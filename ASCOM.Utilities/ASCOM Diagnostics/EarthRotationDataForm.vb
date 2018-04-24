@@ -10,6 +10,8 @@ Public Class EarthRotationDataForm
     Private Const TRACE_LOGGER_IDENTIFIER_FIELD_WIDTH As Integer = 35
     Private Const UPDATE_DATA_PROCESS_TIMEOUT As Double = 60.0 ' Timeout for the "Update now" function provided by this form
     Private Const REFRESH_TIMER_INTERVAL As Integer = 1000 ' Refresh interval (milliseconds) for the current deltaUT1 and leap second values displayed on the form
+    Private Const DELTAUT1_ACCEPTABLE_RANGE As Double = 0.9 ' Acceptable range for manual deltaut1 values is +- this value
+    Private Const MINIMUM_UPDATE_RUN_TIME As Double = 5.0 ' Minimum acceptable time (seconds)  for the time allowed for a manually triggered update task to run
 
     Private TL As TraceLogger
     Private Parameters As EarthRotationParameters
@@ -20,6 +22,7 @@ Public Class EarthRotationDataForm
     Private ManualLeapSeconds, DownloadTimeout, ManualDeltaUT1Value As Double
     Private AutomaticScheduleJobRunTime As DateTime
     Private TraceEnabled As Boolean
+    Private LeapSecondMinimumValue As Double
 
     ' Initialise dropdown list options
     Private dataDownloadSources As New List(Of String) From
@@ -79,6 +82,9 @@ Public Class EarthRotationDataForm
                 AutomaticScheduleTimeDefault = Date.Today.AddHours(36)
             End If
 
+            ' Get a value to use as the lowest valid value for leap seconds during validation
+            LeapSecondMinimumValue = Parameters.BuiltInLeapSeconds
+
             ' Populate the combo box lists
             CmbDataSource.Items.Clear()
             CmbDataSource.Items.AddRange(dataDownloadSources.ToArray())
@@ -129,8 +135,8 @@ Public Class EarthRotationDataForm
             CmbUpdateType.SelectedItem = EarthRotationDataUpdateType
             TL.LogMessage("Form Load", String.Format("Completed setting CmbUpdatetype to: {0}", EarthRotationDataUpdateType))
 
-            TxtManualDeltaUT1.Text = ManualDeltaUT1Value.ToString()
-            TxtManualLeapSeconds.Text = ManualLeapSeconds.ToString()
+            TxtManualDeltaUT1.Text = ManualDeltaUT1Value.ToString("0.000", CultureInfo.CurrentUICulture)
+            TxtManualLeapSeconds.Text = ManualLeapSeconds.ToString("0.0", CultureInfo.CurrentUICulture)
             If Not dataDownloadSources.Contains(EarthRotationDataSource) Then
                 TL.LogMessage("Form Load", String.Format("Specified data source is not one of the built-in sources so add adding it to the list: {0}", EarthRotationDataSource))
                 CmbDataSource.Items.Add(EarthRotationDataSource)
@@ -138,7 +144,7 @@ Public Class EarthRotationDataForm
                 TL.LogMessage("Form Load", String.Format("Specified data source is one of the built-in sources: {0}", EarthRotationDataSource))
             End If
             CmbDataSource.SelectedItem = EarthRotationDataSource
-            TxtDownloadTimeout.Text = DownloadTimeout.ToString()
+            TxtDownloadTimeout.Text = DownloadTimeout.ToString("0.0", CultureInfo.CurrentUICulture)
             DateScheduleRun.Value = AutomaticScheduleJobRunTime
             CmbScheduleRepeat.SelectedItem = AutomaticScheduleJobRepeatFrequency
             TxtTraceFilePath.Text = TraceFilePath
@@ -262,10 +268,10 @@ Public Class EarthRotationDataForm
 
         ' Calaculate the display date, allowing for development test offsets if present. In production offsets wil be 0 so DisplayDate will have a value of DateTime.Now as a UTC
         DisplayDate = DateTime.UtcNow.Subtract(New TimeSpan(TEST_UTC_DAYS_OFFSET, TEST_UTC_HOURS_OFFSET, TEST_UTC_MINUTES_OFFSET, 0))
-        TxtNow.Text = String.Format("{0} {1}", DisplayDate.ToString(DOWNLOAD_TASK_TIME_FORMAT), DisplayDate.Kind.ToString().ToUpperInvariant())
+        TxtNow.Text = String.Format("{0} {1}", DisplayDate.ToString(DOWNLOAD_TASK_TIME_FORMAT, CultureInfo.CurrentUICulture), DisplayDate.Kind.ToString().ToUpperInvariant())
         jdUtc = DateTime.UtcNow.ToOADate + OLE_AUTOMATION_JULIAN_DATE_OFFSET
-        TxtEffectiveDeltaUT1.Text = aUtils.DeltaUT(jdUtc).ToString("+0.000;-0.000;0.000")
-        TxtEffectiveLeapSeconds.Text = aUtils.LeapSeconds.ToString()
+        TxtEffectiveDeltaUT1.Text = aUtils.DeltaUT(jdUtc).ToString("+0.000;-0.000;0.000", CultureInfo.CurrentUICulture)
+        TxtEffectiveLeapSeconds.Text = aUtils.LeapSeconds.ToString("0.0", CultureInfo.CurrentUICulture)
 
         Parameters.RefreshState() ' Make sure we have the latest values, in case any have been updated
         TxtLastRun.Text = Parameters.EarthRotationDataLastUpdatedString
@@ -308,7 +314,7 @@ Public Class EarthRotationDataForm
 
 #End Region
 
-#Region "Button handlers"
+#Region "Button and event handlers"
 
     Private Sub BtnClose_Click(sender As Object, e As EventArgs) Handles BtnClose.Click
         Me.Close()
@@ -327,7 +333,15 @@ Public Class EarthRotationDataForm
 
             LogRunMessage(String.Format("Creating process info"))
             psi = New ProcessStartInfo()
-            psi.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & DOWNLOAD_TASK_EXECUTABLE_NAME
+
+            If Environment.Is64BitOperatingSystem Then
+                psi.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & DOWNLOAD_TASK_EXECUTABLE_NAME
+                LogRunMessage(String.Format("Running on a 64bit OS. Executable path: {0}", psi.FileName))
+            Else
+                psi.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & DOWNLOAD_TASK_EXECUTABLE_NAME
+                LogRunMessage(String.Format("Running on a 32bit OS. Executable path: {0}", psi.FileName))
+            End If
+
             psi.Arguments = "/datasource " & CmbDataSource.Text
             psi.WindowStyle = ProcessWindowStyle.Hidden
             LogRunMessage(String.Format("ProcessInfo Filename: {0}, Arguments: {1}", psi.FileName, psi.Arguments))
@@ -389,14 +403,6 @@ Public Class EarthRotationDataForm
         End If
     End Sub
 
-#End Region
-
-#Region "Input validation routines"
-
-    Private Sub ComboBox1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles CmbDataSource.SelectedIndexChanged
-        ValidateURI()
-    End Sub
-
     Private Sub CmbUpdateType_Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles CmbUpdateType.SelectedIndexChanged
         Dim comboBox As ComboBox = CType(sender, ComboBox)
         Dim originalValue, newValue As String
@@ -452,7 +458,14 @@ Public Class EarthRotationDataForm
 
                         taskDefinition.RegistrationInfo.Description = "ASCOM scheduled job to update earth rotation data: leap seconds and delta UT1. This job is managed through the ASCOM Diagnostics application and should not be manually edited."
 
-                        executablePath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & DOWNLOAD_TASK_EXECUTABLE_NAME
+                        If Environment.Is64BitOperatingSystem Then
+                            executablePath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & DOWNLOAD_TASK_EXECUTABLE_NAME
+                            TL.LogMessage("UpdateTypeEvent", String.Format("Running on a 64bit OS. Executable path: {0}", executablePath))
+                        Else
+                            executablePath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & DOWNLOAD_TASK_EXECUTABLE_NAME
+                            TL.LogMessage("UpdateTypeEvent", String.Format("Running on a 32bit OS. Executable path: {0}", executablePath))
+                        End If
+
                         taskDefinition.Actions.Clear() ' Remove any existing actions and add the current one
                         taskDefinition.Actions.Add(New ExecAction(executablePath, Nothing, Nothing)) ' Add an action that will launch Notepad whenever the trigger fires
                         'TL.LogMessage("UpdateTypeEvent", String.Format("", ))
@@ -460,8 +473,13 @@ Public Class EarthRotationDataForm
 
                         'taskDefinition.Principal.LogonType = TaskLogonType.InteractiveToken
 
-                        taskDefinition.Settings.AllowDemandStart = True ' Add settings appropriate to the task
-                        taskDefinition.Settings.StartWhenAvailable = True
+                        ' Add settings appropriate to the task
+                        Try
+                            taskDefinition.Settings.AllowDemandStart = True ' Requires a V2 task library (XP is only V1)
+                            taskDefinition.Settings.StartWhenAvailable = True
+                        Catch ex As NotV1SupportedException ' Swallow the not supported exception on XP
+                            TL.LogMessage("UpdateTypeEvent", String.Format("This machine only has a V1 task scheduler - ignoring V2 AllowDemandStart and StartWhenAvailable settings."))
+                        End Try
                         taskDefinition.Settings.ExecutionTimeLimit = New TimeSpan(0, 10, 0)
                         taskDefinition.Settings.StopIfGoingOnBatteries = False
                         taskDefinition.Settings.DisallowStartIfOnBatteries = False
@@ -546,11 +564,19 @@ Public Class EarthRotationDataForm
         TL.LogMessage("AutomaticScheduleJobRunTime", String.Format("Schedule job run time updated to: {0}", AutomaticScheduleJobRunTime.ToString(DOWNLOAD_TASK_TIME_FORMAT)))
     End Sub
 
-    Private Sub TxtDownloadTimeout_Validating(sender As Object, e As KeyEventArgs) Handles TxtDownloadTimeout.KeyUp
-        Dim DoubleValue As Double = 0.0
+#End Region
 
-        Dim IsDouble = Double.TryParse(TxtDownloadTimeout.Text, DoubleValue)
-        If IsDouble And DoubleValue > 0.1 Then
+#Region "Input validation routines"
+
+    Private Sub ComboBox1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles CmbDataSource.SelectedIndexChanged
+        ValidateURI()
+    End Sub
+
+    Private Sub TxtDownloadTimeout_Validating(sender As Object, e As KeyEventArgs) Handles TxtDownloadTimeout.KeyUp
+        Dim DoubleValue As Double = 0.0, IsDouble As Boolean
+
+        IsDouble = Double.TryParse(TxtDownloadTimeout.Text, NumberStyles.Number.Float, CultureInfo.CurrentUICulture, DoubleValue)
+        If IsDouble And DoubleValue >= MINIMUM_UPDATE_RUN_TIME Then
             ErrorProvider1.SetError(TxtDownloadTimeout, "")
             DownloadTimeout = DoubleValue
             Parameters.DownloadTaskTimeOut = DownloadTimeout
@@ -558,22 +584,23 @@ Public Class EarthRotationDataForm
             BtnClose.Enabled = True
         Else
             BtnClose.Enabled = False
-            ErrorProvider1.SetError(TxtDownloadTimeout, "Must be a number > 0.1!")
+            ErrorProvider1.SetError(TxtDownloadTimeout, String.Format("Must be a number >= {0}!", MINIMUM_UPDATE_RUN_TIME.ToString("0.0", CultureInfo.CurrentUICulture)))
         End If
     End Sub
 
     Private Sub TxtManualLeapSeconds_Validating(sender As Object, e As KeyEventArgs) Handles TxtManualLeapSeconds.KeyUp
-        Dim DoubleValue As Double = 0.0
+        Dim DoubleValue As Double = 0.0, IsDouble As Boolean
 
-        Dim IsDouble = Double.TryParse(TxtManualLeapSeconds.Text, DoubleValue)
-        If IsDouble And DoubleValue >= 37.0 Then
+        IsDouble = Double.TryParse(TxtManualLeapSeconds.Text, NumberStyles.Number.Float, CultureInfo.CurrentUICulture, DoubleValue)
+        If IsDouble And DoubleValue >= LeapSecondMinimumValue Then
             ErrorProvider1.SetError(TxtManualLeapSeconds, "")
-            ManualLeapSeconds = Double.Parse(TxtManualLeapSeconds.Text)
+            ManualLeapSeconds = DoubleValue
             Parameters.ManualLeapSeconds = ManualLeapSeconds
             TL.LogMessage("ManualLeapSeconds", String.Format("Manual leap seconds updated to: {0}", ManualLeapSeconds))
+            BtnClose.Enabled = True
         Else
-            'BtnCancel.Enabled = False
-            ErrorProvider1.SetError(TxtManualLeapSeconds, "Must be an integer >= 37!")
+            BtnClose.Enabled = False
+            ErrorProvider1.SetError(TxtManualLeapSeconds, String.Format("Must be a number >= {0}!", LeapSecondMinimumValue.ToString("0.0", CultureInfo.CurrentUICulture)))
         End If
     End Sub
 
@@ -582,19 +609,18 @@ Public Class EarthRotationDataForm
     End Sub
 
     Private Sub TxtDeltaUT1Manuals_Validating(sender As Object, e As KeyEventArgs) Handles TxtManualDeltaUT1.KeyUp
-        Dim DoubleValue As Double = 0.0
-        Const DELTAUT1_ACCEPTABLE_RANGE As Double = 0.9
+        Dim DoubleValue As Double = 0.0, IsDouble As Boolean
 
-        Dim IsDouble = Double.TryParse(TxtManualDeltaUT1.Text, DoubleValue)
+        IsDouble = Double.TryParse(TxtManualDeltaUT1.Text, NumberStyles.Number.Float, CultureInfo.CurrentUICulture, DoubleValue)
         If IsDouble And (DoubleValue >= -DELTAUT1_ACCEPTABLE_RANGE) And (DoubleValue <= +DELTAUT1_ACCEPTABLE_RANGE) Then
             ErrorProvider1.SetError(TxtManualDeltaUT1, "")
-            ManualDeltaUT1Value = TxtManualDeltaUT1.Text
+            ManualDeltaUT1Value = DoubleValue
             Parameters.ManualDeltaUT1 = ManualDeltaUT1Value
-            TL.LogMessage("ManualDeltaUT1Value", String.Format("Manual DeltaUT1 value updated to: {0}", ManualDeltaUT1Value))
+            TL.LogMessage("ManualDeltaUT1Value", String.Format(CultureInfo.CurrentUICulture, "Manual DeltaUT1 value updated to: {0}", ManualDeltaUT1Value))
             BtnClose.Enabled = True
         Else
             BtnClose.Enabled = False
-            ErrorProvider1.SetError(TxtManualDeltaUT1, String.Format("Must be in the range -{0} to +{0}!", DELTAUT1_ACCEPTABLE_RANGE))
+            ErrorProvider1.SetError(TxtManualDeltaUT1, String.Format(CultureInfo.CurrentUICulture, "Must be in the range -{0} to +{0}!", DELTAUT1_ACCEPTABLE_RANGE))
         End If
     End Sub
 

@@ -6,7 +6,7 @@ Imports System.IO
 Module GlobalItems
 
     ' Built-in historic leap second data. Format:  JulianDate, Year, Month, Day LeapSeconds
-    Friend BuiltInLeapSeconds As SortedList(Of Double, Double) = New SortedList(Of Double, Double) From
+    Friend BuiltInLeapSecondsValues As SortedList(Of Double, Double) = New SortedList(Of Double, Double) From
         {
             {2437300.5, 1.422818},
             {2437512.5, 1.372818},
@@ -128,7 +128,6 @@ Module GlobalItems
     Friend Const DOWNLOAD_TASK_REPEAT_FREQUENCY_VALUE_NAME As String = "Download Task Repeat Frequency" ' Value name for the scheduled job run time
     Friend Const DOWNLOAD_TASK_TRACE_ENABLED_VALUE_NAME As String = "Download Task Trace Enabled" ' Value name for the scheduled job run time
     Friend Const DOWNLOAD_TASK_TRACE_PATH_VALUE_NAME As String = "Download Task Trace Path" ' Value name for the path to the scheduled job trace file
-    Friend Const DOWNLOAD_TASK_CULTURE_VALUE_NAME As String = "Download Task Culture" ' Value name for the path to the scheduled job trace file
 
     ' Earth rotation data source names
     Friend Const UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1 As String = "Built-in leap seconds and predicted delta UT1" ' Alternative value for earth rotation data source
