@@ -16,8 +16,6 @@ Imports System.Security.Principal
 Imports System.Threading
 Imports System.Text
 
-' Bob Denny - Change so can commit to maybe resolve E200014: Base checksum mismatch on svnsync 
-
 Public Class DiagnosticsForm
 
 #Region "Constants and Enums"
