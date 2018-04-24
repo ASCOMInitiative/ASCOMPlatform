@@ -25,7 +25,7 @@ namespace ASCOM.Simulator
     [Guid("24C040F2-2FA5-4DA4-B87B-6C1101828D2A")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
-    public class Focuser : IFocuserV2, IDisposable
+    public class Focuser : IFocuserV3, IDisposable
     {
         #region Constants
 
@@ -47,7 +47,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Driver interface version
         /// </summary>
-        private const short interfaceVersion = 2;
+        private const short interfaceVersion = 3;
 
         /// <summary>
         /// Driver version number
@@ -196,7 +196,7 @@ namespace ASCOM.Simulator
 
         #endregion
 
-        #region IFocuserV2 Members
+        #region IFocuserV3 Members
 
         /// <summary>
         /// True if the focuser is capable of absolute position; 
@@ -403,8 +403,9 @@ namespace ASCOM.Simulator
         public void Move(int value)
         {
             CheckConnected("Move");
-            if (tempComp)
-                throw new InvalidOperationException("Move not allowed when temperature compensation is active");
+            // Next two lines removed to implement IFocuserV3 requirement
+            // if (tempComp)
+            // throw new InvalidOperationException("Move not allowed when temperature compensation is active");
             if (Absolute)
             {
                 TL.LogMessage("Move Absolute", value.ToString());
@@ -538,25 +539,31 @@ namespace ASCOM.Simulator
         /// </summary>
         private void MoveTimer_Tick(object source, System.Timers.ElapsedEventArgs e)
         {
-            //Create random temperature change
-            if (DateTime.Now.Subtract(lastTempUpdate).TotalSeconds > TempPeriod)
+            // Change at introduction of IFocuserV3 - only allow random temperature induced changes when the motor is in the idle state
+            // This is because IFocuser V3 allows moves when temperature compensation is active
+            if (motorState == MotorState.idle)
             {
-                lastTempUpdate = DateTime.Now;
-                // apply a random change to the temperature
-                double tempOffset = (RandomGenerator.NextDouble() - 0.5);// / 10.0;
-                Temperature = Math.Round(Temperature + tempOffset, 2);
-
-                // move the focuser target to track the temperature if required
-                if (tempComp)
+                //Create random temperature change
+                if (DateTime.Now.Subtract(lastTempUpdate).TotalSeconds > TempPeriod)
                 {
-                    var dt = (int)((Temperature - _lastTemp) * TempSteps);
-                    if (dt != 0)// return;
+                    lastTempUpdate = DateTime.Now;
+                    // apply a random change to the temperature
+                    double tempOffset = (RandomGenerator.NextDouble() - 0.5);// / 10.0;
+                    Temperature = Math.Round(Temperature + tempOffset, 2);
+
+                    // move the focuser target to track the temperature if required
+                    if (tempComp)
                     {
-                        Target += dt;
-                        _lastTemp = Temperature;
+                        var dt = (int)((Temperature - _lastTemp) * TempSteps);
+                        if (dt != 0)// return;
+                        {
+                            Target += dt;
+                            _lastTemp = Temperature;
+                        }
                     }
                 }
             }
+
             if (Target > MaxStep) Target = MaxStep; // Condition target within the acceptable range
             if (Target < 0) Target = 0;
 
