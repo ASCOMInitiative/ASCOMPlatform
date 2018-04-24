@@ -302,35 +302,35 @@ Partial Public Class DeviceFilerWheel
 End Class
 
 Partial Public Class DeviceFocuser
-    Public Sub Dispose() Implements IFocuserV2.Dispose
+    Public Sub Dispose() Implements IFocuserV3.Dispose
     End Sub
 
-    Public Sub SetupDialog() Implements IFocuserV2.SetupDialog
+    Public Sub SetupDialog() Implements IFocuserV3.SetupDialog
     End Sub
 
-    Public ReadOnly Property SupportedActions() As ArrayList Implements IFocuserV2.SupportedActions
+    Public ReadOnly Property SupportedActions() As ArrayList Implements IFocuserV3.SupportedActions
         Get
             Return New ArrayList()
         End Get
     End Property
 
-    Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements IFocuserV2.Action
+    Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements IFocuserV3.Action
         Throw New MethodNotImplementedException("Action")
     End Function
 
-    Public Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False) Implements IFocuserV2.CommandBlind
+    Public Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False) Implements IFocuserV3.CommandBlind
         Throw New MethodNotImplementedException("CommandBlind")
     End Sub
 
-    Public Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean Implements IFocuserV2.CommandBool
+    Public Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean Implements IFocuserV3.CommandBool
         Throw New MethodNotImplementedException("CommandBool")
     End Function
 
-    Public Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String Implements IFocuserV2.CommandString
+    Public Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String Implements IFocuserV3.CommandString
         Throw New MethodNotImplementedException("CommandString")
     End Function
 
-    Public Property Connected() As Boolean Implements IFocuserV2.Connected
+    Public Property Connected() As Boolean Implements IFocuserV3.Connected
         Get
             Return False
         End Get
@@ -338,31 +338,31 @@ Partial Public Class DeviceFocuser
         End Set
     End Property
 
-    Public ReadOnly Property Description As String Implements IFocuserV2.Description
+    Public ReadOnly Property Description As String Implements IFocuserV3.Description
         Get
             Return ""
         End Get
     End Property
 
-    Public ReadOnly Property DriverInfo As String Implements IFocuserV2.DriverInfo
+    Public ReadOnly Property DriverInfo As String Implements IFocuserV3.DriverInfo
         Get
             Return ""
         End Get
     End Property
 
-    Public ReadOnly Property DriverVersion() As String Implements IFocuserV2.DriverVersion
+    Public ReadOnly Property DriverVersion() As String Implements IFocuserV3.DriverVersion
         Get
             Return ""
         End Get
     End Property
 
-    Public ReadOnly Property InterfaceVersion() As Short Implements IFocuserV2.InterfaceVersion
+    Public ReadOnly Property InterfaceVersion() As Short Implements IFocuserV3.InterfaceVersion
         Get
             Return 0
         End Get
     End Property
 
-    Public ReadOnly Property Name As String Implements IFocuserV2.Name
+    Public ReadOnly Property Name As String Implements IFocuserV3.Name
         Get
             Return ""
         End Get

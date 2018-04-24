@@ -24,17 +24,9 @@
     <HelpTitle>ASCOM Platform Help</HelpTitle>
     <CopyrightText>Copyright &amp;#169%3b 2010-18, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
-      <Filter entryType="Namespace" fullName="ASCOM" isExposed="True">
-        <Filter entryType="Class" fullName="ASCOM.ActionNotImplementedException" filterName="ActionNotImplementedException" isExposed="False" />
-        <Filter entryType="Class" fullName="ASCOM.DriverAccessCOMException" filterName="DriverAccessCOMException" isExposed="False" />
-        <Filter entryType="Class" fullName="ASCOM.NotConnectedException" filterName="NotConnectedException" isExposed="False" />
-        <Filter entryType="Class" fullName="ASCOM.ParkedException" filterName="ParkedException" isExposed="False" />
-        <Filter entryType="Class" fullName="ASCOM.SlavedException" filterName="SlavedException" isExposed="False" />
-        <Filter entryType="Class" fullName="ASCOM.ValueNotSetException" filterName="ValueNotSetException" isExposed="False" />
-      </Filter>
-      <Filter entryType="Namespace" fullName="System" isExposed="True">
-        <Filter entryType="Class" fullName="System.Object" filterName="Object" isExposed="False" />
-      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.DeviceInterface" isExposed="True">
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV2" filterName="IFocuserV2" isExposed="False" />
+</Filter>
     </ApiFilter>
     <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>False</Preliminary>
