@@ -21,8 +21,9 @@ namespace EarthRotationUpdate
         private static EarthRotationParameters parameters;
         private static CultureInfo invariantCulture;
         private static TextInfo invariantTextInfo;
-
+        private static Exception downloadError;
         private static string[] monthAbbrev;
+        private static int ReturnCode;
 
         static void Main(string[] args)
         {
@@ -32,6 +33,8 @@ namespace EarthRotationUpdate
                 string runBy = WindowsIdentity.GetCurrent().Name; // Get the name of the user executing this program
                 bool isSystem = WindowsIdentity.GetCurrent().IsSystem;
                 DateTime now = DateTime.Now;
+
+                ReturnCode = 0; // Initialise return code to success
 
                 // Get access to the ASCOM Profile store and retireve the trace logger configuration
                 RegistryAccess profile = new RegistryAccess();
@@ -49,9 +52,17 @@ namespace EarthRotationUpdate
                     traceFileName = string.Format(GlobalItems.DOWNLOAD_TASK_TRACE_FILE_NAME_FORMAT, traceBasePath, now.Year, now.Month, now.Day, now.Hour.ToString("00"), now.Minute.ToString("00"), now.Second.ToString("00"));
                 }
 
+                // Get the trace state from the Profile
+                bool DownloadTaskTraceEnabledValue = false;
+                string DownloadTaskTraceEnabledString = profile.GetProfile(GlobalItems.ASTROMETRY_SUBKEY, GlobalItems.DOWNLOAD_TASK_TRACE_ENABLED_VALUE_NAME, GlobalItems.DOWNLOAD_TASK_TRACE_ENABLED_DEFAULT.ToString());
+                if (!Boolean.TryParse(DownloadTaskTraceEnabledString, out DownloadTaskTraceEnabledValue)) //' String parsed OK so nofurther action
+                { //'Returned string doesn't represent a boolean so use the default
+                    DownloadTaskTraceEnabledValue = GlobalItems.DOWNLOAD_TASK_TRACE_ENABLED_DEFAULT;
+                }
+
                 // Create the trace logger with either the supplied fully qualified name if running as SYSTEM or an automatic file name if running as a normal user
                 TL = new TraceLogger(traceFileName, GlobalItems.DOWNLOAD_TASK_TRACE_LOG_FILETYPE);
-                TL.Enabled = true; // Set the trace state
+                TL.Enabled = DownloadTaskTraceEnabledValue; // Set the trace state
                 TL.IdentifierWidth = GlobalItems.DOWNLOAD_TASK_TRACE_LOGGER_IDENTIFIER_FIELD_WIDTH;
 
                 invariantCulture = new CultureInfo("");
@@ -106,6 +117,9 @@ namespace EarthRotationUpdate
                     }
                 }
 
+                // Ensure that the host URI string, wherever it has come from, ends with a single backslash otherwise the URI will be incorrect when the file name is formed
+                hostURIString = hostURIString.TrimEnd(' ', '-', '\\', '/') + "/";
+
                 LogEvent(string.Format("Run on {0} by {1}, IsSystem: {2}", runDate, runBy, isSystem), EventLogEntryType.Information);
                 TL.LogMessage("EarthRotationUpdate", string.Format("Run on {0} by {1}, IsSystem: {2}", runDate, runBy, isSystem));
                 TL.BlankLine();
@@ -140,16 +154,18 @@ namespace EarthRotationUpdate
                 client.Headers.Add("Accept", "text/plain");
                 client.Encoding = Encoding.ASCII;
                 client.BaseAddress = hostURIString;
-                NetworkCredential credentials = new NetworkCredential("anonymous", "guest");
+                NetworkCredential credentials = new NetworkCredential("anonymous", "guest"); // Apply some standard credentials for FTP sites
                 client.Credentials = credentials;
                 TL.BlankLine();
 
+                // Get the latest delta UT1 values
                 try
                 {
-                    string dUT1fileName = DownloadFile("DeltaUT1", GlobalItems.DUT1_FILE, client, TL);
-                    FileInfo info = new FileInfo(dUT1fileName);
+                    string dUT1fileName = DownloadFile("DeltaUT1", GlobalItems.DUT1_FILE, client, TL); // Download the latest delta UT1 values and receive the filename holding the data
+                    FileInfo info = new FileInfo(dUT1fileName); // Find out if we have any data
                     if (info.Length > 0) // We actually received some data so process it
                     {
+                        // List the data postion parameters that wil be used to extract the delta UT1 data from the file
                         TL.LogMessage("DeltaUT1", string.Format("Expected file format for the {0} file", GlobalItems.DUT1_FILE));
                         TL.LogMessage("DeltaUT1", string.Format("Year string start position: {0}, Year string length: {1}", GlobalItems.DUT1_YEAR_START, GlobalItems.DUT1_YEAR_LENGTH));
                         TL.LogMessage("DeltaUT1", string.Format("Month string start position: {0}, Month string length: {1}", GlobalItems.DUT1_MONTH_START, GlobalItems.DUT1_MONTH_LENGTH));
@@ -158,9 +174,10 @@ namespace EarthRotationUpdate
                         TL.LogMessage("DeltaUT1", string.Format("Delta UT1 start position: {0}, Delta UT1 string length: {1}", GlobalItems.DUT1_DELTAUT1_START, GlobalItems.DUT1_DELTAUT1_LENGTH));
                         TL.BlankLine();
 
-                        profile.DeleteKey(GlobalItems.AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME);
-                        profile.CreateKey(GlobalItems.AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME);
+                        profile.DeleteKey(GlobalItems.AUTOMATIC_UPDATE_DELTAUT1_SUBKEY_NAME); // Clear out old delta UT1 values
+                        profile.CreateKey(GlobalItems.AUTOMATIC_UPDATE_DELTAUT1_SUBKEY_NAME);
 
+                        // Process the data file
                         using (var filestream = new FileStream(dUT1fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
                             using (var file = new StreamReader(filestream, Encoding.ASCII, true, 4096))
@@ -168,29 +185,30 @@ namespace EarthRotationUpdate
                                 string lineOfText;
                                 DateTime date;
 
-                                while ((lineOfText = file.ReadLine()) != null)
+                                while ((lineOfText = file.ReadLine()) != null) // Get lines of text one at a time and parse them 
                                 {
                                     try
                                     {
+                                        // Extract string values for data items
                                         string yearString = lineOfText.Substring(GlobalItems.DUT1_YEAR_START, GlobalItems.DUT1_YEAR_LENGTH);
                                         string monthString = lineOfText.Substring(GlobalItems.DUT1_MONTH_START, GlobalItems.DUT1_MONTH_LENGTH);
                                         string dayString = lineOfText.Substring(GlobalItems.DUT1_DAY_START, GlobalItems.DUT1_DAY_LENGTH);
                                         string julianDateString = lineOfText.Substring(GlobalItems.DUT1_JULIAN_DATE_START, GlobalItems.DUT1_JULIAN_DATE_LENGTH);
                                         string dUT1String = lineOfText.Substring(GlobalItems.DUT1_DELTAUT1_START, GlobalItems.DUT1_DELTAUT1_LENGTH);
 
+                                        // Validate that the data items are parseable
                                         bool yearOK = int.TryParse(yearString, out int year);
                                         bool monthOK = int.TryParse(monthString, out int month);
                                         bool dayOK = int.TryParse(dayString, out int day);
                                         bool julianDateOK = double.TryParse(julianDateString, out double julianDate);
                                         bool dut1OK = double.TryParse(dUT1String, out double dUT1);
 
-                                        if (yearOK & monthOK & dayOK & julianDateOK & dut1OK)
+                                        if (yearOK & monthOK & dayOK & julianDateOK & dut1OK) // We have good values for all data items so save these to the Profile
                                         {
-                                            //TL.LogMessage("DeltaUT1", string.Format("Found good DUT1 value: {0} on JD: {1}", dUT1, julianDate));
-
                                             year = invariantCulture.Calendar.ToFourDigitYear(year); // Convert the two digit year to a four digit year
                                             date = new DateTime(year, month, day);
 
+                                            // Only save the item if it is from a few days back or is a future prediction
                                             if (date.Date >= DateTime.Now.Date.Subtract(new TimeSpan(GlobalItems.NUMBER_OF_BACK_DAYS_OF_DELTAUT1_DATA_TO_LOAD, 0, 0, 0)))
                                             {
                                                 string deltaUT1ValueName = string.Format(GlobalItems.DELTAUT1_VALUE_NAME_FORMAT,
@@ -198,7 +216,7 @@ namespace EarthRotationUpdate
                                                                                          date.Month.ToString(GlobalItems.DELTAUT1_VALUE_NAME_MONTH_FORMAT),
                                                                                          date.Day.ToString(GlobalItems.DELTAUT1_VALUE_NAME_DAY_FORMAT));
                                                 TL.LogMessage("DeltaUT1", string.Format("Setting {0}, JD = {1} - DUT1 = {2} with key: {3}", date.ToLongDateString(), julianDate, dUT1, deltaUT1ValueName));
-                                                profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME, deltaUT1ValueName, dUT1.ToString("0.000", parameters.DownloadTaskCulture));
+                                                profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_DELTAUT1_SUBKEY_NAME, deltaUT1ValueName, dUT1.ToString("0.000", parameters.DownloadTaskCulture));
                                             }
                                         }
                                         else
@@ -224,17 +242,25 @@ namespace EarthRotationUpdate
                     File.Delete(dUT1fileName);
                     TL.BlankLine();
                 }
+                catch (WebException ex) // An issue occured with receiving the leap second file over the network 
+                {
+                    TL.LogMessageCrLf("DeltaUT1", string.Format("Error: {0} - delta UT1 data not updated", ex.Message));
+                    ReturnCode = 1;
+                }
                 catch (Exception ex)
                 {
                     TL.LogMessageCrLf("DeltaUT1", ex.ToString());
+                    ReturnCode = 2;
                 }
 
+                // Get the latest leap second values
                 try
                 {
-                    string leapSecondsfileName = DownloadFile("LeapSeconds", GlobalItems.LEAP_SECONDS_FILE, client, TL);
-                    FileInfo info = new FileInfo(leapSecondsfileName);
+                    string leapSecondsfileName = DownloadFile("LeapSeconds", GlobalItems.LEAP_SECONDS_FILE, client, TL); // Download the latest leap second values and receive the filename holding the data
+                    FileInfo info = new FileInfo(leapSecondsfileName); // Find out if we have any data
                     if (info.Length > 0) // We actually received some data so process it
                     {
+                        // List the data postion parameters that wil be used to extract the delta UT1 data from the file
                         TL.LogMessage("LeapSeconds", string.Format("Expected file format for the {0} file", GlobalItems.DUT1_FILE));
                         TL.LogMessage("LeapSeconds", string.Format("Year string start position: {0}, Year string length: {1}", GlobalItems.LEAP_SECONDS_YEAR_START, GlobalItems.LEAP_SECONDS_YEAR_LENGTH));
                         TL.LogMessage("LeapSeconds", string.Format("Month string start position: {0}, Month string length: {1}", GlobalItems.LEAP_SECONDS_MONTH_START, GlobalItems.LEAP_SECONDS_MONTH_LENGTH));
@@ -243,17 +269,13 @@ namespace EarthRotationUpdate
                         TL.LogMessage("LeapSeconds", string.Format("Leap seconds start position: {0}, Leap seconds string length: {1}", GlobalItems.LEAP_SECONDS_LEAPSECONDS_START, GlobalItems.LEAP_SECONDS_LEAPSECONDS_LENGTH));
                         TL.BlankLine();
 
-                        profile.DeleteKey(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME);
+                        profile.DeleteKey(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME); ; // Clear out old leap second values
                         profile.CreateKey(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME);
-                        profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME, "", "Julian Day - Leap Seconds");
 
                         // Include a value that is in the SOFA library defaults but is not in the USNO files. It predates the start of UTC but I am assuming that IAU is correct on this occasion
                         profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME, double.Parse("2436934.5", CultureInfo.InvariantCulture).ToString(parameters.DownloadTaskCulture), double.Parse("1.4178180", CultureInfo.InvariantCulture).ToString(parameters.DownloadTaskCulture));
 
-
-                        // 		{ 1960,  1,  1.4178180 }, 
-
-
+                        // Process the data file
                         using (var filestream = new FileStream(leapSecondsfileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
                             double currentLeapSeconds = 0.0;
@@ -265,7 +287,7 @@ namespace EarthRotationUpdate
                             {
                                 string lineOfText;
                                 DateTime latestLeapSecondDate = DateTime.MinValue;
-                                while ((lineOfText = file.ReadLine()) != null)
+                                while ((lineOfText = file.ReadLine()) != null) // Get lines of text one at a time and parse them 
                                 {
                                     try
                                     {
@@ -276,6 +298,7 @@ namespace EarthRotationUpdate
                                         string julianDateString = lineOfText.Substring(GlobalItems.LEAP_SECONDS_JULIAN_DATE_START, GlobalItems.LEAP_SECONDS_JULIAN_DATE_LENGTH);
                                         string leapSecondsString = lineOfText.Substring(GlobalItems.LEAP_SECONDS_LEAPSECONDS_START, GlobalItems.LEAP_SECONDS_LEAPSECONDS_LENGTH);
 
+                                        // Validate that the data items are parseable
                                         bool yearOK = int.TryParse(yearString, out int year);
                                         bool dayOK = int.TryParse(dayString, out int day);
                                         bool julianDateOK = double.TryParse(julianDateString, out double julianDate);
@@ -284,7 +307,7 @@ namespace EarthRotationUpdate
                                         // Get the month number by triming the month string, converting to lower case then titlecase then looking up the index in the abbreviated months array
                                         int month = Array.IndexOf(monthAbbrev, invariantTextInfo.ToTitleCase(monthString.Trim(' ').ToLower(CultureInfo.InvariantCulture))) + 1; // If IndexOf fails, it returns -1 so the resultant month number will be zero and this is checked below
 
-                                        if (yearOK & (month > 0) & dayOK & julianDateOK & leapSecondsOK) // Check that all elements are valid
+                                        if (yearOK & (month > 0) & dayOK & julianDateOK & leapSecondsOK) // We have good values for all data items so save these to the Profile
                                         {
                                             double modifiedJulianDate = julianDate - GlobalItems.MODIFIED_JULIAN_DAY_OFFSET;
                                             leapSecondDate = new DateTime(year, month, day);
@@ -316,15 +339,15 @@ namespace EarthRotationUpdate
                             }
                             TL.BlankLine();
 
-                            parameters.AutomaticLeapSecondsString = currentLeapSeconds.ToString(parameters.DownloadTaskCulture); // Persist the new TAI_UTC offset value (leap seconds) to the Profile
+                            parameters.AutomaticLeapSecondsString = currentLeapSeconds.ToString(parameters.DownloadTaskCulture); // Persist the new leap second value to the Profile
 
                             // Persist the next leap second value and its implementation date if these have been announced
-                            if (nextleapSecondsDate == DateTime.MinValue)
+                            if (nextleapSecondsDate == DateTime.MinValue) // No annoucement has been made
                             {
                                 parameters.NextLeapSecondsString = GlobalItems.DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE;
                                 parameters.NextLeapSecondsDateString = GlobalItems.DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE;
                             }
-                            else
+                            else // A future leap second has been announced
                             {
                                 parameters.NextLeapSecondsString = nextLeapSeconds.ToString(parameters.DownloadTaskCulture);
                                 parameters.NextLeapSecondsDateString = nextleapSecondsDate.ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT, parameters.DownloadTaskCulture);
@@ -348,9 +371,15 @@ namespace EarthRotationUpdate
                     parameters = null;
 
                 }
+                catch (WebException ex) // An issue occured with receiving the leap second file over the network 
+                {
+                    TL.LogMessageCrLf("LeapSeconds", string.Format("Error: {0} - leap second data not updated.", ex.Message));
+                    ReturnCode = 3;
+                }
                 catch (Exception ex)
                 {
                     TL.LogMessageCrLf("LeapSeconds", ex.ToString());
+                    ReturnCode = 4;
                 }
 
                 TL.Enabled = false;
@@ -366,15 +395,12 @@ namespace EarthRotationUpdate
                                       EventLogEntryType.Error,
                                       GlobalConstants.EventLogErrors.EarthRotationUpdate,
                                       ex.ToString());
-
-                Environment.Exit(1);
+                ReturnCode = 5;
             }
+            Environment.Exit(ReturnCode);
         }
 
-        private static void LogEvent(string message, EventLogEntryType severity)
-        {
-            EventLogCode.LogEvent("EarthRotationUpdate", message, severity, GlobalConstants.EventLogErrors.EarthRotationUpdate, Except: "");
-        }
+        #region Event handlers
 
         private static void Client_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
@@ -384,10 +410,16 @@ namespace EarthRotationUpdate
                 {
                     if (TL != null) TL.LogMessage("Download Status", string.Format("Download timed out"));
                 }
+                else if (e.Error != null)
+                {
+                    downloadError = e.Error;
+                    if (TL != null) TL.LogMessageCrLf("Download Error", string.Format("Error: {0}", downloadError.Message));
+                }
                 else
                 {
                     if (TL != null) TL.LogMessage("Download Status", string.Format("Download Completed OK,"));
                 }
+
                 DownloadComplete = true;
             }
             catch { }
@@ -402,7 +434,16 @@ namespace EarthRotationUpdate
             catch { }
         }
 
-        static string DownloadFile(string Function, string DataFile, WebClient Client, TraceLogger TL)
+        #endregion
+
+        #region Support code
+
+        private static void LogEvent(string message, EventLogEntryType severity)
+        {
+            EventLogCode.LogEvent("EarthRotationUpdate", message, severity, GlobalConstants.EventLogErrors.EarthRotationUpdate, Except: "");
+        }
+
+        private static string DownloadFile(string Function, string DataFile, WebClient Client, TraceLogger TL)
         {
             string tempFileName;
             Stopwatch timeOutTimer;
@@ -417,6 +458,7 @@ namespace EarthRotationUpdate
             int printCount = 0;
             //DateTime timeOut = DateTime.Now.AddSeconds(DownloadTimeout);
             DownloadComplete = false;
+            downloadError = null;
             timeOutTimer.Start();
             do
             {
@@ -431,17 +473,25 @@ namespace EarthRotationUpdate
 
             if (DownloadComplete)
             {
-                TL.LogMessage(Function, "Response headers");
-                WebHeaderCollection responseHeaders = Client.ResponseHeaders;
-                if (!(responseHeaders is null))
+                if (downloadError == null) // No error occured
                 {
-                    foreach (string header in responseHeaders.AllKeys)
+                    TL.LogMessage(Function, "Response headers");
+                    WebHeaderCollection responseHeaders = Client.ResponseHeaders;
+                    if (!(responseHeaders is null))
                     {
-                        TL.LogMessage(Function, string.Format("Response header {0} = {1}", header, responseHeaders[header]));
+                        foreach (string header in responseHeaders.AllKeys)
+                        {
+                            TL.LogMessage(Function, string.Format("Response header {0} = {1}", header, responseHeaders[header]));
+                        }
                     }
+                    FileInfo info = new FileInfo(tempFileName);
+                    TL.LogMessage(Function, string.Format("Successfully downloaded {0} from {1} as {2}. Size: {3}", DataFile, Client.BaseAddress, tempFileName, info.Length));
                 }
-                FileInfo info = new FileInfo(tempFileName);
-                TL.LogMessage(Function, string.Format("Successfully downloaded {0} from {1} as {2}. Size: {3}", DataFile, Client.BaseAddress, tempFileName, info.Length));
+                else // An error occured
+                {
+                    // Just throw the error, which will be reported in the calling routine
+                    throw downloadError;
+                }
             }
             else
             {
@@ -461,5 +511,8 @@ namespace EarthRotationUpdate
 
             return tempFileName;
         }
+
+        #endregion
+
     }
 }
