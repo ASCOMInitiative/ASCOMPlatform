@@ -53,9 +53,8 @@ namespace EarthRotationUpdate
                 }
 
                 // Get the trace state from the Profile
-                bool DownloadTaskTraceEnabledValue = false;
                 string DownloadTaskTraceEnabledString = profile.GetProfile(GlobalItems.ASTROMETRY_SUBKEY, GlobalItems.DOWNLOAD_TASK_TRACE_ENABLED_VALUE_NAME, GlobalItems.DOWNLOAD_TASK_TRACE_ENABLED_DEFAULT.ToString());
-                if (!Boolean.TryParse(DownloadTaskTraceEnabledString, out DownloadTaskTraceEnabledValue)) //' String parsed OK so nofurther action
+                if (!Boolean.TryParse(DownloadTaskTraceEnabledString, out bool DownloadTaskTraceEnabledValue)) //' String parsed OK so nofurther action
                 { //'Returned string doesn't represent a boolean so use the default
                     DownloadTaskTraceEnabledValue = GlobalItems.DOWNLOAD_TASK_TRACE_ENABLED_DEFAULT;
                 }
@@ -173,7 +172,7 @@ namespace EarthRotationUpdate
                         TL.LogMessage("DeltaUT1", string.Format("Month string start position: {0}, Month string length: {1}", GlobalItems.DELTAUT1_MONTH_START, GlobalItems.DELTAUT1_MONTH_LENGTH));
                         TL.LogMessage("DeltaUT1", string.Format("Day string start position: {0}, Day string length: {1}", GlobalItems.DELTAUT1_DAY_START, GlobalItems.DELTAUT1_DAY_LENGTH));
                         TL.LogMessage("DeltaUT1", string.Format("Julian date start position: {0}, Julian date string length: {1}", GlobalItems.DELTAUT1_JULIAN_DATE_START, GlobalItems.DELTAUT1_JULIAN_DATE_LENGTH));
-                        TL.LogMessage("DeltaUT1", string.Format("Delta UT1 start position: {0}, Delta UT1 string length: {1}", GlobalItems.DELTAUT1_START, GlobalItems.DUT1_DELTAUT1_LENGTH));
+                        TL.LogMessage("DeltaUT1", string.Format("Delta UT1 start position: {0}, Delta UT1 string length: {1}", GlobalItems.DELTAUT1_START, GlobalItems.DELTAUT1_LENGTH));
                         TL.BlankLine();
 
                         profile.DeleteKey(GlobalItems.AUTOMATIC_UPDATE_DELTAUT1_SUBKEY_NAME); // Clear out old delta UT1 values
@@ -196,7 +195,7 @@ namespace EarthRotationUpdate
                                         string monthString = lineOfText.Substring(GlobalItems.DELTAUT1_MONTH_START, GlobalItems.DELTAUT1_MONTH_LENGTH);
                                         string dayString = lineOfText.Substring(GlobalItems.DELTAUT1_DAY_START, GlobalItems.DELTAUT1_DAY_LENGTH);
                                         string julianDateString = lineOfText.Substring(GlobalItems.DELTAUT1_JULIAN_DATE_START, GlobalItems.DELTAUT1_JULIAN_DATE_LENGTH);
-                                        string dUT1String = lineOfText.Substring(GlobalItems.DELTAUT1_START, GlobalItems.DUT1_DELTAUT1_LENGTH);
+                                        string dUT1String = lineOfText.Substring(GlobalItems.DELTAUT1_START, GlobalItems.DELTAUT1_LENGTH);
 
                                         // Validate that the data items are parseable
                                         bool yearOK = int.TryParse(yearString, NumberStyles.Integer, CultureInfo.InvariantCulture, out int year);
