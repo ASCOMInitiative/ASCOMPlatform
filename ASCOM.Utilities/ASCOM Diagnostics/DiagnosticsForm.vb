@@ -1050,7 +1050,7 @@ Public Class DiagnosticsForm
                 .DeviceType = "Focuser",
                 .Name = "ASCOM.Simulator.Focuser",
                 .DriverVersion = DiagnosticsMajorMinorVersionNumber,
-                .InterfaceVersion = 2,
+                .InterfaceVersion = 3,
                 .IsPlatform5 = False,
                 .SixtyFourBit = True
             }
