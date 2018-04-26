@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>NOVAS31</ProjectName>
+    <ProjectName>NOVAS 3.1 Library</ProjectName>
     <ProjectGuid>{AC850762-F3A5-4B3D-8FA2-DEF9018281FC}</ProjectGuid>
     <RootNamespace>NOVAS3</RootNamespace>
     <Keyword>Win32Proj</Keyword>

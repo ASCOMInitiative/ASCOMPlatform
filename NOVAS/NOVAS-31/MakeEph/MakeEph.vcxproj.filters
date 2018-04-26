@@ -39,4 +39,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CioFile\NOVAS 3.1 CioFile.vcxproj" />
+  </ItemGroup>
 </Project>
