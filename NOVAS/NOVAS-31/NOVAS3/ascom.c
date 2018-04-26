@@ -24,5 +24,5 @@ char RACIO_FILE_NAME[255]  = {'c','i','o','_','r','a','.','b','i','n','\0'}; //c
  
 void set_racio_file(char file_name[255])
 {
-strcpy (RACIO_FILE_NAME, file_name);
+strcpy_s (RACIO_FILE_NAME, 255, file_name);
 }
