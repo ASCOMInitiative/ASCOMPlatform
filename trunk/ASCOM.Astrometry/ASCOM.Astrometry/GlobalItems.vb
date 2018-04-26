@@ -5,52 +5,6 @@ Imports System.IO
 
 Module GlobalItems
 
-    ' Built-in historic leap second data. Format:  JulianDate, Year, Month, Day LeapSeconds
-    Friend BuiltInLeapSecondsValues As SortedList(Of Double, Double) = New SortedList(Of Double, Double) From
-        {
-            {2437300.5, 1.422818},
-            {2437512.5, 1.372818},
-            {2437665.5, 1.845858},
-            {2438334.5, 1.945858},
-            {2438395.5, 3.24013},
-            {2438486.5, 3.34013},
-            {2438639.5, 3.44013},
-            {2438761.5, 3.54013},
-            {2438820.5, 3.64013},
-            {2438942.5, 3.74013},
-            {2439004.5, 3.84013},
-            {2439126.5, 4.31317},
-            {2439887.5, 4.21317},
-            {2441317.5, 10.0},
-            {2441499.5, 11.0},
-            {2441683.5, 12.0},
-            {2442048.5, 13.0},
-            {2442413.5, 14.0},
-            {2442778.5, 15.0},
-            {2443144.5, 16.0},
-            {2443509.5, 17.0},
-            {2443874.5, 18.0},
-            {2444239.5, 19.0},
-            {2444786.5, 20.0},
-            {2445151.5, 21.0},
-            {2445516.5, 22.0},
-            {2446247.5, 23.0},
-            {2447161.5, 24.0},
-            {2447892.5, 25.0},
-            {2448257.5, 26.0},
-            {2448804.5, 27.0},
-            {2449169.5, 28.0},
-            {2449534.5, 29.0},
-            {2450083.5, 30.0},
-            {2450630.5, 31.0},
-            {2451179.5, 32.0},
-            {2453736.5, 33.0},
-            {2454832.5, 34.0},
-            {2456109.5, 35.0},
-            {2457204.5, 36.0},
-            {2457754.5, 37.0}
-        }
-
     ' Physical contants
     Friend Const MOON_RADIUS As Double = 1737.0 ' km
     Friend Const EARTH_RADIUS As Double = 6378.0 ' km
@@ -98,8 +52,7 @@ Module GlobalItems
     Friend Const TT_TAI_OFFSET As Double = 32.184 '32.184 seconds
     Friend Const MODIFIED_JULIAN_DAY_OFFSET As Double = 2400000.5 'This is the offset of Modified Julian dates from true Julian dates
     Friend Const SECPERDAY As Double = 86400.0
-    Friend Const DELTAUT1_LOWER_BOUND As Double = -0.9 ' Used to validate delta UT1 values input manually or automatically downloaded
-    Friend Const DELTAUT1_UPPER_BOUND As Double = 0.9
+    Friend Const DELTAUT1_BOUND As Double = 0.9 ' Used to validate delta UT1 values input manually or automatically downloaded, which must line in the range -DELTAUT1_BOUND to +DELTAUT1_BOUND
     Friend Const TROPICAL_YEAR_IN_DAYS As Double = 365.24219
 
     Friend Const OLE_AUTOMATION_JULIAN_DATE_OFFSET As Double = 2415018.5 ' Offset of OLE automation dates from Julian dates
@@ -136,22 +89,21 @@ Module GlobalItems
     Friend Const UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1 As String = "Automatic leap seconds and delta UT1" ' Alternative value for earth rotation data source
 
     ' Delta UT1 filename and format
-    Friend Const DUT1_FILE As String = "finals.daily" ' Name of the IERS file containing Delta UT1 predictions
-    Friend Const DUT1_YEAR_START As Integer = 0 : Friend Const DUT1_YEAR_LENGTH As Integer = 2
-    Friend Const DUT1_MONTH_START As Integer = 2 : Friend Const DUT1_MONTH_LENGTH As Integer = 2
-    Friend Const DUT1_DAY_START As Integer = 4 : Friend Const DUT1_DAY_LENGTH As Integer = 2
-    Friend Const DUT1_JULIAN_DATE_START As Integer = 7 : Friend Const DUT1_JULIAN_DATE_LENGTH As Integer = 8
-    Friend Const DUT1_DELTAUT1_START As Integer = 58 : Friend Const DUT1_DELTAUT1_LENGTH As Integer = 10
+    Friend Const DELTAUT1_FILE As String = "finals.daily" ' Name of the IERS file containing Delta UT1 predictions
+    Friend Const DELTAUT1_YEAR_START As Integer = 0 : Friend Const DELTAUT1_YEAR_LENGTH As Integer = 2 ' Start position and length of the YEAR field in the finals.daily data line
+    Friend Const DELTAUT1_MONTH_START As Integer = 2 : Friend Const DELTAUT1_MONTH_LENGTH As Integer = 2 ' Start position and length of the MONTH field in the finals.daily data line
+    Friend Const DELTAUT1_DAY_START As Integer = 4 : Friend Const DELTAUT1_DAY_LENGTH As Integer = 2 ' Start position and length of the DAY field in the finals.daily data line
+    Friend Const DELTAUT1_JULIAN_DATE_START As Integer = 7 : Friend Const DELTAUT1_JULIAN_DATE_LENGTH As Integer = 8 ' Start position and length of the JULKIAN DATE field in the finals.daily data line
+    Friend Const DELTAUT1_START As Integer = 58 : Friend Const DELTAUT1_LENGTH As Integer = 10 ' Start position and length of the DELTAUT1 field in the finals.daily data line
 
     ' Leap seconds filename and format
     'Friend Const LEAP_SECONDS_FILE As String = "leapsec.dat" ' Name of the IERS file containing leap second historic and future values
     Friend Const LEAP_SECONDS_FILE As String = "tai-utc.dat" ' Name of the IERS file containing leap second historic and future values
-    Friend Const LEAP_SECONDS_YEAR_START As Integer = 0 : Friend Const LEAP_SECONDS_YEAR_LENGTH As Integer = 5
-    Friend Const LEAP_SECONDS_MONTH_START As Integer = 5 : Friend Const LEAP_SECONDS_MONTH_LENGTH As Integer = 4
-    Friend Const LEAP_SECONDS_DAY_START As Integer = 9 : Friend Const LEAP_SECONDS_DAY_LENGTH As Integer = 4
-    Friend Const LEAP_SECONDS_JULIAN_DATE_START As Integer = 17 : Friend Const LEAP_SECONDS_JULIAN_DATE_LENGTH As Integer = 10
-    'Friend Const LEAP_SECONDS_LEAPSECONDS_START As Integer = 38 : Friend Const LEAP_SECONDS_LEAPSECONDS_LENGTH As Integer = 4
-    Friend Const LEAP_SECONDS_LEAPSECONDS_START As Integer = 36 : Friend Const LEAP_SECONDS_LEAPSECONDS_LENGTH As Integer = 12
+    Friend Const LEAP_SECONDS_YEAR_START As Integer = 0 : Friend Const LEAP_SECONDS_YEAR_LENGTH As Integer = 5 ' Start position and length of the YEAR field in the tai-utc.dat data line
+    Friend Const LEAP_SECONDS_MONTH_START As Integer = 5 : Friend Const LEAP_SECONDS_MONTH_LENGTH As Integer = 4 ' Start position and length of the MONTH field in the tai-utc.dat data line
+    Friend Const LEAP_SECONDS_DAY_START As Integer = 9 : Friend Const LEAP_SECONDS_DAY_LENGTH As Integer = 4 ' Start position and length of the DAY field in the tai-utc.dat data line
+    Friend Const LEAP_SECONDS_JULIAN_DATE_START As Integer = 17 : Friend Const LEAP_SECONDS_JULIAN_DATE_LENGTH As Integer = 10 ' Start position and length of the JULIAN DATE field in the tai-utc.dat data line
+    Friend Const LEAP_SECONDS_LEAPSECONDS_START As Integer = 36 : Friend Const LEAP_SECONDS_LEAPSECONDS_LENGTH As Integer = 12 ' Start position and length of the NUMBER OF LEAP SECONDS field in the tai-utc.dat data line
 
     ' Earth rotation data download configuration options
     Friend Const EARTH_ROTATION_DATA_SOURCE_0 As String = "http://maia.usno.navy.mil/ser7/" ' SOurce options for for earth rotation files
@@ -166,19 +118,19 @@ Module GlobalItems
     Friend Const URI_PREFIX_HTTP As String = "http://"
     Friend Const URI_PREFIX_HTTPS As String = "https://"
     Friend Const URI_PREFIX_FTP As String = "ftp://"
-    Friend Const NUMBER_OF_BACK_DAYS_OF_DELTAUT1_DATA_TO_LOAD As Integer = 20
 
     ' Download task configuration
     Friend Const DOWNLOAD_TASK_TRACE_LOG_FILETYPE As String = "EarthRotationUpdate"
-    Friend Const DOWNLOAD_SCHEDULE_TASK_NAME As String = "ASCOM - Update Earth Rotation Data" ' Name of the schedule job that runs the automatic download task
-    Friend Const DOWNLOAD_SCHEDULE_TASK_PATH As String = "\" + DOWNLOAD_SCHEDULE_TASK_NAME ' Full schedule job path within the scheduler job tree. Has to be in the root for backward compatibilty with XP!
+    Friend Const DOWNLOAD_TASK_NAME As String = "ASCOM - Update Earth Rotation Data" ' Name of the schedule job that runs the automatic download task
+    Friend Const DOWNLOAD_TASK_PATH As String = "\" + DOWNLOAD_TASK_NAME ' Full schedule job path within the scheduler job tree. Has to be in the root for backward compatibilty with XP!
     Friend Const DOWNLOAD_TASK_EXECUTABLE_NAME As String = "\ASCOM\Platform 6\Tools\EarthRotationUpdate.exe" ' File system location of the automatic download executable that is started by the scheduled task. The exe is placed here by the installer
     Friend Const DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE As String = "Not published" ' Value to use for next leap seconds and its effective date before these are published
     Friend Const DOWNLOAD_TASK_TIME_FORMAT = "dddd dd MMM yyyy - HH:mm:ss"
-    Friend Const DOWNLOAD_TASK_TRACE_DEFAULT_PATH_FORMAT = "{0}\ASCOM\" + DOWNLOAD_TASK_TRACE_LOG_FILETYPE 'EarthRotationUpdate"
+    Friend Const DOWNLOAD_TASK_TRACE_DEFAULT_PATH_FORMAT = "{0}\ASCOM\" + DOWNLOAD_TASK_TRACE_LOG_FILETYPE
     Friend Const DOWNLOAD_TASK_TRACE_FILE_NAME_FORMAT = "{0}\Log {1}-{2}-{3} {4}{5}{6}"
     Friend Const DOWNLOAD_TASK_USER_AGENT As String = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36 Edge/15.15063"
     Friend Const DOWNLOAD_TASK_TRACE_LOGGER_IDENTIFIER_FIELD_WIDTH As Integer = 35
+    Friend Const DOWNLOAD_TASK_NUMBER_OF_BACK_DAYS_OF_DELTAUT1_DATA_TO_LOAD As Integer = 20 ' The download task will include this number of days of historic data as well as the current and all future data
 
     ' Automatic update test configuration parameters - MUST BE SET TO 0 FOR PRODUCTION BUILDS!
     Friend Const TEST_HISTORIC_DAYS_OFFSET As Integer = 0 '1700 ' Offset in days to force the automatic update program to interpret historic leap second values as current and future values
@@ -187,18 +139,23 @@ Module GlobalItems
     Friend Const TEST_UTC_MINUTES_OFFSET As Integer = 0 '48 ' Offset in minutes to force the current time to appear earlier than present in order to test correct leap second and DeltaUT1 values when leap seconds change
 
     ' Default values
-    Friend Const UPDATE_TYPE_DEFAULT As String = UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1 ' Default value for earth rotation data source
-    Friend Const EARTH_ROTATION_DATA_NEVER_UPDATED As String = "Never" ' Default value for the scheduled job run time
-    Friend Const MANUAL_DELTAUT1_DEFAULT As Double = 0.0
-    Friend Const AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE As String = "Not downloaded" ' Default value for the next number of leap seconds
-    Friend Const NEXT_LEAP_SECONDS_NOT_AVAILABLE As String = "Not downloaded" ' Default value for the current number of leap seconds
-    Friend Const NEXT_LEAP_SECONDS_DATE_DEFAULT As String = "Not downloaded" ' Value to use for next leap seconds and its effective date before these are published
+    Friend Const UPDATE_TYPE_DEFAULT As String = UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1 ' Default value for earth rotation data source
+    Friend Const EARTH_ROTATION_DATA_LAST_UPDATED_DEFAULT As String = NEVER_UPDATED ' Default value for the scheduled job last run time
+    Friend Const MANUAL_DELTAUT1_DEFAULT As Double = 0.0 ' Default value for the manual delta UT1 value
+    Friend Const AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT As String = NOT_DOWNLOADED ' Default value for the automatically downloaded number of leap seconds
+    Friend Const NEXT_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT As String = NOT_DOWNLOADED ' Default value for the next leap second
+    Friend Const NEXT_LEAP_SECONDS_DATE_NOT_AVAILABLE_DEFAULT As String = NOT_DOWNLOADED ' Default value for the next leap second effective date
     Friend Const DOWNLOAD_TASK_DATA_UPDATE_SOURCE_DEFAULT As String = EARTH_ROTATION_DATA_SOURCE_0 ' Default source for earth rotation files
-    Friend Const DOWNLOAD_TASK_REPEAT_DEFAULT As String = SCHEDULE_REPEAT_DAILY
+    Friend Const DOWNLOAD_TASK_REPEAT_DEFAULT As String = SCHEDULE_REPEAT_WEEKLY ' Default repeat frequency for the automatic data download task
     Friend Const DOWNLOAD_TASK_TIMEOUT_DEFAULT As Double = 60.0 ' Default timeout in seconds for data transfers from earth rotation data sources
-    Friend Const DOWNLOAD_TASK_TRACE_ENABLED_DEFAULT As Boolean = False ' Initial state for download task trace output
+    Friend Const DOWNLOAD_TASK_TRACE_ENABLED_DEFAULT As Boolean = True ' Initial state for download task trace output
+
+    ' Not available constants
     Friend Const DOUBLE_VALUE_NOT_AVAILABLE As Double = Double.MinValue
     Friend ReadOnly DATE_VALUE_NOT_AVAILABLE As DateTime = New DateTime(1, 1, 1)
+    Friend Const NOT_DOWNLOADED As String = "Not downloaded"
+    Friend Const NEVER_UPDATED As String = "Never"
+
 End Module
 
 #Region "AstroUtil Enums and Structures"

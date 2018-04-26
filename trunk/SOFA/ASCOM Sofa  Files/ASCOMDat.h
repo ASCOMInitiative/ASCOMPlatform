@@ -15,6 +15,7 @@ typedef int bool; enum { false, true };
 
 //EXPORT int GetLeapSecondData(LeapSecondData UpdatedValues[]);
 EXPORT int GetLeapSecondData(LeapSecondData ReturnedLeapSecondData[], bool *UpdatedData);
+EXPORT int GetBuiltInLeapSecondData(LeapSecondData ReturnedLeapSecondData[]);
 EXPORT int UpdateLeapSecondData(LeapSecondData UpdatedValues[]);
 EXPORT int NumberOfBuiltInLeapSecondValues();
 EXPORT int UsingUpdatedData();

@@ -22,6 +22,7 @@ Public Class EarthRotationParameters : Implements IDisposable
     Private DownloadTaskTracePathValue As String
     Private DownloadTaskScheduledTimeValue As DateTime
     Private EarthRotationDataLastUpdatedValue As String
+    Private BuiltInLeapSecondsValues As SortedList(Of Double, Double)
 
     Private TL As TraceLogger
     Private DebugTraceEnabled As Boolean = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
@@ -58,9 +59,20 @@ Public Class EarthRotationParameters : Implements IDisposable
     End Sub
 
     Public Sub New(SuppliedTraceLogger As TraceLogger)
+        Dim LeapSecondDate As DateTime
+
         TL = SuppliedTraceLogger ' Save the reference to the caller's trace logger so we can write to it
         profile = New RegistryAccess()
         DebugTraceEnabled = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT) ' Get our debug trace value
+
+        LogMessage("EarthRotationParameters", "Getting built-in leap second values")
+        BuiltInLeapSecondsValues = SOFA.SOFA.BuiltInLeapSeconds
+        LogMessage("EarthRotationParameters", String.Format("Received {0 }leap second values", BuiltInLeapSecondsValues.Count))
+
+        For Each record As KeyValuePair(Of Double, Double) In BuiltInLeapSecondsValues
+            LeapSecondDate = DateTime.FromOADate(record.Key - OLE_AUTOMATION_JULIAN_DATE_OFFSET)
+            LogMessage("EarthRotationParameters", String.Format("Received leap second - DMY: {0} {1} {2}, Leap seconds: {3}, ({4})", LeapSecondDate.Day, LeapSecondDate.Month, LeapSecondDate.Year, record.Value, LeapSecondDate.ToLongDateString))
+        Next
 
         ' Initialise lock objects
         LeapSecondLockObject = New Object()
@@ -89,30 +101,19 @@ Public Class EarthRotationParameters : Implements IDisposable
 
 #Region "Public properties"
 
-    Public ReadOnly Property BuiltInLeapSeconds As Double
+    Public ReadOnly Property CurrentBuiltInLeapSeconds As Double
         Get
             Dim ReturnValue, RequiredLeapSecondJulianDate As Double
 
             RequiredLeapSecondJulianDate = DateTime.UtcNow.ToOADate + OLE_AUTOMATION_JULIAN_DATE_OFFSET
-
-            ' Find the leap second value from the built-in table of historic values
-            For i As Integer = BuiltInLeapSecondsValues.Count - 1 To 0 Step -1
-                LogDebugMessage("LeapSeconds(JD)", String.Format("Searching built-in JD {0} with leap second: {1}", BuiltInLeapSecondsValues.Keys(i), BuiltInLeapSecondsValues.Values(i)))
-
-                If Math.Truncate(RequiredLeapSecondJulianDate - MODIFIED_JULIAN_DAY_OFFSET) >= Math.Truncate(BuiltInLeapSecondsValues.Keys(i) - MODIFIED_JULIAN_DAY_OFFSET) Then ' Found a match
-                    ReturnValue = BuiltInLeapSecondsValues.Values(i)
-                    LogDebugMessage("LeapSeconds(JD)", String.Format("Found built-in leap second: {0} set on JD {1}", BuiltInLeapSecondsValues.Values(i), BuiltInLeapSecondsValues.Keys(i)))
-                    Exit For
-                End If
-            Next
-            LogDebugMessage("LeapSeconds(JD)", String.Format("Returning built-in leap seconds value: {0} for JD {1} ({2})",
+            ReturnValue = BuiltInLeapSeconds(RequiredLeapSecondJulianDate)
+            LogDebugMessage("CurrentBuiltInLeapSeconds", String.Format("Returning current built-in leap seconds value: {0} for JD {1} ({2})",
                                                                      ReturnValue,
                                                                      RequiredLeapSecondJulianDate,
                                                                      DateTime.FromOADate(RequiredLeapSecondJulianDate - OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(DOWNLOAD_TASK_TIME_FORMAT)))
-            BuiltInLeapSeconds = ReturnValue
+            Return ReturnValue
         End Get
     End Property
-
 
     Public Property DownloadTaskScheduledTime As DateTime
         Get
@@ -397,15 +398,7 @@ Public Class EarthRotationParameters : Implements IDisposable
                                                                      DateTime.FromOADate(RequiredLeapSecondJulianDate - OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(DOWNLOAD_TASK_TIME_FORMAT)))
                 Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1
                     ' Find the leap second value from the built-in table of historic values
-                    For i As Integer = BuiltInLeapSecondsValues.Count - 1 To 0 Step -1
-                        LogDebugMessage("LeapSeconds(JD)", String.Format("Searching built-in JD {0} with leap second: {1}", BuiltInLeapSecondsValues.Keys(i), BuiltInLeapSecondsValues.Values(i)))
-
-                        If Math.Truncate(RequiredLeapSecondJulianDate - MODIFIED_JULIAN_DAY_OFFSET) >= Math.Truncate(BuiltInLeapSecondsValues.Keys(i) - MODIFIED_JULIAN_DAY_OFFSET) Then ' Found a match
-                            ReturnValue = BuiltInLeapSecondsValues.Values(i)
-                            LogDebugMessage("LeapSeconds(JD)", String.Format("Found built-in leap second: {0} set on JD {1}", BuiltInLeapSecondsValues.Values(i), BuiltInLeapSecondsValues.Keys(i)))
-                            Exit For
-                        End If
-                    Next
+                    ReturnValue = BuiltInLeapSeconds(RequiredLeapSecondJulianDate)
                     LogDebugMessage("LeapSeconds(JD)", String.Format("Built-in leap seconds and delta UT1 are required, returning the built-in leap seconds value: {0} for JD {1} ({2})",
                                                                      ReturnValue,
                                                                      RequiredLeapSecondJulianDate,
@@ -501,7 +494,7 @@ Public Class EarthRotationParameters : Implements IDisposable
                 DeltaUT1String = profile.GetProfile(GlobalItems.AUTOMATIC_UPDATE_DELTAUT1_SUBKEY_NAME, DeltaUT1ValueName)
                 If DeltaUT1String <> "" Then ' We have got something back from the Profile so test whether it is a valid double number
                     If Double.TryParse(DeltaUT1String, NumberStyles.Float, CultureInfo.InvariantCulture, DeltaUT1) Then ' We have a valid double number so check that it is the acceptable range
-                        If (DeltaUT1 >= GlobalItems.DELTAUT1_LOWER_BOUND) And (DeltaUT1 <= GlobalItems.DELTAUT1_UPPER_BOUND) Then
+                        If (DeltaUT1 >= -GlobalItems.DELTAUT1_BOUND) And (DeltaUT1 <= GlobalItems.DELTAUT1_BOUND) Then
 
                             LogDebugMessage("DeltaT(JD)", String.Format("Automatic leap seconds and delta UT1 are required, found a good DeltaUT1 value so returning the calculated DeltaT value for Julian day: {0} ({1})",
                                                                         RequiredDeltaTJulianDateUTC,
@@ -661,7 +654,7 @@ Public Class EarthRotationParameters : Implements IDisposable
                 DeltaUT1String = profile.GetProfile(GlobalItems.AUTOMATIC_UPDATE_DELTAUT1_SUBKEY_NAME, DeltaUT1ValueName)
                 If DeltaUT1String <> "" Then ' We have got something back from the Profile so test whether it is a valid double number
                     If Double.TryParse(DeltaUT1String, ProfileValue) Then ' We have a valid double number so check that it is the acceptable range
-                        If (ProfileValue >= GlobalItems.DELTAUT1_LOWER_BOUND) And (ProfileValue <= GlobalItems.DELTAUT1_UPPER_BOUND) Then
+                        If (ProfileValue >= -GlobalItems.DELTAUT1_BOUND) And (ProfileValue <= GlobalItems.DELTAUT1_BOUND) Then
                             ReturnValue = ProfileValue
                             LogDebugMessage("DeltaUT1(JD)", String.Format("Automatic DeltaUT1 is required and a valid value has been found: {0} at Julian date: {1} ({2})",
                                                                    ReturnValue,
@@ -670,8 +663,8 @@ Public Class EarthRotationParameters : Implements IDisposable
                         Else ' We don't have a valid number so fall back to the predicted value
                             LogDebugMessage("DeltaUT1(JD)", String.Format("Automatic DeltaUT1 is required but the Profile value {0} is outside the valid range: {1} - {2}, returning the predicted value at Julian date: {3} ({4})",
                                                                    ProfileValue,
-                                                                   GlobalItems.DELTAUT1_LOWER_BOUND,
-                                                                   GlobalItems.DELTAUT1_UPPER_BOUND,
+                                                                   -GlobalItems.DELTAUT1_BOUND,
+                                                                   GlobalItems.DELTAUT1_BOUND,
                                                                    RequiredDeltaUT1JulianDateUTC,
                                                                    DateTime.FromOADate(RequiredDeltaUT1JulianDateUTC - OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(DOWNLOAD_TASK_TIME_FORMAT)))
                             ReturnValue = Me.LeapSeconds(RequiredDeltaUT1JulianDateUTC) + TT_TAI_OFFSET - Me.DeltaT(RequiredDeltaUT1JulianDateUTC)
@@ -801,15 +794,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         NowJulian = DateTime.UtcNow.ToOADate + OLE_AUTOMATION_JULIAN_DATE_OFFSET
 
         ' Find the leap second value from the built-in table of historic values
-        For i As Integer = BuiltInLeapSecondsValues.Count - 1 To 0 Step -1
-            LogDebugMessage("RefreshState", String.Format("Leap second default - searching built-in JD {0} with leap second: {1}", BuiltInLeapSecondsValues.Keys(i), BuiltInLeapSecondsValues.Values(i)))
-
-            If Math.Truncate(NowJulian - MODIFIED_JULIAN_DAY_OFFSET) >= Math.Truncate(BuiltInLeapSecondsValues.Keys(i) - MODIFIED_JULIAN_DAY_OFFSET) Then ' Found a match
-                CurrentLeapSeconds = BuiltInLeapSecondsValues.Values(i)
-                LogDebugMessage("RefreshState", String.Format("Leap second default - found built-in leap second: {0} set on JD {1}", BuiltInLeapSecondsValues.Values(i), BuiltInLeapSecondsValues.Keys(i)))
-                Exit For
-            End If
-        Next
+        CurrentLeapSeconds = CurrentBuiltInLeapSeconds
 
         Dim ManualTaiUtcOffsetString As String = profile.GetProfile(ASTROMETRY_SUBKEY, MANUAL_LEAP_SECONDS_VALUENAME, CurrentLeapSeconds.ToString(CultureInfo.InvariantCulture))
         If (Double.TryParse(ManualTaiUtcOffsetString, NumberStyles.Float, CultureInfo.InvariantCulture, ManualLeapSecondsValue)) Then ' String parsed OK so list value if debug is enabled
@@ -820,7 +805,7 @@ Public Class EarthRotationParameters : Implements IDisposable
             LogEvent(String.Format("EarthRoationParameter ManualTaiUtcOffset is corrupt: {0}, default value has been set: {1}", ManualTaiUtcOffsetString, ManualLeapSecondsValue))
         End If
 
-        EarthRotationDataLastUpdatedValue = profile.GetProfile(ASTROMETRY_SUBKEY, EARTH_ROTATION_DATA_LAST_UPDATED_VALUE_NAME, EARTH_ROTATION_DATA_NEVER_UPDATED)
+        EarthRotationDataLastUpdatedValue = profile.GetProfile(ASTROMETRY_SUBKEY, EARTH_ROTATION_DATA_LAST_UPDATED_VALUE_NAME, EARTH_ROTATION_DATA_LAST_UPDATED_DEFAULT)
 
         OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, DOWNLOAD_TASK_DATA_SOURCE_VALUE_NAME, DOWNLOAD_TASK_DATA_UPDATE_SOURCE_DEFAULT)
         UriValid = False ' Set the valid flag false, then set to true if the download source starts with a supported URI prefix
@@ -882,8 +867,8 @@ Public Class EarthRotationParameters : Implements IDisposable
         End Try
 
         AutomaticLeapSecondsValue = DOUBLE_VALUE_NOT_AVAILABLE ' Initialise value as not available
-        OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, AUTOMATIC_LEAP_SECONDS_VALUENAME, AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE)
-        If OriginalProfileValue = AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE Then ' Has the default value so is OK
+        OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, AUTOMATIC_LEAP_SECONDS_VALUENAME, AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT)
+        If OriginalProfileValue = AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT Then ' Has the default value so is OK
             AutomaticLeapSecondsStringValue = OriginalProfileValue
             LogDebugMessage("RefreshState", String.Format("AutomaticLeapSecondsStringValue: {0}", AutomaticLeapSecondsStringValue))
         Else ' Not default so it should be parseable
@@ -891,15 +876,15 @@ Public Class EarthRotationParameters : Implements IDisposable
                 AutomaticLeapSecondsStringValue = OriginalProfileValue
                 LogDebugMessage("RefreshState", String.Format("AutomaticLeapSecondsStringValue: {0}, AutomaticLeapSecondsValue: {1}", AutomaticLeapSecondsStringValue, AutomaticLeapSecondsValue))
             Else 'Returned string doesn't represent a number so reapply the default
-                AutomaticLeapSecondsString = AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE
+                AutomaticLeapSecondsString = AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT
                 LogMessage("EarthRotParm CORRUPT!", String.Format("EarthRoationParameter AutomaticLeapSecondsString is corrupt: {0}, default value has been set: {1}, AutomaticLeapSecondsValue: {2}", OriginalProfileValue, AutomaticLeapSecondsStringValue, AutomaticLeapSecondsValue.ToString()))
                 LogEvent(String.Format("EarthRoationParameter AutomaticLeapSecondsString is corrupt: {0}, default value has been set: {1}", OriginalProfileValue, AutomaticLeapSecondsStringValue))
             End If
         End If
 
         NextLeapSecondsValue = DOUBLE_VALUE_NOT_AVAILABLE ' Initialise value as not available
-        OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, NEXT_LEAP_SECONDS_VALUENAME, NEXT_LEAP_SECONDS_NOT_AVAILABLE)
-        If (OriginalProfileValue = NEXT_LEAP_SECONDS_NOT_AVAILABLE) Or (OriginalProfileValue = DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Then ' Has the default or not published value so is OK
+        OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, NEXT_LEAP_SECONDS_VALUENAME, NEXT_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT)
+        If (OriginalProfileValue = NEXT_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT) Or (OriginalProfileValue = DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Then ' Has the default or not published value so is OK
             NextLeapSecondsStringValue = OriginalProfileValue
             LogDebugMessage("RefreshState", String.Format("NextLeapSecondsStringValue: {0}", NextLeapSecondsStringValue))
         Else ' Not default so it should be parseable
@@ -907,15 +892,15 @@ Public Class EarthRotationParameters : Implements IDisposable
                 NextLeapSecondsStringValue = OriginalProfileValue
                 LogDebugMessage("RefreshState", String.Format("NextLeapSecondsStringValue: {0}, NextLeapSecondsValue: {1}", NextLeapSecondsStringValue, NextLeapSecondsValue))
             Else 'Returned string doesn't represent a number so reapply the default
-                NextLeapSecondsString = NEXT_LEAP_SECONDS_NOT_AVAILABLE
+                NextLeapSecondsString = NEXT_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT
                 LogMessage("EarthRotParm CORRUPT!", String.Format("EarthRoationParameter NextLeapSecondsString is corrupt: {0}, default value has been set: {1}, NextLeapSecondsValue: {2}", OriginalProfileValue, NextLeapSecondsStringValue, NextLeapSecondsValue))
                 LogEvent(String.Format("EarthRoationParameter NextLeapSecondsString is corrupt: {0}, default value has been set: {1}", OriginalProfileValue, NextLeapSecondsStringValue))
             End If
         End If
 
         NextLeapSecondsDateValue = DATE_VALUE_NOT_AVAILABLE ' Initialise value as not available
-        OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, NEXT_LEAP_SECONDS_DATE_VALUENAME, NEXT_LEAP_SECONDS_DATE_DEFAULT)
-        If (OriginalProfileValue = NEXT_LEAP_SECONDS_DATE_DEFAULT) Or (OriginalProfileValue = DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Then ' Has the default or not published value so is OK
+        OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, NEXT_LEAP_SECONDS_DATE_VALUENAME, NEXT_LEAP_SECONDS_DATE_NOT_AVAILABLE_DEFAULT)
+        If (OriginalProfileValue = NEXT_LEAP_SECONDS_DATE_NOT_AVAILABLE_DEFAULT) Or (OriginalProfileValue = DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Then ' Has the default or not published value so is OK
             NextLeapSecondsDateStringValue = OriginalProfileValue
             LogDebugMessage("RefreshState", String.Format("AutomaticNextTaiUtcOffsetDateValue = {0}", NextLeapSecondsDateStringValue))
         Else ' Not default so it should be parseable
@@ -1011,6 +996,27 @@ Public Class EarthRotationParameters : Implements IDisposable
     Private Sub LogEvent(message As String)
         EventLogCode.LogEvent("EarthRotationUpdate", message, EventLogEntryType.Warning, EventLogErrors.EarthRotationUpdate, "")
     End Sub
+
+    Private Function BuiltInLeapSeconds(RequiredLeapSecondJulianDate As Double) As Double
+        Dim ReturnValue As Double
+
+        ' Find the leap second value from the built-in table of historic values
+        For i As Integer = BuiltInLeapSecondsValues.Count - 1 To 0 Step -1
+            LogDebugMessage("BuiltInLeapSeconds(JD)", String.Format("Searching built-in JD {0} with leap second: {1}", BuiltInLeapSecondsValues.Keys(i), BuiltInLeapSecondsValues.Values(i)))
+
+            If Math.Truncate(RequiredLeapSecondJulianDate - MODIFIED_JULIAN_DAY_OFFSET) >= Math.Truncate(BuiltInLeapSecondsValues.Keys(i) - MODIFIED_JULIAN_DAY_OFFSET) Then ' Found a match
+                ReturnValue = BuiltInLeapSecondsValues.Values(i)
+                LogDebugMessage("BuiltInLeapSeconds(JD)", String.Format("Found built-in leap second: {0} set on JD {1}", BuiltInLeapSecondsValues.Values(i), BuiltInLeapSecondsValues.Keys(i)))
+                Exit For
+            End If
+        Next
+        LogDebugMessage("BuiltInLeapSeconds(JD)", String.Format("Returning built-in leap seconds value: {0} for JD {1} ({2})",
+                                                                     ReturnValue,
+                                                                     RequiredLeapSecondJulianDate,
+                                                                     DateTime.FromOADate(RequiredLeapSecondJulianDate - OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(DOWNLOAD_TASK_TIME_FORMAT)))
+        Return ReturnValue
+
+    End Function
 
 #End Region
 

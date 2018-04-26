@@ -14,6 +14,12 @@
 static LeapSecondData UpdatedLeapSecondData[100];  // Global LeapSecondData array to hold updated leap second data supplied to this DLL
 static bool HasUpdatedData = false;				   // Global boolean flag to indicate whether updated data has been supplied. If TRUE, the updated data will be used, if FALSE, built-in data will be used
 static int NUPDATED = 0;						   // Global integer to hold the number of updated leap second records supplied
+
+// This is the master data table for the whole ASCOM Platform. It is located here in the SOFA DLLs so that they can be used independedntly of the Platform if required.
+// The Platform EarthRotatiuonParameters class reads these values through a static SOFA assmebly method and uses them as neded throughout the Platform
+// When new leap seconds are announced:
+//      1) The new value should be added to the end of the values here
+//      2) The NBUILTIN enum in ASCOMDat.h should be incremented to reflect the new number of leap second values
 static LeapSecondData BuiltInLeapSecondData[100] = // Global LeapSecondData array to hold built-in leap second values
 {
 	{ 1960,  1,  1.4178180 },  // BuiltInLeapSecondData[0]
@@ -471,12 +477,9 @@ int NumberOfBuiltInLeapSecondValues()
 int GetLeapSecondData(LeapSecondData ReturnedLeapSecondData[], bool *UpdatedData)
 
 /************************************************************************************************************************************************************************/
-/* INPUT:   Array of LeapSecondDataStruct values - maximum size 100 elements																							*/
-/* STORES:  Supplied SuppliedLeapSecondData array data in global array UpdatedLeapSecondData                                                                            */
-/* RETURNS: Integer status code:                                                                                                                                        */
-/*                       0 - Success - data accepted																													*/
-/*                       1 - Success - data ignored because it has already been supplie 			        															*/
-/*                       2 - Failure - data rejected because at least 100 records were supplied and this is unreasonable since there are only 42 records at April 2018! */
+/* RETURNS: The currently in use array of leap second data                                                                                                              */
+/* RETURNS: Boolean indicating whether the built-in or user supplied tables are being returned                                                                          */
+/* RETURNS: Integer status code:  The number of records being returned                                                                                                  */
 /************************************************************************************************************************************************************************/
 
 {
@@ -504,7 +507,7 @@ int GetLeapSecondData(LeapSecondData ReturnedLeapSecondData[], bool *UpdatedData
 			RecordNumber += 1; // Increment the record count
 		}
 
-		rc = NUPDATED;
+		rc = NUPDATED; // Return a status code to indicate the number of returned items
 	}
 	else // Return the built-in data array
 	{
@@ -527,7 +530,7 @@ int GetLeapSecondData(LeapSecondData ReturnedLeapSecondData[], bool *UpdatedData
 			RecordNumber += 1; // Increment the record count
 		}
 
-		rc = NBUILTIN; // Return a status code to indicate that the data was ignored
+		rc = NBUILTIN; // Return a status code to indicate the number of returned items
 	}
 
 #ifdef _DEBUG 
@@ -538,6 +541,7 @@ int GetLeapSecondData(LeapSecondData ReturnedLeapSecondData[], bool *UpdatedData
 
 	return rc;
 }
+
 /* Method called from outside the SOFA DLL to return the current leap second data table */
 int UsingUpdatedData()
 {
@@ -549,4 +553,44 @@ int UsingUpdatedData()
 #endif
 
 	return HasUpdatedData;
+}
+
+/* Method called from outside the SOFA DLL to return the builkt-in leap second data table */
+int GetBuiltInLeapSecondData(LeapSecondData ReturnedLeapSecondData[])
+
+/************************************************************************************************************************************************************************/
+/* RETURNS: The built-in array of leap second data                                                                                                                      */
+/* RETURNS: Integer status code:  The number of records being returned                                                                                                  */
+/************************************************************************************************************************************************************************/
+
+{
+	int rc = 0;
+	int RecordNumber = 0;
+
+#ifdef _DEBUG 
+	printf("GetLeapSecondData - Returning built-in data...\n");
+#endif
+
+	//BuiltInLeapSecondData
+	/* Iterate over the supplied data and transfer it to the return array */
+	while (RecordNumber < NBUILTIN)
+	{
+		ReturnedLeapSecondData[RecordNumber].Year = BuiltInLeapSecondData[RecordNumber].Year; // Save the data to the UpdatedLeapSecondData arrau
+		ReturnedLeapSecondData[RecordNumber].Month = BuiltInLeapSecondData[RecordNumber].Month;
+		ReturnedLeapSecondData[RecordNumber].LeapSeconds = BuiltInLeapSecondData[RecordNumber].LeapSeconds;
+
+#ifdef _DEBUG 
+		printf("GetBuiltInLeapSecondData value: %g %i %i\n", ReturnedLeapSecondData[RecordNumber].LeapSeconds, ReturnedLeapSecondData[RecordNumber].Month, ReturnedLeapSecondData[RecordNumber].Year);
+#endif
+
+		RecordNumber += 1; // Increment the record count
+	}
+
+	rc = NBUILTIN; // Return a status code to indicate the number of returned items
+
+#ifdef _DEBUG 
+	printf("GetBuiltInLeapSecondData - Return code: %i\n", rc);
+#endif
+
+	return rc;
 }

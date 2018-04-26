@@ -48,7 +48,7 @@ Namespace AstroUtils
             RegAccess = New RegistryAccess
             TL.LogMessage("New", "AstroUtils created Utilities component OK")
             Parameters = New EarthRotationParameters(TL)
-            TL.LogMessage("New", "AstroUtils created Earth Rotation Paraemters object OK")
+            TL.LogMessage("New", "AstroUtils created Earth Rotation Parameters object OK")
             TL.LogMessage("New", "Finished initialisation OK")
         End Sub
 

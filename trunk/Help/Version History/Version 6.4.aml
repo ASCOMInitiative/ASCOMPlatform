@@ -44,19 +44,34 @@
     		<title>Key Changes in 6.4 - For Everyone</title>
       		<content>
 				<list class="bullet">
+	      			<listItem>Leap second and DeltaUT1 Updates
+						<list class="bullet">
+							<listItem>The Platform can download current and announced future leap seconds from the Internet. Consequentially, the Platform doesn't need to be updated when new
+							leap seconds are announced or come into effect.</listItem>
+							<listItem>The Platform can download DeltaUT1 predictions for the coming 90 days from the Internet.</listItem>
+							<listItem>The SOFA and Transform components will use the updated leap second and DeltaUT1 values to ensure the highest accuracy.</listItem>
+							<listItem>The current leap second and DeltaUT1 values can be entered manually if Internet access is not available.</listItem>
+							<listItem>Configuration of these updates is through the Diagnostics Tools / Earth Rotation Data menu.</listItem>
+							<listItem>Several pre-configured Internet data source URIs are provided and the application will accept a user provided URI if required.</listItem>
+							<listItem>A Windows schedule task is provided to automate the download process on a configurable daily, weekly or monthly basis.</listItem>
+							<listItem>An automatic update can be triggered manually from the Diagnostics application.</listItem>
+	      				</list>
+	      			</listItem>
 		      		<listItem>Rotator Simulator - The relative Move command has been improved so that relative moves outside the range -360 to 360 are rejected while moves inside the range -360 to +360 
 		      		are accepted with the target forced to the range 0 to 360. This matches the specification more accurately; thanks to Steve Barkes for finding this.</listItem>
 		      		<listItem>Focuser Simulator - Now has a short delay after a move before IsMoving returns false.</listItem>
 		      		<listItem>Focuser Simulator - Now has a logging function and check box to enable this.</listItem>
-	      			<listItem>DeltaT and DeltaUT prediction modelling was updated in February 2018 with the latest USNO data, which is considered good for at least 1 year.</listItem>
+	      			<listItem>DeltaT and DeltaUT prediction modelling was updated in April 2018 with the latest USNO data, which is considered good for at least 1 year.</listItem>
 	      			<listItem>Installer - Now names uninstall logs as such rather than naming them install logs, which was confusing.</listItem>
 	      			<listItem>Diagnostics - Now has an option to automatically open the log file at the end of the test sequence.</listItem>
+	      			<listItem>String comparison operations have been revised to best practice throughout the Platform to ensure expected operation in all locales.</listItem>
 	      			<listItem>Platform Documentation Changes
 						<list class="bullet">
 							<listItem>Telescope.DeclinationRate was updated to reference SI seconds as agreed on ASCOM Talk in March 2017.</listItem>
 							<listItem>Telescope.RightAscensionRate was updated to reference its units as seconds of RA per sidereal second as agreed on ASCOM Talk in March 2017.</listItem>
 							<listItem>Telescope Sidereal tracking rate was updated to angle per SI second as agreed on ASCOM Talk in March 2017.</listItem>
 							<listItem>Camera.CCDTemperature was updated to allow CCD temperature to be returned even if there is no cooler.</listItem>
+							<listItem>Corrected spelling of twilight throughout Platform help.</listItem>
 	      				</list>
 	      			</listItem>
 	      			<listItem>Platform Infrastructure and Maintainability Improvements
@@ -81,6 +96,25 @@
 	     	<title>Key Changes in 6.4 - For Developers</title>
 	      	<content>
 	      		<list class="bullet">
+	      			<listItem>The Focuser interface has been revised from IFocuserV2 to IFocuserV3.
+						<list class="bullet">
+			      			<listItem>The IFocuserV3.Move method is now required to work and not to throw an InvalidOperationException when a move is commanded while temperature
+			      			compensation is enabled.</listItem>
+			      			<listItem>Any device specific operations required to effect the move should be hidden from the client application. e.g. if temperature 
+			      			compensation needs to be temporarily disabled while the move is made and subsequently re-enabled.</listItem>
+			      			<listItem>No method signatures have been changed in IFocuserV3.</listItem>
+			      			<listItem>To use the new interface in your driver:
+								<list class="bullet">
+					      			<listItem>Install the Platform 6.4 Developer's components.</listItem>
+					      			<listItem>Replace all references to IFocuserV2 with IFocuserV3</listItem>
+					      			<listItem>Change the IFocuserV3.InterFaceVersion property to return 3</listItem>
+					      			<listItem>Revise your IFocuserV3.Move code not to throw an ASCOM.InvalidOperationException exception if a move is requested when temperature compensation is enabled.</listItem>
+			      				</list>
+			      			</listItem>
+			      			<listItem>IFocuserV2 will remain available to support drivers built to this specification.</listItem>
+			      			<listItem>Conform has been updated to test IFocuserV3 drivers in line with the new requirement.</listItem>
+	      				</list>
+	      			</listItem>
 	      			<listItem>A gain control has been added to the Camera test application.</listItem>
 	      			<listItem>COM error numbers are now included in documentation so that these can be thrown directly if required, e.g. by a Delphi application.</listItem>
 	      			<listItem>The Template Wizard has been uplevelled to v6.4.</listItem>
@@ -89,6 +123,7 @@
 	      			applications utilise. The cache provides a time based expiry approach, where stale items are automatically removed after expiry. In addition the cache provides an easy to use
 	      			throttling mechanic that can slow aggressive application polling to acceptable rates for the driver and hardware. Further information is provided in the remarks section of the Cache class 
 	      			and the property / method documentation.</listItem>
+	      			<listItem>Driver Templates - Not implemented exceptions have been removed from all Dispose methods and replaced with TODO: items.</listItem>
 				</list>
       		</content>
    		</section>
@@ -97,8 +132,11 @@
            	<title>Issues Fixed - Platform</title>
             <content>
       			<list class="bullet">
+	      			<listItem>Chooser no longer fails when selecting in-process COM drivers e.g. the ASCOM Focuser Simulator Driver, in locales such as Turkey which use dotted capital I characters (İ).</listItem>
 	      			<listItem>When queried, several components returned version number references to earlier Platforms rather than the current Platform.</listItem>
 	      			<listItem>The Diagnostics DeltaT test no longer throws false errors.</listItem>
+	      			<listItem>The SafetyMonitor simulator Dispose method no longer throws a NotImplementedException.</listItem>
+	      			<listItem>Calling Telescope.TrackingRates.Dispose() from one instance no longer destroys objects used by other TrackingRates instances.</listItem>
 				</list>
    			</content>
    		</section>
@@ -108,7 +146,9 @@
             <content>
       			<list class="bullet">
 	      			<listItem>The Developer components installer will now recognise a VS2017 install and offer to install the ASCOM driver templates.</listItem>
-	      			<listItem>TraceLogger.LogFileName now returns the full trace file path instead of an empty string when a specific log file name has been set ..</listItem>
+	      			<listItem>TraceLogger.LogFileName now returns the full trace file path instead of an empty string when a specific log file name has been set.</listItem>
+	      			<listItem>In-process C# drivers created from ASCOM driver templates will now have fixed assembly version numbers (like C# local server, VB in-process and VB local server drivers) instead of 
+	      			"updated on each build" assembly version numbers). This supports a more productive development environment and avoids creating a proliferation of COM registry entries.</listItem>
 	      		</list>
    			</content>
    		</section>

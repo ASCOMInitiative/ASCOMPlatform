@@ -18,7 +18,7 @@ Module DeltatCode
     ''' To esnure that leap second and DeltaUT1 transitions are handled correctly and occur at 00:00:00 UTC, the supplied Julian date should be in UTC time
     ''' </remarks>
     Function DeltaTCalc(ByVal JulianDateUTC As Double) As Double
-        Dim YearFraction, B, Retval As Double, UTCDate As DateTime
+        Dim YearFraction, B, Retval, ModifiedJulianDay As Double, UTCDate As DateTime
         Static LastJulianDateUTC As Double = DOUBLE_VALUE_NOT_AVAILABLE, LastDeltaTValue As Double
         Static DeltaTCalcLockObject As Object = New Object()
 
@@ -33,9 +33,15 @@ Module DeltatCode
 
         UTCDate = DateTime.FromOADate(JulianDateUTC - OLE_AUTOMATION_JULIAN_DATE_OFFSET) ' Convert the Julian day into a DateTime
         YearFraction = 2000.0 + (JulianDateUTC - J2000BASE) / TROPICAL_YEAR_IN_DAYS ' This calculation is accurate enough for our purposes here (T0 = 2451545.0 is TDB Julian date of epoch J2000.0)
+        ModifiedJulianDay = JulianDateUTC - MODIFIED_JULIAN_DAY_OFFSET
 
-        ' DATE RANGE January 2018 Onwards - The analysis was performed on 28th December 2017 and creates values within 0.03 of a second of the projections to Q4 2018 and sensible extrapolation to 2021
-        If (YearFraction >= 2018) And (YearFraction < Double.MaxValue) Then
+        ' DATE RANGE April 2018 Onwards - The analysis was performed on 25th April 2018 and creates values within 0.03 of a second of the projections to Q4 2018 and sensible extrapolation to 2021
+        ' NOTE: Please not the change to using the modified Julian date in the forumula rather than year fraction compared to previous formulae
+        If (YearFraction >= 2018.3) And (YearFraction < Double.MaxValue) Then
+            Retval = (0.00000161128367083801 * ModifiedJulianDay * ModifiedJulianDay) + (-0.187474214389602 * ModifiedJulianDay) + 5522.26034874982
+
+            ' DATE RANGE January 2018 Onwards - The analysis was performed on 28th December 2017 and creates values within 0.03 of a second of the projections to Q4 2018 and sensible extrapolation to 2021
+        ElseIf (YearFraction >= 2018) And (YearFraction < Double.MaxValue) Then
             Retval = (0.0024855297566049 * YearFraction * YearFraction * YearFraction) + (-15.0681141702439 * YearFraction * YearFraction) + (30449.647471213 * YearFraction) - 20511035.5077593
 
             ' DATE RANGE January 2017 Onwards - The analysis was performed on 29th December 2016 and creates values within 0.12 of a second of the projections to Q3 2019

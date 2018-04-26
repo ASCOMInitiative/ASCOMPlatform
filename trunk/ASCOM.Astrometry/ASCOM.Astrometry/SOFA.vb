@@ -49,7 +49,7 @@ Namespace SOFA
 
         Private TL As TraceLogger
         Private Utl As Util
-        Private SofaDllHandle As IntPtr
+        Private Shared SofaDllHandle As IntPtr
 
         Private Parameters As EarthRotationParameters
 
@@ -62,8 +62,42 @@ Namespace SOFA
 
         Dim RevisedData(MAXIMUM_NUMBER_OF_UPDATED_LEAP_SECOPND_VALUES - 1) As LeapSecondDataStruct
 
-
 #Region "New and IDisposable"
+
+        ''' <summary>
+        ''' Static initialiser to load the SOFA DLL so that it is available for SOFA static functions such as GetBuiltInLeapSeconds
+        ''' </summary>
+        Shared Sub New()
+
+            Dim ReturnedPath As New System.Text.StringBuilder(260), SofaDllFile As String, rc As Boolean, LastError As Integer
+
+#If DEBUG Then
+            ' In the DEBUG environment load the DLL from the application directory where the latest verion will have been copied.
+            ' This assumes that debugging is only undertaken using 32bit applications
+            rc = False ' Just to Suppress a compiler warning
+            SofaDllFile = String.Format("{0}\..\..\..\..\SOFA\Sofa Library\Win32\Debug\{1}", Environment.CurrentDirectory, SOFA32DLL)
+#Else
+            'Find the root location of the common files directory containing the ASCOM support files.
+            'On a 32bit system this is \Program Files\Common Files
+            'On a 64bit system this is \Program Files (x86)\Common Files
+            If Is64Bit() Then ' 64bit application so find the 32bit folder location
+                rc = SHGetSpecialFolderPath(IntPtr.Zero, ReturnedPath, CSIDL_PROGRAM_FILES_COMMONX86, False)
+                SofaDllFile = ReturnedPath.ToString & SOFA_DLL_LOCATION & SOFA64DLL
+            Else '32bit application so just go with the .NET returned value
+                SofaDllFile = GetFolderPath(SpecialFolder.CommonProgramFiles) & SOFA_DLL_LOCATION & SOFA32DLL
+            End If
+#End If
+            SofaDllHandle = LoadLibrary(SofaDllFile)
+            LastError = Marshal.GetLastWin32Error
+
+            If SofaDllHandle <> IntPtr.Zero Then ' Loaded successfully
+
+            Else ' Did not load 
+                Throw New HelperException(String.Format("Error code {0} returned from LoadLibrary when loading SOFA library: {1}  ", LastError.ToString("X8"), SofaDllFile))
+            End If
+
+        End Sub
+
         ''' <summary>
         ''' Creates a new instance of the SOFA component
         ''' </summary>
@@ -195,7 +229,7 @@ Namespace SOFA
 
             Else ' Did not load 
                 TL.LogMessage("New", "Error loading SOFA library: " & LastError.ToString("X8"))
-                Throw New HelperException("Error code returned from LoadLibrary when loading SOFA library: " & LastError.ToString("X8"))
+                Throw New HelperException(String.Format("Error code {0} returned from LoadLibrary when loading SOFA library: {1}  ", LastError.ToString("X8"), SofaDllFile))
             End If
 
             TL.LogMessage("New", "SOFA Initialised OK")
@@ -1531,6 +1565,10 @@ Namespace SOFA
         Private Shared Function GetLeapSecondData32(<Out()> arr() As LeapSecondDataStruct, ByRef HasUpdatedData As Integer) As Short
         End Function
 
+        <DllImport(SOFA32DLL, EntryPoint:="GetBuiltInLeapSecondData")>
+        Private Shared Function GetLeapSecondData32(<Out()> arr() As LeapSecondDataStruct) As Short
+        End Function
+
         <DllImport(SOFA32DLL, EntryPoint:="UsingUpdatedData")>
         Private Shared Function UsingUpdatedData32() As Short
         End Function
@@ -1736,6 +1774,10 @@ Namespace SOFA
         Private Shared Function GetLeapSecondData64(<Out()> arr() As LeapSecondDataStruct, ByRef HasUpdatedData As Integer) As Short
         End Function
 
+        <DllImport(SOFA64DLL, EntryPoint:="GetBuiltInLeapSecondData")>
+        Private Shared Function GetLeapSecondData64(<Out()> arr() As LeapSecondDataStruct) As Short
+        End Function
+
         <DllImport(SOFA64DLL, EntryPoint:="UsingUpdatedData")>
         Private Shared Function UsingUpdatedData64() As Short
         End Function
@@ -1804,7 +1846,7 @@ Namespace SOFA
         ''' </summary>
         ''' <returns>True if the application is 64bit, False for 32bit</returns>
         ''' <remarks></remarks>
-        Private Function Is64Bit() As Boolean
+        Private Shared Function Is64Bit() As Boolean
             If IntPtr.Size = 8 Then 'Check whether we are running on a 32 or 64bit system.
                 Return True
             Else
@@ -1812,6 +1854,40 @@ Namespace SOFA
             End If
         End Function
 
+#End Region
+
+#Region "Static Methods"
+
+        ' Get the built-in list of leap seconds from the SOFA DLL, which is the master data for the whole Platform
+        ' This method is static so that it can be called without having to fully initialise the SOFA DLL which uses an instance of the EarthRotationParameters 
+        ' object leading to a circular reference of EarthRotationParameters calling SOFA, which calls EarthRotationParameters and so on ad infinitum.
+        Public Shared Function BuiltInLeapSeconds() As SortedList(Of Double, Double)
+            Dim LeapSecondArray(100) As LeapSecondDataStruct, LeapSecondList As SortedList(Of Double, Double)
+            Dim NumberOfRecords As Short, UpdatedDataInt As Integer, JulianDate As Double
+
+            LeapSecondList = New SortedList(Of Double, Double)
+            Try
+
+                If Is64Bit() Then ' Call the appropriate 32 or 64 bit DLL depending on the application bitness.
+                    NumberOfRecords = GetLeapSecondData64(LeapSecondArray, UpdatedDataInt)
+                Else
+                    NumberOfRecords = GetLeapSecondData32(LeapSecondArray, UpdatedDataInt)
+                End If
+                Debug.Print("BuiltInLeapSeconds received records: " & NumberOfRecords)
+
+                ' Process the received LeapSecondDataStruct records and save them into a sorted list of juliandate:leapsecond pairs
+                For i As Integer = 0 To NumberOfRecords - 1
+                    ' Create a Julian date from the supplied year, month, date
+                    JulianDate = New DateTime(LeapSecondArray(i).Year, LeapSecondArray(i).Month, 1).ToOADate + OLE_AUTOMATION_JULIAN_DATE_OFFSET
+                    LeapSecondList.Add(JulianDate, LeapSecondArray(i).DelAt)
+                Next
+            Catch ex As Exception
+                Debug.Print("")
+            End Try
+
+            Return LeapSecondList
+
+        End Function
 #End Region
 
     End Class
