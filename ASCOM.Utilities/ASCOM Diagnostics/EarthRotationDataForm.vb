@@ -83,7 +83,7 @@ Public Class EarthRotationDataForm
             End If
 
             ' Get a value to use as the lowest valid value for leap seconds during validation
-            LeapSecondMinimumValue = Parameters.BuiltInLeapSeconds
+            LeapSecondMinimumValue = Parameters.CurrentBuiltInLeapSeconds
 
             ' Populate the combo box lists
             CmbDataSource.Items.Clear()
@@ -277,7 +277,7 @@ Public Class EarthRotationDataForm
         TxtLastRun.Text = Parameters.EarthRotationDataLastUpdatedString
         TxtCurrentLeapSeconds.Text = Parameters.AutomaticLeapSecondsString
         TxtNextLeapSeconds.Text = Parameters.NextLeapSecondsString
-        TxtNextLeapSecondsDate.Text = Parameters.NextLeapSecondsDateString & IIf((Parameters.NextLeapSecondsDateString = GlobalItems.DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Or (Parameters.NextLeapSecondsDateString = GlobalItems.NEXT_LEAP_SECONDS_DATE_DEFAULT), "", "UTC")
+        TxtNextLeapSecondsDate.Text = Parameters.NextLeapSecondsDateString & IIf((Parameters.NextLeapSecondsDateString = GlobalItems.DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Or (Parameters.NextLeapSecondsDateString = GlobalItems.NEXT_LEAP_SECONDS_DATE_NOT_AVAILABLE_DEFAULT), "", "UTC")
         TxtLastRun.Text = Parameters.EarthRotationDataLastUpdatedString
 
     End Sub
@@ -427,7 +427,7 @@ Public Class EarthRotationDataForm
                 TL.LogMessage("UpdateTypeEvent", String.Format("Highest supported scheduler version: {0}, Library version: {1}, Connected: {2}", service.HighestSupportedVersion, TaskService.LibraryVersion, service.Connected))
 
                 ' List current task state if any
-                Dim ASCOMTask As Task = service.GetTask(DOWNLOAD_SCHEDULE_TASK_PATH)
+                Dim ASCOMTask As Task = service.GetTask(DOWNLOAD_TASK_PATH)
                 If (Not (ASCOMTask Is Nothing)) Then
                     TL.LogMessage("UpdateTypeEvent", String.Format("Found ASCOM task {0} last run: {1}, State: {2}, Enabled: {3}", ASCOMTask.Path, ASCOMTask.LastRunTime, ASCOMTask.State, ASCOMTask.Enabled))
                 Else
@@ -438,21 +438,21 @@ Public Class EarthRotationDataForm
                 Select Case EarthRotationDataUpdateType
                     Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1 ' Just remove the update job if it exists so that it can't run
                         If (Not (ASCOMTask Is Nothing)) Then
-                            TL.LogMessage("UpdateTypeEvent", String.Format("Update type is {0} and {1} task exists so it will be deleted.", EarthRotationDataUpdateType, DOWNLOAD_SCHEDULE_TASK_NAME))
-                            service.RootFolder.DeleteTask(DOWNLOAD_SCHEDULE_TASK_NAME)
-                            TL.LogMessage("UpdateTypeEvent", String.Format("Task {0} deleted OK.", DOWNLOAD_SCHEDULE_TASK_NAME))
+                            TL.LogMessage("UpdateTypeEvent", String.Format("Update type is {0} and {1} task exists so it will be deleted.", EarthRotationDataUpdateType, DOWNLOAD_TASK_NAME))
+                            service.RootFolder.DeleteTask(DOWNLOAD_TASK_NAME)
+                            TL.LogMessage("UpdateTypeEvent", String.Format("Task {0} deleted OK.", DOWNLOAD_TASK_NAME))
                         Else
-                            TL.LogMessage("UpdateTypeEvent", String.Format("Update type is {0} and {1} task does not exist so no action.", EarthRotationDataUpdateType, DOWNLOAD_SCHEDULE_TASK_NAME))
+                            TL.LogMessage("UpdateTypeEvent", String.Format("Update type is {0} and {1} task does not exist so no action.", EarthRotationDataUpdateType, DOWNLOAD_TASK_NAME))
                         End If
 
                     Case UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1 ' Create a new or Update the existing scheduled job
 
                         ' Get the task definition to work on, either a new one or the existing task, if it exists
                         If (Not (ASCOMTask Is Nothing)) Then
-                            TL.LogMessage("UpdateTypeEvent", String.Format("Update type is {0} and {1} task exists so it will be updated.", EarthRotationDataUpdateType, DOWNLOAD_SCHEDULE_TASK_NAME))
+                            TL.LogMessage("UpdateTypeEvent", String.Format("Update type is {0} and {1} task exists so it will be updated.", EarthRotationDataUpdateType, DOWNLOAD_TASK_NAME))
                             taskDefinition = ASCOMTask.Definition
                         Else
-                            TL.LogMessage("UpdateTypeEvent", String.Format("Update type is {0} and {1} task does not exist so a new task definition will be created.", EarthRotationDataUpdateType, DOWNLOAD_SCHEDULE_TASK_NAME))
+                            TL.LogMessage("UpdateTypeEvent", String.Format("Update type is {0} and {1} task does not exist so a new task definition will be created.", EarthRotationDataUpdateType, DOWNLOAD_TASK_NAME))
                             taskDefinition = service.NewTask
                         End If
 
@@ -467,16 +467,15 @@ Public Class EarthRotationDataForm
                         End If
 
                         taskDefinition.Actions.Clear() ' Remove any existing actions and add the current one
-                        taskDefinition.Actions.Add(New ExecAction(executablePath, Nothing, Nothing)) ' Add an action that will launch Notepad whenever the trigger fires
+                        taskDefinition.Actions.Add(New ExecAction(executablePath, Nothing, Nothing)) ' Add an action that will launch the updater application whenever the trigger fires
                         'TL.LogMessage("UpdateTypeEvent", String.Format("", ))
                         TL.LogMessage("UpdateTypeEvent", String.Format("Added scheduled job action to run {0}", executablePath))
-
-                        'taskDefinition.Principal.LogonType = TaskLogonType.InteractiveToken
 
                         ' Add settings appropriate to the task
                         Try
                             taskDefinition.Settings.AllowDemandStart = True ' Requires a V2 task library (XP is only V1)
-                            taskDefinition.Settings.StartWhenAvailable = True
+                            taskDefinition.Settings.StartWhenAvailable = True '' Requires a V2 task library (XP is only V1)
+                            TL.LogMessage("UpdateTypeEvent", String.Format("Successfully added V2 AllowDemandStart and StartWhenAvailable settings."))
                         Catch ex As NotV1SupportedException ' Swallow the not supported exception on XP
                             TL.LogMessage("UpdateTypeEvent", String.Format("This machine only has a V1 task scheduler - ignoring V2 AllowDemandStart and StartWhenAvailable settings."))
                         End Try
@@ -484,7 +483,6 @@ Public Class EarthRotationDataForm
                         taskDefinition.Settings.StopIfGoingOnBatteries = False
                         taskDefinition.Settings.DisallowStartIfOnBatteries = False
                         taskDefinition.Settings.Enabled = True
-                        'taskDefinition.Settings.RunOnlyIfLoggedOn = False
                         TL.LogMessage("UpdateTypeEvent", String.Format("Allow demand on start: {0}, Start when available: {1}, Execution time limit: {2} minutes, Stop if going on batteries: {3}, Disallow start if on batteries: {4}, Enabled: {5}, Run only iof logged on: {6}",
                                                           taskDefinition.Settings.AllowDemandStart, taskDefinition.Settings.StartWhenAvailable,
                                                           taskDefinition.Settings.ExecutionTimeLimit.TotalMinutes, taskDefinition.Settings.StopIfGoingOnBatteries, taskDefinition.Settings.DisallowStartIfOnBatteries,
@@ -514,12 +512,12 @@ Public Class EarthRotationDataForm
 
                         ' Implement the new task in the root folder either by updating the existing task or creating a new task
                         If (Not (ASCOMTask Is Nothing)) Then ' The task already exists
-                            TL.LogMessage("UpdateTypeEvent", String.Format("The {0} task exists so applying the updates.", DOWNLOAD_SCHEDULE_TASK_NAME))
+                            TL.LogMessage("UpdateTypeEvent", String.Format("The {0} task exists so applying the updates.", DOWNLOAD_TASK_NAME))
                             ASCOMTask.RegisterChanges() ' Task exists so apply the changes made above
                             TL.LogMessage("UpdateTypeEvent", String.Format("Updates applied OK."))
                         Else ' The task does not already exist
-                            TL.LogMessage("UpdateTypeEvent", String.Format("The {0} task does not exist so registering it now.", DOWNLOAD_SCHEDULE_TASK_NAME))
-                            service.RootFolder.RegisterTaskDefinition(DOWNLOAD_SCHEDULE_TASK_NAME, taskDefinition, TaskCreation.CreateOrUpdate, "SYSTEM", Nothing, TaskLogonType.ServiceAccount)
+                            TL.LogMessage("UpdateTypeEvent", String.Format("The {0} task does not exist so registering it now.", DOWNLOAD_TASK_NAME))
+                            service.RootFolder.RegisterTaskDefinition(DOWNLOAD_TASK_NAME, taskDefinition, TaskCreation.CreateOrUpdate, "SYSTEM", Nothing, TaskLogonType.ServiceAccount)
                             'service.RootFolder.RegisterTaskDefinition(AUTOMATIC_SCHEDULE_JOB_NAME, taskDefinition)
                             TL.LogMessage("UpdateTypeEvent", String.Format("New task registered OK."))
                         End If

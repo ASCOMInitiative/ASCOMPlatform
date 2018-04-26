@@ -163,17 +163,17 @@ namespace EarthRotationUpdate
                 // Get the latest delta UT1 values
                 try
                 {
-                    string dUT1fileName = DownloadFile("DeltaUT1", GlobalItems.DUT1_FILE, client, TL); // Download the latest delta UT1 values and receive the filename holding the data
+                    string dUT1fileName = DownloadFile("DeltaUT1", GlobalItems.DELTAUT1_FILE, client, TL); // Download the latest delta UT1 values and receive the filename holding the data
                     FileInfo info = new FileInfo(dUT1fileName); // Find out if we have any data
                     if (info.Length > 0) // We actually received some data so process it
                     {
                         // List the data postion parameters that wil be used to extract the delta UT1 data from the file
-                        TL.LogMessage("DeltaUT1", string.Format("Expected file format for the {0} file", GlobalItems.DUT1_FILE));
-                        TL.LogMessage("DeltaUT1", string.Format("Year string start position: {0}, Year string length: {1}", GlobalItems.DUT1_YEAR_START, GlobalItems.DUT1_YEAR_LENGTH));
-                        TL.LogMessage("DeltaUT1", string.Format("Month string start position: {0}, Month string length: {1}", GlobalItems.DUT1_MONTH_START, GlobalItems.DUT1_MONTH_LENGTH));
-                        TL.LogMessage("DeltaUT1", string.Format("Day string start position: {0}, Day string length: {1}", GlobalItems.DUT1_DAY_START, GlobalItems.DUT1_DAY_LENGTH));
-                        TL.LogMessage("DeltaUT1", string.Format("Julian date start position: {0}, Julian date string length: {1}", GlobalItems.DUT1_JULIAN_DATE_START, GlobalItems.DUT1_JULIAN_DATE_LENGTH));
-                        TL.LogMessage("DeltaUT1", string.Format("Delta UT1 start position: {0}, Delta UT1 string length: {1}", GlobalItems.DUT1_DELTAUT1_START, GlobalItems.DUT1_DELTAUT1_LENGTH));
+                        TL.LogMessage("DeltaUT1", string.Format("Expected file format for the {0} file", GlobalItems.DELTAUT1_FILE));
+                        TL.LogMessage("DeltaUT1", string.Format("Year string start position: {0}, Year string length: {1}", GlobalItems.DELTAUT1_YEAR_START, GlobalItems.DELTAUT1_YEAR_LENGTH));
+                        TL.LogMessage("DeltaUT1", string.Format("Month string start position: {0}, Month string length: {1}", GlobalItems.DELTAUT1_MONTH_START, GlobalItems.DELTAUT1_MONTH_LENGTH));
+                        TL.LogMessage("DeltaUT1", string.Format("Day string start position: {0}, Day string length: {1}", GlobalItems.DELTAUT1_DAY_START, GlobalItems.DELTAUT1_DAY_LENGTH));
+                        TL.LogMessage("DeltaUT1", string.Format("Julian date start position: {0}, Julian date string length: {1}", GlobalItems.DELTAUT1_JULIAN_DATE_START, GlobalItems.DELTAUT1_JULIAN_DATE_LENGTH));
+                        TL.LogMessage("DeltaUT1", string.Format("Delta UT1 start position: {0}, Delta UT1 string length: {1}", GlobalItems.DELTAUT1_START, GlobalItems.DUT1_DELTAUT1_LENGTH));
                         TL.BlankLine();
 
                         profile.DeleteKey(GlobalItems.AUTOMATIC_UPDATE_DELTAUT1_SUBKEY_NAME); // Clear out old delta UT1 values
@@ -192,11 +192,11 @@ namespace EarthRotationUpdate
                                     try
                                     {
                                         // Extract string values for data items
-                                        string yearString = lineOfText.Substring(GlobalItems.DUT1_YEAR_START, GlobalItems.DUT1_YEAR_LENGTH);
-                                        string monthString = lineOfText.Substring(GlobalItems.DUT1_MONTH_START, GlobalItems.DUT1_MONTH_LENGTH);
-                                        string dayString = lineOfText.Substring(GlobalItems.DUT1_DAY_START, GlobalItems.DUT1_DAY_LENGTH);
-                                        string julianDateString = lineOfText.Substring(GlobalItems.DUT1_JULIAN_DATE_START, GlobalItems.DUT1_JULIAN_DATE_LENGTH);
-                                        string dUT1String = lineOfText.Substring(GlobalItems.DUT1_DELTAUT1_START, GlobalItems.DUT1_DELTAUT1_LENGTH);
+                                        string yearString = lineOfText.Substring(GlobalItems.DELTAUT1_YEAR_START, GlobalItems.DELTAUT1_YEAR_LENGTH);
+                                        string monthString = lineOfText.Substring(GlobalItems.DELTAUT1_MONTH_START, GlobalItems.DELTAUT1_MONTH_LENGTH);
+                                        string dayString = lineOfText.Substring(GlobalItems.DELTAUT1_DAY_START, GlobalItems.DELTAUT1_DAY_LENGTH);
+                                        string julianDateString = lineOfText.Substring(GlobalItems.DELTAUT1_JULIAN_DATE_START, GlobalItems.DELTAUT1_JULIAN_DATE_LENGTH);
+                                        string dUT1String = lineOfText.Substring(GlobalItems.DELTAUT1_START, GlobalItems.DUT1_DELTAUT1_LENGTH);
 
                                         // Validate that the data items are parseable
                                         bool yearOK = int.TryParse(yearString, NumberStyles.Integer, CultureInfo.InvariantCulture, out int year);
@@ -211,7 +211,7 @@ namespace EarthRotationUpdate
                                             date = new DateTime(year, month, day);
 
                                             // Only save the item if it is from a few days back or is a future prediction
-                                            if (date.Date >= DateTime.Now.Date.Subtract(new TimeSpan(GlobalItems.NUMBER_OF_BACK_DAYS_OF_DELTAUT1_DATA_TO_LOAD, 0, 0, 0)))
+                                            if (date.Date >= DateTime.Now.Date.Subtract(new TimeSpan(GlobalItems.DOWNLOAD_TASK_NUMBER_OF_BACK_DAYS_OF_DELTAUT1_DATA_TO_LOAD, 0, 0, 0)))
                                             {
                                                 string deltaUT1ValueName = string.Format(GlobalItems.DELTAUT1_VALUE_NAME_FORMAT,
                                                                                          date.Year.ToString(GlobalItems.DELTAUT1_VALUE_NAME_YEAR_FORMAT),
@@ -263,7 +263,7 @@ namespace EarthRotationUpdate
                     if (info.Length > 0) // We actually received some data so process it
                     {
                         // List the data postion parameters that wil be used to extract the delta UT1 data from the file
-                        TL.LogMessage("LeapSeconds", string.Format("Expected file format for the {0} file", GlobalItems.DUT1_FILE));
+                        TL.LogMessage("LeapSeconds", string.Format("Expected file format for the {0} file", GlobalItems.DELTAUT1_FILE));
                         TL.LogMessage("LeapSeconds", string.Format("Year string start position: {0}, Year string length: {1}", GlobalItems.LEAP_SECONDS_YEAR_START, GlobalItems.LEAP_SECONDS_YEAR_LENGTH));
                         TL.LogMessage("LeapSeconds", string.Format("Month string start position: {0}, Month string length: {1}", GlobalItems.LEAP_SECONDS_MONTH_START, GlobalItems.LEAP_SECONDS_MONTH_LENGTH));
                         TL.LogMessage("LeapSeconds", string.Format("Day string start position: {0}, Day string length: {1}", GlobalItems.LEAP_SECONDS_DAY_START, GlobalItems.LEAP_SECONDS_DAY_LENGTH));
