@@ -1,6 +1,7 @@
 ﻿Imports ASCOM.Utilities
 Imports System.Globalization
 Imports System.IO
+Imports Microsoft.Win32.TaskScheduler
 
 Public Class EarthRotationParameters : Implements IDisposable
 
@@ -981,6 +982,117 @@ Public Class EarthRotationParameters : Implements IDisposable
         End Get
     End Property
 
+    Public Sub ManageScheduledTask()
+        Dim originalValue, newValue As String
+        Dim taskDefinition As TaskDefinition, taskTrigger As Trigger = Nothing, executablePath As String
+
+        Try
+            TL.BlankLine()
+
+            ASCOM.Utilities.RunningVersions(TL)
+
+            TL.LogMessage("UpdateTypeEvent", "Obtaining Scheduler information")
+            Using service = New TaskService()
+
+                TL.LogMessage("UpdateTypeEvent", String.Format("Highest supported scheduler version: {0}, Library version: {1}, Connected: {2}", service.HighestSupportedVersion, TaskService.LibraryVersion, service.Connected))
+
+                ' List current task state if any
+                Dim ASCOMTask As Task = service.GetTask(DOWNLOAD_TASK_PATH)
+                If (Not (ASCOMTask Is Nothing)) Then
+                    TL.LogMessage("UpdateTypeEvent", String.Format("Found ASCOM task {0} last run: {1}, State: {2}, Enabled: {3}", ASCOMTask.Path, ASCOMTask.LastRunTime, ASCOMTask.State, ASCOMTask.Enabled))
+                Else
+                    TL.LogMessage("UpdateTypeEvent", "ASCOM task does not exist")
+                End If
+                TL.BlankLine()
+
+
+                ' Get the task definition to work on, either a new one or the existing task, if it exists
+                If (Not (ASCOMTask Is Nothing)) Then
+                    TL.LogMessage("UpdateTypeEvent", String.Format("{0} task exists so it will be updated.", DOWNLOAD_TASK_NAME))
+                    taskDefinition = ASCOMTask.Definition
+                Else
+                    TL.LogMessage("UpdateTypeEvent", String.Format("{0} task does not exist so a new task definition will be created.", DOWNLOAD_TASK_NAME))
+                    taskDefinition = service.NewTask
+                End If
+
+                taskDefinition.RegistrationInfo.Description = "ASCOM scheduled job to update earth rotation data: leap seconds and delta UT1. This job is managed through the ASCOM Diagnostics application and should not be manually edited."
+
+
+                If ASCOM.Utilities.OSBits = Bitness.Bits64 Then
+                    executablePath = ProgramFilesx86() & DOWNLOAD_TASK_EXECUTABLE_NAME
+                    TL.LogMessage("UpdateTypeEvent", String.Format("Running on a 64bit OS. Executable path: {0}", executablePath))
+                Else
+                    executablePath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & DOWNLOAD_TASK_EXECUTABLE_NAME
+                    TL.LogMessage("UpdateTypeEvent", String.Format("Running on a 32bit OS. Executable path: {0}", executablePath))
+                End If
+                taskDefinition.Actions.Clear() ' Remove any existing actions and add the current one
+                taskDefinition.Actions.Add(New ExecAction(executablePath, Nothing, Nothing)) ' Add an action that will launch the updater application whenever the trigger fires
+                'TL.LogMessage("UpdateTypeEvent", String.Format("", ))
+                TL.LogMessage("UpdateTypeEvent", String.Format("Added scheduled job action to run {0}", executablePath))
+
+                ' Add settings appropriate to the task
+                Try
+                    taskDefinition.Settings.AllowDemandStart = True ' Requires a V2 task library (XP is only V1)
+                    taskDefinition.Settings.StartWhenAvailable = True '' Requires a V2 task library (XP is only V1)
+                    TL.LogMessage("UpdateTypeEvent", String.Format("Successfully added V2 AllowDemandStart and StartWhenAvailable settings."))
+                Catch ex As NotV1SupportedException ' Swallow the not supported exception on XP
+                    TL.LogMessage("UpdateTypeEvent", String.Format("This machine only has a V1 task scheduler - ignoring V2 AllowDemandStart and StartWhenAvailable settings."))
+                End Try
+                taskDefinition.Settings.ExecutionTimeLimit = New TimeSpan(0, 10, 0)
+                taskDefinition.Settings.StopIfGoingOnBatteries = False
+                taskDefinition.Settings.DisallowStartIfOnBatteries = False
+                taskDefinition.Settings.Enabled = True
+                TL.LogMessage("UpdateTypeEvent", String.Format("Allow demand on start: {0}, Start when available: {1}, Execution time limit: {2} minutes, Stop if going on batteries: {3}, Disallow start if on batteries: {4}, Enabled: {5}, Run only iof logged on: {6}",
+                                                  taskDefinition.Settings.AllowDemandStart, taskDefinition.Settings.StartWhenAvailable,
+                                                  taskDefinition.Settings.ExecutionTimeLimit.TotalMinutes, taskDefinition.Settings.StopIfGoingOnBatteries, taskDefinition.Settings.DisallowStartIfOnBatteries,
+                                                  taskDefinition.Settings.Enabled, taskDefinition.Settings.RunOnlyIfLoggedOn))
+
+                Select Case DownloadTaskRepeatFrequencyValue
+                    Case SCHEDULE_REPEAT_NONE ' Execute once at the specified day and time
+                        taskTrigger = New TimeTrigger()
+                        TL.LogMessage("UpdateTypeEvent", String.Format("Set trigger to run the job once at the specified time."))
+                    Case SCHEDULE_REPEAT_DAILY ' Execute daily at the specified time
+                        taskTrigger = New DailyTrigger()
+                        TL.LogMessage("UpdateTypeEvent", String.Format("Set trigger to repeat the job daily at the specified time."))
+                    Case SCHEDULE_REPEAT_WEEKLY ' Execute once per week on the specified day of week
+                        taskTrigger = New WeeklyTrigger()
+                        TL.LogMessage("UpdateTypeEvent", String.Format("Set trigger to repeat the job weekly on the specified day of the week at the specified time."))
+                    Case SCHEDULE_REPEAT_MONTHLY ' Execute once per month on the specified day number of the month
+                        taskTrigger = New MonthlyTrigger()
+                        TL.LogMessage("UpdateTypeEvent", String.Format("Set trigger to repeat the job monthly on the specified day number of the month at the specified time."))
+                    Case Else
+                        MsgBox(String.Format("EarthRotationDataForm.BtnOK - Unknown type of DownloadTaskRepeatFrequencyValue: {0}", DownloadTaskRepeatFrequencyValue))
+                End Select
+                taskTrigger.StartBoundary = DownloadTaskScheduledTimeValue ' Add the user supplied date / time to the trigger
+
+                taskDefinition.Triggers.Clear() ' Remove any previous triggers and add the new trigger to the task as the only trigger
+                taskDefinition.Triggers.Add(taskTrigger)
+                TL.LogMessage("UpdateTypeEvent", String.Format("Added the new trigger to the task definition."))
+
+                ' Implement the new task in the root folder either by updating the existing task or creating a new task
+                If (Not (ASCOMTask Is Nothing)) Then ' The task already exists
+                    TL.LogMessage("UpdateTypeEvent", String.Format("The {0} task exists so applying the updates.", DOWNLOAD_TASK_NAME))
+                    ASCOMTask.RegisterChanges() ' Task exists so apply the changes made above
+                    TL.LogMessage("UpdateTypeEvent", String.Format("Updates applied OK."))
+                Else ' The task does not already exist
+                    TL.LogMessage("UpdateTypeEvent", String.Format("The {0} task does not exist so registering it now.", DOWNLOAD_TASK_NAME))
+                    service.RootFolder.RegisterTaskDefinition(DOWNLOAD_TASK_NAME, taskDefinition, TaskCreation.CreateOrUpdate, "SYSTEM", Nothing, TaskLogonType.ServiceAccount)
+                    'service.RootFolder.RegisterTaskDefinition(AUTOMATIC_SCHEDULE_JOB_NAME, taskDefinition)
+                    TL.LogMessage("UpdateTypeEvent", String.Format("New task registered OK."))
+                End If
+            End Using
+
+        Catch ex As Exception
+            TL.LogMessageCrLf("UpdateTypeEvent Exception", ex.ToString())
+            MsgBox("Something went wrong with the update, please report this on the ASCOM Talk Yahoo forum, including the ASCOM.EarthRotation.xx.yy.txt log file from your Documents\ASCOM\Logs yyyy-mm-dd folder." & vbCrLf & ex.ToString())
+        End Try
+
+        TL.BlankLine()
+        TL.LogMessage("UpdateTypeEvent", String.Format("Earth rotation data update configuration changes completed."))
+
+
+    End Sub
+
 #End Region
 
 #Region "Support code"
@@ -1018,6 +1130,13 @@ Public Class EarthRotationParameters : Implements IDisposable
 
     End Function
 
+    Private Shared Function ProgramFilesx86() As String
+        If ((8 = IntPtr.Size) OrElse Not String.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))) Then
+            Return Environment.GetEnvironmentVariable("ProgramFiles(x86)")
+        End If
+
+        Return Environment.GetEnvironmentVariable("ProgramFiles")
+    End Function
 #End Region
 
 End Class
