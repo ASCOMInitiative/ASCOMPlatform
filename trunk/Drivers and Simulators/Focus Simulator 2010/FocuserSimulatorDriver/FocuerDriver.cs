@@ -160,11 +160,11 @@ namespace ASCOM.Simulator
             if (disposing)
             {
                 try { LogMessage("Dispose", "Dispose called: " + disposing.ToString()); } catch { }
-                try { Handbox.Close(); } catch { }
-                try { Handbox.Dispose(); } catch { }
                 try { _moveTimer.Stop(); } catch { }
                 try { _moveTimer.Close(); } catch { }
                 try { _moveTimer.Dispose(); } catch { }
+                try { Handbox.Close(); } catch { }
+                try { Handbox.Dispose(); } catch { }
                 try { TL.Enabled = false; } catch { }
                 try { TL.Dispose(); } catch { }
             }
@@ -740,7 +740,11 @@ namespace ASCOM.Simulator
         /// <param name="message"></param>
         private void LogMessage(string source, string message)
         {
-            if (!(TL == null)) TL.LogMessageCrLf(source, message);
+            try
+            {
+                if (!(TL == null)) TL.LogMessageCrLf(source, message);
+            }
+            catch { } // Ignore errors here
         }
 
         #endregion
