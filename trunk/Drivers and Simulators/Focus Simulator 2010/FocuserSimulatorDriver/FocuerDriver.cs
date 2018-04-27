@@ -112,22 +112,22 @@ namespace ASCOM.Simulator
             {
                 TL = new TraceLogger("", "FocusSimulator");
                 TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.SIMULATOR_TRACE, GlobalConstants.SIMULATOR_TRACE_DEFAULT);
-                TL.LogMessage("New", "Started");
+                LogMessage("New", "Started");
 
                 //check to see if the profile is ok
                 if (ValidateProfile())
                 {
-                    TL.LogMessage("New", "Validated OK");
+                    LogMessage("New", "Validated OK");
                     KeepMoving = false;
                     LastOffset = 0;
                     RateOfChange = 1;
                     MouseDownTime = DateTime.MaxValue; //Initialise to "don't accelerate" value
                     RandomGenerator = new Random(); //Temperature fluctuation random generator
                     LoadFocuserKeyValues();
-                    TL.LogMessage("New", "Loaded Key Values");
+                    LogMessage("New", "Loaded Key Values");
                     Handbox = new FocuserHandboxForm(this);
                     Handbox.Hide();
-                    TL.LogMessage("FocusSettingsForm", "Created Handbox");
+                    LogMessage("FocusSettingsForm", "Created Handbox");
 
                     // start a timer that monitors and moves the focuser
                     _moveTimer = new System.Timers.Timer();
@@ -137,16 +137,16 @@ namespace ASCOM.Simulator
                     _lastTemp = Temperature;
                     Target = _position;
 
-                    TL.LogMessage("New", "Started Simulation");
+                    LogMessage("New", "Started Simulation");
                 }
                 else
                 {
-                    TL.LogMessage("New", "Registering Profile");
+                    LogMessage("New", "Registering Profile");
                     RegisterWithProfile();
-                    TL.LogMessage("New", "Registered OK");
+                    LogMessage("New", "Registered OK");
                 }
 
-                TL.LogMessage("New", "Completed");
+                LogMessage("New", "Completed");
             }
             catch (Exception ex)
             {
@@ -159,7 +159,7 @@ namespace ASCOM.Simulator
         {
             if (disposing)
             {
-                try { TL.LogMessage("Dispose", "Dispose called: " + disposing.ToString()); } catch { }
+                try { LogMessage("Dispose", "Dispose called: " + disposing.ToString()); } catch { }
                 try { Handbox.Close(); } catch { }
                 try { Handbox.Dispose(); } catch { }
                 try { _moveTimer.Stop(); } catch { }
@@ -172,7 +172,7 @@ namespace ASCOM.Simulator
 
         public void Dispose()
         {
-            try { TL.LogMessage("Dispose", "Dispose called."); } catch { }
+            try { LogMessage("Dispose", "Dispose called."); } catch { }
             Dispose(true);
             GC.SuppressFinalize(this);
         }
@@ -255,40 +255,40 @@ namespace ASCOM.Simulator
         {
             get
             {
-                TL.LogMessage("Connected Get", _isConnected.ToString());
+                LogMessage("Connected Get", _isConnected.ToString());
                 return _isConnected;
             }
             set
             {
                 if (_isConnected == value)
                 {
-                    TL.LogMessage("Connected Set", "Connected is already :" + _isConnected.ToString() + ", doing nothing.");
+                    LogMessage("Connected Set", "Connected is already :" + _isConnected.ToString() + ", doing nothing.");
                     return;
                 }
                 if (value)
                 {
-                    TL.LogMessage("Connected Set", "Connecting driver.");
+                    LogMessage("Connected Set", "Connecting driver.");
                     if (_moveTimer == null)
                     {
-                        TL.LogMessage("Connected Set", "Move timer is null so creating new timer.");
+                        LogMessage("Connected Set", "Move timer is null so creating new timer.");
                         _moveTimer = new System.Timers.Timer();
                     }
-                    TL.LogMessage("Connected Set", "Adding move timer handler.");
+                    LogMessage("Connected Set", "Adding move timer handler.");
                     _moveTimer.Elapsed += new System.Timers.ElapsedEventHandler(MoveTimer_Tick);
                     _moveTimer.Interval = 100;
-                    TL.LogMessage("Connected Set", "Enabling move timer.");
+                    LogMessage("Connected Set", "Enabling move timer.");
                     _moveTimer.Enabled = true;
-                    TL.LogMessage("Connected Set", "Showing handbox.");
+                    LogMessage("Connected Set", "Showing handbox.");
                     Handbox.Show();
                 }
                 else
                 {
-                    TL.LogMessage("Connected Set", "Disconnecting driver.");
-                    TL.LogMessage("Connected Set", "Disabling move timer.");
+                    LogMessage("Connected Set", "Disconnecting driver.");
+                    LogMessage("Connected Set", "Disabling move timer.");
                     _moveTimer.Enabled = false;
-                    TL.LogMessage("Connected Set", "Removing move timer handler.");
+                    LogMessage("Connected Set", "Removing move timer handler.");
                     _moveTimer.Elapsed -= MoveTimer_Tick;
-                    TL.LogMessage("Connected Set", "Hiding handbox.");
+                    LogMessage("Connected Set", "Hiding handbox.");
                     Handbox.Hide();
                 }
                 _isConnected = value;
@@ -363,7 +363,7 @@ namespace ASCOM.Simulator
             //get { return (_position != Target); }
             get
             {
-                TL.LogMessage("IsMoving", "MotorState " + motorState.ToString());
+                LogMessage("IsMoving", "MotorState " + motorState.ToString());
                 return (motorState != MotorState.idle);
             }
         }
@@ -408,13 +408,13 @@ namespace ASCOM.Simulator
             // throw new InvalidOperationException("Move not allowed when temperature compensation is active");
             if (Absolute)
             {
-                TL.LogMessage("Move Absolute", value.ToString());
+                LogMessage("Move Absolute", value.ToString());
                 Target = Truncate(0, value, MaxStep);
                 RateOfChange = 40;
             }
             else
             {
-                TL.LogMessage("Move Relative", value.ToString());
+                LogMessage("Move Relative", value.ToString());
                 Target = 0;
                 _position = Truncate(-MaxStep, value, MaxStep);
                 RateOfChange = 40;
@@ -440,7 +440,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                TL.LogMessage("Position", _position.ToString());
+                if (!(TL == null)) LogMessage("Position", _position.ToString());
                 return _position;
             }
         }
@@ -452,11 +452,11 @@ namespace ASCOM.Simulator
         /// </summary>
         public void SetupDialog()
         {
-            TL.LogMessage("SetupDialog", "Started");
+            LogMessage("SetupDialog", "Started");
             var f = new FocuserSettingsForm(this);
-            TL.LogMessage("SetupDialog", "Created HandboxForm");
+            LogMessage("SetupDialog", "Created HandboxForm");
             f.ShowDialog();
-            TL.LogMessage("SetupDialog", "Finshed");
+            LogMessage("SetupDialog", "Finshed");
         }
 
         /// <summary>
@@ -569,20 +569,20 @@ namespace ASCOM.Simulator
 
             if (_position != Target) //Actually move the focuse if necessary
             {
-                TL.LogMessage("Moving", "LastOffset, Position, Target RateOfChange " + LastOffset + " " + _position + " " + Target + " " + RateOfChange);
+                LogMessage("Moving", "LastOffset, Position, Target RateOfChange " + LastOffset + " " + _position + " " + Target + " " + RateOfChange);
 
                 if (Math.Abs(_position - Target) <= RateOfChange)
                 {
                     _position = Target;
-                    TL.LogMessage("Moving", "  Set position = target");
+                    LogMessage("Moving", "  Set position = target");
 
                 }
                 else
                 {
                     _position += (_position > Target) ? -RateOfChange : RateOfChange;
-                    TL.LogMessage("Moving", "  Updated position = " + _position);
+                    LogMessage("Moving", "  Updated position = " + _position);
                 }
-                TL.LogMessage("Moving", "  New position = " + _position);
+                LogMessage("Moving", "  New position = " + _position);
             }
             if (KeepMoving & (DateTime.Now.Subtract(MouseDownTime).TotalSeconds > 0.5))
             {
@@ -592,7 +592,7 @@ namespace ASCOM.Simulator
                 {
                     RateOfChange = (int)Math.Ceiling((double)RateOfChange * 1.2);
                 }
-                TL.LogMessage("KeepMoving", "LastOffset, Position, Target, RateOfChange MouseDownTime " + LastOffset + " " + _position + " " + Target + " " + RateOfChange + " " + MouseDownTime.ToLongTimeString());
+                LogMessage("KeepMoving", "LastOffset, Position, Target, RateOfChange MouseDownTime " + LastOffset + " " + _position + " " + Target + " " + RateOfChange + " " + MouseDownTime.ToLongTimeString());
             }
 
             // handle MotorState
@@ -603,14 +603,14 @@ namespace ASCOM.Simulator
                     {
                         motorState = MotorState.settling;
                         settleFinishTime = DateTime.Now + TimeSpan.FromMilliseconds(settleTime);
-                        TL.LogMessage("MoveTimer", "Settle start, time " + settleTime.ToString());
+                        LogMessage("MoveTimer", "Settle start, time " + settleTime.ToString());
                     }
                     return;
                 case MotorState.settling:
                     if (settleFinishTime < DateTime.Now)
                     {
                         motorState = MotorState.idle;
-                        TL.LogMessage("MoveTimer", "settle finished");
+                        LogMessage("MoveTimer", "settle finished");
                     }
                     return;
             }
@@ -730,6 +730,17 @@ namespace ASCOM.Simulator
         public static void SaveProfileSetting(string keyName, string value)
         {
             Profile.WriteValue(sCsDriverId, keyName, value);
+        }
+
+        /// <summary>
+        /// Log a message making sure that the TraceLogger exists.
+        /// This is to work round an issue with the form timers that seem to fire after the form and trace logger have been disposed
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="message"></param>
+        private void LogMessage(string source, string message)
+        {
+            if (!(TL == null)) TL.LogMessageCrLf(source, message);
         }
 
         #endregion
