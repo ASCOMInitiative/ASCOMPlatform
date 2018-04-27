@@ -99,7 +99,7 @@ namespace EarthRotationUpdate
                     }
                 }
 
-                // If we have been provided with a "DatSource" override paramter then apply the new URI otherwise read it from the Profile
+                // If we have been provided with a "DataSource" override paramter then apply the new URI otherwise read it from the Profile
                 if (args.Length == 2)
                 {
                     if (args[0].Trim(' ', '-', '\\', '/').Equals("DATASOURCE", StringComparison.OrdinalIgnoreCase)) // Test for the presence of and act on the data source argument ignoring everything else

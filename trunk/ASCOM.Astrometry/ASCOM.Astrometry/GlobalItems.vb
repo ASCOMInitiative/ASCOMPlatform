@@ -86,6 +86,7 @@ Module GlobalItems
     Friend Const UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1 As String = "Built-in leap seconds and predicted delta UT1" ' Alternative value for earth rotation data source
     Friend Const UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1 As String = "Manual leap seconds and manual delta UT1" ' Alternative value for earth rotation data source
     Friend Const UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1 As String = "Manual leap seconds and predicted delta UT1" ' Alternative value for earth rotation data source
+    Friend Const UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1 As String = "On demand leap seconds and delta UT1" ' Alternative value for earth rotation data source
     Friend Const UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1 As String = "Automatic leap seconds and delta UT1" ' Alternative value for earth rotation data source
 
     ' Delta UT1 filename and format
