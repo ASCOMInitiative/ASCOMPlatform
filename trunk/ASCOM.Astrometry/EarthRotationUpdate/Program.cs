@@ -90,6 +90,11 @@ namespace EarthRotationUpdate
                     {
                         TL.LogMessage("EarthRotationUpdate", string.Format("Earth rotation parameter initialisation run on {0} by {1}, IsSystem: {2}", runDate, runBy, isSystem));
                         LogEvent(string.Format("Earth rotation parameter initialisation run on {0} by {1}, IsSystem: {2}", runDate, runBy, isSystem), EventLogEntryType.Information);
+
+                        TL.LogMessage("EarthRotationUpdate", string.Format("Calling ManageScheduledTask"));
+                        parameters.ManageScheduledTask();
+                        TL.LogMessage("EarthRotationUpdate", string.Format("Completed ManageScheduledTask"));
+
                         Environment.Exit(0);
                     }
                 }
