@@ -64,6 +64,9 @@ Public Class EarthRotationDataForm
             TL.LogMessage("Form Load", String.Format("Log file name: {0}", TL.LogFileName))
 
             Parameters = New EarthRotationParameters(TL)
+            TL.LogMessage("Form Load", "Calling ManageScheduledTask")
+            Parameters.ManageScheduledTask()
+            TL.LogMessage("Form Load", "Finished ManageScheduledTask")
             aUtils = New AstroUtils.AstroUtils(TL)
 
             ' Start a timer to periodically update the current DeltaUT1 and leap second values on the form
