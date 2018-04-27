@@ -169,7 +169,7 @@ Partial Class EarthRotationDataForm
         Me.GrpAutomaticUpdate.Size = New System.Drawing.Size(942, 294)
         Me.GrpAutomaticUpdate.TabIndex = 7
         Me.GrpAutomaticUpdate.TabStop = False
-        Me.GrpAutomaticUpdate.Text = "Automatic Update"
+        Me.GrpAutomaticUpdate.Text = "On Demand and Automatic Update"
         '
         'LblRunStatus
         '
@@ -197,9 +197,9 @@ Partial Class EarthRotationDataForm
         Me.BtnRunAutomaticUpdate.ForeColor = System.Drawing.SystemColors.ControlText
         Me.BtnRunAutomaticUpdate.Location = New System.Drawing.Point(511, 226)
         Me.BtnRunAutomaticUpdate.Name = "BtnRunAutomaticUpdate"
-        Me.BtnRunAutomaticUpdate.Size = New System.Drawing.Size(75, 23)
+        Me.BtnRunAutomaticUpdate.Size = New System.Drawing.Size(119, 23)
         Me.BtnRunAutomaticUpdate.TabIndex = 24
-        Me.BtnRunAutomaticUpdate.Text = "Update Now"
+        Me.BtnRunAutomaticUpdate.Text = "On Demand Update"
         Me.BtnRunAutomaticUpdate.UseVisualStyleBackColor = True
         '
         'LblNextLeapSecondsDate
@@ -362,7 +362,7 @@ Partial Class EarthRotationDataForm
         Me.CmbScheduleRepeat.FormattingEnabled = True
         Me.CmbScheduleRepeat.Location = New System.Drawing.Point(184, 116)
         Me.CmbScheduleRepeat.Name = "CmbScheduleRepeat"
-        Me.CmbScheduleRepeat.Size = New System.Drawing.Size(100, 21)
+        Me.CmbScheduleRepeat.Size = New System.Drawing.Size(111, 21)
         Me.CmbScheduleRepeat.TabIndex = 12
         '
         'LblAutoTimeout

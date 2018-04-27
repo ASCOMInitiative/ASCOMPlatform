@@ -39,6 +39,7 @@ Public Class EarthRotationDataForm
             UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1,
             UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1,
             UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1,
+            UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1,
             UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
         }
 
@@ -172,8 +173,8 @@ Public Class EarthRotationDataForm
                 TxtManualDeltaUT1.Enabled = False
                 TxtDownloadTimeout.Enabled = False
                 CmbDataSource.Enabled = False
-                DateScheduleRun.Enabled = False
-                CmbScheduleRepeat.Enabled = False
+                DateScheduleRun.Enabled = False : DateScheduleRun.Visible = True : LblAutoDownloadTime.Visible = True
+                CmbScheduleRepeat.Enabled = False : CmbScheduleRepeat.Visible = True : LblAutoRepeatFrequency.Visible = True
                 TxtTraceFilePath.Enabled = False
                 ChkTraceEnabled.Enabled = False
                 BtnSetTraceDirectory.Enabled = False
@@ -194,8 +195,8 @@ Public Class EarthRotationDataForm
                 TxtManualDeltaUT1.Enabled = True
                 TxtDownloadTimeout.Enabled = False
                 CmbDataSource.Enabled = False
-                DateScheduleRun.Enabled = False
-                CmbScheduleRepeat.Enabled = False
+                DateScheduleRun.Enabled = False : DateScheduleRun.Visible = True : LblAutoDownloadTime.Visible = True
+                CmbScheduleRepeat.Enabled = False : CmbScheduleRepeat.Visible = True : LblAutoRepeatFrequency.Visible = True
                 TxtTraceFilePath.Enabled = False
                 ChkTraceEnabled.Enabled = False
                 BtnSetTraceDirectory.Enabled = False
@@ -216,8 +217,8 @@ Public Class EarthRotationDataForm
                 TxtManualDeltaUT1.Enabled = False
                 TxtDownloadTimeout.Enabled = False
                 CmbDataSource.Enabled = False
-                DateScheduleRun.Enabled = False
-                CmbScheduleRepeat.Enabled = False
+                DateScheduleRun.Enabled = False : DateScheduleRun.Visible = True : LblAutoDownloadTime.Visible = True
+                CmbScheduleRepeat.Enabled = False : CmbScheduleRepeat.Visible = True : LblAutoRepeatFrequency.Visible = True
                 TxtTraceFilePath.Enabled = False
                 ChkTraceEnabled.Enabled = False
                 BtnSetTraceDirectory.Enabled = False
@@ -233,13 +234,36 @@ Public Class EarthRotationDataForm
                 LblTraceEnabled.Enabled = False
                 LblLastRun.Enabled = False
                 LblRunStatus.Enabled = False
+            Case UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1
+                TxtManualLeapSeconds.Enabled = False
+                TxtManualDeltaUT1.Enabled = False
+                TxtDownloadTimeout.Enabled = True
+                CmbDataSource.Enabled = True
+                DateScheduleRun.Enabled = False : DateScheduleRun.Visible = False : LblAutoDownloadTime.Visible = False
+                CmbScheduleRepeat.Enabled = False : CmbScheduleRepeat.Visible = False : LblAutoRepeatFrequency.Visible = False
+                TxtTraceFilePath.Enabled = True
+                ChkTraceEnabled.Enabled = True
+                BtnSetTraceDirectory.Enabled = True
+                TxtRunStatus.Enabled = True
+                BtnRunAutomaticUpdate.Enabled = True
+                TxtCurrentLeapSeconds.Enabled = True
+                TxtNextLeapSeconds.Enabled = True
+                TxtNextLeapSecondsDate.Enabled = True
+                LblCurrentLeapSeconds.Enabled = True
+                LblNextLeapSeconds.Enabled = True
+                LblNextLeapSecondsDate.Enabled = True
+                TxtLastRun.Enabled = True
+                LblTraceEnabled.Enabled = True
+                LblLastRun.Enabled = True
+                LblRunStatus.Enabled = True
+
             Case UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
                 TxtManualLeapSeconds.Enabled = False
                 TxtManualDeltaUT1.Enabled = False
                 TxtDownloadTimeout.Enabled = True
                 CmbDataSource.Enabled = True
-                DateScheduleRun.Enabled = True
-                CmbScheduleRepeat.Enabled = True
+                DateScheduleRun.Enabled = True : DateScheduleRun.Visible = True : LblAutoDownloadTime.Visible = True
+                CmbScheduleRepeat.Enabled = True : CmbScheduleRepeat.Visible = True : LblAutoRepeatFrequency.Visible = True
                 TxtTraceFilePath.Enabled = True
                 ChkTraceEnabled.Enabled = True
                 BtnSetTraceDirectory.Enabled = True
@@ -416,123 +440,11 @@ Public Class EarthRotationDataForm
         If Not String.IsNullOrEmpty(newValue) Then
             EarthRotationDataUpdateType = newValue
             Parameters.UpdateType = EarthRotationDataUpdateType
+            Parameters.ManageScheduledTask() ' Create, update or remove the scheduled task as appropriate
             TL.LogMessage("UpdateTypeEvent", String.Format("Changing current value: '{0}' to: '{1}'", originalValue, EarthRotationDataUpdateType))
         Else
             TL.LogMessage("UpdateTypeEvent", String.Format("New value is null or empty, ignoring change"))
         End If
-
-        Try
-            TL.BlankLine()
-
-            TL.LogMessage("UpdateTypeEvent", "Obtaining Scheduler information")
-            Using service = New TaskService()
-
-                TL.LogMessage("UpdateTypeEvent", String.Format("Highest supported scheduler version: {0}, Library version: {1}, Connected: {2}", service.HighestSupportedVersion, TaskService.LibraryVersion, service.Connected))
-
-                ' List current task state if any
-                Dim ASCOMTask As Task = service.GetTask(DOWNLOAD_TASK_PATH)
-                If (Not (ASCOMTask Is Nothing)) Then
-                    TL.LogMessage("UpdateTypeEvent", String.Format("Found ASCOM task {0} last run: {1}, State: {2}, Enabled: {3}", ASCOMTask.Path, ASCOMTask.LastRunTime, ASCOMTask.State, ASCOMTask.Enabled))
-                Else
-                    TL.LogMessage("UpdateTypeEvent", "ASCOM task does not exist")
-                End If
-                TL.BlankLine()
-
-                Select Case EarthRotationDataUpdateType
-                    Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1 ' Just remove the update job if it exists so that it can't run
-                        If (Not (ASCOMTask Is Nothing)) Then
-                            TL.LogMessage("UpdateTypeEvent", String.Format("Update type is {0} and {1} task exists so it will be deleted.", EarthRotationDataUpdateType, DOWNLOAD_TASK_NAME))
-                            service.RootFolder.DeleteTask(DOWNLOAD_TASK_NAME)
-                            TL.LogMessage("UpdateTypeEvent", String.Format("Task {0} deleted OK.", DOWNLOAD_TASK_NAME))
-                        Else
-                            TL.LogMessage("UpdateTypeEvent", String.Format("Update type is {0} and {1} task does not exist so no action.", EarthRotationDataUpdateType, DOWNLOAD_TASK_NAME))
-                        End If
-
-                    Case UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1 ' Create a new or Update the existing scheduled job
-
-                        ' Get the task definition to work on, either a new one or the existing task, if it exists
-                        If (Not (ASCOMTask Is Nothing)) Then
-                            TL.LogMessage("UpdateTypeEvent", String.Format("Update type is {0} and {1} task exists so it will be updated.", EarthRotationDataUpdateType, DOWNLOAD_TASK_NAME))
-                            taskDefinition = ASCOMTask.Definition
-                        Else
-                            TL.LogMessage("UpdateTypeEvent", String.Format("Update type is {0} and {1} task does not exist so a new task definition will be created.", EarthRotationDataUpdateType, DOWNLOAD_TASK_NAME))
-                            taskDefinition = service.NewTask
-                        End If
-
-                        taskDefinition.RegistrationInfo.Description = "ASCOM scheduled job to update earth rotation data: leap seconds and delta UT1. This job is managed through the ASCOM Diagnostics application and should not be manually edited."
-
-                        If Environment.Is64BitOperatingSystem Then
-                            executablePath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & DOWNLOAD_TASK_EXECUTABLE_NAME
-                            TL.LogMessage("UpdateTypeEvent", String.Format("Running on a 64bit OS. Executable path: {0}", executablePath))
-                        Else
-                            executablePath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & DOWNLOAD_TASK_EXECUTABLE_NAME
-                            TL.LogMessage("UpdateTypeEvent", String.Format("Running on a 32bit OS. Executable path: {0}", executablePath))
-                        End If
-
-                        taskDefinition.Actions.Clear() ' Remove any existing actions and add the current one
-                        taskDefinition.Actions.Add(New ExecAction(executablePath, Nothing, Nothing)) ' Add an action that will launch the updater application whenever the trigger fires
-                        'TL.LogMessage("UpdateTypeEvent", String.Format("", ))
-                        TL.LogMessage("UpdateTypeEvent", String.Format("Added scheduled job action to run {0}", executablePath))
-
-                        ' Add settings appropriate to the task
-                        Try
-                            taskDefinition.Settings.AllowDemandStart = True ' Requires a V2 task library (XP is only V1)
-                            taskDefinition.Settings.StartWhenAvailable = True '' Requires a V2 task library (XP is only V1)
-                            TL.LogMessage("UpdateTypeEvent", String.Format("Successfully added V2 AllowDemandStart and StartWhenAvailable settings."))
-                        Catch ex As NotV1SupportedException ' Swallow the not supported exception on XP
-                            TL.LogMessage("UpdateTypeEvent", String.Format("This machine only has a V1 task scheduler - ignoring V2 AllowDemandStart and StartWhenAvailable settings."))
-                        End Try
-                        taskDefinition.Settings.ExecutionTimeLimit = New TimeSpan(0, 10, 0)
-                        taskDefinition.Settings.StopIfGoingOnBatteries = False
-                        taskDefinition.Settings.DisallowStartIfOnBatteries = False
-                        taskDefinition.Settings.Enabled = True
-                        TL.LogMessage("UpdateTypeEvent", String.Format("Allow demand on start: {0}, Start when available: {1}, Execution time limit: {2} minutes, Stop if going on batteries: {3}, Disallow start if on batteries: {4}, Enabled: {5}, Run only iof logged on: {6}",
-                                                          taskDefinition.Settings.AllowDemandStart, taskDefinition.Settings.StartWhenAvailable,
-                                                          taskDefinition.Settings.ExecutionTimeLimit.TotalMinutes, taskDefinition.Settings.StopIfGoingOnBatteries, taskDefinition.Settings.DisallowStartIfOnBatteries,
-                                                          taskDefinition.Settings.Enabled, taskDefinition.Settings.RunOnlyIfLoggedOn))
-
-                        Select Case AutomaticScheduleJobRepeatFrequency
-                            Case SCHEDULE_REPEAT_NONE ' Execute once at the specified day and time
-                                taskTrigger = New TimeTrigger()
-                                TL.LogMessage("UpdateTypeEvent", String.Format("Set trigger to run the job once at the specified time."))
-                            Case SCHEDULE_REPEAT_DAILY ' Execute daily at the specified time
-                                taskTrigger = New DailyTrigger()
-                                TL.LogMessage("UpdateTypeEvent", String.Format("Set trigger to repeat the job daily at the specified time."))
-                            Case SCHEDULE_REPEAT_WEEKLY ' Execute once per week on the specified day of week
-                                taskTrigger = New WeeklyTrigger()
-                                TL.LogMessage("UpdateTypeEvent", String.Format("Set trigger to repeat the job weekly on the specified day of the week at the specified time."))
-                            Case SCHEDULE_REPEAT_MONTHLY ' Execute once per month on the specified day number of the month
-                                taskTrigger = New MonthlyTrigger()
-                                TL.LogMessage("UpdateTypeEvent", String.Format("Set trigger to repeat the job monthly on the specified day number of the month at the specified time."))
-                            Case Else
-                                MessageBox.Show(String.Format("EarthRotationDataForm.BtnOK - Unknown type of AutomaticScheduleJobRepeatFrequency: {0}", AutomaticScheduleJobRepeatFrequency))
-                        End Select
-                        taskTrigger.StartBoundary = AutomaticScheduleJobRunTime ' Add the user supplied date / time to the trigger
-
-                        taskDefinition.Triggers.Clear() ' Remove any previous triggers and add the new trigger to the task as the only trigger
-                        taskDefinition.Triggers.Add(taskTrigger)
-                        TL.LogMessage("UpdateTypeEvent", String.Format("Added the new trigger to the task definition."))
-
-                        ' Implement the new task in the root folder either by updating the existing task or creating a new task
-                        If (Not (ASCOMTask Is Nothing)) Then ' The task already exists
-                            TL.LogMessage("UpdateTypeEvent", String.Format("The {0} task exists so applying the updates.", DOWNLOAD_TASK_NAME))
-                            ASCOMTask.RegisterChanges() ' Task exists so apply the changes made above
-                            TL.LogMessage("UpdateTypeEvent", String.Format("Updates applied OK."))
-                        Else ' The task does not already exist
-                            TL.LogMessage("UpdateTypeEvent", String.Format("The {0} task does not exist so registering it now.", DOWNLOAD_TASK_NAME))
-                            service.RootFolder.RegisterTaskDefinition(DOWNLOAD_TASK_NAME, taskDefinition, TaskCreation.CreateOrUpdate, "SYSTEM", Nothing, TaskLogonType.ServiceAccount)
-                            'service.RootFolder.RegisterTaskDefinition(AUTOMATIC_SCHEDULE_JOB_NAME, taskDefinition)
-                            TL.LogMessage("UpdateTypeEvent", String.Format("New task registered OK."))
-                        End If
-                    Case Else
-                        MessageBox.Show(String.Format("UpdateType - Unknown type of EarthRotationDataUpdateType: {0}", EarthRotationDataUpdateType))
-                End Select
-            End Using
-
-        Catch ex As Exception
-            TL.LogMessageCrLf("UpdateTypeEvent Exception", ex.ToString())
-            MessageBox.Show("Something went wrong with the update, please report this on the ASCOM Talk Yahoo forum, including the ASCOM.EarthRotation.xx.yy.txt log file from your Documents\ASCOM\Logs yyyy-mm-dd folder." & vbCrLf & ex.ToString())
-        End Try
 
         TL.BlankLine()
         TL.LogMessage("UpdateTypeEvent", String.Format("Earth rotation data update configuration changes completed."))
@@ -645,13 +557,9 @@ Public Class EarthRotationDataForm
 
         If sender Is GrpAutomaticUpdate Then
             Select Case EarthRotationDataUpdateType
-                Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1
+                Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1
                     borderColour = inactiveBorder
-                Case UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1
-                    borderColour = inactiveBorder
-                Case UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1
-                    borderColour = inactiveBorder
-                Case UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
+                Case UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1, UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
                     borderColour = activeBorder
                 Case Else
                     borderColour = Color.Red ' Warning colour that somethinhg has gone wrong in the code!
@@ -663,14 +571,10 @@ Public Class EarthRotationDataForm
             LblAutoSeconds.Enabled = borderColour = activeBorder
         ElseIf sender Is GrpManualUpdate Then
             Select Case EarthRotationDataUpdateType
-                Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1
+                Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1, UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1, UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
                     borderColour = inactiveBorder
-                Case UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1
+                Case UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1
                     borderColour = activeBorder
-                Case UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1
-                    borderColour = activeBorder
-                Case UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
-                    borderColour = inactiveBorder
                 Case Else
                     borderColour = Color.Red ' Warning colour that somethinhg has gone wrong in the code!
             End Select

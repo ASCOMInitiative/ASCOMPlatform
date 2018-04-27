@@ -181,7 +181,7 @@ Namespace SOFA
 
                                 End If
 
-                            Case UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
+                            Case UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1, UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
                                 ' Act according to the number of updated leap second values that are available
                                 Select Case Parameters.DownloadedLeapSeconds.Count
                                     Case 0 ' No values have been downloaded so run with built-in SOFA leap second values
