@@ -147,15 +147,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj">
-      <Project>{872EF2D6-AC89-4C15-AC84-6C69B040A843}</Project>
+      <Project>{872ef2d6-ac89-4c15-ac84-6c69b040a843}</Project>
       <Name>ASCOM.DeviceInterface</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
-      <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
+      <Project>{c9bf0a8b-594f-4ab9-938a-edc8448d8520}</Project>
       <Name>ASCOM.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
-      <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
+      <Project>{5f6cf410-7b16-4a32-99d2-0d92196c4490}</Project>
       <Name>ASCOM.Exceptions</Name>
     </ProjectReference>
   </ItemGroup>
