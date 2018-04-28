@@ -739,7 +739,7 @@ Public Class EarthRotationParameters : Implements IDisposable
     End Function
 
     Public Sub RefreshState()
-        Dim DownloadTaskCultureName, OriginalProfileValue As String, AutomaticScheduleTimeDefault As DateTime, UriValid As Boolean, InstalledCultures As CultureInfo()
+        Dim OriginalProfileValue As String, AutomaticScheduleTimeDefault As DateTime, UriValid As Boolean
 
         Dim UpdateTypes As New List(Of String) From {UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1,
                                                      UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1,
@@ -809,7 +809,7 @@ Public Class EarthRotationParameters : Implements IDisposable
 
         EarthRotationDataLastUpdatedValue = profile.GetProfile(ASTROMETRY_SUBKEY, EARTH_ROTATION_DATA_LAST_UPDATED_VALUE_NAME, EARTH_ROTATION_DATA_LAST_UPDATED_DEFAULT)
 
-        OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, DOWNLOAD_TASK_DATA_SOURCE_VALUE_NAME, DOWNLOAD_TASK_DATA_UPDATE_SOURCE_DEFAULT)
+        OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, DOWNLOAD_TASK_DATA_SOURCE_VALUE_NAME, DOWNLOAD_TASK_INTERNET_DATA_SOURCE_DEFAULT)
         UriValid = False ' Set the valid flag false, then set to true if the download source starts with a supported URI prefix
         If OriginalProfileValue.StartsWith(URI_PREFIX_HTTP, StringComparison.OrdinalIgnoreCase) Then UriValid = True
         If OriginalProfileValue.StartsWith(URI_PREFIX_HTTPS, StringComparison.OrdinalIgnoreCase) Then UriValid = True
@@ -819,7 +819,7 @@ Public Class EarthRotationParameters : Implements IDisposable
             DownloadTaskDataSourceValue = OriginalProfileValue
             LogDebugMessage("RefreshState", String.Format("DownloadTaskDataSourceValue = {0}", DownloadTaskDataSourceValue))
         Else
-            DownloadTaskDataSource = DOWNLOAD_TASK_DATA_UPDATE_SOURCE_DEFAULT
+            DownloadTaskDataSource = DOWNLOAD_TASK_INTERNET_DATA_SOURCE_DEFAULT
             LogMessage("EarthRotParm CORRUPT!", String.Format("EarthRoationParameter DownloadTaskDataSource is corrupt: {0}, default value has been set: {1}", OriginalProfileValue, DownloadTaskDataSourceValue))
             LogEvent(String.Format("EarthRoationParameter DownloadTaskDataSource is corrupt: {0}, default value has been set: {1}", OriginalProfileValue, DownloadTaskDataSourceValue))
         End If
@@ -984,7 +984,6 @@ Public Class EarthRotationParameters : Implements IDisposable
     End Property
 
     Public Sub ManageScheduledTask()
-        Dim originalValue, newValue As String
         Dim taskDefinition As TaskDefinition, taskTrigger As Trigger = Nothing, executableName As String
 
         Try

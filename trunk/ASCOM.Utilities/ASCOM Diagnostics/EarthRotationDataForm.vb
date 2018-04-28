@@ -27,11 +27,11 @@ Public Class EarthRotationDataForm
     ' Initialise dropdown list options
     Private dataDownloadSources As New List(Of String) From
         {
-            EARTH_ROTATION_DATA_SOURCE_0,
-            EARTH_ROTATION_DATA_SOURCE_1,
-            EARTH_ROTATION_DATA_SOURCE_2,
-            EARTH_ROTATION_DATA_SOURCE_3,
-            EARTH_ROTATION_DATA_SOURCE_4
+            EARTH_ROTATION_INTERNET_DATA_SOURCE_0,
+            EARTH_ROTATION_INTERNET_DATA_SOURCE_1,
+            EARTH_ROTATION_INTERNET_DATA_SOURCE_2,
+            EARTH_ROTATION_INTERNET_DATA_SOURCE_3,
+            EARTH_ROTATION_INTERNET_DATA_SOURCE_4
         }
 
     Private ut1Sources As New List(Of String) From
@@ -173,19 +173,13 @@ Public Class EarthRotationDataForm
                 TxtManualDeltaUT1.Enabled = False
                 TxtDownloadTimeout.Enabled = False
                 CmbDataSource.Enabled = False
-                DateScheduleRun.Enabled = False : DateScheduleRun.Visible = True : LblAutoDownloadTime.Visible = True
-                CmbScheduleRepeat.Enabled = False : CmbScheduleRepeat.Visible = True : LblAutoRepeatFrequency.Visible = True
+                DateScheduleRun.Enabled = False
+                CmbScheduleRepeat.Enabled = False
                 TxtTraceFilePath.Enabled = False
                 ChkTraceEnabled.Enabled = False
                 BtnSetTraceDirectory.Enabled = False
                 TxtRunStatus.Enabled = False
                 BtnRunAutomaticUpdate.Enabled = False
-                TxtCurrentLeapSeconds.Enabled = False
-                TxtNextLeapSeconds.Enabled = False
-                TxtNextLeapSecondsDate.Enabled = False
-                LblCurrentLeapSeconds.Enabled = False
-                LblNextLeapSeconds.Enabled = False
-                LblNextLeapSecondsDate.Enabled = False
                 TxtLastRun.Enabled = False
                 LblTraceEnabled.Enabled = False
                 LblLastRun.Enabled = False
@@ -195,19 +189,13 @@ Public Class EarthRotationDataForm
                 TxtManualDeltaUT1.Enabled = True
                 TxtDownloadTimeout.Enabled = False
                 CmbDataSource.Enabled = False
-                DateScheduleRun.Enabled = False : DateScheduleRun.Visible = True : LblAutoDownloadTime.Visible = True
-                CmbScheduleRepeat.Enabled = False : CmbScheduleRepeat.Visible = True : LblAutoRepeatFrequency.Visible = True
+                DateScheduleRun.Enabled = False
+                CmbScheduleRepeat.Enabled = False
                 TxtTraceFilePath.Enabled = False
                 ChkTraceEnabled.Enabled = False
                 BtnSetTraceDirectory.Enabled = False
                 TxtRunStatus.Enabled = False
                 BtnRunAutomaticUpdate.Enabled = False
-                TxtCurrentLeapSeconds.Enabled = False
-                TxtNextLeapSeconds.Enabled = False
-                TxtNextLeapSecondsDate.Enabled = False
-                LblCurrentLeapSeconds.Enabled = False
-                LblNextLeapSeconds.Enabled = False
-                LblNextLeapSecondsDate.Enabled = False
                 TxtLastRun.Enabled = False
                 LblTraceEnabled.Enabled = False
                 LblLastRun.Enabled = False
@@ -217,19 +205,13 @@ Public Class EarthRotationDataForm
                 TxtManualDeltaUT1.Enabled = False
                 TxtDownloadTimeout.Enabled = False
                 CmbDataSource.Enabled = False
-                DateScheduleRun.Enabled = False : DateScheduleRun.Visible = True : LblAutoDownloadTime.Visible = True
-                CmbScheduleRepeat.Enabled = False : CmbScheduleRepeat.Visible = True : LblAutoRepeatFrequency.Visible = True
+                DateScheduleRun.Enabled = False
+                CmbScheduleRepeat.Enabled = False
                 TxtTraceFilePath.Enabled = False
                 ChkTraceEnabled.Enabled = False
                 BtnSetTraceDirectory.Enabled = False
                 TxtRunStatus.Enabled = False
                 BtnRunAutomaticUpdate.Enabled = False
-                TxtCurrentLeapSeconds.Enabled = False
-                TxtNextLeapSeconds.Enabled = False
-                TxtNextLeapSecondsDate.Enabled = False
-                LblCurrentLeapSeconds.Enabled = False
-                LblNextLeapSeconds.Enabled = False
-                LblNextLeapSecondsDate.Enabled = False
                 TxtLastRun.Enabled = False
                 LblTraceEnabled.Enabled = False
                 LblLastRun.Enabled = False
@@ -239,19 +221,13 @@ Public Class EarthRotationDataForm
                 TxtManualDeltaUT1.Enabled = False
                 TxtDownloadTimeout.Enabled = True
                 CmbDataSource.Enabled = True
-                DateScheduleRun.Enabled = False : DateScheduleRun.Visible = False : LblAutoDownloadTime.Visible = False
-                CmbScheduleRepeat.Enabled = False : CmbScheduleRepeat.Visible = False : LblAutoRepeatFrequency.Visible = False
+                DateScheduleRun.Enabled = False
+                CmbScheduleRepeat.Enabled = False
                 TxtTraceFilePath.Enabled = True
                 ChkTraceEnabled.Enabled = True
                 BtnSetTraceDirectory.Enabled = True
                 TxtRunStatus.Enabled = True
                 BtnRunAutomaticUpdate.Enabled = True
-                TxtCurrentLeapSeconds.Enabled = True
-                TxtNextLeapSeconds.Enabled = True
-                TxtNextLeapSecondsDate.Enabled = True
-                LblCurrentLeapSeconds.Enabled = True
-                LblNextLeapSeconds.Enabled = True
-                LblNextLeapSecondsDate.Enabled = True
                 TxtLastRun.Enabled = True
                 LblTraceEnabled.Enabled = True
                 LblLastRun.Enabled = True
@@ -262,19 +238,13 @@ Public Class EarthRotationDataForm
                 TxtManualDeltaUT1.Enabled = False
                 TxtDownloadTimeout.Enabled = True
                 CmbDataSource.Enabled = True
-                DateScheduleRun.Enabled = True : DateScheduleRun.Visible = True : LblAutoDownloadTime.Visible = True
-                CmbScheduleRepeat.Enabled = True : CmbScheduleRepeat.Visible = True : LblAutoRepeatFrequency.Visible = True
+                DateScheduleRun.Enabled = True
+                CmbScheduleRepeat.Enabled = True
                 TxtTraceFilePath.Enabled = True
                 ChkTraceEnabled.Enabled = True
                 BtnSetTraceDirectory.Enabled = True
                 TxtRunStatus.Enabled = True
                 BtnRunAutomaticUpdate.Enabled = True
-                TxtCurrentLeapSeconds.Enabled = True
-                TxtNextLeapSeconds.Enabled = True
-                TxtNextLeapSecondsDate.Enabled = True
-                LblCurrentLeapSeconds.Enabled = True
-                LblNextLeapSeconds.Enabled = True
-                LblNextLeapSecondsDate.Enabled = True
                 TxtLastRun.Enabled = True
                 LblTraceEnabled.Enabled = True
                 LblLastRun.Enabled = True
@@ -282,10 +252,11 @@ Public Class EarthRotationDataForm
             Case Else
                 MsgBox("Unknown EarthRotationDataUpdateType: " & EarthRotationDataUpdateType)
         End Select
-        GrpAutomaticUpdate.Refresh()
+        GrpOnDemandAndAutomaticUpdateConfiguration.Refresh()
         GrpManualUpdate.Refresh()
         GrpUpdateType.Refresh()
         GrpStatus.Refresh()
+        GrpScheduleTime.Refresh()
     End Sub
 
     Private Sub UpdateStatus()
@@ -302,7 +273,6 @@ Public Class EarthRotationDataForm
 
         Parameters.RefreshState() ' Make sure we have the latest values, in case any have been updated
         TxtLastRun.Text = Parameters.EarthRotationDataLastUpdatedString
-        TxtCurrentLeapSeconds.Text = Parameters.AutomaticLeapSecondsString
         TxtNextLeapSeconds.Text = Parameters.NextLeapSecondsString
         TxtNextLeapSecondsDate.Text = Parameters.NextLeapSecondsDateString & IIf((Parameters.NextLeapSecondsDateString = GlobalItems.DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Or (Parameters.NextLeapSecondsDateString = GlobalItems.NEXT_LEAP_SECONDS_DATE_NOT_AVAILABLE_DEFAULT), "", "UTC")
         TxtLastRun.Text = Parameters.EarthRotationDataLastUpdatedString
@@ -392,7 +362,6 @@ Public Class EarthRotationDataForm
                 Else
                     LogRunMessage(String.Format("Job failed with return code {0} after {1} seconds.", proc.ExitCode, RunTimer.Elapsed.TotalSeconds.ToString("0.0")))
                 End If
-
 
             Else
                 LogRunMessage(String.Format("Job timed out after {0} seconds, data not updated", RunTimer.Elapsed.TotalSeconds.ToString("0.0")))
@@ -541,7 +510,7 @@ Public Class EarthRotationDataForm
 
 #Region "Display drawing event handlers"
 
-    Private Sub GroupBox_Paint(sender As Object, e As PaintEventArgs) Handles GrpAutomaticUpdate.Paint, GrpManualUpdate.Paint, GrpUpdateType.Paint, GrpStatus.Paint
+    Private Sub GroupBox_Paint(sender As Object, e As PaintEventArgs) Handles GrpOnDemandAndAutomaticUpdateConfiguration.Paint, GrpManualUpdate.Paint, GrpUpdateType.Paint, GrpStatus.Paint, GrpScheduleTime.Paint
         Const HEIGHT_OFFSET As Integer = 8
         Const WIDTH_OFFSET As Integer = 1
         Const PEN_WIDTH As Integer = 1
@@ -555,35 +524,44 @@ Public Class EarthRotationDataForm
         gfx = e.Graphics
         tSize = TextRenderer.MeasureText(thisControl.Text, thisControl.Font)
 
-        If sender Is GrpAutomaticUpdate Then
-            Select Case EarthRotationDataUpdateType
-                Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1
-                    borderColour = inactiveBorder
-                Case UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1, UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
-                    borderColour = activeBorder
-                Case Else
-                    borderColour = Color.Red ' Warning colour that somethinhg has gone wrong in the code!
-            End Select
-            LblAutoDataSource.Enabled = borderColour = activeBorder
-            LblAutoDownloadTime.Enabled = borderColour = activeBorder
-            LblAutoRepeatFrequency.Enabled = borderColour = activeBorder
-            LblAutoTimeout.Enabled = borderColour = activeBorder
-            LblAutoSeconds.Enabled = borderColour = activeBorder
-        ElseIf sender Is GrpManualUpdate Then
-            Select Case EarthRotationDataUpdateType
-                Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1, UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1, UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
-                    borderColour = inactiveBorder
-                Case UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1
-                    borderColour = activeBorder
-                Case Else
-                    borderColour = Color.Red ' Warning colour that somethinhg has gone wrong in the code!
-            End Select
-            LblManualDeltaUT1.Enabled = borderColour = activeBorder
-            LblManualLeapSeconds.Enabled = borderColour = activeBorder
+        Select Case thisControl.Name
+            Case GrpOnDemandAndAutomaticUpdateConfiguration.Name
+                Select Case EarthRotationDataUpdateType
+                    Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1
+                        borderColour = inactiveBorder
+                    Case UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1, UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
+                        borderColour = activeBorder
+                    Case Else
+                        borderColour = Color.Red ' Warning colour that somethinhg has gone wrong in the code!
+                End Select
+                LblAutoDataSource.Enabled = borderColour = activeBorder
+                LblAutoTimeout.Enabled = borderColour = activeBorder
+                LblAutoSeconds.Enabled = borderColour = activeBorder
 
-        Else
-            borderColour = activeBorder
-        End If
+            Case GrpManualUpdate.Name
+                Select Case EarthRotationDataUpdateType
+                    Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1, UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1, UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
+                        borderColour = inactiveBorder
+                    Case UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1
+                        borderColour = activeBorder
+                    Case Else
+                        borderColour = Color.Red ' Warning colour that somethinhg has gone wrong in the code!
+                End Select
+                LblManualDeltaUT1.Enabled = borderColour = activeBorder
+                LblManualLeapSeconds.Enabled = borderColour = activeBorder
+
+            Case GrpScheduleTime.Name
+                If EarthRotationDataUpdateType = UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1 Then
+                    borderColour = activeBorder
+                Else
+                    borderColour = inactiveBorder
+                End If
+                LblAutoDownloadTime.Enabled = borderColour = activeBorder
+                LblAutoRepeatFrequency.Enabled = borderColour = activeBorder
+
+            Case Else
+                borderColour = activeBorder
+        End Select
 
         p = New Pen(borderColour, PEN_WIDTH)
         thisControl.ForeColor = borderColour

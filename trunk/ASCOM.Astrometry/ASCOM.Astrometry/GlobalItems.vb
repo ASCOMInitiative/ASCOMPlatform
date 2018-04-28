@@ -84,10 +84,10 @@ Module GlobalItems
 
     ' Earth rotation data source names
     Friend Const UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1 As String = "Built-in leap seconds and predicted delta UT1" ' Alternative value for earth rotation data source
-    Friend Const UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1 As String = "Manual leap seconds and manual delta UT1" ' Alternative value for earth rotation data source
-    Friend Const UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1 As String = "Manual leap seconds and predicted delta UT1" ' Alternative value for earth rotation data source
-    Friend Const UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1 As String = "On demand leap seconds and delta UT1" ' Alternative value for earth rotation data source
-    Friend Const UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1 As String = "Automatic leap seconds and delta UT1" ' Alternative value for earth rotation data source
+    Friend Const UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1 As String = "Specified leap seconds and specified delta UT1" ' Alternative value for earth rotation data source
+    Friend Const UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1 As String = "Specified leap seconds and predicted delta UT1" ' Alternative value for earth rotation data source
+    Friend Const UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1 As String = "Manual on demand Internet update" ' Alternative value for earth rotation data source
+    Friend Const UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1 As String = "Automatic scheduled Internet update" ' Alternative value for earth rotation data source
 
     ' Delta UT1 filename and format
     Friend Const DELTAUT1_FILE As String = "finals.daily" ' Name of the IERS file containing Delta UT1 predictions
@@ -107,11 +107,11 @@ Module GlobalItems
     Friend Const LEAP_SECONDS_LEAPSECONDS_START As Integer = 36 : Friend Const LEAP_SECONDS_LEAPSECONDS_LENGTH As Integer = 12 ' Start position and length of the NUMBER OF LEAP SECONDS field in the tai-utc.dat data line
 
     ' Earth rotation data download configuration options
-    Friend Const EARTH_ROTATION_DATA_SOURCE_0 As String = "http://maia.usno.navy.mil/ser7/" ' SOurce options for for earth rotation files
-    Friend Const EARTH_ROTATION_DATA_SOURCE_1 As String = "http://toshi.nofs.navy.mil/ser7/"
-    Friend Const EARTH_ROTATION_DATA_SOURCE_2 As String = "ftp://cddis.gsfc.nasa.gov/pub/products/iers/"
-    Friend Const EARTH_ROTATION_DATA_SOURCE_3 As String = "ftp://maia.usno.navy.mil/ser7/"
-    Friend Const EARTH_ROTATION_DATA_SOURCE_4 As String = "ftp://toshi.nofs.navy.mil/ser7/"
+    Friend Const EARTH_ROTATION_INTERNET_DATA_SOURCE_0 As String = "http://maia.usno.navy.mil/ser7/" ' Internet source options for for earth rotation files
+    Friend Const EARTH_ROTATION_INTERNET_DATA_SOURCE_1 As String = "http://toshi.nofs.navy.mil/ser7/"
+    Friend Const EARTH_ROTATION_INTERNET_DATA_SOURCE_2 As String = "ftp://cddis.gsfc.nasa.gov/pub/products/iers/"
+    Friend Const EARTH_ROTATION_INTERNET_DATA_SOURCE_3 As String = "ftp://maia.usno.navy.mil/ser7/"
+    Friend Const EARTH_ROTATION_INTERNET_DATA_SOURCE_4 As String = "ftp://toshi.nofs.navy.mil/ser7/"
     Friend Const SCHEDULE_REPEAT_NONE As String = "None" ' Options for autoamtic update schedule repeat frequency
     Friend Const SCHEDULE_REPEAT_DAILY As String = "Repeat daily"
     Friend Const SCHEDULE_REPEAT_WEEKLY As String = "Repeat weekly"
@@ -146,7 +146,7 @@ Module GlobalItems
     Friend Const AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT As String = NOT_DOWNLOADED ' Default value for the automatically downloaded number of leap seconds
     Friend Const NEXT_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT As String = NOT_DOWNLOADED ' Default value for the next leap second
     Friend Const NEXT_LEAP_SECONDS_DATE_NOT_AVAILABLE_DEFAULT As String = NOT_DOWNLOADED ' Default value for the next leap second effective date
-    Friend Const DOWNLOAD_TASK_DATA_UPDATE_SOURCE_DEFAULT As String = EARTH_ROTATION_DATA_SOURCE_0 ' Default source for earth rotation files
+    Friend Const DOWNLOAD_TASK_INTERNET_DATA_SOURCE_DEFAULT As String = EARTH_ROTATION_INTERNET_DATA_SOURCE_0 ' Default source for earth rotation files
     Friend Const DOWNLOAD_TASK_REPEAT_DEFAULT As String = SCHEDULE_REPEAT_WEEKLY ' Default repeat frequency for the automatic data download task
     Friend Const DOWNLOAD_TASK_TIMEOUT_DEFAULT As Double = 60.0 ' Default timeout in seconds for data transfers from earth rotation data sources
     Friend Const DOWNLOAD_TASK_TRACE_ENABLED_DEFAULT As Boolean = True ' Initial state for download task trace output
