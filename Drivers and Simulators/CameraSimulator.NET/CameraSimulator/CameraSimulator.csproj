@@ -38,7 +38,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RegisterForComInterop>true</RegisterForComInterop>
+    <RegisterForComInterop>false</RegisterForComInterop>
     <StartAction>Program</StartAction>
     <StartProgram>C:\WINDOWS\System32\WScript.exe</StartProgram>
     <StartArguments>..\..\Test.js</StartArguments>

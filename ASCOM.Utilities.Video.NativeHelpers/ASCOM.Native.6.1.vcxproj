@@ -110,7 +110,8 @@
       <OutputFile>$(ProjectDir)$(Configuration)\$(PlatformName)\$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(TargetPath)" "$(SystemRoot)\System32\$(TargetFileName)" </Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
