@@ -70,7 +70,9 @@
     <LinkIncremental>true</LinkIncremental>
     <CustomBuildAfterTargets>
     </CustomBuildAfterTargets>
-    <OutDir>$(SolutionDir)$(ProjectName)$\</OutDir>
+    <OutDir>$(ProjectDir)\$(Configuration)\$(PlatformName)\</OutDir>
+    <IntDir>$(Configuration)\$(PlatformName)\Work\</IntDir>
+    <TargetName>ASCOM.NativeVideo32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -105,6 +107,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>BitmapUtils.def</ModuleDefinitionFile>
       <AdditionalDependencies>Vfw32.lib;Gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(ProjectDir)$(Configuration)\$(PlatformName)\$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(TargetPath)" "$(SystemRoot)\System32\$(TargetFileName)" </Command>
@@ -155,7 +158,7 @@
       <ModuleDefinitionFile>BitmapUtils.def</ModuleDefinitionFile>
       <AdditionalDependencies>vfw32.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
-      <OutputFile>$(ProjectDir)\$(Configuration)\$(PlatformName)\$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(ProjectDir)$(Configuration)\$(PlatformName)\$(TargetName)$(TargetExt)</OutputFile>
       <ManifestFile>
       </ManifestFile>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

@@ -45,7 +45,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\..\ASCOM.Utilities\Setup\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>ASCOM Redirection Policies.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>

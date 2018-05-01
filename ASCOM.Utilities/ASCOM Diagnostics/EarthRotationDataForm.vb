@@ -402,7 +402,6 @@ Public Class EarthRotationDataForm
     Private Sub CmbUpdateType_Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles CmbUpdateType.SelectedIndexChanged
         Dim comboBox As ComboBox = CType(sender, ComboBox)
         Dim originalValue, newValue As String
-        Dim taskDefinition As TaskDefinition, taskTrigger As Trigger = Nothing, executablePath As String
 
         originalValue = EarthRotationDataUpdateType
         newValue = CType(comboBox.SelectedItem, String)
