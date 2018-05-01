@@ -2,15 +2,13 @@
     <!-- Required Import to use MSBuild Community Tasks -->
     <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
     <PropertyGroup>
-        <!-- Directory in which to export the latest ASCOM codebase from Subversion-->
-        <CheckoutDirectory>$(MSBuildProjectDirectory)\Export</CheckoutDirectory>
+        <!-- Directory in which to export the latest ASCOM code base from GitHub-->
+		<CheckoutDirectoryRelative>Export</CheckoutDirectoryRelative>
+        <CheckoutDirectory>$(MSBuildProjectDirectory)\$(CheckoutDirectoryRelative)</CheckoutDirectory>
 
-        <!-- Subversion URL from which to make the export - Customise this line with your own login name in place of simpsonpwg -->
-        <RepositoryPath>svn://simpsonpwg@svn.code.sf.net/p/ascom/code/trunk</RepositoryPath>
-
-        <!-- Registry location for the user's Subversion login credentials -->
-        <SecurityCredentialsLocation>HKEY_CURRENT_USER\Software\ASCOM\Build</SecurityCredentialsLocation>
-
+        <!-- GitHub URL from which to make the clone -->
+		<GitRepositoryPath>https://github.com/ASCOMInitiative/ASCOMPlatform.git</GitRepositoryPath>
+		
         <!-- Base date from which the number of days is calculated to give the build version number (should stay at Jan 1 2011 - it's good till at least 2019) -->
         <BuildBaseDate>January 1,2011</BuildBaseDate>
 
@@ -78,24 +76,13 @@
         <!-- Clean up any previous installer versions  -->
         <Delete Files="@(OldPlatformInstallers)" />
 
-        <!-- Read the Subversion logon credentials from the registry -->
-        <RegistryRead KeyName="$(SecurityCredentialsLocation)" ValueName="SubversionUserName">
-            <Output TaskParameter="Value" PropertyName="SubversionUserName" />
-        </RegistryRead>
-        <Message Text="Subversion User Name: $(SubversionUserName)"/>
+        <!-- Clone a fresh copy of the ASCOM Platform Git repository  -->
+		<GitClient Command="clone" LocalPath="$(MSBuildProjectDirectory)" Arguments="$(GitRepositoryPath) $(CheckoutDirectoryRelative)"/>
 
-        <RegistryRead KeyName="$(SecurityCredentialsLocation)" ValueName="SubversionPassword">
-            <Output TaskParameter="Value" PropertyName="SubversionPassword" />
-        </RegistryRead>
-        <Message Text="Subversion Password: $(SubversionPassword)" />
-
-        <!-- Export a fresh copy of the Platform source -->
-        <SvnExport RepositoryPath="$(RepositoryPath)"
-               Username = "$(SubversionUserName)"
-               Password = "$(SubversionPassword)"
-               LocalPath="$(CheckoutDirectory)">
-            <Output TaskParameter="Revision" PropertyName="Revision" />
-        </SvnExport>
+        <!-- Get the latest commit number into the Revision Property to use in the the Platform version number -->
+		<Exec Command="git.exe rev-list HEAD --count" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)">
+			<Output TaskParameter="ConsoleOutput" PropertyName="Revision" />
+		</Exec>
         <Message Text="Revision Level: $(Revision)"/>
 
         <!-- Copy the InstallAware shared text strings to the InstallAware program directory. This is the only way that IA will actually use the modified strings! Ugh - but there it is. -->
