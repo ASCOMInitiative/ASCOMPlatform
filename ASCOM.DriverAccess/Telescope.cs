@@ -7,7 +7,6 @@
 using System;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
-using ASCOM.Conform;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
