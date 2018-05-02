@@ -181,7 +181,6 @@
     <None Include="..\..\ASCOM.snk">
       <Link>ASCOM.snk</Link>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj">
