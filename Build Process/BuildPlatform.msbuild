@@ -37,6 +37,9 @@
         <RemoveASCOMPdb>$(RemoveASCOMDirectory)\RemoveASCOM.pdb</RemoveASCOMPdb>
         <RemoveASCOMTxt>$(RemoveASCOMDirectory)\GUIDList.txt</RemoveASCOMTxt>
 	    <VersionFile>$(CheckoutDirectory)\$(PlatformInstallerDirectory)\MasterPlatformVersion.txt</VersionFile>
+		
+        <!-- NuGet location and command to restore Platform NuGet dependencies -->
+		<NuGetCommand>..\nuget restore</NuGetCommand>
     </PropertyGroup>
 
     <!-- Main build target for this build -->
@@ -84,6 +87,9 @@
 			<Output TaskParameter="ConsoleOutput" PropertyName="Revision" />
 		</Exec>
         <Message Text="Revision Level: $(Revision)"/>
+
+        <!-- Restore NuGet packages -->
+		<Exec Command="$(NuGetCommand)" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)"</Exec>
 
         <!-- Copy the InstallAware shared text strings to the InstallAware program directory. This is the only way that IA will actually use the modified strings! Ugh - but there it is. -->
         <ItemGroup>

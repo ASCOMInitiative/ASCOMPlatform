@@ -645,8 +645,6 @@ if Variable REMOVE Equals TRUE
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Exceptions- v6.0.0.0
   Unregister assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable MYPROGRESS to 85
-  Set Variable PROGRESSTEXT to Unregistering ASCOM.IConform - v5.0.0.0
-  Unregister assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Interfaces - v1.0.0.0
   Unregister assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Internal.FusionLib - v1.0.0.0
@@ -822,8 +820,6 @@ if Variable REMOVE not Equals TRUE
   Install Files ..\..\..\..\ASCOM.Utilities\VB6Helper\Helper.dll to $COMMONFILES$\ASCOM
   Install Files ..\..\..\..\ASCOM.Utilities\VB6Helper2\Helper2.dll to $COMMONFILES$\ASCOM
   Comment: New files in Platform 5.5
-  Install Assembly ..\..\..\..\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll to Global Assembly Cache
-  Install Files ..\..\..\..\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb to $WINDIR$\Symbols\dll
   Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.dll to Global Assembly Cache
   Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
   Comment: Updated ASCOM.Exceptions v1.1 for Platform 5.5
@@ -1293,8 +1289,6 @@ if Variable REMOVE not Equals TRUE
     Set Variable PROGRESSTEXT to Registering ASCOM.Astrometry 5.5.6.0
     Register assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
     Set Variable MYPROGRESS to 37
-    Set Variable PROGRESSTEXT to Registering ASCOM.IConform 5.0.0.0
-    Register assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
     Set Variable MYPROGRESS to 38
     Set Variable PROGRESSTEXT to Registering ASCOM.Utilities 5.5.6.0
     Register assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
