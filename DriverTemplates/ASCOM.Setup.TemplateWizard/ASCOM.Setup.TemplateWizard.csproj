@@ -192,6 +192,11 @@
       <Name>ASCOM.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="VSSDK.TemplateWizardInterface.8">
+      <Version>8.0.4</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
