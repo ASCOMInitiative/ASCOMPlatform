@@ -89,7 +89,7 @@
         <Message Text="Revision Level: $(Revision)"/>
 
         <!-- Restore NuGet packages -->
-		<Exec Command="$(NuGetCommand)" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)"</Exec>
+		<Exec Command="$(NuGetCommand)" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 
         <!-- Copy the InstallAware shared text strings to the InstallAware program directory. This is the only way that IA will actually use the modified strings! Ugh - but there it is. -->
         <ItemGroup>
