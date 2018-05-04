@@ -1,4 +1,10 @@
 ###############################################################################
+# Tell Git Linguist to ignore these files when deciding on Platform language 
+# composition
+###############################################################################
+SOFA/Release Zip Files linguist-generated=true
+
+###############################################################################
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
 * text=auto
