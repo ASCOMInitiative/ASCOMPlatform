@@ -3,6 +3,7 @@
 # composition
 ###############################################################################
 SOFA/ReleaseZipFiles/** linguist-vendored
+ASCOM%sPlatform%sExamples/** linguist-documentation
 
 ###############################################################################
 # Set default behavior to automatically normalize line endings.
