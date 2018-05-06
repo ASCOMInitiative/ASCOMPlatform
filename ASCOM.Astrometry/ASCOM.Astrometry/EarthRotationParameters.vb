@@ -1026,8 +1026,12 @@ Public Class EarthRotationParameters : Implements IDisposable
 
                         taskDefinition.RegistrationInfo.Description = "ASCOM scheduled job to update earth rotation data: leap seconds and delta UT1. This job is managed through the ASCOM Diagnostics application and should not be manually edited."
 
-                        executableName = Process.GetCurrentProcess().MainModule.FileName 'Get the full path and name of the EarthRotationUpdate executable
-                        TL.LogMessage("ManageScheduledTask", String.Format("EarthRotationUpdate Process full name and path: {0}", executableName))
+                        executableName = Process.GetCurrentProcess().MainModule.FileName 'Get the full path and name of the current executable
+                        TL.LogMessage("ManageScheduledTask", String.Format("Current Executable process full name and path: {0}", executableName))
+
+                        executableName = Path.GetDirectoryName(executableName) ' Extract the path component of the full file name
+                        executableName += "\EarthRotationUpdate.exe" ' Append the name of the earth rotation update executable
+                        TL.LogMessage("ManageScheduledTask", String.Format("EarthRotationUpdate process full name and path: {0}", executableName))
 
                         taskDefinition.Actions.Clear() ' Remove any existing actions and add the current one
                         taskDefinition.Actions.Add(New ExecAction(executableName, Nothing, Nothing)) ' Add an action that will launch the updater application whenever the trigger fires
