@@ -112,11 +112,6 @@
         </PropertyGroup>
 	    <Message Text="Version numbers - Major: $(PlatformMajor), Minor: $(PlatformMinor), ServicePack: $(PlatformServicePack), MasterPlatformLevel: $(PlatformVersion)" />
 
-        <!-- Create a few registry keys to represent a minimal ASCOM Profile Store. -->
-        <!-- This enables drivers to register themselves during the build process without hitting a ProfileNotFound exception.-->
-        <RegistryWrite KeyName="HKEY_LOCAL_MACHINE\SOFTWARE\ASCOM" ValueName="PlatformVersion" Value="$(PlatformVersion)" />
-        <RegistryWrite KeyName="HKEY_LOCAL_MACHINE\SOFTWARE\ASCOM" ValueName="SerTraceFile" Value="C:\\SerialTraceAuto.txt" />
-		
         <!-- Create global AssemblyVersion attributes from the Platform version, service pack and revision numbers.-->
         <AssemblyInfo CodeLanguage="CS" OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.cs" AssemblyFileVersion="$(PlatformVersion).$(PlatformServicePack).$(Revision)" />
         <AssemblyInfo CodeLanguage="VB" OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.vb" AssemblyFileVersion="$(PlatformVersion).$(PlatformServicePack).$(Revision)" />
@@ -147,8 +142,8 @@
         <Exec Command='"$(CheckoutDirectory)\$(MakeTemplatesExecutable)" "$(CheckoutDirectory)\$(DriverTemplatesDirectory)" "TemplateSources"' />
     
         <!-- Build the help files for Platform and Developer.-->
-        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=Release" />
-        <MSBuild Projects="$(CheckoutDirectory)\$(DeveloperHelpProject)" Properties="Configuration=Release" />
+        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=Release;Platform=AnyCPU" />
+        <MSBuild Projects="$(CheckoutDirectory)\$(DeveloperHelpProject)" Properties="Configuration=Release;Platform=AnyCPU" />
 	    
 		<!-- Update the file version numbers in the InstallAware project files -->
 	    <ItemGroup>
