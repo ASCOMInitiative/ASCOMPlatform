@@ -130,6 +130,7 @@
       <AlternateText>ForceCOMPort</AlternateText>
     </Image>
     <Content Include="styles\branding-Help1.css" />
+    <None Include="Tools and Features\Earth Rotation Parameters.aml" />
     <None Include="Version History\Version 6.4.aml" />
     <None Include="Version History\Version 6.3 SP1.aml" />
     <None Include="Version History\Version 6.3.aml" />

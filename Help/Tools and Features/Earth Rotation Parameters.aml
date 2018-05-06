@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="98976954-6a00-4864-a223-7b3b25ffaaf1" revisionNumber="1">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+	    <introduction>
+	    	<para>There are small disparities between time as measured by the motion of the earth and time as measured by atomic clocks, which can lead to mount pointing inaccuracy if not corrected. 
+	      	One of these effects is due to the earth's daily rotational period becoming longer as the earth's rotation slows down; this effect is about 1ms per day at the time of writing.
+	      	</para>
+	      	<para>
+	      	Astronomers use two corrections to compensate for this effect:
+	      	<list class="bullet">
+				<listItem>Leap seconds - Introduced whenever required to keep Universal Time Coordinated (UTC), which is based on atomic time, within +-0.9 seconds of earth rotational time</listItem>
+				<listItem>Delta UT1 - The remaining difference between UTC and earth rotational time on any particular day (in the range +-0.9 seconds) .</listItem>
+			</list>
+			At the present time, leap seconds need to be introduced every two to three years and the intention to change the number of leap seconds is published in the 
+			International Earth Rotation and Reference Systems Service (IERS) Bulletin C about 6 months in advance of the effective date. Predictions of Delta UT1 are published daily by the IERS Rapid Service 
+			and include values for 90 days in advance of the current date.
+	    	</para>
+	        <para>Previous Platforms have contained a built-in value for leap seconds, current at the time the installer was built. However, they lacked an easy mechanism to update the leap second value 
+	        and contained no support for the current Delta UT1 value.
+	        </para>
+	        <para>
+	        The Platform now has the capability to automatically download current and future leap second values and current Delta UT1 values from the Internet on a regular basis so that the Platform will not 
+	        need to be refreshed on observatory PCs when leap seconds change. If an Internet connection is not available, current values for leap second and Delta UT1 can be entered manually through a graphical 
+	        interface. These options are described in more detail below.
+	        </para>
+	    </introduction>
+	
+	    <section address="DiagTool">
+			<title>Earth Rotation Data Tool</title>
+			<content>
+			<para>
+	        A graphical user interface for managing leap second and Delta UT1 vales has been added to the Diagnostics application that can be found in the Start / ASCOM Platform 6 folder. 
+	        The Earth Rotation Data management graphical interface can be found in the Diagnostics Tools menu. On installation automatic update is selected, if you want a manual or no update mode then please use 
+	        the tool to select your desired data source.
+	        </para>
+	        <para>
+	        Five data sources are supported:
+			<table>
+				<tableHeader>
+					<row>
+						<entry><para>Data Source</para></entry>
+						<entry><para>Leap Seconds</para></entry>
+						<entry><para>Delta UT1</para></entry>
+					</row>
+				</tableHeader>
+				<row>
+					<entry><para>Built-in leap seconds and predicted delta UT1</para></entry>
+					<entry><para>Uses the value built into the Platform when the installer was created.</para></entry>
+					<entry><para>Always zero</para></entry>
+				</row>
+				<row>
+					<entry><para>Specified leap seconds and built-in delta UT1</para></entry>
+					<entry><para></para>Uses the specified leap second value</entry>
+					<entry><para></para>Calculates delta UT1 from the specified leap second value and a built-in prediction DeltaT</entry>
+				</row>
+				<row>
+					<entry><para></para>Specified leap seconds and specified delta UT1</entry>
+					<entry><para></para>Uses the specified leap second value</entry>
+					<entry><para></para>Uses the specified delta UT1 value</entry>
+				</row>
+				<row>
+					<entry><para></para>Manual on-demand Internet update</entry>
+					<entry><para></para>Uses the leap second values last downloaded by running an update with the On-Demand button. Leap seconds will automatically change when the
+					next leap second implementation date is reached.</entry>
+					<entry><para>Uses the delta UT1 value last downloaded through the On-Demand button.</para></entry>
+				</row>
+				<row>
+					<entry><para></para>Automatic scheduled Internet update</entry>
+					<entry><para></para>Uses the leap second values last downloaded by the scheduled data update task. Leap seconds will automatically change when the
+					next leap second implementation date is reached,</entry>
+					<entry><para>Uses the delta UT1 value last downloaded by the scheduled data update task.</para></entry>
+				</row>
+			</table>
+	        </para>
+	        <para>
+			<legacyBold>On Demand and Automatic Update Configuration</legacyBold>
+			</para>
+			<para>
+			A variety of NASA and USNO sites distribute the IERS data and these can be selected from the Internet Data Source dropdown. To protect against waiting for ever for a download to complete, 
+			a timeout can be specified, after which the download task will abort. A trace file can be turned on for on demand and automatic Internet updates. These log files will appear as:
+			<table>
+			  <tableHeader>
+			    <row>
+			      <entry><para>Update Type</para></entry>
+			      <entry><para>Log File Name and Location</para></entry>
+			    </row>
+			  </tableHeader>
+			  <row>
+			    <entry><para>On-demand Update</para></entry>
+			    <entry><para>Documents\ASCOM\Logs-yyyy-mm-dd\ASCOM.EarthRotationUpdate.xxxx.yyyyyy.txt Where yyyy, mm, dd are numeric year, month and day numbers and xxxx and yyyyyy create a time 
+			    based unique identifier.</para></entry>
+			  </row>
+			  <row>
+			    <entry><para>Automatic Scheduled Update</para></entry>
+			    <entry><para>Documents\ASCOM\EarthRotationUpdate\ASCOM.EarthRotationUpdate.xxxx.yyyyyy.txt Where xxxx and yyyyyy create a time based unique identifier.</para></entry>
+			  </row>
+			</table>
+			</para>
+	        <para>
+			<legacyBold>Automatic Update Schedule</legacyBold>
+			</para>
+			<para>
+			The "Automatic scheduled Internet update" source will create a Windows scheduled task that runs on the date / time set and repeats according to the specified "Repeat Frequency":
+			<table>
+				<tableHeader>
+					<row>
+						<entry><para>Repeat Frequency</para></entry>
+						<entry><para>Description</para></entry>
+					</row>
+				</tableHeader>
+				<row>
+					<entry><para>None</para></entry>
+					<entry><para>The data will be updated on the set date / time. Afterwards the task will remain in the task list but with no further activation set.</para>
+					<para>The task can be run manually from the scheduler task list if desired.</para></entry>
+				</row>
+				<row>
+					<entry><para>Repeat daily</para></entry>
+					<entry><para>The task will run first on the set date and time and will run again every day at the set time.</para></entry>
+				</row>
+				<row>
+					<entry><para>Repeat weekly</para></entry>
+					<entry><para>The task will run first on the set date and time and will run again once per week on the set day of the week.</para></entry>
+				</row>
+				<row>
+					<entry><para>Repeat monthly</para></entry>
+					<entry><para>The task will run first on the set date and time and will run again once per month on the set day number of the month.</para></entry>
+				</row>
+			</table>
+			</para>
+			<para>
+			</para>
+	    	</content>
+	    </section>
+	    <relatedTopics>
+		      <!-- One or more of the following:
+		           - A local link
+		           - An external link
+		           - A code entity reference
+		
+		      <link xlink:href="Other Topic's ID"/>
+		      <link xlink:href="Other Topic's ID">Link inner text</link>
+		
+		      <externalLink>
+		          <linkText>Link text</linkText>
+		          <linkAlternateText>Optional alternate link text</linkAlternateText>
+		          <linkUri>URI</linkUri>
+		      </externalLink>
+		
+		      <codeEntityReference>API member ID</codeEntityReference>
+		
+		      Examples:
+		
+		      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8270" />
+		      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
+		
+		      <externalLink>
+		          <linkText>SHFB on GitHub</linkText>
+		          <linkAlternateText>Go to GitHub</linkAlternateText>
+		          <linkUri>https://GitHub.com/EWSoftware/SHFB</linkUri>
+		      </externalLink>
+		
+		      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
+		      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
+		      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
+		      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
+		      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
+		      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
+		      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
+		      -->
+		</relatedTopics>
+	</developerConceptualDocument>
+</topic>

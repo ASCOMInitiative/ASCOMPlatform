@@ -65,6 +65,7 @@ Partial Class EarthRotationDataForm
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.GrpScheduleTime = New System.Windows.Forms.GroupBox()
+        Me.BtnHelp = New System.Windows.Forms.Button()
         Me.GrpManualUpdate.SuspendLayout()
         Me.GrpOnDemandAndAutomaticUpdateConfiguration.SuspendLayout()
         CType(Me.ErrorProvider1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -514,11 +515,23 @@ Partial Class EarthRotationDataForm
         Me.GrpScheduleTime.TabStop = False
         Me.GrpScheduleTime.Text = "Automatic Update Schedule"
         '
+        'BtnHelp
+        '
+        Me.BtnHelp.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.BtnHelp.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.BtnHelp.Location = New System.Drawing.Point(859, 546)
+        Me.BtnHelp.Name = "BtnHelp"
+        Me.BtnHelp.Size = New System.Drawing.Size(75, 23)
+        Me.BtnHelp.TabIndex = 28
+        Me.BtnHelp.Text = "Help"
+        Me.BtnHelp.UseVisualStyleBackColor = True
+        '
         'EarthRotationDataForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(949, 610)
+        Me.Controls.Add(Me.BtnHelp)
         Me.Controls.Add(Me.GrpScheduleTime)
         Me.Controls.Add(Me.GrpStatus)
         Me.Controls.Add(Me.GrpUpdateType)
@@ -584,4 +597,5 @@ Partial Class EarthRotationDataForm
     Friend WithEvents LblNow As Label
     Friend WithEvents TxtNow As TextBox
     Friend WithEvents GrpScheduleTime As GroupBox
+    Friend WithEvents BtnHelp As Button
 End Class
