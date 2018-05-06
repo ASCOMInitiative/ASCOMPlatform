@@ -92,7 +92,7 @@
 			  </row>
 			  <row>
 			    <entry><para>Automatic Scheduled Update</para></entry>
-			    <entry><para>Documents\ASCOM\EarthRotationUpdate\ASCOM.EarthRotationUpdate.xxxx.yyyyyy.txt Where xxxx and yyyyyy create a time based unique identifier.</para></entry>
+			    <entry><para>Documents\ASCOM\EarthRotationUpdate\Log yyyy-mm-dd.txt Where Where yyyy, mm, dd are numeric year, month and day numbers.</para></entry>
 			  </row>
 			</table>
 			</para>
@@ -132,41 +132,16 @@
 	    	</content>
 	    </section>
 	    <relatedTopics>
-		      <!-- One or more of the following:
-		           - A local link
-		           - An external link
-		           - A code entity reference
-		
-		      <link xlink:href="Other Topic's ID"/>
-		      <link xlink:href="Other Topic's ID">Link inner text</link>
-		
-		      <externalLink>
-		          <linkText>Link text</linkText>
-		          <linkAlternateText>Optional alternate link text</linkAlternateText>
-		          <linkUri>URI</linkUri>
-		      </externalLink>
-		
-		      <codeEntityReference>API member ID</codeEntityReference>
-		
-		      Examples:
-		
-		      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8270" />
-		      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
-		
-		      <externalLink>
-		          <linkText>SHFB on GitHub</linkText>
-		          <linkAlternateText>Go to GitHub</linkAlternateText>
-		          <linkUri>https://GitHub.com/EWSoftware/SHFB</linkUri>
-		      </externalLink>
-		
-		      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
-		      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
-		      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
-		      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
-		      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
-		      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
-		      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
-		      -->
+			<externalLink>
+		    	<linkText>IERS Leap Second announcements - Bulletin C</linkText>
+		        <linkAlternateText>Go to IERS</linkAlternateText>
+		        <linkUri>https://www.iers.org/SharedDocs/News/EN/BulletinC.html</linkUri>
+		    </externalLink>
+			<externalLink>
+		    	<linkText>IERS Earth orientation data files</linkText>
+		        <linkAlternateText>Go to IERS</linkAlternateText>
+		        <linkUri>https://www.iers.org/IERS/EN/DataProducts/EarthOrientationData/eop.html</linkUri>
+		    </externalLink>
 		</relatedTopics>
 	</developerConceptualDocument>
 </topic>

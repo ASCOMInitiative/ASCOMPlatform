@@ -466,7 +466,7 @@ Public Class EarthRotationDataForm
     Private Sub TxtDownloadTimeout_Validating(sender As Object, e As KeyEventArgs) Handles TxtDownloadTimeout.KeyUp
         Dim DoubleValue As Double = 0.0, IsDouble As Boolean
 
-        IsDouble = Double.TryParse(TxtDownloadTimeout.Text, System.Globalization.NumberStyles.Number.Float, CultureInfo.CurrentUICulture, DoubleValue)
+        IsDouble = Double.TryParse(TxtDownloadTimeout.Text, NumberStyles.Float, CultureInfo.CurrentUICulture, DoubleValue)
         If IsDouble And DoubleValue >= MINIMUM_UPDATE_RUN_TIME Then
             ErrorProvider1.SetError(TxtDownloadTimeout, "")
             DownloadTimeout = DoubleValue
@@ -482,7 +482,7 @@ Public Class EarthRotationDataForm
     Private Sub TxtManualLeapSeconds_Validating(sender As Object, e As KeyEventArgs) Handles TxtManualLeapSeconds.KeyUp
         Dim DoubleValue As Double = 0.0, IsDouble As Boolean
 
-        IsDouble = Double.TryParse(TxtManualLeapSeconds.Text, System.Globalization.NumberStyles.Number.Float, CultureInfo.CurrentUICulture, DoubleValue)
+        IsDouble = Double.TryParse(TxtManualLeapSeconds.Text, NumberStyles.Float, CultureInfo.CurrentUICulture, DoubleValue)
         If IsDouble And DoubleValue >= LeapSecondMinimumValue Then
             ErrorProvider1.SetError(TxtManualLeapSeconds, "")
             ManualLeapSeconds = DoubleValue
@@ -502,7 +502,7 @@ Public Class EarthRotationDataForm
     Private Sub TxtDeltaUT1Manuals_Validating(sender As Object, e As KeyEventArgs) Handles TxtManualDeltaUT1.KeyUp
         Dim DoubleValue As Double = 0.0, IsDouble As Boolean
 
-        IsDouble = Double.TryParse(TxtManualDeltaUT1.Text, System.Globalization.NumberStyles.Number.Float, CultureInfo.CurrentUICulture, DoubleValue)
+        IsDouble = Double.TryParse(TxtManualDeltaUT1.Text, NumberStyles.Float, CultureInfo.CurrentUICulture, DoubleValue)
         If IsDouble And (DoubleValue >= -DELTAUT1_ACCEPTABLE_RANGE) And (DoubleValue <= +DELTAUT1_ACCEPTABLE_RANGE) Then
             ErrorProvider1.SetError(TxtManualDeltaUT1, "")
             ManualDeltaUT1Value = DoubleValue
