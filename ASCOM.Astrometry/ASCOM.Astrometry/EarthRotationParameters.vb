@@ -991,7 +991,6 @@ Public Class EarthRotationParameters : Implements IDisposable
         Try
             TL.BlankLine()
 
-
             TL.LogMessage("ManageScheduledTask", "Obtaining Scheduler information")
             Using service = New TaskService()
 
@@ -1091,7 +1090,7 @@ Public Class EarthRotationParameters : Implements IDisposable
                                         weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Saturday ' Set the specific day of the week when the task is required to run
                                 End Select
                                 taskDefinition.Triggers.Add(weeklyTrigger)
-                                TL.LogMessage("ManageScheduledTask", String.Format("Set trigger to repeat the job weekly on the specified day of the week at the specified time."))
+                                TL.LogMessage("ManageScheduledTask", String.Format("Set trigger to repeat the job weekly on day {0} at the specified time.", DownloadTaskScheduledTimeValue.DayOfWeek.ToString()))
 
                             Case SCHEDULE_REPEAT_MONTHLY ' Execute once per month on the specified day number of the month
                                 monthlyTrigger = New MonthlyTrigger()
@@ -1100,7 +1099,7 @@ Public Class EarthRotationParameters : Implements IDisposable
                                 monthlyTrigger.DaysOfMonth = dayOfMonth ' Set the specific day of the month when the task is required to run
                                 monthlyTrigger.MonthsOfYear = MonthsOfTheYear.AllMonths
                                 taskDefinition.Triggers.Add(monthlyTrigger)
-                                TL.LogMessage("ManageScheduledTask", String.Format("Set trigger to repeat the job monthly on the specified day number of the month at the specified time."))
+                                TL.LogMessage("ManageScheduledTask", String.Format("Set trigger to repeat the job monthly on day {0} of the month at the specified time.", dayOfMonth(0)))
 
                             Case Else
                                 MsgBox(String.Format("ManageScheduledTask - Unknown type of DownloadTaskRepeatFrequencyValue: {0}", DownloadTaskRepeatFrequencyValue))
