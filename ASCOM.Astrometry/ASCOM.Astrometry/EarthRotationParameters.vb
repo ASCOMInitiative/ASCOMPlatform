@@ -1018,12 +1018,12 @@ Public Class EarthRotationParameters : Implements IDisposable
                     Case UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1 ' Create a new or Update the existing scheduled job
                         ' Get the task definition to work on, either a new one or the existing task, if it exists
                         If (Not (ASCOMTask Is Nothing)) Then
-                            TL.LogMessage("ManageScheduledTask", String.Format("{0} task exists so it will be updated.", DOWNLOAD_TASK_NAME))
-                            taskDefinition = ASCOMTask.Definition
-                        Else
-                            TL.LogMessage("ManageScheduledTask", String.Format("{0} task does not exist so a new task definition will be created.", DOWNLOAD_TASK_NAME))
-                            taskDefinition = service.NewTask
+                            TL.LogMessage("ManageScheduledTask", String.Format("Update type is {0} and {1} task exists so it will be deleted.", UpdateTypeValue, DOWNLOAD_TASK_NAME))
+                            service.RootFolder.DeleteTask(DOWNLOAD_TASK_NAME)
+                            TL.LogMessage("ManageScheduledTask", String.Format("Task {0} deleted OK.", DOWNLOAD_TASK_NAME))
                         End If
+                        TL.LogMessage("ManageScheduledTask", String.Format("{0} task will be created.", DOWNLOAD_TASK_NAME))
+                        taskDefinition = service.NewTask
 
                         taskDefinition.RegistrationInfo.Description = "ASCOM scheduled job to update earth rotation data: leap seconds and delta UT1. This job is managed through the ASCOM Diagnostics application and should not be manually edited."
 
@@ -1106,19 +1106,10 @@ Public Class EarthRotationParameters : Implements IDisposable
 
                         End Select
 
-                        TL.LogMessage("ManageScheduledTask", String.Format("Added the new trigger to the task definition."))
-
                         ' Implement the new task in the root folder either by updating the existing task or creating a new task
-                        If (Not (ASCOMTask Is Nothing)) Then ' The task already exists
-                            TL.LogMessage("ManageScheduledTask", String.Format("The {0} task exists so applying the updates.", DOWNLOAD_TASK_NAME))
-                            ASCOMTask.RegisterChanges() ' Task exists so apply the changes made above
-                            TL.LogMessage("ManageScheduledTask", String.Format("Updates applied OK."))
-                        Else ' The task does not already exist
-                            TL.LogMessage("ManageScheduledTask", String.Format("The {0} task does not exist so registering it now.", DOWNLOAD_TASK_NAME))
-                            service.RootFolder.RegisterTaskDefinition(DOWNLOAD_TASK_NAME, taskDefinition, TaskCreation.CreateOrUpdate, "NT AUTHORITY\SYSTEM", Nothing, TaskLogonType.ServiceAccount)
-                            'service.RootFolder.RegisterTaskDefinition(AUTOMATIC_SCHEDULE_JOB_NAME, taskDefinition)
-                            TL.LogMessage("ManageScheduledTask", String.Format("New task registered OK."))
-                        End If
+                        TL.LogMessage("ManageScheduledTask", String.Format("The {0} task does not exist so registering it now.", DOWNLOAD_TASK_NAME))
+                        service.RootFolder.RegisterTaskDefinition(DOWNLOAD_TASK_NAME, taskDefinition, TaskCreation.CreateOrUpdate, "SYSTEM", Nothing, TaskLogonType.ServiceAccount)
+                        TL.LogMessage("ManageScheduledTask", String.Format("New task registered OK."))
                     Case Else
                         MsgBox(String.Format("UpdateType - Unknown type of EarthRotationDataUpdateType: {0}", UpdateTypeValue))
                 End Select
