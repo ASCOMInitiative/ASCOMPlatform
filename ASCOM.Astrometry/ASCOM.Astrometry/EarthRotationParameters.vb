@@ -1115,7 +1115,7 @@ Public Class EarthRotationParameters : Implements IDisposable
                             TL.LogMessage("ManageScheduledTask", String.Format("Updates applied OK."))
                         Else ' The task does not already exist
                             TL.LogMessage("ManageScheduledTask", String.Format("The {0} task does not exist so registering it now.", DOWNLOAD_TASK_NAME))
-                            service.RootFolder.RegisterTaskDefinition(DOWNLOAD_TASK_NAME, taskDefinition, TaskCreation.CreateOrUpdate, "SYSTEM", Nothing, TaskLogonType.ServiceAccount)
+                            service.RootFolder.RegisterTaskDefinition(DOWNLOAD_TASK_NAME, taskDefinition, TaskCreation.CreateOrUpdate, "NT AUTHORITY\SYSTEM", Nothing, TaskLogonType.ServiceAccount)
                             'service.RootFolder.RegisterTaskDefinition(AUTOMATIC_SCHEDULE_JOB_NAME, taskDefinition)
                             TL.LogMessage("ManageScheduledTask", String.Format("New task registered OK."))
                         End If
