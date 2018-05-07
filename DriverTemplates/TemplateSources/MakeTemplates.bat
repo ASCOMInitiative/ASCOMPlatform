@@ -1,3 +1,3 @@
 @Echo off
-MakeAscomTemplates.exe ".." "TemplateSources"
+..\MakeASCOMTemplates\MakeASCOMTemplates\bin\Release\MakeAscomTemplates.exe ".." "TemplateSources"
 pause

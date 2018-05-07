@@ -1,10 +1,5 @@
 ﻿Imports ASCOM.Astrometry
-Imports System.Collections.Generic
-Imports System.ComponentModel
-Imports Microsoft.Win32.TaskScheduler
 Imports System.Globalization
-Imports System.Runtime.CompilerServices
-Imports System.Security.Principal
 
 Public Class EarthRotationDataForm
     Private Const TRACE_LOGGER_IDENTIFIER_FIELD_WIDTH As Integer = 35
@@ -13,6 +8,8 @@ Public Class EarthRotationDataForm
     Private Const DELTAUT1_ACCEPTABLE_RANGE As Double = 0.9 ' Acceptable range for manual deltaut1 values is +- this value
     Private Const MINIMUM_UPDATE_RUN_TIME As Double = 5.0 ' Minimum acceptable time (seconds)  for the time allowed for a manually triggered update task to run
 
+    Private Const PLATFORM_HELP_FILE As String = "\ASCOM\Platform 6\Docs\PlatformHelp.chm"
+    Private Const EARTH_ROTATION_HELP_TOPIC As String = "/html/98976954-6a00-4864-a223-7b3b25ffaaf1.htm"
     Private TL As TraceLogger
     Private Parameters As EarthRotationParameters
     Private WithEvents NowTimer As Windows.Forms.Timer
@@ -402,7 +399,6 @@ Public Class EarthRotationDataForm
     Private Sub CmbUpdateType_Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles CmbUpdateType.SelectedIndexChanged
         Dim comboBox As ComboBox = CType(sender, ComboBox)
         Dim originalValue, newValue As String
-        Dim taskDefinition As TaskDefinition, taskTrigger As Trigger = Nothing, executablePath As String
 
         originalValue = EarthRotationDataUpdateType
         newValue = CType(comboBox.SelectedItem, String)
@@ -434,6 +430,19 @@ Public Class EarthRotationDataForm
         TL.LogMessage("DownloadTaskRepeatFrequency", String.Format("Schedule job repeat frequency updated from: {0} to: {1}", orig, AutomaticScheduleJobRepeatFrequency))
     End Sub
 
+    Private Sub BtnHelp_Click(sender As Object, e As EventArgs) Handles BtnHelp.Click
+        Dim Btn As Button, HelpFilePath As String
+        Btn = CType(sender, Button)
+
+        If Environment.Is64BitOperatingSystem Then
+            HelpFilePath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & PLATFORM_HELP_FILE
+        Else
+            HelpFilePath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & PLATFORM_HELP_FILE
+        End If
+
+        Help.ShowHelp(Btn.Parent, HelpFilePath, HelpNavigator.Topic, EARTH_ROTATION_HELP_TOPIC)
+    End Sub
+
     Private Sub ChkTraceEnabled_CheckedChanged(sender As Object, e As EventArgs) Handles ChkTraceEnabled.CheckedChanged
         TraceEnabled = ChkTraceEnabled.Checked
         Parameters.DownloadTaskTraceEnabled = TraceEnabled
@@ -457,7 +466,7 @@ Public Class EarthRotationDataForm
     Private Sub TxtDownloadTimeout_Validating(sender As Object, e As KeyEventArgs) Handles TxtDownloadTimeout.KeyUp
         Dim DoubleValue As Double = 0.0, IsDouble As Boolean
 
-        IsDouble = Double.TryParse(TxtDownloadTimeout.Text, NumberStyles.Number.Float, CultureInfo.CurrentUICulture, DoubleValue)
+        IsDouble = Double.TryParse(TxtDownloadTimeout.Text, NumberStyles.Float, CultureInfo.CurrentUICulture, DoubleValue)
         If IsDouble And DoubleValue >= MINIMUM_UPDATE_RUN_TIME Then
             ErrorProvider1.SetError(TxtDownloadTimeout, "")
             DownloadTimeout = DoubleValue
@@ -473,7 +482,7 @@ Public Class EarthRotationDataForm
     Private Sub TxtManualLeapSeconds_Validating(sender As Object, e As KeyEventArgs) Handles TxtManualLeapSeconds.KeyUp
         Dim DoubleValue As Double = 0.0, IsDouble As Boolean
 
-        IsDouble = Double.TryParse(TxtManualLeapSeconds.Text, NumberStyles.Number.Float, CultureInfo.CurrentUICulture, DoubleValue)
+        IsDouble = Double.TryParse(TxtManualLeapSeconds.Text, NumberStyles.Float, CultureInfo.CurrentUICulture, DoubleValue)
         If IsDouble And DoubleValue >= LeapSecondMinimumValue Then
             ErrorProvider1.SetError(TxtManualLeapSeconds, "")
             ManualLeapSeconds = DoubleValue
@@ -493,7 +502,7 @@ Public Class EarthRotationDataForm
     Private Sub TxtDeltaUT1Manuals_Validating(sender As Object, e As KeyEventArgs) Handles TxtManualDeltaUT1.KeyUp
         Dim DoubleValue As Double = 0.0, IsDouble As Boolean
 
-        IsDouble = Double.TryParse(TxtManualDeltaUT1.Text, NumberStyles.Number.Float, CultureInfo.CurrentUICulture, DoubleValue)
+        IsDouble = Double.TryParse(TxtManualDeltaUT1.Text, NumberStyles.Float, CultureInfo.CurrentUICulture, DoubleValue)
         If IsDouble And (DoubleValue >= -DELTAUT1_ACCEPTABLE_RANGE) And (DoubleValue <= +DELTAUT1_ACCEPTABLE_RANGE) Then
             ErrorProvider1.SetError(TxtManualDeltaUT1, "")
             ManualDeltaUT1Value = DoubleValue

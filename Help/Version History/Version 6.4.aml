@@ -6,7 +6,7 @@
       		<content>
 				<para>In line with previous Platform installers, 6.4 is a cumulative release that contains all enhancements and fixes from previous Platform releases and service packs.</para>
 				<alert class="note">
-					<para><legacyBold>Driver and application developers</legacyBold>: In order to maintain a healthy code base, some tidying up is planned for the the 
+					<para><legacyBold>Driver and application developers</legacyBold>: In order to maintain a healthy code base, some tidying up is planned for the 
 					next <legacyBold>major</legacyBold> update and details of the changes are given in the <link xlink:href="#DeprecatedCapability">Deprecated Features</link> section below. Please will you review 
 					this and update your applications and drivers as advised; these changes are not scheduled for introduction until Q1 2017 
 					at the earliest. In the meantime service packs will be issued as required to correct bugs.</para>
@@ -56,12 +56,13 @@
 							<listItem>A Windows schedule task is provided to automate the download process on a configurable daily, weekly or monthly basis.</listItem>
 							<listItem>An automatic update can be triggered manually from the Diagnostics application.</listItem>
 	      				</list>
+	      				<para>Please see <link xlink:href="98976954-6a00-4864-a223-7b3b25ffaaf1" /> for further information.</para>
 	      			</listItem>
 		      		<listItem>Rotator Simulator - The relative Move command has been improved so that relative moves outside the range -360 to 360 are rejected while moves inside the range -360 to +360 
 		      		are accepted with the target forced to the range 0 to 360. This matches the specification more accurately; thanks to Steve Barkes for finding this.</listItem>
 		      		<listItem>Focuser Simulator - Now has a short delay after a move before IsMoving returns false.</listItem>
 		      		<listItem>Focuser Simulator - Now has a logging function and check box to enable this.</listItem>
-	      			<listItem>DeltaT and DeltaUT prediction modelling was updated in April 2018 with the latest USNO data, which is considered good for at least 1 year.</listItem>
+	      			<listItem>DeltaT and DeltaUT prediction modeling was updated in April 2018 with the latest USNO data, which is considered good for at least 1 year.</listItem>
 	      			<listItem>Installer - Now names uninstall logs as such rather than naming them install logs, which was confusing.</listItem>
 	      			<listItem>Diagnostics - Now has an option to automatically open the log file at the end of the test sequence.</listItem>
 	      			<listItem>String comparison operations have been revised to best practice throughout the Platform to ensure expected operation in all locales.</listItem>
@@ -81,7 +82,7 @@
 							<listItem>The help compiler has been updated to the current version.</listItem>
 							<listItem>Installaware has been updated to a much more recent version (InstallAware X6), removing some bugs and allowing additional features to be employed.</listItem>
 							<listItem>The installer now has a splash screen.</listItem>
-							<listItem>Except when an error occurs, the Platform and Developer installers no longer produce baloon messages. Messages now appear on the setup dialogue instead. </listItem>
+							<listItem>Except when an error occurs, the Platform and Developer installers no longer produce balloon messages. Messages now appear on the setup dialogue instead. </listItem>
 							<listItem>The progress bars have been re-implemented so that they move consistently from 0 to 100%</listItem>
 							<listItem>All C++ executables have been recompiled against the VS2017 C++ libraries.</listItem>
 							<listItem>The C++ v10.0 library installers have been removed and replaced with v14.0 library installers.</listItem>
@@ -180,7 +181,7 @@
    			</content>
    		</section>
   		<section address="DeprecatedCapability64">
-           	<title>Deprecated Capabilites (For Developers)</title>
+           	<title>Deprecated Capabilities (For Developers)</title>
             <content>
       			<list class="bullet">
       				<listItem><para>The ASCOM.Astrometry namespace of the Platform has become overcrowded with components that have similar capabilities but that differ in small ways from each other (e.g. NOVAS2, NOVAS2COM, NOVAS3, NOVAS3.1). The recent 

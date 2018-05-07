@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
-  <Topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" visible="True" isDefault="true" isSelected="true" />
+  <Topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" visible="True" isDefault="true" />
   <Topic id="6cdc126a-3b1a-4a55-836f-aaf704740a33" visible="True" />
   <Topic id="174fff87-9bd7-442e-98e1-9fe2ac09bac6" visible="True" />
   <Topic id="3d17234a-c873-4f65-af0f-52f182081a44" visible="True" title="ASCOM Platform for .NET Developers" />
@@ -33,8 +33,9 @@
     <Topic id="00391dc0-68da-49f8-8a8b-b3c13a2fae79" visible="True" title="Whole Profile Methods" />
     <Topic id="1ec7d59c-b79d-41ba-8d1f-d04883c77831" visible="True" />
   </Topic>
-  <Topic id="d1a0b173-b4be-49b5-a979-cfafcd963ddb" visible="True" noFile="true" title="Tools and Features">
+  <Topic id="d1a0b173-b4be-49b5-a979-cfafcd963ddb" visible="True" noFile="true" isExpanded="true" title="Tools and Features">
     <Topic id="0a23ff52-a935-4cd7-a693-9e3b90f7df29" visible="True" />
+    <Topic id="98976954-6a00-4864-a223-7b3b25ffaaf1" visible="True" isSelected="true" />
     <Topic id="62da8408-c4ed-45d8-9398-9990dcbe8cbd" visible="True" />
     <Topic id="f52483b9-e922-4079-afa9-5e6f1a3ab5a5" visible="True" />
     <Topic id="5a679e99-87d5-4b72-a86e-88cbf10c52be" visible="True" />

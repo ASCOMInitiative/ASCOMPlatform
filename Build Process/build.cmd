@@ -1,1 +1,1 @@
-msbuild buildplatform.msbuild > op.txt
+msbuild buildplatform.msbuild > BuildLog.txt

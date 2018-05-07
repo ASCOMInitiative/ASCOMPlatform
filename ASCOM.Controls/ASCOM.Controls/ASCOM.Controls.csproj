@@ -62,7 +62,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>ASCOM-Controls.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\ASCOM-Controls.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
@@ -86,7 +86,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>ASCOM.Controls.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\ASCOM.Controls.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
@@ -179,7 +179,6 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Annunciator.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="AnnunciatorPanel.cs">
@@ -187,22 +186,18 @@
     </Compile>
     <Compile Include="CadenceManager.cs" />
     <Compile Include="CadencePattern.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="ICadencedControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="LEDIndicator.cs">
       <SubType>UserControl</SubType>
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
     <EmbeddedResource Include="Annunciator.resx">
       <DependentUpon>Annunciator.cs</DependentUpon>
@@ -246,7 +241,6 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\External Dependencies\StyleCop\v4.3\Microsoft.StyleCop.targets" />
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
