@@ -259,7 +259,20 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
-
-# Help compiler output
-/Help/Output
-/Help/Output
+ascom-standards.org/_notes/dwsync.xml
+ascom-standards.org/About/_notes/dwsync.xml
+ascom-standards.org/Community/_notes/dwsync.xml
+ascom-standards.org/ConformReports/_notes/dwsync.xml
+ascom-standards.org/Developer/_notes/dwsync.xml
+ascom-standards.org/Downloads/_notes/dwsync.xml
+ascom-standards.org/FAQs/_notes/dwsync.xml
+ascom-standards.org/Images/_notes/dwsync.xml
+ascom-standards.org/Images/Cnts/BlueBorder/_notes/dwsync.xml
+ascom-standards.org/Images/Cnts/LeftNav/_notes/dwsync.xml
+ascom-standards.org/Images/Cnts/SilverContainer/_notes/dwsync.xml
+ascom-standards.org/Images/Visio/_notes/dwsync.xml
+ascom-standards.org/jscripts/_notes/dwsync.xml
+ascom-standards.org/Standards/_notes/dwsync.xml
+ascom-standards.org/Styles/_notes/dwsync.xml
+ascom-standards.org/Support/_notes/dwsync.xml
+ascom-standards.org/Templates/_notes/dwsync.xml
