@@ -425,7 +425,7 @@ Public Class EarthRotationDataForm
         orig = AutomaticScheduleJobRepeatFrequency
         AutomaticScheduleJobRepeatFrequency = CType(comboBox.SelectedItem, String)
         Parameters.DownloadTaskRepeatFrequency = AutomaticScheduleJobRepeatFrequency
-
+        Parameters.ManageScheduledTask()
         EnableControlsAsRequired()
         TL.LogMessage("DownloadTaskRepeatFrequency", String.Format("Schedule job repeat frequency updated from: {0} to: {1}", orig, AutomaticScheduleJobRepeatFrequency))
     End Sub
@@ -452,6 +452,7 @@ Public Class EarthRotationDataForm
     Private Sub DateScheduleRun_ValueChanged(sender As Object, e As EventArgs) Handles DateScheduleRun.ValueChanged
         AutomaticScheduleJobRunTime = DateScheduleRun.Value
         Parameters.DownloadTaskScheduledTime = AutomaticScheduleJobRunTime
+        Parameters.ManageScheduledTask()
         TL.LogMessage("AutomaticScheduleJobRunTime", String.Format("Schedule job run time updated to: {0}", AutomaticScheduleJobRunTime.ToString(DOWNLOAD_TASK_TIME_FORMAT)))
     End Sub
 

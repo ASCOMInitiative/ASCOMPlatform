@@ -984,7 +984,9 @@ Public Class EarthRotationParameters : Implements IDisposable
     End Property
 
     Public Sub ManageScheduledTask()
-        Dim taskDefinition As TaskDefinition, taskTrigger As Trigger = Nothing, executableName As String
+        Dim taskDefinition As TaskDefinition
+        Dim timeTrigger As TimeTrigger = Nothing, dailyTrigger As DailyTrigger = Nothing, weeklyTrigger As WeeklyTrigger = Nothing, monthlyTrigger As MonthlyTrigger = Nothing
+        Dim dayOfMonth(0) As Integer, executableName As String
 
         Try
             TL.BlankLine()
@@ -1055,26 +1057,56 @@ Public Class EarthRotationParameters : Implements IDisposable
                                                           taskDefinition.Settings.ExecutionTimeLimit.TotalMinutes, taskDefinition.Settings.StopIfGoingOnBatteries, taskDefinition.Settings.DisallowStartIfOnBatteries,
                                                           taskDefinition.Settings.Enabled, taskDefinition.Settings.RunOnlyIfLoggedOn))
 
+                        taskDefinition.Triggers.Clear() ' Remove any previous triggers and add the new trigger to the task as the only trigger
                         Select Case DownloadTaskRepeatFrequencyValue
                             Case SCHEDULE_REPEAT_NONE ' Execute once at the specified day and time
-                                taskTrigger = New TimeTrigger()
+                                timeTrigger = New TimeTrigger()
+                                timeTrigger.StartBoundary = DownloadTaskScheduledTimeValue ' Add the user supplied date / time to the trigger
+                                taskDefinition.Triggers.Add(timeTrigger)
                                 TL.LogMessage("ManageScheduledTask", String.Format("Set trigger to run the job once at the specified time."))
+
                             Case SCHEDULE_REPEAT_DAILY ' Execute daily at the specified time
-                                taskTrigger = New DailyTrigger()
+                                dailyTrigger = New DailyTrigger()
+                                dailyTrigger.StartBoundary = DownloadTaskScheduledTimeValue ' Add the user supplied date / time to the trigger
+                                taskDefinition.Triggers.Add(dailyTrigger)
                                 TL.LogMessage("ManageScheduledTask", String.Format("Set trigger to repeat the job daily at the specified time."))
+
                             Case SCHEDULE_REPEAT_WEEKLY ' Execute once per week on the specified day of week
-                                taskTrigger = New WeeklyTrigger()
+                                weeklyTrigger = New WeeklyTrigger()
+                                weeklyTrigger.StartBoundary = DownloadTaskScheduledTimeValue ' Add the user supplied date / time to the trigger
+                                Select Case DownloadTaskScheduledTimeValue.DayOfWeek
+                                    Case DayOfWeek.Sunday
+                                        weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Sunday ' Set the specific day of the week when the task is required to run
+                                    Case DayOfWeek.Monday
+                                        weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Monday ' Set the specific day of the week when the task is required to run
+                                    Case DayOfWeek.Tuesday
+                                        weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Tuesday ' Set the specific day of the week when the task is required to run
+                                    Case DayOfWeek.Wednesday
+                                        weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Wednesday ' Set the specific day of the week when the task is required to run
+                                    Case DayOfWeek.Thursday
+                                        weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Thursday ' Set the specific day of the week when the task is required to run
+                                    Case DayOfWeek.Friday
+                                        weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Friday ' Set the specific day of the week when the task is required to run
+                                    Case DayOfWeek.Saturday
+                                        weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Saturday ' Set the specific day of the week when the task is required to run
+                                End Select
+                                taskDefinition.Triggers.Add(weeklyTrigger)
                                 TL.LogMessage("ManageScheduledTask", String.Format("Set trigger to repeat the job weekly on the specified day of the week at the specified time."))
+
                             Case SCHEDULE_REPEAT_MONTHLY ' Execute once per month on the specified day number of the month
-                                taskTrigger = New MonthlyTrigger()
+                                monthlyTrigger = New MonthlyTrigger()
+                                monthlyTrigger.StartBoundary = DownloadTaskScheduledTimeValue ' Add the user supplied date / time to the trigger
+                                dayOfMonth(0) = DownloadTaskScheduledTimeValue.Day ' Save the specific day on which the task is to run
+                                monthlyTrigger.DaysOfMonth = dayOfMonth ' Set the specific day of the month when the task is required to run
+                                monthlyTrigger.MonthsOfYear = MonthsOfTheYear.AllMonths
+                                taskDefinition.Triggers.Add(monthlyTrigger)
                                 TL.LogMessage("ManageScheduledTask", String.Format("Set trigger to repeat the job monthly on the specified day number of the month at the specified time."))
+
                             Case Else
                                 MsgBox(String.Format("ManageScheduledTask - Unknown type of DownloadTaskRepeatFrequencyValue: {0}", DownloadTaskRepeatFrequencyValue))
-                        End Select
-                        taskTrigger.StartBoundary = DownloadTaskScheduledTimeValue ' Add the user supplied date / time to the trigger
 
-                        taskDefinition.Triggers.Clear() ' Remove any previous triggers and add the new trigger to the task as the only trigger
-                        taskDefinition.Triggers.Add(taskTrigger)
+                        End Select
+
                         TL.LogMessage("ManageScheduledTask", String.Format("Added the new trigger to the task definition."))
 
                         ' Implement the new task in the root folder either by updating the existing task or creating a new task
