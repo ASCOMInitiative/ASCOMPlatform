@@ -916,10 +916,10 @@ if Variable REMOVE not Equals TRUE
   Install Files ..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\M42-800x600.jpg to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
   Install Files ..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\Testcard_F.jpg to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
   Comment: FilterWheel simulator
-  Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
-  Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
-  Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.Simulator.FilterWheel.dll to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
-  Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.Simulator.FilterWheel.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+  Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+  Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.FilterWheelSim.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+  Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.Simulator.FilterWheel.dll to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+  Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.Simulator.FilterWheel.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
   Comment: Focuser simulator
   Install Files ..\..\..\..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
   Install Files ..\..\..\..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
@@ -927,10 +927,10 @@ if Variable REMOVE not Equals TRUE
   Install Files ..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.dll to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
   Install Files ..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.pdb to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
   Comment: Telescope simulator
-  Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
-  Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
-  Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.dll to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
-  Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+  Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+  Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+  Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.Simulator.Telescope.dll to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+  Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.Simulator.Telescope.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
   Comment: Rotator simulator
   Install Files ..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
   Install Files ..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator

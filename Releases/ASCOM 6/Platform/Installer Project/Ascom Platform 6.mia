@@ -5680,7 +5680,7 @@ FALSE
 FALSE
 FALSE
 {66F63968-9989-4A1E-9EF0-CD889DE712C1}
-..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.pdb
+..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.Simulator.Telescope.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 FALSE
@@ -5693,7 +5693,7 @@ FALSE
 FALSE
 FALSE
 {DB279330-747E-49B9-9E3A-B63DE4B15FBA}
-..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.dll
+..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.Simulator.Telescope.dll
 FALSE|
 $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 FALSE
@@ -5706,7 +5706,7 @@ FALSE
 FALSE
 FALSE
 {DF583DE8-D756-465B-A420-9D39B61816F9}
-..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb
+..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.TelescopeSimulator.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 FALSE
@@ -5719,7 +5719,7 @@ FALSE
 FALSE
 FALSE
 {D384BBAC-C890-49D3-9ED6-3F4CF457BE49}
-..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe
+..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.TelescopeSimulator.exe
 FALSE|
 $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 FALSE
@@ -5758,7 +5758,7 @@ FALSE
 FALSE
 FALSE
 {4ED0ABB7-B3ED-43DF-B248-B90FF68D5087}
-..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.Simulator.FilterWheel.pdb
+..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.Simulator.FilterWheel.pdb
 FALSE|
 $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
 FALSE
@@ -5771,7 +5771,7 @@ FALSE
 FALSE
 FALSE
 {D24CBC48-57E7-464F-A2E8-F07FF6E133CA}
-..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.Simulator.FilterWheel.dll
+..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.Simulator.FilterWheel.dll
 FALSE|
 $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
 FALSE
@@ -5784,7 +5784,7 @@ FALSE
 FALSE
 FALSE
 {F8ED3511-34B8-4FA5-B1E5-42F5F148C11A}
-..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.pdb
+..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.FilterWheelSim.pdb
 FALSE|
 $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
 FALSE
@@ -5797,7 +5797,7 @@ FALSE
 FALSE
 FALSE
 {081B258C-DCE5-4FB9-A7AE-10499D06228E}
-..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.exe
+..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.FilterWheelSim.exe
 FALSE|
 $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
 FALSE
