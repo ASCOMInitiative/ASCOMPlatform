@@ -135,43 +135,26 @@ Source: "%srcp%\%rdmf%"; DestDir: "{app}"; Flags: isreadme
 %cex2%Root: HKCR; Subkey: AppId\{#AppClsid2}; Flags: uninsdeletekey
 %cexe%Root: HKCR; Subkey: AppId\%file%; Flags: uninsdeletekey
 
-[CODE]
+[Code]
 const
    REQUIRED_PLATFORM_VERSION = 6.2;    // Set this to the minimum required ASCOM Platform version for this application
 
 //
 // Function to return the ASCOM Platform's version number as a double.
 //
-// The Platform version number is stored in the Profile using point as the decimal separator but some locales use other
-// characters as decimal separators, which means that the Profile version string can't be parsed directly to a double 
-// on all systems.
-//
-// This routine extracts the decimal separator currently in use on the system and converts the point character in the Platform
-// version string to this character before parsing the revised string value to a double, which is returned to the caller.
-//
-// This approach has to be used because Inno 5.5.9 can't create the ASCOM.Utilities.Util COM object and
-// so we can't use the Util.IsPlatformVersion function
-//
 function PlatformVersion(): Double;
 var
    PlatVerString : String;
-   PlatVer : Variant;
-   DoubleValue : Variant;
-   DoubleValueString : String;
-   Separator : String;
 begin
    Result := 0.0;  // Initialise the return value in case we can't read the registry
    try
-      if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\ASCOM','PlatformVersion', PlatVerString) then      // Successfully read the string value so convert it to a variant double
-      begin
-         DoubleValue := 1.0 / 3.0; // Create a real number of value 0.33333
-         DoubleValueString := DoubleValue; // Get the real number as a string including this system's decimal separator
-         Separator := Copy(DoubleValueString,2,1); // Parse out the decimal separator
-         StringChangeEx(PlatVerString, '.', Separator, True); // Change the "." to the current system's decimal separator
-         Result := StrToFloat(PlatVerString); // Create a double from the modified string that contains this system's decimal separator
+      if RegQueryStringValue(HKEY_LOCAL_MACHINE_32, 'Software\ASCOM','PlatformVersion', PlatVerString) then 
+      begin // Successfully read the value from the registry
+         Result := StrToFloat(PlatVerString); // Create a double from the X.Y Platform version string
       end;
    except                                                                   
-     Result:= -1.0; // Indicate in the return value that an exception was generated
+      ShowExceptionMessage;
+      Result:= -1.0; // Indicate in the return value that an exception was generated
    end;
 end;
 
