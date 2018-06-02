@@ -10,6 +10,109 @@ Imports System.Collections.Generic
 Imports System.Diagnostics
 Imports ASCOM.Utilities.Serial
 
+#Region "COM Registration Support"
+Module COMRegistrationSupport
+    ''' <summary>
+    ''' Update a COM registration assembly executable reference (mscoree.dll) from a relative path to an absolute path
+    ''' </summary>
+    ''' <remarks>This is necessary to ensure that the mscoree.dll can be found when the SetSearchDirectories function has been called in an application e.g. by Inno installer post v5.5.9.
+    ''' The COM class name and ClassID are determined from the supplied type definition. If the ClassID cannot be determined it is looked up through the COM registration registry entry through the class's ProgID
+    ''' </remarks>
+    Friend Sub COMRegister(typeToRegister As Type)
+        Dim className, clsId, mscoree, fullPath, sysPath As String, attributes As Object()
+        Dim TL As TraceLogger
+
+        Try
+            TL = New TraceLogger("", "COMRegister" & typeToRegister.Name)
+            TL.Enabled = True
+            TL.LogMessage("COMRegisterActions", "Start")
+
+            ' Report the OS and application bitness
+            If OSBits() = Bitness.Bits64 Then ' 64bit OS
+                TL.LogMessage("OSBits", "64bit OS")
+            Else
+                TL.LogMessage("OSBits", "32bit OS")
+            End If
+
+            If ApplicationBits() = Bitness.Bits64 Then ' 64bit application
+                TL.LogMessage("ApplicationBits", "64bit application")
+            Else
+                TL.LogMessage("ApplicationBits", "32bit application")
+            End If
+
+            ' Create the fully qualified class name from the namespace and class name
+            className = String.Format("{0}.{1}", typeToRegister.Namespace, typeToRegister.Name)
+            TL.LogMessage("ClassName", className)
+
+            ' Determine the class GUID of the supplied type 
+            attributes = typeToRegister.GetCustomAttributes(GetType(GuidAttribute), False) ' Get any GUID references in the supplied type - there should always be just one reference
+
+            ' Act depending on whether we have found the GUID
+            Select Case attributes.Length
+                Case 0 ' No GUID attribute found - this should never happen
+                    TL.LogMessage("COMRegisterActions", "GuidAttribute not found, obtaining the correct class GUID from the COM registration in the registry")
+
+                    clsId = CStr(Registry.ClassesRoot.OpenSubKey(className + "\CLSID").GetValue("")) ' Try plan B to get the GUID from the class's COM registration
+                    If Not String.IsNullOrEmpty(clsId) Then
+                        TL.LogMessage("ClassID", clsId)
+                    Else
+                        TL.LogMessage("ClassID", "Could not find ClassID - returned value is null or an empty string")
+                    End If
+
+                Case 1 ' Found the class GUID attribute so extract and use it
+                    TL.LogMessage("COMRegisterActions", "Found a class GuidAttribute - using it to create the class GUID")
+
+                    clsId = "{" & CType(attributes(0), GuidAttribute).Value & "}" ' Create the class ID by enclosing the class GUID in braces
+                    If Not String.IsNullOrEmpty(clsId) Then
+                        TL.LogMessage("ClassID", clsId)
+                    Else
+                        TL.LogMessage("ClassID", "Could not find ClassID - returned value is null or an empty string")
+                    End If
+
+                Case Else ' More than 1 GUID attribute so ignore it and look up from the registry - this should never happen!
+                    TL.LogMessage("COMRegisterActions", String.Format("{0} GuidAttributes found, obtaining the correct class GUID from the COM registration in the registry"))
+
+                    clsId = CStr(Registry.ClassesRoot.OpenSubKey(className + "\CLSID").GetValue(""))
+                    If Not String.IsNullOrEmpty(clsId) Then
+                        TL.LogMessage("ClassID", clsId)
+                    Else
+                        TL.LogMessage("ClassID", "Could not find ClassID - returned value is null or an empty string")
+                    End If
+
+            End Select
+
+            ' If we have a ClassID then use it to update the class's executable relative path to a full path
+            If Not String.IsNullOrEmpty(clsId) Then
+                mscoree = CStr(Registry.ClassesRoot.OpenSubKey(String.Format("\CLSID\{0}\InProcServer32", clsId)).GetValue(""))
+                TL.LogMessage("COMRegisterActions", String.Format("Current mscoree.dll path: {0}", mscoree))
+
+                If (mscoree.ToUpperInvariant() = "MSCOREE.DLL") Then ' This is a relative path so make it absolute
+                    TL.LogMessage("COMRegisterActions", String.Format("The mscoree.dll path is relative: {0}", mscoree))
+
+                    fullPath = String.Format("{0}\{1}", Environment.GetFolderPath(Environment.SpecialFolder.System), mscoree)
+                    TL.LogMessage("COMRegisterActions", String.Format("Full path to the System32 directory: {0}", fullPath))
+
+                    TL.LogMessage("COMRegisterActions", "Setting InProcServer32 value...")
+                    Registry.ClassesRoot.OpenSubKey(String.Format("\CLSID\{0}\InProcServer32", clsId), True).SetValue("", fullPath)
+                    TL.LogMessage("COMRegisterActions", String.Format("InProcServer32value set OK - {0}", fullPath))
+
+                    mscoree = CStr(Registry.ClassesRoot.OpenSubKey(String.Format("\CLSID\{0}\InProcServer32", clsId)).GetValue(""))
+                    TL.LogMessage("COMRegisterActions", String.Format("New mscoree.dll path: {0}", mscoree))
+
+                Else
+                    TL.LogMessage("COMRegisterActions", "Path is already absolute - no action taken")
+                End If
+            Else
+                TL.LogMessage("COMRegisterActions", "Unable to find the class's ClassID - no action taken.")
+            End If
+        Catch ex As Exception
+            TL.LogMessageCrLf("Exception", ex.ToString())
+        End Try
+
+    End Sub
+End Module
+#End Region
+
 #Region "Registry Utility Code"
 Module RegistryCommonCode
     Friend Function GetWaitType(ByVal p_Name As String, ByVal p_DefaultValue As ASCOM.Utilities.Serial.WaitType) As WaitType
