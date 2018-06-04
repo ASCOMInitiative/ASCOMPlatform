@@ -28,10 +28,10 @@ namespace ASCOM.Setup
         private string DeviceName { get; set; }
         private string DeviceInterface { get; set; }
         private string DeviceId { get; set; }
-        private string InterfaceVersion { get; set; }
+        private int InterfaceVersion { get; set; }
         private string Namespace { get; set; }
 
-        private ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "TemplateWizard");
+        private ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("TemplateWizard");
         private DTE2 myDTE;
         private ProjectItem myProjectItem;
 
@@ -58,6 +58,7 @@ namespace ASCOM.Setup
             }
             catch (Exception ex)
             {
+                TL.LogMessageCrLf("RunStarted", "Form Exception: "+ ex.ToString());
                 MessageBox.Show("Form Exception: " + ex.ToString());
             }
 
@@ -78,7 +79,7 @@ namespace ASCOM.Setup
                 TL.LogMessage("DeviceName", DeviceName);
                 TL.LogMessage("DeviceClass", DeviceClass);
                 TL.LogMessage("DeviceInterface", DeviceInterface);
-                TL.LogMessage("InterfaceVersion", InterfaceVersion);
+                TL.LogMessage("InterfaceVersion", InterfaceVersion.ToString());
                 TL.LogMessage("Namespace", Namespace);
 
                 inputForm.Dispose();
@@ -102,7 +103,7 @@ namespace ASCOM.Setup
                 }
                 replacementsDictionary.Add("ITEMPLATEDEVICEINTERFACE", DeviceInterface);
                 replacementsDictionary.Add("TEMPLATENAMESPACE", Namespace);
-                replacementsDictionary.Add("TEMPLATEINTERFACEVERSION", InterfaceVersion);
+                replacementsDictionary.Add("TEMPLATEINTERFACEVERSION", InterfaceVersion.ToString());
                 // create and replace guids
                 replacementsDictionary.Add(csTemplateAssemblyGuid, Guid.NewGuid().ToString());
                 replacementsDictionary.Add(csTemplateInterfaceGuid, Guid.NewGuid().ToString());
@@ -112,6 +113,7 @@ namespace ASCOM.Setup
             }
             catch (Exception ex)
             {
+                TL.LogMessageCrLf("RunStarted", "Result Exception: " + ex.ToString());
                 MessageBox.Show("Form result setup exception: " + ex.ToString());
             }
 
