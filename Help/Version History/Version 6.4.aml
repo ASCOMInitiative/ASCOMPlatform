@@ -150,6 +150,11 @@
 	      			<listItem>TraceLogger.LogFileName now returns the full trace file path instead of an empty string when a specific log file name has been set.</listItem>
 	      			<listItem>In-process C# drivers created from ASCOM driver templates will now have fixed assembly version numbers (like C# local server, VB in-process and VB local server drivers) instead of 
 	      			"updated on each build" assembly version numbers). This supports a more productive development environment and avoids creating a proliferation of COM registry entries.</listItem>
+	      			<listItem>A security change in Inno Installer, introduced in Inno v5.5.9, prevented ASCOM.Utilities from being used in Inno Pascal script code. This release contains a fix for the issue although it is 
+	      			of limited value. This is because the fix only makes Inno v5.5.9 installers work on Platform 6.4 or later, if users try to run 5.5.9 installers on earlier Platforms the issue will resurface and 
+	      			installers will fail. If you want to use any of the ASCOM support utilities in your Inno installer, your best course of action is to use Inno 5.5.8 or earlier.</listItem>
+	      			<listItem>The Driver Installer template has been updated so that the installers it creates can detect the installed Platform version without using the ASCOM.Utilities component.
+	      			This ensures that these installers will work on all ASCOM Platforms and with Inno 5.5.9 and future inno versions.</listItem>
 	      		</list>
    			</content>
    		</section>
