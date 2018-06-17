@@ -8,9 +8,9 @@ Imports ASCOM.Astrometry.Kepler
 #Region "Transform Interface"
 Namespace Transform
     ''' <summary>
-    ''' Interface to the coordinate transform component; J2000 - apparent - local topocentric
+    ''' Interface to the coordinate transform component; J2000 - apparent - topocentric
     ''' </summary>
-    ''' <remarks>Use this component to transform between J2000, apparent and local topocentric (JNow) coordinates or 
+    ''' <remarks>Use this component to transform between J2000, apparent and topocentric coordinates or 
     ''' vice versa. To use the component, instantiate it, then use one of SetJ2000 or SetJNow or SetApparent to 
     ''' initialise with known values. Now use the RAJ2000, DECJ200, RAJNow, DECJNow, RAApparent and DECApparent 
     ''' properties to read off the required transformed values.
@@ -80,10 +80,10 @@ Namespace Transform
         ''' <remarks></remarks>
         <DispId(8)> Sub SetApparent(ByVal RA As Double, ByVal DEC As Double)
         '''<summary>
-        ''' Sets the known local topocentric Right Ascension and Declination coordinates that are to be transformed
+        ''' Sets the known topocentric Right Ascension and Declination coordinates that are to be transformed
         ''' </summary>
-        ''' <param name="RA">RA in local topocentric co-ordinates</param>
-        ''' <param name="DEC">DEC in local topocentric co-ordinates</param>
+        ''' <param name="RA">RA in topocentric co-ordinates</param>
+        ''' <param name="DEC">DEC in topocentric co-ordinates</param>
         ''' <remarks></remarks>
         <DispId(9)> Sub SetTopocentric(ByVal RA As Double, ByVal DEC As Double)
         ''' <summary>
@@ -109,10 +109,10 @@ Namespace Transform
         ''' <remarks></remarks>
         <DispId(11)> ReadOnly Property DECJ2000() As Double
         ''' <summary>
-        ''' Returns the Right Ascension in local topocentric co-ordinates
+        ''' Returns the Right Ascension in topocentric co-ordinates
         ''' </summary>
-        ''' <value>Local topocentric Right Ascension</value>
-        ''' <returns>Local topocentric Right Ascension</returns>
+        ''' <value>Topocentric Right Ascension</value>
+        ''' <returns>Topocentric Right Ascension</returns>
         ''' <exception cref="Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
         ''' to read a value before any of the Set methods has been used or if the value can not be derived from the
         ''' information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
@@ -120,10 +120,10 @@ Namespace Transform
         ''' <remarks></remarks>
         <DispId(12)> ReadOnly Property RATopocentric() As Double
         ''' <summary>
-        ''' Returns the Declination in local topocentric co-ordinates
+        ''' Returns the Declination in topocentric co-ordinates
         ''' </summary>
-        ''' <value>Local topocentric Declination</value>
-        ''' <returns>Local topocentric Declination</returns>
+        ''' <value>Topocentric Declination</value>
+        ''' <returns>Topocentric Declination</returns>
         ''' <exception cref="Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
         ''' to read a value before any of the Set methods has been used or if the value can not be derived from the
         ''' information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was

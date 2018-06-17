@@ -580,7 +580,7 @@ namespace ASCOM.Simulator
                         break;
 
                     case 1:
-                        eq = EquatorialCoordinateType.equLocalTopocentric;
+                        eq = EquatorialCoordinateType.equTopocentric;
                         output = "Local";
                         break;
                     case 2:

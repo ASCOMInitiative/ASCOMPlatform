@@ -10,9 +10,9 @@ Imports System.Reflection
 
 Namespace Transform
     ''' <summary>
-    ''' Coordinate transform component; J2000 - apparent - local topocentric
+    ''' Coordinate transform component; J2000 - apparent - topocentric
     ''' </summary>
-    ''' <remarks>Use this component to transform between J2000, apparent and local topocentric (JNow) coordinates or 
+    ''' <remarks>Use this component to transform between J2000, apparent and topocentric (JNow) coordinates or 
     ''' vice versa. To use the component, instantiate it, then use one of SetJ2000 or SetJNow or SetApparent to 
     ''' initialise with known values. Now use the RAJ2000, DECJ200, RAJNow, DECJNow, RAApparent and DECApparent etc. 
     ''' properties to read off the required transformed values.
@@ -254,10 +254,10 @@ Namespace Transform
         End Sub
 
         '''<summary>
-        ''' Sets the known local topocentric Right Ascension and Declination coordinates that are to be transformed
+        ''' Sets the known topocentric Right Ascension and Declination coordinates that are to be transformed
         ''' </summary>
-        ''' <param name="RA">RA in local topocentric co-ordinates</param>
-        ''' <param name="DEC">DEC in local topocentric co-ordinates</param>
+        ''' <param name="RA">RA in topocentric co-ordinates</param>
+        ''' <param name="DEC">DEC in topocentric co-ordinates</param>
         ''' <remarks></remarks>
         Sub SetTopocentric(ByVal RA As Double, ByVal DEC As Double) Implements ITransform.SetTopocentric
             LastSetBy = SetBy.Topocentric
@@ -323,10 +323,10 @@ Namespace Transform
         End Property
 
         ''' <summary>
-        ''' Returns the Right Ascension in local topocentric co-ordinates
+        ''' Returns the Right Ascension in topocentric co-ordinates
         ''' </summary>
-        ''' <value>Local topocentric Right Ascension</value>
-        ''' <returns>Right Ascension in hours</returns>
+        ''' <value>Topocentric Right Ascension</value>
+        ''' <returns>Topocentric Right Ascension in hours</returns>
         ''' <exception cref="Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
         ''' to read a value before any of the Set methods has been used or if the value can not be derived from the
         ''' information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
@@ -343,9 +343,9 @@ Namespace Transform
         End Property
 
         ''' <summary>
-        ''' Returns the Declination in local topocentric co-ordinates
+        ''' Returns the Declination in topocentric co-ordinates
         ''' </summary>
-        ''' <value>Local topocentric Declination</value>
+        ''' <value>Topocentric Declination</value>
         ''' <returns>Declination in degrees</returns>
         ''' <exception cref="Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
         ''' to read a value before any of the Set methods has been used or if the value can not be derived from the

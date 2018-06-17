@@ -530,7 +530,7 @@ namespace ASCOM.DriverAccess
 
         /// <summary>
         /// Equatorial coordinate system used by this telescope.
-        /// Most amateur telescopes use local topocentric coordinates.
+        /// Most amateur telescopes use topocentric coordinates.
         /// This coordinate system is simply the apparent position in the sky
         /// (possibly uncorrected for atmospheric refraction) for "here and now",
         /// thus these are the coordinates that one would use with digital setting

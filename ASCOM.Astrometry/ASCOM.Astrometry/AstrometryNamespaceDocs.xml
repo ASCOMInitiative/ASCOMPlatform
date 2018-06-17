@@ -219,7 +219,7 @@
         <h2>Kepler Ephemeris Engine Programmer's Reference</h2>
 
         <h3>Introduction</h3>
-        <p>This document describes the first production release of the Kepler Ephemeris Engine, an ASCOM component which provides ephemerides for solar system bodies, given their orbital elements. It was written as a companion to the NOVAS-COM vector astrometry engine, providing the ephemerides needed for planetary astrometric calculations, and for high-precision aberration calculations. It provides heliocentric J2000 equatorial cartesian vectors for position and velocity given a set of orbital elements and a terrestrial time. NOVAS-COM can be used to transform these coordinates to Earth-centered ("astrometric") or local topocentric coordinates for observational use. You can download NOVAS-COM from the ASCOM Downloads Page.</p>
+        <p>This document describes the first production release of the Kepler Ephemeris Engine, an ASCOM component which provides ephemerides for solar system bodies, given their orbital elements. It was written as a companion to the NOVAS-COM vector astrometry engine, providing the ephemerides needed for planetary astrometric calculations, and for high-precision aberration calculations. It provides heliocentric J2000 equatorial cartesian vectors for position and velocity given a set of orbital elements and a terrestrial time. NOVAS-COM can be used to transform these coordinates to Earth-centered ("astrometric") or topocentric coordinates for observational use. You can download NOVAS-COM from the ASCOM Downloads Page.</p>
 
         <h3>Credits</h3>
         <ul>
