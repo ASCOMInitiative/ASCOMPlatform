@@ -201,6 +201,10 @@
       <CopyToMedia>False</CopyToMedia>
       <ImageId>ManufLogos</ImageId>
     </Image>
+    <Image Include="Developer Information\Astronomical Coordinates.png">
+      <ImageId>Astronomical Coordinates</ImageId>
+      <AlternateText>Astronomical Coordinates</AlternateText>
+    </Image>
     <Image Include="Tools and Features\COMPortSettings.png">
       <ImageId>COMPortSettings</ImageId>
       <AlternateText>COMPort Settings</AlternateText>
@@ -240,6 +244,7 @@
       <CopyToMedia>True</CopyToMedia>
     </Image>
     <Content Include="styles\branding-Help1.css" />
+    <None Include="Developer Information\Astronomical Coordinates.aml" />
     <None Include="Tools and Features\Earth Rotation Parameters.aml" />
     <None Include="Version History\Version 6.4.aml" />
     <None Include="Version History\Version 6.3.aml" />
@@ -247,7 +252,6 @@
     <None Include="Introduction\Acknowledgements.aml" />
     <None Include="Developer Information\Time Relationships.aml" />
     <None Include="Developer Information\Time Relationships.aml" />
-    <None Include="Developer Information\Time Relationships - Copy.aml" />
     <None Include="Developer Information\Camera States.aml" />
     <None Include="Developer Information\Camera States.aml" />
     <None Include="Developer Information\Camera States.aml" />

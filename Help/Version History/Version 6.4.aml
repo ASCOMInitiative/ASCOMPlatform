@@ -80,7 +80,7 @@
 			      			<listItem>The ASCOM open source license text has been added to the Platform SubVersion repository to reflect Open Source norms.</listItem>
 							<listItem>All components are compiled with Visual Studio 2017 and built with the latest tool set.</listItem>
 							<listItem>The help compiler has been updated to the current version.</listItem>
-							<listItem>Installaware has been updated to a much more recent version (InstallAware X6), removing some bugs and allowing additional features to be employed.</listItem>
+							<listItem>InstallAware has been updated to a much more recent version (InstallAware X6), removing some bugs and allowing additional features to be employed.</listItem>
 							<listItem>The installer now has a splash screen.</listItem>
 							<listItem>Except when an error occurs, the Platform and Developer installers no longer produce balloon messages. Messages now appear on the setup dialogue instead. </listItem>
 							<listItem>The progress bars have been re-implemented so that they move consistently from 0 to 100%</listItem>
@@ -125,6 +125,12 @@
 	      			throttling mechanic that can slow aggressive application polling to acceptable rates for the driver and hardware. Further information is provided in the remarks section of the Cache class 
 	      			and the property / method documentation.</listItem>
 	      			<listItem>Driver Templates - Not implemented exceptions have been removed from all Dispose methods and replaced with TODO: items.</listItem>
+	      			<listItem>All Platform documentation references to "local topocentric" have been shortened to "topocentric". The rationale for this is documented in <link xlink:href="72A95B28-BBE2-4C7D-BC03-2D6AB324B6F7" />.
+	      			In addition, the <codeEntityReference linkText="EquatorialCoordinateType.equLocalTopocentric">F:ASCOM.DeviceInterface.EquatorialCoordinateType.equLocalTopocentric</codeEntityReference>
+	      			enum member has been deprecated in favour of 
+	      			<codeEntityReference linkText="EquatorialCoordinateType.equTopocentric">F:ASCOM.DeviceInterface.EquatorialCoordinateType.equTopocentric</codeEntityReference>
+	      			This is a non-breaking change, but continued use of the <codeEntityReference>F:ASCOM.DeviceInterface.EquatorialCoordinateType.equLocalTopocentric</codeEntityReference>
+	      			member will give rise to a compiler warning and suggestion to use equTopocentric instead.</listItem>
 				</list>
       		</content>
    		</section>

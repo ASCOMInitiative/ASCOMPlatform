@@ -109,6 +109,7 @@ Public Enum EquatorialCoordinateType ' 135265BA-25AC-4f43-95E5-80D0171E48FA
     ''' Topocentric coordinates. Coordinates of the object at the current date having allowed for annual aberration, precession and nutation. This is the most common coordinate type for amateur telescopes.
     ''' </summary>
     equTopocentric = 1
+
     ''' <summary>
     ''' J2000 equator/equinox. Coordinates of the object at mid-day on 1st January 2000, ICRS reference frame.
     ''' </summary>
