@@ -116,21 +116,21 @@
 			      			<listItem>Conform has been updated to test IFocuserV3 drivers in line with the new requirement.</listItem>
 	      				</list>
 	      			</listItem>
-	      			<listItem>A gain control has been added to the Camera test application.</listItem>
-	      			<listItem>COM error numbers are now included in documentation so that these can be thrown directly if required, e.g. by a Delphi application.</listItem>
-	      			<listItem>The Template Wizard has been uplevelled to v6.4.</listItem>
-	      			<listItem>There is now an additional paragraph in the Time Relationships help section that clarifies how DeltaT, DeltaUT, UT and TT move relative to each other.</listItem>
-	      			<listItem>A new caching component (ASCOM.Utilities.Cache)has been added to make it easier for driver authors to build robust drivers that can handle the high polling rates that some 
+	      			<listItem>A new caching component (ASCOM.Utilities.Cache) has been added to make it easier for driver authors to build robust drivers that can handle the high polling rates that some 
 	      			applications utilise. The cache provides a time based expiry approach, where stale items are automatically removed after expiry. In addition the cache provides an easy to use
 	      			throttling mechanic that can slow aggressive application polling to acceptable rates for the driver and hardware. Further information is provided in the remarks section of the Cache class 
 	      			and the property / method documentation.</listItem>
+	      			<listItem>A gain control has been added to the Camera test application.</listItem>
+	      			<listItem>COM error numbers are now included in documentation so that these can be thrown directly if required, e.g. by a Delphi application.</listItem>
+	      			<listItem>The Template Wizard has been uplevelled to v6.4.</listItem>
 	      			<listItem>Driver Templates - Not implemented exceptions have been removed from all Dispose methods and replaced with TODO: items.</listItem>
+	      			<listItem>A new section on Astronomical Coordinates has been added to the Developer Information section.</listItem>
+	      			<listItem>There is now an additional paragraph in the Time Relationships help section that clarifies how DeltaT, DeltaUT, UT and TT move relative to each other.</listItem>
 	      			<listItem>All Platform documentation references to "local topocentric" have been shortened to "topocentric". The rationale for this is documented in <link xlink:href="72A95B28-BBE2-4C7D-BC03-2D6AB324B6F7" />.
 	      			In addition, the <codeEntityReference linkText="EquatorialCoordinateType.equLocalTopocentric">F:ASCOM.DeviceInterface.EquatorialCoordinateType.equLocalTopocentric</codeEntityReference>
 	      			enum member has been deprecated in favour of 
-	      			<codeEntityReference linkText="EquatorialCoordinateType.equTopocentric">F:ASCOM.DeviceInterface.EquatorialCoordinateType.equTopocentric</codeEntityReference>
-	      			This is a non-breaking change, but continued use of the <codeEntityReference>F:ASCOM.DeviceInterface.EquatorialCoordinateType.equLocalTopocentric</codeEntityReference>
-	      			member will give rise to a compiler warning and suggestion to use equTopocentric instead.</listItem>
+	      			<codeEntityReference linkText="EquatorialCoordinateType.equTopocentric">F:ASCOM.DeviceInterface.EquatorialCoordinateType.equTopocentric</codeEntityReference>.
+	      			This is a non-breaking change, but use of the equLocalTopocentric member will now give rise to a compiler warning and suggestion to use equTopocentric instead.</listItem>
 				</list>
       		</content>
    		</section>
@@ -160,7 +160,7 @@
 	      			of limited value. This is because the fix only makes Inno v5.5.9 installers work on Platform 6.4 or later, if users try to run 5.5.9 installers on earlier Platforms the issue will resurface and 
 	      			installers will fail. If you want to use any of the ASCOM support utilities in your Inno installer, your best course of action is to use Inno 5.5.8 or earlier.</listItem>
 	      			<listItem>The Driver Installer template has been updated so that the installers it creates can detect the installed Platform version without using the ASCOM.Utilities component.
-	      			This ensures that these installers will work on all ASCOM Platforms and with Inno 5.5.9 and future inno versions.</listItem>
+	      			This ensures that these installers will work on all ASCOM Platforms and with Inno 5.5.9 and future Inno versions.</listItem>
 	      		</list>
    			</content>
    		</section>
