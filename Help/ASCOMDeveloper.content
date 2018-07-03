@@ -35,13 +35,14 @@
   </Topic>
   <Topic id="d1a0b173-b4be-49b5-a979-cfafcd963ddb" visible="True" noFile="true" isExpanded="true" title="Tools and Features">
     <Topic id="0a23ff52-a935-4cd7-a693-9e3b90f7df29" visible="True" />
-    <Topic id="98976954-6a00-4864-a223-7b3b25ffaaf1" visible="True" isSelected="true" />
+    <Topic id="98976954-6a00-4864-a223-7b3b25ffaaf1" visible="True" />
     <Topic id="62da8408-c4ed-45d8-9398-9990dcbe8cbd" visible="True" />
     <Topic id="f52483b9-e922-4079-afa9-5e6f1a3ab5a5" visible="True" />
     <Topic id="5a679e99-87d5-4b72-a86e-88cbf10c52be" visible="True" />
     <Topic id="f2211b59-6f8c-46fb-b47e-2afb569f3133" visible="True" />
   </Topic>
   <Topic id="98b612bf-f22c-428f-af22-7a77e9907b7f" visible="True" noFile="true" isExpanded="true" title="Developer Information">
+    <Topic id="72A95B28-BBE2-4C7D-BC03-2D6AB324B6F7" visible="True" isSelected="true" />
     <Topic id="caf6b21d-755a-4f1c-891f-ce971a9a2f79" visible="True" title="Drivers and Multi-Threading" />
     <Topic id="d5ab3afe-60aa-49aa-8dfb-caae4f86a8fc" visible="True" title="Coordinate Conversion" />
     <Topic id="732148ca-fc8a-4f0d-bc1d-8f5fe2907744" visible="True" />

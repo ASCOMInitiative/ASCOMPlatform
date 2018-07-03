@@ -6,6 +6,7 @@ Imports System.Text.RegularExpressions
 Imports System.Threading
 Imports ASCOM.Utilities.Interfaces
 Imports System.Runtime.InteropServices
+Imports Microsoft.Win32
 
 ''' <summary>
 ''' Provides a set of utility functions for ASCOM clients and drivers
@@ -1477,6 +1478,26 @@ Public Class Util
     Private Function CvtLocal(ByRef d As Date) As Date
         Return CDate(System.DateTime.FromOADate(d.ToOADate - (GetTimeZoneOffset() / 24.0#)))
     End Function
+#End Region
+
+#Region "COM Registration"
+    ''' <summary>
+    ''' Function that is called by RegAsm when the assembly is registered for COM
+    ''' </summary>
+    ''' <remarks>This is necessary to ensure that the mscoree.dll can be found when the SetSearchDirectories function has been called in an application e.g. by Inno installer post v5.5.9</remarks>
+    <ComRegisterFunction>
+    Private Shared Sub COMRegisterActions(typeToRegister As Type)
+        COMRegistrationSupport.COMRegister(typeToRegister)
+    End Sub
+
+    ''' <summary>
+    ''' Function that is called by RegAsm when the assembly is registered for COM
+    ''' </summary>
+    <ComUnregisterFunction>
+    Private Shared Sub COMUnRegisterActions(typeToRegister As Type)
+        ' No action on unregister, this method has been included to remove a compiler warning
+    End Sub
+
 #End Region
 
 End Class

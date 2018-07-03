@@ -135,36 +135,45 @@ Source: "%srcp%\%rdmf%"; DestDir: "{app}"; Flags: isreadme
 %cex2%Root: HKCR; Subkey: AppId\{#AppClsid2}; Flags: uninsdeletekey
 %cexe%Root: HKCR; Subkey: AppId\%file%; Flags: uninsdeletekey
 
-[CODE]
+[Code]
+const
+   REQUIRED_PLATFORM_VERSION = 6.2;    // Set this to the minimum required ASCOM Platform version for this application
+
 //
-// Before the installer UI appears, verify that the (prerequisite)
-// ASCOM Platform 6.2 or greater is installed, including both Helper
-// components. Utility is required for all types (COM and .NET)!
+// Function to return the ASCOM Platform's version number as a double.
+//
+function PlatformVersion(): Double;
+var
+   PlatVerString : String;
+begin
+   Result := 0.0;  // Initialise the return value in case we can't read the registry
+   try
+      if RegQueryStringValue(HKEY_LOCAL_MACHINE_32, 'Software\ASCOM','PlatformVersion', PlatVerString) then 
+      begin // Successfully read the value from the registry
+         Result := StrToFloat(PlatVerString); // Create a double from the X.Y Platform version string
+      end;
+   except                                                                   
+      ShowExceptionMessage;
+      Result:= -1.0; // Indicate in the return value that an exception was generated
+   end;
+end;
+
+//
+// Before the installer UI appears, verify that the required ASCOM Platform version is installed.
 //
 function InitializeSetup(): Boolean;
 var
-   U : Variant;
-   H : Variant;
-begin
+   PlatformVersionNumber : double;
+ begin
    Result := FALSE;  // Assume failure
-   // check that the DriverHelper and Utilities objects exist, report errors if they don't
-   try
-      H := CreateOLEObject('DriverHelper.Util');
-   except
-      MsgBox('The ASCOM DriverHelper object has failed to load, this indicates a serious problem with the ASCOM installation', mbInformation, MB_OK);
-   end;
-   try
-      U := CreateOLEObject('ASCOM.Utilities.Util');
-   except
-      MsgBox('The ASCOM Utilities object has failed to load, this indicates that the ASCOM Platform has not been installed correctly', mbInformation, MB_OK);
-   end;
-   try
-      if (U.IsMinimumRequiredVersion(6,2)) then	// this will work in all locales
-         Result := TRUE;
-   except
-   end;
-   if(not Result) then
-      MsgBox('The ASCOM Platform 6.2 or greater is required for this driver.', mbInformation, MB_OK);
+   PlatformVersionNumber := PlatformVersion(); // Get the installed Platform version as a double
+   If PlatformVersionNumber >= REQUIRED_PLATFORM_VERSION then	// Check whether we have the minimum required Platform or newer
+      Result := TRUE
+   else
+      if PlatformVersionNumber = 0.0 then
+         MsgBox('No ASCOM Platform is installed. Please install Platform ' + Format('%3.1f', [REQUIRED_PLATFORM_VERSION]) + ' or later from http://www.ascom-standards.org', mbCriticalError, MB_OK)
+      else 
+         MsgBox('ASCOM Platform ' + Format('%3.1f', [REQUIRED_PLATFORM_VERSION]) + ' or later is required, but Platform '+ Format('%3.1f', [PlatformVersionNumber]) + ' is installed. Please install the latest Platform before continuing; you will find it at http://www.ascom-standards.org', mbCriticalError, MB_OK);
 end;
 
 // Code to enable the installer to uninstall previous versions of itself when a new version is installed

@@ -235,7 +235,7 @@ Class DeviceTelescope
 
     Public ReadOnly Property EquatorialSystem() As EquatorialCoordinateType Implements ITelescopeV3.EquatorialSystem
         Get
-            Dim equatorialSystem__1 As EquatorialCoordinateType = EquatorialCoordinateType.equLocalTopocentric
+            Dim equatorialSystem__1 As EquatorialCoordinateType = EquatorialCoordinateType.equTopocentric
             TL.LogMessage("DeclinationRate", "Get - " & equatorialSystem__1.ToString())
             Return equatorialSystem__1
         End Get

@@ -45,13 +45,13 @@
 				</tableHeader>
 				<row>
 					<entry><para>Built-in leap seconds and predicted delta UT1</para></entry>
-					<entry><para>Uses the value built into the Platform when the installer was created.</para></entry>
-					<entry><para>Always zero</para></entry>
+					<entry><para>Uses the leap second value built into the Platform when the installer was created.</para></entry>
+					<entry><para>Calculates delta UT1 from the built-in leap second value and the built-in DeltaT prediction</para></entry>
 				</row>
 				<row>
-					<entry><para>Specified leap seconds and built-in delta UT1</para></entry>
+					<entry><para>Specified leap seconds and predicted delta UT1</para></entry>
 					<entry><para></para>Uses the specified leap second value</entry>
-					<entry><para></para>Calculates delta UT1 from the specified leap second value and a built-in prediction DeltaT</entry>
+					<entry><para></para>Calculates delta UT1 from the specified leap second value and the built-in DeltaT prediction</entry>
 				</row>
 				<row>
 					<entry><para></para>Specified leap seconds and specified delta UT1</entry>
@@ -110,20 +110,20 @@
 				</tableHeader>
 				<row>
 					<entry><para>None</para></entry>
-					<entry><para>The data will be updated on the set date / time. Afterwards the task will remain in the task list but with no further activation set.</para>
+					<entry><para>The data will be updated on the set date and time. Afterwards the task will remain in the task list but with no further activation set.</para>
 					<para>The task can be run manually from the scheduler task list if desired.</para></entry>
 				</row>
 				<row>
 					<entry><para>Repeat daily</para></entry>
-					<entry><para>The task will run first on the set date and time and will run again every day at the set time.</para></entry>
+					<entry><para>The data will be updated on the set date and time and again every day at the set time.</para></entry>
 				</row>
 				<row>
 					<entry><para>Repeat weekly</para></entry>
-					<entry><para>The task will run first on the set date and time and will run again once per week on the set day of the week.</para></entry>
+					<entry><para>The data will be updated on the set date and time and again once per week on the set day of the week.</para></entry>
 				</row>
 				<row>
 					<entry><para>Repeat monthly</para></entry>
-					<entry><para>The task will run first on the set date and time and will run again once per month on the set day number of the month.</para></entry>
+					<entry><para>The data will be updated on the set date and time and again once per month on the set day number of the month.</para></entry>
 				</row>
 			</table>
 			</para>

@@ -4,7 +4,6 @@ using System.Net;
 using System.Text;
 using ASCOM.Utilities;
 using ASCOM.Astrometry;
-using Microsoft.Win32;
 using System.Diagnostics;
 using System.Security.Principal;
 using System.Globalization;

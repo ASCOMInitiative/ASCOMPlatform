@@ -31,6 +31,14 @@ namespace ASCOM.Setup
         /// </summary>
         private const string csDeviceClassPlaceholder = "<DeviceClass>";
 
+        private const string DEVICE_TYPE = "DeviceType"; // Name of the Regex group that will hold the device type
+        private const string INTERFACE_VERSION = "InterfaceVersion"; // Name of the Regex group that will hold the interface version number
+
+        /// <summary>
+        /// REGEX format string to extract device type and version number fropm the interface name
+        /// </summary>
+        private const string REGEX_FORMAT = @"^[Ii](?'" + DEVICE_TYPE + @"'\w+)[Vv](?'" + INTERFACE_VERSION + @"'\d+)";
+
         // key is the class name, value is the ASCOM interface properties
         Dictionary<string, ASCOMInterface> interfaceList;
 
@@ -102,7 +110,7 @@ namespace ASCOM.Setup
         /// <summary>
         /// Return the interface version from the device class
         /// </summary>
-        internal string InterfaceVersion
+        internal int InterfaceVersion
         {
             get
             {
@@ -206,7 +214,7 @@ namespace ASCOM.Setup
         {
             errorProvider.SetError(this.txtOrganizationName, String.Empty);
         }
-        
+
         /// <summary>
         /// Event handler for when the user selects a device type
         /// </summary>
@@ -259,6 +267,8 @@ namespace ASCOM.Setup
         /// </summary>
         private void InitASCOMClasses()
         {
+            Regex interfaceRegex = new Regex(REGEX_FORMAT); // Create a regex to parse out the interface name and version number from type names of form: IaaaaaVn
+
             TL.LogMessage("InitASCOMClasses", "Started");
             interfaceList = new Dictionary<string, ASCOMInterface>();
             cbDeviceClass.Items.Clear();
@@ -280,20 +290,67 @@ namespace ASCOM.Setup
                 {
                     if (type.IsInterface)
                     {
-                        // only add those with the SetupDialog method,
-                        // so the extra telescope classes are not added
+                        // Only add those with the SetupDialog method, so the extra telescope classes are not added
                         var p = type.GetMethod("SetupDialog");
                         if (p != null && p.Name == "SetupDialog")
                         {
+                            TL.LogMessage("InitASCOMClasses", "Found interface: " + type.Name);
                             // get the class name by removing the leading I and the training Vn
-                            string name = type.Name.Substring(1);
-                            name = name.TrimEnd('1', '2', '3', '4', 'V');
-                            ASCOMInterface ai = new ASCOMInterface(type.Name);
-                            interfaceList.Add(ai.Name, ai);
-                            cbDeviceClass.Items.Add(ai.Name);
-                            TL.LogMessage("InitASCOMClasses", "Added device: " + ai.Name + " " + name + " " + type.Name + " " + type.Namespace.ToString() + " " + type.FullName);
+
+                            Match m = interfaceRegex.Match(type.Name);
+                            if (m.Success) // We do have a match
+                            {
+                                string deviceType = m.Groups[DEVICE_TYPE].Value;
+                                int interfaceVersion = int.Parse(m.Groups[INTERFACE_VERSION].Value);
+                                ASCOMInterface ai = new ASCOMInterface(type.Name, deviceType, interfaceVersion);
+                                TL.LogMessage("InitASCOMClasses", string.Format("Created ASCOMInterface: {0}, device type: {1}, interface version {2}", type.Name, deviceType, interfaceVersion));
+
+                                if (!interfaceList.ContainsKey(ai.DeviceType)) // Only add an entry if the interface isn't already in the list
+                                {
+                                    interfaceList.Add(ai.DeviceType, ai); // Revised to support DeviceInterfaces having more than 1 version of a device interface e.g. IFocuserV2 and IFocuserV3
+                                    TL.LogMessage("InitASCOMClasses", "Added device: " + ai.DeviceType + " " + deviceType + " " + type.Name + " " + type.Namespace.ToString() + " " + type.FullName);
+                                }
+                                else
+                                {
+                                    // Update the interface version if necessary
+                                    if (interfaceList[deviceType].InterfaceVersion < interfaceVersion)
+                                    {
+                                        TL.LogMessage("InitASCOMClasses", string.Format("Updating {0} interface version number from v{1} to v{2}", deviceType, interfaceList[deviceType].InterfaceVersion, interfaceVersion));
+                                        interfaceList[deviceType].InterfaceName = type.Name;
+                                        interfaceList[deviceType].InterfaceVersion = interfaceVersion;
+                                    }
+                                    else
+                                    {
+                                        TL.LogMessage("InitASCOMClasses", string.Format("Ignoring duplicate interface: v{0} that is a lower than that currently stored: v{1}", interfaceVersion, interfaceList[deviceType].InterfaceVersion));
+                                    }
+                                }
+                            }
+                            else // Type name didn't match the regex formula so it must be a V1 type that doesn't have a Vx designator at the end of the name
+                            {
+                                TL.LogMessage("InitASCOMClasses", string.Format("Interface version regex didn't match interface {0}, including it as a V1 interface", type.Name));
+                                string deviceType = type.Name.Substring(1); // Remove the leading I character, the rest is the interface name
+                                int interfaceVersion = 1; // Set this as a V1 interface
+
+                                ASCOMInterface ai = new ASCOMInterface(type.Name, deviceType, interfaceVersion);
+                                TL.LogMessage("InitASCOMClasses", string.Format("Created ASCOMInterface: {0}, device type: {1}, interface version {2}", type.Name, deviceType, interfaceVersion));
+                                if (!interfaceList.ContainsKey(ai.DeviceType)) // Add the device type so long as it is not already present
+                                {
+                                    interfaceList.Add(ai.DeviceType, ai);
+                                    TL.LogMessage("InitASCOMClasses", "Added device: " + ai.DeviceType + " " + deviceType + " " + type.Name + " " + type.Namespace.ToString() + " " + type.FullName);
+                                }
+                                else
+                                {
+                                    TL.LogMessage("InitASCOMClasses", string.Format("Ignoring duplicate V1 interface: {0} ", type.Name));
+                                }
+                            }
                         }
                     }
+                }
+
+                // Add the interfaces to the dropdown list and pre-select the Telescope type
+                foreach (KeyValuePair<string, ASCOMInterface> ai in interfaceList)
+                {
+                    cbDeviceClass.Items.Add(ai.Value.DeviceType);
                 }
                 this.cbDeviceClass.SelectedIndex = this.cbDeviceClass.FindString("Telescope"); // Select Telescope as the default
             }
@@ -320,23 +377,15 @@ namespace ASCOM.Setup
         /// </summary>
         private class ASCOMInterface
         {
-            internal string Name { get; private set; }
+            internal string DeviceType { get; private set; }
             internal string InterfaceName { get; set; }
-            internal string InterfaceVersion { get; set; }
+            internal int InterfaceVersion { get; set; }
 
-            internal ASCOMInterface(string interfaceName)
+            internal ASCOMInterface(string interfaceName, string deviceType, int interfaceVersion)
             {
                 InterfaceName = interfaceName;
-                // get the class name by removing the leading I and the training Vn
-                Name = interfaceName.Substring(1);
-                Name = Name.TrimEnd('1', '2', '3', '4', 'V');
-                // get the interface version by looking for a trailing Vn
-                if (InterfaceName.LastIndexOf('V') == InterfaceName.Length - 2)
-                {
-                    InterfaceVersion = InterfaceName.Substring(InterfaceName.Length - 1);
-                }
-                else
-                    InterfaceVersion = "1";
+                DeviceType = deviceType;
+                InterfaceVersion = interfaceVersion;
             }
 
         }

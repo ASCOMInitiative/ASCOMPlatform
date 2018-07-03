@@ -549,7 +549,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' </summary>
     ''' <remarks>
     ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-    ''' Most amateur telescopes use local topocentric coordinates. This coordinate system is simply the apparent position in the sky
+    ''' Most amateur telescopes use topocentric coordinates. This coordinate system is simply the apparent position in the sky
     ''' (possibly uncorrected for atmospheric refraction) for "here and now", thus these are the coordinates that one would use with digital setting
     ''' circles and most amateur scopes. More sophisticated telescopes use one of the standard reference systems established by professional astronomers.
     ''' The most common is the Julian Epoch 2000 (J2000). These instruments apply corrections for precession,nutation, abberration, etc. to adjust the coordinates 

@@ -293,7 +293,7 @@ class DeviceTelescope
     {
         get
         {
-            EquatorialCoordinateType equatorialSystem = EquatorialCoordinateType.equLocalTopocentric;
+            EquatorialCoordinateType equatorialSystem = EquatorialCoordinateType.equTopocentric;
             tl.LogMessage("DeclinationRate", "Get - " + equatorialSystem.ToString());
             return equatorialSystem;
         }

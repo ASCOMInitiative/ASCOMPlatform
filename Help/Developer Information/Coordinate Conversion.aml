@@ -8,12 +8,12 @@
 	      		<list class="bullet">
 	      			<listItem>Transform</listItem>
 		      		<listItem>SOFA</listItem>
+					<listItem>NOVAS31</listItem>
 					<listItem>Kepler</listItem>
 					<listItem>NOVASCOM</listItem>
 		      		<listItem>NOVAS2</listItem>
 					<listItem>NOVAS2COM</listItem>
 					<listItem>NOVAS3</listItem>
-					<listItem>NOVAS31</listItem>
 		      	</list>
 		      	
 		      	<para>The ASCOM.Astrometry namespace of the Platform has become overcrowded with components that have similar capabilities but that differ in small ways from each
@@ -34,7 +34,7 @@
 					<listItem>NOVAS3</listItem>
 				</list>
 
-		      	<para>Surely, still an embarrassment of riches? In fact these components provide different capabilities and are 
+		      	<para>Surely, three components is still an embarrassment of riches? In fact these components provide different capabilities and are 
 		      	targeted at different requirements and uses as described below.</para>
 	      	</para>
       	</content>
@@ -44,7 +44,7 @@
 		<title>Transform</title>
    		<content>
       		<para>This simple component is designed for the telescope or dome driver author who simply needs to convert
-      		between J2000 RA/DEC co-ordinates and local topocentric RA/DEC and AZ/EL co-ordinates and vice-versa. 
+      		between J2000 RA/DEC co-ordinates and topocentric RA/DEC and AZ/EL co-ordinates and vice-versa. 
       		The Topocentric RA/DEC and AZ/EL coordinates can also be corrected for refraction effects.
 	      	The component is built on the established NOVAS3.1 supervisory library routines.</para>
 	      	<para>This component can be used directly by .NET based applications and is also exposed as a COM object to enable use 
@@ -87,6 +87,7 @@
   <section address="NOVASCOM">
 		<title>NOVASCOM</title>
    		<content>
+   			<para><legacyBold><literal>DEPRECATED - SCHEDULED FOR REMOVAL FROM THE PLATFORM - USE TRANSFORM, SOFA OR NOVAS31</literal></legacyBold></para>
       		<para>This component is a refactoring of the NOVASCOM component authored by Bob Denny in 2001, which was 
       		provided as an optional download component in ASCOM Platforms 4 and 5. It is now integrated in the platform 
       		release and is appropriate for applications requiring accurate ephemerides of the major planets and 
@@ -102,6 +103,7 @@
   <section address="NOVAS2">
 		<title>NOVAS2</title>
    		<content>
+   			<para><legacyBold><literal>DEPRECATED - SCHEDULED FOR REMOVAL FROM THE PLATFORM - USE TRANSFORM, SOFA OR NOVAS31</literal></legacyBold></para>
       		<para>This component is for demanding applications that require access to the fundamental routines
       		in the NOVAS2 library. It contains a range of supervisory routines that provide access to high
       		level functions and an extensive range of intermediate and basic level routines dedicated to lower level
@@ -120,6 +122,7 @@
   <section address="NOVAS3">
 		<title>NOVAS3</title>
    		<content>
+   			<para><legacyBold><literal>DEPRECATED - SCHEDULED FOR REMOVAL FROM THE PLATFORM - USE TRANSFORM, SOFA OR NOVAS31</literal></legacyBold></para>
       		<para>This component is a shell for the NOVAS 3 library released in December 2009 for demanding applications that require access to the fundamental routines
       		in the NOVAS3 library, the latest JPL DE421 planetary and lunar ephemerises or to calculations 
       		based on the IAU 2000 reference systems resolution. It contains a range of supervisory routines that provide access to high
