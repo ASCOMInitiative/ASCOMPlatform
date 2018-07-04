@@ -4,21 +4,28 @@
 	<section address="Astronomical Coordinates">
 		<title>Astronomical Coordinates</title>
    		<content>
-		    <para>The official classical sequence of [RA,Dec] coordinate systems is as follows (neglecting proper motion and various sub-arcsecond effects):</para>
+		    <para>The official classical sequence of [RA,Dec] coordinate systems, using J2000.0 as an example,is:</para>
 			<para>
 				<mediaLink>
-					<image placement="center" xlink:href="Astronomical Coordinates"/>
+					<image placement="center" xlink:href="Astronomical Coordinates Full"/>
+				</mediaLink>
+			</para>
+		    <para>Neglecting proper motion and various sub-arcsecond effects, the sequence can be simplified to:</para>
+			<para>
+				<mediaLink>
+					<image placement="center" xlink:href="Astronomical Coordinates Simple"/>
 				</mediaLink>
 			</para>
       	</content>
     </section>
-       <section address="Disambiguation">
+    
+    <section address="Disambiguation">
     	<title>Disambiguation</title>
   		<content>
  			<list class="ordered">
 			  <listItem>
-					<para>The term "JNow", unknown in professional circles, is confusing, because the "J" implies that JNow is the "today" equivalent of "J2000",
-			    	which was 2000 Jan 1.5. It isn't - even at exactly 2000 Jan 1.5, stars weren't at their J2000.0 positions, but up to 30 arcseconds away, because 
+					<para>The term "JNow", unknown in professional circles, is confusing, because the "J" implies that JNow is the "today" equivalent of "J2000".
+					It isn't - even at exactly midday on 1st January 2000 (the J2000 origin date/time), stars weren't at their J2000.0 positions, but up to 30 arcseconds away, because
 			    	of aberration and nutation.</para>
 			    	<para>For this reason, <legacyBold>use of the term "JNow" is not recommended</legacyBold>. If you do come across it, it will most likely refer to observed coordinates.</para>
 			  </listItem>
@@ -27,7 +34,7 @@
 					however, the term "Topocentric" already carries this meaning and prefixing it with "Local" adds no further information.</para>
 					<para>For this reason, <legacyBold>use of the term "Local Topocentric" is not recommended</legacyBold>, "Topocentric" does the job more concisely.</para>
 					<para>Historically, the ASCOM EquatorialCoordinate Type enumeration contained the member "equLocalTopocentric" and this name has now been deprecated 
-					in favour of the new member equTopocentric. This is a non-breaking change and continued use of equLocalTopocentric will just show up as a warning when compiling ASCOM drivers and applications.</para>
+					in favour of the new member "equTopocentric". This is a non-breaking change and continued use of equLocalTopocentric will just show up as a warning when compiling ASCOM drivers and applications.</para>
 			  </listItem>
  	       </list>
       </content>
@@ -41,7 +48,7 @@
 	    		<para>
 		    		When designing your driver you need to choose which type of coordinates you will accept and the <codeEntityReference>T:ASCOM.DeviceInterface.ITelescopeV3</codeEntityReference>
 		    		interface provides the <codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV3.DoesRefraction</codeEntityReference> and 
-		    		<codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV3.EquatorialSystem</codeEntityReference> properties for this purpose. The full range of coorindate systems recognised are described here: 
+		    		<codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV3.EquatorialSystem</codeEntityReference> properties for this purpose. The full range of coordinate systems recognised are described here: 
 		    		<codeEntityReference>T:ASCOM.DeviceInterface.EquatorialCoordinateType</codeEntityReference>.
 		    		Usually you would accept one or more of <legacyBold>J2000</legacyBold>, <legacyBold>Topocentric</legacyBold> or <legacyBold>Observed</legacyBold> coordinates at your discretion.
 		    		To specify a particular coordinate type you must set the properties as below:
@@ -81,5 +88,14 @@
 			</list>
         </content>
 	</section>
+	
+	<relatedTopics>
+			<externalLink>
+				<linkText>International Astronomical Union SOFA Manual</linkText>
+				<linkAlternateText>Open the International Astronomical Union SOFA manual</linkAlternateText>
+				<linkUri>http://www.iausofa.org/sofa_ast_c.pdf</linkUri>
+			</externalLink>
+	</relatedTopics>
+
   </developerConceptualDocument>
 </topic>

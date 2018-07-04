@@ -201,9 +201,13 @@
       <CopyToMedia>False</CopyToMedia>
       <ImageId>ManufLogos</ImageId>
     </Image>
-    <Image Include="Developer Information\Astronomical Coordinates.png">
-      <ImageId>Astronomical Coordinates</ImageId>
-      <AlternateText>Astronomical Coordinates</AlternateText>
+    <Image Include="Developer Information\Astronomical Coordinates Full.png">
+      <ImageId>Astronomical Coordinates Full</ImageId>
+      <AlternateText>Astronomical Coordinates Full</AlternateText>
+    </Image>
+    <Image Include="Developer Information\Astronomical Coordinates Simple.png">
+      <ImageId>Astronomical Coordinates Simple</ImageId>
+      <AlternateText>Astronomical Coordinates Simple</AlternateText>
     </Image>
     <Image Include="Tools and Features\COMPortSettings.png">
       <ImageId>COMPortSettings</ImageId>
