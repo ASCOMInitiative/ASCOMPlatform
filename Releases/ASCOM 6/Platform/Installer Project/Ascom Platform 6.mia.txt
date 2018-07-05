@@ -1193,7 +1193,7 @@ if Variable REMOVE not Equals TRUE
     Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions Hub Tester to $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Test.exe
     Create Shortcut $SHORTCUTFOLDER$\ASCOM Compatible Software to http://ascom-standards.org/Community/Partners.htm
     Create Shortcut $SHORTCUTFOLDER$\ASCOM Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
-    Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM_User_Guide.pdf
+    Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM User Guide.pdf
     Create Shortcut $SHORTCUTFOLDER$\Check for Updates to $TARGETDIR$\Tools\CheckForUpdates.js
     Create Shortcut $SHORTCUTFOLDER$\Help and Device Interface Standards to $TARGETDIR$\Docs\PlatformHelp.chm
     Create Shortcut $SHORTCUTFOLDER$\How to get support to http://ascom-standards.org/Support/index.htm
@@ -1632,7 +1632,7 @@ if Variable SILENT Equals FALSE
       if Variable SUCCESS Equals COMPLETE
         if Variable REPAIR not Equals TRUE
           if Variable ACROBATKEY not Equals 
-            Run Program $TARGETDIR$\Docs\ASCOM_User_Guide.pdf 
+            Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
           else
             MessageBox: User Guide, Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 6.
           end
