@@ -258,7 +258,8 @@ if Variable PREREQ not Equals FALSE
       MessageBox: Pre-requisites, We are sorry but you must install Framework 4 before continuing with this install.
       Terminate Installation
     end
-    Comment: Check for .NET 3.5 SP1
+    Comment: Check whether the user enabled .NET 3.5 SP1 while the dialogue was open. If still missing then terminate the install
+    Include Script: checknet351
     if Variable NET351 Equals FALSE
       MessageBox: Pre-requisites, We are sorry but this installer does not contain any pre-requisites except for Windows Installer 3.1.$NEWLINE$$NEWLINE$Please install other pre-requisites manually.
       Terminate Installation
@@ -1631,14 +1632,29 @@ if Variable SILENT Equals FALSE
     if Variable REMOVE Equals FALSE
       if Variable SUCCESS Equals COMPLETE
         if Variable REPAIR not Equals TRUE
+          Comment: Display the user guide if Acrobat is installed
           if Variable ACROBATKEY not Equals 
+            Comment: Acrobat is installed
+            Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is installed - displaying guide (at end of file)
             Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
           else
-            MessageBox: User Guide, Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 6.
+            Comment: Acrobat is not installed so check whether we are running on Windows 10 i.e. the build number is > 9600
+            if Variable OSCURRENTBUILD Greater Than 9600
+              Comment: We are running on Windows 10 so run the program and leave it to the user to display it in the MS Edge browser or application of their choice
+              Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is not installed but we are running on Windows 10 - displaying guide (at end of file)
+              Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
+            else
+              Comment: We are not running on Windows 10 so display an error message.
+              Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is not installed and we are not running on Windows 10 - showing cannot display message (at end of file)
+              MessageBox: User Guide, Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 6.
+            end
           end
         end
       end
     end
+  else
+    Comment: User guide display not requested
+    Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: User guide display not requested (at end of file)
   end
 end
 [END REGION]

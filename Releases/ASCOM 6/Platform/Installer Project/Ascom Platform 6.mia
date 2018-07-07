@@ -259,6 +259,7 @@ MessageBox
 Terminate Install
 End
 Comment
+Include Script
 If
 MessageBox
 Terminate Install
@@ -1631,14 +1632,29 @@ If
 If
 If
 If
+Comment
 If
+Comment
+Write to Text File
 Run Program
 Else
+Comment
+If
+Comment
+Write to Text File
+Run Program
+Else
+Comment
+Write to Text File
 MessageBox
 End
 End
 End
 End
+End
+Else
+Comment
+Write to Text File
 End
 End
 Code Folding Region
@@ -1905,6 +1921,7 @@ $
 {D706564D-645F-4BC2-95FC-6F23490A2ED7}
 {5CC35AE5-3C35-4ED8-AD45-10721515CFA9}
 {537DCE72-E5A0-4FB9-BD73-2F668D591103}
+{CD7BF93A-3EE2-4E2B-85B6-F5320CD13CD6}
 {5866E278-31CA-44FF-B402-C89D77C56D69}
 {FD86E32E-9440-4916-BCCB-52BB33E3B229}
 {D6FFC7DE-D844-4496-9D97-60670BD26CF7}
@@ -3277,14 +3294,29 @@ $
 {A3BD10E7-6594-4A85-8EB8-F4D70379D91A}
 {3C71A05E-877A-45F9-852F-263F83C37EB0}
 {BE488EE1-4EBC-4DB7-AD20-BC9739B237EC}
+{90D54FE1-6BCB-41F2-B908-101CF16D24D6}
 {0F027466-940D-42A3-978E-7237659DC66F}
+{D7679EFE-CB71-497A-B958-437BB87A34EF}
+{5C8ACBA8-EC0B-4E4E-8048-ECDE1512EA99}
 {896A998D-4AB3-47A3-A84B-12582DEF1485}
 {07B385B5-D119-4E90-B56C-D8C96F851AD3}
-{A46F6427-2781-413B-9681-A5ADE5549A55}
+{9FF716C5-FBEB-4D48-AABD-41407F39E942}
+{B0434AB0-5FCC-4A2F-B50F-3A9D75860B0D}
+{2117EF31-FDBB-4CBB-9909-D9F011A6D982}
+{0E271842-C197-4BEC-999F-9DD245EABAE4}
+{2BD8E8FD-A0EC-40C6-AD88-D2453208CE04}
+{D9DFE5FF-0FF3-4103-A349-4B3A30F80C46}
+{74C2B9FD-04B6-4AFE-A384-66748241A1E6}
+{306D65C3-D5F9-4D10-96A8-BE5D33066C36}
+{97D96884-87EE-4C5A-A92A-3B125B7EDDF6}
+{B1680F4C-B29F-4464-A25E-EBE99B4173F5}
 {A9D762FC-FEFC-415B-847B-AEFECAB7491A}
 {EA8B679A-2E1E-4CD5-97EA-3B8D1D1B73C8}
 {9DF3358A-CC68-4FA3-9735-422100AF86B6}
 {CE34B4E6-8153-46C4-8C8C-54B2F6847D3A}
+{755EE2D9-3C78-4E9A-B248-31B90D73A8BF}
+{C079D968-D2CB-4716-B0D6-3E2102CCA79A}
+{AC97FDFD-504C-4F1B-9675-C03CC10F1EAA}
 {658FE558-74E7-4951-AC84-C88748D88AAD}
 {F7EF1A39-3AA5-4D06-A957-E316EF12AAEE}
 {1237CB60-342A-45EB-8531-4F423528E965}
@@ -3329,7 +3361,7 @@ Check setup pre-requisites
 {7E914B07-3670-4489-8E8A-F2EB97E0E06D}
 
 {537DCE72-E5A0-4FB9-BD73-2F668D591103}
-Check for .NET 3.5 SP1
+Check whether the user enabled .NET 3.5 SP1 while the dialogue was open. If still missing then terminate the install
 {045D4D3C-E49F-4751-A750-A4FFFB09EAA2}
 Report location of our uninstaller
 {6CD7F93E-32C9-43E4-B571-968A85A73245}
@@ -3778,6 +3810,18 @@ If the earth rotation data download task trace path doesn't exist then create it
 Value name changed from Leap Seconds to Manual Leap Seconds in Platform 6.4 so remove the old value
 {4C8ECA52-39A8-4F20-BB3E-795D313ABC6B}
 
+{90D54FE1-6BCB-41F2-B908-101CF16D24D6}
+Display the user guide if Acrobat is installed
+{9FF716C5-FBEB-4D48-AABD-41407F39E942}
+Acrobat is not installed so check whether we are running on Windows 10 i.e. the build number is > 9600
+{2117EF31-FDBB-4CBB-9909-D9F011A6D982}
+We are running on Windows 10 so run the program and leave it to the user to display it in the MS Edge browser or application of their choice
+{74C2B9FD-04B6-4AFE-A384-66748241A1E6}
+We are not running on Windows 10 so display an error message.
+{D7679EFE-CB71-497A-B958-437BB87A34EF}
+Acrobat is installed
+{C079D968-D2CB-4716-B0D6-3E2102CCA79A}
+User guide display not requested
 {A4096648-40D6-4817-81BA-DE0AD4949DE5}
 SHORTCUTFOLDER$MYAH$MYAH$FALSE
 $SHORTCUTFILESALL$$ASCOMSTARTMENU$
@@ -5236,6 +5280,11 @@ RC
 0
 0
 TRUE
+{B0434AB0-5FCC-4A2F-B50F-3A9D75860B0D}
+OSCURRENTBUILD
+2
+9600
+FALSE
 {90829DD8-0835-4E22-9C27-A67324C55271}
 $TITLE$ Setup Error
 This product requires at least Windows XP.$NEWLINE$$NEWLINE$Setup cannot continue.
@@ -5272,12 +5321,6 @@ An error has occured while finalising the installation, please save all logs in 
 3
 1
 
-{A46F6427-2781-413B-9681-A5ADE5549A55}
-User Guide
-Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 6.
-0
-1
-
 {B7F362AD-3A9C-4C15-91BB-8528F79DB5EF}
 Pre-requisites
 We are sorry but you must install Framework 4 before continuing with this install.
@@ -5296,6 +5339,12 @@ You chose not to force Platform removal so this installer cannot continue and wi
 0
 1
 ERROROLD
+{97D96884-87EE-4C5A-A92A-3B125B7EDDF6}
+User Guide
+Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 6.
+0
+1
+
 {EAC1FFF4-CCCD-452E-886C-3AAFA5AC4558}
 welcome
 WIZARD
@@ -8203,6 +8252,12 @@ TRUE
 /Initialise
 TRUE
 RC
+{2BD8E8FD-A0EC-40C6-AD88-D2453208CE04}
+$TARGETDIR$\Docs\ASCOM User Guide.pdf
+FALSE
+
+FALSE
+
 {1A792D77-26E6-4BBF-9750-37EBD8EC2BE3}
 $UNINSTALLER$
 
@@ -10668,6 +10723,26 @@ $SETUPLOG$
 $TIME$ RC: $RC$ Initialise earth rotation data
 FALSE
 TRUE
+{5C8ACBA8-EC0B-4E4E-8048-ECDE1512EA99}
+$SETUPLOG$
+$TIME$ UserGuide: Acrobat is installed - displaying guide
+FALSE
+TRUE
+{0E271842-C197-4BEC-999F-9DD245EABAE4}
+$SETUPLOG$
+$TIME$ UserGuide: Acrobat is not installed but we are running on Windows 10 - displaying guide
+FALSE
+TRUE
+{306D65C3-D5F9-4D10-96A8-BE5D33066C36}
+$SETUPLOG$
+$TIME$ UserGuide: Acrobat is not installed and we are not running on Windows 10 - showing cannot display message
+FALSE
+TRUE
+{AC97FDFD-504C-4F1B-9675-C03CC10F1EAA}
+$SETUPLOG$
+$TIME$ UserGuide: User guide display not requested
+FALSE
+TRUE
 {C27DD540-EC7D-462C-9EE8-5D0F21EB2997}
 2|
 SOFTWARE\ASCOM\Astrometry
@@ -10944,6 +11019,8 @@ checknet351
 checknet4client_x86
 {FD6099C8-0DAF-4FC7-B60B-CF026E994675}
 checkvc1410_25017_x86
+{CD7BF93A-3EE2-4E2B-85B6-F5320CD13CD6}
+checknet351
 {BE6F0167-47F0-4C0A-B473-33DB75546DE3}
 SUCCESS
 TRUE
@@ -11451,34 +11528,11 @@ $
 
 
 
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 C
 
 
 
-
-
-
-
-
-C
 
 
 
@@ -11511,6 +11565,30 @@ C
 
 
 
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
 C
 
 
@@ -11915,37 +11993,6 @@ C
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
 
 
 
@@ -12001,6 +12048,37 @@ C
 
 
 
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 C
 
 
@@ -12040,6 +12118,21 @@ C
 
 
 C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -12797,6 +12890,22 @@ C
 
 
 $
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
