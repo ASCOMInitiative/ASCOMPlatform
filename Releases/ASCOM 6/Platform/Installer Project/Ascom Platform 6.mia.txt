@@ -89,6 +89,16 @@ Set Variable FRAMEWORK2 to v2.0.50727
 Set Variable FRAMEWORK4 to v4.0.30319
 Set Variable FRAMEWORK to $FRAMEWORK4$
  
+Comment: Define components and install state variables
+Define Component: ASCOM Platform Installation Options
+Define Component: ASCOM Platform Installation Options\Install Diagnostics shortcut on desktop
+Define Component: ASCOM Platform Installation Options\Install Profile Explorer shortcut on desktop
+Define Component: ASCOM Platform Installation Options\Display user guide when install is complete
+Set Variable INSTALL_PLATFORM to 
+Set Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP to 
+Set Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP to 
+Set Variable DISPLAY_USER_GUIDE to 
+ 
 Comment: Read the framework root value from the OS and set FRAMEWORKPATH to the full path to the executables
 Read Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\InstallRoot into FRAMEWORKROOT
 Set Variable FRAMEWORKPATH to $FRAMEWORKROOT$$FRAMEWORK$
@@ -381,28 +391,37 @@ else
 end
  
 label: Maintenance
-Comment: Maintenance Install/Uninstall
-Set Variable REPAIR to TRUE
-wizard loop
+Comment: Maintenance Modify, Repair or Remove
 Display Dialog: maintenance, wait for dialog to return (modal)
-end
+Convert Variable MODIFY to UPPER case
 Convert Variable REPAIR to UPPER case
 Convert Variable REMOVE to UPPER case
+Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance user choice - Modify: $MODIFY$ ,Repair: $REPAIR$, Remove: $REMOVE$ (at end of file)
+ 
+if Variable REPAIR Equals TRUE
+  Set Variable PROGRESSTEXT to Repairing Platform 6...
+  Set Variable REMOVE to FALSE
+end
+ 
+if Variable MODIFY Equals TRUE
+  Hide Component: ASCOM Platform Installation Options\Display user guide when install is complete
+  Display Dialog: welcome, wait for dialog to return (modal)
+  Set Variable PROGRESSTEXT to Maintaining Platform 6...
+  Set Variable REMOVE to FALSE
+  Set Variable REPAIR to TRUE
+end
+ 
 if Variable REMOVE Equals TRUE
   Set Variable ABORT to FALSE
   Display Dialog: ConfirmRemove, wait for dialog to return (modal)
   if Variable ABORT Equals TRUE
-    Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance - Repair: $REPAIR$, Remove: $REMOVE$ - Uninstall cancelled (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance - Modify: $MODIFY$ ,Repair: $REPAIR$, Remove: $REMOVE$ - Uninstall cancelled (at end of file)
     Terminate Installation
   end
   Set Variable PROGRESSTEXT to Removing Platform 6...
   Set Variable REPAIR to FALSE
 end
-if Variable REPAIR Equals TRUE
-  Set Variable PROGRESSTEXT to Repairing Platform 6...
-  Set Variable REMOVE to FALSE
-end
-Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance - Repair: $REPAIR$, Remove: $REMOVE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance after processing - Modify: $MODIFY$ ,Repair: $REPAIR$, Remove: $REMOVE$ (at end of file)
 [END REGION]
  
 [DEFINE REGION: Main Installation and Uninstallation]
@@ -420,6 +439,15 @@ else
   Set Variable SHORTCUTFOLDER to $SHORTCUTFILES$$ASCOMSTARTMENU$
   Set Variable DESKTOPFOLDER to $DESKTOPDIR$
 end
+ 
+Comment: Remove shortcuts installed by previous installations that won't be removed by their uninstallers
+Set Variable NATIVE_ENGINE to TRUE
+Delete Files $DESKTOPDIR$\ASCOM Diagnostics.lnk (when installing and uninstalling)
+Delete Files $DESKTOPDIRALL$\ASCOM Diagnostics.lnk (when installing and uninstalling)
+Delete Files $DESKTOPDIR$\ProfileExplorer.lnk (when installing and uninstalling)
+Delete Files $DESKTOPDIRALL$\ProfileExplorer.lnk (when installing and uninstalling)
+Set Variable NATIVE_ENGINE to FALSE
+ 
 Display Dialog: progress, use as progress dialog (non-modal)
  
 Comment: Remove previous versions both MSI install and Native install
@@ -507,7 +535,26 @@ end
  
 if Variable REMOVE Equals TRUE
    
+  Set Variable NATIVE_ENGINE to TRUE
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling platform (at end of file)
+  Get Component ASCOM Platform Installation Options Selection State into Variable INSTALL_PLATFORM
+  Write into Text File $SETUPLOG$ from Value $TIME$ Platform Installation Options - $INSTALL_PLATFORM$ (at end of file)
+  Get Component ASCOM Platform Installation Options\Install Diagnostics shortcut on desktop Selection State into Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP
+  Write into Text File $SETUPLOG$ from Value $TIME$ Install Desktop Diagnostics Shortcut - $INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP$ (at end of file)
+  Get Component ASCOM Platform Installation Options\Install Profile Explorer shortcut on desktop Selection State into Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP
+  Write into Text File $SETUPLOG$ from Value $TIME$ Install Profile Explorer Shortcut - $INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP$ (at end of file)
+  Get Component ASCOM Platform Installation Options\Display user guide when install is complete Selection State into Variable DISPLAY_USER_GUIDE
+  Write into Text File $SETUPLOG$ from Value $TIME$ Display User Guide - $DISPLAY_USER_GUIDE$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value   (at end of file)
+  if Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP Equals TRUE
+    Delete Files $DESKTOPDIR$\ASCOM Diagnostics.lnk (when installing and uninstalling)
+    Delete Files $DESKTOPDIRALL$\ASCOM Diagnostics.lnk (when installing and uninstalling)
+  end
+  if Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP Equals TRUE
+    Delete Files $DESKTOPDIR$\ProfileExplorer.lnk (when installing and uninstalling)
+    Delete Files $DESKTOPDIRALL$\ProfileExplorer.lnk (when installing and uninstalling)
+  end
+  Set Variable NATIVE_ENGINE to FALSE
    
   [DEFINE REGION: Components to be uininstalled only from 64bit systems]
    
@@ -768,10 +815,21 @@ if Variable REMOVE not Equals TRUE
   [END REGION]
    
   [DEFINE REGION: Install Platform 6]
-   
-  [OFFLINE CONTENT]
   Comment: ***** Start of Platform Installation *****
   Set Variable PROGRESSTEXT to Installing $TITLE$
+  Write into Text File $SETUPLOG$ from Value   (at end of file)
+   
+  Comment: Get the state of the installable components
+  Get Component ASCOM Platform Installation Options Selection State into Variable INSTALL_PLATFORM
+  Write into Text File $SETUPLOG$ from Value $TIME$ Platform Installation Options - $INSTALL_PLATFORM$ (at end of file)
+  Get Component ASCOM Platform Installation Options\Install Diagnostics shortcut on desktop Selection State into Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP
+  Write into Text File $SETUPLOG$ from Value $TIME$ Install Desktop Diagnostics Shortcut - $INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP$ (at end of file)
+  Get Component ASCOM Platform Installation Options\Install Profile Explorer shortcut on desktop Selection State into Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP
+  Write into Text File $SETUPLOG$ from Value $TIME$ Install Profile Explorer Shortcut - $INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP$ (at end of file)
+  Get Component ASCOM Platform Installation Options\Display user guide when install is complete Selection State into Variable DISPLAY_USER_GUIDE
+  Write into Text File $SETUPLOG$ from Value $TIME$ Display User Guide - $DISPLAY_USER_GUIDE$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value   (at end of file)
+   
   Comment: Create the main ASCOM folder in Common Files
   Create Folder $COMMONFILES$\ASCOM
    
@@ -1181,15 +1239,18 @@ if Variable REMOVE not Equals TRUE
     [DEFINE REGION: Non-MSI installation activities]
      
     [DEFINE REGION: Create shortcuts]
-    Comment: Menu shortcuts
-    Comment: Install after main MSI install has run so we pick up correct icons from applicaitons
+    Comment: Create menu shortcuts - Do this after the main MSI install has run so we pick up correct icons from applications
     Set Variable NATIVE_ENGINE to TRUE
     Write into Text File $SETUPLOG$ from Value $TIME$ Creating shortcuts in native mode (at end of file)
     Write into Text File $SETUPLOG$ from Value $TIME$ DesktopFolder: $DESKTOPFOLDER$ (at end of file)
     Write into Text File $SETUPLOG$ from Value $TIME$ ShortcutFolder: $SHORTCUTFOLDER$ (at end of file)
     Write into Text File $SETUPLOG$ from Value  (at end of file)
-    Create Shortcut $DESKTOPFOLDER$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-    Create Shortcut $DESKTOPFOLDER$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+    if Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP Equals TRUE
+      Create Shortcut $DESKTOPFOLDER$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
+    end
+    if Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP Equals TRUE
+      Create Shortcut $DESKTOPFOLDER$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+    end
     Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions SimulatorTester to $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Test.exe
     Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions Hub Tester to $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Test.exe
     Create Shortcut $SHORTCUTFOLDER$\ASCOM Compatible Software to http://ascom-standards.org/Community/Partners.htm
@@ -1628,7 +1689,7 @@ if Variable SILENT Equals FALSE
     end
   end
   Comment: Show the user guide if we are not removing and not repairing the install
-  if Variable RUNAPP Equals TRUE
+  if Variable DISPLAY_USER_GUIDE Equals TRUE
     if Variable REMOVE Equals FALSE
       if Variable SUCCESS Equals COMPLETE
         if Variable REPAIR not Equals TRUE
