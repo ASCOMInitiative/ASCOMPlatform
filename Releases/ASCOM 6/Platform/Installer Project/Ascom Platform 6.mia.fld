@@ -12,7 +12,7 @@ Platform 6.1 files
 Platform 6.2 files
 Uninstall Platforms 4 and 5
 Extra activities if on a 64bit system
-Uninstall items installed by this installer
 Components to be uininstalled only from 64bit systems
 ASCOM Cache
 Earth Rotation Date Update
+Set up log file and variables

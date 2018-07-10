@@ -58,6 +58,9 @@ Set Variable UNINSTALLER to
 Set Variable SUCCESS to 
 Set Variable SUCCESS64 to 
 Set Variable LASTERROR to 
+Set Variable MODIFY to 
+Set Variable REPAIR to 
+Set Variable REMOVE to 
  
 Comment: Set up values for a 32bit OS
 Set Variable PROGRAMFILES32 to 
@@ -392,11 +395,18 @@ end
  
 label: Maintenance
 Comment: Maintenance Modify, Repair or Remove
+Set Variable MODIFY to True
 Display Dialog: maintenance, wait for dialog to return (modal)
 Convert Variable MODIFY to UPPER case
 Convert Variable REPAIR to UPPER case
 Convert Variable REMOVE to UPPER case
 Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance user choice - Modify: $MODIFY$ ,Repair: $REPAIR$, Remove: $REMOVE$ (at end of file)
+ 
+Comment: Exit Setup if cancelled
+if Variable WIZARD Equals CANCEL
+  Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance cancelled at user request (at end of file)
+  Terminate Installation
+end
  
 if Variable REPAIR Equals TRUE
   Set Variable PROGRESSTEXT to Repairing Platform 6...
@@ -428,6 +438,7 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance after processing -
 label: Main Install
 Comment: Exit Setup if Wizard Loop cancelled
 if Variable WIZARD Equals CANCEL
+  Write into Text File $SETUPLOG$ from Value $TIME$ Installation cancelled at user request (at end of file)
   Terminate Installation
 end
  
@@ -1678,9 +1689,77 @@ Set Variable MYPROGRESS to 100
 [DEFINE REGION: Finish Setup]
 Comment: End of Installation
 Hide Dialog
+ 
+Comment: Initialise finish dialogue message display variables
+Set Variable FINISH_TITLE to 
+Set Variable FINISH_TITLE_POSITION to 
+Set Variable FINISH_DESCRIPTION to 
+Set Variable FINISH_CONTEXT to 
+ 
+Comment: We Ensure that the SUCCESS variable reflects the overall ewrror state
+if Variable ASCOMERROR not Equals 
+  Comment: We have an ASCOM error so reflect this in the SUCCESS variable
+  Set Variable SUCCESS to ERROR
+end
+Comment: Only show the User Guide if the installation competed properly
+if Variable SUCCESS not Equals COMPLETE
+  Comment: We do not have a normal comlete install so we don't want to show the user guide even if it was requested
+  Set Variable DISPLAY_USER_GUIDE to FALSE
+end
+ 
+Comment: test whether we have an error, if so then we just display the error messages
+if Variable SUCCESS not Equals ERROR
+  Comment: No errors so first set default messages in case an unexpected value is returned in the SUCCESS variable
+  Set Variable FINISH_TITLE to Unexpected SUCCESS Status Returned: $SUCCESS$!
+  Set Variable FINISH_CONTEXT to The installation may or may not have completed successfully.$NEWLINE$Please report this on the Yahoo ASCOM-Talk group.
+  if Variable SUCCESS Equals CANCEL
+    Comment: User requested installation cancel
+    Set Variable FINISH_TITLE to Platform installation has been cancelled at your request.
+    Set Variable FINISH_CONTEXT to 
+  end
+  if Variable SUCCESS Equals REBOOT
+    Comment: User requested installation cancel
+    Set Variable FINISH_TITLE to $TITLE$ has been successfully installed.$NEWLINE$Your PC needs to be restarted to complete installation.
+    Set Variable FINISH_CONTEXT to 
+    Set Variable FINISH_DESCRIPTION to  Congratulations, you have successfully installed ASCOM Platform 6!$NEWLINE$$NEWLINE$ Please review the "Introduction" section of the Help file in$NEWLINE$ Start Menu / ASCOM Platform 6 for changes in this release.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ Diagnostics Tool in ASCOM Platform 6 / Tools and report them on$NEWLINE$ the ASCOM Talk Yahoo forum. $NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
+  end
+  if Variable SUCCESS Equals COMPLETE
+    Comment: Success!
+    Set Variable FINISH_TITLE to $TITLE$ has been installed successfully.
+    Set Variable FINISH_DESCRIPTION to  Congratulations, you have successfully installed ASCOM Platform 6!$NEWLINE$$NEWLINE$ Please review the "Introduction" section of the Help file in$NEWLINE$ Start Menu / ASCOM Platform 6 for changes in this release.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ Diagnostics Tool in ASCOM Platform 6 / Tools and report them on$NEWLINE$ the ASCOM Talk Yahoo forum.$NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
+    if Variable DISPLAY_USER_GUIDE Equals TRUE
+      Set Variable FINISH_CONTEXT to The user guide will be displayed after you click the Finish button
+    else
+      Set Variable FINISH_CONTEXT to 
+    end
+    if Variable REMOVE Equals TRUE
+      Comment: User requested installation cancel
+      Set Variable FINISH_TITLE to $TITLE$ has been uninstalled.
+      Set Variable FINISH_CONTEXT to 
+      Set Variable FINISH_DESCRIPTION to 
+    end
+    if Variable REPAIR Equals TRUE
+      Comment: User requested installation cancel
+      Set Variable FINISH_TITLE to $TITLE$ has been repaired.
+      Set Variable FINISH_CONTEXT to 
+      Set Variable FINISH_DESCRIPTION to 
+    end
+    if Variable MODIFY Equals TRUE
+      Comment: User requested installation cancel
+      Set Variable FINISH_TITLE to $TITLE$ has been modified as requested.
+      Set Variable FINISH_CONTEXT to 
+      Set Variable FINISH_DESCRIPTION to 
+    end
+  end
+else
+  Comment: We have an error so set the error messages
+  Set Variable FINISH_TITLE to $TITLE$ installation failed
+  Set Variable FINISH_DESCRIPTION to We are sorry that an error ocurred during installation of Platform 6.$NEWLINE$$NEWLINE$Please review the PlatformInstall, UninstallASCOM and FinaliseInstall $NEWLINE$logs in the My Documents\ASCOM and the most recent$NEWLINE$My Documents\ASCOM\Logs YYYY MM DD folders.$NEWLINE$$NEWLINE$Please also run the Diagnostics Tool in ASCOM Platform 6 / Tools and $NEWLINE$post all logs on the ASCOM Talk Yahoo forum.$NEWLINE$$NEWLINE$Many thanks, The ASCOM Platform Team.
+  Set Variable FINISH_CONTEXT to Last error: "$LASTERROR$"$NEWLINE$ASCOM Error: $ASCOMERROR$
+end
+ 
 Comment: Ensure that the variables are all upper case so that tests conducted within the dialogue fire correctly!
 Convert Variable SUCCESS to UPPER case
-Set Variable RUNAPP to FALSE
 Display Dialog: finish, wait for dialog to return (modal)
 if Variable SILENT Equals FALSE
   if Variable REBOOTCOMPUTER Equals TRUE
@@ -1688,28 +1767,25 @@ if Variable SILENT Equals FALSE
       Reboot Computer
     end
   end
+   
   Comment: Show the user guide if we are not removing and not repairing the install
   if Variable DISPLAY_USER_GUIDE Equals TRUE
-    if Variable REMOVE Equals FALSE
-      if Variable SUCCESS Equals COMPLETE
-        if Variable REPAIR not Equals TRUE
-          Comment: Display the user guide if Acrobat is installed
-          if Variable ACROBATKEY not Equals 
-            Comment: Acrobat is installed
-            Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is installed - displaying guide (at end of file)
-            Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
-          else
-            Comment: Acrobat is not installed so check whether we are running on Windows 10 i.e. the build number is > 9600
-            if Variable OSCURRENTBUILD Greater Than 9600
-              Comment: We are running on Windows 10 so run the program and leave it to the user to display it in the MS Edge browser or application of their choice
-              Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is not installed but we are running on Windows 10 - displaying guide (at end of file)
-              Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
-            else
-              Comment: We are not running on Windows 10 so display an error message.
-              Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is not installed and we are not running on Windows 10 - showing cannot display message (at end of file)
-              MessageBox: User Guide, Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 6.
-            end
-          end
+    if Variable MAINTENANCE not Equals TRUE
+      Comment: Display the user guide if Acrobat is installed
+      if Variable ACROBATKEY not Equals 
+        Comment: Acrobat is installed
+        Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is installed - displaying guide (at end of file)
+        Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
+      else
+        Comment: Acrobat is not installed so check whether we are running on Windows 10 i.e. the build number is > 9600
+        if Variable OSCURRENTBUILD Greater Than 9600
+          Comment: We are running on Windows 10 so run the program and leave it to the user to display it in the MS Edge browser or application of their choice
+          Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is not installed but we are running on Windows 10 - displaying guide (at end of file)
+          Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
+        else
+          Comment: We are not running on Windows 10 so display an error message.
+          Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is not installed and we are not running on Windows 10 - showing cannot display message (at end of file)
+          MessageBox: User Guide, Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 6.
         end
       end
     end
