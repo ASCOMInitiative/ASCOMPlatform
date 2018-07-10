@@ -61,6 +61,9 @@ Set Variable LASTERROR to
 Set Variable MODIFY to 
 Set Variable REPAIR to 
 Set Variable REMOVE to 
+Set Variable FEATURE_OPTIONS_FOLDER to 
+Set Variable FEATURE_OPTIONS_FILE to 
+Set Variable FEATURE_OPTIONS_PATH to 
  
 Comment: Set up values for a 32bit OS
 Set Variable PROGRAMFILES32 to 
@@ -166,6 +169,11 @@ Set Variable ALLUSERS to TRUE
 Comment: Set the Target directory and start menu folder
 Set Variable TARGETDIR to $PROGRAMFILES$ASCOM\Platform 6
 Set Variable STARTMENU to $TITLE$
+ 
+Comment: Set the path and file that will hold user selected feature options so that they can be preserved across installs
+Set Variable FEATURE_OPTIONS_FOLDER to $COMMONFILES$ASCOM\Platform
+Set Variable FEATURE_OPTIONS_FILE to InstallerFeaturesState.txt
+Set Variable FEATURE_OPTIONS_PATH to $FEATURE_OPTIONS_FOLDER$\$FEATURE_OPTIONS_FILE$
  
 Comment: Create the start of the installation log
 Write into Text File $SETUPLOG$ from Value $TIME$ Revision code: $REVISIONCODE$ (at end of file)
@@ -302,11 +310,18 @@ else
 end
  
 label: Welcome Dialog
+Comment: Load features and ensure consistent state for process variables
+Load Feature Selections from file $FEATURE_OPTIONS_PATH$
+Set Variable MODIFY to 
+Set Variable REPAIR to 
+Set Variable REMOVE to 
+Show Component: ASCOM Platform Installation Options\Display user guide when install is complete
 Display Dialog: welcome, wait for dialog to return (modal)
 if Variable WIZARD Equals CANCEL
   GoTo Label: Main Install
 else
   if Variable WIZARD Equals NEXT
+    Save Feature Selections into file $FEATURE_OPTIONS_PATH$
     GoTo Label: Main Install
   end
 end
@@ -394,37 +409,39 @@ else
 end
  
 label: Maintenance
-Comment: Maintenance Modify, Repair or Remove
+Comment: Maintenance Modify, Repair or Remove - Start with a consistent state for feature selection and process variables
+Load Feature Selections from file $FEATURE_OPTIONS_PATH$
 Set Variable MODIFY to True
+Set Variable REPAIR to 
+Set Variable REMOVE to 
+ 
 Display Dialog: maintenance, wait for dialog to return (modal)
-Convert Variable MODIFY to UPPER case
-Convert Variable REPAIR to UPPER case
-Convert Variable REMOVE to UPPER case
 Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance user choice - Modify: $MODIFY$ ,Repair: $REPAIR$, Remove: $REMOVE$ (at end of file)
  
 Comment: Exit Setup if cancelled
-if Variable WIZARD Equals CANCEL
+if Variable WIZARD Equals (Ignore Case) CANCEL
   Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance cancelled at user request (at end of file)
   Terminate Installation
 end
  
-if Variable REPAIR Equals TRUE
+if Variable REPAIR Equals (Ignore Case) TRUE
   Set Variable PROGRESSTEXT to Repairing Platform 6...
   Set Variable REMOVE to FALSE
 end
  
-if Variable MODIFY Equals TRUE
+if Variable MODIFY Equals (Ignore Case) TRUE
   Hide Component: ASCOM Platform Installation Options\Display user guide when install is complete
   Display Dialog: welcome, wait for dialog to return (modal)
+  Save Feature Selections into file $FEATURE_OPTIONS_PATH$
   Set Variable PROGRESSTEXT to Maintaining Platform 6...
   Set Variable REMOVE to FALSE
   Set Variable REPAIR to TRUE
 end
  
-if Variable REMOVE Equals TRUE
+if Variable REMOVE Equals (Ignore Case) TRUE
   Set Variable ABORT to FALSE
   Display Dialog: ConfirmRemove, wait for dialog to return (modal)
-  if Variable ABORT Equals TRUE
+  if Variable ABORT Equals (Ignore Case) TRUE
     Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance - Modify: $MODIFY$ ,Repair: $REPAIR$, Remove: $REMOVE$ - Uninstall cancelled (at end of file)
     Terminate Installation
   end
@@ -437,13 +454,13 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance after processing -
 [DEFINE REGION: Main Installation and Uninstallation]
 label: Main Install
 Comment: Exit Setup if Wizard Loop cancelled
-if Variable WIZARD Equals CANCEL
+if Variable WIZARD Equals (Ignore Case) CANCEL
   Write into Text File $SETUPLOG$ from Value $TIME$ Installation cancelled at user request (at end of file)
   Terminate Installation
 end
  
 Comment: Prepare to install
-if Variable ALLUSERS Equals TRUE
+if Variable ALLUSERS Equals (Ignore Case) TRUE
   Set Variable SHORTCUTFOLDER to $SHORTCUTFILESALL$$ASCOMSTARTMENU$
   Set Variable DESKTOPFOLDER to $DESKTOPDIRALL$
 else
@@ -1702,50 +1719,52 @@ if Variable ASCOMERROR not Equals
   Set Variable SUCCESS to ERROR
 end
 Comment: Only show the User Guide if the installation competed properly
-if Variable SUCCESS not Equals COMPLETE
+if Variable SUCCESS not Equals (Ignore Case) COMPLETE
   Comment: We do not have a normal comlete install so we don't want to show the user guide even if it was requested
   Set Variable DISPLAY_USER_GUIDE to FALSE
 end
  
 Comment: test whether we have an error, if so then we just display the error messages
-if Variable SUCCESS not Equals ERROR
+if Variable SUCCESS not Equals (Ignore Case) ERROR
   Comment: No errors so first set default messages in case an unexpected value is returned in the SUCCESS variable
   Set Variable FINISH_TITLE to Unexpected SUCCESS Status Returned: $SUCCESS$!
   Set Variable FINISH_CONTEXT to The installation may or may not have completed successfully.$NEWLINE$Please report this on the Yahoo ASCOM-Talk group.
-  if Variable SUCCESS Equals CANCEL
+  if Variable SUCCESS Equals (Ignore Case) CANCEL
     Comment: User requested installation cancel
     Set Variable FINISH_TITLE to Platform installation has been cancelled at your request.
     Set Variable FINISH_CONTEXT to 
   end
-  if Variable SUCCESS Equals REBOOT
+  if Variable SUCCESS Equals (Ignore Case) REBOOT
     Comment: User requested installation cancel
     Set Variable FINISH_TITLE to $TITLE$ has been successfully installed.$NEWLINE$Your PC needs to be restarted to complete installation.
     Set Variable FINISH_CONTEXT to 
     Set Variable FINISH_DESCRIPTION to  Congratulations, you have successfully installed ASCOM Platform 6!$NEWLINE$$NEWLINE$ Please review the "Introduction" section of the Help file in$NEWLINE$ Start Menu / ASCOM Platform 6 for changes in this release.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ Diagnostics Tool in ASCOM Platform 6 / Tools and report them on$NEWLINE$ the ASCOM Talk Yahoo forum. $NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
   end
-  if Variable SUCCESS Equals COMPLETE
+  if Variable SUCCESS Equals (Ignore Case) COMPLETE
     Comment: Success!
     Set Variable FINISH_TITLE to $TITLE$ has been installed successfully.
     Set Variable FINISH_DESCRIPTION to  Congratulations, you have successfully installed ASCOM Platform 6!$NEWLINE$$NEWLINE$ Please review the "Introduction" section of the Help file in$NEWLINE$ Start Menu / ASCOM Platform 6 for changes in this release.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ Diagnostics Tool in ASCOM Platform 6 / Tools and report them on$NEWLINE$ the ASCOM Talk Yahoo forum.$NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
-    if Variable DISPLAY_USER_GUIDE Equals TRUE
+    if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
       Set Variable FINISH_CONTEXT to The user guide will be displayed after you click the Finish button
     else
       Set Variable FINISH_CONTEXT to 
     end
-    if Variable REMOVE Equals TRUE
-      Comment: User requested installation cancel
+    if Variable REMOVE Equals (Ignore Case) TRUE
+      Comment: User requested uninstall
       Set Variable FINISH_TITLE to $TITLE$ has been uninstalled.
       Set Variable FINISH_CONTEXT to 
       Set Variable FINISH_DESCRIPTION to 
+      Set Variable NATIVE_ENGINE to TRUE
+      Delete Files $FEATURE_OPTIONS_FOLDER$\$FEATURE_OPTIONS_FILE$ (when uninstalling)
     end
-    if Variable REPAIR Equals TRUE
-      Comment: User requested installation cancel
+    if Variable REPAIR Equals (Ignore Case) TRUE
+      Comment: User requested repair
       Set Variable FINISH_TITLE to $TITLE$ has been repaired.
       Set Variable FINISH_CONTEXT to 
       Set Variable FINISH_DESCRIPTION to 
     end
-    if Variable MODIFY Equals TRUE
-      Comment: User requested installation cancel
+    if Variable MODIFY Equals (Ignore Case) TRUE
+      Comment: User requested change features
       Set Variable FINISH_TITLE to $TITLE$ has been modified as requested.
       Set Variable FINISH_CONTEXT to 
       Set Variable FINISH_DESCRIPTION to 
@@ -1769,8 +1788,8 @@ if Variable SILENT Equals FALSE
   end
    
   Comment: Show the user guide if we are not removing and not repairing the install
-  if Variable DISPLAY_USER_GUIDE Equals TRUE
-    if Variable MAINTENANCE not Equals TRUE
+  if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
+    if Variable MAINTENANCE not Equals (Ignore Case) TRUE
       Comment: Display the user guide if Acrobat is installed
       if Variable ACROBATKEY not Equals 
         Comment: Acrobat is installed
