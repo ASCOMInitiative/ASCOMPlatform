@@ -5048,10 +5048,11 @@ Public Class DiagnosticsForm
                 For i = 1 To NUMBER_OF_THROTTLING_TEST_LOOPS
                     Action("Test Throttling without pumped events " & i & "/" & NUMBER_OF_THROTTLING_TEST_LOOPS)
                     returnDouble = cache.GetDouble(doubleKey, 2.0) ' Get the value with a maximum rate of 2 calls per second
+                    Application.DoEvents()
                 Next
                 sw.Stop()
 
-                If ((sw.ElapsedMilliseconds > THROTTLE_TEST_LOWER_BOUND_NORMAL) And (sw.ElapsedMilliseconds < throttleUpperBound)) Then ' elapsed time is within +-10% of expected 5 seconds
+                If ((sw.ElapsedMilliseconds > throttleLowerBound) And (sw.ElapsedMilliseconds < throttleUpperBound)) Then ' elapsed time is within +-10% of expected 5 seconds
                     NMatches += 1
                     TL.LogMessage(TestName, String.Format("Cache throttling timing: {0} milliseconds is inside the expected range of {1} to {2} milliseconds", sw.ElapsedMilliseconds, throttleLowerBound, throttleUpperBound))
                 Else ' Outside the range so log an error
@@ -5076,7 +5077,7 @@ Public Class DiagnosticsForm
                 Next
                 sw.Stop()
 
-                If ((sw.ElapsedMilliseconds > THROTTLE_TEST_LOWER_BOUND_NORMAL) And (sw.ElapsedMilliseconds < throttleUpperBound)) Then ' elapsed time is within +-10% of expected 5 seconds
+                If ((sw.ElapsedMilliseconds > throttleLowerBound) And (sw.ElapsedMilliseconds < throttleUpperBound)) Then ' elapsed time is within +-10% of expected 5 seconds
                     NMatches += 1
                     TL.LogMessage(TestName, String.Format("Cache throttling timing (with event pumping ): {0} milliseconds is inside the expected range of {1} to {2} milliseconds", sw.ElapsedMilliseconds, throttleLowerBound, throttleUpperBound))
                 Else ' Outside the range so log an error
