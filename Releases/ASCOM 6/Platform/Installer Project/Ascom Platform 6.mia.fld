@@ -1,18 +1,16 @@
 ﻿Check Application Requirements
-Install Application Pre-Requisites
 Check Application Pre-Requisites
-Check/Install Application Pre-Requisites
-Platform 6 files
+Platform 6 Content
 Platform 5.5 files
-Platform 6.1 files
-Platform 6.2 files
-Remove previous Platform  if we are upgrading
-Components to be uininstalled only from 64bit systems
-ASCOM Cache
-Earth Rotation Date Update
-Non-MSI installation activities
 Platform 5 files
 Set Registry Keys
-Platform 6 Content
-Uninstall Platforms 4 and 5
-Install Platform 6
+Platform 6.1 files
+Platform 6.2 files
+Extra activities if on a 64bit system
+ASCOM Cache
+Remove Previous Platforms 4 and 5 if present
+Non-MSI installation activities
+Specify additional clean-up required when uninstalling
+Remove 64bit components
+Remove Previous Platform 6 install if present
+Remove 32bit components
