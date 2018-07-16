@@ -326,7 +326,7 @@ Public Interface IFocuserV3
     ''' <remarks>
     ''' <p style="color:red;margin-bottom:0"><b>TempComp Read must be implemented and must not throw a PropertyNotImplementedException. </b></p>
     ''' <p style="color:red;margin-top:0"><b>TempComp Write can throw a PropertyNotImplementedException.</b></p>
-    ''' If the <see cref="TempCompAvailable" /> property is True, then setting <see cref="TempComp" /> to True puts the focuser into temperature tracking model set to False to turn off temperature tracking.
+    ''' If the <see cref="TempCompAvailable" /> property is True, then setting <see cref="TempComp" /> to True puts the focuser into temperature tracking mode; setting it to False will turn off temperature tracking.
     ''' <para>If temperature compensation is not available, this property must always return False.</para>
     ''' <para> A <see cref="PropertyNotImplementedException" /> exception must be thrown if <see cref="TempCompAvailable" /> is False and an attempt is made to set <see cref="TempComp" /> to true.</para>
     ''' <para><b>BEHAVIOURAL CHANGE - Platform 6.4</b></para>
@@ -336,7 +336,7 @@ Public Interface IFocuserV3
     ''' are expected to execute Move requests when temperature compensation is active and to hide any specific actions required by the hardware from the client. For example this could be achieved by disabling temperature compensation, moving the focuser and re-enabling 
     ''' temperature compensation or simply by moving the focuser with compensation enabled if the hardware supports this.</para>
     ''' <para>Conform will continue to pass IFocuserV2 drivers that throw InvalidOperationException exceptions. However, Conform will now fail IFocuserV3 drivers that throw InvalidOperationException exceptions, in line with this revised specification.</para>
-    '''<</remarks>
+    ''' </remarks>
     Property TempComp() As Boolean
 
     ''' <summary>
