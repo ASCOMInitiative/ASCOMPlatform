@@ -326,11 +326,17 @@ Public Interface IFocuserV3
     ''' <remarks>
     ''' <p style="color:red;margin-bottom:0"><b>TempComp Read must be implemented and must not throw a PropertyNotImplementedException. </b></p>
     ''' <p style="color:red;margin-top:0"><b>TempComp Write can throw a PropertyNotImplementedException.</b></p>
-    ''' If the <see cref="TempCompAvailable" /> property is True, then setting <see cref="TempComp" /> to True puts the focuser into temperature tracking mode. While in temperature tracking mode,
-    ''' <see cref="Move">Move</see> commands will be rejected by the focuser. Set to False to turn off temperature tracking.
+    ''' If the <see cref="TempCompAvailable" /> property is True, then setting <see cref="TempComp" /> to True puts the focuser into temperature tracking model set to False to turn off temperature tracking.
     ''' <para>If temperature compensation is not available, this property must always return False.</para>
     ''' <para> A <see cref="PropertyNotImplementedException" /> exception must be thrown if <see cref="TempCompAvailable" /> is False and an attempt is made to set <see cref="TempComp" /> to true.</para>
-    ''' </remarks>
+    ''' <para><b>BEHAVIOURAL CHANGE - Platform 6.4</b></para>
+    ''' <para>Prior to Platform 6.4, the interface specification mandated that drivers must throw an <see cref="InvalidOperationException"/> if a move was attempted when <see cref="TempComp"/> was True, even if the focuser 
+    ''' was able to execute the move safely without disrupting temperature compensation.</para>
+    ''' <para>Following discussion on ASCOM-Talk in January 2018, the Focuser interface specification has been revised to IFocuserV3, removing the requrement to throw the InvalidOperationException exception. IFocuserV3 compliant drivers 
+    ''' are expected to execute Move requests when temperature compensation is active and to hide any specific actions required by the hardware from the client. For example this could be achieved by disabling temperature compensation, moving the focuser and re-enabling 
+    ''' temperature compensation or simply by moving the focuser with compensation enabled if the hardware supports this.</para>
+    ''' <para>Conform will continue to pass IFocuserV2 drivers that throw InvalidOperationException exceptions. However, Conform will now fail IFocuserV3 drivers that throw InvalidOperationException exceptions, in line with this revised specification.</para>
+    '''<</remarks>
     Property TempComp() As Boolean
 
     ''' <summary>

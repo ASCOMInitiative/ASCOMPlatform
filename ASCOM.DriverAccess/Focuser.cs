@@ -134,6 +134,13 @@ namespace ASCOM.DriverAccess
         /// <para>If the <see cref="Absolute" /> property is False, then this is a relative positioning focuser. The <see cref="Move">Move</see> command tells 
         /// the focuser to move in a relative direction, and the Position parameter of the <see cref="Move">Move</see> method (in this case, step distance) 
         /// is an integer between minus <see cref="MaxIncrement" /> and plus <see cref="MaxIncrement" />.</para>
+        /// <para><b>BEHAVIOURAL CHANGE - Platform 6.4</b></para>
+        /// <para>Prior to Platform 6.4, the interface specification mandated that drivers must throw an <see cref="InvalidOperationException"/> if a move was attempted when <see cref="TempComp"/> was True, even if the focuser 
+        /// was able to execute the move safely without disrupting temperature compensation.</para>
+        /// <para>Following discussion on ASCOM-Talk in January 2018, the Focuser interface specification has been revised to IFocuserV3, removing the requrement to throw the InvalidOperationException exception. IFocuserV3 compliant drivers 
+        /// are expected to execute Move requests when temperature compensation is active and to hide any specific actions required by the hardware from the client. For example this could be achieved by disabling temperature compensation, moving the focuser and re-enabling 
+        /// temperature compensation or simply by moving the focuser with compensation enabled if the hardware supports this.</para>
+        /// <para>Conform will continue to pass IFocuserV2 drivers that throw InvalidOperationException exceptions. However, Conform will now fail IFocuserV3 drivers that throw InvalidOperationException exceptions, in line with this revised specification.</para>
         ///</remarks>
         public void Move(int Position)
         {
@@ -194,6 +201,13 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <remarks>
         /// Raises an exception if ambient temperature is not available. Commonly available on focusers with a built-in temperature compensation mode. 
+        /// <para><b>BEHAVIOURAL CHANGE - Platform 6.4</b></para>
+        /// <para>Prior to Platform 6.4, the interface specification mandated that drivers must throw an <see cref="InvalidOperationException"/> if a move was attempted when <see cref="TempComp"/> was True, even if the focuser 
+        /// was able to execute the move safely without disrupting temperature compensation.</para>
+        /// <para>Following discussion on ASCOM-Talk in January 2018, the Focuser interface specification has been revised to IFocuserV3, removing the requrement to throw the InvalidOperationException exception. IFocuserV3 compliant drivers 
+        /// are expected to execute Move requests when temperature compensation is active and to hide any specific actions required by the hardware from the client. For example this could be achieved by disabling temperature compensation, moving the focuser and re-enabling 
+        /// temperature compensation or simply by moving the focuser with compensation enabled if the hardware supports this.</para>
+        /// <para>Conform will continue to pass IFocuserV2 drivers that throw InvalidOperationException exceptions. However, Conform will now fail IFocuserV3 drivers that throw InvalidOperationException exceptions, in line with this revised specification.</para>
         /// </remarks>
         public double Temperature
         {
