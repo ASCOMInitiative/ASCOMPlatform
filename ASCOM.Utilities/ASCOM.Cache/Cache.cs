@@ -559,6 +559,7 @@ namespace ASCOM.Utilities
         {
             if (pumpMessagesInterval > 0) // We need to break up long waits and pump events intermittently to keep the UI responsive
             {
+                LogMessage("WaitFor", string.Format("Pumping, for {0} milliseconds", duration));
                 DateTime startTime = DateTime.Now; // Save the wait's start time
                 if (duration > pumpMessagesInterval) // There will be at least one PUMP_TIME Sleep / DoEvents loop
                 {
@@ -578,11 +579,13 @@ namespace ASCOM.Utilities
                     LogMessage("WaitFor", string.Format("Waiting for remaining {0} milliseconds", remainingMilliSeconds));
                     Thread.Sleep(remainingMilliSeconds); // Sleep any outstanding milliseconds
                 }
+                LogMessage("WaitFor", string.Format("Pumping, completed wait for {0} milliseconds", duration));
             }
             else // No need to pump events so just go to sleep for the required time
             {
                 LogMessage("WaitFor", string.Format("Not pumping, just waiting for {0} milliseconds", duration));
                 Thread.Sleep(duration);
+                LogMessage("WaitFor", string.Format("Not pumping, completed wait for {0} milliseconds", duration));
             }
         }
 

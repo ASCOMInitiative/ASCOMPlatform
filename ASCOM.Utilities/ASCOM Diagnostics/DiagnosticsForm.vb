@@ -4889,7 +4889,8 @@ Public Class DiagnosticsForm
     End Function
 
     Private Sub CacheTests()
-        If CacheTest("CacheTest", False) Then CacheTest("CacheTestLogged", True)
+        'If CacheTest("CacheTest", False) Then CacheTest("CacheTestLogged", True)
+        CacheTest("CacheTestLogged", True)
     End Sub
 
     Private Function CacheTest(TestName As String, LogCache As Boolean) As Boolean
@@ -5079,7 +5080,7 @@ Public Class DiagnosticsForm
 
                 If ((sw.ElapsedMilliseconds > throttleLowerBound) And (sw.ElapsedMilliseconds < throttleUpperBound)) Then ' elapsed time is within +-10% of expected 5 seconds
                     NMatches += 1
-                    TL.LogMessage(TestName, String.Format("Cache throttling timing (with event pumping ): {0} milliseconds is inside the expected range of {1} to {2} milliseconds", sw.ElapsedMilliseconds, throttleLowerBound, throttleUpperBound))
+                    TL.LogMessage(TestName, String.Format("Cache throttling timing (with event pumping): {0} milliseconds is inside the expected range of {1} to {2} milliseconds", sw.ElapsedMilliseconds, throttleLowerBound, throttleUpperBound))
                 Else ' Outside the range so log an error
                     LogError(TestName, String.Format("Cache throttling timing (with event pumping): {0} milliseconds is outside the expected range of {1} to {2} milliseconds", sw.ElapsedMilliseconds, throttleLowerBound, throttleUpperBound))
                 End If
