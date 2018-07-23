@@ -235,6 +235,10 @@
     <Rule Id="CA2243" Action="None" />
     <Rule Id="CA5122" Action="None" />
   </Rules>
+  <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp.Features" RuleNamespace="Microsoft.CodeAnalysis.CSharp.Features">
+    <Rule Id="IDE0044" Action="None" />
+    <Rule Id="IDE0044WithoutSuggestion" Action="None" />
+  </Rules>
   <Rules AnalyzerId="Microsoft.CodeAnalysis.Features" RuleNamespace="Microsoft.CodeAnalysis.Features">
     <Rule Id="IDE0010" Action="None" />
     <Rule Id="IDE0010WithoutSuggestion" Action="None" />

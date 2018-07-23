@@ -11,7 +11,7 @@ using ASCOM.Utilities.Exceptions;
 namespace ASCOM.Utilities
 {
     /// <summary>
-    /// ASCOM caching component with automatic stale item removal and call rate limiting
+    /// ASCOM caching component with automatic stale item removal and call rate limiting - <i>this component must be disposed when the driver is closing down. See <see cref="Cache.Dispose()"/> for further information.</i>
     /// </summary>
     /// <remarks><para>Astronomy applications are becoming increasingly sophisticated and frequently employ multi-threading techniques that place increasingly high call rate burdens on drivers. 
     /// Much hardware remains of modest processing capacity and performance can suffer if hardware controllers have to process an excessive number of requests for information and one of the
@@ -22,7 +22,7 @@ namespace ASCOM.Utilities
     /// <para>The cache "get" methods will either return the requested item, if present, or will throw a NotInCacheException exception, indicating that the driver should poll the hardware and store the value 
     /// in the cache before returning it to the caller.</para>
     /// <para>Clients using the cache through COM e.g. from scripting languages , Delphi etc. will find that for each group of overloaded methods e.g. GetDouble, only the method with the largest number of parameters
-    /// is available. This is due to a COM limitation that doesn't allow access to method overloads. .NET clients do have access to all overloads.</para>
+    /// is available. This is due to a COM limitation that doesn't allow access to method overloads. .NET clients have access to all overloads.</para>
     /// <para>Code example</para>
     /// <code>
     /// using ASCOM.Utilities;
@@ -58,16 +58,29 @@ namespace ASCOM.Utilities
     {
         private const string MEMORY_CACHE_NAME = "ASCOM";
         private const int PUMP_MESSAGES_INTERVAL_DEFAULT = 0;
+        private const int TIMER_RESOLUTION_REQUIRED = 1; // Timer resolution when making waits to enforce throttling
+        private const double ALLOWABLE_THROTTLING_RATE_MINIMUM = 2.0;
+        private const double ALLOWABLE_THROTTLING_RATE_MAXIMUM = 1000.0;
 
         private MemoryCache memoryCache;
         private TraceLogger TL;
+
         private Dictionary<string, DateTime> lastRead;
         private Dictionary<string, DateTime> lastWritten;
+
         private CacheEntryRemovedCallback removedCallBack;
+
         private int pumpMessagesInterval;
         private bool disposedValue = false; // IDisposable support - to detect redundant Dispose calls
 
         private Mutex syncMutex;
+
+        // Static fields to hold the singleton timer resolution state across all instances of the Cache
+        private static bool timerResolutionHasBeenChecked = false;
+        private static bool timerResolutionHasBeenChanged = false;
+        private static object timerResolutionChangeLock = new object(); // Static lock object to ensure that timer resolution changes happen in a threadsafe manner and only happen once
+        private static int cacheInstanceCount = 0; // Number of concurrent cache instances 
+        private static int timerResolutionCurrent = 0; // Value of timer resolution actually in effect
 
         private enum CacheAction
         {
@@ -85,6 +98,8 @@ namespace ASCOM.Utilities
         /// log in the same directory as the application's own log.</para></remarks>
         public Cache()
         {
+            Interlocked.Increment(ref cacheInstanceCount); // Increment the cache instance counter so we can reset the timer resolution if required when the last cache instance is no longer required
+
             memoryCache = new MemoryCache(MEMORY_CACHE_NAME);
             lastRead = new Dictionary<string, DateTime>();
             lastWritten = new Dictionary<string, DateTime>();
@@ -122,7 +137,6 @@ namespace ASCOM.Utilities
             TL = CallersLogger; // Save the user's TraceLogger reference for use within this component
         }
 
-
         /// <summary>
         /// 
         /// </summary>
@@ -131,19 +145,47 @@ namespace ASCOM.Utilities
         {
             if (!disposedValue)
             {
+                disposedValue = true;
                 if (disposing)
                 {
-                    if (memoryCache != null) memoryCache.Dispose();
+                    if (memoryCache != null)
+                    {
+                        memoryCache.Dispose();
+                        memoryCache = null;
+                    }
                     if (lastRead != null) lastRead = null;
                     if (lastWritten != null) lastWritten = null;
                 }
-                disposedValue = true;
+
+                // Reset the timer resoution if its been changed and we are the last instance running - this needs to run whether called by the Dispose() method or by the GC finaliser
+                lock (timerResolutionChangeLock) // Ensure that this code is serialised across all instances
+                {
+                    try
+                    {
+                        if ((Interlocked.Decrement(ref cacheInstanceCount) == 0) & (timerResolutionHasBeenChanged)) // Decrement the instance count and, if this is the end of last cache instance, reset the timer resolution if it has been changed
+                        {
+                            TimeEndPeriod(timerResolutionCurrent); // Reset the timer resolution to its original value
+                            timerResolutionHasBeenChanged = false; // Belt and brances, make sure the timer canot be reset again
+                        }
+                    }
+                    catch { } // Just swallow any exceptions from this code
+                }
             }
         }
 
         /// <summary>
-        /// Release memory used by the cache and cleanly dispose of the MemoryCache object.
+        /// Reset the PC's timing resolution, if changed, and cleanly dispose of the cache's working memory.
         /// </summary>
+        /// <remarks>
+        /// <para>Windows PCs use regular interrupts to manage timers and form events; a common repeat period is 15.6 milliseconds, which corresponds to 64 interupts per second. Microsoft chose this as a general purpose compromise between 
+        /// timer resolution and UI responsiveness, which are better served with higher interrupt frequencies and power consumption, which is improved with lower interrupt frequencies. Among other things, the interrupt frequency determnines the resolution of 
+        /// the Windows "Sleep" method, which this cache uses to effect throttling.</para>
+        /// <para>If a PC is using the standard 15.6ms interrupt period, sleep times will be rounded up to the nearest 15.6ms making a 1ms sleep last 15.6ms and a 16ms sleep last 31.2ms etc.
+        /// To work round this, if required, the cache can increase the sleep timing resolution to the maximum supported by the PC or 1ms, whichever is the larger. The sleep resolution will only be changed when the 
+        /// first GetXXX or SetXXX call is made that specifies a non-zero value for MaximumCallFrequency. If all calls specify a MaximumCallFrequency of 0.0, the cache will not change the timing resolution.</para>
+        /// <para>The Cache.Dispose() method should be called when the driver is closing down in order to restore the original timing resolution. If this isn't done, Windows will still restore 
+        /// the original value when the overall application terminates, but it remains good practice to dispose of objects at the proper time.</para>
+        /// </remarks>
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
@@ -236,13 +278,13 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Retrieve an object from the cache with the given name. Call frequency will be restricted to the supplied rate by delaying execution as necessary.
+        /// Retrieve an object from the cache with the given name, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
         /// </summary>
         /// <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
-        /// <param name="MaximumCallFrequency">Maximum number of retrievals per second that are to be allowed for this item. A value of 0.0 will disable throttling.</param>
+        /// <param name="MaximumCallFrequency">Maximum number of retrievals per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="Cache.Dispose()"/> for further information.</param>
         /// <returns>The requested object if present in the cache or a "NotInCacheException" if there is no item in the cache that has the supplied name.</returns>
         /// <exception cref="InvalidValueException">When Key is null or empty.</exception>
-        /// <exception cref="InvalidValueException">When MaximumCallFrequency is negative.</exception>
+        /// <exception cref="InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
         /// <exception cref="NotInCacheException">When there is no item in the cache with the supplied key.</exception>
         public object Get(string Key, double MaximumCallFrequency)
         {
@@ -251,13 +293,13 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Retrieve a double value from the cache with the given name. Call frequency will be restricted to the supplied rate by delaying execution as necessary.
+        /// Retrieve a double value from the cache with the given name, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
         /// </summary>
         /// <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
-        /// <param name="MaximumCallFrequency">Maximum number of retrievals per second that are to be allowed for this item. A value of 0.0 will disable throttling.</param>
+        /// <param name="MaximumCallFrequency">Maximum number of retrievals per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="Cache.Dispose()"/> for further information.</param>
         /// <returns>The requested double value, if present in the cache, or a "NotInCacheException" if there is no item in the cache that has the supplied name.</returns>
         /// <exception cref="InvalidValueException">When Key is null or empty.</exception>
-        /// <exception cref="InvalidValueException">When MaximumCallFrequency is negative.</exception>
+        /// <exception cref="InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
         /// <exception cref="NotInCacheException">When there is no item in the cache with the supplied key.</exception>
         public double GetDouble(string Key, double MaximumCallFrequency)
         {
@@ -266,13 +308,13 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Retrieve an integer value from the cache with the given name. Call frequency will be restricted to the supplied rate by delaying execution as necessary.
+        /// Retrieve an integer value from the cache with the given name, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
         /// </summary>
         /// <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
-        /// <param name="MaximumCallFrequency">Maximum number of retrievals per second that are to be allowed for this item. A value of 0.0 will disable throttling.</param>
+        /// <param name="MaximumCallFrequency">Maximum number of retrievals per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="Cache.Dispose()"/> for further information.</param>
         /// <returns>The requested integer value, if present in the cache, or a "NotInCacheException" if there is no item in the cache that has the supplied name.</returns>
         /// <exception cref="InvalidValueException">When Key is null or empty.</exception>
-        /// <exception cref="InvalidValueException">When MaximumCallFrequency is negative.</exception>
+        /// <exception cref="InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
         /// <exception cref="NotInCacheException">When there is no item in the cache with the supplied key.</exception>
         public int GetInt(string Key, double MaximumCallFrequency)
         {
@@ -281,13 +323,13 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Retrieve a boolean value from the cache with the given name. Call frequency will be restricted to the supplied rate by delaying execution as necessary.
+        /// Retrieve a boolean value from the cache with the given name, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
         /// </summary>
         /// <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
-        /// <param name="MaximumCallFrequency">Maximum number of retrievals per second that are to be allowed for this item. A value of 0.0 will disable throttling.</param>
+        /// <param name="MaximumCallFrequency">Maximum number of retrievals per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="Cache.Dispose()"/> for further information.</param>
         /// <returns>The requested boolean value, if present in the cache, or a "NotInCacheException" if there is no item in the cache that has the supplied name.</returns>
         /// <exception cref="InvalidValueException">When Key is null or empty.</exception>
-        /// <exception cref="InvalidValueException">When MaximumCallFrequency is negative.</exception>
+        /// <exception cref="InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
         /// <exception cref="NotInCacheException">When there is no item in the cache with the supplied key.</exception>
         public bool GetBool(string Key, double MaximumCallFrequency)
         {
@@ -296,13 +338,13 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Retrieve a string value from the cache with the given name. Call frequency will be restricted to the supplied rate by delaying execution as necessary.
+        /// Retrieve a string value from the cache with the given name, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
         /// </summary>
         /// <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
-        /// <param name="MaximumCallFrequency">Maximum number of retrievals per second that are to be allowed for this item. A value of 0.0 will disable throttling.</param>
+        /// <param name="MaximumCallFrequency">Maximum number of retrievals per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="Cache.Dispose()"/> for further information.</param>
         /// <returns>The requested string value, if present in the cache, or a "NotInCacheException" if there is no item in the cache that has the supplied name.</returns>
         /// <exception cref="InvalidValueException">When Key is null or empty.</exception>
-        /// <exception cref="InvalidValueException">When MaximumCallFrequency is negative.</exception>
+        /// <exception cref="InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
         /// <exception cref="NotInCacheException">When there is no item in the cache with the supplied key.</exception>
         public string GetString(string Key, double MaximumCallFrequency)
         {
@@ -311,15 +353,15 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Save an object in the cache with the given name and time to live.
+        /// Save an object in the cache with the given name and time to live, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
         /// </summary>
         /// <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
         /// <param name="Value">Object to be stored in the cache.</param>
         /// <param name="CacheTime">Time in seconds before the item will be automatically removed from the cache.</param>
-        /// <param name="MaximumCallFrequency">Maximum number of set calls per second that are to be allowed for this item. A value of 0.0 will disable throttling.</param>
+        /// <param name="MaximumCallFrequency">Maximum number of set calls per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="Cache.Dispose()"/> for further information.</param>
         /// <exception cref="InvalidValueException">When Key is null or empty.</exception>
         /// <exception cref="InvalidValueException">When CacheTime is negative.</exception>
-        /// <exception cref="InvalidValueException">When MaximumCallFrequency is negative.</exception>
+        /// <exception cref="InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
         /// <remarks>Any existing item in the cache with the same name will be overwritten.</remarks>
         public void Set(string Key, object Value, double CacheTime, double MaximumCallFrequency)
         {
@@ -328,15 +370,15 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Save a double value in the cache with the given name and time to live.
+        /// Save a double value in the cache with the given name and time to live, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
         /// </summary>
         /// <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
         /// <param name="Value">Double value to be stored in the cache.</param>
         /// <param name="CacheTime">Time in seconds before the item will be automatically removed from the cache.</param>
-        /// <param name="MaximumCallFrequency">Maximum number of set calls per second that are to be allowed for this item. A value of 0.0 will disable throttling.</param>
+        /// <param name="MaximumCallFrequency">Maximum number of set calls per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="Cache.Dispose()"/> for further information.</param>
         /// <exception cref="InvalidValueException">When Key is null or empty.</exception>
         /// <exception cref="InvalidValueException">When CacheTime is negative.</exception>
-        /// <exception cref="InvalidValueException">When MaximumCallFrequency is negative.</exception>
+        /// <exception cref="InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
         /// <remarks>Any existing item in the cache with the same name will be overwritten.</remarks>
         public void SetDouble(string Key, double Value, double CacheTime, double MaximumCallFrequency)
         {
@@ -345,15 +387,15 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Save an integer value in the cache with the given name and time to live.
+        /// Save an integer value in the cache with the given name and time to live, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
         /// </summary>
         /// <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
         /// <param name="Value">Integer value to be stored in the cache.</param>
         /// <param name="CacheTime">Time in seconds before the item will be automatically removed from the cache.</param>
-        /// <param name="MaximumCallFrequency">Maximum number of set calls per second that are to be allowed for this item. A value of 0.0 will disable throttling.</param>
+        /// <param name="MaximumCallFrequency">Maximum number of set calls per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="Cache.Dispose()"/> for further information.</param>
         /// <exception cref="InvalidValueException">When Key is null or empty.</exception>
         /// <exception cref="InvalidValueException">When CacheTime is negative.</exception>
-        /// <exception cref="InvalidValueException">When MaximumCallFrequency is negative.</exception>
+        /// <exception cref="InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
         /// <remarks>Any existing item in the cache with the same name will be overwritten.</remarks>
         public void SetInt(string Key, int Value, double CacheTime, double MaximumCallFrequency)
         {
@@ -362,15 +404,15 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Save a boolean value in the cache with the given name and time to live.
+        /// Save a boolean value in the cache with the given name and time to live, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
         /// </summary>
         /// <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
         /// <param name="Value">Boolean value to be stored in the cache.</param>
         /// <param name="CacheTime">Time in seconds before the item will be automatically removed from the cache.</param>
-        /// <param name="MaximumCallFrequency">Maximum number of set calls per second that are to be allowed for this item. A value of 0.0 will disable throttling.</param>
+        /// <param name="MaximumCallFrequency">Maximum number of set calls per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="Cache.Dispose()"/> for further information.</param>
         /// <exception cref="InvalidValueException">When Key is null or empty.</exception>
         /// <exception cref="InvalidValueException">When CacheTime is negative.</exception>
-        /// <exception cref="InvalidValueException">When MaximumCallFrequency is negative.</exception>
+        /// <exception cref="InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
         /// <remarks>Any existing item in the cache with the same name will be overwritten.</remarks>
         public void SetBool(string Key, bool Value, double CacheTime, double MaximumCallFrequency)
         {
@@ -379,15 +421,15 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Save a string value in the cache with the given name and time to live.
+        /// Save a string value in the cache with the given name and time to live, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
         /// </summary>
         /// <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
         /// <param name="Value">String value to be stored in the cache.</param>
         /// <param name="CacheTime">Time in seconds before the item will be automatically removed from the cache.</param>
-        /// <param name="MaximumCallFrequency">Maximum number of set calls per second that are to be allowed for this item. A value of 0.0 will disable throttling.</param>
+        /// <param name="MaximumCallFrequency">Maximum number of set calls per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="Cache.Dispose()"/> for further information.</param>
         /// <exception cref="InvalidValueException">When Key is null or empty.</exception>
         /// <exception cref="InvalidValueException">When CacheTime is negative.</exception>
-        /// <exception cref="InvalidValueException">When MaximumCallFrequency is negative.</exception>
+        /// <exception cref="InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
         /// <remarks>Any existing item in the cache with the same name will be overwritten.</remarks>
         public void SetString(string Key, string Value, double CacheTime, double MaximumCallFrequency)
         {
@@ -555,40 +597,6 @@ namespace ASCOM.Utilities
             LogMessage("CacheUpdatedCallback", string.Format("Item removed from cache: {0} {1}, Reason: {2}", arguments.CacheItem.Key, arguments.CacheItem.Value.ToString(), arguments.RemovedReason.ToString()));
         }
 
-        private void WaitFor(int duration)
-        {
-            if (pumpMessagesInterval > 0) // We need to break up long waits and pump events intermittently to keep the UI responsive
-            {
-                LogMessage("WaitFor", string.Format("Pumping, for {0} milliseconds", duration));
-                DateTime startTime = DateTime.Now; // Save the wait's start time
-                if (duration > pumpMessagesInterval) // There will be at least one PUMP_TIME Sleep / DoEvents loop
-                {
-                    do
-                    {
-                        Thread.Sleep(pumpMessagesInterval); // Have a short sleep
-                        Application.DoEvents(); // Keep the UI alive
-                        //LogMessage("WaitFor", string.Format("Pumped messages, time to go: {0} milliseconds ", (duration - pumpMessagesInterval) - DateTime.Now.Subtract(startTime).TotalMilliseconds ));
-                    } while (DateTime.Now.Subtract(startTime).TotalMilliseconds < (double)(duration - pumpMessagesInterval)); // Wait until there are less than PUMP_TIME milliseonds left
-                }
-
-                // Now sleep the remaining few milliseconds
-                int remainingMilliSeconds = (int)(duration - DateTime.Now.Subtract(startTime).TotalMilliseconds); // Calculate the remaining time in milliseconds
-                //LogMessage("WaitFor", string.Format("Remaining milliseconds: {0}", remainingMilliSeconds));
-                if (remainingMilliSeconds > 0)
-                {
-                    LogMessage("WaitFor", string.Format("Waiting for remaining {0} milliseconds", remainingMilliSeconds));
-                    Thread.Sleep(remainingMilliSeconds); // Sleep any outstanding milliseconds
-                }
-                LogMessage("WaitFor", string.Format("Pumping, completed wait for {0} milliseconds", duration));
-            }
-            else // No need to pump events so just go to sleep for the required time
-            {
-                LogMessage("WaitFor", string.Format("Not pumping, just waiting for {0} milliseconds", duration));
-                Thread.Sleep(duration);
-                LogMessage("WaitFor", string.Format("Not pumping, completed wait for {0} milliseconds", duration));
-            }
-        }
-
         private object GetCacheValue(string Caller, string Key)
         {
             // Validate parameters
@@ -656,20 +664,23 @@ namespace ASCOM.Utilities
 
         }
 
-        private void Throttle(string Key, CacheAction action, double MaximumCallFrequency)
+        private void Throttle(string Key, CacheAction action, double CallFrequency)
         {
+            double remainingMilliSeconds = 0.0, minimumTimeBeforeNextCall = 0.0;
+
             // Validate parameters
             if (string.IsNullOrEmpty(Key)) throw new InvalidValueException("Supplied ASCOM Cache key is null or empty when adding an item.");
 
-            if (double.IsNaN(MaximumCallFrequency)) throw new InvalidValueException("Supplied ASCOM Cache maximum call frequency is invalid: Double.NaN.");
-            if (double.IsPositiveInfinity(MaximumCallFrequency)) throw new InvalidValueException("Supplied ASCOM Cache maximum call frequency is invalid: Double.PoitiveInfinity.");
-            if (double.IsNegativeInfinity(MaximumCallFrequency)) throw new InvalidValueException("Supplied ASCOM Cache maximum call frequency is invalid: Double.NegativeInfinity.");
-            if (MaximumCallFrequency < 0.0) throw new InvalidValueException(string.Format("Supplied ASCOM Cache maximum call frequency must be positive, supplied value is negative: {0}", MaximumCallFrequency));
+            if (double.IsNaN(CallFrequency)) throw new InvalidValueException("Supplied ASCOM Cache maximum call frequency is invalid: Double.NaN.");
+            if (CallFrequency < 0.0) throw new InvalidValueException(string.Format("Supplied ASCOM Cache maximum call frequency must be positive, supplied value is negative: {0}", CallFrequency));
+            if ((CallFrequency > 0.0) & (CallFrequency < ALLOWABLE_THROTTLING_RATE_MINIMUM)) throw new InvalidValueException(string.Format("Supplied ASCOM Cache call frequency {0} is below the minimum supported value {1}", CallFrequency, ALLOWABLE_THROTTLING_RATE_MINIMUM));
+            if (CallFrequency > ALLOWABLE_THROTTLING_RATE_MAXIMUM) throw new InvalidValueException(string.Format("Supplied ASCOM Cache call frequency {0} is above the maximum supported value {1}", CallFrequency, ALLOWABLE_THROTTLING_RATE_MAXIMUM));
 
             DateTime lastAction = DateTime.MinValue; // Initialise variable so that we don'get a compiler warning later
 
-            if (MaximumCallFrequency > 0.0) // Zero is a special value that specifies no call throttling
+            if (CallFrequency > 0.0) // Zero is a special value that specifies no call throttling
             {
+                // Throttling is required
                 try
                 {
                     switch (action)
@@ -683,18 +694,60 @@ namespace ASCOM.Utilities
                         default:
                             throw new InvalidValueException(string.Format("ASCOM Cache Throttle - internal error - supplied CacheAction was neither CacheRead nor CacheWrite: {0}", action.ToString()));
                     }
-                    double minimumTimeBeforeNextCall = 1.0 / MaximumCallFrequency; // Calculate the minimum time duration between calls (in seconds) from the maximum call frequency
 
-                    // If we are here this method has been called before and throttling is in effect, so we need to check whether sufficient time has 
+                    // If a "KeyNotFound exception was NOT generated above, this method has been called before and throttling is in effect, so we need to check whether sufficient time has 
                     // passed since the last call to allow this call to proceed immediately.
 
+                    minimumTimeBeforeNextCall = 1.0 / CallFrequency; // Calculate the minimum time duration between calls (in seconds) from the maximum call frequency
+
                     TimeSpan timeFromLastCall = DateTime.Now.Subtract(lastAction); // Calculate how long it has been since the last Get method call and store as a TimeSpan value
-                    if (timeFromLastCall.TotalSeconds <= minimumTimeBeforeNextCall) // Test whether sufficient time has passed to execute the next call immediately.
+                    if (timeFromLastCall.TotalSeconds <= minimumTimeBeforeNextCall) // Test whether sufficient time has passed to execute the next call immediately. If so then continue with no delay
                     {
                         // Insufficient time has passed, so calculate the delay required to ensure the minimum tiome has passed before executing the call
                         int delayMilliSeconds = Convert.ToInt32((1000.0 * minimumTimeBeforeNextCall) - timeFromLastCall.TotalMilliseconds);
                         LogMessage("CacheGetDouble", string.Format("Throttling Get {0} call for {1} milliseconds", Key, delayMilliSeconds));
-                        WaitFor(delayMilliSeconds);
+
+                        if (delayMilliSeconds > 0)
+                        {
+                            // Insufficient time has passed since the previous call so we need to delay this call.
+                            Stopwatch sw = new Stopwatch();
+                            sw.Start();
+                            LogMessage("Throttle", string.Format("Waiting for {0} milliseconds, pumped message interval: {1}", delayMilliSeconds, pumpMessagesInterval));
+
+                            // Set the highest timer reolution if not already set
+                            lock (timerResolutionChangeLock) // Make sure only one instance of this code can run at a time
+                            {
+                                if (!timerResolutionHasBeenChecked) CheckAndSetTimerResolutionIfRequired(); // If the timer resolution has not already been checked then check it now
+                            }
+
+                            if (pumpMessagesInterval > 0) // We need to break up long waits and pump events intermittently to keep the UI responsive
+                            {
+
+                                DateTime startTime = DateTime.Now; // Save the wait's start time
+                                if (delayMilliSeconds > pumpMessagesInterval) // There will be at least one PUMP_TIME Sleep / DoEvents loop
+                                {
+                                    do
+                                    {
+                                        Thread.Sleep(pumpMessagesInterval); // Have a short sleep
+                                        Application.DoEvents(); // Keep the UI alive
+                                    } while (DateTime.Now.Subtract(startTime).TotalMilliseconds < (double)(delayMilliSeconds - pumpMessagesInterval)); // Wait until there are less than PUMP_TIME milliseonds left
+                                }
+
+                                // Now sleep the remaining few milliseconds
+                                remainingMilliSeconds = delayMilliSeconds - DateTime.Now.Subtract(startTime).TotalMilliseconds; // Calculate the remaining time in milliseconds
+                                if (remainingMilliSeconds > timerResolutionCurrent)
+                                {
+                                    Thread.Sleep(Convert.ToInt32(remainingMilliSeconds)); // Sleep any outstanding milliseconds
+                                }
+                            }
+                            else // No need to pump events so just go to sleep for the required time
+                            {
+                                Thread.Sleep(delayMilliSeconds);
+                            }
+
+                            sw.Stop();
+                            LogMessage("Throttle", string.Format("OVERALL - Requested {0}ms wait, actual wait {1}ms", delayMilliSeconds, sw.ElapsedMilliseconds));
+                        }
                     }
                 }
                 catch (KeyNotFoundException)
@@ -706,6 +759,69 @@ namespace ASCOM.Utilities
                     LogMessage("Throttle", "Exception: " + ex.ToString());
                 }
             }
+        }
+
+        private void CheckAndSetTimerResolutionIfRequired()
+        {
+            TIMECAPS timeCapabilities = new TIMECAPS();
+            int timerResolutionRequired;
+
+            // This code is called from within a timer change lock statement so we can just carry on here without further checks on whether other instances are running
+            timerResolutionHasBeenChecked = true; // Flag that we have been called so that we don't get called again
+
+            // Get the minimum, maximum and current timer resolutions
+            uint timeCapabilitiesErrorCode = TimeGetDevCaps(ref timeCapabilities, Marshal.SizeOf(typeof(TIMECAPS)));
+            uint rc = NtQueryTimerResolution(out int minimumResolution, out int maximimResolution, out int currentResolution);
+            currentResolution /= 10000; // Convert the result to integer milliseconds from hundreds of nanoseconds.
+
+            // If there was no error getting the timer resolution information validate the supplied value and apply it
+            if (timeCapabilitiesErrorCode == 0)
+            {
+                timerResolutionRequired = TIMER_RESOLUTION_REQUIRED; // Set the default new timer resolution
+                if (TIMER_RESOLUTION_REQUIRED < timeCapabilities.wPeriodMin) timerResolutionRequired = timeCapabilities.wPeriodMin; // Revise the required timer resolution if the hardware can't support the default value
+                if (TIMER_RESOLUTION_REQUIRED > timeCapabilities.wPeriodMax) timerResolutionRequired = timeCapabilities.wPeriodMax; // Revise the required timer resolution if the hardware can't support the default value
+
+                if (timerResolutionRequired < currentResolution) // The requested period is shorter than the current period so set the new shorter time period
+                {
+                    LogMessage("CheckSetTimerResolution", string.Format("Setting time period to {0}ms, Minimum period: {1}ms, maximum period: {2}ms", timerResolutionRequired, timeCapabilities.wPeriodMin, timeCapabilities.wPeriodMax));
+                    uint result = TimeBeginPeriod(timerResolutionRequired);
+                    timerResolutionHasBeenChanged = true;
+                    timerResolutionCurrent = timerResolutionRequired;
+                }
+                else
+                {
+                    LogMessage("CheckSetTimerResolution", string.Format("Requested period ({0}) is longer trhan current ({1}), ignoring request to change period", timerResolutionRequired, currentResolution));
+                }
+            }
+            else
+            {
+                LogMessage("CheckSetTimerResolution", string.Format("There was an error getting the time capabilities - the time period wlil not be changed. Time capbilities error code: {0:X8}", timeCapabilitiesErrorCode));
+            }
+        }
+
+        #endregion
+
+        #region Timer DLL calls and structures
+        private const string WINMM = "winmm.dll";
+        private const string WINNT = "ntdll.dll";
+
+        [DllImport(WINMM, ExactSpelling = true, EntryPoint = "timeGetDevCaps")]
+        private static extern uint TimeGetDevCaps(ref TIMECAPS ptc, int cbtc);
+
+        [DllImport(WINMM, ExactSpelling = true, EntryPoint = "timeBeginPeriod")]
+        private static extern uint TimeBeginPeriod(int uPeriod);
+
+        [DllImport(WINMM, ExactSpelling = true, EntryPoint = "timeEndPeriod")]
+        private static extern uint TimeEndPeriod(int uPeriod);
+
+        [DllImport(WINNT, ExactSpelling = true, SetLastError = true)]
+        private static extern uint NtQueryTimerResolution(out int MinimumResolution, out int MaximumResolution, out int CurrentResolution);
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct TIMECAPS
+        {
+            internal int wPeriodMin;
+            internal int wPeriodMax;
         }
 
         #endregion

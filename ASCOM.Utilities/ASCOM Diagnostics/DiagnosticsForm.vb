@@ -4889,56 +4889,45 @@ Public Class DiagnosticsForm
     End Function
 
     Private Sub CacheTests()
-        'If CacheTest("CacheTest", False) Then CacheTest("CacheTestLogged", True)
-        CacheTest("CacheTestLogged", True)
+        If CacheTest("CacheTest", False) Then CacheTest("CacheTestLogged", True)
+        'CacheTest("CacheTestLogged", True)
     End Sub
 
     Private Function CacheTest(TestName As String, LogCache As Boolean) As Boolean
-        Dim cache As Cache, returnDouble As Double, returnInt As Integer, returnBool As Boolean, returnString As String, inputObject, returnObject As KeyValuePair
-        Dim removedItemCount As Integer, errorOccured As Boolean = False, throttleLowerBound, throttleUpperBound, numerOfClearItemsToTest As Integer
-        Const THROTTLE_TEST_LOWER_BOUND_NORMAL As Integer = 4900 ' Limits for real PCs
-        Const THROTTLE_TEST_UPPER_BOUND_NORMAL As Integer = 5100
-        Const THROTTLE_TEST_LOWER_BOUND_WIDE As Integer = 4000 ' Limits for virtual machine tests
-        Const THROTTLE_TEST_UPPER_BOUND_WIDE As Integer = 6000
+        Dim cache As Cache = Nothing, cache1 As Cache = Nothing, cache2 As Cache = Nothing, cache3 As Cache = Nothing, cache4 As Cache = Nothing
+        Dim returnDouble As Double
+        Dim returnInt, removedItemCount, numerOfClearItemsToTest As Integer
+        Dim returnBool, errorOccured As Boolean
+        Dim returnString As String
+        Dim inputObject, returnObject As KeyValuePair
 
         Const NUMBER_OF_CLEAR_CACHE_ITEMS As Integer = 1000
-        Const NUMBER_OF_THROTTLING_TEST_LOOPS As Integer = 10 ' 10 loops = 5 seconds
-
-        Const testInt As Integer = 23, intKey As String = "IntKey"
-        Const testDouble As Double = 45.639, doubleKey As String = "DoubleKey"
-        Const testBool As Boolean = True, boolKey As String = "BoolKey"
-        Const testString As String = "Cache test string.", stringKey As String = "StringKey"
-        Const testObjectKey As String = "TestKey23", testObjectValue As String = "TestValue23"
+        Const TEST_INTEGER As Integer = 23, TEST_INTEGER_KEY As String = "IntKey"
+        Const TEST_DOUBLE As Double = 45.639, TEST_DOUBLE_KEY As String = "TEST_DOUBLE_KEY"
+        Const TEST_BOOL As Boolean = True, TEST_BOOL_KEY As String = "BoolKey"
+        Const TEST_STRING As String = "Cache test string.", TEST_STRING_KEY As String = "StringKey"
+        Const TEST_OBJECT As String = "TestObjectValue23", TEST_OBJECT_KEY As String = "TestObjectKey23"
 
         Status("Running Cache functional tests")
 
         ' Test cached doubles
-        cache = Nothing
         Try
+            LogTimerResolution("Start of cache tests")
             cache = New Cache(IIf(LogCache, TL, Nothing))
+            LogTimerResolution("After creating cache")
 
-            ' Set appropriate timing limts depending on whether or not we are running in a VM
-            ' VM limits are wider because VMWare seems to loose time when threads are slept without pumping events. 
-            ' This approach is needed simply to avoid spurious failures when Diagnostics is run in VM test environments
-            If RunningInVM(True) Then
-                throttleLowerBound = THROTTLE_TEST_LOWER_BOUND_WIDE
-                throttleUpperBound = THROTTLE_TEST_UPPER_BOUND_WIDE
-            Else
-                throttleLowerBound = THROTTLE_TEST_LOWER_BOUND_NORMAL
-                throttleUpperBound = THROTTLE_TEST_UPPER_BOUND_NORMAL
-            End If
             Try
                 Action("Test Doubles")
-                cache.SetDouble(doubleKey, testDouble, 0.1) ' Set a value with a 100ms lifetime
-                returnDouble = cache.GetDouble(doubleKey)
-                CompareDouble(TestName, "Get Double", returnDouble, testDouble, TOLERANCE_E6)
+                cache.SetDouble(TEST_DOUBLE_KEY, TEST_DOUBLE, 0.1) ' Set a value with a 100ms lifetime
+                returnDouble = cache.GetDouble(TEST_DOUBLE_KEY)
+                CompareDouble(TestName, "Get Double", returnDouble, TEST_DOUBLE, TOLERANCE_E6)
             Catch ex As Exception
                 LogException(TestName, "Error getting double value: " & ex.ToString())
                 errorOccured = True
             End Try
             Thread.Sleep(150) ' Now wait until the value has timed out and been removed from the cache then test again to make sure an exception is generated
             Try
-                returnDouble = cache.GetDouble(doubleKey)
+                returnDouble = cache.GetDouble(TEST_DOUBLE_KEY)
             Catch ex As NotInCacheException
                 NMatches += 1
                 TL.LogMessage(TestName, "InvalidOperationException thrown as expected for expired double value.")
@@ -4950,16 +4939,16 @@ Public Class DiagnosticsForm
             ' Test cached int
             Try
                 Action("Test Integers")
-                cache.SetInt(intKey, testInt, 0.1) ' Set a value with a 100ms lifetime
-                returnInt = cache.GetInt(intKey)
-                CompareInteger(TestName, "Get Int", returnInt, testInt)
+                cache.SetInt(TEST_INTEGER_KEY, TEST_INTEGER, 0.1) ' Set a value with a 100ms lifetime
+                returnInt = cache.GetInt(TEST_INTEGER_KEY)
+                CompareInteger(TestName, "Get Int", returnInt, TEST_INTEGER)
             Catch ex As Exception
                 LogException(TestName, "Error getting int value: " & ex.ToString())
                 errorOccured = True
             End Try
             Thread.Sleep(150) ' Now wait until the value has timed out and been removed from the cache then test again to make sure an exception is generated
             Try
-                returnInt = cache.GetInt(intKey)
+                returnInt = cache.GetInt(TEST_INTEGER_KEY)
             Catch ex As NotInCacheException
                 NMatches += 1
                 TL.LogMessage(TestName, "InvalidOperationException thrown as expected for expired int value.")
@@ -4971,16 +4960,16 @@ Public Class DiagnosticsForm
             ' Test cached bool
             Try
                 Action("Test Booleans")
-                cache.SetBool(boolKey, testBool, 0.1) ' Set a value with a 100ms lifetime
-                returnBool = cache.GetBool(boolKey)
-                CompareBoolean(TestName, "Get Int", returnBool, testBool)
+                cache.SetBool(TEST_BOOL_KEY, TEST_BOOL, 0.1) ' Set a value with a 100ms lifetime
+                returnBool = cache.GetBool(TEST_BOOL_KEY)
+                CompareBoolean(TestName, "Get Int", returnBool, TEST_BOOL)
             Catch ex As Exception
                 LogException(TestName, "Error getting boolean value: " & ex.ToString())
                 errorOccured = True
             End Try
             Thread.Sleep(150) ' Now wait until the value has timed out and been removed from the cache then test again to make sure an exception is generated
             Try
-                returnBool = cache.GetBool(boolKey)
+                returnBool = cache.GetBool(TEST_BOOL_KEY)
             Catch ex As NotInCacheException
                 NMatches += 1
                 TL.LogMessage(TestName, "InvalidOperationException thrown as expected for expired boolean value.")
@@ -4992,16 +4981,16 @@ Public Class DiagnosticsForm
             ' Test cached string
             Try
                 Action("Test Strings")
-                cache.SetString(stringKey, testString, 0.1) ' Set a value with a 100ms lifetime
-                returnString = cache.GetString(stringKey)
-                CompareString(TestName, "Get String", returnString, testString)
+                cache.SetString(TEST_STRING_KEY, TEST_STRING, 0.1) ' Set a value with a 100ms lifetime
+                returnString = cache.GetString(TEST_STRING_KEY)
+                CompareString(TestName, "Get String", returnString, TEST_STRING)
             Catch ex As Exception
                 LogException(TestName, "Error getting string value: " & ex.ToString())
                 errorOccured = True
             End Try
             Thread.Sleep(150) ' Now wait until the value has timed out and been removed from the cache then test again to make sure an exception is generated
             Try
-                returnString = cache.GetString(stringKey)
+                returnString = cache.GetString(TEST_STRING_KEY)
             Catch ex As NotInCacheException
                 NMatches += 1
                 TL.LogMessage(TestName, "InvalidOperationException thrown as expected for expired string value.")
@@ -5014,22 +5003,22 @@ Public Class DiagnosticsForm
             Try
                 Action("Test Objects")
                 inputObject = New KeyValuePair With {
-                    .Key = testObjectKey,
-                    .Value = testObjectValue
+                    .Key = TEST_OBJECT_KEY,
+                    .Value = TEST_OBJECT
                 } ' Create a test KeyValuePair oject
 
-                cache.Set(testObjectKey, inputObject, 0.1) ' Set a value with a 100ms lifetime
-                returnObject = cache.Get(testObjectKey)
+                cache.Set(TEST_OBJECT_KEY, inputObject, 0.1) ' Set a value with a 100ms lifetime
+                returnObject = cache.Get(TEST_OBJECT_KEY)
 
-                CompareString(TestName, "Get Object Key", returnObject.Key, testObjectKey)
-                CompareString(TestName, "Get Object Value", returnObject.Value, testObjectValue)
+                CompareString(TestName, "Get Object Key", returnObject.Key, TEST_OBJECT_KEY)
+                CompareString(TestName, "Get Object Value", returnObject.Value, TEST_OBJECT)
             Catch ex As Exception
                 LogException(TestName, "Error getting object: " & ex.ToString())
                 errorOccured = True
             End Try
             Thread.Sleep(150) ' Now wait until the value has timed out and been removed from the cache then test again to make sure an exception is generated
             Try
-                returnObject = cache.Get(testObjectKey)
+                returnObject = cache.Get(TEST_OBJECT_KEY)
             Catch ex As NotInCacheException
                 NMatches += 1
                 TL.LogMessage(TestName, "InvalidOperationException thrown as expected for expired object.")
@@ -5038,387 +5027,442 @@ Public Class DiagnosticsForm
                 errorOccured = True
             End Try
 
-            ' Test throttling without pumped events
-            Try
-                cache.SetDouble(doubleKey, testDouble, 100.0) ' Set a value with a 100 second lifetime, so it doesn't time out within the text
-                cache.PumpMessagesInterval = 0
-                returnDouble = cache.GetDouble(doubleKey) ' Do a first get outside the loop so that all subsequqnt gets will be throttled 
-
-                ' Make 10 calls that should be limited to 2 calls per second, i.e. the overall test should take about 5 seconds
-                sw.Restart()
-                For i = 1 To NUMBER_OF_THROTTLING_TEST_LOOPS
-                    Action("Test Throttling without pumped events " & i & "/" & NUMBER_OF_THROTTLING_TEST_LOOPS)
-                    returnDouble = cache.GetDouble(doubleKey, 2.0) ' Get the value with a maximum rate of 2 calls per second
-                    Application.DoEvents()
-                Next
-                sw.Stop()
-
-                If ((sw.ElapsedMilliseconds > throttleLowerBound) And (sw.ElapsedMilliseconds < throttleUpperBound)) Then ' elapsed time is within +-10% of expected 5 seconds
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("Cache throttling timing: {0} milliseconds is inside the expected range of {1} to {2} milliseconds", sw.ElapsedMilliseconds, throttleLowerBound, throttleUpperBound))
-                Else ' Outside the range so log an error
-                    LogError(TestName, String.Format("Cache throttling timing: {0} milliseconds is outside the expected range of {1} to {2} milliseconds", sw.ElapsedMilliseconds, throttleLowerBound, throttleUpperBound))
-                End If
-            Catch ex As Exception
-                LogException(TestName, "Exception testing throttling without pumped events: " & ex.ToString())
-                errorOccured = True
-            End Try
-
-            ' Test throttling with pumped events
-            Try
-                cache.SetDouble(doubleKey, testDouble, 100.0) ' Set a value with a 100 second lifetime, so it doesn't time out within the text
-                cache.PumpMessagesInterval = 20
-                returnDouble = cache.GetDouble(doubleKey) ' Do a first get outside the loop so that all subsequqnt gets will be throttled 
-
-                ' Make 10 calls that should be limited to 2 calls per second, i.e. the overall test should take about 5 seconds
-                sw.Restart()
-                For i = 1 To NUMBER_OF_THROTTLING_TEST_LOOPS
-                    Action("Test Throttling with pumped events " & i & "/" & NUMBER_OF_THROTTLING_TEST_LOOPS)
-                    returnDouble = cache.GetDouble(doubleKey, 2.0) ' Get the value with a maximum rate of 2 calls per second
-                Next
-                sw.Stop()
-
-                If ((sw.ElapsedMilliseconds > throttleLowerBound) And (sw.ElapsedMilliseconds < throttleUpperBound)) Then ' elapsed time is within +-10% of expected 5 seconds
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("Cache throttling timing (with event pumping): {0} milliseconds is inside the expected range of {1} to {2} milliseconds", sw.ElapsedMilliseconds, throttleLowerBound, throttleUpperBound))
-                Else ' Outside the range so log an error
-                    LogError(TestName, String.Format("Cache throttling timing (with event pumping): {0} milliseconds is outside the expected range of {1} to {2} milliseconds", sw.ElapsedMilliseconds, throttleLowerBound, throttleUpperBound))
-                End If
-            Catch ex As Exception
-                LogException(TestName, "Exception testing throttling with pumped events: " & ex.ToString())
-                errorOccured = True
-            End Try
-
-            ' Test cache item removal
-            Try
-                cache = New Cache(IIf(LogCache, TL, Nothing)) ' Create a new cache with nothing in it
-                Action("Test item removal")
-                cache.SetInt(intKey, testInt, 0.1) ' Set a value with a 100ms lifetime
-                returnInt = cache.GetInt(intKey) ' Check that it is there
-                CompareInteger(TestName, "Get Int", returnInt, testInt)
-
-                ' Now remove the item and check that it is gone
-                cache.Remove(intKey)
-                Try
-                    returnInt = cache.GetInt(intKey)
-                Catch ex As NotInCacheException
-                    NMatches += 1
-                    TL.LogMessage(TestName, "InvalidOperationException thrown as expected for removed int value.")
-                End Try
-            Catch ex As Exception
-                LogException(TestName, "Error getting or removing item: " & ex.ToString())
-                errorOccured = True
-            End Try
-
-            ' Test clearing of entire cache
-            Try
-                cache = New Cache(IIf(LogCache, TL, Nothing)) ' Create a new cache with nothing in it
-                Action("Clear cache - Populating cache")
-                sw.Restart()
-                For i = 1 To NUMBER_OF_CLEAR_CACHE_ITEMS ' Create 100 entries in the cache
-                    cache.SetInt(intKey & i, testInt, 10.0) ' Set values with a 10s lifetime
-                Next
-                sw.Stop()
-                NMatches += 1
-                TL.LogMessage(TestName, String.Format("Cache populated {0} items in {1} milliseconds ({2} milliseconds per item).", NUMBER_OF_CLEAR_CACHE_ITEMS, sw.Elapsed.TotalMilliseconds.ToString("0.000"), (sw.Elapsed.TotalMilliseconds / NUMBER_OF_CLEAR_CACHE_ITEMS).ToString("0.000")))
-
-                ' Check that all can be read
-                Action("Clear cache - Reading items")
-                sw.Restart()
-                For i = 1 To NUMBER_OF_CLEAR_CACHE_ITEMS
-                    returnInt = cache.GetInt(intKey & i) ' Check that it is there
-                Next
-                sw.Stop()
-                NMatches += 1
-                TL.LogMessage(TestName, String.Format("Cache read back {0} items OK in {1} milliseconds ({2} milliseconds per item).", NUMBER_OF_CLEAR_CACHE_ITEMS, sw.Elapsed.TotalMilliseconds.ToString("0.000"), (sw.Elapsed.TotalMilliseconds / NUMBER_OF_CLEAR_CACHE_ITEMS).ToString("0.000")))
-
-                ' Now clear the cache and check that all values are gone
-                Action("Clear cache - clearing cache")
-                sw.Restart()
-                cache.ClearCache()
-                sw.Stop()
-                NMatches += 1
-                TL.LogMessage(TestName, String.Format("Cache cleared of {0} items in {1} milliseconds ({2} milliseconds per item).", NUMBER_OF_CLEAR_CACHE_ITEMS, sw.Elapsed.TotalMilliseconds.ToString("0.000"), (sw.Elapsed.TotalMilliseconds / NUMBER_OF_CLEAR_CACHE_ITEMS).ToString("0.000")))
-
-                Action("Clear cache - Confirming cache is empty")
-
-                If (Debugger.IsAttached) Then
-
-                End If
-
-                removedItemCount = 0 ' Initialise count of number of items removed
-
-                ' The "item is removed" test is very slow when run in Visual Studio, which attaches a debugger that slows exception handling, so reduce the number of tests in this circumstance.
-                numerOfClearItemsToTest = IIf(Debugger.IsAttached, NUMBER_OF_CLEAR_CACHE_ITEMS / 50, NUMBER_OF_CLEAR_CACHE_ITEMS)
-                sw.Restart()
-
-                For i = 1 To numerOfClearItemsToTest
-                    Try
-                        returnInt = cache.GetInt(intKey)
-                    Catch ex As NotInCacheException
-                        removedItemCount += 1
-                    End Try
-                Next
-                sw.Stop()
-
-                CompareInteger(TestName, "Clear cache", removedItemCount, numerOfClearItemsToTest)
-                TL.LogMessage(TestName, String.Format("Checked {0} items not present in {1} milliseconds ({2} milliseconds per item).", numerOfClearItemsToTest, sw.Elapsed.TotalMilliseconds.ToString("0.000"), (sw.Elapsed.TotalMilliseconds / numerOfClearItemsToTest).ToString("0.000")))
-            Catch ex As Exception
-                LogException(TestName, "Error testing Cache.ClearCache: " & ex.ToString())
-                errorOccured = True
-            End Try
-
-            ' Test invalid value handling
-            Try
-                cache = New Cache(IIf(LogCache, TL, Nothing)) ' Create a new cache with nothing in it
-
-                ' Test PumpMessagesInterval
-                Try
-                    Action("Test invalid values - PumpMessagesInterval")
-                    cache.PumpMessagesInterval = -1
-                    LogError(TestName, "InvalidValueException was not thrown when supplying a negative value for PumpMessagesInterval.")
-                    errorOccured = True
-                Catch ex As InvalidValueException
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a negative value for PumpMessagesInterval: ""{0}""", ex.Message))
-                Catch ex As Exception
-                    LogError(TestName, "An unexpected exception was thrown when supplying a negative value for PumpMessagesInterval." & ex.ToString())
-                    errorOccured = True
-                End Try
-
-                ' Test GetDouble Key - empty string
-                Try
-                    Action("Test invalid values - GetDouble Key Empty")
-                    cache.GetDouble("")
-                    LogError(TestName, "InvalidValueException was not thrown when supplying an empty GetDouble key string.")
-                    errorOccured = True
-                Catch ex As InvalidValueException
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying an empty GetDouble key string: ""{0}""", ex.Message))
-                Catch ex As Exception
-                    LogError(TestName, "An unexpected exception was thrown when supplying an empty GetDouble key string." & ex.ToString())
-                    errorOccured = True
-                End Try
-
-                ' Test GetDouble Key - null value
-                Try
-                    Action("Test invalid values - GetDouble Key Null")
-                    cache.GetDouble(Nothing)
-                    LogError(TestName, "InvalidValueException was not thrown when supplying a null value as GetDouble key.")
-                    errorOccured = True
-                Catch ex As InvalidValueException
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a null value as GetDouble key: ""{0}""", ex.Message))
-                Catch ex As Exception
-                    LogError(TestName, "An unexpected exception was thrown when supplying a null value as GetDouble key." & ex.ToString())
-                    errorOccured = True
-                End Try
-
-                ' Test GetDouble MaximumCallFrequency
-                Try
-                    Action("Test invalid values - GetDouble MaximumCallFrequency")
-                    cache.GetDouble(doubleKey, -1.0)
-                    LogError(TestName, "InvalidValueException was not thrown when supplying a GetDouble negative MaximumCallFrequency value.")
-                    errorOccured = True
-                Catch ex As InvalidValueException
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a GetDouble negative MaximumCallFrequency value: ""{0}""", ex.Message))
-                Catch ex As Exception
-                    LogError(TestName, "An unexpected exception was thrown when supplying a negative GetDouble MaximumCallFrequency value." & ex.ToString())
-                    errorOccured = True
-                End Try
-
-                ' Test SetDouble Key - empty string
-                Try
-                    Action("Test invalid values - SetDouble Key Empty")
-                    cache.SetDouble("", 0.0, 0.0)
-                    LogError(TestName, "InvalidValueException was not thrown when supplying an empty SetDouble key string.")
-                    errorOccured = True
-                Catch ex As InvalidValueException
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying an empty SetDouble key string: ""{0}""", ex.Message))
-                Catch ex As Exception
-                    LogError(TestName, "An unexpected exception was thrown when supplying an empty SetDouble key string." & ex.ToString())
-                    errorOccured = True
-                End Try
-
-                ' Test SetDouble Key - null value
-                Try
-                    Action("Test invalid values - SetDouble Key Null")
-                    cache.SetDouble(Nothing, 0.0, 0.0)
-                    LogError(TestName, "InvalidValueException was not thrown when supplying a null value as SetDouble key.")
-                    errorOccured = True
-                Catch ex As InvalidValueException
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a null value as SetDouble key: ""{0}""", ex.Message))
-                Catch ex As Exception
-                    LogError(TestName, "An unexpected exception was thrown when supplying a null value as SetDouble key." & ex.ToString())
-                    errorOccured = True
-                End Try
-
-                ' Test SetDouble CacheTime
-                Try
-                    Action("Test invalid values - CacheTime")
-                    cache.SetDouble(doubleKey, 123.45, -1.0)
-                    LogError(TestName, "InvalidValueException was not thrown when supplying a negative CacheTime value.")
-                    errorOccured = True
-                Catch ex As InvalidValueException
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a negative SetDouble CacheTime value: ""{0}""", ex.Message))
-                Catch ex As Exception
-                    LogError(TestName, "An unexpected exception was thrown when supplying a negative CacheTime value." & ex.ToString())
-                    errorOccured = True
-                End Try
-
-                ' Test SetDouble MaximumCallFrequency
-                Try
-                    Action("Test invalid values - SetDouble MaximumCallFrequency")
-                    cache.SetDouble(doubleKey, 0.0, 1.0, -1.0)
-                    LogError(TestName, "InvalidValueException was not thrown when supplying a negative SetDouble MaximumCallFrequency value.")
-                    errorOccured = True
-                Catch ex As InvalidValueException
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a negative SetDouble MaximumCallFrequency value: ""{0}""", ex.Message))
-                Catch ex As Exception
-                    LogError(TestName, "An unexpected exception was thrown when supplying a negative SetDouble MaximumCallFrequency value." & ex.ToString())
-                    errorOccured = True
-                End Try
-
-                ' Test Cache.Remove Key - empty string
-                Try
-                    Action("Test invalid values - Cache.Remove Key Empty")
-                    cache.Remove("")
-                    LogError(TestName, "InvalidValueException was not thrown when supplying an empty Cache.Remove key string.")
-                    errorOccured = True
-                Catch ex As InvalidValueException
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying an empty Cache.Remove key string: ""{0}""", ex.Message))
-                Catch ex As Exception
-                    LogError(TestName, "An unexpected exception was thrown when supplying an empty Cache.Remove key string." & ex.ToString())
-                    errorOccured = True
-                End Try
-
-                ' Test Cache.Remove Keys - null value
-                Try
-                    Action("Test invalid values - Cache.Remove Key Null")
-                    cache.Remove(Nothing)
-                    LogError(TestName, "InvalidValueException was not thrown when supplying a null value as Cache.Remove key.")
-                    errorOccured = True
-                Catch ex As InvalidValueException
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a null value as Cache.Remove key: ""{0}""", ex.Message))
-                Catch ex As Exception
-                    LogError(TestName, "An unexpected exception was thrown when supplying a null value as Cache.Remove key." & ex.ToString())
-                    errorOccured = True
-                End Try
-
-                Try
-                    cache.SetDouble(doubleKey, testDouble, 1.0)
-                    returnInt = cache.GetInt(doubleKey)
-                    LogError(TestName, String.Format("Getting a double value as an integer worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnInt))
-                Catch ex As InvalidCastException
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting a double value as an integer. {0} - {1}", ex.GetType.Name, ex.Message))
-                Catch ex As Exception
-                    LogError(TestName, String.Format("An unexpected exception was thrown when setting a double value and retrieving it as an integer. {0} - {1}", ex.GetType.Name, ex.Message))
-                End Try
-
-                Try
-                    cache.SetInt(intKey, testInt, 1.0)
-                    returnDouble = cache.GetDouble(intKey)
-                    LogError(TestName, String.Format("Getting an integer value as a double worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnInt))
-                Catch ex As InvalidCastException
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting an integer value as a double. {0} - {1}", ex.GetType.Name, ex.Message))
-                Catch ex As Exception
-                    LogError(TestName, String.Format("An unexpected exception was thrown when setting an integer value and retrieving it as a double. {0} - {1}", ex.GetType.Name, ex.Message))
-                End Try
-
-                Try
-                    cache.SetString(stringKey, testString, 1.0)
-                    returnDouble = cache.GetDouble(stringKey)
-                    LogError(TestName, String.Format("Getting a string value as a double worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnInt))
-                Catch ex As InvalidCastException
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting a string value as a double. {0} - {1}", ex.GetType.Name, ex.Message))
-                Catch ex As Exception
-                    LogError(TestName, String.Format("An unexpected exception was thrown when setting a string value and retrieving it as a double. {0} - {1}", ex.GetType.Name, ex.Message))
-                End Try
-
-                Try
-                    cache.Set(doubleKey, testDouble, 1.0)
-                    returnString = cache.GetString(doubleKey)
-                    LogError(TestName, String.Format("Getting a double object as a string worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnInt))
-                Catch ex As InvalidCastException
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting a double object as a string. {0} - {1}", ex.GetType.Name, ex.Message))
-                Catch ex As Exception
-                    LogError(TestName, String.Format("An unexpected exception was thrown when setting a string value and retrieving it as a double. {0} - {1}", ex.GetType.Name, ex.Message))
-                End Try
-
-                Try
-                    cache.Set(doubleKey, testDouble, 1.0)
-                    returnInt = cache.GetInt(doubleKey)
-                    LogError(TestName, String.Format("Getting a double object as an integer worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnInt))
-                Catch ex As InvalidCastException
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting a double object as an integer. {0} - {1}", ex.GetType.Name, ex.Message))
-                Catch ex As Exception
-                    LogError(TestName, String.Format("An unexpected exception was thrown when setting a double object and retrieving it as an integer. {0} - {1}", ex.GetType.Name, ex.Message))
-                End Try
-
-                Try
-                    cache.Set(stringKey, testString, 1.0)
-                    returnBool = cache.Get(stringKey)
-                    LogError(TestName, String.Format("Getting a string object as a boolean worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnBool))
-                Catch ex As InvalidCastException
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting a string object as a boolean object. {0} - {1}", ex.GetType.Name, ex.Message))
-                Catch ex As Exception
-                    LogError(TestName, String.Format("An unexpected exception was thrown when getting a string object as a boolean object. {0} - {1}", ex.GetType.Name, ex.Message))
-                End Try
-
-                Try
-                    cache.Set(doubleKey, testDouble, 1.0)
-                    returnInt = cache.Get(doubleKey)
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("Successfully retrieved a double object: {0} as an integer object: {1}", testDouble, returnInt))
-                Catch ex As Exception
-                    LogError(TestName, String.Format("An unexpected exception was thrown when setting a double object and retrieving it as an integer object. {0} - {1}", ex.GetType.Name, ex.Message))
-                End Try
-
-                Try
-                    cache.Set(doubleKey, testDouble, 1.0)
-                    returnString = cache.Get(doubleKey)
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("Successfully retrieved a double object: {0} as a string object: {1}", testDouble, returnString))
-                Catch ex As Exception
-                    LogError(TestName, String.Format("An unexpected exception was thrown when setting a double object and retrieving it as a string object. {0} - {1}", ex.GetType.Name, ex.Message))
-                End Try
-
-                Try
-                    cache.Set(doubleKey, testDouble, 1.0)
-                    returnBool = cache.Get(doubleKey)
-                    NMatches += 1
-                    TL.LogMessage(TestName, String.Format("Successfully retrieved a double object: {0} as a boolean object: {1}", testDouble, returnBool))
-                Catch ex As Exception
-                    LogError(TestName, String.Format("An unexpected exception was thrown when setting a double object and retrieving it as a boolean object. {0} - {1}", ex.GetType.Name, ex.Message))
-                End Try
-
-            Catch ex As Exception
-                LogException(TestName, "Error testing Cache invalid values: " & ex.ToString())
-                errorOccured = True
-            End Try
-
+            ' Test throttling
+            TestThrottling(cache, 2.0, 0)
+            TestThrottling(cache, 2.0, 20)
+            TestThrottling(cache, 7.0, 0)
+            TestThrottling(cache, 10.0, 0)
+            TestThrottling(cache, 11.0, 0)
+            TestThrottling(cache, 11.0, 20)
+            TestThrottling(cache, 50.0, 0)
+            TestThrottling(cache, 100.0, 0)
         Catch ex1 As Exception
             LogException(TestName, "Error creating ASCOM Cache, further cache testing abandoned! " & ex1.ToString())
             errorOccured = True
+        Finally
+            LogTimerResolution("Before disposing of cache")
+            Try : cache.Dispose() : cache = Nothing : Catch : End Try
         End Try
 
+        ' Test cache item removal
+        Try
+            cache = New Cache(IIf(LogCache, TL, Nothing)) ' Create a new cache with nothing in it
+            Action("Test item removal")
+            cache.SetInt(TEST_INTEGER_KEY, TEST_INTEGER, 0.1) ' Set a value with a 100ms lifetime
+            returnInt = cache.GetInt(TEST_INTEGER_KEY) ' Check that it is there
+            CompareInteger(TestName, "Get Int", returnInt, TEST_INTEGER)
+
+            ' Now remove the item and check that it is gone
+            cache.Remove(TEST_INTEGER_KEY)
+            Try
+                returnInt = cache.GetInt(TEST_INTEGER_KEY)
+            Catch ex As NotInCacheException
+                NMatches += 1
+                TL.LogMessage(TestName, "InvalidOperationException thrown as expected for removed int value.")
+            End Try
+        Catch ex As Exception
+            LogException(TestName, "Error getting or removing item: " & ex.ToString())
+            errorOccured = True
+        Finally
+            Try : cache.Dispose() : cache = Nothing : Catch : End Try
+        End Try
+
+        ' Test clearing of entire cache
+        Try
+            cache = New Cache(IIf(LogCache, TL, Nothing)) ' Create a new cache with nothing in it
+            Action("Clear cache - Populating cache")
+            sw.Restart()
+            For i = 1 To NUMBER_OF_CLEAR_CACHE_ITEMS ' Create 100 entries in the cache
+                cache.SetInt(TEST_INTEGER_KEY & i, TEST_INTEGER, 10.0) ' Set values with a 10s lifetime
+            Next
+            sw.Stop()
+            NMatches += 1
+            TL.LogMessage(TestName, String.Format("Cache populated {0} items in {1} milliseconds ({2} milliseconds per item).", NUMBER_OF_CLEAR_CACHE_ITEMS, sw.Elapsed.TotalMilliseconds.ToString("0.000"), (sw.Elapsed.TotalMilliseconds / NUMBER_OF_CLEAR_CACHE_ITEMS).ToString("0.000")))
+
+            ' Check that all can be read
+            Action("Clear cache - Reading items")
+            sw.Restart()
+            For i = 1 To NUMBER_OF_CLEAR_CACHE_ITEMS
+                returnInt = cache.GetInt(TEST_INTEGER_KEY & i) ' Check that it is there
+            Next
+            sw.Stop()
+            NMatches += 1
+            TL.LogMessage(TestName, String.Format("Cache read back {0} items OK in {1} milliseconds ({2} milliseconds per item).", NUMBER_OF_CLEAR_CACHE_ITEMS, sw.Elapsed.TotalMilliseconds.ToString("0.000"), (sw.Elapsed.TotalMilliseconds / NUMBER_OF_CLEAR_CACHE_ITEMS).ToString("0.000")))
+
+            ' Now clear the cache and check that all values are gone
+            Action("Clear cache - clearing cache")
+            sw.Restart()
+            cache.ClearCache()
+            sw.Stop()
+            NMatches += 1
+            TL.LogMessage(TestName, String.Format("Cache cleared of {0} items in {1} milliseconds ({2} milliseconds per item).", NUMBER_OF_CLEAR_CACHE_ITEMS, sw.Elapsed.TotalMilliseconds.ToString("0.000"), (sw.Elapsed.TotalMilliseconds / NUMBER_OF_CLEAR_CACHE_ITEMS).ToString("0.000")))
+
+            Action("Clear cache - Confirming cache is empty")
+
+            If (Debugger.IsAttached) Then
+
+            End If
+
+            removedItemCount = 0 ' Initialise count of number of items removed
+
+            ' The "item is removed" test is very slow when run in Visual Studio, which attaches a debugger that slows exception handling, so reduce the number of tests in this circumstance.
+            numerOfClearItemsToTest = IIf(Debugger.IsAttached, NUMBER_OF_CLEAR_CACHE_ITEMS / 50, NUMBER_OF_CLEAR_CACHE_ITEMS)
+            sw.Restart()
+
+            For i = 1 To numerOfClearItemsToTest
+                Try
+                    returnInt = cache.GetInt(TEST_INTEGER_KEY)
+                Catch ex As NotInCacheException
+                    removedItemCount += 1
+                End Try
+            Next
+            sw.Stop()
+
+            CompareInteger(TestName, "Clear cache", removedItemCount, numerOfClearItemsToTest)
+            TL.LogMessage(TestName, String.Format("Checked {0} items not present in {1} milliseconds ({2} milliseconds per item).", numerOfClearItemsToTest, sw.Elapsed.TotalMilliseconds.ToString("0.000"), (sw.Elapsed.TotalMilliseconds / numerOfClearItemsToTest).ToString("0.000")))
+        Catch ex As Exception
+            LogException(TestName, "Error testing Cache.ClearCache: " & ex.ToString())
+            errorOccured = True
+        Finally
+            Try : cache.Dispose() : cache = Nothing : Catch : End Try
+        End Try
+
+        ' Test invalid value handling
+        Try
+            cache = New Cache(IIf(LogCache, TL, Nothing)) ' Create a new cache with nothing in it
+
+            ' Test PumpMessagesInterval
+            Try
+                Action("Test invalid values - PumpMessagesInterval")
+                cache.PumpMessagesInterval = -1
+                LogError(TestName, "InvalidValueException was not thrown when supplying a negative value for PumpMessagesInterval.")
+                errorOccured = True
+            Catch ex As InvalidValueException
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a negative value for PumpMessagesInterval: ""{0}""", ex.Message))
+            Catch ex As Exception
+                LogError(TestName, "An unexpected exception was thrown when supplying a negative value for PumpMessagesInterval." & ex.ToString())
+                errorOccured = True
+            End Try
+
+            ' Test GetDouble Key - empty string
+            Try
+                Action("Test invalid values - GetDouble Key Empty")
+                cache.GetDouble("")
+                LogError(TestName, "InvalidValueException was not thrown when supplying an empty GetDouble key string.")
+                errorOccured = True
+            Catch ex As InvalidValueException
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying an empty GetDouble key string: ""{0}""", ex.Message))
+            Catch ex As Exception
+                LogError(TestName, "An unexpected exception was thrown when supplying an empty GetDouble key string." & ex.ToString())
+                errorOccured = True
+            End Try
+
+            ' Test GetDouble Key - null value
+            Try
+                Action("Test invalid values - GetDouble Key Null")
+                cache.GetDouble(Nothing)
+                LogError(TestName, "InvalidValueException was not thrown when supplying a null value as GetDouble key.")
+                errorOccured = True
+            Catch ex As InvalidValueException
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a null value as GetDouble key: ""{0}""", ex.Message))
+            Catch ex As Exception
+                LogError(TestName, "An unexpected exception was thrown when supplying a null value as GetDouble key." & ex.ToString())
+                errorOccured = True
+            End Try
+
+            ' Test GetDouble MaximumCallFrequency
+            Try
+                Action("Test invalid values - GetDouble MaximumCallFrequency")
+                cache.GetDouble(TEST_DOUBLE_KEY, -1.0)
+                LogError(TestName, "InvalidValueException was not thrown when supplying a GetDouble negative MaximumCallFrequency value.")
+                errorOccured = True
+            Catch ex As InvalidValueException
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a GetDouble negative MaximumCallFrequency value: ""{0}""", ex.Message))
+            Catch ex As Exception
+                LogError(TestName, "An unexpected exception was thrown when supplying a negative GetDouble MaximumCallFrequency value." & ex.ToString())
+                errorOccured = True
+            End Try
+
+            ' Test SetDouble Key - empty string
+            Try
+                Action("Test invalid values - SetDouble Key Empty")
+                cache.SetDouble("", 0.0, 0.0)
+                LogError(TestName, "InvalidValueException was not thrown when supplying an empty SetDouble key string.")
+                errorOccured = True
+            Catch ex As InvalidValueException
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying an empty SetDouble key string: ""{0}""", ex.Message))
+            Catch ex As Exception
+                LogError(TestName, "An unexpected exception was thrown when supplying an empty SetDouble key string." & ex.ToString())
+                errorOccured = True
+            End Try
+
+            ' Test SetDouble Key - null value
+            Try
+                Action("Test invalid values - SetDouble Key Null")
+                cache.SetDouble(Nothing, 0.0, 0.0)
+                LogError(TestName, "InvalidValueException was not thrown when supplying a null value as SetDouble key.")
+                errorOccured = True
+            Catch ex As InvalidValueException
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a null value as SetDouble key: ""{0}""", ex.Message))
+            Catch ex As Exception
+                LogError(TestName, "An unexpected exception was thrown when supplying a null value as SetDouble key." & ex.ToString())
+                errorOccured = True
+            End Try
+
+            ' Test SetDouble CacheTime
+            Try
+                Action("Test invalid values - CacheTime")
+                cache.SetDouble(TEST_DOUBLE_KEY, 123.45, -1.0)
+                LogError(TestName, "InvalidValueException was not thrown when supplying a negative CacheTime value.")
+                errorOccured = True
+            Catch ex As InvalidValueException
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a negative SetDouble CacheTime value: ""{0}""", ex.Message))
+            Catch ex As Exception
+                LogError(TestName, "An unexpected exception was thrown when supplying a negative CacheTime value." & ex.ToString())
+                errorOccured = True
+            End Try
+
+            ' Test SetDouble MaximumCallFrequency
+            Try
+                Action("Test invalid values - SetDouble MaximumCallFrequency")
+                cache.SetDouble(TEST_DOUBLE_KEY, 0.0, 1.0, -1.0)
+                LogError(TestName, "InvalidValueException was not thrown when supplying a negative SetDouble MaximumCallFrequency value.")
+                errorOccured = True
+            Catch ex As InvalidValueException
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a negative SetDouble MaximumCallFrequency value: ""{0}""", ex.Message))
+            Catch ex As Exception
+                LogError(TestName, "An unexpected exception was thrown when supplying a negative SetDouble MaximumCallFrequency value." & ex.ToString())
+                errorOccured = True
+            End Try
+
+            ' Test Cache.Remove Key - empty string
+            Try
+                Action("Test invalid values - Cache.Remove Key Empty")
+                cache.Remove("")
+                LogError(TestName, "InvalidValueException was not thrown when supplying an empty Cache.Remove key string.")
+                errorOccured = True
+            Catch ex As InvalidValueException
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying an empty Cache.Remove key string: ""{0}""", ex.Message))
+            Catch ex As Exception
+                LogError(TestName, "An unexpected exception was thrown when supplying an empty Cache.Remove key string." & ex.ToString())
+                errorOccured = True
+            End Try
+
+            ' Test Cache.Remove Keys - null value
+            Try
+                Action("Test invalid values - Cache.Remove Key Null")
+                cache.Remove(Nothing)
+                LogError(TestName, "InvalidValueException was not thrown when supplying a null value as Cache.Remove key.")
+                errorOccured = True
+            Catch ex As InvalidValueException
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a null value as Cache.Remove key: ""{0}""", ex.Message))
+            Catch ex As Exception
+                LogError(TestName, "An unexpected exception was thrown when supplying a null value as Cache.Remove key." & ex.ToString())
+                errorOccured = True
+            End Try
+
+            Try
+                cache.SetDouble(TEST_DOUBLE_KEY, TEST_DOUBLE, 1.0)
+                returnInt = cache.GetInt(TEST_DOUBLE_KEY)
+                LogError(TestName, String.Format("Getting a double value as an integer worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnInt))
+            Catch ex As InvalidCastException
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting a double value as an integer. {0} - {1}", ex.GetType.Name, ex.Message))
+            Catch ex As Exception
+                LogError(TestName, String.Format("An unexpected exception was thrown when setting a double value and retrieving it as an integer. {0} - {1}", ex.GetType.Name, ex.Message))
+            End Try
+
+            Try
+                cache.SetInt(TEST_INTEGER_KEY, TEST_INTEGER, 1.0)
+                returnDouble = cache.GetDouble(TEST_INTEGER_KEY)
+                LogError(TestName, String.Format("Getting an integer value as a double worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnInt))
+            Catch ex As InvalidCastException
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting an integer value as a double. {0} - {1}", ex.GetType.Name, ex.Message))
+            Catch ex As Exception
+                LogError(TestName, String.Format("An unexpected exception was thrown when setting an integer value and retrieving it as a double. {0} - {1}", ex.GetType.Name, ex.Message))
+            End Try
+
+            Try
+                cache.SetString(TEST_STRING_KEY, TEST_STRING, 1.0)
+                returnDouble = cache.GetDouble(TEST_STRING_KEY)
+                LogError(TestName, String.Format("Getting a string value as a double worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnInt))
+            Catch ex As InvalidCastException
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting a string value as a double. {0} - {1}", ex.GetType.Name, ex.Message))
+            Catch ex As Exception
+                LogError(TestName, String.Format("An unexpected exception was thrown when setting a string value and retrieving it as a double. {0} - {1}", ex.GetType.Name, ex.Message))
+            End Try
+
+            Try
+                cache.Set(TEST_DOUBLE_KEY, TEST_DOUBLE, 1.0)
+                returnString = cache.GetString(TEST_DOUBLE_KEY)
+                LogError(TestName, String.Format("Getting a double object as a string worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnInt))
+            Catch ex As InvalidCastException
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting a double object as a string. {0} - {1}", ex.GetType.Name, ex.Message))
+            Catch ex As Exception
+                LogError(TestName, String.Format("An unexpected exception was thrown when setting a string value and retrieving it as a double. {0} - {1}", ex.GetType.Name, ex.Message))
+            End Try
+
+            Try
+                cache.Set(TEST_DOUBLE_KEY, TEST_DOUBLE, 1.0)
+                returnInt = cache.GetInt(TEST_DOUBLE_KEY)
+                LogError(TestName, String.Format("Getting a double object as an integer worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnInt))
+            Catch ex As InvalidCastException
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting a double object as an integer. {0} - {1}", ex.GetType.Name, ex.Message))
+            Catch ex As Exception
+                LogError(TestName, String.Format("An unexpected exception was thrown when setting a double object and retrieving it as an integer. {0} - {1}", ex.GetType.Name, ex.Message))
+            End Try
+
+            Try
+                cache.Set(TEST_STRING_KEY, TEST_STRING, 1.0)
+                returnBool = cache.Get(TEST_STRING_KEY)
+                LogError(TestName, String.Format("Getting a string object as a boolean worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnBool))
+            Catch ex As InvalidCastException
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting a string object as a boolean object. {0} - {1}", ex.GetType.Name, ex.Message))
+            Catch ex As Exception
+                LogError(TestName, String.Format("An unexpected exception was thrown when getting a string object as a boolean object. {0} - {1}", ex.GetType.Name, ex.Message))
+            End Try
+
+            Try
+                cache.Set(TEST_DOUBLE_KEY, TEST_DOUBLE, 1.0)
+                returnInt = cache.Get(TEST_DOUBLE_KEY)
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("Successfully retrieved a double object: {0} as an integer object: {1}", TEST_DOUBLE, returnInt))
+            Catch ex As Exception
+                LogError(TestName, String.Format("An unexpected exception was thrown when setting a double object and retrieving it as an integer object. {0} - {1}", ex.GetType.Name, ex.Message))
+            End Try
+
+            Try
+                cache.Set(TEST_DOUBLE_KEY, TEST_DOUBLE, 1.0)
+                returnString = cache.Get(TEST_DOUBLE_KEY)
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("Successfully retrieved a double object: {0} as a string object: {1}", TEST_DOUBLE, returnString))
+            Catch ex As Exception
+                LogError(TestName, String.Format("An unexpected exception was thrown when setting a double object and retrieving it as a string object. {0} - {1}", ex.GetType.Name, ex.Message))
+            End Try
+
+            Try
+                cache.Set(TEST_DOUBLE_KEY, TEST_DOUBLE, 1.0)
+                returnBool = cache.Get(TEST_DOUBLE_KEY)
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("Successfully retrieved a double object: {0} as a boolean object: {1}", TEST_DOUBLE, returnBool))
+            Catch ex As Exception
+                LogError(TestName, String.Format("An unexpected exception was thrown when setting a double object and retrieving it as a boolean object. {0} - {1}", ex.GetType.Name, ex.Message))
+            End Try
+
+        Catch ex As Exception
+            LogException(TestName, "Error testing Cache invalid values: " & ex.ToString())
+            errorOccured = True
+        Finally
+            Try : cache.Dispose() : cache = Nothing : Catch : End Try
+        End Try
+
+        'Multiple concurrent cache test
+        Try
+            TL.LogMessage(TestName, String.Format("Creating four caches"))
+            cache1 = New Cache()
+            cache2 = New Cache()
+            cache3 = New Cache()
+            cache4 = New Cache()
+            TL.LogMessage(TestName, String.Format("Setting cache values"))
+            cache1.Set(TEST_DOUBLE_KEY & "1", TEST_DOUBLE, 10.0)
+            cache2.Set(TEST_DOUBLE_KEY & "2", TEST_DOUBLE, 10.0)
+            cache3.Set(TEST_DOUBLE_KEY & "3", TEST_DOUBLE, 10.0)
+            cache4.Set(TEST_DOUBLE_KEY & "4", TEST_DOUBLE, 10.0)
+            TL.LogMessage(TestName, String.Format("Getting cache values"))
+            returnDouble = cache1.GetDouble(TEST_DOUBLE_KEY & "1", 2)
+            CompareDouble(TestName, "Get Cache1 Double", returnDouble, TEST_DOUBLE, TOLERANCE_E6)
+            returnDouble = cache1.GetDouble(TEST_DOUBLE_KEY & "1", 2)
+            CompareDouble(TestName, "Get Cache1 Double", returnDouble, TEST_DOUBLE, TOLERANCE_E6)
+            returnDouble = cache2.GetDouble(TEST_DOUBLE_KEY & "2", 2)
+            CompareDouble(TestName, "Get Cache2 Double", returnDouble, TEST_DOUBLE, TOLERANCE_E6)
+            returnDouble = cache2.GetDouble(TEST_DOUBLE_KEY & "2", 2)
+            CompareDouble(TestName, "Get Cache2 Double", returnDouble, TEST_DOUBLE, TOLERANCE_E6)
+            returnDouble = cache3.GetDouble(TEST_DOUBLE_KEY & "3", 2)
+            CompareDouble(TestName, "Get Cache3 Double", returnDouble, TEST_DOUBLE, TOLERANCE_E6)
+            returnDouble = cache3.GetDouble(TEST_DOUBLE_KEY & "3", 2)
+            CompareDouble(TestName, "Get Cache3 Double", returnDouble, TEST_DOUBLE, TOLERANCE_E6)
+            returnDouble = cache4.GetDouble(TEST_DOUBLE_KEY & "4", 2)
+            CompareDouble(TestName, "Get Cache4 Double", returnDouble, TEST_DOUBLE, TOLERANCE_E6)
+            returnDouble = cache4.GetDouble(TEST_DOUBLE_KEY & "4", 2)
+            CompareDouble(TestName, "Get Cache4 Double", returnDouble, TEST_DOUBLE, TOLERANCE_E6)
+        Catch ex As Exception
+            LogException(TestName, "Error testing Cache concurrent caches: " & ex.ToString())
+            errorOccured = True
+        Finally
+            Try : cache1.Dispose() : cache1 = Nothing : Catch : End Try
+            Try : cache2.Dispose() : cache2 = Nothing : Catch : End Try
+            Try : cache3.Dispose() : cache3 = Nothing : Catch : End Try
+            Try : cache4.Dispose() : cache4 = Nothing : Catch : End Try
+        End Try
+
+        LogTimerResolution("End of cache tests")
         TL.BlankLine()
 
         Return errorOccured
     End Function
+
+    Private Sub LogTimerResolution(message As String)
+        Dim rc As UInt32
+        Dim MinimumResolution, MaximimResolution, CurrentResolution As Integer
+
+        rc = NtQueryTimerResolution(MinimumResolution, MaximimResolution, CurrentResolution)
+        TL.LogMessage("TimerResolution", String.Format("{0} - Current resolution: {1}, Minimum resolution: {2}, Maximum resolution: {3}", message, CurrentResolution / 10000.0, MinimumResolution / 10000.0, MaximimResolution / 10000.0))
+    End Sub
+
+    Private Sub TestThrottling(cache As Cache, CallsPerSecond As Double, PumpMessagesInterval As Integer)
+        Dim returnDouble As Double
+        Dim numberOfLoops As Integer, errorOccured As Boolean = False, throttleTarget As Integer
+
+        ' Set upper and lower test pass limits. These are quite wide to allow for systems where sleep time precision is low e.g. when timer resolution is 15.67ms e.g. on laptops and low power devices
+        ' They also don't need to be that precise given that the purpose is only to slow down the arte of client calls
+        Const ACCEPTABLE_LOWER_BOUND As Double = 4500.0 ' Minimum overall test time for a pass (milliseconds) = 110% of expected 5000ms
+        Const ACCEPTABLE_UPPER_BOUND As Double = 6000.0 ' Maximum overall test time for a pass (milliseconds) = 120% of expected 5000ms
+
+        Const testDouble As Double = 45.639, TEST_DOUBLE_KEY As String = "TEST_DOUBLE_KEY"
+
+        ' Test throttling 
+        numberOfLoops = 5 * CallsPerSecond
+        Try
+            cache.SetDouble(TEST_DOUBLE_KEY, testDouble, 100.0) ' Set a value with a 100 second lifetime, so it doesn't time out within the text
+            cache.PumpMessagesInterval = PumpMessagesInterval
+            returnDouble = cache.GetDouble(TEST_DOUBLE_KEY) ' Do a first get outside the loop so that all subsequqnt gets will be throttled 
+
+            ' Make NUMBER_OF_THROTTLING_TEST_LOOPS calls that should be limited to CallsPerSecond calls per second, i.e. the overall test should take about 10 / CallsPerSecond seconds
+            sw.Restart()
+            For i = 1 To numberOfLoops
+                Action(String.Format("Throttling test ({0} per second, pump = {1}ms)  {2}/{3}", CallsPerSecond, PumpMessagesInterval, i, numberOfLoops))
+                returnDouble = cache.GetDouble(TEST_DOUBLE_KEY, CallsPerSecond) ' Get the value with a maximum rate of 2 calls per second
+            Next
+            sw.Stop()
+
+            throttleTarget = numberOfLoops * 1000.0 / CallsPerSecond
+            If ((sw.ElapsedMilliseconds > ACCEPTABLE_LOWER_BOUND) And (sw.ElapsedMilliseconds < ACCEPTABLE_UPPER_BOUND)) Then ' elapsed time is within +-10% of expected 5 seconds
+                NMatches += 1
+                TL.LogMessage("TestThrottling", String.Format("Throttling at {0} calls per second, pump interval = {1}: {2} milliseconds is inside the expected range of {3} to {4} milliseconds (target = {5})", CallsPerSecond, PumpMessagesInterval, sw.ElapsedMilliseconds, ACCEPTABLE_LOWER_BOUND, ACCEPTABLE_UPPER_BOUND, throttleTarget))
+            Else ' Outside the range so log an error
+                LogError("TestThrottling", String.Format("Throttling at {0} calls per second, pump interval = {1}: {2} milliseconds is outside the expected range of {3} to {4} milliseconds (target = {5})", CallsPerSecond, PumpMessagesInterval, sw.ElapsedMilliseconds, ACCEPTABLE_LOWER_BOUND, ACCEPTABLE_UPPER_BOUND, throttleTarget))
+            End If
+        Catch ex As Exception
+            LogException("TestThrottling", "Exception while testing throttling: " & ex.ToString())
+            errorOccured = True
+        End Try
+
+    End Sub
 
     Private Sub UtilTests()
         Dim t As Double
@@ -8441,6 +8485,10 @@ Public Class DiagnosticsForm
         <Out()> ByVal lpszPath As System.Text.StringBuilder,
         ByVal nFolder As Integer,
         ByVal fCreate As Boolean) As Boolean
+    End Function
+
+    <DllImport("ntdll.dll", SetLastError:=True)>
+    Private Shared Function NtQueryTimerResolution(ByRef MinimumResolution As Integer, ByRef MaximumResolution As Integer, ByRef CurrentResolution As Integer) As UInteger
     End Function
 
     Private Sub Status(ByVal Msg As String)
