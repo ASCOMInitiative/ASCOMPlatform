@@ -165,7 +165,8 @@ namespace ASCOM.Utilities
                         if ((Interlocked.Decrement(ref cacheInstanceCount) == 0) & (timerResolutionHasBeenChanged)) // Decrement the instance count and, if this is the end of last cache instance, reset the timer resolution if it has been changed
                         {
                             TimeEndPeriod(timerResolutionCurrent); // Reset the timer resolution to its original value
-                            timerResolutionHasBeenChanged = false; // Belt and brances, make sure the timer canot be reset again
+                            timerResolutionHasBeenChanged = false; // Reset to default values so that the cache can be used again if required
+                            timerResolutionHasBeenChecked = false;
                         }
                     }
                     catch { } // Just swallow any exceptions from this code
