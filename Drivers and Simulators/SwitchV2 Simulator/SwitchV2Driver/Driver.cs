@@ -56,6 +56,10 @@ namespace ASCOM.Simulator
         internal static string traceStateProfileName = "Trace Level";
         internal static string traceStateDefault = "false";
 
+        // Supported actions
+        const string OCH_TAG = "OCHTag"; const string OCH_TAG_UPPER_CASE = "OCHTAG";
+        const string OCH_TEST_POWER_REPORT = "OCHTestPowerReport"; const string OCH_TEST_POWER_REPORT_UPPER_CASE = "OCHTESTPOWERREPORT";
+
         internal static bool traceState;
 
         /// <summary>
@@ -119,14 +123,22 @@ namespace ASCOM.Simulator
         {
             get
             {
-                tl.LogMessage("SupportedActions Get", "Returning empty arraylist");
-                return new ArrayList();
+                tl.LogMessage("SupportedActions Get", string.Format("Returning {0} and {1} in the arraylist", OCH_TAG, OCH_TEST_POWER_REPORT));
+                return new ArrayList() { OCH_TAG, OCH_TEST_POWER_REPORT };
             }
         }
 
         public string Action(string actionName, string actionParameters)
         {
-            throw new ASCOM.ActionNotImplementedException("Action " + actionName + " is not implemented by this driver");
+            switch (actionName.ToUpperInvariant())
+            {
+                case OCH_TAG_UPPER_CASE:
+                    return "SwitchSimulator";
+                case OCH_TEST_POWER_REPORT_UPPER_CASE:
+                    return "All observatory power systems are functioning properly. Supplied parameters: " + actionParameters;
+                default:
+                    throw new ASCOM.ActionNotImplementedException("Action " + actionName + " is not implemented by this driver");
+            }
         }
 
         public void CommandBlind(string command, bool raw)
