@@ -241,15 +241,15 @@ namespace ASCOM.Simulator
                     TL.LogMessage(clientNumber, "Action", string.Format("SupportedActions dictionary contains entry {0} {1}", kvp.Key, kvp.Value));
                 }
 
-                if (supportedActions.ContainsKey(actionName.ToUpper())) // This is an action provided by a subsidiary driver
+                if (supportedActions.ContainsKey(actionName.ToUpper(CultureInfo.CurrentCulture))) // This is an action provided by a subsidiary driver
                 {
-                    if (ObservingConditionsDevices.ContainsKey(supportedActions[actionName.ToUpper()])) // Look for the key in the ObservingConditions drivers list
+                    if (ObservingConditionsDevices.ContainsKey(supportedActions[actionName.ToUpper(CultureInfo.CurrentCulture)])) // Look for the key in the ObservingConditions drivers list
                     {
-                        return ObservingConditionsDevices[supportedActions[actionName.ToUpper()]].Action(driverAction, actionParameters); // Call the subsidiary driver's action with the supplied parameters
+                        return ObservingConditionsDevices[supportedActions[actionName.ToUpper(CultureInfo.CurrentCulture)]].Action(driverAction, actionParameters); // Call the subsidiary driver's action with the supplied parameters
                     }
-                    else if (SwitchDevices.ContainsKey(supportedActions[actionName.ToUpper()]))// Must be a switch driver
+                    else if (SwitchDevices.ContainsKey(supportedActions[actionName.ToUpper(CultureInfo.CurrentCulture)]))// Must be a switch driver
                     {
-                        return SwitchDevices[supportedActions[actionName.ToUpper()]].Action(driverAction, actionParameters); // Call the subsidiary driver's action with the supplied parameters
+                        return SwitchDevices[supportedActions[actionName.ToUpper(CultureInfo.CurrentCulture)]].Action(driverAction, actionParameters); // Call the subsidiary driver's action with the supplied parameters
                     }
                     else
                     {
@@ -405,8 +405,7 @@ namespace ASCOM.Simulator
 
         public static void Disconnect(int clientNumber)
         {
-            bool lastValue;
-            bool successfullyRemoved = connectStates.TryRemove(clientNumber, out lastValue);
+            bool successfullyRemoved = connectStates.TryRemove(clientNumber, out bool lastValue);
             TL.LogMessage(clientNumber, "Disconnect", "Successfully removed entry from list of connected states: " + successfullyRemoved.ToString());
 
             if (ConnectionCount == 0) // The last connection has dropped so stop the timer and disconnect connected devices
@@ -539,7 +538,7 @@ namespace ASCOM.Simulator
                 ArrayList suportedActions = ObservingConditionsDevice.Value.SupportedActions; // Get the list of supported actions and add them to the dictionary
                 foreach (string supportedAction in suportedActions)
                 {
-                    supportedActions[string.Format(SUBSIDIARY_SUPPORTED_ACTION_NAME_FORMAT, tag, supportedAction).ToUpper()] = ObservingConditionsDevice.Key; // Save the action with key: "//TAGNAME:ACTIONNAME" and value: "ProgID of the owning subsidiary driver"
+                    supportedActions[string.Format(SUBSIDIARY_SUPPORTED_ACTION_NAME_FORMAT, tag, supportedAction).ToUpper(CultureInfo.CurrentCulture)] = ObservingConditionsDevice.Key; // Save the action with key: "//TAGNAME:ACTIONNAME" and value: "ProgID of the owning subsidiary driver"
                     overallSupportedActions.Add(string.Format(SUBSIDIARY_SUPPORTED_ACTION_NAME_FORMAT, tag, supportedAction));
                 }
             }
@@ -557,7 +556,7 @@ namespace ASCOM.Simulator
                 ArrayList suportedActions = SwitchDevice.Value.SupportedActions; // Get the list of supported actions and add them to the dictionary
                 foreach (string supportedAction in suportedActions)
                 {
-                    supportedActions[string.Format(SUBSIDIARY_SUPPORTED_ACTION_NAME_FORMAT, tag, supportedAction).ToUpper()] = SwitchDevice.Key; // Save the action with key: "//TAGNAME:ACTIONNAME" and value: "ProgID of the owning subsidiary driver"
+                    supportedActions[string.Format(SUBSIDIARY_SUPPORTED_ACTION_NAME_FORMAT, tag, supportedAction).ToUpper(CultureInfo.CurrentCulture)] = SwitchDevice.Key; // Save the action with key: "//TAGNAME:ACTIONNAME" and value: "ProgID of the owning subsidiary driver"
                     overallSupportedActions.Add(string.Format(SUBSIDIARY_SUPPORTED_ACTION_NAME_FORMAT, tag, supportedAction));
                 }
             }

@@ -1191,6 +1191,15 @@ Public Class DiagnosticsForm
                                 DeviceObject.Link = True ' Try Link, if it fails the outer try will catch the exception
                                 Compare("TestSimulator", "Linked OK", "True", "True")
                             End Try
+
+                            ' Disable temperature compensation if its available
+                            Try
+                                DeviceObject.TempComp = False
+                                Compare("TestSimulator", "Temperature compensation disabled OK", "True", "True")
+                            Catch ex1 As Exception
+                                LogException("TestSimulator", "Exception setting temperatrure compensation: " & ex1.ToString)
+                            End Try
+
                         Case "ObservingConditionsHub"
                             ' The ObservingConditions Hub is unconfigured on initial installation and so has a special test mode that fakes a valid configuration
                             ' This unpublicised Action initiates the test mode
@@ -1472,6 +1481,7 @@ Public Class DiagnosticsForm
                                 Action(Test & " " & DeviceObject.Position & " / " & FocuserTargetPosition) 'Now.Subtract(StartTime).Seconds)
                             Loop Until Not DeviceObject.IsMoving
                             CompareInteger("DeviceTest", Test, DeviceObject.Position, FocuserTargetPosition)
+                            TL.LogMessage("DeviceTest", String.Format("Temperature compensation is available: {0} and enabled: {1}", DeviceObject.TempCompAvailable, DeviceObject.TempComp))
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
