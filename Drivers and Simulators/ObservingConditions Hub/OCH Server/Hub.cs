@@ -446,7 +446,7 @@ namespace ASCOM.Simulator
                 }
 
                 // Clear the list of supported actions so that it will be re-read on next use
-                supportedActions.Clear();
+                if (supportedActions != null) supportedActions.Clear();
             }
         }
 
