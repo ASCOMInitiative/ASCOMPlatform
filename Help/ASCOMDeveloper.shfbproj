@@ -249,6 +249,8 @@
     </Image>
     <Content Include="styles\branding-Help1.css" />
     <None Include="Developer Information\Astronomical Coordinates.aml" />
+    <None Include="Tools and Features\Observing Conditions Hub.aml" />
+    <None Include="Version History\Version 6.4 SP1.aml" />
     <None Include="Tools and Features\Earth Rotation Parameters.aml" />
     <None Include="Version History\Version 6.4.aml" />
     <None Include="Version History\Version 6.3.aml" />

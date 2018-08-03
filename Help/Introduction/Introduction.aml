@@ -4,7 +4,7 @@
     <section address="Introduction-Users-Platform-6">
     	<title>Introduction - ASCOM Platform 6 - Application Users</title>
       	<content>
-      	<para>Please see <link xlink:href="EF4E9405-610F-4353-B4C5-11885BF24898" /> for information on the latest changes.</para>
+      	<para>Please see <link xlink:href="b2f3130f-6cea-4362-89a4-7dd77cfb18d1" /> for information on the latest changes.</para>
       	      	
       	<para>Platform 6 returns to a single installer for the whole platform, removing the need to install an update on top of
       	the core platform and introduces a number of device interface changes to bring consistency

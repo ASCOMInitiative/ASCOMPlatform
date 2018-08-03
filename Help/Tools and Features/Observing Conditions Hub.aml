@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="79d0c293-9ca0-466f-8dda-b974ea8b7383" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+	    <introduction>
+	    	<para>The Observing Conditions Hub (OCH) is an Observing Conditions driver that aggregates a number of real Switch and ObservingConditions drivers into a single 
+	    	consolidated virtual ObservingConditions driver that exposes information from the real drivers.
+	      	</para>
+	    </introduction>
+	
+	    <section address="DiagTool">
+			<title>Observing Conditions Hub</title>
+			<content>
+			<para><legacyBold>Configuration</legacyBold></para>
+			<para>
+	        	<mediaLink>
+					<image placement="center" xlink:href="OCHSetup"/>
+				</mediaLink>
+	        </para>
+			<para>The configuration screen, shown above, is accessed in the usual way through the Chooser properties button. Since both Switch and ObservingConditions drivers can be configured to provide information for 
+			any particular property, the "Selected Driver" dropdown list contains an aggregated list of all installed Switch and ObservingConditions drivers, prefixed by SWITCH: or OBSCON: as appropriate.
+			</para>
+			<para>Each driver's individual configuration can be accessed through the Setup button. Since a Switch device can contain an aribitary number of switches, the particular switch to be used to provide 
+			the particular property information can be selected with the "Switch Number" control. If the "Connect to drivers" checkbox is set, the ""Sensor Description"" field will also be populated and
+			a particular switch can also be selected from this list if required.
+			</para>
+			<para>The Average Period controls at the top of the Setup form provide overall control of these values for the aggregated driver. Its not necessary for subsidiary drivers to implement averaging
+			in order for the OCH to provide averaging capability because the OCH polls subsidiary drivers at the frequency given in the "Number of readings within averaging period" and uses this informatiuon in 
+			it's own averaging algorithm.</para>
+			<para><legacyBold>SupportedActions Property and Action Method</legacyBold></para>
+			<para>The OCH presents all subsidiary driver's Actions through it's own SupportedActions property and Actions method. To ensure that there are no conflicts between drivers that happen
+			to use the same action name for different purposes, each driver's action name is prefixed with a driver identifier in the form: </para>
+			<quote><legacyBold>//</legacyBold><literal>DriverIdentifier</literal><legacyBold>:</legacyBold><literal>DriverActionName</literal></quote>
+			<para>The DriverIdentifier will normally be the subsidiary driver's ProgID. However, if the subsidiary driver provides an <literal>OCHTag</literal> action that returns a string name, this 
+			name will be used as the DriverIdentifier instead of the ProgID.</para>
+			When calling the OCH Action method the full action name including the //DriverIdentifier: prefix must be used. Any supplied parameters wil be passed straight through to the subsidiary driver
+			unchanged and it's response will be returned unchanged to the caller.
+			</content>
+	    </section>
+  </developerConceptualDocument>
+</topic>
