@@ -709,23 +709,10 @@ if Variable REMOVE Equals TRUE
   if Variable SUCCESS not Equals ERROR
     if Variable SUCCESS not Equals CANCEL
       Set Variable PROGRESSTEXT to Removing pinned assemblies
-      Remove Unpinned Assemblies
       Write into Text File $SETUPLOG$ from Value $TIME$ Removing unpinned assemblies (at end of file)
+      Remove Unpinned Assemblies
+      Write into Text File $SETUPLOG$ from Value $TIME$ Removed unpinned assemblies (at end of file)
     end
-  end
-   
-  Set Variable PROGRESSTEXT to Removing desktop shortcuts and installed component state
-   
-  Comment: Remove the installer cache if it still exists
-  Does Folder Exist $INSTALLCACHEDIRECTORY$ (get result into variable INSTALLCACHEEXISTS)
-  if Variable INSTALLCACHEEXISTS Equals TRUE
-    Comment: Cache directory does exist so remove it
-    Write into Text File $SETUPLOG$ from Value $TIME$ Removing install cache found at $INSTALLCACHEDIRECTORY$ (at end of file)
-    Set Variable PROGRESSTEXT to Removing installer cache - Please wait, this can take some time...
-    Recursively Delete Files $INSTALLCACHEDIRECTORY$
-    Write into Text File $SETUPLOG$ from Value $TIME$ Install cache removed (at end of file)
-  else
-    Write into Text File $SETUPLOG$ from Value $TIME$ Install cache not found - $INSTALLCACHEDIRECTORY$ (at end of file)
   end
    
   Set Variable MYPROGRESS to 100
@@ -747,36 +734,6 @@ Include Script: setupvc1410_25017_x64
 Set Variable MYPROGRESS to 6
 Include Script: setupvc1410_25017_x86
 Set Variable MYPROGRESS to 9
- 
-[END REGION]
- 
-[DEFINE REGION: Pre-installation clean up]
-Write into Text File $SETUPLOG$ from Value   (at end of file)
- 
-Comment: System restore can screw up InstallAware under some circumstances by leaving a partially populated directory in ProgramData
-Comment: The following code removes this, if it exists to ensure that this IA install is successful
-Comment: As of IA X6 the Recursive delete files command can take a long time and result in "Not responding" appearing in the installation dialogue.
-Comment: The code will now only run if the installer is run directly from its executable and the REPAIR option is selected. i.e. most people won't see this most of the time
-if Variable REPAIR Equals (Ignore Case) TRUE
-  Write into Text File $SETUPLOG$ from Value $TIME$ Repair option selected so check whether the user is running an installer executable or using the Windows control panel (at end of file)
-  if Variable INSTALLMETHOD Equals (Ignore Case) EXECUTABLE
-    Write into Text File $SETUPLOG$ from Value $TIME$ Run from the installer executable - Installer cache will be deleted if it exists (at end of file)
-    Does Folder Exist $INSTALLCACHEDIRECTORY$ (get result into variable INSTALLCACHEEXISTS)
-    if Variable INSTALLCACHEEXISTS Equals TRUE
-      Comment: Cache directory does exist so remove it
-      Write into Text File $SETUPLOG$ from Value $TIME$ Removing install cache found at $INSTALLCACHEDIRECTORY$ (at end of file)
-      Set Variable PROGRESSTEXT to Removing installer cache - Please wait, this can take some time...
-      Recursively Delete Files $INSTALLCACHEDIRECTORY$
-      Write into Text File $SETUPLOG$ from Value $TIME$ Install cache removed (at end of file)
-    else
-      Write into Text File $SETUPLOG$ from Value $TIME$ Install cache not found - $INSTALLCACHEDIRECTORY$ (at end of file)
-    end
-  else
-    Write into Text File $SETUPLOG$ from Value $TIME$ Repair initiated from the Windows Setup Application Install / Uninstall control panel - Installer cache will not be deleted (at end of file)
-  end
-else
-  Write into Text File $SETUPLOG$ from Value $TIME$ Repair option not selected - Installer cache will not be deleted (at end of file)
-end
  
 [END REGION]
  
