@@ -39,6 +39,26 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Engine cache: $ENGINECACHE$ (a
 Write into Text File $SETUPLOG$ from Value $TIME$ MSI file: $MSIFILE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value   (at end of file)
  
+Comment: Run the RemoveASCOM program if requested on the command line
+if Variable CMDLINE Contains (Ignore Case) /RemoveASCOM
+  Write into Text File $SETUPLOG$ from Value $TIME$ $TITLE$ Command line contains /RemoveASCOM : $CMDLINE$ (at end of file)
+  Comment: Run the RemoveASCOM program
+  Run Program $SUPPORTDIR$\RemoveAscom.exe $REVISIONCODE$ (WAIT, get result into variable ERROROLD)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $ERROROLD$ - RemoveASCOM (at end of file)
+   
+  if Variable ERROROLD Equals 99
+    Comment: User ran ForceRemove but chose NOT to remove the Platform so give them a message and terminate the installer
+    Write into Text File $SETUPLOG$ from Value $TIME$ Terminating install. (at end of file)
+    MessageBox: Unable to uninstall current Platform, You chose not to force Platform removal and this installer will close when you click "OK".
+  else
+    Comment: We've forcibly removed the Platform and Profile store so now we just terminate ready for another installation
+    Write into Text File $SETUPLOG$ from Value $TIME$ Platform uninstaller run completed, (at end of file)
+    MessageBox: Platform Removed, The ASCOM Platform has been removed, the installer will now termiinate. Please run the installer again, without command line parameters, to install the Platform normally.
+  end
+  Comment: Terminate Installation
+  GoTo Label: End of Script
+end
+ 
 Comment: Set current leap second value
 Set Variable LEAPSECONDS to 37
  
@@ -410,7 +430,10 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$PRODUCTCODE$\UninstallString into UNINSTALLER
   Set Variable MYPROGRESS to 10
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling old Platform 6 - $UNINSTALLER$ (at end of file)
+   
+  Comment: Run uninstaller
   Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
+   
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $UNINSTALLCODE$ - Completed uninstallation (at end of file)
   Set Variable MYPROGRESS to 19
    
@@ -1711,4 +1734,5 @@ if Variable SILENT Equals FALSE
   end
 end
 [END REGION]
+label: End of Script
  
