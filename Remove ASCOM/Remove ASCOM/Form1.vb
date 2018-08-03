@@ -5,10 +5,13 @@ Imports Microsoft.Win32
 Imports System.Text
 Imports System.Globalization
 Imports System.Text.RegularExpressions
+Imports System.Threading
 
 Public Class Form1
     Private TL As TraceLogger
     Private PlatformRemoved As Boolean
+    Private CacheDirectory As String
+    Private UninstallDirectory As String
 
     'Constants for use with SHGetSpecialFolderPath
     Const CSIDL_COMMON_STARTMENU As Integer = 22 ' 0x0016  
@@ -26,6 +29,7 @@ Public Class Form1
     End Function
 
     Const PLATFORM6_INSTALL_KEY As String = "{8961E141-B307-4882-ABAD-77A3E76A40C1}"
+    Const PLATFORM_INSTALLER_FILENAME_BASE As String = "ASCOMPlatform"
 
     Const REMOVE_INSTALLER_COMBO_TEXT As String = "Platform and Installer only (Recommended)"
     Dim REMOVE_INSTALLER_BACK_COLOUR As Color = Color.Yellow
@@ -80,7 +84,7 @@ Public Class Form1
         TopLevelRemovalScript() ' Run the overall uninstallation script
 
         If PlatformRemoved Then ' We did remove the Platform so display a message and close this program so that the new installer can continue
-            MessageBox.Show(REMOVAL_COMPLETE_MESSAGE, "RemoveASCOM", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            If CacheDirectory = "" Then MessageBox.Show(REMOVAL_COMPLETE_MESSAGE, "RemoveASCOM", MessageBoxButtons.OK, MessageBoxIcon.Information) ' Show this final message if running stand alone, otherwise leave it to the mewssage in the IA installer
             End
         End If
     End Sub
@@ -92,6 +96,8 @@ Public Class Form1
     ''' <param name="e">Event arguments</param>
     ''' <remarks></remarks>
     Private Sub Form1_Load(sender As Object, e As System.EventArgs) Handles Me.Load
+        Dim arguments As String()
+
         Try
             TL = New TraceLogger("", "ForceRemove")
             TL.Enabled = True
@@ -113,6 +119,15 @@ Public Class Form1
             cmbRemoveMode.SelectedItem = REMOVE_INSTALLER_COMBO_TEXT ' This triggers a cmbRemoveMode_SelectedItemChanged event that paints the correct colours and text for the warning text box.
             TL.LogMessage("ForceRemove", "Removal options combo box populated OK")
             TL.LogMessage("ForceRemove", "Form loaded OK")
+
+            arguments = Environment.GetCommandLineArgs() ' Get the command line arguments as an array, the 0th element is the name of this executable, the 1st element will be an InstallAware feature code
+            If (arguments.Length > 1) Then ' Assume we have been given an additional path to delete. Used to remove the installer cache stored in ProgramData
+                CacheDirectory = arguments(1)
+                TL.LogMessage("ForceRemove", String.Format("Cache directory to be deleted: {0}", CacheDirectory))
+            Else
+                TL.LogMessage("ForceRemove", String.Format("No Cache directory to be deleted parameter was supplied"))
+            End If
+
 
         Catch ex As Exception
             TL.LogMessageCrLf("Form Load Exception", ex.ToString)
@@ -227,6 +242,11 @@ Public Class Form1
         Dim Vals() As String = {""}
         Dim SplitChars() As Char = {" "}
 
+        ' Variables for Platform clean up
+        Dim ASCOMDirectory As String
+        Dim DirInfo As DirectoryInfo, FileInfos() As FileInfo, DirInfos() As DirectoryInfo
+        Dim Found As Boolean
+
         Const PLATFORM41 As String = "Platform 4.1"
         Const PLATFORM50A As String = "Platform 5.0A"
         Const PLATFORM50A_PRODUCT As String = "Platform 5.0A Product"
@@ -269,7 +289,79 @@ Public Class Form1
             If Not (Registry.LocalMachine.OpenSubKey(InstallerKeys(PLATFORM60)) Is Nothing) Then ' Try and uninstall Platform 6
                 TL.LogMessage("Uninstall", PLATFORM60)
                 UninstallProgram = Registry.LocalMachine.OpenSubKey(InstallerKeys(PLATFORM60)).GetValue(UNINSTALL_STRING)
+                UninstallDirectory = Path.GetDirectoryName(UninstallProgram) ' Save the current installation's install directory so that it can be deleted at the end if it is not empty
                 RunProcess(PLATFORM60, UninstallProgram, ARGS60)
+                WaitFor(2000)
+
+                ' Remove any InstallAware install files remaining
+                TL.LogMessage("RemoveInstallers", "Removing InstallAware Installer Files")
+                Try
+                    ASCOMDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)
+                    DirInfo = New DirectoryInfo(ASCOMDirectory) ' Get a directory info for the common application data directory
+                    DirInfos = DirInfo.GetDirectories ' Get a list of directories within the common application data directory
+
+                    Action(Microsoft.VisualBasic.Left(ASCOMDirectory, 70))
+                    Try ' Get file details for each directory in this folder
+                        For Each DirInfo In DirInfos
+                            Try
+                                TL.LogMessageCrLf("RemoveInstallers", "  Processing directory -" & " " & DirInfo.Name & " - " & DirInfo.FullName & " ")
+                                If ((DirInfo.Name.StartsWith("mia", StringComparison.OrdinalIgnoreCase)) And (DirInfo.Name.EndsWith(".tmp", StringComparison.OrdinalIgnoreCase))) Then
+                                    TL.LogMessageCrLf("RemoveInstallers", String.Format("Ignoring directory {0} because it is an Installaware temporary working directory", DirInfo.Name))
+                                Else
+                                    FileInfos = DirInfo.GetFiles ' Get the list of files in this directory
+                                    Found = False
+                                    For Each MyFile As FileInfo In FileInfos ' Now delete them
+                                        TL.LogMessageCrLf("RemoveInstallers", "  Processing file -" & " " & MyFile.Name & " - " & MyFile.FullName & " ")
+
+                                        If ((MyFile.Name.ToUpperInvariant = PLATFORM6_INSTALL_KEY.ToUpperInvariant()) Or (MyFile.Name.StartsWith(PLATFORM_INSTALLER_FILENAME_BASE, StringComparison.OrdinalIgnoreCase))) Then
+                                            Found = True
+                                            TL.LogMessageCrLf("RemoveInstallers", "  Found install directory directory - " & DirInfo.Name)
+                                        End If
+                                    Next
+                                    If Found Then
+                                        TL.LogMessageCrLf("RemoveInstallers", "  Removing directory - " & DirInfo.FullName)
+                                        RemoveFilesRecurse(DirInfo.FullName)
+                                    End If
+                                End If
+                            Catch ex As UnauthorizedAccessException
+                                TL.LogMessage("RemoveInstallers 2", "UnauthorizedAccessException for directory; " & DirInfo.FullName)
+                            Catch ex As Exception
+                                TL.LogMessageCrLf("RemoveInstallers 2", "Exception: " & ex.ToString)
+                            End Try
+                        Next
+                    Catch ex As UnauthorizedAccessException
+                        TL.LogMessage("RemoveInstallers", "UnauthorizedAccessException for directory; " & DirInfo.FullName)
+                    Catch ex As Exception
+                        TL.LogMessageCrLf("RemoveInstallers", "Exception: " & ex.ToString)
+                    End Try
+
+                    WaitFor(1000)
+                    ' Remove any left over cache directories of which we are aware
+                    Try
+                        If CacheDirectory <> "" Then
+                            TL.LogMessageCrLf("RemoveInstallers", String.Format("Removing this executable's installer cache {0}", CacheDirectory))
+                            ASCOMDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)
+
+                            RemoveFilesRecurse(String.Format("{0}\{1}", ASCOMDirectory, CacheDirectory))
+                            TL.LogMessageCrLf("RemoveInstallers", String.Format("Removed this executable's installer cache {0}", CacheDirectory))
+
+                            If UninstallDirectory <> "" Then
+                                TL.LogMessageCrLf("RemoveInstallers", String.Format("Removing current executable's installer cache {0}", UninstallDirectory))
+                                RemoveFilesRecurse(UninstallDirectory)
+                                TL.LogMessageCrLf("RemoveInstallers", String.Format("Removed current installer cache {0}", UninstallDirectory))
+                            Else
+                            End If
+                        Else
+                            TL.LogMessageCrLf("RemoveInstallers", "No installer feature code supplied - no action taken")
+                        End If
+                    Catch ex As Exception
+                        TL.LogMessageCrLf("RemoveInstallers", "Exception: " & ex.ToString)
+                    End Try
+
+                Catch ex As Exception
+                    TL.LogMessageCrLf("RemoveInstallers", "Exception: " & ex.ToString)
+                End Try
+
             Else
                 TL.LogMessage("Uninstall", "Installer key for Platform 6 not present")
             End If
@@ -652,48 +744,6 @@ Public Class Form1
                 TL.BlankLine()
             End If
 
-            ' Remove any InstallAware install files remaining
-            TL.LogMessage("RemoveDirectories", "Removing InstallAware Installer Files")
-            Try
-                ASCOMDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)
-                DirInfo = New DirectoryInfo(ASCOMDirectory) ' Get a directory info for the common application data directory
-                DirInfos = DirInfo.GetDirectories ' Get a list of directories within the common application data directory
-
-                Action(Microsoft.VisualBasic.Left(ASCOMDirectory, 70))
-                Try ' Get file details for each directory in this folder
-                    For Each DirInfo In DirInfos
-                        Try
-                            TL.LogMessageCrLf("RemoveDirectories", "  Processing directory - " & "#" & DirInfo.Name & "#" & DirInfo.FullName & "#")
-                            FileInfos = DirInfo.GetFiles ' Get the list of files in this directory
-                            Found = False
-                            For Each MyFile As FileInfo In FileInfos ' Now delete them
-                                TL.LogMessageCrLf("RemoveDirectories", "  Processing file - " & "#" & MyFile.Name & "#" & MyFile.FullName & "#")
-
-                                If MyFile.Name.ToUpperInvariant = PLATFORM6_INSTALL_KEY.ToUpperInvariant() Then
-                                    Found = True
-                                    TL.LogMessageCrLf("RemoveDirectories", "  Found install directory directory - " & DirInfo.Name)
-                                End If
-                            Next
-                            If Found Then
-                                TL.LogMessageCrLf("RemoveDirectories", "  Removing directory - " & DirInfo.FullName)
-                                RemoveFilesRecurse(DirInfo.FullName)
-                            End If
-                        Catch ex As UnauthorizedAccessException
-                            TL.LogMessage("RemoveDirectories 2", "UnauthorizedAccessException for directory; " & DirInfo.FullName)
-                        Catch ex As Exception
-                            TL.LogMessageCrLf("RemoveDirectories 2", "Exception: " & ex.ToString)
-                        End Try
-                    Next
-                Catch ex As UnauthorizedAccessException
-                    TL.LogMessage("RemoveDirectories", "UnauthorizedAccessException for directory; " & DirInfo.FullName)
-                Catch ex As Exception
-                    TL.LogMessageCrLf("RemoveDirectories", "Exception: " & ex.ToString)
-                End Try
-
-            Catch ex As Exception
-                TL.LogMessageCrLf("RemoveDirectories", "Exception: " & ex.ToString)
-            End Try
-
         Catch ex1 As Exception
             TL.LogMessageCrLf("RemoveDirectories", "Exception 1: " & ex1.ToString)
         End Try
@@ -999,6 +1049,16 @@ Public Class Form1
         Return (IntPtr.Size = 8)
     End Function
 
+    Private Sub WaitFor(period As Integer)
+        Dim startTime As DateTime
+        startTime = DateTime.Now
+        Do
+            Thread.Sleep(20)
+            Application.DoEvents()
+        Loop Until Now.Subtract(startTime).TotalMilliseconds >= period
+
+    End Sub
+
     'run the uninstaller
     Private Sub RunProcess(ByVal InstallerName As String, ByVal processToRun As String, ByVal args As String)
         Dim startInfo As ProcessStartInfo, myProcess As Process, ProcessTimeout, elapsedTime As TimeSpan
@@ -1039,7 +1099,7 @@ Public Class Form1
             Catch
             End Try
         Catch e As Exception
-                TL.LogMessageCrLf("RunProcess", "Exception: " & e.ToString())
+            TL.LogMessageCrLf("RunProcess", "Exception: " & e.ToString())
         End Try
     End Sub
 
