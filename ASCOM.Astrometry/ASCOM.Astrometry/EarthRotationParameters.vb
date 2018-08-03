@@ -49,6 +49,10 @@ Public Class EarthRotationParameters : Implements IDisposable
     Private Const MONTH As Integer = 2
     Private Const LEAP_SECONDS As Integer = 3
 
+    ' Constants for the minimum and maximum Julian date values that are accepted by the DeltaT function
+    Private Const DELTAT_JULIAN_DATE_MINIMUM As Double = 1757582.5
+    Private Const DELTAT_JULIAN_DATE_MAXIMUM As Double = 5373484.499999
+
     ' Downloaded leap second data. Format:  JulianDate, Year, Month, Day LeapSeconds
     Private DownloadedLeapSecondValues As SortedList(Of Double, Double) = New SortedList(Of Double, Double) ' Initialise to an empty list
 
@@ -464,6 +468,11 @@ Public Class EarthRotationParameters : Implements IDisposable
     ''' <returns>DeltaT value as a double</returns>
     Public Overloads Function DeltaT(RequiredDeltaTJulianDateUTC As Double) As Double
         Dim DeltaUT1, ReturnValue As Double, UTCDate As DateTime, DeltaUT1ValueName, DeltaUT1String As String
+
+        ' Validate supplied Julian date - must be in the range [00:00:00 1 January 0100] to [23:59:59.999 31 December 9999]
+        If ((RequiredDeltaTJulianDateUTC < DELTAT_JULIAN_DATE_MINIMUM) Or (RequiredDeltaTJulianDateUTC > DELTAT_JULIAN_DATE_MAXIMUM)) Then
+            Throw New InvalidValueException("The EarthRotationParameters.DeltaT(JD) Julian Date parameter", RequiredDeltaTJulianDateUTC.ToString(), DELTAT_JULIAN_DATE_MINIMUM.ToString(), DELTAT_JULIAN_DATE_MAXIMUM.ToString())
+        End If
 
         SyncLock DeltaTLockObject
             If Math.Truncate(RequiredDeltaTJulianDateUTC - MODIFIED_JULIAN_DAY_OFFSET) = Math.Truncate(LastDeltaTJulianDate - MODIFIED_JULIAN_DAY_OFFSET) Then ' Return the cached value if its availahble otherwise calculate it and save the value for the next call

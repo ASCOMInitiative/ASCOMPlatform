@@ -18,10 +18,28 @@ namespace ASCOM
     public class InvalidValueException : DriverException
     {
         [NonSerialized] const string csMessage = "{0} set - '{1}' is an invalid value. The valid range is: {2}.";
+        [NonSerialized] const string csMessage2 = "{0} - '{1}' is an invalid value. The valid range is: {2} to {3}.";
         [NonSerialized] const string csUnspecified = "unspecified";
         [NonSerialized] string invalidValue;
         [NonSerialized] string propertyOrMethod;
         [NonSerialized] string range;
+        [NonSerialized] string fromValue;
+        [NonSerialized] string toValue;
+
+        /// <summary>
+        /// Create a new exception object and identify the specified driver property or method as the source.
+        /// </summary>
+        /// <param name = "propertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
+        /// <param name = "value">The invalid value that was supplied</param>
+        /// <param name="fromValue"></param>
+        /// <param name="toValue"></param>
+        public InvalidValueException(string propertyOrMethod, string value, string fromValue, string toValue) : base(String.Format(CultureInfo.InvariantCulture, csMessage2, propertyOrMethod, value, fromValue, toValue), ErrorCodes.InvalidValue)
+        {
+            PropertyOrMethod = propertyOrMethod;
+            Value = value;
+            FromValue = fromValue;
+            ToValue = toValue;
+        }
 
         /// <summary>
         /// Create a new exception object and identify the specified driver property or method as the source.
@@ -110,5 +128,24 @@ namespace ASCOM
             get { return range; }
             private set { range = value; }
         }
+
+        /// <summary>
+        /// The lower value of the valid range.
+        /// </summary>
+        public string FromValue
+        {
+            get { return fromValue; }
+            private set { fromValue = value; }
+        }
+
+        /// <summary>
+        /// The higher end of the valid range.
+        /// </summary>
+        public string ToValue
+        {
+            get { return toValue; }
+            private set { toValue = value; }
+        }
+
     }
 }

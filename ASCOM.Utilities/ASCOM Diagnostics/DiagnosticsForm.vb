@@ -2695,6 +2695,46 @@ Public Class DiagnosticsForm
                     DeltaTResult1 = Nov31.DeltaT(JDTest)
                     DeltaTResult2 = Nov31.DeltaT(AstroUtil.JulianDateUtc)
                     TL.LogMessage("NOVAS31DeltaT", String.Format("DeltaT (JD {0}): {1}, DeltaT (JD {2}): {3}", JDTest, DeltaTResult1, AstroUtil.JulianDateUtc, DeltaTResult2))
+
+                    ' Confirm DeltaT validation limits - supplied Julian date must be in the range [00:00:00 1 January 0100] to [23:59:59.999 31 December 9999]
+
+                    Dim WorkedOK As Boolean
+
+                    Try
+                        JD = Nov31.JulianDate(100, 1, 1, 0.0)
+                        DeltaTResult1 = Nov31.DeltaT(JD)
+                        WorkedOK = True
+                        TL.LogMessage("NOVAS31DeltaT", String.Format("Received DeltaT = {0} for Julian date 00:00:00 1 January 0100", DeltaTResult1))
+                    Catch ex As Exception
+                        WorkedOK = False
+                        LogException("NOVAS31DeltaT - Minimum Value", ex.ToString())
+                    End Try
+                    CompareBoolean("NOVAS31DeltaT", "Minimum value OK (00:00:00 1 January 0100)", WorkedOK, True)
+
+                    Try
+                        JD = Nov31.JulianDate(9999, 12, 31, 23.999)
+                        DeltaTResult1 = Nov31.DeltaT(JD)
+                        WorkedOK = True
+                        TL.LogMessage("NOVAS31DeltaT", String.Format("Received DeltaT = {0} for Julian date 23:59:59.999 31 December 9999", DeltaTResult1))
+                    Catch ex As Exception
+                        WorkedOK = False
+                        LogException("NOVAS31DeltaT - Maximum Value", ex.ToString())
+                    End Try
+                    CompareBoolean("NOVAS31DeltaT", "Maximum value OK (23:59:59.999 31 December 9999)", WorkedOK, True)
+
+                    Try
+                        JD = Nov31.JulianDate(1, 1, 1, 0.0)
+                        DeltaTResult1 = Nov31.DeltaT(JD)
+                        WorkedOK = False
+                        TL.LogMessage("NOVAS31DeltaT", String.Format("Received DeltaT = {0} for Julian date 00:00:00 1 January 0001", DeltaTResult1))
+                    Catch ex As InvalidValueException
+                        WorkedOK = True
+                        TL.LogMessage("NOVAS31DeltaT", String.Format("Received an InvalidValueException as expected when the supplied JD is below the minimum value: {0}", ex.Message()))
+                    Catch ex As Exception
+                        WorkedOK = False
+                    End Try
+                    CompareBoolean("NOVAS31DeltaT", "JD below the minimum value threw InvalidValueException as expected (00:00:00 1 January 0001)", WorkedOK, True)
+
                 Case NOVAS3Functions.Aberration
                     rc = 0
                     Nov31.RaDec2Vector(20.0, 40.0, 100, Pos)
