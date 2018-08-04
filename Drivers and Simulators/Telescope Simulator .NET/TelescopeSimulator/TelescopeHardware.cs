@@ -1708,8 +1708,8 @@ namespace ASCOM.Simulator
                     return true;
                 if (rateAxes.LengthSquared != 0)
                     return true;
-                if (rateRaDec.LengthSquared != 0)
-                    return true;
+                //if (rateRaDec.LengthSquared != 0) // Commented out by Peter 4th August 2018 because the Telescope specification says that RightAscensionRate and DeclinationRate do not affect the Slewing state
+                //    return true;
                 return slewing && rateAxes.Y != 0 && rateAxes.X != 0;
             }
         }
