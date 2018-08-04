@@ -719,7 +719,6 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' The right ascension tracking rate offset from sidereal (seconds per sidereal second, default = 0.0)
     ''' </summary>
     ''' <exception cref="PropertyNotImplementedException">If RightAscensionRate Write is not implemented.</exception>
-    ''' <exception cref="InvalidValueException">If an invalid drive rate is set.</exception>
     ''' <exception cref="InvalidValueException">If an invalid rate is set.</exception>
     ''' <remarks>
     ''' <p style="color:red;margin-bottom:0"><b>RightAscensionRate Read must be implemented and must not throw a PropertyNotImplementedException. </b></p>

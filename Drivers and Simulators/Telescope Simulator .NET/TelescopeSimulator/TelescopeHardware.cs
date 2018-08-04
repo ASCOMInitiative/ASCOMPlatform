@@ -126,7 +126,7 @@ namespace ASCOM.Simulator
         private static Vector targetRaDec;
 
         /// <summary>
-        /// Right Ascension (X) and declination (Y) rates, deg/sec
+        /// Right Ascension (X) and declination (Y) rates (deg/sec) set through the RightAscensionRate and DeclinationRate properties
         /// </summary>
         public static Vector rateRaDec = new Vector();
 
@@ -160,7 +160,7 @@ namespace ASCOM.Simulator
         public static Vector guideDuration = new Vector();
 
         /// <summary>
-        /// Axis Rates, deg/sec.
+        /// Axis Rates (deg/sec) set by the MoveAxis method
         /// </summary>
         public static Vector rateAxes = new Vector();
 
