@@ -1051,6 +1051,9 @@ namespace ASCOM.Simulator
 
             SharedResources.TrafficStart(" RA " + m_Util.HoursToHMS(RightAscension) + " DEC " + m_Util.DegreesToDMS(Declination));
 
+            TelescopeHardware.TargetRightAscension = RightAscension; // Set the Target RA and Dec prior to the Slew attempt per the ASCOM Telescope specification
+            TelescopeHardware.TargetDeclination = Declination;
+
             TelescopeHardware.StartSlewRaDec(RightAscension, Declination, true);
 
             //while (TelescopeHardware.SlewState == SlewType.SlewRaDec || TelescopeHardware.SlewState == SlewType.SlewSettle)
@@ -1069,6 +1072,9 @@ namespace ASCOM.Simulator
             CheckRange(Declination, -90, 90, "SlewToCoordinatesAsync", "Declination");
             CheckParked("SlewToCoordinatesAsync");
             CheckTracking(true, "SlewToCoordinatesAsync");
+
+            TelescopeHardware.TargetRightAscension = RightAscension; // Set the Target RA and Dec prior to the Slew attempt per the ASCOM Telescope specification
+            TelescopeHardware.TargetDeclination = Declination;
 
             SharedResources.TrafficStart(" RA " + m_Util.HoursToHMS(RightAscension) + " DEC " + m_Util.DegreesToDMS(Declination));
 
