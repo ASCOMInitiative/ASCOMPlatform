@@ -130,11 +130,13 @@ namespace ASCOM.Simulator
             // no supported actions, return empty array
             get
             {
-                ArrayList sa = new ArrayList();
-                sa.Add(AssemblyVersionNumber); // Add a test action to return a value
-                sa.Add(SlewToHA); // Expects an numeric HA Parameter
-                sa.Add("AvailableTimeInThisPointingState");
-                sa.Add("TimeUntilPointingStateCanChange");
+                ArrayList sa = new ArrayList
+                {
+                    AssemblyVersionNumber, // Add a test action to return a value
+                    SlewToHA, // Expects a numeric HA Parameter
+                    "AvailableTimeInThisPointingState",
+                    "TimeUntilPointingStateCanChange"
+                };
 
                 return sa;
             }
