@@ -253,7 +253,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                SharedResources.TrafficStart(SharedResources.MessageType.Polls, "Azimuth: ");
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "Azimuth: ");
 
                 CheckCapability(TelescopeHardware.CanAltAz, "Azimuth", false);
 
@@ -1160,7 +1160,7 @@ namespace ASCOM.Simulator
 
             TelescopeHardware.ChangePark(false);
 
-            TelescopeHardware.SyncToTargetRaDec();
+            TelescopeHardware.SyncToTarget();
 
             //TelescopeHardware.RightAscension = RightAscension;
             //TelescopeHardware.Declination = Declination;
@@ -1183,7 +1183,7 @@ namespace ASCOM.Simulator
 
             TelescopeHardware.ChangePark(false);
 
-            TelescopeHardware.SyncToTargetRaDec();
+            TelescopeHardware.SyncToTarget();
 
             //TelescopeHardware.RightAscension = TelescopeHardware.TargetRightAscension;
             //TelescopeHardware.Declination = TelescopeHardware.TargetDeclination;
