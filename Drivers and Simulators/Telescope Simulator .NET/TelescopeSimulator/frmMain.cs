@@ -19,7 +19,7 @@ namespace ASCOM.Simulator
 
         public FrmMain()
         {
-            InitializeComponent(); 
+            InitializeComponent();
             this.BringToFront();
             //this.BackColor = Color.Brown;
         }
@@ -123,13 +123,13 @@ namespace ASCOM.Simulator
             }
         }
 
-        private void buttonSetup_Click(object sender, EventArgs e)
+        private void ButtonSetup_Click(object sender, EventArgs e)
         {
             DoSetupDialog();
             SetSlewButtons();
         }
 
-        private void buttonTraffic_Click(object sender, EventArgs e)
+        private void ButtonTraffic_Click(object sender, EventArgs e)
         {
             SharedResources.TrafficForm.Show();
         }
@@ -162,52 +162,52 @@ namespace ASCOM.Simulator
 
         public void SiderealTime(double value)
         {
-                SetTextCallback setText = new SetTextCallback(SetLstText);
-                string text = util.HoursToHMS(value);
-                try{this.Invoke(setText, text);}
-                catch { }
+            SetTextCallback setText = new SetTextCallback(SetLstText);
+            string text = util.HoursToHMS(value);
+            try { this.Invoke(setText, text); }
+            catch { }
         }
 
         public void RightAscension(double value)
         {
-                SetTextCallback setText = new SetTextCallback(SetRaText);
-                string text = util.HoursToHMS(value);
-                try { this.Invoke(setText, text); }
-                catch { }
+            SetTextCallback setText = new SetTextCallback(SetRaText);
+            string text = util.HoursToHMS(value);
+            try { this.Invoke(setText, text); }
+            catch { }
         }
 
         public void Declination(double value)
         {
-                SetTextCallback setText = new SetTextCallback(SetDecText);
-                string text = util.DegreesToDMS(value);
-                try { this.Invoke(setText, text); }
-                catch { }
+            SetTextCallback setText = new SetTextCallback(SetDecText);
+            string text = util.DegreesToDMS(value);
+            try { this.Invoke(setText, text); }
+            catch { }
         }
 
         public void Altitude(double value)
         {
-                SetTextCallback setText = new SetTextCallback(SetAltitudeText);
-                string text = util.DegreesToDMS(value);
-                try { this.Invoke(setText, text); }
-                catch { }
+            SetTextCallback setText = new SetTextCallback(SetAltitudeText);
+            string text = util.DegreesToDMS(value);
+            try { this.Invoke(setText, text); }
+            catch { }
         }
 
         public void Azimuth(double value)
         {
-                SetTextCallback setText = new SetTextCallback(SetAzimuthText);
-                string text = util.DegreesToDMS(value);
-                try { this.Invoke(setText, text); }
-                catch { }
+            SetTextCallback setText = new SetTextCallback(SetAzimuthText);
+            string text = util.DegreesToDMS(value);
+            try { this.Invoke(setText, text); }
+            catch { }
         }
 
         public void ParkButton(string value)
         {
-                SetTextCallback setText = new SetTextCallback(SetParkButtonText);
-                try { this.Invoke(setText, value); }
-                catch { }
+            SetTextCallback setText = new SetTextCallback(SetParkButtonText);
+            try { this.Invoke(setText, value); }
+            catch { }
         }
 
-        private void frmMain_Load(object sender, EventArgs e)
+        private void FrmMain_Load(object sender, EventArgs e)
         {
             SetSlewButtons();
             TelescopeHardware.Start();
@@ -245,7 +245,7 @@ namespace ASCOM.Simulator
         #region slew/guide control using buttons
 
         private void SetPulseGuideParms(double guideRateDec, double guideRateRa)
-		{
+        {
             // stop an axis slew if that's what is enabled
             if (this.radioButtonMoveAxis.Checked)
             {
@@ -253,25 +253,25 @@ namespace ASCOM.Simulator
                 return;
             }
             Debug.Assert(guideRateDec != 0.0 || guideRateRa != 0.0);
-			Debug.Assert( !( guideRateDec != 0.0 && guideRateRa != 0.0 ) );
+            Debug.Assert(!(guideRateDec != 0.0 && guideRateRa != 0.0));
 
-			if ( guideRateDec != 0.0 )
-			{
-				TelescopeHardware.GuideRateDeclination = guideRateDec;
-				TelescopeHardware.isPulseGuidingDec = true;
+            if (guideRateDec != 0.0)
+            {
+                TelescopeHardware.GuideRateDeclination = guideRateDec;
+                TelescopeHardware.isPulseGuidingDec = true;
                 TelescopeHardware.guideDuration.Y = GuideDuration();
-			}
-			else
-			{
+            }
+            else
+            {
                 if (TelescopeHardware.SouthernHemisphere)
                 {
                     guideRateRa *= -1;
                 }
-				TelescopeHardware.GuideRateRightAscension = guideRateRa;
-				TelescopeHardware.isPulseGuidingRa = true;
+                TelescopeHardware.GuideRateRightAscension = guideRateRa;
+                TelescopeHardware.isPulseGuidingRa = true;
                 TelescopeHardware.guideDuration.X = GuideDuration();
-			}
-		}
+            }
+        }
 
         private static double GuideDuration()
         {
@@ -306,11 +306,11 @@ namespace ASCOM.Simulator
 
         private void StartSlew(SlewDirection direction)
         {
-			if ( this.radioButtonPulseGuide.Checked )
-			{
-				// Nothing to do for pulse guiding here.
-				return;
-			}
+            if (this.radioButtonPulseGuide.Checked)
+            {
+                // Nothing to do for pulse guiding here.
+                return;
+            }
             if (TelescopeHardware.AlignmentMode == DeviceInterface.AlignmentModes.algAltAz)
             {
                 TelescopeHardware.SlewDirection = direction;
@@ -329,11 +329,11 @@ namespace ASCOM.Simulator
                         break;
                     case SlewDirection.SlewNorth:
                     case SlewDirection.SlewUp:
-                        TelescopeHardware.SlewDirection = TelescopeHardware.SouthernHemisphere  ? SlewDirection.SlewSouth : SlewDirection.SlewNorth;
+                        TelescopeHardware.SlewDirection = TelescopeHardware.SouthernHemisphere ? SlewDirection.SlewSouth : SlewDirection.SlewNorth;
                         break;
                     case SlewDirection.SlewSouth:
                     case SlewDirection.SlewDown:
-                        TelescopeHardware.SlewDirection = TelescopeHardware.SouthernHemisphere  ? SlewDirection.SlewNorth : SlewDirection.SlewSouth;
+                        TelescopeHardware.SlewDirection = TelescopeHardware.SouthernHemisphere ? SlewDirection.SlewNorth : SlewDirection.SlewSouth;
                         break;
                     case SlewDirection.SlewNone:
                     default:
@@ -344,53 +344,53 @@ namespace ASCOM.Simulator
             SetSlewSpeed();
         }
 
-        private void buttonSlewUp_MouseDown(object sender, MouseEventArgs e)
+        private void ButtonSlewUp_MouseDown(object sender, MouseEventArgs e)
         {
             StartSlew(SlewDirection.SlewUp);
         }
 
-        private void buttonSlewUp_MouseUp(object sender, MouseEventArgs e)
+        private void ButtonSlewUp_MouseUp(object sender, MouseEventArgs e)
         {
             SetPulseGuideParms(guideRate, 0.0);
         }
 
-        private void buttonSlewDown_MouseDown(object sender, MouseEventArgs e)
+        private void ButtonSlewDown_MouseDown(object sender, MouseEventArgs e)
         {
             StartSlew(SlewDirection.SlewDown);
         }
 
-        private void buttonSlewDown_MouseUp(object sender, MouseEventArgs e)
+        private void ButtonSlewDown_MouseUp(object sender, MouseEventArgs e)
         {
-			SetPulseGuideParms( -guideRate, 0.0);
-		}
+            SetPulseGuideParms(-guideRate, 0.0);
+        }
 
-        private void buttonSlewRight_MouseDown(object sender, MouseEventArgs e)
+        private void ButtonSlewRight_MouseDown(object sender, MouseEventArgs e)
         {
             StartSlew(SlewDirection.SlewRight);
         }
 
-        private void buttonSlewRight_MouseUp(object sender, MouseEventArgs e)
+        private void ButtonSlewRight_MouseUp(object sender, MouseEventArgs e)
         {
-			SetPulseGuideParms( 0.0, guideRate);
-		}
+            SetPulseGuideParms(0.0, guideRate);
+        }
 
-        private void buttonSlewLeft_MouseDown(object sender, MouseEventArgs e)
+        private void ButtonSlewLeft_MouseDown(object sender, MouseEventArgs e)
         {
             StartSlew(SlewDirection.SlewLeft);
         }
 
-        private void buttonSlewLeft_MouseUp(object sender, MouseEventArgs e)
+        private void ButtonSlewLeft_MouseUp(object sender, MouseEventArgs e)
         {
-			SetPulseGuideParms( 0.0, -guideRate);
-		}
+            SetPulseGuideParms(0.0, -guideRate);
+        }
 
-        private void buttonSlewStop_Click(object sender, EventArgs e)
+        private void ButtonSlewStop_Click(object sender, EventArgs e)
         {
             TelescopeHardware.AbortSlew();
         }
         #endregion
 
-        private void checkBoxTrack_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxTrack_CheckedChanged(object sender, EventArgs e)
         {
             if (TelescopeHardware.Tracking == checkBoxTrack.Checked)
                 return;
@@ -435,7 +435,7 @@ namespace ASCOM.Simulator
             });
         }
 
-        private void buttonUnpark_Click(object sender, EventArgs e)
+        private void ButtonUnpark_Click(object sender, EventArgs e)
         {
             if (TelescopeHardware.IsParked)
             {
@@ -450,7 +450,7 @@ namespace ASCOM.Simulator
             }
         }
 
-        private void buttonHome_Click(object sender, EventArgs e)
+        private void ButtonHome_Click(object sender, EventArgs e)
         {
             TelescopeHardware.FindHome();
         }

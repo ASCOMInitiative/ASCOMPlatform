@@ -67,12 +67,12 @@ namespace ASCOM.Simulator
                // Other,0
         }
 
-        private void cmdOK_Click(object sender, EventArgs e)
+        private void CmdOK_Click(object sender, EventArgs e)
         {
         
         }
 
-        private void cmdCancel_Click(object sender, EventArgs e)
+        private void CmdCancel_Click(object sender, EventArgs e)
         {
          
         }
@@ -432,10 +432,17 @@ namespace ASCOM.Simulator
         }
         #endregion
 
-        private void buttonSetParkPosition_Click(object sender, EventArgs e)
+        private void ButtonSetParkPosition_Click(object sender, EventArgs e)
         {
             TelescopeHardware.ParkAltitude = TelescopeHardware.Altitude;
             TelescopeHardware.ParkAzimuth = TelescopeHardware.Azimuth;
+        }
+
+
+        private void ButtonParkHomeAndStartupOptions_Click(object sender, EventArgs e)
+        {
+            Form formPark = new ParkHomeAndStartupForm();
+            formPark.ShowDialog();
         }
 
         private void SetupDialogForm_Load(object sender, EventArgs e)
