@@ -15,6 +15,5 @@ Remove 64bit components
 ASCOM Cache
 Remove Previous Platforms 4 and 5 if present
 Non-MSI installation activities
-Remove 32bit components
 Install Application Pre-Requisites if required
 Maintenance Dialogue

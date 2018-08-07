@@ -677,33 +677,44 @@ if Variable REMOVE Equals TRUE
   Comment: Unregister assemblies
   Set Variable MYPROGRESS to 80
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Astrometry - v5.5.6.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering Astrometry 5.5.6.0 (at end of file)
   Unregister assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Astrometry - v6.0.0.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering Astrometry 6.0.0.0 (at end of file)
   Unregister assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Exceptions - v1.1.0.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering Exceptions 1.1.0.0 (at end of file)
   Unregister assembly ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Exceptions- v6.0.0.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering Exceptions 6.0.0.0 (at end of file)
   Unregister assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable MYPROGRESS to 85
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Interfaces - v1.0.0.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering Interfaces 1.0.0.0 (at end of file)
   Unregister assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Internal.FusionLib - v1.0.0.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering FusionLib 1.0.0.0 (at end of file)
   Unregister assembly ASCOM.Internal.FusionLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Utilities - v5.5.6.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering Utilities 5.5.6.0 (at end of file)
   Unregister assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Utilities - v6.0.0.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering Utilities 6.0.0.0 (at end of file)
   Unregister assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Cache - v6.0.0.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering Cache 6.0.0.0 (at end of file)
   Unregister assembly ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
    
   Comment: Unregister MasterInterfaces TypeLib
   Set Variable PROGRESSTEXT to Unregistering ASCOM Master Interfaces Typelib
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering ASCOM Master Interfaces typelib (at end of file)
   Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe -u "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Unregister ASCOM Master Interfaces typelib (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Unregistered ASCOM Master Interfaces typelib (at end of file)
   Set Variable MYPROGRESS to 90
   [END REGION]
    
   Set Variable PROGRESSTEXT to Uninstalling Platform...
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Uninstalling Platform 6 (at end of file)
   Apply Uninstall (get result into variable SUCCESS)
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstall return code: $SUCCESS$ (at end of file)
   if Variable SUCCESS not Equals ERROR
@@ -718,7 +729,7 @@ if Variable REMOVE Equals TRUE
   Set Variable MYPROGRESS to 100
   MessageBalloon: , 
   Set Variable PROGRESSTEXT to Finished uninstalling Platform 6
-  Write into Text File $SETUPLOG$ from Value $TIME$ Finished uninstalling Platform (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Finished uninstalling Platform 6 (at end of file)
    
   Comment: Bypass the installation code and go to the finish dialogue
   GoTo Label: Finish Setup
