@@ -654,14 +654,14 @@ namespace ASCOM.Simulator
         {
             get
             {
-                SharedResources.TrafficStart(SharedResources.MessageType.Other, "GuideRateRightAscension: ");
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateRightAscension: ");
                 CheckVersionOne("GuideRateRightAscension", false);
                 SharedResources.TrafficEnd(TelescopeHardware.GuideRateRightAscension.ToString(CultureInfo.InvariantCulture));
                 return TelescopeHardware.GuideRateRightAscension;
             }
             set
             {
-                SharedResources.TrafficStart(SharedResources.MessageType.Other, "GuideRateRightAscension->: ");
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateRightAscension->: ");
                 CheckVersionOne("GuideRateRightAscension", true);
                 SharedResources.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
                 TelescopeHardware.GuideRateRightAscension = value;
@@ -876,7 +876,11 @@ namespace ASCOM.Simulator
 
         public PierSide SideOfPier
         {
-            get { return TelescopeHardware.SideOfPier; }
+            get
+            {
+                SharedResources.TrafficLine(SharedResources.MessageType.Polls, string.Format("SideOfPier: {0}", TelescopeHardware.SideOfPier));
+                return TelescopeHardware.SideOfPier;
+            }
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SideOfPier: ");
@@ -1091,7 +1095,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                SharedResources.TrafficLine(SharedResources.MessageType.Slew, string.Format(CultureInfo.CurrentCulture, "Slewing: {0}", TelescopeHardware.SlewState != SlewType.SlewNone));
+                SharedResources.TrafficLine(SharedResources.MessageType.Polls, string.Format(CultureInfo.CurrentCulture, "Slewing: {0}", TelescopeHardware.SlewState != SlewType.SlewNone));
                 return TelescopeHardware.IsSlewing;
             }
         }
