@@ -59,7 +59,7 @@
             this.BtnOK.Location = new System.Drawing.Point(279, 314);
             this.BtnOK.Name = "BtnOK";
             this.BtnOK.Size = new System.Drawing.Size(75, 23);
-            this.BtnOK.TabIndex = 0;
+            this.BtnOK.TabIndex = 8;
             this.BtnOK.Text = "OK";
             this.BtnOK.UseVisualStyleBackColor = true;
             this.BtnOK.Click += new System.EventHandler(this.BtnOK_Click);
@@ -69,7 +69,7 @@
             this.txtStartAzimuth.Location = new System.Drawing.Point(39, 108);
             this.txtStartAzimuth.Name = "txtStartAzimuth";
             this.txtStartAzimuth.Size = new System.Drawing.Size(105, 20);
-            this.txtStartAzimuth.TabIndex = 1;
+            this.txtStartAzimuth.TabIndex = 2;
             // 
             // cmbStartupMode
             // 
@@ -78,7 +78,7 @@
             this.cmbStartupMode.Location = new System.Drawing.Point(33, 39);
             this.cmbStartupMode.Name = "cmbStartupMode";
             this.cmbStartupMode.Size = new System.Drawing.Size(208, 21);
-            this.cmbStartupMode.TabIndex = 2;
+            this.cmbStartupMode.TabIndex = 1;
             // 
             // label1
             // 
@@ -95,7 +95,7 @@
             this.txtStartAltitude.Location = new System.Drawing.Point(39, 134);
             this.txtStartAltitude.Name = "txtStartAltitude";
             this.txtStartAltitude.Size = new System.Drawing.Size(105, 20);
-            this.txtStartAltitude.TabIndex = 4;
+            this.txtStartAltitude.TabIndex = 3;
             // 
             // label2
             // 
@@ -142,14 +142,14 @@
             this.txtParkAltitude.Location = new System.Drawing.Point(39, 222);
             this.txtParkAltitude.Name = "txtParkAltitude";
             this.txtParkAltitude.Size = new System.Drawing.Size(105, 20);
-            this.txtParkAltitude.TabIndex = 9;
+            this.txtParkAltitude.TabIndex = 5;
             // 
             // txtParkAzimuth
             // 
             this.txtParkAzimuth.Location = new System.Drawing.Point(39, 196);
             this.txtParkAzimuth.Name = "txtParkAzimuth";
             this.txtParkAzimuth.Size = new System.Drawing.Size(105, 20);
-            this.txtParkAzimuth.TabIndex = 8;
+            this.txtParkAzimuth.TabIndex = 4;
             // 
             // label6
             // 
@@ -176,14 +176,14 @@
             this.TxtHomeAltitude.Location = new System.Drawing.Point(39, 309);
             this.TxtHomeAltitude.Name = "TxtHomeAltitude";
             this.TxtHomeAltitude.Size = new System.Drawing.Size(105, 20);
-            this.TxtHomeAltitude.TabIndex = 14;
+            this.TxtHomeAltitude.TabIndex = 7;
             // 
             // TxtHomeAzimuth
             // 
             this.TxtHomeAzimuth.Location = new System.Drawing.Point(39, 283);
             this.TxtHomeAzimuth.Name = "TxtHomeAzimuth";
             this.TxtHomeAzimuth.Size = new System.Drawing.Size(105, 20);
-            this.TxtHomeAzimuth.TabIndex = 13;
+            this.TxtHomeAzimuth.TabIndex = 6;
             // 
             // picASCOM
             // 
@@ -238,19 +238,22 @@
             // 
             // BtnCancel
             // 
+            this.BtnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.BtnCancel.Location = new System.Drawing.Point(279, 285);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
-            this.BtnCancel.TabIndex = 23;
+            this.BtnCancel.TabIndex = 9;
             this.BtnCancel.Text = "Cancel";
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
             // ParkHomeAndStartupForm
             // 
+            this.AcceptButton = this.BtnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
+            this.CancelButton = this.BtnCancel;
             this.ClientSize = new System.Drawing.Size(370, 349);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.label10);

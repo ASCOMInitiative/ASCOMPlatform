@@ -140,5 +140,6 @@ namespace ASCOM.Simulator
         {
             this.Close();
         }
+
     }
 }
