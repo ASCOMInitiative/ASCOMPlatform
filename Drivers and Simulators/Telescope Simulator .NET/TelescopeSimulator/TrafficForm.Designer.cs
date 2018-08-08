@@ -166,9 +166,9 @@
             // 
             // txtTraffic
             // 
-            this.txtTraffic.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTraffic.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTraffic.BackColor = System.Drawing.SystemColors.Info;
             this.txtTraffic.CausesValidation = false;
             this.txtTraffic.Location = new System.Drawing.Point(12, 157);
@@ -178,7 +178,6 @@
             this.txtTraffic.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtTraffic.Size = new System.Drawing.Size(344, 307);
             this.txtTraffic.TabIndex = 12;
-            this.txtTraffic.Text = "Hello";
             // 
             // TrafficForm
             // 
