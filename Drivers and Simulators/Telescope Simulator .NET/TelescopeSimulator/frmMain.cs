@@ -452,7 +452,18 @@ namespace ASCOM.Simulator
 
         private void ButtonHome_Click(object sender, EventArgs e)
         {
-            TelescopeHardware.FindHome();
+            try
+            {
+                TelescopeHardware.FindHome();
+            }
+            catch (ParkedException ex)
+            {
+                MessageBox.Show(ex.Message, "Parked Exception", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
