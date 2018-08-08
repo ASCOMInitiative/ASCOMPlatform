@@ -131,7 +131,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Park axis positions, X primary, Y secondary in Alt/Az degrees
         /// </summary>
-        private static Vector parkAxes;
+        private static Vector parkPosition;
 
         /// <summary>
         /// current Ra (X, hrs) and Dec (Y, deg), derived from the mount axes
@@ -160,7 +160,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Shutdown position in Alt/Az degrees
         /// </summary>
-        private static Vector ShutdownPosition = new Vector();
+        private static Vector shutdownPosition = new Vector();
 
         /// <summary>
         /// Right Ascension (X) and declination (Y) rates (deg/sec) set through the RightAscensionRate and DeclinationRate properties
@@ -357,7 +357,7 @@ namespace ASCOM.Simulator
                             HomePosition.X = 0;
                             HomePosition.Y = lat;
                             TL.LogMessage("TelescopeHardware", string.Format("German Polar - Setting HomeAxes to {0} {1}", HomePosition.X.ToString(CultureInfo.InvariantCulture), HomePosition.Y.ToString(CultureInfo.InvariantCulture)));
-                            s_Profile.WriteValue(SharedResources.PROGRAM_ID, "StartAzimuthConfigured", HomePosition.X.ToString(CultureInfo.InvariantCulture)); 
+                            s_Profile.WriteValue(SharedResources.PROGRAM_ID, "StartAzimuthConfigured", HomePosition.X.ToString(CultureInfo.InvariantCulture));
                             s_Profile.WriteValue(SharedResources.PROGRAM_ID, "StartAltitudeConfigured", HomePosition.Y.ToString(CultureInfo.InvariantCulture));
                             break;
                         case AlignmentModes.algPolar:
@@ -452,16 +452,16 @@ namespace ASCOM.Simulator
                 StartCoordinates.Y = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "StartAltitudeConfigured", "", "0"), CultureInfo.InvariantCulture); // Get the configured start position
                 StartCoordinates.X = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "StartAzimuthConfigured", "", "0"), CultureInfo.InvariantCulture);
 
-                parkAxes.Y = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "ParkAltitude", "", "0"), CultureInfo.InvariantCulture);
-                parkAxes.X = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "ParkAzimuth", "", "0"), CultureInfo.InvariantCulture);
+                parkPosition.Y = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "ParkAltitude", "", "0"), CultureInfo.InvariantCulture);
+                parkPosition.X = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "ParkAzimuth", "", "0"), CultureInfo.InvariantCulture);
 
                 // Retrieve the Home position
                 HomePosition.X = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "HomeAzimuth", "", "0"), CultureInfo.InvariantCulture);
                 HomePosition.Y = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "HomeAltitude", "", "0"), CultureInfo.InvariantCulture);
 
                 // Retrieve the previous shutdown position position
-                ShutdownPosition.X = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "ShutdownAzimuth", "", "0"), CultureInfo.InvariantCulture);
-                ShutdownPosition.Y = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "ShutdownAltitude", "", "0"), CultureInfo.InvariantCulture);
+                shutdownPosition.X = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "ShutdownAzimuth", "", "0"), CultureInfo.InvariantCulture);
+                shutdownPosition.Y = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "ShutdownAltitude", "", "0"), CultureInfo.InvariantCulture);
 
                 // Retrieve the startup mode
                 startupMode = s_Profile.GetValue(SharedResources.PROGRAM_ID, "StartupMode", "", STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION);
@@ -472,13 +472,13 @@ namespace ASCOM.Simulator
                     case STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION: // No action just go with the built-in values already in altAzm
                         break;
                     case STARTUP_OPTION_PARKED_POSITION:
-                        altAzm = parkAxes;
+                        altAzm = parkPosition;
                         break;
                     case STARTUP_OPTION_START_POSITION:
                         altAzm = StartCoordinates;
                         break;
                     case STARTUP_OPTION_LASTUSED_POSITION:
-                        altAzm = ShutdownPosition;
+                        altAzm = shutdownPosition;
                         break;
                     case STARTUP_OPTION_HOME_POSITION:
                         altAzm = HomePosition;
@@ -1081,20 +1081,20 @@ namespace ASCOM.Simulator
 
         public static double ParkAltitude
         {
-            get { return parkAxes.Y; }
+            get { return parkPosition.Y; }
             set
             {
-                parkAxes.Y = value;
+                parkPosition.Y = value;
                 s_Profile.WriteValue(SharedResources.PROGRAM_ID, "ParkAltitude", value.ToString(CultureInfo.InvariantCulture));
             }
         }
 
         public static double ParkAzimuth
         {
-            get { return parkAxes.X; }
+            get { return parkPosition.X; }
             set
             {
-                parkAxes.X = value;
+                parkPosition.X = value;
                 s_Profile.WriteValue(SharedResources.PROGRAM_ID, "ParkAzimuth", value.ToString(CultureInfo.InvariantCulture));
             }
         }
@@ -1224,7 +1224,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                return (mountAxes - HomePosition).LengthSquared < 0.01;
+                //LogMessage("AtHome", "Distance from Home: {0}, AtHome: {1}", (mountAxes - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared, (mountAxes - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared < 0.01);
+                return (mountAxes - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared < 0.01;
             }
         }
 
@@ -1452,7 +1453,7 @@ namespace ASCOM.Simulator
         {
             Vector parkCoordinates;
 
-            parkCoordinates = MountFunctions.ConvertAltAzmToAxes(parkAxes); // Convert the park position AltAz coordinates into the current axes representation
+            parkCoordinates = MountFunctions.ConvertAltAzmToAxes(parkPosition); // Convert the park position AltAz coordinates into the current axes representation
             Tracking = false;
 
             StartSlewAxes(parkCoordinates, SlewType.SlewPark);
@@ -1466,7 +1467,7 @@ namespace ASCOM.Simulator
             }
 
             Tracking = false;
-            TL.LogMessage("FindHome", string.Format("HomeAxes.X: {0}, HomeAxes.Y: {1}", HomePosition.X.ToString(CultureInfo.InvariantCulture), HomePosition.Y.ToString(CultureInfo.InvariantCulture)));
+            TL.LogMessage("FindHome", string.Format("HomePosition.X: {0}, HomePosition.Y: {1}", HomePosition.X.ToString(CultureInfo.InvariantCulture), HomePosition.Y.ToString(CultureInfo.InvariantCulture)));
             StartSlewAxes(MountFunctions.ConvertAltAzmToAxes(HomePosition), SlewType.SlewHome);
         }
 
