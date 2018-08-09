@@ -1206,7 +1206,7 @@ namespace ASCOM.Simulator
                 CheckCapability(TelescopeHardware.CanSlew, "TargetRightAscension", true);
                 CheckRange(value, 0, 24, "TargetRightAscension");
 
-                SharedResources.TrafficEnd(m_Util.DegreesToHMS(value));
+                SharedResources.TrafficEnd(m_Util.HoursToHMS(value));
                 TelescopeHardware.TargetRightAscension = value;
             }
         }
