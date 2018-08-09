@@ -905,7 +905,7 @@ namespace ASCOM.Simulator
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Time, "Sidereal Time: ");
                 CheckCapability(TelescopeHardware.CanSiderealTime, "SiderealTime", false);
-                SharedResources.TrafficEnd(m_Util.DegreesToHMS(TelescopeHardware.SiderealTime));
+                SharedResources.TrafficEnd(m_Util.HoursToHMS(TelescopeHardware.SiderealTime));
                 return TelescopeHardware.SiderealTime;
             }
         }
