@@ -590,39 +590,47 @@ namespace ASCOM.Simulator
         /// </summary>
         private static void MoveAxes()
         {
-            // get the time since the last update. This avoids problems with the
-            // timer interval varying and greatly improves tracking.
+            // get the time since the last update. This avoids problems with the timer interval varying and greatly improves tracking.
             var now = DateTime.Now;
             var updateInterval = (now - lastUpdateTime).TotalSeconds;
             lastUpdateTime = now;
 
-            // these are the changes to be applied to the axes during this update interval
+            // This vector accumulates all changes to the current primary and secondary axis positions as a result of movement during this update interval
             Vector change = new Vector();
 
-            // determine the change in ha required as a result of tracking
-            change.X = GetTrackingChange(updateInterval);
-
-            // convert the change in Ha to altitude and azimuth changes
-            if (alignmentMode == AlignmentModes.algAltAz)
+            // Determine the changes in current axis position and target axis position required as a result of tracking
+            if (Tracking)
             {
-                change = ConvertRateToAltAz(change.X);
+                double haChange = GetTrackingChange(updateInterval); // Find the hour angle change that occured during this interval
+                switch (alignmentMode)
+                {
+                    case AlignmentModes.algGermanPolar: // In polar aligned mounts an HA change moves only the RA (primary) axis so update this, no change is required to the Dec (secondary) axis
+                    case AlignmentModes.algPolar:
+                        change.X = haChange; // Set the change in the RA (primary) current axis position due to tracking 
+                        targetAxes.X += haChange; // Update the slew target's RA (primary) axis position that will also have changed due to tracking
+                        break;
+                    case AlignmentModes.algAltAz: // In Alt/Az aligned mounts the HA change moves both RA (primary) and Dec (secondary) axes so both need to be updated
+                        change = ConvertRateToAltAz(haChange); // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking
+                        targetAxes = MountFunctions.ConvertRaDecToAxes(targetRaDec, false); // Update the slew target's Azimuth (primary) and Altitude (secondary) axis positions that will also have changed due to tracking
+                        break;
+                }
             }
-
-            // Move towards the target position
+            // Move towards the target position if slewing
             change += DoSlew();
 
             // handle HC button moves
             change += HcMoves();
 
-            // Axis movement
+            // MoveAxis movement
             change += rateAxes;
 
-            // Ra and Dec rate, this assumes a polar mount
+            // RightAScensionRate and DeclinationRate rate offsets, this assumes a polar mount
             change += rateRaDec;
 
+            // Pulse guiding changes
             change += PulseGuide(updateInterval);
 
-            // update the axis values
+            // Update the axis positions with the total change in this interval
             mountAxes += change;
 
             // check the axis values, stop movement past limits
@@ -1389,36 +1397,6 @@ namespace ASCOM.Simulator
             LogMessage("StartSlewAltAz", "{0}, {1}", altitude, azimuth);
             StartSlewAltAz(new Vector(azimuth, altitude));
             return;
-            //switch (AlignmentMode)
-            //{
-            //    case AlignmentModes.algAltAz:
-            //        targetAxes = new Vector(azimuth, altitude);
-            //        break;
-            //    case AlignmentModes.algGermanPolar:
-            //        var ra = AstronomyFunctions.CalculateRA(altitude, azimuth, latitude, longitude);
-            //        targetAxes.X = AstronomyFunctions.HourAngle(ra, longitude) * 15.0;
-            //        targetAxes.Y = AstronomyFunctions.CalculateDec(altitude, azimuth, latitude);
-            //        if (targetAxes.X > 180.0 || targetAxes.Y < 0)
-            //        {
-            //            // adjust the targets to be through the pole
-            //            targetAxes.X += 180;
-            //            targetAxes.Y = 180 - targetAxes.Y;
-            //        }
-            //        if (longitude < 0)
-            //        {
-            //            targetAxes.Y = -targetAxes.Y;
-            //        }
-            //        break;
-            //    case AlignmentModes.algPolar:
-            //        ra = AstronomyFunctions.CalculateRA(altitude, azimuth, latitude, longitude);
-            //        targetAxes.X = AstronomyFunctions.HourAngle(ra, longitude) * 15.0;
-            //        targetAxes.Y = AstronomyFunctions.CalculateDec(altitude, azimuth, latitude);
-            //        break;
-            //}
-            //slewing = true;
-            //SlewState = SlewType.SlewAltAz;
-
-            //ChangePark(false);
         }
 
         public static void StartSlewAltAz(Vector targetAltAzm)
@@ -1553,6 +1531,7 @@ namespace ASCOM.Simulator
             {
                 return 0;
             }
+
             double haChange = 0;
             // determine the change required as a result of tracking
             // generate the change in hour angle as a result of tracking
@@ -1571,8 +1550,7 @@ namespace ASCOM.Simulator
                     haChange = KING_RATE_DEG_SEC * updateInterval;     // change in degrees
                     break;
             }
-            // adjust the target to allow for tracking the primary axis while slewing
-            targetAxes.X += haChange;
+
             return haChange;
         }
 
@@ -1587,9 +1565,12 @@ namespace ASCOM.Simulator
             {
                 return change;
             }
+
             // Move towards the target position
             double delta;
             bool finished = true;
+
+            // Check primary axis
             delta = targetAxes.X - mountAxes.X;
             while (delta < -180 || delta > 180)
             {
@@ -1618,6 +1599,8 @@ namespace ASCOM.Simulator
                 change.X = slewSpeedFast * signDelta;
                 finished = false;
             }
+
+            // Check secondary axis
             delta = targetAxes.Y - mountAxes.Y;
             while (delta < -180 || delta > 180)
             {
@@ -1645,6 +1628,8 @@ namespace ASCOM.Simulator
                 change.Y = slewSpeedFast * signDelta;
                 finished = false;
             }
+
+            // If finsihed then complete processing
             if (finished)
             {
                 slewing = false;
@@ -1678,6 +1663,7 @@ namespace ASCOM.Simulator
                         break;
                 }
             }
+
             return change;
         }
 
@@ -1834,23 +1820,36 @@ namespace ASCOM.Simulator
 
             // get the azimuth and elevation rates, as a ratio of the tracking rate
             double elevationRate = Math.Sin(azmRad) * Math.Cos(latRad);
+
             // fails at zenith so set a very large value, the limit check will trap this
-            double azimuthRate =
-                altAzm.Y != 90.0 ?
-                (Math.Sin(latRad) * Math.Sin(zenithAngle) - Math.Cos(latRad) * Math.Cos(zenithAngle) * Math.Cos(azmRad)) / Math.Sin(zenithAngle) :
-                altAzm.X >= 90 && altAzm.X <= 270 ? 10000 : -10000;
+            double azimuthRate;
+            if (altAzm.Y != 90.0)
+            {
+                azimuthRate = (Math.Sin(latRad) * Math.Sin(zenithAngle) - Math.Cos(latRad) * Math.Cos(zenithAngle) * Math.Cos(azmRad)) / Math.Sin(zenithAngle);
+            }
+            else // altAzm.Y is 90.0
+            {
+                if (altAzm.X >= 90 && altAzm.X <= 270)
+                {
+                    azimuthRate = 10000.0;
+                }
+                else
+                {
+                    azimuthRate = -10000.0;
+                }
+            }
 
             // get the changes in altitude and azimuth using the hour angle change and rates.
             change.Y = elevationRate * haChange;
             change.X = azimuthRate * haChange;
+
             // stop the secondary going past the vertical
-            if (change.Y > 90 - altAzm.Y)
-                change.Y = 0;
+            if (change.Y > 90 - altAzm.Y) change.Y = 0;
+
             // limit the primary to the maximum slew rate
-            if (change.X < -slewSpeedFast)
-                change.X = -slewSpeedFast;
-            if (change.X > slewSpeedFast)
-                change.X = slewSpeedFast;
+            if (change.X < -slewSpeedFast) change.X = -slewSpeedFast;
+            if (change.X > slewSpeedFast) change.X = slewSpeedFast;
+
             return change;
         }
 
