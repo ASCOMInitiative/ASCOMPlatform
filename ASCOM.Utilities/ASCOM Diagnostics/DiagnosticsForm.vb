@@ -1542,10 +1542,15 @@ Public Class DiagnosticsForm
                             DeviceObject.TargetRightAscension = TargetRA
                             TL.LogMessage(Device, "Target RA set to: " & AscomUtil.HoursToHMS(DeviceObject.TargetRightAscension, ":", ":", "", 3))
                             DeviceObject.TargetDeclination = 0.0
+                            TL.LogMessage(Device, "Target Dec set to: " & AscomUtil.DegreesToDMS(DeviceObject.TargetDeclination, ":", ":", "", 3))
                             TL.LogMessage(Device, "Pre-slew RA is: " & AscomUtil.HoursToHMS(DeviceObject.RightAscension, ":", ":", "", 3))
+                            TL.LogMessage(Device, "Pre-slew Dec is: " & AscomUtil.DegreesToDMS(DeviceObject.Declination, ":", ":", "", 3))
+                            TL.LogMessage(Device, String.Format("Pre-slew Az/Alt is: {0} {1}", AscomUtil.DegreesToDMS(DeviceObject.Azimuth, ":", ":", "", 3), AscomUtil.DegreesToDMS(DeviceObject.Altitude, ":", ":", "", 3)))
                             DeviceObject.SlewToTarget()
                             Thread.Sleep(1000) ' Wait a short while to ensure the simulator has stabilised
                             TL.LogMessage(Device, "Post-slew RA is: " & AscomUtil.HoursToHMS(DeviceObject.RightAscension, ":", ":", "", 3))
+                            TL.LogMessage(Device, "Post-slew Dec is: " & AscomUtil.DegreesToDMS(DeviceObject.Declination, ":", ":", "", 3))
+                            TL.LogMessage(Device, String.Format("Post-slew Az/Alt is: {0} {1}", AscomUtil.DegreesToDMS(DeviceObject.Azimuth, ":", ":", "", 3), AscomUtil.DegreesToDMS(DeviceObject.Altitude, ":", ":", "", 3)))
                             CompareDouble(Device, Test & " RA", DeviceObject.RightAscension, TargetRA, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
                             CompareDouble(Device, Test & " Dec", DeviceObject.Declination, 0.0, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180)
                         Case "RightAscension"
