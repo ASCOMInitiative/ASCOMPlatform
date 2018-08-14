@@ -179,7 +179,7 @@
 		<Exec Command='Rename "$(CheckoutDirectory)\$(DeveloperHelpDirectory)\index.html" "Index.html" ' />
 		
 	    <!-- Build the InstallAware installers -->
-        <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(PlatformInstallerProject)" /r' />
+        <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(PlatformInstallerProject)" /r PLATFORMVERSION=$(PlatformVersion).$(PlatformServicePack).$(Revision)' />
         <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(DeveloperInstallerProject)" /r' />
 
         <!-- Copy the installers back to the build root directory -->

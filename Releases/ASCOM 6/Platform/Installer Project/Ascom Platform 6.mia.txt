@@ -1123,7 +1123,7 @@ Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Installation Date, $DAT
 Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Name, $TITLE$
 Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Product Code, $PRODUCTCODE$
 Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Revision Code, $REVISIONCODE$
-Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Version, $VERSION$
+Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Version, #PLATFORMVERSION#
 Write Registry Key HKLM\SOFTWARE\ASCOM\Rotator Drivers\,  (permanent)
 Write Registry Key HKLM\SOFTWARE\ASCOM\SafetyMonitor Drivers\,  (permanent)
 Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\,  (permanent)
