@@ -4,18 +4,14 @@ Imports Microsoft.Win32
 Public Class VersionForm
 
     Private Sub VersionForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Dim ProfileKey As RegistryKey
+
+        Dim InstallInformation As SortedList(Of String, String)
 
         Try
+            InstallInformation = DiagnosticsForm.GetInstallInformation(PLATFORM_INSTALLER_PROPDUCT_CODE, False, True, False) 'Retrieve the current install information
 
-            Using Profile As New RegistryAccess
-                ProfileKey = Profile.OpenSubKey(Registry.LocalMachine, "SOFTWARE\ASCOM\Platform", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
-
-                NameLbl.Text = ProfileKey.GetValue("Platform Name", "Unknown Name")
-                Version.Text = ProfileKey.GetValue("Platform Version", "Unknown Version")
-
-                ProfileKey.Close()
-            End Using
+            NameLbl.Text = InstallInformation.Item(DiagnosticsForm.INST_DISPLAY_NAME)
+            Version.Text = InstallInformation.Item(DiagnosticsForm.INST_DISPLAY_VERSION)
 
         Catch ex As Exception
             LogEvent("DiagnosticsVersionForm", "Exception", EventLogEntryType.Error, EventLogErrors.DiagnosticsLoadException, ex.ToString)
