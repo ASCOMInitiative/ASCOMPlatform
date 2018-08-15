@@ -90,7 +90,7 @@ Partial Class VersionForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(776, 295)
+        Me.ClientSize = New System.Drawing.Size(520, 295)
         Me.Controls.Add(Me.Version)
         Me.Controls.Add(Me.NameLbl)
         Me.Controls.Add(Me.lblPlatformVersion)

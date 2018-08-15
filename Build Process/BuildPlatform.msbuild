@@ -88,12 +88,6 @@
 		</Exec>
         <Message Text="Revision Level: $(Revision)"/>
 
-        <!-- Get the latest commit SHA1 into the GitSHA1 Property to use in the the "assembly information version" string -->
-		<Exec Command="git.exe rev-parse HEAD" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)">
-			<Output TaskParameter="ConsoleOutput" PropertyName="GitSHA1" />
-		</Exec>
-        <Message Text="Git SHA1: $(GitSHA1)"/>
-
         <!-- Restore NuGet packages -->
 		<Exec Command="$(NuGetCommand)" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 
@@ -119,12 +113,8 @@
 	    <Message Text="Version numbers - Major: $(PlatformMajor), Minor: $(PlatformMinor), ServicePack: $(PlatformServicePack), MasterPlatformLevel: $(PlatformVersion)" />
 
         <!-- Create global AssemblyVersion attributes from the Platform version, service pack and revision numbers.-->
-        <AssemblyInfo CodeLanguage="CS" OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.cs" 
-										AssemblyFileVersion="$(PlatformVersion).$(PlatformServicePack).$(Revision)" 
-										AssemblyInformationalVersion="$(GitSHA1)" />
-        <AssemblyInfo CodeLanguage="VB" OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.vb" 
-										AssemblyFileVersion="$(PlatformVersion).$(PlatformServicePack).$(Revision)"
-										AssemblyInformationalVersion="$(GitSHA1)" />
+        <AssemblyInfo CodeLanguage="CS" OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.cs" AssemblyFileVersion="$(PlatformVersion).$(PlatformServicePack).$(Revision)" />
+        <AssemblyInfo CodeLanguage="VB" OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.vb" AssemblyFileVersion="$(PlatformVersion).$(PlatformServicePack).$(Revision)" />
 
         <!-- Build FindGUIDs after cleaning the solution (just in case executables get committed to SVN) -->
         <!-- This builds the GUIDList.vb file ready to be incorporated into RemoveASCOM when it is built as part of the Platform -->
@@ -162,7 +152,7 @@
         <FileUpdate Files="@(IAProjectFiles)" 
 		    Encoding="ASCII"
     		Regex="$(PlatformVersion).9999.9999" 
-		    ReplacementText="$(PlatformVersion).$(PlatformServicePack).$(Revision) - $(GitSHA1)">
+		    ReplacementText="$(PlatformVersion).$(PlatformServicePack).$(Revision)">
 	    </FileUpdate>
 
         <!-- Add browser compatibility line to all the html help files so that all browsers can read them on the ASCOM Standards web site -->
@@ -179,7 +169,7 @@
 		<Exec Command='Rename "$(CheckoutDirectory)\$(DeveloperHelpDirectory)\index.html" "Index.html" ' />
 		
 	    <!-- Build the InstallAware installers -->
-        <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(PlatformInstallerProject)" /r PLATFORMVERSION=$(PlatformVersion).$(PlatformServicePack).$(Revision)' />
+        <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(PlatformInstallerProject)" /r' />
         <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(DeveloperInstallerProject)" /r' />
 
         <!-- Copy the installers back to the build root directory -->

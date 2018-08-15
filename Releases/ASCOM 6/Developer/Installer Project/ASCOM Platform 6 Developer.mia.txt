@@ -457,7 +457,7 @@ else
     Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Name, $TITLE$
     Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Product Code, $PRODUCTCODE$
     Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Revision Code, $REVISIONCODE$
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Version, #PLATFORMVERSION#
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Version, $VERSION$
     [END REGION]
     Comment: Install GacInstall so that we can uninstall assemblies from the GAC indepndently of the Platform itself
     Comment: Install FusionLib here in case the Platform is removed first and has already uninstalled this from the GAC

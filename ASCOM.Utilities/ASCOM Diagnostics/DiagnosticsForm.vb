@@ -28,8 +28,8 @@ Public Class DiagnosticsForm
     Private Const TEST_UTILITIES As Boolean = True
 
     Private Const ASCOM_PLATFORM_NAME As String = "ASCOM Platform 6"
-    Friend Const INST_DISPLAY_NAME As String = "DisplayName"
-    Friend Const INST_DISPLAY_VERSION As String = "DisplayVersion"
+    Private Const INST_DISPLAY_NAME As String = "DisplayName"
+    Private Const INST_DISPLAY_VERSION As String = "DisplayVersion"
     Private Const INST_INSTALL_DATE As String = "InstallDate"
     Private Const INST_INSTALL_LOCATION As String = "InstallLocation"
     Private Const INST_INSTALL_SOURCE As String = "InstallSource"
@@ -125,22 +125,12 @@ Public Class DiagnosticsForm
 
     Private Sub DiagnosticsForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'Initialise form
+        Dim InstallInformation As Generic.SortedList(Of String, String)
 
         Try
             DiagnosticsVersion = Assembly.GetExecutingAssembly.GetName.Version
-            Dim ProfileKey As RegistryKey
-
-            Try
-                Using Profile As New RegistryAccess
-                    ProfileKey = Profile.OpenSubKey(Registry.LocalMachine, "SOFTWARE\ASCOM\Platform", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
-                    lblTitle.Text = ProfileKey.GetValue("Platform Name", "Unknown Name") & " - " & ProfileKey.GetValue("Platform Version", "Unknown Version")
-                    ProfileKey.Close()
-                End Using
-            Catch ex As Exception
-                LogEvent("DiagnosticsVersionForm", "Exception", EventLogEntryType.Error, EventLogErrors.DiagnosticsLoadException, ex.ToString)
-                MsgBox("Unexpected exception loading Version Form: " & ex.ToString, MsgBoxStyle.Critical, "Version load error")
-            End Try
-
+            InstallInformation = GetInstallInformation(PLATFORM_INSTALLER_PROPDUCT_CODE, False, True, False) 'Retrieve the current install information
+            lblTitle.Text = InstallInformation.Item(INST_DISPLAY_NAME) & " - " & InstallInformation.Item(INST_DISPLAY_VERSION)
             lblResult.Text = ""
             lblAction.Text = ""
 
@@ -7729,7 +7719,7 @@ Public Class DiagnosticsForm
     ''' <param name="MSIInstaller">True if the installer is an MSI based installer, False if an Installaware Native installer</param>
     ''' <returns>Generic Sorted List of key value pairs. If not found retruns an empty list</returns>
     ''' <remarks></remarks>
-    Friend Function GetInstallInformation(ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean, ByVal MSIInstaller As Boolean) As Generic.SortedList(Of String, String)
+    Private Function GetInstallInformation(ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean, ByVal MSIInstaller As Boolean) As Generic.SortedList(Of String, String)
         Dim RegKey As RegistryKey
         Dim RetVal As New Generic.SortedList(Of String, String)
         Dim UninstallString As String
