@@ -185,6 +185,12 @@
         </ItemGroup>
         <Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM.zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
 
+        <!-- Set a Git TAG to record the Platform revision number -->
+		<Exec Command='git.exe tag Build_$(Revision) -a -m "Tagged by build machine"' WorkingDirectory="$(CheckoutDirectory)"></Exec>
+		<Exec Command='git.exe push origin Build_$(Revision)' WorkingDirectory="$(CheckoutDirectory)"></Exec>
+
+		
+		
   </Target>
 
 </Project>
