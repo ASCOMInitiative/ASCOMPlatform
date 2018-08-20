@@ -91,6 +91,7 @@ namespace ASCOM.Simulator
             this.checkBoxCanFastReadout = new System.Windows.Forms.CheckBox();
             this.checkBoxLogging = new System.Windows.Forms.CheckBox();
             this.groupBoxReadoutModes = new System.Windows.Forms.GroupBox();
+            this.BtnCoolerConfiguration = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBoxCCD.SuspendLayout();
             this.groupBoxGainSettings.SuspendLayout();
@@ -415,6 +416,7 @@ namespace ASCOM.Simulator
             // 
             // groupBoxCooling
             // 
+            this.groupBoxCooling.Controls.Add(this.BtnCoolerConfiguration);
             this.groupBoxCooling.Controls.Add(this.checkBoxHasCooler);
             this.groupBoxCooling.Controls.Add(this.checkBoxCanGetCoolerPower);
             this.groupBoxCooling.Controls.Add(this.checkBoxCanSetCCDTemperature);
@@ -733,6 +735,16 @@ namespace ASCOM.Simulator
             this.groupBoxReadoutModes.TabStop = false;
             this.groupBoxReadoutModes.Text = "Readout Modes";
             // 
+            // BtnCoolerConfiguration
+            // 
+            this.BtnCoolerConfiguration.Location = new System.Drawing.Point(97, 12);
+            this.BtnCoolerConfiguration.Name = "BtnCoolerConfiguration";
+            this.BtnCoolerConfiguration.Size = new System.Drawing.Size(52, 23);
+            this.BtnCoolerConfiguration.TabIndex = 14;
+            this.BtnCoolerConfiguration.Text = "Setup";
+            this.BtnCoolerConfiguration.UseVisualStyleBackColor = true;
+            this.BtnCoolerConfiguration.Click += new System.EventHandler(this.BtnCoolerConfiguration_Click);
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -843,5 +855,6 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.CheckBox checkBoxUseReadoutModes;
         private System.Windows.Forms.CheckBox checkBoxCanFastReadout;
         private System.Windows.Forms.CheckBox checkBoxLogging;
-	}
+        private System.Windows.Forms.Button BtnCoolerConfiguration;
+    }
 }

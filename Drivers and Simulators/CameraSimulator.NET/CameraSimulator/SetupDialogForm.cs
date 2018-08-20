@@ -8,50 +8,51 @@ using System.Collections;
 
 namespace ASCOM.Simulator
 {
-	[ComVisible(false)]					// Form not registered for COM!
-	public partial class SetupDialogForm : Form
-	{
+    [ComVisible(false)]                 // Form not registered for COM!
+    public partial class SetupDialogForm : Form
+    {
         //private const string STR_N0 = "N0";
         private const string STR_N2 = "N2";
         private Camera camera;
 
+        private CoolerSetupForm coolerSetupForm; // Variable to hold an instance of the cooler configuration form
         internal bool okButtonPressed = false;
 
-		public SetupDialogForm()
-		{
-			InitializeComponent();
-		}
+        public SetupDialogForm()
+        {
+            InitializeComponent();
+        }
 
-		private void cmdOK_Click(object sender, EventArgs e)
-		{
+        private void cmdOK_Click(object sender, EventArgs e)
+        {
             okButtonPressed = true;
             SaveProperties();
-			Dispose();
-		}
+            Dispose();
+        }
 
-		private void cmdCancel_Click(object sender, EventArgs e)
-		{
+        private void cmdCancel_Click(object sender, EventArgs e)
+        {
             okButtonPressed = false;
-			Dispose();
-		}
+            Dispose();
+        }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
         private void BrowseToAscom(object sender, EventArgs e)
-		{
-			try
-			{
-				System.Diagnostics.Process.Start("http://ascom-standards.org/");
-			}
-			catch (System.ComponentModel.Win32Exception noBrowser)
-			{
-				if (noBrowser.ErrorCode == -2147467259)
-					MessageBox.Show(noBrowser.Message);
-			}
-			catch (System.Exception other)
-			{
-				MessageBox.Show(other.Message);
-			}
-		}
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("http://ascom-standards.org/");
+            }
+            catch (System.ComponentModel.Win32Exception noBrowser)
+            {
+                if (noBrowser.ErrorCode == -2147467259)
+                    MessageBox.Show(noBrowser.Message);
+            }
+            catch (System.Exception other)
+            {
+                MessageBox.Show(other.Message);
+            }
+        }
 
         internal void InitProperties(Camera theCamera)
         {
@@ -113,6 +114,9 @@ namespace ASCOM.Simulator
             }
 
             this.camera = theCamera;
+
+            coolerSetupForm = new CoolerSetupForm();
+
         }
 
         private void SaveProperties()
@@ -155,7 +159,7 @@ namespace ASCOM.Simulator
             }
             else if (this.radioButtonUseGains.Checked)
             {
-                camera.gains= new ArrayList{ "ISO 100", "ISO 200", "ISO 400", "ISO 800", "ISO 1600"};
+                camera.gains = new ArrayList { "ISO 100", "ISO 200", "ISO 400", "ISO 800", "ISO 1600" };
                 camera.gainMin = (short)0;
                 camera.gainMax = (short)(camera.gains.Count - 1);
             }
@@ -176,6 +180,16 @@ namespace ASCOM.Simulator
             {
                 camera.readoutModes = new ArrayList { "Default" };
             }
+
+            // Save the cooler configuration
+            camera.heatSinkTemperature = (double)coolerSetupForm.NumAmbientTemperature.Value;
+            //camera.coolerAmbientFinishTemperature = (double)coolerSetupForm.NumAmbientFinishTemperature.Value;
+            camera.setCcdTemperature = (double)coolerSetupForm.NumCCDSetPoint.Value;
+            camera.coolerDeltaTMax = (double)coolerSetupForm.NumCoolerDeltaTMax.Value;
+            camera.coolerTimeToSetPoint = (double)coolerSetupForm.NumTimeToSetPoint.Value;
+            //camera.coolerAmbientChangePeriod = (double)coolerSetupForm.NumAmbientChangePeriod.Value;
+            camera.coolerResetToAmbient = coolerSetupForm.ChkResetToAmbientOnConnect.Checked;
+            camera.coolerMode = coolerSetupForm.cmbCoolerModes.SelectedItem.ToString();
         }
 
         private void buttonSetImageFile_Click(object sender, EventArgs e)
@@ -222,5 +236,26 @@ namespace ASCOM.Simulator
         {
             Log.Enabled = checkBoxLogging.Checked;
         }
-	}
+
+        private void BtnCoolerConfiguration_Click(object sender, EventArgs e)
+        {
+            coolerSetupForm.EnableValidation = false;
+            coolerSetupForm.NumAmbientTemperature.Value = (decimal)camera.heatSinkTemperature;
+            //coolerSetupForm.NumAmbientFinishTemperature.Value = (decimal)camera.coolerAmbientFinishTemperature;
+            coolerSetupForm.NumCCDSetPoint.Value = (decimal)camera.setCcdTemperature;
+            coolerSetupForm.NumCoolerDeltaTMax.Value = (decimal)camera.coolerDeltaTMax;
+            coolerSetupForm.NumTimeToSetPoint.Value = (decimal)camera.coolerTimeToSetPoint;
+            //coolerSetupForm.NumAmbientChangePeriod.Value = (decimal)camera.coolerAmbientChangePeriod;
+            coolerSetupForm.ChkResetToAmbientOnConnect.Checked = camera.coolerResetToAmbient;
+
+            foreach (string coolerMode in camera.coolerModes)
+            {
+                coolerSetupForm.cmbCoolerModes.Items.Add(coolerMode);
+            }
+            coolerSetupForm.cmbCoolerModes.SelectedItem = camera.coolerMode;
+
+            coolerSetupForm.EnableValidation = true;
+            coolerSetupForm.ShowDialog();
+        }
+    }
 }

@@ -22,6 +22,8 @@
 // --------------------------------------------------------------------------------
 //
 
+// Cooler behaviour revised by Peter Simpson in August 2018. Operation of the cooler is described in the cooler timer event handler: void coolerTimer_Elapsed(object sender, ElapsedEventArgs e)
+
 using System;
 using System.Collections;
 using System.Drawing;
@@ -31,6 +33,7 @@ using System.Runtime.InteropServices;
 using System.Timers;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
+using System.Collections.Generic;
 
 namespace ASCOM.Simulator
 {
@@ -43,6 +46,10 @@ namespace ASCOM.Simulator
     [Guid("12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
     public class Camera : ICameraV2
     {
+        // Driver ID and descriptive string that shows in the Chooser
+        private static string s_csDriverID = "ASCOM.Simulator.Camera";
+        private static string s_csDriverDescription = "Camera V2 simulator";
+
         #region profile string constants
         private const string STR_InterfaceVersion = "InterfaceVersion";
         private const string STR_PixelSizeX = "PixelSizeX";
@@ -74,6 +81,57 @@ namespace ASCOM.Simulator
         private const string STR_CanPulseGuide = "CanPulseGuide";
         private const string STR_OmitOddBins = "OmitOddBins";
         private const string STR_CanFastReadout = "CanFastReadout";
+        private const string STR_CoolerAmbientTemperature = "CoolerAmbientTemperature";
+        private const string STR_CoolerSetPoint = "CoolerSetPoint";
+        private const string STR_CoolerDeltaTMax = "CoolerDeltaTMax";
+        private const string STR_CoolerMode = "CoolerMode";
+        private const string STR_CoolerTimeToSetPoint = "CoolerTimeToSetPoint";
+        private const string STR_CoolerResetToAmbient = "CoolerResetToAmbient";
+        #endregion
+
+        #region Camera cooler modes and initial conditions
+        // When adding a new cooler mode, define its name here and add it the coolerModes array so that it will show up in the list of options. Then update all places where switch statements are used to configure behaviour beased on coolingMode.
+        internal const string COOLERMODE_START_AT_SETPOINT = "Straight to set point";
+        internal const string COOLERMODE_DAMPED = "Damped approach to set point";
+        internal const string COOLERMODE_UNDER_DAMPED = "Under damped approach to set point";
+        internal const string COOLERMODE_NEVER_GETS_TO_SETPOINT = "Never gets to set point";
+        internal List<string> coolerModes = new List<string>() { COOLERMODE_START_AT_SETPOINT, COOLERMODE_DAMPED, COOLERMODE_UNDER_DAMPED, COOLERMODE_NEVER_GETS_TO_SETPOINT };
+
+        // Cooler default characteristics - See void coolerTimer_Elapsed(object sender, ElapsedEventArgs e) for a description of cooler operation
+        internal const double COOLER_AMBIENT_TEMPERATURE_DEFAULT = 10; // Ambient temperarure (C) when the camera is initially created  
+        internal const double COOLER_CCD_SET_POINT_DEFAULT = -20; // Camera initial set point
+        internal const double COOLER_DELTAT_MAX_DEFAULT = 40; // Maximum temperature (C) below ambient to which the camera cooler can cool when the cooler is running at 100%
+        internal const double COOLER_TIME_TO_SETPOINT_DEFAULT = 120; // Time (seconds) to reach the CCD temperature set point when starting from ambient
+        internal const bool COOLER_RESET_TO_AMBIENT_DEFAULT = true; // Will the CCD temperature reset to ambient on connect or behave like a normal cooler where temperatuyre depends on past cooling experience
+        internal const string COOLER_COOLERMODE_DEFAULT = COOLERMODE_DAMPED; // Default mode on initial installation
+        private const double NEVER_GETS_TO_SETPOINT_INDEX_REDUCTION_FACTOR = 0.7; // Arbitary factor to reduce the cooler profile index so that the returned curve position is earlier than exoected. This produces a higher CCD temperature, ensuring that the CCD never reaches the setpoint
+        private const double COOLER_WARMING_RATE = 0.05; // Cooler will warm by 5% of the difference between the CCD temperature and ambient temperature each second when the cooler is off
+        private const double COOLER_USE_FULL_POWER = 0.0; // Fraction of the cooling curve above which cooler power will be reported as 100%. e.g. 0.9 means the first 90% of the curve will be reported as 100% cooler power and the last 20% as the calculated power.
+        internal const int NUMBER_OF_COOLER_CURVE_POINTS = 60;
+
+        // Cooler beahioural curves comprising 60 points that can be scaled to time and temperature as required. The first curve element must be 1.0 and the last curve element must be 0.0
+        private double[] curveDamped = new double[NUMBER_OF_COOLER_CURVE_POINTS] {
+            1.0,0.89259,0.750047908,0.63045638,0.530111475,0.445907425,0.375240012,0.315925552,0.266132976,0.22432687,
+            0.189219723,0.159731887,0.134958005,0.114138861,0.096637777,0.081920823,0.069540227,0.059120457,0.050346559,0.042954372,
+            0.03672233,0.031464585,0.027025236,0.0232735,0.020099654,0.017411639,0.015132207,0.013196532,0.011550205,0.010147557,
+            0.008950245,0.007926074,0.007048005,0.006293324,0.005642946,0.005080829,0.004593486,0.004169575,0.003799549,0.003475373,
+            0.003190281,0.002938566,0.00271542,0.002516782,0.002339222,0.002179841,0.002036183,0.001906168,0.001788032,0.001680274,
+            0.001581616,0.001490971,0.001407406,0.001330125,0.001258445,0.001191775,0.001129608,0.001071504,0.001017081,0.0
+            };
+
+        private double[] curveUnderDamped = new double[NUMBER_OF_COOLER_CURVE_POINTS] {
+            1.0,0.8572,0.67627184,0.519728877,0.385775548,0.272496269,0.177925516,0.100103627,0.037120191,-0.01285323,
+            -0.051539444,-0.080539592,-0.101323405,-0.115224605,-0.12344042,-0.127034314,-0.12694117,-0.123974258,-0.118833454,-0.112114224,
+            -0.10431702,-0.095856773,-0.087072246,-0.078235068,-0.069558309,-0.061204508,-0.05329308,-0.045907084,-0.039099326,-0.03289781,
+            -0.027310557,-0.02232982,-0.017935724,-0.014099395,-0.010785593,-0.007954915,-0.005565614,-0.003575064,-0.001940923,-0.00062204,
+            0.000420871,0.001224746,0.001823844,0.002249557,0.002530323,0.002691629,0.002756079,0.002743511,0.002671156,0.002553817,
+            0.002404066,0.002232447,0.002047684,0.001856882,0.00166572,0.001478634,0.001298995,0.001129259,0.000971118,0.0
+            };
+
+        //private int coolerCurveIndex;
+        private DateTime coolerStartedTime;
+        private TimeSpan coolerRunningTime;
+
         #endregion
 
         #region internal properties
@@ -98,7 +156,7 @@ namespace ASCOM.Simulator
         internal short binY;
         internal bool hasShutter;
         internal string sensorName;
-        internal SensorType sensorType;    // TODO make an Enum
+        internal SensorType sensorType;
         internal short bayerOffsetX;
         internal short bayerOffsetY;
 
@@ -116,6 +174,14 @@ namespace ASCOM.Simulator
         internal double ccdTemperature;
         internal double heatSinkTemperature;
         internal double setCcdTemperature;
+
+        // Cooler simulator parameters
+        //internal double coolerSetPoint;
+        internal double coolerDeltaTMax;
+        internal string coolerMode;
+        internal double coolerTimeToSetPoint;
+        internal bool coolerResetToAmbient;
+
 
         // Gain
         internal ArrayList gains;
@@ -153,7 +219,7 @@ namespace ASCOM.Simulator
         internal string imagePath;
         internal bool applyNoise;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member")]
-        private float[, ,] imageData;    // room for a 3 plane colour image
+        private float[,,] imageData;    // room for a 3 plane colour image
         private bool darkFrame;
         internal bool omitOddBins; // True if bins of 3, 5, 7 etc. should throw NotImplementedExceptions
 
@@ -165,9 +231,9 @@ namespace ASCOM.Simulator
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member")]
         private object[,] imageArrayVariant;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member")]
-        private int[, ,] imageArrayColour;
+        private int[,,] imageArrayColour;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member")]
-        private object[, ,] imageArrayVariantColour;
+        private object[,,] imageArrayVariantColour;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         private string lastError = string.Empty;
 
@@ -183,26 +249,24 @@ namespace ASCOM.Simulator
 
         #endregion
 
-        #region Camera Constructor
-        //
-        // Driver ID and descriptive string that shows in the Chooser
-        //
-        private static string s_csDriverID = "ASCOM.Simulator.Camera";
-        // TODO Change the descriptive string for your driver then remove this line
-        private static string s_csDriverDescription = "Camera V2 simulator";
+        #region Camera Constructor and Dispose
         /// <summary>
         /// Initializes a new instance of the <see cref="Camera"/> class.
         /// Must be public for COM registration!
         /// </summary>
         public Camera()
         {
-            // TODO Implement your additional construction here
             InitialiseSimulator();
-            //Log.Enabled = false;
             Log.LogMessage("Constructor", "Done");
-
         }
 
+        public void Dispose()
+        {
+            if (this.exposureTimer != null)
+                this.exposureTimer.Dispose();
+            if (this.coolerTimer != null)
+                this.coolerTimer.Dispose();
+        }
         #endregion
 
         #region ASCOM Registration
@@ -240,17 +304,165 @@ namespace ASCOM.Simulator
         }
         #endregion
 
-        public void Dispose()
+        #region Cooler Timer
+        /// <summary>
+        /// Adjust the ccd temperature and power once a second
+        /// </summary>
+        /// <remarks>
+        /// COOLER CAPABILITIES - The user can configure
+        ///     1) Cooling bhaviour - a) well behaved fall to the setpoint, b) falls to the setpoint but overshoots before returing to it, c) starts at and maintains the setpoint, d) falls but never gets to the setpoint
+        ///     2) The ambient temperature
+        ///     3) The cooler setpoint
+        ///     4) The cooler maximum delta T
+        ///     5) The time to reach the setpoint
+        ///     6) Whether the cooler always starts at ambient temperature when the cooler is turned on or whether it starts at the temperature it has "warmed up to" since the cooler was turned off.
+        ///     
+        /// To provide extensibility and configurablilty, cooler behaviour is determined by a set of predefined "cooler curves". Each of these is held in an array such as curveDamped and curveUnderDamped. Array values lie between 1.0 and -1.0 and represent the 
+        /// CCD temperature as a fraction of the difference between the ambient and setpoint temperatures; negative values represent overshoot beyond the configured setpoint. The array index represents increasing time from turning on the cooler to arrival at the setpoint.
+        /// 
+        /// This approach has been adopted because the curve values can reperesnt any desired cooling characteristic, can be scaled to accommodate any ambient and setpoint temperatures and can also be scaled to operate over any length of time to 
+        /// reach the setpoint. At the time of wrting, each curve contains 60 points, which are considered enough to describe the curve in sufficient detail for simulation purposes. Linear interpolation between array index 
+        /// values is used to provide smooth, unquantised changes in curve values.
+        /// 
+        /// </remarks>
+        private void coolerTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (this.exposureTimer != null)
-                this.exposureTimer.Dispose();
-            if (this.coolerTimer != null)
-                this.coolerTimer.Dispose();
+            if (coolerOn) // We are cooling or at setpoint
+            {
+                coolerRunningTime = DateTime.Now.Subtract(coolerStartedTime); // Update the cooler running time
+
+                // Calculate the cooler index position and the interpolation fraction
+                double coolerCurveFraction = (double)NUMBER_OF_COOLER_CURVE_POINTS * coolerRunningTime.TotalSeconds / coolerTimeToSetPoint; // Fraction of the cooler curve that has been traversed so far - as a double
+                int coolerCurveIndex = Math.Min((int)Math.Floor(coolerCurveFraction), NUMBER_OF_COOLER_CURVE_POINTS - 1); // Convert the cooler curve fraction into an integer, which is the array index to use to find the base temperature fraction. Also ensure that the index is within the array range
+                double interpolationFraction = coolerCurveFraction - (double)coolerCurveIndex; // Calculate the remaiing fraction of an index position that wil be used during interpolation
+
+                //Log.LogMessage("Timer", "Cooler running time: {0}, Cooler curve fraction: {1}, Cooler curve index: {2}, Interpolation fraction: {3}", coolerRunningTime, coolerCurveFraction, coolerCurveIndex, interpolationFraction);
+
+                // Determine whether we are still cooling down or whether we are at the end of the cooling down period
+                if (coolerCurveIndex < NUMBER_OF_COOLER_CURVE_POINTS) // We are still cooling so calculate the new CCD temperature
+                {
+                    switch (coolerMode)
+                    {
+                        case COOLERMODE_START_AT_SETPOINT: // No curve needed for this behaviour mode
+                            ccdTemperature = setCcdTemperature;
+                            Log.LogMessage("Timer", "StartAtSetPoint - CCD temperature is {0}", ccdTemperature);
+                            break;
+                        case COOLERMODE_DAMPED: // Temperature calculated from the damped curve
+                            ccdTemperature = setCcdTemperature + (heatSinkTemperature - setCcdTemperature) * ReturnCurveValue(curveDamped, coolerCurveIndex, interpolationFraction);
+                            Log.LogMessage("Timer", "DampedMode - CCD temperature is {0}, index: {1}", ccdTemperature, coolerCurveIndex);
+                            break;
+                        case COOLERMODE_UNDER_DAMPED: // Temperature calculated from the under damped curve
+                            ccdTemperature = setCcdTemperature + (heatSinkTemperature - setCcdTemperature) * ReturnCurveValue(curveUnderDamped, coolerCurveIndex, interpolationFraction); ;
+                            Log.LogMessage("Timer", "UnderDampedMode - CCD temperature is {0}, index: {1}", ccdTemperature, coolerCurveIndex);
+                            break;
+                        case COOLERMODE_NEVER_GETS_TO_SETPOINT: // Temperature calculated from the damped curve but using the value from an earlier index position that will yield a smaller temperature reduction, ensuring that the CCD never reaches the setpoint
+                            ccdTemperature = setCcdTemperature + (heatSinkTemperature - setCcdTemperature) * ReturnCurveValue(curveDamped, (int)(NEVER_GETS_TO_SETPOINT_INDEX_REDUCTION_FACTOR * coolerCurveIndex), interpolationFraction);
+                            Log.LogMessage("Timer", "MissesSetpoint - CCD temperature is {0}, index: {1}", ccdTemperature, coolerCurveIndex);
+                            break;
+                        default: // Warning messge for future camera driver developers that they need to update this code if a new curve is introduced
+                            System.Windows.Forms.MessageBox.Show("Unknown cooler mode! - " + coolerMode);
+                            break;
+                    }
+
+                    if (ccdTemperature < (heatSinkTemperature - coolerDeltaTMax))
+                    {
+                        ccdTemperature = heatSinkTemperature - coolerDeltaTMax; // Ensure that the temperature can never go below the value corresponding to 100% cooler power
+                        Log.LogMessage("Timer", "CCD temperature limited to Ambient - DeltaTMax", ccdTemperature, coolerCurveIndex);
+                    }
+                }
+                else // The cooler has now reached the set point
+                {
+                    switch (coolerMode)
+                    {
+                        case COOLERMODE_START_AT_SETPOINT: // The cooler has reached the setpoint so ensure that the CCD temperature is exactly the setpoint temperature
+                        case COOLERMODE_DAMPED:
+                        case COOLERMODE_UNDER_DAMPED:
+                            Log.LogMessage("Timer", "CCD is at temperature: {0}, index: {1}", ccdTemperature, coolerCurveIndex);
+                            ccdTemperature = setCcdTemperature;
+                            break;
+                        case COOLERMODE_NEVER_GETS_TO_SETPOINT: // Adjust the CCD temperature so that it is at its final offset from the setpoint.
+                            ccdTemperature = setCcdTemperature + (heatSinkTemperature - setCcdTemperature) * ReturnCurveValue(curveDamped, (int)(NEVER_GETS_TO_SETPOINT_INDEX_REDUCTION_FACTOR * NUMBER_OF_COOLER_CURVE_POINTS - 1), interpolationFraction);
+                            Log.LogMessage("Timer", "CCD never gets to temperature: {0}, index: {1}", ccdTemperature, coolerCurveIndex);
+                            break;
+                        default: // Warning messge for future camera driver developers that they need to update this code if a new curve is introduced
+                            System.Windows.Forms.MessageBox.Show("Unknown cooler mode! - " + coolerMode);
+                            break;
+                    }
+                }
+
+                // Set the cooler power
+                switch (coolerMode)
+                {
+                    case COOLERMODE_START_AT_SETPOINT: // Set cooler power based on fraction of the maxium delta T that is in use
+                    case COOLERMODE_DAMPED:
+                    case COOLERMODE_UNDER_DAMPED:
+                        double powerFractionAtSetPoint = (heatSinkTemperature - setCcdTemperature) / coolerDeltaTMax;
+
+                        coolerPower = 100.0 * (powerFractionAtSetPoint + ((1.0 - powerFractionAtSetPoint) * ((ccdTemperature - setCcdTemperature) / (heatSinkTemperature - setCcdTemperature))));
+                        //Log.LogMessage("Timer", "Cooler power parameters: Power fraction at setpoint: {0}, Folded ccd temperature: {1}, Cooler power: {2}",powerFractionAtSetPoint,foldedCcdTemperature, coolerPower);
+
+                        // Now force the value to 100% for the first part of the cooling curve
+                        if ((heatSinkTemperature - ccdTemperature) / (heatSinkTemperature - setCcdTemperature) < COOLER_USE_FULL_POWER)
+                        {
+                            coolerPower = 100.0;
+                            Log.LogMessage("Timer", "Cooler power - Forced to 100% - {0}", coolerPower);
+                        }
+                        else
+                        {
+                            Log.LogMessage("Timer", "Cooler power - Normal behaviour - Power: {0}, AmbientTemperature: {1}, CCDTemperature: {2}, Delta TMax: {3}", coolerPower, heatSinkTemperature, ccdTemperature, coolerDeltaTMax);
+                        }
+                        break;
+                    case COOLERMODE_NEVER_GETS_TO_SETPOINT: // Set cooler power to 100% because we cannot make the set point
+                        coolerPower = 100.0;
+                        break;
+                    default: // Warning messge for future camera driver developers that they need to update this code if a new curve is introduced
+                        System.Windows.Forms.MessageBox.Show("Unknown cooler mode! - " + coolerMode);
+                        break;
+                }
+            }
+            else // We are warning up or at ambient temperature
+            {
+                double distanceFromAmbient = ccdTemperature - heatSinkTemperature; // Calculate how far the CCD is from ambient temperature
+                if (distanceFromAmbient != 0.0) // The CCD is not at ambient temperature
+                {
+                    if (Math.Abs(distanceFromAmbient) > 0.01) // We are still not at ambient so update the CCD temperature using the cooler warming rate 
+                    {
+                        ccdTemperature += (heatSinkTemperature - ccdTemperature) * COOLER_WARMING_RATE;
+                        Log.LogMessage("Timer", "CCD is NOT at ambient temperature: {0}, CCD temperature changed to {1}, Cooler power: {2}", heatSinkTemperature, ccdTemperature, coolerPower);
+                    }
+                    else // We are now very close to ambient so align the values
+                    {
+                        ccdTemperature = heatSinkTemperature;
+                        Log.LogMessage("Timer", "CCD is NOW AT ambient temperature: {0}, Cooler power: {1}", ccdTemperature, coolerPower);
+                    }
+                }
+                else // The CCD is at ambient temperature
+                {
+                    Log.LogMessage("Timer", "CCD is at ambient temperature: {0}, Cooler power: {1}", heatSinkTemperature, coolerPower);
+                }
+            }
         }
 
-        //
-        // PUBLIC COM INTERFACE ICamera IMPLEMENTATION
-        //
+        double ReturnCurveValue(double[] curve, int index, double interpolationFraction)
+        {
+            double curveValue = curve[index];
+            double retVal = curveValue;
+
+            if (index < curve.GetUpperBound(0)) // If we are not at the last curve array member interpolate the fractional value
+            {
+                double fraction = interpolationFraction * (curve[index + 1] - curve[index]);
+                retVal = curveValue + fraction;
+                Log.LogMessage("ReturnCurveValue", "Index: {0}, Interpolation fraction: {1}, Curve value: {2}, Fraction: {3}, Return value: {4}", index, interpolationFraction, curveValue, fraction, retVal);
+            }
+            else
+            {
+                Log.LogMessage("ReturnCurveValue", "Index: {0} is >=curve.GetUpperBound(0): {1}", index, curve.GetUpperBound(0));
+            }
+
+            return retVal;
+        }
+
+        #endregion
 
         #region Common Methods
 
@@ -316,7 +528,6 @@ namespace ASCOM.Simulator
         #endregion
 
         #region ICamera Members
-
 
         /// <summary>
         /// Aborts the current exposure, if any, and returns the camera to Idle state.
@@ -550,10 +761,10 @@ namespace ASCOM.Simulator
         /// </summary>
         public bool CanPulseGuide
         {
-            get 
-            {                 
+            get
+            {
                 Log.LogMessage("CanPulseGuide", "get {0}", canPulseGuide);
-                return this.canPulseGuide; 
+                return this.canPulseGuide;
             }
         }
 
@@ -608,6 +819,16 @@ namespace ASCOM.Simulator
                 if (value)
                     ReadImageFile();
                 this.connected = value;
+
+                // Start the cooler timer on initial connect
+                if (this.coolerTimer == null)
+                {
+                    coolerTimer = new System.Timers.Timer();
+                    coolerTimer.Elapsed += new ElapsedEventHandler(coolerTimer_Elapsed);
+                    coolerTimer.Interval = 1000;
+                    coolerTimer.Enabled = true;
+                    Log.LogMessage("Connected", "Cooler timer started");
+                }
             }
         }
 
@@ -624,46 +845,85 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckConnected ("Can't read CoolerOn when not connected");
+                CheckConnected("Can't read CoolerOn when not connected");
                 CheckCapability("CoolerOn", this.hasCooler);
                 Log.LogMessage("CoolerOn", "get {0}", coolerOn);
                 return this.coolerOn;
             }
             set
             {
+
                 CheckConnected("Can't set CoolerOn when not connected");
                 CheckCapability("CoolerOn", this.hasCooler);
                 Log.LogMessage("CoolerOn", "set {0}", value);
                 this.coolerOn = value;
 
-                if (this.canSetCcdTemperature)
+                if (coolerOn)// Set the correct cooler temperature starting point, depending on configuration and usage hostory
                 {
-                    // implement CCD temperature control
-                    if (this.coolerTimer == null)
+                    coolerStartedTime = DateTime.Now; // Save the time that the cooler was started
+                    coolerPower = 100; // Set the cooler power to full on
+
+                    // Set the starting position on the temperature curve based on how much the CCD has warmed up since cooling was turned off
+                    switch (coolerMode)
                     {
-                        coolerTimer = new System.Timers.Timer();
-                        coolerTimer.Elapsed += new ElapsedEventHandler(coolerTimer_Elapsed);
-                        coolerTimer.Interval = 1000;
-                        coolerTimer.Enabled = true;
+                        case COOLERMODE_START_AT_SETPOINT:
+                            coolerRunningTime = new TimeSpan(0, 0, (int)coolerTimeToSetPoint);
+                            Log.LogMessage("CoolerOn", "StartAtSetPoint - Setting cooler curve index to 0", ccdTemperature);
+                            break;
+                        case COOLERMODE_DAMPED:
+                            coolerRunningTime = CalculateCoolerRunningTime("DampedMode", curveDamped, 1.0);
+                            break;
+                        case COOLERMODE_UNDER_DAMPED:
+                            coolerRunningTime = CalculateCoolerRunningTime("UnderDampedMode", curveUnderDamped, 1.0);
+                            break;
+                        case COOLERMODE_NEVER_GETS_TO_SETPOINT:
+                            coolerRunningTime = CalculateCoolerRunningTime("NeverGetsToSetPoint", curveDamped, NEVER_GETS_TO_SETPOINT_INDEX_REDUCTION_FACTOR);
+                            break;
+                        default:
+                            System.Windows.Forms.MessageBox.Show("Unknown cooler mode! - " + coolerMode);
+                            break;
                     }
+                }
+                else // Cooler off
+                {
+                    coolerPower = 0; // Set cooler power to zero because the cooler is off
                 }
             }
         }
 
-        /// <summary>
-        /// Adjust the ccd temperature and power once a second
-        /// </summary>
-        private void coolerTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private TimeSpan CalculateCoolerRunningTime(string name, double[] array, double scaleFactor)
         {
-            if (this.coolerOn && this.canSetCcdTemperature)
-            {
-                this.coolerPower = Math.Min(100, Math.Max((this.ccdTemperature - this.setCcdTemperature) * 100, 0));
-                this.ccdTemperature -= (this.coolerPower / 50);     // reduce temperature by up to 2 deg per sec.
-            }
-            // increase temperature by 2 deg per sec at a differential of 40
-            this.ccdTemperature += (this.heatSinkTemperature - this.ccdTemperature) / 20.0;
-        }
+            double currentCoolerCurveValue;
+            int coolerCurveIndex;
+            int runningTime;
+            TimeSpan newCoolerRunningTime;
 
+            if (coolerResetToAmbient) // Configured to always start at ambient
+            {
+                newCoolerRunningTime = new TimeSpan(0, 0, 0);
+                Log.LogMessage("CoolerRunningTime", "Cooler is configured to reset to ambient when cooling is turned on");
+            }
+            else
+            {
+                // Find the current CCD temperature position on the cooling curve and then find the index position of the nearewst value and set this as the start point
+                currentCoolerCurveValue = (ccdTemperature - setCcdTemperature) / (heatSinkTemperature - setCcdTemperature);
+
+                coolerCurveIndex = -1;
+                do
+                {
+                    coolerCurveIndex += 1;
+                    //Log.LogMessage("CoolerOn", "DampedMode FindIndex - Curve damped: {0}, Current cooler curve vValue: {1}, Cooler curve index: {2}", curveDamped[coolerCurveIndex], currentCoolerCurveValue, coolerCurveIndex);
+                } while ((array[coolerCurveIndex] > currentCoolerCurveValue) & (coolerCurveIndex != NUMBER_OF_COOLER_CURVE_POINTS - 1));
+
+                // Calculate cooler running time that would give rise to this curve index being used
+                runningTime = Convert.ToInt32(coolerTimeToSetPoint * (double)coolerCurveIndex * scaleFactor / (double)NUMBER_OF_COOLER_CURVE_POINTS);
+                newCoolerRunningTime = new TimeSpan(0, 0, runningTime);
+
+                Log.LogMessage("CoolerRunningTime", "{0} - CCD temperature is {0}, index: {1}, running time: {2}", name, ccdTemperature, coolerCurveIndex, runningTime);
+            }
+
+            return newCoolerRunningTime;
+        }
         /// <summary>
         /// Returns the present cooler power level, in percent.  Returns zero if CoolerOn is
         /// False.
@@ -1129,10 +1389,13 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't set SetCCDTemperature when not connected");
                 CheckCapability("SetCCDTemperature", canSetCcdTemperature);
-                CheckRange("SetCCDTemperature", -50, value, 20);
+                CheckRange("SetCCDTemperature", heatSinkTemperature - coolerDeltaTMax, value, heatSinkTemperature); // Make sure the set value is in the supported range
                 Log.LogMessage("SetCCDTemperature", "set {0}", value);
+                if (coolerOn) // Cooler is on so this is an adjustment to the current setpoint
+                {
+
+                }
                 this.setCcdTemperature = value;
-                // does this turn cooling on?
             }
         }
 
@@ -1669,8 +1932,8 @@ namespace ASCOM.Simulator
                 {
                     Log.LogMessage("ReadoutMode", "PropertyNotImplemented because readoutModes == null || readoutModes.Count < 1");
                     throw new ASCOM.PropertyNotImplementedException("ReadoutMode", false);
-                //if (this.canFastReadout)
-                //    throw new PropertyNotImplementedException("ReadoutMode", false);
+                    //if (this.canFastReadout)
+                    //    throw new PropertyNotImplementedException("ReadoutMode", false);
                 }
                 var rm = this.readoutMode;
                 Log.LogMessage("ReadoutMode", "get {0}, mode {1}", rm, readoutModes[rm]);
@@ -1696,7 +1959,7 @@ namespace ASCOM.Simulator
                 {
                     Log.LogMessage("ReadoutMode", "InvalidValueException, value {0}, range 0 to {1}", value, readoutModes.Count - 1);
                     throw new InvalidValueException("ReadoutMode", value.ToString(CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "0 to {0}", this.readoutModes.Count - 1));
-                } 
+                }
                 this.readoutMode = value;
             }
         }
@@ -1766,6 +2029,14 @@ namespace ASCOM.Simulator
             using (Profile profile = new Profile(true))
             {
                 profile.DeviceType = "Camera";
+
+                // Read cooler configuration properties
+                heatSinkTemperature = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_CoolerAmbientTemperature, "Cooler", COOLER_AMBIENT_TEMPERATURE_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+                coolerDeltaTMax = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_CoolerDeltaTMax, "Cooler", COOLER_DELTAT_MAX_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+                coolerMode = profile.GetValue(s_csDriverID, STR_CoolerMode, "Cooler", COOLER_COOLERMODE_DEFAULT.ToString(CultureInfo.InvariantCulture));
+                coolerTimeToSetPoint = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_CoolerTimeToSetPoint, "Cooler", COOLER_TIME_TO_SETPOINT_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+                coolerResetToAmbient = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CoolerResetToAmbient, "Cooler", COOLER_RESET_TO_AMBIENT_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+
                 // read properties from profile
                 Log.Enabled = Convert.ToBoolean(profile.GetValue(s_csDriverID, "Trace", string.Empty, "false"), CultureInfo.InvariantCulture);
                 this.interfaceVersion = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_InterfaceVersion, string.Empty, "2"), CultureInfo.InvariantCulture);
@@ -1847,6 +2118,14 @@ namespace ASCOM.Simulator
             {
                 profile.DeviceType = "Camera";
 
+                // Save the cooler configuration to the Profile
+                profile.WriteValue(s_csDriverID, STR_CoolerAmbientTemperature, this.heatSinkTemperature.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerDeltaTMax, this.coolerDeltaTMax.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerMode, this.coolerMode.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerTimeToSetPoint, this.coolerTimeToSetPoint.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerResetToAmbient, this.coolerResetToAmbient.ToString(CultureInfo.InvariantCulture), "Cooler");
+
+                // Save camera configuration to the Profile
                 profile.WriteValue(s_csDriverID, "Trace", Log.Enabled.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_InterfaceVersion, this.interfaceVersion.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_PixelSizeX, this.pixelSizeX.ToString(CultureInfo.InvariantCulture));
@@ -1946,11 +2225,11 @@ namespace ASCOM.Simulator
             this.cameraState = CameraStates.cameraIdle;
             this.coolerOn = false;
             this.coolerPower = 0;
-            this.heatSinkTemperature = 20;
             this.ccdTemperature = 15;
             this.readoutMode = 0;
             this.fastReadout = false;
-            //this.ReadImageFile();
+            this.ccdTemperature = this.heatSinkTemperature; // Set the CCD termperature to ambient
+            Log.LogMessage("InitialiseSimulator", "Set camera temperature to ambient: {0}", heatSinkTemperature);
         }
 
         private delegate int PixelProcess(double value);
@@ -2076,7 +2355,6 @@ namespace ASCOM.Simulator
         {
             return 5.0 * this.binX * this.binY;
         }
-
 
         private delegate void GetData(int x, int y);
         private Bitmap bmp;
