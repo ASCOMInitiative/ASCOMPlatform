@@ -183,11 +183,9 @@ namespace ASCOM.Simulator
 
             // Save the cooler configuration
             camera.heatSinkTemperature = (double)coolerSetupForm.NumAmbientTemperature.Value;
-            //camera.coolerAmbientFinishTemperature = (double)coolerSetupForm.NumAmbientFinishTemperature.Value;
             camera.setCcdTemperature = (double)coolerSetupForm.NumCCDSetPoint.Value;
             camera.coolerDeltaTMax = (double)coolerSetupForm.NumCoolerDeltaTMax.Value;
             camera.coolerTimeToSetPoint = (double)coolerSetupForm.NumTimeToSetPoint.Value;
-            //camera.coolerAmbientChangePeriod = (double)coolerSetupForm.NumAmbientChangePeriod.Value;
             camera.coolerResetToAmbient = coolerSetupForm.ChkResetToAmbientOnConnect.Checked;
             camera.coolerMode = coolerSetupForm.cmbCoolerModes.SelectedItem.ToString();
         }
@@ -241,11 +239,9 @@ namespace ASCOM.Simulator
         {
             coolerSetupForm.EnableValidation = false;
             coolerSetupForm.NumAmbientTemperature.Value = (decimal)camera.heatSinkTemperature;
-            //coolerSetupForm.NumAmbientFinishTemperature.Value = (decimal)camera.coolerAmbientFinishTemperature;
             coolerSetupForm.NumCCDSetPoint.Value = (decimal)camera.setCcdTemperature;
             coolerSetupForm.NumCoolerDeltaTMax.Value = (decimal)camera.coolerDeltaTMax;
             coolerSetupForm.NumTimeToSetPoint.Value = (decimal)camera.coolerTimeToSetPoint;
-            //coolerSetupForm.NumAmbientChangePeriod.Value = (decimal)camera.coolerAmbientChangePeriod;
             coolerSetupForm.ChkResetToAmbientOnConnect.Checked = camera.coolerResetToAmbient;
 
             foreach (string coolerMode in camera.coolerModes)

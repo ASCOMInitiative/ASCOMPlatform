@@ -48,35 +48,35 @@
             // 
             // NumAmbientTemperature
             // 
-            this.NumAmbientTemperature.Location = new System.Drawing.Point(31, 34);
+            this.NumAmbientTemperature.Location = new System.Drawing.Point(31, 28);
             this.NumAmbientTemperature.Minimum = new decimal(new int[] {
             40,
             0,
             0,
             -2147483648});
             this.NumAmbientTemperature.Name = "NumAmbientTemperature";
-            this.NumAmbientTemperature.Size = new System.Drawing.Size(43, 20);
+            this.NumAmbientTemperature.Size = new System.Drawing.Size(55, 20);
             this.NumAmbientTemperature.TabIndex = 0;
             this.NumAmbientTemperature.ValueChanged += new System.EventHandler(this.NumAmbientTemperature_ValueChanged);
             // 
             // NumCCDSetPoint
             // 
-            this.NumCCDSetPoint.Location = new System.Drawing.Point(32, 60);
+            this.NumCCDSetPoint.Location = new System.Drawing.Point(32, 54);
             this.NumCCDSetPoint.Minimum = new decimal(new int[] {
             40,
             0,
             0,
             -2147483648});
             this.NumCCDSetPoint.Name = "NumCCDSetPoint";
-            this.NumCCDSetPoint.Size = new System.Drawing.Size(43, 20);
+            this.NumCCDSetPoint.Size = new System.Drawing.Size(55, 20);
             this.NumCCDSetPoint.TabIndex = 3;
             this.NumCCDSetPoint.ValueChanged += new System.EventHandler(this.NumCCDSetPoint_ValueChanged);
             // 
             // NumCoolerDeltaTMax
             // 
-            this.NumCoolerDeltaTMax.Location = new System.Drawing.Point(31, 86);
+            this.NumCoolerDeltaTMax.Location = new System.Drawing.Point(31, 80);
             this.NumCoolerDeltaTMax.Name = "NumCoolerDeltaTMax";
-            this.NumCoolerDeltaTMax.Size = new System.Drawing.Size(43, 20);
+            this.NumCoolerDeltaTMax.Size = new System.Drawing.Size(55, 20);
             this.NumCoolerDeltaTMax.TabIndex = 4;
             this.NumCoolerDeltaTMax.ValueChanged += new System.EventHandler(this.NumCoolerDeltaTMax_ValueChanged);
             // 
@@ -84,28 +84,28 @@
             // 
             this.cmbCoolerModes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbCoolerModes.FormattingEnabled = true;
-            this.cmbCoolerModes.Location = new System.Drawing.Point(31, 142);
+            this.cmbCoolerModes.Location = new System.Drawing.Point(31, 150);
             this.cmbCoolerModes.Name = "cmbCoolerModes";
             this.cmbCoolerModes.Size = new System.Drawing.Size(206, 21);
             this.cmbCoolerModes.TabIndex = 5;
             // 
             // NumTimeToSetPoint
             // 
-            this.NumTimeToSetPoint.Location = new System.Drawing.Point(32, 169);
+            this.NumTimeToSetPoint.Location = new System.Drawing.Point(31, 106);
             this.NumTimeToSetPoint.Maximum = new decimal(new int[] {
             1000000,
             0,
             0,
             0});
             this.NumTimeToSetPoint.Name = "NumTimeToSetPoint";
-            this.NumTimeToSetPoint.Size = new System.Drawing.Size(78, 20);
+            this.NumTimeToSetPoint.Size = new System.Drawing.Size(55, 20);
             this.NumTimeToSetPoint.TabIndex = 6;
             this.NumTimeToSetPoint.ValueChanged += new System.EventHandler(this.NumTimeToSetPoint_ValueChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(80, 36);
+            this.label1.Location = new System.Drawing.Point(93, 30);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(172, 13);
             this.label1.TabIndex = 8;
@@ -114,7 +114,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(81, 62);
+            this.label4.Location = new System.Drawing.Point(93, 56);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(96, 13);
             this.label4.TabIndex = 11;
@@ -123,16 +123,17 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(80, 88);
+            this.label5.Location = new System.Drawing.Point(92, 82);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(194, 13);
             this.label5.TabIndex = 12;
             this.label5.Text = "Cooler maximum delta t from ambient (C)";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(243, 145);
+            this.label6.Location = new System.Drawing.Point(243, 153);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(108, 13);
             this.label6.TabIndex = 13;
@@ -141,11 +142,11 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(116, 171);
+            this.label7.Location = new System.Drawing.Point(92, 108);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(242, 13);
+            this.label7.Size = new System.Drawing.Size(250, 13);
             this.label7.TabIndex = 14;
-            this.label7.Text = "Time to go from ambient to the set point (seconds)";
+            this.label7.Text = "Time to cool from ambient to the set point (seconds)";
             // 
             // BtnClose
             // 
@@ -160,7 +161,7 @@
             // ChkResetToAmbientOnConnect
             // 
             this.ChkResetToAmbientOnConnect.AutoSize = true;
-            this.ChkResetToAmbientOnConnect.Location = new System.Drawing.Point(31, 195);
+            this.ChkResetToAmbientOnConnect.Location = new System.Drawing.Point(32, 199);
             this.ChkResetToAmbientOnConnect.Name = "ChkResetToAmbientOnConnect";
             this.ChkResetToAmbientOnConnect.Size = new System.Drawing.Size(257, 17);
             this.ChkResetToAmbientOnConnect.TabIndex = 7;
