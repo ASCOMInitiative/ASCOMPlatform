@@ -34,6 +34,7 @@ using System.Timers;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace ASCOM.Simulator
 {
@@ -244,10 +245,10 @@ namespace ASCOM.Simulator
 
         public void Dispose()
         {
-            if (this.exposureTimer != null)
-                this.exposureTimer.Dispose();
-            if (this.coolerTimer != null)
-                this.coolerTimer.Dispose();
+            if (exposureTimer != null)
+                exposureTimer.Dispose();
+            if (coolerTimer != null)
+                coolerTimer.Dispose();
         }
         #endregion
 
@@ -544,7 +545,7 @@ namespace ASCOM.Simulator
         /// </summary>
         public ArrayList SupportedActions
         {
-            get { return this.supportedActions; }
+            get { return supportedActions; }
         }
 
         public string CommandString(string Command, bool Raw)
@@ -564,24 +565,24 @@ namespace ASCOM.Simulator
 
         public string Action(string ActionName, string ActionParameters)
         {
-            if (this.supportedActions.Contains(ActionName))
+            if (supportedActions.Contains(ActionName))
             {
                 switch (ActionName)
                 {
                     case "SetFanSpeed":
-                        int fanMode;
-                        if (int.TryParse(ActionParameters, out fanMode))
+                        int fanModeNew;
+                        if (int.TryParse(ActionParameters, out fanModeNew))
                         {
                             if (fanMode >= 0 && fanMode <= 3)
                             {
-                                this.fanMode = fanMode;
+                                fanMode = fanModeNew;
                                 return string.Empty;
                             }
                         }
                         // value not in range
                         throw new InvalidValueException("Action-SetFanMode", ActionParameters, "0 to 3");
                     case "GetFanSpeed":
-                        return this.fanMode.ToString();
+                        return fanMode.ToString();
                     default:
                         break;
                 }
@@ -605,23 +606,23 @@ namespace ASCOM.Simulator
         public void AbortExposure()
         {
             CheckConnected("Can't abort exposure when not connected");
-            if (!this.canAbortExposure)
+            if (!canAbortExposure)
             {
                 Log.LogMessage("AbortExposure", "CanAbortExposure is false");
                 throw new ASCOM.MethodNotImplementedException("AbortExposure");
             }
 
             Log.LogMessage("AbortExposure", "start");
-            switch (this.cameraState)
+            switch (cameraState)
             {
                 case CameraStates.cameraWaiting:
                 case CameraStates.cameraExposing:
                 case CameraStates.cameraReading:
                 case CameraStates.cameraDownload:
                     // these are all possible exposure states so we can abort the exposure
-                    this.exposureTimer.Enabled = false;
-                    this.cameraState = CameraStates.cameraIdle;
-                    this.imageReady = false;
+                    exposureTimer.Enabled = false;
+                    cameraState = CameraStates.cameraIdle;
+                    imageReady = false;
                     break;
                 case CameraStates.cameraIdle:
                     break;
@@ -645,7 +646,7 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read BinX when not connected");
-                return this.binX;
+                return binX;
             }
             set
             {
@@ -654,12 +655,12 @@ namespace ASCOM.Simulator
                 if ((maxBinX >= 4) & omitOddBins & ((value % 2) > 0) & (value >= 3)) // Must be an odd value of 3 or greater when maxbin is 4 or greater
                 {
                     Log.LogMessage("BinX", "Odd bin value {0} is invalid", value);
-                    throw new InvalidValueException("BinX", value.ToString("d2", CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "1 and even bin values between 2 and {0}", this.MaxBinX));
+                    throw new InvalidValueException("BinX", value.ToString("d2", CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "1 and even bin values between 2 and {0}", MaxBinX));
                 }
 
-                this.binX = value;
-                if (!this.canAsymmetricBin)
-                    this.binY = value;
+                binX = value;
+                if (!canAsymmetricBin)
+                    binY = value;
             }
         }
 
@@ -675,22 +676,22 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read BinY when not connected");
-                return this.binY;
+                return binY;
             }
             set
             {
                 CheckConnected("Can't set BinY when not connected");
-                CheckRange("BinY", 1, value, this.maxBinY);
+                CheckRange("BinY", 1, value, maxBinY);
 
                 if ((maxBinY >= 4) & omitOddBins & ((value % 2) > 0) & (value >= 3)) // Must be an odd value of 3 or greater when maxbin is 4 or greater
                 {
                     Log.LogMessage("BinY", "Odd bin value {0} is invalid", value);
-                    throw new InvalidValueException("BinY", value.ToString("d2", CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "1 and even bin values between 2 and {0}", this.MaxBinY));
+                    throw new InvalidValueException("BinY", value.ToString("d2", CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "1 and even bin values between 2 and {0}", MaxBinY));
                 }
 
-                this.binY = value;
-                if (!this.canAsymmetricBin)
-                    this.binX = value;
+                binY = value;
+                if (!canAsymmetricBin)
+                    binX = value;
             }
         }
 
@@ -704,8 +705,8 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read the CCD temperature when not connected");
-                Log.LogMessage("CCDTemperature", "get {0}", this.ccdTemperature);
-                return this.ccdTemperature;
+                Log.LogMessage("CCDTemperature", "get {0}", ccdTemperature);
+                return ccdTemperature;
             }
         }
 
@@ -743,8 +744,8 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read the camera state when not connected");
-                Log.LogMessage("CameraState", this.cameraState.ToString());
-                return this.cameraState;
+                Log.LogMessage("CameraState", cameraState.ToString());
+                return cameraState;
             }
         }
 
@@ -757,8 +758,8 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read the camera Xsize when not connected");
-                Log.LogMessage("CameraXSize", "get {0}", this.cameraXSize);
-                return this.cameraXSize;
+                Log.LogMessage("CameraXSize", "get {0}", cameraXSize);
+                return cameraXSize;
             }
         }
 
@@ -771,8 +772,8 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read the camera Ysize when not connected");
-                Log.LogMessage("CameraYSize", "get {0}", this.cameraYSize);
-                return this.cameraYSize;
+                Log.LogMessage("CameraYSize", "get {0}", cameraYSize);
+                return cameraYSize;
             }
         }
 
@@ -784,8 +785,8 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read CanAbortExposure when not connected");
-                Log.LogMessage("CanAbortExposure", "get {0}", this.canAbortExposure);
-                return this.canAbortExposure;
+                Log.LogMessage("CanAbortExposure", "get {0}", canAbortExposure);
+                return canAbortExposure;
             }
         }
 
@@ -802,7 +803,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read CanAsymmetricBin when not connected");
                 Log.LogMessage("CanAsymmetricBin", "get {0}", canAsymmetricBin);
-                return this.canAsymmetricBin;
+                return canAsymmetricBin;
             }
         }
 
@@ -815,7 +816,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read CanGetCoolerPower when not connected");
                 Log.LogMessage("CanGetCoolerPower", "get {0}", canGetCoolerPower);
-                return this.canGetCoolerPower;
+                return canGetCoolerPower;
             }
         }
 
@@ -829,7 +830,7 @@ namespace ASCOM.Simulator
             get
             {
                 Log.LogMessage("CanPulseGuide", "get {0}", canPulseGuide);
-                return this.canPulseGuide;
+                return canPulseGuide;
             }
         }
 
@@ -844,7 +845,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read CanSetCCDTemperature when not connected");
                 Log.LogMessage("CanSetCCDTemperature", "get {0}", canSetCcdTemperature);
-                return this.canSetCcdTemperature;
+                return canSetCcdTemperature;
             }
         }
 
@@ -861,7 +862,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read CanStopExposure when not connected");
                 Log.LogMessage("CanStopExposure", "get {0}", canStopExposure);
-                return this.canStopExposure;
+                return canStopExposure;
             }
         }
 
@@ -876,17 +877,17 @@ namespace ASCOM.Simulator
             get
             {
                 Log.LogMessage("Connected", "get {0}", connected);
-                return this.connected;
+                return connected;
             }
             set
             {
                 Log.LogMessage("Connected", "set {0}", value);
                 if (value)
                     ReadImageFile();
-                this.connected = value;
+                connected = value;
 
                 // Start the cooler timer on initial connect
-                if (this.coolerTimer == null)
+                if (coolerTimer == null)
                 {
                     coolerTimer = new System.Timers.Timer();
                     coolerTimer.Elapsed += new ElapsedEventHandler(coolerTimer_Elapsed);
@@ -911,17 +912,17 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read CoolerOn when not connected");
-                CheckCapability("CoolerOn", this.hasCooler);
+                CheckCapability("CoolerOn", hasCooler);
                 Log.LogMessage("CoolerOn", "get {0}", coolerOn);
-                return this.coolerOn;
+                return coolerOn;
             }
             set
             {
 
                 CheckConnected("Can't set CoolerOn when not connected");
-                CheckCapability("CoolerOn", this.hasCooler);
+                CheckCapability("CoolerOn", hasCooler);
                 Log.LogMessage("CoolerOn", "set {0}", value);
-                this.coolerOn = value;
+                coolerOn = value;
 
                 if (coolerOn)// Set the correct cooler temperature starting point, depending on configuration and usage hostory
                 {
@@ -960,7 +961,7 @@ namespace ASCOM.Simulator
                 CheckConnected("Can't read Cooler Power when not connected");
                 CheckCapability("CoolerPower", hasCooler);
                 Log.LogMessage("CoolerPower", "get {0}", coolerPower);
-                return this.coolerPower;
+                return coolerPower;
             }
         }
 
@@ -975,15 +976,15 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read Description when not connected");
-                if (this.interfaceVersion == 1)
+                if (interfaceVersion == 1)
                 {
                     Log.LogMessage("Description", "Simulated V1 Camera");
                     return "Simulated V1 Camera";
                 }
                 else
                 {
-                    Log.LogMessage("Description", "Simulated {0} camera {1}", this.sensorType, this.sensorName);
-                    return string.Format(CultureInfo.CurrentCulture, "Simulated {0} camera {1}", this.sensorType, this.sensorName);
+                    Log.LogMessage("Description", "Simulated {0} camera {1}", sensorType, sensorName);
+                    return string.Format(CultureInfo.CurrentCulture, "Simulated {0} camera {1}", sensorType, sensorName);
                 }
             }
         }
@@ -1000,7 +1001,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read ElectronsPerADU when not connected");
                 Log.LogMessage("ElectronsPerADU", "get {0}", electronsPerADU);
-                return this.electronsPerADU;
+                return electronsPerADU;
             }
         }
 
@@ -1015,7 +1016,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read FullWellCapacity when not connected");
                 Log.LogMessage("FullWellCapacity", "get {0}", fullWellCapacity);
-                return this.fullWellCapacity;
+                return fullWellCapacity;
             }
         }
 
@@ -1030,7 +1031,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read HasShutter when not connected");
                 Log.LogMessage("HasShutter", "get {0}", hasShutter);
-                return this.hasShutter;
+                return hasShutter;
             }
         }
 
@@ -1046,7 +1047,7 @@ namespace ASCOM.Simulator
                 CheckConnected("Can't read HeatSinkTemperature when not connected");
                 CheckCapability("HeatSinkTemperature", canSetCcdTemperature);
                 Log.LogMessage("HeatSinkTemperature", "get {0}", heatSinkTemperature);
-                return this.heatSinkTemperature;
+                return heatSinkTemperature;
             }
         }
 
@@ -1068,17 +1069,17 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read ImageArray when not connected");
-                if (!this.imageReady)
+                if (!imageReady)
                 {
                     Log.LogMessage("ImageArray", "No Image Available");
                     throw new ASCOM.InvalidOperationException("There is no image available");
                 }
 
                 Log.LogMessage("ImageArray", "get");
-                if (this.sensorType == SensorType.Color)
-                    return this.imageArrayColour;
+                if (sensorType == SensorType.Color)
+                    return imageArrayColour;
                 else
-                    return this.imageArray;
+                    return imageArray;
             }
         }
 
@@ -1102,15 +1103,15 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read ImageArrayVariant when not connected");
-                if (!this.imageReady)
+                if (!imageReady)
                 {
                     Log.LogMessage("ImageArrayVariant", "No Image Available");
                     throw new ASCOM.InvalidOperationException("There is no image available");
                 }
                 // convert to variant
-                if (this.sensorType == SensorType.Color)
+                if (sensorType == SensorType.Color)
                 {
-                    this.imageArrayVariantColour = new object[imageArrayColour.GetLength(0), imageArrayColour.GetLength(1), 3];
+                    imageArrayVariantColour = new object[imageArrayColour.GetLength(0), imageArrayColour.GetLength(1), 3];
                     for (int i = 0; i < imageArrayColour.GetLength(1); i++)
                     {
                         for (int j = 0; j < imageArrayColour.GetLength(0); j++)
@@ -1124,7 +1125,7 @@ namespace ASCOM.Simulator
                 }
                 else
                 {
-                    this.imageArrayVariant = new object[imageArray.GetLength(0), imageArray.GetLength(1)];
+                    imageArrayVariant = new object[imageArray.GetLength(0), imageArray.GetLength(1)];
                     for (int i = 0; i < imageArray.GetLength(1); i++)
                     {
                         for (int j = 0; j < imageArray.GetLength(0); j++)
@@ -1149,8 +1150,8 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read ImageReady when not connected");
-                Log.LogMessage("ImageReady", "get {0}", this.imageReady);
-                return this.imageReady;
+                Log.LogMessage("ImageReady", "get {0}", imageReady);
+                return imageReady;
             }
         }
 
@@ -1164,7 +1165,7 @@ namespace ASCOM.Simulator
             get
             {
                 CheckCapability("IsPulseGuiding", canPulseGuide);
-                var ipg = this.isPulseGuidingRa || this.isPulseGuidingDec;
+                var ipg = isPulseGuidingRa || isPulseGuidingDec;
                 Log.LogMessage("IsPulseGuiding", "get {0}", ipg);
                 return ipg;
             }
@@ -1183,7 +1184,7 @@ namespace ASCOM.Simulator
                 CheckConnected("Can't read LastExposureDuration when not connected");
                 CheckReady("LastExposureDuration");
                 Log.LogMessage("LastExposureDuration", "get {0}", lastExposureDuration);
-                return this.lastExposureDuration;
+                return lastExposureDuration;
             }
         }
 
@@ -1199,7 +1200,7 @@ namespace ASCOM.Simulator
                 CheckConnected("Can't read LastExposureStartTime when not connected");
                 CheckReady("LastExposureStartTime");
                 Log.LogMessage("LastExposureStartTime", "get {0}", lastExposureStartTime);
-                return this.lastExposureStartTime;
+                return lastExposureStartTime;
             }
         }
 
@@ -1213,7 +1214,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read MaxADU when not connected");
                 Log.LogMessage("MaxADU", "get {0}", maxADU);
-                return this.maxADU;
+                return maxADU;
             }
         }
 
@@ -1228,7 +1229,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read MaxBinX when not connected");
                 Log.LogMessage("MaxBinX", "get {0}", maxBinX);
-                return this.maxBinX;
+                return maxBinX;
             }
         }
 
@@ -1243,7 +1244,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read MaxBinY when not connected");
                 Log.LogMessage("MaxBinY", "get {0}", maxBinY);
-                return this.maxBinY;
+                return maxBinY;
             }
         }
 
@@ -1258,13 +1259,13 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read NumX when not connected");
                 Log.LogMessage("NumX", "get {0}", numX);
-                return this.numX;
+                return numX;
             }
             set
             {
                 CheckConnected("Can't set NumX when not connected");
                 Log.LogMessage("NumX", "set {0}", value);
-                this.numX = value;
+                numX = value;
             }
         }
 
@@ -1279,13 +1280,13 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read NumY when not connected");
                 Log.LogMessage("NumY", "get {0}", numY);
-                return this.numY;
+                return numY;
             }
             set
             {
                 CheckConnected("Can't set NumY when not connected");
                 Log.LogMessage("NumY", "set {0}", value);
-                this.numY = value;
+                numY = value;
             }
         }
 
@@ -1300,7 +1301,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read PixelSizeX when not connected");
                 Log.LogMessage("PixelSizeX", "get {0}", pixelSizeX);
-                return this.pixelSizeX;
+                return pixelSizeX;
             }
         }
 
@@ -1315,7 +1316,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read PixelSizeY when not connected");
                 Log.LogMessage("PixelSizeY", "get {0}", pixelSizeY);
-                return this.pixelSizeY;
+                return pixelSizeY;
             }
         }
 
@@ -1340,7 +1341,7 @@ namespace ASCOM.Simulator
         /// <exception cref=" System.Exception">PulseGuide command is unsuccessful</exception>
         public void PulseGuide(GuideDirections Direction, int Duration)
         {
-            if (!this.canPulseGuide)
+            if (!canPulseGuide)
             {
                 Log.LogMessage("PulseGuide", "Not Implemented");
                 throw new ASCOM.MethodNotImplementedException("PulseGuide");
@@ -1354,27 +1355,27 @@ namespace ASCOM.Simulator
             {
                 case GuideDirections.guideEast:
                 case GuideDirections.guideWest:
-                    if (this.pulseGuideRaTimer == null)
+                    if (pulseGuideRaTimer == null)
                     {
-                        this.pulseGuideRaTimer = new System.Timers.Timer();
-                        this.pulseGuideRaTimer.Elapsed += new System.Timers.ElapsedEventHandler(pulseGuideRaTimer_Elapsed);
+                        pulseGuideRaTimer = new System.Timers.Timer();
+                        pulseGuideRaTimer.Elapsed += new System.Timers.ElapsedEventHandler(pulseGuideRaTimer_Elapsed);
                     }
-                    this.isPulseGuidingRa = true;
-                    this.pulseGuideRaTimer.Interval = Duration;
-                    this.pulseGuideRaTimer.AutoReset = false;     // only one tick
-                    this.pulseGuideRaTimer.Enabled = true;
+                    isPulseGuidingRa = true;
+                    pulseGuideRaTimer.Interval = Duration;
+                    pulseGuideRaTimer.AutoReset = false;     // only one tick
+                    pulseGuideRaTimer.Enabled = true;
                     break;
                 case GuideDirections.guideNorth:
                 case GuideDirections.guideSouth:
-                    if (this.pulseGuideDecTimer == null)
+                    if (pulseGuideDecTimer == null)
                     {
-                        this.pulseGuideDecTimer = new System.Timers.Timer();
-                        this.pulseGuideDecTimer.Elapsed += new System.Timers.ElapsedEventHandler(pulseGuideDecTimer_Elapsed);
+                        pulseGuideDecTimer = new System.Timers.Timer();
+                        pulseGuideDecTimer.Elapsed += new System.Timers.ElapsedEventHandler(pulseGuideDecTimer_Elapsed);
                     }
-                    this.isPulseGuidingDec = true;
-                    this.pulseGuideDecTimer.Interval = Duration;
-                    this.pulseGuideDecTimer.AutoReset = false;     // only one tick
-                    this.pulseGuideDecTimer.Enabled = true;
+                    isPulseGuidingDec = true;
+                    pulseGuideDecTimer.Interval = Duration;
+                    pulseGuideDecTimer.AutoReset = false;     // only one tick
+                    pulseGuideDecTimer.Enabled = true;
                     break;
                 default:
                     break;
@@ -1383,12 +1384,12 @@ namespace ASCOM.Simulator
 
         private void pulseGuideRaTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            this.isPulseGuidingRa = false;
+            isPulseGuidingRa = false;
         }
 
         private void pulseGuideDecTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            this.isPulseGuidingDec = false;
+            isPulseGuidingDec = false;
         }
 
         /// <summary>
@@ -1406,7 +1407,7 @@ namespace ASCOM.Simulator
                 CheckConnected("Can't read SetCCDTemperature when not connected");
                 CheckCapability("SetCCDTemperature", canSetCcdTemperature);
                 Log.LogMessage("SetCCDTemperature", "get {0}", setCcdTemperature);
-                return this.setCcdTemperature;
+                return setCcdTemperature;
             }
             set
             {
@@ -1441,13 +1442,19 @@ namespace ASCOM.Simulator
         /// <exception cref=" System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
         public void SetupDialog()
         {
-            if (this.connected)
+            if (connected)
                 throw new NotConnectedException("Can't set the CCD properties when connected");
             using (SetupDialogForm F = new SetupDialogForm())
             {
-                F.InitProperties(this);
-                if (F.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                    this.SaveToProfile();
+                try
+                {
+                    F.InitProperties(this);
+                    if (F.ShowDialog() == DialogResult.OK) SaveToProfile();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Setup exception: " + ex.ToString());
+                }
             }
         }
 
@@ -1465,102 +1472,102 @@ namespace ASCOM.Simulator
             Log.LogStart("StartExposure", "Duration {0}, Light {1}", Duration, Light);
             CheckConnected("Can't set StartExposure when not connected");
             // check the duration, light frames only
-            if (Light && (Duration > this.exposureMax || Duration < this.exposureMin))
+            if (Light && (Duration > exposureMax || Duration < exposureMin))
             {
-                this.lastError = "Incorrect exposure duration";
+                lastError = "Incorrect exposure duration";
                 Log.LogMessage("StartExposure", "Incorrect exposure Duration {0}", Duration);
                 throw new ASCOM.InvalidValueException("StartExposure Duration",
                                                      Duration.ToString(CultureInfo.InvariantCulture),
-                                                     string.Format(CultureInfo.InvariantCulture, "{0} to {1}", this.exposureMax, this.exposureMin));
+                                                     string.Format(CultureInfo.InvariantCulture, "{0} to {1}", exposureMax, exposureMin));
             }
             //  binning tests
-            if ((this.binX > this.maxBinX) || (this.binX < 1))
+            if ((binX > maxBinX) || (binX < 1))
             {
-                this.lastError = "Incorrect bin X factor";
+                lastError = "Incorrect bin X factor";
                 Log.LogMessage("StartExposure", "Incorrect BinX {0}", binX);
                 throw new ASCOM.InvalidValueException("StartExposure BinX",
-                                                    this.binX.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", this.maxBinX));
+                                                    binX.ToString(CultureInfo.InvariantCulture),
+                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", maxBinX));
             }
-            if ((this.binY > this.maxBinY) || (this.binY < 1))
+            if ((binY > maxBinY) || (binY < 1))
             {
-                this.lastError = "Incorrect bin Y factor";
+                lastError = "Incorrect bin Y factor";
                 Log.LogMessage("StartExposure", "Incorrect BinY {0}", binY);
                 throw new ASCOM.InvalidValueException("StartExposure BinY",
-                                                    this.binY.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", this.maxBinY));
+                                                    binY.ToString(CultureInfo.InvariantCulture),
+                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", maxBinY));
             }
             // check the start position is in range
             // start is in binned pixels
-            if (this.startX < 0 || this.startX * this.binX > this.cameraXSize)
+            if (startX < 0 || startX * binX > cameraXSize)
             {
-                this.lastError = "Incorrect Start X position";
+                lastError = "Incorrect Start X position";
                 Log.LogMessage("StartExposure", "Incorrect Start X {0}", startX);
                 throw new ASCOM.InvalidValueException("StartExposure StartX",
-                                                    this.startX.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "0 to {0}", cameraXSize / this.binX));
+                                                    startX.ToString(CultureInfo.InvariantCulture),
+                                                    string.Format(CultureInfo.InvariantCulture, "0 to {0}", cameraXSize / binX));
             }
-            if (this.startY < 0 || this.startY * this.binY > this.cameraYSize)
+            if (startY < 0 || startY * binY > cameraYSize)
             {
-                this.lastError = "Incorrect Start Y position";
+                lastError = "Incorrect Start Y position";
                 Log.LogMessage("StartExposure", "Incorrect Start Y {0}", startY);
                 throw new ASCOM.InvalidValueException("StartExposure StartX",
-                                                    this.startX.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "0 to {0}", cameraXSize / this.binX));
+                                                    startX.ToString(CultureInfo.InvariantCulture),
+                                                    string.Format(CultureInfo.InvariantCulture, "0 to {0}", cameraXSize / binX));
             }
             // check that the acquisition is at least 1 pixel in size and fits in the camera area
-            if (this.numX < 1 || (this.numX + this.startX) * this.binX > this.cameraXSize)
+            if (numX < 1 || (numX + startX) * binX > cameraXSize)
             {
-                this.lastError = "Incorrect Num X value";
+                lastError = "Incorrect Num X value";
                 Log.LogMessage("StartExposure", "Incorrect Num X {0}", numX);
                 throw new ASCOM.InvalidValueException("StartExposure NumX",
-                                                    this.numX.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", cameraXSize / this.binX));
+                                                    numX.ToString(CultureInfo.InvariantCulture),
+                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", cameraXSize / binX));
             }
-            if (this.numY < 1 || (this.numY + this.startY) * this.binY > this.cameraYSize)
+            if (numY < 1 || (numY + startY) * binY > cameraYSize)
             {
-                this.lastError = "Incorrect Num Y value";
+                lastError = "Incorrect Num Y value";
                 Log.LogMessage("StartExposure", "Incorrect Num Y {0}", numY);
                 throw new ASCOM.InvalidValueException("StartExposure NumY",
-                                                    this.numY.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", cameraYSize / this.binY));
+                                                    numY.ToString(CultureInfo.InvariantCulture),
+                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", cameraYSize / binY));
             }
 
             // set up the things to do at the start of the exposure
-            this.imageReady = false;
-            if (this.hasShutter)
+            imageReady = false;
+            if (hasShutter)
             {
-                this.darkFrame = !Light;
+                darkFrame = !Light;
             }
-            this.lastExposureStartTime = DateTime.UtcNow.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss", CultureInfo.InvariantCulture);
+            lastExposureStartTime = DateTime.UtcNow.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss", CultureInfo.InvariantCulture);
             // set the image array dimensions
-            if (this.sensorType == SensorType.Color)
-                this.imageArrayColour = new int[this.numX, this.numY, 3];
+            if (sensorType == SensorType.Color)
+                imageArrayColour = new int[numX, numY, 3];
             else
-                this.imageArray = new int[this.numX, this.numY];
+                imageArray = new int[numX, numY];
 
-            if (this.exposureTimer == null)
+            if (exposureTimer == null)
             {
-                this.exposureTimer = new System.Timers.Timer();
-                this.exposureTimer.Elapsed += exposureTimer_Elapsed;
+                exposureTimer = new System.Timers.Timer();
+                exposureTimer.Elapsed += exposureTimer_Elapsed;
             }
             // force the minimum exposure to be 1 millisec to keep the exposureTimer happy
-            this.exposureTimer.Interval = Math.Max((int)(Duration * 1000), 1);
-            this.cameraState = CameraStates.cameraExposing;
-            this.exposureStartTime = DateTime.Now;
-            this.exposureDuration = Duration;
-            this.exposureTimer.Enabled = true;
+            exposureTimer.Interval = Math.Max((int)(Duration * 1000), 1);
+            cameraState = CameraStates.cameraExposing;
+            exposureStartTime = DateTime.Now;
+            exposureDuration = Duration;
+            exposureTimer.Enabled = true;
             Log.LogFinish(" started");
         }
 
         private void exposureTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            this.exposureTimer.Enabled = false;
-            this.lastExposureDuration = (DateTime.Now - this.exposureStartTime).TotalSeconds;
-            this.cameraState = CameraStates.cameraDownload;
-            this.FillImageArray();
-            this.imageReady = true;
-            this.cameraState = CameraStates.cameraIdle;
+            exposureTimer.Enabled = false;
+            lastExposureDuration = (DateTime.Now - exposureStartTime).TotalSeconds;
+            cameraState = CameraStates.cameraDownload;
+            FillImageArray();
+            imageReady = true;
+            cameraState = CameraStates.cameraIdle;
             Log.LogMessage("ExposureTimer_Elapsed", "done");
         }
 
@@ -1572,17 +1579,17 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
+                if (!connected)
                     throw new NotConnectedException("Can't read StartX when not connected");
                 Log.LogMessage("StartX", "get {0}", startX);
-                return this.startX;
+                return startX;
             }
             set
             {
-                if (!this.connected)
+                if (!connected)
                     throw new NotConnectedException("Can't set StartX when not connected");
                 Log.LogMessage("StartX", "set {0}", value);
-                this.startX = value;
+                startX = value;
             }
         }
 
@@ -1594,17 +1601,17 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
+                if (!connected)
                     throw new NotConnectedException("Can't read StartY when not connected");
                 Log.LogMessage("StartY", "get {0}", startY);
-                return this.startY;
+                return startY;
             }
             set
             {
-                if (!this.connected)
+                if (!connected)
                     throw new NotConnectedException("Can't set StartY when not connected");
                 Log.LogMessage("StartY", "set {0}", value);
-                this.startY = value;
+                startY = value;
             }
         }
 
@@ -1621,18 +1628,18 @@ namespace ASCOM.Simulator
             CheckConnected("Can't stop exposure when not connected");
             CheckCapability("StopExposure", canStopExposure);
             Log.LogMessage("StopExposure", "state {0}", cameraState);
-            switch (this.cameraState)
+            switch (cameraState)
             {
                 case CameraStates.cameraWaiting:
                 case CameraStates.cameraExposing:
                 case CameraStates.cameraReading:
                 case CameraStates.cameraDownload:
                     // these are all possible exposure states so we can stop the exposure
-                    this.exposureTimer.Enabled = false;
-                    this.lastExposureDuration = (DateTime.Now - this.exposureStartTime).TotalSeconds;
-                    this.FillImageArray();
-                    this.cameraState = CameraStates.cameraIdle;
-                    this.imageReady = true;
+                    exposureTimer.Enabled = false;
+                    lastExposureDuration = (DateTime.Now - exposureStartTime).TotalSeconds;
+                    FillImageArray();
+                    cameraState = CameraStates.cameraIdle;
+                    imageReady = true;
                     break;
                 case CameraStates.cameraIdle:
                     break;
@@ -1661,9 +1668,9 @@ namespace ASCOM.Simulator
             {
                 CheckInterface("BayerOffsetX");
                 CheckConnected("BayerOffsetX");
-                CheckCapability("BayerOffsetX", this.sensorType != DeviceInterface.SensorType.Monochrome);
+                CheckCapability("BayerOffsetX", sensorType != DeviceInterface.SensorType.Monochrome);
                 Log.LogMessage("BayerOffsetX", "get {0}", bayerOffsetX);
-                return this.bayerOffsetX;
+                return bayerOffsetX;
             }
         }
 
@@ -1680,9 +1687,9 @@ namespace ASCOM.Simulator
             {
                 CheckInterface("BayerOffsetY");
                 CheckConnected("BayerOffsetY");
-                CheckCapability("BayerOffsetY", this.sensorType != DeviceInterface.SensorType.Monochrome);
+                CheckCapability("BayerOffsetY", sensorType != DeviceInterface.SensorType.Monochrome);
                 Log.LogMessage("BayerOffsetY", "get {0}", bayerOffsetY);
-                return this.bayerOffsetY;
+                return bayerOffsetY;
             }
         }
 
@@ -1699,7 +1706,7 @@ namespace ASCOM.Simulator
                 CheckInterface("CanFastReadout");
                 CheckConnected("CanFastReadout");
                 Log.LogMessage("CanFastReadout", "get {0}", canFastReadout);
-                return this.canFastReadout;
+                return canFastReadout;
             }
         }
 
@@ -1751,7 +1758,7 @@ namespace ASCOM.Simulator
                 CheckInterface("ExposureMax");
                 CheckConnected("ExposureMax");
                 Log.LogMessage("ExposureMax", "get {0}", exposureMax);
-                return this.exposureMax;
+                return exposureMax;
             }
         }
 
@@ -1766,7 +1773,7 @@ namespace ASCOM.Simulator
                 CheckInterface("ExposureMin");
                 CheckConnected("ExposureMin");
                 Log.LogMessage("ExposureMin", "get {0}", exposureMin);
-                return this.exposureMin;
+                return exposureMin;
             }
         }
 
@@ -1781,7 +1788,7 @@ namespace ASCOM.Simulator
                 CheckInterface("ExposureResolution");
                 CheckConnected("ExposureResolution");
                 Log.LogMessage("ExposureResolution", "get {0}", exposureResolution);
-                return this.exposureResolution;
+                return exposureResolution;
             }
         }
 
@@ -1798,7 +1805,7 @@ namespace ASCOM.Simulator
                 CheckConnected("FastReadout");
                 CheckCapability("FastReadout", canFastReadout);
                 Log.LogMessage("FastReadout", "get {0}", fastReadout);
-                return this.fastReadout;
+                return fastReadout;
             }
             set
             {
@@ -1806,7 +1813,7 @@ namespace ASCOM.Simulator
                 CheckConnected("FastReadout");
                 CheckCapability("FastReadout", canFastReadout);
                 Log.LogMessage("FastReadout", "get {0}", value);
-                this.fastReadout = value;
+                fastReadout = value;
             }
         }
 
@@ -1821,18 +1828,18 @@ namespace ASCOM.Simulator
             {
                 CheckInterface("Gain");
                 CheckConnected("Gain");
-                CheckCapability("Gain", this.gainMax > this.gainMin);
+                CheckCapability("Gain", gainMax > gainMin);
                 Log.LogMessage("Gain", "get {0}", gain);
-                return this.gain;
+                return gain;
             }
             set
             {
                 CheckInterface("Gain");
                 CheckConnected("Gain");
-                CheckCapability("Gain", this.gainMax > this.gainMin, true);
+                CheckCapability("Gain", gainMax > gainMin, true);
                 CheckRange("Gain", gainMin, value, gainMax);
                 Log.LogMessage("Gain", "set {0}", value);
-                this.gain = value;
+                gain = value;
             }
         }
 
@@ -1847,14 +1854,14 @@ namespace ASCOM.Simulator
             {
                 CheckInterface("GainMax");
                 CheckConnected("GainMax");
-                CheckCapability("GainMax", this.gainMax > this.gainMin);
-                if (this.gains != null && this.gains.Count > 0)
+                CheckCapability("GainMax", gainMax > gainMin);
+                if (gains != null && gains.Count > 0)
                 {
                     Log.LogMessage("GainMax", "cannot be read if there is an array of Gains in use");
                     throw new InvalidOperationException("GainMax cannot be read if there is an array of Gains in use");
                 }
                 Log.LogMessage("GainMax", "get {0}", gainMax);
-                return this.gainMax;
+                return gainMax;
             }
         }
 
@@ -1869,14 +1876,14 @@ namespace ASCOM.Simulator
             {
                 CheckInterface("GainMin");
                 CheckConnected("GainMin");
-                CheckCapability("GainMin", this.gainMax > this.gainMin);
-                if (this.gains != null && this.gains.Count > 0)
+                CheckCapability("GainMin", gainMax > gainMin);
+                if (gains != null && gains.Count > 0)
                 {
                     Log.LogMessage("GainMin", "cannot be read if there is an array of Gains in use");
                     throw new InvalidOperationException("GainMin cannot be read if there is an array of Gains in use");
                 }
                 Log.LogMessage("GainMin", "get {0}", gainMin);
-                return this.gainMin;
+                return gainMin;
             }
         }
 
@@ -1891,9 +1898,9 @@ namespace ASCOM.Simulator
             {
                 CheckInterface("Gains");
                 CheckConnected("Gains");
-                CheckCapability("Gains", !(this.gains == null || this.gains.Count == 0));
+                CheckCapability("Gains", !(gains == null || gains.Count == 0));
                 Log.LogMessage("Gains", "get {0}", gains);
-                return this.gains;
+                return gains;
             }
         }
 
@@ -1903,7 +1910,7 @@ namespace ASCOM.Simulator
         /// <value>The interface version.</value>
         public short InterfaceVersion
         {
-            get { return this.interfaceVersion; }
+            get { return interfaceVersion; }
         }
 
         /// <summary>
@@ -1917,7 +1924,7 @@ namespace ASCOM.Simulator
                 CheckInterface("Name");
                 CheckConnected("Name");
                 Log.LogMessage("Name", "Sim {0}", SensorName);
-                return "Sim " + this.SensorName;
+                return "Sim " + SensorName;
             }
         }
 
@@ -1932,13 +1939,13 @@ namespace ASCOM.Simulator
             {
                 CheckInterface("PercentCompleted");
                 CheckConnected("PercentCompleted");
-                switch (this.cameraState)
+                switch (cameraState)
                 {
                     case CameraStates.cameraWaiting:
                     case CameraStates.cameraExposing:
                     case CameraStates.cameraReading:
                     case CameraStates.cameraDownload:
-                        var pc = (short)(((DateTime.Now - this.exposureStartTime).TotalSeconds / this.exposureDuration) * 100);
+                        var pc = (short)(((DateTime.Now - exposureStartTime).TotalSeconds / exposureDuration) * 100);
                         Log.LogMessage("PercentCompleted", "state {0}, get {1}", cameraState, pc);
                         return pc;
                     case CameraStates.cameraIdle:
@@ -1963,14 +1970,14 @@ namespace ASCOM.Simulator
             {
                 CheckInterface("ReadoutMode");
                 CheckConnected("ReadoutMode");
-                if (this.readoutModes == null || this.readoutModes.Count < 1)
+                if (readoutModes == null || readoutModes.Count < 1)
                 {
                     Log.LogMessage("ReadoutMode", "PropertyNotImplemented because readoutModes == null || readoutModes.Count < 1");
                     throw new ASCOM.PropertyNotImplementedException("ReadoutMode", false);
-                    //if (this.canFastReadout)
+                    //if (canFastReadout)
                     //    throw new PropertyNotImplementedException("ReadoutMode", false);
                 }
-                var rm = this.readoutMode;
+                var rm = readoutMode;
                 Log.LogMessage("ReadoutMode", "get {0}, mode {1}", rm, readoutModes[rm]);
 
                 return rm;
@@ -1980,22 +1987,22 @@ namespace ASCOM.Simulator
                 Log.LogMessage("ReadoutMode", "set {0}", value);
                 CheckInterface("ReadoutMode");
                 CheckConnected("ReadoutMode");
-                if (this.readoutModes == null || this.readoutModes.Count < 1)
+                if (readoutModes == null || readoutModes.Count < 1)
                 {
                     Log.LogMessage("ReadoutMode", "PropertyNotImplemented readoutModes == null || readoutModes.Count < 1");
                     throw new PropertyNotImplementedException("ReadoutMode", true);
                 }
-                if (this.canFastReadout)
+                if (canFastReadout)
                 {
                     Log.LogMessage("ReadoutMode", "PropertyNotImplemented canFastReadout is true");
                     throw new PropertyNotImplementedException("ReadoutMode", true);
                 }
-                if (value < 0 || value > this.readoutModes.Count - 1)
+                if (value < 0 || value > readoutModes.Count - 1)
                 {
                     Log.LogMessage("ReadoutMode", "InvalidValueException, value {0}, range 0 to {1}", value, readoutModes.Count - 1);
-                    throw new InvalidValueException("ReadoutMode", value.ToString(CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "0 to {0}", this.readoutModes.Count - 1));
+                    throw new InvalidValueException("ReadoutMode", value.ToString(CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "0 to {0}", readoutModes.Count - 1));
                 }
-                this.readoutMode = value;
+                readoutMode = value;
             }
         }
 
@@ -2011,14 +2018,14 @@ namespace ASCOM.Simulator
             {
                 CheckInterface("ReadoutModes");
                 CheckConnected("ReadoutModes");
-                //CheckCapability("ReadoutModes", !this.canFastReadout);
-                //CheckCapability("ReadoutModes", !(this.readoutModes == null || this.readoutModes.Count < 1));
+                //CheckCapability("ReadoutModes", !canFastReadout);
+                //CheckCapability("ReadoutModes", !(readoutModes == null || readoutModes.Count < 1));
                 Log.LogMessage("ReadoutModes", "ReadoutModes {0}", readoutModes.Count);
                 foreach (var item in readoutModes)
                 {
                     Log.LogMessage("", "       {0}", item);
                 }
-                return this.readoutModes;
+                return readoutModes;
             }
         }
 
@@ -2035,7 +2042,7 @@ namespace ASCOM.Simulator
                 CheckInterface("SensorName");
                 CheckConnected("SensorName");
                 Log.LogMessage("SensorName", "get {0}", sensorName);
-                return this.sensorName;
+                return sensorName;
             }
         }
 
@@ -2051,7 +2058,7 @@ namespace ASCOM.Simulator
                 CheckInterface("SensorType");
                 CheckConnected("SensorType");
                 Log.LogMessage("SensorType", "get {0}", sensorType);
-                return this.sensorType;
+                return sensorType;
             }
         }
 
@@ -2074,74 +2081,74 @@ namespace ASCOM.Simulator
 
                 // read properties from profile
                 Log.Enabled = Convert.ToBoolean(profile.GetValue(s_csDriverID, "Trace", string.Empty, "false"), CultureInfo.InvariantCulture);
-                this.interfaceVersion = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_InterfaceVersion, string.Empty, "2"), CultureInfo.InvariantCulture);
-                this.pixelSizeX = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_PixelSizeX, string.Empty, "5.6"), CultureInfo.InvariantCulture);
-                this.pixelSizeY = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_PixelSizeY, string.Empty, "5.6"), CultureInfo.InvariantCulture);
-                this.fullWellCapacity = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_FullWellCapacity, string.Empty, "30000"), CultureInfo.InvariantCulture);
-                this.maxADU = Convert.ToInt32(profile.GetValue(s_csDriverID, STR_MaxADU, string.Empty, "65535"), CultureInfo.InvariantCulture);
-                this.electronsPerADU = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_ElectronsPerADU, string.Empty, "0.8"), CultureInfo.InvariantCulture);
+                interfaceVersion = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_InterfaceVersion, string.Empty, "2"), CultureInfo.InvariantCulture);
+                pixelSizeX = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_PixelSizeX, string.Empty, "5.6"), CultureInfo.InvariantCulture);
+                pixelSizeY = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_PixelSizeY, string.Empty, "5.6"), CultureInfo.InvariantCulture);
+                fullWellCapacity = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_FullWellCapacity, string.Empty, "30000"), CultureInfo.InvariantCulture);
+                maxADU = Convert.ToInt32(profile.GetValue(s_csDriverID, STR_MaxADU, string.Empty, "65535"), CultureInfo.InvariantCulture);
+                electronsPerADU = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_ElectronsPerADU, string.Empty, "0.8"), CultureInfo.InvariantCulture);
 
-                this.cameraXSize = Convert.ToInt32(profile.GetValue(s_csDriverID, STR_CameraXSize, string.Empty, "800"), CultureInfo.InvariantCulture);
-                this.cameraYSize = Convert.ToInt32(profile.GetValue(s_csDriverID, STR_CameraYSize, string.Empty, "600"), CultureInfo.InvariantCulture);
-                this.canAsymmetricBin = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanAsymmetricBin, string.Empty, "true"), CultureInfo.InvariantCulture);
-                this.maxBinX = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_MaxBinX, string.Empty, "4"), CultureInfo.InvariantCulture);
-                this.maxBinY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_MaxBinY, string.Empty, "4"), CultureInfo.InvariantCulture);
-                this.hasShutter = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_HasShutter, string.Empty, "false"), CultureInfo.InvariantCulture);
-                this.sensorName = profile.GetValue(s_csDriverID, STR_SensorName, string.Empty, "");
-                this.sensorType = (SensorType)Convert.ToInt32(profile.GetValue(s_csDriverID, STR_SensorType, string.Empty, "0"), CultureInfo.InvariantCulture);
-                this.omitOddBins = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_OmitOddBins, string.Empty, "false"), CultureInfo.InvariantCulture);
+                cameraXSize = Convert.ToInt32(profile.GetValue(s_csDriverID, STR_CameraXSize, string.Empty, "800"), CultureInfo.InvariantCulture);
+                cameraYSize = Convert.ToInt32(profile.GetValue(s_csDriverID, STR_CameraYSize, string.Empty, "600"), CultureInfo.InvariantCulture);
+                canAsymmetricBin = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanAsymmetricBin, string.Empty, "true"), CultureInfo.InvariantCulture);
+                maxBinX = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_MaxBinX, string.Empty, "4"), CultureInfo.InvariantCulture);
+                maxBinY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_MaxBinY, string.Empty, "4"), CultureInfo.InvariantCulture);
+                hasShutter = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_HasShutter, string.Empty, "false"), CultureInfo.InvariantCulture);
+                sensorName = profile.GetValue(s_csDriverID, STR_SensorName, string.Empty, "");
+                sensorType = (SensorType)Convert.ToInt32(profile.GetValue(s_csDriverID, STR_SensorType, string.Empty, "0"), CultureInfo.InvariantCulture);
+                omitOddBins = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_OmitOddBins, string.Empty, "false"), CultureInfo.InvariantCulture);
 
-                this.bayerOffsetX = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetX, string.Empty, "0"), CultureInfo.InvariantCulture);
-                this.bayerOffsetY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetY, string.Empty, "0"), CultureInfo.InvariantCulture);
+                bayerOffsetX = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetX, string.Empty, "0"), CultureInfo.InvariantCulture);
+                bayerOffsetY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetY, string.Empty, "0"), CultureInfo.InvariantCulture);
 
-                this.hasCooler = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_HasCooler, string.Empty, "true"), CultureInfo.InvariantCulture);
-                this.canSetCcdTemperature = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanSetCCDTemperature, string.Empty, "false"), CultureInfo.InvariantCulture);
-                this.canGetCoolerPower = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanGetCoolerPower, string.Empty, "false"), CultureInfo.InvariantCulture);
-                this.setCcdTemperature = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_SetCCDTemperature, string.Empty, "-10"), CultureInfo.InvariantCulture);
+                hasCooler = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_HasCooler, string.Empty, "true"), CultureInfo.InvariantCulture);
+                canSetCcdTemperature = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanSetCCDTemperature, string.Empty, "false"), CultureInfo.InvariantCulture);
+                canGetCoolerPower = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanGetCoolerPower, string.Empty, "false"), CultureInfo.InvariantCulture);
+                setCcdTemperature = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_SetCCDTemperature, string.Empty, "-10"), CultureInfo.InvariantCulture);
 
-                this.canAbortExposure = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanAbortExposure, string.Empty, "true"), CultureInfo.InvariantCulture);
-                this.canStopExposure = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanStopExposure, string.Empty, "true"), CultureInfo.InvariantCulture);
-                this.exposureMax = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_MaxExposure, string.Empty, "3600"), CultureInfo.InvariantCulture);
-                this.exposureMin = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_MinExposure, string.Empty, "0.001"), CultureInfo.InvariantCulture);
-                this.exposureResolution = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_ExposureResolution, string.Empty, "0.001"), CultureInfo.InvariantCulture);
-                string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly((this.GetType())).Location);
-                this.imagePath = profile.GetValue(s_csDriverID, STR_ImagePath, string.Empty, Path.Combine(fullPath, @"m42-800x600.jpg"));
-                this.applyNoise = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_ApplyNoise, string.Empty, "false"), CultureInfo.InvariantCulture);
+                canAbortExposure = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanAbortExposure, string.Empty, "true"), CultureInfo.InvariantCulture);
+                canStopExposure = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanStopExposure, string.Empty, "true"), CultureInfo.InvariantCulture);
+                exposureMax = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_MaxExposure, string.Empty, "3600"), CultureInfo.InvariantCulture);
+                exposureMin = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_MinExposure, string.Empty, "0.001"), CultureInfo.InvariantCulture);
+                exposureResolution = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_ExposureResolution, string.Empty, "0.001"), CultureInfo.InvariantCulture);
+                string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly((GetType())).Location);
+                imagePath = profile.GetValue(s_csDriverID, STR_ImagePath, string.Empty, Path.Combine(fullPath, @"m42-800x600.jpg"));
+                applyNoise = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_ApplyNoise, string.Empty, "false"), CultureInfo.InvariantCulture);
 
-                this.canPulseGuide = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanPulseGuide, string.Empty, "false"), CultureInfo.InvariantCulture);
+                canPulseGuide = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanPulseGuide, string.Empty, "false"), CultureInfo.InvariantCulture);
 
                 string gs = profile.GetValue(s_csDriverID, "Gains");
                 if (string.IsNullOrEmpty(gs))
                 {
-                    this.gainMin = Convert.ToInt16(profile.GetValue(s_csDriverID, "GainMin", string.Empty, "0"), CultureInfo.InvariantCulture);
-                    this.gainMax = Convert.ToInt16(profile.GetValue(s_csDriverID, "GainMax", string.Empty, "0"), CultureInfo.InvariantCulture);
+                    gainMin = Convert.ToInt16(profile.GetValue(s_csDriverID, "GainMin", string.Empty, "0"), CultureInfo.InvariantCulture);
+                    gainMax = Convert.ToInt16(profile.GetValue(s_csDriverID, "GainMax", string.Empty, "0"), CultureInfo.InvariantCulture);
                 }
                 else
                 {
                     string[] gsa = gs.Split(',');
-                    this.gains = new ArrayList();
+                    gains = new ArrayList();
                     foreach (var item in gsa)
                     {
-                        this.gains.Add(item);
+                        gains.Add(item);
                     }
-                    this.gainMin = 0;
-                    this.gainMax = (short)(this.gains.Count - 1);
+                    gainMin = 0;
+                    gainMax = (short)(gains.Count - 1);
                 }
 
-                this.canFastReadout = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanFastReadout, string.Empty, "false"), CultureInfo.InvariantCulture);
+                canFastReadout = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanFastReadout, string.Empty, "false"), CultureInfo.InvariantCulture);
 
                 gs = profile.GetValue(s_csDriverID, "ReadoutModes");
-                this.readoutModes = new ArrayList();
+                readoutModes = new ArrayList();
                 if (string.IsNullOrEmpty(gs))
                 {
-                    this.readoutModes.Add("Default");
+                    readoutModes.Add("Default");
                 }
                 else
                 {
                     string[] rms = gs.Split(',');
                     foreach (var item in rms)
                     {
-                        this.readoutModes.Add(item);
+                        readoutModes.Add(item);
                     }
                 }
             }
@@ -2154,53 +2161,53 @@ namespace ASCOM.Simulator
                 profile.DeviceType = "Camera";
 
                 // Save the cooler configuration to the Profile
-                profile.WriteValue(s_csDriverID, STR_CoolerAmbientTemperature, this.heatSinkTemperature.ToString(CultureInfo.InvariantCulture), "Cooler");
-                profile.WriteValue(s_csDriverID, STR_CoolerDeltaTMax, this.coolerDeltaTMax.ToString(CultureInfo.InvariantCulture), "Cooler");
-                profile.WriteValue(s_csDriverID, STR_CoolerMode, this.coolerMode.ToString(CultureInfo.InvariantCulture), "Cooler");
-                profile.WriteValue(s_csDriverID, STR_CoolerTimeToSetPoint, this.coolerTimeToSetPoint.ToString(CultureInfo.InvariantCulture), "Cooler");
-                profile.WriteValue(s_csDriverID, STR_CoolerResetToAmbient, this.coolerResetToAmbient.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerAmbientTemperature, heatSinkTemperature.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerDeltaTMax, coolerDeltaTMax.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerMode, coolerMode.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerTimeToSetPoint, coolerTimeToSetPoint.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerResetToAmbient, coolerResetToAmbient.ToString(CultureInfo.InvariantCulture), "Cooler");
 
                 // Save camera configuration to the Profile
                 profile.WriteValue(s_csDriverID, "Trace", Log.Enabled.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_InterfaceVersion, this.interfaceVersion.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_PixelSizeX, this.pixelSizeX.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_PixelSizeY, this.pixelSizeY.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_FullWellCapacity, this.fullWellCapacity.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_MaxADU, this.maxADU.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_ElectronsPerADU, this.electronsPerADU.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_InterfaceVersion, interfaceVersion.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_PixelSizeX, pixelSizeX.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_PixelSizeY, pixelSizeY.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_FullWellCapacity, fullWellCapacity.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_MaxADU, maxADU.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_ElectronsPerADU, electronsPerADU.ToString(CultureInfo.InvariantCulture));
 
-                profile.WriteValue(s_csDriverID, STR_CameraXSize, this.cameraXSize.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_CameraYSize, this.cameraYSize.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_CanAsymmetricBin, this.canAsymmetricBin.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_MaxBinX, this.maxBinX.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_MaxBinY, this.maxBinY.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_HasShutter, this.hasShutter.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_SensorName, this.sensorName.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_SensorType, ((int)this.sensorType).ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_BayerOffsetX, this.bayerOffsetX.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_BayerOffsetY, this.bayerOffsetY.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_OmitOddBins, this.omitOddBins.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CameraXSize, cameraXSize.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CameraYSize, cameraYSize.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CanAsymmetricBin, canAsymmetricBin.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_MaxBinX, maxBinX.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_MaxBinY, maxBinY.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_HasShutter, hasShutter.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_SensorName, sensorName.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_SensorType, ((int)sensorType).ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_BayerOffsetX, bayerOffsetX.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_BayerOffsetY, bayerOffsetY.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_OmitOddBins, omitOddBins.ToString(CultureInfo.InvariantCulture));
 
-                profile.WriteValue(s_csDriverID, STR_HasCooler, this.hasCooler.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_CanSetCCDTemperature, this.canSetCcdTemperature.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_CanGetCoolerPower, this.canGetCoolerPower.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_SetCCDTemperature, this.setCcdTemperature.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_HasCooler, hasCooler.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CanSetCCDTemperature, canSetCcdTemperature.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CanGetCoolerPower, canGetCoolerPower.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_SetCCDTemperature, setCcdTemperature.ToString(CultureInfo.InvariantCulture));
 
-                profile.WriteValue(s_csDriverID, STR_CanAbortExposure, this.canAbortExposure.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_CanStopExposure, this.canStopExposure.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_MaxExposure, this.exposureMax.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_MinExposure, this.exposureMin.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_ExposureResolution, this.exposureResolution.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_ImagePath, this.imagePath);
-                profile.WriteValue(s_csDriverID, STR_ApplyNoise, this.applyNoise.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CanAbortExposure, canAbortExposure.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CanStopExposure, canStopExposure.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_MaxExposure, exposureMax.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_MinExposure, exposureMin.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_ExposureResolution, exposureResolution.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_ImagePath, imagePath);
+                profile.WriteValue(s_csDriverID, STR_ApplyNoise, applyNoise.ToString(CultureInfo.InvariantCulture));
 
-                profile.WriteValue(s_csDriverID, STR_CanPulseGuide, this.canPulseGuide.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CanPulseGuide, canPulseGuide.ToString(CultureInfo.InvariantCulture));
 
-                if (this.gains != null && this.gains.Count > 0)
+                if (gains != null && gains.Count > 0)
                 {
                     // gain control using Gains string array
                     System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                    foreach (var item in this.gains)
+                    foreach (var item in gains)
                     {
                         if (sb.Length > 0)
                             sb.Append(",");
@@ -2210,12 +2217,12 @@ namespace ASCOM.Simulator
                     profile.WriteValue(s_csDriverID, "GainMin", "0");
                     profile.WriteValue(s_csDriverID, "GainMax", Convert.ToString(gains.Count - 1, CultureInfo.InvariantCulture));
                 }
-                else if (this.gainMax > this.gainMin)
+                else if (gainMax > gainMin)
                 {
                     // gain control using min and max
                     profile.DeleteValue(s_csDriverID, "Gains");
-                    profile.WriteValue(s_csDriverID, "GainMin", this.gainMin.ToString(CultureInfo.InvariantCulture));
-                    profile.WriteValue(s_csDriverID, "GainMax", this.gainMax.ToString(CultureInfo.InvariantCulture));
+                    profile.WriteValue(s_csDriverID, "GainMin", gainMin.ToString(CultureInfo.InvariantCulture));
+                    profile.WriteValue(s_csDriverID, "GainMax", gainMax.ToString(CultureInfo.InvariantCulture));
                 }
                 else
                 {
@@ -2225,9 +2232,9 @@ namespace ASCOM.Simulator
                     profile.DeleteValue(s_csDriverID, "GainMax");
                 }
 
-                profile.WriteValue(s_csDriverID, STR_CanFastReadout, this.canFastReadout.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CanFastReadout, canFastReadout.ToString(CultureInfo.InvariantCulture));
 
-                if (this.readoutModes == null || this.readoutModes.Count <= 1)
+                if (readoutModes == null || readoutModes.Count <= 1)
                 {
                     profile.DeleteValue(s_csDriverID, "ReadoutModes");
                 }
@@ -2235,7 +2242,7 @@ namespace ASCOM.Simulator
                 {
                     // Readout Modes use string array
                     System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                    foreach (var item in this.readoutModes)
+                    foreach (var item in readoutModes)
                     {
                         if (sb.Length > 0)
                             sb.Append(",");
@@ -2248,27 +2255,27 @@ namespace ASCOM.Simulator
 
         private void InitialiseSimulator()
         {
-            this.ReadFromProfile();
+            ReadFromProfile();
 
-            this.startX = 0;
-            this.startY = 0;
-            this.binX = 1;
-            this.binY = 1;
-            this.numX = this.cameraXSize;
-            this.numY = this.cameraYSize;
+            startX = 0;
+            startY = 0;
+            binX = 1;
+            binY = 1;
+            numX = cameraXSize;
+            numY = cameraYSize;
 
-            this.cameraState = CameraStates.cameraIdle;
-            this.coolerOn = false;
-            this.coolerPower = 0;
-            this.ccdTemperature = 15;
-            this.readoutMode = 0;
-            this.fastReadout = false;
-            this.ccdTemperature = this.heatSinkTemperature; // Set the CCD termperature to ambient
-            this.coolingCycleStartTemperature = this.heatSinkTemperature;
-            this.coolerAtTemperature = false;
+            cameraState = CameraStates.cameraIdle;
+            coolerOn = false;
+            coolerPower = 0;
+            ccdTemperature = 15;
+            readoutMode = 0;
+            fastReadout = false;
 
-            // Set the initial cooling constant in case the camera is just loaded and switched on
-            coolerConstant = CalculateCoolerConstant(heatSinkTemperature-setCcdTemperature, coolerTimeToSetPoint);
+            // Set initial cooler control variables
+            ccdTemperature = heatSinkTemperature; // Set the CCD termperature to ambient
+            coolingCycleStartTemperature = heatSinkTemperature;
+            coolerAtTemperature = !coolerOn;
+            coolerConstant = CalculateCoolerConstant(heatSinkTemperature - setCcdTemperature, coolerTimeToSetPoint); // Set the initial cooling constant in case the camera is just loaded and switched on
 
             Log.LogMessage("InitialiseSimulator", "Set camera temperature to ambient: {0} with cooler constant {1} - Cooler mode: {2}", heatSinkTemperature, coolerConstant, coolerMode);
         }
@@ -2280,39 +2287,39 @@ namespace ASCOM.Simulator
             PixelProcess pixelProcess = new PixelProcess(NoNoise);
             ShutterProcess shutterProcess = new ShutterProcess(BinData);
 
-            if (this.applyNoise)
+            if (applyNoise)
                 pixelProcess = new PixelProcess(Poisson);
-            if (this.HasShutter && this.darkFrame)
+            if (HasShutter && darkFrame)
                 shutterProcess = new ShutterProcess(DarkData);
 
             double readNoise = 3;
             // dark current 1 ADU/sec at 0C doubling for every 5C increase
-            double darkCurrent = Math.Pow(2, this.ccdTemperature / 5);
-            darkCurrent *= this.lastExposureDuration;
+            double darkCurrent = Math.Pow(2, ccdTemperature / 5);
+            darkCurrent *= lastExposureDuration;
             // add read noise, should be in quadrature
             darkCurrent += readNoise;
             // fill the array using binning and image offsets
             // indexes into the imageData
-            for (int y = 0; y < this.numY; y++)
+            for (int y = 0; y < numY; y++)
             {
-                for (int x = 0; x < this.numX; x++)
+                for (int x = 0; x < numX; x++)
                 {
                     double s;
-                    if (this.sensorType == SensorType.Color)
+                    if (sensorType == SensorType.Color)
                     {
-                        s = shutterProcess((x + this.startX) * this.binX, (y + this.startY) * this.binY, 0);
-                        this.imageArrayColour[x, y, 0] = pixelProcess(s + darkCurrent);
-                        s = shutterProcess((x + this.startX) * this.binX, (y + this.startY) * this.binY, 1);
-                        this.imageArrayColour[x, y, 1] = pixelProcess(s + darkCurrent);
-                        s = shutterProcess((x + this.startX) * this.binX, (y + this.startY) * this.binY, 2);
-                        this.imageArrayColour[x, y, 2] = pixelProcess(s + darkCurrent);
+                        s = shutterProcess((x + startX) * binX, (y + startY) * binY, 0);
+                        imageArrayColour[x, y, 0] = pixelProcess(s + darkCurrent);
+                        s = shutterProcess((x + startX) * binX, (y + startY) * binY, 1);
+                        imageArrayColour[x, y, 1] = pixelProcess(s + darkCurrent);
+                        s = shutterProcess((x + startX) * binX, (y + startY) * binY, 2);
+                        imageArrayColour[x, y, 2] = pixelProcess(s + darkCurrent);
                     }
                     else
                     {
-                        s = shutterProcess((x + this.startX) * this.binX, (y + this.startY) * this.binY, 0);
-                        this.imageArray[x, y] = pixelProcess(s + darkCurrent);
+                        s = shutterProcess((x + startX) * binX, (y + startY) * binY, 0);
+                        imageArray[x, y] = pixelProcess(s + darkCurrent);
                     }
-                    //s *= this.lastExposureDuration;
+                    //s *= lastExposureDuration;
                 }
             }
         }
@@ -2324,7 +2331,7 @@ namespace ASCOM.Simulator
             // use normal distribution for large values
             // because Poisson falls over and gets slow
             if (lambda > 50)
-                return Math.Min((int)BoxMuller(lambda, Math.Sqrt(lambda)), this.maxADU);
+                return Math.Min((int)BoxMuller(lambda, Math.Sqrt(lambda)), maxADU);
 
             double L = Math.Exp(-lambda);
             double p = 1.0;
@@ -2335,7 +2342,7 @@ namespace ASCOM.Simulator
                 p *= R.NextDouble();
             }
             while (p > L);
-            return Math.Min(k - 1, this.maxADU);
+            return Math.Min(k - 1, maxADU);
         }
 
         /// <summary>
@@ -2361,7 +2368,7 @@ namespace ASCOM.Simulator
 
         private int NoNoise(double value)
         {
-            return Convert.ToInt32(Math.Min(value, this.maxADU));
+            return Convert.ToInt32(Math.Min(value, maxADU));
         }
 
         /// <summary>
@@ -2382,19 +2389,19 @@ namespace ASCOM.Simulator
         private double BinData(int x, int y, int p)
         {
             double s = 0;
-            for (int k = 0; k < this.binY; k++)
+            for (int k = 0; k < binY; k++)
             {
-                for (int l = 0; l < this.binX; l++)
+                for (int l = 0; l < binX; l++)
                 {
                     s += imageData[l + x, k + y, p];
                 }
             }
-            return s * this.lastExposureDuration;
+            return s * lastExposureDuration;
         }
 
         private double DarkData(int x, int y, int p)
         {
-            return 5.0 * this.binX * this.binY;
+            return 5.0 * binX * binY;
         }
 
         private delegate void GetData(int x, int y);
@@ -2421,10 +2428,10 @@ namespace ASCOM.Simulator
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body")]
         private void ReadImageFile()
         {
-            this.imageData = new float[this.cameraXSize, this.cameraYSize, 1];
+            imageData = new float[cameraXSize, cameraYSize, 1];
             try
             {
-                bmp = (Bitmap)Image.FromFile(this.imagePath);
+                bmp = (Bitmap)Image.FromFile(imagePath);
 
                 //x0 = bayerOffsetX;
                 //x1 = (bayerOffsetX + 1) & 1;
@@ -2432,7 +2439,7 @@ namespace ASCOM.Simulator
                 //y1 = (bayerOffsetY + 1) & 1;
 
                 GetData getData = new GetData(MonochromeData);
-                switch (this.sensorType)
+                switch (sensorType)
                 {
                     case SensorType.Monochrome:
                         stepX = 1;
@@ -2463,7 +2470,7 @@ namespace ASCOM.Simulator
                         stepY = 4;
                         break;
                     case SensorType.Color:
-                        this.imageData = new float[this.cameraXSize, this.cameraYSize, 3];
+                        imageData = new float[cameraXSize, cameraYSize, 3];
                         getData = new GetData(ColorData);
                         stepX = 1;
                         stepY = 1;
@@ -2480,8 +2487,8 @@ namespace ASCOM.Simulator
                 y2 = (y0 + 2) & (stepY - 1);
                 y3 = (y0 + 3) & (stepY - 1);
 
-                int w = Math.Min(this.cameraXSize, bmp.Width * stepX);
-                int h = Math.Min(this.cameraYSize, bmp.Height * stepY);
+                int w = Math.Min(cameraXSize, bmp.Width * stepX);
+                int h = Math.Min(cameraYSize, bmp.Height * stepY);
                 for (int y = 0; y < h; y += stepY)
                 {
                     for (int x = 0; x < w; x += stepX)
@@ -2566,7 +2573,7 @@ namespace ASCOM.Simulator
 
         private void CheckConnected(string message)
         {
-            if (!this.connected)
+            if (!connected)
             {
                 Log.LogMessage("NotConnected", message);
                 throw new NotConnectedException(message);
@@ -2598,7 +2605,7 @@ namespace ASCOM.Simulator
 
         private void CheckReady(string identifier)
         {
-            if (!this.imageReady)
+            if (!imageReady)
             {
                 Log.LogMessage(identifier, "image not ready");
                 throw new NotConnectedException("Can't read " + identifier + " when no image is ready");

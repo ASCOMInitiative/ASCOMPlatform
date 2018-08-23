@@ -115,8 +115,14 @@ namespace ASCOM.Simulator
 
             this.camera = theCamera;
 
+            // Initialise the cooling configuration form
             coolerSetupForm = new CoolerSetupForm();
-
+            coolerSetupForm.cmbCoolerModes.SelectedItem = theCamera.coolerMode;
+            coolerSetupForm.NumAmbientTemperature.Value = (decimal)camera.heatSinkTemperature;
+            coolerSetupForm.NumCCDSetPoint.Value = (decimal)camera.setCcdTemperature;
+            coolerSetupForm.NumCoolerDeltaTMax.Value = (decimal)camera.coolerDeltaTMax;
+            coolerSetupForm.NumTimeToSetPoint.Value = (decimal)camera.coolerTimeToSetPoint;
+            coolerSetupForm.ChkResetToAmbientOnConnect.Checked = camera.coolerResetToAmbient;
         }
 
         private void SaveProperties()
@@ -187,7 +193,7 @@ namespace ASCOM.Simulator
             camera.coolerDeltaTMax = (double)coolerSetupForm.NumCoolerDeltaTMax.Value;
             camera.coolerTimeToSetPoint = (double)coolerSetupForm.NumTimeToSetPoint.Value;
             camera.coolerResetToAmbient = coolerSetupForm.ChkResetToAmbientOnConnect.Checked;
-            camera.coolerMode = coolerSetupForm.cmbCoolerModes.SelectedItem.ToString();
+            if (coolerSetupForm.cmbCoolerModes.SelectedItem != null) camera.coolerMode = coolerSetupForm.cmbCoolerModes.SelectedItem.ToString();
         }
 
         private void buttonSetImageFile_Click(object sender, EventArgs e)

@@ -128,7 +128,6 @@
             this.label5.Size = new System.Drawing.Size(194, 13);
             this.label5.TabIndex = 12;
             this.label5.Text = "Cooler maximum delta t from ambient (C)";
-            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // label6
             // 
