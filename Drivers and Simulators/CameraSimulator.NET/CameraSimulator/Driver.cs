@@ -106,6 +106,7 @@ namespace ASCOM.Simulator
         internal const bool COOLER_RESET_TO_AMBIENT_DEFAULT = false; // Will the CCD temperature reset to ambient on connect or behave like a normal cooler where temperatuyre depends on past cooling experience
         internal const string COOLER_COOLERMODE_DEFAULT = COOLERMODE_DAMPED; // Default mode on initial installation
 
+        private const bool COOLER_DEFAULT_ENABLED_STATE = false; // Deafault power up state for the cooler
         private const double COOLER_NEVER_GETS_TO_SETPOINT_REDUCTION_FACTOR = 0.9; // Arbitary factor to increase the returned CCD termperature so that it never reaches the setpoint
         private const double COOLER_USE_FULL_POWER = 0.95; // Fraction of the cooling curve temperature change above which cooler power will be reported as 100%. e.g. 0.95 means the first 95% of the temperature change will be reported as 100% cooler power and the last 5% as the calculated power.
         private const double COOLER_SETPOINT_REACHED_THRESHOLD = 0.1; // Temperature offset from the setpoint at which the cooler will deem that it has arrived at the setpoint. i.e. when the CCD is within +-THRESHOLD of the setpoint
@@ -2111,6 +2112,7 @@ namespace ASCOM.Simulator
                 exposureMax = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_MaxExposure, string.Empty, "3600"), CultureInfo.InvariantCulture);
                 exposureMin = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_MinExposure, string.Empty, "0.001"), CultureInfo.InvariantCulture);
                 exposureResolution = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_ExposureResolution, string.Empty, "0.001"), CultureInfo.InvariantCulture);
+
                 string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly((GetType())).Location);
                 imagePath = profile.GetValue(s_csDriverID, STR_ImagePath, string.Empty, Path.Combine(fullPath, @"m42-800x600.jpg"));
                 applyNoise = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_ApplyNoise, string.Empty, "false"), CultureInfo.InvariantCulture);
@@ -2263,18 +2265,17 @@ namespace ASCOM.Simulator
             binY = 1;
             numX = cameraXSize;
             numY = cameraYSize;
-
-            cameraState = CameraStates.cameraIdle;
-            coolerOn = false;
-            coolerPower = 0;
-            ccdTemperature = 15;
             readoutMode = 0;
             fastReadout = false;
 
+            cameraState = CameraStates.cameraIdle;
+
             // Set initial cooler control variables
+            coolerOn = COOLER_DEFAULT_ENABLED_STATE; // Set the cooler on or off per default configuration
+            coolerPower = coolerOn ? 100.0 : 0.0; // Set the cooler power depending on whether or not the cooler is on 
             ccdTemperature = heatSinkTemperature; // Set the CCD termperature to ambient
-            coolingCycleStartTemperature = heatSinkTemperature;
-            coolerAtTemperature = !coolerOn;
+            coolingCycleStartTemperature = heatSinkTemperature; // Set the cooling cycle start temperature to ambient
+            coolerAtTemperature = !coolerOn; // Indicate whether we are at temperature as the inverse of whether or not the cooler is on
             coolerConstant = CalculateCoolerConstant(heatSinkTemperature - setCcdTemperature, coolerTimeToSetPoint); // Set the initial cooling constant in case the camera is just loaded and switched on
 
             Log.LogMessage("InitialiseSimulator", "Set camera temperature to ambient: {0} with cooler constant {1} - Cooler mode: {2}", heatSinkTemperature, coolerConstant, coolerMode);
