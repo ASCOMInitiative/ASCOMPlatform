@@ -5,10 +5,13 @@
 Imports ASCOM.DeviceInterface
 Imports ASCOM
 Imports ASCOM.Utilities
+Imports ASCOM.Astrometry.AstroUtils
+Imports ASCOM.Astrometry.NOVAS
 
 Class DeviceTelescope
     Implements ITelescopeV3
     Private utilities As New Util()
+    Private aUtils As New AstroUtils()
     Private TL As New TraceLogger()
 
 #Region "ITelescope Implementation"
@@ -337,7 +340,7 @@ Class DeviceTelescope
         Get
             ' now using novas 3.1
             Dim lst As Double = 0.0
-            Using novas As New ASCOM.Astrometry.NOVAS.NOVAS31
+            Using novas As New NOVAS31
                 Dim jd As Double = utilities.DateUTCToJulian(DateTime.UtcNow)
                 novas.SiderealTime(jd, 0, novas.DeltaT(jd),
                                    Astrometry.GstType.GreenwichMeanSiderealTime,
@@ -345,12 +348,15 @@ Class DeviceTelescope
                                    Astrometry.Accuracy.Reduced,
                                    lst)
             End Using
+
+            ' Allow for the longitude
             lst += SiteLongitude / 360.0 * 24.0
-            lst = lst Mod 24.0
+
+            ' Reduce to the range 0 to 24 hours
+            lst = aUtils.ConditionRA(lst)
+
             TL.LogMessage("SiderealTime", "Get - " & lst.ToString())
             Return lst
-
-
         End Get
     End Property
 
