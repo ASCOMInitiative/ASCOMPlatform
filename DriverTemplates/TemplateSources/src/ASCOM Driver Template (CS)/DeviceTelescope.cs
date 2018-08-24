@@ -6,10 +6,14 @@ using ASCOM.DeviceInterface;
 using System;
 using ASCOM;
 using ASCOM.Utilities;
+using ASCOM.Astrometry.AstroUtils;
+using ASCOM.Astrometry.NOVAS;
 
 class DeviceTelescope
 {
     Util utilities = new Util();
+    AstroUtils astroUtils = new AstroUtils();
+
     TraceLogger tl = new TraceLogger();
 
     #region ITelescope Implementation
@@ -423,7 +427,7 @@ class DeviceTelescope
 
             // alternative using NOVAS 3.1
             double siderealTime = 0.0;
-            using (var novas = new ASCOM.Astrometry.NOVAS.NOVAS31())
+            using (var novas = new NOVAS31())
             {
                 var jd = utilities.DateUTCToJulian(DateTime.UtcNow);
                 novas.SiderealTime(jd, 0, novas.DeltaT(jd),
@@ -434,7 +438,7 @@ class DeviceTelescope
             // allow for the longitude
             siderealTime += SiteLongitude / 360.0 * 24.0;
             // reduce to the range 0 to 24 hours
-            siderealTime = siderealTime % 24.0;
+            siderealTime = astroUtils.ConditionRA(siderealTime);
             tl.LogMessage("SiderealTime", "Get - " + siderealTime.ToString());
             return siderealTime;
         }
