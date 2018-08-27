@@ -21,6 +21,14 @@
 	      		an emergency Platform removal tool that should only be used if normal Platform uninstall options fail.</listItem>
 	      		<listItem>RemoveASCOM now clears out more Platform installation debris than previously.</listItem>
 	      		<listItem>Telescope Simulator - New capability to specify the simulator start up position from these options: Home position, Park position, Configured startup position and last used position.</listItem>
+	      		<listItem>Camera Simulator - Can now be configured to deliver a variety of cooling curves over a specified period of time:
+					<list class="bullet">
+			      		<listItem>Immediately goes to setpoint.</listItem>
+			      		<listItem>Newton's cooling curve to the setpoint.</listItem>
+			      		<listItem>Setpoint overshoot on cooling and undershoot on warming.</listItem>
+			      		<listItem>Setpoint is never reached.</listItem>
+			  		</list>
+	      		</listItem>
 	  		</list>
 	    </content>
 	</section>
@@ -36,7 +44,7 @@
 	  			<listItem>The Diagnostics Cache timing test failed on some systems, this has now been fixed.</listItem>
 	  			<listItem>The Diagnostics Focuser.Move test on the Platform 6 Focuser Simulator could fail intermittently on some systems, this has now been fixed.</listItem>
 	  			<listItem>A rare issue that prevented the Dome Simulator hand-box from appearing has been fixed.</listItem>
-	  			<listItem>Telescope simulator
+	  			<listItem>Telescope Simulator
 	  				<list class="bullet">
 	  					<listItem>Non zero RightAscensionRate or DeclinationRate no longer set the mount Slewing property per the ASCOM Telescope specification.</listItem>
 	  					<listItem>SlewToCoordinates and SlewToCoordinatesAsync now update the TargetRightAscension and TargetDeclination properties per the ASCOM Telescope specification.</listItem>
@@ -52,6 +60,7 @@
 	  					<listItem>The Traffic form SiderealTime and TargetRightAscension messages now display the correct values.</listItem>
 	  					</list>
 	  			</listItem>
+	  			<listItem>Camera Simulator - The CCD will now reach the setpoint temperature in the default configuration.</listItem>
 			</list>
 		</content>
 	</section>
@@ -77,6 +86,7 @@
 	   	<title>Issues Fixed - Developers</title>
 	    <content>
 			<list class="bullet">
+	  			<listItem>Issues in the C# and VB Telescope.SiderealTime template code have been addressed.</listItem>
 	  			<listItem>An issue in commented out code in the VB test application template has been fixed.</listItem>
 	  			<listItem>Validation and clear messaging has been added to DeltaT(JulianDate) functions to reject dates outside the range 00:00:00 1 January 0100 to 23:59:59.999 31 December 9999.</listItem>
 	  		</list>
