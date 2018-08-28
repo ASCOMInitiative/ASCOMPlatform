@@ -98,18 +98,18 @@ namespace ASCOM.Simulator
             const string DOUBLE_SPACE = "\r\n\r\n";
             const string SINGLE_SPACE = "\r\n";
 
-            // Set help text for the cooling configuration form - this picturebox has to be used because the HelpProvider doesn't work when clicking the form itself.
+            // Set help text for the cooling configuration form - this picture box has to be used because the HelpProvider doesn't work when clicking the form itself.
             CoolingHelp.SetHelpString(BackgroundPictureBox,
                 "Cooler Configuration Form - Sets the cooler's control and behavioural characteristics." + DOUBLE_SPACE +
                 "Configures the Cooler's default control values including, ambient temperature, setpoint, time to setpoint and maximum cooling range together with its cooling behaviour."
                 );
 
-            // Set help text for the cooler modes dropdown
+            // Set help text for the cooler modes drop-down
             CoolingHelp.SetHelpString(cmbCoolerModes,
                 "Selects the cooler's behavioural characteristics." + DOUBLE_SPACE +
                 "The \"Always at setpoint\" mode goes immediately to the setpoint when the cooler is turned on or the setpoint is changed." + DOUBLE_SPACE +
                 "The \"Damped approach\" mode uses Newton's cooling equation to arrive smoothly at the setpoint in the configured time when cooling from ambient to the setpoint." + SINGLE_SPACE +
-                "If the starting temnperature is lower than ambient, the cooler will take less time to arrive at the setpoint." + DOUBLE_SPACE +
+                "If the starting temperature is lower than ambient, the cooler will take less time to arrive at the setpoint." + DOUBLE_SPACE +
                 "The \"Under damped\" mode will exceed the setpoint (on both cooling and warming) by 20% of the difference between ambient and the setpoint, subject to a minimum of 2C and a maximum of 5C." + DOUBLE_SPACE +
                 "The \"Never gets to setpoint\" mode will miss the setpoint by 10% of the difference between ambient and the setpoint."
                 );
@@ -131,7 +131,7 @@ namespace ASCOM.Simulator
                 );
             CoolingHelp.SetHelpString(LblCCDSetPoint, CoolingHelp.GetHelpString(NumCCDSetPoint));
 
-            // Set help text for the maxium temperature differential numeric control
+            // Set help text for the maximum temperature differential numeric control
             CoolingHelp.SetHelpString(NumCoolerDeltaTMax,
                 "Sets the maximum temperature differential that the cooler can maintain from ambient." + DOUBLE_SPACE +
                 "The Camera.CoolerPower property will report 100% in the early stages of cooling. It can also report 0% in the early stages of warming." + SINGLE_SPACE +
@@ -150,10 +150,12 @@ namespace ASCOM.Simulator
 
             // Set help text for the reset to ambient checkbox
             CoolingHelp.SetHelpString(ChkResetToAmbientOnConnect,
-                "Sets whether or not to reset the CCD temperature to ambient when cooling is enabled." + DOUBLE_SPACE +
-                "When cooling is turned off, the CCD will normally warm up to ambient temperature in the configured cooling time." + DOUBLE_SPACE +
-                "If this checkbox is unchecked and cooling is re-enabled during the warm-up time, the partially warmed up CCD temperature will be used as the starting point." + DOUBLE_SPACE +
-                "If checked, ambient temperature will be used as the starting point instead."
+                "Sets whether or not to reset the CCD temperature to ambient when the cooler is enabled or the setpoint is changed." + DOUBLE_SPACE +
+                "The cooler will normally warm up or cool down from its current temperature, ambient on connection, but subsequently any temperature within the cooler's range, depending on previous cooling history." + SINGLE_SPACE +
+                "In addition, the camera has a \"warm up\" characteristic when cooling is turned off, which makes the cooler warm from its current temperature to ambient in the specified \"cool down\" time." + DOUBLE_SPACE +
+                "If this checkbox is unchecked the CCD temperature will behave as described above." + DOUBLE_SPACE +
+                "If this checkbox is checked, the CCD temperature will immediately reset to ambient when cooling is turned off; it will also reset to ambient when the setpoint changes, before cooling to the new setpoint." + SINGLE_SPACE +
+                "(This is a driver development aid to ensure that a reproducible, full, cooling curve is delivered every time the cooler is turned on or the setpoint changes.)"
                 );
 
             // Set help text for the close button

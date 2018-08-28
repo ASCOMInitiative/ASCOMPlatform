@@ -94,7 +94,7 @@
             // 
             this.cmbCoolerModes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbCoolerModes.FormattingEnabled = true;
-            this.cmbCoolerModes.Location = new System.Drawing.Point(31, 150);
+            this.cmbCoolerModes.Location = new System.Drawing.Point(31, 153);
             this.cmbCoolerModes.Name = "cmbCoolerModes";
             this.cmbCoolerModes.Size = new System.Drawing.Size(206, 21);
             this.cmbCoolerModes.TabIndex = 5;
@@ -144,7 +144,7 @@
             // LblCoolerModes
             // 
             this.LblCoolerModes.AutoSize = true;
-            this.LblCoolerModes.Location = new System.Drawing.Point(243, 153);
+            this.LblCoolerModes.Location = new System.Drawing.Point(243, 156);
             this.LblCoolerModes.Name = "LblCoolerModes";
             this.LblCoolerModes.Size = new System.Drawing.Size(108, 13);
             this.LblCoolerModes.TabIndex = 13;
@@ -173,7 +173,7 @@
             // 
             this.ChkResetToAmbientOnConnect.AutoSize = true;
             this.CoolingHelp.SetHelpString(this.ChkResetToAmbientOnConnect, "");
-            this.ChkResetToAmbientOnConnect.Location = new System.Drawing.Point(32, 199);
+            this.ChkResetToAmbientOnConnect.Location = new System.Drawing.Point(32, 200);
             this.ChkResetToAmbientOnConnect.Name = "ChkResetToAmbientOnConnect";
             this.CoolingHelp.SetShowHelp(this.ChkResetToAmbientOnConnect, true);
             this.ChkResetToAmbientOnConnect.Size = new System.Drawing.Size(257, 17);
