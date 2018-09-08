@@ -60,6 +60,7 @@ namespace ASCOM.Simulator
             this.radioButtonUseMinAndMax = new System.Windows.Forms.RadioButton();
             this.radioButtonUseGains = new System.Windows.Forms.RadioButton();
             this.groupBoxCooling = new System.Windows.Forms.GroupBox();
+            this.BtnCoolerConfiguration = new System.Windows.Forms.Button();
             this.checkBoxHasCooler = new System.Windows.Forms.CheckBox();
             this.checkBoxCanGetCoolerPower = new System.Windows.Forms.CheckBox();
             this.checkBoxCanSetCCDTemperature = new System.Windows.Forms.CheckBox();
@@ -91,7 +92,6 @@ namespace ASCOM.Simulator
             this.checkBoxCanFastReadout = new System.Windows.Forms.CheckBox();
             this.checkBoxLogging = new System.Windows.Forms.CheckBox();
             this.groupBoxReadoutModes = new System.Windows.Forms.GroupBox();
-            this.BtnCoolerConfiguration = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBoxCCD.SuspendLayout();
             this.groupBoxGainSettings.SuspendLayout();
@@ -427,6 +427,17 @@ namespace ASCOM.Simulator
             this.groupBoxCooling.TabStop = false;
             this.groupBoxCooling.Text = "Cooling";
             // 
+            // BtnCoolerConfiguration
+            // 
+            this.BtnCoolerConfiguration.Location = new System.Drawing.Point(97, 12);
+            this.BtnCoolerConfiguration.Name = "BtnCoolerConfiguration";
+            this.BtnCoolerConfiguration.Size = new System.Drawing.Size(52, 23);
+            this.BtnCoolerConfiguration.TabIndex = 14;
+            this.BtnCoolerConfiguration.Text = "Setup";
+            this.toolTip1.SetToolTip(this.BtnCoolerConfiguration, resources.GetString("BtnCoolerConfiguration.ToolTip"));
+            this.BtnCoolerConfiguration.UseVisualStyleBackColor = true;
+            this.BtnCoolerConfiguration.Click += new System.EventHandler(this.BtnCoolerConfiguration_Click);
+            // 
             // checkBoxHasCooler
             // 
             this.checkBoxHasCooler.AutoSize = true;
@@ -735,20 +746,12 @@ namespace ASCOM.Simulator
             this.groupBoxReadoutModes.TabStop = false;
             this.groupBoxReadoutModes.Text = "Readout Modes";
             // 
-            // BtnCoolerConfiguration
-            // 
-            this.BtnCoolerConfiguration.Location = new System.Drawing.Point(97, 12);
-            this.BtnCoolerConfiguration.Name = "BtnCoolerConfiguration";
-            this.BtnCoolerConfiguration.Size = new System.Drawing.Size(52, 23);
-            this.BtnCoolerConfiguration.TabIndex = 14;
-            this.BtnCoolerConfiguration.Text = "Setup";
-            this.BtnCoolerConfiguration.UseVisualStyleBackColor = true;
-            this.BtnCoolerConfiguration.Click += new System.EventHandler(this.BtnCoolerConfiguration_Click);
-            // 
             // SetupDialogForm
             // 
+            this.AcceptButton = this.cmdOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.cmdCancel;
             this.ClientSize = new System.Drawing.Size(454, 403);
             this.Controls.Add(this.checkBoxLogging);
             this.Controls.Add(this.groupBoxReadoutModes);

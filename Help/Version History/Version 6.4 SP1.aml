@@ -21,12 +21,14 @@
 	      		an emergency Platform removal tool that should only be used if normal Platform uninstall options fail.</listItem>
 	      		<listItem>RemoveASCOM now clears out more Platform installation debris than previously.</listItem>
 	      		<listItem>Telescope Simulator - New capability to specify the simulator start up position from these options: Home position, Park position, Configured startup position and last used position.</listItem>
-	      		<listItem>Camera Simulator - Can now be configured to deliver a variety of cooling curves over a specified period of time:
+	      		<listItem>Camera Simulator - Can now be configured to deliver a variety of cooling behaviours (accessed through a new button on the setup form):
 					<list class="bullet">
 			      		<listItem>Immediately goes to setpoint.</listItem>
 			      		<listItem>Newton's cooling curve to the setpoint.</listItem>
 			      		<listItem>Setpoint overshoot on cooling and undershoot on warming.</listItem>
 			      		<listItem>Setpoint is never reached.</listItem>
+			      		<listItem>Time to reach setpoint can be configured.</listItem>
+			      		<listItem>Setpoint and heat sink temperature random fluctuations can be configured.</listItem>
 			  		</list>
 	      		</listItem>
 	  		</list>

@@ -11,7 +11,6 @@ namespace ASCOM.Simulator
     [ComVisible(false)]                 // Form not registered for COM!
     public partial class SetupDialogForm : Form
     {
-        //private const string STR_N0 = "N0";
         private const string STR_N2 = "N2";
         private Camera camera;
 
@@ -115,14 +114,6 @@ namespace ASCOM.Simulator
 
             camera = theCamera;
 
-            // Initialise the cooling configuration form
-            coolerSetupForm = new CoolerSetupForm();
-            coolerSetupForm.cmbCoolerModes.SelectedItem = theCamera.coolerMode;
-            coolerSetupForm.NumAmbientTemperature.Value = (decimal)camera.heatSinkTemperature;
-            coolerSetupForm.NumCCDSetPoint.Value = (decimal)camera.setCcdTemperature;
-            coolerSetupForm.NumCoolerDeltaTMax.Value = (decimal)camera.coolerDeltaTMax;
-            coolerSetupForm.NumTimeToSetPoint.Value = (decimal)camera.coolerTimeToSetPoint;
-            coolerSetupForm.ChkResetToAmbientOnConnect.Checked = camera.coolerResetToAmbient;
         }
 
         private void SaveProperties()
@@ -186,14 +177,6 @@ namespace ASCOM.Simulator
             {
                 camera.readoutModes = new ArrayList { "Default" };
             }
-
-            // Save the cooler configuration
-            camera.heatSinkTemperature = (double)coolerSetupForm.NumAmbientTemperature.Value;
-            camera.setCcdTemperature = (double)coolerSetupForm.NumCCDSetPoint.Value;
-            camera.coolerDeltaTMax = (double)coolerSetupForm.NumCoolerDeltaTMax.Value;
-            camera.coolerTimeToSetPoint = (double)coolerSetupForm.NumTimeToSetPoint.Value;
-            camera.coolerResetToAmbient = coolerSetupForm.ChkResetToAmbientOnConnect.Checked;
-            if (coolerSetupForm.cmbCoolerModes.SelectedItem != null) camera.coolerMode = coolerSetupForm.cmbCoolerModes.SelectedItem.ToString();
         }
 
         private void buttonSetImageFile_Click(object sender, EventArgs e)
@@ -241,23 +224,18 @@ namespace ASCOM.Simulator
             Log.Enabled = checkBoxLogging.Checked;
         }
 
+        /// <summary>
+        /// Cooler configuration button event handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnCoolerConfiguration_Click(object sender, EventArgs e)
         {
-            coolerSetupForm.EnableValidation = false;
-            coolerSetupForm.NumAmbientTemperature.Value = (decimal)camera.heatSinkTemperature;
-            coolerSetupForm.NumCCDSetPoint.Value = (decimal)camera.setCcdTemperature;
-            coolerSetupForm.NumCoolerDeltaTMax.Value = (decimal)camera.coolerDeltaTMax;
-            coolerSetupForm.NumTimeToSetPoint.Value = (decimal)camera.coolerTimeToSetPoint;
-            coolerSetupForm.ChkResetToAmbientOnConnect.Checked = camera.coolerResetToAmbient;
+            // Create and initialise the cooling configuration form
+            coolerSetupForm = new CoolerSetupForm(); // Create the cooler configuration form
+            coolerSetupForm.InitProperties(camera); // Initialise the form
 
-            foreach (string coolerMode in camera.coolerModes)
-            {
-                coolerSetupForm.cmbCoolerModes.Items.Add(coolerMode);
-            }
-            coolerSetupForm.cmbCoolerModes.SelectedItem = camera.coolerMode;
-
-            coolerSetupForm.EnableValidation = true;
-            coolerSetupForm.ShowDialog();
+            coolerSetupForm.ShowDialog(); // Display the form - Any changes will be saved by the form when its OK button is pressed.
         }
     }
 }
