@@ -62,7 +62,7 @@ namespace ASCOM.Simulator
         private static string s_csDriverID = "ASCOM.Simulator.Camera";
         private static string s_csDriverDescription = "Camera V2 simulator";
 
-        #region profile string constants
+        #region Profile string constants
         private const string STR_InterfaceVersion = "InterfaceVersion";
         private const string STR_PixelSizeX = "PixelSizeX";
         private const string STR_PixelSizeY = "PixelSizeY";
@@ -104,15 +104,20 @@ namespace ASCOM.Simulator
         private const string STR_CoolerFluctuations = "CoolerFluctuations";
         private const string STR_CoolerOvershoot = "CoolerOvershoot";
         private const string STR_CoolerPowerUpState = "CoolerPowerUpState";
+        private const string STR_CoolerUnderDampedCycles = "CoolerUnderDampedCycles";
+        private const string STR_CoolerSetPointMinimum = "CoolerSetPointMinimum";
+        private const string STR_CoolerGraphRange = "CoolerGraphRange";
         #endregion
 
         #region Camera cooler modes and initial conditions
 
         // Available cooler behavioural modes - When adding a new cooler mode, define its name here and add it the coolerModes array to ensure that it will appear in the list of options. Next update places where switch statements configure behaviour based on cooling Mode.
+        internal const string COOLERMODE_WELL_BEHAVED = "Well behaved approach to setpoint (Default)";
         internal const string COOLERMODE_ALWAYS_AT_SETPOINT = "Always at setpoint";
-        internal const string COOLERMODE_DAMPED = "Damped approach to setpoint";
+        internal const string COOLERMODE_SINGLE_OVERSHOOT = "Single overshoot to setpoint";
+        internal const string COOLERMODE_UNDERDAMPED = "Under damped approach to setpoint";
         internal const string COOLERMODE_NEVER_GETS_TO_SETPOINT = "Never gets to setpoint";
-        internal List<string> coolerModes = new List<string>() { COOLERMODE_ALWAYS_AT_SETPOINT, COOLERMODE_DAMPED, COOLERMODE_NEVER_GETS_TO_SETPOINT }; // Collection containing all available cooler modes
+        internal List<string> coolerModes = new List<string>() { COOLERMODE_WELL_BEHAVED, COOLERMODE_SINGLE_OVERSHOOT, COOLERMODE_UNDERDAMPED, COOLERMODE_ALWAYS_AT_SETPOINT, COOLERMODE_NEVER_GETS_TO_SETPOINT }; // Collection containing all available cooler modes
 
         // Cooler default characteristics - See void coolerTimer_Elapsed(object sender, ElapsedEventArgs e) for a description of cooler operation
         private const double COOLER_AMBIENT_TEMPERATURE_DEFAULT = 10; // Ambient temperature (C) when the camera is initially created  
@@ -120,17 +125,21 @@ namespace ASCOM.Simulator
         private const double COOLER_DELTAT_MAX_DEFAULT = 40; // Maximum temperature (C) below ambient to which the camera cooler can cool when the cooler is running at 100%
         private const double COOLER_TIME_TO_SETPOINT_DEFAULT = 30; // Time (seconds) to reach the CCD temperature set point when starting from ambient
         private const double COOLER_FLUCTUATIONS_DEFAULT = 0.0; // +- Default Size of random CCD temperature fluctuations
-        private const double COOLER_OVERSHOOT_DEFAULT = 0.0; // Size of CCD temperature overshoot
-        private const string COOLER_COOLERMODE_DEFAULT = COOLERMODE_DAMPED; // Default cooler mode on initial installation
+        private const double COOLER_OVERSHOOT_DEFAULT = 5.0; // Size of CCD temperature overshoot
+        private const string COOLER_COOLERMODE_DEFAULT = COOLERMODE_WELL_BEHAVED; // Default cooler mode on initial installation
         private const bool COOLER_RESET_TO_AMBIENT_DEFAULT = false; // Will the CCD temperature reset to ambient on connect or behave like a normal cooler where temperature depends on past cooling experience
         private const bool COOLER_POWER_UP_STATE_DEFAULT = false; // Default power up state for the cooler
+        private const double COOLER_UNDERDAMPED_CYCLES_DEFAULT = 5.0;
+        private const double COOLER_SETPOINT_MINIMUM_DEFAULT = -40.0;
+        private const bool COOLER_GRAPH_RANGE_DEFAULT = false;
 
         // Cooler behavioural configuration
         internal const double COOLER_NEVER_GETS_TO_SETPOINT_REDUCTION_FACTOR = 0.1; // Arbitrary factor to increase the returned CCD temperature so that it never reaches the setpoint. The achieved temperature will be (1.0 - REDUCTION_FACTOR) of the setpoint
         private const double COOLER_USE_FULL_POWER = 0.75; // Fraction of the cooling curve temperature change above which cooler power will be reported as 100%. e.g. 0.95 means the first 95% of the temperature change will be reported as 100% cooler power and the last 5% as the calculated power.
-        private const double COOLER_SETPOINT_REACHED_OFFSET = 0.1; // Temperature offset from the setpoint at which the cooler will deem that it has arrived at the setpoint. i.e. when the CCD is within +-COOLER_SETPOINT_REACHED_OFFSET of the setpoint
+        internal const double COOLER_SETPOINT_REACHED_OFFSET = 0.1; // Temperature offset from the setpoint at which the cooler will deem that it has arrived at the setpoint. i.e. when the CCD is within +-COOLER_SETPOINT_REACHED_OFFSET of the setpoint
         private const double OVERSHOOT_INCREASE_TO_TIME_FRACTION = 0.5; // Fraction of the cooling time during which the overshoot component increases to its configured value
         private const double OVERSHOOT_DECREASE_TO_TIME_FRACTION = 0.7; // Fraction of the cooling time during which the overshoot diminishes to 0.0. In the remaining fraction of the cooling curve the temperature follows Newton's cooling equation
+        private const double COOLER_UNDERDAMPED_CYCLES_COMPLETE_FRACTION = 1.0;
 
         // Cooler simulator variables
         internal double coolerDeltaTMax; // Maximum difference between ambient temperature and the cooler setpoint
@@ -140,12 +149,15 @@ namespace ASCOM.Simulator
         internal double coolerFluctuation; // Size of random fluctuations at setpoint
         internal double coolerOvershoot; // Size of cooler overshoot when changing setpoint
         internal bool coolerPowerUpState; // Initial state of the cooler when connected
+        internal double coolerUnderDampedCycles = COOLER_UNDERDAMPED_CYCLES_DEFAULT;
+        internal double coolerSetPointMinimum; // Setpoint below which an exception will be thrown
+        internal bool coolerGraphRange; // Flag that determines whether a cooling curve centric or full temperature range graph is displayed
 
-        private double coolerConstant; // The current value of the Newton's cooling equation constant
-        private double ccdStartTemperature; // CCD temperature at the start of this cooling cycle - depends on previous cooling history - will not be ambient if the CCD is still warming up from a previous cooling cycle
+        internal double coolerConstant; // The current value of the Newton's cooling equation constant
+        internal double ccdStartTemperature; // CCD temperature at the start of this cooling cycle - depends on previous cooling history - will not be ambient if the CCD is still warming up from a previous cooling cycle
         private DateTime coolerTargetChangedTime; // Time at which the cooler temperature target was last changed
         private bool coolerAtTemperature; // Flag indicating whether the cooler has reached its final temperature
-        private static Random randomGenerator; // Ensure that there is only one of these for all camera instances so that fluctuations are not correlated between camers
+        private static Random randomGenerator; // Ensure that there is only one of these for all camera instances so that fluctuations are not correlated between cameras
 
         #endregion
 
@@ -188,6 +200,7 @@ namespace ASCOM.Simulator
         internal double coolerPower;
         internal double ccdTemperature;
         internal double heatSinkTemperature;
+        internal double targetCcdTemperature;
         internal double setCcdTemperature;
 
         // Gain
@@ -340,137 +353,35 @@ namespace ASCOM.Simulator
         /// </remarks>
         private void coolerTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            double adjustedSetpoint = 0.0;
-
-            // Calculate how long this cooling cycle has been running
-            TimeSpan currentCoolingCycleTime = DateTime.Now.Subtract(coolerTargetChangedTime);
+            // Initialise some variables
+            TimeSpan currentCoolingCycleTime = DateTime.Now.Subtract(coolerTargetChangedTime); // Calculate how long this cooling cycle has been running
+            double overallTimeToSetpointU = -(Math.Log(COOLER_SETPOINT_REACHED_OFFSET / Math.Abs(ccdStartTemperature - targetCcdTemperature))) / coolerConstant; // Calculate the time required to reach the setpoint from the starting CCD temperature
+            double currentCoolingTimeFractionU = currentCoolingCycleTime.TotalSeconds / overallTimeToSetpointU; // Calculate the current fraction of the cooling cycle based on current cycle time and expected overall cycle time
+            bool cooling = ccdStartTemperature >= targetCcdTemperature; // Determine whether we are cooling down or heating up
 
             if (coolerOn) // The cooler is on and we are cooling or warming to the setpoint or have just arrived at it
             {
-                // From Newton's cooling equation: NewTemperature = SetPoint + (StartTemperature - SetPoint)*e^-Kt
-                double newtonsEquationTemperature = setCcdTemperature + (ccdStartTemperature - setCcdTemperature) * Math.Exp(-coolerConstant * currentCoolingCycleTime.TotalSeconds); // Calculate the new CCD temperature from Newton's cooling equation
-                bool cooling = ccdStartTemperature >= setCcdTemperature; // Determine whether we are cooling down or heating up
-                double coolerOffsetSigned = cooling ? COOLER_SETPOINT_REACHED_OFFSET : -COOLER_SETPOINT_REACHED_OFFSET; // Set the sign of the cooler offset depending on whether we are cooling or warming
 
-                switch (coolerMode) // Vary behaviour depending on the current cooler mode
-                {
-                    case COOLERMODE_ALWAYS_AT_SETPOINT: // No time dependent behaviour required for this mode
-                        ccdTemperature = setCcdTemperature; // Immediately return the required temperature
-
-                        Log.LogMessage("Timer", "AlwaysAtSetPoint - CCD temperature is {0}, Last power: {1:0}%", ccdTemperature, coolerPower);
-                        coolerAtTemperature = true; // No need for further change because we are at temperature by definition
-                        break;
-
-                    case COOLERMODE_DAMPED: // Gradually approach the setpoint with or without an overshoot as determined by the value of the coolerOvershoot variable 
-
-                        // Newton's cooling curve is used as the foundation for CCD temperature prediction in this mode.
-                        // However, overshoot delivery requires that the Newton's temperature be modified to create the more complex overshoot behaviour. This is achieved by defining phases, 
-                        // specified as fractions of the expected cooling time to the setpoint, which introduce specific incremental temperature offsets that are added to the Newton's temperature 
-                        // to create the desired CCD temperature.
-
-                        // This mode caters for two general cases:
-                        // 1) No overshoot (coolerOvershoot = 0.0) - CCD temperature is managed in one phase throughout the cooling cycle
-                        //    Phase 1) Cooling time fraction 0.0 to 1.0 - Follow Newton's cooling curve from the initial CCD temperature to the setpoint
-                        //
-                        // 2) Some overshoot (coolerOvershoot > 0.0) - CCD temperature behaviour is managed in three phases through the cooling cycle:
-                        //    Phase 1) Cooling time fraction 0.0 to OVERSHOOT_INCREASE_TO_TIME_FRACTION ................................. Proceed from the current CCD temperature through the setpoint to the required overshoot temperature. 
-                        //    Phase 2) Cooling time fraction OVERSHOOT_INCREASE_TO_TIME_FRACTION to OVERSHOOT_DECREASE_TO_TIME_FRACTION . Return from the overshoot temperature through the setpoint to the Newton's curve temperature
-                        //    Phase 3) Cooling time fraction OVERSHOOT_DECREASE_TO_TIME_FRACTION to 1.0 ................................. Follow Newton's cooling curve to the setpoint
-
-                        // Calculate the offset from the Newton's curve temperature at the time of maximum overshoot
-                        double currentOvershootCorrection;
-                        if (coolerOvershoot == 0.0) // No overshoot so there is no overshoot correction to be applied to the newton's equation temperature
-                        {
-                            currentOvershootCorrection = 0.0; // Specify no overshoot correction
-                        }
-                        else // Calculate the offset that needs to be added to the Newton's curve temperature to generate the configured overshoot at the time of maximum overshoot
-                        {
-                            double overallTimeToSetpoint = -(Math.Log(COOLER_SETPOINT_REACHED_OFFSET / Math.Abs(ccdStartTemperature - setCcdTemperature))) / coolerConstant; // Calculate the time required to reach the setpoint from the starting CCD temperature
-                            double currentCoolingTimeFraction = currentCoolingCycleTime.TotalSeconds / overallTimeToSetpoint; // Calculate the current fraction of the cooling cycle based on current cycle time and expected overall cycle time
-                            double newtonsTemperatureAtMaximumOvershoot = setCcdTemperature + (ccdStartTemperature - setCcdTemperature) * Math.Exp(-coolerConstant * overallTimeToSetpoint * OVERSHOOT_INCREASE_TO_TIME_FRACTION); // Calculate the Newton's curve temperature at the time of maximum overshoot
-
-                            double coolerOvershootSigned = cooling ? -coolerOvershoot : coolerOvershoot; // Set the overshoot direction sign correctly : negative when cooling, positive when warming
-                            double offsetFromNewtonsTemperatureAtMaximumOvershoot = setCcdTemperature + coolerOvershootSigned - newtonsTemperatureAtMaximumOvershoot; // Calculate the offset from Newton's temperature that will create the required overshoot at the time of maximum overshoot
-
-                            // Calculate the fraction of the overshoot temperature that should be applied at this fraction of the cooling cycle
-                            double currentOvershootFraction; // Fraction of the configured overshoot to apply at this time
-                            if (currentCoolingTimeFraction <= OVERSHOOT_INCREASE_TO_TIME_FRACTION)
-                            {
-                                // We are in the fist phase of the overshoot where the temperature needs to exceed the setpoint by the configured amount when OVERSHOOT_INCREASE_TO_TIME_FRACTION of the way through the cooling cycle
-                                currentOvershootFraction = currentCoolingTimeFraction / OVERSHOOT_INCREASE_TO_TIME_FRACTION;
-                            }
-                            else if (currentCoolingTimeFraction <= OVERSHOOT_DECREASE_TO_TIME_FRACTION)
-                            {
-                                // We are in the second phase of the cooling cycle where the overshoot needs to decrease as the time fraction progresses from OVERSHOOT_INCREASE_TO_TIME_FRACTION towards OVERSHOOT_DECREASE_TO_TIME_FRACTION
-                                currentOvershootFraction = (OVERSHOOT_DECREASE_TO_TIME_FRACTION - currentCoolingTimeFraction) / (OVERSHOOT_DECREASE_TO_TIME_FRACTION - OVERSHOOT_INCREASE_TO_TIME_FRACTION);
-                            }
-                            else 
-                            {
-                                // We are in the third phase of the cooling cycle with no overshoot and just the Newton's curve temperature
-                                currentOvershootFraction = 0.0; 
-                            }
-
-                            // Calculate the correction to the Newton's equation temperature that will generate overshoot at this time
-                            currentOvershootCorrection = (offsetFromNewtonsTemperatureAtMaximumOvershoot + coolerOffsetSigned) * currentOvershootFraction;
-                        }
-
-                        ccdTemperature = newtonsEquationTemperature - coolerOffsetSigned + currentOvershootCorrection; // Calculate the CCD temperature, including any overshoot correction
-                        ccdTemperature = ConstrainToTemperatureRange(ccdTemperature, heatSinkTemperature, heatSinkTemperature - coolerDeltaTMax); // Make sure the temperature stays in the valid range Ambient to (Ambient- DeltaTMax)
-
-                        Log.LogMessage("Timer", "DampedMode - Newton's equation temperature: {0:+0.00;-0.00;' '0.00}, CCD temperature: {1:+0.00;-0.00;' '0.00}, Last power: {2:0}%, Cooler running time: {3:0.00}", newtonsEquationTemperature, ccdTemperature, coolerPower, currentCoolingCycleTime.TotalSeconds);
-
-                        // Check whether we have arrived close enough to the setpoint to say that we have fully arrived:
-                        if (Math.Abs(newtonsEquationTemperature - setCcdTemperature) < COOLER_SETPOINT_REACHED_OFFSET) // This test must be based on Newton's equation temperature rather than the adjusted CCD temperature
-                        {
-                            ccdTemperature = setCcdTemperature; // Set the CCD temperature exactly to the target temperature
-                            Log.LogMessage("Timer", "CCD has arrived at setpoint temperature: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
-
-                            coolerAtTemperature = true;
-                        }
-                        break;
-
-                    case COOLERMODE_NEVER_GETS_TO_SETPOINT: // Return a higher temperature than calculated from Newton's equation
-                        adjustedSetpoint = ((setCcdTemperature - heatSinkTemperature) * (1.0 - COOLER_NEVER_GETS_TO_SETPOINT_REDUCTION_FACTOR)) + heatSinkTemperature; // Calculate the adjusted setpoint temperature that misses the real setpoint by the COOLER_NEVER_GETS_TO_SETPOINT_REDUCTION_FACTOR
-                        double adjustedNewtonsEquationTemperature = adjustedSetpoint + (ccdStartTemperature - adjustedSetpoint) * Math.Exp(-coolerConstant * currentCoolingCycleTime.TotalSeconds); // Calculate the "adjusted" Newton's equation temperature
-
-                        ccdTemperature = adjustedNewtonsEquationTemperature - coolerOffsetSigned; // Calculate the adjusted CCD temperature
-                        ccdTemperature = ConstrainToTemperatureRange(ccdTemperature, ccdStartTemperature, adjustedSetpoint);  // Constrain the CCD temperature to the required temperature range
-
-                        Log.LogMessage("Timer", "MissesSetpoint - Newton's equation temperature:{0:+0.00;-0.00;' '0.00}, Adjusted Newton's equation temperature:{1:+0.00;-0.00;' '0.00}, Adjusted setpoint temperature:{2:+0.00;-0.00;' '0.00}, CCD temperature: {3:+0.00;-0.00;' '0.00}, Last power: {4:0}%, Cooler running time: {5:0.00}", newtonsEquationTemperature, adjustedNewtonsEquationTemperature, adjustedSetpoint, ccdTemperature, coolerPower, currentCoolingCycleTime.TotalSeconds);
-
-                        // Check whether we have arrived close enough to the setpoint to say that we have fully arrived:
-                        if (Math.Abs(adjustedNewtonsEquationTemperature - adjustedSetpoint) < COOLER_SETPOINT_REACHED_OFFSET) // This test must be based on Newton's equation temperature rather than the adjusted CCD temperature
-                        {
-                            ccdTemperature = adjustedSetpoint;
-                            Log.LogMessage("Timer", @"CCD has arrived at ""missed setpoint"" temperature: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
-
-                            coolerAtTemperature = true;
-                        }
-                        break;
-
-                    default: // Warning message for future camera driver developers that they need to update this code if a new curve is introduced
-                        Log.LogMessage("Timer", "Unknown cooler mode: {0} - Cooling cycle will be abandoned.", coolerMode);
-                        coolerAtTemperature = true; // Terminate this cooling cycle
-                        break;
-                }
+                // Calculate the cooler temperature based on the supplied parameters. The CCD temperature is returned in the ccdTemperature global variable and whether or not the CCD is at temperature is returned in the coolerAtTemperature global variable
+                CalculateCoolerTemperature(currentCoolingTimeFractionU, overallTimeToSetpointU, ccdStartTemperature, targetCcdTemperature, coolerUnderDampedCycles, coolerOvershoot, heatSinkTemperature, coolerDeltaTMax, coolerConstant, coolerMode);
 
                 // Set the cooler power
-                double powerFractionAtSetPoint = (heatSinkTemperature - setCcdTemperature) / coolerDeltaTMax; // Calculate the power used at the setpoint as a linear fraction of the maximum cooling that the cooler can achieve
+                double powerFractionAtSetPoint = (heatSinkTemperature - targetCcdTemperature) / coolerDeltaTMax; // Calculate the power used at the setpoint as a linear fraction of the maximum cooling that the cooler can achieve
 
-                if (setCcdTemperature == heatSinkTemperature) // Deal with a special case where the equation below fails
+                if (targetCcdTemperature == heatSinkTemperature) // Deal with a special case where the equation below fails
                 {
                     coolerPower = 0.0;
                 }
                 else // Calculate the cooler power from the CCD temperature
                 {
-                    coolerPower = 100.0 * (powerFractionAtSetPoint + ((1.0 - powerFractionAtSetPoint) * ((ccdTemperature - setCcdTemperature) / (heatSinkTemperature - setCcdTemperature)))); // Calculate current cooler power based on the offset of the CCD temperature from the setpoint
+                    coolerPower = 100.0 * (powerFractionAtSetPoint + ((1.0 - powerFractionAtSetPoint) * ((ccdTemperature - targetCcdTemperature) / (heatSinkTemperature - targetCcdTemperature)))); // Calculate current cooler power based on the offset of the CCD temperature from the setpoint
                 }
                 if (coolerPower < 0.0) coolerPower = 0.0; // Above equation can give negative power values when warming up so constrain negative values to 0.0
 
                 if (cooling) // Setpoint is below start temperature so we are cooling
                 {
                     // Now force the value to 100% for the first part of the cooling curve to simulate the cooler really going for it...
-                    if ((heatSinkTemperature - ccdTemperature) / (heatSinkTemperature - ((coolerMode == COOLERMODE_NEVER_GETS_TO_SETPOINT) ? adjustedSetpoint : setCcdTemperature)) < COOLER_USE_FULL_POWER)
+                    if ((heatSinkTemperature - ccdTemperature) / (heatSinkTemperature - targetCcdTemperature) < COOLER_USE_FULL_POWER)
                     {
                         coolerPower = 100.0;
                     }
@@ -494,7 +405,7 @@ namespace ASCOM.Simulator
                 }
             }
 
-            // If we are at the setpoint, log this and disable the timer
+            // If we have arrived at the setpoint, log this and disable the timer
             if (coolerAtTemperature)
             {
                 Log.LogMessage("Timer", "CCD is at its final temperature: {0:+0.00;-0.00;' '0.00} and power: {1:0.0}% - Cooling timer disabled", ccdTemperature, coolerPower);
@@ -503,89 +414,185 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// Returns the cooling constant that will get the CCD temperature within a specified distance of the endpoint temperature in the given time
+        /// Calculate the CCD temperature for the current cooler mode using the supplied parameters. 
         /// </summary>
-        /// <param name="TimeToSetpoint">Time in which the change has to be effected</param>
-        /// <returns>Cooling constant to use in Newton's cooling equation</returns>
-        /// <remarks>
-        /// Newton's cooling equation for this cooler gives temperature (T) as a function of time (t):                     T = SetpointTemperature + (StartTemperature - SetpointTemperature) * e^(-k*t)   ...1
-        /// Which can also be shown as:                                                                                    T = SetpointTemperature + TemperatureChange * e^(-k*t)   ...2
-        /// Rearranging gives the cooling constant k as:                                                                   k = -ln[(T - SetpointTemperature) / TemperatureChange] / t   ...3    Differing bracket styles just used to aid clarity
-        ///
-        /// The cooling equation shows that the temperature exponentially approaches the setpoint and thus requires infinite time to achieve the final temperature, assuming infinite precision observation and calculation.
-        /// To work round this, in the simulator we define that the setpoint is reached when the CCD temperature reaches a small offset (COOLER_SETPOINT_REACHED_OFFSET) from the setpoint e.g. 0.1C.
-        /// 
-        /// When the cooler is at the offset temperature (setpoint + COOLER_SETPOINT_REACHED_OFFSET, equation 3 gives:     k = -ln[(TemperatureAtoffset - SetpointTemperature) / TemperatureChange] / TimeToOfffset   ...4    
-        /// 
-        /// "TemperatureAtoffset" in equation 4 can be replaced with (SetpointTemperature + SetPointReachedOffset) giving: k = -ln[(SetpointTemperature + SetPointReachedOffset - SetpointTemperature) / TemperatureChange] / TimeToOfffset   ...5
-        /// which simplifies to:                                                                                           k = -ln[SetPointReachedOffset / TemperatureChange] / t   ...6
-        ///
-        /// Equation 6 allows the cooling constant to be calculated that will cause the cooler reach a temperature of "SetPointReachedOffset" degrees from the setpoint in "t" seconds when cooling over "TemperatureChange" degrees
-        /// 
-        /// For this cooler, "TemperatureCahnge" is taken as the maximum delta T that the cooler can achieve, which can only be changed through configuration. This means that the cooler shows realistic behaviour where 
-        /// small temperature changes are achieved more rapidly than larger changes.
-        ///
-        /// The COOLER_SETPOINT_REACHED_OFFSET variable determines how far the cooler proceeds down the cooling curve before declaring that it has arrived. Larger values make use of the earlier part of the curve which 
-        /// give a slower descent towards the setpoint and less time inching in towards it. Smaller values use more of the curve, which results in a quicker descent to the vicinity of the setpoint and then a longer 
-        /// time spent inching towards the exact value. The value of 0.1sec has been determined experimentally to provide realistic behaviour.
-        ///    
-        ///</remarks>
-        double CalculateCoolerConstant(double TimeToSetpoint)
+        /// <param name="currentCoolingTimeFraction"></param>
+        /// <param name="overallTimeToSetpoint"></param>
+        /// <param name="ccdStartTemperature"></param>
+        /// <param name="targetCcdTemperature"></param>
+        /// <param name="coolerUnderDampedCycles"></param>
+        /// <param name="coolerOvershoot"></param>
+        /// <param name="heatSinkTemperature"></param>
+        /// <param name="coolerDeltaTMax"></param>
+        /// <param name="coolerConstant"></param>
+        /// <param name="coolerMode"></param>
+        /// <remarks>Results are returned in the ccdTemperature and coolerAtTemperature global variables.</remarks>
+        internal void CalculateCoolerTemperature(double currentCoolingTimeFraction, double overallTimeToSetpoint, double ccdStartTemperature, double targetCcdTemperature, double coolerUnderDampedCycles, double coolerOvershoot, double heatSinkTemperature, double coolerDeltaTMax, double coolerConstant, string coolerMode)
         {
-            double coolingConstant = -Math.Log(COOLER_SETPOINT_REACHED_OFFSET / coolerDeltaTMax) / TimeToSetpoint;
-            Log.LogMessage("CoolingConstant", "Cooler setpoint offset: {0:0.0}, Maximum delta T: {1:+0.00;-0.00;' '0.00}, Time to setpoint: {2:0.0}, Cooling constant: {3}", COOLER_SETPOINT_REACHED_OFFSET, coolerDeltaTMax, TimeToSetpoint, coolingConstant);
+            double currentOvershootCorrection, currentOvershootFraction;
 
-            return coolingConstant;
-        }
+            // From Newton's cooling equation: NewTemperature = SetPoint + (StartTemperature - SetPoint)*e^-Kt
+            double newtonsEquationTemperature = targetCcdTemperature + (ccdStartTemperature - targetCcdTemperature) * Math.Exp(-coolerConstant * currentCoolingTimeFraction * overallTimeToSetpoint); // Calculate the new CCD temperature from Newton's cooling equation
 
-        /// <summary>
-        /// Constrain the supplied temperature to a specified range
-        /// </summary>
-        /// <param name="Temperature">Temperature to be constrained</param>
-        /// <param name="FirstBound">First temperature range bound</param>
-        /// <param name="SecondBound">Second temperature range bound</param>
-        /// <returns>Constrained temperature</returns>
-        double ConstrainToTemperatureRange(double Temperature, double FirstBound, double SecondBound)
-        {
-            double retVal;
-            retVal = Temperature; // Initialise the return value with the supplied temperature
+            bool cooling = ccdStartTemperature >= targetCcdTemperature; // Determine whether we are cooling down or heating up
+            double coolerOffsetSigned = cooling ? COOLER_SETPOINT_REACHED_OFFSET : -COOLER_SETPOINT_REACHED_OFFSET; // Set the sign of the cooler offset depending on whether we are cooling or warming
+            double coolerOvershootSigned = cooling ? -coolerOvershoot : coolerOvershoot; // Set the overshoot direction sign correctly : negative when cooling, positive when warming
 
-            if (FirstBound == SecondBound) // The bounds are identical so only one possible valid value
+            // Deal with the special case where start and target temperatures are the same
+            if (ccdStartTemperature == targetCcdTemperature)
             {
-                if (Temperature != FirstBound) // Temperature is outside the valid value
-                {
-                    retVal = FirstBound;
-                    Log.LogMessage("Timer", @"CCD temperature {0:+0.00;-0.00;' '0.00} constrained to the range {1:+0.00;-0.00;' '0.00} to {2:+0.00;-0.00;' '0.00}", Temperature, FirstBound, SecondBound);
-                }
-            }
-            else if (FirstBound < SecondBound) // First is less than second
-            {
-                if (Temperature < FirstBound) // Temperature is lower than first bound
-                {
-                    retVal = FirstBound;
-                    Log.LogMessage("Timer", @"CCD temperature {0:+0.00;-0.00;' '0.00} constrained to the range {1:+0.00;-0.00;' '0.00} to {2:+0.00;-0.00;' '0.00}", Temperature, FirstBound, SecondBound);
-                }
-                if (Temperature > SecondBound) // Temperature is higher than second bound
-                {
-                    retVal = SecondBound;
-                    Log.LogMessage("Timer", @"CCD temperature {0:+0.00;-0.00;' '0.00} constrained to the range {1:+0.00;-0.00;' '0.00} to {2:+0.00;-0.00;' '0.00}", Temperature, FirstBound, SecondBound);
-                }
-            }
-            else // Second is less than first
-            {
-                if (Temperature > FirstBound) // Temperature is higher than first bound
-                {
-                    retVal = FirstBound;
-                    Log.LogMessage("Timer", @"CCD temperature {0:+0.00;-0.00;' '0.00} constrained to the range {1:+0.00;-0.00;' '0.00} to {2:+0.00;-0.00;' '0.00}", Temperature, FirstBound, SecondBound);
-                }
-                if (Temperature < SecondBound) // Temperature is lower than second bound
-                {
-                    retVal = SecondBound;
-                    Log.LogMessage("Timer", @"CCD temperature {0:+0.00;-0.00;' '0.00} constrained to the range {1:+0.00;-0.00;' '0.00} to {2:+0.00;-0.00;' '0.00}", Temperature, FirstBound, SecondBound);
-                }
+                ccdTemperature = targetCcdTemperature;
+                coolerAtTemperature = true;
+                Log.LogMessage("CalculateTemperature", "Start and target temperatures are identical, setting CCD temperature to target temperature: {0:+0.000;-0.000;' '0.000}, Cooler at temperature: {1}", ccdTemperature, coolerAtTemperature);
+                return;
             }
 
-            return retVal;
+            switch (coolerMode)
+            {
+                case COOLERMODE_ALWAYS_AT_SETPOINT: // No time dependent behaviour required for this mode
+                    ccdTemperature = targetCcdTemperature; // Immediately return the required temperature
+
+                    Log.LogMessage("CalculateTemperature", "WellBehaved - CCD temperature is {0}, Last power: {1:0}%", ccdTemperature, coolerPower);
+                    coolerAtTemperature = true; // No need for further change because we are at temperature by definition
+                    break;
+
+                case COOLERMODE_WELL_BEHAVED:
+                    ccdTemperature = newtonsEquationTemperature - coolerOffsetSigned; // Calculate the CCD temperature, including any overshoot correction
+                    ccdTemperature = ConstrainToTemperatureRange(ccdTemperature, heatSinkTemperature, heatSinkTemperature - coolerDeltaTMax); // Make sure the temperature stays in the valid range Ambient to (Ambient- DeltaTMax)
+
+                    Log.LogMessage("CalculateTemperature", "WellBehaved - Newton's equation temperature: {0:+0.000;-0.000;' '0.000}, CCD temperature: {1:+0.000;-0.000;' '0.000}, Last power: {2:0}%, Time fraction: {3:0.000}", newtonsEquationTemperature, ccdTemperature, coolerPower, currentCoolingTimeFraction); //);
+
+                    // Check whether we have arrived close enough to the setpoint to say that we have fully arrived:
+                    if (Math.Abs(newtonsEquationTemperature - targetCcdTemperature) < COOLER_SETPOINT_REACHED_OFFSET) // This test must be based on Newton's equation temperature rather than the adjusted CCD temperature
+                    {
+                        ccdTemperature = targetCcdTemperature; // Set the CCD temperature exactly to the target temperature
+                        Log.LogMessage("CalculateTemperature", "WellBehaved - CCD has arrived at setpoint temperature: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
+
+                        coolerAtTemperature = true;
+                    }
+                    break;
+
+                case COOLERMODE_UNDERDAMPED:
+
+                    double sineValue = Math.Sin(currentCoolingTimeFraction / COOLER_UNDERDAMPED_CYCLES_COMPLETE_FRACTION * Math.PI * coolerUnderDampedCycles);
+
+                    // Calculate the fraction of the overshoot temperature that should be applied at this fraction of the cooling cycle
+                    if (currentCoolingTimeFraction <= COOLER_UNDERDAMPED_CYCLES_COMPLETE_FRACTION)
+                    {
+                        // We are in the first phase of the cooling cycle where the overshoot needs to be applied
+                        currentOvershootFraction = (COOLER_UNDERDAMPED_CYCLES_COMPLETE_FRACTION - currentCoolingTimeFraction) / (COOLER_UNDERDAMPED_CYCLES_COMPLETE_FRACTION);
+                    }
+                    else
+                    {
+                        // We are in the second phase of the cooling cycle with no overshoot and just the Newton's curve temperature
+                        currentOvershootFraction = 0.0;
+                    }
+
+                    // Calculate the correction to the Newton's equation temperature that will generate overshoot at this time
+                    currentOvershootCorrection = coolerOvershootSigned * sineValue * currentOvershootFraction;
+
+                    ccdTemperature = newtonsEquationTemperature - coolerOffsetSigned + currentOvershootCorrection; // Calculate the CCD temperature, including any overshoot correction
+                    ccdTemperature = ConstrainToTemperatureRange(ccdTemperature, heatSinkTemperature, heatSinkTemperature - coolerDeltaTMax); // Make sure the temperature stays in the valid range Ambient to (Ambient- DeltaTMax)
+
+                    Log.LogMessage("CalculateTemperature", "UnderDamped - Newton's equation temperature: {0:+0.000;-0.000;' '0.000}, CCD temperature: {1:+0.000;-0.000;' '0.000}, Last power: {2:0}%, Time fraction: {3:0.000} ----- Overshoot correction: {4}, Sine value: {5}, Cooler offset signed: {6}, Cooler overshoot: {7}, Overshoot fraction: {8}",
+                        newtonsEquationTemperature, ccdTemperature, coolerPower, currentCoolingTimeFraction, currentOvershootCorrection, sineValue, coolerOffsetSigned, coolerOvershootSigned, currentOvershootFraction); //);
+
+                    // Check whether we have arrived close enough to the setpoint to say that we have fully arrived:
+                    if (Math.Abs(newtonsEquationTemperature - targetCcdTemperature) < COOLER_SETPOINT_REACHED_OFFSET) // This test must be based on Newton's equation temperature rather than the adjusted CCD temperature
+                    {
+                        ccdTemperature = targetCcdTemperature; // Set the CCD temperature exactly to the target temperature
+                        Log.LogMessage("CalculateTemperature", "UnderDamped - CCD has arrived at setpoint temperature: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
+
+                        coolerAtTemperature = true;
+                    }
+                    break;
+
+                case COOLERMODE_SINGLE_OVERSHOOT:
+                    // Newton's cooling curve is used as the foundation for CCD temperature prediction in this mode.
+                    // However, overshoot delivery requires that the Newton's temperature be modified to create the more complex overshoot behaviour. This is achieved by defining phases, 
+                    // specified as fractions of the expected cooling time to the setpoint, which introduce specific incremental temperature offsets that are added to the Newton's temperature 
+                    // to create the desired CCD temperature.
+
+                    // This mode caters for two general cases:
+                    // 1) No overshoot (coolerOvershoot = 0.0) - CCD temperature is managed in one phase throughout the cooling cycle
+                    //    Phase 1) Cooling time fraction 0.0 to 1.0 - Follow Newton's cooling curve from the initial CCD temperature to the setpoint
+                    //
+                    // 2) Some overshoot (coolerOvershoot > 0.0) - CCD temperature behaviour is managed in three phases through the cooling cycle:
+                    //    Phase 1) Cooling time fraction 0.0 to OVERSHOOT_INCREASE_TO_TIME_FRACTION ................................. Proceed from the current CCD temperature through the setpoint to the required overshoot temperature. 
+                    //    Phase 2) Cooling time fraction OVERSHOOT_INCREASE_TO_TIME_FRACTION to OVERSHOOT_DECREASE_TO_TIME_FRACTION . Return from the overshoot temperature through the setpoint to the Newton's curve temperature
+                    //    Phase 3) Cooling time fraction OVERSHOOT_DECREASE_TO_TIME_FRACTION to 1.0 ................................. Follow Newton's cooling curve to the setpoint
+
+                    // Calculate the offset from the Newton's curve temperature at the time of maximum overshoot
+                    if (coolerOvershoot == 0.0) // No overshoot so there is no overshoot correction to be applied to the newton's equation temperature
+                    {
+                        currentOvershootCorrection = 0.0; // Specify no overshoot correction
+                    }
+                    else // Calculate the offset that needs to be added to the Newton's curve temperature to generate the configured overshoot at the time of maximum overshoot
+                    {
+                        double newtonsTemperatureAtMaximumOvershoot = targetCcdTemperature + (ccdStartTemperature - targetCcdTemperature) * Math.Exp(-coolerConstant * overallTimeToSetpoint * OVERSHOOT_INCREASE_TO_TIME_FRACTION); // Calculate the Newton's curve temperature at the time of maximum overshoot
+
+                        double offsetFromNewtonsTemperatureAtMaximumOvershoot = targetCcdTemperature + coolerOvershootSigned - newtonsTemperatureAtMaximumOvershoot; // Calculate the offset from Newton's temperature that will create the required overshoot at the time of maximum overshoot
+
+                        // Calculate the fraction of the overshoot temperature that should be applied at this fraction of the cooling cycle
+                        if (currentCoolingTimeFraction <= OVERSHOOT_INCREASE_TO_TIME_FRACTION)
+                        {
+                            // We are in the fist phase of the overshoot where the temperature needs to exceed the setpoint by the configured amount when OVERSHOOT_INCREASE_TO_TIME_FRACTION of the way through the cooling cycle
+                            currentOvershootFraction = Math.Sin((currentCoolingTimeFraction / OVERSHOOT_INCREASE_TO_TIME_FRACTION) * (Math.PI / 2.0)); // Convert the fraction to a sine value to create a smoother transition through the maximum
+                        }
+                        else if (currentCoolingTimeFraction <= OVERSHOOT_DECREASE_TO_TIME_FRACTION)
+                        {
+                            // We are in the second phase of the cooling cycle where the overshoot needs to decrease as the time fraction progresses from OVERSHOOT_INCREASE_TO_TIME_FRACTION towards OVERSHOOT_DECREASE_TO_TIME_FRACTION
+                            currentOvershootFraction = Math.Sin(((OVERSHOOT_DECREASE_TO_TIME_FRACTION - currentCoolingTimeFraction) / (OVERSHOOT_DECREASE_TO_TIME_FRACTION - OVERSHOOT_INCREASE_TO_TIME_FRACTION)) * (Math.PI / 2.0));
+                        }
+                        else
+                        {
+                            // We are in the third phase of the cooling cycle with no overshoot and just the Newton's curve temperature
+                            currentOvershootFraction = 0.0;
+                        }
+
+                        // Calculate the correction to the Newton's equation temperature that will generate overshoot at this time
+                        currentOvershootCorrection = (offsetFromNewtonsTemperatureAtMaximumOvershoot + coolerOffsetSigned) * currentOvershootFraction;
+                    }
+
+                    ccdTemperature = newtonsEquationTemperature - coolerOffsetSigned + currentOvershootCorrection; // Calculate the CCD temperature, including any overshoot correction
+                    ccdTemperature = ConstrainToTemperatureRange(ccdTemperature, heatSinkTemperature, heatSinkTemperature - coolerDeltaTMax); // Make sure the temperature stays in the valid range Ambient to (Ambient- DeltaTMax)
+
+                    Log.LogMessage("CalculateTemperature", "DampedMode - Newton's equation temperature: {0:+0.00;-0.00;' '0.00}, CCD temperature: {1:+0.00;-0.00;' '0.00}, Last power: {2:0}%, Cooler running time: {3:0.00}", newtonsEquationTemperature, ccdTemperature, coolerPower, currentCoolingTimeFraction * overallTimeToSetpoint);
+
+                    // Check whether we have arrived close enough to the setpoint to say that we have fully arrived:
+                    if (Math.Abs(newtonsEquationTemperature - targetCcdTemperature) < COOLER_SETPOINT_REACHED_OFFSET) // This test must be based on Newton's equation temperature rather than the adjusted CCD temperature
+                    {
+                        ccdTemperature = targetCcdTemperature; // Set the CCD temperature exactly to the target temperature
+                        Log.LogMessage("CalculateTemperature", "DampedMode - CCD has arrived at setpoint temperature: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
+
+                        coolerAtTemperature = true;
+                    }
+                    break;
+
+                case COOLERMODE_NEVER_GETS_TO_SETPOINT: // Return a higher temperature than calculated from Newton's equation
+                    double adjustedSetpoint = ((targetCcdTemperature - heatSinkTemperature) * (1.0 - COOLER_NEVER_GETS_TO_SETPOINT_REDUCTION_FACTOR)) + heatSinkTemperature; // Calculate the adjusted setpoint temperature that misses the real setpoint by the COOLER_NEVER_GETS_TO_SETPOINT_REDUCTION_FACTOR
+                    double adjustedNewtonsEquationTemperature = adjustedSetpoint + (ccdStartTemperature - adjustedSetpoint) * Math.Exp(-coolerConstant * currentCoolingTimeFraction * overallTimeToSetpoint); // Calculate the "adjusted" Newton's equation temperature
+
+                    ccdTemperature = adjustedNewtonsEquationTemperature - coolerOffsetSigned; // Calculate the adjusted CCD temperature
+                    ccdTemperature = ConstrainToTemperatureRange(ccdTemperature, ccdStartTemperature, adjustedSetpoint);  // Constrain the CCD temperature to the required temperature range
+
+                    Log.LogMessage("CalculateTemperature", "MissesSetpoint - Newton's equation temperature:{0:+0.00;-0.00;' '0.00}, Adjusted Newton's equation temperature:{1:+0.00;-0.00;' '0.00}, Adjusted setpoint temperature:{2:+0.00;-0.00;' '0.00}, CCD temperature: {3:+0.00;-0.00;' '0.00}, Last power: {4:0}%, Cooler running time: {5:0.00}", newtonsEquationTemperature, adjustedNewtonsEquationTemperature, adjustedSetpoint, ccdTemperature, coolerPower, currentCoolingTimeFraction * overallTimeToSetpoint);
+
+                    // Check whether we have arrived close enough to the setpoint to say that we have fully arrived:
+                    if (Math.Abs(adjustedNewtonsEquationTemperature - adjustedSetpoint) < COOLER_SETPOINT_REACHED_OFFSET) // This test must be based on Newton's equation temperature rather than the adjusted CCD temperature
+                    {
+                        ccdTemperature = adjustedSetpoint;
+                        Log.LogMessage("CalculateTemperature", @"CCD has arrived at ""missed setpoint"" temperature: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
+
+                        coolerAtTemperature = true;
+                    }
+                    break;
+
+                default: // Warning message for future camera driver developers that they need to update this code if a new curve is introduced
+                    Log.LogMessage("Timer", "Unknown cooler mode: {0} - Cooling cycle will be abandoned.", coolerMode);
+                    coolerAtTemperature = true; // Terminate this cooling cycle
+                    break;
+            }
         }
 
         #endregion
@@ -952,7 +959,12 @@ namespace ASCOM.Simulator
                 {
                     coolerTimer = new System.Timers.Timer();
                     coolerTimer.Elapsed += new ElapsedEventHandler(coolerTimer_Elapsed);
-                    coolerTimer.Interval = Math.Min(coolerTimeToSetPoint * 10.0, 1000); // Set a cooler timer period from the required time to temperature. This ensures at least 100 CCD temperature changes during a full cooling cycle from ambient to maximum cooler temperature
+
+                    // Calculate the cooler timer period from the "time to temperature" ensuring at least 200 CCD temperature updates will occur during a full cooling cycle from ambient to maximum cooler temperature
+                    double coolerTimeInterval = Math.Min(coolerTimeToSetPoint * 5.0, 500);
+                    coolerTimeInterval = Math.Max(1.0, coolerTimeInterval); // Ensure that the interval time is at least 1ms, 0 is an invalid value
+                    coolerTimer.Interval = coolerTimeInterval; // Set the cooler timer interval
+
                     coolerTimer.Enabled = false;
                     Log.LogMessage("Connected", "Cooler timer created");
                 }
@@ -1005,7 +1017,7 @@ namespace ASCOM.Simulator
                     ccdStartTemperature = ccdTemperature; // Use the current CCD temperature as the start point
                     coolerTargetChangedTime = DateTime.Now; // Save the time that the cooler was started
 
-                    if (ccdTemperature != setCcdTemperature) coolerAtTemperature = false; // We are not at the setpoint so a cooling cycle is required
+                    if (ccdTemperature != targetCcdTemperature) coolerAtTemperature = false; // We are not at the setpoint so a cooling cycle is required
                     else coolerAtTemperature = true; // We are at the setpoint so no cooling cycle is required
 
                     coolerTimer.Enabled = true; // Start the cooler timer if its not already running
@@ -1497,43 +1509,68 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't set SetCCDTemperature when not connected");
                 CheckCapability("SetCCDTemperature", canSetCcdTemperature);
-                CheckRange("SetCCDTemperature", heatSinkTemperature - coolerDeltaTMax, value, heatSinkTemperature); // Make sure the set value is in the supported range
+                CheckRange("SetCCDTemperature", coolerSetPointMinimum, value, heatSinkTemperature); // Make sure the set value is in the supported range
                 Log.LogMessage("SetCCDTemperature", "set {0}", value);
-                if (value != setCcdTemperature)
+                if (value != setCcdTemperature) // Only try and do something if the new setpoint is different to the current value
                 {
                     setCcdTemperature = value; // Record the new setpoint temperature
 
-                    // Calculate the Newton's equation constant
-                    if (value < heatSinkTemperature) // Temperature has been set below ambient
-                    {
-                        coolerAtTemperature = false; // Indicate that the cooler is not yet at its setpoint
-                    }
-                    else // The setpoint temperature has been set to ambient
-                    {
-                        if (coolerResetToAmbient) // The new setpoint is ambient and we are configured to start at ambient so, by definition, we are already at the setpoint
-                        {
-                            coolerPower = 0.0; // Set the cooler power to 0.0 because it is at ambient temperature
-                            coolerAtTemperature = true;  // Indicate that the cooler is at its setpoint
-                        }
-                        else
-                        {
-                            coolerAtTemperature = false; // Indicate that the cooler is not yet at its setpoint
-                        }
-                    }
-
-                    if (coolerResetToAmbient) // Reset the CCD start temperature if required by configuration
+                    // Reset the CCD start temperature if required by configuration
+                    if (coolerResetToAmbient)
                     {
                         ccdTemperature = heatSinkTemperature;
-                        Log.LogMessage("SetCCDTemperature", "CCD temperature forced to ambient due to configuration: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
+                        Log.LogMessage("SetCCDTemperature", "Starting the cooling cycle with the CCD temperature reset to ambient: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
                     }
                     else
                     {
-                        Log.LogMessage("SetCCDTemperature", "CCD temperature left unchanged due to configuration: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
+                        Log.LogMessage("SetCCDTemperature", "Starting the cooling cycle with the CCD at its current temperature: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
                     }
 
-                    coolerTargetChangedTime = DateTime.Now; // We have a new setpoint so start a new cooling cycle
-                    ccdStartTemperature = ccdTemperature; // Set the start temperature as the current CCD temperature
-                    coolerTimer.Enabled = true; // Make sure that the cooler timer is running
+                    // Set the cooler target temperature, usually the setpoint - but may not be the setpoint if this is beyond the cooler's capacity... the target temperature will never exceed the cooler's capacity regardless of the setpoint temperature
+                    targetCcdTemperature = setCcdTemperature; // Set a default value
+                    if (targetCcdTemperature < (heatSinkTemperature - coolerDeltaTMax)) // Target temperature is below what the cooler can achieve
+                    {
+                        Log.LogMessage("SetCCDTemperature", "Target CCD temperature < Maximum supported: {0:+0.00;-0.00;' '0.00}, Resetting to: {1}", targetCcdTemperature, heatSinkTemperature - coolerDeltaTMax);
+                        targetCcdTemperature = heatSinkTemperature - coolerDeltaTMax; // Set the target temperature to the maximum that the cooler can achieve.
+                        if (ccdTemperature == targetCcdTemperature) // We are already at the target temperature so flag this
+                        {
+                            Log.LogMessage("SetCCDTemperature", "CCD temperature is already at target, setting coolerAtTemperature to True");
+                            coolerAtTemperature = true;  // Indicate that the cooler is at its setpoint
+                        }
+                        else // Not at the new target so start a cooling cycle
+                        {
+                            Log.LogMessage("SetCCDTemperature", "CCD temperature is not at target, setting coolerAtTemperature to False");
+                            coolerAtTemperature = false;
+                        }
+                    }
+                    else // Target temperature is above what the cooler can achieve
+                    {
+                        // Handle setting temperature to ambient
+                        if (value < heatSinkTemperature) // Temperature has been set below ambient
+                        {
+                            coolerAtTemperature = false; // Indicate that the cooler is not yet at its setpoint
+                        }
+                        else // The setpoint temperature has been set to ambient
+                        {
+                            if (coolerResetToAmbient) // The new setpoint is ambient and we are configured to start at ambient so, by definition, we are already at the setpoint
+                            {
+                                coolerPower = 0.0; // Set the cooler power to 0.0 because it is at ambient temperature
+                                coolerAtTemperature = true;  // Indicate that the cooler is at its setpoint
+                            }
+                            else
+                            {
+                                coolerAtTemperature = false; // Indicate that the cooler is not yet at its setpoint
+                            }
+                        }
+                    }
+
+                    // Start a new cooling cycle if required
+                    if (ccdTemperature != targetCcdTemperature)
+                    {
+                        coolerTargetChangedTime = DateTime.Now; // Record the time that the cooling cycle started
+                        ccdStartTemperature = ccdTemperature; // Set the start temperature as the current CCD temperature
+                        coolerTimer.Enabled = true; // Make sure that the cooler timer is running
+                    }
                 }
             }
         }
@@ -2182,6 +2219,9 @@ namespace ASCOM.Simulator
                 coolerFluctuation = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_CoolerFluctuations, "Cooler", COOLER_FLUCTUATIONS_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
                 coolerOvershoot = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_CoolerOvershoot, "Cooler", COOLER_OVERSHOOT_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
                 coolerPowerUpState = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CoolerPowerUpState, "Cooler", COOLER_POWER_UP_STATE_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+                coolerUnderDampedCycles = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_CoolerUnderDampedCycles, "Cooler", COOLER_UNDERDAMPED_CYCLES_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+                coolerSetPointMinimum = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_CoolerSetPointMinimum, "Cooler", COOLER_SETPOINT_MINIMUM_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+                coolerGraphRange = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CoolerGraphRange, "Cooler", COOLER_GRAPH_RANGE_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
 
                 // read properties from profile
                 Log.Enabled = Convert.ToBoolean(profile.GetValue(s_csDriverID, "Trace", string.Empty, "false"), CultureInfo.InvariantCulture);
@@ -2257,6 +2297,13 @@ namespace ASCOM.Simulator
                     }
                 }
             }
+
+            // Validate the cooler mode, if invalid select the default and write this back to the profile.
+            if (!coolerModes.Contains(coolerMode))
+            {
+                coolerMode = COOLER_COOLERMODE_DEFAULT;
+                SaveCoolerToProfile();
+            }
         }
 
         /// <summary>
@@ -2278,6 +2325,9 @@ namespace ASCOM.Simulator
                 profile.WriteValue(s_csDriverID, STR_CoolerOvershoot, coolerOvershoot.ToString(CultureInfo.InvariantCulture), "Cooler");
                 profile.WriteValue(s_csDriverID, STR_SetCCDTemperature, setCcdTemperature.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_CoolerPowerUpState, coolerPowerUpState.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerUnderDampedCycles, coolerUnderDampedCycles.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerSetPointMinimum, coolerSetPointMinimum.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerGraphRange, coolerGraphRange.ToString(CultureInfo.InvariantCulture), "Cooler");
             }
         }
 
@@ -2412,11 +2462,17 @@ namespace ASCOM.Simulator
             cameraState = CameraStates.cameraIdle;
 
             // Set initial cooler control variables
+            targetCcdTemperature = setCcdTemperature; // Set the default value
+            if (targetCcdTemperature < (heatSinkTemperature - coolerDeltaTMax)) // Ensure that the cooler target temperature cannot go below the maximum achievable, event if the setpoint is set below what is achievable
+            {
+                targetCcdTemperature = heatSinkTemperature - coolerDeltaTMax;
+            }
+
             coolerPower = coolerOn ? 100.0 : 0.0; // Set the cooler power depending on whether or not the cooler is on 
             ccdTemperature = heatSinkTemperature; // Set the CCD temperature to ambient
             ccdStartTemperature = heatSinkTemperature; // Set the cooling cycle start temperature to ambient
             coolerAtTemperature = !coolerOn; // Indicate whether we are at temperature as the inverse of whether or not the cooler is on
-            coolerConstant = CalculateCoolerConstant(coolerTimeToSetPoint); // Set the initial cooling constant in case the camera is just loaded and switched on
+            coolerConstant = CalculateCoolerConstant(coolerTimeToSetPoint, coolerDeltaTMax); // Set the initial cooling constant in case the camera is just loaded and switched on
 
             LogCoolerVariables(); // Write the cooler variables to the driver log
 
@@ -2709,6 +2765,111 @@ namespace ASCOM.Simulator
             imageData[x, y, 2] = (bmp.GetPixel(x, y).B);
         }
 
+        /// <summary>
+        /// Write all cooler control variable values to the log file
+        /// </summary>
+        internal void LogCoolerVariables()
+        {
+            Log.LogMessage("LogCoolerVariables", "Heat sink temperature: {0}", heatSinkTemperature);
+            Log.LogMessage("LogCoolerVariables", "Set point temperature: {0}", setCcdTemperature);
+            Log.LogMessage("LogCoolerVariables", "Target temperature: {0}", targetCcdTemperature);
+            Log.LogMessage("LogCoolerVariables", "Maximum delta T: {0}", coolerDeltaTMax);
+            Log.LogMessage("LogCoolerVariables", "Set point minimum temperature: {0}", coolerSetPointMinimum);
+            Log.LogMessage("LogCoolerVariables", "Time to set point: {0}", coolerTimeToSetPoint);
+            Log.LogMessage("LogCoolerVariables", "Reset to ambient: {0}", coolerResetToAmbient);
+            Log.LogMessage("LogCoolerVariables", "Cooler enabled at power up: {0}", coolerPowerUpState);
+            Log.LogMessage("LogCoolerVariables", "Cooler fluctuation: {0}", coolerFluctuation);
+            Log.LogMessage("LogCoolerVariables", "Temperature overshoot: {0}", coolerOvershoot);
+            Log.LogMessage("LogCoolerVariables", "Cooler under damped cycles: {0}", coolerUnderDampedCycles);
+            Log.LogMessage("LogCoolerVariables", "Cooler mode: {0}", coolerMode);
+        }
+
+        /// <summary>
+        /// Constrain the supplied temperature to a specified range
+        /// </summary>
+        /// <param name="Temperature">Temperature to be constrained</param>
+        /// <param name="FirstBound">First temperature range bound</param>
+        /// <param name="SecondBound">Second temperature range bound</param>
+        /// <returns>Constrained temperature</returns>
+        private double ConstrainToTemperatureRange(double Temperature, double FirstBound, double SecondBound)
+        {
+            double retVal;
+            retVal = Temperature; // Initialise the return value with the supplied temperature
+
+            if (FirstBound == SecondBound) // The bounds are identical so only one possible valid value
+            {
+                if (Temperature != FirstBound) // Temperature is outside the valid value
+                {
+                    retVal = FirstBound;
+                    Log.LogMessage("Timer", @"CCD temperature {0:+0.00;-0.00;' '0.00} constrained to the range {1:+0.00;-0.00;' '0.00} to {2:+0.00;-0.00;' '0.00}", Temperature, FirstBound, SecondBound);
+                }
+            }
+            else if (FirstBound < SecondBound) // First is less than second
+            {
+                if (Temperature < FirstBound) // Temperature is lower than first bound
+                {
+                    retVal = FirstBound;
+                    Log.LogMessage("Timer", @"CCD temperature {0:+0.00;-0.00;' '0.00} constrained to the range {1:+0.00;-0.00;' '0.00} to {2:+0.00;-0.00;' '0.00}", Temperature, FirstBound, SecondBound);
+                }
+                if (Temperature > SecondBound) // Temperature is higher than second bound
+                {
+                    retVal = SecondBound;
+                    Log.LogMessage("Timer", @"CCD temperature {0:+0.00;-0.00;' '0.00} constrained to the range {1:+0.00;-0.00;' '0.00} to {2:+0.00;-0.00;' '0.00}", Temperature, FirstBound, SecondBound);
+                }
+            }
+            else // Second is less than first
+            {
+                if (Temperature > FirstBound) // Temperature is higher than first bound
+                {
+                    retVal = FirstBound;
+                    Log.LogMessage("Timer", @"CCD temperature {0:+0.00;-0.00;' '0.00} constrained to the range {1:+0.00;-0.00;' '0.00} to {2:+0.00;-0.00;' '0.00}", Temperature, FirstBound, SecondBound);
+                }
+                if (Temperature < SecondBound) // Temperature is lower than second bound
+                {
+                    retVal = SecondBound;
+                    Log.LogMessage("Timer", @"CCD temperature {0:+0.00;-0.00;' '0.00} constrained to the range {1:+0.00;-0.00;' '0.00} to {2:+0.00;-0.00;' '0.00}", Temperature, FirstBound, SecondBound);
+                }
+            }
+
+            return retVal;
+        }
+
+        /// <summary>
+        /// Returns the cooling constant that will get the CCD temperature within a specified distance of the endpoint temperature in the given time
+        /// </summary>
+        /// <param name="TimeToSetpoint">Time in which the change has to be effected</param>
+        /// <returns>Cooling constant to use in Newton's cooling equation</returns>
+        /// <remarks>
+        /// Newton's cooling equation for this cooler gives temperature (T) as a function of time (t):                     T = SetpointTemperature + (StartTemperature - SetpointTemperature) * e^(-k*t)   ...1
+        /// Which can also be shown as:                                                                                    T = SetpointTemperature + TemperatureChange * e^(-k*t)   ...2
+        /// Rearranging gives the cooling constant k as:                                                                   k = -ln[(T - SetpointTemperature) / TemperatureChange] / t   ...3    Differing bracket styles just used to aid clarity
+        ///
+        /// The cooling equation shows that the temperature exponentially approaches the setpoint and thus requires infinite time to achieve the final temperature, assuming infinite precision observation and calculation.
+        /// To work round this, in the simulator we define that the setpoint is reached when the CCD temperature reaches a small offset (COOLER_SETPOINT_REACHED_OFFSET) from the setpoint e.g. 0.1C.
+        /// 
+        /// When the cooler is at the offset temperature (setpoint + COOLER_SETPOINT_REACHED_OFFSET, equation 3 gives:     k = -ln[(TemperatureAtoffset - SetpointTemperature) / TemperatureChange] / TimeToOfffset   ...4    
+        /// 
+        /// "TemperatureAtoffset" in equation 4 can be replaced with (SetpointTemperature + SetPointReachedOffset) giving: k = -ln[(SetpointTemperature + SetPointReachedOffset - SetpointTemperature) / TemperatureChange] / TimeToOfffset   ...5
+        /// which simplifies to:                                                                                           k = -ln[SetPointReachedOffset / TemperatureChange] / t   ...6
+        ///
+        /// Equation 6 allows the cooling constant to be calculated that will cause the cooler reach a temperature of "SetPointReachedOffset" degrees from the setpoint in "t" seconds when cooling over "TemperatureChange" degrees
+        /// 
+        /// For this cooler, "TemperatureCahnge" is taken as the maximum delta T that the cooler can achieve, which can only be changed through configuration. This means that the cooler shows realistic behaviour where 
+        /// small temperature changes are achieved more rapidly than larger changes.
+        ///
+        /// The COOLER_SETPOINT_REACHED_OFFSET variable determines how far the cooler proceeds down the cooling curve before declaring that it has arrived. Larger values make use of the earlier part of the curve which 
+        /// give a slower descent towards the setpoint and less time inching in towards it. Smaller values use more of the curve, which results in a quicker descent to the vicinity of the setpoint and then a longer 
+        /// time spent inching towards the exact value. The value of 0.1sec has been determined experimentally to provide realistic behaviour.
+        ///    
+        ///</remarks>
+        internal double CalculateCoolerConstant(double TimeToSetpoint, double coolerDeltaTMax)
+        {
+            double coolingConstant = -Math.Log(COOLER_SETPOINT_REACHED_OFFSET / coolerDeltaTMax) / TimeToSetpoint;
+            Log.LogMessage("CoolingConstant", "Cooler setpoint offset: {0:0.0}, Maximum delta T: {1:+0.00;-0.00;' '0.00}, Time to setpoint: {2:0.0}, Cooling constant: {3}", COOLER_SETPOINT_REACHED_OFFSET, coolerDeltaTMax, TimeToSetpoint, coolingConstant);
+
+            return coolingConstant;
+        }
+
         #endregion
 
         #region Checks
@@ -2761,22 +2922,6 @@ namespace ASCOM.Simulator
                 Log.LogMessage(identifier, "Not supported for interface version 1");
                 throw new System.NotSupportedException(identifier + " (not supported for Interface V1)");
             }
-        }
-
-        /// <summary>
-        /// Write all cooler control variable values to the log file
-        /// </summary>
-        internal void LogCoolerVariables()
-        {
-            Log.LogMessage("LogCoolerVariables", "Heat sink temperature: {0}", heatSinkTemperature);
-            Log.LogMessage("LogCoolerVariables", "Set point temperature: {0}", setCcdTemperature);
-            Log.LogMessage("LogCoolerVariables", "Maximum delta T: {0}", coolerDeltaTMax);
-            Log.LogMessage("LogCoolerVariables", "Time to set point: {0}", coolerTimeToSetPoint);
-            Log.LogMessage("LogCoolerVariables", "Reset to ambient: {0}", coolerResetToAmbient);
-            Log.LogMessage("LogCoolerVariables", "Cooler enabled at power up: {0}", coolerPowerUpState);
-            Log.LogMessage("LogCoolerVariables", "Cooler fluctuation: {0}", coolerFluctuation);
-            Log.LogMessage("LogCoolerVariables", "Temperature overshoot: {0}", coolerOvershoot);
-            Log.LogMessage("LogCoolerVariables", "Cooler mode: {0}", coolerMode);
         }
 
         #endregion

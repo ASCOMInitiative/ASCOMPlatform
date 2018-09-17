@@ -236,6 +236,8 @@ namespace ASCOM.Simulator
             coolerSetupForm.InitProperties(camera); // Initialise the form
 
             coolerSetupForm.ShowDialog(); // Display the form - Any changes will be saved by the form when its OK button is pressed.
+            coolerSetupForm.Dispose();
+            coolerSetupForm = null;
         }
     }
 }

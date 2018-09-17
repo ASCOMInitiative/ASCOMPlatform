@@ -21,14 +21,18 @@
 	      		an emergency Platform removal tool that should only be used if normal Platform uninstall options fail.</listItem>
 	      		<listItem>RemoveASCOM now clears out more Platform installation debris than previously.</listItem>
 	      		<listItem>Telescope Simulator - New capability to specify the simulator start up position from these options: Home position, Park position, Configured startup position and last used position.</listItem>
-	      		<listItem>Camera Simulator - Can now be configured to deliver a variety of cooling behaviours (accessed through a new button on the setup form):
+	      		<listItem>Camera Simulator - Can now be configured through a new button on the setup form to deliver a variety of cooling behaviours and features:
 					<list class="bullet">
 			      		<listItem>Immediately goes to setpoint.</listItem>
 			      		<listItem>Newton's cooling curve to the setpoint.</listItem>
 			      		<listItem>Setpoint overshoot on cooling and undershoot on warming.</listItem>
 			      		<listItem>Setpoint is never reached.</listItem>
+			      		<listItem>Underdamped oscillatory behaviour.</listItem>
 			      		<listItem>Time to reach setpoint can be configured.</listItem>
 			      		<listItem>Setpoint and heat sink temperature random fluctuations can be configured.</listItem>
+			      		<listItem>The cooler configuration dialogue includes a graphical representation of the configured cooling curve.</listItem>
+			      		<listItem>If the setpoint is set in a configurable temperature range beyond the lowest achievable temperature, the cooler will bottom out at the lowest achievable temperature. 
+			      		An InvalidValueException will be thrown if an attempt is made to set the CCD temperature beyond the configured lowest setable temperature.</listItem>
 			  		</list>
 	      		</listItem>
 	  		</list>

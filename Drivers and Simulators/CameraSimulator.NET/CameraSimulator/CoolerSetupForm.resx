@@ -120,4 +120,11 @@
   <metadata name="CoolingHelp.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="LblGraph.Text" xml:space="preserve">
+    <value>Red dotted lines     Setpoint and Time to temperature
+Green band            ±0.5 C of the setpoint
+Orange line             Lowest achievable CCD temperature
+Red band               Unreachable temperatures
+Red solid line          Lowest setable CCD temperature</value>
+  </data>
 </root>
