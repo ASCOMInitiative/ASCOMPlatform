@@ -361,7 +361,7 @@
             this.LblSetpointMinimum.Name = "LblSetpointMinimum";
             this.LblSetpointMinimum.Size = new System.Drawing.Size(134, 13);
             this.LblSetpointMinimum.TabIndex = 28;
-            this.LblSetpointMinimum.Text = "Lowest setable setpoint (C)";
+            this.LblSetpointMinimum.Text = "Lowest settable setpoint (C)";
             // 
             // LblGraph
             // 

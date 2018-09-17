@@ -84,7 +84,7 @@ namespace ASCOM.Simulator
                     "Sets the camera's default setpoint temperature." + DOUBLE_SPACE +
                     "This value is set and returned through the Camera.SetCCDTemperature property." + DOUBLE_SPACE +
                     "Must be less than or equal to [AMBIENT] temperature." + DOUBLE_SPACE +
-                    "Must be greater than or equal to [LOWEST_SETABLE]."
+                    "Must be greater than or equal to [LOWEST_SETTABLE]."
                     );
                 CoolingHelp.SetHelpString(LblCCDSetPoint, CoolingHelp.GetHelpString(NumCCDSetPoint)); // Add help text to the control label
 
@@ -181,8 +181,8 @@ namespace ASCOM.Simulator
                     "The \"Always at setpoint\" mode goes immediately to the setpoint when the cooler is turned on or the setpoint is changed." + DOUBLE_SPACE +
                     string.Format("The \"Never gets to setpoint\" mode uses Newton's cooling equation but under reports the CCD temperature by {0:P0} of the difference between ambient and the setpoint.", Camera.COOLER_NEVER_GETS_TO_SETPOINT_REDUCTION_FACTOR) + DOUBLE_SPACE +
                     "NOTES:" + SINGLE_SPACE +
-                    "1) Setting the temperature below the maximum achievable temperature but above the lowest setable temperature will result in the CCD temperature stabilising at the maximum achievable temperature." + SINGLE_SPACE +
-                    "2) Attempting to set the CCD temperature below the lowest setable temperature will result in an InvalidValueException."
+                    "1) Setting the temperature below the maximum achievable temperature but above the lowest settable temperature will result in the CCD temperature stabilising at the maximum achievable temperature." + SINGLE_SPACE +
+                    "2) Attempting to set the CCD temperature below the lowest settable temperature will result in an InvalidValueException."
                     );
 
                 // Set help text for the RESET TO AMBIENT checkbox
@@ -667,7 +667,7 @@ namespace ASCOM.Simulator
                             break;
                     }
                 }
-                else // We are displaying the full temperature range down to the lowest setable temperature
+                else // We are displaying the full temperature range down to the lowest settable temperature
                 {
                     double minimumMultiple = RoundDown((double)NumSetpointMinimum.Value, ROUNDING_FACTOR); // Calculate and set a round number for the low end of the temperature axis
                     CoolingChart.ChartAreas[0].AxisY.Minimum = minimumMultiple;
@@ -722,7 +722,7 @@ namespace ASCOM.Simulator
                 closeToSetpointStripline.ToolTip = string.Format("Temperature range ±0.5C of the set CCD temperature ({0:0.0}C)", NumCCDSetPoint.Value);
                 if (closeToSetpointStripline.StripWidth > 0.0) CoolingChart.ChartAreas[0].AxisY.StripLines.Add(closeToSetpointStripline); // Only include the strip line if it has greater than zero width
 
-                // Create a strip line to mark the temperature range that is setable but not achievable
+                // Create a strip line to mark the temperature range that is settable but not achievable
                 StripLine unachievableTemperatureRangeStripline = new StripLine(); // Create the strip line instance
                 unachievableTemperatureRangeStripline.Interval = 0; // Indicate that it does not repeat
                 unachievableTemperatureRangeStripline.IntervalOffset = (double)NumSetpointMinimum.Value; // Set the start temperature of the strip line
@@ -774,7 +774,7 @@ namespace ASCOM.Simulator
                 annLowest.LineDashStyle = ChartDashStyle.Solid;
                 annLowest.LineWidth = 2;
                 annLowest.Name = "LowestPossibleSetpoint";
-                annLowest.ToolTip = string.Format("Lowest setable CCD temperature ({0:0.0}C), beyond this InvalidValueExceptions are thrown", NumSetpointMinimum.Value);
+                annLowest.ToolTip = string.Format("Lowest settable CCD temperature ({0:0.0}C), beyond this InvalidValueExceptions are thrown", NumSetpointMinimum.Value);
                 CoolingChart.Annotations.Add(annLowest);
 
                 // Add a vertical line at the time at which the setpoint is achieved

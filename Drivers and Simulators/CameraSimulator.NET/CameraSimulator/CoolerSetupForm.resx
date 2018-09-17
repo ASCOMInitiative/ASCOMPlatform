@@ -125,6 +125,6 @@
 Green band            ±0.5 C of the setpoint
 Orange line             Lowest achievable CCD temperature
 Red band               Unreachable temperatures
-Red solid line          Lowest setable CCD temperature</value>
+Red solid line          Lowest settable CCD temperature</value>
   </data>
 </root>
