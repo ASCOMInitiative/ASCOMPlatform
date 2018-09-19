@@ -297,11 +297,11 @@ namespace ASCOM.Simulator
             // 
             this.buttonSlewStop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonSlewStop.Font = new System.Drawing.Font("Wingdings 2", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.buttonSlewStop.Image = ((System.Drawing.Image)(resources.GetObject("buttonSlewStop.Image")));
             this.buttonSlewStop.Location = new System.Drawing.Point(41, 40);
             this.buttonSlewStop.Name = "buttonSlewStop";
             this.buttonSlewStop.Size = new System.Drawing.Size(32, 31);
             this.buttonSlewStop.TabIndex = 2;
-            this.buttonSlewStop.Text = "Ä";
             this.buttonSlewStop.UseVisualStyleBackColor = true;
             this.buttonSlewStop.Click += new System.EventHandler(this.ButtonSlewStop_Click);
             // 

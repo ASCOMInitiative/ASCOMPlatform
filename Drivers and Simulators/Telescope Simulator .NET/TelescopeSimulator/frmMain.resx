@@ -117,10 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="buttonSlewStop.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        Qk1mCQAAAAAAADYAAAAoAAAAHAAAABwAAAABABgAAAAAAAAAAAASCwAAEgsAAAAAAAAAAAAA2tra2tra
+        2tra2tra2tra2tra2trav7+8zczyvLz/vLv/vLv/vLv/vLv/vLv/vLv/vLv/vLv/vLz/zMz0vb272tra
+        2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2traubixtrXwICD/AAD/AAD/AAD/AAD/AAD/
+        AAD/AAD/AAD/AAD/AAD/HBz/srLyuLix2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2trauLix
+        tbXyHh7/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/Ghr/srL0uLix2tra2tra2tra
+        2tra2tra2tra2tra2tra2trauLiyt7fyHBz/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/
+        AAD/AAD/AAD/Fxf/tLP0uLix2tra2tra2tra2tra2tra2tra2traubmyt7bvHx7/AAD/AAD/AAD/AAD/
+        AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/Ghr/s7LyuLix2tra2tra2tra2tra2tra
+        uLixt7byHx7/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/
+        AAD/Ghr/s7P0uLex2tra2tra2traubixtrXyHBz/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/
+        AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/GBj/sbH0uLew2travr67trXwHh7/AAD/AAD/AAD/
+        AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/GRn/
+        srLyvr660tL6Gxv/AAD/AAD/DQ3/Bwf/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/
+        AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/Fxf/zs37wsH/AAD/ERH/h4f/39//0dH/TU3/AAD/AAD/Pj7/
+        r67/JSX/AAD/AAD/DAz/iYn/x8f/mZn/GBj/AAD/QED/raz/ISH/AAD/AAD/AAD/AAD/urr/wcD/AAD/
+        MjL/4N//np7/wMD/7u3/LS3/AAD/Xl3/////Nzf/AAD/AgL/pKT/8vL/pqb/5eX/v7//AQH/V1f/////
+        MTH/AAD/AAD/AAD/AAD/urr/wcD/AAD/BQX/HR3/AAD/EhL///7/d3f/AAD/Vlb/9PP/MzP/AAD/R0f/
+        /v7/Tk7/AAD/Li7/9vb/TEz/RET/7+7/Hh7/AAD/AAD/AAD/AAD/urr/wcD/AAD/AAD/AAD/AAD/bm7/
+        ////UVH/AAD/Vlb/9PP/MTH/AAD/lZX/19f/AAD/AAD/AAD/uLj/m5v/RUX/9/b/nZ3/eXn/KSn/AAD/
+        AAD/urr/wcD/AAD/AAD/AAD/hYX/////hob/BAT/AAD/V1b/9PP/Ly//AAD/tbX/ubn/AAD/AAD/AAD/
+        l5f/t7f/TEv/+/r/3t7/6ur/5+b/NDT/AAD/urr/wcD/AAD/AwP/lJT/////b27/AAD/AAD/AAD/V1b/
+        9PP/Ly//AAD/tbX/urr/AAD/AAD/AAD/mJj/t7j/VVX/7ez/MjH/Hx//4N//tbT/AQH/tbT/wMD/AAD/
+        YmH/////Wlr/AAD/AAD/AAD/AAD/VlX/9PP/MDD/AAD/l5f/29v/AQH/AAD/AAD/vb3/nZ3/TEv/7u3/
+        JSX/AAD/h4b/5eT/Bwf/sbD/v77/AAD/pKT/4+L/AAD/AAD/EBD/AAD/AAD/Skn/8/L/IyP/AAD/RET/
+        ////VFT/AAD/MzP//Pz/T0//REP/8fD/ISH/AAD/ubj/y8r/AwP/s7P/wL//AAD/UlL/+vr/pKT/wMD/
+        k5P/Rkb/i4v/urn/////pqb/i4v/Li7/o6P/9/f/qKj/6ur/yMj/AwP/Tk7/////vLz/v7//////W1v/
+        AAD/ubn/wsH/AAD/AAD/ZWX/1NT/0M//TUz/Wlr/wsL/vLz/srH/v7//wsL/Ozv/Bwf/lJT/0tL/pKT/
+        Hx//AAD/MzL/q6v/u7v/uLj/ZGT/AAD/AAD/urr/0tL5HR3/AAD/AAD/Bwf/BQT/AAD/AAD/AAD/AAD/
+        AAD/AAD/AAD/AAD/AAD/AAD/AwP/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/GBj/zc36v7+7t7bw
+        Hx//AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/
+        AAD/AAD/AAD/Ghr/s7Lyvr672trauLiytrXwHR3/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/
+        AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/GRn/srLyuLix2tra2tra2trauLiyuLfwISD/AAD/
+        AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/HBz/tLTyuLix
+        2tra2tra2tra2tra2traubmyuLfuISD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/
+        AAD/AAD/AAD/AAD/HBz/tLTxuLix2tra2tra2tra2tra2tra2tra2traubiyuLfwHR3/AAD/AAD/AAD/
+        AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/GRn/s7Pyubmx2tra2tra2tra2tra2tra2tra
+        2tra2tra2traubmytbXwICD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/HBz/srLy
+        uLix2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2traubmyt7btIyP/AAD/AAD/AAD/AAD/AAD/
+        AAD/AAD/AAD/AAD/AAD/Hh7/s7LwuLix2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra
+        2trav7+8zc3xv7//v77/v77/v77/v77/v77/v77/v77/v77/v7//zc3zvr672tra2tra2tra2tra2tra
+        2tra2tra
+</value>
+  </data>
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAA0AMDAQAAEABABoBgAA1gAAACAgEAABAAQA6AIAAD4HAAAYGBAAAQAEAOgBAAAmCgAAEBAQAAEA
