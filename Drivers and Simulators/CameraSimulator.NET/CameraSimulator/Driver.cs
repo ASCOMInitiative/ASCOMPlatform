@@ -306,11 +306,13 @@ namespace ASCOM.Simulator
             }
         }
 
+        [ComRegisterFunction]
         private static void RegisterASCOM(Type t)
         {
             RegUnregASCOM(true);
         }
 
+        [ComUnregisterFunction]
         private static void UnregisterASCOM(Type t)
         {
             RegUnregASCOM(false);
