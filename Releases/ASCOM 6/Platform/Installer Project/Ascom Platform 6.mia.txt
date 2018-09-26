@@ -24,8 +24,7 @@ Comment: Create the path to the setup log and create the ASCOM directory, which 
 Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$ASCOM" (WAIT)
  
 Comment: Create the correct log name depending on whether we are installing or uninstalling
-Convert Variable REMOVE to UPPER case
-if Variable REMOVE Equals TRUE
+if Variable REMOVE Equals (Ignore Case) TRUE
   Set Variable SETUPLOG to $MYDOCUMENTS$ASCOM\ASCOMPlatform6Remove$DISKSPACE$.txt
 else
   Set Variable SETUPLOG to $MYDOCUMENTS$ASCOM\ASCOMPlatform6Install$DISKSPACE$.txt
@@ -40,9 +39,28 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Engine cache: $ENGINECACHE$ (a
 Write into Text File $SETUPLOG$ from Value $TIME$ MSI file: $MSIFILE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value   (at end of file)
  
+Comment: Run the RemoveASCOM program if requested on the command line
+if Variable CMDLINE Contains (Ignore Case) /RemoveASCOM
+  Write into Text File $SETUPLOG$ from Value $TIME$ $TITLE$ Command line contains /RemoveASCOM : $CMDLINE$ (at end of file)
+  Comment: Run the RemoveASCOM program
+  Run Program $SUPPORTDIR$\RemoveAscom.exe $REVISIONCODE$ (WAIT, get result into variable ERROROLD)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $ERROROLD$ - RemoveASCOM (at end of file)
+   
+  if Variable ERROROLD Equals 99
+    Comment: User ran ForceRemove but chose NOT to remove the Platform so give them a message and terminate the installer
+    Write into Text File $SETUPLOG$ from Value $TIME$ Terminating install. (at end of file)
+    MessageBox: Unable to uninstall current Platform, You chose not to force Platform removal and this installer will close when you click "OK".
+  else
+    Comment: We've forcibly removed the Platform and Profile store so now we just terminate ready for another installation
+    Write into Text File $SETUPLOG$ from Value $TIME$ Platform uninstaller run completed, (at end of file)
+    MessageBox: Platform Removed, The ASCOM Platform has been removed, the installer will now termiinate. Please run the installer again, without command line parameters, to install the Platform normally.
+  end
+  Comment: Terminate Installation
+  GoTo Label: End of Script
+end
+ 
 Comment: Set current leap second value
 Set Variable LEAPSECONDS to 37
-Comment: Initialise a variable to hold the current earth rotation log file file path
  
 Comment: Initialize setup variables
 Set Variable ASCOMERROR to 
@@ -58,6 +76,14 @@ Set Variable UNINSTALLER to
 Set Variable SUCCESS to 
 Set Variable SUCCESS64 to 
 Set Variable LASTERROR to 
+Set Variable INSTALLCACHEEXISTS to 
+Set Variable INSTALLCACHEDIRECTORY to 
+ 
+Comment: Component installed state variables
+Set Variable INSTALL_PLATFORM to 
+Set Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP to 
+Set Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP to 
+Set Variable DISPLAY_USER_GUIDE to 
  
 Comment: Set up values for a 32bit OS
 Set Variable PROGRAMFILES32 to 
@@ -69,6 +95,18 @@ Set Variable COMMONFILES64 to
 Set Variable WIN64MODE to 
 Set Variable PROGRAMDATA to 
 Get System Setting Windows in 64 bit Mode into WIN64MODE
+ 
+Comment: Determine whether install is from the installer executable or from the Windows control panel application installation / modification dialogue
+Set Variable INSTALLMETHOD to 
+if Variable SETUPPATH Contains (Ignore Case) \ProgramData
+  Set Variable INSTALLMETHOD to CONTROLPANEL
+  Comment: Message to be displayed when repairing an installation using the Windows Control Panel
+  Set Variable REPAIR_MESSAGE to If this repair fails, try using the Platform installer to repair the installation
+else
+  Set Variable INSTALLMETHOD to EXECUTABLE
+  Comment: Message to be displayed when repairing an installation using the Platform installer
+  Set Variable REPAIR_MESSAGE to If this repair fails, uninstall the Platform, reboot and re-run the installer
+end
  
 Comment: Set up values for OS version information
 Set Variable OSCURRENTVERSION to 
@@ -88,6 +126,12 @@ Set Variable FRAMEWORKPATH to
 Set Variable FRAMEWORK2 to v2.0.50727
 Set Variable FRAMEWORK4 to v4.0.30319
 Set Variable FRAMEWORK to $FRAMEWORK4$
+ 
+Comment: Define components
+Define Component: ASCOM Platform Options
+Define Component: ASCOM Platform Options\Install Diagnostics shortcut on desktop
+Define Component: ASCOM Platform Options\Install Profile Explorer shortcut on desktop
+Define Component: ASCOM Platform Options\Display user guide when installation is complete
  
 Comment: Read the framework root value from the OS and set FRAMEWORKPATH to the full path to the executables
 Read Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\InstallRoot into FRAMEWORKROOT
@@ -120,6 +164,16 @@ Get Folder Location Start Menu->Programs Group into SHORTCUTFILES
 if Variable SHORTCUTFILESALL Equals 
   Set Variable SHORTCUTFILESALL to $SHORTCUTFILES$
 end
+ 
+Comment: Setup up shortcut locations
+if Variable ALLUSERS Equals (Ignore Case) TRUE
+  Set Variable SHORTCUTFOLDER to $SHORTCUTFILESALL$$ASCOMSTARTMENU$
+  Set Variable DESKTOPFOLDER to $DESKTOPDIRALL$
+else
+  Set Variable SHORTCUTFOLDER to $SHORTCUTFILES$$ASCOMSTARTMENU$
+  Set Variable DESKTOPFOLDER to $DESKTOPDIR$
+end
+ 
 Get Folder Location System->Desktop Directory into DESKTOPDIR
 Get Common Folder Location System->Desktop Directory into DESKTOPDIRALL
 Get Folder Location System->Windows Directory into WINDIR
@@ -154,7 +208,11 @@ Comment: Set the Target directory and start menu folder
 Set Variable TARGETDIR to $PROGRAMFILES$ASCOM\Platform 6
 Set Variable STARTMENU to $TITLE$
  
+Comment: Set the installation cache location
+Set Variable INSTALLCACHEDIRECTORY to $PROGRAMDATA$$REVISIONCODE$
+ 
 Comment: Create the start of the installation log
+Write into Text File $SETUPLOG$ from Value $TIME$ Product code: $PRODUCTCODE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Revision code: $REVISIONCODE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 if Variable NATIVE_ENGINE Equals TRUE
@@ -181,6 +239,8 @@ Read from Text File $SUPPORTDIR$\MasterPlatformVersion.txt into Variable PLATFOR
 Read from Text File $SUPPORTDIR$\MasterPlatformVersion.txt into Variable PLATFORMVERSIONSPNUMBER
  
 Write into Text File $SETUPLOG$ from Value  (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install method: $INSTALLMETHOD$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Command line: $CMDLINE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Win64Mode: $WIN64MODE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Setup Path: $SETUPPATH$  (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Support Directory: $SUPPORTDIR$  (at end of file)
@@ -202,6 +262,7 @@ Write into Text File $SETUPLOG$ from Value $TIME$ ASCOMStartMenu: $ASCOMSTARTMEN
 Write into Text File $SETUPLOG$ from Value $TIME$ AllUsers: $ALLUSERS$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Target Directory: $TARGETDIR$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Documents Directory: $MYDOCUMENTS$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install cache directory: $INSTALLCACHEDIRECTORY$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Platform Version: $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$.$PLATFORMVERSIONSPNUMBER$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
@@ -225,23 +286,17 @@ if Variable CHECKSYSTEM not Equals TRUE
 end
 [END REGION]
  
-[DEFINE REGION: Check/Install Application Pre-Requisites]
- 
 [DEFINE REGION: Check Application Pre-Requisites]
 Comment: Check setup pre-requisites
 Set Variable PREREQ to FALSE
 Set Variable PRELIST to 
 Set Variable DOTNET40CLIENT_X86 to 
-[compiler if Variable BUILDMODE not Equals PATCH]
 Include Script: checkmsi31
 Include Script: checknet351
 Include Script: checknet4client_x86
 Include Script: checkvc1410_25017_x86
 Include Script: checkvc1410_25017_x64
-[compiler end]
-[END REGION]
  
-[DEFINE REGION: Install Application Pre-Requisites]
 Comment: Install setup pre-requisites
 if Variable PREREQ not Equals FALSE
   if Variable DOTNET40CLIENT_X86 Equals FALSE
@@ -253,175 +308,104 @@ if Variable PREREQ not Equals FALSE
     Terminate Installation
   end
   if Variable WIZARD Equals NEXT
-    Comment: Check for .NET 4.0
-    if Variable DOTNET40CLIENT_X86 Equals FALSE
-      MessageBox: Pre-requisites, We are sorry but you must install Framework 4 before continuing with this install.
-      Terminate Installation
-    end
-    Comment: Check for .NET 3.5 SP1
+    Comment: Check whether the user enabled .NET 3.5 SP1 while the dialogue was open. If still missing then terminate the install
+    Include Script: checknet351
     if Variable NET351 Equals FALSE
-      MessageBox: Pre-requisites, We are sorry but this installer does not contain any pre-requisites except for Windows Installer 3.1.$NEWLINE$$NEWLINE$Please install other pre-requisites manually.
+      MessageBox: Pre-requisites, .NET 3.5 is not installed, please enable or install it and then re-run this installer.
       Terminate Installation
     end
   end
-  Display Dialog: progressprereq, use as progress dialog (non-modal)
-  [compiler if Variable BUILDMODE not Equals PATCH]
-  [compiler end]
-  Hide Dialog
 end
 [END REGION]
  
-[END REGION]
- 
-[DEFINE REGION: Setup User Interview]
-Comment: Hide the non-modal dialogue put up earlier while we check for pre-requisites.
-Hide Dialog
- 
+[DEFINE REGION: Main Setup Dialogue]
 if Variable MAINTENANCE Equals TRUE
   Write into Text File $SETUPLOG$ from Value $TIME$ Mode: Maintenance (at end of file)
   GoTo Label: Maintenance
 else
-  [compiler if Variable BUILDMODE not Equals PATCH]
   Comment: First Time Install
-  Write into Text File $SETUPLOG$ from Value $TIME$ Mode: New Install (at end of file)
-  [compiler end]
+  Write into Text File $SETUPLOG$ from Value $TIME$ Mode: Install new version (at end of file)
 end
  
 label: Welcome Dialog
+Show Component: ASCOM Platform Options\Display user guide when installation is complete
 Display Dialog: welcome, wait for dialog to return (modal)
+Comment: Exit Setup when install is cancelled
 if Variable WIZARD Equals CANCEL
-  GoTo Label: Main Install
-else
-  if Variable WIZARD Equals NEXT
-    GoTo Label: Main Install
-  end
+  Write into Text File $SETUPLOG$ from Value $TIME$ Installation cancelled at user request (Main welcome) (at end of file)
+  Terminate Installation
 end
-[compiler if Variable BUILDMODE not Equals PATCH]
-label: License Check
-Comment: Display Dialog: licensecheck, wait for dialog to return (modal)
-if Variable WIZARD Equals BACK
-  GoTo Label: Welcome Dialog
-else
-  if Variable WIZARD Equals CANCEL
-    GoTo Label: Main Install
-  end
-end
+GoTo Label: Main Install
+ 
 label: ReadMe Information
 Display Dialog: readme, wait for dialog to return (modal)
-if Variable WIZARD Equals BACK
-  GoTo Label: Welcome Dialog
-else
-  if Variable WIZARD Equals CANCEL
-    GoTo Label: Main Install
-  end
+Comment: Exit Setup if install is cancelled
+if Variable WIZARD Equals CANCEL
+  Write into Text File $SETUPLOG$ from Value $TIME$ Installation cancelled at user request (ReadMe) (at end of file)
+  Terminate Installation
 end
-label: User Registration
-Comment: Display Dialog: registration, wait for dialog to return (modal)
-if Variable WIZARD Equals BACK
-  GoTo Label: ReadMe Information
-else
-  if Variable WIZARD Equals CANCEL
-    GoTo Label: Main Install
-  end
+Comment: Return to the welcome screen to continue
+GoTo Label: Welcome Dialog
+[END REGION]
+ 
+[DEFINE REGION: Maintenance Dialogue]
+label: Maintenance
+Comment: Display maintenance dialogue
+Display Dialog: maintenance, wait for dialog to return (modal)
+Comment: Exit Setup if cancelled
+if Variable WIZARD Equals (Ignore Case) CANCEL
+  Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance cancelled at user request (Maintenance) (at end of file)
+  Terminate Installation
 end
-label: Setup Type
-Comment: Display Dialog: setuptype, wait for dialog to return (modal)
-if Variable WIZARD Equals BACK
-  GoTo Label: User Registration
-else
-  if Variable WIZARD Equals CANCEL
-    GoTo Label: Main Install
-  end
-end
-Comment: TO-DO: Customize your minimum setup here
-if Variable MINIMUM Equals TRUE
-else
-  if Variable COMPLETE Equals TRUE
-  end
-end
-label: Custom Setup
-Comment: Display Dialog: componentstree (if variable PERSONALIZED is TRUE), wait for dialog to return (modal)
-if Variable WIZARD Equals BACK
-  GoTo Label: Setup Type
-else
-  if Variable WIZARD Equals CANCEL
-    GoTo Label: Main Install
-  end
-end
-label: Destination Directory
-Comment: Display Dialog: destination, wait for dialog to return (modal)
-if Variable WIZARD Equals BACK
-  GoTo Label: Custom Setup
-else
-  if Variable WIZARD Equals CANCEL
-    GoTo Label: Main Install
-  end
-end
-label: Start Menu
-Comment: Display Dialog: startmenu, wait for dialog to return (modal)
-if Variable WIZARD Equals BACK
-  GoTo Label: Destination Directory
-else
-  if Variable WIZARD Equals CANCEL
-    GoTo Label: Main Install
-  end
-end
-[compiler end]
-label: Start Installation
-Comment: Display Dialog: startinstallation, wait for dialog to return (modal)
-if Variable WIZARD Equals BACK
-  [compiler if Variable BUILDMODE not Equals PATCH]
-  GoTo Label: Start Menu
-  [compiler else]
-  GoTo Label: Welcome Dialog
-  [compiler end]
-else
-  GoTo Label: Main Install
+Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance user choice - Modify: $MODIFY$ ,Repair: $REPAIR$, Remove: $REMOVE$ (at end of file)
+ 
+if Variable REPAIR Equals (Ignore Case) TRUE
+  Set Variable PROGRESSTEXT to Repairing Platform 6...
 end
  
-label: Maintenance
-Comment: Maintenance Install/Uninstall
-Set Variable REPAIR to TRUE
-wizard loop
-Display Dialog: maintenance, wait for dialog to return (modal)
+if Variable MODIFY Equals (Ignore Case) TRUE
+  Hide Component: ASCOM Platform Options\Display user guide when installation is complete
+  Display Dialog: welcome, wait for dialog to return (modal)
+  Comment: Exit Setup when install is cancelled
+  if Variable WIZARD Equals CANCEL
+    Write into Text File $SETUPLOG$ from Value $TIME$ Installation cancelled at user request (Modify) (at end of file)
+    Terminate Installation
+  end
+  Set Variable PROGRESSTEXT to Maintaining Platform 6...
 end
-Convert Variable REPAIR to UPPER case
-Convert Variable REMOVE to UPPER case
-if Variable REMOVE Equals TRUE
+ 
+if Variable REMOVE Equals (Ignore Case) TRUE
   Set Variable ABORT to FALSE
   Display Dialog: ConfirmRemove, wait for dialog to return (modal)
-  if Variable ABORT Equals TRUE
-    Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance - Repair: $REPAIR$, Remove: $REMOVE$ - Uninstall cancelled (at end of file)
+  if Variable ABORT Equals (Ignore Case) TRUE
+    Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance - Modify: $MODIFY$ ,Repair: $REPAIR$, Remove: $REMOVE$ - Uninstall cancelled (at end of file)
     Terminate Installation
   end
   Set Variable PROGRESSTEXT to Removing Platform 6...
-  Set Variable REPAIR to FALSE
 end
-if Variable REPAIR Equals TRUE
-  Set Variable PROGRESSTEXT to Repairing Platform 6...
-  Set Variable REMOVE to FALSE
-end
-Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance - Repair: $REPAIR$, Remove: $REMOVE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance after processing - Modify: $MODIFY$ ,Repair: $REPAIR$, Remove: $REMOVE$ (at end of file)
 [END REGION]
  
-[DEFINE REGION: Main Installation and Uninstallation]
+[DEFINE REGION: Prepare for Installation or Uninstallation]
 label: Main Install
-Comment: Exit Setup if Wizard Loop cancelled
-if Variable WIZARD Equals CANCEL
-  Terminate Installation
-end
+ 
+Comment: Get the state of the installable components
+Get Component ASCOM Platform Options Selection State into Variable INSTALL_PLATFORM
+Get Component ASCOM Platform Options\Install Diagnostics shortcut on desktop Selection State into Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP
+Get Component ASCOM Platform Options\Install Profile Explorer shortcut on desktop Selection State into Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP
+Get Component ASCOM Platform Options\Display user guide when installation is complete Selection State into Variable DISPLAY_USER_GUIDE
+Write into Text File $SETUPLOG$ from Value $TIME$ Platform Installation Options - $INSTALL_PLATFORM$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Desktop Diagnostics Shortcut - $INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Profile Explorer Shortcut - $INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Display User Guide - $DISPLAY_USER_GUIDE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value   (at end of file)
  
 Comment: Prepare to install
-if Variable ALLUSERS Equals TRUE
-  Set Variable SHORTCUTFOLDER to $SHORTCUTFILESALL$$ASCOMSTARTMENU$
-  Set Variable DESKTOPFOLDER to $DESKTOPDIRALL$
-else
-  Set Variable SHORTCUTFOLDER to $SHORTCUTFILES$$ASCOMSTARTMENU$
-  Set Variable DESKTOPFOLDER to $DESKTOPDIR$
-end
 Display Dialog: progress, use as progress dialog (non-modal)
+[END REGION]
  
-Comment: Remove previous versions both MSI install and Native install
+[DEFINE REGION: Remove Previous Platform 6 install if present]
+Comment: Ensure that we remove previous Platform 6 versions built using either MSI or Native install
 Set Variable REQUIRESUPGRADE to FALSE
 Comment: Native install requires upgrade
 if Variable RECOMMENDEDUPGRADE Equals TRUE
@@ -432,15 +416,6 @@ if Variable NEEDSUPGRADE Equals TRUE
   Set Variable REQUIRESUPGRADE to TRUE
 end
  
-Comment: Install pre-requisites included in this installer
-Include Script: setupmsi31
-Set Variable MYPROGRESS to 3
-Include Script: setupvc1410_25017_x64
-Set Variable MYPROGRESS to 6
-Include Script: setupvc1410_25017_x86
-Set Variable MYPROGRESS to 9
- 
-[DEFINE REGION: Remove previous Platform  if we are upgrading]
 if Variable REQUIRESUPGRADE Equals TRUE
   Set Variable PROGRESSTEXT to Uninstalling current Platform...
    
@@ -452,10 +427,13 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Write into Text File $SETUPLOG$ from Value $TIME$ New Windows error reporting UI state - $WINERRORUISTATENEW$ (at end of file)
    
   Comment: Report location of our uninstaller
-  Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{8961E141-B307-4882-ABAD-77A3E76A40C1}\UninstallString into UNINSTALLER
+  Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$PRODUCTCODE$\UninstallString into UNINSTALLER
   Set Variable MYPROGRESS to 10
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling old Platform 6 - $UNINSTALLER$ (at end of file)
+   
+  Comment: Run uninstaller
   Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
+   
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $UNINSTALLCODE$ - Completed uninstallation (at end of file)
   Set Variable MYPROGRESS to 19
    
@@ -502,13 +480,74 @@ if Variable REQUIRESUPGRADE Equals TRUE
 end
 [END REGION]
  
+[DEFINE REGION: Remove Previous Platforms 4 and 5 if present]
+Comment: Remove Platform 5 and 5.5 if we are in initial install mode and not Maintenance or Upgrade modes
+if Variable MAINTENANCE not Equals TRUE
+  Comment: Only try and remove Platforms 4 and  5 if we are not upgrading a previous Platform 6 install
+  if Variable REQUIRESUPGRADE Equals FALSE
+    Write into Text File $SETUPLOG$ from Value $TIME$ Straight forward install - removing old Platform 4 or 5 if it exists (at end of file)
+    Comment: Check for Platform 4.1
+    Set Variable UNINSTALLER41 to 
+    Set Variable PLATFORM4FOUND to FALSE
+    Comment: Check for Platform 4.1
+    Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\ASCOM Platform 4.1\UninstallString into UNINSTALLER41
+    if Variable UNINSTALLER41 not Equals 
+      Set Variable PLATFORM4FOUND to TRUE
+    end
+    Write into Text File $SETUPLOG$ from Value $TIME$ Platform 4.1 - $UNINSTALLER41$ (at end of file)
+    Comment: Check whether Platform 5 is actually installed, only try and uninstall if present! Test is presence of Platform 5 Uninstall string in registry
+    Set Variable UNINSTALLER5A to 
+    Set Variable PLATFORM5FOUND to FALSE
+    Comment: Check for Platform 5a
+    Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{075F543B-97C5-4118-9D54-93910DE03FE9}\UninstallString into UNINSTALLER5A
+    if Variable UNINSTALLER5A not Equals 
+      Set Variable PLATFORM5FOUND to TRUE
+    end
+    Write into Text File $SETUPLOG$ from Value $TIME$ Platform 5A - $UNINSTALLER5A$ (at end of file)
+    Comment: Check for Platform 5b
+    Set Variable UNINSTALLER5B to 
+    Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{14C10725-0018-4534-AE5E-547C08B737B7}\UninstallString into UNINSTALLER5B
+    if Variable UNINSTALLER5B not Equals 
+      Set Variable PLATFORM5FOUND to TRUE
+    end
+    Write into Text File $SETUPLOG$ from Value $TIME$ Platform 5B - $UNINSTALLER5B$ (at end of file)
+    Comment: Run the uninstaller if either platform is found
+    Set Variable RC to 999
+    if Variable PLATFORM5FOUND Equals TRUE
+      Set Variable PROGRESSTEXT to Removing Platform 5...
+      Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling Platform 5... (at end of file)
+      Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
+      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM  (at end of file)
+      Set Variable PROGRESSTEXT to Installing Platform 6...
+    else
+      if Variable PLATFORM4FOUND Equals TRUE
+        Set Variable PROGRESSTEXT to Removing Platform 4...
+        Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling Platform 4... (at end of file)
+        Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM  (at end of file)
+        Set Variable PROGRESSTEXT to Installing Platform 6...
+      else
+        Comment: No previous Platform on this machine so UninstallASCOM must run in order to set the correct security ACL on the ASCOM registry profile store
+        Set Variable PROGRESSTEXT to Preparing ASCOM Profile Store...
+        Write into Text File $SETUPLOG$ from Value $TIME$ First time install, preparing ASCOM Profile Store (at end of file)
+        Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Set ACL on ASCOM Profile Store (at end of file)
+        Set Variable PROGRESSTEXT to First time install - Installing Platform 6...
+      end
+    end
+    if Variable RC not Equals 0
+      MessageBox: Profile Migration, An error has occured during Profile migration, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Yahoo group.
+      Set Variable ASCOMERROR to $RC$
+    end
+  end
+end
+[END REGION]
+ 
 [DEFINE REGION: Uninstall items installed by this installer]
  
 if Variable REMOVE Equals TRUE
    
-  Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling platform (at end of file)
-   
-  [DEFINE REGION: Components to be uininstalled only from 64bit systems]
+  [DEFINE REGION: Remove 64bit components]
    
   Comment: Remove 64bit native images and 64bit component COM registration if necessary
   if Variable WIN64MODE Equals TRUE
@@ -563,6 +602,7 @@ if Variable REMOVE Equals TRUE
    
   [END REGION]
    
+  [DEFINE REGION: Remove 32bit components]
   Comment: Remove 32bit components
   Set Variable MYPROGRESS to 55
   Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
@@ -637,988 +677,1000 @@ if Variable REMOVE Equals TRUE
   Comment: Unregister assemblies
   Set Variable MYPROGRESS to 80
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Astrometry - v5.5.6.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering Astrometry 5.5.6.0 (at end of file)
   Unregister assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Astrometry - v6.0.0.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering Astrometry 6.0.0.0 (at end of file)
   Unregister assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Exceptions - v1.1.0.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering Exceptions 1.1.0.0 (at end of file)
   Unregister assembly ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Exceptions- v6.0.0.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering Exceptions 6.0.0.0 (at end of file)
   Unregister assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable MYPROGRESS to 85
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Interfaces - v1.0.0.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering Interfaces 1.0.0.0 (at end of file)
   Unregister assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Internal.FusionLib - v1.0.0.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering FusionLib 1.0.0.0 (at end of file)
   Unregister assembly ASCOM.Internal.FusionLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Utilities - v5.5.6.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering Utilities 5.5.6.0 (at end of file)
   Unregister assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Utilities - v6.0.0.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering Utilities 6.0.0.0 (at end of file)
   Unregister assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Cache - v6.0.0.0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering Cache 6.0.0.0 (at end of file)
   Unregister assembly ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
    
   Comment: Unregister MasterInterfaces TypeLib
   Set Variable PROGRESSTEXT to Unregistering ASCOM Master Interfaces Typelib
+  Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering ASCOM Master Interfaces typelib (at end of file)
   Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe -u "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Unregister ASCOM Master Interfaces typelib (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Unregistered ASCOM Master Interfaces typelib (at end of file)
   Set Variable MYPROGRESS to 90
+  [END REGION]
    
   Set Variable PROGRESSTEXT to Uninstalling Platform...
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Uninstalling Platform 6 (at end of file)
   Apply Uninstall (get result into variable SUCCESS)
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstall return code: $SUCCESS$ (at end of file)
   if Variable SUCCESS not Equals ERROR
     if Variable SUCCESS not Equals CANCEL
       Set Variable PROGRESSTEXT to Removing pinned assemblies
-      Remove Unpinned Assemblies
       Write into Text File $SETUPLOG$ from Value $TIME$ Removing unpinned assemblies (at end of file)
+      Remove Unpinned Assemblies
+      Write into Text File $SETUPLOG$ from Value $TIME$ Removed unpinned assemblies (at end of file)
     end
   end
+   
   Set Variable MYPROGRESS to 100
   MessageBalloon: , 
   Set Variable PROGRESSTEXT to Finished uninstalling Platform 6
-  Write into Text File $SETUPLOG$ from Value $TIME$ Finished uninstalling Platform (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Finished uninstalling Platform 6 (at end of file)
    
+  Comment: Bypass the installation code and go to the finish dialogue
+  GoTo Label: Finish Setup
 end
  
 [END REGION]
  
-[DEFINE REGION: Perform First Time or Maintenance Installation]
+[DEFINE REGION: Install Application Pre-Requisites if required]
+Comment: Install pre-requisites included in this installer
+Include Script: setupmsi31
+Set Variable MYPROGRESS to 3
+Include Script: setupvc1410_25017_x64
+Set Variable MYPROGRESS to 6
+Include Script: setupvc1410_25017_x86
+Set Variable MYPROGRESS to 9
  
-if Variable REMOVE not Equals TRUE
-  Comment: At this point there should not be any Platform 6 Installaware install on the system either because previous version is uninstalled or this is a new P6 install
-  Comment: System restore can screw up installaware under some circumstances by leaving a partially populated directory in ProgramData
-  Comment: The following code removes this, if it exists to ensure that this IA install is successful
-  Comment: This has to be done in the native engine because variables are not expanded to their values in MSI mode - another IA UGH!
-  Set Variable NATIVE_ENGINE to TRUE
-  Set Variable INSTALLCACHEEXISTS to 
-  Set Variable INSTALLCACHEDIRECTORY to 
-  Set Variable INSTALLCACHEDIRECTORY to $PROGRAMDATA$$REVISIONCODE$
-  Does Folder Exist $INSTALLCACHEDIRECTORY$ (get result into variable INSTALLCACHEEXISTS)
-  if Variable INSTALLCACHEEXISTS Equals TRUE
-    Comment: Cache directory does exist so remove it
-    Write into Text File $SETUPLOG$ from Value $TIME$ Removing install cache found at $INSTALLCACHEDIRECTORY$ (at end of file)
-    Recursively Delete Files $INSTALLCACHEDIRECTORY$
-  else
-    Write into Text File $SETUPLOG$ from Value $TIME$ Install cache not found - $INSTALLCACHEDIRECTORY$ (at end of file)
+[END REGION]
+ 
+[DEFINE REGION: Install New Platform 6 version]
+Comment: ***** Start of Platform Installation *****
+Set Variable PROGRESSTEXT to Installing $TITLE$
+Write into Text File $SETUPLOG$ from Value   (at end of file)
+ 
+Comment: Create the main ASCOM folder in Common Files
+Create Folder $COMMONFILES$\ASCOM
+ 
+[DEFINE REGION: Platform 5 files]
+Comment: Type libraries
+Install Files ..\..\..\..\Interfaces\Master Interfaces\AscomMasterInterfaces.tlb to $COMMONFILES$\ASCOM\Interface
+Install Files ..\..\..\..\Interfaces\HelperPIAs\Helper.tlb to $COMMONFILES$\ASCOM\Interface
+Install Files ..\..\..\..\Interfaces\HelperPIAs\Helper2.tlb to $COMMONFILES$\ASCOM\Interface
+Install Files ..\..\..\..\Interfaces\IObjectSafety.tlb to $COMMONFILES$\ASCOM\Interface
+Comment: Type library installer
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\RegTlb.exe to $COMMONFILES$\ASCOM\Platform\Internal
+Comment: Redistributable support files
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\mscomctl.OCX to $WINSYSDIR$ (Never Overwrite)
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\MSComm32.Ocx to $WINSYSDIR$ (Never Overwrite)
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\msvbvm60.dll to $WINSYSDIR$ (Never Overwrite)
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\comdlg32.ocx to $WINSYSDIR$ (Never Overwrite)
+Comment: Platform 5 assemblies
+Comment: ASCOM.DriverAccess 1.0.5 is not copied because it is replaced with 1.0.6 in Platform 6
+Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\policy.1.0.ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\Platform\v5.5
+Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\DriverAccess.config to $COMMONFILES$\ASCOM\Platform\v5.5
+Install Assembly ..\..\..\..\Interfaces\Master Interfaces\ASCOM.Interfaces.dll to Global Assembly Cache
+Comment: Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.dll to Global Assembly Cache
+Install Assembly ..\..\..\..\Interfaces\HelperPIAs\ASCOM.Helper.dll to Global Assembly Cache
+Install Assembly ..\..\..\..\Interfaces\HelperPIAs\ASCOM.Helper2.dll to Global Assembly Cache
+Comment: Platform 5 simulators
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\CCDSimulator.dll to $COMMONFILES$\ASCOM\Camera
+Install Files ..\..\..\..\Drivers and Simulators\CCD Simulator\UNURANReadMe.txt to $COMMONFILES$\ASCOM\Camera
+Install Files ..\..\..\..\Drivers and Simulators\CCD Simulator\unuran-0.6.0.dll to $COMMONFILES$\ASCOM\Camera
+Install Files ..\..\..\..\Drivers and Simulators\Dome Simulator\DomeSim.exe to $COMMONFILES$\ASCOM\Dome
+Install Files ..\..\..\..\Drivers and Simulators\ASCOMDome\ASCOMDome.exe to $COMMONFILES$\ASCOM\Dome
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Astro32.dll to $COMMONFILES$\ASCOM\Dome
+Install Files ..\..\..\..\Drivers and Simulators\Filter Wheel Simulator\FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel
+Install Files ..\..\..\..\Drivers and Simulators\Focus Simulator\FocusSim.exe to $COMMONFILES$\ASCOM\Focuser
+Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator\SwitchSim.exe to $COMMONFILES$\ASCOM\Switch
+Install Files ..\..\..\..\Drivers and Simulators\Scope Simulator\ScopeSim.exe to $COMMONFILES$\ASCOM\Telescope
+Install Files ..\..\..\..\Drivers and Simulators\Scope Simulator\ScopeSimHelp.htm to $COMMONFILES$\ASCOM\Telescope
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Astro32.dll to $COMMONFILES$\ASCOM\Telescope
+Install Files ..\..\..\..\Pipe\Pipe.exe to $COMMONFILES$\ASCOM\Telescope
+Install Files ..\..\..\..\Pipe\PipeHubHelp.htm to $COMMONFILES$\ASCOM\Telescope
+Install Files ..\..\..\..\Pipe\Hub.exe to $COMMONFILES$\ASCOM\Telescope
+Install Files ..\..\..\..\POTH\Source\POTH\POTH.exe to $COMMONFILES$\ASCOM\Telescope
+Install Files ..\..\..\..\POTH\Source\POTH\POTHHelp.htm to $COMMONFILES$\ASCOM\Telescope
+[END REGION]
+ 
+[DEFINE REGION: Platform 5.5 files]
+Comment: Updated helpers that use Platform 5.5 support
+Install Files ..\..\..\..\ASCOM.Utilities\VB6Helper\Helper.dll to $COMMONFILES$\ASCOM
+Install Files ..\..\..\..\ASCOM.Utilities\VB6Helper2\Helper2.dll to $COMMONFILES$\ASCOM
+Comment: New files in Platform 5.5
+Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.dll to Global Assembly Cache
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
+Comment: Updated ASCOM.Exceptions v1.1 for Platform 5.5
+Comment: Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.dll to Global Assembly Cache
+Comment: Copy Utilities and DriverAccess to .Net directory to ensure Inno installers that test for this run OK
+Comment: The ASCOM.Utilities.dll file MUST be the original from Platform 5.5 because at least 1 installer checks the file version of the installed file!
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\.net
+Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\.net
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\These files are not in use - ReadMe.txt to $COMMONFILES$\ASCOM\.net
+[END REGION]
+ 
+[DEFINE REGION: Platform 6 files]
+Comment: Install exceptions redirection policy
+Install Files ..\..\..\..\ASCOM Redirection Policies\policy.1.0.ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6.0
+Install Files ..\..\..\..\ASCOM Redirection Policies\policy.1.1.ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6.0
+Install Files ..\..\..\..\ASCOM Redirection Policies\ExceptionsPolicy.xml to $COMMONFILES$\ASCOM\Platform\v6.0
+Comment: Updated Utiities 5.5.6 to replace 5.5.1 that access registry rather than XML files, otherwise unchanged
+Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
+Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
+Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\policy.5.5.ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v5.5
+Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\UtilitiesPolicy.xml to $COMMONFILES$\ASCOM\Platform\v5.5
+Comment: Updated driver access v1.0.6 to improve compatibility with Platform 5 drivers
+Install Assembly ..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
+Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
+Comment: Platform 6 core components
+Install Assembly ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
+Install Files ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $WINDIR$\Symbols\dll
+Install Assembly ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
+Comment: Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\Platform\v6
+Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $WINDIR$\Symbols\dll
+Install Assembly ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to Global Assembly Cache
+Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6
+Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb to $WINDIR$\Symbols\dll
+Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
+Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $WINDIR$\Symbols\dll
+Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
+Comment: Tim Long Platform 6 components
+Install Assembly ..\..\..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to Global Assembly Cache
+Install Files ..\..\..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb to $WINDIR$\Symbols\dll
+Install Assembly ..\..\..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to Global Assembly Cache
+Install Files ..\..\..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.pdb to $WINDIR$\Symbols\dll
+Install Assembly ..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to Global Assembly Cache
+Install Files ..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb to $WINDIR$\Symbols\dll
+Comment: Platform 6 Astrometry
+Install Assembly ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
+Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb to $WINDIR$\Symbols\dll
+Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v6
+Install Assembly ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
+Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
+Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\Platform 5.5 Redirection Policy\policy.5.5.ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v5.5
+Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\Platform 5.5 Redirection Policy\AstrometryPolicy.xml to $COMMONFILES$\ASCOM\Platform\v5.5
+Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll to $COMMONFILES$\ASCOM\Astrometry
+Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb to $COMMONFILES$\ASCOM\Astrometry
+Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll to $COMMONFILES$\ASCOM\Astrometry
+Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb to $COMMONFILES$\ASCOM\Astrometry
+Install Files ..\..\..\..\NOVAS\NOVAS-3\CioFile\cio_ra.bin to $COMMONFILES$\ASCOM\Astrometry
+Install Files ..\..\..\..\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH to $COMMONFILES$\ASCOM\Astrometry
+Install Files ..\..\..\..\NOVAS\NOVAS-C\Win32\Release\NOVAS-C.dll to $COMMONFILES$\ASCOM\Astrometry
+Install Files ..\..\..\..\NOVAS\NOVAS-C\Win32\Release\NOVAS-C.pdb to $COMMONFILES$\ASCOM\Astrometry
+Install Files ..\..\..\..\NOVAS\NOVAS-C\x64\Release\NOVAS-C64.dll to $COMMONFILES$\ASCOM\Astrometry
+Install Files ..\..\..\..\NOVAS\NOVAS-C\x64\Release\NOVAS-C64.pdb to $COMMONFILES$\ASCOM\Astrometry
+Comment: Platform 6 SP1 Astrometry
+Install Files ..\..\..\..\NOVAS\NOVAS-31\NOVAS3\Win32\Release\NOVAS31.dll to $COMMONFILES$\ASCOM\Astrometry
+Install Files ..\..\..\..\NOVAS\NOVAS-31\NOVAS3\Win32\Release\NOVAS31.pdb to $COMMONFILES$\ASCOM\Astrometry
+Install Files ..\..\..\..\NOVAS\NOVAS-31\NOVAS3\x64\Release\NOVAS31-64.dll to $COMMONFILES$\ASCOM\Astrometry
+Install Files ..\..\..\..\NOVAS\NOVAS-31\NOVAS3\x64\Release\NOVAS31-64.pdb to $COMMONFILES$\ASCOM\Astrometry
+Comment: Install Files ..\..\..\..\NOVAS\NOVAS-3\CioFile\cio_ra.bin to $COMMONFILES$\ASCOM\Astrometry
+Comment: Platform 6 Internal
+Install Files ..\..\..\..\ASCOM.Utilities\MigrateProfile\bin\Release\MigrateProfile.exe to $COMMONFILES$\ASCOM\Platform\Internal
+Install Files ..\..\..\..\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $COMMONFILES$\ASCOM\Platform\Internal
+Install Assembly ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to Global Assembly Cache
+Install Files ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb to $WINDIR$\Symbols\dll
+Install Assembly ..\..\..\..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll to Global Assembly Cache
+Install Files ..\..\..\..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.pdb to $WINDIR$\Symbols\dll
+Comment: Platform 6 Tools
+Install Files ..\..\..\..\ShowPlatformVersion.vbs to $COMMONFILES$\ASCOM
+Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $WINDIR$\Symbols\dll
+Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe to $TARGETDIR$\Tools
+Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $TARGETDIR$\Tools
+Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml to $TARGETDIR$\Tools
+Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\Ceres.chby to $TARGETDIR$\Tools
+Install Files ..\..\..\..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.exe to $TARGETDIR$\Tools\DriverConnect64
+Install Files ..\..\..\..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.pdb to $TARGETDIR$\Tools\DriverConnect64
+Install Files ..\..\..\..\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.exe to $TARGETDIR$\Tools\DriverConnect32
+Install Files ..\..\..\..\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.pdb to $TARGETDIR$\Tools\DriverConnect32
+Install Files ..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $WINDIR$\Symbols\dll
+Install Files ..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.exe to $TARGETDIR$\Tools
+Install Files ..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $TARGETDIR$\Tools
+Install Files ..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.xml to $TARGETDIR$\Tools
+Comment: Platform 6 Simulators
+Comment: Camera simulator
+Install Files ..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
+Install Files ..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
+Install Files ..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\M42-800x600.jpg to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
+Install Files ..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\Testcard_F.jpg to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
+Comment: FilterWheel simulator
+Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.FilterWheelSim.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.Simulator.FilterWheel.dll to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.Simulator.FilterWheel.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+Comment: Focuser simulator
+Install Files ..\..\..\..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
+Install Files ..\..\..\..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
+Comment: SafetyMonitor simulator
+Install Files ..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.dll to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
+Install Files ..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.pdb to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
+Comment: Telescope simulator
+Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.Simulator.Telescope.dll to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.Simulator.Telescope.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+Comment: Rotator simulator
+Install Files ..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+Install Files ..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+Install Files ..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.dll to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+Install Files ..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+Comment: Dome simulator
+Install Files ..\..\..\..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.dll to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
+Install Files ..\..\..\..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.pdb to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
+Comment: Platform Update Checker
+Install Files ..\..\..\..\CheckForUpdates.js to $TARGETDIR$\Tools
+[END REGION]
+ 
+[DEFINE REGION: Platform 6.1 files]
+Comment: Video utilities
+Install Assembly ..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to Global Assembly Cache
+Install Files ..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.pdb to $WINDIR$\Symbols\dll
+Install Files ..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to $COMMONFILES$\ASCOM\Platform\v6.1
+Comment: Video Simulator
+Install Files ..\..\..\..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\ASCOM.Simulator.Video.dll to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
+Install Files ..\..\..\..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\ASCOM.Simulator.Video.pdb to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\DirectShowLib\DirectShowLib-2005.dll to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
+Install Files ..\..\..\..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\Resources\simulator.pix to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\Resources
+Comment: Video Utilities - Native Helpers
+Install Files ..\..\..\..\ASCOM.Utilities.Video.NativeHelpers\Release\Win32\ASCOM.NativeVideo32.dll to $COMMONFILES$\ASCOM\VideoUtilities
+Install Files ..\..\..\..\ASCOM.Utilities.Video.NativeHelpers\Release\Win32\ASCOM.NativeVideo32.pdb to $COMMONFILES$\ASCOM\VideoUtilities
+Install Files ..\..\..\..\ASCOM.Utilities.Video.NativeHelpers\Release\X64\ASCOM.NativeVideo64.dll to $COMMONFILES$\ASCOM\VideoUtilities
+Install Files ..\..\..\..\ASCOM.Utilities.Video.NativeHelpers\Release\X64\ASCOM.NativeVideo64.pdb to $COMMONFILES$\ASCOM\VideoUtilities
+Comment: Direct Video 2005
+Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\DirectShowLib\DirectShowLib-2005.dll to Global Assembly Cache
+Comment: Switch V2 simulator
+Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.exe to $COMMONFILES$\ASCOM\Switch\Switch V2
+Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.pdb to $COMMONFILES$\ASCOM\Switch\Switch V2
+Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.exe.config to $COMMONFILES$\ASCOM\Switch\Switch V2
+Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\Switch V2
+Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\Switch V2
+Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.dll.config to $COMMONFILES$\ASCOM\Switch\Switch V2
+Comment: Platform 6.1 SP1 SOFA Files
+Install Files ..\..\..\..\SOFA\SOFA Library\Win32\Release\SOFA.dll to $COMMONFILES$\ASCOM\Astrometry
+Install Files ..\..\..\..\SOFA\SOFA Library\Win32\Release\SOFA.pdb to $WINDIR$\Symbols\dll
+Install Files ..\..\..\..\SOFA\Sofa Test Application\Win32\Release\Sofa Test Application.exe to $COMMONFILES$\ASCOM\Astrometry
+Install Files ..\..\..\..\SOFA\SOFA Library\x64\Release\SOFA-64.dll to $COMMONFILES$\ASCOM\Astrometry
+Install Files ..\..\..\..\SOFA\SOFA Library\x64\Release\SOFA-64.pdb to $WINDIR$\Symbols\dll
+Install Files ..\..\..\..\SOFA\SOFA Test Application\x64\Release\Sofa Test Application-64.exe to $COMMONFILES$\ASCOM\Astrometry
+[END REGION]
+ 
+[DEFINE REGION: Platform 6.2 files]
+Comment: Platform 6.2 ObservingConditions Hub
+Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll to $COMMONFILES$\ASCOM\ObservingConditions\OCH
+Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OCH
+Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll.config to $COMMONFILES$\ASCOM\ObservingConditions\OCH
+Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe to $COMMONFILES$\ASCOM\ObservingConditions\OCH
+Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe.config to $COMMONFILES$\ASCOM\ObservingConditions\OCH
+Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.pdb to $COMMONFILES$\ASCOM\Switch\ObservingConditions\OCH
+Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Test\bin\Release\ASCOM.OCH.Test.exe to $COMMONFILES$\ASCOM\ObservingConditions\OCH
+Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Test\bin\Release\ASCOM.OCH.Test.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OCH
+Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.Simulator.ObservingConditions.dll to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
+Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.Simulator.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
+Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.exe to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
+Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.exe.config to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
+Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.pdb to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
+Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\bin\Release\ASCOM.OCSimulator.Test.exe to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
+Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\bin\Release\ASCOM.OCSimulator.Test.pdb to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
+Install Files ..\..\..\..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.dll to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
+Install Files ..\..\..\..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.dll.config to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
+Install Files ..\..\..\..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
+[END REGION]
+ 
+[DEFINE REGION: ASCOM Cache]
+Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to Global Assembly Cache
+Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.pdb to $WINDIR$\Symbols\dll
+Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $COMMONFILES$\ASCOM\Platform\v6.4
+[END REGION]
+ 
+[DEFINE REGION: Earth Rotation Date Update]
+Install Files ..\..\..\..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.exe to $TARGETDIR$\Tools
+Install Files ..\..\..\..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.pdb to $WINDIR$\Symbols\dll
+Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\Microsoft.Win32.TaskScheduler.dll to $TARGETDIR$\Tools
+[END REGION]
+ 
+[DEFINE REGION: Platform 6 Content]
+Comment: Platform 6 Documents
+Install Files ..\Files\Help.ico to $COMMONFILES$\ASCOM\Platform
+Install Files ..\Files\Internet.ico to $COMMONFILES$\ASCOM\Platform
+Install Files ..\Files\ASCOM.ico to $COMMONFILES$\ASCOM\Platform
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Compatible Software (web).url to $TARGETDIR$\Docs
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Drivers and Downloads (web).url to $TARGETDIR$\Docs
+Install Files ..\..\..\..\Help\Output\Platform\PlatformHelp.chm to $TARGETDIR$\Docs
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Support (web).url to $TARGETDIR$\Docs
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM User Guide.pdf to $TARGETDIR$\Docs
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Supported Devices (web).url to $TARGETDIR$\Docs
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\Bug72T-sm.jpg to $TARGETDIR$\Docs
+[END REGION]
+ 
+[DEFINE REGION: Set Registry Keys]
+Comment: Install into 32bit registry, even on a 64bit system
+Write into Text File $SETUPLOG$ from Value $TIME$ Installing 32bit Registry entries (at end of file)
+ 
+Comment: Create registry keys
+Write Registry Key HKLM\SOFTWARE\ASCOM\,  (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\PlatformVersion, $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$ (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\,  (permanent)
+Comment: Leap Seconds = UTC-TAI offset - needs to be updated every time a leap second is added or removed.
+Comment: Value name changed from Leap Seconds to Manual Leap Seconds in Platform 6.4 so remove the old value
+Delete Registry VALUE HKLM\SOFTWARE\ASCOM\Astrometry\Leap Seconds
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Manual Leap Seconds, $LEAPSECONDS$
+Comment: If the earth rotation data download task trace path doesn't exist then create it.
+Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\,  (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Chooser\,  (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\COMPortSettings\, Configuration for COM ports that require special handling (see Platform Help file for instructions)  (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\COMPortSettings\ForceCOMPorts\, List of COM ports that will always appear in the AvailableCOMPorts list (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\COMPortSettings\IgnoreCOMPorts\, List of COM ports that will be omitted from the AvailableCOMPorts scan (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\,  (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\DomeSim.Dome\\, Simulator (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\Pipe.Dome\\, Pipe diagnostic tool (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\Hub.Dome\\, Generic Hub (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\POTH.Dome\\, POTH Hub (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\,  (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\FilterWheelSim.FilterWheel\, Simulator (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\,  (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\, Simulator (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Hub.Focuser\\, Generic Hub (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Pipe.Focuser\\, Pipe diagnostic tool (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\POTH.Focuser\\, POTH Hub (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\, List of applications requiring a specific value of Platform Version (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ACLDome(5.0.1)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ACLTelescope(5.0.1)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\AstroPhysics(4.1.25)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.10)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.13)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.14)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\CyberDrive(5.0.1)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS Setup_5_03.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_505.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_505_v5v6.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_5_03.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_505.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_505_v5v6.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\JMISmartFocus(4.0.1)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LakesideAstro Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LesveDome 5 0 27 Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LittleFootClassic(1.0.0)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LXPTelescope(5.0.1)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\MeadeClassic(5.0.3)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\MeadeLX200GPS(5.0.0)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Optec IFW(1.1.0.1) Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\OptecPyxis(1.0.4)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\OptecTCF(4.1.0)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\PCTCSCombined(5.0.1)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\QHY8ASCOMSetup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\QHY9ASCOMSetup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\RoboFocus(3.0.9)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ServoCAT(4.2.2)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\StarlightXpress Setup, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.1)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.2)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.3)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.4)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.6b)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2K(5.1.7b)Setup.exe, 5.5
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\, List of applications requiring a localised decimal separator in the returned Platform Version value (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ACLDome(5.0.1)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ACLTelescope(5.0.1)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\AstroPhysics(4.1.25)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.10)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.13)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.14)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\CyberDrive(5.0.1)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS Setup_5_03.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_505.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_505_v5v6.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_5_03.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_505.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_505_v5v6.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\JMISmartFocus(4.0.1)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LakesideAstro Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LesveDome 5 0 27 Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LittleFootClassic(1.0.0)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LXPTelescope(5.0.1)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\MeadeClassic(5.0.3)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\MeadeLX200GPS(5.0.0)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Optec IFW(1.1.0.1) Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\OptecPyxis(1.0.4)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\OptecTCF(4.1.0)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\PCTCSCombined(5.0.1)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\QHY8ASCOMSetup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\QHY9ASCOMSetup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\RoboFocus(3.0.9)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ServoCAT(4.2.2)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\StarlightXpress Setup, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.1)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.2)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.3)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.4)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.6b)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2K(5.1.7b)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\TheSkyTelescope(5.2.7)Setup.exe, 
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForceSystemTimer\, List of applications for which Utiliites.Timer will employ a Systems.Timer timer in place of the default Forms timer. (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForceSystemTimer\WScript.Exe, True
+Write Registry Key HKLM\SOFTWARE\ASCOM\ForceSystemTimer\Astroart.Exe, True
+Write Registry Key HKLM\SOFTWARE\ASCOM\ObservingConditions Drivers\,  (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\, Description of installed ASCOM Platform (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Installation Date, $DATE$ $TIME$
+Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Name, $TITLE$
+Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Product Code, $PRODUCTCODE$
+Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Revision Code, $REVISIONCODE$
+Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Version, $VERSION$
+Write Registry Key HKLM\SOFTWARE\ASCOM\Rotator Drivers\,  (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\SafetyMonitor Drivers\,  (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\,  (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\SwitchSim.Switch\, Simulator (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\,  (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOMDome.Telescope\\, ASCOM Dome Control (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Hub.Telescope\\, Generic Hub (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\POTH.Telescope\\, POTH Hub (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Pipe.Telescope\\, Pipe diagnostic tool (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\, Simulator (permanent)
+Write Registry Key HKLM\SOFTWARE\ASCOM\Video Drivers\,  (permanent)
+[END REGION]
+ 
+[DEFINE REGION: Create shortcuts]
+Comment: Create menu shortcuts - Do this after the main MSI install has run so we pick up correct icons from applications
+Write into Text File $SETUPLOG$ from Value $TIME$ Creating shortcuts in native mode (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ DesktopFolder: $DESKTOPFOLDER$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ ShortcutFolder: $SHORTCUTFOLDER$ (at end of file)
+Write into Text File $SETUPLOG$ from Value  (at end of file)
+if Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP Equals TRUE
+  Create Shortcut $DESKTOPFOLDER$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
+end
+if Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP Equals TRUE
+  Create Shortcut $DESKTOPFOLDER$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+end
+ 
+Comment: Shortcuts have to be created in native mode in order to get the ASCOM shortcut icon to appear
+Set Variable NATIVE_ENGINE to TRUE
+Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions SimulatorTester to $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Test.exe
+Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions Hub Tester to $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Test.exe
+Create Shortcut $SHORTCUTFOLDER$\ASCOM Compatible Software to http://ascom-standards.org/Community/Partners.htm
+Create Shortcut $SHORTCUTFOLDER$\ASCOM Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
+Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM User Guide.pdf
+Create Shortcut $SHORTCUTFOLDER$\Check for Updates to $TARGETDIR$\Tools\CheckForUpdates.js
+Create Shortcut $SHORTCUTFOLDER$\Help and Device Interface Standards to $TARGETDIR$\Docs\PlatformHelp.chm
+Create Shortcut $SHORTCUTFOLDER$\How to get support to http://ascom-standards.org/Support/index.htm
+Create Shortcut $SHORTCUTFOLDER$\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
+Create Shortcut $SHORTCUTFOLDER$\Tools\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+Create Shortcut $SHORTCUTFOLDER$\Tools\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
+Create Shortcut $SHORTCUTFOLDER$\Simulators\Dome Simulator to $COMMONFILES$\ASCOM\Dome\DomeSim.exe
+Create Shortcut $SHORTCUTFOLDER$\Simulators\FilterWheel Simulator to $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
+Create Shortcut $SHORTCUTFOLDER$\Simulators\FilterWheel Simulator .NET to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
+Create Shortcut $SHORTCUTFOLDER$\Simulators\Focus Simulator to $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
+Create Shortcut $SHORTCUTFOLDER$\Simulators\Rotator Simulator .NET to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
+Create Shortcut $SHORTCUTFOLDER$\Simulators\Switch Simulator to $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
+Create Shortcut $SHORTCUTFOLDER$\Simulators\Telescope Simulator to $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
+Create Shortcut $SHORTCUTFOLDER$\Simulators\Telescope Simulator .NET to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
+Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor to $COMMONFILES$\ASCOM\Telescope\Pipe.exe
+Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
+Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub to $COMMONFILES$\ASCOM\Telescope\POTH.exe
+Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\POTHHelp.htm
+Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
+Set Variable NATIVE_ENGINE to FALSE
+ 
+[END REGION]
+ 
+[DEFINE REGION: Specify additional clean-up required when uninstalling]
+Comment: Remove TLB files created by RegAsm when application is uninstalled
+Delete Files $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\*.tlb (when uninstalling)
+Delete Files $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\*.tlb (when uninstalling)
+Delete Files $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\*.tlb (when uninstalling)
+Delete Files $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\*.tlb (when uninstalling)
+Delete Files $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\*.tlb (when uninstalling)
+Delete Files $TARGETDIR$\Tools\*.avi (when uninstalling)
+ 
+[END REGION]
+ 
+Comment: Run the installation
+Apply Install (get result into variable SUCCESS)
+ 
+Comment: Save the installation success value and log status outcomes
+Set Variable MYPROGRESS to 20
+Write into Text File $SETUPLOG$ from Value $TIME$ Apply Install - Success:  $SUCCESS$, LastError: $LASTERROR$ (at end of file)
+Write into Text File $SETUPLOG$ from Value  (at end of file)
+ 
+Comment: Process COM registrations and other activities if the MSI install was successful
+if Variable SUCCESS not Equals ERROR
+   
+  [DEFINE REGION: Non-MSI installation activities]
+  Comment: Register Platform 5 components
+  Set Variable MYPROGRESS to 21
+  Set Variable PROGRESSTEXT to Registering assembly ASCOM.Helper 1.0.0.0
+  Register assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable MYPROGRESS to 22
+  Set Variable PROGRESSTEXT to Registering assembly ASCOM.Helper2 1.0.0.0
+  Register assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable MYPROGRESS to 23
+  Set Variable PROGRESSTEXT to Registering assembly ASCOM.Interfaces 1.0.0.0
+  Register assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+   
+  Comment: Register the Platform 5 type libraries
+  Set Variable MYPROGRESS to 24
+  Set Variable PROGRESSTEXT to Registering AscomMaterInterfaces typelib
+  Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - ASCOMMasterInterfaces (at end of file)
+  Set Variable MYPROGRESS to 25
+  Set Variable PROGRESSTEXT to Registering ASCOM.Helper typelib
+  Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper.tlb" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - Helper (at end of file)
+  Set Variable MYPROGRESS to 26
+  Set Variable PROGRESSTEXT to Registering ASCOM.Helper2 typelib
+  Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper2.tlb" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - Helper2 (at end of file)
+  Set Variable MYPROGRESS to 26
+  Set Variable PROGRESSTEXT to Registering IObjectSafety typelib
+  Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\IObjectSafety.tlb" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - IObjectSafety (at end of file)
+   
+  Comment: Register Platform 5 Simulators
+  Set Variable MYPROGRESS to 27
+  Set Variable PROGRESSTEXT to Registering Platform 5 Telescope simulator
+  Run Program $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe /regserver (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - ScopeSim (at end of file)
+  Set Variable MYPROGRESS to 28
+  Set Variable PROGRESSTEXT to Registering Hub server
+  Run Program $COMMONFILES$\ASCOM\Telescope\Hub.exe /regserver (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Hub (at end of file)
+  Set Variable MYPROGRESS to 29
+  Set Variable PROGRESSTEXT to Registering Pipe server
+  Run Program $COMMONFILES$\ASCOM\Telescope\Pipe.exe /regserver (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Pipe (at end of file)
+  Set Variable MYPROGRESS to 30
+  Set Variable PROGRESSTEXT to Registering POTH server
+  Run Program $COMMONFILES$\ASCOM\Telescope\POTH.exe /regserver (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - POTH (at end of file)
+  Set Variable MYPROGRESS to 31
+  Set Variable PROGRESSTEXT to Registering Platform 5 Dome simulator
+  Run Program $COMMONFILES$\ASCOM\Dome\DomeSim.exe /regserver (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - DomeSim (at end of file)
+  Set Variable MYPROGRESS to 32
+  Set Variable PROGRESSTEXT to Registering Platform 5 Dome simulator
+  Run Program $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe /regserver (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - ASCOMDome (at end of file)
+  Set Variable MYPROGRESS to 33
+  Set Variable PROGRESSTEXT to Registering Platform 5 FilterWheel simulator
+  Run Program $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe /regserver (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FilterWheelSim (at end of file)
+  Set Variable MYPROGRESS to 34
+  Set Variable PROGRESSTEXT to Registering Platform 5 Focuser simulator
+  Run Program $COMMONFILES$\ASCOM\Focuser\FocusSim.exe /regserver (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FocusSim (at end of file)
+  Set Variable MYPROGRESS to 35
+  Set Variable PROGRESSTEXT to Registering Platform 5 Switch simulator
+  Run Program $COMMONFILES$\ASCOM\Switch\SwitchSim.exe /regserver (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - SwitchSim (at end of file)
+   
+  Comment: Register Platform 5.5 components
+  Set Variable MYPROGRESS to 36
+  Set Variable PROGRESSTEXT to Registering ASCOM.Astrometry 5.5.6.0
+  Register assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable MYPROGRESS to 37
+  Set Variable MYPROGRESS to 38
+  Set Variable PROGRESSTEXT to Registering ASCOM.Utilities 5.5.6.0
+  Register assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+   
+  Comment: Install policy files
+  Set Variable MYPROGRESS to 39
+  Set Variable PROGRESSTEXT to Installing policy.5.5.ASCOM.Utilities
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.5.5.ASCOM.Utilities.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Utilities (at end of file)
+  if Variable GACINSTALLRC not Equals 0
+    MessageBalloon: GACInstall, Utilities install error RC: $GACINSTALLRC$
   end
-  Set Variable NATIVE_ENGINE to FALSE
-   
-  [DEFINE REGION: Uninstall Platforms 4 and 5]
-  Comment: Remove Platform 5 and 5.5 if we are in initial install mode and not Maintenance or Upgrade modes
-  Write into Text File $SETUPLOG$ from Value $TIME$ Native Engine Mode is: $NATIVE_ENGINE$ (at end of file)
-  if Variable MAINTENANCE not Equals TRUE
-    Comment: Only try and remove Platforms 4 and  5 if we are not upgrading a previous Platform 6 install
-    if Variable REQUIRESUPGRADE Equals FALSE
-      Write into Text File $SETUPLOG$ from Value $TIME$ Straight forward install - removing old Platform 4 or 5 if it exists (at end of file)
-      Comment: Check for Platform 4.1
-      Set Variable UNINSTALLER41 to 
-      Set Variable PLATFORM4FOUND to FALSE
-      Comment: Check for Platform 4.1
-      Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\ASCOM Platform 4.1\UninstallString into UNINSTALLER41
-      if Variable UNINSTALLER41 not Equals 
-        Set Variable PLATFORM4FOUND to TRUE
-      end
-      Write into Text File $SETUPLOG$ from Value $TIME$ Platform 4.1 - $UNINSTALLER41$ (at end of file)
-      Comment: Check whether Platform 5 is actually installed, only try and uninstall if present! Test is presence of Platform 5 Uninstall string in registry
-      Set Variable UNINSTALLER5A to 
-      Set Variable PLATFORM5FOUND to FALSE
-      Comment: Check for Platform 5a
-      Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{075F543B-97C5-4118-9D54-93910DE03FE9}\UninstallString into UNINSTALLER5A
-      if Variable UNINSTALLER5A not Equals 
-        Set Variable PLATFORM5FOUND to TRUE
-      end
-      Write into Text File $SETUPLOG$ from Value $TIME$ Platform 5A - $UNINSTALLER5A$ (at end of file)
-      Comment: Check for Platform 5b
-      Set Variable UNINSTALLER5B to 
-      Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{14C10725-0018-4534-AE5E-547C08B737B7}\UninstallString into UNINSTALLER5B
-      if Variable UNINSTALLER5B not Equals 
-        Set Variable PLATFORM5FOUND to TRUE
-      end
-      Write into Text File $SETUPLOG$ from Value $TIME$ Platform 5B - $UNINSTALLER5B$ (at end of file)
-      Comment: Run the uninstaller if either platform is found
-      Set Variable RC to 999
-      if Variable PLATFORM5FOUND Equals TRUE
-        Set Variable PROGRESSTEXT to Removing Platform 5...
-        Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling Platform 5... (at end of file)
-        Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM  (at end of file)
-        Set Variable PROGRESSTEXT to Installing Platform 6...
-      else
-        if Variable PLATFORM4FOUND Equals TRUE
-          Set Variable PROGRESSTEXT to Removing Platform 4...
-          Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling Platform 4... (at end of file)
-          Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
-          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM  (at end of file)
-          Set Variable PROGRESSTEXT to Installing Platform 6...
-        else
-          Comment: No previous Platform on this machine so UninstallASCOM must run in order to set the correct security ACL on the ASCOM registry profile store
-          Set Variable PROGRESSTEXT to Preparing ASCOM Profile Store...
-          Write into Text File $SETUPLOG$ from Value $TIME$ First time install, preparing ASCOM Profile Store (at end of file)
-          Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
-          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Set ACL on ASCOM Profile Store (at end of file)
-          Set Variable PROGRESSTEXT to First time install - Installing Platform 6...
-        end
-      end
-      if Variable RC not Equals 0
-        MessageBox: Profile Migration, An error has occured during Profile migration, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Yahoo group.
-        Set Variable ASCOMERROR to $RC$
-      end
-    end
+  Set Variable MYPROGRESS to 40
+  Set Variable PROGRESSTEXT to Installing policy.5.5.ASCOM.Astrometry
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.5.5.ASCOM.Astrometry.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Astrometry Policy (at end of file)
+  if Variable GACINSTALLRC not Equals 0
+    MessageBalloon: GACInstall, Astrometry install error RC: $GACINSTALLRC$
   end
-  [END REGION]
+  Set Variable MYPROGRESS to 41
+  Set Variable PROGRESSTEXT to Installing policy.1.0.ASCOM.DriverAccess
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.0.ASCOM.DriverAccess.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - DriverAccess Policy (at end of file)
+  if Variable GACINSTALLRC not Equals 0
+    MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
+  end
+  Set Variable MYPROGRESS to 42
+  Set Variable PROGRESSTEXT to Installing policy.1.0.ASCOM.Exceptions
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.0.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Exceptions Policy 1.0 (at end of file)
+  if Variable GACINSTALLRC not Equals 0
+    MessageBalloon: GACInstall, Exceptions 1.0 install error RC: $GACINSTALLRC$
+  end
+  Set Variable MYPROGRESS to 43
+  Set Variable PROGRESSTEXT to Installing policy.1.1.ASCOM.Exceptions
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.1.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Exceptions Policy 1.1 (at end of file)
+  if Variable GACINSTALLRC not Equals 0
+    MessageBalloon: GACInstall, Exceptions 1.1 install error RC: $GACINSTALLRC$
+  end
    
-  [DEFINE REGION: Install Platform 6]
+  Comment: I'm sorry, I know this is an unforgiveable hack but I can't see any other way to have more than one pdb on the system. Peter
+  Set Variable MYPROGRESS to 44
+  Set Variable PROGRESSTEXT to Installing ASCOM.Utilities debug information
+  Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Utilities.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Utilities\5.5.6.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Copy - Utilities 5.5.6 (at end of file)
+  Set Variable MYPROGRESS to 45
+  Set Variable PROGRESSTEXT to Installing ASCOM.Astrometry debug information
+  Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Astrometry.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Astrometry\5.5.6.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Copy - Astrometry 5.5.6 (at end of file)
+  Set Variable MYPROGRESS to 46
+  Set Variable PROGRESSTEXT to Installing ASCOM.Atributes debug information
+  Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Copy - Attributes 5.5.0 (at end of file)
    
-  [OFFLINE CONTENT]
-  Comment: ***** Start of Platform Installation *****
-  Set Variable PROGRESSTEXT to Installing $TITLE$
-  Comment: Create the main ASCOM folder in Common Files
-  Create Folder $COMMONFILES$\ASCOM
+  Comment: Register Platform 6 components
+  Set Variable MYPROGRESS to 47
+  Set Variable PROGRESSTEXT to Registering ASCOM.Astrometry 6.0.0.0
+  Register assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable MYPROGRESS to 48
+  Set Variable PROGRESSTEXT to Registering ASCOM.Exceptions 6.0.0.0
+  Register assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable MYPROGRESS to 49
+  Set Variable PROGRESSTEXT to Registering ASCOM.Utilities 6.0.0.0
+  Register assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable MYPROGRESS to 50
+  Set Variable PROGRESSTEXT to Registering ASCOM.Utilities.Video 6.1.0.0
+  Register assembly ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable MYPROGRESS to 51
+  Set Variable PROGRESSTEXT to Registering ASCOM.Cache 6.0.0.0
+  Register assembly ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
    
-  [DEFINE REGION: Platform 5 files]
-  Comment: Type libraries
-  Install Files ..\..\..\..\Interfaces\Master Interfaces\AscomMasterInterfaces.tlb to $COMMONFILES$\ASCOM\Interface
-  Install Files ..\..\..\..\Interfaces\HelperPIAs\Helper.tlb to $COMMONFILES$\ASCOM\Interface
-  Install Files ..\..\..\..\Interfaces\HelperPIAs\Helper2.tlb to $COMMONFILES$\ASCOM\Interface
-  Install Files ..\..\..\..\Interfaces\IObjectSafety.tlb to $COMMONFILES$\ASCOM\Interface
-  Comment: Type library installer
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\RegTlb.exe to $COMMONFILES$\ASCOM\Platform\Internal
-  Comment: Redistributable support files
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\mscomctl.OCX to $WINSYSDIR$ (Never Overwrite)
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\MSComm32.Ocx to $WINSYSDIR$ (Never Overwrite)
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\msvbvm60.dll to $WINSYSDIR$ (Never Overwrite)
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\comdlg32.ocx to $WINSYSDIR$ (Never Overwrite)
-  Comment: Platform 5 assemblies
-  Comment: ASCOM.DriverAccess 1.0.5 is not copied because it is replaced with 1.0.6 in Platform 6
-  Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\policy.1.0.ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\Platform\v5.5
-  Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\DriverAccess.config to $COMMONFILES$\ASCOM\Platform\v5.5
-  Install Assembly ..\..\..\..\Interfaces\Master Interfaces\ASCOM.Interfaces.dll to Global Assembly Cache
-  Comment: Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.dll to Global Assembly Cache
-  Install Assembly ..\..\..\..\Interfaces\HelperPIAs\ASCOM.Helper.dll to Global Assembly Cache
-  Install Assembly ..\..\..\..\Interfaces\HelperPIAs\ASCOM.Helper2.dll to Global Assembly Cache
-  Comment: Platform 5 simulators
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\CCDSimulator.dll to $COMMONFILES$\ASCOM\Camera
-  Install Files ..\..\..\..\Drivers and Simulators\CCD Simulator\UNURANReadMe.txt to $COMMONFILES$\ASCOM\Camera
-  Install Files ..\..\..\..\Drivers and Simulators\CCD Simulator\unuran-0.6.0.dll to $COMMONFILES$\ASCOM\Camera
-  Install Files ..\..\..\..\Drivers and Simulators\Dome Simulator\DomeSim.exe to $COMMONFILES$\ASCOM\Dome
-  Install Files ..\..\..\..\Drivers and Simulators\ASCOMDome\ASCOMDome.exe to $COMMONFILES$\ASCOM\Dome
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Astro32.dll to $COMMONFILES$\ASCOM\Dome
-  Install Files ..\..\..\..\Drivers and Simulators\Filter Wheel Simulator\FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel
-  Install Files ..\..\..\..\Drivers and Simulators\Focus Simulator\FocusSim.exe to $COMMONFILES$\ASCOM\Focuser
-  Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator\SwitchSim.exe to $COMMONFILES$\ASCOM\Switch
-  Install Files ..\..\..\..\Drivers and Simulators\Scope Simulator\ScopeSim.exe to $COMMONFILES$\ASCOM\Telescope
-  Install Files ..\..\..\..\Drivers and Simulators\Scope Simulator\ScopeSimHelp.htm to $COMMONFILES$\ASCOM\Telescope
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Astro32.dll to $COMMONFILES$\ASCOM\Telescope
-  Install Files ..\..\..\..\Pipe\Pipe.exe to $COMMONFILES$\ASCOM\Telescope
-  Install Files ..\..\..\..\Pipe\PipeHubHelp.htm to $COMMONFILES$\ASCOM\Telescope
-  Install Files ..\..\..\..\Pipe\Hub.exe to $COMMONFILES$\ASCOM\Telescope
-  Install Files ..\..\..\..\POTH\Source\POTH\POTH.exe to $COMMONFILES$\ASCOM\Telescope
-  Install Files ..\..\..\..\POTH\Source\POTH\POTHHelp.htm to $COMMONFILES$\ASCOM\Telescope
-  [END REGION]
+  Comment: Register in-process simulator DLL files with Codebase option
+  Set Variable MYPROGRESS to 52
+  Set Variable PROGRESSTEXT to Registering Platform 6 Camera simulator
+  Register assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll, set the code base in the registry
+  Set Variable MYPROGRESS to 53
+  Set Variable PROGRESSTEXT to Registering Platform 6 Focuser simulator
+  Register assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll, set the code base in the registry
+  Set Variable MYPROGRESS to 54
+  Set Variable PROGRESSTEXT to Registering Platform 6 SafetyMonitor simulator
+  Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll, set the code base in the registry
+  Set Variable MYPROGRESS to 55
+  Set Variable PROGRESSTEXT to Registering Platform 6 Dome simulator
+  Register assembly $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll, set the code base in the registry
+  Set Variable MYPROGRESS to 56
+  Set Variable PROGRESSTEXT to Registering Platform 6 Video simulator
+  Register assembly $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll, set the code base in the registry
+  Set Variable MYPROGRESS to 57
+  Set Variable PROGRESSTEXT to Registering Platform 6 OpenWeatherMap simulator
+  Register assembly $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\ASCOM.OpenWeatherMap.ObservingConditions.dll, set the code base in the registry
    
-  [DEFINE REGION: Platform 5.5 files]
-  Comment: Updated helpers that use Platform 5.5 support
-  Install Files ..\..\..\..\ASCOM.Utilities\VB6Helper\Helper.dll to $COMMONFILES$\ASCOM
-  Install Files ..\..\..\..\ASCOM.Utilities\VB6Helper2\Helper2.dll to $COMMONFILES$\ASCOM
-  Comment: New files in Platform 5.5
-  Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.dll to Global Assembly Cache
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
-  Comment: Updated ASCOM.Exceptions v1.1 for Platform 5.5
-  Comment: Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.dll to Global Assembly Cache
-  Comment: Copy Utilities and DriverAccess to .Net directory to ensure Inno installers that test for this run OK
-  Comment: The ASCOM.Utilities.dll file MUST be the original from Platform 5.5 because at least 1 installer checks the file version of the installed file!
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\.net
-  Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\.net
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\These files are not in use - ReadMe.txt to $COMMONFILES$\ASCOM\.net
-  [END REGION]
+  Comment: Register these LocalServer drivers using the -register option
+  Set Variable MYPROGRESS to 58
+  Set Variable PROGRESSTEXT to Registering Platform 6 FilterWheel simulator
+  Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe -register (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FilterWheel Simulator 6 (at end of file)
+  Set Variable MYPROGRESS to 59
+  Set Variable PROGRESSTEXT to Registering Platform 6 Rotator simulator
+  Run Program $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe -register (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Rotator Simulator 6 (at end of file)
+  Set Variable MYPROGRESS to 60
+  Set Variable PROGRESSTEXT to Registering Platform 6 Switch simulator
+  Run Program $COMMONFILES$\ASCOM\Switch\Switch V2\ASCOM.Simulator.Server.exe -register (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Switch V2 Simulator (at end of file)
+  Set Variable MYPROGRESS to 61
+  Set Variable PROGRESSTEXT to Registering Platform 6 Telescope simulator
+  Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe -register (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Telescope Simulator 6 (at end of file)
+  Set Variable MYPROGRESS to 62
+  Set Variable PROGRESSTEXT to Registering Platform 6 ObservingConditions simulator
+  Run Program $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Server.exe -register (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Observing Conditions Simulator (at end of file)
+  Set Variable MYPROGRESS to 63
+  Set Variable PROGRESSTEXT to Registering Platform 6 Observing Conditions Hub
+  Run Program $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Server.exe -register (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Observing Conditions Hub (at end of file)
    
-  [DEFINE REGION: Platform 6 files]
-  Comment: Install exceptions redirection policy
-  Install Files ..\..\..\..\ASCOM Redirection Policies\policy.1.0.ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6.0
-  Install Files ..\..\..\..\ASCOM Redirection Policies\policy.1.1.ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6.0
-  Install Files ..\..\..\..\ASCOM Redirection Policies\ExceptionsPolicy.xml to $COMMONFILES$\ASCOM\Platform\v6.0
-  Comment: Updated Utiities 5.5.6 to replace 5.5.1 that access registry rather than XML files, otherwise unchanged
-  Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
-  Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
-  Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\policy.5.5.ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v5.5
-  Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\UtilitiesPolicy.xml to $COMMONFILES$\ASCOM\Platform\v5.5
-  Comment: Updated driver access v1.0.6 to improve compatibility with Platform 5 drivers
-  Install Assembly ..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
-  Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
-  Comment: Platform 6 core components
-  Install Assembly ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
-  Install Files ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $WINDIR$\Symbols\dll
-  Install Assembly ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
-  Comment: Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\Platform\v6
-  Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $WINDIR$\Symbols\dll
-  Install Assembly ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to Global Assembly Cache
-  Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6
-  Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb to $WINDIR$\Symbols\dll
-  Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
-  Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $WINDIR$\Symbols\dll
-  Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
-  Comment: Tim Long Platform 6 components
-  Install Assembly ..\..\..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to Global Assembly Cache
-  Install Files ..\..\..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb to $WINDIR$\Symbols\dll
-  Install Assembly ..\..\..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to Global Assembly Cache
-  Install Files ..\..\..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.pdb to $WINDIR$\Symbols\dll
-  Install Assembly ..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to Global Assembly Cache
-  Install Files ..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb to $WINDIR$\Symbols\dll
-  Comment: Platform 6 Astrometry
-  Install Assembly ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
-  Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb to $WINDIR$\Symbols\dll
-  Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v6
-  Install Assembly ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
-  Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
-  Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\Platform 5.5 Redirection Policy\policy.5.5.ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v5.5
-  Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\Platform 5.5 Redirection Policy\AstrometryPolicy.xml to $COMMONFILES$\ASCOM\Platform\v5.5
-  Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll to $COMMONFILES$\ASCOM\Astrometry
-  Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb to $COMMONFILES$\ASCOM\Astrometry
-  Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll to $COMMONFILES$\ASCOM\Astrometry
-  Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb to $COMMONFILES$\ASCOM\Astrometry
-  Install Files ..\..\..\..\NOVAS\NOVAS-3\CioFile\cio_ra.bin to $COMMONFILES$\ASCOM\Astrometry
-  Install Files ..\..\..\..\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH to $COMMONFILES$\ASCOM\Astrometry
-  Install Files ..\..\..\..\NOVAS\NOVAS-C\Win32\Release\NOVAS-C.dll to $COMMONFILES$\ASCOM\Astrometry
-  Install Files ..\..\..\..\NOVAS\NOVAS-C\Win32\Release\NOVAS-C.pdb to $COMMONFILES$\ASCOM\Astrometry
-  Install Files ..\..\..\..\NOVAS\NOVAS-C\x64\Release\NOVAS-C64.dll to $COMMONFILES$\ASCOM\Astrometry
-  Install Files ..\..\..\..\NOVAS\NOVAS-C\x64\Release\NOVAS-C64.pdb to $COMMONFILES$\ASCOM\Astrometry
-  Comment: Platform 6 SP1 Astrometry
-  Install Files ..\..\..\..\NOVAS\NOVAS-31\NOVAS3\Win32\Release\NOVAS31.dll to $COMMONFILES$\ASCOM\Astrometry
-  Install Files ..\..\..\..\NOVAS\NOVAS-31\NOVAS3\Win32\Release\NOVAS31.pdb to $COMMONFILES$\ASCOM\Astrometry
-  Install Files ..\..\..\..\NOVAS\NOVAS-31\NOVAS3\x64\Release\NOVAS31-64.dll to $COMMONFILES$\ASCOM\Astrometry
-  Install Files ..\..\..\..\NOVAS\NOVAS-31\NOVAS3\x64\Release\NOVAS31-64.pdb to $COMMONFILES$\ASCOM\Astrometry
-  Comment: Install Files ..\..\..\..\NOVAS\NOVAS-3\CioFile\cio_ra.bin to $COMMONFILES$\ASCOM\Astrometry
-  Comment: Platform 6 Internal
-  Install Files ..\..\..\..\ASCOM.Utilities\MigrateProfile\bin\Release\MigrateProfile.exe to $COMMONFILES$\ASCOM\Platform\Internal
-  Install Files ..\..\..\..\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $COMMONFILES$\ASCOM\Platform\Internal
-  Install Assembly ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to Global Assembly Cache
-  Install Files ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb to $WINDIR$\Symbols\dll
-  Install Assembly ..\..\..\..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll to Global Assembly Cache
-  Install Files ..\..\..\..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.pdb to $WINDIR$\Symbols\dll
-  Comment: Platform 6 Tools
-  Install Files ..\..\..\..\ShowPlatformVersion.vbs to $COMMONFILES$\ASCOM
-  Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $WINDIR$\Symbols\dll
-  Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe to $TARGETDIR$\Tools
-  Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $TARGETDIR$\Tools
-  Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml to $TARGETDIR$\Tools
-  Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\Ceres.chby to $TARGETDIR$\Tools
-  Install Files ..\..\..\..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.exe to $TARGETDIR$\Tools\DriverConnect64
-  Install Files ..\..\..\..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.pdb to $TARGETDIR$\Tools\DriverConnect64
-  Install Files ..\..\..\..\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.exe to $TARGETDIR$\Tools\DriverConnect32
-  Install Files ..\..\..\..\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.pdb to $TARGETDIR$\Tools\DriverConnect32
-  Install Files ..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $WINDIR$\Symbols\dll
-  Install Files ..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.exe to $TARGETDIR$\Tools
-  Install Files ..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $TARGETDIR$\Tools
-  Install Files ..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.xml to $TARGETDIR$\Tools
-  Comment: Platform 6 Simulators
-  Comment: Camera simulator
-  Install Files ..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
-  Install Files ..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
-  Install Files ..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\M42-800x600.jpg to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
-  Install Files ..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\Testcard_F.jpg to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
-  Comment: FilterWheel simulator
-  Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
-  Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.FilterWheelSim.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
-  Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.Simulator.FilterWheel.dll to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
-  Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.Simulator.FilterWheel.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
-  Comment: Focuser simulator
-  Install Files ..\..\..\..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
-  Install Files ..\..\..\..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
-  Comment: SafetyMonitor simulator
-  Install Files ..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.dll to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
-  Install Files ..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.pdb to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
-  Comment: Telescope simulator
-  Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
-  Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
-  Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.Simulator.Telescope.dll to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
-  Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.Simulator.Telescope.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
-  Comment: Rotator simulator
-  Install Files ..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
-  Install Files ..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
-  Install Files ..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.dll to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
-  Install Files ..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
-  Comment: Dome simulator
-  Install Files ..\..\..\..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.dll to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
-  Install Files ..\..\..\..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.pdb to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
-  Comment: Platform Update Checker
-  Install Files ..\..\..\..\CheckForUpdates.js to $TARGETDIR$\Tools
-  [END REGION]
    
-  [DEFINE REGION: Platform 6.1 files]
-  Comment: Video utilities
-  Install Assembly ..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to Global Assembly Cache
-  Install Files ..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.pdb to $WINDIR$\Symbols\dll
-  Install Files ..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to $COMMONFILES$\ASCOM\Platform\v6.1
-  Comment: Video Simulator
-  Install Files ..\..\..\..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\ASCOM.Simulator.Video.dll to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
-  Install Files ..\..\..\..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\ASCOM.Simulator.Video.pdb to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\DirectShowLib\DirectShowLib-2005.dll to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
-  Install Files ..\..\..\..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\Resources\simulator.pix to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\Resources
-  Comment: Video Utilities - Native Helpers
-  Install Files ..\..\..\..\ASCOM.Utilities.Video.NativeHelpers\Release\Win32\ASCOM.NativeVideo32.dll to $COMMONFILES$\ASCOM\VideoUtilities
-  Install Files ..\..\..\..\ASCOM.Utilities.Video.NativeHelpers\Release\Win32\ASCOM.NativeVideo32.pdb to $COMMONFILES$\ASCOM\VideoUtilities
-  Install Files ..\..\..\..\ASCOM.Utilities.Video.NativeHelpers\Release\X64\ASCOM.NativeVideo64.dll to $COMMONFILES$\ASCOM\VideoUtilities
-  Install Files ..\..\..\..\ASCOM.Utilities.Video.NativeHelpers\Release\X64\ASCOM.NativeVideo64.pdb to $COMMONFILES$\ASCOM\VideoUtilities
-  Comment: Direct Video 2005
-  Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\DirectShowLib\DirectShowLib-2005.dll to Global Assembly Cache
-  Comment: Switch V2 simulator
-  Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.exe to $COMMONFILES$\ASCOM\Switch\Switch V2
-  Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.pdb to $COMMONFILES$\ASCOM\Switch\Switch V2
-  Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.exe.config to $COMMONFILES$\ASCOM\Switch\Switch V2
-  Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\Switch V2
-  Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\Switch V2
-  Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.dll.config to $COMMONFILES$\ASCOM\Switch\Switch V2
-  Comment: Platform 6.1 SP1 SOFA Files
-  Install Files ..\..\..\..\SOFA\SOFA Library\Win32\Release\SOFA.dll to $COMMONFILES$\ASCOM\Astrometry
-  Install Files ..\..\..\..\SOFA\SOFA Library\Win32\Release\SOFA.pdb to $WINDIR$\Symbols\dll
-  Install Files ..\..\..\..\SOFA\Sofa Test Application\Win32\Release\Sofa Test Application.exe to $COMMONFILES$\ASCOM\Astrometry
-  Install Files ..\..\..\..\SOFA\SOFA Library\x64\Release\SOFA-64.dll to $COMMONFILES$\ASCOM\Astrometry
-  Install Files ..\..\..\..\SOFA\SOFA Library\x64\Release\SOFA-64.pdb to $WINDIR$\Symbols\dll
-  Install Files ..\..\..\..\SOFA\SOFA Test Application\x64\Release\Sofa Test Application-64.exe to $COMMONFILES$\ASCOM\Astrometry
-  [END REGION]
+  Comment: Install 32bit native images
+  Set Variable MYPROGRESS to 64
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
+  Run Program $NGEN32$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DeviceInterfaces 6 (at end of file)
+  Set Variable MYPROGRESS to 65
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper - v1.0.0.0
+  Run Program $NGEN32$ "ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Helper (at end of file)
+  Set Variable MYPROGRESS to 66
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities - v6.0.0.0
+  Run Program $NGEN32$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Utilities 6 (at end of file)
+  Set Variable MYPROGRESS to 67
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities.Video - v6.1.0.0
+  Run Program $NGEN32$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - VideoUtils 6.1 (at end of file)
+  Set Variable MYPROGRESS to 68
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry - v5.5.6.0
+  Run Program $NGEN32$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Astrometry 5.5.6 (at end of file)
+  Set Variable MYPROGRESS to 69
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry - v6.0.0.0
+  Run Program $NGEN32$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Astrometry 6 (at end of file)
+  Set Variable MYPROGRESS to 70
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DriverAccess - v6.0.0.0
+  Run Program $NGEN32$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DriverAccess 6 (at end of file)
+  Set Variable MYPROGRESS to 71
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper2 - v1.0.0.0
+  Run Program $NGEN32$ "ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Helper2 1.0 (at end of file)
+  Set Variable MYPROGRESS to 72
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Exceptions - v6.0.0.0
+  Run Program $NGEN32$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Exceptions 6 (at end of file)
+  Set Variable MYPROGRESS to 73
+  Set Variable PROGRESSTEXT to Creating 32bit native images - DirectShowLib-2005 - v2.1.0.15637
+  Run Program $NGEN32$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DirectShowLib 2.1 (at end of file)
+  Set Variable MYPROGRESS to 74
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Cache - v6.0.0.0
+  Run Program $NGEN32$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Cache (at end of file)
    
-  [DEFINE REGION: Platform 6.2 files]
-  Comment: Platform 6.2 ObservingConditions Hub
-  Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll to $COMMONFILES$\ASCOM\ObservingConditions\OCH
-  Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OCH
-  Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll.config to $COMMONFILES$\ASCOM\ObservingConditions\OCH
-  Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe to $COMMONFILES$\ASCOM\ObservingConditions\OCH
-  Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe.config to $COMMONFILES$\ASCOM\ObservingConditions\OCH
-  Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.pdb to $COMMONFILES$\ASCOM\Switch\ObservingConditions\OCH
-  Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Test\bin\Release\ASCOM.OCH.Test.exe to $COMMONFILES$\ASCOM\ObservingConditions\OCH
-  Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Test\bin\Release\ASCOM.OCH.Test.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OCH
-  Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.Simulator.ObservingConditions.dll to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
-  Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.Simulator.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
-  Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.exe to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
-  Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.exe.config to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
-  Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.pdb to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
-  Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\bin\Release\ASCOM.OCSimulator.Test.exe to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
-  Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\bin\Release\ASCOM.OCSimulator.Test.pdb to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
-  Install Files ..\..\..\..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.dll to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
-  Install Files ..\..\..\..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.dll.config to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
-  Install Files ..\..\..\..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
-  [END REGION]
+  Set Variable PROGRESSTEXT to Initialising earth rotation data
+  Run Program $TARGETDIR$\Tools\EarthRotationUpdate.exe /Initialise (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Initialise earth rotation data (at end of file)
    
-  [DEFINE REGION: ASCOM Cache]
-  Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to Global Assembly Cache
-  Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.pdb to $WINDIR$\Symbols\dll
-  Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $COMMONFILES$\ASCOM\Platform\v6.4
-  [END REGION]
-   
-  [DEFINE REGION: Earth Rotation Date Update]
-  Install Files ..\..\..\..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.exe to $TARGETDIR$\Tools
-  Install Files ..\..\..\..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.pdb to $WINDIR$\Symbols\dll
-  Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\Microsoft.Win32.TaskScheduler.dll to $TARGETDIR$\Tools
-  [END REGION]
-   
-  [DEFINE REGION: Platform 6 Content]
-  Comment: Platform 6 Documents
-  Install Files ..\Files\Help.ico to $COMMONFILES$\ASCOM\Platform
-  Install Files ..\Files\Internet.ico to $COMMONFILES$\ASCOM\Platform
-  Install Files ..\Files\ASCOM.ico to $COMMONFILES$\ASCOM\Platform
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Compatible Software (web).url to $TARGETDIR$\Docs
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Drivers and Downloads (web).url to $TARGETDIR$\Docs
-  Install Files ..\..\..\..\Help\Output\Platform\PlatformHelp.chm to $TARGETDIR$\Docs
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Support (web).url to $TARGETDIR$\Docs
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM_Users_Guide.pdf to $TARGETDIR$\Docs
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Supported Devices (web).url to $TARGETDIR$\Docs
-  Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\Bug72T-sm.jpg to $TARGETDIR$\Docs
-  [END REGION]
-   
-  [DEFINE REGION: Set Registry Keys]
-  Comment: Install into 32bit registry, even on a 64bit system
-  Write into Text File $SETUPLOG$ from Value $TIME$ Installing 32bit Registry entries (at end of file)
-   
-  Comment: Create registry keys
-  Write Registry Key HKLM\SOFTWARE\ASCOM\,  (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\PlatformVersion, $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$ (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\,  (permanent)
-  Comment: Leap Seconds = UTC-TAI offset - needs to be updated every time a leap second is added or removed.
-  Comment: Value name changed from Leap Seconds to Manual Leap Seconds in Platform 6.4 so remove the old value
-  Delete Registry VALUE HKLM\SOFTWARE\ASCOM\Astrometry\Leap Seconds
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Manual Leap Seconds, $LEAPSECONDS$
-  Comment: If the earth rotation data download task trace path doesn't exist then create it.
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\,  (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Chooser\,  (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\COMPortSettings\, Configuration for COM ports that require special handling (see Platform Help file for instructions)  (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\COMPortSettings\ForceCOMPorts\, List of COM ports that will always appear in the AvailableCOMPorts list (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\COMPortSettings\IgnoreCOMPorts\, List of COM ports that will be omitted from the AvailableCOMPorts scan (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\,  (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\DomeSim.Dome\\, Simulator (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\Pipe.Dome\\, Pipe diagnostic tool (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\Hub.Dome\\, Generic Hub (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\POTH.Dome\\, POTH Hub (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\,  (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\FilterWheelSim.FilterWheel\, Simulator (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\,  (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\, Simulator (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Hub.Focuser\\, Generic Hub (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Pipe.Focuser\\, Pipe diagnostic tool (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\POTH.Focuser\\, POTH Hub (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\, List of applications requiring a specific value of Platform Version (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ACLDome(5.0.1)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ACLTelescope(5.0.1)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\AstroPhysics(4.1.25)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.10)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.13)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.14)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\CyberDrive(5.0.1)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS Setup_5_03.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_505.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_505_v5v6.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_5_03.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_505.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_505_v5v6.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\JMISmartFocus(4.0.1)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LakesideAstro Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LesveDome 5 0 27 Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LittleFootClassic(1.0.0)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LXPTelescope(5.0.1)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\MeadeClassic(5.0.3)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\MeadeLX200GPS(5.0.0)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Optec IFW(1.1.0.1) Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\OptecPyxis(1.0.4)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\OptecTCF(4.1.0)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\PCTCSCombined(5.0.1)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\QHY8ASCOMSetup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\QHY9ASCOMSetup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\RoboFocus(3.0.9)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ServoCAT(4.2.2)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\StarlightXpress Setup, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.1)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.2)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.3)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.4)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.6b)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2K(5.1.7b)Setup.exe, 5.5
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\, List of applications requiring a localised decimal separator in the returned Platform Version value (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ACLDome(5.0.1)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ACLTelescope(5.0.1)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\AstroPhysics(4.1.25)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.10)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.13)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.14)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\CyberDrive(5.0.1)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS Setup_5_03.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_505.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_505_v5v6.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_5_03.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_505.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_505_v5v6.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\JMISmartFocus(4.0.1)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LakesideAstro Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LesveDome 5 0 27 Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LittleFootClassic(1.0.0)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LXPTelescope(5.0.1)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\MeadeClassic(5.0.3)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\MeadeLX200GPS(5.0.0)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Optec IFW(1.1.0.1) Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\OptecPyxis(1.0.4)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\OptecTCF(4.1.0)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\PCTCSCombined(5.0.1)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\QHY8ASCOMSetup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\QHY9ASCOMSetup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\RoboFocus(3.0.9)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ServoCAT(4.2.2)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\StarlightXpress Setup, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.1)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.2)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.3)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.4)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.6b)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2K(5.1.7b)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\TheSkyTelescope(5.2.7)Setup.exe, 
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForceSystemTimer\, List of applications for which Utiliites.Timer will employ a Systems.Timer timer in place of the default Forms timer. (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForceSystemTimer\WScript.Exe, True
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ForceSystemTimer\Astroart.Exe, True
-  Write Registry Key HKLM\SOFTWARE\ASCOM\ObservingConditions Drivers\,  (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\, Description of installed ASCOM Platform (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Installation Date, $DATE$ $TIME$
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Name, $TITLE$
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Product Code, $PRODUCTCODE$
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Revision Code, $REVISIONCODE$
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Version, $VERSION$
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Rotator Drivers\,  (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\SafetyMonitor Drivers\,  (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\,  (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\SwitchSim.Switch\, Simulator (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\,  (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOMDome.Telescope\\, ASCOM Dome Control (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Hub.Telescope\\, Generic Hub (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\POTH.Telescope\\, POTH Hub (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Pipe.Telescope\\, Pipe diagnostic tool (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\, Simulator (permanent)
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Video Drivers\,  (permanent)
-  [END REGION]
-   
-  [DEFINE REGION: Specify additional clean-up required when uninstalling]
-  Comment: Remove TLB files created by RegAsm when application is uninstalled
-  Delete Files $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\*.tlb (when uninstalling)
-  Delete Files $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\*.tlb (when uninstalling)
-  Delete Files $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\*.tlb (when uninstalling)
-  Delete Files $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\*.tlb (when uninstalling)
-  Delete Files $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\*.tlb (when uninstalling)
-  Delete Files $TARGETDIR$\Tools\*.avi (when uninstalling)
-   
-  [END REGION]
-   
-  Comment: Run the installation
-  Apply Install (get result into variable SUCCESS)
-   
-  Comment: Save the installation success value and log status outcomes
-  Set Variable MYPROGRESS to 20
-  Write into Text File $SETUPLOG$ from Value $TIME$ Apply Install - Success:  $SUCCESS$, LastError: $LASTERROR$ (at end of file)
-  Write into Text File $SETUPLOG$ from Value  (at end of file)
-   
-  Comment: Process COM registrations and other activities if the MSI install was successful
-  if Variable SUCCESS not Equals ERROR
+  [DEFINE REGION: Extra activities if on a 64bit system]
+  Comment: Extra registration of 64bit components if on 64bit system
+  if Variable WIN64MODE Equals TRUE
      
-    [DEFINE REGION: Non-MSI installation activities]
-     
-    [DEFINE REGION: Create shortcuts]
-    Comment: Menu shortcuts
-    Comment: Install after main MSI install has run so we pick up correct icons from applicaitons
-    Set Variable NATIVE_ENGINE to TRUE
-    Write into Text File $SETUPLOG$ from Value $TIME$ Creating shortcuts in native mode (at end of file)
-    Write into Text File $SETUPLOG$ from Value $TIME$ DesktopFolder: $DESKTOPFOLDER$ (at end of file)
-    Write into Text File $SETUPLOG$ from Value $TIME$ ShortcutFolder: $SHORTCUTFOLDER$ (at end of file)
-    Write into Text File $SETUPLOG$ from Value  (at end of file)
-    Create Shortcut $DESKTOPFOLDER$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-    Create Shortcut $DESKTOPFOLDER$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
-    Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions SimulatorTester to $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Test.exe
-    Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions Hub Tester to $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Test.exe
-    Create Shortcut $SHORTCUTFOLDER$\ASCOM Compatible Software to http://ascom-standards.org/Community/Partners.htm
-    Create Shortcut $SHORTCUTFOLDER$\ASCOM Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
-    Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
-    Create Shortcut $SHORTCUTFOLDER$\Check for Updates to $TARGETDIR$\Tools\CheckForUpdates.js
-    Create Shortcut $SHORTCUTFOLDER$\Help and Device Interface Standards to $TARGETDIR$\Docs\PlatformHelp.chm
-    Create Shortcut $SHORTCUTFOLDER$\How to get support to http://ascom-standards.org/Support/index.htm
-    Create Shortcut $SHORTCUTFOLDER$\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
-    Create Shortcut $SHORTCUTFOLDER$\Tools\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
-    Create Shortcut $SHORTCUTFOLDER$\Tools\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-    Create Shortcut $SHORTCUTFOLDER$\Simulators\Dome Simulator to $COMMONFILES$\ASCOM\Dome\DomeSim.exe
-    Create Shortcut $SHORTCUTFOLDER$\Simulators\FilterWheel Simulator to $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
-    Create Shortcut $SHORTCUTFOLDER$\Simulators\FilterWheel Simulator .NET to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
-    Create Shortcut $SHORTCUTFOLDER$\Simulators\Focus Simulator to $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
-    Create Shortcut $SHORTCUTFOLDER$\Simulators\Rotator Simulator .NET to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
-    Create Shortcut $SHORTCUTFOLDER$\Simulators\Switch Simulator to $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
-    Create Shortcut $SHORTCUTFOLDER$\Simulators\Telescope Simulator to $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
-    Create Shortcut $SHORTCUTFOLDER$\Simulators\Telescope Simulator .NET to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
-    Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor to $COMMONFILES$\ASCOM\Telescope\Pipe.exe
-    Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
-    Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub to $COMMONFILES$\ASCOM\Telescope\POTH.exe
-    Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\POTHHelp.htm
-    Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
-    Set Variable NATIVE_ENGINE to FALSE
-     
-    [END REGION]
-     
-    Comment: Register Platform 5 components
-    Set Variable MYPROGRESS to 21
-    Set Variable PROGRESSTEXT to Registering assembly ASCOM.Helper 1.0.0.0
-    Register assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-    Set Variable MYPROGRESS to 22
-    Set Variable PROGRESSTEXT to Registering assembly ASCOM.Helper2 1.0.0.0
-    Register assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-    Set Variable MYPROGRESS to 23
-    Set Variable PROGRESSTEXT to Registering assembly ASCOM.Interfaces 1.0.0.0
-    Register assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-     
-    Comment: Register the Platform 5 type libraries
-    Set Variable MYPROGRESS to 24
-    Set Variable PROGRESSTEXT to Registering AscomMaterInterfaces typelib
-    Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - ASCOMMasterInterfaces (at end of file)
-    Set Variable MYPROGRESS to 25
-    Set Variable PROGRESSTEXT to Registering ASCOM.Helper typelib
-    Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper.tlb" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - Helper (at end of file)
-    Set Variable MYPROGRESS to 26
-    Set Variable PROGRESSTEXT to Registering ASCOM.Helper2 typelib
-    Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper2.tlb" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - Helper2 (at end of file)
-    Set Variable MYPROGRESS to 26
-    Set Variable PROGRESSTEXT to Registering IObjectSafety typelib
-    Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\IObjectSafety.tlb" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - IObjectSafety (at end of file)
-     
-    Comment: Register Platform 5 Simulators
-    Set Variable MYPROGRESS to 27
-    Set Variable PROGRESSTEXT to Registering Platform 5 Telescope simulator
-    Run Program $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe /regserver (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - ScopeSim (at end of file)
-    Set Variable MYPROGRESS to 28
-    Set Variable PROGRESSTEXT to Registering Hub server
-    Run Program $COMMONFILES$\ASCOM\Telescope\Hub.exe /regserver (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Hub (at end of file)
-    Set Variable MYPROGRESS to 29
-    Set Variable PROGRESSTEXT to Registering Pipe server
-    Run Program $COMMONFILES$\ASCOM\Telescope\Pipe.exe /regserver (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Pipe (at end of file)
-    Set Variable MYPROGRESS to 30
-    Set Variable PROGRESSTEXT to Registering POTH server
-    Run Program $COMMONFILES$\ASCOM\Telescope\POTH.exe /regserver (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - POTH (at end of file)
-    Set Variable MYPROGRESS to 31
-    Set Variable PROGRESSTEXT to Registering Platform 5 Dome simulator
-    Run Program $COMMONFILES$\ASCOM\Dome\DomeSim.exe /regserver (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - DomeSim (at end of file)
-    Set Variable MYPROGRESS to 32
-    Set Variable PROGRESSTEXT to Registering Platform 5 Dome simulator
-    Run Program $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe /regserver (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - ASCOMDome (at end of file)
-    Set Variable MYPROGRESS to 33
-    Set Variable PROGRESSTEXT to Registering Platform 5 FilterWheel simulator
-    Run Program $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe /regserver (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FilterWheelSim (at end of file)
-    Set Variable MYPROGRESS to 34
-    Set Variable PROGRESSTEXT to Registering Platform 5 Focuser simulator
-    Run Program $COMMONFILES$\ASCOM\Focuser\FocusSim.exe /regserver (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FocusSim (at end of file)
-    Set Variable MYPROGRESS to 35
-    Set Variable PROGRESSTEXT to Registering Platform 5 Switch simulator
-    Run Program $COMMONFILES$\ASCOM\Switch\SwitchSim.exe /regserver (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - SwitchSim (at end of file)
-     
-    Comment: Register Platform 5.5 components
-    Set Variable MYPROGRESS to 36
-    Set Variable PROGRESSTEXT to Registering ASCOM.Astrometry 5.5.6.0
-    Register assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-    Set Variable MYPROGRESS to 37
-    Set Variable MYPROGRESS to 38
-    Set Variable PROGRESSTEXT to Registering ASCOM.Utilities 5.5.6.0
-    Register assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-     
-    Comment: Install policy files
-    Set Variable MYPROGRESS to 39
-    Set Variable PROGRESSTEXT to Installing policy.5.5.ASCOM.Utilities
-    Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.5.5.ASCOM.Utilities.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Utilities (at end of file)
-    if Variable GACINSTALLRC not Equals 0
-      MessageBalloon: GACInstall, Utilities install error RC: $GACINSTALLRC$
-    end
-    Set Variable MYPROGRESS to 40
-    Set Variable PROGRESSTEXT to Installing policy.5.5.ASCOM.Astrometry
-    Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.5.5.ASCOM.Astrometry.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Astrometry Policy (at end of file)
-    if Variable GACINSTALLRC not Equals 0
-      MessageBalloon: GACInstall, Astrometry install error RC: $GACINSTALLRC$
-    end
-    Set Variable MYPROGRESS to 41
-    Set Variable PROGRESSTEXT to Installing policy.1.0.ASCOM.DriverAccess
-    Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.0.ASCOM.DriverAccess.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - DriverAccess Policy (at end of file)
-    if Variable GACINSTALLRC not Equals 0
-      MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
-    end
-    Set Variable MYPROGRESS to 42
-    Set Variable PROGRESSTEXT to Installing policy.1.0.ASCOM.Exceptions
-    Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.0.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Exceptions Policy 1.0 (at end of file)
-    if Variable GACINSTALLRC not Equals 0
-      MessageBalloon: GACInstall, Exceptions 1.0 install error RC: $GACINSTALLRC$
-    end
-    Set Variable MYPROGRESS to 43
-    Set Variable PROGRESSTEXT to Installing policy.1.1.ASCOM.Exceptions
-    Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.1.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Exceptions Policy 1.1 (at end of file)
-    if Variable GACINSTALLRC not Equals 0
-      MessageBalloon: GACInstall, Exceptions 1.1 install error RC: $GACINSTALLRC$
-    end
-     
-    Comment: I'm sorry, I know this is an unforgiveable hack but I can't see any other way to have more than one pdb on the system. Peter
-    Set Variable MYPROGRESS to 44
-    Set Variable PROGRESSTEXT to Installing ASCOM.Utilities debug information
-    Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Utilities.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Utilities\5.5.6.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Copy - Utilities 5.5.6 (at end of file)
-    Set Variable MYPROGRESS to 45
-    Set Variable PROGRESSTEXT to Installing ASCOM.Astrometry debug information
-    Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Astrometry.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Astrometry\5.5.6.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Copy - Astrometry 5.5.6 (at end of file)
-    Set Variable MYPROGRESS to 46
-    Set Variable PROGRESSTEXT to Installing ASCOM.Atributes debug information
-    Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Copy - Attributes 5.5.0 (at end of file)
-     
-    Comment: Register Platform 6 components
-    Set Variable MYPROGRESS to 47
-    Set Variable PROGRESSTEXT to Registering ASCOM.Astrometry 6.0.0.0
-    Register assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-    Set Variable MYPROGRESS to 48
-    Set Variable PROGRESSTEXT to Registering ASCOM.Exceptions 6.0.0.0
-    Register assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-    Set Variable MYPROGRESS to 49
-    Set Variable PROGRESSTEXT to Registering ASCOM.Utilities 6.0.0.0
-    Register assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-    Set Variable MYPROGRESS to 50
-    Set Variable PROGRESSTEXT to Registering ASCOM.Utilities.Video 6.1.0.0
-    Register assembly ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-    Set Variable MYPROGRESS to 51
-    Set Variable PROGRESSTEXT to Registering ASCOM.Cache 6.0.0.0
-    Register assembly ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-     
-    Comment: Register in-process simulator DLL files with Codebase option
-    Set Variable MYPROGRESS to 52
-    Set Variable PROGRESSTEXT to Registering Platform 6 Camera simulator
-    Register assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll, set the code base in the registry
-    Set Variable MYPROGRESS to 53
-    Set Variable PROGRESSTEXT to Registering Platform 6 Focuser simulator
-    Register assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll, set the code base in the registry
-    Set Variable MYPROGRESS to 54
-    Set Variable PROGRESSTEXT to Registering Platform 6 SafetyMonitor simulator
-    Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll, set the code base in the registry
-    Set Variable MYPROGRESS to 55
-    Set Variable PROGRESSTEXT to Registering Platform 6 Dome simulator
-    Register assembly $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll, set the code base in the registry
-    Set Variable MYPROGRESS to 56
-    Set Variable PROGRESSTEXT to Registering Platform 6 Video simulator
-    Register assembly $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll, set the code base in the registry
-    Set Variable MYPROGRESS to 57
-    Set Variable PROGRESSTEXT to Registering Platform 6 OpenWeatherMap simulator
-    Register assembly $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\ASCOM.OpenWeatherMap.ObservingConditions.dll, set the code base in the registry
-     
-    Comment: Register these LocalServer drivers using the -register option
-    Set Variable MYPROGRESS to 58
-    Set Variable PROGRESSTEXT to Registering Platform 6 FilterWheel simulator
-    Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe -register (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FilterWheel Simulator 6 (at end of file)
-    Set Variable MYPROGRESS to 59
-    Set Variable PROGRESSTEXT to Registering Platform 6 Rotator simulator
-    Run Program $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe -register (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Rotator Simulator 6 (at end of file)
-    Set Variable MYPROGRESS to 60
-    Set Variable PROGRESSTEXT to Registering Platform 6 Switch simulator
-    Run Program $COMMONFILES$\ASCOM\Switch\Switch V2\ASCOM.Simulator.Server.exe -register (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Switch V2 Simulator (at end of file)
-    Set Variable MYPROGRESS to 61
-    Set Variable PROGRESSTEXT to Registering Platform 6 Telescope simulator
-    Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe -register (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Telescope Simulator 6 (at end of file)
-    Set Variable MYPROGRESS to 62
-    Set Variable PROGRESSTEXT to Registering Platform 6 ObservingConditions simulator
-    Run Program $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Server.exe -register (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Observing Conditions Simulator (at end of file)
-    Set Variable MYPROGRESS to 63
-    Set Variable PROGRESSTEXT to Registering Platform 6 Observing Conditions Hub
-    Run Program $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Server.exe -register (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Observing Conditions Hub (at end of file)
-     
-     
-    Comment: Install 32bit native images
-    Set Variable MYPROGRESS to 64
-    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
-    Run Program $NGEN32$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DeviceInterfaces 6 (at end of file)
-    Set Variable MYPROGRESS to 65
-    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper - v1.0.0.0
-    Run Program $NGEN32$ "ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Helper (at end of file)
-    Set Variable MYPROGRESS to 66
-    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities - v6.0.0.0
-    Run Program $NGEN32$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Utilities 6 (at end of file)
-    Set Variable MYPROGRESS to 67
-    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities.Video - v6.1.0.0
-    Run Program $NGEN32$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - VideoUtils 6.1 (at end of file)
-    Set Variable MYPROGRESS to 68
-    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry - v5.5.6.0
-    Run Program $NGEN32$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Astrometry 5.5.6 (at end of file)
-    Set Variable MYPROGRESS to 69
-    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry - v6.0.0.0
-    Run Program $NGEN32$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Astrometry 6 (at end of file)
-    Set Variable MYPROGRESS to 70
-    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DriverAccess - v6.0.0.0
-    Run Program $NGEN32$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DriverAccess 6 (at end of file)
-    Set Variable MYPROGRESS to 71
-    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper2 - v1.0.0.0
-    Run Program $NGEN32$ "ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Helper2 1.0 (at end of file)
-    Set Variable MYPROGRESS to 72
-    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Exceptions - v6.0.0.0
-    Run Program $NGEN32$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Exceptions 6 (at end of file)
-    Set Variable MYPROGRESS to 73
-    Set Variable PROGRESSTEXT to Creating 32bit native images - DirectShowLib-2005 - v2.1.0.15637
-    Run Program $NGEN32$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DirectShowLib 2.1 (at end of file)
-    Set Variable MYPROGRESS to 74
-    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Cache - v6.0.0.0
-    Run Program $NGEN32$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Cache (at end of file)
-     
-    Set Variable PROGRESSTEXT to Initialising earth rotation data
-    Run Program $TARGETDIR$\Tools\EarthRotationUpdate.exe /Initialise (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Initialise earth rotation data (at end of file)
-     
-    [DEFINE REGION: Extra activities if on a 64bit system]
-    Comment: Extra registration of 64bit components if on 64bit system
-    if Variable WIN64MODE Equals TRUE
-       
-      Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
-      Comment: Register core components
-      Set Variable MYPROGRESS to 75
-      Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Astrometry.dll for COM
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Astrometry (at end of file)
-      if Variable RC not Equals 0
-        MessageBalloon: RegAsm 64, Unable to register the ASCOM.Astrometry assembly for 64bit operation. RC: $RC$
-      end
-      Set Variable MYPROGRESS to 76
-      Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Exceptions.dll for COM
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Exceptions (at end of file)
-      if Variable RC not Equals 0
-        MessageBalloon: RegAsm 64, Unable to register the ASCOM.Exceptions assembly for 64bit operation. RC: $RC$
-      end
-      Set Variable MYPROGRESS to 77
-      Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Utilities.dll for COM
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Utilities (at end of file)
-      if Variable RC not Equals 0
-        MessageBalloon: RegAsm 64, Unable to register the ASCOM.Utilities assembly for 64bit operation. RC: $RC$
-      end
-      Set Variable MYPROGRESS to 78
-      Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Utilities.Video.dll for COM
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Video Utilities (at end of file)
-      if Variable RC not Equals 0
-        MessageBalloon: RegAsm 64, Unable to register the ASCOM.Utilites.Video assembly for 64bit operation. RC: $RC$
-      end
-      Set Variable MYPROGRESS to 79
-      Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Cache.dll for COM
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.4\ASCOM.Cache.dll" (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - ASCOM Cache (at end of file)
-      if Variable RC not Equals 0
-        MessageBalloon: RegAsm 64, Unable to register the ASCOM.Cache assembly for 64bit operation. RC: $RC$
-      end
-       
-      Comment: Register simulators
-      Set Variable MYPROGRESS to 80
-      Set Variable PROGRESSTEXT to Registering Platform 6 Camera simulator
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Camera Simulator 6 (at end of file)
-      if Variable RC not Equals 0
-        MessageBalloon: RegAsm 64, Unable to register the ASCOM Camera simulator for 64bit operation. RC: $RC$
-      end
-      Set Variable MYPROGRESS to 81
-      Set Variable PROGRESSTEXT to Registering Platform 6 Focuser simulator
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll" /codebase (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Focus Simulator 6 (at end of file)
-      if Variable RC not Equals 0
-        MessageBalloon: RegAsm 64, Unable to register the ASCOM Focuser simulator for 64bit operation. RC: $RC$
-      end
-      Set Variable MYPROGRESS to 82
-      Set Variable PROGRESSTEXT to Registering Platform 6 Safety Monitor simulator
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll" /codebase (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Safety Monitor Simulator 6 (at end of file)
-      if Variable RC not Equals 0
-        MessageBalloon: RegAsm 64, Unable to register the ASCOM Safety Monitor simulator for 64bit operation. RC: $RC$
-      end
-      Set Variable MYPROGRESS to 83
-      Set Variable PROGRESSTEXT to Registering Platform 6 Dome simulator
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll" /codebase (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Dome Simulator 6 (at end of file)
-      if Variable RC not Equals 0
-        MessageBalloon: RegAsm 64, Unable to register the ASCOM Dome simulator for 64bit operation. RC: $RC$
-      end
-      Set Variable MYPROGRESS to 84
-      Set Variable PROGRESSTEXT to Registering Platform 6 Video simulator
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll" /codebase (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Video Simulator (at end of file)
-      if Variable RC not Equals 0
-        MessageBalloon: RegAsm 64, Unable to register the ASCOM Video simulator for 64bit operation. RC: $RC$
-      end
-      Set Variable MYPROGRESS to 85
-      Set Variable PROGRESSTEXT to Registering Platform 6 Open Weathermap Driver
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\ASCOM.OpenWeatherMap.ObservingConditions.dll" /codebase (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Open Weather Map Driver (at end of file)
-      if Variable RC not Equals 0
-        MessageBalloon: RegAsm 64, Unable to register the ASCOM Open Weathermap driver for 64bit operation. RC: $RC$
-      end
-       
-      Comment: Create 64bit native images
-      Set Variable MYPROGRESS to 86
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
-      Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DeviceInterfaces 6 (at end of file)
-      Set Variable MYPROGRESS to 87
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DriverAccess - v6.0.0.0
-      Run Program $NGEN64$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DriverAccess 6 (at end of file)
-      Set Variable MYPROGRESS to 88
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Exceptions - v6.0.0.0
-      Run Program $NGEN64$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Exceptions 6 (at end of file)
-      Set Variable MYPROGRESS to 89
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Utilities - v6.0.0.0
-      Run Program $NGEN64$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Utilities 6 (at end of file)
-      Set Variable MYPROGRESS to 90
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Utilities.Video - v6.1.0.0
-      Run Program $NGEN64$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Video Utilities (at end of file)
-      Set Variable MYPROGRESS to 91
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - v5.5.6.0
-      Run Program $NGEN64$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Astrometry 5.5.6 (at end of file)
-      Set Variable MYPROGRESS to 92
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - v6.0.0.0
-      Run Program $NGEN64$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Astrometry 6 (at end of file)
-      Set Variable MYPROGRESS to 93
-      Set Variable PROGRESSTEXT to Creating 64bit native images - DirectShowLib-2005 - v2.1.0.15637
-      Run Program $NGEN64$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DirectShowLib (at end of file)
-      Set Variable MYPROGRESS to 94
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Cache - v6.0.0.0
-      Run Program $NGEN64$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - ASCOM Cache (at end of file)
-      Set Variable MYPROGRESS to 95
-       
-      Comment: Install additional Platform 5.5 files on 64 bit systems to make sure old 64bit mode driver installers continue to work
-      Set Variable PROGRESSTEXT to Installing additional Platform 5.5 files required for 64bit systems
-      Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $COMMONFILES64$ASCOM\.net
-      Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES64$ASCOM\.net
-      Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\These files are not in use - ReadMe.txt to $COMMONFILES64$ASCOM\.net
-      Apply Install (get result into variable SUCCESS64)
-      Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
-    end
-    [END REGION]
-     
-    Comment: Tidy up COM registration (add AppID for DCOM etc.) and finish
-    Set Variable PROGRESSTEXT to Finalising install
-    Run Program $SUPPORTDIR$\FinaliseInstall.exe  (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ FinaliseInstall (at end of file)
-    Set Variable MYPROGRESS to 100
+    Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+    Comment: Register core components
+    Set Variable MYPROGRESS to 75
+    Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Astrometry.dll for COM
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Astrometry (at end of file)
     if Variable RC not Equals 0
-      MessageBox: Finalise Setup, An error has occured while finalising the installation, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Yahoo group.
-      Set Variable ASCOMERROR to $RC$
+      MessageBalloon: RegAsm 64, Unable to register the ASCOM.Astrometry assembly for 64bit operation. RC: $RC$
     end
-    [END REGION]
+    Set Variable MYPROGRESS to 76
+    Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Exceptions.dll for COM
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Exceptions (at end of file)
+    if Variable RC not Equals 0
+      MessageBalloon: RegAsm 64, Unable to register the ASCOM.Exceptions assembly for 64bit operation. RC: $RC$
+    end
+    Set Variable MYPROGRESS to 77
+    Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Utilities.dll for COM
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Utilities (at end of file)
+    if Variable RC not Equals 0
+      MessageBalloon: RegAsm 64, Unable to register the ASCOM.Utilities assembly for 64bit operation. RC: $RC$
+    end
+    Set Variable MYPROGRESS to 78
+    Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Utilities.Video.dll for COM
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Video Utilities (at end of file)
+    if Variable RC not Equals 0
+      MessageBalloon: RegAsm 64, Unable to register the ASCOM.Utilites.Video assembly for 64bit operation. RC: $RC$
+    end
+    Set Variable MYPROGRESS to 79
+    Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Cache.dll for COM
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.4\ASCOM.Cache.dll" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - ASCOM Cache (at end of file)
+    if Variable RC not Equals 0
+      MessageBalloon: RegAsm 64, Unable to register the ASCOM.Cache assembly for 64bit operation. RC: $RC$
+    end
      
+    Comment: Register simulators
+    Set Variable MYPROGRESS to 80
+    Set Variable PROGRESSTEXT to Registering Platform 6 Camera simulator
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Camera Simulator 6 (at end of file)
+    if Variable RC not Equals 0
+      MessageBalloon: RegAsm 64, Unable to register the ASCOM Camera simulator for 64bit operation. RC: $RC$
+    end
+    Set Variable MYPROGRESS to 81
+    Set Variable PROGRESSTEXT to Registering Platform 6 Focuser simulator
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll" /codebase (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Focus Simulator 6 (at end of file)
+    if Variable RC not Equals 0
+      MessageBalloon: RegAsm 64, Unable to register the ASCOM Focuser simulator for 64bit operation. RC: $RC$
+    end
+    Set Variable MYPROGRESS to 82
+    Set Variable PROGRESSTEXT to Registering Platform 6 Safety Monitor simulator
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll" /codebase (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Safety Monitor Simulator 6 (at end of file)
+    if Variable RC not Equals 0
+      MessageBalloon: RegAsm 64, Unable to register the ASCOM Safety Monitor simulator for 64bit operation. RC: $RC$
+    end
+    Set Variable MYPROGRESS to 83
+    Set Variable PROGRESSTEXT to Registering Platform 6 Dome simulator
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll" /codebase (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Dome Simulator 6 (at end of file)
+    if Variable RC not Equals 0
+      MessageBalloon: RegAsm 64, Unable to register the ASCOM Dome simulator for 64bit operation. RC: $RC$
+    end
+    Set Variable MYPROGRESS to 84
+    Set Variable PROGRESSTEXT to Registering Platform 6 Video simulator
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll" /codebase (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Video Simulator (at end of file)
+    if Variable RC not Equals 0
+      MessageBalloon: RegAsm 64, Unable to register the ASCOM Video simulator for 64bit operation. RC: $RC$
+    end
+    Set Variable MYPROGRESS to 85
+    Set Variable PROGRESSTEXT to Registering Platform 6 Open Weathermap Driver
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\ASCOM.OpenWeatherMap.ObservingConditions.dll" /codebase (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Open Weather Map Driver (at end of file)
+    if Variable RC not Equals 0
+      MessageBalloon: RegAsm 64, Unable to register the ASCOM Open Weathermap driver for 64bit operation. RC: $RC$
+    end
+     
+    Comment: Create 64bit native images
+    Set Variable MYPROGRESS to 86
+    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
+    Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DeviceInterfaces 6 (at end of file)
+    Set Variable MYPROGRESS to 87
+    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DriverAccess - v6.0.0.0
+    Run Program $NGEN64$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DriverAccess 6 (at end of file)
+    Set Variable MYPROGRESS to 88
+    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Exceptions - v6.0.0.0
+    Run Program $NGEN64$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Exceptions 6 (at end of file)
+    Set Variable MYPROGRESS to 89
+    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Utilities - v6.0.0.0
+    Run Program $NGEN64$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Utilities 6 (at end of file)
+    Set Variable MYPROGRESS to 90
+    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Utilities.Video - v6.1.0.0
+    Run Program $NGEN64$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Video Utilities (at end of file)
+    Set Variable MYPROGRESS to 91
+    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - v5.5.6.0
+    Run Program $NGEN64$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Astrometry 5.5.6 (at end of file)
+    Set Variable MYPROGRESS to 92
+    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - v6.0.0.0
+    Run Program $NGEN64$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Astrometry 6 (at end of file)
+    Set Variable MYPROGRESS to 93
+    Set Variable PROGRESSTEXT to Creating 64bit native images - DirectShowLib-2005 - v2.1.0.15637
+    Run Program $NGEN64$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DirectShowLib (at end of file)
+    Set Variable MYPROGRESS to 94
+    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Cache - v6.0.0.0
+    Run Program $NGEN64$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - ASCOM Cache (at end of file)
+    Set Variable MYPROGRESS to 95
+     
+    Comment: Install additional Platform 5.5 files on 64 bit systems to make sure old 64bit mode driver installers continue to work
+    Set Variable PROGRESSTEXT to Installing additional Platform 5.5 files required for 64bit systems
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $COMMONFILES64$ASCOM\.net
+    Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES64$ASCOM\.net
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\These files are not in use - ReadMe.txt to $COMMONFILES64$ASCOM\.net
+    Apply Install (get result into variable SUCCESS64)
+    Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
   end
+  [END REGION]
+   
+  Comment: Tidy up COM registration (add AppID for DCOM etc.) and finish
+  Set Variable PROGRESSTEXT to Finalising install
+  Run Program $SUPPORTDIR$\FinaliseInstall.exe  (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ FinaliseInstall (at end of file)
+  Set Variable MYPROGRESS to 100
+  if Variable RC not Equals 0
+    MessageBox: Finalise Setup, An error has occured while finalising the installation, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Yahoo group.
+    Set Variable ASCOMERROR to $RC$
+  end
+  [END REGION]
+   
 end
 Set Variable MYPROGRESS to 100
 [END REGION]
  
-[END REGION]
- 
-[END REGION]
- 
-[DEFINE REGION: Finish Setup]
-Comment: End of Installation
+[DEFINE REGION: Finish Setup Dialogue]
+label: Finish Setup
 Hide Dialog
+ 
+Comment: Initialise finish dialogue message display variables
+Set Variable FINISH_TITLE to 
+Set Variable FINISH_TITLE_POSITION to 
+Set Variable FINISH_DESCRIPTION to 
+Set Variable FINISH_CONTEXT to 
+ 
+Comment: We Ensure that the SUCCESS variable reflects the overall ewrror state
+if Variable ASCOMERROR not Equals 
+  Comment: We have an ASCOM error so reflect this in the SUCCESS variable
+  Set Variable SUCCESS to ERROR
+end
+Comment: Only show the User Guide if the installation competed properly
+if Variable SUCCESS not Equals (Ignore Case) COMPLETE
+  Comment: We do not have a normal comlete install so we don't want to show the user guide even if it was requested
+  Set Variable DISPLAY_USER_GUIDE to FALSE
+end
+ 
+Comment: test whether we have an error, if so then we just display the error messages
+if Variable SUCCESS not Equals (Ignore Case) ERROR
+  Comment: No errors so first set default messages in case an unexpected value is returned in the SUCCESS variable
+  Set Variable FINISH_TITLE to Unexpected SUCCESS Status Returned: $SUCCESS$!
+  Set Variable FINISH_CONTEXT to The installation may or may not have completed successfully.$NEWLINE$Please report this on the Yahoo ASCOM-Talk group.
+  if Variable SUCCESS Equals (Ignore Case) CANCEL
+    Comment: User requested installation cancel
+    Set Variable FINISH_TITLE to Platform installation has been cancelled at your request.
+    Set Variable FINISH_CONTEXT to 
+  end
+  if Variable SUCCESS Equals (Ignore Case) REBOOT
+    Comment: User requested installation cancel
+    Set Variable FINISH_TITLE to $TITLE$ has been successfully installed.$NEWLINE$Your PC needs to be restarted to complete installation.
+    Set Variable FINISH_CONTEXT to 
+    Set Variable FINISH_DESCRIPTION to  Congratulations, ASCOM Platform 6 installed successfully!$NEWLINE$$NEWLINE$ Please review the "Introduction" section of the Help file in$NEWLINE$ Start Menu / ASCOM Platform 6 for changes in this release.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ Diagnostics Tool in ASCOM Platform 6 / Tools and report them on$NEWLINE$ the ASCOM Talk Yahoo forum. $NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
+  end
+  if Variable SUCCESS Equals (Ignore Case) COMPLETE
+    Comment: Success!
+    Set Variable FINISH_TITLE to $TITLE$ has been installed successfully.
+    Set Variable FINISH_DESCRIPTION to  Congratulations, ASCOM Platform 6 installed successfully!$NEWLINE$$NEWLINE$ Please review the "Introduction" section of the Help file in$NEWLINE$ Start Menu / ASCOM Platform 6 for changes in this release.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ Diagnostics Tool in ASCOM Platform 6 / Tools and report them on$NEWLINE$ the ASCOM Talk Yahoo forum.$NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
+    if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
+      Set Variable FINISH_CONTEXT to The user guide will be displayed after you click the Finish button
+    else
+      Set Variable FINISH_CONTEXT to 
+    end
+    Comment: Revise messages if in maintenance mode
+    if Variable MAINTENANCE Equals (Ignore Case) TRUE
+      if Variable REMOVE Equals (Ignore Case) TRUE
+        Comment: User requested uninstall
+        Set Variable FINISH_TITLE to $TITLE$ has been uninstalled.
+        Set Variable FINISH_CONTEXT to 
+        Set Variable FINISH_DESCRIPTION to 
+      end
+      if Variable REPAIR Equals (Ignore Case) TRUE
+        Comment: User requested repair
+        Set Variable FINISH_TITLE to $TITLE$ has been repaired.
+        Set Variable FINISH_CONTEXT to 
+        Set Variable FINISH_DESCRIPTION to 
+      end
+      if Variable MODIFY Equals (Ignore Case) TRUE
+        Comment: User requested change features
+        Set Variable FINISH_TITLE to $TITLE$ has been modified as requested.
+        Set Variable FINISH_CONTEXT to 
+        Set Variable FINISH_DESCRIPTION to 
+      end
+    end
+  end
+else
+  Comment: We have an error so set the error messages
+  Set Variable FINISH_TITLE to $TITLE$ installation failed
+  Set Variable FINISH_DESCRIPTION to Sorry, an error occurred during installation of Platform 6.$NEWLINE$$NEWLINE$Please review the PlatformInstall, UninstallASCOM and FinaliseInstall $NEWLINE$logs in the My Documents\ASCOM and the most recent$NEWLINE$My Documents\ASCOM\Logs YYYY MM DD folders.$NEWLINE$$NEWLINE$Please also run the Diagnostics Tool in ASCOM Platform 6 / Tools and $NEWLINE$post all logs on the ASCOM Talk Yahoo forum.$NEWLINE$$NEWLINE$Many thanks, The ASCOM Platform Team.
+  Set Variable FINISH_CONTEXT to Last error: "$LASTERROR$"$NEWLINE$ASCOM Error: $ASCOMERROR$
+end
+ 
 Comment: Ensure that the variables are all upper case so that tests conducted within the dialogue fire correctly!
 Convert Variable SUCCESS to UPPER case
-Set Variable RUNAPP to FALSE
 Display Dialog: finish, wait for dialog to return (modal)
 if Variable SILENT Equals FALSE
   if Variable REBOOTCOMPUTER Equals TRUE
@@ -1626,20 +1678,33 @@ if Variable SILENT Equals FALSE
       Reboot Computer
     end
   end
+   
   Comment: Show the user guide if we are not removing and not repairing the install
-  if Variable RUNAPP Equals TRUE
-    if Variable REMOVE Equals FALSE
-      if Variable SUCCESS Equals COMPLETE
-        if Variable REPAIR not Equals TRUE
-          if Variable ACROBATKEY not Equals 
-            Run Program $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf 
-          else
-            MessageBox: User Guide, Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 6.
-          end
+  if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
+    if Variable MAINTENANCE not Equals (Ignore Case) TRUE
+      Comment: Display the user guide if Acrobat is installed
+      if Variable ACROBATKEY not Equals 
+        Comment: Acrobat is installed
+        Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is installed - displaying guide (at end of file)
+        Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
+      else
+        Comment: Acrobat is not installed so check whether we are running on Windows 10 i.e. the build number is > 9600
+        if Variable OSCURRENTBUILD Greater Than 9600
+          Comment: We are running on Windows 10 so run the program and leave it to the user to display it in the MS Edge browser or application of their choice
+          Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is not installed but we are running on Windows 10 - displaying guide (at end of file)
+          Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
+        else
+          Comment: We are not running on Windows 10 so display an error message.
+          Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is not installed and we are not running on Windows 10 - showing cannot display message (at end of file)
+          MessageBox: User Guide, Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 6.
         end
       end
     end
+  else
+    Comment: User guide display not requested
+    Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: User guide display not requested (at end of file)
   end
 end
 [END REGION]
+label: End of Script
  

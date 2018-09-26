@@ -100,6 +100,10 @@
     <Folder Include="Introduction\" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Tools and Features\OCHSetup.PNG">
+      <ImageId>OCHSetup</ImageId>
+      <AlternateText>OCHSetup</AlternateText>
+    </Image>
     <Image Include="Tools and Features\CameraV2 State Diagram.png">
       <ImageId>CameraV2 State Diagram</ImageId>
       <AlternateText>Camera V 2 State Diagram</AlternateText>
@@ -130,6 +134,8 @@
       <AlternateText>ForceCOMPort</AlternateText>
     </Image>
     <Content Include="styles\branding-Help1.css" />
+    <None Include="Tools and Features\Observing Conditions Hub.aml" />
+    <None Include="Version History\Version 6.4 SP1.aml" />
     <None Include="Tools and Features\Earth Rotation Parameters.aml" />
     <None Include="Version History\Version 6.4.aml" />
     <None Include="Version History\Version 6.3 SP1.aml" />

@@ -25,6 +25,7 @@ using System.Threading;
 using System.Windows.Forms;
 using ASCOM.Utilities;
 using ASCOM.DriverAccess;
+using System.Text.RegularExpressions;
 
 namespace ASCOM.Simulator
 {
@@ -164,6 +165,14 @@ namespace ASCOM.Simulator
 
         #region Private variables and constants
 
+        // SUpported actions constants
+        private const string SUBSIDIARY_SUPPORTED_ACTION_NAME_FORMAT = "//{0}:{1}";
+        private const string OCH_TAG = "OCHTag"; const string OCH_TAG_LOWER_CASE = "ochtag";
+        private const string DRIVER_TAG_GROUPNAME = "DriverTag";
+        private const string DRIVER_ACTION_GROUPNAME = "ActioName";
+
+        private const string ACTION_NAME_REGEX = @"^\/\/(?'" + DRIVER_TAG_GROUPNAME + @"'\w+):(?'" + DRIVER_ACTION_GROUPNAME + @"'\w+)";
+
         // Miscellaneous variables
         private static int uniqueClientNumber = 0; // Unique number that increements on each call to UniqueClientNumber
         private readonly static object connectLockObject = new object();
@@ -171,6 +180,7 @@ namespace ASCOM.Simulator
         private static ConcurrentDictionary<long, bool> connectStates;
         private static DateTime timeOfLastUpdate = BAD_DATETIME; // Iniitalise to a bad value so we can tell whether a sensor has ever been accessed
         private static System.Timers.Timer averagePeriodTimer;
+        private static ConcurrentDictionary<string, string> supportedActions;
 
         #endregion
 
@@ -213,7 +223,41 @@ namespace ASCOM.Simulator
 
         public static string Action(int clientNumber, string actionName, string actionParameters)
         {
-            throw new ASCOM.ActionNotImplementedException("Action " + actionName + " is not implemented by this driver");
+            Match match = Regex.Match(actionName, ACTION_NAME_REGEX, RegexOptions.IgnoreCase);
+            string driverTag = match.Groups[DRIVER_TAG_GROUPNAME].Value;
+            string driverAction = match.Groups[DRIVER_ACTION_GROUPNAME].Value;
+            TL.LogMessage(clientNumber, "Action", string.Format("Regex - found Driver Tag: {0}, Action: {1}", driverTag, driverAction));
+
+            if ((!string.IsNullOrEmpty(driverTag)) & (!string.IsNullOrEmpty(driverAction))) // We have a subsidiary driver tag and action
+            {
+                if (supportedActions == null) // Populate the supportedActions dictionary with subsidiary driver's supported actions
+                {
+                    TL.LogMessage(clientNumber, "Action", string.Format("SupportedActions has not yet been called, calling it now to populate the list of available supported actions"));
+                    SupportedActions(0);
+                }
+
+                foreach (KeyValuePair<string, string> kvp in supportedActions)
+                {
+                    TL.LogMessage(clientNumber, "Action", string.Format("SupportedActions dictionary contains entry {0} {1}", kvp.Key, kvp.Value));
+                }
+
+                if (supportedActions.ContainsKey(actionName.ToUpper(CultureInfo.CurrentCulture))) // This is an action provided by a subsidiary driver
+                {
+                    if (ObservingConditionsDevices.ContainsKey(supportedActions[actionName.ToUpper(CultureInfo.CurrentCulture)])) // Look for the key in the ObservingConditions drivers list
+                    {
+                        return ObservingConditionsDevices[supportedActions[actionName.ToUpper(CultureInfo.CurrentCulture)]].Action(driverAction, actionParameters); // Call the subsidiary driver's action with the supplied parameters
+                    }
+                    else if (SwitchDevices.ContainsKey(supportedActions[actionName.ToUpper(CultureInfo.CurrentCulture)]))// Must be a switch driver
+                    {
+                        return SwitchDevices[supportedActions[actionName.ToUpper(CultureInfo.CurrentCulture)]].Action(driverAction, actionParameters); // Call the subsidiary driver's action with the supplied parameters
+                    }
+                    else
+                    {
+                        throw new ASCOM.ActionNotImplementedException("Action " + actionName + " can not be found in either observingconditions or switch driver collections");
+                    }
+                }
+            }
+            throw new ASCOM.ActionNotImplementedException("Action " + actionName + " is not implemented in the Observing Conditions Hub.");
         }
 
         public static void CommandBlind(int clientNumber, string command, bool raw)
@@ -361,8 +405,7 @@ namespace ASCOM.Simulator
 
         public static void Disconnect(int clientNumber)
         {
-            bool lastValue;
-            bool successfullyRemoved = connectStates.TryRemove(clientNumber, out lastValue);
+            bool successfullyRemoved = connectStates.TryRemove(clientNumber, out bool lastValue);
             TL.LogMessage(clientNumber, "Disconnect", "Successfully removed entry from list of connected states: " + successfullyRemoved.ToString());
 
             if (ConnectionCount == 0) // The last connection has dropped so stop the timer and disconnect connected devices
@@ -400,6 +443,9 @@ namespace ASCOM.Simulator
                     Sensors[PropertyName].LastPeriodAverage = BAD_VALUE;
                     Sensors[PropertyName].TimeOfLastUpdate = BAD_DATETIME;
                 }
+
+                // Clear the list of supported actions so that it will be re-read on next use
+                if (supportedActions != null) supportedActions.Clear();
             }
         }
 
@@ -471,8 +517,63 @@ namespace ASCOM.Simulator
 
         public static ArrayList SupportedActions(int clientNumber)
         {
-            TL.LogMessage(clientNumber, "SupportedActions", "Returning empty arraylist");
-            return new ArrayList();
+            supportedActions = new ConcurrentDictionary<string, string>();
+            ArrayList overallSupportedActions = new ArrayList();
+
+            foreach (KeyValuePair<string, ObservingConditions> ObservingConditionsDevice in ObservingConditionsDevices)
+            {
+                TL.LogMessage(clientNumber, "SupportedActions", string.Format("Checking ObservingConditions driver {0} for supported actions", ObservingConditionsDevice.Key));
+                string tag = ObservingConditionsDevice.Key; // Set default tag as the ProgID before trying to get
+                try
+                {
+                    TL.LogMessage(clientNumber, "SupportedActions", string.Format("Calling Action {0} on driver {1}", OCH_TAG, ObservingConditionsDevice.Key));
+                    tag = ObservingConditionsDevice.Value.Action(OCH_TAG, "");
+                    TL.LogMessage(clientNumber, "SupportedActions", string.Format("Successfully called Action {0} on driver {1}, result: {2}", OCH_TAG, ObservingConditionsDevice.Key, tag));
+                }
+                catch (Exception ex)
+                {
+                    TL.LogMessageCrLf(clientNumber, "SupportedActions", string.Format("Exception: {0}", ex.ToString()));
+                }
+
+                ArrayList suportedActions = ObservingConditionsDevice.Value.SupportedActions; // Get the list of supported actions and add them to the dictionary
+                foreach (string supportedAction in suportedActions)
+                {
+                    supportedActions[string.Format(SUBSIDIARY_SUPPORTED_ACTION_NAME_FORMAT, tag, supportedAction).ToUpper(CultureInfo.CurrentCulture)] = ObservingConditionsDevice.Key; // Save the action with key: "//TAGNAME:ACTIONNAME" and value: "ProgID of the owning subsidiary driver"
+                    overallSupportedActions.Add(string.Format(SUBSIDIARY_SUPPORTED_ACTION_NAME_FORMAT, tag, supportedAction));
+                }
+            }
+
+            foreach (KeyValuePair<string, Switch> SwitchDevice in SwitchDevices)
+            {
+                TL.LogMessage(clientNumber, "SupportedActions", string.Format("Checking Switch driver {0} for supported actions", SwitchDevice.Key));
+                string tag = SwitchDevice.Key; // Set default tag as the ProgID before trying to get
+                try
+                {
+                    tag = SwitchDevice.Value.Action(OCH_TAG, "");
+                }
+                catch { }
+
+                ArrayList suportedActions = SwitchDevice.Value.SupportedActions; // Get the list of supported actions and add them to the dictionary
+                foreach (string supportedAction in suportedActions)
+                {
+                    supportedActions[string.Format(SUBSIDIARY_SUPPORTED_ACTION_NAME_FORMAT, tag, supportedAction).ToUpper(CultureInfo.CurrentCulture)] = SwitchDevice.Key; // Save the action with key: "//TAGNAME:ACTIONNAME" and value: "ProgID of the owning subsidiary driver"
+                    overallSupportedActions.Add(string.Format(SUBSIDIARY_SUPPORTED_ACTION_NAME_FORMAT, tag, supportedAction));
+                }
+            }
+
+            string actionList = "";
+            foreach (string action in overallSupportedActions)
+            {
+                actionList += action + " ";
+            }
+
+            foreach (KeyValuePair<string, string> kvp in supportedActions)
+            {
+                TL.LogMessage(clientNumber, "SupportedActions", string.Format("Found action {0} in driver {1}", kvp.Key, kvp.Value));
+            }
+
+            TL.LogMessage(clientNumber, "SupportedActions", "Returning arraylist containing actions: " + actionList.Trim());
+            return overallSupportedActions;
         }
 
         #endregion

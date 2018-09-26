@@ -29,14 +29,14 @@
 Imports ASCOM.DeviceInterface
 Imports System.Globalization
 
-<Guid("70896ae0-b6c4-4303-a945-01219bf40bb4")> _
-<ClassInterface(ClassInterfaceType.None)> _
+<Guid("70896ae0-b6c4-4303-a945-01219bf40bb4")>
+<ClassInterface(ClassInterfaceType.None)>
 Public Class Dome
     Implements IDomeV2, IDisposable
 
 #Region "New and IDisposable Support"
 
-    <System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")> _
+    <System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")>
     Public Sub New()
 
         Dim RegVer As String = "1"                      ' Registry version, use to change registry if required by new version
@@ -156,9 +156,19 @@ Public Class Dome
     Private Sub handboxTask()
         If g_handBox Is Nothing Then
             g_handBox = New HandboxForm
-            g_handBox.ShowDialog()
-            'g_handBox.Invoke(New Action(AddressOf g_handBox.Dispose))
-            g_handBox = Nothing
+            TL.LogMessage("HandboxTask", "Starting handbox dialogue")
+            Try
+                g_handBox.ShowDialog()
+                'g_handBox.Invoke(New Action(AddressOf g_handBox.Dispose))
+                TL.LogMessage("HandboxTask", "Closed handbox dialogue")
+
+            Catch ex As Exception
+                TL.LogMessage("HandboxTask", "Exception: " & ex.ToString())
+                Throw
+            Finally
+                g_handBox = Nothing
+            End Try
+
         End If
     End Sub
 
@@ -174,8 +184,10 @@ Public Class Dome
                     g_TrafficForm = Nothing
                 End If
                 If Not g_handBox Is Nothing Then
+                    If Not IsNothing(TL) Then Try : TL.LogMessage("Dispose", "Closing handbox!") : Catch : End Try
                     g_handBox.Invoke(New Action(AddressOf g_handBox.Close))
                     handboxThread.Join(1000)
+                    If Not IsNothing(TL) Then Try : TL.LogMessage("Dispose", "Handbox closed!") : Catch : End Try
                 End If
                 'If Not profile Is Nothing Then
                 '    Try : profile.Dispose() : Catch : End Try
@@ -219,12 +231,12 @@ Public Class Dome
 
     End Sub
 
-    <ComRegisterFunction()> _
+    <ComRegisterFunction()>
     Private Shared Sub RegisterASCOM(ByVal T As Type)
         RegUnregASCOM(True)
     End Sub
 
-    <ComUnregisterFunction()> _
+    <ComUnregisterFunction()>
     Private Shared Sub UnregisterASCOM(ByVal T As Type)
         RegUnregASCOM(False)
     End Sub
@@ -470,6 +482,7 @@ Public Class Dome
         Set(ByVal value As Boolean)
             Dim out As String
             Try
+                TL.LogMessage("Connected", String.Format("Connected set: {0}", value))
                 If Not g_TrafficForm Is Nothing Then
                     If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficStart("Connected: " & g_bConnected & " -> " & value)
                 End If
@@ -479,11 +492,32 @@ Public Class Dome
 
                 out = " (done)"
 
+                TL.LogMessage("Connected", "Starting thread")
+
+                ' Create the handbox if its not present
+                If IsNothing(g_handBox) Then
+                    ' Show the handbox now
+                    handboxThread = New Threading.Thread(AddressOf handboxTask)
+                    handboxThread.IsBackground = True
+                    handboxThread.TrySetApartmentState(Threading.ApartmentState.STA)
+                    handboxThread.Start()
+                    TL.LogMessage("Connected", "Thread started OK")
+
+                    TL.LogMessage("Connected", "Starting wait for handbox form to be created")
+                    Do
+                        Threading.Thread.Sleep(100)
+                        TL.LogMessage("Connected", "Waiting for handbox form to be created")
+                    Loop Until Not g_handBox Is Nothing
+                    TL.LogMessage("Connected", "Handbox created OK")
+                End If
+
                 If value Then
+                    TL.LogMessage("Connected", String.Format("Showing handbox - g_handox is nothing: {0}", IsNothing(g_handBox)))
                     g_handBox.Show()
                     If Not g_TrafficForm Is Nothing Then g_TrafficForm.Show()
                 Else
                     If Not g_TrafficForm Is Nothing Then g_TrafficForm.Hide()
+                    TL.LogMessage("Connected", String.Format("Hiding handbox - g_handox is nothing: {0}", IsNothing(g_handBox)))
                     g_handBox.Hide()
                 End If
 
@@ -695,7 +729,7 @@ Public Class Dome
         End If
 
         If Not g_bCanSetAltitude Then Throw New MethodNotImplementedException("SlewToAltitude")
-        
+
         check_connected()
 
         If g_eShutterState = ShutterState.shutterError Then Err.Raise(SCODE_SHUTTER_ERROR, ERR_SOURCE, "Method SlewToAltitude " & MSG_SHUTTER_ERROR)

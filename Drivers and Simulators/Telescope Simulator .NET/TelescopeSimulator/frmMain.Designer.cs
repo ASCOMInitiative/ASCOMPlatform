@@ -254,8 +254,8 @@ namespace ASCOM.Simulator
             this.buttonSlewUp.TabIndex = 0;
             this.buttonSlewUp.Text = "N";
             this.buttonSlewUp.UseVisualStyleBackColor = true;
-            this.buttonSlewUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlewUp_MouseDown);
-            this.buttonSlewUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlewUp_MouseUp);
+            this.buttonSlewUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ButtonSlewUp_MouseDown);
+            this.buttonSlewUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ButtonSlewUp_MouseUp);
             // 
             // buttonSlewRight
             // 
@@ -266,8 +266,8 @@ namespace ASCOM.Simulator
             this.buttonSlewRight.TabIndex = 3;
             this.buttonSlewRight.Text = "E";
             this.buttonSlewRight.UseVisualStyleBackColor = true;
-            this.buttonSlewRight.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlewRight_MouseDown);
-            this.buttonSlewRight.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlewRight_MouseUp);
+            this.buttonSlewRight.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ButtonSlewRight_MouseDown);
+            this.buttonSlewRight.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ButtonSlewRight_MouseUp);
             // 
             // buttonSlewLeft
             // 
@@ -278,8 +278,8 @@ namespace ASCOM.Simulator
             this.buttonSlewLeft.TabIndex = 1;
             this.buttonSlewLeft.Text = "W";
             this.buttonSlewLeft.UseVisualStyleBackColor = true;
-            this.buttonSlewLeft.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlewLeft_MouseDown);
-            this.buttonSlewLeft.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlewLeft_MouseUp);
+            this.buttonSlewLeft.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ButtonSlewLeft_MouseDown);
+            this.buttonSlewLeft.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ButtonSlewLeft_MouseUp);
             // 
             // buttonSlewDown
             // 
@@ -290,20 +290,20 @@ namespace ASCOM.Simulator
             this.buttonSlewDown.TabIndex = 4;
             this.buttonSlewDown.Text = "S";
             this.buttonSlewDown.UseVisualStyleBackColor = true;
-            this.buttonSlewDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlewDown_MouseDown);
-            this.buttonSlewDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlewDown_MouseUp);
+            this.buttonSlewDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ButtonSlewDown_MouseDown);
+            this.buttonSlewDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ButtonSlewDown_MouseUp);
             // 
             // buttonSlewStop
             // 
             this.buttonSlewStop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonSlewStop.Font = new System.Drawing.Font("Wingdings 2", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.buttonSlewStop.Image = ((System.Drawing.Image)(resources.GetObject("buttonSlewStop.Image")));
             this.buttonSlewStop.Location = new System.Drawing.Point(41, 40);
             this.buttonSlewStop.Name = "buttonSlewStop";
             this.buttonSlewStop.Size = new System.Drawing.Size(32, 31);
             this.buttonSlewStop.TabIndex = 2;
-            this.buttonSlewStop.Text = "Ä";
             this.buttonSlewStop.UseVisualStyleBackColor = true;
-            this.buttonSlewStop.Click += new System.EventHandler(this.buttonSlewStop_Click);
+            this.buttonSlewStop.Click += new System.EventHandler(this.ButtonSlewStop_Click);
             // 
             // pictureBoxPierSideEast
             // 
@@ -345,7 +345,7 @@ namespace ASCOM.Simulator
             this.checkBoxTrack.TabIndex = 4;
             this.checkBoxTrack.Text = "Track";
             this.checkBoxTrack.UseVisualStyleBackColor = true;
-            this.checkBoxTrack.CheckedChanged += new System.EventHandler(this.checkBoxTrack_CheckedChanged);
+            this.checkBoxTrack.CheckedChanged += new System.EventHandler(this.CheckBoxTrack_CheckedChanged);
             // 
             // tableLayoutPanel3
             // 
@@ -373,7 +373,7 @@ namespace ASCOM.Simulator
             this.buttonTraffic.TabIndex = 3;
             this.buttonTraffic.Text = "Traffic";
             this.buttonTraffic.UseVisualStyleBackColor = true;
-            this.buttonTraffic.Click += new System.EventHandler(this.buttonTraffic_Click);
+            this.buttonTraffic.Click += new System.EventHandler(this.ButtonTraffic_Click);
             // 
             // buttonSetup
             // 
@@ -384,7 +384,7 @@ namespace ASCOM.Simulator
             this.buttonSetup.TabIndex = 2;
             this.buttonSetup.Text = "Setup";
             this.buttonSetup.UseVisualStyleBackColor = true;
-            this.buttonSetup.Click += new System.EventHandler(this.buttonSetup_Click);
+            this.buttonSetup.Click += new System.EventHandler(this.ButtonSetup_Click);
             // 
             // buttonHome
             // 
@@ -395,7 +395,7 @@ namespace ASCOM.Simulator
             this.buttonHome.TabIndex = 1;
             this.buttonHome.Text = "Home";
             this.buttonHome.UseVisualStyleBackColor = true;
-            this.buttonHome.Click += new System.EventHandler(this.buttonHome_Click);
+            this.buttonHome.Click += new System.EventHandler(this.ButtonHome_Click);
             // 
             // buttonUnpark
             // 
@@ -406,7 +406,7 @@ namespace ASCOM.Simulator
             this.buttonUnpark.TabIndex = 0;
             this.buttonUnpark.Text = "Unpark";
             this.buttonUnpark.UseVisualStyleBackColor = true;
-            this.buttonUnpark.Click += new System.EventHandler(this.buttonUnpark_Click);
+            this.buttonUnpark.Click += new System.EventHandler(this.ButtonUnpark_Click);
             // 
             // tableLayoutPanel4
             // 
@@ -562,7 +562,7 @@ namespace ASCOM.Simulator
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmMain";
             this.Text = "Telescope Simulator";
-            this.Load += new System.EventHandler(this.frmMain_Load);
+            this.Load += new System.EventHandler(this.FrmMain_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);

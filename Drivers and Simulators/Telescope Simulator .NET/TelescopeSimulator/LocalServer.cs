@@ -24,6 +24,7 @@ using System.Threading;
 using System.Globalization;
 using System.Security.Principal;
 using System.Diagnostics;
+using ASCOM.Utilities;
 
 namespace ASCOM.Simulator
 {
@@ -681,6 +682,7 @@ namespace ASCOM.Simulator
                 // served COM objects, making this act like the VB6 equivalent!
                 //
                 Application.Run(m_MainForm);
+
             }
             catch (Exception ex)
             {
@@ -690,6 +692,15 @@ namespace ASCOM.Simulator
             }
             finally
             {
+                // Save the last used Azimuth and Altitude
+                TelescopeHardware.TL.LogMessage("Main", string.Format("Saving shutdown values for Azimuth: {0}, Altitude: {1}", TelescopeHardware.Azimuth, TelescopeHardware.Altitude));
+                using (Profile profile = new Profile())
+                {
+                    // Best endeavours to save the shutdown alt/az for use on next startup if required
+                    try { profile.WriteValue(SharedResources.PROGRAM_ID, "ShutdownAzimuth", TelescopeHardware.Azimuth.ToString(CultureInfo.InvariantCulture)); } catch { }
+                    try { profile.WriteValue(SharedResources.PROGRAM_ID, "ShutdownAltitude", TelescopeHardware.Altitude.ToString(CultureInfo.InvariantCulture)); } catch { }
+                }
+
                 // Revoke the class factories immediately.
                 // Don't wait until the thread has stopped before
                 // we perform revocation!!!

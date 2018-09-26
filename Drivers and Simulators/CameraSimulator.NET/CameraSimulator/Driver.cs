@@ -22,6 +22,19 @@
 // --------------------------------------------------------------------------------
 //
 
+// Cooler behaviour revised by Peter Simpson in August 2018. Operation of the cooler is described in the cooler timer event handler: void coolerTimer_Elapsed(object sender, ElapsedEventArgs e)
+
+// COOLER CAPABILITIES - The user can configure
+//     1) Cooling behaviour - a) well behaved fall to the setpoint, b) falls to the setpoint but overshoots before returning to it, c) starts at and maintains the setpoint, d) falls but never gets to the setpoint
+//     2) The ambient temperature
+//     3) The cooler setpoint
+//     4) The cooler maximum delta T
+//     5) The time to reach the setpoint
+//     6) The amount of temperature overshoot beyond the setpoint
+//     7) The extent of random temperature fluctuations that are applied to the CCD temperature and heat sink temperature properties
+//     8) Whether the cooler always starts at ambient temperature when the cooler is turned on or whether it starts at the temperature it has "warmed up to" since the cooler was turned off.
+//     9) Whether or not the camera powers up with cooling enabled
+
 using System;
 using System.Collections;
 using System.Drawing;
@@ -31,6 +44,8 @@ using System.Runtime.InteropServices;
 using System.Timers;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace ASCOM.Simulator
 {
@@ -43,7 +58,11 @@ namespace ASCOM.Simulator
     [Guid("12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
     public class Camera : ICameraV2
     {
-        #region profile string constants
+        // Driver ID and descriptive string that shows in the Chooser
+        private static string s_csDriverID = "ASCOM.Simulator.Camera";
+        private static string s_csDriverDescription = "Camera V2 simulator";
+
+        #region Profile string constants
         private const string STR_InterfaceVersion = "InterfaceVersion";
         private const string STR_PixelSizeX = "PixelSizeX";
         private const string STR_PixelSizeY = "PixelSizeY";
@@ -74,9 +93,75 @@ namespace ASCOM.Simulator
         private const string STR_CanPulseGuide = "CanPulseGuide";
         private const string STR_OmitOddBins = "OmitOddBins";
         private const string STR_CanFastReadout = "CanFastReadout";
+
+        // Cooler configuration strings
+        private const string STR_CoolerAmbientTemperature = "CoolerAmbientTemperature";
+        private const string STR_CoolerSetPoint = "CoolerSetPoint";
+        private const string STR_CoolerDeltaTMax = "CoolerDeltaTMax";
+        private const string STR_CoolerMode = "CoolerMode";
+        private const string STR_CoolerTimeToSetPoint = "CoolerTimeToSetPoint";
+        private const string STR_CoolerResetToAmbient = "CoolerResetToAmbient";
+        private const string STR_CoolerFluctuations = "CoolerFluctuations";
+        private const string STR_CoolerOvershoot = "CoolerOvershoot";
+        private const string STR_CoolerPowerUpState = "CoolerPowerUpState";
+        private const string STR_CoolerUnderDampedCycles = "CoolerUnderDampedCycles";
+        private const string STR_CoolerSetPointMinimum = "CoolerSetPointMinimum";
+        private const string STR_CoolerGraphRange = "CoolerGraphRange";
         #endregion
 
-        #region internal properties
+        #region Camera cooler modes and initial conditions
+
+        // Available cooler behavioural modes - When adding a new cooler mode, define its name here and add it the coolerModes array to ensure that it will appear in the list of options. Next update places where switch statements configure behaviour based on cooling Mode.
+        internal const string COOLERMODE_WELL_BEHAVED = "Well behaved approach to setpoint (Default)";
+        internal const string COOLERMODE_ALWAYS_AT_SETPOINT = "Always at setpoint";
+        internal const string COOLERMODE_SINGLE_OVERSHOOT = "Single overshoot to setpoint";
+        internal const string COOLERMODE_UNDERDAMPED = "Under damped approach to setpoint";
+        internal const string COOLERMODE_NEVER_GETS_TO_SETPOINT = "Never gets to setpoint";
+        internal List<string> coolerModes = new List<string>() { COOLERMODE_WELL_BEHAVED, COOLERMODE_SINGLE_OVERSHOOT, COOLERMODE_UNDERDAMPED, COOLERMODE_ALWAYS_AT_SETPOINT, COOLERMODE_NEVER_GETS_TO_SETPOINT }; // Collection containing all available cooler modes
+
+        // Cooler default characteristics - See void coolerTimer_Elapsed(object sender, ElapsedEventArgs e) for a description of cooler operation
+        private const double COOLER_AMBIENT_TEMPERATURE_DEFAULT = 10; // Ambient temperature (C) when the camera is initially created  
+        private const double COOLER_CCD_SET_POINT_DEFAULT = -20; // Camera initial set point
+        private const double COOLER_DELTAT_MAX_DEFAULT = 40; // Maximum temperature (C) below ambient to which the camera cooler can cool when the cooler is running at 100%
+        private const double COOLER_TIME_TO_SETPOINT_DEFAULT = 30; // Time (seconds) to reach the CCD temperature set point when starting from ambient
+        private const double COOLER_FLUCTUATIONS_DEFAULT = 0.0; // +- Default Size of random CCD temperature fluctuations
+        private const double COOLER_OVERSHOOT_DEFAULT = 5.0; // Size of CCD temperature overshoot
+        private const string COOLER_COOLERMODE_DEFAULT = COOLERMODE_WELL_BEHAVED; // Default cooler mode on initial installation
+        private const bool COOLER_RESET_TO_AMBIENT_DEFAULT = false; // Will the CCD temperature reset to ambient on connect or behave like a normal cooler where temperature depends on past cooling experience
+        private const bool COOLER_POWER_UP_STATE_DEFAULT = false; // Default power up state for the cooler
+        private const double COOLER_UNDERDAMPED_CYCLES_DEFAULT = 5.0;
+        private const double COOLER_SETPOINT_MINIMUM_DEFAULT = -40.0;
+        private const bool COOLER_GRAPH_RANGE_DEFAULT = false;
+
+        // Cooler behavioural configuration
+        internal const double COOLER_NEVER_GETS_TO_SETPOINT_REDUCTION_FACTOR = 0.1; // Arbitrary factor to increase the returned CCD temperature so that it never reaches the setpoint. The achieved temperature will be (1.0 - REDUCTION_FACTOR) of the setpoint
+        private const double COOLER_USE_FULL_POWER = 0.75; // Fraction of the cooling curve temperature change above which cooler power will be reported as 100%. e.g. 0.95 means the first 95% of the temperature change will be reported as 100% cooler power and the last 5% as the calculated power.
+        internal const double COOLER_SETPOINT_REACHED_OFFSET = 0.1; // Temperature offset from the setpoint at which the cooler will deem that it has arrived at the setpoint. i.e. when the CCD is within +-COOLER_SETPOINT_REACHED_OFFSET of the setpoint
+        private const double OVERSHOOT_INCREASE_TO_TIME_FRACTION = 0.5; // Fraction of the cooling time during which the overshoot component increases to its configured value
+        private const double OVERSHOOT_DECREASE_TO_TIME_FRACTION = 0.7; // Fraction of the cooling time during which the overshoot diminishes to 0.0. In the remaining fraction of the cooling curve the temperature follows Newton's cooling equation
+        private const double COOLER_UNDERDAMPED_CYCLES_COMPLETE_FRACTION = 1.0;
+
+        // Cooler simulator variables
+        internal double coolerDeltaTMax; // Maximum difference between ambient temperature and the cooler setpoint
+        internal string coolerMode; // Description of current cooler behaviour
+        internal double coolerTimeToSetPoint; // Length of time (seconds) that the cooler will take getting to the setpoint from ambient
+        internal bool coolerResetToAmbient; // Flag to indicate whether the cooler should reset to ambient whenever cooling is set on
+        internal double coolerFluctuation; // Size of random fluctuations at setpoint
+        internal double coolerOvershoot; // Size of cooler overshoot when changing setpoint
+        internal bool coolerPowerUpState; // Initial state of the cooler when connected
+        internal double coolerUnderDampedCycles = COOLER_UNDERDAMPED_CYCLES_DEFAULT;
+        internal double coolerSetPointMinimum; // Setpoint below which an exception will be thrown
+        internal bool coolerGraphRange; // Flag that determines whether a cooling curve centric or full temperature range graph is displayed
+
+        internal double coolerConstant; // The current value of the Newton's cooling equation constant
+        internal double ccdStartTemperature; // CCD temperature at the start of this cooling cycle - depends on previous cooling history - will not be ambient if the CCD is still warming up from a previous cooling cycle
+        private DateTime coolerTargetChangedTime; // Time at which the cooler temperature target was last changed
+        private bool coolerAtTemperature; // Flag indicating whether the cooler has reached its final temperature
+        private static Random randomGenerator; // Ensure that there is only one of these for all camera instances so that fluctuations are not correlated between cameras
+
+        #endregion
+
+        #region Internal properties
 
         //Interface version
         internal short interfaceVersion;
@@ -98,7 +183,7 @@ namespace ASCOM.Simulator
         internal short binY;
         internal bool hasShutter;
         internal string sensorName;
-        internal SensorType sensorType;    // TODO make an Enum
+        internal SensorType sensorType;
         internal short bayerOffsetX;
         internal short bayerOffsetY;
 
@@ -115,6 +200,7 @@ namespace ASCOM.Simulator
         internal double coolerPower;
         internal double ccdTemperature;
         internal double heatSinkTemperature;
+        internal double targetCcdTemperature;
         internal double setCcdTemperature;
 
         // Gain
@@ -152,30 +238,24 @@ namespace ASCOM.Simulator
         // simulation
         internal string imagePath;
         internal bool applyNoise;
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member")]
-        private float[, ,] imageData;    // room for a 3 plane colour image
+        private float[,,] imageData;    // room for a 3 plane colour image
         private bool darkFrame;
         internal bool omitOddBins; // True if bins of 3, 5, 7 etc. should throw NotImplementedExceptions
 
         internal bool connected = false;
         internal CameraStates cameraState = CameraStates.cameraIdle;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member")]
         private int[,] imageArray;
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member")]
         private object[,] imageArrayVariant;
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member")]
-        private int[, ,] imageArrayColour;
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member")]
-        private object[, ,] imageArrayVariantColour;
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        private int[,,] imageArrayColour;
+        private object[,,] imageArrayVariantColour;
         private string lastError = string.Empty;
 
         private System.Timers.Timer exposureTimer;
         private System.Timers.Timer coolerTimer;
 
         // supported actions
-        // should really use consts for the action names, 
+        // should really use constants for the action names, 
         private ArrayList supportedActions = new ArrayList { "SetFanSpeed", "GetFanSpeed" };
 
         // SetFanSpeed, GetFanSpeed. These commands control a hypothetical CCD camera heat sink fan, range 0 (off) to 3 (full speed) 
@@ -183,33 +263,32 @@ namespace ASCOM.Simulator
 
         #endregion
 
-        #region Camera Constructor
-        //
-        // Driver ID and descriptive string that shows in the Chooser
-        //
-        private static string s_csDriverID = "ASCOM.Simulator.Camera";
-        // TODO Change the descriptive string for your driver then remove this line
-        private static string s_csDriverDescription = "Camera V2 simulator";
+        #region Camera Constructor and Dispose
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Camera"/> class.
         /// Must be public for COM registration!
         /// </summary>
         public Camera()
         {
-            // TODO Implement your additional construction here
             InitialiseSimulator();
-            //Log.Enabled = false;
             Log.LogMessage("Constructor", "Done");
+        }
 
+        public void Dispose()
+        {
+            if (exposureTimer != null)
+                exposureTimer.Dispose();
+            if (coolerTimer != null)
+                coolerTimer.Dispose();
         }
 
         #endregion
 
         #region ASCOM Registration
-        //
+
         // Register or unregister driver for ASCOM. This is harmless if already
         // registered or unregistered. 
-        //
         private static void RegUnregASCOM(bool bRegister)
         {
             using (Profile P = new Profile())
@@ -227,30 +306,298 @@ namespace ASCOM.Simulator
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "t"), ComRegisterFunction]
+        [ComRegisterFunction]
         private static void RegisterASCOM(Type t)
         {
             RegUnregASCOM(true);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "t"), ComUnregisterFunction]
+        [ComUnregisterFunction]
         private static void UnregisterASCOM(Type t)
         {
             RegUnregASCOM(false);
         }
+
         #endregion
 
-        public void Dispose()
+        #region Cooler Timer
+
+        /// <summary>
+        /// Adjust the CCD temperature and power periodically to simulate cooling and warming up
+        /// </summary>
+        /// <remarks>
+        ///  
+        /// NOTES
+        ///    
+        /// 1) The cooler timer only runs while the camera is cooling or warming up, at other times it is disabled.
+        /// 
+        /// 2) Each cooler mode, including warming up, is responsible for determining when it has reached its target temperature and indicating this by setting the coolerAtTemperature variable to True.
+        /// 
+        /// 3) Newton's cooling equation is used to calculate how the CCD temperature changes over time. The equation describes an exponential approach to the setpoint that, theoretically, will only be reached in an infinite period of time.
+        ///    To work round this the camera deems that the CCD is at the setpoint temperature when the calculated temperature reaches a small offset from the setpoint, e.g. 0.1C, by which time the rate of temperature change is low. 
+        ///    
+        ///    The advantage of this approach is that the time to arrive at the specified offset can be controlled precisely by suitable choice of cooling constant. Please see the CalculateCoolerConstant method for details of 
+        ///    Newton's cooling equation and how the cooler calculates the cooling constant in practice.
+        /// 
+        /// 4) The reported CCD temperature is adjusted to allow for the specified offset so that the CCD temperature smoothly approaches the required setpoint temperature rather than the (setpoint + offset) temperature.
+        ///    
+        /// 5) All temperature changes are managed through the same process, regardless of mode:
+        ///    a) The Camera.SetCCTTemperature or Camera.CoolerOn properties set the coolerAtTemperature variable to False and start the cooler timer
+        ///    b) The coolerTimer_Elapsed event is called multiple times as time passes and the relevant "mode code" calculates a new CCD temperature and cooler power on each call
+        ///    c) At some point, the mode code determines that the setpoint has been reached and sets the coolerAtTemperature variable to True as well as setting the CCD temperature precisely to the setpoint
+        ///    d) If the coolerAtTemperature variable is True, a cooling cycle completed log message is written and the cooler timer is disabled
+        ///    
+        /// 6) At "times to temperature" of less than 100 seconds, the cooler timer period is calculated from the "time to temperature" to ensure that at least 100 CCD temperature and power updates are made during
+        ///    a full cooling cycle from ambient to maximum cooler temperature. At longer "times to temperature", updates will occur every second.
+        ///    
+        /// 7) Random temperature fluctuations, if configured (coolerFluctuation > 0.0), are applied in the Camera.CCDTemperature and Camera.HeatSinkTemperature properties before the calculated values are returned to the caller.
+        /// 
+        /// </remarks>
+        private void coolerTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (this.exposureTimer != null)
-                this.exposureTimer.Dispose();
-            if (this.coolerTimer != null)
-                this.coolerTimer.Dispose();
+            // Initialise some variables
+            TimeSpan currentCoolingCycleTime = DateTime.Now.Subtract(coolerTargetChangedTime); // Calculate how long this cooling cycle has been running
+            double overallTimeToSetpointU = -(Math.Log(COOLER_SETPOINT_REACHED_OFFSET / Math.Abs(ccdStartTemperature - targetCcdTemperature))) / coolerConstant; // Calculate the time required to reach the setpoint from the starting CCD temperature
+            double currentCoolingTimeFractionU = currentCoolingCycleTime.TotalSeconds / overallTimeToSetpointU; // Calculate the current fraction of the cooling cycle based on current cycle time and expected overall cycle time
+            bool cooling = ccdStartTemperature >= targetCcdTemperature; // Determine whether we are cooling down or heating up
+
+            if (coolerOn) // The cooler is on and we are cooling or warming to the setpoint or have just arrived at it
+            {
+
+                // Calculate the cooler temperature based on the supplied parameters. The CCD temperature is returned in the ccdTemperature global variable and whether or not the CCD is at temperature is returned in the coolerAtTemperature global variable
+                CalculateCoolerTemperature(currentCoolingTimeFractionU, overallTimeToSetpointU, ccdStartTemperature, targetCcdTemperature, coolerUnderDampedCycles, coolerOvershoot, heatSinkTemperature, coolerDeltaTMax, coolerConstant, coolerMode);
+
+                // Set the cooler power
+                double powerFractionAtSetPoint = (heatSinkTemperature - targetCcdTemperature) / coolerDeltaTMax; // Calculate the power used at the setpoint as a linear fraction of the maximum cooling that the cooler can achieve
+
+                if (targetCcdTemperature == heatSinkTemperature) // Deal with a special case where the equation below fails
+                {
+                    coolerPower = 0.0;
+                }
+                else // Calculate the cooler power from the CCD temperature
+                {
+                    coolerPower = 100.0 * (powerFractionAtSetPoint + ((1.0 - powerFractionAtSetPoint) * ((ccdTemperature - targetCcdTemperature) / (heatSinkTemperature - targetCcdTemperature)))); // Calculate current cooler power based on the offset of the CCD temperature from the setpoint
+                }
+                if (coolerPower < 0.0) coolerPower = 0.0; // Above equation can give negative power values when warming up so constrain negative values to 0.0
+
+                if (cooling) // Setpoint is below start temperature so we are cooling
+                {
+                    // Now force the value to 100% for the first part of the cooling curve to simulate the cooler really going for it...
+                    if ((heatSinkTemperature - ccdTemperature) / (heatSinkTemperature - targetCcdTemperature) < COOLER_USE_FULL_POWER)
+                    {
+                        coolerPower = 100.0;
+                    }
+                }
+            }
+            else // Cooler is off and we are warning up or at ambient temperature
+            {
+                double newtonsEquationTemperature = heatSinkTemperature + (ccdStartTemperature - heatSinkTemperature) * Math.Exp(-coolerConstant * currentCoolingCycleTime.TotalSeconds); // Calculate the "correct" new warmed CCD temperature
+
+                ccdTemperature = newtonsEquationTemperature - -COOLER_SETPOINT_REACHED_OFFSET; // Set the correct value since we are warming up
+                ccdTemperature = ConstrainToTemperatureRange(ccdTemperature, ccdStartTemperature, heatSinkTemperature); // Constrain the CCD temperature to the required temperature range
+
+                Log.LogMessage("Timer", "Warming up - CCD temperature:{0:+0.00;-0.00;' '0.00}, Cooler running time: {1:0.00}", ccdTemperature, currentCoolingCycleTime.TotalSeconds);
+
+                if (Math.Abs(newtonsEquationTemperature - heatSinkTemperature) < COOLER_SETPOINT_REACHED_OFFSET) // This test must be based on Newton's equation temperature rather than the adjusted CCD temperature
+                {
+                    ccdTemperature = heatSinkTemperature; // Set the CCD temperature exactly to the ambient temperature
+                    Log.LogMessage("Timer", "CCD has arrived at ambient temperature: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
+
+                    coolerAtTemperature = true;
+                }
+            }
+
+            // If we have arrived at the setpoint, log this and disable the timer
+            if (coolerAtTemperature)
+            {
+                Log.LogMessage("Timer", "CCD is at its final temperature: {0:+0.00;-0.00;' '0.00} and power: {1:0.0}% - Cooling timer disabled", ccdTemperature, coolerPower);
+                coolerTimer.Enabled = false; // Disable the cooler timer because we've reached the setpoint
+            }
         }
 
-        //
-        // PUBLIC COM INTERFACE ICamera IMPLEMENTATION
-        //
+        /// <summary>
+        /// Calculate the CCD temperature for the current cooler mode using the supplied parameters. 
+        /// </summary>
+        /// <param name="currentCoolingTimeFraction"></param>
+        /// <param name="overallTimeToSetpoint"></param>
+        /// <param name="ccdStartTemperature"></param>
+        /// <param name="targetCcdTemperature"></param>
+        /// <param name="coolerUnderDampedCycles"></param>
+        /// <param name="coolerOvershoot"></param>
+        /// <param name="heatSinkTemperature"></param>
+        /// <param name="coolerDeltaTMax"></param>
+        /// <param name="coolerConstant"></param>
+        /// <param name="coolerMode"></param>
+        /// <remarks>Results are returned in the ccdTemperature and coolerAtTemperature global variables.</remarks>
+        internal void CalculateCoolerTemperature(double currentCoolingTimeFraction, double overallTimeToSetpoint, double ccdStartTemperature, double targetCcdTemperature, double coolerUnderDampedCycles, double coolerOvershoot, double heatSinkTemperature, double coolerDeltaTMax, double coolerConstant, string coolerMode)
+        {
+            double currentOvershootCorrection, currentOvershootFraction;
+
+            // From Newton's cooling equation: NewTemperature = SetPoint + (StartTemperature - SetPoint)*e^-Kt
+            double newtonsEquationTemperature = targetCcdTemperature + (ccdStartTemperature - targetCcdTemperature) * Math.Exp(-coolerConstant * currentCoolingTimeFraction * overallTimeToSetpoint); // Calculate the new CCD temperature from Newton's cooling equation
+
+            bool cooling = ccdStartTemperature >= targetCcdTemperature; // Determine whether we are cooling down or heating up
+            double coolerOffsetSigned = cooling ? COOLER_SETPOINT_REACHED_OFFSET : -COOLER_SETPOINT_REACHED_OFFSET; // Set the sign of the cooler offset depending on whether we are cooling or warming
+            double coolerOvershootSigned = cooling ? -coolerOvershoot : coolerOvershoot; // Set the overshoot direction sign correctly : negative when cooling, positive when warming
+
+            // Deal with the special case where start and target temperatures are the same
+            if (ccdStartTemperature == targetCcdTemperature)
+            {
+                ccdTemperature = targetCcdTemperature;
+                coolerAtTemperature = true;
+                Log.LogMessage("CalculateTemperature", "Start and target temperatures are identical, setting CCD temperature to target temperature: {0:+0.000;-0.000;' '0.000}, Cooler at temperature: {1}", ccdTemperature, coolerAtTemperature);
+                return;
+            }
+
+            switch (coolerMode)
+            {
+                case COOLERMODE_ALWAYS_AT_SETPOINT: // No time dependent behaviour required for this mode
+                    ccdTemperature = targetCcdTemperature; // Immediately return the required temperature
+
+                    Log.LogMessage("CalculateTemperature", "WellBehaved - CCD temperature is {0}, Last power: {1:0}%", ccdTemperature, coolerPower);
+                    coolerAtTemperature = true; // No need for further change because we are at temperature by definition
+                    break;
+
+                case COOLERMODE_WELL_BEHAVED:
+                    ccdTemperature = newtonsEquationTemperature - coolerOffsetSigned; // Calculate the CCD temperature, including any overshoot correction
+                    ccdTemperature = ConstrainToTemperatureRange(ccdTemperature, heatSinkTemperature, heatSinkTemperature - coolerDeltaTMax); // Make sure the temperature stays in the valid range Ambient to (Ambient- DeltaTMax)
+
+                    Log.LogMessage("CalculateTemperature", "WellBehaved - Newton's equation temperature: {0:+0.000;-0.000;' '0.000}, CCD temperature: {1:+0.000;-0.000;' '0.000}, Last power: {2:0}%, Time fraction: {3:0.000}", newtonsEquationTemperature, ccdTemperature, coolerPower, currentCoolingTimeFraction); //);
+
+                    // Check whether we have arrived close enough to the setpoint to say that we have fully arrived:
+                    if (Math.Abs(newtonsEquationTemperature - targetCcdTemperature) < COOLER_SETPOINT_REACHED_OFFSET) // This test must be based on Newton's equation temperature rather than the adjusted CCD temperature
+                    {
+                        ccdTemperature = targetCcdTemperature; // Set the CCD temperature exactly to the target temperature
+                        Log.LogMessage("CalculateTemperature", "WellBehaved - CCD has arrived at setpoint temperature: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
+
+                        coolerAtTemperature = true;
+                    }
+                    break;
+
+                case COOLERMODE_UNDERDAMPED:
+
+                    double sineValue = Math.Sin(currentCoolingTimeFraction / COOLER_UNDERDAMPED_CYCLES_COMPLETE_FRACTION * Math.PI * coolerUnderDampedCycles);
+
+                    // Calculate the fraction of the overshoot temperature that should be applied at this fraction of the cooling cycle
+                    if (currentCoolingTimeFraction <= COOLER_UNDERDAMPED_CYCLES_COMPLETE_FRACTION)
+                    {
+                        // We are in the first phase of the cooling cycle where the overshoot needs to be applied
+                        currentOvershootFraction = (COOLER_UNDERDAMPED_CYCLES_COMPLETE_FRACTION - currentCoolingTimeFraction) / (COOLER_UNDERDAMPED_CYCLES_COMPLETE_FRACTION);
+                    }
+                    else
+                    {
+                        // We are in the second phase of the cooling cycle with no overshoot and just the Newton's curve temperature
+                        currentOvershootFraction = 0.0;
+                    }
+
+                    // Calculate the correction to the Newton's equation temperature that will generate overshoot at this time
+                    currentOvershootCorrection = coolerOvershootSigned * sineValue * currentOvershootFraction;
+
+                    ccdTemperature = newtonsEquationTemperature - coolerOffsetSigned + currentOvershootCorrection; // Calculate the CCD temperature, including any overshoot correction
+                    ccdTemperature = ConstrainToTemperatureRange(ccdTemperature, heatSinkTemperature, heatSinkTemperature - coolerDeltaTMax); // Make sure the temperature stays in the valid range Ambient to (Ambient- DeltaTMax)
+
+                    Log.LogMessage("CalculateTemperature", "UnderDamped - Newton's equation temperature: {0:+0.000;-0.000;' '0.000}, CCD temperature: {1:+0.000;-0.000;' '0.000}, Last power: {2:0}%, Time fraction: {3:0.000} ----- Overshoot correction: {4}, Sine value: {5}, Cooler offset signed: {6}, Cooler overshoot: {7}, Overshoot fraction: {8}",
+                        newtonsEquationTemperature, ccdTemperature, coolerPower, currentCoolingTimeFraction, currentOvershootCorrection, sineValue, coolerOffsetSigned, coolerOvershootSigned, currentOvershootFraction); //);
+
+                    // Check whether we have arrived close enough to the setpoint to say that we have fully arrived:
+                    if (Math.Abs(newtonsEquationTemperature - targetCcdTemperature) < COOLER_SETPOINT_REACHED_OFFSET) // This test must be based on Newton's equation temperature rather than the adjusted CCD temperature
+                    {
+                        ccdTemperature = targetCcdTemperature; // Set the CCD temperature exactly to the target temperature
+                        Log.LogMessage("CalculateTemperature", "UnderDamped - CCD has arrived at setpoint temperature: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
+
+                        coolerAtTemperature = true;
+                    }
+                    break;
+
+                case COOLERMODE_SINGLE_OVERSHOOT:
+                    // Newton's cooling curve is used as the foundation for CCD temperature prediction in this mode.
+                    // However, overshoot delivery requires that the Newton's temperature be modified to create the more complex overshoot behaviour. This is achieved by defining phases, 
+                    // specified as fractions of the expected cooling time to the setpoint, which introduce specific incremental temperature offsets that are added to the Newton's temperature 
+                    // to create the desired CCD temperature.
+
+                    // This mode caters for two general cases:
+                    // 1) No overshoot (coolerOvershoot = 0.0) - CCD temperature is managed in one phase throughout the cooling cycle
+                    //    Phase 1) Cooling time fraction 0.0 to 1.0 - Follow Newton's cooling curve from the initial CCD temperature to the setpoint
+                    //
+                    // 2) Some overshoot (coolerOvershoot > 0.0) - CCD temperature behaviour is managed in three phases through the cooling cycle:
+                    //    Phase 1) Cooling time fraction 0.0 to OVERSHOOT_INCREASE_TO_TIME_FRACTION ................................. Proceed from the current CCD temperature through the setpoint to the required overshoot temperature. 
+                    //    Phase 2) Cooling time fraction OVERSHOOT_INCREASE_TO_TIME_FRACTION to OVERSHOOT_DECREASE_TO_TIME_FRACTION . Return from the overshoot temperature through the setpoint to the Newton's curve temperature
+                    //    Phase 3) Cooling time fraction OVERSHOOT_DECREASE_TO_TIME_FRACTION to 1.0 ................................. Follow Newton's cooling curve to the setpoint
+
+                    // Calculate the offset from the Newton's curve temperature at the time of maximum overshoot
+                    if (coolerOvershoot == 0.0) // No overshoot so there is no overshoot correction to be applied to the newton's equation temperature
+                    {
+                        currentOvershootCorrection = 0.0; // Specify no overshoot correction
+                    }
+                    else // Calculate the offset that needs to be added to the Newton's curve temperature to generate the configured overshoot at the time of maximum overshoot
+                    {
+                        double newtonsTemperatureAtMaximumOvershoot = targetCcdTemperature + (ccdStartTemperature - targetCcdTemperature) * Math.Exp(-coolerConstant * overallTimeToSetpoint * OVERSHOOT_INCREASE_TO_TIME_FRACTION); // Calculate the Newton's curve temperature at the time of maximum overshoot
+
+                        double offsetFromNewtonsTemperatureAtMaximumOvershoot = targetCcdTemperature + coolerOvershootSigned - newtonsTemperatureAtMaximumOvershoot; // Calculate the offset from Newton's temperature that will create the required overshoot at the time of maximum overshoot
+
+                        // Calculate the fraction of the overshoot temperature that should be applied at this fraction of the cooling cycle
+                        if (currentCoolingTimeFraction <= OVERSHOOT_INCREASE_TO_TIME_FRACTION)
+                        {
+                            // We are in the fist phase of the overshoot where the temperature needs to exceed the setpoint by the configured amount when OVERSHOOT_INCREASE_TO_TIME_FRACTION of the way through the cooling cycle
+                            currentOvershootFraction = Math.Sin((currentCoolingTimeFraction / OVERSHOOT_INCREASE_TO_TIME_FRACTION) * (Math.PI / 2.0)); // Convert the fraction to a sine value to create a smoother transition through the maximum
+                        }
+                        else if (currentCoolingTimeFraction <= OVERSHOOT_DECREASE_TO_TIME_FRACTION)
+                        {
+                            // We are in the second phase of the cooling cycle where the overshoot needs to decrease as the time fraction progresses from OVERSHOOT_INCREASE_TO_TIME_FRACTION towards OVERSHOOT_DECREASE_TO_TIME_FRACTION
+                            currentOvershootFraction = Math.Sin(((OVERSHOOT_DECREASE_TO_TIME_FRACTION - currentCoolingTimeFraction) / (OVERSHOOT_DECREASE_TO_TIME_FRACTION - OVERSHOOT_INCREASE_TO_TIME_FRACTION)) * (Math.PI / 2.0));
+                        }
+                        else
+                        {
+                            // We are in the third phase of the cooling cycle with no overshoot and just the Newton's curve temperature
+                            currentOvershootFraction = 0.0;
+                        }
+
+                        // Calculate the correction to the Newton's equation temperature that will generate overshoot at this time
+                        currentOvershootCorrection = (offsetFromNewtonsTemperatureAtMaximumOvershoot + coolerOffsetSigned) * currentOvershootFraction;
+                    }
+
+                    ccdTemperature = newtonsEquationTemperature - coolerOffsetSigned + currentOvershootCorrection; // Calculate the CCD temperature, including any overshoot correction
+                    ccdTemperature = ConstrainToTemperatureRange(ccdTemperature, heatSinkTemperature, heatSinkTemperature - coolerDeltaTMax); // Make sure the temperature stays in the valid range Ambient to (Ambient- DeltaTMax)
+
+                    Log.LogMessage("CalculateTemperature", "DampedMode - Newton's equation temperature: {0:+0.00;-0.00;' '0.00}, CCD temperature: {1:+0.00;-0.00;' '0.00}, Last power: {2:0}%, Cooler running time: {3:0.00}", newtonsEquationTemperature, ccdTemperature, coolerPower, currentCoolingTimeFraction * overallTimeToSetpoint);
+
+                    // Check whether we have arrived close enough to the setpoint to say that we have fully arrived:
+                    if (Math.Abs(newtonsEquationTemperature - targetCcdTemperature) < COOLER_SETPOINT_REACHED_OFFSET) // This test must be based on Newton's equation temperature rather than the adjusted CCD temperature
+                    {
+                        ccdTemperature = targetCcdTemperature; // Set the CCD temperature exactly to the target temperature
+                        Log.LogMessage("CalculateTemperature", "DampedMode - CCD has arrived at setpoint temperature: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
+
+                        coolerAtTemperature = true;
+                    }
+                    break;
+
+                case COOLERMODE_NEVER_GETS_TO_SETPOINT: // Return a higher temperature than calculated from Newton's equation
+                    double adjustedSetpoint = ((targetCcdTemperature - heatSinkTemperature) * (1.0 - COOLER_NEVER_GETS_TO_SETPOINT_REDUCTION_FACTOR)) + heatSinkTemperature; // Calculate the adjusted setpoint temperature that misses the real setpoint by the COOLER_NEVER_GETS_TO_SETPOINT_REDUCTION_FACTOR
+                    double adjustedNewtonsEquationTemperature = adjustedSetpoint + (ccdStartTemperature - adjustedSetpoint) * Math.Exp(-coolerConstant * currentCoolingTimeFraction * overallTimeToSetpoint); // Calculate the "adjusted" Newton's equation temperature
+
+                    ccdTemperature = adjustedNewtonsEquationTemperature - coolerOffsetSigned; // Calculate the adjusted CCD temperature
+                    ccdTemperature = ConstrainToTemperatureRange(ccdTemperature, ccdStartTemperature, adjustedSetpoint);  // Constrain the CCD temperature to the required temperature range
+
+                    Log.LogMessage("CalculateTemperature", "MissesSetpoint - Newton's equation temperature:{0:+0.00;-0.00;' '0.00}, Adjusted Newton's equation temperature:{1:+0.00;-0.00;' '0.00}, Adjusted setpoint temperature:{2:+0.00;-0.00;' '0.00}, CCD temperature: {3:+0.00;-0.00;' '0.00}, Last power: {4:0}%, Cooler running time: {5:0.00}", newtonsEquationTemperature, adjustedNewtonsEquationTemperature, adjustedSetpoint, ccdTemperature, coolerPower, currentCoolingTimeFraction * overallTimeToSetpoint);
+
+                    // Check whether we have arrived close enough to the setpoint to say that we have fully arrived:
+                    if (Math.Abs(adjustedNewtonsEquationTemperature - adjustedSetpoint) < COOLER_SETPOINT_REACHED_OFFSET) // This test must be based on Newton's equation temperature rather than the adjusted CCD temperature
+                    {
+                        ccdTemperature = adjustedSetpoint;
+                        Log.LogMessage("CalculateTemperature", @"CCD has arrived at ""missed setpoint"" temperature: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
+
+                        coolerAtTemperature = true;
+                    }
+                    break;
+
+                default: // Warning message for future camera driver developers that they need to update this code if a new curve is introduced
+                    Log.LogMessage("Timer", "Unknown cooler mode: {0} - Cooling cycle will be abandoned.", coolerMode);
+                    coolerAtTemperature = true; // Terminate this cooling cycle
+                    break;
+            }
+        }
+
+        #endregion
 
         #region Common Methods
 
@@ -267,7 +614,7 @@ namespace ASCOM.Simulator
         /// </summary>
         public ArrayList SupportedActions
         {
-            get { return this.supportedActions; }
+            get { return supportedActions; }
         }
 
         public string CommandString(string Command, bool Raw)
@@ -287,24 +634,24 @@ namespace ASCOM.Simulator
 
         public string Action(string ActionName, string ActionParameters)
         {
-            if (this.supportedActions.Contains(ActionName))
+            if (supportedActions.Contains(ActionName))
             {
                 switch (ActionName)
                 {
                     case "SetFanSpeed":
-                        int fanMode;
-                        if (int.TryParse(ActionParameters, out fanMode))
+                        int fanModeNew;
+                        if (int.TryParse(ActionParameters, out fanModeNew))
                         {
                             if (fanMode >= 0 && fanMode <= 3)
                             {
-                                this.fanMode = fanMode;
+                                fanMode = fanModeNew;
                                 return string.Empty;
                             }
                         }
                         // value not in range
                         throw new InvalidValueException("Action-SetFanMode", ActionParameters, "0 to 3");
                     case "GetFanSpeed":
-                        return this.fanMode.ToString();
+                        return fanMode.ToString();
                     default:
                         break;
                 }
@@ -317,7 +664,6 @@ namespace ASCOM.Simulator
 
         #region ICamera Members
 
-
         /// <summary>
         /// Aborts the current exposure, if any, and returns the camera to Idle state.
         /// Must throw exception if camera is not idle and abort is
@@ -329,23 +675,23 @@ namespace ASCOM.Simulator
         public void AbortExposure()
         {
             CheckConnected("Can't abort exposure when not connected");
-            if (!this.canAbortExposure)
+            if (!canAbortExposure)
             {
                 Log.LogMessage("AbortExposure", "CanAbortExposure is false");
                 throw new ASCOM.MethodNotImplementedException("AbortExposure");
             }
 
             Log.LogMessage("AbortExposure", "start");
-            switch (this.cameraState)
+            switch (cameraState)
             {
                 case CameraStates.cameraWaiting:
                 case CameraStates.cameraExposing:
                 case CameraStates.cameraReading:
                 case CameraStates.cameraDownload:
                     // these are all possible exposure states so we can abort the exposure
-                    this.exposureTimer.Enabled = false;
-                    this.cameraState = CameraStates.cameraIdle;
-                    this.imageReady = false;
+                    exposureTimer.Enabled = false;
+                    cameraState = CameraStates.cameraIdle;
+                    imageReady = false;
                     break;
                 case CameraStates.cameraIdle:
                     break;
@@ -369,7 +715,7 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read BinX when not connected");
-                return this.binX;
+                return binX;
             }
             set
             {
@@ -378,12 +724,12 @@ namespace ASCOM.Simulator
                 if ((maxBinX >= 4) & omitOddBins & ((value % 2) > 0) & (value >= 3)) // Must be an odd value of 3 or greater when maxbin is 4 or greater
                 {
                     Log.LogMessage("BinX", "Odd bin value {0} is invalid", value);
-                    throw new InvalidValueException("BinX", value.ToString("d2", CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "1 and even bin values between 2 and {0}", this.MaxBinX));
+                    throw new InvalidValueException("BinX", value.ToString("d2", CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "1 and even bin values between 2 and {0}", MaxBinX));
                 }
 
-                this.binX = value;
-                if (!this.canAsymmetricBin)
-                    this.binY = value;
+                binX = value;
+                if (!canAsymmetricBin)
+                    binY = value;
             }
         }
 
@@ -399,22 +745,22 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read BinY when not connected");
-                return this.binY;
+                return binY;
             }
             set
             {
                 CheckConnected("Can't set BinY when not connected");
-                CheckRange("BinY", 1, value, this.maxBinY);
+                CheckRange("BinY", 1, value, maxBinY);
 
                 if ((maxBinY >= 4) & omitOddBins & ((value % 2) > 0) & (value >= 3)) // Must be an odd value of 3 or greater when maxbin is 4 or greater
                 {
                     Log.LogMessage("BinY", "Odd bin value {0} is invalid", value);
-                    throw new InvalidValueException("BinY", value.ToString("d2", CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "1 and even bin values between 2 and {0}", this.MaxBinY));
+                    throw new InvalidValueException("BinY", value.ToString("d2", CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "1 and even bin values between 2 and {0}", MaxBinY));
                 }
 
-                this.binY = value;
-                if (!this.canAsymmetricBin)
-                    this.binX = value;
+                binY = value;
+                if (!canAsymmetricBin)
+                    binX = value;
             }
         }
 
@@ -428,8 +774,9 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read the CCD temperature when not connected");
-                Log.LogMessage("CCDTemperature", "get {0}", this.ccdTemperature);
-                return this.ccdTemperature;
+                double returnValue = AddRandomFluctuation(ccdTemperature);
+                Log.LogMessage("CCDTemperature", "get {0}", returnValue);
+                return returnValue;
             }
         }
 
@@ -467,8 +814,8 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read the camera state when not connected");
-                Log.LogMessage("CameraState", this.cameraState.ToString());
-                return this.cameraState;
+                Log.LogMessage("CameraState", cameraState.ToString());
+                return cameraState;
             }
         }
 
@@ -481,8 +828,8 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read the camera Xsize when not connected");
-                Log.LogMessage("CameraXSize", "get {0}", this.cameraXSize);
-                return this.cameraXSize;
+                Log.LogMessage("CameraXSize", "get {0}", cameraXSize);
+                return cameraXSize;
             }
         }
 
@@ -495,8 +842,8 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read the camera Ysize when not connected");
-                Log.LogMessage("CameraYSize", "get {0}", this.cameraYSize);
-                return this.cameraYSize;
+                Log.LogMessage("CameraYSize", "get {0}", cameraYSize);
+                return cameraYSize;
             }
         }
 
@@ -508,8 +855,8 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read CanAbortExposure when not connected");
-                Log.LogMessage("CanAbortExposure", "get {0}", this.canAbortExposure);
-                return this.canAbortExposure;
+                Log.LogMessage("CanAbortExposure", "get {0}", canAbortExposure);
+                return canAbortExposure;
             }
         }
 
@@ -526,7 +873,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read CanAsymmetricBin when not connected");
                 Log.LogMessage("CanAsymmetricBin", "get {0}", canAsymmetricBin);
-                return this.canAsymmetricBin;
+                return canAsymmetricBin;
             }
         }
 
@@ -539,7 +886,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read CanGetCoolerPower when not connected");
                 Log.LogMessage("CanGetCoolerPower", "get {0}", canGetCoolerPower);
-                return this.canGetCoolerPower;
+                return canGetCoolerPower;
             }
         }
 
@@ -550,10 +897,10 @@ namespace ASCOM.Simulator
         /// </summary>
         public bool CanPulseGuide
         {
-            get 
-            {                 
+            get
+            {
                 Log.LogMessage("CanPulseGuide", "get {0}", canPulseGuide);
-                return this.canPulseGuide; 
+                return canPulseGuide;
             }
         }
 
@@ -568,7 +915,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read CanSetCCDTemperature when not connected");
                 Log.LogMessage("CanSetCCDTemperature", "get {0}", canSetCcdTemperature);
-                return this.canSetCcdTemperature;
+                return canSetCcdTemperature;
             }
         }
 
@@ -585,7 +932,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read CanStopExposure when not connected");
                 Log.LogMessage("CanStopExposure", "get {0}", canStopExposure);
-                return this.canStopExposure;
+                return canStopExposure;
             }
         }
 
@@ -600,14 +947,32 @@ namespace ASCOM.Simulator
             get
             {
                 Log.LogMessage("Connected", "get {0}", connected);
-                return this.connected;
+                return connected;
             }
             set
             {
                 Log.LogMessage("Connected", "set {0}", value);
-                if (value)
-                    ReadImageFile();
-                this.connected = value;
+                if (value) ReadImageFile();
+
+                connected = value;
+
+                // Create the cooler timer, if required, on connect
+                if (coolerTimer == null)
+                {
+                    coolerTimer = new System.Timers.Timer();
+                    coolerTimer.Elapsed += new ElapsedEventHandler(coolerTimer_Elapsed);
+
+                    // Calculate the cooler timer period from the "time to temperature" ensuring at least 200 CCD temperature updates will occur during a full cooling cycle from ambient to maximum cooler temperature
+                    double coolerTimeInterval = Math.Min(coolerTimeToSetPoint * 5.0, 500);
+                    coolerTimeInterval = Math.Max(1.0, coolerTimeInterval); // Ensure that the interval time is at least 1ms, 0 is an invalid value
+                    coolerTimer.Interval = coolerTimeInterval; // Set the cooler timer interval
+
+                    coolerTimer.Enabled = false;
+                    Log.LogMessage("Connected", "Cooler timer created");
+                }
+
+                if (connected & coolerPowerUpState) CoolerOn = true; // If we are connecting enable the cooler immediately if required through configuration
+
             }
         }
 
@@ -624,44 +989,61 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckConnected ("Can't read CoolerOn when not connected");
-                CheckCapability("CoolerOn", this.hasCooler);
+                CheckConnected("Can't read CoolerOn when not connected");
+                CheckCapability("CoolerOn", hasCooler);
                 Log.LogMessage("CoolerOn", "get {0}", coolerOn);
-                return this.coolerOn;
+                return coolerOn;
             }
             set
             {
-                CheckConnected("Can't set CoolerOn when not connected");
-                CheckCapability("CoolerOn", this.hasCooler);
-                Log.LogMessage("CoolerOn", "set {0}", value);
-                this.coolerOn = value;
 
-                if (this.canSetCcdTemperature)
+                CheckConnected("Can't set CoolerOn when not connected");
+                CheckCapability("CoolerOn", hasCooler);
+                Log.LogMessage("CoolerOn", "set {0}", value);
+                coolerOn = value;
+
+                if (coolerOn)// Set the correct cooler temperature starting point, depending on configuration and usage history
                 {
-                    // implement CCD temperature control
-                    if (this.coolerTimer == null)
+
+                    if (coolerResetToAmbient)
                     {
-                        coolerTimer = new System.Timers.Timer();
-                        coolerTimer.Elapsed += new ElapsedEventHandler(coolerTimer_Elapsed);
-                        coolerTimer.Interval = 1000;
-                        coolerTimer.Enabled = true;
+                        ccdTemperature = heatSinkTemperature; // Configuration requires that CCD temperature is reset to ambient
+                        Log.LogMessage("CoolerOn", "Cooling cycle will start with the CCD temperature reset to ambient: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
                     }
+                    else
+                    {
+                        Log.LogMessage("CoolerOn", "Cooling cycle will start with the CCD at its current temperature: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
+                    }
+
+                    coolerPower = 100; // Set the cooler power to full on
+                    ccdStartTemperature = ccdTemperature; // Use the current CCD temperature as the start point
+                    coolerTargetChangedTime = DateTime.Now; // Save the time that the cooler was started
+
+                    if (ccdTemperature != targetCcdTemperature) coolerAtTemperature = false; // We are not at the setpoint so a cooling cycle is required
+                    else coolerAtTemperature = true; // We are at the setpoint so no cooling cycle is required
+
+                    coolerTimer.Enabled = true; // Start the cooler timer if its not already running
+                }
+                else // Cooler off
+                {
+                    if (coolerResetToAmbient) // CCD temperature immediately returns to ambient by configuration
+                    {
+                        ccdTemperature = heatSinkTemperature; // Set the CCD temperature to ambient
+                        coolerAtTemperature = true; // Indicate that we are already at setpoint temperature
+                        Log.LogMessage("CoolerOn", "CCD temperature reset to ambient due to configuration: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
+                    }
+                    else // Normal behaviour where the cooler warms up from its current temperature
+                    {
+                        coolerAtTemperature = false;
+                        Log.LogMessage("CoolerOn", "CCD temperature left unchanged due to configuration: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
+                    }
+
+                    coolerPower = 0; // Set cooler power to zero because the cooler is off
+                    ccdStartTemperature = ccdTemperature; // Set the start temperature as the current CCD temperature
+                    coolerTargetChangedTime = DateTime.Now; // Set the cooling cycle start time
+                    coolerTimer.Enabled = true; // Make sure that the cooler timer is running
                 }
             }
-        }
-
-        /// <summary>
-        /// Adjust the ccd temperature and power once a second
-        /// </summary>
-        private void coolerTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            if (this.coolerOn && this.canSetCcdTemperature)
-            {
-                this.coolerPower = Math.Min(100, Math.Max((this.ccdTemperature - this.setCcdTemperature) * 100, 0));
-                this.ccdTemperature -= (this.coolerPower / 50);     // reduce temperature by up to 2 deg per sec.
-            }
-            // increase temperature by 2 deg per sec at a differential of 40
-            this.ccdTemperature += (this.heatSinkTemperature - this.ccdTemperature) / 20.0;
         }
 
         /// <summary>
@@ -677,7 +1059,7 @@ namespace ASCOM.Simulator
                 CheckConnected("Can't read Cooler Power when not connected");
                 CheckCapability("CoolerPower", hasCooler);
                 Log.LogMessage("CoolerPower", "get {0}", coolerPower);
-                return this.coolerPower;
+                return coolerPower;
             }
         }
 
@@ -692,15 +1074,15 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read Description when not connected");
-                if (this.interfaceVersion == 1)
+                if (interfaceVersion == 1)
                 {
                     Log.LogMessage("Description", "Simulated V1 Camera");
                     return "Simulated V1 Camera";
                 }
                 else
                 {
-                    Log.LogMessage("Description", "Simulated {0} camera {1}", this.sensorType, this.sensorName);
-                    return string.Format(CultureInfo.CurrentCulture, "Simulated {0} camera {1}", this.sensorType, this.sensorName);
+                    Log.LogMessage("Description", "Simulated {0} camera {1}", sensorType, sensorName);
+                    return string.Format(CultureInfo.CurrentCulture, "Simulated {0} camera {1}", sensorType, sensorName);
                 }
             }
         }
@@ -717,7 +1099,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read ElectronsPerADU when not connected");
                 Log.LogMessage("ElectronsPerADU", "get {0}", electronsPerADU);
-                return this.electronsPerADU;
+                return electronsPerADU;
             }
         }
 
@@ -732,7 +1114,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read FullWellCapacity when not connected");
                 Log.LogMessage("FullWellCapacity", "get {0}", fullWellCapacity);
-                return this.fullWellCapacity;
+                return fullWellCapacity;
             }
         }
 
@@ -747,7 +1129,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read HasShutter when not connected");
                 Log.LogMessage("HasShutter", "get {0}", hasShutter);
-                return this.hasShutter;
+                return hasShutter;
             }
         }
 
@@ -762,8 +1144,9 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read HeatSinkTemperature when not connected");
                 CheckCapability("HeatSinkTemperature", canSetCcdTemperature);
-                Log.LogMessage("HeatSinkTemperature", "get {0}", heatSinkTemperature);
-                return this.heatSinkTemperature;
+                double returnValue = AddRandomFluctuation(heatSinkTemperature);
+                Log.LogMessage("HeatSinkTemperature", "get {0}", returnValue);
+                return returnValue;
             }
         }
 
@@ -785,17 +1168,17 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read ImageArray when not connected");
-                if (!this.imageReady)
+                if (!imageReady)
                 {
                     Log.LogMessage("ImageArray", "No Image Available");
                     throw new ASCOM.InvalidOperationException("There is no image available");
                 }
 
                 Log.LogMessage("ImageArray", "get");
-                if (this.sensorType == SensorType.Color)
-                    return this.imageArrayColour;
+                if (sensorType == SensorType.Color)
+                    return imageArrayColour;
                 else
-                    return this.imageArray;
+                    return imageArray;
             }
         }
 
@@ -813,21 +1196,20 @@ namespace ASCOM.Simulator
         /// just the first plane.
         /// </summary>
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body")]
         public object ImageArrayVariant
         {
             get
             {
                 CheckConnected("Can't read ImageArrayVariant when not connected");
-                if (!this.imageReady)
+                if (!imageReady)
                 {
                     Log.LogMessage("ImageArrayVariant", "No Image Available");
                     throw new ASCOM.InvalidOperationException("There is no image available");
                 }
                 // convert to variant
-                if (this.sensorType == SensorType.Color)
+                if (sensorType == SensorType.Color)
                 {
-                    this.imageArrayVariantColour = new object[imageArrayColour.GetLength(0), imageArrayColour.GetLength(1), 3];
+                    imageArrayVariantColour = new object[imageArrayColour.GetLength(0), imageArrayColour.GetLength(1), 3];
                     for (int i = 0; i < imageArrayColour.GetLength(1); i++)
                     {
                         for (int j = 0; j < imageArrayColour.GetLength(0); j++)
@@ -841,7 +1223,7 @@ namespace ASCOM.Simulator
                 }
                 else
                 {
-                    this.imageArrayVariant = new object[imageArray.GetLength(0), imageArray.GetLength(1)];
+                    imageArrayVariant = new object[imageArray.GetLength(0), imageArray.GetLength(1)];
                     for (int i = 0; i < imageArray.GetLength(1); i++)
                     {
                         for (int j = 0; j < imageArray.GetLength(0); j++)
@@ -866,8 +1248,8 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read ImageReady when not connected");
-                Log.LogMessage("ImageReady", "get {0}", this.imageReady);
-                return this.imageReady;
+                Log.LogMessage("ImageReady", "get {0}", imageReady);
+                return imageReady;
             }
         }
 
@@ -881,7 +1263,7 @@ namespace ASCOM.Simulator
             get
             {
                 CheckCapability("IsPulseGuiding", canPulseGuide);
-                var ipg = this.isPulseGuidingRa || this.isPulseGuidingDec;
+                var ipg = isPulseGuidingRa || isPulseGuidingDec;
                 Log.LogMessage("IsPulseGuiding", "get {0}", ipg);
                 return ipg;
             }
@@ -900,7 +1282,7 @@ namespace ASCOM.Simulator
                 CheckConnected("Can't read LastExposureDuration when not connected");
                 CheckReady("LastExposureDuration");
                 Log.LogMessage("LastExposureDuration", "get {0}", lastExposureDuration);
-                return this.lastExposureDuration;
+                return lastExposureDuration;
             }
         }
 
@@ -916,7 +1298,7 @@ namespace ASCOM.Simulator
                 CheckConnected("Can't read LastExposureStartTime when not connected");
                 CheckReady("LastExposureStartTime");
                 Log.LogMessage("LastExposureStartTime", "get {0}", lastExposureStartTime);
-                return this.lastExposureStartTime;
+                return lastExposureStartTime;
             }
         }
 
@@ -930,7 +1312,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read MaxADU when not connected");
                 Log.LogMessage("MaxADU", "get {0}", maxADU);
-                return this.maxADU;
+                return maxADU;
             }
         }
 
@@ -945,7 +1327,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read MaxBinX when not connected");
                 Log.LogMessage("MaxBinX", "get {0}", maxBinX);
-                return this.maxBinX;
+                return maxBinX;
             }
         }
 
@@ -960,7 +1342,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read MaxBinY when not connected");
                 Log.LogMessage("MaxBinY", "get {0}", maxBinY);
-                return this.maxBinY;
+                return maxBinY;
             }
         }
 
@@ -975,13 +1357,13 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read NumX when not connected");
                 Log.LogMessage("NumX", "get {0}", numX);
-                return this.numX;
+                return numX;
             }
             set
             {
                 CheckConnected("Can't set NumX when not connected");
                 Log.LogMessage("NumX", "set {0}", value);
-                this.numX = value;
+                numX = value;
             }
         }
 
@@ -996,13 +1378,13 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read NumY when not connected");
                 Log.LogMessage("NumY", "get {0}", numY);
-                return this.numY;
+                return numY;
             }
             set
             {
                 CheckConnected("Can't set NumY when not connected");
                 Log.LogMessage("NumY", "set {0}", value);
-                this.numY = value;
+                numY = value;
             }
         }
 
@@ -1017,7 +1399,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read PixelSizeX when not connected");
                 Log.LogMessage("PixelSizeX", "get {0}", pixelSizeX);
-                return this.pixelSizeX;
+                return pixelSizeX;
             }
         }
 
@@ -1032,7 +1414,7 @@ namespace ASCOM.Simulator
             {
                 CheckConnected("Can't read PixelSizeY when not connected");
                 Log.LogMessage("PixelSizeY", "get {0}", pixelSizeY);
-                return this.pixelSizeY;
+                return pixelSizeY;
             }
         }
 
@@ -1057,7 +1439,7 @@ namespace ASCOM.Simulator
         /// <exception cref=" System.Exception">PulseGuide command is unsuccessful</exception>
         public void PulseGuide(GuideDirections Direction, int Duration)
         {
-            if (!this.canPulseGuide)
+            if (!canPulseGuide)
             {
                 Log.LogMessage("PulseGuide", "Not Implemented");
                 throw new ASCOM.MethodNotImplementedException("PulseGuide");
@@ -1071,27 +1453,27 @@ namespace ASCOM.Simulator
             {
                 case GuideDirections.guideEast:
                 case GuideDirections.guideWest:
-                    if (this.pulseGuideRaTimer == null)
+                    if (pulseGuideRaTimer == null)
                     {
-                        this.pulseGuideRaTimer = new System.Timers.Timer();
-                        this.pulseGuideRaTimer.Elapsed += new System.Timers.ElapsedEventHandler(pulseGuideRaTimer_Elapsed);
+                        pulseGuideRaTimer = new System.Timers.Timer();
+                        pulseGuideRaTimer.Elapsed += new System.Timers.ElapsedEventHandler(pulseGuideRaTimer_Elapsed);
                     }
-                    this.isPulseGuidingRa = true;
-                    this.pulseGuideRaTimer.Interval = Duration;
-                    this.pulseGuideRaTimer.AutoReset = false;     // only one tick
-                    this.pulseGuideRaTimer.Enabled = true;
+                    isPulseGuidingRa = true;
+                    pulseGuideRaTimer.Interval = Duration;
+                    pulseGuideRaTimer.AutoReset = false;     // only one tick
+                    pulseGuideRaTimer.Enabled = true;
                     break;
                 case GuideDirections.guideNorth:
                 case GuideDirections.guideSouth:
-                    if (this.pulseGuideDecTimer == null)
+                    if (pulseGuideDecTimer == null)
                     {
-                        this.pulseGuideDecTimer = new System.Timers.Timer();
-                        this.pulseGuideDecTimer.Elapsed += new System.Timers.ElapsedEventHandler(pulseGuideDecTimer_Elapsed);
+                        pulseGuideDecTimer = new System.Timers.Timer();
+                        pulseGuideDecTimer.Elapsed += new System.Timers.ElapsedEventHandler(pulseGuideDecTimer_Elapsed);
                     }
-                    this.isPulseGuidingDec = true;
-                    this.pulseGuideDecTimer.Interval = Duration;
-                    this.pulseGuideDecTimer.AutoReset = false;     // only one tick
-                    this.pulseGuideDecTimer.Enabled = true;
+                    isPulseGuidingDec = true;
+                    pulseGuideDecTimer.Interval = Duration;
+                    pulseGuideDecTimer.AutoReset = false;     // only one tick
+                    pulseGuideDecTimer.Enabled = true;
                     break;
                 default:
                     break;
@@ -1100,12 +1482,12 @@ namespace ASCOM.Simulator
 
         private void pulseGuideRaTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            this.isPulseGuidingRa = false;
+            isPulseGuidingRa = false;
         }
 
         private void pulseGuideDecTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            this.isPulseGuidingDec = false;
+            isPulseGuidingDec = false;
         }
 
         /// <summary>
@@ -1123,146 +1505,210 @@ namespace ASCOM.Simulator
                 CheckConnected("Can't read SetCCDTemperature when not connected");
                 CheckCapability("SetCCDTemperature", canSetCcdTemperature);
                 Log.LogMessage("SetCCDTemperature", "get {0}", setCcdTemperature);
-                return this.setCcdTemperature;
+                return setCcdTemperature;
             }
             set
             {
                 CheckConnected("Can't set SetCCDTemperature when not connected");
                 CheckCapability("SetCCDTemperature", canSetCcdTemperature);
-                CheckRange("SetCCDTemperature", -50, value, 20);
+                CheckRange("SetCCDTemperature", coolerSetPointMinimum, value, heatSinkTemperature); // Make sure the set value is in the supported range
                 Log.LogMessage("SetCCDTemperature", "set {0}", value);
-                this.setCcdTemperature = value;
-                // does this turn cooling on?
+                if (value != setCcdTemperature) // Only try and do something if the new setpoint is different to the current value
+                {
+                    setCcdTemperature = value; // Record the new setpoint temperature
+
+                    // Reset the CCD start temperature if required by configuration
+                    if (coolerResetToAmbient)
+                    {
+                        ccdTemperature = heatSinkTemperature;
+                        Log.LogMessage("SetCCDTemperature", "Starting the cooling cycle with the CCD temperature reset to ambient: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
+                    }
+                    else
+                    {
+                        Log.LogMessage("SetCCDTemperature", "Starting the cooling cycle with the CCD at its current temperature: {0:+0.00;-0.00;' '0.00}", ccdTemperature);
+                    }
+
+                    // Set the cooler target temperature, usually the setpoint - but may not be the setpoint if this is beyond the cooler's capacity... the target temperature will never exceed the cooler's capacity regardless of the setpoint temperature
+                    targetCcdTemperature = setCcdTemperature; // Set a default value
+                    if (targetCcdTemperature < (heatSinkTemperature - coolerDeltaTMax)) // Target temperature is below what the cooler can achieve
+                    {
+                        Log.LogMessage("SetCCDTemperature", "Target CCD temperature < Maximum supported: {0:+0.00;-0.00;' '0.00}, Resetting to: {1}", targetCcdTemperature, heatSinkTemperature - coolerDeltaTMax);
+                        targetCcdTemperature = heatSinkTemperature - coolerDeltaTMax; // Set the target temperature to the maximum that the cooler can achieve.
+                        if (ccdTemperature == targetCcdTemperature) // We are already at the target temperature so flag this
+                        {
+                            Log.LogMessage("SetCCDTemperature", "CCD temperature is already at target, setting coolerAtTemperature to True");
+                            coolerAtTemperature = true;  // Indicate that the cooler is at its setpoint
+                        }
+                        else // Not at the new target so start a cooling cycle
+                        {
+                            Log.LogMessage("SetCCDTemperature", "CCD temperature is not at target, setting coolerAtTemperature to False");
+                            coolerAtTemperature = false;
+                        }
+                    }
+                    else // Target temperature is above what the cooler can achieve
+                    {
+                        // Handle setting temperature to ambient
+                        if (value < heatSinkTemperature) // Temperature has been set below ambient
+                        {
+                            coolerAtTemperature = false; // Indicate that the cooler is not yet at its setpoint
+                        }
+                        else // The setpoint temperature has been set to ambient
+                        {
+                            if (coolerResetToAmbient) // The new setpoint is ambient and we are configured to start at ambient so, by definition, we are already at the setpoint
+                            {
+                                coolerPower = 0.0; // Set the cooler power to 0.0 because it is at ambient temperature
+                                coolerAtTemperature = true;  // Indicate that the cooler is at its setpoint
+                            }
+                            else
+                            {
+                                coolerAtTemperature = false; // Indicate that the cooler is not yet at its setpoint
+                            }
+                        }
+                    }
+
+                    // Start a new cooling cycle if required
+                    if (ccdTemperature != targetCcdTemperature)
+                    {
+                        coolerTargetChangedTime = DateTime.Now; // Record the time that the cooling cycle started
+                        ccdStartTemperature = ccdTemperature; // Set the start temperature as the current CCD temperature
+                        coolerTimer.Enabled = true; // Make sure that the cooler timer is running
+                    }
+                }
             }
         }
 
         /// <summary>
-        /// Launches a configuration dialog box for the driver.  The call will not return
+        /// Launches a configuration dialogue box for the driver.  The call will not return
         /// until the user clicks OK or cancel manually.
         /// </summary>
         /// <exception cref=" System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
         public void SetupDialog()
         {
-            if (this.connected)
+            if (connected)
                 throw new NotConnectedException("Can't set the CCD properties when connected");
             using (SetupDialogForm F = new SetupDialogForm())
             {
-                F.InitProperties(this);
-                if (F.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                    this.SaveToProfile();
+                try
+                {
+                    F.InitProperties(this);
+                    if (F.ShowDialog() == DialogResult.OK) SaveToProfile();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Setup exception: " + ex.ToString());
+                }
             }
         }
 
         /// <summary>
         /// Starts an exposure. Use ImageReady to check when the exposure is complete.
         /// </summary>
-        /// <param name="Duration">exxposure duration in seconds</param>
+        /// <param name="Duration">exposure duration in seconds</param>
         /// <param name="Light">True if light frame, only valid if the camera has a shutter</param>
         /// <exception cref=" System.Exception">NumX, NumY, XBin, YBin, StartX, StartY, or Duration parameters are invalid.</exception>
         /// <exception cref=" System.Exception">CanAsymmetricBin is False and BinX != BinY</exception>
         /// <exception cref=" System.Exception">the exposure cannot be started for any reason, such as a hardware or communications error</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body")]
         public void StartExposure(double Duration, bool Light)
         {
             Log.LogStart("StartExposure", "Duration {0}, Light {1}", Duration, Light);
             CheckConnected("Can't set StartExposure when not connected");
             // check the duration, light frames only
-            if (Light && (Duration > this.exposureMax || Duration < this.exposureMin))
+            if (Light && (Duration > exposureMax || Duration < exposureMin))
             {
-                this.lastError = "Incorrect exposure duration";
+                lastError = "Incorrect exposure duration";
                 Log.LogMessage("StartExposure", "Incorrect exposure Duration {0}", Duration);
                 throw new ASCOM.InvalidValueException("StartExposure Duration",
                                                      Duration.ToString(CultureInfo.InvariantCulture),
-                                                     string.Format(CultureInfo.InvariantCulture, "{0} to {1}", this.exposureMax, this.exposureMin));
+                                                     string.Format(CultureInfo.InvariantCulture, "{0} to {1}", exposureMax, exposureMin));
             }
             //  binning tests
-            if ((this.binX > this.maxBinX) || (this.binX < 1))
+            if ((binX > maxBinX) || (binX < 1))
             {
-                this.lastError = "Incorrect bin X factor";
+                lastError = "Incorrect bin X factor";
                 Log.LogMessage("StartExposure", "Incorrect BinX {0}", binX);
                 throw new ASCOM.InvalidValueException("StartExposure BinX",
-                                                    this.binX.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", this.maxBinX));
+                                                    binX.ToString(CultureInfo.InvariantCulture),
+                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", maxBinX));
             }
-            if ((this.binY > this.maxBinY) || (this.binY < 1))
+            if ((binY > maxBinY) || (binY < 1))
             {
-                this.lastError = "Incorrect bin Y factor";
+                lastError = "Incorrect bin Y factor";
                 Log.LogMessage("StartExposure", "Incorrect BinY {0}", binY);
                 throw new ASCOM.InvalidValueException("StartExposure BinY",
-                                                    this.binY.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", this.maxBinY));
+                                                    binY.ToString(CultureInfo.InvariantCulture),
+                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", maxBinY));
             }
             // check the start position is in range
             // start is in binned pixels
-            if (this.startX < 0 || this.startX * this.binX > this.cameraXSize)
+            if (startX < 0 || startX * binX > cameraXSize)
             {
-                this.lastError = "Incorrect Start X position";
+                lastError = "Incorrect Start X position";
                 Log.LogMessage("StartExposure", "Incorrect Start X {0}", startX);
                 throw new ASCOM.InvalidValueException("StartExposure StartX",
-                                                    this.startX.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "0 to {0}", cameraXSize / this.binX));
+                                                    startX.ToString(CultureInfo.InvariantCulture),
+                                                    string.Format(CultureInfo.InvariantCulture, "0 to {0}", cameraXSize / binX));
             }
-            if (this.startY < 0 || this.startY * this.binY > this.cameraYSize)
+            if (startY < 0 || startY * binY > cameraYSize)
             {
-                this.lastError = "Incorrect Start Y position";
+                lastError = "Incorrect Start Y position";
                 Log.LogMessage("StartExposure", "Incorrect Start Y {0}", startY);
                 throw new ASCOM.InvalidValueException("StartExposure StartX",
-                                                    this.startX.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "0 to {0}", cameraXSize / this.binX));
+                                                    startX.ToString(CultureInfo.InvariantCulture),
+                                                    string.Format(CultureInfo.InvariantCulture, "0 to {0}", cameraXSize / binX));
             }
             // check that the acquisition is at least 1 pixel in size and fits in the camera area
-            if (this.numX < 1 || (this.numX + this.startX) * this.binX > this.cameraXSize)
+            if (numX < 1 || (numX + startX) * binX > cameraXSize)
             {
-                this.lastError = "Incorrect Num X value";
+                lastError = "Incorrect Num X value";
                 Log.LogMessage("StartExposure", "Incorrect Num X {0}", numX);
                 throw new ASCOM.InvalidValueException("StartExposure NumX",
-                                                    this.numX.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", cameraXSize / this.binX));
+                                                    numX.ToString(CultureInfo.InvariantCulture),
+                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", cameraXSize / binX));
             }
-            if (this.numY < 1 || (this.numY + this.startY) * this.binY > this.cameraYSize)
+            if (numY < 1 || (numY + startY) * binY > cameraYSize)
             {
-                this.lastError = "Incorrect Num Y value";
+                lastError = "Incorrect Num Y value";
                 Log.LogMessage("StartExposure", "Incorrect Num Y {0}", numY);
                 throw new ASCOM.InvalidValueException("StartExposure NumY",
-                                                    this.numY.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", cameraYSize / this.binY));
+                                                    numY.ToString(CultureInfo.InvariantCulture),
+                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", cameraYSize / binY));
             }
 
             // set up the things to do at the start of the exposure
-            this.imageReady = false;
-            if (this.hasShutter)
+            imageReady = false;
+            if (hasShutter)
             {
-                this.darkFrame = !Light;
+                darkFrame = !Light;
             }
-            this.lastExposureStartTime = DateTime.UtcNow.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss", CultureInfo.InvariantCulture);
+            lastExposureStartTime = DateTime.UtcNow.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss", CultureInfo.InvariantCulture);
             // set the image array dimensions
-            if (this.sensorType == SensorType.Color)
-                this.imageArrayColour = new int[this.numX, this.numY, 3];
+            if (sensorType == SensorType.Color)
+                imageArrayColour = new int[numX, numY, 3];
             else
-                this.imageArray = new int[this.numX, this.numY];
+                imageArray = new int[numX, numY];
 
-            if (this.exposureTimer == null)
+            if (exposureTimer == null)
             {
-                this.exposureTimer = new System.Timers.Timer();
-                this.exposureTimer.Elapsed += exposureTimer_Elapsed;
+                exposureTimer = new System.Timers.Timer();
+                exposureTimer.Elapsed += exposureTimer_Elapsed;
             }
-            // force the minimum exposure to be 1 millisec to keep the exposureTimer happy
-            this.exposureTimer.Interval = Math.Max((int)(Duration * 1000), 1);
-            this.cameraState = CameraStates.cameraExposing;
-            this.exposureStartTime = DateTime.Now;
-            this.exposureDuration = Duration;
-            this.exposureTimer.Enabled = true;
+            // force the minimum exposure to be 1 millisecond to keep the exposureTimer happy
+            exposureTimer.Interval = Math.Max((int)(Duration * 1000), 1);
+            cameraState = CameraStates.cameraExposing;
+            exposureStartTime = DateTime.Now;
+            exposureDuration = Duration;
+            exposureTimer.Enabled = true;
             Log.LogFinish(" started");
         }
 
         private void exposureTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            this.exposureTimer.Enabled = false;
-            this.lastExposureDuration = (DateTime.Now - this.exposureStartTime).TotalSeconds;
-            this.cameraState = CameraStates.cameraDownload;
-            this.FillImageArray();
-            this.imageReady = true;
-            this.cameraState = CameraStates.cameraIdle;
+            exposureTimer.Enabled = false;
+            lastExposureDuration = (DateTime.Now - exposureStartTime).TotalSeconds;
+            cameraState = CameraStates.cameraDownload;
+            FillImageArray();
+            imageReady = true;
+            cameraState = CameraStates.cameraIdle;
             Log.LogMessage("ExposureTimer_Elapsed", "done");
         }
 
@@ -1274,17 +1720,17 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
+                if (!connected)
                     throw new NotConnectedException("Can't read StartX when not connected");
                 Log.LogMessage("StartX", "get {0}", startX);
-                return this.startX;
+                return startX;
             }
             set
             {
-                if (!this.connected)
+                if (!connected)
                     throw new NotConnectedException("Can't set StartX when not connected");
                 Log.LogMessage("StartX", "set {0}", value);
-                this.startX = value;
+                startX = value;
             }
         }
 
@@ -1296,17 +1742,17 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
+                if (!connected)
                     throw new NotConnectedException("Can't read StartY when not connected");
                 Log.LogMessage("StartY", "get {0}", startY);
-                return this.startY;
+                return startY;
             }
             set
             {
-                if (!this.connected)
+                if (!connected)
                     throw new NotConnectedException("Can't set StartY when not connected");
                 Log.LogMessage("StartY", "set {0}", value);
-                this.startY = value;
+                startY = value;
             }
         }
 
@@ -1323,18 +1769,18 @@ namespace ASCOM.Simulator
             CheckConnected("Can't stop exposure when not connected");
             CheckCapability("StopExposure", canStopExposure);
             Log.LogMessage("StopExposure", "state {0}", cameraState);
-            switch (this.cameraState)
+            switch (cameraState)
             {
                 case CameraStates.cameraWaiting:
                 case CameraStates.cameraExposing:
                 case CameraStates.cameraReading:
                 case CameraStates.cameraDownload:
                     // these are all possible exposure states so we can stop the exposure
-                    this.exposureTimer.Enabled = false;
-                    this.lastExposureDuration = (DateTime.Now - this.exposureStartTime).TotalSeconds;
-                    this.FillImageArray();
-                    this.cameraState = CameraStates.cameraIdle;
-                    this.imageReady = true;
+                    exposureTimer.Enabled = false;
+                    lastExposureDuration = (DateTime.Now - exposureStartTime).TotalSeconds;
+                    FillImageArray();
+                    cameraState = CameraStates.cameraIdle;
+                    imageReady = true;
                     break;
                 case CameraStates.cameraIdle:
                     break;
@@ -1356,16 +1802,16 @@ namespace ASCOM.Simulator
         /// The offset is relative to the 0,0 pixel in the sensor array, and does not change to reflect
         /// subframe settings. 
         /// </summary>
-        /// <value>The bayer offset X.</value>
+        /// <value>The Bayer offset X.</value>
         public short BayerOffsetX
         {
             get
             {
                 CheckInterface("BayerOffsetX");
                 CheckConnected("BayerOffsetX");
-                CheckCapability("BayerOffsetX", this.sensorType != DeviceInterface.SensorType.Monochrome);
+                CheckCapability("BayerOffsetX", sensorType != DeviceInterface.SensorType.Monochrome);
                 Log.LogMessage("BayerOffsetX", "get {0}", bayerOffsetX);
-                return this.bayerOffsetX;
+                return bayerOffsetX;
             }
         }
 
@@ -1375,16 +1821,16 @@ namespace ASCOM.Simulator
         /// The offset is relative to the 0,0 pixel in the sensor array, and does not change to reflect
         /// subframe settings. 
         /// </summary>
-        /// <value>The bayer offset Y.</value>
+        /// <value>The Bayer offset Y.</value>
         public short BayerOffsetY
         {
             get
             {
                 CheckInterface("BayerOffsetY");
                 CheckConnected("BayerOffsetY");
-                CheckCapability("BayerOffsetY", this.sensorType != DeviceInterface.SensorType.Monochrome);
+                CheckCapability("BayerOffsetY", sensorType != DeviceInterface.SensorType.Monochrome);
                 Log.LogMessage("BayerOffsetY", "get {0}", bayerOffsetY);
-                return this.bayerOffsetY;
+                return bayerOffsetY;
             }
         }
 
@@ -1401,7 +1847,7 @@ namespace ASCOM.Simulator
                 CheckInterface("CanFastReadout");
                 CheckConnected("CanFastReadout");
                 Log.LogMessage("CanFastReadout", "get {0}", canFastReadout);
-                return this.canFastReadout;
+                return canFastReadout;
             }
         }
 
@@ -1453,7 +1899,7 @@ namespace ASCOM.Simulator
                 CheckInterface("ExposureMax");
                 CheckConnected("ExposureMax");
                 Log.LogMessage("ExposureMax", "get {0}", exposureMax);
-                return this.exposureMax;
+                return exposureMax;
             }
         }
 
@@ -1468,7 +1914,7 @@ namespace ASCOM.Simulator
                 CheckInterface("ExposureMin");
                 CheckConnected("ExposureMin");
                 Log.LogMessage("ExposureMin", "get {0}", exposureMin);
-                return this.exposureMin;
+                return exposureMin;
             }
         }
 
@@ -1483,7 +1929,7 @@ namespace ASCOM.Simulator
                 CheckInterface("ExposureResolution");
                 CheckConnected("ExposureResolution");
                 Log.LogMessage("ExposureResolution", "get {0}", exposureResolution);
-                return this.exposureResolution;
+                return exposureResolution;
             }
         }
 
@@ -1500,7 +1946,7 @@ namespace ASCOM.Simulator
                 CheckConnected("FastReadout");
                 CheckCapability("FastReadout", canFastReadout);
                 Log.LogMessage("FastReadout", "get {0}", fastReadout);
-                return this.fastReadout;
+                return fastReadout;
             }
             set
             {
@@ -1508,7 +1954,7 @@ namespace ASCOM.Simulator
                 CheckConnected("FastReadout");
                 CheckCapability("FastReadout", canFastReadout);
                 Log.LogMessage("FastReadout", "get {0}", value);
-                this.fastReadout = value;
+                fastReadout = value;
             }
         }
 
@@ -1523,18 +1969,18 @@ namespace ASCOM.Simulator
             {
                 CheckInterface("Gain");
                 CheckConnected("Gain");
-                CheckCapability("Gain", this.gainMax > this.gainMin);
+                CheckCapability("Gain", gainMax > gainMin);
                 Log.LogMessage("Gain", "get {0}", gain);
-                return this.gain;
+                return gain;
             }
             set
             {
                 CheckInterface("Gain");
                 CheckConnected("Gain");
-                CheckCapability("Gain", this.gainMax > this.gainMin, true);
+                CheckCapability("Gain", gainMax > gainMin, true);
                 CheckRange("Gain", gainMin, value, gainMax);
                 Log.LogMessage("Gain", "set {0}", value);
-                this.gain = value;
+                gain = value;
             }
         }
 
@@ -1549,14 +1995,14 @@ namespace ASCOM.Simulator
             {
                 CheckInterface("GainMax");
                 CheckConnected("GainMax");
-                CheckCapability("GainMax", this.gainMax > this.gainMin);
-                if (this.gains != null && this.gains.Count > 0)
+                CheckCapability("GainMax", gainMax > gainMin);
+                if (gains != null && gains.Count > 0)
                 {
                     Log.LogMessage("GainMax", "cannot be read if there is an array of Gains in use");
                     throw new InvalidOperationException("GainMax cannot be read if there is an array of Gains in use");
                 }
                 Log.LogMessage("GainMax", "get {0}", gainMax);
-                return this.gainMax;
+                return gainMax;
             }
         }
 
@@ -1571,14 +2017,14 @@ namespace ASCOM.Simulator
             {
                 CheckInterface("GainMin");
                 CheckConnected("GainMin");
-                CheckCapability("GainMin", this.gainMax > this.gainMin);
-                if (this.gains != null && this.gains.Count > 0)
+                CheckCapability("GainMin", gainMax > gainMin);
+                if (gains != null && gains.Count > 0)
                 {
                     Log.LogMessage("GainMin", "cannot be read if there is an array of Gains in use");
                     throw new InvalidOperationException("GainMin cannot be read if there is an array of Gains in use");
                 }
                 Log.LogMessage("GainMin", "get {0}", gainMin);
-                return this.gainMin;
+                return gainMin;
             }
         }
 
@@ -1593,9 +2039,9 @@ namespace ASCOM.Simulator
             {
                 CheckInterface("Gains");
                 CheckConnected("Gains");
-                CheckCapability("Gains", !(this.gains == null || this.gains.Count == 0));
+                CheckCapability("Gains", !(gains == null || gains.Count == 0));
                 Log.LogMessage("Gains", "get {0}", gains);
-                return this.gains;
+                return gains;
             }
         }
 
@@ -1605,7 +2051,7 @@ namespace ASCOM.Simulator
         /// <value>The interface version.</value>
         public short InterfaceVersion
         {
-            get { return this.interfaceVersion; }
+            get { return interfaceVersion; }
         }
 
         /// <summary>
@@ -1619,7 +2065,7 @@ namespace ASCOM.Simulator
                 CheckInterface("Name");
                 CheckConnected("Name");
                 Log.LogMessage("Name", "Sim {0}", SensorName);
-                return "Sim " + this.SensorName;
+                return "Sim " + SensorName;
             }
         }
 
@@ -1634,13 +2080,13 @@ namespace ASCOM.Simulator
             {
                 CheckInterface("PercentCompleted");
                 CheckConnected("PercentCompleted");
-                switch (this.cameraState)
+                switch (cameraState)
                 {
                     case CameraStates.cameraWaiting:
                     case CameraStates.cameraExposing:
                     case CameraStates.cameraReading:
                     case CameraStates.cameraDownload:
-                        var pc = (short)(((DateTime.Now - this.exposureStartTime).TotalSeconds / this.exposureDuration) * 100);
+                        var pc = (short)(((DateTime.Now - exposureStartTime).TotalSeconds / exposureDuration) * 100);
                         Log.LogMessage("PercentCompleted", "state {0}, get {1}", cameraState, pc);
                         return pc;
                     case CameraStates.cameraIdle:
@@ -1665,14 +2111,14 @@ namespace ASCOM.Simulator
             {
                 CheckInterface("ReadoutMode");
                 CheckConnected("ReadoutMode");
-                if (this.readoutModes == null || this.readoutModes.Count < 1)
+                if (readoutModes == null || readoutModes.Count < 1)
                 {
                     Log.LogMessage("ReadoutMode", "PropertyNotImplemented because readoutModes == null || readoutModes.Count < 1");
                     throw new ASCOM.PropertyNotImplementedException("ReadoutMode", false);
-                //if (this.canFastReadout)
-                //    throw new PropertyNotImplementedException("ReadoutMode", false);
+                    //if (canFastReadout)
+                    //    throw new PropertyNotImplementedException("ReadoutMode", false);
                 }
-                var rm = this.readoutMode;
+                var rm = readoutMode;
                 Log.LogMessage("ReadoutMode", "get {0}, mode {1}", rm, readoutModes[rm]);
 
                 return rm;
@@ -1682,25 +2128,24 @@ namespace ASCOM.Simulator
                 Log.LogMessage("ReadoutMode", "set {0}", value);
                 CheckInterface("ReadoutMode");
                 CheckConnected("ReadoutMode");
-                if (this.readoutModes == null || this.readoutModes.Count < 1)
+                if (readoutModes == null || readoutModes.Count < 1)
                 {
                     Log.LogMessage("ReadoutMode", "PropertyNotImplemented readoutModes == null || readoutModes.Count < 1");
                     throw new PropertyNotImplementedException("ReadoutMode", true);
                 }
-                if (this.canFastReadout)
+                if (canFastReadout)
                 {
                     Log.LogMessage("ReadoutMode", "PropertyNotImplemented canFastReadout is true");
                     throw new PropertyNotImplementedException("ReadoutMode", true);
                 }
-                if (value < 0 || value > this.readoutModes.Count - 1)
+                if (value < 0 || value > readoutModes.Count - 1)
                 {
                     Log.LogMessage("ReadoutMode", "InvalidValueException, value {0}, range 0 to {1}", value, readoutModes.Count - 1);
-                    throw new InvalidValueException("ReadoutMode", value.ToString(CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "0 to {0}", this.readoutModes.Count - 1));
-                } 
-                this.readoutMode = value;
+                    throw new InvalidValueException("ReadoutMode", value.ToString(CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "0 to {0}", readoutModes.Count - 1));
+                }
+                readoutMode = value;
             }
         }
-
 
         /// <summary>
         /// This property provides an array of strings, each of which describes an available readout mode
@@ -1713,21 +2158,21 @@ namespace ASCOM.Simulator
             {
                 CheckInterface("ReadoutModes");
                 CheckConnected("ReadoutModes");
-                //CheckCapability("ReadoutModes", !this.canFastReadout);
-                //CheckCapability("ReadoutModes", !(this.readoutModes == null || this.readoutModes.Count < 1));
+                //CheckCapability("ReadoutModes", !canFastReadout);
+                //CheckCapability("ReadoutModes", !(readoutModes == null || readoutModes.Count < 1));
                 Log.LogMessage("ReadoutModes", "ReadoutModes {0}", readoutModes.Count);
                 foreach (var item in readoutModes)
                 {
                     Log.LogMessage("", "       {0}", item);
                 }
-                return this.readoutModes;
+                return readoutModes;
             }
         }
 
         /// <summary>
-        /// Returns the name (datasheet part number) of the sensor, e.g. ICX285AL.
+        /// Returns the name (data sheet part number) of the sensor, e.g. ICX285AL.
         /// The format is to be exactly as shown on manufacturer data sheet, subject to the following rules.
-        /// All letter shall be uppercase.  Spaces shall not be included.
+        /// All letter shall be upper-case.  Spaces shall not be included.
         /// </summary>
         /// <value>The name of the sensor.</value>
         public string SensorName
@@ -1737,7 +2182,7 @@ namespace ASCOM.Simulator
                 CheckInterface("SensorName");
                 CheckConnected("SensorName");
                 Log.LogMessage("SensorName", "get {0}", sensorName);
-                return this.sensorName;
+                return sensorName;
             }
         }
 
@@ -1753,140 +2198,190 @@ namespace ASCOM.Simulator
                 CheckInterface("SensorType");
                 CheckConnected("SensorType");
                 Log.LogMessage("SensorType", "get {0}", sensorType);
-                return this.sensorType;
+                return sensorType;
             }
         }
 
         #endregion
 
-        #region private
+        #region Private
 
         private void ReadFromProfile()
         {
             using (Profile profile = new Profile(true))
             {
                 profile.DeviceType = "Camera";
+
+                // Read cooler configuration properties
+                heatSinkTemperature = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_CoolerAmbientTemperature, "Cooler", COOLER_AMBIENT_TEMPERATURE_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+                coolerDeltaTMax = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_CoolerDeltaTMax, "Cooler", COOLER_DELTAT_MAX_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+                coolerMode = profile.GetValue(s_csDriverID, STR_CoolerMode, "Cooler", COOLER_COOLERMODE_DEFAULT.ToString(CultureInfo.InvariantCulture));
+                coolerTimeToSetPoint = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_CoolerTimeToSetPoint, "Cooler", COOLER_TIME_TO_SETPOINT_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+                coolerResetToAmbient = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CoolerResetToAmbient, "Cooler", COOLER_RESET_TO_AMBIENT_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+                coolerFluctuation = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_CoolerFluctuations, "Cooler", COOLER_FLUCTUATIONS_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+                coolerOvershoot = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_CoolerOvershoot, "Cooler", COOLER_OVERSHOOT_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+                coolerPowerUpState = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CoolerPowerUpState, "Cooler", COOLER_POWER_UP_STATE_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+                coolerUnderDampedCycles = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_CoolerUnderDampedCycles, "Cooler", COOLER_UNDERDAMPED_CYCLES_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+                coolerSetPointMinimum = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_CoolerSetPointMinimum, "Cooler", COOLER_SETPOINT_MINIMUM_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+                coolerGraphRange = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CoolerGraphRange, "Cooler", COOLER_GRAPH_RANGE_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+
                 // read properties from profile
                 Log.Enabled = Convert.ToBoolean(profile.GetValue(s_csDriverID, "Trace", string.Empty, "false"), CultureInfo.InvariantCulture);
-                this.interfaceVersion = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_InterfaceVersion, string.Empty, "2"), CultureInfo.InvariantCulture);
-                this.pixelSizeX = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_PixelSizeX, string.Empty, "5.6"), CultureInfo.InvariantCulture);
-                this.pixelSizeY = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_PixelSizeY, string.Empty, "5.6"), CultureInfo.InvariantCulture);
-                this.fullWellCapacity = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_FullWellCapacity, string.Empty, "30000"), CultureInfo.InvariantCulture);
-                this.maxADU = Convert.ToInt32(profile.GetValue(s_csDriverID, STR_MaxADU, string.Empty, "65535"), CultureInfo.InvariantCulture);
-                this.electronsPerADU = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_ElectronsPerADU, string.Empty, "0.8"), CultureInfo.InvariantCulture);
+                interfaceVersion = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_InterfaceVersion, string.Empty, "2"), CultureInfo.InvariantCulture);
+                pixelSizeX = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_PixelSizeX, string.Empty, "5.6"), CultureInfo.InvariantCulture);
+                pixelSizeY = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_PixelSizeY, string.Empty, "5.6"), CultureInfo.InvariantCulture);
+                fullWellCapacity = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_FullWellCapacity, string.Empty, "30000"), CultureInfo.InvariantCulture);
+                maxADU = Convert.ToInt32(profile.GetValue(s_csDriverID, STR_MaxADU, string.Empty, "65535"), CultureInfo.InvariantCulture);
+                electronsPerADU = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_ElectronsPerADU, string.Empty, "0.8"), CultureInfo.InvariantCulture);
 
-                this.cameraXSize = Convert.ToInt32(profile.GetValue(s_csDriverID, STR_CameraXSize, string.Empty, "800"), CultureInfo.InvariantCulture);
-                this.cameraYSize = Convert.ToInt32(profile.GetValue(s_csDriverID, STR_CameraYSize, string.Empty, "600"), CultureInfo.InvariantCulture);
-                this.canAsymmetricBin = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanAsymmetricBin, string.Empty, "true"), CultureInfo.InvariantCulture);
-                this.maxBinX = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_MaxBinX, string.Empty, "4"), CultureInfo.InvariantCulture);
-                this.maxBinY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_MaxBinY, string.Empty, "4"), CultureInfo.InvariantCulture);
-                this.hasShutter = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_HasShutter, string.Empty, "false"), CultureInfo.InvariantCulture);
-                this.sensorName = profile.GetValue(s_csDriverID, STR_SensorName, string.Empty, "");
-                this.sensorType = (SensorType)Convert.ToInt32(profile.GetValue(s_csDriverID, STR_SensorType, string.Empty, "0"), CultureInfo.InvariantCulture);
-                this.omitOddBins = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_OmitOddBins, string.Empty, "false"), CultureInfo.InvariantCulture);
+                cameraXSize = Convert.ToInt32(profile.GetValue(s_csDriverID, STR_CameraXSize, string.Empty, "800"), CultureInfo.InvariantCulture);
+                cameraYSize = Convert.ToInt32(profile.GetValue(s_csDriverID, STR_CameraYSize, string.Empty, "600"), CultureInfo.InvariantCulture);
+                canAsymmetricBin = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanAsymmetricBin, string.Empty, "true"), CultureInfo.InvariantCulture);
+                maxBinX = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_MaxBinX, string.Empty, "4"), CultureInfo.InvariantCulture);
+                maxBinY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_MaxBinY, string.Empty, "4"), CultureInfo.InvariantCulture);
+                hasShutter = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_HasShutter, string.Empty, "false"), CultureInfo.InvariantCulture);
+                sensorName = profile.GetValue(s_csDriverID, STR_SensorName, string.Empty, "");
+                sensorType = (SensorType)Convert.ToInt32(profile.GetValue(s_csDriverID, STR_SensorType, string.Empty, "0"), CultureInfo.InvariantCulture);
+                omitOddBins = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_OmitOddBins, string.Empty, "false"), CultureInfo.InvariantCulture);
 
-                this.bayerOffsetX = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetX, string.Empty, "0"), CultureInfo.InvariantCulture);
-                this.bayerOffsetY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetY, string.Empty, "0"), CultureInfo.InvariantCulture);
+                bayerOffsetX = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetX, string.Empty, "0"), CultureInfo.InvariantCulture);
+                bayerOffsetY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetY, string.Empty, "0"), CultureInfo.InvariantCulture);
 
-                this.hasCooler = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_HasCooler, string.Empty, "true"), CultureInfo.InvariantCulture);
-                this.canSetCcdTemperature = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanSetCCDTemperature, string.Empty, "false"), CultureInfo.InvariantCulture);
-                this.canGetCoolerPower = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanGetCoolerPower, string.Empty, "false"), CultureInfo.InvariantCulture);
-                this.setCcdTemperature = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_SetCCDTemperature, string.Empty, "-10"), CultureInfo.InvariantCulture);
+                hasCooler = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_HasCooler, string.Empty, "true"), CultureInfo.InvariantCulture);
+                canSetCcdTemperature = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanSetCCDTemperature, string.Empty, "false"), CultureInfo.InvariantCulture);
+                canGetCoolerPower = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanGetCoolerPower, string.Empty, "false"), CultureInfo.InvariantCulture);
+                setCcdTemperature = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_SetCCDTemperature, string.Empty, "-10"), CultureInfo.InvariantCulture);
 
-                this.canAbortExposure = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanAbortExposure, string.Empty, "true"), CultureInfo.InvariantCulture);
-                this.canStopExposure = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanStopExposure, string.Empty, "true"), CultureInfo.InvariantCulture);
-                this.exposureMax = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_MaxExposure, string.Empty, "3600"), CultureInfo.InvariantCulture);
-                this.exposureMin = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_MinExposure, string.Empty, "0.001"), CultureInfo.InvariantCulture);
-                this.exposureResolution = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_ExposureResolution, string.Empty, "0.001"), CultureInfo.InvariantCulture);
-                string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly((this.GetType())).Location);
-                this.imagePath = profile.GetValue(s_csDriverID, STR_ImagePath, string.Empty, Path.Combine(fullPath, @"m42-800x600.jpg"));
-                this.applyNoise = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_ApplyNoise, string.Empty, "false"), CultureInfo.InvariantCulture);
+                canAbortExposure = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanAbortExposure, string.Empty, "true"), CultureInfo.InvariantCulture);
+                canStopExposure = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanStopExposure, string.Empty, "true"), CultureInfo.InvariantCulture);
+                exposureMax = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_MaxExposure, string.Empty, "3600"), CultureInfo.InvariantCulture);
+                exposureMin = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_MinExposure, string.Empty, "0.001"), CultureInfo.InvariantCulture);
+                exposureResolution = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_ExposureResolution, string.Empty, "0.001"), CultureInfo.InvariantCulture);
 
-                this.canPulseGuide = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanPulseGuide, string.Empty, "false"), CultureInfo.InvariantCulture);
+                string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly((GetType())).Location);
+                imagePath = profile.GetValue(s_csDriverID, STR_ImagePath, string.Empty, Path.Combine(fullPath, @"m42-800x600.jpg"));
+                applyNoise = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_ApplyNoise, string.Empty, "false"), CultureInfo.InvariantCulture);
+
+                canPulseGuide = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanPulseGuide, string.Empty, "false"), CultureInfo.InvariantCulture);
 
                 string gs = profile.GetValue(s_csDriverID, "Gains");
                 if (string.IsNullOrEmpty(gs))
                 {
-                    this.gainMin = Convert.ToInt16(profile.GetValue(s_csDriverID, "GainMin", string.Empty, "0"), CultureInfo.InvariantCulture);
-                    this.gainMax = Convert.ToInt16(profile.GetValue(s_csDriverID, "GainMax", string.Empty, "0"), CultureInfo.InvariantCulture);
+                    gainMin = Convert.ToInt16(profile.GetValue(s_csDriverID, "GainMin", string.Empty, "0"), CultureInfo.InvariantCulture);
+                    gainMax = Convert.ToInt16(profile.GetValue(s_csDriverID, "GainMax", string.Empty, "0"), CultureInfo.InvariantCulture);
                 }
                 else
                 {
                     string[] gsa = gs.Split(',');
-                    this.gains = new ArrayList();
+                    gains = new ArrayList();
                     foreach (var item in gsa)
                     {
-                        this.gains.Add(item);
+                        gains.Add(item);
                     }
-                    this.gainMin = 0;
-                    this.gainMax = (short)(this.gains.Count - 1);
+                    gainMin = 0;
+                    gainMax = (short)(gains.Count - 1);
                 }
 
-                this.canFastReadout = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanFastReadout, string.Empty, "false"), CultureInfo.InvariantCulture);
+                canFastReadout = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanFastReadout, string.Empty, "false"), CultureInfo.InvariantCulture);
 
                 gs = profile.GetValue(s_csDriverID, "ReadoutModes");
-                this.readoutModes = new ArrayList();
+                readoutModes = new ArrayList();
                 if (string.IsNullOrEmpty(gs))
                 {
-                    this.readoutModes.Add("Default");
+                    readoutModes.Add("Default");
                 }
                 else
                 {
                     string[] rms = gs.Split(',');
                     foreach (var item in rms)
                     {
-                        this.readoutModes.Add(item);
+                        readoutModes.Add(item);
                     }
                 }
             }
+
+            // Validate the cooler mode, if invalid select the default and write this back to the profile.
+            if (!coolerModes.Contains(coolerMode))
+            {
+                coolerMode = COOLER_COOLERMODE_DEFAULT;
+                SaveCoolerToProfile();
+            }
         }
 
+        /// <summary>
+        /// Save only the cooler variables to the Profile store
+        /// </summary>
+        internal void SaveCoolerToProfile()
+        {
+            using (Profile profile = new Profile(true))
+            {
+                profile.DeviceType = "Camera";
+
+                // Save the cooler configuration to the Profile
+                profile.WriteValue(s_csDriverID, STR_CoolerAmbientTemperature, heatSinkTemperature.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerDeltaTMax, coolerDeltaTMax.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerMode, coolerMode.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerTimeToSetPoint, coolerTimeToSetPoint.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerResetToAmbient, coolerResetToAmbient.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerFluctuations, coolerFluctuation.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerOvershoot, coolerOvershoot.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_SetCCDTemperature, setCcdTemperature.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CoolerPowerUpState, coolerPowerUpState.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerUnderDampedCycles, coolerUnderDampedCycles.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerSetPointMinimum, coolerSetPointMinimum.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerGraphRange, coolerGraphRange.ToString(CultureInfo.InvariantCulture), "Cooler");
+            }
+        }
+
+        /// <summary>
+        ///  Save all variables to the Profile store, including cooler variables
+        /// </summary>
         private void SaveToProfile()
         {
             using (Profile profile = new Profile(true))
             {
                 profile.DeviceType = "Camera";
 
+                // Save camera configuration to the Profile
                 profile.WriteValue(s_csDriverID, "Trace", Log.Enabled.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_InterfaceVersion, this.interfaceVersion.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_PixelSizeX, this.pixelSizeX.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_PixelSizeY, this.pixelSizeY.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_FullWellCapacity, this.fullWellCapacity.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_MaxADU, this.maxADU.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_ElectronsPerADU, this.electronsPerADU.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_InterfaceVersion, interfaceVersion.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_PixelSizeX, pixelSizeX.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_PixelSizeY, pixelSizeY.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_FullWellCapacity, fullWellCapacity.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_MaxADU, maxADU.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_ElectronsPerADU, electronsPerADU.ToString(CultureInfo.InvariantCulture));
 
-                profile.WriteValue(s_csDriverID, STR_CameraXSize, this.cameraXSize.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_CameraYSize, this.cameraYSize.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_CanAsymmetricBin, this.canAsymmetricBin.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_MaxBinX, this.maxBinX.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_MaxBinY, this.maxBinY.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_HasShutter, this.hasShutter.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_SensorName, this.sensorName.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_SensorType, ((int)this.sensorType).ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_BayerOffsetX, this.bayerOffsetX.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_BayerOffsetY, this.bayerOffsetY.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_OmitOddBins, this.omitOddBins.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CameraXSize, cameraXSize.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CameraYSize, cameraYSize.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CanAsymmetricBin, canAsymmetricBin.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_MaxBinX, maxBinX.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_MaxBinY, maxBinY.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_HasShutter, hasShutter.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_SensorName, sensorName.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_SensorType, ((int)sensorType).ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_BayerOffsetX, bayerOffsetX.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_BayerOffsetY, bayerOffsetY.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_OmitOddBins, omitOddBins.ToString(CultureInfo.InvariantCulture));
 
-                profile.WriteValue(s_csDriverID, STR_HasCooler, this.hasCooler.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_CanSetCCDTemperature, this.canSetCcdTemperature.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_CanGetCoolerPower, this.canGetCoolerPower.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_SetCCDTemperature, this.setCcdTemperature.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_HasCooler, hasCooler.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CanSetCCDTemperature, canSetCcdTemperature.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CanGetCoolerPower, canGetCoolerPower.ToString(CultureInfo.InvariantCulture));
 
-                profile.WriteValue(s_csDriverID, STR_CanAbortExposure, this.canAbortExposure.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_CanStopExposure, this.canStopExposure.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_MaxExposure, this.exposureMax.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_MinExposure, this.exposureMin.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_ExposureResolution, this.exposureResolution.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_ImagePath, this.imagePath);
-                profile.WriteValue(s_csDriverID, STR_ApplyNoise, this.applyNoise.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CanAbortExposure, canAbortExposure.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CanStopExposure, canStopExposure.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_MaxExposure, exposureMax.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_MinExposure, exposureMin.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_ExposureResolution, exposureResolution.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_ImagePath, imagePath);
+                profile.WriteValue(s_csDriverID, STR_ApplyNoise, applyNoise.ToString(CultureInfo.InvariantCulture));
 
-                profile.WriteValue(s_csDriverID, STR_CanPulseGuide, this.canPulseGuide.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CanPulseGuide, canPulseGuide.ToString(CultureInfo.InvariantCulture));
 
-                if (this.gains != null && this.gains.Count > 0)
+                if (gains != null && gains.Count > 0)
                 {
                     // gain control using Gains string array
                     System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                    foreach (var item in this.gains)
+                    foreach (var item in gains)
                     {
                         if (sb.Length > 0)
                             sb.Append(",");
@@ -1896,12 +2391,12 @@ namespace ASCOM.Simulator
                     profile.WriteValue(s_csDriverID, "GainMin", "0");
                     profile.WriteValue(s_csDriverID, "GainMax", Convert.ToString(gains.Count - 1, CultureInfo.InvariantCulture));
                 }
-                else if (this.gainMax > this.gainMin)
+                else if (gainMax > gainMin)
                 {
                     // gain control using min and max
                     profile.DeleteValue(s_csDriverID, "Gains");
-                    profile.WriteValue(s_csDriverID, "GainMin", this.gainMin.ToString(CultureInfo.InvariantCulture));
-                    profile.WriteValue(s_csDriverID, "GainMax", this.gainMax.ToString(CultureInfo.InvariantCulture));
+                    profile.WriteValue(s_csDriverID, "GainMin", gainMin.ToString(CultureInfo.InvariantCulture));
+                    profile.WriteValue(s_csDriverID, "GainMax", gainMax.ToString(CultureInfo.InvariantCulture));
                 }
                 else
                 {
@@ -1911,9 +2406,9 @@ namespace ASCOM.Simulator
                     profile.DeleteValue(s_csDriverID, "GainMax");
                 }
 
-                profile.WriteValue(s_csDriverID, STR_CanFastReadout, this.canFastReadout.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CanFastReadout, canFastReadout.ToString(CultureInfo.InvariantCulture));
 
-                if (this.readoutModes == null || this.readoutModes.Count <= 1)
+                if (readoutModes == null || readoutModes.Count <= 1)
                 {
                     profile.DeleteValue(s_csDriverID, "ReadoutModes");
                 }
@@ -1921,7 +2416,7 @@ namespace ASCOM.Simulator
                 {
                     // Readout Modes use string array
                     System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                    foreach (var item in this.readoutModes)
+                    foreach (var item in readoutModes)
                     {
                         if (sb.Length > 0)
                             sb.Append(",");
@@ -1930,27 +2425,60 @@ namespace ASCOM.Simulator
                     profile.WriteValue(s_csDriverID, "ReadoutModes", sb.ToString());
                 }
             }
+            SaveCoolerToProfile(); // Save the cooler profile as well
+        }
+
+        /// <summary>
+        /// Add a random fluctuation of ±coolerFluctuation to the supplied temperature and return the revised value
+        /// </summary>
+        /// <param name="temperature">The temperature to which the random fluctuation must be applied</param>
+        /// <returns>The supplied temperature ± a random fluctuation</returns>
+        private double AddRandomFluctuation(double temperature)
+        {
+            double returnValue = temperature; // Initialise the return value with the supplied temperature
+
+            if (coolerFluctuation != 0.0) // Some fluctuation in returned value is required
+            {
+                double fluctuation = (randomGenerator.NextDouble() * 2.0 * coolerFluctuation) - coolerFluctuation; // Calculate the fluctuation by translating the Random.NextDouble() value (range 0.0 to +1.0) into the range -coolerFluctuation to +coolerFluctuation
+                returnValue = temperature + fluctuation; // Calculate the new temperature including the random fluctuation
+            }
+
+            return returnValue;
         }
 
         private void InitialiseSimulator()
         {
-            this.ReadFromProfile();
+            ReadFromProfile();
 
-            this.startX = 0;
-            this.startY = 0;
-            this.binX = 1;
-            this.binY = 1;
-            this.numX = this.cameraXSize;
-            this.numY = this.cameraYSize;
+            randomGenerator = new Random(); // Initialise the random fluctuation generator
 
-            this.cameraState = CameraStates.cameraIdle;
-            this.coolerOn = false;
-            this.coolerPower = 0;
-            this.heatSinkTemperature = 20;
-            this.ccdTemperature = 15;
-            this.readoutMode = 0;
-            this.fastReadout = false;
-            //this.ReadImageFile();
+            startX = 0;
+            startY = 0;
+            binX = 1;
+            binY = 1;
+            numX = cameraXSize;
+            numY = cameraYSize;
+            readoutMode = 0;
+            fastReadout = false;
+
+            cameraState = CameraStates.cameraIdle;
+
+            // Set initial cooler control variables
+            targetCcdTemperature = setCcdTemperature; // Set the default value
+            if (targetCcdTemperature < (heatSinkTemperature - coolerDeltaTMax)) // Ensure that the cooler target temperature cannot go below the maximum achievable, event if the setpoint is set below what is achievable
+            {
+                targetCcdTemperature = heatSinkTemperature - coolerDeltaTMax;
+            }
+
+            coolerPower = coolerOn ? 100.0 : 0.0; // Set the cooler power depending on whether or not the cooler is on 
+            ccdTemperature = heatSinkTemperature; // Set the CCD temperature to ambient
+            ccdStartTemperature = heatSinkTemperature; // Set the cooling cycle start temperature to ambient
+            coolerAtTemperature = !coolerOn; // Indicate whether we are at temperature as the inverse of whether or not the cooler is on
+            coolerConstant = CalculateCoolerConstant(coolerTimeToSetPoint, coolerDeltaTMax); // Set the initial cooling constant in case the camera is just loaded and switched on
+
+            LogCoolerVariables(); // Write the cooler variables to the driver log
+
+            Log.LogMessage("InitialiseSimulator", "Set camera temperature to ambient: {0} with cooler constant {1} - Cooler mode: {2}", heatSinkTemperature, coolerConstant, coolerMode);
         }
 
         private delegate int PixelProcess(double value);
@@ -1960,39 +2488,39 @@ namespace ASCOM.Simulator
             PixelProcess pixelProcess = new PixelProcess(NoNoise);
             ShutterProcess shutterProcess = new ShutterProcess(BinData);
 
-            if (this.applyNoise)
+            if (applyNoise)
                 pixelProcess = new PixelProcess(Poisson);
-            if (this.HasShutter && this.darkFrame)
+            if (HasShutter && darkFrame)
                 shutterProcess = new ShutterProcess(DarkData);
 
             double readNoise = 3;
             // dark current 1 ADU/sec at 0C doubling for every 5C increase
-            double darkCurrent = Math.Pow(2, this.ccdTemperature / 5);
-            darkCurrent *= this.lastExposureDuration;
+            double darkCurrent = Math.Pow(2, ccdTemperature / 5);
+            darkCurrent *= lastExposureDuration;
             // add read noise, should be in quadrature
             darkCurrent += readNoise;
             // fill the array using binning and image offsets
             // indexes into the imageData
-            for (int y = 0; y < this.numY; y++)
+            for (int y = 0; y < numY; y++)
             {
-                for (int x = 0; x < this.numX; x++)
+                for (int x = 0; x < numX; x++)
                 {
                     double s;
-                    if (this.sensorType == SensorType.Color)
+                    if (sensorType == SensorType.Color)
                     {
-                        s = shutterProcess((x + this.startX) * this.binX, (y + this.startY) * this.binY, 0);
-                        this.imageArrayColour[x, y, 0] = pixelProcess(s + darkCurrent);
-                        s = shutterProcess((x + this.startX) * this.binX, (y + this.startY) * this.binY, 1);
-                        this.imageArrayColour[x, y, 1] = pixelProcess(s + darkCurrent);
-                        s = shutterProcess((x + this.startX) * this.binX, (y + this.startY) * this.binY, 2);
-                        this.imageArrayColour[x, y, 2] = pixelProcess(s + darkCurrent);
+                        s = shutterProcess((x + startX) * binX, (y + startY) * binY, 0);
+                        imageArrayColour[x, y, 0] = pixelProcess(s + darkCurrent);
+                        s = shutterProcess((x + startX) * binX, (y + startY) * binY, 1);
+                        imageArrayColour[x, y, 1] = pixelProcess(s + darkCurrent);
+                        s = shutterProcess((x + startX) * binX, (y + startY) * binY, 2);
+                        imageArrayColour[x, y, 2] = pixelProcess(s + darkCurrent);
                     }
                     else
                     {
-                        s = shutterProcess((x + this.startX) * this.binX, (y + this.startY) * this.binY, 0);
-                        this.imageArray[x, y] = pixelProcess(s + darkCurrent);
+                        s = shutterProcess((x + startX) * binX, (y + startY) * binY, 0);
+                        imageArray[x, y] = pixelProcess(s + darkCurrent);
                     }
-                    //s *= this.lastExposureDuration;
+                    //s *= lastExposureDuration;
                 }
             }
         }
@@ -2004,7 +2532,7 @@ namespace ASCOM.Simulator
             // use normal distribution for large values
             // because Poisson falls over and gets slow
             if (lambda > 50)
-                return Math.Min((int)BoxMuller(lambda, Math.Sqrt(lambda)), this.maxADU);
+                return Math.Min((int)BoxMuller(lambda, Math.Sqrt(lambda)), maxADU);
 
             double L = Math.Exp(-lambda);
             double p = 1.0;
@@ -2015,7 +2543,7 @@ namespace ASCOM.Simulator
                 p *= R.NextDouble();
             }
             while (p > L);
-            return Math.Min(k - 1, this.maxADU);
+            return Math.Min(k - 1, maxADU);
         }
 
         /// <summary>
@@ -2041,7 +2569,7 @@ namespace ASCOM.Simulator
 
         private int NoNoise(double value)
         {
-            return Convert.ToInt32(Math.Min(value, this.maxADU));
+            return Convert.ToInt32(Math.Min(value, maxADU));
         }
 
         /// <summary>
@@ -2062,25 +2590,24 @@ namespace ASCOM.Simulator
         private double BinData(int x, int y, int p)
         {
             double s = 0;
-            for (int k = 0; k < this.binY; k++)
+            for (int k = 0; k < binY; k++)
             {
-                for (int l = 0; l < this.binX; l++)
+                for (int l = 0; l < binX; l++)
                 {
                     s += imageData[l + x, k + y, p];
                 }
             }
-            return s * this.lastExposureDuration;
+            return s * lastExposureDuration;
         }
 
         private double DarkData(int x, int y, int p)
         {
-            return 5.0 * this.binX * this.binY;
+            return 5.0 * binX * binY;
         }
-
 
         private delegate void GetData(int x, int y);
         private Bitmap bmp;
-        // bayer offsets
+        // Bayer offsets
         private int x0;
         private int x1;
         private int x2;
@@ -2099,13 +2626,12 @@ namespace ASCOM.Simulator
         /// processing into the ImageArray.  The size of the image must be the same as the
         /// full frame image data.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body")]
         private void ReadImageFile()
         {
-            this.imageData = new float[this.cameraXSize, this.cameraYSize, 1];
+            imageData = new float[cameraXSize, cameraYSize, 1];
             try
             {
-                bmp = (Bitmap)Image.FromFile(this.imagePath);
+                bmp = (Bitmap)Image.FromFile(imagePath);
 
                 //x0 = bayerOffsetX;
                 //x1 = (bayerOffsetX + 1) & 1;
@@ -2113,7 +2639,7 @@ namespace ASCOM.Simulator
                 //y1 = (bayerOffsetY + 1) & 1;
 
                 GetData getData = new GetData(MonochromeData);
-                switch (this.sensorType)
+                switch (sensorType)
                 {
                     case SensorType.Monochrome:
                         stepX = 1;
@@ -2144,7 +2670,7 @@ namespace ASCOM.Simulator
                         stepY = 4;
                         break;
                     case SensorType.Color:
-                        this.imageData = new float[this.cameraXSize, this.cameraYSize, 3];
+                        imageData = new float[cameraXSize, cameraYSize, 3];
                         getData = new GetData(ColorData);
                         stepX = 1;
                         stepY = 1;
@@ -2161,8 +2687,8 @@ namespace ASCOM.Simulator
                 y2 = (y0 + 2) & (stepY - 1);
                 y3 = (y0 + 3) & (stepY - 1);
 
-                int w = Math.Min(this.cameraXSize, bmp.Width * stepX);
-                int h = Math.Min(this.cameraYSize, bmp.Height * stepY);
+                int w = Math.Min(cameraXSize, bmp.Width * stepX);
+                int h = Math.Min(cameraYSize, bmp.Height * stepY);
                 for (int y = 0; y < h; y += stepY)
                 {
                     for (int x = 0; x < w; x += stepX)
@@ -2241,13 +2767,118 @@ namespace ASCOM.Simulator
             imageData[x, y, 2] = (bmp.GetPixel(x, y).B);
         }
 
+        /// <summary>
+        /// Write all cooler control variable values to the log file
+        /// </summary>
+        internal void LogCoolerVariables()
+        {
+            Log.LogMessage("LogCoolerVariables", "Heat sink temperature: {0}", heatSinkTemperature);
+            Log.LogMessage("LogCoolerVariables", "Set point temperature: {0}", setCcdTemperature);
+            Log.LogMessage("LogCoolerVariables", "Target temperature: {0}", targetCcdTemperature);
+            Log.LogMessage("LogCoolerVariables", "Maximum delta T: {0}", coolerDeltaTMax);
+            Log.LogMessage("LogCoolerVariables", "Set point minimum temperature: {0}", coolerSetPointMinimum);
+            Log.LogMessage("LogCoolerVariables", "Time to set point: {0}", coolerTimeToSetPoint);
+            Log.LogMessage("LogCoolerVariables", "Reset to ambient: {0}", coolerResetToAmbient);
+            Log.LogMessage("LogCoolerVariables", "Cooler enabled at power up: {0}", coolerPowerUpState);
+            Log.LogMessage("LogCoolerVariables", "Cooler fluctuation: {0}", coolerFluctuation);
+            Log.LogMessage("LogCoolerVariables", "Temperature overshoot: {0}", coolerOvershoot);
+            Log.LogMessage("LogCoolerVariables", "Cooler under damped cycles: {0}", coolerUnderDampedCycles);
+            Log.LogMessage("LogCoolerVariables", "Cooler mode: {0}", coolerMode);
+        }
+
+        /// <summary>
+        /// Constrain the supplied temperature to a specified range
+        /// </summary>
+        /// <param name="Temperature">Temperature to be constrained</param>
+        /// <param name="FirstBound">First temperature range bound</param>
+        /// <param name="SecondBound">Second temperature range bound</param>
+        /// <returns>Constrained temperature</returns>
+        private double ConstrainToTemperatureRange(double Temperature, double FirstBound, double SecondBound)
+        {
+            double retVal;
+            retVal = Temperature; // Initialise the return value with the supplied temperature
+
+            if (FirstBound == SecondBound) // The bounds are identical so only one possible valid value
+            {
+                if (Temperature != FirstBound) // Temperature is outside the valid value
+                {
+                    retVal = FirstBound;
+                    Log.LogMessage("Timer", @"CCD temperature {0:+0.00;-0.00;' '0.00} constrained to the range {1:+0.00;-0.00;' '0.00} to {2:+0.00;-0.00;' '0.00}", Temperature, FirstBound, SecondBound);
+                }
+            }
+            else if (FirstBound < SecondBound) // First is less than second
+            {
+                if (Temperature < FirstBound) // Temperature is lower than first bound
+                {
+                    retVal = FirstBound;
+                    Log.LogMessage("Timer", @"CCD temperature {0:+0.00;-0.00;' '0.00} constrained to the range {1:+0.00;-0.00;' '0.00} to {2:+0.00;-0.00;' '0.00}", Temperature, FirstBound, SecondBound);
+                }
+                if (Temperature > SecondBound) // Temperature is higher than second bound
+                {
+                    retVal = SecondBound;
+                    Log.LogMessage("Timer", @"CCD temperature {0:+0.00;-0.00;' '0.00} constrained to the range {1:+0.00;-0.00;' '0.00} to {2:+0.00;-0.00;' '0.00}", Temperature, FirstBound, SecondBound);
+                }
+            }
+            else // Second is less than first
+            {
+                if (Temperature > FirstBound) // Temperature is higher than first bound
+                {
+                    retVal = FirstBound;
+                    Log.LogMessage("Timer", @"CCD temperature {0:+0.00;-0.00;' '0.00} constrained to the range {1:+0.00;-0.00;' '0.00} to {2:+0.00;-0.00;' '0.00}", Temperature, FirstBound, SecondBound);
+                }
+                if (Temperature < SecondBound) // Temperature is lower than second bound
+                {
+                    retVal = SecondBound;
+                    Log.LogMessage("Timer", @"CCD temperature {0:+0.00;-0.00;' '0.00} constrained to the range {1:+0.00;-0.00;' '0.00} to {2:+0.00;-0.00;' '0.00}", Temperature, FirstBound, SecondBound);
+                }
+            }
+
+            return retVal;
+        }
+
+        /// <summary>
+        /// Returns the cooling constant that will get the CCD temperature within a specified distance of the endpoint temperature in the given time
+        /// </summary>
+        /// <param name="TimeToSetpoint">Time in which the change has to be effected</param>
+        /// <returns>Cooling constant to use in Newton's cooling equation</returns>
+        /// <remarks>
+        /// Newton's cooling equation for this cooler gives temperature (T) as a function of time (t):                     T = SetpointTemperature + (StartTemperature - SetpointTemperature) * e^(-k*t)   ...1
+        /// Which can also be shown as:                                                                                    T = SetpointTemperature + TemperatureChange * e^(-k*t)   ...2
+        /// Rearranging gives the cooling constant k as:                                                                   k = -ln[(T - SetpointTemperature) / TemperatureChange] / t   ...3    Differing bracket styles just used to aid clarity
+        ///
+        /// The cooling equation shows that the temperature exponentially approaches the setpoint and thus requires infinite time to achieve the final temperature, assuming infinite precision observation and calculation.
+        /// To work round this, in the simulator we define that the setpoint is reached when the CCD temperature reaches a small offset (COOLER_SETPOINT_REACHED_OFFSET) from the setpoint e.g. 0.1C.
+        /// 
+        /// When the cooler is at the offset temperature (setpoint + COOLER_SETPOINT_REACHED_OFFSET, equation 3 gives:     k = -ln[(TemperatureAtoffset - SetpointTemperature) / TemperatureChange] / TimeToOfffset   ...4    
+        /// 
+        /// "TemperatureAtoffset" in equation 4 can be replaced with (SetpointTemperature + SetPointReachedOffset) giving: k = -ln[(SetpointTemperature + SetPointReachedOffset - SetpointTemperature) / TemperatureChange] / TimeToOfffset   ...5
+        /// which simplifies to:                                                                                           k = -ln[SetPointReachedOffset / TemperatureChange] / t   ...6
+        ///
+        /// Equation 6 allows the cooling constant to be calculated that will cause the cooler reach a temperature of "SetPointReachedOffset" degrees from the setpoint in "t" seconds when cooling over "TemperatureChange" degrees
+        /// 
+        /// For this cooler, "TemperatureCahnge" is taken as the maximum delta T that the cooler can achieve, which can only be changed through configuration. This means that the cooler shows realistic behaviour where 
+        /// small temperature changes are achieved more rapidly than larger changes.
+        ///
+        /// The COOLER_SETPOINT_REACHED_OFFSET variable determines how far the cooler proceeds down the cooling curve before declaring that it has arrived. Larger values make use of the earlier part of the curve which 
+        /// give a slower descent towards the setpoint and less time inching in towards it. Smaller values use more of the curve, which results in a quicker descent to the vicinity of the setpoint and then a longer 
+        /// time spent inching towards the exact value. The value of 0.1sec has been determined experimentally to provide realistic behaviour.
+        ///    
+        ///</remarks>
+        internal double CalculateCoolerConstant(double TimeToSetpoint, double coolerDeltaTMax)
+        {
+            double coolingConstant = -Math.Log(COOLER_SETPOINT_REACHED_OFFSET / coolerDeltaTMax) / TimeToSetpoint;
+            Log.LogMessage("CoolingConstant", "Cooler setpoint offset: {0:0.0}, Maximum delta T: {1:+0.00;-0.00;' '0.00}, Time to setpoint: {2:0.0}, Cooling constant: {3}", COOLER_SETPOINT_REACHED_OFFSET, coolerDeltaTMax, TimeToSetpoint, coolingConstant);
+
+            return coolingConstant;
+        }
+
         #endregion
 
-        #region checks
+        #region Checks
 
         private void CheckConnected(string message)
         {
-            if (!this.connected)
+            if (!connected)
             {
                 Log.LogMessage("NotConnected", message);
                 throw new NotConnectedException(message);
@@ -2258,7 +2889,7 @@ namespace ASCOM.Simulator
         {
             if (value > max || value < min)
             {
-                Log.LogMessage(identifier, "{0} is not in rang {1} to {2}", value, min, max);
+                Log.LogMessage(identifier, "{0} is not in range {1} to {2}", value, min, max);
                 throw new InvalidValueException(identifier, value.ToString(), string.Format(CultureInfo.InvariantCulture, "{0} to {1}", min, max));
             }
         }
@@ -2279,7 +2910,7 @@ namespace ASCOM.Simulator
 
         private void CheckReady(string identifier)
         {
-            if (!this.imageReady)
+            if (!imageReady)
             {
                 Log.LogMessage(identifier, "image not ready");
                 throw new NotConnectedException("Can't read " + identifier + " when no image is ready");
@@ -2294,7 +2925,6 @@ namespace ASCOM.Simulator
                 throw new System.NotSupportedException(identifier + " (not supported for Interface V1)");
             }
         }
-
 
         #endregion
     }

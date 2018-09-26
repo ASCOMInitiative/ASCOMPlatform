@@ -19,8 +19,8 @@ Module COMRegistrationSupport
     ''' The COM class name and ClassID are determined from the supplied type definition. If the ClassID cannot be determined it is looked up through the COM registration registry entry through the class's ProgID
     ''' </remarks>
     Friend Sub COMRegister(typeToRegister As Type)
-        Dim className, clsId, mscoree, fullPath, sysPath As String, attributes As Object()
-        Dim TL As TraceLogger
+        Dim className, clsId, mscoree, fullPath As String, attributes As Object()
+        Dim TL As TraceLogger = Nothing
 
         Try
             TL = New TraceLogger("", "COMRegister" & typeToRegister.Name)
@@ -70,7 +70,7 @@ Module COMRegistrationSupport
                     End If
 
                 Case Else ' More than 1 GUID attribute so ignore it and look up from the registry - this should never happen!
-                    TL.LogMessage("COMRegisterActions", String.Format("{0} GuidAttributes found, obtaining the correct class GUID from the COM registration in the registry"))
+                    TL.LogMessage("COMRegisterActions", String.Format("{0} GuidAttributes found, obtaining the correct class GUID from the COM registration in the registry", attributes.Length))
 
                     clsId = CStr(Registry.ClassesRoot.OpenSubKey(className + "\CLSID").GetValue(""))
                     If Not String.IsNullOrEmpty(clsId) Then
@@ -106,7 +106,7 @@ Module COMRegistrationSupport
                 TL.LogMessage("COMRegisterActions", "Unable to find the class's ClassID - no action taken.")
             End If
         Catch ex As Exception
-            TL.LogMessageCrLf("Exception", ex.ToString())
+            If Not (TL Is Nothing) Then TL.LogMessageCrLf("Exception", ex.ToString())
         End Try
 
     End Sub

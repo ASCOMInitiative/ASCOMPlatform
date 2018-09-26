@@ -60,6 +60,7 @@ namespace ASCOM.Simulator
             this.radioButtonUseMinAndMax = new System.Windows.Forms.RadioButton();
             this.radioButtonUseGains = new System.Windows.Forms.RadioButton();
             this.groupBoxCooling = new System.Windows.Forms.GroupBox();
+            this.BtnCoolerConfiguration = new System.Windows.Forms.Button();
             this.checkBoxHasCooler = new System.Windows.Forms.CheckBox();
             this.checkBoxCanGetCoolerPower = new System.Windows.Forms.CheckBox();
             this.checkBoxCanSetCCDTemperature = new System.Windows.Forms.CheckBox();
@@ -415,6 +416,7 @@ namespace ASCOM.Simulator
             // 
             // groupBoxCooling
             // 
+            this.groupBoxCooling.Controls.Add(this.BtnCoolerConfiguration);
             this.groupBoxCooling.Controls.Add(this.checkBoxHasCooler);
             this.groupBoxCooling.Controls.Add(this.checkBoxCanGetCoolerPower);
             this.groupBoxCooling.Controls.Add(this.checkBoxCanSetCCDTemperature);
@@ -424,6 +426,17 @@ namespace ASCOM.Simulator
             this.groupBoxCooling.TabIndex = 6;
             this.groupBoxCooling.TabStop = false;
             this.groupBoxCooling.Text = "Cooling";
+            // 
+            // BtnCoolerConfiguration
+            // 
+            this.BtnCoolerConfiguration.Location = new System.Drawing.Point(97, 12);
+            this.BtnCoolerConfiguration.Name = "BtnCoolerConfiguration";
+            this.BtnCoolerConfiguration.Size = new System.Drawing.Size(52, 23);
+            this.BtnCoolerConfiguration.TabIndex = 14;
+            this.BtnCoolerConfiguration.Text = "Setup";
+            this.toolTip1.SetToolTip(this.BtnCoolerConfiguration, resources.GetString("BtnCoolerConfiguration.ToolTip"));
+            this.BtnCoolerConfiguration.UseVisualStyleBackColor = true;
+            this.BtnCoolerConfiguration.Click += new System.EventHandler(this.BtnCoolerConfiguration_Click);
             // 
             // checkBoxHasCooler
             // 
@@ -735,8 +748,10 @@ namespace ASCOM.Simulator
             // 
             // SetupDialogForm
             // 
+            this.AcceptButton = this.cmdOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.cmdCancel;
             this.ClientSize = new System.Drawing.Size(454, 403);
             this.Controls.Add(this.checkBoxLogging);
             this.Controls.Add(this.groupBoxReadoutModes);
@@ -843,5 +858,6 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.CheckBox checkBoxUseReadoutModes;
         private System.Windows.Forms.CheckBox checkBoxCanFastReadout;
         private System.Windows.Forms.CheckBox checkBoxLogging;
-	}
+        private System.Windows.Forms.Button BtnCoolerConfiguration;
+    }
 }

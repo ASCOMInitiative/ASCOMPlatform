@@ -210,6 +210,10 @@ namespace ASCOM.Simulator
 
         #region Private variables and constants
 
+        // Supported actions
+        const string OCH_TAG = "OCHTag"; const string OCH_TAG_UPPER_CASE = "OCHTAG";
+        const string OCH_TEST_WEATHER_REPORT = "OCHTestWeatherReport"; const string OCH_TEST_WEATHER_REPORT_UPPER_CASE = "OCHTESTWEATHERREPORT";
+
         // Miscellaneous variables
         private static int uniqueClientNumber = 0; // Unique number that increements on each call to UniqueClientNumber
         private readonly static object connectLockObject = new object();
@@ -281,7 +285,15 @@ namespace ASCOM.Simulator
 
         public static string Action(int clientNumber, string actionName, string actionParameters)
         {
-            throw new ASCOM.ActionNotImplementedException("Action " + actionName + " is not implemented by this driver");
+            switch (actionName.ToUpperInvariant())
+            {
+                case OCH_TAG_UPPER_CASE:
+                    return "OCSimulator";
+                case OCH_TEST_WEATHER_REPORT_UPPER_CASE:
+                    return "The weather will be very nice today! Supplied parameters: " + actionParameters;
+                default:
+                    throw new ASCOM.ActionNotImplementedException("Action " + actionName + " is not implemented by this driver");
+            }
         }
 
         public static void CommandBlind(int clientNumber, string command)
@@ -455,8 +467,8 @@ namespace ASCOM.Simulator
         {
             CheckConnected("SupportedActions");
 
-            TL.LogMessage(clientNumber, "SupportedActions", "Returning empty arraylist");
-            return new ArrayList();
+            TL.LogMessage(clientNumber, "SupportedActions", string.Format("Returning {0} and {1} in the arraylist", OCH_TAG, OCH_TEST_WEATHER_REPORT));
+            return new ArrayList() { OCH_TAG, OCH_TEST_WEATHER_REPORT };
         }
 
         #endregion
@@ -903,7 +915,7 @@ namespace ASCOM.Simulator
 
                 // Initialise other variables from the Profile
                 DebugTraceState = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, DEBUG_TRACE_PROFILENAME, string.Empty, DEBUG_TRACE_DEFAULT), CultureInfo.InvariantCulture);
-                SensorQueryInterval = Convert.ToDouble(driverProfile.GetValue(DRIVER_PROGID, SENSOR_READ_PERIOD_PROFILENAME, string.Empty, SENSOR_READ_PERIOD_DEFAULT),CultureInfo.InvariantCulture);
+                SensorQueryInterval = Convert.ToDouble(driverProfile.GetValue(DRIVER_PROGID, SENSOR_READ_PERIOD_PROFILENAME, string.Empty, SENSOR_READ_PERIOD_DEFAULT), CultureInfo.InvariantCulture);
                 AveragePeriod = Convert.ToDouble(driverProfile.GetValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, string.Empty, AVERAGE_PERIOD_DEFAULT), CultureInfo.InvariantCulture);
                 NumberOfReadingsToAverage = Convert.ToInt32(driverProfile.GetValue(DRIVER_PROGID, NUMBER_OF_READINGS_PROFILENAME, string.Empty, NUMBER_OF_READINGS_DEFAULT), CultureInfo.InvariantCulture);
                 MinimiseOnStart = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, MINIMISE_ON_START_PROFILENAME, string.Empty, MINIMISE_ON_START_DEFAULT), CultureInfo.InvariantCulture);
@@ -933,7 +945,7 @@ namespace ASCOM.Simulator
                 // Save the variable state to the Profile
                 driverProfile.WriteValue(DRIVER_PROGID, TRACE_LEVEL_PROFILENAME, TraceState.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(DRIVER_PROGID, DEBUG_TRACE_PROFILENAME, DebugTraceState.ToString(CultureInfo.InvariantCulture));
-                driverProfile.WriteValue(DRIVER_PROGID, SENSOR_READ_PERIOD_PROFILENAME, SensorQueryInterval.ToString( CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(DRIVER_PROGID, SENSOR_READ_PERIOD_PROFILENAME, SensorQueryInterval.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, AveragePeriod.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(DRIVER_PROGID, NUMBER_OF_READINGS_PROFILENAME, NumberOfReadingsToAverage.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(DRIVER_PROGID, MINIMISE_ON_START_PROFILENAME, MinimiseOnStart.ToString(CultureInfo.InvariantCulture));

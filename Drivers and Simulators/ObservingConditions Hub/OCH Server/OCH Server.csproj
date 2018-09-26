@@ -78,6 +78,7 @@
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="GarbageCollection.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="LocalServer.cs" />
     <Compile Include="..\..\..\AssemblyVersionInfo.cs">
       <Link>Properties\AssemblyVersionInfo.cs</Link>

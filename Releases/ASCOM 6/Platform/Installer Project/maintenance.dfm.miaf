@@ -1,0 +1,2 @@
+﻿IF (Repair.Checked = False)  THEN  RepairMessage.Visible := False;
+IF (Repair.Checked = True)  THEN  RepairMessage.Visible := True;

@@ -35,5 +35,12 @@ namespace ASCOM.Simulator
             started = false;
             log.LogFinish(string.Format(message, args));
         }
+
+        internal static void LogMessageCrLf(string identifier, string message, params object[] args)
+        {
+            if (started)
+                Log.LogFinish(" ...");
+            log.LogMessageCrLf(identifier, string.Format(message, args));
+        }
     }
 }

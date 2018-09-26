@@ -120,6 +120,17 @@
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>316, 17</value>
   </metadata>
+  <data name="BtnCoolerConfiguration.ToolTip" xml:space="preserve">
+    <value>Configure cooler characteristics including:
+1) Ambient temperature
+2) Default setpoint temperature
+3) Maximum temperature difference that the cooler can maintain.
+4) Cooler operating mode
+5) Amount of cooler overshoot 
+6) Time to cool from ambient temperature to the lowest achievable temperature
+7) Whether to reset the CCD temperature to ambient on each cooling cycle
+8) Whether to enable the cooler when the camera is connected</value>
+  </data>
   <data name="buttonSetImageFile.ToolTip" xml:space="preserve">
     <value>Select an image that will be used in the simulation. Any image type can be used.
 For a monochrome camera the image size should be the same as the CCD width and height.

@@ -34,14 +34,12 @@ namespace ASCOM.Simulator
         public void TrafficLine(string message)
         {
             if (m_Disable) { return; }
-            //txtTraffic.Text += message + Environment.NewLine;
             txtTraffic.AppendText(message + Environment.NewLine);
         }
 
         public void TrafficStart(string message)
         {
             if (m_Disable) { return; }
-            //txtTraffic.Text += message;
             txtTraffic.AppendText(message);
         }
 

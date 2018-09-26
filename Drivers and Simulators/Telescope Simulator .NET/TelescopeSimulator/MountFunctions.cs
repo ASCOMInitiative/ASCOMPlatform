@@ -69,7 +69,7 @@ namespace ASCOM.Simulator
 		        case ASCOM.DeviceInterface.AlignmentModes.algAltAz:
                     break;
                 case ASCOM.DeviceInterface.AlignmentModes.algGermanPolar:
-                    axes = AstronomyFunctions.CalculateRaDec(altAz, TelescopeHardware.Latitude, TelescopeHardware.Longitude);
+                    axes = AstronomyFunctions.CalculateHaDec(altAz, TelescopeHardware.Latitude, TelescopeHardware.Longitude);
                     if (TelescopeHardware.Latitude < 0)
                     {
                         axes.Y = -axes.Y;
@@ -83,7 +83,7 @@ namespace ASCOM.Simulator
                     }
                     break;
                 case ASCOM.DeviceInterface.AlignmentModes.algPolar:
-                    axes = AstronomyFunctions.CalculateRaDec(altAz, TelescopeHardware.Latitude, TelescopeHardware.Longitude);
+                    axes = AstronomyFunctions.CalculateHaDec(altAz, TelescopeHardware.Latitude, TelescopeHardware.Longitude);
                     if (TelescopeHardware.Latitude < 0)
                     {
                         axes.Y = -axes.Y;
@@ -101,6 +101,7 @@ namespace ASCOM.Simulator
 	        {
 		        case ASCOM.DeviceInterface.AlignmentModes.algAltAz:
                     raDec = AstronomyFunctions.CalculateRaDec(axes, TelescopeHardware.Latitude, TelescopeHardware.Longitude);
+                    raDec.X /= 15.0; // Convert RA in degrees to hours - Added by Peter 4th August 2018 to fix the hand box RA displayed value when in Alt/Az mode
                     break;
                 case ASCOM.DeviceInterface.AlignmentModes.algGermanPolar:
                 case ASCOM.DeviceInterface.AlignmentModes.algPolar:
@@ -115,6 +116,7 @@ namespace ASCOM.Simulator
                     raDec.Y = (TelescopeHardware.Latitude >= 0) ? axes.Y : -axes.Y;
                     break;
 	        }
+
             return RangeRaDec(raDec);
         }
 

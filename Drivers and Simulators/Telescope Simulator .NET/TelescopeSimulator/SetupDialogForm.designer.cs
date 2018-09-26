@@ -48,7 +48,7 @@ namespace ASCOM.Simulator
             this.checkBoxNoSyncPastMeridian = new System.Windows.Forms.CheckBox();
             this.checkBoxDisconnectOnPark = new System.Windows.Forms.CheckBox();
             this.buttonSetParkPosition = new System.Windows.Forms.Button();
-            this.buttonResetParkPosition = new System.Windows.Forms.Button();
+            this.buttonParkHomeAndStartupOptions = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.radioButtonGermanEquatorial = new System.Windows.Forms.RadioButton();
@@ -126,7 +126,7 @@ namespace ASCOM.Simulator
             this.cmdOK.TabIndex = 0;
             this.cmdOK.Text = "OK";
             this.cmdOK.UseVisualStyleBackColor = true;
-            this.cmdOK.Click += new System.EventHandler(this.cmdOK_Click);
+            this.cmdOK.Click += new System.EventHandler(this.CmdOK_Click);
             // 
             // cmdCancel
             // 
@@ -137,7 +137,7 @@ namespace ASCOM.Simulator
             this.cmdCancel.TabIndex = 1;
             this.cmdCancel.Text = "Cancel";
             this.cmdCancel.UseVisualStyleBackColor = true;
-            this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
+            this.cmdCancel.Click += new System.EventHandler(this.CmdCancel_Click);
             // 
             // groupBox1
             // 
@@ -297,11 +297,11 @@ namespace ASCOM.Simulator
             this.checkBoxNoCoordinatesAtPark.Text = "No Coordinates when Parked";
             this.checkBoxNoCoordinatesAtPark.UseVisualStyleBackColor = true;
             // 
-            // checkBoxErrorOnSyncPastMeridian
+            // checkBoxNoSyncPastMeridian
             // 
             this.checkBoxNoSyncPastMeridian.AutoSize = true;
             this.checkBoxNoSyncPastMeridian.Location = new System.Drawing.Point(450, 164);
-            this.checkBoxNoSyncPastMeridian.Name = "checkBoxErrorOnSyncPastMeridian";
+            this.checkBoxNoSyncPastMeridian.Name = "checkBoxNoSyncPastMeridian";
             this.checkBoxNoSyncPastMeridian.Size = new System.Drawing.Size(132, 17);
             this.checkBoxNoSyncPastMeridian.TabIndex = 40;
             this.checkBoxNoSyncPastMeridian.Text = "No Sync past meridian";
@@ -319,22 +319,23 @@ namespace ASCOM.Simulator
             // 
             // buttonSetParkPosition
             // 
-            this.buttonSetParkPosition.Location = new System.Drawing.Point(441, 19);
+            this.buttonSetParkPosition.Location = new System.Drawing.Point(427, 28);
             this.buttonSetParkPosition.Name = "buttonSetParkPosition";
-            this.buttonSetParkPosition.Size = new System.Drawing.Size(75, 44);
+            this.buttonSetParkPosition.Size = new System.Drawing.Size(107, 35);
             this.buttonSetParkPosition.TabIndex = 8;
-            this.buttonSetParkPosition.Text = "Set Park Position";
+            this.buttonSetParkPosition.Text = "Set Park Position to Current Alt / Az";
             this.buttonSetParkPosition.UseVisualStyleBackColor = true;
-            this.buttonSetParkPosition.Click += new System.EventHandler(this.buttonSetParkPosition_Click);
+            this.buttonSetParkPosition.Click += new System.EventHandler(this.ButtonSetParkPosition_Click);
             // 
-            // buttonResetParkPosition
+            // buttonParkHomeAndStartupOptions
             // 
-            this.buttonResetParkPosition.Location = new System.Drawing.Point(441, 69);
-            this.buttonResetParkPosition.Name = "buttonResetParkPosition";
-            this.buttonResetParkPosition.Size = new System.Drawing.Size(75, 45);
-            this.buttonResetParkPosition.TabIndex = 9;
-            this.buttonResetParkPosition.Text = "Reset Park Position";
-            this.buttonResetParkPosition.UseVisualStyleBackColor = true;
+            this.buttonParkHomeAndStartupOptions.Location = new System.Drawing.Point(427, 80);
+            this.buttonParkHomeAndStartupOptions.Name = "buttonParkHomeAndStartupOptions";
+            this.buttonParkHomeAndStartupOptions.Size = new System.Drawing.Size(107, 35);
+            this.buttonParkHomeAndStartupOptions.TabIndex = 9;
+            this.buttonParkHomeAndStartupOptions.Text = "Park, Home and Startup Options";
+            this.buttonParkHomeAndStartupOptions.UseVisualStyleBackColor = true;
+            this.buttonParkHomeAndStartupOptions.Click += new System.EventHandler(this.ButtonParkHomeAndStartupOptions_Click);
             // 
             // groupBox2
             // 
@@ -495,7 +496,7 @@ namespace ASCOM.Simulator
             0,
             0});
             this.numericUpDownSlewRate.Name = "numericUpDownSlewRate";
-            this.numericUpDownSlewRate.Size = new System.Drawing.Size(67, 20);
+            this.numericUpDownSlewRate.Size = new System.Drawing.Size(56, 20);
             this.numericUpDownSlewRate.TabIndex = 12;
             this.numericUpDownSlewRate.Value = new decimal(new int[] {
             1,
@@ -1005,7 +1006,7 @@ namespace ASCOM.Simulator
             this.Controls.Add(this.numericUpDownSlewRate);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.buttonResetParkPosition);
+            this.Controls.Add(this.buttonParkHomeAndStartupOptions);
             this.Controls.Add(this.buttonSetParkPosition);
             this.Controls.Add(this.checkBoxDisconnectOnPark);
             this.Controls.Add(this.checkBoxNoCoordinatesAtPark);
@@ -1066,7 +1067,7 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.CheckBox checkBoxNoCoordinatesAtPark;
         private System.Windows.Forms.CheckBox checkBoxDisconnectOnPark;
         private System.Windows.Forms.Button buttonSetParkPosition;
-        private System.Windows.Forms.Button buttonResetParkPosition;
+        private System.Windows.Forms.Button buttonParkHomeAndStartupOptions;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.RadioButton radioButtonAltAzimuth;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
