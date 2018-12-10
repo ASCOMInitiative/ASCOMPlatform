@@ -159,7 +159,7 @@ Public Class TrackingRates
     ' This should make the enumerator thread safe.
     Private ReadOnly pos As Threading.ThreadLocal(Of Integer) = New Threading.ThreadLocal(Of Integer)(
             Function()
-                Return 0
+                Return -1
             End Function)
 
     Private ReadOnly lockObj As Object = New Object
