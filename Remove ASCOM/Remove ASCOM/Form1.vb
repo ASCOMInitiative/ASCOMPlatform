@@ -54,7 +54,7 @@ Public Class Form1
 #Region "Event handlers"
 
     ''' <summary>
-    ''' UPdate colours and text when tyhe type of removal is changed
+    ''' Update colours and text when the type of removal is changed
     ''' </summary>
     ''' <param name="sender">Object creating the event</param>
     ''' <param name="e">Event arguments</param>
@@ -84,7 +84,7 @@ Public Class Form1
         TopLevelRemovalScript() ' Run the overall uninstallation script
 
         If PlatformRemoved Then ' We did remove the Platform so display a message and close this program so that the new installer can continue
-            If CacheDirectory = "" Then MessageBox.Show(REMOVAL_COMPLETE_MESSAGE, "RemoveASCOM", MessageBoxButtons.OK, MessageBoxIcon.Information) ' Show this final message if running stand alone, otherwise leave it to the mewssage in the IA installer
+            If CacheDirectory = "" Then MessageBox.Show(REMOVAL_COMPLETE_MESSAGE, "RemoveASCOM", MessageBoxButtons.OK, MessageBoxIcon.Information) ' Show this final message if running stand alone, otherwise leave it to the message in the IA installer
             End
         End If
     End Sub
@@ -101,7 +101,7 @@ Public Class Form1
         Try
             TL = New TraceLogger("", "ForceRemove")
             TL.Enabled = True
-            TL.LogMessage("ForceRemove", "Program started")
+            TL.LogMessage("ForceRemove", String.Format("Program started on {0}", Now.ToLongDateString))
         Catch ex As Exception
             MsgBox("TraceLogger Load Exception: " & ex.ToString)
         End Try
@@ -134,7 +134,7 @@ Public Class Form1
             Throw
         End Try
 
-        ' Iniitialise Platform removed variable and set default return code
+        ' Initialise Platform removed variable and set default return code
         PlatformRemoved = False
         Environment.ExitCode = 99
     End Sub
@@ -184,7 +184,7 @@ Public Class Form1
             Status("")
             Action("")
 
-            ' Obtain confirmation that Platform remval is required
+            ' Obtain confirmation that Platform removal is required
             Select Case cmbRemoveMode.SelectedItem
                 Case REMOVE_INSTALLER_COMBO_TEXT
                     dlgMessage = REMOVE_INSTALLER_CONFIRMATION_MESSAGE
@@ -306,7 +306,7 @@ Public Class Form1
                             Try
                                 TL.LogMessageCrLf("RemoveInstallers", "  Processing directory -" & " " & DirInfo.Name & " - " & DirInfo.FullName & " ")
                                 If ((DirInfo.Name.StartsWith("mia", StringComparison.OrdinalIgnoreCase)) And (DirInfo.Name.EndsWith(".tmp", StringComparison.OrdinalIgnoreCase))) Then
-                                    TL.LogMessageCrLf("RemoveInstallers", String.Format("Ignoring directory {0} because it is an Installaware temporary working directory", DirInfo.Name))
+                                    TL.LogMessageCrLf("RemoveInstallers", String.Format("Ignoring directory {0} because it is an InstallAware temporary working directory", DirInfo.Name))
                                 Else
                                     FileInfos = DirInfo.GetFiles ' Get the list of files in this directory
                                     Found = False
@@ -315,7 +315,7 @@ Public Class Form1
 
                                         If ((MyFile.Name.ToUpperInvariant = PLATFORM6_INSTALL_KEY.ToUpperInvariant()) Or (MyFile.Name.StartsWith(PLATFORM_INSTALLER_FILENAME_BASE, StringComparison.OrdinalIgnoreCase))) Then
                                             Found = True
-                                            TL.LogMessageCrLf("RemoveInstallers", "  Found install directory directory - " & DirInfo.Name)
+                                            TL.LogMessageCrLf("RemoveInstallers", "  Found install directory - " & DirInfo.Name)
                                         End If
                                     Next
                                     If Found Then
@@ -547,7 +547,7 @@ Public Class Form1
         TL.LogMessage("RemovePlatformFiles", "Started")
         Status("Removing Platform files")
 
-        ' Set up a regular expression to pick out the compiler variable from the InstallPath part of an Installaware Install Files line
+        ' Set up a regular expression to pick out the compiler variable from the InstallPath part of an InstallAware Install Files line
         '                                $COMMONFILES$\ASCOM\Platform\v6
         ' Group within the matched line: <--CompVar-->
         regexInstallerVariables = New Regex("\$(?<CompVar>[\w]*)\$.*", RegexOptions.IgnoreCase)
@@ -646,7 +646,7 @@ Public Class Form1
     End Sub
 
     ''' <summary>
-    ''' Recursively removes all Platform directories and their contents regardless of whther the files are Platform or 3rd party provided.
+    ''' Recursively removes all Platform directories and their contents regardless of whether the files are Platform or 3rd party provided.
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub RemovePlatformDirectories()
@@ -864,7 +864,7 @@ Public Class Form1
     Private Sub RemoveDekstopFilesAndLinks()
         Dim Path As New StringBuilder(260), rc As Integer, DesktopDirectory, StartMenuDirectory As String
 
-        Status("Removing dekstop files and links")
+        Status("Removing desktop files and links")
         TL.LogMessage("RemoveDekstopFilesAndLinks", "Started")
 
         Try
@@ -1084,7 +1084,7 @@ Public Class Form1
                 Application.DoEvents()
             Loop Until myProcess.HasExited Or (elapsedTime > ProcessTimeout)
 
-            If (myProcess.HasExited) Then ' The uninmstaller ran OK and terminated
+            If (myProcess.HasExited) Then ' The uninstaller ran OK and terminated
                 TL.LogMessage("RunProcess", "  Completed - exit code: " & myProcess.ExitCode.ToString)
             Else ' The installer appears to be stuck so kill the process and continue
                 TL.LogMessage("RunProcess", "  Installer did not complete in the allowed time - killing the process")

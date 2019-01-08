@@ -8,9 +8,9 @@
 ' The ClassInterface/None addribute prevents an empty interface called
 ' _Rate from being created and used as the [default] interface
 '
-<Guid("AD6248B3-3F51-4FFF-B62B-E3E942DD817E")> _
-<ClassInterface(ClassInterfaceType.None)> _
-<ComVisible(True)> _
+<Guid("AD6248B3-3F51-4FFF-B62B-E3E942DD817E")>
+<ClassInterface(ClassInterfaceType.None)>
+<ComVisible(True)>
 Public Class Rate
     '		================
     Implements IRate
@@ -66,9 +66,9 @@ End Class
 ' The ClassInterface/None addribute prevents an empty interface called
 ' _AxisRates from being created and used as the [default] interface
 '
-<Guid("99DB28A6-0132-43BF-91C0-D723124813C8")> _
-<ClassInterface(ClassInterfaceType.None)> _
-<ComVisible(True)> _
+<Guid("99DB28A6-0132-43BF-91C0-D723124813C8")>
+<ClassInterface(ClassInterfaceType.None)>
+<ComVisible(True)>
 Public Class AxisRates
     '		======================
     Implements IAxisRates
@@ -145,9 +145,9 @@ End Class
 ' The ClassInterface/None addribute prevents an empty interface called
 ' _TrackingRates from being created and used as the [default] interface
 '
-<Guid("49A4CA43-46B2-4D66-B9D3-FBE3ABE13DEB")> _
-<ClassInterface(ClassInterfaceType.None)> _
-<ComVisible(True)> _
+<Guid("49A4CA43-46B2-4D66-B9D3-FBE3ABE13DEB")>
+<ClassInterface(ClassInterfaceType.None)>
+<ComVisible(True)>
 Public Class TrackingRates
     '		=========================
     Implements ITrackingRates
@@ -157,7 +157,11 @@ Public Class TrackingRates
 
     Private m_TrackingRates(-1) As DriveRates           ' Empty array, but an array nonetheless
     ' This should make the enumerator thread safe.
-    Private ReadOnly pos As Threading.ThreadLocal(Of Integer)
+    Private ReadOnly pos As Threading.ThreadLocal(Of Integer) = New Threading.ThreadLocal(Of Integer)(
+            Function()
+                Return -1
+            End Function)
+
     Private ReadOnly lockObj As Object = New Object
 
     '
