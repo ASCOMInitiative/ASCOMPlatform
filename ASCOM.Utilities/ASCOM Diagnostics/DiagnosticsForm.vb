@@ -2348,7 +2348,7 @@ Public Class DiagnosticsForm
                     NOVAS.NOVAS2.EarthTilt(JD, MObl, TObl, ee, DPSI, DEps)
                     NOVAS.NOVAS2.SiderealTime(JD, 0.0, ee, GST2)
                     rc = Nov3.SiderealTime(JD, 0.0, DeltaT, GstType.GreenwichApparentSiderealTime, Method.EquinoxBased, Accuracy.Full, GST)
-                    LogRCDouble(TestFunction, "Novas3", "GAST Equinox          ", rc, GST, GST2, TOLERANCE_E5)
+                    LogRCDouble(TestFunction, "Novas3", "GAST Equinox          ", rc, GST, GST2, TOLERANCE_E4)
                 Case NOVAS3Functions.Spin
                     rc = 0
                     Nov3.Spin(20.0, Pos1, Pos2)
@@ -3065,7 +3065,7 @@ Public Class DiagnosticsForm
                     NOVAS.NOVAS2.EarthTilt(JD, MObl, TObl, ee, DPSI, DEps)
                     NOVAS.NOVAS2.SiderealTime(JD, 0.0, ee, GST2)
                     rc = Nov31.SiderealTime(JD, 0.0, DeltaT, GstType.GreenwichApparentSiderealTime, Method.EquinoxBased, Accuracy.Full, GST)
-                    LogRCDouble(TestFunction, "Novas31", "GAST Equinox          ", rc, GST, GST2, TOLERANCE_E5)
+                    LogRCDouble(TestFunction, "Novas31", "GAST Equinox          ", rc, GST, GST2, TOLERANCE_E4)
                 Case NOVAS3Functions.Spin
                     rc = 0
                     Nov31.Spin(20.0, Pos1, Pos2)
