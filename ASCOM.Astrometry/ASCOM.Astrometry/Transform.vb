@@ -113,7 +113,7 @@ Namespace Transform
         ''' </summary>
         ''' <remarks></remarks>
         Public Sub Dispose() Implements IDisposable.Dispose
-            ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+            ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
             Dispose(True)
             GC.SuppressFinalize(Me)
         End Sub
@@ -123,7 +123,7 @@ Namespace Transform
         ''' <summary>
         ''' Gets or sets the site latitude
         ''' </summary>
-        ''' <value>Site latitude</value>
+        ''' <value>Site latitude (-90.0 to +90.0)</value>
         ''' <returns>Latitude in degrees</returns>
         ''' <remarks>Positive numbers north of the equator, negative numbers south.</remarks>
         Property SiteLatitude() As Double Implements ITransform.SiteLatitude
@@ -133,6 +133,7 @@ Namespace Transform
                 Return SiteLatValue
             End Get
             Set(ByVal value As Double)
+                If (value < -90.0) Or (value > 90.0) Then Throw New ASCOM.InvalidValueException("SiteLatitude", value.ToString(), "-90.0 degrees", "+90.0 degrees")
                 If SiteLatValue <> value Then RequiresRecalculate = True
                 SiteLatValue = value
                 TL.LogMessage("SiteLatitude Set", FormatDec(value))
@@ -142,9 +143,9 @@ Namespace Transform
         ''' <summary>
         ''' Gets or sets the site longitude
         ''' </summary>
-        ''' <value>Site longitude</value>
+        ''' <value>Site longitude (-180.0 to +180.0)</value>
         ''' <returns>Longitude in degrees</returns>
-        ''' <remarks>Positive numbers east of the Greenwich meridian, negative numbes west of the Greenwich meridian.</remarks>
+        ''' <remarks>Positive numbers east of the Greenwich meridian, negative numbers west of the Greenwich meridian.</remarks>
         Property SiteLongitude() As Double Implements ITransform.SiteLongitude
             Get
                 CheckSet("SiteLongitude", SiteLongValue, "Site longitude has not been set")
@@ -152,6 +153,7 @@ Namespace Transform
                 Return SiteLongValue
             End Get
             Set(ByVal value As Double)
+                If (value < -180.0) Or (value > 180.0) Then Throw New ASCOM.InvalidValueException("SiteLongitude", value.ToString(), "-180.0 degrees", "+180.0 degrees")
                 If SiteLongValue <> value Then RequiresRecalculate = True
                 SiteLongValue = value
                 TL.LogMessage("SiteLongitude Set", FormatDec(value))
@@ -161,7 +163,7 @@ Namespace Transform
         ''' <summary>
         ''' Gets or sets the site elevation above sea level
         ''' </summary>
-        ''' <value>Site elevation</value>
+        ''' <value>Site elevation (-300.0 to +10,000.0 metres)</value>
         ''' <returns>Elevation in metres</returns>
         ''' <remarks></remarks>
         Property SiteElevation() As Double Implements ITransform.SiteElevation
@@ -171,6 +173,7 @@ Namespace Transform
                 Return SiteElevValue
             End Get
             Set(ByVal value As Double)
+                If (value < -300.0) Or (value > 10000.0) Then Throw New ASCOM.InvalidValueException("SiteElevation", value.ToString(), "-300.0 metres", "+10000.0 metres")
                 If SiteElevValue <> value Then RequiresRecalculate = True
                 SiteElevValue = value
                 TL.LogMessage("SiteElevation Set", value.ToString)
@@ -180,7 +183,7 @@ Namespace Transform
         ''' <summary>
         ''' Gets or sets the site ambient temperature
         ''' </summary>
-        ''' <value>Site ambient temperature</value>
+        ''' <value>Site ambient temperature (-273.15 to 100.0 Celsius)</value>
         ''' <returns>Temperature in degrees Celsius</returns>
         ''' <remarks></remarks>
         Property SiteTemperature() As Double Implements ITransform.SiteTemperature
@@ -190,6 +193,7 @@ Namespace Transform
                 Return SiteTempValue
             End Get
             Set(ByVal value As Double)
+                If (value < -273.15) Or (value > 100.0) Then Throw New ASCOM.InvalidValueException("SiteElevation", value.ToString(), "-273.15 Celsius", "+100.0 Celsius")
                 If SiteTempValue <> value Then RequiresRecalculate = True
                 SiteTempValue = value
                 TL.LogMessage("SiteTemperature Set", value.ToString)
@@ -199,7 +203,7 @@ Namespace Transform
         ''' <summary>
         ''' Gets or sets a flag indicating whether refraction is calculated for topocentric co-ordinates
         ''' </summary>
-        ''' <value>True / false flag indicating refaction is included / omitted from topocentric co-ordinates</value>
+        ''' <value>True / false flag indicating refraction is included / omitted from topocentric co-ordinates</value>
         ''' <returns>Boolean flag</returns>
         ''' <remarks></remarks>
         Property Refraction() As Boolean Implements ITransform.Refraction
@@ -215,7 +219,7 @@ Namespace Transform
         End Property
 
         ''' <summary>
-        ''' Causes the transform component to recalculate values derrived from the last Set command
+        ''' Causes the transform component to recalculate values derived from the last Set command
         ''' </summary>
         ''' <remarks>Use this when you have set J2000 co-ordinates and wish to ensure that the mount points to the same 
         ''' co-ordinates allowing for local effects that change with time such as refraction.
@@ -228,52 +232,58 @@ Namespace Transform
         ''' <summary>
         ''' Sets the known J2000 Right Ascension and Declination coordinates that are to be transformed
         ''' </summary>
-        ''' <param name="RA">RA in J2000 co-ordinates</param>
-        ''' <param name="DEC">DEC in J2000 co-ordinates</param>
+        ''' <param name="RA">RA in J2000 co-ordinates (0.0 to 23.999 hours)</param>
+        ''' <param name="DEC">DEC in J2000 co-ordinates (-90.0 to +90.0)</param>
         ''' <remarks></remarks>
         Sub SetJ2000(ByVal RA As Double, ByVal DEC As Double) Implements ITransform.SetJ2000
-            LastSetBy = SetBy.J2000
-            If (RA <> RAJ2000Value) Or (DEC <> DECJ2000Value) Then RequiresRecalculate = True
             RAJ2000Value = ValidateRA("SetJ2000", RA)
             DECJ2000Value = ValidateDec("SetJ2000", DEC)
+
+            LastSetBy = SetBy.J2000
+            If (RA <> RAJ2000Value) Or (DEC <> DECJ2000Value) Then RequiresRecalculate = True
             TL.LogMessage("SetJ2000", "RA: " & Format(RA) & ", DEC: " & FormatDec(DEC))
         End Sub
 
         ''' <summary>
         ''' Sets the known apparent Right Ascension and Declination coordinates that are to be transformed
         ''' </summary>
-        ''' <param name="RA">RA in apparent co-ordinates</param>
-        ''' <param name="DEC">DEC in apparent co-ordinates</param>
+        ''' <param name="RA">RA in apparent co-ordinates (0.0 to 23.999 hours)</param>
+        ''' <param name="DEC">DEC in apparent co-ordinates (-90.0 to +90.0)</param>
         ''' <remarks></remarks>
         Sub SetApparent(ByVal RA As Double, ByVal DEC As Double) Implements ITransform.SetApparent
-            LastSetBy = SetBy.Apparent
-            If (RA <> RAApparentValue) Or (DEC <> DECApparentValue) Then RequiresRecalculate = True
             RAApparentValue = ValidateRA("SetApparent", RA)
             DECApparentValue = ValidateDec("SetApparent", DEC)
+
+            LastSetBy = SetBy.Apparent
+            If (RA <> RAApparentValue) Or (DEC <> DECApparentValue) Then RequiresRecalculate = True
             TL.LogMessage("SetApparent", "RA: " & Format(RA) & ", DEC: " & FormatDec(DEC))
         End Sub
 
         '''<summary>
         ''' Sets the known topocentric Right Ascension and Declination coordinates that are to be transformed
         ''' </summary>
-        ''' <param name="RA">RA in topocentric co-ordinates</param>
-        ''' <param name="DEC">DEC in topocentric co-ordinates</param>
+        ''' <param name="RA">RA in topocentric co-ordinates (0.0 to 23.999 hours)</param>
+        ''' <param name="DEC">DEC in topocentric co-ordinates (-90.0 to +90.0)</param>
         ''' <remarks></remarks>
         Sub SetTopocentric(ByVal RA As Double, ByVal DEC As Double) Implements ITransform.SetTopocentric
-            LastSetBy = SetBy.Topocentric
-            If (RA <> RATopoValue) Or (DEC <> DECTopoValue) Then RequiresRecalculate = True
             RATopoValue = ValidateRA("SetTopocentric", RA)
             DECTopoValue = ValidateDec("SetTopocentric", DEC)
+
+            LastSetBy = SetBy.Topocentric
+            If (RA <> RATopoValue) Or (DEC <> DECTopoValue) Then RequiresRecalculate = True
             TL.LogMessage("SetTopocentric", "RA: " & Format(RA) & ", DEC: " & FormatDec(DEC))
         End Sub
 
         ''' <summary>
         ''' Sets the topocentric azimuth and elevation
         ''' </summary>
-        ''' <param name="Azimuth">Topocentric Azimuth in degrees</param>
-        ''' <param name="Elevation">Topocentric elevation in degrees</param>
+        ''' <param name="Azimuth">Topocentric Azimuth in degrees (0.0 to 359.999999 - north zero, east 90 deg etc.)</param>
+        ''' <param name="Elevation">Topocentric elevation in degrees (-90.0 to +90.0)</param>
         ''' <remarks></remarks>
         Sub SetAzimuthElevation(Azimuth As Double, Elevation As Double) Implements ITransform.SetAzimuthElevation
+            If (Azimuth < 0.0) Or (Azimuth >= 360.0) Then Throw New ASCOM.InvalidValueException("SetAzimuthElevation Azimuth", Azimuth.ToString(), "0.0 hours", "23.9999999... hours")
+            If (Elevation < -90.0) Or (Elevation > 90.0) Then Throw New ASCOM.InvalidValueException("SetAzimuthElevation Elevation", Elevation.ToString(), "-90.0 degrees", "+90.0 degrees")
+
             LastSetBy = SetBy.AzimuthElevation
             RequiresRecalculate = True
             AzimuthTopoValue = Azimuth
@@ -401,7 +411,7 @@ Namespace Transform
         End Property
 
         ''' <summary>
-        ''' Returns the topocentric azimth angle of the target
+        ''' Returns the topocentric azimuth angle of the target
         ''' </summary>
         ''' <value>Topocentric azimuth angle</value>
         ''' <returns>Azimuth angle in degrees</returns>
@@ -445,13 +455,13 @@ Namespace Transform
         ''' <summary>
         ''' Sets or returns the Julian date on the Terrestrial Time timescale for which the transform will be made
         ''' </summary>
-        ''' <value>Julian date (Terrestrial Time) of the transform</value>
+        ''' <value>Julian date (Terrestrial Time) of the transform (1757583.5 to 5373484.499999 = 00:00:00 1/1/0100 to 23:59:59.999 31/12/9999)</value>
         ''' <returns>Terrestrial Time Julian date that will be used by Transform or zero if the PC's current clock value will be used to calculate the Julian date.</returns>
         ''' <remarks>This method was introduced in May 2012. Previously, Transform used the current date-time of the PC when calculating transforms; 
         ''' this remains the default behaviour for backward compatibility.
-        ''' The inital value of this parameter is 0.0, which is a special value that forces Transform to replicate original behaviour by determining the  
+        ''' The initial value of this parameter is 0.0, which is a special value that forces Transform to replicate original behaviour by determining the  
         ''' Julian date from the PC's current date and time. If this property is non zero, that particular terrestrial time Julian date is used in preference 
-        ''' to the value derrived from the PC's clock.
+        ''' to the value derived from the PC's clock.
         ''' <para>Only one of JulianDateTT or JulianDateUTC needs to be set. Use whichever is more readily available, there is no
         ''' need to set both values. Transform will use the last set value of either JulianDateTT or JulianDateUTC as the basis for its calculations.</para></remarks>
         Property JulianDateTT As Double Implements ITransform.JulianDateTT
@@ -460,13 +470,16 @@ Namespace Transform
             End Get
             Set(value As Double)
                 Dim tai1, tai2, utc1, utc2 As Double
+
+                If (value < JULIAN_DATE_MINIMUM_VALUE) Or (value > JULIAN_DATE_MAXIMUM_VALUE) Then Throw New ASCOM.InvalidValueException("JulianDateTT", value.ToString(), JULIAN_DATE_MINIMUM_VALUE.ToString(), JULIAN_DATE_MAXIMUM_VALUE.ToString())
+
                 JulianDateTTValue = value
                 RequiresRecalculate = True ' Force a recalculation because the Julian date has changed
 
                 If JulianDateTTValue <> 0.0 Then
                     'Calculate UTC
-                    If (SOFA.TtTai(JulianDateTTValue, 0.0, tai1, tai2) <> 0) Then TL.LogMessage("JulianDateUTC Set", "Utctai - Bad return code")
-                    If (SOFA.TaiUtc(tai1, tai2, utc1, utc2) <> 0) Then TL.LogMessage("JulianDateUTC Set", "Taitt - Bad return code")
+                    If (SOFA.TtTai(JulianDateTTValue, 0.0, tai1, tai2) <> 0) Then TL.LogMessage("JulianDateTT Set", "TtTai - Bad return code")
+                    If (SOFA.TaiUtc(tai1, tai2, utc1, utc2) <> 0) Then TL.LogMessage("JulianDateTT Set", "TaiUtc - Bad return code")
                     JulianDateUTCValue = utc1 + utc2
 
                     TL.LogMessage("JulianDateTT Set", JulianDateTTValue.ToString & " " & Julian2DateTime(JulianDateTTValue).ToString(DATE_FORMAT) & ", JDUTC: " & Julian2DateTime(JulianDateUTCValue).ToString(DATE_FORMAT))
@@ -480,7 +493,7 @@ Namespace Transform
         ''' <summary>
         ''' Sets or returns the Julian date on the UTC timescale for which the transform will be made
         ''' </summary>
-        ''' <value>Julian date (UTC) of the transform</value>
+        ''' <value>Julian date (UTC) of the transform (1757583.5 to 5373484.499999 = 00:00:00 1/1/0100 to 23:59:59.999 31/12/9999)</value>
         ''' <returns>UTC Julian date that will be used by Transform or zero if the PC's current clock value will be used to calculate the Julian date.</returns>
         ''' <remarks>Introduced in April 2014 as an alternative to JulianDateTT. Only one of JulianDateTT or JulianDateUTC needs to be set. Use whichever is more readily available, there is no
         ''' need to set both values. Transform will use the last set value of either JulianDateTT or JulianDateUTC as the basis for its calculations.</remarks>
@@ -490,13 +503,16 @@ Namespace Transform
             End Get
             Set(value As Double)
                 Dim tai1, tai2, tt1, tt2 As Double
+
+                If (value < JULIAN_DATE_MINIMUM_VALUE) Or (value > JULIAN_DATE_MAXIMUM_VALUE) Then Throw New ASCOM.InvalidValueException("JulianDateUTC", value.ToString(), JULIAN_DATE_MINIMUM_VALUE.ToString(), JULIAN_DATE_MAXIMUM_VALUE.ToString())
+
                 JulianDateUTCValue = value
                 RequiresRecalculate = True ' Force a recalculation because the Julian date has changed
 
                 If JulianDateUTCValue <> 0.0 Then
                     ' Calculate Terrestrial Time equivalent
-                    If (SOFA.UtcTai(JulianDateUTCValue, 0.0, tai1, tai2) <> 0) Then TL.LogMessage("JulianDateUTC Set", "Utctai - Bad return code")
-                    If (SOFA.TaiTt(tai1, tai2, tt1, tt2) <> 0) Then TL.LogMessage("JulianDateUTC Set", "Taitt - Bad return code")
+                    If (SOFA.UtcTai(JulianDateUTCValue, 0.0, tai1, tai2) <> 0) Then TL.LogMessage("JulianDateUTC Set", "UtcTai - Bad return code")
+                    If (SOFA.TaiTt(tai1, tai2, tt1, tt2) <> 0) Then TL.LogMessage("JulianDateUTC Set", "TaiTt - Bad return code")
                     JulianDateTTValue = tt1 + tt2
 
                     TL.LogMessage("JulianDateUTC Set", JulianDateTTValue.ToString & " " & Julian2DateTime(JulianDateUTCValue).ToString(DATE_FORMAT) & ", JDTT: " & Julian2DateTime(JulianDateTTValue).ToString(DATE_FORMAT))
@@ -583,7 +599,7 @@ Namespace Transform
             DUT1 = AstroUtl.DeltaUT(JDUTCSofa)
 
             Sw.Reset() : Sw.Start()
-            If RefracValue Then ' Refraction is requuired
+            If RefracValue Then ' Refraction is required
                 RetCode = SOFA.ObservedToCelestial("R", SOFA.Anp(RATopoValue * HOURS2RADIANS + SOFA.Eo06a(JDTTSofa, 0.0)), DECTopoValue * DEGREES2RADIANS, JDUTCSofa, 0.0, DUT1, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 1000, SiteTempValue, 0.85, 0.57, RACelestrial, DecCelestial)
             Else
                 RetCode = SOFA.ObservedToCelestial("R", SOFA.Anp(RATopoValue * HOURS2RADIANS + SOFA.Eo06a(JDTTSofa, 0.0)), DECTopoValue * DEGREES2RADIANS, JDUTCSofa, 0.0, DUT1, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, RACelestrial, DecCelestial)
@@ -623,19 +639,19 @@ Namespace Transform
 
         End Sub
 
-        Private Sub Recalculate() 'Calculate values for derrived co-ordinates
+        Private Sub Recalculate() 'Calculate values for derived co-ordinates
             SwRecalculate.Reset() : SwRecalculate.Start()
             If RequiresRecalculate Or (RefracValue = True) Then
                 TL.LogMessage("Recalculate", "Requires Recalculate: " & RequiresRecalculate.ToString & ", Refraction: " & RefracValue.ToString)
                 Select Case LastSetBy
-                    Case SetBy.J2000 'J2000 coordinates have bee set so calculate apparent and topocentric coords
+                    Case SetBy.J2000 'J2000 coordinates have bee set so calculate apparent and topocentric coordinates
                         TL.LogMessage("  Recalculate", "  Values last set by SetJ2000")
                         'Check whether required topo values have been set
                         If (Not Double.IsNaN(SiteLatValue)) And
                            (Not Double.IsNaN(SiteLongValue)) And
                            (Not Double.IsNaN(SiteElevValue)) And
                            (Not Double.IsNaN(SiteTempValue)) Then
-                            J2000ToTopo() 'All required site values present so calc Topo values
+                            J2000ToTopo() 'All required site values present so calculate Topo values
                         Else 'Set to NaN
                             RATopoValue = Double.NaN
                             DECTopoValue = Double.NaN
@@ -643,7 +659,7 @@ Namespace Transform
                             ElevationTopoValue = Double.NaN
                         End If
                         Call J2000ToApparent()
-                    Case SetBy.Topocentric 'Topocentric co-ordinates have been set so calculate J2000 and apparent coords
+                    Case SetBy.Topocentric 'Topocentric co-ordinates have been set so calculate J2000 and apparent coordinates
                         TL.LogMessage("  Recalculate", "  Values last set by SetTopocentric")
                         'Check whether required topo values have been set
                         If (Not Double.IsNaN(SiteLatValue)) And
@@ -652,7 +668,7 @@ Namespace Transform
                            (Not Double.IsNaN(SiteTempValue)) Then 'They have so calculate remaining values
                             Call TopoToJ2000()
                             Call J2000ToApparent()
-                        Else 'Set the topo and apaprent values to NaN
+                        Else 'Set the topo and apparent values to NaN
                             RAJ2000Value = Double.NaN
                             DECJ2000Value = Double.NaN
                             RAApparentValue = Double.NaN
@@ -668,7 +684,7 @@ Namespace Transform
                            (Not Double.IsNaN(SiteLongValue)) And
                            (Not Double.IsNaN(SiteElevValue)) And
                            (Not Double.IsNaN(SiteTempValue)) Then
-                            J2000ToTopo() 'All required site values present so calc Topo values
+                            J2000ToTopo() 'All required site values present so calculate Topo values
                         Else
                             RATopoValue = Double.NaN
                             DECTopoValue = Double.NaN
@@ -717,7 +733,7 @@ Namespace Transform
             JulianDateUTCSofa = GetJDUTCSofa()
             DUT1 = AstroUtl.DeltaUT(JulianDateUTCSofa)
 
-            If RefracValue Then ' Refraction is requuired
+            If RefracValue Then ' Refraction is required
                 RetCode = SOFA.ObservedToCelestial("A", AzimuthTopoValue * DEGREES2RADIANS, (90.0 - ElevationTopoValue) * DEGREES2RADIANS, JulianDateUTCSofa, 0.0, DUT1, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 1000, SiteTempValue, 0.85, 0.57, RACelestial, DecCelestial)
             Else
                 RetCode = SOFA.ObservedToCelestial("A", AzimuthTopoValue * DEGREES2RADIANS, (90.0 - ElevationTopoValue) * DEGREES2RADIANS, JulianDateUTCSofa, 0.0, DUT1, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, RACelestial, DecCelestial)
@@ -754,8 +770,8 @@ Namespace Transform
 
                 ' First calculate the UTC Julian date, then convert this to the equivalent TAI Julian date then convert this to the equivalent TT Julian date
                 If (SOFA.Dtf2d("UTC", Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, CDbl(Now.Second) + CDbl(Now.Millisecond) / 1000.0, utc1, utc2) <> 0) Then TL.LogMessage("Dtf2d", "Bad return code")
-                If (SOFA.UtcTai(utc1, utc2, tai1, tai2) <> 0) Then TL.LogMessage("GetJDTTSofa", "Utctai - Bad return code")
-                If (SOFA.TaiTt(tai1, tai2, tt1, tt2) <> 0) Then TL.LogMessage("GetJDTTSofa", "Taitt - Bad return code")
+                If (SOFA.UtcTai(utc1, utc2, tai1, tai2) <> 0) Then TL.LogMessage("GetJDTTSofa", "UtcTai - Bad return code")
+                If (SOFA.TaiTt(tai1, tai2, tt1, tt2) <> 0) Then TL.LogMessage("GetJDTTSofa", "TaiTt - Bad return code")
 
                 Retval = tt1 + tt2
             Else ' A specific TT date / time has been set so use it
@@ -812,7 +828,7 @@ Namespace Transform
                     JDFraction += (5.0 / (24.0 * 60.0 * 60.0 * 10000.0))
 
                     ' Allow for Julian days to start at 12:00 rather than 00:00  
-                    If JDFraction >= 0.5 Then ' After midnight so add 1 to the julian day and remove half a day from the day fraction
+                    If JDFraction >= 0.5 Then ' After midnight so add 1 to the Julian day and remove half a day from the day fraction
                         If debug Then TL.LogMessage("ConvertFromJulian", "JDFraction >= 0.5: " & JDFraction)
                         Day += 1
                         JDFraction -= 0.5
@@ -828,7 +844,7 @@ Namespace Transform
 
                     If debug Then TL.LogMessage("ConvertFromJulian", JDLong & " " & JDFraction & " " & Day & " " & Hours & " " & Minutes & " " & Seconds & " " & MilliSeconds)
                     Retval = New DateTime(Year, Month, Day, Hours, Minutes, Seconds, MilliSeconds)
-                Else ' Early or invalid julian date so return a default value
+                Else ' Early or invalid Julian date so return a default value
                     Retval = New Date(1800, 1, 10) ' Return this as a default bad value
                 End If
             Catch ex As Exception

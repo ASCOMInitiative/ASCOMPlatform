@@ -5,7 +5,7 @@ Imports System.IO
 
 Module GlobalItems
 
-    ' Physical contants
+    ' Physical constants
     Friend Const MOON_RADIUS As Double = 1737.0 ' km
     Friend Const EARTH_RADIUS As Double = 6378.0 ' km
     Friend Const SUN_RADIUS As Double = 696342.0 ' km
@@ -36,11 +36,11 @@ Module GlobalItems
     Friend Const FN1 As Short = 1
     Friend Const FN0 As Short = 0
     Friend Const J2000BASE As Double = 2451545.0 'TDB Julian date of epoch J2000.0.
-    Friend Const KMAU As Double = 149597870.0 'Astronomical Unit in kilometers.
+    Friend Const KMAU As Double = 149597870.0 'Astronomical Unit in kilometres.
     Friend Const MAU As Double = 149597870000.0 'Astronomical Unit in meters.
     Friend Const C As Double = 173.14463348 ' Speed of light in AU/Day.
     Friend Const GS As Double = 1.32712438E+20 ' Heliocentric gravitational constant.
-    Friend Const EARTHRAD As Double = 6378.14 'Radius of Earth in kilometers.
+    Friend Const EARTHRAD As Double = 6378.14 'Radius of Earth in kilometres.
     Friend Const F As Double = 0.00335281 'Earth ellipsoid flattening.
     Friend Const OMEGA As Double = 0.00007292115 'Rotational angular velocity of Earth in radians/sec.
     Friend Const TWOPI As Double = 6.2831853071795862 'Value of pi in radians.
@@ -56,6 +56,9 @@ Module GlobalItems
     Friend Const TROPICAL_YEAR_IN_DAYS As Double = 365.24219
 
     Friend Const OLE_AUTOMATION_JULIAN_DATE_OFFSET As Double = 2415018.5 ' Offset of OLE automation dates from Julian dates
+    Friend Const JULIAN_DATE_MINIMUM_VALUE As Double = -657435.0 + OLE_AUTOMATION_JULIAN_DATE_OFFSET ' Minimum valid Julian date value (1/1/0100 00:00:00) - because DateTime.FromOADate has this limit
+    Friend Const JULIAN_DATE_MAXIMUM_VALUE As Double = 2958465.99999999 + OLE_AUTOMATION_JULIAN_DATE_OFFSET ' Maximum valid Julian date value (31/12/9999 23:59:59.999) - because DateTime.FromOADate has this limit
+
     Friend Const RACIO_DEFAULT_VALUE As Double = Double.NaN 'NOVAS3: Default value that if still present will indicate that this value was not updated
 
     'Profile store Key names
@@ -75,7 +78,7 @@ Module GlobalItems
     Friend Const DELTAUT1_VALUE_NAME_YEAR_FORMAT As String = "0000" ' Format string for the year component of automatically downloaded delta UT1 value names.
     Friend Const DELTAUT1_VALUE_NAME_MONTH_FORMAT As String = "00" ' Format string for the month component of automatically downloaded delta UT1 value names.
     Friend Const DELTAUT1_VALUE_NAME_DAY_FORMAT As String = "00" ' Format string for the day component of automatically downloaded delta UT1 value names.
-    Friend Const DOWNLOAD_TASK_DATA_SOURCE_VALUE_NAME As String = "Download Task Data Source" ' Name of the automatic data data source profile value
+    Friend Const DOWNLOAD_TASK_DATA_SOURCE_VALUE_NAME As String = "Download Task Data Source" ' Name of the automatic data source profile value
     Friend Const DOWNLOAD_TASK_TIMEOUT_VALUE_NAME As String = "Download Task Timeout" ' Name of the automatic update timeout profile value
     Friend Const DOWNLOAD_TASK_SCHEDULED_TIME_VALUE_NAME As String = "Download Task Scheduled Time" ' Value name for the scheduled job run time
     Friend Const DOWNLOAD_TASK_REPEAT_FREQUENCY_VALUE_NAME As String = "Download Task Repeat Frequency" ' Value name for the scheduled job run time
@@ -107,12 +110,12 @@ Module GlobalItems
     Friend Const LEAP_SECONDS_LEAPSECONDS_START As Integer = 36 : Friend Const LEAP_SECONDS_LEAPSECONDS_LENGTH As Integer = 12 ' Start position and length of the NUMBER OF LEAP SECONDS field in the tai-utc.dat data line
 
     ' Earth rotation data download configuration options
-    Friend Const EARTH_ROTATION_INTERNET_DATA_SOURCE_0 As String = "http://maia.usno.navy.mil/ser7/" ' Internet source options for for earth rotation files
+    Friend Const EARTH_ROTATION_INTERNET_DATA_SOURCE_0 As String = "http://maia.usno.navy.mil/ser7/" ' Internet source options for earth rotation files
     Friend Const EARTH_ROTATION_INTERNET_DATA_SOURCE_1 As String = "http://toshi.nofs.navy.mil/ser7/"
     Friend Const EARTH_ROTATION_INTERNET_DATA_SOURCE_2 As String = "ftp://cddis.gsfc.nasa.gov/pub/products/iers/"
     Friend Const EARTH_ROTATION_INTERNET_DATA_SOURCE_3 As String = "ftp://maia.usno.navy.mil/ser7/"
     Friend Const EARTH_ROTATION_INTERNET_DATA_SOURCE_4 As String = "ftp://toshi.nofs.navy.mil/ser7/"
-    Friend Const SCHEDULE_REPEAT_NONE As String = "None" ' Options for autoamtic update schedule repeat frequency
+    Friend Const SCHEDULE_REPEAT_NONE As String = "None" ' Options for automatic update schedule repeat frequency
     Friend Const SCHEDULE_REPEAT_DAILY As String = "Repeat daily"
     Friend Const SCHEDULE_REPEAT_WEEKLY As String = "Repeat weekly"
     Friend Const SCHEDULE_REPEAT_MONTHLY As String = "Repeat monthly"
@@ -123,7 +126,7 @@ Module GlobalItems
     ' Download task configuration
     Friend Const DOWNLOAD_TASK_TRACE_LOG_FILETYPE As String = "EarthRotationUpdate"
     Friend Const DOWNLOAD_TASK_NAME As String = "ASCOM - Update Earth Rotation Data" ' Name of the schedule job that runs the automatic download task
-    Friend Const DOWNLOAD_TASK_PATH As String = "\" + DOWNLOAD_TASK_NAME ' Full schedule job path within the scheduler job tree. Has to be in the root for backward compatibilty with XP!
+    Friend Const DOWNLOAD_TASK_PATH As String = "\" + DOWNLOAD_TASK_NAME ' Full schedule job path within the scheduler job tree. Has to be in the root for backward compatibility with XP!
     Friend Const DOWNLOAD_TASK_EXECUTABLE_NAME As String = "\ASCOM\Platform 6\Tools\EarthRotationUpdate.exe" ' File system location of the automatic download executable that is started by the scheduled task. The exe is placed here by the installer
     Friend Const DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE As String = "Not published" ' Value to use for next leap seconds and its effective date before these are published
     Friend Const DOWNLOAD_TASK_TIME_FORMAT = "dddd dd MMM yyyy - HH:mm:ss"
@@ -136,7 +139,7 @@ Module GlobalItems
     ' Automatic update test configuration parameters - MUST BE SET TO 0 FOR PRODUCTION BUILDS!
     Friend Const TEST_HISTORIC_DAYS_OFFSET As Integer = 0 '1700 ' Offset in days to force the automatic update program to interpret historic leap second values as current and future values
     Friend Const TEST_UTC_DAYS_OFFSET As Integer = 0 '1011 ' Offset in days subtracted from the current time to force it to appear earlier than present in order to test correct leap second and DeltaUT1 values when leap seconds change
-    Friend Const TEST_UTC_HOURS_OFFSET As Integer = 0 '10 ' Offset from current midnight in hours to be used to force the current time to appear as a specified valueearlier than present in order to test correct leap second and DeltaUT1 values when leap seconds change
+    Friend Const TEST_UTC_HOURS_OFFSET As Integer = 0 '10 ' Offset from current midnight in hours to be used to force the current time to appear as a specified value earlier than present in order to test correct leap second and DeltaUT1 values when leap seconds change
     Friend Const TEST_UTC_MINUTES_OFFSET As Integer = 0 '48 ' Offset in minutes to force the current time to appear earlier than present in order to test correct leap second and DeltaUT1 values when leap seconds change
 
     ' Default values
@@ -427,15 +430,15 @@ End Enum
 ''' <list type="bullet">
 ''' <item>nutation calculations use the 2000K model, which is the default for this mode;</item>
 ''' <item>gravitational deflection is calculated using only one body, the Sun [grav_def];</item>
-''' <item>the equation of the equinoxes excludes terms smaller than 2 microarcseconds when computing the "complementary terms" [ee_ct];</item>
+''' <item>the equation of the equinoxes excludes terms smaller than 2 micro arc seconds when computing the "complementary terms" [ee_ct];</item>
 ''' <item>geocentric positions of solar system bodies are adjusted for light travel time using single-value Julian dates 
-''' in calls to ephemeris and iterate with a convergence tolerance of 10-9 days [light-time, ephemeris, solarsystem];</item>
-''' <item>ephemeris calls the appropriate solar system ephemeris using single-value Julian dates [ephemeris, solarsystem].</item>
+''' in calls to ephemeris and iterate with a convergence tolerance of 10-9 days [light-time, ephemeris, solar system];</item>
+''' <item>ephemeris calls the appropriate solar system ephemeris using single-value Julian dates [ephemeris, solar system].</item>
 ''' </list>
 ''' <para>In full-accuracy mode, the IAU 2000A nutation series (1,365 terms) is used [iau2000a]. Evaluating the series for nutation is 
 ''' usually the main computational burden in NOVAS, so using reduced-accuracy mode improves execution time, often noticeably. 
 ''' In reduced-accuracy mode, the NOVAS 2000K nutation series (488 terms) is used by default [nu2000k]. This mode can be used 
-''' when the accuracy requirements are not better than 0.1 milliarcsecond for stars or 3.5 milliarcseconds for solar system bodies. 
+''' when the accuracy requirements are not better than 0.1 milliarcsecond for stars or 3.5 milli arc-seconds for solar system bodies. 
 ''' Selecting this approach can reduce the time required for Earth-rotation computations by about two-thirds.</para>
 ''' </remarks>
 <Guid("F10B748F-4F90-4acf-9EB0-76D50293E9A9"),
@@ -444,12 +447,12 @@ Public Enum Accuracy As Short
     ''' <summary>
     ''' Full accuracy
     ''' </summary>
-    ''' <remarks>Suitable when precision of better than 0.1 milliarcsecond for stars or 3.5 milliarcseconds for solar system bodies is required.</remarks>
+    ''' <remarks>Suitable when precision of better than 0.1 milli arc-second for stars or 3.5 milli arc-seconds for solar system bodies is required.</remarks>
     Full = 0 '... full accuracy
     ''' <summary>
     ''' Reduced accuracy
     ''' </summary>
-    ''' <remarks>Suitable when precision of less than 0.1 milliarcsecond for stars or 3.5 milliarcseconds for solar system bodies is required.</remarks>
+    ''' <remarks>Suitable when precision of less than 0.1 milli arc-second for stars or 3.5 milli arc-seconds for solar system bodies is required.</remarks>
     Reduced = 1 '... reduced accuracy
 End Enum
 
@@ -540,20 +543,20 @@ Public Enum OutputVectorOption As Short
 End Enum
 
 ''' <summary>
-''' Type of pole ofset
+''' Type of pole offset
 ''' </summary>
 ''' <remarks>Used by CelPole.</remarks>
 <Guid("AF69D7CC-A59C-4fcc-BE17-C2F568957BFD"),
 ComVisible(True)>
 Public Enum PoleOffsetCorrection As Short
     ''' <summary>
-    ''' For corrections to angular coordinates of modeled pole referred to mean ecliptic of date, that is, delta-delta-psi 
+    ''' For corrections to angular coordinates of modelled pole referred to mean ecliptic of date, that is, delta-delta-psi 
     ''' and delta-delta-epsilon. 
     ''' </summary>
     ''' <remarks></remarks>
     ReferredToMeanEclipticOfDate = 1
     ''' <summary>
-    ''' For corrections to components of modeled pole unit vector referred to GCRS axes, that is, dx and dy.
+    ''' For corrections to components of modelled pole unit vector referred to GCRS axes, that is, dx and dy.
     ''' </summary>
     ''' <remarks></remarks>
     ReferredToGCRSAxes = 2
@@ -699,18 +702,18 @@ End Enum
 ''' <remarks>This numbering convention is used by ephemeris routines; do not confuse with the Body enum, which is used in most 
 ''' other places within NOVAS3.
 ''' <para>
-''' The numbering convention for 'target' and'center' is:
+''' The numbering convention for 'target' and 'centre' is:
 ''' <pre>
 '''             0  =  Mercury           7 = Neptune
 '''             1  =  Venus             8 = Pluto
 '''             2  =  Earth             9 = Moon
 '''             3  =  Mars             10 = Sun
-'''             4  =  Jupiter          11 = Solar system bary.
-'''             5  =  Saturn           12 = Earth-Moon bary.
-'''             6  =  Uranus           13 = Nutations (long. and obliq.)</pre>
+'''             4  =  Jupiter          11 = Solar system barycentre.
+'''             5  =  Saturn           12 = Earth-Moon barycentre.
+'''             6  =  Uranus           13 = Nutations (long. and oblique.)</pre>
 ''' </para>
 ''' <para>
-''' If nutations are desired, set 'target' = 14; 'center' will be ignored on that call.
+''' If nutations are desired, set 'target' = 14; 'centre' will be ignored on that call.
 ''' </para>
 '''</remarks>
 <Guid("60E342F9-3CC3-4b98-8045-D61B5A7D974B"),
@@ -827,16 +830,16 @@ End Structure
 ''' Structure to hold astrometric catalogue data
 ''' </summary>
 ''' <remarks>
-''' The astrometric catalog data for a star; equator and equinox and units will depend on the catalog. 
-''' While this structure can be used as a generic container for catalog data, all high-level 
-''' NOVAS-C functions require J2000.0 catalog data with FK5-type units (shown in square brackets below).
+''' The astrometric catalogue data for a star; equator and equinox and units will depend on the catalogue. 
+''' While this structure can be used as a generic container for catalogue data, all high-level 
+''' NOVAS-C functions require J2000.0 catalogue data with FK5-type units (shown in square brackets below).
 ''' </remarks>
 <Guid("6320FEDA-8582-4048-988A-7D4DE7978C71"),
 ComVisible(True),
 StructLayoutAttribute(LayoutKind.Sequential, CharSet:=CharSet.[Ansi])>
 Public Structure CatEntry
     ''' <summary>
-    ''' 3-character catalog designator. 
+    ''' 3-character catalogue designator. 
     ''' </summary>
     ''' <remarks></remarks>
     <MarshalAsAttribute(UnmanagedType.BStr, SizeConst:=4)>
@@ -874,19 +877,19 @@ Public Structure CatEntry
     Public ProMoRA As Double
 
     ''' <summary>
-    ''' Proper motion in declination [arcseconds per century].
+    ''' Proper motion in declination [arc seconds per century].
     ''' </summary>
     ''' <remarks></remarks>
     Public ProMoDec As Double
 
     ''' <summary>
-    ''' Parallax [arcseconds].
+    ''' Parallax [arc seconds].
     ''' </summary>
     ''' <remarks></remarks>
     Public Parallax As Double
 
     ''' <summary>
-    ''' Radial velocity [kilometers per second]
+    ''' Radial velocity [kilometres per second]
     ''' </summary>
     ''' <remarks></remarks>
     Public RadialVelocity As Double
@@ -1025,15 +1028,15 @@ End Structure
 ''' <summary>
 ''' Catalogue entry structure
 ''' </summary>
-''' <remarks>Basic astrometric data for any celestial object located outside the solar system; the catalog data for a star.
-''' <para>This structure is identical to the NOVAS2 CatEntry structure expect that, for some reason, the StarName and Catalog fields
+''' <remarks>Basic astrometric data for any celestial object located outside the solar system; the catalogue data for a star.
+''' <para>This structure is identical to the NOVAS2 CatEntry structure expect that, for some reason, the StarName and Catalogue fields
 ''' have been swapped in the NOVAS3 structure.</para>
 ''' <para>
 ''' Please note that some units have changed from those used in NOVAS2 as follows:
 ''' <list type="bullet">
 ''' <item>proper motion in right ascension: from seconds per century to milliarcseconds per year</item>
-''' <item>proper motion in declination: from arcseconds per century to milliarcseconds per year</item>
-''' <item>parallax: from arcseconds to milliarcseconds</item>
+''' <item>proper motion in declination: from arc seconds per century to milliarcseconds per year</item>
+''' <item>parallax: from arc seconds to milliarcseconds</item>
 ''' </list>
 ''' </para>
 ''' </remarks>
@@ -1049,7 +1052,7 @@ Public Structure CatEntry3
     Public StarName As String
 
     ''' <summary>
-    ''' 3-character catalog designator. 
+    ''' 3-character catalogue designator. 
     ''' </summary>
     ''' <remarks></remarks>
     <MarshalAsAttribute(UnmanagedType.ByValTStr, SizeConst:=4)>
@@ -1086,7 +1089,7 @@ Public Structure CatEntry3
     Public ProMoDec As Double
 
     ''' <summary>
-    ''' Parallax (milli-arcseconds)
+    ''' Parallax (milliarcseconds)
     ''' </summary>
     ''' <remarks></remarks>
     Public Parallax As Double
@@ -1152,7 +1155,7 @@ Public Structure SkyPos
     ''' <remarks></remarks>
     Public Dec As Double
     ''' <summary>
-    ''' True (geometric, Euclidian) distance to solar system body or 0.0 for star (AU)
+    ''' True (geometric, Euclidean) distance to solar system body or 0.0 for star (AU)
     ''' </summary>
     ''' <remarks></remarks>
     Public Dis As Double
@@ -1199,7 +1202,7 @@ Public Structure RAOfCio
     ''' <remarks></remarks>
     Public JdTdb As Double
     ''' <summary>
-    ''' Right ascension of the CIO with respect to the GCRS (arcseconds)
+    ''' Right ascension of the CIO with respect to the GCRS (arc seconds)
     ''' </summary>
     ''' <remarks></remarks>
     Public RACio As Double
