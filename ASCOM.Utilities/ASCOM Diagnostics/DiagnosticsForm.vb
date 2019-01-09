@@ -88,6 +88,23 @@ Public Class DiagnosticsForm
         DegreesMinus180ToPlus180InRadians
     End Enum
 
+    Private Enum TransformExceptionTestType
+        SiteLatitude
+        SiteLongitude
+        SiteElevation
+        SiteTemperature
+        JulianDateUTC
+        JulianDateTT
+        SetJ2000RA
+        SetJ2000Dec
+        SetApparentRA
+        SetApparentDec
+        SetTopocentricRA
+        SetTopocentricDec
+        SetAzElAzimuth
+        SetAzElElevation
+    End Enum
+
 #End Region
 
 #Region "Variables"
@@ -3675,6 +3692,8 @@ Public Class DiagnosticsForm
         TransformExceptionTest(TR, TransformExceptionTestType.SiteLongitude, 0.0, -181.0, 181.0)
         TransformExceptionTest(TR, TransformExceptionTestType.SiteElevation, 0.0, -301.0, 10001.0)
         TransformExceptionTest(TR, TransformExceptionTestType.SiteTemperature, 0.0, -275.0, 101.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.JulianDateTT, 2451545.0, 0.0, 6000000.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.JulianDateUTC, 2451545.0, 0.0, 6000000.0)
         TransformExceptionTest(TR, TransformExceptionTestType.SetJ2000RA, 0.0, -1.0, 24.0)
         TransformExceptionTest(TR, TransformExceptionTestType.SetJ2000Dec, 0.0, -91.0, 91.0)
         TransformExceptionTest(TR, TransformExceptionTestType.SetApparentRA, 0.0, -1.0, 24.0)
@@ -3687,23 +3706,12 @@ Public Class DiagnosticsForm
         TransformTest2000("Deneb", "20:41:25.916", "45:16:49.23", TOLERANCE_E5, TOLERANCE_E4)
         TransformTest2000("Polaris", "02:31:51.263", "89:15:50.68", TOLERANCE_E5, TOLERANCE_E4)
         TransformTest2000("Arcturus", "14:15:38.943", "19:10:37.93", TOLERANCE_E5, TOLERANCE_E4)
+
+        TR.Dispose()
+        TR = Nothing
+
         TL.BlankLine()
     End Sub
-
-    Private Enum TransformExceptionTestType
-        SiteLatitude
-        SiteLongitude
-        SiteElevation
-        SiteTemperature
-        SetJ2000RA
-        SetJ2000Dec
-        SetApparentRA
-        SetApparentDec
-        SetTopocentricRA
-        SetTopocentricDec
-        SetAzElAzimuth
-        SetAzElElevation
-    End Enum
 
     Private Sub TransformExceptionTest(TR As Transform.Transform, test As TransformExceptionTestType, InRange As Double, OutofRangeLow As Double, OutofRangeHigh As Double)
         TransformExceptionTester(TR, test, InRange, True)
@@ -3714,6 +3722,10 @@ Public Class DiagnosticsForm
     Private Sub TransformExceptionTester(TR As Transform.Transform, test As TransformExceptionTestType, Value As Double, ExpectedPass As Boolean)
         Try
             Select Case test
+                Case TransformExceptionTestType.JulianDateTT
+                    TR.JulianDateTT = Value
+                Case TransformExceptionTestType.JulianDateUTC
+                    TR.JulianDateUTC = Value
                 Case TransformExceptionTestType.SiteLatitude
                     TR.SiteLatitude = Value
                 Case TransformExceptionTestType.SiteLongitude
