@@ -88,6 +88,23 @@ Public Class DiagnosticsForm
         DegreesMinus180ToPlus180InRadians
     End Enum
 
+    Private Enum TransformExceptionTestType
+        SiteLatitude
+        SiteLongitude
+        SiteElevation
+        SiteTemperature
+        JulianDateUTC
+        JulianDateTT
+        SetJ2000RA
+        SetJ2000Dec
+        SetApparentRA
+        SetApparentDec
+        SetTopocentricRA
+        SetTopocentricDec
+        SetAzElAzimuth
+        SetAzElElevation
+    End Enum
+
 #End Region
 
 #Region "Variables"
@@ -2348,7 +2365,7 @@ Public Class DiagnosticsForm
                     NOVAS.NOVAS2.EarthTilt(JD, MObl, TObl, ee, DPSI, DEps)
                     NOVAS.NOVAS2.SiderealTime(JD, 0.0, ee, GST2)
                     rc = Nov3.SiderealTime(JD, 0.0, DeltaT, GstType.GreenwichApparentSiderealTime, Method.EquinoxBased, Accuracy.Full, GST)
-                    LogRCDouble(TestFunction, "Novas3", "GAST Equinox          ", rc, GST, GST2, TOLERANCE_E5)
+                    LogRCDouble(TestFunction, "Novas3", "GAST Equinox          ", rc, GST, GST2, TOLERANCE_E4)
                 Case NOVAS3Functions.Spin
                     rc = 0
                     Nov3.Spin(20.0, Pos1, Pos2)
@@ -3065,7 +3082,7 @@ Public Class DiagnosticsForm
                     NOVAS.NOVAS2.EarthTilt(JD, MObl, TObl, ee, DPSI, DEps)
                     NOVAS.NOVAS2.SiderealTime(JD, 0.0, ee, GST2)
                     rc = Nov31.SiderealTime(JD, 0.0, DeltaT, GstType.GreenwichApparentSiderealTime, Method.EquinoxBased, Accuracy.Full, GST)
-                    LogRCDouble(TestFunction, "Novas31", "GAST Equinox          ", rc, GST, GST2, TOLERANCE_E5)
+                    LogRCDouble(TestFunction, "Novas31", "GAST Equinox          ", rc, GST, GST2, TOLERANCE_E4)
                 Case NOVAS3Functions.Spin
                     rc = 0
                     Nov31.Spin(20.0, Pos1, Pos2)
@@ -3669,10 +3686,88 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Sub TransformTest()
+        Dim TR As Transform.Transform = New Transform.Transform
+
+        TransformExceptionTest(TR, TransformExceptionTestType.SiteLatitude, 0.0, -91.0, 91.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.SiteLongitude, 0.0, -181.0, 181.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.SiteElevation, 0.0, -301.0, 10001.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.SiteTemperature, 0.0, -275.0, 101.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.JulianDateTT, 2451545.0, 0.0, 6000000.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.JulianDateUTC, 2451545.0, 0.0, 6000000.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.SetJ2000RA, 0.0, -1.0, 24.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.SetJ2000Dec, 0.0, -91.0, 91.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.SetApparentRA, 0.0, -1.0, 24.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.SetApparentDec, 0.0, -91.0, 91.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.SetTopocentricRA, 0.0, -1.0, 24.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.SetTopocentricDec, 0.0, -91.0, 91.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.SetAzElAzimuth, 0.0, -1.0, 360.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.SetAzElElevation, 0.0, -91.0, 91.0)
+
         TransformTest2000("Deneb", "20:41:25.916", "45:16:49.23", TOLERANCE_E5, TOLERANCE_E4)
         TransformTest2000("Polaris", "02:31:51.263", "89:15:50.68", TOLERANCE_E5, TOLERANCE_E4)
         TransformTest2000("Arcturus", "14:15:38.943", "19:10:37.93", TOLERANCE_E5, TOLERANCE_E4)
+
+        TR.Dispose()
+        TR = Nothing
+
         TL.BlankLine()
+    End Sub
+
+    Private Sub TransformExceptionTest(TR As Transform.Transform, test As TransformExceptionTestType, InRange As Double, OutofRangeLow As Double, OutofRangeHigh As Double)
+        TransformExceptionTester(TR, test, InRange, True)
+        TransformExceptionTester(TR, test, OutofRangeLow, False)
+        TransformExceptionTester(TR, test, OutofRangeHigh, False)
+    End Sub
+
+    Private Sub TransformExceptionTester(TR As Transform.Transform, test As TransformExceptionTestType, Value As Double, ExpectedPass As Boolean)
+        Try
+            Select Case test
+                Case TransformExceptionTestType.JulianDateTT
+                    TR.JulianDateTT = Value
+                Case TransformExceptionTestType.JulianDateUTC
+                    TR.JulianDateUTC = Value
+                Case TransformExceptionTestType.SiteLatitude
+                    TR.SiteLatitude = Value
+                Case TransformExceptionTestType.SiteLongitude
+                    TR.SiteLongitude = Value
+                Case TransformExceptionTestType.SiteElevation
+                    TR.SiteElevation = Value
+                Case TransformExceptionTestType.SiteTemperature
+                    TR.SiteTemperature = Value
+                Case TransformExceptionTestType.SetJ2000RA
+                    TR.SetJ2000(Value, 0.0)
+                Case TransformExceptionTestType.SetJ2000Dec
+                    TR.SetJ2000(0.0, Value)
+                Case TransformExceptionTestType.SetApparentRA
+                    TR.SetApparent(Value, 0.0)
+                Case TransformExceptionTestType.SetApparentDec
+                    TR.SetApparent(0.0, Value)
+                Case TransformExceptionTestType.SetTopocentricRA
+                    TR.SetTopocentric(Value, 0.0)
+                Case TransformExceptionTestType.SetTopocentricDec
+                    TR.SetTopocentric(0.0, Value)
+                Case TransformExceptionTestType.SetAzElAzimuth
+                    TR.SetAzimuthElevation(Value, 45.0)
+                Case TransformExceptionTestType.SetAzElElevation
+                    TR.SetAzimuthElevation(45.0, Value)
+            End Select
+            If ExpectedPass Then
+                TL.LogMessage("TransformExceptionTester", String.Format("Test {0} with valid value {1} passed as expected", test.ToString(), Value))
+                NMatches += 1
+            Else
+                LogError("TransformExceptionTester", String.Format("No exception generated on invalid {0} value of {1}", test.ToString(), Value))
+            End If
+        Catch ex As Exception
+            If Not ExpectedPass Then
+                TL.LogMessage("TransformExceptionTester", String.Format("Exception generated as expected for {0} invalid value of {1}", test.ToString(), Value))
+                'TL.LogMessageCrLf("TransformExceptionTester", ex.ToString())
+                NMatches += 1
+            Else
+                LogError("TransformExceptionTester", String.Format("Unexpected exception generated on valid {0} value of {1}", test.ToString(), Value))
+                'TL.LogMessageCrLf("TransformExceptionTester", ex.ToString())
+            End If
+        End Try
+
     End Sub
 
     Private Sub TransformTest2000(ByVal Name As String, ByVal AstroRAString As String, ByVal AstroDECString As String, ByVal RATolerance As Double, DecTolerance As Double)
@@ -4528,7 +4623,7 @@ Public Class DiagnosticsForm
         Dim DisplayTolerance As String = ""
 
         Divisor = ExpectedValue
-        If Divisor = 0.0 Then Divisor = 1.0 'Deal withpossible divide by zero error
+        If Divisor = 0.0 Then Divisor = 1.0 'Deal with possible divide by zero error
 
         If (ActualValue > ExpectedValue) Then ' Get the values to be compared into lower and higher values for use in the HMS and DMS comparisons
             HigherValue = ActualValue

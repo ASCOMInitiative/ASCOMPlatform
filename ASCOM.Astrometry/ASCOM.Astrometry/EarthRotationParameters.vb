@@ -60,7 +60,7 @@ Public Class EarthRotationParameters : Implements IDisposable
 
 #Region "New and IDisposable Support"
     Public Sub New()
-        Me.New(Nothing) ' Call the main initialisation routine with no trace logger refernce
+        Me.New(Nothing) ' Call the main initialisation routine with no trace logger reference
     End Sub
 
     Public Sub New(SuppliedTraceLogger As TraceLogger)
@@ -99,7 +99,7 @@ Public Class EarthRotationParameters : Implements IDisposable
 
     ' This code added by Visual Basic to correctly implement the disposable pattern.
     Public Sub Dispose() Implements IDisposable.Dispose
-        ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+        ' Do not change this code.  Put clean-up code in Dispose(disposing As Boolean) above.
         Dispose(True)
     End Sub
 #End Region
@@ -290,7 +290,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         CurrentJulianDate = DateTime.UtcNow.ToOADate() + OLE_AUTOMATION_JULIAN_DATE_OFFSET ' Calculate today's Julian date
 
         SyncLock LeapSecondLockObject
-            If Math.Truncate(CurrentJulianDate - MODIFIED_JULIAN_DAY_OFFSET) = Math.Truncate(LastLeapSecondJulianDate - MODIFIED_JULIAN_DAY_OFFSET) Then ' Return the cached value if its availahble otherwise calculate it and save the value for the next call
+            If Math.Truncate(CurrentJulianDate - MODIFIED_JULIAN_DAY_OFFSET) = Math.Truncate(LastLeapSecondJulianDate - MODIFIED_JULIAN_DAY_OFFSET) Then ' Return the cached value if its available otherwise calculate it and save the value for the next call
                 LogDebugMessage("LeapSeconds", String.Format("Returning cached today's UTC leap second value: {0}", LastLeapSecondValue))
                 Return LastLeapSecondValue
             End If
@@ -310,7 +310,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         Dim ActiveLeapSeconds As SortedList(Of Double, Double) ' Variable to hold either downloaded or built-in leap second values
 
         SyncLock LeapSecondLockObject
-            If Math.Truncate(RequiredLeapSecondJulianDate - MODIFIED_JULIAN_DAY_OFFSET) = Math.Truncate(LastLeapSecondJulianDate - MODIFIED_JULIAN_DAY_OFFSET) Then ' Return the cached value if its availahble otherwise calculate it and save the value for the next call
+            If Math.Truncate(RequiredLeapSecondJulianDate - MODIFIED_JULIAN_DAY_OFFSET) = Math.Truncate(LastLeapSecondJulianDate - MODIFIED_JULIAN_DAY_OFFSET) Then ' Return the cached value if its available otherwise calculate it and save the value for the next call
                 LogDebugMessage("LeapSeconds(JD)", String.Format("Returning cached leap second value: {0} for UTC Julian date: {1} ({2})",
                                                                  LastLeapSecondValue,
                                                                  RequiredLeapSecondJulianDate,
@@ -418,7 +418,7 @@ Public Class EarthRotationParameters : Implements IDisposable
             If DownloadedLeapSecondValues.Count > 0 Then ' We have downloaded values so use them
                 LogDebugMessage("LeapSeconds(JD)", String.Format("Historic leap second value required. Searching in {0} downloaded leap second values.", DownloadedLeapSecondValues.Count))
                 ActiveLeapSeconds = DownloadedLeapSecondValues
-            Else ' No dowloaded values so fall back to built-in values
+            Else ' No downloaded values so fall back to built-in values
                 LogDebugMessage("LeapSeconds(JD)", String.Format("Historic leap second value required. Searching in {0} built-in leap second values.", BuiltInLeapSecondsValues.Count))
                 ActiveLeapSeconds = BuiltInLeapSecondsValues
             End If
@@ -451,7 +451,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         CurrentJulianDateUTC = DateTime.UtcNow.ToOADate() + GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET ' Calculate today's Julian date
 
         SyncLock DeltaTLockObject
-            If Math.Truncate(CurrentJulianDateUTC - MODIFIED_JULIAN_DAY_OFFSET) = Math.Truncate(LastDeltaTJulianDate - MODIFIED_JULIAN_DAY_OFFSET) Then ' Return the cached value if its availahble otherwise calculate it and save the value for the next call
+            If Math.Truncate(CurrentJulianDateUTC - MODIFIED_JULIAN_DAY_OFFSET) = Math.Truncate(LastDeltaTJulianDate - MODIFIED_JULIAN_DAY_OFFSET) Then ' Return the cached value if its available otherwise calculate it and save the value for the next call
                 LogDebugMessage("DeltaT", String.Format("Returning cached today's DeltaT value: {0}", LastDeltaTValue))
                 Return LastDeltaTValue
             End If
@@ -475,7 +475,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         End If
 
         SyncLock DeltaTLockObject
-            If Math.Truncate(RequiredDeltaTJulianDateUTC - MODIFIED_JULIAN_DAY_OFFSET) = Math.Truncate(LastDeltaTJulianDate - MODIFIED_JULIAN_DAY_OFFSET) Then ' Return the cached value if its availahble otherwise calculate it and save the value for the next call
+            If Math.Truncate(RequiredDeltaTJulianDateUTC - MODIFIED_JULIAN_DAY_OFFSET) = Math.Truncate(LastDeltaTJulianDate - MODIFIED_JULIAN_DAY_OFFSET) Then ' Return the cached value if its available otherwise calculate it and save the value for the next call
                 LogDebugMessage("DeltaT(JD)", String.Format("Returning cached DeltaT value: {0} for UTC Julian date: {1} ({2})",
                                                             LastDeltaTValue,
                                                             RequiredDeltaTJulianDateUTC,
@@ -614,7 +614,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         CurrentJulianDateUTC = DateTime.UtcNow.ToOADate() + GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET ' Calculate today's Julian date
 
         SyncLock DeltaUT1LockObject
-            If Math.Truncate(CurrentJulianDateUTC - MODIFIED_JULIAN_DAY_OFFSET) = Math.Truncate(LastDeltaUT1JulianDate - MODIFIED_JULIAN_DAY_OFFSET) Then ' Return the cached value if its availahble otherwise calculate it and save the value for the next call
+            If Math.Truncate(CurrentJulianDateUTC - MODIFIED_JULIAN_DAY_OFFSET) = Math.Truncate(LastDeltaUT1JulianDate - MODIFIED_JULIAN_DAY_OFFSET) Then ' Return the cached value if its available otherwise calculate it and save the value for the next call
                 LogDebugMessage("DeltaUT1", String.Format("Returning cached today's DeltaUT1 value: {0}", LastDeltaUT1Value))
                 Return LastDeltaUT1Value
             End If
@@ -633,7 +633,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         Dim ReturnValue, ProfileValue As Double, UTCDate As DateTime, DeltaUT1ValueName, DeltaUT1String As String
 
         SyncLock DeltaTLockObject
-            If Math.Truncate(RequiredDeltaUT1JulianDateUTC - MODIFIED_JULIAN_DAY_OFFSET) = Math.Truncate(LastDeltaUT1JulianDate - MODIFIED_JULIAN_DAY_OFFSET) Then ' Return the cached value if its availahble otherwise calculate it and save the value for the next call
+            If Math.Truncate(RequiredDeltaUT1JulianDateUTC - MODIFIED_JULIAN_DAY_OFFSET) = Math.Truncate(LastDeltaUT1JulianDate - MODIFIED_JULIAN_DAY_OFFSET) Then ' Return the cached value if its available otherwise calculate it and save the value for the next call
                 LogDebugMessage("DeltaUT1(JD)", String.Format("Returning cached DeltaUT1 value: {0} for UTC Julian date: {1} ({2})",
                                                               LastDeltaUT1Value,
                                                               RequiredDeltaUT1JulianDateUTC,
@@ -657,7 +657,7 @@ Public Class EarthRotationParameters : Implements IDisposable
                 '                If it is then return this value
                 '                If not then fall back to the predicted value
                 '        If not then fall back to the predicted value
-                '    if no then fdall back to the predicted value
+                '    if no then fall back to the predicted value
                 UTCDate = DateTime.FromOADate(RequiredDeltaUT1JulianDateUTC - OLE_AUTOMATION_JULIAN_DATE_OFFSET) ' Convert the Julian day into a DateTime
                 DeltaUT1ValueName = String.Format(DELTAUT1_VALUE_NAME_FORMAT, UTCDate.Year.ToString(DELTAUT1_VALUE_NAME_YEAR_FORMAT), UTCDate.Month.ToString(DELTAUT1_VALUE_NAME_MONTH_FORMAT), UTCDate.Day.ToString(DELTAUT1_VALUE_NAME_DAY_FORMAT))
 
@@ -882,7 +882,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         If OriginalProfileValue = AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT Then ' Has the default value so is OK
             AutomaticLeapSecondsStringValue = OriginalProfileValue
             LogDebugMessage("RefreshState", String.Format("AutomaticLeapSecondsStringValue: {0}", AutomaticLeapSecondsStringValue))
-        Else ' Not default so it should be parseable
+        Else ' Not default so it should be parse-able
             If (Double.TryParse(OriginalProfileValue, NumberStyles.Float, CultureInfo.InvariantCulture, AutomaticLeapSecondsValue)) Then ' String parsed OK so save value and list it if debug is enabled
                 AutomaticLeapSecondsStringValue = OriginalProfileValue
                 LogDebugMessage("RefreshState", String.Format("AutomaticLeapSecondsStringValue: {0}, AutomaticLeapSecondsValue: {1}", AutomaticLeapSecondsStringValue, AutomaticLeapSecondsValue))
@@ -898,7 +898,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         If (OriginalProfileValue = NEXT_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT) Or (OriginalProfileValue = DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Then ' Has the default or not published value so is OK
             NextLeapSecondsStringValue = OriginalProfileValue
             LogDebugMessage("RefreshState", String.Format("NextLeapSecondsStringValue: {0}", NextLeapSecondsStringValue))
-        Else ' Not default so it should be parseable
+        Else ' Not default so it should be parse-able
             If (Double.TryParse(OriginalProfileValue, NumberStyles.Float, CultureInfo.InvariantCulture, NextLeapSecondsValue)) Then ' String parsed OK so save value and list it if debug is enabled
                 NextLeapSecondsStringValue = OriginalProfileValue
                 LogDebugMessage("RefreshState", String.Format("NextLeapSecondsStringValue: {0}, NextLeapSecondsValue: {1}", NextLeapSecondsStringValue, NextLeapSecondsValue))
@@ -914,7 +914,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         If (OriginalProfileValue = NEXT_LEAP_SECONDS_DATE_NOT_AVAILABLE_DEFAULT) Or (OriginalProfileValue = DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Then ' Has the default or not published value so is OK
             NextLeapSecondsDateStringValue = OriginalProfileValue
             LogDebugMessage("RefreshState", String.Format("AutomaticNextTaiUtcOffsetDateValue = {0}", NextLeapSecondsDateStringValue))
-        Else ' Not default so it should be parseable
+        Else ' Not default so it should be parse-able
             If DateTime.TryParseExact(OriginalProfileValue, DOWNLOAD_TASK_TIME_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, NextLeapSecondsDateValue) Then
                 NextLeapSecondsDateStringValue = OriginalProfileValue
                 LogDebugMessage("RefreshState", String.Format("NextLeapSecondsDateStringValue = {0}, NextLeapSecondsDateValue: {1}", NextLeapSecondsDateStringValue, NextLeapSecondsDateValue.ToString(DOWNLOAD_TASK_TIME_FORMAT)))
@@ -951,7 +951,7 @@ Public Class EarthRotationParameters : Implements IDisposable
                     LogMessage("RefreshState", String.Format("Invalid leap second date: {0}, the valid range is -657435.0 to 2958465.999999", ProfileLeapSecondDate))
                 End If
             End If
-            ProfileLeapSecondValueOk = Double.TryParse(ProfileLeapSecondKeyValuePair.Value, NumberStyles.Float, CultureInfo.InvariantCulture, ProfileLeapSecondsValue) ' Validate tyhe leap seconds value as a double
+            ProfileLeapSecondValueOk = Double.TryParse(ProfileLeapSecondKeyValuePair.Value, NumberStyles.Float, CultureInfo.InvariantCulture, ProfileLeapSecondsValue) ' Validate the leap seconds value as a double
             If ProfileLeapSecondDateOk And ProfileLeapSecondValueOk Then ' Both values are valid doubles so add them to the collection
                 ProfileLeapSecondsValues.Add(ProfileLeapSecondDate, ProfileLeapSecondsValue)
             Else
@@ -1060,7 +1060,7 @@ Public Class EarthRotationParameters : Implements IDisposable
                         taskDefinition.Settings.StopIfGoingOnBatteries = False
                         taskDefinition.Settings.DisallowStartIfOnBatteries = False
                         taskDefinition.Settings.Enabled = True
-                        TL.LogMessage("ManageScheduledTask", String.Format("Allow demand on start: {0}, Start when available: {1}, Execution time limit: {2} minutes, Stop if going on batteries: {3}, Disallow start if on batteries: {4}, Enabled: {5}, Run only iof logged on: {6}",
+                        TL.LogMessage("ManageScheduledTask", String.Format("Allow demand on start: {0}, Start when available: {1}, Execution time limit: {2} minutes, Stop if going on batteries: {3}, Disallow start if on batteries: {4}, Enabled: {5}, Run only if logged on: {6}",
                                                           taskDefinition.Settings.AllowDemandStart, taskDefinition.Settings.StartWhenAvailable,
                                                           taskDefinition.Settings.ExecutionTimeLimit.TotalMinutes, taskDefinition.Settings.StopIfGoingOnBatteries, taskDefinition.Settings.DisallowStartIfOnBatteries,
                                                           taskDefinition.Settings.Enabled, taskDefinition.Settings.RunOnlyIfLoggedOn))
