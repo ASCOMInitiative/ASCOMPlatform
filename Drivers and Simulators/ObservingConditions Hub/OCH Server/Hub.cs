@@ -11,7 +11,7 @@
 //	* ALL DECLARATIONS MUST BE STATIC HERE!! INSTANCES OF THIS CLASS MUST NEVER BE CREATED!
 //
 // Written by:	Bob Denny	29-May-2007
-// Modified by Chris Rowland and Peter Simpson to hamdle multiple hardware devices March 2011
+// Modified by Chris Rowland and Peter Simpson to handle multiple hardware devices March 2011
 //
 using System;
 using System.Collections;
@@ -61,8 +61,8 @@ namespace ASCOM.Simulator
         public const string OVERRIDE_UI_SAFETY_LIMITS_PROFILENAME = "Override UI Safety Limits"; public const string OVERRIDE_UI_SAFETY_LIMITS_DEFAULT = "False";
 
         // Setup dialogue device selection combo box drop down constants 
-        public const string SWITCH_NAME_PREFIX = "SWITCH"; // Prefix used when displaying a switch device in the Setup dropdown list 
-        public const string OBSERVING_CONDITIONS_NAME_PREFIX = "OBSCON"; // Prefix used when displaying an observing conditions device in the Setup dropdown list 
+        public const string SWITCH_NAME_PREFIX = "SWITCH"; // Prefix used when displaying a switch device in the Setup drop-down list 
+        public const string OBSERVING_CONDITIONS_NAME_PREFIX = "OBSCON"; // Prefix used when displaying an observing conditions device in the Setup drop-down list 
         public const string NO_DEVICE_DESCRIPTION = "No device";
 
         // Valid properties constants
@@ -82,7 +82,7 @@ namespace ASCOM.Simulator
         public const string PROPERTY_WINDSPEED = "WindSpeed";
 
         // List of valid ObservingConditions properties
-        public static List<string> ValidProperties = new List<string> { // Aray containing a list of all valid properties
+        public static List<string> ValidProperties = new List<string> { // Array containing a list of all valid properties
             PROPERTY_AVERAGEPERIOD,
             PROPERTY_CLOUDCOVER,
             PROPERTY_DEWPOINT,
@@ -171,14 +171,14 @@ namespace ASCOM.Simulator
         private const string DRIVER_TAG_GROUPNAME = "DriverTag";
         private const string DRIVER_ACTION_GROUPNAME = "ActioName";
 
-        private const string ACTION_NAME_REGEX = @"^\/\/(?'" + DRIVER_TAG_GROUPNAME + @"'\w+):(?'" + DRIVER_ACTION_GROUPNAME + @"'\w+)";
+        private const string ACTION_NAME_REGEX = @"^\/\/(?'" + DRIVER_TAG_GROUPNAME + @"'[^\/:]+):(?'" + DRIVER_ACTION_GROUPNAME + @"'[^\/:]+)";
 
         // Miscellaneous variables
-        private static int uniqueClientNumber = 0; // Unique number that increements on each call to UniqueClientNumber
+        private static int uniqueClientNumber = 0; // Unique number that increments on each call to UniqueClientNumber
         private readonly static object connectLockObject = new object();
         private readonly static object deviceAccessLockObject = new object();
         private static ConcurrentDictionary<long, bool> connectStates;
-        private static DateTime timeOfLastUpdate = BAD_DATETIME; // Iniitalise to a bad value so we can tell whether a sensor has ever been accessed
+        private static DateTime timeOfLastUpdate = BAD_DATETIME; // Initialise to a bad value so we can tell whether a sensor has ever been accessed
         private static System.Timers.Timer averagePeriodTimer;
         private static ConcurrentDictionary<string, string> supportedActions;
 
@@ -524,15 +524,17 @@ namespace ASCOM.Simulator
             {
                 TL.LogMessage(clientNumber, "SupportedActions", string.Format("Checking ObservingConditions driver {0} for supported actions", ObservingConditionsDevice.Key));
                 string tag = ObservingConditionsDevice.Key; // Set default tag as the ProgID before trying to get
+
+                // Get the driver provided tag, if present, otherwise use the ProgId assigned above
                 try
                 {
                     TL.LogMessage(clientNumber, "SupportedActions", string.Format("Calling Action {0} on driver {1}", OCH_TAG, ObservingConditionsDevice.Key));
                     tag = ObservingConditionsDevice.Value.Action(OCH_TAG, "");
                     TL.LogMessage(clientNumber, "SupportedActions", string.Format("Successfully called Action {0} on driver {1}, result: {2}", OCH_TAG, ObservingConditionsDevice.Key, tag));
                 }
-                catch (Exception ex)
+                catch
                 {
-                    TL.LogMessageCrLf(clientNumber, "SupportedActions", string.Format("Exception: {0}", ex.ToString()));
+                    TL.LogMessage(clientNumber, "SupportedActions", string.Format("{0} tag not returned by driver, using ProgID as tag: {1}", OCH_TAG, tag));
                 }
 
                 ArrayList suportedActions = ObservingConditionsDevice.Value.SupportedActions; // Get the list of supported actions and add them to the dictionary
@@ -602,7 +604,7 @@ namespace ASCOM.Simulator
             else
             {
                 TL.LogMessage(clientNumber, "AveragePeriodSet", "Bad value: " + value.ToString() + ", throwing InvalidValueException");
-                throw new InvalidValueException("AveragePeriod Set", value.ToString(), "0.0 updwards");
+                throw new InvalidValueException("AveragePeriod Set", value.ToString(), "0.0 upwards");
             }
         }
 
@@ -822,7 +824,7 @@ namespace ASCOM.Simulator
         #region Support code
 
         /// <summary>
-        /// Tests whether the hub is already conected
+        /// Tests whether the hub is already connected
         /// </summary>
         /// <param name="clientNumber">Number of the client making the call</param>
         /// <returns>Boolean true if the hub is already connected</returns>
@@ -841,7 +843,7 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// Returns a unique client numnber to the calling instance
+        /// Returns a unique client number to the calling instance
         /// </summary>
         public static int GetUniqueClientNumber()
         {
@@ -886,7 +888,7 @@ namespace ASCOM.Simulator
                         {
                             averageValue += tv.SensorValue;
                         }
-                        averageValue = averageValue / numberOfSensorReadings; // Calcualte the average sensor reading
+                        averageValue = averageValue / numberOfSensorReadings; // Calculate the average sensor reading
                     }
                     else // There are no readings so just get and return the current value
                     {
@@ -1042,7 +1044,7 @@ namespace ASCOM.Simulator
             if (averagePeriodTimer.Enabled) averagePeriodTimer.Stop();
             if (averagePeriod > 0.0)
             {
-                averagePeriodTimer.Interval = averagePeriod * 60000.0 / numberOfMeasurementsPerAveragePeriod; // Average period in minutes, convert to milliseocnds and divide by the number of readings required
+                averagePeriodTimer.Interval = averagePeriod * 60000.0 / numberOfMeasurementsPerAveragePeriod; // Average period in minutes, convert to milliseconds and divide by the number of readings required
                 if (IsHardwareConnected(0)) averagePeriodTimer.Enabled = true;
             }
         }
