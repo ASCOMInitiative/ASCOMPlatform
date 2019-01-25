@@ -11,7 +11,7 @@
 //	* ALL DECLARATIONS MUST BE STATIC HERE!! INSTANCES OF THIS CLASS MUST NEVER BE CREATED!
 //
 // Written by:	Bob Denny	29-May-2007
-// Modified by Chris Rowland and Peter Simpson to hamdle multiple hardware devices March 2011
+// Modified by Chris Rowland and Peter Simpson to handle multiple hardware devices March 2011
 //
 using System;
 using System.Collections;
@@ -61,7 +61,7 @@ namespace ASCOM.Simulator
         public const string SENSORVIEW_CONTROL_PREFIX = "sensorView";
         public const string NOT_CONNECTED_MESSAGE = DRIVER_DISPLAY_NAME + " is not connected.";
 
-        // Profile persistance constants
+        // Profile persistence constants
         public const string SIMFROMVALUE_PROFILENAME = "Simulated From Value"; // Default values are held in Dictionary SimulatorDefaultFromValues
         public const string SIMTOVALUE_PROFILENAME = "Simulated To Value"; // Default values are held in Dictionary SimulatorDefaultToValues
         public const string IS_IMPLEMENTED_PROFILENAME = "Is Implemented"; public const string IS_IMPLEMENTED_DEFAULT = "True";
@@ -93,7 +93,7 @@ namespace ASCOM.Simulator
         public static bool MinimiseOnStart;
 
         // List of ObservingConditions properties that are dynamically simulated
-        public static List<string> SimulatedProperties = new List<string> { // Aray containing a list of all valid properties
+        public static List<string> SimulatedProperties = new List<string> { // Array containing a list of all valid properties
             PROPERTY_CLOUDCOVER,
             PROPERTY_HUMIDITY,
             PROPERTY_PRESSURE,
@@ -108,7 +108,7 @@ namespace ASCOM.Simulator
             PROPERTY_WINDSPEED };
 
         // List of valid ObservingConditions properties
-        public static List<string> DriverProperties = new List<string> { // Aray containing a list of all valid properties
+        public static List<string> DriverProperties = new List<string> { // Array containing a list of all valid properties
             PROPERTY_CLOUDCOVER,
             PROPERTY_DEWPOINT,
             PROPERTY_HUMIDITY,
@@ -214,8 +214,13 @@ namespace ASCOM.Simulator
         const string OCH_TAG = "OCHTag"; const string OCH_TAG_UPPER_CASE = "OCHTAG";
         const string OCH_TEST_WEATHER_REPORT = "OCHTestWeatherReport"; const string OCH_TEST_WEATHER_REPORT_UPPER_CASE = "OCHTESTWEATHERREPORT";
 
+        // Profile persistence constants and variable to control whether OCHTag is supported by the driver - no UI is provided for changing this value, it must be changed by editing the Profile directly
+        private const string EXPOSE_OCHTAG_NAME = "Expose OCH Tag";
+        private const bool EXPOSE_OCHTAG_DEFAULT = true;
+        private static bool exposeOCHState;
+
         // Miscellaneous variables
-        private static int uniqueClientNumber = 0; // Unique number that increements on each call to UniqueClientNumber
+        private static int uniqueClientNumber = 0; // Unique number that increments on each call to UniqueClientNumber
         private readonly static object connectLockObject = new object();
         private static ConcurrentDictionary<long, bool> connectStates;
         private static DateTime initialConnectionTime;
@@ -245,7 +250,7 @@ namespace ASCOM.Simulator
                     Sensors.Add(Property, new Sensor(Property));
                 }
 
-                TL = new TraceLoggerPlus("", "OCSimulator"); // Trace state is set in ReadProfile, immediately after nbeing read fomr the Profile
+                TL = new TraceLoggerPlus("", "OCSimulator"); // Trace state is set in ReadProfile, immediately after being read from the Profile
                 ReadProfile(); // Read device configuration from the ASCOM Profile store
 
                 TL.LogMessage("OCSimulator", "Simulator initialising");
@@ -287,7 +292,7 @@ namespace ASCOM.Simulator
         {
             switch (actionName.ToUpperInvariant())
             {
-                case OCH_TAG_UPPER_CASE:
+                case OCH_TAG_UPPER_CASE when exposeOCHState:
                     return "OCSimulator";
                 case OCH_TEST_WEATHER_REPORT_UPPER_CASE:
                     return "The weather will be very nice today! Supplied parameters: " + actionParameters;
@@ -329,7 +334,7 @@ namespace ASCOM.Simulator
         public static void Connect(int clientNumber)
         {
             if (DebugTraceState) TL.LogMessage(clientNumber, "Connect", "Acquiring connection lock");
-            lock (connectLockObject) // Esnure that only one connection attempt can happen at a time
+            lock (connectLockObject) // Ensure that only one connection attempt can happen at a time
             {
                 TL.LogMessage(clientNumber, "Connect", "Has connection lock");
                 if (IsClientConnected(clientNumber)) // If we are already connected then just log this 
@@ -467,8 +472,16 @@ namespace ASCOM.Simulator
         {
             CheckConnected("SupportedActions");
 
-            TL.LogMessage(clientNumber, "SupportedActions", string.Format("Returning {0} and {1} in the arraylist", OCH_TAG, OCH_TEST_WEATHER_REPORT));
-            return new ArrayList() { OCH_TAG, OCH_TEST_WEATHER_REPORT };
+            if (exposeOCHState)
+            {
+                TL.LogMessage(clientNumber, "SupportedActions", string.Format("Returning {0} and {1} in the arraylist", OCH_TAG, OCH_TEST_WEATHER_REPORT));
+                return new ArrayList() { OCH_TAG, OCH_TEST_WEATHER_REPORT };
+            }
+            else
+            {
+                TL.LogMessage("SupportedActions", string.Format("Returning {0} in the arraylist, not returning {1} because exposeOCHState is false", OCH_TEST_WEATHER_REPORT, OCH_TAG));
+                return new ArrayList() { OCH_TEST_WEATHER_REPORT };
+            }
         }
 
         #endregion
@@ -497,7 +510,7 @@ namespace ASCOM.Simulator
             else
             {
                 TL.LogMessage(clientNumber, "AveragePeriodSet", "Bad value: " + value.ToString() + ", throwing InvalidValueException");
-                throw new InvalidValueException("AveragePeriod Set", value.ToString(), "0.0 updwards");
+                throw new InvalidValueException("AveragePeriod Set", value.ToString(), "0.0 upwards");
             }
         }
 
@@ -664,7 +677,7 @@ namespace ASCOM.Simulator
                 int beforeTrim = Sensors[Property].Readings.Count;
                 Sensors[Property].Readings.RemoveAll(TimeRemovePredicate);
                 int afterTrim = Sensors[Property].Readings.Count;
-                if (DebugTraceState) TL.LogMessage("AveragePeriodTimer", Property + " reading added to reading collection. Before trim: " + beforeTrim + ", Aftertrim: " + afterTrim);
+                if (DebugTraceState) TL.LogMessage("AveragePeriodTimer", Property + " reading added to reading collection. Before trim: " + beforeTrim + ", After trim: " + afterTrim);
             }
         }
 
@@ -748,7 +761,7 @@ namespace ASCOM.Simulator
         #region Support code
 
         /// <summary>
-        /// Returns a unique client numnber to the calling instance
+        /// Returns a unique client number to the calling instance
         /// </summary>
         public static int GetUniqueClientNumber()
         {
@@ -803,7 +816,7 @@ namespace ASCOM.Simulator
                                 {
                                     averageValue += tv.SensorValue;
                                 }
-                                averageValue = averageValue / numberOfSensorReadings; // Calcualte the average sensor reading
+                                averageValue = averageValue / numberOfSensorReadings; // Calculate the average sensor reading
                             }
                             else // There are no readings so just return the current value
                             {
@@ -834,7 +847,7 @@ namespace ASCOM.Simulator
         /// Remove stale values from the collection of PC-Mount time difference measurements
         /// </summary>
         /// <param name="timevalue">The time value to test</param>
-        /// <returns>Boolean value indicating whether a particular time value shold be removed from the collection</returns>
+        /// <returns>Boolean value indicating whether a particular time value should be removed from the collection</returns>
         private static bool TimeRemovePredicate(TimeValue timevalue)
         {
             return DateTime.Now.Subtract(timevalue.ObservationTime).TotalMinutes > AveragePeriod;
@@ -848,7 +861,7 @@ namespace ASCOM.Simulator
             if (averagePeriodTimer.Enabled) averagePeriodTimer.Stop();
             if (AveragePeriod > 0.0)
             {
-                averagePeriodTimer.Interval = AveragePeriod * 60000.0 / NumberOfReadingsToAverage; // Averageperiod in minutes, convert to milliseocnds and divide by the number of readings required
+                averagePeriodTimer.Interval = AveragePeriod * 60000.0 / NumberOfReadingsToAverage; // Averageperiod in minutes, convert to milliseconds and divide by the number of readings required
                 if (IsHardwareConnected()) averagePeriodTimer.Enabled = true;
             }
         }
@@ -863,7 +876,7 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// Tests whether the hub is already conected
+        /// Tests whether the hub is already connected
         /// </summary>
         /// <param name="clientNumber">Number of the client making the call</param>
         /// <returns>Boolean true if the hub is already connected</returns>
@@ -911,6 +924,8 @@ namespace ASCOM.Simulator
 
                 // Initialise the logging trace state from the Profile
                 TraceState = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, TRACE_LEVEL_PROFILENAME, string.Empty, TRACE_LEVEL_DEFAULT), CultureInfo.InvariantCulture);
+                exposeOCHState = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, EXPOSE_OCHTAG_NAME, string.Empty, EXPOSE_OCHTAG_DEFAULT.ToString()));
+
                 TL.Enabled = TraceState; // Set the logging state immediately after this has been retrieved from Profile
 
                 // Initialise other variables from the Profile

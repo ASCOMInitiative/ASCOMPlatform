@@ -646,7 +646,7 @@ namespace ASCOM.Simulator
             this.Name = "SetupDialogForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Observing Conditions Hub Configurtation";
+            this.Text = "Observing Conditions Hub Configuration";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numNumberOfReadingsToAverage)).EndInit();

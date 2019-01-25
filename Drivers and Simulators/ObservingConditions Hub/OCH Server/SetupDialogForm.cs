@@ -61,14 +61,14 @@ namespace ASCOM.Simulator
 
         private void cmdOK_Click(object sender, EventArgs e) // OK button event handler
         {
-            // Check whether both dew point and humidy are either set or unset. It is not allowed for one to be available and not the other
+            // Check whether both dew point and humidity are either set or unset. It is not allowed for one to be available and not the other
             Hub.ConnectionType connectionTypeDewPoint = this.Controls.OfType<SensorView>().First(sv => sv.Name == "sensorView" + Hub.PROPERTY_DEWPOINT).SelectedSensor.DeviceMode;
             Hub.ConnectionType connectionTypeHumidity = this.Controls.OfType<SensorView>().First(sv => sv.Name == "sensorView" + Hub.PROPERTY_HUMIDITY).SelectedSensor.DeviceMode;
 
             if (((connectionTypeDewPoint == Hub.ConnectionType.None) & (connectionTypeHumidity == Hub.ConnectionType.Real)) || ((connectionTypeDewPoint == Hub.ConnectionType.Real) & (connectionTypeHumidity == Hub.ConnectionType.None)))
             {
                 // We have one of dew point or humidity set to a device and the other is set to "No Device" - this violates the ASCOM spec so flash a warning
-                MessageBox.Show("Dew point and Humidity must both be implemented or both must be not implemented. The ASCOM specification does not allow one to be implemented and the other not.\r\n\r\nPlease ensure that the configured Dew point and Humidity implementations match.", "DewPoint and Humnidty Issue", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Dew point and Humidity must both be implemented or both must be not implemented. The ASCOM specification does not allow one to be implemented and the other not.\r\n\r\nPlease ensure that the configured Dew point and Humidity implementations match.", "DewPoint and Humidity Issue", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.DialogResult = DialogResult.None;
             }
             else // Both humidity and dew point are either no device or real device
@@ -109,7 +109,7 @@ namespace ASCOM.Simulator
         {
             string warningMessage = "";
 
-            // Set background colour whenver the value changes to give a warning if the user selects a large number of readings that wil slow the hub down when calaculating average values
+            // Set background colour whenever the value changes to give a warning if the user selects a large number of readings that will slow the hub down when calculating average values
             if ((numNumberOfReadingsToAverage.Value <= 30.0M) || (chkOverrideSafetyLimits.Checked)) // SHow normal black on white text if we are safe or we have warnings turned off
             {
                 numNumberOfReadingsToAverage.ForeColor = Color.Black;
@@ -126,10 +126,10 @@ namespace ASCOM.Simulator
                 numNumberOfReadingsToAverage.BackColor = Color.Red;
             }
 
-            if (!chkOverrideSafetyLimits.Checked)// Safety limit is in effect so colour contrl as appropriate and ensure that the selected rate is between 1 and the maximum permitted value
+            if (!chkOverrideSafetyLimits.Checked)// Safety limit is in effect so colour control as appropriate and ensure that the selected rate is between 1 and the maximum permitted value
             {
                 if (numNumberOfReadingsToAverage.Value == numNumberOfReadingsToAverage.Minimum) warningMessage = "( Query rate must be at least 1 per average period )";
-                if (numNumberOfReadingsToAverage.Value == numNumberOfReadingsToAverage.Maximum) // We are at the maximum rate so workj out which message to show
+                if (numNumberOfReadingsToAverage.Value == numNumberOfReadingsToAverage.Maximum) // We are at the maximum rate so work out which message to show
                 {
                     if (numNumberOfReadingsToAverage.Maximum == Hub.MAX_QUERIES_PER_PERIOD) // We are at the 60 per second limit
                     {
@@ -315,7 +315,7 @@ namespace ASCOM.Simulator
                     int maxReadings = (int)Math.Min(numAveragePeriod.Value * 60.0M, Hub.MAX_QUERIES_PER_PERIOD); // Get the lower of the number of 1 per second queries or 60 per interval
                     numNumberOfReadingsToAverage.Maximum = maxReadings; // Limit the maximum number of readings 
                 }
-                if (numNumberOfReadingsToAverage.Value >= numNumberOfReadingsToAverage.Maximum) // Correct value > maximium if required
+                if (numNumberOfReadingsToAverage.Value >= numNumberOfReadingsToAverage.Maximum) // Correct value > maximum if required
                 {
                     numNumberOfReadingsToAverage.Value = numNumberOfReadingsToAverage.Maximum;
                 }

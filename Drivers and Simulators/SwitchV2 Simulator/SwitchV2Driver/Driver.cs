@@ -30,7 +30,7 @@ namespace ASCOM.Simulator
     // Your driver's DeviceID is ASCOM.Simulator.Switch
     //
     // The Guid attribute sets the CLSID for ASCOM.Simulator.Switch
-    // The ClassInterface/None addribute prevents an empty interface called
+    // The ClassInterface/None attribute prevents an empty interface called
     // _Simulator from being created and used as the [default] interface
     //
 
@@ -55,12 +55,15 @@ namespace ASCOM.Simulator
 
         internal static string traceStateProfileName = "Trace Level";
         internal static string traceStateDefault = "false";
+        private const string EXPOSE_OCHTAG_NAME = "Expose OCH Tag";
+        private const bool EXPOSE_OCHTAG_DEFAULT = true;
 
         // Supported actions
         const string OCH_TAG = "OCHTag"; const string OCH_TAG_UPPER_CASE = "OCHTAG";
         const string OCH_TEST_POWER_REPORT = "OCHTestPowerReport"; const string OCH_TEST_POWER_REPORT_UPPER_CASE = "OCHTESTPOWERREPORT";
 
         internal static bool traceState;
+        private static bool exposeOCHState;
 
         /// <summary>
         /// Private variable to hold the connected state
@@ -97,15 +100,15 @@ namespace ASCOM.Simulator
         #region Common properties and methods.
 
         /// <summary>
-        /// Displays the Setup Dialog form.
+        /// Displays the Setup Dialogue form.
         /// If the user clicks the OK button to dismiss the form, then
         /// the new settings are saved, otherwise the old values are reloaded.
         /// THIS IS THE ONLY PLACE WHERE SHOWING USER INTERFACE IS ALLOWED!
         /// </summary>
         public void SetupDialog()
         {
-            // consider only showing the setup dialog if not connected
-            // or call a different dialog if connected
+            // consider only showing the setup dialogue if not connected
+            // or call a different dialogue if connected
             if (IsConnected)
                 System.Windows.Forms.MessageBox.Show("Already connected, just press OK");
 
@@ -123,8 +126,16 @@ namespace ASCOM.Simulator
         {
             get
             {
-                tl.LogMessage("SupportedActions Get", string.Format("Returning {0} and {1} in the arraylist", OCH_TAG, OCH_TEST_POWER_REPORT));
-                return new ArrayList() { OCH_TAG, OCH_TEST_POWER_REPORT };
+                if (exposeOCHState)
+                {
+                    tl.LogMessage("SupportedActions Get", string.Format("Returning {0} and {1} in the arraylist", OCH_TAG, OCH_TEST_POWER_REPORT));
+                    return new ArrayList() { OCH_TAG, OCH_TEST_POWER_REPORT };
+                }
+                else
+                {
+                    tl.LogMessage("SupportedActions Get", string.Format("Returning {0} in the arraylist, not returning {1} because exposeOCHState is false", OCH_TEST_POWER_REPORT, OCH_TAG));
+                    return new ArrayList() { OCH_TEST_POWER_REPORT };
+                }
             }
         }
 
@@ -132,7 +143,7 @@ namespace ASCOM.Simulator
         {
             switch (actionName.ToUpperInvariant())
             {
-                case OCH_TAG_UPPER_CASE:
+                case OCH_TAG_UPPER_CASE when exposeOCHState:
                     return "SwitchSimulator";
                 case OCH_TEST_POWER_REPORT_UPPER_CASE:
                     return "All observatory power systems are functioning properly. Supplied parameters: " + actionParameters;
@@ -158,7 +169,7 @@ namespace ASCOM.Simulator
 
         public void Dispose()
         {
-            // Clean up the tracelogger and util objects
+            // Clean up the trace logger and util objects
             tl.Enabled = false;
             tl.Dispose();
             tl = null;
@@ -496,6 +507,7 @@ namespace ASCOM.Simulator
             using (Profile driverProfile = new Profile() { DeviceType = "Switch" })
             {
                 traceState = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateProfileName, string.Empty, traceStateDefault));
+                exposeOCHState = Convert.ToBoolean(driverProfile.GetValue(driverID, EXPOSE_OCHTAG_NAME, string.Empty, EXPOSE_OCHTAG_DEFAULT.ToString()));
 
                 switches = new List<LocalSwitch>();
                 int numSwitch;

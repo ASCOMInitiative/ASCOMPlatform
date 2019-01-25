@@ -13,7 +13,7 @@ using System.Runtime.CompilerServices;
  *     <Link>Properties\SolutionInfo.cs</Link>
  *   </Compile>
  * 
- * Version information is isolated in a seperate file to facilitate integration with the build server.
+ * Version information is isolated in a separate file to facilitate integration with the build server.
  * The build server will replace this entire file with a machine-generated one. Therefore,
  * this file should contain ONLY the global version number and no other settings.
  * 

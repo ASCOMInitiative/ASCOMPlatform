@@ -50,7 +50,7 @@
             this.buttonSetup.Size = new System.Drawing.Size(33, 26);
             this.buttonSetup.TabIndex = 77;
             this.buttonSetup.Text = "C";
-            this.toolTip.SetToolTip(this.buttonSetup, "Runs the Setup dialg for the selected driver");
+            this.toolTip.SetToolTip(this.buttonSetup, "Runs the Setup dialogue for the selected driver");
             this.buttonSetup.UseVisualStyleBackColor = true;
             this.buttonSetup.Click += new System.EventHandler(this.buttonSetup_Click);
             // 

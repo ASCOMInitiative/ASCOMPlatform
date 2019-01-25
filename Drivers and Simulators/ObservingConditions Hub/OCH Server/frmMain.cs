@@ -65,7 +65,7 @@ namespace ASCOM.Simulator
             {
                 System.Threading.Thread.Sleep(20); // Have a short sleep
                 Application.DoEvents(); // Keep the UI alive
-            } while (DateTime.Now.Subtract(startTime).TotalMilliseconds < duration); // Wait until the durationhas elapsed
+            } while (DateTime.Now.Subtract(startTime).TotalMilliseconds < duration); // Wait until the duration has elapsed
         }
 
         private void btnShutDown_Click(object sender, EventArgs e)
