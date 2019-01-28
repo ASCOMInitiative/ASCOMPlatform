@@ -207,6 +207,10 @@ function writesubmenu() {
 		SubMenuOutput += "<li><a href=\"ReleaseTesting.htm\">Release Testing</a></li>";
 		SubMenuOutput += "<li><a href=\"DriverSupt.htm\">Handling Support Issues</a></li>";
 	    SubMenuOutput += "</ul>";
+        SubMenuOutput += "<h3>Cross-Platform &amp; Internet</h3>";
+	    SubMenuOutput += "<ul class=\"treeview\">";
+		SubMenuOutput += "<li><a href=\"Alpaca.htm\">Introduction to Alpaca</a></li>";
+	    SubMenuOutput += "</ul>";
        break;
     case 6: // Community
         SubMenuOutput += "<h3>Community</h3>";

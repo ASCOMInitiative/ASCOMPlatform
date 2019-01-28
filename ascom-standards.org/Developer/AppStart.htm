@@ -75,10 +75,9 @@
 		<li>Prepare the device for your use</li>
 	</ol>
 	<p>At this point you can control the device via the standard interface members (properties and methods). See the interface standard documents installed with the ASCOM Platform (if you included developer content - you're a developer, right?).</p>
-	<p>Here's a video by Tom How that takes you through the process of developing a simple astronomy application that can control <span class="underline">any telescope with an ASCOM driver</span>.<br />
-<span style="font-size: large">GO FULL SCREEN 1080p TO SEE THE CODE!</span></p>
+	<p>Here's a video by Tom How that takes you through the process of developing a simple astronomy application that can control <span class="underline">any telescope with an ASCOM driver</span>.</p>
 	<p  align="center"><a name="video" id="video"></a>
-	<iframe width="640" height="480" src="//www.youtube.com/embed/SfFg5xoVKhg" frameborder="0" allowfullscreen></iframe></p>
+	<iframe width="560" height="315" src="https://www.youtube.com/embed/SfFg5xoVKhg" frameborder="5" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
 	<h4>Hello World in JScript</h4>
 	<p>The following script, written in the JScript language, shows how simple it is to control a telescope. We use the Telescope Simulator, part of the ASCOM Platform. The simulator is a Telescope driver; it's a great tool for testing your code. To switch over to talking to some other (real) telescope, all you need to do is change the driver ID from <tt><span style="color: #CF6">ScopeSim.Telescope</span></tt> to <tt><span style="color: #CF6">SomethingElse.Telescope</span></tt>. That's it!</p><pre>
 var T = new ActiveXObject("<span style="color: #CF6;">ScopeSim.Telescope</span>");    <span style="color: #999999;">// Change for your driver's ID</span>
@@ -108,7 +107,7 @@ C:\Foo\Bar\&gt;</pre>
 	
 	<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright &copy; 1998-2018, The ASCOM Initiative. 
+	Copyright &copy; 1998-2019, The ASCOM Initiative. 
 	All rights reserved. </div>
 
 </body>
