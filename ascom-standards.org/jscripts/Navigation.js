@@ -212,6 +212,7 @@ function writesubmenu() {
 	    SubMenuOutput += "<ul class=\"treeview\">";
 		SubMenuOutput += "<li><a href=\"Alpaca.htm\">Introduction to Alpaca</a></li>";
 		SubMenuOutput += "<li><a href=\"https://ascom-standards.org/api/\" target=\"_new\">ASCOM Alpaca API</a></li>";
+		SubMenuOutput += "<li><a href=\"ASCOM%20Alpaca%20API%20Reference.pdf\" target=\"_new\">API Reference (PDF)</a></li>";
 	    SubMenuOutput += "</ul>";
        break;
     case 6: // Community
