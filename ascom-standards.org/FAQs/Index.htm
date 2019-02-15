@@ -69,7 +69,20 @@ dt {
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
-		<h3>Frequently Asked Questions</h3>
+		<h3><a name="alpaca" id="alpaca"></a>Frequently Asked Questions - Alpaca Cross-Platform and Internet</h3>
+		<dl style="margin-top: 0px; margin-bottom: 0px;">
+			<dt><a href="../Developer/Alpaca.htm"><img src="../Images/AlpacaLogo128.png" width="128" height="101" hspace="8" border="0" align="right" /></a>What is ASCOM Alpaca?</dt>
+			<dd>ASCOM Alpaca is a new (2019) standard that provides communication between astronomy programs and astronomy devices on multiple operating systems like iOS, Linux, Android, and Mac, using the internet (which means WiFi-connected mobile devices and also astronomy instruments connected via WiFi). It also provides transparent communications with <span class="underline">existing unmodified</span> devices, drivers, and programs on Windows. </dd>
+			<dt>Will Alpaca change or break my existing ASCOM-compatible astronomy applications?</dt>
+			<dd>No. Windows ASCOM programs will remain compatible with <span class="underline">no changes whatsoever</span>. However, if you install <a href="https://github.com/ASCOMInitiative/ASCOMRemote/releases" target="_new">ASCOM Remote</a>, an add-on middleware package, your <span class="underline">unmodified</span> Windows ASCOM programs will be able to use devices and their Alpaca drivers on other platforms <em>as they become available in the future</em>. For example, you will be able to use a self-contained WiFi-connected focuser running Linux on an Arduino or other embedded controller, again with <span class="underline">no modifications to your Windows programs</span>.</dd>
+			<dt>Will Alpaca change or break my existing ASCOM-compatible devices and their drivers or control programs?</dt>
+			<dd>No. Windows ASCOM drivers will remain compatible <span class="underline">with no changes whatever</span>. However, if you install <a href="https://github.com/ASCOMInitiative/ASCOMRemote/releases" target="_new">ASCOM Remote</a>, an add-on middleware package, your <span class="underline">unmodified</span> Windows devices and their drivers will become accessible from from Alpaca-compatible astronomy programs on other platforms such as iOS, Android, Mac, and Linux <em>as  become available in the future</em>. For example, you will be able to control your <span class="underline">unmodifie</span>d Windows-connected telescope mount and driver from an Alpaca-enabled iOS astronomy program.</dd>
+			<dt>Will the ASCOM Platform be changed by Alpaca? Will the tools go away or change?</dt>
+			<dd>No. The Windows ASCOM Platform will continue as it is. The beauty of Alpaca is that the expansion of the ASCOM ecosystem is provided by the <a href="https://github.com/ASCOMInitiative/ASCOMRemote/releases" target="_new">ASCOM Remote</a> middleware, a layered add-on that provides transparent access to the Alpaca-extended environment from the existing Windows ASCOM environment, with <span class="underline">no changes needed to any Windows programs or drivers</span>.</dd>
+			<dt>When will Alpaca-compatible devices and programs be available?</dt>
+			<dd>We don't know. It's a chicken-and-egg situation. We have the eggs, now we need some chickens. The astronomy software and device suppliers that use the other platforms will need to incorporate Alpaca to gain access to and from the Windows ASCOM environment. Other than installation and configuration of <a href="https://github.com/ASCOMInitiative/ASCOMRemote/releases" target="_new">ASCOM Remote</a>, <span class="underline">nothing needs to change on the Windows side</span>, however the non-Windows devices will need to add Alpaca interfaces, and non-windows astronomy programs will need to add the ability to use Alpaca to control devices. This should make life  easy for mobile astronomy programs because Alpaca makes <span class="underline">unmodified</span> Windows-connected devices like telescope mounts, imagers, etc. directly accessible from WiFi.</dd>
+		</dl>
+		<h3>Frequently Asked Questions - Windows Platform and Tools</h3>
 		<dl style="margin-top: 0px; margin-bottom: 0px;">
 		    <dt>The ASCOM Platform installer is asking for the Microsoft .NET Framework. There are so many versions out there. Is 4.x "better" than 3.x? What should I do?</dt>
 			<dd>There has been confusion about getting the Microsoft .NET Framework installed. It is a pre-requisite to the ASCOM Platform. Please read the note for <a href="../FAQs/Plat6OnW7.htm">Windows 7</a> or <a href="../FAQs/Plat6OnXP.htm">Windows XP</a> as it applies to you.</dd>
@@ -102,13 +115,13 @@ dt {
 			<dd>See the <a href="../Support/Index.htm">Support</a> page for details.</dd>
 			
 			<dt>How can I use  TheSky&trade; in the ASCOM Environment? </dt>
-			<dd>See <a href="TheSky.htm">Working With TheSky</a> (also in the menu on the left).</dd>
+			<dd>Yes, TheSky is compatible with the ASCOM environment. See <a href="TheSky.htm">Working With TheSky</a> (also in the menu on the left).</dd>
 
 			<dt>Why don't my scripts work on a 64-bit system?</dt>
 			<dd>Most ASCOM drivers and the ASCOM support components are 32-bit. If you run your script by double-clicking it or using <strong>cscript</strong> on the command line, it uses the 64-bit script engine. The 64-bit script engine cannot use 32-bit components. On a 64-bit system, you must use the 32-bit script engine for ASCOM scripts. The easiest way is to use a command shell like this:<br />
 				<br />
 			
-			<tt>&nbsp;&nbsp;c:\whatever\> <span style="color:#FF6">%windir%\SYSWOW64\cscript.exe</span> <i>myscript.vbs</i></tt> (or <i>myscript.js</i> for JScript)<br />
+			<tt style="font-size:10pt">&nbsp;&nbsp;c:\whatever\> <span style="color:#FF6">%windir%\SYSWOW64\cscript.exe</span> <i>myscript.vbs</i></tt> (or <i>myscript.js</i> for JScript)<br />
 			&nbsp;</dd>
 
 			<dt>What is a Hub?</dt>
