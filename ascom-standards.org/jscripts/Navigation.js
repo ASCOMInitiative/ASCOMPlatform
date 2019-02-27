@@ -156,6 +156,7 @@ function writesubmenu() {
     	SubMenuOutput += "<h3>Additional Downloads</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
 	    SubMenuOutput += "<li><a href=\"ScriptableComponents.htm\">Scriptable Components</a></li>";
+	    SubMenuOutput += "<li><a href=\"https://github.com/ASCOMInitiative/ASCOMRemote/releases\" target=\"_new\">ASCOM Remote (Alpaca)</a></li>";
 	    SubMenuOutput += "</ul>";
     	SubMenuOutput += "<h3>Developer Downloads</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
@@ -206,6 +207,12 @@ function writesubmenu() {
 		SubMenuOutput += "<li><a href=\"DriverDist.htm\">Creating an Installer</a></li>";
 		SubMenuOutput += "<li><a href=\"ReleaseTesting.htm\">Release Testing</a></li>";
 		SubMenuOutput += "<li><a href=\"DriverSupt.htm\">Handling Support Issues</a></li>";
+	    SubMenuOutput += "</ul>";
+        SubMenuOutput += "<h3>Cross-Platform &amp; Internet</h3>";
+	    SubMenuOutput += "<ul class=\"treeview\">";
+		SubMenuOutput += "<li><a href=\"Alpaca.htm\">Introduction to Alpaca</a></li>";
+		SubMenuOutput += "<li><a href=\"https://ascom-standards.org/api/\" target=\"_new\">ASCOM Alpaca API</a></li>";
+		SubMenuOutput += "<li><a href=\"ASCOM%20Alpaca%20API%20Reference.pdf\" target=\"_new\">API Reference (PDF)</a></li>";
 	    SubMenuOutput += "</ul>";
        break;
     case 6: // Community

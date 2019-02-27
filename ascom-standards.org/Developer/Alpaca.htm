@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid_Fixed.dwt" --><!-- DW6 -->
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="expires" content="Fri, 1 Jan 1990 00:00:00 GMT">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+
+<!-- #BeginEditable "Title" -->
+<title>ASCOM Alpaca</title>
+<!-- #EndEditable -->
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid_Fixed.css" />
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+</head>
+
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	<div id="breadcrumbs">
+		<script type="text/javascript" language="javascript">
+	<!-- 
+	breadcrumbs(); 
+	-->
+	</script>
+	</div>
+	<div class="topmenucontainer">
+		<script type="text/javascript" language="javascript">
+      <!-- 
+	        writemainmenu();
+	        -->
+    </script>
+	</div>
+</div>
+<div id="leftcontent">
+
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	writesubmenu(); 
+	-->
+	</script>
+	
+	</div></div></div></div>
+
+
+	<!-- #BeginEditable "LeftNav" -->
+	<p align="center"><a href="https://ascomtalk.groups.io/g/Developer" target="_new" style="font-size:larger"><img src="../Images/Groups.io.jpg" width="188" height="53" vspace="8" border="0" alt="Join or Visit the ASCOM Talk group" /><br />
+	Visit the ASCOM-Talk<br />
+	Developers Forum</a></p>
+	<!-- #EndEditable --></div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+	<h3>Introduction to ASCOM Alpaca</h3>
+
+<p style="color:#FF9900;font-size: large;border: 2px solid; background: #222222">Please note: This is for developers and company leadership. End users please see the <a href="../FAQs/Index.htm">ASCOM FAQ for Alpaca</a>.</p>
+<p>For over twenty years ASCOM has enabled astronomy programs to connect to ASCOM-compliant astronomical devices through standard APIs built on Microsoft COM technology. These APIs have been (and still are) very successful and support a wide variety of astronomy programs and devices that run together on a single Windows PC. </p>
+
+<div align="center"><img src="../Images/AlpacaPrior.png" width="300" height="193" /></div>
+
+<p>In todays heterogenous network-connected world this is a significant limitation and so we have introduced ASCOM Alpaca, which provides the path for:
+<ul>
+<li>Astronomy programs and devices to be connected across Windows, Linux, and MacOS.</li>
+<li>Observatory systems to include programs and devices on multiple platforms</li>
+<li>Devices that can operate via WiFi or Ethernet and avoid the problems with USB</li>
+<li>Interoperability between astronomy programs and devices running under different operating systems</li>
+<li>Implementation of astronomy programs and device control logic written in different languages on different operating systems</li>
+<li>Current unmodified Windows astronomy programs to use ASCOM compatible devices connected to any networked PC or Alpaca device.</li>
+</ul></p>
+
+<div align="center"><a href="https://ascom-standards.org/api/" title="View the ASCOM Alpaca API" target="_new"><img src="../Images/AlpacaOverview.png" width="586" height="360" border="0" /></a></div>
+
+<p>The&nbsp;introduction of <a href="https://github.com/ASCOMInitiative/ASCOMRemote" target="_new">ASCOM Remote</a>&nbsp;in 2018 began the process of extending the ASCOM ecosystem to include the internet, Linux, and MacOS, including small embedded controllers like the Arduino and Raspberry Pi as well as astronomy software on those platforms that wish to use instruments which are hosted on Windows systems. </p>
+<p>As of early 2019, this effort has grown into a new wave of development, with several astronomy instrument vendors embracing the implementation of the <a href="https://ascom-standards.org/api/" target="_new">ASCOM Alpaca API</a> as ReST end-points, reachable over the internet. This effort is much farther along that you might imagine.</p>
+
+<p>For a quick peek at an example of Alpaca technology have a look at this 8 minute video. This video is suitable for company management as it includes business strategic issues, engineering advantages and justification for using Alpaca protocols. If you're a developer interested in more detal and a demo, see the second video below.</p>
+
+<p align="center"><iframe width="560" height="315" src="https://www.youtube.com/embed/wMsuylC-Jcc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
+
+<p>For more in-depth information, including a demo using the Alpaca Linux/Raspberry Pi Rotator simulator from an <em>unmodified</em> copy of Software Bisque's TheSky on Windows, see the following 15 minute video. Watch the Field of View Indicator in TheSky turn the Linux rotator, and see details on the Python development process used.</p>
+
+<p align="center"><iframe width="560" height="315" src="https://www.youtube.com/embed/OeWWmtAREnk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
+
+<p>If you want more info, please post to the <a href="https://ascomtalk.groups.io/g/Developer" target="_new">ASCOM-Talk Developers Forum</a>. To get started <a href="https://github.com/ASCOMInitiative/ASCOMRemote/releases" target="_new">download and insall the current version of ASCOM Remote</a> to your Windows 7/10 PC and look at the <a href="https://github.com/ASCOMInitiative/ASCOMRemote/tree/master/Documentation" target="_new">included documentation</a> which includes the Alpaca protocols and standards.<br />
+<div align="center"><a href="https://ascomtalk.groups.io/g/Developer" target="_new"><img src="../Images/Groups.io.jpg" width="188" height="53" vspace="8" border="0" alt="Join or Visit the ASCOM Talk group" /></a></div></p></div>
+
+	<!-- #EndEditable --></div>
+<div id="rightcontent">
+	<!-- #BeginEditable "RightSideBar" -->
+<div align="center" style="margin-bottom:18px"> <a href="https://ascom-standards.org/api/" target="_new" title="View the ASCOM Alpaca API"><img src="../Images/AlpacaLogo210.png" width="210" height="166" /></a>
+</div>
+<div class="BlueBorder">
+	<!-- Images for container -->
+	<div class="north">
+	<div class="east">
+	<div class="south">
+	<div class="west">
+	<div class="ne">
+	<div class="se">
+	<div class="sw">
+	<div class="nw">
+	<div class="article">
+		<h3 style="font-size:13.8px">Get Started WIth Alpaca</h3>
+		<p style="text-align: center">
+		<a href="https://github.com/ASCOMInitiative/ASCOMRemote/releases" target="_new">
+		<img alt="Download Latest Release" src="../Images/Button2.jpg" width="149" height="44" border="0" /></a>		</p>
+		<p>Download and install <a href="https://github.com/ASCOMInitiative/ASCOMRemote" target="_new">ASCOM Remote</a> to your Windows 7/10 system. <a href="https://github.com/ASCOMInitiative/ASCOMRemote/tree/master/Documentation" target="_new">Documentation</a> is included. <br />
+			<a href="https://ascom-standards.org/api/" target="_new">View the ASCOM Alpaca API</a><br/>
+			<a href="ASCOM%20Alpaca%20API%20Reference.pdf" target="_new">View the API Reference (PDF)</a></p>
+	</div>
+
+	</div></div></div></div></div></div></div></div>
+</div>
+
+<div class="BlueBorder">
+	<!-- Images for container -->
+	<div class="north">
+	<div class="east">
+	<div class="south">
+	<div class="west">
+	<div class="ne">
+	<div class="se">
+	<div class="sw">
+	<div class="nw">
+	<div class="article">
+		<h3>Developers Forum</h3>
+		<p style="text-align: center">
+		<a href="https://ascomtalk.groups.io/g/Developer">
+		<img alt="Go to Forum" src="../Images/VisitButton.jpg" width="149" height="44" border="0" /></a>		</p>
+		<p>Go to the ASCOM-Talk forum on Groups.io. You may apply for membership there.</p>
+	</div>
+
+	</div></div></div></div></div></div></div></div>
+</div>
+
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright &copy; 1998-2019, The ASCOM Initiative. 
+	All rights reserved. </div>
+
+</body>
+
+<!-- #EndTemplate --></html>

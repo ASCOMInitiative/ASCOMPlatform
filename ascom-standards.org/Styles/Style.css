@@ -1,6 +1,6 @@
 ﻿body {
 	font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
-	font-size: 9pt;
+	font-size: 10pt;
 	color: #E4F0F3;
 	margin: 0px;
 	padding: 0px;
@@ -34,9 +34,9 @@ a:hover {
 	color: #00FFFF;
 	text-decoration: underline;
 }
-em {
+/*em {
 	color: red;
-}
+}*/
 
 
 hr {
