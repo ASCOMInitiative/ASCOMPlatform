@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3689A2CB-94C5-4012-A5CF-7E7D1DD27143}</ProjectGuid>
+    <ProjectGuid>{C708E487-E3A9-4073-A545-294B88674225}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ASCOM.$safeprojectname$</RootNamespace>
@@ -69,7 +69,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassFactory.cs" />
-    <Compile Include="frmMain.cs" />
+    <Compile Include="frmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>

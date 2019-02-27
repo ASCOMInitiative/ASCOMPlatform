@@ -213,6 +213,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ASCOM Interfaces and Except
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Coding Examples", "Coding Examples", "{C1829D56-F07F-42CA-854F-C687694E6339}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalServerTemplate", "DriverTemplates\TemplateSources\src\ASCOM LocalServer Template CS\LocalServerTemplate.csproj", "{C708E487-E3A9-4073-A545-294B88674225}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Quick|Any CPU = Debug Quick|Any CPU
@@ -2188,6 +2190,26 @@ Global
 		{C291C8CE-E2D1-456B-8923-89F3FDADB8D3}.Release|x64.ActiveCfg = Release|Win32
 		{C291C8CE-E2D1-456B-8923-89F3FDADB8D3}.Release|x86.ActiveCfg = Release|Win32
 		{C291C8CE-E2D1-456B-8923-89F3FDADB8D3}.Release|x86.Build.0 = Release|Win32
+		{C708E487-E3A9-4073-A545-294B88674225}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.Debug Quick|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.Debug Quick|Win32.ActiveCfg = Debug|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.Debug Quick|x64.ActiveCfg = Debug|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.Debug Quick|x86.ActiveCfg = Debug|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.MakeDynamicLists|Any CPU.ActiveCfg = Release|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.MakeDynamicLists|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.MakeDynamicLists|Win32.ActiveCfg = Release|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.MakeDynamicLists|x64.ActiveCfg = Release|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.MakeDynamicLists|x86.ActiveCfg = Release|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.Release|Win32.ActiveCfg = Release|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.Release|x64.ActiveCfg = Release|Any CPU
+		{C708E487-E3A9-4073-A545-294B88674225}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2275,6 +2297,7 @@ Global
 		{C291C8CE-E2D1-456B-8923-89F3FDADB8D3} = {E100639A-B65F-4B34-A733-D6344AF2EF46}
 		{74C74B4E-3407-4520-B06C-12AB43129F3D} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
 		{C1829D56-F07F-42CA-854F-C687694E6339} = {E61A5194-09EE-46E0-9171-1CBDC35D7A53}
+		{C708E487-E3A9-4073-A545-294B88674225} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EF732E96-7FA0-4C42-96B4-861ED5E48814}
