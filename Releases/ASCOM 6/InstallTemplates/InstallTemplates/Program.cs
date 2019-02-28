@@ -30,7 +30,7 @@ namespace InstallTemplates
                 string TemplateSourceDirectory = "";
                 vsTemplateDirectoryList = new Dictionary<string, string>();
 
-                TL = new TraceLogger("", "InstallTemplates"); // Create a tracelogger so we can log what happens
+                TL = new TraceLogger("", "InstallTemplates"); // Create a trace logger so we can log what happens
                 TL.Enabled = true;
                 LogMessage("Main", "Install date: " + DateTime.Now.ToLongDateString());
 
@@ -72,7 +72,7 @@ namespace InstallTemplates
                     ReturnCode = 1;
                 }
 
-                TL.Enabled = false; // Clean up tracelogger
+                TL.Enabled = false; // Clean up trace logger
                 TL.Dispose();
                 TL = null;
             }
@@ -105,7 +105,7 @@ namespace InstallTemplates
         /// </summary>
         /// <param name="searchDir">The base directory to search</param>
         /// <param name="searchPattern">The pattern to search for</param>
-        /// <returns>A list of sub directories that match the pattern and that themselves contain template directroies</returns>
+        /// <returns>A list of sub directories that match the pattern and that themselves contain template directories</returns>
         static private List<string> FindTemplateDirectoriesInFileSystem(string searchDir, string searchPattern)
         {
             List<string> foundTempateDirectories = new List<string>();
@@ -185,7 +185,7 @@ namespace InstallTemplates
         }
 
         /// <summary>
-        /// Lof an informational message
+        /// Log an informational message
         /// </summary>
         /// <param name="section">Name of the code section that the message is from </param>
         /// <param name="logMessage">The message to record</param>
@@ -279,8 +279,14 @@ namespace InstallTemplates
             FileDelete(Platform5VB + "ASCOM Switch Driver (VB).zip");
             FileDelete(Platform5VB + "ASCOM Telescope Driver (VB).zip");
 
+            LogMessage("InstallTemplates", spaces + "About to copy files from - template source directory: " + TemplateSourceDirectory);
+
             foreach (string item in Directory.GetFiles(TemplateSourceDirectory, "*.zip"))
             {
+                LogMessage("InstallTemplates", spaces + "Processing zip file: " + item);
+                string fileName = Path.GetFileName(item);
+                LogMessage("InstallTemplates", spaces + "Processing zip file: " + fileName);
+
                 if (item.ToUpperInvariant().Contains("CS")) // CSharp item
                 {
                     LogMessage("InstallTemplates", spaces + "Copying C# template: " + item + " as: " + Platform6CSharp + Path.GetFileName(item));
