@@ -6,6 +6,7 @@ using ASCOM.Utilities;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 
 namespace InstallTemplates
 {
@@ -32,7 +33,11 @@ namespace InstallTemplates
 
                 TL = new TraceLogger("", "InstallTemplates"); // Create a trace logger so we can log what happens
                 TL.Enabled = true;
+
+                string fileVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
+                LogMessage("Main", "Installer version: " + fileVersion);
                 LogMessage("Main", "Install date: " + DateTime.Now.ToLongDateString());
+                LogMessage("Main", "");
 
                 try
                 {
@@ -283,7 +288,7 @@ namespace InstallTemplates
 
             foreach (string item in Directory.GetFiles(TemplateSourceDirectory, "*.zip"))
             {
-                LogMessage("InstallTemplates", spaces + "Processing zip file: " + item);
+                LogMessage("InstallTemplates", spaces + "Found zip file: " + item);
                 string fileName = Path.GetFileName(item);
                 LogMessage("InstallTemplates", spaces + "Processing zip file: " + fileName);
 
