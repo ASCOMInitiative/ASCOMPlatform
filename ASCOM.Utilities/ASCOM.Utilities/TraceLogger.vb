@@ -34,25 +34,25 @@ Public Class TraceLogger
     Private g_DefaultLogFilePath As String ' Variable to hold the default log file path determined by TraceLogger at run time
     Private g_LogFileActualName As String 'Full name of the log file being created (includes automatic file name)
     Private g_LogFilePath As String ' Variable to hold a user specified log file path
-    Private g_IdentifierWidth As Integer ' Variable to hold the current identifer field width
+    Private g_IdentifierWidth As Integer ' Variable to hold the current identifier field width
 
     Private mut As System.Threading.Mutex
     Private GotMutex As Boolean
 
 #Region "New and IDisposable Support"
-    Private disposedValue As Boolean = False        ' To detect redundant calls
+    Private traceLoggerHasBeenDisposed As Boolean = False        ' To detect redundant calls
 
     ''' <summary>
     ''' Creates a new TraceLogger instance
     ''' </summary>
     ''' <remarks>The LogFileType is used in the file name to allow you to quickly identify which of 
     ''' several logs contains the information of interest.
-    ''' <para>This call enables automatic logging and sets the filetype to "Default".</para></remarks>
+    ''' <para>This call enables automatic logging and sets the file type to "Default".</para></remarks>
     Public Sub New()
         MyBase.New()
         g_IdentifierWidth = IDENTIFIER_WIDTH_DEFAULT
         g_LogFileName = "" 'Set automatic filenames as default
-        g_LogFileType = "Default" '"Set an arbitary name inc case someone forgets to call SetTraceLog
+        g_LogFileType = "Default" '"Set an arbitrary name in case someone forgets to call SetTraceLog
         g_DefaultLogFilePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & TRACE_LOGGER_PATH & TRACE_LOGGER_FILENAME_BASE & Format(Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT)
         mut = New Threading.Mutex(False, "TraceLoggerMutex")
     End Sub
@@ -91,10 +91,11 @@ Public Class TraceLogger
     ''' <summary>
     ''' Disposes of the TraceLogger object
     ''' </summary>
-    ''' <param name="disposing">True if being disposed by the application, False if disposed by the finalizer.</param>
+    ''' <param name="disposing">True if being disposed by the application, False if disposed by the finaliser.</param>
     ''' <remarks></remarks>
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
-        If Not Me.disposedValue Then
+        If Not Me.traceLoggerHasBeenDisposed Then
+            Me.traceLoggerHasBeenDisposed = True
             If disposing Then
                 If Not (g_LogFile Is Nothing) Then
                     Try : g_LogFile.Flush() : Catch : End Try
@@ -109,7 +110,6 @@ Public Class TraceLogger
                 End If
             End If
         End If
-        Me.disposedValue = True
     End Sub
     ' This code added by Visual Basic to correctly implement the disposable pattern.
     ''' <summary>
@@ -117,7 +117,7 @@ Public Class TraceLogger
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub Dispose() Implements IDisposable.Dispose
-        ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+        ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
         Dispose(True)
         GC.SuppressFinalize(Me)
     End Sub
@@ -127,7 +127,7 @@ Public Class TraceLogger
     ''' </summary>
     ''' <remarks></remarks>
     Protected Overrides Sub Finalize()
-        ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+        ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
         Dispose(False)
         MyBase.Finalize()
     End Sub
@@ -140,11 +140,13 @@ Public Class TraceLogger
     ''' Logs an issue, closing any open line and opening a continuation line if necessary after the 
     ''' issue message.
     ''' </summary>
-    ''' <param name="Identifier">Identifies the meaning of the the message e.g. name of modeule or method logging the message.</param>
+    ''' <param name="Identifier">Identifies the meaning of the message e.g. name of module or method logging the message.</param>
     ''' <param name="Message">Message to log</param>
     ''' <remarks>Use this for reporting issues that you don't want to appear on a line already opened 
     ''' with StartLine</remarks>
     Public Sub LogIssue(ByVal Identifier As String, ByVal Message As String) Implements ITraceLogger.LogIssue
+        If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
+
         Try
             GetTraceLoggerMutex("LogIssue", """" & Identifier & """, """ & Message & """")
             If g_Enabled Then
@@ -164,22 +166,27 @@ Public Class TraceLogger
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub BlankLine() Implements ITraceLogger.BlankLine
+        If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
+
         LogMessage("", "", False)
     End Sub
 
     ''' <summary>
     ''' Logs a complete message in one call, including a hex translation of the message
     ''' </summary>
-    ''' <param name="Identifier">Identifies the meaning of the the message e.g. name of modeule or method logging the message.</param>
+    ''' <param name="Identifier">Identifies the meaning of the message e.g. name of module or method logging the message.</param>
     ''' <param name="Message">Message to log</param>
     ''' <param name="HexDump">True to append a hex translation of the message at the end of the message</param>
     ''' <remarks>
-    ''' <para>Use this for straightforward logging requrements. Writes all information in one command.</para>
+    ''' <para>Use this for straightforward logging requirements. Writes all information in one command.</para>
     ''' <para>Will create a LOGISSUE message in the log if called before a line started by LogStart has been closed with LogFinish. 
-    ''' Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+    ''' Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
     ''' </remarks>
     Public Overloads Sub LogMessage(ByVal Identifier As String, ByVal Message As String, ByVal HexDump As Boolean) Implements ITraceLogger.LogMessage
         Dim Msg As String = Message
+
+        If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
+
         Try
             GetTraceLoggerMutex("LogMessage", """" & Identifier & """, """ & Message & """, " & HexDump.ToString & """")
             If g_LineStarted Then LogFinish(" ") ' 1/10/09 PWGS Silently close the open line
@@ -198,13 +205,15 @@ Public Class TraceLogger
     ''' <summary>
     ''' Displays a message respecting carriage return and linefeed characters
     ''' </summary>
-    ''' <param name="Identifier">Identifies the meaning of the the message e.g. name of modeule or method logging the message.</param>
+    ''' <param name="Identifier">Identifies the meaning of the message e.g. name of module or method logging the message.</param>
     ''' <param name="Message">The final message to terminate the line</param>
     ''' <remarks>
     ''' <para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart.  
-    ''' Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+    ''' Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
     ''' </remarks>
     Public Sub LogMessageCrLf(ByVal Identifier As String, ByVal Message As String) Implements ITraceLogger.LogMessageCrLf
+        If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
+
         Try
             GetTraceLoggerMutex("LogMessage", """" & Identifier & """, """ & Message & """")
             If g_LineStarted Then LogFinish(" ") ' 1/10/09 PWGS Silently close the open line
@@ -223,7 +232,7 @@ Public Class TraceLogger
     ''' <summary>
     ''' Writes the time and identifier to the log, leaving the line ready for further content through LogContinue and LogFinish
     ''' </summary>
-    ''' <param name="Identifier">Identifies the meaning of the the message e.g. name of modeule or method logging the message.</param>
+    ''' <param name="Identifier">Identifies the meaning of the message e.g. name of module or method logging the message.</param>
     ''' <param name="Message">Message to log</param>
     ''' <remarks><para>Use this to start a log line where you want to write further information on the line at a later time.</para>
     ''' <para>E.g. You might want to use this to record that an action has started and then append the word OK if all went well.
@@ -231,9 +240,11 @@ Public Class TraceLogger
     ''' successful when you started. If you just used LogMsg you would have ended up with two log lines, one showing 
     ''' the start of the transaction and the next the outcome.</para>
     ''' <para>Will create a LOGISSUE message in the log if called before a line started by LogStart has been closed with LogFinish. 
-    ''' Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+    ''' Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
     ''' </remarks>
     Public Sub LogStart(ByVal Identifier As String, ByVal Message As String) Implements ITraceLogger.LogStart
+        If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
+
         Try
             GetTraceLoggerMutex("LogStart", """" & Identifier & """, """ & Message & """")
             If g_LineStarted Then
@@ -258,9 +269,11 @@ Public Class TraceLogger
     ''' <remarks>
     ''' <para>This can be called multiple times to build up a complex log line if required.</para>
     ''' <para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart. 
-    ''' Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+    ''' Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
     ''' </remarks>
     Public Overloads Sub LogContinue(ByVal Message As String, ByVal HexDump As Boolean) Implements ITraceLogger.LogContinue
+        If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
+
         ' Append a full hex dump of the supplied string if p_Hex is true
         Dim Msg As String = Message
         If HexDump Then Msg = Message & "  (HEX" & MakeHex(Message) & ")"
@@ -274,9 +287,11 @@ Public Class TraceLogger
     ''' <param name="HexDump">True to append a hex translation of the message at the end of the message</param>
     ''' <remarks>
     ''' <para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart.  
-    ''' Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+    ''' Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
     ''' </remarks>
     Public Overloads Sub LogFinish(ByVal Message As String, ByVal HexDump As Boolean) Implements ITraceLogger.LogFinish
+        If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
+
         ' Append a full hex dump of the supplied string if p_Hex is true
         Dim Msg As String = Message
         If HexDump Then Msg = Message & "  (HEX" & MakeHex(Message) & ")"
@@ -306,7 +321,7 @@ Public Class TraceLogger
     ''' <param name="LogFileType">String identifying the type of log e,g, Focuser, LX200, GEMINI, MoonLite, G11</param>
     ''' <remarks>The LogFileType is used in the file name to allow you to quickly identify which of several logs contains the 
     ''' information of interest.
-    ''' <para><b>Note </b>This command is only required if the tracelogger constructor is called with no
+    ''' <para><b>Note </b>This command is only required if the trace logger constructor is called with no
     ''' parameters. It is provided for use in COM clients that can not call constructors with parameters.
     ''' If you are writing a COM client then create the trace logger as:</para>
     ''' <code>
@@ -319,6 +334,8 @@ Public Class TraceLogger
     ''' </code>
     ''' </remarks>
     Public Sub SetLogFile(ByVal LogFileName As String, ByVal LogFileType As String) Implements ITraceLogger.SetLogFile
+        If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
+
         g_LogFileName = LogFileName 'Save parameters to use when the first call to write a record is made
         g_LogFileType = LogFileType
     End Sub
@@ -340,7 +357,7 @@ Public Class TraceLogger
     ''' Set or return the path to a directory in which the log file will be created
     ''' </summary>
     ''' <returns>String path</returns>
-    ''' <remarks>Introduced with Platform 6.4.<para>If set, this path will be used instead of the the user's Documents directory default path. This must be Set before the first message Is logged.</para></remarks>
+    ''' <remarks>Introduced with Platform 6.4.<para>If set, this path will be used instead of the user's Documents directory default path. This must be Set before the first message Is logged.</para></remarks>
     Public Property LogFilePath() As String Implements ITraceLogger.LogFilePath
         Get
             Return g_LogFilePath
@@ -371,18 +388,20 @@ Public Class TraceLogger
     ''' <summary>
     ''' Logs a complete message in one call
     ''' </summary>
-    ''' <param name="Identifier">Identifies the meaning of the the message e.g. name of modeule or method logging the message.</param>
+    ''' <param name="Identifier">Identifies the meaning of the message e.g. name of module or method logging the message.</param>
     ''' <param name="Message">Message to log</param>
     ''' <remarks>
-    ''' <para>Use this for straightforward logging requrements. Writes all information in one command.</para>
+    ''' <para>Use this for straightforward logging requirements. Writes all information in one command.</para>
     ''' <para>Will create a LOGISSUE message in the log if called before a line started by LogStart has been closed with LogFinish. 
-    ''' Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+    ''' Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
     ''' <para>This overload is not available through COM, please use 
     ''' "LogMessage(ByVal Identifier As String, ByVal Message As String, ByVal HexDump As Boolean)"
     ''' with HexDump set False to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)>
     Public Overloads Sub LogMessage(ByVal Identifier As String, ByVal Message As String) Implements ITraceLoggerExtra.LogMessage
+        If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
+
         Try
             GetTraceLoggerMutex("LogMessage", """" & Identifier & """, """ & Message & """")
             If g_LineStarted Then LogFinish(" ") ' 1/10/09 PWGS Made line closure silent
@@ -402,13 +421,15 @@ Public Class TraceLogger
     ''' <remarks>
     ''' <para>This can be called multiple times to build up a complex log line if required.</para>
     ''' <para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart. 
-    ''' Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+    ''' Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
     ''' <para>This overload is not available through COM, please use 
     ''' "LogContinue(ByVal Message As String, ByVal HexDump As Boolean)"
     ''' with HexDump set False to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)>
     Public Overloads Sub LogContinue(ByVal Message As String) Implements ITraceLoggerExtra.LogContinue
+        If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
+
         Try
             GetTraceLoggerMutex("LogContinue", """" & Message & """")
             If Not g_LineStarted Then
@@ -431,13 +452,15 @@ Public Class TraceLogger
     ''' <remarks>
     ''' <para>Can only be called once for each line started by LogStart.</para>
     ''' <para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart.  
-    ''' Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+    ''' Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
     ''' <para>This overload is not available through COM, please use 
     ''' "LogFinish(ByVal Message As String, ByVal HexDump As Boolean)"
     ''' with HexDump set False to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)>
     Public Overloads Sub LogFinish(ByVal Message As String) Implements ITraceLoggerExtra.LogFinish
+        If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
+
         Try
             GetTraceLoggerMutex("LogFinish", """" & Message & """")
             If Not g_LineStarted Then
@@ -463,18 +486,18 @@ Public Class TraceLogger
             'Case "" 'Do nothing - no log required
             '    Throw New HelperException("TRACELOGGER.CREATELOGFILE - Call made but no log filename has been set")
             Case "", SERIAL_AUTO_FILENAME
-                If g_LogFileType = "" Then Throw New ValueNotSetException("TRACELOGGER.CREATELOGFILE - Call made but no log filetype has been set")
-                If g_LogFilePath = "" Then ' Default behaviour using the current user's Document directry
+                If g_LogFileType = "" Then Throw New ValueNotSetException("TRACELOGGER.CREATELOGFILE - Call made but no log file type has been set")
+                If g_LogFilePath = "" Then ' Default behaviour using the current user's Document directory
                     My.Computer.FileSystem.CreateDirectory(g_DefaultLogFilePath) 'Create the directory if it doesn't exist
                     FileNameBase = g_DefaultLogFilePath & "\ASCOM." & g_LogFileType & "." & Format(Now, "HHmm.ssfff")
                 Else ' User has given a specific path so use that
-                    TodaysLogFilePath = g_LogFilePath & TRACE_LOGGER_FILENAME_BASE & Format(Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT) ' Append Logs yyyy-mm-dd to the user supplied log file file
+                    TodaysLogFilePath = g_LogFilePath & TRACE_LOGGER_FILENAME_BASE & Format(Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT) ' Append Logs yyyy-mm-dd to the user supplied log file
                     My.Computer.FileSystem.CreateDirectory(TodaysLogFilePath) 'Create the directory if it doesn't exist
                     FileNameBase = TodaysLogFilePath & "\ASCOM." & g_LogFileType & "." & Format(Now, "HHmm.ssfff")
                 End If
                 Do 'Create a unique log file name based on date, time and required name
                     g_LogFileActualName = FileNameBase & FileNameSuffix.ToString & ".txt"
-                    FileNameSuffix += 1 'Increment counter that ensures that no logfile can have the same name as any other
+                    FileNameSuffix += 1 'Increment counter that ensures that no log file can have the same name as any other
                 Loop Until (Not File.Exists(g_LogFileActualName))
                 Try
                     g_LogFile = New StreamWriter(g_LogFileActualName, False)
@@ -509,7 +532,7 @@ Public Class TraceLogger
     Private Function MakePrintable(ByVal p_Msg As String, ByVal p_RespectCrLf As Boolean) As String
         Dim l_Msg As String = ""
         Dim i, CharNo As Integer
-        'Present any unprintable charcters in [0xHH] format
+        'Present any unprintable characters in [0xHH] format
         For i = 1 To Len(p_Msg)
             CharNo = Asc(Mid(p_Msg, i, 1))
             Select Case CharNo
