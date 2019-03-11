@@ -363,10 +363,11 @@ namespace ASCOM.Simulator
                     key.SetValue(null, assyDescription);
                     key.SetValue("AppID", m_sAppId);
                     key.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
+                    key.SetValue("RunAs", "Interactive User", RegistryValueKind.String); // Added to ensure that only one copy of the local server runs if the user uses both elevated and non-elevated clients concurrently
                 }
-                    //
-                    // HKCR\APPID\exename.ext
-                    //
+                //
+                // HKCR\APPID\exename.ext
+                //
                 using (RegistryKey key = Registry.ClassesRoot.CreateSubKey("APPID\\" +
                             Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)))
                 {

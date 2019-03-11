@@ -60,7 +60,7 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\..\Developer\Installer Project\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <CodeAnalysisLogFile>..\..\Developer\Installer Project\EraseTemplates.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>

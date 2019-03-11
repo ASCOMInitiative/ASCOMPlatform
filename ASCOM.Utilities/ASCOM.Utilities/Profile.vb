@@ -722,4 +722,24 @@ Public Class Profile
     End Sub
 #End Region
 
+#Region "COM Registration"
+    ''' <summary>
+    ''' Function that is called by RegAsm when the assembly is registered for COM
+    ''' </summary>
+    ''' <remarks>This is necessary to ensure that the mscoree.dll can be found when the SetSearchDirectories function has been called in an application e.g. by Inno installer post v5.5.9</remarks>
+    <ComRegisterFunction>
+    Private Shared Sub COMRegisterActions(typeToRegister As Type)
+        COMRegistrationSupport.COMRegister(typeToRegister)
+    End Sub
+
+    ''' <summary>
+    ''' Function that is called by RegAsm when the assembly is registered for COM
+    ''' </summary>
+    <ComUnregisterFunction>
+    Private Shared Sub COMUnRegisterActions(typeToRegister As Type)
+        ' No action on unregister, this method has been included to remove a compiler warning
+    End Sub
+
+#End Region
+
 End Class

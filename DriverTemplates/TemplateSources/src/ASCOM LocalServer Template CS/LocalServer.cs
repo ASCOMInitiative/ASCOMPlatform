@@ -347,11 +347,12 @@ namespace ASCOM.$safeprojectname$
                     key.SetValue(null, assyDescription);
                     key.SetValue("AppID", s_appId);
                     key.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
-                }
-				//
-				// HKCR\APPID\exename.ext
-				//
-                using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(string.Format("APPID\\{0}",
+                    key.SetValue("RunAs", "Interactive User", RegistryValueKind.String); // Added to ensure that only one copy of the local server runs if the user uses both elevated and non-elevated clients concurrently
+            }
+            //
+            // HKCR\APPID\exename.ext
+            //
+            using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(string.Format("APPID\\{0}",
                             Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1))))
                 {
                     key.SetValue("AppID", s_appId);
