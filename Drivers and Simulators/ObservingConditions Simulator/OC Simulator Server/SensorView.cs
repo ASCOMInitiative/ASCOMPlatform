@@ -13,9 +13,9 @@ namespace ASCOM.Simulator
 {
     /// <summary>
     /// Handles selecting the Switch or ObservingConditions driver and, for the switch,
-    /// selecting the swtch id either using a combo of switch names or a spin button to
+    /// selecting the switch id either using a combo of switch names or a spin button to
     /// select the switch id.
-    /// Also allows calling the setup dialog for the selected driver.
+    /// Also allows calling the setup dialogue for the selected driver.
     /// </summary>
     public partial class SensorView : UserControl
     {

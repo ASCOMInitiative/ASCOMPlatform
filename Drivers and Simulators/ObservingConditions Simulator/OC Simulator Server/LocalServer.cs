@@ -3,7 +3,7 @@
 //
 // This is the core of a managed COM Local Server, capable of serving
 // multiple instances of multiple interfaces, within a single
-// executable. This implementes the equivalent functionality of VB6
+// executable. This implements the equivalent functionality of VB6
 // which has been extensively used in ASCOM for drivers that provide
 // multiple interfaces to multiple clients (e.g. Meade Telescope
 // and Focuser) as well as hubs (e.g., POTH).
@@ -128,7 +128,7 @@ namespace ASCOM.Simulator
         // Used to tell if started by COM or manually
         public static bool StartedByCOM { get; private set; }   // True if server started by COM (-embedding)
 
-        #region Server Lock, Object Counting, and AutoQuit on COM startup
+        #region Server Lock, Object Counting, and AutoQuit on COM start-up
         // Returns the total number of objects alive currently.
         public static int ObjectsCount
         {
@@ -208,7 +208,7 @@ namespace ASCOM.Simulator
                         OCSimulator.TL.LogMessage("ExitIf", "Posting WM_QUIT to Main Thread. Thread ID:" + MainThreadId.ToString() + ", wParam: " + wParam.ToString() + ", lParam: " + lParam.ToString());
                         bool success = PostThreadMessage(MainThreadId, WM_QUIT, wParam, lParam);
                         int returnCode = Marshal.GetLastWin32Error();
-                        OCSimulator.TL.LogMessage("ExitIf", "WM_QUIT outcome. Succcess: " + success + ", return code: " + returnCode.ToString("X"));
+                        OCSimulator.TL.LogMessage("ExitIf", "WM_QUIT outcome. Success: " + success + ", return code: " + returnCode.ToString("X"));
                     }
                 }
             }
@@ -307,7 +307,7 @@ namespace ASCOM.Simulator
         }
 
         //
-        // Elevate by re-running ourselves with elevation dialog
+        // Elevate by re-running ourselves with elevation dialogue
         //
         private static void ElevateSelf(string arg)
         {
@@ -338,7 +338,7 @@ namespace ASCOM.Simulator
         // assembly loading, it registers each one for COM as served by our
         // exe/local server, as well as registering it for ASCOM. It also
         // adds DCOM info for the local server itself, so it can be activated
-        // via an outboiud connection from TheSky.
+        // via an outbound connection from TheSky.
         //
         private static void RegisterObjects()
         {

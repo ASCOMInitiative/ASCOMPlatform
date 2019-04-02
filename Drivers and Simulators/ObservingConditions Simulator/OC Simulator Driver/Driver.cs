@@ -55,7 +55,7 @@ namespace ASCOM.Simulator
         #region Common properties and methods.
 
         /// <summary>
-        /// Displays the Setup Dialog form.
+        /// Displays the Setup Dialogue form.
         /// If the user clicks the OK button to dismiss the form, then
         /// the new settings are saved, otherwise the old values are reloaded.
         /// THIS IS THE ONLY PLACE WHERE SHOWING USER INTERFACE IS ALLOWED!

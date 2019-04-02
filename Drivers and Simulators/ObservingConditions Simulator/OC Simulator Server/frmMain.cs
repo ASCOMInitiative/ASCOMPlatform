@@ -70,7 +70,7 @@ namespace ASCOM.Simulator
             {
                 System.Threading.Thread.Sleep(20); // Have a short sleep
                 Application.DoEvents(); // Keep the UI alive
-            } while (DateTime.Now.Subtract(startTime).TotalMilliseconds < duration); // Wait until the durationhas elapsed
+            } while (DateTime.Now.Subtract(startTime).TotalMilliseconds < duration); // Wait until the duration has elapsed
         }
 
         private void btnShutDown_Click(object sender, EventArgs e)
@@ -128,7 +128,7 @@ namespace ASCOM.Simulator
 
         private void DeactivateEnableButton()
         {
-            btnEnable.Enabled = false; // Set the enabled button to false ready to be enabed by the next change
+            btnEnable.Enabled = false; // Set the enabled button to false ready to be enabled by the next change
             btnEnable.ForeColor = Color.Black;
         }
 

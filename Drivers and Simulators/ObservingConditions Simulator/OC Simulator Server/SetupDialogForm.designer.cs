@@ -819,7 +819,7 @@ namespace ASCOM.Simulator
             this.Name = "SetupDialogForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Observing Conditions Simulator Configurtation";
+            this.Text = "Observing Conditions Simulator Configuration";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numSensorQueryInterval)).EndInit();
