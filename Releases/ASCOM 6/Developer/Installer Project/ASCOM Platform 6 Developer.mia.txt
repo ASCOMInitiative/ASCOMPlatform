@@ -188,13 +188,9 @@ else
   end
 end
 label: ReadMe Information
-Comment: Display Dialog: readme, wait for dialog to return (modal)
-if Variable WIZARD Equals BACK
-  GoTo Label: License Check
-else
-  if Variable WIZARD Equals CANCEL
-    GoTo Label: Main Install
-  end
+Display Dialog: readme, wait for dialog to return (modal)
+if Variable WIZARD Equals CANCEL
+  GoTo Label: Main Install
 end
 label: User Registration
 Comment: Display Dialog: registration, wait for dialog to return (modal)

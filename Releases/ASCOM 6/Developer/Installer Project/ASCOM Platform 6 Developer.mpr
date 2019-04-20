@@ -41,13 +41,10 @@ InstallTemplates.pdb
 MigrationSupport.dll
 MigrationSupport.pdb
 moon.bmp
+readme.rtf
 setup.bmp
 swoosh.avi
 $
-
-
-
-
 
 
 
@@ -623,7 +620,7 @@ ASCOM Platform 6.4 SP1 Developer Components
 ASCOM Platform 6.4 SP1 Developer Components Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{CA35C602-235F-4A2E-B9F5-AFB7FFAC8917}
+{DB3AA51F-C80B-41BA-9E28-DC5A3F249B30}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
