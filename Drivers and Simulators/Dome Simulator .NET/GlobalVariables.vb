@@ -126,6 +126,11 @@ Module GlobalVariables
     Public g_bCanSetShutter As Boolean
     Public g_bCanSyncAzimuth As Boolean
 
+    ' Conform test variables, correct behaviour requires these variables to be set False
+    ' When set True, various "bad" behaviours are exhibited to confirm that Conform detects them correctly
+    Public g_bConformInvertedCanBehaviour As Boolean
+    Public g_bConformReturnWrongException As Boolean
+
     ' Variables
     'Public WithEvents g_timer As Windows.Forms.Timer
     Public g_handBox As HandboxForm             ' Hand box

@@ -15,7 +15,7 @@
 '
 ' Edit Log:
 '
-' Date			Who	Vers	Description
+' Date			Who	Version	Description
 ' -----------	---	-----	-------------------------------------------------------
 ' 22-Jun-2009	rbt	1.0.0	Initial edit, from Dome template
 ' --------------------------------------------------------------------------------
@@ -23,7 +23,7 @@
 ' Your driver's ID is ASCOM.Simulator.Dome
 '
 ' The Guid attribute sets the CLSID for ASCOM.DomeWheelSimulator.Dome
-' The ClassInterface/None addribute prevents an empty interface called
+' The ClassInterface/None attribute prevents an empty interface called
 ' _Dome from being created and used as the [default] interface
 '
 Imports ASCOM.DeviceInterface
@@ -53,7 +53,7 @@ Public Class Dome
             ' initialize variables that are not persistent
             profile.Register(g_csDriverID, g_csDriverDescription) ' Self reg (skips if already reg)
 
-            '' Set handbox screen position
+            '' Set hand-box screen position
             'Try
             '    g_handBox.Left = CInt(profile.GetValue(g_csDriverID, "Left"))
             '    g_handBox.Top = CInt(profile.GetValue(g_csDriverID, "Top"))
@@ -89,6 +89,7 @@ Public Class Dome
             g_bStandardAtHome = Not CBool(profile.GetValue(ID, "NonFragileAtHome", "", "False"))
             g_bStandardAtPark = Not CBool(profile.GetValue(ID, "NonFragileAtPark", "", "False"))
 
+            ' Get Can capabilities
             g_bCanFindHome = CBool(profile.GetValue(ID, "CanFindHome", "Capabilities", "True"))
             g_bCanPark = CBool(profile.GetValue(ID, "CanPark", "Capabilities", "True"))
             g_bCanSetAltitude = CBool(profile.GetValue(ID, "CanSetAltitude", "Capabilities", "True"))
@@ -96,6 +97,10 @@ Public Class Dome
             g_bCanSetPark = CBool(profile.GetValue(ID, "CanSetPark", "Capabilities", "True"))
             g_bCanSetShutter = CBool(profile.GetValue(ID, "CanSetShutter", "Capabilities", "True"))
             g_bCanSyncAzimuth = CBool(profile.GetValue(ID, "CanSyncAzimuth", "Capabilities", "True"))
+
+            ' Get Conform test variables, these should always be set to False for correct production behaviour
+            g_bConformInvertedCanBehaviour = CBool(profile.GetValue(ID, "InvertedCanBehaviour", "ConformTests", "False"))
+            g_bConformReturnWrongException = CBool(profile.GetValue(ID, "ReturnWrongException", "ConformTests", "False"))
 
             ' get and range dome state
             g_dDomeAz = CDbl(profile.GetValue(ID, "DomeAz", "State", CStr(INVALID_COORDINATE)))
@@ -123,7 +128,7 @@ Public Class Dome
         If g_bStandardAtHome Then
             g_bAtHome = False                   ' Standard: home is set by home() method, never wake up homed!
         Else
-            g_bAtHome = HW_AtHome               ' Non standard, position, ok to wake up homed
+            g_bAtHome = HW_AtHome               ' Non standard, position, OK to wake up homed
         End If
 
         'g_timer.Interval = TIMER_INTERVAL * 1000
@@ -133,19 +138,19 @@ Public Class Dome
 
         TL.LogMessage("New", "Starting thread")
 
-        ' Show the handbox now
+        ' Show the hand-box now
         handboxThread = New Threading.Thread(AddressOf handboxTask)
         handboxThread.IsBackground = True
         handboxThread.TrySetApartmentState(Threading.ApartmentState.STA)
         handboxThread.Start()
         TL.LogMessage("New", "Thread started OK")
 
-        TL.LogMessage("New", "Starting wait for handbox form to be created")
+        TL.LogMessage("New", "Starting wait for hand-box form to be created")
         Do
             Threading.Thread.Sleep(100)
-            TL.LogMessage("New", "Waiting for handbox form to be created")
+            TL.LogMessage("New", "Waiting for hand-box form to be created")
         Loop Until Not g_handBox Is Nothing
-        TL.LogMessage("New", "Handbox created OK")
+        TL.LogMessage("New", "Hand-box created OK")
 
         TL.LogMessage("New", "New completed OK")
 
@@ -156,11 +161,11 @@ Public Class Dome
     Private Sub handboxTask()
         If g_handBox Is Nothing Then
             g_handBox = New HandboxForm
-            TL.LogMessage("HandboxTask", "Starting handbox dialogue")
+            TL.LogMessage("HandboxTask", "Starting hand-box dialogue")
             Try
                 g_handBox.ShowDialog()
                 'g_handBox.Invoke(New Action(AddressOf g_handBox.Dispose))
-                TL.LogMessage("HandboxTask", "Closed handbox dialogue")
+                TL.LogMessage("HandboxTask", "Closed hand-box dialogue")
 
             Catch ex As Exception
                 TL.LogMessage("HandboxTask", "Exception: " & ex.ToString())
@@ -184,10 +189,10 @@ Public Class Dome
                     g_TrafficForm = Nothing
                 End If
                 If Not g_handBox Is Nothing Then
-                    If Not IsNothing(TL) Then Try : TL.LogMessage("Dispose", "Closing handbox!") : Catch : End Try
+                    If Not IsNothing(TL) Then Try : TL.LogMessage("Dispose", "Closing hand-box!") : Catch : End Try
                     g_handBox.Invoke(New Action(AddressOf g_handBox.Close))
                     handboxThread.Join(1000)
-                    If Not IsNothing(TL) Then Try : TL.LogMessage("Dispose", "Handbox closed!") : Catch : End Try
+                    If Not IsNothing(TL) Then Try : TL.LogMessage("Dispose", "Hand-box closed!") : Catch : End Try
                 End If
                 'If Not profile Is Nothing Then
                 '    Try : profile.Dispose() : Catch : End Try
@@ -201,14 +206,14 @@ Public Class Dome
 
     ' TODO: override Finalize() only if Dispose(ByVal disposing As Boolean) above has code to free unmanaged resources.
     'Protected Overrides Sub Finalize()
-    '    ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+    '    ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
     '    Dispose(False)
     '    MyBase.Finalize()
     'End Sub
 
     ' This code added by Visual Basic to correctly implement the disposable pattern.
     Public Sub Dispose() Implements IDisposable.Dispose, IDomeV2.Dispose
-        ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+        ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
         Dispose(True)
         GC.SuppressFinalize(Me)
     End Sub
@@ -277,7 +282,7 @@ Public Class Dome
 
 #End Region
 
-#Region "IDome Impelementation"
+#Region "IDome Implementation"
 
     Public Sub AbortSlew() Implements IDomeV2.AbortSlew
         If Not g_TrafficForm Is Nothing Then
@@ -451,7 +456,23 @@ Public Class Dome
             If g_TrafficForm.chkShutter.Checked Then g_TrafficForm.TrafficStart("CloseShutter")
         End If
 
-        If Not g_bCanSetShutter Then Throw New MethodNotImplementedException("CloseShutter")
+        If g_bConformInvertedCanBehaviour Then
+            If g_bCanSetShutter Then ' Invert normal behaviour to make sure that Conform detects this as an error
+                If g_bConformReturnWrongException Then ' Throw the wrong exception to make sure that Conform detects this
+                    Throw New System.NotImplementedException("CloseShutter")
+                Else ' Throw the correct exception
+                    Throw New MethodNotImplementedException("CloseShutter")
+                End If
+            End If
+        Else  ' Normal behaviour
+            If Not g_bCanSetShutter Then ' Normal behaviour
+                If g_bConformReturnWrongException Then ' Throw the wrong exception to make sure that Conform detects this
+                    Throw New System.NotImplementedException("CloseShutter")
+                Else ' Throw the correct exception
+                    Throw New MethodNotImplementedException("CloseShutter")
+                End If
+            End If
+        End If
 
         check_connected()
         HW_CloseShutter()
@@ -494,30 +515,30 @@ Public Class Dome
 
                 TL.LogMessage("Connected", "Starting thread")
 
-                ' Create the handbox if its not present
+                ' Create the hand-box if its not present
                 If IsNothing(g_handBox) Then
-                    ' Show the handbox now
+                    ' Show the hand-box now
                     handboxThread = New Threading.Thread(AddressOf handboxTask)
                     handboxThread.IsBackground = True
                     handboxThread.TrySetApartmentState(Threading.ApartmentState.STA)
                     handboxThread.Start()
                     TL.LogMessage("Connected", "Thread started OK")
 
-                    TL.LogMessage("Connected", "Starting wait for handbox form to be created")
+                    TL.LogMessage("Connected", "Starting wait for hand-box form to be created")
                     Do
                         Threading.Thread.Sleep(100)
-                        TL.LogMessage("Connected", "Waiting for handbox form to be created")
+                        TL.LogMessage("Connected", "Waiting for hand-box form to be created")
                     Loop Until Not g_handBox Is Nothing
-                    TL.LogMessage("Connected", "Handbox created OK")
+                    TL.LogMessage("Connected", "Hand-box created OK")
                 End If
 
                 If value Then
-                    TL.LogMessage("Connected", String.Format("Showing handbox - g_handox is nothing: {0}", IsNothing(g_handBox)))
+                    TL.LogMessage("Connected", String.Format("Showing hand-box - g_handox is nothing: {0}", IsNothing(g_handBox)))
                     g_handBox.Show()
                     If Not g_TrafficForm Is Nothing Then g_TrafficForm.Show()
                 Else
                     If Not g_TrafficForm Is Nothing Then g_TrafficForm.Hide()
-                    TL.LogMessage("Connected", String.Format("Hiding handbox - g_handox is nothing: {0}", IsNothing(g_handBox)))
+                    TL.LogMessage("Connected", String.Format("Hiding hand-box - g_handox is nothing: {0}", IsNothing(g_handBox)))
                     g_handBox.Hide()
                 End If
 
@@ -577,11 +598,26 @@ Public Class Dome
             If g_TrafficForm.chkSlew.Checked Then g_TrafficForm.TrafficStart("FindHome")
         End If
 
-        If Not g_bCanFindHome Then Throw New MethodNotImplementedException("FindHome")
+        If g_bConformInvertedCanBehaviour Then
+            If g_bCanFindHome Then ' Invert normal behaviour to make sure that Conform detects this as an error
+                If g_bConformReturnWrongException Then ' Throw the wrong exception to make sure that Conform detects this
+                    Throw New System.NotImplementedException("FindHome")
+                Else ' Throw the correct exception
+                    Throw New MethodNotImplementedException("FindHome")
+                End If
+            End If
+        Else  ' Normal behaviour
+            If Not g_bCanFindHome Then ' Normal behaviour
+                If g_bConformReturnWrongException Then ' Throw the wrong exception to make sure that Conform detects this
+                    Throw New System.NotImplementedException("FindHome")
+                Else ' Throw the correct exception
+                    Throw New MethodNotImplementedException("FindHome")
+                End If
+            End If
+        End If
 
         check_connected()
-        If Not g_bAtHome Then _
-            HW_FindHome()
+        If Not g_bAtHome Then HW_FindHome()
     End Sub
 
     Public ReadOnly Property InterfaceVersion() As Short Implements IDomeV2.InterfaceVersion
@@ -609,7 +645,29 @@ Public Class Dome
             If g_TrafficForm.chkShutter.Checked Then g_TrafficForm.TrafficStart("OpenShutter")
         End If
 
-        If Not g_bCanSetShutter Then Throw New MethodNotImplementedException("OpenShutter")
+        If g_bConformInvertedCanBehaviour Then
+            If g_bCanSetShutter Then ' Invert normal behaviour to make sure that Conform detects this as an error
+                If g_bConformReturnWrongException Then ' Throw the wrong exception to make sure that Conform detects this
+                    Throw New System.NotImplementedException("OpenShutter")
+                Else ' Throw the correct exception
+                    Throw New MethodNotImplementedException("OpenShutter")
+                End If
+            End If
+        Else  ' Normal behaviour
+            If Not g_bCanSetShutter Then ' Normal behaviour
+                If g_bConformReturnWrongException Then ' Throw the wrong exception to make sure that Conform detects this
+                    Throw New System.NotImplementedException("OpenShutter")
+                Else ' Throw the correct exception
+                    Throw New MethodNotImplementedException("OpenShutter")
+                End If
+            End If
+        End If
+
+        If g_bConformInvertedCanBehaviour Then
+            If g_bCanSetShutter Then Throw New MethodNotImplementedException("OpenShutter") ' Invert normal behaviour to make sure that Conform detects this as an error
+        Else
+            If Not g_bCanSetShutter Then Throw New MethodNotImplementedException("OpenShutter") ' Normal behaviour
+        End If
 
         check_connected()
 
@@ -623,11 +681,26 @@ Public Class Dome
             If g_TrafficForm.chkSlew.Checked Then g_TrafficForm.TrafficStart("Park")
         End If
 
-        If Not g_bCanPark Then Throw New MethodNotImplementedException("Park")
+        If g_bConformInvertedCanBehaviour Then
+            If g_bCanPark Then ' Invert normal behaviour to make sure that Conform detects this as an error
+                If g_bConformReturnWrongException Then ' Throw the wrong exception to make sure that Conform detects this
+                    Throw New System.NotImplementedException("Park")
+                Else ' Throw the correct exception
+                    Throw New MethodNotImplementedException("Park")
+                End If
+            End If
+        Else  ' Normal behaviour
+            If Not g_bCanPark Then ' Normal behaviour
+                If g_bConformReturnWrongException Then ' Throw the wrong exception to make sure that Conform detects this
+                    Throw New System.NotImplementedException("Park")
+                Else ' Throw the correct exception
+                    Throw New MethodNotImplementedException("Park")
+                End If
+            End If
+        End If
 
         check_connected()
-        If Not g_bAtPark Then _
-            HW_Park()
+        If Not g_bAtPark Then HW_Park()
     End Sub
 
     Public Sub SetPark() Implements IDomeV2.SetPark
@@ -635,7 +708,23 @@ Public Class Dome
             If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficStart("SetPark: " & Format$(g_dDomeAz, "0.0"))
         End If
 
-        If Not g_bCanSetPark Then Throw New MethodNotImplementedException("SetPark")
+        If g_bConformInvertedCanBehaviour Then
+            If g_bCanSetPark Then ' Invert normal behaviour to make sure that Conform detects this as an error
+                If g_bConformReturnWrongException Then ' Throw the wrong exception to make sure that Conform detects this
+                    Throw New System.NotImplementedException("SetPark")
+                Else ' Throw the correct exception
+                    Throw New MethodNotImplementedException("SetPark")
+                End If
+            End If
+        Else  ' Normal behaviour
+            If Not g_bCanSetPark Then ' Normal behaviour
+                If g_bConformReturnWrongException Then ' Throw the wrong exception to make sure that Conform detects this
+                    Throw New System.NotImplementedException("Park")
+                Else ' Throw the correct exception
+                    Throw New MethodNotImplementedException("Park")
+                End If
+            End If
+        End If
 
         check_connected()
         g_dSetPark = g_dDomeAz
@@ -728,7 +817,23 @@ Public Class Dome
             If g_TrafficForm.chkShutter.Checked Then g_TrafficForm.TrafficLine("SlewToAltitude:" & Format$(Altitude, "0.0"))
         End If
 
-        If Not g_bCanSetAltitude Then Throw New MethodNotImplementedException("SlewToAltitude")
+        If g_bConformInvertedCanBehaviour Then
+            If g_bCanSetAltitude Then ' Invert normal behaviour to make sure that Conform detects this as an error
+                If g_bConformReturnWrongException Then ' Throw the wrong exception to make sure that Conform detects this
+                    Throw New System.NotImplementedException("SlewToAltitude")
+                Else ' Throw the correct exception
+                    Throw New MethodNotImplementedException("SlewToAltitude")
+                End If
+            End If
+        Else  ' Normal behaviour
+            If Not g_bCanSetAltitude Then ' Normal behaviour
+                If g_bConformReturnWrongException Then ' Throw the wrong exception to make sure that Conform detects this
+                    Throw New System.NotImplementedException("SlewToAltitude")
+                Else ' Throw the correct exception
+                    Throw New MethodNotImplementedException("SlewToAltitude")
+                End If
+            End If
+        End If
 
         check_connected()
 
@@ -744,7 +849,23 @@ Public Class Dome
             If g_TrafficForm.chkSlew.Checked Then g_TrafficForm.TrafficLine("SlewToAzimuth: " & Format$(Azimuth, "0.0"))
         End If
 
-        If Not g_bCanSetAzimuth Then Throw New MethodNotImplementedException("SlewToAzimuth")
+        If g_bConformInvertedCanBehaviour Then
+            If g_bCanSetAzimuth Then ' Invert normal behaviour to make sure that Conform detects this as an error
+                If g_bConformReturnWrongException Then ' Throw the wrong exception to make sure that Conform detects this
+                    Throw New System.NotImplementedException("SlewToAzimuth")
+                Else ' Throw the correct exception
+                    Throw New MethodNotImplementedException("SlewToAzimuth")
+                End If
+            End If
+        Else  ' Normal behaviour
+            If Not g_bCanSetAzimuth Then ' Normal behaviour
+                If g_bConformReturnWrongException Then ' Throw the wrong exception to make sure that Conform detects this
+                    Throw New System.NotImplementedException("SlewToAzimuth")
+                Else ' Throw the correct exception
+                    Throw New MethodNotImplementedException("SlewToAzimuth")
+                End If
+            End If
+        End If
 
         check_connected()
         check_Az(Azimuth)
@@ -756,7 +877,23 @@ Public Class Dome
             If g_TrafficForm.chkSlew.Checked Then g_TrafficForm.TrafficLine("SyncToAzimuth: " & Format$(Azimuth, "0.0"))
         End If
 
-        If Not g_bCanSyncAzimuth Then Throw New MethodNotImplementedException("SyncToAzimuth")
+        If g_bConformInvertedCanBehaviour Then
+            If g_bCanSyncAzimuth Then ' Invert normal behaviour to make sure that Conform detects this as an error
+                If g_bConformReturnWrongException Then ' Throw the wrong exception to make sure that Conform detects this
+                    Throw New System.NotImplementedException("SyncToAzimuth")
+                Else ' Throw the correct exception
+                    Throw New MethodNotImplementedException("SyncToAzimuth")
+                End If
+            End If
+        Else  ' Normal behaviour
+            If Not g_bCanSyncAzimuth Then ' Normal behaviour
+                If g_bConformReturnWrongException Then ' Throw the wrong exception to make sure that Conform detects this
+                    Throw New System.NotImplementedException("SyncToAzimuth")
+                Else ' Throw the correct exception
+                    Throw New MethodNotImplementedException("SyncToAzimuth")
+                End If
+            End If
+        End If
 
         check_connected()
         check_Az(Azimuth)
