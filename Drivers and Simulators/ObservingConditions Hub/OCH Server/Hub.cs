@@ -778,11 +778,28 @@ namespace ASCOM.Simulator
                 if (IsValidProperty(PropertyName)) // The property name is valid
                 {
                     double timeSinceLastUpdate;
+                    TL.LogMessage(clientNumber, "TimeSinceLastUpdate", $"Found valid property name: {PropertyName}");
 
                     // If the type of device is ObservingConditions then query the device directly, if not then return the value we are managing ourselves
                     if (Sensors[PropertyName].DeviceType == DeviceType.ObservingConditions) // This property is being presented by an ObservingConditions device
                     {
-                        timeSinceLastUpdate = ObservingConditionsDevices[PropertyName].TimeSinceLastUpdate(""); // Get the time since last update from the device
+                        TL.LogMessage(clientNumber, "TimeSinceLastUpdate", $"Device is ObservingConditions type");
+
+                        try
+                        {
+                            // Device interrogation is done inside a try catch because we are using reflection to call the property
+                            // If the device throws an exception the outer exception we get will be "TargetInvocationException" with the actual exception as the inner exception
+                            Type type = typeof(ObservingConditions);
+                            MethodInfo methodInfo = type.GetMethod("TimeSinceLastUpdate");
+                            timeSinceLastUpdate = (double)methodInfo.Invoke(ObservingConditionsDevices[Sensors[PropertyName].ProgID], new object[] { PropertyName });
+                            TL.LogMessage("TimeSinceLastUpdate", "Got value: " + timeSinceLastUpdate + " from device " + Sensors[PropertyName].ProgID + " for property " + PropertyName);
+                        }
+                        catch (TargetInvocationException ex)
+                        {
+                            TL.LogMessageCrLf("TimeSinceLastUpdate", "Received an InvalidOperationException reading {0} {1}: {2}", Sensors[PropertyName].ProgID, PropertyName, ex.InnerException.Message);
+                            throw ex.InnerException; // Throw the inner exception, which is the one containing the real meaning
+                        }
+
                     }
                     else // This property is being fronted by a Switch device that doesn't support TimeSinceLastUpdate so return the value that we are maintaining
                     {
