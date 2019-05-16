@@ -70,6 +70,7 @@ namespace ASCOM.Simulator
         public const string PROPERTY_CLOUDCOVER = "CloudCover";
         public const string PROPERTY_DEWPOINT = "DewPoint";
         public const string PROPERTY_HUMIDITY = "Humidity";
+        public const string PROPERTY_LASTUPDATED = "LastUpdated";
         public const string PROPERTY_PRESSURE = "Pressure";
         public const string PROPERTY_RAINRATE = "RainRate";
         public const string PROPERTY_SKYBRIGHTNESS = "SkyBrightness";
@@ -774,13 +775,21 @@ namespace ASCOM.Simulator
             }
             else
             {
-                if (IsValidProperty(PropertyName))
+                if (IsValidProperty(PropertyName)) // The property name is valid
                 {
                     double timeSinceLastUpdate;
 
-                    if (Sensors[PropertyName].TimeOfLastUpdate != BAD_DATETIME) timeSinceLastUpdate = DateTime.Now.Subtract(Sensors[PropertyName].TimeOfLastUpdate).TotalSeconds; // Calculate elapsed time since the sensor's last update time
-                    else timeSinceLastUpdate = -1.0; // No sensor has been updated so return -1
-                    TL.LogMessage(clientNumber, "TimeSinceLastUpdate", PropertyName + ": " + timeSinceLastUpdate);
+                    // If the type of device is ObservingConditions then query the device directly, if not then return the value we are managing ourselves
+                    if (Sensors[PropertyName].DeviceType == DeviceType.ObservingConditions) // This property is being presented by an ObservingConditions device
+                    {
+                        timeSinceLastUpdate = ObservingConditionsDevices[PropertyName].TimeSinceLastUpdate(""); // Get the time since last update from the device
+                    }
+                    else // This property is being fronted by a Switch device that doesn't support TimeSinceLastUpdate so return the value that we are maintaining
+                    {
+                        if (Sensors[PropertyName].TimeOfLastUpdate != BAD_DATETIME) timeSinceLastUpdate = DateTime.Now.Subtract(Sensors[PropertyName].TimeOfLastUpdate).TotalSeconds; // Calculate elapsed time since the sensor's last update time
+                        else timeSinceLastUpdate = -1.0; // No sensor has been updated so return -1
+                        TL.LogMessage(clientNumber, "TimeSinceLastUpdate", PropertyName + ": " + timeSinceLastUpdate);
+                    }
 
                     return timeSinceLastUpdate;
                 }
