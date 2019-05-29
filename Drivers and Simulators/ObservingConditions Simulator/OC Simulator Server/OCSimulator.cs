@@ -93,7 +93,7 @@ namespace ASCOM.Simulator
         public static bool MinimiseOnStart;
 
         // List of ObservingConditions properties that are dynamically simulated
-        public static List<string> SimulatedProperties = new List<string> { // Array containing a list of all valid properties
+        public static List<string> SimulatedProperties = new List<string> { // Array containing a list of properties that are calculated but excluding dew point, which is derived
             PROPERTY_CLOUDCOVER,
             PROPERTY_HUMIDITY,
             PROPERTY_PRESSURE,
@@ -671,13 +671,21 @@ namespace ASCOM.Simulator
         private static void AveragePeriodTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             DateTime now = DateTime.Now;
-            foreach (string Property in SimulatedProperties)
+            foreach (string Property in DriverProperties) //  SimulatedProperties)
             {
-                Sensors[Property].Readings.Add(new TimeValue(now, Sensors[Property].SimCurrentValue));
+                double sensorValue = Sensors[Property].SimCurrentValue;
+                Sensors[Property].Readings.Add(new TimeValue(now, sensorValue));
                 int beforeTrim = Sensors[Property].Readings.Count;
                 Sensors[Property].Readings.RemoveAll(TimeRemovePredicate);
                 int afterTrim = Sensors[Property].Readings.Count;
-                if (DebugTraceState) TL.LogMessage("AveragePeriodTimer", Property + " reading added to reading collection. Before trim: " + beforeTrim + ", After trim: " + afterTrim);
+                if (DebugTraceState) // List the sensor readings that will be averaged
+                {
+                    TL.LogMessage("AveragePeriodTimer", $"{Property} reading {sensorValue} added to reading collection. Before trim count: {beforeTrim}, After trim count: {afterTrim}");
+                    foreach (TimeValue tv in Sensors[Property].Readings)
+                    {
+                        TL.LogMessage("AveragePeriodTimer", $"  {Property} value at {tv.ObservationTime.ToString("hh:mm:ss.fff")} was {tv.SensorValue}");
+                    }
+                }
             }
         }
 
@@ -747,12 +755,12 @@ namespace ASCOM.Simulator
                 Sensors[Property].TimeOfLastUpdate = mostRecentUpdateTime;
                 Sensors[Property].SimCurrentValue = newValue; // Set the new simulator value
 
-                if (Property == PROPERTY_HUMIDITY)
+                // If we are processing a humidity or temperature value, calculate the dew point because this is not "measured" but is derived directly from the current humidity and temperature
+                if ((Property == PROPERTY_HUMIDITY) || (Property == PROPERTY_TEMPERATURE))
                 {
                     Sensors[PROPERTY_DEWPOINT].TimeOfLastUpdate = mostRecentUpdateTime;
-                    Sensors[PROPERTY_DEWPOINT].SimCurrentValue = util.Humidity2DewPoint(newValue, Sensors[PROPERTY_TEMPERATURE].SimCurrentValue); // Set the new simulator value
+                    Sensors[PROPERTY_DEWPOINT].SimCurrentValue = util.Humidity2DewPoint(Sensors[PROPERTY_HUMIDITY].SimCurrentValue, Sensors[PROPERTY_TEMPERATURE].SimCurrentValue); // Set the new simulator dewpoint value
                 }
-
             }
         }
 
@@ -810,20 +818,20 @@ namespace ASCOM.Simulator
                             double averageValue = 0.0;
                             int numberOfSensorReadings = Sensors[PropertyName].Readings.Count;
 
-                            if (numberOfSensorReadings > 0.0) // There are one or more readings so calculate the average value
+                            if (numberOfSensorReadings > 0) // There are one or more readings so calculate the average value
                             {
                                 foreach (TimeValue tv in Sensors[PropertyName].Readings) // Add the sensor readings
                                 {
                                     averageValue += tv.SensorValue;
                                 }
-                                averageValue = averageValue / numberOfSensorReadings; // Calculate the average sensor reading
+                                averageValue /= numberOfSensorReadings; // Calculate the average sensor reading
                             }
                             else // There are no readings so just return the current value
                             {
                                 averageValue = Sensors[PropertyName].SimCurrentValue;
                             }
 
-                            TL.LogMessage("GetDouble", PropertyName + " average value: " + averageValue + ", from " + numberOfSensorReadings + " readings, AveragePeriod: " + AveragePeriod + " minutes.");
+                            TL.LogMessage("GetDouble", PropertyName + " average value: " + averageValue + ", from " + numberOfSensorReadings + " readings, AveragePeriod: " + AveragePeriod + " hours.");
                             return averageValue; // Return the average sensor value
                         }
                     }
@@ -848,9 +856,11 @@ namespace ASCOM.Simulator
         /// </summary>
         /// <param name="timevalue">The time value to test</param>
         /// <returns>Boolean value indicating whether a particular time value should be removed from the collection</returns>
+        /// <remarks>Originally this was treating AveragePeriod as being in minutes, it now treats it as hours per the specification.</remarks>
         private static bool TimeRemovePredicate(TimeValue timevalue)
         {
-            return DateTime.Now.Subtract(timevalue.ObservationTime).TotalMinutes > AveragePeriod;
+            // Next line revised to treat AveragePeriod as being in hours per the interface specification, previously it was treating it as being in minutes. Peter Simpson 29th May 2019
+            return DateTime.Now.Subtract(timevalue.ObservationTime).TotalHours > AveragePeriod;
         }
 
         /// <summary>
@@ -861,7 +871,8 @@ namespace ASCOM.Simulator
             if (averagePeriodTimer.Enabled) averagePeriodTimer.Stop();
             if (AveragePeriod > 0.0)
             {
-                averagePeriodTimer.Interval = AveragePeriod * 60000.0 / NumberOfReadingsToAverage; // Averageperiod in minutes, convert to milliseconds and divide by the number of readings required
+                // Next line revised to treat Averageperiod as being in hours per the interface specification, previously it was treating it as being in minutes. Peter Simpson 29th May 2019
+                averagePeriodTimer.Interval = AveragePeriod * 3600000.0 / NumberOfReadingsToAverage; // AveragePeriod in hours, convert to milliseconds and divide by the number of readings required
                 if (IsHardwareConnected()) averagePeriodTimer.Enabled = true;
             }
         }
@@ -931,7 +942,13 @@ namespace ASCOM.Simulator
                 // Initialise other variables from the Profile
                 DebugTraceState = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, DEBUG_TRACE_PROFILENAME, string.Empty, DEBUG_TRACE_DEFAULT), CultureInfo.InvariantCulture);
                 SensorQueryInterval = Convert.ToDouble(driverProfile.GetValue(DRIVER_PROGID, SENSOR_READ_PERIOD_PROFILENAME, string.Empty, SENSOR_READ_PERIOD_DEFAULT), CultureInfo.InvariantCulture);
-                AveragePeriod = Convert.ToDouble(driverProfile.GetValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, string.Empty, AVERAGE_PERIOD_DEFAULT), CultureInfo.InvariantCulture);
+
+                // Due to an oversight, the initial implementation of the simulator treated AveragePeriod as being in minutes rather than hours; this has been the case for a number of years.
+                // *** For backward compatibility AveragePeriod will continue to be persisted in units of MINUTES. ***
+                // Within the simulator, AveragePeriod is now treated as being in hours and consequently the persisted value in minutes must be converted to hours after retrieval.
+                double averagePeriod = Convert.ToDouble(driverProfile.GetValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, string.Empty, AVERAGE_PERIOD_DEFAULT), CultureInfo.InvariantCulture);
+                AveragePeriod = averagePeriod / 60.0; // Convert the AveragePeriod retrieved value in minutes to hours
+
                 NumberOfReadingsToAverage = Convert.ToInt32(driverProfile.GetValue(DRIVER_PROGID, NUMBER_OF_READINGS_PROFILENAME, string.Empty, NUMBER_OF_READINGS_DEFAULT), CultureInfo.InvariantCulture);
                 MinimiseOnStart = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, MINIMISE_ON_START_PROFILENAME, string.Empty, MINIMISE_ON_START_DEFAULT), CultureInfo.InvariantCulture);
 
@@ -961,7 +978,13 @@ namespace ASCOM.Simulator
                 driverProfile.WriteValue(DRIVER_PROGID, TRACE_LEVEL_PROFILENAME, TraceState.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(DRIVER_PROGID, DEBUG_TRACE_PROFILENAME, DebugTraceState.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(DRIVER_PROGID, SENSOR_READ_PERIOD_PROFILENAME, SensorQueryInterval.ToString(CultureInfo.InvariantCulture));
-                driverProfile.WriteValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, AveragePeriod.ToString(CultureInfo.InvariantCulture));
+
+                // Due to an oversight, the initial implementation of the simulator treated AveragePeriod as being in minutes rather than hours; this has been the case for a number of years.
+                // *** For backward compatibility AveragePeriod will continue to be persisted in units of MINUTES. ***
+                // Within the simulator, AveragePeriod is now treated as being in hours and consequently the internal value in hours must be converted to minutes before being persisted.
+                double averagePeriod = AveragePeriod * 60.0;
+                driverProfile.WriteValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, averagePeriod.ToString(CultureInfo.InvariantCulture));
+
                 driverProfile.WriteValue(DRIVER_PROGID, NUMBER_OF_READINGS_PROFILENAME, NumberOfReadingsToAverage.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(DRIVER_PROGID, MINIMISE_ON_START_PROFILENAME, MinimiseOnStart.ToString(CultureInfo.InvariantCulture));
 
