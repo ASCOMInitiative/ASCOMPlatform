@@ -807,9 +807,11 @@ namespace ASCOM.Simulator
                 }
             }
 
-            if (!TelescopeHardware.CanDualAxisPulseGuide)
+            if (!TelescopeHardware.CanDualAxisPulseGuide) // Single axis synchronous pulse guide
             {
                 System.Threading.Thread.Sleep(Duration); // Must be synchronous so wait out the pulseguide duration here
+                TelescopeHardware.isPulseGuidingRa = false; // Make sure that IsPulseGuiding will return false
+                TelescopeHardware.isPulseGuidingDec = false;
             }
             SharedResources.TrafficEnd(" (done) ");
         }
