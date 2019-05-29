@@ -1241,6 +1241,7 @@ namespace ASCOM.Simulator
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Other, "TrackingRate: -> ");
                 CheckVersionOne("TrackingRate", true);
+                if ((value < DriveRates.driveSidereal) || (value > DriveRates.driveKing)) throw new InvalidValueException("TrackingRate", value.ToString(), "0 (driveSidereal) to 3 (driveKing)");
                 TelescopeHardware.TrackingRate = value;
                 SharedResources.TrafficEnd(value.ToString() + "(done)");
             }
