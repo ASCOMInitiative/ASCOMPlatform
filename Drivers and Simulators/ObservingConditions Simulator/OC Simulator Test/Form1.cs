@@ -4,7 +4,6 @@ using System;
 using System.Reflection;
 using System.Windows.Forms;
 
-
 namespace ASCOM.Simulator
 {
     public partial class Form1 : Form
@@ -132,6 +131,7 @@ namespace ASCOM.Simulator
         {
             LogMessage(DateTime.Now.ToString());
             LogMessage(driver.DriverInfo);
+            ListProperty("AveragePeriod");
             ListProperty("CloudCover");
             ListProperty("DewPoint");
             ListProperty("Humidity");
@@ -228,7 +228,7 @@ namespace ASCOM.Simulator
                 Type type = typeof(ObservingConditions);
                 PropertyInfo propertyInfo = type.GetProperty(PropertyName);
                 var observingConditionsValue = (double)propertyInfo.GetValue(driver, null);
-                LogMessage(PropertyName + " : " + observingConditionsValue.ToString("0.0"));
+                LogMessage(PropertyName + " : " + observingConditionsValue.ToString("0.000"));
             }
 
             catch (TargetInvocationException ex)

@@ -510,13 +510,18 @@ namespace ASCOM.Simulator
             this.label20.AutoSize = true;
             this.label20.Location = new System.Drawing.Point(426, 26);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(124, 13);
+            this.label20.Size = new System.Drawing.Size(114, 13);
             this.label20.TabIndex = 71;
-            this.label20.Text = "Average period (minutes)";
+            this.label20.Text = "Average period (hours)";
             // 
             // numAveragePeriod
             // 
-            this.numAveragePeriod.DecimalPlaces = 1;
+            this.numAveragePeriod.DecimalPlaces = 3;
+            this.numAveragePeriod.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
             this.numAveragePeriod.Location = new System.Drawing.Point(345, 24);
             this.numAveragePeriod.Maximum = new decimal(new int[] {
             9999999,

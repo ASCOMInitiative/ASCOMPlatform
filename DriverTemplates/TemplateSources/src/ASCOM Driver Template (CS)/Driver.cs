@@ -23,7 +23,7 @@
 
 
 // This is used to define code in the template that is specific to one class implementation
-// unused code canbe deleted and this definition removed.
+// unused code can be deleted and this definition removed.
 #define TEMPLATEDEVICECLASS
 
 using System;
@@ -46,7 +46,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
     // Your driver's DeviceID is ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS
     //
     // The Guid attribute sets the CLSID for ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS
-    // The ClassInterface/None addribute prevents an empty interface called
+    // The ClassInterface/None attribute prevents an empty interface called
     // _TEMPLATEDEVICENAME from being created and used as the [default] interface
     //
     // TODO Replace the not implemented exceptions with code to implement the function or
@@ -76,7 +76,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
         internal static string traceStateProfileName = "Trace Level";
         internal static string traceStateDefault = "false";
 
-        internal static string comPort; // Variables to hold the currrent device configuration
+        internal static string comPort; // Variables to hold the current device configuration
 
         /// <summary>
         /// Private variable to hold the connected state
@@ -96,7 +96,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
         /// <summary>
         /// Variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
         /// </summary>
-        internal static TraceLogger tl;
+        internal TraceLogger tl;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TEMPLATEDEVICENAME"/> class.
@@ -111,7 +111,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 
             connectedState = false; // Initialise connected to false
             utilities = new Util(); //Initialise util object
-            astroUtilities = new AstroUtils(); // Initialise astro utilities object
+            astroUtilities = new AstroUtils(); // Initialise astro-utilities object
             //TODO: Implement your additional construction here
 
             tl.LogMessage("TEMPLATEDEVICECLASS", "Completed initialisation");
@@ -194,7 +194,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 
         public void Dispose()
         {
-            // Clean up the tracelogger and util objects
+            // Clean up the trace logger and util objects
             tl.Enabled = false;
             tl.Dispose();
             tl = null;
@@ -422,7 +422,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
         /// <param name="identifier"></param>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        internal static void LogMessage(string identifier, string message, params object[] args)
+        internal void LogMessage(string identifier, string message, params object[] args)
         {
             var msg = string.Format(message, args);
             tl.LogMessage(identifier, msg);

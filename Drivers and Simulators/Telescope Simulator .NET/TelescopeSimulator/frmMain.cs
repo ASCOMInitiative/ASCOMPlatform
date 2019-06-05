@@ -90,11 +90,13 @@ namespace ASCOM.Simulator
                     TelescopeHardware.CanSlew = setupForm.CanSlew;
                     TelescopeHardware.CanAlignmentMode = setupForm.CanAlignmentMode;
                     TelescopeHardware.AlignmentMode = setupForm.AlignmentMode;
+                    TelescopeHardware.CanOptics = setupForm.CanOptics;
                     TelescopeHardware.ApertureArea = setupForm.ApertureArea;
                     TelescopeHardware.ApertureDiameter = setupForm.ApertureDiameter;
                     TelescopeHardware.FocalLength = setupForm.FocalLength;
-                    TelescopeHardware.CanSlewAltAzAsync = setupForm.CanSlewAltAzAsync;
                     TelescopeHardware.CanSlewAltAz = setupForm.CanSlewAltAz;
+                    TelescopeHardware.CanSlewAltAzAsync = setupForm.CanSlewAltAzAsync;
+                    TelescopeHardware.CanSlewAsync = setupForm.CanSlewAsync;
                     TelescopeHardware.CanSync = setupForm.CanSync;
                     TelescopeHardware.CanSyncAltAz = setupForm.CanSyncAltAz;
                     TelescopeHardware.CanUnpark = setupForm.CanUnpark;

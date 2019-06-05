@@ -807,9 +807,11 @@ namespace ASCOM.Simulator
                 }
             }
 
-            if (!TelescopeHardware.CanDualAxisPulseGuide)
+            if (!TelescopeHardware.CanDualAxisPulseGuide) // Single axis synchronous pulse guide
             {
                 System.Threading.Thread.Sleep(Duration); // Must be synchronous so wait out the pulseguide duration here
+                TelescopeHardware.isPulseGuidingRa = false; // Make sure that IsPulseGuiding will return false
+                TelescopeHardware.isPulseGuidingDec = false;
             }
             SharedResources.TrafficEnd(" (done) ");
         }
@@ -1239,6 +1241,7 @@ namespace ASCOM.Simulator
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Other, "TrackingRate: -> ");
                 CheckVersionOne("TrackingRate", true);
+                if ((value < DriveRates.driveSidereal) || (value > DriveRates.driveKing)) throw new InvalidValueException("TrackingRate", value.ToString(), "0 (driveSidereal) to 3 (driveKing)");
                 TelescopeHardware.TrackingRate = value;
                 SharedResources.TrafficEnd(value.ToString() + "(done)");
             }
