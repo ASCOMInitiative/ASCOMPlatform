@@ -124,9 +124,10 @@ function writesubmenu() {
         SubMenuOutput += "<ul class=\"treeview\">";
         SubMenuOutput += "<li><a href=\"Mission.htm\">ASCOM Mission Statement</a></li>";
         SubMenuOutput += "<li><a href=\"WhyImportant.htm\">Why are Drivers Important?</a></li>";
+        SubMenuOutput += "<li><a href=\"Surveys.htm\">How Well are We Doing?</a></li>";
         SubMenuOutput += "<li><a href=\"HowWorks.htm\">How Does ASCOM Work?</a></li>";
         SubMenuOutput += "<li><a href=\"CompatLang.htm\">Compatible Languages</a></li>";
-        SubMenuOutput += "<li><a href=\"Projects.htm\">Projects in Progress</a></li>";
+        SubMenuOutput += "<li><a href=\"Projects.htm\">Projects in Progress (2019)</a></li>";
         SubMenuOutput += "<li><a href=\"History.htm\">A Brief History</a></li>";
         SubMenuOutput += "<li><a href=\"Licensing.htm\">Ownership and Licensing</a></li>";
         SubMenuOutput += "<li><a href=\"HallOfFame.htm\">ASCOM Hall of Fame</a></li>";

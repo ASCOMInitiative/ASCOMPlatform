@@ -66,11 +66,11 @@ Errors and Retries
 
 	<p>A "golden rule" in a driver/client architecture is</p> 
 
-	<div class="note">Do it or return an error if you can't.</div>
+	<div class="note"><a href="Principles.htm#doitright">Do it correctly or signal an error.</a></div>
 
-	<p>When a piece of hardware needs retries, <span class="underline">it is the <i>driver's</i> responsibility to do those retries</span>, if appropriate, and hide this from the clients. Only the driver knows the behaviour of that particular piece of hardware and when retries are appropriate or not.</p> 
+	<p>When a piece of hardware needs retries, <span class="underline">it is the <i>driver's</i> responsibility to do those retries</span>, if appropriate, and hide this from the clients. Only the driver knows the behavior of that particular piece of hardware and when retries are appropriate or not.</p> 
 
-	<p>It is <span class="underline">wrong to expect client applications to provide retries</span> because this would force client authors to include device dependent logic to test possibly invisible conditions and make decisions as to the safety and efficacy of retrying a driver call. It breaks the driver/client layering, forcing client authors to independently guess and implement recovery code with less-than-sufficient knowledge of the inner workings of the device. This is an extension of <a href="Principles.htm">The General Principle</a>.</p> 
+	<p>It is <span class="underline">wrong to expect client applications to provide retries</span> because this would force client authors to include device dependent logic to test possibly invisible conditions and make decisions as to the safety and efficacy of retrying a driver call. It breaks the driver/client layering, forcing client authors to independently guess and implement recovery code with less-than-sufficient knowledge of the inner workings of the device. This is one of <a href="Principles.htm">The General Principles</a>.</p> 
 	</div>
 
 	<!-- #EndEditable --></div>
