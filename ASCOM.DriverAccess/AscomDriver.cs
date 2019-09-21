@@ -412,7 +412,7 @@ namespace ASCOM.DriverAccess
             {
                 try
                 {
-                    return (ArrayList)memberFactory.CallMember(1, "SupportedActions", new Type[] { }, new object[] { });
+                    return memberFactory.CallMember(1, "SupportedActions", new Type[] { }, new object[] { }).ComObjToArrayList();
                 }
                 catch (Exception ex)
                 {

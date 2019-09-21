@@ -859,7 +859,7 @@ namespace ASCOM.DriverAccess
         /// </remarks>
         public ArrayList Gains
         {
-            get { return (ArrayList)_memberFactory.CallMember(1, "Gains", new Type[] { }, new object[] { }); }
+            get { return _memberFactory.CallMember(1, "Gains", new Type[] { }, new object[] { }).ComObjToArrayList(); }
         }
 
         /// <summary>
@@ -933,7 +933,7 @@ namespace ASCOM.DriverAccess
         /// </remarks>
         public ArrayList ReadoutModes
         {
-            get { return (ArrayList)_memberFactory.CallMember(1, "ReadoutModes", new Type[] { }, new object[] { }); }
+            get { return _memberFactory.CallMember(1, "ReadoutModes", new Type[] { }, new object[] { }).ComObjToArrayList(); }
         }
 
         /// <summary>

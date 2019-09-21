@@ -114,7 +114,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref="PropertyNotImplementedException">Must throw exception if camera supports only one integration rate (exposure) that cannot be changed.</exception>
         public ArrayList SupportedIntegrationRates
         {
-            get { return (ArrayList)memberFactory.CallMember(1, "SupportedIntegrationRates", new Type[0], new object[0]); }
+            get { return memberFactory.CallMember(1, "SupportedIntegrationRates", new Type[0], new object[0]).ComObjToArrayList(); }
         }
 
         /// <summary>
@@ -662,7 +662,7 @@ namespace ASCOM.DriverAccess
         ///	</remarks>
         public ArrayList Gains
         {
-            get { return (ArrayList)memberFactory.CallMember(1, "Gains", new Type[0], new object[0]); }
+            get { return memberFactory.CallMember(1, "Gains", new Type[0], new object[0]).ComObjToArrayList(); }
         }
 
         /// <summary>
@@ -746,7 +746,7 @@ namespace ASCOM.DriverAccess
         ///	</remarks>	
         public ArrayList Gammas
         {
-            get { return (ArrayList)memberFactory.CallMember(1, "Gammas", new Type[0], new object[0]); }
+            get { return memberFactory.CallMember(1, "Gammas", new Type[0], new object[0]).ComObjToArrayList(); }
         }
 
         /// <summary>
