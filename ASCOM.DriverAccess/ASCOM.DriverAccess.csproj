@@ -115,6 +115,7 @@
     </Compile>
     <Compile Include="Dome.cs">
     </Compile>
+    <Compile Include="Extensions.cs" />
     <Compile Include="FilterWheel.cs">
     </Compile>
     <Compile Include="Focuser.cs">
