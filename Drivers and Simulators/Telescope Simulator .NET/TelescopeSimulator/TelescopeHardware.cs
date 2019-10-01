@@ -601,7 +601,7 @@ namespace ASCOM.Simulator
             // Determine the changes in current axis position and target axis position required as a result of tracking
             if (Tracking)
             {
-                double haChange = GetTrackingChange(updateInterval); // Find the hour angle change that occured during this interval
+                double haChange = GetTrackingChange(updateInterval); // Find the hour angle change that occurred during this interval
                 switch (alignmentMode)
                 {
                     case AlignmentModes.algGermanPolar: // In polar aligned mounts an HA change moves only the RA (primary) axis so update this, no change is required to the Dec (secondary) axis
@@ -625,7 +625,11 @@ namespace ASCOM.Simulator
             change += rateAxes;
 
             // RightAScensionRate and DeclinationRate rate offsets, this assumes a polar mount
-            change += rateRaDec;
+            Vector actualRaDecRateMovement = new Vector(); // Create a new vector to hold the actual movement
+            actualRaDecRateMovement.X = rateRaDec.X * updateInterval; // Calculate the RA axis movement that has occurred since the last timer event = degrees/sec * sec = deg
+            actualRaDecRateMovement.Y = rateRaDec.Y * updateInterval; // Calculate the DEC axis movement that has occurred since the last timer event = degrees/sec * sec = deg
+            change += actualRaDecRateMovement;
+            TL.LogMessage("MoveAxes", $"Rate RA Dec: {rateRaDec.X} {rateRaDec.Y} - Change: {change.X} {change.Y}");
 
             // Pulse guiding changes
             change += PulseGuide(updateInterval);
