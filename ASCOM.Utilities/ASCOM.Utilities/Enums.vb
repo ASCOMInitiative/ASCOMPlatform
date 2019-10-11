@@ -9,7 +9,9 @@ Public Enum Units As Integer
     knots = 2
     'Temperature
     degreesCelsius = 10
+    <ObsoleteAttribute("Units.degreesFarenheit is an incorrect spelling and has been deprecated, please use Units.degreesFahrenheit instead.", True)>
     degreesFarenheit = 11
+    degreesFahrenheit = 11
     degreesKelvin = 12
     ' Pressure
     hPa = 20
@@ -21,7 +23,3 @@ Public Enum Units As Integer
     inPerHour = 31
 End Enum
 #End Region
-
-Module Enums
-
-End Module

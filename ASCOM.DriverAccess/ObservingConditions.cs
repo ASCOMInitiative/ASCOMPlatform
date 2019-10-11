@@ -97,7 +97,7 @@ namespace ASCOM.DriverAccess
         /// <p style="color:red"><b>Optional property, can throw a PropertyNotImplementedException when the <see cref="Humidity"/> property also throws a PropertyNotImplementedException.</b></p>
         /// <p style="color:red"><b>Mandatory property, must NOT throw a PropertyNotImplementedException when the <see cref="Humidity"/> property is implemented.</b></p>
         /// <para>The units of this property are degrees Celsius. Driver and application authors can use the <see cref="Util.ConvertUnits"/> method
-        /// to convert these units to and from degrees Farenheit.</para>
+        /// to convert these units to and from degrees Fahrenheit.</para>
         /// <para>The ASCOM specification requires that DewPoint and Humidity are either both implemented or both throw PropertyNotImplementedExceptions. It is not allowed for 
         /// one to be implemented and the other to throw a PropertyNotImplementedException. The Utilities component contains methods (<see cref="Util.DewPoint2Humidity"/> and 
         /// <see cref="Util.Humidity2DewPoint"/>) to convert DewPoint to Humidity and vice versa given the ambient temperature.</para>
@@ -241,7 +241,7 @@ namespace ASCOM.DriverAccess
         /// <remarks>
         /// <p style="color:red"><b>Optional property, can throw a PropertyNotImplementedException</b></p>
         /// <para>The units of this property are degrees Celsius. Driver and application authors can use the <see cref="Util.ConvertUnits"/> method
-        /// to convert these units to and from degrees Farenheit.</para>
+        /// to convert these units to and from degrees Fahrenheit.</para>
         /// <para>This is expected to be returned by an infra-red sensor looking at the sky. The lower the temperature the more the sky is likely to be clear.</para>
         /// </remarks>
         public double SkyTemperature
@@ -258,7 +258,7 @@ namespace ASCOM.DriverAccess
         /// <remarks>
         /// <p style="color:red"><b>Optional property, can throw a PropertyNotImplementedException</b></p>
         /// <para>The units of this property are degrees Celsius. Driver and application authors can use the <see cref="Util.ConvertUnits"/> method
-        /// to convert these units to and from degrees Farenheit.</para>
+        /// to convert these units to and from degrees Fahrenheit.</para>
         /// <para>This is expected to be the ambient temperature at the observatory.</para>
         /// </remarks>
         public double Temperature
@@ -274,7 +274,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <remarks>
         /// <p style="color:red"><b>Optional property, can throw a PropertyNotImplementedException</b></p>
-        /// The returned value must be between 0.0 and 360.0, interpreted according to the metereological standard, where a special value of 0.0 is returned when the wind speed is 0.0. 
+        /// The returned value must be between 0.0 and 360.0, interpreted according to the meteorological standard, where a special value of 0.0 is returned when the wind speed is 0.0. 
         /// Wind direction is measured clockwise from north, through east, where East=90.0, South=180.0, West=270.0 and North=360.0.
         /// </remarks>
         public double WindDirection

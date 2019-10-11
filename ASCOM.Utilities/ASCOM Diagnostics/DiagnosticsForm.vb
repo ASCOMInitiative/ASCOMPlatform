@@ -5988,9 +5988,9 @@ Public Class DiagnosticsForm
             CompareDouble("UtilTests", "knots==>metresPerSecond", Utl.ConvertUnits(10.0, Units.knots, Units.metresPerSecond), 5.14444, TOLERANCE_E4)
 
             CompareDouble("UtilTests", "Degrees K==>Degrees K", Utl.ConvertUnits(300.0, Units.degreesKelvin, Units.degreesKelvin), 300.0, TOLERANCE_E4)
-            CompareDouble("UtilTests", "Degrees K==>Degrees F", Utl.ConvertUnits(300.0, Units.degreesKelvin, Units.degreesFarenheit), 80.33, TOLERANCE_E4)
+            CompareDouble("UtilTests", "Degrees K==>Degrees F", Utl.ConvertUnits(300.0, Units.degreesKelvin, Units.degreesFahrenheit), 80.33, TOLERANCE_E4)
             CompareDouble("UtilTests", "Degrees K==>Degrees C", Utl.ConvertUnits(300.0, Units.degreesKelvin, Units.degreesCelsius), 26.85, TOLERANCE_E4)
-            CompareDouble("UtilTests", "Degrees F==>Degrees K", Utl.ConvertUnits(70.0, Units.degreesFarenheit, Units.degreesKelvin), 294.26, TOLERANCE_E4)
+            CompareDouble("UtilTests", "Degrees F==>Degrees K", Utl.ConvertUnits(70.0, Units.degreesFahrenheit, Units.degreesKelvin), 294.26, TOLERANCE_E4)
             CompareDouble("UtilTests", "Degrees C==>Degrees K", Utl.ConvertUnits(20.0, Units.degreesCelsius, Units.degreesKelvin), 293.15, TOLERANCE_E4)
 
             CompareDouble("UtilTests", "hPa==>hPa", Utl.ConvertUnits(1000.0, Units.hPa, Units.hPa), 1000.0, TOLERANCE_E4)
@@ -6020,7 +6020,7 @@ Public Class DiagnosticsForm
             TestUnitsInvalidOperation(Utl, Units.degreesCelsius, Units.inPerHour)
 
             TestUnitsInvalidOperation(Utl, Units.mmHg, Units.knots)
-            TestUnitsInvalidOperation(Utl, Units.mmHg, Units.degreesFarenheit)
+            TestUnitsInvalidOperation(Utl, Units.mmHg, Units.degreesFahrenheit)
             TestUnitsInvalidOperation(Utl, Units.mmHg, Units.mmPerHour)
 
             TestUnitsInvalidOperation(Utl, Units.inPerHour, Units.metresPerSecond)
