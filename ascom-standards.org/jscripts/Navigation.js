@@ -181,6 +181,7 @@ function writesubmenu() {
     case 4: // Standards
         SubMenuOutput += "<h3>Standards</h3>";
         SubMenuOutput += "<ul class=\"treeview\">";
+		SubMenuOutput += "<li><a href=\"InterfacePrinciple.htm\">ASCOM Interface Principle</a></li>";
 		SubMenuOutput += "<li><a href=\"StandardsProcess.htm\">The Standards Process</a></li>";
 		SubMenuOutput += "<li><a href=\"Requirements.htm\">General Requirements</a></li>";
 	    SubMenuOutput += "</ul>";

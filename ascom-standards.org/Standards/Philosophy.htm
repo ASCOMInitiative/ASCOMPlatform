@@ -62,8 +62,8 @@
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
-		<h3>Interface Design Philosophy</h3>
-		<p>It's important to understand some general philosophical issues as applied to ASCOM driver interface designs. </p>
+		<h3>General Interface Design Philosophy</h3>
+		<p>It's important to understand some general philosophical issues as applied to ASCOM driver interface designs. In addition there are specific issues that are covered by the <a href="Interface Principle.htm">ASCOM Interface Principle</a> document which you should also look over.</p>
 		<p>First, as stated in the <a href="../Developer/Principles.htm">General Principle</a> (Developer section), the job of a driver is to <span class="underline">hide all device-dependencies</span> from clients. If it were only that simple. Reaching an interface agreement always involves the interplay between the basic operations needed for the device, and the &quot;value added&quot; features present in some devices and not others. The makers of more sophisticated devices want their unique features to be exposed to clients, yet a driver by its nature cannot expose device dependent features! Our standards process requires the interface author to broker the interface agreement. </p>
 		<p>There are some (semi-related) guiding principles that can be applied to maximize the chances of success:</p>
 		<ul>
@@ -80,8 +80,6 @@
 				<div class="expando" style="display:block;" id="sAdapt"><span id="tsAdapt">This can get tricky. It will be the focus of much of the negotiations over the interface. A family of devices may come in more than one flavor (e.g. simple vs German equatorial mounts) and the clients may need to know what flavor a device is (e.g., know whether it needs to manage flipping). Device limits fall into this category too. Do you provide functions to allow a client to discover slewing/tracking limits pro-actively, or do you raise an error when a client attempts to slew past the limits, or when the mount tracks into a limit? One general rule we've followed is to provide "CanWhatever" properties only for those functions that will "do something" when used. Other things that can be tried, and allowed to raise an error if not supported, don't have a CanWhatever property. The client can try using the function without altering the state of the device, and if no error is raised, the client can unwind that and know that the function is supported.</span></div>
 			</li>
 		</ul>
-		<h3>Case Study </h3>
-		<p>Let's look at these principles in action.  </p>
 	</div>
 	<script type="text/javascript" language="javascript">
 	// Hide expando blocks at runtime. Allows editing in DW
