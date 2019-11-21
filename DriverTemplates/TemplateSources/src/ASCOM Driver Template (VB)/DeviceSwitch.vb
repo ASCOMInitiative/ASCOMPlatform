@@ -197,7 +197,7 @@ Class DeviceSwitch
         Validate(message, id)
         Dim ns As Integer = (((MaxSwitchValue(id) - MinSwitchValue(id)) / SwitchStep(id)) + 1)
         If (expectBoolean And ns <> 2) Or (Not expectBoolean And ns <= 2) Then
-            TL.LogMessage(message, String.Format("Switch {0} has the wriong number of states", id, ns))
+            TL.LogMessage(message, String.Format("Switch {0} has the wrong number of states", id, ns))
             Throw New MethodNotImplementedException(String.Format("{0}({1})", message, id))
         End If
     End Sub

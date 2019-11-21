@@ -335,13 +335,16 @@ Public Interface IFocuserV2 'C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC
     ReadOnly Property TempCompAvailable() As Boolean
 
     ''' <summary>
-    ''' Current ambient temperature as measured by the focuser.
+    ''' Current ambient temperature in degrees Celsius as measured by the focuser.
     ''' </summary>
     ''' <exception cref="PropertyNotImplementedException">If the property is not available for this device.</exception>
     ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
     ''' <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> 
-    ''' Raises an exception if ambient temperature is not available. Commonly available on focusers with a built-in temperature compensation mode. 
+    ''' <para>Raises an exception if ambient temperature is not available. Commonly available on focusers with a built-in temperature compensation mode.</para>
+    ''' <para><b>Clarification - October 2019</b></para>
+    ''' <para>Historically no units were specified for this property. Henceforth, if applications need to process the supplied temperature, they should proceed on the basis that the 
+    ''' units are degrees Celsius for consistency with <see cref="IObservingConditions.Temperature"/>. Conversion to other temperature units can be achieved through the <see cref="Util.ConvertUnits"/> utility method.</para>
     ''' </remarks>
     ReadOnly Property Temperature() As Double
 #End Region

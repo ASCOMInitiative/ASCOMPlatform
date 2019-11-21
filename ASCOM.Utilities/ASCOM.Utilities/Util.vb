@@ -1026,7 +1026,7 @@ Public Class Util
     ''' <para>Conversions available:</para>
     ''' <list type="bullet">
     ''' <item>metres per second &lt;==&gt; miles per hour &lt;==&gt; knots</item>
-    ''' <item>Celsius &lt;==&gt; Farenheit &lt;==&gt; Kelvin</item>
+    ''' <item>Celsius &lt;==&gt; Fahrenheit &lt;==&gt; Kelvin</item>
     ''' <item>hecto Pascals (hPa) &lt;==&gt; milli bar(mbar) &lt;==&gt; mm of mercury &lt;==&gt; inches of mercury</item>
     ''' <item>mm per hour &lt;==&gt; inches per hour</item>
     ''' </list>
@@ -1069,7 +1069,7 @@ Public Class Util
             Select Case FromUnits
                 Case Units.degreesCelsius
                     intermediateValue = InputValue - ABSOLUTE_ZERO_CELSIUS
-                Case Units.degreesFarenheit
+                Case Units.degreesFahrenheit
                     intermediateValue = (InputValue + 459.67) * 5.0 / 9.0
                 Case Units.degreesKelvin
                     intermediateValue = InputValue
@@ -1081,7 +1081,7 @@ Public Class Util
             Select Case ToUnits
                 Case Units.degreesCelsius
                     finalValue = intermediateValue + ABSOLUTE_ZERO_CELSIUS
-                Case Units.degreesFarenheit
+                Case Units.degreesFahrenheit
                     finalValue = (intermediateValue * 9.0 / 5.0) - 459.67
                 Case Units.degreesKelvin
                     finalValue = intermediateValue
