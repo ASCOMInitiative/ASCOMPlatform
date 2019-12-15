@@ -141,7 +141,7 @@ Public Class Chooser
             chooserFormInstance.DeviceType = deviceTypeValue
             chooserFormInstance.InitiallySelectedProgId = DriverProgID
 
-            chooserFormInstance.ShowDialog() ' DIsplay MODAL Chooser dialogue
+            chooserFormInstance.ShowDialog() ' Display MODAL Chooser dialogue
 
             selectedProgId = chooserFormInstance.SelectedProgId
 

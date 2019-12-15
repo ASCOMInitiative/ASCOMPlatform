@@ -1,10 +1,5 @@
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> Partial Class ChooserForm
 #Region "Windows Form Designer generated code "
-    <System.Diagnostics.DebuggerNonUserCode()> Public Sub New()
-        MyBase.New()
-        'This call is required by the Windows Form Designer.
-        InitializeComponent()
-    End Sub
 	'Required by the Windows Form Designer
 	Private components As System.ComponentModel.IContainer
     Public WithEvents picASCOM As System.Windows.Forms.PictureBox
