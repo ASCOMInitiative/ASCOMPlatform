@@ -5,15 +5,6 @@
         'This call is required by the Windows Form Designer.
         InitializeComponent()
     End Sub
-	'Form overrides dispose to clean up the component list.
-	<System.Diagnostics.DebuggerNonUserCode()> Protected Overloads Overrides Sub Dispose(ByVal Disposing As Boolean)
-		If Disposing Then
-			If Not components Is Nothing Then
-				components.Dispose()
-			End If
-		End If
-		MyBase.Dispose(Disposing)
-	End Sub
 	'Required by the Windows Form Designer
 	Private components As System.ComponentModel.IContainer
     Public WithEvents picASCOM As System.Windows.Forms.PictureBox
@@ -50,6 +41,13 @@
         Me.MenuCacheTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuEarthRotationDataFormTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
+        Me.MenuAlpaca = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MnuDiscoveryEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MnuConfigureDiscovery = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MnuDiscoverNow = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.LedDiscoveryStatatua = New ASCOM.Controls.LedIndicator()
+        Me.Label2 = New System.Windows.Forms.Label()
         CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ChooserMenu.SuspendLayout()
         Me.SuspendLayout()
@@ -149,7 +147,7 @@
         '
         'ChooserMenu
         '
-        Me.ChooserMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuTrace})
+        Me.ChooserMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuTrace, Me.MenuAlpaca})
         Me.ChooserMenu.Location = New System.Drawing.Point(0, 0)
         Me.ChooserMenu.Name = "ChooserMenu"
         Me.ChooserMenu.Size = New System.Drawing.Size(333, 24)
@@ -160,79 +158,128 @@
         '
         Me.MenuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuSerialTraceEnabled, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuSimulatorTraceEnabled, Me.MenuDriverAccessTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuNovasTraceEnabled, Me.MenuAstroUtilsTraceEnabled, Me.MenuCacheTraceEnabled, Me.MenuEarthRotationDataFormTraceEnabled})
         Me.MenuTrace.Name = "MenuTrace"
-        Me.MenuTrace.Size = New System.Drawing.Size(47, 20)
+        Me.MenuTrace.Size = New System.Drawing.Size(46, 20)
         Me.MenuTrace.Text = "Trace"
         '
         'NormallyLeaveTheseDisabledToolStripMenuItem
         '
         Me.NormallyLeaveTheseDisabledToolStripMenuItem.Name = "NormallyLeaveTheseDisabledToolStripMenuItem"
-        Me.NormallyLeaveTheseDisabledToolStripMenuItem.Size = New System.Drawing.Size(252, 22)
+        Me.NormallyLeaveTheseDisabledToolStripMenuItem.Size = New System.Drawing.Size(282, 22)
         Me.NormallyLeaveTheseDisabledToolStripMenuItem.Text = "Normally leave these disabled"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(249, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(279, 6)
         '
         'MenuSerialTraceEnabled
         '
         Me.MenuSerialTraceEnabled.Name = "MenuSerialTraceEnabled"
-        Me.MenuSerialTraceEnabled.Size = New System.Drawing.Size(252, 22)
+        Me.MenuSerialTraceEnabled.Size = New System.Drawing.Size(282, 22)
         Me.MenuSerialTraceEnabled.Text = "Serial Trace Enabled"
         '
         'MenuProfileTraceEnabled
         '
         Me.MenuProfileTraceEnabled.Name = "MenuProfileTraceEnabled"
-        Me.MenuProfileTraceEnabled.Size = New System.Drawing.Size(252, 22)
+        Me.MenuProfileTraceEnabled.Size = New System.Drawing.Size(282, 22)
         Me.MenuProfileTraceEnabled.Text = "Profile Trace Enabled"
         '
         'MenuUtilTraceEnabled
         '
         Me.MenuUtilTraceEnabled.Name = "MenuUtilTraceEnabled"
-        Me.MenuUtilTraceEnabled.Size = New System.Drawing.Size(252, 22)
+        Me.MenuUtilTraceEnabled.Size = New System.Drawing.Size(282, 22)
         Me.MenuUtilTraceEnabled.Text = "Util Trace Enabled"
         '
         'MenuSimulatorTraceEnabled
         '
         Me.MenuSimulatorTraceEnabled.Name = "MenuSimulatorTraceEnabled"
-        Me.MenuSimulatorTraceEnabled.Size = New System.Drawing.Size(252, 22)
+        Me.MenuSimulatorTraceEnabled.Size = New System.Drawing.Size(282, 22)
         Me.MenuSimulatorTraceEnabled.Text = "Simulator Trace Enabled"
         '
         'MenuDriverAccessTraceEnabled
         '
         Me.MenuDriverAccessTraceEnabled.Name = "MenuDriverAccessTraceEnabled"
-        Me.MenuDriverAccessTraceEnabled.Size = New System.Drawing.Size(252, 22)
+        Me.MenuDriverAccessTraceEnabled.Size = New System.Drawing.Size(282, 22)
         Me.MenuDriverAccessTraceEnabled.Text = "DriverAccess Trace Enabled"
         '
         'MenuTransformTraceEnabled
         '
         Me.MenuTransformTraceEnabled.Name = "MenuTransformTraceEnabled"
-        Me.MenuTransformTraceEnabled.Size = New System.Drawing.Size(252, 22)
+        Me.MenuTransformTraceEnabled.Size = New System.Drawing.Size(282, 22)
         Me.MenuTransformTraceEnabled.Text = "Transform Trace Enabled"
         '
         'MenuNovasTraceEnabled
         '
         Me.MenuNovasTraceEnabled.Name = "MenuNovasTraceEnabled"
-        Me.MenuNovasTraceEnabled.Size = New System.Drawing.Size(252, 22)
+        Me.MenuNovasTraceEnabled.Size = New System.Drawing.Size(282, 22)
         Me.MenuNovasTraceEnabled.Text = "NOVAS (Partial) Trace Enabled"
         '
         'MenuAstroUtilsTraceEnabled
         '
         Me.MenuAstroUtilsTraceEnabled.Name = "MenuAstroUtilsTraceEnabled"
-        Me.MenuAstroUtilsTraceEnabled.Size = New System.Drawing.Size(252, 22)
+        Me.MenuAstroUtilsTraceEnabled.Size = New System.Drawing.Size(282, 22)
         Me.MenuAstroUtilsTraceEnabled.Text = "AstroUtils Trace Enabled"
         '
         'MenuCacheTraceEnabled
         '
         Me.MenuCacheTraceEnabled.Name = "MenuCacheTraceEnabled"
-        Me.MenuCacheTraceEnabled.Size = New System.Drawing.Size(252, 22)
+        Me.MenuCacheTraceEnabled.Size = New System.Drawing.Size(282, 22)
         Me.MenuCacheTraceEnabled.Text = "Cache Trace Enabled"
         '
         'MenuEarthRotationDataFormTraceEnabled
         '
         Me.MenuEarthRotationDataFormTraceEnabled.Name = "MenuEarthRotationDataFormTraceEnabled"
-        Me.MenuEarthRotationDataFormTraceEnabled.Size = New System.Drawing.Size(283, 22)
+        Me.MenuEarthRotationDataFormTraceEnabled.Size = New System.Drawing.Size(282, 22)
         Me.MenuEarthRotationDataFormTraceEnabled.Text = "Earth Rotation Data Form Trace Enabled"
+        '
+        'MenuAlpaca
+        '
+        Me.MenuAlpaca.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuDiscoveryEnabled, Me.MnuDiscoverNow, Me.ToolStripSeparator2, Me.MnuConfigureDiscovery})
+        Me.MenuAlpaca.Name = "MenuAlpaca"
+        Me.MenuAlpaca.Size = New System.Drawing.Size(55, 20)
+        Me.MenuAlpaca.Text = "Alpaca"
+        '
+        'MnuDiscoveryEnabled
+        '
+        Me.MnuDiscoveryEnabled.Name = "MnuDiscoveryEnabled"
+        Me.MnuDiscoveryEnabled.Size = New System.Drawing.Size(181, 22)
+        Me.MnuDiscoveryEnabled.Text = "DIscovery Enabled"
+        '
+        'MnuConfigureDiscovery
+        '
+        Me.MnuConfigureDiscovery.Name = "MnuConfigureDiscovery"
+        Me.MnuConfigureDiscovery.Size = New System.Drawing.Size(181, 22)
+        Me.MnuConfigureDiscovery.Text = "Configure Discovery"
+        '
+        'MnuDiscoverNow
+        '
+        Me.MnuDiscoverNow.Name = "MnuDiscoverNow"
+        Me.MnuDiscoverNow.Size = New System.Drawing.Size(181, 22)
+        Me.MnuDiscoverNow.Text = "Discover Now"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(178, 6)
+        '
+        'LedDiscoveryStatatua
+        '
+        Me.LedDiscoveryStatatua.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.LedDiscoveryStatatua.LabelText = ""
+        Me.LedDiscoveryStatatua.Location = New System.Drawing.Point(306, 4)
+        Me.LedDiscoveryStatatua.Name = "LedDiscoveryStatatua"
+        Me.LedDiscoveryStatatua.Size = New System.Drawing.Size(20, 17)
+        Me.LedDiscoveryStatatua.TabIndex = 8
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Label2.Location = New System.Drawing.Point(213, 5)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(90, 13)
+        Me.Label2.TabIndex = 9
+        Me.Label2.Text = "Alpaca Discovery"
         '
         'ChooserForm
         '
@@ -240,6 +287,8 @@
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(333, 181)
+        Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.LedDiscoveryStatatua)
         Me.Controls.Add(Me.picASCOM)
         Me.Controls.Add(Me.cmdCancel)
         Me.Controls.Add(Me.cmdOK)
@@ -281,5 +330,12 @@
     Friend WithEvents MenuNovasTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuCacheTraceEnabled As ToolStripMenuItem
     Friend WithEvents MenuEarthRotationDataFormTraceEnabled As ToolStripMenuItem
+    Friend WithEvents MenuAlpaca As ToolStripMenuItem
+    Friend WithEvents MnuDiscoveryEnabled As ToolStripMenuItem
+    Friend WithEvents MnuDiscoverNow As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+    Friend WithEvents MnuConfigureDiscovery As ToolStripMenuItem
+    Friend WithEvents LedDiscoveryStatatua As Controls.LedIndicator
+    Friend WithEvents Label2 As Label
 #End Region
 End Class

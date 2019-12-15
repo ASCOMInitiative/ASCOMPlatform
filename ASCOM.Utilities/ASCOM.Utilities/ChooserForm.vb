@@ -1,13 +1,12 @@
 Option Strict Off
 Option Explicit On
-Imports System.Collections
+
 Imports System.Runtime.InteropServices
-Imports ASCOM.Utilities.Interfaces
-Imports System.Drawing
-Imports System.Drawing.Drawing2D
 
 Friend Class ChooserForm
     Inherits System.Windows.Forms.Form
+
+#Region "Constants"
 
     Private Const ALERT_MESSAGEBOX_TITLE As String = "ASCOM Chooser"
     Private Const PROPERTIES_TOOLTIP_DISPLAY_TIME As Integer = 5000 ' Time to display the Properties tooltip (milliseconds)
@@ -16,26 +15,25 @@ Friend Class ChooserForm
     Private Const TOOLTIP_PROPERTIES_MESSAGE As String = "Check or change driver Properties (configuration)"
     Private Const TOOLTIP_PROPERTIES_FIRST_TIME_MESSAGE As String = "You must check driver configuration before first time use, please click the Properties... button." & vbCrLf & "The OK button will remain greyed out until this is done."
 
-    Private m_sDeviceType, m_sResult, m_sStartSel, sProgID As String
-    Private m_Drivers As Generic.SortedList(Of String, String)
-    Private ChooserWarningToolTip As ToolTip
-    Private ChooserPropertiesToolTip As ToolTip
-    Private DriverIsCompatible As String = ""
-    Dim CurrentWarningTitle, CurrentWarningMesage As String
-    Private TL As TraceLogger
-    Private WithEvents InitialMessageTimer As System.Windows.Forms.Timer
+#End Region
 
-    Private Sub ChooserForm_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
-        'Clean up the trace logger
-        TL.Enabled = False
-        TL.Dispose()
-    End Sub
+    Private deviceTypeValue, initiallySelectedProgIdValue, selectedProgIdValue As String
+    Private driversList As Generic.SortedList(Of String, String)
+    Private driverIsCompatible As String = ""
+    Private currentWarningTitle, currentWarningMesage As String
+
+    Private chooserWarningToolTip As ToolTip
+    Private chooserPropertiesToolTip As ToolTip
+
+    Private TL As TraceLogger
+    Private WithEvents initialMessageTimer As System.Windows.Forms.Timer
+
+#Region "Form load, close, paint and dispose event handlers"
 
     Private Sub ChooserForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-        Dim ProfileStore As RegistryAccess
+        Dim profileStore As RegistryAccess
         Dim i, iSel As Integer
-        Dim sDescription As String = ""
-        Dim Description As String
+        Dim description As String
 
         Try
             'Create the trace logger
@@ -43,24 +41,22 @@ Friend Class ChooserForm
             TL.Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
 
             'Configure the tooltip warning for 32/64bit driver compatibility messages
-            ChooserWarningToolTip = New ToolTip()
+            chooserWarningToolTip = New ToolTip()
 
             ' Configure the Properties button tooltip
-            ChooserPropertiesToolTip = New ToolTip()
-            ChooserPropertiesToolTip.IsBalloon = True
-            ChooserPropertiesToolTip.ToolTipIcon = ToolTipIcon.Info
-            ChooserPropertiesToolTip.UseFading = True
-            ChooserPropertiesToolTip.ToolTipTitle = TOOLTIP_PROPERTIES_TITLE
-            ChooserPropertiesToolTip.SetToolTip(cmdProperties, TOOLTIP_PROPERTIES_MESSAGE)
+            chooserPropertiesToolTip = New ToolTip()
+            chooserPropertiesToolTip.IsBalloon = True
+            chooserPropertiesToolTip.ToolTipIcon = ToolTipIcon.Info
+            chooserPropertiesToolTip.UseFading = True
+            chooserPropertiesToolTip.ToolTipTitle = TOOLTIP_PROPERTIES_TITLE
+            chooserPropertiesToolTip.SetToolTip(cmdProperties, TOOLTIP_PROPERTIES_MESSAGE)
 
-            ' Enumerate the available ASCOM scope drivers, and
-            ' load their descriptions and ProgIDs into the
-            ' list box. Key is ProgID, value is friendly name.
-            ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+            ' Enumerate the available ASCOM scope drivers, and load their descriptions and ProgIDs into the list box. Key is ProgID, value is friendly name.
+            profileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
             Try 'Get the list of drivers of this device type
-                m_Drivers = ProfileStore.EnumKeys(m_sDeviceType & " Drivers") ' Get Key-Class pairs
+                driversList = profileStore.EnumKeys(deviceTypeValue & " Drivers") ' Get Key-Class pairs
                 'Now list the drivers 
-                For Each Driver As Generic.KeyValuePair(Of String, String) In m_Drivers
+                For Each Driver As Generic.KeyValuePair(Of String, String) In driversList
                     TL.LogMessage("ChooserForm Load", "Found ProgID: " & Driver.Key.ToString & ", Description: @" & Driver.Value.ToString & "@")
                     If Driver.Value = "" Then
                         TL.LogMessage("ChooserForm Load", "  ***** Description missing for ProgID: " & Driver.Key.ToString)
@@ -69,34 +65,34 @@ Friend Class ChooserForm
             Catch ex1 As Exception
                 TL.LogMessageCrLf("ChooserForm Load", "Exception: " & ex1.ToString)
                 'Ignore any exceptions from this call e.g. if there are no devices of that type installed just create an empty list
-                m_Drivers = New Generic.SortedList(Of String, String)
+                driversList = New Generic.SortedList(Of String, String)
             End Try
 
             cbDriverSelector.Items.Clear()
-            If m_Drivers.Count = 0 Then
-                MsgBox("There are no ASCOM " & m_sDeviceType & " drivers installed.", CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
+            If driversList.Count = 0 Then
+                MsgBox("There are no ASCOM " & deviceTypeValue & " drivers installed.", CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
             Else
-                For Each de As Generic.KeyValuePair(Of String, String) In m_Drivers
-                    Description = de.Value ' Set the device description
-                    If de.Value = "" Then Description = de.Key 'Deal with the possibility that it is an empty string, i.e. the driver author has forgotton to set it!
-                    cbDriverSelector.Items.Add(Description) ' Add items & allow to sort
+                For Each de As Generic.KeyValuePair(Of String, String) In driversList
+                    description = de.Value ' Set the device description
+                    If de.Value = "" Then description = de.Key 'Deal with the possibility that it is an empty string, i.e. the driver author has forgotton to set it!
+                    cbDriverSelector.Items.Add(description) ' Add items & allow to sort
                 Next
             End If
 
-            Me.Text = "ASCOM " & m_sDeviceType & " Chooser"
-            Me.lblTitle.Text = "Select the type of " & LCase(m_sDeviceType) & " you have, then be " & "sure to click the Properties... button to configure the driver for your " & LCase(m_sDeviceType) & "."
-            m_sResult = ""
+            Me.Text = "ASCOM " & deviceTypeValue & " Chooser"
+            Me.lblTitle.Text = "Select the type of " & LCase(deviceTypeValue) & " you have, then be " & "sure to click the Properties... button to configure the driver for your " & LCase(deviceTypeValue) & "."
+            selectedProgIdValue = ""
 
             ' Now items in list are sorted. Preselect and find the description corresponding to the set progid
-            For Each de As Generic.KeyValuePair(Of String, String) In m_Drivers
-                If LCase(m_sStartSel) = LCase(de.Key.ToString) Then sDescription = de.Value.ToString
+            For Each de As Generic.KeyValuePair(Of String, String) In driversList
+                If LCase(initiallySelectedProgIdValue) = LCase(de.Key.ToString) Then description = de.Value.ToString
             Next
 
             iSel = -1
             i = -1
             For Each Desc As String In cbDriverSelector.Items
                 i += 1
-                If LCase(sDescription) = LCase(Desc) Then iSel = i
+                If LCase(description) = LCase(Desc) Then iSel = i
             Next
 
             If iSel >= 0 Then ' Start selection?
@@ -107,15 +103,15 @@ Friend Class ChooserForm
             End If
             cbDriverSelector_SelectedIndexChanged(cbDriverSelector, New System.EventArgs()) ' Also dims OK
 
-            ProfileStore.Dispose() 'Close down the profile store
-            ProfileStore = Nothing
+            profileStore.Dispose() 'Close down the profile store
+            profileStore = Nothing
 
             RefreshTraceMenu() ' Refresh the trace menu
 
             ' Set up a one-off timer in order to force display of the warning message if the pre-selected driver is not compatible
-            InitialMessageTimer = New System.Windows.Forms.Timer
-            InitialMessageTimer.Interval = FORM_LOAD_WARNING_MESSAGE_DELAY_TIME ' Set it to fire after 250ms
-            InitialMessageTimer.Start() ' Kick off the timer
+            initialMessageTimer = New System.Windows.Forms.Timer
+            initialMessageTimer.Interval = FORM_LOAD_WARNING_MESSAGE_DELAY_TIME ' Set it to fire after 250ms
+            initialMessageTimer.Start() ' Kick off the timer
 
         Catch ex As Exception
             MsgBox("ChooserForm Load " & ex.ToString)
@@ -123,83 +119,70 @@ Friend Class ChooserForm
         End Try
     End Sub
 
-    Private Sub TimerEventProcessor(ByVal myObject As Object, ByVal myEventArgs As EventArgs) Handles InitialMessageTimer.Tick
-        ' This event kicks off once triggered by form load in order to force display of the warning message for a driver that is pre-selected by the user.
-        InitialMessageTimer.Stop() ' Disable the timer to prevent future events from firing
-        InitialMessageTimer.Enabled = False
-        TL.LogMessageCrLf("ChooserForm Timer", "Displaying warning message, if there is one")
-        cbDriverSelector_SelectedIndexChanged(cbDriverSelector, New System.EventArgs()) ' Forces display of the  warning tooltip because it does not show up when displayed during FORM load
+    Private Sub ChooserForm_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
+        'Clean up the trace logger
+        TL.Enabled = False
     End Sub
 
-    Private Sub RefreshTraceMenu()
-        Dim TraceFileName As String ', ProfileStore As RegistryAccess
-
-        Using ProfileStore As New RegistryAccess
-
-            TraceFileName = ProfileStore.GetProfile("", SERIAL_FILE_NAME_VARNAME)
-            Select Case TraceFileName
-                Case "" 'Trace is disabled
-                    'MenuUseTraceAutoFilenames.Enabled = True 'Autofilenames are enabled but unchecked
-                    'MenuUseTraceAutoFilenames.Checked = False
-                    'MenuUseTraceManualFilename.Enabled = True 'Manual trace filename is enabled but unchecked
-                    'MenuUseTraceManualFilename.Checked = False
-                    MenuSerialTraceEnabled.Checked = False 'The trace enabled flag is unchecked and disabled
-                    MenuSerialTraceEnabled.Enabled = True
-                Case SERIAL_AUTO_FILENAME 'Tracing is on using an automatic filename
-                    'MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and checked
-                    'MenuUseTraceAutoFilenames.Checked = True
-                    'MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is dis enabled and unchecked
-                    'MenuUseTraceManualFilename.Checked = False
-                    MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
-                    MenuSerialTraceEnabled.Enabled = True
-                Case Else 'Tracing using some other fixed filename
-                    'MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and unchecked
-                    'MenuUseTraceAutoFilenames.Checked = False
-                    'MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is disabled enabled and checked
-                    'MenuUseTraceManualFilename.Checked = True
-                    MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
-                    MenuSerialTraceEnabled.Enabled = True
-            End Select
-
-            'Set Profile trace checked state on menu item 
-            MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
-            MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
-            MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
-            'MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
-            MenuSimulatorTraceEnabled.Checked = GetBool(SIMULATOR_TRACE, SIMULATOR_TRACE_DEFAULT)
-            MenuDriverAccessTraceEnabled.Checked = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
-            MenuAstroUtilsTraceEnabled.Checked = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
-            MenuNovasTraceEnabled.Checked = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT)
-            MenuCacheTraceEnabled.Checked = GetBool(TRACE_CACHE, TRACE_CACHE_DEFAULT)
-            MenuEarthRotationDataFormTraceEnabled.Checked = GetBool(TRACE_EARTHROTATION_DATA_FORM, TRACE_EARTHROTATION_DATA_FORM_DEFAULT)
-
-        End Using
+    ''' <summary>
+    ''' Dispose of disposable components
+    ''' </summary>
+    ''' <param name="Disposing"></param>
+    Protected Overloads Overrides Sub Dispose(ByVal Disposing As Boolean)
+        If Disposing Then
+            If Not components Is Nothing Then
+                components.Dispose()
+            End If
+            If Not TL Is Nothing Then
+                Try : TL.Dispose() : Catch : End Try
+            End If
+            If Not chooserWarningToolTip Is Nothing Then
+                Try : chooserWarningToolTip.Dispose() : Catch : End Try
+            End If
+            If Not chooserPropertiesToolTip Is Nothing Then
+                Try : chooserPropertiesToolTip.Dispose() : Catch : End Try
+            End If
+        End If
+        MyBase.Dispose(Disposing)
     End Sub
+
+    Private Sub ChooserForm_Paint(ByVal sender As Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Me.Paint
+        Dim SolidBrush As New SolidBrush(Color.Black), LinePen As Pen
+
+        'Routine to draw horizontal line on the ASCOM Chooser form
+        LinePen = New Pen(SolidBrush, 1)
+        e.Graphics.DrawLine(LinePen, 14, 103, Me.Width - 20, 103)
+    End Sub
+
+#End Region
+
+#Region "Public methods"
+
+    ' Isolate this form from the rest of the component
+    ' Return of "" indicates error or Cancel clicked
+    Public ReadOnly Property SelectedProgId() As String
+        Get
+            Return selectedProgIdValue
+        End Get
+    End Property
 
     Public WriteOnly Property DeviceType() As String
         Set(ByVal Value As String)
-            m_sDeviceType = Value
+            deviceTypeValue = Value
         End Set
     End Property
 
-    Public WriteOnly Property StartSel() As String
+    Public WriteOnly Property InitiallySelectedProgId() As String
         Set(ByVal Value As String)
-            m_sStartSel = Value
+            initiallySelectedProgIdValue = Value
         End Set
     End Property
-    '
-    ' Isolate this form from the rest of the component
-    ' Return of "" indicates error or Cancel clicked
-    '
-    Public ReadOnly Property Result() As String
-        Get
-            Result = m_sResult
-        End Get
-    End Property
-    '
-    ' Click in Properties... button. Load the currently selected
-    ' driver and activate its setup dialog.
-    '
+
+#End Region
+
+#Region "UI event handlers"
+
+    ' Click in Properties... button. Loads the currently selected driver and activate its setup dialog.
     Private Sub cmdProperties_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdProperties.Click
         Dim ProfileStore As RegistryAccess
         Dim oDrv As Object = Nothing ' The driver
@@ -213,7 +196,7 @@ Friend Class ChooserForm
         cb = Me.cbDriverSelector ' Convenient shortcut
 
         'Find ProgID corresponding to description
-        For Each Driver As Generic.KeyValuePair(Of String, String) In m_Drivers
+        For Each Driver As Generic.KeyValuePair(Of String, String) In driversList
             If Driver.Value = "" Then 'Deal with the possibility that the description is missing, in which case use the ProgID as the identifier
                 If LCase(Driver.Key.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = Driver.Key.ToString
             Else 'Description is present
@@ -264,14 +247,12 @@ Friend Class ChooserForm
         'Clean up and release resources
         Try : oDrv.Dispose() : Catch ex As Exception : End Try
         Try : Marshal.ReleaseComObject(oDrv) : Catch ex As Exception : End Try
-        oDrv = Nothing
 
         ProfileStore.Dispose()
-        ProfileStore = Nothing
     End Sub
 
     Private Sub cmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCancel.Click
-        m_sResult = ""
+        selectedProgIdValue = ""
         Me.Hide()
     End Sub
 
@@ -281,26 +262,26 @@ Friend Class ChooserForm
         cb = Me.cbDriverSelector ' Convenient shortcut
 
         'Find ProgID corresponding to description
-        For Each Driver As Generic.KeyValuePair(Of String, String) In m_Drivers
+        For Each Driver As Generic.KeyValuePair(Of String, String) In driversList
             TL.LogMessage("OK Click", "Processing ProgID: " & Driver.Key.ToString & ", Description: @" & Driver.Value.ToString & "@")
             If Driver.Value = "" Then 'Deal with the possibility that the description is missing, in which case use the ProgID as the identifier
                 If LCase(Driver.Key.ToString) = LCase(cb.SelectedItem.ToString) Then
-                    sProgID = Driver.Key.ToString
-                    TL.LogMessage("OK Click", "  Description is missing... selecting ProgID: " & sProgID)
+                    selectedProgIdValue = Driver.Key.ToString
+                    TL.LogMessage("OK Click", "  Description is missing... selecting ProgID: " & selectedProgIdValue)
                 End If
             Else
                 If LCase(Driver.Value.ToString) = LCase(cb.SelectedItem.ToString) Then
-                    m_sResult = Driver.Key.ToString
-                    TL.LogMessage("OK Click", "  Description is present... selecting ProgID: " & sProgID)
+                    selectedProgIdValue = Driver.Key.ToString
+                    TL.LogMessage("OK Click", "  Description is present... selecting ProgID: " & selectedProgIdValue)
                 End If
             End If
         Next
-        TL.LogMessage("OK Click", "Returning ProgID: " & sProgID)
+        TL.LogMessage("OK Click", "Returning ProgID: " & selectedProgIdValue)
         Me.Hide()
     End Sub
 
     Private Sub cbDriverSelector_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cbDriverSelector.SelectionChangeCommitted
-        Dim buf As String, ProfileStore As RegistryAccess
+        Dim deviceInitialised As String, ProfileStore As RegistryAccess
         ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
 
         If Me.cbDriverSelector.SelectedIndex >= 0 Then ' Something selected
@@ -308,27 +289,27 @@ Friend Class ChooserForm
             WarningTooltipClear() 'Hide any previous message
 
             'Find ProgID corresponding to description
-            For Each Driver As Generic.KeyValuePair(Of String, String) In m_Drivers
+            For Each Driver As Generic.KeyValuePair(Of String, String) In driversList
                 If Driver.Value = "" Then 'Deal with the possibility that the description is missing, in which case use the ProgID as the identifier
-                    If LCase(Driver.Key.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = Driver.Key.ToString
+                    If LCase(Driver.Key.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then selectedProgIdValue = Driver.Key.ToString
                 Else 'Description is present
-                    If LCase(Driver.Value.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = Driver.Key.ToString
+                    If LCase(Driver.Value.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then selectedProgIdValue = Driver.Key.ToString
                 End If
             Next
-            TL.LogMessage("DriverSelected", "ProgID:" & sProgID & ", Bitness: " & ApplicationBits.ToString)
-            DriverIsCompatible = VersionCode.DriverCompatibilityMessage(sProgID, ApplicationBits, TL) 'Get compatibility warning message, if any
+            TL.LogMessage("DriverSelected", "ProgID:" & selectedProgIdValue & ", Bitness: " & ApplicationBits.ToString)
+            driverIsCompatible = VersionCode.DriverCompatibilityMessage(selectedProgIdValue, ApplicationBits, TL) 'Get compatibility warning message, if any
 
-            If DriverIsCompatible <> "" Then 'This is an incompatible driver
+            If driverIsCompatible <> "" Then 'This is an incompatible driver
                 Me.cmdProperties.Enabled = False ' So prevent access!
                 Me.cmdOK.Enabled = False
                 TL.LogMessage("DriverSelected", "Showing incompatible driver message")
-                WarningToolTipShow("Incompatible Driver (" & sProgID & ")", DriverIsCompatible)
+                WarningToolTipShow("Incompatible Driver (" & selectedProgIdValue & ")", driverIsCompatible)
             Else
                 Me.cmdProperties.Enabled = True ' Turn on Properties
-                buf = ProfileStore.GetProfile("Chooser", sProgID & " Init")
-                If LCase(buf) = "true" Then
+                deviceInitialised = ProfileStore.GetProfile("Chooser", selectedProgIdValue & " Init")
+                If LCase(deviceInitialised) = "true" Then
                     Me.cmdOK.Enabled = True ' This device has been initialized
-                    CurrentWarningMesage = ""
+                    currentWarningMesage = ""
                     TL.LogMessage("DriverSelected", "Driver is compatible and configured so no message")
                 Else
                     Me.cmdOK.Enabled = False ' Ensure OK is enabled
@@ -343,46 +324,6 @@ Friend Class ChooserForm
         End If
 
         ProfileStore.Dispose() 'Clean up profile store
-        ProfileStore = Nothing
-    End Sub
-
-    Private Sub WarningToolTipShow(Title As String, Message As String)
-        WarningTooltipClear()
-        ChooserWarningToolTip.UseAnimation = True
-        ChooserWarningToolTip.UseFading = False
-        ChooserWarningToolTip.ToolTipIcon = ToolTipIcon.Warning
-        ChooserWarningToolTip.AutoPopDelay = 5000
-        ChooserWarningToolTip.InitialDelay = 0
-        ChooserWarningToolTip.IsBalloon = False
-        ChooserWarningToolTip.ReshowDelay = 0
-        ChooserWarningToolTip.OwnerDraw = False
-        ChooserWarningToolTip.ToolTipTitle = Title
-        CurrentWarningTitle = Title
-        CurrentWarningMesage = Message
-
-        If Message.Contains(vbCrLf) Then
-            ChooserWarningToolTip.Show(Message, Me, 18, 24) 'Display at position for a two line message
-        Else
-            ChooserWarningToolTip.Show(Message, Me, 18, 50) 'Display at position for a one line message
-        End If
-    End Sub
-
-    Private Sub WarningTooltipClear()
-        ChooserWarningToolTip.RemoveAll()
-        CurrentWarningTitle = ""
-        CurrentWarningMesage = ""
-    End Sub
-
-    Private Sub ChooserForm_ShowMove(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Move
-        If CurrentWarningMesage <> "" Then WarningToolTipShow(CurrentWarningTitle, CurrentWarningMesage)
-    End Sub
-
-    Private Sub ChooserForm_Paint(ByVal sender As Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Me.Paint
-        Dim SolidBrush As New SolidBrush(Color.Black), LinePen As Pen
-
-        'Routine to draw horizontal line on the ASCOM Chooser form
-        LinePen = New Pen(SolidBrush, 1)
-        e.Graphics.DrawLine(LinePen, 14, 103, Me.Width - 20, 103)
     End Sub
 
     Private Sub picASCOM_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles picASCOM.Click
@@ -391,6 +332,98 @@ Friend Class ChooserForm
         Catch ex As Exception
             MsgBox("Unable to display ASCOM-Standards web site in your browser: " & ex.Message, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
         End Try
+    End Sub
+
+#End Region
+
+#Region "Tooltips code and event handlers"
+
+    Private Sub ChooserFormMoveEventHandler(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Move
+        If currentWarningMesage <> "" Then WarningToolTipShow(currentWarningTitle, currentWarningMesage)
+    End Sub
+
+    Private Sub FormLoadTimerEventHandler(ByVal myObject As Object, ByVal myEventArgs As EventArgs) Handles initialMessageTimer.Tick
+        ' This event kicks off once triggered by form load in order to force display of the warning message for a driver that is pre-selected by the user.
+        initialMessageTimer.Stop() ' Disable the timer to prevent future events from firing
+        initialMessageTimer.Enabled = False
+        TL.LogMessageCrLf("ChooserForm Timer", "Displaying warning message, if there is one")
+        cbDriverSelector_SelectedIndexChanged(cbDriverSelector, New System.EventArgs()) ' Force display of the  warning tooltip because it does not show up when displayed during FORM load
+    End Sub
+
+    Private Sub WarningToolTipShow(Title As String, Message As String)
+        WarningTooltipClear()
+        chooserWarningToolTip.UseAnimation = True
+        chooserWarningToolTip.UseFading = False
+        chooserWarningToolTip.ToolTipIcon = ToolTipIcon.Warning
+        chooserWarningToolTip.AutoPopDelay = 5000
+        chooserWarningToolTip.InitialDelay = 0
+        chooserWarningToolTip.IsBalloon = False
+        chooserWarningToolTip.ReshowDelay = 0
+        chooserWarningToolTip.OwnerDraw = False
+        chooserWarningToolTip.ToolTipTitle = Title
+        currentWarningTitle = Title
+        currentWarningMesage = Message
+
+        If Message.Contains(vbCrLf) Then
+            chooserWarningToolTip.Show(Message, Me, 18, 24) 'Display at position for a two line message
+        Else
+            chooserWarningToolTip.Show(Message, Me, 18, 50) 'Display at position for a one line message
+        End If
+    End Sub
+
+    Private Sub WarningTooltipClear()
+        chooserWarningToolTip.RemoveAll()
+        currentWarningTitle = ""
+        currentWarningMesage = ""
+    End Sub
+
+#End Region
+
+#Region "Menu code and event handlers"
+
+    Private Sub RefreshTraceMenu()
+        Dim TraceFileName As String ', ProfileStore As RegistryAccess
+
+        Using ProfileStore As New RegistryAccess
+
+            TraceFileName = ProfileStore.GetProfile("", SERIAL_FILE_NAME_VARNAME)
+            Select Case TraceFileName
+                Case "" 'Trace is disabled
+                    'MenuUseTraceAutoFilenames.Enabled = True 'Autofilenames are enabled but unchecked
+                    'MenuUseTraceAutoFilenames.Checked = False
+                    'MenuUseTraceManualFilename.Enabled = True 'Manual trace filename is enabled but unchecked
+                    'MenuUseTraceManualFilename.Checked = False
+                    MenuSerialTraceEnabled.Checked = False 'The trace enabled flag is unchecked and disabled
+                    MenuSerialTraceEnabled.Enabled = True
+                Case SERIAL_AUTO_FILENAME 'Tracing is on using an automatic filename
+                    'MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and checked
+                    'MenuUseTraceAutoFilenames.Checked = True
+                    'MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is dis enabled and unchecked
+                    'MenuUseTraceManualFilename.Checked = False
+                    MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
+                    MenuSerialTraceEnabled.Enabled = True
+                Case Else 'Tracing using some other fixed filename
+                    'MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and unchecked
+                    'MenuUseTraceAutoFilenames.Checked = False
+                    'MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is disabled enabled and checked
+                    'MenuUseTraceManualFilename.Checked = True
+                    MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
+                    MenuSerialTraceEnabled.Enabled = True
+            End Select
+
+            'Set Profile trace checked state on menu item 
+            MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
+            MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
+            MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
+            'MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
+            MenuSimulatorTraceEnabled.Checked = GetBool(SIMULATOR_TRACE, SIMULATOR_TRACE_DEFAULT)
+            MenuDriverAccessTraceEnabled.Checked = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
+            MenuAstroUtilsTraceEnabled.Checked = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
+            MenuNovasTraceEnabled.Checked = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT)
+            MenuCacheTraceEnabled.Checked = GetBool(TRACE_CACHE, TRACE_CACHE_DEFAULT)
+            MenuEarthRotationDataFormTraceEnabled.Checked = GetBool(TRACE_EARTHROTATION_DATA_FORM, TRACE_EARTHROTATION_DATA_FORM_DEFAULT)
+
+        End Using
     End Sub
 
     Private Sub MenuAutoTraceFilenames_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
@@ -405,7 +438,6 @@ Friend Class ChooserForm
         MenuSerialTraceEnabled.Checked = True 'Enable the trace enabled flag
         ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SERIAL_AUTO_FILENAME)
         ProfileStore.Dispose()
-        ProfileStore = Nothing
     End Sub
 
     Private Sub MenuSerialTraceFile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
@@ -430,7 +462,6 @@ Friend Class ChooserForm
 
         End Select
         ProfileStore.Dispose()
-        ProfileStore = Nothing
     End Sub
 
     Private Sub MenuSerialTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuSerialTraceEnabled.Click
@@ -446,7 +477,6 @@ Friend Class ChooserForm
             ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SERIAL_AUTO_FILENAME)
         End If
         ProfileStore.Dispose()
-        ProfileStore = Nothing
     End Sub
 
     Private Sub MenuProfileTraceEnabled_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuProfileTraceEnabled.Click
@@ -503,5 +533,7 @@ Friend Class ChooserForm
         MenuNovasTraceEnabled.Checked = Not MenuNovasTraceEnabled.Checked 'Invert selection
         SetName(NOVAS_TRACE, MenuNovasTraceEnabled.Checked.ToString)
     End Sub
+
+#End Region
 
 End Class

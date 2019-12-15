@@ -37,8 +37,8 @@ Public Class Chooser
     ' 25-Feb-09 pwgs     5.1.0 - Refactored for Utilities
     '---------------------------------------------------------------------
 
-    Private m_frmChooser As ChooserForm
-    Private m_sDeviceType As String = ""
+    Private chooserFormInstance As ChooserForm
+    Private deviceTypeValue As String = ""
 
 #Region " New and IDisposable Support "
 
@@ -50,14 +50,14 @@ Public Class Chooser
     ''' <remarks></remarks>
     Public Sub New()
         MyBase.New()
-        'MsgBox("CHOOSER.NEW Before New Form")
+
         Try
-            m_frmChooser = New ChooserForm ' Initially hidden
+            chooserFormInstance = New ChooserForm ' Initially hidden
         Catch ex As Exception
             MsgBox("Chooser.New " & ex.ToString)
         End Try
-        'MsgBox("CHOOSER.NEW AFter New Form")
-        m_sDeviceType = "Telescope" ' Default to Telescope chooser
+
+        deviceTypeValue = "Telescope" ' Default to Telescope chooser
     End Sub
 
     ' IDisposable
@@ -70,9 +70,9 @@ Public Class Chooser
         If Not Me.disposedValue Then
             If disposing Then
             End If
-            If Not (m_frmChooser Is Nothing) Then
-                m_frmChooser.Dispose()
-                m_frmChooser = Nothing
+            If Not (chooserFormInstance Is Nothing) Then
+                chooserFormInstance.Dispose()
+                chooserFormInstance = Nothing
             End If
 
         End If
@@ -113,12 +113,12 @@ Public Class Chooser
     '''</remarks>
     Public Property DeviceType() As String Implements IChooser.DeviceType
         Get
-            Return m_sDeviceType
+            Return deviceTypeValue
         End Get
         Set(ByVal Value As String)
             If Value = "" Then Throw New Exceptions.InvalidValueException("Chooser:DeviceType - " & MSG_ILLEGAL_DEVTYPE) 'Err.Raise(SCODE_ILLEGAL_DEVTYPE, ERR_SOURCE_PROFILE, MSG_ILLEGAL_DEVTYPE)
 
-            m_sDeviceType = Value
+            deviceTypeValue = Value
         End Set
     End Property
 
@@ -132,25 +132,28 @@ Public Class Chooser
     ''' <remarks>The supplied driver will be pre-selected in the Chooser's list when the chooser window is first opened.
     ''' </remarks>
     Public Overloads Function Choose(ByVal DriverProgID As String) As String Implements IChooser.Choose
-        Dim RetVal As String = ""
+        Dim selectedProgId As String
+
         Try
 
-            If String.IsNullOrEmpty(m_sDeviceType) Then Throw New Exceptions.InvalidValueException("Unknown device type, DeviceType property has not been set")
+            If String.IsNullOrEmpty(deviceTypeValue) Then Throw New Exceptions.InvalidValueException("Unknown device type, DeviceType property has not been set")
 
-            m_frmChooser.DeviceType = m_sDeviceType
-            m_frmChooser.StartSel = DriverProgID
-            '   -------------------
-            m_frmChooser.ShowDialog() ' -- MODAL --
-            '   -------------------
-            RetVal = m_frmChooser.Result
-            m_frmChooser.Dispose()
-            m_frmChooser = Nothing
+            chooserFormInstance.DeviceType = deviceTypeValue
+            chooserFormInstance.InitiallySelectedProgId = DriverProgID
+
+            chooserFormInstance.ShowDialog() ' DIsplay MODAL Chooser dialogue
+
+            selectedProgId = chooserFormInstance.SelectedProgId
+
+            chooserFormInstance.Dispose()
+            chooserFormInstance = Nothing
         Catch ex As Exception
             MsgBox("Chooser Exception: " & ex.ToString)
             LogEvent("Chooser", "Exception", EventLogEntryType.Error, EventLogErrors.ChooserException, ex.ToString)
-            RetVal = ""
+            selectedProgId = ""
         End Try
-        Return RetVal
+
+        Return selectedProgId
     End Function
 #End Region
 
