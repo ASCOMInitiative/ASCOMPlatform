@@ -109,68 +109,6 @@ Friend Class ChooserForm
         End Try
     End Sub
 
-    Private Sub PopulateDriverComboBox()
-        Dim profileStore As RegistryAccess
-        Dim i, iSel As Integer
-        Dim description As String
-
-        profileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
-
-        ' Enumerate the available drivers, and load their descriptions and ProgIDs into the list box. Key is ProgID, value is friendly name.
-        Try 'Get the list of drivers of this device type
-            driversList = profileStore.EnumKeys(deviceTypeValue & " Drivers") ' Get Key-Class pairs
-            'Now list the drivers 
-            For Each Driver As Generic.KeyValuePair(Of String, String) In driversList
-                TL.LogMessage("ChooserForm Load", "Found ProgID: " & Driver.Key.ToString & ", Description: @" & Driver.Value.ToString & "@")
-                If Driver.Value = "" Then
-                    TL.LogMessage("ChooserForm Load", "  ***** Description missing for ProgID: " & Driver.Key.ToString)
-                End If
-            Next
-        Catch ex1 As Exception
-            TL.LogMessageCrLf("ChooserForm Load", "Exception: " & ex1.ToString)
-            'Ignore any exceptions from this call e.g. if there are no devices of that type installed just create an empty list
-            driversList = New Generic.SortedList(Of String, String)
-        End Try
-
-        ' Populate the driver selection combo box with driver friendly names
-        CmbDriverSelector.Items.Clear()
-        If driversList.Count = 0 Then
-            MsgBox("There are no ASCOM " & deviceTypeValue & " drivers installed.", CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
-        Else
-            For Each driver As Generic.KeyValuePair(Of String, String) In driversList
-                description = driver.Value ' Set the device description
-                If driver.Value = "" Then description = driver.Key 'Deal with the possibility that it is an empty string, i.e. the driver author has forgotten to set it!
-                CmbDriverSelector.Items.Add(description) ' Add items & allow to sort
-            Next
-        End If
-
-        ' Find the description corresponding to the set ProgID
-        For Each driver As Generic.KeyValuePair(Of String, String) In driversList
-            If LCase(initiallySelectedProgIdValue) = LCase(driver.Key.ToString) Then description = driver.Value.ToString
-        Next
-
-        ' Find the index of the combo box item that matches the description derived from the ProgID
-        iSel = -1
-        i = -1
-        For Each Desc As String In CmbDriverSelector.Items
-            i += 1
-            If LCase(description) = LCase(Desc) Then iSel = i
-        Next
-
-        If iSel >= 0 Then ' If a match was found select the item
-            CmbDriverSelector.SelectedIndex = iSel ' Jump list to that
-            BtnOK.Enabled = True ' Enable the OK button
-        Else ' Match not found so don't pre-select an item
-            CmbDriverSelector.SelectedIndex = -1
-        End If
-
-        ' Check that the selected driver is valid
-        ValidateDriver()
-
-        profileStore.Dispose() 'Close down the profile store
-
-    End Sub
-
     Private Sub ChooserForm_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
         'Clean up the trace logger
         TL.Enabled = False
@@ -231,6 +169,10 @@ Friend Class ChooserForm
 #End Region
 
 #Region "Form and timer event handlers"
+
+    Private Sub ChooserFormMoveEventHandler(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Move
+        If currentWarningMesage <> "" Then WarningToolTipShow(currentWarningTitle, currentWarningMesage)
+    End Sub
 
     Private Sub ChooserForm_Paint(ByVal sender As Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Me.Paint
         Dim SolidBrush As New SolidBrush(Color.Black), LinePen As Pen
@@ -360,41 +302,6 @@ Friend Class ChooserForm
         Catch ex As Exception
             MsgBox("Unable to display ASCOM-Standards web site in your browser: " & ex.Message, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
         End Try
-    End Sub
-
-#End Region
-
-#Region "Tooltips code and event handlers"
-
-    Private Sub ChooserFormMoveEventHandler(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Move
-        If currentWarningMesage <> "" Then WarningToolTipShow(currentWarningTitle, currentWarningMesage)
-    End Sub
-
-    Private Sub WarningToolTipShow(Title As String, Message As String)
-        WarningTooltipClear()
-        chooserWarningToolTip.UseAnimation = True
-        chooserWarningToolTip.UseFading = False
-        chooserWarningToolTip.ToolTipIcon = ToolTipIcon.Warning
-        chooserWarningToolTip.AutoPopDelay = 5000
-        chooserWarningToolTip.InitialDelay = 0
-        chooserWarningToolTip.IsBalloon = False
-        chooserWarningToolTip.ReshowDelay = 0
-        chooserWarningToolTip.OwnerDraw = False
-        chooserWarningToolTip.ToolTipTitle = Title
-        currentWarningTitle = Title
-        currentWarningMesage = Message
-
-        If Message.Contains(vbCrLf) Then
-            chooserWarningToolTip.Show(Message, Me, 18, 24) 'Display at position for a two line message
-        Else
-            chooserWarningToolTip.Show(Message, Me, 18, 50) 'Display at position for a one line message
-        End If
-    End Sub
-
-    Private Sub WarningTooltipClear()
-        chooserWarningToolTip.RemoveAll()
-        currentWarningTitle = ""
-        currentWarningMesage = ""
     End Sub
 
 #End Region
@@ -546,7 +453,7 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub MnuDiscoverNow_Click(sender As Object, e As EventArgs) Handles MnuDiscoverNow.Click
-
+        StartAlpacaDiscovery()
     End Sub
 
     Private Sub MnuConfigureDiscovery_Click(sender As Object, e As EventArgs) Handles MnuConfigureDiscovery.Click
@@ -570,6 +477,7 @@ Friend Class ChooserForm
 #End Region
 
 #Region "State Persistence"
+
     Private Sub ReadState(DeviceType As String)
         Dim registry As RegistryAccess
 
@@ -608,7 +516,7 @@ Friend Class ChooserForm
             registry.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_DISCOVERY_PORT, AlpacaDiscoveryPort.ToString(CultureInfo.InvariantCulture))
             registry.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_NUMBER_OF_BROADCASTS, AlpacaNumberOfBroadcasts.ToString(CultureInfo.InvariantCulture))
             registry.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_TIMEOUT, AlpacaTimeout.ToString(CultureInfo.InvariantCulture))
-            registry.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_DNS_RESOLUTION, alpacaDnsResolution.ToString(CultureInfo.InvariantCulture))
+            registry.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_DNS_RESOLUTION, AlpacaDnsResolution.ToString(CultureInfo.InvariantCulture))
 
         Catch ex As Exception
             MsgBox("Chooser Write State " & ex.ToString)
@@ -623,6 +531,86 @@ Friend Class ChooserForm
 #End Region
 
 #Region "Support code"
+
+    Private Sub StartAlpacaDiscovery()
+        Try
+            ' Render the user interface unresponsive while discovery is underway, except for the Cancel button.
+            SetStateAlpacaDiscovering()
+
+            Dim i As Integer
+            For i = 10 To 500
+                Threading.Thread.Sleep(10)
+                Application.DoEvents()
+            Next
+        Catch ex As Exception
+        Finally
+            ' Restore a usable user interface
+            SetStateAlpacaDiscoveryComplete()
+
+        End Try
+    End Sub
+
+    Private Sub PopulateDriverComboBox()
+        Dim profileStore As RegistryAccess
+        Dim i, iSel As Integer
+        Dim description As String
+
+        profileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+
+        ' Enumerate the available drivers, and load their descriptions and ProgIDs into the list box. Key is ProgID, value is friendly name.
+        Try 'Get the list of drivers of this device type
+            driversList = profileStore.EnumKeys(deviceTypeValue & " Drivers") ' Get Key-Class pairs
+            'Now list the drivers 
+            For Each Driver As Generic.KeyValuePair(Of String, String) In driversList
+                TL.LogMessage("ChooserForm Load", "Found ProgID: " & Driver.Key.ToString & ", Description: @" & Driver.Value.ToString & "@")
+                If Driver.Value = "" Then
+                    TL.LogMessage("ChooserForm Load", "  ***** Description missing for ProgID: " & Driver.Key.ToString)
+                End If
+            Next
+        Catch ex1 As Exception
+            TL.LogMessageCrLf("ChooserForm Load", "Exception: " & ex1.ToString)
+            'Ignore any exceptions from this call e.g. if there are no devices of that type installed just create an empty list
+            driversList = New Generic.SortedList(Of String, String)
+        End Try
+
+        ' Populate the driver selection combo box with driver friendly names
+        CmbDriverSelector.Items.Clear()
+        If driversList.Count = 0 Then
+            MsgBox("There are no ASCOM " & deviceTypeValue & " drivers installed.", CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
+        Else
+            For Each driver As Generic.KeyValuePair(Of String, String) In driversList
+                description = driver.Value ' Set the device description
+                If driver.Value = "" Then description = driver.Key 'Deal with the possibility that it is an empty string, i.e. the driver author has forgotten to set it!
+                CmbDriverSelector.Items.Add(description) ' Add items & allow to sort
+            Next
+        End If
+
+        ' Find the description corresponding to the set ProgID
+        For Each driver As Generic.KeyValuePair(Of String, String) In driversList
+            If LCase(initiallySelectedProgIdValue) = LCase(driver.Key.ToString) Then description = driver.Value.ToString
+        Next
+
+        ' Find the index of the combo box item that matches the description derived from the ProgID
+        iSel = -1
+        i = -1
+        For Each Desc As String In CmbDriverSelector.Items
+            i += 1
+            If LCase(description) = LCase(Desc) Then iSel = i
+        Next
+
+        If iSel >= 0 Then ' If a match was found select the item
+            CmbDriverSelector.SelectedIndex = iSel ' Jump list to that
+            BtnOK.Enabled = True ' Enable the OK button
+        Else ' Match not found so don't pre-select an item
+            CmbDriverSelector.SelectedIndex = -1
+        End If
+
+        ' Check that the selected driver is valid
+        ValidateDriver()
+
+        profileStore.Dispose() 'Close down the profile store
+
+    End Sub
 
     Private Sub SetStateNoAlpaca()
         LblAlpacaDiscovery.Visible = False
@@ -643,6 +631,7 @@ Friend Class ChooserForm
         LedDiscoveryStatus.Visible = True
         LedDiscoveryStatus.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm
         LedDiscoveryStatus.Status = ASCOM.Controls.TrafficLight.Yellow
+        LedDiscoveryStatus.Refresh()
         CmbDriverSelector.Enabled = False
         alpacaStatusToolstripLabel.Text = "Discovery Enabled" : alpacaStatusToolstripLabel.BackColor = Color.LightGreen
         MnuDiscoverNow.Enabled = False
@@ -658,6 +647,7 @@ Friend Class ChooserForm
         LedDiscoveryStatus.Visible = True
         LedDiscoveryStatus.Cadence = ASCOM.Controls.CadencePattern.SteadyOn
         LedDiscoveryStatus.Status = ASCOM.Controls.TrafficLight.Green
+        LedDiscoveryStatus.Refresh()
         alpacaStatusToolstripLabel.Text = "Discovery Enabled" : alpacaStatusToolstripLabel.BackColor = Color.LightGreen
         CmbDriverSelector.Enabled = True
         MnuDiscoverNow.Enabled = True
@@ -666,7 +656,6 @@ Friend Class ChooserForm
         MnuConfigureDiscovery.Enabled = True
         BtnProperties.Enabled = True
         BtnOK.Enabled = True
-
     End Sub
 
     Private Sub ValidateDriver()
@@ -716,6 +705,32 @@ Friend Class ChooserForm
 
     End Sub
 
+    Private Sub WarningToolTipShow(Title As String, Message As String)
+        WarningTooltipClear()
+        chooserWarningToolTip.UseAnimation = True
+        chooserWarningToolTip.UseFading = False
+        chooserWarningToolTip.ToolTipIcon = ToolTipIcon.Warning
+        chooserWarningToolTip.AutoPopDelay = 5000
+        chooserWarningToolTip.InitialDelay = 0
+        chooserWarningToolTip.IsBalloon = False
+        chooserWarningToolTip.ReshowDelay = 0
+        chooserWarningToolTip.OwnerDraw = False
+        chooserWarningToolTip.ToolTipTitle = Title
+        currentWarningTitle = Title
+        currentWarningMesage = Message
+
+        If Message.Contains(vbCrLf) Then
+            chooserWarningToolTip.Show(Message, Me, 18, 24) 'Display at position for a two line message
+        Else
+            chooserWarningToolTip.Show(Message, Me, 18, 50) 'Display at position for a one line message
+        End If
+    End Sub
+
+    Private Sub WarningTooltipClear()
+        chooserWarningToolTip.RemoveAll()
+        currentWarningTitle = ""
+        currentWarningMesage = ""
+    End Sub
 #End Region
 
 End Class

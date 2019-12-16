@@ -251,9 +251,6 @@
     <None Include="Resources\ASCOM.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ASCOMAlpaca.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="NamespaceDocumentation.xml">
       <SubType>Designer</SubType>
     </Content>
