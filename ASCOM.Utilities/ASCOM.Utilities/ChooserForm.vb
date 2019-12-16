@@ -22,6 +22,7 @@ Friend Class ChooserForm
     Private Const ALPACA_DISCOVERY_PORT As String = "Alpaca discovery port" : Private Const ALPACA_DISCOVERY_PORT_DEFAULT As Integer = 32227
     Private Const ALPACA_NUMBER_OF_BROADCASTS As String = "Alpaca number of broadcasts" : Private Const ALPACA_NUMBER_OF_BROADCASTS_DEFAULT As Integer = 2
     Private Const ALPACA_TIMEOUT As String = "Alpaca timeout" : Private Const ALPACA_TIMEOUT_DEFAULT As Double = 2.0
+    Private Const ALPACA_DNS_RESOLUTION As String = "Alpaca DNS resolution" : Private Const ALPACA_DNS_RESOLUTION_DEFAULT As Boolean = False
 
 #End Region
 
@@ -37,13 +38,15 @@ Friend Class ChooserForm
     Private TL As TraceLogger
     Private chooserWarningToolTip As ToolTip
     Private chooserPropertiesToolTip As ToolTip
+    Private alpacaStatusToolstripLabel As ToolStripLabel
     Private WithEvents initialMessageTimer As System.Windows.Forms.Timer
 
     ' Persistence variables
-    Private alpacaEnabled As Boolean
-    Private alpacaDiscoveryPort As Integer
-    Private alpacaNumberOfBroadcasts As Integer
-    Private alpacaTimeout As Double
+    Friend AlpacaEnabled As Boolean
+    Friend AlpacaDiscoveryPort As Integer
+    Friend AlpacaNumberOfBroadcasts As Integer
+    Friend AlpacaTimeout As Double
+    Friend AlpacaDnsResolution As Boolean
 
 #End Region
 
@@ -53,33 +56,22 @@ Friend Class ChooserForm
         MyBase.New()
         InitializeComponent()
 
-        'Create the trace logger
+        'Create a trace logger
         TL = New TraceLogger("", "ChooserForm")
-        TL.Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
+        TL.Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT) ' Enable the trace logger if Util trace is enabled
 
     End Sub
 
     Private Sub ChooserForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-        Dim profileStore As RegistryAccess
-        Dim i, iSel As Integer
-        Dim description As String
 
         Try
 
             ' Initialise form title and message text
-            Me.Text = "ASCOM " & deviceTypeValue & " Chooser"
-            Me.lblTitle.Text = "Select the type of " & LCase(deviceTypeValue) & " you have, then be " & "sure to click the Properties... button to configure the driver for your " & LCase(deviceTypeValue) & "."
+            Text = "ASCOM " & deviceTypeValue & " Chooser"
+            lblTitle.Text = "Select the type of " & LCase(deviceTypeValue) & " you have, then be " & "sure to click the Properties... button to configure the driver for your " & LCase(deviceTypeValue) & "."
             selectedProgIdValue = ""
 
-
-
-            LedDiscoveryStatatua.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm
-            LedDiscoveryStatatua.Status = ASCOM.Controls.TrafficLight.Yellow
-
-
-
-
-            'Configure the tooltip warning for 32/64bit driver compatibility messages
+            'Initialise the tooltip warning for 32/64bit driver compatibility messages
             chooserWarningToolTip = New ToolTip()
 
             ' Configure the Properties button tooltip
@@ -88,75 +80,95 @@ Friend Class ChooserForm
             chooserPropertiesToolTip.ToolTipIcon = ToolTipIcon.Info
             chooserPropertiesToolTip.UseFading = True
             chooserPropertiesToolTip.ToolTipTitle = TOOLTIP_PROPERTIES_TITLE
-            chooserPropertiesToolTip.SetToolTip(cmdProperties, TOOLTIP_PROPERTIES_MESSAGE)
+            chooserPropertiesToolTip.SetToolTip(BtnProperties, TOOLTIP_PROPERTIES_MESSAGE)
 
-            profileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+            ' Set a custom rendered for the tool strip so that colours and appearance can be controlled better
+            ChooserMenu.Renderer = New ChooserCustomToolStripRenderer()
 
-            ' Enumerate the available drivers, and load their descriptions and ProgIDs into the list box. Key is ProgID, value is friendly name.
-            Try 'Get the list of drivers of this device type
-                driversList = profileStore.EnumKeys(deviceTypeValue & " Drivers") ' Get Key-Class pairs
-                'Now list the drivers 
-                For Each Driver As Generic.KeyValuePair(Of String, String) In driversList
-                    TL.LogMessage("ChooserForm Load", "Found ProgID: " & Driver.Key.ToString & ", Description: @" & Driver.Value.ToString & "@")
-                    If Driver.Value = "" Then
-                        TL.LogMessage("ChooserForm Load", "  ***** Description missing for ProgID: " & Driver.Key.ToString)
-                    End If
-                Next
-            Catch ex1 As Exception
-                TL.LogMessageCrLf("ChooserForm Load", "Exception: " & ex1.ToString)
-                'Ignore any exceptions from this call e.g. if there are no devices of that type installed just create an empty list
-                driversList = New Generic.SortedList(Of String, String)
-            End Try
+            ' Create a tool strip label whose background colour can  be changed and add it at the top of the Alpaca menu
+            alpacaStatusToolstripLabel = New ToolStripLabel("Discovery status unknown")
+            MnuAlpaca.DropDownItems.Insert(0, alpacaStatusToolstripLabel)
 
-            ' Populate the driver selection combo box with driver friendly names
-            cbDriverSelector.Items.Clear()
-            If driversList.Count = 0 Then
-                MsgBox("There are no ASCOM " & deviceTypeValue & " drivers installed.", CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
-            Else
-                For Each driver As Generic.KeyValuePair(Of String, String) In driversList
-                    description = driver.Value ' Set the device description
-                    If driver.Value = "" Then description = driver.Key 'Deal with the possibility that it is an empty string, i.e. the driver author has forgotten to set it!
-                    cbDriverSelector.Items.Add(description) ' Add items & allow to sort
-                Next
-            End If
-
-            ' Find the description corresponding to the set ProgID
-            For Each driver As Generic.KeyValuePair(Of String, String) In driversList
-                If LCase(initiallySelectedProgIdValue) = LCase(driver.Key.ToString) Then description = driver.Value.ToString
-            Next
-
-            ' Find the index of the combo box item that matches the description derived from the ProgID
-            iSel = -1
-            i = -1
-            For Each Desc As String In cbDriverSelector.Items
-                i += 1
-                If LCase(description) = LCase(Desc) Then iSel = i
-            Next
-
-            If iSel >= 0 Then ' If a match was found select the item
-                cbDriverSelector.SelectedIndex = iSel ' Jump list to that
-                Me.cmdOK.Enabled = True ' Enable the OK button
-            Else ' Match not found so don't pre-select an item
-                cbDriverSelector.SelectedIndex = -1
-            End If
-
-            ' Check that the selected item is valid
-            cbDriverSelector_SelectedIndexChanged(cbDriverSelector, New System.EventArgs())
-
-            profileStore.Dispose() 'Close down the profile store
-            profileStore = Nothing
+            PopulateDriverComboBox()
 
             RefreshTraceMenu() ' Refresh the trace menu
 
             ' Set up a one-off timer in order to force display of the warning message if the pre-selected driver is not compatible
-            initialMessageTimer = New System.Windows.Forms.Timer
-            initialMessageTimer.Interval = FORM_LOAD_WARNING_MESSAGE_DELAY_TIME ' Set it to fire after 250ms
-            initialMessageTimer.Start() ' Kick off the timer
+            If AlpacaEnabled Then
+                SetStateAlpacaDiscoveryComplete()
+            Else
+                SetStateNoAlpaca()
+                initialMessageTimer = New System.Windows.Forms.Timer
+                initialMessageTimer.Interval = FORM_LOAD_WARNING_MESSAGE_DELAY_TIME ' Set it to fire after 250ms
+                initialMessageTimer.Start() ' Kick off the timer
+            End If
 
         Catch ex As Exception
             MsgBox("ChooserForm Load " & ex.ToString)
             LogEvent("ChooserForm Load ", ex.ToString, System.Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserFormLoad, ex.ToString)
         End Try
+    End Sub
+
+    Private Sub PopulateDriverComboBox()
+        Dim profileStore As RegistryAccess
+        Dim i, iSel As Integer
+        Dim description As String
+
+        profileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+
+        ' Enumerate the available drivers, and load their descriptions and ProgIDs into the list box. Key is ProgID, value is friendly name.
+        Try 'Get the list of drivers of this device type
+            driversList = profileStore.EnumKeys(deviceTypeValue & " Drivers") ' Get Key-Class pairs
+            'Now list the drivers 
+            For Each Driver As Generic.KeyValuePair(Of String, String) In driversList
+                TL.LogMessage("ChooserForm Load", "Found ProgID: " & Driver.Key.ToString & ", Description: @" & Driver.Value.ToString & "@")
+                If Driver.Value = "" Then
+                    TL.LogMessage("ChooserForm Load", "  ***** Description missing for ProgID: " & Driver.Key.ToString)
+                End If
+            Next
+        Catch ex1 As Exception
+            TL.LogMessageCrLf("ChooserForm Load", "Exception: " & ex1.ToString)
+            'Ignore any exceptions from this call e.g. if there are no devices of that type installed just create an empty list
+            driversList = New Generic.SortedList(Of String, String)
+        End Try
+
+        ' Populate the driver selection combo box with driver friendly names
+        CmbDriverSelector.Items.Clear()
+        If driversList.Count = 0 Then
+            MsgBox("There are no ASCOM " & deviceTypeValue & " drivers installed.", CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
+        Else
+            For Each driver As Generic.KeyValuePair(Of String, String) In driversList
+                description = driver.Value ' Set the device description
+                If driver.Value = "" Then description = driver.Key 'Deal with the possibility that it is an empty string, i.e. the driver author has forgotten to set it!
+                CmbDriverSelector.Items.Add(description) ' Add items & allow to sort
+            Next
+        End If
+
+        ' Find the description corresponding to the set ProgID
+        For Each driver As Generic.KeyValuePair(Of String, String) In driversList
+            If LCase(initiallySelectedProgIdValue) = LCase(driver.Key.ToString) Then description = driver.Value.ToString
+        Next
+
+        ' Find the index of the combo box item that matches the description derived from the ProgID
+        iSel = -1
+        i = -1
+        For Each Desc As String In CmbDriverSelector.Items
+            i += 1
+            If LCase(description) = LCase(Desc) Then iSel = i
+        Next
+
+        If iSel >= 0 Then ' If a match was found select the item
+            CmbDriverSelector.SelectedIndex = iSel ' Jump list to that
+            BtnOK.Enabled = True ' Enable the OK button
+        Else ' Match not found so don't pre-select an item
+            CmbDriverSelector.SelectedIndex = -1
+        End If
+
+        ' Check that the selected driver is valid
+        ValidateDriver()
+
+        profileStore.Dispose() 'Close down the profile store
+
     End Sub
 
     Private Sub ChooserForm_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
@@ -182,16 +194,11 @@ Friend Class ChooserForm
             If Not chooserPropertiesToolTip Is Nothing Then
                 Try : chooserPropertiesToolTip.Dispose() : Catch : End Try
             End If
+            If Not alpacaStatusToolstripLabel Is Nothing Then
+                Try : alpacaStatusToolstripLabel.Dispose() : Catch : End Try
+            End If
         End If
         MyBase.Dispose(Disposing)
-    End Sub
-
-    Private Sub ChooserForm_Paint(ByVal sender As Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Me.Paint
-        Dim SolidBrush As New SolidBrush(Color.Black), LinePen As Pen
-
-        'Routine to draw horizontal line on the ASCOM Chooser form
-        LinePen = New Pen(SolidBrush, 1)
-        e.Graphics.DrawLine(LinePen, 14, 103, Me.Width - 20, 103)
     End Sub
 
 #End Region
@@ -223,10 +230,30 @@ Friend Class ChooserForm
 
 #End Region
 
+#Region "Form and timer event handlers"
+
+    Private Sub ChooserForm_Paint(ByVal sender As Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Me.Paint
+        Dim SolidBrush As New SolidBrush(Color.Black), LinePen As Pen
+
+        'Routine to draw horizontal line on the ASCOM Chooser form
+        LinePen = New Pen(SolidBrush, 1)
+        e.Graphics.DrawLine(LinePen, 14, 103, Me.Width - 20, 103)
+    End Sub
+
+    Private Sub FormLoadTimerEventHandler(ByVal myObject As Object, ByVal myEventArgs As EventArgs) Handles initialMessageTimer.Tick
+        ' This event kicks off once triggered by form load in order to force display of the warning message for a driver that is pre-selected by the user.
+        initialMessageTimer.Stop() ' Disable the timer to prevent future events from firing
+        initialMessageTimer.Enabled = False
+        TL.LogMessageCrLf("ChooserForm Timer", "Displaying warning message, if there is one")
+        cbDriverSelector_SelectedIndexChanged(CmbDriverSelector, New System.EventArgs()) ' Force display of the  warning tooltip because it does not show up when displayed during FORM load
+    End Sub
+
+#End Region
+
 #Region "UI event handlers"
 
-    ' Click in Properties... button. Loads the currently selected driver and activate its setup dialog.
-    Private Sub cmdProperties_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdProperties.Click
+    ' Click in Properties... button. Loads the currently selected driver and activate its setup dialogue.
+    Private Sub cmdProperties_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnProperties.Click
         Dim ProfileStore As RegistryAccess
         Dim oDrv As Object = Nothing ' The driver
         Dim cb As System.Windows.Forms.ComboBox
@@ -236,19 +263,19 @@ Friend Class ChooserForm
         Dim UseCreateObject As Boolean = False
 
         ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
-        cb = Me.cbDriverSelector ' Convenient shortcut
+        cb = CmbDriverSelector ' Convenient shortcut
 
         'Find ProgID corresponding to description
         For Each Driver As Generic.KeyValuePair(Of String, String) In driversList
             If Driver.Value = "" Then 'Deal with the possibility that the description is missing, in which case use the ProgID as the identifier
-                If LCase(Driver.Key.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = Driver.Key.ToString
+                If LCase(Driver.Key.ToString) = LCase(CmbDriverSelector.SelectedItem.ToString) Then sProgID = Driver.Key.ToString
             Else 'Description is present
-                If LCase(Driver.Value.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = Driver.Key.ToString
+                If LCase(Driver.Value.ToString) = LCase(CmbDriverSelector.SelectedItem.ToString) Then sProgID = Driver.Key.ToString
             End If
         Next
         TL.LogMessage("PropertiesClick", "ProgID:" & sProgID)
         Try
-            ' Mechanic to revert to Platform 5 behaviour in the event that Activator.CreateInstance has unforseen consequqnces
+            ' Mechanic to revert to Platform 5 behaviour in the event that Activator.CreateInstance has unforeseen consequences
             Try : UseCreateObject = RegistryCommonCode.GetBool(CHOOSER_USE_CREATEOBJECT, CHOOSER_USE_CREATEOBJECT_DEFAULT) : Catch : End Try
 
             If UseCreateObject Then ' Platform 5 behaviour
@@ -280,7 +307,7 @@ Friend Class ChooserForm
             End If
 
             ProfileStore.WriteProfile("Chooser", sProgID & " Init", "True") ' Remember it has been initialized
-            Me.cmdOK.Enabled = True
+            BtnOK.Enabled = True
             WarningTooltipClear()
         Catch ex As Exception
             MsgBox("Failed to load driver: """ & sProgID & """ " & ex.ToString, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
@@ -294,15 +321,15 @@ Friend Class ChooserForm
         ProfileStore.Dispose()
     End Sub
 
-    Private Sub cmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCancel.Click
+    Private Sub cmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnCancel.Click
         selectedProgIdValue = ""
         Me.Hide()
     End Sub
 
-    Private Sub cmdOK_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdOK.Click
+    Private Sub cmdOK_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnOK.Click
         Dim cb As System.Windows.Forms.ComboBox
 
-        cb = Me.cbDriverSelector ' Convenient shortcut
+        cb = CmbDriverSelector ' Convenient shortcut
 
         'Find ProgID corresponding to description
         For Each Driver As Generic.KeyValuePair(Of String, String) In driversList
@@ -323,50 +350,8 @@ Friend Class ChooserForm
         Me.Hide()
     End Sub
 
-    Private Sub cbDriverSelector_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cbDriverSelector.SelectionChangeCommitted
-        Dim deviceInitialised As String, ProfileStore As RegistryAccess
-        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
-
-        If Me.cbDriverSelector.SelectedIndex >= 0 Then ' Something selected
-
-            WarningTooltipClear() 'Hide any previous message
-
-            'Find ProgID corresponding to description
-            For Each Driver As Generic.KeyValuePair(Of String, String) In driversList
-                If Driver.Value = "" Then 'Deal with the possibility that the description is missing, in which case use the ProgID as the identifier
-                    If LCase(Driver.Key.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then selectedProgIdValue = Driver.Key.ToString
-                Else 'Description is present
-                    If LCase(Driver.Value.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then selectedProgIdValue = Driver.Key.ToString
-                End If
-            Next
-            TL.LogMessage("DriverSelected", "ProgID:" & selectedProgIdValue & ", Bitness: " & ApplicationBits.ToString)
-            driverIsCompatible = VersionCode.DriverCompatibilityMessage(selectedProgIdValue, ApplicationBits, TL) 'Get compatibility warning message, if any
-
-            If driverIsCompatible <> "" Then 'This is an incompatible driver
-                Me.cmdProperties.Enabled = False ' So prevent access!
-                Me.cmdOK.Enabled = False
-                TL.LogMessage("DriverSelected", "Showing incompatible driver message")
-                WarningToolTipShow("Incompatible Driver (" & selectedProgIdValue & ")", driverIsCompatible)
-            Else
-                Me.cmdProperties.Enabled = True ' Turn on Properties
-                deviceInitialised = ProfileStore.GetProfile("Chooser", selectedProgIdValue & " Init")
-                If LCase(deviceInitialised) = "true" Then
-                    Me.cmdOK.Enabled = True ' This device has been initialized
-                    currentWarningMesage = ""
-                    TL.LogMessage("DriverSelected", "Driver is compatible and configured so no message")
-                Else
-                    Me.cmdOK.Enabled = False ' Ensure OK is enabled
-                    TL.LogMessage("DriverSelected", "Showing first time configuration required message")
-                    WarningToolTipShow(TOOLTIP_PROPERTIES_TITLE, TOOLTIP_PROPERTIES_FIRST_TIME_MESSAGE)
-                End If
-            End If
-        Else ' Nothing has been selected
-            TL.LogMessage("DriverSelected", "Nothing has been selected")
-            Me.cmdProperties.Enabled = False
-            Me.cmdOK.Enabled = False
-        End If
-
-        ProfileStore.Dispose() 'Clean up profile store
+    Private Sub cbDriverSelector_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles CmbDriverSelector.SelectionChangeCommitted
+        ValidateDriver()
     End Sub
 
     Private Sub picASCOM_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles picASCOM.Click
@@ -383,14 +368,6 @@ Friend Class ChooserForm
 
     Private Sub ChooserFormMoveEventHandler(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Move
         If currentWarningMesage <> "" Then WarningToolTipShow(currentWarningTitle, currentWarningMesage)
-    End Sub
-
-    Private Sub FormLoadTimerEventHandler(ByVal myObject As Object, ByVal myEventArgs As EventArgs) Handles initialMessageTimer.Tick
-        ' This event kicks off once triggered by form load in order to force display of the warning message for a driver that is pre-selected by the user.
-        initialMessageTimer.Stop() ' Disable the timer to prevent future events from firing
-        initialMessageTimer.Enabled = False
-        TL.LogMessageCrLf("ChooserForm Timer", "Displaying warning message, if there is one")
-        cbDriverSelector_SelectedIndexChanged(cbDriverSelector, New System.EventArgs()) ' Force display of the  warning tooltip because it does not show up when displayed during FORM load
     End Sub
 
     Private Sub WarningToolTipShow(Title As String, Message As String)
@@ -432,24 +409,12 @@ Friend Class ChooserForm
             TraceFileName = ProfileStore.GetProfile("", SERIAL_FILE_NAME_VARNAME)
             Select Case TraceFileName
                 Case "" 'Trace is disabled
-                    'MenuUseTraceAutoFilenames.Enabled = True 'Autofilenames are enabled but unchecked
-                    'MenuUseTraceAutoFilenames.Checked = False
-                    'MenuUseTraceManualFilename.Enabled = True 'Manual trace filename is enabled but unchecked
-                    'MenuUseTraceManualFilename.Checked = False
                     MenuSerialTraceEnabled.Checked = False 'The trace enabled flag is unchecked and disabled
                     MenuSerialTraceEnabled.Enabled = True
                 Case SERIAL_AUTO_FILENAME 'Tracing is on using an automatic filename
-                    'MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and checked
-                    'MenuUseTraceAutoFilenames.Checked = True
-                    'MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is dis enabled and unchecked
-                    'MenuUseTraceManualFilename.Checked = False
                     MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
                     MenuSerialTraceEnabled.Enabled = True
                 Case Else 'Tracing using some other fixed filename
-                    'MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and unchecked
-                    'MenuUseTraceAutoFilenames.Checked = False
-                    'MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is disabled enabled and checked
-                    'MenuUseTraceManualFilename.Checked = True
                     MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
                     MenuSerialTraceEnabled.Enabled = True
             End Select
@@ -458,7 +423,6 @@ Friend Class ChooserForm
             MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
             MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
             MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
-            'MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
             MenuSimulatorTraceEnabled.Checked = GetBool(SIMULATOR_TRACE, SIMULATOR_TRACE_DEFAULT)
             MenuDriverAccessTraceEnabled.Checked = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
             MenuAstroUtilsTraceEnabled.Checked = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
@@ -473,10 +437,6 @@ Friend Class ChooserForm
         Dim ProfileStore As RegistryAccess
         ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
         'Auto filenames currently disabled, so enable them
-        'MenuUseTraceAutoFilenames.Checked = True 'Enable the auto tracename flag
-        'MenuUseTraceAutoFilenames.Enabled = False
-        'MenuUseTraceManualFilename.Checked = False 'Unset the manual file flag
-        'MenuUseTraceManualFilename.Enabled = False
         MenuSerialTraceEnabled.Enabled = True 'Set the trace enabled flag
         MenuSerialTraceEnabled.Checked = True 'Enable the trace enabled flag
         ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SERIAL_AUTO_FILENAME)
@@ -491,16 +451,12 @@ Friend Class ChooserForm
         RetVal = SerialTraceFileName.ShowDialog()
         Select Case RetVal
             Case Windows.Forms.DialogResult.OK
-                'Save the reault
+                'Save the result
                 ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SerialTraceFileName.FileName)
                 'Check and enable the serial trace enabled flag
                 MenuSerialTraceEnabled.Enabled = True
                 MenuSerialTraceEnabled.Checked = True
-                'Enable maual serial trace file flag
-                'MenuUseTraceAutoFilenames.Checked = False
-                'MenuUseTraceAutoFilenames.Enabled = False
-                'MenuUseTraceManualFilename.Checked = True
-                'MenuUseTraceManualFilename.Enabled = False
+                'Enable manual serial trace file flag
             Case Else 'Ignore everything else
 
         End Select
@@ -558,7 +514,7 @@ Friend Class ChooserForm
         SetName(TRACE_EARTHROTATION_DATA_FORM, MenuEarthRotationDataFormTraceEnabled.Checked.ToString)
     End Sub
 
-    Private Sub MenuTrace_DropDownOpening(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuTrace.DropDownOpening
+    Private Sub MenuTrace_DropDownOpening(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MnuTrace.DropDownOpening
         RefreshTraceMenu()
     End Sub
 
@@ -577,6 +533,40 @@ Friend Class ChooserForm
         SetName(NOVAS_TRACE, MenuNovasTraceEnabled.Checked.ToString)
     End Sub
 
+    Private Sub MnuEnableDiscovery_Click(sender As Object, e As EventArgs) Handles MnuEnableDiscovery.Click
+        AlpacaEnabled = True
+        WriteState(deviceTypeValue)
+        SetStateAlpacaDiscoveryComplete()
+    End Sub
+
+    Private Sub MnuDisableDiscovery_Click(sender As Object, e As EventArgs) Handles MnuDisableDiscovery.Click
+        AlpacaEnabled = False
+        WriteState(deviceTypeValue)
+        SetStateNoAlpaca()
+    End Sub
+
+    Private Sub MnuDiscoverNow_Click(sender As Object, e As EventArgs) Handles MnuDiscoverNow.Click
+
+    End Sub
+
+    Private Sub MnuConfigureDiscovery_Click(sender As Object, e As EventArgs) Handles MnuConfigureDiscovery.Click
+        Dim alpacaConfigurationForm As ChooserAlpacaConfigurationForm
+        Dim outcome As DialogResult
+
+        TL.LogMessage("ConfigureDiscovery", $"About to create Alpaca configuration form")
+        alpacaConfigurationForm = New ChooserAlpacaConfigurationForm(Me) ' Create a new configuration form
+        alpacaConfigurationForm.ShowDialog() ' Display the form as a modal dialogue box
+        TL.LogMessage("ConfigureDiscovery", $"Exited Alpaca configuration form. Result: {alpacaConfigurationForm.DialogResult.ToString()}")
+
+        If alpacaConfigurationForm.DialogResult = DialogResult.OK Then ' If the user clicked OK then persist the new state
+            TL.LogMessage("ConfigureDiscovery", $"Persisting new configuration for {deviceTypeValue}")
+            WriteState(deviceTypeValue)
+        End If
+
+        alpacaConfigurationForm.Dispose() ' Dispose of the configuration form
+
+    End Sub
+
 #End Region
 
 #Region "State Persistence"
@@ -587,10 +577,14 @@ Friend Class ChooserForm
             TL?.LogMessageCrLf("ChooserReadState", $"Reading state for device type: {DeviceType}. Configuration key: {CONFIGRATION_SUBKEY}, Alpaca enabled: {$"{DeviceType} {ALPACA_ENABLED}"}, ALapca default: {ALPACA_ENABLED_DEFAULT}")
             registry = New RegistryAccess
 
-            alpacaEnabled = Convert.ToBoolean(registry.GetProfile(CONFIGRATION_SUBKEY, $"{DeviceType} {ALPACA_ENABLED}", ALPACA_ENABLED_DEFAULT), CultureInfo.InvariantCulture)
-            alpacaDiscoveryPort = Convert.ToInt32(registry.GetProfile(CONFIGRATION_SUBKEY, $"{DeviceType} {ALPACA_DISCOVERY_PORT}", ALPACA_DISCOVERY_PORT_DEFAULT), CultureInfo.InvariantCulture)
-            alpacaNumberOfBroadcasts = Convert.ToInt32(registry.GetProfile(CONFIGRATION_SUBKEY, $"{DeviceType} {ALPACA_NUMBER_OF_BROADCASTS}", ALPACA_NUMBER_OF_BROADCASTS_DEFAULT), CultureInfo.InvariantCulture)
-            alpacaTimeout = Convert.ToInt32(registry.GetProfile(CONFIGRATION_SUBKEY, $"{DeviceType} {ALPACA_TIMEOUT}", ALPACA_TIMEOUT_DEFAULT), CultureInfo.InvariantCulture)
+            ' The enabled state is per device type
+            AlpacaEnabled = Convert.ToBoolean(registry.GetProfile(CONFIGRATION_SUBKEY, $"{DeviceType} {ALPACA_ENABLED}", ALPACA_ENABLED_DEFAULT), CultureInfo.InvariantCulture)
+
+            ' These values are for all Alpaca devices
+            AlpacaDiscoveryPort = Convert.ToInt32(registry.GetProfile(CONFIGRATION_SUBKEY, ALPACA_DISCOVERY_PORT, ALPACA_DISCOVERY_PORT_DEFAULT), CultureInfo.InvariantCulture)
+            AlpacaNumberOfBroadcasts = Convert.ToInt32(registry.GetProfile(CONFIGRATION_SUBKEY, ALPACA_NUMBER_OF_BROADCASTS, ALPACA_NUMBER_OF_BROADCASTS_DEFAULT), CultureInfo.InvariantCulture)
+            AlpacaTimeout = Convert.ToInt32(registry.GetProfile(CONFIGRATION_SUBKEY, ALPACA_TIMEOUT, ALPACA_TIMEOUT_DEFAULT), CultureInfo.InvariantCulture)
+            AlpacaDnsResolution = Convert.ToBoolean(registry.GetProfile(CONFIGRATION_SUBKEY, ALPACA_DNS_RESOLUTION, ALPACA_DNS_RESOLUTION_DEFAULT), CultureInfo.InvariantCulture)
 
         Catch ex As Exception
             MsgBox("Chooser Read State " & ex.ToString)
@@ -607,10 +601,14 @@ Friend Class ChooserForm
         Try
             registry = New RegistryAccess
 
-            registry.WriteProfile(CONFIGRATION_SUBKEY, $"{DeviceType} {ALPACA_ENABLED}", alpacaEnabled.ToString(CultureInfo.InvariantCulture))
-            registry.WriteProfile(CONFIGRATION_SUBKEY, $"{DeviceType} {ALPACA_DISCOVERY_PORT}", alpacaDiscoveryPort.ToString(CultureInfo.InvariantCulture))
-            registry.WriteProfile(CONFIGRATION_SUBKEY, $"{DeviceType} {ALPACA_NUMBER_OF_BROADCASTS}", alpacaNumberOfBroadcasts.ToString(CultureInfo.InvariantCulture))
-            registry.WriteProfile(CONFIGRATION_SUBKEY, $"{DeviceType} {ALPACA_TIMEOUT}", alpacaTimeout.ToString(CultureInfo.InvariantCulture))
+            ' Save the enabled state per "device type" 
+            registry.WriteProfile(CONFIGRATION_SUBKEY, $"{DeviceType} {ALPACA_ENABLED}", AlpacaEnabled.ToString(CultureInfo.InvariantCulture))
+
+            ' Save other states for all Alpaca devices 
+            registry.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_DISCOVERY_PORT, AlpacaDiscoveryPort.ToString(CultureInfo.InvariantCulture))
+            registry.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_NUMBER_OF_BROADCASTS, AlpacaNumberOfBroadcasts.ToString(CultureInfo.InvariantCulture))
+            registry.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_TIMEOUT, AlpacaTimeout.ToString(CultureInfo.InvariantCulture))
+            registry.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_DNS_RESOLUTION, alpacaDnsResolution.ToString(CultureInfo.InvariantCulture))
 
         Catch ex As Exception
             MsgBox("Chooser Write State " & ex.ToString)
@@ -619,6 +617,102 @@ Friend Class ChooserForm
         Finally
             registry.Dispose()
         End Try
+
+    End Sub
+
+#End Region
+
+#Region "Support code"
+
+    Private Sub SetStateNoAlpaca()
+        LblAlpacaDiscovery.Visible = False
+        LedDiscoveryStatus.Visible = False
+        CmbDriverSelector.Enabled = True
+        alpacaStatusToolstripLabel.Text = "Discovery Disabled" : alpacaStatusToolstripLabel.BackColor = Color.Salmon
+        MnuDiscoverNow.Enabled = False
+        MnuEnableDiscovery.Enabled = True
+        MnuDisableDiscovery.Enabled = False
+        MnuConfigureDiscovery.Enabled = True
+        BtnProperties.Enabled = True
+        BtnOK.Enabled = True
+
+    End Sub
+
+    Private Sub SetStateAlpacaDiscovering()
+        LblAlpacaDiscovery.Visible = True
+        LedDiscoveryStatus.Visible = True
+        LedDiscoveryStatus.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm
+        LedDiscoveryStatus.Status = ASCOM.Controls.TrafficLight.Yellow
+        CmbDriverSelector.Enabled = False
+        alpacaStatusToolstripLabel.Text = "Discovery Enabled" : alpacaStatusToolstripLabel.BackColor = Color.LightGreen
+        MnuDiscoverNow.Enabled = False
+        MnuEnableDiscovery.Enabled = False
+        MnuDisableDiscovery.Enabled = False
+        MnuConfigureDiscovery.Enabled = False
+        BtnProperties.Enabled = False
+        BtnOK.Enabled = False
+    End Sub
+
+    Private Sub SetStateAlpacaDiscoveryComplete()
+        LblAlpacaDiscovery.Visible = True
+        LedDiscoveryStatus.Visible = True
+        LedDiscoveryStatus.Cadence = ASCOM.Controls.CadencePattern.SteadyOn
+        LedDiscoveryStatus.Status = ASCOM.Controls.TrafficLight.Green
+        alpacaStatusToolstripLabel.Text = "Discovery Enabled" : alpacaStatusToolstripLabel.BackColor = Color.LightGreen
+        CmbDriverSelector.Enabled = True
+        MnuDiscoverNow.Enabled = True
+        MnuEnableDiscovery.Enabled = False
+        MnuDisableDiscovery.Enabled = True
+        MnuConfigureDiscovery.Enabled = True
+        BtnProperties.Enabled = True
+        BtnOK.Enabled = True
+
+    End Sub
+
+    Private Sub ValidateDriver()
+        Dim deviceInitialised As String, ProfileStore As RegistryAccess
+        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+
+        If CmbDriverSelector.SelectedIndex >= 0 Then ' Something selected
+
+            WarningTooltipClear() 'Hide any previous message
+
+            'Find ProgID corresponding to description
+            For Each Driver As Generic.KeyValuePair(Of String, String) In driversList
+                If Driver.Value = "" Then 'Deal with the possibility that the description is missing, in which case use the ProgID as the identifier
+                    If LCase(Driver.Key.ToString) = LCase(CmbDriverSelector.SelectedItem.ToString) Then selectedProgIdValue = Driver.Key.ToString
+                Else 'Description is present
+                    If LCase(Driver.Value.ToString) = LCase(CmbDriverSelector.SelectedItem.ToString) Then selectedProgIdValue = Driver.Key.ToString
+                End If
+            Next
+            TL.LogMessage("DriverSelected", "ProgID:" & selectedProgIdValue & ", Bitness: " & ApplicationBits.ToString)
+            driverIsCompatible = VersionCode.DriverCompatibilityMessage(selectedProgIdValue, ApplicationBits, TL) 'Get compatibility warning message, if any
+
+            If driverIsCompatible <> "" Then 'This is an incompatible driver
+                BtnProperties.Enabled = False ' So prevent access!
+                BtnOK.Enabled = False
+                TL.LogMessage("DriverSelected", "Showing incompatible driver message")
+                WarningToolTipShow("Incompatible Driver (" & selectedProgIdValue & ")", driverIsCompatible)
+            Else
+                BtnProperties.Enabled = True ' Turn on Properties
+                deviceInitialised = ProfileStore.GetProfile("Chooser", selectedProgIdValue & " Init")
+                If LCase(deviceInitialised) = "true" Then
+                    BtnOK.Enabled = True ' This device has been initialized
+                    currentWarningMesage = ""
+                    TL.LogMessage("DriverSelected", "Driver is compatible and configured so no message")
+                Else
+                    BtnOK.Enabled = False ' Ensure OK is enabled
+                    TL.LogMessage("DriverSelected", "Showing first time configuration required message")
+                    WarningToolTipShow(TOOLTIP_PROPERTIES_TITLE, TOOLTIP_PROPERTIES_FIRST_TIME_MESSAGE)
+                End If
+            End If
+        Else ' Nothing has been selected
+            TL.LogMessage("DriverSelected", "Nothing has been selected")
+            BtnProperties.Enabled = False
+            BtnOK.Enabled = False
+        End If
+
+        ProfileStore.Dispose() 'Clean up profile store
 
     End Sub
 

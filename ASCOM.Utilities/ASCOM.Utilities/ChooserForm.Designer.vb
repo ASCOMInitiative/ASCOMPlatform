@@ -3,10 +3,10 @@
 	'Required by the Windows Form Designer
 	Private components As System.ComponentModel.IContainer
     Public WithEvents picASCOM As System.Windows.Forms.PictureBox
-	Public WithEvents cmdCancel As System.Windows.Forms.Button
-	Public WithEvents cmdOK As System.Windows.Forms.Button
-	Public WithEvents cmdProperties As System.Windows.Forms.Button
-	Public WithEvents cbDriverSelector As System.Windows.Forms.ComboBox
+	Public WithEvents BtnCancel As System.Windows.Forms.Button
+	Public WithEvents BtnOK As System.Windows.Forms.Button
+	Public WithEvents BtnProperties As System.Windows.Forms.Button
+	Public WithEvents CmbDriverSelector As System.Windows.Forms.ComboBox
 	Public WithEvents Label1 As System.Windows.Forms.Label
     Public WithEvents lblTitle As System.Windows.Forms.Label
     'NOTE: The following procedure is required by the Windows Form Designer
@@ -15,14 +15,14 @@
 	<System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ChooserForm))
         Me.picASCOM = New System.Windows.Forms.PictureBox()
-        Me.cmdCancel = New System.Windows.Forms.Button()
-        Me.cmdOK = New System.Windows.Forms.Button()
-        Me.cmdProperties = New System.Windows.Forms.Button()
-        Me.cbDriverSelector = New System.Windows.Forms.ComboBox()
+        Me.BtnCancel = New System.Windows.Forms.Button()
+        Me.BtnOK = New System.Windows.Forms.Button()
+        Me.BtnProperties = New System.Windows.Forms.Button()
+        Me.CmbDriverSelector = New System.Windows.Forms.ComboBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.lblTitle = New System.Windows.Forms.Label()
         Me.ChooserMenu = New System.Windows.Forms.MenuStrip()
-        Me.MenuTrace = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MnuTrace = New System.Windows.Forms.ToolStripMenuItem()
         Me.NormallyLeaveTheseDisabledToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.MenuSerialTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
@@ -35,14 +35,16 @@
         Me.MenuAstroUtilsTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuCacheTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuEarthRotationDataFormTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
-        Me.MenuAlpaca = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MnuDiscoveryEnabled = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MnuConfigureDiscovery = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MnuAlpaca = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.MnuDiscoverNow = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.LedDiscoveryStatatua = New ASCOM.Controls.LedIndicator()
-        Me.Label2 = New System.Windows.Forms.Label()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.MnuEnableDiscovery = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MnuDisableDiscovery = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MnuConfigureDiscovery = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
+        Me.LedDiscoveryStatus = New ASCOM.Controls.LedIndicator()
+        Me.LblAlpacaDiscovery = New System.Windows.Forms.Label()
         CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ChooserMenu.SuspendLayout()
         Me.SuspendLayout()
@@ -60,59 +62,59 @@
         Me.picASCOM.TabIndex = 5
         Me.picASCOM.TabStop = False
         '
-        'cmdCancel
+        'BtnCancel
         '
-        Me.cmdCancel.BackColor = System.Drawing.SystemColors.Control
-        Me.cmdCancel.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cmdCancel.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdCancel.Location = New System.Drawing.Point(242, 144)
-        Me.cmdCancel.Name = "cmdCancel"
-        Me.cmdCancel.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdCancel.Size = New System.Drawing.Size(79, 23)
-        Me.cmdCancel.TabIndex = 4
-        Me.cmdCancel.Text = "&Cancel"
-        Me.cmdCancel.UseVisualStyleBackColor = False
+        Me.BtnCancel.BackColor = System.Drawing.SystemColors.Control
+        Me.BtnCancel.Cursor = System.Windows.Forms.Cursors.Default
+        Me.BtnCancel.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.BtnCancel.Location = New System.Drawing.Point(242, 144)
+        Me.BtnCancel.Name = "BtnCancel"
+        Me.BtnCancel.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.BtnCancel.Size = New System.Drawing.Size(79, 23)
+        Me.BtnCancel.TabIndex = 4
+        Me.BtnCancel.Text = "&Cancel"
+        Me.BtnCancel.UseVisualStyleBackColor = False
         '
-        'cmdOK
+        'BtnOK
         '
-        Me.cmdOK.BackColor = System.Drawing.SystemColors.Control
-        Me.cmdOK.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cmdOK.Enabled = False
-        Me.cmdOK.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdOK.Location = New System.Drawing.Point(242, 115)
-        Me.cmdOK.Name = "cmdOK"
-        Me.cmdOK.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdOK.Size = New System.Drawing.Size(79, 23)
-        Me.cmdOK.TabIndex = 3
-        Me.cmdOK.Text = "&OK"
-        Me.cmdOK.UseVisualStyleBackColor = False
+        Me.BtnOK.BackColor = System.Drawing.SystemColors.Control
+        Me.BtnOK.Cursor = System.Windows.Forms.Cursors.Default
+        Me.BtnOK.Enabled = False
+        Me.BtnOK.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.BtnOK.Location = New System.Drawing.Point(242, 115)
+        Me.BtnOK.Name = "BtnOK"
+        Me.BtnOK.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.BtnOK.Size = New System.Drawing.Size(79, 23)
+        Me.BtnOK.TabIndex = 3
+        Me.BtnOK.Text = "&OK"
+        Me.BtnOK.UseVisualStyleBackColor = False
         '
-        'cmdProperties
+        'BtnProperties
         '
-        Me.cmdProperties.BackColor = System.Drawing.SystemColors.Control
-        Me.cmdProperties.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cmdProperties.Enabled = False
-        Me.cmdProperties.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdProperties.Location = New System.Drawing.Point(242, 69)
-        Me.cmdProperties.Name = "cmdProperties"
-        Me.cmdProperties.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdProperties.Size = New System.Drawing.Size(79, 23)
-        Me.cmdProperties.TabIndex = 1
-        Me.cmdProperties.Text = "&Properties..."
-        Me.cmdProperties.UseVisualStyleBackColor = False
+        Me.BtnProperties.BackColor = System.Drawing.SystemColors.Control
+        Me.BtnProperties.Cursor = System.Windows.Forms.Cursors.Default
+        Me.BtnProperties.Enabled = False
+        Me.BtnProperties.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.BtnProperties.Location = New System.Drawing.Point(242, 69)
+        Me.BtnProperties.Name = "BtnProperties"
+        Me.BtnProperties.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.BtnProperties.Size = New System.Drawing.Size(79, 23)
+        Me.BtnProperties.TabIndex = 1
+        Me.BtnProperties.Text = "&Properties..."
+        Me.BtnProperties.UseVisualStyleBackColor = False
         '
-        'cbDriverSelector
+        'CmbDriverSelector
         '
-        Me.cbDriverSelector.BackColor = System.Drawing.SystemColors.Window
-        Me.cbDriverSelector.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cbDriverSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbDriverSelector.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cbDriverSelector.Location = New System.Drawing.Point(15, 71)
-        Me.cbDriverSelector.Name = "cbDriverSelector"
-        Me.cbDriverSelector.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cbDriverSelector.Size = New System.Drawing.Size(214, 21)
-        Me.cbDriverSelector.Sorted = True
-        Me.cbDriverSelector.TabIndex = 0
+        Me.CmbDriverSelector.BackColor = System.Drawing.SystemColors.Window
+        Me.CmbDriverSelector.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CmbDriverSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CmbDriverSelector.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CmbDriverSelector.Location = New System.Drawing.Point(15, 71)
+        Me.CmbDriverSelector.Name = "CmbDriverSelector"
+        Me.CmbDriverSelector.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CmbDriverSelector.Size = New System.Drawing.Size(214, 21)
+        Me.CmbDriverSelector.Sorted = True
+        Me.CmbDriverSelector.TabIndex = 0
         '
         'Label1
         '
@@ -142,19 +144,19 @@
         '
         'ChooserMenu
         '
-        Me.ChooserMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuTrace, Me.MenuAlpaca})
+        Me.ChooserMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuTrace, Me.MnuAlpaca})
         Me.ChooserMenu.Location = New System.Drawing.Point(0, 0)
         Me.ChooserMenu.Name = "ChooserMenu"
         Me.ChooserMenu.Size = New System.Drawing.Size(333, 24)
         Me.ChooserMenu.TabIndex = 7
         Me.ChooserMenu.Text = "ChooserMenu"
         '
-        'MenuTrace
+        'MnuTrace
         '
-        Me.MenuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuSerialTraceEnabled, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuSimulatorTraceEnabled, Me.MenuDriverAccessTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuNovasTraceEnabled, Me.MenuAstroUtilsTraceEnabled, Me.MenuCacheTraceEnabled, Me.MenuEarthRotationDataFormTraceEnabled})
-        Me.MenuTrace.Name = "MenuTrace"
-        Me.MenuTrace.Size = New System.Drawing.Size(46, 20)
-        Me.MenuTrace.Text = "Trace"
+        Me.MnuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuSerialTraceEnabled, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuSimulatorTraceEnabled, Me.MenuDriverAccessTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuNovasTraceEnabled, Me.MenuAstroUtilsTraceEnabled, Me.MenuCacheTraceEnabled, Me.MenuEarthRotationDataFormTraceEnabled})
+        Me.MnuTrace.Name = "MnuTrace"
+        Me.MnuTrace.Size = New System.Drawing.Size(46, 20)
+        Me.MnuTrace.Text = "Trace"
         '
         'NormallyLeaveTheseDisabledToolStripMenuItem
         '
@@ -227,24 +229,17 @@
         Me.MenuEarthRotationDataFormTraceEnabled.Size = New System.Drawing.Size(282, 22)
         Me.MenuEarthRotationDataFormTraceEnabled.Text = "Earth Rotation Data Form Trace Enabled"
         '
-        'MenuAlpaca
+        'MnuAlpaca
         '
-        Me.MenuAlpaca.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuDiscoveryEnabled, Me.MnuDiscoverNow, Me.ToolStripSeparator2, Me.MnuConfigureDiscovery})
-        Me.MenuAlpaca.Name = "MenuAlpaca"
-        Me.MenuAlpaca.Size = New System.Drawing.Size(55, 20)
-        Me.MenuAlpaca.Text = "Alpaca"
+        Me.MnuAlpaca.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator3, Me.MnuDiscoverNow, Me.ToolStripSeparator4, Me.MnuEnableDiscovery, Me.MnuDisableDiscovery, Me.MnuConfigureDiscovery})
+        Me.MnuAlpaca.Name = "MnuAlpaca"
+        Me.MnuAlpaca.Size = New System.Drawing.Size(55, 20)
+        Me.MnuAlpaca.Text = "Alpaca"
         '
-        'MnuDiscoveryEnabled
+        'ToolStripSeparator3
         '
-        Me.MnuDiscoveryEnabled.Name = "MnuDiscoveryEnabled"
-        Me.MnuDiscoveryEnabled.Size = New System.Drawing.Size(181, 22)
-        Me.MnuDiscoveryEnabled.Text = "DIscovery Enabled"
-        '
-        'MnuConfigureDiscovery
-        '
-        Me.MnuConfigureDiscovery.Name = "MnuConfigureDiscovery"
-        Me.MnuConfigureDiscovery.Size = New System.Drawing.Size(181, 22)
-        Me.MnuConfigureDiscovery.Text = "Configure Discovery"
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(178, 6)
         '
         'MnuDiscoverNow
         '
@@ -252,29 +247,47 @@
         Me.MnuDiscoverNow.Size = New System.Drawing.Size(181, 22)
         Me.MnuDiscoverNow.Text = "Discover Now"
         '
-        'ToolStripSeparator2
+        'ToolStripSeparator4
         '
-        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(178, 6)
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(178, 6)
         '
-        'LedDiscoveryStatatua
+        'MnuEnableDiscovery
         '
-        Me.LedDiscoveryStatatua.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.LedDiscoveryStatatua.LabelText = ""
-        Me.LedDiscoveryStatatua.Location = New System.Drawing.Point(306, 4)
-        Me.LedDiscoveryStatatua.Name = "LedDiscoveryStatatua"
-        Me.LedDiscoveryStatatua.Size = New System.Drawing.Size(20, 17)
-        Me.LedDiscoveryStatatua.TabIndex = 8
+        Me.MnuEnableDiscovery.Name = "MnuEnableDiscovery"
+        Me.MnuEnableDiscovery.Size = New System.Drawing.Size(181, 22)
+        Me.MnuEnableDiscovery.Text = "Enable DIscovery"
         '
-        'Label2
+        'MnuDisableDiscovery
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.Label2.Location = New System.Drawing.Point(213, 5)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(90, 13)
-        Me.Label2.TabIndex = 9
-        Me.Label2.Text = "Alpaca Discovery"
+        Me.MnuDisableDiscovery.Name = "MnuDisableDiscovery"
+        Me.MnuDisableDiscovery.Size = New System.Drawing.Size(181, 22)
+        Me.MnuDisableDiscovery.Text = "Disable Discovery"
+        '
+        'MnuConfigureDiscovery
+        '
+        Me.MnuConfigureDiscovery.Name = "MnuConfigureDiscovery"
+        Me.MnuConfigureDiscovery.Size = New System.Drawing.Size(181, 22)
+        Me.MnuConfigureDiscovery.Text = "Configure Discovery"
+        '
+        'LedDiscoveryStatus
+        '
+        Me.LedDiscoveryStatus.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.LedDiscoveryStatus.LabelText = ""
+        Me.LedDiscoveryStatus.Location = New System.Drawing.Point(306, 4)
+        Me.LedDiscoveryStatus.Name = "LedDiscoveryStatus"
+        Me.LedDiscoveryStatus.Size = New System.Drawing.Size(20, 17)
+        Me.LedDiscoveryStatus.TabIndex = 8
+        '
+        'LblAlpacaDiscovery
+        '
+        Me.LblAlpacaDiscovery.AutoSize = True
+        Me.LblAlpacaDiscovery.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.LblAlpacaDiscovery.Location = New System.Drawing.Point(213, 5)
+        Me.LblAlpacaDiscovery.Name = "LblAlpacaDiscovery"
+        Me.LblAlpacaDiscovery.Size = New System.Drawing.Size(90, 13)
+        Me.LblAlpacaDiscovery.TabIndex = 9
+        Me.LblAlpacaDiscovery.Text = "Alpaca Discovery"
         '
         'ChooserForm
         '
@@ -282,13 +295,13 @@
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(333, 181)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.LedDiscoveryStatatua)
+        Me.Controls.Add(Me.LblAlpacaDiscovery)
+        Me.Controls.Add(Me.LedDiscoveryStatus)
         Me.Controls.Add(Me.picASCOM)
-        Me.Controls.Add(Me.cmdCancel)
-        Me.Controls.Add(Me.cmdOK)
-        Me.Controls.Add(Me.cmdProperties)
-        Me.Controls.Add(Me.cbDriverSelector)
+        Me.Controls.Add(Me.BtnCancel)
+        Me.Controls.Add(Me.BtnOK)
+        Me.Controls.Add(Me.BtnProperties)
+        Me.Controls.Add(Me.CmbDriverSelector)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.lblTitle)
         Me.Controls.Add(Me.ChooserMenu)
@@ -311,7 +324,7 @@
 
     End Sub
     Friend WithEvents ChooserMenu As System.Windows.Forms.MenuStrip
-    Friend WithEvents MenuTrace As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MnuTrace As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SerialTraceFileName As System.Windows.Forms.SaveFileDialog
     Friend WithEvents MenuSerialTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuProfileTraceEnabled As System.Windows.Forms.ToolStripMenuItem
@@ -325,12 +338,14 @@
     Friend WithEvents MenuNovasTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuCacheTraceEnabled As ToolStripMenuItem
     Friend WithEvents MenuEarthRotationDataFormTraceEnabled As ToolStripMenuItem
-    Friend WithEvents MenuAlpaca As ToolStripMenuItem
-    Friend WithEvents MnuDiscoveryEnabled As ToolStripMenuItem
+    Friend WithEvents MnuAlpaca As ToolStripMenuItem
+    Friend WithEvents MnuEnableDiscovery As ToolStripMenuItem
     Friend WithEvents MnuDiscoverNow As ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
     Friend WithEvents MnuConfigureDiscovery As ToolStripMenuItem
-    Friend WithEvents LedDiscoveryStatatua As Controls.LedIndicator
-    Friend WithEvents Label2 As Label
+    Friend WithEvents LedDiscoveryStatus As Controls.LedIndicator
+    Friend WithEvents LblAlpacaDiscovery As Label
+    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
+    Friend WithEvents MnuDisableDiscovery As ToolStripMenuItem
 #End Region
 End Class

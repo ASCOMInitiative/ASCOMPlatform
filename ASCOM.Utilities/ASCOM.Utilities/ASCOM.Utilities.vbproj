@@ -136,6 +136,13 @@
   <ItemGroup>
     <Compile Include="AllUsersFileSystemProvider.vb" />
     <Compile Include="ASCOMProfile.vb" />
+    <Compile Include="ChooserAlpacaConfigurationForm.Designer.vb">
+      <DependentUpon>ChooserAlpacaConfigurationForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ChooserAlpacaConfigurationForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChooserCustomToolStripRenderer.vb" />
     <Compile Include="Enums.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="..\..\AssemblyVersionInfo.vb">
@@ -187,6 +194,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="XMLAccess.vb" />
+    <EmbeddedResource Include="ChooserAlpacaConfigurationForm.resx">
+      <DependentUpon>ChooserAlpacaConfigurationForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ChooserForm.resX">
       <DependentUpon>ChooserForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -241,9 +251,13 @@
     <None Include="Resources\ASCOM.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ASCOMAlpaca.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="NamespaceDocumentation.xml">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Resources\ASCOMAlpacaMidRes.jpg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">

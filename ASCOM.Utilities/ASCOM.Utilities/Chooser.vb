@@ -67,7 +67,7 @@ Public Class Chooser
     ''' <param name="disposing">True if called by the user, false if called by the system</param>
     ''' <remarks>You can't call this directly, use Dispose with no arguments instead.</remarks>
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
-        If Not Me.disposedValue Then
+        If Not disposedValue Then
             If disposing Then
             End If
             If Not (chooserFormInstance Is Nothing) Then
@@ -76,7 +76,7 @@ Public Class Chooser
             End If
 
         End If
-        Me.disposedValue = True
+        disposedValue = True
     End Sub
 
     ' This code added by Visual Basic to correctly implement the disposable pattern.
@@ -170,7 +170,7 @@ Public Class Chooser
     ''' </remarks>
     <ComVisible(False)> _
     Public Overloads Function Choose() As String Implements IChooserExtra.Choose
-        Return Me.Choose("")
+        Return Choose("")
     End Function
 #End Region
 
