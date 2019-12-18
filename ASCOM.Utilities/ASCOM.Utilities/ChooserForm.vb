@@ -2,11 +2,9 @@ Option Strict Off
 Option Explicit On
 
 Imports System.Globalization
-Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports System.Threading
 Imports ASCOM.Utilities.Alpaca
-Imports Newtonsoft.Json
 
 Friend Class ChooserForm
     Inherits System.Windows.Forms.Form
