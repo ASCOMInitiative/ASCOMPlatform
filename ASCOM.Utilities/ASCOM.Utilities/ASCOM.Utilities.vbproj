@@ -262,6 +262,10 @@
       <Name>ASCOM.Exceptions</Name>
       <Private>True</Private>
     </ProjectReference>
+    <ProjectReference Include="..\ASCOM.Utilities.Support\ASCOM.Utilities.Support.csproj">
+      <Project>{1aa1a742-eabb-4fe6-b4e7-63ed84da9304}</Project>
+      <Name>ASCOM.Utilities.Support</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
