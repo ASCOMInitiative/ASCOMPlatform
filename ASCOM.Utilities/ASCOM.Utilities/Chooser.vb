@@ -1,6 +1,8 @@
 Option Strict On
 Option Explicit On
 Imports ASCOM.Utilities.Interfaces
+Imports System.IO
+Imports System.Reflection
 Imports System.Runtime.InteropServices
 
 ''' <summary>
@@ -17,9 +19,9 @@ Imports System.Runtime.InteropServices
 ''' driver (you probably save this in the registry), and the corresponding telescope type is pre-selected in the Chooser's list. In this case, 
 ''' the OK button starts out enabled (lit-up); the assumption is that the pre-selected driver has already been configured. </para>
 '''</remarks>
-<Guid("B7A1F5A0-71B4-44f9-91E9-468697957D6B"), _
-ComVisible(True), _
-ClassInterface(ClassInterfaceType.None)> _
+<Guid("B7A1F5A0-71B4-44f9-91E9-468697957D6B"),
+ComVisible(True),
+ClassInterface(ClassInterfaceType.None)>
 Public Class Chooser
     Implements IChooser, IChooserExtra, IDisposable
     '   ===========
@@ -52,13 +54,24 @@ Public Class Chooser
         MyBase.New()
 
         Try
+
+            'Dim newtonsoftAssemblyPath As String = $"{GetProgramFilesX86()}\ASCOM\Platform 6\Support\Newtonsoft.Json.dll"
+            'Assembly.LoadFrom(newtonsoftAssemblyPath)
+
+            'Dim asd As Newtonsoft.Json.Converters.BinaryConverter = New Newtonsoft.Json.Converters.BinaryConverter
+
             chooserFormInstance = New ChooserForm ' Initially hidden
+
+        Catch ex As FileNotFoundException
+            MsgBox("Chooser.New Unable to find NewtonSoft JSON DLL" & vbCrLf & ex.Message)
         Catch ex As Exception
             MsgBox("Chooser.New " & ex.ToString)
         End Try
 
         deviceTypeValue = "Telescope" ' Default to Telescope chooser
     End Sub
+
+
 
     ' IDisposable
     ''' <summary>
@@ -168,7 +181,7 @@ Public Class Chooser
     ''' <para>This overload is not available through COM, please use "Choose(ByVal DriverProgID As String)"
     ''' with an empty string parameter to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function Choose() As String Implements IChooserExtra.Choose
         Return Choose("")
     End Function

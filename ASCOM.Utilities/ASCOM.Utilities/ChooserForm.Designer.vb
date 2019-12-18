@@ -43,10 +43,11 @@
         Me.MnuDisableDiscovery = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuConfigureDiscovery = New System.Windows.Forms.ToolStripMenuItem()
         Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
-        Me.LedDiscoveryStatus = New ASCOM.Controls.LedIndicator()
         Me.LblAlpacaDiscovery = New System.Windows.Forms.Label()
+        Me.AlpacaStatus = New System.Windows.Forms.PictureBox()
         CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ChooserMenu.SuspendLayout()
+        CType(Me.AlpacaStatus, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'picASCOM
@@ -270,24 +271,25 @@
         Me.MnuConfigureDiscovery.Size = New System.Drawing.Size(181, 22)
         Me.MnuConfigureDiscovery.Text = "Configure Discovery"
         '
-        'LedDiscoveryStatus
-        '
-        Me.LedDiscoveryStatus.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.LedDiscoveryStatus.LabelText = ""
-        Me.LedDiscoveryStatus.Location = New System.Drawing.Point(306, 4)
-        Me.LedDiscoveryStatus.Name = "LedDiscoveryStatus"
-        Me.LedDiscoveryStatus.Size = New System.Drawing.Size(20, 17)
-        Me.LedDiscoveryStatus.TabIndex = 8
-        '
         'LblAlpacaDiscovery
         '
         Me.LblAlpacaDiscovery.AutoSize = True
         Me.LblAlpacaDiscovery.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.LblAlpacaDiscovery.Location = New System.Drawing.Point(213, 5)
+        Me.LblAlpacaDiscovery.Location = New System.Drawing.Point(211, 5)
         Me.LblAlpacaDiscovery.Name = "LblAlpacaDiscovery"
         Me.LblAlpacaDiscovery.Size = New System.Drawing.Size(90, 13)
         Me.LblAlpacaDiscovery.TabIndex = 9
         Me.LblAlpacaDiscovery.Text = "Alpaca Discovery"
+        '
+        'AlpacaStatus
+        '
+        Me.AlpacaStatus.BackColor = System.Drawing.Color.Lime
+        Me.AlpacaStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.AlpacaStatus.Location = New System.Drawing.Point(305, 8)
+        Me.AlpacaStatus.Name = "AlpacaStatus"
+        Me.AlpacaStatus.Size = New System.Drawing.Size(16, 8)
+        Me.AlpacaStatus.TabIndex = 10
+        Me.AlpacaStatus.TabStop = False
         '
         'ChooserForm
         '
@@ -296,7 +298,7 @@
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(333, 181)
         Me.Controls.Add(Me.LblAlpacaDiscovery)
-        Me.Controls.Add(Me.LedDiscoveryStatus)
+        Me.Controls.Add(Me.AlpacaStatus)
         Me.Controls.Add(Me.picASCOM)
         Me.Controls.Add(Me.BtnCancel)
         Me.Controls.Add(Me.BtnOK)
@@ -319,6 +321,7 @@
         CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ChooserMenu.ResumeLayout(False)
         Me.ChooserMenu.PerformLayout()
+        CType(Me.AlpacaStatus, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -342,10 +345,10 @@
     Friend WithEvents MnuEnableDiscovery As ToolStripMenuItem
     Friend WithEvents MnuDiscoverNow As ToolStripMenuItem
     Friend WithEvents MnuConfigureDiscovery As ToolStripMenuItem
-    Friend WithEvents LedDiscoveryStatus As Controls.LedIndicator
     Friend WithEvents LblAlpacaDiscovery As Label
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
     Friend WithEvents MnuDisableDiscovery As ToolStripMenuItem
+    Friend WithEvents AlpacaStatus As PictureBox
 #End Region
 End Class
