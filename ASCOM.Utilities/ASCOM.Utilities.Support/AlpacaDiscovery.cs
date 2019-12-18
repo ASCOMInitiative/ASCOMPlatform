@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading;
+using ASCOM.Utilities.Support;
 using ASCOM.Utilities;
 using Newtonsoft.Json;
 
@@ -16,7 +17,7 @@ namespace ASCOM.Utilities.Alpaca
     public class AlpacaDiscovery : IDisposable
     {
         // Utility objects
-        private TraceLogger TL;
+        private ITraceLoggerUtility   TL;
         private Finder finder;
         private System.Threading.Timer discoveryCompleteTimer;
 
@@ -33,12 +34,12 @@ namespace ASCOM.Utilities.Alpaca
         /// Initialiser that takes a trace logger
         /// </summary>
         /// <param name="tl">Trace logger instance to use for activity logging</param>
-        public AlpacaDiscovery(TraceLogger tl)
+        public AlpacaDiscovery(ITraceLoggerUtility tl)
         {
             try
             {
                 // Save the supplied trace logger object
-                TL = tl;
+                TL = tl ;
 
                 // Initialise variables
                 tryDnsNameResolution = false; // Initialise so that there is no host name resolution by default

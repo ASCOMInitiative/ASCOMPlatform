@@ -283,7 +283,7 @@
         '
         'AlpacaStatus
         '
-        Me.AlpacaStatus.BackColor = System.Drawing.Color.Lime
+        Me.AlpacaStatus.BackColor = System.Drawing.Color.CornflowerBlue
         Me.AlpacaStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.AlpacaStatus.Location = New System.Drawing.Point(305, 8)
         Me.AlpacaStatus.Name = "AlpacaStatus"

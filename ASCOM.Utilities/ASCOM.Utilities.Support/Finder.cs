@@ -9,7 +9,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using ASCOM.Utilities;
+using ASCOM.Utilities.Support;
 using Newtonsoft.Json;
 
 //This namespace dual targets NetStandard2.0 and Net35, thus no async await
@@ -17,7 +17,7 @@ namespace ASCOM.Utilities.Alpaca
 {
     public class Finder : IDisposable
     {
-        private TraceLogger TL;
+        private ITraceLoggerUtility TL;
 
         private readonly Action<IPEndPoint, AlpacaDiscoveryResponse> callbackFunctionDelegate;
         private readonly UdpClient udpClient;
@@ -38,7 +38,7 @@ namespace ASCOM.Utilities.Alpaca
         /// This may require firewall access
         /// </summary>
         /// <param name="callback">A callback function to receive the endpoint result</param>
-        public Finder(Action<IPEndPoint, AlpacaDiscoveryResponse> callback, TraceLogger traceLogger)
+        internal Finder(Action<IPEndPoint, AlpacaDiscoveryResponse> callback, ITraceLoggerUtility traceLogger)
         {
             TL = traceLogger; // Save the trace logger object
             LogMessage("Finder", "Starting Initialisation...");
