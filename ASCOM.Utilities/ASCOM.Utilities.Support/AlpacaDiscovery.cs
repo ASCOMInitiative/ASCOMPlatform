@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Threading;
 using ASCOM.Utilities.Support;
-using ASCOM.Utilities;
 using Newtonsoft.Json;
 
-namespace ASCOM.Utilities.Alpaca
+namespace ASCOM.Utilities.Support
 {
     /// <summary>
     /// Alpaca discovery component
@@ -19,7 +17,7 @@ namespace ASCOM.Utilities.Alpaca
         // Utility objects
         private ITraceLoggerUtility   TL;
         private Finder finder;
-        private System.Threading.Timer discoveryCompleteTimer;
+        private Timer discoveryCompleteTimer;
 
         // Private variables
         private Dictionary<IPEndPoint, AlpacaDevice> alpacaDeviceList = new Dictionary<IPEndPoint, AlpacaDevice>(); // List of discovered Alpaca devices keyed on IP:Port

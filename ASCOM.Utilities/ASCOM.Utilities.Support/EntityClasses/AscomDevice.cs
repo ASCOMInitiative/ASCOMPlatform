@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace ASCOM.Utilities.Alpaca
+namespace ASCOM.Utilities.Support
 {
     /// <summary>
     /// ASCOM device entity class

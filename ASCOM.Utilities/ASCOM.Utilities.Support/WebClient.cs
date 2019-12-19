@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace ASCOM.Utilities.Alpaca
+namespace ASCOM.Utilities.Support
 {
 
     internal class WebClient : System.Net.WebClient

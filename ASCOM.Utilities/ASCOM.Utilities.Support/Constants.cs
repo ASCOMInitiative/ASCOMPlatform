@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ASCOM.Utilities.Alpaca
+namespace ASCOM.Utilities.Support
 {
     public static class Constants
     {

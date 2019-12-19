@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ASCOM.Utilities.Alpaca
+namespace ASCOM.Utilities.Support
 {
     public class AlpacaConfiguredDevicesResponse : RestResponseBase
     {

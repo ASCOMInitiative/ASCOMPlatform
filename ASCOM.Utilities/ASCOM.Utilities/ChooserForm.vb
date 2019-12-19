@@ -4,8 +4,6 @@ Option Explicit On
 Imports System.Globalization
 Imports System.Runtime.InteropServices
 Imports System.Threading
-Imports ASCOM.Utilities
-Imports ASCOM.Utilities.Alpaca
 Imports ASCOM.Utilities.Support
 
 Friend Class ChooserForm

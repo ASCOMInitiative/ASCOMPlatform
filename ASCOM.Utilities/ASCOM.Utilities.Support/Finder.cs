@@ -13,7 +13,7 @@ using ASCOM.Utilities.Support;
 using Newtonsoft.Json;
 
 //This namespace dual targets NetStandard2.0 and Net35, thus no async await
-namespace ASCOM.Utilities.Alpaca
+namespace ASCOM.Utilities.Support
 {
     public class Finder : IDisposable
     {

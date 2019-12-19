@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ASCOM.Utilities.Alpaca
+namespace ASCOM.Utilities.Support
 {
     public class AlpacaDescriptionResponse : RestResponseBase
     {
