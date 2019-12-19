@@ -45,6 +45,7 @@
         Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
         Me.LblAlpacaDiscovery = New System.Windows.Forms.Label()
         Me.AlpacaStatus = New System.Windows.Forms.PictureBox()
+        Me.MenuRegistryTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ChooserMenu.SuspendLayout()
         CType(Me.AlpacaStatus, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -154,7 +155,7 @@
         '
         'MnuTrace
         '
-        Me.MnuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuSerialTraceEnabled, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuSimulatorTraceEnabled, Me.MenuDriverAccessTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuNovasTraceEnabled, Me.MenuAstroUtilsTraceEnabled, Me.MenuCacheTraceEnabled, Me.MenuEarthRotationDataFormTraceEnabled})
+        Me.MnuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuSerialTraceEnabled, Me.MenuProfileTraceEnabled, Me.MenuRegistryTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuSimulatorTraceEnabled, Me.MenuDriverAccessTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuNovasTraceEnabled, Me.MenuAstroUtilsTraceEnabled, Me.MenuCacheTraceEnabled, Me.MenuEarthRotationDataFormTraceEnabled})
         Me.MnuTrace.Name = "MnuTrace"
         Me.MnuTrace.Size = New System.Drawing.Size(46, 20)
         Me.MnuTrace.Text = "Trace"
@@ -291,6 +292,12 @@
         Me.AlpacaStatus.TabIndex = 10
         Me.AlpacaStatus.TabStop = False
         '
+        'MenuRegistryTraceEnabled
+        '
+        Me.MenuRegistryTraceEnabled.Name = "MenuRegistryTraceEnabled"
+        Me.MenuRegistryTraceEnabled.Size = New System.Drawing.Size(282, 22)
+        Me.MenuRegistryTraceEnabled.Text = "Registry Trace Enabled"
+        '
         'ChooserForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -350,5 +357,6 @@
     Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
     Friend WithEvents MnuDisableDiscovery As ToolStripMenuItem
     Friend WithEvents AlpacaStatus As PictureBox
+    Friend WithEvents MenuRegistryTraceEnabled As ToolStripMenuItem
 #End Region
 End Class

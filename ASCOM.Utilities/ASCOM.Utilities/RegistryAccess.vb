@@ -27,7 +27,7 @@ Friend Class RegistryAccess
     Private sw, swSupport As Stopwatch
 
     ''' <summary>
-    ''' Enum containing all the possible registry access rights values. The buit-in RegistryRights enum only has a partial collection
+    ''' Enum containing all the possible registry access rights values. The built-in RegistryRights enum only has a partial collection
     ''' and often returns values such as -1 or large positive and negative integer values when converted to a string
     ''' The Flags attribute ensures that the ToString operation returns an aggregate list of discrete values
     ''' </summary>
@@ -82,7 +82,7 @@ Friend Class RegistryAccess
 
         RunningVersions(TL)
 
-        sw = New Stopwatch 'Create the stowatch instances
+        sw = New Stopwatch 'Create the stopwatch instances
         swSupport = New Stopwatch
         ProfileMutex = New System.Threading.Mutex(False, PROFILE_MUTEX_NAME)
 
@@ -96,7 +96,7 @@ Friend Class RegistryAccess
 
             RunningVersions(TL)
 
-            sw = New Stopwatch 'Create the stowatch instances
+            sw = New Stopwatch 'Create the stopwatch instances
             swSupport = New Stopwatch
             ProfileMutex = New System.Threading.Mutex(False, PROFILE_MUTEX_NAME)
 
@@ -123,7 +123,7 @@ Friend Class RegistryAccess
 
         RunningVersions(TL) ' Include version information
 
-        sw = New Stopwatch 'Create the stowatch instances
+        sw = New Stopwatch 'Create the stopwatch instances
         swSupport = New Stopwatch
         ProfileMutex = New System.Threading.Mutex(False, PROFILE_MUTEX_NAME)
 
@@ -170,13 +170,13 @@ Friend Class RegistryAccess
 
     ' This code added by Visual Basic to correctly implement the disposable pattern.
     Public Sub Dispose() Implements IDisposable.Dispose
-        ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+        ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
         Dispose(True)
         GC.SuppressFinalize(Me)
     End Sub
 
     Protected Overrides Sub Finalize()
-        ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+        ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
         Dispose(False)
         MyBase.Finalize()
     End Sub
@@ -225,7 +225,7 @@ Friend Class RegistryAccess
         'Throw New MethodNotImplementedException("RegistryAccess:RenameKey " & OriginalSubKeyName & " to " & NewSubKeyName)
         Dim SubKey As RegistryKey, Values As Generic.SortedList(Of String, String)
         SubKey = ProfileRegKey.OpenSubKey(CleanSubKey(NewSubKeyName))
-        If SubKey Is Nothing Then 'Keydoes not exist so create it
+        If SubKey Is Nothing Then 'Key does not exist so create it
             CreateKey(NewSubKeyName)
             Values = EnumProfile(OriginalSubKeyName)
             For Each Value As Generic.KeyValuePair(Of String, String) In Values
@@ -258,7 +258,7 @@ Friend Class RegistryAccess
     End Sub
 
     Friend Function EnumKeys(ByVal p_SubKeyName As String) As Collections.Generic.SortedList(Of String, String) Implements IAccess.EnumKeys
-        'Return a sorted list of subkeys
+        'Return a sorted list of sub-keys
         Dim RetValues As New Generic.SortedList(Of String, String)
         Dim SubKeys() As String, Value As String
         Try
@@ -268,7 +268,7 @@ Friend Class RegistryAccess
 
             SubKeys = ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetSubKeyNames()
 
-            For Each SubKey As String In SubKeys 'Process each key in trun
+            For Each SubKey As String In SubKeys 'Process each key in turn
                 Try 'If there is an error reading the data don't include in the returned list
                     'Create the new subkey and get a handle to it
                     Select Case p_SubKeyName
@@ -277,7 +277,7 @@ Friend Class RegistryAccess
                         Case Else
                             Value = ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName) & "\" & SubKey).GetValue("", "").ToString
                     End Select
-                    RetValues.Add(SubKey, Value) 'Add the Key name and default value to the hashtable
+                    RetValues.Add(SubKey, Value) 'Add the Key name and default value to the hash table
                 Catch ex As Exception
                     TL.LogMessageCrLf("", "Read exception: " & ex.ToString)
                     Throw New ProfilePersistenceException("RegistryAccess.EnumKeys exception", ex)
@@ -305,7 +305,7 @@ Friend Class RegistryAccess
 
             Values = ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetValueNames
             For Each Value As String In Values
-                RetValues.Add(Value, ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetValue(Value).ToString) 'Add the Key name and default value to the hashtable
+                RetValues.Add(Value, ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetValue(Value).ToString) 'Add the Key name and default value to the hash table
             Next
 
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
@@ -397,7 +397,7 @@ Friend Class RegistryAccess
                 Case "4", "5" 'Currently on Platform 4 or 5 so Profile is in 32bit registry
                     'Profile just needs to be backed up 
                     LogMessage("BackupProfile", "Backing up Platform 5 Profile" & CurrentPlatformVersion)
-                    Call Backup50() ' Take a backup copy to retore later
+                    Call Backup50() ' Take a backup copy to restore later
                 Case "5.5" 'Currently on Platform 5.5 so Profile is in file system and there is some profile in the registry too
                     'Backup old 5.0 Profile and Copy 5.5 Profile to registry
                     Call Backup50()
@@ -430,7 +430,7 @@ Friend Class RegistryAccess
                 Case "4", "5" 'Currently on Platform 4 or 5 so Profile is in 32bit registry
                     'Profile just needs to be backed up 
                     LogMessage("RestoreProfile", "Restoring Platform 5 Profile" & CurrentPlatformVersion)
-                    Call Restore50() ' Take a backup copy to retore later
+                    Call Restore50() ' Take a backup copy to restore later
                 Case "5.5" 'Currently on Platform 5.5 so Profile is in file system and there is some profile in the registry too
                     'Backup old 5.0 Profile and Copy 5.5 Profile to registry
                     Call Restore55()
@@ -570,13 +570,13 @@ Friend Class RegistryAccess
     End Sub
 
     Private Function CleanSubKey(ByVal SubKey As String) As String
-        'Remove leading "\" if it exists as this is not logal in a subkey name. "\" in the middle of a subkey name is legal however
+        'Remove leading "\" if it exists as this is not legal in a subkey name. "\" in the middle of a subkey name is legal however
         If Left(SubKey, 1) = "\" Then Return Mid(SubKey, 2)
         Return SubKey
     End Function
 
     Private Sub CopyRegistry(ByVal FromKey As RegistryKey, ByVal ToKey As RegistryKey)
-        'Subroutine used to recursively copy copy a registry Profile from one place to another
+        'Subroutine used to recursively copy a registry Profile from one place to another
         Dim Value, ValueNames(), SubKeys() As String
         'Dim swLocal As Stopwatch
         Dim NewFromKey, NewToKey As RegistryKey
@@ -585,7 +585,7 @@ Friend Class RegistryAccess
         RecurseDepth += 1 'Increment the recursion depth indicator
 
         'swLocal = Stopwatch.StartNew
-        LogMessage("CopyRegistry " & RecurseDepth.ToString, "Copy from: " & FromKey.Name & " to: " & ToKey.Name & " Number of values: " & FromKey.ValueCount.ToString & ", number of subkeys: " & FromKey.SubKeyCount.ToString)
+        LogMessage("CopyRegistry " & RecurseDepth.ToString, "Copy from: " & FromKey.Name & " to: " & ToKey.Name & " Number of values: " & FromKey.ValueCount.ToString & ", number of sub-keys: " & FromKey.SubKeyCount.ToString)
 
         'First copy values from the from key to the to key
         ValueNames = FromKey.GetValueNames()
@@ -668,7 +668,7 @@ Friend Class RegistryAccess
 
         LogMessage("SetRegistryACL", "Creating security identifier")
         DomainSid = New SecurityIdentifier("S-1-0-0") 'Create a starting point domain SID
-        Ident = New SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, DomainSid) 'Create a security Identifier for the BuiltinUsers Group to be passed to the new accessrule
+        Ident = New SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, DomainSid) 'Create a security Identifier for the BuiltinUsers Group to be passed to the new access rule
 
         LogMessage("SetRegistryACL", "Creating FullControl ACL rule")
         RegAccessRule = New RegistryAccessRule(Ident,
@@ -982,7 +982,7 @@ Friend Class RegistryAccess
     End Sub
 
     Private Sub Copy55(ByVal CurrentSubKey As String, ByVal Prof55 As XMLAccess, ByVal RegistryTarget As RegistryKey)
-        'Subroutine used to recursively copy copy the 5.5 XML profile to new 64bit registry profile
+        'Subroutine used to recursively copy the 5.5 XML profile to new 64bit registry profile
         Dim Values, SubKeys As Generic.SortedList(Of String, String)
         Dim swLocal As Stopwatch
         Static RecurseDepth As Integer
@@ -1152,13 +1152,13 @@ Friend Class RegistryAccess
         safeHandle = safeRegistryHandleConstructor.Invoke(New System.Object() {hKey, ownsHandle})
 
         ' Create a new Registry key using the private constructor using the safeHandle - this should then behave like a .NET natively opened handle and disposed of correctly
-        If System.Environment.Version.Major >= 4 Then ' Deal with MS having added a new parameter to the RegistryKey private costructor!!
+        If System.Environment.Version.Major >= 4 Then ' Deal with MS having added a new parameter to the RegistryKey private constructor!!
             Dim RegistryViewType As System.Type = GetType(Microsoft.Win32.SafeHandles.SafeHandleZeroOrMinusOneIsInvalid).Assembly.GetType("Microsoft.Win32.RegistryView") ' This is the new parameter type
-            Dim registryKeyConstructorTypes As System.Type() = {safeRegistryHandleType, GetType(System.Boolean), RegistryViewType} 'Add the extra paraemter to the list of parameter types
+            Dim registryKeyConstructorTypes As System.Type() = {safeRegistryHandleType, GetType(System.Boolean), RegistryViewType} 'Add the extra parameter to the list of parameter types
             registryKeyType = GetType(Microsoft.Win32.RegistryKey)
             registryKeyConstructor = registryKeyType.GetConstructor(privateConstructors, Nothing, registryKeyConstructorTypes, Nothing)
             result = DirectCast(registryKeyConstructor.Invoke(New Object() {safeHandle, writable, CInt(options)}), Microsoft.Win32.RegistryKey) ' Version 4 and later
-        Else ' Only two paraemters for Frameworks 3.5 and below
+        Else ' Only two parameters for Frameworks 3.5 and below
             Dim registryKeyConstructorTypes As System.Type() = {safeRegistryHandleType, GetType(System.Boolean)}
             registryKeyType = GetType(Microsoft.Win32.RegistryKey)
             registryKeyConstructor = registryKeyType.GetConstructor(privateConstructors, Nothing, registryKeyConstructorTypes, Nothing)

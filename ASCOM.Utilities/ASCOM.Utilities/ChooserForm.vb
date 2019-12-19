@@ -358,6 +358,7 @@ Friend Class ChooserForm
 
             'Set Profile trace checked state on menu item 
             MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
+            MenuRegistryTraceEnabled.Checked = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT)
             MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
             MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
             MenuSimulatorTraceEnabled.Checked = GetBool(SIMULATOR_TRACE, SIMULATOR_TRACE_DEFAULT)
@@ -417,8 +418,12 @@ Friend Class ChooserForm
 
     Private Sub MenuProfileTraceEnabled_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuProfileTraceEnabled.Click
         MenuProfileTraceEnabled.Checked = Not MenuProfileTraceEnabled.Checked 'Invert the selection
-        SetName(TRACE_XMLACCESS, MenuProfileTraceEnabled.Checked.ToString)
         SetName(TRACE_PROFILE, MenuProfileTraceEnabled.Checked.ToString)
+    End Sub
+
+    Private Sub MenuRegistryTraceEnabled_Click(sender As Object, e As EventArgs) Handles MenuRegistryTraceEnabled.Click
+        MenuRegistryTraceEnabled.Checked = Not MenuRegistryTraceEnabled.Checked 'Invert the selection
+        SetName(TRACE_XMLACCESS, MenuRegistryTraceEnabled.Checked.ToString)
     End Sub
 
     Private Sub MenuUtilTraceEnabled_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuUtilTraceEnabled.Click
