@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ASCOM.Utilities.Support</RootNamespace>
-    <AssemblyName>ASCOM.UtilitiesSupport</AssemblyName>
+    <AssemblyName>ASCOM.Utilities.Support</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

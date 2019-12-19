@@ -9,10 +9,8 @@ Platform 5 files
 Set Registry Keys
 Platform 6.1 files
 Platform 6.2 files
-Extra activities if on a 64bit system
 Remove 64bit components
 ASCOM Cache
 Remove Previous Platforms 4 and 5 if present
-Non-MSI installation activities
 Install Application Pre-Requisites if required
 Maintenance Dialogue
