@@ -41,7 +41,7 @@ Partial Class ChooserAlpacaConfigurationForm
         '
         'BtnOK
         '
-        Me.BtnOK.Location = New System.Drawing.Point(527, 220)
+        Me.BtnOK.Location = New System.Drawing.Point(446, 220)
         Me.BtnOK.Name = "BtnOK"
         Me.BtnOK.Size = New System.Drawing.Size(75, 23)
         Me.BtnOK.TabIndex = 5
@@ -51,7 +51,7 @@ Partial Class ChooserAlpacaConfigurationForm
         'BtnCancel
         '
         Me.BtnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.BtnCancel.Location = New System.Drawing.Point(446, 220)
+        Me.BtnCancel.Location = New System.Drawing.Point(527, 220)
         Me.BtnCancel.Name = "BtnCancel"
         Me.BtnCancel.Size = New System.Drawing.Size(75, 23)
         Me.BtnCancel.TabIndex = 6

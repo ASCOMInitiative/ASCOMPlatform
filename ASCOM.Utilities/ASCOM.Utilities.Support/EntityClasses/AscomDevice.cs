@@ -28,7 +28,7 @@ namespace ASCOM.Utilities.Support
         /// <param name="alpacaUniqueId">Alpaca device unique ID</param>
         /// <param name="interfaceVersion">Supported Alpaca interface version</param>
         /// <param name="statusMessage">ALapca device status message</param>
-        public AscomDevice(string ascomDdeviceName, string ascomDeviceType, int alpacaDeviceNumber, string ascomDeviceUniqueId, IPEndPoint ipEndPoint, string hostName, string alpacaUniqueId, int interfaceVersion, string statusMessage)
+        public AscomDevice(string ascomDdeviceName, string ascomDeviceType, int alpacaDeviceNumber, string ascomDeviceUniqueId, IPEndPoint ipEndPoint, string hostName, int interfaceVersion, string statusMessage)
         {
             AscomDeviceName = ascomDdeviceName;
             AscomDeviceType = ascomDeviceType;
@@ -36,7 +36,6 @@ namespace ASCOM.Utilities.Support
             AscomDeviceUniqueId = ascomDeviceUniqueId;
             IPEndPoint = ipEndPoint;
             HostName = hostName;
-            AlpacaUniqueId = alpacaUniqueId;
             InterfaceVersion = interfaceVersion;
             StatusMessage = statusMessage;
         }
@@ -70,11 +69,6 @@ namespace ASCOM.Utilities.Support
         /// Alpaca device host name
         /// </summary>
         public string HostName { get; set; }
-
-        /// <summary>
-        /// Alapaca device unique ID
-        /// </summary>
-        public string AlpacaUniqueId { get; set; }
 
         /// <summary>
         /// SUpported Alpaca interface version

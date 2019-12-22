@@ -18,13 +18,13 @@ namespace ASCOM.Utilities.Support
         /// <param name="deviceName">ASCOM device name</param>
         /// <param name="deviceType">ASCOM device type</param>
         /// <param name="deviceNumber">Alpaca API device number</param>
-        /// <param name="deviceUniqueID">ASCOM device unique ID</param>
-        public ConfiguredDevice(string deviceName,string deviceType,int deviceNumber,string deviceUniqueID)
+        /// <param name="uniqueID">ASCOM device unique ID</param>
+        public ConfiguredDevice(string deviceName,string deviceType,int deviceNumber,string uniqueID)
         {
             DeviceName = deviceName;
             DeviceType = deviceType;
             DeviceNumber = deviceNumber;
-            DeviceUniqueID = deviceUniqueID;
+            UniqueID = uniqueID;
         }
 
         /// <summary>
@@ -45,6 +45,6 @@ namespace ASCOM.Utilities.Support
         /// <summary>
         /// ASCOM device unique ID
         /// </summary>
-        public string DeviceUniqueID { get; set; }
+        public string UniqueID { get; set; }
     }
 }

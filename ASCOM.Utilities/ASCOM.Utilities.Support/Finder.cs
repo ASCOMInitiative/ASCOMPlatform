@@ -180,7 +180,7 @@ namespace ASCOM.Utilities.Support
             }
             catch (ObjectDisposedException ex)
             {
-                LogMessage("FinderDiscoveryCallback", $"ObjectDisposedException: " + ex.Message);
+                LogMessage("FinderDiscoveryCallback", $"ObjectDisposedException: " + ex.ToString());
             }
             catch (Exception ex)
             {

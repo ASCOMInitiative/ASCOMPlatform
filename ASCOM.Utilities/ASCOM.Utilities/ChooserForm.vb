@@ -55,6 +55,13 @@ Friend Class ChooserForm
     Friend AlpacaTimeout As Double
     Friend AlpacaDnsResolution As Boolean
 
+    ' Delegates
+    Private PopulateDriverComboBoxDelegate As MethodInvoker = AddressOf PopulateDriverComboBox ' Device list combo box delegate
+    Private SetStateNoAlpacaDelegate As MethodInvoker = AddressOf SetStateNoAlpaca
+    Private SetStateAlpacaDiscoveringDelegate As MethodInvoker = AddressOf SetStateAlpacaDiscovering
+    Private SetStateAlpacaDiscoveryCompleteFoundDevicesDelegate As MethodInvoker = AddressOf SetStateAlpacaDiscoveryCompleteFoundDevices
+    Private SetStateAlpacaDiscoveryCompleteNoDevicesDelegate As MethodInvoker = AddressOf SetStateAlpacaDiscoveryCompleteNoDevices
+
 #End Region
 
 #Region "Form load, close, paint and dispose event handlers"
@@ -579,9 +586,10 @@ Friend Class ChooserForm
             Dim discovery As AlpacaDiscovery
             discovery = New AlpacaDiscovery(TL)
             TL.LogMessage("StartAlpacaDiscovery", $"AlpacaDiscovery created")
-            discovery.StartDiscovery(AlpacaNumberOfBroadcasts, 200, AlpacaDiscoveryPort, AlpacaTimeout, False)
+            discovery.StartDiscovery(AlpacaNumberOfBroadcasts, 200, AlpacaDiscoveryPort, AlpacaTimeout, AlpacaDnsResolution)
             TL.LogMessage("StartAlpacaDiscovery", $"AlpacaDiscovery started")
 
+            ' Keep the UI alive while the discovery is running
             Do
 
                 Threading.Thread.Sleep(10)
@@ -590,11 +598,15 @@ Friend Class ChooserForm
             Loop Until discovery.DiscoveryComplete
             TL.LogMessage("StartAlpacaDiscovery", $"AlpacaDiscovery Completed")
 
+            ' List discovered devices to the log
             For Each ascomDevice As AscomDevice In discovery.GetAscomDevices()
                 TL.LogMessage("StartAlpacaDiscovery", $"FOUND {ascomDevice.AscomDeviceType} {ascomDevice.AscomDeviceName} {ascomDevice.IPEndPoint.ToString()}")
             Next
+
+            ' Get discovered devices of the requested ASCOM device type
             ascomDevices = discovery.GetAscomDevices(deviceTypeValue)
 
+            ' Populate the device list combo box with COM and Alpaca devices
             PopulateDriverComboBox()
 
             discovery.Dispose()
@@ -610,8 +622,6 @@ Friend Class ChooserForm
 
         End Try
     End Sub
-
-    Private PopulateDriverComboBoxDelegate As MethodInvoker = AddressOf PopulateDriverComboBox
 
     Private Sub PopulateDriverComboBox()
         Dim profileStore As RegistryAccess
@@ -664,9 +674,13 @@ Friend Class ChooserForm
                     For Each device As AscomDevice In ascomDevices
                         TL.LogMessage("PopulateDriverComboBox", $"Adding Alpaca device {device.AscomDeviceType} {device.AscomDeviceName}")
 
-                        CmbDriverSelector.Items.Add($"ALPACA - NEW DEVICE   {device.AscomDeviceName}   ({device.IPEndPoint.ToString()} - {deviceTypeValue}/{device.AlpacaDeviceNumber})")
+                        Dim displayHostName As String = IIf(device.HostName = device.IPEndPoint.Address.ToString(), device.HostName, $"{device.HostName} ({device.IPEndPoint.Address.ToString()})")
+
+                        CmbDriverSelector.Items.Add($"ALPACA - NEW DEVICE   {device.AscomDeviceName}   {displayHostName} : { device.IPEndPoint.Port.ToString()} - {deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.AscomDeviceUniqueId}")
                     Next
                 End If
+
+                CmbDriverSelector.DropDownWidth = DropDownWidth(CmbDriverSelector) ' AutoSize the combo box width
 
                 ' Find the description corresponding to the set ProgID
                 For Each driver As Generic.KeyValuePair(Of String, String) In driversList
@@ -699,10 +713,31 @@ Friend Class ChooserForm
         End If
     End Sub
 
-    Public SetStateNoAlpacaDelegate As MethodInvoker = AddressOf SetStateNoAlpaca
-    Public SetStateAlpacaDiscoveringDelegate As MethodInvoker = AddressOf SetStateAlpacaDiscovering
-    Public SetStateAlpacaDiscoveryCompleteFoundDevicesDelegate As MethodInvoker = AddressOf SetStateAlpacaDiscoveryCompleteFoundDevices
-    Public SetStateAlpacaDiscoveryCompleteNoDevicesDelegate As MethodInvoker = AddressOf SetStateAlpacaDiscoveryCompleteNoDevices
+    ''' <summary>
+    ''' Return the maximum width of a combo box's drop-down items
+    ''' </summary>
+    ''' <param name="comboBox">Combo box to inspect</param>
+    ''' <returns>Maximum width of supplied combo box drop-down items</returns>
+    Private Function DropDownWidth(ByVal comboBox As ComboBox) As Integer
+        Dim maxWidth As Integer
+        Dim temp As Integer
+        Dim label1 As Label = New Label()
+
+        maxWidth = comboBox.Width ' Ensure that the minimum width is the width of the combo box
+
+        For Each obj As Object In comboBox.Items
+            label1.Text = obj.ToString()
+            temp = label1.PreferredWidth
+
+            If temp > maxWidth Then
+                maxWidth = temp
+            End If
+        Next
+
+        label1.Dispose()
+
+        Return maxWidth
+    End Function
 
     Private Sub SetStateNoAlpaca()
         If CmbDriverSelector.InvokeRequired Then

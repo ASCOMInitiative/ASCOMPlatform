@@ -56,6 +56,7 @@
     <Compile Include="EntityClasses\AlpacaDevice.cs" />
     <Compile Include="EntityClasses\AscomDevice.cs" />
     <Compile Include="EntityClasses\ConfiguredDevice.cs" />
+    <Compile Include="EntityClasses\DnsResponse.cs" />
     <Compile Include="Finder.cs" />
     <Compile Include="JsonResponseClasses\AlpacaConfiguredDevicesResponse.cs" />
     <Compile Include="JsonResponseClasses\AlpacaDescriptionResponse.cs" />

@@ -13,7 +13,7 @@ namespace ASCOM.Utilities.Support
         /// <summary>
         /// Default initialiser
         /// </summary>
-        public AlpacaDevice() : this(new IPEndPoint(IPAddress.Any, 0), "", "")
+        public AlpacaDevice() : this(new IPEndPoint(IPAddress.Any, 0), "")
         {
         }
 
@@ -23,11 +23,10 @@ namespace ASCOM.Utilities.Support
         /// <param name="ipEndPoint">Alpaca device IP endpoint</param>
         /// <param name="alpacaUniqueId">ALpaca device unique ID</param>
         /// <param name="statusMessage">Device status message</param>
-        public AlpacaDevice(IPEndPoint ipEndPoint, string alpacaUniqueId, string statusMessage)
+        public AlpacaDevice(IPEndPoint ipEndPoint, string statusMessage)
         {
             IPEndPoint = ipEndPoint;
-            HostName = "";
-            AlpacaUniqueId = alpacaUniqueId;
+            HostName = IPEndPoint.Address.ToString(); // Initialise the host name to the IP address in case there is no DNS name resolution or in case this fails
             AlpacaDeviceDescription = new AlpacaDeviceDescription();
             ConfiguredDevices = new List<ConfiguredDevice>();
             SupportedInterfaceVersions = new int[] { };
@@ -43,11 +42,6 @@ namespace ASCOM.Utilities.Support
         /// Alpaca device host name
         /// </summary>
         public string HostName { get; set; }
-
-        /// <summary>
-        /// Alpaca device unique ID
-        /// </summary>
-        public string AlpacaUniqueId { get; set; }
 
         /// <summary>
         /// Alpaca device description

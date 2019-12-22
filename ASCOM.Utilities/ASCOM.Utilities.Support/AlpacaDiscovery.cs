@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
-using ASCOM.Utilities.Support;
 using Newtonsoft.Json;
 
 namespace ASCOM.Utilities.Support
@@ -15,7 +14,7 @@ namespace ASCOM.Utilities.Support
     public class AlpacaDiscovery : IDisposable
     {
         // Utility objects
-        private ITraceLoggerUtility   TL;
+        private ITraceLoggerUtility TL;
         private Finder finder;
         private Timer discoveryCompleteTimer;
 
@@ -24,7 +23,8 @@ namespace ASCOM.Utilities.Support
         private bool disposedValue = false; // To detect redundant Dispose() method calls
         private double discoveryTime; // Length of the discovery phase before it times out
         private bool tryDnsNameResolution; // Flag indicating whether to attempt name resolution on the host IP address
-        private readonly object deviceListLockObject = new object();
+        private DateTime discoveryStartTime; // Time at which the start discovery command was received
+        private readonly object deviceListLockObject = new object(); // Lock object to synchronise access to the Alpaca device list collection, which is not a thread safe collection
 
         #region New and IDisposable Support
 
@@ -37,7 +37,7 @@ namespace ASCOM.Utilities.Support
             try
             {
                 // Save the supplied trace logger object
-                TL = tl ;
+                TL = tl;
 
                 // Initialise variables
                 tryDnsNameResolution = false; // Initialise so that there is no host name resolution by default
@@ -135,8 +135,8 @@ namespace ASCOM.Utilities.Support
                         // Iterate over the ASCOM devices presented by this Alpaca device adding them to the return dictionary
                         foreach (ConfiguredDevice ascomDevice in alpacaDevice.Value.ConfiguredDevices)
                         {
-                            ascomDeviceList.Add(new AscomDevice(ascomDevice.DeviceName, ascomDevice.DeviceType, ascomDevice.DeviceNumber, ascomDevice.DeviceUniqueID, // ASCOM device information 
-                                                   alpacaDevice.Value.IPEndPoint, alpacaDevice.Value.HostName, alpacaDevice.Value.AlpacaUniqueId, alpacaDeviceInterfaceVersion, alpacaDevice.Value.StatusMessage)); // Alpaca device information
+                            ascomDeviceList.Add(new AscomDevice(ascomDevice.DeviceName, ascomDevice.DeviceType, ascomDevice.DeviceNumber, ascomDevice.UniqueID, // ASCOM device information 
+                                                   alpacaDevice.Value.IPEndPoint, alpacaDevice.Value.HostName, alpacaDeviceInterfaceVersion, alpacaDevice.Value.StatusMessage)); // Alpaca device information
                         }
                     }
                 }
@@ -181,6 +181,7 @@ namespace ASCOM.Utilities.Support
 
             discoveryCompleteTimer.Change(Convert.ToInt32(discoveryTime * 1000), Timeout.Infinite);
             DiscoveryComplete = false;
+            discoveryStartTime = DateTime.Now; // Save the start time
 
             // Send the broadcast polls
             for (int i = 1; i <= numberOfPolls; i++)
@@ -252,7 +253,7 @@ namespace ASCOM.Utilities.Support
                 {
                     if (!alpacaDeviceList.ContainsKey(responderIPEndPoint))
                     {
-                        alpacaDeviceList.Add(responderIPEndPoint, new AlpacaDevice(responderIPEndPoint, alpacaDiscoveryResponse.AlpacaUniqueId, Constants.TRYING_TO_CONTACT_MANAGEMENT_API_MESSAGE));
+                        alpacaDeviceList.Add(responderIPEndPoint, new AlpacaDevice(responderIPEndPoint, Constants.TRYING_TO_CONTACT_MANAGEMENT_API_MESSAGE));
                         RaiseAnAlpacaDevicesChangedEvent(); // Device was added so set the changed flag
                     }
                 }
@@ -260,19 +261,19 @@ namespace ASCOM.Utilities.Support
                 // Create a task to query this device's DNS name, if configured to do so
                 if (tryDnsNameResolution)
                 {
-                    LogMessage("BroadcastResponseEventHandler", $"Creating task to retrieve DNS information for device {responderIPEndPoint.ToString()}");
-
+                    LogMessage("BroadcastResponseEventHandler", $"Creating task to retrieve DNS information for device {responderIPEndPoint.ToString()}:{responderIPEndPoint.Port}");
+                    Thread dnsResolutionThread = new Thread(ResolveIpAddressToHostName);
+                    dnsResolutionThread.IsBackground = true;
+                    dnsResolutionThread.Start(responderIPEndPoint);
 
                 }
 
                 // Create a task to query this device's Alpaca management API
-                LogMessage("BroadcastResponseEventHandler", $"Creating thread to retrieve Alpaca management description for device {responderIPEndPoint.ToString()}");
+                LogMessage("BroadcastResponseEventHandler", $"Creating thread to retrieve Alpaca management description for device {responderIPEndPoint.ToString()}:{responderIPEndPoint.Port}");
 
                 Thread descriptionThread = new Thread(GetAlpacaDeviceInformation);
                 descriptionThread.IsBackground = true;
                 descriptionThread.Start(responderIPEndPoint);
-
-                LogMessage("BroadcastResponseEventHandler", $"FINISHED handling Alpaca device at {responderIPEndPoint.Address}:{responderIPEndPoint.Port}"); // Log reception of the broadcast response
 
             }
             catch (Exception ex)
@@ -285,7 +286,6 @@ namespace ASCOM.Utilities.Support
         /// Get Alpaca device information from the management API
         /// </summary>
         /// <param name="deviceIpEndPoint"></param>
-        //private void GetAlpacaDeviceInformation(IPEndPoint deviceIpEndPoint)
         private void GetAlpacaDeviceInformation(object deviceIpEndPointObject)
         {
             IPEndPoint deviceIpEndPoint = deviceIpEndPointObject as IPEndPoint;
@@ -360,30 +360,70 @@ namespace ASCOM.Utilities.Support
         /// <returns></returns>
         /// <remarks>This first makes a DNS query and uses the result if found. If not found it then tries a Microsoft DNS call which also searches the local hosts and makes a netbios query.
         /// If this returns an answer it is use. Otherwise the IP address is returned as the host name</remarks>
-        private void ResolveIpAddressToHostName(IPEndPoint deviceIpEndPoint)
+        private void ResolveIpAddressToHostName(object deviceIpEndPointObject)
         {
-            LogMessage("ResolveIpAddressToHostName", $"Resolving IP address: {deviceIpEndPoint.Address.ToString()}");
+            IPEndPoint deviceIpEndPoint = deviceIpEndPointObject as IPEndPoint; // Get the supplied device endpoint as an IPEndPoint
 
-            /*            try
-                        {
-                            LogMessage("ResolveIpAddressToHostName", $"Resolving {deviceIpEndPoint.Address.ToString()} using configured DNS server(s)...");
-                            var lookup = new LookupClient();
+            DnsResponse dnsResponse = new DnsResponse(); // Create a new DnsResponse to hold and return the 
 
-                            string dnsHostName = lookup.GetHostNameAsync(deviceIpEndPoint.Address).Result; // Look up the host name through DNS synchronously because there is nothing else for this thread to do
-                            if (!string.IsNullOrEmpty(dnsHostName)) // Got a result so use this
-                            {
-                                alpacaDeviceList[deviceIpEndPoint.ToString()].HostName = dnsHostName; RaiseAnAlpacaDevicesChangedEvent(); // Device list was changed so set the changed flag
-                                LogMessage("ResolveIpAddressToHostName", $"Resolved {deviceIpEndPoint.Address.ToString()} to {dnsHostName?.ToString()} through DNS.");
-                            }
-                            else
-                            {
-                                LogMessage("ResolveIpAddressToHostName", $"Cant resolve {deviceIpEndPoint.Address.ToString()} through DNS.");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            LogMessage("ResolveIpAddressToHostName", $"Exception: \r\n{ex.ToString()}");
-                        } */
+            TimeSpan timeOutTime = TimeSpan.FromSeconds(discoveryTime).Subtract(DateTime.Now - discoveryStartTime).Subtract(TimeSpan.FromSeconds(0.2));
+
+            LogMessage("ResolveIpAddressToHostName", $"Resolving IP address: {deviceIpEndPoint.Address.ToString()}, Timeout: {timeOutTime}");
+
+            Dns.BeginGetHostEntry(deviceIpEndPoint.Address.ToString(), new AsyncCallback(GetHostEntryCallback), dnsResponse);
+
+            // Wait here until the resolve completes and the callback calls .Set()
+            bool dnsWasResolved = dnsResponse.CallComplete.WaitOne(timeOutTime); // Wait for the remaining discovery time less a small amount
+
+            if (dnsWasResolved) // A response was received rather than timing out
+            {
+                LogMessage("ResolveIpAddressToHostName", $"{deviceIpEndPoint.ToString()} has host name: {dnsResponse.HostName} IP address count: {dnsResponse.AddressList.Length} Alias count: { dnsResponse.Aliases.Length}");
+
+                if (dnsResponse.AddressList.Length > 0)
+                {
+                    lock (deviceListLockObject)
+                    {
+                        alpacaDeviceList[deviceIpEndPoint].HostName = dnsResponse.HostName;
+                    }
+                    RaiseAnAlpacaDevicesChangedEvent(); // Device list was changed so set the changed flag
+                }
+                else
+                {
+                    LogMessage("ResolveIpAddressToHostName", $"***** DNS responded with a name ({dnsResponse.HostName}) but this has no associated IP addresses and is probably a NETBIOS name *****");
+                }
+
+                foreach (IPAddress address in dnsResponse.AddressList)
+                {
+                    LogMessage("ResolveIpAddressToHostName", $"Address: {address}");
+                }
+                foreach (string alias in dnsResponse.Aliases)
+                {
+                    LogMessage("ResolveIpAddressToHostName", $"Alias: {alias}");
+                }
+
+            }
+            else
+            {
+                LogMessage("ResolveIpAddressToHostName", $"***** DNS did not respond within timeout - unable to resolve IP address to host name *****");
+            }
+
+        }
+
+        /// <summary>
+        /// Record the IPs in the state object for later use.
+        /// </summary>
+        private void GetHostEntryCallback(IAsyncResult ar)
+        {
+            try
+            {
+                DnsResponse dnsResponse = (DnsResponse)ar.AsyncState; // Turn the state object into the DnsResponse type
+                dnsResponse.IpHostEntry = Dns.EndGetHostEntry(ar); // Save the returned IpHostEntry and populate other fields based on its parameters
+                dnsResponse.CallComplete.Set(); // Set the wait handle so that the caller knows that the asynchronous call has completed and that the response has been updated
+            }
+            catch (Exception ex)
+            {
+                LogMessage("GetHostEntryCallback", $"Exception: {ex.ToString()}"); // Log exceptions but don't throw them
+            }
         }
 
         /// <summary>
