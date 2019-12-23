@@ -39,7 +39,6 @@ Public Class Chooser
     ' 25-Feb-09 pwgs     5.1.0 - Refactored for Utilities
     '---------------------------------------------------------------------
 
-    Private chooserFormInstance As ChooserForm
     Private deviceTypeValue As String = ""
 
 #Region " New and IDisposable Support "
@@ -52,21 +51,6 @@ Public Class Chooser
     ''' <remarks></remarks>
     Public Sub New()
         MyBase.New()
-
-        Try
-
-            'Dim newtonsoftAssemblyPath As String = $"{GetProgramFilesX86()}\ASCOM\Platform 6\Support\Newtonsoft.Json.dll"
-            'Assembly.LoadFrom(newtonsoftAssemblyPath)
-
-            'Dim asd As Newtonsoft.Json.Converters.BinaryConverter = New Newtonsoft.Json.Converters.BinaryConverter
-
-            chooserFormInstance = New ChooserForm ' Initially hidden
-
-        Catch ex As FileNotFoundException
-            MsgBox("Chooser.New Unable to find NewtonSoft JSON DLL" & vbCrLf & ex.Message)
-        Catch ex As Exception
-            MsgBox("Chooser.New " & ex.ToString)
-        End Try
 
         deviceTypeValue = "Telescope" ' Default to Telescope chooser
     End Sub
@@ -83,10 +67,6 @@ Public Class Chooser
         If Not disposedValue Then
             If disposing Then
             End If
-            If Not (chooserFormInstance Is Nothing) Then
-                chooserFormInstance.Dispose()
-                chooserFormInstance = Nothing
-            End If
 
         End If
         disposedValue = True
@@ -98,13 +78,13 @@ Public Class Chooser
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub Dispose() Implements IDisposable.Dispose
-        ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+        ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
         Dispose(True)
         GC.SuppressFinalize(Me)
     End Sub
 
     Protected Overrides Sub Finalize()
-        ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+        ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
         Dispose(False)
         MyBase.Finalize()
     End Sub
@@ -136,7 +116,7 @@ Public Class Chooser
     End Property
 
     ''' <summary>
-    ''' Select ASCOM driver to use including pre-selecting one in the dropdown list
+    ''' Select ASCOM driver to use including pre-selecting one in the drop-down list
     ''' </summary>
     ''' <param name="DriverProgID">Driver to preselect in the chooser dialogue</param>
     ''' <returns>Driver ID of chosen driver</returns>
@@ -146,20 +126,20 @@ Public Class Chooser
     ''' </remarks>
     Public Overloads Function Choose(ByVal DriverProgID As String) As String Implements IChooser.Choose
         Dim selectedProgId As String
+        Dim chooserFormInstance As ChooserForm
 
         Try
 
             If String.IsNullOrEmpty(deviceTypeValue) Then Throw New Exceptions.InvalidValueException("Unknown device type, DeviceType property has not been set")
+            chooserFormInstance = New ChooserForm ' Initially hidden
 
             chooserFormInstance.DeviceType = deviceTypeValue
-            chooserFormInstance.InitiallySelectedProgId = DriverProgID
-
+            chooserFormInstance.SelectedProgId = DriverProgID
             chooserFormInstance.ShowDialog() ' Display MODAL Chooser dialogue
 
             selectedProgId = chooserFormInstance.SelectedProgId
 
             chooserFormInstance.Dispose()
-            chooserFormInstance = Nothing
         Catch ex As Exception
             MsgBox("Chooser Exception: " & ex.ToString)
             LogEvent("Chooser", "Exception", EventLogEntryType.Error, EventLogErrors.ChooserException, ex.ToString)

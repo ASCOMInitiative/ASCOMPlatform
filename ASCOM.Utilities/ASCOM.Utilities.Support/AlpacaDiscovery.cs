@@ -366,47 +366,55 @@ namespace ASCOM.Utilities.Support
 
             DnsResponse dnsResponse = new DnsResponse(); // Create a new DnsResponse to hold and return the 
 
+            // Calculate the remaining time before this discovery needs to finish and only undertake DNS resolution if sufficient time remains
             TimeSpan timeOutTime = TimeSpan.FromSeconds(discoveryTime).Subtract(DateTime.Now - discoveryStartTime).Subtract(TimeSpan.FromSeconds(0.2));
-
-            LogMessage("ResolveIpAddressToHostName", $"Resolving IP address: {deviceIpEndPoint.Address.ToString()}, Timeout: {timeOutTime}");
-
-            Dns.BeginGetHostEntry(deviceIpEndPoint.Address.ToString(), new AsyncCallback(GetHostEntryCallback), dnsResponse);
-
-            // Wait here until the resolve completes and the callback calls .Set()
-            bool dnsWasResolved = dnsResponse.CallComplete.WaitOne(timeOutTime); // Wait for the remaining discovery time less a small amount
-
-            if (dnsWasResolved) // A response was received rather than timing out
+            if (timeOutTime.TotalSeconds > 0.2)
             {
-                LogMessage("ResolveIpAddressToHostName", $"{deviceIpEndPoint.ToString()} has host name: {dnsResponse.HostName} IP address count: {dnsResponse.AddressList.Length} Alias count: { dnsResponse.Aliases.Length}");
 
-                if (dnsResponse.AddressList.Length > 0)
+
+                LogMessage("ResolveIpAddressToHostName", $"Resolving IP address: {deviceIpEndPoint.Address.ToString()}, Timeout: {timeOutTime}");
+
+                Dns.BeginGetHostEntry(deviceIpEndPoint.Address.ToString(), new AsyncCallback(GetHostEntryCallback), dnsResponse);
+
+                // Wait here until the resolve completes and the callback calls .Set()
+                bool dnsWasResolved = dnsResponse.CallComplete.WaitOne(timeOutTime); // Wait for the remaining discovery time less a small amount
+
+                if (dnsWasResolved) // A response was received rather than timing out
                 {
-                    lock (deviceListLockObject)
+                    LogMessage("ResolveIpAddressToHostName", $"{deviceIpEndPoint.ToString()} has host name: {dnsResponse.HostName} IP address count: {dnsResponse.AddressList.Length} Alias count: { dnsResponse.Aliases.Length}");
+
+                    if (dnsResponse.AddressList.Length > 0)
                     {
-                        alpacaDeviceList[deviceIpEndPoint].HostName = dnsResponse.HostName;
+                        lock (deviceListLockObject)
+                        {
+                            alpacaDeviceList[deviceIpEndPoint].HostName = dnsResponse.HostName;
+                        }
+                        RaiseAnAlpacaDevicesChangedEvent(); // Device list was changed so set the changed flag
                     }
-                    RaiseAnAlpacaDevicesChangedEvent(); // Device list was changed so set the changed flag
+                    else
+                    {
+                        LogMessage("ResolveIpAddressToHostName", $"***** DNS responded with a name ({dnsResponse.HostName}) but this has no associated IP addresses and is probably a NETBIOS name *****");
+                    }
+
+                    foreach (IPAddress address in dnsResponse.AddressList)
+                    {
+                        LogMessage("ResolveIpAddressToHostName", $"Address: {address}");
+                    }
+                    foreach (string alias in dnsResponse.Aliases)
+                    {
+                        LogMessage("ResolveIpAddressToHostName", $"Alias: {alias}");
+                    }
+
                 }
                 else
                 {
-                    LogMessage("ResolveIpAddressToHostName", $"***** DNS responded with a name ({dnsResponse.HostName}) but this has no associated IP addresses and is probably a NETBIOS name *****");
+                    LogMessage("ResolveIpAddressToHostName", $"***** DNS did not respond within timeout - unable to resolve IP address to host name *****");
                 }
-
-                foreach (IPAddress address in dnsResponse.AddressList)
-                {
-                    LogMessage("ResolveIpAddressToHostName", $"Address: {address}");
-                }
-                foreach (string alias in dnsResponse.Aliases)
-                {
-                    LogMessage("ResolveIpAddressToHostName", $"Alias: {alias}");
-                }
-
             }
             else
             {
-                LogMessage("ResolveIpAddressToHostName", $"***** DNS did not respond within timeout - unable to resolve IP address to host name *****");
+                LogMessage("ResolveIpAddressToHostName", $"***** Insufficient time remains ({timeOutTime.TotalSeconds} seconds) to conduct a DNS query, ignoring request *****");
             }
-
         }
 
         /// <summary>

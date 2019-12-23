@@ -178,9 +178,9 @@ namespace ASCOM.Utilities.Support
                     }
                 }
             }
-            catch (ObjectDisposedException ex)
+            catch (ObjectDisposedException)
             {
-                LogMessage("FinderDiscoveryCallback", $"ObjectDisposedException: " + ex.ToString());
+                // Ignore these, they can occur after the Finder is disposed
             }
             catch (Exception ex)
             {
