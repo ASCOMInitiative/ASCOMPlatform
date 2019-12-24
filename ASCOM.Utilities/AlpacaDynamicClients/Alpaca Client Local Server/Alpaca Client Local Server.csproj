@@ -196,12 +196,6 @@
     <Compile Include="ServedDeviceClient.Designer.cs">
       <DependentUpon>ServedDeviceClient.cs</DependentUpon>
     </Compile>
-    <Compile Include="ServerConfigurationForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ServerConfigurationForm.Designer.cs">
-      <DependentUpon>ServerConfigurationForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="SetupDialogForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -217,9 +211,6 @@
     <Compile Include="ReferenceCountedObject.cs" />
     <EmbeddedResource Include="ServedDeviceClient.resx">
       <DependentUpon>ServedDeviceClient.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ServerConfigurationForm.resx">
-      <DependentUpon>ServerConfigurationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SetupDialogForm.resx">
       <DependentUpon>SetupDialogForm.cs</DependentUpon>

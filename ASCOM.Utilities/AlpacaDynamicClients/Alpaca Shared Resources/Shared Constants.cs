@@ -50,41 +50,11 @@ namespace ASCOM.Remote
         // Remote server setup form constants
         public const string LOCALHOST_NAME = "localhost";
         public const string LOCALHOST_ADDRESS = "127.0.0.1"; // Get the localhost loop back address
-        public const string STRONG_WILDCARD_NAME = "+"; // Symbol for strong IP address wild card
-        public const string WEAK_WILDCARD_NAME = "*"; // Symbol for weak IP address wild card
 
         // Constants shared by Remote Client Drivers and the ASCOM Remote Server
         public const string API_URL_BASE = "/api/"; // This constant must always be lower case to make the logic tests work properly 
         public const string API_VERSION_V1 = "v1"; // This constant must always be lower case to make the logic tests work properly
-        public static readonly int[] MANAGEMENT_SUPPORTED_INTERFACE_VERSIONS = new int[1] { 1 }; // Array of supported interface versions that is returned through the management API
         public const string REMOTE_SERVER_MANAGEMENT_URL_BASE = "/server/"; // Management commands unique to the remote server. This constant must always be lower case to make the logic tests work properly 
-        public const string ALPACA_DEVICE_MANAGEMENT_URL_BASE = "/management/"; // management commands common to all Alpaca devices. This constant must always be lower case to make the logic tests work properly
-        public const string ALPACA_DEVICE_SETUP_URL_BASE = "/setup/"; // management commands common to all Alpaca devices. This constant must always be lower case to make the logic tests work properly
-
-        // Remote server management API interface constants
-        public const string REMOTE_SERVER_MANGEMENT_GET_PROFILE = "profile";
-        public const string REMOTE_SERVER_MANGEMENT_GET_CONFIGURATION = "configuration";
-        public const string REMOTE_SERVER_MANGEMENT_GET_CONCURRENT_CALLS = "concurrency";
-        public const string REMOTE_SERVER_MANGEMENT_RESTART_SERVER = "restart";
-        public const string ALPACA_DEVICE_MANAGEMENT_APIVERSIONS = "apiversions";
-        public const string ALPACA_DEVICE_MANAGEMENT_DESCRIPTION = "description";
-        public const string ALPACA_DEVICE_MANAGEMENT_CONFIGURED_DEVICES = "configureddevices";
-        public const string ALPACA_DEVICE_MANAGEMENT_MANUFACTURER = "Peter Simpson";
-        public const string ALPACA_DEVICE_MANAGEMENT_SERVERNAME = "ASCOM Remote Server";
-
-        // Remote server browser interface URL constants
-        public const string BROWSER_URL_SETUP = "setup";
-
-        // Constants used to set network permissions
-        public const string SET_NETWORK_PERMISSIONS_EXE_PATH = @"\ASCOM\Remote\ASCOM.SetNetworkPermissions.exe"; //Relative path of the SetNetworkPermissions exe from C:\Program Files (or x86 on 64bit OS). Must match the location where the installer puts the exe!
-        public const string ENABLE_REMOTE_SERVER_MANAGEMENT_URI_COMMAND_NAME = "setremoteservermanagementuriacl";
-        public const string ENABLE_ALPACA_DEVICE_MANAGEMENT_URI_COMMAND_NAME = "setalpacamanagementurl";
-        public const string ENABLE_ALPACA_SETUP_URI_COMMAND_NAME = "setalpacasetupurl";
-        public const string ENABLE_API_URI_COMMAND_NAME = "setapiuriacl";
-        public const string ENABLE_HTTP_DOT_SYS_PORT_COMMAND_NAME = "enablehttpdotsysport";
-        public const string SET_LOCAL_SERVER_PATH_COMMAND_NAME = "localserverpath";
-        public const string SET_REMOTE_SERVER_PATH_COMMAND_NAME = "remoteserverpath";
-        public const string USER_NAME_COMMAND_NAME = "username";
 
         // Client driver profile persistence constants
         public const string TRACE_LEVEL_PROFILENAME = "Trace Level"; public const bool CLIENT_TRACE_LEVEL_DEFAULT = true;
@@ -146,12 +116,7 @@ namespace ASCOM.Remote
         public const RegistryHive ASCOM_REMOTE_CONFIGURATION_HIVE = RegistryHive.CurrentUser;
         public const string ASCOM_REMOTE_CONFIGURATION_KEY = @"Software\ASCOM Remote";
 
-        public const string REQUEST_RECEIVED_STRING = "RequestReceived";
-
         public const string DEVICE_NOT_CONFIGURED = "None"; // ProgID / UniqueID / device type value indicating no device configured
-
-        public const string CORS_DEFAULT_PERMISSION = "*"; // Default permission for CORS origins (The * value means "permit all origins")
-        public const string CORS_SERIALISATION_SEPARATOR = "|";
 
         // Alpaca discovery constants
         public const string ALPACA_DISCOVERY_BROADCAST_ID = "alpacadiscovery";

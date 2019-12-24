@@ -15,7 +15,6 @@ namespace ASCOM.Remote
         Profile profile;
         List<string> deviceTypes = new List<string>();
         Dictionary<string, string> deviceDictionary = new Dictionary<string, string>();
-        ServerConfigurationForm setupForm;
         bool recalculate = false;
         TraceLoggerPlus TL;
 
@@ -155,9 +154,8 @@ namespace ASCOM.Remote
         #endregion
 
         #region Event handlers
-        public void InitUI(ServerConfigurationForm parent, TraceLoggerPlus Logger)
+        public void InitUI(TraceLoggerPlus Logger)
         {
-            setupForm = parent;
             TL = Logger;
             TL.LogMessage(0, 0, 0, "InitUI", "Start");
             profile = new Profile();
@@ -180,7 +178,7 @@ namespace ASCOM.Remote
 
         }
 
-        private void cmbDeviceType_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbDeviceType_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
@@ -214,7 +212,6 @@ namespace ASCOM.Remote
 
                 if (recalculate)
                 {
-                    setupForm.RecalculateDeviceNumbers();
                     recalculate = false;
                 }
 
@@ -239,7 +236,7 @@ namespace ASCOM.Remote
 
         }
 
-        private void cmbDevice_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbDevice_SelectedIndexChanged(object sender, EventArgs e)
         {
             description = cmbDevice.SelectedItem.ToString();
             foreach (KeyValuePair<string, string> kvp in deviceDictionary)

@@ -237,13 +237,6 @@ namespace ASCOM.Remote
             e.DrawFocusRectangle();
         }
 
-        private void BtnServerConfiguration_Click(object sender, EventArgs e)
-        {
-            ServerConfigurationForm configurationForm = new ServerConfigurationForm(TL, cmbServiceType.Text, addressList.Text, numPort.Value, txtUserName.Text, txtPassword.Text);
-            configurationForm.ShowDialog();
-            configurationForm.Dispose();
-        }
-
         /// <summary>
         /// Event handler fired when entering a numeric up/down control
         /// </summary>

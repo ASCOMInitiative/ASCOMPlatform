@@ -43,7 +43,7 @@
             this.cmbDeviceType.Name = "cmbDeviceType";
             this.cmbDeviceType.Size = new System.Drawing.Size(165, 21);
             this.cmbDeviceType.TabIndex = 0;
-            this.cmbDeviceType.SelectedIndexChanged += new System.EventHandler(this.cmbDeviceType_SelectedIndexChanged);
+            this.cmbDeviceType.SelectedIndexChanged += new System.EventHandler(this.CmbDeviceType_SelectedIndexChanged);
             // 
             // txtDeviceNumber
             // 
@@ -61,7 +61,7 @@
             this.cmbDevice.Name = "cmbDevice";
             this.cmbDevice.Size = new System.Drawing.Size(296, 21);
             this.cmbDevice.TabIndex = 3;
-            this.cmbDevice.SelectedIndexChanged += new System.EventHandler(this.cmbDevice_SelectedIndexChanged);
+            this.cmbDevice.SelectedIndexChanged += new System.EventHandler(this.CmbDevice_SelectedIndexChanged);
             // 
             // chkAllowSetConnectedTrue
             // 
