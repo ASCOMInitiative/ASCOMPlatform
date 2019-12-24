@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A9A92122-3CD7-4960-8D80-D62B06553983}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ASCOM.Remote</RootNamespace>
+    <AssemblyName>ASCOM.AlpacaSharedResources</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AlpacaConfiguredDevice.cs" />
+    <Compile Include="AlpacaDeviceDescription.cs" />
+    <Compile Include="ConfiguredDevice.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="ProfileDevice.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\..\..\AssemblyVersionInfo.cs">
+      <Link>Properties\AssemblyVersionInfo.cs</Link>
+    </Compile>
+    <Compile Include="RequestData.cs" />
+    <Compile Include="Response Classes\AlpacaConfiguredDevicesResponse.cs" />
+    <Compile Include="Response Classes\AlpacaDiscoveryResponse.cs" />
+    <Compile Include="Response Classes\AxisRatesResponse.cs" />
+    <Compile Include="Response Classes\Base64ArrayHandOffResponse.cs" />
+    <Compile Include="Response Classes\Base64ArrayJsonResponse.cs" />
+    <Compile Include="Response Classes\BoolResponse.cs" />
+    <Compile Include="Response Classes\ConfigurationResponse.cs" />
+    <Compile Include="Response Classes\DateAndTimeResponse.cs" />
+    <Compile Include="Response Classes\AlpacaDescriptionResponse.cs" />
+    <Compile Include="Response Classes\DoubleArray2DResponse.cs" />
+    <Compile Include="Response Classes\DoubleArray3DResponse.cs" />
+    <Compile Include="Response Classes\DoubleResponse.cs" />
+    <Compile Include="Response Classes\ImageArrayResponseBase.cs" />
+    <Compile Include="Response Classes\IntArray1DResponse.cs" />
+    <Compile Include="Response Classes\IntArray2DResponse.cs" />
+    <Compile Include="Response Classes\IntArray3DResponse.cs" />
+    <Compile Include="Response Classes\IntResponse.cs" />
+    <Compile Include="Response Classes\MethodResponse.cs" />
+    <Compile Include="Response Classes\ProfileResponse.cs" />
+    <Compile Include="Response Classes\RateResponse.cs" />
+    <Compile Include="Response Classes\RestResponseBase.cs" />
+    <Compile Include="Response Classes\ShortArray2DResponse.cs" />
+    <Compile Include="Response Classes\ShortArray3DResponse.cs" />
+    <Compile Include="Response Classes\ShortResponse.cs" />
+    <Compile Include="Response Classes\StringArrayResponse.cs" />
+    <Compile Include="Response Classes\StringListResponse.cs" />
+    <Compile Include="Response Classes\StringResponse.cs" />
+    <Compile Include="Response Classes\TrackingRatesResponse.cs" />
+    <Compile Include="Shared Constants.cs" />
+    <Compile Include="SharedResources.cs" />
+    <Compile Include="StringValue.cs" />
+    <Compile Include="TraceLoggerPlus.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="RestSharp">
+      <Version>106.6.9</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj">
+      <Project>{872ef2d6-ac89-4c15-ac84-6c69b040a843}</Project>
+      <Name>ASCOM.DeviceInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities.vbproj">
+      <Project>{c9bf0a8b-594f-4ab9-938a-edc8448d8520}</Project>
+      <Name>ASCOM.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
