@@ -73,10 +73,10 @@ namespace ASCOM.Remote
         public const string IMAGE_ARRAY_COMPRESSION_PROFILENAME = "Image Array Compression"; public const ImageArrayCompression IMAGE_ARRAY_COMPRESSION_DEFAULT = DEFAULT_IMAGE_ARRAY_COMPRESSION;
 
         // Driver naming constants
-        public const string DRIVER_DISPLAY_NAME = "ASCOM Remote Client";
-        public const string DRIVER_PROGID_BASE = "ASCOM.Remote";
+        public const string DRIVER_DISPLAY_NAME = "ASCOM Alpaca Dynamic Client";
+        public const string DRIVER_PROGID_BASE = "ASCOM.AlpacaDynamic";
         public const string NOT_CONNECTED_MESSAGE = "is not connected."; // This is appended to the driver display name + driver number and displayed when the driver is not connected
-        public const string TRACELOGGER_NAME_FORMAT_STRING = "Remote{0}.{1}";
+        public const string TRACELOGGER_NAME_FORMAT_STRING = "AlpacaDynamic{0}.{1}";
 
         // Enum to describe Camera.ImageArray and ImageArrayVCariant array types
         public enum ImageArrayElementTypes
@@ -122,5 +122,11 @@ namespace ASCOM.Remote
         public const string ALPACA_DISCOVERY_BROADCAST_ID = "alpacadiscovery";
         public const int ALPACA_DISCOVERY_PORT = 32227;
         public const string ALPACA_DISCOVERY_RESPONSE_STRING= "alpacaport";
+
+        // Constants used by the generated dynamic client driver assembly
+        public const string ALPACA_CLIENT_LOCAL_SERVER_PATH = @"\ASCOM\AlpacaDynamicClients\"; // Relative path from CommonFiles
+        public const string ALPACA_CLIENT_LOCAL_SERVER = @"ASCOM.AlpacaClientLocalServer.exe"; // Name of the remote client local server application
+        //public const string REMOTE_CLIENT_DRIVER_NAME_TEMPLATE = @"ASCOM.AlpacaDynamic*.{0}.*"; // Template for finding remote client driver files
+
     }
 }

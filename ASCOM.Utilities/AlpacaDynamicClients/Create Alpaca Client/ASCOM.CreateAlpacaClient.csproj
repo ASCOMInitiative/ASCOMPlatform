@@ -89,9 +89,9 @@
       <Project>{c7605d43-d11a-4891-a32d-fd5ab6e74772}</Project>
       <Name>Device Base Classes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Alpaca Client Local Server\Alpaca Client Local Server.csproj">
-      <Project>{86fcd9cf-9bca-435f-bbe9-ffb65221c7cc}</Project>
-      <Name>Alpaca Client Local Server</Name>
+    <ProjectReference Include="..\Alpaca Shared Resources\Alpaca Shared Resources.csproj">
+      <Project>{a9a92122-3cd7-4960-8d80-d62b06553983}</Project>
+      <Name>Alpaca Shared Resources</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

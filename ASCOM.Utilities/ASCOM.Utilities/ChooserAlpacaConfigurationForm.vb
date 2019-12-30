@@ -27,7 +27,9 @@
         NumDiscoveryDuration.Value = Convert.ToDecimal(chooserForm.AlpacaTimeout)
         NumDiscoveryIpPort.Value = Convert.ToDecimal(chooserForm.AlpacaDiscoveryPort)
         ChkDNSResolution.Checked = chooserForm.AlpacaDnsResolution
-
+        ChkListAllDiscoveredDevices.Checked = chooserForm.AlpacaShowDiscoveredDevices
+        ChkShowDeviceDetails.Checked = chooserForm.AlpacaShowDeviceDetails
+        NumExtraChooserWidth.Value = Convert.ToDecimal(chooserForm.AlpacaChooserIncrementalWidth)
     End Sub
 
     ''' <summary>
@@ -42,6 +44,9 @@
         chooserForm.AlpacaTimeout = Convert.ToInt32(NumDiscoveryDuration.Value)
         chooserForm.AlpacaDiscoveryPort = Convert.ToInt32(NumDiscoveryIpPort.Value)
         chooserForm.AlpacaDnsResolution = ChkDNSResolution.Checked
+        chooserForm.AlpacaShowDiscoveredDevices = ChkListAllDiscoveredDevices.Checked
+        chooserForm.AlpacaShowDeviceDetails = ChkShowDeviceDetails.Checked
+        chooserForm.AlpacaChooserIncrementalWidth = Convert.ToInt32(NumExtraChooserWidth.Value)
 
         ' Indicate success so that he Chooser can persist the values
         Me.DialogResult = DialogResult.OK

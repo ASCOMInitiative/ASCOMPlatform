@@ -293,7 +293,7 @@ namespace ASCOM.Utilities.Support
 
             try
             {
-                // Create a combined host and port string
+                LogMessage("GetAlpacaDeviceInformation", $"dISCOVER TIMEOUT: {discoveryTime} ({discoveryTime*1000})");
 
                 // Wait for API version result and process it
                 using (WebClient apiClient = new WebClient())

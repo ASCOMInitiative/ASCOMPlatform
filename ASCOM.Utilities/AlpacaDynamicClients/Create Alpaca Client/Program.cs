@@ -10,12 +10,20 @@ using System.Diagnostics;
 using System.Threading;
 using System.Reflection;
 using ASCOM.Remote;
+using System.CodeDom;
+using System.CodeDom.Compiler;
 
 namespace ASCOM.DynamicRemoteClients
 {
-    static class Program
+    static class CreateAlpacaClients
     {
-        const string ALREADY_RUN = "Client installer already run";
+        private const string BASE_CLASS_POSTFIX = "BaseClass"; // Postfix to the device type to create the base class name e.g. "CamerabaseClass". Must match the last characters of the device base class names!
+        private const int LOCALSERVER_WAIT_TIME = 5000; // Length of time (milliseconds) to wait for the local server to (un)register its drivers
+        private const string LOCALSERVER_EXE_NAME = "ASCOM.AlpacaClientLocalServer.exe"; // Name of the local server executable
+
+
+        // List of supported device types - this must be kept in sync with the device type numeric up-down controls on the form dialogue!
+        private static readonly List<string> supportedDeviceTypes = new List<string>() { "Camera", "Dome", "FilterWheel", "Focuser", "ObservingConditions", "Rotator", "SafetyMonitor", "Switch", "Telescope" };
 
         static TraceLogger TL;
 
@@ -25,6 +33,7 @@ namespace ASCOM.DynamicRemoteClients
         [STAThread]
         static void Main(string[] args)
         {
+            string errMsg;
 
             // Add the event handler for handling UI thread exceptions to the event.
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
@@ -40,16 +49,16 @@ namespace ASCOM.DynamicRemoteClients
 
             try
             {
-                string parameter = ""; // Initialise the supplied parameter to empty string
-                if (args.Length > 0) parameter = args[0]; // Copy any supplied parameter to the parameter variable
+                string commandParameter = ""; // Initialise the supplied parameter to empty string
+                if (args.Length > 0) commandParameter = args[0]; // Copy any supplied command parameter to the parameter variable
 
-                TL.LogMessage("Main", string.Format(@"Supplied parameter: ""{0}""", parameter));
-                parameter = parameter.TrimStart(' ', '-', '/', '\\'); // Remove any parameter prefixes and leading spaces
-                parameter = parameter.TrimEnd(' '); // Remove any trailing spaces
+                TL.LogMessage("Main", string.Format(@"Supplied parameter: ""{0}""", commandParameter));
+                commandParameter = commandParameter.TrimStart(' ', '-', '/', '\\'); // Remove any parameter prefixes and leading spaces
+                commandParameter = commandParameter.TrimEnd(' '); // Remove any trailing spaces
 
-                TL.LogMessage("Main", string.Format(@"Trimmed parameter: ""{0}""", parameter));
+                TL.LogMessage("Main", string.Format(@"Trimmed parameter: ""{0}""", commandParameter));
 
-                switch (parameter.ToUpperInvariant()) // Act on the supplied parameter, if any
+                switch (commandParameter.ToUpperInvariant()) // Act on the supplied parameter, if any
                 {
                     case "": // Run the application in user interactive mode
                         Application.EnableVisualStyles();
@@ -58,89 +67,61 @@ namespace ASCOM.DynamicRemoteClients
                         Application.Run(new Form1(TL));
                         break;
 
-                    case "INSTALLERSETUP": // Called by the installer to create drivers on first time use
-                        TL.LogMessage("Main", "Running installer setup");
+                    case "CREATEALPACACLIENT":
 
-                        // Find if there are any driver files already installed, indicating that this is not a first time install
-                        string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + Form1.REMOTE_SERVER_PATH;
-                        string deviceType = "*";
-                        string searchPattern = string.Format(Form1.REMOTE_CLIENT_DRIVER_NAME_TEMPLATE, deviceType);
-
-                        TL.LogMessage("Main", "About to create base key");
-                        RegistryKey remoteRegistryKey = RegistryKey.OpenBaseKey(SharedConstants.ASCOM_REMOTE_CONFIGURATION_HIVE, RegistryView.Default).CreateSubKey(SharedConstants.ASCOM_REMOTE_CONFIGURATION_KEY, true);
-                        bool alreadyRun = bool.Parse((string)remoteRegistryKey.GetValue(ALREADY_RUN, "false"));
-                        TL.LogMessage("Main", string.Format("Already run: {0}", alreadyRun));
-
-                        if (!alreadyRun) // We have not run yet 
+                        // Validate supplied parameters before passing to the execution method
+                        if (args.Length < 5)
                         {
-                            TL.LogMessage("Main", string.Format("First time setup - migrating profiles and creating dynamic drivers"));
-
-                            // Only attempt first time setup if the local server executable is present
-                            string localServerExe = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + Form1.REMOTE_SERVER_PATH + Form1.REMOTE_SERVER; // Get the local server path
-                            if (File.Exists(localServerExe)) // Local server does exist
-                            {
-                                // Migrate any ASCOM.WebX.DEVICE profile entries to ASCOM.RemoteX.DEVICE profile entries
-                                TL.LogMessage("Main", string.Format("Migrating any ASCOM.WebX.DEVICETYPE profiles to ASCOM.RemoteX.DEVICETYPE"));
-                                MigrateProfiles("Camera");
-                                MigrateProfiles("Dome");
-                                MigrateProfiles("FilterWheel");
-                                MigrateProfiles("Focuser");
-                                MigrateProfiles("ObservingConditions");
-                                MigrateProfiles("Rotator");
-                                MigrateProfiles("SafetyMonitor");
-                                MigrateProfiles("Switch");
-                                MigrateProfiles("Telescope");
-
-                                // Remove any driver or pdb driver files left in the , local server directory
-                                DeleteFiles(localServerPath, @"ascom\.remote\d\.\w+\.dll", "ASCOM.RemoteX.DLL");
-                                DeleteFiles(localServerPath, @"ascom\.remote\d\.\w+\.pdb", "ASCOM.RemoteX.PDB");
-                                DeleteFiles(localServerPath, @"ascom\.web\d\.\w+\.dll", "ASCOM.WebX.DLL");
-                                DeleteFiles(localServerPath, @"ascom\.web\d\.\w+\.pdb", "ASCOM.WebX.PDB");
-
-                                // Create the required drivers
-                                TL.LogMessage("Main", string.Format("Creating one remote client driver of each device type"));
-                                Form1.CreateDriver("Camera", 1, localServerPath, TL);
-                                Form1.CreateDriver("Dome", 1, localServerPath, TL);
-                                Form1.CreateDriver("FilterWheel", 1, localServerPath, TL);
-                                Form1.CreateDriver("Focuser", 1, localServerPath, TL);
-                                Form1.CreateDriver("ObservingConditions", 1, localServerPath, TL);
-                                Form1.CreateDriver("Rotator", 1, localServerPath, TL);
-                                Form1.CreateDriver("SafetyMonitor", 1, localServerPath, TL);
-                                Form1.CreateDriver("Switch", 1, localServerPath, TL);
-                                Form1.CreateDriver("Telescope", 1, localServerPath, TL);
-
-                                // Register the drivers
-                                TL.LogMessage("Main", "Registering drivers");
-                                Form1.RunLocalServer(localServerExe, "-regserver", TL);
-
-                                // Record that we have run once on this PC
-                                TL.LogMessage("Main", string.Format("Setting already run to true"));
-                                remoteRegistryKey.SetValue(ALREADY_RUN, "true");
-                                TL.LogMessage("Main", string.Format("Set already run to true"));
-                            }
-                            else // Local server can not be found so report the issue
-                            {
-                                string errorMessage = string.Format("Could not find local server {0}, unable to register drivers", localServerExe);
-                                TL.LogMessage("Main", errorMessage);
-                                MessageBox.Show(errorMessage);
-                            }
+                            // Validate the number of parameters - must be 5: Command DeviceType COMDeviceNumber ProgID DeviceName
+                            errMsg = $"The CreateAlpacaClient command requires 4 parameters: DeviceType COMDeviceNumber ProgID DeviceName e.g. /CreateAlpacaClient Telescope 1 ASCOM.AlpacaDynamic1.Telescope \"Dynamic telescope display name\"";
+                            TL.LogMessageCrLf("CreateAlpacaClient", errMsg);
+                            MessageBox.Show(errMsg);
+                            return;
                         }
-                        else // Drivers are already installed so no action required
+
+                        // Validate that the supplied device type is one that is supported for Alpaca
+                        if (!supportedDeviceTypes.Contains(args[1], StringComparer.OrdinalIgnoreCase))
                         {
-                            TL.LogMessage("Main", string.Format("This application has already run successful so this is not a first time installation - no action taken"));
+                            errMsg = $"The supplied ASCOM device type '{args[1]}' is not supported: The command format is \"/CreateAlpacaClient ASCOMDeviceType AlpacaDeviceUniqueID\" e.g. /CreateAlpacaClient Telescope 84DC2495-CBCE-4A9C-A703-E342C0E1F651";
+                            TL.LogMessageCrLf("CreateAlpacaClient", errMsg);
+                            MessageBox.Show(errMsg);
+                            return;
                         }
+
+                        // Validate that the supplied device number is an integer
+                        int comDevicenumber;
+                        bool comDevicenunberIsInteger = int.TryParse(args[2], out comDevicenumber);
+                        if (!comDevicenunberIsInteger)
+                        {
+                            errMsg = $"The supplied COM device number is not an integer: {args[2]}";
+                            TL.LogMessageCrLf("CreateAlpacaClient", errMsg);
+                            MessageBox.Show(errMsg);
+                            return;
+                        }
+
+
+                        string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + SharedConstants.ALPACA_CLIENT_LOCAL_SERVER_PATH;
+                        TL.LogMessage("CreateAlpacaClient", $"Alpaca local server folder: {localServerPath}");
+
+                        CreateAlpacaClient(args[1].ToPascalCase(), comDevicenumber, args[3], args[4], localServerPath); // Call the execution method with correctly cased device type and unique ID parameters
+
+                        string localServerExe = $"{localServerPath}\\{LOCALSERVER_EXE_NAME}";
+                        TL.LogMessage("CreateAlpacaClient", $"Alpaca local server exe name: {localServerExe}");
+
+                        RunLocalServer(localServerExe, "-regserver", TL);
+
                         break;
 
                     default: // Unrecognised parameter so flag this to the user
-                        string errMsg = string.Format("Unrecognised parameter: {0}, the only valid value is /InstallerSetup", parameter);
-
+                        errMsg = $"Unrecognised command: '{commandParameter}', the only valid command is: /CreateAlpacaClient DeviceType UniqueID";
+                        TL.LogMessage("Main", errMsg);
                         MessageBox.Show(errMsg);
                         break;
                 }
             }
             catch (Exception ex)
             {
-                string errMsg = ("DynamicRemoteClients exception: " + ex.ToString());
+                errMsg = ("DynamicRemoteClients exception: " + ex.ToString());
                 TL.LogMessageCrLf("Main", errMsg);
                 MessageBox.Show(errMsg);
             }
@@ -150,116 +131,354 @@ namespace ASCOM.DynamicRemoteClients
             TL = null;
         }
 
+        #region Support code
+
         /// <summary>
-        /// Migrate profile names from previous client version
+        /// Create a new Alpaca client using the supplied parameters
         /// </summary>
-        /// <param name="DeviceType"></param>
-        /// <remarks>The first ASCOM Remote release used device ProgIds of the form ASCOM.WebX.DEVICETYPE. This and future versions use ProgIDs of the form ASCOM.RemoteX.DEVICETYPE. This routine renames the 
-        /// Profile entries of any original release drivers to match the new form.</remarks>
-        private static void MigrateProfiles(string DeviceType)
+        /// <param name="args">Arguments array that </param>
+        /// <remarks>
+        /// This command needs two parameters: DeviceType UniqueID
+        ///      DeviceType is the ASCOM driver device type e.g. Telescope, Focuser etc.
+        ///      UniqueID is the Unique ID of this Alpaca device
+        /// </remarks>
+        ///         /// <summary>
+        /// Create a compiled remote client driver assembly
+        /// </summary>
+        /// <param name="DeviceType">The ASCOM device type to create</param>
+        /// <param name="DeviceNumber">The number of this device type to create</param>
+        /// <param name="OutputDirectory">The directory in which to place the compiled assembly</param>
+        /// <remarks>
+        /// This subroutine creates compiler source line definitions (not source code as such) and stores them in memory
+        /// When complete, the compiler is called and the resultant assembly is stored in the specified output directory.
+        /// The code created has no function as such it is just a shell with all of the heavy lifting undertaken by an inherited base class that is supplied pre-compiled
+        /// The resultant assembly for Camera device 1 has this form:
+        /// 
+        /// using System;
+        /// using System.Runtime.InteropServices;
+        /// namespace ASCOM.Remote
+        /// {
+        ///     [Guid("70495DF9-C01E-4987-AE49-E12967202C7F")]             <====> The GUID is dynamically created on the user's machine so that it is unique for every driver
+        ///     [ProgId(DRIVER_PROGID)]
+        ///     [ServedClassName(DRIVER_DISPLAY_NAME)]
+        ///     [ClassInterface(ClassInterfaceType.None)]
+        ///     public class Camera : CameraBaseClass                      <====> Created from supplied parameters - all executable code is in the base class
+        ///     {
+        ///         private const string DRIVER_NUMBER = "1";              <====> Created from supplied parameters
+        ///         private const string DEVICE_TYPE = "Camera";           <====> Created from supplied parameters
+        ///         private const string DRIVER_DISPLAY_NAME = SharedConstants.DRIVER_DISPLAY_NAME + " " + DRIVER_NUMBER;
+        ///         private const string DRIVER_PROGID = SharedConstants.DRIVER_PROGID_BASE + DRIVER_NUMBER + "." + DEVICE_TYPE;
+        ///         public Camera() : base(DRIVER_NUMBER, DRIVER_DISPLAY_NAME, DRIVER_PROGID)
+        ///         {
+        ///         }
+        ///     }
+        /// }
+        /// </remarks>
+        private static void CreateAlpacaClient(string DeviceType, int DeviceNumber, string ProgId, string DisplayName, string localServerPath)
         {
-            const string IP_ADDRESS_NOT_PRESENT = "IP Address NOT present";
+
+            TL.LogMessage("CreateAlpacaClient", $"Creating new ProgID: for {DeviceType} device {DeviceNumber} with ProgID: {ProgId} and display name: {DisplayName}");
+
+
             try
             {
-                TL.LogMessage("MigrateProfiles", string.Format("Migrating device type {0}", DeviceType));
+                // Generate the container unit
+                CodeCompileUnit program = new CodeCompileUnit();
 
-                for (int i = 1; i <= 2; i++)
+                // Generate the namespace
+                CodeNamespace ns = new CodeNamespace("ASCOM.Remote");
+
+                // Add required imports
+                ns.Imports.Add(new CodeNamespaceImport("System"));
+                ns.Imports.Add(new CodeNamespaceImport("System.Runtime.InteropServices"));
+
+                // Declare the device class
+                CodeTypeDeclaration deviceClass = new CodeTypeDeclaration()
                 {
-                    string webProgIdKeyName = string.Format(@"SOFTWARE\ASCOM\{0} Drivers\ASCOM.Web{1}.{0}", DeviceType, i);
-                    TL.LogMessage("MigrateProfiles", string.Format("Processing registry value: {0}", webProgIdKeyName));
+                    Name = DeviceType,
+                    IsClass = true
+                };
 
-                    RegistryKey webProgIdKey = Registry.LocalMachine.OpenSubKey(webProgIdKeyName, true); // Open the key for writing
-                    if (!(webProgIdKey == null)) // ProgID exists
+                // Add the class base type
+                deviceClass.BaseTypes.Add(new CodeTypeReference { BaseType = DeviceType + BASE_CLASS_POSTFIX });
+                TL.LogMessage("CreateAlpacaClient", "Created base type");
+
+                // Create custom attributes to decorate the class
+                CodeAttributeDeclaration guidAttribute = new CodeAttributeDeclaration("Guid", new CodeAttributeArgument(new CodePrimitiveExpression(Guid.NewGuid().ToString())));
+                CodeAttributeDeclaration progIdAttribute = new CodeAttributeDeclaration("ProgId", new CodeAttributeArgument(new CodeArgumentReferenceExpression("DRIVER_PROGID")));
+                CodeAttributeDeclaration servedClassNameAttribute = new CodeAttributeDeclaration("ServedClassName", new CodeAttributeArgument(new CodeArgumentReferenceExpression("DRIVER_DISPLAY_NAME")));
+                CodeAttributeDeclaration classInterfaceAttribute = new CodeAttributeDeclaration("ClassInterface", new CodeAttributeArgument(new CodeArgumentReferenceExpression("ClassInterfaceType.None")));
+                CodeAttributeDeclarationCollection customAttributes = new CodeAttributeDeclarationCollection() { guidAttribute, progIdAttribute, servedClassNameAttribute, classInterfaceAttribute };
+                TL.LogMessage("CreateAlpacaClient", "Created custom attributes");
+
+                // Add the custom attributes to the class
+                deviceClass.CustomAttributes = customAttributes;
+
+                // Create some class level private constants
+                CodeMemberField driverNumberConst = new CodeMemberField(typeof(string), "DRIVER_NUMBER");
+                driverNumberConst.Attributes = MemberAttributes.Private | MemberAttributes.Const;
+                driverNumberConst.InitExpression = new CodePrimitiveExpression(DeviceNumber.ToString());
+
+                CodeMemberField deviceTypeConst = new CodeMemberField(typeof(string), "DEVICE_TYPE");
+                deviceTypeConst.Attributes = MemberAttributes.Private | MemberAttributes.Const;
+                deviceTypeConst.InitExpression = new CodePrimitiveExpression(DeviceType);
+
+                CodeMemberField driverDisplayNameConst = new CodeMemberField(typeof(string), "DRIVER_DISPLAY_NAME");
+                driverDisplayNameConst.Attributes = (MemberAttributes.Private | MemberAttributes.Const);
+                driverDisplayNameConst.InitExpression = new CodePrimitiveExpression(DisplayName);
+
+                CodeMemberField driverProgIDConst = new CodeMemberField(typeof(string), "DRIVER_PROGID");
+                driverProgIDConst.Attributes = MemberAttributes.Private | MemberAttributes.Const;
+                driverProgIDConst.InitExpression = new CodePrimitiveExpression(ProgId);
+
+                // Add the constants to the class
+                deviceClass.Members.AddRange(new CodeMemberField[] { driverNumberConst, deviceTypeConst, driverDisplayNameConst, driverProgIDConst });
+                TL.LogMessage("CreateAlpacaClient", "Added constants to class");
+
+                // Declare the class constructor
+                CodeConstructor constructor = new CodeConstructor();
+                constructor.Attributes = MemberAttributes.Public | MemberAttributes.Final;
+
+                // Add a call to the base class with required parameters
+                constructor.BaseConstructorArgs.Add(new CodeArgumentReferenceExpression("DRIVER_NUMBER"));
+                constructor.BaseConstructorArgs.Add(new CodeArgumentReferenceExpression("DRIVER_DISPLAY_NAME"));
+                constructor.BaseConstructorArgs.Add(new CodeArgumentReferenceExpression("DRIVER_PROGID"));
+                deviceClass.Members.Add(constructor);
+                TL.LogMessage("CreateAlpacaClient", "Added base constructor");
+
+                // Add the class to the namespace
+                ns.Types.Add(deviceClass);
+                TL.LogMessage("CreateAlpacaClient", "Added class to name space");
+
+                // Add the namespace to the program, which is now complete
+                program.Namespaces.Add(ns);
+                TL.LogMessage("CreateAlpacaClient", "Added name space to program");
+
+                // Construct the path to the output DLL
+                String dllName = $"{localServerPath.TrimEnd('\\')}\\{SharedConstants.DRIVER_PROGID_BASE}{DeviceNumber}.{DeviceType}.dll";
+                TL.LogMessage("CreateAlpacaClient", string.Format("Output file name: {0}", dllName));
+
+                // Create relevant compiler options to shape the compilation
+                CompilerParameters cp = new CompilerParameters()
+                {
+                    GenerateExecutable = false,    // Specify output of a DLL
+                    OutputAssembly = dllName,      // Specify the assembly file name to generate
+                    GenerateInMemory = false,      // Save the assembly as a physical file.
+                    TreatWarningsAsErrors = false, // Don't treat warnings as errors.
+                    IncludeDebugInformation = true // Include debug information
+                };
+                TL.LogMessage("CreateAlpacaClient", "Created compiler parameters");
+
+                // Copy required assemblies to the application's working directory
+                Assembly a = Assembly.Load(@"ASCOM.Attributes, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL");
+                TL.LogMessage("CreateAlpacaClient", string.Format("Copying ASCOM.Attributes assembly from {0} to {1}", a.Location, Application.StartupPath));
+                File.Copy(a.Location, Application.StartupPath + "\\" + Path.GetFileName(a.Location), true);
+                TL.LogMessage("CreateAlpacaClient", string.Format("Copied ASCOM.Attributes assembly OK"));
+
+                a = Assembly.Load(@"ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL");
+                TL.LogMessage("CreateAlpacaClient", string.Format("Copying ASCOM.DeviceInterfaces assembly from {0} to {1}", a.Location, Application.StartupPath));
+                File.Copy(a.Location, Application.StartupPath + "\\" + Path.GetFileName(a.Location), true);
+                TL.LogMessage("CreateAlpacaClient", string.Format("Copied ASCOM.DeviceInterfaces assembly OK"));
+
+                // Add required assembly references to make sure the compilation succeeds
+                cp.ReferencedAssemblies.Add(@"ASCOM.Attributes.dll");              // Has to be copied from the GAC to the local directory because the compiler doesn't use the GAC
+                cp.ReferencedAssemblies.Add(@"ASCOM.DeviceInterfaces.dll");        // Has to be copied from the GAC to the local directory because the compiler doesn't use the GAC
+                cp.ReferencedAssemblies.Add(@"RestSharp.dll");                     // Must be present in the current directory
+                cp.ReferencedAssemblies.Add(@"Newtonsoft.Json.dll");               // Must be present in the current directory
+                cp.ReferencedAssemblies.Add(@"ASCOM.AlpacaClientDeviceBaseClasses.dll"); // Must be present in the current directory
+                cp.ReferencedAssemblies.Add(@"ASCOM.AlpacaClientLocalServer.exe"); // Must be present in the current directory
+
+                Assembly executingAssembly = Assembly.GetExecutingAssembly();
+                cp.ReferencedAssemblies.Add(executingAssembly.Location);
+
+                foreach (AssemblyName assemblyName in executingAssembly.GetReferencedAssemblies())
+                {
+                    cp.ReferencedAssemblies.Add(Assembly.Load(assemblyName).Location);
+                }
+
+
+                TL.LogMessage("CreateAlpacaClient", "Added assembly references");
+
+                // Create formatting options for the generated code that will be logged into the trace logger
+                CodeGeneratorOptions codeGeneratorOptions = new CodeGeneratorOptions()
+                {
+                    BracingStyle = "C",
+                    IndentString = "    ",
+                    VerbatimOrder = true,
+                    BlankLinesBetweenMembers = false
+                };
+
+                // Get a code provider so that we can compile the program
+                CodeDomProvider provider = CodeDomProvider.CreateProvider("CSharp");
+                TL.LogMessage("CreateAlpacaClient", "Created CSharp provider");
+
+                // Write the generated code to the trace logger
+                using (MemoryStream outputStream = new MemoryStream())
+                {
+                    using (StreamWriter writer = new StreamWriter(outputStream))
                     {
-                        string ipAddress = (string)webProgIdKey.GetValue("IP Address", IP_ADDRESS_NOT_PRESENT);
-                        TL.LogMessage("MigrateProfiles", string.Format("Found IP Address: {0}", ipAddress));
-
-                        if (!(ipAddress == IP_ADDRESS_NOT_PRESENT))// IP Address value exists so we need to try and rename this profile
-                        {
-                            // Does a current ASCOM>remoteX profile exist, if so then we can't migrate so leave as is
-                            string remoteProgIdkeyName = string.Format(@"SOFTWARE\ASCOM\{0} Drivers\ASCOM.Remote{1}.{0}", DeviceType, i);
-                            TL.LogMessage("MigrateProfiles", string.Format("Checking whether registry key {0} exists", remoteProgIdkeyName));
-
-                            RegistryKey remoteProgIdKey = Registry.LocalMachine.OpenSubKey(remoteProgIdkeyName, true); // Open the key for writing
-                            if (remoteProgIdKey == null) // The "Remote" Profile does not exist so we can just rename the "Web" profile
-                            {
-                                TL.LogMessage("MigrateProfiles", string.Format("The registry key {0} does not exist - creating it", remoteProgIdkeyName));
-                                Registry.LocalMachine.CreateSubKey(remoteProgIdkeyName, true);
-                                remoteProgIdKey = Registry.LocalMachine.OpenSubKey(remoteProgIdkeyName, true); // Open the key for writing
-                                TL.LogMessage("MigrateProfiles", string.Format("Registry key {0} created OK", remoteProgIdkeyName));
-                                string[] valueNames = webProgIdKey.GetValueNames();
-                                foreach (string valueName in valueNames)
-                                {
-                                    string value;
-
-                                    if (valueName == "") // Special handling for the default value - need to change chooser description to ASCOM Remote Client X
-                                    {
-                                        value = string.Format("ASCOM Remote Client {0}", i);
-                                        TL.LogMessage("MigrateProfiles", string.Format("Changing Chooser description to {0} ", value));
-                                    }
-                                    else
-                                    {
-                                        value = (string)webProgIdKey.GetValue(valueName);
-                                        TL.LogMessage("MigrateProfiles", string.Format("Found Web registry value name {0} = {1}", valueName, value));
-                                    }
-                                    TL.LogMessage("MigrateProfiles", string.Format("Setting Remote registry value {0} to {1}", valueName, value));
-                                    remoteProgIdKey.SetValue(valueName, value);
-                                }
-                                TL.LogMessage("MigrateProfiles", string.Format("Driver successfully migrated - deleting Profile {0}", webProgIdKeyName));
-                                Registry.LocalMachine.DeleteSubKey(webProgIdKeyName);
-                                TL.LogMessage("MigrateProfiles", string.Format("Successfully deleted Profile {0}", webProgIdKeyName));
-                            }
-                            else // The "Remote" profile already exists so we can't migrate the old "Web" profile
-                            {
-                                TL.LogMessage("MigrateProfiles", string.Format("The {0} key already exists so we cannot migrate the {1} profile - no action taken", remoteProgIdkeyName, webProgIdKeyName));
-                            }
-                        }
-                        else // No IP address value means that this profile is unconfigured so just delete it.
-                        {
-                            TL.LogMessage("MigrateProfiles", string.Format("Driver not configured - deleting Profile {0}", webProgIdKeyName));
-                            Registry.LocalMachine.DeleteSubKey(webProgIdKeyName);
-                            TL.LogMessage("MigrateProfiles", string.Format("Successfully deleted Profile {0}", webProgIdKeyName));
-                        }
+                        provider.GenerateCodeFromNamespace(ns, writer, codeGeneratorOptions);
                     }
-                    else // ProgID doesn't exist
+
+                    MemoryStream actualStream = new MemoryStream(outputStream.ToArray());
+                    using (StreamReader reader = new StreamReader(actualStream))
                     {
-                        TL.LogMessage("MigrateProfiles", string.Format("ProgId {0} does not exist - no action taken", webProgIdKeyName));
+                        do
+                        {
+                            TL.LogMessage("GeneratedCode", reader.ReadLine());
+                        } while (!reader.EndOfStream);
                     }
                 }
+                provider.Dispose();
+
+                // Compile the source contained in the "program" variable
+                CompilerResults cr = provider.CompileAssemblyFromDom(cp, program);
+                TL.LogMessage("CreateAlpacaClient", string.Format("Compiled assembly - {0} errors", cr.Errors.Count));
+
+                // Report success or errors
+                if (cr.Errors.Count > 0)
+                {
+                    // Display compilation errors.
+                    foreach (CompilerError ce in cr.Errors)
+                    {
+                        TL.LogMessage("CreateAlpacaClient", string.Format("Compiler error: {0}", ce.ToString()));
+                    }
+                }
+                else
+                {
+                    // Display a successful compilation message.
+                    TL.LogMessage("CreateAlpacaClient", "Assembly compiled OK!");
+                }
+
+                TL.BlankLine();
             }
             catch (Exception ex)
             {
-                TL.LogMessageCrLf("MigrateProfiles", ex.ToString());
+                TL.LogMessageCrLf("CreateAlpacaClient", ex.ToString());
             }
+
         }
 
         /// <summary>
-        /// Deletes files based on supplied Regex definition
+        /// Extension method to return a Pascal cased string
         /// </summary>
-        /// <param name="path">Directory containing files to be deleted</param>
-        /// <param name="fileSpecifier">Regex expression specifying the files to delete</param>
-        private static void DeleteFiles(string path, string fileSpecifier, string description)
+        /// <param name="sourceString"></param>
+        /// <returns></returns>
+        public static string ToPascalCase(this string sourceString)
         {
-            IEnumerable<string> files = Directory.EnumerateFiles(path).Where(name => Regex.IsMatch(name, fileSpecifier, RegexOptions.IgnoreCase));
-            TL.LogMessage("DeleteFiles", string.Format("Found {0} {1} files to delete", files.Count(), description));
-            if (files.Count() != 0) // Delete extraneous pdb files
+            // Check for empty string.  
+            if (string.IsNullOrEmpty(sourceString))
             {
-                foreach (string file in files)
-                {
-                    TL.LogMessage("DeleteFiles", string.Format("Deleting file {0}", file));
-                    try
-                    {
-                        File.Delete(file);
-                        TL.LogMessage("DeleteFiles", string.Format("Successfully deleted file {0}", file));
-                    }
-                    catch (Exception ex)
-                    {
-                        string errorMessage = string.Format("Unable to delete file {0} - {1}", file, ex.Message);
-                        TL.LogMessage("DeleteFiles", errorMessage);
-                    }
-                }
+                return string.Empty;
+            }
+
+            // Check for a single character string
+            if (sourceString.Length == 1)
+            {
+                return sourceString.ToUpperInvariant();
+            }
+
+            // Return the multi character string with first letter in upper case and the remaining characters in lower case.  
+            return sourceString.Substring(0, 1).ToUpperInvariant() + sourceString.Substring(1).ToLowerInvariant();
+        }
+
+        //private static void InstallerSetupCommand()
+        //{
+        //    TL.LogMessage("Main", "Running installer setup");
+
+        //    // Find if there are any driver files already installed, indicating that this is not a first time install
+        //    string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + Form1.REMOTE_SERVER_PATH;
+
+        //    TL.LogMessage("Main", "About to create base key");
+        //    using (RegistryKey remoteRegistryBaseKey = RegistryKey.OpenBaseKey(SharedConstants.ASCOM_REMOTE_CONFIGURATION_HIVE, RegistryView.Default))
+        //    {
+        //        using (RegistryKey remoteRegistryKey = remoteRegistryBaseKey.CreateSubKey(SharedConstants.ASCOM_REMOTE_CONFIGURATION_KEY, true))
+        //        {
+        //            bool alreadyRun = bool.Parse((string)remoteRegistryKey.GetValue(ALREADY_RUN, "false"));
+        //            TL.LogMessage("Main", string.Format("Already run: {0}", alreadyRun));
+
+        //            if (!alreadyRun) // We have not run yet 
+        //            {
+        //                TL.LogMessage("Main", string.Format("First time setup - migrating profiles and creating dynamic drivers"));
+
+        //                // Only attempt first time setup if the local server executable is present
+        //                string localServerExe = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + Form1.REMOTE_SERVER_PATH + Form1.REMOTE_SERVER; // Get the local server path
+        //                if (File.Exists(localServerExe)) // Local server does exist
+        //                {
+        //                    // Create the required drivers
+        //                    TL.LogMessage("Main", string.Format("Creating one remote client driver of each device type"));
+        //                    CreateDriver("Camera", 1, localServerPath, TL);
+        //                    CreateDriver("Dome", 1, localServerPath, TL);
+        //                    CreateDriver("FilterWheel", 1, localServerPath, TL);
+        //                    CreateDriver("Focuser", 1, localServerPath, TL);
+        //                    CreateDriver("ObservingConditions", 1, localServerPath, TL);
+        //                    CreateDriver("Rotator", 1, localServerPath, TL);
+        //                    CreateDriver("SafetyMonitor", 1, localServerPath, TL);
+        //                    CreateDriver("Switch", 1, localServerPath, TL);
+        //                    CreateDriver("Telescope", 1, localServerPath, TL);
+
+        //                    // Register the drivers
+        //                    TL.LogMessage("Main", "Registering drivers");
+        //                    RunLocalServer(localServerExe, "-regserver", TL);
+
+        //                    // Record that we have run once on this PC
+        //                    TL.LogMessage("Main", string.Format("Setting already run to true"));
+        //                    remoteRegistryKey.SetValue(ALREADY_RUN, "true");
+        //                    TL.LogMessage("Main", string.Format("Set already run to true"));
+        //                }
+        //                else // Local server can not be found so report the issue
+        //                {
+        //                    string errorMessage = string.Format("Could not find local server {0}, unable to register drivers", localServerExe);
+        //                    TL.LogMessage("Main", errorMessage);
+        //                    MessageBox.Show(errorMessage);
+        //                }
+        //            }
+        //            else // Drivers are already installed so no action required
+        //            {
+        //                TL.LogMessage("Main", string.Format("This application has already run successful so this is not a first time installation - no action taken"));
+        //            }
+
+        //        }
+        //    }
+        //}
+
+        /// <summary>
+        /// Run the local server to register and unregister remote clients
+        /// </summary>
+        /// <param name="localServerExe"></param>
+        /// <param name="serverParameter"></param>
+        internal static void RunLocalServer(string localServerExe, string serverParameter, TraceLogger TL)
+        {
+            bool exitOK;
+            int exitCode = int.MinValue;
+
+            // Set local server run time values
+            ProcessStartInfo start = new ProcessStartInfo();
+            start.Arguments = serverParameter; // Specify the server command parameter
+            start.FileName = localServerExe; // Set the full local server executable path
+            start.WindowStyle = ProcessWindowStyle.Hidden; // Don't show a window while the command runs
+            start.CreateNoWindow = true;
+
+            // Run the external process & wait for it to finish
+            TL.LogMessage("RunLocalServer", $"Starting server with parameter {serverParameter}...");
+            using (Process proc = Process.Start(start))
+            {
+                exitOK = proc.WaitForExit(LOCALSERVER_WAIT_TIME);
+                if (exitOK) exitCode = proc.ExitCode; // Save the exit code
+            }
+
+            if (exitOK) TL.LogMessage("RunLocalServer", $"Local server exited OK with return code: {exitCode}");
+            else
+            {
+                string errorMessage = $"local server did not complete within {LOCALSERVER_WAIT_TIME} milliseconds, return code: {exitCode}";
+                TL.LogMessage("RunLocalServer", errorMessage);
+                MessageBox.Show(errorMessage);
             }
         }
+
+        #endregion
+
+        #region Unhandled exception handlers
 
         static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
         {
@@ -278,7 +497,6 @@ namespace ASCOM.DynamicRemoteClients
 
             TL.Enabled = false;
             TL.Dispose();
-            TL = null;
 
             Environment.Exit(0);
         }
@@ -302,10 +520,10 @@ namespace ASCOM.DynamicRemoteClients
 
             TL.Enabled = false;
             TL.Dispose();
-            TL = null;
 
             Environment.Exit(0);
         }
 
+        #endregion
     }
 }

@@ -53,7 +53,8 @@ Public Class Profile
         ProfileStore = New RegistryAccess(ERR_SOURCE_PROFILE) 'Get access to the profile store
         m_sDeviceType = "Telescope"
         TL = New TraceLogger("", "Profile")
-        TL.Enabled = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT) 'Get enabled / disabled state from the user registry
+        ' Profile trace logging disabled because it has not been required for many years
+        ' TL.Enabled = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT) 'Get enabled / disabled state from the user registry
         TL.LogMessage("New", "Trace logger created OK")
     End Sub
 
