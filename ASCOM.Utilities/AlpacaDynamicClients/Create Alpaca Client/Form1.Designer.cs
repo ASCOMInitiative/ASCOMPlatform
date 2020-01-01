@@ -16,63 +16,84 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.BtnExit = new System.Windows.Forms.Button();
-            this.BtnApply = new System.Windows.Forms.Button();
+            this.BtnClose = new System.Windows.Forms.Button();
+            this.BtnDeleteDrivers = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.LblVersionNumber = new System.Windows.Forms.Label();
+            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // BtnExit
+            // BtnClose
             // 
-            this.BtnExit.Location = new System.Drawing.Point(320, 330);
-            this.BtnExit.Name = "BtnExit";
-            this.BtnExit.Size = new System.Drawing.Size(75, 23);
-            this.BtnExit.TabIndex = 0;
-            this.BtnExit.Text = "Exit";
-            this.BtnExit.UseVisualStyleBackColor = true;
-            this.BtnExit.Click += new System.EventHandler(this.BtnExit_Click);
+            this.BtnClose.Location = new System.Drawing.Point(826, 430);
+            this.BtnClose.Name = "BtnClose";
+            this.BtnClose.Size = new System.Drawing.Size(75, 23);
+            this.BtnClose.TabIndex = 0;
+            this.BtnClose.Text = "Close";
+            this.BtnClose.UseVisualStyleBackColor = true;
+            this.BtnClose.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
-            // BtnApply
+            // BtnDeleteDrivers
             // 
-            this.BtnApply.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.BtnApply.Location = new System.Drawing.Point(239, 330);
-            this.BtnApply.Name = "BtnApply";
-            this.BtnApply.Size = new System.Drawing.Size(75, 23);
-            this.BtnApply.TabIndex = 1;
-            this.BtnApply.Text = "Apply";
-            this.BtnApply.UseVisualStyleBackColor = true;
-            this.BtnApply.Click += new System.EventHandler(this.BtnApply_Click);
+            this.BtnDeleteDrivers.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.BtnDeleteDrivers.Location = new System.Drawing.Point(745, 430);
+            this.BtnDeleteDrivers.Name = "BtnDeleteDrivers";
+            this.BtnDeleteDrivers.Size = new System.Drawing.Size(75, 23);
+            this.BtnDeleteDrivers.TabIndex = 1;
+            this.BtnDeleteDrivers.Text = "Delete";
+            this.BtnDeleteDrivers.UseVisualStyleBackColor = true;
+            this.BtnDeleteDrivers.Click += new System.EventHandler(this.BtnDeleteDrivers_Click);
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(74, 27);
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(306, 26);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(255, 13);
+            this.label11.Size = new System.Drawing.Size(282, 20);
             this.label11.TabIndex = 21;
-            this.label11.Text = "Number of Remote Device Drivers Required";
+            this.label11.Text = "Delete Unwanted Dynamic Drivers";
             // 
             // LblVersionNumber
             // 
             this.LblVersionNumber.AutoSize = true;
-            this.LblVersionNumber.Location = new System.Drawing.Point(12, 335);
+            this.LblVersionNumber.Location = new System.Drawing.Point(12, 435);
             this.LblVersionNumber.Name = "LblVersionNumber";
             this.LblVersionNumber.Size = new System.Drawing.Size(131, 13);
             this.LblVersionNumber.TabIndex = 23;
             this.LblVersionNumber.Text = "Version Number Unknown";
             // 
+            // checkedListBox1
+            // 
+            this.checkedListBox1.FormattingEnabled = true;
+            this.checkedListBox1.Location = new System.Drawing.Point(41, 65);
+            this.checkedListBox1.Name = "checkedListBox1";
+            this.checkedListBox1.Size = new System.Drawing.Size(832, 349);
+            this.checkedListBox1.TabIndex = 24;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(312, 435);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(271, 13);
+            this.label1.TabIndex = 25;
+            this.label1.Text = "Select drivers to be deleted by ticking their check boxes";
+            // 
             // Form1
             // 
-            this.AcceptButton = this.BtnApply;
+            this.AcceptButton = this.BtnDeleteDrivers;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.BtnApply;
-            this.ClientSize = new System.Drawing.Size(407, 365);
+            this.CancelButton = this.BtnDeleteDrivers;
+            this.ClientSize = new System.Drawing.Size(913, 465);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.checkedListBox1);
             this.Controls.Add(this.LblVersionNumber);
             this.Controls.Add(this.label11);
-            this.Controls.Add(this.BtnApply);
-            this.Controls.Add(this.BtnExit);
+            this.Controls.Add(this.BtnDeleteDrivers);
+            this.Controls.Add(this.BtnClose);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Dynamic Remote Driver Configuration";
@@ -83,10 +104,12 @@
 
         #endregion
 
-        private System.Windows.Forms.Button BtnExit;
-        private System.Windows.Forms.Button BtnApply;
+        private System.Windows.Forms.Button BtnClose;
+        private System.Windows.Forms.Button BtnDeleteDrivers;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label LblVersionNumber;
+        private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.Label label1;
     }
 }
 

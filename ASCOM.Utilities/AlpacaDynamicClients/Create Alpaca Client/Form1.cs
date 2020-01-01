@@ -29,9 +29,12 @@ namespace ASCOM.DynamicRemoteClients
         // Constants only used within this form
         private const string DEVICE_NUMBER = "DeviceNumber"; // Regular expression device number placeholder name
         private const string DEVICE_TYPE = "DeviceType"; // Regular expression device type placeholder name
-        private const string NUMERIC_UPDOWN_CONTROLNAME_PREXIX = "Num"; // Prefix to numeric up-down controls that enables them to be identified
+        private const string IP_ADDRESS_VALUE_NAME = "IP Address"; // Regular expression device type placeholder name
+        private const string PORT_NUMBER_VALUE_NAME = "Port Number"; // Regular expression device type placeholder name
+        private const string REMOTE_DEVICE_NUMBER_VALUE_NAME = "Remote Device Number"; // Regular expression device type placeholder name
+        private const string UNIQAUEID_VALUE_NAME = "UniqueID"; // Regular expression device type placeholder name
 
-        private const string REGEX_FORMAT_STRING = @"^ascom\.alpacadynamic(?'" + DEVICE_NUMBER + @"'\d+)\.(?'" + DEVICE_TYPE + @"'[a-z]+)$"; // Regular expression for extracting device type and number
+        private const string PROGID_PARSE_REGEX_STRING = @"^ascom\.alpacadynamic(?'" + DEVICE_NUMBER + @"'\d+)\.(?'" + DEVICE_TYPE + @"'[a-z]+)$"; // Regular expression for extracting device type and number
 
         // Constants shared with the main program
         internal const string REMOTE_SERVER_PATH = @"\ASCOM\AlpacaDynamicClients\"; // Relative path from CommonFiles
@@ -44,7 +47,7 @@ namespace ASCOM.DynamicRemoteClients
         // Global variables within this class
         TraceLogger TL;
         Profile profile;
-        List<DriverRegistration> remoteDrivers;
+        List<DynamicDriverRegistration> remoteDrivers;
         Dictionary<string, int> deviceTypeSummary;
 
         /// <summary>
@@ -63,10 +66,15 @@ namespace ASCOM.DynamicRemoteClients
                 TL.LogMessage("Initialise", string.Format("Application Version: {0}", assemblyVersion.ToString()));
 
                 profile = new Profile();
-                remoteDrivers = new List<DriverRegistration>();
+                remoteDrivers = new List<DynamicDriverRegistration>();
                 deviceTypeSummary = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase); // Create a dictionary using a case insensitive key comparer
 
                 ReadConfiguration(); // Get the current configuration
+
+                foreach (DynamicDriverRegistration driver in remoteDrivers)
+                {
+                    TL.LogMessage("Initialise", $"Found remote {driver.DeviceType} driver: {driver.Description}");
+                }
 
                 TL.LogMessage("Initialise", string.Format("Initialisation completed"));
             }
@@ -100,20 +108,11 @@ namespace ASCOM.DynamicRemoteClients
         {
             ArrayList deviceTypes = profile.RegisteredDeviceTypes;
 
-            Regex regex = new Regex(REGEX_FORMAT_STRING, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            Regex progidParseRegex = new Regex(PROGID_PARSE_REGEX_STRING, RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
             deviceTypeSummary.Clear();
             remoteDrivers.Clear();
-
-            // List all the up-down controls present
-            foreach (Control ctrl in this.Controls)
-            {
-                if (ctrl.GetType() == typeof(NumericUpDown))
-                {
-                    TL.LogMessage("ReadConfiguration", string.Format("Found NumericUpDown control {0}", ctrl.Name));
-                    ctrl.BackColor = SystemColors.Window;
-                }
-            }
+            checkedListBox1.Items.Clear();
 
             // Extract a list of the remote client drivers from the list of devices in the Profile
             foreach (string deviceType in deviceTypes)
@@ -121,26 +120,35 @@ namespace ASCOM.DynamicRemoteClients
                 ArrayList devices = profile.RegisteredDevices(deviceType);
                 foreach (KeyValuePair device in devices)
                 {
-                    Match match = regex.Match(device.Key);
+                    Match match = progidParseRegex.Match(device.Key);
                     if (match.Success)
                     {
-                        DriverRegistration foundDriver = new DriverRegistration();
+                        DynamicDriverRegistration foundDriver = new DynamicDriverRegistration();
                         foundDriver.ProgId = match.Groups["0"].Value;
                         foundDriver.Number = int.Parse(match.Groups[DEVICE_NUMBER].Value, CultureInfo.InvariantCulture);
                         foundDriver.DeviceType = match.Groups[DEVICE_TYPE].Value;
+
+                        profile.DeviceType = foundDriver.DeviceType;
+                        foundDriver.IPAdrress = profile.GetValue(foundDriver.ProgId, IP_ADDRESS_VALUE_NAME);
+                        foundDriver.PortNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, PORT_NUMBER_VALUE_NAME));
+                        foundDriver.RemoteDeviceNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, REMOTE_DEVICE_NUMBER_VALUE_NAME));
+                        foundDriver.UniqueID = profile.GetValue(foundDriver.ProgId, UNIQAUEID_VALUE_NAME);
+                        foundDriver.Name = device.Value;
+                        foundDriver.Description = $"{foundDriver.Name} ({foundDriver.ProgId}) - {foundDriver.IPAdrress}:{foundDriver.PortNumber}/api/v1/{foundDriver.DeviceType}/{foundDriver.Number} - {foundDriver.UniqueID}";
+
                         remoteDrivers.Add(foundDriver);
+                        checkedListBox1.Items.Add(foundDriver);
+
                         TL.LogMessage("ReadConfiguration", string.Format("{0} - {1} - {2}", foundDriver.ProgId, foundDriver.Number, foundDriver.DeviceType));
                     }
                 }
-
-                TL.BlankLine();
             }
 
             // List the remote client drivers and create summary counts of client drivers of each device type 
             foreach (string deviceType in deviceTypes)
             {
-                List<DriverRegistration> result = (from s in remoteDrivers where s.DeviceType.Equals(deviceType, StringComparison.InvariantCultureIgnoreCase) select s).ToList();
-                foreach (DriverRegistration driver in result)
+                List<DynamicDriverRegistration> result = (from s in remoteDrivers where s.DeviceType.Equals(deviceType, StringComparison.InvariantCultureIgnoreCase) select s).ToList();
+                foreach (DynamicDriverRegistration driver in result)
                 {
                     TL.LogMessage("ReadConfiguration", string.Format("{0} driver: {1} - {2} - {3}", deviceType, driver.ProgId, driver.Number, driver.DeviceType));
                 }
@@ -148,28 +156,27 @@ namespace ASCOM.DynamicRemoteClients
                 deviceTypeSummary.Add(deviceType, result.Count);
             }
 
-            // List the summary information
-            foreach (string deviceType in deviceTypes)
-            {
-                TL.LogMessage("ReadConfiguration", string.Format("There are {0} {1} remote drivers", deviceTypeSummary[deviceType], deviceType));
-            }
-
         }
 
-/// <summary>
+        /// <summary>
         /// Exit button handler - just closes the application
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BtnExit_Click(object sender, EventArgs e)
+        private void BtnCancel_Click(object sender, EventArgs e)
         {
-            TL.LogMessage("Exit", "Closing the application");
+            try
+            {
+                TL.LogMessage("Exit", "Closing the application");
 
-            TL.Enabled = false;
-            TL.Dispose();
-            TL = null;
-
-            Application.Exit();
+                TL.Enabled = false;
+                TL.Dispose();
+                TL = null;
+            }
+            finally
+            {
+                Application.Exit();
+            }
         }
 
         /// <summary>
@@ -195,87 +202,49 @@ namespace ASCOM.DynamicRemoteClients
         ///       Else no action
         /// Register drivers
         /// </remarks>
-        private void BtnApply_Click(object sender, EventArgs e)
+        private void BtnDeleteDrivers_Click(object sender, EventArgs e)
         {
             try
             {
                 // Disable controls so that the process can't be stopped part way through 
+                BtnDeleteDrivers.Enabled = false;
 
-                string localServerExe = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + REMOTE_SERVER_PATH + REMOTE_SERVER;
+                string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + REMOTE_SERVER_PATH;
+                string localServerExe = localServerPath + REMOTE_SERVER;
+
                 if (File.Exists(localServerExe)) // Local server does exist
                 {
-                    TL.LogMessage("Apply", string.Format("Found local server {0}", localServerExe));
+                    TL.LogMessage("DeleteDrivers", string.Format("Found local server {0}", localServerExe));
                     ArrayList deviceTypes = profile.RegisteredDeviceTypes;
 
-                    // Unregister existing drivers
+                    // Unregister all current drivers
                     CreateAlpacaClients.RunLocalServer(localServerExe, "-unregserver", TL);
 
-                    // Iterate over all of the installed device types
-                    foreach (string deviceType in deviceTypes)
+                    foreach (DynamicDriverRegistration driver in checkedListBox1.CheckedItems)
                     {
-                        // Only attempt to process a device type if it is one that we support, otherwise ignore it
-                        if (supportedDeviceTypes.Contains(deviceType, StringComparer.OrdinalIgnoreCase))
+                        TL.LogMessage("DeleteDrivers", $"Deleting driver {driver.Description}");
+                        string driverFileName = $"{localServerPath}{driver.ProgId}.dll";
+                        string pdbFileName= $"{localServerPath}{driver.ProgId}.pdb";
+                        TL.LogMessage("DeleteDrivers", $"Deleting driver file {driverFileName}");
+                        try
                         {
-                            // This device type is recognised so process it
-                            TL.LogMessage("Apply", string.Format("Processing device type: \"{0}\"", deviceType));
-                            Control[] c = this.Controls.Find(NUMERIC_UPDOWN_CONTROLNAME_PREXIX + deviceType, true);
-                            NumericUpDown numControl = (NumericUpDown)c[0];
-
-                            // Delete files above the number required
-                            string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + REMOTE_SERVER_PATH;
-                            string searchPattern = string.Format(REMOTE_CLIENT_DRIVER_NAME_TEMPLATE, deviceType);
-
-                            TL.LogMessage("Apply", string.Format("Searching for {0} driver files in {1} using pattern: {2}", deviceType, localServerPath, searchPattern));
-
-                            List<string> files = Directory.GetFiles(localServerPath, searchPattern, SearchOption.TopDirectoryOnly).ToList();
-                            TL.LogMessage("Apply", string.Format("Found {0} driver files", files.Count));
-
-                            foreach (string file in files)
-                            {
-                                TL.LogMessage("Apply", string.Format("Found driver file {0}", file));
-                                try
-                                {
-                                    File.Delete(file);
-                                    TL.LogMessage("Apply", string.Format("Successfully deleted driver file {0}", file));
-                                }
-                                catch (Exception ex)
-                                {
-                                    string errorMessage = string.Format("Unable to delete driver file {0} - {1}", file, ex.Message);
-                                    TL.LogMessage("Apply", errorMessage);
-                                    MessageBox.Show(errorMessage);
-                                }
-                            }
-
-                            // Unregister drivers
-                            List<DriverRegistration> result = (from s in remoteDrivers where s.DeviceType.Equals(deviceType, StringComparison.InvariantCultureIgnoreCase) select s).ToList();
-                            foreach (DriverRegistration driver in result)
-                            {
-                                if (driver.Number > numControl.Value)
-                                {
-                                    TL.LogMessage("Apply", string.Format("Removing driver Profile registration for {0} driver: {1} - {2} - {3}", deviceType, driver.ProgId, driver.Number, driver.DeviceType));
-                                    profile.DeviceType = deviceType;
-                                    profile.Unregister(driver.ProgId);
-                                }
-                                else
-                                {
-                                    TL.LogMessage("Apply", string.Format("Leaving driver Profile in place for {0} driver: {1} - {2} - {3}", deviceType, driver.ProgId, driver.Number, driver.DeviceType));
-                                }
-                            }
-
-                            // Create required number of drivers
-                            for (int i = 1; i <= numControl.Value; i++)
-                            {
-                                //CreateAlpacaClients.CreateDriver(deviceType, i, localServerPath, TL);
-                            }
+                            File.Delete(driverFileName);
+                            File.Delete(pdbFileName);
+                            TL.LogMessage("DeleteDrivers", string.Format("Successfully deleted driver file {0}", driverFileName));
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            TL.LogMessage("Apply", string.Format("Ignoring unsupported device type: \"{0}\"", deviceType));
-                            TL.BlankLine();
+                            string errorMessage = string.Format("Unable to delete driver file {0} - {1}", driverFileName, ex.Message);
+                            TL.LogMessage("DeleteDrivers", errorMessage);
+                            MessageBox.Show(errorMessage);
                         }
+
+                        TL.LogMessage("DeleteDrivers", $"Removing driver Profile registration for {driver.DeviceType} driver: {driver.ProgId}");
+                        profile.DeviceType = driver.DeviceType;
+                        profile.Unregister(driver.ProgId);
                     }
 
-                    // Register the drivers
+                    // Re-register the remaining drivers
                     CreateAlpacaClients.RunLocalServer(localServerExe, "-regserver", TL);
                     ReadConfiguration();
                 }
@@ -284,7 +253,7 @@ namespace ASCOM.DynamicRemoteClients
                     string errorMessage = string.Format("Could not find local server {0}", localServerExe);
                     TL.LogMessage("Apply", errorMessage);
                     MessageBox.Show(errorMessage);
-                }
+                } // Local server cannot be found
             }
             catch (Exception ex)
             {
@@ -293,6 +262,7 @@ namespace ASCOM.DynamicRemoteClients
             }
             finally
             {
+                BtnDeleteDrivers.Enabled = true;
             }
         }
     }
