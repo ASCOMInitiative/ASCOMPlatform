@@ -47,6 +47,7 @@
         Me.LblAlpacaDiscovery = New System.Windows.Forms.Label()
         Me.AlpacaStatus = New System.Windows.Forms.PictureBox()
         Me.DividerLine = New System.Windows.Forms.Panel()
+        Me.MnuManageAlpacaDevices = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ChooserMenu.SuspendLayout()
         CType(Me.AlpacaStatus, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -240,7 +241,7 @@
         '
         'MnuAlpaca
         '
-        Me.MnuAlpaca.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator3, Me.MnuDiscoverNow, Me.ToolStripSeparator4, Me.MnuEnableDiscovery, Me.MnuDisableDiscovery, Me.MnuConfigureChooser})
+        Me.MnuAlpaca.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator3, Me.MnuDiscoverNow, Me.ToolStripSeparator4, Me.MnuEnableDiscovery, Me.MnuDisableDiscovery, Me.MnuManageAlpacaDevices, Me.MnuConfigureChooser})
         Me.MnuAlpaca.Name = "MnuAlpaca"
         Me.MnuAlpaca.Size = New System.Drawing.Size(55, 20)
         Me.MnuAlpaca.Text = "Alpaca"
@@ -248,35 +249,35 @@
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(204, 6)
         '
         'MnuDiscoverNow
         '
         Me.MnuDiscoverNow.Name = "MnuDiscoverNow"
-        Me.MnuDiscoverNow.Size = New System.Drawing.Size(180, 22)
+        Me.MnuDiscoverNow.Size = New System.Drawing.Size(207, 22)
         Me.MnuDiscoverNow.Text = "Discover Now"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(204, 6)
         '
         'MnuEnableDiscovery
         '
         Me.MnuEnableDiscovery.Name = "MnuEnableDiscovery"
-        Me.MnuEnableDiscovery.Size = New System.Drawing.Size(180, 22)
+        Me.MnuEnableDiscovery.Size = New System.Drawing.Size(207, 22)
         Me.MnuEnableDiscovery.Text = "Enable DIscovery"
         '
         'MnuDisableDiscovery
         '
         Me.MnuDisableDiscovery.Name = "MnuDisableDiscovery"
-        Me.MnuDisableDiscovery.Size = New System.Drawing.Size(180, 22)
+        Me.MnuDisableDiscovery.Size = New System.Drawing.Size(207, 22)
         Me.MnuDisableDiscovery.Text = "Disable Discovery"
         '
         'MnuConfigureChooser
         '
         Me.MnuConfigureChooser.Name = "MnuConfigureChooser"
-        Me.MnuConfigureChooser.Size = New System.Drawing.Size(180, 22)
+        Me.MnuConfigureChooser.Size = New System.Drawing.Size(207, 22)
         Me.MnuConfigureChooser.Text = "Configure Chooser"
         '
         'LblAlpacaDiscovery
@@ -306,6 +307,12 @@
         Me.DividerLine.Name = "DividerLine"
         Me.DividerLine.Size = New System.Drawing.Size(306, 1)
         Me.DividerLine.TabIndex = 11
+        '
+        'MnuManageAlpacaDevices
+        '
+        Me.MnuManageAlpacaDevices.Name = "MnuManageAlpacaDevices"
+        Me.MnuManageAlpacaDevices.Size = New System.Drawing.Size(207, 22)
+        Me.MnuManageAlpacaDevices.Text = "Manage Devices (Admin)"
         '
         'ChooserForm
         '
@@ -369,5 +376,6 @@
     Friend WithEvents AlpacaStatus As PictureBox
     Friend WithEvents MenuRegistryTraceEnabled As ToolStripMenuItem
     Friend WithEvents DividerLine As Panel
+    Friend WithEvents MnuManageAlpacaDevices As ToolStripMenuItem
 #End Region
 End Class

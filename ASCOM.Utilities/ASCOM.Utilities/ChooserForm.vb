@@ -1,5 +1,6 @@
 
 Imports System.Collections.Generic
+Imports System.Drawing.Drawing2D
 Imports System.Globalization
 Imports System.IO
 Imports System.Runtime.CompilerServices
@@ -63,7 +64,6 @@ Friend Class ChooserForm
     Private chooserWarningToolTip As ToolTip
     Private chooserPropertiesToolTip As ToolTip
     Private alpacaStatusToolstripLabel As ToolStripLabel
-    Private WithEvents initialMessageTimer As System.Windows.Forms.Timer
     Private WithEvents alpacaStatusIndicatorTimer As System.Windows.Forms.Timer
 
     ' Persistence variables
@@ -119,18 +119,7 @@ Friend Class ChooserForm
         TL.IdentifierWidth = 50
         TL.Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT) ' Enable the trace logger if Util trace is enabled
 
-    End Sub
-
-    Private Sub ResizeChooser()
-        ' Position controls if the Chooser has an increased width
-        Me.Width = OriginalForm1Width + AlpacaChooserIncrementalWidth
-        BtnCancel.Location = New Point(OriginalBtnCancelPosition.X + AlpacaChooserIncrementalWidth, OriginalBtnCancelPosition.Y)
-        BtnOK.Location = New Point(OriginalBtnOKPosition.X + AlpacaChooserIncrementalWidth, OriginalBtnOKPosition.Y)
-        BtnProperties.Location = New Point(OriginalBtnPropertiesPosition.X + AlpacaChooserIncrementalWidth, OriginalBtnPropertiesPosition.Y)
-        CmbDriverSelector.Width = OriginalCmbDriverSelectorWidth + AlpacaChooserIncrementalWidth
-        LblAlpacaDiscovery.Left = OriginalLblAlpacaDiscoveryPosition + AlpacaChooserIncrementalWidth
-        AlpacaStatus.Left = OriginalAlpacaStatusPosition + AlpacaChooserIncrementalWidth
-        DividerLine.Width = OriginalDividerLineWidth + AlpacaChooserIncrementalWidth
+        'CmbDriverSelector.DrawMode = DrawMode.OwnerDrawFixed
 
     End Sub
 
@@ -141,7 +130,6 @@ Friend Class ChooserForm
             ' Initialise form title and message text
             Text = "ASCOM " & deviceTypeValue & " Chooser"
             lblTitle.Text = "Select the type of " & LCase(deviceTypeValue) & " you have, then be " & "sure to click the Properties... button to configure the driver for your " & LCase(deviceTypeValue) & "."
-            'selectedProgIdValue = ""
 
             'Initialise the tooltip warning for 32/64bit driver compatibility messages
             chooserWarningToolTip = New ToolTip()
@@ -179,25 +167,6 @@ Friend Class ChooserForm
             LogEvent("ChooserForm Load ", ex.ToString, System.Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserFormLoad, ex.ToString)
         End Try
     End Sub
-
-    Private Sub InitialiseComboBox()
-        alpacaDevices = New List(Of AscomDevice) ' Initialise to a clear list with no Alpaca devices
-
-        If AlpacaEnabled Then
-            Dim discoveryThread As Thread = New Thread(AddressOf DiscoverAlpacaDevicesAndPopulateDriverComboBox)
-            discoveryThread.Start()
-        Else
-            PopulateDriverComboBox()
-            SetStateNoAlpaca()
-
-            ' Set up a one-off timer in order to force display of the warning message if the pre-selected driver is not compatible
-            initialMessageTimer = New System.Windows.Forms.Timer
-            initialMessageTimer.Interval = FORM_LOAD_WARNING_MESSAGE_DELAY_TIME ' Set it to fire after 250ms
-            initialMessageTimer.Start() ' Kick off the timer
-        End If
-
-    End Sub
-
 
     Private Sub ChooserForm_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
         'Clean up the trace logger
@@ -253,18 +222,55 @@ Friend Class ChooserForm
 
 #End Region
 
-#Region "Form and timer event handlers"
+#Region "Form, control and timer event handlers"
+
+    Private Sub comboProduct_DrawItem(ByVal sender As Object, ByVal e As DrawItemEventArgs) 'Handles CmbDriverSelector.DrawItem
+        Dim brush As Brush
+        Dim colour As Color
+        Dim combo As ComboBox
+        Dim text As String = ""
+
+        Try
+            e.DrawBackground()
+            combo = CType(sender, ComboBox)
+
+            brush = Brushes.White
+            colour = Color.White
+
+            If combo.SelectedIndex >= 0 Then
+                Dim chooseritem As Generic.KeyValuePair(Of ChooserItem, String) = CType(combo.Items(e.Index), Generic.KeyValuePair(Of ChooserItem, String))
+
+                TL.LogMessage("comboProduct_DrawItem", $"IsComDriver: {chooseritem.Key.IsComDriver} {chooseritem.Key.Name} {chooseritem.Value}")
+                text = chooseritem.Value
+                If chooseritem.Key.IsComDriver Then
+                    If chooseritem.Key.ProgID.ToLowerInvariant().StartsWith(ALPACA_PROGID_PREFIX.ToLowerInvariant()) Then
+                        brush = Brushes.Red
+                        colour = Color.Red
+                    Else
+                        brush = Brushes.LightPink
+                        colour = Color.LightPink
+
+                    End If
+                Else
+                    brush = Brushes.LightGreen
+                    colour = Color.LightGreen
+                End If
+            End If
+
+
+
+            e.Graphics.DrawRectangle(New Pen(Color.Black), e.Bounds)
+            e.Graphics.FillRectangle(brush, e.Bounds)
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias
+            e.Graphics.DrawString(text, combo.Font, Brushes.Black, e.Bounds.X, e.Bounds.Y)
+
+        Catch exp As Exception
+            MessageBox.Show(exp.Message)
+        End Try
+    End Sub
 
     Private Sub ChooserFormMoveEventHandler(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Move
         If currentWarningMesage <> "" Then WarningToolTipShow(currentWarningTitle, currentWarningMesage)
-    End Sub
-
-    Private Sub FormLoadTimerEventHandler(ByVal myObject As Object, ByVal myEventArgs As EventArgs) Handles initialMessageTimer.Tick
-        ' This event kicks off once triggered by form load in order to force display of the warning message for a driver that is pre-selected by the user.
-        initialMessageTimer.Stop() ' Disable the timer to prevent future events from firing
-        initialMessageTimer.Enabled = False
-        TL.LogMessageCrLf("ChooserForm Timer", "Displaying warning message, if there is one")
-        cbDriverSelector_SelectedIndexChanged(CmbDriverSelector, New System.EventArgs()) ' Force display of the  warning tooltip because it does not show up when displayed during FORM load
     End Sub
 
     Private Sub AlpacaStatusIndicatorTimerEventHandler(ByVal myObject As Object, ByVal myEventArgs As EventArgs) Handles alpacaStatusIndicatorTimer.Tick
@@ -275,22 +281,21 @@ Friend Class ChooserForm
         End If
 
     End Sub
-#End Region
 
-#Region "UI event handlers"
-
-    ' Click in Properties... button. Loads the currently selected driver and activate its setup dialogue.
+    ''' <summary>
+    ''' Click in Properties... button. Loads the currently selected driver and activate its setup dialogue.
+    ''' </summary>
+    ''' <param name="eventSender"></param>
+    ''' <param name="eventArgs"></param>
     Private Sub cmdProperties_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnProperties.Click
         Dim ProfileStore As RegistryAccess
         Dim oDrv As Object = Nothing ' The driver
-        Dim cb As System.Windows.Forms.ComboBox
         Dim bConnected As Boolean
         Dim sProgID As String
         Dim ProgIdType As Type
         Dim UseCreateObject As Boolean = False
 
         ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
-        cb = CmbDriverSelector ' Convenient shortcut
 
         'Find ProgID corresponding to description
         sProgID = CType(CmbDriverSelector.SelectedItem, Generic.KeyValuePair(Of ChooserItem, String)).Key.ProgID
@@ -349,32 +354,20 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub cmdOK_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnOK.Click
-        Dim generatorWorkingDirectory, generatorExeFile, newProgId As String
-        Dim generatorProcessStartInfo As ProcessStartInfo
+        Dim newProgId As String
 
         If selectedChooserItem.IsComDriver Then ' USer has selected an existing COM driver so return its ProgID
             selectedProgIdValue = selectedChooserItem.ProgID
 
             TL.LogMessage("OK Click", $"Returning ProgID: '{selectedProgIdValue}'")
 
+            ' Close the UI because the COM driver is selected
             Me.Hide()
         Else ' USer has selected a new Alpaca device so we need to create a new COM driver for this
             MsgBox("After pressing OK, you will be asked for Administrator approval to register this new Alpaca device.", MsgBoxStyle.OkCancel, "New Alpaca Device Selected")
 
-            ' Construct path to the executable that will dynamically create a new ALpaca COM client
-            generatorWorkingDirectory = $"{Environment.GetEnvironmentVariable("ProgramFiles(x86)")}\{ALPACA_DYNAMIC_CLIENT_GENERATOR_RELATIVE_PATH}"
-            generatorExeFile = $"{generatorWorkingDirectory}\{ALPACA_DYNAMIC_CLIENT_EXE_NAME}"
-            TL.LogMessage("OK Click", $"Creating driver for ProgID: {selectedProgIdValue} using the {generatorExeFile} executable in working directory {generatorWorkingDirectory}")
-
-            If Not File.Exists(generatorExeFile) Then
-                MsgBox("The client generator executable can not be found, please repair the ASCOM Platform.", MsgBoxStyle.Critical, "ALpaca Client Generator Not Found")
-                TL.LogMessage("OK Click", $"ERROR - Unable to find the client generator executable at {generatorExeFile}, cannot create a new Alpaca client.")
-                selectedProgIdValue = ""
-            End If
-
             Dim deviceNumber As Integer = 0
             Dim typeFromProgId As Type
-
             ' Find an unused number in the ProgID series ASCOM.Alpaca{N}.{DeviceType} where N Is an integer starting at 1
             Do
 
@@ -386,9 +379,22 @@ Friend Class ChooserForm
 
             TL.LogMessage("CreateAlpacaClient", $"Creating new ProgID: {newProgId}")
 
+            Dim generatorWorkingDirectory, generatorExeFile As String
+            Dim generatorProcessStartInfo As ProcessStartInfo
+            ' Construct path to the executable that will dynamically create a new ALpaca COM client
+            generatorWorkingDirectory = $"{Environment.GetEnvironmentVariable("ProgramFiles(x86)")}\{ALPACA_DYNAMIC_CLIENT_GENERATOR_RELATIVE_PATH}"
+            generatorExeFile = $"{generatorWorkingDirectory}\{ALPACA_DYNAMIC_CLIENT_EXE_NAME}"
+            TL.LogMessage("OK Click", $"Creating driver for ProgID: {selectedProgIdValue} using the {generatorExeFile} executable in working directory {generatorWorkingDirectory}")
+
+            If Not File.Exists(generatorExeFile) Then
+                MsgBox("The client generator executable can not be found, please repair the ASCOM Platform.", MsgBoxStyle.Critical, "ALpaca Client Generator Not Found")
+                TL.LogMessage("OK Click", $"ERROR - Unable to find the client generator executable at {generatorExeFile}, cannot create a new Alpaca client.")
+                selectedProgIdValue = ""
+                Return
+            End If
+
             generatorProcessStartInfo = New ProcessStartInfo(generatorExeFile, $"\CreateAlpacaClient {deviceTypeValue} {deviceNumber} {newProgId} ""{selectedChooserItem.Name}""")
             generatorProcessStartInfo.WorkingDirectory = generatorWorkingDirectory
-
 
             generatorProcess = New Process()
             generatorProcess.StartInfo = generatorProcessStartInfo
@@ -397,7 +403,6 @@ Friend Class ChooserForm
             driverGenerationComplete = False
 
             TL.LogMessage("CreateAlpacaClient", $"Starting driver generation process")
-            'generatorProcess.WaitForExit(10000) ' Wait for up to 5 seconds for the process to complete
             generatorProcess.Start()
 
             Do
@@ -423,12 +428,12 @@ Friend Class ChooserForm
             r.WriteProfile("Chooser", $"{newProgId} Init", "True")
             r.Dispose()
             selectedProgIdValue = newProgId
-            PopulateDriverComboBox()
+            InitialiseComboBox()
         End If
 
         TL.LogMessage("OK Click", $"Returning ProgID: '{selectedProgIdValue}'")
 
-        'Me.Hide()
+        ' Don't exit the Chooser but instead return to the UI so that the user can see that a new driver has been created and selected
     End Sub
 
     ''' <summary>
@@ -440,7 +445,7 @@ Friend Class ChooserForm
         driverGenerationComplete = True ' Flag that driver generation is complete
     End Sub
 
-    Private Sub cbDriverSelector_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles CmbDriverSelector.SelectionChangeCommitted
+    Private Sub cbDriverSelector_SelectionChangeCommitted(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles CmbDriverSelector.SelectionChangeCommitted
         If CmbDriverSelector.SelectedIndex >= 0 Then
 
             ' Save the newly selected chooser item
@@ -649,6 +654,50 @@ Friend Class ChooserForm
 
     End Sub
 
+    Private Sub MnuManageAlpacaDevices_Click(sender As Object, e As EventArgs) Handles MnuManageAlpacaDevices.Click
+        Dim generatorWorkingDirectory, generatorExeFile As String
+        Dim generatorProcessStartInfo As ProcessStartInfo
+
+        ' Construct path to the executable that will dynamically create a new ALpaca COM client
+        generatorWorkingDirectory = $"{Environment.GetEnvironmentVariable("ProgramFiles(x86)")}\{ALPACA_DYNAMIC_CLIENT_GENERATOR_RELATIVE_PATH}"
+        generatorExeFile = $"{generatorWorkingDirectory}\{ALPACA_DYNAMIC_CLIENT_EXE_NAME}"
+        TL.LogMessage("ManageAlpacaDevices", $"Managing drivers using the {generatorExeFile} executable in working directory {generatorWorkingDirectory}")
+
+        If Not File.Exists(generatorExeFile) Then
+            MsgBox("The client generator executable can not be found, please repair the ASCOM Platform.", MsgBoxStyle.Critical, "ALpaca Client Generator Not Found")
+            TL.LogMessage("ManageAlpacaDevices", $"ERROR - Unable to find the client generator executable at {generatorExeFile}, cannot create a new Alpaca client.")
+            selectedProgIdValue = ""
+            Return
+        End If
+
+        ' Set the process run time environment and parameters
+        generatorProcessStartInfo = New ProcessStartInfo(generatorExeFile, $"") ' Run the executable with no parameters in order to show the management GUI
+        generatorProcessStartInfo.WorkingDirectory = generatorWorkingDirectory
+
+        ' Create the management process
+        generatorProcess = New Process()
+        generatorProcess.StartInfo = generatorProcessStartInfo
+        generatorProcess.EnableRaisingEvents = True
+
+        ' Initialise the process complete flag to false
+        driverGenerationComplete = False
+
+        ' Run the process
+        TL.LogMessage("ManageAlpacaDevices", $"Starting driver management process")
+        generatorProcess.Start()
+
+        ' Wait for the process to complete at which point the process complete event will fire and driverGenerationComplete will be set true
+        Do
+            Thread.Sleep(10)
+            Application.DoEvents()
+        Loop While Not driverGenerationComplete
+
+        TL.LogMessage("ManageAlpacaDevices", $"Completed driver management process")
+
+        generatorProcess.Dispose()
+
+    End Sub
+
 #End Region
 
 #Region "State Persistence"
@@ -718,60 +767,172 @@ Friend Class ChooserForm
 
 #Region "Support code"
 
+    Private Sub InitialiseComboBox()
+        Dim discoveryThread As Thread = New Thread(AddressOf DiscoverAlpacaDevicesAndPopulateDriverComboBox)
+        discoveryThread.Start()
+    End Sub
+
     Private Sub DiscoverAlpacaDevicesAndPopulateDriverComboBox()
+        Dim p As Profile
 
         Try
 
-            TL.LogMessage("StartAlpacaDiscovery", $"Running on thread: {Thread.CurrentThread.ManagedThreadId}")
+            p = New Profile()
+            p.DeviceType = deviceTypeValue
 
-            ' Render the user interface unresponsive while discovery is underway, except for the Cancel button.
-            SetStateAlpacaDiscovering()
+            TL.LogMessage("StartAlpacaDiscovery", $"Running on thread: {Thread.CurrentThread.ManagedThreadId}.")
 
-            Dim discovery As AlpacaDiscovery
-            discovery = New AlpacaDiscovery(TL)
-            TL.LogMessage("StartAlpacaDiscovery", $"AlpacaDiscovery created")
-            discovery.StartDiscovery(AlpacaNumberOfBroadcasts, 200, AlpacaDiscoveryPort, AlpacaTimeout, AlpacaDnsResolution)
-            TL.LogMessage("StartAlpacaDiscovery", $"AlpacaDiscovery started")
+            chooserList = New SortedList(Of ChooserItem, String)
 
-            ' Keep the UI alive while the discovery is running
-            Do
+            Dim profileStore As New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
 
-                Threading.Thread.Sleep(10)
-                Application.DoEvents()
+            ' Enumerate the available drivers, and load their descriptions and ProgIDs into the driversList generic sorted list collection. Key is ProgID, value is friendly name.
+            Try
+                ' Get Key-Class pairs in the subkey "{DeviceType} Drivers" e.g. "Telescope Drivers"
+                Dim driverList As SortedList(Of String, String) = profileStore.EnumKeys(deviceTypeValue & " Drivers")
+                TL.LogMessage("PopulateDriverComboBox", $"Returned {driverList.Count} COM drivers")
 
-            Loop Until discovery.DiscoveryComplete
-            TL.LogMessage("StartAlpacaDiscovery", $"AlpacaDiscovery Completed")
+                For Each driver As KeyValuePair(Of String, String) In driverList
+                    Dim driverProgId, driverName As String
 
-            ' List discovered devices to the log
-            For Each ascomDevice As AscomDevice In discovery.GetAscomDevices()
-                TL.LogMessage("StartAlpacaDiscovery", $"FOUND {ascomDevice.AscomDeviceType} {ascomDevice.AscomDeviceName} {ascomDevice.IPEndPoint.ToString()}")
-            Next
+                    driverProgId = driver.Key
+                    driverName = driver.Value
 
-            ' Get discovered devices of the requested ASCOM device type
-            alpacaDevices = discovery.GetAscomDevices(deviceTypeValue)
+                    TL.LogMessage("PopulateDriverComboBox", $"Found ProgID: {driverProgId} , Description: '{driverName}'")
 
-            ' Populate the device list combo box with COM and Alpaca devices
+                    If String.IsNullOrEmpty(driverName) Then ' Description Is missing
+                        TL.LogMessage("PopulateDriverComboBox", $"  ***** Description missing for ProgID: {driverProgId}")
+                    End If
+
+                    ' Annotate the device description as configured
+                    If (driverProgId.ToLowerInvariant().StartsWith(ALPACA_PROGID_PREFIX.ToLowerInvariant())) Then ' This is a COM driver for an Alpaca device
+                        If AlpacaShowDeviceDetails Then ' Get device details from the Profile and display these
+                            driverName = $"{driverName}    ({driverProgId} ==> {p.GetValue(driverProgId, PROFILE_VALUE_NAME_IP_ADDRESS, Nothing)}:{p.GetValue(driverProgId, PROFILE_VALUE_NAME_PORT_NUMBER, Nothing)}/api/v1/{deviceTypeValue}/{p.GetValue(driverProgId, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER, Nothing)})" ' Annotate as COM to differentiate from Alpaca drivers
+                        Else ' Just annotate as an Alpaca device
+                            driverName = $"{driverName}    (Alpaca)" ' Annotate as an Alpaca device
+                        End If
+                    Else ' This is not an Alpaca COM driver
+                        If AlpacaShowDeviceDetails Then ' Get device details from the Profile and display these
+                            driverName = $"{driverName}    ({driverProgId})" ' Annotate with ProgID
+                        Else
+                            ' No action just use the driver description as is
+                        End If
+                    End If
+
+                    chooserList.Add(New ChooserItem(driverProgId, driverName), driverName)
+                Next
+
+            Catch ex1 As Exception
+                TL.LogMessageCrLf("PopulateDriverComboBox", "Exception: " & ex1.ToString)
+                'Ignore any exceptions from this call e.g. if there are no devices of that type installed just create an empty list
+            Finally
+                profileStore.Dispose() 'Close down the profile store
+            End Try
+
+            TL.LogMessage("PopulateDriverComboBox", $"Completed COM driver enumeration")
+
+            If (AlpacaEnabled) Then
+                alpacaDevices = New List(Of AscomDevice) ' Initialise to a clear list with no Alpaca devices
+
+                ' Render the user interface unresponsive while discovery is underway, except for the Cancel button.
+                SetStateAlpacaDiscovering()
+                Dim discovery As AlpacaDiscovery
+                discovery = New AlpacaDiscovery(TL)
+                TL.LogMessage("StartAlpacaDiscovery", $"AlpacaDiscovery created")
+                discovery.StartDiscovery(AlpacaNumberOfBroadcasts, 200, AlpacaDiscoveryPort, AlpacaTimeout, AlpacaDnsResolution)
+                TL.LogMessage("StartAlpacaDiscovery", $"AlpacaDiscovery started")
+
+                ' Keep the UI alive while the discovery is running
+                Do
+                    Threading.Thread.Sleep(10)
+                    Application.DoEvents()
+                Loop Until discovery.DiscoveryComplete
+                TL.LogMessage("StartAlpacaDiscovery", $"AlpacaDiscovery Completed")
+
+                ' List discovered devices to the log
+                For Each ascomDevice As AscomDevice In discovery.GetAscomDevices()
+                    TL.LogMessage("StartAlpacaDiscovery", $"FOUND {ascomDevice.AscomDeviceType} {ascomDevice.AscomDeviceName} {ascomDevice.IPEndPoint.ToString()}")
+                Next
+
+                ' Get discovered devices of the requested ASCOM device type
+                alpacaDevices = discovery.GetAscomDevices(deviceTypeValue)
+                discovery.Dispose()
+
+                ' Add any Alpaca devices to the list
+                For Each device As AscomDevice In alpacaDevices
+                    TL.LogMessage("PopulateDriverComboBox", $"Discovered Alpaca device: {device.AscomDeviceType} {device.AscomDeviceName} {device.AscomDeviceUniqueId} at  http://{device.HostName}:{device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber}")
+
+                    Dim displayHostName As String = CType(IIf(device.HostName = device.IPEndPoint.Address.ToString(), device.IPEndPoint.Address.ToString(), $"{device.HostName} ({device.IPEndPoint.Address.ToString()})"), String)
+                    Dim displayName As String
+
+                    ' Get a list of dynamic drivers already configured on the system
+                    Dim foundDriver As Boolean = False
+
+                    For Each arrayListDevice As KeyValuePair In p.RegisteredDevices(deviceTypeValue) ' Iterate over a list of all devices of the current device type
+                        If arrayListDevice.Key.ToLowerInvariant().StartsWith(ALPACA_PROGID_PREFIX.ToLowerInvariant()) Then 'This is a dynamic Alpaca COM driver
+
+                            ' Get the device values to compare with the discovered device
+                            Dim deviceUniqueId As String = p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_UNIQUEID)
+                            Dim deviceHostName As String = p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_IP_ADDRESS)
+                            Dim deviceIPPort As Integer = Convert.ToInt32(p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_PORT_NUMBER))
+                            Dim deviceNumber As Integer = Convert.ToInt32(p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER))
+
+                            TL.LogMessage("PopulateDriverComboBox", $"Found existing COM dynamic driver for device {deviceUniqueId} at http://{deviceHostName}:{deviceIPPort}/api/v1/{deviceTypeValue}/{deviceNumber}")
+                            TL.LogMessage("PopulateDriverComboBox", $"{device.AscomDeviceUniqueId} {deviceUniqueId} {device.AscomDeviceUniqueId = deviceUniqueId} {device.HostName = deviceHostName} {device.IPEndPoint.Port = deviceIPPort} {device.AlpacaDeviceNumber = deviceNumber}")
+
+                            If (device.AscomDeviceUniqueId = deviceUniqueId) And (device.HostName = deviceHostName) And (device.IPEndPoint.Port = deviceIPPort) And (device.AlpacaDeviceNumber = deviceNumber) Then
+                                foundDriver = True
+                                TL.LogMessage("PopulateDriverComboBox", $"    Found existing COM driver match!")
+                            End If
+                        End If
+                    Next
+
+                    If foundDriver Then
+                        If AlpacaShowDiscoveredDevices Then
+                            displayName = $"* KNOWN ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.AscomDeviceUniqueId}"
+                            chooserList.Add(New ChooserItem(device.AscomDeviceUniqueId, device.AlpacaDeviceNumber, device.HostName, device.IPEndPoint.Port, device.AscomDeviceName), displayName)
+                        Else
+                            TL.LogMessage("PopulateDriverComboBox", $"This device MATCHES an existing COM driver so NOT adding it to the Combo box list")
+                        End If
+
+                    Else
+                        TL.LogMessage("PopulateDriverComboBox", $"This device does NOT match an existing COM driver so ADDING it to the Combo box list")
+                        displayName = $"* NEW ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.AscomDeviceUniqueId}"
+                        chooserList.Add(New ChooserItem(device.AscomDeviceUniqueId, device.AlpacaDeviceNumber, device.HostName, device.IPEndPoint.Port, device.AscomDeviceName), displayName)
+                    End If
+
+                Next
+            End If
+
+            ' Populate the device list combo box with COM and Alpaca devices. This method will self invoke if required
             PopulateDriverComboBox()
 
-            discovery.Dispose()
         Catch ex As Exception
             TL.LogMessageCrLf("StartAlpacaDiscovery", ex.ToString())
         Finally
+            p.Dispose()
+
             ' Restore a usable user interface
-            If alpacaDevices.Count > 0 Then
-                SetStateAlpacaDiscoveryCompleteFoundDevices()
+            If AlpacaEnabled Then
+                If alpacaDevices.Count > 0 Then
+                    SetStateAlpacaDiscoveryCompleteFoundDevices()
+                Else
+                    SetStateAlpacaDiscoveryCompleteNoDevices()
+                End If
             Else
-                SetStateAlpacaDiscoveryCompleteNoDevices()
+                SetStateNoAlpaca()
+
             End If
 
         End Try
     End Sub
 
     Private Sub PopulateDriverComboBox()
-        Dim profileStore As RegistryAccess
-        Dim i As Integer
-        Dim description As String
-        chooserList = New SortedList(Of ChooserItem, String)
+        ' Only proceed if there are drivers or Alpaca devices to display
+        If (chooserList.Count = 0) And (alpacaDevices.Count = 0) Then ' No drivers to add to the combo box 
+            MsgBox("There are no ASCOM " & deviceTypeValue & " drivers installed.", CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
+            Return
+        End If
 
         If CmbDriverSelector.InvokeRequired Then ' We are not running on the Ui thread
             TL.LogMessage("PopulateDriverComboBox", $"InvokeRequired from thread {Thread.CurrentThread.ManagedThreadId}")
@@ -780,119 +941,15 @@ Friend Class ChooserForm
             Try
                 TL.LogMessage("PopulateDriverComboBox", $"Running on thread: {Thread.CurrentThread.ManagedThreadId}")
 
-                profileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
-
-                ' Enumerate the available drivers, and load their descriptions and ProgIDs into the driversList generic sorted list collection. Key is ProgID, value is friendly name.
-                Try
-                    ' Get Key-Class pairs in the subkey "{DeviceType} Drivers" e.g. "Telescope Drivers"
-                    Dim driverList As SortedList(Of String, String) = profileStore.EnumKeys(deviceTypeValue & " Drivers")
-                    TL.LogMessage("PopulateDriverComboBox", $"Returned {driverList.Count} COM drivers")
-
-                    For Each driver As KeyValuePair(Of String, String) In driverList
-                        Dim driverProgId, driverName As String
-
-                        driverProgId = driver.Key
-                        driverName = driver.Value
-
-                        TL.LogMessage("PopulateDriverComboBox", $"Found ProgID: {driverProgId} , Description: @{driverName}@")
-
-                        If String.IsNullOrEmpty(driverName) Then ' Description Is missing
-                            TL.LogMessage("PopulateDriverComboBox", $"  ***** Description missing for ProgID: {driverProgId}")
-                        End If
-
-                        ' If Alpaca discovery is enabled, annotate these entries as being either real COM or Alpaca devices
-                        If AlpacaEnabled Then
-                            If (driverProgId.ToLowerInvariant().StartsWith(ALPACA_PROGID_PREFIX.ToLowerInvariant())) Then ' This is a COM driver for an Alpaca device
-                                If AlpacaShowDeviceDetails Then ' Get device details from the Profile and display these
-
-                                    Dim p As New Profile
-                                    Dim r As New RegistryAccess
-                                    p.DeviceType = deviceTypeValue
-                                    Dim ascomProfile As ASCOMProfile = p.GetProfile(driverProgId)
-                                    driverName = $"{driverName}    ({driverProgId} ==> {ascomProfile.GetValue(PROFILE_VALUE_NAME_IP_ADDRESS)}:{ascomProfile.GetValue(PROFILE_VALUE_NAME_PORT_NUMBER)}/api/v1/{deviceTypeValue}/{ascomProfile.GetValue(PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER)})" ' Annotate as COM to differentiate from Alpaca drivers
-                                    p.Dispose()
-                                Else ' Just annotate as an Alpaca device
-                                    driverName = $"{driverName}    (Alpaca)" ' Annotate as an Alpaca device
-                                End If
-                            End If
-                        Else ' This is not an ALpaca device so annotate it accordingly
-                            If AlpacaShowDeviceDetails Then ' Get device details from the Profile and display these
-                                driverName = $"{driverName}    ({driverProgId})" ' Annotate with ProgID
-                            Else
-                                ' No action just use the driver description as is
-                            End If
-
-                        End If
-                        Dim c As ChooserItem
-                        c = New ChooserItem(driverProgId, driverName)
-                        chooserList.Add(c, driverName)
-                    Next
-
-                Catch ex1 As Exception
-                    TL.LogMessageCrLf("PopulateDriverComboBox", "Exception: " & ex1.ToString)
-                    'Ignore any exceptions from this call e.g. if there are no devices of that type installed just create an empty list
-                End Try
-                TL.LogMessage("PopulateDriverComboBox", $"Completed driver enumeration")
-
-                ' Populate the driver selection combo box with driver friendly names
-                If (chooserList.Count = 0) And (alpacaDevices.Count = 0) Then ' No drivers to add to the combo box 
-                    MsgBox("There are no ASCOM " & deviceTypeValue & " drivers installed.", CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
-                Else ' There are some drivers in or to add to the combo box
-
-                    ' Add any Alpaca devices to the list
-                    For Each device As AscomDevice In alpacaDevices
-                        TL.LogMessage("PopulateDriverComboBox", $"Discovered Alpaca device: {device.AscomDeviceType} {device.AscomDeviceName} {device.AscomDeviceUniqueId} at  http://{device.HostName}:{device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber}")
-
-                        Dim displayHostName As String = CType(IIf(device.HostName = device.IPEndPoint.Address.ToString(), device.IPEndPoint.Address.ToString(), $"{device.HostName} ({device.IPEndPoint.Address.ToString()})"), String)
-                        Dim displayName As String = $"* NEW ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName} : { device.IPEndPoint.Port.ToString()} - {deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.AscomDeviceUniqueId}"
-
-                        ' Get a list of dynamic drivers already configured on the system
-
-                        Dim p As New Profile
-                        p.DeviceType = deviceTypeValue
-
-                        Dim devicesArrayList As ArrayList = p.RegisteredDevices(deviceTypeValue) ' Get a list of all devices of the current device type
-
-                        Dim foundDriver As Boolean = False
-
-                        For Each arrayListDevice As KeyValuePair In devicesArrayList
-                            If arrayListDevice.Key.ToLowerInvariant().StartsWith(ALPACA_PROGID_PREFIX.ToLowerInvariant()) Then 'This is a dynamic Alpaca COM driver
-
-                                ' Get the device values to compare with the discovered device
-                                Dim deviceUniqueId As String = p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_UNIQUEID)
-                                Dim deviceHostName As String = p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_IP_ADDRESS)
-                                Dim deviceIPPort As Integer = Convert.ToInt32(p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_PORT_NUMBER))
-                                Dim deviceNumber As Integer = Convert.ToInt32(p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER))
-
-                                TL.LogMessage("PopulateDriverComboBox", $"Found existing COM dynamic driver for device {deviceUniqueId} at http://{deviceHostName}:{deviceIPPort}/api/v1/{deviceTypeValue}/{deviceNumber}")
-                                TL.LogMessage("PopulateDriverComboBox", $"{device.AscomDeviceUniqueId} {deviceUniqueId} {device.AscomDeviceUniqueId = deviceUniqueId} {device.HostName = deviceHostName} {device.IPEndPoint.Port = deviceIPPort} {device.AlpacaDeviceNumber = deviceNumber}")
-
-                                If (device.AscomDeviceUniqueId = deviceUniqueId) And (device.HostName = deviceHostName) And (device.IPEndPoint.Port = deviceIPPort) And (device.AlpacaDeviceNumber = deviceNumber) Then
-                                    foundDriver = True
-                                    TL.LogMessage("PopulateDriverComboBox", $"    Found existing COM driver match!")
-                                End If
-                            End If
-                        Next
-
-                        If foundDriver Then
-                            TL.LogMessage("PopulateDriverComboBox", $"This device MATCHES an existing COM driver so NOT adding it to the Combo box list")
-                        Else
-                            TL.LogMessage("PopulateDriverComboBox", $"This device does NOT match an existing COM driver so ADDING it to the Combo box list")
-                            chooserList.Add(New ChooserItem(device.AscomDeviceUniqueId, device.AlpacaDeviceNumber, device.HostName, device.IPEndPoint.Port, device.AscomDeviceName), displayName)
-                        End If
-
-
-
-                        p.Dispose()
-                    Next
-                End If
+                ' Set the combo box data source to the chooserList list of items to display
+                CmbDriverSelector.SelectedIndex = -1
                 CmbDriverSelector.DataSource = New BindingSource(chooserList, Nothing)
-                CmbDriverSelector.ValueMember = "Key"
                 CmbDriverSelector.DisplayMember = "Value"
+                CmbDriverSelector.ValueMember = "Key"
 
                 CmbDriverSelector.DropDownWidth = DropDownWidth(CmbDriverSelector) ' AutoSize the combo box width
-                CmbDriverSelector.SelectedIndex = -1
 
+                ' Select the current device in the list
                 For Each driver As Generic.KeyValuePair(Of ChooserItem, String) In CmbDriverSelector.Items
                     TL.LogMessage("PopulateDriverComboBox", $"Searching for ProgID: {selectedProgIdValue}, found ProgID: {driver.Key.ProgID}")
                     If driver.Key.ProgID = selectedProgIdValue Then
@@ -906,16 +963,14 @@ Friend Class ChooserForm
                 TL.LogMessage("PopulateDriverComboBox", $"Selected ProgID is: {selectedProgIdValue}")
 
                 ' Validate the selected driver if it is a COM driver
-                If selectedChooserItem.IsComDriver Then ' This is a COM driver
+                If selectedChooserItem.IsComDriver Then ' This is a COM driver so validate that it is functional
                     ValidateDriver(selectedChooserItem.ProgID)
                 Else ' This is a new Alpaca driver
                     BtnProperties.Enabled = False ' Disable the Properties button because there is not yet a COM driver to configure
                 End If
 
-                profileStore.Dispose() 'Close down the profile store
             Catch ex As Exception
                 TL.LogMessageCrLf("PopulateDriverComboBox Top", "Exception: " & ex.ToString)
-
             End Try
         End If
     End Sub
@@ -931,6 +986,7 @@ Friend Class ChooserForm
         Dim label1 As Label = New Label()
 
         maxWidth = comboBox.Width ' Ensure that the minimum width is the width of the combo box
+        TL.LogMessage("DropDownWidth", $"Combo box: {comboBox.Name} Number of items: {comboBox.Items.Count} ")
 
         For Each obj As Generic.KeyValuePair(Of ChooserItem, String) In comboBox.Items
             label1.Text = obj.Value
@@ -1103,6 +1159,19 @@ Friend Class ChooserForm
         chooserWarningToolTip.RemoveAll()
         currentWarningTitle = ""
         currentWarningMesage = ""
+    End Sub
+
+    Private Sub ResizeChooser()
+        ' Position controls if the Chooser has an increased width
+        Me.Width = OriginalForm1Width + AlpacaChooserIncrementalWidth
+        BtnCancel.Location = New Point(OriginalBtnCancelPosition.X + AlpacaChooserIncrementalWidth, OriginalBtnCancelPosition.Y)
+        BtnOK.Location = New Point(OriginalBtnOKPosition.X + AlpacaChooserIncrementalWidth, OriginalBtnOKPosition.Y)
+        BtnProperties.Location = New Point(OriginalBtnPropertiesPosition.X + AlpacaChooserIncrementalWidth, OriginalBtnPropertiesPosition.Y)
+        CmbDriverSelector.Width = OriginalCmbDriverSelectorWidth + AlpacaChooserIncrementalWidth
+        LblAlpacaDiscovery.Left = OriginalLblAlpacaDiscoveryPosition + AlpacaChooserIncrementalWidth
+        AlpacaStatus.Left = OriginalAlpacaStatusPosition + AlpacaChooserIncrementalWidth
+        DividerLine.Width = OriginalDividerLineWidth + AlpacaChooserIncrementalWidth
+
     End Sub
 
 #End Region

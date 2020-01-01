@@ -165,7 +165,7 @@ Partial Class ChooserAlpacaConfigurationForm
         '
         'NumExtraChooserWidth
         '
-        Me.NumExtraChooserWidth.Increment = New Decimal(New Integer() {100, 0, 0, 0})
+        Me.NumExtraChooserWidth.Increment = New Decimal(New Integer() {10, 0, 0, 0})
         Me.NumExtraChooserWidth.Location = New System.Drawing.Point(165, 151)
         Me.NumExtraChooserWidth.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
         Me.NumExtraChooserWidth.Name = "NumExtraChooserWidth"
