@@ -35,14 +35,10 @@ namespace ASCOM.DynamicRemoteClients
         {
             string errMsg;
 
-            // Add the event handler for handling UI thread exceptions to the event.
-            Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
-
-            // Set the unhandled exception mode to force all exceptions to go through our handler.
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-
-            // Add the event handler for handling non-UI thread exceptions to the event. 
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+            // Add unhandled exception handlers           
+            Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException); // Add the event handler for handling UI thread exceptions to the event.
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException); // Set the unhandled exception mode to force all exceptions to go through our handler.
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException); // Add the event handler for handling non-UI thread exceptions to the event. 
 
             TL = new TraceLogger("", "DynamicClients");
             TL.Enabled = true;
@@ -75,7 +71,7 @@ namespace ASCOM.DynamicRemoteClients
                             // Validate the number of parameters - must be 5: Command DeviceType COMDeviceNumber ProgID DeviceName
                             errMsg = $"The CreateAlpacaClient command requires 4 parameters: DeviceType COMDeviceNumber ProgID DeviceName e.g. /CreateAlpacaClient Telescope 1 ASCOM.AlpacaDynamic1.Telescope \"Dynamic telescope display name\"";
                             TL.LogMessageCrLf("CreateAlpacaClient", errMsg);
-                            MessageBox.Show(errMsg);
+                            MessageBox.Show(errMsg, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
 
@@ -84,7 +80,7 @@ namespace ASCOM.DynamicRemoteClients
                         {
                             errMsg = $"The supplied ASCOM device type '{args[1]}' is not supported: The command format is \"/CreateAlpacaClient ASCOMDeviceType AlpacaDeviceUniqueID\" e.g. /CreateAlpacaClient Telescope 84DC2495-CBCE-4A9C-A703-E342C0E1F651";
                             TL.LogMessageCrLf("CreateAlpacaClient", errMsg);
-                            MessageBox.Show(errMsg);
+                            MessageBox.Show(errMsg, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
 
@@ -95,10 +91,9 @@ namespace ASCOM.DynamicRemoteClients
                         {
                             errMsg = $"The supplied COM device number is not an integer: {args[2]}";
                             TL.LogMessageCrLf("CreateAlpacaClient", errMsg);
-                            MessageBox.Show(errMsg);
+                            MessageBox.Show(errMsg, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
-
 
                         string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + SharedConstants.ALPACA_CLIENT_LOCAL_SERVER_PATH;
                         TL.LogMessage("CreateAlpacaClient", $"Alpaca local server folder: {localServerPath}");
@@ -115,7 +110,7 @@ namespace ASCOM.DynamicRemoteClients
                     default: // Unrecognised parameter so flag this to the user
                         errMsg = $"Unrecognised command: '{commandParameter}', the only valid command is: /CreateAlpacaClient DeviceType UniqueID";
                         TL.LogMessage("Main", errMsg);
-                        MessageBox.Show(errMsg);
+                        MessageBox.Show(errMsg, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                 }
             }
@@ -123,7 +118,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 errMsg = ("DynamicRemoteClients exception: " + ex.ToString());
                 TL.LogMessageCrLf("Main", errMsg);
-                MessageBox.Show(errMsg);
+                MessageBox.Show(errMsg, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             TL.Enabled = false;
@@ -134,16 +129,7 @@ namespace ASCOM.DynamicRemoteClients
         #region Support code
 
         /// <summary>
-        /// Create a new Alpaca client using the supplied parameters
-        /// </summary>
-        /// <param name="args">Arguments array that </param>
-        /// <remarks>
-        /// This command needs two parameters: DeviceType UniqueID
-        ///      DeviceType is the ASCOM driver device type e.g. Telescope, Focuser etc.
-        ///      UniqueID is the Unique ID of this Alpaca device
-        /// </remarks>
-        ///         /// <summary>
-        /// Create a compiled remote client driver assembly
+        /// Create a new Alpaca client executable using the supplied parameters
         /// </summary>
         /// <param name="DeviceType">The ASCOM device type to create</param>
         /// <param name="DeviceNumber">The number of this device type to create</param>
@@ -176,9 +162,7 @@ namespace ASCOM.DynamicRemoteClients
         /// </remarks>
         private static void CreateAlpacaClient(string DeviceType, int DeviceNumber, string ProgId, string DisplayName, string localServerPath)
         {
-
             TL.LogMessage("CreateAlpacaClient", $"Creating new ProgID: for {DeviceType} device {DeviceNumber} with ProgID: {ProgId} and display name: {DisplayName}");
-
 
             try
             {
@@ -281,12 +265,12 @@ namespace ASCOM.DynamicRemoteClients
                 TL.LogMessage("CreateAlpacaClient", string.Format("Copied ASCOM.DeviceInterfaces assembly OK"));
 
                 // Add required assembly references to make sure the compilation succeeds
-                cp.ReferencedAssemblies.Add(@"ASCOM.Attributes.dll");              // Has to be copied from the GAC to the local directory because the compiler doesn't use the GAC
-                cp.ReferencedAssemblies.Add(@"ASCOM.DeviceInterfaces.dll");        // Has to be copied from the GAC to the local directory because the compiler doesn't use the GAC
-                cp.ReferencedAssemblies.Add(@"RestSharp.dll");                     // Must be present in the current directory
-                cp.ReferencedAssemblies.Add(@"Newtonsoft.Json.dll");               // Must be present in the current directory
+                cp.ReferencedAssemblies.Add(@"ASCOM.Attributes.dll");                    // Has to be copied from the GAC to the local directory because the compiler doesn't use the GAC
+                cp.ReferencedAssemblies.Add(@"ASCOM.DeviceInterfaces.dll");              // Has to be copied from the GAC to the local directory because the compiler doesn't use the GAC
+                cp.ReferencedAssemblies.Add(@"RestSharp.dll");                           // Must be present in the current directory
+                cp.ReferencedAssemblies.Add(@"Newtonsoft.Json.dll");                     // Must be present in the current directory
                 cp.ReferencedAssemblies.Add(@"ASCOM.AlpacaClientDeviceBaseClasses.dll"); // Must be present in the current directory
-                cp.ReferencedAssemblies.Add(@"ASCOM.AlpacaClientLocalServer.exe"); // Must be present in the current directory
+                cp.ReferencedAssemblies.Add(@"ASCOM.AlpacaClientLocalServer.exe");       // Must be present in the current directory
 
                 Assembly executingAssembly = Assembly.GetExecutingAssembly();
                 cp.ReferencedAssemblies.Add(executingAssembly.Location);
@@ -295,7 +279,6 @@ namespace ASCOM.DynamicRemoteClients
                 {
                     cp.ReferencedAssemblies.Add(Assembly.Load(assemblyName).Location);
                 }
-
 
                 TL.LogMessage("CreateAlpacaClient", "Added assembly references");
 
@@ -382,66 +365,6 @@ namespace ASCOM.DynamicRemoteClients
             return sourceString.Substring(0, 1).ToUpperInvariant() + sourceString.Substring(1).ToLowerInvariant();
         }
 
-        //private static void InstallerSetupCommand()
-        //{
-        //    TL.LogMessage("Main", "Running installer setup");
-
-        //    // Find if there are any driver files already installed, indicating that this is not a first time install
-        //    string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + Form1.REMOTE_SERVER_PATH;
-
-        //    TL.LogMessage("Main", "About to create base key");
-        //    using (RegistryKey remoteRegistryBaseKey = RegistryKey.OpenBaseKey(SharedConstants.ASCOM_REMOTE_CONFIGURATION_HIVE, RegistryView.Default))
-        //    {
-        //        using (RegistryKey remoteRegistryKey = remoteRegistryBaseKey.CreateSubKey(SharedConstants.ASCOM_REMOTE_CONFIGURATION_KEY, true))
-        //        {
-        //            bool alreadyRun = bool.Parse((string)remoteRegistryKey.GetValue(ALREADY_RUN, "false"));
-        //            TL.LogMessage("Main", string.Format("Already run: {0}", alreadyRun));
-
-        //            if (!alreadyRun) // We have not run yet 
-        //            {
-        //                TL.LogMessage("Main", string.Format("First time setup - migrating profiles and creating dynamic drivers"));
-
-        //                // Only attempt first time setup if the local server executable is present
-        //                string localServerExe = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + Form1.REMOTE_SERVER_PATH + Form1.REMOTE_SERVER; // Get the local server path
-        //                if (File.Exists(localServerExe)) // Local server does exist
-        //                {
-        //                    // Create the required drivers
-        //                    TL.LogMessage("Main", string.Format("Creating one remote client driver of each device type"));
-        //                    CreateDriver("Camera", 1, localServerPath, TL);
-        //                    CreateDriver("Dome", 1, localServerPath, TL);
-        //                    CreateDriver("FilterWheel", 1, localServerPath, TL);
-        //                    CreateDriver("Focuser", 1, localServerPath, TL);
-        //                    CreateDriver("ObservingConditions", 1, localServerPath, TL);
-        //                    CreateDriver("Rotator", 1, localServerPath, TL);
-        //                    CreateDriver("SafetyMonitor", 1, localServerPath, TL);
-        //                    CreateDriver("Switch", 1, localServerPath, TL);
-        //                    CreateDriver("Telescope", 1, localServerPath, TL);
-
-        //                    // Register the drivers
-        //                    TL.LogMessage("Main", "Registering drivers");
-        //                    RunLocalServer(localServerExe, "-regserver", TL);
-
-        //                    // Record that we have run once on this PC
-        //                    TL.LogMessage("Main", string.Format("Setting already run to true"));
-        //                    remoteRegistryKey.SetValue(ALREADY_RUN, "true");
-        //                    TL.LogMessage("Main", string.Format("Set already run to true"));
-        //                }
-        //                else // Local server can not be found so report the issue
-        //                {
-        //                    string errorMessage = string.Format("Could not find local server {0}, unable to register drivers", localServerExe);
-        //                    TL.LogMessage("Main", errorMessage);
-        //                    MessageBox.Show(errorMessage);
-        //                }
-        //            }
-        //            else // Drivers are already installed so no action required
-        //            {
-        //                TL.LogMessage("Main", string.Format("This application has already run successful so this is not a first time installation - no action taken"));
-        //            }
-
-        //        }
-        //    }
-        //}
-
         /// <summary>
         /// Run the local server to register and unregister remote clients
         /// </summary>
@@ -472,7 +395,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 string errorMessage = $"local server did not complete within {LOCALSERVER_WAIT_TIME} milliseconds, return code: {exitCode}";
                 TL.LogMessage("RunLocalServer", errorMessage);
-                MessageBox.Show(errorMessage);
+                MessageBox.Show(errorMessage, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

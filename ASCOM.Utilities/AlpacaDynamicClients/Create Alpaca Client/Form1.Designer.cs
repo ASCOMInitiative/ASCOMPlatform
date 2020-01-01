@@ -20,7 +20,7 @@
             this.BtnDeleteDrivers = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.LblVersionNumber = new System.Windows.Forms.Label();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.DynamicDriversCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -49,11 +49,11 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(306, 26);
+            this.label11.Location = new System.Drawing.Point(312, 24);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(282, 20);
+            this.label11.Size = new System.Drawing.Size(294, 20);
             this.label11.TabIndex = 21;
-            this.label11.Text = "Delete Unwanted Dynamic Drivers";
+            this.label11.Text = "Remove Unwanted Dynamic Drivers";
             // 
             // LblVersionNumber
             // 
@@ -64,18 +64,19 @@
             this.LblVersionNumber.TabIndex = 23;
             this.LblVersionNumber.Text = "Version Number Unknown";
             // 
-            // checkedListBox1
+            // DynamicDriversCheckedListBox
             // 
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Location = new System.Drawing.Point(41, 65);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(832, 349);
-            this.checkedListBox1.TabIndex = 24;
+            this.DynamicDriversCheckedListBox.FormattingEnabled = true;
+            this.DynamicDriversCheckedListBox.Location = new System.Drawing.Point(41, 65);
+            this.DynamicDriversCheckedListBox.Name = "DynamicDriversCheckedListBox";
+            this.DynamicDriversCheckedListBox.Size = new System.Drawing.Size(832, 349);
+            this.DynamicDriversCheckedListBox.TabIndex = 24;
+            this.DynamicDriversCheckedListBox.TabStop = false;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(312, 435);
+            this.label1.Location = new System.Drawing.Point(324, 435);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(271, 13);
             this.label1.TabIndex = 25;
@@ -89,7 +90,7 @@
             this.CancelButton = this.BtnDeleteDrivers;
             this.ClientSize = new System.Drawing.Size(913, 465);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.checkedListBox1);
+            this.Controls.Add(this.DynamicDriversCheckedListBox);
             this.Controls.Add(this.LblVersionNumber);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.BtnDeleteDrivers);
@@ -108,7 +109,7 @@
         private System.Windows.Forms.Button BtnDeleteDrivers;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label LblVersionNumber;
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.CheckedListBox DynamicDriversCheckedListBox;
         private System.Windows.Forms.Label label1;
     }
 }
