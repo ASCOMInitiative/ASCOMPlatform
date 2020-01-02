@@ -52,7 +52,7 @@ namespace ASCOM.Remote
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmMain";
             this.ShowInTaskbar = false;
-            this.Text = "ASCOM Remote Client Driver Host";
+            this.Text = "ASCOM Alpaca Dynamic Driver Host";
             this.ResumeLayout(false);
 
         }

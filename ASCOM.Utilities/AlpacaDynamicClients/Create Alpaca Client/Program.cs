@@ -253,17 +253,6 @@ namespace ASCOM.DynamicRemoteClients
                 };
                 TL.LogMessage("CreateAlpacaClient", "Created compiler parameters");
 
-                // Copy required assemblies to the application's working directory
-                Assembly a = Assembly.Load(@"ASCOM.Attributes, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL");
-                TL.LogMessage("CreateAlpacaClient", string.Format("Copying ASCOM.Attributes assembly from {0} to {1}", a.Location, Application.StartupPath));
-                File.Copy(a.Location, Application.StartupPath + "\\" + Path.GetFileName(a.Location), true);
-                TL.LogMessage("CreateAlpacaClient", string.Format("Copied ASCOM.Attributes assembly OK"));
-
-                a = Assembly.Load(@"ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL");
-                TL.LogMessage("CreateAlpacaClient", string.Format("Copying ASCOM.DeviceInterfaces assembly from {0} to {1}", a.Location, Application.StartupPath));
-                File.Copy(a.Location, Application.StartupPath + "\\" + Path.GetFileName(a.Location), true);
-                TL.LogMessage("CreateAlpacaClient", string.Format("Copied ASCOM.DeviceInterfaces assembly OK"));
-
                 // Add required assembly references to make sure the compilation succeeds
                 cp.ReferencedAssemblies.Add(@"ASCOM.Attributes.dll");                    // Must be present in the current directory because the compiler doesn't use the GAC
                 cp.ReferencedAssemblies.Add(@"ASCOM.DeviceInterfaces.dll");              // Must be present in the current directory because the compiler doesn't use the GAC

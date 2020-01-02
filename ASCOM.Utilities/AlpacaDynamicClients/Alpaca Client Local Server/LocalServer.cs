@@ -617,6 +617,7 @@ namespace ASCOM.Remote
             if (StartedByCOM)
             {
                 s_MainForm.WindowState = FormWindowState.Minimized;
+                s_MainForm.Visible = false;
                 s_MainForm.Hide();
             }
 
@@ -649,6 +650,7 @@ namespace ASCOM.Remote
                 // Now stop the Garbage Collector thread.
                 GarbageCollector.StopThread();
                 GarbageCollector.WaitForThreadToStop();
+                GarbageCollector.Dispose();
 
                 TL.Enabled = false;
 
