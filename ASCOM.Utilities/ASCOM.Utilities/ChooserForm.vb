@@ -382,7 +382,7 @@ Friend Class ChooserForm
             Dim generatorWorkingDirectory, generatorExeFile As String
             Dim generatorProcessStartInfo As ProcessStartInfo
             ' Construct path to the executable that will dynamically create a new ALpaca COM client
-            generatorWorkingDirectory = $"{Environment.GetEnvironmentVariable("ProgramFiles(x86)")}\{ALPACA_DYNAMIC_CLIENT_GENERATOR_RELATIVE_PATH}"
+            generatorWorkingDirectory = $"{Get32BitProgramFilesPath()}\{ALPACA_DYNAMIC_CLIENT_GENERATOR_RELATIVE_PATH}"
             generatorExeFile = $"{generatorWorkingDirectory}\{ALPACA_DYNAMIC_CLIENT_EXE_NAME}"
             TL.LogMessage("OK Click", $"Creating driver for ProgID: {newProgId} using the {generatorExeFile} executable in working directory {generatorWorkingDirectory}")
 
@@ -659,7 +659,7 @@ Friend Class ChooserForm
         Dim generatorProcessStartInfo As ProcessStartInfo
 
         ' Construct path to the executable that will dynamically create a new ALpaca COM client
-        generatorWorkingDirectory = $"{Environment.GetEnvironmentVariable("ProgramFiles(x86)")}\{ALPACA_DYNAMIC_CLIENT_GENERATOR_RELATIVE_PATH}"
+        generatorWorkingDirectory = $"{Get32BitProgramFilesPath()}\{ALPACA_DYNAMIC_CLIENT_GENERATOR_RELATIVE_PATH}"
         generatorExeFile = $"{generatorWorkingDirectory}\{ALPACA_DYNAMIC_CLIENT_EXE_NAME}"
         TL.LogMessage("ManageAlpacaDevices", $"Managing drivers using the {generatorExeFile} executable in working directory {generatorWorkingDirectory}")
 
@@ -767,6 +767,23 @@ Friend Class ChooserForm
 
 #Region "Support code"
 
+    ''' <summary>
+    ''' Get the 32bit ProgramFiles path on both 32bit and 64bit systems
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function Get32BitProgramFilesPath() As String
+        ' Try to get the 64bit path
+        Dim returnValue As String = Environment.GetEnvironmentVariable("ProgramFiles(x86)")
+
+        ' If no path is returned get the 32bit path
+        If String.IsNullOrEmpty(returnValue) Then
+            returnValue = Environment.GetEnvironmentVariable("ProgramFiles")
+        End If
+
+        TL.LogMessage("Get32BitProgramFilesPath", $"Returned path: {returnValue}")
+        Return returnValue
+    End Function
+
     Private Sub InitialiseComboBox()
         Dim discoveryThread As Thread = New Thread(AddressOf DiscoverAlpacaDevicesAndPopulateDriverComboBox)
         discoveryThread.Start()
@@ -780,7 +797,7 @@ Friend Class ChooserForm
             p = New Profile()
             p.DeviceType = deviceTypeValue
 
-            TL.LogMessage("StartAlpacaDiscovery", $"Running on thread: {Thread.CurrentThread.ManagedThreadId}.")
+            TL.LogMessage("StartAlpacaDiscovery", $"Running On thread: {Thread.CurrentThread.ManagedThreadId}.")
 
             chooserList = New SortedList(Of ChooserItem, String)
 
