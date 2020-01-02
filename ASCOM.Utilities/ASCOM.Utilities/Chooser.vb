@@ -1,5 +1,6 @@
 Option Strict On
 Option Explicit On
+Imports ASCOM.Utilities.Exceptions
 Imports ASCOM.Utilities.Interfaces
 Imports System.IO
 Imports System.Reflection
@@ -140,6 +141,12 @@ Public Class Chooser
             selectedProgId = chooserFormInstance.SelectedProgId
 
             chooserFormInstance.Dispose()
+
+        Catch ex As DriverNotRegisteredException
+            MsgBox("Chooser Exception: " & ex.Message)
+            LogEvent("Chooser", "Exception", EventLogEntryType.Error, EventLogErrors.ChooserException, ex.ToString)
+            selectedProgId = ""
+
         Catch ex As Exception
             MsgBox("Chooser Exception: " & ex.ToString)
             LogEvent("Chooser", "Exception", EventLogEntryType.Error, EventLogErrors.ChooserException, ex.ToString)

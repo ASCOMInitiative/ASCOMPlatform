@@ -265,10 +265,10 @@ namespace ASCOM.DynamicRemoteClients
                 TL.LogMessage("CreateAlpacaClient", string.Format("Copied ASCOM.DeviceInterfaces assembly OK"));
 
                 // Add required assembly references to make sure the compilation succeeds
-                cp.ReferencedAssemblies.Add(@"ASCOM.Attributes.dll");                    // Has to be copied from the GAC to the local directory because the compiler doesn't use the GAC
-                cp.ReferencedAssemblies.Add(@"ASCOM.DeviceInterfaces.dll");              // Has to be copied from the GAC to the local directory because the compiler doesn't use the GAC
+                cp.ReferencedAssemblies.Add(@"ASCOM.Attributes.dll");                    // Must be present in the current directory because the compiler doesn't use the GAC
+                cp.ReferencedAssemblies.Add(@"ASCOM.DeviceInterfaces.dll");              // Must be present in the current directory because the compiler doesn't use the GAC
+                cp.ReferencedAssemblies.Add(@"ASCOM.Newtonsoft.Json.dll");               // Must be present in the current directory because the compiler doesn't use the GAC
                 cp.ReferencedAssemblies.Add(@"RestSharp.dll");                           // Must be present in the current directory
-                cp.ReferencedAssemblies.Add(@"Newtonsoft.Json.dll");                     // Must be present in the current directory
                 cp.ReferencedAssemblies.Add(@"ASCOM.AlpacaClientDeviceBaseClasses.dll"); // Must be present in the current directory
                 cp.ReferencedAssemblies.Add(@"ASCOM.AlpacaClientLocalServer.exe");       // Must be present in the current directory
 

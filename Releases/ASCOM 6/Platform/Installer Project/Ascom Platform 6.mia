@@ -1006,6 +1006,12 @@ Install Files
 Install Files
 Install Assembly
 Install Files
+Comment
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
 Install Files
 Install Files
 Install Files
@@ -2748,9 +2754,15 @@ $
 {0EBDF54B-3FBA-4415-885D-A3A011237D9B}
 {68489B5C-23EE-4AEC-AB31-A6537632AB48}
 {A6A0B545-99A6-492E-AB0D-BC59D210F8B6}
+{4CC1714A-F4E4-48E8-BCBD-5F4704A11BF1}
 {23D1AEE3-7817-47F4-BA58-5D0EE99EA6A3}
 {2AD14A0C-AFC6-43C0-9691-1BC843C62755}
-{3F161B3D-CA0B-4942-AC04-4730D35DFE60}
+{C58C5C16-7E68-4901-9323-32693A69D0CB}
+{59A83F04-5E26-4C0C-A93C-D6492E414D23}
+{47FDF76A-3E97-4146-B993-933189260DEB}
+{07ECF99B-D559-4E60-B8E8-8788A272B628}
+{59302FA6-658F-4182-A81D-AD77A3EECBC7}
+{FBA925DD-C424-4348-9DF4-10CC11E8BC2D}
 {237B0382-D0F5-4DD4-851F-A728A2614F47}
 {EE58469C-D891-48CD-A5C3-A1F9CEF67326}
 {CD7873F1-AC8F-4CCF-8011-27292C19C5C7}
@@ -4058,6 +4070,8 @@ Shortcuts have to be created in native mode in order to get the ASCOM shortcut i
 
 {32D6FEEE-8D4C-4891-B29F-747C2DD2CD23}
 
+{4CC1714A-F4E4-48E8-BCBD-5F4704A11BF1}
+Add the client creator executable and the dependencies that must be present in order to allow the dynamic compilation to succeed
 {C974C952-7C50-4503-BFEF-AF3B492C0AEE}
 MYPROGRESS
 100
@@ -8199,8 +8213,73 @@ FALSE
 FALSE
 FALSE
 FALSE
-{3F161B3D-CA0B-4942-AC04-4730D35DFE60}
+{C58C5C16-7E68-4901-9323-32693A69D0CB}
+..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll
+FALSE|
+$TARGETDIR$\Tools\CreateAlpacaClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{59A83F04-5E26-4C0C-A93C-D6492E414D23}
+..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll
+FALSE|
+$TARGETDIR$\Tools\CreateAlpacaClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{47FDF76A-3E97-4146-B993-933189260DEB}
+..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll
+FALSE|
+$TARGETDIR$\Tools\CreateAlpacaClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{07ECF99B-D559-4E60-B8E8-8788A272B628}
 ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Create Alpaca Client\bin\Release\RestSharp.dll
+FALSE|
+$TARGETDIR$\Tools\CreateAlpacaClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{59302FA6-658F-4182-A81D-AD77A3EECBC7}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.dll
+FALSE|
+$TARGETDIR$\Tools\CreateAlpacaClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{FBA925DD-C424-4348-9DF4-10CC11E8BC2D}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe
 FALSE|
 $TARGETDIR$\Tools\CreateAlpacaClients
 FALSE
@@ -13580,7 +13659,19 @@ C
 
 
 
+
+
+
+
+
+
 $
+
+
+
+
+
+
 
 
 
