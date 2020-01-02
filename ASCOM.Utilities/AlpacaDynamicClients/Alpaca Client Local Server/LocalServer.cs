@@ -88,8 +88,10 @@ namespace ASCOM.Remote
         private static ArrayList s_ComObjectAssys;              // Dynamically loaded assemblies containing served COM objects
         private static ArrayList s_ComObjectTypes;              // Served COM object types
         private static ArrayList s_ClassFactories;              // Served COM object class factories
-        private static string s_appId = "{c0c7925f-c4e2-4453-8023-6d8650167d6d}";	// Our AppId
+        private static string s_appId = "{31506222-DA7E-4900-A414-843BB3E1BD16}";	// Our AppId
         private static readonly Object lockObject = new object();
+
+        private static TraceLogger TL;
         #endregion
 
         // This property returns the main thread's id.
@@ -200,6 +202,8 @@ namespace ASCOM.Remote
             DirectoryInfo d = new DirectoryInfo(assyPath);
             foreach (FileInfo fi in d.GetFiles("*.dll"))
             {
+                TL.LogMessage("LoadComObjectAssemblies", $"Found file: {fi.FullName}");
+
                 string aPath = fi.FullName;
                 //
                 // First try to load the assembly and get the types for
@@ -212,6 +216,8 @@ namespace ASCOM.Remote
                     Type[] types = so.GetTypes();
                     foreach (Type type in types)
                     {
+                        TL.LogMessage("LoadComObjectAssemblies", $"Found type: {type.Name}");
+
                         // PWGS Now checks the type rather than the assembly
                         // Check to see if the type has the ServedClassName attribute, only use it if it does.
                         MemberInfo info = type;
@@ -219,7 +225,7 @@ namespace ASCOM.Remote
                         object[] attrbutes = info.GetCustomAttributes(typeof(ServedClassNameAttribute), false);
                         if (attrbutes.Length > 0)
                         {
-                            //MessageBox.Show("Adding Type: " + type.Name + " " + type.FullName);
+                            TL.LogMessage("LoadComObjectAssemblies", $"Type: {type.Name} has ServedClassAttribute");
                             s_ComObjectTypes.Add(type); //PWGS - much simpler
                             s_ComObjectAssys.Add(so);
                         }
@@ -227,14 +233,15 @@ namespace ASCOM.Remote
                 }
                 catch (BadImageFormatException)
                 {
+                    TL.LogMessage("LoadComObjectAssemblies", $"Preceding type is not an assembly");
                     // Probably an attempt to load a Win32 DLL (i.e. not a .net assembly)
                     // Just swallow the exception and continue to the next item.
                     continue;
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.Message,
-                        "Remote", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.Message, "Remote", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    TL.LogMessageCrLf("LoadComObjectAssemblies", $"Exception while getting types: {e.ToString()}");
                     return false;
                 }
 
@@ -304,17 +311,12 @@ namespace ASCOM.Remote
             // If reached here, we're running elevated
             //
 
-            TraceLogger TL = new TraceLogger("RemoteClientServer")
-            {
-                Enabled = true
-            };
-
             Assembly assy = Assembly.GetExecutingAssembly();
             Attribute attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyTitleAttribute));
             string assyTitle = ((AssemblyTitleAttribute)attr).Title;
             attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyDescriptionAttribute));
             string assyDescription = ((AssemblyDescriptionAttribute)attr).Description;
-
+            TL.LogMessage("RegisterObjects", $"ASsembly description: {assyDescription}");
             //
             // Local server's DCOM/AppID information
             //
@@ -328,6 +330,7 @@ namespace ASCOM.Remote
                     key.SetValue(null, assyDescription);
                     key.SetValue("AppID", s_appId);
                     key.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
+                    TL.LogMessage("RegisterObjects", $"Set APPID: {assyDescription} {s_appId} Authentication level: 1");
                 }
                 //
                 // HKCR\APPID\exename.ext
@@ -339,8 +342,8 @@ namespace ASCOM.Remote
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error while registering the server:\n" + ex.ToString(),
-                        "Remote Local Server", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "Remote Local Server", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                TL.LogMessageCrLf("RegisterObjects", $"Exception while registering AppID: {ex.ToString()}");
                 return;
             }
             finally
@@ -423,6 +426,8 @@ namespace ASCOM.Remote
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "Remote Local Server", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    TL.LogMessageCrLf("RegisterObjects", $"Exception while registering objects: {ex.ToString()}");
+
                     bFail = true;
                 }
                 finally
@@ -450,14 +455,15 @@ namespace ASCOM.Remote
             // Local server's DCOM/AppID information
             //
             Registry.ClassesRoot.DeleteSubKey(string.Format("APPID\\{0}", s_appId), false);
-            Registry.ClassesRoot.DeleteSubKey(string.Format("APPID\\{0}",
-                    Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)), false);
+            Registry.ClassesRoot.DeleteSubKey(string.Format("APPID\\{0}", Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)), false);
 
             //
             // For each of the driver assemblies
             //
             foreach (Type type in s_ComObjectTypes)
             {
+                TL.LogMessage("RegisterObjects", string.Format("Processing type: {0}, is a COM object: {1}", type.FullName, type.IsCOMObject));
+
                 string clsid = Marshal.GenerateGuidForType(type).ToString("B");
                 string progid = Marshal.GenerateProgIdForType(type);
                 string deviceType = type.Name;
@@ -591,6 +597,9 @@ namespace ASCOM.Remote
         [STAThread]
         static void Main(string[] args)
         {
+            TL = new TraceLogger("DynamicClientServer");
+            TL.Enabled = true;
+
             if (!LoadComObjectAssemblies()) return;                     // Load served COM class assemblies, get types
 
             if (!ProcessArguments(args)) return;                        // Register/Unregister
@@ -640,6 +649,10 @@ namespace ASCOM.Remote
                 // Now stop the Garbage Collector thread.
                 GarbageCollector.StopThread();
                 GarbageCollector.WaitForThreadToStop();
+
+                TL.Enabled = false;
+
+                TL.Dispose();
             }
         }
         #endregion

@@ -384,7 +384,7 @@ Friend Class ChooserForm
             ' Construct path to the executable that will dynamically create a new ALpaca COM client
             generatorWorkingDirectory = $"{Environment.GetEnvironmentVariable("ProgramFiles(x86)")}\{ALPACA_DYNAMIC_CLIENT_GENERATOR_RELATIVE_PATH}"
             generatorExeFile = $"{generatorWorkingDirectory}\{ALPACA_DYNAMIC_CLIENT_EXE_NAME}"
-            TL.LogMessage("OK Click", $"Creating driver for ProgID: {selectedProgIdValue} using the {generatorExeFile} executable in working directory {generatorWorkingDirectory}")
+            TL.LogMessage("OK Click", $"Creating driver for ProgID: {newProgId} using the {generatorExeFile} executable in working directory {generatorWorkingDirectory}")
 
             If Not File.Exists(generatorExeFile) Then
                 MsgBox("The client generator executable can not be found, please repair the ASCOM Platform.", MsgBoxStyle.Critical, "ALpaca Client Generator Not Found")
