@@ -1,16 +1,15 @@
 ﻿Check Application Requirements
 Main Setup Dialogue
-Prepare for Installation or Uninstallation
 Check Application Pre-Requisites
 Specify additional clean-up required when uninstalling
 Platform 6 Content
 Platform 5.5 files
 Platform 5 files
 Set Registry Keys
-Platform 6.1 files
-Platform 6.2 files
 Remove 64bit components
 ASCOM Cache
 Remove Previous Platforms 4 and 5 if present
 Install Application Pre-Requisites if required
 Maintenance Dialogue
+Create shortcuts
+Platform 6.1 files

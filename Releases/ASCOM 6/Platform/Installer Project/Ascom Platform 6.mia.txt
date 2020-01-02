@@ -994,11 +994,21 @@ Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\Microsof
  
 [DEFINE REGION: Alpaca Support for Chooser]
 Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll to Global Assembly Cache
-Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.pdb to $WINDIR$\Symbols\dll
 Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll to $COMMONFILES$\ASCOM\Platform\v6.5
+Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\bin\Release\ASCOM.Utilities.Support.dll to Global Assembly Cache
-Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\bin\Release\ASCOM.Utilities.Support.pdb to $WINDIR$\Symbols\dll
 Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\bin\Release\ASCOM.Utilities.Support.dll to $COMMONFILES$\ASCOM\Platform\v6.5
+Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\bin\Release\ASCOM.Utilities.Support.pdb to $WINDIR$\Symbols\dll
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.pdb to $WINDIR$\Symbols\dll
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe.config to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.pdb to $WINDIR$\Symbols\dll
+Install Assembly ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Shared Resources\bin\Release\ASCOM.AlpacaSharedResources.dll to Global Assembly Cache
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Shared Resources\bin\Release\ASCOM.AlpacaSharedResources.pdb to $WINDIR$\Symbols\dll
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Create Alpaca Client\bin\Release\ASCOM.CreateAlpacaClient.exe to $TARGETDIR$\Tools\CreateAlpacaClients
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Create Alpaca Client\bin\Release\ASCOM.CreateAlpacaClient.pdb to $TARGETDIR$\Tools\CreateAlpacaClients
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Create Alpaca Client\bin\Release\RestSharp.dll to $TARGETDIR$\Tools\CreateAlpacaClients
 [END REGION]
  
 [DEFINE REGION: Platform 6 Content]

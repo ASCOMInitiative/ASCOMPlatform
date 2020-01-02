@@ -999,6 +999,16 @@ Install Files
 Install Assembly
 Install Files
 Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Install Assembly
+Install Files
+Install Files
+Install Files
+Install Files
 Code Folding Region
 Comment
 Code Folding Region
@@ -2726,11 +2736,21 @@ $
 {32D6FEEE-8D4C-4891-B29F-747C2DD2CD23}
 {7082CCE5-A087-4EBE-9A0C-6527E3CE2DE7}
 {F809AAF9-23F4-4367-A19E-A0060E8819C1}
+{A6713E86-123D-4073-AF11-21340B811232}
 {70023001-1CC7-424B-A9D1-94D0FB6E89EA}
-{FF366DB0-3FC1-41B3-AFBB-6C64C01BD7DC}
-{C92AF444-B7EF-40E2-BF46-36DE4D4E593C}
-{E3BFD70D-B2E5-4458-AE6F-D5627096135A}
-{D6A7B78F-44F3-4C48-AA53-00190C0943E9}
+{F98BC521-A5E0-4098-A60B-1B1283A91E83}
+{7DE24A21-BEEA-4E63-9369-14D4B411CA75}
+{A44E4A54-74CF-4B8E-9425-F8B95BCBC50C}
+{9F5F901E-69E1-45A7-AA19-2D5FCB51D653}
+{364763FD-78C9-4988-A0A5-D194EE0C970B}
+{E8E06F79-055C-4ADA-8D26-FC5B201F48F4}
+{D88878CD-9952-4794-8BB1-332E93A2A8A1}
+{0EBDF54B-3FBA-4415-885D-A3A011237D9B}
+{68489B5C-23EE-4AEC-AB31-A6537632AB48}
+{A6A0B545-99A6-492E-AB0D-BC59D210F8B6}
+{23D1AEE3-7817-47F4-BA58-5D0EE99EA6A3}
+{2AD14A0C-AFC6-43C0-9691-1BC843C62755}
+{3F161B3D-CA0B-4942-AC04-4730D35DFE60}
 {237B0382-D0F5-4DD4-851F-A728A2614F47}
 {EE58469C-D891-48CD-A5C3-A1F9CEF67326}
 {CD7873F1-AC8F-4CCF-8011-27292C19C5C7}
@@ -8023,21 +8043,8 @@ FALSE
 FALSE
 FALSE
 FALSE
-{D6A7B78F-44F3-4C48-AA53-00190C0943E9}
-..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\bin\Release\ASCOM.Utilities.Support.dll
-FALSE|
-$COMMONFILES$\ASCOM\Platform\v6.5
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-{E3BFD70D-B2E5-4458-AE6F-D5627096135A}
-..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\bin\Release\ASCOM.Utilities.Support.pdb
+{70023001-1CC7-424B-A9D1-94D0FB6E89EA}
+..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -8049,7 +8056,20 @@ FALSE
 FALSE
 FALSE
 FALSE
-{FF366DB0-3FC1-41B3-AFBB-6C64C01BD7DC}
+{364763FD-78C9-4988-A0A5-D194EE0C970B}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.pdb
+FALSE|
+$WINDIR$\Symbols\dll
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{A6713E86-123D-4073-AF11-21340B811232}
 ..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6.5
@@ -8062,10 +8082,127 @@ FALSE
 FALSE
 FALSE
 FALSE
-{70023001-1CC7-424B-A9D1-94D0FB6E89EA}
-..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.pdb
+{A44E4A54-74CF-4B8E-9425-F8B95BCBC50C}
+..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\bin\Release\ASCOM.Utilities.Support.pdb
 FALSE|
 $WINDIR$\Symbols\dll
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{7DE24A21-BEEA-4E63-9369-14D4B411CA75}
+..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\bin\Release\ASCOM.Utilities.Support.dll
+FALSE|
+$COMMONFILES$\ASCOM\Platform\v6.5
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{9F5F901E-69E1-45A7-AA19-2D5FCB51D653}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.dll
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{0EBDF54B-3FBA-4415-885D-A3A011237D9B}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.pdb
+FALSE|
+$WINDIR$\Symbols\dll
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{E8E06F79-055C-4ADA-8D26-FC5B201F48F4}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{A6A0B545-99A6-492E-AB0D-BC59D210F8B6}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Shared Resources\bin\Release\ASCOM.AlpacaSharedResources.pdb
+FALSE|
+$WINDIR$\Symbols\dll
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{D88878CD-9952-4794-8BB1-332E93A2A8A1}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe.config
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{23D1AEE3-7817-47F4-BA58-5D0EE99EA6A3}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Create Alpaca Client\bin\Release\ASCOM.CreateAlpacaClient.exe
+FALSE|
+$TARGETDIR$\Tools\CreateAlpacaClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{2AD14A0C-AFC6-43C0-9691-1BC843C62755}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Create Alpaca Client\bin\Release\ASCOM.CreateAlpacaClient.pdb
+FALSE|
+$TARGETDIR$\Tools\CreateAlpacaClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{3F161B3D-CA0B-4942-AC04-4730D35DFE60}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Create Alpaca Client\bin\Release\RestSharp.dll
+FALSE|
+$TARGETDIR$\Tools\CreateAlpacaClients
 FALSE
 FALSE
 FALSE
@@ -11297,12 +11434,16 @@ TRUE
 ..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll
 TRUE
 
-{C92AF444-B7EF-40E2-BF46-36DE4D4E593C}
+{F809AAF9-23F4-4367-A19E-A0060E8819C1}
+..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll
+TRUE
+
+{F98BC521-A5E0-4098-A60B-1B1283A91E83}
 ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\bin\Release\ASCOM.Utilities.Support.dll
 TRUE
 
-{F809AAF9-23F4-4367-A19E-A0060E8819C1}
-..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll
+{68489B5C-23EE-4AEC-AB31-A6537632AB48}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Shared Resources\bin\Release\ASCOM.AlpacaSharedResources.dll
 TRUE
 
 {5177FF3C-C42D-4163-ACD1-BAF4DBE0F1C2}
@@ -13429,7 +13570,27 @@ C
 
 
 
+
+
+
+
+
+
+
+
+
+
 $
+
+
+
+
+
+
+
+
+
+
 
 
 
