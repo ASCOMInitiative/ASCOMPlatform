@@ -85,9 +85,6 @@
     <Compile Include="TraceLoggerPlus.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.2</Version>
-    </PackageReference>
     <PackageReference Include="RestSharp">
       <Version>106.6.9</Version>
     </PackageReference>
@@ -96,6 +93,10 @@
     <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj">
       <Project>{872ef2d6-ac89-4c15-ac84-6c69b040a843}</Project>
       <Name>ASCOM.DeviceInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ASCOM.Newtonsoft.Json\ASCOM.Newtonsoft.Json.csproj">
+      <Project>{febf12e1-a8cf-4086-abcd-9ab0fda69bc4}</Project>
+      <Name>ASCOM.Newtonsoft.Json</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{c9bf0a8b-594f-4ab9-938a-edc8448d8520}</Project>

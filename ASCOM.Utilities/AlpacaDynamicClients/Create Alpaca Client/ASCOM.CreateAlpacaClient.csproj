@@ -95,9 +95,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.2</Version>
-    </PackageReference>
     <PackageReference Include="RestSharp">
       <Version>106.6.9</Version>
     </PackageReference>
