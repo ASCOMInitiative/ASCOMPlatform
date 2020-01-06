@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.CodeDom.Compiler;
 using System.CodeDom;
 using System.Reflection;
+using ASCOM.Remote;
 
 namespace ASCOM.DynamicRemoteClients
 {
@@ -39,7 +40,7 @@ namespace ASCOM.DynamicRemoteClients
         // Constants shared with the main program
         internal const string REMOTE_SERVER_PATH = @"\ASCOM\AlpacaDynamicClients\"; // Relative path from CommonFiles
         internal const string REMOTE_SERVER = @"ASCOM.AlpacaClientLocalServer.exe"; // Name of the remote client local server application
-        internal const string REMOTE_CLIENT_DRIVER_NAME_TEMPLATE = @"ASCOM.AlpacaDynamic*.{0}.*"; // Template for finding remote client driver files
+        internal const string REMOTE_CLIENT_DRIVER_NAME_TEMPLATE = SharedConstants.DRIVER_PROGID_BASE + @"*.{0}.*"; // Template for finding remote client driver files
 
         // Global variables within this class
         private TraceLogger TL;
@@ -54,7 +55,7 @@ namespace ASCOM.DynamicRemoteClients
             try
             {
                 InitializeComponent();
-
+                
                 TL = TLParameter; // Save the supplied trace logger
 
                 Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
@@ -200,7 +201,7 @@ namespace ASCOM.DynamicRemoteClients
                 // Disable controls so that the process can't be stopped part way through 
                 BtnDeleteDrivers.Enabled = false;
 
-                // Create variables pointing to the dynamic driv er's local server folder and executable
+                // Create variables pointing to the dynamic driver's local server folder and executable
                 string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + REMOTE_SERVER_PATH;
                 string localServerExe = localServerPath + REMOTE_SERVER;
 

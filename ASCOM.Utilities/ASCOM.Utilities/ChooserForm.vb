@@ -21,7 +21,6 @@ Friend Class ChooserForm
     Private Const TOOLTIP_PROPERTIES_MESSAGE As String = "Check or change driver Properties (configuration)"
     Private Const TOOLTIP_PROPERTIES_FIRST_TIME_MESSAGE As String = "You must check driver configuration before first time use, please click the Properties... button." & vbCrLf & "The OK button will remain greyed out until this is done."
     Private Const CHOOSER_LIST_WIDTH_NEW_ALPACA As Integer = 600 ' Width of the Chooser list when new Alpaca devices are present
-    Private Const ALPACA_PROGID_PREFIX As String = "ASCOM.AlpacaDynamic" ' Prefix applied to all COM drivers created to front Alpaca devices
 
     ' Persistence constants
     Private Const CONFIGRATION_SUBKEY As String = "Chooser\Configuration" ' Store configuration in a subkey under the Chooser key
@@ -243,7 +242,7 @@ Friend Class ChooserForm
                 TL.LogMessage("comboProduct_DrawItem", $"IsComDriver: {chooseritem.Key.IsComDriver} {chooseritem.Key.Name} {chooseritem.Value}")
                 text = chooseritem.Value
                 If chooseritem.Key.IsComDriver Then
-                    If chooseritem.Key.ProgID.ToLowerInvariant().StartsWith(ALPACA_PROGID_PREFIX.ToLowerInvariant()) Then
+                    If chooseritem.Key.ProgID.ToLowerInvariant().StartsWith(DRIVER_PROGID_BASE.ToLowerInvariant()) Then
                         brush = Brushes.Red
                         colour = Color.Red
                     Else
@@ -373,7 +372,9 @@ Friend Class ChooserForm
 
                 deviceNumber += 1
                 newProgId = $"{DRIVER_PROGID_BASE}{deviceNumber}.{deviceTypeValue}"
+                Dim compatibilityMessage As String = VersionCode.DriverCompatibilityMessage(newProgId, ApplicationBits, CType(TL, TraceLogger))
                 typeFromProgId = Type.GetTypeFromProgID(newProgId)
+                TL.LogMessage("CreateAlpacaClient", $"Testing ProgID: {newProgId} Type name: {typeFromProgId?.Name} Compatibility message: '{compatibilityMessage}'")
 
             Loop While (Not (typeFromProgId Is Nothing))
 
@@ -458,6 +459,7 @@ Friend Class ChooserForm
             Else ' This is a new Alpaca driver
                 TL.LogMessage("SelectedIndexChanged", $"New Alpaca driver selected : {selectedChooserItem.Name}")
                 BtnProperties.Enabled = False ' Disable the Properties button because there is not yet a COM driver to configure
+                WarningTooltipClear()
             End If
 
         Else ' Selected index is negative
@@ -822,7 +824,7 @@ Friend Class ChooserForm
                     End If
 
                     ' Annotate the device description as configured
-                    If (driverProgId.ToLowerInvariant().StartsWith(ALPACA_PROGID_PREFIX.ToLowerInvariant())) Then ' This is a COM driver for an Alpaca device
+                    If (driverProgId.ToLowerInvariant().StartsWith(DRIVER_PROGID_BASE.ToLowerInvariant())) Then ' This is a COM driver for an Alpaca device
                         If AlpacaShowDeviceDetails Then ' Get device details from the Profile and display these
                             driverName = $"{driverName}    ({driverProgId} ==> {p.GetValue(driverProgId, PROFILE_VALUE_NAME_IP_ADDRESS, Nothing)}:{p.GetValue(driverProgId, PROFILE_VALUE_NAME_PORT_NUMBER, Nothing)}/api/v1/{deviceTypeValue}/{p.GetValue(driverProgId, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER, Nothing)})" ' Annotate as COM to differentiate from Alpaca drivers
                         Else ' Just annotate as an Alpaca device
@@ -886,7 +888,7 @@ Friend Class ChooserForm
                     Dim foundDriver As Boolean = False
 
                     For Each arrayListDevice As KeyValuePair In p.RegisteredDevices(deviceTypeValue) ' Iterate over a list of all devices of the current device type
-                        If arrayListDevice.Key.ToLowerInvariant().StartsWith(ALPACA_PROGID_PREFIX.ToLowerInvariant()) Then 'This is a dynamic Alpaca COM driver
+                        If arrayListDevice.Key.ToLowerInvariant().StartsWith(DRIVER_PROGID_BASE.ToLowerInvariant()) Then 'This is a dynamic Alpaca COM driver
 
                             ' Get the device values to compare with the discovered device
                             Dim deviceUniqueId As String = p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_UNIQUEID)
@@ -983,6 +985,7 @@ Friend Class ChooserForm
                 If selectedChooserItem.IsComDriver Then ' This is a COM driver so validate that it is functional
                     ValidateDriver(selectedChooserItem.ProgID)
                 Else ' This is a new Alpaca driver
+                    WarningTooltipClear()
                     BtnProperties.Enabled = False ' Disable the Properties button because there is not yet a COM driver to configure
                 End If
 
@@ -1108,27 +1111,27 @@ Friend Class ChooserForm
         End If
     End Sub
 
-    Private Sub ValidateDriver(identifier As String)
+    Private Sub ValidateDriver(progId As String)
         Dim deviceInitialised As String, ProfileStore As RegistryAccess
         ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
 
-        If Not String.IsNullOrEmpty(identifier) Then
+        If Not String.IsNullOrEmpty(progId) Then
 
-            If Not (identifier = "") Then ' Something selected
+            If Not (progId = "") Then ' Something selected
 
                 WarningTooltipClear() 'Hide any previous message
 
-                TL.LogMessage("ValidateDriver", "ProgID:" & identifier & ", Bitness: " & ApplicationBits.ToString)
-                driverIsCompatible = VersionCode.DriverCompatibilityMessage(identifier, ApplicationBits, CType(TL, TraceLogger)) 'Get compatibility warning message, if any
+                TL.LogMessage("ValidateDriver", "ProgID:" & progId & ", Bitness: " & ApplicationBits.ToString)
+                driverIsCompatible = VersionCode.DriverCompatibilityMessage(progId, ApplicationBits, CType(TL, TraceLogger)) 'Get compatibility warning message, if any
 
                 If driverIsCompatible <> "" Then 'This is an incompatible driver
                     BtnProperties.Enabled = False ' So prevent access!
                     BtnOK.Enabled = False
                     TL.LogMessage("ValidateDriver", "Showing incompatible driver message")
-                    WarningToolTipShow("Incompatible Driver (" & identifier & ")", driverIsCompatible)
+                    WarningToolTipShow("Incompatible Driver (" & progId & ")", driverIsCompatible)
                 Else ' Driver is compatible
                     BtnProperties.Enabled = True ' Turn on Properties
-                    deviceInitialised = ProfileStore.GetProfile("Chooser", identifier & " Init")
+                    deviceInitialised = ProfileStore.GetProfile("Chooser", progId & " Init")
                     If LCase(deviceInitialised) = "true" Then
                         BtnOK.Enabled = True ' This device has been initialized
                         currentWarningMesage = ""
