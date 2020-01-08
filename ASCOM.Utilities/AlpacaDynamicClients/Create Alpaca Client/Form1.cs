@@ -231,17 +231,38 @@ namespace ASCOM.DynamicRemoteClients
                             }
                             else // A driver with this ProgID is already in the list so no need to add it again, which would just create a duplicate entry
                             {
+                                TL.LogMessage("ReadConfiguration", $"{progId} - A driver with this ProgID already exists - no action taken");
                                 // No action
                             }
                         }
-                        else // DLL exists so this driver will already have been listed
+                        else // Driver is COm registered and its driver DLL exists
                         {
-                            // No action required
+                            // Test whether the device is ASCOM registered
+                            if (!profile.IsRegistered(progId)) // The driver is not registered in the ASCOM Profile
+                            {
+                                // Create a new list entry
+                                DynamicDriverRegistration foundDriver = new DynamicDriverRegistration();
+                                foundDriver.ProgId = progId;
+                                foundDriver.DeviceType = deviceType;
+                                foundDriver.Name = progId;
+                                foundDriver.InstallState = InstallationState.MissingDriver;
+                                foundDriver.Description = $"{foundDriver.ProgId} - Driver is COM registered but not ASCOM registered - Deletion recommended";
+
+                                dynamicDrivers.Add(foundDriver);
+                                dynamicDriversCheckedListBox.Items.Add(foundDriver);
+                                TL.LogMessage("ReadConfiguration", $"Adding driver to deletion list:  {progId}");
+                            }
+                            else // The driver is registered in the ASCOM Profile
+                            {
+                                TL.LogMessage("ReadConfiguration", $"{progId} - Driver DLL exists and is registered for COm and ASCOM so this driver will have been already listed - no action taken");
+                                // No action required
+                            }
                         }
                     }
                     else // This progID is not registered
                     {
                         // No action
+                        TL.LogMessage("ReadConfiguration", $"{progId} - ProgID is not COM registered - no action taken");
                     }
                 }
             }

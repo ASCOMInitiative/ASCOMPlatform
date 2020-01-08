@@ -22,18 +22,18 @@ namespace ASCOM.Utilities.Support
         /// <param name="ascomDdeviceName">ASCOM device name</param>
         /// <param name="ascomDeviceType">ASCOM device type</param>
         /// <param name="alpacaDeviceNumber">Alpaca API device number</param>
-        /// <param name="ascomDeviceUniqueId">ASCOM device unique ID</param>
+        /// <param name="uniqueId">ASCOM device unique ID</param>
         /// <param name="ipEndPoint">ALpaca device IP endpoint</param>
         /// <param name="hostName">ALapca device host name</param>
         /// <param name="alpacaUniqueId">Alpaca device unique ID</param>
         /// <param name="interfaceVersion">Supported Alpaca interface version</param>
         /// <param name="statusMessage">ALapca device status message</param>
-        public AscomDevice(string ascomDdeviceName, string ascomDeviceType, int alpacaDeviceNumber, string ascomDeviceUniqueId, IPEndPoint ipEndPoint, string hostName, int interfaceVersion, string statusMessage)
+        public AscomDevice(string ascomDdeviceName, string ascomDeviceType, int alpacaDeviceNumber, string uniqueId, IPEndPoint ipEndPoint, string hostName, int interfaceVersion, string statusMessage)
         {
             AscomDeviceName = ascomDdeviceName;
             AscomDeviceType = ascomDeviceType;
             AlpacaDeviceNumber = alpacaDeviceNumber;
-            AscomDeviceUniqueId = ascomDeviceUniqueId;
+            UniqueId = uniqueId;
             IPEndPoint = ipEndPoint;
             HostName = hostName;
             InterfaceVersion = interfaceVersion;
@@ -58,7 +58,7 @@ namespace ASCOM.Utilities.Support
         /// <summary>
         /// ASCOM device unique ID
         /// </summary>
-        public string AscomDeviceUniqueId { get; set; }
+        public string UniqueId { get; set; }
 
         /// <summary>
         /// Alpaca device IP endpoint

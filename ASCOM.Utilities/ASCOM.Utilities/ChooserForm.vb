@@ -459,6 +459,7 @@ Friend Class ChooserForm
                 TL.LogMessage("SelectedIndexChanged", $"New Alpaca driver selected : {selectedChooserItem.Name}")
                 BtnProperties.Enabled = False ' Disable the Properties button because there is not yet a COM driver to configure
                 WarningTooltipClear()
+                BtnOK.Enabled = True
             End If
 
         Else ' Selected index is negative
@@ -878,10 +879,13 @@ Friend Class ChooserForm
 
                 ' Add any Alpaca devices to the list
                 For Each device As AscomDevice In alpacaDevices
-                    TL.LogMessage("PopulateDriverComboBox", $"Discovered Alpaca device: {device.AscomDeviceType} {device.AscomDeviceName} {device.AscomDeviceUniqueId} at  http://{device.HostName}:{device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber}")
+                    TL.LogMessage("PopulateDriverComboBox", $"Discovered Alpaca device: {device.AscomDeviceType} {device.AscomDeviceName} {device.UniqueId} at  http://{device.HostName}:{device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber}")
 
                     Dim displayHostName As String = CType(IIf(device.HostName = device.IPEndPoint.Address.ToString(), device.IPEndPoint.Address.ToString(), $"{device.HostName} ({device.IPEndPoint.Address.ToString()})"), String)
                     Dim displayName As String
+
+                    Dim deviceUniqueId, deviceHostName As String
+                    Dim deviceIPPort, deviceNumber As Integer
 
                     ' Get a list of dynamic drivers already configured on the system
                     Dim foundDriver As Boolean = False
@@ -889,16 +893,43 @@ Friend Class ChooserForm
                     For Each arrayListDevice As KeyValuePair In p.RegisteredDevices(deviceTypeValue) ' Iterate over a list of all devices of the current device type
                         If arrayListDevice.Key.ToLowerInvariant().StartsWith(DRIVER_PROGID_BASE.ToLowerInvariant()) Then 'This is a dynamic Alpaca COM driver
 
-                            ' Get the device values to compare with the discovered device
-                            Dim deviceUniqueId As String = p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_UNIQUEID)
-                            Dim deviceHostName As String = p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_IP_ADDRESS)
-                            Dim deviceIPPort As Integer = Convert.ToInt32(p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_PORT_NUMBER))
-                            Dim deviceNumber As Integer = Convert.ToInt32(p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER))
+                            ' Get and validate the device values to compare with the discovered device
+                            Try
+                                deviceUniqueId = p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_UNIQUEID)
+                            Catch ex As Exception
+                                MessageBox.Show($"{arrayListDevice.Key} - Unable to read the device unique ID. This driver should be deleted and re-created", "Dynamic Driver Corrupted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                Continue For ' Don't process this driver further, move on to the next driver
+                            End Try
+
+                            Try
+                                deviceHostName = p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_IP_ADDRESS)
+                                If String.IsNullOrEmpty(deviceHostName) Then
+                                    MessageBox.Show($"{arrayListDevice.Key} - The device IP address is blank. This driver should be deleted and re-created", "Dynamic Driver Corrupted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                    Continue For ' Don't process this driver further, move on to the next driver
+                                End If
+                            Catch ex As Exception
+                                MessageBox.Show($"{arrayListDevice.Key} - Unable to read the device IP address. This driver should be deleted and re-created", "Dynamic Driver Corrupted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                Continue For ' Don't process this driver further, move on to the next driver
+                            End Try
+
+                            Try
+                                deviceIPPort = Convert.ToInt32(p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_PORT_NUMBER))
+                            Catch ex As Exception
+                                MessageBox.Show($"{arrayListDevice.Key} - Unable to read the device IP Port. This driver should be deleted and re-created", "Dynamic Driver Corrupted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                Continue For ' Don't process this driver further, move on to the next driver
+                            End Try
+
+                            Try
+                                deviceNumber = Convert.ToInt32(p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER))
+                            Catch ex As Exception
+                                MessageBox.Show($"{arrayListDevice.Key} - Unable to read the device number. This driver should be deleted and re-created", "Dynamic Driver Corrupted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                Continue For ' Don't process this driver further, move on to the next driver
+                            End Try
 
                             TL.LogMessage("PopulateDriverComboBox", $"Found existing COM dynamic driver for device {deviceUniqueId} at http://{deviceHostName}:{deviceIPPort}/api/v1/{deviceTypeValue}/{deviceNumber}")
-                            TL.LogMessage("PopulateDriverComboBox", $"{device.AscomDeviceUniqueId} {deviceUniqueId} {device.AscomDeviceUniqueId = deviceUniqueId} {device.HostName = deviceHostName} {device.IPEndPoint.Port = deviceIPPort} {device.AlpacaDeviceNumber = deviceNumber}")
+                            TL.LogMessage("PopulateDriverComboBox", $"{device.UniqueId} {deviceUniqueId} {device.UniqueId = deviceUniqueId} {device.HostName = deviceHostName} {device.IPEndPoint.Port = deviceIPPort} {device.AlpacaDeviceNumber = deviceNumber}")
 
-                            If (device.AscomDeviceUniqueId = deviceUniqueId) And (device.HostName = deviceHostName) And (device.IPEndPoint.Port = deviceIPPort) And (device.AlpacaDeviceNumber = deviceNumber) Then
+                            If (device.UniqueId = deviceUniqueId) And (device.HostName = deviceHostName) And (device.IPEndPoint.Port = deviceIPPort) And (device.AlpacaDeviceNumber = deviceNumber) Then
                                 foundDriver = True
                                 TL.LogMessage("PopulateDriverComboBox", $"    Found existing COM driver match!")
                             End If
@@ -907,16 +938,16 @@ Friend Class ChooserForm
 
                     If foundDriver Then
                         If AlpacaShowDiscoveredDevices Then
-                            displayName = $"* KNOWN ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.AscomDeviceUniqueId}"
-                            chooserList.Add(New ChooserItem(device.AscomDeviceUniqueId, device.AlpacaDeviceNumber, device.HostName, device.IPEndPoint.Port, device.AscomDeviceName), displayName)
+                            displayName = $"* KNOWN ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.UniqueId}"
+                            chooserList.Add(New ChooserItem(device.UniqueId, device.AlpacaDeviceNumber, device.HostName, device.IPEndPoint.Port, device.AscomDeviceName), displayName)
                         Else
                             TL.LogMessage("PopulateDriverComboBox", $"This device MATCHES an existing COM driver so NOT adding it to the Combo box list")
                         End If
 
                     Else
                         TL.LogMessage("PopulateDriverComboBox", $"This device does NOT match an existing COM driver so ADDING it to the Combo box list")
-                        displayName = $"* NEW ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.AscomDeviceUniqueId}"
-                        chooserList.Add(New ChooserItem(device.AscomDeviceUniqueId, device.AlpacaDeviceNumber, device.HostName, device.IPEndPoint.Port, device.AscomDeviceName), displayName)
+                        displayName = $"* NEW ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.UniqueId}"
+                        chooserList.Add(New ChooserItem(device.UniqueId, device.AlpacaDeviceNumber, device.HostName, device.IPEndPoint.Port, device.AscomDeviceName), displayName)
                     End If
 
                 Next
