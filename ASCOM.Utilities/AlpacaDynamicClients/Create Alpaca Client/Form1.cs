@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.CodeDom.Compiler;
 using System.CodeDom;
 using System.Reflection;
+using Microsoft.Win32;
 
 namespace ASCOM.DynamicRemoteClients
 {
@@ -292,12 +293,12 @@ namespace ASCOM.DynamicRemoteClients
                 {
                     TL.LogMessage("DeleteDrivers", string.Format("Found local server {0}", localServerExe));
 
-                    // Unregister all current drivers
-                    CreateAlpacaClients.RunLocalServer(localServerExe, "-unregserver", TL);
-
                     // Iterate over each device that has been checked in the UI checked list box
                     foreach (DynamicDriverRegistration driver in dynamicDriversCheckedListBox.CheckedItems)
                     {
+                        // COM unregister the driver
+                        ComUnregister(driver.ProgId);
+
                         // Delete the driver executable and it's PDB file
                         TL.LogMessage("DeleteDrivers", $"Deleting driver {driver.Description}");
                         string driverFileName = $"{localServerPath}{driver.ProgId}.dll";
@@ -316,19 +317,28 @@ namespace ASCOM.DynamicRemoteClients
                             MessageBox.Show(errorMessage, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
 
-                        // Remove the ASCOM Profile information that is not removed when the driver is unregistered
-                        TL.LogMessage("DeleteDrivers", $"Removing driver Profile registration for {driver.DeviceType} driver: {driver.ProgId}");
-                        profile.DeviceType = driver.DeviceType;
-                        profile.Unregister(driver.ProgId);
+
+                        // Try to remove the ASCOM Profile information that is not removed when the driver is unregistered
+                        try
+                        {
+                            TL.LogMessage("DeleteDrivers", $"Removing driver Profile registration for {driver.DeviceType} driver: {driver.ProgId}");
+                            profile.DeviceType = driver.DeviceType;
+                            profile.Unregister(driver.ProgId);
+                        }
+                        catch (Exception ex)
+                        {
+                            TL.LogMessageCrLf("DeleteDriversException", $"Exception removing driver: {ex.ToString()}");
+                        }
+
                     }
 
                     // Re-register the remaining drivers
-                    CreateAlpacaClients.RunLocalServer(localServerExe, "-regserver", TL);
+                    //                    CreateAlpacaClients.RunLocalServer(localServerExe, "-regserver", TL);
                     ReadConfiguration();
                 }
                 else // Local server can not be found
                 {
-                    string errorMessage = $"Could not find local server: {localServerExe}";
+                    string errorMessage = $"Could not find the dynamic driver local server, please repair the ASCOM Platform: {localServerExe}";
                     TL.LogMessage("DeleteDrivers", errorMessage);
                     MessageBox.Show(errorMessage, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 } // Local server can not be found
@@ -341,6 +351,86 @@ namespace ASCOM.DynamicRemoteClients
             finally
             {
                 BtnDeleteDrivers.Enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Unregister a COM driver
+        /// </summary>
+        /// <param name="progId">ProgID of the driver to be unregistered</param>
+        private void ComUnregister(string progId)
+        {
+            try
+            {
+                RegistryKey classIdKey = Registry.ClassesRoot.OpenSubKey($"{progId}\\CLSID");
+
+                if (classIdKey != null)
+                {
+                    try
+                    {
+                        string classId = (string)classIdKey.GetValue("");
+                        if (!string.IsNullOrEmpty(classId)) // We have a class ID value
+                        {
+                            TL.LogMessage("ComUnregister", $"Deleting ProgID {progId}, which has a class ID of: {classId}");
+
+                            // Delete the ProgID entries in the 32 and 64bit registry sections
+                            Registry.ClassesRoot.DeleteSubKey($"{progId}\\CLSID", false);
+                            Registry.ClassesRoot.DeleteSubKey(progId, false);
+
+                            if (Environment.Is64BitProcess)
+                            {
+                                Registry.ClassesRoot.DeleteSubKey($"Wow6432Node\\{progId}\\CLSID", false);
+                                Registry.ClassesRoot.DeleteSubKey($"Wow6432Node\\{progId}", false);
+                            }
+
+                            // Delete the CLSID entries in the 32 and 64bit registry sections
+                            Registry.ClassesRoot.DeleteSubKey($"CLSID\\{classId}\\Implemented Categories\\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}", false);
+                            Registry.ClassesRoot.DeleteSubKey($"CLSID\\{classId}\\Implemented Categories", false);
+                            Registry.ClassesRoot.DeleteSubKey($"CLSID\\{classId}\\ProgId", false);
+                            Registry.ClassesRoot.DeleteSubKey($"CLSID\\{classId}\\LocalServer32", false);
+                            Registry.ClassesRoot.DeleteSubKey($"CLSID\\{classId}\\Programmable", false);
+                            Registry.ClassesRoot.DeleteSubKey($"CLSID\\{classId}", false);
+
+                            if (Environment.Is64BitProcess)
+                            {
+                                Registry.ClassesRoot.DeleteSubKey($"Wow6432Node\\CLSID\\{classId}\\Implemented Categories\\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}", false);
+                                Registry.ClassesRoot.DeleteSubKey($"Wow6432Node\\CLSID\\{classId}\\Implemented Categories", false);
+                                Registry.ClassesRoot.DeleteSubKey($"Wow6432Node\\CLSID\\{classId}\\ProgId", false);
+                                Registry.ClassesRoot.DeleteSubKey($"Wow6432Node\\CLSID\\{classId}\\LocalServer32", false);
+                                Registry.ClassesRoot.DeleteSubKey($"Wow6432Node\\CLSID\\{classId}\\Programmable", false);
+                                Registry.ClassesRoot.DeleteSubKey($"Wow6432Node\\CLSID\\{classId}", false);
+                            }
+                            TL.LogMessage("ComUnregister", $"Deleted ProgID {progId}");
+                        }
+                        else
+                        {
+                            // Cannot get the class ID value
+                            TL.LogMessage("ComUnregister", $"Cannot find the class ID value - cannot proceed further");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        TL.LogMessageCrLf("ComUnregister", $"Exception retrieving CLSID, cannot proceed further: \r\n{ex.ToString()}");
+                    }
+                }
+                else
+                {
+                    // Cannot open the CLSID key to read the class ID
+                    TL.LogMessage("ComUnregister", $"Cannot open the CLSID key - cannot proceed further");
+                }
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessageCrLf("ComUnregister", $"Exception opening CLSID key, cannot proceed further: \r\n{ex.ToString()}");
+            }
+        }
+
+        private void ChkSelectAll_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox checkBox = (CheckBox)sender;
+            for (int i = 0; i < dynamicDriversCheckedListBox.Items.Count; i++)
+            {
+                dynamicDriversCheckedListBox.SetItemChecked(i, checkBox.Checked);
             }
         }
     }
