@@ -169,7 +169,7 @@ namespace ASCOM.DynamicRemoteClients
                 CodeCompileUnit program = new CodeCompileUnit();
 
                 // Generate the namespace
-                CodeNamespace ns = new CodeNamespace("ASCOM.Remote");
+                CodeNamespace ns = new CodeNamespace("ASCOM.DynamicRemoteClients");
 
                 // Add required imports
                 ns.Imports.Add(new CodeNamespaceImport("System"));
