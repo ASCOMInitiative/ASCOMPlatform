@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using ASCOM.DeviceInterface;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     public class TrackingRatesResponse : RestResponseBase
     {

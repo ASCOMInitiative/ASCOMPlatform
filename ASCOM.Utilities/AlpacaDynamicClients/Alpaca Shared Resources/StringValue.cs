@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     /// <summary>
     /// Class to hold a string value for use with the data grid view control. 

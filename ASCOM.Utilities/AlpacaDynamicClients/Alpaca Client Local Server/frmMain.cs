@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     public partial class FrmMain : Form
     {

@@ -1,6 +1,6 @@
 ﻿using ASCOM.Utilities;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     public class TraceLoggerPlus : TraceLogger
     {

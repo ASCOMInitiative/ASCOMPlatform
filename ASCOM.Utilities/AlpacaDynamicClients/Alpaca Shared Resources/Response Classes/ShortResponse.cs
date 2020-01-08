@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     public class ShortResponse : RestResponseBase
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     /// <summary>
     /// Summary description for GarbageCollection.

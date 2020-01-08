@@ -24,7 +24,7 @@ using System.Threading;
 using System.Security.Principal;
 using System.Diagnostics;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     public static class Server
     {

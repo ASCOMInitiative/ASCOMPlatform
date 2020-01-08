@@ -9,7 +9,6 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.Threading;
 using System.Reflection;
-using ASCOM.Remote;
 using System.CodeDom;
 using System.CodeDom.Compiler;
 
@@ -142,7 +141,7 @@ namespace ASCOM.DynamicRemoteClients
         /// 
         /// using System;
         /// using System.Runtime.InteropServices;
-        /// namespace ASCOM.Remote
+        /// namespace ASCOM.DynamicRemoteClients
         /// {
         ///     [Guid("70495DF9-C01E-4987-AE49-E12967202C7F")]             <====> The GUID is dynamically created on the user's machine so that it is unique for every driver
         ///     [ProgId(DRIVER_PROGID)]

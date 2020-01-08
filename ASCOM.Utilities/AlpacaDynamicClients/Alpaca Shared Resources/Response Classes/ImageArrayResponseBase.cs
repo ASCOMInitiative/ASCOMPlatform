@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     public class ImageArrayResponseBase : RestResponseBase
     {

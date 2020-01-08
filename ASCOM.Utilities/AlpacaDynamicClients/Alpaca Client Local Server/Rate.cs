@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     #region Rate class
     //

@@ -12,9 +12,10 @@
         public string UniqueID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public InstallationState InstallState { get; set; }
 
         /// <summary>
-        /// The YoString method is used by the checked list box control to provide the display description 
+        /// The ToString method is used by the checked list box control to provide the display description 
         /// </summary>
         /// <returns></returns>
         public override string ToString()

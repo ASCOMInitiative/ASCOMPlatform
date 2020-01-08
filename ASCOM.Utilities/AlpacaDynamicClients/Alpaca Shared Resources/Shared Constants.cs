@@ -1,7 +1,7 @@
 ﻿using Microsoft.Win32;
 using System.Runtime.Serialization.Formatters;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     public static class SharedConstants
     {

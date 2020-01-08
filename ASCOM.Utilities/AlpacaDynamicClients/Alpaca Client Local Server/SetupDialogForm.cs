@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     public partial class SetupDialogForm : Form
     {

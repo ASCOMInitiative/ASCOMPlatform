@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     [ComVisible(false)]
     public class ReferenceCountedObjectBase

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     public abstract class RestResponseBase
     {

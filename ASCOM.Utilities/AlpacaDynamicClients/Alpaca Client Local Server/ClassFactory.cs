@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Collections;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
 
     #region C# Definition of IClassFactory

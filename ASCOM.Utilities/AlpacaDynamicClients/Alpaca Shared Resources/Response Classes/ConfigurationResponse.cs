@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Concurrent;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     public class ConfigurationResponse : RestResponseBase
     {

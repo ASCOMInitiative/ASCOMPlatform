@@ -20,7 +20,7 @@
             this.BtnDeleteDrivers = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.LblVersionNumber = new System.Windows.Forms.Label();
-            this.DynamicDriversCheckedListBox = new System.Windows.Forms.CheckedListBox();
+            //this.DynamicDriversCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -66,12 +66,12 @@
             // 
             // DynamicDriversCheckedListBox
             // 
-            this.DynamicDriversCheckedListBox.FormattingEnabled = true;
-            this.DynamicDriversCheckedListBox.Location = new System.Drawing.Point(41, 65);
-            this.DynamicDriversCheckedListBox.Name = "DynamicDriversCheckedListBox";
-            this.DynamicDriversCheckedListBox.Size = new System.Drawing.Size(832, 349);
-            this.DynamicDriversCheckedListBox.TabIndex = 24;
-            this.DynamicDriversCheckedListBox.TabStop = false;
+            //this.DynamicDriversCheckedListBox.FormattingEnabled = true;
+            //this.DynamicDriversCheckedListBox.Location = new System.Drawing.Point(41, 65);
+            //this.DynamicDriversCheckedListBox.Name = "DynamicDriversCheckedListBox";
+            //this.DynamicDriversCheckedListBox.Size = new System.Drawing.Size(832, 349);
+            //this.DynamicDriversCheckedListBox.TabIndex = 24;
+            //this.DynamicDriversCheckedListBox.TabStop = false;
             // 
             // label1
             // 
@@ -90,7 +90,7 @@
             this.CancelButton = this.BtnDeleteDrivers;
             this.ClientSize = new System.Drawing.Size(913, 465);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.DynamicDriversCheckedListBox);
+            //this.Controls.Add(this.DynamicDriversCheckedListBox);
             this.Controls.Add(this.LblVersionNumber);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.BtnDeleteDrivers);
@@ -109,7 +109,7 @@
         private System.Windows.Forms.Button BtnDeleteDrivers;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label LblVersionNumber;
-        private System.Windows.Forms.CheckedListBox DynamicDriversCheckedListBox;
+        //private System.Windows.Forms.CheckedListBox DynamicDriversCheckedListBox;
         private System.Windows.Forms.Label label1;
     }
 }

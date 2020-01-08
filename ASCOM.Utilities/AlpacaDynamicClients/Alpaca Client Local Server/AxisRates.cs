@@ -3,7 +3,7 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     //
     // AxisRates is a strongly-typed collection that must be enumerable by

@@ -1,4 +1,4 @@
-﻿namespace ASCOM.Remote
+﻿namespace ASCOM.DynamicRemoteClients
 {
     public class Base64ArrayHandOffResponse : ImageArrayResponseBase
     {

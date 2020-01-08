@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Threading;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     /// <summary>
     /// Class to hold COM activation and access information for a served device

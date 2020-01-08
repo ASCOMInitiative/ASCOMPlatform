@@ -21,7 +21,6 @@ using System.Diagnostics;
 using System.CodeDom.Compiler;
 using System.CodeDom;
 using System.Reflection;
-using ASCOM.Remote;
 
 namespace ASCOM.DynamicRemoteClients
 {
@@ -40,12 +39,15 @@ namespace ASCOM.DynamicRemoteClients
         // Constants shared with the main program
         internal const string REMOTE_SERVER_PATH = @"\ASCOM\AlpacaDynamicClients\"; // Relative path from CommonFiles
         internal const string REMOTE_SERVER = @"ASCOM.AlpacaClientLocalServer.exe"; // Name of the remote client local server application
-        internal const string REMOTE_CLIENT_DRIVER_NAME_TEMPLATE = SharedConstants.DRIVER_PROGID_BASE + @"*.{0}.*"; // Template for finding remote client driver files
+        private const string DRIVER_PROGID_BASE = "ASCOM.AlpacaDynamic";
 
         // Global variables within this class
         private TraceLogger TL;
         private Profile profile;
         private List<DynamicDriverRegistration> dynamicDrivers;
+        private ColouredCheckedListBox dynamicDriversCheckedListBox;
+
+        #region Initialise and Dispose
 
         /// <summary>
         /// Initialises the form
@@ -55,12 +57,22 @@ namespace ASCOM.DynamicRemoteClients
             try
             {
                 InitializeComponent();
-                
+
                 TL = TLParameter; // Save the supplied trace logger
 
                 Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
                 LblVersionNumber.Text = "Version " + assemblyVersion.ToString();
                 TL.LogMessage("Initialise", string.Format("Application Version: {0}", assemblyVersion.ToString()));
+
+                // Configured the coloured checked list box               
+                dynamicDriversCheckedListBox = new ColouredCheckedListBox();
+                dynamicDriversCheckedListBox.Parent = this;
+                dynamicDriversCheckedListBox.FormattingEnabled = true;
+                dynamicDriversCheckedListBox.Location = new Point(41, 65);
+                dynamicDriversCheckedListBox.Name = "DynamicDriversCheckedListBox";
+                dynamicDriversCheckedListBox.Size = new Size(832, 349);
+                dynamicDriversCheckedListBox.TabStop = false;
+                dynamicDriversCheckedListBox.HorizontalScrollbar = true;
 
                 profile = new Profile();
                 dynamicDrivers = new List<DynamicDriverRegistration>();
@@ -93,9 +105,12 @@ namespace ASCOM.DynamicRemoteClients
             }
 
             if (profile != null) try { profile.Dispose(); } catch { }
+            if (dynamicDriversCheckedListBox != null) try { dynamicDriversCheckedListBox.Dispose(); } catch { }
 
             base.Dispose(disposing);
         }
+
+        #endregion
 
         /// <summary>
         /// Creates a list of Alpaca dynamic drivers and their configuration information
@@ -103,10 +118,11 @@ namespace ASCOM.DynamicRemoteClients
         private void ReadConfiguration()
         {
             Regex progidParseRegex = new Regex(PROGID_PARSE_REGEX_STRING, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            string driverDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + REMOTE_SERVER_PATH;
 
             // Initialise 
             dynamicDrivers.Clear();
-            DynamicDriversCheckedListBox.Items.Clear();
+            dynamicDriversCheckedListBox.Items.Clear();
 
             // Extract a list of the remote client drivers from the list of devices in the Profile
             ArrayList deviceTypes = profile.RegisteredDeviceTypes;
@@ -121,25 +137,110 @@ namespace ASCOM.DynamicRemoteClients
                         // Create a new data class to hold information about this dynamic driver
                         DynamicDriverRegistration foundDriver = new DynamicDriverRegistration();
 
-                        // Populate information from the dynamic driver's ProgID
-                        foundDriver.ProgId = match.Groups["0"].Value;
-                        foundDriver.Number = int.Parse(match.Groups[DEVICE_NUMBER].Value, CultureInfo.InvariantCulture);
-                        foundDriver.DeviceType = deviceType;
+                        try
+                        {
+                            // Populate information from the dynamic driver's ProgID
+                            foundDriver.ProgId = match.Groups["0"].Value;
+                            foundDriver.Number = int.Parse(match.Groups[DEVICE_NUMBER].Value, CultureInfo.InvariantCulture);
+                            foundDriver.DeviceType = deviceType;
 
-                        // populate configuration information from the dynamic driver's Profile and 
-                        profile.DeviceType = foundDriver.DeviceType;
-                        foundDriver.IPAdrress = profile.GetValue(foundDriver.ProgId, IP_ADDRESS_VALUE_NAME);
-                        foundDriver.PortNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, PORT_NUMBER_VALUE_NAME));
-                        foundDriver.RemoteDeviceNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, REMOTE_DEVICE_NUMBER_VALUE_NAME));
-                        foundDriver.UniqueID = profile.GetValue(foundDriver.ProgId, UNIQAUEID_VALUE_NAME);
-                        foundDriver.Name = device.Value;
-                        foundDriver.Description = $"{foundDriver.Name} ({foundDriver.ProgId}) - {foundDriver.IPAdrress}:{foundDriver.PortNumber}/api/v1/{foundDriver.DeviceType}/{foundDriver.Number} - {foundDriver.UniqueID}";
+                            // populate configuration information from the dynamic driver's Profile and 
+                            profile.DeviceType = foundDriver.DeviceType;
+                            foundDriver.IPAdrress = profile.GetValue(foundDriver.ProgId, IP_ADDRESS_VALUE_NAME);
+                            foundDriver.PortNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, PORT_NUMBER_VALUE_NAME));
+                            foundDriver.RemoteDeviceNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, REMOTE_DEVICE_NUMBER_VALUE_NAME));
+                            foundDriver.UniqueID = profile.GetValue(foundDriver.ProgId, UNIQAUEID_VALUE_NAME);
+                            foundDriver.Name = device.Value;
+                            foundDriver.Description = $"{foundDriver.Name} ({foundDriver.ProgId}) - {foundDriver.IPAdrress}:{foundDriver.PortNumber}/api/v1/{foundDriver.DeviceType}/{foundDriver.Number} - {foundDriver.UniqueID}";
 
-                        // Add the data class to the dynamic devices collection and to the form's checked list box
-                        dynamicDrivers.Add(foundDriver);
-                        DynamicDriversCheckedListBox.Items.Add(foundDriver);
+                            // Test whether the driver is correctly registered and installed and flag accordingly
+                            string compatibilityMessage = VersionCode.DriverCompatibilityMessage(foundDriver.ProgId, VersionCode.Bitness.Bits32, TL);
 
-                        TL.LogMessage("ReadConfiguration", string.Format("{0} - {1} - {2}", foundDriver.ProgId, foundDriver.Number, foundDriver.DeviceType));
+                            if (compatibilityMessage == "") // Driver is correctly registered 
+                            {
+                                string driverExecutable = $"{driverDirectory}{foundDriver.ProgId}.dll";
+                                TL.LogMessage("ReadConfiguration", $"Searching for driver:  {driverExecutable}");
+
+                                // Confirm that the driver DLL executable exists
+                                if (File.Exists(driverExecutable)) // DLL exists so flag OK
+                                {
+                                    foundDriver.InstallState = InstallationState.Ok;
+                                }
+                                else // Driver DLL does not exist so flag as corrupted and suggest deletion
+                                {
+                                    foundDriver.InstallState = InstallationState.MissingDriver;
+                                    foundDriver.Description = $"{foundDriver.ProgId} - Driver is ASCOM registered does not exist - Deletion recommended";
+                                }
+                            }
+                            else // A driver installation issue was found so flag as corrupted and recommend deletion
+                            {
+                                foundDriver.InstallState = InstallationState.NotCompatible;
+                                foundDriver.Description = $"{foundDriver.ProgId} - {compatibilityMessage} - Deletion recommended";
+                            }
+
+                            TL.LogMessage("ReadConfiguration", $"{foundDriver.ProgId} - {compatibilityMessage} - Installed OK: {foundDriver.InstallState}");
+                        }
+                        catch (Exception ex)
+                        {
+                            foundDriver.InstallState = InstallationState.BadProfile;
+                            foundDriver.Description = $"{foundDriver.ProgId} - ASCOM Profile is invalid - Deletion recommended";
+                            TL.LogMessageCrLf("ReadConfiguration", ex.ToString());
+                        }
+                        finally
+                        {
+                            // Add the data class to the dynamic devices collection and to the form's checked list box
+                            dynamicDrivers.Add(foundDriver);
+                            dynamicDriversCheckedListBox.Items.Add(foundDriver);
+
+                            TL.LogMessage("ReadConfiguration", $"{foundDriver.ProgId} - {foundDriver.Number} - {foundDriver.DeviceType} - Installed OK: {foundDriver.InstallState}");
+                        }
+                    }
+                }
+
+                // Check the first 20 COM registrations of ASCOM.AlpacaDynamic{X}.{DeviceType} and check whether executables exist. If not flag as corrupt
+                for (int i = 1; i <= 20; i++)
+                {
+                    string progId = $"{DRIVER_PROGID_BASE}{i}.{deviceType}";
+                    Type typeFromProgId = Type.GetTypeFromProgID(progId);
+
+                    if (typeFromProgId != null) // This ProgID is registered
+                    {
+                        TL.LogMessage("ReadConfiguration", $"ProgID {progId} is registered. Type name: {typeFromProgId?.Name}");
+
+                        string driverExecutable = $"{driverDirectory}{progId}.dll";
+                        TL.LogMessage("ReadConfiguration", $"Searching for driver:  {driverExecutable}");
+
+                        // test whether the driver DLL executable is missing
+                        if (!File.Exists(driverExecutable))  // Driver DLL does not exist so flag as corrupted and suggest deletion
+                        {
+                            // Only add this driver to the list if it is not already in the list
+                            if (dynamicDrivers.Where(x => x.ProgId.ToLowerInvariant() == progId.ToLowerInvariant()).Count() == 0) // There are no drivers with this ProgID already in the list
+                            {
+                                // Create a new list entry
+                                DynamicDriverRegistration foundDriver = new DynamicDriverRegistration();
+                                foundDriver.ProgId = progId;
+                                foundDriver.DeviceType = deviceType;
+                                foundDriver.Name = progId;
+                                foundDriver.InstallState = InstallationState.MissingDriver;
+                                foundDriver.Description = $"{foundDriver.ProgId} - Driver is COM registered but driver executable does not exist - Deletion recommended";
+
+                                dynamicDrivers.Add(foundDriver);
+                                dynamicDriversCheckedListBox.Items.Add(foundDriver);
+                                TL.LogMessage("ReadConfiguration", $"Adding driver to deletion list:  {progId}");
+                            }
+                            else // A driver with this ProgID is already in the list so no need to add it again, which would just create a duplicate entry
+                            {
+                                // No action
+                            }
+                        }
+                        else // DLL exists so this driver will already have been listed
+                        {
+                            // No action required
+                        }
+                    }
+                    else // This progID is not registered
+                    {
+                        // No action
                     }
                 }
             }
@@ -167,28 +268,10 @@ namespace ASCOM.DynamicRemoteClients
         }
 
         /// <summary>
-        /// Revise the number of remote clients and clean up the Profile if required
+        /// Completely remove drivers flagged for deletion
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        /// <remarks> Approach to revising the number of remote clients:
-        /// Prerequisites
-        ///   Confirm that local server exists
-        ///     If not then exit
-        ///   Unregister drivers
-        /// Remove driver executables numbered higher than required
-        ///   For each driver number > n
-        ///     Delete driver
-        /// Remove Profile information for drivers numbered higher than required
-        ///   For each driver number > n
-        ///     Unregister driver
-        /// Install required drivers
-        ///   For each driver 1..n
-        ///     Check that driver file exists
-        ///       If not then create driver
-        ///       Else no action
-        /// Register drivers
-        /// </remarks>
         private void BtnDeleteDrivers_Click(object sender, EventArgs e)
         {
 
@@ -212,8 +295,8 @@ namespace ASCOM.DynamicRemoteClients
                     // Unregister all current drivers
                     CreateAlpacaClients.RunLocalServer(localServerExe, "-unregserver", TL);
 
-                    // Iterate over each device that has been checked in the UI checked listbox
-                    foreach (DynamicDriverRegistration driver in DynamicDriversCheckedListBox.CheckedItems)
+                    // Iterate over each device that has been checked in the UI checked list box
+                    foreach (DynamicDriverRegistration driver in dynamicDriversCheckedListBox.CheckedItems)
                     {
                         // Delete the driver executable and it's PDB file
                         TL.LogMessage("DeleteDrivers", $"Deleting driver {driver.Description}");

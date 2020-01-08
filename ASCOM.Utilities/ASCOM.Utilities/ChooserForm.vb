@@ -221,7 +221,7 @@ Friend Class ChooserForm
 
 #End Region
 
-#Region "Form, control and timer event handlers"
+#Region "Form, button, control and timer event handlers"
 
     Private Sub comboProduct_DrawItem(ByVal sender As Object, ByVal e As DrawItemEventArgs) 'Handles CmbDriverSelector.DrawItem
         Dim brush As Brush
@@ -372,9 +372,8 @@ Friend Class ChooserForm
 
                 deviceNumber += 1
                 newProgId = $"{DRIVER_PROGID_BASE}{deviceNumber}.{deviceTypeValue}"
-                Dim compatibilityMessage As String = VersionCode.DriverCompatibilityMessage(newProgId, ApplicationBits, CType(TL, TraceLogger))
                 typeFromProgId = Type.GetTypeFromProgID(newProgId)
-                TL.LogMessage("CreateAlpacaClient", $"Testing ProgID: {newProgId} Type name: {typeFromProgId?.Name} Compatibility message: '{compatibilityMessage}'")
+                TL.LogMessage("CreateAlpacaClient", $"Testing ProgID: {newProgId} Type name: {typeFromProgId?.Name}")
 
             Loop While (Not (typeFromProgId Is Nothing))
 

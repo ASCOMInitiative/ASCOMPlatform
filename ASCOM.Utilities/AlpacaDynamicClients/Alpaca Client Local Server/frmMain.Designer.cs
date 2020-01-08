@@ -1,6 +1,6 @@
 using System;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     partial class FrmMain
     {

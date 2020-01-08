@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     public class DoubleArray2DResponse : ImageArrayResponseBase
     {

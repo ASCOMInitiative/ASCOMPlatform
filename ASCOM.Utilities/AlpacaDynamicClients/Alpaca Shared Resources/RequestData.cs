@@ -1,7 +1,7 @@
 ﻿using System.Collections.Specialized;
 using System.Net;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     public class RequestData
     {

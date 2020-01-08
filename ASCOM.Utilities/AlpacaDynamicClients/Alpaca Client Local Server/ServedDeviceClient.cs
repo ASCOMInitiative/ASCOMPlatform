@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using ASCOM.Utilities;
 using System.Collections;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     public partial class ServedDeviceClient : UserControl
     {

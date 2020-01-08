@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using ASCOM.DeviceInterface;
 using RestSharp;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     /// <summary>
     /// ASCOM Remote ObservingConditions base class

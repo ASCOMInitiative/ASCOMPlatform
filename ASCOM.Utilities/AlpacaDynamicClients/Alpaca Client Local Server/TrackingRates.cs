@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 using System.Globalization;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     //
     // TrackingRates is a strongly-typed collection that must be enumerable by

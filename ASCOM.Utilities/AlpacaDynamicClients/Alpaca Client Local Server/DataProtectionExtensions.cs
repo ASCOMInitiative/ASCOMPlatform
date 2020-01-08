@@ -3,7 +3,7 @@ using System.Text;
 using System.Security.Cryptography;
 using ASCOM.Utilities;
 
-namespace ASCOM.Remote
+namespace ASCOM.DynamicRemoteClients
 {
     /// <summary>
     /// Extensions to the String data type to allow the string to be encrypted and decrypted.
