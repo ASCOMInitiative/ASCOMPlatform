@@ -152,7 +152,7 @@ namespace ASCOM.DynamicRemoteClients
                             foundDriver.RemoteDeviceNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, REMOTE_DEVICE_NUMBER_VALUE_NAME));
                             foundDriver.UniqueID = profile.GetValue(foundDriver.ProgId, UNIQAUEID_VALUE_NAME);
                             foundDriver.Name = device.Value;
-                            foundDriver.Description = $"{foundDriver.Name} ({foundDriver.ProgId}) - {foundDriver.IPAdrress}:{foundDriver.PortNumber}/api/v1/{foundDriver.DeviceType}/{foundDriver.Number} - {foundDriver.UniqueID}";
+                            foundDriver.Description = $"{foundDriver.Name} ({foundDriver.ProgId}) - {foundDriver.IPAdrress}:{foundDriver.PortNumber}/api/v1/{foundDriver.DeviceType}/{foundDriver.RemoteDeviceNumber} - {foundDriver.UniqueID}";
 
                             // Test whether the driver is correctly registered and installed and flag accordingly
                             string compatibilityMessage = VersionCode.DriverCompatibilityMessage(foundDriver.ProgId, VersionCode.Bitness.Bits32, TL);

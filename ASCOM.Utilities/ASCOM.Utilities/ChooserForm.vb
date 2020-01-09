@@ -64,6 +64,7 @@ Friend Class ChooserForm
     Private chooserPropertiesToolTip As ToolTip
     Private alpacaStatusToolstripLabel As ToolStripLabel
     Private WithEvents alpacaStatusIndicatorTimer As System.Windows.Forms.Timer
+    Private profile As Profile
 
     ' Persistence variables
     Friend AlpacaEnabled As Boolean
@@ -118,7 +119,7 @@ Friend Class ChooserForm
         TL.IdentifierWidth = 50
         TL.Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT) ' Enable the trace logger if Util trace is enabled
 
-        'CmbDriverSelector.DrawMode = DrawMode.OwnerDrawFixed
+        profile = New Profile()
 
     End Sub
 
@@ -192,6 +193,9 @@ Friend Class ChooserForm
             End If
             If Not alpacaStatusToolstripLabel Is Nothing Then
                 Try : alpacaStatusToolstripLabel.Dispose() : Catch : End Try
+            End If
+            If Not profile Is Nothing Then
+                Try : profile.Dispose() : Catch : End Try
             End If
         End If
         MyBase.Dispose(Disposing)
@@ -354,86 +358,85 @@ Friend Class ChooserForm
 
     Private Sub cmdOK_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnOK.Click
         Dim newProgId As String
+        TL.LogMessage("OK Click", $"Combo box selected index = {CmbDriverSelector.SelectedIndex}")
 
-        If selectedChooserItem.IsComDriver Then ' USer has selected an existing COM driver so return its ProgID
+        If selectedChooserItem.IsComDriver Then ' User has selected an existing COM driver so return its ProgID
             selectedProgIdValue = selectedChooserItem.ProgID
 
             TL.LogMessage("OK Click", $"Returning ProgID: '{selectedProgIdValue}'")
 
             ' Close the UI because the COM driver is selected
             Me.Hide()
-        Else ' USer has selected a new Alpaca device so we need to create a new COM driver for this
-            MsgBox("After pressing OK, you will be asked for Administrator approval to register this new Alpaca device.", MsgBoxStyle.OkCancel, "New Alpaca Device Selected")
+        Else ' User has selected a new Alpaca device so we need to create a new COM driver for this
+            Dim userResponse As MsgBoxResult = MsgBox("After pressing OK, you will be asked for Administrator approval to register this new Alpaca device.", MsgBoxStyle.OkCancel, "New Alpaca Device Selected")
+            If userResponse = MsgBoxResult.Ok Then
+                Dim deviceNumber As Integer = 0
+                Dim typeFromProgId As Type
+                ' Find an unused number in the ProgID series ASCOM.Alpaca{N}.{DeviceType} where N Is an integer starting at 1
+                Do
 
-            Dim deviceNumber As Integer = 0
-            Dim typeFromProgId As Type
-            ' Find an unused number in the ProgID series ASCOM.Alpaca{N}.{DeviceType} where N Is an integer starting at 1
-            Do
+                    deviceNumber += 1
+                    newProgId = $"{DRIVER_PROGID_BASE}{deviceNumber}.{deviceTypeValue}"
+                    typeFromProgId = Type.GetTypeFromProgID(newProgId)
+                    TL.LogMessage("CreateAlpacaClient", $"Testing ProgID: {newProgId} Type name: {typeFromProgId?.Name}")
 
-                deviceNumber += 1
-                newProgId = $"{DRIVER_PROGID_BASE}{deviceNumber}.{deviceTypeValue}"
-                typeFromProgId = Type.GetTypeFromProgID(newProgId)
-                TL.LogMessage("CreateAlpacaClient", $"Testing ProgID: {newProgId} Type name: {typeFromProgId?.Name}")
+                Loop While (Not (typeFromProgId Is Nothing))
 
-            Loop While (Not (typeFromProgId Is Nothing))
+                TL.LogMessage("CreateAlpacaClient", $"Creating new ProgID: {newProgId}")
 
-            TL.LogMessage("CreateAlpacaClient", $"Creating new ProgID: {newProgId}")
+                Dim generatorWorkingDirectory, generatorExeFile As String
+                Dim generatorProcessStartInfo As ProcessStartInfo
+                ' Construct path to the executable that will dynamically create a new ALpaca COM client
+                generatorWorkingDirectory = $"{Get32BitProgramFilesPath()}\{ALPACA_DYNAMIC_CLIENT_GENERATOR_RELATIVE_PATH}"
+                generatorExeFile = $"{generatorWorkingDirectory}\{ALPACA_DYNAMIC_CLIENT_EXE_NAME}"
+                TL.LogMessage("OK Click", $"Creating driver for ProgID: {newProgId} using the {generatorExeFile} executable in working directory {generatorWorkingDirectory}")
 
-            Dim generatorWorkingDirectory, generatorExeFile As String
-            Dim generatorProcessStartInfo As ProcessStartInfo
-            ' Construct path to the executable that will dynamically create a new ALpaca COM client
-            generatorWorkingDirectory = $"{Get32BitProgramFilesPath()}\{ALPACA_DYNAMIC_CLIENT_GENERATOR_RELATIVE_PATH}"
-            generatorExeFile = $"{generatorWorkingDirectory}\{ALPACA_DYNAMIC_CLIENT_EXE_NAME}"
-            TL.LogMessage("OK Click", $"Creating driver for ProgID: {newProgId} using the {generatorExeFile} executable in working directory {generatorWorkingDirectory}")
+                If Not File.Exists(generatorExeFile) Then
+                    MsgBox("The client generator executable can not be found, please repair the ASCOM Platform.", MsgBoxStyle.Critical, "ALpaca Client Generator Not Found")
+                    TL.LogMessage("OK Click", $"ERROR - Unable to find the client generator executable at {generatorExeFile}, cannot create a new Alpaca client.")
+                    selectedProgIdValue = ""
+                    Return
+                End If
 
-            If Not File.Exists(generatorExeFile) Then
-                MsgBox("The client generator executable can not be found, please repair the ASCOM Platform.", MsgBoxStyle.Critical, "ALpaca Client Generator Not Found")
-                TL.LogMessage("OK Click", $"ERROR - Unable to find the client generator executable at {generatorExeFile}, cannot create a new Alpaca client.")
-                selectedProgIdValue = ""
-                Return
+                generatorProcessStartInfo = New ProcessStartInfo(generatorExeFile, $"\CreateAlpacaClient {deviceTypeValue} {deviceNumber} {newProgId} ""{selectedChooserItem.Name}""")
+                generatorProcessStartInfo.WorkingDirectory = generatorWorkingDirectory
+
+                generatorProcess = New Process()
+                generatorProcess.StartInfo = generatorProcessStartInfo
+                generatorProcess.EnableRaisingEvents = True
+
+                driverGenerationComplete = False
+
+                TL.LogMessage("CreateAlpacaClient", $"Starting driver generation process")
+                generatorProcess.Start()
+
+                Do
+                    Thread.Sleep(10)
+                    Application.DoEvents()
+                Loop While Not driverGenerationComplete
+
+                TL.LogMessage("CreateAlpacaClient", $"Completed driver generation process")
+
+                generatorProcess.Dispose()
+
+                ' Configure the IP address, port number and Alpaca device number in the newly registered driver
+                profile.DeviceType = $"{deviceTypeValue.Substring(0, 1).ToUpperInvariant()}{deviceTypeValue.Substring(1).ToLowerInvariant()}"
+                profile.WriteValue(newProgId, PROFILE_VALUE_NAME_IP_ADDRESS, selectedChooserItem.HostName)
+                profile.WriteValue(newProgId, PROFILE_VALUE_NAME_PORT_NUMBER, selectedChooserItem.Port.ToString())
+                profile.WriteValue(newProgId, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER, selectedChooserItem.DeviceNumber.ToString())
+                profile.WriteValue(newProgId, PROFILE_VALUE_NAME_UNIQUEID, selectedChooserItem.DeviceUniqueID.ToString())
+
+                Dim r As New RegistryAccess
+
+                r.WriteProfile("Chooser", $"{newProgId} Init", "True")
+                r.Dispose()
+                selectedProgIdValue = newProgId
+                InitialiseComboBox()
+                TL.LogMessage("OK Click", $"Returning ProgID: '{selectedProgIdValue}'")
             End If
-
-            generatorProcessStartInfo = New ProcessStartInfo(generatorExeFile, $"\CreateAlpacaClient {deviceTypeValue} {deviceNumber} {newProgId} ""{selectedChooserItem.Name}""")
-            generatorProcessStartInfo.WorkingDirectory = generatorWorkingDirectory
-
-            generatorProcess = New Process()
-            generatorProcess.StartInfo = generatorProcessStartInfo
-            generatorProcess.EnableRaisingEvents = True
-
-            driverGenerationComplete = False
-
-            TL.LogMessage("CreateAlpacaClient", $"Starting driver generation process")
-            generatorProcess.Start()
-
-            Do
-                Thread.Sleep(10)
-                Application.DoEvents()
-            Loop While Not driverGenerationComplete
-
-            TL.LogMessage("CreateAlpacaClient", $"Completed driver generation process")
-
-            generatorProcess.Dispose()
-
-            ' Configure the IP address, port number and Alpaca device number in the newly registered driver
-            Dim p As Profile = New Profile()
-            p.DeviceType = $"{deviceTypeValue.Substring(0, 1).ToUpperInvariant()}{deviceTypeValue.Substring(1).ToLowerInvariant()}"
-            p.WriteValue(newProgId, PROFILE_VALUE_NAME_IP_ADDRESS, selectedChooserItem.HostName)
-            p.WriteValue(newProgId, PROFILE_VALUE_NAME_PORT_NUMBER, selectedChooserItem.Port.ToString())
-            p.WriteValue(newProgId, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER, selectedChooserItem.DeviceNumber.ToString())
-            p.WriteValue(newProgId, PROFILE_VALUE_NAME_UNIQUEID, selectedChooserItem.DeviceUniqueID.ToString())
-            p.Dispose()
-
-            Dim r As New RegistryAccess
-
-            r.WriteProfile("Chooser", $"{newProgId} Init", "True")
-            r.Dispose()
-            selectedProgIdValue = newProgId
-            InitialiseComboBox()
+            ' Don't exit the Chooser but instead return to the UI so that the user can see that a new driver has been created and selected
         End If
 
-        TL.LogMessage("OK Click", $"Returning ProgID: '{selectedProgIdValue}'")
-
-        ' Don't exit the Chooser but instead return to the UI so that the user can see that a new driver has been created and selected
     End Sub
 
     ''' <summary>
@@ -698,6 +701,9 @@ Friend Class ChooserForm
 
         generatorProcess.Dispose()
 
+        ' Refresh the driver list after any changes made by the management tool
+        InitialiseComboBox()
+
     End Sub
 
 #End Region
@@ -792,12 +798,9 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub DiscoverAlpacaDevicesAndPopulateDriverComboBox()
-        Dim p As Profile
-
         Try
 
-            p = New Profile()
-            p.DeviceType = deviceTypeValue
+            profile.DeviceType = deviceTypeValue
 
             TL.LogMessage("StartAlpacaDiscovery", $"Running On thread: {Thread.CurrentThread.ManagedThreadId}.")
 
@@ -826,7 +829,7 @@ Friend Class ChooserForm
                     ' Annotate the device description as configured
                     If (driverProgId.ToLowerInvariant().StartsWith(DRIVER_PROGID_BASE.ToLowerInvariant())) Then ' This is a COM driver for an Alpaca device
                         If AlpacaShowDeviceDetails Then ' Get device details from the Profile and display these
-                            driverName = $"{driverName}    ({driverProgId} ==> {p.GetValue(driverProgId, PROFILE_VALUE_NAME_IP_ADDRESS, Nothing)}:{p.GetValue(driverProgId, PROFILE_VALUE_NAME_PORT_NUMBER, Nothing)}/api/v1/{deviceTypeValue}/{p.GetValue(driverProgId, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER, Nothing)})" ' Annotate as COM to differentiate from Alpaca drivers
+                            driverName = $"{driverName}    ({driverProgId} ==> {profile.GetValue(driverProgId, PROFILE_VALUE_NAME_IP_ADDRESS, Nothing)}:{profile.GetValue(driverProgId, PROFILE_VALUE_NAME_PORT_NUMBER, Nothing)}/api/v1/{deviceTypeValue}/{profile.GetValue(driverProgId, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER, Nothing)})" ' Annotate as COM to differentiate from Alpaca drivers
                         Else ' Just annotate as an Alpaca device
                             driverName = $"{driverName}    (Alpaca)" ' Annotate as an Alpaca device
                         End If
@@ -890,19 +893,19 @@ Friend Class ChooserForm
                     ' Get a list of dynamic drivers already configured on the system
                     Dim foundDriver As Boolean = False
 
-                    For Each arrayListDevice As KeyValuePair In p.RegisteredDevices(deviceTypeValue) ' Iterate over a list of all devices of the current device type
+                    For Each arrayListDevice As KeyValuePair In profile.RegisteredDevices(deviceTypeValue) ' Iterate over a list of all devices of the current device type
                         If arrayListDevice.Key.ToLowerInvariant().StartsWith(DRIVER_PROGID_BASE.ToLowerInvariant()) Then 'This is a dynamic Alpaca COM driver
 
                             ' Get and validate the device values to compare with the discovered device
                             Try
-                                deviceUniqueId = p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_UNIQUEID)
+                                deviceUniqueId = profile.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_UNIQUEID)
                             Catch ex As Exception
                                 MessageBox.Show($"{arrayListDevice.Key} - Unable to read the device unique ID. This driver should be deleted and re-created", "Dynamic Driver Corrupted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                                 Continue For ' Don't process this driver further, move on to the next driver
                             End Try
 
                             Try
-                                deviceHostName = p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_IP_ADDRESS)
+                                deviceHostName = profile.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_IP_ADDRESS)
                                 If String.IsNullOrEmpty(deviceHostName) Then
                                     MessageBox.Show($"{arrayListDevice.Key} - The device IP address is blank. This driver should be deleted and re-created", "Dynamic Driver Corrupted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                                     Continue For ' Don't process this driver further, move on to the next driver
@@ -913,14 +916,14 @@ Friend Class ChooserForm
                             End Try
 
                             Try
-                                deviceIPPort = Convert.ToInt32(p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_PORT_NUMBER))
+                                deviceIPPort = Convert.ToInt32(profile.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_PORT_NUMBER))
                             Catch ex As Exception
                                 MessageBox.Show($"{arrayListDevice.Key} - Unable to read the device IP Port. This driver should be deleted and re-created", "Dynamic Driver Corrupted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                                 Continue For ' Don't process this driver further, move on to the next driver
                             End Try
 
                             Try
-                                deviceNumber = Convert.ToInt32(p.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER))
+                                deviceNumber = Convert.ToInt32(profile.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER))
                             Catch ex As Exception
                                 MessageBox.Show($"{arrayListDevice.Key} - Unable to read the device number. This driver should be deleted and re-created", "Dynamic Driver Corrupted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                                 Continue For ' Don't process this driver further, move on to the next driver
@@ -959,8 +962,6 @@ Friend Class ChooserForm
         Catch ex As Exception
             TL.LogMessageCrLf("StartAlpacaDiscovery", ex.ToString())
         Finally
-            p.Dispose()
-
             ' Restore a usable user interface
             If AlpacaEnabled Then
                 If alpacaDevices.Count > 0 Then
@@ -990,6 +991,9 @@ Friend Class ChooserForm
             Try
                 TL.LogMessage("PopulateDriverComboBox", $"Running on thread: {Thread.CurrentThread.ManagedThreadId}")
 
+                ' Initialise the selected chooser item
+                selectedChooserItem = Nothing
+
                 ' Set the combo box data source to the chooserList list of items to display
                 CmbDriverSelector.SelectedIndex = -1
                 CmbDriverSelector.DataSource = New BindingSource(chooserList, Nothing)
@@ -1010,6 +1014,9 @@ Friend Class ChooserForm
                 Next
 
                 TL.LogMessage("PopulateDriverComboBox", $"Selected ProgID is: {selectedProgIdValue}")
+                If selectedChooserItem Is Nothing Then ' The requested driver was not found so pick the device that is actually visible
+                    selectedChooserItem = CType(CmbDriverSelector.SelectedItem, Generic.KeyValuePair(Of ChooserItem, String)).Key
+                End If
 
                 ' Validate the selected driver if it is a COM driver
                 If selectedChooserItem.IsComDriver Then ' This is a COM driver so validate that it is functional
