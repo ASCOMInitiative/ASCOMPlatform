@@ -1,11 +1,10 @@
-﻿// This application enables the user to specify the number and type of remote client drivers that will be configured on their client machine,
-// the user thus ends up with only devices that they actually want and need.
-// The application uses dynamic compilation i.e. the drivers are compiled on the user's machine at run time rather than being pre-compiled at installer build time.
+﻿// This application enables the user to create and manage dynamic client drivers
+// The application uses dynamic compilation i.e. the drivers are compiled on the user's machine rather than being delivered through an installer
 // Most of the heavy lifting is done through pre-compiled base classes that are called from the dynamically compiled top level shell classes.
 // This enables the user to specify what are normally hard coded specifics such as the device type, GUID and device number.
 
 // The application generates required code and stores this in memory. When the class is complete it is compiled and the resultant assembly persisted to disk
-// into the same directory as the remote client local server, which is then called to register the driver assembly.
+// into the same directory as the dynamic client local server, which is then called to register the driver assembly.
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,13 +32,13 @@ namespace ASCOM.DynamicRemoteClients
         private const string IP_ADDRESS_VALUE_NAME = "IP Address"; // Regular expression device type placeholder name
         private const string PORT_NUMBER_VALUE_NAME = "Port Number"; // Regular expression device type placeholder name
         private const string REMOTE_DEVICE_NUMBER_VALUE_NAME = "Remote Device Number"; // Regular expression device type placeholder name
-        private const string UNIQAUEID_VALUE_NAME = "UniqueID"; // Regular expression device type placeholder name
+        private const string UNIQUEID_VALUE_NAME = "UniqueID"; // Regular expression device type placeholder name
 
         private const string PROGID_PARSE_REGEX_STRING = @"^ascom\.alpacadynamic(?'" + DEVICE_NUMBER + @"'\d+)\.(?'" + DEVICE_TYPE + @"'[a-z]+)$"; // Regular expression for extracting device type and number
 
         // Constants shared with the main program
-        internal const string REMOTE_SERVER_PATH = @"\ASCOM\AlpacaDynamicClients\"; // Relative path from CommonFiles
-        internal const string REMOTE_SERVER = @"ASCOM.AlpacaClientLocalServer.exe"; // Name of the remote client local server application
+        internal const string LOCAL_SERVER_PATH = @"\ASCOM\AlpacaDynamicClients\"; // Relative path from CommonFiles
+        internal const string LOCAL_SERVER_EXE = @"ASCOM.AlpacaClientLocalServer.exe"; // Name of the remote client local server application
         private const string DRIVER_PROGID_BASE = "ASCOM.AlpacaDynamic";
 
         // Global variables within this class
@@ -119,7 +118,7 @@ namespace ASCOM.DynamicRemoteClients
         private void ReadConfiguration()
         {
             Regex progidParseRegex = new Regex(PROGID_PARSE_REGEX_STRING, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            string driverDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + REMOTE_SERVER_PATH;
+            string driverDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + LOCAL_SERVER_PATH;
 
             // Initialise 
             dynamicDrivers.Clear();
@@ -150,7 +149,7 @@ namespace ASCOM.DynamicRemoteClients
                             foundDriver.IPAdrress = profile.GetValue(foundDriver.ProgId, IP_ADDRESS_VALUE_NAME);
                             foundDriver.PortNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, PORT_NUMBER_VALUE_NAME));
                             foundDriver.RemoteDeviceNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, REMOTE_DEVICE_NUMBER_VALUE_NAME));
-                            foundDriver.UniqueID = profile.GetValue(foundDriver.ProgId, UNIQAUEID_VALUE_NAME);
+                            foundDriver.UniqueID = profile.GetValue(foundDriver.ProgId, UNIQUEID_VALUE_NAME);
                             foundDriver.Name = device.Value;
                             foundDriver.Description = $"{foundDriver.Name} ({foundDriver.ProgId}) - {foundDriver.IPAdrress}:{foundDriver.PortNumber}/api/v1/{foundDriver.DeviceType}/{foundDriver.RemoteDeviceNumber} - {foundDriver.UniqueID}";
 
@@ -307,8 +306,8 @@ namespace ASCOM.DynamicRemoteClients
                 BtnDeleteDrivers.Enabled = false;
 
                 // Create variables pointing to the dynamic driver's local server folder and executable
-                string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + REMOTE_SERVER_PATH;
-                string localServerExe = localServerPath + REMOTE_SERVER;
+                string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + LOCAL_SERVER_PATH;
+                string localServerExe = localServerPath + LOCAL_SERVER_EXE;
 
                 if (File.Exists(localServerExe)) // Local server does exist
                 {
@@ -394,17 +393,11 @@ namespace ASCOM.DynamicRemoteClients
                         {
                             TL.LogMessage("ComUnregister", $"Deleting ProgID {progId}, which has a class ID of: {classId}");
 
-                            // Delete the ProgID entries in the 32 and 64bit registry sections
+                            // Delete the ProgID entries in the 32bit registry section
                             Registry.ClassesRoot.DeleteSubKey($"{progId}\\CLSID", false);
                             Registry.ClassesRoot.DeleteSubKey(progId, false);
 
-                            if (Environment.Is64BitProcess)
-                            {
-                                Registry.ClassesRoot.DeleteSubKey($"Wow6432Node\\{progId}\\CLSID", false);
-                                Registry.ClassesRoot.DeleteSubKey($"Wow6432Node\\{progId}", false);
-                            }
-
-                            // Delete the CLSID entries in the 32 and 64bit registry sections
+                            // Delete the CLSID entries in the 32bit registry section
                             Registry.ClassesRoot.DeleteSubKey($"CLSID\\{classId}\\Implemented Categories\\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}", false);
                             Registry.ClassesRoot.DeleteSubKey($"CLSID\\{classId}\\Implemented Categories", false);
                             Registry.ClassesRoot.DeleteSubKey($"CLSID\\{classId}\\ProgId", false);
@@ -412,15 +405,6 @@ namespace ASCOM.DynamicRemoteClients
                             Registry.ClassesRoot.DeleteSubKey($"CLSID\\{classId}\\Programmable", false);
                             Registry.ClassesRoot.DeleteSubKey($"CLSID\\{classId}", false);
 
-                            if (Environment.Is64BitProcess)
-                            {
-                                Registry.ClassesRoot.DeleteSubKey($"Wow6432Node\\CLSID\\{classId}\\Implemented Categories\\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}", false);
-                                Registry.ClassesRoot.DeleteSubKey($"Wow6432Node\\CLSID\\{classId}\\Implemented Categories", false);
-                                Registry.ClassesRoot.DeleteSubKey($"Wow6432Node\\CLSID\\{classId}\\ProgId", false);
-                                Registry.ClassesRoot.DeleteSubKey($"Wow6432Node\\CLSID\\{classId}\\LocalServer32", false);
-                                Registry.ClassesRoot.DeleteSubKey($"Wow6432Node\\CLSID\\{classId}\\Programmable", false);
-                                Registry.ClassesRoot.DeleteSubKey($"Wow6432Node\\CLSID\\{classId}", false);
-                            }
                             TL.LogMessage("ComUnregister", $"Deleted ProgID {progId}");
                         }
                         else

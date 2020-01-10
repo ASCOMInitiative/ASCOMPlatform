@@ -354,7 +354,7 @@ namespace ASCOM.DynamicRemoteClients
         }
 
         /// <summary>
-        /// Run the local server to register and unregister remote clients
+        /// Run the local server to register and unregister DynamicRemoteClient clients
         /// </summary>
         /// <param name="localServerExe"></param>
         /// <param name="serverParameter"></param>
@@ -400,7 +400,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 Enabled = true
             };
-            TL.LogMessage("Main", string.Format("ASCOM Remote Dynamic Client Manager - Thread exception. Version: {0}", assemblyVersion.ToString()));
+            TL.LogMessage("Main", string.Format("ASCOM Dynamic Client Manager - Thread exception. Version: {0}", assemblyVersion.ToString()));
             TL.LogMessageCrLf("Main", e.Exception.ToString());
 
             // Display the exception in the default .txt editor and exit
@@ -423,7 +423,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 Enabled = true
             };
-            TL.LogMessage("Main", string.Format("ASCOM Remote Dynamic Client Manager - Unhandled exception. Version: {0}", assemblyVersion.ToString()));
+            TL.LogMessage("Main", string.Format("ASCOM Dynamic Client Manager - Unhandled exception. Version: {0}", assemblyVersion.ToString()));
             TL.LogMessageCrLf("Main", exception.ToString());
 
             // Display the exception in the default .txt editor and exit

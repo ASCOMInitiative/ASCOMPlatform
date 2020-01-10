@@ -23,7 +23,7 @@ using System.Net.Http;
 
 namespace ASCOM.DynamicRemoteClients
 {
-    public static class RemoteClientDriver
+    public static class DynamicClientDriver
     {
         #region Private variables and constants
 
@@ -45,24 +45,24 @@ namespace ASCOM.DynamicRemoteClients
         /// <summary>
         /// Static initialiser to set up the objects we need at run time
         /// </summary>
-        static RemoteClientDriver()
+        static DynamicClientDriver()
         {
             try
             {
-                TLLocalServer = new TraceLoggerPlus("", "RemoteClientLocalServer")
+                TLLocalServer = new TraceLoggerPlus("", "DynamicClientLocalServer")
                 {
                     Enabled = false
                 }; // Trace state is set in ReadProfile, immediately after being read from the Profile
-                TLLocalServer.LogMessage("RemoteClient", $"Initialising - Version: { Assembly.GetEntryAssembly().GetName().Version}");
+                TLLocalServer.LogMessage("DynamicClientDriver", $"Initialising - Version: { Assembly.GetEntryAssembly().GetName().Version}");
 
                 connectStates = new ConcurrentDictionary<long, bool>();
 
-                TLLocalServer.LogMessage("RemoteClient", "Initialisation complete.");
+                TLLocalServer.LogMessage("DynamicClientDriver", "Initialisation complete.");
             }
             catch (Exception ex)
             {
-                TLLocalServer.LogMessageCrLf("RemoteClient", ex.ToString());
-                MessageBox.Show(ex.ToString(), "Error initialising the RemoteClient Telescope", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                TLLocalServer.LogMessageCrLf("DynamicClientDriver", ex.ToString());
+                MessageBox.Show(ex.ToString(), "Error initialising the DynamicClientDriver base class", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -573,7 +573,7 @@ namespace ASCOM.DynamicRemoteClients
                                 client.ConfigureWebRequest(wr => wr.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip); // Allow both Deflate and GZip decompression
                                 break;
                             default:
-                                throw new InvalidValueException($"Invalid image array compression type: {imageArrayCompression} - Correct this in the Remote Client setup dialogue.");
+                                throw new InvalidValueException($"Invalid image array compression type: {imageArrayCompression} - Correct this in the Dynamic Client setup dialogue.");
                         }
 
                         switch (imageArrayTransferType)
@@ -585,7 +585,7 @@ namespace ASCOM.DynamicRemoteClients
                                 request.AddHeader(SharedConstants.BASE64_HANDOFF_HEADER, SharedConstants.BASE64_HANDOFF_SUPPORTED);
                                 break;
                             default:
-                                throw new InvalidValueException($"Invalid image array transfer type: {imageArrayTransferType} - Correct this in the Remote Client setup dialogue.");
+                                throw new InvalidValueException($"Invalid image array transfer type: {imageArrayTransferType} - Correct this in the Dynamic Client setup dialogue.");
                         }
                     }
 
@@ -1421,7 +1421,7 @@ namespace ASCOM.DynamicRemoteClients
                             return returnArray;
 
                         default:
-                            throw new InvalidValueException("Remote Driver Camera.ImageArrayVariant: Unsupported return array rank from RemoteClientDriver.GetValue<Array>: " + returnArray.Rank);
+                            throw new InvalidValueException("DynamicRemoteClient Driver Camera.ImageArrayVariant: Unsupported return array rank from DynamicClientDriver.GetValue<Array>: " + returnArray.Rank);
                     }
                 case 3:
                     switch (variantType)
@@ -1469,11 +1469,11 @@ namespace ASCOM.DynamicRemoteClients
                             return returnArray;
 
                         default:
-                            throw new InvalidValueException("Remote Driver Camera.ImageArrayVariant: Unsupported return array rank from RemoteClientDriver.GetValue<Array>: " + returnArray.Rank);
+                            throw new InvalidValueException("DynamicRemoteClient Driver Camera.ImageArrayVariant: Unsupported return array rank from DynamicClientDriver.GetValue<Array>: " + returnArray.Rank);
                     }
 
                 default:
-                    throw new InvalidValueException("Remote Driver Camera.ImageArrayVariant: Unsupported return array rank from RemoteClientDriver.GetValue<Array>: " + returnArray.Rank);
+                    throw new InvalidValueException("DynamicRemoteClient Driver Camera.ImageArrayVariant: Unsupported return array rank from DynamicClientDriver.GetValue<Array>: " + returnArray.Rank);
             }
         }
 

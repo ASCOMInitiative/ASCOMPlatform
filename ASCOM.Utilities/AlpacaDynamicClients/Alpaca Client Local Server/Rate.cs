@@ -8,7 +8,7 @@ namespace ASCOM.DynamicRemoteClients
     // The Rate class implements IRate, and is used to hold values
     // for AxisRates. You do not need to change this class.
     //
-    // The Guid attribute sets the CLSID for ASCOM.Remote.Rate
+    // The Guid attribute sets the CLSID for the DynamicRemoteClient Rate class
     // The ClassInterface/None attribute prevents an empty interface called
     // _Rate from being created and used as the [default] interface
     //

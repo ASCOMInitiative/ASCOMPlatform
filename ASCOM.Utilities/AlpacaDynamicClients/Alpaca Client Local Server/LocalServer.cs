@@ -1,5 +1,5 @@
 //
-// ASCOM.Remote Local COM Server
+// ASCOM.DynamicRemoteClients Local COM Server
 //
 // This is the core of a managed COM Local Server, capable of serving
 // multiple instances of multiple interfaces, within a single
@@ -91,6 +91,9 @@ namespace ASCOM.DynamicRemoteClients
         private static string s_appId = "{31506222-DA7E-4900-A414-843BB3E1BD16}";	// Our AppId
         private static readonly Object lockObject = new object();
 
+        private const string LOCAL_SERVER_NAME = "dynamic Driver Local Server";
+
+
         private static TraceLogger TL;
         #endregion
 
@@ -180,16 +183,13 @@ namespace ASCOM.DynamicRemoteClients
         }
         #endregion
 
-        // -----------------
-        // PRIVATE FUNCTIONS
-        // -----------------
 
         #region Dynamic Driver Assembly Loader
-        //
-        // Load the assemblies that contain the classes that we will serve
-        // via COM. These will be located in the same folder as
-        // our executable.
-        //
+
+        /// <summary>
+        /// Load the assemblies that contain the classes that we will serve via COM. These will be located in the same folder as our executable.
+        /// </summary>
+        /// <returns></returns>
         private static bool LoadComObjectAssemblies()
         {
             s_ComObjectAssys = new ArrayList();
@@ -240,7 +240,7 @@ namespace ASCOM.DynamicRemoteClients
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.Message, "Remote", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.Message, LOCAL_SERVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     TL.LogMessageCrLf("LoadComObjectAssemblies", $"Exception while getting types: {e.ToString()}");
                     return false;
                 }
@@ -279,12 +279,11 @@ namespace ASCOM.DynamicRemoteClients
             try { Process.Start(si); }
             catch (System.ComponentModel.Win32Exception)
             {
-                MessageBox.Show("The driver was not " + (arg == "/register" ? "registered" : "unregistered") +
-                    " because you did not allow it.", "Driver Registration", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("The driver was not " + (arg == "/register" ? "registered" : "unregistered") + " because you did not allow it.", LOCAL_SERVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Driver Registration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show(ex.ToString(), LOCAL_SERVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
             return;
         }
@@ -307,9 +306,7 @@ namespace ASCOM.DynamicRemoteClients
                 ElevateSelf("/register");
                 return;
             }
-            //
             // If reached here, we're running elevated
-            //
 
             Assembly assy = Assembly.GetExecutingAssembly();
             Attribute attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyTitleAttribute));
@@ -317,14 +314,11 @@ namespace ASCOM.DynamicRemoteClients
             attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyDescriptionAttribute));
             string assyDescription = ((AssemblyDescriptionAttribute)attr).Description;
             TL.LogMessage("RegisterObjects", $"ASsembly description: {assyDescription}");
-            //
-            // Local server's DCOM/AppID information
-            //
+
+            // Set the ;ocal server's DCOM/AppID information
             try
             {
-                //
-                // HKCR\APPID\appid
-                //
+                // Set HKCR\APPID\appid
                 using (RegistryKey key = Registry.ClassesRoot.CreateSubKey("APPID\\" + s_appId))
                 {
                     key.SetValue(null, assyDescription);
@@ -332,9 +326,8 @@ namespace ASCOM.DynamicRemoteClients
                     key.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
                     TL.LogMessage("RegisterObjects", $"Set APPID: {assyDescription} {s_appId} Authentication level: 1");
                 }
-                //
-                // HKCR\APPID\exename.ext
-                //
+
+                // Set HKCR\APPID\exename.ext
                 using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(string.Format("APPID\\{0}", Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1))))
                 {
                     key.SetValue("AppID", s_appId);
@@ -342,7 +335,7 @@ namespace ASCOM.DynamicRemoteClients
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "Remote Local Server", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show("Error while registering the server:\n" + ex.ToString(), LOCAL_SERVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 TL.LogMessageCrLf("RegisterObjects", $"Exception while registering AppID: {ex.ToString()}");
                 return;
             }
@@ -352,26 +345,22 @@ namespace ASCOM.DynamicRemoteClients
 
             TL.LogMessage("RegisterObjects", "Registering types");
 
-            //
-            // For each of the driver assemblies
-            //
+            // COM register each of the driver assemblies
             foreach (Type type in s_ComObjectTypes)
             {
                 TL.LogMessage("RegisterObjects", string.Format("Processing type: {0}, is a COM object: {1}", type.FullName, type.IsCOMObject));
                 bool bFail = false;
                 try
                 {
-                    //
-                    // HKCR\CLSID\clsid
-                    //
+                    // Set HKCR\CLSID\clsid
                     string clsid = Marshal.GenerateGuidForType(type).ToString("B");
                     string progid = Marshal.GenerateProgIdForType(type);
-                    //PWGS Generate device type from the Class name
-                    string deviceType = type.Name;
 
+                    // Generate device type from the Class name
+                    string deviceType = type.Name;
                     using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(string.Format("CLSID\\{0}", clsid)))
                     {
-                        key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
+                        key.SetValue(null, progid);
                         key.SetValue("AppId", s_appId);
                         using (RegistryKey key2 = key.CreateSubKey("Implemented Categories"))
                         {
@@ -388,9 +377,7 @@ namespace ASCOM.DynamicRemoteClients
                         }
                     }
 
-                    //
-                    // HKCR\APPID\clsid  For TheSkyX DCOM
-                    //
+                    // Set HKCR\APPID\clsid for TheSkyX DCOM
                     using (RegistryKey key = Registry.ClassesRoot.CreateSubKey("APPID\\" + clsid))
                     {
                         key.SetValue(null, assyDescription);
@@ -398,9 +385,7 @@ namespace ASCOM.DynamicRemoteClients
                         key.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
                     }
 
-                    //
-                    // HKCR\CLSID\progid
-                    //
+                    // Set HKCR\CLSID\progid
                     using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(progid))
                     {
                         key.SetValue(null, assyTitle);
@@ -409,13 +394,11 @@ namespace ASCOM.DynamicRemoteClients
                             key2.SetValue(null, clsid);
                         }
                     }
-                    //
-                    // ASCOM 
-                    //
-                    assy = type.Assembly;
 
+                    // Register the driver in the ASCOM Profile
+                    assy = type.Assembly;
                     // Pull the display name from the ServedClassName attribute.
-                    attr = Attribute.GetCustomAttribute(type, typeof(ServedClassNameAttribute)); //PWGS Changed to search type for attribute rather than assembly
+                    attr = Attribute.GetCustomAttribute(type, typeof(ServedClassNameAttribute));
                     string chooserName = ((ServedClassNameAttribute)attr).DisplayName ?? "MultiServer";
                     using (var P = new ASCOM.Utilities.Profile())
                     {
@@ -425,7 +408,7 @@ namespace ASCOM.DynamicRemoteClients
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "Remote Local Server", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("Error while registering the server:\n" + ex.ToString(), LOCAL_SERVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     TL.LogMessageCrLf("RegisterObjects", $"Exception while registering objects: {ex.ToString()}");
 
                     bFail = true;
@@ -445,21 +428,18 @@ namespace ASCOM.DynamicRemoteClients
         //
         private static void UnregisterObjects()
         {
+            // Ensure that we are running as with admin privilege
             if (!IsAdministrator)
             {
                 ElevateSelf("/unregister");
                 return;
             }
 
-            //
-            // Local server's DCOM/AppID information
-            //
+            // Remove the local server's DCOM/AppID information
             Registry.ClassesRoot.DeleteSubKey(string.Format("APPID\\{0}", s_appId), false);
             Registry.ClassesRoot.DeleteSubKey(string.Format("APPID\\{0}", Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)), false);
 
-            //
-            // For each of the driver assemblies
-            //
+            // COM unregister each of the driver assemblies
             foreach (Type type in s_ComObjectTypes)
             {
                 TL.LogMessage("RegisterObjects", string.Format("Processing type: {0}, is a COM object: {1}", type.FullName, type.IsCOMObject));
@@ -467,39 +447,18 @@ namespace ASCOM.DynamicRemoteClients
                 string clsid = Marshal.GenerateGuidForType(type).ToString("B");
                 string progid = Marshal.GenerateProgIdForType(type);
                 string deviceType = type.Name;
-                //
-                // Best efforts
-                //
-                //
-                // HKCR\progid
-                //
+
+                // Remove HKCR\progid
                 Registry.ClassesRoot.DeleteSubKey(String.Format("{0}\\CLSID", progid), false);
                 Registry.ClassesRoot.DeleteSubKey(progid, false);
-                //
-                // HKCR\CLSID\clsid
-                //
+
+                // Remove HKCR\CLSID\clsid
                 Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\Implemented Categories\\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}", clsid), false);
                 Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\Implemented Categories", clsid), false);
                 Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\ProgId", clsid), false);
                 Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\LocalServer32", clsid), false);
                 Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\Programmable", clsid), false);
                 Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}", clsid), false);
-
-                /* This is commented out so that profile values are retained when the driver is uninstalled and as part of the upgrade process.
-                 * Unfortunately it does mean that drivers will have to be manually deleted from the Profile if they are no longer required.
-                try
-                {
-                  //
-                  // ASCOM
-                  //
-                  using (var P = new ASCOM.Utilities.Profile())
-                  {
-                    P.DeviceType = deviceType;
-                    P.Unregister(progid);
-                    }
-                  }
-                  catch (Exception) { }
-                */
 
             }
         }
@@ -520,8 +479,7 @@ namespace ASCOM.DynamicRemoteClients
                 s_ClassFactories.Add(factory);
                 if (!factory.RegisterClassObject())
                 {
-                    MessageBox.Show("Failed to register class factory for " + type.Name,
-                        "Remote Local Server", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("Failed to register class factory for " + type.Name, "Dynamic Driver Local Server", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return false;
                 }
             }
@@ -576,8 +534,7 @@ namespace ASCOM.DynamicRemoteClients
                         break;
 
                     default:
-                        MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding",
-                            "Remote Local Server", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", LOCAL_SERVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         break;
                 }
             }

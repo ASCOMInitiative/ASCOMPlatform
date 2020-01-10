@@ -40,7 +40,7 @@ namespace ASCOM.DynamicRemoteClients
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(260, 18);
             this.label1.TabIndex = 0;
-            this.label1.Text = "This is the ASCOM Remote Client driver local server.";
+            this.label1.Text = "This is the ASCOM Dynamic Client driver local server.";
             // 
             // FrmMain
             // 

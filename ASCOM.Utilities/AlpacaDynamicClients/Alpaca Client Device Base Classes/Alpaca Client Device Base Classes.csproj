@@ -7,7 +7,7 @@
     <ProjectGuid>{C7605D43-D11A-4891-A32D-FD5AB6E74772}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ASCOM.Remote</RootNamespace>
+    <RootNamespace>ASCOM.DynamicRemoteClients</RootNamespace>
     <AssemblyName>ASCOM.AlpacaClientDeviceBaseClasses</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

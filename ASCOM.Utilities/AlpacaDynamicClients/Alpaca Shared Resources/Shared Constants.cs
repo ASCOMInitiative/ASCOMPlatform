@@ -43,7 +43,7 @@ namespace ASCOM.DynamicRemoteClients
 
         public const string ISO8601_DATE_FORMAT_STRING = "yyyy-MM-ddTHH:mm:ss.fffffff";
 
-        // Remote client configuration constants
+        // Dynamic client configuration constants
         public const int SOCKET_ERROR_MAXIMUM_RETRIES = 2; // The number of retries that the client will make when it receives a socket actively refused error from the remote server
         public const int SOCKET_ERROR_RETRY_DELAY_TIME = 1000; // The delay time (milliseconds) between socket actively refused retries
 
@@ -87,14 +87,14 @@ namespace ASCOM.DynamicRemoteClients
             Double = 3
         }
 
-        // Enum used by the remote client to indicate what type of image array transfer should be used
+        // Enum used by the dynamic client to indicate what type of image array transfer should be used
         public enum ImageArrayTransferType
         {
             JSON = 0,
             Base64HandOff = 1,
         }
 
-        // Enum used by the remote client to indicate what type of compression should be used in responses
+        // Enum used by the dynamic client to indicate what type of compression should be used in responses
         public enum ImageArrayCompression
         {
             None = 0,
@@ -111,10 +111,6 @@ namespace ASCOM.DynamicRemoteClients
         public const string BASE64_HANDOFF_HEADER = "base64handoff"; // Name of HTTP header used to affirm binary serialisation support for image array data
         public const string BASE64_HANDOFF_SUPPORTED = "true"; // Value of HTTP header to indicate support for binary serialised image array data
         public const string BASE64_HANDOFF_FILE_DOWNLOAD_URI_EXTENSION = "base64"; // Addition to the ImageArray and ImageArrayVariant method names from which base64 serialised image files can be downloaded
-
-        // Registry key where the Web Server configuration will be stored
-        public const RegistryHive ASCOM_REMOTE_CONFIGURATION_HIVE = RegistryHive.CurrentUser;
-        public const string ASCOM_REMOTE_CONFIGURATION_KEY = @"Software\ASCOM Remote";
 
         public const string DEVICE_NOT_CONFIGURED = "None"; // ProgID / UniqueID / device type value indicating no device configured
 

@@ -184,7 +184,6 @@
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="GarbageCollection.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="LocalServer.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="NoReturnValue.cs" />
@@ -203,7 +202,7 @@
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
     </Compile>
     <Compile Include="TrackingRates.cs" />
-    <Compile Include="RemoteClientDriver.cs" />
+    <Compile Include="DynamicClientDriver.cs" />
     <EmbeddedResource Include="frmMain.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmMain.cs</DependentUpon>
@@ -222,7 +221,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="LocalServer.snk" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

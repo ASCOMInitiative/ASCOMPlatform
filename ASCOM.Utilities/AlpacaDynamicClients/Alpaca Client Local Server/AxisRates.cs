@@ -10,7 +10,7 @@ namespace ASCOM.DynamicRemoteClients
     // both COM and .NET. The IAxisRates and IEnumerable interfaces provide
     // this polymorphism. 
     //
-    // The Guid attribute sets the CLSID for ASCOM.Remote.AxisRates
+    // The Guid attribute sets the CLSID for ADynamicRemoteClients AxisRates class
     // The ClassInterface/None attribute prevents an empty interface called
     // _AxisRates from being created and used as the [default] interface
     //
@@ -123,7 +123,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                if (pos < 0 || pos >= m_Rates.Length) throw new System.InvalidOperationException(string.Format("ASCOM Remote AxisRates.Current - Pointer value {0} is outside expected range 0..{1}", pos, m_Rates.Length));
+                if (pos < 0 || pos >= m_Rates.Length) throw new System.InvalidOperationException(string.Format("ASCOM DynamicRemoteClient AxisRates.Current - Pointer value {0} is outside expected range 0..{1}", pos, m_Rates.Length));
                 return m_Rates[pos];
             }
         }
