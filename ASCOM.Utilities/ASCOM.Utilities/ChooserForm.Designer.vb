@@ -42,12 +42,13 @@
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.MnuEnableDiscovery = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuDisableDiscovery = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MnuManageAlpacaDevices = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuConfigureChooser = New System.Windows.Forms.ToolStripMenuItem()
         Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
         Me.LblAlpacaDiscovery = New System.Windows.Forms.Label()
         Me.AlpacaStatus = New System.Windows.Forms.PictureBox()
         Me.DividerLine = New System.Windows.Forms.Panel()
-        Me.MnuManageAlpacaDevices = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MnuCreateAlpacaDriver = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ChooserMenu.SuspendLayout()
         CType(Me.AlpacaStatus, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -241,7 +242,7 @@
         '
         'MnuAlpaca
         '
-        Me.MnuAlpaca.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator3, Me.MnuDiscoverNow, Me.ToolStripSeparator4, Me.MnuEnableDiscovery, Me.MnuDisableDiscovery, Me.MnuManageAlpacaDevices, Me.MnuConfigureChooser})
+        Me.MnuAlpaca.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator3, Me.MnuDiscoverNow, Me.ToolStripSeparator4, Me.MnuEnableDiscovery, Me.MnuDisableDiscovery, Me.MnuManageAlpacaDevices, Me.MnuCreateAlpacaDriver, Me.MnuConfigureChooser})
         Me.MnuAlpaca.Name = "MnuAlpaca"
         Me.MnuAlpaca.Size = New System.Drawing.Size(55, 20)
         Me.MnuAlpaca.Text = "Alpaca"
@@ -249,36 +250,42 @@
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(204, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(248, 6)
         '
         'MnuDiscoverNow
         '
         Me.MnuDiscoverNow.Name = "MnuDiscoverNow"
-        Me.MnuDiscoverNow.Size = New System.Drawing.Size(207, 22)
+        Me.MnuDiscoverNow.Size = New System.Drawing.Size(251, 22)
         Me.MnuDiscoverNow.Text = "Discover Now"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(204, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(248, 6)
         '
         'MnuEnableDiscovery
         '
         Me.MnuEnableDiscovery.Name = "MnuEnableDiscovery"
-        Me.MnuEnableDiscovery.Size = New System.Drawing.Size(207, 22)
+        Me.MnuEnableDiscovery.Size = New System.Drawing.Size(251, 22)
         Me.MnuEnableDiscovery.Text = "Enable DIscovery"
         '
         'MnuDisableDiscovery
         '
         Me.MnuDisableDiscovery.Name = "MnuDisableDiscovery"
-        Me.MnuDisableDiscovery.Size = New System.Drawing.Size(207, 22)
+        Me.MnuDisableDiscovery.Size = New System.Drawing.Size(251, 22)
         Me.MnuDisableDiscovery.Text = "Disable Discovery"
+        '
+        'MnuManageAlpacaDevices
+        '
+        Me.MnuManageAlpacaDevices.Name = "MnuManageAlpacaDevices"
+        Me.MnuManageAlpacaDevices.Size = New System.Drawing.Size(251, 22)
+        Me.MnuManageAlpacaDevices.Text = "Manage Devices (Admin)"
         '
         'MnuConfigureChooser
         '
         Me.MnuConfigureChooser.Name = "MnuConfigureChooser"
-        Me.MnuConfigureChooser.Size = New System.Drawing.Size(207, 22)
-        Me.MnuConfigureChooser.Text = "Configure Chooser"
+        Me.MnuConfigureChooser.Size = New System.Drawing.Size(251, 22)
+        Me.MnuConfigureChooser.Text = "Configure Chooser and Discovery"
         '
         'LblAlpacaDiscovery
         '
@@ -308,11 +315,11 @@
         Me.DividerLine.Size = New System.Drawing.Size(306, 1)
         Me.DividerLine.TabIndex = 11
         '
-        'MnuManageAlpacaDevices
+        'MnuCreateAlpacaDriver
         '
-        Me.MnuManageAlpacaDevices.Name = "MnuManageAlpacaDevices"
-        Me.MnuManageAlpacaDevices.Size = New System.Drawing.Size(207, 22)
-        Me.MnuManageAlpacaDevices.Text = "Manage Devices (Admin)"
+        Me.MnuCreateAlpacaDriver.Name = "MnuCreateAlpacaDriver"
+        Me.MnuCreateAlpacaDriver.Size = New System.Drawing.Size(251, 22)
+        Me.MnuCreateAlpacaDriver.Text = "Create Alpaca Driver (Admin)"
         '
         'ChooserForm
         '
@@ -377,5 +384,6 @@
     Friend WithEvents MenuRegistryTraceEnabled As ToolStripMenuItem
     Friend WithEvents DividerLine As Panel
     Friend WithEvents MnuManageAlpacaDevices As ToolStripMenuItem
+    Friend WithEvents MnuCreateAlpacaDriver As ToolStripMenuItem
 #End Region
 End Class

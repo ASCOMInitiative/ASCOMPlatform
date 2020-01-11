@@ -227,7 +227,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alpaca Client Local Server"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alpaca Shared Resources", "ASCOM.Utilities\AlpacaDynamicClients\Alpaca Shared Resources\Alpaca Shared Resources.csproj", "{A9A92122-3CD7-4960-8D80-D62B06553983}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.CreateAlpacaClient", "ASCOM.Utilities\AlpacaDynamicClients\Create Alpaca Client\ASCOM.CreateAlpacaClient.csproj", "{97967194-9DD9-44DF-846C-E2D8D504DF2E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.AlpacaDynamicClientManager", "ASCOM.Utilities\AlpacaDynamicClients\Create Alpaca Client\ASCOM.AlpacaDynamicClientManager.csproj", "{97967194-9DD9-44DF-846C-E2D8D504DF2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

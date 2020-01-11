@@ -660,17 +660,33 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub MnuManageAlpacaDevices_Click(sender As Object, e As EventArgs) Handles MnuManageAlpacaDevices.Click
+
+        ' Run the client manager in manage mode
+        RunDynamicClientManager("ManageDevices")
+
+        ' Refresh the driver list after any changes made by the management tool
+        InitialiseComboBox()
+
+    End Sub
+
+    Private Sub MnuCreateAlpacaDriver_Click(sender As Object, e As EventArgs) Handles MnuCreateAlpacaDriver.Click
+
+    End Sub
+
+    Private Sub RunDynamicClientManager(parameters As String)
         Dim generatorWorkingDirectory, generatorExeFile As String
         Dim generatorProcessStartInfo As ProcessStartInfo
 
         ' Construct path to the executable that will dynamically create a new ALpaca COM client
         generatorWorkingDirectory = $"{Get32BitProgramFilesPath()}\{ALPACA_DYNAMIC_CLIENT_GENERATOR_RELATIVE_PATH}"
         generatorExeFile = $"{generatorWorkingDirectory}\{ALPACA_DYNAMIC_CLIENT_EXE_NAME}"
-        TL.LogMessage("ManageAlpacaDevices", $"Managing drivers using the {generatorExeFile} executable in working directory {generatorWorkingDirectory}")
+
+        TL.LogMessage("RunDynamicClientManager", $"Generator parameters: '{parameters}'")
+        TL.LogMessage("RunDynamicClientManager", $"Managing drivers using the {generatorExeFile} executable in working directory {generatorWorkingDirectory}")
 
         If Not File.Exists(generatorExeFile) Then
             MsgBox("The client generator executable can not be found, please repair the ASCOM Platform.", MsgBoxStyle.Critical, "ALpaca Client Generator Not Found")
-            TL.LogMessage("ManageAlpacaDevices", $"ERROR - Unable to find the client generator executable at {generatorExeFile}, cannot create a new Alpaca client.")
+            TL.LogMessage("RunDynamicClientManager", $"ERROR - Unable to find the client generator executable at {generatorExeFile}, cannot create a new Alpaca client.")
             selectedProgIdValue = ""
             Return
         End If
@@ -688,7 +704,7 @@ Friend Class ChooserForm
         driverGenerationComplete = False
 
         ' Run the process
-        TL.LogMessage("ManageAlpacaDevices", $"Starting driver management process")
+        TL.LogMessage("RunDynamicClientManager", $"Starting driver management process")
         generatorProcess.Start()
 
         ' Wait for the process to complete at which point the process complete event will fire and driverGenerationComplete will be set true
@@ -697,14 +713,13 @@ Friend Class ChooserForm
             Application.DoEvents()
         Loop While Not driverGenerationComplete
 
-        TL.LogMessage("ManageAlpacaDevices", $"Completed driver management process")
+        TL.LogMessage("RunDynamicClientManager", $"Completed driver management process")
 
         generatorProcess.Dispose()
 
-        ' Refresh the driver list after any changes made by the management tool
-        InitialiseComboBox()
 
     End Sub
+
 
 #End Region
 
