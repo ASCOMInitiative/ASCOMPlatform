@@ -49,6 +49,7 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.ForeColor = System.Drawing.Color.RoyalBlue;
             this.label11.Location = new System.Drawing.Point(312, 24);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(294, 20);
@@ -84,7 +85,7 @@
             this.ChkSelectAll.UseVisualStyleBackColor = true;
             this.ChkSelectAll.CheckedChanged += new System.EventHandler(this.ChkSelectAll_CheckedChanged);
             // 
-            // Form1
+            // ManageDevicesForm
             // 
             this.AcceptButton = this.BtnDeleteDrivers;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -98,7 +99,7 @@
             this.Controls.Add(this.BtnDeleteDrivers);
             this.Controls.Add(this.BtnClose);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form1";
+            this.Name = "ManageDevicesForm";
             this.Text = "Dynamic Remote Driver Configuration";
             this.ResumeLayout(false);
             this.PerformLayout();

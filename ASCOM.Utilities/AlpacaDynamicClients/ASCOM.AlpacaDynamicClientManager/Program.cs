@@ -18,7 +18,7 @@ namespace ASCOM.DynamicRemoteClients
     {
         private const string BASE_CLASS_POSTFIX = "BaseClass"; // Postfix to the device type to create the base class name e.g. "CamerabaseClass". Must match the last characters of the device base class names!
         private const int LOCALSERVER_WAIT_TIME = 5000; // Length of time (milliseconds) to wait for the local server to (un)register its drivers
-        private const string LOCALSERVER_EXE_NAME = "ASCOM.AlpacaClientLocalServer.exe"; // Name of the local server executable
+        internal const string LOCALSERVER_EXE_NAME = "ASCOM.AlpacaClientLocalServer.exe"; // Name of the local server executable
 
 
         // List of supported device types - this must be kept in sync with the device type numeric up-down controls on the form dialogue!
@@ -39,7 +39,7 @@ namespace ASCOM.DynamicRemoteClients
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException); // Set the unhandled exception mode to force all exceptions to go through our handler.
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException); // Add the event handler for handling non-UI thread exceptions to the event. 
 
-            TL = new TraceLogger("", "DynamicClients");
+            TL = new TraceLogger("", "AlpacaDynamicClientManager");
             TL.Enabled = true;
 
             try
@@ -58,19 +58,19 @@ namespace ASCOM.DynamicRemoteClients
                     case "MANAGEDEVICES": // Run the application in user interactive mode
                         Application.EnableVisualStyles();
                         Application.SetCompatibleTextRenderingDefault(false);
-                        TL.LogMessage("Main", "Starting application form");
+                        TL.LogMessage("Main", "Starting device management form");
                         Application.Run(new ManageDevicesForm(TL));
                         break;
 
                     case "CREATEALPACACLIENT":
 
                         // Validate supplied parameters before passing to the execution method
-                        if (args.Length < 5)
+                        if (args.Length < 4)
                         {
                             // Validate the number of parameters - must be 5: Command DeviceType COMDeviceNumber ProgID DeviceName
-                            errMsg = $"The CreateAlpacaClient command requires 4 parameters: DeviceType COMDeviceNumber ProgID DeviceName e.g. /CreateAlpacaClient Telescope 1 ASCOM.AlpacaDynamic1.Telescope \"Dynamic telescope display name\"";
+                            errMsg = $"The CreateAlpacaClient command requires 3 parameters: DeviceType COMDeviceNumber ProgID DeviceName e.g. /CreateAlpacaClient Telescope 1 ASCOM.AlpacaDynamic1.Telescope";
                             TL.LogMessageCrLf("CreateAlpacaClient", errMsg);
-                            MessageBox.Show(errMsg, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(errMsg, "ASCOM Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
 
@@ -79,7 +79,7 @@ namespace ASCOM.DynamicRemoteClients
                         {
                             errMsg = $"The supplied ASCOM device type '{args[1]}' is not supported: The command format is \"/CreateAlpacaClient ASCOMDeviceType AlpacaDeviceUniqueID\" e.g. /CreateAlpacaClient Telescope 84DC2495-CBCE-4A9C-A703-E342C0E1F651";
                             TL.LogMessageCrLf("CreateAlpacaClient", errMsg);
-                            MessageBox.Show(errMsg, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(errMsg, "ASCOM Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
 
@@ -90,20 +90,18 @@ namespace ASCOM.DynamicRemoteClients
                         {
                             errMsg = $"The supplied COM device number is not an integer: {args[2]}";
                             TL.LogMessageCrLf("CreateAlpacaClient", errMsg);
-                            MessageBox.Show(errMsg, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(errMsg, "ASCOM Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
 
                         string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + SharedConstants.ALPACA_CLIENT_LOCAL_SERVER_PATH;
                         TL.LogMessage("CreateAlpacaClient", $"Alpaca local server folder: {localServerPath}");
 
-                        CreateAlpacaClient(args[1].ToPascalCase(), comDevicenumber, args[3], args[4], localServerPath); // Call the execution method with correctly cased device type and unique ID parameters
-
-                        string localServerExe = $"{localServerPath}\\{LOCALSERVER_EXE_NAME}";
-                        TL.LogMessage("CreateAlpacaClient", $"Alpaca local server exe name: {localServerExe}");
-
-                        RunLocalServer(localServerExe, "-regserver", TL);
-
+                        // The supplied parameters pass validation so run the create device form to obtain the device description and create the driver
+                        Application.EnableVisualStyles();
+                        Application.SetCompatibleTextRenderingDefault(false);
+                        TL.LogMessage("Main", "Starting device creation form");
+                        Application.Run(new CreateDeviceForm(args[1].ToPascalCase(), comDevicenumber, args[3], localServerPath, TL));
                         break;
 
                     default: // Unrecognised parameter so flag this to the user
@@ -159,7 +157,7 @@ namespace ASCOM.DynamicRemoteClients
         ///     }
         /// }
         /// </remarks>
-        private static void CreateAlpacaClient(string DeviceType, int DeviceNumber, string ProgId, string DisplayName, string localServerPath)
+        internal static void CreateAlpacaClient(string DeviceType, int DeviceNumber, string ProgId, string DisplayName, string localServerPath)
         {
             TL.LogMessage("CreateAlpacaClient", $"Creating new ProgID: for {DeviceType} device {DeviceNumber} with ProgID: {ProgId} and display name: {DisplayName}");
 

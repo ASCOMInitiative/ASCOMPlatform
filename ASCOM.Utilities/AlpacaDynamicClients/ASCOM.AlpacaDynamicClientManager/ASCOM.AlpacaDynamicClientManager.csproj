@@ -64,6 +64,12 @@
     <Compile Include="ColouredCheckedListBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CreateDeviceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateDeviceForm.Designer.cs">
+      <DependentUpon>CreateDeviceForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="DynamicDriverRegistration.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="ManageDevicesForm.cs">
@@ -74,6 +80,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CreateDeviceForm.resx">
+      <DependentUpon>CreateDeviceForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ManageDevicesForm.resx">
       <DependentUpon>ManageDevicesForm.cs</DependentUpon>
     </EmbeddedResource>

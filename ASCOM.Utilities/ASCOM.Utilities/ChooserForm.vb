@@ -376,7 +376,7 @@ Friend Class ChooserForm
                 If userResponse = MsgBoxResult.Ok Then
 
                     ' Create a new ALpaca driver of the current ASCOM device type
-                    newProgId = CreateNewAlpacaDriver(selectedChooserItem.Name)
+                    newProgId = CreateNewAlpacaDriver()
 
                     ' Configure the IP address, port number and Alpaca device number in the newly registered driver
                     profile.DeviceType = $"{deviceTypeValue.Substring(0, 1).ToUpperInvariant()}{deviceTypeValue.Substring(1).ToLowerInvariant()}"
@@ -637,7 +637,7 @@ Friend Class ChooserForm
     ''' <param name="progIdBase">ProgID base string</param>
     ''' <param name="deviceType">ASCOM device type</param>
     ''' <returns></returns>
-    Private Function CreateNewAlpacaDriver(deviceDescription As String) As String
+    Private Function CreateNewAlpacaDriver() As String
         Dim newProgId As String
         Dim deviceNumber As Integer
         Dim typeFromProgId As Type
@@ -656,7 +656,7 @@ Friend Class ChooserForm
         TL.LogMessage("CreateAlpacaClient", $"Creating new ProgID: {newProgId}")
 
         ' Create the new Alpaca Client
-        RunDynamicClientManager($"\CreateAlpacaClient {deviceTypeValue} {deviceNumber} {newProgId} ""{deviceDescription}""")
+        RunDynamicClientManager($"\CreateAlpacaClient {deviceTypeValue} {deviceNumber} {newProgId}")
 
         Return newProgId ' Return the new ProgID
     End Function
@@ -670,7 +670,7 @@ Friend Class ChooserForm
             If userResponse = MsgBoxResult.Ok Then ' User said proceed
 
                 ' Create a new ALpaca driver of the current ASCOM device type
-                newProgId = CreateNewAlpacaDriver("New Alpaca Driver")
+                newProgId = CreateNewAlpacaDriver()
 
                 ' Select the new driver in the Chooser combo box list
                 selectedProgIdValue = newProgId
