@@ -24,7 +24,7 @@ using Microsoft.Win32;
 
 namespace ASCOM.DynamicRemoteClients
 {
-    public partial class Form1 : Form
+    public partial class ManageDevicesForm : Form
     {
         // Constants only used within this form
         private const string DEVICE_NUMBER = "DeviceNumber"; // Regular expression device number placeholder name
@@ -52,7 +52,7 @@ namespace ASCOM.DynamicRemoteClients
         /// <summary>
         /// Initialises the form
         /// </summary>
-        public Form1(TraceLogger TLParameter)
+        public ManageDevicesForm(TraceLogger TLParameter)
         {
             try
             {
@@ -234,7 +234,7 @@ namespace ASCOM.DynamicRemoteClients
                                 // No action
                             }
                         }
-                        else // Driver is COm registered and its driver DLL exists
+                        else // Driver is COM registered and its driver DLL exists
                         {
                             // Test whether the device is ASCOM registered
                             if (!profile.IsRegistered(progId)) // The driver is not registered in the ASCOM Profile
@@ -244,7 +244,7 @@ namespace ASCOM.DynamicRemoteClients
                                 foundDriver.ProgId = progId;
                                 foundDriver.DeviceType = deviceType;
                                 foundDriver.Name = progId;
-                                foundDriver.InstallState = InstallationState.MissingDriver;
+                                foundDriver.InstallState = InstallationState.BadProfile;
                                 foundDriver.Description = $"{foundDriver.ProgId} - Driver is COM registered but not ASCOM registered - Deletion recommended";
 
                                 dynamicDrivers.Add(foundDriver);
@@ -253,7 +253,7 @@ namespace ASCOM.DynamicRemoteClients
                             }
                             else // The driver is registered in the ASCOM Profile
                             {
-                                TL.LogMessage("ReadConfiguration", $"{progId} - Driver DLL exists and is registered for COm and ASCOM so this driver will have been already listed - no action taken");
+                                TL.LogMessage("ReadConfiguration", $"{progId} - Driver DLL exists and is registered for COM and ASCOM so this driver will have been already listed - no action taken");
                                 // No action required
                             }
                         }
@@ -295,7 +295,6 @@ namespace ASCOM.DynamicRemoteClients
         /// <param name="e"></param>
         private void BtnDeleteDrivers_Click(object sender, EventArgs e)
         {
-
             // Confirm whether the user really does want to delete the selected drivers
             DialogResult result = MessageBox.Show("Are you sure that you want to delete the checked drivers?", "Delete Dynamic Drivers", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result != DialogResult.Yes) return; // Give up if there is any outcome other than yes
@@ -305,63 +304,78 @@ namespace ASCOM.DynamicRemoteClients
                 // Disable controls so that the process can't be stopped part way through 
                 BtnDeleteDrivers.Enabled = false;
 
-                // Create variables pointing to the dynamic driver's local server folder and executable
+                // Create pointer to the dynamic driver's local server folder
                 string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + LOCAL_SERVER_PATH;
-                string localServerExe = localServerPath + LOCAL_SERVER_EXE;
+                TL.LogMessage("DeleteDrivers", $"Local server path: {localServerPath}");
 
-                if (File.Exists(localServerExe)) // Local server does exist
+                // Iterate over each device that has been checked in the UI checked list box
+                foreach (DynamicDriverRegistration driver in dynamicDriversCheckedListBox.CheckedItems)
                 {
-                    TL.LogMessage("DeleteDrivers", string.Format("Found local server {0}", localServerExe));
+                    // COM unregister the driver
+                    ComUnregister(driver.ProgId);
 
-                    // Iterate over each device that has been checked in the UI checked list box
-                    foreach (DynamicDriverRegistration driver in dynamicDriversCheckedListBox.CheckedItems)
+                    // Create pointers to the driver executable and its PDB file
+                    TL.LogMessage("DeleteDrivers", $"Deleting driver {driver.Description}");
+                    string driverFileName = $"{localServerPath}{driver.ProgId}.dll";
+                    string pdbFileName = $"{localServerPath}{driver.ProgId}.pdb";
+
+                    // Delete the driver and it's PDB file
+                    TL.LogMessage("DeleteDrivers", $"Deleting driver files {driverFileName} and {pdbFileName}");
+                    try
                     {
-                        // COM unregister the driver
-                        ComUnregister(driver.ProgId);
-
-                        // Delete the driver executable and it's PDB file
-                        TL.LogMessage("DeleteDrivers", $"Deleting driver {driver.Description}");
-                        string driverFileName = $"{localServerPath}{driver.ProgId}.dll";
-                        string pdbFileName = $"{localServerPath}{driver.ProgId}.pdb";
-                        TL.LogMessage("DeleteDrivers", $"Deleting driver files {driverFileName} and {pdbFileName}");
-                        try
-                        {
-                            File.Delete(driverFileName);
-                            File.Delete(pdbFileName);
-                            TL.LogMessage("DeleteDrivers", string.Format("Successfully deleted driver file {0}", driverFileName));
-                        }
-                        catch (Exception ex)
-                        {
-                            string errorMessage = string.Format("Unable to delete driver file {0} - {1}", driverFileName, ex.Message);
-                            TL.LogMessage("DeleteDrivers", errorMessage);
-                            MessageBox.Show(errorMessage, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-
-
-                        // Try to remove the ASCOM Profile information that is not removed when the driver is unregistered
-                        try
-                        {
-                            TL.LogMessage("DeleteDrivers", $"Removing driver Profile registration for {driver.DeviceType} driver: {driver.ProgId}");
-                            profile.DeviceType = driver.DeviceType;
-                            profile.Unregister(driver.ProgId);
-                        }
-                        catch (Exception ex)
-                        {
-                            TL.LogMessageCrLf("DeleteDriversException", $"Exception removing driver: {ex.ToString()}");
-                        }
-
+                        File.Delete(driverFileName);
+                        TL.LogMessage("DeleteDrivers", $"Successfully deleted driver file { driverFileName}");
+                    }
+                    catch (Exception ex)
+                    {
+                        string errorMessage = $"Unable to delete driver file {driverFileName} - {ex.Message}";
+                        TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                        MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
-                    // Re-register the remaining drivers
-                    //                    CreateAlpacaClients.RunLocalServer(localServerExe, "-regserver", TL);
-                    ReadConfiguration();
+                    try
+                    {
+                        File.Delete(pdbFileName);
+                        TL.LogMessage("DeleteDrivers", $"Successfully deleted driver file { driverFileName}");
+                    }
+                    catch (Exception ex)
+                    {
+                        string errorMessage = $"Unable to delete driver file {pdbFileName} - {ex.Message}";
+                        TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                        MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    // Remove the ASCOM Profile information that is not removed by the local server when the driver is unregistered
+                    try
+                    {
+                        TL.LogMessage("DeleteDrivers", $"Removing driver Profile registration for {driver.DeviceType} driver: {driver.ProgId}");
+                        profile.DeviceType = driver.DeviceType;
+                        profile.Unregister(driver.ProgId);
+                    }
+                    catch (Exception ex)
+                    {
+                        string errorMessage = $"Unable to unregister driver {driver.ProgId} - {ex.Message}";
+                        TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                        MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    // Remove the flag indicating that this driver has been configured
+                    try
+                    {
+                        using (RegistryAccess registryAccess = new RegistryAccess())
+                        {
+                            registryAccess.DeleteProfile("Chooser", $"{driver.ProgId} Init");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        string errorMessage = $"Unable to remove driver initialised flag for {driver.ProgId} - {ex.Message}";
+                        TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                        MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
-                else // Local server can not be found
-                {
-                    string errorMessage = $"Could not find the dynamic driver local server, please repair the ASCOM Platform: {localServerExe}";
-                    TL.LogMessage("DeleteDrivers", errorMessage);
-                    MessageBox.Show(errorMessage, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                } // Local server can not be found
+
+                ReadConfiguration();
             }
             catch (Exception ex)
             {

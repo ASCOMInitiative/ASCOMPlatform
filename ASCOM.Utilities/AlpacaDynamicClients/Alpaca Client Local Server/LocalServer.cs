@@ -315,7 +315,7 @@ namespace ASCOM.DynamicRemoteClients
             string assyDescription = ((AssemblyDescriptionAttribute)attr).Description;
             TL.LogMessage("RegisterObjects", $"ASsembly description: {assyDescription}");
 
-            // Set the ;ocal server's DCOM/AppID information
+            // Set the local server's DCOM/AppID information
             try
             {
                 // Set HKCR\APPID\appid
@@ -395,15 +395,22 @@ namespace ASCOM.DynamicRemoteClients
                         }
                     }
 
-                    // Register the driver in the ASCOM Profile
+                    // Register the driver in the ASCOM Profile if it is not already registered
                     assy = type.Assembly;
                     // Pull the display name from the ServedClassName attribute.
                     attr = Attribute.GetCustomAttribute(type, typeof(ServedClassNameAttribute));
                     string chooserName = ((ServedClassNameAttribute)attr).DisplayName ?? "MultiServer";
-                    using (var P = new ASCOM.Utilities.Profile())
+                    using (var profile = new ASCOM.Utilities.Profile())
                     {
-                        P.DeviceType = deviceType;
-                        P.Register(progid, chooserName);
+                        if (!profile.IsRegistered(progid)) // Device is not ASCOM registered so register it and set some initial values so that the driver will appear valid to the dynamic device manager
+                        {
+                            profile.DeviceType = deviceType;
+                            profile.Register(progid, chooserName);
+                            profile.WriteValue(progid, SharedConstants.IPADDRESS_PROFILENAME,SharedConstants.IPADDRESS_DEFAULT);
+                            profile.WriteValue(progid, SharedConstants.PORTNUMBER_PROFILENAME, SharedConstants.PORTNUMBER_DEFAULT.ToString());
+                            profile.WriteValue(progid, SharedConstants.REMOTE_DEVICE_NUMBER_PROFILENAME, SharedConstants.REMOTE_DEVICE_NUMBER_DEFAULT.ToString());
+                            profile.WriteValue(progid, SharedConstants.UNIQUEID_PROFILENAME, SharedConstants.UNIQUEID_DEFAULT);
+                        }
                     }
                 }
                 catch (Exception ex)

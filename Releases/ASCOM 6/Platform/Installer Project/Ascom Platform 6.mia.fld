@@ -1,6 +1,7 @@
 ﻿Check Application Requirements
 Main Setup Dialogue
 Prepare for Installation or Uninstallation
+Finish Setup Dialogue
 Check Application Pre-Requisites
 Specify additional clean-up required when uninstalling
 Platform 6 Content
@@ -9,11 +10,10 @@ Set Registry Keys
 Platform 6.1 files
 Set up log file and variables
 Remove Previous Platform 6 install if present
+Remove 64bit components
 ASCOM Cache
 Remove Previous Platforms 4 and 5 if present
 Create shortcuts
+Remove 32bit components
 Install Application Pre-Requisites if required
 Maintenance Dialogue
-Remove 64bit components
-Remove 32bit components
-Finish Setup Dialogue

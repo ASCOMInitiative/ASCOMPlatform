@@ -1,6 +1,6 @@
 ﻿namespace ASCOM.DynamicRemoteClients
 {
-    partial class Form1
+    partial class ManageDevicesForm
     {
         /// <summary>
         /// Required designer variable.
@@ -15,7 +15,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageDevicesForm));
             this.BtnClose = new System.Windows.Forms.Button();
             this.BtnDeleteDrivers = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();

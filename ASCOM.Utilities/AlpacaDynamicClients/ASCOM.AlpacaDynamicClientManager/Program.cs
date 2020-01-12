@@ -55,11 +55,11 @@ namespace ASCOM.DynamicRemoteClients
 
                 switch (commandParameter.ToUpperInvariant()) // Act on the supplied parameter, if any
                 {
-                    case "": // Run the application in user interactive mode
+                    case "MANAGEDEVICES": // Run the application in user interactive mode
                         Application.EnableVisualStyles();
                         Application.SetCompatibleTextRenderingDefault(false);
                         TL.LogMessage("Main", "Starting application form");
-                        Application.Run(new Form1(TL));
+                        Application.Run(new ManageDevicesForm(TL));
                         break;
 
                     case "CREATEALPACACLIENT":

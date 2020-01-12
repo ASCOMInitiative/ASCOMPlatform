@@ -66,16 +66,16 @@
     </Compile>
     <Compile Include="DynamicDriverRegistration.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="ManageDevicesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ManageDevicesForm.Designer.cs">
+      <DependentUpon>ManageDevicesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="ManageDevicesForm.resx">
+      <DependentUpon>ManageDevicesForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="app.manifest">
