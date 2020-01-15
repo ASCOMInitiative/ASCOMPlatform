@@ -2357,11 +2357,8 @@ Global
 		{97967194-9DD9-44DF-846C-E2D8D504DF2E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{97967194-9DD9-44DF-846C-E2D8D504DF2E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{97967194-9DD9-44DF-846C-E2D8D504DF2E}.Release|Win32.ActiveCfg = Release|Any CPU
-		{97967194-9DD9-44DF-846C-E2D8D504DF2E}.Release|Win32.Build.0 = Release|Any CPU
 		{97967194-9DD9-44DF-846C-E2D8D504DF2E}.Release|x64.ActiveCfg = Release|Any CPU
-		{97967194-9DD9-44DF-846C-E2D8D504DF2E}.Release|x64.Build.0 = Release|Any CPU
 		{97967194-9DD9-44DF-846C-E2D8D504DF2E}.Release|x86.ActiveCfg = Release|Any CPU
-		{97967194-9DD9-44DF-846C-E2D8D504DF2E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
