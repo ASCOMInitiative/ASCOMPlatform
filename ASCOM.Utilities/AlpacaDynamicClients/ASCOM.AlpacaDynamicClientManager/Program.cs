@@ -18,8 +18,6 @@ namespace ASCOM.DynamicRemoteClients
     {
         private const string BASE_CLASS_POSTFIX = "BaseClass"; // Postfix to the device type to create the base class name e.g. "CamerabaseClass". Must match the last characters of the device base class names!
         private const int LOCALSERVER_WAIT_TIME = 5000; // Length of time (milliseconds) to wait for the local server to (un)register its drivers
-        internal const string LOCALSERVER_EXE_NAME = "ASCOM.AlpacaClientLocalServer.exe"; // Name of the local server executable
-
 
         // List of supported device types - this must be kept in sync with the device type numeric up-down controls on the form dialogue!
         private static readonly List<string> supportedDeviceTypes = new List<string>() { "Camera", "Dome", "FilterWheel", "Focuser", "ObservingConditions", "Rotator", "SafetyMonitor", "Switch", "Telescope" };
@@ -256,7 +254,7 @@ namespace ASCOM.DynamicRemoteClients
                 cp.ReferencedAssemblies.Add(@"ASCOM.Newtonsoft.Json.dll");               // Must be present in the current directory because the compiler doesn't use the GAC
                 cp.ReferencedAssemblies.Add(@"RestSharp.dll");                           // Must be present in the current directory
                 cp.ReferencedAssemblies.Add(@"ASCOM.AlpacaClientDeviceBaseClasses.dll"); // Must be present in the current directory
-                cp.ReferencedAssemblies.Add(@"ASCOM.AlpacaClientLocalServer.exe");       // Must be present in the current directory
+                cp.ReferencedAssemblies.Add(SharedConstants.ALPACA_CLIENT_LOCAL_SERVER); // Must be present in the current directory
 
                 Assembly executingAssembly = Assembly.GetExecutingAssembly();
                 cp.ReferencedAssemblies.Add(executingAssembly.Location);

@@ -25,7 +25,7 @@ namespace ASCOM.DynamicRemoteClients
         private string DriverDisplayName; // Driver description that displays in the ASCOM Chooser.
         private string DriverProgId; // Drivers ProgID
         private SetupDialogForm setupForm; // Private variable to hold an instance of the Driver's setup form when invoked by the user
-        private RestClient client; // Client to send and receive REST style messages to / from the remote server
+        private RestClient client; // Client to send and receive REST style messages to / from the remote device
         private uint clientNumber; // Unique number for this driver within the locaL server, i.e. across all drivers that the local server is serving
         private bool clientIsConnected;  // Connection state of this driver
         private string URIBase; // URI base unique to this driver
@@ -38,8 +38,8 @@ namespace ASCOM.DynamicRemoteClients
         private decimal remoteDeviceNumber;
         private string serviceType;
         private int establishConnectionTimeout;
-        private int standardServerResponseTimeout;
-        private int longServerResponseTimeout;
+        private int standardDeviceResponseTimeout;
+        private int longDeviceResponseTimeout;
         private string userName;
         private string password;
         private bool manageConnectLocally;
@@ -65,8 +65,8 @@ namespace ASCOM.DynamicRemoteClients
 
                 if (TL == null) TL = new TraceLoggerPlus("", string.Format(SharedConstants.TRACELOGGER_NAME_FORMAT_STRING, DriverNumber, DEVICE_TYPE));
                 DynamicClientDriver.ReadProfile(clientNumber, TL, DEVICE_TYPE, DriverProgId,
-                    ref traceState, ref debugTraceState, ref ipAddressString, ref portNumber, ref remoteDeviceNumber, ref serviceType, ref establishConnectionTimeout, ref standardServerResponseTimeout,
-                    ref longServerResponseTimeout, ref userName, ref password, ref manageConnectLocally, ref imageArrayTransferType, ref imageArrayCompression);
+                    ref traceState, ref debugTraceState, ref ipAddressString, ref portNumber, ref remoteDeviceNumber, ref serviceType, ref establishConnectionTimeout, ref standardDeviceResponseTimeout,
+                    ref longDeviceResponseTimeout, ref userName, ref password, ref manageConnectLocally, ref imageArrayTransferType, ref imageArrayCompression);
                 TL.LogMessage(clientNumber, DEVICE_TYPE, string.Format("Trace state: {0}, Debug Trace State: {1}, TraceLogger Debug State: {2}", traceState, debugTraceState, TL.DebugTraceState));
                 Version version = Assembly.GetEntryAssembly().GetName().Version;
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "Starting initialisation, Version: " + version.ToString());
@@ -74,13 +74,13 @@ namespace ASCOM.DynamicRemoteClients
                 clientNumber = DynamicClientDriver.GetUniqueClientNumber();
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "This instance's unique client number: " + clientNumber);
 
-                DynamicClientDriver.ConnectToRemoteServer(ref client, ipAddressString, portNumber, serviceType, TL, clientNumber, DEVICE_TYPE, standardServerResponseTimeout, userName, password);
+                DynamicClientDriver.ConnectToRemoteDevice(ref client, ipAddressString, portNumber, serviceType, TL, clientNumber, DEVICE_TYPE, standardDeviceResponseTimeout, userName, password);
 
                 URIBase = string.Format("{0}{1}/{2}/{3}/", SharedConstants.API_URL_BASE, SharedConstants.API_VERSION_V1, DEVICE_TYPE, remoteDeviceNumber.ToString());
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "This devices's base URI: " + URIBase);
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "Establish communications timeout: " + establishConnectionTimeout.ToString());
-                TL.LogMessage(clientNumber, DEVICE_TYPE, "Standard server response timeout: " + standardServerResponseTimeout.ToString());
-                TL.LogMessage(clientNumber, DEVICE_TYPE, "Long server response timeout: " + longServerResponseTimeout.ToString());
+                TL.LogMessage(clientNumber, DEVICE_TYPE, "Standard device response timeout: " + standardDeviceResponseTimeout.ToString());
+                TL.LogMessage(clientNumber, DEVICE_TYPE, "Long device response timeout: " + longDeviceResponseTimeout.ToString());
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "User name: " + userName);
                 TL.LogMessage(clientNumber, DEVICE_TYPE, string.Format("Password is Null or Empty: {0}, Password is Null or White Space: {1}", string.IsNullOrEmpty(password), string.IsNullOrWhiteSpace(password)));
                 TL.LogMessage(clientNumber, DEVICE_TYPE, string.Format("Password length: {0}", password.Length));
@@ -99,25 +99,25 @@ namespace ASCOM.DynamicRemoteClients
 
         public string Action(string actionName, string actionParameters)
         {
-            DynamicClientDriver.SetClientTimeout(client, longServerResponseTimeout);
+            DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
             return DynamicClientDriver.Action(clientNumber, client, URIBase, TL, actionName, actionParameters);
         }
 
         public void CommandBlind(string command, bool raw = false)
         {
-            DynamicClientDriver.SetClientTimeout(client, longServerResponseTimeout);
+            DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
             DynamicClientDriver.CommandBlind(clientNumber, client, URIBase, TL, command, raw);
         }
 
         public bool CommandBool(string command, bool raw = false)
         {
-            DynamicClientDriver.SetClientTimeout(client, longServerResponseTimeout);
+            DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
             return DynamicClientDriver.CommandBool(clientNumber, client, URIBase, TL, command, raw);
         }
 
         public string CommandString(string command, bool raw = false)
         {
-            DynamicClientDriver.SetClientTimeout(client, longServerResponseTimeout);
+            DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
             return DynamicClientDriver.CommandString(clientNumber, client, URIBase, TL, command, raw);
         }
 
@@ -136,9 +136,9 @@ namespace ASCOM.DynamicRemoteClients
                 clientIsConnected = value;
                 if (manageConnectLocally)
                 {
-                    TL.LogMessage(clientNumber, DEVICE_TYPE, string.Format("The Connected property is being managed locally so the new value '{0}' will not be sent to the remote server", value));
+                    TL.LogMessage(clientNumber, DEVICE_TYPE, string.Format("The Connected property is being managed locally so the new value '{0}' will not be sent to the remote device", value));
                 }
-                else // Send the command to the remote server
+                else // Send the command to the remote device
                 {
                     DynamicClientDriver.SetClientTimeout(client, establishConnectionTimeout);
                     if (value) DynamicClientDriver.Connect(clientNumber, client, URIBase, TL);
@@ -151,8 +151,8 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
-                string response = string.Format("{0} REMOTE DRIVER: {1}", DriverDisplayName, DynamicClientDriver.Description(clientNumber, client, URIBase, TL));
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                string response = string.Format("{0} REMOTE DEVICE: {1}", DriverDisplayName, DynamicClientDriver.Description(clientNumber, client, URIBase, TL));
                 TL.LogMessage(clientNumber, "Description", response);
                 return response;
             }
@@ -162,10 +162,10 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                 string remoteString = DynamicClientDriver.DriverInfo(clientNumber, client, URIBase, TL);
-                string response = string.Format("{0} Version {1}, REMOTE DRIVER: {2}", DriverDisplayName, version.ToString(), remoteString);
+                string response = string.Format("{0} Version {1}, REMOTE DEVICE: {2}", DriverDisplayName, version.ToString(), remoteString);
                 TL.LogMessage(clientNumber, "DriverInfo", response);
                 return response;
             }
@@ -175,7 +175,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.DriverVersion(clientNumber, client, URIBase, TL);
             }
         }
@@ -184,7 +184,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.InterfaceVersion(clientNumber, client, URIBase, TL);
             }
         }
@@ -194,7 +194,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 string remoteString = DynamicClientDriver.GetValue<string>(clientNumber, client, URIBase, TL, "Name");
-                string response = string.Format("{0} REMOTE DRIVER: {1}", DriverDisplayName, remoteString);
+                string response = string.Format("{0} REMOTE DEVICE: {1}", DriverDisplayName, remoteString);
                 TL.LogMessage(clientNumber, "Name", response);
                 return response;
             }
@@ -221,8 +221,8 @@ namespace ASCOM.DynamicRemoteClients
                     setupForm.PortNumber = portNumber;
                     setupForm.RemoteDeviceNumber = remoteDeviceNumber;
                     setupForm.EstablishConnectionTimeout = establishConnectionTimeout;
-                    setupForm.StandardTimeout = standardServerResponseTimeout;
-                    setupForm.LongTimeout = longServerResponseTimeout;
+                    setupForm.StandardTimeout = standardDeviceResponseTimeout;
+                    setupForm.LongTimeout = longDeviceResponseTimeout;
                     setupForm.UserName = userName;
                     setupForm.Password = password;
                     setupForm.ManageConnectLocally = manageConnectLocally;
@@ -244,8 +244,8 @@ namespace ASCOM.DynamicRemoteClients
                         portNumber = setupForm.PortNumber;
                         remoteDeviceNumber = setupForm.RemoteDeviceNumber;
                         establishConnectionTimeout = (int)setupForm.EstablishConnectionTimeout;
-                        standardServerResponseTimeout = (int)setupForm.StandardTimeout;
-                        longServerResponseTimeout = (int)setupForm.LongTimeout;
+                        standardDeviceResponseTimeout = (int)setupForm.StandardTimeout;
+                        longDeviceResponseTimeout = (int)setupForm.LongTimeout;
                         userName = setupForm.UserName;
                         password = setupForm.Password;
                         manageConnectLocally = setupForm.ManageConnectLocally;
@@ -254,11 +254,11 @@ namespace ASCOM.DynamicRemoteClients
                         // Write the changed values to the Profile
                         TL.LogMessage(clientNumber, "SetupDialog", "Writing new values to profile");
                         DynamicClientDriver.WriteProfile(clientNumber, TL, DEVICE_TYPE, DriverProgId,
-                             traceState, debugTraceState, ipAddressString, portNumber, remoteDeviceNumber, serviceType, establishConnectionTimeout, standardServerResponseTimeout, longServerResponseTimeout, userName, password, manageConnectLocally, imageArrayTransferType, imageArrayCompression);
+                             traceState, debugTraceState, ipAddressString, portNumber, remoteDeviceNumber, serviceType, establishConnectionTimeout, standardDeviceResponseTimeout, longDeviceResponseTimeout, userName, password, manageConnectLocally, imageArrayTransferType, imageArrayCompression);
 
                         // Establish new host and device parameters
                         TL.LogMessage(clientNumber, "SetupDialog", "Establishing new host and device parameters");
-                        DynamicClientDriver.ConnectToRemoteServer(ref client, ipAddressString, portNumber, serviceType, TL, clientNumber, DEVICE_TYPE, standardServerResponseTimeout, userName, password);
+                        DynamicClientDriver.ConnectToRemoteDevice(ref client, ipAddressString, portNumber, serviceType, TL, clientNumber, DEVICE_TYPE, standardDeviceResponseTimeout, userName, password);
                     }
                     else TL.LogMessage(clientNumber, "SetupDialog", "Dialogue closed with Cancel status");
                 }
@@ -274,7 +274,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.SupportedActions(clientNumber, client, URIBase, TL);
             }
         }
@@ -285,37 +285,37 @@ namespace ASCOM.DynamicRemoteClients
 
         public void AbortSlew()
         {
-            DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+            DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
             DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "AbortSlew");
         }
 
         public void CloseShutter()
         {
-            DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+            DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
             DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "CloseShutter");
         }
 
         public void FindHome()
         {
-            DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+            DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
             DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "FindHome");
         }
 
         public void OpenShutter()
         {
-            DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+            DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
             DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "OpenShutter");
         }
 
         public void Park()
         {
-            DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+            DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
             DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "Park");
         }
 
         public void SetPark()
         {
-            DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+            DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
             DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "SetPark");
         }
 
@@ -325,7 +325,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 { SharedConstants.ALT_PARAMETER_NAME, Altitude.ToString() }
             };
-            DynamicClientDriver.SendToRemoteDriver<NoReturnValue>(clientNumber, client, URIBase, TL, "SlewToAltitude", Parameters, Method.PUT);
+            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "SlewToAltitude", Parameters, Method.PUT);
         }
 
         public void SlewToAzimuth(double Azimuth)
@@ -334,7 +334,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 { SharedConstants.AZ_PARAMETER_NAME, Azimuth.ToString() }
             };
-            DynamicClientDriver.SendToRemoteDriver<NoReturnValue>(clientNumber, client, URIBase, TL, "SlewToAzimuth", Parameters, Method.PUT);
+            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "SlewToAzimuth", Parameters, Method.PUT);
         }
 
         public void SyncToAzimuth(double Azimuth)
@@ -343,14 +343,14 @@ namespace ASCOM.DynamicRemoteClients
             {
                 { SharedConstants.AZ_PARAMETER_NAME, Azimuth.ToString() }
             };
-            DynamicClientDriver.SendToRemoteDriver<NoReturnValue>(clientNumber, client, URIBase, TL, "SyncToAzimuth", Parameters, Method.PUT);
+            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "SyncToAzimuth", Parameters, Method.PUT);
         }
 
         public double Altitude
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetValue<double>(clientNumber, client, URIBase, TL, "Altitude");
             }
         }
@@ -359,7 +359,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "AtHome");
             }
         }
@@ -368,7 +368,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "AtPark");
             }
         }
@@ -377,7 +377,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetValue<double>(clientNumber, client, URIBase, TL, "Azimuth");
             }
         }
@@ -386,7 +386,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanFindHome");
             }
         }
@@ -395,7 +395,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanPark");
             }
         }
@@ -404,7 +404,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSetAltitude");
             }
         }
@@ -413,7 +413,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSetAzimuth");
             }
         }
@@ -422,7 +422,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSetPark");
             }
         }
@@ -431,7 +431,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSetShutter");
             }
         }
@@ -440,7 +440,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSlave");
             }
         }
@@ -449,7 +449,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSyncAzimuth");
             }
         }
@@ -458,7 +458,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetValue<ShutterState>(clientNumber, client, URIBase, TL, "ShutterStatus");
             }
         }
@@ -467,13 +467,13 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "Slaved");
             }
 
             set
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 DynamicClientDriver.SetBool(clientNumber, client, URIBase, TL, "Slaved", value);
             }
         }
@@ -482,7 +482,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                DynamicClientDriver.SetClientTimeout(client, standardServerResponseTimeout);
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "Slewing");
             }
         }

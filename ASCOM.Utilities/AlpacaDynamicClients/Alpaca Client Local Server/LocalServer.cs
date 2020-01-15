@@ -84,7 +84,7 @@ namespace ASCOM.DynamicRemoteClients
         #region Private Data
         private static int objsInUse;                       // Keeps a count on the total number of objects alive.
         private static int serverLocks;                     // Keeps a lock count on this application.
-        private static FrmMain s_MainForm = null;               // Reference to our main form
+        private static LocalServerForm s_MainForm = null;               // Reference to our main form
         private static ArrayList s_ComObjectAssys;              // Dynamically loaded assemblies containing served COM objects
         private static ArrayList s_ComObjectTypes;              // Served COM object types
         private static ArrayList s_ClassFactories;              // Served COM object class factories
@@ -576,7 +576,7 @@ namespace ASCOM.DynamicRemoteClients
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            s_MainForm = new FrmMain();
+            s_MainForm = new LocalServerForm();
 
             if (StartedByCOM)
             {

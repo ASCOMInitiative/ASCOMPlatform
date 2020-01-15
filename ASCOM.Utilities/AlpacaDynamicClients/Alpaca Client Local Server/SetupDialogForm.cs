@@ -218,7 +218,7 @@ namespace ASCOM.DynamicRemoteClients
         /// </summary>
         /// <param name="sender">Device to be painted</param>
         /// <param name="e">Draw event arguments object</param>
-        void ComboBox_DrawItem(object sender, DrawItemEventArgs e)
+        private void ComboBox_DrawItem(object sender, DrawItemEventArgs e)
         {
             if (e.Index < 0) return; // Do not paint if no item is selected
 

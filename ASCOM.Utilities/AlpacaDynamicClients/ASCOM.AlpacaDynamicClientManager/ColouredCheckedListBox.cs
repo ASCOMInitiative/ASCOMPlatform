@@ -20,7 +20,7 @@ namespace ASCOM.DynamicRemoteClients
         }
 
         /// <summary>
-        /// Override the draw event so that the background colour can bet set
+        /// Overrides the draw event so that the background colour can bet set
         /// </summary>
         /// <param name="e"></param>
         protected override void OnDrawItem(DrawItemEventArgs e)

@@ -16,7 +16,7 @@ namespace ASCOM.DynamicRemoteClients
         public const string ValidIpAddressRegex = @"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$";
         public const string ValidHostnameRegex = @"^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$";
 
-        // HTTP Parameter names shared by driver and remote server
+        // HTTP Parameter names shared by driver and remote device
         public const string RA_PARAMETER_NAME = "RightAscension";
         public const string DEC_PARAMETER_NAME = "Declination";
         public const string ALT_PARAMETER_NAME = "Altitude";
@@ -44,17 +44,16 @@ namespace ASCOM.DynamicRemoteClients
         public const string ISO8601_DATE_FORMAT_STRING = "yyyy-MM-ddTHH:mm:ss.fffffff";
 
         // Dynamic client configuration constants
-        public const int SOCKET_ERROR_MAXIMUM_RETRIES = 2; // The number of retries that the client will make when it receives a socket actively refused error from the remote server
+        public const int SOCKET_ERROR_MAXIMUM_RETRIES = 2; // The number of retries that the client will make when it receives a socket actively refused error from the remote device
         public const int SOCKET_ERROR_RETRY_DELAY_TIME = 1000; // The delay time (milliseconds) between socket actively refused retries
 
-        // Remote server setup form constants
+        // remote device setup form constants
         public const string LOCALHOST_NAME = "localhost";
         public const string LOCALHOST_ADDRESS = "127.0.0.1"; // Get the localhost loop back address
 
-        // Constants shared by Remote Client Drivers and the ASCOM Remote Server
+        // Constants shared by Remote Client Drivers and the ASCOM remote device
         public const string API_URL_BASE = "/api/"; // This constant must always be lower case to make the logic tests work properly 
         public const string API_VERSION_V1 = "v1"; // This constant must always be lower case to make the logic tests work properly
-        public const string REMOTE_SERVER_MANAGEMENT_URL_BASE = "/server/"; // Management commands unique to the remote server. This constant must always be lower case to make the logic tests work properly 
 
         // Client driver profile persistence constants
         public const string TRACE_LEVEL_PROFILENAME = "Trace Level"; public const bool CLIENT_TRACE_LEVEL_DEFAULT = true;
@@ -64,8 +63,8 @@ namespace ASCOM.DynamicRemoteClients
         public const string REMOTE_DEVICE_NUMBER_PROFILENAME = "Remote Device Number"; public const decimal REMOTE_DEVICE_NUMBER_DEFAULT = 0;
         public const string SERVICE_TYPE_PROFILENAME = "Service Type"; public const string SERVICE_TYPE_DEFAULT = "http";
         public const string ESTABLISH_CONNECTION_TIMEOUT_PROFILENAME = "Establish Connection Timeout"; public const int  ESTABLISH_CONNECTION_TIMEOUT_DEFAULT = 10;
-        public const string STANDARD_SERVER_RESPONSE_TIMEOUT_PROFILENAME = "Standard Server Response Timeout"; public const int  STANDARD_SERVER_RESPONSE_TIMEOUT_DEFAULT = 10;
-        public const string LONG_SERVER_RESPONSE_TIMEOUT_PROFILENAME = "Long Server Response Timeout"; public const int LONG_SERVER_RESPONSE_TIMEOUT_DEFAULT = 120;
+        public const string STANDARD_DEVICE_RESPONSE_TIMEOUT_PROFILENAME = "Standard Device Response Timeout"; public const int  STANDARD_SERVER_RESPONSE_TIMEOUT_DEFAULT = 10;
+        public const string LONG_DEVICE_RESPONSE_TIMEOUT_PROFILENAME = "Long Device Response Timeout"; public const int LONG_SERVER_RESPONSE_TIMEOUT_DEFAULT = 120;
         public const string USERNAME_PROFILENAME = "User Name"; public const string USERNAME_DEFAULT = "";
         public const string PASSWORD_PROFILENAME = "Password"; public const string PASSWORD_DEFAULT = "";
         public const string MANAGE_CONNECT_LOCALLY_PROFILENAME = "Manage Connect Locally"; public const bool MANAGE_CONNECT_LOCALLY_DEFAULT = false;

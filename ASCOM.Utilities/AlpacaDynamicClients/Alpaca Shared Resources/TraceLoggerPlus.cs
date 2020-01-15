@@ -34,18 +34,6 @@ namespace ASCOM.DynamicRemoteClients
             }
         }
 
-        public void LogMessage(RequestData requestData, string prefix, string message)
-        {
-            if (IpAddressTraceState)
-            {
-                base.LogMessage(string.Format(ID_FORMAT_STRING, requestData.ClientID, requestData.ClientTransactionID, requestData.ServerTransactionID), string.Format(MESSAGE_FORMAT_STRING_WITH_IP_ADDRESS, requestData.ClientIpAddress, prefix, message));
-            }
-            else
-            {
-                base.LogMessage(string.Format(ID_FORMAT_STRING, requestData.ClientID, requestData.ClientTransactionID, requestData.ServerTransactionID), string.Format(MESSAGE_FORMAT_STRING_NO_IP_ADDRESS, prefix, message));
-            }
-        }
-
         public void LogMessageCrLf(uint instance, string prefix, string message)
         {
             base.LogMessageCrLf(prefix + " " + instance.ToString(), message);
@@ -63,16 +51,5 @@ namespace ASCOM.DynamicRemoteClients
             }
         }
 
-        public void LogMessageCrLf(RequestData requestData, string prefix, string message)
-        {
-            if (IpAddressTraceState)
-            {
-                base.LogMessageCrLf(string.Format(ID_FORMAT_STRING, requestData.ClientID, requestData.ClientTransactionID, requestData.ServerTransactionID), string.Format(MESSAGE_FORMAT_STRING_WITH_IP_ADDRESS, requestData.ClientIpAddress, prefix, message));
-            }
-            else
-            {
-                base.LogMessageCrLf(string.Format(ID_FORMAT_STRING, requestData.ClientID, requestData.ClientTransactionID, requestData.ServerTransactionID), string.Format(MESSAGE_FORMAT_STRING_NO_IP_ADDRESS, prefix, message));
-            }
-        }
     }
 }

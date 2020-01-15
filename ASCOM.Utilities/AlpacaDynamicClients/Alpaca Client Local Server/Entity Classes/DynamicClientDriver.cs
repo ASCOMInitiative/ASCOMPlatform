@@ -152,13 +152,13 @@ namespace ASCOM.DynamicRemoteClients
             return sf.GetMethod().Name;
         }
 
-        public static void SetClientTimeout(RestClient client, int serverResponseTimeout)
+        public static void SetClientTimeout(RestClient client, int deviceResponseTimeout)
         {
-            client.Timeout = serverResponseTimeout * 1000;
-            client.ReadWriteTimeout = serverResponseTimeout * 1000;
+            client.Timeout = deviceResponseTimeout * 1000;
+            client.ReadWriteTimeout = deviceResponseTimeout * 1000;
         }
 
-        public static void ConnectToRemoteServer(ref RestClient client, string ipAddressString, decimal portNumber, string serviceType, TraceLoggerPlus TL, uint clientNumber, string deviceType, int serverResponseTimeout, string userName, string password)
+        public static void ConnectToRemoteDevice(ref RestClient client, string ipAddressString, decimal portNumber, string serviceType, TraceLoggerPlus TL, uint clientNumber, string deviceType, int deviceResponseTimeout, string userName, string password)
         {
             TL.LogMessage(clientNumber, deviceType, "Connecting to device: " + ipAddressString + ":" + portNumber.ToString());
 
@@ -175,8 +175,8 @@ namespace ASCOM.DynamicRemoteClients
                 PreAuthenticate = true
             };
             TL.LogMessage(clientNumber, deviceType, "Creating Authenticator");
-            client.Authenticator = new HttpBasicAuthenticator(userName.Unencrypt(TL), password.Unencrypt(TL)); // Need to decrypt the user name and password so the correct values are sent to the remote server
-            SetClientTimeout(client, serverResponseTimeout);
+            client.Authenticator = new HttpBasicAuthenticator(userName.Unencrypt(TL), password.Unencrypt(TL)); // Need to decrypt the user name and password so the correct values are sent to the remote device
+            SetClientTimeout(client, deviceResponseTimeout);
         }
 
         #endregion
@@ -193,8 +193,8 @@ namespace ASCOM.DynamicRemoteClients
                                        ref decimal remoteDeviceNumber,
                                        ref string serviceType,
                                        ref int establishConnectionTimeout,
-                                       ref int standardServerResponseTimeout,
-                                       ref int longServerResponseTimeout,
+                                       ref int standardDeviceResponseTimeout,
+                                       ref int longDeviceResponseTimeout,
                                        ref string userName,
                                        ref string password,
                                        ref bool manageConnectLocally,
@@ -217,8 +217,8 @@ namespace ASCOM.DynamicRemoteClients
                 remoteDeviceNumber = GetDecimalValue(TL, driverProfile, driverProgID, SharedConstants.REMOTE_DEVICE_NUMBER_PROFILENAME, string.Empty, SharedConstants.REMOTE_DEVICE_NUMBER_DEFAULT);
                 serviceType = driverProfile.GetValue(driverProgID, SharedConstants.SERVICE_TYPE_PROFILENAME, string.Empty, SharedConstants.SERVICE_TYPE_DEFAULT);
                 establishConnectionTimeout = GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.ESTABLISH_CONNECTION_TIMEOUT_PROFILENAME, string.Empty, SharedConstants.ESTABLISH_CONNECTION_TIMEOUT_DEFAULT);
-                standardServerResponseTimeout = GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.STANDARD_SERVER_RESPONSE_TIMEOUT_PROFILENAME, string.Empty, SharedConstants.STANDARD_SERVER_RESPONSE_TIMEOUT_DEFAULT);
-                longServerResponseTimeout = GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.LONG_SERVER_RESPONSE_TIMEOUT_PROFILENAME, string.Empty, SharedConstants.LONG_SERVER_RESPONSE_TIMEOUT_DEFAULT);
+                standardDeviceResponseTimeout = GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.STANDARD_DEVICE_RESPONSE_TIMEOUT_PROFILENAME, string.Empty, SharedConstants.STANDARD_SERVER_RESPONSE_TIMEOUT_DEFAULT);
+                longDeviceResponseTimeout = GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.LONG_DEVICE_RESPONSE_TIMEOUT_PROFILENAME, string.Empty, SharedConstants.LONG_SERVER_RESPONSE_TIMEOUT_DEFAULT);
                 userName = driverProfile.GetValue(driverProgID, SharedConstants.USERNAME_PROFILENAME, string.Empty, SharedConstants.USERNAME_DEFAULT);
                 password = driverProfile.GetValue(driverProgID, SharedConstants.PASSWORD_PROFILENAME, string.Empty, SharedConstants.PASSWORD_DEFAULT);
                 manageConnectLocally = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.MANAGE_CONNECT_LOCALLY_PROFILENAME, string.Empty, SharedConstants.MANAGE_CONNECT_LOCALLY_DEFAULT);
@@ -242,8 +242,8 @@ namespace ASCOM.DynamicRemoteClients
                                         decimal remoteDeviceNumber,
                                         string serviceType,
                                         int establishConnectionTimeout,
-                                        int standardServerResponseTimeout,
-                                        int longServerResponseTimeout,
+                                        int standardDeviceResponseTimeout,
+                                        int longDeviceResponseTimeout,
                                         string userName,
                                         string password,
                                         bool manageConnectLocally,
@@ -263,8 +263,8 @@ namespace ASCOM.DynamicRemoteClients
                 driverProfile.WriteValue(driverProgID, SharedConstants.REMOTE_DEVICE_NUMBER_PROFILENAME, remoteDeviceNumber.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(driverProgID, SharedConstants.SERVICE_TYPE_PROFILENAME, serviceType.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(driverProgID, SharedConstants.ESTABLISH_CONNECTION_TIMEOUT_PROFILENAME, establishConnectionTimeout.ToString(CultureInfo.InvariantCulture));
-                driverProfile.WriteValue(driverProgID, SharedConstants.STANDARD_SERVER_RESPONSE_TIMEOUT_PROFILENAME, standardServerResponseTimeout.ToString(CultureInfo.InvariantCulture));
-                driverProfile.WriteValue(driverProgID, SharedConstants.LONG_SERVER_RESPONSE_TIMEOUT_PROFILENAME, longServerResponseTimeout.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(driverProgID, SharedConstants.STANDARD_DEVICE_RESPONSE_TIMEOUT_PROFILENAME, standardDeviceResponseTimeout.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(driverProgID, SharedConstants.LONG_DEVICE_RESPONSE_TIMEOUT_PROFILENAME, longDeviceResponseTimeout.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(driverProgID, SharedConstants.USERNAME_PROFILENAME, userName.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(driverProgID, SharedConstants.PASSWORD_PROFILENAME, password.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(driverProgID, SharedConstants.MANAGE_CONNECT_LOCALLY_PROFILENAME, manageConnectLocally.ToString(CultureInfo.InvariantCulture));
@@ -355,7 +355,7 @@ namespace ASCOM.DynamicRemoteClients
         public static void CallMethodWithNoParameters(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>();
-            SendToRemoteDriver<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
         }
 
         /// <summary>
@@ -387,7 +387,7 @@ namespace ASCOM.DynamicRemoteClients
         public static T GetValue<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, SharedConstants.ImageArrayTransferType imageArrayTransferType, SharedConstants.ImageArrayCompression imageArrayCompression)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>();
-            return SendToRemoteDriver<T>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET, imageArrayTransferType, imageArrayCompression);
+            return SendToRemoteDevice<T>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET, imageArrayTransferType, imageArrayCompression);
         }
 
         public static void SetBool(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, bool parmeterValue)
@@ -396,7 +396,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 { method, parmeterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            SendToRemoteDriver<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
         }
 
         public static void SetInt(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, int parmeterValue)
@@ -405,7 +405,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 { method, parmeterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            SendToRemoteDriver<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
         }
 
         public static void SetShort(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short parmeterValue)
@@ -414,7 +414,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 { method, parmeterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            SendToRemoteDriver<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
         }
 
         public static void SetDouble(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, double parmeterValue)
@@ -423,7 +423,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 { method, parmeterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            SendToRemoteDriver<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
         }
 
         public static void SetDoubleWithShortParameter(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short index, double parmeterValue)
@@ -433,7 +433,7 @@ namespace ASCOM.DynamicRemoteClients
                 { SharedConstants.ID_PARAMETER_NAME, index.ToString(CultureInfo.InvariantCulture) },
                 { SharedConstants.VALUE_PARAMETER_NAME, parmeterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            SendToRemoteDriver<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
         }
 
         public static void SetBoolWithShortParameter(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short index, bool parmeterValue)
@@ -443,7 +443,7 @@ namespace ASCOM.DynamicRemoteClients
                 { SharedConstants.ID_PARAMETER_NAME, index.ToString(CultureInfo.InvariantCulture) },
                 { SharedConstants.STATE_PARAMETER_NAME, parmeterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            SendToRemoteDriver<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
         }
 
         public static void SetStringWithShortParameter(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short index, string parmeterValue)
@@ -453,7 +453,7 @@ namespace ASCOM.DynamicRemoteClients
                 { SharedConstants.ID_PARAMETER_NAME, index.ToString(CultureInfo.InvariantCulture) },
                 { SharedConstants.NAME_PARAMETER_NAME, parmeterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            SendToRemoteDriver<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
         }
 
         public static string GetStringIndexedString(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, string parameterValue)
@@ -462,7 +462,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 { SharedConstants.SENSORNAME_PARAMETER_NAME, parameterValue }
             };
-            return SendToRemoteDriver<string>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET);
+            return SendToRemoteDevice<string>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET);
         }
 
         public static double GetStringIndexedDouble(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, string parameterValue)
@@ -471,7 +471,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 { SharedConstants.SENSORNAME_PARAMETER_NAME, parameterValue }
             };
-            return SendToRemoteDriver<double>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET);
+            return SendToRemoteDevice<double>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET);
         }
 
         public static double GetShortIndexedDouble(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short parameterValue)
@@ -480,7 +480,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 { SharedConstants.ID_PARAMETER_NAME, parameterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            return SendToRemoteDriver<double>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET);
+            return SendToRemoteDevice<double>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET);
         }
 
         public static bool GetShortIndexedBool(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short parameterValue)
@@ -489,7 +489,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 { SharedConstants.ID_PARAMETER_NAME, parameterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            return SendToRemoteDriver<bool>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET);
+            return SendToRemoteDevice<bool>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET);
         }
 
         public static string GetShortIndexedString(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short parameterValue)
@@ -498,11 +498,11 @@ namespace ASCOM.DynamicRemoteClients
             {
                 { SharedConstants.ID_PARAMETER_NAME, parameterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            return SendToRemoteDriver<string>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET);
+            return SendToRemoteDevice<string>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET);
         }
 
         /// <summary>
-        /// Send a command to the remote server, retrying a given number of times if a socket exception is received
+        /// Send a command to the remote device, retrying a given number of times if a socket exception is received
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="clientNumber"></param>
@@ -513,13 +513,13 @@ namespace ASCOM.DynamicRemoteClients
         /// <param name="Parameters"></param>
         /// <param name="HttpMethod"></param>
         /// <returns></returns>
-        public static T SendToRemoteDriver<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, Dictionary<string, string> Parameters, Method HttpMethod)
+        public static T SendToRemoteDevice<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, Dictionary<string, string> Parameters, Method HttpMethod)
         {
-            return SendToRemoteDriver<T>(clientNumber, client, URIBase, TL, method, Parameters, HttpMethod, SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, SharedConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT);
+            return SendToRemoteDevice<T>(clientNumber, client, URIBase, TL, method, Parameters, HttpMethod, SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, SharedConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT);
         }
 
         /// <summary>
-        /// Send a command to the remote server, retrying a given number of times if a socket exception is received, specifying an image array transfer type
+        /// Send a command to the remote device, retrying a given number of times if a socket exception is received, specifying an image array transfer type
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="clientNumber"></param>
@@ -531,7 +531,7 @@ namespace ASCOM.DynamicRemoteClients
         /// <param name="HttpMethod"></param>
         /// <param name="imageArrayTransferType"></param>
         /// <returns></returns>
-        public static T SendToRemoteDriver<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, Dictionary<string, string> Parameters, Method HttpMethod, SharedConstants.ImageArrayTransferType imageArrayTransferType, SharedConstants.ImageArrayCompression imageArrayCompression)
+        public static T SendToRemoteDevice<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, Dictionary<string, string> Parameters, Method HttpMethod, SharedConstants.ImageArrayTransferType imageArrayTransferType, SharedConstants.ImageArrayCompression imageArrayCompression)
         {
             int retryCounter = 0; // Initialise the socket error retry counter
             Stopwatch sw = new Stopwatch(); // Stopwatch to time activities
@@ -602,9 +602,9 @@ namespace ASCOM.DynamicRemoteClients
 
                     lastTime = sw.ElapsedMilliseconds;
                     // Call the remote device and get the response
-                    if (TL.DebugTraceState) TL.LogMessage(clientNumber, method, "Client Txn ID: " + transaction.ToString() + ", Sending command to remote server");
+                    if (TL.DebugTraceState) TL.LogMessage(clientNumber, method, "Client Txn ID: " + transaction.ToString() + ", Sending command to remote device");
                     IRestResponse deviceJsonResponse = client.Execute(request);
-                    long timeServerResponse = sw.ElapsedMilliseconds - lastTime;
+                    long timeDeviceResponse = sw.ElapsedMilliseconds - lastTime;
 
                     string responseContent;
                     if (deviceJsonResponse.Content.Length > 1000) responseContent = deviceJsonResponse.Content.Substring(0, 1000);
@@ -715,7 +715,9 @@ namespace ASCOM.DynamicRemoteClients
                                 ratesArray[i] = rate;
                                 i++;
                             }
+#pragma warning disable IDE0068 // Use recommended dispose pattern warning disabled because this class will be used by other processes so I'm not going to dispose it here
                             TrackingRates trackingRates = new TrackingRates();
+#pragma warning restore IDE0068 // Use recommended dispose pattern re-enabled
                             trackingRates.SetRates(ratesArray);
                             if (CallWasSuccessful(TL, trackingRatesResponse))
                             {
@@ -770,7 +772,9 @@ namespace ASCOM.DynamicRemoteClients
                         if (typeof(T) == typeof(IAxisRates))
                         {
                             AxisRatesResponse axisRatesResponse = JsonConvert.DeserializeObject<AxisRatesResponse>(deviceJsonResponse.Content);
+#pragma warning disable IDE0068 // Use recommended dispose pattern warning disabled because this class will be used by other processes so I'm not going to dispose it here
                             AxisRates axisRates = new AxisRates((TelescopeAxes)(Convert.ToInt32(Parameters[SharedConstants.AXIS_PARAMETER_NAME])));
+#pragma warning restore IDE0068 // Use recommended dispose pattern re-enabled
                             TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, axisRatesResponse.ClientTransactionID.ToString(), axisRatesResponse.ServerTransactionID.ToString(), axisRatesResponse.Value.Count.ToString())); //, axisRatesResponse.Method));
                             foreach (RateResponse rr in axisRatesResponse.Value)
                             {
@@ -805,127 +809,133 @@ namespace ASCOM.DynamicRemoteClients
 
                                 TL.LogMessage(clientNumber, method, $"Base64 - Downloading base64 serialised image");
 
-                                // Construct an HTTP request to get the logo
+                                // Construct an HTTP request to get the base 64 encoded image
                                 string base64Uri = (client.BaseUrl + URIBase.TrimStart('/') + method.ToLowerInvariant() + SharedConstants.BASE64_HANDOFF_FILE_DOWNLOAD_URI_EXTENSION).ToLowerInvariant(); // Create the download URI from the REST client elements
                                 if (TL.DebugTraceState) TL.LogMessage(clientNumber, method, $"Base64 URI: {base64Uri}");
 
-                                // Create a handler that indicates the compression levels supported by this client
-                                HttpClientHandler imageDownloadHandler = new HttpClientHandler();
-                                switch (imageArrayCompression)
+                                // Create a variable to hold the returned base 64 string
+                                string base64ArrayString = "";
+
+                                // Create a handler to indicate the compression levels supported by this client
+                                using (HttpClientHandler imageDownloadHandler = new HttpClientHandler())
                                 {
-                                    case SharedConstants.ImageArrayCompression.None:
-                                        imageDownloadHandler.AutomaticDecompression = DecompressionMethods.None;
-                                        break;
-                                    case SharedConstants.ImageArrayCompression.Deflate:
-                                        imageDownloadHandler.AutomaticDecompression = DecompressionMethods.Deflate;
-                                        break;
-                                    case SharedConstants.ImageArrayCompression.GZip:
-                                        imageDownloadHandler.AutomaticDecompression = DecompressionMethods.GZip;
-                                        break;
-                                    case SharedConstants.ImageArrayCompression.GZipOrDeflate:
-                                        imageDownloadHandler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip; // Allow both Deflate and GZip decompression
-                                        break;
-                                    default:
-                                        throw new InvalidValueException($"Unknown ImageArrayCompression value: {imageArrayCompression} - Can't proceed further!");
-                                }
-
-                                using (HttpClient httpClient = new HttpClient(imageDownloadHandler))
-                                {
-                                    string base64ArrayString = "";
-
-                                    // Get an async stream
-                                    Stream base64ArrayStream = httpClient.GetStreamAsync(base64Uri).Result;
-                                    TL.LogMessage(clientNumber, method, $"Downloaded base64 stream obtained in {sw.ElapsedMilliseconds}ms"); sw.Restart();
-
-                                    // Read the stream contents into a string variable
-                                    using (StreamReader sr = new StreamReader(base64ArrayStream, System.Text.Encoding.ASCII, false))
+                                    switch (imageArrayCompression)
                                     {
-                                        base64ArrayString = sr.ReadToEnd();
-                                    }
-
-                                    TL.LogMessage(clientNumber, method, $"Read base64 string from stream ({base64ArrayString.Length} bytes) in {sw.ElapsedMilliseconds}ms"); sw.Restart();
-                                    try { TL.LogMessage(clientNumber, method, $"Base64 string start: {base64ArrayString.Substring(0, 300)}"); } catch { }
-                                    try { TL.LogMessage(clientNumber, method, $"Base64 string end: {base64ArrayString.Substring(60000000, 300)}"); } catch { }
-
-                                    // Convert the array from base64 encoding to a byte array
-                                    byte[] base64ArrayByteArray = Convert.FromBase64String(base64ArrayString);
-                                    TL.LogMessage(clientNumber, method, $"Converted base64 string of length {base64ArrayString.Length} to byte array of length {base64ArrayByteArray.Length} in {sw.ElapsedMilliseconds}ms"); sw.Restart();
-                                    string byteLine = "";
-                                    try
-                                    {
-                                        for (int i = 0; i < 300; i++)
-                                        {
-                                            byteLine += base64ArrayByteArray[i].ToString() + " ";
-                                        }
-                                        TL.LogMessage(clientNumber, method, $"Converted base64 bytes: {byteLine}");
-                                    }
-                                    catch { }
-
-                                    // Now create and populate an appropriate array to return to the client that mirrors the array type returned by the device
-                                    switch (arrayType) // Handle the different array return types
-                                    {
-                                        case SharedConstants.ImageArrayElementTypes.Int:
-                                            switch (base64HandOffresponse.Rank)
-                                            {
-                                                case 2:
-                                                    remoteArray = new int[base64HandOffresponse.Dimension0Length, base64HandOffresponse.Dimension1Length];
-                                                    break;
-
-                                                case 3:
-                                                    remoteArray = new int[base64HandOffresponse.Dimension0Length, base64HandOffresponse.Dimension1Length, base64HandOffresponse.Dimension2Length];
-                                                    break;
-
-                                                default:
-                                                    throw new InvalidOperationException("Arrays of Rank " + base64HandOffresponse.Rank + " are not supported.");
-                                            }
-                                            Buffer.BlockCopy(base64ArrayByteArray, 0, remoteArray, 0, base64ArrayByteArray.Length); // Copy the array bytes to the response array that will return to the client
+                                        case SharedConstants.ImageArrayCompression.None:
+                                            imageDownloadHandler.AutomaticDecompression = DecompressionMethods.None;
                                             break;
-
-                                        case SharedConstants.ImageArrayElementTypes.Short:
-                                            switch (base64HandOffresponse.Rank)
-                                            {
-                                                case 2:
-                                                    remoteArray = new short[base64HandOffresponse.Dimension0Length, base64HandOffresponse.Dimension1Length];
-                                                    break;
-
-                                                case 3:
-                                                    remoteArray = new short[base64HandOffresponse.Dimension0Length, base64HandOffresponse.Dimension1Length, base64HandOffresponse.Dimension2Length];
-                                                    break;
-
-                                                default:
-                                                    throw new InvalidOperationException("Arrays of Rank " + base64HandOffresponse.Rank + " are not supported.");
-                                            }
-                                            Buffer.BlockCopy(base64ArrayByteArray, 0, remoteArray, 0, base64ArrayByteArray.Length); // Copy the array bytes to the response array that will return to the client
+                                        case SharedConstants.ImageArrayCompression.Deflate:
+                                            imageDownloadHandler.AutomaticDecompression = DecompressionMethods.Deflate;
                                             break;
-
-                                        case SharedConstants.ImageArrayElementTypes.Double:
-                                            switch (base64HandOffresponse.Rank)
-                                            {
-                                                case 2:
-                                                    remoteArray = new double[base64HandOffresponse.Dimension0Length, base64HandOffresponse.Dimension1Length];
-                                                    break;
-
-                                                case 3:
-                                                    remoteArray = new double[base64HandOffresponse.Dimension0Length, base64HandOffresponse.Dimension1Length, base64HandOffresponse.Dimension2Length];
-                                                    break;
-
-                                                default:
-                                                    throw new InvalidOperationException("Arrays of Rank " + base64HandOffresponse.Rank + " are not supported.");
-                                            }
-                                            Buffer.BlockCopy(base64ArrayByteArray, 0, remoteArray, 0, base64ArrayByteArray.Length); // Copy the array bytes to the response array that will return to the client
+                                        case SharedConstants.ImageArrayCompression.GZip:
+                                            imageDownloadHandler.AutomaticDecompression = DecompressionMethods.GZip;
                                             break;
-
+                                        case SharedConstants.ImageArrayCompression.GZipOrDeflate:
+                                            imageDownloadHandler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip; // Allow both Deflate and GZip decompression
+                                            break;
                                         default:
-                                            throw new InvalidOperationException("Image array element type" + arrayType + " is not supported.");
+                                            throw new InvalidValueException($"Unknown ImageArrayCompression value: {imageArrayCompression} - Can't proceed further!");
                                     }
 
-                                    if (TL.DebugTraceState)
+                                    // Create an HTTP client  to download the base64 string
+                                    using (HttpClient httpClient = new HttpClient(imageDownloadHandler))
                                     {
-                                        TL.LogMessage(clientNumber, method, $"Created and copied the array in {sw.ElapsedMilliseconds}ms"); sw.Restart();
-                                    }
+                                        // Get the async stream from the HTTPClient
+                                        Stream base64ArrayStream = httpClient.GetStreamAsync(base64Uri).Result;
+                                        TL.LogMessage(clientNumber, method, $"Downloaded base64 stream obtained in {sw.ElapsedMilliseconds}ms"); sw.Restart();
 
-                                    return (T)(object)remoteArray;
+                                        // Read the stream contents into the string variable ready for further processing
+                                        using (StreamReader sr = new StreamReader(base64ArrayStream, System.Text.Encoding.ASCII, false))
+                                        {
+                                            base64ArrayString = sr.ReadToEnd();
+                                        }
+                                    }
                                 }
+
+                                TL.LogMessage(clientNumber, method, $"Read base64 string from stream ({base64ArrayString.Length} bytes) in {sw.ElapsedMilliseconds}ms"); sw.Restart();
+                                try { TL.LogMessage(clientNumber, method, $"Base64 string start: {base64ArrayString.Substring(0, 300)}"); } catch { }
+                                try { TL.LogMessage(clientNumber, method, $"Base64 string end: {base64ArrayString.Substring(60000000, 300)}"); } catch { }
+
+                                // Convert the array from base64 encoding to a byte array
+                                byte[] base64ArrayByteArray = Convert.FromBase64String(base64ArrayString);
+                                TL.LogMessage(clientNumber, method, $"Converted base64 string of length {base64ArrayString.Length} to byte array of length {base64ArrayByteArray.Length} in {sw.ElapsedMilliseconds}ms"); sw.Restart();
+                                string byteLine = "";
+                                try
+                                {
+                                    for (int i = 0; i < 300; i++)
+                                    {
+                                        byteLine += base64ArrayByteArray[i].ToString() + " ";
+                                    }
+                                    TL.LogMessage(clientNumber, method, $"Converted base64 bytes: {byteLine}");
+                                }
+                                catch { }
+
+                                // Now create and populate an appropriate array to return to the client that mirrors the array type returned by the device
+                                switch (arrayType) // Handle the different array return types
+                                {
+                                    case SharedConstants.ImageArrayElementTypes.Int:
+                                        switch (base64HandOffresponse.Rank)
+                                        {
+                                            case 2:
+                                                remoteArray = new int[base64HandOffresponse.Dimension0Length, base64HandOffresponse.Dimension1Length];
+                                                break;
+
+                                            case 3:
+                                                remoteArray = new int[base64HandOffresponse.Dimension0Length, base64HandOffresponse.Dimension1Length, base64HandOffresponse.Dimension2Length];
+                                                break;
+
+                                            default:
+                                                throw new InvalidOperationException("Arrays of Rank " + base64HandOffresponse.Rank + " are not supported.");
+                                        }
+
+                                        // Copy the array bytes to the response array that will return to the client
+                                        Buffer.BlockCopy(base64ArrayByteArray, 0, remoteArray, 0, base64ArrayByteArray.Length);
+                                        break;
+
+                                    case SharedConstants.ImageArrayElementTypes.Short:
+                                        switch (base64HandOffresponse.Rank)
+                                        {
+                                            case 2:
+                                                remoteArray = new short[base64HandOffresponse.Dimension0Length, base64HandOffresponse.Dimension1Length];
+                                                break;
+
+                                            case 3:
+                                                remoteArray = new short[base64HandOffresponse.Dimension0Length, base64HandOffresponse.Dimension1Length, base64HandOffresponse.Dimension2Length];
+                                                break;
+
+                                            default:
+                                                throw new InvalidOperationException("Arrays of Rank " + base64HandOffresponse.Rank + " are not supported.");
+                                        }
+                                        Buffer.BlockCopy(base64ArrayByteArray, 0, remoteArray, 0, base64ArrayByteArray.Length); // Copy the array bytes to the response array that will return to the client
+                                        break;
+
+                                    case SharedConstants.ImageArrayElementTypes.Double:
+                                        switch (base64HandOffresponse.Rank)
+                                        {
+                                            case 2:
+                                                remoteArray = new double[base64HandOffresponse.Dimension0Length, base64HandOffresponse.Dimension1Length];
+                                                break;
+
+                                            case 3:
+                                                remoteArray = new double[base64HandOffresponse.Dimension0Length, base64HandOffresponse.Dimension1Length, base64HandOffresponse.Dimension2Length];
+                                                break;
+
+                                            default:
+                                                throw new InvalidOperationException("Arrays of Rank " + base64HandOffresponse.Rank + " are not supported.");
+                                        }
+                                        Buffer.BlockCopy(base64ArrayByteArray, 0, remoteArray, 0, base64ArrayByteArray.Length); // Copy the array bytes to the response array that will return to the client
+                                        break;
+
+                                    default:
+                                        throw new InvalidOperationException("Image array element type" + arrayType + " is not supported.");
+                                }
+
+                                if (TL.DebugTraceState)
+                                {
+                                    TL.LogMessage(clientNumber, method, $"Created and copied the array in {sw.ElapsedMilliseconds}ms"); sw.Restart();
+                                }
+
+                                return (T)(object)remoteArray;
                             }
 
                             // Handle conventional JSON response with integer array elements individually serialised
@@ -1020,10 +1030,10 @@ namespace ASCOM.DynamicRemoteClients
                                     default:
                                         throw new InvalidOperationException("Image array element type" + arrayType + " is not supported.");
                                 }
-                            } // Remote server has used JSON encoding
+                            } // remote device has used JSON encoding
                         }
 
-                        // HANDLE COM EXCEPTIONS THROWN BY WINDOWS BASED DRIVERS RUNNING IN THE REMOTE SERVER
+                        // HANDLE COM EXCEPTIONS THROWN BY WINDOWS BASED DRIVERS RUNNING IN THE REMOTE DEVICE
                         if (restResponseBase.DriverException != null)
                         {
                             TL.LogMessageCrLf(clientNumber, method, string.Format("Exception Message: \"{0}\", Exception Number: 0x{1}", restResponseBase.ErrorMessage, restResponseBase.ErrorNumber.ToString("X8")));
@@ -1124,7 +1134,7 @@ namespace ASCOM.DynamicRemoteClients
                 }
                 catch (Exception ex) // Process unexpected exceptions
                 {
-                    if (ex is System.Net.WebException) // Received a WebException, this could indicate that the remote server actively refused the connection so test for this and retry if appropriate
+                    if (ex is System.Net.WebException) // Received a WebException, this could indicate that the remote device actively refused the connection so test for this and retry if appropriate
                     {
                         if (ex.InnerException != null) // First make sure the is an inner exception
                         {
@@ -1205,7 +1215,7 @@ namespace ASCOM.DynamicRemoteClients
                 { SharedConstants.ACTION_COMMAND_PARAMETER_NAME, actionName },
                 { SharedConstants.ACTION_PARAMETERS_PARAMETER_NAME, actionParameters }
             };
-            string remoteString = SendToRemoteDriver<string>(clientNumber, client, URIBase, TL, "Action", Parameters, Method.PUT);
+            string remoteString = SendToRemoteDevice<string>(clientNumber, client, URIBase, TL, "Action", Parameters, Method.PUT);
 
             TL.LogMessage(clientNumber, "Action", "Response: " + remoteString);
             return remoteString;
@@ -1218,7 +1228,7 @@ namespace ASCOM.DynamicRemoteClients
                 { SharedConstants.COMMAND_PARAMETER_NAME, command },
                 { SharedConstants.RAW_PARAMETER_NAME, raw.ToString() }
             };
-            SendToRemoteDriver<NoReturnValue>(clientNumber, client, URIBase, TL, "CommandBlind", Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "CommandBlind", Parameters, Method.PUT);
             TL.LogMessage(clientNumber, "CommandBlind", "Completed OK");
         }
 
@@ -1229,7 +1239,7 @@ namespace ASCOM.DynamicRemoteClients
                 { SharedConstants.COMMAND_PARAMETER_NAME, command },
                 { SharedConstants.RAW_PARAMETER_NAME, raw.ToString() }
             };
-            bool remoteBool = SendToRemoteDriver<bool>(clientNumber, client, URIBase, TL, "CommandBool", Parameters, Method.PUT);
+            bool remoteBool = SendToRemoteDevice<bool>(clientNumber, client, URIBase, TL, "CommandBool", Parameters, Method.PUT);
 
             TL.LogMessage(clientNumber, "CommandBool", remoteBool.ToString());
             return remoteBool;
@@ -1242,7 +1252,7 @@ namespace ASCOM.DynamicRemoteClients
                 { SharedConstants.COMMAND_PARAMETER_NAME, command },
                 { SharedConstants.RAW_PARAMETER_NAME, raw.ToString() }
             };
-            string remoteString = SendToRemoteDriver<string>(clientNumber, client, URIBase, TL, "CommandString", Parameters, Method.PUT);
+            string remoteString = SendToRemoteDevice<string>(clientNumber, client, URIBase, TL, "CommandString", Parameters, Method.PUT);
 
             TL.LogMessage(clientNumber, "CommandString", remoteString);
             return remoteString;

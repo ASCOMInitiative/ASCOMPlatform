@@ -16,9 +16,6 @@ using ASCOM.Utilities;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using System.IO;
-using System.Diagnostics;
-using System.CodeDom.Compiler;
-using System.CodeDom;
 using System.Reflection;
 using Microsoft.Win32;
 
@@ -26,20 +23,11 @@ namespace ASCOM.DynamicRemoteClients
 {
     public partial class ManageDevicesForm : Form
     {
-        // Constants only used within this form
+        // Constants used within this form
         private const string DEVICE_NUMBER = "DeviceNumber"; // Regular expression device number placeholder name
         private const string DEVICE_TYPE = "DeviceType"; // Regular expression device type placeholder name
-        private const string IP_ADDRESS_VALUE_NAME = "IP Address"; // Regular expression device type placeholder name
-        private const string PORT_NUMBER_VALUE_NAME = "Port Number"; // Regular expression device type placeholder name
-        private const string REMOTE_DEVICE_NUMBER_VALUE_NAME = "Remote Device Number"; // Regular expression device type placeholder name
-        private const string UNIQUEID_VALUE_NAME = "UniqueID"; // Regular expression device type placeholder name
-
         private const string PROGID_PARSE_REGEX_STRING = @"^ascom\.alpacadynamic(?'" + DEVICE_NUMBER + @"'\d+)\.(?'" + DEVICE_TYPE + @"'[a-z]+)$"; // Regular expression for extracting device type and number
-
-        // Constants shared with the main program
-        internal const string LOCAL_SERVER_PATH = @"\ASCOM\AlpacaDynamicClients\"; // Relative path from CommonFiles
-        internal const string LOCAL_SERVER_EXE = @"ASCOM.AlpacaClientLocalServer.exe"; // Name of the remote client local server application
-        private const string DRIVER_PROGID_BASE = "ASCOM.AlpacaDynamic";
+        private const int NUMBER_OF_DYNAMIC_DRIVER_NUMBERS_TO_TEST = 20; // Number of dynamic drivers whose COM registrations will be tested in order to find an unused dynamic driver progID
 
         // Global variables within this class
         private TraceLogger TL;
@@ -79,6 +67,7 @@ namespace ASCOM.DynamicRemoteClients
 
                 ReadConfiguration(); // Get the current configuration
 
+                // List the drivers found in the log
                 foreach (DynamicDriverRegistration driver in dynamicDrivers)
                 {
                     TL.LogMessage("Initialise", $"Found remote {driver.DeviceType} driver: {driver.Description}");
@@ -118,7 +107,7 @@ namespace ASCOM.DynamicRemoteClients
         private void ReadConfiguration()
         {
             Regex progidParseRegex = new Regex(PROGID_PARSE_REGEX_STRING, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            string driverDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + LOCAL_SERVER_PATH;
+            string driverDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + SharedConstants.ALPACA_CLIENT_LOCAL_SERVER_PATH;
 
             // Initialise 
             dynamicDrivers.Clear();
@@ -146,10 +135,10 @@ namespace ASCOM.DynamicRemoteClients
 
                             // populate configuration information from the dynamic driver's Profile and 
                             profile.DeviceType = foundDriver.DeviceType;
-                            foundDriver.IPAdrress = profile.GetValue(foundDriver.ProgId, IP_ADDRESS_VALUE_NAME);
-                            foundDriver.PortNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, PORT_NUMBER_VALUE_NAME));
-                            foundDriver.RemoteDeviceNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, REMOTE_DEVICE_NUMBER_VALUE_NAME));
-                            foundDriver.UniqueID = profile.GetValue(foundDriver.ProgId, UNIQUEID_VALUE_NAME);
+                            foundDriver.IPAdrress = profile.GetValue(foundDriver.ProgId, SharedConstants.IPADDRESS_PROFILENAME);
+                            foundDriver.PortNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, SharedConstants.PORTNUMBER_PROFILENAME));
+                            foundDriver.RemoteDeviceNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, SharedConstants.REMOTE_DEVICE_NUMBER_PROFILENAME));
+                            foundDriver.UniqueID = profile.GetValue(foundDriver.ProgId, SharedConstants.UNIQUEID_PROFILENAME);
                             foundDriver.Name = device.Value;
                             foundDriver.Description = $"{foundDriver.Name} ({foundDriver.ProgId}) - {foundDriver.IPAdrress}:{foundDriver.PortNumber}/api/v1/{foundDriver.DeviceType}/{foundDriver.RemoteDeviceNumber} - {foundDriver.UniqueID}";
 
@@ -197,10 +186,10 @@ namespace ASCOM.DynamicRemoteClients
                     }
                 }
 
-                // Check the first 20 COM registrations of ASCOM.AlpacaDynamic{X}.{DeviceType} and check whether executables exist. If not flag as corrupt
-                for (int i = 1; i <= 20; i++)
+                // Test the first N COM registrations of the form ASCOM.AlpacaDynamic{X}.{DeviceType} and check whether they are registered for COM and whether their DLL executables exist. If not flag as corrupt
+                for (int i = 1; i <= NUMBER_OF_DYNAMIC_DRIVER_NUMBERS_TO_TEST; i++)
                 {
-                    string progId = $"{DRIVER_PROGID_BASE}{i}.{deviceType}";
+                    string progId = $"{SharedConstants.DRIVER_PROGID_BASE}{i}.{deviceType}";
                     Type typeFromProgId = Type.GetTypeFromProgID(progId);
 
                     if (typeFromProgId != null) // This ProgID is registered
@@ -210,7 +199,7 @@ namespace ASCOM.DynamicRemoteClients
                         string driverExecutable = $"{driverDirectory}{progId}.dll";
                         TL.LogMessage("ReadConfiguration", $"Searching for driver:  {driverExecutable}");
 
-                        // test whether the driver DLL executable is missing
+                        // Test whether the driver DLL executable is missing
                         if (!File.Exists(driverExecutable))  // Driver DLL does not exist so flag as corrupted and suggest deletion
                         {
                             // Only add this driver to the list if it is not already in the list
@@ -253,14 +242,14 @@ namespace ASCOM.DynamicRemoteClients
                             }
                             else // The driver is registered in the ASCOM Profile
                             {
-                                TL.LogMessage("ReadConfiguration", $"{progId} - Driver DLL exists and is registered for COM and ASCOM so this driver will have been already listed - no action taken");
                                 // No action required
+                                TL.LogMessage("ReadConfiguration", $"{progId} - Driver DLL exists and is registered for COM and ASCOM so this driver will have been already listed - no action taken");
                             }
                         }
                     }
                     else // This progID is not registered
                     {
-                        // No action
+                        // No action required
                         TL.LogMessage("ReadConfiguration", $"{progId} - ProgID is not COM registered - no action taken");
                     }
                 }
@@ -277,10 +266,6 @@ namespace ASCOM.DynamicRemoteClients
             try
             {
                 TL.LogMessage("Cancel", "Closing the application");
-
-                TL.Enabled = false;
-                TL.Dispose();
-                TL = null;
             }
             finally
             {
@@ -305,14 +290,14 @@ namespace ASCOM.DynamicRemoteClients
                 BtnDeleteDrivers.Enabled = false;
 
                 // Create pointer to the dynamic driver's local server folder
-                string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + LOCAL_SERVER_PATH;
+                string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + SharedConstants.ALPACA_CLIENT_LOCAL_SERVER_PATH;
                 TL.LogMessage("DeleteDrivers", $"Local server path: {localServerPath}");
 
                 // Iterate over each device that has been checked in the UI checked list box
                 foreach (DynamicDriverRegistration driver in dynamicDriversCheckedListBox.CheckedItems)
                 {
                     // COM unregister the driver
-                    ComUnregister(driver.ProgId);
+                    ComUnRegister(driver.ProgId);
 
                     // Create pointers to the driver executable and its PDB file
                     TL.LogMessage("DeleteDrivers", $"Deleting driver {driver.Description}");
@@ -392,7 +377,7 @@ namespace ASCOM.DynamicRemoteClients
         /// Unregister a COM driver
         /// </summary>
         /// <param name="progId">ProgID of the driver to be unregistered</param>
-        private void ComUnregister(string progId)
+        private void ComUnRegister(string progId)
         {
             try
             {
@@ -444,6 +429,11 @@ namespace ASCOM.DynamicRemoteClients
             }
         }
 
+        /// <summary>
+        /// Check or uncheck all driver entries when the "Select All" checkbox state is changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChkSelectAll_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox checkBox = (CheckBox)sender;

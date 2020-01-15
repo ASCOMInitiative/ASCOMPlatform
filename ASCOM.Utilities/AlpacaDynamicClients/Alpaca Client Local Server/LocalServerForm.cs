@@ -2,11 +2,11 @@ using System.Windows.Forms;
 
 namespace ASCOM.DynamicRemoteClients
 {
-    public partial class FrmMain : Form
+    public partial class LocalServerForm : Form
     {
         delegate void SetTextCallback(string text);
 
-        public FrmMain()
+        public LocalServerForm()
         {
             InitializeComponent();
         }

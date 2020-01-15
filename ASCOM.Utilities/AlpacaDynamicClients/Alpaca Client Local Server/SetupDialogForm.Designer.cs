@@ -152,7 +152,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(212, 13);
             this.label2.TabIndex = 11;
-            this.label2.Text = "Remote Device Server Name or IP Address";
+            this.label2.Text = "Remote Device Host Name or IP Address";
             // 
             // label3
             // 
@@ -296,7 +296,7 @@
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(219, 13);
             this.label10.TabIndex = 23;
-            this.label10.Text = "Establish communications with server timeout";
+            this.label10.Text = "Establish communications with device timeout";
             // 
             // txtUserName
             // 
@@ -337,7 +337,7 @@
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(284, 13);
             this.label13.TabIndex = 28;
-            this.label13.Text = "Authentication is ony required if you are using a web server";
+            this.label13.Text = "Authentication is only required if you are using a web server";
             // 
             // label6
             // 
@@ -346,7 +346,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(125, 13);
             this.label6.TabIndex = 29;
-            this.label6.Text = "Communication Timeouts";
+            this.label6.Text = "Communication Time-outs";
             // 
             // chkTrace
             // 
@@ -387,7 +387,7 @@
             this.radManageConnectRemotely.Size = new System.Drawing.Size(376, 17);
             this.radManageConnectRemotely.TabIndex = 0;
             this.radManageConnectRemotely.TabStop = true;
-            this.radManageConnectRemotely.Text = "Manage connect / disconnect remotely - send commands to remote server";
+            this.radManageConnectRemotely.Text = "Manage connect / disconnect remotely - send commands to remote device";
             this.radManageConnectRemotely.UseVisualStyleBackColor = true;
             // 
             // radManageConnectLocally
@@ -398,7 +398,7 @@
             this.radManageConnectLocally.Size = new System.Drawing.Size(392, 17);
             this.radManageConnectLocally.TabIndex = 1;
             this.radManageConnectLocally.TabStop = true;
-            this.radManageConnectLocally.Text = "Manage connect / disconnect locally - don\'t send commands to remote server";
+            this.radManageConnectLocally.Text = "Manage connect / disconnect locally - don\'t send commands to remote device";
             this.radManageConnectLocally.UseVisualStyleBackColor = true;
             // 
             // SetupErrorProvider

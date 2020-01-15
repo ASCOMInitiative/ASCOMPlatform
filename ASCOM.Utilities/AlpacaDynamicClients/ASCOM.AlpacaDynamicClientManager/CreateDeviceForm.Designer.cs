@@ -34,12 +34,13 @@
             this.TxtDeviceDescription = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // BtnCancel
             // 
             this.BtnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.BtnCancel.Location = new System.Drawing.Point(429, 144);
+            this.BtnCancel.Location = new System.Drawing.Point(481, 144);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
             this.BtnCancel.TabIndex = 0;
@@ -49,7 +50,7 @@
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(348, 144);
+            this.BtnOk.Location = new System.Drawing.Point(400, 144);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 1;
@@ -59,30 +60,39 @@
             // 
             // TxtDeviceDescription
             // 
-            this.TxtDeviceDescription.Location = new System.Drawing.Point(41, 94);
+            this.TxtDeviceDescription.Location = new System.Drawing.Point(40, 94);
             this.TxtDeviceDescription.Name = "TxtDeviceDescription";
-            this.TxtDeviceDescription.Size = new System.Drawing.Size(435, 20);
+            this.TxtDeviceDescription.Size = new System.Drawing.Size(488, 20);
             this.TxtDeviceDescription.TabIndex = 2;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(135, 78);
+            this.label1.Location = new System.Drawing.Point(173, 78);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(249, 13);
+            this.label1.Size = new System.Drawing.Size(238, 13);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Driver description that will appear in the Chooser list";
+            this.label1.Text = "Driver description that will appear in the Chooser*";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.label2.Location = new System.Drawing.Point(156, 28);
+            this.label2.Location = new System.Drawing.Point(182, 28);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(219, 20);
             this.label2.TabIndex = 4;
             this.label2.Text = "Create New Alpaca  Driver";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(25, 149);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(350, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "* All other settings are configured through the Chooser\'s properties button";
             // 
             // CreateDeviceForm
             // 
@@ -90,7 +100,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.BtnCancel;
-            this.ClientSize = new System.Drawing.Size(516, 179);
+            this.ClientSize = new System.Drawing.Size(568, 179);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.TxtDeviceDescription);
@@ -111,5 +122,6 @@
         private System.Windows.Forms.TextBox TxtDeviceDescription;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }

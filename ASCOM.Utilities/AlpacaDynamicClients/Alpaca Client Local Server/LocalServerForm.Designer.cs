@@ -2,7 +2,7 @@ using System;
 
 namespace ASCOM.DynamicRemoteClients
 {
-    partial class FrmMain
+    partial class LocalServerForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@ namespace ASCOM.DynamicRemoteClients
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LocalServerForm));
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -42,7 +42,7 @@ namespace ASCOM.DynamicRemoteClients
             this.label1.TabIndex = 0;
             this.label1.Text = "This is the ASCOM Dynamic Client driver local server.";
             // 
-            // FrmMain
+            // LocalServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -50,7 +50,7 @@ namespace ASCOM.DynamicRemoteClients
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "FrmMain";
+            this.Name = "LocalServerForm";
             this.ShowInTaskbar = false;
             this.Text = "ASCOM Alpaca Dynamic Driver Host";
             this.ResumeLayout(false);
