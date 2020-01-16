@@ -38,7 +38,7 @@ namespace ASCOM.DynamicRemoteClients
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException); // Add the event handler for handling non-UI thread exceptions to the event. 
 
             TL = new TraceLogger("", "AlpacaDynamicClientManager");
-            TL.Enabled = true;
+            TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.TRACE_UTIL, GlobalConstants.TRACE_UTIL_DEFAULT);
 
             try
             {
@@ -61,7 +61,7 @@ namespace ASCOM.DynamicRemoteClients
                 switch (commandParameter.ToUpperInvariant()) // Act on the supplied parameter, if any
                 {
                     case "MANAGEDEVICES":
-                        
+
                         // Run the application in user interactive mode
                         Application.EnableVisualStyles();
                         Application.SetCompatibleTextRenderingDefault(false);
@@ -156,7 +156,10 @@ namespace ASCOM.DynamicRemoteClients
                         break;
 
                     default: // Unrecognised parameter so flag this to the user
-                        errMsg = $"Unrecognised command: '{commandParameter}', the only valid command is: /CreateAlpacaClient DeviceType UniqueID";
+                        errMsg = $"Unrecognised command: '{commandParameter}', the valid command are:\r\n" +
+                            $"/CreateAlpacaClient DeviceType COMDeviceNumber ProgID DeviceName\r\n" +
+                            $"CreateNamedClient DeviceType COMDeviceNumber ProgID\r\n" +
+                            $"/ManageDevices";
                         TL.LogMessage("Main", errMsg);
                         MessageBox.Show(errMsg, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
