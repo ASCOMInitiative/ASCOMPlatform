@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("ASCOM Dynamic Client Local Server")]
-[assembly: AssemblyCopyright("Copyright © 2018 ASCOM")]
+[assembly: AssemblyCopyright("Copyright © 2020 ASCOM")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -10,8 +10,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("ASCOM Utilities")> 
 <Assembly: AssemblyDescription("ASCOM Utilities")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")>
-<Assembly: AssemblyProduct("ASCOM Utilities")> 
-<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2009, 2014")> 
+<Assembly: AssemblyProduct("ASCOM Utilities")>
+<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2020")>
 <Assembly: AssemblyTrademark("")>
 <Assembly: AssemblyCulture("")>
 

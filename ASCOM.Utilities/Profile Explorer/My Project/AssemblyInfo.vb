@@ -11,8 +11,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("Profile Explorer")> 
 <Assembly: AssemblyDescription("ASCOM Profile Store Visualiser")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")> 
-<Assembly: AssemblyProduct("Profile Explorer")> 
-<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2011, 2014")> 
+<Assembly: AssemblyProduct("Profile Explorer")>
+<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2020")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

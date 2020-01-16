@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("ASCOM Cache")]
-[assembly: AssemblyCopyright("Copyright ©  2018 ASCOM Initiative")]
+[assembly: AssemblyCopyright("Copyright ©  2020 ASCOM Initiative")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

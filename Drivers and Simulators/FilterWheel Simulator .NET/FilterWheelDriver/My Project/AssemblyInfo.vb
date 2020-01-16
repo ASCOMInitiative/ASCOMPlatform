@@ -11,8 +11,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("FilterWheelSimulator Driver")> 
 <Assembly: AssemblyDescription("ASCOM FilterWheelSimulator Driver")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")> 
-<Assembly: AssemblyProduct("Filter Wheel Simulator [.Net]")> 
-<Assembly: AssemblyCopyright("Mark Crossley Copyright © ASCOM Initiative 2014")> 
+<Assembly: AssemblyProduct("Filter Wheel Simulator [.Net]")>
+<Assembly: AssemblyCopyright("Mark Crossley Copyright © ASCOM Initiative 2020")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)> 

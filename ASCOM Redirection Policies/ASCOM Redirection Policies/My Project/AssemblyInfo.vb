@@ -11,8 +11,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("ASCOM Redirection Policies")> 
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("ASCOM")>
-<Assembly: AssemblyProduct("ASCOM Redirection Policies")> 
-<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2009, 2014")> 
+<Assembly: AssemblyProduct("ASCOM Redirection Policies")>
+<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2020")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

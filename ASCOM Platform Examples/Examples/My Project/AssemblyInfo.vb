@@ -11,8 +11,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("ASCOM Platform Examples")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("Simpson Household")> 
-<Assembly: AssemblyProduct("ASCOM Platform Examples")> 
-<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2009, 2014")> 
+<Assembly: AssemblyProduct("ASCOM Platform Examples")>
+<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2020")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

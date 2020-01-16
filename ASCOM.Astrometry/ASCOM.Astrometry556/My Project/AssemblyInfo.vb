@@ -11,8 +11,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("ASCOM Astrometry")> 
 <Assembly: AssemblyDescription("ASCOM Astrometry")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")> 
-<Assembly: AssemblyProduct("ASCOM.Astrometry")> 
-<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2009, 2014")> 
+<Assembly: AssemblyProduct("ASCOM.Astrometry")>
+<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2020")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)> 

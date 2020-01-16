@@ -11,8 +11,8 @@ Imports System.Runtime.CompilerServices
 <Assembly: AssemblyTitle("Migration Support")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")> 
-<Assembly: AssemblyProduct("Migration Support")> 
-<Assembly: AssemblyCopyright("Copyright © ASCOM 2010, 2014")> 
+<Assembly: AssemblyProduct("Migration Support")>
+<Assembly: AssemblyCopyright("Copyright © ASCOM 2020")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
