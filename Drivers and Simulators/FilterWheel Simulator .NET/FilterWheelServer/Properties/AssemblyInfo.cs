@@ -11,4 +11,4 @@ using System.Runtime.InteropServices;
 
 [assembly: ComVisibleAttribute(false)]
 // AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
-[assembly: AssemblyVersion("6.4.0.0")]
+[assembly: AssemblyVersion("6.5.0.0")]
