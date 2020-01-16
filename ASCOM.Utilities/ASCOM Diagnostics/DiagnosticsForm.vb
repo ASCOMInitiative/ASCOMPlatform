@@ -5619,7 +5619,7 @@ Public Class DiagnosticsForm
         Dim ts As String
         Dim HelperType As Type
         Dim i As Integer, Is64Bit As Boolean
-        Dim MyVersion As Version
+        'Dim MyVersion As Version
         Dim Utl As Util
 
         Const TestDate As Date = #6/1/2010 4:37:00 PM#
@@ -5662,11 +5662,16 @@ Public Class DiagnosticsForm
             Compare("UtilTests", "IsMinimumRequiredVersion 6.6", Utl.IsMinimumRequiredVersion(6, 6).ToString, "False")
 
             ' Check that the platform version properties return the correct values
-            MyVersion = Assembly.GetExecutingAssembly.GetName.Version ' Get this assembly's version number against which to compare the Util version numbers
-            CompareInteger("UtilTests", "Major Version", Utl.MajorVersion, MyVersion.Major)
-            CompareInteger("UtilTests", "Minor Version", Utl.MinorVersion, MyVersion.Minor)
-            CompareInteger("UtilTests", "Service Pack", Utl.ServicePack, MyVersion.Build)
-            CompareInteger("UtilTests", "Build Number", Utl.BuildNumber, MyVersion.Revision)
+            Dim FV As FileVersionInfo
+            FV = Process.GetCurrentProcess().MainModule.FileVersionInfo ' Get this assembly's file version number against which to compare the Util version numbers
+
+            TL.LogMessageCrLf("Versions", "  Product:  " & FV.ProductName & " " & FV.ProductVersion)
+            TL.LogMessageCrLf("Versions", "  File:     " & FV.FileDescription & " " & FV.FileVersion)
+
+            CompareInteger("UtilTests", "Major Version", Utl.MajorVersion, FV.FileMajorPart)
+            CompareInteger("UtilTests", "Minor Version", Utl.MinorVersion, FV.FileMinorPart)
+            CompareInteger("UtilTests", "Service Pack", Utl.ServicePack, FV.FileBuildPart)
+            CompareInteger("UtilTests", "Build Number", Utl.BuildNumber, FV.FilePrivatePart)
 
             TL.BlankLine()
 
