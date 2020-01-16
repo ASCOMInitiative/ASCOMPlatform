@@ -279,9 +279,9 @@ if Variable CHECKSYSTEM not Equals TRUE
   MessageBox: $TITLE$ Setup Error, This product requires at least Internet Explorer 5.01 Service Pack 1.$NEWLINE$$NEWLINE$Setup cannot continue.
   Terminate Installation
 end
-Get System Setting Windows XP into CHECKSYSTEM
+Get System Setting Windows 7 into CHECKSYSTEM
 if Variable CHECKSYSTEM not Equals TRUE
-  MessageBox: $TITLE$ Setup Error, This product requires at least Windows XP.$NEWLINE$$NEWLINE$Setup cannot continue.
+  MessageBox: $TITLE$ Setup Error, This product requires at least Windows 7.$NEWLINE$$NEWLINE$Setup cannot continue.
   Terminate Installation
 end
 [END REGION]
