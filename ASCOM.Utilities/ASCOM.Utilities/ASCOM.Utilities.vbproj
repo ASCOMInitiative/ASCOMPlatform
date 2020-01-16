@@ -134,6 +134,12 @@
   <ItemGroup>
     <Compile Include="AllUsersFileSystemProvider.vb" />
     <Compile Include="ASCOMProfile.vb" />
+    <Compile Include="CheckedMessageBox.Designer.vb">
+      <DependentUpon>CheckedMessageBox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CheckedMessageBox.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ChooserAlpacaConfigurationForm.Designer.vb">
       <DependentUpon>ChooserAlpacaConfigurationForm.vb</DependentUpon>
     </Compile>
@@ -193,6 +199,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="XMLAccess.vb" />
+    <EmbeddedResource Include="CheckedMessageBox.resx">
+      <DependentUpon>CheckedMessageBox.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ChooserAlpacaConfigurationForm.resx">
       <DependentUpon>ChooserAlpacaConfigurationForm.vb</DependentUpon>
     </EmbeddedResource>

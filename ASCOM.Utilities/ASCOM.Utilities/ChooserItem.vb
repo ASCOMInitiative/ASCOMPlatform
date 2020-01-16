@@ -36,7 +36,7 @@ Public Class ChooserItem
     ''' </summary>
     ''' <param name="deviceNumber">The Alpaca device access number</param>
     ''' <param name="hostName">The host name (or IP address) used to access the Alpaca device</param>
-    ''' <param name="port">The ALpaca port number</param>
+    ''' <param name="port">The Alpaca port number</param>
     ''' <param name="name">The device's display name</param>
     Public Sub New(deviceUniqueId As String, deviceNumber As Integer, hostName As String, port As Integer, name As String)
         Me.New()
@@ -55,7 +55,7 @@ Public Class ChooserItem
     Public Property ChooserID As Guid
 
     ''' <summary>
-    ''' ID that is globally unique for this ALpaca device
+    ''' ID that is globally unique for this Alpaca device
     ''' </summary>
     ''' <returns>ASCOM device's unique ID</returns>
     Public Property DeviceUniqueID As String

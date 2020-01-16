@@ -18,10 +18,10 @@ namespace ASCOM.Utilities.Support
         }
 
         /// <summary>
-        /// Initialise IP end point, ALpaca unique ID and Status message
+        /// Initialise IP end point, Alpaca unique ID and Status message
         /// </summary>
         /// <param name="ipEndPoint">Alpaca device IP endpoint</param>
-        /// <param name="alpacaUniqueId">ALpaca device unique ID</param>
+        /// <param name="alpacaUniqueId">Alpaca device unique ID</param>
         /// <param name="statusMessage">Device status message</param>
         public AlpacaDevice(IPEndPoint ipEndPoint, string statusMessage)
         {

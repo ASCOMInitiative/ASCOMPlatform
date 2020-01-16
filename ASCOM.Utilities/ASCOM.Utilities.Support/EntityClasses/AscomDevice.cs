@@ -23,7 +23,7 @@ namespace ASCOM.Utilities.Support
         /// <param name="ascomDeviceType">ASCOM device type</param>
         /// <param name="alpacaDeviceNumber">Alpaca API device number</param>
         /// <param name="uniqueId">ASCOM device unique ID</param>
-        /// <param name="ipEndPoint">ALpaca device IP endpoint</param>
+        /// <param name="ipEndPoint">Alpaca device IP endpoint</param>
         /// <param name="hostName">ALapca device host name</param>
         /// <param name="alpacaUniqueId">Alpaca device unique ID</param>
         /// <param name="interfaceVersion">Supported Alpaca interface version</param>

@@ -22,7 +22,7 @@ Friend Class ChooserForm
     Private Const TOOLTIP_PROPERTIES_FIRST_TIME_MESSAGE As String = "You must check driver configuration before first time use, please click the Properties... button." & vbCrLf & "The OK button will remain greyed out until this is done."
     Private Const CHOOSER_LIST_WIDTH_NEW_ALPACA As Integer = 600 ' Width of the Chooser list when new Alpaca devices are present
 
-    ' Persistence constants
+    ' Chooser persistence constants
     Private Const CONFIGRATION_SUBKEY As String = "Chooser\Configuration" ' Store configuration in a subkey under the Chooser key
     Private Const ALPACA_ENABLED As String = "Alpaca enabled" : Private Const ALPACA_ENABLED_DEFAULT As Boolean = False
     Private Const ALPACA_DISCOVERY_PORT As String = "Alpaca discovery port" : Private Const ALPACA_DISCOVERY_PORT_DEFAULT As Integer = 32227
@@ -359,7 +359,7 @@ Friend Class ChooserForm
 
     Private Sub cmdOK_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnOK.Click
         Dim newProgId As String
-        Dim userResponse As MsgBoxResult
+        Dim userResponse As DialogResult
 
         Using registryAccess As New RegistryAccess
             TL.LogMessage("OK Click", $"Combo box selected index = {CmbDriverSelector.SelectedIndex}")
@@ -372,11 +372,21 @@ Friend Class ChooserForm
                 ' Close the UI because the COM driver is selected
                 Me.Hide()
             Else ' User has selected a new Alpaca device so we need to create a new COM driver for this
-                userResponse = MsgBox("After pressing OK, you will be asked for Administrator approval to register this new Alpaca device.", MsgBoxStyle.OkCancel, "New Alpaca Device Selected")
-                If userResponse = MsgBoxResult.Ok Then
 
-                    ' Create a new ALpaca driver of the current ASCOM device type
-                    newProgId = CreateNewAlpacaDriver()
+                ' SHow the admin request dialogue if it has not been suppressed by the user
+                If Not GetBool(SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE, SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE_DEFAULT) Then ' The admin request coming dialogue has not been suppressed so show the dialogue
+                    Using checkedMessageBox As New CheckedMessageBox()
+                        userResponse = checkedMessageBox.ShowDialog()
+                    End Using
+                Else ' The admin request coming dialogue has been suppressed so flag the user response as OK
+                    userResponse = DialogResult.OK
+                End If
+
+                ' Test whether the user clicked the OK button or pressed the "x" cancel icon in the top right of the form
+                If userResponse = DialogResult.OK Then ' User pressed the OK button
+
+                    ' Create a new Alpaca driver of the current ASCOM device type
+                    newProgId = CreateNewAlpacaDriver(selectedChooserItem.Name)
 
                     ' Configure the IP address, port number and Alpaca device number in the newly registered driver
                     profile.DeviceType = $"{deviceTypeValue.Substring(0, 1).ToUpperInvariant()}{deviceTypeValue.Substring(1).ToLowerInvariant()}"
@@ -637,7 +647,7 @@ Friend Class ChooserForm
     ''' <param name="progIdBase">ProgID base string</param>
     ''' <param name="deviceType">ASCOM device type</param>
     ''' <returns></returns>
-    Private Function CreateNewAlpacaDriver() As String
+    Private Function CreateNewAlpacaDriver(deviceDescription As String) As String
         Dim newProgId As String
         Dim deviceNumber As Integer
         Dim typeFromProgId As Type
@@ -655,8 +665,12 @@ Friend Class ChooserForm
 
         TL.LogMessage("CreateAlpacaClient", $"Creating new ProgID: {newProgId}")
 
-        ' Create the new Alpaca Client
-        RunDynamicClientManager($"\CreateAlpacaClient {deviceTypeValue} {deviceNumber} {newProgId}")
+        ' Create the new Alpaca Client appending the device description if required 
+        If (String.IsNullOrEmpty(deviceDescription)) Then
+            RunDynamicClientManager($"\CreateNamedClient {deviceTypeValue} {deviceNumber} {newProgId}")
+        Else
+            RunDynamicClientManager($"\CreateAlpacaClient {deviceTypeValue} {deviceNumber} {newProgId} ""{deviceDescription}""")
+        End If
 
         Return newProgId ' Return the new ProgID
     End Function
@@ -666,18 +680,15 @@ Friend Class ChooserForm
         Dim userResponse As MsgBoxResult
         Using registryAccess As New RegistryAccess
 
-            userResponse = MsgBox("After pressing OK, you will be asked for Administrator approval to create this new Alpaca device.", MsgBoxStyle.OkCancel, "Create New Alpaca Device")
-            If userResponse = MsgBoxResult.Ok Then ' User said proceed
+            ' Create a new Alpaca driver of the current ASCOM device type
+            newProgId = CreateNewAlpacaDriver("")
 
-                ' Create a new ALpaca driver of the current ASCOM device type
-                newProgId = CreateNewAlpacaDriver()
+            ' Select the new driver in the Chooser combo box list
+            selectedProgIdValue = newProgId
+            InitialiseComboBox()
 
-                ' Select the new driver in the Chooser combo box list
-                selectedProgIdValue = newProgId
-                InitialiseComboBox()
+            TL.LogMessage("OK Click", $"Returning ProgID: '{selectedProgIdValue}'")
 
-                TL.LogMessage("OK Click", $"Returning ProgID: '{selectedProgIdValue}'")
-            End If
         End Using
     End Sub
 
@@ -758,7 +769,7 @@ Friend Class ChooserForm
         Dim clientManagerWorkingDirectory, clientManagerExeFile As String
         Dim clientManagerProcessStartInfo As ProcessStartInfo
 
-        ' Construct path to the executable that will dynamically create a new ALpaca COM client
+        ' Construct path to the executable that will dynamically create a new Alpaca COM client
         clientManagerWorkingDirectory = $"{Get32BitProgramFilesPath()}\{ALPACA_DYNAMIC_CLIENT_MANAGER_RELATIVE_PATH}"
         clientManagerExeFile = $"{clientManagerWorkingDirectory}\{ALPACA_DYNAMIC_CLIENT_MANAGER_EXE_NAME}"
 
@@ -766,7 +777,7 @@ Friend Class ChooserForm
         TL.LogMessage("RunDynamicClientManager", $"Managing drivers using the {clientManagerExeFile} executable in working directory {clientManagerWorkingDirectory}")
 
         If Not File.Exists(clientManagerExeFile) Then
-            MsgBox("The client generator executable can not be found, please repair the ASCOM Platform.", MsgBoxStyle.Critical, "ALpaca Client Generator Not Found")
+            MsgBox("The client generator executable can not be found, please repair the ASCOM Platform.", MsgBoxStyle.Critical, "Alpaca Client Generator Not Found")
             TL.LogMessage("RunDynamicClientManager", $"ERROR - Unable to find the client generator executable at {clientManagerExeFile}, cannot create a new Alpaca client.")
             selectedProgIdValue = ""
             Return
@@ -1037,9 +1048,11 @@ Friend Class ChooserForm
                     End If
                 Next
 
-                TL.LogMessage("PopulateDriverComboBox", $"Selected ProgID is: {selectedProgIdValue}")
                 If selectedChooserItem Is Nothing Then ' The requested driver was not found so pick the device that is actually visible
                     selectedChooserItem = CType(CmbDriverSelector.SelectedItem, Generic.KeyValuePair(Of ChooserItem, String)).Key
+                    TL.LogMessage("PopulateDriverComboBox", $"Selected ProgID {selectedProgIdValue} WAS NOT found. The selected device is: {selectedChooserItem.Name}, Is COM driver: {selectedChooserItem.IsComDriver}")
+                Else
+                    TL.LogMessage("PopulateDriverComboBox", $"Selected ProgID {selectedProgIdValue} WAS found. Device is: {selectedChooserItem.Name}, Is COM driver: {selectedChooserItem.IsComDriver}")
                 End If
 
                 ' Validate the selected driver if it is a COM driver
@@ -1048,6 +1061,8 @@ Friend Class ChooserForm
                 Else ' This is a new Alpaca driver
                     WarningTooltipClear()
                     BtnProperties.Enabled = False ' Disable the Properties button because there is not yet a COM driver to configure
+                    BtnOK.Enabled = True
+                    currentOkButtonEnabledState = True
                 End If
 
             Catch ex As Exception
