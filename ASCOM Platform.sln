@@ -2360,6 +2360,7 @@ Global
 		{350A73BD-60D1-03E4-2EDC-A617D2D79CE3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{350A73BD-60D1-03E4-2EDC-A617D2D79CE3}.Release|Win32.ActiveCfg = Release|x86
 		{350A73BD-60D1-03E4-2EDC-A617D2D79CE3}.Release|x64.ActiveCfg = Release|Any CPU
+		{350A73BD-60D1-03E4-2EDC-A617D2D79CE3}.Release|x64.Build.0 = Release|Any CPU
 		{350A73BD-60D1-03E4-2EDC-A617D2D79CE3}.Release|x86.ActiveCfg = Release|x86
 		{350A73BD-60D1-03E4-2EDC-A617D2D79CE3}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
