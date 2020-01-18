@@ -96,10 +96,6 @@
       <Project>{2c40fad9-de75-4360-a0ad-911c4d24d98c}</Project>
       <Name>ASCOM.Attributes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj">
-      <Project>{872ef2d6-ac89-4c15-ac84-6c69b040a843}</Project>
-      <Name>ASCOM.DeviceInterface</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{c9bf0a8b-594f-4ab9-938a-edc8448d8520}</Project>
       <Name>ASCOM.Utilities</Name>
