@@ -6,7 +6,6 @@ Check Application Pre-Requisites
 Specify additional clean-up required when uninstalling
 Platform 6 Content
 Platform 5 files
-Set Registry Keys
 Platform 6.1 files
 Set up log file and variables
 Remove Previous Platform 6 install if present
@@ -17,3 +16,4 @@ Create shortcuts
 Remove 32bit components
 Install Application Pre-Requisites if required
 Maintenance Dialogue
+Uninstall items installed by this installer

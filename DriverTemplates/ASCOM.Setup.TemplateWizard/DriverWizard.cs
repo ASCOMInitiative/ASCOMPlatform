@@ -9,6 +9,8 @@ namespace ASCOM.Setup
     using EnvDTE;
     using EnvDTE80;
     using System.IO;
+    using System.Diagnostics;
+
     //using ASCOM.Internal;
 
     public class DriverWizard : IWizard
@@ -44,6 +46,22 @@ namespace ASCOM.Setup
         /// <param name="customParams"></param>
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
+            try
+            {
+                // Create a file for output named TestFile.txt.
+                string traceLogFile = $"{TL.LogFilePath}\\TraceLog.txt";
+                TL.LogMessage("RunStarted", $"Tracing to file: {traceLogFile}");
+                Stream myFile = File.Create(traceLogFile);
+
+                // Create a new text writer using the output stream, and add it to the trace listeners.
+                TextWriterTraceListener myTextListener = new TextWriterTraceListener(myFile);
+                Trace.Listeners.Add(myTextListener);
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessageCrLf("RunStarted", $"Exception creating trace file: \r\n{ex.ToString()}");
+            }
+
             Diagnostics.Enter();
 
             myDTE = (DTE2)automationObject;
@@ -58,7 +76,7 @@ namespace ASCOM.Setup
             }
             catch (Exception ex)
             {
-                TL.LogMessageCrLf("RunStarted", "Form Exception: "+ ex.ToString());
+                TL.LogMessageCrLf("RunStarted", "Form Exception: " + ex.ToString());
                 MessageBox.Show("Form Exception: " + ex.ToString());
             }
 
@@ -312,34 +330,34 @@ namespace ASCOM.Setup
                 Diagnostics.Enter();
                 if (myProjectItem != null) // We do have a project item to work on
                 {
-                myProjectItem.Open(); // Open the item for editing
-                TL.LogMessage("RunFinished", "Done Open");
+                    myProjectItem.Open(); // Open the item for editing
+                    TL.LogMessage("RunFinished", "Done Open");
 
-                Document itemDocument = myProjectItem.Document; // Get the open file's document object
-                TL.LogMessage("RunFinished", "Created Document");
+                    Document itemDocument = myProjectItem.Document; // Get the open file's document object
+                    TL.LogMessage("RunFinished", "Created Document");
 
-                itemDocument.Activate(); // Make this the current document
-                TL.LogMessage("RunFinished", "Activated Document");
+                    itemDocument.Activate(); // Make this the current document
+                    TL.LogMessage("RunFinished", "Activated Document");
 
-                TextSelection documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
-                TL.LogMessage("RunFinished", "Created Selection object");
+                    TextSelection documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                    TL.LogMessage("RunFinished", "Created Selection object");
 
-                documentSelection.StartOfDocument(); // GO to the top of the document
-                TL.LogMessage("RunFinished", "Done StartOfDocument Region");
+                    documentSelection.StartOfDocument(); // GO to the top of the document
+                    TL.LogMessage("RunFinished", "Done StartOfDocument Region");
 
-                string pattern = "[Rr]egion \"*I" + DeviceClass; // Cerate a regular expression string that works for region in both VB and C#
-                TL.LogMessage("", "RegEx search pattern: " + pattern);
-                if (documentSelection.FindText(pattern, (int)vsFindOptions.vsFindOptionsRegularExpression)) // Search for the interface implemnetation start of region 
-                {
-                    // Found the interface implementation region so toggle its twistie closed
-                    documentSelection.SelectLine();
-                    TL.LogMessage("RunFinished", "Found region I" + DeviceClass + " - " + documentSelection.Text); // Log the line actuall found
-                    myDTE.ExecuteCommand("Edit.ToggleOutliningExpansion"); // Toggle the twistie closed
-                    TL.LogMessage("RunFinished", "Done ToggleOutliningExpansion Region");
-                }
+                    string pattern = "[Rr]egion \"*I" + DeviceClass; // Cerate a regular expression string that works for region in both VB and C#
+                    TL.LogMessage("", "RegEx search pattern: " + pattern);
+                    if (documentSelection.FindText(pattern, (int)vsFindOptions.vsFindOptionsRegularExpression)) // Search for the interface implemnetation start of region 
+                    {
+                        // Found the interface implementation region so toggle its twistie closed
+                        documentSelection.SelectLine();
+                        TL.LogMessage("RunFinished", "Found region I" + DeviceClass + " - " + documentSelection.Text); // Log the line actuall found
+                        myDTE.ExecuteCommand("Edit.ToggleOutliningExpansion"); // Toggle the twistie closed
+                        TL.LogMessage("RunFinished", "Done ToggleOutliningExpansion Region");
+                    }
 
-                itemDocument.Close(vsSaveChanges.vsSaveChangesYes); // SAve changes and close the file
-                TL.LogMessage("RunFinished", "Done Save");
+                    itemDocument.Close(vsSaveChanges.vsSaveChangesYes); // SAve changes and close the file
+                    TL.LogMessage("RunFinished", "Done Save");
                 }
                 else // No project item so just report this (happens when a test project is being created)
                 {
