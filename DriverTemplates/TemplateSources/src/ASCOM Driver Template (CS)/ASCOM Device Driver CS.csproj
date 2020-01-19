@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DeviceCamera.cs" />
+    <Compile Include="DeviceCoverCalibrator.cs" />
     <Compile Include="DeviceDome.cs" />
     <Compile Include="DeviceFilterWheel.cs" />
     <Compile Include="DeviceFocuser.cs" />

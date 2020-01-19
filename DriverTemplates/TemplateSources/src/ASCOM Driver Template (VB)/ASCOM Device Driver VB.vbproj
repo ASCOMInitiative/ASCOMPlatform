@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DeviceCamera.vb" />
+    <Compile Include="DeviceCoverCalibrator.vb" />
     <Compile Include="DeviceDome.vb" />
     <Compile Include="DeviceFilterWheel.vb" />
     <Compile Include="DeviceFocuser.vb" />
