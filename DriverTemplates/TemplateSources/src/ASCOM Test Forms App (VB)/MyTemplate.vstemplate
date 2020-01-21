@@ -12,6 +12,10 @@
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
     <Icon>__TemplateIcon.ico</Icon>
+	<LanguageTag>visualbasic</LanguageTag>
+    <PlatformTag>windows</PlatformTag>
+    <ProjectTypeTag>desktop</ProjectTypeTag>
+    <ProjectTypeTag>ASCOM</ProjectTypeTag>
   </TemplateData>
   <WizardExtension>
     <Assembly>ASCOM.Setup.TemplateWizard, Version=6.0.0.0, Culture=Neutral, PublicKeyToken=565de7938946fba7</Assembly>

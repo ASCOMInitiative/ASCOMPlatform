@@ -13,6 +13,10 @@
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
     <Icon>__TemplateIcon.ico</Icon>
+	<LanguageTag>visualbasic</LanguageTag>
+    <PlatformTag>windows</PlatformTag>
+    <ProjectTypeTag>desktop</ProjectTypeTag>
+    <ProjectTypeTag>ASCOM</ProjectTypeTag>
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="ASCOM Device Driver.vbproj" File="ASCOM Device Driver VB.vbproj" ReplaceParameters="true">

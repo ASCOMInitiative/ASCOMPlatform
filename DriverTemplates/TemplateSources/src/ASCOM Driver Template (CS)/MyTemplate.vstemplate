@@ -13,6 +13,10 @@
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
     <Icon>CSharpASCOM.ico</Icon>
+	<LanguageTag>csharp</LanguageTag>
+    <PlatformTag>windows</PlatformTag>
+    <ProjectTypeTag>desktop</ProjectTypeTag>
+    <ProjectTypeTag>ASCOM</ProjectTypeTag>
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="ASCOM Device Driver.csproj" File="ASCOM Device Driver CS.csproj" ReplaceParameters="true">
