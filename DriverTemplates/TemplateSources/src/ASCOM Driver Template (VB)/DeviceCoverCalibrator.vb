@@ -6,15 +6,16 @@ Imports ASCOM.DeviceInterface
 Imports ASCOM.Utilities
 
 Class DeviceCoverCalibrator
-    Dim util = New Util()
-    Dim tl = New TraceLogger()
+    Implements ICoverCalibratorV1
+    Private util = New Util()
+    Private tl = New TraceLogger()
 
 #Region "ICoverCalibrator Implementation"
 
     ''' <summary>
     ''' Returns the state of the device cover, if present, otherwise returns "NotPresent"
     ''' </summary>
-    Public ReadOnly Property CoverState() As CoverStatus
+    Public ReadOnly Property CoverState() As CoverStatus Implements ICoverCalibratorV1.CoverState
         Get
             tl.LogMessage("CoverState Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("CoverState", False)
@@ -24,7 +25,7 @@ Class DeviceCoverCalibrator
     ''' <summary>
     ''' Initiates cover opening if a cover is present
     ''' </summary>
-    Public Sub OpenCover()
+    Public Sub OpenCover() Implements ICoverCalibratorV1.OpenCover
         tl.LogMessage("OpenCover", "Not implemented")
         Throw New ASCOM.MethodNotImplementedException("OpenCover")
     End Sub
@@ -32,7 +33,7 @@ Class DeviceCoverCalibrator
     ''' <summary>
     ''' Initiates cover closing if a cover is present
     ''' </summary>
-    Public Sub CloseCover()
+    Public Sub CloseCover() Implements ICoverCalibratorV1.CloseCover
         tl.LogMessage("CloseCover", "Not implemented")
         Throw New ASCOM.MethodNotImplementedException("CloseCover")
     End Sub
@@ -40,7 +41,7 @@ Class DeviceCoverCalibrator
     ''' <summary>
     ''' Stops any cover movement that may be in progress if a cover is present and cover movement can be interrupted.
     ''' </summary>
-    Public Sub HaltCover()
+    Public Sub HaltCover() Implements ICoverCalibratorV1.HaltCover
         tl.LogMessage("HaltCover", "Not implemented")
         Throw New ASCOM.MethodNotImplementedException("HaltCover")
     End Sub
@@ -48,7 +49,7 @@ Class DeviceCoverCalibrator
     ''' <summary>
     ''' Returns the state of the calibration device, if present, otherwise returns "NotPresent"
     ''' </summary>
-    Public ReadOnly Property CalibratorState() As CalibratorStatus
+    Public ReadOnly Property CalibratorState() As CalibratorStatus Implements ICoverCalibratorV1.CalibratorState
         Get
             tl.LogMessage("CalibratorState Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("CalibratorState", False)
@@ -58,7 +59,7 @@ Class DeviceCoverCalibrator
     ''' <summary>
     ''' Returns the current calibrator brightness in the range 0 (completely off) to <see cref="MaxBrightness"/> (fully on)
     ''' </summary>
-    Public ReadOnly Property Brightness As Integer
+    Public ReadOnly Property Brightness As Integer Implements ICoverCalibratorV1.Brightness
         Get
             tl.LogMessage("Brightness Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("Brightness", False)
@@ -68,7 +69,7 @@ Class DeviceCoverCalibrator
     ''' <summary>
     ''' The Brightness value that makes the calibrator deliver its maximum illumination.
     ''' </summary>
-    Public ReadOnly Property MaxBrightness As Integer
+    Public ReadOnly Property MaxBrightness As Integer Implements ICoverCalibratorV1.MaxBrightness
         Get
             tl.LogMessage("MaxBrightness Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("MaxBrightness", False)
@@ -79,7 +80,7 @@ Class DeviceCoverCalibrator
     ''' Turns the calibrator on at the specified brightness if the device has calibration capability
     ''' </summary>
     ''' <param name="Brightness"></param>
-    Public Sub CalibratorOn(Brightness As Integer)
+    Public Sub CalibratorOn(Brightness As Integer) Implements ICoverCalibratorV1.CalibratorOn
         tl.LogMessage("CalibratorOn", $"Not implemented. Value set: {Brightness}")
         Throw New ASCOM.MethodNotImplementedException("CalibratorOn")
     End Sub
@@ -87,7 +88,7 @@ Class DeviceCoverCalibrator
     ''' <summary>
     ''' Turns the calibrator off if the device has calibration capability
     ''' </summary>
-    Public Sub CalibratorOff()
+    Public Sub CalibratorOff() Implements ICoverCalibratorV1.CalibratorOff
         tl.LogMessage("CalibratorOff", "Not implemented")
         Throw New ASCOM.MethodNotImplementedException("CalibratorOff")
     End Sub

@@ -1,5 +1,6 @@
-﻿' This file is a placeholder used during template development,
-' It plays no part in the final ASCOM driver and can safely be deleted.
+﻿' This file is a placeholder used during template development. It holds the common method definitions for all the VB interfaces to remove compilation errors in the VB template
+' that arise from including the "Implements" statement that is in each device type file.
+' It plays no part in the final ASCOM driver.
 Imports ASCOM.DeviceInterface
 
 Partial Public Class TEMPLATEDEVICECLASS
@@ -640,6 +641,75 @@ Partial Public Class DeviceObservingConditions
     End Property
 
     Public ReadOnly Property Name As String Implements IObservingConditions.Name
+        Get
+            Return ""
+        End Get
+    End Property
+
+End Class
+
+Partial Public Class DeviceCoverCalibrator
+    Public Sub Dispose() Implements ICoverCalibratorV1.Dispose
+    End Sub
+
+    Public Sub SetupDialog() Implements ICoverCalibratorV1.SetupDialog
+    End Sub
+
+    Public ReadOnly Property SupportedActions() As ArrayList Implements ICoverCalibratorV1.SupportedActions
+        Get
+            Return New ArrayList()
+        End Get
+    End Property
+
+    Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements ICoverCalibratorV1.Action
+        Throw New MethodNotImplementedException("Action")
+    End Function
+
+    Public Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False) Implements ICoverCalibratorV1.CommandBlind
+        Throw New MethodNotImplementedException("CommandBlind")
+    End Sub
+
+    Public Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean Implements ICoverCalibratorV1.CommandBool
+        Throw New MethodNotImplementedException("CommandBool")
+    End Function
+
+    Public Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String Implements ICoverCalibratorV1.CommandString
+        Throw New MethodNotImplementedException("CommandString")
+    End Function
+
+    Public Property Connected() As Boolean Implements ICoverCalibratorV1.Connected
+        Get
+            Return False
+        End Get
+        Set(value As Boolean)
+        End Set
+    End Property
+
+    Public ReadOnly Property Description As String Implements ICoverCalibratorV1.Description
+        Get
+            Return ""
+        End Get
+    End Property
+
+    Public ReadOnly Property DriverInfo As String Implements ICoverCalibratorV1.DriverInfo
+        Get
+            Return ""
+        End Get
+    End Property
+
+    Public ReadOnly Property DriverVersion() As String Implements ICoverCalibratorV1.DriverVersion
+        Get
+            Return ""
+        End Get
+    End Property
+
+    Public ReadOnly Property InterfaceVersion() As Short Implements ICoverCalibratorV1.InterfaceVersion
+        Get
+            Return 0
+        End Get
+    End Property
+
+    Public ReadOnly Property Name As String Implements ICoverCalibratorV1.Name
         Get
             Return ""
         End Get
