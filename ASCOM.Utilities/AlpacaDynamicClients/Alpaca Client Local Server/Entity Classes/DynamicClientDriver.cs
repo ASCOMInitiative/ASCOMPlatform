@@ -769,6 +769,20 @@ namespace ASCOM.DynamicRemoteClients
                             if (CallWasSuccessful(TL, domeShutterStateResponse)) return (T)((object)domeShutterStateResponse.Value);
                             restResponseBase = (RestResponseBase)domeShutterStateResponse;
                         }
+                        if (typeof(T) == typeof(CoverStatus))
+                        {
+                            IntResponse coverStatusResponse = JsonConvert.DeserializeObject<IntResponse>(deviceJsonResponse.Content);
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, coverStatusResponse.ClientTransactionID, coverStatusResponse.ServerTransactionID, coverStatusResponse.Value.ToString())); //, domeShutterStateResponse.Method));
+                            if (CallWasSuccessful(TL, coverStatusResponse)) return (T)((object)coverStatusResponse.Value);
+                            restResponseBase = (RestResponseBase)coverStatusResponse;
+                        }
+                        if (typeof(T) == typeof(CalibratorStatus))
+                        {
+                            IntResponse calibratorStatusResponse = JsonConvert.DeserializeObject<IntResponse>(deviceJsonResponse.Content);
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, calibratorStatusResponse.ClientTransactionID, calibratorStatusResponse.ServerTransactionID, calibratorStatusResponse.Value.ToString())); //, domeShutterStateResponse.Method));
+                            if (CallWasSuccessful(TL, calibratorStatusResponse)) return (T)((object)calibratorStatusResponse.Value);
+                            restResponseBase = (RestResponseBase)calibratorStatusResponse;
+                        }
                         if (typeof(T) == typeof(IAxisRates))
                         {
                             AxisRatesResponse axisRatesResponse = JsonConvert.DeserializeObject<AxisRatesResponse>(deviceJsonResponse.Content);

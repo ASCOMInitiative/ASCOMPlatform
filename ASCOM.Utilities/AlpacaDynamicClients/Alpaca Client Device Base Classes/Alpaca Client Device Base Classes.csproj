@@ -55,6 +55,7 @@
       <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
     <Compile Include="Camera Base Class.cs" />
+    <Compile Include="CoverCalibrator Base Class.cs" />
     <Compile Include="Dome Base Class.cs" />
     <Compile Include="FilterWheel Base Class.cs" />
     <Compile Include="Focuser Base Class.cs" />

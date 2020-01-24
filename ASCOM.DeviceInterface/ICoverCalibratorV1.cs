@@ -226,6 +226,7 @@ namespace ASCOM.DeviceInterface
         /// Initiates cover opening if a cover is present
         /// </summary>
         /// <exception cref="MethodNotImplementedException">When <see cref="CoverState"/> returns <see cref="CoverStatus.NotPresent"/>.</exception>
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
         /// <remarks>
         /// <para>While the cover is opening <see cref="CoverState"/> must return <see cref="CoverStatus.Moving"/>.</para>
         /// <para>When the cover is open <see cref="CoverState"/> must return <see cref="CoverStatus.Open"/>.</para>
@@ -237,6 +238,7 @@ namespace ASCOM.DeviceInterface
         /// Initiates cover closing if a cover is present
         /// </summary>
         /// <exception cref="MethodNotImplementedException">When <see cref="CoverState"/> returns <see cref="CoverStatus.NotPresent"/>.</exception>
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
         /// <remarks>
         /// <para>While the cover is closing <see cref="CoverState"/> must return <see cref="CoverStatus.Moving"/>.</para>
         /// <para>When the cover is closed <see cref="CoverState"/> must return <see cref="CoverStatus.Closed"/>.</para>
@@ -248,6 +250,7 @@ namespace ASCOM.DeviceInterface
         /// Stops any cover movement that may be in progress if a cover is present and cover movement can be interrupted.
         /// </summary>
         /// <exception cref="MethodNotImplementedException">When <see cref="CoverState"/> returns <see cref="CoverStatus.NotPresent"/> or if cover movement cannot be interrupted.</exception>
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
         /// <remarks>
         /// <para>This must stop any cover movement as soon as possible and set a <see cref="CoverState"/> of <see cref="CoverStatus.Open"/>, <see cref="CoverStatus.Closed"/> 
         /// or <see cref="CoverStatus.Unknown"/> as appropriate.</para>
@@ -273,7 +276,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="PropertyNotImplementedException">When <see cref="CalibratorState"/> returns <see cref="CalibratorStatus.NotPresent"/>.</exception>
         /// <remarks>
-        /// <para>This is a mandatory property for a calibrator device </para>
+        /// <para>This is a mandatory property that must always return a value for a calibrator device </para>
         /// <para>The brightness value must be 0 when the <see cref="CalibratorState"/> is <see cref="CalibratorStatus.Off"/></para>
         /// </remarks>
         int Brightness { get; }
@@ -283,7 +286,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="PropertyNotImplementedException">When <see cref="CalibratorState"/> returns <see cref="CalibratorStatus.NotPresent"/>.</exception>
         /// <remarks>
-        /// <para>This is a mandatory property for a calibrator device and must be within the integer range 1 to 2,147,483,647</para>
+        /// <para>This is a mandatory property for a calibrator device and must always return a value within the integer range 1 to 2,147,483,647</para>
         /// <para>A value of 1 indicates that the calibrator can only be "off" or "on".</para>
         /// <para>A value of 10 indicates that the calibrator has 10 discreet illumination levels in addition to "off".</para>
         /// <para>The value for this parameter should be determined by the driver author or device manufacturer based on the capabilities of the hardware used in the calibrator.</para>
@@ -295,6 +298,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <param name="Brightness">Sets the required calibrator illumination brightness in the range 0 (fully off) to <see cref="MaxBrightness"/> (fully on).</param>
         /// <exception cref="MethodNotImplementedException">When <see cref="CalibratorState"/> returns <see cref="CalibratorStatus.NotPresent"/>.</exception>
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
         /// <exception cref="InvalidValueException">When the supplied brightness parameter is outside the range 0 to <see cref="MaxBrightness"/>.</exception>
         /// <remarks>
         /// <para>This is a mandatory method for a calibrator device that must be implemented.</para>
@@ -309,6 +313,7 @@ namespace ASCOM.DeviceInterface
         /// Turns the calibrator off if the device has calibration capability
         /// </summary>
         /// <exception cref="MethodNotImplementedException">When <see cref="CalibratorState"/> returns <see cref="CalibratorStatus.NotPresent"/>.</exception>
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
         /// <remarks>
         /// <para>This is a mandatory method for a calibrator device.</para>
         /// <para>If the calibrator requires time to safely stabilise after use, <see cref="CalibratorState"/> must return <see cref="CalibratorStatus.NotReady"/>. When the 

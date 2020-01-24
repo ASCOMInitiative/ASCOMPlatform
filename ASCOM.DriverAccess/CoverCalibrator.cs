@@ -91,7 +91,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <exception cref="MethodNotImplementedException">When <see cref="CoverState"/> returns <see cref="CoverStatus.NotPresent"/> or if cover movement cannot be interrupted.</exception>
         /// <remarks>
-        /// <para>This must stop any cover movement as soon as possible and set a <see cref="CoverState"/> of <see cref="CoverStatus.Open"/>, <see cref="CoverStatus.Closed"/> 
+        /// <para>This must stop any cover movement quickly and set a <see cref="CoverState"/> of <see cref="CoverStatus.Open"/>, <see cref="CoverStatus.Closed"/> 
         /// or <see cref="CoverStatus.Unknown"/> as appropriate.</para>
         /// <para>If cover movement cannot be interrupted, a <see cref="MethodNotImplementedException"/> must be thrown.</para>
         /// </remarks>
@@ -159,7 +159,7 @@ namespace ASCOM.DriverAccess
         /// </remarks>
         public void CalibratorOn(int Brightness)
         {
-            memberFactory.CallMember(3, "Move", new Type[] { typeof(int) }, new object[] { Brightness });
+            memberFactory.CallMember(3, "CalibratorOn", new Type[] { typeof(int) }, new object[] { Brightness });
         }
 
         /// <summary>

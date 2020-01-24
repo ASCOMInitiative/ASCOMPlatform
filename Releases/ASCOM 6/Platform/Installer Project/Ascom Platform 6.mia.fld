@@ -9,6 +9,7 @@ Platform 5 files
 Platform 6.1 files
 Set up log file and variables
 Remove Previous Platform 6 install if present
+Uninstall items installed by this installer
 Remove 64bit components
 ASCOM Cache
 Remove Previous Platforms 4 and 5 if present
@@ -16,4 +17,3 @@ Create shortcuts
 Remove 32bit components
 Install Application Pre-Requisites if required
 Maintenance Dialogue
-Uninstall items installed by this installer

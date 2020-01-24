@@ -40,6 +40,7 @@ namespace ASCOM.DynamicRemoteClients
         public const string SIDEOFPIER_PARAMETER_NAME = "SideOfPier";
         public const string UTCDATE_PARAMETER_NAME = "UTCDate";
         public const string SENSORNAME_PARAMETER_NAME = "SensorName";
+        public const string BRIGHTNESS_PARAMETER_NAME = "Brightness";
 
         public const string ISO8601_DATE_FORMAT_STRING = "yyyy-MM-ddTHH:mm:ss.fffffff";
 

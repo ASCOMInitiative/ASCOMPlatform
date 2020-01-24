@@ -20,7 +20,7 @@ namespace ASCOM.DynamicRemoteClients
         private const int LOCALSERVER_WAIT_TIME = 5000; // Length of time (milliseconds) to wait for the local server to (un)register its drivers
 
         // List of supported device types - this must be kept in sync with the device type numeric up-down controls on the form dialogue!
-        private static readonly List<string> supportedDeviceTypes = new List<string>() { "Camera", "Dome", "FilterWheel", "Focuser", "ObservingConditions", "Rotator", "SafetyMonitor", "Switch", "Telescope" };
+        private static readonly List<string> supportedDeviceTypes = new List<string>() { "Camera", "CoverCalibrator", "Dome", "FilterWheel", "Focuser", "ObservingConditions", "Rotator", "SafetyMonitor", "Switch", "Telescope" };
 
         static TraceLogger TL;
 
