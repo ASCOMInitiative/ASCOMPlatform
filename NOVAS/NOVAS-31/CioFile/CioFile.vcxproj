@@ -14,7 +14,7 @@
     <ProjectGuid>{C291C8CE-E2D1-456B-8923-89F3FDADB8D3}</ProjectGuid>
     <RootNamespace>CioFile</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>NOVAS 3.1 CioFile</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

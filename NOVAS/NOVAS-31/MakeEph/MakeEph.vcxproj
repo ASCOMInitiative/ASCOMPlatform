@@ -14,7 +14,7 @@
     <ProjectGuid>{4A4FC3BD-B445-49AA-87E4-B7A046CA1735}</ProjectGuid>
     <RootNamespace>MakeEph</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>NOVAS 3.1  MakeEph</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
