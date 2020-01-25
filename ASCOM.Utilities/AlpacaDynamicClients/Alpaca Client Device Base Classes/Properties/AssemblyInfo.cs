@@ -22,4 +22,4 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("827D3998-C506-4F49-AC08-4A427E2E8494")]
 
-// Assembly version attributes are in the Shared Resources Project \ Properties \SharedVersionNumbers.cs file
+[assembly: AssemblyVersion("6.0.0.0")]

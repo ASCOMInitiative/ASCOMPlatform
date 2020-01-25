@@ -20,12 +20,12 @@ Public Class DiagnosticsForm
 
 #Region "Constants and Enums"
     ' Controls to reduce the scope of tests to be run - only set to false to speed up testing during development. Must all be set True for production builds!
-    Private Const TEST_ASTROMETRY As Boolean = True
-    Private Const TEST_CACHE As Boolean = True
-    Private Const TEST_LOGS_AND_APPLICATIONS As Boolean = True
+    Private Const TEST_ASTROMETRY As Boolean = False
+    Private Const TEST_CACHE As Boolean = False
+    Private Const TEST_LOGS_AND_APPLICATIONS As Boolean = False
     Private Const TEST_REGISTRY As Boolean = True
-    Private Const TEST_SIMULATORS As Boolean = True
-    Private Const TEST_UTILITIES As Boolean = True
+    Private Const TEST_SIMULATORS As Boolean = False
+    Private Const TEST_UTILITIES As Boolean = False
 
     Private Const ASCOM_PLATFORM_NAME As String = "ASCOM Platform 6"
     Private Const INST_DISPLAY_NAME As String = "DisplayName"
@@ -7206,6 +7206,19 @@ Public Class DiagnosticsForm
                             localPath = assemblyURI.LocalPath
                             If (localPath.ToUpperInvariant.Contains("\ASCOM.DRIVERACCESS\6") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.UTILITIES\6") Or
+                                localPath.ToUpperInvariant.Contains("ASCOM.ALPACASHAREDRESOURCES") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.ATTRIBUTES\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.CACHE") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.CONTROLS") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.DRIVERACCESS\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.EXCEPTIONS\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.INTERNAL.EXTENSIONS\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.INTERNAL.FUSIONLIB\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.NEWTONSOFT.JSON\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.SETTINGSPROVIDER\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.SETUP.TEMPLATEWIZARD\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.UTILITIES.SUPPORT\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.UTILITIES.VIDEO") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.ASTROMETRY\6") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.DEVICEINTERFACES\6")) Then
                                 AscomGACPaths.Add(localPath)
