@@ -741,8 +741,7 @@ namespace ASCOM.DriverAccess
         /// <list type="bullet">
         /// <item><description>Raises an error if <see cref="AtPark" /> is true.</description></item>
         /// <item><description>The <see cref="IsPulseGuiding" /> property must be True during pulse-guiding.</description></item>
-        /// <item><description>The PulseGuide method may throw an <see cref="InvalidValueException" /> if a pulseguide request arrives when an incompatible 
-        /// command is already underway e.g. a slew is in progress.</description></item>
+        /// <item><description>The PulseGuide method may throw an <see cref="InvalidValueException" /> if called when an incompatible command is already underway e.g. a slew is in progress.</description></item>
         /// <item><description>The rate of motion for movements about the right ascension axis is specified by the <see cref="GuideRateRightAscension" /> property. The rate of motion
         /// for movements about the declination axis is specified by the <see cref="GuideRateDeclination" /> property. These two rates may be tied together into a single rate, depending
         /// on the driver's implementation and the capabilities of the telescope.</description></item>
