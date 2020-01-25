@@ -90,7 +90,7 @@ PROGRESSMODE
 MARQUEE
 {040D93AA-A07D-47A0-BAFA-F4C3B6C04D83}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Installing Visual C++ Runtime for Visual Studio 2017 v.15.2 (x64)
+Installing Visual C++ Runtime for Visual Studio 2019 (x64)
 {956AD561-C6B0-4EF2-88D9-103587CAF6CD}
 VC1410_25017_RESULT_X64
 0
@@ -123,7 +123,7 @@ TRUE
 FALSE
 {EA21FFD4-7C5D-467C-97D0-C089ED0759ED}
 $TITLE$ Setup
-Microsoft Visual C++ Runtime for Visual Studio 2017 v.15.2 (x64) could not be installed. $VC1410_25017_RESULT_X64$$NEWLINE$$NEWLINE$Please use Windows Update to manually install this update on your system.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+Microsoft Visual C++ Runtime for Visual Studio 2019 (x64) could not be installed. $VC1410_25017_RESULT_X64$$NEWLINE$$NEWLINE$Please use Windows Update to manually install this update on your system.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
 3
 1
 

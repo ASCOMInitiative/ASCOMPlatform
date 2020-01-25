@@ -1,5 +1,5 @@
 if Variable VC1410_25017_RTM_X86 Equals TRUE
-  Set Variable PROGRESSTEXT to Installing Visual C++ Runtime for Visual Studio 2017 v.15.2 (x86)
+  Set Variable PROGRESSTEXT to Installing Visual C++ Runtime for Visual Studio 2019 (x86)
   Set Variable PROGRESSMODE to MARQUEE
    
   Set Variable VC1410_25017_FILES_X86 to 
@@ -23,7 +23,7 @@ if Variable VC1410_25017_RTM_X86 Equals TRUE
       end
     else
       if Variable VC1410_25017_RESULT_X86 not Equals 0
-        MessageBox: $TITLE$ Setup, Microsoft Visual C++ Runtime for Visual Studio 2017 v.15.2 (x86) could not be installed. $VC1410_25017_RESULT_X86$$NEWLINE$$NEWLINE$Please use Windows Update to manually install this update on your system.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+        MessageBox: $TITLE$ Setup, Microsoft Visual C++ Runtime for Visual Studio 2019 (x86) could not be installed. $VC1410_25017_RESULT_X86$$NEWLINE$$NEWLINE$Please use Windows Update to manually install this update on your system.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
         Terminate Installation
       end
     end
