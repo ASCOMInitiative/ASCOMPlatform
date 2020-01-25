@@ -20,12 +20,12 @@ Public Class DiagnosticsForm
 
 #Region "Constants and Enums"
     ' Controls to reduce the scope of tests to be run - only set to false to speed up testing during development. Must all be set True for production builds!
-    Private Const TEST_ASTROMETRY As Boolean = False
-    Private Const TEST_CACHE As Boolean = False
-    Private Const TEST_LOGS_AND_APPLICATIONS As Boolean = False
+    Private Const TEST_ASTROMETRY As Boolean = True
+    Private Const TEST_CACHE As Boolean = True
+    Private Const TEST_LOGS_AND_APPLICATIONS As Boolean = True
     Private Const TEST_REGISTRY As Boolean = True
-    Private Const TEST_SIMULATORS As Boolean = False
-    Private Const TEST_UTILITIES As Boolean = False
+    Private Const TEST_SIMULATORS As Boolean = True
+    Private Const TEST_UTILITIES As Boolean = True
 
     Private Const ASCOM_PLATFORM_NAME As String = "ASCOM Platform 6"
     Private Const INST_DISPLAY_NAME As String = "DisplayName"
