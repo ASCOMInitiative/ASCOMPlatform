@@ -2388,15 +2388,10 @@ Global
 		{089C1280-AABD-4DF1-9FCA-B3077578A37B}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{089C1280-AABD-4DF1-9FCA-B3077578A37B}.Debug|x86.Build.0 = Debug|Any CPU
 		{089C1280-AABD-4DF1-9FCA-B3077578A37B}.MakeDynamicLists|Any CPU.ActiveCfg = Release|Any CPU
-		{089C1280-AABD-4DF1-9FCA-B3077578A37B}.MakeDynamicLists|Any CPU.Build.0 = Release|Any CPU
 		{089C1280-AABD-4DF1-9FCA-B3077578A37B}.MakeDynamicLists|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{089C1280-AABD-4DF1-9FCA-B3077578A37B}.MakeDynamicLists|Mixed Platforms.Build.0 = Release|Any CPU
 		{089C1280-AABD-4DF1-9FCA-B3077578A37B}.MakeDynamicLists|Win32.ActiveCfg = Release|Any CPU
-		{089C1280-AABD-4DF1-9FCA-B3077578A37B}.MakeDynamicLists|Win32.Build.0 = Release|Any CPU
 		{089C1280-AABD-4DF1-9FCA-B3077578A37B}.MakeDynamicLists|x64.ActiveCfg = Release|Any CPU
-		{089C1280-AABD-4DF1-9FCA-B3077578A37B}.MakeDynamicLists|x64.Build.0 = Release|Any CPU
 		{089C1280-AABD-4DF1-9FCA-B3077578A37B}.MakeDynamicLists|x86.ActiveCfg = Release|Any CPU
-		{089C1280-AABD-4DF1-9FCA-B3077578A37B}.MakeDynamicLists|x86.Build.0 = Release|Any CPU
 		{089C1280-AABD-4DF1-9FCA-B3077578A37B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{089C1280-AABD-4DF1-9FCA-B3077578A37B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{089C1280-AABD-4DF1-9FCA-B3077578A37B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
