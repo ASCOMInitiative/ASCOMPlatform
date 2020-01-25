@@ -143,9 +143,6 @@
     <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\Serial.vb">
       <Link>Serial.vb</Link>
     </Compile>
-    <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\TraceLogger.vb">
-      <Link>TraceLogger.vb</Link>
-    </Compile>
     <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\VB6Support\VB6COMErrors.vb">
       <Link>VB6COMErrors.vb</Link>
     </Compile>
@@ -170,6 +167,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="TraceLogger.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -192,10 +190,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\ASCOM.Utilities.Support.csproj">
-      <Project>{1aa1a742-eabb-4fe6-b4e7-63ed84da9304}</Project>
-      <Name>ASCOM.Utilities.Support</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
       <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
       <Name>ASCOM.Exceptions</Name>
