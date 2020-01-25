@@ -729,29 +729,26 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Moves the scope in the given direction for the given interval or time at 
-        /// the rate given by the corresponding guide rate property 
+        /// Moves the scope in the given direction for the given interval or time at
+        /// the rate given by the corresponding guide rate property
         /// </summary>
+        /// <param name="Direction">The direction in which the guide-rate motion is to be made</param>
+        /// <param name="Duration">The duration of the guide-rate motion (milliseconds)</param>
         /// <remarks>
-        /// This method returns immediately if the hardware is capable of back-to-back moves,
-        /// i.e. dual-axis moves. For hardware not having the dual-axis capability,
-        /// the method returns only after the move has completed. 
+        /// This method returns immediately if the hardware is capable of back-to-back moves e.g. dual-axis moves. For hardware not having dual-axis capability, the method returns only after the move has completed.
         /// <para>
         /// <b>NOTES:</b>
         /// <list type="bullet">
         /// <item><description>Raises an error if <see cref="AtPark" /> is true.</description></item>
-        /// <item><description>The <see cref="IsPulseGuiding" /> property must be be True during pulse-guiding.</description></item>
-        /// <item><description>The rate of motion for movements about the right ascension axis is 
-        /// specified by the <see cref="GuideRateRightAscension" /> property. The rate of motion
-        /// for movements about the declination axis is specified by the 
-        /// <see cref="GuideRateDeclination" /> property. These two rates may be tied together
-        /// into a single rate, depending on the driver's implementation
-        /// and the capabilities of the telescope.</description></item>
+        /// <item><description>The <see cref="IsPulseGuiding" /> property must be True during pulse-guiding.</description></item>
+        /// <item><description>The PulseGuide method may throw an <see cref="InvalidValueException" /> if a pulseguide request arrives when an incompatible 
+        /// command is already underway e.g. a slew is in progress.</description></item>
+        /// <item><description>The rate of motion for movements about the right ascension axis is specified by the <see cref="GuideRateRightAscension" /> property. The rate of motion
+        /// for movements about the declination axis is specified by the <see cref="GuideRateDeclination" /> property. These two rates may be tied together into a single rate, depending
+        /// on the driver's implementation and the capabilities of the telescope.</description></item>
         /// </list>
         /// </para>
         /// </remarks>
-        /// <param name="Direction">The direction in which the guide-rate motion is to be made</param>
-        /// <param name="Duration">The duration of the guide-rate motion (milliseconds)</param>
         public void PulseGuide(GuideDirections Direction, int Duration)
         {
             memberFactory.CallMember(3, "PulseGuide", new Type[] { typeof(GuideDirections), typeof(int) }, new object[] { (int)Direction, Duration });

@@ -689,21 +689,19 @@ namespace ASCOM.DeviceInterface
         /// <param name="Duration">The duration of the guide-rate motion (milliseconds)</param>
         /// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanPulseGuide" /> is False</exception>
         /// <exception cref="InvalidValueException">If an invalid direction or duration is given.</exception>
+        /// <exception cref="InvalidOperationException">If the pulse guide cannot be effected e.g. if the telescope is slewing or is not tracking.</exception>
         /// <remarks>
-        /// This method returns immediately if the hardware is capable of back-to-back moves,
-        /// i.e. dual-axis moves. For hardware not having the dual-axis capability,
-        /// the method returns only after the move has completed.
+        /// This method returns immediately if the hardware is capable of back-to-back moves e.g. dual-axis moves. For hardware not having dual-axis capability, the method returns only after the move has completed.
         /// <para>
         /// <b>NOTES:</b>
         /// <list type="bullet">
         /// <item><description>Raises an error if <see cref="AtPark" /> is true.</description></item>
-        /// <item><description>The <see cref="IsPulseGuiding" /> property must be be True during pulse-guiding.</description></item>
-        /// <item><description>The rate of motion for movements about the right ascension axis is
-        /// specified by the <see cref="GuideRateRightAscension" /> property. The rate of motion
-        /// for movements about the declination axis is specified by the
-        /// <see cref="GuideRateDeclination" /> property. These two rates may be tied together
-        /// into a single rate, depending on the driver's implementation
-        /// and the capabilities of the telescope.</description></item>
+        /// <item><description>The <see cref="IsPulseGuiding" /> property must be True during pulse-guiding.</description></item>
+        /// <item><description>The PulseGuide method may throw an <see cref="InvalidValueException" /> if a pulseguide request arrives when an incompatible 
+        /// command is already underway e.g. a slew is in progress.</description></item>
+        /// <item><description>The rate of motion for movements about the right ascension axis is specified by the <see cref="GuideRateRightAscension" /> property. The rate of motion
+        /// for movements about the declination axis is specified by the <see cref="GuideRateDeclination" /> property. These two rates may be tied together into a single rate, depending
+        /// on the driver's implementation and the capabilities of the telescope.</description></item>
         /// </list>
         /// </para>
         /// </remarks>

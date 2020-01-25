@@ -5691,21 +5691,19 @@
             <param name="Duration">The duration of the guide-rate motion (milliseconds)</param>
             <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented and <see cref="P:ASCOM.DeviceInterface.ITelescopeV3.CanPulseGuide" /> is False</exception>
             <exception cref="T:ASCOM.InvalidValueException">If an invalid direction or duration is given.</exception>
+            <exception cref="T:ASCOM.InvalidOperationException">If the pulse guide cannot be effected e.g. if the telescope is slewing or is not tracking.</exception>
             <remarks>
-            This method returns immediately if the hardware is capable of back-to-back moves,
-            i.e. dual-axis moves. For hardware not having the dual-axis capability,
-            the method returns only after the move has completed.
+            This method returns immediately if the hardware is capable of back-to-back moves e.g. dual-axis moves. For hardware not having dual-axis capability, the method returns only after the move has completed.
             <para>
             <b>NOTES:</b>
             <list type="bullet">
             <item><description>Raises an error if <see cref="P:ASCOM.DeviceInterface.ITelescopeV3.AtPark" /> is true.</description></item>
-            <item><description>The <see cref="P:ASCOM.DeviceInterface.ITelescopeV3.IsPulseGuiding" /> property must be be True during pulse-guiding.</description></item>
-            <item><description>The rate of motion for movements about the right ascension axis is
-            specified by the <see cref="P:ASCOM.DeviceInterface.ITelescopeV3.GuideRateRightAscension" /> property. The rate of motion
-            for movements about the declination axis is specified by the
-            <see cref="P:ASCOM.DeviceInterface.ITelescopeV3.GuideRateDeclination" /> property. These two rates may be tied together
-            into a single rate, depending on the driver's implementation
-            and the capabilities of the telescope.</description></item>
+            <item><description>The <see cref="P:ASCOM.DeviceInterface.ITelescopeV3.IsPulseGuiding" /> property must be True during pulse-guiding.</description></item>
+            <item><description>The <see cref="P:ASCOM.DeviceInterface.ITelescopeV3.IsPulseGuiding" /> property may throw an <see cref="T:ASCOM.InvalidValueException" /> if a pulseguide request arrives when an incompatible 
+            command is already underway e.g. a slew is in progress</description></item>
+            <item><description>The rate of motion for movements about the right ascension axis is specified by the <see cref="P:ASCOM.DeviceInterface.ITelescopeV3.GuideRateRightAscension" /> property. The rate of motion
+            for movements about the declination axis is specified by the <see cref="P:ASCOM.DeviceInterface.ITelescopeV3.GuideRateDeclination" /> property. These two rates may be tied together into a single rate, depending
+            on the driver's implementation and the capabilities of the telescope.</description></item>
             </list>
             </para>
             </remarks>
