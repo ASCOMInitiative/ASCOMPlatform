@@ -905,6 +905,9 @@ Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\Filt
 Comment: Focuser simulator
 Install Files ..\..\..\..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
 Install Files ..\..\..\..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
+Comment: CoverCalibrator simulator
+Install Files ..\..\..\..\Drivers and Simulators\CoverCalibrator Simulator\bin\Release\ASCOM.Simulator.CoverCalibrator.dll to $COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator
+Install Files ..\..\..\..\Drivers and Simulators\CoverCalibrator Simulator\bin\Release\ASCOM.Simulator.CoverCalibrator.pdb to $COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator
 Comment: SafetyMonitor simulator
 Install Files ..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.dll to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
 Install Files ..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.pdb to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
@@ -1381,6 +1384,8 @@ if Variable SUCCESS not Equals ERROR
   Set Variable MYPROGRESS to 53
   Set Variable PROGRESSTEXT to Registering Platform 6 Focuser simulator
   Register assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll, set the code base in the registry
+  Set Variable PROGRESSTEXT to Registering Platform 6 CoverCalibrator simulator
+  Register assembly $COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator\ASCOM.Simulator.CoverCalibrator.dll, set the code base in the registry
   Set Variable MYPROGRESS to 54
   Set Variable PROGRESSTEXT to Registering Platform 6 SafetyMonitor simulator
   Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll, set the code base in the registry
@@ -1533,6 +1538,12 @@ if Variable SUCCESS not Equals ERROR
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Focus Simulator 6 (at end of file)
     if Variable RC not Equals 0
       MessageBalloon: RegAsm 64, Unable to register the ASCOM Focuser simulator for 64bit operation. RC: $RC$
+    end
+    Set Variable PROGRESSTEXT to Registering Platform 6 CoverCalibrator simulator
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator\ASCOM.Simulator.CoverCalibrator.dll" /codebase (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - CoverCalibrator Simulator (at end of file)
+    if Variable RC not Equals 0
+      MessageBalloon: RegAsm 64, Unable to register the ASCOM CoverCalibrator simulator for 64bit operation. RC: $RC$
     end
     Set Variable MYPROGRESS to 82
     Set Variable PROGRESSTEXT to Registering Platform 6 Safety Monitor simulator
