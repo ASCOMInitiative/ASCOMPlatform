@@ -252,7 +252,7 @@ KB2919355 required for Windows 8.1.0
 Only execute this script if we are on a 64bit OS
 {C27FDA11-39A8-4AB5-84EE-474768106738}
 PRELIST$MYAH$MYAH$FALSE
-$PRELIST$$NEWLINE$Visual C++ Runtime for Visual Studio 2019 (x64)
+$PRELIST$$NEWLINE$Visual C++ Runtime for Visual Studio 2019 14.24.28127  (x64)
 {391BF5FF-5673-481B-A2CA-5A551EC76DC4}
 PREREQ
 TRUE

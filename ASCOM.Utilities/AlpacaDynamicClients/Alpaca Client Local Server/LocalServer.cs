@@ -216,8 +216,6 @@ namespace ASCOM.DynamicRemoteClients
                     Type[] types = so.GetTypes();
                     foreach (Type type in types)
                     {
-                        TL.LogMessage("LoadComObjectAssemblies", $"Found type: {type.Name}");
-
                         // PWGS Now checks the type rather than the assembly
                         // Check to see if the type has the ServedClassName attribute, only use it if it does.
                         MemberInfo info = type;
@@ -355,6 +353,7 @@ namespace ASCOM.DynamicRemoteClients
                     // Set HKCR\CLSID\clsid
                     string clsid = Marshal.GenerateGuidForType(type).ToString("B");
                     string progid = Marshal.GenerateProgIdForType(type);
+                    TL.LogMessage("RegisterObjects", $"ProgID: {progid} CLSID: {clsid} ");
 
                     // Generate device type from the Class name
                     string deviceType = type.Name;
@@ -402,14 +401,20 @@ namespace ASCOM.DynamicRemoteClients
                     string chooserName = ((ServedClassNameAttribute)attr).DisplayName ?? "MultiServer";
                     using (var profile = new ASCOM.Utilities.Profile())
                     {
+                        profile.DeviceType = deviceType;
+                        TL.LogMessage("RegisterObjects", $"About to Check whether {progid} of device type: {deviceType} is registered. IsRegistered: {profile.IsRegistered(progid)}");
                         if (!profile.IsRegistered(progid)) // Device is not ASCOM registered so register it and set some initial values so that the driver will appear valid to the dynamic device manager
                         {
-                            profile.DeviceType = deviceType;
+                            TL.LogMessage("RegisterObjects", $"ProgID: {progid} profile is not registered, setting default values ");
                             profile.Register(progid, chooserName);
                             profile.WriteValue(progid, SharedConstants.IPADDRESS_PROFILENAME,SharedConstants.IPADDRESS_DEFAULT);
                             profile.WriteValue(progid, SharedConstants.PORTNUMBER_PROFILENAME, SharedConstants.PORTNUMBER_DEFAULT.ToString());
                             profile.WriteValue(progid, SharedConstants.REMOTE_DEVICE_NUMBER_PROFILENAME, SharedConstants.REMOTE_DEVICE_NUMBER_DEFAULT.ToString());
                             profile.WriteValue(progid, SharedConstants.UNIQUEID_PROFILENAME, SharedConstants.UNIQUEID_DEFAULT);
+                        }
+                        else
+                        {
+                            TL.LogMessage("RegisterObjects", $"ProgID: {progid} profile is already registered.");
                         }
                     }
                 }

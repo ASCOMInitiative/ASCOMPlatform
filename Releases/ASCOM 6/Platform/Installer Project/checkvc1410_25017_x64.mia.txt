@@ -100,7 +100,7 @@ if Variable ISWINDOWS64BIT Equals TRUE
    
   if Variable VC1410_25017_RTM_X64 Equals TRUE
     Set Variable PREREQ to TRUE
-    Set Variable PRELIST to $PRELIST$$NEWLINE$Visual C++ Runtime for Visual Studio 2019 (x64)
+    Set Variable PRELIST to $PRELIST$$NEWLINE$Visual C++ Runtime for Visual Studio 2019 14.24.28127  (x64)
     Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(64) - VC 14.24 library (64 bit) not found, it will be installed (at end of file)
   else
     Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(64) - VC 14.24 library (64 bit) found OK (at end of file)

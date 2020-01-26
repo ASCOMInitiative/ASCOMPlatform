@@ -54,7 +54,7 @@ Public Class Profile
         m_sDeviceType = "Telescope"
         TL = New TraceLogger("", "Profile")
         ' Profile trace logging disabled because it has not been required for many years
-        ' TL.Enabled = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT) 'Get enabled / disabled state from the user registry
+        TL.Enabled = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT) 'Get enabled / disabled state from the user registry
         TL.LogMessage("New", "Trace logger created OK")
     End Sub
 
@@ -258,7 +258,7 @@ Public Class Profile
         CheckRegistered(DriverID)
         TL.LogMessage("Unregister", "Unregistering " & DriverID)
 
-        LastDriverID = "" 'Clear this value so that the next next IsRegistered test doesn't use a now invalid cached value
+        LastDriverID = "" 'Clear this value so that the next IsRegistered test doesn't use a now invalid cached value
         ProfileStore.DeleteKey(MakeKey(DriverID, ""))
     End Sub
 

@@ -28,13 +28,15 @@ Partial Class CheckedMessageBox
         Me.ChkDoNotShowAgain = New System.Windows.Forms.CheckBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'BtnOk
         '
         Me.BtnOk.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BtnOk.Location = New System.Drawing.Point(294, 11)
+        Me.BtnOk.Location = New System.Drawing.Point(295, 12)
         Me.BtnOk.Name = "BtnOk"
         Me.BtnOk.Size = New System.Drawing.Size(75, 23)
         Me.BtnOk.TabIndex = 0
@@ -56,7 +58,7 @@ Partial Class CheckedMessageBox
         Me.ChkDoNotShowAgain.AutoSize = True
         Me.ChkDoNotShowAgain.BackColor = System.Drawing.SystemColors.Control
         Me.ChkDoNotShowAgain.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ChkDoNotShowAgain.Location = New System.Drawing.Point(21, 15)
+        Me.ChkDoNotShowAgain.Location = New System.Drawing.Point(21, 16)
         Me.ChkDoNotShowAgain.Name = "ChkDoNotShowAgain"
         Me.ChkDoNotShowAgain.Size = New System.Drawing.Size(194, 17)
         Me.ChkDoNotShowAgain.TabIndex = 2
@@ -69,26 +71,48 @@ Partial Class CheckedMessageBox
         Me.Label2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.Location = New System.Drawing.Point(12, 36)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(152, 13)
+        Me.Label2.Size = New System.Drawing.Size(155, 13)
         Me.Label2.TabIndex = 3
-        Me.Label2.Text = "create the new Alpaca driver"
+        Me.Label2.Text = "create the new Alpaca driver."
         '
         'Panel1
         '
         Me.Panel1.BackColor = System.Drawing.SystemColors.Control
         Me.Panel1.Controls.Add(Me.BtnOk)
         Me.Panel1.Controls.Add(Me.ChkDoNotShowAgain)
-        Me.Panel1.Location = New System.Drawing.Point(-9, 74)
+        Me.Panel1.Location = New System.Drawing.Point(-9, 115)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(389, 45)
+        Me.Panel1.Size = New System.Drawing.Size(403, 45)
         Me.Panel1.TabIndex = 4
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(12, 68)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(346, 13)
+        Me.Label3.TabIndex = 5
+        Me.Label3.Text = "After the driver is created, the Chooser dialogue will be presented"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(12, 81)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(352, 13)
+        Me.Label4.TabIndex = 6
+        Me.Label4.Text = "again and the driver can be selected as normal with the OK button."
         '
         'CheckedMessageBox
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Window
-        Me.ClientSize = New System.Drawing.Size(372, 118)
+        Me.ClientSize = New System.Drawing.Size(373, 160)
+        Me.Controls.Add(Me.Label4)
+        Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Panel1)
@@ -110,4 +134,6 @@ Partial Class CheckedMessageBox
     Friend WithEvents ChkDoNotShowAgain As CheckBox
     Friend WithEvents Label2 As Label
     Friend WithEvents Panel1 As Panel
+    Friend WithEvents Label3 As Label
+    Friend WithEvents Label4 As Label
 End Class

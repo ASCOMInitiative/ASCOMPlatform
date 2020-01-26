@@ -37,6 +37,7 @@ Partial Class ChooserAlpacaConfigurationForm
         Me.ChkShowDeviceDetails = New System.Windows.Forms.CheckBox()
         Me.NumExtraChooserWidth = New System.Windows.Forms.NumericUpDown()
         Me.Label4 = New System.Windows.Forms.Label()
+        Me.ChkShowCreateNewAlpacaDriverMessage = New System.Windows.Forms.CheckBox()
         CType(Me.NumDiscoveryIpPort, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumDiscoveryBroadcasts, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumDiscoveryDuration, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -46,7 +47,7 @@ Partial Class ChooserAlpacaConfigurationForm
         '
         'BtnOK
         '
-        Me.BtnOK.Location = New System.Drawing.Point(491, 283)
+        Me.BtnOK.Location = New System.Drawing.Point(491, 303)
         Me.BtnOK.Name = "BtnOK"
         Me.BtnOK.Size = New System.Drawing.Size(75, 23)
         Me.BtnOK.TabIndex = 5
@@ -56,7 +57,7 @@ Partial Class ChooserAlpacaConfigurationForm
         'BtnCancel
         '
         Me.BtnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.BtnCancel.Location = New System.Drawing.Point(572, 283)
+        Me.BtnCancel.Location = New System.Drawing.Point(572, 303)
         Me.BtnCancel.Name = "BtnCancel"
         Me.BtnCancel.Size = New System.Drawing.Size(75, 23)
         Me.BtnCancel.TabIndex = 6
@@ -182,13 +183,24 @@ Partial Class ChooserAlpacaConfigurationForm
         Me.Label4.TabIndex = 13
         Me.Label4.Text = "Additional Chooser width (Default 0)"
         '
+        'ChkShowCreateNewAlpacaDriverMessage
+        '
+        Me.ChkShowCreateNewAlpacaDriverMessage.AutoSize = True
+        Me.ChkShowCreateNewAlpacaDriverMessage.Location = New System.Drawing.Point(269, 262)
+        Me.ChkShowCreateNewAlpacaDriverMessage.Name = "ChkShowCreateNewAlpacaDriverMessage"
+        Me.ChkShowCreateNewAlpacaDriverMessage.Size = New System.Drawing.Size(235, 17)
+        Me.ChkShowCreateNewAlpacaDriverMessage.TabIndex = 14
+        Me.ChkShowCreateNewAlpacaDriverMessage.Text = "Show 'Create new Alpaca driver' instructions"
+        Me.ChkShowCreateNewAlpacaDriverMessage.UseVisualStyleBackColor = True
+        '
         'ChooserAlpacaConfigurationForm
         '
         Me.AcceptButton = Me.BtnOK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.BtnCancel
-        Me.ClientSize = New System.Drawing.Size(659, 318)
+        Me.ClientSize = New System.Drawing.Size(659, 338)
+        Me.Controls.Add(Me.ChkShowCreateNewAlpacaDriverMessage)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.NumExtraChooserWidth)
         Me.Controls.Add(Me.ChkShowDeviceDetails)
@@ -230,4 +242,5 @@ Partial Class ChooserAlpacaConfigurationForm
     Friend WithEvents ChkShowDeviceDetails As CheckBox
     Friend WithEvents NumExtraChooserWidth As NumericUpDown
     Friend WithEvents Label4 As Label
+    Friend WithEvents ChkShowCreateNewAlpacaDriverMessage As CheckBox
 End Class

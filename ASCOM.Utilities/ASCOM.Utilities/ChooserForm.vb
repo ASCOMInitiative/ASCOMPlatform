@@ -1,5 +1,6 @@
 
 Imports System.Collections.Generic
+Imports System.ComponentModel
 Imports System.Drawing.Drawing2D
 Imports System.Globalization
 Imports System.IO
@@ -58,6 +59,7 @@ Friend Class ChooserForm
     Private WithEvents clientManagerProcess As Process
     Private driverGenerationComplete As Boolean
     Private currentOkButtonEnabledState As Boolean
+    Private currentPropertiesButtonEnabledState As Boolean
 
     ' Component variables
     Private TL As ITraceLoggerUtility
@@ -66,6 +68,7 @@ Friend Class ChooserForm
     Private alpacaStatusToolstripLabel As ToolStripLabel
     Private WithEvents alpacaStatusIndicatorTimer As System.Windows.Forms.Timer
     Private profile As Profile
+    Private registryAccess As RegistryAccess
 
     ' Persistence variables
     Friend AlpacaEnabled As Boolean
@@ -111,6 +114,9 @@ Friend Class ChooserForm
         OriginalLblAlpacaDiscoveryPosition = LblAlpacaDiscovery.Left
         OriginalAlpacaStatusPosition = AlpacaStatus.Left
         OriginalDividerLineWidth = DividerLine.Width
+
+        'Get access to the profile registry area
+        registryAccess = New RegistryAccess(ERR_SOURCE_CHOOSER)
 
         ReadState() ' Read in the state variables from persisted storage
         ResizeChooser()
@@ -197,6 +203,9 @@ Friend Class ChooserForm
             End If
             If Not profile Is Nothing Then
                 Try : profile.Dispose() : Catch : End Try
+            End If
+            If Not registryAccess Is Nothing Then
+                Try : registryAccess.Dispose() : Catch : End Try
             End If
         End If
         MyBase.Dispose(Disposing)
@@ -292,14 +301,11 @@ Friend Class ChooserForm
     ''' <param name="eventSender"></param>
     ''' <param name="eventArgs"></param>
     Private Sub cmdProperties_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnProperties.Click
-        Dim ProfileStore As RegistryAccess
         Dim oDrv As Object = Nothing ' The driver
         Dim bConnected As Boolean
         Dim sProgID As String
         Dim ProgIdType As Type
         Dim UseCreateObject As Boolean = False
-
-        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
 
         'Find ProgID corresponding to description
         sProgID = CType(CmbDriverSelector.SelectedItem, Generic.KeyValuePair(Of ChooserItem, String)).Key.ProgID
@@ -337,8 +343,8 @@ Friend Class ChooserForm
                 End Try
             End If
 
-            ProfileStore.WriteProfile("Chooser", sProgID & " Init", "True") ' Remember it has been initialized
-            BtnOK.Enabled = True
+            registryAccess.WriteProfile("Chooser", sProgID & " Init", "True") ' Remember it has been initialized
+            EnableOkButton(True)
             WarningTooltipClear()
         Catch ex As Exception
             MsgBox("Failed to load driver: """ & sProgID & """ " & ex.ToString, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
@@ -349,7 +355,6 @@ Friend Class ChooserForm
         Try : oDrv.Dispose() : Catch ex As Exception : End Try
         Try : Marshal.ReleaseComObject(oDrv) : Catch ex As Exception : End Try
 
-        ProfileStore.Dispose()
     End Sub
 
     Private Sub cmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnCancel.Click
@@ -361,30 +366,30 @@ Friend Class ChooserForm
         Dim newProgId As String
         Dim userResponse As DialogResult
 
-        Using registryAccess As New RegistryAccess
-            TL.LogMessage("OK Click", $"Combo box selected index = {CmbDriverSelector.SelectedIndex}")
+        TL.LogMessage("OK Click", $"Combo box selected index = {CmbDriverSelector.SelectedIndex}")
 
-            If selectedChooserItem.IsComDriver Then ' User has selected an existing COM driver so return its ProgID
-                selectedProgIdValue = selectedChooserItem.ProgID
+        If selectedChooserItem.IsComDriver Then ' User has selected an existing COM driver so return its ProgID
+            selectedProgIdValue = selectedChooserItem.ProgID
 
-                TL.LogMessage("OK Click", $"Returning ProgID: '{selectedProgIdValue}'")
+            TL.LogMessage("OK Click", $"Returning ProgID: '{selectedProgIdValue}'")
 
-                ' Close the UI because the COM driver is selected
-                Me.Hide()
-            Else ' User has selected a new Alpaca device so we need to create a new COM driver for this
+            ' Close the UI because the COM driver is selected
+            Me.Hide()
+        Else ' User has selected a new Alpaca device so we need to create a new COM driver for this
 
-                ' SHow the admin request dialogue if it has not been suppressed by the user
-                If Not GetBool(SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE, SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE_DEFAULT) Then ' The admin request coming dialogue has not been suppressed so show the dialogue
-                    Using checkedMessageBox As New CheckedMessageBox()
-                        userResponse = checkedMessageBox.ShowDialog()
-                    End Using
-                Else ' The admin request coming dialogue has been suppressed so flag the user response as OK
-                    userResponse = DialogResult.OK
-                End If
+            ' SHow the admin request dialogue if it has not been suppressed by the user
+            If Not GetBool(SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE, SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE_DEFAULT) Then ' The admin request coming dialogue has not been suppressed so show the dialogue
+                Using checkedMessageBox As New CheckedMessageBox()
+                    userResponse = checkedMessageBox.ShowDialog()
+                End Using
+            Else ' The admin request coming dialogue has been suppressed so flag the user response as OK
+                userResponse = DialogResult.OK
+            End If
 
-                ' Test whether the user clicked the OK button or pressed the "x" cancel icon in the top right of the form
-                If userResponse = DialogResult.OK Then ' User pressed the OK button
+            ' Test whether the user clicked the OK button or pressed the "x" cancel icon in the top right of the form
+            If userResponse = DialogResult.OK Then ' User pressed the OK button
 
+                Try
                     ' Create a new Alpaca driver of the current ASCOM device type
                     newProgId = CreateNewAlpacaDriver(selectedChooserItem.Name)
 
@@ -397,18 +402,22 @@ Friend Class ChooserForm
 
                     ' Flag the driver as being already configured so that it can be used immediately
                     registryAccess.WriteProfile("Chooser", $"{newProgId} Init", "True")
-                    registryAccess.Dispose()
 
                     ' Select the new driver in the Chooser combo box list
                     selectedProgIdValue = newProgId
                     InitialiseComboBox()
 
                     TL.LogMessage("OK Click", $"Returning ProgID: '{selectedProgIdValue}'")
-                End If
-
-                ' Don't exit the Chooser but instead return to the UI so that the user can see that a new driver has been created and selected
+                Catch ex As Win32Exception When (ex.ErrorCode = &H80004005)
+                    TL.LogMessage("OK Click", $"Driver creation cancelled: {ex.Message}")
+                    MessageBox.Show($"Driver creation cancelled: {ex.Message}")
+                Catch ex As Exception
+                    MessageBox.Show($"{ex.ToString()}")
+                End Try
             End If
-        End Using
+
+            ' Don't exit the Chooser but instead return to the UI so that the user can see that a new driver has been created and selected
+        End If
     End Sub
 
     ''' <summary>
@@ -425,6 +434,7 @@ Friend Class ChooserForm
 
             ' Save the newly selected chooser item
             selectedChooserItem = CType(CmbDriverSelector.SelectedItem, Generic.KeyValuePair(Of ChooserItem, String)).Key
+            selectedProgIdValue = selectedChooserItem.ProgID
 
             ' Validate the driver if it is a COM driver
             If selectedChooserItem.IsComDriver Then ' This is a COM driver
@@ -432,9 +442,9 @@ Friend Class ChooserForm
                 ValidateDriver(selectedChooserItem.ProgID)
             Else ' This is a new Alpaca driver
                 TL.LogMessage("SelectedIndexChanged", $"New Alpaca driver selected : {selectedChooserItem.Name}")
-                BtnProperties.Enabled = False ' Disable the Properties button because there is not yet a COM driver to configure
+                EnablePropertiesButton(False) ' Disable the Properties button because there is not yet a COM driver to configure
                 WarningTooltipClear()
-                BtnOK.Enabled = True
+                EnableOkButton(True)
             End If
 
         Else ' Selected index is negative
@@ -455,58 +465,51 @@ Friend Class ChooserForm
 #Region "Menu code and event handlers"
 
     Private Sub RefreshTraceMenu()
-        Dim TraceFileName As String ', ProfileStore As RegistryAccess
+        Dim TraceFileName As String
 
-        Using ProfileStore As New RegistryAccess
 
-            TraceFileName = ProfileStore.GetProfile("", SERIAL_FILE_NAME_VARNAME)
-            Select Case TraceFileName
-                Case "" 'Trace is disabled
-                    MenuSerialTraceEnabled.Checked = False 'The trace enabled flag is unchecked and disabled
-                    MenuSerialTraceEnabled.Enabled = True
-                Case SERIAL_AUTO_FILENAME 'Tracing is on using an automatic filename
-                    MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
-                    MenuSerialTraceEnabled.Enabled = True
-                Case Else 'Tracing using some other fixed filename
-                    MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
-                    MenuSerialTraceEnabled.Enabled = True
-            End Select
+        TraceFileName = registryAccess.GetProfile("", SERIAL_FILE_NAME_VARNAME)
+        Select Case TraceFileName
+            Case "" 'Trace is disabled
+                MenuSerialTraceEnabled.Checked = False 'The trace enabled flag is unchecked and disabled
+                MenuSerialTraceEnabled.Enabled = True
+            Case SERIAL_AUTO_FILENAME 'Tracing is on using an automatic filename
+                MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
+                MenuSerialTraceEnabled.Enabled = True
+            Case Else 'Tracing using some other fixed filename
+                MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
+                MenuSerialTraceEnabled.Enabled = True
+        End Select
 
-            'Set Profile trace checked state on menu item 
-            MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
-            MenuRegistryTraceEnabled.Checked = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT)
-            MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
-            MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
-            MenuSimulatorTraceEnabled.Checked = GetBool(SIMULATOR_TRACE, SIMULATOR_TRACE_DEFAULT)
-            MenuDriverAccessTraceEnabled.Checked = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
-            MenuAstroUtilsTraceEnabled.Checked = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
-            MenuNovasTraceEnabled.Checked = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT)
-            MenuCacheTraceEnabled.Checked = GetBool(TRACE_CACHE, TRACE_CACHE_DEFAULT)
-            MenuEarthRotationDataFormTraceEnabled.Checked = GetBool(TRACE_EARTHROTATION_DATA_FORM, TRACE_EARTHROTATION_DATA_FORM_DEFAULT)
+        'Set Profile trace checked state on menu item 
+        MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
+        MenuRegistryTraceEnabled.Checked = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT)
+        MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
+        MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
+        MenuSimulatorTraceEnabled.Checked = GetBool(SIMULATOR_TRACE, SIMULATOR_TRACE_DEFAULT)
+        MenuDriverAccessTraceEnabled.Checked = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
+        MenuAstroUtilsTraceEnabled.Checked = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
+        MenuNovasTraceEnabled.Checked = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT)
+        MenuCacheTraceEnabled.Checked = GetBool(TRACE_CACHE, TRACE_CACHE_DEFAULT)
+        MenuEarthRotationDataFormTraceEnabled.Checked = GetBool(TRACE_EARTHROTATION_DATA_FORM, TRACE_EARTHROTATION_DATA_FORM_DEFAULT)
 
-        End Using
     End Sub
 
     Private Sub MenuAutoTraceFilenames_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        Dim ProfileStore As RegistryAccess
-        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
         'Auto filenames currently disabled, so enable them
         MenuSerialTraceEnabled.Enabled = True 'Set the trace enabled flag
         MenuSerialTraceEnabled.Checked = True 'Enable the trace enabled flag
-        ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SERIAL_AUTO_FILENAME)
-        ProfileStore.Dispose()
+        registryAccess.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SERIAL_AUTO_FILENAME)
     End Sub
 
     Private Sub MenuSerialTraceFile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        Dim ProfileStore As RegistryAccess
         Dim RetVal As System.Windows.Forms.DialogResult
 
-        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
         RetVal = SerialTraceFileName.ShowDialog()
         Select Case RetVal
             Case Windows.Forms.DialogResult.OK
                 'Save the result
-                ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SerialTraceFileName.FileName)
+                registryAccess.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SerialTraceFileName.FileName)
                 'Check and enable the serial trace enabled flag
                 MenuSerialTraceEnabled.Enabled = True
                 MenuSerialTraceEnabled.Checked = True
@@ -514,22 +517,17 @@ Friend Class ChooserForm
             Case Else 'Ignore everything else
 
         End Select
-        ProfileStore.Dispose()
     End Sub
 
     Private Sub MenuSerialTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuSerialTraceEnabled.Click
-        Dim ProfileStore As RegistryAccess
-
-        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
 
         If MenuSerialTraceEnabled.Checked Then ' Auto serial trace is on so turn it off
             MenuSerialTraceEnabled.Checked = False
-            ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, "")
+            registryAccess.WriteProfile("", SERIAL_FILE_NAME_VARNAME, "")
         Else ' Auto serial trace is off so turn it on
             MenuSerialTraceEnabled.Checked = True
-            ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SERIAL_AUTO_FILENAME)
+            registryAccess.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SERIAL_AUTO_FILENAME)
         End If
-        ProfileStore.Dispose()
     End Sub
 
     Private Sub MenuProfileTraceEnabled_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuProfileTraceEnabled.Click
@@ -678,18 +676,16 @@ Friend Class ChooserForm
     Private Sub MnuCreateAlpacaDriver_Click(sender As Object, e As EventArgs) Handles MnuCreateAlpacaDriver.Click
         Dim newProgId As String
         Dim userResponse As MsgBoxResult
-        Using registryAccess As New RegistryAccess
 
-            ' Create a new Alpaca driver of the current ASCOM device type
-            newProgId = CreateNewAlpacaDriver("")
+        ' Create a new Alpaca driver of the current ASCOM device type
+        newProgId = CreateNewAlpacaDriver("")
 
-            ' Select the new driver in the Chooser combo box list
-            selectedProgIdValue = newProgId
-            InitialiseComboBox()
+        ' Select the new driver in the Chooser combo box list
+        selectedProgIdValue = newProgId
+        InitialiseComboBox()
 
-            TL.LogMessage("OK Click", $"Returning ProgID: '{selectedProgIdValue}'")
+        TL.LogMessage("OK Click", $"Returning ProgID: '{selectedProgIdValue}'")
 
-        End Using
     End Sub
 
 #End Region
@@ -702,57 +698,48 @@ Friend Class ChooserForm
 
 
     Private Overloads Sub ReadState(DeviceType As String)
-        Dim registry As RegistryAccess
-
         Try
             TL?.LogMessageCrLf("ChooserReadState", $"Reading state for device type: {DeviceType}. Configuration key: {CONFIGRATION_SUBKEY}, Alpaca enabled: {$"{DeviceType} {ALPACA_ENABLED}"}, ALapca default: {ALPACA_ENABLED_DEFAULT}")
-            registry = New RegistryAccess
 
             ' The enabled state is per device type
-            AlpacaEnabled = Convert.ToBoolean(registry.GetProfile(CONFIGRATION_SUBKEY, $"{DeviceType} {ALPACA_ENABLED}", ALPACA_ENABLED_DEFAULT.ToString()), CultureInfo.InvariantCulture)
+            AlpacaEnabled = Convert.ToBoolean(registryAccess.GetProfile(CONFIGRATION_SUBKEY, $"{DeviceType} {ALPACA_ENABLED}", ALPACA_ENABLED_DEFAULT.ToString()), CultureInfo.InvariantCulture)
 
             ' These values are for all Alpaca devices
-            AlpacaDiscoveryPort = Convert.ToInt32(registry.GetProfile(CONFIGRATION_SUBKEY, ALPACA_DISCOVERY_PORT, ALPACA_DISCOVERY_PORT_DEFAULT.ToString()), CultureInfo.InvariantCulture)
-            AlpacaNumberOfBroadcasts = Convert.ToInt32(registry.GetProfile(CONFIGRATION_SUBKEY, ALPACA_NUMBER_OF_BROADCASTS, ALPACA_NUMBER_OF_BROADCASTS_DEFAULT.ToString()), CultureInfo.InvariantCulture)
-            AlpacaTimeout = Convert.ToInt32(registry.GetProfile(CONFIGRATION_SUBKEY, ALPACA_TIMEOUT, ALPACA_TIMEOUT_DEFAULT.ToString()), CultureInfo.InvariantCulture)
-            AlpacaDnsResolution = Convert.ToBoolean(registry.GetProfile(CONFIGRATION_SUBKEY, ALPACA_DNS_RESOLUTION, ALPACA_DNS_RESOLUTION_DEFAULT.ToString()), CultureInfo.InvariantCulture)
-            AlpacaShowDeviceDetails = Convert.ToBoolean(registry.GetProfile(CONFIGRATION_SUBKEY, ALPACA_SHOW_DEVICE_DETAILS, ALPACA_SHOW_DEVICE_DETAILS_DEFAULT.ToString()), CultureInfo.InvariantCulture)
-            AlpacaShowDiscoveredDevices = Convert.ToBoolean(registry.GetProfile(CONFIGRATION_SUBKEY, ALPACA_SHOW_DISCOVERED_DEVICES, ALPACA_SHOW_DISCOVERED_DEVICES_DEFAULT.ToString()), CultureInfo.InvariantCulture)
-            AlpacaChooserIncrementalWidth = Convert.ToInt32(registry.GetProfile(CONFIGRATION_SUBKEY, ALPACA_CHOOSER_WIDTH, ALPACA_CHOOSER_WIDTH_DEFAULT.ToString()), CultureInfo.InvariantCulture)
+            AlpacaDiscoveryPort = Convert.ToInt32(registryAccess.GetProfile(CONFIGRATION_SUBKEY, ALPACA_DISCOVERY_PORT, ALPACA_DISCOVERY_PORT_DEFAULT.ToString()), CultureInfo.InvariantCulture)
+            AlpacaNumberOfBroadcasts = Convert.ToInt32(registryAccess.GetProfile(CONFIGRATION_SUBKEY, ALPACA_NUMBER_OF_BROADCASTS, ALPACA_NUMBER_OF_BROADCASTS_DEFAULT.ToString()), CultureInfo.InvariantCulture)
+            AlpacaTimeout = Convert.ToInt32(registryAccess.GetProfile(CONFIGRATION_SUBKEY, ALPACA_TIMEOUT, ALPACA_TIMEOUT_DEFAULT.ToString()), CultureInfo.InvariantCulture)
+            AlpacaDnsResolution = Convert.ToBoolean(registryAccess.GetProfile(CONFIGRATION_SUBKEY, ALPACA_DNS_RESOLUTION, ALPACA_DNS_RESOLUTION_DEFAULT.ToString()), CultureInfo.InvariantCulture)
+            AlpacaShowDeviceDetails = Convert.ToBoolean(registryAccess.GetProfile(CONFIGRATION_SUBKEY, ALPACA_SHOW_DEVICE_DETAILS, ALPACA_SHOW_DEVICE_DETAILS_DEFAULT.ToString()), CultureInfo.InvariantCulture)
+            AlpacaShowDiscoveredDevices = Convert.ToBoolean(registryAccess.GetProfile(CONFIGRATION_SUBKEY, ALPACA_SHOW_DISCOVERED_DEVICES, ALPACA_SHOW_DISCOVERED_DEVICES_DEFAULT.ToString()), CultureInfo.InvariantCulture)
+            AlpacaChooserIncrementalWidth = Convert.ToInt32(registryAccess.GetProfile(CONFIGRATION_SUBKEY, ALPACA_CHOOSER_WIDTH, ALPACA_CHOOSER_WIDTH_DEFAULT.ToString()), CultureInfo.InvariantCulture)
 
         Catch ex As Exception
             MsgBox("Chooser Read State " & ex.ToString)
             LogEvent("Chooser Read State ", ex.ToString, System.Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserFormLoad, ex.ToString)
             TL?.LogMessageCrLf("ChooserReadState", ex.ToString())
-        Finally
-            registry.Dispose()
         End Try
     End Sub
 
     Private Sub WriteState(DeviceType As String)
-        Dim registry As RegistryAccess
 
         Try
-            registry = New RegistryAccess
 
             ' Save the enabled state per "device type" 
-            registry.WriteProfile(CONFIGRATION_SUBKEY, $"{DeviceType} {ALPACA_ENABLED}", AlpacaEnabled.ToString(CultureInfo.InvariantCulture))
+            registryAccess.WriteProfile(CONFIGRATION_SUBKEY, $"{DeviceType} {ALPACA_ENABLED}", AlpacaEnabled.ToString(CultureInfo.InvariantCulture))
 
             ' Save other states for all Alpaca devices 
-            registry.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_DISCOVERY_PORT, AlpacaDiscoveryPort.ToString(CultureInfo.InvariantCulture))
-            registry.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_NUMBER_OF_BROADCASTS, AlpacaNumberOfBroadcasts.ToString(CultureInfo.InvariantCulture))
-            registry.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_TIMEOUT, AlpacaTimeout.ToString(CultureInfo.InvariantCulture))
-            registry.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_DNS_RESOLUTION, AlpacaDnsResolution.ToString(CultureInfo.InvariantCulture))
-            registry.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_SHOW_DEVICE_DETAILS, AlpacaShowDeviceDetails.ToString(CultureInfo.InvariantCulture))
-            registry.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_SHOW_DISCOVERED_DEVICES, AlpacaShowDiscoveredDevices.ToString(CultureInfo.InvariantCulture))
-            registry.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_CHOOSER_WIDTH, AlpacaChooserIncrementalWidth.ToString(CultureInfo.InvariantCulture))
+            registryAccess.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_DISCOVERY_PORT, AlpacaDiscoveryPort.ToString(CultureInfo.InvariantCulture))
+            registryAccess.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_NUMBER_OF_BROADCASTS, AlpacaNumberOfBroadcasts.ToString(CultureInfo.InvariantCulture))
+            registryAccess.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_TIMEOUT, AlpacaTimeout.ToString(CultureInfo.InvariantCulture))
+            registryAccess.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_DNS_RESOLUTION, AlpacaDnsResolution.ToString(CultureInfo.InvariantCulture))
+            registryAccess.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_SHOW_DEVICE_DETAILS, AlpacaShowDeviceDetails.ToString(CultureInfo.InvariantCulture))
+            registryAccess.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_SHOW_DISCOVERED_DEVICES, AlpacaShowDiscoveredDevices.ToString(CultureInfo.InvariantCulture))
+            registryAccess.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_CHOOSER_WIDTH, AlpacaChooserIncrementalWidth.ToString(CultureInfo.InvariantCulture))
 
         Catch ex As Exception
             MsgBox("Chooser Write State " & ex.ToString)
             LogEvent("Chooser Write State ", ex.ToString, System.Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserFormLoad, ex.ToString)
             TL?.LogMessageCrLf("ChooserWriteState", ex.ToString())
-        Finally
-            registry.Dispose()
         End Try
 
     End Sub
@@ -842,12 +829,11 @@ Friend Class ChooserForm
 
             chooserList = New SortedList(Of ChooserItem, String)
 
-            Dim profileStore As New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
 
             ' Enumerate the available drivers, and load their descriptions and ProgIDs into the driversList generic sorted list collection. Key is ProgID, value is friendly name.
             Try
                 ' Get Key-Class pairs in the subkey "{DeviceType} Drivers" e.g. "Telescope Drivers"
-                Dim driverList As SortedList(Of String, String) = profileStore.EnumKeys(deviceTypeValue & " Drivers")
+                Dim driverList As SortedList(Of String, String) = registryAccess.EnumKeys(deviceTypeValue & " Drivers")
                 TL.LogMessage("PopulateDriverComboBox", $"Returned {driverList.Count} COM drivers")
 
                 For Each driver As KeyValuePair(Of String, String) In driverList
@@ -883,8 +869,6 @@ Friend Class ChooserForm
             Catch ex1 As Exception
                 TL.LogMessageCrLf("PopulateDriverComboBox", "Exception: " & ex1.ToString)
                 'Ignore any exceptions from this call e.g. if there are no devices of that type installed just create an empty list
-            Finally
-                profileStore.Dispose() 'Close down the profile store
             End Try
 
             TL.LogMessage("PopulateDriverComboBox", $"Completed COM driver enumeration")
@@ -992,7 +976,8 @@ Friend Class ChooserForm
                 Next
             End If
 
-            ' Populate the device list combo box with COM and Alpaca devices. This method will self invoke if required
+            ' Populate the device list combo box with COM and Alpaca devices.
+            ' This Is implemented as an independent method because it interacts with UI controls And will self invoke if required
             PopulateDriverComboBox()
 
         Catch ex As Exception
@@ -1027,7 +1012,7 @@ Friend Class ChooserForm
                 TL.LogMessage("PopulateDriverComboBox", $"Running on thread: {Thread.CurrentThread.ManagedThreadId}")
 
                 ' Initialise the selected chooser item
-                selectedChooserItem = Nothing
+                'selectedChooserItem = Nothing
 
                 ' Set the combo box data source to the chooserList list of items to display
                 CmbDriverSelector.SelectedIndex = -1
@@ -1037,32 +1022,41 @@ Friend Class ChooserForm
 
                 CmbDriverSelector.DropDownWidth = DropDownWidth(CmbDriverSelector) ' AutoSize the combo box width
 
-                ' Select the current device in the list
-                For Each driver As Generic.KeyValuePair(Of ChooserItem, String) In CmbDriverSelector.Items
-                    TL.LogMessage("PopulateDriverComboBox", $"Searching for ProgID: {selectedProgIdValue}, found ProgID: {driver.Key.ProgID}")
-                    If driver.Key.ProgID = selectedProgIdValue Then
-                        TL.LogMessage("PopulateDriverComboBox", $"*** Found ProgID: {selectedProgIdValue}")
-                        CmbDriverSelector.SelectedItem = driver
-                        selectedChooserItem = driver.Key
-                        BtnOK.Enabled = True ' Enable the OK button
-                    End If
-                Next
+                ' If a ProgID has been provided, test whether it matches a ProgID in the driver list
+                If selectedProgIdValue <> "" Then ' A progID was provided
 
-                If selectedChooserItem Is Nothing Then ' The requested driver was not found so pick the device that is actually visible
-                    selectedChooserItem = CType(CmbDriverSelector.SelectedItem, Generic.KeyValuePair(Of ChooserItem, String)).Key
-                    TL.LogMessage("PopulateDriverComboBox", $"Selected ProgID {selectedProgIdValue} WAS NOT found. The selected device is: {selectedChooserItem.Name}, Is COM driver: {selectedChooserItem.IsComDriver}")
-                Else
-                    TL.LogMessage("PopulateDriverComboBox", $"Selected ProgID {selectedProgIdValue} WAS found. Device is: {selectedChooserItem.Name}, Is COM driver: {selectedChooserItem.IsComDriver}")
+                    ' Select the current device in the list
+                    For Each driver As Generic.KeyValuePair(Of ChooserItem, String) In CmbDriverSelector.Items
+                        TL.LogMessage("PopulateDriverComboBox", $"Searching for ProgID: {selectedProgIdValue}, found ProgID: {driver.Key.ProgID}")
+                        If driver.Key.ProgID.ToLowerInvariant() = selectedProgIdValue.ToLowerInvariant() Then
+                            TL.LogMessage("PopulateDriverComboBox", $"*** Found ProgID: {selectedProgIdValue}")
+                            CmbDriverSelector.SelectedItem = driver
+                            selectedChooserItem = driver.Key
+                            EnableOkButton(True) ' Enable the OK button
+                        End If
+                    Next
                 End If
 
-                ' Validate the selected driver if it is a COM driver
-                If selectedChooserItem.IsComDriver Then ' This is a COM driver so validate that it is functional
-                    ValidateDriver(selectedChooserItem.ProgID)
-                Else ' This is a new Alpaca driver
-                    WarningTooltipClear()
-                    BtnProperties.Enabled = False ' Disable the Properties button because there is not yet a COM driver to configure
-                    BtnOK.Enabled = True
-                    currentOkButtonEnabledState = True
+                If selectedChooserItem Is Nothing Then ' The requested driver was not found so display a blank Chooser item
+                    TL.LogMessage("PopulateDriverComboBox", $"Selected ProgID {selectedProgIdValue} WAS NOT found, displaying a blank combo list item")
+
+                    CmbDriverSelector.ResetText()
+                    CmbDriverSelector.SelectedIndex = -1
+
+                    EnablePropertiesButton(False)
+                    EnableOkButton(False)
+                Else
+                    TL.LogMessage("PopulateDriverComboBox", $"Selected ProgID {selectedProgIdValue} WAS found. Device is: {selectedChooserItem.Name}, Is COM driver: {selectedChooserItem.IsComDriver}")
+
+                    ' Validate the selected driver if it is a COM driver
+                    If selectedChooserItem.IsComDriver Then ' This is a COM driver so validate that it is functional
+                        ValidateDriver(selectedChooserItem.ProgID)
+                    Else ' This is a new Alpaca driver
+                        WarningTooltipClear()
+                        EnablePropertiesButton(False) ' Disable the Properties button because there is not yet a COM driver to configure
+                        EnableOkButton(True)
+
+                    End If
                 End If
 
             Catch ex As Exception
@@ -1113,7 +1107,7 @@ Friend Class ChooserForm
             MnuEnableDiscovery.Enabled = True
             MnuDisableDiscovery.Enabled = False
             MnuConfigureChooser.Enabled = True
-            BtnProperties.Enabled = True
+            BtnProperties.Enabled = currentPropertiesButtonEnabledState
             BtnOK.Enabled = currentOkButtonEnabledState
             AlpacaStatus.Visible = False
             alpacaStatusIndicatorTimer.Stop()
@@ -1125,7 +1119,6 @@ Friend Class ChooserForm
             TL.LogMessage("SetStateAlpacaDiscovering", $"InvokeRequired from thread {Thread.CurrentThread.ManagedThreadId}")
             CmbDriverSelector.Invoke(SetStateAlpacaDiscoveringDelegate)
         Else
-            currentOkButtonEnabledState = BtnOK.Enabled
             TL.LogMessage("SetStateAlpacaDiscovering", $"Running on thread {Thread.CurrentThread.ManagedThreadId} OK button enabled state: {currentOkButtonEnabledState}")
             LblAlpacaDiscovery.Visible = True
             CmbDriverSelector.Enabled = False
@@ -1157,7 +1150,7 @@ Friend Class ChooserForm
             MnuEnableDiscovery.Enabled = False
             MnuDisableDiscovery.Enabled = True
             MnuConfigureChooser.Enabled = True
-            BtnProperties.Enabled = True
+            BtnProperties.Enabled = currentPropertiesButtonEnabledState
             BtnOK.Enabled = currentOkButtonEnabledState
             AlpacaStatus.Visible = True
             AlpacaStatus.BackColor = Color.Lime
@@ -1179,7 +1172,7 @@ Friend Class ChooserForm
             MnuEnableDiscovery.Enabled = False
             MnuDisableDiscovery.Enabled = True
             MnuConfigureChooser.Enabled = True
-            BtnProperties.Enabled = True
+            BtnProperties.Enabled = currentPropertiesButtonEnabledState
             BtnOK.Enabled = currentOkButtonEnabledState
             AlpacaStatus.Visible = True
             AlpacaStatus.BackColor = Color.Red
@@ -1188,8 +1181,7 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub ValidateDriver(progId As String)
-        Dim deviceInitialised As String, ProfileStore As RegistryAccess
-        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+        Dim deviceInitialised As String
 
         If Not String.IsNullOrEmpty(progId) Then
 
@@ -1200,21 +1192,21 @@ Friend Class ChooserForm
                 TL.LogMessage("ValidateDriver", "ProgID:" & progId & ", Bitness: " & ApplicationBits.ToString)
                 driverIsCompatible = VersionCode.DriverCompatibilityMessage(progId, ApplicationBits, CType(TL, TraceLogger)) 'Get compatibility warning message, if any
 
-                If driverIsCompatible <> "" Then 'This is an incompatible driver
-                    BtnProperties.Enabled = False ' So prevent access!
-                    BtnOK.Enabled = False
+                If driverIsCompatible <> "" Then 'This is an incompatible driver so we need to prevent access
+                    EnablePropertiesButton(False)
+                    EnableOkButton(False)
                     TL.LogMessage("ValidateDriver", "Showing incompatible driver message")
                     WarningToolTipShow("Incompatible Driver (" & progId & ")", driverIsCompatible)
-                Else ' Driver is compatible
-                    BtnProperties.Enabled = True ' Turn on Properties
-                    deviceInitialised = ProfileStore.GetProfile("Chooser", progId & " Init")
-                    If LCase(deviceInitialised) = "true" Then
-                        BtnOK.Enabled = True ' This device has been initialized
+                Else ' This is a compatible driver
+                    EnablePropertiesButton(True) ' Turn on Properties
+                    deviceInitialised = registryAccess.GetProfile("Chooser", progId & " Init")
+                    If LCase(deviceInitialised) = "true" Then ' This device has been initialized
+                        EnableOkButton(True)
                         currentWarningMesage = ""
                         TL.LogMessage("ValidateDriver", "Driver is compatible and configured so no message")
-                    Else
+                    Else ' This device has not been initialised
                         selectedProgIdValue = ""
-                        BtnOK.Enabled = False ' Ensure OK is enabled
+                        EnableOkButton(False) ' Ensure OK is disabled
                         TL.LogMessage("ValidateDriver", "Showing first time configuration required message")
                         WarningToolTipShow(TOOLTIP_PROPERTIES_TITLE, TOOLTIP_PROPERTIES_FIRST_TIME_MESSAGE)
                     End If
@@ -1222,11 +1214,10 @@ Friend Class ChooserForm
             Else ' Nothing has been selected
                 TL.LogMessage("ValidateDriver", "Nothing has been selected")
                 selectedProgIdValue = ""
-                BtnProperties.Enabled = False
-                BtnOK.Enabled = False
+                EnablePropertiesButton(False)
+                EnableOkButton(False) ' Ensure OK is disabled
             End If
         End If
-        ProfileStore.Dispose() 'Clean up profile store
 
     End Sub
 
@@ -1268,6 +1259,24 @@ Friend Class ChooserForm
         AlpacaStatus.Left = OriginalAlpacaStatusPosition + AlpacaChooserIncrementalWidth
         DividerLine.Width = OriginalDividerLineWidth + AlpacaChooserIncrementalWidth
 
+    End Sub
+
+    ''' <summary>
+    ''' Set the enabled state of the OK button and record this as the current state
+    ''' </summary>
+    ''' <param name="state"></param>
+    Private Sub EnableOkButton(state As Boolean)
+        BtnOK.Enabled = state
+        currentOkButtonEnabledState = state
+    End Sub
+
+    ''' <summary>
+    ''' Set the enabled state of the Properties button and record this as the current state
+    ''' </summary>
+    ''' <param name="state"></param>
+    Private Sub EnablePropertiesButton(state As Boolean)
+        BtnProperties.Enabled = state
+        currentPropertiesButtonEnabledState = state
     End Sub
 
 #End Region

@@ -30,6 +30,7 @@
         ChkListAllDiscoveredDevices.Checked = chooserForm.AlpacaShowDiscoveredDevices
         ChkShowDeviceDetails.Checked = chooserForm.AlpacaShowDeviceDetails
         NumExtraChooserWidth.Value = Convert.ToDecimal(chooserForm.AlpacaChooserIncrementalWidth)
+        ChkShowCreateNewAlpacaDriverMessage.Checked = Not GetBool(SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE, SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE_DEFAULT)
     End Sub
 
     ''' <summary>
@@ -47,6 +48,7 @@
         chooserForm.AlpacaShowDiscoveredDevices = ChkListAllDiscoveredDevices.Checked
         chooserForm.AlpacaShowDeviceDetails = ChkShowDeviceDetails.Checked
         chooserForm.AlpacaChooserIncrementalWidth = Convert.ToInt32(NumExtraChooserWidth.Value)
+        SetName(SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE, (Not ChkShowCreateNewAlpacaDriverMessage.Checked).ToString())
 
         ' Indicate success so that he Chooser can persist the values
         Me.DialogResult = DialogResult.OK
