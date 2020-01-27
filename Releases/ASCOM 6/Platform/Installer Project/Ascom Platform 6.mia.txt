@@ -1021,6 +1021,21 @@ Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Dev
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe to $TARGETDIR$\Tools\AlpacaDynamicClientManager
 [END REGION]
  
+[DEFINE REGION: ASCOM Device Hub]
+Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.exe to $COMMONFILES$\ASCOM\DeviceHub
+Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.exe.config to $COMMONFILES$\ASCOM\DeviceHub
+Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.pdb to $COMMONFILES$\ASCOM\DeviceHub
+Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\MvvmMessenger.dll to $COMMONFILES$\ASCOM\DeviceHub
+Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\MvvmMessenger.pdb to $COMMONFILES$\ASCOM\DeviceHub
+Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\PresentationFramework.Aero.dll to $COMMONFILES$\ASCOM\DeviceHub
+Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\TelescopeDriver\bin\Release\ASCOM.DeviceHub.Telescope.dll to $COMMONFILES$\ASCOM\DeviceHub
+Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\TelescopeDriver\bin\Release\ASCOM.DeviceHub.Telescope.pdb to $COMMONFILES$\ASCOM\DeviceHub
+Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DomeDriver\bin\Release\ASCOM.DeviceHub.Dome.dll to $COMMONFILES$\ASCOM\DeviceHub
+Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DomeDriver\bin\Release\ASCOM.DeviceHub.Dome.pdb to $COMMONFILES$\ASCOM\DeviceHub
+Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\FocuserDriver\bin\Release\ASCOM.DeviceHub.Focuser.dll to $COMMONFILES$\ASCOM\DeviceHub
+Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\FocuserDriver\bin\Release\ASCOM.DeviceHub.Focuser.pdb to $COMMONFILES$\ASCOM\DeviceHub
+[END REGION]
+ 
 [DEFINE REGION: Platform 6 Content]
 Comment: Platform 6 Documents
 Install Files ..\Files\Help.ico to $COMMONFILES$\ASCOM\Platform
@@ -1424,6 +1439,9 @@ if Variable SUCCESS not Equals ERROR
   Set Variable PROGRESSTEXT to Registering Platform 6 Observing Conditions Hub
   Run Program $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Server.exe -register (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Observing Conditions Hub (at end of file)
+  Set Variable PROGRESSTEXT to Registering Platform 6 Device Hub
+  Run Program $COMMONFILES$\ASCOM\DeviceHub\ASCOM.DeviceHub.exe -register (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Device Hub (at end of file)
    
    
   Comment: Install 32bit native images
