@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceHub", "DeviceHub\DeviceHub.csproj", "{DF9D30BE-3312-4D7E-9EA4-6C2F6E2D22B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit Tests", "Unit Tests\Unit Tests.csproj", "{F57F2D4F-D9DA-4BB0-B10D-FB334F15D21B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelescopeDriver", "TelescopeDriver\TelescopeDriver.csproj", "{64308775-BD4A-469C-BCAB-3ED830B811AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomeDriver", "DomeDriver\DomeDriver.csproj", "{FC864194-7A8E-49B6-B8CF-22DEE7342DEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocuserDriver", "FocuserDriver\FocuserDriver.csproj", "{F9894D1D-06E7-4C06-AE00-09F8940E0AA8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{60BC9354-D5AC-4EBE-8D75-841B38EED518}"
+	ProjectSection(SolutionItems) = preProject
+		Inno Setup\ASCOM Device Hub Setup.iss = Inno Setup\ASCOM Device Hub Setup.iss
+		Documents\ASCOM Device Hub User and Technical Information.docx = Documents\ASCOM Device Hub User and Technical Information.docx
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvvmMessenger", "MvvmMessenger\MvvmMessenger.csproj", "{3C199A36-99A6-4C99-BAB3-E37A81505111}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConformanceTests", "ConformanceTests\ConformanceTests.csproj", "{61DD3A73-FCBB-458A-B7ED-DA00DFEB4062}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DF9D30BE-3312-4D7E-9EA4-6C2F6E2D22B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF9D30BE-3312-4D7E-9EA4-6C2F6E2D22B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF9D30BE-3312-4D7E-9EA4-6C2F6E2D22B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF9D30BE-3312-4D7E-9EA4-6C2F6E2D22B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F57F2D4F-D9DA-4BB0-B10D-FB334F15D21B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F57F2D4F-D9DA-4BB0-B10D-FB334F15D21B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F57F2D4F-D9DA-4BB0-B10D-FB334F15D21B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F57F2D4F-D9DA-4BB0-B10D-FB334F15D21B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC864194-7A8E-49B6-B8CF-22DEE7342DEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC864194-7A8E-49B6-B8CF-22DEE7342DEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC864194-7A8E-49B6-B8CF-22DEE7342DEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC864194-7A8E-49B6-B8CF-22DEE7342DEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9894D1D-06E7-4C06-AE00-09F8940E0AA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9894D1D-06E7-4C06-AE00-09F8940E0AA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9894D1D-06E7-4C06-AE00-09F8940E0AA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9894D1D-06E7-4C06-AE00-09F8940E0AA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C199A36-99A6-4C99-BAB3-E37A81505111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C199A36-99A6-4C99-BAB3-E37A81505111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C199A36-99A6-4C99-BAB3-E37A81505111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C199A36-99A6-4C99-BAB3-E37A81505111}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61DD3A73-FCBB-458A-B7ED-DA00DFEB4062}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61DD3A73-FCBB-458A-B7ED-DA00DFEB4062}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61DD3A73-FCBB-458A-B7ED-DA00DFEB4062}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61DD3A73-FCBB-458A-B7ED-DA00DFEB4062}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2F3D1CC9-90D1-4D6F-8D27-50BD979D275B}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,109 @@
+﻿<UserControl x:Class="ASCOM.DeviceHub.TelescopeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ASCOM.DeviceHub"
+			 mc:Ignorable="d" 
+			 Background="{DynamicResource WindowBackgroundBrush}"
+             d:DesignHeight="400" d:DesignWidth="452">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type local:TelescopeParametersViewModel}">
+            <local:TelescopeParametersView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:TelescopeCapabilitiesViewModel}">
+            <local:TelescopeCapabilitiesView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:TelescopeTrackingRatesViewModel}">
+            <local:TelescopeTrackingRatesView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:TelescopeDirectSlewViewModel}">
+            <local:TelescopeDirectSlewView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:TelescopeMotionViewModel}">
+            <local:TelescopeMotionView />
+        </DataTemplate>
+
+        <local:BooleanVisibilityConverter x:Key="BoolVisConverter" />
+        <local:DeviceConnectedValueConverter x:Key="DeviceConnectedValueConverter" />
+		<local:NegatedBooleanValueConverter x:Key="NegatedBooleanValueConverter" />
+
+		<Style x:Key="Text" TargetType="{x:Type Label}">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+
+        <Style x:Key="ClientText" TargetType="{x:Type TextBlock}">
+            <Setter Property="Margin" Value="0,6,0,0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+
+        <Style x:Key="Content" TargetType="{x:Type ContentControl}">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Height" Value="Auto" />
+        </Style>
+
+        <DataTemplate x:Key="headerText">
+            <TextBlock Text="{Binding}" FontSize="9" Margin="0" Padding="0" Width="Auto" Foreground="{DynamicResource NormalTextBrush}" />
+        </DataTemplate>
+
+    </UserControl.Resources>
+    <Grid Background="{DynamicResource WindowBackgroundBrush}" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Background="{DynamicResource WindowBackgroundBrush}" Style="{StaticResource ClientText}"
+                   Text="{Binding ObjectCount, StringFormat=Telescope Clients: {0}, FallbackValue=Telescope Clients: X}"
+                   Visibility="{Binding HasActiveClients, Converter={StaticResource BoolVisConverter}, FallbackValue=Visible}" />
+        <Grid Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Stretch" Margin="0,0,0,4">
+            <StackPanel Orientation="Horizontal">
+				<Button Height="70" Width="70" Margin="4" HorizontalAlignment="Left" Style="{DynamicResource CircleButton}"
+					    Command="{Binding ToggleTelescopeConnectedCommand}">
+					<Button.Content>
+						<TextBlock TextWrapping="Wrap" TextAlignment="Center"
+								   Text="{Binding IsConnected, Converter={StaticResource DeviceConnectedValueConverter}, ConverterParameter=Telescope, FallbackValue=Disconnect Telescope}" />
+					</Button.Content>
+				</Button>
+				<Label Style="{StaticResource Text}" VerticalAlignment="Center" Margin="6,0,0,0"
+				        Content="{Binding TelescopeID, FallbackValue=(No Telescope)}" />
+            </StackPanel>
+        </Grid>
+        <TabControl Name="_telescopeTabs" Grid.Row="2" Background="Transparent" Height="350" HorizontalAlignment="Stretch" 
+					SelectionChanged="TabControl_SelectionChanged" IsSynchronizedWithCurrentItem="True">
+			<TabControl.Resources>
+				<Style TargetType="{x:Type TabItem}">
+					<Setter Property="Focusable" 
+							Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.IsSlewInProgress, Converter={StaticResource NegatedBooleanValueConverter}}" />
+				</Style>
+			</TabControl.Resources>
+			<TabItem Header="Motion" Template="{DynamicResource DeviceHubTabItemTemplate}" HeaderTemplate="{DynamicResource headerText}">
+				<ContentControl Content="{Binding MotionVm}" HorizontalAlignment="Stretch" />
+            </TabItem>
+			<TabItem Header="Direct Slew" Template="{DynamicResource DeviceHubTabItemTemplate}" HeaderTemplate="{DynamicResource headerText}">
+                <ContentControl Content="{Binding DirectSlewVm}" Style="{StaticResource Content}" />
+            </TabItem>
+			<TabItem  Header="Tracking Rates" Template="{DynamicResource DeviceHubTabItemTemplate}" HeaderTemplate="{DynamicResource headerText}">
+                <ContentControl Content="{Binding TrackingRatesVm}" Style="{StaticResource Content}" />
+            </TabItem>
+			<TabItem Header="Capabilities" Template="{DynamicResource DeviceHubTabItemTemplate}"  HeaderTemplate="{DynamicResource headerText}">
+                <ContentControl Content="{Binding CapabilitiesVm}"  Style="{StaticResource Content}" />
+            </TabItem>
+			<TabItem Header="Static Properties" Template="{DynamicResource DeviceHubTabItemTemplate}" HeaderTemplate="{DynamicResource headerText}">
+                <ContentControl Content="{Binding ParametersVm}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Height="Auto" />
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

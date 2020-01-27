@@ -1,0 +1,372 @@
+﻿<UserControl x:Class="ASCOM.DeviceHub.TelescopeDirectSlewView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
+             xmlns:local="clr-namespace:ASCOM.DeviceHub"
+             mc:Ignorable="d" 
+			 Background="{DynamicResource WindowBackgroundBrush}"
+             d:DesignHeight="400" d:DesignWidth="440">
+	<UserControl.Resources>
+		<local:ParkingStateVisibilityConverter x:Key="ParkingStateVisConverter" />
+		<local:NegatedBooleanToVisibilityConverter x:Key="NegatedBooleanToVisibilityConverter" />
+		<local:BooleanVisibilityConverter x:Key="BoolVisConverter" />
+		<local:BooleanBooleanValueConverter x:Key="BoolBoolConverter" />
+		<local:RightAscensionValueConverter x:Key="RightAscensionValueConverter" />
+		<local:DeclinationValueConverter x:Key="DeclinationValueConverter" />
+		<local:BooleanToConnectStringConverter x:Key="BoolConnectConverter" />
+		<local:AzimuthValueConverter x:Key="AzimuthValueConverter" />
+		<local:SideOfPierStringConverter x:Key="SideOfPierConverter" />
+		<local:HourAngleValueConverter x:Key="HourAngleValueConverter" />
+		<local:AltitudeValueConverter x:Key="AltitudeValueConverter" />
+        <local:BooleanOnOffConverter x:Key="BooleanOnOffConverter" />
+
+        <Style x:Key="SlewValue" TargetType="{x:Type TextBox}">
+			<Setter Property="VerticalAlignment" Value="Stretch" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+			<Setter Property="Margin" Value="0" />
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBackgroundBrush}" />
+			<Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource AstroTextBrush}" />
+			<Setter Property="Validation.ErrorTemplate">
+				<Setter.Value>
+					<ControlTemplate>
+						<Grid>
+							<Polygon Points="14,14 14,0 0,0" Stroke="Black" StrokeThickness="0" Fill="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,1,1,0"
+								ToolTip="{Binding AdornedElement.(Validation.Errors)[0].ErrorContent, ElementName=adornerPlaceholder}" />
+							<Border BorderBrush="Red" BorderThickness="2">
+								<AdornedElementPlaceholder x:Name="adornerPlaceholder"/>
+							</Border>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<Style TargetType="{x:Type Hyperlink}">
+			<Setter Property="Foreground" Value="DarkCyan" />
+			<Setter Property="TextBlock.TextDecorations" Value="{x:Null}" />
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Setter Property="Foreground" Value="#ffc02b2b" />
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+
+		<Style x:Key="StateLabel" TargetType="{x:Type Label}">
+			<Setter Property="Margin" Value="0" />
+			<Setter Property="Padding" Value="0" />
+			<Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+			<Setter Property="HorizontalAlignment" Value="Right" />
+		</Style>
+		<Style x:Key="StateValue" TargetType="{x:Type Label}">
+			<Setter Property="HorizontalAlignment" Value="Left" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+			<Setter Property="Foreground" Value="{DynamicResource DynamicTextBrush}" />
+			<Setter Property="Margin" Value="6,0,0,0" />
+			<Setter Property="Padding" Value="0" />
+			<Setter Property="MinWidth" Value="70" />
+		</Style>
+	</UserControl.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="Auto" />
+		</Grid.ColumnDefinitions>
+
+		<GroupBox Grid.Row="0" Grid.Column="0" Header="Telescope State" Margin="8,0,0,0" Padding="0" VerticalAlignment="Top" Height="Auto" 
+				  Foreground="{DynamicResource NormalTextBrush}">
+			<Grid Margin="0,4,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="Auto">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" MinWidth="60" />
+					<ColumnDefinition Width="Auto" MinWidth="60" />
+				</Grid.ColumnDefinitions>
+				<Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Style="{StaticResource StateValue}" 
+								   Content="{Binding Status.Connected, Converter={StaticResource BoolConnectConverter}, FallbackValue=Not Connected}" />
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Tracking:" Style="{StaticResource StateLabel}" />
+                <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource StateValue}"
+									Content="{Binding Status.Tracking, Converter={StaticResource BooleanOnOffConverter}, Mode=OneWay}" />
+
+                <Label Grid.Row="2" Grid.Column="0" Content="Sidereal Time:" Style="{StaticResource StateLabel}" />
+				<Label Grid.Row="2" Grid.Column="1" Style="{StaticResource StateValue}"
+									Content="{Binding Status.SiderealTime, Converter={StaticResource RightAscensionValueConverter}, Mode=OneWay}" />
+
+				<Label Grid.Row="3" Grid.Column="0" Content="RA:" Style="{StaticResource StateLabel}" />
+				<Label Grid.Row="3" Grid.Column="1" Style="{StaticResource StateValue}"
+								   Content="{Binding Status.RightAscension, Converter={StaticResource RightAscensionValueConverter}, Mode=OneWay}" />
+
+				<Label Grid.Row="4" Grid.Column="0" Content="Dec:" Style="{StaticResource StateLabel}" />
+				<Label Grid.Row="4" Grid.Column="1" Style="{StaticResource StateValue}"
+								   Content="{Binding Status.Declination, Converter={StaticResource DeclinationValueConverter}, Mode=OneWay}" />
+
+				<Label Grid.Row="5" Grid.Column="0" Content="Altitude:" Style="{StaticResource StateLabel}" />
+				<Label Grid.Row="5" Grid.Column="1" Style="{StaticResource StateValue}"
+								   Content="{Binding Status.Altitude, Converter={StaticResource DeclinationValueConverter}, Mode=OneWay}" />
+
+				<Label Grid.Row="6" Grid.Column="0" Content="Azimuth:" Style="{StaticResource StateLabel}" />
+				<Label Grid.Row="6" Grid.Column="1" Style="{StaticResource StateValue}"
+								   Content="{Binding Status.Azimuth, Converter={StaticResource AzimuthValueConverter}, Mode=OneWay}"  />
+
+				<Label Grid.Row="7" Grid.Column="0" Content="Hour Angle:" Style="{StaticResource StateLabel}" />
+				<Label Grid.Row="7" Grid.Column="1" Style="{StaticResource StateValue}"
+								   Content="{Binding Status.LocalHourAngle, Converter={StaticResource HourAngleValueConverter}, Mode=OneWay}"  />
+
+				<Label Grid.Row="8" Grid.Column="0" Content="Side of Pier:" Style="{StaticResource StateLabel}" />
+				<Label Grid.Row="8" Grid.Column="1" Style="{StaticResource StateValue}"
+								   Content="{Binding Status.SideOfPier, Converter={StaticResource SideOfPierConverter}, Mode=OneWay}"  />
+
+				<StackPanel Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+					<Label Content="Slewing" Foreground="{DynamicResource EmphasisTextBrush}" VerticalAlignment="Center" Margin="3,0" Padding="2" 
+									   Visibility="{Binding Status.Slewing, ConverterParameter={x:Static Visibility.Hidden}, Converter={StaticResource BoolVisConverter}, FallbackValue=Hidden}" />
+					<Label Content="Parking" Foreground="{DynamicResource EmphasisTextBrush}"  VerticalAlignment="Center" Margin="3,0" Padding="2" 
+									   Visibility="{Binding Status.ParkingState, ConverterParameter={x:Static local:ParkingStateEnum.ParkInProgress}, Converter={StaticResource ParkingStateVisConverter}, FallbackValue=Hidden}" />
+
+					<Label  Content="Weight Up" VerticalAlignment="Center"  Margin="4,0" Padding="2" Foreground="{DynamicResource EmphasisTextBrush}"
+										Visibility="{Binding Status.IsCounterWeightUp, ConverterParameter={x:Static Visibility.Hidden}, Converter={StaticResource BoolVisConverter}, FallbackValue=Hidden}">
+						<Label.Style>
+							<Style TargetType="{x:Type Label}">
+								<Style.Resources>
+									<Storyboard x:Key="flashAnimation" >
+										<DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" AutoReverse="True" Duration="0:0:0.5" RepeatBehavior="Forever" />
+									</Storyboard>
+								</Style.Resources>
+
+								<Setter Property="Visibility" Value="Hidden" />
+
+								<!-- Make the text visible and flash when we go CW up -->
+
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding Status.IsCounterWeightUp}" Value="True">
+										<DataTrigger.EnterActions>
+											<BeginStoryboard x:Name="flash" Storyboard="{StaticResource flashAnimation}" />
+										</DataTrigger.EnterActions>
+										<DataTrigger.ExitActions>
+											<StopStoryboard BeginStoryboardName="flash"/>
+										</DataTrigger.ExitActions>
+										<Setter Property="Visibility" Value="Visible" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</Label.Style>
+					</Label>
+				</StackPanel>
+			</Grid>
+		</GroupBox>
+
+		<Grid Grid.Row="0" Grid.Column="1" MinWidth="140" Margin="6,4">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" MinWidth="100" />
+			</Grid.ColumnDefinitions>
+			<StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Vertical">
+				<RadioButton Content="Enter as decimal degrees" Foreground="{DynamicResource NormalTextBrush}" 
+										 IsChecked="{Binding UseDecimalHours, ConverterParameter=True, Converter={StaticResource BoolBoolConverter}}" TabIndex="2" />
+                <RadioButton Content="Enter as degrees/minutes/seconds" Margin="0,4,0,0" Foreground="{DynamicResource NormalTextBrush}"
+										 IsChecked="{Binding UseDecimalHours, ConverterParameter=False, Converter={StaticResource BoolBoolConverter}}" TabIndex="1" />
+            </StackPanel>
+
+			<Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Visibility="{Binding Status.Tracking, Converter={StaticResource BoolVisConverter}}">
+				<Grid.RowDefinitions>
+					<RowDefinition />
+					<RowDefinition />
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition />
+					<ColumnDefinition />
+				</Grid.ColumnDefinitions>
+				<Label Grid.Row="0" Grid.Column="0" Margin="0,2" HorizontalAlignment="Left" Foreground="{DynamicResource NormalTextBrush}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Row="0" Text="Target Right Ascension:" />
+						<TextBlock Grid.Row="1" Text="(hours) " HorizontalAlignment="Right"   />
+					</Grid>
+				</Label>
+
+				<Grid Grid.Row="0" Grid.Column="1" Margin="0,14" MinHeight="22">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+
+					<!-- Right Ascension HH MM SS -->
+
+					<TextBlock Grid.Row="0" Height="22" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0" FontSize="16"
+							   ToolTip="Click here to change the target right ascension"
+							   Visibility="{Binding UseDecimalHours, Converter={StaticResource NegatedBooleanToVisibilityConverter}}" >
+						<Hyperlink Command="{Binding EditRightAscensionCommand}">
+							<Run Text="{Binding TargetRightAscension, Converter={StaticResource RightAscensionValueConverter}, FallbackValue=No value}" />
+						</Hyperlink>
+					</TextBlock>
+
+					<!-- Right Ascension Decimal Hours -->
+
+					<local:DoubleEntryBox Grid.Row="1" Height="22" Width="80" HorizontalAlignment="Left" Style="{StaticResource SlewValue}" 
+										  Minimum="0" Maximum="24" IsMaximumInclusive="False" TabIndex="3" 
+										  Text="{Binding TargetRightAscension, StringFormat=F5, UpdateSourceTrigger=LostFocus, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"								
+										  Visibility="{Binding UseDecimalHours, Converter={StaticResource BoolVisConverter}}" />
+				</Grid>
+
+				<Label Grid.Row="1" Grid.Column="0" Margin =" 0,2" HorizontalAlignment="Right" Foreground="{DynamicResource NormalTextBrush}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Row="0" Text="Target Declination:" />
+						<TextBlock Grid.Row="1" Text="(degrees) " HorizontalAlignment="Right" />
+					</Grid>
+				</Label>
+
+				<Grid Grid.Row="1" Grid.Column="1" Margin="0,10" MinHeight="22">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+
+					<!-- Declination DD MM SS -->
+
+					<TextBlock Grid.Row="0" Height="22" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,-1,0,0" FontSize="16"
+							   ToolTip="Click here to change the target declination"
+							   Visibility="{Binding UseDecimalHours, Converter={StaticResource NegatedBooleanToVisibilityConverter}}" >
+						<Hyperlink  Command="{Binding EditDeclinationCommand}">
+							<Run Text="{Binding TargetDeclination, Converter={StaticResource DeclinationValueConverter}, FallbackValue=No value}" />
+						</Hyperlink>
+					</TextBlock>
+
+					<!-- Declination decimal degrees -->
+
+					<local:DoubleEntryBox Grid.Row="1" Height="22" Width="80" HorizontalAlignment="Left" Style="{StaticResource SlewValue}" 
+										  Minimum="-90" Maximum="90" IsMaximumInclusive="False"
+										  Text="{Binding TargetDeclination, StringFormat=F5, UpdateSourceTrigger=LostFocus, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" 
+										  Visibility="{Binding UseDecimalHours, Converter={StaticResource BoolVisConverter}}" TabIndex="4" />
+				</Grid>
+			</Grid>
+
+			<Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" 
+				  Visibility="{Binding Status.Tracking, Converter={StaticResource NegatedBooleanToVisibilityConverter}, FallbackValue=Collapsed}"
+				  IsEnabled="{Binding CanDoDirectSlew}">
+				<Grid.RowDefinitions>
+					<RowDefinition />
+					<RowDefinition />
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition />
+					<ColumnDefinition />
+				</Grid.ColumnDefinitions>
+				<Label Grid.Row="0" Grid.Column="0" Margin="0,2" HorizontalAlignment="Right" Foreground="{DynamicResource NormalTextBrush}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Row="0" Text="Target Azimuth:" />
+						<TextBlock Grid.Row="1" Text="(degrees) " HorizontalAlignment="Right"   />
+					</Grid>
+				</Label>
+
+				<Grid Grid.Row="0" Grid.Column="1" Margin="0,14" MinHeight="22">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+
+					<!-- Azimuth DDD MM SS -->
+
+					<TextBlock Grid.Row="0" Height="22" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0" FontSize="16"
+							   ToolTip="Click here to change the target azimuth"
+							   Visibility="{Binding UseDecimalHours, Converter={StaticResource NegatedBooleanToVisibilityConverter}}" >
+						<Hyperlink Command="{Binding EditAzimuthCommand}">
+							<Run Text="{Binding TargetAzimuth, Converter={StaticResource AzimuthValueConverter}, FallbackValue=No value}" />
+						</Hyperlink>
+					</TextBlock>
+
+					<!-- Azimuth Decimal Degrees -->
+
+					<local:DoubleEntryBox Grid.Row="1" Height="22" Width="80" HorizontalAlignment="Left" Style="{StaticResource SlewValue}" 
+										  Minimum="0" Maximum="360" IsMaximumInclusive="False"
+										  Text="{Binding TargetAzimuth, StringFormat=F5, UpdateSourceTrigger=LostFocus, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"								
+										  Visibility="{Binding UseDecimalHours, Converter={StaticResource BoolVisConverter}}" />
+				</Grid>
+
+				<Label Grid.Row="1" Grid.Column="0" Margin =" 0,2" HorizontalAlignment="Right" Foreground="{DynamicResource NormalTextBrush}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Row="0" Text="Target Altitude:"  />
+						<TextBlock Grid.Row="1" Text="(degrees) " HorizontalAlignment="Right" />
+					</Grid>
+				</Label>
+
+				<Grid Grid.Row="1" Grid.Column="1" Margin="0,10" MinHeight="22">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+
+					<!-- Altitude DD MM SS -->
+
+					<TextBlock Grid.Row="0" Height="22" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,-1,0,0" FontSize="16"
+							   ToolTip="Click here to change the target altitude"
+							   Visibility="{Binding UseDecimalHours, Converter={StaticResource NegatedBooleanToVisibilityConverter}}" >
+						<Hyperlink  Command="{Binding EditAltitudeCommand}">
+							<Run Text="{Binding TargetAltitude, Converter={StaticResource AltitudeValueConverter}, FallbackValue=No value}" />
+						</Hyperlink>
+					</TextBlock>
+
+					<!-- Altitude decimal degrees -->
+
+					<local:DoubleEntryBox Grid.Row="1" Height="22" Width="80" HorizontalAlignment="Left" Style="{StaticResource SlewValue}" 
+										  Minimum="0" Maximum="90" IsMaximumInclusive="True"
+										  Text="{Binding TargetAltitude, StringFormat=F5, UpdateSourceTrigger=LostFocus, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" 
+										  Visibility="{Binding UseDecimalHours, Converter={StaticResource BoolVisConverter}}" />
+				</Grid>
+			</Grid>
+
+			<StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" Margin="10,4" HorizontalAlignment="Center">
+                <Button HorizontalAlignment="Left" Height="60" Width="60" Style="{StaticResource CircleButton}" TabIndex="5"
+									Command="{Binding BeginDirectSlewCommand}"
+                                    IsEnabled="{Binding CanDoDirectSlew}">
+					<TextBlock TextAlignment="Center" TextWrapping="Wrap">
+						<Run Text="Slew To"/>
+						<LineBreak/>
+						<Run Text="Target"/>
+					</TextBlock>
+				</Button>
+				<Button HorizontalAlignment="Left" Height="60" Width="60" Margin="20,0" Style="{StaticResource CircleButton}"
+						ToolTip="Abort Slew"
+						Command="{Binding AbortDirectSlewCommand}" TabIndex="6">
+					<Image Height="40" Source="/ASCOM.DeviceHub;component/Images/Stop.ico"  />
+				</Button>
+			</StackPanel>
+		</Grid>
+	</Grid>
+</UserControl>

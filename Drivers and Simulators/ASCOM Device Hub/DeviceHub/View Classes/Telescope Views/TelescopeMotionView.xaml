@@ -1,0 +1,250 @@
+﻿<UserControl x:Class="ASCOM.DeviceHub.TelescopeMotionView"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:local="clr-namespace:ASCOM.DeviceHub"
+			 mc:Ignorable="d" 
+			 Background="{DynamicResource WindowBackgroundBrush}"
+			 d:DesignHeight="350" d:DesignWidth="380">
+	<UserControl.Resources>
+		<local:ParkingStateVisibilityConverter x:Key="ParkingStateVisConverter" />
+		<local:BooleanVisibilityConverter x:Key="BoolVisConverter" />
+		<local:NegatedBooleanToVisibilityConverter x:Key="NegatedBooleanToVisibilityConverter" />
+		<local:RightAscensionValueConverter x:Key="RightAscensionValueConverter" />
+		<local:DeclinationValueConverter x:Key="DeclinationValueConverter" />
+		<local:AzimuthValueConverter x:Key="AzimuthValueConverter" />
+		<local:BooleanBooleanValueConverter x:Key="BoolBoolConverter" />
+		<local:BooleanToConnectStringConverter x:Key="BoolConnectConverter" />
+		<local:SideOfPierStringConverter x:Key="SideOfPierConverter" />
+		<local:HourAngleValueConverter x:Key="HourAngleValueConverter" />
+
+		<Style x:Key="StateLabel" TargetType="{x:Type Label}">
+			<Setter Property="Margin" Value="0" />
+			<Setter Property="Padding" Value="0" />
+			<Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+			<Setter Property="HorizontalAlignment" Value="Right" />
+		</Style>
+		<Style x:Key="StateValue" TargetType="{x:Type Label}">
+			<Setter Property="HorizontalAlignment" Value="Left" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+			<Setter Property="Foreground" Value="{DynamicResource DynamicTextBrush}" />
+			<Setter Property="Margin" Value="6,0,0,0" />
+			<Setter Property="Padding" Value="0" />
+			<Setter Property="MinWidth" Value="70" />
+		</Style>
+	</UserControl.Resources>
+	<Grid >
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="Auto" />
+		</Grid.ColumnDefinitions>
+
+		<!-- Telescope State -->
+
+		<GroupBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"  Header="Telescope State" Margin="8,0" Padding="0" VerticalAlignment="Top" Height="Auto" 
+				  Foreground="{DynamicResource NormalTextBrush}">
+			<Grid Margin="0,4,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="Auto">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" MinWidth="60" />
+					<ColumnDefinition Width="Auto" MinWidth="60" />
+				</Grid.ColumnDefinitions>
+				<Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Style="{StaticResource StateValue}" 
+								   Content="{Binding Status.Connected, Converter={StaticResource BoolConnectConverter}, FallbackValue='Not Connected'  }" />
+				<CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="Tracking" Margin="6,0" Foreground="{DynamicResource NormalTextBrush}" 
+									  IsChecked="{Binding IsTracking}"
+									  Command="{Binding ChangeTrackingCommand}" />
+
+				<Label Grid.Row="2" Grid.Column="0" Content="Sidereal Time:" Style="{StaticResource StateLabel}" />
+				<Label Grid.Row="2" Grid.Column="1" Style="{StaticResource StateValue}"
+									Content="{Binding Status.SiderealTime, Converter={StaticResource RightAscensionValueConverter}, Mode=OneWay}" />
+
+				<Label Grid.Row="3" Grid.Column="0" Content="RA:" Style="{StaticResource StateLabel}" />
+				<Label Grid.Row="3" Grid.Column="1" Style="{StaticResource StateValue}"
+								   Content="{Binding Status.RightAscension, Converter={StaticResource RightAscensionValueConverter}, Mode=OneWay}" />
+
+				<Label Grid.Row="4" Grid.Column="0" Content="Dec:" Style="{StaticResource StateLabel}" />
+				<Label Grid.Row="4" Grid.Column="1" Style="{StaticResource StateValue}"
+								   Content="{Binding Status.Declination, Converter={StaticResource DeclinationValueConverter}, Mode=OneWay}" />
+
+				<Label Grid.Row="5" Grid.Column="0" Content="Altitude:" Style="{StaticResource StateLabel}" />
+				<Label Grid.Row="5" Grid.Column="1" Style="{StaticResource StateValue}"
+								   Content="{Binding Status.Altitude, Converter={StaticResource DeclinationValueConverter}, Mode=OneWay}" />
+
+				<Label Grid.Row="6" Grid.Column="0" Content="Azimuth:" Style="{StaticResource StateLabel}" />
+				<Label Grid.Row="6" Grid.Column="1" Style="{StaticResource StateValue}"
+								   Content="{Binding Status.Azimuth, Converter={StaticResource AzimuthValueConverter}, Mode=OneWay}"  />
+
+				<Label Grid.Row="7" Grid.Column="0" Content="Hour Angle:" Style="{StaticResource StateLabel}" />
+				<Label Grid.Row="7" Grid.Column="1" Style="{StaticResource StateValue}"
+								   Content="{Binding Status.LocalHourAngle, Converter={StaticResource HourAngleValueConverter}, Mode=OneWay}"  />
+
+				<Label Grid.Row="8" Grid.Column="0" Content="Side of Pier:" Style="{StaticResource StateLabel}" />
+				<Label Grid.Row="8" Grid.Column="1" Style="{StaticResource StateValue}"
+								   Content="{Binding Status.SideOfPier, Converter={StaticResource SideOfPierConverter}, Mode=OneWay}"  />
+
+				<StackPanel Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+					<Label Content="Slewing" Foreground="{DynamicResource EmphasisTextBrush}" VerticalAlignment="Center" Margin="3,0" Padding="2" 
+									   Visibility="{Binding Status.Slewing, Converter={StaticResource BoolVisConverter}, ConverterParameter={x:Static Visibility.Hidden}, FallbackValue=Hidden}" />
+					<Label Content="Parking" Foreground="{DynamicResource EmphasisTextBrush}"  VerticalAlignment="Center" Margin="3,0" Padding="2" 
+									   Visibility="{Binding Status.ParkingState, Converter={StaticResource ParkingStateVisConverter}, ConverterParameter={x:Static local:ParkingStateEnum.ParkInProgress}, FallbackValue=Hidden}" />
+
+					<Label  Content="Weight Up" VerticalAlignment="Center"  Margin="4,0" Padding="2" Foreground="{DynamicResource EmphasisTextBrush}"
+										Visibility="{Binding Status.IsCounterWeightUp, ConverterParameter={x:Static Visibility.Hidden}, Converter={StaticResource BoolVisConverter}, FallbackValue=Hidden}">
+						<Label.Style>
+							<Style TargetType="{x:Type Label}">
+								<Style.Resources>
+									<Storyboard x:Key="flashAnimation" >
+										<DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" AutoReverse="True" Duration="0:0:0.5" RepeatBehavior="Forever" />
+									</Storyboard>
+								</Style.Resources>
+
+								<Setter Property="Visibility" Value="Hidden" />
+
+								<!-- Make the text visible and flash when we go CW up -->
+
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding Status.IsCounterWeightUp}" Value="True">
+										<Setter Property="Visibility" Value="Visible" />
+										<DataTrigger.EnterActions>
+											<BeginStoryboard Name="flash" Storyboard="{StaticResource flashAnimation}" />
+										</DataTrigger.EnterActions>
+										<DataTrigger.ExitActions>
+											<StopStoryboard BeginStoryboardName="flash"/>
+										</DataTrigger.ExitActions>
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</Label.Style>
+					</Label>
+				</StackPanel>
+			</Grid>
+		</GroupBox>
+		
+		<!-- Park & Meridian Flip Buttons -->
+        
+		<StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0">
+			<Button Width="70" Height="70" Style="{DynamicResource CircleButton}"
+								Content="{Binding ParkCommandAction, FallbackValue=Park}" 
+								Command="{Binding ChangeParkStateCommand}" />
+			<Button Width="70" Height="70" Style="{DynamicResource CircleButton}"
+								Command="{Binding DoMeridianFlipCommand}">
+				<Button.Content>
+					<TextBlock TextAlignment="Center" TextWrapping="Wrap">
+						Meridian<LineBreak/>Flip
+					</TextBlock>
+				</Button.Content>
+			</Button>
+		</StackPanel>
+        
+		<Grid Grid.Row="1" Grid.Column="1" Margin="4,12,4,4" HorizontalAlignment="Center" VerticalAlignment="Top">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="20" />
+				<ColumnDefinition Width="20" />
+				<ColumnDefinition Width="20" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+            
+            <!-- Variable & Fixed Radio Buttons -->
+            
+			<StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal">
+				<RadioButton Content="Variable" Foreground="{DynamicResource NormalTextBrush}" 
+									 ToolTip="The scope will be slewed at the selected rate for as long as the button is pressed." 
+									 IsChecked="{Binding IsVariableJog, Converter={StaticResource BoolBoolConverter}, ConverterParameter=True}" 
+									 IsEnabled="{Binding Status.IsReadyToSlew}" />
+				<RadioButton Content="Fixed" Foreground="{DynamicResource NormalTextBrush}" Margin="10,0,0,0"
+									 ToolTip="The scope will be slewed by the selected amount."
+									 IsChecked="{Binding IsVariableJog, Converter={StaticResource BoolBoolConverter}, ConverterParameter=False}" 
+									 IsEnabled="{Binding Status.IsReadyToSlew}" />
+			</StackPanel>
+            
+            <!-- Motion Rate/Amount -->
+            
+			<StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal" Width="Auto" Height="Auto" Margin="0,4"
+									Visibility="{Binding IsVariableJog, Converter={StaticResource BoolVisConverter}}" >
+				<Label Content="Rate:" HorizontalAlignment="Left" VerticalAlignment="Center" 
+								Margin="0,2" Padding="4,0" Foreground="{DynamicResource NormalTextBrush}" />
+				<ComboBox Height="20" Width="84" Margin="0,4,0,0" IsSynchronizedWithCurrentItem="True" DisplayMemberPath="Name"								
+								ItemsSource="{Binding JogRates}" SelectedItem="{Binding SelectedJogRate}" 
+								IsEnabled="{Binding CanStartMoveTelescope}" />
+			</StackPanel>
+			<StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal" Width="Auto" Height="Auto" Margin="0,4"
+									Visibility="{Binding IsVariableJog, Converter={StaticResource NegatedBooleanToVisibilityConverter}}" >
+				<Label Content="Amount:" HorizontalAlignment="Left" VerticalAlignment="Center" 
+									Margin="0,2" Padding="4,0" Foreground="{DynamicResource NormalTextBrush}" />
+				<ComboBox Height="20" Width="65" Margin="0,4,0,0" IsSynchronizedWithCurrentItem="True" DisplayMemberPath="Name"
+						  ItemsSource="{Binding SlewAmounts}" SelectedItem="{Binding SelectedSlewAmount}" 
+						  IsEnabled="{Binding CanStartMoveTelescope}" />
+			</StackPanel>
+            
+            <!-- Motion directions -->
+            
+			<Button Grid.Row="3" Grid.Column="1" Width="24" Height="24" Margin="0,6,0,0"
+								Content="{Binding SlewDirections[0].Name, FallbackValue=N, Mode=Default}" 
+								IsEnabled="{Binding CanStartMoveTelescope}"
+								Command="{Binding DoFixedSlewCommand}" CommandParameter="{Binding SlewDirections[0].Direction}"
+								local:MouseBehavior.MouseDownCommand="{Binding StartMoveCommand}" local:MouseBehavior.MouseDownCommandParameter="{Binding SlewDirections[0].Direction}"
+								local:MouseBehavior.MouseUpCommand="{Binding StopMotionCommand}" local:MouseBehavior.MouseUpCommandParameter="{Binding SlewDirections[0].Direction}" />
+			<Button Grid.Row="4" Grid.Column="0" Width="24" Height="24"  HorizontalAlignment="Right"
+								Content="{Binding SlewDirections[2].Name, FallbackValue=W, Mode=Default}" 
+								IsEnabled="{Binding CanStartMoveTelescope}"
+								Command="{Binding DoFixedSlewCommand}" CommandParameter="{Binding SlewDirections[2].Direction}"
+							local:MouseBehavior.MouseDownCommand="{Binding StartMoveCommand}" local:MouseBehavior.MouseDownCommandParameter="{Binding SlewDirections[2].Direction}"
+							local:MouseBehavior.MouseUpCommand="{Binding StopMotionCommand}" local:MouseBehavior.MouseUpCommandParameter="{Binding SlewDirections[2].Direction}" />
+			<Button Grid.Row="4" Grid.Column="1" Width="24" Height="24" Margin="0,5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+					ToolTip="Abort Slew"
+					Command="{Binding StopMotionCommand}"
+					IsEnabled="{Binding Status.Connected, FallbackValue=False}">
+				<Image Margin="2" Source="/ASCOM.DeviceHub;component/Images/Stop.ico" />
+			</Button>
+			<Button Grid.Row="4" Grid.Column="2" Width="24" Height="24" HorizontalAlignment="Left"
+								Content="{Binding SlewDirections[3].Name, FallbackValue=E, Mode=Default}" 
+								IsEnabled="{Binding CanStartMoveTelescope}"
+								Command="{Binding DoFixedSlewCommand}" CommandParameter="{Binding SlewDirections[3].Direction}"
+								local:MouseBehavior.MouseDownCommand="{Binding StartMoveCommand}" local:MouseBehavior.MouseDownCommandParameter="{Binding SlewDirections[3].Direction}"
+								local:MouseBehavior.MouseUpCommand="{Binding StopMotionCommand}" local:MouseBehavior.MouseUpCommandParameter="{Binding SlewDirections[3].Direction}" />
+			<Button Grid.Row="5" Grid.Column="1" Width="24" Height="24" 
+								Content="{Binding SlewDirections[1].Name, FallbackValue=S, Mode=Default}" 
+								IsEnabled="{Binding CanStartMoveTelescope}"
+								Command="{Binding DoFixedSlewCommand}" CommandParameter="{Binding SlewDirections[1].Direction}"
+								local:MouseBehavior.MouseDownCommand="{Binding StartMoveCommand}" local:MouseBehavior.MouseDownCommandParameter="{Binding SlewDirections[1].Direction}"
+								local:MouseBehavior.MouseUpCommand="{Binding StopMotionCommand}" local:MouseBehavior.MouseUpCommandParameter="{Binding SlewDirections[1].Direction}" />
+		</Grid>
+		<Expander Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Foreground="{DynamicResource NormalTextBrush}" 
+				  Template="{DynamicResource StretchyExpanderTemplate}" 
+				  Header="Other Actions">
+			<Grid>
+				<Button Width="64" Height="64" HorizontalAlignment="Left" Margin="6,4" Style="{DynamicResource CircleButton}"
+								Content="Set Park" ToolTip="Set the telescope's Park position"
+								Command="{Binding SetParkPositionCommand}" />
+
+			</Grid>
+		</Expander>
+	</Grid>
+</UserControl>

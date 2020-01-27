@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="ASCOM.DeviceHub.DomeCapabilitiesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" 
+			 Background="{DynamicResource WindowBackgroundBrush}"
+             d:DesignHeight="260" d:DesignWidth="340" MinWidth="428">
+	<UserControl.Resources>
+
+		<Style x:Key="CapLabel" TargetType="{x:Type Label}">
+			<Setter Property="HorizontalAlignment" Value="Right" />
+			<Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+			<Setter Property="Margin" Value="6,0,0,0" />
+			<Setter Property="Padding" Value="0" />
+		</Style>
+		<Style x:Key="CapValue" TargetType="{x:Type Label}">
+			<Setter Property="HorizontalAlignment" Value="Left" />
+			<Setter Property="Foreground" Value="{DynamicResource DynamicTextBrush}" />
+			<Setter Property="Margin" Value="8,0,0,0" />
+			<Setter Property="Padding" Value="0" />
+		</Style>
+	</UserControl.Resources>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="Auto"/>
+		</Grid.ColumnDefinitions>
+		<Label Grid.Row="0" Grid.Column="0" Content="Can Find Home:" Style="{StaticResource CapLabel}" Margin="0" />
+		<Label Grid.Row="1" Grid.Column="0" Content="Can Park:" Style="{StaticResource CapLabel}" Margin="0" />
+		<Label Grid.Row="2" Grid.Column="0" Content="Can Set Altitude:" Style="{StaticResource CapLabel}" Margin="0" />
+		<Label Grid.Row="3" Grid.Column="0" Content="Can Set Azimuth:" Style="{StaticResource CapLabel}" Margin="0" />
+		<Label Grid.Row="4" Grid.Column="0" Content="Can Set Park:" Style="{StaticResource CapLabel}" Margin="0" />
+		<Label Grid.Row="5" Grid.Column="0" Content="Can Set Shutter:" Style="{StaticResource CapLabel}" Margin="0" />
+		<Label Grid.Row="6" Grid.Column="0" Content="Can Slave:" Style="{StaticResource CapLabel}" Margin="0" />
+		<Label Grid.Row="7" Grid.Column="0" Content="Can SyncAzimuth:" Style="{StaticResource CapLabel}" Margin="0" />
+
+		<Label Grid.Row="0" Grid.Column="1" Content="{Binding Capabilities.CanFindHome}" Style="{StaticResource CapValue}"/>
+		<Label Grid.Row="1" Grid.Column="1" Content="{Binding Capabilities.CanPark}" Style="{StaticResource CapValue}"/>
+		<Label Grid.Row="2" Grid.Column="1" Content="{Binding Capabilities.CanSetAltitude}" Style="{StaticResource CapValue}"/>
+		<Label Grid.Row="3" Grid.Column="1" Content="{Binding Capabilities.CanSetAzimuth}" Style="{StaticResource CapValue}"/>
+		<Label Grid.Row="4" Grid.Column="1" Content="{Binding Capabilities.CanSetPark}" Style="{StaticResource CapValue}"/>
+		<Label Grid.Row="5" Grid.Column="1" Content="{Binding Capabilities.CanSetShutter}" Style="{StaticResource CapValue}"/>
+		<Label Grid.Row="6" Grid.Column="1" Content="{Binding Capabilities.CanSlave}" Style="{StaticResource CapValue}"/>
+		<Label Grid.Row="7" Grid.Column="1" Content="{Binding Capabilities.CanSyncAzimuth}" Style="{StaticResource CapValue}"/>
+	</Grid>
+</UserControl>

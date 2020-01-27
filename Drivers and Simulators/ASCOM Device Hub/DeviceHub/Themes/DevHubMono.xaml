@@ -1,0 +1,45 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Color x:Key="DevHubGray">#ff303030</Color>
+	<Color x:Key="LightGray">#ff808080</Color>
+	<Color x:Key="DarkGray">#ff505050</Color>
+	<Color x:Key="DarkDarkGray">#ff404040</Color>
+	<Color x:Key="NormalTextColor">White</Color>
+	<Color x:Key="InvertTextColor">Black</Color>
+	<Color x:Key="SelectedItemColor">#ffc02b2b</Color>
+
+	<SolidColorBrush x:Key="WindowBackgroundBrush" Color="{DynamicResource DevHubGray}" />
+	<SolidColorBrush x:Key="MenuBackgroundBrush" Color="{DynamicResource DevHubGray}" />
+	<SolidColorBrush x:Key="NormalTextBrush" Color="{DynamicResource NormalTextColor}" />
+	<SolidColorBrush x:Key="DynamicTextBrush" Color="LightCoral" />
+	<SolidColorBrush x:Key="ListBackgroundBrush" Color="{DynamicResource DarkDarkGray}" />
+
+	<SolidColorBrush x:Key="InvertTextBrush" Color="{DynamicResource InvertTextColor}" />
+	<SolidColorBrush x:Key="RotarySliderForeground" Color="{DynamicResource NormalTextColor}" />
+	<SolidColorBrush x:Key="SelectedRotaryValueForeground" Color="{DynamicResource SelectedItemColor}" />
+	<SolidColorBrush x:Key="RotaryFace" Color="{DynamicResource DarkGray}" />
+	<SolidColorBrush x:Key="RotaryHand" Color="{DynamicResource SelectedItemColor}" />
+	<SolidColorBrush x:Key="RoundButtonFaceBrush" Color="{DynamicResource LightGray}" />
+	<SolidColorBrush x:Key="RoundButtonTextBrush" Color="{DynamicResource DarkGray}" />
+	<SolidColorBrush x:Key="ArrowBrush" Color="{DynamicResource LightGray}" />
+	<SolidColorBrush x:Key="EmphasisTextBrush" Color="Yellow" />
+	<SolidColorBrush x:Key="MenuItemBorderBrush" Color="Gainsboro" />
+	<SolidColorBrush x:Key="TabItemBorderBrush" Color="White" />
+	<SolidColorBrush x:Key="ButtonBorderBrush" Color="White" />
+
+	<SolidColorBrush x:Key="TabItemBackgroundBrush" Color="{DynamicResource DarkGray}" />
+	<SolidColorBrush x:Key="TabItemSelectedBackgroundBrush" Color="{DynamicResource DevHubGray}" />
+	<LinearGradientBrush x:Key="TabItemMouseoverBrush" EndPoint="0,1" StartPoint="0,0">
+		<GradientStop Color="#ff8888a8" Offset="0.15"/>
+		<GradientStop Color="#ff686888" Offset="0.5"/>
+		<GradientStop Color="#ff585878" Offset="0.5"/>
+		<GradientStop Color="#ff404060" Offset="1"/>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="HilightMenuItemBackgroundBrush" EndPoint="0,1" StartPoint="0,0">
+		<GradientStop Color="#d08383c3" Offset="0"/>
+		<GradientStop Color="#d06464a4" Offset="0.5"/>
+		<GradientStop Color="#d0434383" Offset="0.5"/>
+		<GradientStop Color="#d0303070" Offset="1"/>
+	</LinearGradientBrush>
+
+</ResourceDictionary>

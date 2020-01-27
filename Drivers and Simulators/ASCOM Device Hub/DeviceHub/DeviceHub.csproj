@@ -1,0 +1,492 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DF9D30BE-3312-4D7E-9EA4-6C2F6E2D22B0}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>ASCOM.DeviceHub</RootNamespace>
+    <AssemblyName>ASCOM.DeviceHub</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Images\ASCOM.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\..\ASCOM.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationFramework.Aero">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="..\..\..\AssemblyVersionInfo.cs">
+      <Link>Properties\AssemblyVersionInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\ProductAssemblyInfo.cs">
+      <Link>ProductAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Business Object Classes\AssemblyGuidAttribute.cs" />
+    <Compile Include="Business Object Classes\Message Types\DomeSlavedChangedMessage.cs" />
+    <Compile Include="Business Object Classes\Value Converters\BooleanOnOffConverter.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\TelescopeRates.cs" />
+    <Compile Include="View Classes\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Business Object Classes\Value Converters\AltitudeValueConverter.cs" />
+    <Compile Include="ViewModel Classes\AboutViewModel.cs" />
+    <Compile Include="Business Object Classes\PropertyExceptions.cs" />
+    <Compile Include="ViewModel Classes\DomeAzimuthOffsetViewModel.cs" />
+    <Compile Include="ViewModel Classes\AltitudeValuesEntryViewModel.cs" />
+    <Compile Include="ViewModel Classes\AzimuthValuesEntryViewModel.cs" />
+    <Compile Include="Business Object Classes\Message Types\ActivityLogClosedMessage.cs" />
+    <Compile Include="Business Object Classes\Focuser Classes\AscomFocuserStatus.cs" />
+    <Compile Include="Attached Behaviors\Masking.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\HourAngleConverter.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\HoursConverter.cs" />
+    <Compile Include="Business Object Classes\Value Converters\BooleanForegroundConverter.cs" />
+    <Compile Include="Business Object Classes\Dome Classes\DevHubDomeStatus.cs" />
+    <Compile Include="Business Object Classes\Message Types\DomeCapabilitiesUpdatedMessage.cs" />
+    <Compile Include="Business Object Classes\Message Types\DeviceDisconnectedMessage.cs" />
+    <Compile Include="Business Object Classes\Dome Classes\DomeControl.cs" />
+    <Compile Include="Business Object Classes\NormalizedValueBase.cs" />
+    <Compile Include="Business Object Classes\Focuser Classes\DevHubFocuserStatus.cs" />
+    <Compile Include="Business Object Classes\ASCOM Classes\DeviceDriverBase.cs" />
+    <Compile Include="Business Object Classes\Dome Classes\DomeSettings.cs" />
+    <Compile Include="Business Object Classes\Focuser Classes\FocuserSettings.cs" />
+    <Compile Include="Business Object Classes\Value Converters\HourAngleValueConverter.cs" />
+    <Compile Include="Business Object Classes\Value Converters\NegatedBooleanValueConverter.cs" />
+    <Compile Include="Business Object Classes\Dome Classes\DomeSynchronize.cs" />
+    <Compile Include="Services Classes\Interfaces\IDeviceService.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\TelescopeSettings.cs" />
+    <Compile Include="Business Object Classes\Theme.cs" />
+    <Compile Include="Business Object Classes\ThemeManager.cs" />
+    <Compile Include="Business Object Classes\Message Types\SlewInProgressMessage.cs" />
+    <Compile Include="View Classes\Focuser Views\FocuserControlView.xaml.cs">
+      <DependentUpon>FocuserControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Business Object Classes\Message Types\FocuserIDChangedMessage.cs" />
+    <Compile Include="DeviceManagers\FocuserManager.cs" />
+    <Compile Include="DeviceManagers\FocuserManagerAccess.cs" />
+    <Compile Include="Business Object Classes\Message Types\FocuserMoveCompletedMessage.cs" />
+    <Compile Include="Business Object Classes\Focuser Classes\FocuserParameters.cs" />
+    <Compile Include="Business Object Classes\Message Types\FocuserParametersUpdatedMessage.cs" />
+    <Compile Include="View Classes\Focuser Views\FocuserParametersView.xaml.cs">
+      <DependentUpon>FocuserParametersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Business Object Classes\Value Converters\FocuserPositionValueConverter.cs" />
+    <Compile Include="Services Classes\Implementations\FocuserService.cs" />
+    <Compile Include="View Classes\Focuser Views\FocuserSetupView.xaml.cs">
+      <DependentUpon>FocuserSetupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel Classes\Focuser ViewModels\FocuserSetupViewModel.cs" />
+    <Compile Include="Business Object Classes\Message Types\FocuserStatusUpdatedMessage.cs" />
+    <Compile Include="Business Object Classes\Value Converters\FocuserTemperatureValueConverter.cs" />
+    <Compile Include="View Classes\Focuser Views\FocuserView.xaml.cs">
+      <DependentUpon>FocuserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel Classes\Focuser ViewModels\FocuserViewModel.cs" />
+    <Compile Include="DeviceManagers\IFocuserManager.cs" />
+    <Compile Include="Services Classes\Interfaces\IFocuserService.cs" />
+    <Compile Include="ViewModel Classes\Focuser ViewModels\FocuserControlViewModel.cs" />
+    <Compile Include="ViewModel Classes\Focuser ViewModels\FocuserParametersViewModel.cs" />
+    <Compile Include="Business Object Classes\Value Converters\MoveValueConverter.cs" />
+    <Compile Include="Business Object Classes\Value Converters\NullableBooleanValueConverter.cs" />
+    <Compile Include="ViewModel Classes\SimpleValueEntryViewModel.cs" />
+    <Compile Include="ViewModel Classes\ScopeDomeOffsetViewModel.cs" />
+    <Compile Include="ViewModel Classes\RightAscensionValuesEntryViewModel.cs" />
+    <Compile Include="ViewModel Classes\ValuesEntryViewModelBase.cs" />
+    <Compile Include="ViewModel Classes\DeclinationValuesEntryViewModel.cs" />
+    <Compile Include="Business Object Classes\Value Converters\IntegerForegroundConverter.cs" />
+    <Compile Include="View Classes\RotarySliderView.xaml.cs">
+      <DependentUpon>RotarySliderView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel Classes\RotarySliderViewModel.cs" />
+    <Compile Include="Business Object Classes\RotaryValue.cs" />
+    <Compile Include="Business Object Classes\Value Converters\ValueAngleConverter.cs" />
+    <Compile Include="View Classes\ValuesEntryView.xaml.cs">
+      <DependentUpon>ValuesEntryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Business Object Classes\Value Converters\ValueTextConverter.cs" />
+    <Compile Include="View Classes\DomeViews\DomeCapabilitiesView.xaml.cs">
+      <DependentUpon>DomeCapabilitiesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel Classes\Dome ViewModels\DomeCapabilitiesViewModel.cs" />
+    <Compile Include="Business Object Classes\Message Types\DomeLayoutSettingsMessage.cs" />
+    <Compile Include="Business Object Classes\Dome Classes\DomeCapabilities.cs" />
+    <Compile Include="Business Object Classes\Message Types\DomeIDChangedMessage.cs" />
+    <Compile Include="Business Object Classes\Dome Classes\DomeLayoutSettings.cs" />
+    <Compile Include="View Classes\DomeViews\DomeMotionView.xaml.cs">
+      <DependentUpon>DomeMotionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel Classes\Dome ViewModels\DomeMotionViewModel.cs" />
+    <Compile Include="Business Object Classes\Dome Classes\DomeParameters.cs" />
+    <Compile Include="Business Object Classes\Message Types\DomeParametersUpdatedMessage.cs" />
+    <Compile Include="Business Object Classes\Dome Classes\AscomDomeStatus.cs" />
+    <Compile Include="Business Object Classes\ApplicationSettings.cs" />
+    <Compile Include="DeviceManagers\DomeManager.cs" />
+    <Compile Include="DeviceManagers\DomeManagerAccess.cs" />
+    <Compile Include="View Classes\DomeViews\DomeParametersView.xaml.cs">
+      <DependentUpon>DomeParametersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel Classes\Dome ViewModels\DomeParametersViewModel.cs" />
+    <Compile Include="Services Classes\Implementations\DomeService.cs" />
+    <Compile Include="View Classes\DomeViews\DomeSetupView.xaml.cs">
+      <DependentUpon>DomeSetupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel Classes\Dome ViewModels\DomeSetupViewModel.cs" />
+    <Compile Include="Business Object Classes\Dome Classes\DomeSlewAmounts.cs" />
+    <Compile Include="Business Object Classes\Message Types\DomeStatusUpdatedMessage.cs" />
+    <Compile Include="View Classes\DomeViews\DomeView.xaml.cs">
+      <DependentUpon>DomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel Classes\Dome ViewModels\DomeViewModel.cs" />
+    <Compile Include="Business Object Classes\Value Converters\HomingStateVisibilityConverter.cs" />
+    <Compile Include="DeviceManagers\IDomeManager.cs" />
+    <Compile Include="Services Classes\Interfaces\IDomeService.cs" />
+    <Compile Include="Services Classes\Implementations\AppSettingsService.cs" />
+    <Compile Include="Business Object Classes\ASCOM Classes\ReferenceCountedObject.cs" />
+    <Compile Include="Business Object Classes\Message Types\ObjectCountMessage.cs" />
+    <Compile Include="Services Classes\Interfaces\IAppSettingsService.cs" />
+    <Compile Include="View Classes\Telescope Views\TelescopeMotionView.xaml.cs">
+      <DependentUpon>TelescopeMotionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel Classes\Telescope ViewModels\TelescopeMotionViewModel.cs" />
+    <Compile Include="View Classes\Telescope Views\TelescopeDirectSlewView.xaml.cs">
+      <DependentUpon>TelescopeDirectSlewView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel Classes\Telescope ViewModels\TelescopeDirectSlewViewModel.cs" />
+    <Compile Include="View Classes\Telescope Views\TelescopeTrackingRatesView.xaml.cs">
+      <DependentUpon>TelescopeTrackingRatesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel Classes\Telescope ViewModels\TelescopeTrackingRatesViewModel.cs" />
+    <Compile Include="View Classes\Telescope Views\TelescopeCapabilitiesView.xaml.cs">
+      <DependentUpon>TelescopeCapabilitiesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel Classes\Telescope ViewModels\TelescopeCapabilitiesViewModel.cs" />
+    <Compile Include="View Classes\Telescope Views\TelescopeParametersView.xaml.cs">
+      <DependentUpon>TelescopeParametersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel Classes\Telescope ViewModels\TelescopeParametersViewModel.cs" />
+    <Compile Include="View Classes\DeviceHubDialogView.cs" />
+    <Compile Include="DeviceManagers\ITelescopeManager.cs" />
+    <Compile Include="Custom Controls\DoubleEntryBox.cs" />
+    <Compile Include="Business Object Classes\DialogCloseEventArgs.cs" />
+    <Compile Include="Services Classes\Implementations\ActivityLogService.cs" />
+    <Compile Include="ViewModel Classes\ActivityLogViewModel.cs" />
+    <Compile Include="Business Object Classes\Message Types\ActivityMessage.cs" />
+    <Compile Include="View Classes\ActivityLogView.xaml.cs">
+      <DependentUpon>ActivityLogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Business Object Classes\Telescope Classes\AltitudeConverter.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\AzimuthConverter.cs" />
+    <Compile Include="Business Object Classes\Value Converters\AzimuthValueConverter.cs" />
+    <Compile Include="Business Object Classes\Value Converters\BooleanToConnectStringConverter.cs" />
+    <Compile Include="Business Object Classes\Value Converters\BooleanBooleanValueConverter.cs" />
+    <Compile Include="Business Object Classes\Value Converters\BooleanVisibilityConverter.cs" />
+    <Compile Include="Business Object Classes\DialogContents.cs" />
+    <Compile Include="Business Object Classes\DevicePropertiesBase.cs" />
+    <Compile Include="Business Object Classes\Enumerations.cs" />
+    <Compile Include="Business Object Classes\Globals.cs" />
+    <Compile Include="Attached Behaviors\MouseBehavior.cs" />
+    <Compile Include="Business Object Classes\Value Converters\DeclinationValueConverter.cs" />
+    <Compile Include="Business Object Classes\Value Converters\NegatedBooleanToVisibilityConverter.cs" />
+    <Compile Include="Business Object Classes\Value Converters\ParkingStateVisibilityConverter.cs" />
+    <Compile Include="Business Object Classes\Value Converters\PauseStringConverter.cs" />
+    <Compile Include="Business Object Classes\Value Converters\AlignmentModeToStringConverter.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\DevHubTelescopeStatus.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\DeclinationConverter.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\DegreesConverter.cs" />
+    <Compile Include="DeviceManagers\DeviceManagerBase.cs" />
+    <Compile Include="Business Object Classes\Value Converters\EquCoordTypeToStringConverter.cs" />
+    <Compile Include="Business Object Classes\Value Converters\MoveEnumToBooleanConverter.cs" />
+    <Compile Include="Business Object Classes\RelayCommand.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\JogRate.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\JogRates.cs" />
+    <Compile Include="Services Classes\Interfaces\IActivityLogService.cs" />
+    <Compile Include="Resources\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Business Object Classes\Value Converters\RightAscensionValueConverter.cs" />
+    <Compile Include="Business Object Classes\Value Converters\DeviceConnectedValueConverter.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\SlewDirection.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\SlewAmount.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\TelescopeSlewAmounts.cs" />
+    <Compile Include="Business Object Classes\Value Converters\SideOfPierStringConverter.cs" />
+    <Compile Include="DeviceManagers\TelescopeManagerAccess.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\RightAscensionConverter.cs" />
+    <Compile Include="Services Classes\Implementations\TelescopeService.cs" />
+    <Compile Include="Services Classes\Interfaces\ITelescopeService.cs" />
+    <Compile Include="Business Object Classes\Win32 Extensions\User32.cs" />
+    <Compile Include="View Classes\SetupView.xaml.cs">
+      <DependentUpon>SetupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel Classes\SetupViewModel.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\TelescopeCapabilities.cs" />
+    <Compile Include="Business Object Classes\Message Types\TelescopeCapabilitiesUpdatedMessage.cs" />
+    <Compile Include="Business Object Classes\Message Types\TelescopeIDChangedMessage.cs" />
+    <Compile Include="Business Object Classes\Value Converters\DeviceIDConverter.cs" />
+    <Compile Include="DeviceManagers\TelescopeManager.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\TelescopeParameters.cs" />
+    <Compile Include="Business Object Classes\Message Types\TelescopeParametersUpdatedMessage.cs" />
+    <Compile Include="Business Object Classes\AppSettingsManager.cs" />
+    <Compile Include="View Classes\Telescope Views\TelescopeSetupView.xaml.cs">
+      <DependentUpon>TelescopeSetupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel Classes\Telescope ViewModels\TelescopeSetupViewModel.cs" />
+    <Compile Include="Business Object Classes\Message Types\TelescopeStatusUpdatedMessage.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\TrackingRateItem.cs" />
+    <Compile Include="View Classes\Telescope Views\TelescopeView.xaml.cs">
+      <DependentUpon>TelescopeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Business Object Classes\Telescope Classes\AscomTelescopeStatus.cs" />
+    <Compile Include="ViewModel Classes\Telescope ViewModels\TelescopeViewModel.cs" />
+    <Compile Include="ViewModel Classes\DeviceHubDialogViewModelBase.cs" />
+    <Compile Include="ViewModel Classes\DeviceHubViewModelBase.cs" />
+    <Compile Include="Services Classes\Implementations\DialogService.cs" />
+    <Compile Include="Services Classes\Interfaces\IDialogService.cs" />
+    <Compile Include="Services Classes\Interfaces\IMessageBoxService.cs" />
+    <Compile Include="Services Classes\Implementations\MessageBoxService.cs" />
+    <Compile Include="Services Classes\ServiceContainer.cs" />
+    <Compile Include="Services Classes\ServiceInjector.cs" />
+    <Compile Include="Business Object Classes\Win32 Extensions\WindowExtensions.cs" />
+    <Page Include="View Classes\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\DevHubMono.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\Focuser Views\FocuserControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\Focuser Views\FocuserParametersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\Focuser Views\FocuserSetupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\Focuser Views\FocuserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\RotarySliderView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View Classes\ValuesEntryView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View Classes\DomeViews\DomeCapabilitiesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\DomeViews\DomeMotionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\DomeViews\DomeParametersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\DomeViews\DomeSetupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\DomeViews\DomeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\Telescope Views\TelescopeMotionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\Telescope Views\TelescopeDirectSlewView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\Telescope Views\TelescopeTrackingRatesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\Telescope Views\TelescopeCapabilitiesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\Telescope Views\TelescopeParametersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\ActivityLogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\SetupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\Telescope Views\TelescopeSetupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\Telescope Views\TelescopeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Business Object Classes\ASCOM Classes\ClassFactory.cs" />
+    <Compile Include="Business Object Classes\ASCOM Classes\GarbageCollection.cs" />
+    <Compile Include="Business Object Classes\ASCOM Classes\LocalServer.cs" />
+    <Compile Include="View Classes\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ViewModel Classes\MainWindowViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="TelescopeControlClasses.cd" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icon down arrow.png" />
+    <Resource Include="Images\icon rotate left.png" />
+    <Resource Include="Images\icon rotate right.png" />
+    <Resource Include="Images\icon up arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ASCOM.ico" />
+    <Resource Include="Images\Stop.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj">
+      <Project>{bce07b80-9e3d-43d9-be5b-50d121d40ed3}</Project>
+      <Name>ASCOM.Astrometry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ASCOM.Attributes\ASCOM.Attributes.csproj">
+      <Project>{2c40fad9-de75-4360-a0ad-911c4d24d98c}</Project>
+      <Name>ASCOM.Attributes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj">
+      <Project>{350a73bd-60d1-03e4-2edc-a617d2d79ce3}</Project>
+      <Name>ASCOM.DeviceInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ASCOM.DriverAccess\ASCOM.DriverAccess.csproj">
+      <Project>{3b6c23f5-c590-4385-86bb-98b604b565ba}</Project>
+      <Name>ASCOM.DriverAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
+      <Project>{c9bf0a8b-594f-4ab9-938a-edc8448d8520}</Project>
+      <Name>ASCOM.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
+      <Project>{5f6cf410-7b16-4a32-99d2-0d92196c4490}</Project>
+      <Name>ASCOM.Exceptions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MvvmMessenger\MvvmMessenger.csproj">
+      <Project>{3c199a36-99a6-4c99-bab3-e37a81505111}</Project>
+      <Name>MvvmMessenger</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

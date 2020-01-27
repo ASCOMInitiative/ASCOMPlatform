@@ -1,0 +1,159 @@
+﻿<UserControl x:Class="ASCOM.DeviceHub.FocuserControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
+             xmlns:local="clr-namespace:ASCOM.DeviceHub"
+             mc:Ignorable="d" 
+   	         Background="{DynamicResource WindowBackgroundBrush}"
+             d:DesignHeight="330" d:DesignWidth="340" MinWidth="420">
+	<UserControl.Resources>
+		<local:MoveValueConverter x:Key="MoveValueConverter" />
+		<local:FocuserPositionValueConverter x:Key="FocuserPositionValueConverter" />
+		<local:FocuserTemperatureValueConverter x:Key="FocuserTemperatureValueConverter" />
+		<local:NullableBooleanValueConverter x:Key="NullableBooleanValueConverter" />
+		<local:BooleanVisibilityConverter x:Key="BoolVisConverter" />
+		<local:NegatedBooleanToVisibilityConverter x:Key="NegBoolVisConverter" />
+		<local:BooleanToConnectStringConverter x:Key="BoolConnectConverter" />
+
+		<Style x:Key="StateLabel" TargetType="{x:Type Label}">
+			<Setter Property="Margin" Value="0" />
+			<Setter Property="Padding" Value="0" />
+			<Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+			<Setter Property="HorizontalAlignment" Value="Right" />
+		</Style>
+
+		<Style x:Key="StateValue" TargetType="{x:Type Label}">
+			<Setter Property="HorizontalAlignment" Value="Left" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+			<Setter Property="Foreground" Value="{DynamicResource DynamicTextBrush}" />
+			<Setter Property="Margin" Value="6,0,0,0" />
+			<Setter Property="Padding" Value="0" />
+			<Setter Property="MinWidth" Value="70" />
+		</Style>
+	</UserControl.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<GroupBox Grid.Row="0" Grid.ColumnSpan="2" Header="Temperature Calibration" Foreground="{DynamicResource NormalTextBrush}" Margin="6" Width="360">
+			<StackPanel Orientation="Horizontal">
+				<Label Content="Temperature Offset (°C):"  Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Margin="6" />
+				<Slider Width="120" Minimum="-10" Maximum="10" TickFrequency="0.5" IsSnapToTickEnabled="True" VerticalAlignment="Center" 
+						IsEnabled="{Binding Status.Connected, FallbackValue=False}"
+						Value="{Binding TemperatureOffset}" />
+                <Label Foreground="{DynamicResource DynamicTextBrush}" VerticalAlignment="Center" Width="30">
+                    <Label.Content>
+                        <TextBlock Text="{Binding TemperatureOffset, StringFormat=F1, FallbackValue=0, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                    </Label.Content>
+                </Label>
+                <Button Content="Save" Height="40" Width="40" VerticalAlignment="Center" Padding="3" Style="{StaticResource CircleButton}"
+						IsEnabled="{Binding Status.Connected, FallbackValue=False}" 
+						Command="{Binding SaveOffsetCommand}" />
+			</StackPanel>
+		</GroupBox>
+
+		<Grid Grid.Row="1" Margin="2" HorizontalAlignment="center">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+			<Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Style="{DynamicResource StateValue}" FontSize="18" 
+								   Content="{Binding Status.Connected, Converter={StaticResource BoolConnectConverter}, FallbackValue='Not Connected'  }" />
+			<Label Grid.Row="1" Grid.Column="0" Content="Position:" Style="{DynamicResource StateLabel}" FontSize="18" />
+			<Label Grid.Row="1" Grid.Column="1" Style="{StaticResource StateValue}" FontSize="18" 
+				   Content="{Binding Status.Position, Converter={StaticResource FocuserPositionValueConverter}, FallbackValue=NO DATA}" />
+			<Label Grid.Row="1" Grid.Column="2" Content="Moving" Style="{StaticResource StateValue}" Foreground="{DynamicResource EmphasisTextBrush}" FontSize="18"
+				   HorizontalAlignment="Left" Margin="6,0,0,0"
+				Visibility="{Binding Status.IsMoving
+							, Converter={StaticResource BoolVisConverter}, ConverterParameter={x:Static Visibility.Hidden}
+							, FallbackValue=Hidden}" />
+			<Label Grid.Row="2" Grid.Column="0" Content="Temperature:" Style="{StaticResource StateLabel}" FontSize="18" />
+			<Label Grid.Row="2" Grid.Column="1" Style="{DynamicResource StateValue}" Margin="6,0" Padding="0" HorizontalAlignment="Right" FontSize="18"  >
+				<Label.Content>
+					<MultiBinding Converter="{StaticResource FocuserTemperatureValueConverter}">
+						<Binding Path="Status.Temperature" />
+						<Binding Path="TemperatureOffset" />
+						<Binding Path="TemperatureDisplayDegF" />
+					</MultiBinding>
+				</Label.Content>
+			</Label>
+			<StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal">
+				<RadioButton GroupName="GroupTempF" Content="°F" Margin="4,0,0,0" Foreground="{DynamicResource NormalTextBrush}" FontSize="18" 
+							 IsChecked="{Binding TemperatureDisplayDegF, Converter={StaticResource NullableBooleanValueConverter}, ConverterParameter=true}" />
+				<RadioButton GroupName="GroupTempC"  Content="°C" Margin="10,0,0,0" Foreground="{DynamicResource NormalTextBrush}" FontSize="18" 
+							 IsChecked="{Binding TemperatureDisplayDegF, Converter={StaticResource NullableBooleanValueConverter}, ConverterParameter=false}" />
+			</StackPanel>
+			<CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Content="Temperature Compensation" Foreground="{DynamicResource NormalTextBrush}" 
+					  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" 
+					  Visibility="{Binding Parameters.TempCompAvailable, Converter={StaticResource BoolVisConverter}
+									, FallbackValue=Visible}"
+					  Command="{Binding ToggleTempCompCommand}" CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"/>
+		</Grid>
+		<Grid Grid.Row="2" Margin="0,8" HorizontalAlignment="center">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			<Label Grid.Row="0" Grid.Column="0" Content="Select the move amount:" Style="{DynamicResource StateLabel}" VerticalAlignment="Top"/>
+			<StackPanel Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Vertical" Margin="0,0,0,6" HorizontalAlignment="Left">
+				<Slider Value="{Binding Path=MoveIndex, Mode=TwoWay}" Width="130" VerticalAlignment="Top" Minimum="0" Maximum="6" TickFrequency="1" IsSnapToTickEnabled="True" Margin="0,0,0,0" Padding="0" 
+						IsEnabled="{Binding Status.Connected, FallbackValue=False}" />
+				<Label Height="20" Style="{DynamicResource StateLabel}" HorizontalAlignment="Center" VerticalContentAlignment="Top" HorizontalContentAlignment="Center" 
+					   Content="{Binding MoveIncrement, Converter={StaticResource MoveValueConverter}, FallbackValue='0 steps/move'}"/>
+			</StackPanel>
+			<Button Grid.Row="1" Grid.Column="0" Height="50" Width="50" HorizontalAlignment="Right" Style="{StaticResource CircleButton}"
+					Command="{Binding MoveFocuserInwardCommand}">
+				<Button.Content>
+					<TextBlock TextAlignment="Center" TextWrapping="Wrap">
+						Move<LineBreak/>In
+					</TextBlock>
+				</Button.Content>
+			</Button>
+			<Button Grid.Row="1" Grid.Column="1" Height="50" Width="50" Style="{StaticResource CircleButton}"
+					ToolTip="Abort Movement"
+					Command="{Binding HaltFocuserCommand}" 
+					IsEnabled="{Binding FocuserBusy, Converter={StaticResource NegBoolVisConverter}}">
+				<Button.Content>
+					<Image Width="36" Height="36" Source="/ASCOM.DeviceHub;component/Images/Stop.ico" />
+				</Button.Content>
+			</Button>
+			<Button Grid.Row="1" Grid.Column="2" Height="50" Width="50" HorizontalAlignment="Left" Style="{StaticResource CircleButton}"
+					Command="{Binding MoveFocuserOutwardCommand}">
+				<Button.Content>
+					<TextBlock TextAlignment="Center" TextWrapping="Wrap">
+						Move<LineBreak/>Out
+					</TextBlock>
+				</Button.Content>
+			</Button>
+
+			<StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,2"
+						Visibility="{Binding Parameters.Absolute, Converter={StaticResource BoolVisConverter}}">
+				<Label Content="Move To Position:" Style="{DynamicResource StateLabel}" VerticalAlignment="Center" />
+				<TextBox Height="20" MinWidth="50" Margin="6,0" VerticalAlignment="Center" 
+						 local:Masking.Mask="^([-\+]?[1-9]\d*|0)$"
+						 IsEnabled="{Binding Path=Status.Connected}" 
+						 Text="{Binding TargetPosition, FallbackValue=15700}" />
+				<Button Content="Go" Height="30" Width="30" Style="{StaticResource CircleButton}" 
+						Command="{Binding MoveFocuserToPositionCommand}" />
+			</StackPanel>
+		</Grid>
+	</Grid>
+</UserControl>

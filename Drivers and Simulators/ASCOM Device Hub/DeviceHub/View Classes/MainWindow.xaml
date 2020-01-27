@@ -1,0 +1,143 @@
+﻿<Window x:Class="ASCOM.DeviceHub.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ASCOM.DeviceHub"
+        mc:Ignorable="d"
+		WindowStyle="ThreeDBorderWindow"
+		Background="{DynamicResource WindowBackgroundBrush}"
+        Title="ASCOM Device Hub" Icon="/ASCOM.DeviceHub;component/Images/ASCOM.ico" ResizeMode="CanMinimize" 
+		LocationChanged="Window_LocationChanged" Loaded="Window_Loaded" SizeToContent="WidthAndHeight">
+	<Window.Resources>
+		<DataTemplate DataType="{x:Type local:TelescopeViewModel}">
+			<local:TelescopeView />
+		</DataTemplate>
+		<DataTemplate DataType="{x:Type local:DomeViewModel}">
+			<local:DomeView />
+		</DataTemplate>
+		<DataTemplate DataType="{x:Type local:FocuserViewModel}">
+			<local:FocuserView />
+		</DataTemplate>
+
+		<DataTemplate x:Key="headerText">
+			<TextBlock Text="{Binding}" FontSize="11"  Margin="10,2" Padding="0" Width="Auto" Foreground="{DynamicResource NormalTextBrush}" />
+		</DataTemplate>
+
+		<local:BooleanVisibilityConverter x:Key="BoolVisConverter" />
+		<local:NegatedBooleanValueConverter x:Key="NegatedBooleanConverter" />
+		<local:NegatedBooleanToVisibilityConverter x:Key="NegBoolVisConverter" />
+	</Window.Resources>
+	<DockPanel HorizontalAlignment="Stretch" LastChildFill="True" >
+		<Grid DockPanel.Dock="Top" HorizontalAlignment="Stretch">
+			<Menu Background="{DynamicResource MenuBackgroundBrush}" Foreground="{DynamicResource NormalTextBrush}" HorizontalAlignment="Stretch">
+				<MenuItem Header="File" Foreground="{DynamicResource NormalTextBrush}" >
+					<MenuItem Header="Exit" Background="{DynamicResource MenuBackgroundBrush}" Foreground="{DynamicResource NormalTextBrush}"
+						  Template="{DynamicResource MenuItemControlTemplate1}" Click="ExitMenuItem_Click" />
+				</MenuItem>
+				<MenuItem Header="Tools" Foreground="{DynamicResource NormalTextBrush}">
+					<MenuItem Header="Setup" Background="{DynamicResource MenuBackgroundBrush}" Foreground="{DynamicResource NormalTextBrush}"
+						  Template="{DynamicResource MenuItemControlTemplate1}"
+						  Command="{Binding ShowSetupCommand}" />
+					<MenuItem Header="View Activity Log" Background="{DynamicResource MenuBackgroundBrush}" Foreground="{DynamicResource NormalTextBrush}"
+						  Template="{DynamicResource MenuItemControlTemplate1}"
+						  Command="{Binding ShowLogCommand}" />
+				</MenuItem>
+				<MenuItem Header="Help" Foreground="{DynamicResource NormalTextBrush}">
+					<MenuItem Header="View Help" Foreground="{DynamicResource NormalTextBrush}" Background="{DynamicResource MenuBackgroundBrush}" 
+							  Template="{DynamicResource MenuItemControlTemplate1}"
+							  Command="{Binding ViewHelpCommand}" />
+					<MenuItem Header="About..." Foreground="{DynamicResource NormalTextBrush}" Background="{DynamicResource MenuBackgroundBrush}" 
+							  Template="{DynamicResource MenuItemControlTemplate1}"
+							  Command="{Binding ShowAboutCommand}" />
+				</MenuItem>
+			</Menu>
+			<TextBlock Background="{DynamicResource MenuBackgroundBrush}" Foreground="{DynamicResource NormalTextBrush}" 
+                   HorizontalAlignment="Right" VerticalAlignment="Center" Margin="6,0"
+                   Text="{Binding ObjectCount, StringFormat=Active Clients Count: \{0\}}"
+			Visibility="{Binding HasActiveClients, Converter={StaticResource BoolVisConverter}, FallbackValue=Visible}" />
+		</Grid>
+
+		<Grid>
+			<Grid.RowDefinitions >
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+
+			<!-- Tabbed Screen Layout -->
+
+			<TabControl Grid.Row="0" Background="Transparent" HorizontalAlignment="Stretch"  Margin="0,6,0,0" Height="475" Width="454" 
+					SelectionChanged="TabControl_SelectionChanged"
+					Visibility="{Binding UseExpandedScreenLayout, Converter={StaticResource NegBoolVisConverter}, FallbackValue=Visible}">
+				<TabItem Template="{DynamicResource DeviceHubTabItemTemplate}" Header="Telescope" HeaderTemplate="{DynamicResource headerText}" BorderThickness="6,1">
+					<ContentControl Content="{Binding TelescopeVm}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="6,0" Padding="0" Height="Auto" />
+				</TabItem>
+				<TabItem Template="{DynamicResource DeviceHubTabItemTemplate}" Header="Dome" HeaderTemplate="{StaticResource headerText}" >
+					<ContentControl Content="{Binding DomeVm}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="6,0" Padding="0" Height="Auto" />
+				</TabItem>
+				<TabItem Template="{DynamicResource DeviceHubTabItemTemplate}" Header="Focuser" HeaderTemplate="{StaticResource headerText}" >
+					<ContentControl Content="{Binding FocuserVm}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="6,0" Padding="0" Height="Auto" />
+				</TabItem>
+			</TabControl>
+
+			<!-- Expanded Screen Layout -->
+
+			<Grid Grid.Row="1" Visibility="{Binding UseExpandedScreenLayout, Converter={StaticResource BoolVisConverter}, FallbackValue=Collapsed}">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<GroupBox Grid.Column="0" Header="Telescope Control" Width="460" Height="460" Margin="6" Foreground="{DynamicResource NormalTextBrush}">
+					<ContentControl Content="{Binding TelescopeVm}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="6,0" Padding="0" Height="Auto" />
+				</GroupBox>
+				<Expander x:Name="_domeControl" Grid.Column="1" ExpandDirection="Right" Margin="0,10" 
+						  Foreground="{DynamicResource NormalTextBrush}" Expanded="Expander_Expanded"
+						  ToolTip="Use Ctrl-Click to expand without collapsing other expanders.">
+					<Expander.Header>
+						<TextBlock Text="Dome Control" TextOptions.TextFormattingMode="Display">
+							<TextBlock.LayoutTransform>
+								<TransformGroup>
+									<RotateTransform Angle="90" />
+									<TranslateTransform X="-200" Y="20"/>
+								</TransformGroup>
+							</TextBlock.LayoutTransform>
+						</TextBlock>
+					</Expander.Header>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="424" />
+						</Grid.ColumnDefinitions>
+						<GroupBox Header="Dome Control" Foreground="{DynamicResource NormalTextBrush}" Margin="4,2">
+							<ContentControl HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="6,0" Padding="0" Height="Auto" 
+											Content="{Binding DomeVm}" />
+						</GroupBox>
+					</Grid>
+				</Expander>
+				<Expander x:Name="_focuserControl" Grid.Column="2" ExpandDirection="Right" Margin="0,10" 
+						  Foreground="{DynamicResource NormalTextBrush}" Expanded="Expander_Expanded"
+						  ToolTip="Use Ctrl-Click to expand without collapsing other expanders.">
+					<Expander.Header>
+						<TextBlock Text="Focuser Control" TextOptions.TextFormattingMode="Display" Foreground="{DynamicResource NormalTextBrush}">
+							<TextBlock.LayoutTransform>
+								<TransformGroup>
+									<RotateTransform Angle="90" />
+									<TranslateTransform X="-200" Y="20"/>
+								</TransformGroup>
+							</TextBlock.LayoutTransform>
+						</TextBlock>
+					</Expander.Header>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="430" />
+						</Grid.ColumnDefinitions>
+						<GroupBox Header="Focuser Control" Foreground="{DynamicResource NormalTextBrush}" Margin="4,2">
+							<ContentControl HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="6,0" Padding="0" Height="Auto" 
+											Content="{Binding FocuserVm}" />
+						</GroupBox>
+					</Grid>
+				</Expander>
+			</Grid>
+		</Grid>
+	</DockPanel>
+</Window>
