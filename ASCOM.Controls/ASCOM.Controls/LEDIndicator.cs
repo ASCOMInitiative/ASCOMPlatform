@@ -11,6 +11,7 @@ namespace ASCOM.Controls
     ///   can be steady or can flash with a choice of different cadences.
     /// </summary>
     [DefaultProperty("LabelText")]
+    [Obsolete("An improved version of this class is available as a NuGet package at https://www.nuget.org/packages/TA.WinForms.Controls/")]
     public sealed class LedIndicator : UserControl, ICadencedControl
     {
         #region Non-designer fields and properties

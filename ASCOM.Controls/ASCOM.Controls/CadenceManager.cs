@@ -39,6 +39,7 @@ namespace ASCOM.Controls
     ///     <item>The <see cref = "ICadencedControl.CadenceUpdate" /> method is marshalled to the GUI thread.</item>
     ///   </list>
     /// </remarks>
+    [Obsolete("An improved version of this class is available as a NuGet package at https://www.nuget.org/packages/TA.WinForms.Controls/")]
     public sealed class CadenceManager
     {
         /// <summary>

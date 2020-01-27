@@ -9,6 +9,7 @@ namespace ASCOM.Controls
 	///   This control inherits most of its behaviour from the <see cref = "FlowLayoutPanel" />
 	///   base class, but provides some defaults that are appropriate for use with ASCOM.
 	/// </summary>
+	[Obsolete("An improved version of this class is available as a NuGet package at https://www.nuget.org/packages/TA.WinForms.Controls/")]
 	public sealed class AnnunciatorPanel : FlowLayoutPanel
 	{
 		/// <summary>
