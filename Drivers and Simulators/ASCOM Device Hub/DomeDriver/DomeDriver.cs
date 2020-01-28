@@ -306,7 +306,16 @@ namespace ASCOM.DeviceHub
 					if ( value )
 					{
 						msg += String.Format( " (connecting to {0})", DomeManager.DomeID );
-						ConnectedState = DomeManager.Connect();
+						//ConnectedState = DomeManager.Connect();
+						// Do this on the U/I thread.
+
+						Task task = new Task(() =>
+						{
+							ConnectedState = DomeManager.Connect();
+						});
+
+						task.Start(Globals.UISyncContext);
+						task.Wait();
 					}
 					else
 					{

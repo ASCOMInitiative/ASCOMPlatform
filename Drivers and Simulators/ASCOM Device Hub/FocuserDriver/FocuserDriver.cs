@@ -519,7 +519,16 @@ namespace ASCOM.DeviceHub
 					if ( value )
 					{
 						msg += String.Format( " (connecting to {0})", FocuserManager.FocuserID );
-						ConnectedState = FocuserManager.Connect();
+						//ConnectedState = FocuserManager.Connect();
+						// Do this on the U/I thread.
+
+						Task task = new Task(() =>
+						{
+							ConnectedState = FocuserManager.Connect();
+						});
+
+						task.Start(Globals.UISyncContext);
+						task.Wait();
 					}
 					else
 					{

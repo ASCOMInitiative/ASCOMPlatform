@@ -314,7 +314,16 @@ namespace ASCOM.DeviceHub
 					if ( value )
 					{
 						msg += String.Format( " (connecting to {0})", TelescopeManager.TelescopeID );
-						ConnectedState = TelescopeManager.Connect();
+						//ConnectedState = TelescopeManager.Connect();
+						// Do this on the U/I thread.
+
+						Task task = new Task(() =>
+						{
+							ConnectedState = TelescopeManager.Connect();
+						});
+
+						task.Start(Globals.UISyncContext);
+						task.Wait();
 					}
 					else
 					{
