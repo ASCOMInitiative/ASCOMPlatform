@@ -8,6 +8,7 @@
     <DelaySign>false</DelaySign>
     <PackageProjectUrl>https://ascom-standards.org/</PackageProjectUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>The ASCOM Initiative</Authors>
   </PropertyGroup>
 
   <ItemGroup>
