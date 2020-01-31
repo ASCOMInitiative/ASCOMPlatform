@@ -1034,6 +1034,7 @@ Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DomeDriver\bin
 Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DomeDriver\bin\Release\ASCOM.DeviceHub.Dome.pdb to $COMMONFILES$\ASCOM\DeviceHub
 Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\FocuserDriver\bin\Release\ASCOM.DeviceHub.Focuser.dll to $COMMONFILES$\ASCOM\DeviceHub
 Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\FocuserDriver\bin\Release\ASCOM.DeviceHub.Focuser.pdb to $COMMONFILES$\ASCOM\DeviceHub
+Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\Documents\ASCOM Device Hub User and Technical Information.pdf to $COMMONFILES$\ASCOM\DeviceHub
 [END REGION]
  
 [DEFINE REGION: Platform 6 Content]
@@ -1221,6 +1222,8 @@ Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescop
 Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub to $COMMONFILES$\ASCOM\Telescope\POTH.exe
 Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\POTHHelp.htm
 Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
+Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Device Hub to $COMMONFILES$\ASCOM\DeviceHub\ASCOM.DeviceHub.exe
+Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Device Hub Help to $COMMONFILES$\ASCOM\DeviceHub\ASCOM Device Hub User and Technical Information.pdf
 Set Variable NATIVE_ENGINE to FALSE
  
 [END REGION]

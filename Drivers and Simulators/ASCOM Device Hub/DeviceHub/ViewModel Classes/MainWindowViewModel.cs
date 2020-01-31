@@ -338,7 +338,13 @@ namespace ASCOM.DeviceHub
 
 		private void ViewHelp()
 		{
-			string folderPath = Directory.GetCurrentDirectory();
+			// Get the full file name of the assembly containing the main application window
+			string fullPath = typeof(MainWindow).Assembly.Location;
+			
+			// Extract the path of the folder containing the assembly
+			string folderPath = Path.GetDirectoryName(fullPath);
+
+			// Construct the full file name of the help file and display it
 			string helpPath = Path.Combine( folderPath, Properties.Settings.Default.HelpFileName );
 			Process.Start( helpPath );
 		}
