@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+ 
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="expires" content="Fri, 1 Jan 1990 00:00:00 GMT">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+
+<!-- #BeginEditable "Title" -->
+<title>Interface Design Philosophy</title>
+
+<script type="text/javascript" language="javascript" src="../jscripts/expando.js"></script>
+<!-- #EndEditable -->
+
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	breadcrumbs(); 
+	-->
+	</script>
+</div>
+
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+      <!-- 
+	        writemainmenu();
+	        -->
+    </script>
+  </div>
+</div>
+
+
+
+<div id="leftcontent">
+
+
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	writesubmenu(); 
+	-->
+	</script>
+	
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+		<h3>ASCOM Interface Principle (<em>Dec 2019</em>)</h3>
+		<h2>Introduction</h2>
+		<p>This ASCOM &quot;business&quot; principle has been formulated to guide decisions on introduction of new interfaces or modification of existing interfaces. The need for this principle arose from discussions in June 2019 on whether flat panels should be supported through their own unique interface or through a specialised expression of the very flexible Switch interface.</p>
+		<h2>Statement</h2>
+		<p>ASCOM interfaces represent complex equipment capabilities in a device neutral way using meaningful interface and member names with defined behaviours. Their intent is to enable applications to focus exclusively on the operational act of observing.</p> 
+
+<p>Creation of a new ASCOM device interface, or adding a new feature to an existing one, requires that:</p>
+		<ul>
+			<li>				The new interface or feature arises from clear requirements and use cases.</li>
+			<li>				Application developers and hardware vendors be involved in its definition.</li>
+			<li>				Application developers commit to exploiting the interface</li>
+			<li>				Hardware vendors agree to create drivers for their devices</li>
+		</ul>
+<h2>Rationale</h2>
+
+<p>	A device neutral interface representation enables:</p>
+
+<ul>
+	<li>Application developers to code to a single interface that provides access to a wide variety of hardware without the need for manufacturer and model specific coding.</li>
+	<li>				Astronomical hardware to be immediately compatible with a wide variety of application software without the hardware vendor needing to maintain multiple application specific drivers.</li>
+</ul>
+
+<p>Meaningful member names and defined behaviours reduce errors and speed up development and testing of applications and drivers. The application developer and hardware vendor communities are key beneficiaries of ASCOM interfaces, their involvement is essential to demonstrate demand and ensure that interfaces are effective and provide value. ASCOM interfaces add most value for devices with complex behaviours or operational configuration requirements, simple requirements will be met through existing interfaces wherever possible to manage ASCOM's overall complexity.</p>
+
+<p>Modern astronomy equipment often has complex configuration capabilities which are important to optimising device performance. However, these are frequently manufacturer specific or not commonly used within a device class. Some are set in down time outside operational observing sessions and just used &quot;as configured&quot; during observation e.g. telescope mount modelling. Furthermore, manufacturers increasingly provide advanced monitoring of detailed manufacturer specific device behaviour such as mount motor currents.</p>
+
+<p>ASCOM interfaces focus on essential activities during the operational act of observing, and consequently only support control of parameters that an observer needs to change during a real observation session. The use of unique device interfaces with meaningful member names is favoured over more generic approaches, such as using the Switch interface, because:</p>
+<ol>
+	<li>In a named interface, use of correct member names is enforced at compile time. When using the Switch interface, specific capabilities must be assigned to &quot;well-known&quot; switch numbers or switch names. Errors in these Switch numbers and names will only show up at run time and increases the support burden for application developers and driver authors.</li>
+	<li>Well known switch numbers or switch names must be established and managed separately for each &quot;virtual&quot; device interface implemented through the Switch interface. Casing rules for switch names must be established.</li>
+	<li>Switches can only be accessed through their device number and not by their name. This requires client applications to iterate over the switch device list to map any &quot;well-known&quot; switch names to their associated switch numbers.</li>
+	</ol>
+<h2>Implications</h2>
+<ol>
+	<li>A new interface, or interface change, will be a response to clear requirements and use cases. Changes whose justifications lack clarity or shared support will be rejected.</li>
+	<li>New device types will have named interfaces with meaningful methods names except when the interface only has one boolean or numeric property, in which case the Switch interface will be used.</li>
+	<li>In general, creation of a new interface will require support from at least two commercial application authors and two device manufacturers.</li>
+	<li>Devices that support multiple states will have their own named interfaces.</li>
+	<li>Devices that have complex run-time configuration options or monitoring capabilities will expose these through their own driver or management application. The device will be responsible for displaying and responding to any device specific monitoring / control GUI and for providing a standard ASCOM device interface that client applications use during an observing session.</li>
+	<li>The Switch interface will not be used to construct complex interfaces where capabilities are assigned to &quot;well-known&quot; switch numbers or switch names.</li>
+	<li>Low level monitoring and simple control functions such as turning off observatory lighting, measuring mains power voltage and monitoring backup UPS status will be implemented using the Switch interface.</li>
+	<li>Devices with a single boolean / numeric property will be implemented through the Switch interface.</li>
+	<li>The SupportedActions/Action methods will be used to:
+		<ol type="a">
+			<li>Provide proprietary extensions to driver functionality.</li>
+			<li>Trial potential interface changes by creating &quot;common naming agreements&quot; where well known action names provide the same functionality in different drivers. This allows early implementation without the need for an immediate interface version change.</li>
+		</ol>
+	</li>
+	</ol>
+	</div>
+	<script type="text/javascript" language="javascript">
+	// Hide expando blocks at runtime. Allows editing in DW
+	var divs = document.getElementsByTagName("div");
+	for(var i = 0; i < divs.length; i++) {
+		if(divs[i].style.display == "block")
+			divs[i].style.display = "none";
+	}
+	</script>
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright &copy; 1998-2019, The ASCOM Initiative. 
+	All rights reserved. </div>
+
+</body>
+
+<!-- #EndTemplate --></html>
