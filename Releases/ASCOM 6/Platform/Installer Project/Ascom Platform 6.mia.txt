@@ -832,9 +832,9 @@ Install Files ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb 
 Install Assembly ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
 Comment: Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\Platform\v6
 Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $WINDIR$\Symbols\dll
-Install Assembly ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to Global Assembly Cache
-Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6
-Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb to $WINDIR$\Symbols\dll
+Install Assembly ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to Global Assembly Cache
+Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6
+Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
 Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $WINDIR$\Symbols\dll
 Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
