@@ -2162,7 +2162,7 @@ FALSE
 FALSE
 FALSE
 {38907624-A7E8-459E-ABC7-DB192C293F53}
-..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll
+..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll
 FALSE|
 $TARGETDIR$\Components\Platform6
 FALSE
@@ -2617,7 +2617,7 @@ FALSE
 FALSE
 FALSE
 {318A1F1B-D101-47A7-8E27-06261A335730}
-..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.xml
+..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.xml
 FALSE|
 $TARGETDIR$\Components\Platform6
 FALSE

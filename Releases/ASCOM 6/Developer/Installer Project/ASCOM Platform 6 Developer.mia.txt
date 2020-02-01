@@ -390,8 +390,8 @@ else
     Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $TARGETDIR$\Components\Platform6
     Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml to $TARGETDIR$\Components\Platform6
     Set Variable PROGRESS to 40
-    Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform6
-    Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.xml to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.xml to $TARGETDIR$\Components\Platform6
     Comment: Platform 5.5 references
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Astrometry.dll to $TARGETDIR$\Components\Platform55\
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Astrometry.xml to $TARGETDIR$\Components\Platform55\
