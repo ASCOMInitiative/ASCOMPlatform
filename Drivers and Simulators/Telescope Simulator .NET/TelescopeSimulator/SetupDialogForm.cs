@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using System.Globalization;
+using System.Reflection;
 
 namespace ASCOM.Simulator
 {
@@ -18,13 +19,13 @@ namespace ASCOM.Simulator
         {
             InitializeComponent();
 
-            Version version = new Version(Application.ProductVersion);
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
             labelVersion.Text = string.Format(CultureInfo.CurrentCulture, "ASCOM Telescope Simulator .NET Version {0}.{1}.{2}", version.Major, version.Minor, version.Build);
             TimeZone localZone = TimeZone.CurrentTimeZone;
             labelTime.Text = "Time zone is " + localZone.StandardName;
             if (localZone.IsDaylightSavingTime(DateTime.Now))
             {
-                labelTime.Text += " (currently DST)"; 
+                labelTime.Text += " (currently DST)";
             }
 
             //This is a little silly, but you cant build a combobox with values without a datasource
@@ -60,21 +61,21 @@ namespace ASCOM.Simulator
             comboBoxEquatorialSystem.DataSource = items;
             comboBoxEquatorialSystem.DisplayMember = "Display";
             comboBoxEquatorialSystem.ValueMember = "Value";
-               // Local,1
-               // B1950,4
-               // J2000,2
-               // J2050,3
-               // Other,0
+            // Local,1
+            // B1950,4
+            // J2000,2
+            // J2050,3
+            // Other,0
         }
 
         private void CmdOK_Click(object sender, EventArgs e)
         {
-        
+
         }
 
         private void CmdCancel_Click(object sender, EventArgs e)
         {
-         
+
         }
 
         private void BrowseToAscom(object sender, EventArgs e)
@@ -102,12 +103,12 @@ namespace ASCOM.Simulator
         }
         public double Elevation
         {
-            get 
+            get
             {
                 if (!double.TryParse(textBoxElevation.Text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out double elevation))
                     elevation = double.NaN;
                 return elevation;
-                
+
             }
             set { textBoxElevation.Text = value.ToString(CultureInfo.CurrentCulture); }
         }
@@ -115,7 +116,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                double lat=0;
+                double lat = 0;
                 try
                 {
                     lat = double.Parse(textBoxLatitudeDegrees.Text, CultureInfo.CurrentCulture) + double.Parse(textBoxLatitudeMinutes.Text, CultureInfo.CurrentCulture) / 60;
@@ -159,7 +160,9 @@ namespace ASCOM.Simulator
                 {
                     value = -value;
                     comboBoxLongitude.SelectedIndex = 1;
-                }else{
+                }
+                else
+                {
                     comboBoxLongitude.SelectedIndex = 0;
                 }
 
@@ -201,7 +204,7 @@ namespace ASCOM.Simulator
         public bool VersionOneOnly
         {
             get { return checkBoxVersionOne.Checked; }
-            set { checkBoxVersionOne.Checked = value;}
+            set { checkBoxVersionOne.Checked = value; }
         }
         public bool CanFindHome
         {
@@ -369,7 +372,7 @@ namespace ASCOM.Simulator
             {
                 if (!double.TryParse(textBoxApertureArea.Text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out double area))
                     area = -1;  // indicates an error - for now
-                return area; 
+                return area;
             }
             set { textBoxApertureArea.Text = value.ToString(CultureInfo.CurrentCulture); }
         }
@@ -465,7 +468,7 @@ namespace ASCOM.Simulator
 
         public string Display
         {
-            get {return m_Display;}
+            get { return m_Display; }
             set { m_Display = value; }
         }
         public string Value
