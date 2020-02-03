@@ -19,11 +19,11 @@ namespace ASCOM.TEMPLATEDEVICENAME
         {
             InitializeComponent();
             
-            // Initialise current values of user settings from the ASCOM Profile
-            InitUI();
-
             // Save the provided trace logger for use within the setup dialogue
             tl = tlDriver;
+
+            // Initialise current values of user settings from the ASCOM Profile
+            InitUI();
         }
 
         private void cmdOK_Click(object sender, EventArgs e) // OK button event handler
