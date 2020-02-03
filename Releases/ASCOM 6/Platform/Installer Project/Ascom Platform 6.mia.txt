@@ -84,6 +84,10 @@ Set Variable INSTALL_PLATFORM to
 Set Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP to 
 Set Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP to 
 Set Variable DISPLAY_USER_GUIDE to 
+Set Variable INSTALL_POTH to 
+Set Variable INSTALL_DOMECONTROLHUB to 
+Set Variable INSTALL_PIPE to 
+Set Variable INSTALL_HUB to 
  
 Comment: Set up values for a 32bit OS
 Set Variable PROGRAMFILES32 to 
@@ -132,6 +136,11 @@ Define Component: ASCOM Platform Options
 Define Component: ASCOM Platform Options\Install Diagnostics shortcut on desktop
 Define Component: ASCOM Platform Options\Install Profile Explorer shortcut on desktop
 Define Component: ASCOM Platform Options\Display user guide when installation is complete
+Define Component: Platform 5 hubs replaced by Device Hub
+Define Component: Platform 5 hubs replaced by Device Hub\POTH
+Define Component: Platform 5 hubs replaced by Device Hub\Dome Control Hub
+Define Component: Platform 5 hubs replaced by Device Hub\Pipe
+Define Component: Platform 5 hubs replaced by Device Hub\Hub
  
 Comment: Read the framework root value from the OS and set FRAMEWORKPATH to the full path to the executables
 Read Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\InstallRoot into FRAMEWORKROOT
@@ -394,10 +403,18 @@ Get Component ASCOM Platform Options Selection State into Variable INSTALL_PLATF
 Get Component ASCOM Platform Options\Install Diagnostics shortcut on desktop Selection State into Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP
 Get Component ASCOM Platform Options\Install Profile Explorer shortcut on desktop Selection State into Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP
 Get Component ASCOM Platform Options\Display user guide when installation is complete Selection State into Variable DISPLAY_USER_GUIDE
+Get Component Platform 5 hubs replaced by Device Hub\POTH Selection State into Variable INSTALL_POTH
+Get Component Platform 5 hubs replaced by Device Hub\Dome Control Hub Selection State into Variable INSTALL_DOMECONTROLHUB
+Get Component Platform 5 hubs replaced by Device Hub\Pipe Selection State into Variable INSTALL_PIPE
+Get Component Platform 5 hubs replaced by Device Hub\Hub Selection State into Variable INSTALL_HUB
 Write into Text File $SETUPLOG$ from Value $TIME$ Platform Installation Options - $INSTALL_PLATFORM$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install Desktop Diagnostics Shortcut - $INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install Profile Explorer Shortcut - $INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Display User Guide - $DISPLAY_USER_GUIDE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install POTH - $INSTALL_POTH$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Dome Control Hub - $INSTALL_DOMECONTROLHUB$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Pipe - $INSTALL_PIPE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Hub - $INSTALL_HUB$ (at end of file)
 Write into Text File $SETUPLOG$ from Value   (at end of file)
  
 Comment: Prepare to install
@@ -782,7 +799,6 @@ Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\CCDSimulator.dll to $C
 Install Files ..\..\..\..\Drivers and Simulators\CCD Simulator\UNURANReadMe.txt to $COMMONFILES$\ASCOM\Camera
 Install Files ..\..\..\..\Drivers and Simulators\CCD Simulator\unuran-0.6.0.dll to $COMMONFILES$\ASCOM\Camera
 Install Files ..\..\..\..\Drivers and Simulators\Dome Simulator\DomeSim.exe to $COMMONFILES$\ASCOM\Dome
-Install Files ..\..\..\..\Drivers and Simulators\ASCOMDome\ASCOMDome.exe to $COMMONFILES$\ASCOM\Dome
 Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Astro32.dll to $COMMONFILES$\ASCOM\Dome
 Install Files ..\..\..\..\Drivers and Simulators\Filter Wheel Simulator\FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel
 Install Files ..\..\..\..\Drivers and Simulators\Focus Simulator\FocusSim.exe to $COMMONFILES$\ASCOM\Focuser
@@ -790,11 +806,20 @@ Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator\SwitchSim.exe 
 Install Files ..\..\..\..\Drivers and Simulators\Scope Simulator\ScopeSim.exe to $COMMONFILES$\ASCOM\Telescope
 Install Files ..\..\..\..\Drivers and Simulators\Scope Simulator\ScopeSimHelp.htm to $COMMONFILES$\ASCOM\Telescope
 Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Astro32.dll to $COMMONFILES$\ASCOM\Telescope
-Install Files ..\..\..\..\Pipe\Pipe.exe to $COMMONFILES$\ASCOM\Telescope
-Install Files ..\..\..\..\Pipe\PipeHubHelp.htm to $COMMONFILES$\ASCOM\Telescope
-Install Files ..\..\..\..\Pipe\Hub.exe to $COMMONFILES$\ASCOM\Telescope
-Install Files ..\..\..\..\POTH\Source\POTH\POTH.exe to $COMMONFILES$\ASCOM\Telescope
-Install Files ..\..\..\..\POTH\Source\POTH\POTHHelp.htm to $COMMONFILES$\ASCOM\Telescope
+if Variable INSTALL_DOMECONTROLHUB Equals TRUE
+  Install Files ..\..\..\..\Drivers and Simulators\ASCOMDome\ASCOMDome.exe to $COMMONFILES$\ASCOM\Dome
+end
+if Variable INSTALL_PIPE Equals TRUE
+  Install Files ..\..\..\..\Pipe\Pipe.exe to $COMMONFILES$\ASCOM\Telescope
+  Install Files ..\..\..\..\Pipe\PipeHubHelp.htm to $COMMONFILES$\ASCOM\Telescope
+end
+if Variable INSTALL_HUB Equals TRUE
+  Install Files ..\..\..\..\Pipe\Hub.exe to $COMMONFILES$\ASCOM\Telescope
+end
+if Variable INSTALL_POTH Equals TRUE
+  Install Files ..\..\..\..\POTH\Source\POTH\POTH.exe to $COMMONFILES$\ASCOM\Telescope
+  Install Files ..\..\..\..\POTH\Source\POTH\POTHHelp.htm to $COMMONFILES$\ASCOM\Telescope
+end
 [END REGION]
  
 [DEFINE REGION: Platform 5.5 files]
@@ -1217,11 +1242,17 @@ Create Shortcut $SHORTCUTFOLDER$\Simulators\Rotator Simulator .NET to $COMMONFIL
 Create Shortcut $SHORTCUTFOLDER$\Simulators\Switch Simulator to $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
 Create Shortcut $SHORTCUTFOLDER$\Simulators\Telescope Simulator to $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
 Create Shortcut $SHORTCUTFOLDER$\Simulators\Telescope Simulator .NET to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
-Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor to $COMMONFILES$\ASCOM\Telescope\Pipe.exe
-Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
-Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub to $COMMONFILES$\ASCOM\Telescope\POTH.exe
-Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\POTHHelp.htm
-Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
+if Variable INSTALL_PIPE Equals TRUE
+  Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor to $COMMONFILES$\ASCOM\Telescope\Pipe.exe
+  Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
+end
+if Variable INSTALL_POTH Equals TRUE
+  Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub to $COMMONFILES$\ASCOM\Telescope\POTH.exe
+  Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\POTHHelp.htm
+end
+if Variable INSTALL_DOMECONTROLHUB Equals TRUE
+  Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
+end
 Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Device Hub to $COMMONFILES$\ASCOM\DeviceHub\ASCOM.DeviceHub.exe
 Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Device Hub Help to $COMMONFILES$\ASCOM\DeviceHub\ASCOM Device Hub User and Technical Information.pdf
 Set Variable NATIVE_ENGINE to FALSE
@@ -1286,25 +1317,33 @@ if Variable SUCCESS not Equals ERROR
   Run Program $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe /regserver (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - ScopeSim (at end of file)
   Set Variable MYPROGRESS to 28
-  Set Variable PROGRESSTEXT to Registering Hub server
-  Run Program $COMMONFILES$\ASCOM\Telescope\Hub.exe /regserver (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Hub (at end of file)
-  Set Variable MYPROGRESS to 29
-  Set Variable PROGRESSTEXT to Registering Pipe server
-  Run Program $COMMONFILES$\ASCOM\Telescope\Pipe.exe /regserver (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Pipe (at end of file)
-  Set Variable MYPROGRESS to 30
-  Set Variable PROGRESSTEXT to Registering POTH server
-  Run Program $COMMONFILES$\ASCOM\Telescope\POTH.exe /regserver (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - POTH (at end of file)
-  Set Variable MYPROGRESS to 31
+  if Variable INSTALL_HUB Equals TRUE
+    Set Variable PROGRESSTEXT to Registering Hub server
+    Run Program $COMMONFILES$\ASCOM\Telescope\Hub.exe /regserver (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Hub (at end of file)
+    Set Variable MYPROGRESS to 29
+  end
+  if Variable INSTALL_PIPE Equals TRUE
+    Set Variable PROGRESSTEXT to Registering Pipe server
+    Run Program $COMMONFILES$\ASCOM\Telescope\Pipe.exe /regserver (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Pipe (at end of file)
+    Set Variable MYPROGRESS to 30
+  end
+  if Variable INSTALL_POTH Equals TRUE
+    Set Variable PROGRESSTEXT to Registering POTH server
+    Run Program $COMMONFILES$\ASCOM\Telescope\POTH.exe /regserver (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - POTH (at end of file)
+    Set Variable MYPROGRESS to 31
+  end
   Set Variable PROGRESSTEXT to Registering Platform 5 Dome simulator
   Run Program $COMMONFILES$\ASCOM\Dome\DomeSim.exe /regserver (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - DomeSim (at end of file)
   Set Variable MYPROGRESS to 32
-  Set Variable PROGRESSTEXT to Registering Platform 5 Dome simulator
-  Run Program $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe /regserver (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - ASCOMDome (at end of file)
+  if Variable INSTALL_DOMECONTROLHUB Equals TRUE
+    Set Variable PROGRESSTEXT to Registering Platform 5 Dome Hub
+    Run Program $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe /regserver (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - ASCOMDome (at end of file)
+  end
   Set Variable MYPROGRESS to 33
   Set Variable PROGRESSTEXT to Registering Platform 5 FilterWheel simulator
   Run Program $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe /regserver (WAIT, get result into variable RC)
@@ -1779,3 +1818,38 @@ end
 [END REGION]
 label: End of Script
  
+[DEFINE WEB MEDIA DomeControl Hub]
+if Variable SELECTED Equals TRUE
+end
+[DEFINE WEB MEDIA POTH]
+if Variable SELECTED Equals TRUE
+end
+[DEFINE WEB MEDIA Hub]
+if Variable SELECTED Equals TRUE
+end
+[DEFINE WEB MEDIA Pipe]
+if Variable SELECTED Equals TRUE
+end
+[DEFINE WEB MEDIA Platform 5 hubs replaced by Device Hub]
+Get Component Platform 5 hubs replaced by Device Hub Selection State into Variable SELECTED
+if Variable SELECTED Equals TRUE
+end
+[DEFINE WEB MEDIA Dome Control Hub]
+Get Component Platform 5 hubs replaced by Device Hub\Dome Control Hub Selection State into Variable SELECTED
+if Variable SELECTED Equals TRUE
+end
+[DEFINE WEB MEDIA POTH]
+Get Component Platform 5 hubs replaced by Device Hub\POTH Selection State into Variable SELECTED
+if Variable SELECTED Equals TRUE
+end
+[DEFINE WEB MEDIA Hub]
+Get Component Platform 5 hubs replaced by Device Hub\Hub Selection State into Variable SELECTED
+if Variable SELECTED Equals TRUE
+end
+[DEFINE WEB MEDIA Pipe]
+Get Component Platform 5 hubs replaced by Device Hub\Pipe Selection State into Variable SELECTED
+if Variable SELECTED Equals TRUE
+end
+[DEFINE WEB MEDIA Platform 5 hubs replaced by Device Hub]
+if Variable SELECTED Equals TRUE
+end

@@ -15,18 +15,21 @@ if Variable ISWINDOWS64BIT Equals TRUE
   Get Common Folder Location System->System Directory into DOTNET48_WINSYSDIR
 end
 Read Registry Key HKLM\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\Version into INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64)
+Write into Text File $SETUPLOG$ from Value $TIME$ .Net Framework version: $INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64)$ (at end of file)
 if Variable ISWINDOWS64BIT Equals TRUE
   Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
   Get Common Folder Location System->System Directory into DOTNET48_WOWSYSDIR
 else
   Get Common Folder Location System->System Directory into DOTNET48_WINSYSDIR
 end
-if Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) Greater Than (Version) 4.8.03760
+if Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) Greater Than (Version) 4.8.0
   Comment: .NET 4.8 is installed OK
-  Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) to TRUE
+  Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) to FALSE
+  Write into Text File $SETUPLOG$ from Value $TIME$ Found Framework 4.8 (at end of file)
 else
   Comment: .NET 4.8 is NOT installed
   Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) to FALSE
+  Write into Text File $SETUPLOG$ from Value $TIME$ Framework 4.8 not found (at end of file)
   if Variable DOTNET48_IS10RTM Equals TRUE
     if Variable DOTNET48_IS10RED Equals FALSE
       MessageBox: $TITLE$ Setup, On Windows 10, $TITLE$ requires the Anniversary Update or later. Please upgrade to a later Windows version.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
@@ -57,7 +60,7 @@ else
 end
 if Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) Equals FALSE
   Set Variable PREREQ to TRUE
-  Set Variable PRELIST to $PRELIST$$NEWLINE$Microsoft .NET Framework 4.8 (x86 and x64)
+  Set Variable PRELIST to $PRELIST$$NEWLINE$Microsoft .NET Framework 4.8
   Get System Setting Windows 7 into OS_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64)
   if Variable OS_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) not Equals TRUE
     MessageBox: $TITLE$ Setup, $TITLE$ requires at least Windows 7 or Windows Server 2008 R2. Please upgrade your operating system and try again.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
@@ -80,3 +83,4 @@ if Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) Equals FALSE
     end
   end
 end
+Write into Text File $SETUPLOG$ from Value   (at end of file)

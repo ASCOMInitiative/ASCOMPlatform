@@ -60,7 +60,7 @@ else
 end
 if Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) Equals FALSE
   Set Variable PREREQ to TRUE
-  Set Variable PRELIST to $PRELIST$$NEWLINE$Microsoft .NET Framework 4.8 (x86 and x64)
+  Set Variable PRELIST to $PRELIST$$NEWLINE$Microsoft .NET Framework 4.8
   Get System Setting Windows 7 into OS_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64)
   if Variable OS_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) not Equals TRUE
     MessageBox: $TITLE$ Setup, $TITLE$ requires at least Windows 7 or Windows Server 2008 R2. Please upgrade your operating system and try again.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.

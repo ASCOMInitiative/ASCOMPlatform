@@ -1,6 +1,4 @@
 ﻿Main Setup Dialogue
-Prepare for Installation or Uninstallation
-Finish Setup Dialogue
 Platform 6 Content
 Set Registry Keys
 Platform 6.1 files
@@ -9,6 +7,9 @@ Remove Previous Platform 6 install if present
 ASCOM Cache
 Earth Rotation Date Update
 Remove Previous Platforms 4 and 5 if present
-Install Application Pre-Requisites if required
 Maintenance Dialogue
 Alpaca Support for Chooser
+Remove 64bit components
+Remove 32bit components
+Install Application Pre-Requisites if required
+Uninstall items installed by this installer
