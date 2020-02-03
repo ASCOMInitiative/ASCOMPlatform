@@ -1,0 +1,82 @@
+Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) to TRUE
+Get System Setting Windows 10 Creators Update into DOTNET48_IS10
+Get System Setting Windows 10 Redstone into DOTNET48_IS10RED
+Get System Setting Windows 10 into DOTNET48_IS10RTM
+Get System Setting Windows 8 into DOTNET48_IS80
+Get System Setting Windows Server 2012 into DOTNET48_IS80SERVER
+Get System Setting Windows 8.1 Update 1 into DOTNET48_IS811
+Get System Setting Windows 8.1 into DOTNET48_IS81
+Get System Setting Windows 7 into DOTNET48_IS7
+Get System Setting Service Pack 1 into DOTNET48_ISSP1
+Get System Setting Windows in 64 bit Mode into ISWINDOWS64BIT
+Set Variable DOTNET48_DOWNLEVEL to FALSE
+if Variable ISWINDOWS64BIT Equals TRUE
+  Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+  Get Common Folder Location System->System Directory into DOTNET48_WINSYSDIR
+end
+Read Registry Key HKLM\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\Version into INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64)
+if Variable ISWINDOWS64BIT Equals TRUE
+  Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+  Get Common Folder Location System->System Directory into DOTNET48_WOWSYSDIR
+else
+  Get Common Folder Location System->System Directory into DOTNET48_WINSYSDIR
+end
+if Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) Greater Than (Version) 4.8.03760
+  Comment: .NET 4.8 is installed OK
+  Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) to TRUE
+else
+  Comment: .NET 4.8 is NOT installed
+  Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) to FALSE
+  if Variable DOTNET48_IS10RTM Equals TRUE
+    if Variable DOTNET48_IS10RED Equals FALSE
+      MessageBox: $TITLE$ Setup, On Windows 10, $TITLE$ requires the Anniversary Update or later. Please upgrade to a later Windows version.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+      Terminate Installation
+    end
+  else
+    if Variable DOTNET48_IS81 Equals FALSE
+      if Variable DOTNET48_IS80 Equals TRUE
+        Comment: .NET 4.8 is unavailable for Windows 8.0
+        if Variable DOTNET48_IS80SERVER Equals FALSE
+          MessageBox: $TITLE$ Setup, $TITLE$ requires Windows 8.1 Update or newer. Please upgrade your operating system and try again.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+          Terminate Installation
+        end
+      else
+        if Variable DOTNET48_IS7 Equals FALSE
+          MessageBox: $TITLE$ Setup, $TITLE$ requires Windows 7 or newer. Please upgrade your operating system and try again.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+          Terminate Installation
+        else
+          if Variable DOTNET48_ISSP1 Equals FALSE
+            MessageBox: $TITLE$ Setup, $TITLE$ requires Service Pack 1 for your Windows operating system. Please upgrade your operating system and try again.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+            Terminate Installation
+          end
+        end
+      end
+      Set Variable DOTNET48_DOWNLEVEL to TRUE
+    end
+  end
+end
+if Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) Equals FALSE
+  Set Variable PREREQ to TRUE
+  Set Variable PRELIST to $PRELIST$$NEWLINE$Microsoft .NET Framework 4.8 (x86 and x64)
+  Get System Setting Windows 7 into OS_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64)
+  if Variable OS_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) not Equals TRUE
+    MessageBox: $TITLE$ Setup, $TITLE$ requires at least Windows 7 or Windows Server 2008 R2. Please upgrade your operating system and try again.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+    Terminate Installation
+  end
+  Get System Setting Windows 8 into OS_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64)
+  if Variable OS_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) Equals FALSE
+    Get System Setting Service Pack 1 into SP_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64)
+    if Variable SP_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) Equals FALSE
+      MessageBox: $TITLE$ Setup, $TITLE$ requires at least Service Pack 1. Please install Service Pack 1 and try again.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+      Terminate Installation
+    end
+  else
+    if Variable DOTNET48_IS811 Equals FALSE
+      if Variable DOTNET48_IS81 Equals TRUE
+        Comment: .NET 4.8 requires Update 1 on Windows 8.1
+        MessageBox: $TITLE$ Setup, $TITLE$ requires Update (KB 2919355) for Windows.$NEWLINE$$NEWLINE$Please install Update (KB 2919355) using Windows Update and try again.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+        Terminate Installation
+      end
+    end
+  end
+end

@@ -290,16 +290,16 @@ end
 Comment: Check setup pre-requisites
 Set Variable PREREQ to FALSE
 Set Variable PRELIST to 
-Set Variable DOTNET40CLIENT_X86 to 
+Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.7(X86ANDX64) to 
 Include Script: checkmsi31
 Include Script: checknet351
-Include Script: checknet4client_x86
+Include Script: checknet4.8_x86 
 Include Script: checkvc1410_25017_x86
 Include Script: checkvc1410_25017_x64
  
 Comment: Install setup pre-requisites
 if Variable PREREQ not Equals FALSE
-  if Variable DOTNET40CLIENT_X86 Equals FALSE
+  if Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.7(X86ANDX64) Equals FALSE
     Comment: If Framework 4 is missing then we don't need a message about 3.5 as well!
     Set Variable NET351 to TRUE
   end
