@@ -89,58 +89,32 @@
             <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.ICoverCalibratorV1.Action(System.String,System.String)">
-            <summary>
-            Invokes the specified device-specific action.
-            </summary>
-            <param name="ActionName">
-            A well known name agreed by interested parties that represents the action to be carried out.
-            </param>
-            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.
-            </param>
+            <summary>Invokes the specified device-specific custom action.</summary>
+            <param name="ActionName">A well known name agreed by interested parties that represents the action to be carried out.</param>
+            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.</param>
             <returns>A string response. The meaning of returned strings is set by the driver author.</returns>
-            <exception cref="T:ASCOM.MethodNotImplementedException">Throws this exception if no actions are suported.</exception>
-            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the SupportedActions method will inform clients
-            of driver capabilities, but the driver must still throw an ASCOM.ActionNotImplemented exception if it is asked to
-            perform an action that it does not support.</exception>
+            <exception cref="T:ASCOM.MethodNotImplementedException">Thrown if no actions are supported.</exception>
+            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the <see cref="P:ASCOM.DeviceInterface.ICoverCalibratorV1.SupportedActions"/> method will inform clients of driver capabilities, but the driver must still throw 
+            an <see cref="T:ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
             <exception cref="T:ASCOM.NotConnectedException">If the driver is not connected.</exception>
-            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <example>Suppose filter wheels start to appear with automatic wheel changers; new actions could
-            be “FilterWheel:QueryWheels” and “FilterWheel:SelectWheel”. The former returning a
-            formatted list of wheel names and the second taking a wheel name and making the change, returning appropriate
-            values to indicate success or failure.
-            </example>
-            <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p>
-            This method is intended for use in all current and future device types and to avoid name clashes, management of action names
-            is important from day 1. A two-part naming convention will be adopted - <b>DeviceType:UniqueActionName</b> where:
-            <list type="bullet">
-            <item><description>DeviceType is the same value as would be used by <see cref="P:ASCOM.Utilities.Chooser.DeviceType"/> e.g. Telescope, Camera, Switch etc.</description></item>
-            <item><description>UniqueActionName is a single word, or multiple words joined by underscore characters, that sensibly describes the action to be performed.</description></item>
-            </list>
-            <para>
-            It is recommended that UniqueActionNames should be a maximum of 16 characters for legibility.
-            Should the same function and UniqueActionName be supported by more than one type of device, the reserved DeviceType of
-            “General” will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel
-            and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
-            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.ICoverCalibratorV1.SupportedActions"/> property.</para>
+            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful.</exception>
+            <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
+            of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
+            <remarks><p style="color:red"><b>Must be implemented.</b></p>
+            <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
+            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.ICoverCalibratorV1.SupportedActions" /> property.</para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.ICoverCalibratorV1.SupportedActions">
-            <summary>
-            Returns the list of action names supported by this driver.
-            </summary>
+            <summary>Returns the list of custom action names supported by this driver.</summary>
             <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Must be implemented</b></p> This method must return an empty arraylist if no actions are supported. Please do not throw a
-            <see cref="T:ASCOM.PropertyNotImplementedException" />.
-            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities.
-            Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in
-            the <see cref="M:ASCOM.DeviceInterface.ICoverCalibratorV1.Action(System.String,System.String)">Action</see> method.</para>
-            <para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
-            determine whether a particular action is supported. This is easily done through the Contains method. Since the
-            collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned
-            about hom many members are in the collection. </para>
-            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
-            the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
+            <remarks><p style="color:red"><b>Must be implemented</b></p>
+            <para>This method must return an empty <see cref="T:System.Collections.ArrayList" /> if no actions are supported. Do not throw a <see cref="T:ASCOM.PropertyNotImplementedException" />.</para>
+            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. Returned action names may be in mixed case to
+            enhance presentation but the <see cref="M:ASCOM.DeviceInterface.ICoverCalibratorV1.Action(System.String,System.String)" /> method is case insensitive.</para>
+            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET, <see cref="T:System.Collections.ArrayList" /> is the correct
+            implementation to use because the .NET Generic methods are not compatible with COM.</para>
             </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.ICoverCalibratorV1.CommandBlind(System.String,System.Boolean)">
@@ -792,57 +766,32 @@
             <remarks><p style="color:red"><b>Must be implemented, must not throw a MethodNotImplementedException.</b></p> </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.ICameraV2.Action(System.String,System.String)">
-            <summary>
-            Invokes the specified device-specific action.
-            </summary>
-            <param name="ActionName">
-            A well known name agreed by interested parties that represents the action to be carried out.
-            </param>
-            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.
-            </param>
+            <summary>Invokes the specified device-specific custom action.</summary>
+            <param name="ActionName">A well known name agreed by interested parties that represents the action to be carried out.</param>
+            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.</param>
             <returns>A string response. The meaning of returned strings is set by the driver author.</returns>
-            <exception cref="T:ASCOM.MethodNotImplementedException">Throws this exception if no actions are suported.</exception>
-            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the SupportedActions method will inform clients
-            of driver capabilities, but the driver must still throw an ASCOM.ActionNotImplemented exception if it is asked to
-            perform an action that it does not support.</exception>
+            <exception cref="T:ASCOM.MethodNotImplementedException">Thrown if no actions are supported.</exception>
+            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the <see cref="P:ASCOM.DeviceInterface.ICameraV2.SupportedActions"/> method will inform clients of driver capabilities, but the driver must still throw 
+            an <see cref="T:ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
             <exception cref="T:ASCOM.NotConnectedException">If the driver is not connected.</exception>
-            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <example>Suppose filter wheels start to appear with automatic wheel changers; new actions could
-            be “FilterWheel:QueryWheels” and “FilterWheel:SelectWheel”. The former returning a
-            formatted list of wheel names and the second taking a wheel name and making the change, returning appropriate
-            values to indicate success or failure.
-            </example>
-            <remarks><p style="color:red"><b>May throw a MethodNotImplementedException if the device does not support any actions.</b></p>
-            This method is intended for use in all current and future device types and to avoid name clashes, management of action names
-            is important from day 1. A two-part naming convention will be adopted - <b>DeviceType:UniqueActionName</b> where:
-            <list type="bullet">
-            <item><description>DeviceType is the same value as would be used by <see cref="P:ASCOM.Utilities.Chooser.DeviceType"/> e.g. Telescope, Camera, Switch etc.</description></item>
-            <item><description>UniqueActionName is a single word, or multiple words joined by underscore characters, that sensibly describes the action to be performed.</description></item>
-            </list>
-            <para>
-            It is recommended that UniqueActionNames should be a maximum of 16 characters for legibility.
-            Should the same function and UniqueActionName be supported by more than one type of device, the reserved DeviceType of
-            “General” will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel
-            and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
-            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.ICameraV2.SupportedActions"/> property.</para>
+            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful.</exception>
+            <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
+            of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
+            <remarks><p style="color:red"><b>Must be implemented.</b></p>
+            <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
+            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.ICameraV2.SupportedActions" /> property.</para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.ICameraV2.SupportedActions">
-            <summary>
-            Returns the list of action names supported by this driver.
-            </summary>
+            <summary>Returns the list of custom action names supported by this driver.</summary>
             <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p> This method must return an empty arraylist if no actions are supported.
-            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities.
-            Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in
-            the <see cref="M:ASCOM.DeviceInterface.ICameraV2.Action(System.String,System.String)">Action</see> method.</para>
-            <para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
-            determine whether a particular action is supported. This is easily done through the Contains method. Since the
-            collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned
-            about hom many members are in the collection. </para>
-            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
-            the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
+            <remarks><p style="color:red"><b>Must be implemented</b></p>
+            <para>This method must return an empty <see cref="T:System.Collections.ArrayList" /> if no actions are supported. Do not throw a <see cref="T:ASCOM.PropertyNotImplementedException" />.</para>
+            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. Returned action names may be in mixed case to
+            enhance presentation but the <see cref="M:ASCOM.DeviceInterface.ICameraV2.Action(System.String,System.String)" /> method is case insensitive.</para>
+            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET, <see cref="T:System.Collections.ArrayList" /> is the correct
+            implementation to use because the .NET Generic methods are not compatible with COM.</para>
             </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.ICameraV2.CommandBlind(System.String,System.Boolean)">
@@ -2356,434 +2305,540 @@
             </remarks>
         </member>
         <member name="T:ASCOM.DeviceInterface.IDomeV2">
-            <summary>
-            Defines the IDome Interface
-            </summary>
+            <summary>Defines the IDome Interface</summary>
             <remarks>
-            This interface is used to handle a dome, with or without a controllable shutter, and also a roll off roof.
-            <para>The dome implentation should be self explanatory.</para>
-            <para>A roll off roof is implemented using the shutter control as the roof.  The properties and methods shoud be implented as follows:
-            <list>
-            <item><description>OpenShutter and CloseShutter open and close the roof.</description></item>
-            <item><description>CanFindHome, CanPark,CanSetAltitude, CanSetAzimuth, CanSetPark, CanSlave and CanSyncAzimuth all return false.</description></item>
-            <item><description>CanSetShutter returns true.</description></item>
-            <item><description>ShutterStatus is implemented.</description></item>
-            <item><description>Slewing always returns false.</description></item>
-            <item><description>AbortSlew should stop the shutter moving.</description></item>
-            <item><description>FindHome, Park, SetPark, SlewToAltitude, SlewToAzimuth and SyncToAzimuth all throw the <see cref="T:ASCOM.MethodNotImplementedException" /></description></item>
-            <item><description>Altitude and Azimuth throw the <see cref="T:ASCOM.PropertyNotImplementedException"/>.</description></item>
-            </list></para>
+            <para>
+            This interface can be used to control most types of observatory structure, including a dome
+            (with or without a controllable shutter), a clamshell and a roll off roof.
+            </para>
+            <para>
+            The dome implementation should be self explanatory.
+            A roll off roof or clamshell is implemented using the shutter control as the roof.
+            The properties and methods should be implemented as follows:
+            </para>
+            <list type="bullet">
+            <item>
+            <see cref="M:ASCOM.DeviceInterface.IDomeV2.OpenShutter" /> and <see cref="M:ASCOM.DeviceInterface.IDomeV2.CloseShutter" /> open and close the roof
+            </item>
+            <item>
+            <see cref="P:ASCOM.DeviceInterface.IDomeV2.CanFindHome" />, <see cref="P:ASCOM.DeviceInterface.IDomeV2.CanPark" />, <see cref="P:ASCOM.DeviceInterface.IDomeV2.CanSetAltitude" />,
+            <see cref="P:ASCOM.DeviceInterface.IDomeV2.CanSetAzimuth" />, <see cref="P:ASCOM.DeviceInterface.IDomeV2.CanSetPark" />, <see cref="P:ASCOM.DeviceInterface.IDomeV2.CanSlave" /> and
+            <see cref="P:ASCOM.DeviceInterface.IDomeV2.CanSyncAzimuth" /> all return <c>false</c>.
+            </item>
+            <item><see cref="P:ASCOM.DeviceInterface.IDomeV2.CanSetShutter" /> returns <c>true</c>.</item>
+            <item><see cref="P:ASCOM.DeviceInterface.IDomeV2.ShutterStatus" /> should be implemented.</item>
+            <item>
+            <see cref="M:ASCOM.DeviceInterface.IDomeV2.AbortSlew" /> should stop the roof or shutter.
+            </item>
+            <item>
+            <see cref="M:ASCOM.DeviceInterface.IDomeV2.FindHome" />, <see cref="M:ASCOM.DeviceInterface.IDomeV2.Park" />, <see cref="M:ASCOM.DeviceInterface.IDomeV2.SetPark" />,
+            <see cref="M:ASCOM.DeviceInterface.IDomeV2.SlewToAltitude(System.Double)" />, <see cref="M:ASCOM.DeviceInterface.IDomeV2.SlewToAzimuth(System.Double)" /> and
+            <see cref="M:ASCOM.DeviceInterface.IDomeV2.SyncToAzimuth(System.Double)" /> all throw <see cref="T:ASCOM.MethodNotImplementedException" />
+            </item>
+            <item>
+            <see cref="P:ASCOM.DeviceInterface.IDomeV2.Altitude" /> and <see cref="P:ASCOM.DeviceInterface.IDomeV2.Azimuth" /> throw  <see cref="T:ASCOM.PropertyNotImplementedException" />
+            </item>
+            </list>
+            <para>
+            Some domes and possibly clamshells may be able to control the opening aperture and/or
+            position. Observatories with this feature may wish to support the <see cref="M:ASCOM.DeviceInterface.IDomeV2.SlewToAltitude(System.Double)" /> method.
+            In this case, the altitude specified is not the position of the shutter or roof, but the
+            centre of an "aperture on the sky" that the observer wishes to view. The driver will have knowledge of the
+            physical properties of the structure (possibly using data stored within the driver's settings) and it is up to
+            the driver to determine the best physical position of the roof apparatus to meet the observer's request.
+            </para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.Connected">
             <summary>
-            Set True to connect to the device hardware. Set False to disconnect from the device hardware.
-            You can also read the property to check whether it is connected. This reports the current hardware state.
+            Set <see langword="true" /> to connect to the device hardware. Set <see langword="false" /> to
+            disconnect from the device hardware. You can also read the property to check whether it is
+            connected. This reports the current hardware state.
             </summary>
-            <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
-            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
+            <value><see langword="true" /> if connected to the hardware; otherwise, <see langword="false" />.</value>
+            <exception cref="T:ASCOM.DriverException">Must throw if the connection attempt was not successful</exception>
             <remarks>
-            <p style="color:red"><b>Must be implemented</b></p>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.
-            <para>The Connected property sets and reports the state of connection to the device hardware.
-            For a hub this means that Connected will be true when the first driver connects and will only be set to false
-            when all drivers have disconnected.  A second driver may find that Connected is already true and
-            setting Connected to false does not report Connected as false.  This is not an error because the physical state is that the
-            hardware connection is still true.</para>
-            <para>Multiple calls setting Connected to true or false will not cause an error.</para>
+            <p style="color: red;"><b>Must be implemented.</b></p>
+            <para>
+            Do not use a <c>NotConnectedException</c> here, that exception is for use in other methods
+            that require a connection in order to succeed.
+            </para>
+            <para>
+            The Connected property sets and reports the state of the hardware connection. For a hub
+            this means that <see cref="P:ASCOM.DeviceInterface.IDomeV2.Connected" /> will be <see langword="true" /> when the first
+            driver connects and will only return <see langword="false" /> when all drivers have
+            disconnected.  A second driver may find that Connected is already true and setting
+            <see cref="P:ASCOM.DeviceInterface.IDomeV2.Connected" /> to <see langword="false" /> does not report
+            <see cref="P:ASCOM.DeviceInterface.IDomeV2.Connected" /> as <see langword="false" />. This is not an error because the
+            physical state is that the hardware connection is still active.
+            </para>
+            <para>
+            The property is idempotent; writing to the property multiple times will not cause an
+            error.
+            </para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.Description">
             <summary>
-            Returns a description of the device, such as manufacturer and modelnumber. Any ASCII characters may be used.
+            Returns a description of the device, such as manufacturer and model number. Any ASCII
+            characters may be used.
             </summary>
             <value>The description.</value>
-            <exception cref="T:ASCOM.NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
-            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
-        </member>
-        <member name="P:ASCOM.DeviceInterface.IDomeV2.DriverInfo">
-            <summary>
-            Descriptive and version information about this ASCOM driver.
-            </summary>
+            <exception cref="T:ASCOM.NotConnectedException">
+            thrown If the device is not connected and this information
+            is only available when connected.
+            </exception>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
             <remarks>
-            <p style="color:red"><b>Must be implemented</b></p> This string may contain line endings and may be hundreds to thousands of characters long.
-            It is intended to display detailed information on the ASCOM driver, including version and copyright data.
-            See the <see cref="P:ASCOM.DeviceInterface.IDomeV2.Description" /> property for information on the device itself.
-            To get the driver version in a parseable string, use the <see cref="P:ASCOM.DeviceInterface.IDomeV2.DriverVersion" /> property.
+            <p style="color: red;"><b>Must be implemented.</b></p>
+            </remarks>
+        </member>
+        <member name="P:ASCOM.DeviceInterface.IDomeV2.DriverInfo">
+            <summary>Descriptive and version information about this ASCOM driver.</summary>
+            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
+            <remarks>
+            <p style="color:red"><b>Must be implemented</b></p>
+            <para>
+            This string may contain line endings and may be hundreds to thousands of characters long.
+            It is intended to display detailed information on the ASCOM driver, including version and
+            copyright data. See the <see cref="P:ASCOM.DeviceInterface.IDomeV2.Description" /> property for information on the device
+            itself. To get the driver version in a parseable string, use the
+            <see cref="P:ASCOM.DeviceInterface.IDomeV2.DriverVersion" /> property.
+            </para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.DriverVersion">
-            <summary>
-            A string containing only the major and minor version of the driver.
-            </summary>
-            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Must be implemented</b></p> This must be in the form "n.n".
-            It should not to be confused with the <see cref="P:ASCOM.DeviceInterface.IDomeV2.InterfaceVersion" /> property, which is the version of this specification supported by the
-            driver.
+            <summary>A string containing only the major and minor version of the driver.</summary>
+            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful.</exception>
+            <remarks>
+            <p style="color:red"><b>Must be implemented.</b></p>
+            <para>
+            This must be in the form "n.n". The major and minor versions are positive decimal integers
+            and are separated by a period. Drivers should <b>not</b> format this as a real number with
+            a decimal point. The driver version should not to be confused with the
+            <see cref="P:ASCOM.DeviceInterface.IDomeV2.InterfaceVersion" /> property, which is the version of this specification
+            supported by the driver.
+            </para>
+            <para>
+            Note: client applications should <b>NOT</b> treat this as a real number with a decimal
+            point, it is a string containing two integers with a separator character. Take care when
+            parsing this string, as a culture-sensitive parser may be confused by the period; Specify
+            <c>InvariantCulture</c> if necessary.
+            </para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.InterfaceVersion">
             <summary>
-            The interface version number that this device supports. Should return 2 for this interface version.
+            The interface version number that this device supports. Should return 2 for this interface
+            version.
             </summary>
-            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read ths property.
-            If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1.
-            In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
+            <remarks>
+            <p style="color:red"><b>Must be implemented.</b></p>
+            <para>
+            Clients can detect legacy V1 drivers by trying to read ths property. If the driver raises an
+            error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of
+            1. In other words, a raised error or a return value of 1 indicates that the driver is a V1
+            driver.</para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.Name">
-            <summary>
-            The short name of the driver, for display purposes
-            </summary>
+            <summary>The short name of the driver, for display purposes</summary>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
+            <remarks>
+            <p style="color:red"><b>Must be implemented.</b></p>
+            </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IDomeV2.SetupDialog">
             <summary>
-            Launches a configuration dialog box for the driver.  The call will not return
-            until the user clicks OK or cancel manually.
+            Launches a configuration dialog box for the driver.  The call will not return until the user
+            clicks OK or cancel manually.
             </summary>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
+            <remarks>
+            <p style="color:red"><b>Must be implemented.</b></p>
+            </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IDomeV2.Action(System.String,System.String)">
-            <summary>
-            Invokes the specified device-specific action.
-            </summary>
-            <param name="ActionName">
-            A well known name agreed by interested parties that represents the action to be carried out.
-            </param>
-            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.
-            </param>
+            <summary>Invokes the specified device-specific custom action.</summary>
+            <param name="ActionName">A well known name agreed by interested parties that represents the action to be carried out.</param>
+            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.</param>
             <returns>A string response. The meaning of returned strings is set by the driver author.</returns>
-            <exception cref="T:ASCOM.MethodNotImplementedException">Throws this exception if no actions are suported.</exception>
-            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the SupportedActions method will inform clients
-            of driver capabilities, but the driver must still throw an ASCOM.ActionNotImplemented exception if it is asked to
-            perform an action that it does not support.</exception>
+            <exception cref="T:ASCOM.MethodNotImplementedException">Thrown if no actions are supported.</exception>
+            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the <see cref="P:ASCOM.DeviceInterface.IDomeV2.SupportedActions"/> method will inform clients of driver capabilities, but the driver must still throw 
+            an <see cref="T:ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
             <exception cref="T:ASCOM.NotConnectedException">If the driver is not connected.</exception>
-            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <example>Suppose filter wheels start to appear with automatic wheel changers; new actions could
-            be “FilterWheel:QueryWheels” and “FilterWheel:SelectWheel”. The former returning a
-            formatted list of wheel names and the second taking a wheel name and making the change, returning appropriate
-            values to indicate success or failure.
-            </example>
-            <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p>
-            This method is intended for use in all current and future device types and to avoid name clashes, management of action names
-            is important from day 1. A two-part naming convention will be adopted - <b>DeviceType:UniqueActionName</b> where:
-            <list type="bullet">
-            <item><description>DeviceType is the same value as would be used by <see cref="P:ASCOM.Utilities.Chooser.DeviceType"/> e.g. Telescope, Camera, Switch etc.</description></item>
-            <item><description>UniqueActionName is a single word, or multiple words joined by underscore characters, that sensibly describes the action to be performed.</description></item>
-            </list>
-            <para>
-            It is recommended that UniqueActionNames should be a maximum of 16 characters for legibility.
-            Should the same function and UniqueActionName be supported by more than one type of device, the reserved DeviceType of
-            “General” will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel
-            and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
-            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.IDomeV2.SupportedActions"/> property.</para>
+            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful.</exception>
+            <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
+            of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
+            <remarks><p style="color:red"><b>Must be implemented.</b></p>
+            <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
+            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.IDomeV2.SupportedActions" /> property.</para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.SupportedActions">
-            <summary>
-            Returns the list of action names supported by this driver.
-            </summary>
+            <summary>Returns the list of custom action names supported by this driver.</summary>
             <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Must be implemented</b></p> This method must return an empty arraylist if no actions are supported. Please do not throw a
-            <see cref="T:ASCOM.PropertyNotImplementedException" />.
-            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities.
-            Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in
-            the <see cref="M:ASCOM.DeviceInterface.IDomeV2.Action(System.String,System.String)">Action</see> method.</para>
-            <para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
-            determine whether a particular action is supported. This is easily done through the Contains method. Since the
-            collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned
-            about hom many members are in the collection. </para>
-            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
-            the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
+            <remarks><p style="color:red"><b>Must be implemented</b></p>
+            <para>This method must return an empty <see cref="T:System.Collections.ArrayList" /> if no actions are supported. Do not throw a <see cref="T:ASCOM.PropertyNotImplementedException" />.</para>
+            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. Returned action names may be in mixed case to
+            enhance presentation but the <see cref="M:ASCOM.DeviceInterface.IDomeV2.Action(System.String,System.String)" /> method is case insensitive.</para>
+            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET, <see cref="T:System.Collections.ArrayList" /> is the correct
+            implementation to use because the .NET Generic methods are not compatible with COM.</para>
             </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IDomeV2.CommandBlind(System.String,System.Boolean)">
             <summary>
-            Transmits an arbitrary string to the device and does not wait for a response.
-            Optionally, protocol framing characters may be added to the string before transmission.
+            Transmits an arbitrary string to the device and does not wait for a response. Optionally,
+            protocol framing characters may be added to the string before transmission.
             </summary>
             <param name="Command">The literal command string to be transmitted.</param>
             <param name="Raw">
-            if set to <c>true</c> the string is transmitted 'as-is'.
-            If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+            if set to <see langword="true" /> the string is transmitted 'as-is'. If set to
+            <see langword="false" /> then protocol framing characters may be added prior to transmission.
             </param>
             <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
             <exception cref="T:ASCOM.NotConnectedException">If the driver is not connected.</exception>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> </remarks>
+            <remarks>
+            <p style="color:red">
+            <b>Can throw a not implemented exception</b>
+            </p>
+            </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IDomeV2.CommandBool(System.String,System.Boolean)">
             <summary>
-            Transmits an arbitrary string to the device and waits for a boolean response.
-            Optionally, protocol framing characters may be added to the string before transmission.
+            Transmits an arbitrary string to the device and waits for a boolean response. Optionally,
+            protocol framing characters may be added to the string before transmission.
             </summary>
             <param name="Command">The literal command string to be transmitted.</param>
             <param name="Raw">
-            if set to <c>true</c> the string is transmitted 'as-is'.
-            If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+            if set to <see langword="true" /> the string is transmitted 'as-is'. If set to
+            <see langword="false" /> then protocol framing characters may be added prior to transmission.
             </param>
-            <returns>
-            Returns the interpreted boolean response received from the device.
-            </returns>
+            <returns>Returns the interpreted boolean response received from the device.</returns>
             <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
             <exception cref="T:ASCOM.NotConnectedException">If the driver is not connected.</exception>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> </remarks>
+            <remarks>
+            <p style="color:red">
+            <b>Can throw a not implemented exception</b>
+            </p>
+            </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IDomeV2.CommandString(System.String,System.Boolean)">
             <summary>
-            Transmits an arbitrary string to the device and waits for a string response.
-            Optionally, protocol framing characters may be added to the string before transmission.
+            Transmits an arbitrary string to the device and waits for a string response. Optionally,
+            protocol framing characters may be added to the string before transmission.
             </summary>
             <param name="Command">The literal command string to be transmitted.</param>
             <param name="Raw">
-            if set to <c>true</c> the string is transmitted 'as-is'.
-            If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+            if set to <see langword="true" /> the string is transmitted 'as-is'. If set to
+            <see langword="false" /> then protocol framing characters may be added prior to transmission.
             </param>
-            <returns>
-            Returns the string response received from the device.
-            </returns>
+            <returns>Returns the string response received from the device.</returns>
             <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
             <exception cref="T:ASCOM.NotConnectedException">If the driver is not connected.</exception>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> </remarks>
+            <remarks>
+            <p style="color:red">
+            <b>Can throw a not implemented exception</b>
+            </p>
+            </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IDomeV2.Dispose">
             <summary>
-            Dispose the late-bound interface, if needed. Will release it via COM
-            if it is a COM object, else if native .NET will just dereference it
-            for GC.
+            Dispose the late-bound interface, if needed. Will release it via COM if it is a COM object,
+            else if native .NET will just dereference it for garbage collection.
             </summary>
+            <remarks>It is best practice to always call this method when finished with a driver instance.</remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IDomeV2.AbortSlew">
-            <summary>
-            Immediately cancel current dome operation.
-            </summary>
+            <summary>Immediately stops any and all movement.</summary>
             <remarks>
-            <p style="color:red"><b>Must be implemented, must not throw a MethodNotImplementedException.</b></p>
-            Calling this method will immediately disable hardware slewing (<see cref="P:ASCOM.DeviceInterface.IDomeV2.Slaved" /> will become False). Raises an error if a communications failure occurs, or if the command is known to have failed.
+            <p style="color:red">
+            <b>Must be implemented, must not throw a MethodNotImplementedException.</b>
+            </p>
+            Calling this method will immediately disable hardware slewing (<see cref="P:ASCOM.DeviceInterface.IDomeV2.Slaved" /> will
+            become <see langword="false" />). Raises an error if a communications failure occurs, or if the
+            command is known to have failed.
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.Altitude">
             <summary>
-            The dome altitude (degrees, horizon zero and increasing positive to 90 zenith).
+            The altitude (degrees, horizon zero and increasing positive to 90 zenith) of the part of the sky that the observer wishes to observe.
             </summary>
             <exception cref="T:ASCOM.PropertyNotImplementedException">If the property is not implemented</exception>
             <remarks>
-            Raises an error only if no altitude control. If actual dome altitude can not be read, then reports back the last slew position.
+            <para>
+            The specified altitude is the position on the sky that the observer wishes to observe. It is up to the driver to determine how best to locate the dome aperture in order to expose that part of the sky to the telescope.
+            This means that the mechanical position to which the Dome moves may not correspond exactly to requested observing altitude because the driver must coordinate
+            multiple shutters, clamshell segments or roof mechanisms to provide the required aperture on the sky.
+            </para>
+            <para>
+            Raises an error only if no altitude control. If actual dome altitude can not be read, then reports back the altitude of the last slew position.
+            </para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.AtHome">
             <summary>
-            Indicates whether the dome is in the home position. Raises an error if not supported.
+            <para><see langword="true" /> when the dome is in the home position. Raises an error if not supported.</para>
             <para>
-            This is normally used following a <see cref="M:ASCOM.DeviceInterface.IDomeV2.FindHome" /> operation. The value is reset with any azimuth slew operation that moves the dome away from the home position.
+            This is normally used following a <see cref="M:ASCOM.DeviceInterface.IDomeV2.FindHome" /> operation. The value is reset
+            with any azimuth slew operation that moves the dome away from the home position.
             </para>
             <para>
-            <see cref="P:ASCOM.DeviceInterface.IDomeV2.AtHome" /> may also become true durng normal slew operations, if the dome passes through the home position and the dome controller hardware is capable of detecting that;
-            or at the end of a slew operation if the dome comes to rest at the home position.
+            <see cref="P:ASCOM.DeviceInterface.IDomeV2.AtHome" /> may optionally also become true during normal slew operations, if the
+            dome passes through the home position and the dome controller hardware is capable of
+            detecting that; or at the end of a slew operation if the dome comes to rest at the home
+            position.
             </para>
             </summary>
             <exception cref="T:ASCOM.PropertyNotImplementedException">If the property is not implemented</exception>
             <remarks>
-            <para>The home position is normally defined by a hardware sensor positioned around the dome circumference and represents a fixed, known azimuth reference.</para>
-            <para>For some devices, the home position may represent a small range of azimuth values, rather than a discrete value, since dome inertia, the resolution of the home position sensor and/or the azimuth encoder may be
-            insufficient to return the exact same azimuth value on each occasion. Some dome controllers, on the other hand, will always force the azimuth reading to a fixed value whenever the home position sensor is active.
-            Because of these potential differences in behaviour, applications should not rely on the reported azimuth position being identical each time <see cref="P:ASCOM.DeviceInterface.IDomeV2.AtHome" /> is set <c>true</c>.</para>
+            <para>
+            The home position is normally defined by a hardware sensor positioned around the dome circumference and represents a fixed, known azimuth reference.
+            </para>
+            <para>
+            Applications should not rely on the reported azimuth position being identical each time <see cref="P:ASCOM.DeviceInterface.IDomeV2.AtHome" /> is set <see langword="true" />.
+            For some devices, the home position may encompass a small range of azimuth values, rather than a discrete value, since dome inertia, the resolution of the home position sensor
+            and/or the azimuth encoder may be insufficient to return the exact same azimuth value on each occasion. On the other hand some dome controllers always force the azimuth
+            reading to a fixed value whenever the home position sensor is active.
+            </para>
             </remarks>
-            [ASCOM-135] TPL - Updated documentation
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.AtPark">
-            <summary>
-            True if the dome is in the programmed park position.
-            </summary>
+            <summary><see langword="true" /> if the dome is in the programmed park position.</summary>
             <exception cref="T:ASCOM.PropertyNotImplementedException">If the property is not implemented</exception>
             <remarks>
+            <para>
             Set only following a <see cref="M:ASCOM.DeviceInterface.IDomeV2.Park" /> operation and reset with any slew operation. Raises an error if not supported.
+            </para>
+            <para>
+            Applications should not rely on the reported azimuth position being identical each time <see cref="P:ASCOM.DeviceInterface.IDomeV2.AtPark" /> is set <see langword="true" />.
+            For some devices, the park position may encompass a small range of azimuth values, rather than a discrete value, since dome inertia, the resolution of the park position sensor
+            and/or the azimuth encoder may be insufficient to return the exact same azimuth value on each occasion. On the other hand some dome controllers always force the azimuth
+            reading to a fixed value whenever the park position sensor is active.
+            </para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.Azimuth">
             <summary>
-            The dome azimuth (degrees, North zero and increasing clockwise, i.e., 90 East, 180 South, 270 West)
+            The dome azimuth (degrees, North zero and increasing clockwise, i.e., 90 East, 180 South, 270 West). North is true north and not magnetic north.
             </summary>
             <exception cref="T:ASCOM.PropertyNotImplementedException">If the property is not implemented</exception>
-            <remarks>Raises an error only if no azimuth control. If actual dome azimuth can not be read, then reports back last slew position</remarks>
+            <remarks>
+            <para>
+            The specified azimuth is the position on the sky that the observer wishes to observe. It is up to the driver to determine how best to locate the dome in order to expose that part of the sky to the telescope.
+            This means that the mechanical position to which the Dome moves may not correspond exactly to requested observing azimuth because the driver must coordinate
+            multiple shutters, clamshell segments or roof mechanisms to provide the required aperture on the sky.
+            </para>
+            <para>
+            Raises an error only if no azimuth control. If actual dome azimuth can not be read, then reports back the azimuth of the last slew position.
+            </para>
+            </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.CanFindHome">
-            <summary>
-            True if driver can do a search for home position.
-            </summary>
+            <summary><see langword="true" /> if driver can perform a search for home position.</summary>
             <remarks>
-            <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+            <p style="color:red">
+            <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
+            </p>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.CanPark">
-            <summary>
-            True if driver is capable of setting dome altitude.
-            </summary>
+            <summary><see langword="true" /> if the driver is capable of parking the dome.</summary>
             <remarks>
-            <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+            <p style="color:red">
+            <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
+            </p>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.CanSetAltitude">
-            <summary>
-            True if driver is capable of setting dome altitude.
-            </summary>
+            <summary><see langword="true" /> if driver is capable of setting dome altitude.</summary>
             <remarks>
-            <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+            <p style="color:red">
+            <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
+            </p>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.CanSetAzimuth">
             <summary>
-            True if driver is capable of setting dome azimuth.
+            <see langword="true" /> if driver is capable of rotating the dome (or controlling the roof
+            mechanism) in order to observe at a given azimuth.
             </summary>
             <remarks>
-            <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+            <p style="color:red">
+            <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
+            </p>
+            <para>
+            This property typically returns <see langword="true" /> for rotating structures and <see langword="false" /> for non-rotating structures.
+            </para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.CanSetPark">
-            <summary>
-            True if driver can set the dome park position.
-            </summary>
+            <summary><see langword="true" /> if the driver can set the dome park position.</summary>
             <remarks>
-            <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+            <p style="color:red">
+            <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
+            </p>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.CanSetShutter">
             <summary>
-            True if driver is capable of automatically operating shutter.
+            <see langword="true" /> if the driver is capable of opening and closing the shutter or roof
+            mechanism.
             </summary>
             <remarks>
-            <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+            <p style="color:red">
+            <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
+            </p>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.CanSlave">
-            <summary>
-            True if the dome hardware supports slaving to a telescope.
-            </summary>
+            <summary><see langword="true" /> if the dome hardware supports slaving to a telescope.</summary>
             <remarks>
-            <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-            See the notes for the <see cref="P:ASCOM.DeviceInterface.IDomeV2.Slaved" /> property.
+            <p style="color:red">
+            <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
+            </p>
+            <para>
+            See the notes for the <see cref="P:ASCOM.DeviceInterface.IDomeV2.Slaved" /> property. This should only be <see langword="true" /> if the dome hardware has its own built-in slaving mechanism. 
+            It is not permitted for a dome driver to query a telescope driver directly.
+            </para>
             </remarks>
+            <seealso cref="P:ASCOM.DeviceInterface.IDomeV2.Slaved" />
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.CanSyncAzimuth">
             <summary>
-            True if driver is capable of synchronizing the dome azimuth position using the <see cref="M:ASCOM.DeviceInterface.IDomeV2.SyncToAzimuth(System.Double)" /> method.
+            <see langword="true" /> if the driver is capable of synchronizing the dome azimuth position
+            using the <see cref="M:ASCOM.DeviceInterface.IDomeV2.SyncToAzimuth(System.Double)" /> method.
             </summary>
             <remarks>
-            <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+            <p style="color:red">
+            <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
+            </p>
             </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IDomeV2.CloseShutter">
-            <summary>
-            Close shutter or otherwise shield telescope from the sky.
-            </summary>
+            <summary>Close the shutter or otherwise shield the telescope from the sky.</summary>
             <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
         </member>
         <member name="M:ASCOM.DeviceInterface.IDomeV2.FindHome">
-            <summary>
-            Start operation to search for the dome home position.
-            </summary>
+            <summary>Start operation to search for the dome home position.</summary>
             <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
+            <exception cref="T:ASCOM.DriverException">Must throw an exception if the operation cannot be started.</exception>
+            <exception cref="T:ASCOM.SlavedException">Thrown if slaving is enabled.</exception>
             <remarks>
-            After Home position is established initializes <see cref="P:ASCOM.DeviceInterface.IDomeV2.Azimuth" /> to the default value and sets the <see cref="P:ASCOM.DeviceInterface.IDomeV2.AtHome" /> flag.
-            Exception if not supported or communications failure. Raises an error if <see cref="P:ASCOM.DeviceInterface.IDomeV2.Slaved" /> is True.
+            The method should not block and the homing operation should complete asynchronously. After the
+            home position is established, <see cref="P:ASCOM.DeviceInterface.IDomeV2.Azimuth" /> is synchronized to the appropriate value
+            and the <see cref="P:ASCOM.DeviceInterface.IDomeV2.AtHome" /> property becomes <see langword="true" />.
             </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IDomeV2.OpenShutter">
-            <summary>
-            Open shutter or otherwise expose telescope to the sky.
-            </summary>
+            <summary>Open shutter or otherwise expose telescope to the sky.</summary>
             <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
-            <remarks>
-            Raises an error if not supported or if a communications failure occurs.
-            </remarks>
+            <exception cref="T:ASCOM.DriverException">Must throw an exception if the operation cannot be started.</exception>
+            <remarks>Raises an error if not supported or if a communications failure occurs.</remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IDomeV2.Park">
-            <summary>
-            Rotate dome in azimuth to park position.
-            </summary>
+            <summary>Rotate dome in azimuth to park position.</summary>
             <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
             <remarks>
-            After assuming programmed park position, sets <see cref="P:ASCOM.DeviceInterface.IDomeV2.AtPark" /> flag. Raises an error if <see cref="P:ASCOM.DeviceInterface.IDomeV2.Slaved" /> is True, or if not supported, or if a communications failure has occurred.
+            After assuming the programmed park position, sets the <see cref="P:ASCOM.DeviceInterface.IDomeV2.AtPark" /> flag. Raises an error if <see cref="P:ASCOM.DeviceInterface.IDomeV2.Slaved" /> is <see langword="true" />, if not supported 
+            or if a communications failure occurred.
             </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IDomeV2.SetPark">
-            <summary>
-            Set the current azimuth, altitude position of dome to be the park position.
-            </summary>
+            <summary>Set the current azimuth position of dome to the park position.</summary>
             <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
-            <remarks>
-            Raises an error if not supported or if a communications failure occurs.
-            </remarks>
+            <exception cref="T:ASCOM.DriverException">Must throw an exception if the operation cannot be completed.</exception>
+            <remarks>Raises an error if not supported or if a communications failure occurs.</remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.ShutterStatus">
-            <summary>
-            Status of the dome shutter or roll-off roof.
-            </summary>
+            <summary>Gets the status of the dome shutter or roof structure.</summary>
             <exception cref="T:ASCOM.PropertyNotImplementedException">If the property is not implemented</exception>
             <remarks>
-            Raises an error only if no shutter control. If actual shutter status can not be read, then reports back the last shutter state.
+            Raises an error only if no shutter control. If actual shutter status can not be read, then
+            reports back the last shutter state.
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.Slaved">
-            <summary>
-            True if the dome is slaved to the telescope in its hardware, else False.
-            </summary>
+            <summary><see langword="true"/> if the dome is slaved to the telescope in its hardware, else <see langword="false"/>.</summary>
+            <exception cref="T:ASCOM.PropertyNotImplementedException">If Slaved can not be set.</exception>
             <remarks>
-            <p style="color:red;margin-bottom:0"><b>Slaved Read must be implemented and must not throw a PropertyNotImplementedException. </b></p>
-            <p style="color:red;margin-top:0"><b>Slaved Write can throw a PropertyNotImplementedException.</b></p>
-            Set this property to True to enable dome-telescope hardware slaving, if supported (see <see cref="P:ASCOM.DeviceInterface.IDomeV2.CanSlave" />). Raises an exception on any attempt to set
-            this property if hardware slaving is not supported). Always returns False if hardware slaving is not supported.
+            <p style="color:red;margin-bottom:0">
+            <b>Slaved Read must be implemented and must not throw a PropertyNotImplementedException. </b>
+            </p>
+            <p style="color:red;margin-top:0">
+            <b>Slaved Write can throw a PropertyNotImplementedException.</b>
+            </p>
+            Set this property to <see langword="true"/> to enable dome-telescope hardware slaving, if supported (see
+            <see cref="P:ASCOM.DeviceInterface.IDomeV2.CanSlave" />). Raises an exception on any attempt to set this property if hardware
+            slaving is not supported). Always returns <see langword="false"/> if hardware slaving is not supported.
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IDomeV2.Slewing">
             <summary>
-            True if any part of the dome is currently moving, False if all dome components are steady.
+            <see langword="true" /> if any part of the dome is currently moving, <see langword="false" />
+            if all dome components are stationary.
             </summary>
             <remarks>
-            <p style="color:red;margin-bottom:0"><b>Slewing must be implemented and must not throw a PropertyNotImplementedException. </b></p>
-            Raises an error if <see cref="P:ASCOM.DeviceInterface.IDomeV2.Slaved" /> is True, if not supported, if a communications failure occurs, or if the dome can not reach indicated azimuth.
+            <p style="color:red;margin-bottom:0">
+            <b>Slewing must be implemented and must not throw a PropertyNotImplementedException. </b>
+            </p>
             </remarks>
+            <exception cref="T:ASCOM.DriverException">
+            Must raise an error if <see cref="P:ASCOM.DeviceInterface.IDomeV2.Slaved" /> is <see langword="true" />, if not supported, if a
+            communications failure occurs, or if the dome can not reach the requested azimuth.
+            </exception>
         </member>
         <member name="M:ASCOM.DeviceInterface.IDomeV2.SlewToAltitude(System.Double)">
-            <summary>
-            Slew the dome to the given altitude position.
-            </summary>
+            <summary>Ensure that the requested viewing altitude is available for observing.</summary>
             <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
-            <exception cref="T:ASCOM.InvalidValueException">If the supplied altitude is outside the range 0..90 degrees.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">If the supplied altitude is out of range.</exception>
+            <exception cref="T:ASCOM.DriverException"> Must raise an error if <see cref="P:ASCOM.DeviceInterface.IDomeV2.Slaved" /> is <see langword="true" />, if not supported, if a communications failure occurs or if the dome can not reach indicated altitude.</exception>
+            <param name="Altitude">
+            The desired viewing altitude (degrees, horizon zero and increasing positive to 90 degrees at the zenith)
+            </param>
             <remarks>
-            Raises an error if <see cref="P:ASCOM.DeviceInterface.IDomeV2.Slaved" /> is True, if not supported, if a communications failure occurs, or if the dome can not reach indicated altitude.
+            The requested altitude should be interpreted by the driver as the position on the sky that the observer wishes to observe. The driver has detailed knowledge of the physical structure and
+            must coordinate shutters, roofs or clamshell segments to open an aperture on the sky that satisfies the observer's request.
             </remarks>
-            <param name="Altitude">Target dome altitude (degrees, horizon zero and increasing positive to 90 zenith)</param>
         </member>
         <member name="M:ASCOM.DeviceInterface.IDomeV2.SlewToAzimuth(System.Double)">
             <summary>
-            Slew the dome to the given azimuth position.
+            Ensure that the requested viewing azimuth is available for observing.
+            The method should not block and the slew operation should complete asynchronously.
             </summary>
             <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
-            <exception cref="T:ASCOM.InvalidValueException">If the supplied azimuth is outside the range 0..360 degrees.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">
+            thrown if the requested azimuth is greater than or equal to 360 or less than 0.
+            </exception>
+            <exception cref="T:ASCOM.SlavedException">Thrown if <see cref="P:ASCOM.DeviceInterface.IDomeV2.Slaved" /> is <see langword="true" /></exception>
+            <exception cref="T:ASCOM.DriverException">
+            Must raise an error if the operation cannot be started.
+            </exception>
+            <param name="Azimuth">
+            Desired viewing azimuth (degrees, North zero and increasing clockwise. i.e., 90 East,
+            180 South, 270 West)
+            </param>
             <remarks>
-            Raises an error if <see cref="P:ASCOM.DeviceInterface.IDomeV2.Slaved" /> is True, if not supported, if a communications failure occurs, or if the dome can not reach indicated azimuth.
+            The requested azimuth should be interpreted by the driver as the position on the sky that the observer wishes to observe. The driver has detailed knowledge of the physical structure and
+            must coordinate shutters, roofs or clamshell segments to open an aperture on the sky that satisfies the observer's request.
             </remarks>
-            <param name="Azimuth">Target azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)</param>
         </member>
         <member name="M:ASCOM.DeviceInterface.IDomeV2.SyncToAzimuth(System.Double)">
-            <summary>
-            Synchronize the current position of the dome to the given azimuth.
-            </summary>
+            <summary>Synchronize the current position of the dome to the given azimuth.</summary>
             <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
-            <exception cref="T:ASCOM.InvalidValueException">If the supplied azimuth is outside the range 0..360 degrees.</exception>
-            <remarks>
-            Raises an error if not supported or if a communications failure occurs.
-            </remarks>
-            <param name="Azimuth">Target azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)</param>
+            <exception cref="T:ASCOM.InvalidValueException">
+            If the supplied azimuth is outside the range 0..360
+            degrees.
+            </exception>
+            <exception cref="T:ASCOM.DriverException">Must raise an error if the operation cannot be completed.</exception>
+            <param name="Azimuth">
+            Target azimuth (degrees, North zero and increasing clockwise. i.e., 90 East,
+            180 South, 270 West)
+            </param>
         </member>
         <member name="T:ASCOM.DeviceInterface.IFilterWheelV2">
             <summary>
@@ -2864,58 +2919,32 @@
             <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IFilterWheelV2.Action(System.String,System.String)">
-            <summary>
-            Invokes the specified device-specific action.
-            </summary>
-            <param name="ActionName">
-            A well known name agreed by interested parties that represents the action to be carried out.
-            </param>
-            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.
-            </param>
+            <summary>Invokes the specified device-specific custom action.</summary>
+            <param name="ActionName">A well known name agreed by interested parties that represents the action to be carried out.</param>
+            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.</param>
             <returns>A string response. The meaning of returned strings is set by the driver author.</returns>
-            <exception cref="T:ASCOM.MethodNotImplementedException">Throws this exception if no actions are suported.</exception>
-            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the SupportedActions method will inform clients
-            of driver capabilities, but the driver must still throw an ASCOM.ActionNotImplemented exception if it is asked to
-            perform an action that it does not support.</exception>
+            <exception cref="T:ASCOM.MethodNotImplementedException">Thrown if no actions are supported.</exception>
+            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the <see cref="P:ASCOM.DeviceInterface.IFilterWheelV2.SupportedActions"/> method will inform clients of driver capabilities, but the driver must still throw 
+            an <see cref="T:ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
             <exception cref="T:ASCOM.NotConnectedException">If the driver is not connected.</exception>
-            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <example>Suppose filter wheels start to appear with automatic wheel changers; new actions could
-            be “FilterWheel:QueryWheels” and “FilterWheel:SelectWheel”. The former returning a
-            formatted list of wheel names and the second taking a wheel name and making the change, returning appropriate
-            values to indicate success or failure.
-            </example>
-            <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p>
-            This method is intended for use in all current and future device types and to avoid name clashes, management of action names
-            is important from day 1. A two-part naming convention will be adopted - <b>DeviceType:UniqueActionName</b> where:
-            <list type="bullet">
-            <item><description>DeviceType is the same value as would be used by <see cref="P:ASCOM.Utilities.Chooser.DeviceType"/> e.g. Telescope, Camera, Switch etc.</description></item>
-            <item><description>UniqueActionName is a single word, or multiple words joined by underscore characters, that sensibly describes the action to be performed.</description></item>
-            </list>
-            <para>
-            It is recommended that UniqueActionNames should be a maximum of 16 characters for legibility.
-            Should the same function and UniqueActionName be supported by more than one type of device, the reserved DeviceType of
-            “General” will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel
-            and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
-            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.IFilterWheelV2.SupportedActions"/> property.</para>
+            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful.</exception>
+            <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
+            of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
+            <remarks><p style="color:red"><b>Must be implemented.</b></p>
+            <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
+            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.IFilterWheelV2.SupportedActions" /> property.</para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IFilterWheelV2.SupportedActions">
-            <summary>
-            Returns the list of action names supported by this driver.
-            </summary>
+            <summary>Returns the list of custom action names supported by this driver.</summary>
             <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Must be implemented</b></p> This method must return an empty arraylist if no actions are supported. Please do not throw a
-            <see cref="T:ASCOM.PropertyNotImplementedException" />.
-            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities.
-            Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in
-            the <see cref="M:ASCOM.DeviceInterface.IFilterWheelV2.Action(System.String,System.String)">Action</see> method.</para>
-            <para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
-            determine whether a particular action is supported. This is easily done through the Contains method. Since the
-            collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned
-            about hom many members are in the collection. </para>
-            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
-            the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
+            <remarks><p style="color:red"><b>Must be implemented</b></p>
+            <para>This method must return an empty <see cref="T:System.Collections.ArrayList" /> if no actions are supported. Do not throw a <see cref="T:ASCOM.PropertyNotImplementedException" />.</para>
+            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. Returned action names may be in mixed case to
+            enhance presentation but the <see cref="M:ASCOM.DeviceInterface.IFilterWheelV2.Action(System.String,System.String)" /> method is case insensitive.</para>
+            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET, <see cref="T:System.Collections.ArrayList" /> is the correct
+            implementation to use because the .NET Generic methods are not compatible with COM.</para>
             </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IFilterWheelV2.CommandBlind(System.String,System.Boolean)">
@@ -3094,58 +3123,32 @@
             <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IFocuserV2.Action(System.String,System.String)">
-            <summary>
-            Invokes the specified device-specific action.
-            </summary>
-            <param name="ActionName">
-            A well known name agreed by interested parties that represents the action to be carried out.
-            </param>
-            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.
-            </param>
+            <summary>Invokes the specified device-specific custom action.</summary>
+            <param name="ActionName">A well known name agreed by interested parties that represents the action to be carried out.</param>
+            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.</param>
             <returns>A string response. The meaning of returned strings is set by the driver author.</returns>
-            <exception cref="T:ASCOM.MethodNotImplementedException">Throws this exception if no actions are suported.</exception>
-            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the SupportedActions method will inform clients
-            of driver capabilities, but the driver must still throw an ASCOM.ActionNotImplemented exception if it is asked to
-            perform an action that it does not support.</exception>
+            <exception cref="T:ASCOM.MethodNotImplementedException">Thrown if no actions are supported.</exception>
+            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the <see cref="P:ASCOM.DeviceInterface.IFocuserV2.SupportedActions"/> method will inform clients of driver capabilities, but the driver must still throw 
+            an <see cref="T:ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
             <exception cref="T:ASCOM.NotConnectedException">If the driver is not connected.</exception>
-            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <example>Suppose filter wheels start to appear with automatic wheel changers; new actions could
-            be “FilterWheel:QueryWheels” and “FilterWheel:SelectWheel”. The former returning a
-            formatted list of wheel names and the second taking a wheel name and making the change, returning appropriate
-            values to indicate success or failure.
-            </example>
-            <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p>
-            This method is intended for use in all current and future device types and to avoid name clashes, management of action names
-            is important from day 1. A two-part naming convention will be adopted - <b>DeviceType:UniqueActionName</b> where:
-            <list type="bullet">
-            <item><description>DeviceType is the same value as would be used by <see cref="P:ASCOM.Utilities.Chooser.DeviceType"/> e.g. Telescope, Camera, Switch etc.</description></item>
-            <item><description>UniqueActionName is a single word, or multiple words joined by underscore characters, that sensibly describes the action to be performed.</description></item>
-            </list>
-            <para>
-            It is recommended that UniqueActionNames should be a maximum of 16 characters for legibility.
-            Should the same function and UniqueActionName be supported by more than one type of device, the reserved DeviceType of
-            “General” will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel
-            and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
-            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.IFocuserV2.SupportedActions"/> property.</para>
+            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful.</exception>
+            <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
+            of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
+            <remarks><p style="color:red"><b>Must be implemented.</b></p>
+            <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
+            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.IFocuserV2.SupportedActions" /> property.</para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IFocuserV2.SupportedActions">
-            <summary>
-            Returns the list of action names supported by this driver.
-            </summary>
+            <summary>Returns the list of custom action names supported by this driver.</summary>
             <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Must be implemented</b></p> This method must return an empty arraylist if no actions are supported. Please do not throw a
-            <see cref="T:ASCOM.PropertyNotImplementedException" />.
-            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities.
-            Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in
-            the <see cref="M:ASCOM.DeviceInterface.IFocuserV2.Action(System.String,System.String)">Action</see> method.</para>
-            <para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
-            determine whether a particular action is supported. This is easily done through the Contains method. Since the
-            collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned
-            about hom many members are in the collection. </para>
-            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
-            the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
+            <remarks><p style="color:red"><b>Must be implemented</b></p>
+            <para>This method must return an empty <see cref="T:System.Collections.ArrayList" /> if no actions are supported. Do not throw a <see cref="T:ASCOM.PropertyNotImplementedException" />.</para>
+            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. Returned action names may be in mixed case to
+            enhance presentation but the <see cref="M:ASCOM.DeviceInterface.IFocuserV2.Action(System.String,System.String)" /> method is case insensitive.</para>
+            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET, <see cref="T:System.Collections.ArrayList" /> is the correct
+            implementation to use because the .NET Generic methods are not compatible with COM.</para>
             </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IFocuserV2.CommandBlind(System.String,System.Boolean)">
@@ -3438,58 +3441,32 @@
             <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IFocuserV3.Action(System.String,System.String)">
-            <summary>
-            Invokes the specified device-specific action.
-            </summary>
-            <param name="ActionName">
-            A well known name agreed by interested parties that represents the action to be carried out.
-            </param>
-            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.
-            </param>
+            <summary>Invokes the specified device-specific custom action.</summary>
+            <param name="ActionName">A well known name agreed by interested parties that represents the action to be carried out.</param>
+            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.</param>
             <returns>A string response. The meaning of returned strings is set by the driver author.</returns>
-            <exception cref="T:ASCOM.MethodNotImplementedException">Throws this exception if no actions are suported.</exception>
-            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the SupportedActions method will inform clients
-            of driver capabilities, but the driver must still throw an ASCOM.ActionNotImplemented exception if it is asked to
-            perform an action that it does not support.</exception>
+            <exception cref="T:ASCOM.MethodNotImplementedException">Thrown if no actions are supported.</exception>
+            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the <see cref="P:ASCOM.DeviceInterface.IFocuserV3.SupportedActions"/> method will inform clients of driver capabilities, but the driver must still throw 
+            an <see cref="T:ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
             <exception cref="T:ASCOM.NotConnectedException">If the driver is not connected.</exception>
-            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <example>Suppose filter wheels start to appear with automatic wheel changers; new actions could
-            be “FilterWheel:QueryWheels” and “FilterWheel:SelectWheel”. The former returning a
-            formatted list of wheel names and the second taking a wheel name and making the change, returning appropriate
-            values to indicate success or failure.
-            </example>
-            <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p>
-            This method is intended for use in all current and future device types and to avoid name clashes, management of action names
-            is important from day 1. A two-part naming convention will be adopted - <b>DeviceType:UniqueActionName</b> where:
-            <list type="bullet">
-            <item><description>DeviceType is the same value as would be used by <see cref="P:ASCOM.Utilities.Chooser.DeviceType"/> e.g. Telescope, Camera, Switch etc.</description></item>
-            <item><description>UniqueActionName is a single word, or multiple words joined by underscore characters, that sensibly describes the action to be performed.</description></item>
-            </list>
-            <para>
-            It is recommended that UniqueActionNames should be a maximum of 16 characters for legibility.
-            Should the same function and UniqueActionName be supported by more than one type of device, the reserved DeviceType of
-            “General” will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel
-            and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
-            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.IFocuserV3.SupportedActions"/> property.</para>
+            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful.</exception>
+            <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
+            of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
+            <remarks><p style="color:red"><b>Must be implemented.</b></p>
+            <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
+            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.IFocuserV3.SupportedActions" /> property.</para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IFocuserV3.SupportedActions">
-            <summary>
-            Returns the list of action names supported by this driver.
-            </summary>
+            <summary>Returns the list of custom action names supported by this driver.</summary>
             <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Must be implemented</b></p> This method must return an empty arraylist if no actions are supported. Please do not throw a
-            <see cref="T:ASCOM.PropertyNotImplementedException" />.
-            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities.
-            Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in
-            the <see cref="M:ASCOM.DeviceInterface.IFocuserV3.Action(System.String,System.String)">Action</see> method.</para>
-            <para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
-            determine whether a particular action is supported. This is easily done through the Contains method. Since the
-            collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned
-            about hom many members are in the collection. </para>
-            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
-            the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
+            <remarks><p style="color:red"><b>Must be implemented</b></p>
+            <para>This method must return an empty <see cref="T:System.Collections.ArrayList" /> if no actions are supported. Do not throw a <see cref="T:ASCOM.PropertyNotImplementedException" />.</para>
+            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. Returned action names may be in mixed case to
+            enhance presentation but the <see cref="M:ASCOM.DeviceInterface.IFocuserV3.Action(System.String,System.String)" /> method is case insensitive.</para>
+            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET, <see cref="T:System.Collections.ArrayList" /> is the correct
+            implementation to use because the .NET Generic methods are not compatible with COM.</para>
             </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IFocuserV3.CommandBlind(System.String,System.Boolean)">
@@ -3790,68 +3767,32 @@
             <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IObservingConditions.Action(System.String,System.String)">
-            <summary>
-            Invokes the specified device-specific action.
-            </summary>
-            <param name="ActionName">
-            A well known name agreed by interested parties that represents the action to be carried out.
-            </param>
-            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.
-            </param>
+            <summary>Invokes the specified device-specific custom action.</summary>
+            <param name="ActionName">A well known name agreed by interested parties that represents the action to be carried out.</param>
+            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.</param>
             <returns>A string response. The meaning of returned strings is set by the driver author.</returns>
-            <exception cref="T:ASCOM.MethodNotImplementedException">Throws this exception if no actions are suported.</exception>
-            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the SupportedActions method will inform clients
-            of driver capabilities, but the driver must still throw an ASCOM.ActionNotImplemented exception if it is asked to
-            perform an action that it does not support.</exception>
+            <exception cref="T:ASCOM.MethodNotImplementedException">Thrown if no actions are supported.</exception>
+            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the <see cref="P:ASCOM.DeviceInterface.IObservingConditions.SupportedActions"/> method will inform clients of driver capabilities, but the driver must still throw 
+            an <see cref="T:ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
             <exception cref="T:ASCOM.NotConnectedException">If the driver is not connected.</exception>
-            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <example>Suppose filter wheels start to appear with automatic wheel changers; new actions could
-            be “FilterWheel:QueryWheels” and “FilterWheel:SelectWheel”. The former returning a
-            formatted list of wheel names and the second taking a wheel name and making the change, returning appropriate
-            values to indicate success or failure.
-            </example>
-            <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p>
-            This method is intended for use in all current and future device types and to avoid name clashes, management of action names
-            is important from day 1. A two-part naming convention will be adopted - <b>DeviceType:UniqueActionName</b> where:
-            <list type="bullet">
-            <item><description>DeviceType is the same value as would be used by <see cref="P:ASCOM.Utilities.Chooser.DeviceType"/> e.g. Telescope, Camera, Switch etc.</description></item>
-            <item><description>UniqueActionName is a single word, or multiple words joined by underscore characters, that sensibly describes the action to be performed.</description></item>
-            </list>
-            <para>
-            It is recommended that UniqueActionNames should be a maximum of 16 characters for legibility.
-            Should the same function and UniqueActionName be supported by more than one type of device, the reserved DeviceType of
-            “General” will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel
-            and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
-            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.IObservingConditions.SupportedActions"/> property.</para>
-            <para>For ObservingConditions drivers the following conventions are recommended:
-            <list type="bullet">
-            <item>The "ActionName" should be the name of a sensor in a form that makes sense to the user.
-            This must not be changed in the driver.</item>
-            <item>The "ActionParameter" should be "Value" to return the sensor value and
-            "Description" to return the sensor description.
-            The description must return a valid description, even if not connected.</item>
-            </list>
-            </para>
+            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful.</exception>
+            <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
+            of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
+            <remarks><p style="color:red"><b>Must be implemented.</b></p>
+            <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
+            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.IObservingConditions.SupportedActions" /> property.</para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IObservingConditions.SupportedActions">
-            <summary>
-            Returns the list of action names supported by this driver.
-            </summary>
+            <summary>Returns the list of custom action names supported by this driver.</summary>
             <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Must be implemented</b></p> This method must return an empty arraylist if no actions are supported. Please do not throw a
-            <see cref="T:ASCOM.PropertyNotImplementedException" />.
-            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities.
-            Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in
-            the <see cref="M:ASCOM.DeviceInterface.IObservingConditions.Action(System.String,System.String)">Action</see> method.</para>
-            <para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
-            determine whether a particular action is supported. This is easily done through the Contains method. Since the
-            collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned
-            about hom many members are in the collection. </para>
-            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
-            the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
-            <para>See <see cref="M:ASCOM.DeviceInterface.IObservingConditions.Action(System.String,System.String)">Action</see> for advice on how th implement this for ObservingConditions drivers.</para>
+            <remarks><p style="color:red"><b>Must be implemented</b></p>
+            <para>This method must return an empty <see cref="T:System.Collections.ArrayList" /> if no actions are supported. Do not throw a <see cref="T:ASCOM.PropertyNotImplementedException" />.</para>
+            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. Returned action names may be in mixed case to
+            enhance presentation but the <see cref="M:ASCOM.DeviceInterface.IObservingConditions.Action(System.String,System.String)" /> method is case insensitive.</para>
+            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET, <see cref="T:System.Collections.ArrayList" /> is the correct
+            implementation to use because the .NET Generic methods are not compatible with COM.</para>
             </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IObservingConditions.CommandBlind(System.String,System.Boolean)">
@@ -4423,58 +4364,32 @@
             <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IRotatorV2.Action(System.String,System.String)">
-            <summary>
-            Invokes the specified device-specific action.
-            </summary>
-            <param name="ActionName">
-            A well known name agreed by interested parties that represents the action to be carried out.
-            </param>
-            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.
-            </param>
+            <summary>Invokes the specified device-specific custom action.</summary>
+            <param name="ActionName">A well known name agreed by interested parties that represents the action to be carried out.</param>
+            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.</param>
             <returns>A string response. The meaning of returned strings is set by the driver author.</returns>
-            <exception cref="T:ASCOM.MethodNotImplementedException">Throws this exception if no actions are suported.</exception>
-            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the SupportedActions method will inform clients
-            of driver capabilities, but the driver must still throw an ASCOM.ActionNotImplemented exception if it is asked to
-            perform an action that it does not support.</exception>
+            <exception cref="T:ASCOM.MethodNotImplementedException">Thrown if no actions are supported.</exception>
+            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the <see cref="P:ASCOM.DeviceInterface.IRotatorV2.SupportedActions"/> method will inform clients of driver capabilities, but the driver must still throw 
+            an <see cref="T:ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
             <exception cref="T:ASCOM.NotConnectedException">If the driver is not connected.</exception>
-            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <example>Suppose filter wheels start to appear with automatic wheel changers; new actions could
-            be “FilterWheel:QueryWheels” and “FilterWheel:SelectWheel”. The former returning a
-            formatted list of wheel names and the second taking a wheel name and making the change, returning appropriate
-            values to indicate success or failure.
-            </example>
-            <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p>
-            This method is intended for use in all current and future device types and to avoid name clashes, management of action names
-            is important from day 1. A two-part naming convention will be adopted - <b>DeviceType:UniqueActionName</b> where:
-            <list type="bullet">
-            <item><description>DeviceType is the same value as would be used by <see cref="P:ASCOM.Utilities.Chooser.DeviceType"/> e.g. Telescope, Camera, Switch etc.</description></item>
-            <item><description>UniqueActionName is a single word, or multiple words joined by underscore characters, that sensibly describes the action to be performed.</description></item>
-            </list>
-            <para>
-            It is recommended that UniqueActionNames should be a maximum of 16 characters for legibility.
-            Should the same function and UniqueActionName be supported by more than one type of device, the reserved DeviceType of
-            “General” will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel
-            and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
-            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.IRotatorV2.SupportedActions"/> property.</para>
+            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful.</exception>
+            <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
+            of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
+            <remarks><p style="color:red"><b>Must be implemented.</b></p>
+            <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
+            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.IRotatorV2.SupportedActions" /> property.</para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IRotatorV2.SupportedActions">
-            <summary>
-            Returns the list of action names supported by this driver.
-            </summary>
+            <summary>Returns the list of custom action names supported by this driver.</summary>
             <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Must be implemented</b></p> This method must return an empty arraylist if no actions are supported. Please do not throw a
-            <see cref="T:ASCOM.PropertyNotImplementedException" />.
-            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities.
-            Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in
-            the <see cref="M:ASCOM.DeviceInterface.IRotatorV2.Action(System.String,System.String)">Action</see> method.</para>
-            <para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
-            determine whether a particular action is supported. This is easily done through the Contains method. Since the
-            collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned
-            about hom many members are in the collection. </para>
-            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
-            the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
+            <remarks><p style="color:red"><b>Must be implemented</b></p>
+            <para>This method must return an empty <see cref="T:System.Collections.ArrayList" /> if no actions are supported. Do not throw a <see cref="T:ASCOM.PropertyNotImplementedException" />.</para>
+            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. Returned action names may be in mixed case to
+            enhance presentation but the <see cref="M:ASCOM.DeviceInterface.IRotatorV2.Action(System.String,System.String)" /> method is case insensitive.</para>
+            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET, <see cref="T:System.Collections.ArrayList" /> is the correct
+            implementation to use because the .NET Generic methods are not compatible with COM.</para>
             </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IRotatorV2.CommandBlind(System.String,System.Boolean)">
@@ -4732,58 +4647,32 @@
             <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.ISwitchV2.Action(System.String,System.String)">
-            <summary>
-            Invokes the specified device-specific action.
-            </summary>
-            <param name="ActionName">
-            A well known name agreed by interested parties that represents the action to be carried out.
-            </param>
-            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.
-            </param>
+            <summary>Invokes the specified device-specific custom action.</summary>
+            <param name="ActionName">A well known name agreed by interested parties that represents the action to be carried out.</param>
+            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.</param>
             <returns>A string response. The meaning of returned strings is set by the driver author.</returns>
-            <exception cref="T:ASCOM.MethodNotImplementedException">Throws this exception if no actions are suported.</exception>
-            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the SupportedActions method will inform clients
-            of driver capabilities, but the driver must still throw an ASCOM.ActionNotImplemented exception if it is asked to
-            perform an action that it does not support.</exception>
+            <exception cref="T:ASCOM.MethodNotImplementedException">Thrown if no actions are supported.</exception>
+            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the <see cref="P:ASCOM.DeviceInterface.ISwitchV2.SupportedActions"/> method will inform clients of driver capabilities, but the driver must still throw 
+            an <see cref="T:ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
             <exception cref="T:ASCOM.NotConnectedException">If the driver is not connected.</exception>
-            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <example>Suppose filter wheels start to appear with automatic wheel changers; new actions could
-            be “FilterWheel:QueryWheels” and “FilterWheel:SelectWheel”. The former returning a
-            formatted list of wheel names and the second taking a wheel name and making the change, returning appropriate
-            values to indicate success or failure.
-            </example>
-            <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p>
-            This method is intended for use in all current and future device types and to avoid name clashes, management of action names
-            is important from day 1. A two-part naming convention will be adopted - <b>DeviceType:UniqueActionName</b> where:
-            <list type="bullet">
-            <item><description>DeviceType is the same value as would be used by <see cref="P:ASCOM.Utilities.Chooser.DeviceType"/> e.g. Telescope, Camera, Switch etc.</description></item>
-            <item><description>UniqueActionName is a single word, or multiple words joined by underscore characters, that sensibly describes the action to be performed.</description></item>
-            </list>
-            <para>
-            It is recommended that UniqueActionNames should be a maximum of 16 characters for legibility.
-            Should the same function and UniqueActionName be supported by more than one type of device, the reserved DeviceType of
-            “General” will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel
-            and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
-            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.ISwitchV2.SupportedActions"/> property.</para>
+            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful.</exception>
+            <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
+            of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
+            <remarks><p style="color:red"><b>Must be implemented.</b></p>
+            <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
+            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.ISwitchV2.SupportedActions" /> property.</para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.ISwitchV2.SupportedActions">
-            <summary>
-            Returns the list of action names supported by this driver.
-            </summary>
+            <summary>Returns the list of custom action names supported by this driver.</summary>
             <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Must be implemented</b></p> This method must return an empty arraylist if no actions are supported. Please do not throw a
-            <see cref="T:ASCOM.PropertyNotImplementedException" />.
-            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities.
-            Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in
-            the <see cref="M:ASCOM.DeviceInterface.ISwitchV2.Action(System.String,System.String)">Action</see> method.</para>
-            <para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
-            determine whether a particular action is supported. This is easily done through the Contains method. Since the
-            collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned
-            about hom many members are in the collection. </para>
-            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
-            the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
+            <remarks><p style="color:red"><b>Must be implemented</b></p>
+            <para>This method must return an empty <see cref="T:System.Collections.ArrayList" /> if no actions are supported. Do not throw a <see cref="T:ASCOM.PropertyNotImplementedException" />.</para>
+            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. Returned action names may be in mixed case to
+            enhance presentation but the <see cref="M:ASCOM.DeviceInterface.ISwitchV2.Action(System.String,System.String)" /> method is case insensitive.</para>
+            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET, <see cref="T:System.Collections.ArrayList" /> is the correct
+            implementation to use because the .NET Generic methods are not compatible with COM.</para>
             </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.ISwitchV2.CommandBlind(System.String,System.Boolean)">
@@ -5097,58 +4986,32 @@
             <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.ITelescopeV3.Action(System.String,System.String)">
-            <summary>
-            Invokes the specified device-specific action.
-            </summary>
-            <param name="ActionName">
-            A well known name agreed by interested parties that represents the action to be carried out.
-            </param>
-            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.
-            </param>
+            <summary>Invokes the specified device-specific custom action.</summary>
+            <param name="ActionName">A well known name agreed by interested parties that represents the action to be carried out.</param>
+            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.</param>
             <returns>A string response. The meaning of returned strings is set by the driver author.</returns>
-            <exception cref="T:ASCOM.MethodNotImplementedException">Throws this exception if no actions are suported.</exception>
-            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the SupportedActions method will inform clients
-            of driver capabilities, but the driver must still throw an ASCOM.ActionNotImplemented exception if it is asked to
-            perform an action that it does not support.</exception>
+            <exception cref="T:ASCOM.MethodNotImplementedException">Thrown if no actions are supported.</exception>
+            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the <see cref="P:ASCOM.DeviceInterface.ITelescopeV3.SupportedActions"/> method will inform clients of driver capabilities, but the driver must still throw 
+            an <see cref="T:ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
             <exception cref="T:ASCOM.NotConnectedException">If the driver is not connected.</exception>
-            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <example>Suppose filter wheels start to appear with automatic wheel changers; new actions could
-            be “FilterWheel:QueryWheels” and “FilterWheel:SelectWheel”. The former returning a
-            formatted list of wheel names and the second taking a wheel name and making the change, returning appropriate
-            values to indicate success or failure.
-            </example>
-            <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p>
-            This method is intended for use in all current and future device types and to avoid name clashes, management of action names
-            is important from day 1. A two-part naming convention will be adopted - <b>DeviceType:UniqueActionName</b> where:
-            <list type="bullet">
-            <item><description>DeviceType is the same value as would be used by <see cref="P:ASCOM.Utilities.Chooser.DeviceType"/> e.g. Telescope, Camera, Switch etc.</description></item>
-            <item><description>UniqueActionName is a single word, or multiple words joined by underscore characters, that sensibly describes the action to be performed.</description></item>
-            </list>
-            <para>
-            It is recommended that UniqueActionNames should be a maximum of 16 characters for legibility.
-            Should the same function and UniqueActionName be supported by more than one type of device, the reserved DeviceType of
-            “General” will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel
-            and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
-            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.ITelescopeV3.SupportedActions"/> property.</para>
+            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful.</exception>
+            <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
+            of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
+            <remarks><p style="color:red"><b>Must be implemented.</b></p>
+            <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
+            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.ITelescopeV3.SupportedActions" /> property.</para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.ITelescopeV3.SupportedActions">
-            <summary>
-            Returns the list of action names supported by this driver.
-            </summary>
+            <summary>Returns the list of custom action names supported by this driver.</summary>
             <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Must be implemented</b></p> This method must return an empty arraylist if no actions are supported. Please do not throw a
-            <see cref="T:ASCOM.PropertyNotImplementedException" />.
-            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities.
-            Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in
-            the <see cref="M:ASCOM.DeviceInterface.ITelescopeV3.Action(System.String,System.String)">Action</see> method.</para>
-            <para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
-            determine whether a particular action is supported. This is easily done through the Contains method. Since the
-            collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned
-            about hom many members are in the collection. </para>
-            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
-            the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
+            <remarks><p style="color:red"><b>Must be implemented</b></p>
+            <para>This method must return an empty <see cref="T:System.Collections.ArrayList" /> if no actions are supported. Do not throw a <see cref="T:ASCOM.PropertyNotImplementedException" />.</para>
+            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. Returned action names may be in mixed case to
+            enhance presentation but the <see cref="M:ASCOM.DeviceInterface.ITelescopeV3.Action(System.String,System.String)" /> method is case insensitive.</para>
+            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET, <see cref="T:System.Collections.ArrayList" /> is the correct
+            implementation to use because the .NET Generic methods are not compatible with COM.</para>
             </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.ITelescopeV3.CommandBlind(System.String,System.Boolean)">
@@ -6411,57 +6274,32 @@
             </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IVideo.Action(System.String,System.String)">
-            <summary>
-            Invokes the specified device-specific action.
-            </summary>
-            <param name="ActionName">
-            A well known name agreed by interested parties that represents the action to be carried out.
-            </param>
-            <param name="ActionParameters">List of required parameters or an <see cref="T:System.String">Empty String</see> if none are required.
-            </param>
+            <summary>Invokes the specified device-specific custom action.</summary>
+            <param name="ActionName">A well known name agreed by interested parties that represents the action to be carried out.</param>
+            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.</param>
             <returns>A string response. The meaning of returned strings is set by the driver author.</returns>
-            <exception cref="T:ASCOM.MethodNotImplementedException">Throws this exception if no actions are supported.</exception>
-            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the SupportedActions method will inform clients
-            of driver capabilities, but the driver must still throw an ASCOM.ActionNotImplemented exception if it is asked to
-            perform an action that it does not support.</exception>
+            <exception cref="T:ASCOM.MethodNotImplementedException">Thrown if no actions are supported.</exception>
+            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedActions"/> method will inform clients of driver capabilities, but the driver must still throw 
+            an <see cref="T:ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
             <exception cref="T:ASCOM.NotConnectedException">If the driver is not connected.</exception>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful.</exception>
-            <example>Suppose filter wheels start to appear with automatic wheel changers; new actions could
-            be “FilterWheel:QueryWheels” and “FilterWheel:SelectWheel”. The former returning a
-            formatted list of wheel names and the second taking a wheel name and making the change, returning appropriate
-            values to indicate success or failure.
-            </example>
-            <remarks><p style="color:red"><b>May throw a MethodNotImplementedException if the device does not support any actions.</b></p>
-            This method is intended for use in all current and future device types and to avoid name clashes, management of action names
-            is important from day 1. A two-part naming convention will be adopted - <b>DeviceType:UniqueActionName</b> where:
-            <list type="bullet">
-            <item><description>DeviceType is the same value as would be used by <see cref="P:ASCOM.Utilities.Chooser.DeviceType"/> e.g. Telescope, Camera, Switch etc.</description></item>
-            <item><description>UniqueActionName is a single word, or multiple words joined by underscore characters, that sensibly describes the action to be performed.</description></item>
-            </list>
-            <para>
-            It is recommended that UniqueActionNames should be a maximum of 16 characters for legibility.
-            Should the same function and UniqueActionName be supported by more than one type of device, the reserved DeviceType of
-            "General" will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel
-            and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
-            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedActions"/> property.</para>
+            <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
+            of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
+            <remarks><p style="color:red"><b>Must be implemented.</b></p>
+            <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
+            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedActions" /> property.</para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.IVideo.SupportedActions">
-            <summary>
-            Returns the list of action names supported by this driver.
-            </summary>
+            <summary>Returns the list of custom action names supported by this driver.</summary>
             <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p> This method must return an empty arraylist if no actions are supported.
-            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities.
-            Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in
-            the <see cref="M:ASCOM.DeviceInterface.IVideo.Action(System.String,System.String)">Action</see> method.</para>
-            <para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
-            determine whether a particular action is supported. This is easily done through the Contains method. Since the
-            collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned
-            about hom many members are in the collection. </para>
-            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
-            the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
+            <remarks><p style="color:red"><b>Must be implemented</b></p>
+            <para>This method must return an empty <see cref="T:System.Collections.ArrayList" /> if no actions are supported. Do not throw a <see cref="T:ASCOM.PropertyNotImplementedException" />.</para>
+            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. Returned action names may be in mixed case to
+            enhance presentation but the <see cref="M:ASCOM.DeviceInterface.IVideo.Action(System.String,System.String)" /> method is case insensitive.</para>
+            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET, <see cref="T:System.Collections.ArrayList" /> is the correct
+            implementation to use because the .NET Generic methods are not compatible with COM.</para>
             </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.IVideo.Dispose">
@@ -7208,58 +7046,32 @@
             <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.ISafetyMonitor.Action(System.String,System.String)">
-            <summary>
-            Invokes the specified device-specific action.
-            </summary>
-            <param name="ActionName">
-            A well known name agreed by interested parties that represents the action to be carried out.
-            </param>
-            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.
-            </param>
+            <summary>Invokes the specified device-specific custom action.</summary>
+            <param name="ActionName">A well known name agreed by interested parties that represents the action to be carried out.</param>
+            <param name="ActionParameters">List of required parameters or an <see cref="F:System.String.Empty">Empty String</see> if none are required.</param>
             <returns>A string response. The meaning of returned strings is set by the driver author.</returns>
-            <exception cref="T:ASCOM.MethodNotImplementedException">Throws this exception if no actions are suported.</exception>
-            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the SupportedActions method will inform clients
-            of driver capabilities, but the driver must still throw an ASCOM.ActionNotImplemented exception if it is asked to
-            perform an action that it does not support.</exception>
+            <exception cref="T:ASCOM.MethodNotImplementedException">Thrown if no actions are supported.</exception>
+            <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the <see cref="P:ASCOM.DeviceInterface.ISafetyMonitor.SupportedActions"/> method will inform clients of driver capabilities, but the driver must still throw 
+            an <see cref="T:ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
             <exception cref="T:ASCOM.NotConnectedException">If the driver is not connected.</exception>
-            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <example>Suppose filter wheels start to appear with automatic wheel changers; new actions could
-            be “FilterWheel:QueryWheels” and “FilterWheel:SelectWheel”. The former returning a
-            formatted list of wheel names and the second taking a wheel name and making the change, returning appropriate
-            values to indicate success or failure.
-            </example>
-            <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p>
-            This method is intended for use in all current and future device types and to avoid name clashes, management of action names
-            is important from day 1. A two-part naming convention will be adopted - <b>DeviceType:UniqueActionName</b> where:
-            <list type="bullet">
-            <item><description>DeviceType is the same value as would be used by <see cref="P:ASCOM.Utilities.Chooser.DeviceType"/> e.g. Telescope, Camera, Switch etc.</description></item>
-            <item><description>UniqueActionName is a single word, or multiple words joined by underscore characters, that sensibly describes the action to be performed.</description></item>
-            </list>
-            <para>
-            It is recommended that UniqueActionNames should be a maximum of 16 characters for legibility.
-            Should the same function and UniqueActionName be supported by more than one type of device, the reserved DeviceType of
-            “General” will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel
-            and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
-            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.ISafetyMonitor.SupportedActions"/> property.</para>
+            <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful.</exception>
+            <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
+            of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
+            <remarks><p style="color:red"><b>Must be implemented.</b></p>
+            <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
+            <para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.ISafetyMonitor.SupportedActions" /> property.</para>
             </remarks>
         </member>
         <member name="P:ASCOM.DeviceInterface.ISafetyMonitor.SupportedActions">
-            <summary>
-            Returns the list of action names supported by this driver.
-            </summary>
+            <summary>Returns the list of custom action names supported by this driver.</summary>
             <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
             <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-            <remarks><p style="color:red"><b>Must be implemented</b></p> This method must return an empty arraylist if no actions are supported. Please do not throw a
-            <see cref="T:ASCOM.PropertyNotImplementedException" />.
-            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities.
-            Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in
-            the <see cref="M:ASCOM.DeviceInterface.ISafetyMonitor.Action(System.String,System.String)">Action</see> method.</para>
-            <para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
-            determine whether a particular action is supported. This is easily done through the Contains method. Since the
-            collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned
-            about hom many members are in the collection. </para>
-            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
-            the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
+            <remarks><p style="color:red"><b>Must be implemented</b></p>
+            <para>This method must return an empty <see cref="T:System.Collections.ArrayList" /> if no actions are supported. Do not throw a <see cref="T:ASCOM.PropertyNotImplementedException" />.</para>
+            <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. Returned action names may be in mixed case to
+            enhance presentation but the <see cref="M:ASCOM.DeviceInterface.ISafetyMonitor.Action(System.String,System.String)" /> method is case insensitive.</para>
+            <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET, <see cref="T:System.Collections.ArrayList" /> is the correct
+            implementation to use because the .NET Generic methods are not compatible with COM.</para>
             </remarks>
         </member>
         <member name="M:ASCOM.DeviceInterface.ISafetyMonitor.CommandBlind(System.String,System.Boolean)">
