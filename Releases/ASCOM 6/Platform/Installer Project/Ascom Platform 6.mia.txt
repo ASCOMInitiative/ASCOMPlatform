@@ -1245,13 +1245,21 @@ Create Shortcut $SHORTCUTFOLDER$\Simulators\Telescope Simulator .NET to $COMMONF
 if Variable INSTALL_PIPE Equals TRUE
   Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor to $COMMONFILES$\ASCOM\Telescope\Pipe.exe
   Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
+else
+  Delete Files $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor.lnk" (when installing and uninstalling)
+  Delete Files $SHORTCUTFOLDER$\Tools\Pipe Help.lnk" (when installing and uninstalling)
 end
 if Variable INSTALL_POTH Equals TRUE
   Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub to $COMMONFILES$\ASCOM\Telescope\POTH.exe
   Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\POTHHelp.htm
+else
+  Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub.lnk" (when installing and uninstalling)
+  Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help.lnk" (when installing and uninstalling)
 end
 if Variable INSTALL_DOMECONTROLHUB Equals TRUE
   Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
+else
+  Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control.lnk" (when installing and uninstalling)
 end
 Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Device Hub to $COMMONFILES$\ASCOM\DeviceHub\ASCOM.DeviceHub.exe
 Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Device Hub Help to $COMMONFILES$\ASCOM\DeviceHub\ASCOM Device Hub User and Technical Information.pdf

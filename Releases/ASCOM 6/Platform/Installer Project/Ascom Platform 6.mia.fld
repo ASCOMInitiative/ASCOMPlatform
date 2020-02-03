@@ -4,12 +4,12 @@ Set Registry Keys
 Platform 6.1 files
 Platform 6.2 files
 Remove Previous Platform 6 install if present
+Uninstall items installed by this installer
+Remove 64bit components
 ASCOM Cache
 Earth Rotation Date Update
 Remove Previous Platforms 4 and 5 if present
-Maintenance Dialogue
-Alpaca Support for Chooser
-Remove 64bit components
 Remove 32bit components
 Install Application Pre-Requisites if required
-Uninstall items installed by this installer
+Maintenance Dialogue
+Alpaca Support for Chooser
