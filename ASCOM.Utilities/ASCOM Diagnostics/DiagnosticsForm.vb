@@ -967,49 +967,53 @@ Public Class DiagnosticsForm
 
         If True Then
 
+            ' Telescope Simulator - Platform 6
             Sim = New SimulatorDescriptor With {
-                    .ProgID = "ASCOM.Simulator.CoverCalibrator",
-                    .Description = "Platform 6 CoverCalibrator Simulator",
-                    .DeviceType = "CoverCalibrator",
-                    .Name = "CoverCalibrator Simulator",
-                    .DriverVersion = DiagnosticsMajorMinorVersionNumber,
-                    .InterfaceVersion = 1,
+                    .ProgID = "ASCOM.Simulator.Telescope",
+                    .Description = "Platform 6 Telescope Simulator",
+                    .DeviceType = "Telescope",
+                    .Name = "Simulator",
+                    .DriverVersion = DiagnosticsFullVersionNumber,
+                    .InterfaceVersion = 3,
                     .IsPlatform5 = False,
-                    .SixtyFourBit = True
+                    .SixtyFourBit = True,
+                    .AxisRates = New Double(,) {{0.0, 0.5}, {1.0 / 3.0, 1.0}}, ' Axis rates relative to MaxRate
+                    .AxisRatesRelative = True
                 }
             TestSimulator(Sim)
             Sim = Nothing
 
+            ' CoverCalibrator Simulator
             Sim = New SimulatorDescriptor With {
-            .ProgID = "ASCOM.Simulator.Telescope",
-            .Description = "Platform 6 Telescope Simulator",
-            .DeviceType = "Telescope",
-            .Name = "Simulator",
-            .DriverVersion = DiagnosticsFullVersionNumber,
-            .InterfaceVersion = 3,
-            .IsPlatform5 = False,
-            .SixtyFourBit = True,
-            .AxisRates = New Double(,) {{0.0, 0.5}, {1.0 / 3.0, 1.0}}, ' Axis rates relative to MaxRate
-            .AxisRatesRelative = True
-        }
+                .ProgID = "ASCOM.Simulator.CoverCalibrator",
+                .Description = "Platform 6 CoverCalibrator Simulator",
+                .DeviceType = "CoverCalibrator",
+                .Name = "CoverCalibrator Simulator",
+                .DriverVersion = DiagnosticsMajorMinorVersionNumber,
+                .InterfaceVersion = 1,
+                .IsPlatform5 = False,
+                .SixtyFourBit = True
+            }
             TestSimulator(Sim)
             Sim = Nothing
 
+            ' Telescope Simulator - Platform 5
             Sim = New SimulatorDescriptor With {
-            .ProgID = "ScopeSim.Telescope",
-            .Description = "Platform 5 Telescope Simulator",
-            .DeviceType = "Telescope",
-            .Name = "Simulator",
-            .DriverVersion = "5.0",
-            .InterfaceVersion = 2,
-            .IsPlatform5 = True,
-            .SixtyFourBit = True,
-            .AxisRates = New Double(,) {{0.0}, {8.0}}, ' Absolute axis rates
-            .AxisRatesRelative = False
-        }
+                .ProgID = "ScopeSim.Telescope",
+                .Description = "Platform 5 Telescope Simulator",
+                .DeviceType = "Telescope",
+                .Name = "Simulator",
+                .DriverVersion = "5.0",
+                .InterfaceVersion = 2,
+                .IsPlatform5 = True,
+                .SixtyFourBit = True,
+                .AxisRates = New Double(,) {{0.0}, {8.0}}, ' Absolute axis rates
+                .AxisRatesRelative = False
+            }
             TestSimulator(Sim)
             Sim = Nothing
 
+            ' Camera Simulator - Platform 5
             Sim = New SimulatorDescriptor With {
                 .ProgID = "CCDSimulator.Camera",
                 .Description = "Platform 5 Camera Simulator",
@@ -1023,6 +1027,7 @@ Public Class DiagnosticsForm
             TestSimulator(Sim)
             Sim = Nothing
 
+            ' Camera Simulator - Platform 6
             Sim = New SimulatorDescriptor With {
                 .ProgID = "ASCOM.Simulator.Camera",
                 .Description = "Platform 6 Camera Simulator",
@@ -1037,96 +1042,19 @@ Public Class DiagnosticsForm
             Sim = Nothing
 
             Sim = New SimulatorDescriptor With {
-                .ProgID = "FilterWheelSim.FilterWheel",
-                .Description = "Platform 5 FilterWheel Simulator",
-                .DeviceType = "FilterWheel",
-                .Name = "xxxx",
-                .DriverVersion = "5.0",
-                .InterfaceVersion = 1,
-                .IsPlatform5 = True,
-                .SixtyFourBit = True
-            }
+                    .ProgID = "ASCOM.Simulator.Dome",
+                    .Description = "Platform 6 Dome Simulator",
+                    .DeviceType = "Dome",
+                    .Name = "Simulator",
+                    .DriverVersion = DiagnosticsMajorMinorVersionNumber,
+                    .InterfaceVersion = 2,
+                    .IsPlatform5 = False,
+                    .SixtyFourBit = True
+                }
             TestSimulator(Sim)
             Sim = Nothing
 
-            Sim = New SimulatorDescriptor With {
-                .ProgID = "ASCOM.Simulator.FilterWheel",
-                .Description = "Platform 6 FilterWheel Simulator",
-                .DeviceType = "FilterWheel",
-                .Name = "Filter Wheel Simulator .NET",
-                .DriverVersion = DiagnosticsMajorNumber & ".0",
-                .InterfaceVersion = 2,
-                .IsPlatform5 = False,
-                .SixtyFourBit = True
-            }
-            TestSimulator(Sim)
-            Sim = Nothing
-
-            Sim = New SimulatorDescriptor With {
-                .ProgID = "FocusSim.Focuser",
-                .Description = "Platform 5 Focuser Simulator",
-                .DeviceType = "Focuser",
-                .Name = "Simulator",
-                .DriverVersion = "5.0",
-                .InterfaceVersion = 1,
-                .IsPlatform5 = True,
-                .SixtyFourBit = True
-            }
-            TestSimulator(Sim)
-            Sim = Nothing
-
-            Sim = New SimulatorDescriptor With {
-                .ProgID = "ASCOM.Simulator.Focuser",
-                .Description = "Platform 6 Focuser Simulator",
-                .DeviceType = "Focuser",
-                .Name = "ASCOM.Simulator.Focuser",
-                .DriverVersion = DiagnosticsMajorMinorVersionNumber,
-                .InterfaceVersion = 3,
-                .IsPlatform5 = False,
-                .SixtyFourBit = True
-            }
-            TestSimulator(Sim)
-            Sim = Nothing
-
-            Sim = New SimulatorDescriptor With {
-                .ProgID = "ASCOM.Simulator.SafetyMonitor",
-                .Description = "Platform 6 Safety Monitor Simulator",
-                .DeviceType = "SafetyMonitor",
-                .Name = "ASCOM.Simulator.SafetyMonitor",
-                .DriverVersion = DiagnosticsMajorNumber & ".0",
-                .InterfaceVersion = 2,
-                .IsPlatform5 = False,
-                .SixtyFourBit = True
-            }
-            TestSimulator(Sim)
-            Sim = Nothing
-
-            Sim = New SimulatorDescriptor With {
-                .ProgID = "SwitchSim.Switch",
-                .Description = "Platform 5 Switch Simulator",
-                .DeviceType = "Switch",
-                .Name = "Switch Simulator",
-                .DriverVersion = "5.0",
-                .InterfaceVersion = 1,
-                .IsPlatform5 = True,
-                .SixtyFourBit = True
-            }
-            TestSimulator(Sim)
-            Sim = Nothing
-
-            Sim = New SimulatorDescriptor With {
-                .ProgID = "ASCOM.Simulator.Switch",
-                .Description = "Platform 6 Switch Simulator",
-                .DeviceType = "Switch",
-                .Name = "ASCOM Switch V2 Simulator",
-                .DriverVersion = DiagnosticsMajorMinorVersionNumber,
-                .InterfaceVersion = 2,
-                .IsPlatform5 = False,
-                .SixtyFourBit = True
-            }
-            TestSimulator(Sim)
-            Sim = Nothing
-
+            ' Dome Simulator - Platform 5
             Sim = New SimulatorDescriptor With {
                 .ProgID = "DomeSim.Dome",
                 .Description = "Dome Simulator",
@@ -1140,11 +1068,96 @@ Public Class DiagnosticsForm
             TestSimulator(Sim)
             Sim = Nothing
 
+            ' FilterWheel Simulator - Platform 5
             Sim = New SimulatorDescriptor With {
-                .ProgID = "ASCOM.Simulator.Dome",
-                .Description = "Platform 6 Dome Simulator",
-                .DeviceType = "Dome",
+                .ProgID = "FilterWheelSim.FilterWheel",
+                .Description = "Platform 5 FilterWheel Simulator",
+                .DeviceType = "FilterWheel",
+                .Name = "xxxx",
+                .DriverVersion = "5.0",
+                .InterfaceVersion = 1,
+                .IsPlatform5 = True,
+                .SixtyFourBit = True
+            }
+            TestSimulator(Sim)
+            Sim = Nothing
+
+            ' FilterWheel Simulator - Platform 6
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.Simulator.FilterWheel",
+                .Description = "Platform 6 FilterWheel Simulator",
+                .DeviceType = "FilterWheel",
+                .Name = "Filter Wheel Simulator .NET",
+                .DriverVersion = DiagnosticsMajorNumber & ".0",
+                .InterfaceVersion = 2,
+                .IsPlatform5 = False,
+                .SixtyFourBit = True
+            }
+            TestSimulator(Sim)
+            Sim = Nothing
+
+            ' Focuser Simulator - Platform 5
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "FocusSim.Focuser",
+                .Description = "Platform 5 Focuser Simulator",
+                .DeviceType = "Focuser",
                 .Name = "Simulator",
+                .DriverVersion = "5.0",
+                .InterfaceVersion = 1,
+                .IsPlatform5 = True,
+                .SixtyFourBit = True
+            }
+            TestSimulator(Sim)
+            Sim = Nothing
+
+            ' Focuser Simulator - Platform 6
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.Simulator.Focuser",
+                .Description = "Platform 6 Focuser Simulator",
+                .DeviceType = "Focuser",
+                .Name = "ASCOM.Simulator.Focuser",
+                .DriverVersion = DiagnosticsMajorMinorVersionNumber,
+                .InterfaceVersion = 3,
+                .IsPlatform5 = False,
+                .SixtyFourBit = True
+            }
+            TestSimulator(Sim)
+            Sim = Nothing
+
+            ' SafetyMonitor Simulator
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.Simulator.SafetyMonitor",
+                .Description = "Platform 6 Safety Monitor Simulator",
+                .DeviceType = "SafetyMonitor",
+                .Name = "ASCOM.Simulator.SafetyMonitor",
+                .DriverVersion = DiagnosticsMajorNumber & ".0",
+                .InterfaceVersion = 2,
+                .IsPlatform5 = False,
+                .SixtyFourBit = True
+            }
+            TestSimulator(Sim)
+            Sim = Nothing
+
+            ' Switch Simulator - Platform 5
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "SwitchSim.Switch",
+                .Description = "Platform 5 Switch Simulator",
+                .DeviceType = "Switch",
+                .Name = "Switch Simulator",
+                .DriverVersion = "5.0",
+                .InterfaceVersion = 1,
+                .IsPlatform5 = True,
+                .SixtyFourBit = True
+            }
+            TestSimulator(Sim)
+            Sim = Nothing
+
+            ' Switch Simulator - Platform 6
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.Simulator.Switch",
+                .Description = "Platform 6 Switch Simulator",
+                .DeviceType = "Switch",
+                .Name = "ASCOM Switch V2 Simulator",
                 .DriverVersion = DiagnosticsMajorMinorVersionNumber,
                 .InterfaceVersion = 2,
                 .IsPlatform5 = False,
@@ -1153,6 +1166,7 @@ Public Class DiagnosticsForm
             TestSimulator(Sim)
             Sim = Nothing
 
+            ' Video Simulator
             Sim = New SimulatorDescriptor With {
                 .ProgID = "ASCOM.Simulator.Video",
                 .Description = "Platform 6 Video Simulator",
@@ -1166,6 +1180,7 @@ Public Class DiagnosticsForm
             TestSimulator(Sim)
             Sim = Nothing
 
+            ' ObservingConditions Simulator
             Sim = New SimulatorDescriptor With {
                 .ProgID = "ASCOM.Simulator.ObservingConditions",
                 .Description = "Platform 6 ObservingConditions Simulator",
@@ -1179,6 +1194,7 @@ Public Class DiagnosticsForm
             TestSimulator(Sim)
             Sim = Nothing
 
+            ' ObservingConditions Hub
             Sim = New SimulatorDescriptor With {
                 .ProgID = "ASCOM.OCH.ObservingConditions",
                 .Description = "Platform 6 ObservingConditions Hub",
@@ -1202,6 +1218,7 @@ Public Class DiagnosticsForm
         Dim returnString As String
         Dim coverState As CoverStatus
         Dim calibratorState As CalibratorStatus
+        Dim interfaceVersion As Integer
 
         Const MAX_SLEW_RATE_PROFILE_NAME As String = "MaxSlewRate" ' Name of the Profile variable holding the maximum slew rate
 
@@ -1248,9 +1265,27 @@ Public Class DiagnosticsForm
                     Thread.Sleep(1000)
 
                     Try
+                        Compare("TestSimulator", $"Can read {Sim.DeviceType} interface version: {interfaceVersion}", True, True)
+                    Catch ex1 As COMException
+                        If ex1.ErrorCode = &H80040400 And Sim.DeviceType = "Telescope" Then
+                            Compare("TestSimulator", "Simulator is in Interface V1 mode", "True", "True")
+                        End If
+                    Catch ex1 As NotSupportedException
+                    Catch ex1 As MissingMemberException
+                        If Sim.IsPlatform5 Then
+                            Compare("TestSimulator", "Interfaceversion member is not present in Platform 5 Simulator", "True", "True")
+                        Else
+                            LogException("TestSimulator", "Interfaceversion Exception: " & ex1.ToString)
+                        End If
+                    Catch ex1 As Exception
+                        LogException("TestSimulator", "Interfaceversion Exception: " & ex1.ToString)
+                    End Try
+
+                    Try
                         RetValString = DeviceObject.Description
                         Compare("TestSimulator", "Description member is present in Platform 6 Simulator", "True", "True")
                         NMatches += 1
+                    Catch ex1 As NotSupportedException
                     Catch ex1 As MissingMemberException
                         If Sim.IsPlatform5 Then
                             Compare("TestSimulator", "Description member is not present in Platform 5 Simulator", "True", "True")
@@ -1264,6 +1299,7 @@ Public Class DiagnosticsForm
                     Try
                         RetValString = DeviceObject.DriverInfo
                         Compare("TestSimulator", "DriverInfo member is present in Platform 6 Simulator", "True", "True")
+                    Catch ex1 As NotSupportedException
                     Catch ex1 As MissingMemberException
                         If Sim.IsPlatform5 Then
                             Compare("TestSimulator", "DriverInfo member is not present in Platform 5 Simulator", "True", "True")
@@ -1275,7 +1311,9 @@ Public Class DiagnosticsForm
                     End Try
 
                     Try
-                        Compare("TestSimulator", Sim.DeviceType & " " & "Name", DeviceObject.Name, Sim.Name)
+                        RetValString = DeviceObject.Name
+                        Compare("TestSimulator", "Name member is present in Platform 6 Simulator", "True", "True")
+                    Catch ex1 As NotSupportedException
                     Catch ex1 As MissingMemberException
                         If Sim.IsPlatform5 Then
                             Compare("TestSimulator", "Name member is not present in Platform 5 Simulator", "True", "True")
@@ -1287,27 +1325,12 @@ Public Class DiagnosticsForm
                     End Try
 
                     Try
-                        Compare("TestSimulator", Sim.DeviceType & " " & "InterfaceVersion", DeviceObject.Interfaceversion, Sim.InterfaceVersion)
-                    Catch ex1 As COMException
-                        If ex1.ErrorCode = &H80040400 And Sim.DeviceType = "Telescope" Then
-                            Compare("TestSimulator", "Simulator is in Interface V1 mode", "True", "True")
-                        End If
-                    Catch ex1 As MissingMemberException
-                        If Sim.IsPlatform5 Then
-                            Compare("TestSimulator", "Interfaceversion member is not present in Platform 5 Simulator", "True", "True")
-                        Else
-                            LogException("TestSimulator", "Interfaceversion Exception: " & ex1.ToString)
-                        End If
-                    Catch ex1 As Exception
-                        LogException("TestSimulator", "Interfaceversion Exception: " & ex1.ToString)
-                    End Try
-
-                    Try
                         Compare("TestSimulator", Sim.DeviceType & " " & "DriverVersion", DeviceObject.DriverVersion, Sim.DriverVersion)
                     Catch ex1 As COMException
                         If ex1.ErrorCode = &H80040400 And Sim.DeviceType = "Telescope" Then
                             Compare("TestSimulator", "Simulator is in Interface V1 mode", "True", "True")
                         End If
+                    Catch ex1 As NotSupportedException
                     Catch ex1 As MissingMemberException
                         If Sim.IsPlatform5 Then
                             Compare("TestSimulator", "DriverVersion member is not present in Platform 5 Simulator", "True", "True")
@@ -1323,7 +1346,6 @@ Public Class DiagnosticsForm
                             DeviceTest("Telescope", "UnPark")
                             DeviceTest("Telescope", "TrackingTrue")
                             DeviceTest("Telescope", "SiderealTime")
-                            DeviceTest("Telescope", "RightAscension")
                             DeviceTest("Telescope", "TargetDeclination")
                             DeviceTest("Telescope", "TargetRightAscension")
                             DeviceTest("Telescope", "Slew")
@@ -1391,12 +1413,12 @@ Public Class DiagnosticsForm
                                 DeviceTest("Switch", "SwitchStep")
                             End If
                         Case "Dome"
-                            DeviceTest("Dome", "OpenShutter")
-                            DeviceTest("Dome", "Slewing")
                             DeviceTest("Dome", "ShutterStatus")
+                            DeviceTest("Dome", "Slewing")
+                            DeviceTest("Dome", "OpenShutter")
+                            DeviceTest("Dome", "CloseShutter")
                             DeviceTest("Dome", "SlewToAltitude")
                             DeviceTest("Dome", "SlewToAzimuth")
-                            DeviceTest("Dome", "CloseShutter")
                         Case "Video"
                             DeviceTest("Video", "BitDepth")
                             DeviceTest("Video", "CanConfigureDeviceProperties")
@@ -1445,6 +1467,8 @@ Public Class DiagnosticsForm
         Dim RetVal As Object = Nothing, SiderealTime, RetValDouble, TargetRA As Double, StartTime As Date
         Dim DeviceTrackingRates As Object
         Dim FocuserMax, FocuserPosition As Integer, FocuserUpperPortion, FocuserTargetPosition As Integer
+        Dim canUnpark, canSetTracking, canReadSiderealTime, canSetTargetRightAscension, canSetTargetDeclination, canReadShutterStatus, slewing, canReadSlewing As Boolean
+        Dim shutterStatus As ShutterState
 
         Const PossibleDriveRates As String = "driveSidereal,driveKing,driveLunar,driveSolar"
 
@@ -1453,7 +1477,6 @@ Public Class DiagnosticsForm
             StartTime = Now
             Select Case Device
                 Case "CoverCalibrator"
-
                     Select Case Test
                         Case "Brightness"
                             CompareBoolean("DeviceTest", Test, DeviceObject.Brightness >= 0, True)
@@ -1494,6 +1517,7 @@ Public Class DiagnosticsForm
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
+
                 Case "FilterWheel"
                     Select Case Test
                         Case "Position"
@@ -1507,6 +1531,7 @@ Public Class DiagnosticsForm
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
+
                 Case "Focuser"
                     Select Case Test
                         Case "Move"
@@ -1541,6 +1566,7 @@ Public Class DiagnosticsForm
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
+
                 Case "Camera"
                     Select Case Test
                         Case "StartExposure"
@@ -1557,63 +1583,98 @@ Public Class DiagnosticsForm
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
+
                 Case "Telescope"
                     Select Case Test
                         Case "UnPark"
-                            DeviceObject.UnPark()
-                            Try
-                                Compare(Device, Test, DeviceObject.AtPark, "False")
-                            Catch ex1 As COMException
-                                If ex1.ErrorCode = &H80040400 Then
-                                    Compare("TestSimulator", "UnPark - Simulator is in Interface V1 mode", "True", "True")
-                                End If
-                            End Try
+                            canUnpark = DeviceObject.CanUnpark
+                            Compare(Device, "CanUnPark - Simulator does return a value from CanUnpark.", "True", "True")
+                            If canUnpark Then ' Test Unpark if it is supported
+                                Try
+                                    DeviceObject.UnPark()
+                                    Compare(Device, Test, DeviceObject.AtPark, "False")
+                                Catch ex1 As COMException
+                                    If ex1.ErrorCode = &H80040400 Then
+                                        Compare(Device, "UnPark - Simulator is in Interface V1 mode", "True", "True")
+                                    End If
+                                End Try
+                            End If
                         Case "TrackingTrue"
-                            DeviceObject.UnPark()
-                            DeviceObject.Tracking = True
-                            Compare(Device, Test, DeviceObject.Tracking, "True")
+                            If canUnpark Then DeviceObject.UnPark()
+                            canSetTracking = DeviceObject.CanSetTracking
+                            Compare(Device, "CanSetTracking - Simulator does return a value from CanSetTracking.", "True", "True")
+                            If canSetTracking Then
+                                DeviceObject.Tracking = True
+                                Compare(Device, Test, DeviceObject.Tracking, "True")
+                            Else
+                                TL.LogMessage(Device, "Tracking test skipped because CanSetTrackling is False")
+                            End If
                         Case "SiderealTime"
-                            SiderealTime = DeviceObject.SiderealTime
-                            TL.LogMessage(Device, "Received Sidereal time from telescope: " & SiderealTime)
-                            RetValDouble = DeviceObject.SiderealTime
-                            CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
+                            Try
+                                SiderealTime = DeviceObject.SiderealTime
+                                canReadSiderealTime = True
+                                Compare(Device, "SiderealTime - Simulator does return a value from SiderealTime.", "True", "True")
+
+                                TL.LogMessage(Device, "Received Sidereal time from telescope: " & SiderealTime)
+                                RetValDouble = DeviceObject.SiderealTime
+                                CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
+
+                            Catch ex As COMException When ex.ErrorCode = &H80040400
+                            Catch ex As PropertyNotImplementedException
+                                Compare(Device, "SiderealTime - Property is configured not to return a value.", "True", "True")
+                            End Try
                         Case "TargetDeclination"
-                            DeviceObject.TargetDeclination = 0.0
-                            RetValDouble = DeviceObject.TargetDeclination
-                            CompareDouble(Device, Test, RetValDouble, 0.0, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180)
+                            Try
+                                DeviceObject.TargetDeclination = 0.0
+                                canSetTargetDeclination = True
+                                RetValDouble = DeviceObject.TargetDeclination
+                                CompareDouble(Device, Test, RetValDouble, 0.0, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180)
+                            Catch ex As COMException When ex.ErrorCode = &H80040400
+                            Catch ex As PropertyNotImplementedException
+                                Compare(Device, "TargetDeclination - Property is configured not to return a value.", "True", "True")
+                            End Try
                         Case "TargetRightAscension"
-                            SiderealTime = DeviceObject.SiderealTime
-                            TL.LogMessage(Device, "Received Sidereal time from telescope: " & AscomUtil.HoursToHMS(SiderealTime, ":", ":", "", 3))
-                            DeviceObject.TargetRightAscension = SiderealTime
-                            TL.LogMessage(Device, "Target RA set to: " & DeviceObject.TargetRightAscension)
-                            RetValDouble = DeviceObject.TargetRightAscension
-                            CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
+                            If canReadSiderealTime Then
+                                SiderealTime = DeviceObject.SiderealTime
+                                TL.LogMessage(Device, "Received Sidereal time from telescope: " & AscomUtil.HoursToHMS(SiderealTime, ":", ":", "", 3))
+                                Try
+                                    DeviceObject.TargetRightAscension = SiderealTime
+                                    canSetTargetRightAscension = True
+                                    TL.LogMessage(Device, "Target RA set to: " & DeviceObject.TargetRightAscension)
+                                    RetValDouble = DeviceObject.TargetRightAscension
+                                    CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
+                                Catch ex As COMException When ex.ErrorCode = &H80040400
+                                Catch ex As PropertyNotImplementedException
+                                    Compare(Device, "TargetRightAscension - Property is configured not to return a value.", "True", "True")
+                                End Try
+                            Else
+                                TL.LogMessage(Device, "TargetRightAscension test skipped because can't read sidereal time")
+                            End If
                         Case "Slew"
-                            DeviceObject.UnPark()
-                            DeviceObject.Tracking = True
-                            SiderealTime = DeviceObject.SiderealTime
-                            TL.LogMessage(Device, "Received Sidereal time from telescope: " & AscomUtil.HoursToHMS(SiderealTime, ":", ":", "", 3))
-                            TargetRA = AstroUtil.ConditionRA(SiderealTime - 1.0) ' Set the RA target to be 1 hour before zenith
-                            TL.LogMessage(Device, "Target RA calculated as: " & AscomUtil.HoursToHMS(TargetRA, ":", ":", "", 3))
-                            DeviceObject.TargetRightAscension = TargetRA
-                            TL.LogMessage(Device, "Target RA set to: " & AscomUtil.HoursToHMS(DeviceObject.TargetRightAscension, ":", ":", "", 3))
-                            DeviceObject.TargetDeclination = 0.0
-                            TL.LogMessage(Device, "Target Dec set to: " & AscomUtil.DegreesToDMS(DeviceObject.TargetDeclination, ":", ":", "", 3))
-                            TL.LogMessage(Device, "Pre-slew RA is: " & AscomUtil.HoursToHMS(DeviceObject.RightAscension, ":", ":", "", 3))
-                            TL.LogMessage(Device, "Pre-slew Dec is: " & AscomUtil.DegreesToDMS(DeviceObject.Declination, ":", ":", "", 3))
-                            TL.LogMessage(Device, String.Format("Pre-slew Az/Alt is: {0} {1}", AscomUtil.DegreesToDMS(DeviceObject.Azimuth, ":", ":", "", 3), AscomUtil.DegreesToDMS(DeviceObject.Altitude, ":", ":", "", 3)))
-                            DeviceObject.SlewToTarget()
-                            Thread.Sleep(1000) ' Wait a short while to ensure the simulator has stabilised
-                            TL.LogMessage(Device, "Post-slew RA is: " & AscomUtil.HoursToHMS(DeviceObject.RightAscension, ":", ":", "", 3))
-                            TL.LogMessage(Device, "Post-slew Dec is: " & AscomUtil.DegreesToDMS(DeviceObject.Declination, ":", ":", "", 3))
-                            TL.LogMessage(Device, String.Format("Post-slew Az/Alt is: {0} {1}", AscomUtil.DegreesToDMS(DeviceObject.Azimuth, ":", ":", "", 3), AscomUtil.DegreesToDMS(DeviceObject.Altitude, ":", ":", "", 3)))
-                            CompareDouble(Device, Test & " RA", DeviceObject.RightAscension, TargetRA, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
-                            CompareDouble(Device, Test & " Dec", DeviceObject.Declination, 0.0, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180)
-                        Case "RightAscension"
-                            SiderealTime = DeviceObject.SiderealTime
-                            DeviceObject.TargetRightAscension = SiderealTime
-                            RetValDouble = DeviceObject.TargetRightAscension
-                            CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
+                            If canUnpark And canSetTracking And canReadSiderealTime And canSetTargetRightAscension And canSetTargetDeclination Then
+                                DeviceObject.UnPark()
+                                DeviceObject.Tracking = True
+                                SiderealTime = DeviceObject.SiderealTime
+                                TL.LogMessage(Device, "Received Sidereal time from telescope: " & AscomUtil.HoursToHMS(SiderealTime, ":", ":", "", 3))
+                                TargetRA = AstroUtil.ConditionRA(SiderealTime - 1.0) ' Set the RA target to be 1 hour before zenith
+                                TL.LogMessage(Device, "Target RA calculated as: " & AscomUtil.HoursToHMS(TargetRA, ":", ":", "", 3))
+                                DeviceObject.TargetRightAscension = TargetRA
+                                TL.LogMessage(Device, "Target RA set to: " & AscomUtil.HoursToHMS(DeviceObject.TargetRightAscension, ":", ":", "", 3))
+                                DeviceObject.TargetDeclination = 0.0
+                                TL.LogMessage(Device, "Target Dec set to: " & AscomUtil.DegreesToDMS(DeviceObject.TargetDeclination, ":", ":", "", 3))
+                                TL.LogMessage(Device, "Pre-slew RA is: " & AscomUtil.HoursToHMS(DeviceObject.RightAscension, ":", ":", "", 3))
+                                TL.LogMessage(Device, "Pre-slew Dec is: " & AscomUtil.DegreesToDMS(DeviceObject.Declination, ":", ":", "", 3))
+                                TL.LogMessage(Device, String.Format("Pre-slew Az/Alt is: {0} {1}", AscomUtil.DegreesToDMS(DeviceObject.Azimuth, ":", ":", "", 3), AscomUtil.DegreesToDMS(DeviceObject.Altitude, ":", ":", "", 3)))
+                                DeviceObject.SlewToTarget()
+                                Thread.Sleep(1000) ' Wait a short while to ensure the simulator has stabilised
+                                TL.LogMessage(Device, "Post-slew RA is: " & AscomUtil.HoursToHMS(DeviceObject.RightAscension, ":", ":", "", 3))
+                                TL.LogMessage(Device, "Post-slew Dec is: " & AscomUtil.DegreesToDMS(DeviceObject.Declination, ":", ":", "", 3))
+                                TL.LogMessage(Device, String.Format("Post-slew Az/Alt is: {0} {1}", AscomUtil.DegreesToDMS(DeviceObject.Azimuth, ":", ":", "", 3), AscomUtil.DegreesToDMS(DeviceObject.Altitude, ":", ":", "", 3)))
+                                CompareDouble(Device, Test & " RA", DeviceObject.RightAscension, TargetRA, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
+                                CompareDouble(Device, Test & " Dec", DeviceObject.Declination, 0.0, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180)
+                            Else
+                                TL.LogMessage(Device, $"Slew test skipped because CanUnpark: {canUnpark}, CanSetTracking: {canSetTracking}, CanReadSidferalTime: {canReadSiderealTime}, CanSetTargetRightAscension: {canSetTargetRightAscension}, CanSetTargetDeclination: {canSetTargetDeclination}")
+                            End If
                         Case "TrackingRates"
                             Try
                                 DeviceTrackingRates = DeviceObject.TrackingRates
@@ -1627,66 +1688,121 @@ Public Class DiagnosticsForm
                                 Next
                             Catch ex1 As COMException
                                 If ex1.ErrorCode = &H80040400 Then
-                                    Compare("TestSimulator", "TrackingRates - Simulator is in Interface V1 mode", "True", "True")
+                                    Compare(Device, "TrackingRates - Simulator is in Interface V1 mode", "True", "True")
                                 End If
                             End Try
                         Case "AxisRates"
                             Try
                                 RetVal = DeviceObject.AxisRates(TelescopeAxes.axisPrimary)
+                                Compare(Device, "AxisRates returned OK", "True", "True")
                             Catch ex1 As COMException
                                 If ex1.ErrorCode = &H80040400 Then
-                                    Compare("TestSimulator", "AxisRates - Simulator is in Interface V1 mode", "True", "True")
+                                    Compare(Device, "AxisRates - Simulator is in Interface V1 mode", "True", "True")
                                 End If
                             End Try
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
+
                 Case "Dome"
                     Select Case Test
-                        Case "OpenShutter"
-                            StartTime = Now
-                            DeviceObject.OpenShutter()
-                            Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterOpen)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
-                                Thread.Sleep(100)
-                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
-                                Application.DoEvents()
-                            Loop
-                            Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
-                            Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterOpen))
                         Case "ShutterStatus"
-                            Compare(Device, Test, CInt(DeviceObject.ShutterStatus), 0)
+                            Try
+                                shutterStatus = CType(DeviceObject.ShutterState, ShutterState)
+                                canReadShutterStatus = True
+                                Compare(Device, "ShutterStatus - Simulator can read the shutter status", "True", "True")
+                            Catch ex As MissingMemberException
+                            Catch ex As COMException When ex.ErrorCode = &H80040400
+                            Catch ex As MethodNotImplementedException
+                                Compare(Device, "ShutterStatus - Simulator ShutterStatus property is not accessible", "True", "True")
+                            End Try
                         Case "Slewing"
-                            Compare(Device, Test, DeviceObject.Slewing.ToString, "False")
+                            Try
+                                slewing = CType(DeviceObject.Slewing, Boolean)
+                                canReadSlewing = True
+                                Compare(Device, "Slewing - Simulator can read the Slewing status", "True", "True")
+                            Catch ex As COMException When ex.ErrorCode = &H80040400
+                            Catch ex As MethodNotImplementedException
+                                Compare(Device, "Slewing - Simulator Slewing property is not accessible", "True", "True")
+                            End Try
+                        Case "OpenShutter"
+                            If canReadShutterStatus Then
+                                Try
+                                    StartTime = Now
+                                    DeviceObject.OpenShutter()
+                                    Compare(Device, "OpenShutter - Simulator can open the shutter", "True", "True")
+                                    Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterOpen)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
+                                        Thread.Sleep(100)
+                                        Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                                        Application.DoEvents()
+                                    Loop
+                                    Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
+                                    Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterOpen))
+                                Catch ex As COMException When ex.ErrorCode = &H80040400
+                                Catch ex As MethodNotImplementedException
+                                    Compare(Device, "OpenShutter - Simulator open shutter is disabled", "True", "True")
+                                End Try
+                            Else
+                                Compare(Device, "OpenShutter - Skipping test because simulator ShutterStatus property is not accessible", "True", "True")
+                            End If
                         Case "CloseShutter"
-                            StartTime = Now
-                            DeviceObject.CloseShutter()
-                            Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterClosed)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
-                                Thread.Sleep(100)
-                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
-                                Application.DoEvents()
-                            Loop
-                            Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
-                            Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterClosed))
+                            If canReadShutterStatus Then
+                                Try
+                                    StartTime = Now
+                                    DeviceObject.CloseShutter()
+                                    Compare(Device, "OpenShutter - Simulator can close the shutter", "True", "True")
+                                    Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterClosed)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
+                                        Thread.Sleep(100)
+                                        Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                                        Application.DoEvents()
+                                    Loop
+                                    Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
+                                    Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterClosed))
+                                Catch ex As COMException When ex.ErrorCode = &H80040400
+                                Catch ex As MethodNotImplementedException
+                                    Compare(Device, "CloseShutter - Simulator close shutter is disabled", "True", "True")
+                                End Try
+                            Else
+                                Compare(Device, "CloseShutter - Skipping test because simulator ShutterStatus property is not accessible", "True", "True")
+                            End If
                         Case "SlewToAltitude"
-                            StartTime = Now
-                            DeviceObject.SlewToAltitude(45.0)
-                            Do
-                                Thread.Sleep(100)
-                                Application.DoEvents()
-                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
-                            Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
-                            Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
-                            CompareDouble(Device, Test, DeviceObject.Altitude, 45.0, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180)
+                            If canReadSlewing Then
+                                Try
+                                    StartTime = Now
+                                    DeviceObject.SlewToAltitude(45.0)
+                                    Do
+                                        Thread.Sleep(100)
+                                        Application.DoEvents()
+                                        Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                                    Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
+                                    Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
+                                    CompareDouble(Device, Test, DeviceObject.Altitude, 45.0, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180)
+                                Catch ex As COMException When ex.ErrorCode = &H80040400
+                                Catch ex As MethodNotImplementedException
+                                    Compare(Device, "SlewToAltitude - Simulator SlewToAltitude method is disabled", "True", "True")
+                                End Try
+                            Else
+                                Compare(Device, "SlewToAltitude - Skipping test because simulator Slewing property is not accessible", "True", "True")
+                            End If
                         Case "SlewToAzimuth"
-                            StartTime = Now
-                            DeviceObject.SlewToAzimuth(225.0)
-                            Do
-                                Thread.Sleep(100)
-                                Application.DoEvents()
-                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
-                            Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
-                            Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
-                            CompareDouble(Device, Test, DeviceObject.Azimuth, 225.0, TOLERANCE_5_SECONDS, DoubleType.Degrees0To360)
+                            If canReadSlewing Then
+                                Try
+                                    StartTime = Now
+                                    DeviceObject.SlewToAzimuth(225.0)
+                                    Do
+                                        Thread.Sleep(100)
+                                        Application.DoEvents()
+                                        Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                                    Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
+                                    Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
+                                    CompareDouble(Device, Test, DeviceObject.Azimuth, 225.0, TOLERANCE_5_SECONDS, DoubleType.Degrees0To360)
+                                Catch ex As COMException When ex.ErrorCode = &H80040400
+                                Catch ex As MethodNotImplementedException
+                                    Compare(Device, "SlewToAzimuth - Simulator SlewToAzimuth method is disabled", "True", "True")
+                                End Try
+                            Else
+                                Compare(Device, "SlewToAzimuth - Skipping test because simulator Slewing property is not accessible", "True", "True")
+                            End If
                         Case Else
                             LogException("DeviceTest", "Unknown Dome Test: " & Test)
                     End Select
@@ -1718,6 +1834,7 @@ Public Class DiagnosticsForm
                         Case Else
                             LogException("DeviceTest", "Unknown ObservingConditions Test: " & Test)
                     End Select
+
                 Case Else
                     LogException("DeviceTest", "Unknown Device: " & Device)
             End Select
