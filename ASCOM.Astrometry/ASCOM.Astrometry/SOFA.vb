@@ -54,7 +54,7 @@ Namespace SOFA
         Private Parameters As EarthRotationParameters
 
         <StructLayout(LayoutKind.Sequential)>
-        Structure LeapSecondDataStruct
+        Friend Structure LeapSecondDataStruct
             Dim Year As Integer
             Dim Month As Integer
             Dim DelAt As Double
@@ -1861,7 +1861,7 @@ Namespace SOFA
         ' Get the built-in list of leap seconds from the SOFA DLL, which is the master data for the whole Platform
         ' This method is static so that it can be called without having to fully initialise the SOFA DLL which uses an instance of the EarthRotationParameters 
         ' object leading to a circular reference of EarthRotationParameters calling SOFA, which calls EarthRotationParameters and so on ad infinitum.
-        Public Shared Function BuiltInLeapSeconds() As SortedList(Of Double, Double)
+        Friend Shared Function BuiltInLeapSeconds() As SortedList(Of Double, Double)
             Dim LeapSecondArray(100) As LeapSecondDataStruct, LeapSecondList As SortedList(Of Double, Double)
             Dim NumberOfRecords As Short, UpdatedDataInt As Integer, JulianDate As Double
 

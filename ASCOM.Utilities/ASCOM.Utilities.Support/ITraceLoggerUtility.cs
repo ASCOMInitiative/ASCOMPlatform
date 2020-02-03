@@ -7,7 +7,7 @@
     /// reference to ASCOM.Utilities.Support and adding the reverse dependency would create a circular dependency, which is not permitted.
     /// Use of this interface, which is defined in ASCOM.Utilities.Support and is implemented in the TraceLogger class, means that both ASCOM.Utilities and ASCOM.Utilities.Support can deal with  
     /// objects that expose the ITraceLoggerUtility interface without ASCOM.Utilities,Support requiring a reference the concrete TraceLogger class.</remarks>
-    public interface ITraceLoggerUtility
+    internal interface ITraceLoggerUtility
     {
         public void LogStart(string Identifier, string Message);
         public void LogContinue(string Message, bool HexDump);

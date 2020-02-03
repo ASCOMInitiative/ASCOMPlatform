@@ -11,7 +11,7 @@ namespace ASCOM.Utilities.Support
     /// Alpaca discovery component
     /// Note: Forced the use of System.Net.Http.HttpClientHandler instead of System.Net.Http.SocketsHttpHandler because HttpClient timeout doesn't work correctly in the latter
     /// </summary>
-    public class AlpacaDiscovery : IDisposable
+    internal class AlpacaDiscovery : IDisposable
     {
         // Utility objects
         private ITraceLoggerUtility TL;
@@ -32,7 +32,7 @@ namespace ASCOM.Utilities.Support
         /// Initialiser that takes a trace logger
         /// </summary>
         /// <param name="tl">Trace logger instance to use for activity logging</param>
-        public AlpacaDiscovery(ITraceLoggerUtility tl)
+        internal AlpacaDiscovery(ITraceLoggerUtility tl)
         {
             try
             {

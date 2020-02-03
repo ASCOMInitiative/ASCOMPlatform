@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <!-- The configuration and platform will be used to determine which
          assemblies to include from solution and project documentation
@@ -18,11 +18,11 @@
     <OutputPath>.\Output\Platform\</OutputPath>
     <HtmlHelpName>PlatformHelp</HtmlHelpName>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj" />
       <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" />
+      <DocumentationSource sourceFile="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj" />
     </DocumentationSources>
     <HelpTitle>ASCOM Platform Help</HelpTitle>
-    <CopyrightText>Copyright &amp;#169%3b 2010-18, The ASCOM Initiative</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2010-20, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.DeviceInterface" isExposed="True">
         <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV2" filterName="IFocuserV2" isExposed="False" />
@@ -62,7 +62,8 @@
     </PlugInConfigurations>
     <FeedbackEMailAddress>
     </FeedbackEMailAddress>
-    <FeedbackEMailLinkText>the ASCOM Talk Yahoo Group</FeedbackEMailLinkText>
+    <FeedbackEMailLinkText>
+    </FeedbackEMailLinkText>
     <HeaderText>
     </HeaderText>
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers, EditorBrowsableNever, NonBrowsable</VisibleItems>
@@ -70,7 +71,7 @@
       <NamespaceSummaryItem name="ASCOM.HelperNET.VB6HelperSupport" isDocumented="False" xmlns="" />
     </NamespaceSummaries>
     <SdkLinkType>Msdn</SdkLinkType>
-    <FrameworkVersion>.NET Framework 3.5</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.8</FrameworkVersion>
     <KeepLogFile>True</KeepLogFile>
     <MSHelpViewerSdkLinkType>None</MSHelpViewerSdkLinkType>
     <SyntaxFilters>C#, Visual Basic, Managed C++</SyntaxFilters>
@@ -134,6 +135,7 @@
       <AlternateText>ForceCOMPort</AlternateText>
     </Image>
     <Content Include="styles\branding-Help1.css" />
+    <None Include="Version History\Version 6.5.aml" />
     <None Include="Tools and Features\Observing Conditions Hub.aml" />
     <None Include="Version History\Version 6.4 SP1.aml" />
     <None Include="Tools and Features\Earth Rotation Parameters.aml" />
