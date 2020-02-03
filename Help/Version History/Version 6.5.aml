@@ -94,14 +94,13 @@
 				To reduce the maintenance burden, SOFA will become the primary high precision library for astronomical computing distributed with the ASCOM Platform and 
 				dependence of Platform components on NOVAS will be removed. However, the NOVAS routines provide functionality that is not present in SOFA e.g. major and minor planet ephemerides 
 				and consequently the NOVAS 3.1 component will continue to be distributed with the Platform.</para>
-				<para>The following NOVAS components will be removed from the Platform installer at the next major update and moved into a separate installer:</para>
+				<para>The following NOVAS components will be removed from the Platform installation at the next major update:</para>
 				<list class="bullet">
-					<listItem>NOVASCOM</listItem>
 					<listItem>NOVAS2</listItem>
 					<listItem>NOVAS2COM</listItem>
 					<listItem>NOVAS3</listItem>
 				</list>
-				<para>PLEASE NOTE: The Kepler component was flagged as deprecated in previous Platform releases but will now be retained following feedback from developers.</para>
+				<para>PLEASE NOTE: The Kepler and NOVASCOM components were flagged as deprecated in previous Platform releases but will now be retained following feedback from developers.</para>
 				</listItem>
 	 			<listItem>The following VB6 based simulators will be removed from the Platform at the next major update. These drivers were moved to a 
 	 			"bug-fix only" maintenance mode when Platform 6 was released and are becoming increasingly out of step with their .NET counterparts, which are fully integrated 
