@@ -27,6 +27,19 @@
 		</content>
 	</section>
 	
+	<section address="RetiredComponents">
+	   	<title>Retired Components</title>
+	    <content>
+	    	<para>The following Platform 5 hubs have been retired in this release and are replaced by the new Device Hub. We stroingly recommend that you switch over to using the Deice Hub becuase these components will be removed in a future release.</para>
+			<list class="bullet">
+	  			<listItem>POTH</listItem>
+	  			<listItem>Hub</listItem>
+	  			<listItem>Pipe</listItem>
+	  			<listItem>Dome Control Hub</listItem>
+			</list>
+		</content>
+	</section>
+	
 	<section address="Changes65Dev">
 	 	<title>Key Changes in 6.5 - For Developers</title>
 	  	<content>
@@ -152,25 +165,23 @@
 	<section address="PreReqs65">
 		<title>Platform Prerequisites</title>
 		<content>
-			<para>Platform 6.4 SP1 requires the following .NET framework version and library:</para>
+			<para>Platform 6.5 requires the following .NET framework version and library:</para>
 			<list class="bullet">
 	  			<listItem>.NET Framework 4.8</listItem>
-	  			<listItem>For WIndows 8 and later the .NET Framework 3.5 option must be enabled in Control Panel / Programs and Features / Turn Windows Features On and Off</listItem>
+	  			<listItem>For WIndows 8 and Windows 10 the .NET Framework 3.5 option must be enabled in Control Panel / Programs and Features / Turn Windows Features On and Off</listItem>
 	  			<listItem>Visual C++ 16.0 libraries (these are provided by the Platform installer if required)</listItem>
 			</list>
-			<para>While previous Platforms required .NET Framework 3.5, Platform 6.5 requires that .NET Framework 4.8 is installed on your PC. This change is to enable Platform components to take 
-			advantage of new features introduced after Framework 4.0 was released and to put the Platform onto what Microsoft cxurrently is flagging as the last release of .NET Framework.</para>
-			<para>The installer will advise you if your PC does not have the required support and will request that you install or enable
-			it before continuing with the installation. The framework can be downloaded from the
+			<para>While previous Platforms required .NET Framework 4.0, Platform 6.5 requires that .NET Framework 4.8 is installed on your PC. This change is to enable Platform components to take 
+			advantage of new features introduced after Framework 4.0 was released and to put the Platform onto what Microsoft has flagged as the last release of .NET Framework.</para>
+			<para>The installer will advise you if your PC does not have the required support and will request that you install or enable it before continuing with the installation.
 				<externalLink>
 					<linkText>Microsoft Download Centre</linkText>
 					<linkAlternateText>http://www.microsoft.com/downloads</linkAlternateText>
 					<linkUri>http://www.microsoft.com/downloads</linkUri>
 					<linkTarget>_blank</linkTarget>
 				</externalLink>
-				please check under "Popular Downloads - Developer Tools" if Framework 4.8 is not otherwise listed.
 			</para>
-			<para>The Platform setup will install the C++ 16 libraries if they are not already present on your PC.</para>
+			<para>The Platform installer will provide or update the C++ 16 libraries if they are not already present on your PC or are not current.</para>
 	    </content>
 	</section>
  

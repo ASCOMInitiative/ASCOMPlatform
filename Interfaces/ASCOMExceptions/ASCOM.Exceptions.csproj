@@ -13,6 +13,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net35|AnyCPU'">
     <DocumentationFile>ASCOM.Exceptions.xml</DocumentationFile>
+    <NoWarn>1701;1702;NU5105</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
