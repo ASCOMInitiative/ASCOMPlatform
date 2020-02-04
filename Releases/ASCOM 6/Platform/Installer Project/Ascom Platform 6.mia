@@ -344,6 +344,10 @@ If
 Write to Text File
 Terminate Install
 End
+If
+Write to Text File
+GoTo Label
+End
 GoTo Label
 Comment
 Label
@@ -2208,6 +2212,10 @@ $
 {92507A5D-A743-4356-A113-A9EEB7C4A411}
 {FF2885AF-3FB3-4429-BB94-F4C78C86072B}
 {865C06A4-EAD1-43BE-93BB-94EC39FBA4B9}
+{7F9C3399-7B1B-4D25-BC92-8E7DFA49F7F4}
+{FD56121F-776C-4072-9780-66270EB2A600}
+{38853FC5-8868-4BF1-8382-F88AB987E7DF}
+{4781F860-37E7-4F1B-A8E9-4EA42E8BE3BC}
 {40D0B9BC-4E03-4FA2-B6AC-6ABD9BF5428F}
 {749502C6-BDA8-48E1-A015-C134EE9194BB}
 {64185B59-787C-476E-A4A7-18B65C6C25C4}
@@ -5972,6 +5980,11 @@ INSTALL_DOMECONTROLHUB
 0
 TRUE
 FALSE
+{7F9C3399-7B1B-4D25-BC92-8E7DFA49F7F4}
+WIZARD
+0
+README
+FALSE
 {DF8B809A-C82A-415C-BBCB-F54F0C5D25AB}
 $TITLE$ Setup Error
 This product requires at least Internet Explorer 5.01 Service Pack 1.$NEWLINE$$NEWLINE$Setup cannot continue.
@@ -6099,15 +6112,15 @@ ASCOM Platform Options
 TRUE
 Description for feature New Feature
 {6321CC5A-74D7-45FC-9F87-3BE903179DC8}
-Platform 5 hubs replaced by Device Hub\Dome Control Hub
+Out of date hubs replaced by Device Hub\Dome Control Hub
 FALSE
-Description for feature New Feature
+Dome Control Hub has been replaced by the Device Hub
 {4E7E0FDE-BCBE-4376-9175-B82E093BD143}
-Platform 5 hubs replaced by Device Hub\Hub
+Out of date hubs replaced by Device Hub\Hub
 FALSE
-Description for feature New Feature
+Hub has been replaced by the Device Hub
 {B6D230F3-B6F6-407F-833F-B188CCF0471A}
-Platform 5 hubs replaced by Device Hub
+Out of date hubs replaced by Device Hub
 FALSE
 Description for feature New Feature
 {E76D87F6-97E2-428A-B1C0-CB72C6AF1CDC}
@@ -6123,13 +6136,13 @@ ASCOM Platform Options\Display user guide when installation is complete
 FALSE
 Description for feature New Feature
 {AB675F5D-D1F3-427C-B3CB-8A0A77DB2249}
-Platform 5 hubs replaced by Device Hub\Pipe
+Out of date hubs replaced by Device Hub\Pipe
 FALSE
-Description for feature New Feature
+Pipe has been replaced by the Device Hub
 {CF5CC194-4FF0-4779-81F1-B58E2980261D}
-Platform 5 hubs replaced by Device Hub\POTH
+Out of date hubs replaced by Device Hub\POTH
 FALSE
-Description for feature New Feature
+POTH has been replaced by the Device Hub
 {272D658A-67B9-4BAB-B1E8-D0319F32D68B}
 ASCOM Platform Options\Display user guide when installation is complete
 DISPLAY_USER_GUIDE
@@ -6143,31 +6156,31 @@ INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP
 ASCOM Platform Options
 INSTALL_PLATFORM
 {0CCEC61D-9872-487B-8EC0-CC102EFAC652}
-Platform 5 hubs replaced by Device Hub
+Out of date hubs replaced by Device Hub
 SELECTED
 {FEBC19E0-11C6-4CE7-B426-A199D1E9E691}
-Platform 5 hubs replaced by Device Hub\Dome Control Hub
+Out of date hubs replaced by Device Hub\Dome Control Hub
 SELECTED
 {2015E1F7-5581-4087-9726-D53147968D1C}
-Platform 5 hubs replaced by Device Hub\POTH
+Out of date hubs replaced by Device Hub\POTH
 SELECTED
 {33518B54-25BC-4FFB-8BA3-80F56F866525}
-Platform 5 hubs replaced by Device Hub\Hub
+Out of date hubs replaced by Device Hub\Hub
 SELECTED
 {01BBD56A-1355-4C1E-8F10-F35CD9FC315A}
-Platform 5 hubs replaced by Device Hub\Dome Control Hub
+Out of date hubs replaced by Device Hub\Dome Control Hub
 INSTALL_DOMECONTROLHUB
 {9C82A0B9-CA62-4254-9BD7-F8F4A81D5707}
-Platform 5 hubs replaced by Device Hub\Hub
+Out of date hubs replaced by Device Hub\Hub
 INSTALL_HUB
 {1C89BE9D-B368-4049-9754-B8555435EAA8}
-Platform 5 hubs replaced by Device Hub\Pipe
+Out of date hubs replaced by Device Hub\Pipe
 SELECTED
 {49AC5D94-ECEF-406C-89CB-4C61E55F96B0}
-Platform 5 hubs replaced by Device Hub\POTH
+Out of date hubs replaced by Device Hub\POTH
 INSTALL_POTH
 {1748EBC8-D93D-402C-A57B-C699719C84AA}
-Platform 5 hubs replaced by Device Hub\Pipe
+Out of date hubs replaced by Device Hub\Pipe
 INSTALL_PIPE
 {B7656BD2-3686-41CC-BBFB-F6B6EF293D9B}
 $COMMONFILES$\ASCOM
@@ -10980,30 +10993,30 @@ TRUE
 $SHORTCUTFOLDER$\Tools
 Pipe Connection Monitor.lnk"
 TRUE
-TRUE
+FALSE
 {9BBB4DD1-F71D-4013-AA7D-830A440899C1}
 $SHORTCUTFOLDER$\Tools
 Pipe Help.lnk"
 TRUE
-TRUE
+FALSE
 {439731B8-D886-449C-8297-CC203786FBF0}
 $SHORTCUTFOLDER$\Scope-Dome Hubs
 POTH Scope-Dome Hub.lnk"
 TRUE
-TRUE
+FALSE
 {BF287CF6-C45D-4F48-82D1-77DB85272EDC}
 $SHORTCUTFOLDER$\Scope-Dome Hubs
 POTH Help.lnk"
 TRUE
-TRUE
+FALSE
 {A0791A9D-8C79-4380-BA71-A7A17009527A}
 $SHORTCUTFOLDER$\Scope-Dome Hubs
 ASCOM Dome Control.lnk"
 TRUE
-TRUE
+FALSE
 {8A995C3A-00D6-428E-83EC-C2DEB660726D}
-Platform 5 hubs replaced by Device Hub
-Platform 5 hubs replaced by Device Hub.7zip
+Out of date hubs replaced by Device Hub
+Out of date hubs replaced by Device Hub.7zip
 FALSE
 {6DED69D5-9190-478F-807A-5D2B86E0FCEB}
 DomeControl Hub
@@ -11022,8 +11035,8 @@ Pipe
 Pipe.7zip
 FALSE
 {1D940E81-86F2-401F-B863-7527E63BB5E7}
-Platform 5 hubs replaced by Device Hub
-Platform 5 hubs replaced by Device Hub.7zip
+Out of date hubs replaced by Device Hub
+Out of date hubs replaced by Device Hub.7zip
 FALSE
 {08F62C27-667B-49A1-99D6-E9590D554E07}
 Dome Control Hub
@@ -11063,6 +11076,8 @@ Finish Setup
 Welcome Dialog
 {7DD319B9-FF0A-40BB-A2D1-3C6542B53258}
 End of Script
+{38853FC5-8868-4BF1-8382-F88AB987E7DF}
+ReadMe Information
 {04A60E60-D2D0-4920-A697-C99FD0EC4753}
 $SUPPORTDIR$\MasterPlatformVersion.txt
 PLATFORMVERSIONSPNUMBER
@@ -12153,6 +12168,11 @@ TRUE
 {22B06526-836E-46E0-9F4D-7BD182E5BAD9}
 $SETUPLOG$
 $TIME$ Install Hub - $INSTALL_HUB$
+FALSE
+TRUE
+{FD56121F-776C-4072-9780-66270EB2A600}
+$SETUPLOG$
+$TIME$ ReadMe shown
 FALSE
 TRUE
 {C27DD540-EC7D-462C-9EE8-5D0F21EB2997}
@@ -13459,6 +13479,10 @@ C
 
 
 
+
+
+
+
 C
 
 
@@ -14530,6 +14554,10 @@ C
 
 
 $
+
+
+
+
 
 
 

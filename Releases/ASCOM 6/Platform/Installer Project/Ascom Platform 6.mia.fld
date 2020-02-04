@@ -1,5 +1,4 @@
-﻿Main Setup Dialogue
-Platform 6 Content
+﻿Platform 6 Content
 Set Registry Keys
 Platform 6.1 files
 Platform 6.2 files
@@ -13,3 +12,8 @@ Remove 32bit components
 Install Application Pre-Requisites if required
 Maintenance Dialogue
 Alpaca Support for Chooser
+Non-MSI installation activities
+Platform 5 files
+Platform 5.5 files
+Platform 6 files
+ASCOM Device Hub

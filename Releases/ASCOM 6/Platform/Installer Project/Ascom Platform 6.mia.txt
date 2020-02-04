@@ -136,11 +136,11 @@ Define Component: ASCOM Platform Options
 Define Component: ASCOM Platform Options\Install Diagnostics shortcut on desktop
 Define Component: ASCOM Platform Options\Install Profile Explorer shortcut on desktop
 Define Component: ASCOM Platform Options\Display user guide when installation is complete
-Define Component: Platform 5 hubs replaced by Device Hub
-Define Component: Platform 5 hubs replaced by Device Hub\POTH
-Define Component: Platform 5 hubs replaced by Device Hub\Dome Control Hub
-Define Component: Platform 5 hubs replaced by Device Hub\Pipe
-Define Component: Platform 5 hubs replaced by Device Hub\Hub
+Define Component: Out of date hubs replaced by Device Hub
+Define Component: Out of date hubs replaced by Device Hub\POTH
+Define Component: Out of date hubs replaced by Device Hub\Dome Control Hub
+Define Component: Out of date hubs replaced by Device Hub\Pipe
+Define Component: Out of date hubs replaced by Device Hub\Hub
  
 Comment: Read the framework root value from the OS and set FRAMEWORKPATH to the full path to the executables
 Read Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\InstallRoot into FRAMEWORKROOT
@@ -344,6 +344,10 @@ if Variable WIZARD Equals CANCEL
   Write into Text File $SETUPLOG$ from Value $TIME$ Installation cancelled at user request (Main welcome) (at end of file)
   Terminate Installation
 end
+if Variable WIZARD Equals README
+  Write into Text File $SETUPLOG$ from Value $TIME$ ReadMe shown (at end of file)
+  GoTo Label: ReadMe Information
+end
 GoTo Label: Main Install
  
 label: ReadMe Information
@@ -403,10 +407,10 @@ Get Component ASCOM Platform Options Selection State into Variable INSTALL_PLATF
 Get Component ASCOM Platform Options\Install Diagnostics shortcut on desktop Selection State into Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP
 Get Component ASCOM Platform Options\Install Profile Explorer shortcut on desktop Selection State into Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP
 Get Component ASCOM Platform Options\Display user guide when installation is complete Selection State into Variable DISPLAY_USER_GUIDE
-Get Component Platform 5 hubs replaced by Device Hub\POTH Selection State into Variable INSTALL_POTH
-Get Component Platform 5 hubs replaced by Device Hub\Dome Control Hub Selection State into Variable INSTALL_DOMECONTROLHUB
-Get Component Platform 5 hubs replaced by Device Hub\Pipe Selection State into Variable INSTALL_PIPE
-Get Component Platform 5 hubs replaced by Device Hub\Hub Selection State into Variable INSTALL_HUB
+Get Component Out of date hubs replaced by Device Hub\POTH Selection State into Variable INSTALL_POTH
+Get Component Out of date hubs replaced by Device Hub\Dome Control Hub Selection State into Variable INSTALL_DOMECONTROLHUB
+Get Component Out of date hubs replaced by Device Hub\Pipe Selection State into Variable INSTALL_PIPE
+Get Component Out of date hubs replaced by Device Hub\Hub Selection State into Variable INSTALL_HUB
 Write into Text File $SETUPLOG$ from Value $TIME$ Platform Installation Options - $INSTALL_PLATFORM$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install Desktop Diagnostics Shortcut - $INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install Profile Explorer Shortcut - $INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP$ (at end of file)
@@ -1246,20 +1250,20 @@ if Variable INSTALL_PIPE Equals TRUE
   Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor to $COMMONFILES$\ASCOM\Telescope\Pipe.exe
   Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
 else
-  Delete Files $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor.lnk" (when installing and uninstalling)
-  Delete Files $SHORTCUTFOLDER$\Tools\Pipe Help.lnk" (when installing and uninstalling)
+  Delete Files $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor.lnk" (when installing)
+  Delete Files $SHORTCUTFOLDER$\Tools\Pipe Help.lnk" (when installing)
 end
 if Variable INSTALL_POTH Equals TRUE
   Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub to $COMMONFILES$\ASCOM\Telescope\POTH.exe
   Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\POTHHelp.htm
 else
-  Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub.lnk" (when installing and uninstalling)
-  Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help.lnk" (when installing and uninstalling)
+  Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub.lnk" (when installing)
+  Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help.lnk" (when installing)
 end
 if Variable INSTALL_DOMECONTROLHUB Equals TRUE
   Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
 else
-  Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control.lnk" (when installing and uninstalling)
+  Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control.lnk" (when installing)
 end
 Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Device Hub to $COMMONFILES$\ASCOM\DeviceHub\ASCOM.DeviceHub.exe
 Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Device Hub Help to $COMMONFILES$\ASCOM\DeviceHub\ASCOM Device Hub User and Technical Information.pdf
@@ -1838,26 +1842,26 @@ end
 [DEFINE WEB MEDIA Pipe]
 if Variable SELECTED Equals TRUE
 end
-[DEFINE WEB MEDIA Platform 5 hubs replaced by Device Hub]
-Get Component Platform 5 hubs replaced by Device Hub Selection State into Variable SELECTED
+[DEFINE WEB MEDIA Out of date hubs replaced by Device Hub]
+Get Component Out of date hubs replaced by Device Hub Selection State into Variable SELECTED
 if Variable SELECTED Equals TRUE
 end
 [DEFINE WEB MEDIA Dome Control Hub]
-Get Component Platform 5 hubs replaced by Device Hub\Dome Control Hub Selection State into Variable SELECTED
+Get Component Out of date hubs replaced by Device Hub\Dome Control Hub Selection State into Variable SELECTED
 if Variable SELECTED Equals TRUE
 end
 [DEFINE WEB MEDIA POTH]
-Get Component Platform 5 hubs replaced by Device Hub\POTH Selection State into Variable SELECTED
+Get Component Out of date hubs replaced by Device Hub\POTH Selection State into Variable SELECTED
 if Variable SELECTED Equals TRUE
 end
 [DEFINE WEB MEDIA Hub]
-Get Component Platform 5 hubs replaced by Device Hub\Hub Selection State into Variable SELECTED
+Get Component Out of date hubs replaced by Device Hub\Hub Selection State into Variable SELECTED
 if Variable SELECTED Equals TRUE
 end
 [DEFINE WEB MEDIA Pipe]
-Get Component Platform 5 hubs replaced by Device Hub\Pipe Selection State into Variable SELECTED
+Get Component Out of date hubs replaced by Device Hub\Pipe Selection State into Variable SELECTED
 if Variable SELECTED Equals TRUE
 end
-[DEFINE WEB MEDIA Platform 5 hubs replaced by Device Hub]
+[DEFINE WEB MEDIA Out of date hubs replaced by Device Hub]
 if Variable SELECTED Equals TRUE
 end
