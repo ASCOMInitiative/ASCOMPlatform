@@ -255,7 +255,11 @@
     <ClCompile Include="..\Currrent Source Code\fasa03.c" />
     <ClCompile Include="..\Currrent Source Code\faur03.c" />
     <ClCompile Include="..\Currrent Source Code\fave03.c" />
+    <ClCompile Include="..\Currrent Source Code\fk425.c" />
+    <ClCompile Include="..\Currrent Source Code\fk45z.c" />
+    <ClCompile Include="..\Currrent Source Code\fk524.c" />
     <ClCompile Include="..\Currrent Source Code\fk52h.c" />
+    <ClCompile Include="..\Currrent Source Code\fk54z.c" />
     <ClCompile Include="..\Currrent Source Code\fk5hip.c" />
     <ClCompile Include="..\Currrent Source Code\fk5hz.c" />
     <ClCompile Include="..\Currrent Source Code\fw2m.c" />

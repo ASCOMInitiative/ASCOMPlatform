@@ -40,10 +40,10 @@ Namespace SOFA
         Private Const SOFA_DLL_LOCATION As String = "\ASCOM\Astrometry\" 'This is appended to the Common Files path so that the calling application can dind the SOFA DLLs
 
         ' Release and revision constants
-        Private Const SOFA_RELEASE_NUMBER As Integer = 14
-        Private Const SOFA_ISSUE_DATE As String = "2018-02-30"
+        Private Const SOFA_RELEASE_NUMBER As Integer = 15
+        Private Const SOFA_ISSUE_DATE As String = "2019-07-22"
         Private Const SOFA_REVISION_NUMBER As Integer = 0 ' Not presented in the interface, maintained here for reference
-        Private Const SOFA_REVISION_DATE As String = "2018-02-30"
+        Private Const SOFA_REVISION_DATE As String = "2019-07-22"
 
         Private Const MAXIMUM_NUMBER_OF_UPDATED_LEAP_SECOPND_VALUES As Integer = 100
 

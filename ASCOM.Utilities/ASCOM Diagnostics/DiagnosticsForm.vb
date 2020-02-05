@@ -536,6 +536,11 @@ Public Class DiagnosticsForm
         TL.LogMessage("SOFATests", "Starting test")
         SOFA = New SOFA.SOFA
 
+        ' SOFA version tests
+        CompareInteger("SOFATests", "SOFA release number", SOFA.SofaReleaseNumber(), 15)
+        Compare("SOFATests", "SOFA issue date", SOFA.SofaIssueDate, "2019-07-22")
+        Compare("SOFATests", "SOFA revision date", SOFA.SofaRevisionDate, "2019-07-22")
+
         'Af2a tests
         j = SOFA.Af2a("-", 45, 13, 27.2, a)
 

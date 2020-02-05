@@ -35,6 +35,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\ASCOM Sofa  Files\ASCOMDat.c">
+      <Filter>ASCOM Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\Currrent Source Code\a2af.c">
       <Filter>SOFA Source Files</Filter>
     </ClCompile>
@@ -311,7 +314,19 @@
     <ClCompile Include="..\Currrent Source Code\fk5hz.c">
       <Filter>SOFA Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Currrent Source Code\fk45z.c">
+      <Filter>SOFA Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\Currrent Source Code\fk52h.c">
+      <Filter>SOFA Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Currrent Source Code\fk54z.c">
+      <Filter>SOFA Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Currrent Source Code\fk425.c">
+      <Filter>SOFA Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Currrent Source Code\fk524.c">
       <Filter>SOFA Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Currrent Source Code\fw2m.c">
@@ -751,9 +766,6 @@
     </ClCompile>
     <ClCompile Include="..\Currrent Source Code\zr.c">
       <Filter>SOFA Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ASCOM Sofa  Files\ASCOMDat.c">
-      <Filter>ASCOM Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
