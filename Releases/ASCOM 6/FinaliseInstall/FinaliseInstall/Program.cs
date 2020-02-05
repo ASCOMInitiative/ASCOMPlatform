@@ -254,6 +254,11 @@ namespace ConsoleApplication1
                 {
                     AddAppID("ASCOMDome.Telescope", "ASCOMDome.exe", "{B5863239-0A6E-48d4-A9EA-0DDA4D942390}");
                     AddAppID("ASCOMDome.Dome", "", "{B5863239-0A6E-48d4-A9EA-0DDA4D942390}");
+
+                    // Register VB6 simulators for ASCOM. I set these friendly names.
+                    LogMessage("FinaliseInstall", "Registering ASCOMDome");
+                    RegAscom("ASCOMDome.Telescope", "ASCOM Dome Control");
+                    RegAscom("ASCOMDome.Dome", "ASCOM Dome Control");
                 }
                 else // Executable not found so unregister from the Profile
                 {
@@ -266,10 +271,6 @@ namespace ConsoleApplication1
                 AddAppID("ASCOM.Simulator.Rotator", "ASCOM.RotatorSimulator.exe", "{5D4BBF44-2573-401A-AEE1-F9716D0BAEC3}");
                 AddAppID("ASCOM.Simulator.Telescope", "ASCOM.TelescopeSimulator.exe", "{1620DCB8-0352-4717-A966-B174AC868FA0}");
 
-                // Register VB6 simulators for ASCOM. I set these friendly names.
-                LogMessage("FinaliseInstall", "Registering ASCOMDome");
-                RegAscom("ASCOMDome.Telescope", "ASCOM Dome Control");
-                RegAscom("ASCOMDome.Dome", "ASCOM Dome Control");
 
                 //Clean up Profile object before close
                 try
