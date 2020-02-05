@@ -25,6 +25,7 @@
 	      		</listItem>
 	      		<listItem>The Diagnostics tool is now more tolerant of simulator configurations that are not set to default values.</listItem>
 	      		<listItem>Tracing of Platform registry use now has its own independent trace enable / disable flag.</listItem>
+	      		<listItem>SOFA has been updated to the current 22nd July 2019 version.</listItem>
 	  		</list>
 	    </content>
 	</section>
