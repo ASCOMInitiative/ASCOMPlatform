@@ -52,6 +52,10 @@ namespace ASCOM.DynamicRemoteClients
                 LblVersionNumber.Text = "Version " + assemblyVersion.ToString();
                 TL.LogMessage("Initialise", string.Format("Application Version: {0}", assemblyVersion.ToString()));
 
+                // Add form load and resize handlers
+                this.Resize += ManageDevicesForm_Resize;
+                this.Load += ManageDevicesForm_Load;
+
                 // Configured the coloured checked list box               
                 dynamicDriversCheckedListBox = new ColouredCheckedListBox();
                 dynamicDriversCheckedListBox.Parent = this;
@@ -78,9 +82,10 @@ namespace ASCOM.DynamicRemoteClients
             catch (Exception ex)
             {
                 TL.LogMessageCrLf("initialise - Exception", ex.ToString());
-                MessageBox.Show("Sorry, en error occurred on start up, please report this error message on the ASCOM Talk forum hosted at Groups.Io.\r\n\n" + ex.Message, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Sorry, an error occurred on start up, please report this error message on the ASCOM Talk forum hosted at Groups.Io.\r\n\n" + ex.Message, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         /// <summary>
         /// Clean up any resources being used.
@@ -100,6 +105,164 @@ namespace ASCOM.DynamicRemoteClients
         }
 
         #endregion
+
+        #region Event handlers
+
+        /// <summary>
+        /// Form load event handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ManageDevicesForm_Load(object sender, EventArgs e)
+        {
+            // Place controls in their correct positions before displaying
+            LayoutControls();
+        }
+
+        /// <summary>
+        /// Handler for the form resize event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ManageDevicesForm_Resize(object sender, EventArgs e)
+        {
+            LayoutControls();
+        }
+
+        /// <summary>
+        /// Cancel button handler - just closes the application
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnCancel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                TL.LogMessage("Cancel", "Closing the application");
+            }
+            finally
+            {
+                Application.Exit();
+            }
+        }
+
+        /// <summary>
+        /// Completely remove drivers flagged for deletion
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnDeleteDrivers_Click(object sender, EventArgs e)
+        {
+            // Confirm whether the user really does want to delete the selected drivers
+            DialogResult result = MessageBox.Show("Are you sure that you want to delete the checked drivers?", "Delete Dynamic Drivers", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result != DialogResult.Yes) return; // Give up if there is any outcome other than yes
+
+            try
+            {
+                // Disable controls so that the process can't be stopped part way through 
+                BtnDeleteDrivers.Enabled = false;
+
+                // Create pointer to the dynamic driver's local server folder
+                string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + SharedConstants.ALPACA_CLIENT_LOCAL_SERVER_PATH;
+                TL.LogMessage("DeleteDrivers", $"Local server path: {localServerPath}");
+
+                // Iterate over each device that has been checked in the UI checked list box
+                foreach (DynamicDriverRegistration driver in dynamicDriversCheckedListBox.CheckedItems)
+                {
+                    // COM unregister the driver
+                    ComUnRegister(driver.ProgId);
+
+                    // Create pointers to the driver executable and its PDB file
+                    TL.LogMessage("DeleteDrivers", $"Deleting driver {driver.Description}");
+                    string driverFileName = $"{localServerPath}{driver.ProgId}.dll";
+                    string pdbFileName = $"{localServerPath}{driver.ProgId}.pdb";
+
+                    // Delete the driver and it's PDB file
+                    TL.LogMessage("DeleteDrivers", $"Deleting driver files {driverFileName} and {pdbFileName}");
+                    try
+                    {
+                        File.Delete(driverFileName);
+                        TL.LogMessage("DeleteDrivers", $"Successfully deleted driver file { driverFileName}");
+                    }
+                    catch (Exception ex)
+                    {
+                        string errorMessage = $"Unable to delete driver file {driverFileName} - {ex.Message}";
+                        TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                        MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    try
+                    {
+                        File.Delete(pdbFileName);
+                        TL.LogMessage("DeleteDrivers", $"Successfully deleted driver file { driverFileName}");
+                    }
+                    catch (Exception ex)
+                    {
+                        string errorMessage = $"Unable to delete driver file {pdbFileName} - {ex.Message}";
+                        TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                        MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    // Remove the ASCOM Profile information that is not removed by the local server when the driver is unregistered
+                    try
+                    {
+                        TL.LogMessage("DeleteDrivers", $"Removing driver Profile registration for {driver.DeviceType} driver: {driver.ProgId}");
+                        profile.DeviceType = driver.DeviceType;
+                        profile.Unregister(driver.ProgId);
+                    }
+                    catch (Exception ex)
+                    {
+                        string errorMessage = $"Unable to unregister driver {driver.ProgId} - {ex.Message}";
+                        TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                        MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    // Remove the flag indicating that this driver has been configured
+                    try
+                    {
+                        using (RegistryAccess registryAccess = new RegistryAccess())
+                        {
+                            registryAccess.DeleteProfile("Chooser", $"{driver.ProgId} Init");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        string errorMessage = $"Unable to remove driver initialised flag for {driver.ProgId} - {ex.Message}";
+                        TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                        MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+
+                ReadConfiguration();
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessageCrLf("DeleteDrivers - Exception", ex.ToString());
+                MessageBox.Show("Sorry, en error occurred during Apply, please report this error message on the ASCOM Talk forum hosted at Groups.Io.\r\n\n" + ex.Message, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                BtnDeleteDrivers.Enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Check or uncheck all driver entries when the "Select All" checkbox state is changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ChkSelectAll_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox checkBox = (CheckBox)sender;
+            for (int i = 0; i < dynamicDriversCheckedListBox.Items.Count; i++)
+            {
+                dynamicDriversCheckedListBox.SetItemChecked(i, checkBox.Checked);
+            }
+        }
+
+        #endregion
+
+        #region Support code
 
         /// <summary>
         /// Creates a list of Alpaca dynamic drivers and their configuration information
@@ -257,123 +420,6 @@ namespace ASCOM.DynamicRemoteClients
         }
 
         /// <summary>
-        /// Cancel button handler - just closes the application
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnCancel_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                TL.LogMessage("Cancel", "Closing the application");
-            }
-            finally
-            {
-                Application.Exit();
-            }
-        }
-
-        /// <summary>
-        /// Completely remove drivers flagged for deletion
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnDeleteDrivers_Click(object sender, EventArgs e)
-        {
-            // Confirm whether the user really does want to delete the selected drivers
-            DialogResult result = MessageBox.Show("Are you sure that you want to delete the checked drivers?", "Delete Dynamic Drivers", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (result != DialogResult.Yes) return; // Give up if there is any outcome other than yes
-
-            try
-            {
-                // Disable controls so that the process can't be stopped part way through 
-                BtnDeleteDrivers.Enabled = false;
-
-                // Create pointer to the dynamic driver's local server folder
-                string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + SharedConstants.ALPACA_CLIENT_LOCAL_SERVER_PATH;
-                TL.LogMessage("DeleteDrivers", $"Local server path: {localServerPath}");
-
-                // Iterate over each device that has been checked in the UI checked list box
-                foreach (DynamicDriverRegistration driver in dynamicDriversCheckedListBox.CheckedItems)
-                {
-                    // COM unregister the driver
-                    ComUnRegister(driver.ProgId);
-
-                    // Create pointers to the driver executable and its PDB file
-                    TL.LogMessage("DeleteDrivers", $"Deleting driver {driver.Description}");
-                    string driverFileName = $"{localServerPath}{driver.ProgId}.dll";
-                    string pdbFileName = $"{localServerPath}{driver.ProgId}.pdb";
-
-                    // Delete the driver and it's PDB file
-                    TL.LogMessage("DeleteDrivers", $"Deleting driver files {driverFileName} and {pdbFileName}");
-                    try
-                    {
-                        File.Delete(driverFileName);
-                        TL.LogMessage("DeleteDrivers", $"Successfully deleted driver file { driverFileName}");
-                    }
-                    catch (Exception ex)
-                    {
-                        string errorMessage = $"Unable to delete driver file {driverFileName} - {ex.Message}";
-                        TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
-                        MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-
-                    try
-                    {
-                        File.Delete(pdbFileName);
-                        TL.LogMessage("DeleteDrivers", $"Successfully deleted driver file { driverFileName}");
-                    }
-                    catch (Exception ex)
-                    {
-                        string errorMessage = $"Unable to delete driver file {pdbFileName} - {ex.Message}";
-                        TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
-                        MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-
-                    // Remove the ASCOM Profile information that is not removed by the local server when the driver is unregistered
-                    try
-                    {
-                        TL.LogMessage("DeleteDrivers", $"Removing driver Profile registration for {driver.DeviceType} driver: {driver.ProgId}");
-                        profile.DeviceType = driver.DeviceType;
-                        profile.Unregister(driver.ProgId);
-                    }
-                    catch (Exception ex)
-                    {
-                        string errorMessage = $"Unable to unregister driver {driver.ProgId} - {ex.Message}";
-                        TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
-                        MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-
-                    // Remove the flag indicating that this driver has been configured
-                    try
-                    {
-                        using (RegistryAccess registryAccess = new RegistryAccess())
-                        {
-                            registryAccess.DeleteProfile("Chooser", $"{driver.ProgId} Init");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        string errorMessage = $"Unable to remove driver initialised flag for {driver.ProgId} - {ex.Message}";
-                        TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
-                        MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-
-                ReadConfiguration();
-            }
-            catch (Exception ex)
-            {
-                TL.LogMessageCrLf("DeleteDrivers - Exception", ex.ToString());
-                MessageBox.Show("Sorry, en error occurred during Apply, please report this error message on the ASCOM Talk forum hosted at Groups.Io.\r\n\n" + ex.Message, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                BtnDeleteDrivers.Enabled = true;
-            }
-        }
-
-        /// <summary>
         /// Unregister a COM driver
         /// </summary>
         /// <param name="progId">ProgID of the driver to be unregistered</param>
@@ -429,18 +475,15 @@ namespace ASCOM.DynamicRemoteClients
             }
         }
 
-        /// <summary>
-        /// Check or uncheck all driver entries when the "Select All" checkbox state is changed
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ChkSelectAll_CheckedChanged(object sender, EventArgs e)
+        private void LayoutControls()
         {
-            CheckBox checkBox = (CheckBox)sender;
-            for (int i = 0; i < dynamicDriversCheckedListBox.Items.Count; i++)
-            {
-                dynamicDriversCheckedListBox.SetItemChecked(i, checkBox.Checked);
-            }
+            LblDriversToBeDeleted.Left = (this.Width - LblDriversToBeDeleted.Width - 95) / 2;
+            LblTitle.Left = (this.Width - LblTitle.Width - 20) / 2;
+            dynamicDriversCheckedListBox.Height = this.Height - 147;
+            dynamicDriversCheckedListBox.Width = this.Width - 97;
+
         }
+
+        #endregion
     }
 }

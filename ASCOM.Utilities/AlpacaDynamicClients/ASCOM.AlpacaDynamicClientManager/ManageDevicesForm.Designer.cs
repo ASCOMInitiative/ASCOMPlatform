@@ -18,14 +18,15 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageDevicesForm));
             this.BtnClose = new System.Windows.Forms.Button();
             this.BtnDeleteDrivers = new System.Windows.Forms.Button();
-            this.label11 = new System.Windows.Forms.Label();
+            this.LblTitle = new System.Windows.Forms.Label();
             this.LblVersionNumber = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.LblDriversToBeDeleted = new System.Windows.Forms.Label();
             this.ChkSelectAll = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // BtnClose
             // 
+            this.BtnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnClose.Location = new System.Drawing.Point(826, 430);
             this.BtnClose.Name = "BtnClose";
             this.BtnClose.Size = new System.Drawing.Size(75, 23);
@@ -36,6 +37,7 @@
             // 
             // BtnDeleteDrivers
             // 
+            this.BtnDeleteDrivers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnDeleteDrivers.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.BtnDeleteDrivers.Location = new System.Drawing.Point(745, 430);
             this.BtnDeleteDrivers.Name = "BtnDeleteDrivers";
@@ -45,19 +47,20 @@
             this.BtnDeleteDrivers.UseVisualStyleBackColor = true;
             this.BtnDeleteDrivers.Click += new System.EventHandler(this.BtnDeleteDrivers_Click);
             // 
-            // label11
+            // LblTitle
             // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.label11.Location = new System.Drawing.Point(312, 24);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(294, 20);
-            this.label11.TabIndex = 21;
-            this.label11.Text = "Remove Unwanted Dynamic Drivers";
+            this.LblTitle.AutoSize = true;
+            this.LblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LblTitle.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.LblTitle.Location = new System.Drawing.Point(312, 24);
+            this.LblTitle.Name = "LblTitle";
+            this.LblTitle.Size = new System.Drawing.Size(294, 20);
+            this.LblTitle.TabIndex = 21;
+            this.LblTitle.Text = "Remove Unwanted Dynamic Drivers";
             // 
             // LblVersionNumber
             // 
+            this.LblVersionNumber.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.LblVersionNumber.AutoSize = true;
             this.LblVersionNumber.Location = new System.Drawing.Point(12, 435);
             this.LblVersionNumber.Name = "LblVersionNumber";
@@ -65,14 +68,15 @@
             this.LblVersionNumber.TabIndex = 23;
             this.LblVersionNumber.Text = "Version Number Unknown";
             // 
-            // label1
+            // LblDriversToBeDeleted
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(324, 435);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(271, 13);
-            this.label1.TabIndex = 25;
-            this.label1.Text = "Select drivers to be deleted by ticking their check boxes";
+            this.LblDriversToBeDeleted.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.LblDriversToBeDeleted.AutoSize = true;
+            this.LblDriversToBeDeleted.Location = new System.Drawing.Point(324, 435);
+            this.LblDriversToBeDeleted.Name = "LblDriversToBeDeleted";
+            this.LblDriversToBeDeleted.Size = new System.Drawing.Size(271, 13);
+            this.LblDriversToBeDeleted.TabIndex = 25;
+            this.LblDriversToBeDeleted.Text = "Select drivers to be deleted by ticking their check boxes";
             // 
             // ChkSelectAll
             // 
@@ -93,12 +97,13 @@
             this.CancelButton = this.BtnDeleteDrivers;
             this.ClientSize = new System.Drawing.Size(913, 465);
             this.Controls.Add(this.ChkSelectAll);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.LblDriversToBeDeleted);
             this.Controls.Add(this.LblVersionNumber);
-            this.Controls.Add(this.label11);
+            this.Controls.Add(this.LblTitle);
             this.Controls.Add(this.BtnDeleteDrivers);
             this.Controls.Add(this.BtnClose);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(600, 300);
             this.Name = "ManageDevicesForm";
             this.Text = "Dynamic Remote Driver Configuration";
             this.ResumeLayout(false);
@@ -110,10 +115,10 @@
 
         private System.Windows.Forms.Button BtnClose;
         private System.Windows.Forms.Button BtnDeleteDrivers;
-        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label LblTitle;
         private System.Windows.Forms.Label LblVersionNumber;
         //private System.Windows.Forms.CheckedListBox DynamicDriversCheckedListBox;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label LblDriversToBeDeleted;
         private System.Windows.Forms.CheckBox ChkSelectAll;
     }
 }

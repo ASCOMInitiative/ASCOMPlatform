@@ -60,6 +60,7 @@ namespace ASCOM.DynamicRemoteClients
 
                 switch (commandParameter.ToUpperInvariant()) // Act on the supplied parameter, if any
                 {
+                    case "":
                     case "MANAGEDEVICES":
 
                         // Run the application in user interactive mode
