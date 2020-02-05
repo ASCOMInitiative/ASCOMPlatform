@@ -1,127 +1,75 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" revisionNumber="1">
 	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <section address="Introduction-Users-Platform-6">
-    	<title>Introduction - ASCOM Platform 6 - Application Users</title>
-      	<content>
-	      	<para>
-	      		Please see <link xlink:href="3417e177-f705-497d-8127-fb30e8519d50" /> for information on the latest changes.
-	      	</para>
-	      	      	
-	      	<para>
-		      	Platform 6 returns to a single installer for the whole platform, removing the need to install an update on top of
-		      	the core platform and introduces a number of device interface changes to bring consistency
-		      	to the information available. It also provides new flexibility for client and driver authors to innovate and add 
-		      	their own driver commands without having to release new versions of the device interfaces.
-		    </para>
-	      	
-	      	<para>
-	      		Platform 6 aims for <legacyBold>100% backward compatibility</legacyBold> with current drivers and applications, providing an easy upgrade path
-	      		and new capabilities that developers and enthusiasts can exploit.
-	      	</para>
-	      	
-	      	<para>
-	      		Significant reliability and compatibility improvements have also been made in Platform 6:
-				<list class="bullet">
-				  	<listItem>
-				  		<para>Inno based driver installers that failed in locale's where "point" is not the decimal separator now receive the
-				  		PlatformVersion string in the format that they expect allowing them to run to completion.</para>
-				  	</listItem>
-				  	<listItem>
-				  		<para>Inno based driver installers that are targeted specifically at Platform 5 are detected and provided with a 
-				  		PlatformVersion number that allows them to install on Platform 6, thus maintaining the current range of available 
-				  		drivers.</para>
-				  	</listItem>
-				  	<listItem>
-				  		<para>Checks for correct installation are now made when drivers are selected through Chooser. COM 
-				  		registration is checked and if issues are found, these are flagged and it is not possible to select that driver. 
-				  		This improves on previous experience where a difficult to decipher error message would appear when an application
-				  		attempted to start the driver</para>
-				  	</listItem>
-				  	<listItem>
-				  		<para>The 32/64bit compatibility of in-process COM servers is now checked by the Chooser and invalid combinations e.g. 
-				  		a 32bit only driver being selected by a 64bit application are flagged to the user, again preventing difficult
-				  		to decipher error messages from appearing when the driver was started.</para>
-				  	</listItem>
-				  	<listItem>
-				  		<para>The timer has improved compatibility with console applications and scripting languages.</para>
-				  	</listItem>
-				  	<listItem>
-				  		<para>The serial component will now detect a wider variety of serial ports.</para>
-				  	</listItem>
-				  	<listItem>
-				  		<para>The ASCOM Profile store has been moved back into the registry for improved performance, reliability and
-				  		compatibility with drivers that bypass the ASCOM Profile functions and directly manipulate the registry. 
-				  		<link xlink:href="62da8408-c4ed-45d8-9398-9990dcbe8cbd" /> has been enhanced to make Profile viewing and editing easy.</para>
-				  	</listItem>
-				  	<listItem>
-				  		<para>An ASCOM Windows event log has been introduced to record significant events and serious Platform code failures, improving fault 
-				  		diagnosis, leading to better Platform stability.</para>
-	 		 		</listItem>
-	 	 		 	<listItem>
-	 	 		 		<para><link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> now includes a comprehensive test suite and detailed report 
-	 	 		 		providing greater confidence that the Platform is properly installed.</para>
-	 	 		 	</listItem>
-	 	 		 	<listItem>
-	 	 		 		<para><link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> checks for correct COM registration of Platform 6 helper 
-	 	 		 		components and restores proper function if drivers or applications distribute and register earlier versions of these components.</para>
-	 	 		 	</listItem>
-					<listItem>
-	 	 		 		<para>The serial component is now compatible with devices that require RTS and CTS line use to be enabled, 
-	 	 		 		see <link xlink:href="f52483b9-e922-4079-afa9-5e6f1a3ab5a5" />.</para>
-	 	 		 	</listItem>
-				</list>
-			</para>
-			<para>
-				The Platform has been split into two installers: the main Platform and the Developer Components. This gives a more focused
-				installation for the majority of ASCOM users, who are not developers, and allows us to make more frequent updates to the developer
-				components, which we know from experience are enhanced more frequently.
-			</para>
-			<para>
-			The <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> tool has been considerably enhanced to provide a wide ranging report on the installed Platform and
-			incorporates a comprehensive test suite that exercises every aspect of Platform functionality.
-			</para>
-			<para>
-				We've also included an easy way for you to check for updates to the Platform.
-			</para>
-		</content>
-    </section>
+      	<para>
+      		Please see <link xlink:href="3417e177-f705-497d-8127-fb30e8519d50" /> for detailed information on the latest changes.
+      	</para>
 
-    <section address="Issues">
-    	<title>Issues and Enhancement Requests</title>
-      	<content>
-			<para>
-				Please use the ASCOM Groups.io forum:
-					<externalLink>
-						<linkText>ASCOM Talk Forum</linkText>
-						<linkAlternateText>https://ascomtalk.groups.io/g/Help</linkAlternateText>
-						<linkUri>https://ascomtalk.groups.io/g/Help</linkUri>
-						<linkTarget>_blank</linkTarget>
-					</externalLink>
-				at <quoteInline>https://ascomtalk.groups.io/g/Help</quoteInline> to report and discuss issues that you come across when using the ASCOM Platform. You will find the 
-				<link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> tool located in Start Menu / ASCOM Platform 6 / Tools;
-				it will help greatly if you run it before reporting an issue as it provides concrete evidence to help diagnose and resolve the problem. 
-			</para>
-		</content>
-    </section>
-    <section address="Notes">
-    	<title>Notes</title>
-      	<content>
-      		<list class="bullet">
- 				<listItem>See the section titled <link xlink:href="bfd53b69-9f13-489b-9a98-50c60d2a633b" /> for a summary of Platform 6 updates and new functionality.</listItem>
- 				<listItem>See the section titled <link xlink:href="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" /> for a summary of Platform 5.5 updates and new functionality.</listItem>
-  				<listItem>This platform appears as <quoteInline>ASCOM Platform 6.5</quoteInline> in the Apps  and add/remove programs dialogues</listItem>
-  				<listItem>The Platform has been tested in 32 and 64bit bit versions of Windows 7 and Windows 10.</listItem>
-	  		</list>
-      	</content>
-    </section>
+      	<para>
+      		Every ASCOM Platform release aims for <legacyBold>100% backward compatibility</legacyBold> with current drivers and applications, providing an easy upgrade path and new capabilities that developers and enthusiasts can exploit.
+      	</para>
+      	
+		<para>
+			If you would like to confirm the integrity of the installed Platform, the <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> will provide a wide ranging report through a comprehensive test suite that exercises every aspect of Platform functionality.
+		</para>
 
-   	<relatedTopics>
-		<externalLink>
-			<linkText>ASCOM Initiative Web Site</linkText>
-			<linkAlternateText>Go to the ASCOM Initiative web site</linkAlternateText>
-			<linkUri>https://ascom-standards.org/</linkUri>
-		</externalLink>
-	</relatedTopics>
+      	<section address="Introduction-Users-Platform-6">
+	      	
+    		<title>Major Enhancements in Platform 6.5</title>
+	      	<content>
+				<para><legacyBold>Alpaca Support</legacyBold></para>
+		      	<para>
+		    		Alpaca devices can now be discovered from the Chooser, which will also create a dynamic driver so that the device can be used in any ASCOM client program. By default Alpaca discovery is disabled but can be enabled through a new "Alpaca"
+		    		menu option in the Chooser. This menu also enables you to manually create an Alpaca driver for devices that do not support automatic discovery as well as configure discovery and Chooser behaviou. Further information is provided here: XXXXXXXXXXXX.
+				</para>
+				<para><legacyBold>Device Hub</legacyBold></para>
+		      	<para>
+		    		We now have a new "Device Hub" that replaces the aging POTH, Pipe, Hub and Dome Control drivers. This provides improved functionality deliovered in a modern technology that makes it easy to enhance if required. 
+		    		Thanks very much to Rick Burke for delivering this significant improvement!
+				</para>
+				<para><legacyBold>CoverCalibrator Interface</legacyBold></para>
+		      	<para>
+		    		Following an RFC we have added a new interface to enable control of automated telescope covers and camera calibration devices. This interface supports two distinct capabilities because some devices incorprate both within one hardware device and
+		    		enabled clients to open and close telescvoe covers and to adjust the brightness of flat field calibration panels.
+				</para>
+			</content>
+    	</section>
+
+	    <section address="Issues">
+	    	<title>Issues and Enhancement Requests</title>
+	      	<content>
+				<para>
+					Please use the ASCOM Groups.io forum:
+						<externalLink>
+							<linkText>ASCOM Talk Forum</linkText>
+							<linkAlternateText>https://ascomtalk.groups.io/g/Help</linkAlternateText>
+							<linkUri>https://ascomtalk.groups.io/g/Help</linkUri>
+							<linkTarget>_blank</linkTarget>
+						</externalLink>
+					at <quoteInline>https://ascomtalk.groups.io/g/Help</quoteInline> to report and discuss issues that you come across when using the ASCOM Platform. You will find the <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> located in 
+					Start Menu / ASCOM Platform 6 / Tools; it will help greatly if you run it before reporting an issue as it provides concrete evidence to help diagnose and resolve the problem. 
+				</para>
+			</content>
+	    </section>
+	    
+	    <section address="Notes">
+	    	<title>Notes</title>
+	      	<content>
+	      		<list class="bullet">
+	 				<listItem>See the section titled <link xlink:href="bfd53b69-9f13-489b-9a98-50c60d2a633b" /> for a summary of Platform 6 updates and new functionality.</listItem>
+	 				<listItem>See the section titled <link xlink:href="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" /> for a summary of Platform 5.5 updates and new functionality.</listItem>
+	  				<listItem>This platform appears as <quoteInline>ASCOM Platform 6.5</quoteInline> in the Apps  and add/remove programs dialogues</listItem>
+	  				<listItem>The Platform has been tested in 32 and 64bit bit versions of Windows 7 and Windows 10.</listItem>
+		  		</list>
+	      	</content>
+	    </section>
+	
+	   	<relatedTopics>
+			<externalLink>
+				<linkText>ASCOM Initiative Web Site</linkText>
+				<linkAlternateText>Go to the ASCOM Initiative web site</linkAlternateText>
+				<linkUri>https://ascom-standards.org/</linkUri>
+			</externalLink>
+		</relatedTopics>
 	</developerConceptualDocument>
 </topic>

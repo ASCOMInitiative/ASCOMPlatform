@@ -13,7 +13,18 @@
 		<title>Key Changes in 6.5 - For Everyone</title>
 		<content>
 			<list class="bullet">
-	      		<listItem>.</listItem>
+	      		<listItem>Alpaca devices can be discovered by the Chooser and drivers are automatically created for them.</listItem>
+	      		<listItem>Chooser can be configured to display more information about drivers than previously.</listItem>
+	      		<listItem>The Chooser dialogue width can be increased if required.</listItem>
+	      		<listItem>Telescope covers and camera calibration devices are now supported throuigh a new CoverCalibrator interface.</listItem>
+	      		<listItem>A CoverCalibrator simulator has been added to the Platform.</listItem>
+	      		<listItem>A new Telescope / Dome / Focuser hub called Device Hub has been added to the Platform. 
+	      			<list class="bullet">
+			      		<listItem>This makes the POTH, Hub, Pipe and ASCOM Dome Hub components obsolete and we recommended that you migrate to the Device Hub because the obsolete hubs will be removed in a future Platform update.</listItem>
+		      		</list>
+	      		</listItem>
+	      		<listItem>The Diagnostics tool is now more tolerant of simulator configurations that are not set to default values.</listItem>
+	      		<listItem>Tracing of Platform registry use now has its own independent trace enable / disable flag.</listItem>
 	  		</list>
 	    </content>
 	</section>
@@ -22,8 +33,26 @@
 	   	<title>Issues Fixed - Platform</title>
 	    <content>
 			<list class="bullet">
-	  			<listItem>.</listItem>
-			</list>
+	      		<listItem>The Diagnostics tool is  more tolerant of simulator configurations that are not set to default values.</listItem>
+	      		<listItem>The Utilities component has been adapted to work when called by installers that use Inno 5.5.9 and later.</listItem>
+	      		<listItem>The TraceLogger component is now better behaved when called after it has been disposed.</listItem>
+	      		<listItem>All local server simulators now start just one instance when used concurrently from both normal and elevated clients.</listItem>
+	      		<listItem>The Transform component now validates supplied Julian dates.</listItem>
+	      		<listItem>ObservingConditions Hub and Simulator
+					<list class="bullet">
+			      		<listItem>The hub TimeSinceLastUpdate property now returns the value from the underlying ObservikngConditions device.</listItem>
+			      		<listItem>The simulator now interprets AveragePeriod as being in hours, per the API specification, rather than minutes as in the original release.</listItem>
+		      		</list>
+	      		</listItem>
+	      		<listItem>Telescope Simulator
+					<list class="bullet">
+			      		<listItem>The TrackingRate property now validates the supplied rate.</listItem>
+			      		<listItem>IsPulseGuiding now returns False after a synchronous move when dual axis pulse guide is disabled.</listItem>
+			      		<listItem>The CanOptics and CanSlewAsync configuration values are now persisted correctly.</listItem>
+			      		<listItem>RightAscensionRate and DeclinationRate movements are no longer four times larger than expected.</listItem>
+		      		</list>
+	      		</listItem>
+      		</list>
 		</content>
 	</section>
 	
@@ -44,14 +73,31 @@
 	 	<title>Key Changes in 6.5 - For Developers</title>
 	  	<content>
 	  		<list class="bullet">
-	  			<listItem>.</listItem>
+	      		<listItem>Interface Standards and Components
+			  		<list class="bullet">
+			      		<listItem>ICoverCalibratorV1 support has been added to Interfaces and DriverAccess.</listItem>
+			      		<listItem>Clarification: The Focuser temperature unit is degrees Celsius.</listItem>
+			      		<listItem>Clarification: Telescope.PulseGuide may throw an InvalidValueException if called when an incompatible command is already underway e.g. a slew is in progress.</listItem>
+			      		<listItem>Clarification: IDomeV2 wording has been clarified for many properties and methods.</listItem>
+			      		<listItem>The NOVASCOM and Kepler components are no longer flagged as deprecated because they provide unique functionality within the Platform.</listItem>
+			      		<listItem>The version of ASCOM Controls installed by the Platform has been marked as deprecated. An updated version of the controls is available as a NuGet package. The displayed message contains a reference to the new TA.Winforms.Controls NuGet package.</listItem>
+					</list>
+	      		</listItem>
+	      		<listItem>Templates and Driver Install Script Generator
+			  		<list class="bullet">
+			      		<listItem>Align TrackingRates class in VB driver template to the C# template code.</listItem>
+			      		<listItem>The local server template has been updated so that simulators will start just one instance when used from normal and elevated clients concurrently.</listItem>
+			      		<listItem>The TraceLogger in the C# template is now an instance variable because of issues arising when disposing the original static TraceLogger variable.</listItem>
+			      		<listItem>CoverCalibrator device support has been added to the templates and the Driver Install Script Generator.</listItem>
+			      		<listItem>The required minimum Windows version has been set to Windows 7 using a format that works in Inno 6.</listItem>
+			      		<listItem>The support URL has been changed to the new ASCOM Groups.io forum.</listItem>
+					</list>
+	      		</listItem>
+	      		<listItem>The Product Version tag of all executables is now the Platform Git build SHA.</listItem>
+	      		<listItem>The installer now advocates using Conform to test drivers.</listItem>
+	      		<listItem>The deprecated NOVAS2, NOVAS2COM and NOVAS3 components no longer appear in the developer help file.</listItem>
+	      		<listItem>DriverAccess can now handle ArrayLists from .NET Core drivers.</listItem>
 			</list>
-			<alert class="note">
-				<para><legacyBold>Driver and application developers</legacyBold>: In order to maintain a healthy code base, some tidying up is planned for the 
-				next <legacyBold>major</legacyBold> update and details of the changes are given in the <link xlink:href="#DeprecatedCapability65">Deprecated Features</link> section below. Please will you review 
-				this and update your applications and drivers as advised; these changes are not currently scheduled for introduction before Q1 2019 at the earliest. 
-				In the meantime service packs will be issued as required to correct bugs.</para>
-			</alert>
 		</content>
 	</section>
 	
@@ -59,8 +105,24 @@
 	   	<title>Issues Fixed - Developers</title>
 	    <content>
 			<list class="bullet">
-	  			<listItem>.</listItem>
+			    <listItem>The required minimum Windows version in the script created by the Driver Install Script Generator has been set to Windows 7 using a format that works in Inno 6.</listItem>
+			    <listItem>The support URL in the script created by the Driver Install Script Generator has been changed to the new ASCOM Groups.io forum.</listItem>
 	  		</list>
+		</content>
+	</section>
+	
+	<section address="BreakingChanges65">
+	   	<title>Breaking Changes (For Developers)</title>
+	    <content>
+			<list class="bullet">
+	 			<listItem>The ASCOM.Utilities.Units “Fahrenheit” member has been deprecated in favour of the correctly spelled “Fahrenheit” member. This will not affect compiled programs but will result in warnings when the code is next compiled.</listItem>
+			</list>
+			<alert class="note">
+				<para><legacyBold>Driver and application developers</legacyBold>: In order to maintain a healthy code base, some tidying up is planned for the 
+				next <legacyBold>major</legacyBold> update and details of the changes are given in the <link xlink:href="#DeprecatedCapability65">Deprecated Features</link> section below. Please will you review 
+				this and update your applications and drivers as advised; these changes are not currently scheduled for introduction before Q2 2020 at the earliest. 
+				In the meantime service packs will be issued as required to correct bugs.</para>
+			</alert>
 		</content>
 	</section>
 	
@@ -82,14 +144,6 @@
 		</content>
 	</section>
 	
-	<section address="BreakingChanges65">
-	   	<title>Breaking Changes (For Developers)</title>
-	    <content>
-			<list class="bullet">
-	 			<listItem>None.</listItem>
-			</list>
-		</content>
-	</section>
 	<section address="DeprecatedCapability65">
 	   	<title>Deprecated Capabilities (For Developers)</title>
 	    <content>
@@ -115,50 +169,69 @@
 				</list>
 				<para>PLEASE NOTE: The Kepler and NOVASCOM components were flagged as deprecated in previous Platform releases but will now be retained following feedback from developers.</para>
 				</listItem>
-	 			<listItem>The following VB6 based simulators will be removed from the Platform at the next major update. These drivers were moved to a 
-	 			"bug-fix only" maintenance mode when Platform 6 was released and are becoming increasingly out of step with their .NET counterparts, which are fully integrated 
-	 			into the Platform code base.
-					<table>
-					  <tableHeader>
-					    <row>
-					      <entry><para>Simulator</para></entry>
-					      <entry><para>ProgID</para></entry>
-					      <entry><para>Replacement</para></entry>
-					    </row>
-					  </tableHeader>
-					  <row>
-					    <entry><para>Camera Simulator</para></entry>
-					    <entry><para>CCDSimulator.Camera</para></entry>
+	 			<listItem>The following VB6 based simulators and hubs will be removed from the Platform at the next major update. These drivers were moved to a 
+	 			"bug-fix only" maintenance mode when Platform 6 was released and are becoming increasingly out of step with their .NET counterparts, which are fully integrated into the Platform code base.
+				<table>
+					<tableHeader>
+						<row>
+							<entry><para>Simulator</para></entry>
+							<entry><para>ProgID</para></entry>
+							<entry><para>Replacement</para></entry>
+						</row>
+					</tableHeader>
+					<row>
+						<entry><para>Camera Simulator</para></entry>
+						<entry><para>CCDSimulator.Camera</para></entry>
 						<entry><para>Replace use of the CCDSimulator.Camera ProgID with ASCOM.Simulator.Camera, which will invoke the "Camera V2 simulator</para></entry>
-					  </row>
-					  <row>
-					    <entry><para>Dome Simulator</para></entry>
-					    <entry><para>DomeSim.Telescope</para></entry>
+					</row>
+					<row>
+						<entry><para>Dome Simulator</para></entry>
+						<entry><para>DomeSim.Telescope</para></entry>
 						<entry><para>Replace use of the DomeSim.Telescope ProgID with ASCOM.Simulator.Dome, which will invoke the "Dome Simulator .NET" driver.</para></entry>
-					  </row>
-					  <row>
-					    <entry><para>Filter Wheel Simulator</para></entry>
-					    <entry><para>FilterWheelSim.FilterWheel</para></entry>
+					</row>
+					<row>
+						<entry><para>Filter Wheel Simulator</para></entry>
+						<entry><para>FilterWheelSim.FilterWheel</para></entry>
 						<entry><para>Replace use of the FilterWheelSim.FilterWheel ProgID with ASCOM.Simulator.FilterWheel, which will invoke the "Filter Wheel Simulator [.NET]" driver.</para></entry>
-					  </row>
-					  <row>
-					    <entry><para>Focuser Simulator</para></entry>
-					    <entry><para>FocuserSim.Focuser</para></entry>
+					</row>
+					<row>
+						<entry><para>Focuser Simulator</para></entry>
+						<entry><para>FocuserSim.Focuser</para></entry>
 						<entry><para>Replace use of the FocuserSim.Focuser ProgID with ASCOM.Simulator.Focuser, which will invoke the "ASCOM Simulator Focuser Driver" driver.</para></entry>
-					  </row>
-					  <row>
-					    <entry><para>Switch Simulator</para></entry>
-					    <entry><para>SwitchSim.Switch</para></entry>
+					</row>
+					<row>
+						<entry><para>Switch Simulator</para></entry>
+						<entry><para>SwitchSim.Switch</para></entry>
 						<entry><para>Replace use of the SwitchSim.Switch ProgID with ASCOM.Simulator.Switch, which will invoke the "ASCOM SwitchV2 Simulator Driver" driver.</para></entry>
-					  </row>
-					  <row>
-					    <entry><para>Telescope Simulator</para></entry>
-					    <entry><para>ScopeSim.Telescope</para></entry>
+					</row>
+					<row>
+						<entry><para>Telescope Simulator</para></entry>
+						<entry><para>ScopeSim.Telescope</para></entry>
 						<entry><para>Replace use of the ScopeSim.Telescope ProgID with ASCOM.Simulator.Telescope, which will invoke the "Telescope Simulator for .NET" driver.</para></entry>
-					  </row>
-					</table>
-	 			</listItem>
-			</list>
+					</row>
+					<row>
+						<entry><para>Pipe hub</para></entry>
+						<entry><para>Pipe.Telescope, Pipe.Dome, Pipe.Focuser</para></entry>
+						<entry><para>Replace with Device Hub - ASCOM.DeviceHub.Telescope, ASCOM.DeviceHub.Dome, ASCOM.DeviceHub.Focuser</para></entry>
+					</row>
+					<row>
+						<entry><para>Hub hub</para></entry>
+						<entry><para>Hub.Telescope, Hub.Dome, Hub.Focuser</para></entry>
+						<entry><para>Replace with Device Hub - ASCOM.DeviceHub.Telescope, ASCOM.DeviceHub.Dome, ASCOM.DeviceHub.Focuser</para></entry>
+					</row>
+					<row>
+						<entry><para>POTH hub</para></entry>
+						<entry><para>POTH.Telescope, POTH.Dome, POTH.Focuser</para></entry>
+						<entry><para>Replace with Device Hub - ASCOM.DeviceHub.Telescope, ASCOM.DeviceHub.Dome, ASCOM.DeviceHub.Focuser</para></entry>
+					</row>
+					<row>
+						<entry><para>ASCOM Dome Control hub</para></entry>
+						<entry><para>ASCOMDome.Dome, ASCOMDome.Telescope</para></entry>
+						<entry><para>Replace with Device Hub - ASCOM.DeviceHub.Telescope, ASCOM.DeviceHub.Dome</para></entry>
+					</row>
+				</table>
+</listItem>
+</list>
 		</content>
     </section>
   
