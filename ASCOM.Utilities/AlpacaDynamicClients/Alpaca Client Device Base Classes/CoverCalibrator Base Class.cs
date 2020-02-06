@@ -13,7 +13,7 @@ namespace ASCOM.DynamicRemoteClients
     /// <summary>
     /// ASCOM DynamicRemoteClients SafetyMonitor base class
     /// </summary>
-    public class CovercalibratorBaseClass : ReferenceCountedObjectBase, ICoverCalibratorV1
+    public class CoverCalibratorBaseClass : ReferenceCountedObjectBase, ICoverCalibratorV1
     {
         #region Variables and Constants
 
@@ -52,10 +52,10 @@ namespace ASCOM.DynamicRemoteClients
         #region Initialiser
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CovercalibratorBaseClass"/> class.
+        /// Initializes a new instance of the <see cref="CoverCalibratorBaseClass"/> class.
         /// Must be public for COM registration.
         /// </summary>
-        public CovercalibratorBaseClass(string RequiredDriverNumber, string RequiredDriverDisplayName, string RequiredProgId)
+        public CoverCalibratorBaseClass(string RequiredDriverNumber, string RequiredDriverDisplayName, string RequiredProgId)
         {
             try
             {

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="e3870a2f-582a-4ab4-b37f-e9b1c37a2030" revisionNumber="1">
+<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<introduction>
+		<para
+		>The Observing Conditions Hub (OCH) is an Observing Conditions driver that aggregates a number of real Switch and ObservingConditions drivers into a single
+		consolidated virtual ObservingConditions driver that exposes information from the real drivers.
+		</para>
+	</introduction>
+	
+	<section address="AlpacaChooser">
+		<title>Alpaca through Chooser</title>
+		<content>
+			<para>
+				<mediaLink>
+					<image placement="center" xlink:href="ChooserTest"/>
+				</mediaLink>
+			</para>
+		</content>
+	</section>
+	
+	</developerConceptualDocument>
+</topic>

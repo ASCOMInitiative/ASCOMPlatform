@@ -101,6 +101,10 @@
     <Folder Include="Introduction\" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Tools and Features\ChooserTest.png">
+      <ImageId>ChooserTest</ImageId>
+      <AlternateText>Chooser Test</AlternateText>
+    </Image>
     <Image Include="Tools and Features\OCHSetup.PNG">
       <ImageId>OCHSetup</ImageId>
       <AlternateText>OCHSetup</AlternateText>
@@ -135,6 +139,7 @@
       <AlternateText>ForceCOMPort</AlternateText>
     </Image>
     <Content Include="styles\branding-Help1.css" />
+    <None Include="Tools and Features\AlpacaChooser.aml" />
     <None Include="Version History\Version 6.5.aml" />
     <None Include="Tools and Features\Observing Conditions Hub.aml" />
     <None Include="Version History\Version 6.4 SP1.aml" />

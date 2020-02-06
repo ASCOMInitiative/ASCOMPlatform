@@ -107,7 +107,7 @@ namespace ASCOM.DynamicRemoteClients
                         TL.LogMessage("CreateAlpacaClient", $"Alpaca local server folder: {localServerPath}");
 
                         // The supplied parameters pass validation so run the create device form to obtain the device description and create the driver
-                        CreateAlpacaClient(args[1].ToPascalCase(), comDevicenumber, args[3], args[4], localServerPath); // Call the execution method with correctly cased device type and unique ID parameters
+                        CreateAlpacaClient(args[1], comDevicenumber, args[3], args[4], localServerPath); // Call the execution method with correctly cased device type and unique ID parameters
                         string localServerExe = $"{localServerPath}\\{SharedConstants.ALPACA_CLIENT_LOCAL_SERVER}";
                         TL.LogMessage("CreateAlpacaClient", $"Alpaca local server exe name: {localServerExe}");
                         RunLocalServer(localServerExe, "-regserver", TL);
@@ -152,7 +152,7 @@ namespace ASCOM.DynamicRemoteClients
                         Application.EnableVisualStyles();
                         Application.SetCompatibleTextRenderingDefault(false);
                         TL.LogMessage("Main", "Starting device creation form");
-                        Application.Run(new CreateDeviceForm(args[1].ToPascalCase(), comDevicenumber, args[3], localServerPath, TL));
+                        Application.Run(new CreateDeviceForm(args[1], comDevicenumber, args[3], localServerPath, TL));
 
                         break;
 
@@ -388,23 +388,23 @@ namespace ASCOM.DynamicRemoteClients
         /// </summary>
         /// <param name="sourceString"></param>
         /// <returns></returns>
-        public static string ToPascalCase(this string sourceString)
-        {
-            // Check for empty string.  
-            if (string.IsNullOrEmpty(sourceString))
-            {
-                return string.Empty;
-            }
+        //public static string ToPascalCase(this string sourceString)
+        //{
+        //    // Check for empty string.  
+        //    if (string.IsNullOrEmpty(sourceString))
+        //    {
+        //        return string.Empty;
+        //    }
 
-            // Check for a single character string
-            if (sourceString.Length == 1)
-            {
-                return sourceString.ToUpperInvariant();
-            }
+        //    // Check for a single character string
+        //    if (sourceString.Length == 1)
+        //    {
+        //        return sourceString.ToUpperInvariant();
+        //    }
 
-            // Return the multi character string with first letter in upper case and the remaining characters in lower case.  
-            return sourceString.Substring(0, 1).ToUpperInvariant() + sourceString.Substring(1).ToLowerInvariant();
-        }
+        //    // Return the multi character string with first letter in upper case and the remaining characters in lower case.  
+        //    return sourceString.Substring(0, 1).ToUpperInvariant() + sourceString.Substring(1).ToLowerInvariant();
+        //}
 
         /// <summary>
         /// Run the local server to register and unregister DynamicRemoteClient clients

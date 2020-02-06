@@ -467,16 +467,15 @@ namespace ConsoleApplication1
 
             try
             {
-                LogMessage("RegAscom", "  Setting device type");
+                LogMessage("UnRegAscom", "  Setting device type");
                 tProfile.InvokeMember("DeviceType", BindingFlags.Default | BindingFlags.SetProperty, null, oProfile, new object[] { sType }, CultureInfo.InvariantCulture);
 
-                LogMessage("RegAscom", "  Unregistering device");
+                LogMessage("UnRegAscom", "  Unregistering device");
                 tProfile.InvokeMember("Unregister", BindingFlags.Default | BindingFlags.InvokeMethod, null, oProfile, new object[] { ProgID }, CultureInfo.InvariantCulture);
             }
             catch (Exception ex)
             {
-                SetReturnCode(7);
-                LogError("RegAscom", "Failed to unregister " + ProgID + " - " + ex.ToString());
+                LogError("UnRegAscom", "Failed to unregister " + ProgID + " - " + ex.ToString());
             }
         }
 
