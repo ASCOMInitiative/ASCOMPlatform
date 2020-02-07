@@ -4447,34 +4447,55 @@ Public Class DiagnosticsForm
             Try
                 TL.LogMessage("ProfileTest", "Installed Simulator Devices")
                 keys = AscomUtlProf.RegisteredDevices("Camera")
-                CheckSimulator(keys, "Camera", "ASCOM.Simulator.Camera")
-                CheckSimulator(keys, "Camera", "CCDSimulator.Camera")
+                CheckSimulator(keys, "Camera", "ASCOM.Simulator.Camera", False)
+                CheckSimulator(keys, "Camera", "CCDSimulator.Camera", False)
+
+                keys = AscomUtlProf.RegisteredDevices("CoverCalibrator")
+                CheckSimulator(keys, "CoverCalibrator", "ASCOM.Simulator.CoverCalibrator", False)
+
                 keys = AscomUtlProf.RegisteredDevices("Dome")
-                CheckSimulator(keys, "Dome", "DomeSim.Dome")
-                CheckSimulator(keys, "Dome", "Hub.Dome")
-                CheckSimulator(keys, "Dome", "Pipe.Dome")
-                CheckSimulator(keys, "Dome", "POTH.Dome")
+                CheckSimulator(keys, "Dome", "DomeSim.Dome", False)
+                CheckSimulator(keys, "Dome", "ASCOM.DeviceHub.Dome", False)
+
                 keys = AscomUtlProf.RegisteredDevices("FilterWheel")
-                CheckSimulator(keys, "FilterWheel", "ASCOM.Simulator.FilterWheel")
-                CheckSimulator(keys, "FilterWheel", "FilterWheelSim.FilterWheel")
+                CheckSimulator(keys, "FilterWheel", "ASCOM.Simulator.FilterWheel", False)
+                CheckSimulator(keys, "FilterWheel", "FilterWheelSim.FilterWheel", False)
+
                 keys = AscomUtlProf.RegisteredDevices("Focuser")
-                CheckSimulator(keys, "Focuser", "FocusSim.Focuser")
-                CheckSimulator(keys, "Focuser", "Hub.Focuser")
-                CheckSimulator(keys, "Focuser", "Pipe.Focuser")
-                CheckSimulator(keys, "Focuser", "POTH.Focuser")
+                CheckSimulator(keys, "Focuser", "FocusSim.Focuser", False)
+                CheckSimulator(keys, "Focuser", "ASCOM.Simulator.Focuser", False)
+                CheckSimulator(keys, "Focuser", "ASCOM.DeviceHub.Focuser", False)
+
+                keys = AscomUtlProf.RegisteredDevices("ObservingConditions")
+                CheckSimulator(keys, "ObservingConditions", "ASCOM.OCH.ObservingConditions", False)
+                CheckSimulator(keys, "ObservingConditions", "ASCOM.Simulator.ObservingConditions", False)
+
                 keys = AscomUtlProf.RegisteredDevices("Rotator")
-                CheckSimulator(keys, "Rotator", "ASCOM.Simulator.Rotator")
+                CheckSimulator(keys, "Rotator", "ASCOM.Simulator.Rotator", False)
+
                 keys = AscomUtlProf.RegisteredDevices("SafetyMonitor")
-                CheckSimulator(keys, "SafetyMonitor", "ASCOM.Simulator.SafetyMonitor")
+                CheckSimulator(keys, "SafetyMonitor", "ASCOM.Simulator.SafetyMonitor", False)
+
                 keys = AscomUtlProf.RegisteredDevices("Switch")
-                CheckSimulator(keys, "Switch", "SwitchSim.Switch")
+                CheckSimulator(keys, "Switch", "SwitchSim.Switch", False)
+                CheckSimulator(keys, "Switch", "ASCOM.Simulator.Switch", False)
+
                 keys = AscomUtlProf.RegisteredDevices("Telescope")
-                CheckSimulator(keys, "Telescope", "ASCOM.Simulator.Telescope")
-                CheckSimulator(keys, "Telescope", "ASCOMDome.Telescope")
-                CheckSimulator(keys, "Telescope", "Hub.Telescope")
-                CheckSimulator(keys, "Telescope", "Pipe.Telescope")
-                CheckSimulator(keys, "Telescope", "POTH.Telescope")
-                CheckSimulator(keys, "Telescope", "ScopeSim.Telescope")
+                CheckSimulator(keys, "Telescope", "ASCOM.Simulator.Telescope", False)
+                CheckSimulator(keys, "Telescope", "ScopeSim.Telescope", False)
+                CheckSimulator(keys, "Telescope", "ASCOM.DeviceHub.Telescope", False)
+
+                ' Devices that may or may not be present because they are now optional
+                CheckSimulator(keys, "Dome", "Hub.Dome", True)
+                CheckSimulator(keys, "Dome", "Pipe.Dome", True)
+                CheckSimulator(keys, "Dome", "POTH.Dome", True)
+                CheckSimulator(keys, "Focuser", "Hub.Focuser", True)
+                CheckSimulator(keys, "Focuser", "Pipe.Focuser", True)
+                CheckSimulator(keys, "Focuser", "POTH.Focuser", True)
+                CheckSimulator(keys, "Telescope", "Hub.Telescope", True)
+                CheckSimulator(keys, "Telescope", "Pipe.Telescope", True)
+                CheckSimulator(keys, "Telescope", "POTH.Telescope", True)
+                CheckSimulator(keys, "Telescope", "ASCOMDome.Telescope", True)
 
                 DevTypes = AscomUtlProf.RegisteredDeviceTypes
                 For Each DevType As String In DevTypes
@@ -4670,16 +4691,26 @@ Public Class DiagnosticsForm
 
     End Sub
 
-    Private Sub CheckSimulator(ByVal Devices As ArrayList, ByVal DeviceType As String, ByVal DeviceName As String)
+    Private Sub CheckSimulator(ByVal Devices As ArrayList, ByVal DeviceType As String, ByVal DeviceName As String, CanBeMissing As Boolean)
         Dim Found As Boolean = False
+
+        ' Search for the device and record if it is present
         For Each Device In Devices
             If Device.Key = DeviceName Then Found = True
         Next
 
+        ' Assess the search outcome
         If Found Then
+            ' Expected device is present so record a success
             Compare("ProfileTest", DeviceType, DeviceName, DeviceName)
         Else
-            Compare("ProfileTest", DeviceType, "", DeviceName)
+            If CanBeMissing Then
+                ' Ignore the fact that the device is not present
+            Else
+                ' Record that an expected device is missing
+                Compare("ProfileTest", DeviceType, "", DeviceName)
+            End If
+
         End If
     End Sub
 
