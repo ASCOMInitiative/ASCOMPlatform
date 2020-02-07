@@ -138,6 +138,9 @@ Friend Class ChooserForm
             Text = "ASCOM " & deviceTypeValue & " Chooser"
             lblTitle.Text = "Select the type of " & LCase(deviceTypeValue) & " you have, then be " & "sure to click the Properties... button to configure the driver for your " & LCase(deviceTypeValue) & "."
 
+            ' Initialise the Profile component with the supplied device type
+            profile.DeviceType = deviceTypeValue
+
             'Initialise the tooltip warning for 32/64bit driver compatibility messages
             chooserWarningToolTip = New ToolTip()
 
@@ -217,7 +220,35 @@ Friend Class ChooserForm
 
     Public WriteOnly Property DeviceType() As String
         Set(ByVal Value As String)
-            deviceTypeValue = Value
+
+            ' Clean up the supplied device type to consistent values
+            Select Case Value.ToLowerInvariant()
+                Case "camera"
+                    deviceTypeValue = "Camera"
+                Case "covercalibrator"
+                    deviceTypeValue = "CoverCalibrator"
+                Case "dome"
+                    deviceTypeValue = "Dome"
+                Case "filterwheel"
+                    deviceTypeValue = "FilterWheel"
+                Case "focuser"
+                    deviceTypeValue = "Focuser"
+                Case "observingconditions"
+                    deviceTypeValue = "ObservingConditions"
+                Case "rotator"
+                    deviceTypeValue = "Rotator"
+                Case "safetymonitor"
+                    deviceTypeValue = "SafetyMonitor"
+                Case "switch"
+                    deviceTypeValue = "Switch"
+                Case "telescope"
+                    deviceTypeValue = "Telescope"
+                Case "video"
+                    deviceTypeValue = "Video"
+                Case Else ' If not recognised just use as supplied for backward compatibility
+                    deviceTypeValue = Value
+            End Select
+
             TL.LogMessage("DeviceType Set", deviceTypeValue)
             ReadState(deviceTypeValue)
         End Set
@@ -394,7 +425,7 @@ Friend Class ChooserForm
                     newProgId = CreateNewAlpacaDriver(selectedChooserItem.Name)
 
                     ' Configure the IP address, port number and Alpaca device number in the newly registered driver
-                    profile.DeviceType = $"{deviceTypeValue.Substring(0, 1).ToUpperInvariant()}{deviceTypeValue.Substring(1).ToLowerInvariant()}"
+                    profile.DeviceType = deviceTypeValue
                     profile.WriteValue(newProgId, PROFILE_VALUE_NAME_IP_ADDRESS, selectedChooserItem.HostName)
                     profile.WriteValue(newProgId, PROFILE_VALUE_NAME_PORT_NUMBER, selectedChooserItem.Port.ToString())
                     profile.WriteValue(newProgId, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER, selectedChooserItem.DeviceNumber.ToString())
@@ -630,9 +661,19 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub MnuManageAlpacaDevices_Click(sender As Object, e As EventArgs) Handles MnuManageAlpacaDevices.Click
+        Dim deviceWasRegistered As Boolean
+
+        ' Get the current registration state for the selected ProgID
+        deviceWasRegistered = profile.IsRegistered(selectedProgIdValue)
 
         ' Run the client manager in manage mode
         RunDynamicClientManager("ManageDevices")
+
+        'Test whether the selected ProgID has just been deleted and if so unselect the ProgID
+        If deviceWasRegistered Then
+            ' Unselect the ProgID if it has just been deleted
+            If Not profile.IsRegistered(selectedProgIdValue) Then selectedProgIdValue = ""
+        End If
 
         ' Refresh the driver list after any changes made by the management tool
         InitialiseComboBox()
@@ -823,12 +864,9 @@ Friend Class ChooserForm
     Private Sub DiscoverAlpacaDevicesAndPopulateDriverComboBox()
         Try
 
-            profile.DeviceType = deviceTypeValue
-
             TL.LogMessage("StartAlpacaDiscovery", $"Running On thread: {Thread.CurrentThread.ManagedThreadId}.")
 
             chooserList = New SortedList(Of ChooserItem, String)
-
 
             ' Enumerate the available drivers, and load their descriptions and ProgIDs into the driversList generic sorted list collection. Key is ProgID, value is friendly name.
             Try
