@@ -666,13 +666,22 @@ Friend Class ChooserForm
         ' Get the current registration state for the selected ProgID
         deviceWasRegistered = profile.IsRegistered(selectedProgIdValue)
 
+        TL.LogMessage("ManageAlpacaDevicesClick", $"ProgID {selectedProgIdValue} of type {profile.DeviceType} is registered: {deviceWasRegistered}")
+
         ' Run the client manager in manage mode
         RunDynamicClientManager("ManageDevices")
 
         'Test whether the selected ProgID has just been deleted and if so unselect the ProgID
         If deviceWasRegistered Then
             ' Unselect the ProgID if it has just been deleted
-            If Not profile.IsRegistered(selectedProgIdValue) Then selectedProgIdValue = ""
+            If Not profile.IsRegistered(selectedProgIdValue) Then
+                selectedChooserItem = Nothing
+                TL.LogMessage("ManageAlpacaDevicesClick", $"ProgID {selectedProgIdValue} was registered but has been deleted")
+            Else
+                TL.LogMessage("ManageAlpacaDevicesClick", $"ProgID {selectedProgIdValue} is still registered - no action")
+            End If
+        Else
+            TL.LogMessage("ManageAlpacaDevicesClick", $"ProgID {selectedProgIdValue} was NOT registered - no action")
         End If
 
         ' Refresh the driver list after any changes made by the management tool

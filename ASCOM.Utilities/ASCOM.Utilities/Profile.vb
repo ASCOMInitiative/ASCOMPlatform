@@ -17,9 +17,9 @@ Imports System.Text
 ''' persistence information in a shared area of the file system.</para>
 ''' <para>Please code to the IProfile interface</para>
 ''' </remarks>
-<ClassInterface(ClassInterfaceType.None), _
-Guid("880840E2-76E6-4036-AD8F-60A326D7F9DA"), _
-ComVisible(True)> _
+<ClassInterface(ClassInterfaceType.None),
+Guid("880840E2-76E6-4036-AD8F-60A326D7F9DA"),
+ComVisible(True)>
 Public Class Profile
     Implements IProfile, IProfileExtra, IDisposable
     '   ===========
@@ -38,8 +38,6 @@ Public Class Profile
     Private m_sDeviceType As String ' Device type specified by user
     Private ProfileStore As RegistryAccess
     Private TL As TraceLogger
-    Private LastDriverID As String, LastResult As Boolean ' Cache values to improve IsRegistered performance
-
 
 #Region "New and IDisposable Support "
     Private disposedValue As Boolean = False        ' To detect redundant calls
@@ -102,13 +100,13 @@ Public Class Profile
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub Dispose() Implements IDisposable.Dispose
-        ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+        ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
         Dispose(True)
         GC.SuppressFinalize(Me)
     End Sub
 
     Protected Overrides Sub Finalize()
-        ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+        ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
         Dispose(False)
         MyBase.Finalize()
     End Sub
@@ -130,7 +128,7 @@ Public Class Profile
         End Get
         Set(ByVal Value As String)
             TL.LogMessage("DeviceType Set", Value.ToString)
-            If Value = "" Then Throw New Exceptions.InvalidValueException(MSG_ILLEGAL_DEVTYPE) 'Err.Raise(SCODE_ILLEGAL_DEVTYPE, ERR_SOURCE_PROFILE, MSG_ILLEGAL_DEVTYPE)
+            If Value = "" Then Throw New Exceptions.InvalidValueException(MSG_ILLEGAL_DEVTYPE)
             m_sDeviceType = Value
         End Set
     End Property
@@ -163,10 +161,9 @@ Public Class Profile
                     RetVal.Add(DType)
                 End If
             Next
-            'RegDevs.Sort() 'Sort the list into alphabetical order
-            'ReDim RetVal(RegDevs.Count - 1)
-            'RegDevs.CopyTo(RetVal) 'Copy values to array
+
             RetVal.Sort()
+
             Return (RetVal)
 
         End Get
@@ -180,7 +177,7 @@ Public Class Profile
     ''' <exception cref="Exceptions.InvalidValueException">Throw if the supplied DeviceType is empty string or 
     ''' null value.</exception>
     ''' <remarks>
-    ''' Use this to find all the registerd devices of a given type that are in the Profile store
+    ''' Use this to find all the registered devices of a given type that are in the Profile store
     ''' <para>If a DeviceType is supplied, where no device of that type has been registered before on this system,
     ''' an empty list will be returned</para>
     ''' </remarks>
@@ -193,7 +190,7 @@ Public Class Profile
         End If
         Try
             RegDevs = ProfileStore.EnumKeys(DeviceType & " Drivers") ' Get Key-Class pairs
-        Catch ex As System.NullReferenceException 'Catch exception thrown if the Deviceype is an invalid value
+        Catch ex As System.NullReferenceException 'Catch exception thrown if the DeviceType is an invalid value
             TL.LogMessage("RegisteredDevices", "WARNING: there are no devices of type: """ & DeviceType & """ registered on this system")
             RegDevs = New Generic.SortedList(Of String, String) 'Return an empty list
         End Try
@@ -206,10 +203,10 @@ Public Class Profile
     End Function
 
     ''' <summary>
-    ''' Confirms whether a specific driver is registered ort unregistered in the profile store
+    ''' Confirms whether a specific driver is registered or unregistered in the profile store
     ''' </summary>
-    ''' <param name="DriverID">String reprsenting the device's ProgID</param>
-    ''' <returns>Boolean indicating registered or unregisteredstate of the supplied DriverID</returns>
+    ''' <param name="DriverID">String representing the device's ProgID</param>
+    ''' <returns>Boolean indicating registered or unregistered state of the supplied DriverID</returns>
     ''' <remarks></remarks>
     Public Function IsRegistered(ByVal DriverID As String) As Boolean Implements IProfile.IsRegistered
         Return Me.IsRegisteredPrv(DriverID, False)
@@ -229,7 +226,6 @@ Public Class Profile
             TL.LogMessage("Register", "Registering " & DriverID)
             ProfileStore.CreateKey(MakeKey(DriverID, ""))
             ProfileStore.WriteProfile(MakeKey(DriverID, ""), "", DescriptiveName)
-            LastDriverID = "" 'Clear this value so that the next next IsRegistered test doesn't use a now invalid cached value
         Else
             'ASCOM-306 - Added code to refresh description if it is missing
             CurrentDescription = GetValue(DriverID, "", "", "")
@@ -258,7 +254,6 @@ Public Class Profile
         CheckRegistered(DriverID)
         TL.LogMessage("Unregister", "Unregistering " & DriverID)
 
-        LastDriverID = "" 'Clear this value so that the next IsRegistered test doesn't use a now invalid cached value
         ProfileStore.DeleteKey(MakeKey(DriverID, ""))
     End Sub
 
@@ -275,7 +270,7 @@ Public Class Profile
     ''' <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
     ''' <remarks>
     ''' <para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
-    ''' <para>Does not provide access to other registry data types such as binary and doubleword. </para>
+    ''' <para>Does not provide access to other registry data types such as binary and double-word. </para>
     ''' <para>If a default value is supplied and the value is not already present in the profile store,
     ''' the default value will be set in the profile store and then returned as the value of the 
     ''' DriverID/SubKey/Name. If the default value is set to null (C#) or Nothing (VB) then no value will
@@ -336,7 +331,7 @@ Public Class Profile
     '''  </remarks>
     Public Overloads Function Values(ByVal DriverID As String, ByVal SubKey As String) As ArrayList Implements IProfile.Values
         Dim RetVal As New ArrayList
-        'Return a hashtable of all values in a given key
+        'Return a hash table of all values in a given key
         Dim Vals As Generic.SortedList(Of String, String)
         TL.LogMessage("Values", "Driver: " & DriverID & " Subkey: """ & SubKey & """")
         CheckRegistered(DriverID)
@@ -426,7 +421,7 @@ Public Class Profile
     ''' <returns>Device profile encoded in XML</returns>
     ''' <remarks>Please see the code examples in this help file for a description of how to use this method.
     '''<para>The format of the returned XML is shown below. The SubKey element repeats for as many subkeys as are present while the Value element with its
-    ''' Name and Data memebers repeats as often as there are values in a particular subkey.</para>
+    ''' Name and Data members repeats as often as there are values in a particular subkey.</para>
     ''' <para><pre>
     ''' &lt;?xml version="1.0" encoding="utf-8" ?&gt; 
     ''' &lt;ASCOMProfileAL&gt;
@@ -471,7 +466,7 @@ Public Class Profile
         CurrentProfile = ProfileStore.GetProfile(MakeKey(DriverId, ""))
         Using MemStream As New MemoryStream 'Create a memory stream to receive the serialised ProfileKey
             XMLSer.Serialize(MemStream, CurrentProfile) 'Serialise the ProfileKey object to XML held in the memory stream
-            XMLProfileBytes = MemStream.ToArray() 'Retrieve the serialised unicode XML characters as a byte array
+            XMLProfileBytes = MemStream.ToArray() 'Retrieve the serialised Unicode XML characters as a byte array
             RetVal = UTF8.GetString(XMLProfileBytes) 'Convert the byte array into a UTF8 character string
         End Using
 
@@ -496,7 +491,7 @@ Public Class Profile
 
         XMLProfileBytes = UTF8.GetBytes(XmlProfile) 'Convert the UTF8 XML string into a byte array
         Using MemStream As New MemoryStream(XMLProfileBytes) 'Present the UTF8 string byte array as a memory stream
-            NewProfileContents = CType(XMLSer.Deserialize(MemStream), ASCOMProfile) 'Deserialise the stream to a ProfileKey object holding the new set of values
+            NewProfileContents = CType(XMLSer.Deserialize(MemStream), ASCOMProfile) 'De-serialise the stream to a ProfileKey object holding the new set of values
         End Using
 
         ProfileStore.SetProfile(MakeKey(DriverId, ""), NewProfileContents)
@@ -510,7 +505,7 @@ Public Class Profile
     ''' Read an entire device profile and return it as an ASCOMProfile class instance
     ''' </summary>
     ''' <param name="DriverId">The ProgID of the device</param>
-    ''' <returns>Device profile represented as a recusrive class</returns>
+    ''' <returns>Device profile represented as a recursive class</returns>
     ''' <remarks>Please see the code examples in this help file for a description of how to use this method.</remarks>
     Public Function GetProfile(ByVal DriverId As String) As ASCOMProfile Implements IProfileExtra.GetProfile
         Dim RetVal As ASCOMProfile
@@ -537,10 +532,10 @@ Public Class Profile
     ''' <summary>
     ''' Migrate the ASCOM profile from registry to file store
     ''' </summary>
-    ''' <param name="CurrentPlatformVersion">The platform version number of the current profile store beig migrated</param>
+    ''' <param name="CurrentPlatformVersion">The platform version number of the current profile store being migrated</param>
     ''' <remarks></remarks>
-    <EditorBrowsable(EditorBrowsableState.Never), _
-    ComVisible(False)> _
+    <EditorBrowsable(EditorBrowsableState.Never),
+    ComVisible(False)>
     Public Sub MigrateProfile(ByVal CurrentPlatformVersion As String) Implements IProfileExtra.MigrateProfile
         ProfileStore.BackupProfile(CurrentPlatformVersion)
     End Sub
@@ -557,7 +552,7 @@ Public Class Profile
     ''' "DeleteValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
     ''' with SubKey set to empty string achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Sub DeleteValue(ByVal DriverID As String, ByVal Name As String) Implements IProfileExtra.DeleteValue
         Me.DeleteValue(DriverID, Name, "")
     End Sub
@@ -572,12 +567,12 @@ Public Class Profile
     ''' <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
     ''' <remarks>
     ''' <para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
-    ''' <para>Does not provide access to other registry data types such as binary and doubleword. </para>
+    ''' <para>Does not provide access to other registry data types such as binary and double-word. </para>
     ''' <para>This overload is not available through COM, please use 
     ''' "GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
     ''' with SubKey set to empty string achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function GetValue(ByVal DriverID As String, ByVal Name As String) As String Implements IProfileExtra.GetValue
         Return Me.GetValue(DriverID, Name, "", Nothing)
     End Function
@@ -593,9 +588,9 @@ Public Class Profile
     ''' <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
     ''' <remarks>
     ''' <para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
-    ''' <para>Does not provide access to other registry data types such as binary and doubleword. </para>
+    ''' <para>Does not provide access to other registry data types such as binary and double-word. </para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String) As String Implements IProfileExtra.GetValue
         Return Me.GetValue(DriverID, Name, SubKey, Nothing)
     End Function
@@ -609,7 +604,7 @@ Public Class Profile
     ''' the Key property is the sub-key name, and the Value property is the value. The unnamed ("default") value for that key is also returned.
     ''' <para>The KeyValuePair objects are instances of the <see cref="KeyValuePair">KeyValuePair class</see></para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function SubKeys(ByVal DriverID As String) As ArrayList Implements IProfileExtra.SubKeys
         Return Me.SubKeys(DriverID, "")
     End Function
@@ -625,7 +620,7 @@ Public Class Profile
     ''' Key property set to an empty string.
     ''' <para>The KeyValuePair objects are instances of the <see cref="KeyValuePair">KeyValuePair class</see></para>
     '''  </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function Values(ByVal DriverID As String) As ArrayList Implements IProfileExtra.Values
         Return Me.Values(DriverID, "")
     End Function
@@ -643,7 +638,7 @@ Public Class Profile
     ''' "WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String, ByVal SubKey As String)"
     ''' with SubKey set to empty string achieve this effect.
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Sub WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String) Implements IProfileExtra.WriteValue
         Me.WriteValue(DriverID, Name, Value, "")
     End Sub
@@ -657,10 +652,6 @@ Public Class Profile
 
         If Indent Then IndStr = "  "
 
-        If DriverID = LastDriverID Then
-            TL.LogMessage(IndStr & "IsRegistered", IndStr & DriverID.ToString & " - using cached value: " & LastResult)
-            Return LastResult
-        End If
         TL.LogStart(IndStr & "IsRegistered", IndStr & DriverID.ToString & " ")
 
         IsRegisteredPrv = False ' Assume failure
@@ -679,20 +670,13 @@ Public Class Profile
                     IsRegisteredPrv = True ' Found it
                 End If
             Next
+
             If Not IsRegisteredPrv Then TL.LogFinish("Key " & DriverID & " not found")
 
-            ' If keys.ContainsKey(DriverID) Then
-            ' TL.LogFinish("Key " & DriverID & " found")
-            ' IsRegisteredPrv = True ' Found it
-            ' Else
-            ' TL.LogFinish("Key " & DriverID & " not found")
-            ' End If
         Catch ex As Exception
             TL.LogFinish("Exception: " & ex.ToString)
         End Try
 
-        LastDriverID = DriverID
-        LastResult = IsRegisteredPrv
     End Function
 
     Private Function MakeKey(ByVal BaseKey As String, ByVal SubKey As String) As String
@@ -710,11 +694,9 @@ Public Class Profile
             TL.LogMessage("  CheckRegistered", "Driver is not registered")
             If DriverID = "" Then
                 TL.LogMessage("  CheckRegistered", "Throwing illegal driver ID exception")
-                'Err.Raise(SCODE_ILLEGAL_DRIVERID, ERR_SOURCE_PROFILE, MSG_ILLEGAL_DRIVERID)
                 Throw New Exceptions.InvalidValueException(MSG_ILLEGAL_DRIVERID)
             Else
                 TL.LogMessage("  CheckRegistered", "Throwing driver is not registered exception. ProgID: " & DriverID & " DeviceType: " & m_sDeviceType)
-                'Err.Raise(SCODE_DRIVER_NOT_REG, ERR_SOURCE_PROFILE, "DriverID " & DriverID & " is not registered.")
                 Throw New Exceptions.DriverNotRegisteredException("DriverID " & DriverID & " is not registered as a device of type: " & m_sDeviceType)
             End If
         Else
