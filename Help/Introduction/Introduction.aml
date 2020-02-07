@@ -1,75 +1,92 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" revisionNumber="1">
-	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-      	<para>
-      		Please see <link xlink:href="3417e177-f705-497d-8127-fb30e8519d50" /> for detailed information on the latest changes.
-      	</para>
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <para>
+      Please see <link xlink:href="3417e177-f705-497d-8127-fb30e8519d50" /> for detailed information on the latest changes.
+    </para>
 
-      	<para>
-      		Every ASCOM Platform release aims for <legacyBold>100% backward compatibility</legacyBold> with current drivers and applications, providing an easy upgrade path and new capabilities that developers and enthusiasts can exploit.
-      	</para>
-      	
-		<para>
-			If you would like to confirm the integrity of the installed Platform, the <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> will provide a wide ranging report through a comprehensive test suite that exercises every aspect of Platform functionality.
-		</para>
+    <para>
+      Every ASCOM Platform release aims for <legacyBold>100% backward compatibility</legacyBold> with current drivers and applications, providing an easy upgrade path and new capabilities that developers and enthusiasts can exploit.
+    </para>
 
-      	<section address="Introduction-Users-Platform-6">
-	      	
-    		<title>Major Enhancements in Platform 6.5</title>
-	      	<content>
-				<para><legacyBold>Alpaca Support</legacyBold></para>
-		      	<para>
-		    		Alpaca devices can now be discovered from the Chooser, which will also create a dynamic driver so that the device can be used in any ASCOM client program. By default Alpaca discovery is disabled but can be enabled through a new "Alpaca"
-		    		menu option in the Chooser. This menu also enables you to manually create an Alpaca driver for devices that do not support automatic discovery as well as configure discovery and Chooser behaviou. Further information is provided here: XXXXXXXXXXXX.
-				</para>
-				<para><legacyBold>Device Hub</legacyBold></para>
-		      	<para>
-		    		We now have a new "Device Hub" that replaces the aging POTH, Pipe, Hub and Dome Control drivers. This provides improved functionality deliovered in a modern technology that makes it easy to enhance if required. 
-		    		Thanks very much to Rick Burke for delivering this significant improvement!
-				</para>
-				<para><legacyBold>CoverCalibrator Interface</legacyBold></para>
-		      	<para>
-		    		Following an RFC we have added a new interface to enable control of automated telescope covers and camera calibration devices. This interface supports two distinct capabilities because some devices incorprate both within one hardware device and
-		    		enabled clients to open and close telescvoe covers and to adjust the brightness of flat field calibration panels.
-				</para>
-			</content>
-    	</section>
+    <para>
+      If you would like to confirm the integrity of the installed Platform, the <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> will provide a wide ranging report through a comprehensive test suite that exercises
+      every aspect of Platform functionality.
+    </para>
 
-	    <section address="Issues">
-	    	<title>Issues and Enhancement Requests</title>
-	      	<content>
-				<para>
-					Please use the ASCOM Groups.io forum:
-						<externalLink>
-							<linkText>ASCOM Talk Forum</linkText>
-							<linkAlternateText>https://ascomtalk.groups.io/g/Help</linkAlternateText>
-							<linkUri>https://ascomtalk.groups.io/g/Help</linkUri>
-							<linkTarget>_blank</linkTarget>
-						</externalLink>
-					at <quoteInline>https://ascomtalk.groups.io/g/Help</quoteInline> to report and discuss issues that you come across when using the ASCOM Platform. You will find the <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> located in 
-					Start Menu / ASCOM Platform 6 / Tools; it will help greatly if you run it before reporting an issue as it provides concrete evidence to help diagnose and resolve the problem. 
-				</para>
-			</content>
-	    </section>
-	    
-	    <section address="Notes">
-	    	<title>Notes</title>
-	      	<content>
-	      		<list class="bullet">
-	 				<listItem>See the section titled <link xlink:href="bfd53b69-9f13-489b-9a98-50c60d2a633b" /> for a summary of Platform 6 updates and new functionality.</listItem>
-	 				<listItem>See the section titled <link xlink:href="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" /> for a summary of Platform 5.5 updates and new functionality.</listItem>
-	  				<listItem>This platform appears as <quoteInline>ASCOM Platform 6.5</quoteInline> in the Apps  and add/remove programs dialogues</listItem>
-	  				<listItem>The Platform has been tested in 32 and 64bit bit versions of Windows 7 and Windows 10.</listItem>
-		  		</list>
-	      	</content>
-	    </section>
-	
-	   	<relatedTopics>
-			<externalLink>
-				<linkText>ASCOM Initiative Web Site</linkText>
-				<linkAlternateText>Go to the ASCOM Initiative web site</linkAlternateText>
-				<linkUri>https://ascom-standards.org/</linkUri>
-			</externalLink>
-		</relatedTopics>
-	</developerConceptualDocument>
+    <section address="Introduction-Users-Platform-6">
+
+      <title>Major Enhancements in Platform 6.5</title>
+      <content>
+        <para>
+          <legacyBold>Alpaca Support</legacyBold>
+        </para>
+        <para>
+          Alpaca devices can now be discovered from the Chooser, which will also create a dynamic driver so that the device can be used in any ASCOM client program. By default, Alpaca discovery is disabled but can be enabled
+          through a new "Alpaca" menu option in the Chooser. This menu also enables you to manually create an Alpaca driver for devices that do not support automatic discovery as well as configure discovery and Chooser behaviour.
+        </para>
+        <para>
+          Further information on Alpaca use is provided here: <link xlink:href="e3870a2f-582a-4ab4-b37f-e9b1c37a2030">Using Alpaca devices through the Chooser</link>.
+        </para>
+        <para>
+          <legacyBold>Device Hub</legacyBold>
+        </para>
+        <para>
+          We now have a new "Device Hub" that replaces the ageing POTH, Pipe, Hub and Dome Control drivers. This provides improved functionality delivered in a modern technology that makes it easy to enhance if required.
+          Thanks very much to Rick Burke for delivering this significant improvement!
+        </para>
+        <para>
+          <legacyBold>CoverCalibrator Interface</legacyBold>
+        </para>
+        <para>
+          Following an RFC we have added a new interface, ICoverCalibrator, which enables clients to control opening and closing of automated telescope covers and to adjust the brightness of flat field calibration panels.
+          The interface incorporates these two distinct capabilities because some devices provide both within one hardware device.
+        </para>
+      </content>
+    </section>
+
+    <section address="Issues">
+      <title>Issues and Enhancement Requests</title>
+      <content>
+        <para>
+          Please use the ASCOM Groups.io forum:
+          <externalLink>
+            <linkText>ASCOM Talk Forum</linkText>
+            <linkAlternateText>https://ascomtalk.groups.io/g/Help</linkAlternateText>
+            <linkUri>https://ascomtalk.groups.io/g/Help</linkUri>
+            <linkTarget>_blank</linkTarget>
+          </externalLink>
+          at <quoteInline>https://ascomtalk.groups.io/g/Help</quoteInline> to report and discuss issues that you come across when using the ASCOM Platform. You will find the
+          <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> located in Start Menu / ASCOM Platform 6 / Tools; it will help greatly if you run it before reporting an issue as it provides concrete evidence to
+          help diagnose and resolve the problem.
+        </para>
+      </content>
+    </section>
+
+    <section address="Notes">
+      <title>Notes</title>
+      <content>
+        <list class="bullet">
+          <listItem>
+            See the section titled <link xlink:href="bfd53b69-9f13-489b-9a98-50c60d2a633b" /> for a summary of Platform 6 updates and new functionality.
+          </listItem>
+          <listItem>
+            See the section titled <link xlink:href="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" /> for a summary of Platform 5.5 updates and new functionality.
+          </listItem>
+          <listItem>
+            This platform appears as <quoteInline>ASCOM Platform 6.5</quoteInline> in the Apps  and add/remove programs dialogues
+          </listItem>
+          <listItem>The Platform has been tested in 32 and 64bit bit versions of Windows 7 and Windows 10.</listItem>
+        </list>
+      </content>
+    </section>
+
+    <relatedTopics>
+      <externalLink>
+        <linkText>ASCOM Initiative Web Site</linkText>
+        <linkAlternateText>Go to the ASCOM Initiative web site</linkAlternateText>
+        <linkUri>https://ascom-standards.org/</linkUri>
+      </externalLink>
+    </relatedTopics>
+  </developerConceptualDocument>
 </topic>

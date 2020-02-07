@@ -101,6 +101,54 @@
     <Folder Include="Introduction\" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Tools and Features\alpacaexample3.png">
+      <ImageId>alpacaexample3</ImageId>
+      <AlternateText>alpacaexample 3</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpacaexample2.png">
+      <ImageId>alpacaexample2</ImageId>
+      <AlternateText>alpacaexample 2</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpacaexample1.png">
+      <ImageId>alpacaexample1</ImageId>
+      <AlternateText>alpacaexample 1</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpacaconfig.png">
+      <ImageId>alpacaconfig</ImageId>
+      <AlternateText>alpacaconfig</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpaca8.png">
+      <ImageId>alpaca8</ImageId>
+      <AlternateText>alpaca 8</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpaca7.png">
+      <ImageId>alpaca7</ImageId>
+      <AlternateText>alpaca 7</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpaca6.png">
+      <ImageId>alpaca6</ImageId>
+      <AlternateText>alpaca 6</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpaca5.png">
+      <ImageId>alpaca5</ImageId>
+      <AlternateText>alpaca 5</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpaca4.png">
+      <ImageId>alpaca4</ImageId>
+      <AlternateText>alpaca 4</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpaca3.png">
+      <ImageId>alpaca3</ImageId>
+      <AlternateText>alpaca 3</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpaca2.png">
+      <ImageId>alpaca2</ImageId>
+      <AlternateText>alpaca 2</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpaca1.png">
+      <ImageId>alpaca1</ImageId>
+      <AlternateText>alpaca 1</AlternateText>
+    </Image>
     <Image Include="Tools and Features\ChooserTest.png">
       <ImageId>ChooserTest</ImageId>
       <AlternateText>Chooser Test</AlternateText>
@@ -145,7 +193,6 @@
     <None Include="Version History\Version 6.4 SP1.aml" />
     <None Include="Tools and Features\Earth Rotation Parameters.aml" />
     <None Include="Version History\Version 6.4.aml" />
-    <None Include="Version History\Version 6.3 SP1.aml" />
     <None Include="Version History\Version 6.3.aml" />
     <None Include="Version History\Version 6.2.aml" />
     <None Include="Introduction\Acknowledgements.aml" />

@@ -1,23 +1,179 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="e3870a2f-582a-4ab4-b37f-e9b1c37a2030" revisionNumber="1">
-<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-	<introduction>
-		<para
-		>The Observing Conditions Hub (OCH) is an Observing Conditions driver that aggregates a number of real Switch and ObservingConditions drivers into a single
-		consolidated virtual ObservingConditions driver that exposes information from the real drivers.
-		</para>
-	</introduction>
-	
-	<section address="AlpacaChooser">
-		<title>Alpaca through Chooser</title>
-		<content>
-			<para>
-				<mediaLink>
-					<image placement="center" xlink:href="ChooserTest"/>
-				</mediaLink>
-			</para>
-		</content>
-	</section>
-	
-	</developerConceptualDocument>
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+        Alpaca devices are network connected, communicate through ASCOM's HTTP/REST Alpaca protocol and can be built in any technology that provides an HTTP based interface.
+        They are quite different to the previous generation of devices that could only be connected directly to a Windows PC and that communicated with clients through Microsoft's Component Object Model (COM) technology.
+      </para>
+      <para>
+        ASCOM Remote Clients have been used since May 2018 to enable clients to communicate with
+        <externalLink>
+          <linkText>Alpaca Devices</linkText>
+          <linkAlternateText>Go to the ASCOM Alpaca Devices web page</linkAlternateText>
+          <linkUri>https://www.ascom-standards.org/Developer/Alpaca.htm</linkUri>
+        </externalLink>
+        .
+        However, the Remote Clients are no longer needed because new <legacyBold>Alpaca Dynamic Clients</legacyBold> are built right into the Platform and can be created on demand through the Chooser.
+        These dynamically created clients will be configured automatically using information from Alpaca devices that identify themselves over the network.
+      </para>
+      <para>
+        The remainder of this section shows how to create and use <legacyBold>Alpaca Dynamic Clients</legacyBold> to communicate with networked Alpaca devices.
+      </para>
+    </introduction>
+
+    <section address="AlpacaThroughChooser">
+      <title>Alpaca through the Chooser</title>
+      <content>
+        <para>
+          In its default state Chooser works as it always has.
+          <mediaLink>
+            <image placement="left" xlink:href="alpaca1"/>
+          </mediaLink>
+          The new Alpaca menu enables you to:
+          <list class="bullet">
+            <listItem>
+              <legacyBold>Enable</legacyBold> - turn on Alpaca device discovery
+            </listItem>
+            <listItem>
+              <legacyBold>Manage</legacyBold> - Remove dynamic drivers that are no longer required
+            </listItem>
+            <listItem>
+              <legacyBold>Create</legacyBold> - Make an Alpaca driver that you can configure manually
+            </listItem>
+            <listItem>
+              <legacyBold>Configure</legacyBold> - Change the behaviour of the Chooser and Alpaca discovery
+            </listItem>
+          </list>
+          <mediaLink>
+            <image placement="left" xlink:href="alpaca2"/>
+          </mediaLink>
+        </para>
+      </content>
+    </section>
+
+    <section address="DiscoveringDevices">
+      <title>Discovering Alpaca Devices</title>
+      <content>
+        <para>
+          Click the <legacyBold>Enable Discovery</legacyBold> item to make Chooser search for Alpaca devices and a discovery status LED will appear and flash amber while the discovery is undertaken.
+          If devices are discovered, the LED will become green and the discovered devices will appear in the Chooser list
+          <mediaLink>
+            <image placement="left" xlink:href="alpaca3"/>
+          </mediaLink>
+        </para>
+        <para>
+          <alert class="note">
+            <para>
+              Discovery must be enabled separately <legacyBold>for each device type</legacyBold>. This is so that you don't have to wait for discovery to complete when you don't have any Alpaca devices of that particular type.
+            </para>
+          </alert>
+        </para>
+        <para>
+          If no devices respond in time the LED will become red.
+          <mediaLink>
+            <image placement="left" xlink:href="alpaca4"/>
+          </mediaLink>
+        </para>
+        <para>
+          To create a dynamic driver for the newly discovered Alpaca device select it as normal, noting that the Properties button will be greyed out because the driver hasn't yet been created.
+          <mediaLink>
+            <image placement="left" xlink:href="alpaca5"/>
+          </mediaLink>
+        </para>
+        <para>
+          Press the OK button and the dialogue below will appear advising that Administrator level approval is required.
+          <mediaLink>
+            <image placement="left" xlink:href="alpaca6"/>
+          </mediaLink>
+        </para>
+        <para>
+          After clicking OK the normal Administrator security dialogue will appear and, if approved, the driver will be created and you will be returned to the Chooser with the new dynamic driver selected.
+          <mediaLink>
+            <image placement="left" xlink:href="alpaca7"/>
+          </mediaLink>
+        </para>
+        <para>There is no need to change the driver’s Properties because these will already have been set, but they can be inspected and changed if you wish.</para>
+        <para>
+          Now press the Chooser OK button to select the driver as normal.
+          <alert class="note">
+            <para>
+              The created driver will be available to all ASCOM clients on this PC - there is no need to rediscover the device on every client, you just need to select the device’s dynamic COM driver from the list as shown
+              below.
+            </para>
+          </alert>
+          <mediaLink>
+            <image placement="left" xlink:href="alpaca8"/>
+          </mediaLink>
+        </para>
+      </content>
+    </section>
+
+    <section address="Configuration">
+      <title>Chooser Configuration</title>
+      <content>
+        <mediaLink>
+          <image placement="left" xlink:href="alpacaconfig"/>
+        </mediaLink>
+        <para>TThe Configure Chooser and Discovery dialogue enables you to set:</para>
+        <list class="bullet">
+          <listItem>
+            <legacyBold>Discovery IP port number</legacyBold> - This only needs to be changed if your network already uses port 32227 for some other function. All devices and clients must be configured to use the same address
+            in order for discovery to work.
+          </listItem>
+          <listItem>
+            <legacyBold>Number of Discovery Broadcasts</legacyBold> - One broadcast should be sufficient but, if you have an extremely unreliable network this can be increased as required.
+          </listItem>
+          <listItem>
+            <legacyBold>Discovery Duration</legacyBold> - The length of time that the discovery agent will wait for devices to respond before returning a response to the client. This wait time can be tuned up or down to match the
+            responsiveness of your Alpaca devices and of the network between the client and the device.
+          </listItem>
+          <listItem>
+            <legacyBold>Additional Chooser Width</legacyBold> - Increases the Chooser dialogue width to improve legibility if required
+          </listItem>
+          <listItem>
+            <legacyBold>Attempt DNS name resolution</legacyBold> - Will try to resolve the IP address to a host name using Microsoft’s DNS resolver component. Please note that this can sometimes produce unexpected results
+            because it can return NETBIOS names
+            if there is no response from a real DNS server.
+          </listItem>
+          <listItem>
+            <legacyBold>List all discovered devices</legacyBold> - Includes Chooser entries for Alpaca devices that already have COM drivers in the Chooser list. This can be useful for confirming that an Alpaca device is
+            visible on the network
+          </listItem>
+          <listItem>
+            <legacyBold>Show device details</legacyBold> - Includes ProgIDs and Alpaca Unique IDs in the Chooser display to aid debugging
+          </listItem>
+          <listItem>
+            <legacyBold>Show "Create new Alpaca driver" instructions</legacyBold> - The dialogue that is displayed before a new dynamic driver is created explaining what is about to happen has a
+            “do not show this message again” check box. This enables it to be reset if required.
+          </listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="Examples">
+      <title>Chooser Example Dialogues</title>
+      <content>
+        <para>
+          Example of the Chooser dialogue with width set to 400
+          <mediaLink>
+            <image placement="left" xlink:href="alpacaexample1"/>
+          </mediaLink>
+        </para>
+        <para>
+          Example of the Chooser dialogue with “List known devices” on
+          <mediaLink>
+            <image placement="left" xlink:href="alpacaexample2"/>
+          </mediaLink>
+        </para>
+        <para>
+          Example of the “manage devices dialogue
+          <mediaLink>
+            <image placement="left" xlink:href="alpacaexample3"/>
+          </mediaLink>
+        </para>
+      </content>
+    </section>
+
+  </developerConceptualDocument>
 </topic>

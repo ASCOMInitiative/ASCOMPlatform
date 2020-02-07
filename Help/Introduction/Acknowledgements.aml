@@ -2,13 +2,15 @@
 <topic id="174fff87-9bd7-442e-98e1-9fe2ac09bac6" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <section address="Acknowledgements">
-    	<title>Acknowledgements</title>
-      	<content>
-      		<para>I would like to gratefully acknowledge Daniel Van Noord, Rick Burke, Tim Long, Chris Rowland, Chris Norman, Rob Morgan and Bob Denny for constructive 
-      		discussions, knowledge transfer, help in design and for testing development versions of Platform 6.</para>
-      		<para>Thanks all!</para>
-      		<para>Peter Simpson</para>
-      	</content>
+      <title>Acknowledgements</title>
+      <content>
+        <para>
+          I would like to gratefully acknowledge Daniel Van Noord, Rick Burke, Tim Long, Chris Rowland, Chris Norman, Rob Morgan and Bob Denny for constructive
+          discussions, knowledge transfer, help in design and for testing development versions of Platform 6.
+        </para>
+        <para>Thanks all!</para>
+        <para>Peter Simpson</para>
+      </content>
     </section>
   </developerConceptualDocument>
 </topic>

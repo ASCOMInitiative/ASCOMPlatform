@@ -245,6 +245,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvvmMessenger", "Drivers an
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelescopeDriver", "Drivers and Simulators\ASCOM Device Hub\TelescopeDriver\TelescopeDriver.csproj", "{49616BA2-A6E8-4342-B9B9-B80C4F508DDB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Help Files", "Help Files", "{B72C4FBC-2BD8-4DB9-9BA7-287DD580F248}"
+EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "ASCOMPlatform", "Help\ASCOMPlatform.shfbproj", "{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}"
+EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "ASCOMDeveloper", "Help\ASCOMDeveloper.shfbproj", "{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Quick|Any CPU = Debug Quick|Any CPU
@@ -2594,6 +2600,56 @@ Global
 		{49616BA2-A6E8-4342-B9B9-B80C4F508DDB}.Release|x64.ActiveCfg = Release|Any CPU
 		{49616BA2-A6E8-4342-B9B9-B80C4F508DDB}.Release|x86.ActiveCfg = Release|Any CPU
 		{49616BA2-A6E8-4342-B9B9-B80C4F508DDB}.Release|x86.Build.0 = Release|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Debug Quick|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Debug Quick|Mixed Platforms.Build.0 = Debug|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Debug Quick|Win32.ActiveCfg = Debug|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Debug Quick|Win32.Build.0 = Debug|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Debug Quick|x64.ActiveCfg = Debug|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Debug Quick|x64.Build.0 = Debug|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Debug Quick|x86.ActiveCfg = Debug|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Debug Quick|x86.Build.0 = Debug|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.MakeDynamicLists|Any CPU.ActiveCfg = Release|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.MakeDynamicLists|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.MakeDynamicLists|Win32.ActiveCfg = Release|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.MakeDynamicLists|x64.ActiveCfg = Release|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.MakeDynamicLists|x86.ActiveCfg = Release|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Release|Win32.ActiveCfg = Release|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Release|x64.ActiveCfg = Release|Any CPU
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302}.Release|x86.ActiveCfg = Release|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Debug Quick|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Debug Quick|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Debug Quick|Win32.ActiveCfg = Debug|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Debug Quick|Win32.Build.0 = Debug|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Debug Quick|x64.ActiveCfg = Debug|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Debug Quick|x64.Build.0 = Debug|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Debug Quick|x86.ActiveCfg = Debug|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Debug Quick|x86.Build.0 = Debug|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.MakeDynamicLists|Any CPU.ActiveCfg = Release|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.MakeDynamicLists|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.MakeDynamicLists|Win32.ActiveCfg = Release|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.MakeDynamicLists|x64.ActiveCfg = Release|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.MakeDynamicLists|x86.ActiveCfg = Release|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Release|Win32.ActiveCfg = Release|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Release|x64.ActiveCfg = Release|Any CPU
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2697,6 +2753,8 @@ Global
 		{F9894D1D-06E7-4C06-AE00-09F8940E0AA8} = {3AC24387-BBC3-4372-9415-687DAC206112}
 		{3C199A36-99A6-4C99-BAB3-E37A81505111} = {3AC24387-BBC3-4372-9415-687DAC206112}
 		{49616BA2-A6E8-4342-B9B9-B80C4F508DDB} = {3AC24387-BBC3-4372-9415-687DAC206112}
+		{EAF06FA1-39D1-4AEB-8CDF-47A459B51302} = {B72C4FBC-2BD8-4DB9-9BA7-287DD580F248}
+		{8D46E8FA-B8A8-4C72-91F9-8E1FB856B461} = {B72C4FBC-2BD8-4DB9-9BA7-287DD580F248}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EF732E96-7FA0-4C42-96B4-861ED5E48814}
