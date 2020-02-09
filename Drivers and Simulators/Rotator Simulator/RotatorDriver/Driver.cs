@@ -4,18 +4,12 @@
 //
 // ASCOM Rotator driver for RotatorSimulator
 //
-// Description:	Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam 
-//				nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam 
-//				erat, sed diam voluptua. At vero eos et accusam et justo duo 
-//				dolores et ea rebum. Stet clita kasd gubergren, no sea takimata 
-//				sanctus est Lorem ipsum dolor sit amet.
-//
 // Implements:	ASCOM Rotator interface version: 1.0
 // Author:		(XXX) Your N. Here <your@email.here>
 //
 // Edit Log:
 //
-// Date			Who	Vers	Description
+// Date			Who	Version	Description
 // -----------	---	-----	-------------------------------------------------------
 // dd-mmm-yyyy	XXX	1.0.0	Initial edit, from ASCOM Rotator Driver template
 // --------------------------------------------------------------------------------
@@ -27,36 +21,25 @@ using ASCOM;
 
 namespace ASCOM.Simulator
 {
-	//
-	// Your driver's ID is ASCOM.Simulator.Rotator
-	//
-	// The Guid attribute sets the CLSID for ASCOM.Simulator.Rotator
-	// The ClassInterface/None addribute prevents an empty interface called
-	// _Rotator from being created and used as the [default] interface
-	//
+    // The Guid attribute sets the CLSID for ASCOM.Simulator.Rotator
+    // The ClassInterface/None attribute prevents an empty interface called _Rotator from being created and used as the [default] interface
+ 
     [Guid("347B5004-3662-42C0-96B8-3F8F6F0467D2")]
     [ServedClassName("Rotator Simulator .NET")]
     [ProgId("ASCOM.Simulator.Rotator")]
     [ClassInterface(ClassInterfaceType.None)]
-    [ComVisible(true)] 
-	public class Rotator : ReferenceCountedObjectBase, IRotatorV2
-	{
-        /// <summary>
-        /// Driver ID - ClassID and used in the profile
-        /// </summary>
-        private string driverID = "ASCOM.Simulator.Rotator";
-
-		//
-		// Constructor - Must be public for COM registration!
-		//
-		public Rotator()
+    [ComVisible(true)]
+    public class Rotator : ReferenceCountedObjectBase, IRotatorV3
+    {
+        //
+        // Constructor - Must be public for COM registration!
+        //
+        public Rotator()
         {
-            driverID = Marshal.GenerateProgIdForType(this.GetType());
-            //System.Windows.Forms.MessageBox.Show("Test");       // allows time for attach to process
         }
 
-		//
-		// PUBLIC COM INTERFACE IRotator IMPLEMENTATION
+        //
+        // PUBLIC COM INTERFACE IRotator IMPLEMENTATION
         //
         #region IDeviceControl Members
         /// <summary>
@@ -68,25 +51,24 @@ namespace ASCOM.Simulator
             throw new ASCOM.ActionNotImplementedException(actionName);
         }
 
-	    public void CommandBlind(string command, bool raw)
-	    {
+        public void CommandBlind(string command, bool raw)
+        {
             throw new ASCOM.MethodNotImplementedException("CommandBlind " + command);
-	    }
+        }
 
-	    public bool CommandBool(string command, bool raw)
-	    {
+        public bool CommandBool(string command, bool raw)
+        {
             throw new ASCOM.MethodNotImplementedException("CommandBool " + command);
-	    }
+        }
 
-	    public string CommandString(string command, bool raw)
-	    {
+        public string CommandString(string command, bool raw)
+        {
             throw new ASCOM.MethodNotImplementedException("CommandString " + command);
-	    }
+        }
 
-	    public void Dispose()
-	    {
-            //throw new MethodNotImplementedException("Dispose");
-	    }
+        public void Dispose()
+        {
+        }
 
         /// <summary>
         /// Gets the supported actions.
@@ -98,7 +80,7 @@ namespace ASCOM.Simulator
         }
 
         #endregion
-        
+
         #region IRotator Members
         public bool Connected
         {
@@ -131,62 +113,78 @@ namespace ASCOM.Simulator
             get { return RotatorHardware.RotatorName; }
         }
 
-	    public bool CanReverse
-		{
-			get { return RotatorHardware.CanReverse; }
-		}
+        public bool CanReverse
+        {
+            get { return RotatorHardware.CanReverse; }
+        }
 
-	    public void Halt()
-		{
-			RotatorHardware.Halt();
-		}
+        public void Halt()
+        {
+            RotatorHardware.Halt();
+        }
 
-		public bool IsMoving
-		{
-			get { return RotatorHardware.Moving; }
-		}
+        public bool IsMoving
+        {
+            get { return RotatorHardware.IsMoving; }
+        }
 
-		public void Move(float position)
-		{
-			RotatorHardware.Move(position);
-		}
+        public void Move(float position)
+        {
+            RotatorHardware.Move(position);
+        }
 
-		public void MoveAbsolute(float position)
-		{
-			RotatorHardware.MoveAbsolute(position);
-		}
+        public void MoveAbsolute(float position)
+        {
+            RotatorHardware.MoveAbsolute(position);
+        }
 
-		public float Position
-		{
-			get { return RotatorHardware.Position; }
-		}
+        public float Position
+        {
+            get { return RotatorHardware.Position; }
+        }
 
-		public bool Reverse
-		{
-			get { return RotatorHardware.Reverse; }
-			set { RotatorHardware.Reverse = value; }
-		}
+        public bool Reverse
+        {
+            get { return RotatorHardware.Reverse; }
+            set { RotatorHardware.Reverse = value; }
+        }
 
-		public void SetupDialog()
-		{
-			if(RotatorHardware.Connected)
-				throw new DriverException("The rotator is connected, cannot do SetupDialog()",
-									unchecked(ErrorCodes.DriverBase + 4));
+        public void SetupDialog()
+        {
+            if (RotatorHardware.Connected) throw new DriverException("The rotator is connected, cannot do SetupDialog()", unchecked(ErrorCodes.DriverBase + 4));
+
             RotatorHardware.SetupDialog();
+        }
 
-			//RotatorSimulator.m_MainForm.DoSetupDialog();			// Kinda sleazy
-		}
+        public float StepSize
+        {
+            get { return RotatorHardware.StepSize; }
+        }
 
-	    public float StepSize
-		{
-			get { return RotatorHardware.StepSize; }
-		}
+        public float TargetPosition
+        {
+            get { return RotatorHardware.TargetPosition; }
+        }
 
-		public float TargetPosition
-		{
-			get { return RotatorHardware.TargetPosition; }
-		}
+        #endregion
 
-		#endregion
-	}
+        #region IRotatorV3 members
+
+        public bool CanSync
+        {
+            get { return RotatorHardware.CanReverse; }
+        }
+
+        public float InstrumentalPosition
+        {
+            get { return RotatorHardware.InstrumentalPosition; }
+        }
+
+        public void Sync(float position)
+        {
+            RotatorHardware.Sync(position);
+        }
+
+        #endregion
+    }
 }

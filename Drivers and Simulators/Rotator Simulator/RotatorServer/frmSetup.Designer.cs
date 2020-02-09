@@ -37,6 +37,10 @@ namespace ASCOM.Simulator
             this.txtRotationRate = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.chkReverse = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.TxtSyncOfffset = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.ChkCanSync = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // cmdOK
@@ -44,7 +48,7 @@ namespace ASCOM.Simulator
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.BackColor = System.Drawing.Color.White;
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(110, 102);
+            this.cmdOK.Location = new System.Drawing.Point(117, 171);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(75, 23);
             this.cmdOK.TabIndex = 0;
@@ -57,7 +61,7 @@ namespace ASCOM.Simulator
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.BackColor = System.Drawing.Color.White;
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(29, 102);
+            this.cmdCancel.Location = new System.Drawing.Point(36, 171);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(75, 23);
             this.cmdCancel.TabIndex = 1;
@@ -69,7 +73,7 @@ namespace ASCOM.Simulator
             // 
             this.lblStepSize.BackColor = System.Drawing.Color.Transparent;
             this.lblStepSize.ForeColor = System.Drawing.Color.White;
-            this.lblStepSize.Location = new System.Drawing.Point(12, 48);
+            this.lblStepSize.Location = new System.Drawing.Point(30, 89);
             this.lblStepSize.Name = "lblStepSize";
             this.lblStepSize.Size = new System.Drawing.Size(179, 13);
             this.lblStepSize.TabIndex = 2;
@@ -80,7 +84,7 @@ namespace ASCOM.Simulator
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(12, 22);
+            this.label2.Location = new System.Drawing.Point(28, 22);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(71, 13);
             this.label2.TabIndex = 3;
@@ -90,7 +94,7 @@ namespace ASCOM.Simulator
             // 
             this.chkCanReverse.AutoSize = true;
             this.chkCanReverse.ForeColor = System.Drawing.Color.White;
-            this.chkCanReverse.Location = new System.Drawing.Point(15, 74);
+            this.chkCanReverse.Location = new System.Drawing.Point(32, 116);
             this.chkCanReverse.Name = "chkCanReverse";
             this.chkCanReverse.Size = new System.Drawing.Size(85, 17);
             this.chkCanReverse.TabIndex = 4;
@@ -100,9 +104,9 @@ namespace ASCOM.Simulator
             // 
             // txtRotationRate
             // 
-            this.txtRotationRate.Location = new System.Drawing.Point(89, 19);
+            this.txtRotationRate.Location = new System.Drawing.Point(105, 19);
             this.txtRotationRate.Name = "txtRotationRate";
-            this.txtRotationRate.Size = new System.Drawing.Size(30, 20);
+            this.txtRotationRate.Size = new System.Drawing.Size(41, 20);
             this.txtRotationRate.TabIndex = 6;
             this.txtRotationRate.TextChanged += new System.EventHandler(this.txtRotationRate_TextChanged);
             // 
@@ -111,7 +115,7 @@ namespace ASCOM.Simulator
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(125, 22);
+            this.label4.Location = new System.Drawing.Point(152, 22);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(47, 13);
             this.label4.TabIndex = 8;
@@ -122,19 +126,64 @@ namespace ASCOM.Simulator
             this.chkReverse.AutoSize = true;
             this.chkReverse.BackColor = System.Drawing.Color.Transparent;
             this.chkReverse.ForeColor = System.Drawing.Color.White;
-            this.chkReverse.Location = new System.Drawing.Point(118, 74);
+            this.chkReverse.Location = new System.Drawing.Point(135, 116);
             this.chkReverse.Name = "chkReverse";
             this.chkReverse.Size = new System.Drawing.Size(66, 17);
             this.chkReverse.TabIndex = 9;
             this.chkReverse.Text = "Reverse";
             this.chkReverse.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(152, 54);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(25, 13);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "deg";
+            // 
+            // TxtSyncOfffset
+            // 
+            this.TxtSyncOfffset.Location = new System.Drawing.Point(105, 51);
+            this.TxtSyncOfffset.Name = "TxtSyncOfffset";
+            this.TxtSyncOfffset.Size = new System.Drawing.Size(41, 20);
+            this.TxtSyncOfffset.TabIndex = 11;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(36, 54);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(63, 13);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "Sync offset:";
+            // 
+            // ChkCanSync
+            // 
+            this.ChkCanSync.AutoSize = true;
+            this.ChkCanSync.ForeColor = System.Drawing.Color.White;
+            this.ChkCanSync.Location = new System.Drawing.Point(32, 138);
+            this.ChkCanSync.Name = "ChkCanSync";
+            this.ChkCanSync.Size = new System.Drawing.Size(69, 17);
+            this.ChkCanSync.TabIndex = 13;
+            this.ChkCanSync.Text = "CanSync";
+            this.ChkCanSync.UseVisualStyleBackColor = true;
+            this.ChkCanSync.CheckedChanged += new System.EventHandler(this.ChkCanSync_CheckedChanged);
+            // 
             // frmSetup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(197, 137);
+            this.ClientSize = new System.Drawing.Size(227, 206);
+            this.Controls.Add(this.ChkCanSync);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.TxtSyncOfffset);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.chkReverse);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtRotationRate);
@@ -150,6 +199,7 @@ namespace ASCOM.Simulator
             this.Name = "frmSetup";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Rotator Simulator Setup";
+            this.Load += new System.EventHandler(this.frmSetup_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -165,5 +215,9 @@ namespace ASCOM.Simulator
 		private System.Windows.Forms.TextBox txtRotationRate;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.CheckBox chkReverse;
-	}
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox TxtSyncOfffset;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.CheckBox ChkCanSync;
+    }
 }

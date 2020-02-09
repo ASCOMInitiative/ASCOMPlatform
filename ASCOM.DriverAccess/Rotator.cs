@@ -15,13 +15,17 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to Rotator drivers
     /// </summary>
-    public class Rotator : AscomDriver, IRotatorV2
+    public class Rotator : AscomDriver, IRotatorV3
     {
+        private const int INTERFACE_VERSION_UNKNOWN = int.MinValue;
+
+        private int interfaceVersion = INTERFACE_VERSION_UNKNOWN; // Cached copy of the device's interface version
+
         #region Rotator constructors
         private MemberFactory memberFactory;
 
         /// <summary>
-        /// Creates a rotator object with the given Prog ID
+        /// Creates a rotator object with the given ProgID
         /// </summary>
         /// <param name="rotatorId">ProgID of the rotator to be accessed.</param>
         public Rotator(string rotatorId)
@@ -33,10 +37,10 @@ namespace ASCOM.DriverAccess
 
         #region Convenience Members
         /// <summary>
-        /// Brings up the ASCOM Chooser Dialog to choose a Rotator
+        /// Brings up the ASCOM Chooser Dialogue to choose a Rotator
         /// </summary>
-        /// <param name="rotatorId">Rotator Prog ID for default or null for None</param>
-        /// <returns>Prog ID for chosen Rotator or null for none</returns>
+        /// <param name="rotatorId">Rotator ProgID for default or null for None</param>
+        /// <returns>ProgID for chosen Rotator or null for none</returns>
         public static string Choose(string rotatorId)
         {
             using (Chooser chooser = new Chooser())
@@ -48,7 +52,7 @@ namespace ASCOM.DriverAccess
 
         #endregion
 
-        #region IRotator Members
+        #region IRotatorV2 Members
 
         /// <summary>
         /// Indicates whether the Rotator supports the <see cref="Reverse" /> method.
@@ -106,17 +110,29 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Current instantaneous Rotator position, in degrees.
+        /// Current instantaneous Rotator position, allowing for any sync offset, in degrees.
         /// </summary>
+        /// <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
         /// <remarks>
-        /// The position is expressed as an angle from 0 up to but not including 360 degrees, counter-clockwise against the 
-        /// sky. This is the standard definition of Position Angle. However, the rotator does not need to (and in general will not) 
-        /// report the true Equatorial Position Angle, as the attached imager may not be precisely aligned with the rotator's indexing. 
-        /// It is up to the client to determine any offset between mechanical rotator position angle and the true Equatorial Position 
-        /// Angle of the imager, and compensate for any difference. 
-        /// <para>The optional <see cref="Reverse" /> property is provided in order to manage rotators being used on optics with odd or 
-        /// even number of reflections. With the Reverse switch in the correct position for the optics, the reported position angle must 
-        /// be counter-clockwise against the sky.</para>
+        /// <para><b>SPECIFICATION REVISION - IRotatorV3 - Platform 6.5</b></para>
+        /// <para>
+        /// When <see cref="CanSync"/> is <see cref="Boolean.TrueString"/> Position reports the synced position angle rather than the instrument mechanical position angle. The synced position is defined 
+        /// as the instrumental position plus an offset. When the rotator instrumental position is synced to a Sky Position Angle this property returns the Sky Position Angle. 
+        /// The offset that is determined when the rotator is synced should persist across driver starts and device reboots. 
+        /// </para>
+        /// <para>If <see cref="CanSync"/> is <see cref="Boolean.FalseString"/> this property must return the same value as <see cref="InstrumentalPosition"/>.</para>
+        /// <para>
+        /// The position is expressed as an angle from 0 up to but not including 360 degrees, counter-clockwise against the
+        /// sky. This is the standard definition of Position Angle. However, the rotator does not need to (and in general will not)
+        /// report the true Equatorial Position Angle, as the attached imager may not be precisely aligned with the rotator's indexing.
+        /// It is up to the client to determine any offset between mechanical rotator position angle and the true Equatorial Position
+        /// Angle of the imager, and compensate for any difference.
+        /// </para>
+        /// <para>
+        /// The optional <see cref="Reverse" /> property is provided in order to manage rotators being used on optics with odd or
+        /// even number of reflections. With the Reverse switch in the correct position for the optics, the reported position angle must
+        /// be counter-clockwise against the sky.
+        /// </para>
         /// </remarks>
         public float Position
         {
@@ -162,6 +178,91 @@ namespace ASCOM.DriverAccess
 
         #endregion
 
+        #region IRotatorV3 Members
+
+        /// <summary>
+        /// Reports true if the rotator and / or driver can perform a sync and false if it cannot.
+        /// </summary>
+        /// <remarks> This must be implemented and must not throw an exception.</remarks>
+        public bool CanSync
+        {
+            get
+            {
+                // Return the device's value for interface versions of 3 and higher otherwise return false because earlier interfaces can't sync
+                if (GetInterfaceVersion() >= 3)
+                {
+                    return (bool)memberFactory.CallMember(1, "CanSync", new Type[] { }, new object[] { });
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// This returns the raw instrumental position of the rotator.
+        /// </summary>
+        /// <remarks>
+        /// This must be implemented and returns the raw instrumental position of the rotator, which is equivalent to the IRotatorV2 Position property. Other clients (beyond the one that performed the sync) 
+        /// can calculate the current offset using this and the Position value. If CanSync is false this will be the same as Position.
+        /// </remarks>
+        public float InstrumentalPosition
+        {
+            get
+            {
+                // Return the device's InstrumentalPosition for interface versions of 3 and higher otherwise return Position because earlier interfaces don't have an InstrumentalPosition method
+                if (GetInterfaceVersion() >= 3)
+                {
+                    return (float)memberFactory.CallMember(1, "InstrumentalPosition", new Type[] { }, new object[] { });
+                }
+                else
+                {
+                    return (float)memberFactory.CallMember(1, "Position", new Type[] { }, new object[] { });
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Syncs the rotator to the specified position angle without moving it. 
+        /// </summary>
+        /// <exception cref="MethodNotImplementedException">If CanSync is false.</exception>
+        /// <param name="Position"></param>
+        /// <remarks>
+        /// Once this is set both the MoveAbsolute method and the Position property must function in 
+        /// synced coordinates rather than raw instrumental coordinates. The sync offset must persist across driver starts and device reboots.
+        /// </remarks>
+        public void Sync(float Position)
+        {
+            if (GetInterfaceVersion() >= 3)
+            {
+                memberFactory.CallMember(3, "Sync", new Type[] { typeof(float) }, new object[] { Position });
+            }
+            else
+            {
+                throw new MethodNotImplementedException("Sync is not implemented because the driver is IRotatorV2 or earlier.");
+            }
+        }
+
+        /// <summary>
+        /// Returns the device's interface version, querying the device if the version isn't already known
+        /// </summary>
+        /// <returns></returns>
+        private int GetInterfaceVersion()
+        {
+            // If we don't know what the device's interface version is query it to find out 
+            if (interfaceVersion == INTERFACE_VERSION_UNKNOWN)
+            {
+                interfaceVersion = InterfaceVersion; // Query the device to get the interface version
+            }
+
+            return interfaceVersion;
+        }
+
+        #endregion
+
     }
+
     #endregion
 }

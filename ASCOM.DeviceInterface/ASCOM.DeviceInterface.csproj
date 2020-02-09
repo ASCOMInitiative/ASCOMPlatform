@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ICoverCalibratorV1.cs" />
+    <Compile Include="IRotatorV3.cs" />
     <Compile Include="Properties\MyNamespace.Static.Designer.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="IAxisRates.cs" />

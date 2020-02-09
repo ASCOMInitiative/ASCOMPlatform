@@ -25,8 +25,9 @@
     <CopyrightText>Copyright &amp;#169%3b 2010-20, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.DeviceInterface" isExposed="True">
-        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV2" filterName="IFocuserV2" isExposed="False" />
-      </Filter>
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV2" filterName="IFocuserV2" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IRotatorV2" filterName="IRotatorV2" isExposed="False" />
+</Filter>
     </ApiFilter>
     <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>False</Preliminary>

@@ -13,7 +13,7 @@ namespace ASCOM.DynamicRemoteClients
     /// <summary>
     /// ASCOM DynamicRemoteClients Rotator base class
     /// </summary>
-    public class RotatorBaseClass : ReferenceCountedObjectBase, IRotatorV2
+    public class RotatorBaseClass : ReferenceCountedObjectBase, IRotatorV3
     {
         #region Variables and Constants
 
@@ -369,6 +369,38 @@ namespace ASCOM.DynamicRemoteClients
             };
             DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "MoveAbsolute", Parameters, Method.PUT);
             TL.LogMessage(clientNumber, "MoveAbsolute", string.Format("Rotator moved to absolute position {0} OK", Position));
+        }
+
+        #endregion
+
+        #region IRotatorV3 Properties and Methods
+
+        public bool CanSync
+        {
+            get
+            {
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSync");
+            }
+        }
+
+        public float InstrumentalPosition
+        {
+            get
+            {
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                return DynamicClientDriver.GetValue<float>(clientNumber, client, URIBase, TL, "InstrumentalPosition");
+            }
+        }
+
+        public void Sync(float Position)
+        {
+            Dictionary<string, string> Parameters = new Dictionary<string, string>
+            {
+                { SharedConstants.POSITION_PARAMETER_NAME, Position.ToString(CultureInfo.InvariantCulture) }
+            };
+            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "Sync", Parameters, Method.PUT);
+            TL.LogMessage(clientNumber, "Sync", string.Format("Rotator synced to sky position {0} OK", Position));
         }
 
         #endregion
