@@ -230,11 +230,11 @@ namespace ASCOM.DeviceInterface
         /// <remarks>
         /// <para><b>SPECIFICATION REVISION - IRotatorV3 - Platform 6.5</b></para>
         /// <para>
-        /// If <see cref="CanSync"/> is <see cref="Boolean.TrueString"/> this method will move the rotator to the requested <b>Synced Coordinate</b> position.
-        /// If <see cref="CanSync"/> is <see cref="Boolean.FalseString"/> this method will move the rotator to the requested <b>Instrument Mechanical</b> position as it does in IRotatorV2. 
+        /// If <see cref="CanSync"/> is <see cref="Boolean.TrueString"/> this method will move the rotator to the requested <b>Synced</b> position.
+        /// If <see cref="CanSync"/> is <see cref="Boolean.FalseString"/> this method will move the rotator to the requested <b>Mechanical</b> position as it does in IRotatorV2. 
         /// </para>
         /// <para>
-        /// Calling <see cref="MoveAbsolute">MoveAbsolute</see> causes the <see cref="TargetPosition" /> property to change to the value of the
+        /// Calling <see cref="MoveAbsolute"/> causes the <see cref="TargetPosition" /> property to change to the value of the
         /// <see cref="Position" /> parameter, then starts rotation to <see cref="TargetPosition" />. 
         /// </para>
         /// </remarks>
@@ -247,11 +247,10 @@ namespace ASCOM.DeviceInterface
         /// <remarks>
         /// <para><b>SPECIFICATION REVISION - IRotatorV3 - Platform 6.5</b></para>
         /// <para>
-        /// When <see cref="CanSync"/> is <see cref="Boolean.TrueString"/> Position reports the synced position angle rather than the instrument mechanical position angle. The synced position is defined 
-        /// as the instrumental position plus an offset. When the rotator instrumental position is synced to a Sky Position Angle this property returns the Sky Position Angle. 
-        /// The offset that is determined when the rotator is synced should persist across driver starts and device reboots. 
+        /// When <see cref="CanSync"/> is <see cref="Boolean.TrueString"/>, Position reports the synced position rather than the mechanical position. The synced position is defined 
+        /// as the mechanical position plus an offset. The offset is determined when the <see cref="Sync(float)"/> method is called and must be persisted across driver starts and device reboots.
         /// </para>
-        /// <para>If <see cref="CanSync"/> is <see cref="Boolean.FalseString"/> this property must return the same value as <see cref="InstrumentalPosition"/>.</para>
+        /// <para>If <see cref="CanSync"/> is <see cref="Boolean.FalseString"/>, this property must return the same value as <see cref="MechanicalPosition"/>.</para>
         /// <para>
         /// The position is expressed as an angle from 0 up to but not including 360 degrees, counter-clockwise against the
         /// sky. This is the standard definition of Position Angle. However, the rotator does not need to (and in general will not)
@@ -300,30 +299,42 @@ namespace ASCOM.DeviceInterface
         #region IRotatorV3 additional properties and methods
 
         /// <summary>
-        /// Reports true if the rotator and / or driver can perform a sync and false if it cannot.
+        /// Reports <see cref="Boolean.TrueString"/> if the rotator and / or driver can perform a sync and <see cref="Boolean.FalseString"/> if it cannot.
         /// </summary>
         /// <remarks> This must be implemented and must not throw an exception.</remarks>
         bool CanSync { get; }
 
         /// <summary>
-        /// This returns the raw instrumental position of the rotator.
+        /// This returns the raw mechanical position of the rotator.
         /// </summary>
         /// <remarks>
-        /// This must be implemented and returns the raw instrumental position of the rotator, which is equivalent to the IRotatorV2 Position property. Other clients (beyond the one that performed the sync) 
-        /// can calculate the current offset using this and the Position value. If CanSync is false this will be the same as Position.
+        /// This must be implemented and returns the mechanical position of the rotator, which is equivalent to the IRotatorV2 <see cref="Position"/> property. Other clients (beyond the one that performed the sync) 
+        /// can calculate the current offset using this and the <see cref="Position"/> value. If <see cref="CanSync"/> is <see cref="Boolean.FalseString"/> this property will return the same value as the <see cref="Position"/> property.
         /// </remarks>
-        float InstrumentalPosition { get; }
+        float MechanicalPosition { get; }
 
         /// <summary>
         /// Syncs the rotator to the specified position angle without moving it. 
         /// </summary>
-        /// <exception cref="MethodNotImplementedException">If CanSync is false.</exception>
+        /// <exception cref="MethodNotImplementedException">If <see cref="CanSync"/> is <see cref="Boolean.FalseString"/>.</exception>
         /// <param name="Position">Synchronised rotator position angle.</param>
         /// <remarks>
-        /// Once this is set both the MoveAbsolute method and the Position property must function in 
-        /// synced coordinates rather than raw instrumental coordinates. The sync offset must persist across driver starts and device reboots.
+        /// Once this method has been called and the sync offset determined, both the <see cref="MoveAbsolute(float)"/>> method and the <see cref="Position"/> property must function in synced coordinates 
+        /// rather than mechanical coordinates. The sync offset must persist across driver starts and device reboots.
         /// </remarks>
         void Sync(float Position);
+
+        /// <summary>
+        /// Moves the rotator to the specified mechanical angle. 
+        /// </summary>
+        /// <exception cref="MethodNotImplementedException">If <see cref="CanSync"/> is <see cref="Boolean.FalseString"/>.</exception>
+        /// <param name="Position">Mechanical rotator position angle.</param>
+        /// <remarks>
+        /// <para>Moves the rotator to the requested mechanical angle, independent of any sync offset that may have been set. This method is to address requirements that require a physical rotation
+        /// angle such as when taking sky flats.</para>
+        /// <para>Client applications should use the <see cref="MoveAbsolute(float)"/> method in preference to this method when imaging.</para>
+        /// </remarks>
+        void MoveMechanical(float Position);
 
         #endregion
     }

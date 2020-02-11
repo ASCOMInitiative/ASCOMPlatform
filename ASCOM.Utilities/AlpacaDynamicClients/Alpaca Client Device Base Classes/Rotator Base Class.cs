@@ -384,7 +384,7 @@ namespace ASCOM.DynamicRemoteClients
             }
         }
 
-        public float InstrumentalPosition
+        public float MechanicalPosition
         {
             get
             {
@@ -401,6 +401,16 @@ namespace ASCOM.DynamicRemoteClients
             };
             DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "Sync", Parameters, Method.PUT);
             TL.LogMessage(clientNumber, "Sync", string.Format("Rotator synced to sky position {0} OK", Position));
+        }
+
+        public void MoveMechanical(float Position)
+        {
+            Dictionary<string, string> Parameters = new Dictionary<string, string>
+            {
+                { SharedConstants.POSITION_PARAMETER_NAME, Position.ToString(CultureInfo.InvariantCulture) }
+            };
+            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "MoveMechanical", Parameters, Method.PUT);
+            TL.LogMessage(clientNumber, "MoveMechanical", string.Format("Rotator moved to mechanical position {0} OK", Position));
         }
 
         #endregion

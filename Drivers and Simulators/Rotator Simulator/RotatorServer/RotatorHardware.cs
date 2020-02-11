@@ -339,6 +339,32 @@ namespace ASCOM.Simulator
             }
         }
 
+        public static void MoveMechanical(float position)
+        {
+            CheckConnected();
+            CheckAngle(position);
+            lock (syncLockObject)
+            {
+                // The logic below has been implemented to show the choices, even though it is redundant from a coding perspective
+                if (canSync) // Rotator can sync so we move the rotator's mechanical position to that supplied 
+                {
+                    lock (syncLockObject)
+                    {
+                        targetMechanicalPosition = position; // Calculate the mechanical rotator angle from the supplied sky position
+                        isMoving = true;
+                    }
+                }
+                else // Rotator can't sync so we move the rotator's mechanical position to that supplied 
+                {
+                    lock (syncLockObject)
+                    {
+                        targetMechanicalPosition = position;
+                        isMoving = true;
+                    }
+                }
+            }
+        }
+
         //
         // Members used by frmMain to run the machine using its timer. This avoids having two timers. Since it has to poll the machinery anyway, it just calls the UpdateState method here just 
         // before reading the state variables. It also sets the update rate for motion calculations here, based on the update rate of its timer.

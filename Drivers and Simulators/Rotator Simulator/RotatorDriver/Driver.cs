@@ -175,7 +175,7 @@ namespace ASCOM.Simulator
             get { return RotatorHardware.CanReverse; }
         }
 
-        public float InstrumentalPosition
+        public float MechanicalPosition
         {
             get { return RotatorHardware.InstrumentalPosition; }
         }
@@ -183,6 +183,11 @@ namespace ASCOM.Simulator
         public void Sync(float position)
         {
             RotatorHardware.Sync(position);
+        }
+
+        public void MoveMechanical(float position)
+        {
+            RotatorHardware.MoveMechanical(position);
         }
 
         #endregion
