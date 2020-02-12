@@ -269,19 +269,13 @@ namespace ASCOM.Simulator
             {
                 if (canSync) // Rotator can sync so we move the mechanical rotator position to the value that corresponds to the supplied sky position
                 {
-                    lock (syncLockObject)
-                    {
-                        targetMechanicalPosition = RangeAngle(position - syncOffset, 0.0F, 360.0F); // Calculate the mechanical rotator angle from the supplied sky position
-                        isMoving = true;
-                    }
+                    targetMechanicalPosition = RangeAngle(position - syncOffset, 0.0F, 360.0F); // Calculate the mechanical rotator angle from the supplied sky position
+                    isMoving = true;
                 }
                 else // Rotator can't sync so we move the mechanical rotator position to the supplied position
                 {
-                    lock (syncLockObject)
-                    {
-                        targetMechanicalPosition = position;
-                        isMoving = true;
-                    }
+                    targetMechanicalPosition = position;
+                    isMoving = true;
                 }
             }
         }

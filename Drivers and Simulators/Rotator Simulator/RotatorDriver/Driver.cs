@@ -172,7 +172,7 @@ namespace ASCOM.Simulator
 
         public bool CanSync
         {
-            get { return RotatorHardware.CanReverse; }
+            get { return RotatorHardware.CanSync; }
         }
 
         public float MechanicalPosition
