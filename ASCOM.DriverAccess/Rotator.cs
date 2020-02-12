@@ -221,10 +221,10 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                // Return the device's InstrumentalPosition for interface versions of 3 and higher otherwise return Position because earlier interfaces don't have an InstrumentalPosition method
+                // Return the device's mechanical position for interface versions of 3 and higher otherwise return Position because earlier interfaces don't have an InstrumentalPosition method
                 if (GetInterfaceVersion() >= 3)
                 {
-                    return (float)memberFactory.CallMember(1, "InstrumentalPosition", new Type[] { }, new object[] { });
+                    return (float)memberFactory.CallMember(1, "MechanicalPosition", new Type[] { }, new object[] { });
                 }
                 else
                 {
