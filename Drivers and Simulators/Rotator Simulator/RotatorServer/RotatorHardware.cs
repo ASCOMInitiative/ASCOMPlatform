@@ -20,7 +20,7 @@ namespace ASCOM.Simulator
         // To convert a synced position to a mechanical position the relationship is: MechanicalPosition = SyncPosition - SyncOffset
         // The units of the mechanicalPosition and syncOffset variables are degrees from 0 to 359.9999...
         // The simulator state machine uses the "position" and "syncOffset" variables to hold the mechanical position and offset to the synced position respectively
-        // The targetPosition variable works in mechanical coordinates
+        // The targetMechanicalPosition variable works in mechanical coordinates
         // The driver's Position and InstrumentalPosition property values are calculated on demand allowing for or omitting the sync offset as determined by the value of the "canSync" variable
 
         // Settings, persistent
@@ -37,7 +37,7 @@ namespace ASCOM.Simulator
         private static bool connected;
         private static bool isMoving;
         private static bool direction;
-        private static float targetPosition; // Degrees - Destination rotator angle to which the rotator should move Sky position if synced, mechanical position if not synced
+        private static float targetMechanicalPosition; // Degrees - Destination rotator angle to which the rotator should move Sky position if synced, mechanical position if not synced
         private static int updateInterval = 250; // Milliseconds, default, set by main form
         private static string rotatorName = "ASCOM.Simulator.Rotator";
         private static string description = "ASCOM Rotator Driver for RotatorSimulator";
@@ -55,7 +55,7 @@ namespace ASCOM.Simulator
             mechanicalPosition = 0.0F;
             connected = false;
             isMoving = false;
-            targetPosition = 0.0F;
+            targetMechanicalPosition = 0.0F;
         }
 
         // Read configuration from the Profile
@@ -75,11 +75,11 @@ namespace ASCOM.Simulator
                 // Initialise the target position
                 if (canSync) // Rotator can sync so take account of the sync offset
                 {
-                    targetPosition = RangeAngle(mechanicalPosition + syncOffset, 0.0F, 360.0F); ; // Initialise the target position to the current synced position
+                    targetMechanicalPosition = RangeAngle(mechanicalPosition + syncOffset, 0.0F, 360.0F); ; // Initialise the target position to the current synced position
                 }
                 else // Rotator can't sync so just use the mechanical position
                 {
-                    targetPosition = mechanicalPosition; // Initialise the target position to the current mechanical position value
+                    targetMechanicalPosition = mechanicalPosition; // Initialise the target position to the current mechanical position value
                 }
             }
         }
@@ -196,17 +196,11 @@ namespace ASCOM.Simulator
                 {
                     if (canSync) // Rotator can sync so return the synced position
                     {
-                        lock (syncLockObject)
-                        {
-                            return RangeAngle(mechanicalPosition + syncOffset, 0.0F, 360.0F);
-                        }
+                        return RangeAngle(mechanicalPosition + syncOffset, 0.0F, 360.0F);
                     }
                     else // Rotator can't sync we return the mechanical position
                     {
-                        lock (syncLockObject)
-                        {
-                            return mechanicalPosition;
-                        }
+                        return mechanicalPosition;
                     }
                 }
             }
@@ -214,14 +208,19 @@ namespace ASCOM.Simulator
 
         public static float TargetPosition
         {
-            get { CheckConnected(); return targetPosition; }
-            set
+            get
             {
                 CheckConnected();
                 lock (syncLockObject)
                 {
-                    targetPosition = value;
-                    isMoving = true;                                   // Avoid timing window!
+                    if (canSync) // Rotator can sync so return the synced target position
+                    {
+                        return RangeAngle(targetMechanicalPosition + syncOffset, 0.0F, 360.0F);
+                    }
+                    else // Rotator can't sync we return the mechanical target position
+                    {
+                        return targetMechanicalPosition;
+                    }
                 }
             }
         }
@@ -253,11 +252,11 @@ namespace ASCOM.Simulator
                 {
                     throw new ASCOM.InvalidValueException("Relative Angle out of range", relativePosition.ToString(), "-360 < angle < 360");
                 }
-                var target = targetPosition + relativePosition;
+                var target = targetMechanicalPosition + relativePosition;
                 // force to the range 0 to 360
                 if (target >= 360.0) target -= 360.0F;
                 if (target < 0.0) target += 360.0F;
-                targetPosition = target;
+                targetMechanicalPosition = target;
                 isMoving = true;
             }
         }
@@ -272,7 +271,7 @@ namespace ASCOM.Simulator
                 {
                     lock (syncLockObject)
                     {
-                        targetPosition = RangeAngle(position - syncOffset, 0.0F, 360.0F); // Calculate the mechanical rotator angle from the supplied sky position
+                        targetMechanicalPosition = RangeAngle(position - syncOffset, 0.0F, 360.0F); // Calculate the mechanical rotator angle from the supplied sky position
                         isMoving = true;
                     }
                 }
@@ -280,7 +279,7 @@ namespace ASCOM.Simulator
                 {
                     lock (syncLockObject)
                     {
-                        targetPosition = position;
+                        targetMechanicalPosition = position;
                         isMoving = true;
                     }
                 }
@@ -292,7 +291,7 @@ namespace ASCOM.Simulator
             // CheckMoving(true);	// ASCOM-24: Fails Conform, should be harmless.
             lock (syncLockObject)
             {
-                targetPosition = mechanicalPosition;
+                targetMechanicalPosition = mechanicalPosition;
                 isMoving = false;
             }
         }
@@ -359,7 +358,7 @@ namespace ASCOM.Simulator
                 {
                     lock (syncLockObject)
                     {
-                        targetPosition = position; // Calculate the mechanical rotator angle from the supplied sky position
+                        targetMechanicalPosition = position; // Calculate the mechanical rotator angle from the supplied sky position
                         isMoving = true;
                     }
                 }
@@ -367,7 +366,7 @@ namespace ASCOM.Simulator
                 {
                     lock (syncLockObject)
                     {
-                        targetPosition = position;
+                        targetMechanicalPosition = position;
                         isMoving = true;
                     }
                 }
@@ -387,7 +386,7 @@ namespace ASCOM.Simulator
         {
             lock (syncLockObject)
             {
-                float dPA = RangeAngle(targetPosition - mechanicalPosition, -180, 180);
+                float dPA = RangeAngle(targetMechanicalPosition - mechanicalPosition, -180, 180);
                 if (Math.Abs(dPA) == 0)
                 {
                     isMoving = false;
