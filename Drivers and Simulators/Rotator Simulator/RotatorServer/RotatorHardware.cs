@@ -37,7 +37,7 @@ namespace ASCOM.Simulator
         private static bool connected;
         private static bool isMoving;
         private static bool direction;
-        private static float targetMechanicalPosition; // Degrees - Destination mechanical angle to which the rotator should move
+        private static float targetPosition; // Degrees - Destination rotator angle to which the rotator should move Sky position if synced, mechanical position if not synced
         private static int updateInterval = 250; // Milliseconds, default, set by main form
         private static string rotatorName = "ASCOM.Simulator.Rotator";
         private static string description = "ASCOM Rotator Driver for RotatorSimulator";
@@ -55,7 +55,7 @@ namespace ASCOM.Simulator
             mechanicalPosition = 0.0F;
             connected = false;
             isMoving = false;
-            targetMechanicalPosition = 0.0F;
+            targetPosition = 0.0F;
         }
 
         // Read configuration from the Profile
@@ -65,13 +65,22 @@ namespace ASCOM.Simulator
             {
                 profile.DeviceType = "Rotator";
                 mechanicalPosition = Convert.ToSingle(profile.GetValue(progID, "Position", "", "0.0"), CultureInfo.InvariantCulture);
-                targetMechanicalPosition = mechanicalPosition;
                 RotationRate = Convert.ToSingle(profile.GetValue(progID, "RotationRate", "", "3.0"), CultureInfo.InvariantCulture);
                 canReverse = Convert.ToBoolean(profile.GetValue(progID, "CanReverse", "", bool.TrueString));
                 reverse = Convert.ToBoolean(profile.GetValue(progID, "Reverse", "", bool.FalseString));
 
                 syncOffset = Convert.ToSingle(profile.GetValue(progID, "SyncOffset", "", "0.0"), CultureInfo.InvariantCulture);
                 canSync = Convert.ToBoolean(profile.GetValue(progID, "CanSync", "", bool.TrueString));
+
+                // Initialise the target position
+                if (canSync) // Rotator can sync so take account of the sync offset
+                {
+                    targetPosition = RangeAngle(mechanicalPosition + syncOffset, 0.0F, 360.0F); ; // Initialise the target position to the current synced position
+                }
+                else // Rotator can't sync so just use the mechanical position
+                {
+                    targetPosition = mechanicalPosition; // Initialise the target position to the current mechanical position value
+                }
             }
         }
 
@@ -205,13 +214,13 @@ namespace ASCOM.Simulator
 
         public static float TargetPosition
         {
-            get { CheckConnected(); return targetMechanicalPosition; }
+            get { CheckConnected(); return targetPosition; }
             set
             {
                 CheckConnected();
                 lock (syncLockObject)
                 {
-                    targetMechanicalPosition = value;
+                    targetPosition = value;
                     isMoving = true;                                   // Avoid timing window!
                 }
             }
@@ -244,11 +253,11 @@ namespace ASCOM.Simulator
                 {
                     throw new ASCOM.InvalidValueException("Relative Angle out of range", relativePosition.ToString(), "-360 < angle < 360");
                 }
-                var target = targetMechanicalPosition + relativePosition;
+                var target = targetPosition + relativePosition;
                 // force to the range 0 to 360
                 if (target >= 360.0) target -= 360.0F;
                 if (target < 0.0) target += 360.0F;
-                targetMechanicalPosition = target;
+                targetPosition = target;
                 isMoving = true;
             }
         }
@@ -263,7 +272,7 @@ namespace ASCOM.Simulator
                 {
                     lock (syncLockObject)
                     {
-                        targetMechanicalPosition = RangeAngle(position - syncOffset, 0.0F, 360.0F); // Calculate the mechanical rotator angle from the supplied sky position
+                        targetPosition = RangeAngle(position - syncOffset, 0.0F, 360.0F); // Calculate the mechanical rotator angle from the supplied sky position
                         isMoving = true;
                     }
                 }
@@ -271,7 +280,7 @@ namespace ASCOM.Simulator
                 {
                     lock (syncLockObject)
                     {
-                        targetMechanicalPosition = position;
+                        targetPosition = position;
                         isMoving = true;
                     }
                 }
@@ -283,7 +292,7 @@ namespace ASCOM.Simulator
             // CheckMoving(true);	// ASCOM-24: Fails Conform, should be harmless.
             lock (syncLockObject)
             {
-                targetMechanicalPosition = mechanicalPosition;
+                targetPosition = mechanicalPosition;
                 isMoving = false;
             }
         }
@@ -350,7 +359,7 @@ namespace ASCOM.Simulator
                 {
                     lock (syncLockObject)
                     {
-                        targetMechanicalPosition = position; // Calculate the mechanical rotator angle from the supplied sky position
+                        targetPosition = position; // Calculate the mechanical rotator angle from the supplied sky position
                         isMoving = true;
                     }
                 }
@@ -358,7 +367,7 @@ namespace ASCOM.Simulator
                 {
                     lock (syncLockObject)
                     {
-                        targetMechanicalPosition = position;
+                        targetPosition = position;
                         isMoving = true;
                     }
                 }
@@ -378,7 +387,7 @@ namespace ASCOM.Simulator
         {
             lock (syncLockObject)
             {
-                float dPA = RangeAngle(targetMechanicalPosition - mechanicalPosition, -180, 180);
+                float dPA = RangeAngle(targetPosition - mechanicalPosition, -180, 180);
                 if (Math.Abs(dPA) == 0)
                 {
                     isMoving = false;
