@@ -389,7 +389,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<float>(clientNumber, client, URIBase, TL, "InstrumentalPosition");
+                return DynamicClientDriver.GetValue<float>(clientNumber, client, URIBase, TL, "MechanicalPosition");
             }
         }
 
