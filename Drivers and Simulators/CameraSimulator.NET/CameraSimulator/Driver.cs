@@ -277,10 +277,15 @@ namespace ASCOM.Simulator
 
         public void Dispose()
         {
-            if (exposureTimer != null)
-                exposureTimer.Dispose();
-            if (coolerTimer != null)
-                coolerTimer.Dispose();
+            Log.LogMessage("Dispose", "Releasing memory and components");
+            if (exposureTimer != null) exposureTimer.Dispose();
+            if (coolerTimer != null) coolerTimer.Dispose();
+            imageArray = null;
+            imageArrayVariant = null;
+            imageArrayColour = null;
+            imageArrayVariantColour = null;
+            imageData = null;
+            GC.Collect();
         }
 
         #endregion
@@ -293,7 +298,7 @@ namespace ASCOM.Simulator
         {
             using (Profile P = new Profile())
             {
-                P.DeviceType = "Camera";					//  Requires Helper 5.0.3 or later
+                P.DeviceType = "Camera";                    //  Requires Helper 5.0.3 or later
                 if (bRegister)
                     P.Register(s_csDriverID, s_csDriverDescription);
                 else
@@ -1610,18 +1615,16 @@ namespace ASCOM.Simulator
         /// <exception cref=" System.Exception">the exposure cannot be started for any reason, such as a hardware or communications error</exception>
         public void StartExposure(double Duration, bool Light)
         {
-            Log.LogStart("StartExposure", "Duration {0}, Light {1}", Duration, Light);
+            Log.LogMessage("StartExposure", "Duration {0}, Light {1}", Duration, Light);
             CheckConnected("Can't set StartExposure when not connected");
             // check the duration, light frames only
             if (Light && (Duration > exposureMax || Duration < exposureMin))
             {
                 lastError = "Incorrect exposure duration";
                 Log.LogMessage("StartExposure", "Incorrect exposure Duration {0}", Duration);
-                throw new ASCOM.InvalidValueException("StartExposure Duration",
-                                                     Duration.ToString(CultureInfo.InvariantCulture),
-                                                     string.Format(CultureInfo.InvariantCulture, "{0} to {1}", exposureMax, exposureMin));
+                throw new ASCOM.InvalidValueException("StartExposure Duration", Duration.ToString(CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "{0} to {1}", exposureMax, exposureMin));
             }
-            //  binning tests
+            //  Binning tests
             if ((binX > maxBinX) || (binX < 1))
             {
                 lastError = "Incorrect bin X factor";
@@ -1638,8 +1641,8 @@ namespace ASCOM.Simulator
                                                     binY.ToString(CultureInfo.InvariantCulture),
                                                     string.Format(CultureInfo.InvariantCulture, "1 to {0}", maxBinY));
             }
-            // check the start position is in range
-            // start is in binned pixels
+
+            // Check the start position is in range, start is in binned pixels
             if (startX < 0 || startX * binX > cameraXSize)
             {
                 lastError = "Incorrect Start X position";
@@ -1656,7 +1659,8 @@ namespace ASCOM.Simulator
                                                     startX.ToString(CultureInfo.InvariantCulture),
                                                     string.Format(CultureInfo.InvariantCulture, "0 to {0}", cameraXSize / binX));
             }
-            // check that the acquisition is at least 1 pixel in size and fits in the camera area
+
+            // Check that the acquisition is at least 1 pixel in size and fits in the camera area
             if (numX < 1 || (numX + startX) * binX > cameraXSize)
             {
                 lastError = "Incorrect Num X value";
@@ -1681,11 +1685,54 @@ namespace ASCOM.Simulator
                 darkFrame = !Light;
             }
             lastExposureStartTime = DateTime.UtcNow.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss", CultureInfo.InvariantCulture);
+
             // set the image array dimensions
-            if (sensorType == SensorType.Color)
-                imageArrayColour = new int[numX, numY, 3];
-            else
-                imageArray = new int[numX, numY];
+            if (sensorType == SensorType.Color) // Colour sensor
+            {
+                if (imageArrayColour == null) // No image array so create a new one
+                {
+                    Log.LogMessage("StartExposure", $"Creating first time colour array of dimensions {numX} x {numY}");
+                    imageArrayColour = new int[numX, numY, 3];
+                }
+                else // Image array already exists so check whether we can re-use it or whether we have to create a new one
+                {
+                    if ((imageArrayColour.GetLength(0) == numX) & (imageArrayColour.GetLength(1) == numY)) // Existing array has the required dimensions so we can just re-use it
+                    {
+                        // No action required because we are re-using the existing array
+                        Log.LogMessage("StartExposure", $"Reusing existing colour array of dimensions {numX} x {numY}");
+                    }
+                    else // Different array size required so remove the old one and create new
+                    {
+                        Log.LogMessage("StartExposure", $"Creating new colour array of dimensions {numX} x {numY}");
+                        imageArrayColour = null; // Discard the current array
+                        imageArrayColour = new int[numX, numY, 3];
+                        GC.Collect(); // Force a garbage collection to clear out the old array
+                    }
+                }
+            }
+            else // Monochrome sensor
+            {
+                if (imageArray == null) // No image array so create a new one
+                {
+                    Log.LogMessage("StartExposure", $"Creating first time monochrome array of dimensions {numX} x {numY}");
+                    imageArray = new int[numX, numY];
+                }
+                else // Image array already exists so check whether we can re-use it or whether we have to create a new one
+                {
+                    if ((imageArray.GetLength(0) == numX) & (imageArray.GetLength(1) == numY)) // Existing array has the required dimensions so we can just re-use it
+                    {
+                        // No action required because we are re-using the existing array
+                        Log.LogMessage("StartExposure", $"Reusing existing monochrome array of dimensions {numX} x {numY}");
+                    }
+                    else // Different array size required so remove the old one and create new
+                    {
+                        Log.LogMessage("StartExposure", $"Creating new monochrome array of dimensions {numX} x {numY}");
+                        imageArray = null; // Discard the current array
+                        imageArray = new int[numX, numY]; // Create a new array
+                        GC.Collect(); // Force a garbage collection to clear out the old array
+                    }
+                }
+            }
 
             if (exposureTimer == null)
             {
@@ -1698,7 +1745,7 @@ namespace ASCOM.Simulator
             exposureStartTime = DateTime.Now;
             exposureDuration = Duration;
             exposureTimer.Enabled = true;
-            Log.LogFinish(" started");
+            Log.LogMessage("StartExposure", "Completed");
         }
 
         private void exposureTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -2628,15 +2675,25 @@ namespace ASCOM.Simulator
         /// </summary>
         private void ReadImageFile()
         {
-            imageData = new float[cameraXSize, cameraYSize, 1];
+
+            // Create or reuse the image data array
+            if (sensorType == SensorType.Monochrome)
+            {
+                if (imageData == null) imageData = new float[cameraXSize, cameraYSize, 1];
+            }
+            else
+            {
+                if (imageData == null) imageData = new float[cameraXSize, cameraYSize, 3];
+            }
+
             try
             {
                 bmp = (Bitmap)Image.FromFile(imagePath);
 
-                //x0 = bayerOffsetX;
-                //x1 = (bayerOffsetX + 1) & 1;
-                //y0 = bayerOffsetY;
-                //y1 = (bayerOffsetY + 1) & 1;
+                // x0 = bayerOffsetX;
+                // x1 = (bayerOffsetX + 1) & 1;
+                // y0 = bayerOffsetY;
+                // y1 = (bayerOffsetY + 1) & 1;
 
                 GetData getData = new GetData(MonochromeData);
                 switch (sensorType)
@@ -2659,10 +2716,10 @@ namespace ASCOM.Simulator
                         getData = new GetData(CMYG2Data);
                         stepX = 2;
                         stepY = 4;
-                        //y0 = (bayerOffsetY) & 3;
-                        //y1 = (bayerOffsetY + 1) & 3;
-                        //y2 = (bayerOffsetY + 2) & 3;
-                        //y3 = (bayerOffsetY + 3) & 3;
+                        // y0 = (bayerOffsetY) & 3;
+                        // y1 = (bayerOffsetY + 1) & 3;
+                        // y2 = (bayerOffsetY + 2) & 3;
+                        // y3 = (bayerOffsetY + 3) & 3;
                         break;
                     case SensorType.LRGB:
                         getData = new GetData(LRGBData);
@@ -2670,7 +2727,6 @@ namespace ASCOM.Simulator
                         stepY = 4;
                         break;
                     case SensorType.Color:
-                        imageData = new float[cameraXSize, cameraYSize, 3];
                         getData = new GetData(ColorData);
                         stepX = 1;
                         stepY = 1;
