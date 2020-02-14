@@ -957,7 +957,44 @@ namespace ASCOM.Simulator
             set
             {
                 Log.LogMessage("Connected", "set {0}", value);
-                if (value) ReadImageFile();
+                if (value & !connected) // We are connecting and are not already connected
+                {
+                    ReadImageFile();
+
+                    // Restore valid settings if necessary
+                    imageReady = false;
+                    //  Bin X test
+                    if ((binX > maxBinX) || (binX < 1))
+                    {
+                        binX = 1;
+                    }
+
+                    //  Bin Y test
+                    if ((binY > maxBinY) || (binY < 1))
+                    {
+                        binY = 1;
+                    }
+
+                    // Check the start position is in range, start is in binned pixels
+                    if (startX < 0 || startX * binX > cameraXSize)
+                    {
+                        startX = 0;
+                    }
+                    if (startY < 0 || startY * binY > cameraYSize)
+                    {
+                        startY = 0;
+                    }
+
+                    // Check that the acquisition is at least 1 pixel in size and fits in the camera area
+                    if (numX < 1 || (numX + startX) * binX > cameraXSize)
+                    {
+                        numX= cameraXSize / binX;
+                    }
+                    if (numY < 1 || (numY + startY) * binY > cameraYSize)
+                    {
+                        numY = cameraYSize / binY;
+                    }
+                }
 
                 connected = value;
 
@@ -978,6 +1015,18 @@ namespace ASCOM.Simulator
 
                 if (connected & coolerPowerUpState) CoolerOn = true; // If we are connecting enable the cooler immediately if required through configuration
 
+
+                if (!connected) // We have just disconnected so free memory used by large objects
+                {
+                    imageArray = null;
+                    imageArrayVariant = null;
+                    imageArrayColour = null;
+                    imageArrayVariantColour = null;
+                    imageData = null;
+                }
+
+                // Force a garbage collection on both connect and disconnect
+                GC.Collect();
             }
         }
 
@@ -2532,6 +2581,11 @@ namespace ASCOM.Simulator
 
         private void FillImageArray()
         {
+            // Release image array variant memory to make as much headroom as possible
+            imageArrayVariant = null;
+            imageArrayVariantColour = null;
+            GC.Collect();
+
             PixelProcess pixelProcess = new PixelProcess(NoNoise);
             ShutterProcess shutterProcess = new ShutterProcess(BinData);
 
