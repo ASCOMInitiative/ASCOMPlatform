@@ -1385,119 +1385,134 @@ namespace ASCOM.DynamicRemoteClients
 
             returnArray = GetValue<Array>(clientNumber, client, URIBase, TL, "ImageArrayVariant", imageArrayTransferType, imageArrayCompression);
 
-            string variantType = returnArray.GetType().Name;
-            string elementType;
-            switch (returnArray.Rank) // Process 2D and 3D variant arrays, all other types are unsupported
+            try
             {
-                case 2: // 2D Array
-                    elementType = returnArray.GetValue(0, 0).GetType().Name;
-                    break;
-                case 3: // 3D array
-                    elementType = returnArray.GetValue(0, 0, 0).GetType().Name;
-                    break;
-                default:
-                    throw new InvalidValueException("ReturnImageArray: Received an unsupported return array rank: " + returnArray.Rank);
-            }
+                string variantType = returnArray.GetType().Name;
+                string elementType;
+                switch (returnArray.Rank) // Process 2D and 3D variant arrays, all other types are unsupported
+                {
+                    case 2: // 2D Array
+                        elementType = returnArray.GetValue(0, 0).GetType().Name;
+                        break;
+                    case 3: // 3D array
+                        elementType = returnArray.GetValue(0, 0, 0).GetType().Name;
+                        break;
+                    default:
+                        throw new InvalidValueException("ReturnImageArray: Received an unsupported return array rank: " + returnArray.Rank);
+                }
 
-            TL.LogMessage(clientNumber, "ImageArrayVariant", $"Received {variantType} array of Rank {returnArray.Rank} with Length {returnArray.Length} and element type {elementType}");
+                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Received {variantType} array of Rank {returnArray.Rank} with Length {returnArray.Length} and element type {elementType}");
 
-            // convert to variant
+                // convert to variant
 
-            switch (returnArray.Rank)
-            {
-                case 2:
-                    switch (variantType)
-                    {
-                        case "Int16[,]":
-                            objectArray2D = new object[returnArray.GetLength(0), returnArray.GetLength(1)];
-                            for (int i = 0; i < returnArray.GetLength(1); i++)
-                            {
-                                for (int j = 0; j < returnArray.GetLength(0); j++)
+                switch (returnArray.Rank)
+                {
+                    case 2:
+                        switch (variantType)
+                        {
+                            case "Int16[,]":
+                                objectArray2D = new object[returnArray.GetLength(0), returnArray.GetLength(1)];
+                                for (int i = 0; i < returnArray.GetLength(1); i++)
                                 {
-                                    objectArray2D[j, i] = ((short[,])returnArray)[j, i];
-                                }
-                            }
-                            return objectArray2D;
-                        case "Int32[,]":
-                            objectArray2D = new object[returnArray.GetLength(0), returnArray.GetLength(1)];
-
-                            for (int i = 0; i < returnArray.GetLength(1); i++)
-                            {
-                                for (int j = 0; j < returnArray.GetLength(0); j++)
-                                {
-                                    objectArray2D[j, i] = ((int[,])returnArray)[j, i];
-                                }
-                            }
-                            return objectArray2D;
-                        case "Double[,]":
-                            objectArray2D = new object[returnArray.GetLength(0), returnArray.GetLength(1)];
-                            for (int i = 0; i < returnArray.GetLength(1); i++)
-                            {
-                                for (int j = 0; j < returnArray.GetLength(0); j++)
-                                {
-                                    objectArray2D[j, i] = ((double[,])returnArray)[j, i];
-                                }
-                            }
-                            return objectArray2D;
-
-                        case "Object[,]":
-                            TL.LogMessage(clientNumber, "ImageArrayVariant", $"Returning Object[,] array to client");
-                            return returnArray;
-
-                        default:
-                            throw new InvalidValueException("DynamicRemoteClient Driver Camera.ImageArrayVariant: Unsupported return array rank from DynamicClientDriver.GetValue<Array>: " + returnArray.Rank);
-                    }
-                case 3:
-                    switch (variantType)
-                    {
-                        case "Int16[,,]":
-                            objectArray3D = new object[returnArray.GetLength(0), returnArray.GetLength(1), 3];
-                            for (int i = 0; i < returnArray.GetLength(1); i++)
-                            {
-                                for (int j = 0; j < returnArray.GetLength(0); j++)
-                                {
-                                    for (int k = 0; k < 3; k++)
-                                        objectArray3D[j, i, k] = ((short[,,])returnArray)[j, i, k];
-                                }
-                            }
-                            return objectArray3D;
-
-                        case "Int32[,,]":
-                            objectArray3D = new object[returnArray.GetLength(0), returnArray.GetLength(1), returnArray.GetLength(2)];
-                            for (int k = 0; k < returnArray.GetLength(2); k++)
-                            {
-                                for (int j = 0; j < returnArray.GetLength(1); j++)
-                                {
-                                    for (int i = 0; i < returnArray.GetLength(0); i++)
+                                    for (int j = 0; j < returnArray.GetLength(0); j++)
                                     {
-                                        objectArray3D[i, j, k] = ((int[,,])returnArray)[i, j, k];
+                                        objectArray2D[j, i] = ((short[,])returnArray)[j, i];
                                     }
                                 }
-                            }
-                            return objectArray3D;
+                                return objectArray2D;
 
-                        case "Double[,,]":
-                            objectArray3D = new object[returnArray.GetLength(0), returnArray.GetLength(1), 3];
-                            for (int i = 0; i < returnArray.GetLength(1); i++)
-                            {
-                                for (int j = 0; j < returnArray.GetLength(0); j++)
+                            case "Int32[,]":
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"About to create 2D object array");
+                                objectArray2D = new object[returnArray.GetLength(0), returnArray.GetLength(1)];
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Created 2D object array");
+
+                                Array.Copy(returnArray, objectArray2D, returnArray.Length);
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying array");
+
+                                //for (int i = 0; i < returnArray.GetLength(1); i++)
+                                //{
+                                //    for (int j = 0; j < returnArray.GetLength(0); j++)
+                                //    {
+                                //        objectArray2D[j, i] = ((int[,])returnArray)[j, i];
+                                //    }
+                                //}
+                                return objectArray2D;
+
+                            case "Double[,]":
+                                objectArray2D = new object[returnArray.GetLength(0), returnArray.GetLength(1)];
+                                for (int i = 0; i < returnArray.GetLength(1); i++)
                                 {
-                                    for (int k = 0; k < 3; k++)
-                                        objectArray3D[j, i, k] = ((double[,,])returnArray)[j, i, k];
+                                    for (int j = 0; j < returnArray.GetLength(0); j++)
+                                    {
+                                        objectArray2D[j, i] = ((double[,])returnArray)[j, i];
+                                    }
                                 }
-                            }
-                            return objectArray3D;
+                                return objectArray2D;
 
-                        case "Object[,,]":
-                            TL.LogMessage(clientNumber, "ImageArrayVariant", $"Returning Object[,,] array to client");
-                            return returnArray;
+                            case "Object[,]":
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Returning Object[,] array to client");
+                                return returnArray;
 
-                        default:
-                            throw new InvalidValueException("DynamicRemoteClient Driver Camera.ImageArrayVariant: Unsupported return array rank from DynamicClientDriver.GetValue<Array>: " + returnArray.Rank);
-                    }
+                            default:
+                                throw new InvalidValueException("DynamicRemoteClient Driver Camera.ImageArrayVariant: Unsupported return array rank from DynamicClientDriver.GetValue<Array>: " + returnArray.Rank);
+                        }
+                    case 3:
+                        switch (variantType)
+                        {
+                            case "Int16[,,]":
+                                objectArray3D = new object[returnArray.GetLength(0), returnArray.GetLength(1), 3];
+                                for (int i = 0; i < returnArray.GetLength(1); i++)
+                                {
+                                    for (int j = 0; j < returnArray.GetLength(0); j++)
+                                    {
+                                        for (int k = 0; k < 3; k++)
+                                            objectArray3D[j, i, k] = ((short[,,])returnArray)[j, i, k];
+                                    }
+                                }
+                                return objectArray3D;
 
-                default:
-                    throw new InvalidValueException("DynamicRemoteClient Driver Camera.ImageArrayVariant: Unsupported return array rank from DynamicClientDriver.GetValue<Array>: " + returnArray.Rank);
+                            case "Int32[,,]":
+                                objectArray3D = new object[returnArray.GetLength(0), returnArray.GetLength(1), returnArray.GetLength(2)];
+                                for (int k = 0; k < returnArray.GetLength(2); k++)
+                                {
+                                    for (int j = 0; j < returnArray.GetLength(1); j++)
+                                    {
+                                        for (int i = 0; i < returnArray.GetLength(0); i++)
+                                        {
+                                            objectArray3D[i, j, k] = ((int[,,])returnArray)[i, j, k];
+                                        }
+                                    }
+                                }
+                                return objectArray3D;
+
+                            case "Double[,,]":
+                                objectArray3D = new object[returnArray.GetLength(0), returnArray.GetLength(1), 3];
+                                for (int i = 0; i < returnArray.GetLength(1); i++)
+                                {
+                                    for (int j = 0; j < returnArray.GetLength(0); j++)
+                                    {
+                                        for (int k = 0; k < 3; k++)
+                                            objectArray3D[j, i, k] = ((double[,,])returnArray)[j, i, k];
+                                    }
+                                }
+                                return objectArray3D;
+
+                            case "Object[,,]":
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Returning Object[,,] array to client");
+                                return returnArray;
+
+                            default:
+                                throw new InvalidValueException("DynamicRemoteClient Driver Camera.ImageArrayVariant: Unsupported return array rank from DynamicClientDriver.GetValue<Array>: " + returnArray.Rank);
+                        }
+
+                    default:
+                        throw new InvalidValueException("DynamicRemoteClient Driver Camera.ImageArrayVariant: Unsupported return array rank from DynamicClientDriver.GetValue<Array>: " + returnArray.Rank);
+                }
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessageCrLf(clientNumber, "ImageArrayVariant", $"Exception: \r\n{ex.ToString()}");
+                throw;
             }
         }
 

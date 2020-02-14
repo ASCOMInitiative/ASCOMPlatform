@@ -407,7 +407,7 @@ namespace ASCOM.DynamicRemoteClients
                         {
                             TL.LogMessage("RegisterObjects", $"ProgID: {progid} profile is not registered, setting default values ");
                             profile.Register(progid, chooserName);
-                            profile.WriteValue(progid, SharedConstants.IPADDRESS_PROFILENAME,SharedConstants.IPADDRESS_DEFAULT);
+                            profile.WriteValue(progid, SharedConstants.IPADDRESS_PROFILENAME, SharedConstants.IPADDRESS_DEFAULT);
                             profile.WriteValue(progid, SharedConstants.PORTNUMBER_PROFILENAME, SharedConstants.PORTNUMBER_DEFAULT.ToString());
                             profile.WriteValue(progid, SharedConstants.REMOTE_DEVICE_NUMBER_PROFILENAME, SharedConstants.REMOTE_DEVICE_NUMBER_DEFAULT.ToString());
                             profile.WriteValue(progid, SharedConstants.UNIQUEID_PROFILENAME, SharedConstants.UNIQUEID_DEFAULT);
@@ -568,6 +568,9 @@ namespace ASCOM.DynamicRemoteClients
         {
             TL = new TraceLogger("DynamicClientServer");
             TL.Enabled = true;
+
+            TL.LogMessage("Main", $"Dynamic client version: {Application.ProductVersion}");
+            TL.LogMessage("Main", $"Running as a {(string)(Environment.Is64BitProcess ? "64bit" : "32bit")} process on a {(string)(Environment.Is64BitOperatingSystem ? "64bit" : "32bit")} operating system.");
 
             if (!LoadComObjectAssemblies()) return;                     // Load served COM class assemblies, get types
 
