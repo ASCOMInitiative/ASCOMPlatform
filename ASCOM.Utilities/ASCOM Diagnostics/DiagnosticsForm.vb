@@ -60,6 +60,7 @@ Public Class DiagnosticsForm
     Private Const DOME_SLEW_TIMEOUT As Integer = 240
     Private Const INST_UNINSTALL_STRING As String = "UninstallString"
     Private Const INST_DISPLAY_ICON As String = "DisplayIcon"
+    Private Const INST_NOT_KNOWN As String = "Not known"
 
     Private Const TEST_DATE As String = "Thursday, 30 December 2010 09:00:00" ' Arbitrary test date used to generate NOVASCOM test data, it must conform to the "F" date format for the invariant culture
     Private Const J2000 As Double = 2451545.0 'Julian day for J2000 epoch
@@ -7954,6 +7955,7 @@ Public Class DiagnosticsForm
 
     Private Sub ScanInstalledPlatform()
         Dim RegKey As RegistryKey
+        Dim platformInfo, developerInfo As Generic.SortedList(Of String, String)
 
         GetInstalledComponent("Platform 5A", "{075F543B-97C5-4118-9D54-93910DE03FE9}", False, True, True)
         GetInstalledComponent("Platform 5B", "{14C10725-0018-4534-AE5E-547C08B737B7}", False, True, True)
@@ -7974,9 +7976,12 @@ Public Class DiagnosticsForm
         End Try
         TL.BlankLine()
 
-        GetInstalledComponent("Platform 6", PLATFORM_INSTALLER_PROPDUCT_CODE, True, False, True)
-        GetInstalledComponent("Platform 6 Developer", DEVELOPER_INSTALLER_PROPDUCT_CODE, False, True, True)
+        platformInfo = GetInstalledComponent("Platform 6", PLATFORM_INSTALLER_PROPDUCT_CODE, True, False, True)
+        developerInfo = GetInstalledComponent("Platform 6 Developer", DEVELOPER_INSTALLER_PROPDUCT_CODE, False, True, True)
 
+        If developerInfo(INST_DISPLAY_VERSION) <> INST_NOT_KNOWN Then
+            Compare("Platform 6", "Developer and Platform Version Numbers", developerInfo(INST_DISPLAY_VERSION), platformInfo(INST_DISPLAY_VERSION))
+        End If
         TL.BlankLine()
     End Sub
 
@@ -7989,8 +7994,9 @@ Public Class DiagnosticsForm
     ''' <param name="Force32">Flag forcing use of 32bit registry on a 64bit OS</param>
     ''' <param name="MSIInstaller">True if the installer is an MSI based installer, False if an InstallAware Native installer</param>
     ''' <remarks></remarks>
-    Private Sub GetInstalledComponent(ByVal Name As String, ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean, ByVal MSIInstaller As Boolean)
+    Private Function GetInstalledComponent(ByVal Name As String, ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean, ByVal MSIInstaller As Boolean) As Generic.SortedList(Of String, String)
         Dim InstallInfo As Generic.SortedList(Of String, String)
+
         Try ' Platform 6 installer GUID, should always be present in Platform 6
             InstallInfo = GetInstallInformation(ProductCode, Required, Force32, MSIInstaller)
             If InstallInfo.Count > 0 Then
@@ -8003,28 +8009,14 @@ Public Class DiagnosticsForm
             Else
                 TL.LogMessage(Name, "Not installed")
             End If
-
-            'Catch ex As ProfilePersistenceException
-            '    If ex.Message.Contains("as it does not exist") Then
-            ' If Required Then ' Must be present so log an error if its not
-            ' LogException(Name, "Exception: " & ex.Message)
-            ' Else ' Optional so just record absence
-            ' End If
-            ' Else
-            ' LogException(Name, "Exception: " & ex.ToString)
-            ' End If
-            'Catch ex As NullReferenceException
-            '    If Required Then ' Must be present so log an error if its not
-            ' LogException(Name, "Exception: " & ex.Message)
-            ' Else ' Optional so just record absence
-            ' TL.LogMessage(Name, "Not installed")
-            ' End If
         Catch ex As Exception
             LogException(Name, "Exception: " & ex.ToString)
         End Try
+
         TL.BlankLine()
 
-    End Sub
+        Return InstallInfo
+    End Function
 
     ''' <summary>
     ''' Gets installation information about a product identified by its product GUID
@@ -8099,11 +8091,11 @@ Public Class DiagnosticsForm
                 Next
             End If
 
-            RetVal.Add(INST_DISPLAY_NAME, RegKey.GetValue(INST_DISPLAY_NAME, "Not known"))
-            RetVal.Add(INST_DISPLAY_VERSION, RegKey.GetValue(INST_DISPLAY_VERSION, "Not known"))
-            RetVal.Add(INST_INSTALL_DATE, RegKey.GetValue(INST_INSTALL_DATE, "Not known"))
-            RetVal.Add(INST_INSTALL_SOURCE, RegKey.GetValue(INST_INSTALL_SOURCE, "Not known"))
-            RetVal.Add(INST_INSTALL_LOCATION, RegKey.GetValue(INST_INSTALL_LOCATION, "Not known"))
+            RetVal.Add(INST_DISPLAY_NAME, RegKey.GetValue(INST_DISPLAY_NAME, INST_NOT_KNOWN))
+            RetVal.Add(INST_DISPLAY_VERSION, RegKey.GetValue(INST_DISPLAY_VERSION, INST_NOT_KNOWN))
+            RetVal.Add(INST_INSTALL_DATE, RegKey.GetValue(INST_INSTALL_DATE, INST_NOT_KNOWN))
+            RetVal.Add(INST_INSTALL_SOURCE, RegKey.GetValue(INST_INSTALL_SOURCE, INST_NOT_KNOWN))
+            RetVal.Add(INST_INSTALL_LOCATION, RegKey.GetValue(INST_INSTALL_LOCATION, INST_NOT_KNOWN))
 
             RegKey.Close()
         Catch ex As Exception
