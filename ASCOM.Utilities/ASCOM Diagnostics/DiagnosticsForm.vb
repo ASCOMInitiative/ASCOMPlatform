@@ -7979,9 +7979,14 @@ Public Class DiagnosticsForm
         platformInfo = GetInstalledComponent("Platform 6", PLATFORM_INSTALLER_PROPDUCT_CODE, True, False, True)
         developerInfo = GetInstalledComponent("Platform 6 Developer", DEVELOPER_INSTALLER_PROPDUCT_CODE, False, True, True)
 
-        If developerInfo(INST_DISPLAY_VERSION) <> INST_NOT_KNOWN Then
-            Compare("Platform 6", "Developer and Platform Version Numbers", developerInfo(INST_DISPLAY_VERSION), platformInfo(INST_DISPLAY_VERSION))
-        End If
+        Try
+            If developerInfo(INST_DISPLAY_VERSION) <> INST_NOT_KNOWN Then
+                Compare("Platform 6", "Developer and Platform Version Numbers", developerInfo(INST_DISPLAY_VERSION), platformInfo(INST_DISPLAY_VERSION))
+            End If
+        Catch ex As System.Collections.Generic.KeyNotFoundException
+            ' Ignore errors due to the key being missing if the developer tools are not installed
+        End Try
+
         TL.BlankLine()
     End Sub
 
