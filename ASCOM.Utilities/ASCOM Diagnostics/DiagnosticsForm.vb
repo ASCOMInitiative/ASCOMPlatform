@@ -1578,13 +1578,23 @@ Public Class DiagnosticsForm
                             StartTime = Now
                             DeviceObject.StartExposure(3.0, True)
                             TL.LogMessage(Device, "Start exposure duration: " & Now.Subtract(StartTime).TotalSeconds)
+
+                            ' Wait until exposure phase is complete and the simulator moves to the Downloading state
                             Do
                                 Thread.Sleep(100)
                                 Application.DoEvents()
                                 Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds")
-                            Loop Until ((DeviceObject.CameraState = CameraStates.cameraIdle) Or (Now.Subtract(StartTime).TotalSeconds) > 5.0)
+                            Loop Until ((DeviceObject.CameraState <> CameraStates.cameraExposing) Or (Now.Subtract(StartTime).TotalSeconds) > 15.0)
                             CompareDouble(Device, "StartExposure", Now.Subtract(StartTime).TotalSeconds, 3.0, 0.2)
+
+                            ' Wait until the camera is idle before testing ImageReady
+                            Do
+                                Thread.Sleep(100)
+                                Application.DoEvents()
+                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds")
+                            Loop Until ((DeviceObject.CameraState = CameraStates.cameraIdle) Or (Now.Subtract(StartTime).TotalSeconds) > 15.0)
                             Compare(Device, "ImageReady", DeviceObject.ImageReady, True)
+
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
