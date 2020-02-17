@@ -78,6 +78,8 @@ Set Variable SUCCESS64 to
 Set Variable LASTERROR to 
 Set Variable INSTALLCACHEEXISTS to 
 Set Variable INSTALLCACHEDIRECTORY to 
+Set Variable VC32_REBOOT_REQUIRED to 
+Set Variable VC64_REBOOT_REQUIRED to 
  
 Comment: Component installed state variables
 Set Variable INSTALL_PLATFORM to 
@@ -283,14 +285,43 @@ if Variable CHECKSYSTEM not Equals TRUE
   MessageBox: $TITLE$ Setup Error, This product requires at least Administrator Privileges.$NEWLINE$$NEWLINE$Setup cannot continue.
   Terminate Installation
 end
-Get System Setting Internet Explorer 5.01 Service Pack 1 into CHECKSYSTEM
-if Variable CHECKSYSTEM not Equals TRUE
-  MessageBox: $TITLE$ Setup Error, This product requires at least Internet Explorer 5.01 Service Pack 1.$NEWLINE$$NEWLINE$Setup cannot continue.
+ 
+Comment: Check that SP1 is installed if we are running on Windows 7
+Get Exact OS Level into CHECKSYSTEM
+if Variable CHECKSYSTEM Equals SEVEN
+  Comment: We are running on Windows 7 so test for service pack 1
+  Get Exact SP Level into CHECKSYSTEM
+  if Variable CHECKSYSTEM not Greater Than 0
+    Comment: We are running on Windows 7 without service pack 1 so cannot proceed because Framework 4.8 is only supported on Win 7 SP1
+    MessageBox: $TITLE$ Setup Error, The ASCOM Platform requires at least Windows 7 SP1.$NEWLINE$$NEWLINE$Setup cannot continue.
+    Terminate Installation
+  end
+end
+ 
+Comment: Check that we are on 8.1 if we are running Windows 8
+Get Exact OS Level into CHECKSYSTEM
+if Variable CHECKSYSTEM Equals METRO
+  Comment: We are running on Windows 8.0 so cannot proceed because Framework 4.8 is only supported on Win 8.1
+  MessageBox: $TITLE$ Setup Error, The ASCOM Platform requires at least Windows 8.1.$NEWLINE$$NEWLINE$Setup cannot continue.
   Terminate Installation
 end
+ 
+Comment: Check that we are on at least Restone (Abbiversary Update)  if we are running Windows 10
+Get System Setting Windows 10 into CHECKSYSTEM
+if Variable CHECKSYSTEM Equals TRUE
+  Comment: We are running on Windows 10 so make sure that we are at least on Redstone
+  Get System Setting Windows 10 Redstone into CHECKSYSTEM
+  if Variable CHECKSYSTEM not Greater Than 0
+    Comment: We are running on Windows 10 with a Threshold version so cannot proceed because Framework 4.8 is only supported on Win 8.1
+    MessageBox: $TITLE$ Setup Error, The ASCOM Platform requires at least Windows 10 Anniversary Update.$NEWLINE$$NEWLINE$Setup cannot continue.
+    Terminate Installation
+  end
+end
+ 
+Comment: Check that we are not eblow WIndows 7
 Get System Setting Windows 7 into CHECKSYSTEM
 if Variable CHECKSYSTEM not Equals TRUE
-  MessageBox: $TITLE$ Setup Error, This product requires at least Windows 7.$NEWLINE$$NEWLINE$Setup cannot continue.
+  MessageBox: $TITLE$ Setup Error, The ASCOM Platform requires at least Windows 7 SP1.$NEWLINE$$NEWLINE$Setup cannot continue.
   Terminate Installation
 end
 [END REGION]
@@ -299,7 +330,7 @@ end
 Comment: Check setup pre-requisites
 Set Variable PREREQ to FALSE
 Set Variable PRELIST to 
-Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.7(X86ANDX64) to 
+Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) to 
 Include Script: checkmsi31
 Include Script: checknet351
 Include Script: checknet4.8_x86 
@@ -308,7 +339,7 @@ Include Script: checkvc1410_25017_x64
  
 Comment: Install setup pre-requisites
 if Variable PREREQ not Equals FALSE
-  if Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.7(X86ANDX64) Equals FALSE
+  if Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) Equals FALSE
     Comment: If Framework 4 is missing then we don't need a message about 3.5 as well!
     Set Variable NET351 to TRUE
   end
@@ -557,7 +588,7 @@ if Variable MAINTENANCE not Equals TRUE
       end
     end
     if Variable RC not Equals 0
-      MessageBox: Profile Migration, An error has occured during Profile migration, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Yahoo group.
+      MessageBox: Profile Migration, An error has occured during Profile migration, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
       Set Variable ASCOMERROR to $RC$
     end
   end
@@ -762,9 +793,9 @@ end
 Comment: Install pre-requisites included in this installer
 Include Script: setupmsi31
 Set Variable MYPROGRESS to 3
-Include Script: setupvc1410_25017_x64
+Include Script: setupvc1410_25017_x64 (get result into variable VC64_REBOOT_REQUIRED)
 Set Variable MYPROGRESS to 6
-Include Script: setupvc1410_25017_x86
+Include Script: setupvc1410_25017_x86 (get result into variable VC32_REBOOT_REQUIRED)
 Set Variable MYPROGRESS to 9
  
 [END REGION]
@@ -1707,7 +1738,7 @@ if Variable SUCCESS not Equals ERROR
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ FinaliseInstall (at end of file)
   Set Variable MYPROGRESS to 100
   if Variable RC not Equals 0
-    MessageBox: Finalise Setup, An error has occured while finalising the installation, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Yahoo group.
+    MessageBox: Finalise Setup, An error has occured while finalising the installation, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
     Set Variable ASCOMERROR to $RC$
   end
   [END REGION]
@@ -1719,6 +1750,14 @@ Set Variable MYPROGRESS to 100
 [DEFINE REGION: Finish Setup Dialogue]
 label: Finish Setup
 Hide Dialog
+ 
+Comment: Set SUCCESS to REBOOT if either of the Visual C++ installers required it.
+if Variable VC32_REBOOT_REQUIRED Equals (Ignore Case) TRUE
+  Set Variable SUCCESS to REBOOT
+end
+if Variable VC64_REBOOT_REQUIRED Equals (Ignore Case) TRUE
+  Set Variable SUCCESS to REBOOT
+end
  
 Comment: Initialise finish dialogue message display variables
 Set Variable FINISH_TITLE to 
@@ -1737,57 +1776,52 @@ if Variable SUCCESS not Equals (Ignore Case) COMPLETE
   Set Variable DISPLAY_USER_GUIDE to FALSE
 end
  
-Comment: test whether we have an error, if so then we just display the error messages
+Comment: Test whether we have an error, if so then we just display the error messages
 if Variable SUCCESS not Equals (Ignore Case) ERROR
-  Comment: No errors so first set default messages in case an unexpected value is returned in the SUCCESS variable
-  Set Variable FINISH_TITLE to Unexpected SUCCESS Status Returned: $SUCCESS$!
-  Set Variable FINISH_CONTEXT to The installation may or may not have completed successfully.$NEWLINE$Please report this on the Yahoo ASCOM-Talk group.
+  Comment: No errors - great!
   if Variable SUCCESS Equals (Ignore Case) CANCEL
     Comment: User requested installation cancel
     Set Variable FINISH_TITLE to Platform installation has been cancelled at your request.
-    Set Variable FINISH_CONTEXT to 
-  end
-  if Variable SUCCESS Equals (Ignore Case) REBOOT
-    Comment: User requested installation cancel
-    Set Variable FINISH_TITLE to $TITLE$ has been successfully installed.$NEWLINE$Your PC needs to be restarted to complete installation.
-    Set Variable FINISH_CONTEXT to 
-    Set Variable FINISH_DESCRIPTION to  Congratulations, ASCOM Platform 6 installed successfully!$NEWLINE$$NEWLINE$ Please review the "Introduction" section of the Help file in$NEWLINE$ Start Menu / ASCOM Platform 6 for changes in this release.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ Diagnostics Tool in ASCOM Platform 6 / Tools and report them on$NEWLINE$ the ASCOM Talk Yahoo forum. $NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
-  end
-  if Variable SUCCESS Equals (Ignore Case) COMPLETE
-    Comment: Success!
-    Set Variable FINISH_TITLE to $TITLE$ has been installed successfully.
-    Set Variable FINISH_DESCRIPTION to  Congratulations, ASCOM Platform 6 installed successfully!$NEWLINE$$NEWLINE$ Please review the "Introduction" section of the Help file in$NEWLINE$ Start Menu / ASCOM Platform 6 for changes in this release.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ Diagnostics Tool in ASCOM Platform 6 / Tools and report them on$NEWLINE$ the ASCOM Talk Yahoo forum.$NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
-    if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
-      Set Variable FINISH_CONTEXT to The user guide will be displayed after you click the Finish button
+  else
+    if Variable SUCCESS Equals (Ignore Case) REBOOT
+      Comment: At least one of the Visual C++ installers requires a reboot
+      Set Variable FINISH_TITLE to $TITLE$ has been successfully installed.$NEWLINE$Your PC needs to be restarted to complete installation.
     else
-      Set Variable FINISH_CONTEXT to 
-    end
-    Comment: Revise messages if in maintenance mode
-    if Variable MAINTENANCE Equals (Ignore Case) TRUE
-      if Variable REMOVE Equals (Ignore Case) TRUE
-        Comment: User requested uninstall
-        Set Variable FINISH_TITLE to $TITLE$ has been uninstalled.
-        Set Variable FINISH_CONTEXT to 
-        Set Variable FINISH_DESCRIPTION to 
-      end
-      if Variable REPAIR Equals (Ignore Case) TRUE
-        Comment: User requested repair
-        Set Variable FINISH_TITLE to $TITLE$ has been repaired.
-        Set Variable FINISH_CONTEXT to 
-        Set Variable FINISH_DESCRIPTION to 
-      end
-      if Variable MODIFY Equals (Ignore Case) TRUE
-        Comment: User requested change features
-        Set Variable FINISH_TITLE to $TITLE$ has been modified as requested.
-        Set Variable FINISH_CONTEXT to 
-        Set Variable FINISH_DESCRIPTION to 
+      if Variable SUCCESS Equals (Ignore Case) COMPLETE
+        Comment: Success and no reboot required!
+        Set Variable FINISH_TITLE to $TITLE$ has been installed successfully.
+        Set Variable FINISH_DESCRIPTION to  Congratulations, ASCOM Platform 6 installed successfully!$NEWLINE$$NEWLINE$ Please review the "Introduction" section of the Help file in$NEWLINE$ Start Menu / ASCOM Platform 6 for changes in this release.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ Diagnostics Tool in ASCOM Platform 6 / Tools and report them on$NEWLINE$ the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
+        if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
+          Set Variable FINISH_CONTEXT to The user guide will be displayed after you click the Finish button
+        end
+        Comment: Revise messages if in maintenance mode
+        if Variable MAINTENANCE Equals (Ignore Case) TRUE
+          Set Variable FINISH_DESCRIPTION to 
+          Set Variable FINISH_CONTEXT to 
+          if Variable REMOVE Equals (Ignore Case) TRUE
+            Comment: User requested uninstall
+            Set Variable FINISH_TITLE to $TITLE$ has been uninstalled.
+          end
+          if Variable REPAIR Equals (Ignore Case) TRUE
+            Comment: User requested repair
+            Set Variable FINISH_TITLE to $TITLE$ has been repaired.
+          end
+          if Variable MODIFY Equals (Ignore Case) TRUE
+            Comment: User requested change features
+            Set Variable FINISH_TITLE to $TITLE$ has been modified as requested.
+          end
+        end
+      else
+        Comment: Unexpected value in SUCCESS variable
+        Set Variable FINISH_TITLE to Unexpected SUCCESS Status Returned: $SUCCESS$!
+        Set Variable FINISH_CONTEXT to The installation may or may not have completed successfully.$NEWLINE$Please report this on the Groups.Io ASCOM-Talk forum.
       end
     end
   end
 else
   Comment: We have an error so set the error messages
   Set Variable FINISH_TITLE to $TITLE$ installation failed
-  Set Variable FINISH_DESCRIPTION to Sorry, an error occurred during installation of Platform 6.$NEWLINE$$NEWLINE$Please review the PlatformInstall, UninstallASCOM and FinaliseInstall $NEWLINE$logs in the My Documents\ASCOM and the most recent$NEWLINE$My Documents\ASCOM\Logs YYYY MM DD folders.$NEWLINE$$NEWLINE$Please also run the Diagnostics Tool in ASCOM Platform 6 / Tools and $NEWLINE$post all logs on the ASCOM Talk Yahoo forum.$NEWLINE$$NEWLINE$Many thanks, The ASCOM Platform Team.
+  Set Variable FINISH_DESCRIPTION to Sorry, an error occurred during installation of Platform 6.$NEWLINE$$NEWLINE$Please review the PlatformInstall, UninstallASCOM and FinaliseInstall $NEWLINE$logs in the My Documents\ASCOM and the most recent$NEWLINE$My Documents\ASCOM\Logs YYYY MM DD folders.$NEWLINE$$NEWLINE$Please also run the Diagnostics Tool in ASCOM Platform 6 / Tools and $NEWLINE$post all logs on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$Many thanks, The ASCOM Platform Team.
   Set Variable FINISH_CONTEXT to Last error: "$LASTERROR$"$NEWLINE$ASCOM Error: $ASCOMERROR$
 end
  
@@ -1830,38 +1864,3 @@ end
 [END REGION]
 label: End of Script
  
-[DEFINE WEB MEDIA DomeControl Hub]
-if Variable SELECTED Equals TRUE
-end
-[DEFINE WEB MEDIA POTH]
-if Variable SELECTED Equals TRUE
-end
-[DEFINE WEB MEDIA Hub]
-if Variable SELECTED Equals TRUE
-end
-[DEFINE WEB MEDIA Pipe]
-if Variable SELECTED Equals TRUE
-end
-[DEFINE WEB MEDIA Out of date hubs replaced by Device Hub]
-Get Component Out of date hubs replaced by Device Hub Selection State into Variable SELECTED
-if Variable SELECTED Equals TRUE
-end
-[DEFINE WEB MEDIA Dome Control Hub]
-Get Component Out of date hubs replaced by Device Hub\Dome Control Hub Selection State into Variable SELECTED
-if Variable SELECTED Equals TRUE
-end
-[DEFINE WEB MEDIA POTH]
-Get Component Out of date hubs replaced by Device Hub\POTH Selection State into Variable SELECTED
-if Variable SELECTED Equals TRUE
-end
-[DEFINE WEB MEDIA Hub]
-Get Component Out of date hubs replaced by Device Hub\Hub Selection State into Variable SELECTED
-if Variable SELECTED Equals TRUE
-end
-[DEFINE WEB MEDIA Pipe]
-Get Component Out of date hubs replaced by Device Hub\Pipe Selection State into Variable SELECTED
-if Variable SELECTED Equals TRUE
-end
-[DEFINE WEB MEDIA Out of date hubs replaced by Device Hub]
-if Variable SELECTED Equals TRUE
-end
