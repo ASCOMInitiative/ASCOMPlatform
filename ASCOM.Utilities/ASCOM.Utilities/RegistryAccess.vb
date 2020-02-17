@@ -11,9 +11,12 @@ Imports System.Xml
 Imports System.Xml.Serialization
 Imports System.Text
 Imports System.Environment
+Imports System.Runtime.InteropServices
 
 Friend Class RegistryAccess
     Implements IAccess, IDisposable
+
+    Private HandleList As List(Of IntPtr) = New List(Of IntPtr)()
 
     Private ProfileRegKey As RegistryKey
 
@@ -151,11 +154,7 @@ Friend Class RegistryAccess
     ' IDisposable
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
         If Not Me.disposedValue Then
-            If DisableTLOnExit Then
-                Try : TL.Enabled = False : Catch : End Try 'Clean up the logger
-                Try : TL.Dispose() : Catch : End Try
-                Try : TL = Nothing : Catch : End Try
-            End If
+            If Not (TL Is Nothing) Then Try : TL.LogMessage("Dispose", "RegistryAccess Dispose has been Called.") : Catch : End Try
             Try : sw.Stop() : Catch : End Try 'Clean up the stopwatches
             Try : sw = Nothing : Catch : End Try
             Try : swSupport.Stop() : Catch : End Try
@@ -163,7 +162,25 @@ Friend Class RegistryAccess
             Try : ProfileMutex.Close() : Catch : End Try
             Try : ProfileMutex = Nothing : Catch : End Try
             Try : ProfileRegKey.Close() : Catch : End Try
+
+            Try : ProfileRegKey.Close() : Catch : End Try
             Try : ProfileRegKey = Nothing : Catch : End Try
+
+            For Each ptr As IntPtr In HandleList
+                Try
+                    If Not (TL Is Nothing) Then Try : TL.LogMessage("Dispose", $"Closing handle {ptr.ToString("X8")}") : Catch : End Try
+                    CloseHandle(ptr)
+                Catch ex As Exception
+                    If Not (TL Is Nothing) Then Try : TL.LogMessageCrLf("Dispose", ex.ToString()) : Catch : End Try
+                End Try
+            Next
+
+            If DisableTLOnExit Then
+                Try : TL.LogMessage("Dispose", "Cleaning up logger.") : Catch : End Try 'Clean up the logger
+                Try : TL.Enabled = False : Catch : End Try 'Clean up the logger
+                Try : TL.Dispose() : Catch : End Try
+                Try : TL = Nothing : Catch : End Try
+            End If
         End If
         Me.disposedValue = True
     End Sub
@@ -172,14 +189,14 @@ Friend Class RegistryAccess
     Public Sub Dispose() Implements IDisposable.Dispose
         ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
         Dispose(True)
-        GC.SuppressFinalize(Me)
+        'GC.SuppressFinalize(Me)
     End Sub
 
-    Protected Overrides Sub Finalize()
-        ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
-        Dispose(False)
-        MyBase.Finalize()
-    End Sub
+    'Protected Overrides Sub Finalize()
+    '    ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
+    '    Dispose(False)
+    '    MyBase.Finalize()
+    'End Sub
 
 #End Region
 
@@ -233,6 +250,7 @@ Friend Class RegistryAccess
             Next
             DeleteKey(OriginalSubKeyName)
         Else ' Key already exists so throw an exception
+            SubKey.Close()
             Throw New ProfilePersistenceException("Key " & NewSubKeyName & " already exists")
         End If
     End Sub
@@ -509,6 +527,7 @@ Friend Class RegistryAccess
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds ")
 
         Finally
+            Try : SKey.Close() : Catch : End Try
             ReleaseProfileMutex("SetProfile")
         End Try
 
@@ -567,6 +586,9 @@ Friend Class RegistryAccess
         For Each SubKeyName As String In SubKeyNames
             GetSubKey(BaseSubKey, SubKeyOffset & "\" & CleanSubKey(SubKeyName), ProfileContents)
         Next
+
+        Try : SKey.Close() : Catch : End Try
+
     End Sub
 
     Private Function CleanSubKey(ByVal SubKey As String) As String
@@ -608,6 +630,9 @@ Friend Class RegistryAccess
         'swLocal.Stop() : LogMessage("  CopyRegistry", "  Completed subkey: " & FromKey.Name & " " & RecurseDepth.ToString & ",  Elapsed time: " & swLocal.ElapsedMilliseconds & " milliseconds")
         RecurseDepth -= 1 'Decrement the recursion depth counter
         'swLocal = Nothing
+        Try : NewFromKey.Close() : Catch : End Try
+        Try : NewToKey.Close() : Catch : End Try
+
     End Sub
 
     Private Sub Backup50()
@@ -1119,8 +1144,10 @@ Friend Class RegistryAccess
             Rights = RegistryRights.WriteKey
             '                       hKey                             SubKey      Res lpClass     dwOpts samDesired     SecAttr      Handle        Disp
             Result = RegCreateKeyEx(GetRegistryKeyHandle(ParentKey), SubKeyName, 0, IntPtr.Zero, 0, Rights Or Options, IntPtr.Zero.ToInt32, SubKeyHandle, IntPtr.Zero.ToInt32)
+            HandleList.Add(CType(SubKeyHandle, IntPtr))
         Else
             Result = RegOpenKeyEx(GetRegistryKeyHandle(ParentKey), SubKeyName, 0, Rights Or Options, SubKeyHandle)
+            HandleList.Add(CType(SubKeyHandle, IntPtr))
         End If
 
         Select Case Result
@@ -1200,6 +1227,8 @@ Friend Class RegistryAccess
                                                                      ByVal lpSecurityAttributes As Integer,
                                                                      ByRef phkResult As Integer,
                                                                      ByVal lpdwDisposition As Integer) As Integer
+
+    Private Declare Auto Function CloseHandle Lib "kernel32.dll" (ByVal hObject As IntPtr) As Integer
 
 #End Region
 

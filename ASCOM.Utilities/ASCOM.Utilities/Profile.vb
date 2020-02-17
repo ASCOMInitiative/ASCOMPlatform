@@ -85,6 +85,7 @@ Public Class Profile
                 ProfileStore = Nothing
             End If
             If Not (TL Is Nothing) Then
+                Try : TL.LogMessage("Dispose", "Profile Dispose has been Called.") : Catch : End Try 'Clean up the logger
                 TL.Enabled = False
                 TL.Dispose()
                 TL = Nothing
@@ -102,14 +103,14 @@ Public Class Profile
     Public Sub Dispose() Implements IDisposable.Dispose
         ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
         Dispose(True)
-        GC.SuppressFinalize(Me)
+        'GC.SuppressFinalize(Me)
     End Sub
 
-    Protected Overrides Sub Finalize()
-        ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
-        Dispose(False)
-        MyBase.Finalize()
-    End Sub
+    'Protected Overrides Sub Finalize()
+    '    ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
+    '    Dispose(False)
+    '    MyBase.Finalize()
+    'End Sub
 
 #End Region
 
