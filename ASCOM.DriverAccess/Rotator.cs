@@ -8,7 +8,6 @@ using System;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 
-
 namespace ASCOM.DriverAccess
 {
     #region Rotator wrapper
@@ -60,11 +59,13 @@ namespace ASCOM.DriverAccess
         /// <returns>
         /// True if the Rotator supports the <see cref="Reverse" /> method.
         /// </returns>
+        /// <remarks>
+        /// <p style="color:red;margin-bottom:0"><b>Must be implemented.</b></p>
+        /// </remarks>
         public bool CanReverse
         {
             get { return (bool)memberFactory.CallMember(1, "CanReverse", new Type[] { }, new object[] { }); }
         }
-
 
         /// <summary>
         /// Immediately stop any Rotator motion due to a previous <see cref="Move">Move</see> or <see cref="MoveAbsolute">MoveAbsolute</see> method call.
@@ -105,10 +106,10 @@ namespace ASCOM.DriverAccess
         /// <exception cref="MethodNotImplementedException">If the method is not implemented.</exception>
         /// <exception cref="InvalidValueException">If Position is invalid.</exception>
         /// <remarks>
-        /// <para><b>SPECIFICATION REVISION - IRotatorV3 - Platform 6.5</b></para>
+        /// <p style="color:red"><b>SPECIFICATION REVISION - IRotatorV3 - Platform 6.5</b></p>
         /// <para>
-        /// If <see cref="CanSync"/> is <see cref="Boolean.TrueString"/> this method will move the rotator to the requested <b>Synced</b> position.
-        /// If <see cref="CanSync"/> is <see cref="Boolean.FalseString"/> this method will move the rotator to the requested <b>Mechanical</b> position as it does in IRotatorV2. 
+        /// If <see cref="CanSync"/> is True this method will move the rotator to the requested <b>Synced</b> position.
+        /// If <see cref="CanSync"/> is False this method will move the rotator to the requested <b>Mechanical</b> position as it does in IRotatorV2. 
         /// </para>
         /// <para>
         /// Calling <see cref="MoveAbsolute"/> causes the <see cref="TargetPosition" /> property to change to the value of the
@@ -124,13 +125,17 @@ namespace ASCOM.DriverAccess
         /// Current instantaneous Rotator position, allowing for any sync offset, in degrees.
         /// </summary>
         /// <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
+        /// <summary>
+        /// Current instantaneous Rotator position, allowing for any sync offset, in degrees.
+        /// </summary>
+        /// <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
         /// <remarks>
-        /// <para><b>SPECIFICATION REVISION - IRotatorV3 - Platform 6.5</b></para>
+        /// <p style="color:red"><b>SPECIFICATION REVISION - IRotatorV3 - Platform 6.5</b></p>
         /// <para>
-        /// When <see cref="CanSync"/> is <see cref="Boolean.TrueString"/>, Position reports the synced position rather than the mechanical position. The synced position is defined 
+        /// When <see cref="CanSync"/> is True, Position reports the synced position rather than the mechanical position. The synced position is defined 
         /// as the mechanical position plus an offset. The offset is determined when the <see cref="Sync(float)"/> method is called and must be persisted across driver starts and device reboots.
         /// </para>
-        /// <para>If <see cref="CanSync"/> is <see cref="Boolean.FalseString"/>, this property must return the same value as <see cref="MechanicalPosition"/>.</para>
+        /// <para>If <see cref="CanSync"/> is False, this property must return the same value as <see cref="MechanicalPosition"/>.</para>
         /// <para>
         /// The position is expressed as an angle from 0 up to but not including 360 degrees, counter-clockwise against the
         /// sky. This is the standard definition of Position Angle. However, the rotator does not need to (and in general will not)
@@ -191,9 +196,9 @@ namespace ASCOM.DriverAccess
         #region IRotatorV3 Members
 
         /// <summary>
-        /// Reports <see cref="Boolean.TrueString"/> if the rotator and / or driver can perform a sync and <see cref="Boolean.FalseString"/> if it cannot.
+        /// Reports True if the rotator and / or driver can perform a sync and False if it cannot.
         /// </summary>
-        /// <remarks> This must be implemented and must not throw an exception.</remarks>
+        /// <remarks><p style="color:red"><b>Must be implemented</b></p></remarks>
         public bool CanSync
         {
             get
@@ -214,8 +219,8 @@ namespace ASCOM.DriverAccess
         /// This returns the raw mechanical position of the rotator.
         /// </summary>
         /// <remarks>
-        /// This must be implemented and returns the mechanical position of the rotator, which is equivalent to the IRotatorV2 <see cref="Position"/> property. Other clients (beyond the one that performed the sync) 
-        /// can calculate the current offset using this and the <see cref="Position"/> value. If <see cref="CanSync"/> is <see cref="Boolean.FalseString"/> this property will return the same value as the <see cref="Position"/> property.
+        /// <p style="color:red"><b>Must be implemented</b></p>Returns the mechanical position of the rotator, which is equivalent to the IRotatorV2 <see cref="Position"/> property. Other clients (beyond the one that performed the sync) 
+        /// can calculate the current offset using this and the <see cref="Position"/> value. If <see cref="CanSync"/> is False this property will return the same value as the <see cref="Position"/> property.
         /// </remarks>
         public float MechanicalPosition
         {
@@ -237,9 +242,10 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Syncs the rotator to the specified position angle without moving it. 
         /// </summary>
-        /// <exception cref="MethodNotImplementedException">If <see cref="CanSync"/> is <see cref="Boolean.FalseString"/>.</exception>
+        /// <exception cref="MethodNotImplementedException">If <see cref="CanSync"/> is False.</exception>
         /// <param name="Position">Synchronised rotator position angle.</param>
         /// <remarks>
+        /// <p style="color:red"><b>Must be implemented if <see cref="CanSync"/> is True.</b></p>
         /// Once this method has been called and the sync offset determined, both the <see cref="MoveAbsolute(float)"/>> method and the <see cref="Position"/> property must function in synced coordinates 
         /// rather than mechanical coordinates. The sync offset must persist across driver starts and device reboots.
         /// </remarks>
@@ -258,11 +264,12 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Moves the rotator to the specified mechanical angle. 
         /// </summary>
-        /// <exception cref="MethodNotImplementedException">If <see cref="CanSync"/> is <see cref="Boolean.FalseString"/>.</exception>
+        /// <exception cref="MethodNotImplementedException">If <see cref="CanSync"/> is False.</exception>
         /// <param name="Position">Mechanical rotator position angle.</param>
         /// <remarks>
-        /// <para>Moves the rotator to the requested mechanical angle, independent of any sync offset that may have been set. This method is to address requirements that require a physical rotation
-        /// angle such as when taking sky flats.</para>
+        /// <p style="color:red"><b>Must be implemented if <see cref="CanSync"/> is True.</b></p>
+        /// <para>Moves the rotator to the requested mechanical angle, independent of any sync offset that may have been set. This method is to address requirements that need a physical rotation
+        /// angle such as taking sky flats.</para>
         /// <para>Client applications should use the <see cref="MoveAbsolute(float)"/> method in preference to this method when imaging.</para>
         /// </remarks>
         public void MoveMechanical(float Position)

@@ -82,7 +82,9 @@
           <listItem>
             Interface Standards and Components
             <list class="bullet">
-              <listItem>ICoverCalibratorV1 support has been added to Interfaces and DriverAccess.</listItem>
+              <listItem>ICoverCalibratorV1 has been added to Interfaces and DriverAccess.</listItem>
+              <listItem>IRotaotrV3 has been added to Interfaces and DriverAccess.</listItem>
+              <listItem>Revision: The Rotator Position property and MoveAbsolute method behaviours are different when IRotatorV3.CanSync is true.</listItem>
               <listItem>Clarification: The Focuser temperature unit is degrees Celsius.</listItem>
               <listItem>Clarification: Telescope.PulseGuide may throw an InvalidValueException if called when an incompatible command is already underway e.g. a slew is in progress.</listItem>
               <listItem>Clarification: IDomeV2 wording has been clarified for many properties and methods.</listItem>
