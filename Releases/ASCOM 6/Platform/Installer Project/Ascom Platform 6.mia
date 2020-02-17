@@ -293,6 +293,7 @@ Comment
 Get OS or SP Level
 If
 Comment
+Write to Text File
 MessageBox
 Terminate Install
 End
@@ -302,6 +303,7 @@ Comment
 Get OS or SP Level
 If
 Comment
+Write to Text File
 MessageBox
 Terminate Install
 End
@@ -313,6 +315,7 @@ Comment
 Get System Settings
 If
 Comment
+Write to Text File
 MessageBox
 Terminate Install
 End
@@ -321,6 +324,7 @@ Comment
 Comment
 Get System Settings
 If
+Write to Text File
 MessageBox
 Terminate Install
 End
@@ -2160,6 +2164,7 @@ $
 {0F7B2E1F-0465-47EF-9979-900A3ED2CF01}
 {9C6681D7-708F-45BB-9109-DEFC60352BEA}
 {15CFCCD2-CD22-431C-BF8E-9225DD8CBCD0}
+{30B5AF73-945E-4A61-BD8B-8583FA2B6094}
 {D8E9E8C4-1277-4571-80E4-3028903D63E5}
 {CA2EDBA1-B73A-41AC-B025-64820B07A73B}
 {F7BD42EC-3F3E-402B-90F6-B952B94C006C}
@@ -2169,6 +2174,7 @@ $
 {34C6A84B-FC00-478E-AD5E-E93C06DC42A2}
 {7F6CA0E8-AB59-4437-8E2E-493A8ABF955A}
 {A4A108D2-7BB8-4B4C-B9BA-1DD2F5B52290}
+{BECCD496-109E-4200-ACC2-1F17A17A04B4}
 {A66080D9-28F7-4599-BE32-35F244255E72}
 {5CB29BA0-D2DB-4F4F-A75F-7CA7665358CD}
 {AAEC6F23-A919-4118-AD84-D49785BAAAA7}
@@ -2180,6 +2186,7 @@ $
 {407AD466-DC35-43ED-B98A-3322AFA90D6D}
 {75C35BD0-C7BC-4CF4-8843-7E765405C726}
 {86CA81E1-3D2C-4DD4-9FD7-9318E8DCDA3E}
+{FBE3A7FB-8098-4C76-9DFE-292E45A29A5E}
 {5BAA2F47-2B2F-494B-A2A1-430AD1335688}
 {A35374B9-4D31-49A1-BFA2-EEF205E408F0}
 {189EE5AF-113E-40F9-80A4-B6089DCC842B}
@@ -2188,6 +2195,7 @@ $
 {661028BF-07FB-4159-9DF7-962D31863EDB}
 {891F3D51-EF12-4A44-AFAA-66CA725B3BA9}
 {6CF9F796-DD4C-4351-9238-D871C8EF2529}
+{B28EDA17-EFFE-4A00-9D1C-D37A69C726C1}
 {B898B1FB-3E92-46C8-80C3-06EDDD33752A}
 {E89AD19F-1AE7-4DC0-95A0-6FF071B1AC1A}
 {26FA7D9B-6D6D-469E-96A4-2DF0676A382F}
@@ -4325,7 +4333,7 @@ Set SUCCESS to REBOOT if either of the Visual C++ installers required it.
 {CD1B6C19-F332-4E12-AC02-FF9A45D3E93B}
 Unexpected value in SUCCESS variable
 {F18C0BDA-73C3-4E5F-AF17-82CBB6602875}
-Check that SP1 is installed if we are running on Windows 7
+.NET Framework 4.8 - Check that SP1 is installed if we are running on Windows 7
 {B5A0433F-6B45-4B3A-94F0-7862F35C3686}
 We are running on Windows 7 so test for service pack 1
 {15CFCCD2-CD22-431C-BF8E-9225DD8CBCD0}
@@ -4333,7 +4341,7 @@ We are running on Windows 7 without service pack 1 so cannot proceed because Fra
 {A4A108D2-7BB8-4B4C-B9BA-1DD2F5B52290}
 We are running on Windows 8.0 so cannot proceed because Framework 4.8 is only supported on Win 8.1
 {AB6B75CD-7893-4D7C-A40D-DD9BDB452918}
-Check that we are on 8.1 if we are running Windows 8
+.NET Framework 4.8 - Check that we are on 8.1 if we are running Windows 8
 {0F7FAD0B-D368-4EC4-9F35-DD2F5F55F9E2}
 
 {7F8731CA-BD32-4A4D-84CA-5E59C045C87D}
@@ -4341,13 +4349,13 @@ Check that we are on 8.1 if we are running Windows 8
 {567224A2-19EA-4AE7-A813-B9636029FC98}
 
 {661028BF-07FB-4159-9DF7-962D31863EDB}
-Check that we are not eblow WIndows 7
+Check that we are not below Windows 7 i.e. on XP
 {705AF6CD-3860-4B93-95AA-F7D3DD206C0C}
 
 {86CA81E1-3D2C-4DD4-9FD7-9318E8DCDA3E}
 We are running on Windows 10 with a Threshold version so cannot proceed because Framework 4.8 is only supported on Win 8.1
 {D9A637E8-2BF6-4446-9F77-BD1AADBD502E}
-Check that we are on at least Restone (Abbiversary Update)  if we are running Windows 10
+.NET Framework 4.8 - Check that we are on at least Restone (Anniversary Update) if we are running Windows 10
 {6026D396-5848-4256-91D3-8BEA22780392}
 We are running on Windows 10 so make sure that we are at least on Redstone
 {C974C952-7C50-4503-BFEF-AF3B492C0AEE}
@@ -5980,8 +5988,8 @@ TRUE
 FALSE
 {75C35BD0-C7BC-4CF4-8843-7E765405C726}
 CHECKSYSTEM
-2
 0
+TRUE
 TRUE
 {B3EB30C5-5686-4186-96B5-86C9FC5D6576}
 $TITLE$ Setup Error
@@ -6038,26 +6046,26 @@ The ASCOM Platform has been removed, the installer will now termiinate. Please r
 1
 ERROROLD
 {B898B1FB-3E92-46C8-80C3-06EDDD33752A}
-$TITLE$ Setup Error
-The ASCOM Platform requires at least Windows 7 SP1.$NEWLINE$$NEWLINE$Setup cannot continue.
+$TITLE$ Setup Issue
+Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
 3
 1
 
 {D8E9E8C4-1277-4571-80E4-3028903D63E5}
-$TITLE$ Setup Error
-The ASCOM Platform requires at least Windows 7 SP1.$NEWLINE$$NEWLINE$Setup cannot continue.
+$TITLE$ Setup Issue
+Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
 3
 1
 
 {A66080D9-28F7-4599-BE32-35F244255E72}
-$TITLE$ Setup Error
-The ASCOM Platform requires at least Windows 8.1.$NEWLINE$$NEWLINE$Setup cannot continue.
+$TITLE$ Setup Issue
+Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
 3
 1
 
 {5BAA2F47-2B2F-494B-A2A1-430AD1335688}
-$TITLE$ Setup Error
-The ASCOM Platform requires at least Windows 10 Anniversary Update.$NEWLINE$$NEWLINE$Setup cannot continue.
+$TITLE$ Setup issue
+Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
 3
 1
 
@@ -12133,6 +12141,26 @@ $SETUPLOG$
 $TIME$ ReadMe shown
 FALSE
 TRUE
+{30B5AF73-945E-4A61-BD8B-8583FA2B6094}
+$SETUPLOG$
+$TIME$ Found Windows 7 without SP1, terminating installation
+FALSE
+TRUE
+{BECCD496-109E-4200-ACC2-1F17A17A04B4}
+$SETUPLOG$
+$TIME$ Found Windows 8.0, terminating installation
+FALSE
+TRUE
+{B28EDA17-EFFE-4A00-9D1C-D37A69C726C1}
+$SETUPLOG$
+$TIME$ Found Windows earlier than 7, terminating installation
+FALSE
+TRUE
+{FBE3A7FB-8098-4C76-9DFE-292E45A29A5E}
+$SETUPLOG$
+$TIME$ Found Windows 10 Threshold, terminating installation
+FALSE
+TRUE
 {C27DD540-EC7D-462C-9EE8-5D0F21EB2997}
 2|
 SOFTWARE\ASCOM\Astrometry
@@ -13484,6 +13512,10 @@ C
 
 
 
+
+
+
+
 C
 
 
@@ -14523,6 +14555,10 @@ C
 
 
 $
+
+
+
+
 
 
 

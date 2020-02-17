@@ -286,42 +286,46 @@ if Variable CHECKSYSTEM not Equals TRUE
   Terminate Installation
 end
  
-Comment: Check that SP1 is installed if we are running on Windows 7
+Comment: .NET Framework 4.8 - Check that SP1 is installed if we are running on Windows 7
 Get Exact OS Level into CHECKSYSTEM
 if Variable CHECKSYSTEM Equals SEVEN
   Comment: We are running on Windows 7 so test for service pack 1
   Get Exact SP Level into CHECKSYSTEM
   if Variable CHECKSYSTEM not Greater Than 0
     Comment: We are running on Windows 7 without service pack 1 so cannot proceed because Framework 4.8 is only supported on Win 7 SP1
-    MessageBox: $TITLE$ Setup Error, The ASCOM Platform requires at least Windows 7 SP1.$NEWLINE$$NEWLINE$Setup cannot continue.
+    Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 7 without SP1, terminating installation (at end of file)
+    MessageBox: $TITLE$ Setup Issue, Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
     Terminate Installation
   end
 end
  
-Comment: Check that we are on 8.1 if we are running Windows 8
+Comment: .NET Framework 4.8 - Check that we are on 8.1 if we are running Windows 8
 Get Exact OS Level into CHECKSYSTEM
 if Variable CHECKSYSTEM Equals METRO
   Comment: We are running on Windows 8.0 so cannot proceed because Framework 4.8 is only supported on Win 8.1
-  MessageBox: $TITLE$ Setup Error, The ASCOM Platform requires at least Windows 8.1.$NEWLINE$$NEWLINE$Setup cannot continue.
+  Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 8.0, terminating installation (at end of file)
+  MessageBox: $TITLE$ Setup Issue, Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
   Terminate Installation
 end
  
-Comment: Check that we are on at least Restone (Abbiversary Update)  if we are running Windows 10
+Comment: .NET Framework 4.8 - Check that we are on at least Restone (Anniversary Update) if we are running Windows 10
 Get System Setting Windows 10 into CHECKSYSTEM
 if Variable CHECKSYSTEM Equals TRUE
   Comment: We are running on Windows 10 so make sure that we are at least on Redstone
   Get System Setting Windows 10 Redstone into CHECKSYSTEM
-  if Variable CHECKSYSTEM not Greater Than 0
+  if Variable CHECKSYSTEM not Equals TRUE
     Comment: We are running on Windows 10 with a Threshold version so cannot proceed because Framework 4.8 is only supported on Win 8.1
-    MessageBox: $TITLE$ Setup Error, The ASCOM Platform requires at least Windows 10 Anniversary Update.$NEWLINE$$NEWLINE$Setup cannot continue.
+    Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 10 Threshold, terminating installation (at end of file)
+    MessageBox: $TITLE$ Setup issue, Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
     Terminate Installation
   end
 end
  
-Comment: Check that we are not eblow WIndows 7
+Comment: Check that we are not below Windows 7 i.e. on XP
 Get System Setting Windows 7 into CHECKSYSTEM
 if Variable CHECKSYSTEM not Equals TRUE
-  MessageBox: $TITLE$ Setup Error, The ASCOM Platform requires at least Windows 7 SP1.$NEWLINE$$NEWLINE$Setup cannot continue.
+  Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows earlier than 7, terminating installation (at end of file)
+  MessageBox: $TITLE$ Setup Issue, Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
   Terminate Installation
 end
 [END REGION]

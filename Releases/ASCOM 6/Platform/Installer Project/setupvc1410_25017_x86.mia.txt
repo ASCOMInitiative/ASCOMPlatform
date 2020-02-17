@@ -1,4 +1,4 @@
-Set Variable REBOOT_REQUIRED_X86 to TRUE
+Set Variable REBOOT_REQUIRED_X86 to FALSE
 if Variable VC1410_25017_RTM_X86 Equals TRUE
   Set Variable PROGRESSTEXT to Installing Visual C++ Runtime for Visual Studio 2019 (x86)
   Set Variable PROGRESSMODE to MARQUEE
