@@ -36,7 +36,7 @@ namespace ASCOM.DeviceHub
 	// Your driver's DeviceID is ASCOM.DeviceHub.Telescope
 	//
 	// The Guid attribute sets the CLSID for ASCOM.DeviceHub.Telescope
-	// The ClassInterface/None addribute prevents an empty interface called
+	// The ClassInterface/None attribute prevents an empty interface called
 	// _DeviceHub from being created and used as the [default] interface
 	//
 

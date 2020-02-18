@@ -34,7 +34,7 @@ namespace ASCOM.DeviceHub
 	// Your driver's DeviceID is ASCOM.DeviceHub.Dome
 
 	// The Guid attribute sets the CLSID for ASCOM.DeviceHub.Dome
-	// The ClassInterface/None addribute prevents an empty interface called
+	// The ClassInterface/None attribute prevents an empty interface called
 	// _DeviceHub from being created and used as the [default] interface
 
 	/// <summary>
@@ -273,7 +273,7 @@ namespace ASCOM.DeviceHub
 
 		public void Dispose()
 		{
-			// Clean up the tracelogger and utilities objects
+			// Clean up the trace logger and utilities objects
 
 			_logger.Enabled = false;
 			_logger.Dispose();

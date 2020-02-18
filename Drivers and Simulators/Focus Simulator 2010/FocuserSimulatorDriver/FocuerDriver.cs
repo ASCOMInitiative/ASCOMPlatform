@@ -14,7 +14,7 @@ namespace ASCOM.Simulator
     // Your driver's DeviceID is ASCOM.Simulator.Focuser
     //
     // The Guid attribute sets the CLSID for ASCOM.Simulator.Focuser
-    // The ClassInterface/None addribute prevents an empty interface called
+    // The ClassInterface/None attribute prevents an empty interface called
     // _Conceptual from being created and used as the [default] interface
     //
 
@@ -72,7 +72,7 @@ namespace ASCOM.Simulator
 
         #endregion
 
-        internal TraceLogger TL;// Shared tracelogger between this instances classes
+        internal TraceLogger TL;// Shared trace logger between this instances classes
 
         #region local parameters
 

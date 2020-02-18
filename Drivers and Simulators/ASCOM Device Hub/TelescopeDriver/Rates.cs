@@ -14,7 +14,7 @@ namespace ASCOM.DeviceHub
 	// for AxisRates. You do not need to change this class.
 	//
 	// The Guid attribute sets the CLSID for ASCOM.DeviceHub.Rate
-	// The ClassInterface/None addribute prevents an empty interface called
+	// The ClassInterface/None attribute prevents an empty interface called
 	// _Rate from being created and used as the [default] interface
 
 	[Guid( "bbb05daa-5a12-44f8-9c0b-f28ef8134ebd" )]
@@ -65,7 +65,7 @@ namespace ASCOM.DeviceHub
 	// this polymorphism. 
 
 	// The Guid attribute sets the CLSID for ASCOM.DeviceHub.AxisRates
-	// The ClassInterface/None addribute prevents an empty interface called
+	// The ClassInterface/None attribute prevents an empty interface called
 	// _AxisRates from being created and used as the [default] interface
 
 	[Guid( "fd8657cf-a98f-4462-bb48-102d93480980" )]
@@ -155,7 +155,7 @@ namespace ASCOM.DeviceHub
 	// this polymorphism. 
 
 	// The Guid attribute sets the CLSID for ASCOM.DeviceHub.TrackingRates
-	// The ClassInterface/None addribute prevents an empty interface called
+	// The ClassInterface/None attribute prevents an empty interface called
 	// _TrackingRates from being created and used as the [default] interface
 	//
 	// This class is implemented in this way so that applications based on .NET 3.5

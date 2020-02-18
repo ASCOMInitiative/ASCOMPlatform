@@ -395,7 +395,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Returns a flag indicating whether the camera is currrently in a <see cref="PulseGuide">PulseGuide</see> operation.
+        /// Returns a flag indicating whether the camera is currently in a <see cref="PulseGuide">PulseGuide</see> operation.
         /// </summary>
         /// <remarks>
         /// If True, pulse guiding is in progress. Required if the <see cref="PulseGuide">PulseGuide</see> method

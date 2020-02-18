@@ -15,7 +15,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
     // for AxisRates. You do not need to change this class.
     //
     // The Guid attribute sets the CLSID for ASCOM.TEMPLATEDEVICENAME.Rate
-    // The ClassInterface/None addribute prevents an empty interface called
+    // The ClassInterface/None attribute prevents an empty interface called
     // _Rate from being created and used as the [default] interface
     //
     [Guid("AD6248B3-3F51-4FFF-B62B-E3E942DD817E")]
@@ -40,7 +40,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 
         public void Dispose()
         {
-            // TODO Add any required object cleanup here
+            // TODO Add any required object clean-up here
         }
 
         public double Maximum
@@ -66,7 +66,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
     // this polymorphism. 
     //
     // The Guid attribute sets the CLSID for ASCOM.TEMPLATEDEVICENAME.AxisRates
-    // The ClassInterface/None addribute prevents an empty interface called
+    // The ClassInterface/None attribute prevents an empty interface called
     // _AxisRates from being created and used as the [default] interface
     //
     [Guid("99DB28A6-0132-43BF-91C0-D723124813C8")]
@@ -121,7 +121,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 
         public void Dispose()
         {
-            // TODO Add any required object cleanup here
+            // TODO Add any required object clean-up here
         }
 
         public IEnumerator GetEnumerator()
@@ -145,7 +145,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
     // this polymorphism. 
     //
     // The Guid attribute sets the CLSID for ASCOM.TEMPLATEDEVICENAME.TrackingRates
-    // The ClassInterface/None addribute prevents an empty interface called
+    // The ClassInterface/None attribute prevents an empty interface called
     // _TrackingRates from being created and used as the [default] interface
     //
     // This class is implemented in this way so that applications based on .NET 3.5
@@ -193,7 +193,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 
         public void Dispose()
         {
-            // TODO Add any required object cleanup here
+            // TODO Add any required object clean-up here
         }
 
         public DriveRates this[int index]

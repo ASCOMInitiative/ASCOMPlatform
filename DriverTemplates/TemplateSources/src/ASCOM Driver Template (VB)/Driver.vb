@@ -24,7 +24,7 @@
 ' Your driver's ID is ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS
 '
 ' The Guid attribute sets the CLSID for ASCOM.DeviceName.TEMPLATEDEVICECLASS
-' The ClassInterface/None addribute prevents an empty interface called
+' The ClassInterface/None attribute prevents an empty interface called
 ' _TEMPLATEDEVICECLASS from being created and used as the [default] interface
 '
 
@@ -49,7 +49,7 @@ Imports System.Text
 Public Class TEMPLATEDEVICECLASS
 
     ' The Guid attribute sets the CLSID for ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS
-    ' The ClassInterface/None addribute prevents an empty interface called
+    ' The ClassInterface/None attribute prevents an empty interface called
     ' _TEMPLATEDEVICENAME from being created and used as the [default] interface
 
     ' TODO Replace the not implemented exceptions with code to implement the function or
@@ -68,7 +68,7 @@ Public Class TEMPLATEDEVICECLASS
     Friend Shared comPortDefault As String = "COM1"
     Friend Shared traceStateDefault As String = "False"
 
-    Friend Shared comPort As String ' Variables to hold the currrent device configuration
+    Friend Shared comPort As String ' Variables to hold the current device configuration
     Friend Shared traceState As Boolean
 
     Private connectedState As Boolean ' Private variable to hold the connected state
@@ -88,7 +88,7 @@ Public Class TEMPLATEDEVICECLASS
 
         connectedState = False ' Initialise connected to false
         utilities = New Util() ' Initialise util object
-        astroUtilities = New AstroUtils 'Initialise new astro utiliites object
+        astroUtilities = New AstroUtils 'Initialise new astro utilities object
 
         'TODO: Implement your additional construction here
 
@@ -224,7 +224,7 @@ Public Class TEMPLATEDEVICECLASS
     End Property
 
     Public Sub Dispose() Implements ITEMPLATEDEVICEINTERFACE.Dispose
-        ' Clean up the tracelogger and util objects
+        ' Clean up the trace logger and util objects
         TL.Enabled = False
         TL.Dispose()
         TL = Nothing

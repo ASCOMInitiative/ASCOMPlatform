@@ -462,7 +462,7 @@ namespace ASCOM.DeviceInterface
         bool ImageReady { get; }
 
         /// <summary>
-        /// Returns a flag indicating whether the camera is currrently in a <see cref="PulseGuide">PulseGuide</see> operation.
+        /// Returns a flag indicating whether the camera is currently in a <see cref="PulseGuide">PulseGuide</see> operation.
         /// </summary>
         /// <remarks>
         /// If <c>true</c>, pulse guiding is in progress. Required if the <see cref="PulseGuide">PulseGuide</see> method

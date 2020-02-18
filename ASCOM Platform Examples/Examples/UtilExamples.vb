@@ -2,7 +2,7 @@
     Sub Example()
         Dim Utl As ASCOM.Utilities.Util
         Dim PrmString, RspString As String, PrmDouble, RspDouble As Double, RspDate As Date
-        Dim PlatformMajor, PlatformMinor, ServicePack, Build As Integer, CurrrentPlatformVersion As Version
+        Dim PlatformMajor, PlatformMinor, ServicePack, Build As Integer, CurrentPlatformVersion As Version
 
         Utl = New ASCOM.Utilities.Util
 
@@ -17,8 +17,8 @@
         Build = Utl.BuildNumber
 
         'Test whether the installed platform is at or greater than a required level
-        CurrrentPlatformVersion = New Version(PlatformMajor, PlatformMinor, ServicePack, Build)
-        If CurrrentPlatformVersion < New Version(6, 0, 3, 0) Then MsgBox("This application requires Platform 6.0 SP3 or later")
+        CurrentPlatformVersion = New Version(PlatformMajor, PlatformMinor, ServicePack, Build)
+        If CurrentPlatformVersion < New Version(6, 0, 3, 0) Then MsgBox("This application requires Platform 6.0 SP3 or later")
 
         With Utl 'Use "with" to get several properties
             RspString = .TimeZoneName 'Time zone name
