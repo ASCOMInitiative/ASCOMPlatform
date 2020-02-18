@@ -7,7 +7,7 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Threading
-Imports ASCOM.Utilities.Support
+Imports ASCOM.Utilities
 
 Friend Class ChooserForm
     Inherits Form
@@ -62,7 +62,7 @@ Friend Class ChooserForm
     Private currentPropertiesButtonEnabledState As Boolean
 
     ' Component variables
-    Private TL As ITraceLoggerUtility
+    Private TL As TraceLogger
     Private chooserWarningToolTip As ToolTip
     Private chooserPropertiesToolTip As ToolTip
     Private alpacaStatusToolstripLabel As ToolStripLabel
@@ -873,7 +873,7 @@ Friend Class ChooserForm
     Private Sub DiscoverAlpacaDevicesAndPopulateDriverComboBox()
         Try
 
-            TL.LogMessage("StartAlpacaDiscovery", $"Running On thread: {Thread.CurrentThread.ManagedThreadId}.")
+            TL.LogMessage("DiscoverAlpacaDevices", $"Running On thread: {Thread.CurrentThread.ManagedThreadId}.")
 
             chooserList = New SortedList(Of ChooserItem, String)
 
@@ -881,7 +881,7 @@ Friend Class ChooserForm
             Try
                 ' Get Key-Class pairs in the subkey "{DeviceType} Drivers" e.g. "Telescope Drivers"
                 Dim driverList As SortedList(Of String, String) = registryAccess.EnumKeys(deviceTypeValue & " Drivers")
-                TL.LogMessage("PopulateDriverComboBox", $"Returned {driverList.Count} COM drivers")
+                TL.LogMessage("DiscoverAlpacaDevices", $"Returned {driverList.Count} COM drivers")
 
                 For Each driver As KeyValuePair(Of String, String) In driverList
                     Dim driverProgId, driverName As String
@@ -914,11 +914,11 @@ Friend Class ChooserForm
                 Next
 
             Catch ex1 As Exception
-                TL.LogMessageCrLf("PopulateDriverComboBox", "Exception: " & ex1.ToString)
+                TL.LogMessageCrLf("DiscoverAlpacaDevices", "Exception: " & ex1.ToString)
                 'Ignore any exceptions from this call e.g. if there are no devices of that type installed just create an empty list
             End Try
 
-            TL.LogMessage("PopulateDriverComboBox", $"Completed COM driver enumeration")
+            TL.LogMessage("DiscoverAlpacaDevices", $"Completed COM driver enumeration")
 
             If (AlpacaEnabled) Then
                 alpacaDevices = New List(Of AscomDevice) ' Initialise to a clear list with no Alpaca devices
@@ -927,21 +927,25 @@ Friend Class ChooserForm
                 SetStateAlpacaDiscovering()
                 Dim discovery As AlpacaDiscovery
                 discovery = New AlpacaDiscovery(TL)
-                TL.LogMessage("StartAlpacaDiscovery", $"AlpacaDiscovery created")
+                TL.LogMessage("DiscoverAlpacaDevices", $"AlpacaDiscovery created")
                 discovery.StartDiscovery(AlpacaNumberOfBroadcasts, 200, AlpacaDiscoveryPort, AlpacaTimeout, AlpacaDnsResolution)
-                TL.LogMessage("StartAlpacaDiscovery", $"AlpacaDiscovery started")
+                TL.LogMessage("DiscoverAlpacaDevices", $"AlpacaDiscovery started")
 
                 ' Keep the UI alive while the discovery is running
                 Do
                     Threading.Thread.Sleep(10)
                     Application.DoEvents()
                 Loop Until discovery.DiscoveryComplete
-                TL.LogMessage("StartAlpacaDiscovery", $"AlpacaDiscovery Completed")
+                TL.LogMessage("DiscoverAlpacaDevices", $"Discovery phase has finished")
+
+                TL.LogMessage("DiscoverAlpacaDevices", $"Discovered {discovery.GetAscomDevices().Count} devices")
 
                 ' List discovered devices to the log
                 For Each ascomDevice As AscomDevice In discovery.GetAscomDevices()
-                    TL.LogMessage("StartAlpacaDiscovery", $"FOUND {ascomDevice.AscomDeviceType} {ascomDevice.AscomDeviceName} {ascomDevice.IPEndPoint.ToString()}")
+                    TL.LogMessage("DiscoverAlpacaDevices", $"FOUND {ascomDevice.AscomDeviceType} {ascomDevice.AscomDeviceName} {ascomDevice.IPEndPoint.ToString()}")
                 Next
+
+                TL.LogMessage("DiscoverAlpacaDevices", $"Discovered {discovery.GetAscomDevices(deviceTypeValue).Count} {deviceTypeValue} devices")
 
                 ' Get discovered devices of the requested ASCOM device type
                 alpacaDevices = discovery.GetAscomDevices(deviceTypeValue)
@@ -949,7 +953,7 @@ Friend Class ChooserForm
 
                 ' Add any Alpaca devices to the list
                 For Each device As AscomDevice In alpacaDevices
-                    TL.LogMessage("PopulateDriverComboBox", $"Discovered Alpaca device: {device.AscomDeviceType} {device.AscomDeviceName} {device.UniqueId} at  http://{device.HostName}:{device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber}")
+                    TL.LogMessage("DiscoverAlpacaDevices", $"Discovered Alpaca device: {device.AscomDeviceType} {device.AscomDeviceName} {device.UniqueId} at  http://{device.HostName}:{device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber}")
 
                     Dim displayHostName As String = CType(IIf(device.HostName = device.IPEndPoint.Address.ToString(), device.IPEndPoint.Address.ToString(), $"{device.HostName} ({device.IPEndPoint.Address.ToString()})"), String)
                     Dim displayName As String
@@ -996,26 +1000,28 @@ Friend Class ChooserForm
                                 Continue For ' Don't process this driver further, move on to the next driver
                             End Try
 
-                            TL.LogMessage("PopulateDriverComboBox", $"Found existing COM dynamic driver for device {deviceUniqueId} at http://{deviceHostName}:{deviceIPPort}/api/v1/{deviceTypeValue}/{deviceNumber}")
-                            TL.LogMessage("PopulateDriverComboBox", $"{device.UniqueId} {deviceUniqueId} {device.UniqueId = deviceUniqueId} {device.HostName = deviceHostName} {device.IPEndPoint.Port = deviceIPPort} {device.AlpacaDeviceNumber = deviceNumber}")
+                            TL.LogMessage("DiscoverAlpacaDevices", $"Found existing COM dynamic driver for device {deviceUniqueId} at http://{deviceHostName}:{deviceIPPort}/api/v1/{deviceTypeValue}/{deviceNumber}")
+                            TL.LogMessage("DiscoverAlpacaDevices", $"{device.UniqueId} {deviceUniqueId} {device.UniqueId = deviceUniqueId} {device.HostName = deviceHostName} {device.IPEndPoint.Port = deviceIPPort} {device.AlpacaDeviceNumber = deviceNumber}")
 
                             If (device.UniqueId = deviceUniqueId) And (device.HostName = deviceHostName) And (device.IPEndPoint.Port = deviceIPPort) And (device.AlpacaDeviceNumber = deviceNumber) Then
                                 foundDriver = True
-                                TL.LogMessage("PopulateDriverComboBox", $"    Found existing COM driver match!")
+                                TL.LogMessage("DiscoverAlpacaDevices", $"    Found existing COM driver match!")
                             End If
                         End If
                     Next
 
                     If foundDriver Then
+                        TL.LogMessage("DiscoverAlpacaDevices", $"Found driver match for {device.AscomDeviceName}")
                         If AlpacaShowDiscoveredDevices Then
+                            TL.LogMessage("DiscoverAlpacaDevices", $"Showing KNOWN ALPACA DEVICE entry for {device.AscomDeviceName}")
                             displayName = $"* KNOWN ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.UniqueId}"
                             chooserList.Add(New ChooserItem(device.UniqueId, device.AlpacaDeviceNumber, device.HostName, device.IPEndPoint.Port, device.AscomDeviceName), displayName)
                         Else
-                            TL.LogMessage("PopulateDriverComboBox", $"This device MATCHES an existing COM driver so NOT adding it to the Combo box list")
+                            TL.LogMessage("DiscoverAlpacaDevices", $"This device MATCHES an existing COM driver so NOT adding it to the Combo box list")
                         End If
 
                     Else
-                        TL.LogMessage("PopulateDriverComboBox", $"This device does NOT match an existing COM driver so ADDING it to the Combo box list")
+                        TL.LogMessage("DiscoverAlpacaDevices", $"This device does NOT match an existing COM driver so ADDING it to the Combo box list")
                         displayName = $"* NEW ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.UniqueId}"
                         chooserList.Add(New ChooserItem(device.UniqueId, device.AlpacaDeviceNumber, device.HostName, device.IPEndPoint.Port, device.AscomDeviceName), displayName)
                     End If
@@ -1023,12 +1029,19 @@ Friend Class ChooserForm
                 Next
             End If
 
+            ' List the ChooserList contents
+            TL.LogMessage("DiscoverAlpacaDevices", $"Start of Chooser List")
+            For Each item As System.Collections.Generic.KeyValuePair(Of ChooserItem, String) In chooserList
+                TL.LogMessage("DiscoverAlpacaDevices", $"List includes device {item.Value}")
+            Next
+            TL.LogMessage("DiscoverAlpacaDevices", $"End of Chooser List")
+
             ' Populate the device list combo box with COM and Alpaca devices.
             ' This Is implemented as an independent method because it interacts with UI controls And will self invoke if required
             PopulateDriverComboBox()
 
         Catch ex As Exception
-            TL.LogMessageCrLf("StartAlpacaDiscovery", ex.ToString())
+            TL.LogMessageCrLf("DiscoverAlpacaDevices", ex.ToString())
         Finally
             ' Restore a usable user interface
             If AlpacaEnabled Then

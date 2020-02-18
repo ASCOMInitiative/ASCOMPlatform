@@ -4,7 +4,7 @@ Imports System.IO
 Imports ASCOM.Utilities.Interfaces
 Imports ASCOM.Utilities.Exceptions
 Imports System.Runtime.InteropServices
-Imports ASCOM.Utilities.Support
+Imports ASCOM.Utilities
 
 ''' <summary>
 ''' Creates a log file for a driver or application. Uses a similar file name and internal format to the serial logger. Multiple logs can be created simultaneously if needed.
@@ -24,7 +24,7 @@ Imports ASCOM.Utilities.Support
 ComVisible(True),
 ClassInterface(ClassInterfaceType.None)>
 Public Class TraceLogger
-    Implements ITraceLogger, ITraceLoggerExtra, IDisposable, ITraceLoggerUtility
+    Implements ITraceLogger, ITraceLoggerExtra, IDisposable
 
     Private Const IDENTIFIER_WIDTH_DEFAULT As Integer = 25 ' Default width of the identifier field. The width can be changed through the TraceLogger.IdentifierWidth property
 
@@ -117,7 +117,7 @@ Public Class TraceLogger
     ''' Disposes of the TraceLogger object
     ''' </summary>
     ''' <remarks></remarks>
-    Public Sub Dispose() Implements IDisposable.Dispose, ITraceLoggerUtility.Dispose
+    Public Sub Dispose() Implements IDisposable.Dispose
         ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
         Dispose(True)
         GC.SuppressFinalize(Me)
@@ -145,7 +145,7 @@ Public Class TraceLogger
     ''' <param name="Message">Message to log</param>
     ''' <remarks>Use this for reporting issues that you don't want to appear on a line already opened 
     ''' with StartLine</remarks>
-    Public Sub LogIssue(ByVal Identifier As String, ByVal Message As String) Implements ITraceLogger.LogIssue, ITraceLoggerUtility.LogIssue
+    Public Sub LogIssue(ByVal Identifier As String, ByVal Message As String) Implements ITraceLogger.LogIssue
         If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
 
         Try
@@ -166,7 +166,7 @@ Public Class TraceLogger
     ''' Insert a blank line into the log file
     ''' </summary>
     ''' <remarks></remarks>
-    Public Sub BlankLine() Implements ITraceLogger.BlankLine, ITraceLoggerUtility.BlankLine
+    Public Sub BlankLine() Implements ITraceLogger.BlankLine
         If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
 
         LogMessage("", "", False)
@@ -183,7 +183,7 @@ Public Class TraceLogger
     ''' <para>Will create a LOGISSUE message in the log if called before a line started by LogStart has been closed with LogFinish. 
     ''' Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
     ''' </remarks>
-    Public Overloads Sub LogMessage(ByVal Identifier As String, ByVal Message As String, ByVal HexDump As Boolean) Implements ITraceLogger.LogMessage, ITraceLoggerUtility.LogMessage
+    Public Overloads Sub LogMessage(ByVal Identifier As String, ByVal Message As String, ByVal HexDump As Boolean) Implements ITraceLogger.LogMessage
         Dim Msg As String = Message
 
         If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
@@ -212,7 +212,7 @@ Public Class TraceLogger
     ''' <para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart.  
     ''' Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
     ''' </remarks>
-    Public Sub LogMessageCrLf(ByVal Identifier As String, ByVal Message As String) Implements ITraceLogger.LogMessageCrLf, ITraceLoggerUtility.LogMessageCrLf
+    Public Sub LogMessageCrLf(ByVal Identifier As String, ByVal Message As String) Implements ITraceLogger.LogMessageCrLf
         If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
 
         Try
@@ -243,7 +243,7 @@ Public Class TraceLogger
     ''' <para>Will create a LOGISSUE message in the log if called before a line started by LogStart has been closed with LogFinish. 
     ''' Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
     ''' </remarks>
-    Public Sub LogStart(ByVal Identifier As String, ByVal Message As String) Implements ITraceLogger.LogStart, ITraceLoggerUtility.LogStart
+    Public Sub LogStart(ByVal Identifier As String, ByVal Message As String) Implements ITraceLogger.LogStart
         If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
 
         Try
@@ -272,7 +272,7 @@ Public Class TraceLogger
     ''' <para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart. 
     ''' Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
     ''' </remarks>
-    Public Overloads Sub LogContinue(ByVal Message As String, ByVal HexDump As Boolean) Implements ITraceLogger.LogContinue, ITraceLoggerUtility.LogContinue
+    Public Overloads Sub LogContinue(ByVal Message As String, ByVal HexDump As Boolean) Implements ITraceLogger.LogContinue
         If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
 
         ' Append a full hex dump of the supplied string if p_Hex is true
@@ -290,7 +290,7 @@ Public Class TraceLogger
     ''' <para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart.  
     ''' Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
     ''' </remarks>
-    Public Overloads Sub LogFinish(ByVal Message As String, ByVal HexDump As Boolean) Implements ITraceLogger.LogFinish, ITraceLoggerUtility.LogFinish
+    Public Overloads Sub LogFinish(ByVal Message As String, ByVal HexDump As Boolean) Implements ITraceLogger.LogFinish
         If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
 
         ' Append a full hex dump of the supplied string if p_Hex is true
@@ -306,7 +306,7 @@ Public Class TraceLogger
     ''' <returns>Boolean, current logging status (enabled/disabled).</returns>
     ''' <remarks>If this property is false then calls to LogMsg, LogStart, LogContinue and LogFinish do nothing. If True, 
     ''' supplied messages are written to the log file.</remarks>
-    Public Property Enabled() As Boolean Implements ITraceLogger.Enabled, ITraceLoggerUtility.Enabled
+    Public Property Enabled() As Boolean Implements ITraceLogger.Enabled
         Get
             Return g_Enabled
         End Get
@@ -334,7 +334,7 @@ Public Class TraceLogger
     ''' TL = New TraceLogger("",TraceName")
     ''' </code>
     ''' </remarks>
-    Public Sub SetLogFile(ByVal LogFileName As String, ByVal LogFileType As String) Implements ITraceLogger.SetLogFile, ITraceLoggerUtility.SetLogFile
+    Public Sub SetLogFile(ByVal LogFileName As String, ByVal LogFileType As String) Implements ITraceLogger.SetLogFile
         If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
 
         g_LogFileName = LogFileName 'Save parameters to use when the first call to write a record is made
@@ -348,7 +348,7 @@ Public Class TraceLogger
     ''' <returns>String filename</returns>
     ''' <remarks>This call will return an empty string until the first line has been written to the log file
     ''' as the file is not created until required.</remarks>
-    Public ReadOnly Property LogFileName() As String Implements ITraceLogger.LogFileName, ITraceLoggerUtility.LogFileName
+    Public ReadOnly Property LogFileName() As String Implements ITraceLogger.LogFileName
         Get
             Return g_LogFileActualName
         End Get
@@ -359,7 +359,7 @@ Public Class TraceLogger
     ''' </summary>
     ''' <returns>String path</returns>
     ''' <remarks>Introduced with Platform 6.4.<para>If set, this path will be used instead of the user's Documents directory default path. This must be Set before the first message Is logged.</para></remarks>
-    Public Property LogFilePath() As String Implements ITraceLogger.LogFilePath, ITraceLoggerUtility.LogFilePath
+    Public Property LogFilePath() As String Implements ITraceLogger.LogFilePath
         Get
             Return g_LogFilePath
         End Get
@@ -374,7 +374,7 @@ Public Class TraceLogger
     ''' <value>Width of the identifier field</value>
     ''' <returns>Integer width</returns>
     ''' <remarks>Introduced with Platform 6.4.<para>If set, this width will be used instead of the default identifier field width.</para></remarks>
-    Public Property IdentifierWidth As Integer Implements ITraceLogger.IdentifierWidth, ITraceLoggerUtility.IdentifierWidth
+    Public Property IdentifierWidth As Integer Implements ITraceLogger.IdentifierWidth
         Get
             Return g_IdentifierWidth
         End Get
@@ -400,7 +400,7 @@ Public Class TraceLogger
     ''' with HexDump set False to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)>
-    Public Overloads Sub LogMessage(ByVal Identifier As String, ByVal Message As String) Implements ITraceLoggerExtra.LogMessage, ITraceLoggerUtility.LogMessage
+    Public Overloads Sub LogMessage(ByVal Identifier As String, ByVal Message As String) Implements ITraceLoggerExtra.LogMessage
         If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
 
         Try
@@ -428,7 +428,7 @@ Public Class TraceLogger
     ''' with HexDump set False to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)>
-    Public Overloads Sub LogContinue(ByVal Message As String) Implements ITraceLoggerExtra.LogContinue, ITraceLoggerUtility.LogContinue
+    Public Overloads Sub LogContinue(ByVal Message As String) Implements ITraceLoggerExtra.LogContinue
         If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
 
         Try
@@ -459,7 +459,7 @@ Public Class TraceLogger
     ''' with HexDump set False to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)>
-    Public Overloads Sub LogFinish(ByVal Message As String) Implements ITraceLoggerExtra.LogFinish, ITraceLoggerUtility.LogFinish
+    Public Overloads Sub LogFinish(ByVal Message As String) Implements ITraceLoggerExtra.LogFinish
         If Me.traceLoggerHasBeenDisposed Then Return ' Ignore this call if the trace logger has been disposed
 
         Try
