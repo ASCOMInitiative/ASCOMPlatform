@@ -15,7 +15,10 @@
       <title>Key Changes in 6.5 - For Everyone</title>
       <content>
         <list class="bullet">
-          <listItem>Alpaca devices can be discovered by the Chooser and drivers are automatically created for them.</listItem>
+          <listItem>
+            Alpaca devices can be discovered by the Chooser and drivers are automatically created for them. Further information:
+            <link xlink:href="e3870a2f-582a-4ab4-b37f-e9b1c37a2030">Using Alpaca devices through the Chooser</link>.
+        </listItem>
           <listItem>Chooser can be configured to display more information about drivers than previously.</listItem>
           <listItem>The Chooser dialogue width can be increased if required.</listItem>
           <listItem>Telescope covers and camera calibration devices are now supported through a new CoverCalibrator interface.</listItem>
@@ -40,8 +43,10 @@
           <listItem>The Diagnostics tool is  more tolerant of simulator configurations that are not set to default values.</listItem>
           <listItem>The Utilities component has been adapted to work when called by installers that use Inno 5.5.9 and later.</listItem>
           <listItem>The TraceLogger component is now better behaved when called after it has been disposed.</listItem>
+          <listItem>A registry handle leak in the Profile component has been fixed.</listItem>
           <listItem>All local server simulators now start just one instance when used concurrently from both normal and elevated clients.</listItem>
           <listItem>The Transform component now validates supplied Julian dates.</listItem>
+          <listItem>Camera simulator memory management has been significantly improved.</listItem>
           <listItem>
             ObservingConditions Hub and Simulator
             <list class="bullet">
@@ -88,14 +93,19 @@
               <listItem>Clarification: The Focuser temperature unit is degrees Celsius.</listItem>
               <listItem>Clarification: Telescope.PulseGuide may throw an InvalidValueException if called when an incompatible command is already underway e.g. a slew is in progress.</listItem>
               <listItem>Clarification: IDomeV2 wording has been clarified for many properties and methods.</listItem>
-              <listItem>The NOVASCOM and Kepler components are no longer flagged as deprecated because they provide unique functionality within the Platform.</listItem>
-              <listItem>The version of ASCOM Controls installed by the Platform has been marked as deprecated. An updated version of the controls is available as a NuGet package. The displayed message contains a reference to the new TA.Winforms.Controls NuGet package.</listItem>
             </list>
           </listItem>
+          <listItem>The NOVASCOM and Kepler components are no longer flagged as deprecated because they provide unique functionality within the Platform.</listItem>
+          <listItem>The version of ASCOM Controls installed by the Platform has been marked as deprecated. An updated version of the controls is available as a NuGet package. The displayed message contains a reference to the new TA.Winforms.Controls NuGet package.</listItem>
+          <listItem>The Product Version tag of all executables is now the Platform Git build SHA.</listItem>
+          <listItem>Diagnostics now flags an error if the installed Platform and Developer components versions are different.</listItem>
+          <listItem>The installer now advocates using Conform to test drivers.</listItem>
+          <listItem>The deprecated NOVAS2, NOVAS2COM and NOVAS3 components no longer appear in the developer help file.</listItem>
+          <listItem>DriverAccess can now handle ArrayLists from .NET Core drivers.</listItem>
           <listItem>
-            Templates and Driver Install Script Generator
+            Templates and the Driver Install Script Generator
             <list class="bullet">
-              <listItem>Align TrackingRates class in VB driver template to the C# template code.</listItem>
+              <listItem>The TrackingRates class in VB driver template is now aligned to the C# template code.</listItem>
               <listItem>The local server template has been updated so that simulators will start just one instance when used from normal and elevated clients concurrently.</listItem>
               <listItem>The TraceLogger in the C# template is now an instance variable because of issues arising when disposing the original static TraceLogger variable.</listItem>
               <listItem>CoverCalibrator device support has been added to the templates and the Driver Install Script Generator.</listItem>
@@ -103,10 +113,6 @@
               <listItem>The support URL has been changed to the new ASCOM Groups.io forum.</listItem>
             </list>
           </listItem>
-          <listItem>The Product Version tag of all executables is now the Platform Git build SHA.</listItem>
-          <listItem>The installer now advocates using Conform to test drivers.</listItem>
-          <listItem>The deprecated NOVAS2, NOVAS2COM and NOVAS3 components no longer appear in the developer help file.</listItem>
-          <listItem>DriverAccess can now handle ArrayLists from .NET Core drivers.</listItem>
         </list>
       </content>
     </section>
