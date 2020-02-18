@@ -15,7 +15,8 @@ Class DeviceRotator
 
 #Region "IRotator Implementation"
 
-    Private rotatorPosition As Single = 0 ' Absolute position angle of the rotator 
+    Private rotatorPosition As Single = 0 ' Synced or mechanical position angle of the rotator depending on the value of CanSync
+    Private rotatorMechanicalPosition As Single = 0 ' Mechanical position angle Of the rotator 
 
     Public ReadOnly Property CanReverse() As Boolean Implements IRotatorV2.CanReverse
         Get
@@ -79,6 +80,38 @@ Class DeviceRotator
             Return rotatorPosition
         End Get
     End Property
+
+    ' IRotatorV3 methods
+
+    Public ReadOnly Property CanSync As Boolean
+        Get
+            TL.LogMessage("CanSync Get", False.ToString());
+            Return False;
+        End Get
+    End Property
+
+    Public ReadOnly Property MechanicalPosition As Single
+        Get
+            TL.LogMessage("MechanicalPosition Get", rotatorMechanicalPosition.ToString())
+            Return rotatorMechanicalPosition
+        End Get
+    End Property
+
+    Public Sub MoveMechanical(Position As Single)
+        TL.LogMessage("MoveMechanical", Position.ToString()) ' Move To this position
+
+        ' TODO Implement correct sync behaviour. i.e. If the rotator has been synced the mechanical And rotator positions won't be the same
+        rotatorMechanicalPosition = astroUtilities.Range(Position, 0.0, True, 360.0, False) ' Ensure value Is In the range 0.0..359.9999...
+        rotatorPosition = astroUtilities.Range(Position, 0.0, True, 360.0, False) ' Ensure value Is In the range 0.0..359.9999...
+    End Sub
+
+    Public Sub Sync(Position As Single)
+
+        TL.LogMessage("Sync", Position.ToString()) ' Sync To this position
+
+        ' TODO Implement correct sync behaviour. i.e. the rotator mechanical And rotator positions may Not be the same
+        rotatorPosition = astroUtilities.Range(Position, 0.0, True, 360.0, False); // Ensure value Is In the range 0.0..359.9999...
+    End Sub
 
 #End Region
 

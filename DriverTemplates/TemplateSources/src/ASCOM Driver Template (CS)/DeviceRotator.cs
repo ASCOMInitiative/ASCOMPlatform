@@ -98,9 +98,7 @@ class DeviceRotator
         }
     }
 
-    #endregion
-
-    #region IRotatorV3 Methods
+    // IRotatorV3 methods
 
     public bool CanSync
     {
@@ -131,10 +129,9 @@ class DeviceRotator
 
     public void Sync(float Position)
     {
-        tl.LogMessage("Sync", Position.ToString()); // Move to this position
+        tl.LogMessage("Sync", Position.ToString()); // Sync to this position
 
         // TODO: Implement correct sync behaviour. i.e. the rotator mechanical and rotator positions may not be the same
-        mechanicalPosition = (float)astroUtilities.Range(Position, 0.0, true, 360.0, false); // Ensure value is in the range 0.0..359.9999...
         rotatorPosition = (float)astroUtilities.Range(Position, 0.0, true, 360.0, false); // Ensure value is in the range 0.0..359.9999...
     }
 
