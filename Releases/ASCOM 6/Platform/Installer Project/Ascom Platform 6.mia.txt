@@ -1063,8 +1063,8 @@ Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\Microsof
 Comment: Add Alpaca support assemblies to the GAC
 Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll to Global Assembly Cache
 Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.pdb to $WINDIR$\Symbols\dll
-Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\bin\Release\ASCOM.Utilities.Support.dll to Global Assembly Cache
-Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\bin\Release\ASCOM.Utilities.Support.pdb to $WINDIR$\Symbols\dll
+Comment: Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\bin\Release\ASCOM.Utilities.Support.dll to Global Assembly Cache
+Comment: Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\bin\Release\ASCOM.Utilities.Support.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Shared Resources\bin\Release\ASCOM.AlpacaSharedResources.dll to Global Assembly Cache
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Shared Resources\bin\Release\ASCOM.AlpacaSharedResources.pdb to $WINDIR$\Symbols\dll
 Comment: Add the dynamic client driver files
@@ -1579,8 +1579,8 @@ if Variable SUCCESS not Equals ERROR
   Run Program $NGEN32$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Cache (at end of file)
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Support.Utilities - v6.0.0.0
-  Run Program $NGEN32$ "ASCOM.Utilities.Support, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Support Utilities (at end of file)
+  Comment: Run Program $NGEN32$ "ASCOM.Utilities.Support, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Comment: Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Support Utilities (at end of file)
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Newtonsoft.Json- v6.0.0.0
   Run Program $NGEN32$ "ASCOM.Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Newtonsoft JSON Support (at end of file)
@@ -1720,8 +1720,8 @@ if Variable SUCCESS not Equals ERROR
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - ASCOM Cache (at end of file)
     Set Variable MYPROGRESS to 95
     Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Support.Utilities - v6.0.0.0
-    Run Program $NGEN64$ "ASCOM.Utilities.Support, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - ASCOM Support Utilities (at end of file)
+    Comment: Run Program $NGEN64$ "ASCOM.Utilities.Support, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Comment: Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - ASCOM Support Utilities (at end of file)
     Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Newtonsoft.Json- v6.0.0.0
     Run Program $NGEN64$ "ASCOM.Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - ASCOM Newtonsoft JSON Support (at end of file)
