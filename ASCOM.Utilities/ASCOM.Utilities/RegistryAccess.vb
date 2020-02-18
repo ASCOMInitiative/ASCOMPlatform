@@ -131,7 +131,7 @@ Friend Class RegistryAccess
         ProfileMutex = New System.Threading.Mutex(False, PROFILE_MUTEX_NAME)
 
         Try
-            ProfileRegKey = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
+            ProfileRegKey = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
             PlatformVersion = GetProfile("\", "PlatformVersion")
             'OK, no exception so assume that we are initialised
         Catch ex As System.ComponentModel.Win32Exception 'This occurs when the key does not exist and is OK if we are ignoring checks
@@ -154,7 +154,7 @@ Friend Class RegistryAccess
     ' IDisposable
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
         If Not Me.disposedValue Then
-            If Not (TL Is Nothing) Then Try : TL.LogMessage("Dispose", "RegistryAccess Dispose has been Called.") : Catch : End Try
+            If Not (TL Is Nothing) Then Try : TL.LogMessage("Dispose", $"RegistryAccess Dispose has been called with disposing = {disposing}.") : Catch : End Try
             Try : sw.Stop() : Catch : End Try 'Clean up the stopwatches
             Try : sw = Nothing : Catch : End Try
             Try : swSupport.Stop() : Catch : End Try
@@ -166,6 +166,7 @@ Friend Class RegistryAccess
             Try : ProfileRegKey.Close() : Catch : End Try
             Try : ProfileRegKey = Nothing : Catch : End Try
 
+            ' Release the registry key OS handles
             For Each ptr As IntPtr In HandleList
                 Try
                     If Not (TL Is Nothing) Then Try : TL.LogMessage("Dispose", $"Closing handle {ptr.ToString("X8")}") : Catch : End Try
@@ -458,7 +459,7 @@ Friend Class RegistryAccess
             End Select
 
             'Make sure we have a valid key now that we have migrated the profile to the registry
-            ProfileRegKey = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
+            ProfileRegKey = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
 
             sw.Stop() : LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
         Catch ex As Exception
@@ -643,7 +644,7 @@ Friend Class RegistryAccess
         swLocal = Stopwatch.StartNew
 
         'FromKey = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME, True)
-        FromKey = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegWow64Options.KEY_WOW64_32KEY)
+        FromKey = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegWow64Options.KEY_WOW64_32KEY)
         ToKey = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME & "\" & REGISTRY_5_BACKUP_SUBKEY)
         PlatformVersion = ToKey.GetValue("PlatformVersion", "").ToString ' Test whether we have already backed up the profile
         If String.IsNullOrEmpty(PlatformVersion) Then
@@ -710,8 +711,8 @@ Friend Class RegistryAccess
             ListRegistryACLs(Registry.ClassesRoot, "HKEY_CLASSES_ROOT")
             ListRegistryACLs(Registry.LocalMachine.OpenSubKey("SOFTWARE"), "HKEY_LOCAL_MACHINE\SOFTWARE")
             ListRegistryACLs(Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft"), "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft")
-            ListRegistryACLs(OpenSubKey(Registry.LocalMachine, "SOFTWARE", True, RegWow64Options.KEY_WOW64_64KEY), "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node")
-            ListRegistryACLs(OpenSubKey(Registry.LocalMachine, "SOFTWARE\Microsoft", True, RegWow64Options.KEY_WOW64_32KEY), "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft")
+            ListRegistryACLs(OpenSubKey3264(Registry.LocalMachine, "SOFTWARE", True, RegWow64Options.KEY_WOW64_64KEY), "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node")
+            ListRegistryACLs(OpenSubKey3264(Registry.LocalMachine, "SOFTWARE\Microsoft", True, RegWow64Options.KEY_WOW64_32KEY), "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft")
         Else
             LogMessage("SetRegistryACL", "Listing base key ACLS in 32bit mode")
             ListRegistryACLs(Registry.ClassesRoot, "HKEY_CLASSES_ROOT")
@@ -720,7 +721,7 @@ Friend Class RegistryAccess
         End If
 
         LogMessage("SetRegistryACL", "Creating root ASCOM key ""\""")
-        Key = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY) ' Always create the key in the 32bit portion of the registry for backward compatibility
+        Key = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY) ' Always create the key in the 32bit portion of the registry for backward compatibility
 
         LogMessage("SetRegistryACL", "Retrieving ASCOM key ACL rule")
         TL.BlankLine()
@@ -1049,7 +1050,7 @@ Friend Class RegistryAccess
         swLocal = Stopwatch.StartNew
 
         FromKey = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME & "\" & REGISTRY_5_BACKUP_SUBKEY)
-        ToKey = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
+        ToKey = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
         LogMessage("Restore50", "Restoring Profile 5 to " & ToKey.Name)
         CopyRegistry(FromKey, ToKey)
         FromKey.Close() 'Close the key after migration
@@ -1066,7 +1067,7 @@ Friend Class RegistryAccess
         swLocal = Stopwatch.StartNew
 
         FromKey = Registry.CurrentUser.OpenSubKey(REGISTRY_ROOT_KEY_NAME & "\" & REGISTRY_55_BACKUP_SUBKEY)
-        ToKey = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
+        ToKey = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
         LogMessage("Restore55", "Restoring Profile 5.5 to " & ToKey.Name)
         CopyRegistry(FromKey, ToKey)
         FromKey.Close() 'Close the key after migration
@@ -1131,7 +1132,7 @@ Friend Class RegistryAccess
     'OpenSubKey should be replaced with Microsoft.Win32.RegistryKey.OpenBaseKey method
 
     '<Obsolete("Replace with Microsoft.Win32.RegistryKey.OpenBaseKey method in Framework 4", False)> _
-    Friend Function OpenSubKey(ByVal ParentKey As RegistryKey, ByVal SubKeyName As String, ByVal Writeable As Boolean, ByVal Options As RegWow64Options) As RegistryKey
+    Friend Function OpenSubKey3264(ByVal ParentKey As RegistryKey, ByVal SubKeyName As String, ByVal Writeable As Boolean, ByVal Options As RegWow64Options) As RegistryKey
         Dim SubKeyHandle As Integer
         Dim Result As Integer
 
