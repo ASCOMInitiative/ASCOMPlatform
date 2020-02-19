@@ -11,6 +11,7 @@ Imports System.Diagnostics
 Imports ASCOM.Utilities.Serial
 
 #Region "COM Registration Support"
+
 Module COMRegistrationSupport
     ''' <summary>
     ''' Update a COM registration assembly executable reference (mscoree.dll) from a relative path to an absolute path
@@ -111,10 +112,13 @@ Module COMRegistrationSupport
 
     End Sub
 End Module
+
 #End Region
 
 #Region "Registry Utility Code"
+
 Module RegistryCommonCode
+
     Friend Function GetWaitType(ByVal p_Name As String, ByVal p_DefaultValue As ASCOM.Utilities.Serial.WaitType) As WaitType
         Dim l_Value As WaitType
         Dim m_HKCU, m_SettingsKey As RegistryKey
@@ -179,6 +183,7 @@ Module RegistryCommonCode
 
         Return l_Value
     End Function
+
     Friend Function GetString(ByVal p_Name As String, ByVal p_DefaultValue As String) As String
         Dim l_Value As String = ""
         Dim m_HKCU, m_SettingsKey As RegistryKey
@@ -210,6 +215,7 @@ Module RegistryCommonCode
 
         Return l_Value
     End Function
+
     Friend Function GetDouble(ByVal p_Key As RegistryKey, ByVal p_Name As String, ByVal p_DefaultValue As Double) As Double
         Dim l_Value As Double
         Dim m_HKCU, m_SettingsKey As RegistryKey
@@ -242,6 +248,7 @@ Module RegistryCommonCode
 
         Return l_Value
     End Function
+
     Friend Function GetDate(ByVal p_Name As String, ByVal p_DefaultValue As Date) As Date
         Dim l_Value As Date
         Dim m_HKCU, m_SettingsKey As RegistryKey
@@ -273,6 +280,7 @@ Module RegistryCommonCode
 
         Return l_Value
     End Function
+
     Friend Sub SetName(ByVal p_Name As String, ByVal p_Value As String)
         Dim m_HKCU, m_SettingsKey As RegistryKey
 
@@ -289,11 +297,15 @@ Module RegistryCommonCode
         m_HKCU = Nothing
 
     End Sub
+
 End Module
+
 #End Region
 
 #Region "Windows event log code"
+
 Module EventLogCode
+
     ''' <summary>
     ''' Add an event record to the ASCOM Windows event log
     ''' </summary>
@@ -368,6 +380,7 @@ Module EventLogCode
             End Try
         End Try
     End Sub
+
 End Module
 
 #End Region
@@ -375,6 +388,15 @@ End Module
 #Region "Version Code"
 
 Module VersionCode
+
+    Friend Function GetCommonProgramFilesx86() As String
+        If (IntPtr.Size = 8) Or (Not String.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))) Then
+            Return Environment.GetEnvironmentVariable("CommonProgramFiles(x86)")
+        Else
+            Return Environment.GetEnvironmentVariable("CommonProgramFiles")
+        End If
+    End Function
+
     Friend Sub RunningVersions(ByVal TL As TraceLogger)
         Dim Assemblies() As Assembly 'Define an array of assembly information
         Dim AppDom As System.AppDomain = AppDomain.CurrentDomain
@@ -941,9 +963,11 @@ Module VersionCode
     End Function
 
 End Module
+
 #End Region
 
 #Region "Old Code"
+
 'Try 'Get the list of 32bit only drivers
 'Drivers32Bit = ProfileStore.EnumProfile(DRIVERS_32BIT)
 'Catch ex1 As Exception
@@ -971,11 +995,12 @@ End Module
 '               "Please contact the driver author to see if there is a 32bit compatible version."
 ' End If
 
-
 #End Region
 
 #Region "Force Platform version code"
+
 Module AscomSharedCode
+
     Friend Function ConditionPlatformVersion(ByVal PlatformVersion As String, ByVal Profile As RegistryAccess, ByVal TL As TraceLogger) As String
         Dim ModuleFileName, ForcedFileNameKey As String, ForcedFileNames, ForcedSeparators As SortedList(Of String, String)
         Dim PC As PerformanceCounter
@@ -1055,7 +1080,9 @@ Module AscomSharedCode
         End Try
         If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  Returning: """ & ConditionPlatformVersion & """")
     End Function
+
 End Module
+
 #End Region
 
 #Region "PeReader"
@@ -1559,7 +1586,6 @@ Friend Class PEReader
     End Sub
 #End Region
 
-#End Region
-
 End Class
 
+#End Region

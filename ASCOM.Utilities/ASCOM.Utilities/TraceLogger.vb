@@ -52,11 +52,19 @@ Public Class TraceLogger
     ''' <para>This call enables automatic logging and sets the file type to "Default".</para></remarks>
     Public Sub New()
         MyBase.New()
+
         g_IdentifierWidth = IDENTIFIER_WIDTH_DEFAULT
         g_LogFileName = "" ' Set automatic filenames as default
         autoLogFilePath = True ' Set automatic filenames as default
         g_LogFileType = "Default" '"Set an arbitrary name in case someone forgets to call SetTraceLog
-        g_DefaultLogFilePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & TRACE_LOGGER_PATH & TRACE_LOGGER_FILENAME_BASE & Format(Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT)
+
+        ' Get the correct log file path depending on whether we are running as the "System" user that has no documents folder or a regular user who does
+        If String.IsNullOrEmpty(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)) Then ' We are running as the "System" user
+            g_DefaultLogFilePath = GetCommonProgramFilesx86() & TRACE_LOGGER_SYSTEM_PATH & TRACE_LOGGER_FILENAME_BASE & Format(Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT)
+        Else ' We are running as a normal user
+            g_DefaultLogFilePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & TRACE_LOGGER_PATH & TRACE_LOGGER_FILENAME_BASE & Format(Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT)
+        End If
+
         g_LogFilePath = g_DefaultLogFilePath ' Initialise the log file path to the default value
         mut = New Threading.Mutex(False, "TraceLoggerMutex")
     End Sub
@@ -68,14 +76,9 @@ Public Class TraceLogger
     ''' <param name="LogFileType">String identifying the type of log e,g, Focuser, LX200, GEMINI, MoonLite, G11</param>
     ''' <remarks>The LogFileType is used in the file name to allow you to quickly identify which of several logs contains the information of interest.</remarks>
     Public Sub New(ByVal LogFileName As String, ByVal LogFileType As String)
-        MyBase.New()
-        g_IdentifierWidth = IDENTIFIER_WIDTH_DEFAULT
+        Me.New()
         g_LogFileName = LogFileName 'Save parameters to use when the first call to write a record is made
-        autoLogFilePath = True ' Set automatic filenames as default
         g_LogFileType = LogFileType
-        g_DefaultLogFilePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & TRACE_LOGGER_PATH & TRACE_LOGGER_FILENAME_BASE & Format(Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT)
-        g_LogFilePath = g_DefaultLogFilePath ' Initialise the log file path to the default value
-        mut = New Threading.Mutex
     End Sub
 
     ''' <summary>
@@ -84,14 +87,8 @@ Public Class TraceLogger
     ''' <param name="LogFileType">String identifying the type of log e,g, Focuser, LX200, GEMINI, MoonLite, G11</param>
     ''' <remarks>The LogFileType is used in the file name to allow you to quickly identify which of several logs contains the information of interest.</remarks>
     Public Sub New(ByVal LogFileType As String)
-        MyBase.New()
-        g_IdentifierWidth = IDENTIFIER_WIDTH_DEFAULT
-        g_LogFileName = "" 'Set automatic filenames as default
-        autoLogFilePath = True ' Set automatic filenames as default
+        Me.New()
         g_LogFileType = LogFileType
-        g_DefaultLogFilePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & TRACE_LOGGER_PATH & TRACE_LOGGER_FILENAME_BASE & Format(Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT)
-        g_LogFilePath = g_DefaultLogFilePath ' Initialise the log file path to the default value
-        mut = New Threading.Mutex
         g_Enabled = True ' Enable the log
     End Sub
 
@@ -497,6 +494,7 @@ Public Class TraceLogger
         Dim FileNameSuffix As Integer = 0, ok As Boolean = False, FileNameBase, TodaysLogFilePath As String
         Select Case g_LogFileName
 
+            ' No filename has been specified so use the automatically generated name
             Case "", SERIAL_AUTO_FILENAME
                 If g_LogFileType = "" Then Throw New ValueNotSetException("TRACELOGGER.CREATELOGFILE - Call made but no log file type has been set")
 
@@ -535,6 +533,7 @@ Public Class TraceLogger
 
                 End Try
 
+                ' The user has provided a specific filename
             Case Else 'Create log file based on supplied name
                 Try
                     g_LogFile = New StreamWriter(g_LogFileName & ".txt", False)

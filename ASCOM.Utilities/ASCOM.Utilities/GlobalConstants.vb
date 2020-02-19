@@ -95,6 +95,7 @@ Module GlobalConstants
     Friend Const TRACE_LOGGER_PATH As String = "\ASCOM" ' Path to TraceLogger directory from My Documents
     Friend Const TRACE_LOGGER_FILENAME_BASE As String = "\Logs " ' Fixed part of TraceLogger file name.  Note: The trailing space must be retained!
     Friend Const TRACE_LOGGER_FILE_NAME_DATE_FORMAT As String = "yyyy-MM-dd"
+    Friend Const TRACE_LOGGER_SYSTEM_PATH As String = "\ASCOM\SystemLogs" ' Location where "System" user logs will be placed
 
     Friend Enum EventLogErrors As Integer
         EventLogCreated = 0
