@@ -34,6 +34,22 @@ namespace ASCOM.Simulator
 {
     public static class TelescopeHardware
     {
+        #region How the simulator works
+
+        // The telescope is implemented using two axes that represent the primary and secondary telescope axes.
+        // The role of the axes varies depending on the mount type.
+        // The primary axis is the azimuth axis for an AltAz mount and the hour angle axis for polar mounts.
+        // The secondary axis is the altitude axis for AltAz mounts and the declination axis for polar mounts.
+
+        // All motion is done and all positions are set and obtained using these axes.
+
+        // Vectors are used for pairs of angles that represent the various positions and rates
+        // Vector.X is the primary axis, Hour angle, Right Ascension or azimuth and Vector.Y is the secondary axis, declination or altitude.
+
+        // Ra and hour angle are in hours
+        // Mount positions, Declination, azimuth and altitude are in degrees.
+
+        #endregion
         #region Constants
         // Startup options values       
         private const string STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION = "Start up at simulator Default Position";
@@ -47,7 +63,10 @@ namespace ASCOM.Simulator
         private const double SOLAR_RATE_DEG_SEC = 15.0 / 3600;
         private const double LUNAR_RATE_DEG_SEC = 14.515 / 3600;
         private const double KING_RATE_DEG_SEC = 15.037 / 3600;
-        private const double SIDEREAL_RATE_SEC_SEC = 15.041 / 15.0;
+        private const double ARCSEC_TO_DEGREES = 1.0 / 3600.0;
+        private const double DEGREES_TO_ARCSEC = 3600.0;
+        private const double SIDEREAL_SECONDS_TO_SI_SECONDS = 0.9972695601852;
+        private const double SI_SECONDS_TO_SIDEREAL_SECONDS = 1.002737915528;
         #endregion
 
         #region Private variables
@@ -1207,8 +1226,8 @@ namespace ASCOM.Simulator
 
         public static double DeclinationRate
         {
-            get { return rateRaDec.Y; }
-            set { rateRaDec.Y = value; }
+            get { return rateRaDec.Y * DEGREES_TO_ARCSEC; }
+            set { rateRaDec.Y = value * ARCSEC_TO_DEGREES; }
         }
 
         public static double Declination
@@ -1297,8 +1316,8 @@ namespace ASCOM.Simulator
         // converts the rate between seconds per sidereal second and seconds per second
         public static double RightAscensionRate
         {
-            get { return rateRaDec.X / SIDEREAL_RATE_SEC_SEC; }
-            set { rateRaDec.X = value * SIDEREAL_RATE_SEC_SEC; }
+            get { return rateRaDec.X * SI_SECONDS_TO_SIDEREAL_SECONDS * DEGREES_TO_ARCSEC; }
+            set { rateRaDec.X = value * SIDEREAL_SECONDS_TO_SI_SECONDS * ARCSEC_TO_DEGREES; }
         }
 
         public static double GuideRateDeclination

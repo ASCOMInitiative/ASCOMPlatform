@@ -494,8 +494,10 @@ namespace ASCOM.Simulator
             }
             set
             {
-                SharedResources.TrafficLine(SharedResources.MessageType.Gets, "DeclinationRate:-> " + value);
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "DeclinationRate:-> ");
+                CheckCapability(TelescopeHardware.CanSetEquatorialRates, "DeclinationRate", true);
                 TelescopeHardware.DeclinationRate = value;
+                SharedResources.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -838,12 +840,12 @@ namespace ASCOM.Simulator
         {
             get
             {
-                SharedResources.TrafficLine(SharedResources.MessageType.Gets, "RightAscensionRate->: (done)");
+                SharedResources.TrafficLine(SharedResources.MessageType.Gets, "RightAscensionRate: " + TelescopeHardware.RightAscensionRate);
                 return TelescopeHardware.RightAscensionRate;
             }
             set
             {
-                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "RightAscensionRate =- ");
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "RightAscensionRate:-> ");
                 CheckCapability(TelescopeHardware.CanSetEquatorialRates, "RightAscensionRate", true);
                 TelescopeHardware.RightAscensionRate = value;
                 SharedResources.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
