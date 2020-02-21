@@ -38,7 +38,7 @@ namespace ASCOM.DeviceHub
 			int domeRadius;
 			int gemAxisOffset;
 			int azimuthAccuracy;
-			int azimuthAdjustment;
+			double azimuthAdjustment;
 			int slaveInterval;
 			bool loggerEnabled;
 			bool usePOTHCalculation;
@@ -53,7 +53,7 @@ namespace ASCOM.DeviceHub
 				domeRadius = Convert.ToInt32( profile.GetValue( DriverID, _radiusProfileName, String.Empty, _radiusDefault ) );
 				gemAxisOffset = Convert.ToInt32( profile.GetValue( DriverID, _gemAxisOffsetProfileName, String.Empty, _gemAxisOffsetDefault ) );
 				azimuthAccuracy = Convert.ToInt32( profile.GetValue( DriverID, _azimuthAccuracyProfileName, String.Empty, _azimuthAccuracyDefault ) );
-				azimuthAdjustment = Convert.ToInt32( profile.GetValue( DriverID, _azimuthAdjustmentProfileName, String.Empty, _azimuthAdjustmentDefault ) );
+				azimuthAdjustment = Convert.ToDouble( profile.GetValue( DriverID, _azimuthAdjustmentProfileName, String.Empty, _azimuthAdjustmentDefault ) );
 				slaveInterval = Convert.ToInt32( profile.GetValue( DriverID, _slaveIntervalProfileName, String.Empty, _slaveIntervalDefault ) );
 				loggerEnabled = Convert.ToBoolean( profile.GetValue( DriverID, _traceStateProfileName, String.Empty, _traceStateDefault ) );
 				usePOTHCalculation = Convert.ToBoolean( profile.GetValue( DriverID, _usePOTHSlavingCalculationProfileName, String.Empty, _usePOTHSlavingCalculationDefault ) );
