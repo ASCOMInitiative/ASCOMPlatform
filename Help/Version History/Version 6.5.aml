@@ -60,7 +60,7 @@
               <listItem>The TrackingRate property now validates the supplied rate.</listItem>
               <listItem>IsPulseGuiding now returns False after a synchronous move when dual axis pulse guide is disabled.</listItem>
               <listItem>The CanOptics and CanSlewAsync configuration values are now persisted correctly.</listItem>
-              <listItem>RightAscensionRate and DeclinationRate movements are no longer four times larger than expected.</listItem>
+              <listItem>RightAscensionRate and DeclinationRate movements are no longer 14,400 times larger than expected.</listItem>
             </list>
           </listItem>
         </list>
