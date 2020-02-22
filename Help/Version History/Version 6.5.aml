@@ -18,7 +18,7 @@
           <listItem>
             Alpaca devices can be discovered by the Chooser and drivers are automatically created for them. Further information:
             <link xlink:href="e3870a2f-582a-4ab4-b37f-e9b1c37a2030">Using Alpaca devices through the Chooser</link>.
-        </listItem>
+          </listItem>
           <listItem>Chooser can be configured to display more information about drivers than previously.</listItem>
           <listItem>The Chooser dialogue width can be increased if required.</listItem>
           <listItem>Telescope covers and camera calibration devices are now supported through a new CoverCalibrator interface.</listItem>
@@ -40,13 +40,18 @@
       <title>Issues Fixed - Platform</title>
       <content>
         <list class="bullet">
-          <listItem>The Diagnostics tool is  more tolerant of simulator configurations that are not set to default values.</listItem>
-          <listItem>The Utilities component has been adapted to work when called by installers that use Inno 5.5.9 and later.</listItem>
-          <listItem>The TraceLogger component is now better behaved when called after it has been disposed.</listItem>
-          <listItem>A registry handle leak in the Profile component has been fixed.</listItem>
+          <listItem>The Diagnostics tool is more tolerant of simulator configurations that are not set to default values.</listItem>
           <listItem>All local server simulators now start just one instance when used concurrently from both normal and elevated clients.</listItem>
-          <listItem>The Transform component now validates supplied Julian dates.</listItem>
           <listItem>Camera simulator memory management has been significantly improved.</listItem>
+          <listItem>
+            ASCOM Utilities
+            <list class="bullet">
+              <listItem>Utilities components have been adapted to work when called by installers that use Inno 5.5.9 and later.</listItem>
+              <listItem>TraceLogger is better behaved when called after it has been disposed.</listItem>
+              <listItem>A registry handle leak in the Profile component has been fixed.</listItem>
+              <listItem>Transform now validates supplied Julian dates.</listItem>
+            </list>
+          </listItem>
           <listItem>
             ObservingConditions Hub and Simulator
             <list class="bullet">
