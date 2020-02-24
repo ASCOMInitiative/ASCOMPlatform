@@ -33,6 +33,8 @@ Friend Class ChooserForm
     Private Const ALPACA_SHOW_DISCOVERED_DEVICES As String = "Show discovered Alpaca devices" : Private Const ALPACA_SHOW_DISCOVERED_DEVICES_DEFAULT As Boolean = False
     Private Const ALPACA_SHOW_DEVICE_DETAILS As String = "Show Alpaca device details" : Private Const ALPACA_SHOW_DEVICE_DETAILS_DEFAULT As Boolean = False
     Private Const ALPACA_CHOOSER_WIDTH As String = "Alpaca Chooser width" : Private Const ALPACA_CHOOSER_WIDTH_DEFAULT As Integer = 0
+    Private Const ALPACA_USE_IPV4 As String = "Use IPv4" : Private Const ALPACA_USE_IPV4_DEFAULT As Boolean = True
+    Private Const ALPACA_USE_IPV6 As String = "Use IPv6" : Private Const ALPACA_USE_IPV6_DEFAULT As Boolean = False
 
     ' Alpaca integration constants
     Private Const ALPACA_DYNAMIC_CLIENT_MANAGER_RELATIVE_PATH As String = "ASCOM\Platform 6\Tools\AlpacaDynamicClientManager"
@@ -748,7 +750,6 @@ Friend Class ChooserForm
         ReadState("Telescope")
     End Sub
 
-
     Private Overloads Sub ReadState(DeviceType As String)
         Try
             TL?.LogMessageCrLf("ChooserReadState", $"Reading state for device type: {DeviceType}. Configuration key: {CONFIGRATION_SUBKEY}, Alpaca enabled: {$"{DeviceType} {ALPACA_ENABLED}"}, ALapca default: {ALPACA_ENABLED_DEFAULT}")
@@ -764,7 +765,8 @@ Friend Class ChooserForm
             AlpacaShowDeviceDetails = Convert.ToBoolean(registryAccess.GetProfile(CONFIGRATION_SUBKEY, ALPACA_SHOW_DEVICE_DETAILS, ALPACA_SHOW_DEVICE_DETAILS_DEFAULT.ToString()), CultureInfo.InvariantCulture)
             AlpacaShowDiscoveredDevices = Convert.ToBoolean(registryAccess.GetProfile(CONFIGRATION_SUBKEY, ALPACA_SHOW_DISCOVERED_DEVICES, ALPACA_SHOW_DISCOVERED_DEVICES_DEFAULT.ToString()), CultureInfo.InvariantCulture)
             AlpacaChooserIncrementalWidth = Convert.ToInt32(registryAccess.GetProfile(CONFIGRATION_SUBKEY, ALPACA_CHOOSER_WIDTH, ALPACA_CHOOSER_WIDTH_DEFAULT.ToString()), CultureInfo.InvariantCulture)
-
+            AlpacaUseIpV4 = Convert.ToBoolean(registryAccess.GetProfile(CONFIGRATION_SUBKEY, ALPACA_USE_IPV4, ALPACA_USE_IPV4_DEFAULT.ToString()), CultureInfo.InvariantCulture)
+            AlpacaUseIpV6 = Convert.ToBoolean(registryAccess.GetProfile(CONFIGRATION_SUBKEY, ALPACA_USE_IPV6, ALPACA_USE_IPV6_DEFAULT.ToString()), CultureInfo.InvariantCulture)
         Catch ex As Exception
             MsgBox("Chooser Read State " & ex.ToString)
             LogEvent("Chooser Read State ", ex.ToString, System.Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserFormLoad, ex.ToString)
@@ -787,6 +789,8 @@ Friend Class ChooserForm
             registryAccess.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_SHOW_DEVICE_DETAILS, AlpacaShowDeviceDetails.ToString(CultureInfo.InvariantCulture))
             registryAccess.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_SHOW_DISCOVERED_DEVICES, AlpacaShowDiscoveredDevices.ToString(CultureInfo.InvariantCulture))
             registryAccess.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_CHOOSER_WIDTH, AlpacaChooserIncrementalWidth.ToString(CultureInfo.InvariantCulture))
+            registryAccess.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_USE_IPV4, AlpacaUseIpV4.ToString(CultureInfo.InvariantCulture))
+            registryAccess.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_USE_IPV6, AlpacaUseIpV6.ToString(CultureInfo.InvariantCulture))
 
         Catch ex As Exception
             MsgBox("Chooser Write State " & ex.ToString)
