@@ -75,6 +75,7 @@
   <Filter entryType="Class" fullName="ASCOM.Utilities.ChooserAlpacaConfigurationForm" filterName="ChooserAlpacaConfigurationForm" isExposed="False" />
   <Filter entryType="Class" fullName="ASCOM.Utilities.ChooserCustomToolStripRenderer" filterName="ChooserCustomToolStripRenderer" isExposed="False" />
   <Filter entryType="Class" fullName="ASCOM.Utilities.ChooserItem" filterName="ChooserItem" isExposed="False" />
+  <Filter entryType="Class" fullName="ASCOM.Utilities.Constants" filterName="Constants" isExposed="False" />
   <Filter entryType="Interface" fullName="ASCOM.Utilities.ICache" filterName="ICache" isExposed="False" />
   <Filter entryType="Interface" fullName="ASCOM.Utilities.ICacheExtra" filterName="ICacheExtra" isExposed="False" />
   <Filter entryType="Class" fullName="ASCOM.Utilities.Profile" filterName="Profile" isExposed="True">

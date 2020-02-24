@@ -11,14 +11,35 @@ Namespace Interfaces
 #Region "Utilities Public Interfaces"
 
     ''' <summary>
+    ''' Methods visible to both COM and .NET clients
+    ''' </summary>
+    <Guid("EF7EA6E1-1074-4C07-BC42-079E1F486C2B"), ComVisible(True)>
+    Public Interface IAlpacaDiscovery
+        <DispId(1)> Property DiscoveryComplete As Boolean
+        <DispId(2)> Function GetAlpacaDevicesAsArrayList() As ArrayList
+        <DispId(3)> Function GetAscomDevicesAsArrayList(ByVal deviceType As String) As ArrayList
+        <DispId(4)> Sub StartDiscovery(ByVal numberOfPolls As Integer, ByVal pollInterval As Integer, ByVal discoveryPort As Integer, ByVal discoveryDuration As Double, ByVal resolveDnsName As Boolean, ByVal useIpV4 As Boolean, ByVal useIpV6 As Boolean)
+    End Interface
+
+    ''' <summary>
+    ''' Methods only visible to .NET clients
+    ''' </summary>
+    <ComVisible(False)>
+    Friend Interface IAlpacaDiscoveryExtra
+        Function GetAlpacaDevices() As List(Of ASCOM.Utilities.AlpacaDevice)
+        Function GetAscomDevices(ByVal deviceType As String) As List(Of ASCOM.Utilities.AscomDevice)
+        Event AlpacaDevicesUpdated As EventHandler
+        Event DiscoveryCompleted As EventHandler
+    End Interface
+
+    ''' <summary>
     ''' Interface for KeyValuePair class
     ''' </summary>
     ''' <remarks>This is a return type only used by a small number of the Profile.XXXCOM commands. Including
     ''' <see cref="IProfile.RegisteredDevices">IProfile.RegisteredDevices</see>, 
     ''' <see cref="IProfile.SubKeys">IProfile.SubKeys</see> and 
     ''' <see cref="IProfile.Values">IProfile.Values</see>.</remarks>
-    <Guid("CA653783-E47D-4e9d-9759-3B91BE0F4340"),
-    ComVisible(True)>
+    <Guid("CA653783-E47D-4e9d-9759-3B91BE0F4340"), ComVisible(True)>
     Public Interface IKeyValuePair
         ''' <summary>
         ''' Key member of a key value pair
@@ -229,8 +250,7 @@ Namespace Interfaces
     ''' Interface to the .NET Chooser component
     ''' </summary>
     ''' <remarks></remarks>
-    <Guid("D398FD76-F4B8-48a2-9CA3-2EF0DD8B98E1"),
-    ComVisible(True)>
+    <Guid("D398FD76-F4B8-48a2-9CA3-2EF0DD8B98E1"), ComVisible(True)>
     Public Interface IChooser
         ''' <summary>
         ''' The type of device for which the Chooser will select a driver. (String, default = "Telescope")

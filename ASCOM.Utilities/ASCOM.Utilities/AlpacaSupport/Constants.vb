@@ -1,4 +1,4 @@
-﻿Public Module Constants
+﻿Friend Module Constants
     Public Const DISCOVERY_MESSAGE As String = "alpacadiscovery"
     Public Const DISCOVERY_RESPONSE_STRING As String = "alpacaport"
     Public Const TRYING_TO_CONTACT_MANAGEMENT_API_MESSAGE As String = "Trying to contact Alpaca management API"

@@ -2,14 +2,19 @@
 Imports System.Collections.Generic
 Imports System.Linq
 Imports System.Net
+Imports System.Runtime.InteropServices
 Imports System.Threading
+Imports ASCOM.Utilities.Interfaces
 Imports Newtonsoft.Json
 
 ''' <summary>
 ''' Enables clients to discover Alpaca devices by sending one or more discovery polls. Returns information on discovered Alpaca devices and the ASCOM devices that are available.
 ''' </summary>
+<Guid("877A70E7-0A70-41EE-829A-8C00CAE2B9F0"),
+ComVisible(True),
+ClassInterface(ClassInterfaceType.None)>
 Public Class AlpacaDiscovery
-    Implements IDisposable
+    Implements IAlpacaDiscovery, IAlpacaDiscoveryExtra, IDisposable
 
 #Region "Variables"
 
@@ -102,13 +107,31 @@ Public Class AlpacaDiscovery
     ''' Raised every time information about discovered devices is updated
     ''' </summary>
     ''' <remarks>This event is only available to .NET clients, there is no equivalent for COM clients.</remarks>
-    Public Event AlpacaDevicesUpdated As EventHandler
+    Public Event AlpacaDevicesUpdated As EventHandler Implements IAlpacaDiscoveryExtra.AlpacaDevicesUpdated
 
     ''' <summary>
     ''' Raised when the discovery is complete
     ''' </summary>
     ''' <remarks>This event is only available to .NET clients. COM clients should poll the <see cref="DiscoveryComplete"/> property periodically to determine when discovery is complete.</remarks>
-    Public Event DiscoveryCompleted As EventHandler
+    Public Event DiscoveryCompleted As EventHandler Implements IAlpacaDiscoveryExtra.DiscoveryCompleted
+#End Region
+
+#Region "Public Properties"
+
+    ''' <summary>
+    ''' Flag that indicates when a discovery cycle is complete
+    ''' </summary>
+    ''' <returns>True when discovery is complete.</returns>
+    ''' <remarks>The discovery is considered complete when the time period specified on the <see cref="StartDiscovery(Integer, Integer, Integer, Double, Boolean, Boolean, Boolean)"/> method is exceeded.</remarks>
+    Public Property DiscoveryComplete As Boolean Implements IAlpacaDiscovery.DiscoveryComplete
+        Get
+            Return discoveryCompleteValue
+        End Get
+        Private Set(ByVal value As Boolean)
+            discoveryCompleteValue = value
+        End Set
+    End Property
+
 #End Region
 
 #Region "Public Methods"
@@ -118,7 +141,7 @@ Public Class AlpacaDiscovery
     ''' <returns>ArrayList of <see cref="AlpacaDevice"/>classes</returns>
     ''' <remarks>This method is for use by COM clients because it is not possible to pass a generic list as used in <see cref="GetAlpacaDevices"/> through a COM interface. 
     ''' .NET clients should use <see cref="GetAlpacaDevices()"/> instead of this method.</remarks>
-    Public Function GetAlpacaDevicesAsArrayList() As ArrayList
+    Public Function GetAlpacaDevicesAsArrayList() As ArrayList Implements IAlpacaDiscovery.GetAlpacaDevicesAsArrayList
         Return New ArrayList(GetAlpacaDevices()) ' Return the Alpaca devices list as an ArrayList
     End Function
 
@@ -136,7 +159,7 @@ Public Class AlpacaDiscovery
     ''' This method will return every discovered device, regardless of device type, if the supplied "deviceType" parameter is an empty string.
     ''' </para>
     ''' </remarks>
-    Public Function GetAscomDevicesAsArrayList(ByVal deviceType As String) As ArrayList
+    Public Function GetAscomDevicesAsArrayList(ByVal deviceType As String) As ArrayList Implements IAlpacaDiscovery.GetAscomDevicesAsArrayList
         Return New ArrayList(GetAscomDevices(deviceType)) ' Return the ASCOM devices list as an ArrayList
     End Function
 
@@ -145,7 +168,7 @@ Public Class AlpacaDiscovery
     ''' </summary>
     ''' <returns>List of <see cref="AlpacaDevice"/>classes</returns>
     ''' <remarks>This method is only available to .NET clients because COM cannot handle generic types. COM clients should use <see cref="GetAlpacaDevicesAsArrayList()"/>.</remarks>
-    Public Function GetAlpacaDevices() As List(Of AlpacaDevice)
+    Public Function GetAlpacaDevices() As List(Of AlpacaDevice) Implements IAlpacaDiscoveryExtra.GetAlpacaDevices
         SyncLock deviceListLockObject ' Make sure that the device list dictionary can't change while copying it to the list
             Return alpacaDeviceList.Values.ToList() ' Create a copy of the dynamically changing alpacaDeviceList ConcurrentDictionary of discovered devices
         End SyncLock
@@ -164,7 +187,7 @@ Public Class AlpacaDiscovery
     ''' This method will return every discovered device, regardless of device type, if the supplied "deviceType" parameter is an empty string.
     ''' </para>
     ''' </remarks>
-    Public Function GetAscomDevices(ByVal deviceType As String) As List(Of AscomDevice)
+    Public Function GetAscomDevices(ByVal deviceType As String) As List(Of AscomDevice) Implements IAlpacaDiscoveryExtra.GetAscomDevices
         Dim ascomDeviceList As List(Of AscomDevice) = New List(Of AscomDevice)() ' List of discovered ASCOM devices to support Chooser-like functionality
 
         SyncLock deviceListLockObject ' Make sure that the device list dictionary can't change while processing this command
@@ -198,20 +221,6 @@ Public Class AlpacaDiscovery
     End Function
 
     ''' <summary>
-    ''' Flag that indicates when a discovery cycle is complete
-    ''' </summary>
-    ''' <returns>True when discovery is complete.</returns>
-    ''' <remarks>The discovery is considered complete when the time period specified on the <see cref="StartDiscovery(Integer, Integer, Integer, Double, Boolean, Boolean, Boolean)"/> method is exceeded.</remarks>
-    Public Property DiscoveryComplete As Boolean
-        Get
-            Return discoveryCompleteValue
-        End Get
-        Private Set(ByVal value As Boolean)
-            discoveryCompleteValue = value
-        End Set
-    End Property
-
-    ''' <summary>
     ''' Start an Alpaca device discovery based on the supplied parameters
     ''' </summary>
     ''' <param name="numberOfPolls">Number of polls to send in the range 1 to 5</param>
@@ -227,7 +236,7 @@ Public Class AlpacaDiscovery
                               ByVal discoveryDuration As Double,
                               ByVal resolveDnsName As Boolean,
                               ByVal useIpV4 As Boolean,
-                              ByVal useIpV6 As Boolean)
+                              ByVal useIpV6 As Boolean) Implements IAlpacaDiscovery.StartDiscovery
 
         ' Validate parameters
         If (numberOfPolls < 1) Or (numberOfPolls > 5) Then Throw New InvalidValueException($"StartDiscovery - NumberOfPolls: {numberOfPolls} is not within the valid range of 1::5")

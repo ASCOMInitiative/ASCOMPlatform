@@ -118,6 +118,15 @@
     <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\AllUsersFileSystemProvider.vb">
       <Link>AllUsersFileSystemProvider.vb</Link>
     </Compile>
+    <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\AlpacaSupport\Entity Classes\AlpacaDevice.vb">
+      <Link>Entity Classes\AlpacaDevice.vb</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\AlpacaSupport\Entity Classes\AscomDevice.vb">
+      <Link>Entity Classes\AscomDevice.vb</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\AlpacaSupport\Entity Classes\ConfiguredDevice.vb">
+      <Link>Entity Classes\ConfiguredDevice.vb</Link>
+    </Compile>
     <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOMProfile.vb">
       <Link>ASCOMProfile.vb</Link>
     </Compile>

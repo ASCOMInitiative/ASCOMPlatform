@@ -1,5 +1,5 @@
 ﻿''' <summary>
-''' Description of a single ASCOM device that is returned as
+''' Description of a single ASCOM device as returned within the <see cref="AlpacaDevice"/> class.
 ''' </summary>
 Public Class ConfiguredDevice
     ''' <summary>
@@ -7,7 +7,6 @@ Public Class ConfiguredDevice
     ''' </summary>
     Public Sub New()
     End Sub
-
 
     ''' <summary>
     ''' Initialise the device name, device type, device number and ASCOM device unique ID
@@ -35,7 +34,7 @@ Public Class ConfiguredDevice
     Public Property DeviceType As String
 
     ''' <summary>
-    ''' Alpaca API device number
+    ''' Device number used to access the device through the Alpaca API
     ''' </summary>
     Public Property DeviceNumber As Integer
 
