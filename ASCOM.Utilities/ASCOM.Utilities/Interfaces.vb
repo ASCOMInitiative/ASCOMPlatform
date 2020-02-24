@@ -1,14 +1,132 @@
-﻿'Public and private interfaces for the ASCOM.Utilities namesapce
+﻿'Public and private interfaces for the ASCOM.Utilities namespace
 
 Imports System.Runtime.InteropServices
 Imports System.ComponentModel
 Imports ASCOM.Utilities
 Imports System.Collections.Generic
 Imports ASCOM.Utilities.Enums
+Imports System.Net
 
 Namespace Interfaces
 
 #Region "Utilities Public Interfaces"
+
+    ''' <summary>
+    ''' Methods visible to both COM and .NET clients
+    ''' </summary>
+    <Guid("2299465C-A42B-47FE-B8F5-B3A1AF11B137"), ComVisible(True)>
+    Public Interface IAlpacaDevice
+        ''' <summary>
+        ''' Alpaca device's host name or IP address
+        ''' </summary>
+        <DispId(1)> Property HostName As String
+
+        ''' <summary>
+        ''' Alpaca device's IP port number
+        ''' </summary>
+        <DispId(2)> Property Port As Integer
+
+        ''' <summary>
+        ''' Array of ASCOM devices available on this Alpaca device
+        ''' </summary>
+        <DispId(3)> Property ConfiguredDevices As ConfiguredDevice()
+
+        ''' <summary>
+        ''' Array of supported Alpaca interface version numbers
+        ''' </summary>
+        <DispId(4)> Property SupportedInterfaceVersions As Integer()
+
+        ''' <summary>
+        ''' The Alpaca device's configured name
+        ''' </summary>
+        ''' <returns></returns>
+        <DispId(5)> Property ServerName As String
+
+        ''' <summary>
+        ''' The device manufacturer's name
+        ''' </summary>
+        ''' <returns></returns>
+        <DispId(6)> Property Manufacturer As String
+
+        ''' <summary>
+        ''' The device's version as set by the manufacturer
+        ''' </summary>
+        ''' <returns></returns>
+        <DispId(7)> Property ManufacturerVersion As String
+
+        ''' <summary>
+        ''' The Alpaca device's configured location
+        ''' </summary>
+        ''' <returns></returns>
+        <DispId(8)> Property Location As String
+
+    End Interface
+
+    <Guid("4BF7844B-26BB-41DE-A500-26C65922F290"), ComVisible(True)>
+    Public Interface IAscomDevice
+        ''' <summary>
+        ''' ASCOM device name
+        ''' </summary>
+        <DispId(1)> Property AscomDeviceName As String
+
+        ''' <summary>
+        ''' ASCOM device type
+        ''' </summary>
+        <DispId(2)> Property AscomDeviceType As String
+
+        ''' <summary>
+        ''' Alpaca API device number
+        ''' </summary>
+        <DispId(3)> Property AlpacaDeviceNumber As Integer
+
+        ''' <summary>
+        ''' ASCOM device unique ID
+        ''' </summary>
+        <DispId(4)> Property UniqueId As String
+
+        ''' <summary>
+        ''' Alpaca device host name
+        ''' </summary>
+        <DispId(5)> Property HostName As String
+
+        ''' <summary>
+        ''' SUpported Alpaca interface version
+        ''' </summary>
+        <DispId(6)> Property InterfaceVersion As Integer
+
+        ''' <summary>
+        ''' Alpaca device status message
+        ''' </summary>
+        <DispId(7)> Property StatusMessage As String
+
+    End Interface
+
+    <ComVisible(False)> Friend Interface IAscomDeviceExtra
+        Property IPEndPoint As IPEndPoint
+    End Interface
+
+    <Guid("696037F0-9138-4701-AA6C-CE6DB4091F6C"), ComVisible(True)>
+    Public Interface IConfiguredDevice
+        ''' <summary>
+        ''' ASCOM device name
+        ''' </summary>
+        <DispId(1)> Property DeviceName As String
+
+        ''' <summary>
+        ''' ASCOM device type
+        ''' </summary>
+        <DispId(2)> Property DeviceType As String
+
+        ''' <summary>
+        ''' Device number used to access the device through the Alpaca API
+        ''' </summary>
+        <DispId(3)> Property DeviceNumber As Integer
+
+        ''' <summary>
+        ''' ASCOM device unique ID
+        ''' </summary>
+        <DispId(4)> Property UniqueID As String
+    End Interface
 
     ''' <summary>
     ''' Methods visible to both COM and .NET clients
