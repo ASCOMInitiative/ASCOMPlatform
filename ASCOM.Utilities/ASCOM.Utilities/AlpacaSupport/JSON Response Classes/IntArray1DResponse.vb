@@ -1,4 +1,4 @@
-﻿Public Class IntArray1DResponse
+﻿Friend Class IntArray1DResponse
     Inherits RestResponseBase
 
     Private intArray1D As Integer()

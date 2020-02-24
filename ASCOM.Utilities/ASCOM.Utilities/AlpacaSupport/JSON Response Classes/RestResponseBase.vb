@@ -1,6 +1,6 @@
 ﻿Imports System
 
-Public MustInherit Class RestResponseBase
+Friend MustInherit Class RestResponseBase
     Private exception As Exception
     Public Property ClientTransactionID As UInteger
     Public Property ServerTransactionID As UInteger

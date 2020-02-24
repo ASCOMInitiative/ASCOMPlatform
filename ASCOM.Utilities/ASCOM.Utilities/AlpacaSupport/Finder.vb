@@ -24,7 +24,6 @@ Friend Class Finder
     ''' </summary>
     Public ReadOnly Property CachedEndpoints As List(Of IPEndPoint) = New List(Of IPEndPoint)()
 
-
 #Region "Initialisation and Dispose"
     ''' <summary>
     ''' Creates a Alpaca Finder object that sends out a search request for Alpaca devices
@@ -48,6 +47,7 @@ Friend Class Finder
     End Sub
 
     Private disposedValue As Boolean = False ' To detect redundant calls
+
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
         If Not disposedValue Then
 
@@ -66,7 +66,6 @@ Friend Class Finder
             disposedValue = True
         End If
     End Sub
-
 
     ' This code added to correctly implement the disposable pattern.
     Public Sub Dispose() Implements IDisposable.Dispose
@@ -141,7 +140,6 @@ Friend Class Finder
 
             ' Configure the UdpClient class to accept more messages, if they arrive
             udpClient.BeginReceive(New AsyncCallback(AddressOf FinderDiscoveryCallback), udpClient)
-
 
             'Only process Alpaca device responses
             If ReceiveString.ToLowerInvariant().Contains(DISCOVERY_RESPONSE_STRING) Then

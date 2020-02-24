@@ -79,6 +79,8 @@ Friend Class ChooserForm
     Friend AlpacaShowDiscoveredDevices As Boolean
     Friend AlpacaShowDeviceDetails As Boolean
     Friend AlpacaChooserIncrementalWidth As Integer
+    Friend AlpacaUseIpV4 As Boolean
+    Friend AlpacaUseIpV6 As Boolean
 
     ' Delegates
     Private PopulateDriverComboBoxDelegate As MethodInvoker = AddressOf PopulateDriverComboBox ' Device list combo box delegate
@@ -928,7 +930,7 @@ Friend Class ChooserForm
                 Dim discovery As AlpacaDiscovery
                 discovery = New AlpacaDiscovery(TL)
                 TL.LogMessage("DiscoverAlpacaDevices", $"AlpacaDiscovery created")
-                discovery.StartDiscovery(AlpacaNumberOfBroadcasts, 200, AlpacaDiscoveryPort, AlpacaTimeout, AlpacaDnsResolution)
+                discovery.StartDiscovery(AlpacaNumberOfBroadcasts, 200, AlpacaDiscoveryPort, AlpacaTimeout, AlpacaDnsResolution, AlpacaUseIpV4, AlpacaUseIpV6)
                 TL.LogMessage("DiscoverAlpacaDevices", $"AlpacaDiscovery started")
 
                 ' Keep the UI alive while the discovery is running
@@ -938,10 +940,10 @@ Friend Class ChooserForm
                 Loop Until discovery.DiscoveryComplete
                 TL.LogMessage("DiscoverAlpacaDevices", $"Discovery phase has finished")
 
-                TL.LogMessage("DiscoverAlpacaDevices", $"Discovered {discovery.GetAscomDevices().Count} devices")
+                TL.LogMessage("DiscoverAlpacaDevices", $"Discovered {discovery.GetAscomDevices("").Count} devices")
 
                 ' List discovered devices to the log
-                For Each ascomDevice As AscomDevice In discovery.GetAscomDevices()
+                For Each ascomDevice As AscomDevice In discovery.GetAscomDevices("")
                     TL.LogMessage("DiscoverAlpacaDevices", $"FOUND {ascomDevice.AscomDeviceType} {ascomDevice.AscomDeviceName} {ascomDevice.IPEndPoint.ToString()}")
                 Next
 

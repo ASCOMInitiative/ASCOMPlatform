@@ -1,4 +1,4 @@
-﻿Public Class AlpacaDescriptionResponse
+﻿Friend Class AlpacaDescriptionResponse
     Inherits RestResponseBase
 
     Public Sub New()

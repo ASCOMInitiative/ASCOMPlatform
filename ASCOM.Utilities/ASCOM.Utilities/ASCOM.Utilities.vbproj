@@ -133,10 +133,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AllUsersFileSystemProvider.vb" />
+    <Compile Include="AlpacaSupport\Entity Classes\AlpacaDeviceDescription.vb" />
     <Compile Include="AlpacaSupport\JSON Response Classes\AlpacaConfiguredDevicesResponse.vb" />
     <Compile Include="AlpacaSupport\JSON Response Classes\AlpacaDescriptionResponse.vb" />
     <Compile Include="AlpacaSupport\Entity Classes\AlpacaDevice.vb" />
-    <Compile Include="AlpacaSupport\Entity Classes\AlpacaDeviceDescription.vb" />
     <Compile Include="AlpacaSupport\AlpacaDiscovery.vb" />
     <Compile Include="AlpacaSupport\JSON Response Classes\AlpacaDiscoveryResponse.vb" />
     <Compile Include="AlpacaSupport\Entity Classes\AscomDevice.vb" />

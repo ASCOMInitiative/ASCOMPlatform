@@ -1,9 +1,9 @@
 ﻿''' <summary>
-''' Configured device entity class
+''' Description of a single ASCOM device that is returned as
 ''' </summary>
 Public Class ConfiguredDevice
     ''' <summary>
-    ''' Default initialiser
+    ''' Initialises the class with default values
     ''' </summary>
     Public Sub New()
     End Sub

@@ -1,12 +1,13 @@
 ﻿Imports System.Net
 
 ''' <summary>
-''' ASCOM device entity class
+''' Description of an ASCOM device that is served by an Alpaca device that is discovered by the <see cref="AlpacaDiscovery"/> component.
 ''' </summary>
 Public Class AscomDevice
     ''' <summary>
-    ''' Default initialiser
+    ''' Initialises the class with default values
     ''' </summary>
+    ''' <remarks>COM clients should use this initialiser and set the properties individually because COM only supports parameterless initialisers.</remarks>
     Public Sub New()
     End Sub
 
@@ -24,6 +25,7 @@ Public Class AscomDevice
     ''' <paramname="alpacaUniqueId">Alpaca device unique ID</param>
     ''' <paramname="interfaceVersion">Supported Alpaca interface version</param>
     ''' <paramname="statusMessage">ALapca device status message</param>
+    ''' <remarks>This can only be used by .NET clients because COM only supports parameterless initialisers.</remarks>
     Public Sub New(ByVal ascomDdeviceName As String, ByVal ascomDeviceType As String, ByVal alpacaDeviceNumber As Integer, ByVal uniqueId As String, ByVal ipEndPoint As IPEndPoint, ByVal hostName As String, ByVal interfaceVersion As Integer, ByVal statusMessage As String)
         AscomDeviceName = ascomDdeviceName
         Me.AscomDeviceType = ascomDeviceType
@@ -34,7 +36,6 @@ Public Class AscomDevice
         Me.InterfaceVersion = interfaceVersion
         Me.StatusMessage = statusMessage
     End Sub
-
 
     ''' <summary>
     ''' ASCOM device name

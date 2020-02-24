@@ -6,17 +6,13 @@ Imports System.Threading
 Imports Newtonsoft.Json
 
 ''' <summary>
-''' Alpaca discovery component
-''' Note: Forced the use of System.Net.Http.HttpClientHandler instead of System.Net.Http.SocketsHttpHandler because HttpClient timeout doesn't work correctly in the latter
+''' Enables clients to discover Alpaca devices by sending one or more discovery polls. Returns information on discovered Alpaca devices and the ASCOM devices that are available.
 ''' </summary>
-Friend Class AlpacaDiscovery
+Public Class AlpacaDiscovery
     Implements IDisposable
 
+#Region "Variables"
 
-    ''' <summary>
-    ''' Returns discovery completion status
-    ''' </summary>
-    Private _DiscoveryComplete As Boolean
     ' Utility objects
     Private TL As TraceLogger
     Private finder As Finder
@@ -28,22 +24,34 @@ Friend Class AlpacaDiscovery
     Private discoveryTime As Double ' Length of the discovery phase before it times out
     Private tryDnsNameResolution As Boolean ' Flag indicating whether to attempt name resolution on the host IP address
     Private discoveryStartTime As Date ' Time at which the start discovery command was received
+    Private discoveryCompleteValue As Boolean ' Discovery completion status
     Private ReadOnly deviceListLockObject As Object = New Object() ' Lock object to synchronise access to the Alpaca device list collection, which is not a thread safe collection
+
+#End Region
 
 #Region "New and IDisposable Support"
 
     ''' <summary>
-    ''' Initialiser that takes a trace logger
+    ''' Initialise the Alpaca discovery component
     ''' </summary>
-    ''' <paramname="tl">Trace logger instance to use for activity logging</param>
-    Friend Sub New(ByVal tl As TraceLogger)
-        Try
-            ' Save the supplied trace logger object
-            Me.TL = tl
+    Public Sub New()
+        InitialiseClass() ' Initialise without a trace logger
+    End Sub
 
+    ''' <summary>
+    ''' Initialiser that takes a trace logger (Can only be used from .NET clients)
+    ''' </summary>
+    ''' <paramname="traceLogger">Trace logger instance to use for activity logging</param>
+    Friend Sub New(ByVal traceLogger As TraceLogger)
+        TL = traceLogger ' Save the supplied trace logger object
+        InitialiseClass() ' Initialise using the trace logger
+    End Sub
+
+    Private Sub InitialiseClass()
+        Try
             ' Initialise variables
             tryDnsNameResolution = False ' Initialise so that there is no host name resolution by default
-            DiscoveryComplete = True ' Initialise so that discoveries can be run
+            discoveryCompleteValue = True ' Initialise so that discoveries can be run
 
             ' Initialise utility objects
             discoveryCompleteTimer = New System.Threading.Timer(AddressOf OnDiscoveryCompleteTimer)
@@ -53,18 +61,24 @@ Friend Class AlpacaDiscovery
                 finder = Nothing
             End If
 
-            finder = New Finder(AddressOf BroadcastResponseEventHandler, Me.TL) ' Get a new broadcast response finder
+            ' Get a new broadcast response finder
+            finder = New Finder(AddressOf BroadcastResponseEventHandler, TL)
+
             LogMessage("AlpacaDiscoveryInitialise", $"Complete - Running on thread {Thread.CurrentThread.ManagedThreadId}")
         Catch ex As Exception
             LogMessage("AlpacaDiscoveryInitialise", $"Exception{ex.ToString()}")
         End Try
+
     End Sub
 
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
         If Not disposedValue Then
 
             If disposing Then
+                ' The trace logger is not disposed here because it is supplied by the client, which is response for disposing of it as appropriate.
+
                 If finder IsNot Nothing Then finder.Dispose()
+
                 If discoveryCompleteTimer IsNot Nothing Then discoveryCompleteTimer.Dispose()
             End If
 
@@ -72,56 +86,90 @@ Friend Class AlpacaDiscovery
         End If
     End Sub
 
+    ''' <summary>
+    ''' Disposes of the discovery component and cleans up resources
+    ''' </summary>
     Public Sub Dispose() Implements IDisposable.Dispose
         ' Do not change this code. Put clean-up code in Dispose(bool disposing) above.
         Dispose(True)
     End Sub
 
-
 #End Region
 
-#Region "Public events and methods"
+#Region "Public Events"
 
     ''' <summary>
     ''' Raised every time information about discovered devices is updated
     ''' </summary>
+    ''' <remarks>This event is only available to .NET clients, there is no equivalent for COM clients.</remarks>
     Public Event AlpacaDevicesUpdated As EventHandler
 
     ''' <summary>
     ''' Raised when the discovery is complete
     ''' </summary>
+    ''' <remarks>This event is only available to .NET clients. COM clients should poll the <see cref="DiscoveryComplete"/> property periodically to determine when discovery is complete.</remarks>
     Public Event DiscoveryCompleted As EventHandler
+#End Region
 
+#Region "Public Methods"
+    ''' <summary>
+    ''' Returns an ArrayList of discovered Alpaca devices for use by COM clients
+    ''' </summary>
+    ''' <returns>ArrayList of <see cref="AlpacaDevice"/>classes</returns>
+    ''' <remarks>This method is for use by COM clients because it is not possible to pass a generic list as used in <see cref="GetAlpacaDevices"/> through a COM interface. 
+    ''' .NET clients should use <see cref="GetAlpacaDevices()"/> instead of this method.</remarks>
+    Public Function GetAlpacaDevicesAsArrayList() As ArrayList
+        Return New ArrayList(GetAlpacaDevices()) ' Return the Alpaca devices list as an ArrayList
+    End Function
 
     ''' <summary>
-    ''' Returns a list of discovered Alpaca devices
+    ''' Returns an ArrayList of discovered ASCOM devices, of the specified device type, for use by COM clients
     ''' </summary>
-    ''' <returns>List of AlpacaDevice classes</returns>
+    ''' <param name="deviceType">The device type for which to search e.g. Telescope, Focuser. An empty string will return devices of all types.</param>
+    ''' <returns>ArrayList of <see cref="AscomDevice"/>classes</returns>
+    ''' <remarks>
+    ''' <para>
+    ''' This method is for use by COM clients because it is not possible to return a generic list, as used in <see cref="GetAscomDevices(String)"/>, through a COM interface. 
+    ''' .NET clients should use <see cref="GetAscomDevices(String)"/> instead of this method.
+    ''' </para>
+    ''' <para>
+    ''' This method will return every discovered device, regardless of device type, if the supplied "deviceType" parameter is an empty string.
+    ''' </para>
+    ''' </remarks>
+    Public Function GetAscomDevicesAsArrayList(ByVal deviceType As String) As ArrayList
+        Return New ArrayList(GetAscomDevices(deviceType)) ' Return the ASCOM devices list as an ArrayList
+    End Function
+
+    ''' <summary>
+    ''' Returns a generic List of discovered Alpaca devices.
+    ''' </summary>
+    ''' <returns>List of <see cref="AlpacaDevice"/>classes</returns>
+    ''' <remarks>This method is only available to .NET clients because COM cannot handle generic types. COM clients should use <see cref="GetAlpacaDevicesAsArrayList()"/>.</remarks>
     Public Function GetAlpacaDevices() As List(Of AlpacaDevice)
         SyncLock deviceListLockObject ' Make sure that the device list dictionary can't change while copying it to the list
             Return alpacaDeviceList.Values.ToList() ' Create a copy of the dynamically changing alpacaDeviceList ConcurrentDictionary of discovered devices
         End SyncLock
     End Function
 
-
     ''' <summary>
-    ''' Returns a list of discovered ASCOM devices of the specified device type for Chooser-like functionality
+    ''' Returns a generic list of discovered ASCOM devices of the specified device type.
     ''' </summary>
+    ''' <param name="deviceType">The device type for which to search e.g. Telescope, Focuser. An empty string will return devices of all types.</param>
     ''' <returns>List of AscomDevice classes</returns>
+    ''' <remarks>
+    ''' <para>
+    ''' This method is only available to .NET clients because COM cannot handle generic types. COM clients should use <see cref="GetAscomDevicesAsArrayList(String)()"/>.
+    ''' </para>
+    ''' <para>
+    ''' This method will return every discovered device, regardless of device type, if the supplied "deviceType" parameter is an empty string.
+    ''' </para>
+    ''' </remarks>
     Public Function GetAscomDevices(ByVal deviceType As String) As List(Of AscomDevice)
-        Return GetAscomDevices().Where(Function(ascomDevice) ascomDevice.AscomDeviceType.ToLowerInvariant() = deviceType.ToLowerInvariant()).ToList()
-    End Function
-
-
-    ''' <summary>
-    ''' Returns a list of all discovered ASCOM devices for Chooser-like functionality
-    ''' </summary>
-    ''' <returns>List of AscomDevice classes</returns>
-    Public Function GetAscomDevices() As List(Of AscomDevice)
         Dim ascomDeviceList As List(Of AscomDevice) = New List(Of AscomDevice)() ' List of discovered ASCOM devices to support Chooser-like functionality
 
-        ' Iterate over the discovered Alpaca devices
-        SyncLock deviceListLockObject ' Make sure that the device list dictionary can't change while copying it to the list
+        SyncLock deviceListLockObject ' Make sure that the device list dictionary can't change while processing this command
+
+            ' Iterate over the discovered Alpaca devices
             For Each alpacaDevice As KeyValuePair(Of IPEndPoint, AlpacaDevice) In alpacaDeviceList
 
                 ' Iterate over each Alpaca interface version that the Alpaca device supports
@@ -129,39 +177,65 @@ Friend Class AlpacaDiscovery
 
                     ' Iterate over the ASCOM devices presented by this Alpaca device adding them to the return dictionary
                     For Each ascomDevice As ConfiguredDevice In alpacaDevice.Value.ConfiguredDevices
-                        ascomDeviceList.Add(New AscomDevice(ascomDevice.DeviceName, ascomDevice.DeviceType, ascomDevice.DeviceNumber, ascomDevice.UniqueID, alpacaDevice.Value.IPEndPoint, alpacaDevice.Value.HostName, alpacaDeviceInterfaceVersion, alpacaDevice.Value.StatusMessage)) ' ASCOM device information 
-                        ' Alpaca device information
-                    Next
-                Next
-            Next
-        End SyncLock
 
-        Return ascomDeviceList ' Return the list of ASCOM devices
+                        ' Test whether all devices or only devices of a specific device type are required
+                        If String.IsNullOrEmpty(deviceType) Then ' Return a full list of every discovered device regardless of device type 
+                            ascomDeviceList.Add(New AscomDevice(ascomDevice.DeviceName, ascomDevice.DeviceType, ascomDevice.DeviceNumber, ascomDevice.UniqueID, alpacaDevice.Value.IPEndPoint, alpacaDevice.Value.HostName, alpacaDeviceInterfaceVersion, alpacaDevice.Value.StatusMessage)) ' ASCOM device information 
+                        Else ' Return only devices of the specified type
+                            If ascomDevice.DeviceType.ToLowerInvariant() = deviceType.ToLowerInvariant() Then
+                                ascomDeviceList.Add(New AscomDevice(ascomDevice.DeviceName, ascomDevice.DeviceType, ascomDevice.DeviceNumber, ascomDevice.UniqueID, alpacaDevice.Value.IPEndPoint, alpacaDevice.Value.HostName, alpacaDeviceInterfaceVersion, alpacaDevice.Value.StatusMessage)) ' ASCOM device information 
+                            End If
+                        End If
+
+                    Next ' Next Ascom Device
+                Next ' Next interface version
+            Next ' Next Alpaca device
+
+            ' Return the information requested
+            Return ascomDeviceList ' Return the list of ASCOM devices
+
+        End SyncLock
     End Function
 
+    ''' <summary>
+    ''' Flag that indicates when a discovery cycle is complete
+    ''' </summary>
+    ''' <returns>True when discovery is complete.</returns>
+    ''' <remarks>The discovery is considered complete when the time period specified on the <see cref="StartDiscovery(Integer, Integer, Integer, Double, Boolean, Boolean, Boolean)"/> method is exceeded.</remarks>
     Public Property DiscoveryComplete As Boolean
         Get
-            Return _DiscoveryComplete
+            Return discoveryCompleteValue
         End Get
         Private Set(ByVal value As Boolean)
-            _DiscoveryComplete = value
+            discoveryCompleteValue = value
         End Set
     End Property
 
-
     ''' <summary>
-    ''' Start an Alpaca device discovery
+    ''' Start an Alpaca device discovery based on the supplied parameters
     ''' </summary>
-    ''' <paramname="numberOfPolls">Number of polls to send in the range 1 to 5</param>
-    ''' <paramname="pollInterval">Interval between each poll in the range 10 to 5000 milliseconds</param>
-    ''' <paramname="discoveryPort">Discovery port on which to send the broadcast (normally 32227)</param>
-    ''' <paramname="discoveryDuration">Length of time to wait for devices to respond</param>
-    ''' <paramname="resolveDnsName">Attempt to resolve host IP addresses to DNS names</param>
-    Public Sub StartDiscovery(ByVal numberOfPolls As Integer, ByVal pollInterval As Integer, ByVal discoveryPort As Integer, ByVal discoveryDuration As Double, ByVal resolveDnsName As Boolean)
+    ''' <param name="numberOfPolls">Number of polls to send in the range 1 to 5</param>
+    ''' <param name="pollInterval">Interval between each poll in the range 10 to 5000 milliseconds</param>
+    ''' <param name="discoveryPort">Discovery port on which to send the broadcast (normally 32227) in the range 1025 to 65535</param>
+    ''' <param name="discoveryDuration">Length of time (seconds) to wait for devices to respond</param>
+    ''' <param name="resolveDnsName">Attempt to resolve host IP addresses to DNS names</param>
+    ''' <param name="useIpV4">Search for Alpaca devices that use IPv4 addresses. (One or both of useIpV4 and useIpV6 must be True.)</param>
+    ''' <param name="useIpV6">Search for Alpaca devices that use IPv6 addresses. (One or both of useIpV4 and useIpV6 must be True.)</param>
+    Public Sub StartDiscovery(ByVal numberOfPolls As Integer,
+                              ByVal pollInterval As Integer,
+                              ByVal discoveryPort As Integer,
+                              ByVal discoveryDuration As Double,
+                              ByVal resolveDnsName As Boolean,
+                              ByVal useIpV4 As Boolean,
+                              ByVal useIpV6 As Boolean)
+
         ' Validate parameters
-        If numberOfPolls < 1 OrElse numberOfPolls > 5 Then Throw New ArgumentException($"StartDiscovery - NumberOfPolls: {numberOfPolls} is not within the valid range of 1::5")
-        If pollInterval < 10 OrElse pollInterval > 5000 Then Throw New ArgumentException($"StartDiscovery - PollInterval: {numberOfPolls} is not within the valid range of 10::5000")
-        If Not DiscoveryComplete Then Throw New InvalidOperationException("Cannot start a new discovery because a previous discovery is still running.")
+        If (numberOfPolls < 1) Or (numberOfPolls > 5) Then Throw New InvalidValueException($"StartDiscovery - NumberOfPolls: {numberOfPolls} is not within the valid range of 1::5")
+        If (pollInterval < 10) Or (pollInterval > 60000) Then Throw New InvalidValueException($"StartDiscovery - PollInterval: {pollInterval} is not within the valid range of 10::5000")
+        If (discoveryPort < 1025) Or (discoveryPort > 65535) Then Throw New InvalidValueException($"StartDiscovery - DiscoveryPort: {discoveryPort} is not within the valid range of 1025::65535")
+        If discoveryDuration < 0.0 Then Throw New InvalidValueException($"StartDiscovery - DiscoverDuration: {discoveryDuration} must be greater than 0.0")
+        If Not (useIpV4 Or useIpV6) Then Throw New InvalidValueException("StartDiscovery: Both the use IPv4 and use IPv6 flags are false. At least one of these must be set True.")
+        If Not discoveryCompleteValue Then Throw New InvalidOperationException("Cannot start a new discovery because a previous discovery is still running.")
 
         ' Save supplied parameters for use within the application 
         discoveryTime = discoveryDuration
@@ -171,14 +245,13 @@ Friend Class AlpacaDiscovery
         LogMessage("StartDiscovery", $"Starting search for Alpaca devices with timeout: {discoveryTime} Broadcast polls: {numberOfPolls} sent every {pollInterval} milliseconds")
         finder.ClearCache()
 
-
         ' Clear the device list dictionary
         SyncLock deviceListLockObject ' Make sure that the clear operation is not interrupted by other threads
             alpacaDeviceList.Clear()
         End SyncLock
 
         discoveryCompleteTimer.Change(Convert.ToInt32(discoveryTime * 1000), Timeout.Infinite)
-        DiscoveryComplete = False
+        discoveryCompleteValue = False
         discoveryStartTime = Date.Now ' Save the start time
 
         ' Send the broadcast polls
@@ -191,7 +264,6 @@ Friend Class AlpacaDiscovery
 
         LogMessage("StartDiscovery", "Alpaca device broadcast polls completed, discovery started")
     End Sub
-
 
 #End Region
 
@@ -212,9 +284,8 @@ Friend Class AlpacaDiscovery
     ''' <paramname="state">Timer state</param>
     Private Sub OnDiscoveryCompleteTimer(ByVal state As Object)
         LogMessage("OnTimeOutTimerFired", $"Firing discovery complete event")
-        DiscoveryComplete = True ' Flag that the timer out has expired
+        discoveryCompleteValue = True ' Flag that the timer out has expired
         Dim statusMessagesUpdated As Boolean = False
-
 
         ' Update the status messages of management API calls that didn't connect in time
         SyncLock deviceListLockObject ' Make sure that the device list dictionary can't change while being read and that only one thread can update it at a time
@@ -249,7 +320,6 @@ Friend Class AlpacaDiscovery
                 End If
             End SyncLock
 
-
             ' Create a task to query this device's DNS name, if configured to do so
             If tryDnsNameResolution Then
                 LogMessage("BroadcastResponseEventHandler", $"Creating task to retrieve DNS information for device {responderIPEndPoint.ToString()}:{responderIPEndPoint.Port}")
@@ -257,7 +327,6 @@ Friend Class AlpacaDiscovery
                 dnsResolutionThread.IsBackground = True
                 dnsResolutionThread.Start(responderIPEndPoint)
             End If
-
 
             ' Create a task to query this device's Alpaca management API
             LogMessage("BroadcastResponseEventHandler", $"Creating thread to retrieve Alpaca management description for device {responderIPEndPoint.ToString()}:{responderIPEndPoint.Port}")
@@ -281,7 +350,6 @@ Friend Class AlpacaDiscovery
         Try
             LogMessage("GetAlpacaDeviceInformation", $"dISCOVER TIMEOUT: {discoveryTime} ({discoveryTime * 1000})")
 
-
             ' Wait for API version result and process it
             Using apiClient As WebClientWithTimeOut = New WebClientWithTimeOut()
                 Dim apiVersionsJsonResponse As String = GetRequest($"http://{hostIpAndPort}/management/apiversions", Convert.ToInt32(discoveryTime * 1000))
@@ -296,7 +364,6 @@ Friend Class AlpacaDiscovery
                 RaiseAnAlpacaDevicesChangedEvent() ' Device list was changed so set the changed flag
             End Using
 
-
             ' Wait for device description result and process it
             Using descriptionClient As WebClientWithTimeOut = New WebClientWithTimeOut()
                 Dim deviceDescriptionJsonResponse As String = GetRequest($"http://{hostIpAndPort}/management/v1/description", Convert.ToInt32(discoveryTime * 1000))
@@ -304,12 +371,14 @@ Friend Class AlpacaDiscovery
                 Dim deviceDescriptionResponse As AlpacaDescriptionResponse = JsonConvert.DeserializeObject(Of AlpacaDescriptionResponse)(deviceDescriptionJsonResponse)
 
                 SyncLock deviceListLockObject ' Make sure that only one thread can update the device list dictionary at a time
-                    alpacaDeviceList(deviceIpEndPoint).AlpacaDeviceDescription = deviceDescriptionResponse.Value
+                    alpacaDeviceList(deviceIpEndPoint).ServerName = deviceDescriptionResponse.Value.ServerName
+                    alpacaDeviceList(deviceIpEndPoint).Manufacturer = deviceDescriptionResponse.Value.Manufacturer
+                    alpacaDeviceList(deviceIpEndPoint).ManufacturerVersion = deviceDescriptionResponse.Value.ManufacturerVersion
+                    alpacaDeviceList(deviceIpEndPoint).Location = deviceDescriptionResponse.Value.Location
                 End SyncLock
 
                 RaiseAnAlpacaDevicesChangedEvent() ' Device list was changed so set the changed flag
             End Using
-
 
             ' Wait for configured devices result and process it
             Using configuredDevicesClient As WebClientWithTimeOut = New WebClientWithTimeOut()
@@ -327,8 +396,7 @@ Friend Class AlpacaDiscovery
             LogMessage("GetAlpacaDeviceInformation", $"COMPLETED API tasks for {hostIpAndPort}")
         Catch ex As Exception
             ' Something went wrong so log the issue and sent a message to the user
-            LogMessage("GetAlpacaDeviceInformation", $"GetAlpacaDescriptions exception: 
-{ex.ToString()}")
+            LogMessage("GetAlpacaDeviceInformation", $"GetAlpacaDescriptions exception: {ex.ToString()}")
 
             SyncLock deviceListLockObject ' Make sure that only one thread can update the device list dictionary at a time
                 alpacaDeviceList(deviceIpEndPoint).StatusMessage = ex.Message
@@ -336,7 +404,6 @@ Friend Class AlpacaDiscovery
             End SyncLock
         End Try
     End Sub
-
 
     ''' <summary>
     ''' Resolve a host IP address to a host name
@@ -409,15 +476,34 @@ Friend Class AlpacaDiscovery
     ''' <paramname="methodName"></param>
     ''' <paramname="message"></param>
     Private Sub LogMessage(ByVal methodName As String, ByVal message As String)
-        Dim indentSpaces As String = New [String](" "c, Thread.CurrentThread.ManagedThreadId * NUMBER_OF_THREAD_MESSAGE_INDENT_SPACES)
+        Dim indentSpaces As String
+
+        ' Create the required number of space characters for indented logging based on the managed thread number
+        indentSpaces = New [String](" "c, Thread.CurrentThread.ManagedThreadId * NUMBER_OF_THREAD_MESSAGE_INDENT_SPACES)
+
+        ' Log the message so long as the trace logger is not null
         TL?.LogMessageCrLf($"AlpacaDiscovery - {methodName}", $"{indentSpaces}{Thread.CurrentThread.ManagedThreadId} {message}")
     End Sub
 
-    Private Function GetRequest(ByVal aURL As String, ByVal timeOut As Integer) As String
-        Dim webClient As WebClientWithTimeOut = New WebClientWithTimeOut()
+    ''' <summary>
+    ''' Call a device URL and return the response as a string, timing out after a specified time
+    ''' </summary>
+    ''' <param name="deviceUrl">Device's URL to call</param>
+    ''' <param name="timeOut">Length of time to wait for a response</param>
+    ''' <returns>Device response as a string</returns>
+    Private Function GetRequest(ByVal deviceUrl As String, ByVal timeOut As Integer) As String
+        Dim webClient As WebClientWithTimeOut
+        Dim returnString As String
+
+        webClient = New WebClientWithTimeOut()
         webClient.Timeout = timeOut
-        Dim s As String = CType(webClient.DownloadString(aURL), String)
-        Return s
+
+        ' Get the string response from the device
+        returnString = CType(webClient.DownloadString(deviceUrl), String)
+
+        Return returnString
     End Function
+
 #End Region
+
 End Class
