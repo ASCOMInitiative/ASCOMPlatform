@@ -38,16 +38,21 @@ Partial Class ChooserAlpacaConfigurationForm
         Me.NumExtraChooserWidth = New System.Windows.Forms.NumericUpDown()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.ChkShowCreateNewAlpacaDriverMessage = New System.Windows.Forms.CheckBox()
+        Me.GrpIpVersion = New System.Windows.Forms.GroupBox()
+        Me.RadIpV4 = New System.Windows.Forms.RadioButton()
+        Me.RadIpV6 = New System.Windows.Forms.RadioButton()
+        Me.RadIpV4AndV6 = New System.Windows.Forms.RadioButton()
         CType(Me.NumDiscoveryIpPort, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumDiscoveryBroadcasts, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumDiscoveryDuration, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumExtraChooserWidth, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GrpIpVersion.SuspendLayout()
         Me.SuspendLayout()
         '
         'BtnOK
         '
-        Me.BtnOK.Location = New System.Drawing.Point(491, 303)
+        Me.BtnOK.Location = New System.Drawing.Point(519, 303)
         Me.BtnOK.Name = "BtnOK"
         Me.BtnOK.Size = New System.Drawing.Size(75, 23)
         Me.BtnOK.TabIndex = 5
@@ -57,7 +62,7 @@ Partial Class ChooserAlpacaConfigurationForm
         'BtnCancel
         '
         Me.BtnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.BtnCancel.Location = New System.Drawing.Point(572, 303)
+        Me.BtnCancel.Location = New System.Drawing.Point(601, 303)
         Me.BtnCancel.Name = "BtnCancel"
         Me.BtnCancel.Size = New System.Drawing.Size(75, 23)
         Me.BtnCancel.TabIndex = 6
@@ -193,13 +198,59 @@ Partial Class ChooserAlpacaConfigurationForm
         Me.ChkShowCreateNewAlpacaDriverMessage.Text = "Show 'Create new Alpaca driver' instructions"
         Me.ChkShowCreateNewAlpacaDriverMessage.UseVisualStyleBackColor = True
         '
+        'GrpIpVersion
+        '
+        Me.GrpIpVersion.Controls.Add(Me.RadIpV4AndV6)
+        Me.GrpIpVersion.Controls.Add(Me.RadIpV6)
+        Me.GrpIpVersion.Controls.Add(Me.RadIpV4)
+        Me.GrpIpVersion.Location = New System.Drawing.Point(531, 73)
+        Me.GrpIpVersion.Name = "GrpIpVersion"
+        Me.GrpIpVersion.Size = New System.Drawing.Size(136, 107)
+        Me.GrpIpVersion.TabIndex = 15
+        Me.GrpIpVersion.TabStop = False
+        Me.GrpIpVersion.Text = "Supported IP Version(s)"
+        '
+        'RadIpV4
+        '
+        Me.RadIpV4.AutoSize = True
+        Me.RadIpV4.Location = New System.Drawing.Point(6, 26)
+        Me.RadIpV4.Name = "RadIpV4"
+        Me.RadIpV4.Size = New System.Drawing.Size(75, 17)
+        Me.RadIpV4.TabIndex = 0
+        Me.RadIpV4.TabStop = True
+        Me.RadIpV4.Text = "IP V4 Only"
+        Me.RadIpV4.UseVisualStyleBackColor = True
+        '
+        'RadIpV6
+        '
+        Me.RadIpV6.AutoSize = True
+        Me.RadIpV6.Location = New System.Drawing.Point(6, 52)
+        Me.RadIpV6.Name = "RadIpV6"
+        Me.RadIpV6.Size = New System.Drawing.Size(75, 17)
+        Me.RadIpV6.TabIndex = 1
+        Me.RadIpV6.TabStop = True
+        Me.RadIpV6.Text = "IP V6 Only"
+        Me.RadIpV6.UseVisualStyleBackColor = True
+        '
+        'RadIpV4AndV6
+        '
+        Me.RadIpV4AndV6.AutoSize = True
+        Me.RadIpV4AndV6.Location = New System.Drawing.Point(6, 78)
+        Me.RadIpV4AndV6.Name = "RadIpV4AndV6"
+        Me.RadIpV4AndV6.Size = New System.Drawing.Size(88, 17)
+        Me.RadIpV4AndV6.TabIndex = 2
+        Me.RadIpV4AndV6.TabStop = True
+        Me.RadIpV4AndV6.Text = "IP V4 and V6"
+        Me.RadIpV4AndV6.UseVisualStyleBackColor = True
+        '
         'ChooserAlpacaConfigurationForm
         '
         Me.AcceptButton = Me.BtnOK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.BtnCancel
-        Me.ClientSize = New System.Drawing.Size(659, 338)
+        Me.ClientSize = New System.Drawing.Size(700, 338)
+        Me.Controls.Add(Me.GrpIpVersion)
         Me.Controls.Add(Me.ChkShowCreateNewAlpacaDriverMessage)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.NumExtraChooserWidth)
@@ -223,6 +274,8 @@ Partial Class ChooserAlpacaConfigurationForm
         CType(Me.NumDiscoveryDuration, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumExtraChooserWidth, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GrpIpVersion.ResumeLayout(False)
+        Me.GrpIpVersion.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -243,4 +296,8 @@ Partial Class ChooserAlpacaConfigurationForm
     Friend WithEvents NumExtraChooserWidth As NumericUpDown
     Friend WithEvents Label4 As Label
     Friend WithEvents ChkShowCreateNewAlpacaDriverMessage As CheckBox
+    Friend WithEvents GrpIpVersion As GroupBox
+    Friend WithEvents RadIpV4AndV6 As RadioButton
+    Friend WithEvents RadIpV6 As RadioButton
+    Friend WithEvents RadIpV4 As RadioButton
 End Class

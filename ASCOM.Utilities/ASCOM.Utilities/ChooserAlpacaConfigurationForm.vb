@@ -31,6 +31,15 @@
         ChkShowDeviceDetails.Checked = chooserForm.AlpacaShowDeviceDetails
         NumExtraChooserWidth.Value = Convert.ToDecimal(chooserForm.AlpacaChooserIncrementalWidth)
         ChkShowCreateNewAlpacaDriverMessage.Checked = Not GetBool(SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE, SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE_DEFAULT)
+
+        ' Set the IP v4 / v6 radio boxes
+        If chooserForm.AlpacaUseIpV4 And chooserForm.AlpacaUseIpV6 Then '// Both Then IPv4 And v6 are enabled so Set the "both" button
+            RadIpV4AndV6.Checked = True
+        Else ' Only one of v4 Or v6 Is enabled so set accordingly 
+            RadIpV4.Checked = chooserForm.AlpacaUseIpV4
+            RadIpV6.Checked = chooserForm.AlpacaUseIpV6
+        End If
+
     End Sub
 
     ''' <summary>
@@ -50,7 +59,23 @@
         chooserForm.AlpacaChooserIncrementalWidth = Convert.ToInt32(NumExtraChooserWidth.Value)
         SetName(SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE, (Not ChkShowCreateNewAlpacaDriverMessage.Checked).ToString())
 
-        ' Indicate success so that he Chooser can persist the values
+        ' Set the IP v4 And v6 variables as necessary
+        If (RadIpV4.Checked) Then  ' The Then IPv4 radio button Is checked so Set the IP v4 And IP v6 variables accordingly
+            chooserForm.AlpacaUseIpV4 = True
+            chooserForm.AlpacaUseIpV6 = False
+        End If
+
+        If (RadIpV6.Checked) Then  ' The Then IPv6 radio button Is checked so Set the IP v4 And IP v6 variables accordingly
+            chooserForm.AlpacaUseIpV4 = False
+            chooserForm.AlpacaUseIpV6 = True
+        End If
+
+        If (RadIpV4AndV6.Checked) Then ' The Then IPv4 And IPV6 radio button Is checked so Set the IP v4 And IP v6 variables accordingly
+            chooserForm.AlpacaUseIpV4 = True
+            chooserForm.AlpacaUseIpV6 = True
+        End If
+
+        ' Indicate success so that the Chooser can persist the values
         Me.DialogResult = DialogResult.OK
         Me.Close()
 
