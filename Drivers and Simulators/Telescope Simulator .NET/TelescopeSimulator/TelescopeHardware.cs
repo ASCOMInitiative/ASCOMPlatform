@@ -184,7 +184,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Right Ascension (X) and declination (Y) rates (deg/sec) set through the RightAscensionRate and DeclinationRate properties
         /// </summary>
-        private static Vector rateRaDec = new Vector();
+        private static Vector rateRaDecOffset = new Vector();
 
         private static int dateDelta;
 
@@ -261,7 +261,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Axis Rates (deg/sec) set by the MoveAxis method
         /// </summary>
-        public static Vector rateAxes = new Vector();
+        public static Vector rateMoveAxes = new Vector();
 
         #endregion
 
@@ -298,7 +298,7 @@ namespace ASCOM.Simulator
 
                 SouthernHemisphere = false;
                 //Connected = false;
-                rateAxes = new Vector();
+                rateMoveAxes = new Vector();
 
                 TL = new ASCOM.Utilities.TraceLogger("", "TelescopeSimHardware");
                 TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.SIMULATOR_TRACE, GlobalConstants.SIMULATOR_TRACE_DEFAULT);
@@ -560,8 +560,8 @@ namespace ASCOM.Simulator
 
                 guideRate.X = 15.0 * (1.0 / 3600.0) / SharedResources.SIDRATE;
                 guideRate.Y = guideRate.X;
-                rateRaDec.Y = 0;
-                rateRaDec.X = 0;
+                rateRaDecOffset.Y = 0;
+                rateRaDecOffset.X = 0;
 
                 TrackingRate = DriveRates.driveSidereal;
                 SlewSettleTime = 0;
@@ -590,8 +590,8 @@ namespace ASCOM.Simulator
             Tracking = AutoTrack;
             AtPark = false;
 
-            rateAxes.X = 0;
-            rateAxes.Y = 0;
+            rateMoveAxes.X = 0;
+            rateMoveAxes.Y = 0;
 
             lastUpdateTime = DateTime.Now;
             s_wTimer.Start();
@@ -610,48 +610,50 @@ namespace ASCOM.Simulator
         private static void MoveAxes()
         {
             // get the time since the last update. This avoids problems with the timer interval varying and greatly improves tracking.
-            var now = DateTime.Now;
-            var updateInterval = (now - lastUpdateTime).TotalSeconds;
+            DateTime now = DateTime.Now;
+            double timeInSecondsSinceLastUpdate = (now - lastUpdateTime).TotalSeconds;
             lastUpdateTime = now;
 
             // This vector accumulates all changes to the current primary and secondary axis positions as a result of movement during this update interval
             Vector change = new Vector();
 
-            // Determine the changes in current axis position and target axis position required as a result of tracking
-            if (Tracking)
+            // Apply tracking changes
+            if (rateMoveAxes.X == 0.0) // No axis move rate has been set for the primary RA axis so normal tracking applies, if it has been enabled
             {
-                double haChange = GetTrackingChange(updateInterval); // Find the hour angle change that occurred during this interval
-                switch (alignmentMode)
+                // Determine the changes in current axis position and target axis position required as a result of tracking
+                if (Tracking) // Tracking is enabled
                 {
-                    case AlignmentModes.algGermanPolar: // In polar aligned mounts an HA change moves only the RA (primary) axis so update this, no change is required to the Dec (secondary) axis
-                    case AlignmentModes.algPolar:
-                        change.X = haChange; // Set the change in the RA (primary) current axis position due to tracking 
-                        targetAxes.X += haChange; // Update the slew target's RA (primary) axis position that will also have changed due to tracking
-                        break;
-                    case AlignmentModes.algAltAz: // In Alt/Az aligned mounts the HA change moves both RA (primary) and Dec (secondary) axes so both need to be updated
-                        change = ConvertRateToAltAz(haChange); // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking
-                        targetAxes = MountFunctions.ConvertRaDecToAxes(targetRaDec, false); // Update the slew target's Azimuth (primary) and Altitude (secondary) axis positions that will also have changed due to tracking
-                        break;
+                    double haChange = GetTrackingChange(timeInSecondsSinceLastUpdate); // Find the hour angle change that occurred during this interval
+                    switch (alignmentMode)
+                    {
+                        case AlignmentModes.algGermanPolar: // In polar aligned mounts an HA change moves only the RA (primary) axis so update this, no change is required to the Dec (secondary) axis
+                        case AlignmentModes.algPolar:
+                            change.X = haChange; // Set the change in the RA (primary) current axis position due to tracking 
+                            targetAxes.X += haChange; // Update the slew target's RA (primary) axis position that will also have changed due to tracking
+                            break;
+                        case AlignmentModes.algAltAz: // In Alt/Az aligned mounts the HA change moves both RA (primary) and Dec (secondary) axes so both need to be updated
+                            change = ConvertRateToAltAz(haChange); // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking
+                            targetAxes = MountFunctions.ConvertRaDecToAxes(targetRaDec, false); // Update the slew target's Azimuth (primary) and Altitude (secondary) axis positions that will also have changed due to tracking
+                            break;
+                    }
+
+                    // We are tracking so apply any RightAScensionRate and DeclinationRate rate offsets, this assumes a polar mount. 
+                    // This correction is not applied when MoveAxis is in effect because the interface specification says it is one or the other of these and not both at the same time
+                    change += Vector.Multiply(rateRaDecOffset, timeInSecondsSinceLastUpdate);
                 }
             }
+
+            // MoveAxis movement allowing for the time since the last movement correction was applied.
+            change += Vector.Multiply(rateMoveAxes, timeInSecondsSinceLastUpdate);
+
             // Move towards the target position if slewing
             change += DoSlew();
 
             // handle HC button moves
             change += HcMoves();
 
-            // MoveAxis movement
-            change += rateAxes;
-
-            // RightAScensionRate and DeclinationRate rate offsets, this assumes a polar mount
-            Vector actualRaDecRateMovement = new Vector(); // Create a new vector to hold the actual movement
-            actualRaDecRateMovement.X = rateRaDec.X * updateInterval; // Calculate the RA axis movement that has occurred since the last timer event = degrees/sec * sec = deg
-            actualRaDecRateMovement.Y = rateRaDec.Y * updateInterval; // Calculate the DEC axis movement that has occurred since the last timer event = degrees/sec * sec = deg
-            change += actualRaDecRateMovement;
-            TL.LogMessage("MoveAxes", $"Rate RA Dec: {rateRaDec.X} {rateRaDec.Y} - Change: {change.X} {change.Y}");
-
             // Pulse guiding changes
-            change += PulseGuide(updateInterval);
+            change += PulseGuide(timeInSecondsSinceLastUpdate);
 
             // Update the axis positions with the total change in this interval
             mountAxes += change;
@@ -1226,8 +1228,8 @@ namespace ASCOM.Simulator
 
         public static double DeclinationRate
         {
-            get { return rateRaDec.Y * DEGREES_TO_ARCSEC; }
-            set { rateRaDec.Y = value * ARCSEC_TO_DEGREES; }
+            get { return rateRaDecOffset.Y * DEGREES_TO_ARCSEC; }
+            set { rateRaDecOffset.Y = value * ARCSEC_TO_DEGREES; }
         }
 
         public static double Declination
@@ -1316,8 +1318,8 @@ namespace ASCOM.Simulator
         // converts the rate between seconds per sidereal second and seconds per second
         public static double RightAscensionRate
         {
-            get { return rateRaDec.X * SI_SECONDS_TO_SIDEREAL_SECONDS * DEGREES_TO_ARCSEC; }
-            set { rateRaDec.X = value * SIDEREAL_SECONDS_TO_SI_SECONDS * ARCSEC_TO_DEGREES; }
+            get { return rateRaDecOffset.X * SI_SECONDS_TO_SIDEREAL_SECONDS * DEGREES_TO_ARCSEC; }
+            set { rateRaDecOffset.X = value * SIDEREAL_SECONDS_TO_SI_SECONDS * ARCSEC_TO_DEGREES; }
         }
 
         public static double GuideRateDeclination
@@ -1378,19 +1380,19 @@ namespace ASCOM.Simulator
                     return true;
                 if (slewing)
                     return true;
-                if (rateAxes.LengthSquared != 0)
+                if (rateMoveAxes.LengthSquared != 0)
                     return true;
                 //if (rateRaDec.LengthSquared != 0) // Commented out by Peter 4th August 2018 because the Telescope specification says that RightAscensionRate and DeclinationRate do not affect the Slewing state
                 //    return true;
-                return slewing && rateAxes.Y != 0 && rateAxes.X != 0;
+                return slewing && rateMoveAxes.Y != 0 && rateMoveAxes.X != 0;
             }
         }
 
         public static void AbortSlew()
         {
             slewing = false;
-            rateAxes = new Vector();
-            rateRaDec = new Vector();
+            rateMoveAxes = new Vector();
+            rateRaDecOffset = new Vector();
             SlewState = SlewType.SlewNone;
         }
 
