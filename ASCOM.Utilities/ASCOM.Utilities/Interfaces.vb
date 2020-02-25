@@ -29,7 +29,7 @@ Namespace Interfaces
         ''' <summary>
         ''' Array of ASCOM devices available on this Alpaca device
         ''' </summary>
-        <DispId(3)> Property ConfiguredDevices As ConfiguredDevice()
+        <DispId(3)> ReadOnly Property ConfiguredDevicesAsArrayList As ArrayList
 
         ''' <summary>
         ''' Array of supported Alpaca interface version numbers
@@ -62,6 +62,21 @@ Namespace Interfaces
 
     End Interface
 
+    ''' <summary>
+    ''' Methods only visible to .NET clients
+    ''' </summary>
+    <ComVisible(False)>
+    Public Interface IAlpacaDeviceExtra
+        ''' <summary>
+        ''' Array of ASCOM devices available on this Alpaca device
+        ''' </summary>
+        Property ConfiguredDevices As List(Of ConfiguredDevice)
+
+    End Interface
+
+    ''' <summary>
+    ''' Methods visible to both COM and .NET clients
+    ''' </summary>
     <Guid("4BF7844B-26BB-41DE-A500-26C65922F290"), ComVisible(True)>
     Public Interface IAscomDevice
         ''' <summary>
@@ -101,10 +116,17 @@ Namespace Interfaces
 
     End Interface
 
-    <ComVisible(False)> Friend Interface IAscomDeviceExtra
+    ''' <summary>
+    ''' Methods only visible to .NET clients
+    ''' </summary>
+    <ComVisible(False)>
+    Friend Interface IAscomDeviceExtra
         Property IPEndPoint As IPEndPoint
     End Interface
 
+    ''' <summary>
+    ''' Methods visible to both COM and .NET clients
+    ''' </summary>
     <Guid("696037F0-9138-4701-AA6C-CE6DB4091F6C"), ComVisible(True)>
     Public Interface IConfiguredDevice
         ''' <summary>
@@ -134,8 +156,41 @@ Namespace Interfaces
     <Guid("EF7EA6E1-1074-4C07-BC42-079E1F486C2B"), ComVisible(True)>
     Public Interface IAlpacaDiscovery
         <DispId(1)> Property DiscoveryComplete As Boolean
+
+        ''' <summary>
+        ''' Returns an ArrayList of discovered Alpaca devices for use by COM clients
+        ''' </summary>
+        ''' <returns>ArrayList of <see cref="AlpacaDevice"/>classes</returns>
+        ''' <remarks>This method is for use by COM clients because it is not possible to pass a generic list as used in <see cref="GetAlpacaDevices"/> through a COM interface. 
+        ''' .NET clients should use <see cref="GetAlpacaDevices()"/> instead of this method.</remarks>
         <DispId(2)> Function GetAlpacaDevicesAsArrayList() As ArrayList
+
+        ''' <summary>
+        ''' Returns an ArrayList of discovered ASCOM devices, of the specified device type, for use by COM clients
+        ''' </summary>
+        ''' <param name="deviceType">The device type for which to search e.g. Telescope, Focuser. An empty string will return devices of all types.</param>
+        ''' <returns>ArrayList of <see cref="AscomDevice"/>classes</returns>
+        ''' <remarks>
+        ''' <para>
+        ''' This method is for use by COM clients because it is not possible to return a generic list, as used in <see cref="GetAscomDevices(String)"/>, through a COM interface. 
+        ''' .NET clients should use <see cref="GetAscomDevices(String)"/> instead of this method.
+        ''' </para>
+        ''' <para>
+        ''' This method will return every discovered device, regardless of device type, if the supplied "deviceType" parameter is an empty string.
+        ''' </para>
+        ''' </remarks>
         <DispId(3)> Function GetAscomDevicesAsArrayList(ByVal deviceType As String) As ArrayList
+
+        ''' <summary>
+        ''' Start an Alpaca device discovery based on the supplied parameters
+        ''' </summary>
+        ''' <param name="numberOfPolls">Number of polls to send in the range 1 to 5</param>
+        ''' <param name="pollInterval">Interval between each poll in the range 10 to 5000 milliseconds</param>
+        ''' <param name="discoveryPort">Discovery port on which to send the broadcast (normally 32227) in the range 1025 to 65535</param>
+        ''' <param name="discoveryDuration">Length of time (seconds) to wait for devices to respond</param>
+        ''' <param name="resolveDnsName">Attempt to resolve host IP addresses to DNS names</param>
+        ''' <param name="useIpV4">Search for Alpaca devices that use IPv4 addresses. (One or both of useIpV4 and useIpV6 must be True.)</param>
+        ''' <param name="useIpV6">Search for Alpaca devices that use IPv6 addresses. (One or both of useIpV4 and useIpV6 must be True.)</param>
         <DispId(4)> Sub StartDiscovery(ByVal numberOfPolls As Integer, ByVal pollInterval As Integer, ByVal discoveryPort As Integer, ByVal discoveryDuration As Double, ByVal resolveDnsName As Boolean, ByVal useIpV4 As Boolean, ByVal useIpV6 As Boolean)
     End Interface
 
@@ -144,10 +199,40 @@ Namespace Interfaces
     ''' </summary>
     <ComVisible(False)>
     Friend Interface IAlpacaDiscoveryExtra
+        ''' <summary>
+        ''' Returns a generic List of discovered Alpaca devices.
+        ''' </summary>
+        ''' <returns>List of <see cref="AlpacaDevice"/>classes</returns>
+        ''' <remarks>This method is only available to .NET clients because COM cannot handle generic types. COM clients should use <see cref="GetAlpacaDevicesAsArrayList()"/>.</remarks>
         Function GetAlpacaDevices() As List(Of ASCOM.Utilities.AlpacaDevice)
+
+        ''' <summary>
+        ''' Returns a generic list of discovered ASCOM devices of the specified device type.
+        ''' </summary>
+        ''' <param name="deviceType">The device type for which to search e.g. Telescope, Focuser. An empty string will return devices of all types.</param>
+        ''' <returns>List of AscomDevice classes</returns>
+        ''' <remarks>
+        ''' <para>
+        ''' This method is only available to .NET clients because COM cannot handle generic types. COM clients should use <see cref="GetAscomDevicesAsArrayList(String)()"/>.
+        ''' </para>
+        ''' <para>
+        ''' This method will return every discovered device, regardless of device type, if the supplied "deviceType" parameter is an empty string.
+        ''' </para>
+        ''' </remarks>
         Function GetAscomDevices(ByVal deviceType As String) As List(Of ASCOM.Utilities.AscomDevice)
+
+        ''' <summary>
+        ''' Raised every time information about discovered devices is updated
+        ''' </summary>
+        ''' <remarks>This event is only available to .NET clients, there is no equivalent for COM clients.</remarks>
         Event AlpacaDevicesUpdated As EventHandler
+
+        ''' <summary>
+        ''' Raised when the discovery is complete
+        ''' </summary>
+        ''' <remarks>This event is only available to .NET clients. COM clients should poll the <see cref="DiscoveryComplete"/> property periodically to determine when discovery is complete.</remarks>
         Event DiscoveryCompleted As EventHandler
+
     End Interface
 
     ''' <summary>

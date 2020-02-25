@@ -31,7 +31,6 @@ Public Class AlpacaDiscovery
     Private discoveryStartTime As Date ' Time at which the start discovery command was received
     Private discoveryCompleteValue As Boolean ' Discovery completion status
     Private ReadOnly deviceListLockObject As Object = New Object() ' Lock object to synchronise access to the Alpaca device list collection, which is not a thread safe collection
-
 #End Region
 
 #Region "New and IDisposable Support"
@@ -142,7 +141,16 @@ Public Class AlpacaDiscovery
     ''' <remarks>This method is for use by COM clients because it is not possible to pass a generic list as used in <see cref="GetAlpacaDevices"/> through a COM interface. 
     ''' .NET clients should use <see cref="GetAlpacaDevices()"/> instead of this method.</remarks>
     Public Function GetAlpacaDevicesAsArrayList() As ArrayList Implements IAlpacaDiscovery.GetAlpacaDevicesAsArrayList
-        Return New ArrayList(GetAlpacaDevices()) ' Return the Alpaca devices list as an ArrayList
+        Dim alpacaDevicesAsArrayList As ArrayList ' Variable to hold the arraylist analogue of the generic list of Alpaca devices
+
+        alpacaDevicesAsArrayList = New ArrayList ' Create a new array-list
+
+        ' populate the array-list with data from the generic list
+        For Each alpacaDevice As AlpacaDevice In GetAlpacaDevices()
+            alpacaDevicesAsArrayList.Add(alpacaDevice)
+        Next
+
+        Return alpacaDevicesAsArrayList ' Return the Alpaca devices list as an ArrayList
     End Function
 
     ''' <summary>
@@ -286,7 +294,6 @@ Public Class AlpacaDiscovery
         RaiseEvent AlpacaDevicesUpdated(Me, EventArgs.Empty)
     End Sub
 
-
     ''' <summary>
     ''' Discovery timer event handler - called when the allocated discovery period has ended
     ''' </summary>
@@ -310,7 +317,6 @@ Public Class AlpacaDiscovery
         If statusMessagesUpdated Then RaiseAnAlpacaDevicesChangedEvent() ' Raise a devices changed event if any status messages have been updated
         RaiseEvent DiscoveryCompleted(Me, EventArgs.Empty) ' Raise an event to indicate that discovery is complete
     End Sub
-
 
     ''' <summary>
     ''' Handler for device responses coming from the Finder
@@ -346,7 +352,6 @@ Public Class AlpacaDiscovery
             LogMessage("BroadcastResponseEventHandler", $"AddresssFound Exception: {ex.ToString()}")
         End Try
     End Sub
-
 
     ''' <summary>
     ''' Get Alpaca device information from the management API
@@ -397,6 +402,11 @@ Public Class AlpacaDiscovery
 
                 SyncLock deviceListLockObject ' Make sure that only one thread can update the device list dictionary at a time
                     alpacaDeviceList(deviceIpEndPoint).ConfiguredDevices = configuredDevicesResponse.Value
+                    LogMessage("GetAlpacaDeviceInformation", $"Listing configured devices")
+                    For Each configuredDevce As ConfiguredDevice In alpacaDeviceList(deviceIpEndPoint).ConfiguredDevices
+                        LogMessage("GetAlpacaDeviceInformation", $"Found configured device: {configuredDevce.DeviceName} {configuredDevce.DeviceType} {configuredDevce.UniqueID}")
+                    Next
+                    LogMessage("GetAlpacaDeviceInformation", $"Completed list of configured devices")
                 End SyncLock
 
                 RaiseAnAlpacaDevicesChangedEvent() ' Device list was changed so set the changed flag
@@ -464,7 +474,6 @@ Public Class AlpacaDiscovery
         End If
     End Sub
 
-
     ''' <summary>
     ''' Record the IPs in the state object for later use.
     ''' </summary>
@@ -477,7 +486,6 @@ Public Class AlpacaDiscovery
             LogMessage("GetHostEntryCallback", $"Exception: {ex.ToString()}") ' Log exceptions but don't throw them
         End Try
     End Sub
-
 
     ''' <summary>
     ''' Log a message to the screen, adding the current managed thread ID

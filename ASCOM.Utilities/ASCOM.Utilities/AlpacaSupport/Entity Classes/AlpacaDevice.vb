@@ -10,7 +10,10 @@ Imports ASCOM.Utilities.Interfaces
 ComVisible(True),
 ClassInterface(ClassInterfaceType.None)>
 Public Class AlpacaDevice
-    Implements ASCOM.Utilities.Interfaces.IAlpacaDevice
+    Implements ASCOM.Utilities.Interfaces.IAlpacaDevice, ASCOM.Utilities.Interfaces.IAlpacaDeviceExtra
+
+    Dim configuredDevicesValue As List(Of ConfiguredDevice)
+    Dim configuredDevicesAsArrayListValue As ArrayList
 
     ''' <summary>
     ''' Initialises the class with default values
@@ -29,7 +32,8 @@ Public Class AlpacaDevice
         Me.IPEndPoint = ipEndPoint
         HostName = ipEndPoint.Address.ToString() ' Initialise the host name to the IP address in case there is no DNS name resolution or in case this fails
         Port = ipEndPoint.Port ' Initialise the port number to the port set in the IPEndPoint
-        ConfiguredDevices = New ConfiguredDevice() {} ' List(Of ConfiguredDevice)()
+        configuredDevicesValue = New List(Of ConfiguredDevice)
+        configuredDevicesAsArrayListValue = New ArrayList
         SupportedInterfaceVersions = New Integer() {}
         Me.StatusMessage = statusMessage
     End Sub
@@ -47,10 +51,16 @@ Public Class AlpacaDevice
     Public Property Port As Integer Implements IAlpacaDevice.Port
 
     ''' <summary>
-    ''' Array of ASCOM devices available on this Alpaca device
+    ''' List of ASCOM devices available on this Alpaca device as an ArrayList for COM clients
     ''' </summary>
-    Public Property ConfiguredDevices As ConfiguredDevice() Implements IAlpacaDevice.ConfiguredDevices
-
+    ''' <remarks>
+    ''' This method is primarily to support COM clients because COM does not support generic lists. .NET clients should use the <see cref="ConfiguredDevices"/> property instead.
+    ''' </remarks>
+    ReadOnly Property ConfiguredDevicesAsArrayList As ArrayList Implements IAlpacaDevice.ConfiguredDevicesAsArrayList
+        Get
+            Return configuredDevicesAsArrayListValue ' Return the array-list of devices that was populated by the set ConfiguredDevices method
+        End Get
+    End Property
     ''' <summary>
     ''' Array of supported Alpaca interface version numbers
     ''' </summary>
@@ -80,6 +90,28 @@ Public Class AlpacaDevice
     ''' <returns></returns>
     Public Property Location As String = "" Implements IAlpacaDevice.Location
 
+    ''' <summary>
+    ''' List of ASCOM devices available on this Alpaca device
+    ''' </summary>
+    ''' <remarks>
+    ''' This method can only be used by .NET clients. COM clients should use the <see cref="ConfiguredDevicesAsArrayList"/> property.
+    ''' </remarks>
+    Public Property ConfiguredDevices As List(Of ConfiguredDevice) Implements IAlpacaDeviceExtra.ConfiguredDevices
+        Get
+            Return configuredDevicesValue ' Return the list of configured devices
+        End Get
+
+        Set(ByVal value As List(Of ConfiguredDevice))
+            ' Save the supplied list of configured devices 
+            configuredDevicesValue = value
+
+            ' Populate the read-only arraylist with the same data
+            configuredDevicesAsArrayListValue.Clear()
+            For Each configuredDevice As ConfiguredDevice In configuredDevicesValue
+                configuredDevicesAsArrayListValue.Add(configuredDevice)
+            Next
+        End Set
+    End Property
 #End Region
 
 #Region "Internal Properties"

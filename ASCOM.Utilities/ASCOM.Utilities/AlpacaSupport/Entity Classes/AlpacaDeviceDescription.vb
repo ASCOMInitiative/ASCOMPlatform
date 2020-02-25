@@ -29,24 +29,24 @@ Friend Class AlpacaDeviceDescription
     ''' The Alpaca device's configured name
     ''' </summary>
     ''' <returns></returns>
-    Friend Property ServerName As String = ""
+    Public Property ServerName As String = ""
 
     ''' <summary>
     ''' The device manufacturer's name
     ''' </summary>
     ''' <returns></returns>
-    Friend Property Manufacturer As String = ""
+    Public Property Manufacturer As String = ""
 
     ''' <summary>
     ''' The device's version as set by the manufacturer
     ''' </summary>
     ''' <returns></returns>
-    Friend Property ManufacturerVersion As String = ""
+    Public Property ManufacturerVersion As String = ""
 
     ''' <summary>
     ''' The Alpaca device's configured location
     ''' </summary>
     ''' <returns></returns>
-    Friend Property Location As String = ""
+    Public Property Location As String = ""
 
 End Class

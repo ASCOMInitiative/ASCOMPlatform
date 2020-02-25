@@ -101,9 +101,9 @@
             </list>
           </listItem>
           <listItem>
-            The ASCOM.Utilities.AlpacaDiscovery component has been added, which enables clients to conduct searches for Alpaca devices through the Alpaca network discovery protocol.
-            The associated ASCOM.Utilities.AlpacaDevice and ASCOM.Utilities.AscomDevice data classes provide details of the Alpaca devices discovered on the network and the ASCOM devices 
-            that can be accessed through them respectively.
+            An ASCOM.Utilities.AlpacaDiscovery component has been added. This enables .NET and COM clients to
+            conduct searches for Alpaca devices through the Alpaca network discovery protocol. The associated ASCOM.Utilities.AlpacaDevice, ASCOM.Utilities.ConfiguredDevice and ASCOM.Utilities.AscomDevice data classes provide
+            details of the Alpaca devices discovered on the network and of the ASCOM devices that can be accessed through them.
           </listItem>
           <listItem>The NOVASCOM and Kepler components are no longer flagged as deprecated because they provide unique functionality within the Platform.</listItem>
           <listItem>The version of ASCOM Controls installed by the Platform has been marked as deprecated. An updated version of the controls is available as a NuGet package. The displayed message contains a reference to the new TA.Winforms.Controls NuGet package.</listItem>
