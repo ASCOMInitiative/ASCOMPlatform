@@ -28,7 +28,7 @@ Friend Class ChooserForm
     Private Const ALPACA_ENABLED As String = "Alpaca enabled" : Private Const ALPACA_ENABLED_DEFAULT As Boolean = False
     Private Const ALPACA_DISCOVERY_PORT As String = "Alpaca discovery port" : Private Const ALPACA_DISCOVERY_PORT_DEFAULT As Integer = 32227
     Private Const ALPACA_NUMBER_OF_BROADCASTS As String = "Alpaca number of broadcasts" : Private Const ALPACA_NUMBER_OF_BROADCASTS_DEFAULT As Integer = 2
-    Private Const ALPACA_TIMEOUT As String = "Alpaca timeout" : Private Const ALPACA_TIMEOUT_DEFAULT As Double = 2.0
+    Private Const ALPACA_TIMEOUT As String = "Alpaca timeout" : Private Const ALPACA_TIMEOUT_DEFAULT As Double = 1.0
     Private Const ALPACA_DNS_RESOLUTION As String = "Alpaca DNS resolution" : Private Const ALPACA_DNS_RESOLUTION_DEFAULT As Boolean = False
     Private Const ALPACA_SHOW_DISCOVERED_DEVICES As String = "Show discovered Alpaca devices" : Private Const ALPACA_SHOW_DISCOVERED_DEVICES_DEFAULT As Boolean = False
     Private Const ALPACA_SHOW_DEVICE_DETAILS As String = "Show Alpaca device details" : Private Const ALPACA_SHOW_DEVICE_DETAILS_DEFAULT As Boolean = False
