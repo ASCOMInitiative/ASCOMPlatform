@@ -189,7 +189,7 @@ Public Class AlpacaDiscovery
     ''' <returns>List of AscomDevice classes</returns>
     ''' <remarks>
     ''' <para>
-    ''' This method is only available to .NET clients because COM cannot handle generic types. COM clients should use <see cref="GetAscomDevicesAsArrayList(String)()"/>.
+    ''' This method is only available to .NET clients because COM cannot handle generic types. COM clients should use <see cref="GetAlpacaDevicesAsArrayList()"/>.
     ''' </para>
     ''' <para>
     ''' This method will return every discovered device, regardless of device type, if the supplied "deviceType" parameter is an empty string.
