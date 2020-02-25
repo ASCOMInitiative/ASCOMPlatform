@@ -66,7 +66,7 @@ namespace ASCOM.Simulator
         private const double DEGREES_TO_ARCSEC = 3600.0;
         private const double ARCSEC_TO_DEGREES = 1.0 / DEGREES_TO_ARCSEC;
         private const double SIDEREAL_SECONDS_TO_SI_SECONDS = 0.9972695601852;
-        private const double SI_SECONDS_TO_SIDEREAL_SECONDS = 1.0/ SIDEREAL_SECONDS_TO_SI_SECONDS;
+        private const double SI_SECONDS_TO_SIDEREAL_SECONDS = 1.0 / SIDEREAL_SECONDS_TO_SI_SECONDS;
         #endregion
 
         #region Private variables
@@ -183,8 +183,11 @@ namespace ASCOM.Simulator
 
         /// <summary>
         /// Right Ascension (X) and declination (Y) rates (deg/sec) set through the RightAscensionRate and DeclinationRate properties
+        ///  The "Internal" vector holds values in the units used internally by the simulator (degrees per SI second)
+        ///  The "External" vector holds values in the units specified in the telescope interface standard (arc-seconds per sidereal second for RightAscensionRate and arc-seconds per SI second for DeclinationRate)
         /// </summary>
-        private static Vector rateRaDecOffset = new Vector();
+        private static Vector rateRaDecOffsetInternal = new Vector();
+        private static Vector rateRaDecOffsetExternal = new Vector();
 
         private static int dateDelta;
 
@@ -560,8 +563,8 @@ namespace ASCOM.Simulator
 
                 guideRate.X = 15.0 * (1.0 / 3600.0) / SharedResources.SIDRATE;
                 guideRate.Y = guideRate.X;
-                rateRaDecOffset.Y = 0;
-                rateRaDecOffset.X = 0;
+                rateRaDecOffsetInternal.Y = 0;
+                rateRaDecOffsetInternal.X = 0;
 
                 TrackingRate = DriveRates.driveSidereal;
                 SlewSettleTime = 0;
@@ -639,7 +642,7 @@ namespace ASCOM.Simulator
 
                     // We are tracking so apply any RightAScensionRate and DeclinationRate rate offsets, this assumes a polar mount. 
                     // This correction is not applied when MoveAxis is in effect because the interface specification says it is one or the other of these and not both at the same time
-                    change += Vector.Multiply(rateRaDecOffset, timeInSecondsSinceLastUpdate);
+                    change += Vector.Multiply(rateRaDecOffsetInternal, timeInSecondsSinceLastUpdate);
                 }
             }
 
@@ -1228,8 +1231,12 @@ namespace ASCOM.Simulator
 
         public static double DeclinationRate
         {
-            get { return rateRaDecOffset.Y * DEGREES_TO_ARCSEC; }
-            set { rateRaDecOffset.Y = value * ARCSEC_TO_DEGREES; }
+            get { return rateRaDecOffsetExternal.Y; }
+            set
+            {
+                rateRaDecOffsetExternal.Y = value; // Save the provided rate to be returned through the Get property
+                rateRaDecOffsetInternal.Y = value * ARCSEC_TO_DEGREES; // Save the rate in the internal units that the simulator uses
+            }
         }
 
         public static double Declination
@@ -1318,8 +1325,12 @@ namespace ASCOM.Simulator
         // converts the rate between seconds per sidereal second and seconds per second
         public static double RightAscensionRate
         {
-            get { return rateRaDecOffset.X * SI_SECONDS_TO_SIDEREAL_SECONDS * DEGREES_TO_ARCSEC; }
-            set { rateRaDecOffset.X = value * SIDEREAL_SECONDS_TO_SI_SECONDS * ARCSEC_TO_DEGREES; }
+            get { return rateRaDecOffsetExternal.X; }
+            set
+            {
+                rateRaDecOffsetExternal.X = value; // Save the provided rate to be returned through the Get property
+                rateRaDecOffsetInternal.X = value * SIDEREAL_SECONDS_TO_SI_SECONDS * ARCSEC_TO_DEGREES; // Save the rate in the internal units that the simulator uses
+            }
         }
 
         public static double GuideRateDeclination
@@ -1392,7 +1403,7 @@ namespace ASCOM.Simulator
         {
             slewing = false;
             rateMoveAxes = new Vector();
-            rateRaDecOffset = new Vector();
+            rateRaDecOffsetInternal = new Vector();
             SlewState = SlewType.SlewNone;
         }
 
