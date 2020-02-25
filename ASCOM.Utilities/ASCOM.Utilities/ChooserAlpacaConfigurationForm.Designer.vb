@@ -39,9 +39,10 @@ Partial Class ChooserAlpacaConfigurationForm
         Me.Label4 = New System.Windows.Forms.Label()
         Me.ChkShowCreateNewAlpacaDriverMessage = New System.Windows.Forms.CheckBox()
         Me.GrpIpVersion = New System.Windows.Forms.GroupBox()
-        Me.RadIpV4 = New System.Windows.Forms.RadioButton()
-        Me.RadIpV6 = New System.Windows.Forms.RadioButton()
         Me.RadIpV4AndV6 = New System.Windows.Forms.RadioButton()
+        Me.RadIpV6 = New System.Windows.Forms.RadioButton()
+        Me.RadIpV4 = New System.Windows.Forms.RadioButton()
+        Me.Label5 = New System.Windows.Forms.Label()
         CType(Me.NumDiscoveryIpPort, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumDiscoveryBroadcasts, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumDiscoveryDuration, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -210,16 +211,16 @@ Partial Class ChooserAlpacaConfigurationForm
         Me.GrpIpVersion.TabStop = False
         Me.GrpIpVersion.Text = "Supported IP Version(s)"
         '
-        'RadIpV4
+        'RadIpV4AndV6
         '
-        Me.RadIpV4.AutoSize = True
-        Me.RadIpV4.Location = New System.Drawing.Point(6, 26)
-        Me.RadIpV4.Name = "RadIpV4"
-        Me.RadIpV4.Size = New System.Drawing.Size(75, 17)
-        Me.RadIpV4.TabIndex = 0
-        Me.RadIpV4.TabStop = True
-        Me.RadIpV4.Text = "IP V4 Only"
-        Me.RadIpV4.UseVisualStyleBackColor = True
+        Me.RadIpV4AndV6.AutoSize = True
+        Me.RadIpV4AndV6.Location = New System.Drawing.Point(6, 78)
+        Me.RadIpV4AndV6.Name = "RadIpV4AndV6"
+        Me.RadIpV4AndV6.Size = New System.Drawing.Size(88, 17)
+        Me.RadIpV4AndV6.TabIndex = 2
+        Me.RadIpV4AndV6.TabStop = True
+        Me.RadIpV4AndV6.Text = "IP V4 and V6"
+        Me.RadIpV4AndV6.UseVisualStyleBackColor = True
         '
         'RadIpV6
         '
@@ -232,16 +233,26 @@ Partial Class ChooserAlpacaConfigurationForm
         Me.RadIpV6.Text = "IP V6 Only"
         Me.RadIpV6.UseVisualStyleBackColor = True
         '
-        'RadIpV4AndV6
+        'RadIpV4
         '
-        Me.RadIpV4AndV6.AutoSize = True
-        Me.RadIpV4AndV6.Location = New System.Drawing.Point(6, 78)
-        Me.RadIpV4AndV6.Name = "RadIpV4AndV6"
-        Me.RadIpV4AndV6.Size = New System.Drawing.Size(88, 17)
-        Me.RadIpV4AndV6.TabIndex = 2
-        Me.RadIpV4AndV6.TabStop = True
-        Me.RadIpV4AndV6.Text = "IP V4 and V6"
-        Me.RadIpV4AndV6.UseVisualStyleBackColor = True
+        Me.RadIpV4.AutoSize = True
+        Me.RadIpV4.Location = New System.Drawing.Point(6, 26)
+        Me.RadIpV4.Name = "RadIpV4"
+        Me.RadIpV4.Size = New System.Drawing.Size(75, 17)
+        Me.RadIpV4.TabIndex = 0
+        Me.RadIpV4.TabStop = True
+        Me.RadIpV4.Text = "IP V4 Only"
+        Me.RadIpV4.UseVisualStyleBackColor = True
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.ForeColor = System.Drawing.Color.Red
+        Me.Label5.Location = New System.Drawing.Point(423, 40)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(253, 13)
+        Me.Label5.TabIndex = 16
+        Me.Label5.Text = "Platform 6.5 RC1 only supports discovery using IPv4"
         '
         'ChooserAlpacaConfigurationForm
         '
@@ -250,6 +261,7 @@ Partial Class ChooserAlpacaConfigurationForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.BtnCancel
         Me.ClientSize = New System.Drawing.Size(700, 338)
+        Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.GrpIpVersion)
         Me.Controls.Add(Me.ChkShowCreateNewAlpacaDriverMessage)
         Me.Controls.Add(Me.Label4)
@@ -300,4 +312,5 @@ Partial Class ChooserAlpacaConfigurationForm
     Friend WithEvents RadIpV4AndV6 As RadioButton
     Friend WithEvents RadIpV6 As RadioButton
     Friend WithEvents RadIpV4 As RadioButton
+    Friend WithEvents Label5 As Label
 End Class
