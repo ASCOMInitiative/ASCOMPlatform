@@ -7,13 +7,27 @@ namespace ASCOM.DeviceInterface
     /// <summary>Defines the IDome Interface</summary>
     /// <remarks>
     /// <para>
-    /// This interface can be used to control most types of observatory structure, including a dome
-    /// (with or without a controllable shutter), a clamshell and a roll off roof.
+    /// This interface can be used to control most types of observatory structure, including domes (with or without a controllable shutter), clamshells and roll off roofs.
+    /// </para>
+    /// <para><b>Dome Coordinates</b></para>
+    /// <para>
+    /// The azimuth and shutter altitude coordinates within this interface refer to positioning of the dome itself and are not sky coordinates from the perspective of the observing device. 
+    /// Mount geometry and pier location often mean that the observing device is not located at the centre point of a hemispherical dome and this results in the dome needing to be positioned at different coordinates
+    /// than those of the mount in order to expose the required part of the sky to the observing device.
     /// </para>
     /// <para>
-    /// The dome implementation should be self explanatory.
-    /// A roll off roof or clamshell is implemented using the shutter control as the roof.
-    /// The properties and methods should be implemented as follows:
+    /// Calculating the required dome position is not the responsibility of the dome driver, this must be done by the client application or by an intermediary hub such as the Device Hub. The coordinates sent 
+    /// to the dome driver must be those required to position the dome slit in the correct position after allowing for the geometry of the mount.
+    /// </para>
+    /// <para><b>Dome Slaving</b></para>
+    /// <para>
+    /// A dome is said to be slaved when its azimuth and shutter altitude are controlled by a "behind the scenes" controller that knows the required telescope observing coordinates and that can calculate the 
+    /// required dome position after allowing for mount geometry, observing device orientation etc. When slaved and in operational use most of the dome interface methods are of little relevance 
+    /// apart from the shutter control methods.
+    /// </para>
+    /// <para><b>How to use the Dome interface to implement a Roll-off Roof or Clamshell</b></para>
+    /// <para>
+    /// A roll off roof or clamshell is implemented using the shutter control as the roof. The properties and methods should be implemented as follows:
     /// </para>
     /// <list type="bullet">
     /// <item>
@@ -38,14 +52,6 @@ namespace ASCOM.DeviceInterface
     /// <see cref="IDomeV2.Altitude" /> and <see cref="IDomeV2.Azimuth" /> throw  <see cref="PropertyNotImplementedException" />
     /// </item>
     /// </list>
-    /// <para>
-    /// Some domes and possibly clamshells may be able to control the opening aperture and/or
-    /// position. Observatories with this feature may wish to support the <see cref="IDomeV2.SlewToAltitude" /> method.
-    /// In this case, the altitude specified is not the position of the shutter or roof, but the
-    /// centre of an "aperture on the sky" that the observer wishes to view. The driver will have knowledge of the
-    /// physical properties of the structure (possibly using data stored within the driver's settings) and it is up to
-    /// the driver to determine the best physical position of the roof apparatus to meet the observer's request.
-    /// </para>
     /// </remarks>
     [Guid("88CFA00C-DDD3-4b42-A1F0-9387E6823832")]
     [ComVisible(true)]
@@ -341,6 +347,10 @@ namespace ASCOM.DeviceInterface
         /// </para>
         /// <para>
         /// Raises an error only if no azimuth control. If actual dome azimuth can not be read, then reports back the azimuth of the last slew position.
+        /// </para>
+        /// <para>
+        /// The supplied azimuth value is the final azimuth for the dome, not the telescope azimuth. ASCOM Dome drivers do not perform slaving calculations i.e. they do not take account of mount geometry and simply 
+        /// move where they are instructed. Any such slaving calculations must be done by the application.
         /// </para>
         /// </remarks>
         double Azimuth { get; }
