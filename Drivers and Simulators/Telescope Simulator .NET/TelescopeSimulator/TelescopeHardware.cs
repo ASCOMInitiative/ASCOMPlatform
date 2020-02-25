@@ -63,10 +63,10 @@ namespace ASCOM.Simulator
         private const double SOLAR_RATE_DEG_SEC = 15.0 / 3600;
         private const double LUNAR_RATE_DEG_SEC = 14.515 / 3600;
         private const double KING_RATE_DEG_SEC = 15.037 / 3600;
-        private const double ARCSEC_TO_DEGREES = 1.0 / 3600.0;
         private const double DEGREES_TO_ARCSEC = 3600.0;
+        private const double ARCSEC_TO_DEGREES = 1.0 / DEGREES_TO_ARCSEC;
         private const double SIDEREAL_SECONDS_TO_SI_SECONDS = 0.9972695601852;
-        private const double SI_SECONDS_TO_SIDEREAL_SECONDS = 1.002737915528;
+        private const double SI_SECONDS_TO_SIDEREAL_SECONDS = 1.0/ SIDEREAL_SECONDS_TO_SI_SECONDS;
         #endregion
 
         #region Private variables
