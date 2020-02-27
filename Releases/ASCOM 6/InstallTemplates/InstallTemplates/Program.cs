@@ -197,7 +197,6 @@ namespace InstallTemplates
                 else
                 {
                     LogMessage("FindInRegistry", "    Registry key not present");
-                    ReturnCode = 2;
                 }
             }
             catch (Exception ex)
