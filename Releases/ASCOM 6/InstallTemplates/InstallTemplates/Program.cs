@@ -97,9 +97,18 @@ namespace InstallTemplates
         /// <returns>An updated dictionary of unique template directory values.</returns>
         static private Dictionary<string, string> AddTemplateDirectories(List<string> additionList, Dictionary<string, string> overallList)
         {
-            foreach (string templateDirectory in additionList)
+            try
             {
-                if (!overallList.ContainsKey(templateDirectory)) overallList.Add(templateDirectory, "");
+                foreach (string templateDirectory in additionList)
+                {
+                    if (!overallList.ContainsKey(templateDirectory)) overallList.Add(templateDirectory, "");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogError("AddTemplateDirectories", "  Exception adding template directories: " + ex.ToString());
+                ReturnCode = 2;
             }
 
             return overallList;
@@ -153,39 +162,50 @@ namespace InstallTemplates
         /// <returns>A list of template directories found</returns>
         static private List<string> FindTemplateDirectoriesInRegistry(RegistryKey rKey, string searchKey)
         {
-            RegistryKey VSKey = Registry.CurrentUser;
             List<string> foundTempateDirectories = new List<string>();
-
-            LogMessage("FindInRegistry", "Searching key: " + rKey.ToString() + searchKey);
 
             try
             {
-                VSKey = rKey.OpenSubKey(searchKey, false); //VS BAse Location
-            }
-            catch { }
+                RegistryKey VSKey = Registry.CurrentUser;
 
-            if (VSKey != null)
-            {
-                string[] vsVersions = VSKey.GetSubKeyNames();
+                LogMessage("FindInRegistry", "Searching key: " + rKey.ToString() + searchKey);
 
-                foreach (string vsversion in vsVersions)
+                try
                 {
-                    //LogMessage("FindTemplateDirectoriesInRegistry", "Found: " + vsversion);
-                    string keyname = searchKey + @"\" + vsversion;
-                    //LogMessage("FindTemplateDirectoriesInRegistry", "Searching for Key: " + keyname);
-                    VSKey = Registry.CurrentUser.OpenSubKey(keyname);
-                    string templateDir = (string)VSKey.GetValue(@"UserProjectTemplatesLocation");
-                    if (!string.IsNullOrEmpty(templateDir))
+                    VSKey = rKey.OpenSubKey(searchKey, false); //VS BAse Location
+                }
+                catch { }
+
+                if (VSKey != null)
+                {
+                    string[] vsVersions = VSKey.GetSubKeyNames();
+
+                    foreach (string vsversion in vsVersions)
                     {
-                        LogMessage("FindInRegistry", "    Found Template Directory: " + templateDir);
-                        foundTempateDirectories.Add(templateDir);
+                        //LogMessage("FindTemplateDirectoriesInRegistry", "Found: " + vsversion);
+                        string keyname = searchKey + @"\" + vsversion;
+                        //LogMessage("FindTemplateDirectoriesInRegistry", "Searching for Key: " + keyname);
+                        VSKey = Registry.CurrentUser.OpenSubKey(keyname);
+                        string templateDir = (string)VSKey.GetValue(@"UserProjectTemplatesLocation");
+                        if (!string.IsNullOrEmpty(templateDir))
+                        {
+                            LogMessage("FindInRegistry", "    Found Template Directory: " + templateDir);
+                            foundTempateDirectories.Add(templateDir);
+                        }
                     }
                 }
+                else
+                {
+                    LogMessage("FindInRegistry", "    Registry key not present");
+                    ReturnCode = 2;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                LogMessage("FindInRegistry", "    Registry key not present");
+                LogError("AddTemplateDirectories", "  Exception adding template directories: " + ex.ToString());
+                ReturnCode = 3;
             }
+
             return foundTempateDirectories;
         }
 
@@ -223,88 +243,96 @@ namespace InstallTemplates
         {
             const string spaces = "    ";
 
-            LogMessage("InstallTemplates", "TemplateBasePath: " + TemplateBasePath);
-            LogMessage("InstallTemplates", "TemplateSourceDirectory: " + TemplateSourceDirectory);
-
-            string Platform5VB = TemplateBasePath + @"\Visual Basic\"; // Set up expected paths
-            string Platform5CSharp = TemplateBasePath + @"\Visual C#\";
-            string Platform6VB = TemplateBasePath + @"\Visual Basic\ASCOM6\";
-            string Platform6CSharp = TemplateBasePath + @"\Visual C#\ASCOM6\";
-
-            LogMessage("InstallTemplates", spaces + "VB Path (Platform 5): " + Platform5VB);
-            LogMessage("InstallTemplates", spaces + "C# Path (Platform 5): " + Platform5CSharp);
-            LogMessage("InstallTemplates", spaces + "VB Path (Platform 6): " + Platform6VB);
-            LogMessage("InstallTemplates", spaces + "C# Path (Platform 6): " + Platform6CSharp);
-
-            if (Directory.Exists(Platform6CSharp))
+            try
             {
-                LogMessage("InstallTemplates", spaces + "Path: " + Platform6CSharp + " already exists");
-            }
-            else
-            {
-                LogMessage("InstallTemplates", spaces + "Path: " + Platform6CSharp + " does not exist, creating directory");
-                Directory.CreateDirectory(Platform6CSharp);
-            }
-            CleanDirectory(Platform6CSharp); // Clean the C# directory
+                LogMessage("InstallTemplates", "TemplateBasePath: " + TemplateBasePath);
+                LogMessage("InstallTemplates", "TemplateSourceDirectory: " + TemplateSourceDirectory);
 
-            if (Directory.Exists(Platform6VB))
-            {
-                LogMessage("InstallTemplates", spaces + "Path: " + Platform6VB + " already exists");
-            }
-            else
-            {
-                LogMessage("InstallTemplates", spaces + "Path: " + Platform6VB + " does not exist, creating directory");
-                Directory.CreateDirectory(Platform6VB);
-            }
-            CleanDirectory(Platform6VB); // Clean the C# directory
+                string Platform5VB = TemplateBasePath + @"\Visual Basic\"; // Set up expected paths
+                string Platform5CSharp = TemplateBasePath + @"\Visual C#\";
+                string Platform6VB = TemplateBasePath + @"\Visual Basic\ASCOM6\";
+                string Platform6CSharp = TemplateBasePath + @"\Visual C#\ASCOM6\";
 
-            FileDelete(Platform5CSharp + "ASCOM Camera Driver (C#).zip"); //Platform 5 C#
-            FileDelete(Platform5CSharp + "ASCOM Dome Driver (C#).zip");
-            FileDelete(Platform5CSharp + "ASCOM FilterWheel Driver (C#).zip");
-            FileDelete(Platform5CSharp + "ASCOM Focuser Driver (C#).zip");
-            FileDelete(Platform5CSharp + "ASCOM Rotator Driver (C#).zip");
-            FileDelete(Platform5CSharp + "ASCOM Switch Driver (C#).zip");
-            FileDelete(Platform5CSharp + "ASCOM Telescope Driver (C#).zip");
-            FileDelete(Platform5CSharp + "ASCOM Local Server (singleton).zip");
+                LogMessage("InstallTemplates", spaces + "VB Path (Platform 5): " + Platform5VB);
+                LogMessage("InstallTemplates", spaces + "C# Path (Platform 5): " + Platform5CSharp);
+                LogMessage("InstallTemplates", spaces + "VB Path (Platform 6): " + Platform6VB);
+                LogMessage("InstallTemplates", spaces + "C# Path (Platform 6): " + Platform6CSharp);
 
-            FileDelete(Platform5VB + "ASCOM Camera Driver (VB).zip"); // Platform 5 VB
-            FileDelete(Platform5VB + "ASCOM Dome Driver (VB).zip");
-            FileDelete(Platform5VB + "ASCOM FilterWheel Driver (VB).zip");
-            FileDelete(Platform5VB + "ASCOM Focuser Driver (VB).zip");
-            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB).zip");
-            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(2).zip"); //Remove copies introduced by a bad content file in Platform 5 Templates SP1
-            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(3).zip");
-            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(4).zip");
-            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(5).zip");
-            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(6).zip");
-            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(7).zip");
-            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(8).zip");
-            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(9).zip");
-            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(10).zip");
-            FileDelete(Platform5VB + "ASCOM Switch Driver (VB).zip");
-            FileDelete(Platform5VB + "ASCOM Telescope Driver (VB).zip");
-
-            LogMessage("InstallTemplates", spaces + "About to copy files from - template source directory: " + TemplateSourceDirectory);
-
-            foreach (string item in Directory.GetFiles(TemplateSourceDirectory, "*.zip"))
-            {
-                LogMessage("InstallTemplates", spaces + "Found zip file: " + item);
-                string fileName = Path.GetFileName(item);
-                LogMessage("InstallTemplates", spaces + "Processing zip file: " + fileName);
-
-                if (item.ToUpperInvariant().Contains("CS")) // CSharp item
+                if (Directory.Exists(Platform6CSharp))
                 {
-                    LogMessage("InstallTemplates", spaces + "Copying C# template: " + item + " as: " + Platform6CSharp + Path.GetFileName(item));
-                    File.Copy(item, Platform6CSharp + Path.GetFileName(item), true);
+                    LogMessage("InstallTemplates", spaces + "Path: " + Platform6CSharp + " already exists");
                 }
-                if (item.ToUpperInvariant().Contains("VB")) // VBitem
+                else
                 {
-                    LogMessage("InstallTemplates", spaces + "Copying VB template: " + item + " as: " + Platform6VB + Path.GetFileName(item));
-                    File.Copy(item, Platform6VB + Path.GetFileName(item), true);
+                    LogMessage("InstallTemplates", spaces + "Path: " + Platform6CSharp + " does not exist, creating directory");
+                    Directory.CreateDirectory(Platform6CSharp);
                 }
-            }
+                CleanDirectory(Platform6CSharp); // Clean the C# directory
 
-            return 0;
+                if (Directory.Exists(Platform6VB))
+                {
+                    LogMessage("InstallTemplates", spaces + "Path: " + Platform6VB + " already exists");
+                }
+                else
+                {
+                    LogMessage("InstallTemplates", spaces + "Path: " + Platform6VB + " does not exist, creating directory");
+                    Directory.CreateDirectory(Platform6VB);
+                }
+                CleanDirectory(Platform6VB); // Clean the C# directory
+
+                FileDelete(Platform5CSharp + "ASCOM Camera Driver (C#).zip"); //Platform 5 C#
+                FileDelete(Platform5CSharp + "ASCOM Dome Driver (C#).zip");
+                FileDelete(Platform5CSharp + "ASCOM FilterWheel Driver (C#).zip");
+                FileDelete(Platform5CSharp + "ASCOM Focuser Driver (C#).zip");
+                FileDelete(Platform5CSharp + "ASCOM Rotator Driver (C#).zip");
+                FileDelete(Platform5CSharp + "ASCOM Switch Driver (C#).zip");
+                FileDelete(Platform5CSharp + "ASCOM Telescope Driver (C#).zip");
+                FileDelete(Platform5CSharp + "ASCOM Local Server (singleton).zip");
+
+                FileDelete(Platform5VB + "ASCOM Camera Driver (VB).zip"); // Platform 5 VB
+                FileDelete(Platform5VB + "ASCOM Dome Driver (VB).zip");
+                FileDelete(Platform5VB + "ASCOM FilterWheel Driver (VB).zip");
+                FileDelete(Platform5VB + "ASCOM Focuser Driver (VB).zip");
+                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB).zip");
+                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(2).zip"); //Remove copies introduced by a bad content file in Platform 5 Templates SP1
+                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(3).zip");
+                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(4).zip");
+                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(5).zip");
+                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(6).zip");
+                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(7).zip");
+                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(8).zip");
+                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(9).zip");
+                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(10).zip");
+                FileDelete(Platform5VB + "ASCOM Switch Driver (VB).zip");
+                FileDelete(Platform5VB + "ASCOM Telescope Driver (VB).zip");
+
+                LogMessage("InstallTemplates", spaces + "About to copy files from - template source directory: " + TemplateSourceDirectory);
+
+                foreach (string item in Directory.GetFiles(TemplateSourceDirectory, "*.zip"))
+                {
+                    LogMessage("InstallTemplates", spaces + "Found zip file: " + item);
+                    string fileName = Path.GetFileName(item);
+                    LogMessage("InstallTemplates", spaces + "Processing zip file: " + fileName);
+
+                    if (item.ToUpperInvariant().Contains("CS")) // CSharp item
+                    {
+                        LogMessage("InstallTemplates", spaces + "Copying C# template: " + item + " as: " + Platform6CSharp + Path.GetFileName(item));
+                        File.Copy(item, Platform6CSharp + Path.GetFileName(item), true);
+                    }
+                    if (item.ToUpperInvariant().Contains("VB")) // VBitem
+                    {
+                        LogMessage("InstallTemplates", spaces + "Copying VB template: " + item + " as: " + Platform6VB + Path.GetFileName(item));
+                        File.Copy(item, Platform6VB + Path.GetFileName(item), true);
+                    }
+                }
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                LogError("FileDelete", "  Exception installing templates: " + ex.ToString());
+                ReturnCode = 4;
+            }
         }
 
         /// <summary>
@@ -332,6 +360,7 @@ namespace InstallTemplates
             catch (Exception ex)
             {
                 LogError("FileDelete", "  Exception Deleting file: " + FileExists.ToString() + ", " + DeleteFile + " " + ex.ToString());
+                ReturnCode = 5;
             }
         }
 

@@ -539,7 +539,7 @@ else
     Set Variable MYPROGRESS to 90
     Write into Text File $SETUPLOG$ from Value Finished installing new templates - Return Code: $RC$ (at end of file)
     if Variable RC not Equals 0
-      MessageBox: Install Templates, An error has occured during template installation. $NEWLINE$$NEWLINE$Please report this on the ASCOM-Talk Yahoo group.
+      MessageBox: Install Templates, An error has occured during template installation, some templates may not have installed correctly. $NEWLINE$$NEWLINE$Please report this on the Groups.Io ASCOM Developer forum.
     end
   end
   Set Variable MYPROGRESS to 100

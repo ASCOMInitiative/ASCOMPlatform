@@ -1834,7 +1834,7 @@ Repair: .$REPAIR$. Modify: .$MODIFY$. Remove: .$REMOVE$.
 
 {78E48656-9E8E-4F2C-9595-DA933B2ABA1C}
 Install Templates
-An error has occured during template installation. $NEWLINE$$NEWLINE$Please report this on the ASCOM-Talk Yahoo group.
+An error has occured during template installation, some templates may not have installed correctly. $NEWLINE$$NEWLINE$Please report this on the Groups.Io ASCOM Developer forum.
 2
 1
 
