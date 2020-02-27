@@ -332,6 +332,7 @@ namespace InstallTemplates
             {
                 LogError("FileDelete", "  Exception installing templates: " + ex.ToString());
                 ReturnCode = 4;
+                return 4;
             }
         }
 
