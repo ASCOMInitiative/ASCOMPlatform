@@ -20,6 +20,8 @@ using System.Security.Cryptography;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace ASCOM.DynamicRemoteClients
 {
@@ -152,31 +154,156 @@ namespace ASCOM.DynamicRemoteClients
             return sf.GetMethod().Name;
         }
 
+        /// <summary>
+        /// Set the REST client communications timeout for the next transaction
+        /// </summary>
+        /// <param name="client">REST client to use</param>
+        /// <param name="deviceResponseTimeout">Timeout to be set</param>
         public static void SetClientTimeout(RestClient client, int deviceResponseTimeout)
         {
             client.Timeout = deviceResponseTimeout * 1000;
             client.ReadWriteTimeout = deviceResponseTimeout * 1000;
         }
 
-        public static void ConnectToRemoteDevice(ref RestClient client, string ipAddressString, decimal portNumber, string serviceType, TraceLoggerPlus TL, uint clientNumber, string deviceType, int deviceResponseTimeout, string userName, string password)
+        /// <summary>
+        /// Create and configure a REST client to communicate with the Alpaca device
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="ipAddressString"></param>
+        /// <param name="portNumber"></param>
+        /// <param name="connectionTimeout"></param>
+        /// <param name="serviceType"></param>
+        /// <param name="TL"></param>
+        /// <param name="clientNumber"></param>
+        /// <param name="deviceType"></param>
+        /// <param name="deviceResponseTimeout"></param>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <param name="uniqueId"></param>
+        /// <remarks>This method will attempt to re-discover the Alpaca device if it is not possible to establish a TCP connection with the device at the specified address and port.</remarks>
+        public static void ConnectToRemoteDevice(ref RestClient client, string ipAddressString, decimal portNumber, int connectionTimeout, string serviceType, TraceLoggerPlus TL,
+                                                 uint clientNumber, string deviceType, int deviceResponseTimeout, string userName, string password, string uniqueId)
         {
-            TL.LogMessage(clientNumber, deviceType, "Connecting to device: " + ipAddressString + ":" + portNumber.ToString());
+            TL.LogMessage(clientNumber, deviceType, $"Connecting to device: {ipAddressString}:{portNumber}, Unique ID: {uniqueId}");
 
-            string clientHostAddress = string.Format("{0}://{1}:{2}", serviceType, ipAddressString, portNumber.ToString());
-            TL.LogMessage(clientNumber, deviceType, "Client host address: " + clientHostAddress);
+            string clientHostAddress = $"{serviceType}://{ipAddressString}:{portNumber}";
+            TL.LogMessage(clientNumber, deviceType, $"Testing whether client at address {clientHostAddress} can be contacted.");
 
+            // Test whether there is a device at the configured IP address and port by trying to open a TCP connection to it
+            if (!ClientIsUp(ipAddressString, portNumber, connectionTimeout, TL, clientNumber)) // It was not possible to establish TCP communication with a device at the IP address provided
+            {
+                // Attempt to "re-discover" the device and use it's new address and / or port
+                TL.LogMessage(clientNumber, deviceType, $"The device at the configured IP address and port {ipAddressString} cannot be contacted, attempting to re-discover it");
+
+                // Create an AlapcaDiscovery component to conduct the search
+                using (AlpacaDiscovery alpacaDiscovery = new AlpacaDiscovery())
+                {
+                    // Start a discovery using two polls, 100ms apart, timing out after 2 seconds, don't attempt to resolve the IP address to a DNS name
+                    alpacaDiscovery.StartDiscovery(2, 100, 32227, 2.0, false, true, false);
+
+                    // Wait for the discovery cycle to complete, making sure that the UI remains responsive
+                    do
+                    {
+                        Thread.Sleep(10);
+                        Application.DoEvents();
+                    } while (!alpacaDiscovery.DiscoveryComplete);
+
+                    // Get a list of the discovered Alpaca devices
+                    List<AlpacaDevice> discoveredDevices = alpacaDiscovery.GetAlpacaDevices();
+
+                    // Iterate over these to find which ASCOM devices are served by them
+                    foreach (AlpacaDevice alpacaDevice in discoveredDevices)
+                    {
+                        TL.LogMessage(clientNumber, deviceType, $"Found Alpaca device {alpacaDevice.HostName}:{alpacaDevice.Port} - {alpacaDevice.ServerName}");
+
+                        // Iterate over the devices served by the Alpaca device
+                        foreach (ConfiguredDevice ascomDevice in alpacaDevice.ConfiguredDevices)
+                        {
+                            TL.LogMessage(clientNumber, deviceType, $"Found ASCOM device {ascomDevice.DeviceName}:{ascomDevice.DeviceType} - {ascomDevice.UniqueID}");
+
+                            // Test whether the found ASCOM device has the same unique ID as the device for which we are looking
+                            if (ascomDevice.UniqueID.ToLowerInvariant() == uniqueId.ToLowerInvariant()) // We have a match so we can use this address and port instead of the configured values that no longer work
+                            {
+                                TL.LogMessage(clientNumber, deviceType, $"  *** Found REQUIRED ASCOM device ***");
+
+                                byte[] addressBytes = IPAddress.Parse(alpacaDevice.HostName).GetAddressBytes();
+                                foreach (byte b in addressBytes)
+                                {
+                                    TL.LogMessage(clientNumber, deviceType, $"  Byte: {b.ToString()} (0x{b.ToString("X2")})");
+
+                                }
+
+
+                                // Update the client host address with the newly discovered address and port
+                                clientHostAddress = $"{serviceType}://{alpacaDevice.HostName}:{alpacaDevice.Port}";
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Remove any old client, if present
             if (client != null)
             {
                 client.ClearHandlers();
             }
 
+            // Create a new client pointing at the alpaca device
             client = new RestClient(clientHostAddress)
             {
                 PreAuthenticate = true
             };
+
+            // Add an HTTP basic authenticator configured with the user name and password to the client
             TL.LogMessage(clientNumber, deviceType, "Creating Authenticator");
             client.Authenticator = new HttpBasicAuthenticator(userName.Unencrypt(TL), password.Unencrypt(TL)); // Need to decrypt the user name and password so the correct values are sent to the remote device
+
+            // Set the client timeout
             SetClientTimeout(client, deviceResponseTimeout);
+        }
+
+        /// <summary>
+        /// test whether there is a device at the specified IP address and port by opening a TCP connection to it
+        /// </summary>
+        /// <param name="ipAddressString">IP address of the device</param>
+        /// <param name="portNumber">IP port number on the device</param>
+        /// <param name="connectionTimeout">Time to wait before timing out</param>
+        /// <param name="TL">Trace logger in which to report progress</param>
+        /// <param name="clientNumber">The client's number</param>
+        /// <returns></returns>
+        private static bool ClientIsUp(string ipAddressString, decimal portNumber, int connectionTimeout, TraceLoggerPlus TL, uint clientNumber)
+        {
+            using (TcpClient tcpClient = new TcpClient())
+            {
+                // Create a task that will return True if a connection to the device can be established or False if the connection is rejected or not possible
+                Task<bool> connectionTask = tcpClient.ConnectAsync(ipAddressString, (int)portNumber).ContinueWith(task => { return !task.IsFaulted; }, TaskContinuationOptions.ExecuteSynchronously);
+                TL.LogMessage(clientNumber, "ClientIsUp", $"Created connection task");
+
+                // Create a task that will time out after the specified time and return a value of False
+                Task<bool> timeoutTask = Task.Delay(connectionTimeout * 1000).ContinueWith<bool>(task => false, TaskContinuationOptions.ExecuteSynchronously);
+                TL.LogMessage(clientNumber, "ClientIsUp", $"Created timeout task");
+
+                // Create a task that will wait until either of the two preceding tasks completes
+                Task<bool> resultTask = Task.WhenAny(connectionTask, timeoutTask).Unwrap();
+                TL.LogMessage(clientNumber, "ClientIsUp", $"Waiting for a task to complete");
+
+                // Wait for one of the tasks to complete
+                resultTask.Wait();
+                TL.LogMessage(clientNumber, "ClientIsUp", $"A task has completed");
+
+                // Test whether or not we connected OK within the timeout period
+                if (resultTask.Result) // We did connect OK within the timeout period
+                {
+                    TL.LogMessage(clientNumber, "ClientIsUp", $"Contacted client OK!");
+                    tcpClient.Close();
+                    return true;
+                }
+                else // We did not connect successfully within the timeout period
+                {
+                    TL.LogMessage(clientNumber, "ClientIsUp", $"Unable to contact client....");
+                    return false;
+                }
+            }
         }
 
         #endregion

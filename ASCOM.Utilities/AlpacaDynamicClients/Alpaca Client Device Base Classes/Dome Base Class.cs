@@ -75,7 +75,7 @@ namespace ASCOM.DynamicRemoteClients
                 clientNumber = DynamicClientDriver.GetUniqueClientNumber();
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "This instance's unique client number: " + clientNumber);
 
-                DynamicClientDriver.ConnectToRemoteDevice(ref client, ipAddressString, portNumber, serviceType, TL, clientNumber, DEVICE_TYPE, standardDeviceResponseTimeout, userName, password);
+                DynamicClientDriver.ConnectToRemoteDevice(ref client, ipAddressString, portNumber, establishConnectionTimeout, serviceType, TL, clientNumber, DEVICE_TYPE, standardDeviceResponseTimeout, userName, password, uniqueId);
 
                 URIBase = string.Format("{0}{1}/{2}/{3}/", SharedConstants.API_URL_BASE, SharedConstants.API_VERSION_V1, DEVICE_TYPE, remoteDeviceNumber.ToString());
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "This devices's base URI: " + URIBase);
@@ -259,7 +259,7 @@ namespace ASCOM.DynamicRemoteClients
 
                         // Establish new host and device parameters
                         TL.LogMessage(clientNumber, "SetupDialog", "Establishing new host and device parameters");
-                        DynamicClientDriver.ConnectToRemoteDevice(ref client, ipAddressString, portNumber, serviceType, TL, clientNumber, DEVICE_TYPE, standardDeviceResponseTimeout, userName, password);
+                        DynamicClientDriver.ConnectToRemoteDevice(ref client, ipAddressString, portNumber, establishConnectionTimeout, serviceType, TL, clientNumber, DEVICE_TYPE, standardDeviceResponseTimeout, userName, password, uniqueId);
                     }
                     else TL.LogMessage(clientNumber, "SetupDialog", "Dialogue closed with Cancel status");
                 }
