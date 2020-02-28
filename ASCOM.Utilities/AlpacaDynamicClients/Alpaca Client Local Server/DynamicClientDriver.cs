@@ -199,7 +199,8 @@ namespace ASCOM.DynamicRemoteClients
                                        ref string password,
                                        ref bool manageConnectLocally,
                                        ref SharedConstants.ImageArrayTransferType imageArrayTransferType,
-                                       ref SharedConstants.ImageArrayCompression imageArrayCompression
+                                       ref SharedConstants.ImageArrayCompression imageArrayCompression,
+                                       ref string uniqueId
                                        )
         {
             using (Profile driverProfile = new Profile())
@@ -224,6 +225,7 @@ namespace ASCOM.DynamicRemoteClients
                 manageConnectLocally = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.MANAGE_CONNECT_LOCALLY_PROFILENAME, string.Empty, SharedConstants.MANAGE_CONNECT_LOCALLY_DEFAULT);
                 imageArrayTransferType = (SharedConstants.ImageArrayTransferType)GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_PROFILENAME, string.Empty, (int)SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT);
                 imageArrayCompression = (SharedConstants.ImageArrayCompression)GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.IMAGE_ARRAY_COMPRESSION_PROFILENAME, string.Empty, (int)SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT);
+                uniqueId = driverProfile.GetValue(driverProgID, SharedConstants.UNIQUEID_PROFILENAME, string.Empty, SharedConstants.UNIQUEID_DEFAULT);
 
                 TL.DebugTraceState = debugTraceState; // Save the debug state for use when needed wherever the trace logger is used
 
@@ -248,7 +250,8 @@ namespace ASCOM.DynamicRemoteClients
                                         string password,
                                         bool manageConnectLocally,
                                         SharedConstants.ImageArrayTransferType imageArrayTransferType,
-                                        SharedConstants.ImageArrayCompression imageArrayCompression
+                                        SharedConstants.ImageArrayCompression imageArrayCompression,
+                                        string uniqueId
                                         )
         {
             using (Profile driverProfile = new Profile())
@@ -270,6 +273,7 @@ namespace ASCOM.DynamicRemoteClients
                 driverProfile.WriteValue(driverProgID, SharedConstants.MANAGE_CONNECT_LOCALLY_PROFILENAME, manageConnectLocally.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(driverProgID, SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_PROFILENAME, ((int)imageArrayTransferType).ToString());
                 driverProfile.WriteValue(driverProgID, SharedConstants.IMAGE_ARRAY_COMPRESSION_PROFILENAME, ((int)imageArrayCompression).ToString());
+                driverProfile.WriteValue(driverProgID, SharedConstants.UNIQUEID_PROFILENAME, uniqueId.ToString(CultureInfo.InvariantCulture));
 
                 TL.DebugTraceState = debugTraceState; // Save the new debug state for use when needed wherever the trace logger is used
 

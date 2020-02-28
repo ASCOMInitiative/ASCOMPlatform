@@ -458,7 +458,6 @@ namespace ASCOM.DynamicRemoteClients
 
                 string clsid = Marshal.GenerateGuidForType(type).ToString("B");
                 string progid = Marshal.GenerateProgIdForType(type);
-                string deviceType = type.Name;
 
                 // Remove HKCR\progid
                 Registry.ClassesRoot.DeleteSubKey(String.Format("{0}\\CLSID", progid), false);
