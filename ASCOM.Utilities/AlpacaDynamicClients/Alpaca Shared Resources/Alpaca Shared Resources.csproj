@@ -80,7 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="RestSharp">
-      <Version>106.6.9</Version>
+      <Version>106.10.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
