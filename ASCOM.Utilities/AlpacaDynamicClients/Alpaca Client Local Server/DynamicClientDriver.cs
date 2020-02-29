@@ -191,146 +191,172 @@ namespace ASCOM.DynamicRemoteClients
         /// <param name="uniqueId"></param>
         /// <remarks>This method will attempt to re-discover the Alpaca device if it is not possible to establish a TCP connection with the device at the specified address and port.</remarks>
         public static void ConnectToRemoteDevice(ref RestClient client, string ipAddressString, decimal portNumber, int connectionTimeout, string serviceType, TraceLoggerPlus TL,
-                                                 uint clientNumber, string deviceType, int deviceResponseTimeout, string userName, string password, string uniqueId)
+                                                 uint clientNumber, string driverProgId, string deviceType, int deviceResponseTimeout, string userName, string password, string uniqueId, bool enableRediscovery)
         {
             List<AvailableInterface> availableInterfaces = new List<AvailableInterface>();
 
-            TL.LogMessage(clientNumber, deviceType, $"Connecting to device: {ipAddressString}:{portNumber}, Unique ID: {uniqueId}");
-
             string clientHostAddress = $"{serviceType}://{ipAddressString}:{portNumber}";
-            TL.LogMessage(clientNumber, deviceType, $"Testing whether client at address {clientHostAddress} can be contacted.");
+            TL.LogMessage(clientNumber, deviceType, $"Connecting to device: {ipAddressString}:{portNumber}, Unique ID: {uniqueId} through URL: {clientHostAddress}");
 
-            // Test whether there is a device at the configured IP address and port by trying to open a TCP connection to it
-            if (!ClientIsUp(ipAddressString, portNumber, connectionTimeout, TL, clientNumber)) // It was not possible to establish TCP communication with a device at the IP address provided
+            // Test whether automatic Alpaca device rediscovery is enabled for this device
+            if (enableRediscovery) // Automatic rediscovery is enabled
             {
-                // Attempt to "re-discover" the device and use it's new address and / or port
-                TL.LogMessage(clientNumber, deviceType, $"The device at the configured IP address and port {ipAddressString} cannot be contacted, attempting to re-discover it");
+                TL.LogMessage(clientNumber, deviceType, $"Testing whether client at address {clientHostAddress} can be contacted.");
 
-                // Create an AlapcaDiscovery component to conduct the search
-                using (AlpacaDiscovery alpacaDiscovery = new AlpacaDiscovery())
+                // Test whether there is a device at the configured IP address and port by trying to open a TCP connection to it
+                if (!ClientIsUp(ipAddressString, portNumber, connectionTimeout, TL, clientNumber)) // It was not possible to establish TCP communication with a device at the IP address provided
                 {
-                    // Start a discovery using two polls, 100ms apart, timing out after 2 seconds, don't attempt to resolve the IP address to a DNS name
-                    alpacaDiscovery.StartDiscovery(2, 100, 32227, 2.0, false, true, false);
+                    // Attempt to "re-discover" the device and use it's new address and / or port
+                    TL.LogMessage(clientNumber, deviceType, $"The device at the configured IP address and port {ipAddressString} cannot be contacted, attempting to re-discover it");
 
-                    // Wait for the discovery cycle to complete, making sure that the UI remains responsive
-                    do
+                    // Create an AlapcaDiscovery component to conduct the search
+                    using (AlpacaDiscovery alpacaDiscovery = new AlpacaDiscovery())
                     {
-                        Thread.Sleep(10);
-                        Application.DoEvents();
-                    } while (!alpacaDiscovery.DiscoveryComplete);
+                        // Start a discovery using two polls, 100ms apart, timing out after 2 seconds, don't attempt to resolve the IP address to a DNS name
+                        alpacaDiscovery.StartDiscovery(2, 100, 32227, 2.0, false, true, false);
 
-                    // Get a list of the discovered Alpaca devices
-                    List<AlpacaDevice> discoveredDevices = alpacaDiscovery.GetAlpacaDevices();
-
-                    // Iterate over these to find which ASCOM devices are served by them
-                    foreach (AlpacaDevice alpacaDevice in discoveredDevices)
-                    {
-                        TL.LogMessage(clientNumber, deviceType, $"Found Alpaca device {alpacaDevice.HostName}:{alpacaDevice.Port} - {alpacaDevice.ServerName}");
-
-                        // Iterate over the devices served by the Alpaca device
-                        foreach (ConfiguredDevice ascomDevice in alpacaDevice.ConfiguredDevices)
+                        // Wait for the discovery cycle to complete, making sure that the UI remains responsive
+                        do
                         {
-                            TL.LogMessage(clientNumber, deviceType, $"Found ASCOM device {ascomDevice.DeviceName}:{ascomDevice.DeviceType} - {ascomDevice.UniqueID} at {alpacaDevice.HostName}:{alpacaDevice.Port}");
+                            Thread.Sleep(10);
+                            Application.DoEvents();
+                        } while (!alpacaDiscovery.DiscoveryComplete);
 
-                            // Test whether the found ASCOM device has the same unique ID as the device for which we are looking
-                            if (ascomDevice.UniqueID.ToLowerInvariant() == uniqueId.ToLowerInvariant()) // We have a match so we can use this address and port instead of the configured values that no longer work
+                        // Get a list of the discovered Alpaca devices
+                        List<AlpacaDevice> discoveredDevices = alpacaDiscovery.GetAlpacaDevices();
+
+                        // Iterate over these to find which ASCOM devices are served by them
+                        foreach (AlpacaDevice alpacaDevice in discoveredDevices)
+                        {
+                            TL.LogMessage(clientNumber, deviceType, $"Found Alpaca device {alpacaDevice.HostName}:{alpacaDevice.Port} - {alpacaDevice.ServerName}");
+
+                            // Iterate over the devices served by the Alpaca device
+                            foreach (ConfiguredDevice ascomDevice in alpacaDevice.ConfiguredDevices)
                             {
-                                TL.LogMessage(clientNumber, deviceType, $"  *** Found REQUIRED ASCOM device ***");
+                                TL.LogMessage(clientNumber, deviceType, $"Found ASCOM device {ascomDevice.DeviceName}:{ascomDevice.DeviceType} - {ascomDevice.UniqueID} at {alpacaDevice.HostName}:{alpacaDevice.Port}");
 
-                                // Get the IP address as a big endian byte array
-                                byte[] addressBytes = IPAddress.Parse(alpacaDevice.HostName).GetAddressBytes();
+                                // Test whether the found ASCOM device has the same unique ID as the device for which we are looking
+                                if (ascomDevice.UniqueID.ToLowerInvariant() == uniqueId.ToLowerInvariant()) // We have a match so we can use this address and port instead of the configured values that no longer work
+                                {
+                                    TL.LogMessage(clientNumber, deviceType, $"  *** Found REQUIRED ASCOM device ***");
 
-                                // Create an array large enough to hold an IPv6 address (16 bytes) plus one extra byte at the high end that will always be 0.
-                                // This ensures that the IPv6 address will not be interpreted as a negative number if its top bit is set
-                                byte[] hostBytes = new byte[17];
+                                    // Get the IP address as a big endian byte array
+                                    byte[] addressBytes = IPAddress.Parse(alpacaDevice.HostName).GetAddressBytes();
 
-                                // Re-order the network address byte array to little endian as used in Windows
-                                Array.Copy(addressBytes.Reverse().ToArray<byte>(), hostBytes, addressBytes.Length);
+                                    // Create an array large enough to hold an IPv6 address (16 bytes) plus one extra byte at the high end that will always be 0.
+                                    // This ensures that the IPv6 address will not be interpreted as a negative number if its top bit is set
+                                    byte[] hostBytes = new byte[17];
 
-                                // Create a big integer from the little endian byte array
-                                BigInteger bigIntegerAddress = new BigInteger(hostBytes);
+                                    // Re-order the network address byte array to little endian as used in Windows
+                                    Array.Copy(addressBytes.Reverse().ToArray<byte>(), hostBytes, addressBytes.Length);
 
-                                // Create a new structure to hold the interface information and add it to the list of interfaces
-                                AvailableInterface availableInterface = new AvailableInterface();
-                                availableInterface.HostName = alpacaDevice.HostName;
-                                availableInterface.Port = alpacaDevice.Port;
-                                availableInterface.IpAddress = bigIntegerAddress;
-                                availableInterfaces.Add(availableInterface);
+                                    // Create a big integer from the little endian byte array
+                                    BigInteger bigIntegerAddress = new BigInteger(hostBytes);
 
+                                    // Create a new structure to hold the interface information and add it to the list of interfaces
+                                    AvailableInterface availableInterface = new AvailableInterface();
+                                    availableInterface.HostName = alpacaDevice.HostName;
+                                    availableInterface.Port = alpacaDevice.Port;
+                                    availableInterface.IpAddress = bigIntegerAddress;
+                                    availableInterfaces.Add(availableInterface);
+
+                                }
                             }
+                            TL.BlankLine();
                         }
-                        TL.BlankLine();
+
                     }
 
-                }
+                    // Search the discovered interfaces for the one whose network address is closest to the original address
+                    // This will ensure that we pick an address on the original subnet if this is available.
+                    switch (availableInterfaces.Count)
+                    {
+                        case 0:
+                            TL.LogMessage(clientNumber, deviceType, $"No ASCOM device was discovered that had a UniqueD of {uniqueId}");
+                            TL.BlankLine();
+                            break;
 
-                // Search the discovered interfaces for the one whose network address is closest to the original address
-                // This will ensure that we pick an address on the original subnet if this is available.
-                switch (availableInterfaces.Count)
-                {
-                    case 0:
-                        TL.LogMessage(clientNumber, deviceType, $"No ASCOM device was discovered that had a UniqueD of {uniqueId}");
-                        TL.BlankLine();
-                        break;
+                        case 1:
+                            // Update the client host address with the newly discovered address and port
+                            clientHostAddress = $"{serviceType}://{availableInterfaces[0].HostName}:{availableInterfaces[0].Port}";
+                            TL.LogMessage(clientNumber, deviceType, $"One ASCOM device was discovered that had a UniqueD of {uniqueId}. Now using URL: {clientHostAddress}");
 
-                    case 1:
-                        // Update the client host address with the newly discovered address and port
-                        clientHostAddress = $"{serviceType}://{availableInterfaces[0].HostName}:{availableInterfaces[0].Port}";
-                        TL.LogMessage(clientNumber, deviceType, $"One ASCOM device was discovered that had a UniqueD of {uniqueId}. Now using URL: {clientHostAddress}");
-                        TL.BlankLine();
-                        break;
-
-                    default:
-                        TL.LogMessage(clientNumber, deviceType, $"{availableInterfaces.Count} ASCOM devices were discovered that had a UniqueD of {uniqueId}.");
-
-                        // Get the original IP address as a big endian byte array
-                        byte[] addressBytes = new byte[0]; // Create a zero length array in case its not possible to parse the IP address string (it may be a host name or may just be corrupted)
-
-                        try
-                        {
-                            addressBytes = IPAddress.Parse(ipAddressString).GetAddressBytes();
-                        }
-                        catch { }
-
-                        // Create an array large enough to hold an IPv6 address (16 bytes) plus one extra byte at the high end that will always be 0.
-                        // This ensures that the IPv6 address will not be interpreted as a negative number if its top bit is set
-                        byte[] hostBytes = new byte[17];
-
-                        // Re-order the network address byte array to little endian as used in Windows
-                        Array.Copy(addressBytes.Reverse().ToArray<byte>(), hostBytes, addressBytes.Length);
-
-                        // Create a big integer from the little endian byte array
-                        BigInteger currentIpAddress = new BigInteger(hostBytes);
-
-                        // Iterate over the discovered interfaces to find the one that is closest to the original IP address
-                        for (int i = 0; i < availableInterfaces.Count; i++)
-                        {
-                            AvailableInterface ai = new AvailableInterface();
-                            ai.IpAddress = availableInterfaces[i].IpAddress;
-                            ai.Port = availableInterfaces[i].Port;
-                            ai.HostName = availableInterfaces[i].HostName;
-                            ai.AddressDistance = BigInteger.Abs(BigInteger.Subtract(currentIpAddress, ai.IpAddress));
-                            availableInterfaces[i] = ai;
-                        }
-
-                        // Initialise a big integer variable with an impossibly large address to ensure that the first iterated value will be used
-                        // The following number requires a leading zero to ensure that it is not interpreted as a negative number because its most significant bit is set
-                        // Hex number character count                    1234567890123456789012345678901234 = 34 hex characters = 17 bytes = a leading 0 byte plus 16 bytes of value 255
-                        BigInteger largestDifference = BigInteger.Parse("00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", NumberStyles.HexNumber, CultureInfo.InvariantCulture);
-                        TL.LogMessage(clientNumber, deviceType, $"Initialised largest value: {largestDifference} = {largestDifference.ToString("X34")}");
-
-                        // Now iterate over the values and pick the entry with the smallest difference in IP address
-                        foreach (AvailableInterface availableInterface in availableInterfaces)
-                        {
-                            if (availableInterface.AddressDistance < largestDifference)
+                            // Write the new value to the driver's Profile so it is found immediately in future
+                            using (Profile profile = new Profile())
                             {
-                                largestDifference = availableInterface.AddressDistance;
-                                clientHostAddress = $"{serviceType}://{availableInterface.HostName}:{availableInterface.Port}";
-                                TL.LogMessage(clientNumber, deviceType, $"New lowest address difference found: {availableInterface.AddressDistance} ({availableInterface.AddressDistance.ToString("X32")}) for UniqueD {uniqueId}. Now using URL: {clientHostAddress}");
+                                profile.DeviceType = deviceType;
+                                profile.WriteValue(driverProgId, SharedConstants.IPADDRESS_PROFILENAME, availableInterfaces[0].HostName);
+                                profile.WriteValue(driverProgId, SharedConstants.PORTNUMBER_PROFILENAME, availableInterfaces[0].Port.ToString());
+                                TL.LogMessage(clientNumber, deviceType, $"Written new values {availableInterfaces[0].HostName} and {availableInterfaces[0].Port} to profile {driverProgId}");
                             }
-                        }
-                        TL.BlankLine();
-                        break;
+
+                            TL.BlankLine();
+                            break;
+
+                        default:
+                            TL.LogMessage(clientNumber, deviceType, $"{availableInterfaces.Count} ASCOM devices were discovered that had a UniqueD of {uniqueId}.");
+
+                            // Get the original IP address as a big endian byte array
+                            byte[] addressBytes = new byte[0]; // Create a zero length array in case its not possible to parse the IP address string (it may be a host name or may just be corrupted)
+
+                            try
+                            {
+                                addressBytes = IPAddress.Parse(ipAddressString).GetAddressBytes();
+                            }
+                            catch { }
+
+                            // Create an array large enough to hold an IPv6 address (16 bytes) plus one extra byte at the high end that will always be 0.
+                            // This ensures that the IPv6 address will not be interpreted as a negative number if its top bit is set
+                            byte[] hostBytes = new byte[17];
+
+                            // Re-order the network address byte array to little endian as used in Windows
+                            Array.Copy(addressBytes.Reverse().ToArray<byte>(), hostBytes, addressBytes.Length);
+
+                            // Create a big integer from the little endian byte array
+                            BigInteger currentIpAddress = new BigInteger(hostBytes);
+
+                            // Iterate over the discovered interfaces to find the one that is closest to the original IP address
+                            for (int i = 0; i < availableInterfaces.Count; i++)
+                            {
+                                AvailableInterface ai = new AvailableInterface();
+                                ai.IpAddress = availableInterfaces[i].IpAddress;
+                                ai.Port = availableInterfaces[i].Port;
+                                ai.HostName = availableInterfaces[i].HostName;
+                                ai.AddressDistance = BigInteger.Abs(BigInteger.Subtract(currentIpAddress, ai.IpAddress));
+                                availableInterfaces[i] = ai;
+                            }
+
+                            // Initialise a big integer variable with an impossibly large address to ensure that the first iterated value will be used
+                            // The following number requires a leading zero to ensure that it is not interpreted as a negative number because its most significant bit is set
+                            // Hex number character count                    1234567890123456789012345678901234 = 34 hex characters = 17 bytes = a leading 0 byte plus 16 bytes of value 255
+                            BigInteger largestDifference = BigInteger.Parse("00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                            TL.LogMessage(clientNumber, deviceType, $"Initialised largest value: {largestDifference} = {largestDifference.ToString("X34")}");
+
+                            // Now iterate over the values and pick the entry with the smallest difference in IP address
+                            foreach (AvailableInterface availableInterface in availableInterfaces)
+                            {
+                                if (availableInterface.AddressDistance < largestDifference)
+                                {
+                                    largestDifference = availableInterface.AddressDistance;
+                                    clientHostAddress = $"{serviceType}://{availableInterface.HostName}:{availableInterface.Port}";
+
+                                    TL.LogMessage(clientNumber, deviceType, $"New lowest address difference found: {availableInterface.AddressDistance} ({availableInterface.AddressDistance.ToString("X32")}) for UniqueD {uniqueId}. Now using URL: {clientHostAddress}");
+
+                                    // Write the new value to the driver's Profile so it is found immediately in future
+                                    using (Profile profile = new Profile())
+                                    {
+                                        profile.DeviceType = deviceType;
+                                        profile.WriteValue(driverProgId, SharedConstants.IPADDRESS_PROFILENAME, availableInterface.HostName);
+                                        profile.WriteValue(driverProgId, SharedConstants.PORTNUMBER_PROFILENAME, availableInterface.Port.ToString());
+                                        TL.LogMessage(clientNumber, deviceType, $"Written new values {availableInterface.HostName} and {availableInterface.Port} to profile {driverProgId}");
+                                    }
+                                }
+                            }
+
+
+                            TL.BlankLine();
+                            break;
+                    }
                 }
             }
 
@@ -419,7 +445,8 @@ namespace ASCOM.DynamicRemoteClients
                                        ref bool manageConnectLocally,
                                        ref SharedConstants.ImageArrayTransferType imageArrayTransferType,
                                        ref SharedConstants.ImageArrayCompression imageArrayCompression,
-                                       ref string uniqueId
+                                       ref string uniqueId,
+                                       ref bool enableRediscovery
                                        )
         {
             using (Profile driverProfile = new Profile())
@@ -445,6 +472,7 @@ namespace ASCOM.DynamicRemoteClients
                 imageArrayTransferType = (SharedConstants.ImageArrayTransferType)GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_PROFILENAME, string.Empty, (int)SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT);
                 imageArrayCompression = (SharedConstants.ImageArrayCompression)GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.IMAGE_ARRAY_COMPRESSION_PROFILENAME, string.Empty, (int)SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT);
                 uniqueId = driverProfile.GetValue(driverProgID, SharedConstants.UNIQUEID_PROFILENAME, string.Empty, SharedConstants.UNIQUEID_DEFAULT);
+                enableRediscovery = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.ENABLE_REDISCOVERY_PROFILENAME, string.Empty, SharedConstants.ENABLE_REDISCOVERY_DEFAULT);
 
                 TL.DebugTraceState = debugTraceState; // Save the debug state for use when needed wherever the trace logger is used
 
@@ -470,7 +498,8 @@ namespace ASCOM.DynamicRemoteClients
                                         bool manageConnectLocally,
                                         SharedConstants.ImageArrayTransferType imageArrayTransferType,
                                         SharedConstants.ImageArrayCompression imageArrayCompression,
-                                        string uniqueId
+                                        string uniqueId,
+                                        bool enableRediscovery
                                         )
         {
             using (Profile driverProfile = new Profile())
@@ -493,6 +522,7 @@ namespace ASCOM.DynamicRemoteClients
                 driverProfile.WriteValue(driverProgID, SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_PROFILENAME, ((int)imageArrayTransferType).ToString());
                 driverProfile.WriteValue(driverProgID, SharedConstants.IMAGE_ARRAY_COMPRESSION_PROFILENAME, ((int)imageArrayCompression).ToString());
                 driverProfile.WriteValue(driverProgID, SharedConstants.UNIQUEID_PROFILENAME, uniqueId.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(driverProgID, SharedConstants.ENABLE_REDISCOVERY_PROFILENAME, enableRediscovery.ToString(CultureInfo.InvariantCulture));
 
                 TL.DebugTraceState = debugTraceState; // Save the new debug state for use when needed wherever the trace logger is used
 
@@ -1438,8 +1468,6 @@ namespace ASCOM.DynamicRemoteClients
                 return false; // Some sort of issue so return false
             }
         }
-
-
 
         #endregion
 

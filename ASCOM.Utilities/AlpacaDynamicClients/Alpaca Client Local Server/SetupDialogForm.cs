@@ -15,6 +15,15 @@ namespace ASCOM.DynamicRemoteClients
 
         private TraceLoggerPlus TL;
 
+        private bool selectByMouse = false; // Variable to help select the whole contents of a numeric up-down box when tabbed into our selected by mouse
+
+        // Create validating regular expression
+        Regex validHostnameRegex = new Regex(SharedConstants.ValidHostnameRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        Regex validIpAddressRegex = new Regex(SharedConstants.ValidIpAddressRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        #endregion
+
+        #region Public Properties
+
         public string DriverDisplayName { get; set; }
         public string ServiceType { get; set; }
         public string IPAddressString { get; set; }
@@ -31,12 +40,8 @@ namespace ASCOM.DynamicRemoteClients
         public SharedConstants.ImageArrayTransferType ImageArrayTransferType { get; set; }
         public SharedConstants.ImageArrayCompression ImageArrayCompression { get; set; }
         public string DeviceType { get; set; }
+        public bool EnableRediscovery { get; set; }
 
-        private bool selectByMouse = false; // Variable to help select the whole contents of a numeric up-down box when tabbed into our selected by mouse
-
-        // Create validating regular expression
-        Regex validHostnameRegex = new Regex(SharedConstants.ValidHostnameRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        Regex validIpAddressRegex = new Regex(SharedConstants.ValidIpAddressRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
         #endregion
 
         #region Initialisation and Form Load
@@ -72,18 +77,6 @@ namespace ASCOM.DynamicRemoteClients
 
             // Add event handler to enable / disable the compression combo box depending on whether JSON or Base64HandOff is selected
             CmbImageArrayTransferType.SelectedValueChanged += CmbImageArrayTransferType_SelectedValueChanged;
-        }
-
-        private void CmbImageArrayTransferType_SelectedValueChanged(object sender, EventArgs e)
-        {
-            if ((SharedConstants.ImageArrayTransferType)CmbImageArrayTransferType.SelectedItem == SharedConstants.ImageArrayTransferType.Base64HandOff)
-            {
-                cmbImageArrayCompression.Enabled = false;
-            }
-            else
-            {
-                cmbImageArrayCompression.Enabled = true;
-            }
         }
 
         public SetupDialogForm(TraceLoggerPlus TraceLogger) : this()
@@ -144,6 +137,8 @@ namespace ASCOM.DynamicRemoteClients
             txtPassword.Text = Password.Unencrypt(TL);
             chkTrace.Checked = TraceState;
             chkDebugTrace.Checked = DebugTraceState;
+            ChkEnableRediscovery.Checked = EnableRediscovery;
+
             if (ManageConnectLocally)
             {
                 radManageConnectLocally.Checked = true;
@@ -209,6 +204,7 @@ namespace ASCOM.DynamicRemoteClients
             ManageConnectLocally = radManageConnectLocally.Checked;
             ImageArrayTransferType = (SharedConstants.ImageArrayTransferType)CmbImageArrayTransferType.SelectedItem;
             ImageArrayCompression = (SharedConstants.ImageArrayCompression)cmbImageArrayCompression.SelectedItem;
+            EnableRediscovery = ChkEnableRediscovery.Checked;
             this.DialogResult = DialogResult.OK;
             Close();
         }
@@ -310,6 +306,18 @@ namespace ASCOM.DynamicRemoteClients
                 btnOK.Enabled = false;
             }
 
+        }
+
+        private void CmbImageArrayTransferType_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if ((SharedConstants.ImageArrayTransferType)CmbImageArrayTransferType.SelectedItem == SharedConstants.ImageArrayTransferType.Base64HandOff)
+            {
+                cmbImageArrayCompression.Enabled = false;
+            }
+            else
+            {
+                cmbImageArrayCompression.Enabled = true;
+            }
         }
 
         #endregion

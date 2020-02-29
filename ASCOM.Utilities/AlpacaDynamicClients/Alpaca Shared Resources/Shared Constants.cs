@@ -72,6 +72,7 @@ namespace ASCOM.DynamicRemoteClients
         public const string IMAGE_ARRAY_TRANSFER_TYPE_PROFILENAME = "Image Array Transfer Type"; public const ImageArrayTransferType IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT = DEFAULT_IMAGE_ARRAY_TRANSFER_TYPE;
         public const string IMAGE_ARRAY_COMPRESSION_PROFILENAME = "Image Array Compression"; public const ImageArrayCompression IMAGE_ARRAY_COMPRESSION_DEFAULT = DEFAULT_IMAGE_ARRAY_COMPRESSION;
         public const string UNIQUEID_PROFILENAME = "UniqueID"; public const string UNIQUEID_DEFAULT = "Unknown";
+        public const string ENABLE_REDISCOVERY_PROFILENAME = "Enable Rediscovery"; public const bool ENABLE_REDISCOVERY_DEFAULT = true;
 
         // Driver naming constants
         public const string DRIVER_DISPLAY_NAME = "ASCOM Alpaca Dynamic Client";

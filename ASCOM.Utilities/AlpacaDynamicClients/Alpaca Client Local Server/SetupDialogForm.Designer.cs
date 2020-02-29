@@ -64,6 +64,7 @@
             this.LabImageArrayConfiguration1 = new System.Windows.Forms.Label();
             this.cmbImageArrayCompression = new System.Windows.Forms.ComboBox();
             this.LabImageArrayConfiguration2 = new System.Windows.Forms.Label();
+            this.ChkEnableRediscovery = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numRemoteDeviceNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numStandardTimeout)).BeginInit();
@@ -150,7 +151,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(189, 18);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(212, 13);
+            this.label2.Size = new System.Drawing.Size(203, 13);
             this.label2.TabIndex = 11;
             this.label2.Text = "Remote Device Host Name or IP Address";
             // 
@@ -294,7 +295,7 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(114, 213);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(219, 13);
+            this.label10.Size = new System.Drawing.Size(222, 13);
             this.label10.TabIndex = 23;
             this.label10.Text = "Establish communications with device timeout";
             // 
@@ -335,7 +336,7 @@
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(187, 99);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(284, 13);
+            this.label13.Size = new System.Drawing.Size(286, 13);
             this.label13.TabIndex = 28;
             this.label13.Text = "Authentication is only required if you are using a web server";
             // 
@@ -344,7 +345,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(18, 195);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(125, 13);
+            this.label6.Size = new System.Drawing.Size(128, 13);
             this.label6.TabIndex = 29;
             this.label6.Text = "Communication Time-outs";
             // 
@@ -384,7 +385,7 @@
             this.radManageConnectRemotely.AutoSize = true;
             this.radManageConnectRemotely.Location = new System.Drawing.Point(6, 18);
             this.radManageConnectRemotely.Name = "radManageConnectRemotely";
-            this.radManageConnectRemotely.Size = new System.Drawing.Size(376, 17);
+            this.radManageConnectRemotely.Size = new System.Drawing.Size(379, 17);
             this.radManageConnectRemotely.TabIndex = 0;
             this.radManageConnectRemotely.TabStop = true;
             this.radManageConnectRemotely.Text = "Manage connect / disconnect remotely - send commands to remote device";
@@ -395,7 +396,7 @@
             this.radManageConnectLocally.AutoSize = true;
             this.radManageConnectLocally.Location = new System.Drawing.Point(6, 41);
             this.radManageConnectLocally.Name = "radManageConnectLocally";
-            this.radManageConnectLocally.Size = new System.Drawing.Size(392, 17);
+            this.radManageConnectLocally.Size = new System.Drawing.Size(395, 17);
             this.radManageConnectLocally.TabIndex = 1;
             this.radManageConnectLocally.TabStop = true;
             this.radManageConnectLocally.Text = "Manage connect / disconnect locally - don\'t send commands to remote device";
@@ -441,6 +442,16 @@
             this.LabImageArrayConfiguration2.TabIndex = 33;
             this.LabImageArrayConfiguration2.Text = "Image array transfer compression";
             // 
+            // ChkEnableRediscovery
+            // 
+            this.ChkEnableRediscovery.AutoSize = true;
+            this.ChkEnableRediscovery.Location = new System.Drawing.Point(126, 61);
+            this.ChkEnableRediscovery.Name = "ChkEnableRediscovery";
+            this.ChkEnableRediscovery.Size = new System.Drawing.Size(324, 17);
+            this.ChkEnableRediscovery.TabIndex = 34;
+            this.ChkEnableRediscovery.Text = "Enable rediscovery if device cannot be found at this IP address";
+            this.ChkEnableRediscovery.UseVisualStyleBackColor = true;
+            // 
             // SetupDialogForm
             // 
             this.AcceptButton = this.btnOK;
@@ -448,6 +459,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(697, 402);
+            this.Controls.Add(this.ChkEnableRediscovery);
             this.Controls.Add(this.LabImageArrayConfiguration2);
             this.Controls.Add(this.cmbImageArrayCompression);
             this.Controls.Add(this.LabImageArrayConfiguration1);
@@ -533,5 +545,6 @@
         private System.Windows.Forms.ComboBox CmbImageArrayTransferType;
         private System.Windows.Forms.Label LabImageArrayConfiguration2;
         private System.Windows.Forms.ComboBox cmbImageArrayCompression;
+        private System.Windows.Forms.CheckBox ChkEnableRediscovery;
     }
 }

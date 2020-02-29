@@ -46,6 +46,7 @@ namespace ASCOM.DynamicRemoteClients
         private SharedConstants.ImageArrayTransferType imageArrayTransferType;
         private SharedConstants.ImageArrayCompression imageArrayCompression;
         private string uniqueId;
+        private bool enableRediscovery;
 
         #endregion
 
@@ -67,7 +68,7 @@ namespace ASCOM.DynamicRemoteClients
                 if (TL == null) TL = new TraceLoggerPlus("", string.Format(SharedConstants.TRACELOGGER_NAME_FORMAT_STRING, DriverNumber, DEVICE_TYPE));
                 DynamicClientDriver.ReadProfile(clientNumber, TL, DEVICE_TYPE, DriverProgId,
                     ref traceState, ref debugTraceState, ref ipAddressString, ref portNumber, ref remoteDeviceNumber, ref serviceType, ref establishConnectionTimeout, ref standardDeviceResponseTimeout,
-                    ref longDeviceResponseTimeout, ref userName, ref password, ref manageConnectLocally, ref imageArrayTransferType, ref imageArrayCompression, ref uniqueId);
+                    ref longDeviceResponseTimeout, ref userName, ref password, ref manageConnectLocally, ref imageArrayTransferType, ref imageArrayCompression, ref uniqueId, ref enableRediscovery);
 
                 Version version = Assembly.GetEntryAssembly().GetName().Version;
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "Starting initialisation, Version: " + version.ToString());
@@ -75,7 +76,8 @@ namespace ASCOM.DynamicRemoteClients
                 clientNumber = DynamicClientDriver.GetUniqueClientNumber();
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "This instance's unique client number: " + clientNumber);
 
-                DynamicClientDriver.ConnectToRemoteDevice(ref client, ipAddressString, portNumber, establishConnectionTimeout, serviceType, TL, clientNumber, DEVICE_TYPE, standardDeviceResponseTimeout, userName, password, uniqueId);
+                DynamicClientDriver.ConnectToRemoteDevice(ref client, ipAddressString, portNumber, establishConnectionTimeout, serviceType, TL, clientNumber, DriverProgId, DEVICE_TYPE,
+                                                          standardDeviceResponseTimeout, userName, password, uniqueId, enableRediscovery);
 
                 URIBase = string.Format("{0}{1}/{2}/{3}/", SharedConstants.API_URL_BASE, SharedConstants.API_VERSION_V1, DEVICE_TYPE, remoteDeviceNumber.ToString());
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "This devices's base URI: " + URIBase);
@@ -230,6 +232,7 @@ namespace ASCOM.DynamicRemoteClients
                     setupForm.ManageConnectLocally = manageConnectLocally;
                     setupForm.ImageArrayTransferType = imageArrayTransferType;
                     setupForm.DeviceType = DEVICE_TYPE;
+                    setupForm.EnableRediscovery = enableRediscovery;
 
                     TL.LogMessage(clientNumber, "SetupDialog", "Showing Dialogue");
                     var result = setupForm.ShowDialog();
@@ -252,15 +255,17 @@ namespace ASCOM.DynamicRemoteClients
                         password = setupForm.Password;
                         manageConnectLocally = setupForm.ManageConnectLocally;
                         imageArrayTransferType = setupForm.ImageArrayTransferType;
+                        enableRediscovery = setupForm.EnableRediscovery;
 
                         // Write the changed values to the Profile
                         TL.LogMessage(clientNumber, "SetupDialog", "Writing new values to profile");
                         DynamicClientDriver.WriteProfile(clientNumber, TL, DEVICE_TYPE, DriverProgId, traceState, debugTraceState, ipAddressString, portNumber, remoteDeviceNumber, serviceType,
-                            establishConnectionTimeout, standardDeviceResponseTimeout, longDeviceResponseTimeout, userName, password, manageConnectLocally, imageArrayTransferType, imageArrayCompression, uniqueId);
+                            establishConnectionTimeout, standardDeviceResponseTimeout, longDeviceResponseTimeout, userName, password, manageConnectLocally, imageArrayTransferType, imageArrayCompression, uniqueId, enableRediscovery);
 
                         // Establish new host and device parameters
                         TL.LogMessage(clientNumber, "SetupDialog", "Establishing new host and device parameters");
-                        DynamicClientDriver.ConnectToRemoteDevice(ref client, ipAddressString, portNumber, establishConnectionTimeout, serviceType, TL, clientNumber, DEVICE_TYPE, standardDeviceResponseTimeout, userName, password, uniqueId);
+                        DynamicClientDriver.ConnectToRemoteDevice(ref client, ipAddressString, portNumber, establishConnectionTimeout, serviceType, TL, clientNumber, DriverProgId, DEVICE_TYPE,
+                                                                  standardDeviceResponseTimeout, userName, password, uniqueId, enableRediscovery);
                     }
                     else TL.LogMessage(clientNumber, "SetupDialog", "Dialogue closed with Cancel status");
                 }
