@@ -63,7 +63,7 @@ namespace ASCOM.DynamicRemoteClients
         public const string PORTNUMBER_PROFILENAME = "Port Number"; public const decimal PORTNUMBER_DEFAULT = 11111;
         public const string REMOTE_DEVICE_NUMBER_PROFILENAME = "Remote Device Number"; public const decimal REMOTE_DEVICE_NUMBER_DEFAULT = 0;
         public const string SERVICE_TYPE_PROFILENAME = "Service Type"; public const string SERVICE_TYPE_DEFAULT = "http";
-        public const string ESTABLISH_CONNECTION_TIMEOUT_PROFILENAME = "Establish Connection Timeout"; public const int  ESTABLISH_CONNECTION_TIMEOUT_DEFAULT = 10;
+        public const string ESTABLISH_CONNECTION_TIMEOUT_PROFILENAME = "Establish Connection Timeout"; public const int  ESTABLISH_CONNECTION_TIMEOUT_DEFAULT = 2;
         public const string STANDARD_DEVICE_RESPONSE_TIMEOUT_PROFILENAME = "Standard Device Response Timeout"; public const int  STANDARD_SERVER_RESPONSE_TIMEOUT_DEFAULT = 10;
         public const string LONG_DEVICE_RESPONSE_TIMEOUT_PROFILENAME = "Long Device Response Timeout"; public const int LONG_SERVER_RESPONSE_TIMEOUT_DEFAULT = 120;
         public const string USERNAME_PROFILENAME = "User Name"; public const string USERNAME_DEFAULT = "";

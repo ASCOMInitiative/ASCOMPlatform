@@ -22,6 +22,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace ASCOM.DynamicRemoteClients
 {
@@ -39,6 +40,14 @@ namespace ASCOM.DynamicRemoteClients
         private readonly static object transactionCountlockObject = new object();
 
         private static ConcurrentDictionary<long, bool> connectStates;
+
+        private struct AvailableInterface
+        {
+            public string HostName;
+            public int Port;
+            public BigInteger IpAddress;
+            public BigInteger AddressDistance;
+        }
 
         #endregion
 
@@ -184,6 +193,8 @@ namespace ASCOM.DynamicRemoteClients
         public static void ConnectToRemoteDevice(ref RestClient client, string ipAddressString, decimal portNumber, int connectionTimeout, string serviceType, TraceLoggerPlus TL,
                                                  uint clientNumber, string deviceType, int deviceResponseTimeout, string userName, string password, string uniqueId)
         {
+            List<AvailableInterface> availableInterfaces = new List<AvailableInterface>();
+
             TL.LogMessage(clientNumber, deviceType, $"Connecting to device: {ipAddressString}:{portNumber}, Unique ID: {uniqueId}");
 
             string clientHostAddress = $"{serviceType}://{ipAddressString}:{portNumber}";
@@ -219,26 +230,107 @@ namespace ASCOM.DynamicRemoteClients
                         // Iterate over the devices served by the Alpaca device
                         foreach (ConfiguredDevice ascomDevice in alpacaDevice.ConfiguredDevices)
                         {
-                            TL.LogMessage(clientNumber, deviceType, $"Found ASCOM device {ascomDevice.DeviceName}:{ascomDevice.DeviceType} - {ascomDevice.UniqueID}");
+                            TL.LogMessage(clientNumber, deviceType, $"Found ASCOM device {ascomDevice.DeviceName}:{ascomDevice.DeviceType} - {ascomDevice.UniqueID} at {alpacaDevice.HostName}:{alpacaDevice.Port}");
 
                             // Test whether the found ASCOM device has the same unique ID as the device for which we are looking
                             if (ascomDevice.UniqueID.ToLowerInvariant() == uniqueId.ToLowerInvariant()) // We have a match so we can use this address and port instead of the configured values that no longer work
                             {
                                 TL.LogMessage(clientNumber, deviceType, $"  *** Found REQUIRED ASCOM device ***");
 
+                                // Get the IP address as a big endian byte array
                                 byte[] addressBytes = IPAddress.Parse(alpacaDevice.HostName).GetAddressBytes();
-                                foreach (byte b in addressBytes)
-                                {
-                                    TL.LogMessage(clientNumber, deviceType, $"  Byte: {b.ToString()} (0x{b.ToString("X2")})");
 
-                                }
+                                // Create an array large enough to hold an IPv6 address (16 bytes) plus one extra byte at the high end that will always be 0.
+                                // This ensures that the IPv6 address will not be interpreted as a negative number if its top bit is set
+                                byte[] hostBytes = new byte[17];
 
+                                // Re-order the network address byte array to little endian as used in Windows
+                                Array.Copy(addressBytes.Reverse().ToArray<byte>(), hostBytes, addressBytes.Length);
 
-                                // Update the client host address with the newly discovered address and port
-                                clientHostAddress = $"{serviceType}://{alpacaDevice.HostName}:{alpacaDevice.Port}";
+                                // Create a big integer from the little endian byte array
+                                BigInteger bigIntegerAddress = new BigInteger(hostBytes);
+
+                                // Create a new structure to hold the interface information and add it to the list of interfaces
+                                AvailableInterface availableInterface = new AvailableInterface();
+                                availableInterface.HostName = alpacaDevice.HostName;
+                                availableInterface.Port = alpacaDevice.Port;
+                                availableInterface.IpAddress = bigIntegerAddress;
+                                availableInterfaces.Add(availableInterface);
+
                             }
                         }
+                        TL.BlankLine();
                     }
+
+                }
+
+                // Search the discovered interfaces for the one whose network address is closest to the original address
+                // This will ensure that we pick an address on the original subnet if this is available.
+                switch (availableInterfaces.Count)
+                {
+                    case 0:
+                        TL.LogMessage(clientNumber, deviceType, $"No ASCOM device was discovered that had a UniqueD of {uniqueId}");
+                        TL.BlankLine();
+                        break;
+
+                    case 1:
+                        // Update the client host address with the newly discovered address and port
+                        clientHostAddress = $"{serviceType}://{availableInterfaces[0].HostName}:{availableInterfaces[0].Port}";
+                        TL.LogMessage(clientNumber, deviceType, $"One ASCOM device was discovered that had a UniqueD of {uniqueId}. Now using URL: {clientHostAddress}");
+                        TL.BlankLine();
+                        break;
+
+                    default:
+                        TL.LogMessage(clientNumber, deviceType, $"{availableInterfaces.Count} ASCOM devices were discovered that had a UniqueD of {uniqueId}.");
+
+                        // Get the original IP address as a big endian byte array
+                        byte[] addressBytes = new byte[0]; // Create a zero length array in case its not possible to parse the IP address string (it may be a host name or may just be corrupted)
+
+                        try
+                        {
+                            addressBytes = IPAddress.Parse(ipAddressString).GetAddressBytes();
+                        }
+                        catch { }
+
+                        // Create an array large enough to hold an IPv6 address (16 bytes) plus one extra byte at the high end that will always be 0.
+                        // This ensures that the IPv6 address will not be interpreted as a negative number if its top bit is set
+                        byte[] hostBytes = new byte[17];
+
+                        // Re-order the network address byte array to little endian as used in Windows
+                        Array.Copy(addressBytes.Reverse().ToArray<byte>(), hostBytes, addressBytes.Length);
+
+                        // Create a big integer from the little endian byte array
+                        BigInteger currentIpAddress = new BigInteger(hostBytes);
+
+                        // Iterate over the discovered interfaces to find the one that is closest to the original IP address
+                        for (int i = 0; i < availableInterfaces.Count; i++)
+                        {
+                            AvailableInterface ai = new AvailableInterface();
+                            ai.IpAddress = availableInterfaces[i].IpAddress;
+                            ai.Port = availableInterfaces[i].Port;
+                            ai.HostName = availableInterfaces[i].HostName;
+                            ai.AddressDistance = BigInteger.Abs(BigInteger.Subtract(currentIpAddress, ai.IpAddress));
+                            availableInterfaces[i] = ai;
+                        }
+
+                        // Initialise a big integer variable with an impossibly large address to ensure that the first iterated value will be used
+                        // The following number requires a leading zero to ensure that it is not interpreted as a negative number because its most significant bit is set
+                        // Hex number character count                    1234567890123456789012345678901234 = 34 hex characters = 17 bytes = a leading 0 byte plus 16 bytes of value 255
+                        BigInteger largestDifference = BigInteger.Parse("00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                        TL.LogMessage(clientNumber, deviceType, $"Initialised largest value: {largestDifference} = {largestDifference.ToString("X34")}");
+
+                        // Now iterate over the values and pick the entry with the smallest difference in IP address
+                        foreach (AvailableInterface availableInterface in availableInterfaces)
+                        {
+                            if (availableInterface.AddressDistance < largestDifference)
+                            {
+                                largestDifference = availableInterface.AddressDistance;
+                                clientHostAddress = $"{serviceType}://{availableInterface.HostName}:{availableInterface.Port}";
+                                TL.LogMessage(clientNumber, deviceType, $"New lowest address difference found: {availableInterface.AddressDistance} ({availableInterface.AddressDistance.ToString("X32")}) for UniqueD {uniqueId}. Now using URL: {clientHostAddress}");
+                            }
+                        }
+                        TL.BlankLine();
+                        break;
                 }
             }
 
