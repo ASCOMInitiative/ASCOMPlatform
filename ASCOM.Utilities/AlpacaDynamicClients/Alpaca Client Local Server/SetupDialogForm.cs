@@ -41,6 +41,8 @@ namespace ASCOM.DynamicRemoteClients
         public SharedConstants.ImageArrayCompression ImageArrayCompression { get; set; }
         public string DeviceType { get; set; }
         public bool EnableRediscovery { get; set; }
+        public bool IpV4Enabled { get; set; }
+        public bool IpV6Enabled { get; set; }
 
         #endregion
 
@@ -139,6 +141,17 @@ namespace ASCOM.DynamicRemoteClients
             chkDebugTrace.Checked = DebugTraceState;
             ChkEnableRediscovery.Checked = EnableRediscovery;
 
+            // Set the IP v4 / v6 radio boxes
+            if (IpV4Enabled & IpV6Enabled) // Both IPv4 and v6 are enabled so set the "both" button
+            {
+                RadIpV4AndV6.Checked = true;
+            }
+            else // Only one of v4 or v6 is enabled so set accordingly 
+            {
+                RadIpV4.Checked = IpV4Enabled;
+                RadIpV6.Checked = IpV6Enabled;
+            }
+
             if (ManageConnectLocally)
             {
                 radManageConnectLocally.Checked = true;
@@ -205,6 +218,24 @@ namespace ASCOM.DynamicRemoteClients
             ImageArrayTransferType = (SharedConstants.ImageArrayTransferType)CmbImageArrayTransferType.SelectedItem;
             ImageArrayCompression = (SharedConstants.ImageArrayCompression)cmbImageArrayCompression.SelectedItem;
             EnableRediscovery = ChkEnableRediscovery.Checked;
+
+            // Set the IP v4 and v6 variables as necessary
+            if (RadIpV4.Checked) // The IPv4 radio button is checked so set the IP v4 and IP v6 variables accordingly
+            {
+                IpV4Enabled = true;
+                IpV6Enabled = false;
+            }
+            if (RadIpV6.Checked) // The IPv6 radio button is checked so set the IP v4 and IP v6 variables accordingly
+            {
+                IpV4Enabled = false;
+                IpV6Enabled = true;
+            }
+            if (RadIpV4AndV6.Checked) // The IPv4 and IPV6 radio button is checked so set the IP v4 and IP v6 variables accordingly
+            {
+                IpV4Enabled = true;
+                IpV6Enabled = true;
+            }
+
             this.DialogResult = DialogResult.OK;
             Close();
         }

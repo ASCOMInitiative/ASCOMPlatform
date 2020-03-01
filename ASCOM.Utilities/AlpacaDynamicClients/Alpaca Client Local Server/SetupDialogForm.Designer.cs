@@ -65,6 +65,11 @@
             this.cmbImageArrayCompression = new System.Windows.Forms.ComboBox();
             this.LabImageArrayConfiguration2 = new System.Windows.Forms.Label();
             this.ChkEnableRediscovery = new System.Windows.Forms.CheckBox();
+            this.label97 = new System.Windows.Forms.Label();
+            this.GrpIpVersionSelector = new System.Windows.Forms.GroupBox();
+            this.RadIpV4AndV6 = new System.Windows.Forms.RadioButton();
+            this.RadIpV6 = new System.Windows.Forms.RadioButton();
+            this.RadIpV4 = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numRemoteDeviceNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numStandardTimeout)).BeginInit();
@@ -72,11 +77,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.numEstablishCommunicationsTimeout)).BeginInit();
             this.groupBoxConnectDisconnect.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SetupErrorProvider)).BeginInit();
+            this.GrpIpVersionSelector.SuspendLayout();
             this.SuspendLayout();
             // 
             // numPort
             // 
-            this.numPort.Location = new System.Drawing.Point(476, 35);
+            this.numPort.Location = new System.Drawing.Point(610, 35);
             this.numPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -101,12 +107,12 @@
             this.addressList.FormattingEnabled = true;
             this.addressList.Location = new System.Drawing.Point(126, 34);
             this.addressList.Name = "addressList";
-            this.addressList.Size = new System.Drawing.Size(328, 21);
+            this.addressList.Size = new System.Drawing.Size(463, 21);
             this.addressList.TabIndex = 1;
             // 
             // numRemoteDeviceNumber
             // 
-            this.numRemoteDeviceNumber.Location = new System.Drawing.Point(587, 35);
+            this.numRemoteDeviceNumber.Location = new System.Drawing.Point(721, 35);
             this.numRemoteDeviceNumber.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -120,7 +126,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(574, 18);
+            this.label1.Location = new System.Drawing.Point(708, 18);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(117, 13);
             this.label1.TabIndex = 8;
@@ -128,7 +134,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(605, 336);
+            this.btnOK.Location = new System.Drawing.Point(745, 390);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 12;
@@ -139,7 +145,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(605, 365);
+            this.btnCancel.Location = new System.Drawing.Point(745, 419);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 13;
@@ -158,7 +164,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(498, 18);
+            this.label3.Location = new System.Drawing.Point(632, 18);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(39, 13);
             this.label3.TabIndex = 12;
@@ -188,6 +194,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(104, 37);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(20, 13);
@@ -197,15 +204,16 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(461, 37);
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(595, 37);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(10, 13);
+            this.label7.Size = new System.Drawing.Size(11, 13);
             this.label7.TabIndex = 17;
             this.label7.Text = ":";
             // 
             // numStandardTimeout
             // 
-            this.numStandardTimeout.Location = new System.Drawing.Point(21, 237);
+            this.numStandardTimeout.Location = new System.Drawing.Point(53, 277);
             this.numStandardTimeout.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -228,7 +236,7 @@
             // 
             // numLongTimeout
             // 
-            this.numLongTimeout.Location = new System.Drawing.Point(21, 263);
+            this.numLongTimeout.Location = new System.Drawing.Point(53, 303);
             this.numLongTimeout.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -252,7 +260,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(114, 239);
+            this.label8.Location = new System.Drawing.Point(146, 279);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(322, 13);
             this.label8.TabIndex = 20;
@@ -261,7 +269,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(114, 265);
+            this.label9.Location = new System.Drawing.Point(146, 305);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(302, 13);
             this.label9.TabIndex = 21;
@@ -269,7 +277,7 @@
             // 
             // numEstablishCommunicationsTimeout
             // 
-            this.numEstablishCommunicationsTimeout.Location = new System.Drawing.Point(21, 211);
+            this.numEstablishCommunicationsTimeout.Location = new System.Drawing.Point(53, 251);
             this.numEstablishCommunicationsTimeout.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -293,7 +301,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(114, 213);
+            this.label10.Location = new System.Drawing.Point(146, 253);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(222, 13);
             this.label10.TabIndex = 23;
@@ -301,14 +309,14 @@
             // 
             // txtUserName
             // 
-            this.txtUserName.Location = new System.Drawing.Point(156, 115);
+            this.txtUserName.Location = new System.Drawing.Point(188, 131);
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(210, 20);
             this.txtUserName.TabIndex = 5;
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(156, 141);
+            this.txtPassword.Location = new System.Drawing.Point(188, 157);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(210, 20);
             this.txtPassword.TabIndex = 7;
@@ -316,7 +324,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(376, 118);
+            this.label11.Location = new System.Drawing.Point(408, 134);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(184, 13);
             this.label11.TabIndex = 26;
@@ -325,7 +333,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(376, 144);
+            this.label12.Location = new System.Drawing.Point(408, 160);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(180, 13);
             this.label12.TabIndex = 27;
@@ -334,7 +342,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(187, 99);
+            this.label13.Location = new System.Drawing.Point(219, 115);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(286, 13);
             this.label13.TabIndex = 28;
@@ -343,7 +351,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(18, 195);
+            this.label6.Location = new System.Drawing.Point(50, 235);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(128, 13);
             this.label6.TabIndex = 29;
@@ -352,7 +360,7 @@
             // chkTrace
             // 
             this.chkTrace.AutoSize = true;
-            this.chkTrace.Location = new System.Drawing.Point(22, 117);
+            this.chkTrace.Location = new System.Drawing.Point(54, 133);
             this.chkTrace.Name = "chkTrace";
             this.chkTrace.Size = new System.Drawing.Size(90, 17);
             this.chkTrace.TabIndex = 4;
@@ -362,7 +370,7 @@
             // chkDebugTrace
             // 
             this.chkDebugTrace.AutoSize = true;
-            this.chkDebugTrace.Location = new System.Drawing.Point(22, 143);
+            this.chkDebugTrace.Location = new System.Drawing.Point(54, 159);
             this.chkDebugTrace.Name = "chkDebugTrace";
             this.chkDebugTrace.Size = new System.Drawing.Size(125, 17);
             this.chkDebugTrace.TabIndex = 6;
@@ -373,7 +381,7 @@
             // 
             this.groupBoxConnectDisconnect.Controls.Add(this.radManageConnectRemotely);
             this.groupBoxConnectDisconnect.Controls.Add(this.radManageConnectLocally);
-            this.groupBoxConnectDisconnect.Location = new System.Drawing.Point(21, 324);
+            this.groupBoxConnectDisconnect.Location = new System.Drawing.Point(53, 364);
             this.groupBoxConnectDisconnect.Name = "groupBoxConnectDisconnect";
             this.groupBoxConnectDisconnect.Size = new System.Drawing.Size(415, 66);
             this.groupBoxConnectDisconnect.TabIndex = 11;
@@ -410,7 +418,7 @@
             // 
             this.CmbImageArrayTransferType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CmbImageArrayTransferType.FormattingEnabled = true;
-            this.CmbImageArrayTransferType.Location = new System.Drawing.Point(513, 213);
+            this.CmbImageArrayTransferType.Location = new System.Drawing.Point(545, 253);
             this.CmbImageArrayTransferType.Name = "CmbImageArrayTransferType";
             this.CmbImageArrayTransferType.Size = new System.Drawing.Size(159, 21);
             this.CmbImageArrayTransferType.TabIndex = 30;
@@ -418,7 +426,7 @@
             // LabImageArrayConfiguration1
             // 
             this.LabImageArrayConfiguration1.AutoSize = true;
-            this.LabImageArrayConfiguration1.Location = new System.Drawing.Point(510, 195);
+            this.LabImageArrayConfiguration1.Location = new System.Drawing.Point(542, 235);
             this.LabImageArrayConfiguration1.Name = "LabImageArrayConfiguration1";
             this.LabImageArrayConfiguration1.Size = new System.Drawing.Size(138, 13);
             this.LabImageArrayConfiguration1.TabIndex = 31;
@@ -428,7 +436,7 @@
             // 
             this.cmbImageArrayCompression.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbImageArrayCompression.FormattingEnabled = true;
-            this.cmbImageArrayCompression.Location = new System.Drawing.Point(513, 265);
+            this.cmbImageArrayCompression.Location = new System.Drawing.Point(545, 305);
             this.cmbImageArrayCompression.Name = "cmbImageArrayCompression";
             this.cmbImageArrayCompression.Size = new System.Drawing.Size(159, 21);
             this.cmbImageArrayCompression.TabIndex = 32;
@@ -436,7 +444,7 @@
             // LabImageArrayConfiguration2
             // 
             this.LabImageArrayConfiguration2.AutoSize = true;
-            this.LabImageArrayConfiguration2.Location = new System.Drawing.Point(510, 249);
+            this.LabImageArrayConfiguration2.Location = new System.Drawing.Point(542, 289);
             this.LabImageArrayConfiguration2.Name = "LabImageArrayConfiguration2";
             this.LabImageArrayConfiguration2.Size = new System.Drawing.Size(162, 13);
             this.LabImageArrayConfiguration2.TabIndex = 33;
@@ -452,13 +460,70 @@
             this.ChkEnableRediscovery.Text = "Enable rediscovery if device cannot be found at this IP address";
             this.ChkEnableRediscovery.UseVisualStyleBackColor = true;
             // 
+            // label97
+            // 
+            this.label97.AutoSize = true;
+            this.label97.ForeColor = System.Drawing.Color.Red;
+            this.label97.Location = new System.Drawing.Point(592, 196);
+            this.label97.Name = "label97";
+            this.label97.Size = new System.Drawing.Size(230, 13);
+            this.label97.TabIndex = 53;
+            this.label97.Text = "This version only supports discovery using IPv4";
+            // 
+            // GrpIpVersionSelector
+            // 
+            this.GrpIpVersionSelector.Controls.Add(this.RadIpV4AndV6);
+            this.GrpIpVersionSelector.Controls.Add(this.RadIpV6);
+            this.GrpIpVersionSelector.Controls.Add(this.RadIpV4);
+            this.GrpIpVersionSelector.Location = new System.Drawing.Point(642, 90);
+            this.GrpIpVersionSelector.Name = "GrpIpVersionSelector";
+            this.GrpIpVersionSelector.Size = new System.Drawing.Size(133, 103);
+            this.GrpIpVersionSelector.TabIndex = 52;
+            this.GrpIpVersionSelector.TabStop = false;
+            this.GrpIpVersionSelector.Text = "Supported IP Version(s)";
+            // 
+            // RadIpV4AndV6
+            // 
+            this.RadIpV4AndV6.AutoSize = true;
+            this.RadIpV4AndV6.Location = new System.Drawing.Point(6, 75);
+            this.RadIpV4AndV6.Name = "RadIpV4AndV6";
+            this.RadIpV4AndV6.Size = new System.Drawing.Size(88, 17);
+            this.RadIpV4AndV6.TabIndex = 2;
+            this.RadIpV4AndV6.TabStop = true;
+            this.RadIpV4AndV6.Text = "IP V4 and V6";
+            this.RadIpV4AndV6.UseVisualStyleBackColor = true;
+            // 
+            // RadIpV6
+            // 
+            this.RadIpV6.AutoSize = true;
+            this.RadIpV6.Location = new System.Drawing.Point(6, 49);
+            this.RadIpV6.Name = "RadIpV6";
+            this.RadIpV6.Size = new System.Drawing.Size(75, 17);
+            this.RadIpV6.TabIndex = 1;
+            this.RadIpV6.TabStop = true;
+            this.RadIpV6.Text = "IP V6 Only";
+            this.RadIpV6.UseVisualStyleBackColor = true;
+            // 
+            // RadIpV4
+            // 
+            this.RadIpV4.AutoSize = true;
+            this.RadIpV4.Location = new System.Drawing.Point(6, 23);
+            this.RadIpV4.Name = "RadIpV4";
+            this.RadIpV4.Size = new System.Drawing.Size(75, 17);
+            this.RadIpV4.TabIndex = 0;
+            this.RadIpV4.TabStop = true;
+            this.RadIpV4.Text = "IP V4 Only";
+            this.RadIpV4.UseVisualStyleBackColor = true;
+            // 
             // SetupDialogForm
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(697, 402);
+            this.ClientSize = new System.Drawing.Size(832, 454);
+            this.Controls.Add(this.label97);
+            this.Controls.Add(this.GrpIpVersionSelector);
             this.Controls.Add(this.ChkEnableRediscovery);
             this.Controls.Add(this.LabImageArrayConfiguration2);
             this.Controls.Add(this.cmbImageArrayCompression);
@@ -504,6 +569,8 @@
             this.groupBoxConnectDisconnect.ResumeLayout(false);
             this.groupBoxConnectDisconnect.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SetupErrorProvider)).EndInit();
+            this.GrpIpVersionSelector.ResumeLayout(false);
+            this.GrpIpVersionSelector.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -546,5 +613,10 @@
         private System.Windows.Forms.Label LabImageArrayConfiguration2;
         private System.Windows.Forms.ComboBox cmbImageArrayCompression;
         private System.Windows.Forms.CheckBox ChkEnableRediscovery;
+        internal System.Windows.Forms.Label label97;
+        private System.Windows.Forms.GroupBox GrpIpVersionSelector;
+        private System.Windows.Forms.RadioButton RadIpV4AndV6;
+        private System.Windows.Forms.RadioButton RadIpV6;
+        private System.Windows.Forms.RadioButton RadIpV4;
     }
 }

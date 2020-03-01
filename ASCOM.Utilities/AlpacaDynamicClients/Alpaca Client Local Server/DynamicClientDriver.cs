@@ -446,7 +446,9 @@ namespace ASCOM.DynamicRemoteClients
                                        ref SharedConstants.ImageArrayTransferType imageArrayTransferType,
                                        ref SharedConstants.ImageArrayCompression imageArrayCompression,
                                        ref string uniqueId,
-                                       ref bool enableRediscovery
+                                       ref bool enableRediscovery,
+                                       ref bool ipV4Enabled,
+                                       ref bool ipV6Enabled
                                        )
         {
             using (Profile driverProfile = new Profile())
@@ -473,6 +475,8 @@ namespace ASCOM.DynamicRemoteClients
                 imageArrayCompression = (SharedConstants.ImageArrayCompression)GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.IMAGE_ARRAY_COMPRESSION_PROFILENAME, string.Empty, (int)SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT);
                 uniqueId = driverProfile.GetValue(driverProgID, SharedConstants.UNIQUEID_PROFILENAME, string.Empty, SharedConstants.UNIQUEID_DEFAULT);
                 enableRediscovery = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.ENABLE_REDISCOVERY_PROFILENAME, string.Empty, SharedConstants.ENABLE_REDISCOVERY_DEFAULT);
+                ipV4Enabled = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.ENABLE_IPV4_DISCOVERY_PROFILENAME, string.Empty, SharedConstants.ENABLE_IPV4_DISCOVERY_DEFAULT);
+                ipV6Enabled = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.ENABLE_IPV6_DISCOVERY_PROFILENAME, string.Empty, SharedConstants.ENABLE_IPV6_DISCOVERY_DEFAULT);
 
                 TL.DebugTraceState = debugTraceState; // Save the debug state for use when needed wherever the trace logger is used
 
@@ -499,7 +503,9 @@ namespace ASCOM.DynamicRemoteClients
                                         SharedConstants.ImageArrayTransferType imageArrayTransferType,
                                         SharedConstants.ImageArrayCompression imageArrayCompression,
                                         string uniqueId,
-                                        bool enableRediscovery
+                                        bool enableRediscovery,
+                                        bool ipV4Enabled,
+                                        bool ipV6Enabled
                                         )
         {
             using (Profile driverProfile = new Profile())
@@ -523,6 +529,8 @@ namespace ASCOM.DynamicRemoteClients
                 driverProfile.WriteValue(driverProgID, SharedConstants.IMAGE_ARRAY_COMPRESSION_PROFILENAME, ((int)imageArrayCompression).ToString());
                 driverProfile.WriteValue(driverProgID, SharedConstants.UNIQUEID_PROFILENAME, uniqueId.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(driverProgID, SharedConstants.ENABLE_REDISCOVERY_PROFILENAME, enableRediscovery.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(driverProgID, SharedConstants.ENABLE_IPV4_DISCOVERY_PROFILENAME, ipV4Enabled.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(driverProgID, SharedConstants.ENABLE_IPV6_DISCOVERY_PROFILENAME, ipV6Enabled.ToString(CultureInfo.InvariantCulture));
 
                 TL.DebugTraceState = debugTraceState; // Save the new debug state for use when needed wherever the trace logger is used
 

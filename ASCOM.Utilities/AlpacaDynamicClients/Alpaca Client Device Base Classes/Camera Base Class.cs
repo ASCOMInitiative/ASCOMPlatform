@@ -47,6 +47,8 @@ namespace ASCOM.DynamicRemoteClients
         private SharedConstants.ImageArrayCompression imageArrayCompression;
         private string uniqueId;
         private bool enableRediscovery;
+        private bool ipV4Enabled;
+        private bool ipV6Enabled;
 
         #endregion
 
@@ -68,7 +70,7 @@ namespace ASCOM.DynamicRemoteClients
                 if (TL == null) TL = new TraceLoggerPlus("", string.Format(SharedConstants.TRACELOGGER_NAME_FORMAT_STRING, DriverNumber, DEVICE_TYPE));
                 DynamicClientDriver.ReadProfile(clientNumber, TL, DEVICE_TYPE, DriverProgId,
                     ref traceState, ref debugTraceState, ref ipAddressString, ref portNumber, ref remoteDeviceNumber, ref serviceType, ref establishConnectionTimeout, ref standardDeviceResponseTimeout,
-                    ref longDeviceResponseTimeout, ref userName, ref password, ref manageConnectLocally, ref imageArrayTransferType, ref imageArrayCompression, ref uniqueId, ref enableRediscovery);
+                    ref longDeviceResponseTimeout, ref userName, ref password, ref manageConnectLocally, ref imageArrayTransferType, ref imageArrayCompression, ref uniqueId, ref enableRediscovery, ref ipV4Enabled, ref ipV6Enabled);
                 TL.LogMessage(clientNumber, DEVICE_TYPE, string.Format("Trace state: {0}, Debug Trace State: {1}, TraceLogger Debug State: {2}", traceState, debugTraceState, TL.DebugTraceState));
                 Version version = Assembly.GetEntryAssembly().GetName().Version;
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "Starting initialisation, Version: " + version.ToString());
@@ -76,7 +78,7 @@ namespace ASCOM.DynamicRemoteClients
                 clientNumber = DynamicClientDriver.GetUniqueClientNumber();
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "This instance's unique client number: " + clientNumber);
 
-                DynamicClientDriver.ConnectToRemoteDevice(ref client, ipAddressString, portNumber, establishConnectionTimeout, serviceType, TL, clientNumber, DriverProgId, DEVICE_TYPE, 
+                DynamicClientDriver.ConnectToRemoteDevice(ref client, ipAddressString, portNumber, establishConnectionTimeout, serviceType, TL, clientNumber, DriverProgId, DEVICE_TYPE,
                                                           standardDeviceResponseTimeout, userName, password, uniqueId, enableRediscovery);
 
                 URIBase = string.Format("{0}{1}/{2}/{3}/", SharedConstants.API_URL_BASE, SharedConstants.API_VERSION_V1, DEVICE_TYPE, remoteDeviceNumber.ToString());
@@ -234,6 +236,8 @@ namespace ASCOM.DynamicRemoteClients
                     setupForm.ImageArrayCompression = imageArrayCompression;
                     setupForm.DeviceType = DEVICE_TYPE;
                     setupForm.EnableRediscovery = enableRediscovery;
+                    setupForm.IpV4Enabled = ipV4Enabled;
+                    setupForm.IpV6Enabled = ipV6Enabled;
 
                     TL.LogMessage(clientNumber, "SetupDialog", "Showing Dialogue");
                     var result = setupForm.ShowDialog();
@@ -257,12 +261,14 @@ namespace ASCOM.DynamicRemoteClients
                         manageConnectLocally = setupForm.ManageConnectLocally;
                         imageArrayTransferType = setupForm.ImageArrayTransferType;
                         imageArrayCompression = setupForm.ImageArrayCompression;
-                        enableRediscovery=setupForm.EnableRediscovery ;
+                        enableRediscovery = setupForm.EnableRediscovery;
+                        ipV4Enabled = setupForm.IpV4Enabled;
+                        ipV6Enabled = setupForm.IpV6Enabled;
 
                         // Write the changed values to the Profile
                         TL.LogMessage(clientNumber, "SetupDialog", "Writing new values to profile");
                         DynamicClientDriver.WriteProfile(clientNumber, TL, DEVICE_TYPE, DriverProgId, traceState, debugTraceState, ipAddressString, portNumber, remoteDeviceNumber, serviceType,
-                            establishConnectionTimeout, standardDeviceResponseTimeout, longDeviceResponseTimeout, userName, password, manageConnectLocally, imageArrayTransferType, imageArrayCompression, uniqueId, enableRediscovery);
+                            establishConnectionTimeout, standardDeviceResponseTimeout, longDeviceResponseTimeout, userName, password, manageConnectLocally, imageArrayTransferType, imageArrayCompression, uniqueId, enableRediscovery, ipV4Enabled, ipV6Enabled);
 
                         // Establish new host and device parameters
                         TL.LogMessage(clientNumber, "SetupDialog", "Establishing new host and device parameters");
