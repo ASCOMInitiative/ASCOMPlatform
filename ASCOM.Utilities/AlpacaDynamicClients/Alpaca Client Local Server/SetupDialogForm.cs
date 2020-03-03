@@ -89,114 +89,121 @@ namespace ASCOM.DynamicRemoteClients
 
         private void SetupDialogForm_Load(object sender, EventArgs e)
         {
-            TL.LogMessage("SetupForm Load", "Start");
-
-            Version version = Assembly.GetExecutingAssembly().GetName().Version;
-
-            this.Text = $"{DriverDisplayName} Configuration - Version {version} - {DeviceType}";
-            addressList.Items.Add(SharedConstants.LOCALHOST_NAME);
-
-            cmbServiceType.Text = ServiceType;
-
-            int selectedIndex = 0;
-
-            if (IPAddressString != SharedConstants.LOCALHOST_NAME)
+            try
             {
-                addressList.Items.Add(IPAddressString);
-                selectedIndex = 1;
-            }
+                TL.LogMessage("SetupForm Load", "Start");
 
-            IPHostEntry host;
-            IPAddress localIP = null;
-            host = Dns.GetHostEntry(Dns.GetHostName());
-            bool found = false;
-            foreach (IPAddress ip in host.AddressList)
-            {
-                if ((ip.AddressFamily == AddressFamily.InterNetwork) & !found)
+                Version version = Assembly.GetExecutingAssembly().GetName().Version;
+
+                this.Text = $"{DriverDisplayName} Configuration - Version {version} - {DeviceType}";
+                addressList.Items.Add(SharedConstants.LOCALHOST_NAME);
+
+                cmbServiceType.Text = ServiceType;
+
+                int selectedIndex = 0;
+
+                if (IPAddressString != SharedConstants.LOCALHOST_NAME)
                 {
-                    localIP = ip;
-                    TL.LogMessage("GetIPAddress", "Found IP Address: " + ip.ToString());
-                    found = true;
-                    if (ip.ToString() != IPAddressString) // Only add addresses that are not the currently selected IP address
+                    addressList.Items.Add(IPAddressString);
+                    selectedIndex = 1;
+                }
+
+                IPHostEntry host;
+                IPAddress localIP = null;
+                host = Dns.GetHostEntry(Dns.GetHostName());
+                bool found = false;
+                foreach (IPAddress ip in host.AddressList)
+                {
+                    if ((ip.AddressFamily == AddressFamily.InterNetwork) & !found)
                     {
-                        addressList.Items.Add(ip.ToString());
+                        localIP = ip;
+                        TL.LogMessage("GetIPAddress", "Found IP Address: " + ip.ToString());
+                        found = true;
+                        if (ip.ToString() != IPAddressString) // Only add addresses that are not the currently selected IP address
+                        {
+                            addressList.Items.Add(ip.ToString());
+                        }
                     }
+                    else
+                    {
+                        TL.LogMessage("GetIPAddress", "Ignored IP Address: " + ip.ToString());
+                    }
+                }
+                if (localIP == null) throw new Exception("Cannot find IP address of this device");
+
+                TL.LogMessage("GetIPAddress", localIP.ToString());
+                addressList.SelectedIndex = selectedIndex;
+                numPort.Value = PortNumber;
+                numRemoteDeviceNumber.Value = RemoteDeviceNumber;
+                numEstablishCommunicationsTimeout.Value = Convert.ToDecimal(EstablishConnectionTimeout);
+                numStandardTimeout.Value = Convert.ToDecimal(StandardTimeout);
+                numLongTimeout.Value = Convert.ToDecimal(LongTimeout);
+                txtUserName.Text = UserName.Unencrypt(TL);
+                txtPassword.Text = Password.Unencrypt(TL);
+                chkTrace.Checked = TraceState;
+                chkDebugTrace.Checked = DebugTraceState;
+                ChkEnableRediscovery.Checked = EnableRediscovery;
+                NumDiscoveryPort.Value = Convert.ToDecimal(DiscoveryPort);
+
+                // Set the IP v4 / v6 radio boxes
+                if (IpV4Enabled & IpV6Enabled) // Both IPv4 and v6 are enabled so set the "both" button
+                {
+                    RadIpV4AndV6.Checked = true;
+                }
+                else // Only one of v4 or v6 is enabled so set accordingly 
+                {
+                    RadIpV4.Checked = IpV4Enabled;
+                    RadIpV6.Checked = IpV6Enabled;
+                }
+
+                if (ManageConnectLocally)
+                {
+                    radManageConnectLocally.Checked = true;
                 }
                 else
                 {
-                    TL.LogMessage("GetIPAddress", "Ignored IP Address: " + ip.ToString());
+                    radManageConnectRemotely.Checked = true;
                 }
+
+                CmbImageArrayTransferType.Items.Add(SharedConstants.ImageArrayTransferType.JSON);
+                CmbImageArrayTransferType.Items.Add(SharedConstants.ImageArrayTransferType.Base64HandOff);
+                CmbImageArrayTransferType.SelectedItem = ImageArrayTransferType;
+
+                cmbImageArrayCompression.Items.Add(SharedConstants.ImageArrayCompression.None);
+                cmbImageArrayCompression.Items.Add(SharedConstants.ImageArrayCompression.Deflate);
+                cmbImageArrayCompression.Items.Add(SharedConstants.ImageArrayCompression.GZip);
+                cmbImageArrayCompression.Items.Add(SharedConstants.ImageArrayCompression.GZipOrDeflate);
+                cmbImageArrayCompression.SelectedItem = ImageArrayCompression;
+
+                // Make the ImageArray transfer configuration drop-downs visible only when a camera driver is being accessed.
+                if (DeviceType == "Camera")
+                {
+                    cmbImageArrayCompression.Visible = true;
+                    CmbImageArrayTransferType.Visible = true;
+                    LabImageArrayConfiguration1.Visible = true;
+                    LabImageArrayConfiguration2.Visible = true;
+                }
+                else
+                {
+                    cmbImageArrayCompression.Visible = false;
+                    CmbImageArrayTransferType.Visible = false;
+                    LabImageArrayConfiguration1.Visible = false;
+                    LabImageArrayConfiguration2.Visible = false;
+                }
+
+                // Handle cases where the stored registry value is not one of the currently supported modes
+                if (CmbImageArrayTransferType.SelectedItem == null) CmbImageArrayTransferType.SelectedItem = SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT;
+                if (cmbImageArrayCompression.SelectedItem == null) cmbImageArrayCompression.SelectedItem = SharedConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT;
+
+                // Bring this form to the front of the screen
+                this.WindowState = FormWindowState.Minimized;
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
             }
-            if (localIP == null) throw new Exception("Cannot find IP address of this device");
-
-            TL.LogMessage("GetIPAddress", localIP.ToString());
-            addressList.SelectedIndex = selectedIndex;
-            numPort.Value = PortNumber;
-            numRemoteDeviceNumber.Value = RemoteDeviceNumber;
-            numEstablishCommunicationsTimeout.Value = Convert.ToDecimal(EstablishConnectionTimeout);
-            numStandardTimeout.Value = Convert.ToDecimal(StandardTimeout);
-            numLongTimeout.Value = Convert.ToDecimal(LongTimeout);
-            txtUserName.Text = UserName.Unencrypt(TL);
-            txtPassword.Text = Password.Unencrypt(TL);
-            chkTrace.Checked = TraceState;
-            chkDebugTrace.Checked = DebugTraceState;
-            ChkEnableRediscovery.Checked = EnableRediscovery;
-            NumDiscoveryPort.Value = DiscoveryPort;
-
-            // Set the IP v4 / v6 radio boxes
-            if (IpV4Enabled & IpV6Enabled) // Both IPv4 and v6 are enabled so set the "both" button
+            catch(Exception ex)
             {
-                RadIpV4AndV6.Checked = true;
+                MessageBox.Show("Exception initialising Dynamic Driver: " + ex.ToString());
             }
-            else // Only one of v4 or v6 is enabled so set accordingly 
-            {
-                RadIpV4.Checked = IpV4Enabled;
-                RadIpV6.Checked = IpV6Enabled;
-            }
-
-            if (ManageConnectLocally)
-            {
-                radManageConnectLocally.Checked = true;
-            }
-            else
-            {
-                radManageConnectRemotely.Checked = true;
-            }
-
-            CmbImageArrayTransferType.Items.Add(SharedConstants.ImageArrayTransferType.JSON);
-            CmbImageArrayTransferType.Items.Add(SharedConstants.ImageArrayTransferType.Base64HandOff);
-            CmbImageArrayTransferType.SelectedItem = ImageArrayTransferType;
-
-            cmbImageArrayCompression.Items.Add(SharedConstants.ImageArrayCompression.None);
-            cmbImageArrayCompression.Items.Add(SharedConstants.ImageArrayCompression.Deflate);
-            cmbImageArrayCompression.Items.Add(SharedConstants.ImageArrayCompression.GZip);
-            cmbImageArrayCompression.Items.Add(SharedConstants.ImageArrayCompression.GZipOrDeflate);
-            cmbImageArrayCompression.SelectedItem = ImageArrayCompression;
-
-            // Make the ImageArray transfer configuration drop-downs visible only when a camera driver is being accessed.
-            if (DeviceType == "Camera")
-            {
-                cmbImageArrayCompression.Visible = true;
-                CmbImageArrayTransferType.Visible = true;
-                LabImageArrayConfiguration1.Visible = true;
-                LabImageArrayConfiguration2.Visible = true;
-            }
-            else
-            {
-                cmbImageArrayCompression.Visible = false;
-                CmbImageArrayTransferType.Visible = false;
-                LabImageArrayConfiguration1.Visible = false;
-                LabImageArrayConfiguration2.Visible = false;
-            }
-
-            // Handle cases where the stored registry value is not one of the currently supported modes
-            if (CmbImageArrayTransferType.SelectedItem == null) CmbImageArrayTransferType.SelectedItem = SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT;
-            if (cmbImageArrayCompression.SelectedItem == null) cmbImageArrayCompression.SelectedItem = SharedConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT;
-
-            // Bring this form to the front of the screen
-            this.WindowState = FormWindowState.Minimized;
-            this.Show();
-            this.WindowState = FormWindowState.Normal;
         }
 
         #endregion

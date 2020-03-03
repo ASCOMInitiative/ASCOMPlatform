@@ -239,6 +239,7 @@ namespace ASCOM.DynamicRemoteClients
                     setupForm.EnableRediscovery = enableRediscovery;
                     setupForm.IpV4Enabled = ipV4Enabled;
                     setupForm.IpV6Enabled = ipV6Enabled;
+                    setupForm.DiscoveryPort = discoveryPort;
 
                     TL.LogMessage(clientNumber, "SetupDialog", "Showing Dialogue");
                     var result = setupForm.ShowDialog();
@@ -265,6 +266,7 @@ namespace ASCOM.DynamicRemoteClients
                         enableRediscovery = setupForm.EnableRediscovery;
                         ipV4Enabled = setupForm.IpV4Enabled;
                         ipV6Enabled = setupForm.IpV6Enabled;
+                        discoveryPort = setupForm.DiscoveryPort;
 
                         // Write the changed values to the Profile
                         TL.LogMessage(clientNumber, "SetupDialog", "Writing new values to profile");
