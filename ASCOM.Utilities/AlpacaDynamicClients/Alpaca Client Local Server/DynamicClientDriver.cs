@@ -191,7 +191,7 @@ namespace ASCOM.DynamicRemoteClients
         /// <param name="uniqueId"></param>
         /// <remarks>This method will attempt to re-discover the Alpaca device if it is not possible to establish a TCP connection with the device at the specified address and port.</remarks>
         public static void ConnectToRemoteDevice(ref RestClient client, string ipAddressString, decimal portNumber, int connectionTimeout, string serviceType, TraceLoggerPlus TL,
-                                                 uint clientNumber, string driverProgId, string deviceType, int deviceResponseTimeout, string userName, string password, string uniqueId, bool enableRediscovery)
+                                                 uint clientNumber, string driverProgId, string deviceType, int deviceResponseTimeout, string userName, string password, string uniqueId, bool enableRediscovery, bool ipV4Enabled, bool ipV6Enabled, int discoveryPort)
         {
             List<AvailableInterface> availableInterfaces = new List<AvailableInterface>();
 
@@ -212,8 +212,8 @@ namespace ASCOM.DynamicRemoteClients
                     // Create an AlapcaDiscovery component to conduct the search
                     using (AlpacaDiscovery alpacaDiscovery = new AlpacaDiscovery())
                     {
-                        // Start a discovery using two polls, 100ms apart, timing out after 2 seconds, don't attempt to resolve the IP address to a DNS name
-                        alpacaDiscovery.StartDiscovery(2, 100, 32227, 2.0, false, true, false);
+                        // Start a discovery using two polls, 100ms apart, timing out after 2 seconds, don't attempt to resolve the IP address to a DNS name use the discovery port and IP settings of this device
+                        alpacaDiscovery.StartDiscovery(2, 100, discoveryPort, 2.0, false, ipV4Enabled, ipV6Enabled);
 
                         // Wait for the discovery cycle to complete, making sure that the UI remains responsive
                         do
@@ -425,7 +425,7 @@ namespace ASCOM.DynamicRemoteClients
                 {
                     TL.LogMessage(clientNumber, "ClientIsUp", $"Contacted client OK!");
                     tcpClient.Close();
-                    returnValue= true;
+                    returnValue = true;
                 }
                 else // We did not connect successfully within the timeout period
                 {
@@ -470,7 +470,8 @@ namespace ASCOM.DynamicRemoteClients
                                        ref string uniqueId,
                                        ref bool enableRediscovery,
                                        ref bool ipV4Enabled,
-                                       ref bool ipV6Enabled
+                                       ref bool ipV6Enabled,
+                                       ref int discoveryPort
                                        )
         {
             using (Profile driverProfile = new Profile())
@@ -499,6 +500,7 @@ namespace ASCOM.DynamicRemoteClients
                 enableRediscovery = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.ENABLE_REDISCOVERY_PROFILENAME, string.Empty, SharedConstants.ENABLE_REDISCOVERY_DEFAULT);
                 ipV4Enabled = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.ENABLE_IPV4_DISCOVERY_PROFILENAME, string.Empty, SharedConstants.ENABLE_IPV4_DISCOVERY_DEFAULT);
                 ipV6Enabled = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.ENABLE_IPV6_DISCOVERY_PROFILENAME, string.Empty, SharedConstants.ENABLE_IPV6_DISCOVERY_DEFAULT);
+                discoveryPort = GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.DISCOVERY_PORT_PROFILENAME, string.Empty, SharedConstants.DISCOVERY_PORT_DEFAULT);
 
                 TL.DebugTraceState = debugTraceState; // Save the debug state for use when needed wherever the trace logger is used
 
@@ -527,7 +529,8 @@ namespace ASCOM.DynamicRemoteClients
                                         string uniqueId,
                                         bool enableRediscovery,
                                         bool ipV4Enabled,
-                                        bool ipV6Enabled
+                                        bool ipV6Enabled,
+                                        int discoveryPort
                                         )
         {
             using (Profile driverProfile = new Profile())
@@ -553,6 +556,7 @@ namespace ASCOM.DynamicRemoteClients
                 driverProfile.WriteValue(driverProgID, SharedConstants.ENABLE_REDISCOVERY_PROFILENAME, enableRediscovery.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(driverProgID, SharedConstants.ENABLE_IPV4_DISCOVERY_PROFILENAME, ipV4Enabled.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(driverProgID, SharedConstants.ENABLE_IPV6_DISCOVERY_PROFILENAME, ipV6Enabled.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(driverProgID, SharedConstants.DISCOVERY_PORT_PROFILENAME, discoveryPort.ToString(CultureInfo.InvariantCulture));
 
                 TL.DebugTraceState = debugTraceState; // Save the new debug state for use when needed wherever the trace logger is used
 

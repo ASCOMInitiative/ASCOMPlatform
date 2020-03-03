@@ -43,6 +43,7 @@ namespace ASCOM.DynamicRemoteClients
         public bool EnableRediscovery { get; set; }
         public bool IpV4Enabled { get; set; }
         public bool IpV6Enabled { get; set; }
+        public int DiscoveryPort { get; set; }
 
         #endregion
 
@@ -140,6 +141,7 @@ namespace ASCOM.DynamicRemoteClients
             chkTrace.Checked = TraceState;
             chkDebugTrace.Checked = DebugTraceState;
             ChkEnableRediscovery.Checked = EnableRediscovery;
+            NumDiscoveryPort.Value = DiscoveryPort;
 
             // Set the IP v4 / v6 radio boxes
             if (IpV4Enabled & IpV6Enabled) // Both IPv4 and v6 are enabled so set the "both" button
@@ -218,6 +220,7 @@ namespace ASCOM.DynamicRemoteClients
             ImageArrayTransferType = (SharedConstants.ImageArrayTransferType)CmbImageArrayTransferType.SelectedItem;
             ImageArrayCompression = (SharedConstants.ImageArrayCompression)cmbImageArrayCompression.SelectedItem;
             EnableRediscovery = ChkEnableRediscovery.Checked;
+            DiscoveryPort = Convert.ToInt32(NumDiscoveryPort.Value);
 
             // Set the IP v4 and v6 variables as necessary
             if (RadIpV4.Checked) // The IPv4 radio button is checked so set the IP v4 and IP v6 variables accordingly
