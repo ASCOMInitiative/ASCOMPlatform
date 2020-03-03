@@ -1,12 +1,11 @@
 ﻿Friend Module Constants
-    Public Const DISCOVERY_MESSAGE As String = "alpacadiscovery"
+    Public Const DISCOVERY_MESSAGE As String = "alpacadiscovery1"
     Public Const DISCOVERY_RESPONSE_STRING As String = "alpacaport"
     Public Const TRYING_TO_CONTACT_MANAGEMENT_API_MESSAGE As String = "Trying to contact Alpaca management API"
+    Public Const ALPACA_DISCOVERY_IPV6_MULTICAST_ADDRESS As String = "FF12::414C:5041:4341"
 
     ' Alpaca and ASCOM error number constants
-    Public Const FAILED_TO_CONTACT_MANAGEMENT_API_MESSAGE As String = "The Alpaca management API did not respond within the discovery response time" ' Offset value that relates the ASCOM Alpaca reserved error number range to the ASCOM COM HResult error number range
-    ' Lowest ASCOM error number
-    ' Highest ASCOM error number
+    Public Const FAILED_TO_CONTACT_MANAGEMENT_API_MESSAGE As String = "The Alpaca management API did not respond within the discovery response time"
 
     Public Const ASCOM_ERROR_NUMBER_OFFSET As Integer = &H80040000 ' Offset value that relates the ASCOM Alpaca reserved Error number range To the ASCOM COM HResult Error number range
     Public Const ASCOM_ERROR_NUMBER_BASE As Integer = &H80040400 ' Lowest ASCOM Error number

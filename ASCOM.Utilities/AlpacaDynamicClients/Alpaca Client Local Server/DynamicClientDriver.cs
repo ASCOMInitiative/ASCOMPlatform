@@ -391,8 +391,19 @@ namespace ASCOM.DynamicRemoteClients
         /// <returns></returns>
         private static bool ClientIsUp(string ipAddressString, decimal portNumber, int connectionTimeout, TraceLoggerPlus TL, uint clientNumber)
         {
-            using (TcpClient tcpClient = new TcpClient())
+            TcpClient tcpClient = null;
+
+            bool returnValue = false; // Assume a bad outcome in case there is an exception 
+
+            try
             {
+                IPAddress ipAddress = IPAddress.Parse(ipAddressString);
+
+                // Create an IPv4 or IPv6 TCP client as required
+                if (ipAddress.AddressFamily == AddressFamily.InterNetwork) tcpClient = new TcpClient(AddressFamily.InterNetwork); // Test IPv4 addresses
+                else tcpClient = new TcpClient(AddressFamily.InterNetworkV6);
+                TL.LogMessage(clientNumber, "ClientIsUp", $"Created an {ipAddress.AddressFamily} TCP client");
+
                 // Create a task that will return True if a connection to the device can be established or False if the connection is rejected or not possible
                 Task<bool> connectionTask = tcpClient.ConnectAsync(ipAddressString, (int)portNumber).ContinueWith(task => { return !task.IsFaulted; }, TaskContinuationOptions.ExecuteSynchronously);
                 TL.LogMessage(clientNumber, "ClientIsUp", $"Created connection task");
@@ -414,14 +425,25 @@ namespace ASCOM.DynamicRemoteClients
                 {
                     TL.LogMessage(clientNumber, "ClientIsUp", $"Contacted client OK!");
                     tcpClient.Close();
-                    return true;
+                    returnValue= true;
                 }
                 else // We did not connect successfully within the timeout period
                 {
                     TL.LogMessage(clientNumber, "ClientIsUp", $"Unable to contact client....");
-                    return false;
+                    returnValue = false;
                 }
             }
+
+            catch (Exception ex)
+            {
+                TL.LogMessageCrLf(clientNumber, "ClientIsUp", $"Exception: {ex.ToString()}");
+
+            }
+            finally
+            {
+                tcpClient.Dispose();
+            }
+            return returnValue;
         }
 
         #endregion

@@ -19,6 +19,8 @@ Friend Class Finder
     Private ReadOnly callbackFunctionDelegate As Action(Of IPEndPoint, AlpacaDiscoveryResponse)
     Private ReadOnly udpClient As UdpClient
 
+    Dim ipV6Discoveryclients As List(Of UdpClient) = New List(Of UdpClient)()
+
     ''' <summary>
     ''' A cache of all endpoints found by the server
     ''' </summary>
@@ -60,6 +62,11 @@ Friend Class Finder
                     Catch
                     End Try
                 End If
+
+                For Each client As UdpClient In ipV6Discoveryclients
+                    Try : client.Close() : Catch : End Try
+                Next
+
                 'try { udpClient.Dispose(); } catch { }
             End If
 
@@ -80,10 +87,10 @@ Friend Class Finder
     ''' <summary>
     ''' Resends the search request
     ''' </summary>
-    Public Sub Search(ByVal discoveryport As Integer)
-        SendDiscoveryMessage(Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE), discoveryport)
+    Public Sub Search(ByVal discoveryport As Integer, ipV4Enabled As Boolean, ipV6Enabled As Boolean)
+        If ipV4Enabled Then SendDiscoveryMessageIpV4(discoveryport)
+        If ipV6Enabled Then SendDiscoveryMessageIpV6(discoveryport)
     End Sub
-
 
     ''' <summary>
     ''' Clears the cached IP Endpoints in CachedEndpoints
@@ -92,43 +99,92 @@ Friend Class Finder
         CachedEndpoints.Clear()
     End Sub
 
-
 #End Region
 
-    ' 
-    '  On my test systems I discovered that some computer network adapters / networking gear will not forward 255.255.255.255 broadcasts. 
-    '  This binds to each network adapter on the computer, determines if it will work and then
-    '  Sends an IP and Subnet correct broadcast for each address combination on that adapter
-    '  This may result in some addresses being duplicated. For example if there are multiple addresses assigned to the same
-    '  Server this will find them all.
-    '  Also NCAP style loop backs may duplicate IP address running on local host
-    ' 
-    Private Sub SendDiscoveryMessage(ByVal message As Byte(), ByVal discoveryPort As Integer)
+    Private Sub SendDiscoveryMessageIpV4(ByVal discoveryPort As Integer)
         Dim adapters As NetworkInterface() = NetworkInterface.GetAllNetworkInterfaces()
+        LogMessage("SendDiscoveryMessageIpV4", $"Sending IPv$ discovery broadcasts")
 
         For Each adapter As NetworkInterface In adapters
             'Do not try and use non-operational adapters
             If adapter.OperationalStatus <> OperationalStatus.Up Then Continue For
-            ' Currently this only works for IPv4, skip any adapters that do not support it.
-            If Not adapter.Supports(NetworkInterfaceComponent.IPv4) Then Continue For
-            Dim adapterProperties As IPInterfaceProperties = adapter.GetIPProperties()
-            If adapterProperties Is Nothing Then Continue For
-            Dim uniCast As UnicastIPAddressInformationCollection = adapterProperties.UnicastAddresses
 
-            If uniCast.Count > 0 Then
+            If adapter.Supports(NetworkInterfaceComponent.IPv4) Then
+                Dim adapterProperties As IPInterfaceProperties = adapter.GetIPProperties()
+                If adapterProperties Is Nothing Then Continue For
+                Dim uniCast As UnicastIPAddressInformationCollection = adapterProperties.UnicastAddresses
 
-                For Each uni As UnicastIPAddressInformation In uniCast
-                    ' Currently this only works for IPv4.
-                    If uni.Address.AddressFamily <> AddressFamily.InterNetwork Then Continue For
+                If uniCast.Count > 0 Then
 
-                    ' Local host addresses (127.*.*.*) may have a null mask in Net Framework. We do want to search these. The correct mask is 255.0.0.0.
-                    udpClient.Send(message, message.Length, New IPEndPoint(GetBroadcastAddress(uni.Address, If(uni.IPv4Mask, IPAddress.Parse("255.0.0.0"))), discoveryPort))
-                    LogMessage("SendDiscoveryMessage", $"Sent broadcast to: {uni.Address.ToString()}")
-                Next
+                    For Each uni As UnicastIPAddressInformation In uniCast
+                        If uni.Address.AddressFamily <> AddressFamily.InterNetwork Then Continue For
+
+                        ' Local host addresses (127.*.*.*) may have a null mask in Net Framework. We do want to search these. The correct mask is 255.0.0.0.
+                        udpClient.Send(Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE), Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE).Length, New IPEndPoint(GetBroadcastAddress(uni.Address, If(uni.IPv4Mask, IPAddress.Parse("255.0.0.0"))), discoveryPort))
+                        LogMessage("SendDiscoveryMessageIpV4", $"Sent broadcast to: {uni.Address.ToString()}")
+                    Next
+                End If
             End If
         Next
     End Sub
 
+    ''' <summary>
+    ''' Send out discovery message on the IPv6 multicast group
+    ''' This dual targets NetStandard 2.0 and NetFX 3.5 so no Async Await
+    ''' </summary>
+    Private Sub SendDiscoveryMessageIpV6(ByVal discoveryPort As Integer)
+
+        For Each client As UdpClient In ipV6Discoveryclients
+            Try : client.Close() : Catch : End Try
+        Next
+
+        ipV6Discoveryclients.Clear()
+
+
+        LogMessage("SendDiscoveryMessageIpV6", $"Sending IPv6 discovery broadcasts")
+
+        ' Windows needs to bind a socket to each adapter explicitly
+        For Each adapter As NetworkInterface In NetworkInterface.GetAllNetworkInterfaces()
+            LogMessage("SendDiscoveryMessageIpV6", $"Found network interface {adapter.Description}, Interface type: {adapter.NetworkInterfaceType.ToString()} - supports multicast: {adapter.SupportsMulticast}")
+            If adapter.OperationalStatus <> OperationalStatus.Up Then Continue For
+            LogMessage("SendDiscoveryMessageIpV6", $"Interface is up")
+
+            If adapter.Supports(NetworkInterfaceComponent.IPv6) AndAlso adapter.SupportsMulticast Then
+                LogMessage("SendDiscoveryMessageIpV6", $"Interface supports IPv6")
+                Dim adapterProperties As IPInterfaceProperties = adapter.GetIPProperties()
+                If adapterProperties Is Nothing Then Continue For
+                Dim uniCast As UnicastIPAddressInformationCollection = adapterProperties.UnicastAddresses
+                LogMessage("SendDiscoveryMessageIpV6", $"Adapter does have properties. Number of unicast addresses: {uniCast.Count}")
+
+                If uniCast.Count > 0 Then
+
+                    For Each uni As UnicastIPAddressInformation In uniCast
+                        If uni.Address.AddressFamily = AddressFamily.InterNetworkV6 Then
+                            LogMessage("SendDiscoveryMessageIpV6", $"Interface is IPv6")
+
+                            Try
+                                Dim client As UdpClient = New UdpClient(AddressFamily.InterNetworkV6)
+
+                                '0 tells OS to give us a free ethereal port
+                                client.Client.Bind(New IPEndPoint(uni.Address, 0))
+                                client.BeginReceive(New AsyncCallback(AddressOf FinderDiscoveryCallback), client)
+                                client.Send(Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE), Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE).Length, New IPEndPoint(IPAddress.Parse(ALPACA_DISCOVERY_IPV6_MULTICAST_ADDRESS), discoveryPort))
+                                LogMessage("SendDiscoveryMessageIpV6", $"Sent multicast IPv6 discovery packet")
+
+                                ipV6Discoveryclients.Add(client)
+                            Catch ex As SocketException
+                            End Try
+                        End If
+                    Next
+                End If
+            End If
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' This callback is shared between IPv4 and IPv6
+    ''' </summary>
+    ''' <param name="ar"></param>
     Private Sub FinderDiscoveryCallback(ByVal ar As IAsyncResult)
         Try
             Dim udpClient As UdpClient = CType(ar.AsyncState, UdpClient)

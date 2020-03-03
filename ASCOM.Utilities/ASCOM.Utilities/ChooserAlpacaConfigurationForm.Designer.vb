@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class ChooserAlpacaConfigurationForm
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class ChooserAlpacaConfigurationForm
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ChooserAlpacaConfigurationForm))
         Me.BtnOK = New System.Windows.Forms.Button()
@@ -42,7 +42,6 @@ Partial Class ChooserAlpacaConfigurationForm
         Me.RadIpV4AndV6 = New System.Windows.Forms.RadioButton()
         Me.RadIpV6 = New System.Windows.Forms.RadioButton()
         Me.RadIpV4 = New System.Windows.Forms.RadioButton()
-        Me.Label5 = New System.Windows.Forms.Label()
         CType(Me.NumDiscoveryIpPort, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumDiscoveryBroadcasts, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumDiscoveryDuration, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -244,16 +243,6 @@ Partial Class ChooserAlpacaConfigurationForm
         Me.RadIpV4.Text = "IP V4 Only"
         Me.RadIpV4.UseVisualStyleBackColor = True
         '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.ForeColor = System.Drawing.Color.Red
-        Me.Label5.Location = New System.Drawing.Point(423, 40)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(253, 13)
-        Me.Label5.TabIndex = 16
-        Me.Label5.Text = "Platform 6.5 RC1 only supports discovery using IPv4"
-        '
         'ChooserAlpacaConfigurationForm
         '
         Me.AcceptButton = Me.BtnOK
@@ -261,7 +250,6 @@ Partial Class ChooserAlpacaConfigurationForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.BtnCancel
         Me.ClientSize = New System.Drawing.Size(700, 338)
-        Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.GrpIpVersion)
         Me.Controls.Add(Me.ChkShowCreateNewAlpacaDriverMessage)
         Me.Controls.Add(Me.Label4)
@@ -312,5 +300,4 @@ Partial Class ChooserAlpacaConfigurationForm
     Friend WithEvents RadIpV4AndV6 As RadioButton
     Friend WithEvents RadIpV6 As RadioButton
     Friend WithEvents RadIpV4 As RadioButton
-    Friend WithEvents Label5 As Label
 End Class

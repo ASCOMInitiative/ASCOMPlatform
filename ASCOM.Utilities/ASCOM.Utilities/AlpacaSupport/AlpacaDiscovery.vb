@@ -274,7 +274,7 @@ Public Class AlpacaDiscovery
         ' Send the broadcast polls
         For i As Integer = 1 To numberOfPolls
             LogMessage("StartDiscovery", $"Sending poll {i}...")
-            finder.Search(discoveryPort)
+            finder.Search(discoveryPort, useIpV4, useIpV6)
             LogMessage("StartDiscovery", $"Poll {i} sent.")
             If i < numberOfPolls Then Thread.Sleep(pollInterval) ' Sleep after sending the poll, except for the last one
         Next
@@ -362,10 +362,12 @@ Public Class AlpacaDiscovery
         Dim hostIpAndPort As String = deviceIpEndPoint.ToString()
 
         Try
-            LogMessage("GetAlpacaDeviceInformation", $"dISCOVER TIMEOUT: {discoveryTime} ({discoveryTime * 1000})")
+            LogMessage("GetAlpacaDeviceInformation", $"DISCOVERY TIMEOUT: {discoveryTime} ({discoveryTime * 1000})")
 
             ' Wait for API version result and process it
             Using apiClient As WebClientWithTimeOut = New WebClientWithTimeOut()
+                LogMessage("GetAlpacaDeviceInformation", $"About to get version information from http://{hostIpAndPort}/management/apiversions at IP endpoint {deviceIpEndPoint.Address} {deviceIpEndPoint.AddressFamily}")
+
                 Dim apiVersionsJsonResponse As String = GetRequest($"http://{hostIpAndPort}/management/apiversions", Convert.ToInt32(discoveryTime * 1000))
                 LogMessage("GetAlpacaDeviceInformation", $"Received JSON response from {hostIpAndPort}: {apiVersionsJsonResponse}")
                 Dim apiVersionsResponse As IntArray1DResponse = JsonConvert.DeserializeObject(Of IntArray1DResponse)(apiVersionsJsonResponse)

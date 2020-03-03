@@ -1,5 +1,6 @@
 ﻿Imports System.Collections.Generic
 Imports System.Net
+Imports System.Net.Sockets
 Imports System.Runtime.InteropServices
 Imports ASCOM.Utilities.Interfaces
 
@@ -30,7 +31,14 @@ Public Class AlpacaDevice
     ''' <paramname="statusMessage">Device status message</param>
     Friend Sub New(ByVal ipEndPoint As IPEndPoint, ByVal statusMessage As String)
         Me.IPEndPoint = ipEndPoint
-        HostName = ipEndPoint.Address.ToString() ' Initialise the host name to the IP address in case there is no DNS name resolution or in case this fails
+
+        ' Initialise the Host name to the IP address using the normal ToString version if IPv4 or the canonical form if IPv6
+        If ipEndPoint.AddressFamily = AddressFamily.InterNetworkV6 Then
+            HostName = $"[{ipEndPoint.Address}]"  ' Initialise the host name to the IPv6 address in case there is no DNS name resolution or in case this fails
+        Else
+            HostName = ipEndPoint.Address.ToString()  ' Initialise the host name to the IPv4 address in case there is no DNS name resolution or in case this fails
+        End If
+
         Port = ipEndPoint.Port ' Initialise the port number to the port set in the IPEndPoint
         configuredDevicesValue = New List(Of ConfiguredDevice)
         configuredDevicesAsArrayListValue = New ArrayList
