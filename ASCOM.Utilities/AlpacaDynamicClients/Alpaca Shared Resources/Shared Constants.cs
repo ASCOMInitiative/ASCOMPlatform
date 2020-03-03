@@ -74,7 +74,7 @@ namespace ASCOM.DynamicRemoteClients
         public const string UNIQUEID_PROFILENAME = "UniqueID"; public const string UNIQUEID_DEFAULT = "Unknown";
         public const string ENABLE_REDISCOVERY_PROFILENAME = "Enable Rediscovery"; public const bool ENABLE_REDISCOVERY_DEFAULT = true;
         public const string ENABLE_IPV4_DISCOVERY_PROFILENAME = "Enable IPv4 Discovery"; public const bool ENABLE_IPV4_DISCOVERY_DEFAULT = true;
-        public const string ENABLE_IPV6_DISCOVERY_PROFILENAME = "Enable IPv6 Discovery"; public const bool ENABLE_IPV6_DISCOVERY_DEFAULT = false;
+        public const string ENABLE_IPV6_DISCOVERY_PROFILENAME = "Enable IPv6 Discovery"; public const bool ENABLE_IPV6_DISCOVERY_DEFAULT = true;
         public const string DISCOVERY_PORT_PROFILENAME = "Discovery Port"; public const int DISCOVERY_PORT_DEFAULT = 32227;
 
         // Driver naming constants
