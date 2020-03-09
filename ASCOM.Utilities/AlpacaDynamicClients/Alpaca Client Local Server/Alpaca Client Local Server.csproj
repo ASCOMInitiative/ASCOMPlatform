@@ -160,6 +160,7 @@
     <Compile Include="AxisRates.cs" />
     <Compile Include="ClassFactory.cs" />
     <Compile Include="DataProtectionExtensions.cs" />
+    <Compile Include="HostPc.cs" />
     <Compile Include="LocalServerForm.cs">
       <SubType>Form</SubType>
     </Compile>

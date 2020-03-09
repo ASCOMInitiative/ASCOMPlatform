@@ -49,8 +49,9 @@ namespace ASCOM.DynamicRemoteClients
         public const int SOCKET_ERROR_RETRY_DELAY_TIME = 1000; // The delay time (milliseconds) between socket actively refused retries
 
         // remote device setup form constants
-        public const string LOCALHOST_NAME = "localhost";
-        public const string LOCALHOST_ADDRESS = "127.0.0.1"; // Get the localhost loop back address
+        public const string LOCALHOST_NAME_IPV4 = "localhost";
+        public const string LOCALHOST_ADDRESS_IPV4 = "127.0.0.1"; // Get the localhost loop back address
+        public const string STRONG_WILDCARD_NAME = "+"; // Get the localhost loop back address
 
         // Constants shared by Remote Client Drivers and the ASCOM remote device
         public const string API_URL_BASE = "/api/"; // This constant must always be lower case to make the logic tests work properly 
@@ -59,7 +60,7 @@ namespace ASCOM.DynamicRemoteClients
         // Client driver profile persistence constants
         public const string TRACE_LEVEL_PROFILENAME = "Trace Level"; public const bool CLIENT_TRACE_LEVEL_DEFAULT = true;
         public const string DEBUG_TRACE_PROFILENAME = "Include Debug Trace"; public const bool DEBUG_TRACE_DEFAULT = false;
-        public const string IPADDRESS_PROFILENAME = "IP Address"; public const string IPADDRESS_DEFAULT = SharedConstants.LOCALHOST_ADDRESS;
+        public const string IPADDRESS_PROFILENAME = "IP Address"; public const string IPADDRESS_DEFAULT = SharedConstants.LOCALHOST_ADDRESS_IPV4;
         public const string PORTNUMBER_PROFILENAME = "Port Number"; public const decimal PORTNUMBER_DEFAULT = 11111;
         public const string REMOTE_DEVICE_NUMBER_PROFILENAME = "Remote Device Number"; public const decimal REMOTE_DEVICE_NUMBER_DEFAULT = 0;
         public const string SERVICE_TYPE_PROFILENAME = "Service Type"; public const string SERVICE_TYPE_DEFAULT = "http";

@@ -19,7 +19,7 @@ namespace ASCOM.DynamicRemoteClients
 
         // Create validating regular expression
         Regex validHostnameRegex = new Regex(SharedConstants.ValidHostnameRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        Regex validIpAddressRegex = new Regex(SharedConstants.ValidIpAddressRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        //Regex validIpAddressRegex = new Regex(SharedConstants.ValidIpAddressRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
         #endregion
 
         #region Public Properties
@@ -94,45 +94,10 @@ namespace ASCOM.DynamicRemoteClients
                 TL.LogMessage("SetupForm Load", "Start");
 
                 Version version = Assembly.GetExecutingAssembly().GetName().Version;
-
                 this.Text = $"{DriverDisplayName} Configuration - Version {version} - {DeviceType}";
-                addressList.Items.Add(SharedConstants.LOCALHOST_NAME);
 
+                // Initialise controls
                 cmbServiceType.Text = ServiceType;
-
-                int selectedIndex = 0;
-
-                if (IPAddressString != SharedConstants.LOCALHOST_NAME)
-                {
-                    addressList.Items.Add(IPAddressString);
-                    selectedIndex = 1;
-                }
-
-                IPHostEntry host;
-                IPAddress localIP = null;
-                host = Dns.GetHostEntry(Dns.GetHostName());
-                bool found = false;
-                foreach (IPAddress ip in host.AddressList)
-                {
-                    if ((ip.AddressFamily == AddressFamily.InterNetwork) & !found)
-                    {
-                        localIP = ip;
-                        TL.LogMessage("GetIPAddress", "Found IP Address: " + ip.ToString());
-                        found = true;
-                        if (ip.ToString() != IPAddressString) // Only add addresses that are not the currently selected IP address
-                        {
-                            addressList.Items.Add(ip.ToString());
-                        }
-                    }
-                    else
-                    {
-                        TL.LogMessage("GetIPAddress", "Ignored IP Address: " + ip.ToString());
-                    }
-                }
-                if (localIP == null) throw new Exception("Cannot find IP address of this device");
-
-                TL.LogMessage("GetIPAddress", localIP.ToString());
-                addressList.SelectedIndex = selectedIndex;
                 numPort.Value = PortNumber;
                 numRemoteDeviceNumber.Value = RemoteDeviceNumber;
                 numEstablishCommunicationsTimeout.Value = Convert.ToDecimal(EstablishConnectionTimeout);
@@ -155,6 +120,9 @@ namespace ASCOM.DynamicRemoteClients
                     RadIpV4.Checked = IpV4Enabled;
                     RadIpV6.Checked = IpV6Enabled;
                 }
+
+                // Populate the address list combo box  
+                PopulateAddressList();
 
                 if (ManageConnectLocally)
                 {
@@ -200,7 +168,7 @@ namespace ASCOM.DynamicRemoteClients
                 this.Show();
                 this.WindowState = FormWindowState.Normal;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Exception initialising Dynamic Driver: " + ex.ToString());
             }
@@ -214,7 +182,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             TraceState = chkTrace.Checked;
             DebugTraceState = chkDebugTrace.Checked;
-            IPAddressString = addressList.Text;
+            IPAddressString = addressList.Text.Trim();
             PortNumber = numPort.Value;
             RemoteDeviceNumber = numRemoteDeviceNumber.Value;
             ServiceType = cmbServiceType.Text;
@@ -310,29 +278,45 @@ namespace ASCOM.DynamicRemoteClients
 
         private void AddressList_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            bool isValid = false;
+            bool isValid = false; // Assume that the address is invalid until proven otherwise
+            TL.LogMessage("AddressList_Validating", $"Address item: {addressList.Text}");
 
-            if (IsIpAddress(addressList.Text)) // The host name is an IP address so test whether this is valid
+            // Test whether the supplied IP address is valid and, if it is an IPv6 address, test whether it is in canonical form
+            if (IPAddress.TryParse(addressList.Text.Trim(), out IPAddress ipAddress)) // The host name is an IP address
             {
-                MatchCollection matches = validIpAddressRegex.Matches(addressList.Text);
-                if (matches.Count == 0)
+                if (ipAddress.AddressFamily == AddressFamily.InterNetworkV6) // This is an IPv6 address
                 {
-                    SetupErrorProvider.SetError(addressList, "IP addresses can only contain digits and the point character in the form WWW.XXX.YYY.ZZZ.");
+                    TL.LogMessage("AddressList_Validating", $"Address item: {addressList.Text} is an IPv6 address");
+                    if (addressList.Text.Trim().StartsWith("[") & addressList.Text.Trim().EndsWith("]"))
+                    {
+                        TL.LogMessage("AddressList_Validating", $"Address item: {addressList.Text} is a canonical IPv6 address");
+                        // The IP v6 address is already in canonical form, no action required
+                        isValid = true;
+                    }
+                    else // The IPv6 address is not in canonical form so we need to add square brackets
+                    {
+                        TL.LogMessage("AddressList_Validating", $"Address item: {addressList.Text} is NOT a canonical IPv6 address");
+                        SetupErrorProvider.SetError(addressList, "IPv6 addresses must be in canonical form i.e. start with [ and end with ].");
+                    }
                 }
-                else
+                else // This is an IPv4 address
                 {
+                    // The IP v4 address is already in canonical form, no action required
                     isValid = true;
                 }
             }
-            else // The host name is a string rather than an IP address so validate this
+            else // The host name is either an invalid IP address or a string so validate this
             {
+                TL.LogMessage("AddressList_Validating", $"Address item: {addressList.Text} is NOT a valid IP address");
                 MatchCollection matches = validHostnameRegex.Matches(addressList.Text);
                 if (matches.Count == 0)
                 {
-                    SetupErrorProvider.SetError(addressList, "Not a valid host name.");
+                    TL.LogMessage("AddressList_Validating", $"Address item: {addressList.Text} is NOT a valid IP address or Host Name");
+                    SetupErrorProvider.SetError(addressList, "Not a valid IP address or host name.");
                 }
                 else
                 {
+                    TL.LogMessage("AddressList_Validating", $"Address item: {addressList.Text} is a valid Host Name");
                     isValid = true;
                 }
             }
@@ -364,16 +348,104 @@ namespace ASCOM.DynamicRemoteClients
         #endregion
 
         #region Support Code
-        public bool IsIpAddress(string s)
+        #endregion
+
+        private void RadIpV4_CheckedChanged(object sender, EventArgs e)
         {
-            foreach (char c in s)
-            {
-                if ((!Char.IsDigit(c)) && (c != '.')) return false; // Make sure that the strong only contains digits and the point character
-            }
-            return true;
+            PopulateAddressList();
         }
 
-        #endregion
+        private void RadIpV6_CheckedChanged(object sender, EventArgs e)
+        {
+            PopulateAddressList();
+        }
+
+        private void RadIpV4AndV6_CheckedChanged(object sender, EventArgs e)
+        {
+            PopulateAddressList();
+        }
+
+        private void PopulateAddressList()
+        {
+            bool foundAnIPAddress = false;
+            bool foundTheIPAddress = false;
+            int selectedIndex = 0;
+
+            TL.LogMessage(0, 0, 0, "PopulateAddressList", "Start");
+
+            addressList.Items.Clear();
+
+            // Add IPv4 addresses
+            if (RadIpV4.Checked | RadIpV4AndV6.Checked) // IPv4 addresses are required
+            {
+                // Add a local host entry
+                addressList.Items.Add(SharedConstants.LOCALHOST_NAME_IPV4); // Make "localhost" the first entry in the list of IPv4 addresses
+                foreach (IPAddress ipAddress in HostPc.IpV4Addresses)
+                {
+                    addressList.Items.Add(ipAddress.ToString());
+                    TL.LogMessage(0, 0, 0, "PopulateAddressList", string.Format("  Added {0} Address: {1}", ipAddress.AddressFamily.ToString(), ipAddress.ToString()));
+
+                    foundAnIPAddress = true;
+
+                    if (ipAddress.ToString() == IPAddressString)
+                    {
+                        selectedIndex = addressList.Items.Count - 1;
+                        foundTheIPAddress = true;
+                    }
+                }
+            }
+
+            // Add IPv6 addresses
+            if (RadIpV6.Checked | RadIpV4AndV6.Checked) // IPv6 addresses are required
+            {
+                foreach (IPAddress ipAddress in HostPc.IpV6Addresses)
+                {
+                    addressList.Items.Add($"[{ipAddress}]");
+                    TL.LogMessage(0, 0, 0, "PopulateAddressList", string.Format("  Added {0} Address: {1}", ipAddress.AddressFamily.ToString(), ipAddress.ToString()));
+
+                    foundAnIPAddress = true;
+
+                    if ($"[{ipAddress}]" == IPAddressString)
+                    {
+                        selectedIndex = addressList.Items.Count - 1;
+                        foundTheIPAddress = true;
+                    }
+                }
+            }
+
+            TL.LogMessage(0, 0, 0, "PopulateAddressList", string.Format($"Found an IP address: {foundAnIPAddress}, Found the IP address: {foundTheIPAddress}, Stored IP Address: {IPAddressString}"));
+
+            if ((!foundTheIPAddress) & (IPAddressString != "")) // Add the last stored IP address if it isn't found in the search above
+            {
+                if (IPAddressString == "+") // Handle the "all addresses special case
+                {
+                    addressList.Items.Add(IPAddressString); // Add the stored address to the list
+                    selectedIndex = addressList.Items.Count - 1; // Select this item in the list
+                }
+                else  // One specific address so add it if it parses OK
+                {
+                    IPAddress serverIpAddress = IPAddress.Parse(IPAddressString);
+                    if (
+                            ((serverIpAddress.AddressFamily == AddressFamily.InterNetwork) & ((RadIpV4.Checked | RadIpV4AndV6.Checked))) |
+                            ((serverIpAddress.AddressFamily == AddressFamily.InterNetworkV6) & ((RadIpV6.Checked | RadIpV4AndV6.Checked)))
+                       )
+                    {
+                        addressList.Items.Add(IPAddressString); // Add the stored address to the list
+                        selectedIndex = addressList.Items.Count - 1; // Select this item in the list
+                    }
+                    else selectedIndex = 0;
+                }
+            }
+
+            // Add the wild card addresses at the end of the list
+
+            // Include the strong wild card character in the list of addresses if not already in use
+            if (IPAddressString != SharedConstants.STRONG_WILDCARD_NAME) addressList.Items.Add(SharedConstants.STRONG_WILDCARD_NAME);
+
+            // Set the combo box selected item
+            addressList.SelectedIndex = selectedIndex;
+            SetupErrorProvider.Clear();
+        }
 
     }
 }

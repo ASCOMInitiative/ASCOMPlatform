@@ -31,6 +31,7 @@ Public Class AlpacaDiscovery
     Private discoveryStartTime As Date ' Time at which the start discovery command was received
     Private discoveryCompleteValue As Boolean ' Discovery completion status
     Private ReadOnly deviceListLockObject As Object = New Object() ' Lock object to synchronise access to the Alpaca device list collection, which is not a thread safe collection
+
 #End Region
 
 #Region "New and IDisposable Support"
@@ -66,7 +67,7 @@ Public Class AlpacaDiscovery
             End If
 
             ' Get a new broadcast response finder
-            finder = New Finder(AddressOf BroadcastResponseEventHandler, TL)
+            finder = New Finder(AddressOf FoundDeviceEventHandler, TL)
 
             LogMessage("AlpacaDiscoveryInitialise", $"Complete - Running on thread {Thread.CurrentThread.ManagedThreadId}")
         Catch ex As Exception
@@ -113,6 +114,7 @@ Public Class AlpacaDiscovery
     ''' </summary>
     ''' <remarks>This event is only available to .NET clients. COM clients should poll the <see cref="DiscoveryComplete"/> property periodically to determine when discovery is complete.</remarks>
     Public Event DiscoveryCompleted As EventHandler Implements IAlpacaDiscoveryExtra.DiscoveryCompleted
+
 #End Region
 
 #Region "Public Properties"
@@ -134,6 +136,7 @@ Public Class AlpacaDiscovery
 #End Region
 
 #Region "Public Methods"
+
     ''' <summary>
     ''' Returns an ArrayList of discovered Alpaca devices for use by COM clients
     ''' </summary>
@@ -323,9 +326,9 @@ Public Class AlpacaDiscovery
     ''' </summary>
     ''' <paramname="responderIPEndPoint">Responder's IP address and port</param>
     ''' <paramname="alpacaDiscoveryResponse">Class containing the information provided by the device in its response.</param>
-    Private Sub BroadcastResponseEventHandler(ByVal responderIPEndPoint As IPEndPoint, ByVal alpacaDiscoveryResponse As AlpacaDiscoveryResponse)
+    Private Sub FoundDeviceEventHandler(ByVal responderIPEndPoint As IPEndPoint, ByVal alpacaDiscoveryResponse As AlpacaDiscoveryResponse)
         Try
-            LogMessage("BroadcastResponseEventHandler", $"FOUND Alpaca device at {responderIPEndPoint.Address}:{responderIPEndPoint.Port}") ' Log reception of the broadcast response
+            LogMessage("FoundDeviceEventHandler", $"FOUND Alpaca device at {responderIPEndPoint.Address}:{responderIPEndPoint.Port}") ' Log reception of the broadcast response
 
             ' Add the new device or ignore this duplicate if it already exists
             SyncLock deviceListLockObject ' Make sure that the device list dictionary can't change while being read and that only one thread can update it at a time
@@ -337,19 +340,19 @@ Public Class AlpacaDiscovery
 
             ' Create a task to query this device's DNS name, if configured to do so
             If tryDnsNameResolution Then
-                LogMessage("BroadcastResponseEventHandler", $"Creating task to retrieve DNS information for device {responderIPEndPoint.ToString()}:{responderIPEndPoint.Port}")
+                LogMessage("FoundDeviceEventHandler", $"Creating task to retrieve DNS information for device {responderIPEndPoint.ToString()}:{responderIPEndPoint.Port}")
                 Dim dnsResolutionThread As Thread = New Thread(AddressOf ResolveIpAddressToHostName)
                 dnsResolutionThread.IsBackground = True
                 dnsResolutionThread.Start(responderIPEndPoint)
             End If
 
             ' Create a task to query this device's Alpaca management API
-            LogMessage("BroadcastResponseEventHandler", $"Creating thread to retrieve Alpaca management description for device {responderIPEndPoint.ToString()}:{responderIPEndPoint.Port}")
+            LogMessage("FoundDeviceEventHandler", $"Creating thread to retrieve Alpaca management description for device {responderIPEndPoint.ToString()}:{responderIPEndPoint.Port}")
             Dim descriptionThread As Thread = New Thread(AddressOf GetAlpacaDeviceInformation)
             descriptionThread.IsBackground = True
             descriptionThread.Start(responderIPEndPoint)
         Catch ex As Exception
-            LogMessage("BroadcastResponseEventHandler", $"AddresssFound Exception: {ex.ToString()}")
+            LogMessage("FoundDeviceEventHandler", $"AddresssFound Exception: {ex.ToString()}")
         End Try
     End Sub
 

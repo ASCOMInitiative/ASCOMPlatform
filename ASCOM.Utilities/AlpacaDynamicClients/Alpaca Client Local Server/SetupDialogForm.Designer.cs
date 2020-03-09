@@ -484,6 +484,7 @@
             this.RadIpV4AndV6.TabStop = true;
             this.RadIpV4AndV6.Text = "IP V4 and V6";
             this.RadIpV4AndV6.UseVisualStyleBackColor = true;
+            this.RadIpV4AndV6.CheckedChanged += new System.EventHandler(this.RadIpV4AndV6_CheckedChanged);
             // 
             // RadIpV6
             // 
@@ -495,6 +496,7 @@
             this.RadIpV6.TabStop = true;
             this.RadIpV6.Text = "IP V6 Only";
             this.RadIpV6.UseVisualStyleBackColor = true;
+            this.RadIpV6.CheckedChanged += new System.EventHandler(this.RadIpV6_CheckedChanged);
             // 
             // RadIpV4
             // 
@@ -506,6 +508,7 @@
             this.RadIpV4.TabStop = true;
             this.RadIpV4.Text = "IP V4 Only";
             this.RadIpV4.UseVisualStyleBackColor = true;
+            this.RadIpV4.CheckedChanged += new System.EventHandler(this.RadIpV4_CheckedChanged);
             // 
             // NumDiscoveryPort
             // 

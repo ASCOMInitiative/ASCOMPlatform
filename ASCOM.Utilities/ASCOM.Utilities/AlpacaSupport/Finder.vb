@@ -140,7 +140,6 @@ Friend Class Finder
 
         ipV6Discoveryclients.Clear()
 
-
         LogMessage("SendDiscoveryMessageIpV6", $"Sending IPv6 discovery broadcasts")
 
         ' Windows needs to bind a socket to each adapter explicitly
