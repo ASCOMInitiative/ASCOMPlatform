@@ -2,7 +2,7 @@
     Public Const DISCOVERY_MESSAGE As String = "alpacadiscovery1" ' Fixed text alpacadiscovery plus a string version number of 1
     Public Const DISCOVERY_RESPONSE_STRING As String = "alpacaport"
     Public Const TRYING_TO_CONTACT_MANAGEMENT_API_MESSAGE As String = "Trying to contact Alpaca management API"
-    Public Const ALPACA_DISCOVERY_IPV6_MULTICAST_ADDRESS As String = "ff12::a19aca"
+    Public Const ALPACA_DISCOVERY_IPV6_MULTICAST_ADDRESS As String = "ff12::a1:9aca"
 
     ' Alpaca and ASCOM error number constants
     Public Const FAILED_TO_CONTACT_MANAGEMENT_API_MESSAGE As String = "The Alpaca management API did not respond within the discovery response time"
