@@ -397,12 +397,18 @@ namespace ASCOM.DynamicRemoteClients
 
             try
             {
-                IPAddress ipAddress = IPAddress.Parse(ipAddressString);
-
-                // Create an IPv4 or IPv6 TCP client as required
-                if (ipAddress.AddressFamily == AddressFamily.InterNetwork) tcpClient = new TcpClient(AddressFamily.InterNetwork); // Test IPv4 addresses
-                else tcpClient = new TcpClient(AddressFamily.InterNetworkV6);
-                TL.LogMessage(clientNumber, "ClientIsUp", $"Created an {ipAddress.AddressFamily} TCP client");
+                // Create a TcpClient 
+                if (IPAddress.TryParse(ipAddressString, out IPAddress ipAddress))
+                {
+                    // Create an IPv4 or IPv6 TCP client as required
+                    if (ipAddress.AddressFamily == AddressFamily.InterNetwork) tcpClient = new TcpClient(AddressFamily.InterNetwork); // Test IPv4 addresses
+                    else tcpClient = new TcpClient(AddressFamily.InterNetworkV6);
+                    TL.LogMessage(clientNumber, "ClientIsUp", $"Created an {ipAddress.AddressFamily} TCP client");
+                }
+                else
+                {
+                    tcpClient = new TcpClient(); // Create a generic TcpClient that can work with host names
+                }
 
                 // Create a task that will return True if a connection to the device can be established or False if the connection is rejected or not possible
                 Task<bool> connectionTask = tcpClient.ConnectAsync(ipAddressString, (int)portNumber).ContinueWith(task => { return !task.IsFaulted; }, TaskContinuationOptions.ExecuteSynchronously);
