@@ -17,48 +17,53 @@ Namespace Interfaces
     <Guid("2299465C-A42B-47FE-B8F5-B3A1AF11B137"), ComVisible(True)>
     Public Interface IAlpacaDevice
         ''' <summary>
-        ''' Alpaca device's host name or IP address
+        ''' The Alpaca device's DNS host name, if available, otherwise its IP address. IPv6 addresses will be in canonical form.
         ''' </summary>
         <DispId(1)> Property HostName As String
 
         ''' <summary>
+        ''' The Alpaca device's IP address. IPv6 addresses will be in canonical form.
+        ''' </summary>
+        <DispId(2)> Property IpAddress As String
+
+        ''' <summary>
         ''' Alpaca device's IP port number
         ''' </summary>
-        <DispId(2)> Property Port As Integer
+        <DispId(3)> Property Port As Integer
 
         ''' <summary>
         ''' Array of ASCOM devices available on this Alpaca device
         ''' </summary>
-        <DispId(3)> ReadOnly Property ConfiguredDevicesAsArrayList As ArrayList
+        <DispId(4)> ReadOnly Property ConfiguredDevicesAsArrayList As ArrayList
 
         ''' <summary>
         ''' Array of supported Alpaca interface version numbers
         ''' </summary>
-        <DispId(4)> Property SupportedInterfaceVersions As Integer()
+        <DispId(5)> Property SupportedInterfaceVersions As Integer()
 
         ''' <summary>
         ''' The Alpaca device's configured name
         ''' </summary>
         ''' <returns></returns>
-        <DispId(5)> Property ServerName As String
+        <DispId(6)> Property ServerName As String
 
         ''' <summary>
         ''' The device manufacturer's name
         ''' </summary>
         ''' <returns></returns>
-        <DispId(6)> Property Manufacturer As String
+        <DispId(7)> Property Manufacturer As String
 
         ''' <summary>
         ''' The device's version as set by the manufacturer
         ''' </summary>
         ''' <returns></returns>
-        <DispId(7)> Property ManufacturerVersion As String
+        <DispId(8)> Property ManufacturerVersion As String
 
         ''' <summary>
         ''' The Alpaca device's configured location
         ''' </summary>
         ''' <returns></returns>
-        <DispId(8)> Property Location As String
+        <DispId(9)> Property Location As String
 
     End Interface
 
@@ -80,17 +85,17 @@ Namespace Interfaces
     <Guid("4BF7844B-26BB-41DE-A500-26C65922F290"), ComVisible(True)>
     Public Interface IAscomDevice
         ''' <summary>
-        ''' ASCOM device name
+        ''' The ASCOM device's name
         ''' </summary>
         <DispId(1)> Property AscomDeviceName As String
 
         ''' <summary>
-        ''' ASCOM device type
+        ''' The ASCOM device's device type
         ''' </summary>
         <DispId(2)> Property AscomDeviceType As String
 
         ''' <summary>
-        ''' Alpaca API device number
+        ''' The device's Alpaca API device number
         ''' </summary>
         <DispId(3)> Property AlpacaDeviceNumber As Integer
 
@@ -100,19 +105,24 @@ Namespace Interfaces
         <DispId(4)> Property UniqueId As String
 
         ''' <summary>
-        ''' Alpaca device host name
+        ''' The ASCOM device's DNS host name, if available, otherwise its IP address. IPv6 addresses will be in canonical form.
         ''' </summary>
         <DispId(5)> Property HostName As String
 
         ''' <summary>
+        ''' The ASCOM device's IP address. IPv6 addresses will be in canonical form.
+        ''' </summary>
+        <DispId(6)> Property IpAddress As String
+
+        ''' <summary>
         ''' SUpported Alpaca interface version
         ''' </summary>
-        <DispId(6)> Property InterfaceVersion As Integer
+        <DispId(7)> Property InterfaceVersion As Integer
 
         ''' <summary>
         ''' Alpaca device status message
         ''' </summary>
-        <DispId(7)> Property StatusMessage As String
+        <DispId(8)> Property StatusMessage As String
 
     End Interface
 
