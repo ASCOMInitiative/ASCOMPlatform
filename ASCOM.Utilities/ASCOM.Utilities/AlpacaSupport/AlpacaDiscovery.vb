@@ -439,43 +439,59 @@ Public Class AlpacaDiscovery
     ''' If this returns an answer it is use. Otherwise the IP address is returned as the host name</remarks>
     Private Sub ResolveIpAddressToHostName(ByVal deviceIpEndPointObject As Object)
         Dim deviceIpEndPoint As IPEndPoint = TryCast(deviceIpEndPointObject, IPEndPoint) ' Get the supplied device endpoint as an IPEndPoint
-        Dim dnsResponse As DnsResponse = New DnsResponse() ' Create a new DnsResponse to hold and return the 
 
-        ' Calculate the remaining time before this discovery needs to finish and only undertake DNS resolution if sufficient time remains
-        Dim timeOutTime As TimeSpan = TimeSpan.FromSeconds(discoveryTime).Subtract(Date.Now - discoveryStartTime).Subtract(TimeSpan.FromSeconds(0.2))
+        ' test whether the cast was successful
+        If Not deviceIpEndPoint Is Nothing Then ' The cast was successful so we can try to search for the host name
+            Dim dnsResponse As DnsResponse = New DnsResponse() ' Create a new DnsResponse to hold and return the 
 
-        If timeOutTime.TotalSeconds > 0.2 Then
-            LogMessage("ResolveIpAddressToHostName", $"Resolving IP address: {deviceIpEndPoint.Address.ToString()}, Timeout: {timeOutTime}")
-            Dns.BeginGetHostEntry(deviceIpEndPoint.Address.ToString(), New AsyncCallback(AddressOf GetHostEntryCallback), dnsResponse)
+            ' Calculate the remaining time before this discovery needs to finish and only undertake DNS resolution if sufficient time remains
+            Dim timeOutTime As TimeSpan = TimeSpan.FromSeconds(discoveryTime).Subtract(Date.Now - discoveryStartTime).Subtract(TimeSpan.FromSeconds(0.2))
 
-            ' Wait here until the resolve completes and the callback calls .Set()
-            Dim dnsWasResolved As Boolean = dnsResponse.CallComplete.WaitOne(timeOutTime) ' Wait for the remaining discovery time less a small amount
-            If dnsWasResolved Then ' A response was received rather than timing out
-                LogMessage("ResolveIpAddressToHostName", $"{deviceIpEndPoint.ToString()} has host name: {dnsResponse.HostName} IP address count: {dnsResponse.AddressList.Length} Alias count: {dnsResponse.Aliases.Length}")
+            If timeOutTime.TotalSeconds > Constants.MINIMUM_TIME_REMAINING_TO_UNDERTAKE_DNS_RESOLUTION Then ' We have more than the configured time left so we will attempt a reverse DNS name resolution
+                LogMessage("ResolveIpAddressToHostName", $"Resolving IP address: {deviceIpEndPoint.Address.ToString()}, Timeout: {timeOutTime}")
+                Dns.BeginGetHostEntry(deviceIpEndPoint.Address.ToString(), New AsyncCallback(AddressOf GetHostEntryCallback), dnsResponse)
 
-                If dnsResponse.AddressList.Length > 0 Then
+                ' Wait here until the resolve completes and the callback calls .Set()
+                Dim dnsWasResolved As Boolean = dnsResponse.CallComplete.WaitOne(timeOutTime) ' Wait for the remaining discovery time
 
-                    SyncLock deviceListLockObject
-                        alpacaDeviceList(deviceIpEndPoint).HostName = dnsResponse.HostName
-                    End SyncLock
+                ' Execution continues here after either a DNS response is found or the request times out
+                If dnsWasResolved Then ' A response was received rather than timing out
+                    LogMessage("ResolveIpAddressToHostName", $"{deviceIpEndPoint.ToString()} has host name: {dnsResponse.HostName} IP address count: {dnsResponse.AddressList.Length} Alias count: {dnsResponse.Aliases.Length}")
 
-                    RaiseAnAlpacaDevicesChangedEvent() ' Device list was changed so set the changed flag
-                Else
-                    LogMessage("ResolveIpAddressToHostName", $"***** DNS responded with a name ({dnsResponse.HostName}) but this has no associated IP addresses and is probably a NETBIOS name *****")
+                    For Each address As IPAddress In dnsResponse.AddressList
+                        LogMessage("ResolveIpAddressToHostName", $"  Received {address.AddressFamily} address: {address}")
+                    Next
+
+                    For Each hostAlias As String In dnsResponse.Aliases
+                        LogMessage("ResolveIpAddressToHostName", $"  Received alias: {hostAlias}")
+                    Next
+
+                    If dnsResponse.AddressList.Length > 0 Then ' We got a reply that contains host addresses so there may be a valid host name
+
+                        SyncLock deviceListLockObject
+                            If Not String.IsNullOrEmpty(dnsResponse.HostName) Then alpacaDeviceList(deviceIpEndPoint).HostName = dnsResponse.HostName
+                        End SyncLock
+
+                        RaiseAnAlpacaDevicesChangedEvent() ' Device list was changed so set the changed flag
+                    Else
+                        LogMessage("ResolveIpAddressToHostName", $"***** DNS responded with a name ({dnsResponse.HostName}) but this has no associated IP addresses and is probably a NETBIOS name *****")
+                    End If
+
+                    For Each address As IPAddress In dnsResponse.AddressList
+                        LogMessage("ResolveIpAddressToHostName", $"Address: {address}")
+                    Next
+
+                    For Each [alias] As String In dnsResponse.Aliases
+                        LogMessage("ResolveIpAddressToHostName", $"Alias: {[alias]}")
+                    Next
+                Else ' DNS did not respond in time
+                    LogMessage("ResolveIpAddressToHostName", $"***** DNS did not respond within timeout - unable to resolve IP address to host name *****")
                 End If
-
-                For Each address As IPAddress In dnsResponse.AddressList
-                    LogMessage("ResolveIpAddressToHostName", $"Address: {address}")
-                Next
-
-                For Each [alias] As String In dnsResponse.Aliases
-                    LogMessage("ResolveIpAddressToHostName", $"Alias: {[alias]}")
-                Next
-            Else
-                LogMessage("ResolveIpAddressToHostName", $"***** DNS did not respond within timeout - unable to resolve IP address to host name *****")
+            Else ' There was insufficient time to query DNS
+                LogMessage("ResolveIpAddressToHostName", $"***** Insufficient time remains ({timeOutTime.TotalSeconds} seconds) to conduct a DNS query, ignoring request *****")
             End If
-        Else
-            LogMessage("ResolveIpAddressToHostName", $"***** Insufficient time remains ({timeOutTime.TotalSeconds} seconds) to conduct a DNS query, ignoring request *****")
+        Else ' The IPEndPoint cast was not successful so we cannot carry out a DNS name search because we don't have the device's IP address
+            LogMessage("ResolveIpAddressToHostName", $"DNS resolution could not be undertaken - It was not possible to cast the supplied IPEndPoint object to an IPEndPoint type: {deviceIpEndPoint.ToString()}.")
         End If
     End Sub
 

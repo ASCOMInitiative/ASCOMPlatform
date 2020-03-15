@@ -25,4 +25,5 @@
     Public Const DEFAULT_ALPACA_DISCOVERY_TIMEOUT As Double = 2.0 ' Default time out (seconds) time for a management API command
     Public Const MINIMUM_TIME_OUT As Double = 1.0 ' Minimum allowable discovery timeout value
     Public Const NUMBER_OF_THREAD_MESSAGE_INDENT_SPACES As Integer = 2
+    Public Const MINIMUM_TIME_REMAINING_TO_UNDERTAKE_DNS_RESOLUTION As Double = 0.1 ' Minimum discovery time (seconds) that must remain if a DNS IP to host name resolution is to be attempted
 End Module
