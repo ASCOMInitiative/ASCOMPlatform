@@ -872,14 +872,24 @@ namespace ASCOM.DeviceHub
 
 		public PierSide DestinationSideOfPier( double rightAscension, double declination )
 		{
+			PierSide retval = PierSide.pierUnknown;
+
 			RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
 			DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
 
-			LogActivityStart( ActivityMessageTypes.Other, " Get DestinationSideOfPier \r\n   RA {0}\r\n   Dec {1}:", raConverter, decConverter );
+			LogActivityStart( ActivityMessageTypes.Other, " Get DestinationSideOfPier \r\n   RA {0}\r\n   Dec {1}: ", raConverter, decConverter );
 			CheckDevice();
-			PierSide retval = Service.DestinationSideOfPier( rightAscension, declination );
-			string name = GetPierSideName( retval );
-			LogActivityEnd( ActivityMessageTypes.Other, "{0} {1}", name, Done );
+
+			try
+			{
+				retval = Service.DestinationSideOfPier( rightAscension, declination );
+				string name = GetPierSideName( retval );
+				LogActivityEnd( ActivityMessageTypes.Other, "{0} {1}", name, Done );
+			} 
+			catch ( Exception )
+			{
+				LogActivityEnd( ActivityMessageTypes.Other, "Failed" );
+			}
 
 			return retval;
 		}
