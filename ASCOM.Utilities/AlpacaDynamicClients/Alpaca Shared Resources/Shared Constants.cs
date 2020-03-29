@@ -120,11 +120,6 @@ namespace ASCOM.DynamicRemoteClients
 
         public const string DEVICE_NOT_CONFIGURED = "None"; // ProgID / UniqueID / device type value indicating no device configured
 
-        // Alpaca discovery constants
-        public const string ALPACA_DISCOVERY_BROADCAST_ID = "alpacadiscovery";
-        public const int ALPACA_DISCOVERY_PORT = 32227;
-        public const string ALPACA_DISCOVERY_RESPONSE_STRING = "alpacaport";
-
         // Constants used by the generated dynamic client driver assembly
         public const string ALPACA_CLIENT_LOCAL_SERVER_PATH = @"\ASCOM\AlpacaDynamicClients\"; // Relative path from CommonFiles
         public const string ALPACA_CLIENT_LOCAL_SERVER = @"ASCOM.AlpacaClientLocalServer.exe"; // Name of the remote client local server application
