@@ -447,5 +447,36 @@ namespace ASCOM.DynamicRemoteClients
             SetupErrorProvider.Clear();
         }
 
+        private void BtnSetupUrlMain_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string setupUrl = $"{cmbServiceType.Text}://{addressList.Text}:{numPort.Value}/setup";
+                TL.LogMessageCrLf("MainSetupURL", $"{setupUrl}");
+
+                System.Diagnostics.Process.Start(setupUrl);
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessageCrLf("MainSetup Exception", ex.ToString());
+                MessageBox.Show($"An error occurred when contacting the Alpaca device: {ex.Message}", "Setup Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void BtnSetupUrlDevice_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string setupUrl = $"{cmbServiceType.Text}://{addressList.Text}:{numPort.Value}/setup/v1/{DeviceType.ToLowerInvariant()}/{numRemoteDeviceNumber.Value}/setup";
+                TL.LogMessageCrLf("DeviceSetupURL", $"{setupUrl}");
+
+                System.Diagnostics.Process.Start(setupUrl);
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessageCrLf("ASCOMSetup Exception", ex.ToString());
+                MessageBox.Show($"An error occurred when contacting the Alpaca device: {ex.Message}", "Setup Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

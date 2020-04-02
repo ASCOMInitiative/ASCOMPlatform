@@ -71,6 +71,9 @@
             this.RadIpV4 = new System.Windows.Forms.RadioButton();
             this.NumDiscoveryPort = new System.Windows.Forms.NumericUpDown();
             this.label14 = new System.Windows.Forms.Label();
+            this.BtnSetupUrlMain = new System.Windows.Forms.Button();
+            this.BtnSetupUrlDevice = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numRemoteDeviceNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numStandardTimeout)).BeginInit();
@@ -80,6 +83,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.SetupErrorProvider)).BeginInit();
             this.GrpIpVersionSelector.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumDiscoveryPort)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // numPort
@@ -136,7 +140,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(745, 433);
+            this.btnOK.Location = new System.Drawing.Point(745, 414);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 12;
@@ -147,7 +151,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(745, 462);
+            this.btnCancel.Location = new System.Drawing.Point(745, 443);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 13;
@@ -541,13 +545,45 @@
             this.label14.TabIndex = 54;
             this.label14.Text = "Discovery Port";
             // 
+            // BtnSetupUrlMain
+            // 
+            this.BtnSetupUrlMain.Location = new System.Drawing.Point(6, 19);
+            this.BtnSetupUrlMain.Name = "BtnSetupUrlMain";
+            this.BtnSetupUrlMain.Size = new System.Drawing.Size(75, 52);
+            this.BtnSetupUrlMain.TabIndex = 0;
+            this.BtnSetupUrlMain.Text = "Whole Alpaca Device";
+            this.BtnSetupUrlMain.UseVisualStyleBackColor = true;
+            this.BtnSetupUrlMain.Click += new System.EventHandler(this.BtnSetupUrlMain_Click);
+            // 
+            // BtnSetupUrlDevice
+            // 
+            this.BtnSetupUrlDevice.Location = new System.Drawing.Point(101, 19);
+            this.BtnSetupUrlDevice.Name = "BtnSetupUrlDevice";
+            this.BtnSetupUrlDevice.Size = new System.Drawing.Size(75, 52);
+            this.BtnSetupUrlDevice.TabIndex = 1;
+            this.BtnSetupUrlDevice.Text = "Specific ASCOM Device";
+            this.BtnSetupUrlDevice.UseVisualStyleBackColor = true;
+            this.BtnSetupUrlDevice.Click += new System.EventHandler(this.BtnSetupUrlDevice_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.BtnSetupUrlDevice);
+            this.groupBox1.Controls.Add(this.BtnSetupUrlMain);
+            this.groupBox1.Location = new System.Drawing.Point(520, 395);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(186, 78);
+            this.groupBox1.TabIndex = 56;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Alpaca Web Configuration";
+            // 
             // SetupDialogForm
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(832, 497);
+            this.ClientSize = new System.Drawing.Size(832, 483);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.NumDiscoveryPort);
             this.Controls.Add(this.GrpIpVersionSelector);
@@ -599,6 +635,7 @@
             this.GrpIpVersionSelector.ResumeLayout(false);
             this.GrpIpVersionSelector.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumDiscoveryPort)).EndInit();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -647,5 +684,8 @@
         private System.Windows.Forms.RadioButton RadIpV4;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.NumericUpDown NumDiscoveryPort;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button BtnSetupUrlDevice;
+        private System.Windows.Forms.Button BtnSetupUrlMain;
     }
 }
