@@ -273,6 +273,9 @@ namespace ASCOM.DeviceHub
 			if ( Connected && Capabilities != null && Status != null
 				&& Capabilities.CanSetShutter && Status.ShutterStatus != ShutterState.shutterOpen )
 			{
+				Status.Slewing = true;
+				Status.ShutterStatus = ShutterState.shutterOpening;
+
 				Task.Run( () => OpenShutterTask() );
 			}
 		}
@@ -284,6 +287,9 @@ namespace ASCOM.DeviceHub
 			if ( Connected && Capabilities != null && Status != null
 				&& Capabilities.CanSetShutter && Status.ShutterStatus != ShutterState.shutterClosed )
 			{
+				Status.Slewing = true;
+				Status.ShutterStatus = ShutterState.shutterClosing;
+
 				Task.Run( () => CloseShutterTask() );
 			}
 		}
@@ -313,6 +319,7 @@ namespace ASCOM.DeviceHub
 			if ( Connected && !Slewing && Capabilities.CanSetAltitude
 				&& ( status != ShutterState.shutterClosed || status != ShutterState.shutterError ) )
 			{
+				Status.Slewing = true;
 				Task.Run( () => SlewShutterTask( targetAltitude ) );
 			}
 		}
@@ -562,7 +569,7 @@ namespace ASCOM.DeviceHub
 		/// <returns> true if the target is in the range of current +/- accuracy</returns>
 		private bool IsInRange( double targetValue, double currentValue, double accuracy )
 		{
-			bool retval = true;
+			bool retval;
 
 			// First handle wraparound.
 
@@ -667,7 +674,6 @@ namespace ASCOM.DeviceHub
 			Task task = Task.Run( () =>
 			{
 				OpenShutter();
-				Status.ShutterStatus = ShutterState.shutterOpening;
 
 				PollingInterval = POLLING_INTERVAL_FAST;
 				PollingWake.Set();
@@ -711,8 +717,6 @@ namespace ASCOM.DeviceHub
 			{
 				CloseShutter();
 
-				Status.ShutterStatus = ShutterState.shutterClosing;
-
 				PollingInterval = POLLING_INTERVAL_FAST;
 				PollingWake.Set();
 			}, cts.Token );
@@ -755,7 +759,6 @@ namespace ASCOM.DeviceHub
 			{
 				SlewToAltitude( altitude );
 
-				Status.Slewing = true;
 				PollingInterval = POLLING_INTERVAL_FAST;
 				PollingWake.Set();
 

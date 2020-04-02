@@ -92,9 +92,13 @@ namespace Unit_Tests.Dome
 
 			_mgr.OpenDomeShutter();
 
-			Thread.Sleep( 2000 );
+			Assert.IsTrue( _mgr.Status.Slewing );
+			Assert.IsTrue( _mgr.Status.ShutterStatus == ShutterState.shutterOpening );
 
-			Assert.IsTrue( _svc.ShutterStatus == ShutterState.shutterOpen );
+			Thread.Sleep( 3000 );
+
+			Assert.IsTrue( _mgr.Status.ShutterStatus == ShutterState.shutterOpen );
+			Assert.IsFalse( _svc.Slewing );
 		}
 
 		[TestMethod]
@@ -111,9 +115,13 @@ namespace Unit_Tests.Dome
 
 			_mgr.CloseDomeShutter();
 
-			Thread.Sleep( 2000 );
+			Assert.IsTrue( _mgr.Status.Slewing );
+			Assert.IsTrue( _mgr.Status.ShutterStatus == ShutterState.shutterClosing );
 
-			Assert.IsTrue( _svc.ShutterStatus == ShutterState.shutterClosed );
+			Thread.Sleep( 3000 );
+
+			Assert.IsFalse( _mgr.Status.Slewing );
+			Assert.IsTrue( _mgr.Status.ShutterStatus == ShutterState.shutterClosed );
 		}
 
 		[TestMethod]
@@ -171,8 +179,6 @@ namespace Unit_Tests.Dome
 			double altitude = rnd.NextDouble() * 89.0 + 1.0;
 
 			_mgr.SlewDomeShutter( altitude );
-
-			Thread.Sleep( 100 );
 
 			Assert.IsTrue( _mgr.Status.Slewing, "The dome has not started slewing the shutter!" );
 

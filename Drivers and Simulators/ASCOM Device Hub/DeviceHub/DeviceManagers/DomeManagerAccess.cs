@@ -368,6 +368,7 @@ namespace ASCOM.DeviceHub
 			LogActivityStart( ActivityMessageTypes.Commands, "CloseShutter:" );
 			CheckDevice();
 			Status.Slewing = true;
+			Status.ShutterStatus = ShutterState.shutterClosing;
 			Service.CloseShutter();
 			LogActivityEnd( ActivityMessageTypes.Commands, Done );
 		}
@@ -429,6 +430,7 @@ namespace ASCOM.DeviceHub
 			LogActivityStart( ActivityMessageTypes.Commands, "OpenShutter:" );
 			CheckDevice();
 			Status.Slewing = true;
+			Status.ShutterStatus = ShutterState.shutterOpening;
 			Service.OpenShutter();
 			LogActivityEnd( ActivityMessageTypes.Commands, Done );
 		}

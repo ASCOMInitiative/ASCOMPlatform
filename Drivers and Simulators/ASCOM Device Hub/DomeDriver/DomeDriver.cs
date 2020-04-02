@@ -838,7 +838,7 @@ namespace ASCOM.DeviceHub
 			string msg = "";
 			try
 			{
-				DomeManager.CloseShutter();
+				DomeManager.CloseDomeShutter();
 				msg += _done;
 			}
 			catch ( Exception )
@@ -889,7 +889,7 @@ namespace ASCOM.DeviceHub
 
 			try
 			{
-				DomeManager.OpenShutter();
+				DomeManager.OpenDomeShutter();
 				msg += _done;
 			}
 			catch ( Exception )
@@ -1100,7 +1100,7 @@ namespace ASCOM.DeviceHub
 
 			try
 			{
-				DomeManager.SlewToAltitude( altitude );
+				DomeManager.SlewDomeShutter( altitude );
 				msg += _done;
 			}
 			catch ( Exception )
