@@ -561,7 +561,7 @@
             this.BtnSetupUrlDevice.Name = "BtnSetupUrlDevice";
             this.BtnSetupUrlDevice.Size = new System.Drawing.Size(75, 52);
             this.BtnSetupUrlDevice.TabIndex = 1;
-            this.BtnSetupUrlDevice.Text = "Specific ASCOM Device";
+            this.BtnSetupUrlDevice.Text = "This ASCOM Device";
             this.BtnSetupUrlDevice.UseVisualStyleBackColor = true;
             this.BtnSetupUrlDevice.Click += new System.EventHandler(this.BtnSetupUrlDevice_Click);
             // 
