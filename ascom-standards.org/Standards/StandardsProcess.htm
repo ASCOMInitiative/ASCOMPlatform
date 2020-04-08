@@ -89,6 +89,15 @@
 			<a href="https://ascom-standards.org/Help/Platform/html/P_ASCOM_DeviceInterface_ICameraV2_Gains.htm" target="_new">https://ascom-standards.org/Help/Platform/html/P_ASCOM_DeviceInterface_ICameraV2_Gains.htm</a><br />
 		The Syntax, Exceptions and Remarks sections are just examples of the type of content required, replicating the Help presentation format precisely isn't required.</li>
 		</ol>
+		
+		<p>Here are some .NET best practices to ensure that the interface is compatible with COM and .NET, and for ease of definitiion for Alpaca.</p>
+		<ul>
+			<li>Use ArrayList if you need to return a collection of values, as COM doesn't support .NET generic lists. The ArrayList can contain simple types such as numbers or strings. While the ArrayList can also contain objects, we  recommend avoiding lists of classes, if possible, to reduce implementation complexity for client and driver authors.</li>
+			<li>To make the method "optional" state that it can throw a PropertyNotImplementedException or MethodNotImplementedException as appropriate.</li>
+			<li>If a method takes a parameter, implement it as a function rather than as a property</li>
+			<li>Don't use "optional" parameters that have implicit default values.</li>
+			<li>Try to avoid returning structures / classes if you can, this can be done but makes life a lot more difficult for implementers.</li>
+		</ul>
 	</div>
 
 
