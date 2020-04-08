@@ -147,6 +147,9 @@
             <legacyBold>Show "Create new Alpaca driver" instructions</legacyBold> - The dialogue that is displayed before a new dynamic driver is created explaining what is about to happen has a
             “do not show this message again” check box. This enables it to be reset if required.
           </listItem>
+          <listItem>
+            <legacyBold>Supported IP Versions</legacyBold> - Select whether Alpaca devices will be discovered through IPv4 or IPv6 networking protocols. For most installations, the default "IPv4 Only" setting is recommended. 
+          </listItem>
         </list>
       </content>
     </section>
