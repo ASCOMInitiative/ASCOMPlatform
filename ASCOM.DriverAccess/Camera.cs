@@ -1,18 +1,7 @@
-//-----------------------------------------------------------------------
-// <summary>Defines the Camera class.</summary>
-//-----------------------------------------------------------------------
-// 10-Jul-08	rbd		1.0.5 - ImageArray returns type object, remove ImageArrayV which
-//						was a Chris Rowland test/experiment. Can cast the object returned
-//						by ImageArray into int[,]. Add COM releasing to Dispose().
-// 01-Jan-10  	cdr     1.0.6 - Add Camera V2 properties as late bound properties.
-// 29-May-10  	rem     6.0.0 - Added memberFactory.
-
 using System;
 using System.Collections;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
-//using ASCOM.Conform;
-using System.Globalization;
 
 namespace ASCOM.DriverAccess
 {
@@ -636,6 +625,7 @@ namespace ASCOM.DriverAccess
         #endregion
 
         #region ICameraV2 members
+
         /// <summary>
         /// Bayer X offset index, Interface Version 2 only
         /// </summary>
@@ -773,26 +763,40 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Index into the <see cref="Gains" /> array for the selected camera gain, Interface Version 2 only
+        /// <p style="color:blue"><b>This is an existing ICameraV2 property and its interface definition has not been changed. The Remarks section has been clarified to describe the two gain management modes.</b></p>
+        /// The camera's gain (GAIN VALUE MODE) OR the index of the selected camera gain description in the <see cref="Gains" /> array (GAINS INDEX MODE)
         /// </summary>
-        /// <value>Short integer index for the current camera gain in the <see cref="Gains" /> string array.</value>
-        /// <returns>Index into the Gains array for the selected camera gain</returns>
-        /// <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
-        /// active <see cref="AscomDriver.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-        /// <exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
-        /// <exception cref="PropertyNotImplementedException">Must throw an exception if gain is not supported</exception>
-        /// <remarks>
-        /// <see cref="Gain" /> can be used to adjust the gain setting of the camera, if supported. There are two typical usage scenarios:
+        /// <returns><para><b> GAIN VALUE MODE:</b> The current gain value.</para>
+        /// <p style="color:red"><b>OR</b></p>
+        /// <b>GAINS INDEX MODE:</b> Index into the Gains array for the current camera gain
+        /// </returns>
+        /// <exception cref="PropertyNotImplementedException">When neither <b>GAINS INDEX</b> mode nor <b>GAIN VALUE</b> mode are supported.</exception>
+        /// <exception cref="NotConnectedException">When the information is not available. (Some drivers may require an active connection in order to retrieve necessary information from the camera.)</exception>
+        /// <exception cref="InvalidValueException">When the supplied value is not valid.</exception>
+        /// <remarks><p style="color:red"><b>This is an optional property and can throw a PropertyNotImplementedException if Gain is not supported by the camera.</b></p>
+        /// The <see cref="Gain" /> property is used to adjust the gain setting of the camera and has <b>two modes of operation</b>:
         /// <ul>
-        /// <li>DSLR Cameras - <see cref="Gains" /> will return a 0-based array of strings, which correspond to different gain settings such as 
-        /// "ISO 800". <see cref="Gain" /> must be set to an integer in this range. <see cref="GainMin" /> and <see cref="GainMax" /> must thrown an exception if 
-        /// this mode is used.</li>
-        /// <li>Adjustable gain CCD cameras - <see cref="GainMin" /> and <see cref="GainMax" /> return integers, which specify the valid range for <see cref="GainMin" /> and <see cref="Gain" />.</li>
+        /// <li><b>GAIN VALUE MODE</b> - The <see cref="Gain" /> property is a direct numeric representation of the camera's gain.
+        /// <ul>
+        /// <li>In this mode the <see cref="GainMin" /> and <see cref="GainMax" /> properties must return integers specifying the valid range for <see cref="Gain" /></li>
+        /// <li>The <see cref="Gains"/> property must return a <see cref="PropertyNotImplementedException"/>.</li>
         /// </ul>
-        ///<para>The driver must default <see cref="Gain" /> to a valid value. </para>
-        ///<para>Please note that <see cref="ReadoutMode" /> may in some cases affect the gain of the camera; if so the driver must be written such 
-        /// that the two properties do not conflict if both are used.</para>
-        /// <para>This is only available for the Camera Interface Version 2</para>
+        /// </li>
+        /// <li><b>GAINS INDEX MODE</b> - The <see cref="Gain" /> property is the selected gain's index within the <see cref="Gains"/> array of textual gain descriptions.
+        /// <ul>
+        /// <li>In this  mode the <see cref="Gains" /> method returns a 0-based array of strings, which describe available gain settings e.g. "ISO 200", "ISO 1600" </li>
+        /// <li><see cref="GainMin" /> and <see cref="GainMax" /> must throw <see cref="PropertyNotImplementedException"/>s.</li>
+        /// <li>Please note that the <see cref="Gains"/> array is zero based.</li>
+        /// </ul>
+        /// </li>
+        /// </ul>
+        /// <para>A driver can support none, one or both gain modes depending on the camera's capabilities. However, only one mode can be active at any one moment because both modes share
+        /// the <see cref="Gain"/> property to return the gain value. Client applications can determine which mode is operational by reading the <see cref="GainMin"/>, <see cref="GainMax"/> and 
+        /// <see cref="Gain"/> properties. If a property can be read then its associated mode is active, if it throws a <see cref="PropertyNotImplementedException"/> then the mode is not active.</para>
+        /// <para>If a driver supports both modes the astronomer must be able to select the required mode through the driver Setup dialogue.</para>
+        /// <para>During driver initialisation the driver must set <see cref="Gain" /> to a valid value.</para>
+        /// <para>Please note that <see cref="ReadoutMode" /> may in some cases affect the gain of the camera; if so, the driver must be ensure that the two properties do not conflict if both are used.</para>
+        /// <para>This is only available in Camera Interface Version 2 and later.</para>
         /// </remarks>
         public short Gain
         {
@@ -801,20 +805,22 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Maximum value of <see cref="Gain" />, Interface Version 2 only
+        /// <p style="color:blue"><b>This is an existing ICameraV2 property and its interface definition has not been changed. The Remarks section has been clarified to describe the two gain management modes.</b></p>
+        /// Maximum <see cref="Gain" /> value of that this camera supports
         /// </summary>
-        /// <value>Short integer representing the maximum gain value supported by the camera.</value>
         /// <returns>The maximum gain value that this camera supports</returns>
-        /// <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
-        /// active <see cref="AscomDriver.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-        /// <exception cref="PropertyNotImplementedException">Must throw an exception if gainmax is not supported</exception>
-        /// <remarks>When specifying the gain setting with an integer value, <see cref="GainMax" /> is used in conjunction with <see cref="GainMin" /> to 
-        /// specify the range of valid settings.
-        /// <para><see cref="GainMax" /> shall be greater than <see cref="GainMin" />. If either is available, then both must be available.</para>
-        /// <para>Please see <see cref="Gain" /> for more information.</para>
-        /// <para>It is recommended that this function be called only after a <see cref="AscomDriver.Connected">connection</see> is established with the camera hardware, to ensure 
-        /// that the driver is aware of the capabilities of the specific camera model.</para>
-        /// <para>This is only available for the Camera Interface Version 2</para>
+        /// <exception cref="PropertyNotImplementedException">When the <see cref="Gain"/> property is not implemented or is operating in <b>GAINS INDEX</b> mode.</exception>
+        /// <exception cref="NotConnectedException">When the information is not available. (Some drivers may require an active connection in order to retrieve necessary information from the camera.)</exception>
+        /// <remarks><p style="color:red"><b>This is an optional property and can throw a PropertyNotImplementedException.</b></p>
+        /// When <see cref="Gain"/> is operating in <b><see cref="Gain">GAIN VALUE</see></b> mode:
+        /// <ul>
+        /// <li><see cref="GainMax" /> must return the camera's highest valid <see cref="Gain" /> setting.</li>
+        /// <li><see cref="GainMax" /> must be equal to or greater than <see cref="GainMin" />.</li>
+        /// <li><see cref="Gains"/> must throw a <see cref="PropertyNotImplementedException"/></li>
+        /// </ul>
+        /// <para>Please note that <see cref="GainMin"/> and <see cref="GainMax"/> act together and that either both must be implemented or both must throw <see cref="PropertyNotImplementedException"/>s.</para>
+        /// <para>It is recommended that this function be called only after a connection is established with the camera hardware to ensure that the driver is aware of the capabilities of the specific camera model.</para>
+        /// <para>This property is only available in Camera Interface Version 2 and later.</para>
         /// </remarks>
         public short GainMax
         {
@@ -822,19 +828,22 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Minimum value of <see cref="Gain" />, Interface Version 2 only
+        /// <p style="color:blue"><b>This is an existing ICameraV2 property and its interface definition has not been changed. The Remarks section has been clarified to describe the two gain management modes.</b></p>
+        /// Minimum <see cref="Gain" /> value of that this camera supports
         /// </summary>
         /// <returns>The minimum gain value that this camera supports</returns>
-        /// <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
-        /// active <see cref="AscomDriver.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-        /// <exception cref="PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
-        /// <remarks>When specifying the gain setting with an integer value, <see cref="GainMin" /> is used in conjunction with <see cref="GainMax" /> to 
-        /// specify the range of valid settings.
-        /// <para><see cref="GainMax" /> shall be greater than <see cref="GainMin" />. If either is available, then both must be available.</para>
-        /// <para>Please see <see cref="Gain" /> for more information.</para>
-        /// <para>It is recommended that this function be called only after a <see cref="AscomDriver.Connected">connection</see> is established with the camera hardware, to ensure 
-        /// that the driver is aware of the capabilities of the specific camera model.</para>
-        /// <para>This is only available for the Camera Interface Version 2</para>
+        /// <exception cref="PropertyNotImplementedException">When the <see cref="Gain"/> property is is not implemented or is operating in <b>GAINS INDEX</b> mode.</exception>
+        /// <exception cref="NotConnectedException">When the information is not available. (Some drivers may require an active connection in order to retrieve necessary information from the camera.)</exception>
+        /// <remarks><p style="color:red"><b>This is an optional property and can throw a PropertyNotImplementedException.</b></p>
+        /// When <see cref="Gain"/> is operating in <b><see cref="Gain">GAIN VALUE</see></b> mode:
+        /// <ul>
+        /// <li><see cref="GainMin" /> must return the camera's lowest valid <see cref="Gain" /> setting.</li>
+        /// <li><see cref="GainMin" /> must be less than or equal to <see cref="GainMax" />.</li>
+        /// <li><see cref="Gains"/> must throw a <see cref="PropertyNotImplementedException"/></li>
+        /// </ul>
+        /// <para>Please note that <see cref="GainMin"/> and <see cref="GainMax"/> act together and that either both must be implemented or both must throw <see cref="PropertyNotImplementedException"/>s.</para>
+        /// <para>It is recommended that this function be called only after a connection is established with the camera hardware to ensure that the driver is aware of the capabilities of the specific camera model.</para>
+        /// <para>This property is only available in Camera Interface Version 2 and later.</para>
         /// </remarks>
         public short GainMin
         {
@@ -842,20 +851,23 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Gains supported by the camera, Interface Version 2 only
+        /// <p style="color:blue"><b>This is an existing ICameraV2 property and its interface definition has not been changed. The Remarks section has been clarified to describe the two gain management modes.</b></p>
+        /// List of Gain names supported by the camera
         /// </summary>
-        /// <returns>An ArrayList of gain names </returns>
-        /// <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
-        /// active <see cref="AscomDriver.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-        /// <exception cref="PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
-        /// <remarks><see cref="Gains" /> provides a 0-based array of available gain settings.  This is often used to specify ISO settings for DSLR cameras.  
-        /// Typically the application software will display the available gain settings in a drop list. The application will then supply 
-        /// the selected index to the driver via the <see cref="Gain" /> property. 
-        /// <para>The <see cref="Gain" /> setting may alternatively be specified using integer values; if this mode is used then <see cref="Gains" /> is invalid 
-        /// and must throw an exception. Please see <see cref="GainMax" /> and <see cref="GainMin" /> for more information.</para>
-        /// <para>It is recommended that this function be called only after a <see cref="AscomDriver.Connected">connection</see> is established with the camera hardware, 
-        /// to ensure that the driver is aware of the capabilities of the specific camera model.</para>
-        /// <para>This is only available for the Camera Interface Version 2</para>
+        /// <returns>Thed list of supported gain names as an ArrayList of strings</returns>
+        /// <exception cref="PropertyNotImplementedException">When the <see cref="Gain"/> property is not implemented or is operating in <b>GAIN VALUE</b> mode.</exception>
+        /// <exception cref="NotConnectedException">When the information is not available. (Some drivers may require an active connection in order to retrieve necessary information from the camera.)</exception>
+        /// <remarks><p style="color:red"><b>This is an optional property and can throw a PropertyNotImplementedException.</b></p>
+        /// When <see cref="Gain"/> is operating in <b><see cref="Gain">GAINS INDEX</see></b> mode:
+        /// <ul>
+        /// <li>The <see cref="Gains" /> property must return a zero-based ArrayList of available gain setting names.</li>
+        /// <li>The <see cref="GainMin"/> and <see cref="GainMax"/> properties must throw <see cref="PropertyNotImplementedException"/>s.</li>
+        /// </ul>
+        /// <para>The returned gain names could, for example, be a list of ISO settings for a DSLR camera or a list of gain names for a CMOS camera.
+        /// Typically the application software will display the returned gain names in a drop list, from which the astronomer can select the required value.
+        /// The application can then configure the required gain by setting the camera's <see cref="Gain"/> property to the array index of the selected description.</para>
+        /// <para>It is recommended that this function be called only after a connection is established with the camera hardware to ensure that the driver is aware of the capabilities of the specific camera model.</para>
+        /// <para>This is only available in Camera Interface Version 2 and later.</para>
         /// </remarks>
         public ArrayList Gains
         {
@@ -1642,6 +1654,154 @@ namespace ASCOM.DriverAccess
         {
             get { return (SensorType)_memberFactory.CallMember(1, "SensorType", new Type[] { }, new object[] { }); }
         }
+
+        #endregion
+
+        #region ICameraV3 members
+
+        /// <summary>
+        /// <p style="color:limegreen"><b>This is a proposed ICameraV3 property.</b></p>
+        /// The camera's offset (OFFSET VALUE MODE) OR the index of the selected camera offset description in the <see cref="Offsets" /> array (OFFSETS INDEX MODE)
+        /// </summary>
+        /// <returns><para><b> OFFSET VALUE MODE:</b> The current offset value.</para>
+        /// <p style="color:red"><b>OR</b></p>
+        /// <b>OFFSETS INDEX MODE:</b> Index into the Offsets array for the current camera offset
+        /// </returns>
+        /// <exception cref="PropertyNotImplementedException">When neither <b>OFFSETS INDEX</b> mode nor <b>OFFSET VALUE</b> mode are supported.</exception>
+        /// <exception cref="NotConnectedException">When the information is not available. (Some drivers may require an active connection in order to retrieve necessary information from the camera.)</exception>
+        /// <exception cref="InvalidValueException">When the supplied value is not valid.</exception>
+        /// <remarks><p style="color:red"><b>This is an optional property and can throw a PropertyNotImplementedException if Offset is not supported by the camera.</b></p>
+        /// The <see cref="Offset" /> property is used to adjust the offset setting of the camera and has <b>two modes of operation</b>:
+        /// <ul>
+        /// <li><b>OFFSET VALUE MODE</b> - The <see cref="Offset" /> property is a direct numeric representation of the camera's offset.
+        /// <ul>
+        /// <li>In this mode the <see cref="OffsetMin" /> and <see cref="OffsetMax" /> properties must return integers specifying the valid range for <see cref="Offset" /></li>
+        /// <li>The <see cref="Offsets"/> property must return a <see cref="PropertyNotImplementedException"/>.</li>
+        /// </ul>
+        /// </li>
+        /// <li><b>OFFSETS INDEX MODE</b> - The <see cref="Offset" /> property is the selected offset's index within the <see cref="Offsets"/> array of textual offset descriptions.
+        /// <ul>
+        /// <li>In this  mode the <see cref="Offsets" /> method returns a 0-based array of strings, which describe available offset settings e.g. "ISO 200", "ISO 1600" </li>
+        /// <li><see cref="OffsetMin" /> and <see cref="OffsetMax" /> must throw <see cref="PropertyNotImplementedException"/>s.</li>
+        /// <li>Please note that the <see cref="Offsets"/> array is zero based.</li>
+        /// </ul>
+        /// </li>
+        /// </ul>
+        /// <para>A driver can support none, one or both offset modes depending on the camera's capabilities. However, only one mode can be active at any one moment because both modes share
+        /// the <see cref="Offset"/> property to return the offset value. Client applications can determine which mode is operational by reading the <see cref="OffsetMin"/>, <see cref="OffsetMax"/> and 
+        /// <see cref="Offset"/> properties. If a property can be read then its associated mode is active, if it throws a <see cref="PropertyNotImplementedException"/> then the mode is not active.</para>
+        /// <para>If a driver supports both modes the astronomer must be able to select the required mode through the driver Setup dialogue.</para>
+        /// <para>During driver initialisation the driver must set <see cref="Offset" /> to a valid value.</para>
+        /// <para>Please note that <see cref="ReadoutMode" /> may in some cases affect the offset of the camera; if so, the driver must be ensure that the two properties do not conflict if both are used.</para>
+        /// <para>This is only available in Camera Interface Version 2 and later.</para>
+        /// </remarks>
+        public int Offset
+        {
+            set { _memberFactory.CallMember(2, "Offset", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "Offset", new Type[] { }, new object[] { })); }
+        }
+
+        /// <summary>
+        /// <p style="color:limegreen"><b>This is a proposed ICameraV3 property.</b></p>
+        /// Maximum <see cref="Offset" /> value of that this camera supports
+        /// </summary>
+        /// <returns>The maximum offset value that this camera supports</returns>
+        /// <exception cref="PropertyNotImplementedException">When the <see cref="Offset"/> property is not implemented or is operating in <b>OFFSETS INDEX</b> mode.</exception>
+        /// <exception cref="NotConnectedException">When the information is not available. (Some drivers may require an active connection in order to retrieve necessary information from the camera.)</exception>
+        /// <remarks><p style="color:red"><b>This is an optional property and can throw a PropertyNotImplementedException.</b></p>
+        /// When <see cref="Offset"/> is operating in <b><see cref="Offset">OFFSET VALUE</see></b> mode:
+        /// <ul>
+        /// <li><see cref="OffsetMax" /> must return the camera's highest valid <see cref="Offset" /> setting.</li>
+        /// <li><see cref="OffsetMax" /> must be equal to or greater than <see cref="OffsetMin" />.</li>
+        /// <li><see cref="Offsets"/> must throw a <see cref="PropertyNotImplementedException"/></li>
+        /// </ul>
+        /// <para>Please note that <see cref="OffsetMin"/> and <see cref="OffsetMax"/> act together and that either both must be implemented or both must throw <see cref="PropertyNotImplementedException"/>s.</para>
+        /// <para>It is recommended that this function be called only after a connection is established with the camera hardware to ensure that the driver is aware of the capabilities of the specific camera model.</para>
+        /// <para>This property is only available in Camera Interface Version 2 and later.</para>
+        /// </remarks>
+        public int OffsetMax
+        {
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "OffsetMax", new Type[] { }, new object[] { })); }
+        }
+
+        /// <summary>
+        /// <p style="color:limegreen"><b>This is a proposed ICameraV3 property.</b></p>
+        /// Minimum <see cref="Offset" /> value of that this camera supports
+        /// </summary>
+        /// <returns>The minimum offset value that this camera supports</returns>
+        /// <exception cref="PropertyNotImplementedException">When the <see cref="Offset"/> property is is not implemented or is operating in <b>OFFSETS INDEX</b> mode.</exception>
+        /// <exception cref="NotConnectedException">When the information is not available. (Some drivers may require an active connection in order to retrieve necessary information from the camera.)</exception>
+        /// <remarks><p style="color:red"><b>This is an optional property and can throw a PropertyNotImplementedException.</b></p>
+        /// When <see cref="Offset"/> is operating in <b><see cref="Offset">OFFSET VALUE</see></b> mode:
+        /// <ul>
+        /// <li><see cref="OffsetMin" /> must return the camera's lowest valid <see cref="Offset" /> setting.</li>
+        /// <li><see cref="OffsetMin" /> must be less than or equal to <see cref="OffsetMax" />.</li>
+        /// <li><see cref="Offsets"/> must throw a <see cref="PropertyNotImplementedException"/></li>
+        /// </ul>
+        /// <para>Please note that <see cref="OffsetMin"/> and <see cref="OffsetMax"/> act together and that either both must be implemented or both must throw <see cref="PropertyNotImplementedException"/>s.</para>
+        /// <para>It is recommended that this function be called only after a connection is established with the camera hardware to ensure that the driver is aware of the capabilities of the specific camera model.</para>
+        /// <para>This property is only available in Camera Interface Version 2 and later.</para>
+        /// </remarks>
+        public int OffsetMin
+        {
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "OffsetMin", new Type[] { }, new object[] { })); }
+        }
+
+        /// <summary>
+        /// <p style="color:limegreen"><b>This is a proposed ICameraV3 property.</b></p>
+        /// List of Offset names supported by the camera
+        /// </summary>
+        /// <returns>Thed list of supported offset names as an ArrayList of strings</returns>
+        /// <exception cref="PropertyNotImplementedException">When the <see cref="Offset"/> property is not implemented or is operating in <b>OFFSET VALUE</b> mode.</exception>
+        /// <exception cref="NotConnectedException">When the information is not available. (Some drivers may require an active connection in order to retrieve necessary information from the camera.)</exception>
+        /// <remarks><p style="color:red"><b>This is an optional property and can throw a PropertyNotImplementedException.</b></p>
+        /// When <see cref="Offset"/> is operating in <b><see cref="Offset">OFFSETS INDEX</see></b> mode:
+        /// <ul>
+        /// <li>The <see cref="Offsets" /> property must return a zero-based ArrayList of available offset setting names.</li>
+        /// <li>The <see cref="OffsetMin"/> and <see cref="OffsetMax"/> properties must throw <see cref="PropertyNotImplementedException"/>s.</li>
+        /// </ul>
+        /// <para>The returned offset names could, for example, be a list of ISO settings for a DSLR camera or a list of offset names for a CMOS camera.
+        /// Typically the application software will display the returned offset names in a drop list, from which the astronomer can select the required value.
+        /// The application can then configure the required offset by setting the camera's <see cref="Offset"/> property to the array index of the selected description.</para>
+        /// <para>It is recommended that this function be called only after a connection is established with the camera hardware to ensure that the driver is aware of the capabilities of the specific camera model.</para>
+        /// <para>This is only available in Camera Interface Version 2 and later.</para>
+        /// </remarks>
+        public ArrayList Offsets
+        {
+            get { return _memberFactory.CallMember(1, "Offsets", new Type[] { }, new object[] { }).ComObjToArrayList(); }
+        }
+
+        /// <summary>
+        /// <p style="color:limegreen"><b>This is a proposed ICameraV3 property.</b></p>
+        /// Camera's sub-exposure interval
+        /// </summary>
+        /// <exception cref="PropertyNotImplementedException">When the camera does not support sub exposure configuration.</exception>
+        /// <exception cref="NotConnectedException">When the information is not available. (Some drivers may require an active connection in order to retrieve necessary information from the camera.)</exception>
+        /// <exception cref="InvalidValueException">When the supplied value is not valid.</exception>
+        /// <remarks><p style="color:red"><b>This is an optional property and can throw a PropertyNotImplementedException.</b></p>
+        /// </remarks>
+        public double SubExposureDuration
+        {
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "SubExposureDuration", new Type[] { }, new object[] { })); }
+            set { _memberFactory.CallMember(2, "SubExposureDuration", new Type[] { }, new object[] { value }); }
+        }
+
+        /// <summary>
+        /// The state of the camera's PulseGuide command
+        /// <p style="color:limegreen"><b>This is a proposed ICameraV3 property.</b></p>
+        /// </summary>
+        /// <remarks><p style="color:red"><b>This is an mandatory property and must not throw a PropertyNotImplementedException.</b></p>
+        /// This property provides enhanced information over the IsPulseGuiding method, however, to maintain backward compatibility, the IsPulseGuiding method must continue to be implemented 
+        /// whenever CanPulseGuide returns true.
+        /// <para>
+        /// This method must return <see cref="PulseGuideState.NotPresent"/> when CanPulseGuide returns false.
+        /// </para>
+        /// </remarks>
+        public PulseGuideState PulseGuideStatus 
+        {
+            get { return (PulseGuideState)_memberFactory.CallMember(1, "PulseGuideStatus", new Type[] { }, new object[] { }); }
+        }
+
         #endregion
     }
 

@@ -401,4 +401,30 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         LRGB = 5
     }
+
+    /// <summary>
+    /// Describes the ASCOM camera pulse guide status
+    /// </summary>
+    /// <remarks>This does not have an "Unknown" state because the driver is expected to initialise the <see cref="ICameraV3.PulseGuideStatus"/> property to 
+    /// either the <see cref="PulseGuideState.NotPresent"/> or the <see cref="PulseGuideState.Inactive"/> state.</remarks>
+    public enum PulseGuideState
+    {
+        /// <summary>
+        /// This camera can not pulse guide - in this state the CanPulseGuide property must return false
+        /// </summary>
+        NotPresent,
+        /// <summary>
+        /// The camera is not pulse guiding - in this state the IsPulseGuiding property must return false.
+        /// </summary>
+        Inactive,
+        /// <summary>
+        /// The camera is pulse guiding - in this state the IsPulseGuiding property must return true.
+        /// </summary>
+        Active,
+        /// <summary>
+        /// The camera encountered an error while pulse guiding - information regarding the error can be obtained using the <see cref="ICommonMembers.GetError(string)">GetError("PulseGuide")</see>/> method.
+        /// </summary>
+        Error
+    }
+
 }
