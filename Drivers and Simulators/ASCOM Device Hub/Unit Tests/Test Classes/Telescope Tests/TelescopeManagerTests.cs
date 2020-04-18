@@ -421,6 +421,30 @@ namespace Unit_Tests.Telescope
 			Assert.AreEqual( _svc.DeclinationRate, 0.0, 0.0001 );
 		}
 
+		[TestMethod]
+		public void DestinationSideOfPierTest()
+		{
+			Assert.IsTrue( _mgr.Connected );
+
+			Vector currentPosition = GetTargetRaDec();
+
+			_svc.MockRaDec = currentPosition;
+			_svc.MockSideOfPier = PierSide.pierWest;
+			_svc.MockIsWeakDriver = false;
+
+			PierSide currentSOP = _mgr.GetTargetSideOfPier( currentPosition.X, currentPosition.Y );
+			Assert.AreEqual<PierSide>( PierSide.pierWest, currentSOP );
+
+			Vector targetPosition = currentPosition - new Vector( 7.0, 0.0 );
+			_svc.MockSideOfPier = PierSide.pierEast;
+			PierSide targetSOP = _mgr.GetTargetSideOfPier( targetPosition.X, targetPosition.Y );
+			Assert.IsTrue( targetSOP == PierSide.pierEast );
+
+			_svc.MockIsWeakDriver = true;
+			targetSOP = _mgr.GetTargetSideOfPier( targetPosition.X, targetPosition.Y );
+			Assert.IsTrue( targetSOP == PierSide.pierEast );
+		}
+
 		#region Helper Methods
 
 		private Vector GetTargetRaDec()

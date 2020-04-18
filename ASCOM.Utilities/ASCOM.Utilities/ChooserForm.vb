@@ -1288,6 +1288,8 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub WarningToolTipShow(Title As String, Message As String)
+        Const MESSAGE_X_POSITION As Integer = 120 ' Was 18
+
         WarningTooltipClear()
         chooserWarningToolTip.UseAnimation = True
         chooserWarningToolTip.UseFading = False
@@ -1302,9 +1304,9 @@ Friend Class ChooserForm
         currentWarningMesage = Message
 
         If Message.Contains(vbCrLf) Then
-            chooserWarningToolTip.Show(Message, Me, 18, 24) 'Display at position for a two line message
+            chooserWarningToolTip.Show(Message, Me, MESSAGE_X_POSITION, 24) 'Display at position for a two line message
         Else
-            chooserWarningToolTip.Show(Message, Me, 18, 50) 'Display at position for a one line message
+            chooserWarningToolTip.Show(Message, Me, MESSAGE_X_POSITION, 50) 'Display at position for a one line message
         End If
     End Sub
 

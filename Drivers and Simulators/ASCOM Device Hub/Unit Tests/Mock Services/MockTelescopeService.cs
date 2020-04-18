@@ -80,6 +80,7 @@ namespace Unit_Tests
 		public IAxisRates MockPrimaryAxisRates { get; set; }
 		public IAxisRates MockSecondaryAxisRates { get; set; }
 		public IAxisRates MockTertiaryAxisRates { get; set; }
+		public bool MockIsWeakDriver { get; set; }
 
 		private Vector _targetAxes;
 		private Vector _mountAxes;
@@ -106,6 +107,7 @@ namespace Unit_Tests
 			MockUTCDate = DateTime.Now;
 			MockMoveAxisRates = new Vector { X = 0.0, Y = 0.0 };
 			MockCanMoveAxes = new bool[] { true, true, false };
+			MockIsWeakDriver = false;
 			DoesRefraction = false;
 			GuideRateDeclination = 0.004178;
 			GuideRateRightAscension = 0.004178;
@@ -523,6 +525,11 @@ namespace Unit_Tests
 
 		public PierSide DestinationSideOfPier( double rightAscension, double declination )
 		{
+			if ( MockIsWeakDriver )
+			{
+				throw new MethodNotImplementedException( "DestinationSideOfPier not implemented in this driver." );
+			}
+
 			return MockSideOfPier;
 		}
 

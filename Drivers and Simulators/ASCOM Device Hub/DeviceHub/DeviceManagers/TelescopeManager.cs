@@ -8,6 +8,8 @@ using ASCOM.Astrometry.Transform;
 using ASCOM.DeviceInterface;
 
 using ASCOM.DeviceHub.MvvmMessenger;
+using ASCOM.Astrometry.AstroUtils;
+using System.Diagnostics;
 
 namespace ASCOM.DeviceHub
 {
@@ -22,6 +24,8 @@ namespace ASCOM.DeviceHub
 		public static string TelescopeID { get; set; }
 
 		private static TelescopeManager _instance = null;
+
+		private static AstroUtils AstroUtils { get; set; }
 
 		public static TelescopeManager Instance
 		{
@@ -41,6 +45,8 @@ namespace ASCOM.DeviceHub
 		static TelescopeManager()
 		{
 			TelescopeID = "";
+
+			AstroUtils = new AstroUtils();
 		}
 
 		public static void SetTelescopeID( string id )
@@ -607,6 +613,29 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
+		public PierSide GetTargetSideOfPier( double rightAscension, double declination )
+		{
+			PierSide retval = DestinationSideOfPier( rightAscension, declination );
+
+			if ( retval == PierSide.pierUnknown )
+			{
+				// Unable to get side-of-pier from the mount so we need to simulate it.
+
+				double hourAngle = AstroUtils.ConditionHA( Status.SiderealTime - rightAscension );
+				PierSide currentSOP = Status.SideOfPier;
+				PierSide destinationSOP = currentSOP; // Favor the current side-of-pier for 0 hour angle;
+
+				destinationSOP = ( hourAngle > 0 ) ? PierSide.pierEast : destinationSOP;
+				destinationSOP = ( hourAngle < 0 ) ? PierSide.pierWest : destinationSOP;
+
+				retval = destinationSOP;
+				string name = GetPierSideName( retval, true );
+				LogActivityLine( ActivityMessageTypes.Other, "Calculated Destination Side-Of-Pier as {0}.", name );
+			}
+
+			return retval;
+		}
+
 		#endregion Public Methods
 
 		#region Helper Methods
@@ -917,7 +946,7 @@ namespace ASCOM.DeviceHub
 			return axisName;
 		}
 
-		private string GetPierSideName( PierSide sideOfPier )
+		private string GetPierSideName( PierSide sideOfPier, bool isSimulated=false )
 		{
 			string name = "";
 
@@ -926,6 +955,11 @@ namespace ASCOM.DeviceHub
 				case PierSide.pierUnknown: name = "unknown"; break;
 				case PierSide.pierEast: name = "East"; break;
 				case PierSide.pierWest: name = "West"; break;
+			}
+
+			if ( isSimulated )
+			{
+				name += " (S)";
 			}
 
 			return name;
@@ -1342,7 +1376,7 @@ namespace ASCOM.DeviceHub
 
 		private void SendSlewMessage( double ra, double dec )
 		{
-			PierSide sop = DestinationSideOfPier( ra, dec );
+			PierSide sop = GetTargetSideOfPier( ra, dec );
 			SlewInProgressMessage msg = new SlewInProgressMessage( true, ra, dec, sop );
 			Messenger.Default.Send( msg );
 			PreviousSlewInProgressMessage = msg;

@@ -20,7 +20,7 @@ Public Class AlpacaDevice
     ''' Initialises the class with default values
     ''' </summary>
     Public Sub New()
-        Me.New(New IPEndPoint(IPAddress.Any, 0), "")
+        Me.New(New IPEndPoint(0, 0), "")
     End Sub
 
     ''' <summary>
@@ -30,28 +30,39 @@ Public Class AlpacaDevice
     ''' <paramname="alpacaUniqueId">Alpaca device unique ID</param>
     ''' <paramname="statusMessage">Device status message</param>
     Friend Sub New(ByVal ipEndPoint As IPEndPoint, ByVal statusMessage As String)
-        Me.IPEndPoint = ipEndPoint
-
-        ' Initialise the Host name to the IP address using the normal ToString version if IPv4 or the canonical form if IPv6
-        If ipEndPoint.AddressFamily = AddressFamily.InterNetworkV6 Then
-            HostName = $"[{ipEndPoint.Address}]"  ' Initialise the host name to the IPv6 address in case there is no DNS name resolution or in case this fails
-        Else
-            HostName = ipEndPoint.Address.ToString()  ' Initialise the host name to the IPv4 address in case there is no DNS name resolution or in case this fails
-        End If
-
-        Port = ipEndPoint.Port ' Initialise the port number to the port set in the IPEndPoint
+        ' Initialise internal storage variables
         configuredDevicesValue = New List(Of ConfiguredDevice)
         configuredDevicesAsArrayListValue = New ArrayList
         SupportedInterfaceVersions = New Integer() {}
-        Me.StatusMessage = statusMessage
+
+        Me.IPEndPoint = ipEndPoint ' Set the IPEndpoint to the supplied value
+
+        ' Initialise the Host name to the IP address using the normal ToString version if IPv4 or the canonical form if IPv6
+        If ipEndPoint.AddressFamily = AddressFamily.InterNetworkV6 Then
+            IpAddress = $"[{ipEndPoint.Address}]"  ' Set the IPv6 canonical IP host address
+            HostName = IpAddress ' Initialise the host name to the IPv6 address in case there is no DNS name resolution or in case this fails
+        Else
+            IpAddress = ipEndPoint.Address.ToString()  ' Set the IPv4 IP host address
+            HostName = IpAddress ' Initialise the host name to the IPv4 address in case there is no DNS name resolution or in case this fails
+        End If
+
+        Port = ipEndPoint.Port ' Set the port number to the port set in the IPEndPoint
+
+        Me.StatusMessage = statusMessage ' Set the status message to the supplied value
+
     End Sub
 
 #Region "Public Properties"
 
     ''' <summary>
-    ''' Alpaca device's host name or IP address
+    ''' The Alpaca device's DNS host name, if available, otherwise its IP address. IPv6 addresses will be in canonical form.
     ''' </summary>
     Public Property HostName As String Implements IAlpacaDevice.HostName
+
+    ''' <summary>
+    ''' The Alpaca device's IP address. IPv6 addresses will be in canonical form.
+    ''' </summary>
+    Public Property IpAddress As String Implements IAlpacaDevice.IpAddress
 
     ''' <summary>
     ''' Alpaca device's IP port number
@@ -69,6 +80,7 @@ Public Class AlpacaDevice
             Return configuredDevicesAsArrayListValue ' Return the array-list of devices that was populated by the set ConfiguredDevices method
         End Get
     End Property
+
     ''' <summary>
     ''' Array of supported Alpaca interface version numbers
     ''' </summary>

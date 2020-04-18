@@ -314,7 +314,7 @@ namespace ASCOM.DeviceHub
 					if ( value )
 					{
 						msg += String.Format( " (connecting to {0})", TelescopeManager.TelescopeID );
-						//ConnectedState = TelescopeManager.Connect();
+
 						// Do this on the U/I thread.
 
 						Task task = new Task(() =>
@@ -322,7 +322,7 @@ namespace ASCOM.DeviceHub
 							ConnectedState = TelescopeManager.Connect();
 						});
 
-						task.Start(Globals.UISyncContext);
+						task.Start( Globals.UISyncContext );
 						task.Wait();
 					}
 					else
@@ -1401,7 +1401,7 @@ namespace ASCOM.DeviceHub
 
 			try
 			{
-				retval = TelescopeManager.DestinationSideOfPier( rightAscension, declination );
+				retval = TelescopeManager.GetTargetSideOfPier( rightAscension, declination );
 				msg += String.Format( "{0}{1}", retval, _done );
 			}
 			catch ( Exception )

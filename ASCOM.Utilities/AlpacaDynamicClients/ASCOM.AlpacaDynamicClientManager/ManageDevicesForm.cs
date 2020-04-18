@@ -241,67 +241,89 @@ namespace ASCOM.DynamicRemoteClients
                 // Iterate over each device that has been checked in the UI checked list box
                 foreach (DynamicDriverRegistration driver in dynamicDriversCheckedListBox.CheckedItems)
                 {
-                    // COM unregister the driver
-                    ComUnRegister(driver.ProgId);
+                    TL.LogMessage("DeleteDrivers", $"Deleting driver {driver.Description}");
 
                     // Create pointers to the driver executable and its PDB file
-                    TL.LogMessage("DeleteDrivers", $"Deleting driver {driver.Description}");
                     string driverFileName = $"{localServerPath}{driver.ProgId}.dll";
                     string pdbFileName = $"{localServerPath}{driver.ProgId}.pdb";
+                    TL.LogMessage("DeleteDrivers", $"DLL path: {driverFileName}");
+                    TL.LogMessage("DeleteDrivers", $"PDB path: {pdbFileName}");
 
-                    // Delete the driver and it's PDB file
-                    TL.LogMessage("DeleteDrivers", $"Deleting driver files {driverFileName} and {pdbFileName}");
-                    try
+                    // Test whether we can get an exclusive write lock on the DLL and PDB files. If this works we can delete the files later, if not be have to abandon removing this driver
+                    if (FileIsAccessible(driverFileName) & FileIsAccessible(pdbFileName)) // Both files are accessible so proceed with removal
                     {
-                        File.Delete(driverFileName);
-                        TL.LogMessage("DeleteDrivers", $"Successfully deleted driver file { driverFileName}");
-                    }
-                    catch (Exception ex)
-                    {
-                        string errorMessage = $"Unable to delete driver file {driverFileName} - {ex.Message}";
-                        TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
-                        MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                        // Unregister the driver for COM interop
+                        ComUnRegister(driver.ProgId);
 
-                    try
-                    {
-                        File.Delete(pdbFileName);
-                        TL.LogMessage("DeleteDrivers", $"Successfully deleted driver file { driverFileName}");
-                    }
-                    catch (Exception ex)
-                    {
-                        string errorMessage = $"Unable to delete driver file {pdbFileName} - {ex.Message}";
-                        TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
-                        MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-
-                    // Remove the ASCOM Profile information that is not removed by the local server when the driver is unregistered
-                    try
-                    {
-                        TL.LogMessage("DeleteDrivers", $"Removing driver Profile registration for {driver.DeviceType} driver: {driver.ProgId}");
-                        profile.DeviceType = driver.DeviceType;
-                        profile.Unregister(driver.ProgId);
-                    }
-                    catch (Exception ex)
-                    {
-                        string errorMessage = $"Unable to unregister driver {driver.ProgId} - {ex.Message}";
-                        TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
-                        MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-
-                    // Remove the flag indicating that this driver has been configured
-                    try
-                    {
-                        using (RegistryAccess registryAccess = new RegistryAccess())
+                        // Delete the driver file
+                        TL.LogMessage("DeleteDrivers", $"Deleting driver files {driverFileName} and {pdbFileName}");
+                        try
                         {
-                            registryAccess.DeleteProfile("Chooser", $"{driver.ProgId} Init");
+                            File.Delete(driverFileName);
+                            TL.LogMessage("DeleteDrivers", $"Successfully deleted driver file { driverFileName}");
+                        }
+                        catch (UnauthorizedAccessException ex)
+                        {
+                            string errorMessage = $"Unable to delete driver file {driverFileName} because it is locked or in use.";
+                            TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                            MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        catch (Exception ex)
+                        {
+                            string errorMessage = $"Unable to delete driver file {driverFileName} - {ex.Message}";
+                            TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                            MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+
+                        // Delete the driver's PDB file
+                        try
+                        {
+                            File.Delete(pdbFileName);
+                            TL.LogMessage("DeleteDrivers", $"Successfully deleted driver file { driverFileName}");
+                        }
+                        catch (Exception ex)
+                        {
+                            string errorMessage = $"Unable to delete driver file {pdbFileName} - {ex.Message}";
+                            TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                            MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+
+                        // Remove the ASCOM Profile information that is not removed by the local server when the driver is unregistered
+                        try
+                        {
+                            TL.LogMessage("DeleteDrivers", $"Removing driver Profile registration for {driver.DeviceType} driver: {driver.ProgId}");
+                            profile.DeviceType = driver.DeviceType;
+                            profile.Unregister(driver.ProgId);
+                        }
+                        catch (Exception ex)
+                        {
+                            string errorMessage = $"Unable to unregister driver {driver.ProgId} - {ex.Message}";
+                            TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                            MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+
+                        // Remove the Chooser flag indicating that this driver has been configured
+                        try
+                        {
+                            using (RegistryAccess registryAccess = new RegistryAccess())
+                            {
+                                registryAccess.DeleteProfile("Chooser", $"{driver.ProgId} Init");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            string errorMessage = $"Unable to remove driver initialised flag for {driver.ProgId} - {ex.Message}";
+                            TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                            MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
-                    catch (Exception ex)
+                    else // One or other of the files is not accessible so we have to omit removal of the driver
                     {
-                        string errorMessage = $"Unable to remove driver initialised flag for {driver.ProgId} - {ex.Message}";
-                        TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
-                        MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        string errorMessage = $"Unable to delete the {driver.Name} driver.\r\n\n" +
+                                              $"This may be because it is still in use by a client application.\r\n\n" +
+                                              $"Please close all ASCOM applications and try again using the .NET Chooser in the ASCOM Diagnostics application's Tools menu.";
+                        MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        TL.LogMessage("DeleteDrivers", $"{errorMessage}");
                     }
                 }
 
@@ -314,6 +336,7 @@ namespace ASCOM.DynamicRemoteClients
             }
             finally
             {
+                // Re-enable the delete button
                 BtnDeleteDrivers.Enabled = true;
             }
         }
@@ -661,6 +684,47 @@ namespace ASCOM.DynamicRemoteClients
             dynamicDriversCheckedListBox.Width = this.Width - 97;
             ChkIncludeAscomRemoteDrivers.Left = this.Width - 218;
             ChkIncludeAlpacaDynamicDrivers.Left = ChkIncludeAscomRemoteDrivers.Left;
+        }
+
+        /// <summary>
+        /// Test whether a file can be opened for exclusive write access, indicating that it can also be deleted
+        /// </summary>
+        /// <param name="filename">Full path and name of file to test</param>
+        /// <returns>True if the file can be accessed</returns>
+        private bool FileIsAccessible(string filename)
+        {
+            bool isAccessible = false; // Initialise the outcome to inaccessible
+
+            try
+            {
+                if (File.Exists(filename)) // The specified file does exist so we can test whether it is possible to get exclusive access
+                {
+
+                    // Test whether we can get an exclusive write lock on the file. If this works we have full access and will be able to delete the file
+                    FileStream fs = File.Open(filename, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                    fs.Close();
+                    fs.Dispose();
+                    fs = null;
+
+                    // If we get here the open and close was successful and we can get full access to the file so we can set the outcome to this effect
+                    isAccessible = true;
+                }
+                else // The file does not exist so we flag it as accessible because the later File.Delete command won't throw an error if the file does not exist
+                {
+                    isAccessible = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                // If we arrive here there is some kind of accessibility issue and it wont be possible to delete the file so we set the outcome accordingly
+                isAccessible = false;
+
+                // Log the failure message to help with debugging but otherwise swallow the exception
+                TL.LogMessageCrLf("FileIsAccessible", $"Unable to get write access to driver file {filename} - {ex.ToString()}");
+            }
+
+            // Return the test outcome
+            return isAccessible;
         }
 
         #endregion
