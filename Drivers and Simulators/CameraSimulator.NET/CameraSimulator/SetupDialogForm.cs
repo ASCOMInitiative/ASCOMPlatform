@@ -239,5 +239,5 @@ namespace ASCOM.Simulator
             coolerSetupForm.Dispose();
             coolerSetupForm = null;
         }
-    }
+
 }
