@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace ASCOM.DeviceInterface
 {
     /// <summary>
-    /// Defines the IRotatorV3 Interface including new synchronisation methods (see Remarks section below)
+    /// Defines the IRotatorV3 Interface including new synchronisation methods. In addition cable wrap management is clarified. (see Remarks section below)
     /// </summary>
     /// <remarks>
     /// The IRotatorV3 interface was introduced in Platform 6.5 to add support for rotator synchronisation through these new methods:
@@ -15,6 +15,11 @@ namespace ASCOM.DeviceInterface
     /// <item><see cref="Sync(float)"/></item>
     /// <item><see cref="MoveMechanical(float)"/></item>
     /// </list>
+    /// <para>
+    /// The rotator system (including its firmware and driver) is responsible for managing cable wrap prevention behaviour. Client applications must be able to position 
+    /// the rotator from any angle (0 &lt;= angle &lt; 360) to any angle (0 &lt;= angle &lt; 360) without regard to equipment clearance or cable considerations. If needed, the rotator 
+    /// may provide a user interface to configure specific behaviour in the driver's SetupDialog.
+    /// </para>
     /// </remarks>
     [Guid("8BFC7846-E20A-46E8-BF9A-2B595D90104A")]
     [ComVisible(true)]
