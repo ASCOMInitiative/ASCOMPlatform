@@ -869,5 +869,59 @@ namespace ASCOM.DynamicRemoteClients
 
         #endregion
 
+        #region ICameraV3 implementation
+
+        public int Offset
+        {
+            get
+            {
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                return DynamicClientDriver.GetValue<int>(clientNumber, client, URIBase, TL, "Offset");
+            }
+
+            set
+            {
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                DynamicClientDriver.SetInt(clientNumber, client, URIBase, TL, "Gain", value);
+            }
+        }
+
+        public int OffsetMax
+        {
+            get
+            {
+                return DynamicClientDriver.GetValue<int>(clientNumber, client, URIBase, TL, "OffsetMax");
+            }
+        }
+
+        public int OffsetMin
+        {
+            get
+            {
+                return DynamicClientDriver.GetValue<int>(clientNumber, client, URIBase, TL, "OffsetMin");
+            }
+        }
+
+        public ArrayList Offsets
+        {
+            get
+            {
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                List<string> offsets = DynamicClientDriver.GetValue<List<string>>(clientNumber, client, URIBase, TL, "Offsets");
+                TL.LogMessage(clientNumber, "Offsets", string.Format("Returning {0} Offsets", offsets.Count));
+
+                ArrayList returnValues = new ArrayList();
+                foreach (string offset in offsets)
+                {
+                    returnValues.Add(offset);
+                    TL.LogMessage(clientNumber, "Offsets", string.Format("Returning Offset: {0}", offset));
+                }
+
+                return returnValues;
+            }
+        }
+
+        #endregion
+
     }
 }
