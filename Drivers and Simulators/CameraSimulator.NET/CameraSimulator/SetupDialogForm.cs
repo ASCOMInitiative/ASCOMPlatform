@@ -17,16 +17,76 @@ namespace ASCOM.Simulator
         private CoolerSetupForm coolerSetupForm; // Variable to hold an instance of the cooler configuration form
         internal bool okButtonPressed = false;
 
+        private bool validationErrorsOccurred = false; // Initialise to the success condition (Used to stop the form closing if there are validation errors in text box values)
+
         public SetupDialogForm()
         {
             InitializeComponent();
+
+            this.FormClosing += SetupDialogForm_FormClosing;
+
+            // Set a common event handler for the gain radio buttons
+            radioButtonNoGain.CheckedChanged += GainRadioButton_CheckedChanged;
+            radioButtonUseGains.CheckedChanged += GainRadioButton_CheckedChanged;
+            radioButtonUseMinAndMax.CheckedChanged += GainRadioButton_CheckedChanged;
+
+            // Set a common event handler for the offset radio buttons
+            RadNoOffset.CheckedChanged += OffsetRadioButton_CheckedChanged;
+            RadOffsets.CheckedChanged += OffsetRadioButton_CheckedChanged;
+            RadOffsetMinMax.CheckedChanged += OffsetRadioButton_CheckedChanged;
+
+        }
+
+        private void SetupDialogForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (validationErrorsOccurred) e.Cancel = true; // Cancel the close if validation errors occurred
+        }
+
+        private void OffsetRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
+            switch (rb.Name)
+            {
+                case "RadNoOffset":
+                    TxtOffsetMin.Enabled = false;
+                    TxtOffsetMax.Enabled = false;
+                    break;
+                case "RadOffsets":
+                    TxtOffsetMin.Enabled = false;
+                    TxtOffsetMax.Enabled = false;
+                    break;
+                case "RadOffsetMinMax":
+                    TxtOffsetMin.Enabled = true;
+                    TxtOffsetMax.Enabled = true;
+                    break;
+            }
+        }
+
+        private void GainRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
+            switch (rb.Name)
+            {
+                case "radioButtonNoGain":
+                    textBoxGainMin.Enabled = false;
+                    textBoxGainMax.Enabled = false;
+                    break;
+                case "radioButtonUseGains":
+                    textBoxGainMin.Enabled = false;
+                    textBoxGainMax.Enabled = false;
+                    break;
+                case "radioButtonUseMinAndMax":
+                    textBoxGainMin.Enabled = true;
+                    textBoxGainMax.Enabled = true;
+                    break;
+            }
         }
 
         private void cmdOK_Click(object sender, EventArgs e)
         {
             okButtonPressed = true;
-            SaveProperties();
-            this.Dispose();
+            validationErrorsOccurred = false; // Initialise to the success condition
+            SaveProperties(); // If validation fails the valiudation flag will be set false and the form close will be cancelled
         }
 
         private void cmdCancel_Click(object sender, EventArgs e)
@@ -35,7 +95,6 @@ namespace ASCOM.Simulator
             this.Dispose();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
         private void BrowseToAscom(object sender, EventArgs e)
         {
             try
@@ -55,11 +114,10 @@ namespace ASCOM.Simulator
 
         internal void InitProperties(Camera theCamera)
         {
+
             checkBoxLogging.Checked = Log.Enabled;
-            checkBoxInterfaceVersion.Checked = (theCamera.interfaceVersion == 2);
             textBoxPixelSizeX.Text = theCamera.pixelSizeX.ToString(STR_N2, CultureInfo.CurrentCulture);
             textBoxPixelSizeY.Text = theCamera.pixelSizeY.ToString(STR_N2, CultureInfo.CurrentCulture);
-            //textBoxFullWellCapacity.Text = camera.fullWellCapacity.ToString();
             textBoxMaxADU.Text = theCamera.maxADU.ToString(CultureInfo.CurrentCulture);
             textBoxElectronsPerADU.Text = theCamera.electronsPerADU.ToString(STR_N2, CultureInfo.CurrentCulture);
 
@@ -84,25 +142,55 @@ namespace ASCOM.Simulator
             textBoxMaxExposure.Text = theCamera.exposureMax.ToString(CultureInfo.CurrentCulture);
             textBoxMinExposure.Text = theCamera.exposureMin.ToString(CultureInfo.CurrentCulture);
 
-            if (theCamera.gains != null && theCamera.gains.Count > 0)
+            // Set Gain configuration
+            switch (theCamera.gainMode)
             {
-                radioButtonUseGains.Checked = true;
+                case Camera.GainMode.None:
+                    radioButtonNoGain.Checked = true;
+                    break;
+                case Camera.GainMode.GainMinMax:
+                    radioButtonUseMinAndMax.Checked = true;
+                    break;
+                case Camera.GainMode.Gains:
+                    radioButtonUseGains.Checked = true;
+                    break;
+                default:
+                    radioButtonNoGain.Checked = true;
+                    break;
             }
-            else if (theCamera.gainMax > theCamera.gainMin)
-            {
-                radioButtonUseMinAndMax.Checked = true;
-            }
-            else
-            {
-                radioButtonNoGain.Checked = true;
-            }
+
             textBoxGainMin.Text = theCamera.gainMin.ToString(CultureInfo.CurrentCulture);
             textBoxGainMax.Text = theCamera.gainMax.ToString(CultureInfo.CurrentCulture);
+
+            // Set Offset configuration
+            switch (theCamera.offsetMode)
+            {
+                case Camera.OffsetMode.None:
+                    RadNoOffset.Checked = true;
+                    break;
+                case Camera.OffsetMode.OffsetMinMax:
+                    RadOffsetMinMax.Checked = true;
+                    break;
+                case Camera.OffsetMode.Offsets:
+                    RadOffsets.Checked = true;
+                    break;
+                default:
+                    radioButtonNoGain.Checked = true;
+                    break;
+            }
+
+            TxtOffsetMin.Text = theCamera.offsetMin.ToString(CultureInfo.CurrentCulture);
+            TxtOffsetMax.Text = theCamera.offsetMax.ToString(CultureInfo.CurrentCulture);
+
+            // Set the sub exposure configuration
+            TxtSubExposure.Text = theCamera.subExposureInterval.ToString(CultureInfo.CurrentCulture);
+            ChkHasSubExposure.Checked = theCamera.hasSubExposure;
+            TxtSubExposure.Enabled = ChkHasSubExposure.Checked;
+
             checkBoxApplyNoise.Checked = theCamera.applyNoise;
-
             checkBoxCanPulseGuide.Checked = theCamera.canPulseGuide;
-
             checkBoxCanFastReadout.Checked = theCamera.canFastReadout;
+
             if (theCamera.canFastReadout)
             {
                 checkBoxUseReadoutModes.Enabled = false;
@@ -112,16 +200,21 @@ namespace ASCOM.Simulator
                 checkBoxUseReadoutModes.Checked = theCamera.readoutModes.Count > 1;
             }
 
-            camera = theCamera;
+            // Set interface version last so that appropriate text box controls are enabled and disabled correctly per what is available in each interface version
+            NumInterfaceVersion.Value = theCamera.interfaceVersion;
 
+            camera = theCamera;
         }
 
+        /// <summary>
+        /// Save the new configuration
+        /// </summary>
+        /// <returns>True if there are no validation errors, otherwise false</returns>
         private void SaveProperties()
         {
             Log.Enabled = checkBoxLogging.Checked;
             camera.pixelSizeX = double.Parse(textBoxPixelSizeX.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
             camera.pixelSizeY = double.Parse(textBoxPixelSizeY.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
-            //camera.fullWellCapacity = Convert.ToDouble(textBoxFullWellCapacity.Text, CultureInfo.InvariantCulture);
             camera.maxADU = int.Parse(textBoxMaxADU.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
             camera.electronsPerADU = double.Parse(textBoxElectronsPerADU.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
 
@@ -149,24 +242,111 @@ namespace ASCOM.Simulator
 
             camera.canPulseGuide = checkBoxCanPulseGuide.Checked;
 
+            // Save Gain parameters
+            if (short.TryParse(textBoxGainMin.Text, NumberStyles.Number, CultureInfo.CurrentCulture, out short gainMinParsed)) // Validate GainMin
+            {
+                camera.gainMin = gainMinParsed;
+            }
+            else
+            {
+                validationErrorsOccurred = true;
+                MessageBox.Show($"The minimum gain value is invalid: '{textBoxGainMin.Text}'");
+            }
+
+            if (short.TryParse(textBoxGainMax.Text, NumberStyles.Number, CultureInfo.CurrentCulture, out short gainMaxParsed)) // Validate GainMax
+            {
+                camera.gainMax = gainMaxParsed;
+            }
+            else
+            {
+                validationErrorsOccurred = true;
+                MessageBox.Show($"The maximum gain value is invalid: '{textBoxGainMax.Text}'");
+            }
+
+            if (camera.gainMin > camera.gainMax) // Validate that GainMin is not greater than GainMax 
+            {
+                validationErrorsOccurred = true;
+                MessageBox.Show($"The maximum gain value {camera.gainMin} is greater than the minimum gain value: {camera.gainMax}");
+            }
+
             if (radioButtonNoGain.Checked)
             {
-                camera.gainMin = camera.gainMax = 0;
-                camera.gains = null;
+                camera.gainMode = Camera.GainMode.None;
             }
             else if (radioButtonUseGains.Checked)
             {
-                camera.gains = new ArrayList { "ISO 100", "ISO 200", "ISO 400", "ISO 800", "ISO 1600" };
-                camera.gainMin = (short)0;
-                camera.gainMax = (short)(camera.gains.Count - 1);
+                camera.gainMode = Camera.GainMode.Gains;
+                if ((camera.gain < 0) | (camera.gain > camera.gains.Count - 1)) camera.gain = 0; // initialise to first item if the current Gain is out of the Gains array size
+
             }
-            if (radioButtonUseMinAndMax.Checked)
+            else if (radioButtonUseMinAndMax.Checked)
             {
-                camera.gains = null;
-                camera.gainMin = short.Parse(textBoxGainMin.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
-                camera.gainMax = short.Parse(textBoxGainMax.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
+                camera.gainMode = Camera.GainMode.GainMinMax;
+                if ((camera.gain < camera.gainMin) | (camera.gain > camera.gainMax)) camera.gain = camera.gainMin; // initialise to GainMin if the current Gain is out side the min to max range
             }
-            camera.interfaceVersion = (short)(checkBoxInterfaceVersion.Checked ? 2 : 1);
+
+            // Save Offset parameters
+            if (int.TryParse(TxtOffsetMin.Text, NumberStyles.Number, CultureInfo.CurrentCulture, out int offsetMinParsed)) // Validate OffsetMin
+            {
+                camera.offsetMin = offsetMinParsed;
+            }
+            else
+            {
+                validationErrorsOccurred = true;
+                MessageBox.Show($"The minimum offset value is invalid: '{TxtOffsetMin.Text}'");
+            }
+
+            if (int.TryParse(TxtOffsetMax.Text, NumberStyles.Number, CultureInfo.CurrentCulture, out int offsetMaxParsed)) // Validate OffsetMax
+            {
+                camera.offsetMax = offsetMaxParsed;
+            }
+            else
+            {
+                validationErrorsOccurred = true;
+                MessageBox.Show($"The maximum offset value is invalid: '{TxtOffsetMax.Text}'");
+            }
+
+            if (camera.offsetMin > camera.offsetMax) // Validate that OffsetMin is not greater than OffsetMax 
+            {
+                validationErrorsOccurred = true;
+                MessageBox.Show($"The minimum offset value {camera.offsetMin} is greater than the maximum offset value: {camera.offsetMax}");
+            }
+
+            if (RadNoOffset.Checked)
+            {
+                camera.offsetMode = Camera.OffsetMode.None;
+            }
+            else if (RadOffsets.Checked)
+            {
+                camera.offsetMode = Camera.OffsetMode.Offsets;
+                if ((camera.offset < 0) | (camera.offset > camera.offsets.Count - 1)) camera.offset = 0; // initialise to first item if the current Offset is out of the Offsets array size
+
+            }
+            if (RadOffsetMinMax.Checked)
+            {
+                camera.offsetMode = Camera.OffsetMode.OffsetMinMax;
+                if ((camera.offset < camera.offsetMin) | (camera.offset > camera.offsetMax)) camera.offset = camera.offsetMin; // initialise to OffsetMin if the current Offset is out side the min to max range
+            }
+
+            // Save sub exposure configuration
+            camera.hasSubExposure = ChkHasSubExposure.Checked;
+            if (double.TryParse(TxtSubExposure.Text, NumberStyles.Number, CultureInfo.CurrentCulture, out double subExposureParsed)) // Validate OffsetMin
+            {
+                camera.subExposureInterval = subExposureParsed;
+            }
+            else
+            {
+                validationErrorsOccurred = true;
+                MessageBox.Show($"The sub exposure value is invalid: '{TxtSubExposure.Text}'");
+            }
+
+            if (camera.subExposureInterval <= 0.0) // Validate that sub exposure is not negative or zero
+            {
+                validationErrorsOccurred = true;
+                MessageBox.Show($"The sub exposure interval: {camera.subExposureInterval} must be positive and greater than 0.0");
+            }
+
+            camera.interfaceVersion = Decimal.ToInt16(NumInterfaceVersion.Value);
 
             camera.canFastReadout = checkBoxCanFastReadout.Checked;
             if (checkBoxUseReadoutModes.Checked)
@@ -191,23 +371,6 @@ namespace ASCOM.Simulator
 
         private void checkBoxInterfaceVersion_CheckedChanged(object sender, EventArgs e)
         {
-            // enable the V2 properties if checked
-            textBoxBayerOffsetX.Enabled = checkBoxInterfaceVersion.Checked;
-            textBoxBayerOffsetY.Enabled = checkBoxInterfaceVersion.Checked;
-            textBoxGainMax.Enabled = checkBoxInterfaceVersion.Checked;
-            textBoxGainMin.Enabled = checkBoxInterfaceVersion.Checked;
-            textBoxMaxExposure.Enabled = checkBoxInterfaceVersion.Checked;
-            textBoxMinExposure.Enabled = checkBoxInterfaceVersion.Checked;
-            textBoxSensorName.Enabled = checkBoxInterfaceVersion.Checked;
-            comboBoxSensorType.Enabled = checkBoxInterfaceVersion.Checked;
-            radioButtonNoGain.Enabled = checkBoxInterfaceVersion.Checked;
-            radioButtonUseGains.Enabled = checkBoxInterfaceVersion.Checked;
-            radioButtonUseMinAndMax.Enabled = checkBoxInterfaceVersion.Checked;
-        }
-
-        private void checkBoxCanFastReadout_CheckedChanged(object sender, EventArgs e)
-        {
-            checkBoxUseReadoutModes.Enabled = !(sender as CheckBox).Checked;
         }
 
         private void comboBoxSensorType_SelectedIndexChanged(object sender, EventArgs e)
@@ -240,4 +403,34 @@ namespace ASCOM.Simulator
             coolerSetupForm = null;
         }
 
+        private void NumInterfaceVersion_ValueChanged(object sender, EventArgs e)
+        {
+            // Enable the IcameraV2 properties if required
+            textBoxBayerOffsetX.Enabled = NumInterfaceVersion.Value >= 2;
+            textBoxBayerOffsetY.Enabled = NumInterfaceVersion.Value >= 2;
+            textBoxGainMax.Enabled = NumInterfaceVersion.Value >= 2;
+            textBoxGainMin.Enabled = NumInterfaceVersion.Value >= 2;
+            textBoxMaxExposure.Enabled = NumInterfaceVersion.Value >= 2;
+            textBoxMinExposure.Enabled = NumInterfaceVersion.Value >= 2;
+            textBoxSensorName.Enabled = NumInterfaceVersion.Value >= 2;
+            comboBoxSensorType.Enabled = NumInterfaceVersion.Value >= 2;
+            radioButtonNoGain.Enabled = NumInterfaceVersion.Value >= 2;
+            radioButtonUseGains.Enabled = NumInterfaceVersion.Value >= 2;
+            radioButtonUseMinAndMax.Enabled = NumInterfaceVersion.Value >= 2;
+
+            // Enable the ICameraV3 properties if required
+            RadNoOffset.Enabled = NumInterfaceVersion.Value >= 3;
+            RadOffsetMinMax.Enabled = NumInterfaceVersion.Value >= 3;
+            RadOffsets.Enabled = NumInterfaceVersion.Value >= 3;
+            TxtOffsetMax.Enabled = NumInterfaceVersion.Value >= 3;
+            TxtOffsetMin.Enabled = NumInterfaceVersion.Value >= 3;
+            ChkHasSubExposure.Enabled= NumInterfaceVersion.Value >= 3;
+            TxtSubExposure.Enabled= (NumInterfaceVersion.Value >= 3) & ChkHasSubExposure.Checked;
+        }
+
+        private void ChkHasSubExposure_CheckedChanged(object sender, EventArgs e)
+        {
+            TxtSubExposure.Enabled = ChkHasSubExposure.Checked;
+        }
+    }
 }
