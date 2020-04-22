@@ -56,7 +56,7 @@ namespace ASCOM.Simulator
     /// _Camera from being created and used as the [default] interface
     /// </summary>
     [Guid("12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
-    public class Camera : ICameraV2
+    public class Camera : ICameraV3
     {
         // Driver ID and descriptive string that shows in the Chooser
         private static string s_csDriverID = "ASCOM.Simulator.Camera";
@@ -2434,27 +2434,40 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// Camera.SubExposureInterval can be used to specify that multiple exposures be aggregated by the camera into a single composite exposure
+        /// Camera.SubExposureDuration can be used to specify that multiple exposures be aggregated by the camera into a single composite exposure
         /// </summary>
-        /// <value>The sub exposure interval (s).</value>
-        public double SubExposureInterval
+        /// <value>The sub exposure duration (s).</value>
+        public double SubExposureDuration
         {
             get
             {
-                CheckSupportedInThisInterfaceVersion("SubExposureInterval", 3);
-                CheckConnected("SubExposureInterval");
-                CheckCapabilityEnabled("SubExposureInterval", hasSubExposure);
-                Log.LogMessage("SubExposureInterval", "get {0}", subExposureInterval);
+                CheckSupportedInThisInterfaceVersion("SubExposureDuration", 3);
+                CheckConnected("SubExposureDuration");
+                CheckCapabilityEnabled("SubExposureDuration", hasSubExposure);
+                Log.LogMessage("SubExposureDuration", "get {0}", subExposureInterval);
                 return subExposureInterval;
             }
             set
             {
-                CheckSupportedInThisInterfaceVersion("SubExposureInterval", 3);
-                CheckConnected("SubExposureInterval");
-                CheckCapabilityEnabled("SubExposureInterval", hasSubExposure);
-                Log.LogMessage("SubExposureInterval", $"set {value}");
-                if (value <= 0.0) throw new InvalidValueException($"The sub exposure interval must not be negative or zero: {value}");
+                CheckSupportedInThisInterfaceVersion("SubExposureDuration", 3);
+                CheckConnected("SubExposureDuration");
+                CheckCapabilityEnabled("SubExposureDuration", hasSubExposure);
+                Log.LogMessage("SubExposureDuration", $"set {value}");
+                if (value < double.Epsilon) throw new InvalidValueException($"The sub exposure duration must not be negative or zero: {value}");
                 subExposureInterval = value;
+            }
+        }
+
+        /// <summary>
+        /// Return the PulseGuiding state: Not Present, Active or inactive
+        /// </summary>
+        public PulseGuideState PulseGuideStatus
+        {
+            get
+            {
+                if (!canPulseGuide) return PulseGuideState.NotImplemented;
+                if (isPulseGuidingDec | isPulseGuidingRa) return PulseGuideState.Active;
+                return PulseGuideState.Inactive;
             }
         }
 

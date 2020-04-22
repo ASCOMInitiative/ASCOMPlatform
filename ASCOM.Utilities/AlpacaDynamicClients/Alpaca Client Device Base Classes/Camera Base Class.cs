@@ -12,7 +12,7 @@ namespace ASCOM.DynamicRemoteClients
     /// <summary>
     /// ASCOM DynamicRemoteClients Camera base class.
     /// </summary>
-    public class CameraBaseClass : ReferenceCountedObjectBase, ICameraV2
+    public class CameraBaseClass : ReferenceCountedObjectBase, ICameraV3
     {
         #region Variables and Constants
 
@@ -918,6 +918,30 @@ namespace ASCOM.DynamicRemoteClients
                 }
 
                 return returnValues;
+            }
+        }
+
+        public double SubExposureDuration
+        {
+            get
+            {
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                return DynamicClientDriver.GetValue<double>(clientNumber, client, URIBase, TL, "SubExposureDuration");
+            }
+
+            set
+            {
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                DynamicClientDriver.SetDouble(clientNumber, client, URIBase, TL, "SubExposureDuration", value);
+            }
+        }
+
+        public PulseGuideState PulseGuideStatus
+        {
+            get
+            {
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                return DynamicClientDriver.GetValue<PulseGuideState>(clientNumber, client, URIBase, TL, "PulseGuideStatus");
             }
         }
 
