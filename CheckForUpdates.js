@@ -27,13 +27,13 @@
 // ------------------------------------------------------------------------------------------------
 
 var POPTITLE = "Check ASCOM Updates";
-var REMWEB = "http://download.ascom-standards.org/ver/";
+var REMWEB = "https://download.ascom-standards.org/ver/";
 var REGROOT64 = "HKLM\\Software\\Wow6432Node\\ASCOM\\Platform\\";
 var REGROOT32 = "HKLM\\Software\\ASCOM\\Platform\\";
 
-var PLATPAGE = "http://ascom-standards.org/Downloads/Index.htm";
-var DEVPAGE = "http://ascom-standards.org/Downloads/PlatDevComponents.htm";
-var CONFPAGE = "http://ascom-standards.org/Downloads/DevTools.htm";
+var PLATPAGE = "https://ascom-standards.org/Downloads/Index.htm";
+var DEVPAGE = "https://ascom-standards.org/Downloads/PlatDevComponents.htm";
+var CONFPAGE = "https://ascom-standards.org/Downloads/DevTools.htm";
 
 var SH = new ActiveXObject("WScript.Shell");
 
