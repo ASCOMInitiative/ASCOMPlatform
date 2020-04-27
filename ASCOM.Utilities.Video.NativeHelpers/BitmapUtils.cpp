@@ -110,8 +110,9 @@ HRESULT GetBitmapPixels(long width, long height, long bpp, long flipMode, long* 
 	return S_OK;
 }
 
-HRESULT GetColourBitmapPixels(long width, long height, long bpp, long flipMode, long* pixels, BYTE* bitmapPixels)
+HRESULT GetColourBitmapPixels(long width, long height, long bpp, long flipMode, long isRowMajor, long* pixels, BYTE* bitmapPixels)
 {
+	bool isNetRowMajor = isRowMajor == 1;
 	bool flipHorizontally = flipMode == 1 || flipMode == 3;
 	bool flipVertically = flipMode == 2 || flipMode == 3;
 
@@ -130,26 +131,53 @@ HRESULT GetColourBitmapPixels(long width, long height, long bpp, long flipMode, 
 	}
 
 	long currLinePos = 0;
+	int widthStride = 3 * height;
 	int length = width * height;
 	int twoLengths = 2 * length;
 	bitmapPixels+=3 * length + x_sp;
+	long* pixelsStart = pixels;
 
 	int shiftVal = bpp == 12 ? 4 : 8;
 
 	int total = width * height;
+	int row = -1;
 	while(total--)
 	{
 		if (currLinePos == 0) 
 		{
+			row++;
+
 			currLinePos = width;
 			bitmapPixels+=x_nrc;
+
+			if (!isNetRowMajor)
+			{
+				pixels = pixelsStart + row * 3;
+			}
 		};
 
-		unsigned int valR = *pixels;
-		unsigned int valG = *(pixels + length);
-		unsigned int valB = *(pixels + twoLengths);
+		unsigned int valR;
+		unsigned int valG;
+		unsigned int valB;
 
-		pixels++;
+		// NOTE: PInvoke Marshalls .NET multi-dimentional arrays to C-style arrays in column-major format
+		//       Therefore .NET rowMajor will be a columnMajor here, and vice verca
+		if (isNetRowMajor)
+		{
+			valR = *pixels;
+			valG = *(pixels + length);
+			valB = *(pixels + twoLengths);
+
+			pixels++;
+		}
+		else
+		{
+			valR = *pixels;
+			valG = *(pixels + 1);
+			valB = *(pixels + 2);
+
+			pixels += widthStride;
+		}
 
 		unsigned int dblValR;
 		unsigned int dblValG;
@@ -266,6 +294,7 @@ HRESULT GetColourPixelsFromBitmap(long width, long height, long bpp, long flipMo
 	long* ptrPixelsR = pixels;
 	long* ptrPixelsG = pixels + (width * height);
 	long* ptrPixelsB = pixels + 2 * (width * height);
+
 	unsigned char* buf = reinterpret_cast<unsigned char*>(bmp.bmBits);
 
 	CopyBitmapHeaders(width, height, false, bitmapPixels);
@@ -282,34 +311,33 @@ HRESULT GetColourPixelsFromBitmap(long width, long height, long bpp, long flipMo
 
 			if (flipMode == 0)
 			{
-				*(ptrPixelsR + (width - 1 - x) + width * y ) = *(ptrBuf + 2);
-				*(ptrPixelsG + (width - 1 - x) + width * y ) = *(ptrBuf + 1);
-				*(ptrPixelsB + (width - 1 - x) + width * y ) = *(ptrBuf);
+				*(ptrPixelsR + (width - 1 - x) + width * y) = *(ptrBuf + 2);
+				*(ptrPixelsG + (width - 1 - x) + width * y) = *(ptrBuf + 1);
+				*(ptrPixelsB + (width - 1 - x) + width * y) = *(ptrBuf);
 
 				currBitmapPixel = bitmapPixels - 3 * (x + width * y);
 			}
 			else if (flipMode == 1) /* Flip Horizontally */
 			{
-
-				*(ptrPixelsR + x + width * y ) = *(ptrBuf + 2);
-				*(ptrPixelsG + x + width * y ) = *(ptrBuf + 1);
-				*(ptrPixelsB + x + width * y ) = *(ptrBuf);
+				*(ptrPixelsR + x + width * y) = *(ptrBuf + 2);
+				*(ptrPixelsG + x + width * y) = *(ptrBuf + 1);
+				*(ptrPixelsB + x + width * y) = *(ptrBuf);
 
 				currBitmapPixel = bitmapPixels - 3 * ((width - 1 - x) + width * y);
 			}
 			else if (flipMode == 2) /* Flip Vertically */
 			{
-				*(ptrPixelsR + (width - 1 - x) + width * (height - 1 - y) ) = *(ptrBuf + 2);
-				*(ptrPixelsG + (width - 1 - x) + width * (height - 1 - y) ) = *(ptrBuf + 1);
-				*(ptrPixelsB + (width - 1 - x) + width * (height - 1 - y) ) = *(ptrBuf);
+				*(ptrPixelsR + (width - 1 - x) + width * (height - 1 - y)) = *(ptrBuf + 2);
+				*(ptrPixelsG + (width - 1 - x) + width * (height - 1 - y)) = *(ptrBuf + 1);
+				*(ptrPixelsB + (width - 1 - x) + width * (height - 1 - y)) = *(ptrBuf);
 
 				currBitmapPixel = bitmapPixels - 3 * (x +  width * (height - 1 - y));
 			}
 			else if (flipMode == 3) /* Flip Horizontally & Vertically */
 			{
-				*(ptrPixelsR + x + width * (height - 1 - y) ) = *(ptrBuf + 2);
-				*(ptrPixelsG + x + width * (height - 1 - y) ) = *(ptrBuf + 1);
-				*(ptrPixelsB + x + width * (height - 1 - y) ) = *(ptrBuf);
+				*(ptrPixelsR + x + width * (height - 1 - y)) = *(ptrBuf + 2);
+				*(ptrPixelsG + x + width * (height - 1 - y)) = *(ptrBuf + 1);
+				*(ptrPixelsB + x + width * (height - 1 - y)) = *(ptrBuf);
 
 				currBitmapPixel = bitmapPixels - 3 * ((width - 1 - x) + width * (height - 1 - y));
 			}
