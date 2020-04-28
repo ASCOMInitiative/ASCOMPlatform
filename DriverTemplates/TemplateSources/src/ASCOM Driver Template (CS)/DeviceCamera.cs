@@ -535,15 +535,6 @@ class DeviceCamera
         throw new ASCOM.MethodNotImplementedException("PulseGuide");
     }
 
-    public PulseGuideState PulseGuideStatus
-    {
-        get
-        {
-            tl.LogMessage("PulseGuideStatus Get", "Not implemented");
-            return PulseGuideState.NotImplemented;
-        }
-    }
-
 public short ReadoutMode
     {
         get

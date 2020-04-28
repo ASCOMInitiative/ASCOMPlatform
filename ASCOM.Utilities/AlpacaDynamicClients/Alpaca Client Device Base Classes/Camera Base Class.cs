@@ -936,15 +936,6 @@ namespace ASCOM.DynamicRemoteClients
             }
         }
 
-        public PulseGuideState PulseGuideStatus
-        {
-            get
-            {
-                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<PulseGuideState>(clientNumber, client, URIBase, TL, "PulseGuideStatus");
-            }
-        }
-
         #endregion
 
     }

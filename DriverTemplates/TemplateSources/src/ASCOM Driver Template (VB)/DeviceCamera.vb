@@ -430,13 +430,6 @@ Class DeviceCamera
         Throw New ASCOM.MethodNotImplementedException("Direction")
     End Sub
 
-    Public ReadOnly Property PulseGuideStatus() As PulseGuideState Implements ICameraV3.PulseGuideStatus
-        Get
-            TL.LogMessage("PulseGuideStatus Get", "Not implemented")
-            Return PulseGuideState.NotImplemented
-        End Get
-    End Property
-
     Public Property ReadoutMode() As Short Implements ICameraV3.ReadoutMode
         Get
             TL.LogMessage("ReadoutMode Get", "Not implemented")

@@ -1786,22 +1786,6 @@ namespace ASCOM.DriverAccess
             set { _memberFactory.CallMember(2, "SubExposureDuration", new Type[] { }, new object[] { value }); }
         }
 
-        /// <summary>
-        /// The state of the camera's PulseGuide command
-        /// <p style="color:limegreen"><b>This is a proposed ICameraV3 property.</b></p>
-        /// </summary>
-        /// <remarks><p style="color:red"><b>This is an mandatory property and must not throw a PropertyNotImplementedException.</b></p>
-        /// This property provides enhanced information over the IsPulseGuiding method, however, to maintain backward compatibility, the IsPulseGuiding method must continue to be implemented 
-        /// whenever CanPulseGuide returns true.
-        /// <para>
-        /// This method must return <see cref="PulseGuideState.NotPresent"/> when CanPulseGuide returns false.
-        /// </para>
-        /// </remarks>
-        public PulseGuideState PulseGuideStatus 
-        {
-            get { return (PulseGuideState)_memberFactory.CallMember(1, "PulseGuideStatus", new Type[] { }, new object[] { }); }
-        }
-
         #endregion
     }
 

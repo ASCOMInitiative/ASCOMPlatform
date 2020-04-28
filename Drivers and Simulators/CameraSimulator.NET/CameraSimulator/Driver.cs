@@ -2458,19 +2458,6 @@ namespace ASCOM.Simulator
             }
         }
 
-        /// <summary>
-        /// Return the PulseGuiding state: Not Present, Active or inactive
-        /// </summary>
-        public PulseGuideState PulseGuideStatus
-        {
-            get
-            {
-                if (!canPulseGuide) return PulseGuideState.NotImplemented;
-                if (isPulseGuidingDec | isPulseGuidingRa) return PulseGuideState.Active;
-                return PulseGuideState.Inactive;
-            }
-        }
-
         #endregion
 
         #region Private
