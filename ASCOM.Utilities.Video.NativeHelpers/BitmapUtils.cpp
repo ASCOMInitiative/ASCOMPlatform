@@ -125,7 +125,7 @@ HRESULT GetColourBitmapPixels(long width, long height, long bpp, long flipMode, 
 
 	if (flipHorizontally)
 	{
-		x_sp = 0;
+		x_sp = -3;
 		x_nrc = 0;
 		x_inc = -3;
 	}
