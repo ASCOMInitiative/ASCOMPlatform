@@ -1076,13 +1076,6 @@ namespace ASCOM.DynamicRemoteClients
                             if (CallWasSuccessful(TL, calibratorStatusResponse)) return (T)((object)calibratorStatusResponse.Value);
                             restResponseBase = (RestResponseBase)calibratorStatusResponse;
                         }
-                        if (typeof(T) == typeof(PulseGuideState))
-                        {
-                            IntResponse pulseGuideStatusResponse = JsonConvert.DeserializeObject<IntResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, pulseGuideStatusResponse.ClientTransactionID, pulseGuideStatusResponse.ServerTransactionID, pulseGuideStatusResponse.Value.ToString()));
-                            if (CallWasSuccessful(TL, pulseGuideStatusResponse)) return (T)((object)pulseGuideStatusResponse.Value);
-                            restResponseBase = (RestResponseBase)pulseGuideStatusResponse;
-                        }
                         if (typeof(T) == typeof(IAxisRates))
                         {
                             AxisRatesResponse axisRatesResponse = JsonConvert.DeserializeObject<AxisRatesResponse>(deviceJsonResponse.Content);
