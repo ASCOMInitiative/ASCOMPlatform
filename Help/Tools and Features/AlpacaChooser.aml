@@ -76,13 +76,16 @@
           </mediaLink>
         </para>
         <para>
-          To create a dynamic driver for the newly discovered Alpaca device select it as normal, noting that the Properties button will be greyed out because the driver hasn't yet been created.
+          To create a dynamic driver for the newly discovered Alpaca device, select it from the drop-down list as usual and press the OK button. 
+          Visual confirmation to press the OK button is provided by a balloon message that appears for a few seconds when the device is selected.
+          Please note that the Properties button will be greyed out because the driver hasn't yet been created.
           <mediaLink>
             <image placement="left" xlink:href="alpaca5"/>
           </mediaLink>
         </para>
         <para>
-          Press the OK button and the dialogue below will appear advising that Administrator level approval is required.
+          After pressing the OK button the dialogue below will appear advising that Administrator level approval is required.
+          Click the dialogue's "Do not show this message again" check box if you no longer wish to see this dialogue or the earlier balloon message. This setting can be reset through the Chooser Configuration menu if required.
           <mediaLink>
             <image placement="left" xlink:href="alpaca6"/>
           </mediaLink>
@@ -93,9 +96,9 @@
             <image placement="left" xlink:href="alpaca7"/>
           </mediaLink>
         </para>
-        <para>There is no need to change the driver’s Properties because these will already have been set, but they can be inspected and changed if you wish.</para>
+        <para>There is no need to change the driver’s Properties because these will already have been set using information from the discovered device, but they can be inspected and changed if you wish.</para>
         <para>
-          Now press the Chooser OK button to select the driver as normal.
+          Now press the Chooser OK button to select the newly created dynamic driver as normal.
           <alert class="note">
             <para>
               The created driver will be available to all ASCOM clients on this PC - there is no need to rediscover the device on every client, you just need to select the device’s dynamic COM driver from the list as shown
