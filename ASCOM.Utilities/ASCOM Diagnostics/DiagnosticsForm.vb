@@ -5049,7 +5049,7 @@ Public Class DiagnosticsForm
 
             rc = NH.GetColourBitmapPixels(100, 100, 8, FlipMode.FlipHorizontally, frameColour, True, byteArray)
             CompareInteger("VideoUtilsTests", "GetBitmapPixels Colour FlipMode.FlipHorizontally RC", rc, 0)
-            CompareLongInteger("VideoUtilsTests", "GetBitmapPixels CheckSum", CheckSumByteArray(byteArray), 26412476543)
+            CompareLongInteger("VideoUtilsTests", "GetBitmapPixels CheckSum", CheckSumByteArray(byteArray), 26407095983)
 
             rc = NH.GetColourBitmapPixels(100, 100, 8, FlipMode.FlipVertically, frameColour, True, byteArray)
             CompareInteger("VideoUtilsTests", "GetBitmapPixels Colour FlipMode.FlipVertically RC", rc, 0)
@@ -5057,7 +5057,7 @@ Public Class DiagnosticsForm
 
             rc = NH.GetColourBitmapPixels(100, 100, 8, FlipMode.FlipBoth, frameColour, True, byteArray)
             CompareInteger("VideoUtilsTests", "GetBitmapPixels Colour FlipMode.FlipBoth RC", rc, 0)
-            CompareLongInteger("VideoUtilsTests", "GetBitmapPixels CheckSum", CheckSumByteArray(byteArray), 26412496956)
+            CompareLongInteger("VideoUtilsTests", "GetBitmapPixels CheckSum", CheckSumByteArray(byteArray), 26407116396)
 
             InitBitMap(bitmap)
 
@@ -5090,19 +5090,19 @@ Public Class DiagnosticsForm
             CompareLongInteger("VideoUtilsTests", "ByteArray FlipBoth CheckSum", CheckSumByteArray(byteArray), 174994618)
 
             frameColour = NH.GetColourPixelsFromBitmap(bitmap, FlipMode.None, byteArray)
-            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipNone CheckSum", CheckSum3DFrame(frameColour), 55234894)
+            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipNone CheckSum", CheckSum3DFrame(frameColour), 36625703)
             CompareLongInteger("VideoUtilsTests", "ByteArray CheckSum", CheckSumByteArray(byteArray), 295553892)
 
             frameColour = NH.GetColourPixelsFromBitmap(bitmap, FlipMode.FlipHorizontally, byteArray)
-            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipHorizontally CheckSum", CheckSum3DFrame(frameColour), 54805394)
+            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipHorizontally CheckSum", CheckSum3DFrame(frameColour), 35246947)
             CompareLongInteger("VideoUtilsTests", "ByteArray FlipHorizontally CheckSum", CheckSumByteArray(byteArray), 295221231)
 
             frameColour = NH.GetColourPixelsFromBitmap(bitmap, FlipMode.FlipVertically, byteArray)
-            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipVertically CheckSum", CheckSum3DFrame(frameColour), 54831409)
+            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipVertically CheckSum", CheckSum3DFrame(frameColour), 35285887)
             CompareLongInteger("VideoUtilsTests", "ByteArray FlipVertically CheckSum", CheckSumByteArray(byteArray), 304432836)
 
             frameColour = NH.GetColourPixelsFromBitmap(bitmap, FlipMode.FlipBoth, byteArray)
-            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipBoth CheckSum", CheckSum3DFrame(frameColour), 53990701)
+            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipBoth CheckSum", CheckSum3DFrame(frameColour), 32973098)
             CompareLongInteger("VideoUtilsTests", "ByteArray FlipBoth CheckSum", CheckSumByteArray(byteArray), 304100175)
             frameColour = NH.GetColourPixelsFromBitmap(bitmap, FlipMode.None, byteArray)
 
@@ -5116,13 +5116,13 @@ Public Class DiagnosticsForm
             CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipBoth CheckSum", CheckSumByteArray(byteArray), 105136517648)
 
             byteArray = NH.PrepareColourBitmapForDisplay(frameColour, frameColour.GetUpperBound(0), frameColour.GetUpperBound(1), FlipMode.None, True)
-            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay None CheckSum", CheckSumByteArray(byteArray), 243107340)
+            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay None CheckSum", CheckSumByteArray(byteArray), 852184)
             byteArray = NH.PrepareColourBitmapForDisplay(frameColour, frameColour.GetUpperBound(0), frameColour.GetUpperBound(1), FlipMode.FlipHorizontally, True)
-            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipHorizontally CheckSum", CheckSumByteArray(byteArray), 243407028)
+            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipHorizontally CheckSum", CheckSumByteArray(byteArray), 852424)
             byteArray = NH.PrepareColourBitmapForDisplay(frameColour, frameColour.GetUpperBound(0), frameColour.GetUpperBound(1), FlipMode.FlipVertically, True)
-            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipVertically CheckSum", CheckSumByteArray(byteArray), 243130927)
+            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipVertically CheckSum", CheckSumByteArray(byteArray), 875771)
             byteArray = NH.PrepareColourBitmapForDisplay(frameColour, frameColour.GetUpperBound(0), frameColour.GetUpperBound(1), FlipMode.FlipBoth, True)
-            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipBoth CheckSum", CheckSumByteArray(byteArray), 243430615)
+            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipBoth CheckSum", CheckSumByteArray(byteArray), 876011)
 
         Catch ex As Exception
             LogException("VideoUtilTests", "Exception: " & ex.ToString)
