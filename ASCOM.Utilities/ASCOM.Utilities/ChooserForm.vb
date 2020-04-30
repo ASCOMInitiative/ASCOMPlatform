@@ -1348,21 +1348,21 @@ Friend Class ChooserForm
 
         ' Only consider displaying the tooltip if it has been instantiated
         If Not createAlpacaDeviceToolTip Is Nothing Then
+
             ' Only display the tooltip if Alpaca discovery is enabled and the Alpaca dialogues have NOT been suppressed
             If AlpacaEnabled And Not GetBool(SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE, SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE_DEFAULT) Then
 
-                ' Only display the tooltip if a device has been selected
-                If Not CmbDriverSelector.SelectedItem Is Nothing Then
-                    selectedItem = CType(CmbDriverSelector.SelectedItem, Generic.KeyValuePair(Of ChooserItem, String))
+                ' The tooltip code must be executed by the UI thread so invoke this if required
+                If BtnOK.InvokeRequired Then
+                    TL.LogMessage("DisplayAlpacaDeviceToolTip", $"Invoke required on thread {Thread.CurrentThread.ManagedThreadId}")
+                    BtnOK.Invoke(displayCreateAlpacDeviceTooltip)
+                Else
+                    ' Only display the tooltip if a device has been selected
+                    If Not CmbDriverSelector.SelectedItem Is Nothing Then
+                        selectedItem = CType(CmbDriverSelector.SelectedItem, Generic.KeyValuePair(Of ChooserItem, String))
 
-                    ' Only display the tooltip if the an Alpaca driver has been selected
-                    If Not selectedItem.Key.IsComDriver Then
-
-                        ' The tooltip code must be executed by the UI thread so invoke this if required
-                        If BtnOK.InvokeRequired Then
-                            TL.LogMessage("DisplayAlpacaDeviceToolTip", $"Invoke required on thread {Thread.CurrentThread.ManagedThreadId}")
-                            BtnOK.Invoke(displayCreateAlpacDeviceTooltip)
-                        Else
+                        ' Only display the tooltip if the an Alpaca driver has been selected
+                        If Not selectedItem.Key.IsComDriver Then
 
                             createAlpacaDeviceToolTip.RemoveAll()
 
