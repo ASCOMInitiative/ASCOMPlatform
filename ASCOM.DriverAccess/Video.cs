@@ -24,8 +24,9 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class Video : AscomDriver, IVideo
     {
-        #region Video constructors
         private MemberFactory memberFactory;
+
+        #region Video constructors
 
         /// <summary>
         /// Creates a Video object with the given Prog ID
@@ -40,7 +41,7 @@ namespace ASCOM.DriverAccess
 
         #region Convenience Members
         /// <summary>
-        /// Brings up the ASCOM Chooser Dialog to choose a Video device
+        /// Brings up the ASCOM Chooser Dialogue to choose a Video device
         /// </summary>
         /// <param name="videoId">Video Prog ID for default or null for None</param>
         /// <returns>Prog ID for chosen Video or null for none</returns>
@@ -94,7 +95,7 @@ namespace ASCOM.DriverAccess
         /// <remarks>
         /// Analogue cameras run in one of the two fixed frame rates - 25fps for PAL video and 29.97fps for NTSC video. 
         /// Digital cameras usually can run at a variable frame rate. This value is for information purposes only and cannot be set. The FrameRate has the same value during the entire operation of the device. 
-        /// Changing the <see cref="P:ASCOM.DeviceInterface.IVideo.IntegrationRate"/> property may change the actual variable frame rate but cannot changethe return value of this property.
+        /// Changing the <see cref="P:ASCOM.DeviceInterface.IVideo.IntegrationRate"/> property may change the actual variable frame rate but cannot change the return value of this property.
         /// </remarks>
         public VideoCameraFrameRate FrameRate
         {
@@ -107,7 +108,7 @@ namespace ASCOM.DriverAccess
         /// <remarks>
         /// Digital and integrating analogue video cameras allow the effective exposure of a frame to be changed. If the camera supports setting the exposure directly i.e. 2.153 sec then the driver must only
         /// return a range of useful supported exposures. For many video cameras the supported exposures (integration rates) increase by a factor of 2 from a base exposure e.g. 1, 2, 4, 8, 16 sec or 0.04, 0.08, 0.16, 0.32, 0.64, 1.28, 2.56, 5.12, 10.24 sec.
-        /// If the camers supports only one exposure that cannot be changed (such as all non integrating PAL or NTSC video cameras) then this property must throw <see cref="PropertyNotImplementedException"/>.
+        /// If the camera supports only one exposure that cannot be changed (such as all non integrating PAL or NTSC video cameras) then this property must throw <see cref="PropertyNotImplementedException"/>.
         /// </remarks>
         /// <value>The list of supported integration rates in seconds.</value>
         /// <exception cref="NotConnectedException">Must throw exception if data unavailable.</exception>
@@ -155,10 +156,10 @@ namespace ASCOM.DriverAccess
         ///	<returns>The name of sensor used within the camera.</returns>
         ///	<exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
         ///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-        ///	<remarks>Returns the name (datasheet part number) of the sensor, e.g. ICX285AL.  The format is to be exactly as shown on 
-        ///	manufacturer data sheet, subject to the following rules. All letter shall be uppercase.  Spaces shall not be included.
-        ///	<para>Any extra suffixes that define region codes, package types, temperature range, coatings, grading, color/monochrome, 
-        ///	etc. shall not be included. For color sensors, if a suffix differentiates different Bayer matrix encodings, it shall be 
+        ///	<remarks>Returns the name (data-sheet part number) of the sensor, e.g. ICX285AL.  The format is to be exactly as shown on 
+        ///	manufacturer data sheet, subject to the following rules. All letter shall be upper-case.  Spaces shall not be included.
+        ///	<para>Any extra suffixes that define region codes, package types, temperature range, coatings, grading, colour/monochrome, 
+        ///	etc. shall not be included. For colour sensors, if a suffix differentiates different Bayer matrix encodings, it shall be 
         ///	included.</para>
         ///	<para>Examples:</para>
         ///	<list type="bullet">
@@ -166,9 +167,9 @@ namespace ASCOM.DriverAccess
         ///		<item><description>KAF-8300-AXC-CD-AA shall be reported as KAF-8300</description></item>
         ///	</list>
         ///	<para><b>Note:</b></para>
-        ///	<para>The most common usage of this property is to select approximate color balance parameters to be applied to 
-        ///	the Bayer matrix of one-shot color sensors.  Application authors should assume that an appropriate IR cutoff filter is 
-        ///	in place for color sensors.</para>
+        ///	<para>The most common usage of this property is to select approximate colour balance parameters to be applied to 
+        ///	the Bayer matrix of one-shot colour sensors.  Application authors should assume that an appropriate IR cut-off filter is 
+        ///	in place for colour sensors.</para>
         ///	<para>It is recommended that this function be called only after a <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> is established with 
         ///	the camera hardware, to ensure that the driver is aware of the capabilities of the specific camera model.</para>
         ///	</remarks>
@@ -178,7 +179,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        ///Type of colour information returned by the the camera sensor.
+        ///Type of colour information returned by the camera sensor.
         ///</summary>
         ///   <value></value>
         ///   <returns>The <see cref="DeviceInterface.SensorType"/> enum value of the camera sensor</returns>
@@ -214,7 +215,7 @@ namespace ASCOM.DriverAccess
         ///                   <td style="padding-right: 10px; padding-left: 10px; &#xA; border-right-color: #000000; border-right-style: Solid; &#xA; border-bottom-color: #000000; border-bottom-style: Solid; &#xA; border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
         ///Colour</td>
         ///                   <td style="padding-right: 10px; padding-left: 10px; &#xA; border-right-color: #000000; border-right-style: Solid; &#xA; border-bottom-color: #000000; border-bottom-style: Solid; &#xA; border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
-        ///Camera produces color image directly, requiring not Bayer decoding. The monochome pixels for the R, G and B channels are returned in this order in the <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/>.</td>
+        ///Camera produces colour image directly, requiring not Bayer decoding. The monochrome pixels for the R, G and B channels are returned in this order in the <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/>.</td>
         ///               </tr>
         ///               <tr>
         ///                   <td style="padding-right: 10px; padding-left: 10px; &#xA; border-left-color: #000000; border-left-style: Solid; &#xA; border-right-color: #000000; border-right-style: Solid; &#xA; border-bottom-color: #000000; border-bottom-style: Solid; &#xA; border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
@@ -526,7 +527,7 @@ namespace ASCOM.DriverAccess
         ///	<value>The size of the video frame buffer. </value>
         ///	<remarks><p style="color:red"><b>Must be implemented</b></p> When retrieving video frames using the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrame" /> property 
         /// the driver may use a buffer to queue the frames waiting to be read by the client. This property returns the size of the buffer in frames or 
-        /// if no buffering is supported then the value of less than 2 should be returned. The size of the buffer can be controlled by the end user from the driver setup dialog. 
+        /// if no buffering is supported then the value of less than 2 should be returned. The size of the buffer can be controlled by the end user from the driver setup dialogue. 
         ///	</remarks>
         public int VideoFramesBufferSize
         {
@@ -569,7 +570,7 @@ namespace ASCOM.DriverAccess
         ///		<item><description>2      CameraError     Camera error condition serious enough to prevent further operations (connection fail, etc.).</description></item>
         ///	</list>
         /// <para>CameraIdle and CameraBusy are optional states. Free running cameras cannot be stopped and don't have a CameraIdle state. When those cameras are powered they immediately enter CameraRunning state. 
-        /// Some digital cameras or vdeo systems may suport operations that take longer to complete. Whlie those longer operations are running the camera will remain in the state it was before the operation started.</para>
+        /// Some digital cameras or video systems may support operations that take longer to complete. While those longer operations are running the camera will remain in the state it was before the operation started.</para>
         /// <para>The video camera state diagram is shown below: 
         /// 
         /// <img src="../media/VideoCamera State Diagram.png"/></para>
@@ -760,17 +761,17 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Displays a device properties configuration dialog that allows the configuration of specialized settings.
+        /// Displays a device properties configuration dialogue that allows the configuration of specialized settings.
         /// </summary>
         ///	<exception cref="NotConnectedException">Must throw an exception if the camera is not connected.</exception>
         ///	<exception cref="MethodNotImplementedException">Must throw an exception if the method is not supported.</exception>
         /// <remarks>
-        /// <para>The dialog could also provide buttons for cameras that can be controlled via 'on screen display' menues and a set of navigation buttons such as Up, Down, Left, Right and Enter. 
-        /// This dialog is not intended to be used in unattended mode but can give greater control over video cameras that provide special features. The dialog may also allow 
+        /// <para>The dialogue could also provide buttons for cameras that can be controlled via 'on screen display' menus and a set of navigation buttons such as Up, Down, Left, Right and Enter. 
+        /// This dialogue is not intended to be used in unattended mode but can give greater control over video cameras that provide special features. The dialogue may also allow 
         /// changing standard <see cref="DeviceInterface.IVideo"/> interface settings such as Gamma and Gain. If a client software 
         /// displays any <see cref="DeviceInterface.IVideo"/> interface settings then it should take care to keep in sync the values changed by this method and those changed directly via the interface.</para>
-        /// <para>To support automated and unattended control over the specialized device settings or functions available on this dialog the driver should also allow their control via <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedActions"/>. 
-        /// This dialog is meant to be used by the applications to allow the user to adjust specialized device settings when those applications don't specifically use the specialized settings in their functionality.</para>
+        /// <para>To support automated and unattended control over the specialized device settings or functions available on this dialogue the driver should also allow their control via <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedActions"/>. 
+        /// This dialogue is meant to be used by the applications to allow the user to adjust specialized device settings when those applications don't specifically use the specialized settings in their functionality.</para>
         /// <para>Examples for specialized settings that could be supported are white balance and sharpness.</para>
         /// </remarks>
         public void ConfigureDeviceProperties()

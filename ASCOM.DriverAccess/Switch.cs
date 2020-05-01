@@ -15,7 +15,7 @@ namespace ASCOM.DriverAccess
     /// <para>The Switch interface is used to define a number of 'switch devices'. A switch device can be used to control something, such as a power switch
     /// or may be used to sense the state of something, such as a limit switch.</para>
     /// <para>This SwitchV2 interface is an extension of the original Switch interface.  The changes allow devices to have more than two states and
-    /// to distinguish between devices that are writable and those that are read only.</para>
+    /// to distinguish between devices that are writeable and those that are read only.</para>
     /// <para><b>Compatibility between Switch and SwitchV2 interfaces:</b></para>
     /// <list type="bullet"><item>Switch devices that implemented the original Switch interface and
     /// client applications that use the original interface will still work together.</item>
@@ -60,7 +60,7 @@ namespace ASCOM.DriverAccess
 
         #region Convenience Members
         /// <summary>
-        /// Brings up the ASCOM Chooser Dialog to choose a Switch
+        /// Brings up the ASCOM Chooser Dialogue to choose a Switch
         /// </summary>
         /// <param name="switchId">FilterWheel Prog ID for default or null for None</param>
         /// <returns>Prog ID for chosen Switch or null for none</returns>
@@ -164,7 +164,7 @@ namespace ASCOM.DriverAccess
         /// the state from some hardware. Once the state has been set the last state set should be returned.</exception>
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
-        /// <para>All devices must implement this. A multi-state device will return true if the device is at the maximum value, false if the value is at the minumum
+        /// <para>All devices must implement this. A multi-state device will return true if the device is at the maximum value, false if the value is at the minimum
         /// and either true or false as specified by the driver developer for intermediate values.</para>
         /// </remarks>
         public bool GetSwitch(short id)

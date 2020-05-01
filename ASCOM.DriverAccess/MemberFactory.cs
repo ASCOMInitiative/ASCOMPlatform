@@ -32,9 +32,8 @@ namespace ASCOM.DriverAccess
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
         internal MemberFactory(string progId, TraceLogger ascomDriverTraceLogger)
         {
-            //_tl = new TraceLogger("", "MemberFactory");
-            //_tl.Enabled = RegistryCommonCode.GetBool(GlobalConstants.DRIVERACCESS_TRACE, GlobalConstants.DRIVERACCESS_TRACE_DEFAULT);
-            TL = ascomDriverTraceLogger; // Save the supplied TraceLogger object for use in method calls
+            // Save the supplied TraceLogger object for use in method calls
+            TL = ascomDriverTraceLogger;
             TL.LogMessage("ProgID", progId);
 
             _strProgId = progId;
@@ -204,7 +203,7 @@ namespace ASCOM.DriverAccess
         /// </summary> 
         /// <param name="memberCode">1-GetProperty, 2-SetProperty, 3-Method</param>
         /// <param name="memberName">The member name to call as a string</param>
-        /// <param name="parameterTypes">Array of paramerter types in order</param> 
+        /// <param name="parameterTypes">Array of parameter types in order</param> 
         /// <param name="parms">Array of parameters in order</param>
         /// <exception cref="PropertyNotImplementedException"></exception>
         /// <exception cref="MethodNotImplementedException"></exception>
@@ -295,7 +294,7 @@ namespace ASCOM.DriverAccess
                         }
                     }
 
-                    //evertyhing failed so throw an exception
+                    //everything failed so throw an exception
                     TL.LogMessage(memberName + " Get", "  The object is neither a .NET object nor a COM object!");
                     throw new PropertyNotImplementedException(_strProgId + " " + memberName, false);
 
@@ -380,7 +379,7 @@ namespace ASCOM.DriverAccess
                         }
                     }
 
-                    //evertyhing failed so throw an exception
+                    //everything failed so throw an exception
                     TL.LogMessage("PropertySet", "  The object is neither a .NET object nor a COM object!");
                     throw new PropertyNotImplementedException(_strProgId + " " + memberName, true);
 
@@ -515,7 +514,7 @@ namespace ASCOM.DriverAccess
             string value;
             string range;
 
-            // Deal with the possibilty that DriverAccess is being used in both driver and client so remove the outer 
+            // Deal with the possibility that DriverAccess is being used in both driver and client so remove the outer 
             // DriverAccessCOMException exception if present
             if (e.InnerException is DriverAccessCOMException)
             {
@@ -528,7 +527,7 @@ namespace ASCOM.DriverAccess
                 }
                 catch (Exception ex)
                 {
-                    // Report buyt ignore this error, catch it later in CheckDotNetExceptions
+                    // Report but ignore this error, catch it later in CheckDotNetExceptions
                     TL.LogMessageCrLf(memberName, "  *** Exception arose when accessing InnerException.InnerException: " + ex.ToString());
                 }
 
