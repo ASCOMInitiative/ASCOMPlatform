@@ -11,9 +11,9 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class Camera : AscomDriver, ICameraV2
     {
-        #region Camera constructors
         private readonly MemberFactory _memberFactory;
-        private readonly short _driverInterfaceVersion;
+
+        #region Camera constructors
 
         /// <summary>
         /// Creates an instance of the camera class.
@@ -23,14 +23,6 @@ namespace ASCOM.DriverAccess
             : base(cameraId)
         {
             _memberFactory = base.MemberFactory;
-            try
-            {
-                _driverInterfaceVersion = InterfaceVersion;
-            }
-            catch (PropertyNotImplementedException)
-            {
-                _driverInterfaceVersion = 1;
-            }
         }
         #endregion
 
@@ -43,7 +35,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <param name="cameraId">Optional DriverID of the previously selected camera that is to be the pre-selected camera in the list.</param>
         /// <returns>
-        /// The DriverID of the user selected camera. Null if the dialog is canceled.
+        /// The DriverID of the user selected camera. Null if the dialogue is cancelled.
         /// </returns>
         public static string Choose(string cameraId)
         {
@@ -200,8 +192,8 @@ namespace ASCOM.DriverAccess
         /// Returns a flag indicating whether this camera supports pulse guiding
         /// </summary>
         /// <remarks>
-        /// Returns True if the camera can send autoguider pulses to the telescope mount; False if not.  
-        /// Note: this does not provide any indication of whether the autoguider cable is actually connected.
+        /// Returns True if the camera can send auto guider pulses to the telescope mount; False if not.  
+        /// Note: this does not provide any indication of whether the auto guider cable is actually connected.
         /// </remarks>
         /// <value>
         /// 	<c>true</c> if this instance can pulse guide; otherwise, <c>false</c>.
@@ -212,7 +204,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Returns a flag indicatig whether this camera supports setting the CCD temperature
+        /// Returns a flag indicating whether this camera supports setting the CCD temperature
         /// </summary>
         /// <remarks>
         /// If True, the camera's cooler setpoint can be adjusted. If False, the camera
@@ -337,8 +329,8 @@ namespace ASCOM.DriverAccess
         /// The application must inspect the Safearray parameters to determine the dimensions. 
         /// <para>Note: if <see cref="NumX" /> or <see cref="NumY" /> is changed after a call to <see cref="StartExposure">StartExposure</see> it will 
         /// have no effect on the size of this array. This is the preferred method for programs (not scripts) to download 
-        /// iamges since it requires much less memory.</para>
-        /// <para>For color or multispectral cameras, will produce an array of  <see cref="NumX" /> * <see cref="NumY" /> *
+        /// images since it requires much less memory.</para>
+        /// <para>For colour or multispectral cameras, will produce an array of  <see cref="NumX" /> * <see cref="NumY" /> *
         /// NumPlanes.  If the application cannot handle multispectral images, it should use just the first plane.</para>
         /// </remarks>
         /// <value>The image array.</value>
@@ -358,7 +350,7 @@ namespace ASCOM.DriverAccess
         /// should only be used from scripts due to the extremely high memory utilization on
         /// large image arrays (26 bytes per pixel). Pixels values should be in Short, int,
         /// or Double format.
-        /// <para>For color or multispectral cameras, will produce an array of <see cref="NumX" /> * <see cref="NumY" /> *
+        /// <para>For colour or multispectral cameras, will produce an array of <see cref="NumX" /> * <see cref="NumY" /> *
         /// NumPlanes.  If the application cannot handle multispectral images, it should use
         /// just the first plane.</para>
         /// </remarks>
@@ -370,7 +362,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Returns a flag indicating whether the image is ready to be downloaded fom the camera
+        /// Returns a flag indicating whether the image is ready to be downloaded from the camera
         /// </summary>
         /// <remarks>
         /// If True, there is an image from the camera available. If False, no image
@@ -513,7 +505,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Activates the Camera's mount control sytem to instruct the mount to move in a particular direction for a given period of time
+        /// Activates the Camera's mount control system to instruct the mount to move in a particular direction for a given period of time
         /// </summary>
         /// <remarks>
         /// This method returns only after the move has completed.
@@ -545,7 +537,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <remarks>
         /// <para>The driver should throw an <see cref="InvalidValueException" /> if an attempt is made to set <see cref="SetCCDTemperature" /> 
-        /// outside the valid range for the camera. As an assitance to driver authors, to protect equipment and prevent harm to individuals, 
+        /// outside the valid range for the camera. As an assistance to driver authors, to protect equipment and prevent harm to individuals, 
         /// Conform will report an issue if it is possible to set <see cref="SetCCDTemperature" /> below -280C or above +100C.</para>
         /// <b>Note:</b>  Camera hardware and/or driver should perform cooler ramping, to prevent
         /// thermal shock and potential damage to the CCD array or cooler stack.
@@ -553,7 +545,7 @@ namespace ASCOM.DriverAccess
         /// <value>The set CCD temperature.</value>
         /// <exception cref="DriverException">Must throw exception if command not successful.</exception>
         /// <exception cref="InvalidValueException">Must throw an InvalidValueException if an attempt is made to set a value is outside the 
-        /// camera's valid termperature setpoint range.</exception>
+        /// camera's valid temperature setpoint range.</exception>
         /// <exception cref="PropertyNotImplementedException">Must throw exception if <see cref="CanSetCCDTemperature" /> is False.</exception>
         public double SetCCDTemperature
         {
@@ -674,7 +666,7 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                if (_driverInterfaceVersion > 1)
+                if (this.DriverInterfaceVersion > 1)
                 {
                     return Convert.ToBoolean(_memberFactory.CallMember(1, "CanFastReadout", new Type[] { }, new object[] { }));
                 }
@@ -700,7 +692,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Minimium exposure time, Interface Version 2 only
+        /// Minimum exposure time, Interface Version 2 only
         /// </summary>
         /// <returns>The minimum exposure time, in seconds, that the camera supports through <see cref="StartExposure">StartExposure</see></returns>
         /// <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
@@ -832,7 +824,7 @@ namespace ASCOM.DriverAccess
         /// Minimum <see cref="Gain" /> value of that this camera supports
         /// </summary>
         /// <returns>The minimum gain value that this camera supports</returns>
-        /// <exception cref="PropertyNotImplementedException">When the <see cref="Gain"/> property is is not implemented or is operating in <b>GAINS INDEX</b> mode.</exception>
+        /// <exception cref="PropertyNotImplementedException">When the <see cref="Gain"/> property is not implemented or is operating in <b>GAINS INDEX</b> mode.</exception>
         /// <exception cref="NotConnectedException">When the information is not available. (Some drivers may require an active connection in order to retrieve necessary information from the camera.)</exception>
         /// <remarks><p style="color:red"><b>This is an optional property and can throw a PropertyNotImplementedException.</b></p>
         /// When <see cref="Gain"/> is operating in <b><see cref="Gain">GAIN VALUE</see></b> mode:
@@ -854,7 +846,7 @@ namespace ASCOM.DriverAccess
         /// <p style="color:blue"><b>This is an existing ICameraV2 property and its interface definition has not been changed. The Remarks section has been clarified to describe the two gain management modes.</b></p>
         /// List of Gain names supported by the camera
         /// </summary>
-        /// <returns>Thed list of supported gain names as an ArrayList of strings</returns>
+        /// <returns>The list of supported gain names as an ArrayList of strings</returns>
         /// <exception cref="PropertyNotImplementedException">When the <see cref="Gain"/> property is not implemented or is operating in <b>GAIN VALUE</b> mode.</exception>
         /// <exception cref="NotConnectedException">When the information is not available. (Some drivers may require an active connection in order to retrieve necessary information from the camera.)</exception>
         /// <remarks><p style="color:red"><b>This is an optional property and can throw a PropertyNotImplementedException.</b></p>
@@ -875,7 +867,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Percent conpleted, Interface Version 2 only
+        /// Percent completed, Interface Version 2 only
         /// </summary>
         /// <returns>A value between 0 and 100% indicating the completeness of this operation</returns>
         /// <exception cref="InvalidOperationException">Thrown when it is inappropriate to call <see cref="PercentCompleted" /></exception>
@@ -954,10 +946,10 @@ namespace ASCOM.DriverAccess
         /// <returns>The name of sensor used within the camera</returns>
         /// <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
         /// active <see cref="AscomDriver.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-        /// <remarks>Returns the name (datasheet part number) of the sensor, e.g. ICX285AL.  The format is to be exactly as shown on 
-        /// manufacturer data sheet, subject to the following rules. All letter shall be uppercase.  Spaces shall not be included.
-        /// <para>Any extra suffixes that define region codes, package types, temperature range, coatings, grading, color/monochrome, 
-        /// etc. shall not be included. For color sensors, if a suffix differentiates different Bayer matrix encodings, it shall be 
+        /// <remarks>Returns the name (data sheet part number) of the sensor, e.g. ICX285AL.  The format is to be exactly as shown on 
+        /// manufacturer data sheet, subject to the following rules. All letter shall be upper case.  Spaces shall not be included.
+        /// <para>Any extra suffixes that define region codes, package types, temperature range, coatings, grading, colour/monochrome, 
+        /// etc. shall not be included. For colour sensors, if a suffix differentiates different Bayer matrix encodings, it shall be 
         /// included.</para>
         /// <para>Examples:</para>
         /// <list type="bullet">
@@ -965,9 +957,9 @@ namespace ASCOM.DriverAccess
         /// <item><description>KAF-8300-AXC-CD-AA shall be reported as KAF-8300</description></item>
         /// </list>
         /// <para><b>Note:</b></para>
-        /// <para>The most common usage of this property is to select approximate color balance parameters to be applied to 
-        /// the Bayer matrix of one-shot color sensors.  Application authors should assume that an appropriate IR cutoff filter is 
-        /// in place for color sensors.</para>
+        /// <para>The most common usage of this property is to select approximate colour balance parameters to be applied to 
+        /// the Bayer matrix of one-shot colour sensors.  Application authors should assume that an appropriate IR cut-off filter is 
+        /// in place for colour sensors.</para>
         /// <para>It is recommended that this function be called only after a <see cref="AscomDriver.Connected">connection</see> is established with 
         /// the camera hardware, to ensure that the driver is aware of the capabilities of the specific camera model.</para>
         /// <para>This is only available for the Camera Interface Version 2</para>
@@ -978,7 +970,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Type of colour information returned by the the camera sensor, Interface Version 2 only
+        /// Type of colour information returned by the camera sensor, Interface Version 2 only
         /// </summary>
         /// <value></value>
         /// <returns>The <see cref="ASCOM.DeviceInterface.SensorType" /> enum value of the camera sensor</returns>
@@ -1729,7 +1721,7 @@ namespace ASCOM.DriverAccess
         /// Minimum <see cref="Offset" /> value of that this camera supports
         /// </summary>
         /// <returns>The minimum offset value that this camera supports</returns>
-        /// <exception cref="PropertyNotImplementedException">When the <see cref="Offset"/> property is is not implemented or is operating in <b>OFFSETS INDEX</b> mode.</exception>
+        /// <exception cref="PropertyNotImplementedException">When the <see cref="Offset"/> property is not implemented or is operating in <b>OFFSETS INDEX</b> mode.</exception>
         /// <exception cref="NotConnectedException">When the information is not available. (Some drivers may require an active connection in order to retrieve necessary information from the camera.)</exception>
         /// <remarks><p style="color:red"><b>This is an optional property and can throw a PropertyNotImplementedException.</b></p>
         /// When <see cref="Offset"/> is operating in <b><see cref="Offset">OFFSET VALUE</see></b> mode:
@@ -1751,7 +1743,7 @@ namespace ASCOM.DriverAccess
         /// <p style="color:limegreen"><b>This is a proposed ICameraV3 property.</b></p>
         /// List of Offset names supported by the camera
         /// </summary>
-        /// <returns>Thed list of supported offset names as an ArrayList of strings</returns>
+        /// <returns>The list of supported offset names as an ArrayList of strings</returns>
         /// <exception cref="PropertyNotImplementedException">When the <see cref="Offset"/> property is not implemented or is operating in <b>OFFSET VALUE</b> mode.</exception>
         /// <exception cref="NotConnectedException">When the information is not available. (Some drivers may require an active connection in order to retrieve necessary information from the camera.)</exception>
         /// <remarks><p style="color:red"><b>This is an optional property and can throw a PropertyNotImplementedException.</b></p>
