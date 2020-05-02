@@ -58,7 +58,7 @@
 	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" --><div class="article">
-	<h3>The ASCOM Standards Process (rev. March 2020)</h3>
+	<h3>The ASCOM Standards Process (rev. April 2020)</h3>
 	<p>The ASCOM standards process is  <i>informal </i> since relatively few people are involved and the astronomy community overall is relatively small. By avoiding the stilted and often political &quot;standards body&quot; approach, standards can be proposed (<a href="#proposals">see below</a>), discussed, implemented, tested, refined, and accepted by vote more quickly and with a higher probability of success. See the <a href="InterfacePrinciple.htm" target="_new">ASCOM Interface Principle</a> and <a href="#philosophy">Philosophical Issues</a> below. Loosely stated, the process is:</p>
 	<ol>
 		<li>A <span class="underline">single author</span> publishes  a draft interface specification. Ideally, this will be derived from an interface already in use and not designed in a vacuum.  See <a href="#philosophy">Philosophical Issues</a> below.</li>
@@ -79,7 +79,7 @@
 	<p>Another important aspect of the standards process is that the author is  responsible for brokering the interface agreement, a difficult task requiring sensitivity and above all the strength to reject &quot;it would be nice if&quot; suggestions which have no clear use-case. </p>
 	</div>
 	
-	<div class="article">
+<!--	<div class="article">
 		<a name="proposals" id="proposals"></a>
 		<h3>How to propose a new interface or change an existing interface</h3>
 		<p>Please start a new thread on the <a href="https://ascomtalk.groups.io/g/Developer" target="_new">ASCOM Developer forum</a> (not the general user help forum) providing:</p>
@@ -90,7 +90,7 @@
 		The Syntax, Exceptions and Remarks sections are just examples of the type of content required, replicating the Help presentation format precisely isn't required.</li>
 		</ol>
 		
-		<p>Here are some .NET best practices to ensure that the interface is compatible with COM and .NET, and for ease of definitiion for Alpaca.</p>
+		<p>Here are some .NET best practices to ensure that the interface is compatible with COM and .NET, and for ease of definition for Alpaca.</p>
 		<ul>
 			<li>Use ArrayList if you need to return a collection of values, as COM doesn't support .NET generic lists. The ArrayList can contain simple types such as numbers or strings. While the ArrayList can also contain objects, we  recommend avoiding lists of classes, if possible, to reduce implementation complexity for client and driver authors.</li>
 			<li>To make the method "optional" state that it can throw a PropertyNotImplementedException or MethodNotImplementedException as appropriate.</li>
@@ -98,7 +98,7 @@
 			<li>Don't use "optional" parameters that have implicit default values.</li>
 			<li>Try to avoid returning structures / classes if you can, this can be done but makes life a lot more difficult for implementers.</li>
 		</ul>
-	</div>
+	</div>-->
 
 
 	<!-- #EndEditable --></div>
