@@ -355,6 +355,31 @@ namespace Unit_Tests.Telescope
 		}
 
 		[TestMethod]
+		public void BuildJogRatesTests()
+		{
+			// First test symmetric rates (same rates for both axes).
+
+			_vm.HasAsymmetricJogRates = true;
+			_vm.Capabilities = InitializeFullCapabilities();
+			Assert.AreEqual( _vm.Capabilities.PrimaryAxisRates.Length, _vm.Capabilities.SecondaryAxisRates.Length );
+
+			_prVm.Invoke( "BuildJogRatesLists" );
+			Assert.IsFalse( _vm.HasAsymmetricJogRates );
+			Assert.IsNull( _vm.SecondaryJogRates );
+			Assert.IsNull( _vm.SelectedSecondaryJogRate );
+
+			// Now test asymmetric rates.
+
+			_vm.Capabilities = InitializeAsymmetricCapabilities();
+			Assert.AreEqual( _vm.Capabilities.PrimaryAxisRates.Length, _vm.Capabilities.SecondaryAxisRates.Length );
+
+			_prVm.Invoke( "BuildJogRatesLists" );
+			Assert.IsTrue( _vm.HasAsymmetricJogRates );
+			Assert.IsNotNull( _vm.SecondaryJogRates );
+			Assert.IsNotNull( _vm.SelectedSecondaryJogRate );
+		}
+
+		[TestMethod]
 		public void JogMoveAxis()
 		{
 			double moveRate = 1.0;
@@ -571,6 +596,18 @@ namespace Unit_Tests.Telescope
 			TelescopeCapabilities capabilities = TelescopeCapabilities.GetFullCapabilities();
 
 			AxisRates.ResetRates();
+			capabilities.PrimaryAxisRates = AxisRatesToArray( new AxisRates( TelescopeAxes.axisPrimary ) );
+			capabilities.SecondaryAxisRates = AxisRatesToArray( new AxisRates( TelescopeAxes.axisSecondary ) );
+			capabilities.TertiaryAxisRates = AxisRatesToArray( new AxisRates( TelescopeAxes.axisTertiary ) );
+
+			return capabilities;
+		}
+
+		private TelescopeCapabilities InitializeAsymmetricCapabilities()
+		{
+			TelescopeCapabilities capabilities = TelescopeCapabilities.GetFullCapabilities();
+
+			AxisRates.SetAsymmetricRates();
 			capabilities.PrimaryAxisRates = AxisRatesToArray( new AxisRates( TelescopeAxes.axisPrimary ) );
 			capabilities.SecondaryAxisRates = AxisRatesToArray( new AxisRates( TelescopeAxes.axisSecondary ) );
 			capabilities.TertiaryAxisRates = AxisRatesToArray( new AxisRates( TelescopeAxes.axisTertiary ) );

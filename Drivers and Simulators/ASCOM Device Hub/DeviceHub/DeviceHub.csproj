@@ -82,6 +82,7 @@
     <Compile Include="Business Object Classes\Message Types\DomeSlavedChangedMessage.cs" />
     <Compile Include="Business Object Classes\Value Converters\BooleanOnOffConverter.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\TelescopeRates.cs" />
+    <Compile Include="Business Object Classes\Value Converters\MultiBooleanVisibilityConverter.cs" />
     <Compile Include="View Classes\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>

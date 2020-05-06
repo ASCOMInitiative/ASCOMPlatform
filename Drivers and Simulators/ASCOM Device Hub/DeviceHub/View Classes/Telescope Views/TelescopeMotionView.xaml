@@ -18,6 +18,7 @@
 		<local:BooleanToConnectStringConverter x:Key="BoolConnectConverter" />
 		<local:SideOfPierStringConverter x:Key="SideOfPierConverter" />
 		<local:HourAngleValueConverter x:Key="HourAngleValueConverter" />
+		<local:MultiBooleanVisibilityConverter x:Key="MultiBoolVis" />
 
 		<Style x:Key="StateLabel" TargetType="{x:Type Label}">
 			<Setter Property="Margin" Value="0" />
@@ -155,7 +156,7 @@
 			</Button>
 		</StackPanel>
         
-		<Grid Grid.Row="1" Grid.Column="1" Margin="4,12,4,4" HorizontalAlignment="Center" VerticalAlignment="Top">
+		<Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Margin="4,12,4,4" HorizontalAlignment="Center" VerticalAlignment="Top">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
@@ -185,15 +186,49 @@
 			</StackPanel>
             
             <!-- Motion Rate/Amount -->
-            
-			<StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal" Width="Auto" Height="Auto" Margin="0,4"
-									Visibility="{Binding IsVariableJog, Converter={StaticResource BoolVisConverter}}" >
+			
+			<StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal" Width="Auto" Height="Auto" Margin="0,4">
+				<StackPanel.Visibility>
+					<MultiBinding Converter="{StaticResource MultiBoolVis}" ConverterParameter="true|false">
+						<Binding Path="IsVariableJog"  />
+						<Binding Path="HasAsymmetricJogRates" />
+					</MultiBinding>
+				</StackPanel.Visibility>
 				<Label Content="Rate:" HorizontalAlignment="Left" VerticalAlignment="Center" 
 								Margin="0,2" Padding="4,0" Foreground="{DynamicResource NormalTextBrush}" />
 				<ComboBox Height="20" Width="84" Margin="0,4,0,0" IsSynchronizedWithCurrentItem="True" DisplayMemberPath="Name"								
 								ItemsSource="{Binding JogRates}" SelectedItem="{Binding SelectedJogRate}" 
 								IsEnabled="{Binding CanStartMoveTelescope}" />
 			</StackPanel>
+
+			<StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Vertical" Width="Auto" Height="Auto" Margin="0,4">
+				<StackPanel.Visibility>
+					<MultiBinding Converter="{StaticResource MultiBoolVis}" ConverterParameter="true|true">
+						<Binding Path="IsVariableJog"  />
+						<Binding Path="HasAsymmetricJogRates" />
+					</MultiBinding>
+				</StackPanel.Visibility>
+				<StackPanel Orientation="Horizontal" Width="Auto" Height="Auto" Margin="0">
+					<Label Content="RA/Az Axis Rate:" HorizontalAlignment="Left" VerticalAlignment="Center" 
+								Margin="0,2" Padding="4,0" Foreground="{DynamicResource NormalTextBrush}" />
+					<ComboBox Height="20" Width="84" Margin="0,4,0,0" IsSynchronizedWithCurrentItem="True" DisplayMemberPath="Name"								
+								ItemsSource="{Binding JogRates}" SelectedItem="{Binding SelectedJogRate}" 
+								IsEnabled="{Binding CanStartMoveTelescope}" />
+				</StackPanel>
+				<StackPanel Orientation="Horizontal" Width="Auto" Height="Auto" Margin="0">
+					<Label Content="DEC/Alt Axis Rate:" HorizontalAlignment="Left" VerticalAlignment="Center" 
+								Margin="0,2" Padding="4,0" Foreground="{DynamicResource NormalTextBrush}" FontSize="11" />
+					<ComboBox Height="20" Width="84" Margin="0,4,0,0" IsSynchronizedWithCurrentItem="True" DisplayMemberPath="Name"								
+								ItemsSource="{Binding SecondaryJogRates}" SelectedItem="{Binding SelectedSecondaryJogRate}" 
+								IsEnabled="{Binding CanStartMoveTelescope}" />
+				</StackPanel>
+
+			</StackPanel>
+
+			
+			
+			
+			
 			<StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal" Width="Auto" Height="Auto" Margin="0,4"
 									Visibility="{Binding IsVariableJog, Converter={StaticResource NegatedBooleanToVisibilityConverter}}" >
 				<Label Content="Amount:" HorizontalAlignment="Left" VerticalAlignment="Center" 
@@ -236,7 +271,7 @@
 								local:MouseBehavior.MouseDownCommand="{Binding StartMoveCommand}" local:MouseBehavior.MouseDownCommandParameter="{Binding SlewDirections[1].Direction}"
 								local:MouseBehavior.MouseUpCommand="{Binding StopMotionCommand}" local:MouseBehavior.MouseUpCommandParameter="{Binding SlewDirections[1].Direction}" />
 		</Grid>
-		<Expander Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Foreground="{DynamicResource NormalTextBrush}" 
+		<Expander Grid.Row="2" Grid.Column="0" Foreground="{DynamicResource NormalTextBrush}" 
 				  Template="{DynamicResource StretchyExpanderTemplate}" 
 				  Header="Other Actions">
 			<Grid>

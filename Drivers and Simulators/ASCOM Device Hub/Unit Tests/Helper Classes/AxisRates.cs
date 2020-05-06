@@ -25,6 +25,16 @@ namespace Unit_Tests
 			TertiaryAxisRates = new AxisRate[0];
 		}
 
+		internal static void SetAsymmetricRates()
+		{
+			double pRate = 3.807;
+			double sRate = pRate / 2.0;
+
+			PrimaryAxisRates = new AxisRate[] { new AxisRate( pRate, pRate ) };
+			SecondaryAxisRates = new AxisRate[] { new AxisRate( sRate, sRate ) };
+			TertiaryAxisRates = new AxisRate[0];
+		}
+
 		internal static void SetRates( TelescopeAxes axis, AxisRate[] rates )
 		{
 			if ( axis == TelescopeAxes.axisPrimary )

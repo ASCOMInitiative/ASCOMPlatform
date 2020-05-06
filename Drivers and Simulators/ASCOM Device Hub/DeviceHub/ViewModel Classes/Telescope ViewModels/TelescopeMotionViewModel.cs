@@ -36,6 +36,7 @@ namespace ASCOM.DeviceHub
 			_selectedSlewAmount = _slewAmounts[0];
 			_status = null;
 			_slewDirections = null;
+			_hasAsymmetricJogRates = false;
 
 			SetParkCommandAction();
 
@@ -140,6 +141,36 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
+		private JogRates _secondaryJogRates;
+
+		public JogRates SecondaryJogRates
+		{
+			get { return _secondaryJogRates; }
+			set
+			{
+				if ( value != _secondaryJogRates )
+				{
+					_secondaryJogRates = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		private JogRate _selectedSecondaryJogRate;
+
+		public JogRate SelectedSecondaryJogRate
+		{
+			get { return _selectedSecondaryJogRate; }
+			set
+			{
+				if ( value != _selectedSecondaryJogRate )
+				{
+					_selectedSecondaryJogRate = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
 		private TelescopeSlewAmounts _slewAmounts;
 
 		public TelescopeSlewAmounts SlewAmounts
@@ -230,6 +261,21 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
+		private bool _hasAsymmetricJogRates;
+
+		public bool HasAsymmetricJogRates
+		{
+			get { return _hasAsymmetricJogRates; }
+			set
+			{
+				if ( value != _hasAsymmetricJogRates )
+				{
+					_hasAsymmetricJogRates = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
 		#endregion Change Notification Properties
 
 		#region Public Methods
@@ -292,25 +338,65 @@ namespace ASCOM.DeviceHub
 			CanStartMoveTelescope = canMove;
 		}
 
-		private void BuildJogRatesList()
+		private void BuildJogRatesLists()
 		{
 			JogRates jogRates = null;
+			JogRates secondaryJogRates = null;
+
+			bool asymmetricRates = false;
 
 			if ( Capabilities != null )
 			{
 				IRate[] primaryAxisRates = Capabilities.PrimaryAxisRates;
 				jogRates = JogRates.FromAxisRates( primaryAxisRates );
+
+				IRate[] secondaryAxisRates = Capabilities.SecondaryAxisRates;
+				secondaryJogRates = JogRates.FromAxisRates( secondaryAxisRates );
+
+				if ( jogRates.Count == secondaryJogRates.Count )
+				{
+					for ( int i = 0; i < jogRates.Count; ++i )
+					{
+						if ( jogRates[i].Rate != secondaryJogRates[i].Rate )
+						{
+							asymmetricRates = true;
+							break;
+						}
+					}
+				}
+				else
+				{
+					asymmetricRates = true;
+				}
 			}
 
 			if ( jogRates == null )
 			{
 				JogRates = null;
 				SelectedJogRate = null;
+
+				SecondaryJogRates = null;
+				SelectedSecondaryJogRate = null;
+
+				HasAsymmetricJogRates = false;
 			}
 			else
 			{
 				JogRates = jogRates;
 				SelectedJogRate = jogRates[0];
+
+				if ( asymmetricRates )
+				{
+					SecondaryJogRates = secondaryJogRates;
+					SelectedSecondaryJogRate = secondaryJogRates[0];
+				}
+				else
+				{
+					SecondaryJogRates = null;
+					SelectedSecondaryJogRate = null;
+				}
+
+				HasAsymmetricJogRates = asymmetricRates;
 			}
 		}
 
@@ -330,7 +416,7 @@ namespace ASCOM.DeviceHub
 
 				if ( JogRates == null )
 				{
-					BuildJogRatesList();
+					BuildJogRatesLists();
 				}
 
 				if ( SlewDirections == null )
@@ -378,7 +464,7 @@ namespace ASCOM.DeviceHub
 					Capabilities = null;
 					Parameters = null;
 					CanStartMoveTelescope = false;
-					BuildJogRatesList();
+					BuildJogRatesLists();
 					IsTracking = false;
 					SlewDirections = null;
 				}, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
@@ -571,12 +657,24 @@ namespace ASCOM.DeviceHub
 		private void StartMove( object param )
 		{
 			MoveDirections direction = (MoveDirections)param;
+			JogRate rate;
 
 			if ( IsVariableJog )
 			{
+				rate = SelectedJogRate;
+
+				// If the telescope has different rates for the secondary (Dec or Altitude) axis, use them.
+
+				if ( HasAsymmetricJogRates &&
+					(   direction == MoveDirections.Up || direction == MoveDirections.Down
+					 || direction == MoveDirections.North || direction == MoveDirections.South ) )
+				{
+					rate = SelectedSecondaryJogRate;
+				}
+
 				try
 				{
-					TelescopeManager.StartJogScope( direction, SelectedJogRate );
+					TelescopeManager.StartJogScope( direction, rate );
 					_jogInProgress = true;
 				}
 				catch ( Exception xcp )

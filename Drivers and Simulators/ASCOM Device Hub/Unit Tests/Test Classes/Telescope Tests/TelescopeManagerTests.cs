@@ -436,6 +436,11 @@ namespace Unit_Tests.Telescope
 			Assert.AreEqual<PierSide>( PierSide.pierWest, currentSOP );
 
 			Vector targetPosition = currentPosition - new Vector( 7.0, 0.0 );
+
+			if ( targetPosition.X < 0 )
+			{
+				targetPosition.X += 24;
+			}
 			_svc.MockSideOfPier = PierSide.pierEast;
 			PierSide targetSOP = _mgr.GetTargetSideOfPier( targetPosition.X, targetPosition.Y );
 			Assert.IsTrue( targetSOP == PierSide.pierEast );
