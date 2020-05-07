@@ -401,4 +401,5 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         LRGB = 5
     }
+
 }

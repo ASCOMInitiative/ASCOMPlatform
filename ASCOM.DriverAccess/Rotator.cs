@@ -16,12 +16,9 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class Rotator : AscomDriver, IRotatorV3
     {
-        private const int INTERFACE_VERSION_UNKNOWN = int.MinValue;
-
-        private int interfaceVersion = INTERFACE_VERSION_UNKNOWN; // Cached copy of the device's interface version
+        private MemberFactory memberFactory;
 
         #region Rotator constructors
-        private MemberFactory memberFactory;
 
         /// <summary>
         /// Creates a rotator object with the given ProgID
@@ -204,7 +201,7 @@ namespace ASCOM.DriverAccess
             get
             {
                 // Return the device's value for interface versions of 3 and higher otherwise return false because earlier interfaces can't sync
-                if (GetInterfaceVersion() >= 3)
+                if (base.DriverInterfaceVersion >= 3)
                 {
                     return (bool)memberFactory.CallMember(1, "CanSync", new Type[] { }, new object[] { });
                 }
@@ -227,7 +224,7 @@ namespace ASCOM.DriverAccess
             get
             {
                 // Return the device's mechanical position for interface versions of 3 and higher otherwise return Position because earlier interfaces don't have an InstrumentalPosition method
-                if (GetInterfaceVersion() >= 3)
+                if (base.DriverInterfaceVersion >= 3)
                 {
                     return (float)memberFactory.CallMember(1, "MechanicalPosition", new Type[] { }, new object[] { });
                 }
@@ -251,7 +248,7 @@ namespace ASCOM.DriverAccess
         /// </remarks>
         public void Sync(float Position)
         {
-            if (GetInterfaceVersion() >= 3)
+            if (base.DriverInterfaceVersion >= 3)
             {
                 memberFactory.CallMember(3, "Sync", new Type[] { typeof(float) }, new object[] { Position });
             }
@@ -274,7 +271,7 @@ namespace ASCOM.DriverAccess
         /// </remarks>
         public void MoveMechanical(float Position)
         {
-            if (GetInterfaceVersion() >= 3)
+            if (base.DriverInterfaceVersion >= 3)
             {
                 memberFactory.CallMember(3, "MoveMechanical", new Type[] { typeof(float) }, new object[] { Position });
             }
@@ -282,21 +279,6 @@ namespace ASCOM.DriverAccess
             {
                 throw new MethodNotImplementedException("Sync is not implemented because the driver is IRotatorV2 or earlier.");
             }
-        }
-
-        /// <summary>
-        /// Returns the device's interface version, querying the device if the version isn't already known
-        /// </summary>
-        /// <returns></returns>
-        private int GetInterfaceVersion()
-        {
-            // If we don't know what the device's interface version is query it to find out 
-            if (interfaceVersion == INTERFACE_VERSION_UNKNOWN)
-            {
-                interfaceVersion = InterfaceVersion; // Query the device to get the interface version
-            }
-
-            return interfaceVersion;
         }
 
         #endregion

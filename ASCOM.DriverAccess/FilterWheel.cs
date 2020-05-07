@@ -39,7 +39,7 @@ namespace ASCOM.DriverAccess
 
         #region Convenience Members
         /// <summary>
-        /// Brings up the ASCOM Chooser Dialog to choose a FilterWheel
+        /// Brings up the ASCOM Chooser Dialogue to choose a FilterWheel
         /// </summary>
         /// <param name="filterWheelId">FilterWheel Prog ID for default or null for None</param>
         /// <returns>Prog ID for chosen FilterWheel or null for none</returns>

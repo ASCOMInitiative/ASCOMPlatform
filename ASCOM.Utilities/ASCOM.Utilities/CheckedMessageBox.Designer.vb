@@ -51,7 +51,7 @@ Partial Class CheckedMessageBox
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(342, 13)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "After pressing OK you will be asked for Administrator approval to"
+        Me.Label1.Text = "When you press OK on this dialogue you will be asked for"
         '
         'ChkDoNotShowAgain
         '
@@ -62,7 +62,7 @@ Partial Class CheckedMessageBox
         Me.ChkDoNotShowAgain.Name = "ChkDoNotShowAgain"
         Me.ChkDoNotShowAgain.Size = New System.Drawing.Size(194, 17)
         Me.ChkDoNotShowAgain.TabIndex = 2
-        Me.ChkDoNotShowAgain.Text = "Do not show this message again"
+        Me.ChkDoNotShowAgain.Text = "Do not show Alpaca messages again"
         Me.ChkDoNotShowAgain.UseVisualStyleBackColor = False
         '
         'Label2
@@ -73,7 +73,7 @@ Partial Class CheckedMessageBox
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(155, 13)
         Me.Label2.TabIndex = 3
-        Me.Label2.Text = "create the new Alpaca driver."
+        Me.Label2.Text = "Administrator approval to create the new Alpaca Dynamic driver."
         '
         'Panel1
         '

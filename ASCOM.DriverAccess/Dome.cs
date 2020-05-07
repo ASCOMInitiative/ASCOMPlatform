@@ -32,9 +32,9 @@ namespace ASCOM.DriverAccess
     /// </remarks>
     public class Dome : AscomDriver, IDomeV2
     {
-        #region Dome constructors
-
         private MemberFactory memberFactory;
+
+        #region Dome constructors
 
         /// <summary>
         /// Constructor for Dome class. Creates a Dome based on the ProgID in the DomeID string.

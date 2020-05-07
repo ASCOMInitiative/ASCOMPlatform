@@ -397,12 +397,18 @@ namespace ASCOM.DynamicRemoteClients
 
             try
             {
-                IPAddress ipAddress = IPAddress.Parse(ipAddressString);
-
-                // Create an IPv4 or IPv6 TCP client as required
-                if (ipAddress.AddressFamily == AddressFamily.InterNetwork) tcpClient = new TcpClient(AddressFamily.InterNetwork); // Test IPv4 addresses
-                else tcpClient = new TcpClient(AddressFamily.InterNetworkV6);
-                TL.LogMessage(clientNumber, "ClientIsUp", $"Created an {ipAddress.AddressFamily} TCP client");
+                // Create a TcpClient 
+                if (IPAddress.TryParse(ipAddressString, out IPAddress ipAddress))
+                {
+                    // Create an IPv4 or IPv6 TCP client as required
+                    if (ipAddress.AddressFamily == AddressFamily.InterNetwork) tcpClient = new TcpClient(AddressFamily.InterNetwork); // Test IPv4 addresses
+                    else tcpClient = new TcpClient(AddressFamily.InterNetworkV6);
+                    TL.LogMessage(clientNumber, "ClientIsUp", $"Created an {ipAddress.AddressFamily} TCP client");
+                }
+                else
+                {
+                    tcpClient = new TcpClient(); // Create a generic TcpClient that can work with host names
+                }
 
                 // Create a task that will return True if a connection to the device can be established or False if the connection is rejected or not possible
                 Task<bool> connectionTask = tcpClient.ConnectAsync(ipAddressString, (int)portNumber).ContinueWith(task => { return !task.IsFaulted; }, TaskContinuationOptions.ExecuteSynchronously);
@@ -904,7 +910,7 @@ namespace ASCOM.DynamicRemoteClients
                         if (typeof(T) == typeof(bool))
                         {
                             BoolResponse boolResponse = JsonConvert.DeserializeObject<BoolResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, boolResponse.ClientTransactionID, boolResponse.ServerTransactionID, boolResponse.Value.ToString())); //, boolResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, boolResponse.ClientTransactionID, boolResponse.ServerTransactionID, boolResponse.Value.ToString()));
                             if (CallWasSuccessful(TL, boolResponse)) return (T)((object)boolResponse.Value);
                             restResponseBase = (RestResponseBase)boolResponse;
                         }
@@ -912,7 +918,7 @@ namespace ASCOM.DynamicRemoteClients
                         {
                             // Handle float as double over the web, remembering to convert the returned value to float
                             DoubleResponse doubleResponse = JsonConvert.DeserializeObject<DoubleResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, doubleResponse.ClientTransactionID, doubleResponse.ServerTransactionID, doubleResponse.Value.ToString())); //, doubleResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, doubleResponse.ClientTransactionID, doubleResponse.ServerTransactionID, doubleResponse.Value.ToString()));
                             float floatValue = (float)doubleResponse.Value;
                             if (CallWasSuccessful(TL, doubleResponse)) return (T)((object)floatValue);
                             restResponseBase = (RestResponseBase)doubleResponse;
@@ -920,63 +926,63 @@ namespace ASCOM.DynamicRemoteClients
                         if (typeof(T) == typeof(double))
                         {
                             DoubleResponse doubleResponse = JsonConvert.DeserializeObject<DoubleResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, doubleResponse.ClientTransactionID, doubleResponse.ServerTransactionID, doubleResponse.Value.ToString())); //, doubleResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, doubleResponse.ClientTransactionID, doubleResponse.ServerTransactionID, doubleResponse.Value.ToString())); 
                             if (CallWasSuccessful(TL, doubleResponse)) return (T)((object)doubleResponse.Value);
                             restResponseBase = (RestResponseBase)doubleResponse;
                         }
                         if (typeof(T) == typeof(string))
                         {
                             StringResponse stringResponse = JsonConvert.DeserializeObject<StringResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, stringResponse.ClientTransactionID, stringResponse.ServerTransactionID, stringResponse.Value.ToString())); //, stringResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, stringResponse.ClientTransactionID, stringResponse.ServerTransactionID, stringResponse.Value.ToString())); 
                             if (CallWasSuccessful(TL, stringResponse)) return (T)((object)stringResponse.Value);
                             restResponseBase = (RestResponseBase)stringResponse;
                         }
                         if (typeof(T) == typeof(string[]))
                         {
                             StringArrayResponse stringArrayResponse = JsonConvert.DeserializeObject<StringArrayResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, stringArrayResponse.ClientTransactionID, stringArrayResponse.ServerTransactionID, stringArrayResponse.Value.Count())); //, stringArrayResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, stringArrayResponse.ClientTransactionID, stringArrayResponse.ServerTransactionID, stringArrayResponse.Value.Count()));
                             if (CallWasSuccessful(TL, stringArrayResponse)) return (T)((object)stringArrayResponse.Value);
                             restResponseBase = (RestResponseBase)stringArrayResponse;
                         }
                         if (typeof(T) == typeof(short))
                         {
                             ShortResponse shortResponse = JsonConvert.DeserializeObject<ShortResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, shortResponse.ClientTransactionID, shortResponse.ServerTransactionID, shortResponse.Value.ToString())); //, shortResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, shortResponse.ClientTransactionID, shortResponse.ServerTransactionID, shortResponse.Value.ToString()));
                             if (CallWasSuccessful(TL, shortResponse)) return (T)((object)shortResponse.Value);
                             restResponseBase = (RestResponseBase)shortResponse;
                         }
                         if (typeof(T) == typeof(int))
                         {
                             IntResponse intResponse = JsonConvert.DeserializeObject<IntResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, intResponse.ClientTransactionID, intResponse.ServerTransactionID, intResponse.Value.ToString())); //, intResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, intResponse.ClientTransactionID, intResponse.ServerTransactionID, intResponse.Value.ToString())); 
                             if (CallWasSuccessful(TL, intResponse)) return (T)((object)intResponse.Value);
                             restResponseBase = (RestResponseBase)intResponse;
                         }
                         if (typeof(T) == typeof(int[]))
                         {
                             IntArray1DResponse intArrayResponse = JsonConvert.DeserializeObject<IntArray1DResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, intArrayResponse.ClientTransactionID, intArrayResponse.ServerTransactionID, intArrayResponse.Value.Count())); //, intArrayResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, intArrayResponse.ClientTransactionID, intArrayResponse.ServerTransactionID, intArrayResponse.Value.Count()));
                             if (CallWasSuccessful(TL, intArrayResponse)) return (T)((object)intArrayResponse.Value);
                             restResponseBase = (RestResponseBase)intArrayResponse;
                         }
                         if (typeof(T) == typeof(DateTime))
                         {
                             DateTimeResponse dateTimeResponse = JsonConvert.DeserializeObject<DateTimeResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, dateTimeResponse.ClientTransactionID, dateTimeResponse.ServerTransactionID, dateTimeResponse.Value.ToString())); //, dateTimeResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, dateTimeResponse.ClientTransactionID, dateTimeResponse.ServerTransactionID, dateTimeResponse.Value.ToString()));
                             if (CallWasSuccessful(TL, dateTimeResponse)) return (T)((object)dateTimeResponse.Value);
                             restResponseBase = (RestResponseBase)dateTimeResponse;
                         }
                         if (typeof(T) == typeof(List<string>)) // Used for ArrayLists of string
                         {
                             StringListResponse stringListResponse = JsonConvert.DeserializeObject<StringListResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, stringListResponse.ClientTransactionID, stringListResponse.ServerTransactionID, stringListResponse.Value.Count.ToString())); //, stringListResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, stringListResponse.ClientTransactionID, stringListResponse.ServerTransactionID, stringListResponse.Value.Count.ToString()));
                             if (CallWasSuccessful(TL, stringListResponse)) return (T)((object)stringListResponse.Value);
                             restResponseBase = (RestResponseBase)stringListResponse;
                         }
                         if (typeof(T) == typeof(NoReturnValue)) // Used for Methods that have no response and Property Set members
                         {
                             MethodResponse deviceResponse = JsonConvert.DeserializeObject<MethodResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, deviceResponse.ClientTransactionID.ToString(), deviceResponse.ServerTransactionID.ToString(), "No response")); //, deviceResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, deviceResponse.ClientTransactionID.ToString(), deviceResponse.ServerTransactionID.ToString(), "No response"));
                             if (CallWasSuccessful(TL, deviceResponse)) return (T)((object)new NoReturnValue());
                             restResponseBase = (RestResponseBase)deviceResponse;
                         }
@@ -985,14 +991,14 @@ namespace ASCOM.DynamicRemoteClients
                         if (typeof(T) == typeof(PierSide))
                         {
                             IntResponse pierSideResponse = JsonConvert.DeserializeObject<IntResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, pierSideResponse.ClientTransactionID, pierSideResponse.ServerTransactionID, pierSideResponse.Value.ToString())); //, pierSideResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, pierSideResponse.ClientTransactionID, pierSideResponse.ServerTransactionID, pierSideResponse.Value.ToString()));
                             if (CallWasSuccessful(TL, pierSideResponse)) return (T)((object)pierSideResponse.Value);
                             restResponseBase = (RestResponseBase)pierSideResponse;
                         }
                         if (typeof(T) == typeof(ITrackingRates))
                         {
                             TrackingRatesResponse trackingRatesResponse = JsonConvert.DeserializeObject<TrackingRatesResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format("Trackingrates Count: {0} - Txn ID: {1}, Method: {1}", trackingRatesResponse.Value.Count.ToString(), trackingRatesResponse.ServerTransactionID.ToString())); //, trackingRatesResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format("Trackingrates Count: {0} - Txn ID: {1}, Method: {1}", trackingRatesResponse.Value.Count.ToString(), trackingRatesResponse.ServerTransactionID.ToString()));
                             List<DriveRates> rates = new List<DriveRates>();
                             DriveRates[] ratesArray = new DriveRates[trackingRatesResponse.Value.Count];
                             int i = 0;
@@ -1017,56 +1023,56 @@ namespace ASCOM.DynamicRemoteClients
                         if (typeof(T) == typeof(EquatorialCoordinateType))
                         {
                             IntResponse equatorialCoordinateResponse = JsonConvert.DeserializeObject<IntResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, equatorialCoordinateResponse.ClientTransactionID, equatorialCoordinateResponse.ServerTransactionID, equatorialCoordinateResponse.Value.ToString())); //, equatorialCoordinateResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, equatorialCoordinateResponse.ClientTransactionID, equatorialCoordinateResponse.ServerTransactionID, equatorialCoordinateResponse.Value.ToString()));
                             if (CallWasSuccessful(TL, equatorialCoordinateResponse)) return (T)((object)equatorialCoordinateResponse.Value);
                             restResponseBase = (RestResponseBase)equatorialCoordinateResponse;
                         }
                         if (typeof(T) == typeof(AlignmentModes))
                         {
                             IntResponse alignmentModesResponse = JsonConvert.DeserializeObject<IntResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, alignmentModesResponse.ClientTransactionID, alignmentModesResponse.ServerTransactionID, alignmentModesResponse.Value.ToString())); //, alignmentModesResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, alignmentModesResponse.ClientTransactionID, alignmentModesResponse.ServerTransactionID, alignmentModesResponse.Value.ToString()));
                             if (CallWasSuccessful(TL, alignmentModesResponse)) return (T)((object)alignmentModesResponse.Value);
                             restResponseBase = (RestResponseBase)alignmentModesResponse;
                         }
                         if (typeof(T) == typeof(DriveRates))
                         {
                             IntResponse driveRatesResponse = JsonConvert.DeserializeObject<IntResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, driveRatesResponse.ClientTransactionID, driveRatesResponse.ServerTransactionID, driveRatesResponse.Value.ToString())); //, driveRatesResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, driveRatesResponse.ClientTransactionID, driveRatesResponse.ServerTransactionID, driveRatesResponse.Value.ToString()));
                             if (CallWasSuccessful(TL, driveRatesResponse)) return (T)((object)driveRatesResponse.Value);
                             restResponseBase = (RestResponseBase)driveRatesResponse;
                         }
                         if (typeof(T) == typeof(SensorType))
                         {
                             IntResponse sensorTypeResponse = JsonConvert.DeserializeObject<IntResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, sensorTypeResponse.ClientTransactionID, sensorTypeResponse.ServerTransactionID, sensorTypeResponse.Value.ToString())); //, sensorTypeResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, sensorTypeResponse.ClientTransactionID, sensorTypeResponse.ServerTransactionID, sensorTypeResponse.Value.ToString()));
                             if (CallWasSuccessful(TL, sensorTypeResponse)) return (T)((object)sensorTypeResponse.Value);
                             restResponseBase = (RestResponseBase)sensorTypeResponse;
                         }
                         if (typeof(T) == typeof(CameraStates))
                         {
                             IntResponse cameraStatesResponse = JsonConvert.DeserializeObject<IntResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, cameraStatesResponse.ClientTransactionID, cameraStatesResponse.ServerTransactionID, cameraStatesResponse.Value.ToString())); //, cameraStatesResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, cameraStatesResponse.ClientTransactionID, cameraStatesResponse.ServerTransactionID, cameraStatesResponse.Value.ToString()));
                             if (CallWasSuccessful(TL, cameraStatesResponse)) return (T)((object)cameraStatesResponse.Value);
                             restResponseBase = (RestResponseBase)cameraStatesResponse;
                         }
                         if (typeof(T) == typeof(ShutterState))
                         {
                             IntResponse domeShutterStateResponse = JsonConvert.DeserializeObject<IntResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, domeShutterStateResponse.ClientTransactionID, domeShutterStateResponse.ServerTransactionID, domeShutterStateResponse.Value.ToString())); //, domeShutterStateResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, domeShutterStateResponse.ClientTransactionID, domeShutterStateResponse.ServerTransactionID, domeShutterStateResponse.Value.ToString()));
                             if (CallWasSuccessful(TL, domeShutterStateResponse)) return (T)((object)domeShutterStateResponse.Value);
                             restResponseBase = (RestResponseBase)domeShutterStateResponse;
                         }
                         if (typeof(T) == typeof(CoverStatus))
                         {
                             IntResponse coverStatusResponse = JsonConvert.DeserializeObject<IntResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, coverStatusResponse.ClientTransactionID, coverStatusResponse.ServerTransactionID, coverStatusResponse.Value.ToString())); //, domeShutterStateResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, coverStatusResponse.ClientTransactionID, coverStatusResponse.ServerTransactionID, coverStatusResponse.Value.ToString())); 
                             if (CallWasSuccessful(TL, coverStatusResponse)) return (T)((object)coverStatusResponse.Value);
                             restResponseBase = (RestResponseBase)coverStatusResponse;
                         }
                         if (typeof(T) == typeof(CalibratorStatus))
                         {
                             IntResponse calibratorStatusResponse = JsonConvert.DeserializeObject<IntResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, calibratorStatusResponse.ClientTransactionID, calibratorStatusResponse.ServerTransactionID, calibratorStatusResponse.Value.ToString())); //, domeShutterStateResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, calibratorStatusResponse.ClientTransactionID, calibratorStatusResponse.ServerTransactionID, calibratorStatusResponse.Value.ToString())); 
                             if (CallWasSuccessful(TL, calibratorStatusResponse)) return (T)((object)calibratorStatusResponse.Value);
                             restResponseBase = (RestResponseBase)calibratorStatusResponse;
                         }
@@ -1076,7 +1082,7 @@ namespace ASCOM.DynamicRemoteClients
 #pragma warning disable IDE0068 // Use recommended dispose pattern warning disabled because this class will be used by other processes so I'm not going to dispose it here
                             AxisRates axisRates = new AxisRates((TelescopeAxes)(Convert.ToInt32(Parameters[SharedConstants.AXIS_PARAMETER_NAME])));
 #pragma warning restore IDE0068 // Use recommended dispose pattern re-enabled
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, axisRatesResponse.ClientTransactionID.ToString(), axisRatesResponse.ServerTransactionID.ToString(), axisRatesResponse.Value.Count.ToString())); //, axisRatesResponse.Method));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, axisRatesResponse.ClientTransactionID.ToString(), axisRatesResponse.ServerTransactionID.ToString(), axisRatesResponse.Value.Count.ToString()));
                             foreach (RateResponse rr in axisRatesResponse.Value)
                             {
                                 axisRates.Add(rr.Minimum, rr.Maximum, TL);

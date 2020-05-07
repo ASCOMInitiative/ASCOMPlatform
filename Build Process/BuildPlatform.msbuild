@@ -2,6 +2,9 @@
     <!-- Required Import to use MSBuild Community Tasks -->
     <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
     <PropertyGroup>
+	        <!-- GIT Barch to Check Out-->
+        <GitCheckoutBranch>develop</GitCheckoutBranch>
+	
         <!-- Directory in which to export the latest ASCOM code base from GitHub-->
 		<CheckoutDirectoryRelative>Export</CheckoutDirectoryRelative>
         <CheckoutDirectory>$(MSBuildProjectDirectory)\$(CheckoutDirectoryRelative)</CheckoutDirectory>
@@ -83,8 +86,11 @@
         <!-- Clean up any previous installer versions  -->
         <Delete Files="@(OldPlatformInstallers)" />
 
+        <!-- Create the export directory ready for cloning  -->
+        <MakeDir Directories="$(CheckoutDirectory)"/>
+
         <!-- Clone a fresh copy of the ASCOM Platform Git repository  -->
-		<GitClient Command="clone" LocalPath="$(MSBuildProjectDirectory)" Arguments="$(GitRepositoryPath) $(CheckoutDirectoryRelative)"/>
+		<GitClient Command="clone" LocalPath="$(MSBuildProjectDirectory)" Arguments="-b $(GitCheckoutBranch) $(GitRepositoryPath) $(CheckoutDirectoryRelative)"/>
 
         <!-- Get the latest commit number into the Revision Property to use in the the Platform version number -->
 		<Exec Command="git.exe rev-list HEAD --count" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)">
@@ -92,8 +98,14 @@
 		</Exec>
         <Message Text="Revision Level: $(Revision)"/>
 
+        <!-- Get the SHA1 of the latest commit into the CommitSHA1 property -->
+		<Exec Command="git.exe rev-parse HEAD" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)">
+			<Output TaskParameter="ConsoleOutput" PropertyName="CommitSHA1" />
+		</Exec>
+        <Message Text="HEAD SHA1: $(CommitSHA1)"/>
+
         <!-- Restore NuGet packages -->
-		<Exec Command="$(NuGetCommand)" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
+		<Exec Command="$(NuGetCommand)" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
 
         <!-- Copy the InstallAware shared text strings to the InstallAware program directory. This is the only way that IA will actually use the modified strings! Ugh - but there it is. -->
         <ItemGroup>
@@ -117,8 +129,16 @@
 	    <Message Text="Version numbers - Major: $(PlatformMajor), Minor: $(PlatformMinor), ServicePack: $(PlatformServicePack), MasterPlatformLevel: $(PlatformVersion)" />
 
         <!-- Create global AssemblyVersion attributes from the Platform version, service pack and revision numbers.-->
-        <AssemblyInfo CodeLanguage="CS" OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.cs" AssemblyFileVersion="$(PlatformVersion).$(PlatformServicePack).$(Revision)" />
-        <AssemblyInfo CodeLanguage="VB" OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.vb" AssemblyFileVersion="$(PlatformVersion).$(PlatformServicePack).$(Revision)" />
+        <AssemblyInfo 
+			CodeLanguage="CS"
+			OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.cs" 
+			AssemblyFileVersion="$(PlatformVersion).$(PlatformServicePack).$(Revision)" 
+			AssemblyInformationalVersion="$(CommitSHA1)"/>
+        <AssemblyInfo 
+		    CodeLanguage="VB" 
+			OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.vb" 
+			AssemblyFileVersion="$(PlatformVersion).$(PlatformServicePack).$(Revision)"
+			AssemblyInformationalVersion="$(CommitSHA1)"/>
 
         <!-- Build FindGUIDs after cleaning the solution (just in case executables get committed to SVN) -->
         <!-- This builds the GUIDList.vb file ready to be incorporated into RemoveASCOM when it is built as part of the Platform -->
@@ -201,10 +221,10 @@
 		</ItemGroup> 
 		<WriteLinesToFile File="$(BuildNumberFile)" Lines="@(CmdLine)" Overwrite="true"/>
 
-		<!-- Commit and push the revised build number to GitHub so that it shows up in the history. -->
+		<!-- Commit and push the revised build number to GitHub so that it shows up in the history. 
 		<Exec Command='git.exe commit $(BuildNumberFileName) -m "Build version: $(PlatformVersion).$(PlatformServicePack).$(Revision)"' WorkingDirectory="$(CheckoutDirectory)"></Exec>
 		<Exec Command='git.exe push' WorkingDirectory="$(CheckoutDirectory)"></Exec>
-			
+		   -->
   </Target>
 
 </Project>

@@ -15,20 +15,21 @@ namespace ASCOM.DriverAccess
     public class AscomDriver : IDisposable
     {
         internal TraceLogger TL;
-        private int interfaceVersion;
+        private short? interfaceVersion = null; // Create a nullable short to hold the interface version and initialise it to null - i.e. the value has not yet been retrieved from the driver
         MemberFactory memberFactory;
         private bool disposedValue = false;        // To detect redundant calls
         private string deviceType;
 
         #region AscomDriver Constructors and Dispose
+
         /// <summary>
         /// 
         /// </summary>
         public AscomDriver()
         {
         }
-               
-        
+
+
         /// <summary>
         /// Creates a new instance of the <see cref="AscomDriver"/> class.
         /// </summary>
@@ -45,10 +46,8 @@ namespace ASCOM.DriverAccess
             deviceType = this.GetType().Name.ToUpperInvariant();
             TL.LogMessage("AscomDriver", "Device type: " + this.GetType().Name);
 
-            memberFactory = new MemberFactory(deviceProgId, TL); // Create a memberfactory object and pass in the TraceLogger
+            memberFactory = new MemberFactory(deviceProgId, TL); // Create a MemberFactory object and pass in the TraceLogger
 
-            try { interfaceVersion = this.InterfaceVersion; }
-            catch { interfaceVersion = 1; }
         }
 
         /// <summary>
@@ -61,9 +60,9 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Disposes of managed and unmanged resources
+        /// Disposes of managed and unmanaged resources
         /// </summary>
-        /// <param name="disposing">True to dispose of managed resources, false to dispose of unmanged resources</param>
+        /// <param name="disposing">True to dispose of managed resources, false to dispose of unmanaged resources</param>
         protected virtual void Dispose(bool disposing)
         {
             if (!this.disposedValue)
@@ -82,6 +81,8 @@ namespace ASCOM.DriverAccess
         }
         #endregion
 
+        #region Internal members
+
         /// <summary>
         /// Returns the member factory created for this device for use by the device class
         /// </summary>
@@ -90,6 +91,31 @@ namespace ASCOM.DriverAccess
         {
             get { return memberFactory; }
         }
+
+        /// <summary>
+        /// Return the driver interface version number
+        /// </summary>
+        /// <returns>The driver's interface version</returns>
+        /// <remarks>
+        /// This method reads the interface version on the first call and caches it, returning the cached value on subsequent calls.
+        /// It also handles interface version 1 drivers that don't have InterfaceVersion properties
+        /// </remarks>
+        internal short DriverInterfaceVersion
+        {
+            get
+            {
+                // Test whether the interface version has already been retrieved
+                if (!interfaceVersion.HasValue) // This is the first time the method has been called so get the interface version number from the driver and cache it
+                {
+                    try { interfaceVersion = this.InterfaceVersion; } // Get the interface version
+                    catch { interfaceVersion = 1; } // The method failed so assume that the driver has a version 1 interface where the InterfaceVersion method is not implemented
+                }
+
+                return interfaceVersion.Value; // Return the newly retrieved or already cached value
+            }
+        }
+
+        #endregion
 
         #region IAscomDriver Members
 
@@ -120,9 +146,9 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                if ((deviceType == "FOCUSER") & (interfaceVersion == 1)) //Focuser interface V1 doesn't use connected, only Link
+                if ((deviceType == "FOCUSER") & (DriverInterfaceVersion == 1)) //Focuser interface V1 doesn't use connected, only Link
                 {
-                    TL.LogMessage("Connected Get", "Device is Focuser and Interfaceverison is 1 so issuing Link command");
+                    TL.LogMessage("Connected Get", "Device is Focuser and InterfaceVerison is 1 so issuing Link command");
                     return (bool)memberFactory.CallMember(1, "Link", new Type[] { }, new object[] { });
                 }
                 else //Everything else uses Connected!
@@ -133,9 +159,9 @@ namespace ASCOM.DriverAccess
             }
             set
             {
-                if ((deviceType == "FOCUSER") & (interfaceVersion == 1)) //Focuser interface V1 doesn't use connected, only Link
+                if ((deviceType == "FOCUSER") & (DriverInterfaceVersion == 1)) //Focuser interface V1 doesn't use connected, only Link
                 {
-                    TL.LogMessage("Connected Set", "Device is Focuser and Interfaceverison is 1 so issuing Link command: " + value);
+                    TL.LogMessage("Connected Set", "Device is Focuser and InterfaceVerison is 1 so issuing Link command: " + value);
                     memberFactory.CallMember(2, "Link", new Type[] { }, new object[] { value });
                 }
                 else //Everything else uses Connected!
@@ -147,7 +173,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Returns a description of the device, such as manufacturer and modelnumber. Any ASCII characters may be used. 
+        /// Returns a description of the device, such as manufacturer and model number. Any ASCII characters may be used. 
         /// </summary>
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
@@ -163,7 +189,7 @@ namespace ASCOM.DriverAccess
                 }
                 catch (Exception ex)
                 {
-                    if (interfaceVersion == 1)
+                    if (DriverInterfaceVersion == 1)
                     {
                         switch (deviceType)
                         {
@@ -194,7 +220,7 @@ namespace ASCOM.DriverAccess
         /// <p style="color:red"><b>Must be implemented</b></p> This string may contain line endings and may be hundreds to thousands of characters long.
         /// It is intended to display detailed information on the ASCOM driver, including version and copyright data.
         /// See the <see cref="Description" /> property for information on the device itself.
-        /// To get the driver version in a parseable string, use the <see cref="DriverVersion" /> property.
+        /// To get the driver version in a parse-able string, use the <see cref="DriverVersion" /> property.
         /// </remarks>
         public string DriverInfo
         {
@@ -206,7 +232,7 @@ namespace ASCOM.DriverAccess
                 }
                 catch (Exception ex)
                 {
-                    if (interfaceVersion == 1)
+                    if (DriverInterfaceVersion == 1)
                     {
                         switch (deviceType)
                         {
@@ -248,7 +274,7 @@ namespace ASCOM.DriverAccess
                 }
                 catch (Exception ex)
                 {
-                    if (interfaceVersion == 1)
+                    if (DriverInterfaceVersion == 1)
                     {
                         switch (deviceType)
                         {
@@ -277,7 +303,7 @@ namespace ASCOM.DriverAccess
         /// The interface version number that this device supports.
         /// </summary>
         /// <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
-        /// <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read ths property.
+        /// <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read this property.
         /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
         /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
         /// </remarks>
@@ -312,7 +338,7 @@ namespace ASCOM.DriverAccess
                 }
                 catch (Exception ex)
                 {
-                    if (interfaceVersion == 1)
+                    if (DriverInterfaceVersion == 1)
                     {
                         switch (deviceType)
                         {
@@ -337,7 +363,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Launches a configuration dialog box for the driver.  The call will not return
+        /// Launches a configuration dialogue box for the driver.  The call will not return
         /// until the user clicks OK or cancel manually.
         /// </summary>
         /// <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
@@ -391,9 +417,9 @@ namespace ASCOM.DriverAccess
                 catch (Exception ex)
                 {
                     //No interface version 1 drivers or TelescopeV2 have SupportedActions so just return an empty arraylist for these
-                    if ((interfaceVersion == 1) | ((deviceType == "TELESCOPE") & (interfaceVersion == 2)))
+                    if ((DriverInterfaceVersion == 1) | ((deviceType == "TELESCOPE") & (DriverInterfaceVersion == 2)))
                     {
-                        TL.LogMessage("SupportedActions Get", "SupportedActions is not implmented in " + deviceType + " version " + interfaceVersion + " returning an empty ArrayList");
+                        TL.LogMessage("SupportedActions Get", "SupportedActions is not implemented in " + deviceType + " version " + DriverInterfaceVersion + " returning an empty ArrayList");
                         return new ArrayList();
                     }
                     else //All later device interfaces should have returned an arraylist but we have received an exception, so pass it on!

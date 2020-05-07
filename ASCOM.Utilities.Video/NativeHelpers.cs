@@ -143,15 +143,17 @@ namespace ASCOM.Utilities.Video
             return rc;
         }
 
-        internal int GetColourBitmapPixels(int width, int height, int bpp, FlipMode flipMode, int[, ,] pixels, ref byte[] bitmapBytes)
+        internal int GetColourBitmapPixels(int width, int height, int bpp, FlipMode flipMode, int[, ,] pixels, bool isRowMajor, ref byte[] bitmapBytes)
         {
+            // TODO: This needs to change depending on the imageArray Column or Rowmajor, call different native methods
+
             if (Is64Bit()) // 64bit call
             {
-                rc = GetColourBitmapPixels64(width, height, bpp, flipMode, pixels, bitmapBytes);
+                rc = GetColourBitmapPixels64(width, height, bpp, flipMode, isRowMajor ? 1 : 0, pixels, bitmapBytes);
             }
             else // 32bit call
             {
-                rc = GetColourBitmapPixels32(width, height, bpp, flipMode, pixels, bitmapBytes);
+                rc = GetColourBitmapPixels32(width, height, bpp, flipMode, isRowMajor ? 1 : 0, pixels, bitmapBytes);
             }
             return rc;
         }
@@ -356,6 +358,7 @@ namespace ASCOM.Utilities.Video
             int height,
             int bpp,
             FlipMode flipMode,
+            int isRowMajor,
             [In, MarshalAs(UnmanagedType.LPArray)] int[, ,] pixels,
             [In, Out] byte[] bitmapBytes);
 
@@ -445,6 +448,7 @@ namespace ASCOM.Utilities.Video
             int height,
             int bpp,
             FlipMode flipMode,
+            int isRowMajor,
             [In, MarshalAs(UnmanagedType.LPArray)] int[, ,] pixels,
             [In, Out] byte[] bitmapBytes);
 
@@ -536,14 +540,14 @@ namespace ASCOM.Utilities.Video
             return PrepareBitmapForDisplay(imageArray, width, height, true, flipMode);
         }
 
-        internal byte[] PrepareColourBitmapForDisplay(int[, ,] imageArray, int width, int height, FlipMode flipMode)
+        internal byte[] PrepareColourBitmapForDisplay(int[, ,] imageArray, int width, int height, FlipMode flipMode, bool isRowMajor)
         {
-            return PrepareColourBitmapForDisplay(imageArray, width, height, false, flipMode);
+            return PrepareColourBitmapForDisplay(imageArray, width, height, false, flipMode, isRowMajor);
         }
 
-        internal byte[] PrepareColourBitmapForDisplay(object[, ,] imageArray, int width, int height, FlipMode flipMode)
+        internal byte[] PrepareColourBitmapForDisplay(object[, ,] imageArray, int width, int height, FlipMode flipMode, bool isRowMajor)
         {
-            return PrepareColourBitmapForDisplay(imageArray, width, height, true, flipMode);
+            return PrepareColourBitmapForDisplay(imageArray, width, height, true, flipMode, isRowMajor);
         }
 
         internal object GetMonochromePixelsFromBitmap(Bitmap bitmap, LumaConversionMode conversionMode, FlipMode flipMode, out byte[] rawBitmapBytes)
@@ -566,7 +570,7 @@ namespace ASCOM.Utilities.Video
 
         internal object GetColourPixelsFromBitmap(Bitmap bitmap, FlipMode flipMode, out byte[] rawBitmapBytes)
         {
-            int[, ,] bitmapPixels = new int[bitmap.Width, bitmap.Height, 3];
+            int[, ,] bitmapPixels = new int[3, bitmap.Height, bitmap.Width];
             rawBitmapBytes = new byte[(bitmap.Width * bitmap.Height * 3) + 40 + 14 + 1];
 
             IntPtr hBitmap = bitmap.GetHbitmap();
@@ -621,24 +625,44 @@ namespace ASCOM.Utilities.Video
             return rawBitmapBytes;
         }
 
-        private byte[] PrepareColourBitmapForDisplay(object imageArray, int width, int height, bool useVariantPixels, FlipMode flipMode)
+        private byte[] PrepareColourBitmapForDisplay(object imageArray, int width, int height, bool useVariantPixels, FlipMode flipMode, bool isRowMajor)
         {
-            int[, ,] pixels = new int[height, width, 3];
+            byte[] rawBitmapBytes = new byte[(width * height * 3) + 40 + 14 + 1];
 
-            if (useVariantPixels)
+            if (isRowMajor)
             {
-                Array safeArr = (Array)imageArray;
-                Array.Copy(safeArr, pixels, pixels.Length);
+                int[,,] pixels = new int[3, height, width];
+
+                if (useVariantPixels)
+                {
+                    Array safeArr = (Array)imageArray;
+                    Array.Copy(safeArr, pixels, pixels.Length);
+                }
+                else
+                {
+                    Array safeArr = (Array)imageArray;
+                    Array.Copy(safeArr, pixels, pixels.Length);
+                }
+
+                GetColourBitmapPixels(width, height, (int)8, flipMode, pixels, true, ref rawBitmapBytes);
             }
             else
             {
-                Array safeArr = (Array)imageArray;
-                Array.Copy(safeArr, pixels, pixels.Length);
+                int[,,] pixels = new int[width, height, 3];
+
+                if (useVariantPixels)
+                {
+                    Array safeArr = (Array)imageArray;
+                    Array.Copy(safeArr, pixels, pixels.Length);
+                }
+                else
+                {
+                    Array safeArr = (Array)imageArray;
+                    Array.Copy(safeArr, pixels, pixels.Length);
+                }
+
+                GetColourBitmapPixels(width, height, (int)8, flipMode, pixels, false, ref rawBitmapBytes);
             }
-
-            byte[] rawBitmapBytes = new byte[(width * height * 3) + 40 + 14 + 1];
-
-            GetColourBitmapPixels(width, height, (int)8, flipMode, pixels, ref rawBitmapBytes);
 
             return rawBitmapBytes;
         }

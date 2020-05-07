@@ -19,9 +19,9 @@ namespace ASCOM.DriverAccess
     /// </remarks>
     public class ObservingConditions : AscomDriver, IObservingConditions
     {
-        #region ObservingConditions constructors
-
         private readonly MemberFactory _memberFactory;
+
+        #region ObservingConditions constructors
 
         /// <summary>
         /// Creates an ObservingConditions object with the given Prog ID
@@ -36,7 +36,7 @@ namespace ASCOM.DriverAccess
 
         #region Convenience Members
         /// <summary>
-        /// Brings up the ASCOM Chooser Dialog to choose an ObservingConditions driver.
+        /// Brings up the ASCOM Chooser Dialogue to choose an ObservingConditions driver.
         /// </summary>
         /// <param name="observingConditionsId">ObservingConditions Prog ID for default or null for None</param>
         /// <returns>Prog ID for chosen ObservingConditions or null for none</returns>
@@ -129,7 +129,7 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Atmospheric pressure at the observatory
         /// </summary>
-        /// <value>Atmospheric presure at the observatory (hPa)</value>
+        /// <value>Atmospheric pressure at the observatory (hPa)</value>
         /// <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <remarks>
@@ -157,7 +157,7 @@ namespace ASCOM.DriverAccess
         /// <p style="color:red"><b>Optional property, can throw a PropertyNotImplementedException</b></p>
         /// <para>The units of this property are millimetres per hour. Client and driver authors can use the method <see cref="Util.ConvertUnits"/>
         /// to convert these units to and from inches per hour.</para>
-        /// <para>This property can be interpreted as 0.0 = Dry any positive nonzero value = wet.</para>
+        /// <para>This property can be interpreted as 0.0 = Dry any positive non-zero value = wet.</para>
         /// <para>Rainfall intensity is classified according to the rate of precipitation:</para>
         /// <list type="bullet">
         /// <item><description>Light rain — when the precipitation rate is &lt; 2.5 mm (0.098 in) per hour</description></item>
@@ -186,7 +186,7 @@ namespace ASCOM.DriverAccess
         /// <term>Illuminance</term><term>Surfaces illuminated by:</term>
         /// </listheader>
         /// <item><description>0.0001 lux</description><description>Moonless, overcast night sky (starlight)</description></item>
-        /// <item><description>0.002 lux</description><description>Moonless clear night sky with airglow</description></item>
+        /// <item><description>0.002 lux</description><description>Moonless clear night sky with air glow</description></item>
         /// <item><description>0.27–1.0 lux</description><description>Full moon on a clear night</description></item>
         /// <item><description>3.4 lux</description><description>Dark limit of civil twilight under a clear sky</description></item>
         /// <item><description>50 lux</description><description>Family living room lights (Australia, 1998)</description></item>

@@ -15,7 +15,7 @@ class DeviceCamera
 
     #region ICamera Implementation
 
-    private const int ccdWidth = 1394; // Constants to define the ccd pixel dimenstions
+    private const int ccdWidth = 1394; // Constants to define the CCD pixel dimensions
     private const int ccdHeight = 1040;
     private const double pixelSize = 6.45; // Constant for the pixel physical dimension
 
@@ -39,7 +39,7 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("BayerOffsetX Get Get", "Not implemented");
+            tl.LogMessage("BayerOffsetX Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("BayerOffsetX", false);
         }
     }
@@ -48,7 +48,7 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("BayerOffsetY Get Get", "Not implemented");
+            tl.LogMessage("BayerOffsetY Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("BayerOffsetX", true);
         }
     }
@@ -85,7 +85,7 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("CCDTemperature Get Get", "Not implemented");
+            tl.LogMessage("CCDTemperature Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("CCDTemperature", false);
         }
     }
@@ -184,12 +184,12 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("CoolerOn Get Get", "Not implemented");
+            tl.LogMessage("CoolerOn Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("CoolerOn", false);
         }
         set
         {
-            tl.LogMessage("CoolerOn Set Get", "Not implemented");
+            tl.LogMessage("CoolerOn Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("CoolerOn", true);
         }
     }
@@ -198,7 +198,7 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("CoolerPower Get Get", "Not implemented");
+            tl.LogMessage("CoolerPower Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("CoolerPower", false);
         }
     }
@@ -207,7 +207,7 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("ElectronsPerADU Get Get", "Not implemented");
+            tl.LogMessage("ElectronsPerADU Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("ElectronsPerADU", false);
         }
     }
@@ -216,7 +216,7 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("ExposureMax Get Get", "Not implemented");
+            tl.LogMessage("ExposureMax Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("ExposureMax", false);
         }
     }
@@ -461,6 +461,47 @@ class DeviceCamera
         }
     }
 
+    public int Offset
+    {
+        get
+        {
+            tl.LogMessage("Offset Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("Offset", false);
+        }
+        set
+        {
+            tl.LogMessage("Offset Set", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("Offset", true);
+        }
+    }
+
+    public int OffsetMax
+    {
+        get
+        {
+            tl.LogMessage("OffsetMax Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("OffsetMax", false);
+        }
+    }
+
+    public int OffsetMin
+    {
+        get
+        {
+            tl.LogMessage("OffsetMin Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("OffsetMin", true);
+        }
+    }
+
+    public ArrayList Offsets
+    {
+        get
+        {
+            tl.LogMessage("Offsets Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("Offsets", true);
+        }
+    }
+
     public short PercentCompleted
     {
         get
@@ -494,7 +535,7 @@ class DeviceCamera
         throw new ASCOM.MethodNotImplementedException("PulseGuide");
     }
 
-    public short ReadoutMode
+public short ReadoutMode
     {
         get
         {
@@ -596,6 +637,20 @@ class DeviceCamera
     {
         tl.LogMessage("StopExposure", "Not implemented");
         throw new MethodNotImplementedException("StopExposure");
+    }
+
+    public double SubExposureDuration
+    {
+        get
+        {
+            tl.LogMessage("SubExposureDuration Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("SubExposureDuration", false);
+        }
+        set
+        {
+            tl.LogMessage("SubExposureDuration Set", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("SubExposureDuration", true);
+        }
     }
 
     #endregion

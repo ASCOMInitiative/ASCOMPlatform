@@ -21,6 +21,9 @@ Friend Class ChooserForm
     Private Const TOOLTIP_PROPERTIES_TITLE As String = "Driver Setup"
     Private Const TOOLTIP_PROPERTIES_MESSAGE As String = "Check or change driver Properties (configuration)"
     Private Const TOOLTIP_PROPERTIES_FIRST_TIME_MESSAGE As String = "You must check driver configuration before first time use, please click the Properties... button." & vbCrLf & "The OK button will remain greyed out until this is done."
+    Private Const TOOLTIP_CREATE_ALPACA_DEVICE_TITLE As String = "Alpaca Device Selected"
+    Private Const TOOLTIP_CREATE_ALPACA_DEVICE_MESSAGE As String = "Please click this button to create the Alpaca Dynamic driver"
+    Private Const TOOLTIP_CREATE_ALPACA_DEVICE_DISPLAYTIME As Integer = 5 ' Number of seconds to display the Create Alpaca Device informational message
     Private Const CHOOSER_LIST_WIDTH_NEW_ALPACA As Integer = 600 ' Width of the Chooser list when new Alpaca devices are present
 
     ' Chooser persistence constants
@@ -67,6 +70,7 @@ Friend Class ChooserForm
     Private TL As TraceLogger
     Private chooserWarningToolTip As ToolTip
     Private chooserPropertiesToolTip As ToolTip
+    Private createAlpacaDeviceToolTip As ToolTip
     Private alpacaStatusToolstripLabel As ToolStripLabel
     Private WithEvents alpacaStatusIndicatorTimer As System.Windows.Forms.Timer
     Private profile As Profile
@@ -157,6 +161,30 @@ Friend Class ChooserForm
             chooserPropertiesToolTip.UseFading = True
             chooserPropertiesToolTip.ToolTipTitle = TOOLTIP_PROPERTIES_TITLE
             chooserPropertiesToolTip.SetToolTip(BtnProperties, TOOLTIP_PROPERTIES_MESSAGE)
+
+            ' Create Alpaca information tooltip 
+            createAlpacaDeviceToolTip = New ToolTip()
+
+            ' Configure the Create Alpaca Device tooltip
+            'createAlpacaDeviceToolTip.IsBalloon = True
+            'createAlpacaDeviceToolTip.ToolTipIcon = ToolTipIcon.Info
+            'createAlpacaDeviceToolTip.UseFading = True
+            'createAlpacaDeviceToolTip.ToolTipTitle = TOOLTIP_CREATE_ALPACA_DEVICE_TITLE
+
+
+
+            'createAlpacaDeviceToolTip.UseAnimation = True
+            'createAlpacaDeviceToolTip.UseFading = False
+            'createAlpacaDeviceToolTip.ToolTipIcon = ToolTipIcon.Warning
+            'createAlpacaDeviceToolTip.AutoPopDelay = 5000
+            'createAlpacaDeviceToolTip.InitialDelay = 0
+            'createAlpacaDeviceToolTip.IsBalloon = False
+            'createAlpacaDeviceToolTip.ReshowDelay = 0
+            'createAlpacaDeviceToolTip.OwnerDraw = False
+            'createAlpacaDeviceToolTip.ToolTipTitle = TOOLTIP_CREATE_ALPACA_DEVICE_TITLE
+            'createAlpacaDeviceToolTip.ShowAlways = True
+
+
 
             ' Set a custom rendered for the tool strip so that colours and appearance can be controlled better
             ChooserMenu.Renderer = New ChooserCustomToolStripRenderer()
@@ -319,6 +347,7 @@ Friend Class ChooserForm
 
     Private Sub ChooserFormMoveEventHandler(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Move
         If currentWarningMesage <> "" Then WarningToolTipShow(currentWarningTitle, currentWarningMesage)
+        DisplayAlpacaDeviceToolTip()
     End Sub
 
     Private Sub AlpacaStatusIndicatorTimerEventHandler(ByVal myObject As Object, ByVal myEventArgs As EventArgs) Handles alpacaStatusIndicatorTimer.Tick
@@ -480,6 +509,7 @@ Friend Class ChooserForm
                 EnablePropertiesButton(False) ' Disable the Properties button because there is not yet a COM driver to configure
                 WarningTooltipClear()
                 EnableOkButton(True)
+                DisplayAlpacaDeviceToolTip()
             End If
 
         Else ' Selected index is negative
@@ -1059,7 +1089,7 @@ Friend Class ChooserForm
             Else
                 SetStateNoAlpaca()
             End If
-
+            DisplayAlpacaDeviceToolTip()
         End Try
     End Sub
 
@@ -1288,6 +1318,8 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub WarningToolTipShow(Title As String, Message As String)
+        Const MESSAGE_X_POSITION As Integer = 120 ' Was 18
+
         WarningTooltipClear()
         chooserWarningToolTip.UseAnimation = True
         chooserWarningToolTip.UseFading = False
@@ -1302,9 +1334,56 @@ Friend Class ChooserForm
         currentWarningMesage = Message
 
         If Message.Contains(vbCrLf) Then
-            chooserWarningToolTip.Show(Message, Me, 18, 24) 'Display at position for a two line message
+            chooserWarningToolTip.Show(Message, Me, MESSAGE_X_POSITION, 24) 'Display at position for a two line message
         Else
-            chooserWarningToolTip.Show(Message, Me, 18, 50) 'Display at position for a one line message
+            chooserWarningToolTip.Show(Message, Me, MESSAGE_X_POSITION, 50) 'Display at position for a one line message
+        End If
+    End Sub
+
+    Private Delegate Sub NoParameterDelegate()
+    Private displayCreateAlpacDeviceTooltip As NoParameterDelegate = New NoParameterDelegate(AddressOf DisplayAlpacaDeviceToolTip)
+
+    Private Sub DisplayAlpacaDeviceToolTip()
+        Dim selectedItem As Generic.KeyValuePair(Of ChooserItem, String)
+
+        ' Only consider displaying the tooltip if it has been instantiated
+        If Not createAlpacaDeviceToolTip Is Nothing Then
+
+            ' Only display the tooltip if Alpaca discovery is enabled and the Alpaca dialogues have NOT been suppressed
+            If AlpacaEnabled And Not GetBool(SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE, SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE_DEFAULT) Then
+
+                ' The tooltip code must be executed by the UI thread so invoke this if required
+                If BtnOK.InvokeRequired Then
+                    TL.LogMessage("DisplayAlpacaDeviceToolTip", $"Invoke required on thread {Thread.CurrentThread.ManagedThreadId}")
+                    BtnOK.Invoke(displayCreateAlpacDeviceTooltip)
+                Else
+                    ' Only display the tooltip if a device has been selected
+                    If Not CmbDriverSelector.SelectedItem Is Nothing Then
+                        selectedItem = CType(CmbDriverSelector.SelectedItem, Generic.KeyValuePair(Of ChooserItem, String))
+
+                        ' Only display the tooltip if the an Alpaca driver has been selected
+                        If Not selectedItem.Key.IsComDriver Then
+
+                            createAlpacaDeviceToolTip.RemoveAll()
+
+                            createAlpacaDeviceToolTip.UseAnimation = True
+                            createAlpacaDeviceToolTip.UseFading = False
+                            createAlpacaDeviceToolTip.ToolTipIcon = ToolTipIcon.Info
+                            createAlpacaDeviceToolTip.AutoPopDelay = 5000
+                            createAlpacaDeviceToolTip.InitialDelay = 0
+                            createAlpacaDeviceToolTip.IsBalloon = True
+                            createAlpacaDeviceToolTip.ReshowDelay = 0
+                            createAlpacaDeviceToolTip.OwnerDraw = False
+                            createAlpacaDeviceToolTip.ToolTipTitle = TOOLTIP_CREATE_ALPACA_DEVICE_TITLE
+
+                            'createAlpacaDeviceToolTip.Show(TOOLTIP_CREATE_ALPACA_DEVICE_MESSAGE, Me, 295, 85, TOOLTIP_CREATE_ALPACA_DEVICE_DISPLAYTIME * 1000) 'Display at position for a two line message
+                            createAlpacaDeviceToolTip.Show(TOOLTIP_CREATE_ALPACA_DEVICE_MESSAGE, BtnOK, 45, -60, TOOLTIP_CREATE_ALPACA_DEVICE_DISPLAYTIME * 1000) 'Display at position for a two line message
+                            TL.LogMessage("DisplayAlpacaDeviceToolTip", $"Set tooltip on thread {Thread.CurrentThread.ManagedThreadId}")
+                        End If
+                    End If
+
+                End If
+            End If
         End If
     End Sub
 
@@ -1313,6 +1392,7 @@ Friend Class ChooserForm
         currentWarningTitle = ""
         currentWarningMesage = ""
     End Sub
+
 
     Private Sub ResizeChooser()
         ' Position controls if the Chooser has an increased width

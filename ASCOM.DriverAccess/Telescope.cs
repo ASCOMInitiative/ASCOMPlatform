@@ -60,7 +60,7 @@ namespace ASCOM.DriverAccess
         /// In this case, the OK button starts out enabled (lit-up); the assumption is that the pre-selected driver has already been configured. 
         /// </summary>
         /// <param name="telescopeId">Optional DriverID of the previously selected telescope that is to be the pre-selected telescope in the list. </param>
-        /// <returns>The DriverID of the user selected telescope. Null if the dialog is canceled.</returns>
+        /// <returns>The DriverID of the user selected telescope. Null if the dialogue is cancelled.</returns>
         public static string Choose(string telescopeId)
         {
             using (Chooser chooser = new Chooser())
@@ -139,7 +139,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// True if the telescope has been put into the parked state by the seee <see cref="Park" /> method. Set False by calling the Unpark() method.
+        /// True if the telescope has been put into the parked state by the see <see cref="Park" /> method. Set False by calling the Unpark() method.
         /// </summary>
         /// <remarks>
         /// <para>AtPark is True when the telescope is in the parked state. This is achieved by calling the <see cref="Park" /> method. When AtPark is true, 
@@ -164,7 +164,7 @@ namespace ASCOM.DriverAccess
         /// <para>This is only available for telescope InterfaceVersions 2 and 3</para>
         /// <para>
         /// Please note that the rate objects must contain absolute non-negative values only. Applications determine the direction by applying a
-        /// positive or negative sign to the rates provided. This obviates the need for the driver to to present a duplicate set of negative rates 
+        /// positive or negative sign to the rates provided. This obviates the need for the driver to present a duplicate set of negative rates 
         /// as well as the positive rates.</para>
         /// </remarks>
         public IAxisRates AxisRates(ASCOM.DeviceInterface.TelescopeAxes Axis)
@@ -330,7 +330,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// True if the guide rate properties used for <see cref="PulseGuide" /> can ba adjusted.
+        /// True if the guide rate properties used for <see cref="PulseGuide" /> can be adjusted.
         /// </summary>
         /// <remarks>
         /// May raise an error if the telescope is not connected. 
@@ -418,7 +418,7 @@ namespace ASCOM.DriverAccess
         /// True if this telescope is capable of programmed asynchronous slewing to local horizontal coordinates
         /// </summary>
         /// <remarks>
-        /// This indicates the the asynchronous local horizontal slewing methods are supported.
+        /// This indicates the asynchronous local horizontal slewing methods are supported.
         /// If this is True, then <see cref="CanSlewAltAz" /> will also be true. 
         /// May raise an error if the telescope is not connected. 
         /// </remarks>
@@ -431,7 +431,7 @@ namespace ASCOM.DriverAccess
         /// True if this telescope is capable of programmed asynchronous slewing to equatorial coordinates.
         /// </summary>
         /// <remarks>
-        /// This indicates the the asynchronous equatorial slewing methods are supported.
+        /// This indicates the asynchronous equatorial slewing methods are supported.
         /// If this is True, then <see cref="CanSlew" /> will also be true.
         /// May raise an error if the telescope is not connected. 
         /// </remarks>
@@ -441,7 +441,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// True if this telescope is capable of programmed synching to equatorial coordinates.
+        /// True if this telescope is capable of programmed syncing to equatorial coordinates.
         /// </summary>
         /// <remarks>
         /// May raise an error if the telescope is not connected. 
@@ -452,7 +452,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// True if this telescope is capable of programmed synching to local horizontal coordinates
+        /// True if this telescope is capable of programmed syncing to local horizontal coordinates
         /// </summary>
         /// <remarks>
         /// May raise an error if the telescope is not connected. 
@@ -571,7 +571,7 @@ namespace ASCOM.DriverAccess
         /// the standard reference systems established by professional astronomers.
         /// The most common is the Julian Epoch 2000 (J2000). 
         /// These instruments apply corrections for precession,
-        /// nutation, abberration, etc. to adjust the coordinates from the standard system
+        /// nutation, aberration, etc. to adjust the coordinates from the standard system
         /// to the pointing direction for the time and location of "here and now". 
         /// <para>This is only available for telescope InterfaceVersions 2 and 3</para>
         /// </remarks>
@@ -690,13 +690,13 @@ namespace ASCOM.DriverAccess
         /// <b>NOTES:</b>
         /// <list type="bullet">
         /// <item><description>The movement rate must be within the value(s) obtained from a <see cref="IRate" /> object in the 
-        /// the <see cref="AxisRates" /> collection. This is a signed value with negative rates moving in the oposite direction to positive rates.</description></item>
+        /// the <see cref="AxisRates" /> collection. This is a signed value with negative rates moving in the opposite direction to positive rates.</description></item>
         /// <item><description>The values specified in <see cref="AxisRates" /> are absolute, unsigned values and apply to both directions, 
         /// determined by the sign used in this command.</description></item>
         /// <item><description>An out of range exception is raised the rate is out of range.</description></item>
         /// <item><description>The value of <see cref="Slewing" /> must be True if the telescope is moving 
         /// about any of its axes as a result of this method being called. 
-        /// This can be used to simulate a handbox by initiating motion with the
+        /// This can be used to simulate a hand-box by initiating motion with the
         /// MouseDown event and stopping the motion with the MouseUp event.</description></item>
         /// <item><description>When the motion is stopped by setting the rate to zero the scope will be set to the previous 
         /// <see cref="TrackingRate" /> or to no movement, depending on the state of the <see cref="Tracking" /> property.</description></item>
@@ -828,10 +828,10 @@ namespace ASCOM.DriverAccess
         /// close to the meridian). In order to understand these pointing states, consider the following (thanks to Patrick Wallace for this info):</para>
         /// <para>All conventional telescope mounts have two axes nominally at right angles. For an equatorial, the longitude axis is mechanical 
         /// hour angle and the latitude axis is mechanical declination. Sky coordinates and mechanical coordinates are two completely separate arenas. 
-        /// This becomes rather more obvious if your mount is an altaz, but it's still true for an equatorial. Both mount axes can in principle 
+        /// This becomes rather more obvious if your mount is an alt-az, but it's still true for an equatorial. Both mount axes can in principle 
         /// move over a range of 360 deg. This is distinct from sky HA/Dec, where Dec is limited to a 180 deg range (+90 to -90).  Apart from 
         /// practical limitations, any point in the sky can be seen in two mechanical orientations. To get from one to the other the HA axis 
-        /// is moved 180 deg and the Dec axis is moved through the pole a distance twice the sky codeclination (90 - sky declination).</para>
+        /// is moved 180 deg and the Dec axis is moved through the pole a distance twice the sky co declination (90 - sky declination).</para>
         /// <para>Mechanical zero HA/Dec will be one of the two ways of pointing at the intersection of the celestial equator and the local meridian. 
         /// In order to support Dome slaving, where it is important to know which side of the pier the mount is actually on, ASCOM has adopted the 
         /// convention that the Normal pointing state will be the state where a German Equatorial mount is on the East side of the pier, looking West, with the 
@@ -862,7 +862,7 @@ namespace ASCOM.DriverAccess
         /// <item><description>Dec_sky = 180d - Dec_mech, expressed in range ± 90d</description></item>
         /// </list>
         /// </para>
-        /// <para>Astronomy software often needs to know which which pointing state the mount is in. Examples include setting guiding polarities 
+        /// <para>Astronomy software often needs to know which pointing state the mount is in. Examples include setting guiding polarities 
         /// and calculating dome opening azimuth/altitude. The meaning of the SideOfPier property, then is:
         /// <list type="table">
         /// <item><term><b>pierEast</b></term><description>Normal pointing state</description></item>
@@ -873,8 +873,8 @@ namespace ASCOM.DriverAccess
         /// (which varies from -180 to +180), a driver cannot calculate the pointing state, and *must not* implement SideOfPier.
         /// If the mount hardware reports only the mechanical declination axis position (-180 to +180) then a driver can calculate SideOfPier as follows:
         /// <list type="bullet">
-        /// <item><description>pierEast = abs(mechanical dec) &lt;= 90 deg</description></item>
-        /// <item><description>pierWest = abs(mechanical Dec) &gt; 90 deg</description></item>
+        /// <item><description>pierEast = abs(mechanical declination) &lt;= 90 deg</description></item>
+        /// <item><description>pierWest = abs(mechanical declination) &gt; 90 deg</description></item>
         /// </list>
         /// </para>
         /// <para>It is allowed (though not required) that this property may be written to force the mount to flip. Doing so, however, may change 
@@ -1371,7 +1371,7 @@ namespace ASCOM.DriverAccess
     #region Internal strongly typed collection wrappers
     //<summary>
     // Strongly typed enumerator for late bound Rate
-    // objects being enumarated
+    // objects being enumerated
     //</summary>
     class _RateEnumerator : IEnumerator, IDisposable
     {
@@ -1501,7 +1501,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <param name="objTypeScope">The type of the supplied object</param>
         /// <param name="objScopeLateBound">The object representing the telescope device</param>
-        /// <param name="TraceLog">A pointer to a trace loger in which to record trace information</param>
+        /// <param name="TraceLog">A pointer to a trace logger in which to record trace information</param>
         public TrackingRates(Type objTypeScope, object objScopeLateBound, TraceLogger TraceLog)
         {
             objTrackingRatesLateBound = objTypeScope.InvokeMember("TrackingRates",
@@ -1667,7 +1667,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Resets the enumerator to its initial posiiton before the first element
+        /// Resets the enumerator to its initial position before the first element
         /// </summary>
         public void Reset()
         {
