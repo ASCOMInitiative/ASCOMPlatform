@@ -25,6 +25,7 @@
     <CopyrightText>Copyright &amp;#169%3b 2010-20, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.DeviceInterface" isExposed="True">
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICameraV2" filterName="ICameraV2" isExposed="False" />
   <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV2" filterName="IFocuserV2" isExposed="False" />
   <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IRotatorV2" filterName="IRotatorV2" isExposed="False" />
 </Filter>
@@ -67,7 +68,7 @@
     </FeedbackEMailLinkText>
     <HeaderText>
     </HeaderText>
-    <VisibleItems>InheritedMembers, InheritedFrameworkMembers, EditorBrowsableNever, NonBrowsable</VisibleItems>
+    <VisibleItems>InheritedMembers, EditorBrowsableNever, NonBrowsable</VisibleItems>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="ASCOM.HelperNET.VB6HelperSupport" isDocumented="False" xmlns="" />
     </NamespaceSummaries>

@@ -23,6 +23,8 @@
           <listItem>The Chooser dialogue width can be increased if required.</listItem>
           <listItem>Telescope covers and camera calibration devices are now supported through a new CoverCalibrator interface.</listItem>
           <listItem>A CoverCalibrator simulator has been added to the Platform.</listItem>
+          <listItem>The camera interface now supports offsets and sub exposures.</listItem>
+          <listItem>The camera simulator setup dialogue appearance has been improved.</listItem>
           <listItem>
             A new Telescope / Dome / Focuser hub called Device Hub has been added to the Platform.
             <list class="bullet">
@@ -43,6 +45,7 @@
           <listItem>The Diagnostics tool is more tolerant of simulator configurations that are not set to default values.</listItem>
           <listItem>All local server simulators now start just one instance when used concurrently from both normal and elevated clients.</listItem>
           <listItem>Camera simulator memory management has been significantly improved.</listItem>
+  		  <listItem>The CheckFoUpdates script has been fixed following ascom-standards.org move to HTTPS.</listItem>
           <listItem>
             ASCOM Utilities
             <list class="bullet">
@@ -98,6 +101,7 @@
               <listItem>Clarification: The Focuser temperature unit is degrees Celsius.</listItem>
               <listItem>Clarification: Telescope.PulseGuide may throw an InvalidValueException if called when an incompatible command is already underway e.g. a slew is in progress.</listItem>
               <listItem>Clarification: IDomeV2 wording has been clarified for many properties and methods.</listItem>
+              <listItem>Clarification: IRotatorV3 cable wrap behaviour management wording has been clarified.</listItem>
             </list>
           </listItem>
           <listItem>
@@ -112,6 +116,7 @@
           <listItem>The installer now advocates using Conform to test drivers.</listItem>
           <listItem>The deprecated NOVAS2, NOVAS2COM and NOVAS3 components no longer appear in the developer help file.</listItem>
           <listItem>DriverAccess can now handle ArrayLists from .NET Core drivers.</listItem>
+          <listItem>The video utilities helpers for creating bitmaps now work with both row-major and column-major formats.</listItem>
           <listItem>
             Templates and the Driver Install Script Generator
             <list class="bullet">
@@ -131,6 +136,7 @@
       <title>Issues Fixed - Developers</title>
       <content>
         <list class="bullet">
+          <listItem>Project template creation is more robust</listItem>
           <listItem>The required minimum Windows version in the script created by the Driver Install Script Generator has been set to Windows 7 using a format that works in Inno 6.</listItem>
           <listItem>The support URL in the script created by the Driver Install Script Generator has been changed to the new ASCOM Groups.io forum.</listItem>
         </list>
