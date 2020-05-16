@@ -1652,7 +1652,6 @@ namespace ASCOM.DriverAccess
         #region ICameraV3 members
 
         /// <summary>
-        /// <p style="color:limegreen"><b>This is a proposed ICameraV3 property.</b></p>
         /// The camera's offset (OFFSET VALUE MODE) OR the index of the selected camera offset description in the <see cref="Offsets" /> array (OFFSETS INDEX MODE)
         /// </summary>
         /// <returns><para><b> OFFSET VALUE MODE:</b> The current offset value.</para>
@@ -1685,7 +1684,7 @@ namespace ASCOM.DriverAccess
         /// <para>If a driver supports both modes the astronomer must be able to select the required mode through the driver Setup dialogue.</para>
         /// <para>During driver initialisation the driver must set <see cref="Offset" /> to a valid value.</para>
         /// <para>Please note that <see cref="ReadoutMode" /> may in some cases affect the offset of the camera; if so, the driver must be ensure that the two properties do not conflict if both are used.</para>
-        /// <para>This is only available in Camera Interface Version 2 and later.</para>
+        /// <para>This is only available in Camera Interface Version 3 and later.</para>
         /// </remarks>
         public int Offset
         {
@@ -1694,7 +1693,6 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// <p style="color:limegreen"><b>This is a proposed ICameraV3 property.</b></p>
         /// Maximum <see cref="Offset" /> value of that this camera supports
         /// </summary>
         /// <returns>The maximum offset value that this camera supports</returns>
@@ -1709,7 +1707,7 @@ namespace ASCOM.DriverAccess
         /// </ul>
         /// <para>Please note that <see cref="OffsetMin"/> and <see cref="OffsetMax"/> act together and that either both must be implemented or both must throw <see cref="PropertyNotImplementedException"/>s.</para>
         /// <para>It is recommended that this function be called only after a connection is established with the camera hardware to ensure that the driver is aware of the capabilities of the specific camera model.</para>
-        /// <para>This property is only available in Camera Interface Version 2 and later.</para>
+        /// <para>This property is only available in Camera Interface Version 3 and later.</para>
         /// </remarks>
         public int OffsetMax
         {
@@ -1717,7 +1715,6 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// <p style="color:limegreen"><b>This is a proposed ICameraV3 property.</b></p>
         /// Minimum <see cref="Offset" /> value of that this camera supports
         /// </summary>
         /// <returns>The minimum offset value that this camera supports</returns>
@@ -1732,7 +1729,7 @@ namespace ASCOM.DriverAccess
         /// </ul>
         /// <para>Please note that <see cref="OffsetMin"/> and <see cref="OffsetMax"/> act together and that either both must be implemented or both must throw <see cref="PropertyNotImplementedException"/>s.</para>
         /// <para>It is recommended that this function be called only after a connection is established with the camera hardware to ensure that the driver is aware of the capabilities of the specific camera model.</para>
-        /// <para>This property is only available in Camera Interface Version 2 and later.</para>
+        /// <para>This property is only available in Camera Interface Version 3 and later.</para>
         /// </remarks>
         public int OffsetMin
         {
@@ -1740,7 +1737,6 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// <p style="color:limegreen"><b>This is a proposed ICameraV3 property.</b></p>
         /// List of Offset names supported by the camera
         /// </summary>
         /// <returns>The list of supported offset names as an ArrayList of strings</returns>
@@ -1752,11 +1748,11 @@ namespace ASCOM.DriverAccess
         /// <li>The <see cref="Offsets" /> property must return a zero-based ArrayList of available offset setting names.</li>
         /// <li>The <see cref="OffsetMin"/> and <see cref="OffsetMax"/> properties must throw <see cref="PropertyNotImplementedException"/>s.</li>
         /// </ul>
-        /// <para>The returned offset names could, for example, be a list of ISO settings for a DSLR camera or a list of offset names for a CMOS camera.
+        /// <para>The returned offset names are at the manufacturer / driver author's discretion and could for example be: "Low gain", "Medium gain" and "High gain"to match the offset to different camera use scenarios.
         /// Typically the application software will display the returned offset names in a drop list, from which the astronomer can select the required value.
         /// The application can then configure the required offset by setting the camera's <see cref="Offset"/> property to the array index of the selected description.</para>
         /// <para>It is recommended that this function be called only after a connection is established with the camera hardware to ensure that the driver is aware of the capabilities of the specific camera model.</para>
-        /// <para>This is only available in Camera Interface Version 2 and later.</para>
+        /// <para>This is only available in Camera Interface Version 3 and later.</para>
         /// </remarks>
         public ArrayList Offsets
         {
@@ -1764,13 +1760,13 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// <p style="color:limegreen"><b>This is a proposed ICameraV3 property.</b></p>
         /// Camera's sub-exposure interval
         /// </summary>
         /// <exception cref="PropertyNotImplementedException">When the camera does not support sub exposure configuration.</exception>
         /// <exception cref="NotConnectedException">When the information is not available. (Some drivers may require an active connection in order to retrieve necessary information from the camera.)</exception>
         /// <exception cref="InvalidValueException">When the supplied value is not valid.</exception>
         /// <remarks><p style="color:red"><b>This is an optional property and can throw a PropertyNotImplementedException.</b></p>
+        /// <para>This is only available in Camera Interface Version 3 and later.</para>
         /// </remarks>
         public double SubExposureDuration
         {
