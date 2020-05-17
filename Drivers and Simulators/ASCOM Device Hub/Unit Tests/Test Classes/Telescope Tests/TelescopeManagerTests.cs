@@ -47,6 +47,8 @@ namespace Unit_Tests.Telescope
 			_mgr.Dispose();
 		}
 
+		#region Test Methods
+
 		[TestMethod]
 		public void ConnectTest()
 		{
@@ -450,6 +452,24 @@ namespace Unit_Tests.Telescope
 			Assert.IsTrue( targetSOP == PierSide.pierEast );
 		}
 
+		[TestMethod]
+		[ExpectedException(typeof(NullReferenceException))]
+		public void NullAxisRatesTest()
+		{
+			Assert.IsTrue( _mgr.Connected );
+
+			TelescopeCapabilities caps = new TelescopeCapabilities( _mgr );
+			Assert.IsNotNull( caps );
+
+			_svc.MockNullPrimaryAxisRates = true;
+
+			caps = new TelescopeCapabilities( _mgr );
+
+			Assert.Fail( "No exception was thrown when receiving a null AxisRates list." );
+		}
+
+		#endregion Test Methods
+
 		#region Helper Methods
 
 		private Vector GetTargetRaDec()
@@ -526,6 +546,6 @@ namespace Unit_Tests.Telescope
 			return rateArr;
 		}
 
-		#endregion
+		#endregion Helper Methods
 	}
 }

@@ -168,16 +168,23 @@ namespace ASCOM.DeviceHub
 					Task task = Task.Run( () =>
 					{
 						ReadInitialFocuserDataTask();
-						StartDevicePolling();
 					} );
 
-					task.Wait();
+					task.Wait(); // This will propagate any unhandled exception
 				}
-				catch ( Exception )
+				catch ( AggregateException xcp )
 				{
+					LogActivityLine( ActivityMessageTypes.Other, "Attempting to initialize focuser operation caught an unhandled exception. Details follow:" );
+					LogActivityLine( ActivityMessageTypes.Other, xcp.InnerException.ToString() );
+
 					Connected = false;
 					IsConnected = false;
 					ReleaseFocuserService();
+				}
+
+				if ( Connected )
+				{
+					StartDevicePolling();
 				}
 
 				retval = Connected;

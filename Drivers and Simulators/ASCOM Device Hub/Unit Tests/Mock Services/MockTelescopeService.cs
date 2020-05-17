@@ -81,6 +81,7 @@ namespace Unit_Tests
 		public IAxisRates MockSecondaryAxisRates { get; set; }
 		public IAxisRates MockTertiaryAxisRates { get; set; }
 		public bool MockIsWeakDriver { get; set; }
+		public bool MockNullPrimaryAxisRates { get; set; }
 
 		private Vector _targetAxes;
 		private Vector _mountAxes;
@@ -126,6 +127,8 @@ namespace Unit_Tests
 			MockPrimaryAxisRates = new AxisRates( TelescopeAxes.axisPrimary );
 			MockSecondaryAxisRates = new AxisRates( TelescopeAxes.axisSecondary );
 			MockTertiaryAxisRates = new AxisRates( TelescopeAxes.axisTertiary );
+
+			MockNullPrimaryAxisRates = false;
 		}
 
 		public bool Initialized { get; private set; }
@@ -465,6 +468,11 @@ namespace Unit_Tests
 		{
 			if ( axis == TelescopeAxes.axisPrimary )
 			{
+				if ( MockNullPrimaryAxisRates )
+				{
+					return null;
+				}
+
 				return MockPrimaryAxisRates;
 			}
 			else if ( axis == TelescopeAxes.axisSecondary )

@@ -16,6 +16,7 @@ namespace Unit_Tests.Dome
 		private const double _tolerance = 0.00001;
 
 		private DomeManager _mgr;
+
 		private MockDomeService _svc;
 		private int _startupDelayMs = 3000;
 
@@ -30,6 +31,7 @@ namespace Unit_Tests.Dome
 			ServiceContainer.Instance.ClearAllServices();
 			ServiceContainer.Instance.AddService<IDomeService>( new MockDomeService() );
 			_mgr = DomeManager.Instance;
+
 			_svc = (MockDomeService)ServiceContainer.Instance.GetService<IDomeService>();
 
 			Messenger.Default.Register<DomeSlavedChangedMessage>( this, ( action ) => UpdateDomeSlavedState( action ) );
@@ -51,6 +53,7 @@ namespace Unit_Tests.Dome
 			_mgr.Dispose();
 		}
 
+		#region Test Methods
 
 		[TestMethod]
 		public void Connect()
@@ -251,9 +254,15 @@ namespace Unit_Tests.Dome
 			Assert.IsFalse( Globals.IsDomeSlaved );
 		}
 
+		#endregion Test Methods
+
+		#region Helper Methods
+
 		private void UpdateDomeSlavedState( DomeSlavedChangedMessage action )
 		{
 			Globals.IsDomeSlaved = action.State;
 		}
+
+		#endregion Helper Methods
 	}
 }

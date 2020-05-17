@@ -221,16 +221,23 @@ namespace ASCOM.DeviceHub
 					Task task = Task.Run( () =>
 					{
 						ReadInitialDomeDataTask();
-						StartDevicePolling();
 					} );
 
-					task.Wait();
+					task.Wait();  // This will propagate any unhandled exception
 				}
-				catch ( Exception )
+				catch ( AggregateException xcp )
 				{
+					LogActivityLine( ActivityMessageTypes.Other, "Attempting to initialize dome operation caught an unhandled exception. Details follow:" );
+					LogActivityLine( ActivityMessageTypes.Other, xcp.InnerException.ToString() );
+
 					Connected = false;
 					IsConnected = false;
 					ReleaseDomeService();
+				}
+
+				if ( Connected )
+				{
+					StartDevicePolling();
 				}
 
 				retval = Connected;
