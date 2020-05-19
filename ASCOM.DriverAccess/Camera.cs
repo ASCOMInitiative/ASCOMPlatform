@@ -755,7 +755,6 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// <p style="color:blue"><b>This is an existing ICameraV2 property and its interface definition has not been changed. The Remarks section has been clarified to describe the two gain management modes.</b></p>
         /// The camera's gain (GAIN VALUE MODE) OR the index of the selected camera gain description in the <see cref="Gains" /> array (GAINS INDEX MODE)
         /// </summary>
         /// <returns><para><b> GAIN VALUE MODE:</b> The current gain value.</para>
@@ -797,7 +796,6 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// <p style="color:blue"><b>This is an existing ICameraV2 property and its interface definition has not been changed. The Remarks section has been clarified to describe the two gain management modes.</b></p>
         /// Maximum <see cref="Gain" /> value of that this camera supports
         /// </summary>
         /// <returns>The maximum gain value that this camera supports</returns>
@@ -820,7 +818,6 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// <p style="color:blue"><b>This is an existing ICameraV2 property and its interface definition has not been changed. The Remarks section has been clarified to describe the two gain management modes.</b></p>
         /// Minimum <see cref="Gain" /> value of that this camera supports
         /// </summary>
         /// <returns>The minimum gain value that this camera supports</returns>
@@ -843,7 +840,6 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// <p style="color:blue"><b>This is an existing ICameraV2 property and its interface definition has not been changed. The Remarks section has been clarified to describe the two gain management modes.</b></p>
         /// List of Gain names supported by the camera
         /// </summary>
         /// <returns>The list of supported gain names as an ArrayList of strings</returns>

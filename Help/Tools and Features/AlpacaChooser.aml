@@ -15,7 +15,18 @@
         </externalLink>
         .
         However, the Remote Clients are no longer needed because new <legacyBold>Alpaca Dynamic Clients</legacyBold> are built right into the Platform and can be created on demand through the Chooser.
-        These dynamically created clients will be configured automatically using information from Alpaca devices that identify themselves over the network.
+        These dynamically created clients:
+        <list class="bullet">
+	      <listItem>
+	        Will be configured automatically using information from Alpaca devices that identify themselves over the network using the Alpaca discovery protocol.
+	      </listItem>
+	      <listItem>
+	        Will attempt to "self heal" by rediscovering an Alpaca device if its IP address changes.
+	      </listItem>
+	      <listItem>
+	        Will discover and communicate with Alpaca devices using IPv4 and IPv6
+	      </listItem>
+	    </list>
       </para>
       <para>
         The remainder of this section shows how to create and use <legacyBold>Alpaca Dynamic Clients</legacyBold> to communicate with networked Alpaca devices.

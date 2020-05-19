@@ -96,12 +96,14 @@
             Interface Standards and Components
             <list class="bullet">
               <listItem>ICoverCalibratorV1 has been added to Interfaces and DriverAccess.</listItem>
-              <listItem>IRotaotrV3 has been added to Interfaces and DriverAccess.</listItem>
-              <listItem>Revision: The Rotator Position property and MoveAbsolute method behaviours are different when IRotatorV3.CanSync is true.</listItem>
+              <listItem>ICameraV3 has been added to Interfaces and DriverAccess.</listItem>
+              <listItem>IRotatorV3 has been added to Interfaces and DriverAccess.</listItem>
+              <listItem>Revision: In IRotatorV3, most members are now mandatory rather than optional as was the case in previous versions.</listItem>
               <listItem>Clarification: The Focuser temperature unit is degrees Celsius.</listItem>
               <listItem>Clarification: Telescope.PulseGuide may throw an InvalidValueException if called when an incompatible command is already underway e.g. a slew is in progress.</listItem>
               <listItem>Clarification: IDomeV2 wording has been clarified for many properties and methods.</listItem>
               <listItem>Clarification: IRotatorV3 cable wrap behaviour management wording has been clarified.</listItem>
+              <listItem>Clarification: Better descriptions of the two Camera Gain method operating modes have been added, the interface specification itself is unchanged.</listItem>
             </list>
           </listItem>
           <listItem>
@@ -117,6 +119,9 @@
           <listItem>The deprecated NOVAS2, NOVAS2COM and NOVAS3 components no longer appear in the developer help file.</listItem>
           <listItem>DriverAccess can now handle ArrayLists from .NET Core drivers.</listItem>
           <listItem>The video utilities helpers for creating bitmaps now work with both row-major and column-major formats.</listItem>
+          <listItem>The driver access toolkit no longer queries the driver's interface when the initialiser is called, instead it is queried lazily when actually needed. 
+          This ensures that DriverAccess constructors are successful when DriverAccess is hosting a Remote Client or a Dynamic Client whose Alpaca device cannot be contacted. Now, the DriverAccess constructor is always successful and the Remote/Dynamic driver's SetupDialog method
+          can be called to change configuration if required.</listItem>
           <listItem>
             Templates and the Driver Install Script Generator
             <list class="bullet">
