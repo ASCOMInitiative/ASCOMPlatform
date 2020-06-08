@@ -28,12 +28,14 @@ namespace ASCOM.DeviceHub
 		protected const string _done = " (done)";
 		protected const string _failed = " (failed)";
 
-		#endregion Common Fields
-
 		/// <summary>
 		/// Variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
 		/// </summary>
 		protected TraceLogger _logger;
+
+		#endregion Common Fields
+
+		#region Protected Methods
 
 		protected void CheckConnected( string ident, bool isConnected )
 		{
@@ -123,5 +125,7 @@ namespace ASCOM.DeviceHub
 				_logger.LogMessage( identifier, message );
 			}
 		}
+
+		#endregion Protected Methods
 	}
 }

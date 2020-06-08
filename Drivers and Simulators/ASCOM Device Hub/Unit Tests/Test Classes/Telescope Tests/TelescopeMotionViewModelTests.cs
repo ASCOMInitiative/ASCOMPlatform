@@ -377,6 +377,16 @@ namespace Unit_Tests.Telescope
 			Assert.IsTrue( _vm.HasAsymmetricJogRates );
 			Assert.IsNotNull( _vm.SecondaryJogRates );
 			Assert.IsNotNull( _vm.SelectedSecondaryJogRate );
+
+			// Finally, test empty rates.
+
+			_vm.Capabilities = IntializeEmptyAxisRatesCapabilities();
+			Assert.AreEqual( 0, _vm.Capabilities.PrimaryAxisRates.Length );
+			Assert.AreEqual( 0, _vm.Capabilities.SecondaryAxisRates.Length );
+			Assert.AreEqual( 0, _vm.Capabilities.TertiaryAxisRates.Length );
+
+			_prVm.Invoke( "BuildJogRatesLists" );
+			Assert.IsNull( _vm.JogRates );
 		}
 
 		[TestMethod]
@@ -608,6 +618,18 @@ namespace Unit_Tests.Telescope
 			TelescopeCapabilities capabilities = TelescopeCapabilities.GetFullCapabilities();
 
 			AxisRates.SetAsymmetricRates();
+			capabilities.PrimaryAxisRates = AxisRatesToArray( new AxisRates( TelescopeAxes.axisPrimary ) );
+			capabilities.SecondaryAxisRates = AxisRatesToArray( new AxisRates( TelescopeAxes.axisSecondary ) );
+			capabilities.TertiaryAxisRates = AxisRatesToArray( new AxisRates( TelescopeAxes.axisTertiary ) );
+
+			return capabilities;
+		}
+
+		private TelescopeCapabilities IntializeEmptyAxisRatesCapabilities()
+		{
+			TelescopeCapabilities capabilities = TelescopeCapabilities.GetFullCapabilities();
+
+			AxisRates.ClearRates();
 			capabilities.PrimaryAxisRates = AxisRatesToArray( new AxisRates( TelescopeAxes.axisPrimary ) );
 			capabilities.SecondaryAxisRates = AxisRatesToArray( new AxisRates( TelescopeAxes.axisSecondary ) );
 			capabilities.TertiaryAxisRates = AxisRatesToArray( new AxisRates( TelescopeAxes.axisTertiary ) );

@@ -440,17 +440,6 @@ namespace ASCOM.DeviceHub
 			GCTokenSource = null;
 		}
 
-		private static void WaitForGarbageCollectionToStop()
-		{
-			Task task = Task.Run( () =>
-			{
-				while ( GCTask != null && GCTask.IsCanceled )
-				{
-					Thread.Sleep( 250 );
-				}
-			} );
-		}
-
         #endregion Helper Methods
 
         #region Dynamic Driver Assembly Loader

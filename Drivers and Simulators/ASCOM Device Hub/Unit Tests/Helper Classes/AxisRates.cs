@@ -18,6 +18,13 @@ namespace Unit_Tests
 			ResetRates();
 		}
 
+		internal static void ClearRates()
+		{
+			PrimaryAxisRates = new AxisRate[0];
+			SecondaryAxisRates = new AxisRate[0];
+			TertiaryAxisRates = new AxisRate[0];
+		}
+
 		internal static void ResetRates()
 		{
 			PrimaryAxisRates = new AxisRate[] { new AxisRate( 0.0, 5.0 ) };

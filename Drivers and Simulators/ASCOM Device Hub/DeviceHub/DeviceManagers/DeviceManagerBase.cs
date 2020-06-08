@@ -7,6 +7,7 @@ using System.Windows;
 
 using ASCOM.DeviceHub.MvvmMessenger;
 using ASCOM.DeviceInterface;
+using ASCOM.DriverAccess;
 
 namespace ASCOM.DeviceHub
 {
@@ -74,29 +75,31 @@ namespace ASCOM.DeviceHub
 
 					LogActivityEnd( messageType, sb.ToString() );
 				}
-				else if ( retval is ITrackingRates)
+				else if ( retval is TrackingRates)
 				{
 					LogActivityStart( ActivityMessageTypes.Parameters, "Get {0}:", propName );
 					StringBuilder sb = new StringBuilder();
 
-					ITrackingRates rates = retval as ITrackingRates;
+					TrackingRates rates = retval as TrackingRates;
 
 					if ( rates == null )
 					{
 						sb.Append( " Did not return expected ITrackingRates collection!" );
 					}
+					else if ( rates.Count == 0 )
+					{
+						sb.Append( "Received invalid Tracking Rates collection." );
+					}
 					else
 					{
-						foreach ( DriveRates rate in rates )
+						for ( int i = 1; i <= rates.Count; ++i )
 						{
-							DriveRates tempRate = rate;
-
 							if ( sb.Length > 0 )
 							{
 								sb.Append( ", " );
 							}
 
-							sb.Append( tempRate.ToString() );
+							sb.Append( rates[i].ToString() );
 						}
 					}
 

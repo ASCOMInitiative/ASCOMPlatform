@@ -347,26 +347,35 @@ namespace ASCOM.DeviceHub
 
 			if ( Capabilities != null )
 			{
+				// We need to be careful because the jog rates can be null if the telescope does
+				// not support MoveAxis!
+
 				IRate[] primaryAxisRates = Capabilities.PrimaryAxisRates;
 				jogRates = JogRates.FromAxisRates( primaryAxisRates );
 
 				IRate[] secondaryAxisRates = Capabilities.SecondaryAxisRates;
 				secondaryJogRates = JogRates.FromAxisRates( secondaryAxisRates );
 
-				if ( jogRates.Count == secondaryJogRates.Count )
+				// If we cannot move both primary and secondary axes then we cannot have asymmetric rates.
+				// This shows up in the jog rates being null.
+
+				if ( jogRates != null && secondaryJogRates != null )
 				{
-					for ( int i = 0; i < jogRates.Count; ++i )
+					if ( jogRates.Count == secondaryJogRates.Count )
 					{
-						if ( jogRates[i].Rate != secondaryJogRates[i].Rate )
+						for ( int i = 0; i < jogRates.Count; ++i )
 						{
-							asymmetricRates = true;
-							break;
+							if ( jogRates[i].Rate != secondaryJogRates[i].Rate )
+							{
+								asymmetricRates = true;
+								break;
+							}
 						}
 					}
-				}
-				else
-				{
-					asymmetricRates = true;
+					else
+					{
+						asymmetricRates = true;
+					}
 				}
 			}
 

@@ -23,6 +23,8 @@
 using System;
 using System.Collections;
 using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -399,7 +401,16 @@ namespace ASCOM.DeviceHub
 		{
 			get
 			{
-				string name = System.Reflection.Assembly.GetExecutingAssembly().FullName;
+				Assembly assembly = Assembly.GetEntryAssembly();
+				var attribute = (AssemblyProductAttribute)assembly.GetCustomAttributes( typeof(AssemblyProductAttribute), false ).FirstOrDefault();
+				string name = attribute.Product;
+
+				string downstreamName = TelescopeManager.Name;
+
+				if ( !String.IsNullOrEmpty( downstreamName ) )
+				{
+					name += " -> " + downstreamName;
+				}
 
 				LogMessage( "Get Name:", name );
 

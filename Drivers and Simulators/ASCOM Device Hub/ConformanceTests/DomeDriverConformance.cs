@@ -751,18 +751,18 @@ namespace ConformanceTests
 			TestSlewToAzimuth( 225 );
 			TestSlewToAzimuth( 270 );
 			TestSlewToAzimuth( 315 );
-			TestSlewToAzimuth( -10 );
-			TestSlewToAzimuth( 370 );
+			TestSlewToAzimuth( -10, true );
+			TestSlewToAzimuth( 370, true );
 		}
 
-		private void TestSlewToAzimuth( int target )
+		private void TestSlewToAzimuth( int target, bool expectException = false )
 		{
 			string msg = "";
 			string status = _error;
 			bool timedOut = false;
 			int minValid = 0;
 			int maxValid = 359;
-			Exception except;
+			Exception except = null;
 
 			try
 			{
@@ -796,10 +796,18 @@ namespace ConformanceTests
 
 				if ( msg.Contains( "invalid value" ) && ( target < minValid || target > maxValid ) )
 				{
-					status = _ok;
-					msg = String.Format( "COM invalid value exception correctly raised for slew to {0} degrees", target );
+					status = (expectException) ? _ok : _error;
+					msg = String.Format( "COM invalid value exception {0} raised for slew to {1} degrees"
+											, (expectException) ? "correctly" : "unexpectedly", target );
 				}
 			}
+
+			if ( expectException && except == null )
+			{
+				status = _error;
+				msg = String.Format( "No invalid value exception was raised for a slew to {0} degrees", target );
+			}
+
 
 			string suffix = ( target >= minValid && target <= maxValid ) ? target.ToString() : "";
 			TestContext.WriteLine( _fmt, NowTime(), "SlewToAzimuth " + suffix, status, msg );
@@ -821,18 +829,18 @@ namespace ConformanceTests
 			TestSlewToAltitude( 60 );
 			TestSlewToAltitude( 75 );
 			TestSlewToAltitude( 90 );
-			TestSlewToAltitude( -10 );
-			TestSlewToAltitude( 100 );
+			TestSlewToAltitude( -10, true );
+			TestSlewToAltitude( 100, true );
 		}
 
-		private void TestSlewToAltitude( int target )
+		private void TestSlewToAltitude( int target, bool expectException = false )
 		{
 			string msg = "";
 			string status = _error;
 			bool timedOut = false;
 			int minValid = 0;
 			int maxValid = 90;
-			Exception except;
+			Exception except = null;
 
 			try
 			{
@@ -866,13 +874,19 @@ namespace ConformanceTests
 
 				if ( msg.Contains( "invalid value") && ( target < minValid || target > maxValid ) )
 				{
-					status = _ok;
-					msg = String.Format( "COM invalid value exception correctly raised for slew to {0} degrees", target );
+					status = ( expectException ) ? _ok : _error;
+					msg = String.Format( "COM invalid value exception {0} raised for slew to {1} degrees"
+											, ( expectException ) ? "correctly" : "unexpectedly", target );
 				}
 			}
 
-			string suffix = ( target >= minValid && target <= maxValid ) ? target.ToString() : "";
-			TestContext.WriteLine( _fmt, NowTime(), "SlewToAltitude "+ suffix, status, msg );
+			if ( expectException && except == null )
+			{
+				status = _error;
+				msg = String.Format( "No invalid value exception was raised for a slew to {0} degrees", target );
+			}
+
+			TestContext.WriteLine( _fmt, NowTime(), "SlewToAltitude "+ target.ToString(), status, msg );
 
 			if ( status == _error )
 			{
