@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using ASCOM.DeviceInterface;
+using ASCOM.DriverAccess;
 
 namespace ASCOM.DeviceHub
 {
@@ -36,12 +37,13 @@ namespace ASCOM.DeviceHub
 
 			List<TrackingRateItem> temp = new List<TrackingRateItem>();
 
-			ITrackingRates rates = mgr.TrackingRates;
+			TrackingRates rates = (TrackingRates)mgr.TrackingRates;
 
 			if ( rates != null )
 			{
-				foreach ( DriveRates rate in rates )
+				for ( int i = 1; i <= rates.Count; ++i )
 				{
+					DriveRates rate = rates[i];
 					string name = "";
 
 					switch ( rate )
