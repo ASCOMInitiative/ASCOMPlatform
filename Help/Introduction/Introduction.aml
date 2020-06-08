@@ -15,7 +15,6 @@
     </para>
 
     <section address="Introduction-Users-Platform-6">
-
       <title>Major Enhancements in Platform 6.5</title>
       <content>
         <para>
@@ -41,6 +40,15 @@
         <para>
           Following an RFC we have added a new interface, ICoverCalibrator, which enables clients to control opening and closing of automated telescope covers and to adjust the brightness of flat field calibration panels.
           The interface incorporates these two distinct capabilities because some devices provide both within one hardware device.
+        </para>
+      </content>
+    </section>
+
+    <section address="Compatibility">
+      <title>Operating System Compatibility</title>
+      <content>
+        <para>
+          Platform 6.5 requires Windows 7 or later together with .NET Framework 4.8. PCs running Windows XP should use Platform 6.4 Service Pack 1 together with .NET Framework 4 Client Profile instead.
         </para>
       </content>
     </section>
