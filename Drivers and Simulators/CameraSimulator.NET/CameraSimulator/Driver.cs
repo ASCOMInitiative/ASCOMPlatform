@@ -1270,9 +1270,32 @@ namespace ASCOM.Simulator
 
                 Log.LogMessage("ImageArray", "get");
                 if (sensorType == SensorType.Color)
+                {                
+                    // Test code to demonstrate the order of returned array values. Not required in production code!
+                    //for (int k = 0; k < 3; k++)
+                    //{
+                    //    for (int j = 0; j < numY; j++)
+                    //    {
+                    //        for (int i = 0; i < numX; i++)
+                    //        {
+                    //            imageArrayColour[i, j, k] = i + 10 * j + 100 * k;
+                    //        }
+                    //    }
+                    //}
                     return imageArrayColour;
+                }
                 else
+                {
+                    // Test code to demonstrate the order of returned array values. Not required in production code!
+                    //for (int j = 0; j < numY; j++)
+                    //{
+                    //    for (int i = 0; i < numX; i++)
+                    //    {
+                    //        imageArray[i, j] = i + 10 * j;
+                    //    }
+                    //}
                     return imageArray;
+                }
             }
         }
 
