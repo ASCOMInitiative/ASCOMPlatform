@@ -157,7 +157,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                string response = string.Format("{0} REMOTE DEVICE: {1}", DriverDisplayName, DynamicClientDriver.Description(clientNumber, client, URIBase, TL));
+                string response = DynamicClientDriver.Description(clientNumber, client, URIBase, TL);
                 TL.LogMessage(clientNumber, "Description", response);
                 return response;
             }
@@ -168,9 +168,9 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                Version version = Assembly.GetExecutingAssembly().GetName().Version;
                 string remoteString = DynamicClientDriver.DriverInfo(clientNumber, client, URIBase, TL);
-                string response = string.Format("{0} Version {1}, REMOTE DEVICE: {2}", DriverDisplayName, version.ToString(), remoteString);
+                string response = $"{DriverDisplayName} Version {version}, REMOTE DEVICE: {remoteString}";
                 TL.LogMessage(clientNumber, "DriverInfo", response);
                 return response;
             }
