@@ -213,7 +213,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// This returns the raw mechanical position of the rotator.
+        /// This returns the raw mechanical position of the rotator in degrees.
         /// </summary>
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented</b></p>Returns the mechanical position of the rotator, which is equivalent to the IRotatorV2 <see cref="Position"/> property. Other clients (beyond the one that performed the sync) 
