@@ -429,7 +429,8 @@ namespace ASCOM.DeviceInterface
         /// NumPlanes.  If the application cannot handle multispectral images, it should use just the first plane.</para>
         /// </remarks>
         /// <value>The image array.</value>
-        /// <exception cref=" NotConnectedException">Must throw exception if data unavailable.</exception>
+        /// <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
+        /// <exception cref="InvalidOperationException">If no image data is available.</exception>
         object ImageArray { get; }
 
         /// <summary>
@@ -447,7 +448,8 @@ namespace ASCOM.DeviceInterface
         /// just the first plane.</para>
         /// </remarks>
         /// <value>The image array variant.</value>
-        /// <exception cref=" NotConnectedException">Must throw exception if data unavailable.</exception>
+        /// <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
+        /// <exception cref="InvalidOperationException">If no image data is available.</exception>
         object ImageArrayVariant { get; }
 
         /// <summary>
