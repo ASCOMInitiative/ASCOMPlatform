@@ -73,16 +73,6 @@ namespace ASCOM.Simulator
             }
         }
 
-        public bool CanSync
-        {
-            get { return ChkCanSync.Checked; }
-            set
-            {
-                ChkCanSync.Checked = value;
-                UpdateUI();
-            }
-        }
-
         public float SyncOffset
         {
             get { return syncOffset; }
@@ -157,14 +147,7 @@ namespace ASCOM.Simulator
                 chkReverse.Enabled = true;
             }
 
-            if (ChkCanSync.Checked)
-            {
-                TxtSyncOfffset.Enabled = true;
-            }
-            else
-            {
-                TxtSyncOfffset.Enabled = false;
-            }
+            TxtSyncOfffset.Enabled = true;
 
             lblStepSize.Text = "Step size " + this.StepSize.ToString("0.0") + " deg. (4 steps/sec.)";
         }

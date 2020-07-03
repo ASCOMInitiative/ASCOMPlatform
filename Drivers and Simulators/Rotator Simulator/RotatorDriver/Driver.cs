@@ -23,7 +23,7 @@ namespace ASCOM.Simulator
 {
     // The Guid attribute sets the CLSID for ASCOM.Simulator.Rotator
     // The ClassInterface/None attribute prevents an empty interface called _Rotator from being created and used as the [default] interface
- 
+
     [Guid("347B5004-3662-42C0-96B8-3F8F6F0467D2")]
     [ServedClassName("Rotator Simulator .NET")]
     [ProgId("ASCOM.Simulator.Rotator")]
@@ -169,11 +169,6 @@ namespace ASCOM.Simulator
         #endregion
 
         #region IRotatorV3 members
-
-        public bool CanSync
-        {
-            get { return RotatorHardware.CanSync; }
-        }
 
         public float MechanicalPosition
         {

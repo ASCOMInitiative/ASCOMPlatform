@@ -30,7 +30,6 @@ namespace ASCOM.Simulator
             setupForm.CanReverse = RotatorHardware.CanReverse;
             setupForm.Reverse = RotatorHardware.Reverse;
             setupForm.RotationRate = RotatorHardware.RotationRate;
-            setupForm.CanSync = RotatorHardware.CanSync;
             setupForm.SyncOffset = RotatorHardware.SyncOffset;
 
             setupForm.UpdateInterval = updateInterval;
@@ -42,7 +41,6 @@ namespace ASCOM.Simulator
                 RotatorHardware.CanReverse = setupForm.CanReverse;
                 RotatorHardware.Reverse = setupForm.Reverse;
                 RotatorHardware.RotationRate = setupForm.RotationRate;
-                RotatorHardware.CanSync = setupForm.CanSync;
                 RotatorHardware.SyncOffset = setupForm.SyncOffset;
             }
 
@@ -97,21 +95,13 @@ namespace ASCOM.Simulator
             this.chkConnected.Checked = RotatorHardware.Connected;
             if (RotatorHardware.Connected)
             {
-                this.LblSkyPosition.Text = $" {RotatorHardware.Position.ToString("000.0")}";
+                this.LblSkyPosition.Text = $" {RotatorHardware.Position:000.0}";
                 this.LblSkyPosition.ForeColor = Color.White;
-                this.LblMechanicalPosition.Text = $" {RotatorHardware.InstrumentalPosition.ToString("000.0")}";
+                this.LblMechanicalPosition.Text = $" {RotatorHardware.InstrumentalPosition:000.0}";
                 this.LblMechanicalPosition.ForeColor = Color.White;
 
-                if (RotatorHardware.CanSync) // If the rotator is able to sync display the sync offset
-                {
-                    this.LblSyncOffset.Text = RotatorHardware.SyncOffset.ToString("+000.0;-000.0");
-                    this.LblSyncOffset.ForeColor = Color.White;
-                }
-                else // We can't sync so set the value to N/A and disable the display
-                {
-                    this.LblSyncOffset.ForeColor = Color.Red;
-                    this.LblSyncOffset.Text = "N/A";
-                }
+                this.LblSyncOffset.Text = RotatorHardware.SyncOffset.ToString("+000.0;-000.0");
+                this.LblSyncOffset.ForeColor = Color.White;
             }
             else
             {
