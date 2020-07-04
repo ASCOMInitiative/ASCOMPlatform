@@ -264,6 +264,12 @@ namespace ASCOM.Simulator
             set { checkBoxCanPierSide.Checked = value; }
 
         }
+        public bool CanDestinationSideOfPier
+        {
+            get { return chkCanDestinationSideofPier.Checked; }
+            set { chkCanDestinationSideofPier.Checked = value; }
+
+        }
         public bool CanTrackingRates
         {
             get { return checkBoxCanTrackingRates.Checked; }

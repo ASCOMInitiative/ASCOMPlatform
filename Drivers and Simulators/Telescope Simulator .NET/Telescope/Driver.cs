@@ -515,6 +515,7 @@ namespace ASCOM.Simulator
             SharedResources.TrafficStart(SharedResources.MessageType.Other, "DestinationSideOfPier: ");
             CheckVersionOne("DestinationSideOfPier");
             SharedResources.TrafficStart(string.Format(CultureInfo.CurrentCulture, "Ra {0}, Dec {1} - ", RightAscension, Declination));
+            CheckCapability(TelescopeHardware.CanDestinationSideofPier, "DestinationSideOfPier");
 
             PierSide ps = TelescopeHardware.SideOfPierRaDec(RightAscension, Declination);
             SharedResources.TrafficEnd(ps.ToString());
@@ -883,6 +884,7 @@ namespace ASCOM.Simulator
             get
             {
                 SharedResources.TrafficLine(SharedResources.MessageType.Polls, string.Format("SideOfPier: {0}", TelescopeHardware.SideOfPier));
+                CheckCapability(TelescopeHardware.CanPierSide, "SideOfPier", false);
                 return TelescopeHardware.SideOfPier;
             }
             set

@@ -103,6 +103,7 @@ namespace ASCOM.Simulator
             this.checkBoxRefraction = new System.Windows.Forms.CheckBox();
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelTime = new System.Windows.Forms.Label();
+            this.chkCanDestinationSideofPier = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
@@ -532,6 +533,7 @@ namespace ASCOM.Simulator
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel4.Controls.Add(this.chkCanDestinationSideofPier, 2, 3);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanPulseGuide, 3, 3);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanGuideRates, 3, 2);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanTrackingRates, 3, 1);
@@ -549,19 +551,19 @@ namespace ASCOM.Simulator
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanPark, 1, 1);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSetParkPosition, 1, 2);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanUnpark, 1, 3);
-            this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel5, 1, 4);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanPierSide, 2, 1);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSetPierSide, 2, 2);
-            this.tableLayoutPanel4.Controls.Add(this.checkBoxCanDoesRefraction, 2, 3);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanDualAxisPulseGuide, 3, 4);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSetEquatorialRates, 3, 5);
-            this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel6, 2, 4);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanLatLongElev, 1, 7);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanOptics, 1, 8);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanDateTime, 2, 7);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSiderealTime, 2, 8);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxVersionOne, 3, 8);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxNoSyncPastMeridian, 3, 7);
+            this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel5, 1, 5);
+            this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel6, 2, 5);
+            this.tableLayoutPanel4.Controls.Add(this.checkBoxCanDoesRefraction, 2, 4);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -773,7 +775,7 @@ namespace ASCOM.Simulator
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.86014F));
             this.tableLayoutPanel5.Controls.Add(this.comboBoxNumberMoveAxis, 0, 0);
             this.tableLayoutPanel5.Controls.Add(this.label8, 0, 0);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(152, 95);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(152, 118);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel4.SetRowSpan(this.tableLayoutPanel5, 2);
@@ -831,7 +833,7 @@ namespace ASCOM.Simulator
             // 
             this.checkBoxCanDoesRefraction.AutoSize = true;
             this.checkBoxCanDoesRefraction.ForeColor = System.Drawing.Color.White;
-            this.checkBoxCanDoesRefraction.Location = new System.Drawing.Point(301, 72);
+            this.checkBoxCanDoesRefraction.Location = new System.Drawing.Point(301, 95);
             this.checkBoxCanDoesRefraction.Name = "checkBoxCanDoesRefraction";
             this.checkBoxCanDoesRefraction.Size = new System.Drawing.Size(112, 17);
             this.checkBoxCanDoesRefraction.TabIndex = 27;
@@ -867,7 +869,7 @@ namespace ASCOM.Simulator
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 56.64336F));
             this.tableLayoutPanel6.Controls.Add(this.comboBoxEquatorialSystem, 0, 0);
             this.tableLayoutPanel6.Controls.Add(this.label9, 0, 0);
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(301, 95);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(301, 118);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel4.SetRowSpan(this.tableLayoutPanel6, 2);
@@ -990,6 +992,17 @@ namespace ASCOM.Simulator
             this.labelTime.Size = new System.Drawing.Size(185, 13);
             this.labelTime.TabIndex = 19;
             this.labelTime.Text = "<run time - time zone and UTC offset>";
+            // 
+            // chkCanDestinationSideofPier
+            // 
+            this.chkCanDestinationSideofPier.AutoSize = true;
+            this.chkCanDestinationSideofPier.ForeColor = System.Drawing.Color.White;
+            this.chkCanDestinationSideofPier.Location = new System.Drawing.Point(301, 72);
+            this.chkCanDestinationSideofPier.Name = "chkCanDestinationSideofPier";
+            this.chkCanDestinationSideofPier.Size = new System.Drawing.Size(127, 17);
+            this.chkCanDestinationSideofPier.TabIndex = 42;
+            this.chkCanDestinationSideofPier.Text = "DestinationSideofPier";
+            this.chkCanDestinationSideofPier.UseVisualStyleBackColor = true;
             // 
             // SetupDialogForm
             // 
@@ -1123,5 +1136,6 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.TextBox textBoxFocalLength;
         private System.Windows.Forms.TextBox textBoxAperture;
         private System.Windows.Forms.CheckBox checkBoxNoSyncPastMeridian;
+        private System.Windows.Forms.CheckBox chkCanDestinationSideofPier;
     }
 }

@@ -115,6 +115,7 @@ namespace ASCOM.Simulator
         private static bool canLatLongElev;
         private static bool canSiderealTime;
         private static bool canPierSide;
+        private static bool canDestinationSideOfPier;
         private static bool canTrackingRates;
 
         //Telescope Implementation
@@ -433,6 +434,7 @@ namespace ASCOM.Simulator
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanLatLongElev", "true", "Capabilities");
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanSiderealTime", "true", "Capabilities");
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanPierSide", "true", "Capabilities");
+                    s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanDestinationSideOfPier", "true", "Capabilities");
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanTrackingRates", "true", "Capabilities");
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanDualAxisPulseGuide", "true", "Capabilities");
                 }
@@ -536,6 +538,7 @@ namespace ASCOM.Simulator
                 canLatLongElev = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanLatLongElev", "Capabilities"));
                 canSiderealTime = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanSiderealTime", "Capabilities"));
                 canPierSide = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanPierSide", "Capabilities"));
+                canDestinationSideOfPier = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanDestinationSideOfPier", "Capabilities","True"));
                 canTrackingRates = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanTrackingRates", "Capabilities"));
                 canDualAxisPulseGuide = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanDualAxisPulseGuide", "Capabilities"));
                 noSyncPastMeridian = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "NoSyncPastMeridian", "Capabilities", "false"));
@@ -914,6 +917,16 @@ namespace ASCOM.Simulator
             {
                 canPierSide = value;
                 s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanPierSide", value.ToString(), "Capabilities");
+            }
+        }
+
+        public static bool CanDestinationSideofPier
+        {
+            get { return canDestinationSideOfPier; }
+            set
+            {
+                canDestinationSideOfPier = value;
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanDestinationSideOfPier", value.ToString(), "Capabilities");
             }
         }
 
