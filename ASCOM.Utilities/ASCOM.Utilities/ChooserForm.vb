@@ -934,9 +934,9 @@ Friend Class ChooserForm
                     ' Annotate the device description as configured
                     If (driverProgId.ToLowerInvariant().StartsWith(DRIVER_PROGID_BASE.ToLowerInvariant())) Then ' This is a COM driver for an Alpaca device
                         If AlpacaShowDeviceDetails Then ' Get device details from the Profile and display these
-                            driverName = $"{driverName}    ({driverProgId} ==> {profile.GetValue(driverProgId, PROFILE_VALUE_NAME_IP_ADDRESS, Nothing)}:
-                                        {profile.GetValue(driverProgId, PROFILE_VALUE_NAME_PORT_NUMBER, Nothing)}/api/v1/{deviceTypeValue}/{profile.GetValue(driverProgId, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER, Nothing)}
-                                        ) - {profile.GetValue(driverProgId, PROFILE_VALUE_NAME_UNIQUEID)}" ' Annotate as Alpaca Dynamic driver to differentiate from other COM drivers
+                            driverName = $"{driverName}    ({driverProgId} ==> {profile.GetValue(driverProgId, PROFILE_VALUE_NAME_IP_ADDRESS, Nothing)}:" +
+                                         $"{profile.GetValue(driverProgId, PROFILE_VALUE_NAME_PORT_NUMBER, Nothing)}/api/v1/{deviceTypeValue}/{profile.GetValue(driverProgId, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER, Nothing)}" +
+                                         $") - {profile.GetValue(driverProgId, PROFILE_VALUE_NAME_UNIQUEID)}" ' Annotate as Alpaca Dynamic driver to differentiate from other COM drivers
                         Else ' Just annotate as an Alpaca device
                             driverName = $"{driverName}    (Alpaca)" ' Annotate as an Alpaca device
                         End If
