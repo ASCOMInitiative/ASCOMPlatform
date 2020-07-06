@@ -16,6 +16,8 @@ Public Class AlpacaDevice
     Dim configuredDevicesValue As List(Of ConfiguredDevice)
     Dim configuredDevicesAsArrayListValue As ArrayList
 
+    Dim hostNameValue, ipAddressValue, serverNameValue, manufacturerValue, manufacturerVersionValue, locationValue As String
+
     ''' <summary>
     ''' Initialises the class with default values
     ''' </summary>
@@ -34,6 +36,14 @@ Public Class AlpacaDevice
         configuredDevicesValue = New List(Of ConfiguredDevice)
         configuredDevicesAsArrayListValue = New ArrayList
         SupportedInterfaceVersions = New Integer() {}
+
+        ' Initialise string variables to ensure that no null values are present
+        hostNameValue = ""
+        ipAddressValue = ""
+        serverNameValue = ""
+        manufacturerValue = ""
+        manufacturerVersionValue = ""
+        locationValue = ""
 
         Me.IPEndPoint = ipEndPoint ' Set the IPEndpoint to the supplied value
 
@@ -58,11 +68,33 @@ Public Class AlpacaDevice
     ''' The Alpaca device's DNS host name, if available, otherwise its IP address. IPv6 addresses will be in canonical form.
     ''' </summary>
     Public Property HostName As String Implements IAlpacaDevice.HostName
+        Get
+            Return hostNameValue
+        End Get
+        Set(value As String)
+            If String.IsNullOrEmpty(value) Then ' Make sure a null value is converted to an empty string
+                hostNameValue = ""
+            Else
+                hostNameValue = value ' Save the supplied value
+            End If
+        End Set
+    End Property
 
     ''' <summary>
     ''' The Alpaca device's IP address. IPv6 addresses will be in canonical form.
     ''' </summary>
     Public Property IpAddress As String Implements IAlpacaDevice.IpAddress
+        Get
+            Return ipAddressValue
+        End Get
+        Set(value As String)
+            If String.IsNullOrEmpty(value) Then ' Make sure a null value is converted to an empty string
+                ipAddressValue = ""
+            Else
+                ipAddressValue = value ' Save the supplied value
+            End If
+        End Set
+    End Property
 
     ''' <summary>
     ''' Alpaca device's IP port number
@@ -90,25 +122,70 @@ Public Class AlpacaDevice
     ''' The Alpaca device's configured name
     ''' </summary>
     ''' <returns></returns>
-    Public Property ServerName As String = "" Implements IAlpacaDevice.ServerName
+    Public Property ServerName As String Implements IAlpacaDevice.ServerName
+        Get
+            Return serverNameValue
+        End Get
+        Set(value As String)
+            If String.IsNullOrEmpty(value) Then ' Make sure a null value is converted to an empty string
+                serverNameValue = ""
+            Else
+                serverNameValue = value ' Save the supplied value
+            End If
+        End Set
+    End Property
 
     ''' <summary>
     ''' The device manufacturer's name
     ''' </summary>
     ''' <returns></returns>
-    Public Property Manufacturer As String = "" Implements IAlpacaDevice.Manufacturer
+    Public Property Manufacturer As String Implements IAlpacaDevice.Manufacturer
+        Get
+            Return manufacturerValue
+        End Get
+        Set(value As String)
+            If String.IsNullOrEmpty(value) Then ' Make sure a null value is converted to an empty string
+                manufacturerValue = ""
+            Else
+                manufacturerValue = value ' Save the supplied value
+            End If
+        End Set
+    End Property
 
     ''' <summary>
     ''' The device's version as set by the manufacturer
     ''' </summary>
     ''' <returns></returns>
-    Public Property ManufacturerVersion As String = "" Implements IAlpacaDevice.ManufacturerVersion
+    Public Property ManufacturerVersion As String Implements IAlpacaDevice.ManufacturerVersion
+        Get
+            Return manufacturerVersionValue
+        End Get
+        Set(value As String)
+            If String.IsNullOrEmpty(value) Then ' Make sure a null value is converted to an empty string
+                manufacturerVersionValue = ""
+            Else
+                manufacturerVersionValue = value ' Save the supplied value
+            End If
+        End Set
+    End Property
 
     ''' <summary>
     ''' The Alpaca device's configured location
     ''' </summary>
     ''' <returns></returns>
-    Public Property Location As String = "" Implements IAlpacaDevice.Location
+    Public Property Location As String Implements IAlpacaDevice.Location
+        Get
+            Return locationValue
+
+        End Get
+        Set(value As String)
+            If String.IsNullOrEmpty(value) Then ' Make sure a null value is converted to an empty string
+                locationValue = ""
+            Else
+                locationValue = value ' Save the supplied value
+            End If
+        End Set
+    End Property
 
     ''' <summary>
     ''' List of ASCOM devices available on this Alpaca device

@@ -8,6 +8,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Threading
 Imports ASCOM.Utilities
+Imports Newtonsoft.Json.Serialization
 
 Friend Class ChooserForm
     Inherits Form
@@ -963,31 +964,32 @@ Friend Class ChooserForm
 
                 ' Render the user interface unresponsive while discovery is underway, except for the Cancel button.
                 SetStateAlpacaDiscovering()
-                Dim discovery As AlpacaDiscovery
-                discovery = New AlpacaDiscovery(TL)
-                TL.LogMessage("DiscoverAlpacaDevices", $"AlpacaDiscovery created")
-                discovery.StartDiscovery(AlpacaNumberOfBroadcasts, 200, AlpacaDiscoveryPort, AlpacaTimeout, AlpacaDnsResolution, AlpacaUseIpV4, AlpacaUseIpV6)
-                TL.LogMessage("DiscoverAlpacaDevices", $"AlpacaDiscovery started")
 
-                ' Keep the UI alive while the discovery is running
-                Do
-                    Threading.Thread.Sleep(10)
-                    Application.DoEvents()
-                Loop Until discovery.DiscoveryComplete
-                TL.LogMessage("DiscoverAlpacaDevices", $"Discovery phase has finished")
+                ' Initiate discovery and wait for it to complete
+                Using discovery As AlpacaDiscovery = New AlpacaDiscovery(TL)
+                    TL.LogMessage("DiscoverAlpacaDevices", $"AlpacaDiscovery created")
+                    discovery.StartDiscovery(AlpacaNumberOfBroadcasts, 200, AlpacaDiscoveryPort, AlpacaTimeout, AlpacaDnsResolution, AlpacaUseIpV4, AlpacaUseIpV6)
+                    TL.LogMessage("DiscoverAlpacaDevices", $"AlpacaDiscovery started")
 
-                TL.LogMessage("DiscoverAlpacaDevices", $"Discovered {discovery.GetAscomDevices("").Count} devices")
+                    ' Keep the UI alive while the discovery is running
+                    Do
+                        Threading.Thread.Sleep(10)
+                        Application.DoEvents()
+                    Loop Until discovery.DiscoveryComplete
+                    TL.LogMessage("DiscoverAlpacaDevices", $"Discovery phase has finished")
 
-                ' List discovered devices to the log
-                For Each ascomDevice As AscomDevice In discovery.GetAscomDevices("")
-                    TL.LogMessage("DiscoverAlpacaDevices", $"FOUND {ascomDevice.AscomDeviceType} {ascomDevice.AscomDeviceName} {ascomDevice.IPEndPoint.ToString()}")
-                Next
+                    TL.LogMessage("DiscoverAlpacaDevices", $"Discovered {discovery.GetAscomDevices("").Count} devices")
 
-                TL.LogMessage("DiscoverAlpacaDevices", $"Discovered {discovery.GetAscomDevices(deviceTypeValue).Count} {deviceTypeValue} devices")
+                    ' List discovered devices to the log
+                    For Each ascomDevice As AscomDevice In discovery.GetAscomDevices("")
+                        TL.LogMessage("DiscoverAlpacaDevices", $"FOUND {ascomDevice.AscomDeviceType} {ascomDevice.AscomDeviceName} {ascomDevice.IPEndPoint.ToString()}")
+                    Next
 
-                ' Get discovered devices of the requested ASCOM device type
-                alpacaDevices = discovery.GetAscomDevices(deviceTypeValue)
-                discovery.Dispose()
+                    TL.LogMessage("DiscoverAlpacaDevices", $"Discovered {discovery.GetAscomDevices(deviceTypeValue).Count} {deviceTypeValue} devices")
+
+                    ' Get discovered devices of the requested ASCOM device type
+                    alpacaDevices = discovery.GetAscomDevices(deviceTypeValue)
+                End Using
 
                 ' Add any Alpaca devices to the list
                 For Each device As AscomDevice In alpacaDevices
