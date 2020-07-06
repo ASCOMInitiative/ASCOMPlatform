@@ -66,6 +66,7 @@ namespace ASCOM.Simulator
             this.label7 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.chkCanDestinationSideofPier = new System.Windows.Forms.CheckBox();
             this.checkBoxCanPulseGuide = new System.Windows.Forms.CheckBox();
             this.checkBoxCanGuideRates = new System.Windows.Forms.CheckBox();
             this.checkBoxCanTrackingRates = new System.Windows.Forms.CheckBox();
@@ -83,27 +84,26 @@ namespace ASCOM.Simulator
             this.checkBoxCanPark = new System.Windows.Forms.CheckBox();
             this.checkBoxCanSetParkPosition = new System.Windows.Forms.CheckBox();
             this.checkBoxCanUnpark = new System.Windows.Forms.CheckBox();
-            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.comboBoxNumberMoveAxis = new System.Windows.Forms.ComboBox();
-            this.label8 = new System.Windows.Forms.Label();
             this.checkBoxCanPierSide = new System.Windows.Forms.CheckBox();
             this.checkBoxCanSetPierSide = new System.Windows.Forms.CheckBox();
-            this.checkBoxCanDoesRefraction = new System.Windows.Forms.CheckBox();
             this.checkBoxCanDualAxisPulseGuide = new System.Windows.Forms.CheckBox();
             this.checkBoxCanSetEquatorialRates = new System.Windows.Forms.CheckBox();
-            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-            this.comboBoxEquatorialSystem = new System.Windows.Forms.ComboBox();
-            this.label9 = new System.Windows.Forms.Label();
             this.checkBoxCanLatLongElev = new System.Windows.Forms.CheckBox();
             this.checkBoxCanOptics = new System.Windows.Forms.CheckBox();
             this.checkBoxCanDateTime = new System.Windows.Forms.CheckBox();
             this.checkBoxCanSiderealTime = new System.Windows.Forms.CheckBox();
             this.checkBoxVersionOne = new System.Windows.Forms.CheckBox();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.comboBoxNumberMoveAxis = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.comboBoxEquatorialSystem = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.checkBoxCanDoesRefraction = new System.Windows.Forms.CheckBox();
             this.checkBoxOnTop = new System.Windows.Forms.CheckBox();
             this.checkBoxRefraction = new System.Windows.Forms.CheckBox();
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelTime = new System.Windows.Forms.Label();
-            this.chkCanDestinationSideofPier = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
@@ -581,6 +581,17 @@ namespace ASCOM.Simulator
             this.tableLayoutPanel4.Size = new System.Drawing.Size(598, 209);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
+            // chkCanDestinationSideofPier
+            // 
+            this.chkCanDestinationSideofPier.AutoSize = true;
+            this.chkCanDestinationSideofPier.ForeColor = System.Drawing.Color.White;
+            this.chkCanDestinationSideofPier.Location = new System.Drawing.Point(301, 72);
+            this.chkCanDestinationSideofPier.Name = "chkCanDestinationSideofPier";
+            this.chkCanDestinationSideofPier.Size = new System.Drawing.Size(127, 17);
+            this.chkCanDestinationSideofPier.TabIndex = 42;
+            this.chkCanDestinationSideofPier.Text = "DestinationSideofPier";
+            this.chkCanDestinationSideofPier.UseVisualStyleBackColor = true;
+            // 
             // checkBoxCanPulseGuide
             // 
             this.checkBoxCanPulseGuide.AutoSize = true;
@@ -768,45 +779,6 @@ namespace ASCOM.Simulator
             this.checkBoxCanUnpark.Text = "Unparking";
             this.checkBoxCanUnpark.UseVisualStyleBackColor = true;
             // 
-            // tableLayoutPanel5
-            // 
-            this.tableLayoutPanel5.ColumnCount = 2;
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.13986F));
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.86014F));
-            this.tableLayoutPanel5.Controls.Add(this.comboBoxNumberMoveAxis, 0, 0);
-            this.tableLayoutPanel5.Controls.Add(this.label8, 0, 0);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(152, 118);
-            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 1;
-            this.tableLayoutPanel4.SetRowSpan(this.tableLayoutPanel5, 2);
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(143, 40);
-            this.tableLayoutPanel5.TabIndex = 23;
-            // 
-            // comboBoxNumberMoveAxis
-            // 
-            this.comboBoxNumberMoveAxis.FormattingEnabled = true;
-            this.comboBoxNumberMoveAxis.Items.AddRange(new object[] {
-            "0",
-            "1",
-            "2",
-            "3"});
-            this.comboBoxNumberMoveAxis.Location = new System.Drawing.Point(88, 3);
-            this.comboBoxNumberMoveAxis.Name = "comboBoxNumberMoveAxis";
-            this.comboBoxNumberMoveAxis.Size = new System.Drawing.Size(52, 21);
-            this.comboBoxNumberMoveAxis.TabIndex = 15;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(3, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(78, 26);
-            this.label8.TabIndex = 14;
-            this.label8.Text = "Number of Axis For Move:";
-            // 
             // checkBoxCanPierSide
             // 
             this.checkBoxCanPierSide.AutoSize = true;
@@ -829,17 +801,6 @@ namespace ASCOM.Simulator
             this.checkBoxCanSetPierSide.Text = "Set Side of Pier";
             this.checkBoxCanSetPierSide.UseVisualStyleBackColor = true;
             // 
-            // checkBoxCanDoesRefraction
-            // 
-            this.checkBoxCanDoesRefraction.AutoSize = true;
-            this.checkBoxCanDoesRefraction.ForeColor = System.Drawing.Color.White;
-            this.checkBoxCanDoesRefraction.Location = new System.Drawing.Point(301, 95);
-            this.checkBoxCanDoesRefraction.Name = "checkBoxCanDoesRefraction";
-            this.checkBoxCanDoesRefraction.Size = new System.Drawing.Size(112, 17);
-            this.checkBoxCanDoesRefraction.TabIndex = 27;
-            this.checkBoxCanDoesRefraction.Text = "RefractionSupport";
-            this.checkBoxCanDoesRefraction.UseVisualStyleBackColor = true;
-            // 
             // checkBoxCanDualAxisPulseGuide
             // 
             this.checkBoxCanDualAxisPulseGuide.AutoSize = true;
@@ -861,40 +822,6 @@ namespace ASCOM.Simulator
             this.checkBoxCanSetEquatorialRates.TabIndex = 33;
             this.checkBoxCanSetEquatorialRates.Text = "RA / Dec Rates";
             this.checkBoxCanSetEquatorialRates.UseVisualStyleBackColor = true;
-            // 
-            // tableLayoutPanel6
-            // 
-            this.tableLayoutPanel6.ColumnCount = 2;
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43.35664F));
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 56.64336F));
-            this.tableLayoutPanel6.Controls.Add(this.comboBoxEquatorialSystem, 0, 0);
-            this.tableLayoutPanel6.Controls.Add(this.label9, 0, 0);
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(301, 118);
-            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-            this.tableLayoutPanel6.RowCount = 1;
-            this.tableLayoutPanel4.SetRowSpan(this.tableLayoutPanel6, 2);
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(143, 40);
-            this.tableLayoutPanel6.TabIndex = 34;
-            // 
-            // comboBoxEquatorialSystem
-            // 
-            this.comboBoxEquatorialSystem.FormattingEnabled = true;
-            this.comboBoxEquatorialSystem.Location = new System.Drawing.Point(64, 3);
-            this.comboBoxEquatorialSystem.Name = "comboBoxEquatorialSystem";
-            this.comboBoxEquatorialSystem.Size = new System.Drawing.Size(75, 21);
-            this.comboBoxEquatorialSystem.TabIndex = 15;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(3, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(54, 26);
-            this.label9.TabIndex = 14;
-            this.label9.Text = "Equatorial System:";
             // 
             // checkBoxCanLatLongElev
             // 
@@ -951,6 +878,90 @@ namespace ASCOM.Simulator
             this.checkBoxVersionOne.Text = "Version 1 Only";
             this.checkBoxVersionOne.UseVisualStyleBackColor = true;
             // 
+            // tableLayoutPanel5
+            // 
+            this.tableLayoutPanel5.ColumnCount = 2;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.13986F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.86014F));
+            this.tableLayoutPanel5.Controls.Add(this.comboBoxNumberMoveAxis, 0, 0);
+            this.tableLayoutPanel5.Controls.Add(this.label8, 0, 0);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(152, 118);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 1;
+            this.tableLayoutPanel4.SetRowSpan(this.tableLayoutPanel5, 2);
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(143, 40);
+            this.tableLayoutPanel5.TabIndex = 23;
+            // 
+            // comboBoxNumberMoveAxis
+            // 
+            this.comboBoxNumberMoveAxis.FormattingEnabled = true;
+            this.comboBoxNumberMoveAxis.Items.AddRange(new object[] {
+            "0",
+            "1",
+            "2",
+            "3"});
+            this.comboBoxNumberMoveAxis.Location = new System.Drawing.Point(88, 3);
+            this.comboBoxNumberMoveAxis.Name = "comboBoxNumberMoveAxis";
+            this.comboBoxNumberMoveAxis.Size = new System.Drawing.Size(52, 21);
+            this.comboBoxNumberMoveAxis.TabIndex = 15;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.ForeColor = System.Drawing.Color.White;
+            this.label8.Location = new System.Drawing.Point(3, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(78, 26);
+            this.label8.TabIndex = 14;
+            this.label8.Text = "Number of Axis For Move:";
+            // 
+            // tableLayoutPanel6
+            // 
+            this.tableLayoutPanel6.ColumnCount = 2;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43.35664F));
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 56.64336F));
+            this.tableLayoutPanel6.Controls.Add(this.comboBoxEquatorialSystem, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.label9, 0, 0);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(301, 118);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.RowCount = 1;
+            this.tableLayoutPanel4.SetRowSpan(this.tableLayoutPanel6, 2);
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(143, 40);
+            this.tableLayoutPanel6.TabIndex = 34;
+            // 
+            // comboBoxEquatorialSystem
+            // 
+            this.comboBoxEquatorialSystem.FormattingEnabled = true;
+            this.comboBoxEquatorialSystem.Location = new System.Drawing.Point(64, 3);
+            this.comboBoxEquatorialSystem.Name = "comboBoxEquatorialSystem";
+            this.comboBoxEquatorialSystem.Size = new System.Drawing.Size(75, 21);
+            this.comboBoxEquatorialSystem.TabIndex = 15;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.ForeColor = System.Drawing.Color.White;
+            this.label9.Location = new System.Drawing.Point(3, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(54, 26);
+            this.label9.TabIndex = 14;
+            this.label9.Text = "Equatorial System:";
+            // 
+            // checkBoxCanDoesRefraction
+            // 
+            this.checkBoxCanDoesRefraction.AutoSize = true;
+            this.checkBoxCanDoesRefraction.ForeColor = System.Drawing.Color.White;
+            this.checkBoxCanDoesRefraction.Location = new System.Drawing.Point(301, 95);
+            this.checkBoxCanDoesRefraction.Name = "checkBoxCanDoesRefraction";
+            this.checkBoxCanDoesRefraction.Size = new System.Drawing.Size(112, 17);
+            this.checkBoxCanDoesRefraction.TabIndex = 27;
+            this.checkBoxCanDoesRefraction.Text = "RefractionSupport";
+            this.checkBoxCanDoesRefraction.UseVisualStyleBackColor = true;
+            // 
             // checkBoxOnTop
             // 
             this.checkBoxOnTop.AutoSize = true;
@@ -992,17 +1003,6 @@ namespace ASCOM.Simulator
             this.labelTime.Size = new System.Drawing.Size(185, 13);
             this.labelTime.TabIndex = 19;
             this.labelTime.Text = "<run time - time zone and UTC offset>";
-            // 
-            // chkCanDestinationSideofPier
-            // 
-            this.chkCanDestinationSideofPier.AutoSize = true;
-            this.chkCanDestinationSideofPier.ForeColor = System.Drawing.Color.White;
-            this.chkCanDestinationSideofPier.Location = new System.Drawing.Point(301, 72);
-            this.chkCanDestinationSideofPier.Name = "chkCanDestinationSideofPier";
-            this.chkCanDestinationSideofPier.Size = new System.Drawing.Size(127, 17);
-            this.chkCanDestinationSideofPier.TabIndex = 42;
-            this.chkCanDestinationSideofPier.Text = "DestinationSideofPier";
-            this.chkCanDestinationSideofPier.UseVisualStyleBackColor = true;
             // 
             // SetupDialogForm
             // 
