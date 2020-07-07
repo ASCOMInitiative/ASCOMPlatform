@@ -46,6 +46,7 @@
           <listItem>All local server simulators now start just one instance when used concurrently from both normal and elevated clients.</listItem>
           <listItem>Camera simulator memory management has been significantly improved.</listItem>
   		  <listItem>The CheckFoUpdates script has been fixed following ascom-standards.org move to HTTPS.</listItem>
+  		  <listItem>A rare Diagnostics tool "assembly has already been loaded" error message, which occured when Platform files were manually renamed, has been fixed.</listItem>
           <listItem>
             ASCOM Utilities
             <list class="bullet">
@@ -104,6 +105,8 @@
               <listItem>Clarification: IDomeV2 wording has been clarified for many properties and methods.</listItem>
               <listItem>Clarification: IRotatorV3 cable wrap behaviour management wording has been clarified.</listItem>
               <listItem>Clarification: Better descriptions of the two Camera Gain method operating modes have been added, the interface specification itself is unchanged.</listItem>
+              <listItem>Clarification: The driver description field should be a maximum of 64 characters in length in order to fit within FITS headers.</listItem>
+              <listItem>Clarification: Camera.ImageArray and Camera.ImageArrayVariant should throw an InvalidoperationException if no image data is available.</listItem>
             </list>
           </listItem>
           <listItem>
@@ -144,6 +147,7 @@
           <listItem>Project template creation is more robust</listItem>
           <listItem>The required minimum Windows version in the script created by the Driver Install Script Generator has been set to Windows 7 using a format that works in Inno 6.</listItem>
           <listItem>The support URL in the script created by the Driver Install Script Generator has been changed to the new ASCOM Groups.io forum.</listItem>
+          <listItem>The DriverAccess constructor no longer queries the driver's interface version, this is now done lazily, when required.</listItem>        
         </list>
       </content>
     </section>
