@@ -1,0 +1,43 @@
+﻿<local:DeviceHubDialogView x:Class="ASCOM.DeviceHub.DriverSetupDialogView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ASCOM.DeviceHub;assembly=ASCOM.DeviceHub"
+        mc:Ignorable="d"
+        Background="{DynamicResource WindowBackgroundBrush}"
+        Title="Device Hub Telescope Setup" SizeToContent="WidthAndHeight" Icon="Images/ASCOM.ico" ResizeMode="NoResize">
+    <local:DeviceHubDialogView.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary>
+					<DataTemplate DataType="{x:Type local:TelescopeSetupViewModel}">
+						<local:TelescopeSetupView />
+					</DataTemplate>
+				</ResourceDictionary>
+				<ResourceDictionary Source="pack://application:,,,/ASCOM.DeviceHub;component/Themes/DevHubMono.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</local:DeviceHubDialogView.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="10" />
+            <RowDefinition Height="Auto" MinHeight="10" />
+            <RowDefinition Height="Auto" MinHeight="10" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" MinWidth="30" />
+            <ColumnDefinition Width="Auto" MinWidth="30" />
+        </Grid.ColumnDefinitions>
+        <CheckBox Grid.Row="0" Grid.Column="0" Name="_loggingEnabledCheckBox" Content="Driver Trace Enabled?" Foreground="White"
+				  IsChecked="{Binding IsLoggingEnabled}" />
+		<ContentControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Height="Auto" 
+						Content="{Binding TelescopeSetupVm}" />
+        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,6,0,0">
+            <Button Content="OK" Margin="5,0" Width="50"
+                    Command="{Binding SelectDriverCommand}" />
+            <Button Content="Cancel" Margin="5,0" Width="50" 
+                    Command="{Binding AbortSelectDriverCommand}" />
+        </StackPanel>
+    </Grid>
+</local:DeviceHubDialogView>

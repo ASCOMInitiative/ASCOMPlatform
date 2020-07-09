@@ -1,5 +1,6 @@
-﻿' This file is a placeholder used during template development,
-' It plays no part in the final ASCOM driver and can safely be deleted.
+﻿' This file is a placeholder used during template development. It holds the common method definitions for all the VB interfaces to remove compilation errors in the VB template
+' that arise from including the "Implements" statement that is in each device type file.
+' It plays no part in the final ASCOM driver.
 Imports ASCOM.DeviceInterface
 
 Partial Public Class TEMPLATEDEVICECLASS
@@ -95,35 +96,35 @@ Partial Public Class DeviceTelescope
 End Class
 
 Partial Public Class DeviceCamera
-    Public Sub Dispose() Implements ICameraV2.Dispose
+    Public Sub Dispose() Implements ICameraV3.Dispose
     End Sub
 
-    Public Sub SetupDialog() Implements ICameraV2.SetupDialog
+    Public Sub SetupDialog() Implements ICameraV3.SetupDialog
     End Sub
 
-    Public ReadOnly Property SupportedActions() As ArrayList Implements ICameraV2.SupportedActions
+    Public ReadOnly Property SupportedActions() As ArrayList Implements ICameraV3.SupportedActions
         Get
             Return New ArrayList()
         End Get
     End Property
 
-    Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements ICameraV2.Action
+    Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements ICameraV3.Action
         Throw New MethodNotImplementedException("Action")
     End Function
 
-    Public Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False) Implements ICameraV2.CommandBlind
+    Public Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False) Implements ICameraV3.CommandBlind
         Throw New MethodNotImplementedException("CommandBlind")
     End Sub
 
-    Public Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean Implements ICameraV2.CommandBool
+    Public Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean Implements ICameraV3.CommandBool
         Throw New MethodNotImplementedException("CommandBool")
     End Function
 
-    Public Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String Implements ICameraV2.CommandString
+    Public Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String Implements ICameraV3.CommandString
         Throw New MethodNotImplementedException("CommandString")
     End Function
 
-    Public Property Connected() As Boolean Implements ICameraV2.Connected
+    Public Property Connected() As Boolean Implements ICameraV3.Connected
         Get
             Return False
         End Get
@@ -131,31 +132,31 @@ Partial Public Class DeviceCamera
         End Set
     End Property
 
-    Public ReadOnly Property Description As String Implements ICameraV2.Description
+    Public ReadOnly Property Description As String Implements ICameraV3.Description
         Get
             Return ""
         End Get
     End Property
 
-    Public ReadOnly Property DriverInfo As String Implements ICameraV2.DriverInfo
+    Public ReadOnly Property DriverInfo As String Implements ICameraV3.DriverInfo
         Get
             Return ""
         End Get
     End Property
 
-    Public ReadOnly Property DriverVersion() As String Implements ICameraV2.DriverVersion
+    Public ReadOnly Property DriverVersion() As String Implements ICameraV3.DriverVersion
         Get
             Return ""
         End Get
     End Property
 
-    Public ReadOnly Property InterfaceVersion() As Short Implements ICameraV2.InterfaceVersion
+    Public ReadOnly Property InterfaceVersion() As Short Implements ICameraV3.InterfaceVersion
         Get
             Return 0
         End Get
     End Property
 
-    Public ReadOnly Property Name As String Implements ICameraV2.Name
+    Public ReadOnly Property Name As String Implements ICameraV3.Name
         Get
             Return ""
         End Get
@@ -371,35 +372,35 @@ Partial Public Class DeviceFocuser
 End Class
 
 Partial Public Class DeviceRotator
-    Public Sub Dispose() Implements IRotatorV2.Dispose
+    Public Sub Dispose() Implements IRotatorV3.Dispose
     End Sub
 
-    Public Sub SetupDialog() Implements IRotatorV2.SetupDialog
+    Public Sub SetupDialog() Implements IRotatorV3.SetupDialog
     End Sub
 
-    Public ReadOnly Property SupportedActions() As ArrayList Implements IRotatorV2.SupportedActions
+    Public ReadOnly Property SupportedActions() As ArrayList Implements IRotatorV3.SupportedActions
         Get
             Return New ArrayList()
         End Get
     End Property
 
-    Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements IRotatorV2.Action
+    Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements IRotatorV3.Action
         Throw New MethodNotImplementedException("Action")
     End Function
 
-    Public Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False) Implements IRotatorV2.CommandBlind
+    Public Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False) Implements IRotatorV3.CommandBlind
         Throw New MethodNotImplementedException("CommandBlind")
     End Sub
 
-    Public Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean Implements IRotatorV2.CommandBool
+    Public Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean Implements IRotatorV3.CommandBool
         Throw New MethodNotImplementedException("CommandBool")
     End Function
 
-    Public Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String Implements IRotatorV2.CommandString
+    Public Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String Implements IRotatorV3.CommandString
         Throw New MethodNotImplementedException("CommandString")
     End Function
 
-    Public Property Connected() As Boolean Implements IRotatorV2.Connected
+    Public Property Connected() As Boolean Implements IRotatorV3.Connected
         Get
             Return False
         End Get
@@ -407,38 +408,37 @@ Partial Public Class DeviceRotator
         End Set
     End Property
 
-    Public ReadOnly Property Description As String Implements IRotatorV2.Description
+    Public ReadOnly Property Description As String Implements IRotatorV3.Description
         Get
             Return ""
         End Get
     End Property
 
-    Public ReadOnly Property DriverInfo As String Implements IRotatorV2.DriverInfo
+    Public ReadOnly Property DriverInfo As String Implements IRotatorV3.DriverInfo
         Get
             Return ""
         End Get
     End Property
 
-    Public ReadOnly Property DriverVersion() As String Implements IRotatorV2.DriverVersion
+    Public ReadOnly Property DriverVersion() As String Implements IRotatorV3.DriverVersion
         Get
             Return ""
         End Get
     End Property
 
-    Public ReadOnly Property InterfaceVersion() As Short Implements IRotatorV2.InterfaceVersion
+    Public ReadOnly Property InterfaceVersion() As Short Implements IRotatorV3.InterfaceVersion
         Get
             Return 0
         End Get
     End Property
 
-    Public ReadOnly Property Name As String Implements IRotatorV2.Name
+    Public ReadOnly Property Name As String Implements IRotatorV3.Name
         Get
             Return ""
         End Get
     End Property
 
 End Class
-
 
 Partial Public Class DeviceSwitch
     Public Sub Dispose() Implements ISwitchV2.Dispose
@@ -640,6 +640,75 @@ Partial Public Class DeviceObservingConditions
     End Property
 
     Public ReadOnly Property Name As String Implements IObservingConditions.Name
+        Get
+            Return ""
+        End Get
+    End Property
+
+End Class
+
+Partial Public Class DeviceCoverCalibrator
+    Public Sub Dispose() Implements ICoverCalibratorV1.Dispose
+    End Sub
+
+    Public Sub SetupDialog() Implements ICoverCalibratorV1.SetupDialog
+    End Sub
+
+    Public ReadOnly Property SupportedActions() As ArrayList Implements ICoverCalibratorV1.SupportedActions
+        Get
+            Return New ArrayList()
+        End Get
+    End Property
+
+    Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements ICoverCalibratorV1.Action
+        Throw New MethodNotImplementedException("Action")
+    End Function
+
+    Public Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False) Implements ICoverCalibratorV1.CommandBlind
+        Throw New MethodNotImplementedException("CommandBlind")
+    End Sub
+
+    Public Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean Implements ICoverCalibratorV1.CommandBool
+        Throw New MethodNotImplementedException("CommandBool")
+    End Function
+
+    Public Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String Implements ICoverCalibratorV1.CommandString
+        Throw New MethodNotImplementedException("CommandString")
+    End Function
+
+    Public Property Connected() As Boolean Implements ICoverCalibratorV1.Connected
+        Get
+            Return False
+        End Get
+        Set(value As Boolean)
+        End Set
+    End Property
+
+    Public ReadOnly Property Description As String Implements ICoverCalibratorV1.Description
+        Get
+            Return ""
+        End Get
+    End Property
+
+    Public ReadOnly Property DriverInfo As String Implements ICoverCalibratorV1.DriverInfo
+        Get
+            Return ""
+        End Get
+    End Property
+
+    Public ReadOnly Property DriverVersion() As String Implements ICoverCalibratorV1.DriverVersion
+        Get
+            Return ""
+        End Get
+    End Property
+
+    Public ReadOnly Property InterfaceVersion() As Short Implements ICoverCalibratorV1.InterfaceVersion
+        Get
+            Return 0
+        End Get
+    End Property
+
+    Public ReadOnly Property Name As String Implements ICoverCalibratorV1.Name
         Get
             Return ""
         End Get

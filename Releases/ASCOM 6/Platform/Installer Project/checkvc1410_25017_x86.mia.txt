@@ -83,7 +83,7 @@ Comment: Check for the MFC 14.10 DLL file in the system directory
 Does File Exist $WINSYSDIR$\mfc140.dll (get result into variable VC1410_25017_RTM_X86)
 if Variable VC1410_25017_RTM_X86 Equals TRUE
   Get File Version $WINSYSDIR$\mfc140.dll into Variable MFC140_VER
-  Set Variable MFC140UP152_TARGET to 14.10.25017.0
+  Set Variable MFC140UP152_TARGET to 14.24.28127.0
   if Variable MFC140UP152_TARGET not Greater Than (Version) $MFC140_VER$
     Set Variable VC1410_25017_RTM_X86 to FALSE
   end
@@ -93,9 +93,9 @@ end
  
 if Variable VC1410_25017_RTM_X86 Equals TRUE
   Set Variable PREREQ to TRUE
-  Set Variable PRELIST to $PRELIST$$NEWLINE$Visual C++ Runtime for Visual Studio 2017 v.15.2 (x86)
-  Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(86) - VC 14 library (32 bit) not found, it will be installed (at end of file)
+  Set Variable PRELIST to $PRELIST$$NEWLINE$Visual C++ Runtime for Visual Studio 2019 14.24.28127 (x86)
+  Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(86) - VC 14.24 library (32 bit) not found, it will be installed (at end of file)
 else
-  Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(86) - VC 14 library (32 bit) found OK (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(86) - VC 14.24 library (32 bit) found OK (at end of file)
 end
  

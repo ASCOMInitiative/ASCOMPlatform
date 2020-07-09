@@ -1,0 +1,142 @@
+﻿<UserControl x:Class="ASCOM.DeviceHub.TelescopeCapabilitiesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
+             xmlns:local="clr-namespace:ASCOM.DeviceHub"
+             mc:Ignorable="d" 
+			 Background="{DynamicResource WindowBackgroundBrush}"
+             d:DesignHeight="400" d:DesignWidth="440">
+    <UserControl.Resources>
+        <local:BooleanVisibilityConverter x:Key="BoolVisConverter" />
+
+        <Style x:Key="CapLabel" TargetType="{x:Type Label}">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+            <Setter Property="Margin" Value="6,0,0,0" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style x:Key="CapValue" TargetType="{x:Type Label}">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Foreground" Value="{DynamicResource DynamicTextBrush}" />
+            <Setter Property="Margin" Value="8,0,0,0" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style x:Key="axisRatesItems" TargetType="{x:Type ItemsControl}">
+            <Setter Property="ItemsControl.ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="56" />
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="56" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextAlignment="Right"
+														Text="{Binding Minimum, StringFormat=0.00000, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                            <TextBlock Grid.Column="1" TextAlignment="Center" Text="-" />
+                            <TextBlock Grid.Column="2" TextAlignment="Left"
+														Text="{Binding Maximum, StringFormat=0.00000, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                        </Grid>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid ScrollViewer.CanContentScroll="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="Can Find Home:" Style="{StaticResource CapLabel}" Margin="0" />
+                <Label Grid.Row="1" Grid.Column="0" Content="Can Park:" Style="{StaticResource CapLabel}" Margin="0" />
+                <Label Grid.Row="2" Grid.Column="0" Content="Can Pulse Guide:" Style="{StaticResource CapLabel}" Margin="0" />
+                <Label Grid.Row="3" Grid.Column="0" Content="Can Set Dec Rate:" Style="{StaticResource CapLabel}" Margin="0" />
+                <Label Grid.Row="4" Grid.Column="0" Content="Can Set Guide Rates:" Style="{StaticResource CapLabel}" Margin="0" />
+                <Label Grid.Row="5" Grid.Column="0" Content="Can Set Park:" Style="{StaticResource CapLabel}" Margin="0" />
+                <Label Grid.Row="6" Grid.Column="0" Content="Can Set Pier Side:" Style="{StaticResource CapLabel}" Margin="0" />
+                <Label Grid.Row="7" Grid.Column="0" Content="Can Set RA Rate:" Style="{StaticResource CapLabel}" Margin="0" />
+                <Label Grid.Row="8" Grid.Column="0" Content="Can Set Tracking:" Style="{StaticResource CapLabel}" Margin="0" />
+                <Label Grid.Row="9" Grid.Column="0" Content="Can Slew:" Style="{StaticResource CapLabel}" Margin="0" />
+                <Label Grid.Row="10" Grid.Column="0" Content="Can Slew Alt Az:" Style="{StaticResource CapLabel}" Margin="0" />
+                <Label Grid.Row="11" Grid.Column="0" Content="Can Slew Alt Az Async:" Style="{StaticResource CapLabel}" Margin="0" />
+                <Label Grid.Row="12" Grid.Column="0" Content="Can Slew Async:" Style="{StaticResource CapLabel}" Margin="0" />
+                <Label Grid.Row="13" Grid.Column="0" Content="Can Sync:" Style="{StaticResource CapLabel}" Margin="0" />
+                <Label Grid.Row="14" Grid.Column="0" Content="Can Unpark:" Style="{StaticResource CapLabel}" Margin="0" />
+                <Label Grid.Row="15" Grid.Column="0" Content="Can Move Primary Axis:" Style="{StaticResource CapLabel}" Margin="0" />
+                <Label Grid.Row="16" Grid.Column="0" Content="Can Move Secondary Axis:" Style="{StaticResource CapLabel}" Margin="0" />
+                <Label Grid.Row="17" Grid.Column="0" Content="Can Move Tertiary Axis:" Style="{StaticResource CapLabel}" Margin="0" />
+
+                <Label Grid.Row="0" Grid.Column="1" Content="{Binding Capabilities.CanFindHome}" Style="{StaticResource CapValue}"/>
+                <Label Grid.Row="1" Grid.Column="1" Content="{Binding Capabilities.CanPark}" Style="{StaticResource CapValue}"/>
+                <Label Grid.Row="2" Grid.Column="1" Content="{Binding Capabilities.CanPulseGuide}" Style="{StaticResource CapValue}"/>
+                <Label Grid.Row="3" Grid.Column="1" Content="{Binding Capabilities.CanSetDeclinationRate}" Style="{StaticResource CapValue}"/>
+                <Label Grid.Row="4" Grid.Column="1" Content="{Binding Capabilities.CanSetGuideRates}" Style="{StaticResource CapValue}"/>
+                <Label Grid.Row="5" Grid.Column="1" Content="{Binding Capabilities.CanSetPark}" Style="{StaticResource CapValue}"/>
+                <Label Grid.Row="6" Grid.Column="1" Content="{Binding Capabilities.CanSetPierSide}" Style="{StaticResource CapValue}"/>
+                <Label Grid.Row="7" Grid.Column="1" Content="{Binding Capabilities.CanSetRightAscensionRate}" Style="{StaticResource CapValue}"/>
+                <Label Grid.Row="8" Grid.Column="1" Content="{Binding Capabilities.CanSetTracking}" Style="{StaticResource CapValue}"/>
+                <Label Grid.Row="9" Grid.Column="1" Content="{Binding Capabilities.CanSlew}" Style="{StaticResource CapValue}"/>
+                <Label Grid.Row="10" Grid.Column="1" Content="{Binding Capabilities.CanSlewAltAz}" Style="{StaticResource CapValue}"/>
+                <Label Grid.Row="11" Grid.Column="1" Content="{Binding Capabilities.CanSlewAltAzAsync}" Style="{StaticResource CapValue}"/>
+                <Label Grid.Row="12" Grid.Column="1" Content="{Binding Capabilities.CanSlewAsync}" Style="{StaticResource CapValue}"/>
+                <Label Grid.Row="13" Grid.Column="1" Content="{Binding Capabilities.CanSync}" Style="{StaticResource CapValue}"/>
+                <Label Grid.Row="14" Grid.Column="1" Content="{Binding Capabilities.CanUnpark}" Style="{StaticResource CapValue}"/>
+                <Label Grid.Row="15" Grid.Column="1" Content="{Binding Capabilities.CanMovePrimaryAxis}" Style="{StaticResource CapValue}"/>
+                <Label Grid.Row="16" Grid.Column="1" Content="{Binding Capabilities.CanMoveSecondaryAxis}" Style="{StaticResource CapValue}"/>
+                <Label Grid.Row="17" Grid.Column="1" Content="{Binding Capabilities.CanMoveTertiaryAxis}" Style="{StaticResource CapValue}"/>
+
+                <StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="19" Margin="20,6" Orientation="Vertical">
+                    <GroupBox Header="Primary Axis Rates" Foreground="{DynamicResource NormalTextBrush}" Width="Auto"
+									  Visibility="{Binding Capabilities.CanMovePrimaryAxis, Converter={StaticResource BoolVisConverter}}">
+						<ItemsControl Height="Auto" Background="{DynamicResource WindowBackgroundBrush}" Foreground="{DynamicResource DynamicTextBrush}" 
+											  Style="{StaticResource axisRatesItems}" HorizontalAlignment="Center"
+									ItemsSource="{Binding Capabilities.PrimaryAxisRates}">
+                        </ItemsControl>
+                    </GroupBox>
+
+                    <GroupBox Header="Secondary Axis Rates" Margin="0,6,0,0" Foreground="{DynamicResource NormalTextBrush}" Width="Auto"
+									  Visibility="{Binding Capabilities.CanMoveSecondaryAxis, Converter={StaticResource BoolVisConverter}}">
+                        <ItemsControl Margin="1" Height="Auto" Background="{DynamicResource WindowBackgroundBrush}" Foreground="{DynamicResource DynamicTextBrush}" 
+											  Style="{StaticResource axisRatesItems}" HorizontalAlignment="Center"
+											  ItemsSource="{Binding Capabilities.SecondaryAxisRates}">
+                        </ItemsControl>
+                    </GroupBox>
+
+                    <GroupBox Header="Tertiary Axis Rates" Margin="0,6,0,0" Foreground="{DynamicResource NormalTextBrush}" Width="Auto"
+								Visibility="{Binding Capabilities.CanMoveTertiaryAxis, Converter={StaticResource BoolVisConverter}}">
+                        <ItemsControl Margin="1" Height="Auto" Background="{DynamicResource WindowBackgroundBrush}" Foreground="{DynamicResource NormalTextBrush}" 
+											  Style="{StaticResource axisRatesItems}" HorizontalAlignment="Center"
+											  ItemsSource="{Binding Capabilities.TertiaryAxisRates}">
+                        </ItemsControl>
+                    </GroupBox>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

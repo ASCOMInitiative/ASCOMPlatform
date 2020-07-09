@@ -11,8 +11,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("RemoveASCOM")> 
 <Assembly: AssemblyDescription("Removes all ASCOM Platforms and Profile")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")> 
-<Assembly: AssemblyProduct("RemoveASCOM")> 
-<Assembly: AssemblyCopyright("Copyright © ASCOM 2011")> 
+<Assembly: AssemblyProduct("RemoveASCOM")>
+<Assembly: AssemblyCopyright("Copyright © ASCOM 2020")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -30,4 +30,4 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
 
-<Assembly: AssemblyVersion("6.4.0.0")>
+<Assembly: AssemblyVersion("6.5.0.0")>

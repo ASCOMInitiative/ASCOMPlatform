@@ -60,8 +60,9 @@ Public Class DiagnosticsForm
     Private Const DOME_SLEW_TIMEOUT As Integer = 240
     Private Const INST_UNINSTALL_STRING As String = "UninstallString"
     Private Const INST_DISPLAY_ICON As String = "DisplayIcon"
+    Private Const INST_NOT_KNOWN As String = "Not known"
 
-    Private Const TEST_DATE As String = "Thursday, 30 December 2010 09:00:00" ' Arbitary test date used to generate NOVASCOM test data, it must conform to the "F" date format for the invariant culture
+    Private Const TEST_DATE As String = "Thursday, 30 December 2010 09:00:00" ' Arbitrary test date used to generate NOVASCOM test data, it must conform to the "F" date format for the invariant culture
     Private Const J2000 As Double = 2451545.0 'Julian day for J2000 epoch
     Private Const INDENT As Integer = 3 ' Display indent for recursive loop output
 
@@ -121,7 +122,7 @@ Public Class DiagnosticsForm
     Private AscomUtil As ASCOM.Utilities.Util
     Private g_Util2 As Object
     Private DecimalSeparator As String = "", ThousandsSeparator As String = ""
-    Private AbbreviatedMonthNames() As String = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedMonthNames ' List of monthnames in current culture language
+    Private AbbreviatedMonthNames() As String = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedMonthNames ' List of month names in current culture language
     Private StartTime As Date
     Private NumberOfTicks As Integer
 
@@ -173,7 +174,7 @@ Public Class DiagnosticsForm
             Nov31 = New NOVAS.NOVAS31
             AscomUtil = New ASCOM.Utilities.Util
             Me.BringToFront()
-            Me.KeyPreview = True ' Ensure that keypress events are sent to the form so that the keypress event handler can respond to them
+            Me.KeyPreview = True ' Ensure that key press events are sent to the form so that the key press event handler can respond to them
         Catch ex As Exception
             EventLogCode.LogEvent("Diagnostics Load", "Exception", EventLogEntryType.Error, EventLogErrors.DiagnosticsLoadException, ex.ToString)
             MsgBox(ex.ToString)
@@ -242,7 +243,7 @@ Public Class DiagnosticsForm
                 DecimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator
                 ThousandsSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator
 
-                Try 'Try and create a registryaccess object
+                Try 'Try and create a registry access object
                     ASCOMRegistryAccess = New ASCOM.Utilities.RegistryAccess
                 Catch ex As Exception
                     TL.LogMessage("Diagnostics", "ERROR - Unexpected exception creating New RegistryAccess object, later steps will show errors")
@@ -322,7 +323,7 @@ Public Class DiagnosticsForm
                     End Try
 
                     Try
-                        ScanCOMRegistration() 'Report Com Registration
+                        ScanCOMRegistration() 'Report COM Registration
                     Catch ex As Exception
                         LogException("ScanCOMRegistration", ex.ToString)
                     End Try
@@ -510,14 +511,14 @@ Public Class DiagnosticsForm
                 Action("")
                 TL = Nothing
             Finally
-                Try : ASCOMRegistryAccess.Dispose() : Catch : End Try 'Clean up registryaccess object
+                Try : ASCOMRegistryAccess.Dispose() : Catch : End Try 'Clean up registry access object
                 ASCOMRegistryAccess = Nothing
             End Try
 
             btnViewLastLog.Enabled = True ' Enable the view log control and set focus to it
             Me.ActiveControl = btnViewLastLog
 
-            If (MenuAutoViewLog.Checked) Then Process.Start(LastLogFile) ' If autoi log opening is enabled, open the last log in the system's default text editor
+            If (MenuAutoViewLog.Checked) Then Process.Start(LastLogFile) ' If auto log opening is enabled, open the last log in the system's default text editor
 
         Catch ex1 As Exception
             lblResult.Text = "Can't create log: " & ex1.Message
@@ -535,6 +536,11 @@ Public Class DiagnosticsForm
         Status("Testing SOFA")
         TL.LogMessage("SOFATests", "Starting test")
         SOFA = New SOFA.SOFA
+
+        ' SOFA version tests
+        CompareInteger("SOFATests", "SOFA release number", SOFA.SofaReleaseNumber(), 15)
+        Compare("SOFATests", "SOFA issue date", SOFA.SofaIssueDate, "2019-07-22")
+        Compare("SOFATests", "SOFA revision date", SOFA.SofaRevisionDate, "2019-07-22")
 
         'Af2a tests
         j = SOFA.Af2a("-", 45, 13, 27.2, a)
@@ -808,7 +814,7 @@ Public Class DiagnosticsForm
     Private Sub GetApplicationViaSubDirectories(ByVal Application As ApplicationList, ByVal AppDirectory As String)
         Dim PathShell As New System.Text.StringBuilder(260), Directories As Generic.List(Of String)
         If ApplicationBits() = Bitness.Bits64 Then
-            'Find the programfiles (x86) path
+            'Find the program files (x86) path
             SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILESX86, False)
         Else '32bits
             SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILES, False)
@@ -828,7 +834,7 @@ Public Class DiagnosticsForm
     Private Sub GetApplicationViaDirectory(ByVal Application As ApplicationList, ByVal AppDirectory As String)
         Dim PathShell As New System.Text.StringBuilder(260), AppPath As String, Executables As Generic.List(Of String)
         If ApplicationBits() = Bitness.Bits64 Then
-            'Find the programfiles (x86) path
+            'Find the program files (x86) path
             SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILESX86, False)
         Else '32bits
             SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILES, False)
@@ -839,7 +845,7 @@ Public Class DiagnosticsForm
             Executables.AddRange(Directory.GetFiles(AppPath, "*.dll", IO.SearchOption.AllDirectories).ToList)
             If Executables.Count = 0 Then 'No executables found
                 TL.LogMessage("ScanApplication", "Application " & Application.ToString & " not found in " & AppPath)
-            Else ' Some exectables were found
+            Else ' Some executables were found
                 TL.LogMessage("ScanApplication", "Found " & Application.ToString)
 
                 For Each Executable As String In Executables
@@ -858,11 +864,11 @@ Public Class DiagnosticsForm
         Reg = New RegistryAccess
 
         Try
-            AppKey = Reg.OpenSubKey(Registry.ClassesRoot, ProgID & "\CLSID", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+            AppKey = Reg.OpenSubKey3264(Registry.ClassesRoot, ProgID & "\CLSID", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
             CLSIDString = AppKey.GetValue("", "")
             AppKey.Close()
             If Not String.IsNullOrEmpty(CLSIDString) Then 'Got a GUID value so try and process it
-                AppKey = Reg.OpenSubKey(Registry.ClassesRoot, "CLSID\" & CLSIDString & "\LocalServer32", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                AppKey = Reg.OpenSubKey3264(Registry.ClassesRoot, "CLSID\" & CLSIDString & "\LocalServer32", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
                 FileName = AppKey.GetValue("", "")
                 FileName = FileName.Trim(New Char() {""""}) 'TrimChars)
                 If Not String.IsNullOrEmpty(FileName) Then 'We have a file name so see if it exists
@@ -896,7 +902,7 @@ Public Class DiagnosticsForm
             AppKey.Close()
             If Not String.IsNullOrEmpty(CLSIDString) Then 'Got a GUID value so try and process it
                 Try
-                    AppKey = Reg.OpenSubKey(Registry.ClassesRoot, "CLSID\" & CLSIDString & "\LocalServer32", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                    AppKey = Reg.OpenSubKey3264(Registry.ClassesRoot, "CLSID\" & CLSIDString & "\LocalServer32", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
                     FileName = AppKey.GetValue("", "")
                     If Not String.IsNullOrEmpty(FileName) Then 'We have a file name so see if it exists
                         If File.Exists(FileName) Then 'Get details
@@ -965,37 +971,55 @@ Public Class DiagnosticsForm
         DiagnosticsMajorMinorVersionNumber = DiagnosticsVersion.Major.ToString() & "." & DiagnosticsVersion.Minor.ToString()
         DiagnosticsMajorNumber = DiagnosticsVersion.Major.ToString()
 
-        Sim = New SimulatorDescriptor With {
-            .ProgID = "ASCOM.Simulator.Telescope",
-            .Description = "Platform 6 Telescope Simulator",
-            .DeviceType = "Telescope",
-            .Name = "Simulator",
-            .DriverVersion = DiagnosticsFullVersionNumber,
-            .InterfaceVersion = 3,
-            .IsPlatform5 = False,
-            .SixtyFourBit = True,
-            .AxisRates = New Double(,) {{0.0, 0.5}, {1.0 / 3.0, 1.0}}, ' Axis rates relative to MaxRate
-            .AxisRatesRelative = True
-        }
-        TestSimulator(Sim)
-        Sim = Nothing
-
-        Sim = New SimulatorDescriptor With {
-            .ProgID = "ScopeSim.Telescope",
-            .Description = "Platform 5 Telescope Simulator",
-            .DeviceType = "Telescope",
-            .Name = "Simulator",
-            .DriverVersion = "5.0",
-            .InterfaceVersion = 2,
-            .IsPlatform5 = True,
-            .SixtyFourBit = True,
-            .AxisRates = New Double(,) {{0.0}, {8.0}}, ' Absolute axis rates
-            .AxisRatesRelative = False
-        }
-        TestSimulator(Sim)
-        Sim = Nothing
-
         If True Then
+
+            ' Telescope Simulator - Platform 6
+            Sim = New SimulatorDescriptor With {
+                    .ProgID = "ASCOM.Simulator.Telescope",
+                    .Description = "Platform 6 Telescope Simulator",
+                    .DeviceType = "Telescope",
+                    .Name = "Simulator",
+                    .DriverVersion = DiagnosticsFullVersionNumber,
+                    .InterfaceVersion = 3,
+                    .IsPlatform5 = False,
+                    .SixtyFourBit = True,
+                    .AxisRates = New Double(,) {{0.0, 0.5}, {1.0 / 3.0, 1.0}}, ' Axis rates relative to MaxRate
+                    .AxisRatesRelative = True
+                }
+            TestSimulator(Sim)
+            Sim = Nothing
+
+            ' CoverCalibrator Simulator
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.Simulator.CoverCalibrator",
+                .Description = "Platform 6 CoverCalibrator Simulator",
+                .DeviceType = "CoverCalibrator",
+                .Name = "CoverCalibrator Simulator",
+                .DriverVersion = DiagnosticsMajorMinorVersionNumber,
+                .InterfaceVersion = 1,
+                .IsPlatform5 = False,
+                .SixtyFourBit = True
+            }
+            TestSimulator(Sim)
+            Sim = Nothing
+
+            ' Telescope Simulator - Platform 5
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ScopeSim.Telescope",
+                .Description = "Platform 5 Telescope Simulator",
+                .DeviceType = "Telescope",
+                .Name = "Simulator",
+                .DriverVersion = "5.0",
+                .InterfaceVersion = 2,
+                .IsPlatform5 = True,
+                .SixtyFourBit = True,
+                .AxisRates = New Double(,) {{0.0}, {8.0}}, ' Absolute axis rates
+                .AxisRatesRelative = False
+            }
+            TestSimulator(Sim)
+            Sim = Nothing
+
+            ' Camera Simulator - Platform 5
             Sim = New SimulatorDescriptor With {
                 .ProgID = "CCDSimulator.Camera",
                 .Description = "Platform 5 Camera Simulator",
@@ -1009,6 +1033,7 @@ Public Class DiagnosticsForm
             TestSimulator(Sim)
             Sim = Nothing
 
+            ' Camera Simulator - Platform 6
             Sim = New SimulatorDescriptor With {
                 .ProgID = "ASCOM.Simulator.Camera",
                 .Description = "Platform 6 Camera Simulator",
@@ -1023,96 +1048,19 @@ Public Class DiagnosticsForm
             Sim = Nothing
 
             Sim = New SimulatorDescriptor With {
-                .ProgID = "FilterWheelSim.FilterWheel",
-                .Description = "Platform 5 FilterWheel Simulator",
-                .DeviceType = "FilterWheel",
-                .Name = "xxxx",
-                .DriverVersion = "5.0",
-                .InterfaceVersion = 1,
-                .IsPlatform5 = True,
-                .SixtyFourBit = True
-            }
+                    .ProgID = "ASCOM.Simulator.Dome",
+                    .Description = "Platform 6 Dome Simulator",
+                    .DeviceType = "Dome",
+                    .Name = "Simulator",
+                    .DriverVersion = DiagnosticsMajorMinorVersionNumber,
+                    .InterfaceVersion = 2,
+                    .IsPlatform5 = False,
+                    .SixtyFourBit = True
+                }
             TestSimulator(Sim)
             Sim = Nothing
 
-            Sim = New SimulatorDescriptor With {
-                .ProgID = "ASCOM.Simulator.FilterWheel",
-                .Description = "Platform 6 FilterWheel Simulator",
-                .DeviceType = "FilterWheel",
-                .Name = "Filter Wheel Simulator .NET",
-                .DriverVersion = DiagnosticsMajorNumber & ".0",
-                .InterfaceVersion = 2,
-                .IsPlatform5 = False,
-                .SixtyFourBit = True
-            }
-            TestSimulator(Sim)
-            Sim = Nothing
-
-            Sim = New SimulatorDescriptor With {
-                .ProgID = "FocusSim.Focuser",
-                .Description = "Platform 5 Focuser Simulator",
-                .DeviceType = "Focuser",
-                .Name = "Simulator",
-                .DriverVersion = "5.0",
-                .InterfaceVersion = 1,
-                .IsPlatform5 = True,
-                .SixtyFourBit = True
-            }
-            TestSimulator(Sim)
-            Sim = Nothing
-
-            Sim = New SimulatorDescriptor With {
-                .ProgID = "ASCOM.Simulator.Focuser",
-                .Description = "Platform 6 Focuser Simulator",
-                .DeviceType = "Focuser",
-                .Name = "ASCOM.Simulator.Focuser",
-                .DriverVersion = DiagnosticsMajorMinorVersionNumber,
-                .InterfaceVersion = 3,
-                .IsPlatform5 = False,
-                .SixtyFourBit = True
-            }
-            TestSimulator(Sim)
-            Sim = Nothing
-
-            Sim = New SimulatorDescriptor With {
-                .ProgID = "ASCOM.Simulator.SafetyMonitor",
-                .Description = "Platform 6 Safety Monitor Simulator",
-                .DeviceType = "SafetyMonitor",
-                .Name = "ASCOM.Simulator.SafetyMonitor",
-                .DriverVersion = DiagnosticsMajorNumber & ".0",
-                .InterfaceVersion = 2,
-                .IsPlatform5 = False,
-                .SixtyFourBit = True
-            }
-            TestSimulator(Sim)
-            Sim = Nothing
-
-            Sim = New SimulatorDescriptor With {
-                .ProgID = "SwitchSim.Switch",
-                .Description = "Platform 5 Switch Simulator",
-                .DeviceType = "Switch",
-                .Name = "Switch Simulator",
-                .DriverVersion = "5.0",
-                .InterfaceVersion = 1,
-                .IsPlatform5 = True,
-                .SixtyFourBit = True
-            }
-            TestSimulator(Sim)
-            Sim = Nothing
-
-            Sim = New SimulatorDescriptor With {
-                .ProgID = "ASCOM.Simulator.Switch",
-                .Description = "Platform 6 Switch Simulator",
-                .DeviceType = "Switch",
-                .Name = "ASCOM Switch V2 Simulator",
-                .DriverVersion = DiagnosticsMajorMinorVersionNumber,
-                .InterfaceVersion = 2,
-                .IsPlatform5 = False,
-                .SixtyFourBit = True
-            }
-            TestSimulator(Sim)
-            Sim = Nothing
-
+            ' Dome Simulator - Platform 5
             Sim = New SimulatorDescriptor With {
                 .ProgID = "DomeSim.Dome",
                 .Description = "Dome Simulator",
@@ -1126,11 +1074,96 @@ Public Class DiagnosticsForm
             TestSimulator(Sim)
             Sim = Nothing
 
+            ' FilterWheel Simulator - Platform 5
             Sim = New SimulatorDescriptor With {
-                .ProgID = "ASCOM.Simulator.Dome",
-                .Description = "Platform 6 Dome Simulator",
-                .DeviceType = "Dome",
+                .ProgID = "FilterWheelSim.FilterWheel",
+                .Description = "Platform 5 FilterWheel Simulator",
+                .DeviceType = "FilterWheel",
+                .Name = "xxxx",
+                .DriverVersion = "5.0",
+                .InterfaceVersion = 1,
+                .IsPlatform5 = True,
+                .SixtyFourBit = True
+            }
+            TestSimulator(Sim)
+            Sim = Nothing
+
+            ' FilterWheel Simulator - Platform 6
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.Simulator.FilterWheel",
+                .Description = "Platform 6 FilterWheel Simulator",
+                .DeviceType = "FilterWheel",
+                .Name = "Filter Wheel Simulator .NET",
+                .DriverVersion = DiagnosticsMajorNumber & ".0",
+                .InterfaceVersion = 2,
+                .IsPlatform5 = False,
+                .SixtyFourBit = True
+            }
+            TestSimulator(Sim)
+            Sim = Nothing
+
+            ' Focuser Simulator - Platform 5
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "FocusSim.Focuser",
+                .Description = "Platform 5 Focuser Simulator",
+                .DeviceType = "Focuser",
                 .Name = "Simulator",
+                .DriverVersion = "5.0",
+                .InterfaceVersion = 1,
+                .IsPlatform5 = True,
+                .SixtyFourBit = True
+            }
+            TestSimulator(Sim)
+            Sim = Nothing
+
+            ' Focuser Simulator - Platform 6
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.Simulator.Focuser",
+                .Description = "Platform 6 Focuser Simulator",
+                .DeviceType = "Focuser",
+                .Name = "ASCOM.Simulator.Focuser",
+                .DriverVersion = DiagnosticsMajorMinorVersionNumber,
+                .InterfaceVersion = 3,
+                .IsPlatform5 = False,
+                .SixtyFourBit = True
+            }
+            TestSimulator(Sim)
+            Sim = Nothing
+
+            ' SafetyMonitor Simulator
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.Simulator.SafetyMonitor",
+                .Description = "Platform 6 Safety Monitor Simulator",
+                .DeviceType = "SafetyMonitor",
+                .Name = "ASCOM.Simulator.SafetyMonitor",
+                .DriverVersion = DiagnosticsMajorNumber & ".0",
+                .InterfaceVersion = 2,
+                .IsPlatform5 = False,
+                .SixtyFourBit = True
+            }
+            TestSimulator(Sim)
+            Sim = Nothing
+
+            ' Switch Simulator - Platform 5
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "SwitchSim.Switch",
+                .Description = "Platform 5 Switch Simulator",
+                .DeviceType = "Switch",
+                .Name = "Switch Simulator",
+                .DriverVersion = "5.0",
+                .InterfaceVersion = 1,
+                .IsPlatform5 = True,
+                .SixtyFourBit = True
+            }
+            TestSimulator(Sim)
+            Sim = Nothing
+
+            ' Switch Simulator - Platform 6
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.Simulator.Switch",
+                .Description = "Platform 6 Switch Simulator",
+                .DeviceType = "Switch",
+                .Name = "ASCOM Switch V2 Simulator",
                 .DriverVersion = DiagnosticsMajorMinorVersionNumber,
                 .InterfaceVersion = 2,
                 .IsPlatform5 = False,
@@ -1139,6 +1172,7 @@ Public Class DiagnosticsForm
             TestSimulator(Sim)
             Sim = Nothing
 
+            ' Video Simulator
             Sim = New SimulatorDescriptor With {
                 .ProgID = "ASCOM.Simulator.Video",
                 .Description = "Platform 6 Video Simulator",
@@ -1152,6 +1186,7 @@ Public Class DiagnosticsForm
             TestSimulator(Sim)
             Sim = Nothing
 
+            ' ObservingConditions Simulator
             Sim = New SimulatorDescriptor With {
                 .ProgID = "ASCOM.Simulator.ObservingConditions",
                 .Description = "Platform 6 ObservingConditions Simulator",
@@ -1165,6 +1200,7 @@ Public Class DiagnosticsForm
             TestSimulator(Sim)
             Sim = Nothing
 
+            ' ObservingConditions Hub
             Sim = New SimulatorDescriptor With {
                 .ProgID = "ASCOM.OCH.ObservingConditions",
                 .Description = "Platform 6 ObservingConditions Hub",
@@ -1186,6 +1222,9 @@ Public Class DiagnosticsForm
         Dim RetValString As String, DeviceAxisRates As Object, ct As Integer, DeviceType As Type
         Dim prof As Profile, MaxSlewRate As Double
         Dim returnString As String
+        Dim coverState As CoverStatus
+        Dim calibratorState As CalibratorStatus
+        Dim interfaceVersion As Integer
 
         Const MAX_SLEW_RATE_PROFILE_NAME As String = "MaxSlewRate" ' Name of the Profile variable holding the maximum slew rate
 
@@ -1214,7 +1253,7 @@ Public Class DiagnosticsForm
                                 DeviceObject.TempComp = False
                                 Compare("TestSimulator", "Temperature compensation disabled OK", "True", "True")
                             Catch ex1 As Exception
-                                LogException("TestSimulator", "Exception setting temperatrure compensation: " & ex1.ToString)
+                                LogException("TestSimulator", "Exception setting temperature compensation: " & ex1.ToString)
                             End Try
 
                         Case "ObservingConditionsHub"
@@ -1232,9 +1271,27 @@ Public Class DiagnosticsForm
                     Thread.Sleep(1000)
 
                     Try
+                        Compare("TestSimulator", $"Can read {Sim.DeviceType} interface version: {interfaceVersion}", True, True)
+                    Catch ex1 As COMException
+                        If ex1.ErrorCode = &H80040400 And Sim.DeviceType = "Telescope" Then
+                            Compare("TestSimulator", "Simulator is in Interface V1 mode", "True", "True")
+                        End If
+                    Catch ex1 As NotSupportedException
+                    Catch ex1 As MissingMemberException
+                        If Sim.IsPlatform5 Then
+                            Compare("TestSimulator", "Interfaceversion member is not present in Platform 5 Simulator", "True", "True")
+                        Else
+                            LogException("TestSimulator", "Interfaceversion Exception: " & ex1.ToString)
+                        End If
+                    Catch ex1 As Exception
+                        LogException("TestSimulator", "Interfaceversion Exception: " & ex1.ToString)
+                    End Try
+
+                    Try
                         RetValString = DeviceObject.Description
                         Compare("TestSimulator", "Description member is present in Platform 6 Simulator", "True", "True")
                         NMatches += 1
+                    Catch ex1 As NotSupportedException
                     Catch ex1 As MissingMemberException
                         If Sim.IsPlatform5 Then
                             Compare("TestSimulator", "Description member is not present in Platform 5 Simulator", "True", "True")
@@ -1248,6 +1305,7 @@ Public Class DiagnosticsForm
                     Try
                         RetValString = DeviceObject.DriverInfo
                         Compare("TestSimulator", "DriverInfo member is present in Platform 6 Simulator", "True", "True")
+                    Catch ex1 As NotSupportedException
                     Catch ex1 As MissingMemberException
                         If Sim.IsPlatform5 Then
                             Compare("TestSimulator", "DriverInfo member is not present in Platform 5 Simulator", "True", "True")
@@ -1259,7 +1317,9 @@ Public Class DiagnosticsForm
                     End Try
 
                     Try
-                        Compare("TestSimulator", Sim.DeviceType & " " & "Name", DeviceObject.Name, Sim.Name)
+                        RetValString = DeviceObject.Name
+                        Compare("TestSimulator", "Name member is present in Platform 6 Simulator", "True", "True")
+                    Catch ex1 As NotSupportedException
                     Catch ex1 As MissingMemberException
                         If Sim.IsPlatform5 Then
                             Compare("TestSimulator", "Name member is not present in Platform 5 Simulator", "True", "True")
@@ -1271,27 +1331,12 @@ Public Class DiagnosticsForm
                     End Try
 
                     Try
-                        Compare("TestSimulator", Sim.DeviceType & " " & "InterfaceVersion", DeviceObject.Interfaceversion, Sim.InterfaceVersion)
-                    Catch ex1 As COMException
-                        If ex1.ErrorCode = &H80040400 And Sim.DeviceType = "Telescope" Then
-                            Compare("TestSimulator", "Simulator is in Interface V1 mode", "True", "True")
-                        End If
-                    Catch ex1 As MissingMemberException
-                        If Sim.IsPlatform5 Then
-                            Compare("TestSimulator", "Interfaceversion member is not present in Platform 5 Simulator", "True", "True")
-                        Else
-                            LogException("TestSimulator", "Interfaceversion Exception: " & ex1.ToString)
-                        End If
-                    Catch ex1 As Exception
-                        LogException("TestSimulator", "Interfaceversion Exception: " & ex1.ToString)
-                    End Try
-
-                    Try
                         Compare("TestSimulator", Sim.DeviceType & " " & "DriverVersion", DeviceObject.DriverVersion, Sim.DriverVersion)
                     Catch ex1 As COMException
                         If ex1.ErrorCode = &H80040400 And Sim.DeviceType = "Telescope" Then
                             Compare("TestSimulator", "Simulator is in Interface V1 mode", "True", "True")
                         End If
+                    Catch ex1 As NotSupportedException
                     Catch ex1 As MissingMemberException
                         If Sim.IsPlatform5 Then
                             Compare("TestSimulator", "DriverVersion member is not present in Platform 5 Simulator", "True", "True")
@@ -1307,7 +1352,6 @@ Public Class DiagnosticsForm
                             DeviceTest("Telescope", "UnPark")
                             DeviceTest("Telescope", "TrackingTrue")
                             DeviceTest("Telescope", "SiderealTime")
-                            DeviceTest("Telescope", "RightAscension")
                             DeviceTest("Telescope", "TargetDeclination")
                             DeviceTest("Telescope", "TargetRightAscension")
                             DeviceTest("Telescope", "Slew")
@@ -1327,7 +1371,7 @@ Public Class DiagnosticsForm
                                     If Sim.AxisRatesRelative Then ' Relative axis rates so multiply the provided fractions of MaxRate by MaxRate
                                         CompareDouble("TestSimulator", "AxisRate Minimum", AxRte.Minimum, Sim.AxisRates(0, ct) * MaxSlewRate, 0.000001)
                                         CompareDouble("TestSimulator", "AxisRate Maximum", AxRte.Maximum, Sim.AxisRates(1, ct) * MaxSlewRate, 0.000001)
-                                    Else ' Abolute axis rates so test as given
+                                    Else ' Absolute axis rates so test as given
                                         CompareDouble("TestSimulator", "AxisRate Minimum", AxRte.Minimum, Sim.AxisRates(0, ct), 0.000001)
                                         CompareDouble("TestSimulator", "AxisRate Maximum", AxRte.Maximum, Sim.AxisRates(1, ct), 0.000001)
                                     End If
@@ -1341,6 +1385,18 @@ Public Class DiagnosticsForm
 
                         Case "Camera"
                             DeviceTest("Camera", "StartExposure")
+                        Case "CoverCalibrator"
+                            coverState = DeviceObject.CoverState ' Confirm that these  properties can be read and then they can be used to determine which tests to apply
+                            calibratorState = DeviceObject.CalibratorState
+
+                            ' If we get here we have successfully read the two status properties
+                            NMatches += 2
+                            TL.LogMessage("CoverCalibrator", $"CoverState: {coverState}, CalibratorState: {calibratorState}")
+
+                            If calibratorState <> CalibratorStatus.NotPresent Then ' The Calibrator capability is active so test these properties
+                                DeviceTest("CoverCalibrator", "Brightness")
+                                DeviceTest("CoverCalibrator", "MaxBrightness")
+                            End If
                         Case "FilterWheel"
                             DeviceTest("FilterWheel", "Position")
                         Case "Focuser"
@@ -1363,12 +1419,12 @@ Public Class DiagnosticsForm
                                 DeviceTest("Switch", "SwitchStep")
                             End If
                         Case "Dome"
-                            DeviceTest("Dome", "OpenShutter")
-                            DeviceTest("Dome", "Slewing")
                             DeviceTest("Dome", "ShutterStatus")
+                            DeviceTest("Dome", "Slewing")
+                            DeviceTest("Dome", "OpenShutter")
+                            DeviceTest("Dome", "CloseShutter")
                             DeviceTest("Dome", "SlewToAltitude")
                             DeviceTest("Dome", "SlewToAzimuth")
-                            DeviceTest("Dome", "CloseShutter")
                         Case "Video"
                             DeviceTest("Video", "BitDepth")
                             DeviceTest("Video", "CanConfigureDeviceProperties")
@@ -1417,6 +1473,8 @@ Public Class DiagnosticsForm
         Dim RetVal As Object = Nothing, SiderealTime, RetValDouble, TargetRA As Double, StartTime As Date
         Dim DeviceTrackingRates As Object
         Dim FocuserMax, FocuserPosition As Integer, FocuserUpperPortion, FocuserTargetPosition As Integer
+        Dim canUnpark, canSetTracking, canReadSiderealTime, canSetTargetRightAscension, canSetTargetDeclination, canReadShutterStatus, slewing, canReadSlewing As Boolean
+        Dim shutterStatus As ShutterState
 
         Const PossibleDriveRates As String = "driveSidereal,driveKing,driveLunar,driveSolar"
 
@@ -1424,6 +1482,16 @@ Public Class DiagnosticsForm
         Try
             StartTime = Now
             Select Case Device
+                Case "CoverCalibrator"
+                    Select Case Test
+                        Case "Brightness"
+                            CompareBoolean("DeviceTest", Test, DeviceObject.Brightness >= 0, True)
+                        Case "MaxBrightness"
+                            CompareBoolean("DeviceTest", Test, DeviceObject.MaxBrightness >= 1, True)
+                        Case Else
+                            LogException("DeviceTest", "Unknown Test: " & Test)
+                    End Select
+
                 Case "SafetyMonitor"
                     Select Case Test
                         Case "IsSafe"
@@ -1455,6 +1523,7 @@ Public Class DiagnosticsForm
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
+
                 Case "FilterWheel"
                     Select Case Test
                         Case "Position"
@@ -1468,6 +1537,7 @@ Public Class DiagnosticsForm
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
+
                 Case "Focuser"
                     Select Case Test
                         Case "Move"
@@ -1502,79 +1572,125 @@ Public Class DiagnosticsForm
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
+
                 Case "Camera"
                     Select Case Test
                         Case "StartExposure"
                             StartTime = Now
                             DeviceObject.StartExposure(3.0, True)
                             TL.LogMessage(Device, "Start exposure duration: " & Now.Subtract(StartTime).TotalSeconds)
+
+                            ' Wait until exposure phase is complete and the simulator moves to the Downloading state
                             Do
                                 Thread.Sleep(100)
                                 Application.DoEvents()
                                 Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds")
-                            Loop Until ((DeviceObject.CameraState = CameraStates.cameraIdle) Or (Now.Subtract(StartTime).TotalSeconds) > 5.0)
+                            Loop Until ((DeviceObject.CameraState <> CameraStates.cameraExposing) Or (Now.Subtract(StartTime).TotalSeconds) > 15.0)
                             CompareDouble(Device, "StartExposure", Now.Subtract(StartTime).TotalSeconds, 3.0, 0.2)
+
+                            ' Wait until the camera is idle before testing ImageReady
+                            Do
+                                Thread.Sleep(100)
+                                Application.DoEvents()
+                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds")
+                            Loop Until ((DeviceObject.CameraState = CameraStates.cameraIdle) Or (Now.Subtract(StartTime).TotalSeconds) > 15.0)
                             Compare(Device, "ImageReady", DeviceObject.ImageReady, True)
+
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
+
                 Case "Telescope"
                     Select Case Test
                         Case "UnPark"
-                            DeviceObject.UnPark()
-                            Try
-                                Compare(Device, Test, DeviceObject.AtPark, "False")
-                            Catch ex1 As COMException
-                                If ex1.ErrorCode = &H80040400 Then
-                                    Compare("TestSimulator", "UnPark - Simulator is in Interface V1 mode", "True", "True")
-                                End If
-                            End Try
+                            canUnpark = DeviceObject.CanUnpark
+                            Compare(Device, "CanUnPark - Simulator does return a value from CanUnpark.", "True", "True")
+                            If canUnpark Then ' Test Unpark if it is supported
+                                Try
+                                    DeviceObject.UnPark()
+                                    Compare(Device, Test, DeviceObject.AtPark, "False")
+                                Catch ex1 As COMException
+                                    If ex1.ErrorCode = &H80040400 Then
+                                        Compare(Device, "UnPark - Simulator is in Interface V1 mode", "True", "True")
+                                    End If
+                                End Try
+                            End If
                         Case "TrackingTrue"
-                            DeviceObject.UnPark()
-                            DeviceObject.Tracking = True
-                            Compare(Device, Test, DeviceObject.Tracking, "True")
+                            If canUnpark Then DeviceObject.UnPark()
+                            canSetTracking = DeviceObject.CanSetTracking
+                            Compare(Device, "CanSetTracking - Simulator does return a value from CanSetTracking.", "True", "True")
+                            If canSetTracking Then
+                                DeviceObject.Tracking = True
+                                Compare(Device, Test, DeviceObject.Tracking, "True")
+                            Else
+                                TL.LogMessage(Device, "Tracking test skipped because CanSetTrackling is False")
+                            End If
                         Case "SiderealTime"
-                            SiderealTime = DeviceObject.SiderealTime
-                            TL.LogMessage(Device, "Received Sidereal time from telescope: " & SiderealTime)
-                            RetValDouble = DeviceObject.SiderealTime
-                            CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
+                            Try
+                                SiderealTime = DeviceObject.SiderealTime
+                                canReadSiderealTime = True
+                                Compare(Device, "SiderealTime - Simulator does return a value from SiderealTime.", "True", "True")
+
+                                TL.LogMessage(Device, "Received Sidereal time from telescope: " & SiderealTime)
+                                RetValDouble = DeviceObject.SiderealTime
+                                CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
+
+                            Catch ex As COMException When ex.ErrorCode = &H80040400
+                            Catch ex As PropertyNotImplementedException
+                                Compare(Device, "SiderealTime - Property is configured not to return a value.", "True", "True")
+                            End Try
                         Case "TargetDeclination"
-                            DeviceObject.TargetDeclination = 0.0
-                            RetValDouble = DeviceObject.TargetDeclination
-                            CompareDouble(Device, Test, RetValDouble, 0.0, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180)
+                            Try
+                                DeviceObject.TargetDeclination = 0.0
+                                canSetTargetDeclination = True
+                                RetValDouble = DeviceObject.TargetDeclination
+                                CompareDouble(Device, Test, RetValDouble, 0.0, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180)
+                            Catch ex As COMException When ex.ErrorCode = &H80040400
+                            Catch ex As PropertyNotImplementedException
+                                Compare(Device, "TargetDeclination - Property is configured not to return a value.", "True", "True")
+                            End Try
                         Case "TargetRightAscension"
-                            SiderealTime = DeviceObject.SiderealTime
-                            TL.LogMessage(Device, "Received Sidereal time from telescope: " & AscomUtil.HoursToHMS(SiderealTime, ":", ":", "", 3))
-                            DeviceObject.TargetRightAscension = SiderealTime
-                            TL.LogMessage(Device, "Target RA set to: " & DeviceObject.TargetRightAscension)
-                            RetValDouble = DeviceObject.TargetRightAscension
-                            CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
+                            If canReadSiderealTime Then
+                                SiderealTime = DeviceObject.SiderealTime
+                                TL.LogMessage(Device, "Received Sidereal time from telescope: " & AscomUtil.HoursToHMS(SiderealTime, ":", ":", "", 3))
+                                Try
+                                    DeviceObject.TargetRightAscension = SiderealTime
+                                    canSetTargetRightAscension = True
+                                    TL.LogMessage(Device, "Target RA set to: " & DeviceObject.TargetRightAscension)
+                                    RetValDouble = DeviceObject.TargetRightAscension
+                                    CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
+                                Catch ex As COMException When ex.ErrorCode = &H80040400
+                                Catch ex As PropertyNotImplementedException
+                                    Compare(Device, "TargetRightAscension - Property is configured not to return a value.", "True", "True")
+                                End Try
+                            Else
+                                TL.LogMessage(Device, "TargetRightAscension test skipped because can't read sidereal time")
+                            End If
                         Case "Slew"
-                            DeviceObject.UnPark()
-                            DeviceObject.Tracking = True
-                            SiderealTime = DeviceObject.SiderealTime
-                            TL.LogMessage(Device, "Received Sidereal time from telescope: " & AscomUtil.HoursToHMS(SiderealTime, ":", ":", "", 3))
-                            TargetRA = AstroUtil.ConditionRA(SiderealTime - 1.0) ' Set the RA target to be 1 hour before zenith
-                            TL.LogMessage(Device, "Target RA calculated as: " & AscomUtil.HoursToHMS(TargetRA, ":", ":", "", 3))
-                            DeviceObject.TargetRightAscension = TargetRA
-                            TL.LogMessage(Device, "Target RA set to: " & AscomUtil.HoursToHMS(DeviceObject.TargetRightAscension, ":", ":", "", 3))
-                            DeviceObject.TargetDeclination = 0.0
-                            TL.LogMessage(Device, "Target Dec set to: " & AscomUtil.DegreesToDMS(DeviceObject.TargetDeclination, ":", ":", "", 3))
-                            TL.LogMessage(Device, "Pre-slew RA is: " & AscomUtil.HoursToHMS(DeviceObject.RightAscension, ":", ":", "", 3))
-                            TL.LogMessage(Device, "Pre-slew Dec is: " & AscomUtil.DegreesToDMS(DeviceObject.Declination, ":", ":", "", 3))
-                            TL.LogMessage(Device, String.Format("Pre-slew Az/Alt is: {0} {1}", AscomUtil.DegreesToDMS(DeviceObject.Azimuth, ":", ":", "", 3), AscomUtil.DegreesToDMS(DeviceObject.Altitude, ":", ":", "", 3)))
-                            DeviceObject.SlewToTarget()
-                            Thread.Sleep(1000) ' Wait a short while to ensure the simulator has stabilised
-                            TL.LogMessage(Device, "Post-slew RA is: " & AscomUtil.HoursToHMS(DeviceObject.RightAscension, ":", ":", "", 3))
-                            TL.LogMessage(Device, "Post-slew Dec is: " & AscomUtil.DegreesToDMS(DeviceObject.Declination, ":", ":", "", 3))
-                            TL.LogMessage(Device, String.Format("Post-slew Az/Alt is: {0} {1}", AscomUtil.DegreesToDMS(DeviceObject.Azimuth, ":", ":", "", 3), AscomUtil.DegreesToDMS(DeviceObject.Altitude, ":", ":", "", 3)))
-                            CompareDouble(Device, Test & " RA", DeviceObject.RightAscension, TargetRA, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
-                            CompareDouble(Device, Test & " Dec", DeviceObject.Declination, 0.0, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180)
-                        Case "RightAscension"
-                            SiderealTime = DeviceObject.SiderealTime
-                            DeviceObject.TargetRightAscension = SiderealTime
-                            RetValDouble = DeviceObject.TargetRightAscension
-                            CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
+                            If canUnpark And canSetTracking And canReadSiderealTime And canSetTargetRightAscension And canSetTargetDeclination Then
+                                DeviceObject.UnPark()
+                                DeviceObject.Tracking = True
+                                SiderealTime = DeviceObject.SiderealTime
+                                TL.LogMessage(Device, "Received Sidereal time from telescope: " & AscomUtil.HoursToHMS(SiderealTime, ":", ":", "", 3))
+                                TargetRA = AstroUtil.ConditionRA(SiderealTime - 1.0) ' Set the RA target to be 1 hour before zenith
+                                TL.LogMessage(Device, "Target RA calculated as: " & AscomUtil.HoursToHMS(TargetRA, ":", ":", "", 3))
+                                DeviceObject.TargetRightAscension = TargetRA
+                                TL.LogMessage(Device, "Target RA set to: " & AscomUtil.HoursToHMS(DeviceObject.TargetRightAscension, ":", ":", "", 3))
+                                DeviceObject.TargetDeclination = 0.0
+                                TL.LogMessage(Device, "Target Dec set to: " & AscomUtil.DegreesToDMS(DeviceObject.TargetDeclination, ":", ":", "", 3))
+                                TL.LogMessage(Device, "Pre-slew RA is: " & AscomUtil.HoursToHMS(DeviceObject.RightAscension, ":", ":", "", 3))
+                                TL.LogMessage(Device, "Pre-slew Dec is: " & AscomUtil.DegreesToDMS(DeviceObject.Declination, ":", ":", "", 3))
+                                TL.LogMessage(Device, String.Format("Pre-slew Az/Alt is: {0} {1}", AscomUtil.DegreesToDMS(DeviceObject.Azimuth, ":", ":", "", 3), AscomUtil.DegreesToDMS(DeviceObject.Altitude, ":", ":", "", 3)))
+                                DeviceObject.SlewToTarget()
+                                Thread.Sleep(1000) ' Wait a short while to ensure the simulator has stabilised
+                                TL.LogMessage(Device, "Post-slew RA is: " & AscomUtil.HoursToHMS(DeviceObject.RightAscension, ":", ":", "", 3))
+                                TL.LogMessage(Device, "Post-slew Dec is: " & AscomUtil.DegreesToDMS(DeviceObject.Declination, ":", ":", "", 3))
+                                TL.LogMessage(Device, String.Format("Post-slew Az/Alt is: {0} {1}", AscomUtil.DegreesToDMS(DeviceObject.Azimuth, ":", ":", "", 3), AscomUtil.DegreesToDMS(DeviceObject.Altitude, ":", ":", "", 3)))
+                                CompareDouble(Device, Test & " RA", DeviceObject.RightAscension, TargetRA, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
+                                CompareDouble(Device, Test & " Dec", DeviceObject.Declination, 0.0, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180)
+                            Else
+                                TL.LogMessage(Device, $"Slew test skipped because CanUnpark: {canUnpark}, CanSetTracking: {canSetTracking}, CanReadSidferalTime: {canReadSiderealTime}, CanSetTargetRightAscension: {canSetTargetRightAscension}, CanSetTargetDeclination: {canSetTargetDeclination}")
+                            End If
                         Case "TrackingRates"
                             Try
                                 DeviceTrackingRates = DeviceObject.TrackingRates
@@ -1588,66 +1704,121 @@ Public Class DiagnosticsForm
                                 Next
                             Catch ex1 As COMException
                                 If ex1.ErrorCode = &H80040400 Then
-                                    Compare("TestSimulator", "TrackingRates - Simulator is in Interface V1 mode", "True", "True")
+                                    Compare(Device, "TrackingRates - Simulator is in Interface V1 mode", "True", "True")
                                 End If
                             End Try
                         Case "AxisRates"
                             Try
                                 RetVal = DeviceObject.AxisRates(TelescopeAxes.axisPrimary)
+                                Compare(Device, "AxisRates returned OK", "True", "True")
                             Catch ex1 As COMException
                                 If ex1.ErrorCode = &H80040400 Then
-                                    Compare("TestSimulator", "AxisRates - Simulator is in Interface V1 mode", "True", "True")
+                                    Compare(Device, "AxisRates - Simulator is in Interface V1 mode", "True", "True")
                                 End If
                             End Try
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
+
                 Case "Dome"
                     Select Case Test
-                        Case "OpenShutter"
-                            StartTime = Now
-                            DeviceObject.OpenShutter()
-                            Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterOpen)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
-                                Thread.Sleep(100)
-                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
-                                Application.DoEvents()
-                            Loop
-                            Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
-                            Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterOpen))
                         Case "ShutterStatus"
-                            Compare(Device, Test, CInt(DeviceObject.ShutterStatus), 0)
+                            Try
+                                shutterStatus = CType(DeviceObject.ShutterState, ShutterState)
+                                canReadShutterStatus = True
+                                Compare(Device, "ShutterStatus - Simulator can read the shutter status", "True", "True")
+                            Catch ex As MissingMemberException
+                            Catch ex As COMException When ex.ErrorCode = &H80040400
+                            Catch ex As MethodNotImplementedException
+                                Compare(Device, "ShutterStatus - Simulator ShutterStatus property is not accessible", "True", "True")
+                            End Try
                         Case "Slewing"
-                            Compare(Device, Test, DeviceObject.Slewing.ToString, "False")
+                            Try
+                                slewing = CType(DeviceObject.Slewing, Boolean)
+                                canReadSlewing = True
+                                Compare(Device, "Slewing - Simulator can read the Slewing status", "True", "True")
+                            Catch ex As COMException When ex.ErrorCode = &H80040400
+                            Catch ex As MethodNotImplementedException
+                                Compare(Device, "Slewing - Simulator Slewing property is not accessible", "True", "True")
+                            End Try
+                        Case "OpenShutter"
+                            If canReadShutterStatus Then
+                                Try
+                                    StartTime = Now
+                                    DeviceObject.OpenShutter()
+                                    Compare(Device, "OpenShutter - Simulator can open the shutter", "True", "True")
+                                    Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterOpen)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
+                                        Thread.Sleep(100)
+                                        Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                                        Application.DoEvents()
+                                    Loop
+                                    Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
+                                    Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterOpen))
+                                Catch ex As COMException When ex.ErrorCode = &H80040400
+                                Catch ex As MethodNotImplementedException
+                                    Compare(Device, "OpenShutter - Simulator open shutter is disabled", "True", "True")
+                                End Try
+                            Else
+                                Compare(Device, "OpenShutter - Skipping test because simulator ShutterStatus property is not accessible", "True", "True")
+                            End If
                         Case "CloseShutter"
-                            StartTime = Now
-                            DeviceObject.CloseShutter()
-                            Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterClosed)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
-                                Thread.Sleep(100)
-                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
-                                Application.DoEvents()
-                            Loop
-                            Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
-                            Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterClosed))
+                            If canReadShutterStatus Then
+                                Try
+                                    StartTime = Now
+                                    DeviceObject.CloseShutter()
+                                    Compare(Device, "OpenShutter - Simulator can close the shutter", "True", "True")
+                                    Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterClosed)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
+                                        Thread.Sleep(100)
+                                        Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                                        Application.DoEvents()
+                                    Loop
+                                    Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
+                                    Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterClosed))
+                                Catch ex As COMException When ex.ErrorCode = &H80040400
+                                Catch ex As MethodNotImplementedException
+                                    Compare(Device, "CloseShutter - Simulator close shutter is disabled", "True", "True")
+                                End Try
+                            Else
+                                Compare(Device, "CloseShutter - Skipping test because simulator ShutterStatus property is not accessible", "True", "True")
+                            End If
                         Case "SlewToAltitude"
-                            StartTime = Now
-                            DeviceObject.SlewToAltitude(45.0)
-                            Do
-                                Thread.Sleep(100)
-                                Application.DoEvents()
-                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
-                            Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
-                            Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
-                            CompareDouble(Device, Test, DeviceObject.Altitude, 45.0, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180)
+                            If canReadSlewing Then
+                                Try
+                                    StartTime = Now
+                                    DeviceObject.SlewToAltitude(45.0)
+                                    Do
+                                        Thread.Sleep(100)
+                                        Application.DoEvents()
+                                        Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                                    Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
+                                    Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
+                                    CompareDouble(Device, Test, DeviceObject.Altitude, 45.0, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180)
+                                Catch ex As COMException When ex.ErrorCode = &H80040400
+                                Catch ex As MethodNotImplementedException
+                                    Compare(Device, "SlewToAltitude - Simulator SlewToAltitude method is disabled", "True", "True")
+                                End Try
+                            Else
+                                Compare(Device, "SlewToAltitude - Skipping test because simulator Slewing property is not accessible", "True", "True")
+                            End If
                         Case "SlewToAzimuth"
-                            StartTime = Now
-                            DeviceObject.SlewToAzimuth(225.0)
-                            Do
-                                Thread.Sleep(100)
-                                Application.DoEvents()
-                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
-                            Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
-                            Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
-                            CompareDouble(Device, Test, DeviceObject.Azimuth, 225.0, TOLERANCE_5_SECONDS, DoubleType.Degrees0To360)
+                            If canReadSlewing Then
+                                Try
+                                    StartTime = Now
+                                    DeviceObject.SlewToAzimuth(225.0)
+                                    Do
+                                        Thread.Sleep(100)
+                                        Application.DoEvents()
+                                        Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                                    Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
+                                    Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
+                                    CompareDouble(Device, Test, DeviceObject.Azimuth, 225.0, TOLERANCE_5_SECONDS, DoubleType.Degrees0To360)
+                                Catch ex As COMException When ex.ErrorCode = &H80040400
+                                Catch ex As MethodNotImplementedException
+                                    Compare(Device, "SlewToAzimuth - Simulator SlewToAzimuth method is disabled", "True", "True")
+                                End Try
+                            Else
+                                Compare(Device, "SlewToAzimuth - Skipping test because simulator Slewing property is not accessible", "True", "True")
+                            End If
                         Case Else
                             LogException("DeviceTest", "Unknown Dome Test: " & Test)
                     End Select
@@ -1679,6 +1850,7 @@ Public Class DiagnosticsForm
                         Case Else
                             LogException("DeviceTest", "Unknown ObservingConditions Test: " & Test)
                     End Select
+
                 Case Else
                     LogException("DeviceTest", "Unknown Device: " & Device)
             End Select
@@ -2528,14 +2700,14 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Sub CheckoutStarsFull31()
-        'Port of the NOVAS 3 ChecoutStarsFull.c program to confirm correct iplementation
+        'Port of the NOVAS 3 ChecoutStarsFull.c program to confirm correct implementation
 
         Const N_STARS As Integer = 3
         Const N_TIMES As Integer = 4
 
         '/*
         'Main function to check out many parts of NOVAS-C by calling
-        'function 'topo_star' with version 1 of function 'solarsystem'.
+        'function 'topo_star' with version 1 of function 'solar system'.
 
         'For use with NOVAS-C Version 3.
         '*/
@@ -3338,25 +3510,25 @@ Public Class DiagnosticsForm
         Compare("Novas2Tests", "AstroPlanet RC", RC, 0)
         CompareDouble("Novas2Tests", "AstroPlanet RA", RATarget, 18.6090529142058, TOLERANCE_E9, DoubleType.Hours0To24)
         CompareDouble("Novas2Tests", "AstroPlanet Dec", DECTarget, -23.172110257017, TOLERANCE_E9, DoubleType.Degrees0To360)
-        CompareDouble("Novas2Tests", "AstroPlanet Dist", Distance, 0.983376046291495, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "AstroPlanet List", Distance, 0.983376046291495, TOLERANCE_E9)
 
         RC = NOVAS.NOVAS2.VirtualPlanet(JD, SunBody, EarthBody, RANow, DECNow, Distance)
         Compare("Novas2Tests", "VirtualPlanet RC", RC, 0)
         CompareDouble("Novas2Tests", "VirtualPlanet RA", RANow, 18.6086339599669, TOLERANCE_E9, DoubleType.Hours0To24)
         CompareDouble("Novas2Tests", "VirtualPlanet Dec", DECNow, -23.1724757087899, TOLERANCE_E9, DoubleType.Degrees0To360)
-        CompareDouble("Novas2Tests", "VirtualPlanet Dist", Distance, 0.983376046291495, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "VirtualPlanet List", Distance, 0.983376046291495, TOLERANCE_E9)
 
         RC = NOVAS.NOVAS2.AppPlanet(JD, SunBody, EarthBody, RANow, DECNow, Distance)
         Compare("Novas2Tests", "AppPlanet RC", RC, 0)
         CompareDouble("Novas2Tests", "AppPlanet RA", RANow, 18.620097981585, TOLERANCE_E9, DoubleType.Hours0To24)
         CompareDouble("Novas2Tests", "AppPlanet Dec", DECNow, -23.162343811122, TOLERANCE_E9, DoubleType.Degrees0To360)
-        CompareDouble("Novas2Tests", "AppPlanet Dist", Distance, 0.983376046291495, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "AppPlanet List", Distance, 0.983376046291495, TOLERANCE_E9)
 
         RC = NOVAS.NOVAS2.TopoPlanet(JD, SunBody, EarthBody, 0.0, LocationStruct, RANow, DECNow, Distance)
         Compare("Novas2Tests", "TopoPlanet RC", RC, 0)
         CompareDouble("Novas2Tests", "TopoPlanet RA", RANow, 18.6201822342814, TOLERANCE_E9, DoubleType.Hours0To24)
         CompareDouble("Novas2Tests", "TopoPlanet Dec", DECNow, -23.1645247136453, TOLERANCE_E9, DoubleType.Degrees0To360)
-        CompareDouble("Novas2Tests", "TopoPlanet Dist", Distance, 0.983371860482251, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "TopoPlanet List", Distance, 0.983371860482251, TOLERANCE_E9)
         TL.BlankLine()
 
         NOVAS.NOVAS2.Equ2Hor(JD, 0.0, 0.0, 0.0, LocationStruct, StarRAJ2000, StarDecJ2000, RefractionOption.LocationRefraction, ZenithDistance, Azimuth, RANow, DECNow)
@@ -3692,8 +3864,10 @@ Public Class DiagnosticsForm
         TransformExceptionTest(TR, TransformExceptionTestType.SiteLongitude, 0.0, -181.0, 181.0)
         TransformExceptionTest(TR, TransformExceptionTestType.SiteElevation, 0.0, -301.0, 10001.0)
         TransformExceptionTest(TR, TransformExceptionTestType.SiteTemperature, 0.0, -275.0, 101.0)
-        TransformExceptionTest(TR, TransformExceptionTestType.JulianDateTT, 2451545.0, 0.0, 6000000.0)
-        TransformExceptionTest(TR, TransformExceptionTestType.JulianDateUTC, 2451545.0, 0.0, 6000000.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.JulianDateTT, 2451545.0, -1.0, 6000000.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.JulianDateTT, 0.0, -1.0, 6000000.0) ' Confirm that the special JulianDateTT value of 0.0 passes
+        TransformExceptionTest(TR, TransformExceptionTestType.JulianDateUTC, 2451545.0, -1.0, 6000000.0)
+        TransformExceptionTest(TR, TransformExceptionTestType.JulianDateUTC, 0.0, -1.0, 6000000.0) ' Confirm that the special JulianDateUTC value of 0.0 passes
         TransformExceptionTest(TR, TransformExceptionTestType.SetJ2000RA, 0.0, -1.0, 24.0)
         TransformExceptionTest(TR, TransformExceptionTestType.SetJ2000Dec, 0.0, -91.0, 91.0)
         TransformExceptionTest(TR, TransformExceptionTestType.SetApparentRA, 0.0, -1.0, 24.0)
@@ -3822,7 +3996,7 @@ Public Class DiagnosticsForm
         Dim EA As New ASCOM.Astrometry.NOVASCOM.Earth
 
         'Astrometry test data for planets obtained from the original 32bit  components
-        'The data is for the arbitary test date Thursday, 30 December 2010 09:00:00" 
+        'The data is for the arbitrary test date Thursday, 30 December 2010 09:00:00" 
         Dim Mercury() As Double = New Double() {-0.146477263357071, -0.739730529540394, -0.275237058490435,
                                                 -0.146552680905756, -0.73971718813053, -0.275232768188589,
                                                 -0.144373027430296, -0.740086172152297, -0.275392756115203,
@@ -3880,7 +4054,7 @@ Public Class DiagnosticsForm
 
         Try
             Status("NovasCom Tests")
-            'Create the Julian date corresponding to the arbitary test date
+            'Create the Julian date corresponding to the arbitrary test date
             JD = TestJulianDate()
             TL.LogMessage("NovasCom Tests", "Julian Date = " & JD & " = " & TEST_DATE)
             CompareDouble("NovasCom", "JulianDate", JD, 2455560.875, TOLERANCE_E9)
@@ -3959,7 +4133,7 @@ Public Class DiagnosticsForm
     Private Sub ComparePosVec(ByVal TestName As String, ByVal st As NOVASCOM.Star, ByVal pv As NOVASCOM.PositionVector, ByVal Results() As Double, ByVal TestAzEl As Boolean, ByVal Tolerance As Double)
         CompareDouble(TestName, "RA Pos", pv.RightAscension, Results(0), Tolerance)
         CompareDouble(TestName, "DEC Pos", pv.Declination, Results(1), Tolerance)
-        CompareDouble(TestName, "Dist", pv.Distance, Results(2), Tolerance)
+        CompareDouble(TestName, "List", pv.Distance, Results(2), Tolerance)
         If TestAzEl Then
             CompareDouble(TestName, "Elev", pv.Elevation, Results(3), Tolerance)
         End If
@@ -3977,7 +4151,7 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Function TestJulianDate() As Double
-        'Create the Julian date corresponding to the arbitary test date
+        'Create the Julian date corresponding to the arbitrary test date
         Dim Util As New ASCOM.Utilities.Util
         Dim JD As Double
         JD = Util.DateUTCToJulian(Date.ParseExact(TEST_DATE, "F", System.Globalization.CultureInfo.InvariantCulture))
@@ -4143,7 +4317,7 @@ Public Class DiagnosticsForm
 
             Compare("ProfileTest", "DeviceType", AscomUtlProf.DeviceType, "Telescope")
 
-            Try : AscomUtlProf.Unregister(TestScope) : Catch : End Try 'Esnure the test scope is not registered
+            Try : AscomUtlProf.Unregister(TestScope) : Catch : End Try 'Ensure the test scope is not registered
             Compare("ProfileTest", "IsRegistered when not registered should be False", AscomUtlProf.IsRegistered(TestScope).ToString, "False")
 
             AscomUtlProf.Register(TestScope, "This is a test telescope")
@@ -4286,34 +4460,55 @@ Public Class DiagnosticsForm
             Try
                 TL.LogMessage("ProfileTest", "Installed Simulator Devices")
                 keys = AscomUtlProf.RegisteredDevices("Camera")
-                CheckSimulator(keys, "Camera", "ASCOM.Simulator.Camera")
-                CheckSimulator(keys, "Camera", "CCDSimulator.Camera")
+                CheckSimulator(keys, "Camera", "ASCOM.Simulator.Camera", False)
+                CheckSimulator(keys, "Camera", "CCDSimulator.Camera", False)
+
+                keys = AscomUtlProf.RegisteredDevices("CoverCalibrator")
+                CheckSimulator(keys, "CoverCalibrator", "ASCOM.Simulator.CoverCalibrator", False)
+
                 keys = AscomUtlProf.RegisteredDevices("Dome")
-                CheckSimulator(keys, "Dome", "DomeSim.Dome")
-                CheckSimulator(keys, "Dome", "Hub.Dome")
-                CheckSimulator(keys, "Dome", "Pipe.Dome")
-                CheckSimulator(keys, "Dome", "POTH.Dome")
+                CheckSimulator(keys, "Dome", "DomeSim.Dome", False)
+                CheckSimulator(keys, "Dome", "ASCOM.DeviceHub.Dome", False)
+
                 keys = AscomUtlProf.RegisteredDevices("FilterWheel")
-                CheckSimulator(keys, "FilterWheel", "ASCOM.Simulator.FilterWheel")
-                CheckSimulator(keys, "FilterWheel", "FilterWheelSim.FilterWheel")
+                CheckSimulator(keys, "FilterWheel", "ASCOM.Simulator.FilterWheel", False)
+                CheckSimulator(keys, "FilterWheel", "FilterWheelSim.FilterWheel", False)
+
                 keys = AscomUtlProf.RegisteredDevices("Focuser")
-                CheckSimulator(keys, "Focuser", "FocusSim.Focuser")
-                CheckSimulator(keys, "Focuser", "Hub.Focuser")
-                CheckSimulator(keys, "Focuser", "Pipe.Focuser")
-                CheckSimulator(keys, "Focuser", "POTH.Focuser")
+                CheckSimulator(keys, "Focuser", "FocusSim.Focuser", False)
+                CheckSimulator(keys, "Focuser", "ASCOM.Simulator.Focuser", False)
+                CheckSimulator(keys, "Focuser", "ASCOM.DeviceHub.Focuser", False)
+
+                keys = AscomUtlProf.RegisteredDevices("ObservingConditions")
+                CheckSimulator(keys, "ObservingConditions", "ASCOM.OCH.ObservingConditions", False)
+                CheckSimulator(keys, "ObservingConditions", "ASCOM.Simulator.ObservingConditions", False)
+
                 keys = AscomUtlProf.RegisteredDevices("Rotator")
-                CheckSimulator(keys, "Rotator", "ASCOM.Simulator.Rotator")
+                CheckSimulator(keys, "Rotator", "ASCOM.Simulator.Rotator", False)
+
                 keys = AscomUtlProf.RegisteredDevices("SafetyMonitor")
-                CheckSimulator(keys, "SafetyMonitor", "ASCOM.Simulator.SafetyMonitor")
+                CheckSimulator(keys, "SafetyMonitor", "ASCOM.Simulator.SafetyMonitor", False)
+
                 keys = AscomUtlProf.RegisteredDevices("Switch")
-                CheckSimulator(keys, "Switch", "SwitchSim.Switch")
+                CheckSimulator(keys, "Switch", "SwitchSim.Switch", False)
+                CheckSimulator(keys, "Switch", "ASCOM.Simulator.Switch", False)
+
                 keys = AscomUtlProf.RegisteredDevices("Telescope")
-                CheckSimulator(keys, "Telescope", "ASCOM.Simulator.Telescope")
-                CheckSimulator(keys, "Telescope", "ASCOMDome.Telescope")
-                CheckSimulator(keys, "Telescope", "Hub.Telescope")
-                CheckSimulator(keys, "Telescope", "Pipe.Telescope")
-                CheckSimulator(keys, "Telescope", "POTH.Telescope")
-                CheckSimulator(keys, "Telescope", "ScopeSim.Telescope")
+                CheckSimulator(keys, "Telescope", "ASCOM.Simulator.Telescope", False)
+                CheckSimulator(keys, "Telescope", "ScopeSim.Telescope", False)
+                CheckSimulator(keys, "Telescope", "ASCOM.DeviceHub.Telescope", False)
+
+                ' Devices that may or may not be present because they are now optional
+                CheckSimulator(keys, "Dome", "Hub.Dome", True)
+                CheckSimulator(keys, "Dome", "Pipe.Dome", True)
+                CheckSimulator(keys, "Dome", "POTH.Dome", True)
+                CheckSimulator(keys, "Focuser", "Hub.Focuser", True)
+                CheckSimulator(keys, "Focuser", "Pipe.Focuser", True)
+                CheckSimulator(keys, "Focuser", "POTH.Focuser", True)
+                CheckSimulator(keys, "Telescope", "Hub.Telescope", True)
+                CheckSimulator(keys, "Telescope", "Pipe.Telescope", True)
+                CheckSimulator(keys, "Telescope", "POTH.Telescope", True)
+                CheckSimulator(keys, "Telescope", "ASCOMDome.Telescope", True)
 
                 DevTypes = AscomUtlProf.RegisteredDeviceTypes
                 For Each DevType As String In DevTypes
@@ -4509,16 +4704,26 @@ Public Class DiagnosticsForm
 
     End Sub
 
-    Private Sub CheckSimulator(ByVal Devices As ArrayList, ByVal DeviceType As String, ByVal DeviceName As String)
+    Private Sub CheckSimulator(ByVal Devices As ArrayList, ByVal DeviceType As String, ByVal DeviceName As String, CanBeMissing As Boolean)
         Dim Found As Boolean = False
+
+        ' Search for the device and record if it is present
         For Each Device In Devices
             If Device.Key = DeviceName Then Found = True
         Next
 
+        ' Assess the search outcome
         If Found Then
+            ' Expected device is present so record a success
             Compare("ProfileTest", DeviceType, DeviceName, DeviceName)
         Else
-            Compare("ProfileTest", DeviceType, "", DeviceName)
+            If CanBeMissing Then
+                ' Ignore the fact that the device is not present
+            Else
+                ' Record that an expected device is missing
+                Compare("ProfileTest", DeviceType, "", DeviceName)
+            End If
+
         End If
     End Sub
 
@@ -4708,7 +4913,7 @@ Public Class DiagnosticsForm
 
             Case DoubleType.HoursMinus12ToPlus12
                 If (HigherValue > 6.0) And (LowerValue < -6.0) Then ' We are comparing across the -12.0/+12.0 hour discontinuity so we need to make both numbers fall onto a continuous stream
-                    ComparisonValue = (12.0 - HigherValue) + (12.0 + LowerValue) ' Calculate the distance of the high value from 12.0 hours and add this to the lower value to get the differnce between the two values.
+                    ComparisonValue = (12.0 - HigherValue) + (12.0 + LowerValue) ' Calculate the distance of the high value from 12.0 hours and add this to the lower value to get the difference between the two values.
                 Else
                     ' No need for special action because both numbers are on the same side of the 0/360 degree discontinuity
                     ComparisonValue = Math.Abs(ActualValue - ExpectedValue)
@@ -4721,7 +4926,7 @@ Public Class DiagnosticsForm
                 ActualValue = ActualValue * RADIANS_TO_HOURS ' Convert from radians to hours
                 ExpectedValue = ExpectedValue * RADIANS_TO_HOURS
                 If (HigherValue > 6.0) And (LowerValue < -6.0) Then ' We are comparing across the -12.0/+12.0 hour discontinuity so we need to make both numbers fall onto a continuous stream
-                    ComparisonValue = (12.0 - HigherValue) + (12.0 + LowerValue) ' Calculate the distance of the high value from 12.0 hours and add this to the lower value to get the differnce between the two values.
+                    ComparisonValue = (12.0 - HigherValue) + (12.0 + LowerValue) ' Calculate the distance of the high value from 12.0 hours and add this to the lower value to get the difference between the two values.
                 Else
                     ' No need for special action because both numbers are on the same side of the 0/360 degree discontinuity
                     ComparisonValue = Math.Abs(ActualValue - ExpectedValue)
@@ -4778,7 +4983,7 @@ Public Class DiagnosticsForm
             TL.LogMessage("VideoUtilsTests", "Creating NativeHelpers RC")
             NH = New NativeHelpers
 
-            InitFrame2D(frame) ' Iniitalise the frame array
+            InitFrame2D(frame) ' Initialise the frame array
             CompareLongInteger("VideoUtilsTests", "InitFrame CheckSum", CheckSum2DFrame(frame), 111088890000)
 
             TL.LogMessage("VideoUtilsTests", "Opening video file RC")
@@ -4838,21 +5043,21 @@ Public Class DiagnosticsForm
             InitFrame3D(frameColour)
             CompareLongInteger("VideoUtilsTests", "InitFrame3D frameColour", CheckSum3DFrame(frameColour), 888711120000)
 
-            rc = NH.GetColourBitmapPixels(100, 100, 8, FlipMode.None, frameColour, byteArray)
+            rc = NH.GetColourBitmapPixels(100, 100, 8, FlipMode.None, frameColour, True, byteArray)
             CompareInteger("VideoUtilsTests", "GetBitmapPixels Colour FlipMode.None RC", rc, 0)
             CompareLongInteger("VideoUtilsTests", "GetBitmapPixels CheckSum", CheckSumByteArray(byteArray), 26404898591)
 
-            rc = NH.GetColourBitmapPixels(100, 100, 8, FlipMode.FlipHorizontally, frameColour, byteArray)
+            rc = NH.GetColourBitmapPixels(100, 100, 8, FlipMode.FlipHorizontally, frameColour, True, byteArray)
             CompareInteger("VideoUtilsTests", "GetBitmapPixels Colour FlipMode.FlipHorizontally RC", rc, 0)
-            CompareLongInteger("VideoUtilsTests", "GetBitmapPixels CheckSum", CheckSumByteArray(byteArray), 26412476543)
+            CompareLongInteger("VideoUtilsTests", "GetBitmapPixels CheckSum", CheckSumByteArray(byteArray), 26407095983)
 
-            rc = NH.GetColourBitmapPixels(100, 100, 8, FlipMode.FlipVertically, frameColour, byteArray)
+            rc = NH.GetColourBitmapPixels(100, 100, 8, FlipMode.FlipVertically, frameColour, True, byteArray)
             CompareInteger("VideoUtilsTests", "GetBitmapPixels Colour FlipMode.FlipVertically RC", rc, 0)
             CompareLongInteger("VideoUtilsTests", "GetBitmapPixels CheckSum", CheckSumByteArray(byteArray), 26404919004)
 
-            rc = NH.GetColourBitmapPixels(100, 100, 8, FlipMode.FlipBoth, frameColour, byteArray)
+            rc = NH.GetColourBitmapPixels(100, 100, 8, FlipMode.FlipBoth, frameColour, True, byteArray)
             CompareInteger("VideoUtilsTests", "GetBitmapPixels Colour FlipMode.FlipBoth RC", rc, 0)
-            CompareLongInteger("VideoUtilsTests", "GetBitmapPixels CheckSum", CheckSumByteArray(byteArray), 26412496956)
+            CompareLongInteger("VideoUtilsTests", "GetBitmapPixels CheckSum", CheckSumByteArray(byteArray), 26407116396)
 
             InitBitMap(bitmap)
 
@@ -4885,19 +5090,19 @@ Public Class DiagnosticsForm
             CompareLongInteger("VideoUtilsTests", "ByteArray FlipBoth CheckSum", CheckSumByteArray(byteArray), 174994618)
 
             frameColour = NH.GetColourPixelsFromBitmap(bitmap, FlipMode.None, byteArray)
-            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipNone CheckSum", CheckSum3DFrame(frameColour), 55234894)
+            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipNone CheckSum", CheckSum3DFrame(frameColour), 36625703)
             CompareLongInteger("VideoUtilsTests", "ByteArray CheckSum", CheckSumByteArray(byteArray), 295553892)
 
             frameColour = NH.GetColourPixelsFromBitmap(bitmap, FlipMode.FlipHorizontally, byteArray)
-            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipHorizontally CheckSum", CheckSum3DFrame(frameColour), 54805394)
+            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipHorizontally CheckSum", CheckSum3DFrame(frameColour), 35246947)
             CompareLongInteger("VideoUtilsTests", "ByteArray FlipHorizontally CheckSum", CheckSumByteArray(byteArray), 295221231)
 
             frameColour = NH.GetColourPixelsFromBitmap(bitmap, FlipMode.FlipVertically, byteArray)
-            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipVertically CheckSum", CheckSum3DFrame(frameColour), 54831409)
+            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipVertically CheckSum", CheckSum3DFrame(frameColour), 35285887)
             CompareLongInteger("VideoUtilsTests", "ByteArray FlipVertically CheckSum", CheckSumByteArray(byteArray), 304432836)
 
             frameColour = NH.GetColourPixelsFromBitmap(bitmap, FlipMode.FlipBoth, byteArray)
-            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipBoth CheckSum", CheckSum3DFrame(frameColour), 53990701)
+            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipBoth CheckSum", CheckSum3DFrame(frameColour), 32973098)
             CompareLongInteger("VideoUtilsTests", "ByteArray FlipBoth CheckSum", CheckSumByteArray(byteArray), 304100175)
             frameColour = NH.GetColourPixelsFromBitmap(bitmap, FlipMode.None, byteArray)
 
@@ -4910,14 +5115,14 @@ Public Class DiagnosticsForm
             byteArray = NH.PrepareBitmapForDisplay(frameOut, 100, 100, FlipMode.FlipBoth)
             CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipBoth CheckSum", CheckSumByteArray(byteArray), 105136517648)
 
-            byteArray = NH.PrepareColourBitmapForDisplay(frameColour, frameColour.GetUpperBound(0), frameColour.GetUpperBound(1), FlipMode.None)
-            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay None CheckSum", CheckSumByteArray(byteArray), 243107340)
-            byteArray = NH.PrepareColourBitmapForDisplay(frameColour, frameColour.GetUpperBound(0), frameColour.GetUpperBound(1), FlipMode.FlipHorizontally)
-            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipHorizontally CheckSum", CheckSumByteArray(byteArray), 243407028)
-            byteArray = NH.PrepareColourBitmapForDisplay(frameColour, frameColour.GetUpperBound(0), frameColour.GetUpperBound(1), FlipMode.FlipVertically)
-            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipVertically CheckSum", CheckSumByteArray(byteArray), 243130927)
-            byteArray = NH.PrepareColourBitmapForDisplay(frameColour, frameColour.GetUpperBound(0), frameColour.GetUpperBound(1), FlipMode.FlipBoth)
-            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipBoth CheckSum", CheckSumByteArray(byteArray), 243430615)
+            byteArray = NH.PrepareColourBitmapForDisplay(frameColour, frameColour.GetUpperBound(0), frameColour.GetUpperBound(1), FlipMode.None, True)
+            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay None CheckSum", CheckSumByteArray(byteArray), 852184)
+            byteArray = NH.PrepareColourBitmapForDisplay(frameColour, frameColour.GetUpperBound(0), frameColour.GetUpperBound(1), FlipMode.FlipHorizontally, True)
+            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipHorizontally CheckSum", CheckSumByteArray(byteArray), 852424)
+            byteArray = NH.PrepareColourBitmapForDisplay(frameColour, frameColour.GetUpperBound(0), frameColour.GetUpperBound(1), FlipMode.FlipVertically, True)
+            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipVertically CheckSum", CheckSumByteArray(byteArray), 875771)
+            byteArray = NH.PrepareColourBitmapForDisplay(frameColour, frameColour.GetUpperBound(0), frameColour.GetUpperBound(1), FlipMode.FlipBoth, True)
+            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipBoth CheckSum", CheckSumByteArray(byteArray), 876011)
 
         Catch ex As Exception
             LogException("VideoUtilTests", "Exception: " & ex.ToString)
@@ -5155,7 +5360,7 @@ Public Class DiagnosticsForm
                 inputObject = New KeyValuePair With {
                     .Key = TEST_OBJECT_KEY,
                     .Value = TEST_OBJECT
-                } ' Create a test KeyValuePair oject
+                } ' Create a test KeyValuePair object
 
                 cache.Set(TEST_OBJECT_KEY, inputObject, 0.1) ' Set a value with a 100ms lifetime
                 returnObject = cache.Get(TEST_OBJECT_KEY)
@@ -5579,7 +5784,7 @@ Public Class DiagnosticsForm
         Dim numberOfLoops As Integer, errorOccured As Boolean = False, throttleTarget As Integer
 
         ' Set upper and lower test pass limits. These are quite wide to allow for systems where sleep time precision is low e.g. when timer resolution is 15.67ms e.g. on laptops and low power devices
-        ' They also don't need to be that precise given that the purpose is only to slow down the arte of client calls
+        ' They also don't need to be that precise given that the purpose is only to slow down the rate of client calls
         Const ACCEPTABLE_LOWER_BOUND As Double = 4500.0 ' Minimum overall test time for a pass (milliseconds) = 110% of expected 5000ms
         Const ACCEPTABLE_UPPER_BOUND As Double = 6000.0 ' Maximum overall test time for a pass (milliseconds) = 120% of expected 5000ms
 
@@ -5590,7 +5795,7 @@ Public Class DiagnosticsForm
         Try
             cache.SetDouble(TEST_DOUBLE_KEY, testDouble, 100.0) ' Set a value with a 100 second lifetime, so it doesn't time out within the text
             cache.PumpMessagesInterval = PumpMessagesInterval
-            returnDouble = cache.GetDouble(TEST_DOUBLE_KEY) ' Do a first get outside the loop so that all subsequqnt gets will be throttled 
+            returnDouble = cache.GetDouble(TEST_DOUBLE_KEY) ' Do a first get outside the loop so that all subsequent gets will be throttled 
 
             ' Make NUMBER_OF_THROTTLING_TEST_LOOPS calls that should be limited to CallsPerSecond calls per second, i.e. the overall test should take about 10 / CallsPerSecond seconds
             sw.Restart()
@@ -5619,7 +5824,7 @@ Public Class DiagnosticsForm
         Dim ts As String
         Dim HelperType As Type
         Dim i As Integer, Is64Bit As Boolean
-        Dim MyVersion As Version
+        'Dim MyVersion As Version
         Dim Utl As Util
 
         Const TestDate As Date = #6/1/2010 4:37:00 PM#
@@ -5658,14 +5863,20 @@ Public Class DiagnosticsForm
             Compare("UtilTests", "IsMinimumRequiredVersion 6.2", Utl.IsMinimumRequiredVersion(6, 2).ToString, "True")
             Compare("UtilTests", "IsMinimumRequiredVersion 6.3", Utl.IsMinimumRequiredVersion(6, 3).ToString, "True")
             Compare("UtilTests", "IsMinimumRequiredVersion 6.4", Utl.IsMinimumRequiredVersion(6, 4).ToString, "True")
-            Compare("UtilTests", "IsMinimumRequiredVersion 6.5", Utl.IsMinimumRequiredVersion(6, 5).ToString, "False")
+            Compare("UtilTests", "IsMinimumRequiredVersion 6.5", Utl.IsMinimumRequiredVersion(6, 5).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 6.6", Utl.IsMinimumRequiredVersion(6, 6).ToString, "False")
 
             ' Check that the platform version properties return the correct values
-            MyVersion = New Version(Application.ProductVersion) ' Get this assembly's version number against which to compare the Util version numbers
-            CompareInteger("UtilTests", "Major Version", Utl.MajorVersion, MyVersion.Major)
-            CompareInteger("UtilTests", "Minor Version", Utl.MinorVersion, MyVersion.Minor)
-            CompareInteger("UtilTests", "Service Pack", Utl.ServicePack, MyVersion.Build)
-            CompareInteger("UtilTests", "Build Number", Utl.BuildNumber, MyVersion.Revision)
+            Dim FV As FileVersionInfo
+            FV = Process.GetCurrentProcess().MainModule.FileVersionInfo ' Get this assembly's file version number against which to compare the Util version numbers
+
+            TL.LogMessageCrLf("Versions", "  Product:  " & FV.ProductName & " " & FV.ProductVersion)
+            TL.LogMessageCrLf("Versions", "  File:     " & FV.FileDescription & " " & FV.FileVersion)
+
+            CompareInteger("UtilTests", "Major Version", Utl.MajorVersion, FV.FileMajorPart)
+            CompareInteger("UtilTests", "Minor Version", Utl.MinorVersion, FV.FileMinorPart)
+            CompareInteger("UtilTests", "Service Pack", Utl.ServicePack, FV.FileBuildPart)
+            CompareInteger("UtilTests", "Build Number", Utl.BuildNumber, FV.FilePrivatePart)
 
             TL.BlankLine()
 
@@ -5744,7 +5955,7 @@ Public Class DiagnosticsForm
                 t = 3.123894628 : Compare("UtilTests", "HoursToHMS", Utl.HoursToHMS(t, "-", ";"), "03-07;26")
                 t = 3.123894628 : Compare("UtilTests", "HoursToHMS", Utl.HoursToHMS(t, "-", ";", "#"), "03-07;26#")
                 t = 3.123894628 : Compare("UtilTests", "HoursToHMS", Utl.HoursToHMS(t, "-", ";", "#", 3), "03-07;26" & DecimalSeparator & "021#")
-            Else 'Run teststo compare original 32bit only and new 32/64bit capabale components
+            Else 'Run tests to compare original 32bit only and new 32/64bit capable components
                 t = 30.123456789 : Compare("UtilTests", "DegreesToDM", Utl.DegreesToDM(t, ":").ToString, DrvHlpUtil.DegreesToDM(t, ":").ToString)
                 t = 60.987654321 : Compare("UtilTests", "DegreesToDMS", Utl.DegreesToDMS(t, ":", ":", "", 4).ToString, DrvHlpUtil.DegreesToDMS(t, ":", ":", "", 4).ToString)
                 t = 50.123453456 : Compare("UtilTests", "DegreesToHM", Utl.DegreesToHM(t).ToString, DrvHlpUtil.DegreesToHM(t).ToString)
@@ -5830,7 +6041,7 @@ Public Class DiagnosticsForm
             TimingTest(2000, Is64Bit)
             TL.BlankLine()
 
-            ' Test conversion funcitons
+            ' Test conversion functions
             CompareDouble("UtilTests", "DewPoint2Humidity", Utl.DewPoint2Humidity(20.0, 25.0), 73.81, TOLERANCE_E4)
             CompareDouble("UtilTests", "Humidity2DewPoint", Utl.Humidity2DewPoint(45.0, 5.0), -5.948, TOLERANCE_E4)
 
@@ -6186,7 +6397,7 @@ Public Class DiagnosticsForm
             MessageLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & GlobalConstants.EVENTLOG_MESSAGES
 
             If File.Exists(MessageLog) Or File.Exists(ErrorLog) Then
-                LogError("ScanEventLog", "Errors have occured while writing to the ASCOM event log, please see detail earlier in this log.")
+                LogError("ScanEventLog", "Errors have occurred while writing to the ASCOM event log, please see detail earlier in this log.")
                 TL.LogMessage("", "")
 
                 If File.Exists(MessageLog) Then
@@ -6263,7 +6474,7 @@ Public Class DiagnosticsForm
                     RegistryRights(Registry.LocalMachine, "SOFTWARE\WOW6432Node\ASCOM", False)
                     RegistryRights(Registry.LocalMachine, "SOFTWARE\WOW6432Node\ASCOM\Telescope Drivers", False)
                     RegistryRights(Registry.LocalMachine, "SOFTWARE\WOW6432Node\ASCOM\Telescope Drivers\ASCOM.Simulator.Telescope", False)
-                    Key = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                    Key = ASCOMRegistryAccess.OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
                     RecursionLevel = -1
                     RecurseRegistrySecurity(Key)
                 Catch ex As Exception
@@ -6403,7 +6614,7 @@ Public Class DiagnosticsForm
             Next
 
             If (debugSwitch) Then TL.LogMessage("RegistryRightsDbg", "Completed iteration of security rules")
-            If ConfirmFullAccess Then 'Check whether full access is availble if required
+            If ConfirmFullAccess Then 'Check whether full access is available if required
                 If foundFullAccess Then
                     NMatches += 1
                     TL.BlankLine()
@@ -6423,7 +6634,7 @@ Public Class DiagnosticsForm
     End Sub
 
     ''' <summary>
-    ''' Returns the localised text name of the BUILTIN\Users group. This varies by locale so has to be derrived on the users system.
+    ''' Returns the localised text name of the BUILTIN\Users group. This varies by locale so has to be derived on the users system.
     ''' </summary>
     ''' <returns>Localised name of the BUILTIN\Users group</returns>
     ''' <remarks>This uses the WMI features and is pretty obscure - sorry, it was the only way I could find to do this! Peter</remarks>
@@ -6478,7 +6689,7 @@ Public Class DiagnosticsForm
             Try
                 'List the 32bit registry
                 TL.LogMessage("ScanRegistry", "Machine Profile Root (64bit OS - 32bit Registry)")
-                Key = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                Key = ASCOMRegistryAccess.OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
                 RecursionLevel = -1
                 RecurseRegistry(Key)
             Catch ex As Exception
@@ -6489,7 +6700,7 @@ Public Class DiagnosticsForm
             Try
                 'List the 64bit registry
                 TL.LogMessage("ScanRegistry", "Machine Profile Root (64bit OS - 64bit Registry)")
-                Key = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_64KEY)
+                Key = ASCOMRegistryAccess.OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_64KEY)
                 RecursionLevel = -1
                 RecurseRegistry(Key)
             Catch ex As ProfilePersistenceException
@@ -6669,7 +6880,7 @@ Public Class DiagnosticsForm
 
             TL.BlankLine()
         Catch ex As DirectoryNotFoundException
-            TL.LogMessage("ScanProfileFiles", "Profile 5.5 filestore not present")
+            TL.LogMessage("ScanProfileFiles", "Profile 5.5 file store not present")
             TL.BlankLine()
         Catch ex As Exception
             LogException("ScanProfileFiles", "Exception: " & ex.ToString)
@@ -6915,7 +7126,7 @@ Public Class DiagnosticsForm
     Private Sub ScanCOMRegistration()
         Try
             Status("Scanning Registry")
-            TL.LogMessage("COMRegistration", "") 'Report COM registation
+            TL.LogMessage("COMRegistration", "") 'Report COM registration
 
             'Original Platform 5 helpers
             GetCOMRegistration("DriverHelper.Chooser")
@@ -6930,7 +7141,7 @@ Public Class DiagnosticsForm
             GetCOMRegistration("DriverHelper.ProfileAccess")
             GetCOMRegistration("DriverHelper.SerialSupport")
 
-            'Utlities
+            'Utilities
             GetCOMRegistration("ASCOM.Utilities.ASCOMProfile")
             GetCOMRegistration("ASCOM.Utilities.Chooser")
             GetCOMRegistration("ASCOM.Utilities.KeyValuePair")
@@ -7022,7 +7233,7 @@ Public Class DiagnosticsForm
                         Case VersionCode.Bitness.Bits64 ' We are a 64bit application so look in the 32bit registry section
                             Select Case Bitness
                                 Case VersionCode.Bitness.Bits32 ' Open the 32bit registry
-                                    RKeyCLSID = RegAccess.OpenSubKey(Registry.ClassesRoot, "CLSID\" & CLSID, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                                    RKeyCLSID = RegAccess.OpenSubKey3264(Registry.ClassesRoot, "CLSID\" & CLSID, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
                                 Case VersionCode.Bitness.Bits64 'Open the 64bit registry
                                     RKeyCLSID = Registry.ClassesRoot.OpenSubKey("CLSID\" & CLSID, False)
                                 Case Else
@@ -7093,13 +7304,13 @@ Public Class DiagnosticsForm
                         Else
                             LogError("HelperHijacking", "Unable to find registered CLSID\InprocServer32: " + CLSID & "InprocServer32")
                         End If
-                    Else 'CLSID value dfoes not exist
+                    Else 'CLSID value does not exist
                         LogError("HelperHijacking", "Unable to find registered CLSID: " + CLSID)
                     End If
                 Else 'CLSID is missing
                     LogError("HelperHijacking", "Unable to find ProgID\CLSID: " + ProgID & "\CLSID")
                 End If
-            Else ' Cannot find ProgID so gve error message
+            Else ' Cannot find ProgID so give error message
                 LogError("HelperHijacking", "Unable to find registered ProgID: " + ProgID)
             End If
         Catch ex As Exception
@@ -7161,6 +7372,19 @@ Public Class DiagnosticsForm
                             localPath = assemblyURI.LocalPath
                             If (localPath.ToUpperInvariant.Contains("\ASCOM.DRIVERACCESS\6") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.UTILITIES\6") Or
+                                localPath.ToUpperInvariant.Contains("ASCOM.ALPACASHAREDRESOURCES") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.ATTRIBUTES\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.CACHE") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.CONTROLS") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.DRIVERACCESS\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.EXCEPTIONS\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.INTERNAL.EXTENSIONS\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.INTERNAL.FUSIONLIB\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.NEWTONSOFT.JSON\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.SETTINGSPROVIDER\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.SETUP.TEMPLATEWIZARD\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.UTILITIES.SUPPORT\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.UTILITIES.VIDEO") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.ASTROMETRY\6") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.DEVICEINTERFACES\6")) Then
                                 AscomGACPaths.Add(localPath)
@@ -7371,12 +7595,15 @@ Public Class DiagnosticsForm
             FullPath = FPath & FName 'Create full filename from path and simple filename
             If File.Exists(FullPath) Then
                 TL.LogMessage("FileDetails", FullPath)
+
                 'Try to get assembly version info if present
                 Try
                     Ass = Assembly.ReflectionOnlyLoadFrom(FullPath)
                     AssVer = Ass.FullName
                     Framework = Ass.ImageRuntimeVersion
                 Catch ex As FileLoadException ' Deal with possibility that this assembly has already been loaded
+                    TL.LogMessageCrLf("ErrorDiagnostics", $"A FileLoadException was thrown. Fusion log: {vbCrLf}'{ex.FusionLog}'")
+
                     ReflectionAssemblies = AppDomain.CurrentDomain.ReflectionOnlyGetAssemblies() ' Get list of assemblies already loaded to the reflection only context
                     CompareName = Path.GetFileNameWithoutExtension(FName)
                     For Each ReflectionAss As Assembly In ReflectionAssemblies ' Find the assembly already there and get its full name
@@ -7384,12 +7611,12 @@ Public Class DiagnosticsForm
                             AssVer = ReflectionAss.FullName
                         End If
                     Next
+
                     If String.IsNullOrEmpty(AssVer) Then
-                        TL.LogMessage("ErrorDiagnosticsCmp", CompareName)
+                        TL.LogMessage("ErrorDiagnostics", CompareName)
                         For Each ReflectionAss As Assembly In ReflectionAssemblies ' List the assemblies already loaded
                             TL.LogMessage("ErrorDiagnostics", ReflectionAss.FullName)
                         Next
-                        LogException("FileDetails", "FileLoadException: " & ex.ToString)
                     End If
                 Catch ex As BadImageFormatException
                     AssVer = "Not an assembly"
@@ -7518,7 +7745,7 @@ Public Class DiagnosticsForm
                             End Select
 
                             If Not RKey Is Nothing Then
-                                If RKey.Name <> p_Key.Name Then 'We are in an infinite loop so kill it by settig rkey = Nothing
+                                If RKey.Name <> p_Key.Name Then 'We are in an infinite loop so kill it by setting rkey = Nothing
                                     TL.LogMessage("NewSubKey", Space((p_Depth + 1) * INDENT) & p_Container & "\" & p_Key.GetValue(ValueName))
                                     ProcessSubKey(RKey, p_Depth + 1, "None")
                                     RKey.Close()
@@ -7667,8 +7894,8 @@ Public Class DiagnosticsForm
         End Try
 
         Try
-            TL.LogMessage("Profile", "Recusrsing Profile")
-            RecurseProfile("\") 'Scan recurively over the profile
+            TL.LogMessage("Profile", "Recursing Profile")
+            RecurseProfile("\") 'Scan recursively over the profile
         Catch ex As Exception
             LogException("ScanProfile", ex.Message)
         End Try
@@ -7733,6 +7960,7 @@ Public Class DiagnosticsForm
 
     Private Sub ScanInstalledPlatform()
         Dim RegKey As RegistryKey
+        Dim platformInfo, developerInfo As Generic.SortedList(Of String, String)
 
         GetInstalledComponent("Platform 5A", "{075F543B-97C5-4118-9D54-93910DE03FE9}", False, True, True)
         GetInstalledComponent("Platform 5B", "{14C10725-0018-4534-AE5E-547C08B737B7}", False, True, True)
@@ -7749,12 +7977,20 @@ Public Class DiagnosticsForm
         Catch ex As NullReferenceException
             TL.LogMessage("Platform 5.5", "Not Installed")
         Catch ex As Exception
-            LogException("Platform 5.5", "Execption: " & ex.ToString)
+            LogException("Platform 5.5", "Exception: " & ex.ToString)
         End Try
         TL.BlankLine()
 
-        GetInstalledComponent("Platform 6", PLATFORM_INSTALLER_PROPDUCT_CODE, True, False, True)
-        GetInstalledComponent("Platform 6 Developer", DEVELOPER_INSTALLER_PROPDUCT_CODE, False, True, True)
+        platformInfo = GetInstalledComponent("Platform 6", PLATFORM_INSTALLER_PROPDUCT_CODE, True, False, True)
+        developerInfo = GetInstalledComponent("Platform 6 Developer", DEVELOPER_INSTALLER_PROPDUCT_CODE, False, True, True)
+
+        Try
+            If developerInfo(INST_DISPLAY_VERSION) <> INST_NOT_KNOWN Then
+                Compare("Platform 6", "Developer and Platform Version Numbers", developerInfo(INST_DISPLAY_VERSION), platformInfo(INST_DISPLAY_VERSION))
+            End If
+        Catch ex As System.Collections.Generic.KeyNotFoundException
+            ' Ignore errors due to the key being missing if the developer tools are not installed
+        End Try
 
         TL.BlankLine()
     End Sub
@@ -7766,10 +8002,11 @@ Public Class DiagnosticsForm
     ''' <param name="ProductCode">Installer GUID uniquely identifying the product</param>
     ''' <param name="Required">Flag determining whether to report an error or return a status message if the product isn't installed</param>
     ''' <param name="Force32">Flag forcing use of 32bit registry on a 64bit OS</param>
-    ''' <param name="MSIInstaller">True if the installer is an MSI based installer, False if an Installaware Native installer</param>
+    ''' <param name="MSIInstaller">True if the installer is an MSI based installer, False if an InstallAware Native installer</param>
     ''' <remarks></remarks>
-    Private Sub GetInstalledComponent(ByVal Name As String, ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean, ByVal MSIInstaller As Boolean)
+    Private Function GetInstalledComponent(ByVal Name As String, ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean, ByVal MSIInstaller As Boolean) As Generic.SortedList(Of String, String)
         Dim InstallInfo As Generic.SortedList(Of String, String)
+
         Try ' Platform 6 installer GUID, should always be present in Platform 6
             InstallInfo = GetInstallInformation(ProductCode, Required, Force32, MSIInstaller)
             If InstallInfo.Count > 0 Then
@@ -7782,37 +8019,23 @@ Public Class DiagnosticsForm
             Else
                 TL.LogMessage(Name, "Not installed")
             End If
-
-            'Catch ex As ProfilePersistenceException
-            '    If ex.Message.Contains("as it does not exist") Then
-            ' If Required Then ' Must be present so log an error if its not
-            ' LogException(Name, "Exception: " & ex.Message)
-            ' Else ' Optional so just record absence
-            ' End If
-            ' Else
-            ' LogException(Name, "Exception: " & ex.ToString)
-            ' End If
-            'Catch ex As NullReferenceException
-            '    If Required Then ' Must be present so log an error if its not
-            ' LogException(Name, "Exception: " & ex.Message)
-            ' Else ' Optional so just record absence
-            ' TL.LogMessage(Name, "Not installed")
-            ' End If
         Catch ex As Exception
             LogException(Name, "Exception: " & ex.ToString)
         End Try
+
         TL.BlankLine()
 
-    End Sub
+        Return InstallInfo
+    End Function
 
     ''' <summary>
-    ''' Gets installation informaiton about a product identified by its product GUID
+    ''' Gets installation information about a product identified by its product GUID
     ''' </summary>
     ''' <param name="ProductCode">Installer GUID uniquely identifying the product</param>
     ''' <param name="Required">Flag determining whether to report an error or return a status message if the product isn't installed</param>
     ''' <param name="Force32">Flag forcing use of 32bit registry on a 64bit OS</param>
     ''' <param name="MSIInstaller">True if the installer is an MSI based installer, False if an Installaware Native installer</param>
-    ''' <returns>Generic Sorted List of key value pairs. If not found retruns an empty list</returns>
+    ''' <returns>Generic Sorted List of key value pairs. If not found returns an empty list</returns>
     ''' <remarks></remarks>
     Private Function GetInstallInformation(ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean, ByVal MSIInstaller As Boolean) As Generic.SortedList(Of String, String)
         Dim RegKey As RegistryKey
@@ -7878,11 +8101,11 @@ Public Class DiagnosticsForm
                 Next
             End If
 
-            RetVal.Add(INST_DISPLAY_NAME, RegKey.GetValue(INST_DISPLAY_NAME, "Not known"))
-            RetVal.Add(INST_DISPLAY_VERSION, RegKey.GetValue(INST_DISPLAY_VERSION, "Not known"))
-            RetVal.Add(INST_INSTALL_DATE, RegKey.GetValue(INST_INSTALL_DATE, "Not known"))
-            RetVal.Add(INST_INSTALL_SOURCE, RegKey.GetValue(INST_INSTALL_SOURCE, "Not known"))
-            RetVal.Add(INST_INSTALL_LOCATION, RegKey.GetValue(INST_INSTALL_LOCATION, "Not known"))
+            RetVal.Add(INST_DISPLAY_NAME, RegKey.GetValue(INST_DISPLAY_NAME, INST_NOT_KNOWN))
+            RetVal.Add(INST_DISPLAY_VERSION, RegKey.GetValue(INST_DISPLAY_VERSION, INST_NOT_KNOWN))
+            RetVal.Add(INST_INSTALL_DATE, RegKey.GetValue(INST_INSTALL_DATE, INST_NOT_KNOWN))
+            RetVal.Add(INST_INSTALL_SOURCE, RegKey.GetValue(INST_INSTALL_SOURCE, INST_NOT_KNOWN))
+            RetVal.Add(INST_INSTALL_LOCATION, RegKey.GetValue(INST_INSTALL_LOCATION, INST_NOT_KNOWN))
 
             RegKey.Close()
         Catch ex As Exception
@@ -8064,7 +8287,7 @@ Public Class DiagnosticsForm
             CompareInteger("AstroUtilTests", "Events Sun Rise Count", Events.RiseTime.Count, 1)
             CompareInteger("AstroUtilTests", "Events Sun Set Count", Events.SetTime.Count, 2)
             CompareDouble("AstroUtilTests", "Events Sun Rise", Events.RiseTime(0), 10.9587287503168, TOLERANCE_E5)
-            CompareDouble("AstroUtilTests", "Events Sun Set", Events.SetTime(0), 0.0368674126801114, TOLERANCE_E2) ' Smaller tolerance becuase the expected value is smaller
+            CompareDouble("AstroUtilTests", "Events Sun Set", Events.SetTime(0), 0.0368674126801114, TOLERANCE_E2) ' Smaller tolerance because the expected value is smaller
             CompareDouble("AstroUtilTests", "Events Sun Set", Events.SetTime(1), 23.8850069460075, TOLERANCE_E5)
 
             Events = GetEvents(ASCOM.Astrometry.EventType.MoonRiseMoonSet, 5, 8, 2012, 51.0, -60.0, -5.0)
@@ -8321,7 +8544,7 @@ Public Class DiagnosticsForm
             ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SERIAL_AUTO_FILENAME)
 
             MenuUseTraceAutoFilenames.Enabled = False
-            MenuUseTraceAutoFilenames.Checked = True 'Enable the auto tracename flag
+            MenuUseTraceAutoFilenames.Checked = True 'Enable the auto trace name flag
             MenuUseTraceManualFilename.Checked = False 'Unset the manual file flag
             MenuUseTraceManualFilename.Enabled = False
         End If
@@ -8333,7 +8556,7 @@ Public Class DiagnosticsForm
         Dim ProfileStore As RegistryAccess
         ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
         'Auto filenames currently disabled, so enable them
-        MenuUseTraceAutoFilenames.Checked = True 'Enable the auto tracename flag
+        MenuUseTraceAutoFilenames.Checked = True 'Enable the auto trace name flag
         MenuUseTraceAutoFilenames.Enabled = False
         MenuUseTraceManualFilename.Checked = False 'Unset the manual file flag
         MenuUseTraceManualFilename.Enabled = False
@@ -8369,12 +8592,12 @@ Public Class DiagnosticsForm
 
         Select Case RetVal ' Handle the outcome from the user
             Case Windows.Forms.DialogResult.OK
-                'Save the reault
+                'Save the result
                 ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SerialTraceFileName.FileName)
                 'Check and enable the serial trace enabled flag
                 MenuSerialTraceEnabled.Enabled = True
                 MenuSerialTraceEnabled.Checked = True
-                'Enable maual serial trace file flag
+                'Enable manual serial trace file flag
                 MenuUseTraceAutoFilenames.Checked = False
                 MenuUseTraceAutoFilenames.Enabled = False
                 MenuUseTraceManualFilename.Checked = True
@@ -8414,21 +8637,21 @@ Public Class DiagnosticsForm
         TraceFileName = ProfileStore.GetProfile("", SERIAL_FILE_NAME_VARNAME, "")
         Select Case TraceFileName
             Case "" 'Trace is disabled
-                MenuUseTraceAutoFilenames.Enabled = True 'Autofilenames are enabled but unchecked
+                MenuUseTraceAutoFilenames.Enabled = True 'Auto filenames are enabled but unchecked
                 MenuUseTraceAutoFilenames.Checked = False
                 MenuUseTraceManualFilename.Enabled = True 'Manual trace filename is enabled but unchecked
                 MenuUseTraceManualFilename.Checked = False
                 MenuSerialTraceEnabled.Checked = False 'The trace enabled flag is unchecked and disabled
                 MenuSerialTraceEnabled.Enabled = True
             Case SERIAL_AUTO_FILENAME 'Tracing is on using an automatic filename
-                MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and checked
+                MenuUseTraceAutoFilenames.Enabled = False 'Auto filenames are disabled and checked
                 MenuUseTraceAutoFilenames.Checked = True
                 MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is dis enabled and unchecked
                 MenuUseTraceManualFilename.Checked = False
                 MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
                 MenuSerialTraceEnabled.Enabled = True
             Case Else 'Tracing using some other fixed filename
-                MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and unchecked
+                MenuUseTraceAutoFilenames.Enabled = False 'Auto filenames are disabled and unchecked
                 MenuUseTraceAutoFilenames.Checked = False
                 MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is disabled enabled and checked
                 MenuUseTraceManualFilename.Checked = True
@@ -8438,6 +8661,7 @@ Public Class DiagnosticsForm
 
         'Set Profile trace checked state on menu item 
         MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
+        MenuRegistryTraceEnabled.Checked = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT)
         MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
         MenuTimerTraceEnabled.Checked = GetBool(TRACE_TIMER, TRACE_TIMER_DEFAULT)
         MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
@@ -8529,8 +8753,12 @@ Public Class DiagnosticsForm
 
     Private Sub MenuProfileTraceEnabled_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuProfileTraceEnabled.Click
         MenuProfileTraceEnabled.Checked = Not MenuProfileTraceEnabled.Checked 'Invert the selection
-        SetName(TRACE_XMLACCESS, MenuProfileTraceEnabled.Checked.ToString)
         SetName(TRACE_PROFILE, MenuProfileTraceEnabled.Checked.ToString)
+    End Sub
+
+    Private Sub MenuRegistryTraceEnabled_Click(sender As Object, e As EventArgs) Handles MenuRegistryTraceEnabled.Click
+        MenuRegistryTraceEnabled.Checked = Not MenuRegistryTraceEnabled.Checked 'Invert the selection
+        SetName(TRACE_XMLACCESS, MenuRegistryTraceEnabled.Checked.ToString)
     End Sub
 
     Private Sub MenuUtilTraceEnabled_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuUtilTraceEnabled.Click
@@ -8629,7 +8857,7 @@ Public Class DiagnosticsForm
 
 #Region "Utility Code"
 
-    'DLL to provide the path to Program Files(x86)\Common Files folder location that is not avialable through the .NET framework
+    'DLL to provide the path to Program Files(x86)\Common Files folder location that is not available through the .NET framework
     <DllImport("shell32.dll")>
     Private Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr,
         <Out()> ByVal lpszPath As System.Text.StringBuilder,

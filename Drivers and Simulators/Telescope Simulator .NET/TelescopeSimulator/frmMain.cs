@@ -58,6 +58,7 @@ namespace ASCOM.Simulator
                 setupForm.CanEquatorial = TelescopeHardware.CanEquatorial;
                 setupForm.CanLatLongElev = TelescopeHardware.CanLatLongElev;
                 setupForm.CanPierSide = TelescopeHardware.CanPierSide;
+                setupForm.CanDestinationSideOfPier = TelescopeHardware.CanDestinationSideofPier;
                 setupForm.CanDualAxisPulseGuide = TelescopeHardware.CanDualAxisPulseGuide;
                 setupForm.AutoTrack = TelescopeHardware.AutoTrack;
                 setupForm.DisconnectOnPark = TelescopeHardware.DisconnectOnPark;
@@ -106,6 +107,7 @@ namespace ASCOM.Simulator
                     TelescopeHardware.CanEquatorial = setupForm.CanEquatorial;
                     TelescopeHardware.CanLatLongElev = setupForm.CanLatLongElev;
                     TelescopeHardware.CanPierSide = setupForm.CanPierSide;
+                    TelescopeHardware.CanDestinationSideofPier = setupForm.CanDestinationSideOfPier;
                     TelescopeHardware.CanDualAxisPulseGuide = setupForm.CanDualAxisPulseGuide;
                     TelescopeHardware.AutoTrack = setupForm.AutoTrack;
                     TelescopeHardware.DisconnectOnPark = setupForm.DisconnectOnPark;

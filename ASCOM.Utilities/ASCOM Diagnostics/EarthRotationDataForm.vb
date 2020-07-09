@@ -21,7 +21,7 @@ Public Class EarthRotationDataForm
     Private TraceEnabled As Boolean
     Private LeapSecondMinimumValue As Double
 
-    ' Initialise dropdown list options
+    ' Initialise drop-down list options
     Private dataDownloadSources As New List(Of String) From
         {
             EARTH_ROTATION_INTERNET_DATA_SOURCE_0,
@@ -72,11 +72,11 @@ Public Class EarthRotationDataForm
             NowTimer.Interval = REFRESH_TIMER_INTERVAL
             NowTimer.Start()
 
-            ' Specify that these combo boxes wil be painted by code in this form so that the backgrounds will be white rather than grey 
+            ' Specify that these combo boxes will be painted by code in this form so that the backgrounds will be white rather than grey 
             CmbUpdateType.DrawMode = DrawMode.OwnerDrawFixed
             CmbScheduleRepeat.DrawMode = DrawMode.OwnerDrawFixed
 
-            ' Create a default schedule time for use in case a time hasn't been set yet. Either noon today (local time) if we are before noon or noon tomorrow if we are after noon tday.
+            ' Create a default schedule time for use in case a time hasn't been set yet. Either noon today (local time) if we are before noon or noon tomorrow if we are after noon today.
             If DateTime.Now.Hour < 12 Then
                 AutomaticScheduleTimeDefault = Date.Today.AddHours(12)
             Else
@@ -153,7 +153,7 @@ Public Class EarthRotationDataForm
 
             UpdateStatus()
             EnableControlsAsRequired()
-            UpdateCurrentLeapSecondsAndDeltaUT1(New Object, New EventArgs()) ' Update the current leap second and deltaUT1 displays so they have current valuyes when the form appears
+            UpdateCurrentLeapSecondsAndDeltaUT1(New Object, New EventArgs()) ' Update the current leap second and deltaUT1 displays so they have current values when the form appears
 
         Catch ex As Exception
             TL.LogMessageCrLf("Form Load", ex.ToString())
@@ -259,9 +259,9 @@ Public Class EarthRotationDataForm
     Private Sub UpdateStatus()
         Dim DisplayDate As DateTime, jdUtc As Double
 
-        aUtils.Refresh() ' Ensure that our astroutils object is using the latest data
+        aUtils.Refresh() ' Ensure that our astro utils object is using the latest data
 
-        ' Calaculate the display date, allowing for development test offsets if present. In production offsets wil be 0 so DisplayDate will have a value of DateTime.Now as a UTC
+        ' Calculate the display date, allowing for development test offsets if present. In production offsets will be 0 so DisplayDate will have a value of DateTime.Now as a UTC
         DisplayDate = DateTime.UtcNow.Subtract(New TimeSpan(TEST_UTC_DAYS_OFFSET, TEST_UTC_HOURS_OFFSET, TEST_UTC_MINUTES_OFFSET, 0))
         TxtNow.Text = String.Format("{0} {1}", DisplayDate.ToString(DOWNLOAD_TASK_TIME_FORMAT, CultureInfo.CurrentUICulture), DisplayDate.Kind.ToString().ToUpperInvariant())
         jdUtc = DateTime.UtcNow.ToOADate + OLE_AUTOMATION_JULIAN_DATE_OFFSET
@@ -352,7 +352,7 @@ Public Class EarthRotationDataForm
             Loop Until UpdateCompleted Or (RunTimer.Elapsed.TotalSeconds > UPDATE_DATA_PROCESS_TIMEOUT)
             RunTimer.Stop()
 
-            proc.WaitForExit() ' Esnure that all processing is complete before proceeding
+            proc.WaitForExit() ' Ensure that all processing is complete before proceeding
             If UpdateCompleted Then
                 If proc.ExitCode = 0 Then
                     LogRunMessage(String.Format("Job completed OK in {0} seconds.", RunTimer.Elapsed.TotalSeconds.ToString("0.0")))
@@ -542,7 +542,7 @@ Public Class EarthRotationDataForm
                     Case UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1, UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
                         borderColour = activeBorder
                     Case Else
-                        borderColour = Color.Red ' Warning colour that somethinhg has gone wrong in the code!
+                        borderColour = Color.Red ' Warning colour that something has gone wrong in the code!
                 End Select
                 LblAutoDataSource.Enabled = borderColour = activeBorder
                 LblAutoTimeout.Enabled = borderColour = activeBorder
@@ -555,7 +555,7 @@ Public Class EarthRotationDataForm
                     Case UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1
                         borderColour = activeBorder
                     Case Else
-                        borderColour = Color.Red ' Warning colour that somethinhg has gone wrong in the code!
+                        borderColour = Color.Red ' Warning colour that something has gone wrong in the code!
                 End Select
                 LblManualDeltaUT1.Enabled = borderColour = activeBorder
                 LblManualLeapSeconds.Enabled = borderColour = activeBorder

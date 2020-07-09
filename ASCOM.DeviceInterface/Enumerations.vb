@@ -7,7 +7,7 @@
 ' </summary>
 '
 ' <copyright company="The ASCOM Initiative" author="Timothy P. Long">
-'	Copyright © 2010 The ASCOM Initiative
+'	Copyright © 2020 The ASCOM Initiative
 ' </copyright>
 '
 ' <license>

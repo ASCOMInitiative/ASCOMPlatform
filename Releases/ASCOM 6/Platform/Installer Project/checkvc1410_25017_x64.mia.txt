@@ -88,7 +88,7 @@ if Variable ISWINDOWS64BIT Equals TRUE
   Does File Exist $WINSYSDIR$\mfc140.dll (get result into variable VC1410_25017_RTM_X64)
   if Variable VC1410_25017_RTM_X64 Equals TRUE
     Get File Version $WINSYSDIR$\mfc140.dll into Variable MFC1410_VER
-    Set Variable MFC140UP152_TARGET to 14.10.25017.0
+    Set Variable MFC140UP152_TARGET to 14.24.28127.4
     if Variable MFC140UP152_TARGET not Greater Than (Version) $MFC1410_VER$
       Set Variable VC1410_25017_RTM_X64 to FALSE
     end
@@ -100,10 +100,10 @@ if Variable ISWINDOWS64BIT Equals TRUE
    
   if Variable VC1410_25017_RTM_X64 Equals TRUE
     Set Variable PREREQ to TRUE
-    Set Variable PRELIST to $PRELIST$$NEWLINE$Visual C++ Runtime for Visual Studio 2017 v.15.2 (x64)
-    Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(64) - VC 14 library (64 bit) not found, it will be installed (at end of file)
+    Set Variable PRELIST to $PRELIST$$NEWLINE$Visual C++ Runtime for Visual Studio 2019 14.24.28127  (x64)
+    Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(64) - VC 14.24 library (64 bit) not found, it will be installed (at end of file)
   else
-    Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(64) - VC 14 library (64 bit) found OK (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(64) - VC 14.24 library (64 bit) found OK (at end of file)
   end
    
 end

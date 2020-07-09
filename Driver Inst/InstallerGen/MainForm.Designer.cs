@@ -158,6 +158,7 @@ namespace ASCOM.InstallerGen
             this.cbDriverType.FormattingEnabled = true;
             this.cbDriverType.Items.AddRange(new object[] {
             "Camera",
+            "CoverCalibrator",
             "Dome",
             "FilterWheel",
             "Focuser",
@@ -467,6 +468,7 @@ namespace ASCOM.InstallerGen
             this.cbDriverType2.Items.AddRange(new object[] {
             "(none)",
             "Camera",
+            "CoverCalibrator",
             "Dome",
             "FilterWheel",
             "Focuser",

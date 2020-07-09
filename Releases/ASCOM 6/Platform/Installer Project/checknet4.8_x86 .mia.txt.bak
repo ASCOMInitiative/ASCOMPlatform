@@ -1,0 +1,26 @@
+Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) to TRUE
+Get System Setting Windows in 64 bit Mode into ISWINDOWS64BIT
+ 
+Comment: Read thew .NET version number from the correct part of the 32bit or 64bit registry
+if Variable ISWINDOWS64BIT Equals TRUE
+  Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+  Read Registry Key HKLM\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\Version into INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64)
+  Write into Text File $SETUPLOG$ from Value $TIME$ .Net Framework version: $INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64 - from 64bit registry)$ (at end of file)
+  Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+else
+  Read Registry Key HKLM\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\Version into INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64)
+  Write into Text File $SETUPLOG$ from Value $TIME$ .Net Framework version: $INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64)$ - from 32bit registry (at end of file)
+end
+ 
+if Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) Greater Than (Version) 4.8.0
+  Comment: .NET 4.8 is installed OK
+  Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) to TRUE
+  Write into Text File $SETUPLOG$ from Value $TIME$ Found Framework 4.8 (at end of file)
+else
+  Comment: .NET 4.8 is NOT installed or is not at a high enough version
+  Write into Text File $SETUPLOG$ from Value $TIME$ Framework 4.8 not found (at end of file)
+  MessageBox: $TITLE$ Setup, .NET Framework 4.8 is not installed, please install it either through Windows Update or through Microsoft's stand-alone, offline installer.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
+  Terminate Installation
+end
+ 
+Write into Text File $SETUPLOG$ from Value   (at end of file)

@@ -1,0 +1,42 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Color x:Key="DevHubGray">#ff303030</Color>
+	<Color x:Key="LightGray">#ffC0C0C0</Color>
+	<Color x:Key="DarkGray">#ff505050</Color>
+	<Color x:Key="NormalTextColor">Black</Color>
+	<Color x:Key="InvertTextColor">White</Color>
+	<Color x:Key="SelectedItemColor">#ffc02b2b</Color>
+	
+	<!--<SolidColorBrush x:Key="WindowBackgroundBrush" Color="{DynamicResource {x:Static SystemColors.WindowColorKey}}" />-->
+	<SolidColorBrush x:Key="WindowBackgroundBrush" Color="{DynamicResource LightGray}" />
+	<SolidColorBrush x:Key="MenuBackgroundBrush" Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}" />
+	<SolidColorBrush x:Key="NormalTextBrush" Color="{DynamicResource {x:Static SystemColors.ControlTextColorKey}}" />
+	<SolidColorBrush x:Key="DynamicTextBrush" Color="Red" />
+	<SolidColorBrush x:Key="ListBackgroundBrush" Color="LightGray" />
+
+	<SolidColorBrush x:Key="InvertTextBrush" Color="{DynamicResource {x:Static SystemColors.HighlightTextColorKey}}" />
+	<SolidColorBrush x:Key="RotarySliderForeground" Color="{DynamicResource {x:Static SystemColors.ControlTextColorKey}}" />
+	<SolidColorBrush x:Key="SelectedRotaryValueForeground" Color="{DynamicResource SelectedItemColor}" />
+	<SolidColorBrush x:Key="RotaryFace" Color="LightBlue" />
+	<SolidColorBrush x:Key="RotaryHand" Color="Red" />
+	<SolidColorBrush x:Key="RoundButtonFaceBrush" Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}" />
+	<SolidColorBrush x:Key="RoundButtonTextBrush" Color="{DynamicResource {x:Static SystemColors.InactiveCaptionColorKey}}" />
+	<SolidColorBrush x:Key="ArrowBrush" Color="{DynamicResource LightGray}" />
+	<SolidColorBrush x:Key="EmphasisTextBrush" Color="MediumVioletRed" />
+	<SolidColorBrush x:Key="MenuItemBorderBrush" Color="Black" />
+	<SolidColorBrush x:Key="TabItemBorderBrush" Color="Black" />
+	<SolidColorBrush x:Key="ButtonBorderBrush" Color="Black" />
+	<SolidColorBrush x:Key="TabItemSelectedBackgroundBrush" Color="{DynamicResource {x:Static SystemColors.ControlLightLightColorKey}}" />
+	<LinearGradientBrush x:Key="TabItemBackgroundBrush" EndPoint="0,1" StartPoint="0,0">
+		<GradientStop Color="#FFF3F3F3" Offset="0"/>
+		<GradientStop Color="#FFEBEBEB" Offset="0.5"/>
+		<GradientStop Color="#FFDDDDDD" Offset="0.5"/>
+		<GradientStop Color="#FFCDCDCD" Offset="1"/>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="HilightMenuItemBackgroundBrush" EndPoint="0,1" StartPoint="0,0">
+		<GradientStop Color="#F0F3F3F3" Offset="0"/>
+		<GradientStop Color="#F0EBEBEB" Offset="0.5"/>
+		<GradientStop Color="#F0DDDDDD" Offset="0.5"/>
+		<GradientStop Color="#F0CDCDCD" Offset="1"/>
+	</LinearGradientBrush>
+</ResourceDictionary>

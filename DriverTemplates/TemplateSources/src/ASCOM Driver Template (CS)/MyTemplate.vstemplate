@@ -13,6 +13,10 @@
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
     <Icon>CSharpASCOM.ico</Icon>
+	<LanguageTag>csharp</LanguageTag>
+    <PlatformTag>windows</PlatformTag>
+    <ProjectTypeTag>desktop</ProjectTypeTag>
+    <ProjectTypeTag>ASCOM</ProjectTypeTag>
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="ASCOM Device Driver.csproj" File="ASCOM Device Driver CS.csproj" ReplaceParameters="true">
@@ -21,6 +25,7 @@
       <ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.png">ASCOM.png</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="ASCOMDriverTemplate.snk">ASCOMDriverTemplate.snk</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="DeviceCamera.cs">DeviceCamera.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceCoverCalibrator.cs">DeviceCoverCalibrator.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="DeviceDome.cs">DeviceDome.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="DeviceFilterWheel.cs">DeviceFilterWheel.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="DeviceFocuser.cs">DeviceFocuser.cs</ProjectItem>
@@ -28,8 +33,8 @@
       <ProjectItem ReplaceParameters="false" TargetFileName="DeviceSafetyMonitor.cs">DeviceSafetyMonitor.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="DeviceSwitch.cs">DeviceSwitch.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="DeviceTelescope.cs">DeviceTelescope.cs</ProjectItem>
-	    <ProjectItem ReplaceParameters="false" TargetFileName="DeviceVideo.cs">DeviceVideo.cs</ProjectItem>
-	    <ProjectItem ReplaceParameters="false" TargetFileName="DeviceObservingConditions.cs">DeviceObservingConditions.cs</ProjectItem>
+	  <ProjectItem ReplaceParameters="false" TargetFileName="DeviceVideo.cs">DeviceVideo.cs</ProjectItem>
+	  <ProjectItem ReplaceParameters="false" TargetFileName="DeviceObservingConditions.cs">DeviceObservingConditions.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Driver.cs">Driver.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Rates.cs">Rates.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="PlaceholderInterface.cs">PlaceholderInterface.cs</ProjectItem>

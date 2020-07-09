@@ -13,9 +13,15 @@ namespace ASCOM.TEMPLATEDEVICENAME
     [ComVisible(false)]					// Form not registered for COM!
     public partial class SetupDialogForm : Form
     {
-        public SetupDialogForm()
+        TraceLogger tl; // Holder for a reference to the driver's trace logger
+
+        public SetupDialogForm(TraceLogger tlDriver)
         {
             InitializeComponent();
+            
+            // Save the provided trace logger for use within the setup dialogue
+            tl = tlDriver;
+
             // Initialise current values of user settings from the ASCOM Profile
             InitUI();
         }
@@ -25,7 +31,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
             // Place any validation constraint checks here
             // Update the state variables with results from the dialogue
             TEMPLATEDEVICECLASS.comPort = (string)comboBoxComPort.SelectedItem;
-            TEMPLATEDEVICECLASS.tl.Enabled = chkTrace.Checked;
+            tl.Enabled = chkTrace.Checked;
         }
 
         private void cmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
@@ -52,7 +58,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 
         private void InitUI()
         {
-            chkTrace.Checked = TEMPLATEDEVICECLASS.tl.Enabled;
+            chkTrace.Checked = tl.Enabled;
             // set the list of com ports to those that are currently available
             comboBoxComPort.Items.Clear();
             comboBoxComPort.Items.AddRange(System.IO.Ports.SerialPort.GetPortNames());      // use System.IO because it's static

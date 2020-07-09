@@ -11,8 +11,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("MigrateProfile")> 
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("ASCOM")>
-<Assembly: AssemblyProduct("MigrateProfile")> 
-<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2014")> 
+<Assembly: AssemblyProduct("MigrateProfile")>
+<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2020")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

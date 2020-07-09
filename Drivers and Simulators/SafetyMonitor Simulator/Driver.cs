@@ -11,7 +11,7 @@ namespace ASCOM.Simulator
     // Your driver's DeviceID is ASCOM.Simulator.SafetyMonitor
     //
     // The Guid attribute sets the CLSID for ASCOM.Simulator.SafetyMonitor
-    // The ClassInterface/None addribute prevents an empty interface called
+    // The ClassInterface/None attribute prevents an empty interface called
     // _Conceptual from being created and used as the [default] interface
     //
 

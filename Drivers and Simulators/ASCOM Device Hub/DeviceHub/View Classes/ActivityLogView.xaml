@@ -1,0 +1,98 @@
+﻿<Window x:Class="ASCOM.DeviceHub.ActivityLogView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
+        mc:Ignorable="d"
+        Background="{DynamicResource WindowBackgroundBrush}"
+        Title="Device Hub Activity Log" MinHeight="540" MinWidth="480"  Height="540" Width="480" WindowStyle="ThreeDBorderWindow" Loaded="Window_Loaded" LocationChanged="Window_LocationChanged" Icon="/ASCOM.DeviceHub;component/Images/ASCOM.ico" SizeChanged="Window_SizeChanged" ResizeMode="CanResizeWithGrip" >
+    <Window.Resources>
+        <Style x:Key="DevLabel" TargetType="{x:Type Label}">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+    </Window.Resources>
+    <Grid Margin="6">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
+            <!-- DeviceType Check boxes -->
+            <RowDefinition Height="Auto" />
+            <!-- MessageType Check boxes -->
+            <RowDefinition Height="Auto" />
+            <!-- Buttons -->
+            <RowDefinition Height="*" />
+            <!-- Messages -->
+            <RowDefinition Height="Auto" />
+            <!-- Memory & Button -->
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="9*" />
+            <ColumnDefinition Width="37*"/>
+            <ColumnDefinition Width="46*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal">
+            <Label Content="Selected devices:" Style="{StaticResource DevLabel}" Margin="6,-3,4,0" />
+            <CheckBox Content="Telescope" Margin="6,9,6,0" Foreground="{DynamicResource NormalTextBrush}"
+					  IsChecked="{Binding EnableTelescopeLogging}" />
+            <CheckBox Content="Dome" Margin="6,9,6,0" Foreground="{DynamicResource NormalTextBrush}"
+					  IsChecked="{Binding EnableDomeLogging}" />
+            <CheckBox Content="Focuser" Margin="6,9,6,0" Foreground="{DynamicResource NormalTextBrush}"
+					  IsChecked="{Binding EnableFocuserLogging}" />
+        </StackPanel>
+        <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Header="Activity Types"
+				  Foreground="{DynamicResource NormalTextBrush}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <CheckBox Grid.Row="0" Content="Commands (Slews, Syncs, Park, Find Home, etc.)" 
+						  Margin="6,9,6,0" Foreground="{DynamicResource NormalTextBrush}"
+						  IsChecked="{Binding EnableCommandLogging}" />
+                <CheckBox Grid.Row="1" Content="Status (Polling Position, Tracking, Slewing, AtXXX, etc.)" 
+						  Margin="6,9,6,0" Foreground="{DynamicResource NormalTextBrush}"
+						  IsChecked="{Binding EnableStatusLogging}" />
+                <CheckBox Grid.Row="2" Content="Static Parameters (Alignment Mode, Aperture, Site Info, etc. )" 
+						  Margin="6,9,6,0" Foreground="{DynamicResource NormalTextBrush}"
+						  IsChecked="{Binding EnableParametersLogging}" />
+                <CheckBox Grid.Row="3" Content="Capabilities (CanXXX flags)" 
+						  Margin="6,9,6,0" Foreground="{DynamicResource NormalTextBrush}"
+                          IsChecked="{Binding EnableCapabilitiesLogging}" />
+                <CheckBox Grid.Row="4" Content="Other Activity (Connect, Disconnect, etc.)"
+						  Margin="6,9,6,0" Foreground="{DynamicResource NormalTextBrush}"
+                      IsChecked="{Binding EnableOthersLogging}" />
+            </Grid>
+        </GroupBox>
+        <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Height="50"  Width="50" ToolTip="Temporarily disable logging." Style="{DynamicResource CircleButton}"
+                        Content="{Binding PausedCommandText, FallbackValue=Pause}" 
+                        Command="{Binding PauseLoggingCommand}" />
+                <Button Content="Clear" Height="50"  Width="50" Style="{DynamicResource CircleButton}" Margin="10,0" ToolTip="Permanently clear the log contents."
+                        Command="{Binding ClearLogCommand}" />
+                <Button Content="Copy" Height="50"  Width="50" Style="{DynamicResource CircleButton}" ToolTip="Copy the log contents to the Windows Clipboard."
+                        Command="{Binding CopyLogCommand}" />
+            </StackPanel>
+        </Grid>
+        <TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True" Cursor="Arrow"
+                 Background="{DynamicResource MenuBackgroundBrush}" Foreground="White" BorderBrush="White"
+                 HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" TargetUpdated="TextBox_TargetUpdated"
+                 Text="{Binding LogContents, Mode=OneWay, NotifyOnTargetUpdated=True}" UndoLimit="0"  />
+        <Label Grid.Row="4" Grid.Column="0" Style="{StaticResource DevLabel}" Grid.ColumnSpan="2" Margin="0,25">
+            <Label.Content>
+                <TextBlock Text="{Binding MemoryUsage, FallbackValue=Memory Usage: 1 MB, StringFormat=Memory Usage: {0:F3} MB, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+            </Label.Content>
+        </Label>
+        <Button Grid.Row="4" Grid.Column="2" Content="Close" HorizontalAlignment="Right" Height="60" Width="60" Margin="0,6,0,0" Style="{StaticResource CircleButton}"
+                    Command="{Binding CloseLogCommand}" />
+    </Grid>
+</Window>

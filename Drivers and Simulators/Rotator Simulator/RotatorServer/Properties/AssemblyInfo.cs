@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ASCOM Rotator Simulator")]
 [assembly: AssemblyDescription("ASCOM multi-instance server for RotatorSim.Rotator")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("Copyright © 2007, Robert B. Denny Copyright © ASCOM Initiative 2014")]
+[assembly: AssemblyCopyright("Copyright © 2007, Robert B. Denny Copyright © ASCOM Initiative 2020")]
 
 [assembly: ComVisibleAttribute(false)]
 
 // AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
-[assembly: AssemblyVersion("6.4.0.0")]
+[assembly: AssemblyVersion("6.5.0.0")]

@@ -1,0 +1,82 @@
+﻿<UserControl x:Class="ASCOM.DeviceHub.DomeParametersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" 
+			 Background="{DynamicResource WindowBackgroundBrush}"
+             d:DesignHeight="400" d:DesignWidth="440" MinWidth="428">
+	<UserControl.Resources>
+		<Style x:Key="ParmLabel" TargetType="{x:Type Label}">
+			<Setter Property="HorizontalAlignment" Value="Right" />
+			<Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+			<Setter Property="Margin" Value="6,0,0,0" />
+			<Setter Property="Padding" Value="0" />
+		</Style>
+		<Style x:Key="ParmValue" TargetType="{x:Type Label}">
+			<Setter Property="HorizontalAlignment" Value="Left" />
+			<Setter Property="Foreground" Value="{DynamicResource DynamicTextBrush}" />
+			<Setter Property="Margin" Value="8,0,0,0" />
+			<Setter Property="Padding" Value="0" />
+		</Style>
+
+		<ControlTemplate x:Key="ListBoxControlTemplate1" TargetType="{x:Type ListBox}">
+			<Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="1" SnapsToDevicePixels="True">
+				<ScrollViewer Focusable="False" Padding="{TemplateBinding Padding}">
+					<ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+				</ScrollViewer>
+			</Border>
+			<ControlTemplate.Triggers>
+				<Trigger Property="IsEnabled" Value="False">
+					<Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+					<Setter Property="Background" TargetName="Bd" Value="{DynamicResource MenuBackgroundBrush}"/>
+				</Trigger>
+				<MultiTrigger>
+					<MultiTrigger.Conditions>
+						<Condition Property="IsGrouping" Value="True"/>
+						<Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="False"/>
+					</MultiTrigger.Conditions>
+					<Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+				</MultiTrigger>
+			</ControlTemplate.Triggers>
+		</ControlTemplate>
+	</UserControl.Resources>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<Label Grid.Row="0" Grid.Column="0" Content="Description:" Style="{StaticResource ParmLabel}" />
+		<Label Grid.Row="1" Grid.Column="0" Content="Driver Info:" Style="{StaticResource ParmLabel}" />
+		<Label Grid.Row="2" Grid.Column="0" Content="Driver Version:" Style="{StaticResource ParmLabel}" />
+		<Label Grid.Row="3" Grid.Column="0" Content="Interface Version:" Style="{StaticResource ParmLabel}" />
+		<Label Grid.Row="4" Grid.Column="0" Content="Supported Actions:" Style="{StaticResource ParmLabel}" />
+		
+		<Label Grid.Row="0" Grid.Column="1" Content="{Binding Parameters.Description}" Style="{StaticResource ParmValue}" />
+		<Label Grid.Row="1" Grid.Column="1" Content="{Binding Parameters.DriverInfo}" Style="{StaticResource ParmValue}" />
+		<Label Grid.Row="2" Grid.Column="1" Content="{Binding Parameters.DriverVersion}" Style="{StaticResource ParmValue}" />
+		<Label Grid.Row="3" Grid.Column="1" Content="{Binding Parameters.InterfaceVersion}" Style="{StaticResource ParmValue}" />
+		<ListBox Grid.Row="4" Grid.Column="1" Height="100" MinWidth="220" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,4,0,0" 
+							 Focusable="False" IsHitTestVisible="False"
+							 ItemsSource="{Binding Parameters.SupportedActions}">
+			<ListBox.Style>
+				<Style TargetType="{x:Type ListBox}">
+					<Setter Property="Background" Value="{DynamicResource ListBackgroundBrush}" />
+				</Style>
+			</ListBox.Style>
+			<ListBox.ItemContainerStyle>
+				<Style TargetType="ListBoxItem">
+					<Setter Property="Foreground" Value="{DynamicResource DynamicTextBrush}" />
+				</Style>
+			</ListBox.ItemContainerStyle>
+		</ListBox>
+	</Grid>
+</UserControl>

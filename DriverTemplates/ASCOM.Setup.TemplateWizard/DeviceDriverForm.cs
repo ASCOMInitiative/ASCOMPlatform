@@ -276,6 +276,7 @@ namespace ASCOM.Setup
             // Get an assembly reference to the DeviceInterfaces assembly
             Assembly DeviceInterfacesAssembly = Assembly.GetAssembly(typeof(DriveRates)); // DriveRates is used because it is unlikely to change names in future unlike device interfaces.
             TL.LogMessage("InitASCOMClasses", "Found interface assembly: " + DeviceInterfacesAssembly.FullName);
+            TL.LogMessage("InitASCOMClasses", "Interface is located at: " + DeviceInterfacesAssembly.Location);
 
             // Get the calling type, this allows us to customise the list depending on which wizard called the form
             Type CallingType = new StackFrame(2, false).GetMethod().ReflectedType;

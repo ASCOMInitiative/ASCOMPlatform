@@ -9,6 +9,8 @@ namespace ASCOM.Setup
     using EnvDTE;
     using EnvDTE80;
     using System.IO;
+    using System.Diagnostics;
+
     //using ASCOM.Internal;
 
     public class DriverWizard : IWizard
@@ -33,7 +35,7 @@ namespace ASCOM.Setup
 
         private ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("TemplateWizard");
         private DTE2 myDTE;
-        private ProjectItem myProjectItem;
+        private ProjectItem driverTemplate;
 
         /// <summary>
         /// Runs custom wizard logic at the beginning of a template wizard run.
@@ -44,7 +46,7 @@ namespace ASCOM.Setup
         /// <param name="customParams"></param>
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            Diagnostics.Enter();
+            TL.LogMessage("RunStarted", $"Started wizard");
 
             myDTE = (DTE2)automationObject;
 
@@ -58,7 +60,7 @@ namespace ASCOM.Setup
             }
             catch (Exception ex)
             {
-                TL.LogMessageCrLf("RunStarted", "Form Exception: "+ ex.ToString());
+                TL.LogMessageCrLf("RunStarted", "Form Exception: " + ex.ToString());
                 MessageBox.Show("Form Exception: " + ex.ToString());
             }
 
@@ -117,7 +119,6 @@ namespace ASCOM.Setup
                 MessageBox.Show("Form result setup exception: " + ex.ToString());
             }
 
-            Diagnostics.Exit();
         }
 
         /// <summary>
@@ -138,8 +139,6 @@ namespace ASCOM.Setup
         /// <remarks>This method is only called for item templates, not for project templates.</remarks>
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
-            Diagnostics.Enter();
-            Diagnostics.Exit();
         }
 
         /// <summary>
@@ -149,8 +148,6 @@ namespace ASCOM.Setup
         /// <remarks>This method is called before opening any item that has the OpenInEditor attribute.</remarks>
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
-            Diagnostics.Enter();
-            Diagnostics.Exit();
         }
 
         /// <summary>
@@ -159,7 +156,6 @@ namespace ASCOM.Setup
         /// <param name="project"></param>
         public void ProjectFinishedGenerating(Project project)
         {
-            Diagnostics.Enter();
             // Iterate through the project items and 
             // remove any files that begin with the word "Placeholder".
             // and the Rates class unless it's the Telescope class
@@ -184,14 +180,13 @@ namespace ASCOM.Setup
             // Special handling for VB and C# driver template projects to add the interface implementation to the core driver code
             try
             {
-                TL.Enabled = true;
                 // Check the name of each item in the project and execute if this is a driver template project (contains Driver.vb or Driver.cs)
                 foreach (ProjectItem projectItem in project.ProjectItems)
                 {
                     TL.LogMessage("ProjectFinishedGenerating", "Item name: " + projectItem.Name);
                     if ((projectItem.Name.ToUpperInvariant() == "DRIVER.CS") | (projectItem.Name.ToUpperInvariant() == "DRIVER.VB"))
                     {
-                        myProjectItem = projectItem; // Save the driver item
+                        driverTemplate = projectItem; // Save the driver item
                         // This is a driver template
                         // Get the filename and directory of the Driver.xx file
                         string directory = Path.GetDirectoryName(projectItem.FileNames[1].ToString());
@@ -293,7 +288,6 @@ namespace ASCOM.Setup
             TL.LogMessage("ProjectFinishedGenerating", "End");
             TL.Enabled = false;
 
-            Diagnostics.Exit();
         }
 
         /// <summary>
@@ -303,50 +297,52 @@ namespace ASCOM.Setup
         {
             try
             {
-                // The interface implmentation inserted in the ProjectFinishedGenerating event has its Region twistie open
-                // This code is to close the interface implmentation twistie so that the region appears like the common methods and support code twisties
+                // The interface implementation inserted in the ProjectFinishedGenerating event has its Region twistie open
+                // This code is to close the interface implementation twistie so that the region appears like the common methods and support code twisties
 
                 TL.Enabled = true;
                 TL.LogMessage("RunFinished", "Start");
 
-                Diagnostics.Enter();
-                if (myProjectItem != null) // We do have a project item to work on
-                {
-                myProjectItem.Open(); // Open the item for editing
-                TL.LogMessage("RunFinished", "Done Open");
+                // Code here commented out in order to stop the creator freezing when say a C# template is created immediately after a VB template
+                // I can't figure out why this code is unreliable so I'm doing away with it because its effect is just cosmetic
 
-                Document itemDocument = myProjectItem.Document; // Get the open file's document object
-                TL.LogMessage("RunFinished", "Created Document");
+                //if (driverTemplate != null) // We do have a project item to work on
+                //{
+                //    driverTemplate.Open(); // Open the item for editing
+                //    TL.LogMessage("RunFinished", "Done Open");
 
-                itemDocument.Activate(); // Make this the current document
-                TL.LogMessage("RunFinished", "Activated Document");
+                //    Document driverTemplateDocument = driverTemplate.Document; // Get the open file's document object
+                //    TL.LogMessage("RunFinished", "Created Document");
 
-                TextSelection documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
-                TL.LogMessage("RunFinished", "Created Selection object");
+                //    driverTemplateDocument.Activate(); // Make this the current document
+                //    TL.LogMessage("RunFinished", "Activated Document");
 
-                documentSelection.StartOfDocument(); // GO to the top of the document
-                TL.LogMessage("RunFinished", "Done StartOfDocument Region");
+                //    TextSelection selectedText = (TextSelection)driverTemplateDocument.Selection; // Create a document selection
+                //    TL.LogMessage("RunFinished", "Created Selection object");
 
-                string pattern = "[Rr]egion \"*I" + DeviceClass; // Cerate a regular expression string that works for region in both VB and C#
-                TL.LogMessage("", "RegEx search pattern: " + pattern);
-                if (documentSelection.FindText(pattern, (int)vsFindOptions.vsFindOptionsRegularExpression)) // Search for the interface implemnetation start of region 
-                {
-                    // Found the interface implementation region so toggle its twistie closed
-                    documentSelection.SelectLine();
-                    TL.LogMessage("RunFinished", "Found region I" + DeviceClass + " - " + documentSelection.Text); // Log the line actuall found
-                    myDTE.ExecuteCommand("Edit.ToggleOutliningExpansion"); // Toggle the twistie closed
-                    TL.LogMessage("RunFinished", "Done ToggleOutliningExpansion Region");
-                }
+                //    selectedText.StartOfDocument(); // GO to the top of the document
+                //    TL.LogMessage("RunFinished", "Done StartOfDocument Region");
 
-                itemDocument.Close(vsSaveChanges.vsSaveChangesYes); // SAve changes and close the file
-                TL.LogMessage("RunFinished", "Done Save");
-                }
-                else // No project item so just report this (happens when a test project is being created)
-                {
-                    TL.LogMessage("RunFinished", "Project item is null, no action taken");
-                }
+                //    string pattern = "[Rr]egion \"*I" + DeviceClass; // Create a regular expression string that works for region in both VB and C#
+                //    TL.LogMessage("", "RegEx search pattern: " + pattern);
+                //    if (selectedText.FindText(pattern, (int)vsFindOptions.vsFindOptionsRegularExpression)) // Search for the interface implementation start of region 
+                //    {
+                //        // Found the interface implementation region so toggle its twistie closed
+                //        selectedText.SelectLine();
+                //        TL.LogMessage("RunFinished", "Found region I" + DeviceClass + " - " + selectedText.Text); // Log the line actually found
+                //        myDTE.ExecuteCommand("Edit.ToggleOutliningExpansion"); // Toggle the twistie closed
+                //        TL.LogMessage("RunFinished", "Done ToggleOutliningExpansion Region");
+                //    }
+
+                //    driverTemplateDocument.Close(vsSaveChanges.vsSaveChangesYes); // Save changes and close the file
+
+                //    TL.LogMessage("RunFinished", "Done Save");
+                //}
+                //else // No project item so just report this (happens when a test project is being created)
+                //{
+                //    TL.LogMessage("RunFinished", "Project item is null, no action taken");
+                //}
                 TL.LogMessage("RunFinished", "End");
-                Diagnostics.Exit();
             }
             catch (Exception ex)
             {

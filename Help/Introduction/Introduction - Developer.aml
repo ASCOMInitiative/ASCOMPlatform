@@ -6,37 +6,14 @@
     	<title>Introduction - ASCOM-Platform 6 - ASCOM Driver and Application Developers</title>
       	<content>
       	
-      	<para>Please see <link xlink:href="c70b2e72-ab62-4dbb-b7c6-eed3cd523c14" /> for information on the latest changes.</para>
+      	<para>Please see <link xlink:href="3417e177-f705-497d-8127-fb30e8519d50" /> for information on the latest changes.</para>
       	
-      	<para>This release builds on the architectural changes introduced in Plaform 5.5 and introduces a set of common methods that 
+      	<para>Platform 6 builds on the architectural changes introduced in Plaform 5.5 and introduces a set of common methods that 
       	will be availabnle in all drivers. These have been based on the methods already implemented in the Telescope interface together
       	with methods agreed in the IDeviceControl interface discussion. The full list of members is given 
       	in the ASCOM.DeviceInterface namespace section of this help file.
       	</para>
-      	
-      	<para>The following section describes changes introduced in Platform 5.5</para>
 		</content>
-    </section>
-
-	<section address="Introduction-Developers-Platform-55">
-    	<title>Introduction - Driver and Application Developers - Features Introduced in Platform 5.5</title>
-      	<content>
-		<para>The update introduces refactored, native, .NET implementations of the Helper 
-		components, which sit alongside the current VB6 COM components. The .NET components don't replace the COM components 
-		but do provide an alternate way for .NET applications to access their useful functionality.</para>
-		
-		<para>In addition to the original COM components all the new .NET components are exposed through COM to provide a 
-		migration path onwards from the ageing VB6 based COM helper components, see section 
-		<link xlink:href="e7734c14-0562-4010-b0c9-ddb5055cd318" />.</para>
-		
-		<para>This help file also documents the capabilities offered by the new native .NET platform components. 
-      	Instructions on how to access these capabilities are given in the 
-      	section <link xlink:href="3d17234a-c873-4f65-af0f-52f182081a44" /></para>
-      	
-      	<para>These new components are refactored from the original COM components and provide very similar functionality.
-      	They allow a .NET client or driver to use only .NET support components and to function as a 32 or 64 bit 
-      	application as required.</para>
-      	</content>
     </section>
 
     <section address="ClientDriverInteractions">
@@ -150,12 +127,8 @@
     	<title>Notes</title>
       	<content>
       		<list class="bullet">
- 				<listItem>See the section titled 
- 				<link xlink:href="6c2d0f0d-6460-494e-9c1f-08545fcff623" />
- 				for a summary of updates and new functionality.
- 				</listItem>
+ 				<listItem>See the section titled <link xlink:href="bfd53b69-9f13-489b-9a98-50c60d2a633b" /> for a summary of updates and new functionality.</listItem>
 	  		</list>
-	
       	</content>
     </section>
 
@@ -163,9 +136,9 @@
 		<link xlink:href="3d17234a-c873-4f65-af0f-52f182081a44" />
 		<link xlink:href="e7734c14-0562-4010-b0c9-ddb5055cd318" />
 		<externalLink>
-			<linkText>ASCOM Initiative</linkText>
+			<linkText>ASCOM Initiative Web Site</linkText>
 			<linkAlternateText>Go to the ASCOM Initiative web site</linkAlternateText>
-			<linkUri>http://ascom-standards.org/</linkUri>
+			<linkUri>https://ascom-standards.org/</linkUri>
 		</externalLink>
 		<codeEntityReference>N:ASCOM.Utilities</codeEntityReference>
 	</relatedTopics>

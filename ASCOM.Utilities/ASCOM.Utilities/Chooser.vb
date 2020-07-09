@@ -1,6 +1,9 @@
 Option Strict On
 Option Explicit On
+Imports ASCOM.Utilities.Exceptions
 Imports ASCOM.Utilities.Interfaces
+Imports System.IO
+Imports System.Reflection
 Imports System.Runtime.InteropServices
 
 ''' <summary>
@@ -17,9 +20,9 @@ Imports System.Runtime.InteropServices
 ''' driver (you probably save this in the registry), and the corresponding telescope type is pre-selected in the Chooser's list. In this case, 
 ''' the OK button starts out enabled (lit-up); the assumption is that the pre-selected driver has already been configured. </para>
 '''</remarks>
-<Guid("B7A1F5A0-71B4-44f9-91E9-468697957D6B"), _
-ComVisible(True), _
-ClassInterface(ClassInterfaceType.None)> _
+<Guid("B7A1F5A0-71B4-44f9-91E9-468697957D6B"),
+ComVisible(True),
+ClassInterface(ClassInterfaceType.None)>
 Public Class Chooser
     Implements IChooser, IChooserExtra, IDisposable
     '   ===========
@@ -37,8 +40,7 @@ Public Class Chooser
     ' 25-Feb-09 pwgs     5.1.0 - Refactored for Utilities
     '---------------------------------------------------------------------
 
-    Private m_frmChooser As ChooserForm
-    Private m_sDeviceType As String = ""
+    Private deviceTypeValue As String = ""
 
 #Region " New and IDisposable Support "
 
@@ -50,15 +52,11 @@ Public Class Chooser
     ''' <remarks></remarks>
     Public Sub New()
         MyBase.New()
-        'MsgBox("CHOOSER.NEW Before New Form")
-        Try
-            m_frmChooser = New ChooserForm ' Initially hidden
-        Catch ex As Exception
-            MsgBox("Chooser.New " & ex.ToString)
-        End Try
-        'MsgBox("CHOOSER.NEW AFter New Form")
-        m_sDeviceType = "Telescope" ' Default to Telescope chooser
+
+        deviceTypeValue = "Telescope" ' Default to Telescope chooser
     End Sub
+
+
 
     ' IDisposable
     ''' <summary>
@@ -67,16 +65,12 @@ Public Class Chooser
     ''' <param name="disposing">True if called by the user, false if called by the system</param>
     ''' <remarks>You can't call this directly, use Dispose with no arguments instead.</remarks>
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
-        If Not Me.disposedValue Then
+        If Not disposedValue Then
             If disposing Then
-            End If
-            If Not (m_frmChooser Is Nothing) Then
-                m_frmChooser.Dispose()
-                m_frmChooser = Nothing
             End If
 
         End If
-        Me.disposedValue = True
+        disposedValue = True
     End Sub
 
     ' This code added by Visual Basic to correctly implement the disposable pattern.
@@ -85,13 +79,13 @@ Public Class Chooser
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub Dispose() Implements IDisposable.Dispose
-        ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+        ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
         Dispose(True)
         GC.SuppressFinalize(Me)
     End Sub
 
     Protected Overrides Sub Finalize()
-        ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+        ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
         Dispose(False)
         MyBase.Finalize()
     End Sub
@@ -113,17 +107,17 @@ Public Class Chooser
     '''</remarks>
     Public Property DeviceType() As String Implements IChooser.DeviceType
         Get
-            Return m_sDeviceType
+            Return deviceTypeValue
         End Get
         Set(ByVal Value As String)
             If Value = "" Then Throw New Exceptions.InvalidValueException("Chooser:DeviceType - " & MSG_ILLEGAL_DEVTYPE) 'Err.Raise(SCODE_ILLEGAL_DEVTYPE, ERR_SOURCE_PROFILE, MSG_ILLEGAL_DEVTYPE)
 
-            m_sDeviceType = Value
+            deviceTypeValue = Value
         End Set
     End Property
 
     ''' <summary>
-    ''' Select ASCOM driver to use including pre-selecting one in the dropdown list
+    ''' Select ASCOM driver to use including pre-selecting one in the drop-down list
     ''' </summary>
     ''' <param name="DriverProgID">Driver to preselect in the chooser dialogue</param>
     ''' <returns>Driver ID of chosen driver</returns>
@@ -132,25 +126,34 @@ Public Class Chooser
     ''' <remarks>The supplied driver will be pre-selected in the Chooser's list when the chooser window is first opened.
     ''' </remarks>
     Public Overloads Function Choose(ByVal DriverProgID As String) As String Implements IChooser.Choose
-        Dim RetVal As String = ""
+        Dim selectedProgId As String
+        Dim chooserFormInstance As ChooserForm
+
         Try
 
-            If String.IsNullOrEmpty(m_sDeviceType) Then Throw New Exceptions.InvalidValueException("Unknown device type, DeviceType property has not been set")
+            If String.IsNullOrEmpty(deviceTypeValue) Then Throw New Exceptions.InvalidValueException("Unknown device type, DeviceType property has not been set")
+            chooserFormInstance = New ChooserForm ' Initially hidden
 
-            m_frmChooser.DeviceType = m_sDeviceType
-            m_frmChooser.StartSel = DriverProgID
-            '   -------------------
-            m_frmChooser.ShowDialog() ' -- MODAL --
-            '   -------------------
-            RetVal = m_frmChooser.Result
-            m_frmChooser.Dispose()
-            m_frmChooser = Nothing
+            chooserFormInstance.DeviceType = deviceTypeValue
+            chooserFormInstance.SelectedProgId = DriverProgID
+            chooserFormInstance.ShowDialog() ' Display MODAL Chooser dialogue
+
+            selectedProgId = chooserFormInstance.SelectedProgId
+
+            chooserFormInstance.Dispose()
+
+        Catch ex As DriverNotRegisteredException
+            MsgBox("Chooser Exception: " & ex.Message)
+            LogEvent("Chooser", "Exception", EventLogEntryType.Error, EventLogErrors.ChooserException, ex.ToString)
+            selectedProgId = ""
+
         Catch ex As Exception
             MsgBox("Chooser Exception: " & ex.ToString)
             LogEvent("Chooser", "Exception", EventLogEntryType.Error, EventLogErrors.ChooserException, ex.ToString)
-            RetVal = ""
+            selectedProgId = ""
         End Try
-        Return RetVal
+
+        Return selectedProgId
     End Function
 #End Region
 
@@ -165,9 +168,9 @@ Public Class Chooser
     ''' <para>This overload is not available through COM, please use "Choose(ByVal DriverProgID As String)"
     ''' with an empty string parameter to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function Choose() As String Implements IChooserExtra.Choose
-        Return Me.Choose("")
+        Return Choose("")
     End Function
 #End Region
 

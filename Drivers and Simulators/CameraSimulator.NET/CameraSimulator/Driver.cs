@@ -56,7 +56,7 @@ namespace ASCOM.Simulator
     /// _Camera from being created and used as the [default] interface
     /// </summary>
     [Guid("12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
-    public class Camera : ICameraV2
+    public class Camera : ICameraV3
     {
         // Driver ID and descriptive string that shows in the Chooser
         private static string s_csDriverID = "ASCOM.Simulator.Camera";
@@ -93,6 +93,18 @@ namespace ASCOM.Simulator
         private const string STR_CanPulseGuide = "CanPulseGuide";
         private const string STR_OmitOddBins = "OmitOddBins";
         private const string STR_CanFastReadout = "CanFastReadout";
+        private const string STR_GainMode = "GainMode";
+        private const string STR_GainMin = "GainMin";
+        private const string STR_GainMax = "GainMax";
+        private const string STR_Gains = "Gains";
+        private const string STR_Gain = "Gain";
+        private const string STR_OffsetMode = "OffsetMode";
+        private const string STR_OffsetMin = "OffsetMin";
+        private const string STR_OffsetMax = "OffsetMax";
+        private const string STR_Offsets = "Offsets";
+        private const string STR_Offset = "Offset";
+        private const string STR_HasSubExposure = "HasSubExposure";
+        private const string STR_SubExposureInterval = "SubExposureInterval";
 
         // Cooler configuration strings
         private const string STR_CoolerAmbientTemperature = "CoolerAmbientTemperature";
@@ -207,7 +219,15 @@ namespace ASCOM.Simulator
         internal ArrayList gains;
         internal short gainMin;
         internal short gainMax;
-        private short gain;
+        internal short gain;
+        internal GainMode gainMode;
+
+        // Offset
+        internal ArrayList offsets;
+        internal int offsetMin;
+        internal int offsetMax;
+        internal int offset;
+        internal OffsetMode offsetMode;
 
         // Exposure
         internal bool canAbortExposure;
@@ -217,6 +237,8 @@ namespace ASCOM.Simulator
         internal double exposureResolution;
         private double lastExposureDuration;
         private string lastExposureStartTime;
+        internal bool hasSubExposure;
+        internal double subExposureInterval;
 
         private DateTime exposureStartTime;
         private double exposureDuration;
@@ -263,6 +285,24 @@ namespace ASCOM.Simulator
 
         #endregion
 
+        #region Enums
+
+        internal enum GainMode
+        {
+            None = 0,
+            Gains = 1,
+            GainMinMax = 2
+        }
+
+        internal enum OffsetMode
+        {
+            None = 0,
+            Offsets = 1,
+            OffsetMinMax = 2
+        }
+
+        #endregion
+
         #region Camera Constructor and Dispose
 
         /// <summary>
@@ -277,10 +317,15 @@ namespace ASCOM.Simulator
 
         public void Dispose()
         {
-            if (exposureTimer != null)
-                exposureTimer.Dispose();
-            if (coolerTimer != null)
-                coolerTimer.Dispose();
+            Log.LogMessage("Dispose", "Releasing memory and components");
+            if (exposureTimer != null) exposureTimer.Dispose();
+            if (coolerTimer != null) coolerTimer.Dispose();
+            imageArray = null;
+            imageArrayVariant = null;
+            imageArrayColour = null;
+            imageArrayVariantColour = null;
+            imageData = null;
+            GC.Collect();
         }
 
         #endregion
@@ -293,7 +338,7 @@ namespace ASCOM.Simulator
         {
             using (Profile P = new Profile())
             {
-                P.DeviceType = "Camera";					//  Requires Helper 5.0.3 or later
+                P.DeviceType = "Camera";                    //  Requires Helper 5.0.3 or later
                 if (bRegister)
                     P.Register(s_csDriverID, s_csDriverDescription);
                 else
@@ -952,7 +997,44 @@ namespace ASCOM.Simulator
             set
             {
                 Log.LogMessage("Connected", "set {0}", value);
-                if (value) ReadImageFile();
+                if (value & !connected) // We are connecting and are not already connected
+                {
+                    ReadImageFile();
+
+                    // Restore valid settings if necessary
+                    imageReady = false;
+                    //  Bin X test
+                    if ((binX > maxBinX) || (binX < 1))
+                    {
+                        binX = 1;
+                    }
+
+                    //  Bin Y test
+                    if ((binY > maxBinY) || (binY < 1))
+                    {
+                        binY = 1;
+                    }
+
+                    // Check the start position is in range, start is in binned pixels
+                    if (startX < 0 || startX * binX > cameraXSize)
+                    {
+                        startX = 0;
+                    }
+                    if (startY < 0 || startY * binY > cameraYSize)
+                    {
+                        startY = 0;
+                    }
+
+                    // Check that the acquisition is at least 1 pixel in size and fits in the camera area
+                    if (numX < 1 || (numX + startX) * binX > cameraXSize)
+                    {
+                        numX = cameraXSize / binX;
+                    }
+                    if (numY < 1 || (numY + startY) * binY > cameraYSize)
+                    {
+                        numY = cameraYSize / binY;
+                    }
+                }
 
                 connected = value;
 
@@ -973,6 +1055,18 @@ namespace ASCOM.Simulator
 
                 if (connected & coolerPowerUpState) CoolerOn = true; // If we are connecting enable the cooler immediately if required through configuration
 
+
+                if (!connected) // We have just disconnected so free memory used by large objects
+                {
+                    imageArray = null;
+                    imageArrayVariant = null;
+                    imageArrayColour = null;
+                    imageArrayVariantColour = null;
+                    imageData = null;
+                }
+
+                // Force a garbage collection on both connect and disconnect
+                GC.Collect();
             }
         }
 
@@ -990,7 +1084,7 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read CoolerOn when not connected");
-                CheckCapability("CoolerOn", hasCooler);
+                CheckCapabilityEnabled("CoolerOn", hasCooler);
                 Log.LogMessage("CoolerOn", "get {0}", coolerOn);
                 return coolerOn;
             }
@@ -998,7 +1092,7 @@ namespace ASCOM.Simulator
             {
 
                 CheckConnected("Can't set CoolerOn when not connected");
-                CheckCapability("CoolerOn", hasCooler);
+                CheckCapabilityEnabled("CoolerOn", hasCooler);
                 Log.LogMessage("CoolerOn", "set {0}", value);
                 coolerOn = value;
 
@@ -1057,7 +1151,7 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read Cooler Power when not connected");
-                CheckCapability("CoolerPower", hasCooler);
+                CheckCapabilityEnabled("CoolerPower", hasCooler);
                 Log.LogMessage("CoolerPower", "get {0}", coolerPower);
                 return coolerPower;
             }
@@ -1143,7 +1237,7 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read HeatSinkTemperature when not connected");
-                CheckCapability("HeatSinkTemperature", canSetCcdTemperature);
+                CheckCapabilityEnabled("HeatSinkTemperature", canSetCcdTemperature);
                 double returnValue = AddRandomFluctuation(heatSinkTemperature);
                 Log.LogMessage("HeatSinkTemperature", "get {0}", returnValue);
                 return returnValue;
@@ -1176,9 +1270,32 @@ namespace ASCOM.Simulator
 
                 Log.LogMessage("ImageArray", "get");
                 if (sensorType == SensorType.Color)
+                {                
+                    // Test code to demonstrate the order of returned array values. Not required in production code!
+                    //for (int k = 0; k < 3; k++)
+                    //{
+                    //    for (int j = 0; j < numY; j++)
+                    //    {
+                    //        for (int i = 0; i < numX; i++)
+                    //        {
+                    //            imageArrayColour[i, j, k] = i + 10 * j + 100 * k;
+                    //        }
+                    //    }
+                    //}
                     return imageArrayColour;
+                }
                 else
+                {
+                    // Test code to demonstrate the order of returned array values. Not required in production code!
+                    //for (int j = 0; j < numY; j++)
+                    //{
+                    //    for (int i = 0; i < numX; i++)
+                    //    {
+                    //        imageArray[i, j] = i + 10 * j;
+                    //    }
+                    //}
                     return imageArray;
+                }
             }
         }
 
@@ -1262,7 +1379,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckCapability("IsPulseGuiding", canPulseGuide);
+                CheckCapabilityEnabled("IsPulseGuiding", canPulseGuide);
                 var ipg = isPulseGuidingRa || isPulseGuidingDec;
                 Log.LogMessage("IsPulseGuiding", "get {0}", ipg);
                 return ipg;
@@ -1503,14 +1620,14 @@ namespace ASCOM.Simulator
             get
             {
                 CheckConnected("Can't read SetCCDTemperature when not connected");
-                CheckCapability("SetCCDTemperature", canSetCcdTemperature);
+                CheckCapabilityEnabled("SetCCDTemperature", canSetCcdTemperature);
                 Log.LogMessage("SetCCDTemperature", "get {0}", setCcdTemperature);
                 return setCcdTemperature;
             }
             set
             {
                 CheckConnected("Can't set SetCCDTemperature when not connected");
-                CheckCapability("SetCCDTemperature", canSetCcdTemperature);
+                CheckCapabilityEnabled("SetCCDTemperature", canSetCcdTemperature);
                 CheckRange("SetCCDTemperature", coolerSetPointMinimum, value, heatSinkTemperature); // Make sure the set value is in the supported range
                 Log.LogMessage("SetCCDTemperature", "set {0}", value);
                 if (value != setCcdTemperature) // Only try and do something if the new setpoint is different to the current value
@@ -1610,18 +1727,16 @@ namespace ASCOM.Simulator
         /// <exception cref=" System.Exception">the exposure cannot be started for any reason, such as a hardware or communications error</exception>
         public void StartExposure(double Duration, bool Light)
         {
-            Log.LogStart("StartExposure", "Duration {0}, Light {1}", Duration, Light);
+            Log.LogMessage("StartExposure", "Duration {0}, Light {1}", Duration, Light);
             CheckConnected("Can't set StartExposure when not connected");
             // check the duration, light frames only
             if (Light && (Duration > exposureMax || Duration < exposureMin))
             {
                 lastError = "Incorrect exposure duration";
                 Log.LogMessage("StartExposure", "Incorrect exposure Duration {0}", Duration);
-                throw new ASCOM.InvalidValueException("StartExposure Duration",
-                                                     Duration.ToString(CultureInfo.InvariantCulture),
-                                                     string.Format(CultureInfo.InvariantCulture, "{0} to {1}", exposureMax, exposureMin));
+                throw new ASCOM.InvalidValueException("StartExposure Duration", Duration.ToString(CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "{0} to {1}", exposureMax, exposureMin));
             }
-            //  binning tests
+            //  Binning tests
             if ((binX > maxBinX) || (binX < 1))
             {
                 lastError = "Incorrect bin X factor";
@@ -1638,8 +1753,8 @@ namespace ASCOM.Simulator
                                                     binY.ToString(CultureInfo.InvariantCulture),
                                                     string.Format(CultureInfo.InvariantCulture, "1 to {0}", maxBinY));
             }
-            // check the start position is in range
-            // start is in binned pixels
+
+            // Check the start position is in range, start is in binned pixels
             if (startX < 0 || startX * binX > cameraXSize)
             {
                 lastError = "Incorrect Start X position";
@@ -1656,7 +1771,8 @@ namespace ASCOM.Simulator
                                                     startX.ToString(CultureInfo.InvariantCulture),
                                                     string.Format(CultureInfo.InvariantCulture, "0 to {0}", cameraXSize / binX));
             }
-            // check that the acquisition is at least 1 pixel in size and fits in the camera area
+
+            // Check that the acquisition is at least 1 pixel in size and fits in the camera area
             if (numX < 1 || (numX + startX) * binX > cameraXSize)
             {
                 lastError = "Incorrect Num X value";
@@ -1681,11 +1797,54 @@ namespace ASCOM.Simulator
                 darkFrame = !Light;
             }
             lastExposureStartTime = DateTime.UtcNow.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss", CultureInfo.InvariantCulture);
+
             // set the image array dimensions
-            if (sensorType == SensorType.Color)
-                imageArrayColour = new int[numX, numY, 3];
-            else
-                imageArray = new int[numX, numY];
+            if (sensorType == SensorType.Color) // Colour sensor
+            {
+                if (imageArrayColour == null) // No image array so create a new one
+                {
+                    Log.LogMessage("StartExposure", $"Creating first time colour array of dimensions {numX} x {numY}");
+                    imageArrayColour = new int[numX, numY, 3];
+                }
+                else // Image array already exists so check whether we can re-use it or whether we have to create a new one
+                {
+                    if ((imageArrayColour.GetLength(0) == numX) & (imageArrayColour.GetLength(1) == numY)) // Existing array has the required dimensions so we can just re-use it
+                    {
+                        // No action required because we are re-using the existing array
+                        Log.LogMessage("StartExposure", $"Reusing existing colour array of dimensions {numX} x {numY}");
+                    }
+                    else // Different array size required so remove the old one and create new
+                    {
+                        Log.LogMessage("StartExposure", $"Creating new colour array of dimensions {numX} x {numY}");
+                        imageArrayColour = null; // Discard the current array
+                        imageArrayColour = new int[numX, numY, 3];
+                        GC.Collect(); // Force a garbage collection to clear out the old array
+                    }
+                }
+            }
+            else // Monochrome sensor
+            {
+                if (imageArray == null) // No image array so create a new one
+                {
+                    Log.LogMessage("StartExposure", $"Creating first time monochrome array of dimensions {numX} x {numY}");
+                    imageArray = new int[numX, numY];
+                }
+                else // Image array already exists so check whether we can re-use it or whether we have to create a new one
+                {
+                    if ((imageArray.GetLength(0) == numX) & (imageArray.GetLength(1) == numY)) // Existing array has the required dimensions so we can just re-use it
+                    {
+                        // No action required because we are re-using the existing array
+                        Log.LogMessage("StartExposure", $"Reusing existing monochrome array of dimensions {numX} x {numY}");
+                    }
+                    else // Different array size required so remove the old one and create new
+                    {
+                        Log.LogMessage("StartExposure", $"Creating new monochrome array of dimensions {numX} x {numY}");
+                        imageArray = null; // Discard the current array
+                        imageArray = new int[numX, numY]; // Create a new array
+                        GC.Collect(); // Force a garbage collection to clear out the old array
+                    }
+                }
+            }
 
             if (exposureTimer == null)
             {
@@ -1698,7 +1857,7 @@ namespace ASCOM.Simulator
             exposureStartTime = DateTime.Now;
             exposureDuration = Duration;
             exposureTimer.Enabled = true;
-            Log.LogFinish(" started");
+            Log.LogMessage("StartExposure", "Completed");
         }
 
         private void exposureTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -1767,7 +1926,7 @@ namespace ASCOM.Simulator
         public void StopExposure()
         {
             CheckConnected("Can't stop exposure when not connected");
-            CheckCapability("StopExposure", canStopExposure);
+            CheckCapabilityEnabled("StopExposure", canStopExposure);
             Log.LogMessage("StopExposure", "state {0}", cameraState);
             switch (cameraState)
             {
@@ -1807,9 +1966,9 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("BayerOffsetX");
+                CheckSupportedInThisInterfaceVersion("BayerOffsetX", 2);
                 CheckConnected("BayerOffsetX");
-                CheckCapability("BayerOffsetX", sensorType != DeviceInterface.SensorType.Monochrome);
+                CheckCapabilityEnabled("BayerOffsetX", sensorType != DeviceInterface.SensorType.Monochrome);
                 Log.LogMessage("BayerOffsetX", "get {0}", bayerOffsetX);
                 return bayerOffsetX;
             }
@@ -1826,9 +1985,9 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("BayerOffsetY");
+                CheckSupportedInThisInterfaceVersion("BayerOffsetY", 2);
                 CheckConnected("BayerOffsetY");
-                CheckCapability("BayerOffsetY", sensorType != DeviceInterface.SensorType.Monochrome);
+                CheckCapabilityEnabled("BayerOffsetY", sensorType != DeviceInterface.SensorType.Monochrome);
                 Log.LogMessage("BayerOffsetY", "get {0}", bayerOffsetY);
                 return bayerOffsetY;
             }
@@ -1844,7 +2003,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("CanFastReadout");
+                CheckSupportedInThisInterfaceVersion("CanFastReadout", 2);
                 CheckConnected("CanFastReadout");
                 Log.LogMessage("CanFastReadout", "get {0}", canFastReadout);
                 return canFastReadout;
@@ -1863,7 +2022,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("DriverInfo");
+                CheckSupportedInThisInterfaceVersion("DriverInfo", 2);
                 CheckConnected("DriverInfo");
                 String strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 Log.LogMessage("DriverInfo", "{0} - Version {1}", s_csDriverDescription, strVersion);
@@ -1880,7 +2039,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("DriverVersion");
+                CheckSupportedInThisInterfaceVersion("DriverVersion", 2);
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                 var str = String.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
                 Log.LogMessage("DriverVersion", "get {0}", str);
@@ -1896,7 +2055,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("ExposureMax");
+                CheckSupportedInThisInterfaceVersion("ExposureMax", 2);
                 CheckConnected("ExposureMax");
                 Log.LogMessage("ExposureMax", "get {0}", exposureMax);
                 return exposureMax;
@@ -1911,7 +2070,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("ExposureMin");
+                CheckSupportedInThisInterfaceVersion("ExposureMin", 2);
                 CheckConnected("ExposureMin");
                 Log.LogMessage("ExposureMin", "get {0}", exposureMin);
                 return exposureMin;
@@ -1926,7 +2085,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("ExposureResolution");
+                CheckSupportedInThisInterfaceVersion("ExposureResolution", 2);
                 CheckConnected("ExposureResolution");
                 Log.LogMessage("ExposureResolution", "get {0}", exposureResolution);
                 return exposureResolution;
@@ -1942,17 +2101,17 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("FastReadout");
+                CheckSupportedInThisInterfaceVersion("FastReadout", 2);
                 CheckConnected("FastReadout");
-                CheckCapability("FastReadout", canFastReadout);
+                CheckCapabilityEnabled("FastReadout", canFastReadout);
                 Log.LogMessage("FastReadout", "get {0}", fastReadout);
                 return fastReadout;
             }
             set
             {
-                CheckInterface("FastReadout");
+                CheckSupportedInThisInterfaceVersion("FastReadout", 2);
                 CheckConnected("FastReadout");
-                CheckCapability("FastReadout", canFastReadout);
+                CheckCapabilityEnabled("FastReadout", canFastReadout);
                 Log.LogMessage("FastReadout", "get {0}", value);
                 fastReadout = value;
             }
@@ -1967,19 +2126,29 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("Gain");
+                CheckSupportedInThisInterfaceVersion("Gain", 2);
                 CheckConnected("Gain");
-                CheckCapability("Gain", gainMax > gainMin);
+                CheckCapabilityEnabled("Gain", gainMode != GainMode.None);
                 Log.LogMessage("Gain", "get {0}", gain);
                 return gain;
             }
             set
             {
-                CheckInterface("Gain");
+                CheckSupportedInThisInterfaceVersion("Gain", 2);
                 CheckConnected("Gain");
-                CheckCapability("Gain", gainMax > gainMin, true);
-                CheckRange("Gain", gainMin, value, gainMax);
-                Log.LogMessage("Gain", "set {0}", value);
+                CheckCapabilityEnabled("Gain", gainMode != GainMode.None);
+
+                switch (gainMode)
+                {
+                    case GainMode.Gains:
+                        CheckRange("Gain", 0, value, gains.Count - 1);
+                        break;
+                    case GainMode.GainMinMax:
+                        CheckRange("Gain", gainMin, value, gainMax);
+                        break;
+                }
+
+                Log.LogMessage("Gain", $"set {value}, GainMode: {gainMode}");
                 gain = value;
             }
         }
@@ -1993,14 +2162,10 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("GainMax");
+                CheckSupportedInThisInterfaceVersion("GainMax", 2);
                 CheckConnected("GainMax");
-                CheckCapability("GainMax", gainMax > gainMin);
-                if (gains != null && gains.Count > 0)
-                {
-                    Log.LogMessage("GainMax", "cannot be read if there is an array of Gains in use");
-                    throw new InvalidOperationException("GainMax cannot be read if there is an array of Gains in use");
-                }
+                CheckCapabilityEnabled("GainMax", gainMode == GainMode.GainMinMax);
+
                 Log.LogMessage("GainMax", "get {0}", gainMax);
                 return gainMax;
             }
@@ -2015,14 +2180,10 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("GainMin");
+                CheckSupportedInThisInterfaceVersion("GainMin", 2);
                 CheckConnected("GainMin");
-                CheckCapability("GainMin", gainMax > gainMin);
-                if (gains != null && gains.Count > 0)
-                {
-                    Log.LogMessage("GainMin", "cannot be read if there is an array of Gains in use");
-                    throw new InvalidOperationException("GainMin cannot be read if there is an array of Gains in use");
-                }
+                CheckCapabilityEnabled("GainMax", gainMode == GainMode.GainMinMax);
+
                 Log.LogMessage("GainMin", "get {0}", gainMin);
                 return gainMin;
             }
@@ -2037,9 +2198,10 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("Gains");
+                CheckSupportedInThisInterfaceVersion("Gains", 2);
                 CheckConnected("Gains");
-                CheckCapability("Gains", !(gains == null || gains.Count == 0));
+                CheckCapabilityEnabled("Gains", gainMode == GainMode.Gains);
+
                 Log.LogMessage("Gains", "get {0}", gains);
                 return gains;
             }
@@ -2062,7 +2224,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("Name");
+                CheckSupportedInThisInterfaceVersion("Name", 2);
                 CheckConnected("Name");
                 Log.LogMessage("Name", "Sim {0}", SensorName);
                 return "Sim " + SensorName;
@@ -2078,7 +2240,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("PercentCompleted");
+                CheckSupportedInThisInterfaceVersion("PercentCompleted", 2);
                 CheckConnected("PercentCompleted");
                 switch (cameraState)
                 {
@@ -2109,7 +2271,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("ReadoutMode");
+                CheckSupportedInThisInterfaceVersion("ReadoutMode", 2);
                 CheckConnected("ReadoutMode");
                 if (readoutModes == null || readoutModes.Count < 1)
                 {
@@ -2126,7 +2288,7 @@ namespace ASCOM.Simulator
             set
             {
                 Log.LogMessage("ReadoutMode", "set {0}", value);
-                CheckInterface("ReadoutMode");
+                CheckSupportedInThisInterfaceVersion("ReadoutMode", 2);
                 CheckConnected("ReadoutMode");
                 if (readoutModes == null || readoutModes.Count < 1)
                 {
@@ -2156,10 +2318,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("ReadoutModes");
+                CheckSupportedInThisInterfaceVersion("ReadoutModes", 2);
                 CheckConnected("ReadoutModes");
-                //CheckCapability("ReadoutModes", !canFastReadout);
-                //CheckCapability("ReadoutModes", !(readoutModes == null || readoutModes.Count < 1));
                 Log.LogMessage("ReadoutModes", "ReadoutModes {0}", readoutModes.Count);
                 foreach (var item in readoutModes)
                 {
@@ -2179,7 +2339,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("SensorName");
+                CheckSupportedInThisInterfaceVersion("SensorName", 2);
                 CheckConnected("SensorName");
                 Log.LogMessage("SensorName", "get {0}", sensorName);
                 return sensorName;
@@ -2195,10 +2355,129 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckInterface("SensorType");
+                CheckSupportedInThisInterfaceVersion("SensorType", 2);
                 CheckConnected("SensorType");
                 Log.LogMessage("SensorType", "get {0}", sensorType);
                 return sensorType;
+            }
+        }
+
+        #endregion
+
+        #region ICameraV3 members
+
+        /// <summary>
+        /// Camera.Offset can be used to adjust the offset setting of the camera, if supported.
+        /// The Offset, Offsets, OffsetMin and OffsetMax operation is complex adjust this at your peril!
+        /// </summary>
+        /// <value>The offset.</value>
+        public int Offset
+        {
+            get
+            {
+                CheckSupportedInThisInterfaceVersion("Offset", 3);
+                CheckConnected("Offset");
+                CheckCapabilityEnabled("Offset", offsetMode != OffsetMode.None);
+                Log.LogMessage("Offset", "get {0}", offset);
+                return offset;
+            }
+            set
+            {
+                CheckSupportedInThisInterfaceVersion("Offset", 3);
+                CheckConnected("Offset");
+                CheckCapabilityEnabled("Offset", offsetMode != OffsetMode.None);
+
+                switch (offsetMode)
+                {
+                    case OffsetMode.Offsets:
+                        CheckRange("Offset", 0, value, offsets.Count - 1);
+                        break;
+                    case OffsetMode.OffsetMinMax:
+                        CheckRange("Offset", offsetMin, value, offsetMax);
+                        break;
+                }
+
+                Log.LogMessage("Offset", $"set {value}, OffsetMode: {offsetMode}");
+                offset = value;
+            }
+        }
+
+        /// <summary>
+        /// When specifying the offset setting with an integer value, Camera.OffsetMax is used
+        /// in conjunction with Camera.OffsetMin to specify the range of valid settings.
+        /// </summary>
+        /// <value>The max offset.</value>
+        public int OffsetMax
+        {
+            get
+            {
+                CheckSupportedInThisInterfaceVersion("OffsetMax", 3);
+                CheckConnected("OffsetMax");
+                CheckCapabilityEnabled("OffsetMax", offsetMode == OffsetMode.OffsetMinMax);
+
+                Log.LogMessage("OffsetMax", "get {0}", offsetMax);
+                return offsetMax;
+            }
+        }
+
+        /// <summary>
+        /// When specifying the offset setting with an integer value, Camera.OffsetMin is used
+        /// in conjunction with Camera.OffsetMax to specify the range of valid settings.
+        /// </summary>
+        /// <value>The min offset.</value>
+        public int OffsetMin
+        {
+            get
+            {
+                CheckSupportedInThisInterfaceVersion("OffsetMin", 3);
+                CheckConnected("OffsetMin");
+                CheckCapabilityEnabled("OffsetMax", offsetMode == OffsetMode.OffsetMinMax);
+
+                Log.LogMessage("OffsetMin", "get {0}", offsetMin);
+                return offsetMin;
+            }
+        }
+
+        /// <summary>
+        /// Offsets provides a 0-based array of available offset settings.
+        /// The Offset, Offsets, OffsetMin and OffsetMax operation is complex adjust this at your peril!
+        /// </summary>
+        /// <value>The offsets.</value>
+        public ArrayList Offsets
+        {
+            get
+            {
+                CheckSupportedInThisInterfaceVersion("Offsets", 3);
+                CheckConnected("Offsets");
+                CheckCapabilityEnabled("Offsets", offsetMode == OffsetMode.Offsets);
+
+                Log.LogMessage("Offsets", "get {0}", offsets);
+                return offsets;
+            }
+        }
+
+        /// <summary>
+        /// Camera.SubExposureDuration can be used to specify that multiple exposures be aggregated by the camera into a single composite exposure
+        /// </summary>
+        /// <value>The sub exposure duration (s).</value>
+        public double SubExposureDuration
+        {
+            get
+            {
+                CheckSupportedInThisInterfaceVersion("SubExposureDuration", 3);
+                CheckConnected("SubExposureDuration");
+                CheckCapabilityEnabled("SubExposureDuration", hasSubExposure);
+                Log.LogMessage("SubExposureDuration", "get {0}", subExposureInterval);
+                return subExposureInterval;
+            }
+            set
+            {
+                CheckSupportedInThisInterfaceVersion("SubExposureDuration", 3);
+                CheckConnected("SubExposureDuration");
+                CheckCapabilityEnabled("SubExposureDuration", hasSubExposure);
+                Log.LogMessage("SubExposureDuration", $"set {value}");
+                if (value < double.Epsilon) throw new InvalidValueException($"The sub exposure duration must not be negative or zero: {value}");
+                subExposureInterval = value;
             }
         }
 
@@ -2227,7 +2506,7 @@ namespace ASCOM.Simulator
 
                 // read properties from profile
                 Log.Enabled = Convert.ToBoolean(profile.GetValue(s_csDriverID, "Trace", string.Empty, "false"), CultureInfo.InvariantCulture);
-                interfaceVersion = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_InterfaceVersion, string.Empty, "2"), CultureInfo.InvariantCulture);
+                interfaceVersion = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_InterfaceVersion, string.Empty, "3"), CultureInfo.InvariantCulture);
                 pixelSizeX = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_PixelSizeX, string.Empty, "5.6"), CultureInfo.InvariantCulture);
                 pixelSizeY = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_PixelSizeY, string.Empty, "5.6"), CultureInfo.InvariantCulture);
                 fullWellCapacity = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_FullWellCapacity, string.Empty, "30000"), CultureInfo.InvariantCulture);
@@ -2264,35 +2543,47 @@ namespace ASCOM.Simulator
 
                 canPulseGuide = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanPulseGuide, string.Empty, "false"), CultureInfo.InvariantCulture);
 
-                string gs = profile.GetValue(s_csDriverID, "Gains");
-                if (string.IsNullOrEmpty(gs))
+                // Get Gain configuration
+                gainMode = (GainMode)Convert.ToInt32(profile.GetValue(s_csDriverID, STR_GainMode, string.Empty, "0"), CultureInfo.InvariantCulture);
+                gain = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_Gain, string.Empty, "0"), CultureInfo.InvariantCulture);
+                gainMin = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_GainMin, string.Empty, "0"), CultureInfo.InvariantCulture);
+                gainMax = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_GainMax, string.Empty, "0"), CultureInfo.InvariantCulture);
+
+                string[] gainsStringArray = profile.GetValue(s_csDriverID, STR_Gains, string.Empty, "ISO 100,ISO 200,ISO 400,ISO 800,ISO 1600").Split(',');
+                gains = new ArrayList();
+                foreach (string gain in gainsStringArray)
                 {
-                    gainMin = Convert.ToInt16(profile.GetValue(s_csDriverID, "GainMin", string.Empty, "0"), CultureInfo.InvariantCulture);
-                    gainMax = Convert.ToInt16(profile.GetValue(s_csDriverID, "GainMax", string.Empty, "0"), CultureInfo.InvariantCulture);
+                    gains.Add(gain.Trim());
                 }
-                else
+
+                // Get Offset configuration
+                offsetMode = (OffsetMode)Convert.ToInt32(profile.GetValue(s_csDriverID, STR_OffsetMode, string.Empty, "0"), CultureInfo.InvariantCulture);
+                offset = Convert.ToInt32(profile.GetValue(s_csDriverID, STR_Offset, string.Empty, "0"), CultureInfo.InvariantCulture);
+                offsetMin = Convert.ToInt32(profile.GetValue(s_csDriverID, STR_OffsetMin, string.Empty, "0"), CultureInfo.InvariantCulture);
+                offsetMax = Convert.ToInt32(profile.GetValue(s_csDriverID, STR_OffsetMax, string.Empty, "0"), CultureInfo.InvariantCulture);
+
+                // Get sub exposure configuration
+                hasSubExposure = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_HasSubExposure, string.Empty, "false"), CultureInfo.InvariantCulture);
+                subExposureInterval = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_SubExposureInterval, string.Empty, "1.5"), CultureInfo.InvariantCulture);
+
+                string[] offsetStringArray = profile.GetValue(s_csDriverID, STR_Offsets, string.Empty, "Offset for ISO 100,Offset for ISO 200,Offset for ISO 400,Offset for ISO 800,Offset for ISO 1600").Split(',');
+                offsets = new ArrayList();
+                foreach (string offset in offsetStringArray)
                 {
-                    string[] gsa = gs.Split(',');
-                    gains = new ArrayList();
-                    foreach (var item in gsa)
-                    {
-                        gains.Add(item);
-                    }
-                    gainMin = 0;
-                    gainMax = (short)(gains.Count - 1);
+                    offsets.Add(offset.Trim());
                 }
 
                 canFastReadout = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanFastReadout, string.Empty, "false"), CultureInfo.InvariantCulture);
 
-                gs = profile.GetValue(s_csDriverID, "ReadoutModes");
+                string gainsString = profile.GetValue(s_csDriverID, "ReadoutModes");
                 readoutModes = new ArrayList();
-                if (string.IsNullOrEmpty(gs))
+                if (string.IsNullOrEmpty(gainsString))
                 {
                     readoutModes.Add("Default");
                 }
                 else
                 {
-                    string[] rms = gs.Split(',');
+                    string[] rms = gainsString.Split(',');
                     foreach (var item in rms)
                     {
                         readoutModes.Add(item);
@@ -2377,34 +2668,37 @@ namespace ASCOM.Simulator
 
                 profile.WriteValue(s_csDriverID, STR_CanPulseGuide, canPulseGuide.ToString(CultureInfo.InvariantCulture));
 
-                if (gains != null && gains.Count > 0)
+                // Write gain variables
+                profile.WriteValue(s_csDriverID, STR_GainMode, ((int)gainMode).ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_Gain, Convert.ToString(gain, CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_GainMin, Convert.ToString(gainMin, CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_GainMax, Convert.ToString(gainMax, CultureInfo.InvariantCulture));
+
+                System.Text.StringBuilder gainStringBuilder = new System.Text.StringBuilder();
+                foreach (string gainItem in gains)
                 {
-                    // gain control using Gains string array
-                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                    foreach (var item in gains)
-                    {
-                        if (sb.Length > 0)
-                            sb.Append(",");
-                        sb.Append(item.ToString());
-                    }
-                    profile.WriteValue(s_csDriverID, "Gains", sb.ToString());
-                    profile.WriteValue(s_csDriverID, "GainMin", "0");
-                    profile.WriteValue(s_csDriverID, "GainMax", Convert.ToString(gains.Count - 1, CultureInfo.InvariantCulture));
+                    if (gainStringBuilder.Length > 0) gainStringBuilder.Append(",");
+                    gainStringBuilder.Append(gainItem.ToString());
                 }
-                else if (gainMax > gainMin)
+                profile.WriteValue(s_csDriverID, STR_Gains, gainStringBuilder.ToString());
+
+                // Write offset variables
+                profile.WriteValue(s_csDriverID, STR_OffsetMode, ((int)offsetMode).ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_Offset, Convert.ToString(offset, CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_OffsetMin, Convert.ToString(offsetMin, CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_OffsetMax, Convert.ToString(offsetMax, CultureInfo.InvariantCulture));
+
+                // Write sub exposure values
+                profile.WriteValue(s_csDriverID, STR_HasSubExposure, hasSubExposure.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_SubExposureInterval, subExposureInterval.ToString(CultureInfo.InvariantCulture));
+
+                System.Text.StringBuilder offsetStringBuilder = new System.Text.StringBuilder();
+                foreach (string offsetItem in offsets)
                 {
-                    // gain control using min and max
-                    profile.DeleteValue(s_csDriverID, "Gains");
-                    profile.WriteValue(s_csDriverID, "GainMin", gainMin.ToString(CultureInfo.InvariantCulture));
-                    profile.WriteValue(s_csDriverID, "GainMax", gainMax.ToString(CultureInfo.InvariantCulture));
+                    if (offsetStringBuilder.Length > 0) offsetStringBuilder.Append(",");
+                    offsetStringBuilder.Append(offsetItem.ToString());
                 }
-                else
-                {
-                    // no gain control
-                    profile.DeleteValue(s_csDriverID, "Gains");
-                    profile.DeleteValue(s_csDriverID, "GainMin");
-                    profile.DeleteValue(s_csDriverID, "GainMax");
-                }
+                profile.WriteValue(s_csDriverID, STR_Offsets, offsetStringBuilder.ToString());
 
                 profile.WriteValue(s_csDriverID, STR_CanFastReadout, canFastReadout.ToString(CultureInfo.InvariantCulture));
 
@@ -2415,14 +2709,14 @@ namespace ASCOM.Simulator
                 else
                 {
                     // Readout Modes use string array
-                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                    gainStringBuilder = new System.Text.StringBuilder();
                     foreach (var item in readoutModes)
                     {
-                        if (sb.Length > 0)
-                            sb.Append(",");
-                        sb.Append(item.ToString());
+                        if (gainStringBuilder.Length > 0)
+                            gainStringBuilder.Append(",");
+                        gainStringBuilder.Append(item.ToString());
                     }
-                    profile.WriteValue(s_csDriverID, "ReadoutModes", sb.ToString());
+                    profile.WriteValue(s_csDriverID, "ReadoutModes", gainStringBuilder.ToString());
                 }
             }
             SaveCoolerToProfile(); // Save the cooler profile as well
@@ -2485,6 +2779,11 @@ namespace ASCOM.Simulator
 
         private void FillImageArray()
         {
+            // Release image array variant memory to make as much headroom as possible
+            imageArrayVariant = null;
+            imageArrayVariantColour = null;
+            GC.Collect();
+
             PixelProcess pixelProcess = new PixelProcess(NoNoise);
             ShutterProcess shutterProcess = new ShutterProcess(BinData);
 
@@ -2628,15 +2927,25 @@ namespace ASCOM.Simulator
         /// </summary>
         private void ReadImageFile()
         {
-            imageData = new float[cameraXSize, cameraYSize, 1];
+
+            // Create or reuse the image data array
+            if (sensorType == SensorType.Monochrome)
+            {
+                if (imageData == null) imageData = new float[cameraXSize, cameraYSize, 1];
+            }
+            else
+            {
+                if (imageData == null) imageData = new float[cameraXSize, cameraYSize, 3];
+            }
+
             try
             {
                 bmp = (Bitmap)Image.FromFile(imagePath);
 
-                //x0 = bayerOffsetX;
-                //x1 = (bayerOffsetX + 1) & 1;
-                //y0 = bayerOffsetY;
-                //y1 = (bayerOffsetY + 1) & 1;
+                // x0 = bayerOffsetX;
+                // x1 = (bayerOffsetX + 1) & 1;
+                // y0 = bayerOffsetY;
+                // y1 = (bayerOffsetY + 1) & 1;
 
                 GetData getData = new GetData(MonochromeData);
                 switch (sensorType)
@@ -2659,10 +2968,10 @@ namespace ASCOM.Simulator
                         getData = new GetData(CMYG2Data);
                         stepX = 2;
                         stepY = 4;
-                        //y0 = (bayerOffsetY) & 3;
-                        //y1 = (bayerOffsetY + 1) & 3;
-                        //y2 = (bayerOffsetY + 2) & 3;
-                        //y3 = (bayerOffsetY + 3) & 3;
+                        // y0 = (bayerOffsetY) & 3;
+                        // y1 = (bayerOffsetY + 1) & 3;
+                        // y2 = (bayerOffsetY + 2) & 3;
+                        // y3 = (bayerOffsetY + 3) & 3;
                         break;
                     case SensorType.LRGB:
                         getData = new GetData(LRGBData);
@@ -2670,7 +2979,6 @@ namespace ASCOM.Simulator
                         stepY = 4;
                         break;
                     case SensorType.Color:
-                        imageData = new float[cameraXSize, cameraYSize, 3];
                         getData = new GetData(ColorData);
                         stepX = 1;
                         stepY = 1;
@@ -2894,17 +3202,17 @@ namespace ASCOM.Simulator
             }
         }
 
-        private void CheckCapability(string identifier, bool capability)
+        /// <summary>
+        /// Throw a PropertyNotImplementedException if a property Get is not supported
+        /// </summary>
+        /// <param name="capabilityName">Property name</param>
+        /// <param name="enabled">True for capability supported, false for capability not supported</param>
+        private void CheckCapabilityEnabled(string capabilityName, bool enabled)
         {
-            CheckCapability(identifier, capability, false);
-        }
-
-        private void CheckCapability(string identifier, bool capability, bool accessorSet)
-        {
-            if (!capability)
+            if (!enabled)
             {
-                Log.LogMessage(identifier, "Not Implemented");
-                throw new PropertyNotImplementedException(identifier, accessorSet);
+                Log.LogMessage(capabilityName, "Not Implemented");
+                throw new PropertyNotImplementedException(capabilityName, false);
             }
         }
 
@@ -2917,12 +3225,12 @@ namespace ASCOM.Simulator
             }
         }
 
-        private void CheckInterface(string identifier)
+        private void CheckSupportedInThisInterfaceVersion(string memberName, int minimumSupportedInterfaceVersion)
         {
-            if (interfaceVersion == 1)
+            if (interfaceVersion < minimumSupportedInterfaceVersion)
             {
-                Log.LogMessage(identifier, "Not supported for interface version 1");
-                throw new System.NotSupportedException(identifier + " (not supported for Interface V1)");
+                Log.LogMessage(memberName, $"The {memberName} member is not present in ICameraV{interfaceVersion}, throwing an ASCOM.InvalidOperationException");
+                throw new InvalidOperationException($"The {memberName} member is not present in ICameraV{interfaceVersion}");
             }
         }
 

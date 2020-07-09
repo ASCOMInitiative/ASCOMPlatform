@@ -1,0 +1,235 @@
+﻿<UserControl x:Class="ASCOM.DeviceHub.DomeMotionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
+             xmlns:local="clr-namespace:ASCOM.DeviceHub"
+             mc:Ignorable="d" 
+   	         Background="{DynamicResource WindowBackgroundBrush}"
+             d:DesignHeight="300" d:DesignWidth="340" MinWidth="428" MinHeight="530">
+	<UserControl.Resources>
+		<local:ParkingStateVisibilityConverter x:Key="ParkingStateVisConverter" />
+		<local:HomingStateVisibilityConverter x:Key="HomingStateVisConverter" />
+		<local:BooleanVisibilityConverter x:Key="BoolVisConverter" />
+		<local:DeviceConnectedValueConverter x:Key="DeviceConnectedValueConverter" />
+		<local:BooleanToConnectStringConverter x:Key="BoolConnectConverter" />
+
+		<Style x:Key="Text" TargetType="{x:Type Label}">
+			<Setter Property="Margin" Value="0" />
+			<Setter Property="Padding" Value="0" />
+			<Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+			<Setter Property="HorizontalAlignment" Value="Right" />
+		</Style>
+		<Style x:Key="ClientText" TargetType="{x:Type TextBlock}">
+			<Setter Property="Margin" Value="0,6,0,0" />
+			<Setter Property="Padding" Value="0" />
+			<Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+			<Setter Property="VerticalAlignment" Value="Top" />
+			<Setter Property="HorizontalAlignment" Value="Right" />
+		</Style>
+		<Style x:Key="StateLabel" TargetType="{x:Type Label}">
+			<Setter Property="Margin" Value="0" />
+			<Setter Property="Padding" Value="0" />
+			<Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+			<Setter Property="HorizontalAlignment" Value="Right" />
+		</Style>
+		<Style x:Key="StateValue" TargetType="{x:Type Label}">
+			<Setter Property="HorizontalAlignment" Value="Left" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+			<Setter Property="Foreground" Value="{DynamicResource DynamicTextBrush}" />
+			<Setter Property="Margin" Value="6,0,0,0" />
+			<Setter Property="Padding" Value="0" />
+			<Setter Property="MinWidth" Value="70" />
+		</Style>
+	</UserControl.Resources>
+
+	<Grid Margin="6,4">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" MinWidth="124" />
+			<ColumnDefinition Width="Auto" />
+		</Grid.ColumnDefinitions>
+		<StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+			<Button Height="60" Width="60" Margin="4,0" Style="{StaticResource CircleButton}"
+					Command="{Binding ToggleShutterStateCommand}">
+				<Button.Content>
+					<TextBlock TextAlignment="Center" TextWrapping="Wrap"
+							   Text="{Binding ShutterCommandAction, FallbackValue=Close Shutter, TargetNullValue=Open Shutter}" />
+				</Button.Content>
+			</Button>
+			<Button Height="60" Width="60" Margin="4,0" Style="{StaticResource CircleButton}"
+					Command="{Binding ParkDomeCommand}">
+				<Button.Content>
+					<TextBlock TextAlignment="Center" TextWrapping="Wrap">
+						 Park<LineBreak/>Dome
+					</TextBlock>
+				</Button.Content>
+			</Button>
+		</StackPanel>
+		<Grid Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="28" />
+				<ColumnDefinition Width="30" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+
+			<StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal" Width="Auto" Height="Auto" Margin="0,0,0,8">
+				<Label Content="Amount:" HorizontalAlignment="Left" VerticalAlignment="Center" 
+									Margin="0,2" Padding="4,0" Foreground="{DynamicResource NormalTextBrush}" />
+				<ComboBox Height="20" Width="50" Margin="0,2,0,0" IsSynchronizedWithCurrentItem="True" DisplayMemberPath="Name"
+									ItemsSource="{Binding SlewAmounts}" SelectedItem="{Binding SelectedSlewAmount}" />
+			</StackPanel>
+
+			<!-- Motion directions -->
+
+			<Button Grid.Row="1" Grid.Column="1" Width="24" Height="24" Margin="7,0,6,0" ToolTip="Jog shutter opening up"
+					VerticalAlignment="Bottom"
+                    Command="{Binding JogAltitudeCommand}" CommandParameter="{x:Static local:MoveDirections.Up}" >
+				<Button.Content>
+					<Image Source="/ASCOM.DeviceHub;component/Images/icon up arrow.png" />
+				</Button.Content>
+			</Button>
+			<Button Grid.Row="2" Grid.Column="0" Width="24" Height="24"  HorizontalAlignment="Right" ToolTip="Jog dome clockwise"
+							    Command ="{Binding JogAzimuthCommand}" CommandParameter="{x:Static local:MoveDirections.Clockwise}">
+				<Button.Content>
+					<Image Source="/ASCOM.DeviceHub;component/Images/icon rotate right.png" />
+				</Button.Content>
+			</Button>
+			<Button Grid.Row="2" Grid.Column="1" Width="24" Height="24" Margin="0,3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+							    Command="{Binding StopMotionCommand}"
+								IsEnabled="{Binding Status.Connected, FallbackValue=False}">
+				<Image Margin="2" Source="/ASCOM.DeviceHub;component/Images/Stop.ico" />
+			</Button>
+			<Button Grid.Row="2" Grid.Column="2" Width="24" Height="24" HorizontalAlignment="Left" ToolTip="Jog dome counter-clockwise" 
+								Command ="{Binding JogAzimuthCommand}" CommandParameter="{x:Static local:MoveDirections.CounterClockwise}" Margin="0,3">
+				<Button.Content>
+					<Image Source="/ASCOM.DeviceHub;component/Images/icon rotate left.png" />
+				</Button.Content>
+			</Button>
+			<Button Grid.Row="3" Grid.Column="1" Width="24" Height="24" ToolTip="Jog shutter opening down"
+                                Command="{Binding JogAltitudeCommand}" CommandParameter="{x:Static local:MoveDirections.Down}">
+				<Button.Content>
+					<Image Source="/ASCOM.DeviceHub;component/Images/icon down arrow.png" />
+				</Button.Content>
+			</Button>
+		</Grid>
+		<GroupBox Grid.Row="1" Grid.Column="1" Header="Dome State" Margin="8,0,4,0" Padding="0" VerticalAlignment="Top" Height="Auto" Width="238" Foreground="{DynamicResource NormalTextBrush}">
+			<Grid Margin="0,4" HorizontalAlignment="Center" VerticalAlignment="Top" Height="Auto">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="18"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" MinWidth="60" />
+					<ColumnDefinition Width="Auto" MinWidth="60" />
+				</Grid.ColumnDefinitions>
+				<Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Style="{StaticResource StateValue}" 
+								   Content="{Binding Status.Connected, Converter={StaticResource BoolConnectConverter}, FallbackValue='Not Connected'  }" />
+				<CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="Slaved To Telescope" Margin="6,0" Foreground="{DynamicResource NormalTextBrush}" 
+                          HorizontalAlignment="Left" VerticalAlignment="Center"
+						  IsChecked="{Binding IsSlaved}"
+						  Command="{Binding SlaveToScopeCommand}"
+						  CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}" />
+				<Label Grid.Row="2" Grid.Column="0" Content="Shutter Position:" Style="{StaticResource StateLabel}" />
+				<Label Grid.Row="2" Grid.Column="1" Style="{StaticResource StateValue}" 
+					   Content="{Binding Status.ShutterPosition}" />
+
+				<Label Grid.Row="3" Grid.Column="0" Content="Azimuth:" Style="{StaticResource StateLabel}" />
+                <Label Grid.Row="3" Grid.Column="1" Style="{StaticResource StateValue}">
+                    <Label.Content>
+                        <TextBlock Text="{Binding Status.Azimuth, StringFormat=F1, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                    </Label.Content>
+                </Label>
+
+                <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+					<Label Content="Slewing" Foreground="{DynamicResource EmphasisTextBrush}" VerticalAlignment="Center" Margin="3,0" Padding="0" 
+									   Visibility="{Binding IsSlewing, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolVisConverter},ConverterParameter={x:Static Visibility.Hidden}, FallbackValue=Hidden}" />
+					<Label Content="Parking" Foreground="{DynamicResource EmphasisTextBrush}"  VerticalAlignment="Center" Margin="3,0" Padding="0" 
+									   Visibility="{Binding Status.ParkingState, Converter={StaticResource ParkingStateVisConverter}, ConverterParameter={x:Static local:ParkingStateEnum.ParkInProgress}, FallbackValue=Hidden}" />
+					<Label Content="Finding Home" Foreground="{DynamicResource EmphasisTextBrush}" VerticalAlignment="Center" Margin="3,0" Padding="0" 
+									   Visibility="{Binding Status.HomingState, Converter={StaticResource HomingStateVisConverter}, ConverterParameter={x:Static local:HomingStateEnum.HomingInProgress}, FallbackValue=Hidden}" />
+
+				</StackPanel>
+			</Grid>
+		</GroupBox>
+		<Expander Name="_motionExpander" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="Direct Motion" Foreground="{DynamicResource NormalTextBrush}" Margin="6,2"
+                      Template="{DynamicResource StretchyExpanderTemplate}" Expanded="Expander_Expanded">
+			<GroupBox Header="Go To Azimuth" HorizontalAlignment="Left" Margin="0" Height="Auto" Width="Auto">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+					<StackPanel Grid.Row="0" Orientation="Horizontal">
+						<Label Content="Azimuth:" Style="{StaticResource StateLabel}"/>
+						<local:DoubleEntryBox Minimum="0" Maximum="360" IsMaximumInclusive="False" Margin="3,6"
+											  Height="24" Width="60" VerticalAlignment="Center"
+											  Text="{Binding DirectTargetAzimuth, StringFormat=F1, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+						<Button Height="50" Width="50" Content="Go To" Style="{StaticResource CircleButton}"
+									Command="{Binding GotoDirectAzimuthCommand}" />
+						<Button Height="50" Width="50" Style="{StaticResource CircleButton}"
+								Command="{Binding FindHomeCommand}">
+							<Button.Content>
+								<TextBlock TextAlignment="Center" TextWrapping="Wrap">
+										Go To<LineBreak/>Home
+								</TextBlock>
+							</Button.Content>
+						</Button>
+					</StackPanel>
+				</Grid>
+			</GroupBox>
+		</Expander>
+		<Expander Name="_otherActionsExpander" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Header="Other Actions" Foreground="{DynamicResource NormalTextBrush}" Margin="6,0"                      
+				 Template="{DynamicResource StretchyExpanderTemplate}" Expanded="Expander_Expanded">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" MinHeight="20" />
+					<RowDefinition Height="Auto" MinHeight="20"/>
+					<RowDefinition Height="Auto" MinHeight="20"/>
+				</Grid.RowDefinitions>
+				<CheckBox Grid.Row="0" Content="Use POTH Compatible Slaving Calculation" Foreground="{DynamicResource NormalTextBrush}" Margin="4,4,0,0" 
+							  IsChecked="{Binding UsePOTHSlaveCalculation}"/>
+				<StackPanel Grid.Row="1" Orientation="Horizontal" Margin="6,0">
+					<Label Content="Dome Azimuth Adjustment:" Style="{StaticResource StateLabel}" VerticalAlignment="Center" />
+					<Slider Width="100" Minimum="-20" Maximum="20" TickFrequency="0.5" IsSnapToTickEnabled="True"
+							Value="{Binding DomeAzimuthAdjustment}" />
+                    <Label Style="{StaticResource StateValue}">
+                        <Label.Content>
+                            <TextBlock Text="{Binding DomeAzimuthAdjustment, FallbackValue=0, StringFormat=F1, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                        </Label.Content>
+                    </Label>
+                </StackPanel>
+				<GroupBox Grid.Row="2" Header="Sync Azimuth" HorizontalAlignment="Left" Width="238" Margin="8,-2,0,0" Grid.ColumnSpan="2">
+					<StackPanel Grid.Row="1" Orientation="Horizontal">
+						<Label Content="Azimuth:" Style="{StaticResource StateLabel}" />
+						<local:DoubleEntryBox Minimum="0" Maximum="360" IsMaximumInclusive="False" Margin="6,1"
+											  Height="22" Width="80" VerticalAlignment="Center"
+											  Text="{Binding SyncTargetAzimuth, StringFormat=F1, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+						<Button Content="Sync" Height="34" Width="34" Style="{StaticResource CircleButton}" Margin="0,-2,0,0"
+									Command="{Binding SyncAzimuthCommand}"/>
+					</StackPanel>
+				</GroupBox>
+			</Grid>
+		</Expander>
+	</Grid>
+</UserControl>

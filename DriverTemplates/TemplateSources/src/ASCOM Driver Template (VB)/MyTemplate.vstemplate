@@ -13,12 +13,17 @@
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
     <Icon>__TemplateIcon.ico</Icon>
+	<LanguageTag>visualbasic</LanguageTag>
+    <PlatformTag>windows</PlatformTag>
+    <ProjectTypeTag>desktop</ProjectTypeTag>
+    <ProjectTypeTag>ASCOM</ProjectTypeTag>
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="ASCOM Device Driver.vbproj" File="ASCOM Device Driver VB.vbproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="app.config">app.config</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.png">ASCOM.png</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="DeviceCamera.vb">DeviceCamera.vb</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="DeviceCoverCalibrator.vb">DeviceCoverCalibrator.vb</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="DeviceDome.vb">DeviceDome.vb</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="DeviceFilterWheel.vb">DeviceFilterWheel.vb</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="DeviceFocuser.vb">DeviceFocuser.vb</ProjectItem>

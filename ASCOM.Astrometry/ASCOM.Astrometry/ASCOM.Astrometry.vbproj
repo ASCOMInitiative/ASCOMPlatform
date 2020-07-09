@@ -228,7 +228,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="TaskScheduler">
-      <Version>2.8.1</Version>
+      <Version>2.8.18</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

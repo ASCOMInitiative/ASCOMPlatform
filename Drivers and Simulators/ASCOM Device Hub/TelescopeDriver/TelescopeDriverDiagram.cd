@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ASCOM.DeviceHub.Telescope" Collapsed="true">
+    <Position X="1.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>xAEAAQCcinFs0OYJmArc0EaBAIJMTCIQQIIIKwIgCGY=</HashCode>
+      <FileName>TelescopeDriver.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="TelescopeManager" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ASCOM.DeviceHub.DriverSetupDialogView" Collapsed="true">
+    <Position X="4.25" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAQAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DriverSetupDialogView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ASCOM.DeviceHub.DriverSetupDialogViewModel" Collapsed="true">
+    <Position X="6.75" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAGAAgEIgEAQAAAAgAAAgABAAAIAAAAAAA=</HashCode>
+      <FileName>DriverSetupDialogViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ASCOM.DeviceHub.TelescopeManager" Collapsed="true">
+    <Position X="1" Y="1.75" Width="2.25" />
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="Service" />
+    </ShowAsAssociation>
+    <Lollipop Position="1.949" />
+  </Class>
+  <Class Name="ASCOM.DeviceHub.TelescopeService" Collapsed="true">
+    <Position X="1" Y="4.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.958" />
+  </Class>
+  <Interface Name="ASCOM.DeviceHub.ITelescopeService" Collapsed="true">
+    <Position X="1.25" Y="3" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

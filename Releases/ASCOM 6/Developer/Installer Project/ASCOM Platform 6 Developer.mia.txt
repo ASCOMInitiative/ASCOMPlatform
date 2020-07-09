@@ -26,6 +26,16 @@ end
 Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$\ASCOM" (WAIT)
  
 [DEFINE REGION: Check Application Requirements]
+Get System Setting Administrator Rights into CHECKSYSTEM
+if Variable CHECKSYSTEM not Equals TRUE
+  MessageBox: $TITLE$ Setup Error, This product requires at least Administrator Privileges.$NEWLINE$$NEWLINE$Setup cannot continue.
+  Terminate Installation
+end
+Get System Setting Windows 7 into CHECKSYSTEM
+if Variable CHECKSYSTEM not Equals TRUE
+  MessageBox: $TITLE$ Setup Error, This product requires at least Windows 7.$NEWLINE$$NEWLINE$Setup cannot continue.
+  Terminate Installation
+end
 [END REGION]
  
 [DEFINE REGION: Check/Install Application Pre-Requisites]
@@ -127,6 +137,11 @@ Get Folder Location WWW->WWWRoot into WWWROOTDIR
 Get Folder Location System->Profiles Directory into USERPROFILE
  
 [END REGION]
+ 
+Comment: Set install directory and start menu folder
+Set Variable TARGETDIR to $PROGRAMFILES$ASCOM\Platform 6 Developer Components
+Set Variable STARTMENU to ASCOM Platform 6
+ 
 Comment: Create the start of the installation log
 Write into Text File $SETUPLOG$ from Value $TITLE$ v$VERSION$ (at end of file)
 Write into Text File $SETUPLOG$ from Value Installed $DATE$ $TIME$ (at end of file)
@@ -154,13 +169,12 @@ Write into Text File $SETUPLOG$ from Value Maintenance: $MAINTENANCE$, Recommend
 Write into Text File $SETUPLOG$ from Value ShortcutFiles: $SHORTCUTFILES$ (at end of file)
 Write into Text File $SETUPLOG$ from Value ShortcutFilesAll: $SHORTCUTFILESALL$ (at end of file)
 Write into Text File $SETUPLOG$ from Value DesktopDir: $DESKTOPDIR$ (at end of file)
+Write into Text File $SETUPLOG$ from Value DocumentsDir: $MYDOCUMENTS$ (at end of file)
 Write into Text File $SETUPLOG$ from Value AllUsers: $ALLUSERS$ (at end of file)
 Write into Text File $SETUPLOG$ from Value Target Directory: $TARGETDIR$ (at end of file)
+Write into Text File $SETUPLOG$ from Value Start Menu Directory: $STARTMENU$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
  
-Comment: Set install directory and start menu folder
-Set Variable TARGETDIR to $PROGRAMFILES$ASCOM\Platform 6 Developer Components
-Set Variable STARTMENU to ASCOM Platform 6
 Set Variable MYPROGRESS to 5
  
 [DEFINE REGION: Setup User Interview]
@@ -377,8 +391,8 @@ else
     Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $TARGETDIR$\Components\Platform6
     Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml to $TARGETDIR$\Components\Platform6
     Set Variable PROGRESS to 40
-    Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform6
-    Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.xml to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.xml to $TARGETDIR$\Components\Platform6
     Comment: Platform 5.5 references
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Astrometry.dll to $TARGETDIR$\Components\Platform55\
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Astrometry.xml to $TARGETDIR$\Components\Platform55\
@@ -522,11 +536,13 @@ else
     Comment: Install templates
     Write into Text File $SETUPLOG$ from Value Installing templates (at end of file)
     Set Variable MYPROGRESS to 75
+    Comment: Ensure that a VS2019 folder exists, if VS does not create it then the template installer will fail to install the templates
+    Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$\Visual Studio 2019\Templates\ProjectTemplates" (WAIT)
     Run Program $SUPPORTDIR$\InstallTemplates.exe  (WAIT, get result into variable RC)
     Set Variable MYPROGRESS to 90
     Write into Text File $SETUPLOG$ from Value Finished installing new templates - Return Code: $RC$ (at end of file)
     if Variable RC not Equals 0
-      MessageBox: Install Templates, An error has occured during template installation. $NEWLINE$$NEWLINE$Please report this on the ASCOM-Talk Yahoo group.
+      MessageBox: Install Templates, An error has occured during template installation, some templates may not have installed correctly. $NEWLINE$$NEWLINE$Please report this on the Groups.Io ASCOM Developer forum.
     end
   end
   Set Variable MYPROGRESS to 100

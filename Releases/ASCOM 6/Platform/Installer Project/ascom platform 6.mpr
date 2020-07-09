@@ -1290,7 +1290,167 @@ $
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1864,23 +2024,23 @@ $
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 6.4 SP1
+ASCOM Platform 6.5
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {A6BBF69E-978B-43BE-B8DF-21EFC599A93A}
-6.4.9999.9999
+6.5.9999.9999
 English
-ASCOM Platform 6.4 SP1
-ASCOM Platform 6.4 SP1 Installation
+ASCOM Platform 6.5
+ASCOM Platform 6.5 Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{B5D88F33-E09D-46D7-BD1C-408D86EF2A73}
+{87F66D35-27C5-4E4C-8ADB-61B8A18D214B}
 ASCOM Initiative
 ASCOM Initiative
-http://tech.groups.yahoo.com/group/ASCOM-Talk
-http://ascom-standards.org/Downloads/Index.htm
-Copyright � 1998-2018, The ASCOM Initiative. All rights reserved. 
+https://ascomtalk.groups.io/g/Help
+https://ascom-standards.org/Downloads/Index.htm
+Copyright � 1998-2020, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform64
+ASCOMPlatform65
 TRUE
 FALSE
 
@@ -1905,11 +2065,11 @@ FALSE
 checknet351.mia
 checkmsi31.mia
 setupmsi31.mia
-checknet4client_x86.mia
 checkvc1410_25017_x86.mia
 setupvc1410_25017_x86.mia
 checkvc1410_25017_x64.mia
 setupvc1410_25017_x64.mia
+checknet4.8_x86 .mia
 $
 FALSE
 

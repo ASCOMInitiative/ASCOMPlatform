@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -13,8 +13,9 @@
     <AssemblyName>MigrationSupport</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,6 +25,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>MigrationSupport.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>Full</DebugType>
@@ -36,6 +38,7 @@
     <DebugSymbols>true</DebugSymbols>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>..\..\..\..\Ascom.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -72,6 +75,7 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -90,6 +94,7 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -112,6 +117,15 @@
   <ItemGroup>
     <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\AllUsersFileSystemProvider.vb">
       <Link>AllUsersFileSystemProvider.vb</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\AlpacaSupport\Entity Classes\AlpacaDevice.vb">
+      <Link>Entity Classes\AlpacaDevice.vb</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\AlpacaSupport\Entity Classes\AscomDevice.vb">
+      <Link>Entity Classes\AscomDevice.vb</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\AlpacaSupport\Entity Classes\ConfiguredDevice.vb">
+      <Link>Entity Classes\ConfiguredDevice.vb</Link>
     </Compile>
     <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOMProfile.vb">
       <Link>ASCOMProfile.vb</Link>
@@ -143,9 +157,6 @@
     <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\Serial.vb">
       <Link>Serial.vb</Link>
     </Compile>
-    <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\TraceLogger.vb">
-      <Link>TraceLogger.vb</Link>
-    </Compile>
     <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\VB6Support\VB6COMErrors.vb">
       <Link>VB6COMErrors.vb</Link>
     </Compile>
@@ -170,6 +181,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="TraceLogger.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">

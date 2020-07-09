@@ -11,8 +11,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("ASCOM Device Interfaces")> 
 <Assembly: AssemblyDescription("ASCOM Device Interfaces for Platform 6")> 
 <Assembly: AssemblyCompany("ASCOM")> 
-<Assembly: AssemblyProduct("ASCOM.DeviceInterfaces.Platform6")> 
-<Assembly: AssemblyCopyright("Copyright © ASCOM 2010, 2014")> 
+<Assembly: AssemblyProduct("ASCOM.DeviceInterfaces.Platform6")>
+<Assembly: AssemblyCopyright("Copyright © ASCOM 2020")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)> 

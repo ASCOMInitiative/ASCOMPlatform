@@ -36,6 +36,7 @@ namespace ASCOM.Controls
     ///    an <see cref = "AnnunciatorPanel" />) and is not directly settable by the user.
     ///  </para>
     ///</summary>
+    [Obsolete("An improved version of this class is available as a NuGet package at https://www.nuget.org/packages/TA.WinForms.Controls/")]
     public sealed class Annunciator : Label, ICadencedControl
     {
         /// <summary>

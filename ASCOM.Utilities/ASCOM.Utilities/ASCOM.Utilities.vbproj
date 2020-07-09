@@ -69,7 +69,7 @@
     <NoWarn>42017,42018,42019,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>Full</DebugType>
     <RegisterForComInterop>false</RegisterForComInterop>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <WarningsAsErrors>41999,42016,42020,42021,42022</WarningsAsErrors>
     <CodeAnalysisRuleSet>..\..\Ascom.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
@@ -133,7 +133,37 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AllUsersFileSystemProvider.vb" />
+    <Compile Include="AlpacaSupport\Entity Classes\AlpacaDeviceDescription.vb" />
+    <Compile Include="AlpacaSupport\JSON Response Classes\AlpacaConfiguredDevicesResponse.vb" />
+    <Compile Include="AlpacaSupport\JSON Response Classes\AlpacaDescriptionResponse.vb" />
+    <Compile Include="AlpacaSupport\Entity Classes\AlpacaDevice.vb" />
+    <Compile Include="AlpacaSupport\AlpacaDiscovery.vb" />
+    <Compile Include="AlpacaSupport\JSON Response Classes\AlpacaDiscoveryResponse.vb" />
+    <Compile Include="AlpacaSupport\Entity Classes\AscomDevice.vb" />
+    <Compile Include="AlpacaSupport\Entity Classes\ConfiguredDevice.vb" />
+    <Compile Include="AlpacaSupport\Constants.vb" />
+    <Compile Include="AlpacaSupport\Entity Classes\DnsResponse.vb" />
+    <Compile Include="AlpacaSupport\Finder.vb" />
+    <Compile Include="AlpacaSupport\JSON Response Classes\IntArray1DResponse.vb" />
+    <Compile Include="AlpacaSupport\JSON Response Classes\RestResponseBase.vb" />
+    <Compile Include="AlpacaSupport\WebClient.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ASCOMProfile.vb" />
+    <Compile Include="CheckedMessageBox.Designer.vb">
+      <DependentUpon>CheckedMessageBox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CheckedMessageBox.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChooserAlpacaConfigurationForm.Designer.vb">
+      <DependentUpon>ChooserAlpacaConfigurationForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ChooserAlpacaConfigurationForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChooserCustomToolStripRenderer.vb" />
+    <Compile Include="ChooserItem.vb" />
     <Compile Include="Enums.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="..\..\AssemblyVersionInfo.vb">
@@ -185,6 +215,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="XMLAccess.vb" />
+    <EmbeddedResource Include="CheckedMessageBox.resx">
+      <DependentUpon>CheckedMessageBox.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChooserAlpacaConfigurationForm.resx">
+      <DependentUpon>ChooserAlpacaConfigurationForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ChooserForm.resX">
       <DependentUpon>ChooserForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -242,12 +278,17 @@
     <Content Include="NamespaceDocumentation.xml">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Resources\ASCOMAlpacaMidRes.jpg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
       <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
       <Name>ASCOM.Exceptions</Name>
       <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\ASCOM.Newtonsoft.Json\ASCOM.Newtonsoft.Json.csproj">
+      <Project>{febf12e1-a8cf-4086-abcd-9ab0fda69bc4}</Project>
+      <Name>ASCOM.Newtonsoft.Json</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />

@@ -9,10 +9,11 @@ Public Class VersionForm
         Try
 
             Using Profile As New RegistryAccess
-                ProfileKey = Profile.OpenSubKey(Registry.LocalMachine, "SOFTWARE\ASCOM\Platform", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                ProfileKey = Profile.OpenSubKey3264(Registry.LocalMachine, "SOFTWARE\ASCOM\Platform", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
 
                 NameLbl.Text = ProfileKey.GetValue("Platform Name", "Unknown Name")
                 Version.Text = ProfileKey.GetValue("Platform Version", "Unknown Version")
+                ProductVersion.Text = Application.ProductVersion
 
                 ProfileKey.Close()
             End Using

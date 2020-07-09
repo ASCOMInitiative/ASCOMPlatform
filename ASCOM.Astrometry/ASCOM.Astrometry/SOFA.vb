@@ -40,10 +40,10 @@ Namespace SOFA
         Private Const SOFA_DLL_LOCATION As String = "\ASCOM\Astrometry\" 'This is appended to the Common Files path so that the calling application can dind the SOFA DLLs
 
         ' Release and revision constants
-        Private Const SOFA_RELEASE_NUMBER As Integer = 14
-        Private Const SOFA_ISSUE_DATE As String = "2018-02-30"
+        Private Const SOFA_RELEASE_NUMBER As Integer = 15
+        Private Const SOFA_ISSUE_DATE As String = "2019-07-22"
         Private Const SOFA_REVISION_NUMBER As Integer = 0 ' Not presented in the interface, maintained here for reference
-        Private Const SOFA_REVISION_DATE As String = "2018-02-30"
+        Private Const SOFA_REVISION_DATE As String = "2019-07-22"
 
         Private Const MAXIMUM_NUMBER_OF_UPDATED_LEAP_SECOPND_VALUES As Integer = 100
 
@@ -54,7 +54,7 @@ Namespace SOFA
         Private Parameters As EarthRotationParameters
 
         <StructLayout(LayoutKind.Sequential)>
-        Structure LeapSecondDataStruct
+        Friend Structure LeapSecondDataStruct
             Dim Year As Integer
             Dim Month As Integer
             Dim DelAt As Double
@@ -1861,7 +1861,7 @@ Namespace SOFA
         ' Get the built-in list of leap seconds from the SOFA DLL, which is the master data for the whole Platform
         ' This method is static so that it can be called without having to fully initialise the SOFA DLL which uses an instance of the EarthRotationParameters 
         ' object leading to a circular reference of EarthRotationParameters calling SOFA, which calls EarthRotationParameters and so on ad infinitum.
-        Public Shared Function BuiltInLeapSeconds() As SortedList(Of Double, Double)
+        Friend Shared Function BuiltInLeapSeconds() As SortedList(Of Double, Double)
             Dim LeapSecondArray(100) As LeapSecondDataStruct, LeapSecondList As SortedList(Of Double, Double)
             Dim NumberOfRecords As Short, UpdatedDataInt As Integer, JulianDate As Double
 

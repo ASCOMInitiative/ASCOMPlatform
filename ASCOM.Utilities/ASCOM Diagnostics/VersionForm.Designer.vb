@@ -28,6 +28,8 @@ Partial Class VersionForm
         Me.lblPlatformVersion = New System.Windows.Forms.Label()
         Me.NameLbl = New System.Windows.Forms.Label()
         Me.Version = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.ProductVersion = New System.Windows.Forms.Label()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -47,7 +49,7 @@ Partial Class VersionForm
         Me.lblPlatformName.AutoSize = True
         Me.lblPlatformName.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblPlatformName.ForeColor = System.Drawing.SystemColors.HotTrack
-        Me.lblPlatformName.Location = New System.Drawing.Point(140, 126)
+        Me.lblPlatformName.Location = New System.Drawing.Point(137, 117)
         Me.lblPlatformName.Name = "lblPlatformName"
         Me.lblPlatformName.Size = New System.Drawing.Size(116, 18)
         Me.lblPlatformName.TabIndex = 1
@@ -58,7 +60,7 @@ Partial Class VersionForm
         Me.lblPlatformVersion.AutoSize = True
         Me.lblPlatformVersion.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblPlatformVersion.ForeColor = System.Drawing.SystemColors.HotTrack
-        Me.lblPlatformVersion.Location = New System.Drawing.Point(128, 163)
+        Me.lblPlatformVersion.Location = New System.Drawing.Point(125, 154)
         Me.lblPlatformVersion.Name = "lblPlatformVersion"
         Me.lblPlatformVersion.Size = New System.Drawing.Size(127, 18)
         Me.lblPlatformVersion.TabIndex = 3
@@ -69,7 +71,7 @@ Partial Class VersionForm
         Me.NameLbl.AutoSize = True
         Me.NameLbl.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.NameLbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.NameLbl.Location = New System.Drawing.Point(260, 126)
+        Me.NameLbl.Location = New System.Drawing.Point(257, 117)
         Me.NameLbl.Name = "NameLbl"
         Me.NameLbl.Size = New System.Drawing.Size(53, 19)
         Me.NameLbl.TabIndex = 4
@@ -80,17 +82,41 @@ Partial Class VersionForm
         Me.Version.AutoSize = True
         Me.Version.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Version.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Version.Location = New System.Drawing.Point(260, 163)
+        Me.Version.Location = New System.Drawing.Point(257, 154)
         Me.Version.Name = "Version"
         Me.Version.Size = New System.Drawing.Size(67, 19)
         Me.Version.TabIndex = 5
         Me.Version.Text = "Version"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.ForeColor = System.Drawing.SystemColors.HotTrack
+        Me.Label1.Location = New System.Drawing.Point(33, 267)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(84, 18)
+        Me.Label1.TabIndex = 6
+        Me.Label1.Text = "Build SHA:"
+        '
+        'ProductVersion
+        '
+        Me.ProductVersion.AutoSize = True
+        Me.ProductVersion.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ProductVersion.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.ProductVersion.Location = New System.Drawing.Point(123, 267)
+        Me.ProductVersion.Name = "ProductVersion"
+        Me.ProductVersion.Size = New System.Drawing.Size(357, 19)
+        Me.ProductVersion.TabIndex = 7
+        Me.ProductVersion.Text = "a6231f4c20c7a241acf288d1655c65bf7adcaabf"
         '
         'VersionForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(520, 295)
+        Me.Controls.Add(Me.ProductVersion)
+        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Version)
         Me.Controls.Add(Me.NameLbl)
         Me.Controls.Add(Me.lblPlatformVersion)
@@ -109,4 +135,6 @@ Partial Class VersionForm
     Friend WithEvents lblPlatformVersion As System.Windows.Forms.Label
     Friend WithEvents NameLbl As System.Windows.Forms.Label
     Friend WithEvents Version As System.Windows.Forms.Label
+    Friend WithEvents Label1 As Label
+    Friend WithEvents ProductVersion As Label
 End Class

@@ -9,10 +9,10 @@ using System.Resources;
 [assembly: AssemblyTitle("ASCOM TelescopeSimulator server")]
 [assembly: AssemblyDescription("ASCOM multi-interface server for TelescopeSimulator")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("Copyright © 2009, Robert Turner, Copyright © ASCOM Initiative 2014")]
+[assembly: AssemblyCopyright("Copyright © 2009, Robert Turner, Copyright © ASCOM Initiative 2020")]
 
 [assembly: ComVisibleAttribute(false)]
 
 // AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
-[assembly: AssemblyVersion("6.4.0.0")]
+[assembly: AssemblyVersion("6.5.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("en")]

@@ -33,7 +33,7 @@ namespace ASCOM.Simulator
     // Your driver's ID is ASCOM.Telescope.Telescope
     //
     // The Guid attribute sets the CLSID for ASCOM.Telescope.Telescope
-    // The ClassInterface/None addribute prevents an empty interface called
+    // The ClassInterface/None attribute prevents an empty interface called
     // _Telescope from being created and used as the [default] interface
     //
 
@@ -494,8 +494,10 @@ namespace ASCOM.Simulator
             }
             set
             {
-                SharedResources.TrafficLine(SharedResources.MessageType.Gets, "DeclinationRate:-> " + value);
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "DeclinationRate:-> ");
+                CheckCapability(TelescopeHardware.CanSetEquatorialRates, "DeclinationRate", true);
                 TelescopeHardware.DeclinationRate = value;
+                SharedResources.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -513,6 +515,7 @@ namespace ASCOM.Simulator
             SharedResources.TrafficStart(SharedResources.MessageType.Other, "DestinationSideOfPier: ");
             CheckVersionOne("DestinationSideOfPier");
             SharedResources.TrafficStart(string.Format(CultureInfo.CurrentCulture, "Ra {0}, Dec {1} - ", RightAscension, Declination));
+            CheckCapability(TelescopeHardware.CanDestinationSideofPier, "DestinationSideOfPier");
 
             PierSide ps = TelescopeHardware.SideOfPierRaDec(RightAscension, Declination);
             SharedResources.TrafficEnd(ps.ToString());
@@ -705,10 +708,10 @@ namespace ASCOM.Simulator
             switch (Axis)
             {
                 case ASCOM.DeviceInterface.TelescopeAxes.axisPrimary:
-                    TelescopeHardware.rateAxes.X = Rate;
+                    TelescopeHardware.rateMoveAxes.X = Rate;
                     break;
                 case ASCOM.DeviceInterface.TelescopeAxes.axisSecondary:
-                    TelescopeHardware.rateAxes.Y = Rate;
+                    TelescopeHardware.rateMoveAxes.Y = Rate;
                     break;
                 case ASCOM.DeviceInterface.TelescopeAxes.axisTertiary:
                     // not implemented
@@ -838,12 +841,12 @@ namespace ASCOM.Simulator
         {
             get
             {
-                SharedResources.TrafficLine(SharedResources.MessageType.Gets, "RightAscensionRate->: (done)");
+                SharedResources.TrafficLine(SharedResources.MessageType.Gets, "RightAscensionRate: " + TelescopeHardware.RightAscensionRate);
                 return TelescopeHardware.RightAscensionRate;
             }
             set
             {
-                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "RightAscensionRate =- ");
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "RightAscensionRate:-> ");
                 CheckCapability(TelescopeHardware.CanSetEquatorialRates, "RightAscensionRate", true);
                 TelescopeHardware.RightAscensionRate = value;
                 SharedResources.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
@@ -881,6 +884,7 @@ namespace ASCOM.Simulator
             get
             {
                 SharedResources.TrafficLine(SharedResources.MessageType.Polls, string.Format("SideOfPier: {0}", TelescopeHardware.SideOfPier));
+                CheckCapability(TelescopeHardware.CanPierSide, "SideOfPier", false);
                 return TelescopeHardware.SideOfPier;
             }
             set
@@ -1449,7 +1453,7 @@ namespace ASCOM.Simulator
     // for AxisRates. You do not need to change this class.
     //
     // The Guid attribute sets the CLSID for ASCOM.Telescope.Rate
-    // The ClassInterface/None addribute prevents an empty interface called
+    // The ClassInterface/None attribute prevents an empty interface called
     // _Rate from being created and used as the [default] interface
     //
     [Guid("d0acdb0f-9c7e-4c53-abb7-576e9f2b8225")]
@@ -1513,7 +1517,7 @@ namespace ASCOM.Simulator
     // this polymorphism. 
     //
     // The Guid attribute sets the CLSID for ASCOM.Telescope.AxisRates
-    // The ClassInterface/None addribute prevents an empty interface called
+    // The ClassInterface/None attribute prevents an empty interface called
     // _AxisRates from being created and used as the [default] interface
     //
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix"), Guid("af5510b9-3108-4237-83da-ae70524aab7d"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
@@ -1635,7 +1639,7 @@ namespace ASCOM.Simulator
     // this polymorphism. 
     //
     // The Guid attribute sets the CLSID for ASCOM.Telescope.TrackingRates
-    // The ClassInterface/None addribute prevents an empty interface called
+    // The ClassInterface/None attribute prevents an empty interface called
     // _TrackingRates from being created and used as the [default] interface
     //
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix"), Guid("4bf5c72a-8491-49af-8668-626eac765e91")]

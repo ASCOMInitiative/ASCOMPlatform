@@ -13,7 +13,11 @@
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
     <Icon>CSharpASCOM.ico</Icon>
-  </TemplateData>
+ 	<LanguageTag>csharp</LanguageTag>
+    <PlatformTag>windows</PlatformTag>
+    <ProjectTypeTag>desktop</ProjectTypeTag>
+    <ProjectTypeTag>ASCOM</ProjectTypeTag>
+ </TemplateData>
   <TemplateContent>
     <Project TargetFileName="ASCOM Test Console App (CS).csproj" File="ASCOM Test Console App (CS).csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="app.config">app.config</ProjectItem>
