@@ -31,7 +31,6 @@ namespace ASCOM.Simulator
 
         // IRotatorV3 variables
         private static float syncOffset; // Degrees - Offset between the mechanical instrumental position and the synced position 
-        private static bool canSync;
 
         // State variables
         private static bool connected;
@@ -70,17 +69,7 @@ namespace ASCOM.Simulator
                 reverse = Convert.ToBoolean(profile.GetValue(progID, "Reverse", "", bool.FalseString));
 
                 syncOffset = Convert.ToSingle(profile.GetValue(progID, "SyncOffset", "", "0.0"), CultureInfo.InvariantCulture);
-                canSync = Convert.ToBoolean(profile.GetValue(progID, "CanSync", "", bool.TrueString));
-
-                // Initialise the target position
-                if (canSync) // Rotator can sync so take account of the sync offset
-                {
-                    targetMechanicalPosition = RangeAngle(mechanicalPosition + syncOffset, 0.0F, 360.0F); ; // Initialise the target position to the current synced position
-                }
-                else // Rotator can't sync so just use the mechanical position
-                {
-                    targetMechanicalPosition = mechanicalPosition; // Initialise the target position to the current mechanical position value
-                }
+                targetMechanicalPosition = RangeAngle(mechanicalPosition + syncOffset, 0.0F, 360.0F); ; // Initialise the target position to the current synced position
             }
         }
 
@@ -96,7 +85,6 @@ namespace ASCOM.Simulator
                 profile.WriteValue(progID, "Reverse", reverse.ToString(), "");
 
                 profile.WriteValue(progID, "SyncOffset", syncOffset.ToString(CultureInfo.InvariantCulture), "");
-                profile.WriteValue(progID, "CanSync", canSync.ToString(), "");
             }
         }
 
@@ -173,7 +161,6 @@ namespace ASCOM.Simulator
                 form.Reverse = Reverse;
                 form.UpdateInterval = updateInterval;
                 form.SyncOffset = syncOffset;
-                form.CanSync = canSync;
                 if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     Reverse = form.Reverse;
@@ -181,7 +168,6 @@ namespace ASCOM.Simulator
                     RotationRate = form.RotationRate;
                     syncOffset = form.SyncOffset;
                     //syncOffset = RangeAngle(syncOffset, 0.0F, 360.0F);
-                    canSync = form.CanSync;
                     WriteConfiguration(); // Added to force persistence after values are changed in the setup dialogue
                 }
             }
@@ -194,14 +180,7 @@ namespace ASCOM.Simulator
                 CheckConnected();
                 lock (syncLockObject)
                 {
-                    if (canSync) // Rotator can sync so return the synced position
-                    {
-                        return RangeAngle(mechanicalPosition + syncOffset, 0.0F, 360.0F);
-                    }
-                    else // Rotator can't sync we return the mechanical position
-                    {
-                        return mechanicalPosition;
-                    }
+                    return RangeAngle(mechanicalPosition + syncOffset, 0.0F, 360.0F);
                 }
             }
         }
@@ -213,14 +192,7 @@ namespace ASCOM.Simulator
                 CheckConnected();
                 lock (syncLockObject)
                 {
-                    if (canSync) // Rotator can sync so return the synced target position
-                    {
-                        return RangeAngle(targetMechanicalPosition + syncOffset, 0.0F, 360.0F);
-                    }
-                    else // Rotator can't sync we return the mechanical target position
-                    {
-                        return targetMechanicalPosition;
-                    }
+                    return RangeAngle(targetMechanicalPosition + syncOffset, 0.0F, 360.0F);
                 }
             }
         }
@@ -267,16 +239,8 @@ namespace ASCOM.Simulator
             CheckAngle(position);
             lock (syncLockObject)
             {
-                if (canSync) // Rotator can sync so we move the mechanical rotator position to the value that corresponds to the supplied sky position
-                {
-                    targetMechanicalPosition = RangeAngle(position - syncOffset, 0.0F, 360.0F); // Calculate the mechanical rotator angle from the supplied sky position
-                    isMoving = true;
-                }
-                else // Rotator can't sync so we move the mechanical rotator position to the supplied position
-                {
-                    targetMechanicalPosition = position;
-                    isMoving = true;
-                }
+                targetMechanicalPosition = RangeAngle(position - syncOffset, 0.0F, 360.0F); // Calculate the mechanical rotator angle from the supplied sky position
+                isMoving = true;
             }
         }
 
@@ -291,17 +255,6 @@ namespace ASCOM.Simulator
         }
 
         // IRotatorV3 methods for clients
-        public static bool CanSync
-        {
-            get
-            {
-                return canSync;
-            }
-            set
-            {
-                canSync = value;
-            }
-        }
 
         public static float InstrumentalPosition
         {
@@ -309,20 +262,9 @@ namespace ASCOM.Simulator
             {
                 CheckConnected();
 
-                // Full logic implemented below for clarity even though it is redundant from a coding perspective
-                if (canSync) // Rotator can sync but we still must return the mechanical position
+                lock (syncLockObject)
                 {
-                    lock (syncLockObject)
-                    {
-                        return mechanicalPosition;
-                    }
-                }
-                else // Rotator can't sync so we still need to return the mechanical position
-                {
-                    lock (syncLockObject)
-                    {
-                        return mechanicalPosition;
-                    }
+                    return mechanicalPosition;
                 }
             }
         }
@@ -330,8 +272,6 @@ namespace ASCOM.Simulator
         public static void Sync(float syncPosition)
         {
             CheckConnected();
-
-            if (!canSync) throw new MethodNotImplementedException("Rotator simulator synchronisation is disabled by its configuration.");
 
             CheckAngle(syncPosition);
             lock (syncLockObject)
@@ -347,22 +287,10 @@ namespace ASCOM.Simulator
             CheckAngle(position);
             lock (syncLockObject)
             {
-                // The logic below has been implemented to show the choices, even though it is redundant from a coding perspective
-                if (canSync) // Rotator can sync so we move the rotator's mechanical position to that supplied 
+                lock (syncLockObject)
                 {
-                    lock (syncLockObject)
-                    {
-                        targetMechanicalPosition = position; // Calculate the mechanical rotator angle from the supplied sky position
-                        isMoving = true;
-                    }
-                }
-                else // Rotator can't sync so we move the rotator's mechanical position to that supplied 
-                {
-                    lock (syncLockObject)
-                    {
-                        targetMechanicalPosition = position;
-                        isMoving = true;
-                    }
+                    targetMechanicalPosition = position; // Calculate the mechanical rotator angle from the supplied sky position
+                    isMoving = true;
                 }
             }
         }

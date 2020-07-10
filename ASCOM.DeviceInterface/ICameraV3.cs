@@ -43,7 +43,10 @@ namespace ASCOM.DeviceInterface
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
         /// <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
-        /// <remarks><p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p> </remarks>
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p> 
+        /// <para>The description length must be a maximum of 64 characters so that it can be used in FITS image headers, which are limited to 80 characters including the header name.</para>
+        /// </remarks>
         string Description { get; }
 
         /// <summary>
@@ -426,7 +429,8 @@ namespace ASCOM.DeviceInterface
         /// NumPlanes.  If the application cannot handle multispectral images, it should use just the first plane.</para>
         /// </remarks>
         /// <value>The image array.</value>
-        /// <exception cref=" NotConnectedException">Must throw exception if data unavailable.</exception>
+        /// <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
+        /// <exception cref="InvalidOperationException">If no image data is available.</exception>
         object ImageArray { get; }
 
         /// <summary>
@@ -444,7 +448,8 @@ namespace ASCOM.DeviceInterface
         /// just the first plane.</para>
         /// </remarks>
         /// <value>The image array variant.</value>
-        /// <exception cref=" NotConnectedException">Must throw exception if data unavailable.</exception>
+        /// <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
+        /// <exception cref="InvalidOperationException">If no image data is available.</exception>
         object ImageArrayVariant { get; }
 
         /// <summary>

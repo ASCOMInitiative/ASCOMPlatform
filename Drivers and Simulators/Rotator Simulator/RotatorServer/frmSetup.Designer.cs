@@ -40,7 +40,6 @@ namespace ASCOM.Simulator
             this.label1 = new System.Windows.Forms.Label();
             this.TxtSyncOfffset = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.ChkCanSync = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // cmdOK
@@ -48,7 +47,7 @@ namespace ASCOM.Simulator
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.BackColor = System.Drawing.Color.White;
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(117, 171);
+            this.cmdOK.Location = new System.Drawing.Point(117, 151);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(75, 23);
             this.cmdOK.TabIndex = 0;
@@ -61,7 +60,7 @@ namespace ASCOM.Simulator
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.BackColor = System.Drawing.Color.White;
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(36, 171);
+            this.cmdCancel.Location = new System.Drawing.Point(36, 151);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(75, 23);
             this.cmdCancel.TabIndex = 1;
@@ -162,25 +161,12 @@ namespace ASCOM.Simulator
             this.label3.TabIndex = 10;
             this.label3.Text = "Sync offset:";
             // 
-            // ChkCanSync
-            // 
-            this.ChkCanSync.AutoSize = true;
-            this.ChkCanSync.ForeColor = System.Drawing.Color.White;
-            this.ChkCanSync.Location = new System.Drawing.Point(32, 138);
-            this.ChkCanSync.Name = "ChkCanSync";
-            this.ChkCanSync.Size = new System.Drawing.Size(69, 17);
-            this.ChkCanSync.TabIndex = 13;
-            this.ChkCanSync.Text = "CanSync";
-            this.ChkCanSync.UseVisualStyleBackColor = true;
-            this.ChkCanSync.CheckedChanged += new System.EventHandler(this.ChkCanSync_CheckedChanged);
-            // 
             // frmSetup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(227, 206);
-            this.Controls.Add(this.ChkCanSync);
+            this.ClientSize = new System.Drawing.Size(227, 186);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.TxtSyncOfffset);
             this.Controls.Add(this.label3);
@@ -218,6 +204,5 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox TxtSyncOfffset;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.CheckBox ChkCanSync;
     }
 }

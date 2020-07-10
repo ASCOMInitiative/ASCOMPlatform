@@ -7595,12 +7595,15 @@ Public Class DiagnosticsForm
             FullPath = FPath & FName 'Create full filename from path and simple filename
             If File.Exists(FullPath) Then
                 TL.LogMessage("FileDetails", FullPath)
+
                 'Try to get assembly version info if present
                 Try
                     Ass = Assembly.ReflectionOnlyLoadFrom(FullPath)
                     AssVer = Ass.FullName
                     Framework = Ass.ImageRuntimeVersion
                 Catch ex As FileLoadException ' Deal with possibility that this assembly has already been loaded
+                    TL.LogMessageCrLf("ErrorDiagnostics", $"A FileLoadException was thrown. Fusion log: {vbCrLf}'{ex.FusionLog}'")
+
                     ReflectionAssemblies = AppDomain.CurrentDomain.ReflectionOnlyGetAssemblies() ' Get list of assemblies already loaded to the reflection only context
                     CompareName = Path.GetFileNameWithoutExtension(FName)
                     For Each ReflectionAss As Assembly In ReflectionAssemblies ' Find the assembly already there and get its full name
@@ -7608,12 +7611,12 @@ Public Class DiagnosticsForm
                             AssVer = ReflectionAss.FullName
                         End If
                     Next
+
                     If String.IsNullOrEmpty(AssVer) Then
-                        TL.LogMessage("ErrorDiagnosticsCmp", CompareName)
+                        TL.LogMessage("ErrorDiagnostics", CompareName)
                         For Each ReflectionAss As Assembly In ReflectionAssemblies ' List the assemblies already loaded
                             TL.LogMessage("ErrorDiagnostics", ReflectionAss.FullName)
                         Next
-                        LogException("FileDetails", "FileLoadException: " & ex.ToString)
                     End If
                 Catch ex As BadImageFormatException
                     AssVer = "Not an assembly"

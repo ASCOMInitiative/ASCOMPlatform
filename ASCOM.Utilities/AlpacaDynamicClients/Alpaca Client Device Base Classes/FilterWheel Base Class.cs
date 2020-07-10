@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -189,7 +190,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                string response = string.Format("{0} REMOTE DEVICE: {1}", DriverDisplayName, DynamicClientDriver.Description(clientNumber, client, URIBase, TL));
+                string response = DynamicClientDriver.Description(clientNumber, client, URIBase, TL);
                 TL.LogMessage(clientNumber, "Description", response);
                 return response;
             }
@@ -203,9 +204,8 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                string remoteString = DynamicClientDriver.DriverInfo(clientNumber, client, URIBase, TL);
-                string response = string.Format("{0} Version {1}, REMOTE DEVICE: {2}", DriverDisplayName, version.ToString(), remoteString);
+                string version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
+                string response = $"ASCOM Dynamic Driver v{version} - REMOTE DEVICE: {DynamicClientDriver.DriverInfo(clientNumber, client, URIBase, TL)}";
                 TL.LogMessage(clientNumber, "DriverInfo", response);
                 return response;
             }
@@ -242,8 +242,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                string remoteString = DynamicClientDriver.GetValue<string>(clientNumber, client, URIBase, TL, "Name");
-                string response = string.Format("{0} REMOTE DEVICE: {1}", DriverDisplayName, remoteString);
+                string response = DynamicClientDriver.GetValue<string>(clientNumber, client, URIBase, TL, "Name");
                 TL.LogMessage(clientNumber, "Name", response);
                 return response;
             }

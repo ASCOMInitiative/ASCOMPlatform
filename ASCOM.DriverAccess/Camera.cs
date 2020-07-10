@@ -334,7 +334,8 @@ namespace ASCOM.DriverAccess
         /// NumPlanes.  If the application cannot handle multispectral images, it should use just the first plane.</para>
         /// </remarks>
         /// <value>The image array.</value>
-        /// <exception cref=" NotConnectedException">Must throw exception if data unavailable.</exception>
+        /// <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
+        /// <exception cref="InvalidOperationException">If no image data is available.</exception>
         public object ImageArray
         {
             get { return _memberFactory.CallMember(1, "ImageArray", new Type[] { }, new object[] { }); }
@@ -355,7 +356,8 @@ namespace ASCOM.DriverAccess
         /// just the first plane.</para>
         /// </remarks>
         /// <value>The image array variant.</value>
-        /// <exception cref=" NotConnectedException">Must throw exception if data unavailable.</exception>
+        /// <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
+        /// <exception cref="InvalidOperationException">If no image data is available.</exception>
         public object ImageArrayVariant
         {
             get { return _memberFactory.CallMember(1, "ImageArrayVariant", new Type[] { }, new object[] { }); }

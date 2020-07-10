@@ -98,7 +98,8 @@ namespace ASCOM.DeviceInterface
         /// </exception>
         /// <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
         /// <remarks>
-        /// <p style="color: red;"><b>Must be implemented.</b></p>
+        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p> 
+        /// <para>The description length must be a maximum of 64 characters so that it can be used in FITS image headers, which are limited to 80 characters including the header name.</para>
         /// </remarks>
         string Description { get; }
 

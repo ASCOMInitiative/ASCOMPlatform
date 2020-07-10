@@ -8,6 +8,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Threading
 Imports ASCOM.Utilities
+Imports Newtonsoft.Json.Serialization
 
 Friend Class ChooserForm
     Inherits Form
@@ -934,7 +935,9 @@ Friend Class ChooserForm
                     ' Annotate the device description as configured
                     If (driverProgId.ToLowerInvariant().StartsWith(DRIVER_PROGID_BASE.ToLowerInvariant())) Then ' This is a COM driver for an Alpaca device
                         If AlpacaShowDeviceDetails Then ' Get device details from the Profile and display these
-                            driverName = $"{driverName}    ({driverProgId} ==> {profile.GetValue(driverProgId, PROFILE_VALUE_NAME_IP_ADDRESS, Nothing)}:{profile.GetValue(driverProgId, PROFILE_VALUE_NAME_PORT_NUMBER, Nothing)}/api/v1/{deviceTypeValue}/{profile.GetValue(driverProgId, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER, Nothing)})" ' Annotate as COM to differentiate from Alpaca drivers
+                            driverName = $"{driverName}    ({driverProgId} ==> {profile.GetValue(driverProgId, PROFILE_VALUE_NAME_IP_ADDRESS, Nothing)}:" +
+                                         $"{profile.GetValue(driverProgId, PROFILE_VALUE_NAME_PORT_NUMBER, Nothing)}/api/v1/{deviceTypeValue}/{profile.GetValue(driverProgId, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER, Nothing)}" +
+                                         $") - {profile.GetValue(driverProgId, PROFILE_VALUE_NAME_UNIQUEID)}" ' Annotate as Alpaca Dynamic driver to differentiate from other COM drivers
                         Else ' Just annotate as an Alpaca device
                             driverName = $"{driverName}    (Alpaca)" ' Annotate as an Alpaca device
                         End If
@@ -961,31 +964,32 @@ Friend Class ChooserForm
 
                 ' Render the user interface unresponsive while discovery is underway, except for the Cancel button.
                 SetStateAlpacaDiscovering()
-                Dim discovery As AlpacaDiscovery
-                discovery = New AlpacaDiscovery(TL)
-                TL.LogMessage("DiscoverAlpacaDevices", $"AlpacaDiscovery created")
-                discovery.StartDiscovery(AlpacaNumberOfBroadcasts, 200, AlpacaDiscoveryPort, AlpacaTimeout, AlpacaDnsResolution, AlpacaUseIpV4, AlpacaUseIpV6)
-                TL.LogMessage("DiscoverAlpacaDevices", $"AlpacaDiscovery started")
 
-                ' Keep the UI alive while the discovery is running
-                Do
-                    Threading.Thread.Sleep(10)
-                    Application.DoEvents()
-                Loop Until discovery.DiscoveryComplete
-                TL.LogMessage("DiscoverAlpacaDevices", $"Discovery phase has finished")
+                ' Initiate discovery and wait for it to complete
+                Using discovery As AlpacaDiscovery = New AlpacaDiscovery(TL)
+                    TL.LogMessage("DiscoverAlpacaDevices", $"AlpacaDiscovery created")
+                    discovery.StartDiscovery(AlpacaNumberOfBroadcasts, 200, AlpacaDiscoveryPort, AlpacaTimeout, AlpacaDnsResolution, AlpacaUseIpV4, AlpacaUseIpV6)
+                    TL.LogMessage("DiscoverAlpacaDevices", $"AlpacaDiscovery started")
 
-                TL.LogMessage("DiscoverAlpacaDevices", $"Discovered {discovery.GetAscomDevices("").Count} devices")
+                    ' Keep the UI alive while the discovery is running
+                    Do
+                        Threading.Thread.Sleep(10)
+                        Application.DoEvents()
+                    Loop Until discovery.DiscoveryComplete
+                    TL.LogMessage("DiscoverAlpacaDevices", $"Discovery phase has finished")
 
-                ' List discovered devices to the log
-                For Each ascomDevice As AscomDevice In discovery.GetAscomDevices("")
-                    TL.LogMessage("DiscoverAlpacaDevices", $"FOUND {ascomDevice.AscomDeviceType} {ascomDevice.AscomDeviceName} {ascomDevice.IPEndPoint.ToString()}")
-                Next
+                    TL.LogMessage("DiscoverAlpacaDevices", $"Discovered {discovery.GetAscomDevices("").Count} devices")
 
-                TL.LogMessage("DiscoverAlpacaDevices", $"Discovered {discovery.GetAscomDevices(deviceTypeValue).Count} {deviceTypeValue} devices")
+                    ' List discovered devices to the log
+                    For Each ascomDevice As AscomDevice In discovery.GetAscomDevices("")
+                        TL.LogMessage("DiscoverAlpacaDevices", $"FOUND {ascomDevice.AscomDeviceType} {ascomDevice.AscomDeviceName} {ascomDevice.IPEndPoint.ToString()}")
+                    Next
 
-                ' Get discovered devices of the requested ASCOM device type
-                alpacaDevices = discovery.GetAscomDevices(deviceTypeValue)
-                discovery.Dispose()
+                    TL.LogMessage("DiscoverAlpacaDevices", $"Discovered {discovery.GetAscomDevices(deviceTypeValue).Count} {deviceTypeValue} devices")
+
+                    ' Get discovered devices of the requested ASCOM device type
+                    alpacaDevices = discovery.GetAscomDevices(deviceTypeValue)
+                End Using
 
                 ' Add any Alpaca devices to the list
                 For Each device As AscomDevice In alpacaDevices
