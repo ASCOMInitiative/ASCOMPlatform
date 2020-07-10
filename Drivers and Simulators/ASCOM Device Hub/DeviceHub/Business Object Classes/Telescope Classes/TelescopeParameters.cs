@@ -37,7 +37,7 @@ namespace ASCOM.DeviceHub
 
 			List<TrackingRateItem> temp = new List<TrackingRateItem>();
 
-			TrackingRates rates = (TrackingRates)mgr.TrackingRates;
+			ITrackingRates rates = (ITrackingRates)mgr.TrackingRates;
 
 			if ( rates != null )
 			{

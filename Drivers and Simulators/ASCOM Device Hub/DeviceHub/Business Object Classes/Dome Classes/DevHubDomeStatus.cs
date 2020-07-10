@@ -20,19 +20,22 @@ namespace ASCOM.DeviceHub
 		public DevHubDomeStatus( DomeManager mgr )
 			: base( mgr )
 		{
-			if ( this.ParkingState != ParkingStateEnum.ParkInProgress )
+			if ( mgr.HomingState != HomingStateEnum.HomingInProgress || !Slewing )
+			{
+				HomingState = ( AtHome ) ? HomingStateEnum.IsAtHome : HomingStateEnum.NotAtHome;
+			}
+
+			if ( mgr.ParkingState != ParkingStateEnum.ParkInProgress || !Slewing )
 			{
 				ParkingState = ( AtPark ) ? ParkingStateEnum.IsAtPark : ParkingStateEnum.Unparked;
 			}
-			else
-			{
-				ParkingState = ParkingStateEnum.ParkInProgress;
-			}
-
-			HomingState = this.HomingState;
 
 			ShutterPosition = FormatShutterPosition( mgr );
+
+			LastUpdateTime = DateTime.Now;
 		}
+
+		public DateTime LastUpdateTime { get; private set; }
 
 		#region Change Notification Properties
 
@@ -125,6 +128,8 @@ namespace ASCOM.DeviceHub
 
 			ParkingState = ParkingStateEnum.Unparked;
 			HomingState = HomingStateEnum.NotAtHome;
+
+			LastUpdateTime = DateTime.Now;
 		}
 
 		#endregion Helper Methods

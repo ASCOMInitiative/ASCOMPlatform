@@ -220,9 +220,9 @@ namespace ASCOM.DeviceHub
 		private void ShowSetup()
 		{
 			SetupVm = new SetupViewModel();
-			SetupVm.InitializeCurrentTelescope( TelescopeManager.TelescopeID );
-			SetupVm.InitializeCurrentDome( DomeManager.DomeID );
-			SetupVm.InitializeCurrentFocuser( FocuserManager.FocuserID );
+			SetupVm.InitializeCurrentTelescope( TelescopeManager.TelescopeID, TelescopeManager.FastPollingPeriod );
+			SetupVm.InitializeCurrentDome( DomeManager.DomeID, DomeManager.FastPollingPeriod );
+			SetupVm.InitializeCurrentFocuser( FocuserManager.FocuserID, FocuserManager.FastPollingPeriod );
 			SetupVm.UseExpandedScreenLayout = UseExpandedScreenLayout;
 
 			IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();

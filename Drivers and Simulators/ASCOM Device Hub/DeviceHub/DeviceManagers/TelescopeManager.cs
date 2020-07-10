@@ -17,11 +17,10 @@ namespace ASCOM.DeviceHub
 	{
 		#region Static Constructor, Properties, Fields, and Methods
 
-		private const int POLLING_INTERVAL_NORMAL = 3000;   // once per second
-		private const int POLLING_INTERVAL_FAST = 1500;      // twice per second
-		private const int POLLING_INTERVAL_SLOW = 2000;     // once every 2 seconds
+		private const int POLLING_INTERVAL_NORMAL = 3000;   // once per 3 seconds
 
 		public static string TelescopeID { get; set; }
+		public static double FastPollingPeriod { get; private set; }
 
 		private static TelescopeManager _instance = null;
 
@@ -53,6 +52,11 @@ namespace ASCOM.DeviceHub
 		{
 			TelescopeID = id;
 			Messenger.Default.Send( new TelescopeIDChangedMessage( id ) );
+		}
+
+		public static void SetFastUpdatePeriod( double period )
+		{
+			FastPollingPeriod = period;
 		}
 
 		#endregion Static Constructor, Properties, Fields, and Methods
@@ -686,7 +690,7 @@ namespace ASCOM.DeviceHub
 						PreviousSlewInProgressMessage = msg;
 					}
 
-					PollingInterval = ( Status.Slewing ) ? POLLING_INTERVAL_FAST : POLLING_INTERVAL_NORMAL;
+					PollingInterval = ( Status.Slewing ) ? Convert.ToInt32( FastPollingPeriod * 1000.0) : POLLING_INTERVAL_NORMAL;
 				}
 
 				if ( token.WaitHandle.WaitOne( PollingInterval ) )

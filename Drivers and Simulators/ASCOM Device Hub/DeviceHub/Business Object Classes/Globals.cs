@@ -21,7 +21,17 @@ namespace ASCOM.DeviceHub
 		public const double RAD_TO_DEG = 1.0 / DEG_TO_RAD;				// 57.29578 degrees per radian
 		public const double HRS_TO_RAD = ( 2.0 * Math.PI ) / 24.0;		// 0.26180 radians per hour
 		public const double RAD_TO_HRS = 1.0 / HRS_TO_RAD;				// 3.81972 hours per radian
-		public const double HRS_TO_DEG = 15.0;							// 15 degrees per hour
+		public const double HRS_TO_DEG = 15.0;                          // 15 degrees per hour
+
+		public const double SCOPE_FAST_UPDATE_MIN = 0.5;
+		public const double SCOPE_FAST_UPDATE_MAX = 1.5;
+
+		public const double DOME_FAST_UPDATE_MIN = 1.0;
+		public const double DOME_FAST_UPDATE_MAX = 3.0;
+
+		public const double FOCUSER_FAST_UPDATE_MIN = 0.5;
+		public const double FOCUSER_FAST_UPDATE_MAX = 5.0;
+
 
 		public static double RegistryVersion { get; set; }
 

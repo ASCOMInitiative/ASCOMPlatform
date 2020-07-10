@@ -15,10 +15,9 @@ namespace ASCOM.DeviceHub
 		#region Static Constructor, Properties, Fields, and Methods
 
 		private const int POLLING_INTERVAL_NORMAL = 5000;   // once every 5 seconds
-		private const int POLLING_INTERVAL_FAST = 1000;      // once every second
-		private const int POLLING_INTERVAL_SLOW = 10000;     // once every 10 seconds
 
 		public static string DomeID { get; set; }
+		public static double FastPollingPeriod { get; private set; }
 
 		private static DomeManager _instance = null;
 
@@ -48,6 +47,11 @@ namespace ASCOM.DeviceHub
 			Messenger.Default.Send( new DomeIDChangedMessage( id ) );
 		}
 
+		public static void SetFastUpdatePeriod( double period )
+		{
+			FastPollingPeriod = period;
+		}
+
 		#endregion Static Constructor, Properties, Fields, and Methods
 
 		#region Private Properties
@@ -61,6 +65,7 @@ namespace ASCOM.DeviceHub
 		private bool IsPolling { get; set; }
 		private int PollingInterval { get; set; }
 		private ManualResetEvent PollingWake { get; set; }
+		private bool StatusUpdated { get; set; }
 
 		// We need telescope info in order to slave our position with the telescope.
 
@@ -280,10 +285,10 @@ namespace ASCOM.DeviceHub
 			if ( Connected && Capabilities != null && Status != null
 				&& Capabilities.CanSetShutter && Status.ShutterStatus != ShutterState.shutterOpen )
 			{
-				Status.Slewing = true;
-				Status.ShutterStatus = ShutterState.shutterOpening;
+				// Issue the open shutter command and wait for a status update before continuing.
 
-				Task.Run( () => OpenShutterTask() );
+				var task = OpenShutterAsync();
+				var result = task.Result;
 			}
 		}
 
@@ -294,10 +299,10 @@ namespace ASCOM.DeviceHub
 			if ( Connected && Capabilities != null && Status != null
 				&& Capabilities.CanSetShutter && Status.ShutterStatus != ShutterState.shutterClosed )
 			{
-				Status.Slewing = true;
-				Status.ShutterStatus = ShutterState.shutterClosing;
+				// Issue the close shutter command and wait for a status update before returning.
 
-				Task.Run( () => CloseShutterTask() );
+				var task =  CloseShutterAsync();
+				var result = task.Result;
 			}
 		}
 
@@ -307,7 +312,10 @@ namespace ASCOM.DeviceHub
 			{
 				ParkingState = ParkingStateEnum.ParkInProgress;
 
-				Task.Run( () => ParkDomeTask() );
+				// Issue the park command and wait for a status update before returning;
+
+				var task = ParkDomeAsync();
+				var result = task.Result;
 			}
 		}
 
@@ -315,7 +323,8 @@ namespace ASCOM.DeviceHub
 		{
 			if ( Connected && Capabilities != null && Capabilities.CanFindHome && !Slewing )
 			{
-				Task.Run( () => FindHomeTask() );
+				var task = FindHomeAsync();
+				var result = task.Result;
 			}
 		}
 
@@ -324,10 +333,10 @@ namespace ASCOM.DeviceHub
 			ShutterState status = ShutterStatus;
 
 			if ( Connected && !Slewing && Capabilities.CanSetAltitude
-				&& ( status != ShutterState.shutterClosed || status != ShutterState.shutterError ) )
+				&& ( status != ShutterState.shutterClosed && status != ShutterState.shutterError ) )
 			{
-				Status.Slewing = true;
-				Task.Run( () => SlewShutterTask( targetAltitude ) );
+				var task = SlewShutterAsync( targetAltitude );
+				var result = task.Result;
 			}
 		}
 
@@ -343,7 +352,11 @@ namespace ASCOM.DeviceHub
 		{
 			if ( Connected && !Slewing && Capabilities.CanSetAzimuth )
 			{
-				Task.Run( () => SlewDomeTask( targetAzimuth ) );
+				// We don't actually need the result, but it allows us to wait for the async slew to start
+				// and for a status update to occur.
+
+				var task = SlewDomeAsync( targetAzimuth );
+				var result = task.Result;
 			}
 		}
 
@@ -351,7 +364,16 @@ namespace ASCOM.DeviceHub
 		{
 			if ( Connected )
 			{
-				Task.Run( () => AbortSlew() );
+				Task<bool> task = Task<bool>.Run( () =>
+				{
+					AbortSlew();
+
+					WaitForStatusUpdate();
+
+					return true;
+				} );
+
+				bool result = task.Result;
 			}
 		}
 
@@ -398,7 +420,7 @@ namespace ASCOM.DeviceHub
 					SlewTheSlavedDome( ref nextSlaveAdjustmentTime );
 					bool shutterMoving = Status.ShutterStatus == ShutterState.shutterOpening
 										|| Status.ShutterStatus == ShutterState.shutterClosing;
-					PollingInterval = ( Status.Slewing || shutterMoving ) ? POLLING_INTERVAL_FAST : POLLING_INTERVAL_NORMAL;
+					PollingInterval = ( Status.Slewing || shutterMoving ) ? Convert.ToInt32( FastPollingPeriod * 1000.0 ) : POLLING_INTERVAL_NORMAL;
 				}
 
 				// Wait until the polling interval has expired, we have been cancelled, or we have been
@@ -543,9 +565,9 @@ namespace ASCOM.DeviceHub
 					SlewToAzimuth( targetAzimuth );
 					Status.Slewing = true;
 
-					if ( PollingInterval != POLLING_INTERVAL_FAST )
+					if ( PollingInterval != (int)(FastPollingPeriod * 1000.0) )
 					{
-						PollingInterval = POLLING_INTERVAL_FAST;
+						PollingInterval = (int)(FastPollingPeriod * 1000.0);
 						PollingWake.Set();
 					}
 				}, CancellationToken.None );
@@ -607,11 +629,6 @@ namespace ASCOM.DeviceHub
 
 			try
 			{
-				if ( HomingState != HomingStateEnum.HomingInProgress || !Slewing )
-				{
-					HomingState = ( AtHome ) ? HomingStateEnum.IsAtHome : HomingStateEnum.NotAtHome;
-				}
-
 				sts = new DevHubDomeStatus( this );
 			}
 			catch ( Exception xcp )
@@ -628,6 +645,7 @@ namespace ASCOM.DeviceHub
 			else
 			{
 				Status = sts;
+				StatusUpdated = true;
 				Messenger.Default.Send( new DomeStatusUpdatedMessage( sts ) );
 			}
 		}
@@ -670,233 +688,152 @@ namespace ASCOM.DeviceHub
 			Messenger.Default.Send( new DomeStatusUpdatedMessage( Status ) );
 		}
 
-		private void OpenShutterTask()
+		private Task<bool> OpenShutterAsync()
 		{
-			// This method is called as a Task to run on a worker thread. It issues an 
-			// asynchronous command to open the shutter and monitors until the driver reports that
-			// the shutter is open.
+			// This method creates a task to run on a worker thread. It issues the open shutter command, 
+			// speeds up the polling cycle, and waits until the next status update before completing.
+			// This allows the caller to wait for completion before continuing.
 
-			CancellationTokenSource cts = new CancellationTokenSource( 90000 );
-
-			Task task = Task.Run( () =>
+			Task<bool> task = Task<bool>.Run( () =>
 			{
 				OpenShutter();
 
-				PollingInterval = POLLING_INTERVAL_FAST;
+				PollingInterval = (int)(FastPollingPeriod * 1000.0);
 				PollingWake.Set();
-			}, cts.Token );
 
-			// Loop here until the ShutterStatus is open, timeout or exception.
+				WaitForStatusUpdate();
 
-			bool more = true;
+				return Status.ShutterStatus == ShutterState.shutterOpening;
+			} );
 
-			while ( more )
-			{
-				if ( Status.ShutterStatus == ShutterState.shutterOpen || Status.ShutterStatus == ShutterState.shutterError )
-				{
-					more = false;
-				}
-				else if ( task.IsCanceled ) // not parked in 90 seconds causes cancellation.
-				{
-					more = false;
-				}
-				else if ( task.IsFaulted )
-				{
-					more = false;
-				}
-
-				if ( more )
-				{
-					Thread.Sleep( 1000 );
-				}
-			}
+			return task;
 		}
 
-		private void CloseShutterTask()
+		private Task<bool> CloseShutterAsync()
 		{
-			// This method is called as a Task to run on a worker thread. It issues an 
-			// asynchronous command to open the shutter and monitors until the driver reports that
-			// the shutter is open.
+			// This method creates a task to run on a worker thread. It issues the close shutter command, 
+			// speeds up the polling cycle, and waits until the next status update before completing.
+			// This allows the caller to wait for completion before continuing.
 
-			CancellationTokenSource cts = new CancellationTokenSource( 90000 );
-
-			Task task = Task.Run( () =>
+			Task<bool> task = Task<bool>.Run( () =>
 			{
 				CloseShutter();
 
-				PollingInterval = POLLING_INTERVAL_FAST;
+				// Put the polling task into high gear.
+
+				PollingInterval = (int)(FastPollingPeriod * 1000.0);
 				PollingWake.Set();
-			}, cts.Token );
 
-			// Loop here until the ShutterStatus is closed, timeout, or exception.
+				WaitForStatusUpdate();
 
-			bool more = true;
+				return Status.ShutterStatus == ShutterState.shutterClosing;
+			} );
 
-			while ( more )
-			{
-				if ( Status.ShutterStatus == ShutterState.shutterClosed || Status.ShutterStatus == ShutterState.shutterError )
-				{
-					more = false;
-				}
-				else if ( task.IsCanceled ) // not closed in 90 seconds causes cancellation.
-				{
-					more = false;
-				}
-				else if ( task.IsFaulted )
-				{
-					more = false;
-				}
-
-				if ( more )
-				{
-					Thread.Sleep( 1000 );
-				}
-			}
+			return task;
 		}
 
-		private void SlewShutterTask( double altitude )
+		private Task<bool> SlewShutterAsync( double altitude )
 		{
-			// This method is called as a Task to run on a worker thread. It issues an 
-			// asynchronous command to set the shutter altitude and monitors until the driver reports that
-			// the shutter movement is complete.
+			// This method creates a task to run on a worker thread. It issues the slew shutter command, 
+			// speeds up the polling cycle, and waits until the next status update before completing.
+			// This allows the caller to wait for completion before continuing.
 
-			CancellationTokenSource cts = new CancellationTokenSource( 90000 );
-
-			Task task = Task.Run( () =>
+			Task<bool> task = Task<bool>.Run( () =>
 			{
 				SlewToAltitude( altitude );
 
-				PollingInterval = POLLING_INTERVAL_FAST;
+				// Put the polling task into high gear.
+
+				PollingInterval = (int)( FastPollingPeriod * 1000.0 );
 				PollingWake.Set();
 
-			}, cts.Token );
+				WaitForStatusUpdate();
 
-			MonitorUntilSlewComplete( task );
+				return Status.Slewing;
+			} );
+
+			return task;
 		}
 
-		private void ParkDomeTask()
+		private Task<bool> ParkDomeAsync()
 		{
-			// This method is called as a Task to run on a worker thread.
+			// This method creates a task to run on a worker thread. It issues the park command, 
+			// speeds up the polling cycle, and waits until the next status update before completing.
+			// This allows the caller to wait for completion before continuing.
 
-			// Since we don't know whether Park is synchronous or asynchronous, call it on another thread.
-			// which is set up to cancel after 90 seconds.
-			
-			CancellationTokenSource cts = new CancellationTokenSource( 90000 );
-
-			Task task = Task.Run( () => Park(), cts.Token );
-
-			Thread.Sleep( 250 );
-
-			Status.Slewing = true;
-			PollingInterval = POLLING_INTERVAL_FAST;
-			PollingWake.Set();
-
-			// Loop here until AtPark is true, timeout or exception.
-
-			bool more = true;
-
-			while ( more )
+			Task<bool> task = Task<bool>.Run( () =>
 			{
-				if ( Status.AtPark )
-				{
-					more = false;
-					ParkingState = ParkingStateEnum.IsAtPark;
-				}
-				else if ( task.IsCanceled ) // not parked in 60 seconds causes cancellation.
-				{
-					more = false;
-					ParkingState = ParkingStateEnum.ParkFailed;
-				}
-				else if ( task.IsFaulted )
-				{
-					more = false;
-					ParkingState = ParkingStateEnum.ParkFailed;
-				}
+				Park();
 
-				if ( more )
-				{
-					Thread.Sleep( 1000 );
-				}
+				// Put the polling task into high gear.
+
+				PollingInterval = (int)( FastPollingPeriod * 1000.0 );
+				PollingWake.Set();
+
+				WaitForStatusUpdate();
+
+				return Status.AtPark;
+			} );
+
+			return task;
+		}
+
+		private void WaitForStatusUpdate()
+		{
+			DateTime lastUpdate = Status.LastUpdateTime;
+
+			// Wait for a status update before ending the task.
+
+			while ( lastUpdate == Status.LastUpdateTime )
+			{
+				Thread.Sleep( 400 );
 			}
 		}
 
-		private void FindHomeTask()
+		private Task<bool> FindHomeAsync()
 		{
-			// This method is called as a Task to run on a worker thread. It issues an 
-			// asynchronous command to slew the dome to its home azimuth and monitors until the driver reports that
-			// the movement is complete.
+			// This method creates a task to run on a worker thread. It issues the FindHome command, 
+			// speeds up the polling cycle, and waits until the next status update before completing.
+			// This allows the caller to wait for completion before continuing.
 
-			CancellationTokenSource cts = new CancellationTokenSource( 90000 );
-
-			Task task = Task.Run( () =>
+			Task<bool> task = Task<bool>.Run( () =>
 			{
 				FindHome();
 
-				HomingState = HomingStateEnum.HomingInProgress;
-				Status.Slewing = true;
-				PollingInterval = POLLING_INTERVAL_FAST;
+				// Put the polling task into high gear.
+
+				PollingInterval = (int)( FastPollingPeriod * 1000.0 );
 				PollingWake.Set();
-			}, cts.Token );
 
-			MonitorUntilSlewComplete( task );
+				WaitForStatusUpdate();
 
-			if ( AtHome )
-			{
-				HomingState = HomingStateEnum.IsAtHome;
-			}
-			else
-			{
-				HomingState = HomingStateEnum.HomeFailed;
-			}
+				return Status.AtHome;
+			} );
+
+			return task;
 		}
 
-		private void SlewDomeTask( double toAzimuth )
+		private Task<bool> SlewDomeAsync( double toAzimuth )
 		{
-			// This method is called as a Task to run on a worker thread. It issues an 
-			// asynchronous command to slew the dome to a specified azimuth and monitors until the driver reports that
-			// the movement is complete.
+			// This method creates a task to run on a worker thread. It issues the slew command, 
+			// speeds up the polling cycle, and waits until the next status update before completing.
+			// This allows the caller to wait for completion before continuing.
 
-			CancellationTokenSource cts = new CancellationTokenSource( 90000 );
-
-			Task task = Task.Run( () =>
+			Task<bool> task = Task<bool>.Run( () =>
 			{
 				SlewToAzimuth( toAzimuth );
 
-				Status.Slewing = true;
-				PollingInterval = POLLING_INTERVAL_FAST;
+				// Put the polling task into high gear.
+
+				PollingInterval = (int)( FastPollingPeriod * 1000.0 );
 				PollingWake.Set();
 
-			}, cts.Token );
+				WaitForStatusUpdate();
 
-			MonitorUntilSlewComplete( task );
-		}
+				return Status.Slewing;
+			} );
 
-		private void MonitorUntilSlewComplete( Task task )
-		{
-			// Loop here until the motion has stopped, timeout or exception.
-
-			bool more = true;
-
-			while ( more )
-			{
-				if ( !Status.Slewing )
-				{
-					more = false;
-				}
-				else if ( task.IsCanceled ) // Still slewing after 90 seconds causes cancellation.
-				{
-					more = false;
-				}
-				else if ( task.IsFaulted )
-				{
-					more = false;
-				}
-
-				if ( more )
-				{
-					Thread.Sleep( 1000 );
-				}
-			}
+			return task;
 		}
 
 		/// <summary>
@@ -933,8 +870,6 @@ namespace ASCOM.DeviceHub
 
 			Task.Factory.StartNew( () => TelescopeParameters = action.Parameters, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
 		}
-
-		// Changed 4/2/2019
 
 		private void UpdateTelescopeStatus( TelescopeStatusUpdatedMessage action )
 		{
