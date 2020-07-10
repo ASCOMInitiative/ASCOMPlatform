@@ -34,6 +34,7 @@
           <listItem>The Diagnostics tool is now more tolerant of simulator configurations that are not set to default values.</listItem>
           <listItem>Tracing of Platform registry use now has its own independent trace enable / disable flag.</listItem>
           <listItem>SOFA has been updated to the current 22nd July 2019 version.</listItem>
+          <listItem>DeltaT predictions good to December 2021 have been added.</listItem>
         </list>
       </content>
     </section>
@@ -47,7 +48,8 @@
           <listItem>Camera simulator memory management has been significantly improved.</listItem>
   		  <listItem>The CheckFoUpdates script has been fixed following ascom-standards.org move to HTTPS.</listItem>
   		  <listItem>A rare Diagnostics tool "assembly has already been loaded" error message, which occured when Platform files were manually renamed, has been fixed.</listItem>
-          <listItem>
+  		  <listItem>The automatic earth rotation parameters data source has been forced to the NASA site because all USNO sites are unavailable until at least December 2020.</listItem>
+  		  <listItem>
             ASCOM Utilities
             <list class="bullet">
               <listItem>Utilities components have been adapted to work when called by installers that use Inno 5.5.9 and later.</listItem>
