@@ -113,7 +113,7 @@ namespace Unit_Tests.Dome
 
 			while ( _mgr.Status.ShutterStatus != ShutterState.shutterOpen )
 			{
-				Thread.Sleep( 500 );
+				Thread.Sleep( 2000 );
 			}
 
 			_mgr.CloseDomeShutter();
@@ -135,18 +135,37 @@ namespace Unit_Tests.Dome
 
 			_mgr.ParkTheDome();
 
-			Thread.Sleep( 100 );
+			Assert.IsTrue( _mgr.Status.Slewing, "The dome has not started slewing to Park." );
 
-			Assert.IsTrue( _mgr.Status.Slewing, "The dome has not started slewing to Park!" );
+			DateTime timeoutTime = DateTime.Now.AddMinutes( 1.0 );
+			bool timedout = false;
+			DevHubDomeStatus sts = _mgr.Status;
 
-			while ( _mgr.Status.Slewing )
+			while ( !timedout )
 			{
-				Thread.Sleep( 100 );
+				if ( !_mgr.Status.Slewing && _mgr.Status.AtPark )
+				{
+					break;
+				}
+				else
+				{
+					if ( DateTime.Now > timeoutTime )
+					{
+						timedout = true;
+					}
+					else
+					{
+						Thread.Sleep( 500 );
+
+						sts = _mgr.Status;
+					}
+				}
 			}
 
+			Assert.IsFalse( timedout );
 			Assert.IsFalse( _mgr.Status.Slewing );
-			Assert.IsTrue( _mgr.Status.AtPark );
-			Assert.AreEqual( _svc.ParkAzimuth, _mgr.Azimuth );
+			Assert.IsTrue( sts.AtPark );
+			Assert.AreEqual( _svc.ParkAzimuth, _mgr.Status.Azimuth );
 		}
 
 		[TestMethod]
@@ -157,17 +176,36 @@ namespace Unit_Tests.Dome
 
 			_mgr.FindHomePosition();
 
-			Thread.Sleep( 100 );
-
 			Assert.IsTrue( _mgr.Status.Slewing, "The dome has not started slewing to Home!" );
 
-			while ( _mgr.Status.Slewing )
+			DateTime timeoutTime = DateTime.Now.AddMinutes( 1.0 );
+			bool timedout = false;
+			DevHubDomeStatus sts = _mgr.Status;
+
+			while ( !timedout )
 			{
-				Thread.Sleep( 100 );
+				if ( !_mgr.Status.Slewing && _mgr.Status.AtHome )
+				{
+					break;
+				}
+				else
+				{
+					if ( DateTime.Now > timeoutTime )
+					{
+						timedout = true;
+					}
+					else
+					{
+						Thread.Sleep( 500 );
+
+						sts = _mgr.Status;
+					}
+				}
 			}
 
-			Assert.IsFalse( _mgr.Status.Slewing );
-			Assert.IsTrue( _mgr.Status.AtHome );
+			Assert.IsFalse( timedout );
+			Assert.IsFalse( sts.Slewing );
+			Assert.IsTrue( sts.AtHome );
 			Assert.AreEqual( _svc.HomeAzimuth, _mgr.Azimuth );
 		}
 
@@ -178,26 +216,38 @@ namespace Unit_Tests.Dome
 			_svc.MockShutterStatus = ShutterState.shutterOpen;
 			_svc.MockAltitude = 0.0;
 
+			// Slew to a random number between 20 and 90 degrees.
+
 			Random rnd = new Random();
-			double altitude = rnd.NextDouble() * 89.0 + 1.0;
+			double altitude = rnd.NextDouble() * 70.0 + 20.0;
 
 			_mgr.SlewDomeShutter( altitude );
 
 			Assert.IsTrue( _mgr.Status.Slewing, "The dome has not started slewing the shutter!" );
 
+			DateTime lastStatusUpdate = _mgr.Status.LastUpdateTime;
+
+			while ( _mgr.Status.LastUpdateTime == lastStatusUpdate )
+			{
+				Thread.Sleep( 500 );
+			}
+
 			while ( _mgr.Status.Slewing )
 			{
-				Thread.Sleep( 1000 );
+				Thread.Sleep( 500 );
 			}
 
 			Assert.IsFalse( _mgr.Status.Slewing );
-			Assert.AreEqual( altitude, _mgr.Status.Altitude, _tolerance );
+
+			string msg = String.Format( "Expected altitude of {0}, but got {1}.", altitude, _mgr.Status.Altitude );
+			Assert.AreEqual( altitude, _mgr.Status.Altitude, _tolerance, msg );
 		}
 
 		[TestMethod]
 		public void SlewDomeAzimuth()
 		{
 			// Start at Park.
+
 			_svc.MockAtPark = true;
 			_svc.MockAzimuth = _svc.ParkAzimuth;
 
@@ -207,13 +257,18 @@ namespace Unit_Tests.Dome
 			do
 			{
 				azimuth = rnd.NextDouble() * 360.0;
-				azimuth = ( azimuth == _svc.ParkAzimuth ) ? Double.NaN : azimuth;
+
+				// Pick a random azimuth that is at least 30 degrees from the park azimuth.
+
+				azimuth = ( Math.Abs( azimuth - _svc.MockAzimuth ) < 30.0 ) ? Double.NaN : azimuth;
 			}
 			while ( Double.IsNaN( azimuth ) );
 
 			_mgr.SlewDomeToAzimuth( azimuth );
 
-			Thread.Sleep( 100 );
+			// If this fails, it is most likely due to the fact that the slew is already complete
+			// before we get here. That is why we pick a destination azimuth that is at least 30
+			// degrees away from the starting azimuth.
 
 			Assert.IsTrue( _mgr.Status.Slewing, "The dome has not started slewing to Home!" );
 

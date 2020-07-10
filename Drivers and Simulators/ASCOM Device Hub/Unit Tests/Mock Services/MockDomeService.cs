@@ -225,6 +225,7 @@ namespace Unit_Tests.Dome
 				throw new NotConnectedException();
 			}
 
+			MockSlewing = true;
 			SlewDomeToAzimuth( HomeAzimuth );
 		}
 
@@ -258,6 +259,7 @@ namespace Unit_Tests.Dome
 				throw new NotConnectedException();
 			}
 
+			MockSlewing = true;
 			SlewDomeToAzimuth( ParkAzimuth );
 		}
 
@@ -303,6 +305,8 @@ namespace Unit_Tests.Dome
 				return;
 			}
 
+			MockSlewing = true;
+
 			double moveRate = 30; // deg/sec
 			double totalMove = targetAltitude - MockAltitude;
 
@@ -319,8 +323,6 @@ namespace Unit_Tests.Dome
 
 			int updateInterval = (int)moveTime * 1000 / updateCount;
 
-			MockSlewing = true;
-
 			Task.Run( () =>
 			{
 				double updatesReported = 0;
@@ -329,7 +331,7 @@ namespace Unit_Tests.Dome
 				{
 					double altitude = MockAltitude + ( totalMove / updateCount );
 
-					MockAzimuth = altitude;
+					MockAltitude = altitude;
 					++updatesReported;
 
 					Thread.Sleep( updateInterval );
@@ -347,6 +349,7 @@ namespace Unit_Tests.Dome
 				throw new NotConnectedException();
 			}
 
+			MockSlewing = true;
 			SlewDomeToAzimuth( azimuth );
 		}
 
@@ -415,7 +418,6 @@ namespace Unit_Tests.Dome
 				 }
 
 				 MockAzimuth = targetAzimuth;
-				 MockSlewing = false;
 
 				 if ( targetAzimuth == HomeAzimuth )
 				 {
@@ -425,6 +427,8 @@ namespace Unit_Tests.Dome
 				 {
 					 MockAtPark = true;
 				 }
+
+				 MockSlewing = false;
 			 } );
 		}
 

@@ -50,6 +50,7 @@ namespace ASCOM.DeviceHub
 		public void InitializeCurrentFocuser( string focuserID )
 		{
 			FocuserSetupVm.FocuserID = focuserID;
+			FocuserSetupVm.FastUpdatePeriod = FocuserManager.FastPollingPeriod;
 			FocuserSetupVm.Initialize( Globals.FocuserTemperatureOffset );
 		}
 

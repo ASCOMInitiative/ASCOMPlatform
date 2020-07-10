@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:ASCOM.DeviceHub"
              mc:Ignorable="d" 
 			 Title="Device Hub Application and Driver Setup"
-			 Background="{DynamicResource WindowBackgroundBrush}" Height="520" Width="460" d:DesignWidth="500" Icon="/ASCOM.DeviceHub;component/Images/ASCOM.ico" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Loaded="DeviceHubDialogView_Loaded" WindowStyle="ThreeDBorderWindow">
+			 Background="{DynamicResource WindowBackgroundBrush}" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Loaded="DeviceHubDialogView_Loaded" WindowStyle="ThreeDBorderWindow" SizeToContent="WidthAndHeight">
 	<local:DeviceHubDialogView.Resources>
 		<local:BooleanBooleanValueConverter x:Key="BoolBoolConverter" />
 
@@ -41,63 +41,82 @@
 	</local:DeviceHubDialogView.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="410" />
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="355*" />
-			<ColumnDefinition Width="99*"/>
+			<ColumnDefinition Width="Auto" />
 		</Grid.ColumnDefinitions>
-		<TabControl x:Name="_deviceTab" Grid.Row="0" Background="Transparent" Height="Auto" 
-					SelectionChanged="TabControl_SelectionChanged" VerticalAlignment="Top" Margin="10,10,10,0" MinHeight="390" Grid.ColumnSpan="2">
+		<TabControl x:Name="_deviceTab" Grid.Row="0" Background="Transparent" Height="Auto" HorizontalAlignment="Stretch" Grid.IsSharedSizeScope="True"
+					SelectionChanged="TabControl_SelectionChanged" VerticalAlignment="Top" Margin="10,10,10,0" Width="500">
 			<TabItem Header="Device Hub Setup" Template="{DynamicResource DeviceHubTabItemTemplate}" HeaderTemplate="{DynamicResource headerText}" 
 					 Tag="Application" >
 				<Grid>
 					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto" />
-						<RowDefinition Height="Auto" />
-						<RowDefinition Height="Auto" />
+						<RowDefinition SharedSizeGroup="setupitem" />
 					</Grid.RowDefinitions>
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="Auto"/>
-					</Grid.ColumnDefinitions>
-					<StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10,6">
-						<Label Content="Select the visual theme:" Foreground="{DynamicResource NormalTextBrush}" Margin="0" Padding="0"/>
-						<RadioButton Content="Standard" Foreground="{DynamicResource NormalTextBrush}" Margin="10,0"
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
+						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+						</Grid.ColumnDefinitions>
+						<StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10,6">
+							<Label Content="Select the visual theme:" Foreground="{DynamicResource NormalTextBrush}" Margin="0" Padding="0"/>
+							<RadioButton Content="Standard" Foreground="{DynamicResource NormalTextBrush}" Margin="10,0"
 									IsChecked="{Binding UseCustomTheme, ConverterParameter=False, Converter={StaticResource BoolBoolConverter}}" />
-						<RadioButton Content="Custom" Foreground="{DynamicResource NormalTextBrush}" Margin="0"
+							<RadioButton Content="Custom" Foreground="{DynamicResource NormalTextBrush}" Margin="0"
 										 IsChecked="{Binding UseCustomTheme, ConverterParameter=True, Converter={StaticResource BoolBoolConverter}}" />
-					</StackPanel>
-					<CheckBox Grid.Row="1" Grid.Column="0" Margin="10,6" Content="Suppress Activation Notification" Foreground="{DynamicResource NormalTextBrush}" 
+						</StackPanel>
+						<CheckBox Grid.Row="1" Grid.Column="0" Margin="10,6" Content="Suppress Activation Notification" Foreground="{DynamicResource NormalTextBrush}" 
 							  ToolTip="Read the user document for more information"
 							  IsChecked="{Binding SuppressTrayBubble}" />
-					<CheckBox Grid.Row="2" Grid.Column="0" Margin="10,6" Content="Use Expanded Screen Layout" Foreground="{DynamicResource NormalTextBrush}" 
+						<CheckBox Grid.Row="2" Grid.Column="0" Margin="10,6" Content="Use Expanded Screen Layout" Foreground="{DynamicResource NormalTextBrush}" 
 							  ToolTip="Display Dome and Focuser control in Expanders rather than Tabs"
 							  IsChecked="{Binding UseExpandedScreenLayout}" />
+					</Grid>
 				</Grid>
 			</TabItem>
 			<TabItem Header="Telescope Setup" Template="{DynamicResource DeviceHubTabItemTemplate}" HeaderTemplate="{DynamicResource headerText}" 
                      Tag="Telescope"
 					 ToolTip ="Telescope Setup is disabled when a telescope is connected."
                      IsEnabled="{Binding IsTelescopeActive, ConverterParameter=False, Converter={StaticResource BoolBoolConverter}}">
-				<ContentControl Content="{Binding TelescopeSetupVm}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Height="Auto" />
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition SharedSizeGroup="setupitem" />
+					</Grid.RowDefinitions>
+					<ContentControl Content="{Binding TelescopeSetupVm}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Height="Auto" Width="Auto" />
+				</Grid>
 			</TabItem>
 
 			<TabItem Header="Dome Setup" Template="{DynamicResource DeviceHubTabItemTemplate}" HeaderTemplate="{DynamicResource headerText}" 
 					 Tag="Dome"
 					 ToolTip="Dome Setup is disabled when a dome is connected."
                      IsEnabled="{Binding IsDomeActive, ConverterParameter=False, Converter={StaticResource BoolBoolConverter}}">
-				<ContentControl Content="{Binding DomeSetupVm}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Height="Auto" />
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition SharedSizeGroup="setupitem" />
+					</Grid.RowDefinitions>
+					<ContentControl Content="{Binding DomeSetupVm}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Height="Auto" Width="Auto" />
+				</Grid>
 			</TabItem>
 
 			<TabItem Header="Focuser Setup" Template="{DynamicResource DeviceHubTabItemTemplate}" HeaderTemplate="{DynamicResource headerText}" 
 					 Tag="Focuser"
 					 ToolTip="Focuser Setup is disabled when a focuser is connected."
 					 IsEnabled="{Binding IsFocuserActive, ConverterParameter=False, Converter={StaticResource BoolBoolConverter}}">
-				<ContentControl Content="{Binding FocuserSetupVm}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Height="Auto" />
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition SharedSizeGroup="setupitem" />
+					</Grid.RowDefinitions>
+					<ContentControl Content="{Binding FocuserSetupVm}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Height="Auto" Width="Auto" />
+				</Grid>
 			</TabItem>
 		</TabControl>
-		<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0" Grid.ColumnSpan="2">
+		<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,10,8" Grid.ColumnSpan="2">
 			<Button Height="60" Width="60" Content="OK" Style="{DynamicResource CircleButton}"
 					Command="{Binding SetupOKCommand}" />
 			<Button Height="60" Width="60" Content="Cancel" Style="{DynamicResource CircleButton}"

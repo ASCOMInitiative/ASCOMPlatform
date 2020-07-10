@@ -10,7 +10,7 @@ using ASCOM.DeviceInterface;
 
 namespace Unit_Tests
 {
-	public class TrackingRates : ITrackingRates, IEnumerable, IEnumerator, IDisposable
+	public class TrackingRates : ITrackingRates, IEnumerable, IEnumerator
 	{
 		private DriveRates[] _trackingRates;
 		private int _pos = -1;
@@ -44,7 +44,12 @@ namespace Unit_Tests
 
 		#endregion
 
-		#region IEnumerable implementation
+		public void Dispose()
+		{
+			// Add any required object cleanup here
+		}
+
+		#region IEnumerator implementation
 
 		public IEnumerator GetEnumerator()
 		{
@@ -55,7 +60,7 @@ namespace Unit_Tests
 
 		#endregion
 
-		#region IEnumerator implementation
+		#region IEnumerable implementation
 
 		public bool MoveNext()
 		{
@@ -82,27 +87,6 @@ namespace Unit_Tests
 				}
 
 				return _trackingRates[_pos];
-			}
-		}
-
-		#endregion
-
-		#region IDisposable Members
-
-		public void Dispose()
-		{
-			Dispose( true );
-			GC.SuppressFinalize( this );
-		}
-
-		// The bulk of the clean-up code is implemented in Dispose(bool)
-		protected virtual void Dispose( bool disposing )
-		{
-			if ( disposing )
-			{
-				// free managed resources
-
-				_trackingRates = null;
 			}
 		}
 

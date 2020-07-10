@@ -4,7 +4,7 @@
 ;
 
 #define MyAppName "ASCOM.DeviceHub"
-#define MyAppVersion "6.4.1.3"
+#define MyAppVersion "6.4.1.11"
 #define MyDestSubdirName "ASCOM.DeviceHub"
 
 [Setup]

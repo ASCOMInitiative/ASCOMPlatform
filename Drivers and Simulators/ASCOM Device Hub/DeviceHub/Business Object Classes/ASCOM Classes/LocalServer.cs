@@ -12,6 +12,7 @@ using System.Windows;
 using Microsoft.Win32;
 
 using ASCOM.DeviceHub.MvvmMessenger;
+using System.Runtime;
 
 namespace ASCOM.DeviceHub
 {
@@ -355,15 +356,18 @@ namespace ASCOM.DeviceHub
 		{
 			TelescopeSettings scopeSettings = TelescopeSettings.FromProfile();
 			TelescopeManager.SetTelescopeID( scopeSettings.TelescopeID );
+			TelescopeManager.SetFastUpdatePeriod( scopeSettings.FastUpdatePeriod );
 
 			DomeSettings domeSettings = DomeSettings.FromProfile();
 			DomeManager.SetDomeID( domeSettings.DomeID );
+			DomeManager.SetFastUpdatePeriod( domeSettings.FastUpdatePeriod );
 			Globals.DomeLayout = domeSettings.DomeLayout;
 			Globals.DomeAzimuthAdjustment = domeSettings.AzimuthAdjustment;
 			Globals.UsePOTHDomeSlaveCalculation = domeSettings.UsePOTHDomeSlaveCalculation;
 
 			FocuserSettings focuserSettings = FocuserSettings.FromProfile();
 			FocuserManager.SetFocuserID( focuserSettings.FocuserID );
+			FocuserManager.SetFastUpdatePeriod( focuserSettings.FastUpdatePeriod);
 			Globals.FocuserTemperatureOffset = focuserSettings.TemperatureOffset;
 		}
 

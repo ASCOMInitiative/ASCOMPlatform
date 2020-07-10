@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:ASCOM.DeviceHub"
              mc:Ignorable="d" 
              Background="{DynamicResource WindowBackgroundBrush}"
-             d:DesignHeight="300" d:DesignWidth="400"
-             Height="290">
+             d:DesignHeight="406" d:DesignWidth="380"
+             Height="Auto">
 	<UserControl.Resources>
 		<local:DeviceIDConverter x:Key="DeviceIDConverter" />
 
@@ -24,6 +24,7 @@
 	</UserControl.Resources>
     <Grid>
 		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" MinHeight="20" />
 			<RowDefinition Height="Auto" MinHeight="20" />
 			<RowDefinition Height="Auto" MinHeight="20" />
 		</Grid.RowDefinitions>
@@ -49,7 +50,7 @@
 				</Grid>
 			</GroupBox>
 		</StackPanel>
-		<GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="Temperature Calibration" Foreground="{DynamicResource NormalTextBrush}" Margin="6" Width="310">
+		<GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="Temperature Calibration" Foreground="{DynamicResource NormalTextBrush}" Margin="0" HorizontalAlignment="Stretch">
 			<StackPanel Orientation="Horizontal">
 				<Label Content="Temperature Offset (°C):" Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Margin="6" />
 				<Slider Width="120" Minimum="-10" Maximum="10" TickFrequency="0.5" IsSnapToTickEnabled="True" VerticalAlignment="Center" 
@@ -58,6 +59,16 @@
 					   Content="{Binding TemperatureOffset, StringFormat=F1, FallbackValue=0.0}" />
 			</StackPanel>
 
+		</GroupBox>
+		<GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="Driver Polling Interval" Foreground="{DynamicResource NormalTextBrush}" Margin="0" HorizontalAlignment="Stretch">
+			<StackPanel Grid.Row="1" Orientation="Horizontal" Margin="6" Height="26">
+				<Label Content="Fast Polling Rate (sec):" Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0" />
+				<Slider Width="150" TickFrequency="0.05" IsSnapToTickEnabled="True" Margin="4,0" VerticalAlignment="Center"
+					Minimum="{Binding FastUpdateMinimum}" Maximum="{Binding FastUpdateMaximum}" 
+					Value="{Binding FastUpdatePeriod}" />
+				<TextBlock Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0"
+					   Text="{Binding FastUpdatePeriod, StringFormat=F2, FallbackValue=XXXX}" />
+			</StackPanel>
 		</GroupBox>
 	</Grid>
 </UserControl>

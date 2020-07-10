@@ -6,7 +6,10 @@ namespace ASCOM.DeviceHub
 	public class TelescopeSetupViewModel : DeviceHubViewModelBase
 	{
 		public TelescopeSetupViewModel()
-		{}
+		{
+			_fastUpdateMinimum = Globals.SCOPE_FAST_UPDATE_MIN;
+			_fastUpdateMaximum = Globals.SCOPE_FAST_UPDATE_MAX;
+		}
 
 		#region Change Notification Properties
 
@@ -20,6 +23,51 @@ namespace ASCOM.DeviceHub
 				if ( value != _telescopeID )
 				{
 					_telescopeID = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		private double _fastUpdatePeriod;
+
+		public double FastUpdatePeriod
+		{
+			get { return _fastUpdatePeriod; }
+			set
+			{
+				if ( value != _fastUpdatePeriod )
+				{
+					_fastUpdatePeriod = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		private double _fastUpdateMinimum;
+
+		public double FastUpdateMinimum
+		{
+			get { return _fastUpdateMinimum; }
+			set
+			{
+				if ( value != _fastUpdateMinimum )
+				{
+					_fastUpdateMinimum = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		private double _fastUpdateMaximum;
+
+		public double FastUpdateMaximum
+		{
+			get { return _fastUpdateMaximum; }
+			set
+			{
+				if ( value != _fastUpdateMaximum )
+				{
+					_fastUpdateMaximum = value;
 					OnPropertyChanged();
 				}
 			}

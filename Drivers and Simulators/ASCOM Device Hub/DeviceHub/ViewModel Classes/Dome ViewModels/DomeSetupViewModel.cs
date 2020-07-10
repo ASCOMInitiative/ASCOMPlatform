@@ -9,7 +9,10 @@ namespace ASCOM.DeviceHub
 		#region Constructor
 
 		public DomeSetupViewModel()
-		{}
+		{
+			_fastUpdateMinimum = Globals.DOME_FAST_UPDATE_MIN;
+			_fastUpdateMaximum = Globals.DOME_FAST_UPDATE_MAX;
+		}
 
 		#endregion Constructor
 
@@ -21,7 +24,7 @@ namespace ASCOM.DeviceHub
 
 		#region Public Methods
 
-		public void Initialize( DomeLayoutSettings settings )
+		public void InitializeLayout( DomeLayoutSettings settings )
 		{
 			_domeRadius = settings.DomeRadius;
 			_gemAxisOffset = settings.GemAxisOffset;
@@ -170,6 +173,51 @@ namespace ASCOM.DeviceHub
 				if ( value != _slaveInterval )
 				{
 					_slaveInterval = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		private double _fastUpdatePeriod;
+
+		public double FastUpdatePeriod
+		{
+			get { return _fastUpdatePeriod; }
+			set
+			{
+				if ( value != _fastUpdatePeriod )
+				{
+					_fastUpdatePeriod = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		private double _fastUpdateMinimum;
+
+		public double FastUpdateMinimum
+		{
+			get { return _fastUpdateMinimum; }
+			set
+			{
+				if ( value != _fastUpdateMinimum )
+				{
+					_fastUpdateMinimum = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		private double _fastUpdateMaximum;
+
+		public double FastUpdateMaximum
+		{
+			get { return _fastUpdateMaximum; }
+			set
+			{
+				if ( value != _fastUpdateMaximum )
+				{
+					_fastUpdateMaximum = value;
 					OnPropertyChanged();
 				}
 			}

@@ -26,6 +26,9 @@ namespace ASCOM.DeviceHub
 		private const string _slaveIntervalDefault = "30";
 		private const string _usePOTHSlavingCalculationProfileName = "Use POTH Slaving Calculation";
 		private const string _usePOTHSlavingCalculationDefault = "false";
+		private const string _fastUpdateProfileName = "Fast Update Period";
+		private static readonly string _fastUpdateDefault = Globals.DOME_FAST_UPDATE_MIN.ToString();
+
 
 		private static string DriverID => Globals.DevHubDomeID;
 
@@ -42,6 +45,7 @@ namespace ASCOM.DeviceHub
 			int slaveInterval;
 			bool loggerEnabled;
 			bool usePOTHCalculation;
+			double fastUpdatePeriod;
 
 			using ( Profile profile = new Profile() )
 			{
@@ -57,7 +61,12 @@ namespace ASCOM.DeviceHub
 				slaveInterval = Convert.ToInt32( profile.GetValue( DriverID, _slaveIntervalProfileName, String.Empty, _slaveIntervalDefault ) );
 				loggerEnabled = Convert.ToBoolean( profile.GetValue( DriverID, _traceStateProfileName, String.Empty, _traceStateDefault ) );
 				usePOTHCalculation = Convert.ToBoolean( profile.GetValue( DriverID, _usePOTHSlavingCalculationProfileName, String.Empty, _usePOTHSlavingCalculationDefault ) );
+				fastUpdatePeriod = Convert.ToDouble( profile.GetValue( DriverID, _fastUpdateProfileName, String.Empty, _fastUpdateDefault ) );
 			}
+
+			// Prevent the user from circumventing the valid fast update by setting the value in the profile store directly.
+
+			fastUpdatePeriod = Math.Max( Globals.DOME_FAST_UPDATE_MIN, Math.Min( fastUpdatePeriod, Globals.DOME_FAST_UPDATE_MAX ) );
 
 			DomeLayoutSettings layoutSettings = new DomeLayoutSettings
 			{
@@ -74,7 +83,8 @@ namespace ASCOM.DeviceHub
 				DomeLayout = layoutSettings,
 				AzimuthAdjustment = azimuthAdjustment,
 				UsePOTHDomeSlaveCalculation = usePOTHCalculation,
-				IsLoggingEnabled = loggerEnabled
+				IsLoggingEnabled = loggerEnabled,
+				FastUpdatePeriod = fastUpdatePeriod
 			};
 
 			return settings;
@@ -88,6 +98,7 @@ namespace ASCOM.DeviceHub
 		public bool IsLoggingEnabled { get; set; }
 		public double AzimuthAdjustment { get; set; }
 		public bool UsePOTHDomeSlaveCalculation { get; set; }
+		public double FastUpdatePeriod { get; set; }
 
 		public void ToProfile()
 		{
@@ -105,6 +116,7 @@ namespace ASCOM.DeviceHub
 				profile.WriteValue( DriverID, _slaveIntervalProfileName, DomeLayout.SlaveInterval.ToString() );
 				profile.WriteValue( DriverID, _traceStateProfileName, IsLoggingEnabled.ToString() );
 				profile.WriteValue( DriverID, _usePOTHSlavingCalculationProfileName, UsePOTHDomeSlaveCalculation.ToString() );
+				profile.WriteValue( DriverID, _fastUpdateProfileName, FastUpdatePeriod.ToString() );
 			}
 		}
 	}

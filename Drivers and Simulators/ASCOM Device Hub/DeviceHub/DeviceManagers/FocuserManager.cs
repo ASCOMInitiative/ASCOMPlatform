@@ -11,10 +11,9 @@ namespace ASCOM.DeviceHub
 		#region Static Constructor, Properties, Fields, and Methods
 
 		private const int POLLING_INTERVAL_NORMAL = 5000;	// once every 5 seconds
-		private const int POLLING_INTERVAL_FAST = 500;		// once every 1/2 second
-		private const int POLLING_INTERVAL_SLOW = 10000;	// once every 10 seconds
 
 		public static string FocuserID { get; set; }
+		public static double FastPollingPeriod { get; private set; }
 
 		private static FocuserManager _instance = null;
 
@@ -42,6 +41,11 @@ namespace ASCOM.DeviceHub
 		{
 			FocuserID = id;
 			Messenger.Default.Send( new FocuserIDChangedMessage( id ) );
+		}
+
+		public static void SetFastUpdatePeriod( double period )
+		{
+			FastPollingPeriod = period;
 		}
 
 		#endregion Static Constructor, Properties, Fields, and Methods
@@ -238,9 +242,11 @@ namespace ASCOM.DeviceHub
 
 				moveAmount = Math.Max( Math.Min( moveAmount, maxStep ), -maxStep );
 
-				if ( PollingInterval != POLLING_INTERVAL_FAST )
+				int fastInterval = Convert.ToInt32( FastPollingPeriod * 1000.0 );
+
+				if ( PollingInterval != fastInterval )
 				{
-					PollingInterval = POLLING_INTERVAL_FAST;
+					PollingInterval = fastInterval;
 					PollingWake.Set();
 				}
 			}
@@ -362,7 +368,7 @@ namespace ASCOM.DeviceHub
 					}
 				}
 
-				PollingInterval = MoveInProgress ? POLLING_INTERVAL_FAST : POLLING_INTERVAL_NORMAL;
+				PollingInterval = MoveInProgress ? Convert.ToInt32( FastPollingPeriod * 1000.0 ) : POLLING_INTERVAL_NORMAL;
 
 				// Wait until the polling interval has expired, we have been cancelled, or we have been
 				// awakened early because the polling interval has been changed.
