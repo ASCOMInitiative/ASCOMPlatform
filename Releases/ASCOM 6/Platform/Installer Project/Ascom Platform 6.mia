@@ -1245,6 +1245,7 @@ Write Registry
 Write Registry
 Write Registry
 Write Registry
+Write Registry
 Code Folding Region
 Comment
 Code Folding Region
@@ -2998,7 +2999,8 @@ $
 {DD32792F-5CC6-4F5C-9657-A4BE3F80C57D}
 {C27DD540-EC7D-462C-9EE8-5D0F21EB2997}
 {EA5FC8B2-6907-416A-A409-4BC427BDECA3}
-{02950C07-E7F9-4F0A-A0AC-E24246ED061A}
+{5E08D1D8-DBD1-44F7-8EA9-E904DE960CDB}
+{F9069842-260A-4F00-85AF-C0FE10C4FFCA}
 {49AC1A1D-779C-4D1A-BF30-6558532881E9}
 {DFD5AFE7-E1C0-48CD-95D1-08E7974F7418}
 {9949EA55-921A-4962-8A6A-411E7DCB3F34}
@@ -4122,8 +4124,6 @@ Unregister 64bit components
 
 {C1B91B6C-EB0F-47F8-9D44-A1F209C933EF}
 
-{02950C07-E7F9-4F0A-A0AC-E24246ED061A}
-If the earth rotation data download task trace path doesn't exist then create it.
 {DD32792F-5CC6-4F5C-9657-A4BE3F80C57D}
 Value name changed from Leap Seconds to Manual Leap Seconds in Platform 6.4 so remove the old value
 {4C8ECA52-39A8-4F20-BB3E-795D313ABC6B}
@@ -4358,6 +4358,8 @@ We are running on Windows 10 with a Threshold version so cannot proceed because 
 .NET Framework 4.8 - Check that we are on at least Restone (Anniversary Update) if we are running Windows 10
 {6026D396-5848-4256-91D3-8BEA22780392}
 We are running on Windows 10 so make sure that we are at least on Redstone
+{5E08D1D8-DBD1-44F7-8EA9-E904DE960CDB}
+Force use of the NASA download site because all of the USNo sites are unavailable at July 2020 and are predicted to be down until at least December 2020
 {C974C952-7C50-4503-BFEF-AF3B492C0AEE}
 MYPROGRESS
 100
@@ -10965,6 +10967,14 @@ SOFTWARE\ASCOM\CoverCalibrator Drivers
 
 TRUE
 FALSE
+{F9069842-260A-4F00-85AF-C0FE10C4FFCA}
+0
+2|
+SOFTWARE\ASCOM\Astrometry
+Download Task Data Source
+ftp://cddis.gsfc.nasa.gov/pub/products/iers/
+TRUE
+FALSE
 {84D7BDB2-1906-470A-B9BC-948F23D84057}
 $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
 *.tlb
@@ -14265,6 +14275,7 @@ C
 
 
 
+
 C
 C
 
@@ -14555,6 +14566,7 @@ C
 
 
 $
+
 
 
 

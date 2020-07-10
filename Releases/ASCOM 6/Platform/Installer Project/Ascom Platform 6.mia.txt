@@ -1127,7 +1127,8 @@ Comment: Leap Seconds = UTC-TAI offset - needs to be updated every time a leap s
 Comment: Value name changed from Leap Seconds to Manual Leap Seconds in Platform 6.4 so remove the old value
 Delete Registry VALUE HKLM\SOFTWARE\ASCOM\Astrometry\Leap Seconds
 Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Manual Leap Seconds, $LEAPSECONDS$
-Comment: If the earth rotation data download task trace path doesn't exist then create it.
+Comment: Force use of the NASA download site because all of the USNo sites are unavailable at July 2020 and are predicted to be down until at least December 2020
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Download Task Data Source, ftp://cddis.gsfc.nasa.gov/pub/products/iers/
 Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\,  (permanent)
 Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
 Write Registry Key HKLM\SOFTWARE\ASCOM\Chooser\,  (permanent)
