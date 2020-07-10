@@ -35,7 +35,7 @@ namespace ASCOM.DeviceHub
 
 			// Prevent the user from circumventing the valid fast update by setting the value in the profile store directly.
 
-			fastUpdatePeriod = Math.Max( Globals.DOME_FAST_UPDATE_MIN, Math.Min( fastUpdatePeriod, Globals.DOME_FAST_UPDATE_MAX ) );
+			fastUpdatePeriod = Math.Max( Globals.FOCUSER_FAST_UPDATE_MIN, Math.Min( fastUpdatePeriod, Globals.FOCUSER_FAST_UPDATE_MAX ) );
 
 			FocuserSettings settings = new FocuserSettings
 			{
