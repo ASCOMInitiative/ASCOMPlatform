@@ -1,24 +1,32 @@
 ﻿Option Strict On
 Option Explicit On
+Imports System.Globalization
 Imports System.Math
 Imports ASCOM.Astrometry
+Imports ASCOM.Astrometry.SOFA
 Imports ASCOM.Utilities
 
 Module DeltatCode
     ''' <summary>
-    ''' Calculates the value of DeltaT over a wide range of hstoric and future Julian dates
+    ''' Calculates the value of DeltaT over a wide range of historic and future Julian dates
     ''' </summary>
     ''' <param name="JulianDateUTC">Julian Date of interest</param>
     ''' <returns>DelatT value at the given Julian date</returns>
     ''' <remarks>
-    ''' Post 2011, calculation is effected throgh a 2nd order polynomial best fit to real DeltaT data from: http://maia.usno.navy.mil/ser7/deltat.data 
+    ''' Post 2011, calculation is effected through a 2nd order polynomial best fit to real DeltaT data from: http://maia.usno.navy.mil/ser7/deltat.data 
     ''' together with projections of DeltaT from: http://maia.usno.navy.mil/ser7/deltat.preds
     ''' The analysis spreadsheets for DeltaT values at dates post 2011 are stored in the \NOVAS\DeltaT Predictions folder of the ASCOM source tree.
     ''' 
-    ''' To esnure that leap second and DeltaUT1 transitions are handled correctly and occur at 00:00:00 UTC, the supplied Julian date should be in UTC time
+    ''' To ensure that leap second and DeltaUT1 transitions are handled correctly and occur at 00:00:00 UTC, the supplied Julian date should be in UTC time
     ''' </remarks>
     Function DeltaTCalc(ByVal JulianDateUTC As Double) As Double
+        Const FALLBACK_LEAP_SECONDS_VALUE = 37 ' A last ditch value to use in the event that the registry values are missing
+
         Dim YearFraction, B, Retval, ModifiedJulianDay As Double, UTCDate As DateTime
+
+        Dim AutomaticTaiUtcOffsetString, ManualTaiUtcOffsetString As String
+        Dim AutomaticLeapSecondsValue, ManualLeapSecondsValue As Double
+
         Static LastJulianDateUTC As Double = DOUBLE_VALUE_NOT_AVAILABLE, LastDeltaTValue As Double
         Static DeltaTCalcLockObject As Object = New Object()
 
@@ -35,9 +43,18 @@ Module DeltatCode
         YearFraction = 2000.0 + (JulianDateUTC - J2000BASE) / TROPICAL_YEAR_IN_DAYS ' This calculation is accurate enough for our purposes here (T0 = 2451545.0 is TDB Julian date of epoch J2000.0)
         ModifiedJulianDay = JulianDateUTC - MODIFIED_JULIAN_DAY_OFFSET
 
-        ' DATE RANGE April 2018 Onwards - The analysis was performed on 25th April 2018 and creates values within 0.03 of a second of the projections to Q4 2018 and sensible extrapolation to 2021
-        ' NOTE: Please not the change to using the modified Julian date in the forumula rather than year fraction compared to previous formulae
-        If (YearFraction >= 2018.3) And (YearFraction < Double.MaxValue) Then
+        ' NOTE: Starting April 2018 - Please note the use of modified Julian date in the formula rather than year fraction as in previous formulae
+
+        ' DATE RANGE January 2022 Onwards - This is beyond the sensible extrapolation range of the most recent data analysis so revert to the basic formula: DeltaT = LeapSeconds + 32.184
+        If (YearFraction >= 2022.0) And (YearFraction < Double.MaxValue) Then
+            Retval = FALLBACK_LEAP_SECONDS_VALUE + GlobalItems.TT_TAI_OFFSET
+
+            ' DATE RANGE July 2020 Onwards - The analysis was performed on 10th July 2020 and creates values within 0.01 of a second of the projections to Q2 2021 and sensible extrapolation to the end of 2021
+        ElseIf (YearFraction >= 2020.5) And (YearFraction < Double.MaxValue) Then
+            Retval = (0.0000000000234066661113585 * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay) - (0.00000555556956413194 * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay) + (0.494477925757861 * ModifiedJulianDay * ModifiedJulianDay) - (19560.53496991 * ModifiedJulianDay) + 290164271.563078
+
+            ' DATE RANGE April 2018 Onwards - The analysis was performed on 25th April 2018 and creates values within 0.03 of a second of the projections to Q4 2018 and sensible extrapolation to 2021
+        ElseIf (YearFraction >= 2018.3) And (YearFraction < Double.MaxValue) Then
             Retval = (0.00000161128367083801 * ModifiedJulianDay * ModifiedJulianDay) + (-0.187474214389602 * ModifiedJulianDay) + 5522.26034874982
 
             ' DATE RANGE January 2018 Onwards - The analysis was performed on 28th December 2017 and creates values within 0.03 of a second of the projections to Q4 2018 and sensible extrapolation to 2021
@@ -59,7 +76,7 @@ Module DeltatCode
             ' DATE RANGE January 2011 to September 2011
         ElseIf (YearFraction >= 2011.0) And (YearFraction < 2011.75) Then
             ' Following now superseded by above for 2012-16, this is left in for consistency with previous behaviour
-            ' Use polynomial given at http://sunearth.gsfc.nasa.gov/eclipse/SEcat5/deltatpoly.html as retrtieved on 11-Jan-2009
+            ' Use polynomial given at http://sunearth.gsfc.nasa.gov/eclipse/SEcat5/deltatpoly.html as retrieved on 11-Jan-2009
             B = YearFraction - 2000.0
             Retval = 62.92 + (B * (0.32217 + (B * 0.005589)))
         Else ' Bob's original code

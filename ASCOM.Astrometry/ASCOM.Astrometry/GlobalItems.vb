@@ -149,7 +149,7 @@ Module GlobalItems
     Friend Const AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT As String = NOT_DOWNLOADED ' Default value for the automatically downloaded number of leap seconds
     Friend Const NEXT_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT As String = NOT_DOWNLOADED ' Default value for the next leap second
     Friend Const NEXT_LEAP_SECONDS_DATE_NOT_AVAILABLE_DEFAULT As String = NOT_DOWNLOADED ' Default value for the next leap second effective date
-    Friend Const DOWNLOAD_TASK_INTERNET_DATA_SOURCE_DEFAULT As String = EARTH_ROTATION_INTERNET_DATA_SOURCE_0 ' Default source for earth rotation files
+    Friend Const DOWNLOAD_TASK_INTERNET_DATA_SOURCE_DEFAULT As String = EARTH_ROTATION_INTERNET_DATA_SOURCE_2 ' Default source for earth rotation files - JULY 2020 Changed to NASA because all USNO sites are unavailable until end of 2020
     Friend Const DOWNLOAD_TASK_REPEAT_DEFAULT As String = SCHEDULE_REPEAT_WEEKLY ' Default repeat frequency for the automatic data download task
     Friend Const DOWNLOAD_TASK_TIMEOUT_DEFAULT As Double = 30.0 ' Default timeout in seconds for data transfers from earth rotation data sources
     Friend Const DOWNLOAD_TASK_TRACE_ENABLED_DEFAULT As Boolean = True ' Initial state for download task trace output
