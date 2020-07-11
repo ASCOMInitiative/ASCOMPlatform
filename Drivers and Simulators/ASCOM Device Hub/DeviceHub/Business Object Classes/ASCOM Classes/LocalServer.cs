@@ -898,11 +898,13 @@ namespace ASCOM.DeviceHub
 						break;
 
 					case "-regElevated":
+					case @"/regElevated":
 						RegisterObjects( true );
 
 						break;
 
 					case "-unregElevated":
+					case @"/unregElevated":
 						UnregisterObjects( true );
 
 						break;
