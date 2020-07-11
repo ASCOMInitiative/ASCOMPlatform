@@ -897,17 +897,20 @@ namespace ASCOM.DeviceHub
 
 						break;
 
-					case "-regElevated":
-					case @"/regElevated":
+					case "-regelevated":
+					case @"/regelevated":
 						RegisterObjects( true );
+						retval = false;
 
 						break;
 
-					case "-unregElevated":
-					case @"/unregElevated":
+					case "-unregelevated":
+					case @"/unregelevated":
 						UnregisterObjects( true );
+						retval = false;
 
 						break;
+
 					default:
 						MessageBox.Show( "Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding",
 							"DeviceHub", MessageBoxButton.OK, MessageBoxImage.Exclamation );
