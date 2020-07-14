@@ -20,12 +20,10 @@ Module DeltatCode
     ''' To ensure that leap second and DeltaUT1 transitions are handled correctly and occur at 00:00:00 UTC, the supplied Julian date should be in UTC time
     ''' </remarks>
     Function DeltaTCalc(ByVal JulianDateUTC As Double) As Double
-        Const FALLBACK_LEAP_SECONDS_VALUE = 37 ' A last ditch value to use in the event that the registry values are missing
-
         Dim YearFraction, B, Retval, ModifiedJulianDay As Double, UTCDate As DateTime
 
-        Dim AutomaticTaiUtcOffsetString, ManualTaiUtcOffsetString As String
-        Dim AutomaticLeapSecondsValue, ManualLeapSecondsValue As Double
+        Dim ManualTaiUtcOffsetString As String
+        Dim ManualLeapSecondsValue As Double
 
         Static LastJulianDateUTC As Double = DOUBLE_VALUE_NOT_AVAILABLE, LastDeltaTValue As Double
         Static DeltaTCalcLockObject As Object = New Object()
@@ -46,11 +44,20 @@ Module DeltatCode
         ' NOTE: Starting April 2018 - Please note the use of modified Julian date in the formula rather than year fraction as in previous formulae
 
         ' DATE RANGE January 2022 Onwards - This is beyond the sensible extrapolation range of the most recent data analysis so revert to the basic formula: DeltaT = LeapSeconds + 32.184
-        If (YearFraction >= 2022.0) And (YearFraction < Double.MaxValue) Then
-            Retval = FALLBACK_LEAP_SECONDS_VALUE + GlobalItems.TT_TAI_OFFSET
+        If (YearFraction >= 2022.0) Then
+
+            ' Create an EarthRotationParameters object and retrieve the current leap second value. If something goes wrong return the fall-back value
+            Try
+                Using rp As EarthRotationParameters = New EarthRotationParameters()
+                    Retval = rp.LeapSeconds + TT_TAI_OFFSET ' Get today's leap second value using whatever mechanic the user has configured and convert to DeltaT
+                End Using
+            Catch ex As Exception
+                ' Ultimate fallback value if all else fails!
+                Retval = LEAP_SECOND_ULTIATE_FALLBACK_VALUE + TT_TAI_OFFSET
+            End Try
 
             ' DATE RANGE July 2020 Onwards - The analysis was performed on 10th July 2020 and creates values within 0.01 of a second of the projections to Q2 2021 and sensible extrapolation to the end of 2021
-        ElseIf (YearFraction >= 2020.5) And (YearFraction < Double.MaxValue) Then
+        ElseIf (YearFraction >= 2020.5) Then
             Retval = (0.0000000000234066661113585 * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay) - (0.00000555556956413194 * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay) + (0.494477925757861 * ModifiedJulianDay * ModifiedJulianDay) - (19560.53496991 * ModifiedJulianDay) + 290164271.563078
 
             ' DATE RANGE April 2018 Onwards - The analysis was performed on 25th April 2018 and creates values within 0.03 of a second of the projections to Q4 2018 and sensible extrapolation to 2021
