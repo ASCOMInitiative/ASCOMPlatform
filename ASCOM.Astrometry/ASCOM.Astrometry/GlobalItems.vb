@@ -160,6 +160,9 @@ Module GlobalItems
     Friend Const NOT_DOWNLOADED As String = "Not downloaded"
     Friend Const NEVER_UPDATED As String = "Never"
 
+    ' Ultimate fallback-back value for number of leap seconds if all else fails
+    Friend Const LEAP_SECOND_ULTIATE_FALLBACK_VALUE As Double = 37.0
+
 End Module
 
 #Region "AstroUtil Enums and Structures"
