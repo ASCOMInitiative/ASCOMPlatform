@@ -16,8 +16,8 @@ class DeviceRotator
 
     #region IRotator Implementation
 
-    private float rotatorPosition = 0; // Synced or mechanical position angle of the rotator depending on the value of CanSync
-    private float mechanicalPosition = 0; // Mechanical position angle of the rotator 
+    private float rotatorPosition = 0; // Synced or mechanical position angle of the rotator
+    private float mechanicalPosition = 0; // Mechanical position angle of the rotator
 
     public bool CanReverse
     {
@@ -99,15 +99,6 @@ class DeviceRotator
     }
 
     // IRotatorV3 methods
-
-    public bool CanSync
-    {
-        get
-        {
-            tl.LogMessage("CanSync Get", false.ToString());
-            return false;
-        }
-    }
 
     public float MechanicalPosition
     {
