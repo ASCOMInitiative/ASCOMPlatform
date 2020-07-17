@@ -60,11 +60,12 @@
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
 	<h3>Installing the ASCOM Platform on Windows XP</h3>
-	<p>As of 2018, the ASCOM Initiative no longer supports the Platform on Windows XP. It is possible that it will still work, however some drivers and possibly the Platform itself, may depend on features and fixes that Microsoft has provided since XP. Please don't ask for help with XP. We don't test with it and you should really move on.	XP came out 17 years ago.
-	<p>For reference, here is what we published relating to XP: The ASCOM Platform depends on Microsoft technology that is included in Windows 7 but was not included in Windows XP. This has caused confusion because the ASCOM Platform installer asks for Microsoft .NET Framework x.x. To make a long story short, here's what you need to do before installing the ASCOM Platform on WIndows XP:	
+	<p class="note">NOTE: The ASCOM	Platform 6.5 and later (first released in May 2020) requires at least Windows 7. It does not work on Windows XP. If you have Windows XP, and you do not already have Platform 6.4 or older, go to our Releases page and scroll down to the 6.4 Service Pack 1 release. Download and install that one. We cannot support you, so you're pretty much on your own. XP is extremely old.</p>
+	<p>As of 2018, the ASCOM Initiative no longer supports the Platform on Windows XP. It is possible that Platform <strong>6.4</strong> will still work, however some drivers and possibly the Platform itself, may depend on features and fixes that Microsoft has provided since XP. Please don't ask for help with XP. We don't test with it and you should really move on.	XP came out almost 20 years ago.
+	Again, Platform 6.5 and later will not work on Windows XP.<p>For reference, here is what we published relating to XP: The ASCOM Platform depends on Microsoft technology that is included in Windows 7 but was not included in Windows XP. This has caused confusion because the ASCOM Platform installer asks for Microsoft .NET Framework x.x. To make a long story short, here's what you need to do before installing the ASCOM Platform on WIndows XP:	
 	<ol>
 		<li>Ensure you have Windows XP Service Pack 3 installed. See	<a href="http://support.microsoft.com/kb/322389" target="_blank">http://support.microsoft.com/kb/322389</a></li>
-		<li>Install ONLY the .NET Framework 3.5 SP1. This includes everything you need for the ASCOM Platform. See <a href="http://www.microsoft.com/en-us/download/details.aspx?id=22" target="_blank">http://www.microsoft.com/en-us/download/details.aspx?id=22</a></li>
+		<li>Install the .NET Framework 4 Cient Profile. This includes everything you need for the ASCOM Platform. See <a href="https://www.microsoft.com/en-gb/download/details.aspx?id=24872" target="_blank">https://www.microsoft.com/en-gb/download/details.aspx?id=24872</a></li>
 		<li>If you happen not to have some required operating system updates, you are out of luck. </li>
 		<li>Now install the ASCOM Platform. <span class="underline">You should not apply any compatibility settings, neither before nor after installation</span>.</li>
 	</ol>
