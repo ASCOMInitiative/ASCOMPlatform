@@ -11,8 +11,8 @@ Imports System.Runtime.CompilerServices
 <Assembly: AssemblyTitle("Migration Support")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")> 
-<Assembly: AssemblyProduct("Migration Support")> 
-<Assembly: AssemblyCopyright("Copyright © ASCOM 2010, 2014")> 
+<Assembly: AssemblyProduct("Migration Support")>
+<Assembly: AssemblyCopyright("Copyright © ASCOM 2020")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,7 +31,7 @@ Imports System.Runtime.CompilerServices
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
 
-<Assembly: AssemblyVersion("6.4.0.0")>
+<Assembly: AssemblyVersion("6.5.0.0")>
 
 'Permissions for particular assemblies to access internal "Friend" variables and methods of this assembly
 <Assembly: InternalsVisibleToAttribute("UninstallAscom, PublicKey= " + _

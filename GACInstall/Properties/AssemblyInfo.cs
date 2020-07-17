@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("GACInstall")]
 [assembly: AssemblyDescription("Install assemblies into the GAC. Based on code by Mauricio Rojas orellabac@gmail.com mrojas@artinsoft.com")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2014")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2020")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -22,4 +22,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("fc0404ba-bf0d-4faf-bdd7-b7f1aa1f015d")]
 
 // AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
-[assembly: AssemblyVersion("6.4.0.0")]
+[assembly: AssemblyVersion("6.5.0.0")]

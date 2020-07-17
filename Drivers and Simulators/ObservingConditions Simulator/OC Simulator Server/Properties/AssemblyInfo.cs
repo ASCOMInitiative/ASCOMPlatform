@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("ASCOM Observing Conditions Simulator")]
-[assembly: AssemblyCopyright("Copyright ASCOM © 2015")]
+[assembly: AssemblyCopyright("Copyright ASCOM © 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -21,6 +21,6 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("6.4.0.0")]
+[assembly: AssemblyVersion("6.5.0.0")]
 
 [assembly: ComVisibleAttribute(false)]

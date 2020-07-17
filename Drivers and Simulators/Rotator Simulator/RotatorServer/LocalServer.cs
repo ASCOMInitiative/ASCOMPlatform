@@ -223,7 +223,6 @@ namespace ASCOM.Simulator
 			m_ComObjectAssys = new ArrayList();
 			m_ComObjectTypes = new ArrayList();
 
-            string assy = Assembly.GetEntryAssembly().Location;
             string assyPath = Assembly.GetEntryAssembly().Location;
 
             var executableFolder = Path.GetDirectoryName(assyPath);
@@ -623,7 +622,7 @@ namespace ASCOM.Simulator
             m_MainForm.Visible = true;
 
 			// Initialize hardware layer
-			RotatorHardware.Initialize();
+			RotatorHardware.ReadConfiguration();
 
 			// Start up the garbage collection thread.
 			GarbageCollection GarbageCollector = new GarbageCollection(1000);
@@ -650,7 +649,7 @@ namespace ASCOM.Simulator
 			GarbageCollector.WaitForThreadToStop();
 
 			// And finally save the hardware state for next time
-			RotatorHardware.Finalize_();
+			RotatorHardware.WriteConfiguration();
 
 		}
 		#endregion

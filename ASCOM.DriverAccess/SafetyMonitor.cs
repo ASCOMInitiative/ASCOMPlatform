@@ -15,9 +15,9 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class SafetyMonitor : AscomDriver, ISafetyMonitor
     {
-        #region SafetyMonitor constructors
-
         private readonly MemberFactory _memberFactory;
+
+        #region SafetyMonitor constructors
 
         /// <summary>
         /// Creates a SafetyMonitor object with the given Prog ID
@@ -32,7 +32,7 @@ namespace ASCOM.DriverAccess
 
         #region Convenience Members
         /// <summary>
-        /// Brings up the ASCOM Chooser Dialog to choose a SafetyMonitor
+        /// Brings up the ASCOM Chooser Dialogue to choose a SafetyMonitor
         /// </summary>
         /// <param name="safetyMonitorId">SafetyMonitor Prog ID for default or null for None</param>
         /// <returns>Prog ID for chosen SafetyMonitor or null for none</returns>

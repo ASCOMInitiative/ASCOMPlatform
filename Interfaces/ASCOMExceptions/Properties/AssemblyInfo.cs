@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ASCOM Exceptions")]
 [assembly: AssemblyDescription("Exception classes for use in ASCOM Drivers")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2014")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2020")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -24,4 +24,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("3e1da6ba-4e5a-4627-bd36-cfdc484bcaef")]
 // AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
 
-[assembly: AssemblyVersion("6.0.0.0")]
+[assembly: AssemblyVersion("6.0.0")]

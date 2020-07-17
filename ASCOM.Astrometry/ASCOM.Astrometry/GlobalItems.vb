@@ -149,7 +149,7 @@ Module GlobalItems
     Friend Const AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT As String = NOT_DOWNLOADED ' Default value for the automatically downloaded number of leap seconds
     Friend Const NEXT_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT As String = NOT_DOWNLOADED ' Default value for the next leap second
     Friend Const NEXT_LEAP_SECONDS_DATE_NOT_AVAILABLE_DEFAULT As String = NOT_DOWNLOADED ' Default value for the next leap second effective date
-    Friend Const DOWNLOAD_TASK_INTERNET_DATA_SOURCE_DEFAULT As String = EARTH_ROTATION_INTERNET_DATA_SOURCE_0 ' Default source for earth rotation files
+    Friend Const DOWNLOAD_TASK_INTERNET_DATA_SOURCE_DEFAULT As String = EARTH_ROTATION_INTERNET_DATA_SOURCE_2 ' Default source for earth rotation files - JULY 2020 Changed to NASA because all USNO sites are unavailable until end of 2020
     Friend Const DOWNLOAD_TASK_REPEAT_DEFAULT As String = SCHEDULE_REPEAT_WEEKLY ' Default repeat frequency for the automatic data download task
     Friend Const DOWNLOAD_TASK_TIMEOUT_DEFAULT As Double = 30.0 ' Default timeout in seconds for data transfers from earth rotation data sources
     Friend Const DOWNLOAD_TASK_TRACE_ENABLED_DEFAULT As Boolean = True ' Initial state for download task trace output
@@ -159,6 +159,9 @@ Module GlobalItems
     Friend ReadOnly DATE_VALUE_NOT_AVAILABLE As DateTime = New DateTime(1, 1, 1)
     Friend Const NOT_DOWNLOADED As String = "Not downloaded"
     Friend Const NEVER_UPDATED As String = "Never"
+
+    ' Ultimate fallback-back value for number of leap seconds if all else fails
+    Friend Const LEAP_SECOND_ULTIATE_FALLBACK_VALUE As Double = 37.0
 
 End Module
 

@@ -11,7 +11,7 @@ using System.Resources;
 [assembly: AssemblyTitle("Simulator Camera V2 Driver")]
 [assembly: AssemblyDescription("ASCOM Camera Driver for Camera Simulator")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("Copyright © 2010, 2014 The ASCOM Initiative")]
+[assembly: AssemblyCopyright("Copyright © 2020 The ASCOM Initiative")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -26,4 +26,4 @@ using System.Resources;
 [assembly: NeutralResourcesLanguageAttribute("en")]
 
 // AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
-[assembly: AssemblyVersion("6.4.0.0")]
+[assembly: AssemblyVersion("6.5.0.0")]

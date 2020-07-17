@@ -16,7 +16,8 @@ class DeviceRotator
 
     #region IRotator Implementation
 
-    private float rotatorPosition = 0; // Absolute position angle of the rotator 
+    private float rotatorPosition = 0; // Synced or mechanical position angle of the rotator
+    private float mechanicalPosition = 0; // Mechanical position angle of the rotator
 
     public bool CanReverse
     {
@@ -95,6 +96,34 @@ class DeviceRotator
             tl.LogMessage("TargetPosition Get", rotatorPosition.ToString()); // This rotator has instantaneous movement
             return rotatorPosition;
         }
+    }
+
+    // IRotatorV3 methods
+
+    public float MechanicalPosition
+    {
+        get
+        {
+            tl.LogMessage("MechanicalPosition Get", mechanicalPosition.ToString());
+            return mechanicalPosition;
+        }
+    }
+
+    public void MoveMechanical(float Position)
+    {
+        tl.LogMessage("MoveMechanical", Position.ToString()); // Move to this position
+
+        // TODO: Implement correct sync behaviour. i.e. if the rotator has been synced the mechanical and rotator positions won't be the same
+        mechanicalPosition = (float)astroUtilities.Range(Position, 0.0, true, 360.0, false); // Ensure value is in the range 0.0..359.9999...
+        rotatorPosition = (float)astroUtilities.Range(Position, 0.0, true, 360.0, false); // Ensure value is in the range 0.0..359.9999...
+    }
+
+    public void Sync(float Position)
+    {
+        tl.LogMessage("Sync", Position.ToString()); // Sync to this position
+
+        // TODO: Implement correct sync behaviour. i.e. the rotator mechanical and rotator positions may not be the same
+        rotatorPosition = (float)astroUtilities.Range(Position, 0.0, true, 360.0, false); // Ensure value is in the range 0.0..359.9999...
     }
 
     #endregion

@@ -12,11 +12,11 @@
 **  This file is part of the International Astronomical Union's
 **  SOFA (Standards Of Fundamental Astronomy) software collection.
 **
-**  This revision:   2017 October 7
+**  This revision:   2018 December 5
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 
 #include "sofam.h"
@@ -297,10 +297,28 @@ EXPORT int iauStarpv(double ra, double dec,
               double pv[2][3]);
 
 /* Astronomy/StarCatalogs */
+
+EXPORT void iauFk425(double r1950, double d1950,
+              double dr1950, double dd1950,
+              double p1950, double v1950,
+              double *r2000, double *d2000,
+              double *dr2000, double *dd2000,
+              double *p2000, double *v2000);
+EXPORT void iauFk45z(double r1950, double d1950, double bepoch,
+              double *r2000, double *d2000);
+EXPORT void iauFk524(double r2000, double d2000,
+              double dr2000, double dd2000,
+              double p2000, double v2000,
+              double *r1950, double *d1950,
+              double *dr1950, double *dd1950,
+              double *p1950, double *v1950);
 EXPORT void iauFk52h(double r5, double d5,
               double dr5, double dd5, double px5, double rv5,
               double *rh, double *dh,
               double *drh, double *ddh, double *pxh, double *rvh);
+EXPORT void iauFk54z(double r2000, double d2000, double bepoch,
+              double *r1950, double *d1950,
+              double *dr1950, double *dd1950);
 EXPORT void iauFk5hip(double r5h[3][3], double s5h[3]);
 EXPORT void iauFk5hz(double r5, double d5, double date1, double date2,
               double *rh, double *dh);
@@ -480,7 +498,7 @@ EXPORT void iauSxpv(double s, double pv[2][3], double spv[2][3]);
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

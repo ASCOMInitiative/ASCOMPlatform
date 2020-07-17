@@ -1,0 +1,120 @@
+            Updates for SOFA Release 15 : 2019 July 22
+            - - - - - - - - - - - - - - - - - - - - - - -
+
+Summary of Changes
+------------------
+The changes fall into the following categories:
+
+1. Wrong sign in the ANSI C function iauTdbtcb corrected.
+
+2. Update DAT release year.
+
+3. Implementation of four new routines that have been added to the
+   Star Catalog Conversions section dealing with the transformation
+   between the FK4 and the FK5 reference systems.  These routines
+   have have been included partly for completeness but mainly so that
+   positions in publications pre-1984 can be properly handled.  They
+   cover conversions between B1950.0 FK4 and J2000.0 FK5, with and
+   without proper motion.
+
+4. Enhancement of 17 routines that compare the two components of
+   given date/time arguments to minimize rounding errors, so that
+   optimum results are achieved even when one of the arguments is
+   negative.  (SOFA is grateful to the Astropy group for drawing
+   attention to the deficiency.)
+
+5. Due to introducing these new routines, the Astrometry Tools
+   Cookbook, the test program and other supporting files have also
+   been updated.
+
+6. Miscellaneous typographical corrections and improvements to
+   various other documents.
+
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+FORTRAN 77 Library
+------------------
+
+1.  iau_DAT      Year ....
+
+2.  iau_FK425    Convert B1950.0 FK4 star catalog data to J2000.0 FK5.
+    iau_FK524    Convert J2000.0 FK5 star catalog data to B1950.0 FK4.
+    iau_FK45Z    Convert a B1950.0 FK4 star position to J2000.0 FK5,
+                 assuming zero proper motion in the FK5 system.
+    iau_FK54Z    Convert a J2000.0 FK5 star position to B1950.0 FK4,
+                 assuming zero proper motion in FK5 and zero parallax.
+
+3. iau_JD2CAL    In all these routines the Fortran function ABS was
+   iau_JD2CALF   included when comparing the two argument data/time
+   iau_TAITT     parameter.
+   iau_TAIUT1
+   iau_TAIUTC
+   iau_TCBTDB
+   iau_TCGTT
+   iau_TDBTCB
+   iau_TDBTT
+   iau_TTTAI
+   iau_TTTCG
+   iau_TTTDB
+   IAU_TTUT1
+   iau_UT1TAI
+   iau_UT1TT
+   iau_UT1UTC
+   iau_UTCTAI
+
+4. t_sofa_f.for     Addition of new routines.
+
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+ANSI C Library
+--------------
+
+1.  iauTdbtcb.c Replace
+                    *tcb1 = f - ( d - ( f - t77tf ) ) * elbb;
+                by
+                    *tcb1 = f + ( d - ( f - t77tf ) ) * elbb;
+
+                n.b. the sign error affects only one of two paths
+                through the code.
+
+2. iauDat       Release year.
+
+3. iauFk425     Convert B1950.0 FK4 star catalog data to J2000.0 FK5.
+   iauFk524     Convert J2000.0 FK5 star catalog data to B1950.0 FK4.
+   iauFk45z     Convert a B1950.0 FK4 star position to J2000.0 FK5,
+                assuming zero proper motion in the FK5 system.
+   iauFk54z     Convert a J2000.0 FK5 star position to B1950.0 FK4,
+                assuming zero proper motion in FK5 and zero parallax.
+   sofa.h       Inclusion of the above routines' prototype
+                declarations.
+
+4. iauJd2cal    In these 17 routines the ANSI C function fabs() was
+   iauJd2calf   included when comparing the two argument data/time
+   iauJd2calf   parameter.
+   iauTaitt
+   iauTaiut1
+   iauTaiutc
+   iauTcbtdb
+   iauTcgtt
+   iauTdbtcb
+   iauTdbtt
+   iauTttai
+   iauTttcg
+   iauTttdb
+   IAUTtut1
+   iauUt1tai
+   iauUt1tt
+   iauUt1utc
+   iauUtctai
+
+5. t_sofa_c.c   Addition of new routines.
+
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
++ SOFA thanks all those who have reported the various issues that go
++ to ensuring the libraries and documentation are kept up-to-date and
++ relevant.
++
++ End of updates
++ 2019 June 30
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+

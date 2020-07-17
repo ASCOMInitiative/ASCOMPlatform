@@ -30,7 +30,7 @@ namespace ASCOM.OpenWeatherMap
     // Your driver's DeviceID is ASCOM.OpenWeatherMap.ObservingConditions
     //
     // The Guid attribute sets the CLSID for ASCOM.OpenWeatherMap.ObservingConditions
-    // The ClassInterface/None addribute prevents an empty interface called
+    // The ClassInterface/None attribute prevents an empty interface called
     // _OpenWeatherMap from being created and used as the [default] interface
     //
     // TODO Replace the not implemented exceptions with code to implement the function or

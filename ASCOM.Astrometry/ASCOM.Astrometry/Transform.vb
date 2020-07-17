@@ -471,7 +471,10 @@ Namespace Transform
             Set(value As Double)
                 Dim tai1, tai2, utc1, utc2 As Double
 
-                If (value < JULIAN_DATE_MINIMUM_VALUE) Or (value > JULIAN_DATE_MAXIMUM_VALUE) Then Throw New ASCOM.InvalidValueException("JulianDateTT", value.ToString(), JULIAN_DATE_MINIMUM_VALUE.ToString(), JULIAN_DATE_MAXIMUM_VALUE.ToString())
+                ' Validate the supplied value, it must be 0.0 or within the permitted range
+                If (value <> 0.0) And ((value < JULIAN_DATE_MINIMUM_VALUE) Or (value > JULIAN_DATE_MAXIMUM_VALUE)) Then
+                    Throw New ASCOM.InvalidValueException("JulianDateTT", value.ToString(), JULIAN_DATE_MINIMUM_VALUE.ToString(), JULIAN_DATE_MAXIMUM_VALUE.ToString())
+                End If
 
                 JulianDateTTValue = value
                 RequiresRecalculate = True ' Force a recalculation because the Julian date has changed
@@ -504,7 +507,10 @@ Namespace Transform
             Set(value As Double)
                 Dim tai1, tai2, tt1, tt2 As Double
 
-                If (value < JULIAN_DATE_MINIMUM_VALUE) Or (value > JULIAN_DATE_MAXIMUM_VALUE) Then Throw New ASCOM.InvalidValueException("JulianDateUTC", value.ToString(), JULIAN_DATE_MINIMUM_VALUE.ToString(), JULIAN_DATE_MAXIMUM_VALUE.ToString())
+                ' Validate the supplied value, it must be 0.0 or within the permitted range
+                If (value <> 0.0) And ((value < JULIAN_DATE_MINIMUM_VALUE) Or (value > JULIAN_DATE_MAXIMUM_VALUE)) Then
+                    Throw New ASCOM.InvalidValueException("JulianDateUTC", value.ToString(), JULIAN_DATE_MINIMUM_VALUE.ToString(), JULIAN_DATE_MAXIMUM_VALUE.ToString())
+                End If
 
                 JulianDateUTCValue = value
                 RequiresRecalculate = True ' Force a recalculation because the Julian date has changed

@@ -24,7 +24,7 @@ Module GlobalConstants
     Friend Const ASTROUTILS_TRACE As String = "Trace Astro Utils", ASTROUTILS_TRACE_DEFAULT As Boolean = False
     Friend Const NOVAS_TRACE As String = "Trace NOVAS", NOVAS_TRACE_DEFAULT As Boolean = False
     Friend Const SERIAL_WAIT_TYPE As String = "Serial Wait Type", SERIAL_WAIT_TYPE_DEFAULT As ASCOM.Utilities.Serial.WaitType = Serial.WaitType.WaitForSingleObject
-
+    Friend Const SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE As String = "Suppress Alpaca Driver Admin Dialogue", SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE_DEFAULT As Boolean = False
     Friend Const PROFILE_MUTEX_NAME As String = "ASCOMProfileMutex" 'Name and timout value for the Profile mutex than ensures only one profile action happens at a time
     Friend Const PROFILE_MUTEX_TIMEOUT As Integer = 5000
 
@@ -95,6 +95,7 @@ Module GlobalConstants
     Friend Const TRACE_LOGGER_PATH As String = "\ASCOM" ' Path to TraceLogger directory from My Documents
     Friend Const TRACE_LOGGER_FILENAME_BASE As String = "\Logs " ' Fixed part of TraceLogger file name.  Note: The trailing space must be retained!
     Friend Const TRACE_LOGGER_FILE_NAME_DATE_FORMAT As String = "yyyy-MM-dd"
+    Friend Const TRACE_LOGGER_SYSTEM_PATH As String = "\ASCOM\SystemLogs" ' Location where "System" user logs will be placed
 
     Friend Enum EventLogErrors As Integer
         EventLogCreated = 0

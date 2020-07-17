@@ -31,8 +31,8 @@ namespace ASCOM
         /// </summary>
         /// <param name = "propertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
         /// <param name = "value">The invalid value that was supplied</param>
-        /// <param name="fromValue"></param>
-        /// <param name="toValue"></param>
+        /// <param name="fromValue">Valid range lower bound</param>
+        /// <param name="toValue">Valid range upper bound</param>
         public InvalidValueException(string propertyOrMethod, string value, string fromValue, string toValue) : base(String.Format(CultureInfo.InvariantCulture, csMessage2, propertyOrMethod, value, fromValue, toValue), ErrorCodes.InvalidValue)
         {
             PropertyOrMethod = propertyOrMethod;

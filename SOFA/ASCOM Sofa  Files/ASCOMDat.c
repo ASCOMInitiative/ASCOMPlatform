@@ -4,7 +4,7 @@
 
 /* This routine returns  the number of leap seconds for a given Gregorian calendar date. */
 
-/* The IAU / SOFA supplied library makes use of hard coded leap second data to enable it to operate in a stand alone envirtonment. */
+/* The IAU / SOFA supplied library makes use of hard coded leap second data to enable it to operate in a stand alone environment. */
 /* However, this approach requires that any application that uses the library be recompiled with an updated SOFA library whenever a new leap second is announced.*/
 /* To mitigate this, SOFA have provided a dispensation (SOFA License Note 3c below) for organisations to modify the iauDat routine to suite local conventions for dealing with leap second changes.*/
 
@@ -15,8 +15,8 @@ static LeapSecondData UpdatedLeapSecondData[100];  // Global LeapSecondData arra
 static bool HasUpdatedData = false;				   // Global boolean flag to indicate whether updated data has been supplied. If TRUE, the updated data will be used, if FALSE, built-in data will be used
 static int NUPDATED = 0;						   // Global integer to hold the number of updated leap second records supplied
 
-// This is the master data table for the whole ASCOM Platform. It is located here in the SOFA DLLs so that they can be used independedntly of the Platform if required.
-// The Platform EarthRotatiuonParameters class reads these values through a static SOFA assmebly method and uses them as neded throughout the Platform
+// This is the master data table for the whole ASCOM Platform. It is located here in the SOFA DLLs so that they can be used independently of the Platform if required.
+// The Platform EarthRotatiuonParameters class reads these values through a static SOFA assembly method and uses them as needed throughout the Platform
 // When new leap seconds are announced:
 //      1) The new value should be added to the end of the values here
 //      2) The NBUILTIN enum in ASCOMDat.h should be incremented to reflect the new number of leap second values
@@ -197,7 +197,7 @@ int iauDat(int iy, int im, int id, double fd, double *deltat)
 	int NDAT; // Number of valid records in the pointer based table (not the dimension of the array itself)
 
 	/* Release year for this version of iauDat */
-	enum { IYV = 2017 };
+	enum { IYV = 2019 };
 
 	/* Reference dates (MJD) and drift rates (s/day), pre leap seconds */
 	static const double drift[][2] =
@@ -231,7 +231,7 @@ int iauDat(int iy, int im, int id, double fd, double *deltat)
 	}
 	else // No external data has been supplied so use the built-in data instead
 	{
-		NDAT = NBUILTIN; // Save the nunber of updated data records
+		NDAT = NBUILTIN; // Save the number of updated data records
 		SelectedLeapSecondData = &BuiltInLeapSecondData; // Assign the built-in data array address to the SelectedLeapSecondArray variable
 #ifdef _DEBUG 
 		printf("Using %i BUILT IN leap second data values to get leap seconds for day %i %i %i - ", NDAT, id, im, iy);
@@ -402,7 +402,7 @@ int UpdateLeapSecondData(LeapSecondData SuppliedLeapSecondData[])
 /* STORES:  Supplied SuppliedLeapSecondData array data in global array UpdatedLeapSecondData                                                                            */
 /* RETURNS: Integer status code:                                                                                                                                        */
 /*                       0 - Success - data accepted																													*/
-/*                       1 - Success - data ignored because it has already been supplie 			        															*/
+/*                       1 - Success - data ignored because it has already been supplied 			        															*/
 /*                       2 - Failure - data rejected because at least 100 records were supplied and this is unreasonable since there are only 42 records at April 2018! */
 /************************************************************************************************************************************************************************/
 
@@ -423,7 +423,7 @@ int UpdateLeapSecondData(LeapSecondData SuppliedLeapSecondData[])
 			printf("UpdateLeapSecondData value: %g %i %i\n", SuppliedLeapSecondData[NUPDATED].LeapSeconds, SuppliedLeapSecondData[NUPDATED].Month, SuppliedLeapSecondData[NUPDATED].Year);
 #endif
 
-			UpdatedLeapSecondData[NUPDATED].Year = SuppliedLeapSecondData[NUPDATED].Year; // Save the data to the UpdatedLeapSecondData arrau
+			UpdatedLeapSecondData[NUPDATED].Year = SuppliedLeapSecondData[NUPDATED].Year; // Save the data to the UpdatedLeapSecondData array
 			UpdatedLeapSecondData[NUPDATED].Month = SuppliedLeapSecondData[NUPDATED].Month;
 			UpdatedLeapSecondData[NUPDATED].LeapSeconds = SuppliedLeapSecondData[NUPDATED].LeapSeconds;
 
@@ -435,7 +435,7 @@ int UpdateLeapSecondData(LeapSecondData SuppliedLeapSecondData[])
 			HasUpdatedData = true; // Record that we will use the updated leap second data
 			rc = 0; // Return a status code to show that the new data was accepted
 		}
-		else // We have at least 100 records so we will assume that there are more to come, which would exceed the data size of the array. Consequqntly we will not accept the new data
+		else // We have at least 100 records so we will assume that there are more to come, which would exceed the data size of the array. Consequently we will not accept the new data
 		{
 			HasUpdatedData = false; // Record that we will use the built-in leap second data
 			rc = 2; // Return a status code to show that the new data was rejected
@@ -496,7 +496,7 @@ int GetLeapSecondData(LeapSecondData ReturnedLeapSecondData[], bool *UpdatedData
 		/* Iterate over the supplied data and transfer it to the return array */
 		while (RecordNumber < NUPDATED)
 		{
-			ReturnedLeapSecondData[RecordNumber].Year = UpdatedLeapSecondData[RecordNumber].Year; // Save the data to the UpdatedLeapSecondData arrau
+			ReturnedLeapSecondData[RecordNumber].Year = UpdatedLeapSecondData[RecordNumber].Year; // Save the data to the UpdatedLeapSecondData array
 			ReturnedLeapSecondData[RecordNumber].Month = UpdatedLeapSecondData[RecordNumber].Month;
 			ReturnedLeapSecondData[RecordNumber].LeapSeconds = UpdatedLeapSecondData[RecordNumber].LeapSeconds;
 
@@ -519,7 +519,7 @@ int GetLeapSecondData(LeapSecondData ReturnedLeapSecondData[], bool *UpdatedData
 		/* Iterate over the supplied data and transfer it to the return array */
 		while (RecordNumber < NBUILTIN)
 		{
-			ReturnedLeapSecondData[RecordNumber].Year = BuiltInLeapSecondData[RecordNumber].Year; // Save the data to the UpdatedLeapSecondData arrau
+			ReturnedLeapSecondData[RecordNumber].Year = BuiltInLeapSecondData[RecordNumber].Year; // Save the data to the UpdatedLeapSecondData array
 			ReturnedLeapSecondData[RecordNumber].Month = BuiltInLeapSecondData[RecordNumber].Month;
 			ReturnedLeapSecondData[RecordNumber].LeapSeconds = BuiltInLeapSecondData[RecordNumber].LeapSeconds;
 
@@ -555,7 +555,7 @@ int UsingUpdatedData()
 	return HasUpdatedData;
 }
 
-/* Method called from outside the SOFA DLL to return the builkt-in leap second data table */
+/* Method called from outside the SOFA DLL to return the built-in leap second data table */
 int GetBuiltInLeapSecondData(LeapSecondData ReturnedLeapSecondData[])
 
 /************************************************************************************************************************************************************************/
@@ -575,7 +575,7 @@ int GetBuiltInLeapSecondData(LeapSecondData ReturnedLeapSecondData[])
 	/* Iterate over the supplied data and transfer it to the return array */
 	while (RecordNumber < NBUILTIN)
 	{
-		ReturnedLeapSecondData[RecordNumber].Year = BuiltInLeapSecondData[RecordNumber].Year; // Save the data to the UpdatedLeapSecondData arrau
+		ReturnedLeapSecondData[RecordNumber].Year = BuiltInLeapSecondData[RecordNumber].Year; // Save the data to the UpdatedLeapSecondData array
 		ReturnedLeapSecondData[RecordNumber].Month = BuiltInLeapSecondData[RecordNumber].Month;
 		ReturnedLeapSecondData[RecordNumber].LeapSeconds = BuiltInLeapSecondData[RecordNumber].LeapSeconds;
 

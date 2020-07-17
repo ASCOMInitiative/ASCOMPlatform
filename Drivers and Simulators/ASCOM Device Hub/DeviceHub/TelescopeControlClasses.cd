@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ASCOM.DeviceHub.Server" Collapsed="true">
+    <Position X="6" Y="0.5" Width="1.75" />
+    <AssociationLine Name="MainWindow" Type="ASCOM.DeviceHub.MainWindow" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6.484" Y="1.062" />
+        <Point X="6.484" Y="1.312" />
+        <Point X="5.062" Y="1.312" />
+        <Point X="5.062" Y="1.75" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="ViewModel" Type="ASCOM.DeviceHub.MainWindowViewModel" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.031" Y="1.062" />
+        <Point X="7.031" Y="1.437" />
+        <Point X="8.625" Y="1.437" />
+        <Point X="8.625" Y="1.75" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>IIHIEoAAJAIgBIACIAwkgAAAEgAAoRMABgQABBCBARA=</HashCode>
+      <FileName>Business Object Classes\ASCOM Classes\LocalServer.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="MainWindow" />
+      <Property Name="ViewModel" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ASCOM.DeviceHub.MainWindowViewModel" Collapsed="true">
+    <Position X="7.5" Y="1.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>IAEIEAAAAAAAAAAIABAggAAAAECAIgFBAAACQAgAAAA=</HashCode>
+      <FileName>ViewModel Classes\MainWindowViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="TelescopeVm" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ASCOM.DeviceHub.TelescopeViewModel" Collapsed="true">
+    <Position X="6" Y="3" Width="2.25" />
+    <AssociationLine Name="ParametersVm" Type="ASCOM.DeviceHub.TelescopeParametersViewModel" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.25" Y="3.438" />
+        <Point X="10" Y="3.438" />
+        <Point X="10" Y="4.25" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="CapabilitiesVm" Type="ASCOM.DeviceHub.TelescopeCapabilitiesViewModel" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.25" Y="3.25" />
+        <Point X="12.875" Y="3.25" />
+        <Point X="12.875" Y="4.25" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="MotionVm" Type="ASCOM.DeviceHub.TelescopeMotionViewModel" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6" Y="3.25" />
+        <Point X="5.524" Y="3.25" />
+        <Point X="5.524" Y="3.253" />
+        <Point X="1.625" Y="3.253" />
+        <Point X="1.625" Y="4.25" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>Il0gAAAEgAAAAEBEAEAgAAAAEACAAgCAAQgAQBgBIEA=</HashCode>
+      <FileName>ViewModel Classes\Telescope ViewModels\TelescopeViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="ParametersVm" />
+      <Property Name="CapabilitiesVm" />
+      <Property Name="TrackingRatesVm" />
+      <Property Name="DirectSlewVm" />
+      <Property Name="MotionVm" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ASCOM.DeviceHub.TelescopeMotionViewModel" Collapsed="true">
+    <Position X="0.5" Y="4.25" Width="2.25" />
+    <AssociationLine Name="TelescopeManager" Type="ASCOM.DeviceHub.ITelescopeManager" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.625" Y="4.941" />
+        <Point X="1.625" Y="6" />
+        <Point X="3.25" Y="6" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>YFEVmAgNMAAEAAUIhASAAgQUEIDAADQAAYLCIAQmAGA=</HashCode>
+      <FileName>ViewModel Classes\Telescope ViewModels\TelescopeMotionViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="TelescopeManager" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ASCOM.DeviceHub.TelescopeDirectSlewViewModel" Collapsed="true">
+    <Position X="3" Y="4.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AEMgAAEFGAAAAAABAIAACgAA0ACQkQACAACDAJABIGA=</HashCode>
+      <FileName>ViewModel Classes\Telescope ViewModels\TelescopeDirectSlewViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="TelescopeManager" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ASCOM.DeviceHub.TelescopeTrackingRatesViewModel" Collapsed="true">
+    <Position X="5.75" Y="4.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>CgCCAACFEgAAwABAAMAAKgAAAACUQEAEQoQIAFAQCkg=</HashCode>
+      <FileName>ViewModel Classes\Telescope ViewModels\TelescopeTrackingRatesViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="TelescopeManager" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ASCOM.DeviceHub.TelescopeCapabilitiesViewModel" Collapsed="true">
+    <Position X="11.5" Y="4.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAEAAAAAAAAAAAAAACAACQAAAAAAAAABAAAAA=</HashCode>
+      <FileName>ViewModel Classes\Telescope ViewModels\TelescopeCapabilitiesViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ASCOM.DeviceHub.TelescopeParametersViewModel" Collapsed="true">
+    <Position X="8.75" Y="4.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAEAAAAAAAAAgAAAACAAAAAAIAAAAAACAA=</HashCode>
+      <FileName>ViewModel Classes\Telescope ViewModels\TelescopeParametersViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ASCOM.DeviceHub.TelescopeManager" Collapsed="true">
+    <Position X="3.25" Y="7" Width="2.25" />
+    <AssociationLine Name="Service" Type="ASCOM.DeviceHub.ITelescopeService">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.11" Y="0.06" Height="0.182" Width="0.712" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>5C8EwwHVuHBv1O95+gLc3MbBgyLs7CqUSOtIq4NJTDY=</HashCode>
+      <FileName>DeviceManagers\TelescopeManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Service" />
+    </ShowAsAssociation>
+    <Lollipop Position="1.043" />
+  </Class>
+  <Class Name="ASCOM.DeviceHub.TelescopeService" Collapsed="true">
+    <Position X="3.25" Y="9.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>zAEAEQCUiHBs0OYJmALc0EaBAALMTCIQQIIIOwIoCCY=</HashCode>
+      <FileName>Services Classes\Implementations\TelescopeService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.708" />
+  </Class>
+  <Class Name="ASCOM.DeviceHub.App" Collapsed="true">
+    <Position X="3.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ASCOM.DeviceHub.MainWindow" Collapsed="true">
+    <Position X="4.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View Classes\MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="1.158" />
+  </Class>
+  <Interface Name="ASCOM.DeviceHub.ITelescopeManager" Collapsed="true">
+    <Position X="3.25" Y="5.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAYAAgFEAAAABABIAAKABIAAAAAAAAAAAAAAAAEABCA=</HashCode>
+      <FileName>DeviceManagers\ITelescopeManager.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ASCOM.DeviceHub.ITelescopeService" Collapsed="true">
+    <Position X="3.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services Classes\Interfaces\ITelescopeService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

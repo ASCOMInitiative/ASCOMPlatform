@@ -36,7 +36,7 @@ namespace ConsoleApplication1
         private const string BuiltInAdministratorsSID = "S-1-5-32-544";
         private const string BuiltInUsersSID = "S-1-5-32-545";
 
-        // Readonly and full registry access rights lists. These are as implemented by Windows after an "out of the box" install.
+        // Read only and full registry access rights lists. These are as implemented by Windows after an "out of the box" install.
         static private AccessRights FullRights = AccessRights.Query |
                                                  AccessRights.SetKey |
                                                  AccessRights.CreateSubKey |
@@ -54,7 +54,7 @@ namespace ConsoleApplication1
                                                  AccessRights.StandardReadControl;
 
         /// <summary>
-        /// Enum containing all the possible registry access rights values. The buit-in RegistryRights enum only has a partial collection
+        /// Enum containing all the possible registry access rights values. The built-in RegistryRights enum only has a partial collection
         /// and often returns values such as -1 or large positive and negative integer values when converted to a string
         /// The Flags attribute ensures that the ToString operation returns an aggregate list of discrete values
         /// </summary>
@@ -102,7 +102,7 @@ namespace ConsoleApplication1
         {
             try
             {
-                TL = new TraceLogger("", "FinaliseInstall"); // Create a tracelogger so we can log what happens
+                TL = new TraceLogger("", "FinaliseInstall"); // Create a trace logger so we can log what happens
                 TL.Enabled = true;
 
                 LogMessage("FinaliseInstall", "Starting finalise process");
@@ -110,7 +110,8 @@ namespace ConsoleApplication1
                 try
                 {
 
-                    CheckHKCRPermissions(false); // Check that required pernissions are present on HKCR
+                    // Check that required permissions are present on HKCR
+                    CheckHKCRPermissions(false);
 
                     tProfile = Type.GetTypeFromProgID("DriverHelper.Profile"); // Create a late bound Helper.Profile
                     if (tProfile == null) // Check whether the Type.GetTypeFromProgID method was successful
@@ -119,7 +120,7 @@ namespace ConsoleApplication1
                         // Report the error, restore standard permissions and try again to get the type
 
                         LogMessage("FinaliseInstall", "BAD - DriverHelper.Profile returned Type is null, attempting to fix registry permissions on HKCR!");
-                        CheckHKCRPermissions(true); // Fix any missing pernissions on HKCR
+                        CheckHKCRPermissions(true); // Fix any missing permissions on HKCR
                         LogMessage("FinaliseInstall", " ");
                         LogMessage("FinaliseInstall", "Making check that new permissions are OK");
                         CheckHKCRPermissions(false); // Confirm that the new permissions fix the issue
@@ -128,7 +129,7 @@ namespace ConsoleApplication1
                         if (tProfile == null)
                         {
                             // Bad news - again unable to create the type so log this as an error
-                            LogError("FinaliseInstall", "DriverHelper.Profile returned Type is still null on second attmept!");
+                            LogError("FinaliseInstall", "DriverHelper.Profile returned Type is still null on second attempt!");
                         }
                         else
                         {
@@ -152,17 +153,13 @@ namespace ConsoleApplication1
                     LogError("FinaliseInstall", "Exception 6: " + ex.ToString());
                 }
 
-                //
                 // Force TypeLib linkages to PIAs (bug on repair & upgrades).
-                //
                 LogMessage("FinaliseInstall", "Fixing PIA Linkages");
                 FixPiaLinkage("{12DC26BD-E8F7-4328-8A8B-B16C6D87A077}", "ASCOM.Helper");
                 FixPiaLinkage("{55B16037-26C0-4F1E-A6DC-4C0E702D9FBE}", "ASCOM.Helper2");
                 FixPiaLinkage("{76618F90-032F-4424-A680-802467A55742}", "ASCOM.Interfaces");
 
-                //
                 // Remove Platform 4.1 installer entry in Add/Remove Programs (TESTED)
-                //
                 LogMessage("FinaliseInstall", "Removing Platform 4.1 installer entries");
                 RegistryKey rkAddRem = null;
                 try
@@ -175,10 +172,7 @@ namespace ConsoleApplication1
                 catch (Exception) { }
                 finally { if (rkAddRem != null) rkAddRem.Close(); }
 
-                //
                 // Attempt to remove some old Platform Start Menu items
-                // No special folder for all users start menu?
-                //
                 LogMessage("FinaliseInstall", "Cleaning old start menu items");
                 string startPath = "C:\\Documents and Settings\\All Users\\Start Menu\\Programs\\ASCOM Platform";
                 try
@@ -195,16 +189,10 @@ namespace ConsoleApplication1
                 }
                 catch (Exception) { }
 
-                //
-                // Set up some paths...
-                //
+                // Find path to the common files folder
                 string ascomPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) + "\\ASCOM";
-                //string xmlProfPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\ASCOM";
 
-                //
-                // Remove old Wise uninstaller and install log. It's weird, but this
-                // stuff was installed in the Telescope subfolder. Always in program
-                // files, common files, ASCOM\Telescope. 
+                // Remove old Wise uninstaller and install log. It's weird, but this stuff was installed in the Telescope subfolder. Always in program files, common files, ASCOM\Telescope. 
                 LogMessage("FinaliseInstall", "Removing old Wise installer debris");
                 try
                 {
@@ -212,63 +200,79 @@ namespace ConsoleApplication1
                     File.Delete(ascomPath + "\\Telescope\\UNWISE.EXE");
                 }
                 catch (Exception) { }
-                //
-                // Register all of the simulators here, keeping MSI's dirty mits off them 
-                // so they can be worked on and replaced with uupdates, etc.
-                //
-                // MIRROR CALLS IN UNINSTALL!
-                //
-                /*RegUnregExe(ascomPath + "\\Dome\\DomeSim.exe", true);
-                RegUnregExe(ascomPath + "\\Dome\\ASCOMDome.exe", true);
-                RegUnregExe(ascomPath + "\\Focuser\\FocusSim.exe", true);
-                RegUnregExe(ascomPath + "\\Telescope\\ScopeSim.exe", true);
-                RegUnregDll(ascomPath + "\\Camera\\CCDSimulator.dll", true);
-                RegUnregExe(ascomPath + "\\Telescope\\POTH.exe", true);
-                RegUnregExe(ascomPath + "\\Telescope\\Pipe.exe", true);
-                RegUnregExe(ascomPath + "\\Telescope\\Hub.exe", true);
-                RegUnregExe(ascomPath + "\\Switch\\SwitchSim.exe", true);
-                */
 
-                //
-                // Add AppID stuff for EXE simulators Must be in commit because
-                // these things must be registered now! Don't bother for Switch.
-                //
-                // MIRROR CALLS IN UNINSTALL!
-                //
-                LogMessage("FinaliseInstall", "Adding Appid information for EXE simulators");
+                // Add AppID stuff for EXE simulators. Must be in commit because these things must be registered now! Don't bother for Switch.
+                LogMessage("FinaliseInstall", "Adding App-id information for EXE simulators");
                 AddAppID("ScopeSim.Telescope", "ScopeSim.exe", "{4597A685-11FD-47ae-A5D2-A8DC54C90CDC}");
                 AddAppID("FocusSim.Focuser", "FocusSim.exe", "{289BFF60-3B9E-417c-8DA1-F96773679342}");
                 AddAppID("DomeSim.Dome", "DomeSim.exe", "{C47DAA29-5788-464e-BBA7-9711FBC7A01F}");
-                AddAppID("POTH.Telescope", "POTH.exe", "{0A21726F-E58B-4461-85A9-9AA739E6E42F}");
-                AddAppID("POTH.Dome", "", "{0A21726F-E58B-4461-85A9-9AA739E6E42F}");
-                AddAppID("POTH.Focuser", "", "{0A21726F-E58B-4461-85A9-9AA739E6E42F}");
-                AddAppID("Pipe.Telescope", "Pipe.exe", "{080B23A0-3190-45e5-A7C8-53C61F22DFF2}");
-                AddAppID("Pipe.Focuser", "", "{080B23A0-3190-45e5-A7C8-53C61F22DFF2}");
-                AddAppID("Pipe.Dome", "", "{080B23A0-3190-45e5-A7C8-53C61F22DFF2}");
-                AddAppID("Hub.Telescope", "Hub.exe", "{3213D452-2A8F-4624-9D65-E04E175E4CB2}");
-                AddAppID("Hub.Focuser", "", "{3213D452-2A8F-4624-9D65-E04E175E4CB2}");
-                AddAppID("Hub.Dome", "", "{3213D452-2A8F-4624-9D65-E04E175E4CB2}");
-                AddAppID("ASCOMDome.Telescope", "ASCOMDome.exe", "{B5863239-0A6E-48d4-A9EA-0DDA4D942390}");
-                AddAppID("ASCOMDome.Dome", "", "{B5863239-0A6E-48d4-A9EA-0DDA4D942390}");
 
-                // New Platform 6 simulator exes - add Appid information
+                // Add POTH AppID if its executable is on the system otherwise unregister it
+                if (File.Exists($"{ascomPath}\\Telescope\\POTH.exe")) // Found the executable so apply the AppIDs
+                {
+                    AddAppID("POTH.Telescope", "POTH.exe", "{0A21726F-E58B-4461-85A9-9AA739E6E42F}");
+                    AddAppID("POTH.Dome", "", "{0A21726F-E58B-4461-85A9-9AA739E6E42F}");
+                    AddAppID("POTH.Focuser", "", "{0A21726F-E58B-4461-85A9-9AA739E6E42F}");
+                }
+                else // Executable not found so unregister from the Profile
+                {
+                    UnregAscom("POTH.Telescope");
+                    UnregAscom("POTH.Dome");
+                    UnregAscom("POTH.Focuser");
+                }
+
+                // Add Pipe AppID if its executable is on the system otherwise unregister it
+                if (File.Exists($"{ascomPath}\\Telescope\\Pipe.exe")) // Found the executable so apply the AppIDs
+                {
+                    AddAppID("Pipe.Telescope", "Pipe.exe", "{080B23A0-3190-45e5-A7C8-53C61F22DFF2}");
+                    AddAppID("Pipe.Focuser", "", "{080B23A0-3190-45e5-A7C8-53C61F22DFF2}");
+                    AddAppID("Pipe.Dome", "", "{080B23A0-3190-45e5-A7C8-53C61F22DFF2}");
+                }
+                else // Executable not found so unregister from the Profile
+                {
+                    UnregAscom("Pipe.Telescope");
+                    UnregAscom("Pipe.Dome");
+                    UnregAscom("Pipe.Focuser");
+                }
+
+                // Add Hub AppID if its executable is on the system otherwise unregister it
+                if (File.Exists($"{ascomPath}\\Telescope\\Hub.exe")) // Found the executable so apply the AppIDs
+                {
+                    AddAppID("Hub.Telescope", "Hub.exe", "{3213D452-2A8F-4624-9D65-E04E175E4CB2}");
+                    AddAppID("Hub.Focuser", "", "{3213D452-2A8F-4624-9D65-E04E175E4CB2}");
+                    AddAppID("Hub.Dome", "", "{3213D452-2A8F-4624-9D65-E04E175E4CB2}");
+                }
+                else // Executable not found so unregister from the Profile
+                {
+                    UnregAscom("Hub.Telescope");
+                    UnregAscom("Hub.Dome");
+                    UnregAscom("Hub.Focuser");
+                }
+
+                // Add ASCOMDome AppID if its executable is on the system otherwise unregister it
+                if (File.Exists($"{ascomPath}\\Dome\\ASCOMDome.exe")) // Found the executable so apply the AppIDs
+                {
+                    AddAppID("ASCOMDome.Telescope", "ASCOMDome.exe", "{B5863239-0A6E-48d4-A9EA-0DDA4D942390}");
+                    AddAppID("ASCOMDome.Dome", "", "{B5863239-0A6E-48d4-A9EA-0DDA4D942390}");
+
+                    // Register VB6 simulators for ASCOM. I set these friendly names.
+                    LogMessage("FinaliseInstall", "Registering ASCOMDome");
+                    RegAscom("ASCOMDome.Telescope", "ASCOM Dome Control");
+                    RegAscom("ASCOMDome.Dome", "ASCOM Dome Control");
+                }
+                else // Executable not found so unregister from the Profile
+                {
+                    UnregAscom("ASCOMDome.Telescope");
+                    UnregAscom("ASCOMDome.Dome");
+                }
+
+                // New Platform 6 simulator executables - add App-id information
                 AddAppID("ASCOM.Simulator.FilterWheel", "ASCOM.FilterWheelSim.exe", "{AE139A96-FF4D-4F22-A44C-141A9873E823}");
                 AddAppID("ASCOM.Simulator.Rotator", "ASCOM.RotatorSimulator.exe", "{5D4BBF44-2573-401A-AEE1-F9716D0BAEC3}");
                 AddAppID("ASCOM.Simulator.Telescope", "ASCOM.TelescopeSimulator.exe", "{1620DCB8-0352-4717-A966-B174AC868FA0}");
 
-                //
-                // Register VB6 simulators for ASCOM. I set these friendly names.
-                //
-                LogMessage("FinaliseInstall", "Registering ASCOMDome");
-                RegAscom("ASCOMDome.Telescope", "ASCOM Dome Control");
-                RegAscom("ASCOMDome.Dome", "ASCOM Dome Control");
 
-                // This has been removed because it destroys the ability to remove 5.5 after use and does NOT restore all the 
-                // Platform 5 files resulting in an unexpected automatic repair. Its left here just in case, Please DO NOT RE-ENABLE THIS FEATURE unless have a way round the resulting issues
-                //FinaliseRestorePoint();
-
-
-                //Clean up objects before close
+                //Clean up Profile object before close
                 try
                 {
                     int rc = 0;
@@ -283,8 +287,7 @@ namespace ConsoleApplication1
                 }
                 catch { }
 
-                LogMessage("FinaliseInstall", "Completed finalise process, ReturnCode: " + ReturnCode.ToString());
-
+                //Clean up TraceLogger object before close
                 try
                 {
                     TL.Enabled = false;
@@ -299,6 +302,7 @@ namespace ConsoleApplication1
                 LogError("FinaliseInstall", "Exception: " + ex.ToString());
             }
 
+            LogMessage("FinaliseInstall", "Completed finalise process, ReturnCode: " + ReturnCode.ToString());
             return ReturnCode;
         }
 
@@ -316,33 +320,29 @@ namespace ConsoleApplication1
         //
         static private void AddAppID(string progID, string exeName, string sAPPID)
         {
-            LogMessage("AddAppID", "ProgID: " + progID + ", ExeName: " + exeName + ", Appid: " + sAPPID);
-            int hr = CLSIDFromProgID(progID, out Guid gCLSID);
+            LogMessage("AddAppID", "ProgID: " + progID + ", ExeName: " + exeName + ", App-id: " + sAPPID);
+
+            CLSIDFromProgID(progID, out Guid gCLSID);
             string sCLSID = "{" + new GuidConverter().ConvertToString(gCLSID) + "}";
             LogMessage("AddAppID", "  CLSID: " + sCLSID);
 
             RegistryKey rkCLSID = null;
             RegistryKey rkAPPID = null;
             RegistryKey rkAPPIDExe = null;
+
             try
             {
-                rkCLSID = Registry.ClassesRoot.OpenSubKey(
-                                "CLSID\\" + sCLSID,
-                                RegistryKeyPermissionCheck.ReadWriteSubTree);
+                rkCLSID = Registry.ClassesRoot.OpenSubKey("CLSID\\" + sCLSID, RegistryKeyPermissionCheck.ReadWriteSubTree);
                 rkCLSID.SetValue("AppId", sAPPID);
-                rkAPPID = Registry.ClassesRoot.CreateSubKey(
-                                "APPID\\" + sAPPID,
-                                RegistryKeyPermissionCheck.ReadWriteSubTree);
-                rkAPPID.SetValue("", rkCLSID.GetValue(""));				// Same description as class
+                rkAPPID = Registry.ClassesRoot.CreateSubKey("APPID\\" + sAPPID, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                rkAPPID.SetValue("", rkCLSID.GetValue("")); // Same description as class
                 rkAPPID.SetValue("AppId", sAPPID);
-                rkAPPID.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);	// RPC_C_AUTHN_LEVEL_NONE
+                rkAPPID.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord); // RPC_C_AUTHN_LEVEL_NONE
 
-                if (exeName != "")										// If want AppId\Exe.name
+                if (exeName != "") // If want AppId\Exe.name
                 {
-                    rkAPPIDExe = Registry.ClassesRoot.CreateSubKey(
-                                    "AppId\\" + exeName,
-                                    RegistryKeyPermissionCheck.ReadWriteSubTree);
-                    rkAPPIDExe.SetValue("", rkCLSID.GetValue(""));		// Same description as class
+                    rkAPPIDExe = Registry.ClassesRoot.CreateSubKey("AppId\\" + exeName, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                    rkAPPIDExe.SetValue("", rkCLSID.GetValue("")); // Same description as class
                     rkAPPIDExe.SetValue("AppId", sAPPID);
                 }
                 LogMessage("AddAppID", "  OK - Completed");
@@ -366,7 +366,7 @@ namespace ConsoleApplication1
         //
         static private void RemAppID(string exeName, string sAPPID)
         {
-            if (exeName == "" || sAPPID == "") return;						// Ohmygod exit
+            if (exeName == "" || sAPPID == "") return;						// Oh my god exit
 
             RegistryKey rkAPPID = null;
             try
@@ -400,7 +400,7 @@ namespace ConsoleApplication1
             Process proc = null;
             try
             {
-                proc = Process.Start(ExePath, (Register ? "/" : "/un") + "regserver");	// Works for .NET and VB6 localservers
+                proc = Process.Start(ExePath, (Register ? "/" : "/un") + "regserver");	// Works for .NET and VB6 local servers
                 proc.WaitForExit();
             }
             catch (Exception ex)
@@ -448,46 +448,34 @@ namespace ConsoleApplication1
             try
             {
                 LogMessage("RegAscom", "  Setting device type");
-                tProfile.InvokeMember("DeviceType",
-                    BindingFlags.Default | BindingFlags.SetProperty,
-                    null, oProfile, new object[] { sType },
-                    CultureInfo.InvariantCulture);
+                tProfile.InvokeMember("DeviceType", BindingFlags.Default | BindingFlags.SetProperty, null, oProfile, new object[] { sType }, CultureInfo.InvariantCulture);
 
                 LogMessage("RegAscom", "  Registering device");
-                tProfile.InvokeMember("Register",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, oProfile, new object[] { ProgID, Desc },
-                    CultureInfo.InvariantCulture);
+                tProfile.InvokeMember("Register", BindingFlags.Default | BindingFlags.InvokeMethod, null, oProfile, new object[] { ProgID, Desc }, CultureInfo.InvariantCulture);
             }
             catch (Exception ex)
             {
                 SetReturnCode(2);
-                LogError("RegAscom", "Failed to register " + ProgID + "  for ASCOM: " + ex.ToString());
+                LogError("RegAscom", "Failed to register " + ProgID + " - " + ex.ToString());
             }
         }
 
         static private void UnregAscom(string ProgID)
         {
             string sType = ProgID.Substring(ProgID.IndexOf('.') + 1);
+            LogMessage("UnRegAscom", "Unregistering ProgID: " + ProgID);
 
             try
             {
-                tProfile.InvokeMember("DeviceType",
-                    BindingFlags.Default | BindingFlags.SetProperty,
-                    null, oProfile, new object[] { sType },
-                    CultureInfo.InvariantCulture);
+                LogMessage("UnRegAscom", "  Setting device type");
+                tProfile.InvokeMember("DeviceType", BindingFlags.Default | BindingFlags.SetProperty, null, oProfile, new object[] { sType }, CultureInfo.InvariantCulture);
 
-                tProfile.InvokeMember("Unregister",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, oProfile, new object[] { ProgID },
-                    CultureInfo.InvariantCulture);
+                LogMessage("UnRegAscom", "  Unregistering device");
+                tProfile.InvokeMember("Unregister", BindingFlags.Default | BindingFlags.InvokeMethod, null, oProfile, new object[] { ProgID }, CultureInfo.InvariantCulture);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Failed to unregister " + ProgID + "  for ASCOM: " + ex.Message,
-                    sMsgTitle,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
+                LogError("UnRegAscom", "Failed to unregister " + ProgID + " - " + ex.ToString());
             }
         }
 
@@ -585,7 +573,7 @@ namespace ConsoleApplication1
         /// <summary>
         /// Check and if required, fix permissions on HKEY_CLASSES_ROOT
         /// </summary>
-        /// <param name="FixPermissions">True to fix missing permissions, flase just to check and report permission state</param>
+        /// <param name="FixPermissions">True to fix missing permissions, false just to check and report permission state</param>
         protected static void CheckHKCRPermissions(bool FixPermissions)
         {
             try
@@ -603,7 +591,7 @@ namespace ConsoleApplication1
 
                 RegistrySecurity HKCRAccessControl = Registry.ClassesRoot.GetAccessControl();
 
-                //Iterate over the rule set and list them for Builtin users
+                //Iterate over the rule set and list them for Built in users
                 foreach (RegistryAccessRule RegRule in HKCRAccessControl.GetAccessRules(true, true, typeof(NTAccount)))
                 {
                     Rights = (AccessRights)RegRule.RegistryRights;
@@ -618,7 +606,7 @@ namespace ConsoleApplication1
 
                     // Allow NT AUTHORITY\SYSTEM GenericAll / NotInherited / ContainerInherit / InheritOnly
                     if ((RegRule.IdentityReference.ToString().Equals(GetLocalAccountName(NTAuthoritySystemSID), StringComparison.OrdinalIgnoreCase)) &
-                         Rights == AccessRights.GenericAll & 
+                         Rights == AccessRights.GenericAll &
                          RegRule.InheritanceFlags == InheritanceFlags.ContainerInherit &
                          RegRule.PropagationFlags == PropagationFlags.InheritOnly) FoundSystemGenericAccess = true;
 
@@ -630,7 +618,7 @@ namespace ConsoleApplication1
 
                     // Allow BUILTIN\Administrators GenericAll / NotInherited / ContainerInherit / InheritOnly
                     if ((RegRule.IdentityReference.ToString().Equals(GetLocalAccountName(BuiltInAdministratorsSID), StringComparison.OrdinalIgnoreCase)) &
-                         Rights == AccessRights.GenericAll & 
+                         Rights == AccessRights.GenericAll &
                          RegRule.InheritanceFlags == InheritanceFlags.ContainerInherit &
                          RegRule.PropagationFlags == PropagationFlags.InheritOnly) FoundAdministratorGenericAccess = true;
 
@@ -642,7 +630,7 @@ namespace ConsoleApplication1
 
                     // Allow BUILTIN\Users GenericRead / NotInherited / ContainerInherit / InheritOnly
                     if ((RegRule.IdentityReference.ToString().Equals(GetLocalAccountName(BuiltInUsersSID), StringComparison.OrdinalIgnoreCase)) &
-                         Rights == AccessRights.GenericRead & 
+                         Rights == AccessRights.GenericRead &
                          RegRule.InheritanceFlags == InheritanceFlags.ContainerInherit &
                          RegRule.PropagationFlags == PropagationFlags.InheritOnly) FoundUserGenericAccess = true;
 
@@ -688,7 +676,7 @@ namespace ConsoleApplication1
                         LogMessage("SetRegistryACL", "Creating security identifiers");
                         SecurityIdentifier DomainSid = new SecurityIdentifier("S-1-0-0"); //Create a starting point domain SID
 
-                        //Create security identifiers for the various accounts to be passed to the new accessrule
+                        //Create security identifiers for the various accounts to be passed to the new access rule
                         SecurityIdentifier BuiltinUsersIdentifier = new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, DomainSid);
                         SecurityIdentifier AdministratorsIdentifier = new SecurityIdentifier(WellKnownSidType.BuiltinAdministratorsSid, DomainSid);
                         SecurityIdentifier CreatorOwnerIdentifier = new SecurityIdentifier(WellKnownSidType.CreatorOwnerSid, DomainSid);
@@ -784,9 +772,9 @@ namespace ConsoleApplication1
                         LogMessage("SetRegistryACL", "Setting new ACL rule");
                         Registry.ClassesRoot.SetAccessControl(KeySec); //Apply the new rules to the Profile key
 
-                        LogMessage("SetRegistryACL", "Rerieving new ruleset from key");
+                        LogMessage("SetRegistryACL", "Retrieving new rule set from key");
 
-                        // Retrieve the new ruleset and and list them
+                        // Retrieve the new rule set and list them
                         foreach (RegistryAccessRule RegRule in Registry.ClassesRoot.GetAccessControl().GetAccessRules(true, true, typeof(NTAccount)))
                         {
                             LogMessage("SetRegistryACL New", RegRule.AccessControlType.ToString() + " " +
@@ -826,7 +814,7 @@ namespace ConsoleApplication1
         }
 
         /// <summary>
-        /// Returns the localised text name of the BUILTIN\Users group. This varies by locale so has to be derrived on the users system.
+        /// Returns the localised text name of the BUILTIN\Users group. This varies by locale so has to be derived on the users system.
         /// </summary>
         /// <returns>Localised name of the BUILTIN\Users group</returns>
         /// <remarks>This uses the WMI features and is pretty obscure - sorry, it was the only way I could find to do this! Peter</remarks>
@@ -894,11 +882,11 @@ namespace ConsoleApplication1
         }
 
         /// <summary>
-        /// Returns the localised text name of the requested account. This varies by locale so has to be derrived on the users system.
+        /// Returns the localised text name of the requested account. This varies by locale so has to be derived on the users system.
         /// </summary>
         /// <param name="AccountSID">SID of the account whose localised name is required</param>
         /// <returns>Localised name of the account</returns>
-        /// <remarks>The SID shold be in a form similar to S-1-5-18</remarks>
+        /// <remarks>The SID should be in a form similar to S-1-5-18</remarks>
         protected static string GetLocalAccountName(string AccountSID)
         {
             SecurityIdentifier sid = new SecurityIdentifier(AccountSID);
@@ -908,5 +896,4 @@ namespace ConsoleApplication1
         }
 
     }
-
 }

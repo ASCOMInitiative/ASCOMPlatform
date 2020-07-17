@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <!-- The configuration and platform will be used to determine which
          assemblies to include from solution and project documentation
@@ -18,15 +18,17 @@
     <OutputPath>.\Output\Platform\</OutputPath>
     <HtmlHelpName>PlatformHelp</HtmlHelpName>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj" />
       <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" />
+      <DocumentationSource sourceFile="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj" />
     </DocumentationSources>
     <HelpTitle>ASCOM Platform Help</HelpTitle>
-    <CopyrightText>Copyright &amp;#169%3b 2010-18, The ASCOM Initiative</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2010-20, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.DeviceInterface" isExposed="True">
-        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV2" filterName="IFocuserV2" isExposed="False" />
-      </Filter>
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICameraV2" filterName="ICameraV2" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV2" filterName="IFocuserV2" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IRotatorV2" filterName="IRotatorV2" isExposed="False" />
+</Filter>
     </ApiFilter>
     <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>False</Preliminary>
@@ -62,15 +64,16 @@
     </PlugInConfigurations>
     <FeedbackEMailAddress>
     </FeedbackEMailAddress>
-    <FeedbackEMailLinkText>the ASCOM Talk Yahoo Group</FeedbackEMailLinkText>
+    <FeedbackEMailLinkText>
+    </FeedbackEMailLinkText>
     <HeaderText>
     </HeaderText>
-    <VisibleItems>InheritedMembers, InheritedFrameworkMembers, EditorBrowsableNever, NonBrowsable</VisibleItems>
+    <VisibleItems>InheritedMembers, EditorBrowsableNever, NonBrowsable</VisibleItems>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="ASCOM.HelperNET.VB6HelperSupport" isDocumented="False" xmlns="" />
     </NamespaceSummaries>
     <SdkLinkType>Msdn</SdkLinkType>
-    <FrameworkVersion>.NET Framework 3.5</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.8</FrameworkVersion>
     <KeepLogFile>True</KeepLogFile>
     <MSHelpViewerSdkLinkType>None</MSHelpViewerSdkLinkType>
     <SyntaxFilters>C#, Visual Basic, Managed C++</SyntaxFilters>
@@ -100,6 +103,58 @@
     <Folder Include="Introduction\" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Tools and Features\alpacaexample3.png">
+      <ImageId>alpacaexample3</ImageId>
+      <AlternateText>alpacaexample 3</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpacaexample2.png">
+      <ImageId>alpacaexample2</ImageId>
+      <AlternateText>alpacaexample 2</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpacaexample1.png">
+      <ImageId>alpacaexample1</ImageId>
+      <AlternateText>alpacaexample 1</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpacaconfig.png">
+      <ImageId>alpacaconfig</ImageId>
+      <AlternateText>alpacaconfig</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpaca8.png">
+      <ImageId>alpaca8</ImageId>
+      <AlternateText>alpaca 8</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpaca7.png">
+      <ImageId>alpaca7</ImageId>
+      <AlternateText>alpaca 7</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpaca6.png">
+      <ImageId>alpaca6</ImageId>
+      <AlternateText>alpaca 6</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpaca5.png">
+      <ImageId>alpaca5</ImageId>
+      <AlternateText>alpaca 5</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpaca4.png">
+      <ImageId>alpaca4</ImageId>
+      <AlternateText>alpaca 4</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpaca3.png">
+      <ImageId>alpaca3</ImageId>
+      <AlternateText>alpaca 3</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpaca2.png">
+      <ImageId>alpaca2</ImageId>
+      <AlternateText>alpaca 2</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\alpaca1.png">
+      <ImageId>alpaca1</ImageId>
+      <AlternateText>alpaca 1</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\ChooserTest.png">
+      <ImageId>ChooserTest</ImageId>
+      <AlternateText>Chooser Test</AlternateText>
+    </Image>
     <Image Include="Tools and Features\OCHSetup.PNG">
       <ImageId>OCHSetup</ImageId>
       <AlternateText>OCHSetup</AlternateText>
@@ -134,11 +189,12 @@
       <AlternateText>ForceCOMPort</AlternateText>
     </Image>
     <Content Include="styles\branding-Help1.css" />
+    <None Include="Tools and Features\AlpacaChooser.aml" />
+    <None Include="Version History\Version 6.5.aml" />
     <None Include="Tools and Features\Observing Conditions Hub.aml" />
     <None Include="Version History\Version 6.4 SP1.aml" />
     <None Include="Tools and Features\Earth Rotation Parameters.aml" />
     <None Include="Version History\Version 6.4.aml" />
-    <None Include="Version History\Version 6.3 SP1.aml" />
     <None Include="Version History\Version 6.3.aml" />
     <None Include="Version History\Version 6.2.aml" />
     <None Include="Introduction\Acknowledgements.aml" />

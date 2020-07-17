@@ -21,7 +21,7 @@
 ' Your driver's ID is ASCOM.FilterWheelSim.FilterWheel  ???
 '
 ' The Guid attribute sets the CLSID for ASCOM.FilterWheelSim.FilterWheel
-' The ClassInterface/None addribute prevents an empty interface called
+' The ClassInterface/None attribute prevents an empty interface called
 ' _FilterWheel from being created and used as the [default] interface
 '
 

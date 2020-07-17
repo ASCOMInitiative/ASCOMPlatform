@@ -5,7 +5,7 @@
 ' for AxisRates. You do not need to change this class.
 '
 ' The Guid attribute sets the CLSID for ASCOM.$safeprojectname$.Rate
-' The ClassInterface/None addribute prevents an empty interface called
+' The ClassInterface/None attribute prevents an empty interface called
 ' _Rate from being created and used as the [default] interface
 '
 <Guid("AD6248B3-3F51-4FFF-B62B-E3E942DD817E")>
@@ -63,7 +63,7 @@ End Class
 ' this polymorphism. 
 '
 ' The Guid attribute sets the CLSID for ASCOM.$safeprojectname$.AxisRates
-' The ClassInterface/None addribute prevents an empty interface called
+' The ClassInterface/None attribute prevents an empty interface called
 ' _AxisRates from being created and used as the [default] interface
 '
 <Guid("99DB28A6-0132-43BF-91C0-D723124813C8")>
@@ -142,7 +142,7 @@ End Class
 ' this polymorphism. 
 '
 ' The Guid attribute sets the CLSID for ASCOM.$safeprojectname$.TrackingRates
-' The ClassInterface/None addribute prevents an empty interface called
+' The ClassInterface/None attribute prevents an empty interface called
 ' _TrackingRates from being created and used as the [default] interface
 '
 <Guid("49A4CA43-46B2-4D66-B9D3-FBE3ABE13DEB")>

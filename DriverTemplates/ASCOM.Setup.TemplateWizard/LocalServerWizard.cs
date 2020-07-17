@@ -28,13 +28,10 @@ namespace ASCOM.Setup
 		// has the OpenInEditor attribute.
 		public void BeforeOpeningFile(ProjectItem projectItem)
 		{
-			Diagnostics.Enter();
-			Diagnostics.Exit();
 		}
 
 		public void ProjectFinishedGenerating(Project project)
 		{
-			Diagnostics.Enter();
 			// Iterate through the project items and 
 			// remove any files that begin with the word "Placeholder".
 			ProjectItems items = project.ProjectItems;
@@ -46,29 +43,23 @@ namespace ASCOM.Setup
 				}
 			}
 			project.Name = String.Format(csDeviceIdFormat, DeviceId);
-			Diagnostics.Exit();
 		}
 
 		// This method is only called for item templates,
 		// not for project templates.
 		public void ProjectItemFinishedGenerating(ProjectItem projectItem)
 		{
-			Diagnostics.Enter();
-			Diagnostics.Exit();
 		}
 
 		// This method is called after the project is created.
 		public void RunFinished()
 		{
-			Diagnostics.Enter();
-			Diagnostics.Exit();
 		}
 
 		public void RunStarted(object automationObject,
 			Dictionary<string, string> replacementsDictionary,
 			WizardRunKind runKind, object[] customParams)
 		{
-			Diagnostics.Enter();
 			try
 			{
 				// Display a form to the user. The form collects 
@@ -100,7 +91,6 @@ namespace ASCOM.Setup
 			{
 				MessageBox.Show(ex.ToString());
 			}
-			Diagnostics.Exit();
 		}
 
 		// This method is only called for item templates,

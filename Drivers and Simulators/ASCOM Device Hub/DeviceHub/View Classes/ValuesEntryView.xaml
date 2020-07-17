@@ -1,0 +1,80 @@
+﻿<local:DeviceHubDialogView x:Class="ASCOM.DeviceHub.ValuesEntryView"		
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:ASCOM.DeviceHub"
+		Background="{DynamicResource WindowBackgroundBrush}" 
+		Title="{Binding Description}"
+        mc:Ignorable="d" Height="383" Width="278" Loaded="Window_Loaded" WindowStyle="ThreeDBorderWindow" ResizeMode="NoResize" BorderBrush="LightBlue" BorderThickness="2" ShowInTaskbar="False" WindowStartupLocation="CenterOwner">
+	<Window.Resources>
+		<local:BooleanVisibilityConverter x:Key="BoolVisConverter" />
+		<local:BooleanForegroundConverter x:Key="BoolFgConverter" />
+		<sys:Boolean x:Key="bTrue">True</sys:Boolean>
+		<sys:Boolean x:Key="bFalse">False</sys:Boolean>
+
+		<Style x:Key="SliderStyle" TargetType="{x:Type local:RotarySliderView}">
+			<Setter Property="Foreground" Value="{StaticResource RotarySliderForeground}" />
+			<Setter Property="SelectedValueBrush" Value="{StaticResource SelectedRotaryValueForeground}" />
+			<Setter Property="RotaryFace" Value="{StaticResource RotaryFace}" />
+			<Setter Property="RotaryHand" Value="{StaticResource RotaryHand}" />
+		</Style>
+		<DataTemplate DataType="{x:Type local:RotarySliderViewModel}">
+			<local:RotarySliderView Style="{DynamicResource SliderStyle}" />
+		</DataTemplate>
+		<Style TargetType="{x:Type Hyperlink}">
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Setter Property="Foreground" Value="{DynamicResource SelectedRotaryValueForeground}" />
+				</Trigger>
+			</Style.Triggers>
+			<Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+			<Setter Property="TextBlock.TextDecorations" Value="{x:Null}" />
+		</Style>
+
+		<Style x:Key="TextRunStyle" TargetType="Run">
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Foreground}" Value="{StaticResource SelectedRotaryValueForeground}">
+					<Setter Property="TextDecorations" Value="Underline" />
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
+	</Window.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="30" />
+			<RowDefinition Height="Auto" MinHeight="40" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="6" VerticalAlignment="Bottom"
+					Visibility="{Binding UsesSignsText, Converter={StaticResource BoolVisConverter}, ConverterParameter={x:Static Visibility.Hidden}}">
+			<TextBlock Height="Auto" Width="Auto" Margin="0,0,6,0" >
+				<Hyperlink Command="{Binding NegativeCommand}">
+					<Run Style="{StaticResource TextRunStyle}" 
+						Text="{Binding NegativeText, FallbackValue=Negative}"
+						Foreground="{Binding IsNegative, Converter={StaticResource BoolFgConverter}, ConverterParameter={StaticResource bTrue}, FallbackValue=White}" />
+				</Hyperlink>
+			</TextBlock>
+			<TextBlock Height="Auto" Width="Auto" Margin="6,0" >
+				<Hyperlink Command="{Binding PositiveCommand}">
+					<Run Style="{StaticResource TextRunStyle}"
+						Text="{Binding PositiveText, FallbackValue=Positive}" 
+		   				Foreground="{Binding IsNegative, Converter={StaticResource BoolFgConverter}, ConverterParameter={StaticResource bFalse}, FallbackValue=White}" />
+				</Hyperlink>
+			</TextBlock>
+		</StackPanel>
+		
+		<ContentControl Grid.Row="1" Content="{Binding RotarySliderVm}" VerticalAlignment="Top" />
+
+		<StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="6,6">
+			<Button Name="_ok" Content="OK" Height="50" Width="50" Style="{StaticResource CircleButton}" 
+					Click="_ok_Click" />
+			<Button Name="_cancel" Content="Cancel" Height="50" Width="50" Style="{StaticResource CircleButton}" 
+					Click="_cancel_Click"/>
+		</StackPanel>
+	</Grid>
+</local:DeviceHubDialogView>
