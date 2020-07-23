@@ -312,48 +312,100 @@ Friend Class RegistryAccess
         Return RetValues
     End Function
 
+    ''' <summary>
+    ''' Returns a sorted list of key values
+    ''' </summary>
+    ''' <param name="p_SubKeyName">SubKey to search</param>
+    ''' <returns></returns>
     Friend Function EnumProfile(ByVal p_SubKeyName As String) As Generic.SortedList(Of String, String) Implements IAccess.EnumProfile
-        'Returns a sorted list of key values
         Dim RetValues As New Generic.SortedList(Of String, String)
         Dim Values() As String
+        Dim registrySubKey As RegistryKey
 
         Try
             GetProfileMutex("EnumProfile", p_SubKeyName)
             sw.Reset() : sw.Start() 'Start timing this call
             TL.LogMessage("EnumProfile", "SubKey: """ & p_SubKeyName & """")
 
-            Values = ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetValueNames
-            For Each Value As String In Values
-                RetValues.Add(Value, ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetValue(Value).ToString) 'Add the Key name and default value to the hash table
-            Next
+
+            ' Get a registry handle to the specified subkey. This may be null if the subkey doesn't exist
+            registrySubKey = ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName))
+
+            ' Test whether the registry handle is null, i.e. whether or not the registry subkey exists
+            If Not IsNothing(registrySubKey) Then ' The subkey does exist so retrieve its value's names
+                Values = registrySubKey.GetValueNames
+                For Each Value As String In Values
+                    RetValues.Add(Value, ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetValue(Value).ToString) 'Add the Key name and default value to the hash table
+                Next
+            Else ' The subkey doesn't exist
+                ' No action because the return value already contains an empty list 
+            End If
 
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
         Finally
             ReleaseProfileMutex("EnumProfile")
         End Try
+
         Return RetValues
     End Function
 
+    ''' <summary>
+    ''' Read a single value from a key
+    ''' </summary>
+    ''' <param name="p_SubKeyName"></param>
+    ''' <param name="p_ValueName"></param>
+    ''' <param name="p_DefaultValue"></param>
+    ''' <returns></returns>
     Friend Overloads Function GetProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String, ByVal p_DefaultValue As String) As String Implements IAccess.GetProfile
-        'Read a single value from a key
         Dim RetVal As String
+        Dim profileValue As Object
+        Dim registrySubKey As RegistryKey
 
         Try
             GetProfileMutex("GetProfile", p_SubKeyName & " " & p_ValueName & " " & p_DefaultValue)
             sw.Reset() : sw.Start() 'Start timing this call
             TL.LogMessage("GetProfile", "SubKey: """ & p_SubKeyName & """ Name: """ & p_ValueName & """" & """ DefaultValue: """ & p_DefaultValue & """")
             TL.LogMessage("  DefaultValue", "is nothing... " & (p_DefaultValue Is Nothing).ToString)
-            RetVal = "" 'Initialise return value to null string
+            RetVal = String.Empty 'Initialise return value to empty string
             Try
-                RetVal = ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetValue(p_ValueName).ToString
-                TL.LogMessage("  Value", """" & RetVal & """")
+                ' This section re-written to avoid NullReferenceExceptions when the specified subkey does not exist and when the requested value is missing
+
+                ' Get a registry handle to the specified subkey. This may be null if the subkey doesn't exist
+                registrySubKey = ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName))
+
+                ' Test whether the registry handle is null, i.e. whether or not the registry subkey exists
+                If Not IsNothing(registrySubKey) Then ' The subkey does exist so retrieve the specified value
+                    profileValue = registrySubKey.GetValue(p_ValueName)
+
+                    ' Test whether we received something, if not the value is not present
+                    If Not IsNothing(profileValue) Then ' We did receive something so ToString() will work
+                        RetVal = profileValue.ToString()
+                    Else ' We received null so don't try and ToString() this because it will generate a NullReferenceException. Instead return the default value if supplied, otherwise an empty string
+                        If Not (p_DefaultValue Is Nothing) Then 'We have been supplied a default value so set it and then return it
+                            WriteProfile(p_SubKeyName, p_ValueName, p_DefaultValue)
+                            RetVal = p_DefaultValue
+                            TL.LogMessage("  Value", "Value not yet set, returning supplied default value: " & p_DefaultValue)
+                        Else
+                            TL.LogMessage("  Value", "Value not yet set and no default value supplied, returning empty string")
+                        End If
+                    End If
+                    TL.LogMessage("  Value", """" & RetVal & """")
+                Else ' The subkey doesn't exist so test whether we have been supplied with a default value
+                    If Not (p_DefaultValue Is Nothing) Then 'We have been supplied a default value so set it and then return it
+                        WriteProfile(p_SubKeyName, p_ValueName, p_DefaultValue)
+                        RetVal = p_DefaultValue
+                        TL.LogMessage("  Value", "Value not yet set, returning supplied default value: " & p_DefaultValue)
+                    Else
+                        TL.LogMessage("  Value", "Value not yet set and no default value supplied, returning empty string")
+                    End If
+                End If
             Catch ex As NullReferenceException
                 If Not (p_DefaultValue Is Nothing) Then 'We have been supplied a default value so set it and then return it
                     WriteProfile(p_SubKeyName, p_ValueName, p_DefaultValue)
                     RetVal = p_DefaultValue
                     TL.LogMessage("  Value", "Value not yet set, returning supplied default value: " & p_DefaultValue)
                 Else
-                    TL.LogMessage("  Value", "Value not yet set and no default value supplied, returning null string")
+                    TL.LogMessage("  Value", "Value not yet set and no default value supplied, returning empty string")
                 End If
             Catch ex As Exception 'Any other exception
                 If Not (p_DefaultValue Is Nothing) Then 'We have been supplied a default value so set it and then return it

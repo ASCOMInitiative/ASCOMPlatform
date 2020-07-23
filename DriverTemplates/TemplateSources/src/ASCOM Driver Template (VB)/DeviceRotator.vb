@@ -15,7 +15,7 @@ Class DeviceRotator
 
 #Region "IRotator Implementation"
 
-    Private rotatorPosition As Single = 0 ' Synced or mechanical position angle of the rotator depending on the value of CanSync
+    Private rotatorPosition As Single = 0 ' Synced or mechanical position angle of the rotator
     Private rotatorMechanicalPosition As Single = 0 ' Mechanical position angle Of the rotator 
 
     Public ReadOnly Property CanReverse() As Boolean Implements IRotatorV3.CanReverse
@@ -82,13 +82,6 @@ Class DeviceRotator
     End Property
 
     ' IRotatorV3 methods
-
-    Public ReadOnly Property CanSync As Boolean Implements IRotatorV3.CanSync
-        Get
-            TL.LogMessage("CanSync Get", False.ToString())
-            Return False
-        End Get
-    End Property
 
     Public ReadOnly Property MechanicalPosition As Single Implements IRotatorV3.MechanicalPosition
         Get
