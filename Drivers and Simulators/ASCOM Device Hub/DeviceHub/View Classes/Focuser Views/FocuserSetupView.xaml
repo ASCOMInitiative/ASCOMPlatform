@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+	         xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"   			 
              xmlns:local="clr-namespace:ASCOM.DeviceHub"
              mc:Ignorable="d" 
              Background="{DynamicResource WindowBackgroundBrush}"
@@ -51,12 +52,12 @@
 			</GroupBox>
 		</StackPanel>
 		<GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="Temperature Calibration" Foreground="{DynamicResource NormalTextBrush}" Margin="0" HorizontalAlignment="Stretch">
-			<StackPanel Orientation="Horizontal">
-				<Label Content="Temperature Offset (°C):" Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Margin="6" />
-				<Slider Width="120" Minimum="-10" Maximum="10" TickFrequency="0.5" IsSnapToTickEnabled="True" VerticalAlignment="Center" 
+			<StackPanel Orientation="Horizontal" Margin="6" Height="26">
+				<Label Content="Temperature Offset (°C):" Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Margin="0,-3,0,0" />
+				<Slider Width="120" Minimum="-10" Maximum="10" TickFrequency="0.5" IsSnapToTickEnabled="True" Margin="4,0" VerticalAlignment="Center" 
 						Value="{Binding TemperatureOffset}"/>
-				<Label Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" 
-					   Content="{Binding TemperatureOffset, StringFormat=F1, FallbackValue=0.0}" />
+				<TextBlock Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0"
+					   Text="{Binding TemperatureOffset, StringFormat=F1, FallbackValue=0.0, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
 			</StackPanel>
 
 		</GroupBox>
@@ -67,7 +68,7 @@
 					Minimum="{Binding FastUpdateMinimum}" Maximum="{Binding FastUpdateMaximum}" 
 					Value="{Binding FastUpdatePeriod}" />
 				<TextBlock Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0"
-					   Text="{Binding FastUpdatePeriod, StringFormat=F2, FallbackValue=XXXX}" />
+					   Text="{Binding FastUpdatePeriod, StringFormat=F2, FallbackValue=XXXX, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
 			</StackPanel>
 		</GroupBox>
 	</Grid>

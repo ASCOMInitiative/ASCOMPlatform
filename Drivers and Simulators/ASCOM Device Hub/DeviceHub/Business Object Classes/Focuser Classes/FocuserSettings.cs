@@ -30,7 +30,7 @@ namespace ASCOM.DeviceHub
 				focuserID = profile.GetValue( DriverID, _focuserIDProfileName, String.Empty, _focuserIDDefault );
 				temperatureOffset = Convert.ToDouble( profile.GetValue( DriverID, _temperatureOffsetProfileName, String.Empty, _temperatureOffsetDefault ), CultureInfo.InvariantCulture );
 				loggerEnabled = Convert.ToBoolean( profile.GetValue( DriverID, _traceStateProfileName, String.Empty, _traceStateDefault ) );
-				fastUpdatePeriod = Convert.ToDouble( profile.GetValue( DriverID, _fastUpdateProfileName, String.Empty, _fastUpdateDefault ) );
+				fastUpdatePeriod = Convert.ToDouble( profile.GetValue( DriverID, _fastUpdateProfileName, String.Empty, _fastUpdateDefault ), CultureInfo.InvariantCulture );
 			}
 
 			// Prevent the user from circumventing the valid fast update by setting the value in the profile store directly.
@@ -64,7 +64,7 @@ namespace ASCOM.DeviceHub
 				profile.WriteValue( DriverID, _focuserIDProfileName, FocuserID );
 				profile.WriteValue( DriverID, _temperatureOffsetProfileName, TemperatureOffset.ToString(CultureInfo.InvariantCulture) );
 				profile.WriteValue( DriverID, _traceStateProfileName, IsLoggingEnabled.ToString() );
-				profile.WriteValue( DriverID, _fastUpdateProfileName, FastUpdatePeriod.ToString() );
+				profile.WriteValue( DriverID, _fastUpdateProfileName, FastUpdatePeriod.ToString(CultureInfo.InvariantCulture) );
 			}
 		}
 	}

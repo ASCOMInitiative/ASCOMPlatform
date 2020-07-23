@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Globalization;
 using ASCOM.Utilities;
 
 namespace ASCOM.DeviceHub
@@ -26,7 +26,7 @@ namespace ASCOM.DeviceHub
 				profile.DeviceType = "Telescope";
 				telescopeID = profile.GetValue( DriverID, _telescopeIDProfileName, String.Empty, _telescopeIDDefault );
 				loggerEnabled = Convert.ToBoolean( profile.GetValue( DriverID, _traceStateProfileName, String.Empty, _traceStateDefault ) );
-				fastUpdatePeriod = Convert.ToDouble( profile.GetValue( DriverID, _fastUpdateProfileName, String.Empty, _fastUpdateDefault ) );
+				fastUpdatePeriod = Convert.ToDouble( profile.GetValue( DriverID, _fastUpdateProfileName, String.Empty, _fastUpdateDefault ), CultureInfo.InvariantCulture );
 			}
 
 			// Prevent the user from circumventing the valid fast update period range by setting the profile directly.
@@ -57,7 +57,7 @@ namespace ASCOM.DeviceHub
 				profile.DeviceType = "Telescope";
 				profile.WriteValue( DriverID, _telescopeIDProfileName, TelescopeID );
 				profile.WriteValue( DriverID, _traceStateProfileName, IsLoggingEnabled.ToString() );
-				profile.WriteValue( DriverID, _fastUpdateProfileName, FastUpdatePeriod.ToString() );
+				profile.WriteValue( DriverID, _fastUpdateProfileName, FastUpdatePeriod.ToString( CultureInfo.InvariantCulture ) );
 			}
 		}
 	}
