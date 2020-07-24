@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+	         xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"   
              xmlns:local="clr-namespace:ASCOM.DeviceHub"
              mc:Ignorable="d" 
 			 Background="{DynamicResource WindowBackgroundBrush}"
@@ -46,7 +47,7 @@
 					Minimum="{Binding FastUpdateMinimum}" Maximum="{Binding FastUpdateMaximum}" 
 					Value="{Binding FastUpdatePeriod}" />
 				<TextBlock Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0"
-					   Text="{Binding FastUpdatePeriod, StringFormat=F2, FallbackValue=XXXX}" />
+					   Text="{Binding FastUpdatePeriod, StringFormat=F2, FallbackValue=XXXX, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
 			</StackPanel>
 		</GroupBox>
 	</Grid>
