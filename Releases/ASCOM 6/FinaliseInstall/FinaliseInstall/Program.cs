@@ -476,6 +476,10 @@ namespace ConsoleApplication1
             catch (Exception ex)
             {
                 LogError("UnRegAscom", "Failed to unregister " + ProgID + " - " + ex.ToString());
+                if (ex.InnerException is COMException)
+                {
+                    LogError("UnRegAscom", $"Inner exception is COMException - Error Number: {((COMException)ex.InnerException).HResult:X8}");
+                }
             }
         }
 
