@@ -482,7 +482,7 @@ namespace ConsoleApplication1
                 if (ex.InnerException is COMException)
                 {
                     COMException innerException = (COMException)ex.InnerException;
-                    if (Convert.ToUInt32(innerException.HResult) == 0x80040420)
+                    if ((uint)innerException.HResult == 0x80040420)
                     {
                         logError = false; // Suppress error logging when the driver is not registered
                     }
