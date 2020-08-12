@@ -903,8 +903,11 @@ Friend Class ChooserForm
     End Function
 
     Private Sub InitialiseComboBox()
+        TL.LogMessage("InitialiseComboBox", $"Arrived at InitialiseComboBox - Running On thread: {Thread.CurrentThread.ManagedThreadId}.")
         Dim discoveryThread As Thread = New Thread(AddressOf DiscoverAlpacaDevicesAndPopulateDriverComboBox)
+        TL.LogMessage("InitialiseComboBox", $"Successfully created discovery thread, about to start discovery thread...")
         discoveryThread.Start()
+        TL.LogMessage("InitialiseComboBox", $"Discovery thread started OK")
     End Sub
 
     Private Sub DiscoverAlpacaDevicesAndPopulateDriverComboBox()
