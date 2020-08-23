@@ -5,6 +5,7 @@ Imports ASCOM.Utilities.Interfaces
 Imports ASCOM.Utilities.Exceptions
 Imports System.Runtime.InteropServices
 Imports ASCOM.Utilities
+Imports System.Reflection
 
 ''' <summary>
 ''' Creates a log file for a driver or application. Uses a similar file name and internal format to the serial logger. Multiple logs can be created simultaneously if needed.
@@ -597,7 +598,7 @@ Public Class TraceLogger
                 g_LogFile.Flush()
             End If
         Catch ex As Exception
-            LogEvent("LogMsgFormatter", "Exception", EventLogEntryType.Error, EventLogErrors.TraceLoggerException, ex.ToString)
+            LogEvent("LogMsgFormatter", "Exception", EventLogEntryType.Error, EventLogErrors.TraceLoggerException, $"Test: ""{p_Test}"", Message: ""{p_Msg}""{Environment.NewLine}TraceLogger has been Disposed: {traceLoggerHasBeenDisposed}{Environment.NewLine}Entry assembly: {Assembly.GetEntryAssembly}{Environment.NewLine}Calling assembly: {Assembly.GetCallingAssembly}{Environment.NewLine}{ex}")
             'MsgBox("LogMsgFormatter exception: " & Len(l_Msg) & " *" & l_Msg & "* " & ex.ToString, MsgBoxStyle.Critical)
         End Try
     End Sub

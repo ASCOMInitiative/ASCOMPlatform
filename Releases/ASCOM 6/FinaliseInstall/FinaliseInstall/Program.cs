@@ -475,7 +475,21 @@ namespace ConsoleApplication1
             }
             catch (Exception ex)
             {
-                LogError("UnRegAscom", "Failed to unregister " + ProgID + " - " + ex.ToString());
+                bool logError = true; // Default to logging errors
+
+                // Test whether this exception has arisen because the driver is not registered, if so, this is expected so don't log the error
+                // The test condition is that the inner exception is a COMException with HResult=0x80040420
+                if (ex.InnerException is COMException)
+                {
+                    COMException innerException = (COMException)ex.InnerException;
+                    if ((uint)innerException.HResult == 0x80040420)
+                    {
+                        logError = false; // Suppress error logging when the driver is not registered
+                    }
+                }
+
+                // Log the error if it is not expected
+                if (logError) LogError("UnRegAscom", "Failed to unregister " + ProgID + " - " + ex.ToString());
             }
         }
 

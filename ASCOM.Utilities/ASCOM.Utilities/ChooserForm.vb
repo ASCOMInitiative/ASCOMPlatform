@@ -15,6 +15,10 @@ Friend Class ChooserForm
 
 #Region "Constants"
 
+    ' Debug constants
+    Private Const DEBUG_SINGLE_THREADING As Boolean = True
+
+    ' General constants
     Private Const ALERT_MESSAGEBOX_TITLE As String = "ASCOM Chooser"
     Private Const PROPERTIES_TOOLTIP_DISPLAY_TIME As Integer = 5000 ' Time to display the Properties tooltip (milliseconds)
     Private Const FORM_LOAD_WARNING_MESSAGE_DELAY_TIME As Integer = 250 ' Delay time before any warning message is displayed on form load
@@ -903,8 +907,22 @@ Friend Class ChooserForm
     End Function
 
     Private Sub InitialiseComboBox()
-        Dim discoveryThread As Thread = New Thread(AddressOf DiscoverAlpacaDevicesAndPopulateDriverComboBox)
-        discoveryThread.Start()
+
+        TL.LogMessage("InitialiseComboBox", $"Arrived at InitialiseComboBox - Running On thread: {Thread.CurrentThread.ManagedThreadId}.")
+
+        If DEBUG_SINGLE_THREADING Then
+            TL.LogMessage("InitialiseComboBox", $"Starting single threaded discovery...")
+            DiscoverAlpacaDevicesAndPopulateDriverComboBox()
+            TL.LogMessage("InitialiseComboBox", $"Completed single threaded discovery")
+        Else ' Normal multi-threading behaviour
+            TL.LogMessage("InitialiseComboBox", $"Creating discovery thread...")
+            Dim discoveryThread As Thread = New Thread(AddressOf DiscoverAlpacaDevicesAndPopulateDriverComboBox)
+            TL.LogMessage("InitialiseComboBox", $"Successfully created discovery thread, about to start discovery thread...")
+            discoveryThread.Start()
+            TL.LogMessage("InitialiseComboBox", $"Discovery thread started OK")
+        End If
+
+        TL.LogMessage("InitialiseComboBox", $"Exiting InitialiseComboBox on thread: {Thread.CurrentThread.ManagedThreadId}.")
     End Sub
 
     Private Sub DiscoverAlpacaDevicesAndPopulateDriverComboBox()

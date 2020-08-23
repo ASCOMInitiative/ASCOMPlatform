@@ -154,7 +154,6 @@ Friend Class RegistryAccess
     ' IDisposable
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
         If Not Me.disposedValue Then
-            If Not (TL Is Nothing) Then Try : TL.LogMessage("Dispose", $"RegistryAccess Dispose has been called with disposing = {disposing}.") : Catch : End Try
             Try : sw.Stop() : Catch : End Try 'Clean up the stopwatches
             Try : sw = Nothing : Catch : End Try
             Try : swSupport.Stop() : Catch : End Try
@@ -168,16 +167,10 @@ Friend Class RegistryAccess
 
             ' Release the registry key OS handles
             For Each ptr As IntPtr In HandleList
-                Try
-                    If Not (TL Is Nothing) Then Try : TL.LogMessage("Dispose", $"Closing handle {ptr.ToString("X8")}") : Catch : End Try
-                    CloseHandle(ptr)
-                Catch ex As Exception
-                    If Not (TL Is Nothing) Then Try : TL.LogMessageCrLf("Dispose", ex.ToString()) : Catch : End Try
-                End Try
+                Try : CloseHandle(ptr) : Catch ex As Exception : End Try
             Next
 
             If DisableTLOnExit Then
-                Try : TL.LogMessage("Dispose", "Cleaning up logger.") : Catch : End Try 'Clean up the logger
                 Try : TL.Enabled = False : Catch : End Try 'Clean up the logger
                 Try : TL.Dispose() : Catch : End Try
                 Try : TL = Nothing : Catch : End Try
@@ -190,14 +183,7 @@ Friend Class RegistryAccess
     Public Sub Dispose() Implements IDisposable.Dispose
         ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
         Dispose(True)
-        'GC.SuppressFinalize(Me)
     End Sub
-
-    'Protected Overrides Sub Finalize()
-    '    ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
-    '    Dispose(False)
-    '    MyBase.Finalize()
-    'End Sub
 
 #End Region
 
