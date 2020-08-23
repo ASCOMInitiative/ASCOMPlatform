@@ -803,17 +803,19 @@ namespace ASCOM.DeviceHub
 				Registry.ClassesRoot.DeleteSubKey( String.Format( "CLSID\\{0}\\Programmable", clsid ), false );
 				Registry.ClassesRoot.DeleteSubKey( String.Format( "CLSID\\{0}", clsid ), false );
 
-				try
-				{
-					// ASCOM
+				// Commented out removal of Profile settings to preserve them during an upgrade.
 
-					using ( var P = new ASCOM.Utilities.Profile() )
-					{
-						P.DeviceType = deviceType;
-						P.Unregister( progid );
-					}
-				}
-				catch ( Exception ) { }
+				//try
+				//{
+				//	// ASCOM
+
+				//	using ( var P = new ASCOM.Utilities.Profile() )
+				//	{
+				//		P.DeviceType = deviceType;
+				//		P.Unregister( progid );
+				//	}
+				//}
+				//catch ( Exception ) { }
 			}
 		}
 
