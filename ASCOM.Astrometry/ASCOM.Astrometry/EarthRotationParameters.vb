@@ -1127,7 +1127,7 @@ Public Class EarthRotationParameters : Implements IDisposable
 
         Catch ex As Exception
             TL.LogMessageCrLf("ManageScheduledTask Exception", ex.ToString())
-            MsgBox("Something went wrong with the update, please report this on the ASCOM Talk Yahoo forum, including the ASCOM.EarthRotation.xx.yy.txt log file from your Documents\ASCOM\Logs yyyy-mm-dd folder." & vbCrLf & ex.ToString())
+            MsgBox("Something went wrong with the update, please report this on the ASCOM Talk Groups.IO forum, including the ASCOM.EarthRotation.xx.yy.txt log file from your Documents\ASCOM\Logs yyyy-mm-dd folder." & vbCrLf & ex.ToString())
         End Try
 
         TL.BlankLine()

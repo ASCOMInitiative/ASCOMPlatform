@@ -157,7 +157,7 @@ Public Class EarthRotationDataForm
 
         Catch ex As Exception
             TL.LogMessageCrLf("Form Load", ex.ToString())
-            MessageBox.Show("Something went wrong when loading the configuration form, please report this on the ASCOM Talk Yahoo forum, including the ASCOM.EarthRotation.xx.yy.txt log file from your Documents\ASCOM\Logs yyyy-mm-dd folder." & vbCrLf & ex.ToString())
+            MessageBox.Show("Something went wrong when loading the configuration form, please report this on the ASCOM Talk Groups.IO forum, including the ASCOM.EarthRotation.xx.yy.txt log file from your Documents\ASCOM\Logs yyyy-mm-dd folder." & vbCrLf & ex.ToString())
         End Try
     End Sub
 

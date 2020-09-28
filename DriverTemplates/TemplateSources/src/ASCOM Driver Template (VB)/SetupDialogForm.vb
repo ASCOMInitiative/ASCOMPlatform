@@ -22,7 +22,7 @@ Public Class SetupDialogForm
     Private Sub ShowAscomWebPage(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox1.DoubleClick, PictureBox1.Click
         ' Click on ASCOM logo event handler
         Try
-            System.Diagnostics.Process.Start("http://ascom-standards.org/")
+            System.Diagnostics.Process.Start("https://ascom-standards.org/")
         Catch noBrowser As System.ComponentModel.Win32Exception
             If noBrowser.ErrorCode = -2147467259 Then
                 MessageBox.Show(noBrowser.Message)
