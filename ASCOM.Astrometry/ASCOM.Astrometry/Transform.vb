@@ -236,11 +236,14 @@ Namespace Transform
         ''' <param name="DEC">DEC in J2000 co-ordinates (-90.0 to +90.0)</param>
         ''' <remarks></remarks>
         Sub SetJ2000(ByVal RA As Double, ByVal DEC As Double) Implements ITransform.SetJ2000
-            RAJ2000Value = ValidateRA("SetJ2000", RA)
-            DECJ2000Value = ValidateDec("SetJ2000", DEC)
+
+            If (RA <> RAJ2000Value) Or (DEC <> DECJ2000Value) Then
+                RAJ2000Value = ValidateRA("SetJ2000", RA)
+                DECJ2000Value = ValidateDec("SetJ2000", DEC)
+                RequiresRecalculate = True
+            End If
 
             LastSetBy = SetBy.J2000
-            If (RA <> RAJ2000Value) Or (DEC <> DECJ2000Value) Then RequiresRecalculate = True
             TL.LogMessage("SetJ2000", "RA: " & Format(RA) & ", DEC: " & FormatDec(DEC))
         End Sub
 
@@ -251,11 +254,14 @@ Namespace Transform
         ''' <param name="DEC">DEC in apparent co-ordinates (-90.0 to +90.0)</param>
         ''' <remarks></remarks>
         Sub SetApparent(ByVal RA As Double, ByVal DEC As Double) Implements ITransform.SetApparent
-            RAApparentValue = ValidateRA("SetApparent", RA)
-            DECApparentValue = ValidateDec("SetApparent", DEC)
+
+            If (RA <> RAApparentValue) Or (DEC <> DECApparentValue) Then
+                RAApparentValue = ValidateRA("SetApparent", RA)
+                DECApparentValue = ValidateDec("SetApparent", DEC)
+                RequiresRecalculate = True
+            End If
 
             LastSetBy = SetBy.Apparent
-            If (RA <> RAApparentValue) Or (DEC <> DECApparentValue) Then RequiresRecalculate = True
             TL.LogMessage("SetApparent", "RA: " & Format(RA) & ", DEC: " & FormatDec(DEC))
         End Sub
 
@@ -266,11 +272,14 @@ Namespace Transform
         ''' <param name="DEC">DEC in topocentric co-ordinates (-90.0 to +90.0)</param>
         ''' <remarks></remarks>
         Sub SetTopocentric(ByVal RA As Double, ByVal DEC As Double) Implements ITransform.SetTopocentric
-            RATopoValue = ValidateRA("SetTopocentric", RA)
-            DECTopoValue = ValidateDec("SetTopocentric", DEC)
+
+            If (RA <> RATopoValue) Or (DEC <> DECTopoValue) Then
+                RATopoValue = ValidateRA("SetTopocentric", RA)
+                DECTopoValue = ValidateDec("SetTopocentric", DEC)
+                RequiresRecalculate = True
+            End If
 
             LastSetBy = SetBy.Topocentric
-            If (RA <> RATopoValue) Or (DEC <> DECTopoValue) Then RequiresRecalculate = True
             TL.LogMessage("SetTopocentric", "RA: " & Format(RA) & ", DEC: " & FormatDec(DEC))
         End Sub
 
@@ -281,13 +290,15 @@ Namespace Transform
         ''' <param name="Elevation">Topocentric elevation in degrees (-90.0 to +90.0)</param>
         ''' <remarks></remarks>
         Sub SetAzimuthElevation(Azimuth As Double, Elevation As Double) Implements ITransform.SetAzimuthElevation
+
             If (Azimuth < 0.0) Or (Azimuth >= 360.0) Then Throw New ASCOM.InvalidValueException("SetAzimuthElevation Azimuth", Azimuth.ToString(), "0.0 hours", "23.9999999... hours")
             If (Elevation < -90.0) Or (Elevation > 90.0) Then Throw New ASCOM.InvalidValueException("SetAzimuthElevation Elevation", Elevation.ToString(), "-90.0 degrees", "+90.0 degrees")
 
-            LastSetBy = SetBy.AzimuthElevation
-            RequiresRecalculate = True
             AzimuthTopoValue = Azimuth
             ElevationTopoValue = Elevation
+            RequiresRecalculate = True
+
+            LastSetBy = SetBy.AzimuthElevation
             TL.LogMessage("SetAzimuthElevation", "Azimuth: " & FormatDec(Azimuth) & ", Elevation: " & FormatDec(Elevation))
         End Sub
 
