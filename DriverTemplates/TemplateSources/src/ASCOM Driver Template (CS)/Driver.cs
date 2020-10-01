@@ -165,29 +165,30 @@ namespace ASCOM.TEMPLATEDEVICENAME
         public void CommandBlind(string command, bool raw)
         {
             CheckConnected("CommandBlind");
-            // Call CommandString and return as soon as it finishes
-            this.CommandString(command, raw);
-            // or
+            // TODO The optional CommandBlind method should either be implemented OR throw a MethodNotImplementedException
+            // If implemented, CommandBlind must send the supplied command to the mount and return immediately without waiting for a response
+
             throw new ASCOM.MethodNotImplementedException("CommandBlind");
-            // DO NOT have both these sections!  One or the other
         }
 
         public bool CommandBool(string command, bool raw)
         {
             CheckConnected("CommandBool");
-            string ret = CommandString(command, raw);
-            // TODO decode the return string and return true or false
-            // or
+            // TODO The optional CommandBool method should either be implemented OR throw a MethodNotImplementedException
+            // If implemented, CommandBool must send the supplied command to the mount, wait for a response and parse this to return a True or False value
+
+            // string retString = CommandString(command, raw); // Send the command and wait for the response
+            // bool retBool = XXXXXXXXXXXXX; // Parse the returned string and create a boolean True / False value
+            // return retBool; // Return the boolean value to the client
+
             throw new ASCOM.MethodNotImplementedException("CommandBool");
-            // DO NOT have both these sections!  One or the other
         }
 
         public string CommandString(string command, bool raw)
         {
             CheckConnected("CommandString");
-            // it's a good idea to put all the low level communication with the device here,
-            // then all communication calls this function
-            // you need something to ensure that only one command is in progress at a time
+            // TODO The optional CommandString method should either be implemented OR throw a MethodNotImplementedException
+            // If implemented, CommandString must send the supplied command to the mount and wait for a response before returning this to the client
 
             throw new ASCOM.MethodNotImplementedException("CommandString");
         }
