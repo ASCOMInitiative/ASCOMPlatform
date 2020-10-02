@@ -4,7 +4,6 @@ Imports System.IO
 Imports ASCOM.Utilities.Interfaces
 Imports ASCOM.Utilities.Exceptions
 Imports System.Runtime.InteropServices
-Imports ASCOM.Utilities.Support
 
 ''' <summary>
 ''' Creates a log file for a driver or application. Uses a similar file name and internal format to the serial logger. Multiple logs can be created simultaneously if needed.

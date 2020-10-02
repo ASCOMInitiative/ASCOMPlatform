@@ -2,9 +2,7 @@
 
 Imports System.Runtime.InteropServices
 Imports System.ComponentModel
-Imports ASCOM.Utilities
 Imports System.Collections.Generic
-Imports ASCOM.Utilities.Enums
 Imports System.Net
 
 Namespace Interfaces
