@@ -528,7 +528,12 @@ Friend Class RegistryAccess
 
     Friend Sub SetProfile(ByVal p_SubKeyName As String, ByVal p_ProfileKey As ASCOMProfile) Implements IAccess.SetProfile
         Dim SKey As RegistryKey
+
+        ' Initialise registry key to remove compiler warning
+        SKey = Registry.CurrentUser
+
         Try
+
             GetProfileMutex("SetProfile", p_SubKeyName)
             sw.Reset() : sw.Start() 'Start timing this call
             TL.LogMessage("SetProfile", "SubKey: """ & p_SubKeyName & """")
@@ -642,6 +647,10 @@ Friend Class RegistryAccess
         'Dim swLocal As Stopwatch
         Dim NewFromKey, NewToKey As RegistryKey
         Static RecurseDepth As Integer
+
+        ' Initialise registry keys to remove compiler warning
+        NewFromKey = Registry.CurrentUser
+        NewToKey = Registry.CurrentUser
 
         RecurseDepth += 1 'Increment the recursion depth indicator
 

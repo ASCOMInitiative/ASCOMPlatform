@@ -1,6 +1,4 @@
-﻿Imports System
-Imports System.Collections.Generic
-Imports System.Linq
+﻿Imports System.Collections.Generic
 Imports System.Net
 Imports System.Runtime.InteropServices
 Imports System.Threading
@@ -46,7 +44,7 @@ Public Class AlpacaDiscovery
     ''' <summary>
     ''' Initialiser that takes a trace logger (Can only be used from .NET clients)
     ''' </summary>
-    ''' <paramname="traceLogger">Trace logger instance to use for activity logging</param>
+    ''' <param name="traceLogger">Trace logger instance to use for activity logging</param>
     Friend Sub New(ByVal traceLogger As TraceLogger)
         TL = traceLogger ' Save the supplied trace logger object
         InitialiseClass() ' Initialise using the trace logger
@@ -292,7 +290,6 @@ Public Class AlpacaDiscovery
     ''' <summary>
     ''' Raise an Alpaca devices updated event
     ''' </summary>
-    ''' <paramname="e"></param>
     Private Sub RaiseAnAlpacaDevicesChangedEvent()
         RaiseEvent AlpacaDevicesUpdated(Me, EventArgs.Empty)
     End Sub
@@ -300,7 +297,7 @@ Public Class AlpacaDiscovery
     ''' <summary>
     ''' Discovery timer event handler - called when the allocated discovery period has ended
     ''' </summary>
-    ''' <paramname="state">Timer state</param>
+    ''' <param name="state">Timer state</param>
     Private Sub OnDiscoveryCompleteTimer(ByVal state As Object)
         LogMessage("OnTimeOutTimerFired", $"Firing discovery complete event")
         discoveryCompleteValue = True ' Flag that the timer out has expired
@@ -324,8 +321,8 @@ Public Class AlpacaDiscovery
     ''' <summary>
     ''' Handler for device responses coming from the Finder
     ''' </summary>
-    ''' <paramname="responderIPEndPoint">Responder's IP address and port</param>
-    ''' <paramname="alpacaDiscoveryResponse">Class containing the information provided by the device in its response.</param>
+    ''' <param name="responderIPEndPoint">Responder's IP address and port</param>
+    ''' <param name="alpacaDiscoveryResponse">Class containing the information provided by the device in its response.</param>
     Private Sub FoundDeviceEventHandler(ByVal responderIPEndPoint As IPEndPoint, ByVal alpacaDiscoveryResponse As AlpacaDiscoveryResponse)
         Try
             LogMessage("FoundDeviceEventHandler", $"FOUND Alpaca device at {responderIPEndPoint.Address}:{responderIPEndPoint.Port}") ' Log reception of the broadcast response
@@ -359,7 +356,7 @@ Public Class AlpacaDiscovery
     ''' <summary>
     ''' Get Alpaca device information from the management API
     ''' </summary>
-    ''' <paramname="deviceIpEndPoint"></param>
+    ''' <param name="deviceIpEndPointObject"></param>
     Private Sub GetAlpacaDeviceInformation(ByVal deviceIpEndPointObject As Object)
         Dim deviceIpEndPoint As IPEndPoint = TryCast(deviceIpEndPointObject, IPEndPoint)
         Dim hostIpAndPort As String = deviceIpEndPoint.ToString()
@@ -432,9 +429,6 @@ Public Class AlpacaDiscovery
     ''' <summary>
     ''' Resolve a host IP address to a host name
     ''' </summary>
-    ''' <paramname="hostIp"></param>
-    ''' <paramname="HostPort"></param>
-    ''' <returns></returns>
     ''' <remarks>This first makes a DNS query and uses the result if found. If not found it then tries a Microsoft DNS call which also searches the local hosts and makes a netbios query.
     ''' If this returns an answer it is use. Otherwise the IP address is returned as the host name</remarks>
     Private Sub ResolveIpAddressToHostName(ByVal deviceIpEndPointObject As Object)
@@ -511,8 +505,8 @@ Public Class AlpacaDiscovery
     ''' <summary>
     ''' Log a message to the screen, adding the current managed thread ID
     ''' </summary>
-    ''' <paramname="methodName"></param>
-    ''' <paramname="message"></param>
+    ''' <param name="methodName"></param>
+    ''' <param name="message"></param>
     Private Sub LogMessage(ByVal methodName As String, ByVal message As String)
         Dim indentSpaces As String
 

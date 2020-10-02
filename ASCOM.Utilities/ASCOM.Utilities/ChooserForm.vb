@@ -728,10 +728,9 @@ Friend Class ChooserForm
     End Sub
 
     ''' <summary>
-    ''' Find the lowest numbered unused ProgID in the series {progIdBase}{N}.{deviceType} where N Is an integer starting at 1
+    ''' Creates a new Alpaca driver instance with the given descriptive name
     ''' </summary>
-    ''' <param name="progIdBase">ProgID base string</param>
-    ''' <param name="deviceType">ASCOM device type</param>
+    ''' <param name="deviceDescription"></param>
     ''' <returns></returns>
     Private Function CreateNewAlpacaDriver(deviceDescription As String) As String
         Dim newProgId As String

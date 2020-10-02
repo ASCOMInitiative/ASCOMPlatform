@@ -33,7 +33,7 @@ Friend Class Finder
     ''' Calling search and concatenating the results reduces the chance that a UDP packet is lost
     ''' This may require firewall access
     ''' </summary>
-    ''' <paramname="callback">A callback function to receive the endpoint result</param>
+    ''' <param name="callback">A callback function to receive the endpoint result</param>
     Friend Sub New(ByVal callback As Action(Of IPEndPoint, AlpacaDiscoveryResponse), ByVal traceLogger As TraceLogger)
         TL = traceLogger ' Save the trace logger object
         LogMessage("Finder", "Starting Initialisation...")

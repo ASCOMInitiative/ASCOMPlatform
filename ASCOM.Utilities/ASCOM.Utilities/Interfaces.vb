@@ -169,8 +169,8 @@ Namespace Interfaces
         ''' Returns an ArrayList of discovered Alpaca devices for use by COM clients
         ''' </summary>
         ''' <returns>ArrayList of <see cref="AlpacaDevice"/>classes</returns>
-        ''' <remarks>This method is for use by COM clients because it is not possible to pass a generic list as used in <see cref="GetAlpacaDevices"/> through a COM interface. 
-        ''' .NET clients should use <see cref="GetAlpacaDevices()"/> instead of this method.</remarks>
+        ''' <remarks>This method is for use by COM clients because it is not possible to pass a generic list as used in <see cref="IAlpacaDiscoveryExtra.GetAlpacaDevices"/> through a COM interface. 
+        ''' .NET clients should use <see cref="IAlpacaDiscoveryExtra.GetAlpacaDevices()"/> instead of this method.</remarks>
         <DispId(2)> Function GetAlpacaDevicesAsArrayList() As ArrayList
 
         ''' <summary>
@@ -180,8 +180,8 @@ Namespace Interfaces
         ''' <returns>ArrayList of <see cref="AscomDevice"/>classes</returns>
         ''' <remarks>
         ''' <para>
-        ''' This method is for use by COM clients because it is not possible to return a generic list, as used in <see cref="GetAscomDevices(String)"/>, through a COM interface. 
-        ''' .NET clients should use <see cref="GetAscomDevices(String)"/> instead of this method.
+        ''' This method is for use by COM clients because it is not possible to return a generic list, as used in <see cref="IAlpacaDiscoveryExtra.GetAscomDevices(String)"/>, through a COM interface. 
+        ''' .NET clients should use <see cref="IAlpacaDiscoveryExtra.GetAscomDevices(String)"/> instead of this method.
         ''' </para>
         ''' <para>
         ''' This method will return every discovered device, regardless of device type, if the supplied "deviceType" parameter is an empty string.
@@ -211,7 +211,7 @@ Namespace Interfaces
         ''' Returns a generic List of discovered Alpaca devices.
         ''' </summary>
         ''' <returns>List of <see cref="AlpacaDevice"/>classes</returns>
-        ''' <remarks>This method is only available to .NET clients because COM cannot handle generic types. COM clients should use <see cref="GetAlpacaDevicesAsArrayList()"/>.</remarks>
+        ''' <remarks>This method is only available to .NET clients because COM cannot handle generic types. COM clients should use <see cref="IAlpacaDiscovery.GetAlpacaDevicesAsArrayList()"/>.</remarks>
         Function GetAlpacaDevices() As List(Of ASCOM.Utilities.AlpacaDevice)
 
         ''' <summary>
@@ -221,7 +221,7 @@ Namespace Interfaces
         ''' <returns>List of AscomDevice classes</returns>
         ''' <remarks>
         ''' <para>
-        ''' This method is only available to .NET clients because COM cannot handle generic types. COM clients should use <see cref="GetAscomDevicesAsArrayList(String)()"/>.
+        ''' This method is only available to .NET clients because COM cannot handle generic types. COM clients should use <see cref="IAlpacaDiscovery.GetAscomDevicesAsArrayList(String)"/>.
         ''' </para>
         ''' <para>
         ''' This method will return every discovered device, regardless of device type, if the supplied "deviceType" parameter is an empty string.
@@ -238,7 +238,7 @@ Namespace Interfaces
         ''' <summary>
         ''' Raised when the discovery is complete
         ''' </summary>
-        ''' <remarks>This event is only available to .NET clients. COM clients should poll the <see cref="DiscoveryComplete"/> property periodically to determine when discovery is complete.</remarks>
+        ''' <remarks>This event is only available to .NET clients. COM clients should poll the <see cref="IAlpacaDiscovery.DiscoveryComplete"/> property periodically to determine when discovery is complete.</remarks>
         Event DiscoveryCompleted As EventHandler
 
     End Interface

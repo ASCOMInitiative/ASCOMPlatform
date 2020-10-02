@@ -8005,7 +8005,7 @@ Public Class DiagnosticsForm
     ''' <param name="MSIInstaller">True if the installer is an MSI based installer, False if an InstallAware Native installer</param>
     ''' <remarks></remarks>
     Private Function GetInstalledComponent(ByVal Name As String, ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean, ByVal MSIInstaller As Boolean) As Generic.SortedList(Of String, String)
-        Dim InstallInfo As Generic.SortedList(Of String, String)
+        Dim InstallInfo As New SortedList(Of String, String)
 
         Try ' Platform 6 installer GUID, should always be present in Platform 6
             InstallInfo = GetInstallInformation(ProductCode, Required, Force32, MSIInstaller)
@@ -8037,9 +8037,9 @@ Public Class DiagnosticsForm
     ''' <param name="MSIInstaller">True if the installer is an MSI based installer, False if an Installaware Native installer</param>
     ''' <returns>Generic Sorted List of key value pairs. If not found returns an empty list</returns>
     ''' <remarks></remarks>
-    Private Function GetInstallInformation(ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean, ByVal MSIInstaller As Boolean) As Generic.SortedList(Of String, String)
+    Private Function GetInstallInformation(ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean, ByVal MSIInstaller As Boolean) As SortedList(Of String, String)
         Dim RegKey As RegistryKey
-        Dim RetVal As New Generic.SortedList(Of String, String)
+        Dim RetVal As New SortedList(Of String, String)
         Dim UninstallString As String
         Dim UninstallKey As RegistryKey, UninstallSubKeyNames() As String
         Dim PlatformName As String = ""
