@@ -66,7 +66,7 @@ Friend Class ChooserForm
     Private currentWarningTitle, currentWarningMesage As String
     Private alpacaDevices As Generic.List(Of AscomDevice) = New Generic.List(Of AscomDevice)()
     Private selectedChooserItem As ChooserItem
-    Private WithEvents clientManagerProcess As Process
+    Private WithEvents ClientManagerProcess As Process
     Private driverGenerationComplete As Boolean
     Private currentOkButtonEnabledState As Boolean
     Private currentPropertiesButtonEnabledState As Boolean
@@ -77,7 +77,7 @@ Friend Class ChooserForm
     Private chooserPropertiesToolTip As ToolTip
     Private createAlpacaDeviceToolTip As ToolTip
     Private alpacaStatusToolstripLabel As ToolStripLabel
-    Private WithEvents alpacaStatusIndicatorTimer As System.Windows.Forms.Timer
+    Private WithEvents AlpacaStatusIndicatorTimer As System.Windows.Forms.Timer
     Private profile As Profile
     Private registryAccess As RegistryAccess
 
@@ -201,9 +201,9 @@ Friend Class ChooserForm
             RefreshTraceMenu() ' Refresh the trace menu
 
             ' Set up the Alpaca status blink timer but make sure its not running
-            alpacaStatusIndicatorTimer = New System.Windows.Forms.Timer
-            alpacaStatusIndicatorTimer.Interval = ALPACA_STATUS_BLINK_TIME ' Set it to fire after 250ms
-            alpacaStatusIndicatorTimer.Stop()
+            AlpacaStatusIndicatorTimer = New System.Windows.Forms.Timer
+            AlpacaStatusIndicatorTimer.Interval = ALPACA_STATUS_BLINK_TIME ' Set it to fire after 250ms
+            AlpacaStatusIndicatorTimer.Stop()
 
             TL.LogMessage("ChooserForm_Load", $"UI thread: {Thread.CurrentThread.ManagedThreadId}")
 
@@ -305,7 +305,7 @@ Friend Class ChooserForm
 
 #Region "Form, button, control and timer event handlers"
 
-    Private Sub comboProduct_DrawItem(ByVal sender As Object, ByVal e As DrawItemEventArgs) 'Handles CmbDriverSelector.DrawItem
+    Private Sub ComboProduct_DrawItem(ByVal sender As Object, ByVal e As DrawItemEventArgs) 'Handles CmbDriverSelector.DrawItem
         Dim brush As Brush
         Dim colour As Color
         Dim combo As ComboBox
@@ -355,7 +355,7 @@ Friend Class ChooserForm
         DisplayAlpacaDeviceToolTip()
     End Sub
 
-    Private Sub AlpacaStatusIndicatorTimerEventHandler(ByVal myObject As Object, ByVal myEventArgs As EventArgs) Handles alpacaStatusIndicatorTimer.Tick
+    Private Sub AlpacaStatusIndicatorTimerEventHandler(ByVal myObject As Object, ByVal myEventArgs As EventArgs) Handles AlpacaStatusIndicatorTimer.Tick
         If AlpacaStatus.BackColor = Color.Orange Then
             AlpacaStatus.BackColor = Color.DimGray
         Else
@@ -369,7 +369,7 @@ Friend Class ChooserForm
     ''' </summary>
     ''' <param name="eventSender"></param>
     ''' <param name="eventArgs"></param>
-    Private Sub cmdProperties_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnProperties.Click
+    Private Sub CmdProperties_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnProperties.Click
         Dim oDrv As Object = Nothing ' The driver
         Dim bConnected As Boolean
         Dim sProgID As String
@@ -426,12 +426,12 @@ Friend Class ChooserForm
 
     End Sub
 
-    Private Sub cmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnCancel.Click
+    Private Sub CmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnCancel.Click
         selectedProgIdValue = ""
         Me.Hide()
     End Sub
 
-    Private Sub cmdOK_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnOK.Click
+    Private Sub CmdOK_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnOK.Click
         Dim newProgId As String
         Dim userResponse As DialogResult
 
@@ -494,11 +494,11 @@ Friend Class ChooserForm
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub DriverGeneration_Complete(ByVal sender As Object, ByVal e As System.EventArgs) Handles clientManagerProcess.Exited
+    Private Sub DriverGeneration_Complete(ByVal sender As Object, ByVal e As System.EventArgs) Handles ClientManagerProcess.Exited
         driverGenerationComplete = True ' Flag that driver generation is complete
     End Sub
 
-    Private Sub cbDriverSelector_SelectionChangeCommitted(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles CmbDriverSelector.SelectionChangeCommitted
+    Private Sub CbDriverSelector_SelectionChangeCommitted(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles CmbDriverSelector.SelectionChangeCommitted
         If CmbDriverSelector.SelectedIndex >= 0 Then
 
             ' Save the newly selected chooser item
@@ -522,7 +522,7 @@ Friend Class ChooserForm
         End If
     End Sub
 
-    Private Sub picASCOM_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles picASCOM.Click
+    Private Sub PicASCOM_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles picASCOM.Click
         Try
             Process.Start("https://ASCOM-Standards.org/")
         Catch ex As Exception
@@ -863,16 +863,16 @@ Friend Class ChooserForm
         clientManagerProcessStartInfo.WorkingDirectory = clientManagerWorkingDirectory
 
         ' Create the management process
-        clientManagerProcess = New Process()
-        clientManagerProcess.StartInfo = clientManagerProcessStartInfo
-        clientManagerProcess.EnableRaisingEvents = True
+        ClientManagerProcess = New Process()
+        ClientManagerProcess.StartInfo = clientManagerProcessStartInfo
+        ClientManagerProcess.EnableRaisingEvents = True
 
         ' Initialise the process complete flag to false
         driverGenerationComplete = False
 
         ' Run the process
         TL.LogMessage("RunDynamicClientManager", $"Starting driver management process")
-        clientManagerProcess.Start()
+        ClientManagerProcess.Start()
 
         ' Wait for the process to complete at which point the process complete event will fire and driverGenerationComplete will be set true
         Do
@@ -882,7 +882,7 @@ Friend Class ChooserForm
 
         TL.LogMessage("RunDynamicClientManager", $"Completed driver management process")
 
-        clientManagerProcess.Dispose()
+        ClientManagerProcess.Dispose()
 
     End Sub
 
@@ -1225,7 +1225,7 @@ Friend Class ChooserForm
             BtnProperties.Enabled = currentPropertiesButtonEnabledState
             BtnOK.Enabled = currentOkButtonEnabledState
             AlpacaStatus.Visible = False
-            alpacaStatusIndicatorTimer.Stop()
+            AlpacaStatusIndicatorTimer.Stop()
         End If
     End Sub
 
@@ -1247,7 +1247,7 @@ Friend Class ChooserForm
             BtnOK.Enabled = False
             AlpacaStatus.Visible = True
             AlpacaStatus.BackColor = Color.Orange
-            alpacaStatusIndicatorTimer.Start()
+            AlpacaStatusIndicatorTimer.Start()
         End If
     End Sub
 
@@ -1269,7 +1269,7 @@ Friend Class ChooserForm
             BtnOK.Enabled = currentOkButtonEnabledState
             AlpacaStatus.Visible = True
             AlpacaStatus.BackColor = Color.Lime
-            alpacaStatusIndicatorTimer.Stop()
+            AlpacaStatusIndicatorTimer.Stop()
         End If
     End Sub
 
@@ -1291,7 +1291,7 @@ Friend Class ChooserForm
             BtnOK.Enabled = currentOkButtonEnabledState
             AlpacaStatus.Visible = True
             AlpacaStatus.BackColor = Color.Red
-            alpacaStatusIndicatorTimer.Stop()
+            AlpacaStatusIndicatorTimer.Stop()
         End If
     End Sub
 
