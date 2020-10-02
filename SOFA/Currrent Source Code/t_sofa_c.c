@@ -17,11 +17,11 @@ static int verbose = 0;
 **
 **  All messages go to stdout.
 **
-**  This revision:  2017 December 6
+**  This revision:  2020 May 30
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2020-07-21
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 */
 
 static void viv(int ival, int ivalok,
@@ -5667,7 +5667,7 @@ static void t_p06e(int *status)
 **
 **  Called:  iauP06e, vvd
 **
-**  This revision:  2013 August 7
+**  This revision:  2020 May 30
 */
 {
     double eps0, psia, oma, bpa, bqa, pia, bpia,
@@ -5702,7 +5702,7 @@ static void t_p06e(int *status)
        "iauP06e", "zetaa", status);
    vvd(thetaa, 0.2650932701657497181e-3, 1e-14,
        "iauP06e", "thetaa", status);
-   vvd(pa, 0.6651637681381016344e-3, 1e-14,
+   vvd(pa, 0.6651637681381016288e-3, 1e-14,
        "iauP06e", "pa", status);
    vvd(gam, 0.1398077115963754987e-5, 1e-14,
        "iauP06e", "gam", status);
@@ -10157,7 +10157,7 @@ int main(int argc, char *argv[])
 }
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2020
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

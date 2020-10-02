@@ -63,7 +63,7 @@ static LeapSecondData BuiltInLeapSecondData[100] = // Global LeapSecondData arra
 	{ 2009,  1, 34.0 },
 	{ 2012,  7, 35.0 },
 	{ 2015,  7, 36.0 },  // BuiltInLeapSecondData[40]
-	{ 2017,  1, 37.0 },  // BuiltInLeapSecondData[41] <=== Insert additional values after this one and UPDATE NBUILTIN in the ASCOMDat.h file or new vales won't be used!
+	{ 2017,  1, 37.0 },  // BuiltInLeapSecondData[41] <=== Insert additional values after this one and UPDATE NBUILTIN in the ASCOMDat.h file or new values won't be used!
 };
 
 int iauDat(int iy, int im, int id, double fd, double *deltat)
@@ -197,7 +197,7 @@ int iauDat(int iy, int im, int id, double fd, double *deltat)
 	int NDAT; // Number of valid records in the pointer based table (not the dimension of the array itself)
 
 	/* Release year for this version of iauDat */
-	enum { IYV = 2019 };
+	enum { IYV = 2020 };
 
 	/* Reference dates (MJD) and drift rates (s/day), pre leap seconds */
 	static const double drift[][2] =

@@ -1,6 +1,6 @@
 #ifndef SOFAHDEF
 #define SOFAHDEF
-#define EXPORT __declspec(dllexport)
+#define EXPORT __declspec(dllexport)            
 
 /*
 **  - - - - - - -
@@ -14,9 +14,9 @@
 **
 **  This revision:   2018 December 5
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2020-07-21
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 */
 
 #include "sofam.h"
@@ -498,7 +498,7 @@ EXPORT void iauSxpv(double s, double pv[2][3], double spv[2][3]);
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2020
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

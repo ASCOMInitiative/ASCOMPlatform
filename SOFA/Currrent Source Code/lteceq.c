@@ -57,9 +57,9 @@ void iauLteceq(double epj, double dl, double db, double *dr, double *dd)
 **
 **  This revision:  2016 February 9
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2020-07-21
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 */
 {
    double rm[3][3], v1[3], v2[3], a, b;
@@ -83,7 +83,7 @@ void iauLteceq(double epj, double dl, double db, double *dr, double *dd)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2020
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
