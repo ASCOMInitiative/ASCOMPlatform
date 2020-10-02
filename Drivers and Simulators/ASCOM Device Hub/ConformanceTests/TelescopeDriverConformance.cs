@@ -317,7 +317,7 @@ namespace ConformanceTests
 			WriteProperty<short>( "SlewSettleTime", -1, "", "Write"
 								, "Invalid value exception generated as expected on set slew settle time < 0"
 								, typeof( TargetInvocationException ) );
-			ReadProperty<PierSide>( "SideOfPier", "", "Read" );
+			ReadProperty<PierSide>( "SideOfPier", "", "Read", "", true );
 			ReadAndTestSiderealTime();
 
 			ReadDegreeProperty( "TargetDeclination", "Read", typeof( TargetInvocationException ) );
@@ -1452,6 +1452,15 @@ namespace ConformanceTests
 			string status = _error;
 			string msg = "DestinationSideOfPier does not change as expected";
 
+			if ( Telescope.AlignmentMode != AlignmentModes.algGermanPolar )
+			{
+				status = _info;
+				msg = "Test skipped as AlignmentMode is not German Polar";
+				TestContext.WriteLine( _fmt, NowTime(), "DestinationSideOfPier", status, msg );
+
+				return;
+			}
+
 			// Move to sane pier west position and get the destination side-of-pier 
 			// value for a pier east position.
 
@@ -1461,11 +1470,27 @@ namespace ConformanceTests
 			bool trackingFlag = Telescope.Tracking;
 			Telescope.Tracking = true;
 
+			PierSide currentPierSide = PierSide.pierUnknown;
+
 			try
 			{
-				Telescope.SlewToCoordinates( targetPierWest.X, targetPierWest.Y );
+				currentPierSide = Telescope.SideOfPier;
+			}
+			catch ( Exception )
+			{
+				status = _info;
+				msg = "SideOfPier is not implemented in this driver. Skipping this test.";
+				TestContext.WriteLine( _fmt, NowTime(), "DestinationSideOfPier", status, msg );
 
-				PierSide currentPierSide = Telescope.SideOfPier;
+				return;
+			}
+
+			try
+			{
+				currentPierSide = PierSide.pierUnknown;
+				Telescope.SlewToCoordinates( targetPierWest.X, targetPierWest.Y );
+				currentPierSide = Telescope.SideOfPier;
+
 				PierSide targetPierSide = Telescope.DestinationSideOfPier( targetPierEast.X, targetPierEast.Y );
 
 				if ( currentPierSide == PierSide.pierWest && targetPierSide != currentPierSide )
@@ -2705,7 +2730,8 @@ namespace ConformanceTests
 		}
 
 		private T ReadProperty<T>( string propName, string valueFormat="", string nameSuffix=""
-									, string customResultMessage = "" )
+									, string customResultMessage = ""
+									, bool isOptional = false )
 		{
 			T retval = default(T);
 			string status = _error;
@@ -2732,7 +2758,13 @@ namespace ConformanceTests
 
 			string msg = "";
 
-			if ( status == _error )
+			if ( status == _error && isOptional)
+			{
+				// An error for an optional property is OK
+				status = _ok;
+				msg = exception + " by an Optional Member";
+			}
+			else if ( status == _error )
 			{
 				msg = exception;
 				_failedConformanceCheck = true;
@@ -2971,6 +3003,10 @@ namespace ConformanceTests
 				{
 					retval += " on read before write";
 				}
+			}
+			else if ( xcp is PropertyNotImplementedException )
+			{
+				retval = "Property not implemented exception was generated";
 			}
 			else if ( xcp is DriverAccessCOMException )
 			{

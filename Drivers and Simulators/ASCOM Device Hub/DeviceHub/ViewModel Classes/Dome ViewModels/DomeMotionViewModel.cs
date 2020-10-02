@@ -341,8 +341,7 @@ namespace ASCOM.DeviceHub
 			bool retval = false;
 
 			if ( Status != null && Status.Connected && !Status.Slewing 
-				&& Status.ShutterStatus != ShutterState.shutterClosing && Status.ShutterStatus != ShutterState.shutterOpening
-				&& !IsSlaved )
+				&& Status.ShutterStatus != ShutterState.shutterClosing && Status.ShutterStatus != ShutterState.shutterOpening )
 			{
 				retval = true;
 			}

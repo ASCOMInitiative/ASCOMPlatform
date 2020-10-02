@@ -357,12 +357,14 @@ namespace Unit_Tests.Telescope
 			_svc.MockAtPark = false;
 			_svc.MockTracking = true;
 			_svc.MockSideOfPier = PierSide.pierWest;
+			_mgr.Status.SideOfPier = PierSide.pierWest;
 
-			Thread.Sleep( 1000 );
+			Thread.Sleep( 5000 ); // Give the telescope manager time to do a status update.
 
 			Assert.IsFalse( _mgr.AtPark );
 			Assert.IsTrue( _mgr.Tracking );
 			Assert.IsTrue( _mgr.Capabilities.CanSetPierSide );
+			Assert.IsTrue( _mgr.Status.SideOfPier == PierSide.pierWest );
 
 			// Verify that both the Manager and the Service have the same side-of-pier and that
 			// it is not Unknown.
@@ -375,17 +377,22 @@ namespace Unit_Tests.Telescope
 
 			_mgr.StartMeridianFlip();
 
-			// Figure out which side we should end up on after the flip.
-
-			PierSide targetSop = sop == PierSide.pierEast ? PierSide.pierWest : PierSide.pierEast;
-
 			// Wait for the flip.
 
-			Thread.Sleep( 1500 );
+			Thread.Sleep( 6000 );
+
+			while ( _mgr.Slewing )
+			{
+				Thread.Sleep( 500 );
+			}
 
 			// Make sure that we are done and on the expected side of the mount.
 
 			Assert.IsFalse( _mgr.Slewing );
+
+			// Figure out which side we should end up on after the flip.
+
+			PierSide targetSop = sop == PierSide.pierEast ? PierSide.pierWest : PierSide.pierEast;
 			Assert.AreEqual( targetSop, _mgr.SideOfPier );
 		}
 

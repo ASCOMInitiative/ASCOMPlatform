@@ -263,7 +263,7 @@ namespace ASCOM.DeviceHub
 			}
 			else if ( Capabilities.CanPulseGuide )
 			{
-				StartJogPulseGuide( jogDirection, jogRate );
+				StartJogPulseGuide( jogDirection );
 			}
 		}
 
@@ -795,7 +795,8 @@ namespace ASCOM.DeviceHub
 					Task.Run( () => SlewToCoordinates( targetRA, targetDec ) );
 				}
 
-				PierSide sideOfPier = Service.DestinationSideOfPier( targetRA, targetDec );
+				PierSide sideOfPier = GetTargetSideOfPier( targetRA, targetDec );
+
 				SlewInProgressMessage msg = new SlewInProgressMessage( true, targetRA, targetDec, sideOfPier );
 				Messenger.Default.Send( msg );
 				PreviousSlewInProgressMessage = msg;
@@ -881,7 +882,7 @@ namespace ASCOM.DeviceHub
 					throw new Exception( "Unable to perform the requested slew." );
 				}
 
-				PierSide sideOfPier = Service.DestinationSideOfPier( targetRA, targetDec );
+				PierSide sideOfPier = GetTargetSideOfPier( targetRA, targetDec );
 				SlewInProgressMessage msg = new SlewInProgressMessage( true, targetRA, targetDec, sideOfPier );
 				Messenger.Default.Send( msg );
 				PreviousSlewInProgressMessage = msg;
@@ -908,7 +909,7 @@ namespace ASCOM.DeviceHub
 				double targetDec;
 
 				CalculateRaAndDec( targetAz, targetAlt, out targetRa, out targetDec );
-				PierSide sideOfPier = Service.DestinationSideOfPier( targetRa, targetDec );
+				PierSide sideOfPier = GetTargetSideOfPier( targetRa, targetDec );
 				Messenger.Default.Send( new SlewInProgressMessage( true, targetRa, targetDec, sideOfPier ) );
 			}
 		}
@@ -986,7 +987,7 @@ namespace ASCOM.DeviceHub
 				case GuideDirections.guideEast: name = "East"; break;
 				case GuideDirections.guideNorth: name = "North"; break;
 				case GuideDirections.guideSouth: name = "South"; break;
-				case GuideDirections.guideWest: name = "North"; break;
+				case GuideDirections.guideWest: name = "West"; break;
 				default: name = "unknown"; break;
 			}
 
@@ -1084,19 +1085,22 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void StartJogPulseGuide( MoveDirections jogDirection, JogRate jogRate )
+		private void StartJogPulseGuide( MoveDirections jogDirection )
 		{
-			GuideDirections direction = GetPulseGuideDirection( jogDirection, jogRate );
+			GuideDirections? direction = GetPulseGuideDirection( jogDirection );
 
-			// This will throw an exception if the rate is too large!
+			// Don't start jogging if we don't have a valid direction.
 
-			ValidatePulseRate( direction, jogRate );
+			if ( !direction.HasValue )
+			{
+				return;
+			}
 
 			try
 			{
 				PulseGuideCancelTokenSource = new CancellationTokenSource();
 
-				Task.Factory.StartNew( () => DoPulseGuideTask( direction, jogRate.Rate, PulseGuideCancelTokenSource.Token ), PulseGuideCancelTokenSource.Token, TaskCreationOptions.None, TaskScheduler.Default );
+				Task.Factory.StartNew( () => DoPulseGuideTask( direction.Value, PulseGuideCancelTokenSource.Token ), PulseGuideCancelTokenSource.Token, TaskCreationOptions.None, TaskScheduler.Default );
 
 			}
 			catch ( Exception xcp )
@@ -1105,25 +1109,28 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private GuideDirections GetPulseGuideDirection( MoveDirections jogDirection, JogRate jogRate )
+		private GuideDirections? GetPulseGuideDirection( MoveDirections jogDirection )
 		{
-			TelescopeAxes axis = GetJogAxis( jogDirection );
+			GuideDirections? direction = null;
 
-			double signedRate = jogRate.Rate * GetJogSign( jogDirection );
+			switch ( jogDirection )
+			{
+				case MoveDirections.North:
+					direction = GuideDirections.guideNorth;
+					break;
 
-			GuideDirections direction = GuideDirections.guideWest;
+				case MoveDirections.South:
+					direction = GuideDirections.guideSouth;
+					break;
 
-			if ( axis == TelescopeAxes.axisPrimary && signedRate < 0.0 )
-			{
-				direction = GuideDirections.guideEast;
-			}
-			else if ( axis == TelescopeAxes.axisSecondary && signedRate >= 0.0 )
-			{
-				direction = GuideDirections.guideNorth;
-			}
-			else if ( axis == TelescopeAxes.axisSecondary && signedRate < 0.0 )
-			{
-				direction = GuideDirections.guideSouth;
+				case MoveDirections.East:
+					direction = GuideDirections.guideEast;
+					break;
+
+				case MoveDirections.West:
+					direction = GuideDirections.guideWest;
+					break;
+
 			}
 
 			return direction;
@@ -1137,27 +1144,10 @@ namespace ASCOM.DeviceHub
 		private const int PulseGuideDuration = 200; // milli-seconds
 		private const int PulseGuidePollRate = 220; // milli-seconds
 
-		private void DoPulseGuideTask( GuideDirections direction, double jogRate, CancellationToken cancelToken )
+		private void DoPulseGuideTask( GuideDirections direction, CancellationToken cancelToken )
 		{
-			double originalGuideRate = Double.NaN;
-
 			try
 			{
-				if ( direction == GuideDirections.guideEast || direction == GuideDirections.guideWest )
-				{
-					originalGuideRate = GuideRateRightAscension;
-					GuideRateRightAscension = jogRate;
-				}
-				else if ( direction == GuideDirections.guideNorth || direction == GuideDirections.guideSouth )
-				{
-					originalGuideRate = GuideRateDeclination;
-					GuideRateDeclination = jogRate;
-				}
-				else
-				{
-					return;
-				}
-
 				while ( !cancelToken.IsCancellationRequested )
 				{
 					PulseGuide( direction, PulseGuideDuration );
@@ -1171,20 +1161,6 @@ namespace ASCOM.DeviceHub
 			catch ( Exception xcp )
 			{
 				throw xcp;
-			}
-			finally
-			{
-				if ( !Double.IsNaN( originalGuideRate ) )
-				{
-					if ( direction == GuideDirections.guideEast || direction == GuideDirections.guideWest )
-					{
-						GuideRateRightAscension = originalGuideRate;
-					}
-					else
-					{
-						GuideRateDeclination = originalGuideRate;
-					}
-				}
 			}
 		}
 
@@ -1237,61 +1213,6 @@ namespace ASCOM.DeviceHub
 				{
 					sb.AppendFormat( "{0} - {1}\r\n", axisRate.Minimum, axisRate.Maximum );
 				}
-
-				throw new Exception( sb.ToString() );
-			}
-		}
-
-		private void ValidatePulseRate( GuideDirections guideDirection, JogRate rate )
-		{
-			// It is assumed that CanPulseGuide is true when this method is called!!!
-
-			bool rateValid = false;
-			Exception rateException = null;
-
-			// Check the requested rate against the valid rates.
-
-			double currentGuideRate = 0.00417807; // 1X sidereal
-
-			if ( guideDirection == GuideDirections.guideEast || guideDirection == GuideDirections.guideWest )
-			{
-				currentGuideRate = GuideRateRightAscension;
-
-				try
-				{
-					GuideRateRightAscension = rate.Rate;
-					rateValid = true;
-				}
-				catch ( Exception xcp )
-				{
-					rateException = xcp;
-				}
-
-				GuideRateRightAscension = currentGuideRate;
-			}
-			else if ( guideDirection == GuideDirections.guideNorth || guideDirection == GuideDirections.guideSouth )
-			{
-				currentGuideRate = GuideRateDeclination;
-
-				try
-				{
-					GuideRateDeclination = rate.Rate;
-					rateValid = true;
-				}
-				catch ( Exception xcp )
-				{
-					rateException = xcp;
-				}
-
-				GuideRateDeclination = currentGuideRate;
-			}
-
-			if ( !rateValid )
-			{
-				StringBuilder sb = new StringBuilder();
-				sb.AppendLine( "The requested move rate is invalid. Please choose a slower rate!" );
-				sb.AppendLine( "Error message follows:" );
-				sb.AppendLine( rateException.Message );
 
 				throw new Exception( sb.ToString() );
 			}
@@ -1388,8 +1309,8 @@ namespace ASCOM.DeviceHub
 
 		private void SendSlewMessage( double ra, double dec )
 		{
-			PierSide sop = GetTargetSideOfPier( ra, dec );
-			SlewInProgressMessage msg = new SlewInProgressMessage( true, ra, dec, sop );
+			PierSide sideOfPier = GetTargetSideOfPier( ra, dec );
+			SlewInProgressMessage msg = new SlewInProgressMessage( true, ra, dec, sideOfPier );
 			Messenger.Default.Send( msg );
 			PreviousSlewInProgressMessage = msg;
 		}
