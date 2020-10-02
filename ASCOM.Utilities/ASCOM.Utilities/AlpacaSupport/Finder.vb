@@ -121,7 +121,7 @@ Friend Class Finder
 
                         ' Local host addresses (127.*.*.*) may have a null mask in Net Framework. We do want to search these. The correct mask is 255.0.0.0.
                         udpClient.Send(Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE), Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE).Length, New IPEndPoint(GetBroadcastAddress(uni.Address, If(uni.IPv4Mask, IPAddress.Parse("255.0.0.0"))), discoveryPort))
-                        LogMessage("SendDiscoveryMessageIpV4", $"Sent broadcast to: {uni.Address.ToString()}")
+                        LogMessage("SendDiscoveryMessageIpV4", $"Sent broadcast to: {uni.Address}")
                     Next
                 End If
             End If
@@ -144,7 +144,7 @@ Friend Class Finder
 
         ' Windows needs to bind a socket to each adapter explicitly
         For Each adapter As NetworkInterface In NetworkInterface.GetAllNetworkInterfaces()
-            LogMessage("SendDiscoveryMessageIpV6", $"Found network interface {adapter.Description}, Interface type: {adapter.NetworkInterfaceType.ToString()} - supports multicast: {adapter.SupportsMulticast}")
+            LogMessage("SendDiscoveryMessageIpV6", $"Found network interface {adapter.Description}, Interface type: {adapter.NetworkInterfaceType} - supports multicast: {adapter.SupportsMulticast}")
             If adapter.OperationalStatus <> OperationalStatus.Up Then Continue For
             LogMessage("SendDiscoveryMessageIpV6", $"Interface is up")
 
@@ -191,7 +191,7 @@ Friend Class Finder
 
             ' Obtain the UDP message body and convert it to a string, with remote IP address attached as well
             Dim ReceiveString As String = Encoding.ASCII.GetString(udpClient.EndReceive(ar, alpacaBroadcastResponseEndPoint))
-            LogMessage($"FinderDiscoveryCallback", $"Received {ReceiveString} from Alpaca device at {alpacaBroadcastResponseEndPoint.Address.ToString()}")
+            LogMessage($"FinderDiscoveryCallback", $"Received {ReceiveString} from Alpaca device at {alpacaBroadcastResponseEndPoint.Address}")
 
             ' Configure the UdpClient class to accept more messages, if they arrive
             udpClient.BeginReceive(New AsyncCallback(AddressOf FinderDiscoveryCallback), udpClient)
@@ -203,10 +203,10 @@ Friend Class Finder
                 Dim alpacaApiEndpoint As IPEndPoint = New IPEndPoint(alpacaBroadcastResponseEndPoint.Address, discoveryResponse.AlpacaPort) ' Create 
                 If Not CachedEndpoints.Contains(alpacaApiEndpoint) Then
                     CachedEndpoints.Add(alpacaApiEndpoint)
-                    LogMessage("FinderDiscoveryCallback", $"Received new Alpaca API endpoint: {alpacaApiEndpoint.ToString()} from broadcast endpoint: {alpacaBroadcastResponseEndPoint.ToString()}")
+                    LogMessage("FinderDiscoveryCallback", $"Received new Alpaca API endpoint: {alpacaApiEndpoint} from broadcast endpoint: {alpacaBroadcastResponseEndPoint}")
                     callbackFunctionDelegate?.Invoke(alpacaApiEndpoint, discoveryResponse) ' Moved inside the loop so that the callback is only called once per IP address
                 Else
-                    LogMessage("FinderDiscoveryCallback", $"Ignoring duplicate Alpaca API endpoint: {alpacaApiEndpoint.ToString()} from broadcast endpoint: {alpacaBroadcastResponseEndPoint.ToString()}")
+                    LogMessage("FinderDiscoveryCallback", $"Ignoring duplicate Alpaca API endpoint: {alpacaApiEndpoint} from broadcast endpoint: {alpacaBroadcastResponseEndPoint}")
                 End If
             End If
 

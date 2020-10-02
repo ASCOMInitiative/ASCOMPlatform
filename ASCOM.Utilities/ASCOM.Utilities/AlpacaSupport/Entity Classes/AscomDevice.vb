@@ -46,7 +46,7 @@ Public Class AscomDevice
         If ipEndPoint.AddressFamily = AddressFamily.InterNetwork Then ' IPv4 address
             Me.IpAddress = ipEndPoint.Address.ToString()
         ElseIf ipEndPoint.AddressFamily = AddressFamily.InterNetworkV6 Then ' IPv6 address so save it in canonical form
-            Me.IpAddress = $"[{ipEndPoint.Address.ToString()}]"
+            Me.IpAddress = $"[{ipEndPoint.Address}]"
         Else
             Throw New ASCOM.InvalidValueException($"Unsupported network type {ipEndPoint.AddressFamily} when creating a new ASCOMDevice")
         End If
