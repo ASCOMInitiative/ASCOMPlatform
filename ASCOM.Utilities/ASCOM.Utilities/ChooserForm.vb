@@ -481,7 +481,7 @@ Friend Class ChooserForm
                     TL.LogMessage("OK Click", $"Driver creation cancelled: {ex.Message}")
                     MessageBox.Show($"Driver creation cancelled: {ex.Message}")
                 Catch ex As Exception
-                    MessageBox.Show($"{ex.ToString()}")
+                    MessageBox.Show($"{ex}")
                 End Try
             End If
 
@@ -682,7 +682,7 @@ Friend Class ChooserForm
         TL.LogMessage("ConfigureDiscovery", $"About to create Alpaca configuration form")
         alpacaConfigurationForm = New ChooserAlpacaConfigurationForm(Me) ' Create a new configuration form
         alpacaConfigurationForm.ShowDialog() ' Display the form as a modal dialogue box
-        TL.LogMessage("ConfigureDiscovery", $"Exited Alpaca configuration form. Result: {alpacaConfigurationForm.DialogResult.ToString()}")
+        TL.LogMessage("ConfigureDiscovery", $"Exited Alpaca configuration form. Result: {alpacaConfigurationForm.DialogResult}")
 
         If alpacaConfigurationForm.DialogResult = DialogResult.OK Then ' If the user clicked OK then persist the new state
             TL.LogMessage("ConfigureDiscovery", $"Persisting new configuration for {deviceTypeValue}")
@@ -998,7 +998,7 @@ Friend Class ChooserForm
 
                     ' List discovered devices to the log
                     For Each ascomDevice As AscomDevice In discovery.GetAscomDevices("")
-                        TL.LogMessage("DiscoverAlpacaDevices", $"FOUND {ascomDevice.AscomDeviceType} {ascomDevice.AscomDeviceName} {ascomDevice.IPEndPoint.ToString()}")
+                        TL.LogMessage("DiscoverAlpacaDevices", $"FOUND {ascomDevice.AscomDeviceType} {ascomDevice.AscomDeviceName} {ascomDevice.IPEndPoint}")
                     Next
 
                     TL.LogMessage("DiscoverAlpacaDevices", $"Discovered {discovery.GetAscomDevices(deviceTypeValue).Count} {deviceTypeValue} devices")
@@ -1009,9 +1009,9 @@ Friend Class ChooserForm
 
                 ' Add any Alpaca devices to the list
                 For Each device As AscomDevice In alpacaDevices
-                    TL.LogMessage("DiscoverAlpacaDevices", $"Discovered Alpaca device: {device.AscomDeviceType} {device.AscomDeviceName} {device.UniqueId} at  http://{device.HostName}:{device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber}")
+                    TL.LogMessage("DiscoverAlpacaDevices", $"Discovered Alpaca device: {device.AscomDeviceType} {device.AscomDeviceName} {device.UniqueId} at  http://{device.HostName}:{device.IPEndPoint.Port}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber}")
 
-                    Dim displayHostName As String = CType(IIf(device.HostName = device.IPEndPoint.Address.ToString(), device.IPEndPoint.Address.ToString(), $"{device.HostName} ({device.IPEndPoint.Address.ToString()})"), String)
+                    Dim displayHostName As String = CType(IIf(device.HostName = device.IPEndPoint.Address.ToString(), device.IPEndPoint.Address.ToString(), $"{device.HostName} ({device.IPEndPoint.Address})"), String)
                     Dim displayName As String
 
                     Dim deviceUniqueId, deviceHostName As String
@@ -1070,7 +1070,7 @@ Friend Class ChooserForm
                         TL.LogMessage("DiscoverAlpacaDevices", $"Found driver match for {device.AscomDeviceName}")
                         If AlpacaShowDiscoveredDevices Then
                             TL.LogMessage("DiscoverAlpacaDevices", $"Showing KNOWN ALPACA DEVICE entry for {device.AscomDeviceName}")
-                            displayName = $"* KNOWN ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.UniqueId}"
+                            displayName = $"* KNOWN ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.UniqueId}"
                             chooserList.Add(New ChooserItem(device.UniqueId, device.AlpacaDeviceNumber, device.HostName, device.IPEndPoint.Port, device.AscomDeviceName), displayName)
                         Else
                             TL.LogMessage("DiscoverAlpacaDevices", $"This device MATCHES an existing COM driver so NOT adding it to the Combo box list")
@@ -1078,7 +1078,7 @@ Friend Class ChooserForm
 
                     Else
                         TL.LogMessage("DiscoverAlpacaDevices", $"This device does NOT match an existing COM driver so ADDING it to the Combo box list")
-                        displayName = $"* NEW ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.UniqueId}"
+                        displayName = $"* NEW ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.UniqueId}"
                         chooserList.Add(New ChooserItem(device.UniqueId, device.AlpacaDeviceNumber, device.HostName, device.IPEndPoint.Port, device.AscomDeviceName), displayName)
                     End If
 
