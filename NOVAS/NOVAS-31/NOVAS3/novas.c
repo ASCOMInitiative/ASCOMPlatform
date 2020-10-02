@@ -2250,6 +2250,9 @@ short int equ2ecl_vec(double jd_tt, short int coord_sys,
 	static double oblm, oblt;
 	double t, secdiff, jd_tdb, pos0[3], w, x, y, z, obl;
 
+	/* ASCOM - Peter Simpson: Initialise obl to get rid of a compiler warning */
+	obl = 0.0;
+
 	/*
 	   'jd_tdb' is the TDB Julian date corresponding to 'jd_tt'.
 	*/
@@ -7483,7 +7486,7 @@ short int cio_location(double jd_tdb, short int accuracy,
 	if (first_call)
 	{
 		// Peter Simpson 17th February 2010	  
-		// Following line has been changed to accomodate the file being in a fixed location in the ASCOM Platform
+		// Following line has been changed to accommodate the file being in a fixed location in the ASCOM Platform
 		// see ascom.c for further information
 
 		if (fopen_s(&cio_file, RACIO_FILE_NAME, "rb") != 0)
@@ -7494,7 +7497,7 @@ short int cio_location(double jd_tdb, short int accuracy,
 		else
 		{
 			use_file = 1;
-			fclose(cio_file);
+			if (cio_file != NULL) fclose(cio_file); // Added test for NULL to remove a false positive compiler warning
 		}
 	}
 
