@@ -678,7 +678,6 @@ Friend Class ChooserForm
 
     Private Sub MnuConfigureDiscovery_Click(sender As Object, e As EventArgs) Handles MnuConfigureChooser.Click
         Dim alpacaConfigurationForm As ChooserAlpacaConfigurationForm
-        Dim outcome As DialogResult
 
         TL.LogMessage("ConfigureDiscovery", $"About to create Alpaca configuration form")
         alpacaConfigurationForm = New ChooserAlpacaConfigurationForm(Me) ' Create a new configuration form
@@ -764,7 +763,6 @@ Friend Class ChooserForm
 
     Private Sub MnuCreateAlpacaDriver_Click(sender As Object, e As EventArgs) Handles MnuCreateAlpacaDriver.Click
         Dim newProgId As String
-        Dim userResponse As MsgBoxResult
 
         ' Create a new Alpaca driver of the current ASCOM device type
         newProgId = CreateNewAlpacaDriver("")

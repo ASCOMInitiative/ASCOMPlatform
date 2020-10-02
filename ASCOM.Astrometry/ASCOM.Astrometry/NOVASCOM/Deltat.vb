@@ -22,9 +22,6 @@ Module DeltatCode
     Function DeltaTCalc(ByVal JulianDateUTC As Double) As Double
         Dim YearFraction, B, Retval, ModifiedJulianDay As Double, UTCDate As DateTime
 
-        Dim ManualTaiUtcOffsetString As String
-        Dim ManualLeapSecondsValue As Double
-
         Static LastJulianDateUTC As Double = DOUBLE_VALUE_NOT_AVAILABLE, LastDeltaTValue As Double
         Static DeltaTCalcLockObject As Object = New Object()
 
