@@ -1,6 +1,4 @@
-﻿Imports System
-Imports System.Collections.Generic
-Imports System.Linq
+﻿Imports System.Collections.Generic
 Imports System.Net
 Imports System.Runtime.InteropServices
 Imports System.Threading
@@ -46,7 +44,7 @@ Public Class AlpacaDiscovery
     ''' <summary>
     ''' Initialiser that takes a trace logger (Can only be used from .NET clients)
     ''' </summary>
-    ''' <paramname="traceLogger">Trace logger instance to use for activity logging</param>
+    ''' <param name="traceLogger">Trace logger instance to use for activity logging</param>
     Friend Sub New(ByVal traceLogger As TraceLogger)
         TL = traceLogger ' Save the supplied trace logger object
         InitialiseClass() ' Initialise using the trace logger
@@ -71,7 +69,7 @@ Public Class AlpacaDiscovery
 
             LogMessage("AlpacaDiscoveryInitialise", $"Complete - Running on thread {Thread.CurrentThread.ManagedThreadId}")
         Catch ex As Exception
-            LogMessage("AlpacaDiscoveryInitialise", $"Exception{ex.ToString()}")
+            LogMessage("AlpacaDiscoveryInitialise", $"Exception{ex}")
         End Try
 
     End Sub
@@ -292,7 +290,6 @@ Public Class AlpacaDiscovery
     ''' <summary>
     ''' Raise an Alpaca devices updated event
     ''' </summary>
-    ''' <paramname="e"></param>
     Private Sub RaiseAnAlpacaDevicesChangedEvent()
         RaiseEvent AlpacaDevicesUpdated(Me, EventArgs.Empty)
     End Sub
@@ -300,7 +297,7 @@ Public Class AlpacaDiscovery
     ''' <summary>
     ''' Discovery timer event handler - called when the allocated discovery period has ended
     ''' </summary>
-    ''' <paramname="state">Timer state</param>
+    ''' <param name="state">Timer state</param>
     Private Sub OnDiscoveryCompleteTimer(ByVal state As Object)
         LogMessage("OnTimeOutTimerFired", $"Firing discovery complete event")
         discoveryCompleteValue = True ' Flag that the timer out has expired
@@ -324,8 +321,8 @@ Public Class AlpacaDiscovery
     ''' <summary>
     ''' Handler for device responses coming from the Finder
     ''' </summary>
-    ''' <paramname="responderIPEndPoint">Responder's IP address and port</param>
-    ''' <paramname="alpacaDiscoveryResponse">Class containing the information provided by the device in its response.</param>
+    ''' <param name="responderIPEndPoint">Responder's IP address and port</param>
+    ''' <param name="alpacaDiscoveryResponse">Class containing the information provided by the device in its response.</param>
     Private Sub FoundDeviceEventHandler(ByVal responderIPEndPoint As IPEndPoint, ByVal alpacaDiscoveryResponse As AlpacaDiscoveryResponse)
         Try
             LogMessage("FoundDeviceEventHandler", $"FOUND Alpaca device at {responderIPEndPoint.Address}:{responderIPEndPoint.Port}") ' Log reception of the broadcast response
@@ -340,26 +337,26 @@ Public Class AlpacaDiscovery
 
             ' Create a task to query this device's DNS name, if configured to do so
             If tryDnsNameResolution Then
-                LogMessage("FoundDeviceEventHandler", $"Creating task to retrieve DNS information for device {responderIPEndPoint.ToString()}:{responderIPEndPoint.Port}")
+                LogMessage("FoundDeviceEventHandler", $"Creating task to retrieve DNS information for device {responderIPEndPoint}:{responderIPEndPoint.Port}")
                 Dim dnsResolutionThread As Thread = New Thread(AddressOf ResolveIpAddressToHostName)
                 dnsResolutionThread.IsBackground = True
                 dnsResolutionThread.Start(responderIPEndPoint)
             End If
 
             ' Create a task to query this device's Alpaca management API
-            LogMessage("FoundDeviceEventHandler", $"Creating thread to retrieve Alpaca management description for device {responderIPEndPoint.ToString()}:{responderIPEndPoint.Port}")
+            LogMessage("FoundDeviceEventHandler", $"Creating thread to retrieve Alpaca management description for device {responderIPEndPoint}:{responderIPEndPoint.Port}")
             Dim descriptionThread As Thread = New Thread(AddressOf GetAlpacaDeviceInformation)
             descriptionThread.IsBackground = True
             descriptionThread.Start(responderIPEndPoint)
         Catch ex As Exception
-            LogMessage("FoundDeviceEventHandler", $"AddresssFound Exception: {ex.ToString()}")
+            LogMessage("FoundDeviceEventHandler", $"AddresssFound Exception: {ex}")
         End Try
     End Sub
 
     ''' <summary>
     ''' Get Alpaca device information from the management API
     ''' </summary>
-    ''' <paramname="deviceIpEndPoint"></param>
+    ''' <param name="deviceIpEndPointObject"></param>
     Private Sub GetAlpacaDeviceInformation(ByVal deviceIpEndPointObject As Object)
         Dim deviceIpEndPoint As IPEndPoint = TryCast(deviceIpEndPointObject, IPEndPoint)
         Dim hostIpAndPort As String = deviceIpEndPoint.ToString()
@@ -420,7 +417,7 @@ Public Class AlpacaDiscovery
             LogMessage("GetAlpacaDeviceInformation", $"COMPLETED API tasks for {hostIpAndPort}")
         Catch ex As Exception
             ' Something went wrong so log the issue and sent a message to the user
-            LogMessage("GetAlpacaDeviceInformation", $"GetAlpacaDescriptions exception: {ex.ToString()}")
+            LogMessage("GetAlpacaDeviceInformation", $"GetAlpacaDescriptions exception: {ex}")
 
             SyncLock deviceListLockObject ' Make sure that only one thread can update the device list dictionary at a time
                 alpacaDeviceList(deviceIpEndPoint).StatusMessage = ex.Message
@@ -432,9 +429,6 @@ Public Class AlpacaDiscovery
     ''' <summary>
     ''' Resolve a host IP address to a host name
     ''' </summary>
-    ''' <paramname="hostIp"></param>
-    ''' <paramname="HostPort"></param>
-    ''' <returns></returns>
     ''' <remarks>This first makes a DNS query and uses the result if found. If not found it then tries a Microsoft DNS call which also searches the local hosts and makes a netbios query.
     ''' If this returns an answer it is use. Otherwise the IP address is returned as the host name</remarks>
     Private Sub ResolveIpAddressToHostName(ByVal deviceIpEndPointObject As Object)
@@ -448,7 +442,7 @@ Public Class AlpacaDiscovery
             Dim timeOutTime As TimeSpan = TimeSpan.FromSeconds(discoveryTime).Subtract(Date.Now - discoveryStartTime).Subtract(TimeSpan.FromSeconds(0.2))
 
             If timeOutTime.TotalSeconds > Constants.MINIMUM_TIME_REMAINING_TO_UNDERTAKE_DNS_RESOLUTION Then ' We have more than the configured time left so we will attempt a reverse DNS name resolution
-                LogMessage("ResolveIpAddressToHostName", $"Resolving IP address: {deviceIpEndPoint.Address.ToString()}, Timeout: {timeOutTime}")
+                LogMessage("ResolveIpAddressToHostName", $"Resolving IP address: {deviceIpEndPoint.Address}, Timeout: {timeOutTime}")
                 Dns.BeginGetHostEntry(deviceIpEndPoint.Address.ToString(), New AsyncCallback(AddressOf GetHostEntryCallback), dnsResponse)
 
                 ' Wait here until the resolve completes and the callback calls .Set()
@@ -456,7 +450,7 @@ Public Class AlpacaDiscovery
 
                 ' Execution continues here after either a DNS response is found or the request times out
                 If dnsWasResolved Then ' A response was received rather than timing out
-                    LogMessage("ResolveIpAddressToHostName", $"{deviceIpEndPoint.ToString()} has host name: {dnsResponse.HostName} IP address count: {dnsResponse.AddressList.Length} Alias count: {dnsResponse.Aliases.Length}")
+                    LogMessage("ResolveIpAddressToHostName", $"{deviceIpEndPoint} has host name: {dnsResponse.HostName} IP address count: {dnsResponse.AddressList.Length} Alias count: {dnsResponse.Aliases.Length}")
 
                     For Each address As IPAddress In dnsResponse.AddressList
                         LogMessage("ResolveIpAddressToHostName", $"  Received {address.AddressFamily} address: {address}")
@@ -491,7 +485,7 @@ Public Class AlpacaDiscovery
                 LogMessage("ResolveIpAddressToHostName", $"***** Insufficient time remains ({timeOutTime.TotalSeconds} seconds) to conduct a DNS query, ignoring request *****")
             End If
         Else ' The IPEndPoint cast was not successful so we cannot carry out a DNS name search because we don't have the device's IP address
-            LogMessage("ResolveIpAddressToHostName", $"DNS resolution could not be undertaken - It was not possible to cast the supplied IPEndPoint object to an IPEndPoint type: {deviceIpEndPoint.ToString()}.")
+            LogMessage("ResolveIpAddressToHostName", $"DNS resolution could not be undertaken - It was not possible to cast the supplied IPEndPoint object to an IPEndPoint type: {deviceIpEndPoint}.")
         End If
     End Sub
 
@@ -504,15 +498,15 @@ Public Class AlpacaDiscovery
             dnsResponse.IpHostEntry = Dns.EndGetHostEntry(ar) ' Save the returned IpHostEntry and populate other fields based on its parameters
             dnsResponse.CallComplete.Set() ' Set the wait handle so that the caller knows that the asynchronous call has completed and that the response has been updated
         Catch ex As Exception
-            LogMessage("GetHostEntryCallback", $"Exception: {ex.ToString()}") ' Log exceptions but don't throw them
+            LogMessage("GetHostEntryCallback", $"Exception: {ex}") ' Log exceptions but don't throw them
         End Try
     End Sub
 
     ''' <summary>
     ''' Log a message to the screen, adding the current managed thread ID
     ''' </summary>
-    ''' <paramname="methodName"></param>
-    ''' <paramname="message"></param>
+    ''' <param name="methodName"></param>
+    ''' <param name="message"></param>
     Private Sub LogMessage(ByVal methodName As String, ByVal message As String)
         Dim indentSpaces As String
 

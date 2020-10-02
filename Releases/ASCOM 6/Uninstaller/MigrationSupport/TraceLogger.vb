@@ -4,7 +4,6 @@ Imports System.IO
 Imports ASCOM.Utilities.Interfaces
 Imports ASCOM.Utilities.Exceptions
 Imports System.Runtime.InteropServices
-Imports ASCOM.Utilities.Support
 
 ''' <summary>
 ''' Creates a log file for a driver or application. Uses a similar file name and internal format to the serial logger. Multiple logs can be created simultaneously if needed.
@@ -536,14 +535,14 @@ Public Class TraceLogger
             Select Case CharNo
                 Case 10, 13 ' Either translate or respect CRLf depending on the setting of the respect parameter
                     If p_RespectCrLf Then
-                        l_Msg = l_Msg & Mid(p_Msg, i, 1)
+                        l_Msg &= Mid(p_Msg, i, 1)
                     Else
-                        l_Msg = l_Msg & "[" & Right("00" & Hex(CharNo), 2) & "]"
+                        l_Msg &= "[" & Right("00" & Hex(CharNo), 2) & "]"
                     End If
                 Case 0 - 9, 11, 12, 14 - 31, Is > 126 ' All other non-printables should be translated
                     l_Msg = l_Msg & "[" & Right("00" & Hex(CharNo), 2) & "]"
                 Case Else 'Everything else is printable and should be left as is
-                    l_Msg = l_Msg & Mid(p_Msg, i, 1)
+                    l_Msg &= Mid(p_Msg, i, 1)
             End Select
             If CharNo < 32 Or CharNo > 126 Then
             Else
@@ -564,11 +563,10 @@ Public Class TraceLogger
     End Function
 
     Private Sub LogMsgFormatter(ByVal p_Test As String, ByVal p_Msg As String, ByVal p_NewLine As Boolean, ByVal p_RespectCrLf As Boolean)
-        Dim l_Msg As String = ""
         Try
             p_Test = Left(p_Test & StrDup(g_IdentifierWidth, " "), g_IdentifierWidth)
 
-            l_Msg = Format(Now(), "HH:mm:ss.fff") & " " & MakePrintable(p_Test, p_RespectCrLf) & " " & MakePrintable(p_Msg, p_RespectCrLf)
+            Dim l_Msg As String = Format(Now(), "HH:mm:ss.fff") & " " & MakePrintable(p_Test, p_RespectCrLf) & " " & MakePrintable(p_Msg, p_RespectCrLf)
             If Not g_LogFile Is Nothing Then
                 If p_NewLine Then
                     g_LogFile.WriteLine(l_Msg) 'Update log file with newline terminator

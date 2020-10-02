@@ -3,15 +3,18 @@ Imports System.Net
 Imports System.Net.Sockets
 Imports System.Runtime.InteropServices
 Imports ASCOM.Utilities.Interfaces
+Imports ASCOM.Utilities
 
+#Disable Warning BC42309 ' XML comment has a tag with a 'cref' attribute that could not be resolved
 ''' <summary>
-''' Overall description of an Alpaca device that supports discovery as returned by the <see cref="AlpacaDiscovery"/> component.
+''' Overall description of an Alpaca device that supports discovery as returned by the <see cref="AlpacaDiscovery"/>component.
 ''' </summary>
+#Enable Warning BC42309 ' XML comment has a tag with a 'cref' attribute that could not be resolved
 <Guid("D572145F-E4CF-4A9E-B2AE-A0D32604E20C"),
 ComVisible(True),
 ClassInterface(ClassInterfaceType.None)>
 Public Class AlpacaDevice
-    Implements ASCOM.Utilities.Interfaces.IAlpacaDevice, ASCOM.Utilities.Interfaces.IAlpacaDeviceExtra
+    Implements IAlpacaDevice, IAlpacaDeviceExtra
 
     Dim configuredDevicesValue As List(Of ConfiguredDevice)
     Dim configuredDevicesAsArrayListValue As ArrayList
@@ -28,9 +31,8 @@ Public Class AlpacaDevice
     ''' <summary>
     ''' Initialise IP end point, Alpaca unique ID and Status message - Can only be used from .NET clients
     ''' </summary>
-    ''' <paramname="ipEndPoint">Alpaca device IP endpoint</param>
-    ''' <paramname="alpacaUniqueId">Alpaca device unique ID</param>
-    ''' <paramname="statusMessage">Device status message</param>
+    ''' <param name="ipEndPoint">Alpaca device IP endpoint</param>
+    ''' <param name="statusMessage">Device status message</param>
     Friend Sub New(ByVal ipEndPoint As IPEndPoint, ByVal statusMessage As String)
         ' Initialise internal storage variables
         configuredDevicesValue = New List(Of ConfiguredDevice)

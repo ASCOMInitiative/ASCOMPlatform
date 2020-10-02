@@ -3,9 +3,11 @@ Imports System.Net.Sockets
 Imports System.Runtime.InteropServices
 Imports ASCOM.Utilities.Interfaces
 
+#Disable Warning BC42309 ' XML comment has a tag with a 'cref' attribute that could not be resolved
 ''' <summary>
 ''' Description of an ASCOM device that is served by an Alpaca device that is discovered by the <see cref="AlpacaDiscovery"/> component.
 ''' </summary>
+#Enable Warning BC42309 ' XML comment has a tag with a 'cref' attribute that could not be resolved
 <Guid("E768E0BB-D795-4CAE-95D0-9D0173BF57BC"),
 ComVisible(True),
 ClassInterface(ClassInterfaceType.None)>
@@ -23,15 +25,14 @@ Public Class AscomDevice
     ''' Initialise the ASCOM device name, ASCOM device type and ASCOM device unique ID, plus
     ''' the Alpaca API device number, unique ID, device IP endpoint, Alpaca unique ID, interface version and status message
     ''' </summary>
-    ''' <paramname="ascomDdeviceName">ASCOM device name</param>
-    ''' <paramname="ascomDeviceType">ASCOM device type</param>
-    ''' <paramname="alpacaDeviceNumber">Alpaca API device number</param>
-    ''' <paramname="uniqueId">ASCOM device unique ID</param>
-    ''' <paramname="ipEndPoint">Alpaca device IP endpoint</param>
-    ''' <paramname="hostName">ALapca device host name</param>
-    ''' <paramname="alpacaUniqueId">Alpaca device unique ID</param>
-    ''' <paramname="interfaceVersion">Supported Alpaca interface version</param>
-    ''' <paramname="statusMessage">Alpaca device status message</param>
+    ''' <param name="ascomDdeviceName">ASCOM device name</param>
+    ''' <param name="ascomDeviceType">ASCOM device type</param>
+    ''' <param name="alpacaDeviceNumber">Alpaca API device number</param>
+    ''' <param name="uniqueId">ASCOM device unique ID</param>
+    ''' <param name="ipEndPoint">Alpaca device IP endpoint</param>
+    ''' <param name="hostName">ALapca device host name</param>
+    ''' <param name="interfaceVersion">Supported Alpaca interface version</param>
+    ''' <param name="statusMessage">Alpaca device status message</param>
     ''' <remarks>This can only be used by .NET clients because COM only supports parameterless initialisers.</remarks>
     Friend Sub New(ByVal ascomDdeviceName As String, ByVal ascomDeviceType As String, ByVal alpacaDeviceNumber As Integer, ByVal uniqueId As String, ByVal ipEndPoint As IPEndPoint, ByVal hostName As String, ByVal interfaceVersion As Integer, ByVal statusMessage As String)
         AscomDeviceName = ascomDdeviceName
@@ -46,10 +47,10 @@ Public Class AscomDevice
         ' Populate the IP address based on the supplied IPEndPoint value and address type
         If ipEndPoint.AddressFamily = AddressFamily.InterNetwork Then ' IPv4 address
             Me.IpAddress = ipEndPoint.Address.ToString()
-        ElseIf ipEndPoint.AddressFamily = AddressFamily.InterNetworkV6 Then ' IPv6 address so save it in canconical form
-            Me.IpAddress = $"[{ipEndPoint.Address.ToString()}]"
+        ElseIf ipEndPoint.AddressFamily = AddressFamily.InterNetworkV6 Then ' IPv6 address so save it in canonical form
+            Me.IpAddress = $"[{ipEndPoint.Address}]"
         Else
-            Throw New ASCOM.InvalidValueException($"Unsupported network type {ipEndPoint.AddressFamily.ToString()} when creating a new ASCOMDevice")
+            Throw New ASCOM.InvalidValueException($"Unsupported network type {ipEndPoint.AddressFamily} when creating a new ASCOMDevice")
         End If
 
     End Sub

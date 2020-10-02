@@ -13,7 +13,7 @@ Public Class VersionForm
 
                 NameLbl.Text = ProfileKey.GetValue("Platform Name", "Unknown Name")
                 Version.Text = ProfileKey.GetValue("Platform Version", "Unknown Version")
-                ProductVersion.Text = Application.ProductVersion
+                BuildSha.Text = Application.ProductVersion
 
                 ProfileKey.Close()
             End Using

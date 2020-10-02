@@ -330,7 +330,7 @@ namespace ASCOM.DynamicRemoteClients
                             // The following number requires a leading zero to ensure that it is not interpreted as a negative number because its most significant bit is set
                             // Hex number character count                    1234567890123456789012345678901234 = 34 hex characters = 17 bytes = a leading 0 byte plus 16 bytes of value 255
                             BigInteger largestDifference = BigInteger.Parse("00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", NumberStyles.HexNumber, CultureInfo.InvariantCulture);
-                            TL.LogMessage(clientNumber, deviceType, $"Initialised largest value: {largestDifference} = {largestDifference.ToString("X34")}");
+                            TL.LogMessage(clientNumber, deviceType, $"Initialised largest value: {largestDifference} = {largestDifference:X34}");
 
                             // Now iterate over the values and pick the entry with the smallest difference in IP address
                             foreach (AvailableInterface availableInterface in availableInterfaces)
@@ -340,7 +340,7 @@ namespace ASCOM.DynamicRemoteClients
                                     largestDifference = availableInterface.AddressDistance;
                                     clientHostAddress = $"{serviceType}://{availableInterface.HostName}:{availableInterface.Port}";
 
-                                    TL.LogMessage(clientNumber, deviceType, $"New lowest address difference found: {availableInterface.AddressDistance} ({availableInterface.AddressDistance.ToString("X32")}) for UniqueD {uniqueId}. Now using URL: {clientHostAddress}");
+                                    TL.LogMessage(clientNumber, deviceType, $"New lowest address difference found: {availableInterface.AddressDistance} ({availableInterface.AddressDistance:X32}) for UniqueD {uniqueId}. Now using URL: {clientHostAddress}");
 
                                     // Write the new value to the driver's Profile so it is found immediately in future
                                     using (Profile profile = new Profile())
@@ -442,7 +442,7 @@ namespace ASCOM.DynamicRemoteClients
 
             catch (Exception ex)
             {
-                TL.LogMessageCrLf(clientNumber, "ClientIsUp", $"Exception: {ex.ToString()}");
+                TL.LogMessageCrLf(clientNumber, "ClientIsUp", $"Exception: {ex}");
 
             }
             finally
@@ -1268,7 +1268,7 @@ namespace ASCOM.DynamicRemoteClients
                                             case 2:
                                                 IntArray2DResponse intArray2DResponse = JsonConvert.DeserializeObject<IntArray2DResponse>(deviceJsonResponse.Content);
                                                 TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, intArray2DResponse.ClientTransactionID, intArray2DResponse.ServerTransactionID, intArray2DResponse.Rank.ToString())); //, intArray2DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {((SharedConstants.ImageArrayElementTypes)intArray2DResponse.Type).ToString()}, Rank: {intArray2DResponse.Rank}");
+                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(SharedConstants.ImageArrayElementTypes)intArray2DResponse.Type}, Rank: {intArray2DResponse.Rank}");
                                                 if (CallWasSuccessful(TL, intArray2DResponse)) return (T)((object)intArray2DResponse.Value);
                                                 restResponseBase = (RestResponseBase)intArray2DResponse;
                                                 break;
@@ -1276,7 +1276,7 @@ namespace ASCOM.DynamicRemoteClients
                                             case 3:
                                                 IntArray3DResponse intArray3DResponse = JsonConvert.DeserializeObject<IntArray3DResponse>(deviceJsonResponse.Content);
                                                 TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, intArray3DResponse.ClientTransactionID, intArray3DResponse.ServerTransactionID, intArray3DResponse.Rank.ToString())); //, intArray3DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {((SharedConstants.ImageArrayElementTypes)intArray3DResponse.Type).ToString()}, Rank: {intArray3DResponse.Rank}");
+                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(SharedConstants.ImageArrayElementTypes)intArray3DResponse.Type}, Rank: {intArray3DResponse.Rank}");
                                                 if (CallWasSuccessful(TL, intArray3DResponse)) return (T)((object)intArray3DResponse.Value);
                                                 restResponseBase = (RestResponseBase)intArray3DResponse;
                                                 break;
@@ -1292,7 +1292,7 @@ namespace ASCOM.DynamicRemoteClients
                                             case 2:
                                                 ShortArray2DResponse shortArray2DResponse = JsonConvert.DeserializeObject<ShortArray2DResponse>(deviceJsonResponse.Content);
                                                 TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, shortArray2DResponse.ClientTransactionID, shortArray2DResponse.ServerTransactionID, shortArray2DResponse.Rank.ToString())); //, shortArray2DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {((SharedConstants.ImageArrayElementTypes)shortArray2DResponse.Type).ToString()}, Rank: {shortArray2DResponse.Rank}");
+                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(SharedConstants.ImageArrayElementTypes)shortArray2DResponse.Type}, Rank: {shortArray2DResponse.Rank}");
                                                 if (CallWasSuccessful(TL, shortArray2DResponse)) return (T)((object)shortArray2DResponse.Value);
                                                 restResponseBase = (RestResponseBase)shortArray2DResponse;
                                                 break;
@@ -1300,7 +1300,7 @@ namespace ASCOM.DynamicRemoteClients
                                             case 3:
                                                 ShortArray3DResponse shortArray3DResponse = JsonConvert.DeserializeObject<ShortArray3DResponse>(deviceJsonResponse.Content);
                                                 TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, shortArray3DResponse.ClientTransactionID, shortArray3DResponse.ServerTransactionID, shortArray3DResponse.Rank.ToString())); //, shortArray3DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {((SharedConstants.ImageArrayElementTypes)shortArray3DResponse.Type).ToString()}, Rank: {shortArray3DResponse.Rank}");
+                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(SharedConstants.ImageArrayElementTypes)shortArray3DResponse.Type}, Rank: {shortArray3DResponse.Rank}");
                                                 if (CallWasSuccessful(TL, shortArray3DResponse)) return (T)((object)shortArray3DResponse.Value);
                                                 restResponseBase = (RestResponseBase)shortArray3DResponse;
                                                 break;
@@ -1316,7 +1316,7 @@ namespace ASCOM.DynamicRemoteClients
                                             case 2:
                                                 DoubleArray2DResponse doubleArray2DResponse = JsonConvert.DeserializeObject<DoubleArray2DResponse>(deviceJsonResponse.Content);
                                                 TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, doubleArray2DResponse.ClientTransactionID, doubleArray2DResponse.ServerTransactionID, doubleArray2DResponse.Rank.ToString())); //, doubleArray2DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {((SharedConstants.ImageArrayElementTypes)doubleArray2DResponse.Type).ToString()}, Rank: {doubleArray2DResponse.Rank}");
+                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(SharedConstants.ImageArrayElementTypes)doubleArray2DResponse.Type}, Rank: {doubleArray2DResponse.Rank}");
                                                 if (CallWasSuccessful(TL, doubleArray2DResponse)) return (T)((object)doubleArray2DResponse.Value);
                                                 restResponseBase = (RestResponseBase)doubleArray2DResponse;
                                                 break;
@@ -1324,7 +1324,7 @@ namespace ASCOM.DynamicRemoteClients
                                             case 3:
                                                 DoubleArray3DResponse doubleArray3DResponse = JsonConvert.DeserializeObject<DoubleArray3DResponse>(deviceJsonResponse.Content);
                                                 TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, doubleArray3DResponse.ClientTransactionID, doubleArray3DResponse.ServerTransactionID, doubleArray3DResponse.Rank.ToString())); //, doubleArray3DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {((SharedConstants.ImageArrayElementTypes)doubleArray3DResponse.Type).ToString()}, Rank: {doubleArray3DResponse.Rank}");
+                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(SharedConstants.ImageArrayElementTypes)doubleArray3DResponse.Type}, Rank: {doubleArray3DResponse.Rank}");
                                                 if (CallWasSuccessful(TL, doubleArray3DResponse)) return (T)((object)doubleArray3DResponse.Value);
                                                 restResponseBase = (RestResponseBase)doubleArray3DResponse;
                                                 break;
@@ -1802,7 +1802,7 @@ namespace ASCOM.DynamicRemoteClients
             }
             catch (Exception ex)
             {
-                TL.LogMessageCrLf(clientNumber, "ImageArrayVariant", $"Exception: \r\n{ex.ToString()}");
+                TL.LogMessageCrLf(clientNumber, "ImageArrayVariant", $"Exception: \r\n{ex}");
                 throw;
             }
         }

@@ -528,7 +528,12 @@ Friend Class RegistryAccess
 
     Friend Sub SetProfile(ByVal p_SubKeyName As String, ByVal p_ProfileKey As ASCOMProfile) Implements IAccess.SetProfile
         Dim SKey As RegistryKey
+
+        ' Initialise registry key to remove compiler warning
+        SKey = Registry.CurrentUser
+
         Try
+
             GetProfileMutex("SetProfile", p_SubKeyName)
             sw.Reset() : sw.Start() 'Start timing this call
             TL.LogMessage("SetProfile", "SubKey: """ & p_SubKeyName & """")
@@ -643,6 +648,10 @@ Friend Class RegistryAccess
         Dim NewFromKey, NewToKey As RegistryKey
         Static RecurseDepth As Integer
 
+        ' Initialise registry keys to remove compiler warning
+        NewFromKey = Registry.CurrentUser
+        NewToKey = Registry.CurrentUser
+
         RecurseDepth += 1 'Increment the recursion depth indicator
 
         'swLocal = Stopwatch.StartNew
@@ -696,7 +705,6 @@ Friend Class RegistryAccess
         ToKey.Close()
 
         swLocal.Stop() : LogMessage("Backup50", "ElapsedTime " & swLocal.ElapsedMilliseconds & " milliseconds")
-        swLocal = Nothing
     End Sub
 
     Friend Sub ListRegistryACLs(Key As RegistryKey, Description As String)
@@ -835,7 +843,6 @@ Friend Class RegistryAccess
         Key.Close() 'Close the key after migration
 
         swLocal.Stop() : LogMessage("SetRegistryACL", "ElapsedTime " & swLocal.ElapsedMilliseconds & " milliseconds")
-        swLocal = Nothing
     End Sub
 
     Friend Sub CanonicalizeDacl(objectSecurity As RegistrySecurity)
@@ -1037,9 +1044,7 @@ Friend Class RegistryAccess
         'Clean up objects
         Key.Flush()
         Key.Close()
-        Key = Nothing
         Prof55.Dispose()
-        Prof55 = Nothing
 
         LogMessage("Backup55", "Completed copying the Profile")
 
@@ -1078,7 +1083,6 @@ Friend Class RegistryAccess
         Next
         swLocal.Stop() : LogMessage("  Copy55ToRegistry", "  Completed subkey: " & CurrentSubKey & " " & RecurseDepth.ToString & ",  Elapsed time: " & swLocal.ElapsedMilliseconds & " milliseconds")
         RecurseDepth -= 1 'Decrement the recursion depth counter
-        swLocal = Nothing
     End Sub
 
     Private Sub Restore50()
@@ -1095,7 +1099,6 @@ Friend Class RegistryAccess
         ToKey.Close()
 
         swLocal.Stop() : LogMessage("Restore50", "ElapsedTime " & swLocal.ElapsedMilliseconds & " milliseconds")
-        swLocal = Nothing
     End Sub
 
     Private Sub Restore55()
@@ -1112,7 +1115,6 @@ Friend Class RegistryAccess
         ToKey.Close()
 
         swLocal.Stop() : LogMessage("Restore55", "ElapsedTime " & swLocal.ElapsedMilliseconds & " milliseconds")
-        swLocal = Nothing
     End Sub
 
     Private Sub GetProfileMutex(ByVal Method As String, ByVal Parameters As String)

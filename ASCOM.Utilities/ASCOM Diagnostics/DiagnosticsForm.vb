@@ -987,7 +987,6 @@ Public Class DiagnosticsForm
                     .AxisRatesRelative = True
                 }
             TestSimulator(Sim)
-            Sim = Nothing
 
             ' CoverCalibrator Simulator
             Sim = New SimulatorDescriptor With {
@@ -1001,7 +1000,6 @@ Public Class DiagnosticsForm
                 .SixtyFourBit = True
             }
             TestSimulator(Sim)
-            Sim = Nothing
 
             ' Telescope Simulator - Platform 5
             Sim = New SimulatorDescriptor With {
@@ -1017,7 +1015,6 @@ Public Class DiagnosticsForm
                 .AxisRatesRelative = False
             }
             TestSimulator(Sim)
-            Sim = Nothing
 
             ' Camera Simulator - Platform 5
             Sim = New SimulatorDescriptor With {
@@ -1031,7 +1028,6 @@ Public Class DiagnosticsForm
                 .IsPlatform5 = True
             }
             TestSimulator(Sim)
-            Sim = Nothing
 
             ' Camera Simulator - Platform 6
             Sim = New SimulatorDescriptor With {
@@ -1045,7 +1041,6 @@ Public Class DiagnosticsForm
                 .SixtyFourBit = True
             }
             TestSimulator(Sim)
-            Sim = Nothing
 
             Sim = New SimulatorDescriptor With {
                     .ProgID = "ASCOM.Simulator.Dome",
@@ -1058,7 +1053,6 @@ Public Class DiagnosticsForm
                     .SixtyFourBit = True
                 }
             TestSimulator(Sim)
-            Sim = Nothing
 
             ' Dome Simulator - Platform 5
             Sim = New SimulatorDescriptor With {
@@ -1072,7 +1066,6 @@ Public Class DiagnosticsForm
                 .SixtyFourBit = True
             }
             TestSimulator(Sim)
-            Sim = Nothing
 
             ' FilterWheel Simulator - Platform 5
             Sim = New SimulatorDescriptor With {
@@ -1086,7 +1079,6 @@ Public Class DiagnosticsForm
                 .SixtyFourBit = True
             }
             TestSimulator(Sim)
-            Sim = Nothing
 
             ' FilterWheel Simulator - Platform 6
             Sim = New SimulatorDescriptor With {
@@ -1100,7 +1092,6 @@ Public Class DiagnosticsForm
                 .SixtyFourBit = True
             }
             TestSimulator(Sim)
-            Sim = Nothing
 
             ' Focuser Simulator - Platform 5
             Sim = New SimulatorDescriptor With {
@@ -1114,7 +1105,6 @@ Public Class DiagnosticsForm
                 .SixtyFourBit = True
             }
             TestSimulator(Sim)
-            Sim = Nothing
 
             ' Focuser Simulator - Platform 6
             Sim = New SimulatorDescriptor With {
@@ -1128,7 +1118,6 @@ Public Class DiagnosticsForm
                 .SixtyFourBit = True
             }
             TestSimulator(Sim)
-            Sim = Nothing
 
             ' SafetyMonitor Simulator
             Sim = New SimulatorDescriptor With {
@@ -1142,7 +1131,6 @@ Public Class DiagnosticsForm
                 .SixtyFourBit = True
             }
             TestSimulator(Sim)
-            Sim = Nothing
 
             ' Switch Simulator - Platform 5
             Sim = New SimulatorDescriptor With {
@@ -1156,7 +1144,6 @@ Public Class DiagnosticsForm
                 .SixtyFourBit = True
             }
             TestSimulator(Sim)
-            Sim = Nothing
 
             ' Switch Simulator - Platform 6
             Sim = New SimulatorDescriptor With {
@@ -1170,7 +1157,6 @@ Public Class DiagnosticsForm
                 .SixtyFourBit = True
             }
             TestSimulator(Sim)
-            Sim = Nothing
 
             ' Video Simulator
             Sim = New SimulatorDescriptor With {
@@ -1184,7 +1170,6 @@ Public Class DiagnosticsForm
                 .SixtyFourBit = True
             }
             TestSimulator(Sim)
-            Sim = Nothing
 
             ' ObservingConditions Simulator
             Sim = New SimulatorDescriptor With {
@@ -1198,7 +1183,6 @@ Public Class DiagnosticsForm
                 .SixtyFourBit = True
             }
             TestSimulator(Sim)
-            Sim = Nothing
 
             ' ObservingConditions Hub
             Sim = New SimulatorDescriptor With {
@@ -1212,7 +1196,6 @@ Public Class DiagnosticsForm
                 .SixtyFourBit = True
             }
             TestSimulator(Sim)
-            Sim = Nothing
 
         End If
         TL.BlankLine()
@@ -2023,7 +2006,7 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Sub CheckoutStarsFull()
-        'Port of the NOVAS 3 ChecoutStarsFull.c program to confirm correct iplementation
+        'Port of the NOVAS 3 ChecoutStarsFull.c program to confirm correct implementation
 
         Const N_STARS As Integer = 3
         Const N_TIMES As Integer = 4
@@ -2036,8 +2019,7 @@ Public Class DiagnosticsForm
         'For use with NOVAS-C Version 3.
         '*/
 
-        Dim [error] As Short = 0
-        Dim accuracy As Short = 0
+        Dim accuracy As Short
         Dim i, j, rc As Short
 
         '/*
@@ -2712,7 +2694,6 @@ Public Class DiagnosticsForm
         'For use with NOVAS-C Version 3.
         '*/
 
-        Dim [error] As Short = 0
         Dim accuracy As Short = 0
         Dim i, j, rc As Short
 
@@ -3337,7 +3318,7 @@ Public Class DiagnosticsForm
     Private Sub LogRC31(ByVal Test As NOVAS3Functions, ByVal Note As String, ByVal rc As Integer, ByVal msg As String, ByVal Comparison As String)
         Dim LMsg As String
         If Note <> "" Then
-            Note = Note & ": "
+            Note &= ": "
             LMsg = Note & msg
         Else
             LMsg = msg
@@ -3363,7 +3344,7 @@ Public Class DiagnosticsForm
     Private Sub LogRC(ByVal Test As NOVAS3Functions, ByVal Note As String, ByVal rc As Integer, ByVal msg As String, ByVal Comparison As String)
         Dim LMsg As String
         If Note <> "" Then
-            Note = Note & ": "
+            Note &= ": "
             LMsg = Note & msg
         Else
             LMsg = msg
@@ -3882,7 +3863,6 @@ Public Class DiagnosticsForm
         TransformTest2000("Arcturus", "14:15:38.943", "19:10:37.93", TOLERANCE_E5, TOLERANCE_E4)
 
         TR.Dispose()
-        TR = Nothing
 
         TL.BlankLine()
     End Sub
@@ -4156,7 +4136,6 @@ Public Class DiagnosticsForm
         Dim JD As Double
         JD = Util.DateUTCToJulian(Date.ParseExact(TEST_DATE, "F", System.Globalization.CultureInfo.InvariantCulture))
         Util.Dispose()
-        Util = Nothing
         Return JD
     End Function
 
@@ -4747,7 +4726,6 @@ Public Class DiagnosticsForm
         'TL.LogMessage("MultiWrite - MultiThread", "ThreadEnd")
         TL.Enabled = False
         TL.Dispose()
-        TL = Nothing
 
     End Sub
 
@@ -4823,9 +4801,9 @@ Public Class DiagnosticsForm
 
     Private Sub CompareDouble(ByVal SectionName As String, ByVal ValueName As String, ByVal ActualValue As Double, ByVal ExpectedValue As Double, ByVal Tolerance As Double, CompareType As DoubleType)
         Dim Divisor, ComparisonValue, LowerValue, HigherValue As Double
-        Dim DisplayNew As String = ""
-        Dim DisplayOriginal As String = ""
-        Dim DisplayTolerance As String = ""
+        Dim DisplayNew As String
+        Dim DisplayOriginal As String
+        Dim DisplayTolerance As String
 
         Divisor = ExpectedValue
         If Divisor = 0.0 Then Divisor = 1.0 'Deal with possible divide by zero error
@@ -4851,8 +4829,8 @@ Public Class DiagnosticsForm
                 DisplayTolerance = AscomUtil.DegreesToDMS(Tolerance, ":", ":", "", 3) & " Seconds"
 
             Case DoubleType.Degrees0To360InRadians
-                ActualValue = ActualValue * RADIANS_TO_DEGREES ' Convert from radians to degrees
-                ExpectedValue = ExpectedValue * RADIANS_TO_DEGREES
+                ActualValue *= RADIANS_TO_DEGREES ' Convert from radians to degrees
+                ExpectedValue *= RADIANS_TO_DEGREES
                 If ((HigherValue > 270.0) And (LowerValue < 90.0)) Then ' We are comparing across the 0/2Pi radian discontinuity so we need to add the distances from 0/2Pi discontinuity of each value
                     ComparisonValue = (360.0 - HigherValue) + LowerValue ' Calculate the distance of the high value from 360.0 degrees and add this to the lower value to get the difference between the two values.
                 Else
@@ -4875,8 +4853,8 @@ Public Class DiagnosticsForm
                 DisplayTolerance = AscomUtil.DegreesToDMS(Tolerance, ":", ":", "", 3) & " Seconds"
 
             Case DoubleType.DegreesMinus180ToPlus180InRadians
-                ActualValue = ActualValue * RADIANS_TO_DEGREES ' Convert from radians to degrees
-                ExpectedValue = ExpectedValue * RADIANS_TO_DEGREES
+                ActualValue *= RADIANS_TO_DEGREES ' Convert from radians to degrees
+                ExpectedValue *= RADIANS_TO_DEGREES
                 If (HigherValue > (0.5 * Math.PI)) And (LowerValue < -0.5 * Math.PI) Then ' We are comparing across the -Pi/+Pi degree discontinuity so we need to make both numbers fall onto a continuous stream
                     ComparisonValue = (Math.PI - HigherValue) + (Math.PI + LowerValue) ' Calculate the distance of the high value from Pi radians and add this to the lower value to get the difference between the two values.
                 Else
@@ -4899,8 +4877,8 @@ Public Class DiagnosticsForm
                 DisplayTolerance = AscomUtil.HoursToHMS(Tolerance, ":", ":", "", 3) & " ArcSeconds"
 
             Case DoubleType.Hours0To24InRadians
-                ActualValue = ActualValue * RADIANS_TO_HOURS ' Convert from radians to hours
-                ExpectedValue = ExpectedValue * RADIANS_TO_HOURS
+                ActualValue *= RADIANS_TO_HOURS ' Convert from radians to hours
+                ExpectedValue *= RADIANS_TO_HOURS
                 If (HigherValue > 18.0) And (LowerValue < 6.0) Then ' We are comparing across the 0/24 hour discontinuity so we need to make both numbers fall onto a continuous stream
                     ComparisonValue = (24.0 - HigherValue) + LowerValue  ' Calculate the distance of the high value from 24.0 hours and add this to the lower value to get the difference between the two values.
                 Else
@@ -4923,8 +4901,8 @@ Public Class DiagnosticsForm
                 DisplayTolerance = AscomUtil.HoursToHMS(Tolerance, ":", ":", "", 3) & " ArcSeconds"
 
             Case DoubleType.HoursMinus12ToPlus12InRadians
-                ActualValue = ActualValue * RADIANS_TO_HOURS ' Convert from radians to hours
-                ExpectedValue = ExpectedValue * RADIANS_TO_HOURS
+                ActualValue *= RADIANS_TO_HOURS ' Convert from radians to hours
+                ExpectedValue *= RADIANS_TO_HOURS
                 If (HigherValue > 6.0) And (LowerValue < -6.0) Then ' We are comparing across the -12.0/+12.0 hour discontinuity so we need to make both numbers fall onto a continuous stream
                     ComparisonValue = (12.0 - HigherValue) + (12.0 + LowerValue) ' Calculate the distance of the high value from 12.0 hours and add this to the lower value to get the difference between the two values.
                 Else
@@ -5781,7 +5759,7 @@ Public Class DiagnosticsForm
 
     Private Sub TestThrottling(cache As Cache, CallsPerSecond As Double, PumpMessagesInterval As Integer)
         Dim returnDouble As Double
-        Dim numberOfLoops As Integer, errorOccured As Boolean = False, throttleTarget As Integer
+        Dim numberOfLoops As Integer, throttleTarget As Integer
 
         ' Set upper and lower test pass limits. These are quite wide to allow for systems where sleep time precision is low e.g. when timer resolution is 15.67ms e.g. on laptops and low power devices
         ' They also don't need to be that precise given that the purpose is only to slow down the rate of client calls
@@ -5814,7 +5792,6 @@ Public Class DiagnosticsForm
             End If
         Catch ex As Exception
             LogException("TestThrottling", "Exception while testing throttling: " & ex.ToString())
-            errorOccured = True
         End Try
 
     End Sub
@@ -6321,8 +6298,6 @@ Public Class DiagnosticsForm
             Case Else
                 LogError("UtilTests:CheckArray", "Returned array rank is outside expected range of 1..3: " & ReturnArray.Rank)
         End Select
-
-        ReturnArray = CType(ReturnObject, Array)
 
     End Sub
 
@@ -7063,7 +7038,7 @@ Public Class DiagnosticsForm
         Dim SetupFiles(), UninstallFiles() As String
         Dim TempFilesList As New List(Of String)
         Dim SR As StreamReader = Nothing
-        Dim Lines(30) As String, LineCount As Integer = 0
+        Dim Lines(30) As String, LineCount As Integer
         Dim ASCOMFile As Boolean
 
         Try
@@ -7337,9 +7312,9 @@ Public Class DiagnosticsForm
         Dim FileLocation As String
         Dim FileVer As FileVersionInfo
         Dim DiagnosticsVersion As New Version("0.0.0.0")
-        Dim FileVersion As New Version("0.0.0.0")
+        Dim FileVersion As Version
         Dim VersionComparison As Integer
-        Dim assemblyURI As Uri = Nothing
+        Dim assemblyURI As Uri
         Dim localPath As String
 
         Try
@@ -7588,7 +7563,7 @@ Public Class DiagnosticsForm
         Dim FullPath As String
         Dim Att As FileAttributes, FVInfo As FileVersionInfo, FInfo As FileInfo
         Dim Ass As Assembly, AssVer As String = "", CompareName As String
-        Dim ReflectionAssemblies() As Assembly = Nothing
+        Dim ReflectionAssemblies() As Assembly
         Dim Framework As String = "", PE As PEReader
 
         Try
@@ -7857,7 +7832,6 @@ Public Class DiagnosticsForm
         End Try
 
         SerPort.Dispose()
-        SerPort = Nothing
     End Sub
 
     Private Sub ScanProfile()
@@ -7905,7 +7879,7 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Sub RecurseProfile(ByVal ASCOMKey As String)
-        Dim SubKeys, Values As New Generic.SortedList(Of String, String)
+        Dim SubKeys, Values As SortedList(Of String, String)
         Dim NextKey, DisplayName, DisplayValue As String
 
         'List values in this key
@@ -8005,7 +7979,7 @@ Public Class DiagnosticsForm
     ''' <param name="MSIInstaller">True if the installer is an MSI based installer, False if an InstallAware Native installer</param>
     ''' <remarks></remarks>
     Private Function GetInstalledComponent(ByVal Name As String, ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean, ByVal MSIInstaller As Boolean) As Generic.SortedList(Of String, String)
-        Dim InstallInfo As Generic.SortedList(Of String, String)
+        Dim InstallInfo As New SortedList(Of String, String)
 
         Try ' Platform 6 installer GUID, should always be present in Platform 6
             InstallInfo = GetInstallInformation(ProductCode, Required, Force32, MSIInstaller)
@@ -8037,16 +8011,16 @@ Public Class DiagnosticsForm
     ''' <param name="MSIInstaller">True if the installer is an MSI based installer, False if an Installaware Native installer</param>
     ''' <returns>Generic Sorted List of key value pairs. If not found returns an empty list</returns>
     ''' <remarks></remarks>
-    Private Function GetInstallInformation(ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean, ByVal MSIInstaller As Boolean) As Generic.SortedList(Of String, String)
+    <CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification:="The 'Required' parameter is used when DEBUG_TRACE is enabled.")>
+    Private Function GetInstallInformation(ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean, ByVal MSIInstaller As Boolean) As SortedList(Of String, String)
         Dim RegKey As RegistryKey
-        Dim RetVal As New Generic.SortedList(Of String, String)
+        Dim RetVal As New SortedList(Of String, String)
         Dim UninstallString As String
         Dim UninstallKey As RegistryKey, UninstallSubKeyNames() As String
-        Dim PlatformName As String = ""
 
-        Const DebugTRace As Boolean = False ' Set to true to debug this code, otherwise leave false!
+        Const DEBUG_TRACE As Boolean = False ' Set to true to debug this code, otherwise leave false!
 
-        If DebugTRace Then TL.LogMessage("GetInstallInformation", "Product: " & ProductCode & ", Required: " & Required & ", Forece32: " & Force32 & ", MSIInstaller: " & MSIInstaller)
+        If DEBUG_TRACE Then TL.LogMessage("GetInstallInformation", $"Product: {ProductCode}, Required: {Required}, Force32: {Force32}, MSIInstaller: {MSIInstaller}")
         Try
             If MSIInstaller Then
                 'RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & PLATFORM_INSTALLER_PROPDUCT_CODE, False)
@@ -8055,7 +8029,7 @@ Public Class DiagnosticsForm
                 Else '64bit OS but requires 32bit registry
                     RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\" & ProductCode, False)
                 End If
-                If DebugTRace Then
+                If DEBUG_TRACE Then
                     If Not RegKey Is Nothing Then
                         TL.LogMessage("GetInstallInformation", "  MSI Installer: found Reg Key: " & RegKey.Name)
                     Else
@@ -8071,7 +8045,7 @@ Public Class DiagnosticsForm
                     UninstallKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\", False)
                     RegKey = UninstallKey.OpenSubKey(ProductCode, False)
                 End If
-                If DebugTRace Then
+                If DEBUG_TRACE Then
                     If Not UninstallKey Is Nothing Then
                         TL.LogMessage("GetInstallInformation", "  Native Installer: found Uninstall Key: " & UninstallKey.Name)
                     Else
@@ -8088,14 +8062,14 @@ Public Class DiagnosticsForm
                 UninstallString = RegKey.GetValue(INST_UNINSTALL_STRING, "")
                 RegKey.Close()
                 RegKey = Nothing
-                If DebugTRace Then TL.LogMessage("GetInstallInformation", "  Native Installer: found Uninstall String: " & UninstallString)
+                If DEBUG_TRACE Then TL.LogMessage("GetInstallInformation", "  Native Installer: found Uninstall String: " & UninstallString)
 
                 UninstallSubKeyNames = UninstallKey.GetSubKeyNames
                 For Each SubKey As String In UninstallSubKeyNames
-                    If DebugTRace Then TL.LogMessage("GetInstallInformation", "  Native Installer: searching subkey : " & SubKey)
+                    If DEBUG_TRACE Then TL.LogMessage("GetInstallInformation", "  Native Installer: searching subkey : " & SubKey)
                     If UninstallKey.OpenSubKey(SubKey).GetValue(INST_DISPLAY_ICON, "") = UninstallString Then
                         RegKey = UninstallKey.OpenSubKey(SubKey)
-                        If DebugTRace Then TL.LogMessage("GetInstallInformation", "    Native Installer Found: " & RegKey.Name)
+                        If DEBUG_TRACE Then TL.LogMessage("GetInstallInformation", "    Native Installer Found: " & RegKey.Name)
                         Exit For
                     End If
                 Next
@@ -8109,7 +8083,7 @@ Public Class DiagnosticsForm
 
             RegKey.Close()
         Catch ex As Exception
-            If DebugTRace Then TL.LogMessageCrLf("Exception", ex.ToString)
+            If DEBUG_TRACE Then TL.LogMessageCrLf("Exception", ex.ToString)
             'If Not RetVal.ContainsKey(INST_DISPLAY_NAME) Then RetVal.Add(INST_DISPLAY_NAME, "Unknown name")
             'If Not RetVal.ContainsKey(INST_DISPLAY_VERSION) Then RetVal.Add(INST_DISPLAY_VERSION, "Unknown version")
             'If Not RetVal.ContainsKey(INST_INSTALL_DATE) Then RetVal.Add(INST_INSTALL_DATE, "Unknown install date")
@@ -8549,7 +8523,6 @@ Public Class DiagnosticsForm
             MenuUseTraceManualFilename.Enabled = False
         End If
         ProfileStore.Dispose()
-        ProfileStore = Nothing
     End Sub
 
     Private Sub MenuAutoTraceFilenames_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuUseTraceAutoFilenames.Click
@@ -8564,7 +8537,6 @@ Public Class DiagnosticsForm
         MenuSerialTraceEnabled.Checked = True 'Enable the trace enabled flag
         ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SERIAL_AUTO_FILENAME)
         ProfileStore.Dispose()
-        ProfileStore = Nothing
     End Sub
 
     Private Sub MenuIncludeSerialTraceDebugInformation_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuIncludeSerialTraceDebugInformation.Click
@@ -8607,7 +8579,6 @@ Public Class DiagnosticsForm
         End Select
 
         ProfileStore.Dispose()
-        ProfileStore = Nothing
     End Sub
 
 #End Region

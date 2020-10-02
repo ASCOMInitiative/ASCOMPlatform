@@ -16,7 +16,6 @@ Friend Class AlpacaDeviceDescription
     ''' <param name="manufacturer">The device manufacturer's name</param>
     ''' <param name="manufacturerVersion">The device's version as set by the manufacturer</param>
     ''' <param name="location">The Alpaca device's configured location</param>
-    ''' <param name="alpacaUniqueId"></param>
     ''' <remarks>This can only be used by .NET clients because COM only supports parameterless initialisers.</remarks>
     Friend Sub New(ByVal serverName As String, ByVal manufacturer As String, ByVal manufacturerVersion As String, ByVal location As String)
         Me.ServerName = serverName
