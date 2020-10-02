@@ -3337,7 +3337,7 @@ Public Class DiagnosticsForm
     Private Sub LogRC31(ByVal Test As NOVAS3Functions, ByVal Note As String, ByVal rc As Integer, ByVal msg As String, ByVal Comparison As String)
         Dim LMsg As String
         If Note <> "" Then
-            Note = Note & ": "
+            Note &= ": "
             LMsg = Note & msg
         Else
             LMsg = msg
@@ -3363,7 +3363,7 @@ Public Class DiagnosticsForm
     Private Sub LogRC(ByVal Test As NOVAS3Functions, ByVal Note As String, ByVal rc As Integer, ByVal msg As String, ByVal Comparison As String)
         Dim LMsg As String
         If Note <> "" Then
-            Note = Note & ": "
+            Note &= ": "
             LMsg = Note & msg
         Else
             LMsg = msg
@@ -4851,8 +4851,8 @@ Public Class DiagnosticsForm
                 DisplayTolerance = AscomUtil.DegreesToDMS(Tolerance, ":", ":", "", 3) & " Seconds"
 
             Case DoubleType.Degrees0To360InRadians
-                ActualValue = ActualValue * RADIANS_TO_DEGREES ' Convert from radians to degrees
-                ExpectedValue = ExpectedValue * RADIANS_TO_DEGREES
+                ActualValue *= RADIANS_TO_DEGREES ' Convert from radians to degrees
+                ExpectedValue *= RADIANS_TO_DEGREES
                 If ((HigherValue > 270.0) And (LowerValue < 90.0)) Then ' We are comparing across the 0/2Pi radian discontinuity so we need to add the distances from 0/2Pi discontinuity of each value
                     ComparisonValue = (360.0 - HigherValue) + LowerValue ' Calculate the distance of the high value from 360.0 degrees and add this to the lower value to get the difference between the two values.
                 Else
@@ -4875,8 +4875,8 @@ Public Class DiagnosticsForm
                 DisplayTolerance = AscomUtil.DegreesToDMS(Tolerance, ":", ":", "", 3) & " Seconds"
 
             Case DoubleType.DegreesMinus180ToPlus180InRadians
-                ActualValue = ActualValue * RADIANS_TO_DEGREES ' Convert from radians to degrees
-                ExpectedValue = ExpectedValue * RADIANS_TO_DEGREES
+                ActualValue *= RADIANS_TO_DEGREES ' Convert from radians to degrees
+                ExpectedValue *= RADIANS_TO_DEGREES
                 If (HigherValue > (0.5 * Math.PI)) And (LowerValue < -0.5 * Math.PI) Then ' We are comparing across the -Pi/+Pi degree discontinuity so we need to make both numbers fall onto a continuous stream
                     ComparisonValue = (Math.PI - HigherValue) + (Math.PI + LowerValue) ' Calculate the distance of the high value from Pi radians and add this to the lower value to get the difference between the two values.
                 Else
@@ -4899,8 +4899,8 @@ Public Class DiagnosticsForm
                 DisplayTolerance = AscomUtil.HoursToHMS(Tolerance, ":", ":", "", 3) & " ArcSeconds"
 
             Case DoubleType.Hours0To24InRadians
-                ActualValue = ActualValue * RADIANS_TO_HOURS ' Convert from radians to hours
-                ExpectedValue = ExpectedValue * RADIANS_TO_HOURS
+                ActualValue *= RADIANS_TO_HOURS ' Convert from radians to hours
+                ExpectedValue *= RADIANS_TO_HOURS
                 If (HigherValue > 18.0) And (LowerValue < 6.0) Then ' We are comparing across the 0/24 hour discontinuity so we need to make both numbers fall onto a continuous stream
                     ComparisonValue = (24.0 - HigherValue) + LowerValue  ' Calculate the distance of the high value from 24.0 hours and add this to the lower value to get the difference between the two values.
                 Else
@@ -4923,8 +4923,8 @@ Public Class DiagnosticsForm
                 DisplayTolerance = AscomUtil.HoursToHMS(Tolerance, ":", ":", "", 3) & " ArcSeconds"
 
             Case DoubleType.HoursMinus12ToPlus12InRadians
-                ActualValue = ActualValue * RADIANS_TO_HOURS ' Convert from radians to hours
-                ExpectedValue = ExpectedValue * RADIANS_TO_HOURS
+                ActualValue *= RADIANS_TO_HOURS ' Convert from radians to hours
+                ExpectedValue *= RADIANS_TO_HOURS
                 If (HigherValue > 6.0) And (LowerValue < -6.0) Then ' We are comparing across the -12.0/+12.0 hour discontinuity so we need to make both numbers fall onto a continuous stream
                     ComparisonValue = (12.0 - HigherValue) + (12.0 + LowerValue) ' Calculate the distance of the high value from 12.0 hours and add this to the lower value to get the difference between the two values.
                 Else
