@@ -2019,7 +2019,6 @@ Public Class DiagnosticsForm
         'For use with NOVAS-C Version 3.
         '*/
 
-        Dim [error] As Short
         Dim accuracy As Short
         Dim i, j, rc As Short
 
@@ -2695,7 +2694,6 @@ Public Class DiagnosticsForm
         'For use with NOVAS-C Version 3.
         '*/
 
-        Dim [error] As Short
         Dim accuracy As Short = 0
         Dim i, j, rc As Short
 
