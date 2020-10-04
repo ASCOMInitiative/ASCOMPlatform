@@ -6,7 +6,9 @@
     	<title>Introduction - ASCOM-Platform 6 - ASCOM Driver and Application Developers</title>
       	<content>
       	
-      	<para>Please see <link xlink:href="3417e177-f705-497d-8127-fb30e8519d50" /> for information on the latest changes.</para>
+      	<para>
+      		Please see <link xlink:href="3417e177-f705-497d-8127-fb30e8519d50" /> for detailed information on Platform 6.5 changes and <link xlink:href="FC49CB34-01CF-4D01-BE66-6D55796512D5" /> for updates in service pack 1.
+      	</para>
       	
       	<para>Platform 6 builds on the architectural changes introduced in Plaform 5.5 and introduces a set of common methods that 
       	will be availabnle in all drivers. These have been based on the methods already implemented in the Telescope interface together

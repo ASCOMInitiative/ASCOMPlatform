@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="FC49CB34-01CF-4D01-BE66-6D55796512D5" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <section address="Intro65SP1">
+      <title>Introduction</title>
+      <content>
+        <para>
+          In line with previous Platform installers, 6.5 SP1 is a cumulative release that contains all enhancements and fixes from previous Platform releases and service packs. The Platform
+          environment pre-requisites are listed here <link xlink:href="#PreReqs65SP1">Platform Prerequisites</link>.
+        </para>
+      </content>
+    </section>
+
+    <section address="Changes65SP1">
+      <title>Key Changes in 6.5 SP1 - For Everyone</title>
+      <content>
+        <list class="bullet">
+          <listItem>Device Hub
+          	<list class="bullet">
+          		<listItem>Side Of Pier and Destination Side Of Pier will now be calculated by Device Hub if not available from the downstream driver.</listItem>
+          		<listItem>The dome shutter can now be opened and closed when slaved.</listItem>
+          		<listItem>Exceptions are now trapped and logged during dome slaving calculations.</listItem>
+        	</list>
+          </listItem>
+          <listItem>Improved TraceLogger messaging if an instance is used after being disposed.</listItem>
+          <listItem>All references to the Yahoo ASCOM Talk forum have been replaced with references to the new Groups.IO forum.</listItem>
+          <listItem>All links referencing the ascom-standards.org web site now use HTTPS instead of HTTP.</listItem>
+          <listItem>DeltaT predictions good to December 2021 have been added.</listItem>
+          <listItem>The SOFA component has been updated to use the latest IAU 21st July 2020 - Version 16 SOFA release.</listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="IssuesFixedPlatform65SP1">
+      <title>Issues Fixed - Platform</title>
+      <content>
+        <list class="bullet">
+          <listItem>A serious bug was introduced in the Astrometry.Transform class during Platform 6.5 implementation, which prevented a single instance from being used for multiple transforms. 
+          The bug has been fixed and Transform now works as it did in Platform 6.4.</listItem>
+          <listItem>The installer now works properly on machines whose PC Name contains a space character.</listItem>
+          <listItem>Device Hub
+          	<list class="bullet">
+          		<listItem>Improved support for locales that use comma as the decimal separator</listItem>
+          		<listItem>Profile settings will now be preserved when upgrading.</listItem>
+          		<listItem>SideofPier exceptions will now be forwarded to the client.</listItem>
+        	</list>
+          </listItem>
+          <listItem>The installer now handles unregistering drivers more gracefully.</listItem>
+          <listItem>The installer now checks that the Windows Task Scheduler is enabled before attempting to create its scheduled task.</listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="RetiredComponents">
+      <title>Retired Components</title>
+      <content>
+        <para>The following Platform 5 hubs have been retired in Platform 6.5 and are replaced by the new Device Hub. We strongly recommend that you switch over to using the Device Hub because these components will be removed in a future release.</para>
+        <list class="bullet">
+          <listItem>POTH</listItem>
+          <listItem>Hub</listItem>
+          <listItem>Pipe</listItem>
+          <listItem>Dome Control Hub</listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="Changes65DevSP1">
+      <title>Key Changes in 6.5 SP1 - For Developers</title>
+      <content>
+        <list class="bullet">
+          <listItem>Comments in the driver templates are now clearer on how to implement the CommandXXX methods.</listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="IssuesFixedDeveloper65SP1">
+      <title>Issues Fixed - Developers</title>
+      <content>
+        <list class="bullet">
+          <listItem>Recent versions of Visual Studio have started trapping NullReferenceExceptions that previously were not caught. Utilities.Profile has been recoded to avoid these.</listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="BreakingChanges65">
+      <title>Breaking Changes (For Developers) in Platform 6.5</title>
+      <content>
+        <list class="bullet">
+          <listItem>The ASCOM.Utilities.Units “Fahrenheit” member has been deprecated in favour of the correctly spelled “Fahrenheit” member. This will not affect compiled programs but will result in warnings when the code is next compiled.</listItem>
+        </list>
+        <alert class="note">
+          <para>
+            <legacyBold>Driver and application developers</legacyBold>: In order to maintain a healthy code base, some tidying up is planned for the
+            next <legacyBold>major</legacyBold> update and details of the changes are given in the <link xlink:href="#DeprecatedCapability65">Deprecated Features</link> section below. Please will you review
+            this and update your applications and drivers as advised; these changes are not currently scheduled for introduction before Q2 2020 at the earliest.
+            In the meantime service packs will be issued as required to correct bugs.
+          </para>
+        </alert>
+      </content>
+    </section>
+
+    <section address="KnownIssuesDevelopment65SP1">
+      <title>Known Limitations - Developers</title>
+      <content>
+        <list class="bullet">
+          <listItem>
+            The components in the Astrometry.NOVAS namespace are fully usable from .NET languages but are not fully
+            accessible through COM from scripting languages because a number of parameters are passed by reference or use
+            structures that do not pass across the COM interface. Two work rounds are available:
+            <list class="ordered">
+              <listItem>Use the Transform component in the ASCOM.Astrometry.Transform namespace, it is fully COM compatible.</listItem>
+              <listItem>
+                Create your own COM presentation component that encapsulates the SOFA or NOVAS 3.1 functions that you require
+                and presents them in a COM compatible fashion to suit your needs. This component can them be consumed by your
+                scripting application.
+              </listItem>
+            </list>
+          </listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="DeprecatedCapability65">
+      <title>Deprecated Capabilities (For Developers)</title>
+      <content>
+        <list class="bullet">
+          <listItem>
+            <para>
+              The ASCOM.Astrometry namespace of the Platform has become overcrowded with components that have similar capabilities but that differ in small ways from each other (e.g. NOVAS2, NOVAS2COM, NOVAS3, NOVAS3.1). The recent
+              realisation that some NOVAS routines use iterative algorithms that can fail, when in very close proximity to the poles, led to a search for an alternative and the
+              <externalLink>
+                <linkText>SOFA Library</linkText>
+                <linkAlternateText>http://www.iausofa.org</linkAlternateText>
+                <linkUri>http://www.iausofa.org</linkUri>
+                <linkTarget>_blank</linkTarget>
+              </externalLink>
+              was found to be an actively maintained and authoritative choice.
+            </para>
+            <para>
+              The addition of a SOFA component brings the number of high precision astronomy libraries distributed within the Platform to 8!
+              To reduce the maintenance burden, SOFA will become the primary high precision library for astronomical computing distributed with the ASCOM Platform and
+              dependence of Platform components on NOVAS will be removed. However, the NOVAS routines provide functionality that is not present in SOFA e.g. major and minor planet ephemerides
+              and consequently the NOVAS 3.1 component will continue to be distributed with the Platform.
+            </para>
+            <para>The following NOVAS components will be removed from the Platform installation at the next major update:</para>
+            <list class="bullet">
+              <listItem>NOVAS2</listItem>
+              <listItem>NOVAS2COM</listItem>
+              <listItem>NOVAS3</listItem>
+            </list>
+            <para>PLEASE NOTE: The Kepler and NOVASCOM components were flagged as deprecated in previous Platform releases but will now be retained following feedback from developers.</para>
+          </listItem>
+          <listItem>
+            The following VB6 based simulators and hubs will be removed from the Platform at the next major update. These drivers were moved to a
+            "bug-fix only" maintenance mode when Platform 6 was released and are becoming increasingly out of step with their .NET counterparts, which are fully integrated into the Platform code base.
+            <table>
+              <tableHeader>
+                <row>
+                  <entry>
+                    <para>Simulator</para>
+                  </entry>
+                  <entry>
+                    <para>ProgID</para>
+                  </entry>
+                  <entry>
+                    <para>Replacement</para>
+                  </entry>
+                </row>
+              </tableHeader>
+              <row>
+                <entry>
+                  <para>Camera Simulator</para>
+                </entry>
+                <entry>
+                  <para>CCDSimulator.Camera</para>
+                </entry>
+                <entry>
+                  <para>Replace use of the CCDSimulator.Camera ProgID with ASCOM.Simulator.Camera, which will invoke the "Camera V2 simulator</para>
+                </entry>
+              </row>
+              <row>
+                <entry>
+                  <para>Dome Simulator</para>
+                </entry>
+                <entry>
+                  <para>DomeSim.Telescope</para>
+                </entry>
+                <entry>
+                  <para>Replace use of the DomeSim.Telescope ProgID with ASCOM.Simulator.Dome, which will invoke the "Dome Simulator .NET" driver.</para>
+                </entry>
+              </row>
+              <row>
+                <entry>
+                  <para>Filter Wheel Simulator</para>
+                </entry>
+                <entry>
+                  <para>FilterWheelSim.FilterWheel</para>
+                </entry>
+                <entry>
+                  <para>Replace use of the FilterWheelSim.FilterWheel ProgID with ASCOM.Simulator.FilterWheel, which will invoke the "Filter Wheel Simulator [.NET]" driver.</para>
+                </entry>
+              </row>
+              <row>
+                <entry>
+                  <para>Focuser Simulator</para>
+                </entry>
+                <entry>
+                  <para>FocuserSim.Focuser</para>
+                </entry>
+                <entry>
+                  <para>Replace use of the FocuserSim.Focuser ProgID with ASCOM.Simulator.Focuser, which will invoke the "ASCOM Simulator Focuser Driver" driver.</para>
+                </entry>
+              </row>
+              <row>
+                <entry>
+                  <para>Switch Simulator</para>
+                </entry>
+                <entry>
+                  <para>SwitchSim.Switch</para>
+                </entry>
+                <entry>
+                  <para>Replace use of the SwitchSim.Switch ProgID with ASCOM.Simulator.Switch, which will invoke the "ASCOM SwitchV2 Simulator Driver" driver.</para>
+                </entry>
+              </row>
+              <row>
+                <entry>
+                  <para>Telescope Simulator</para>
+                </entry>
+                <entry>
+                  <para>ScopeSim.Telescope</para>
+                </entry>
+                <entry>
+                  <para>Replace use of the ScopeSim.Telescope ProgID with ASCOM.Simulator.Telescope, which will invoke the "Telescope Simulator for .NET" driver.</para>
+                </entry>
+              </row>
+              <row>
+                <entry>
+                  <para>Pipe hub</para>
+                </entry>
+                <entry>
+                  <para>Pipe.Telescope, Pipe.Dome, Pipe.Focuser</para>
+                </entry>
+                <entry>
+                  <para>Replace with Device Hub - ASCOM.DeviceHub.Telescope, ASCOM.DeviceHub.Dome, ASCOM.DeviceHub.Focuser</para>
+                </entry>
+              </row>
+              <row>
+                <entry>
+                  <para>Hub hub</para>
+                </entry>
+                <entry>
+                  <para>Hub.Telescope, Hub.Dome, Hub.Focuser</para>
+                </entry>
+                <entry>
+                  <para>Replace with Device Hub - ASCOM.DeviceHub.Telescope, ASCOM.DeviceHub.Dome, ASCOM.DeviceHub.Focuser</para>
+                </entry>
+              </row>
+              <row>
+                <entry>
+                  <para>POTH hub</para>
+                </entry>
+                <entry>
+                  <para>POTH.Telescope, POTH.Dome, POTH.Focuser</para>
+                </entry>
+                <entry>
+                  <para>Replace with Device Hub - ASCOM.DeviceHub.Telescope, ASCOM.DeviceHub.Dome, ASCOM.DeviceHub.Focuser</para>
+                </entry>
+              </row>
+              <row>
+                <entry>
+                  <para>ASCOM Dome Control hub</para>
+                </entry>
+                <entry>
+                  <para>ASCOMDome.Dome, ASCOMDome.Telescope</para>
+                </entry>
+                <entry>
+                  <para>Replace with Device Hub - ASCOM.DeviceHub.Telescope, ASCOM.DeviceHub.Dome</para>
+                </entry>
+              </row>
+            </table>
+          </listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="PreReqs65SP1">
+      <title>Platform Prerequisites</title>
+      <content>
+        <para>Platform 6.5 requires the following .NET framework version and library:</para>
+        <list class="bullet">
+          <listItem>.NET Framework 4.8</listItem>
+          <listItem>For WIndows 8 and Windows 10 the .NET Framework 3.5 option must be enabled in Control Panel / Programs and Features / Turn Windows Features On and Off</listItem>
+          <listItem>Visual C++ 16.0 libraries (these are provided by the Platform installer if required)</listItem>
+        </list>
+        <para>
+          While previous Platforms required .NET Framework 4.0, Platform 6.5 requires that .NET Framework 4.8 is installed on your PC. This change is to enable Platform components to take
+          advantage of new features introduced after Framework 4.0 was released and to put the Platform onto what Microsoft has flagged as the last release of .NET Framework.
+        </para>
+        <para>
+          The installer will advise you if your PC does not have the required support and will request that you install or enable it before continuing with the installation.
+          <externalLink>
+            <linkText>Microsoft Download Centre</linkText>
+            <linkAlternateText>http://www.microsoft.com/downloads</linkAlternateText>
+            <linkUri>http://www.microsoft.com/downloads</linkUri>
+            <linkTarget>_blank</linkTarget>
+          </externalLink>
+        </para>
+        <para>The Platform installer will provide or update the C++ 16 libraries if they are not already present on your PC or are not current.</para>
+      </content>
+    </section>
+
+  </developerConceptualDocument>
+</topic>
