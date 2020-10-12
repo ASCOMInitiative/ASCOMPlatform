@@ -645,10 +645,10 @@ namespace ASCOM.DynamicRemoteClients
 
         #region Remote access methods
 
-        public static void CallMethodWithNoParameters(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method)
+        public static void CallMethodWithNoParameters(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, MemberTypes memberType)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>();
-            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT, memberType);
         }
 
         /// <summary>
@@ -660,10 +660,11 @@ namespace ASCOM.DynamicRemoteClients
         /// <param name="URIBase"></param>
         /// <param name="TL"></param>
         /// <param name="method"></param>
+        /// <param name="memberType"></param>
         /// <returns></returns>
-        public static T GetValue<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method)
+        public static T GetValue<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, MemberTypes memberType)
         {
-            return GetValue<T>(clientNumber, client, URIBase, TL, method, SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, SharedConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT); // Set an arbitrary value for ImageArrayTransferType
+            return GetValue<T>(clientNumber, client, URIBase, TL, method, SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, SharedConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT, memberType); // Set an arbitrary value for ImageArrayTransferType
         }
 
         /// <summary>
@@ -676,122 +677,124 @@ namespace ASCOM.DynamicRemoteClients
         /// <param name="TL"></param>
         /// <param name="method"></param>
         /// <param name="imageArrayTransferType"></param>
+        /// <param name="imageArrayCompression"></param>
+        /// <param name="memberType"></param>
         /// <returns></returns>
-        public static T GetValue<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, SharedConstants.ImageArrayTransferType imageArrayTransferType, SharedConstants.ImageArrayCompression imageArrayCompression)
+        public static T GetValue<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, SharedConstants.ImageArrayTransferType imageArrayTransferType, SharedConstants.ImageArrayCompression imageArrayCompression, MemberTypes memberType)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>();
-            return SendToRemoteDevice<T>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET, imageArrayTransferType, imageArrayCompression);
+            return SendToRemoteDevice<T>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET, imageArrayTransferType, imageArrayCompression, memberType);
         }
 
-        public static void SetBool(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, bool parmeterValue)
+        public static void SetBool(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, bool parmeterValue, MemberTypes memberType)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
                 { method, parmeterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT, memberType);
         }
 
-        public static void SetInt(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, int parmeterValue)
+        public static void SetInt(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, int parmeterValue, MemberTypes memberType)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
                 { method, parmeterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT, memberType);
         }
 
-        public static void SetShort(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short parmeterValue)
+        public static void SetShort(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short parmeterValue, MemberTypes memberType)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
                 { method, parmeterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT, memberType);
         }
 
-        public static void SetDouble(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, double parmeterValue)
+        public static void SetDouble(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, double parmeterValue, MemberTypes memberType)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
                 { method, parmeterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT, memberType);
         }
 
-        public static void SetDoubleWithShortParameter(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short index, double parmeterValue)
+        public static void SetDoubleWithShortParameter(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short index, double parmeterValue, MemberTypes memberType)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
                 { SharedConstants.ID_PARAMETER_NAME, index.ToString(CultureInfo.InvariantCulture) },
                 { SharedConstants.VALUE_PARAMETER_NAME, parmeterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT, memberType);
         }
 
-        public static void SetBoolWithShortParameter(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short index, bool parmeterValue)
+        public static void SetBoolWithShortParameter(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short index, bool parmeterValue, MemberTypes memberType)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
                 { SharedConstants.ID_PARAMETER_NAME, index.ToString(CultureInfo.InvariantCulture) },
                 { SharedConstants.STATE_PARAMETER_NAME, parmeterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT, memberType);
         }
 
-        public static void SetStringWithShortParameter(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short index, string parmeterValue)
+        public static void SetStringWithShortParameter(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short index, string parmeterValue, MemberTypes memberType)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
                 { SharedConstants.ID_PARAMETER_NAME, index.ToString(CultureInfo.InvariantCulture) },
                 { SharedConstants.NAME_PARAMETER_NAME, parmeterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT, memberType);
         }
 
-        public static string GetStringIndexedString(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, string parameterValue)
+        public static string GetStringIndexedString(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, string parameterValue, MemberTypes memberType)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
                 { SharedConstants.SENSORNAME_PARAMETER_NAME, parameterValue }
             };
-            return SendToRemoteDevice<string>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET);
+            return SendToRemoteDevice<string>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET, memberType);
         }
 
-        public static double GetStringIndexedDouble(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, string parameterValue)
+        public static double GetStringIndexedDouble(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, string parameterValue, MemberTypes memberType)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
                 { SharedConstants.SENSORNAME_PARAMETER_NAME, parameterValue }
             };
-            return SendToRemoteDevice<double>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET);
+            return SendToRemoteDevice<double>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET, memberType);
         }
 
-        public static double GetShortIndexedDouble(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short parameterValue)
+        public static double GetShortIndexedDouble(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short parameterValue, MemberTypes memberType)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
                 { SharedConstants.ID_PARAMETER_NAME, parameterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            return SendToRemoteDevice<double>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET);
+            return SendToRemoteDevice<double>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET, memberType);
         }
 
-        public static bool GetShortIndexedBool(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short parameterValue)
+        public static bool GetShortIndexedBool(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short parameterValue, MemberTypes memberType)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
                 { SharedConstants.ID_PARAMETER_NAME, parameterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            return SendToRemoteDevice<bool>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET);
+            return SendToRemoteDevice<bool>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET, memberType);
         }
 
-        public static string GetShortIndexedString(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short parameterValue)
+        public static string GetShortIndexedString(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, short parameterValue, MemberTypes memberType)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
                 { SharedConstants.ID_PARAMETER_NAME, parameterValue.ToString(CultureInfo.InvariantCulture) }
             };
-            return SendToRemoteDevice<string>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET);
+            return SendToRemoteDevice<string>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET, memberType);
         }
 
         /// <summary>
@@ -806,9 +809,9 @@ namespace ASCOM.DynamicRemoteClients
         /// <param name="Parameters"></param>
         /// <param name="HttpMethod"></param>
         /// <returns></returns>
-        public static T SendToRemoteDevice<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, Dictionary<string, string> Parameters, Method HttpMethod)
+        public static T SendToRemoteDevice<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, Dictionary<string, string> Parameters, Method HttpMethod, MemberTypes memberType)
         {
-            return SendToRemoteDevice<T>(clientNumber, client, URIBase, TL, method, Parameters, HttpMethod, SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, SharedConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT);
+            return SendToRemoteDevice<T>(clientNumber, client, URIBase, TL, method, Parameters, HttpMethod, SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, SharedConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT, memberType);
         }
 
         /// <summary>
@@ -817,14 +820,14 @@ namespace ASCOM.DynamicRemoteClients
         /// <typeparam name="T"></typeparam>
         /// <param name="clientNumber"></param>
         /// <param name="client"></param>
-        /// <param name="URIBase"></param>
+        /// <param name="uriBase"></param>
         /// <param name="TL"></param>
         /// <param name="method"></param>
-        /// <param name="Parameters"></param>
-        /// <param name="HttpMethod"></param>
+        /// <param name="parameters"></param>
+        /// <param name="httpMethod"></param>
         /// <param name="imageArrayTransferType"></param>
         /// <returns></returns>
-        public static T SendToRemoteDevice<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, Dictionary<string, string> Parameters, Method HttpMethod, SharedConstants.ImageArrayTransferType imageArrayTransferType, SharedConstants.ImageArrayCompression imageArrayCompression)
+        public static T SendToRemoteDevice<T>(uint clientNumber, RestClient client, string uriBase, TraceLoggerPlus TL, string method, Dictionary<string, string> parameters, Method httpMethod, SharedConstants.ImageArrayTransferType imageArrayTransferType, SharedConstants.ImageArrayCompression imageArrayCompression, MemberTypes memberType)
         {
             int retryCounter = 0; // Initialise the socket error retry counter
             Stopwatch sw = new Stopwatch(); // Stopwatch to time activities
@@ -840,7 +843,7 @@ namespace ASCOM.DynamicRemoteClients
                     const string LOG_FORMAT_STRING = "Client Txn ID: {0}, Server Txn ID: {1}, Value: {2}";
 
                     RestResponseBase restResponseBase = null; // This has to be the base class of the data type classes in order for exception and error responses to be handled generically
-                    RestRequest request = new RestRequest((URIBase + method).ToLowerInvariant(), HttpMethod);
+                    RestRequest request = new RestRequest((uriBase + method).ToLowerInvariant(), httpMethod);
                     {
                         request.RequestFormat = DataFormat.Json;
                     };
@@ -888,7 +891,7 @@ namespace ASCOM.DynamicRemoteClients
                     request.AddParameter(SharedConstants.CLIENTID_PARAMETER_NAME, clientNumber.ToString());
 
                     // Add any supplied parameters to the request
-                    foreach (KeyValuePair<string, string> parameter in Parameters)
+                    foreach (KeyValuePair<string, string> parameter in parameters)
                     {
                         request.AddParameter(parameter.Key, parameter.Value);
                     }
@@ -904,6 +907,7 @@ namespace ASCOM.DynamicRemoteClients
                     else responseContent = deviceJsonResponse.Content;
                     TL.LogMessage(clientNumber, method, string.Format("Response Status: '{0}', Response: {1}", deviceJsonResponse.StatusDescription, responseContent));
 
+                    // Assess success at the communications level and handle accordingly 
                     if ((deviceJsonResponse.ResponseStatus == ResponseStatus.Completed) & (deviceJsonResponse.StatusCode == System.Net.HttpStatusCode.OK))
                     {
                         // GENERAL MULTI-DEVICE TYPES
@@ -926,14 +930,14 @@ namespace ASCOM.DynamicRemoteClients
                         if (typeof(T) == typeof(double))
                         {
                             DoubleResponse doubleResponse = JsonConvert.DeserializeObject<DoubleResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, doubleResponse.ClientTransactionID, doubleResponse.ServerTransactionID, doubleResponse.Value.ToString())); 
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, doubleResponse.ClientTransactionID, doubleResponse.ServerTransactionID, doubleResponse.Value.ToString()));
                             if (CallWasSuccessful(TL, doubleResponse)) return (T)((object)doubleResponse.Value);
                             restResponseBase = (RestResponseBase)doubleResponse;
                         }
                         if (typeof(T) == typeof(string))
                         {
                             StringResponse stringResponse = JsonConvert.DeserializeObject<StringResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, stringResponse.ClientTransactionID, stringResponse.ServerTransactionID, stringResponse.Value.ToString())); 
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, stringResponse.ClientTransactionID, stringResponse.ServerTransactionID, stringResponse.Value.ToString()));
                             if (CallWasSuccessful(TL, stringResponse)) return (T)((object)stringResponse.Value);
                             restResponseBase = (RestResponseBase)stringResponse;
                         }
@@ -954,7 +958,7 @@ namespace ASCOM.DynamicRemoteClients
                         if (typeof(T) == typeof(int))
                         {
                             IntResponse intResponse = JsonConvert.DeserializeObject<IntResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, intResponse.ClientTransactionID, intResponse.ServerTransactionID, intResponse.Value.ToString())); 
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, intResponse.ClientTransactionID, intResponse.ServerTransactionID, intResponse.Value.ToString()));
                             if (CallWasSuccessful(TL, intResponse)) return (T)((object)intResponse.Value);
                             restResponseBase = (RestResponseBase)intResponse;
                         }
@@ -1065,14 +1069,14 @@ namespace ASCOM.DynamicRemoteClients
                         if (typeof(T) == typeof(CoverStatus))
                         {
                             IntResponse coverStatusResponse = JsonConvert.DeserializeObject<IntResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, coverStatusResponse.ClientTransactionID, coverStatusResponse.ServerTransactionID, coverStatusResponse.Value.ToString())); 
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, coverStatusResponse.ClientTransactionID, coverStatusResponse.ServerTransactionID, coverStatusResponse.Value.ToString()));
                             if (CallWasSuccessful(TL, coverStatusResponse)) return (T)((object)coverStatusResponse.Value);
                             restResponseBase = (RestResponseBase)coverStatusResponse;
                         }
                         if (typeof(T) == typeof(CalibratorStatus))
                         {
                             IntResponse calibratorStatusResponse = JsonConvert.DeserializeObject<IntResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, calibratorStatusResponse.ClientTransactionID, calibratorStatusResponse.ServerTransactionID, calibratorStatusResponse.Value.ToString())); 
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, calibratorStatusResponse.ClientTransactionID, calibratorStatusResponse.ServerTransactionID, calibratorStatusResponse.Value.ToString()));
                             if (CallWasSuccessful(TL, calibratorStatusResponse)) return (T)((object)calibratorStatusResponse.Value);
                             restResponseBase = (RestResponseBase)calibratorStatusResponse;
                         }
@@ -1080,7 +1084,7 @@ namespace ASCOM.DynamicRemoteClients
                         {
                             AxisRatesResponse axisRatesResponse = JsonConvert.DeserializeObject<AxisRatesResponse>(deviceJsonResponse.Content);
 #pragma warning disable IDE0068 // Use recommended dispose pattern warning disabled because this class will be used by other processes so I'm not going to dispose it here
-                            AxisRates axisRates = new AxisRates((TelescopeAxes)(Convert.ToInt32(Parameters[SharedConstants.AXIS_PARAMETER_NAME])));
+                            AxisRates axisRates = new AxisRates((TelescopeAxes)(Convert.ToInt32(parameters[SharedConstants.AXIS_PARAMETER_NAME])));
 #pragma warning restore IDE0068 // Use recommended dispose pattern re-enabled
                             TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, axisRatesResponse.ClientTransactionID.ToString(), axisRatesResponse.ServerTransactionID.ToString(), axisRatesResponse.Value.Count.ToString()));
                             foreach (RateResponse rr in axisRatesResponse.Value)
@@ -1117,7 +1121,7 @@ namespace ASCOM.DynamicRemoteClients
                                 TL.LogMessage(clientNumber, method, $"Base64 - Downloading base64 serialised image");
 
                                 // Construct an HTTP request to get the base 64 encoded image
-                                string base64Uri = (client.BaseUrl + URIBase.TrimStart('/') + method.ToLowerInvariant() + SharedConstants.BASE64_HANDOFF_FILE_DOWNLOAD_URI_EXTENSION).ToLowerInvariant(); // Create the download URI from the REST client elements
+                                string base64Uri = (client.BaseUrl + uriBase.TrimStart('/') + method.ToLowerInvariant() + SharedConstants.BASE64_HANDOFF_FILE_DOWNLOAD_URI_EXTENSION).ToLowerInvariant(); // Create the download URI from the REST client elements
                                 if (TL.DebugTraceState) TL.LogMessage(clientNumber, method, $"Base64 URI: {base64Uri}");
 
                                 // Create a variable to hold the returned base 64 string
@@ -1392,16 +1396,16 @@ namespace ASCOM.DynamicRemoteClients
                                 }
                                 else if (ascomCOMErrorNumber == ErrorCodes.NotImplemented) // Handle PropertyNotImplementedException and MethodNotImplementedException (both have the same error code)
                                 {
-                                    // Need to determine whether a property not implemented or a method not implemented exception is intended by examining the message text - ugh - but I can't see another way!
-                                    if (restResponseBase.ErrorMessage.ToLowerInvariant().Contains("property"))  // Found the string "property" so assume a PropertyNotImplementedException is appropriate...
+                                    // Throw the relevant exception depending on whether this is a property or a method
+                                    if (memberType == MemberTypes.Property) // Calling member is a property so throw a PropertyNotImplementedException
                                     {
                                         TL.LogMessageCrLf(clientNumber, method, string.Format("Alpaca property not implemented error, throwing PropertyNotImplementedException - ErrorMessage: \"{0}\", ErrorNumber: 0x{1:X8}", restResponseBase.ErrorMessage, ascomCOMErrorNumber));
-                                        throw new PropertyNotImplementedException(restResponseBase.ErrorMessage);
+                                        throw new PropertyNotImplementedException(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(method), httpMethod == Method.PUT , restResponseBase.ErrorMessage);
                                     }
-                                    else // Otherwise assume that a MethodNotImplementedException is appropriate...
+                                    else // Calling member is a method so throw a MethodNotImplementedException
                                     {
                                         TL.LogMessageCrLf(clientNumber, method, string.Format(" Alpaca method not implemented error, throwing MethodNotImplementedException - ErrorMessage: \"{0}\", ErrorNumber: 0x{1:X8}", restResponseBase.ErrorMessage, ascomCOMErrorNumber));
-                                        throw new MethodNotImplementedException(restResponseBase.ErrorMessage);
+                                        throw new MethodNotImplementedException(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(method), restResponseBase.ErrorMessage);
                                     }
                                 }
                                 else if (ascomCOMErrorNumber == ErrorCodes.ValueNotSet) // Handle ValueNotSetException
@@ -1520,7 +1524,7 @@ namespace ASCOM.DynamicRemoteClients
                 { SharedConstants.ACTION_COMMAND_PARAMETER_NAME, actionName },
                 { SharedConstants.ACTION_PARAMETERS_PARAMETER_NAME, actionParameters }
             };
-            string remoteString = SendToRemoteDevice<string>(clientNumber, client, URIBase, TL, "Action", Parameters, Method.PUT);
+            string remoteString = SendToRemoteDevice<string>(clientNumber, client, URIBase, TL, "Action", Parameters, Method.PUT, MemberTypes.Method);
 
             TL.LogMessage(clientNumber, "Action", "Response: " + remoteString);
             return remoteString;
@@ -1533,7 +1537,7 @@ namespace ASCOM.DynamicRemoteClients
                 { SharedConstants.COMMAND_PARAMETER_NAME, command },
                 { SharedConstants.RAW_PARAMETER_NAME, raw.ToString() }
             };
-            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "CommandBlind", Parameters, Method.PUT);
+            SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "CommandBlind", Parameters, Method.PUT, MemberTypes.Method);
             TL.LogMessage(clientNumber, "CommandBlind", "Completed OK");
         }
 
@@ -1544,7 +1548,7 @@ namespace ASCOM.DynamicRemoteClients
                 { SharedConstants.COMMAND_PARAMETER_NAME, command },
                 { SharedConstants.RAW_PARAMETER_NAME, raw.ToString() }
             };
-            bool remoteBool = SendToRemoteDevice<bool>(clientNumber, client, URIBase, TL, "CommandBool", Parameters, Method.PUT);
+            bool remoteBool = SendToRemoteDevice<bool>(clientNumber, client, URIBase, TL, "CommandBool", Parameters, Method.PUT, MemberTypes.Method);
 
             TL.LogMessage(clientNumber, "CommandBool", remoteBool.ToString());
             return remoteBool;
@@ -1557,7 +1561,7 @@ namespace ASCOM.DynamicRemoteClients
                 { SharedConstants.COMMAND_PARAMETER_NAME, command },
                 { SharedConstants.RAW_PARAMETER_NAME, raw.ToString() }
             };
-            string remoteString = SendToRemoteDevice<string>(clientNumber, client, URIBase, TL, "CommandString", Parameters, Method.PUT);
+            string remoteString = SendToRemoteDevice<string>(clientNumber, client, URIBase, TL, "CommandString", Parameters, Method.PUT, MemberTypes.Method);
 
             TL.LogMessage(clientNumber, "CommandString", remoteString);
             return remoteString;
@@ -1578,7 +1582,7 @@ namespace ASCOM.DynamicRemoteClients
                     try
                     {
                         TL.LogMessage(clientNumber, "Connect", "This is the first connection so set Connected to True");
-                        SetBool(clientNumber, client, URIBase, TL, "Connected", true);
+                        SetBool(clientNumber, client, URIBase, TL, "Connected", true, MemberTypes.Property);
                         bool notAlreadyPresent = connectStates.TryAdd(clientNumber, true);
                         TL.LogMessage(clientNumber, "Connect", "Successfully connected, AlreadyConnected: " + (!notAlreadyPresent).ToString() + ", number of connections: " + connectStates.Count);
                     }
@@ -1593,7 +1597,7 @@ namespace ASCOM.DynamicRemoteClients
 
         public static string Description(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL)
         {
-            return GetValue<string>(clientNumber, client, URIBase, TL, "Description");
+            return GetValue<string>(clientNumber, client, URIBase, TL, "Description", MemberTypes.Property);
         }
 
         public static void Disconnect(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL)
@@ -1602,7 +1606,7 @@ namespace ASCOM.DynamicRemoteClients
             if (IsClientConnected(clientNumber, TL)) // If we are already connected then disconnect, otherwise ignore disconnect 
             {
                 TL.LogMessage(clientNumber, "Disconnect", "We are connected, setting Connected to False on remote driver");
-                SetBool(clientNumber, client, URIBase, TL, "Connected", false);
+                SetBool(clientNumber, client, URIBase, TL, "Connected", false, MemberTypes.Property);
                 bool successfullyRemoved = connectStates.TryRemove(clientNumber, out bool lastValue);
                 TL.LogMessage("Disconnect", $"Set Connected to: False, Successfully removed: {successfullyRemoved}, previous value: {lastValue}");
             }
@@ -1614,26 +1618,26 @@ namespace ASCOM.DynamicRemoteClients
 
         public static string DriverInfo(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL)
         {
-            return GetValue<string>(clientNumber, client, URIBase, TL, "DriverInfo");
+            return GetValue<string>(clientNumber, client, URIBase, TL, "DriverInfo", MemberTypes.Property);
         }
 
         public static string DriverVersion(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL)
         {
-            string remoteString = GetValue<string>(clientNumber, client, URIBase, TL, "DriverVersion");
+            string remoteString = GetValue<string>(clientNumber, client, URIBase, TL, "DriverVersion", MemberTypes.Property);
             TL.LogMessage(clientNumber, "DriverVersion", remoteString);
             return remoteString;
         }
 
         public static short InterfaceVersion(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL)
         {
-            short interfaceVersion = GetValue<short>(clientNumber, client, URIBase, TL, "InterfaceVersion");
+            short interfaceVersion = GetValue<short>(clientNumber, client, URIBase, TL, "InterfaceVersion", MemberTypes.Property);
             TL.LogMessage(clientNumber, "InterfaceVersion", interfaceVersion.ToString());
             return interfaceVersion;
         }
 
         public static ArrayList SupportedActions(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL)
         {
-            List<string> supportedActions = GetValue<List<string>>(clientNumber, client, URIBase, TL, "SupportedActions");
+            List<string> supportedActions = GetValue<List<string>>(clientNumber, client, URIBase, TL, "SupportedActions", MemberTypes.Property);
             TL.LogMessage(clientNumber, "SupportedActions", string.Format("Returning {0} actions", supportedActions.Count));
 
             ArrayList returnValues = new ArrayList();
@@ -1674,7 +1678,7 @@ namespace ASCOM.DynamicRemoteClients
             object[,] objectArray2D;
             object[,,] objectArray3D;
 
-            returnArray = GetValue<Array>(clientNumber, client, URIBase, TL, "ImageArrayVariant", imageArrayTransferType, imageArrayCompression);
+            returnArray = GetValue<Array>(clientNumber, client, URIBase, TL, "ImageArrayVariant", imageArrayTransferType, imageArrayCompression, MemberTypes.Property);
 
             try
             {

@@ -71,6 +71,21 @@ namespace ASCOM
         }
 
         /// <summary>
+        /// Create a new exception with the supplied message
+        /// </summary>
+        /// <param name = "property">Exception description</param>
+        /// <param name = "accessorSet">Exception description</param>
+        /// <param name = "message">Exception description</param>
+        /// <remarks>
+        /// This overload applies the error message directly to the exception without interpreting it as is the case with other overloads
+        /// </remarks>
+        public PropertyNotImplementedException(string property, bool accessorSet, string message) : base(property, message)
+        {
+            this.property = property;
+            this.accessorSet = accessorSet;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref = "PropertyNotImplementedException" /> class.
         /// </summary>
         /// <param name = "info">The <see cref = "T:System.Runtime.Serialization.SerializationInfo" /> that holds the serialized object data about the exception being thrown.</param>

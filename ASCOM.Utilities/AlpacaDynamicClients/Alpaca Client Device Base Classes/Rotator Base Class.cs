@@ -201,7 +201,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                string response = DynamicClientDriver.GetValue<string>(clientNumber, client, URIBase, TL, "Name");
+                string response = DynamicClientDriver.GetValue<string>(clientNumber, client, URIBase, TL, "Name", MemberTypes.Property);
                 TL.LogMessage(clientNumber, "Name", response);
                 return response;
             }
@@ -304,7 +304,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanReverse");
+                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanReverse", MemberTypes.Property);
             }
         }
 
@@ -313,7 +313,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "IsMoving");
+                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "IsMoving", MemberTypes.Property);
             }
         }
 
@@ -322,7 +322,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<float>(clientNumber, client, URIBase, TL, "Position");
+                return DynamicClientDriver.GetValue<float>(clientNumber, client, URIBase, TL, "Position", MemberTypes.Property);
             }
         }
 
@@ -331,13 +331,13 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "Reverse");
+                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "Reverse", MemberTypes.Property);
             }
 
             set
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                DynamicClientDriver.SetBool(clientNumber, client, URIBase, TL, "Reverse", value);
+                DynamicClientDriver.SetBool(clientNumber, client, URIBase, TL, "Reverse", value, MemberTypes.Property);
             }
         }
 
@@ -346,7 +346,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<float>(clientNumber, client, URIBase, TL, "StepSize");
+                return DynamicClientDriver.GetValue<float>(clientNumber, client, URIBase, TL, "StepSize", MemberTypes.Property);
             }
         }
 
@@ -355,14 +355,14 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<float>(clientNumber, client, URIBase, TL, "TargetPosition");
+                return DynamicClientDriver.GetValue<float>(clientNumber, client, URIBase, TL, "TargetPosition", MemberTypes.Property);
             }
         }
 
         public void Halt()
         {
             DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
-            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "Halt");
+            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "Halt", MemberTypes.Method);
             TL.LogMessage(clientNumber, "Halt", "Rotator halted OK");
         }
 
@@ -373,7 +373,7 @@ namespace ASCOM.DynamicRemoteClients
                 { SharedConstants.POSITION_PARAMETER_NAME, Position.ToString(CultureInfo.InvariantCulture) }
             };
             DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
-            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "Move", Parameters, Method.PUT);
+            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "Move", Parameters, Method.PUT, MemberTypes.Method);
             TL.LogMessage(clientNumber, "Move", string.Format("Rotator moved to relative position {0} OK", Position));
         }
 
@@ -384,7 +384,7 @@ namespace ASCOM.DynamicRemoteClients
                 { SharedConstants.POSITION_PARAMETER_NAME, Position.ToString(CultureInfo.InvariantCulture) }
             };
             DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
-            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "MoveAbsolute", Parameters, Method.PUT);
+            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "MoveAbsolute", Parameters, Method.PUT, MemberTypes.Method);
             TL.LogMessage(clientNumber, "MoveAbsolute", string.Format("Rotator moved to absolute position {0} OK", Position));
         }
 
@@ -397,7 +397,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<float>(clientNumber, client, URIBase, TL, "MechanicalPosition");
+                return DynamicClientDriver.GetValue<float>(clientNumber, client, URIBase, TL, "MechanicalPosition", MemberTypes.Property);
             }
         }
 
@@ -408,7 +408,7 @@ namespace ASCOM.DynamicRemoteClients
                 { SharedConstants.POSITION_PARAMETER_NAME, Position.ToString(CultureInfo.InvariantCulture) }
             };
             DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
-            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "Sync", Parameters, Method.PUT);
+            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "Sync", Parameters, Method.PUT, MemberTypes.Method);
             TL.LogMessage(clientNumber, "Sync", string.Format("Rotator synced to sky position {0} OK", Position));
         }
 
@@ -419,7 +419,7 @@ namespace ASCOM.DynamicRemoteClients
                 { SharedConstants.POSITION_PARAMETER_NAME, Position.ToString(CultureInfo.InvariantCulture) }
             };
             DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
-            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "MoveMechanical", Parameters, Method.PUT);
+            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "MoveMechanical", Parameters, Method.PUT, MemberTypes.Method);
             TL.LogMessage(clientNumber, "MoveMechanical", string.Format("Rotator moved to mechanical position {0} OK", Position));
         }
 

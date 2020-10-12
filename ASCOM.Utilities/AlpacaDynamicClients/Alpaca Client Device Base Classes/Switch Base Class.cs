@@ -199,7 +199,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                string response = DynamicClientDriver.GetValue<string>(clientNumber, client, URIBase, TL, "Name");
+                string response = DynamicClientDriver.GetValue<string>(clientNumber, client, URIBase, TL, "Name", MemberTypes.Property);
                 TL.LogMessage(clientNumber, "Name", response);
                 return response;
             }
@@ -300,31 +300,31 @@ namespace ASCOM.DynamicRemoteClients
         public bool CanWrite(short id)
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            return DynamicClientDriver.GetShortIndexedBool(clientNumber, client, URIBase, TL, "CanWrite", id);
+            return DynamicClientDriver.GetShortIndexedBool(clientNumber, client, URIBase, TL, "CanWrite", id, MemberTypes.Method);
         }
 
         public bool GetSwitch(short id)
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            return DynamicClientDriver.GetShortIndexedBool(clientNumber, client, URIBase, TL, "GetSwitch", id);
+            return DynamicClientDriver.GetShortIndexedBool(clientNumber, client, URIBase, TL, "GetSwitch", id, MemberTypes.Method);
         }
 
         public string GetSwitchDescription(short id)
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            return DynamicClientDriver.GetShortIndexedString(clientNumber, client, URIBase, TL, "GetSwitchDescription", id);
+            return DynamicClientDriver.GetShortIndexedString(clientNumber, client, URIBase, TL, "GetSwitchDescription", id, MemberTypes.Method);
         }
 
         public string GetSwitchName(short id)
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            return DynamicClientDriver.GetShortIndexedString(clientNumber, client, URIBase, TL, "GetSwitchName", id);
+            return DynamicClientDriver.GetShortIndexedString(clientNumber, client, URIBase, TL, "GetSwitchName", id, MemberTypes.Method);
         }
 
         public double GetSwitchValue(short id)
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            return DynamicClientDriver.GetShortIndexedDouble(clientNumber, client, URIBase, TL, "GetSwitchValue", id);
+            return DynamicClientDriver.GetShortIndexedDouble(clientNumber, client, URIBase, TL, "GetSwitchValue", id, MemberTypes.Method);
         }
 
         public short MaxSwitch
@@ -332,44 +332,44 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<short>(clientNumber, client, URIBase, TL, "MaxSwitch");
+                return DynamicClientDriver.GetValue<short>(clientNumber, client, URIBase, TL, "MaxSwitch", MemberTypes.Property);
             }
         }
 
         public double MaxSwitchValue(short id)
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            return DynamicClientDriver.GetShortIndexedDouble(clientNumber, client, URIBase, TL, "MaxSwitchValue", id);
+            return DynamicClientDriver.GetShortIndexedDouble(clientNumber, client, URIBase, TL, "MaxSwitchValue", id, MemberTypes.Method);
         }
 
         public double MinSwitchValue(short id)
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            return DynamicClientDriver.GetShortIndexedDouble(clientNumber, client, URIBase, TL, "MinSwitchValue", id);
+            return DynamicClientDriver.GetShortIndexedDouble(clientNumber, client, URIBase, TL, "MinSwitchValue", id, MemberTypes.Method);
         }
 
         public double SwitchStep(short id)
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            return DynamicClientDriver.GetShortIndexedDouble(clientNumber, client, URIBase, TL, "SwitchStep", id);
+            return DynamicClientDriver.GetShortIndexedDouble(clientNumber, client, URIBase, TL, "SwitchStep", id, MemberTypes.Method);
         }
 
         public void SetSwitchName(short id, string name)
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            DynamicClientDriver.SetStringWithShortParameter(clientNumber, client, URIBase, TL, "SetSwitchName", id, name);
+            DynamicClientDriver.SetStringWithShortParameter(clientNumber, client, URIBase, TL, "SetSwitchName", id, name, MemberTypes.Method);
         }
 
         public void SetSwitch(short id, bool state)
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            DynamicClientDriver.SetBoolWithShortParameter(clientNumber, client, URIBase, TL, "SetSwitch", id, state);
+            DynamicClientDriver.SetBoolWithShortParameter(clientNumber, client, URIBase, TL, "SetSwitch", id, state, MemberTypes.Method);
         }
 
         public void SetSwitchValue(short id, double value)
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            DynamicClientDriver.SetDoubleWithShortParameter(clientNumber, client, URIBase, TL, "SetSwitchValue", id, value);
+            DynamicClientDriver.SetDoubleWithShortParameter(clientNumber, client, URIBase, TL, "SetSwitchValue", id, value, MemberTypes.Method);
         }
 
         #endregion
