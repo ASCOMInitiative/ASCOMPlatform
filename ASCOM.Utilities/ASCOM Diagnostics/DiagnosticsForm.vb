@@ -139,6 +139,8 @@ Public Class DiagnosticsForm
 
     Private ERDForm As EarthRotationDataForm ' Variable to hold the earth rotation data form handle so that we can ensure that a new instance of the form is always used
 
+    Private regKey As RegistryKey ' Key to support reading the Windows 10 version and build information
+
 #End Region
 
     Private Sub DiagnosticsForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -219,6 +221,23 @@ Public Class DiagnosticsForm
                                             " " & CultureInfo.CurrentUICulture.Name &
                                             " Decimal Separator """ & CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator & """" &
                                             " Number Group Separator """ & CultureInfo.CurrentUICulture.NumberFormat.NumberGroupSeparator & """")
+
+            Try
+                regKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion") ' Open the OS version registry key
+                Dim productName As String = regKey.GetValue("ProductName", "").ToString()
+                Dim currentMajorVersionNumber As String = regKey.GetValue("CurrentMajorVersionNumber", "").ToString()
+                Dim currentMinorVersionNumber As String = regKey.GetValue("CurrentMinorVersionNumber", "").ToString()
+                Dim currentType As String = regKey.GetValue("CurrentType", "").ToString()
+                Dim currentBuildNumber As String = regKey.GetValue("currentBuildNumber", "").ToString()
+                Dim ubr As String = regKey.GetValue("UBR", "").ToString()
+
+                TL.BlankLine()
+                TL.LogMessage("OS Version", $"{productName} {currentType} {currentMajorVersionNumber}.{currentMinorVersionNumber}.{currentBuildNumber}.{ubr}")
+                TL.BlankLine()
+            Catch ex As Exception
+                TL.LogMessageCrLf("OS Version", $"Exception reading OS version information: {ex}")
+            End Try
+
             If RunningInVM(False) Then
                 TL.LogMessage("Environment", "Diagnostics is running in a virtual machine")
 
