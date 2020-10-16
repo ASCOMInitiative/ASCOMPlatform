@@ -176,7 +176,8 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)Drivers and Simulators\ASCOM Device Hub\DeviceHub\$(OutDir)$(TargetFileName)"</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetDir)$(TargetName)$(TargetExt)" "$(SolutionDir)Drivers and Simulators\ASCOM Device Hub\DeviceHub\$(OutDir)$(TargetName)$(TargetExt)"
+copy "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)Drivers and Simulators\ASCOM Device Hub\DeviceHub\$(OutDir)$(TargetName).pdb"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
