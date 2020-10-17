@@ -161,7 +161,7 @@ Module GlobalItems
     Friend Const NEVER_UPDATED As String = "Never"
 
     ' Ultimate fallback-back value for number of leap seconds if all else fails
-    Friend Const LEAP_SECOND_ULTIATE_FALLBACK_VALUE As Double = 37.0
+    Friend Const LEAP_SECOND_ULTIMATE_FALLBACK_VALUE As Double = 37.0
 
 End Module
 

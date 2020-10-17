@@ -50,8 +50,16 @@ Module DeltatCode
                 End Using
             Catch ex As Exception
                 ' Ultimate fallback value if all else fails!
-                Retval = LEAP_SECOND_ULTIATE_FALLBACK_VALUE + TT_TAI_OFFSET
+                Retval = LEAP_SECOND_ULTIMATE_FALLBACK_VALUE + TT_TAI_OFFSET
             End Try
+
+            ' DATE RANGE October 17th 2020 Onwards - The analysis was performed on 17th July 2020 and creates values within 0.01 of a second of the projections to October 2021 and sensible extrapolation to the end of 2021
+        ElseIf (YearFraction >= 2020.79) Then
+            Retval = (0.0000000000526391114738186 * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay) _
+                   - (-0.0000124987447353606 * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay) _
+                   + (1.1128953517557 * ModifiedJulianDay * ModifiedJulianDay) _
+                   - (-44041.1402447551 * ModifiedJulianDay) _
+                   + 653571203.42671
 
             ' DATE RANGE July 2020 Onwards - The analysis was performed on 10th July 2020 and creates values within 0.01 of a second of the projections to Q2 2021 and sensible extrapolation to the end of 2021
         ElseIf (YearFraction >= 2020.5) Then
