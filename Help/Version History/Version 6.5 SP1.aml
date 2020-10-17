@@ -27,6 +27,7 @@
           <listItem>All links referencing the ascom-standards.org web site now use HTTPS instead of HTTP.</listItem>
           <listItem>DeltaT predictions, good to December 2021, have been revised based on the latest IERS predictions.</listItem>
           <listItem>The SOFA component has been updated to use the latest IAU 21st July 2020 - Version 16 SOFA release.</listItem>
+          <listItem>Chooser Properties Button - detailed failure information will now be provided if a driver does not connect correctly.</listItem>
         </list>
       </content>
     </section>
