@@ -25,7 +25,7 @@
           <listItem>Improved TraceLogger messaging if an instance is used after being disposed.</listItem>
           <listItem>All references to the Yahoo ASCOM Talk forum have been replaced with references to the new Groups.IO forum.</listItem>
           <listItem>All links referencing the ascom-standards.org web site now use HTTPS instead of HTTP.</listItem>
-          <listItem>DeltaT predictions good to December 2021 have been added.</listItem>
+          <listItem>DeltaT predictions, good to December 2021, have been revised based on the latest IERS predictions.</listItem>
           <listItem>The SOFA component has been updated to use the latest IAU 21st July 2020 - Version 16 SOFA release.</listItem>
         </list>
       </content>
@@ -37,7 +37,16 @@
         <list class="bullet">
           <listItem>A serious bug was introduced in the Astrometry.Transform class during Platform 6.5 implementation, which prevented a single instance from being used for multiple transforms. 
           The bug has been fixed and Transform now works as it did in Platform 6.4.</listItem>
-          <listItem>The installer now works properly on machines whose PC Name contains a space character.</listItem>
+          <listItem>Clients will now see the correct type of NotImplementedException (PropertNotImplementedExceptiony or MethodNotImplementedException) when Alpaca devices report that a member is not implemented.</listItem>
+          <listItem>Diagnostics now correctly reports the Windows 10 operating system version.</listItem>
+          <listItem>
+          	Platform installer:
+           	<list class="bullet">
+          		<listItem>Works properly on machines whose PC Name contains a space character.</listItem>
+		        <listItem>Handles unregistering drivers more gracefully.</listItem>
+        		<listItem>Checks that the Windows Task Scheduler is enabled before attempting to create its scheduled task.</listItem>
+        	</list>
+          </listItem>
           <listItem>Device Hub
           	<list class="bullet">
           		<listItem>Improved support for locales that use comma as the decimal separator</listItem>
@@ -45,8 +54,6 @@
           		<listItem>SideofPier exceptions will now be forwarded to the client.</listItem>
         	</list>
           </listItem>
-          <listItem>The installer now handles unregistering drivers more gracefully.</listItem>
-          <listItem>The installer now checks that the Windows Task Scheduler is enabled before attempting to create its scheduled task.</listItem>
         </list>
       </content>
     </section>
