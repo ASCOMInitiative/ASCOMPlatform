@@ -92,7 +92,7 @@ namespace ASCOM.DeviceHub
 		{
 			string position = "Unknown";
 			ShutterState shutterStatus = this.ShutterStatus;
-			double fractionOpen = ( mgr.CanSetAltitude ) ? this.Altitude / 90.0 : Double.NaN;
+			double fractionOpen = ( mgr.Capabilities.CanSetAltitude ) ? this.Altitude / 90.0 : Double.NaN;
 			bool useFraction = ( !Double.IsNaN( fractionOpen ) );
 
 			switch ( shutterStatus )
