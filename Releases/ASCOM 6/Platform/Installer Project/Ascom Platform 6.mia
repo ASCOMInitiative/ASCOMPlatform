@@ -802,6 +802,10 @@ Set Variable
 Include Script
 Set Variable
 Comment
+Comment
+Write to Text File
+Run Program
+Write to Text File
 Code Folding Region
 Comment
 Code Folding Region
@@ -2674,6 +2678,10 @@ $
 {77941178-3CF3-4212-924C-6702262E626D}
 {6563C58A-E208-4A4D-BC39-44C99AD778F0}
 {E48DE2BC-C1AD-4F09-8C2B-4C21FA63A1DE}
+{87B20770-26C4-41EC-915E-EB6A24A1D261}
+{1D456B89-9376-450F-847B-C93EC368FF98}
+{BCBC7A89-88DD-4B9C-9751-41F773A801E6}
+{D99CA6C5-97D8-4FD9-A0DF-EF4F773076AB}
 {2D9E05E9-AEDD-4785-8237-F0D0AC5D5126}
 {7E14B11F-4A4E-446B-8140-437648EA3C1D}
 {4ED27AFA-F362-480F-A5BB-717DC5544C1F}
@@ -4360,6 +4368,8 @@ We are running on Windows 10 with a Threshold version so cannot proceed because 
 We are running on Windows 10 so make sure that we are at least on Redstone
 {5E08D1D8-DBD1-44F7-8EA9-E904DE960CDB}
 Force use of the NASA download site because all of the USNo sites are unavailable at July 2020 and are predicted to be down until at least December 2020
+{87B20770-26C4-41EC-915E-EB6A24A1D261}
+Ensure that the corrrect Profile registry ACL is inslatted on every run to repair broken installations
 {C974C952-7C50-4503-BFEF-AF3B492C0AEE}
 MYPROGRESS
 100
@@ -9446,6 +9456,12 @@ TRUE
 -register
 TRUE
 RC
+{BCBC7A89-88DD-4B9C-9751-41F773A801E6}
+$SUPPORTDIR$\UninstallAscom.exe
+TRUE
+/SETPROFILEACL
+TRUE
+RC
 {1A792D77-26E6-4BBF-9750-37EBD8EC2BE3}
 $UNINSTALLER$
 
@@ -12171,6 +12187,16 @@ $SETUPLOG$
 $TIME$ Found Windows 10 Threshold, terminating installation
 FALSE
 TRUE
+{D99CA6C5-97D8-4FD9-A0DF-EF4F773076AB}
+$SETUPLOG$
+$TIME$ RC: $RC$ UninstallASCOM /SETPROFILEACL
+FALSE
+TRUE
+{1D456B89-9376-450F-847B-C93EC368FF98}
+$SETUPLOG$
+$TIME$ Setting Profile registry ACL
+FALSE
+TRUE
 {C27DD540-EC7D-462C-9EE8-5D0F21EB2997}
 2|
 SOFTWARE\ASCOM\Astrometry
@@ -13526,6 +13552,10 @@ C
 
 
 
+
+
+
+
 C
 
 
@@ -14566,6 +14596,10 @@ C
 
 
 $
+
+
+
+
 
 
 

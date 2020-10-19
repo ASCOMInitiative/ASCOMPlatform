@@ -802,6 +802,10 @@ Set Variable MYPROGRESS to 6
 Include Script: setupvc1410_25017_x86 (get result into variable VC32_REBOOT_REQUIRED)
 Set Variable MYPROGRESS to 9
  
+Comment: Ensure that the corrrect Profile registry ACL is inslatted on every run to repair broken installations
+Write into Text File $SETUPLOG$ from Value $TIME$ Setting Profile registry ACL (at end of file)
+Run Program $SUPPORTDIR$\UninstallAscom.exe /SETPROFILEACL (WAIT, get result into variable RC)
+Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM /SETPROFILEACL (at end of file)
 [END REGION]
  
 [DEFINE REGION: Install New Platform 6 version]
