@@ -64,9 +64,12 @@ namespace UninstallAscom
                     TL = new TraceLogger("", "SetProfileACL"); // Create a trace logger so we can log what happens
                     TL.Enabled = true;
 
-                    LogMessage("SetRegistryACL", "Setting Profile registry ACL");
-                    RegAccess.SetRegistryACL();
-
+                    LogMessage("SetRegistryACL", "Creating RegistryAccess object");
+                    using (RegAccess = new RegistryAccess(TL))
+                    {
+                        LogMessage("SetRegistryACL", "Setting Profile registry ACL");
+                        RegAccess.SetRegistryACL();
+                    }
                 }
                 else // Remove previous platforms, if present
                 {
