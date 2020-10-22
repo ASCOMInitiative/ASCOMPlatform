@@ -806,6 +806,12 @@ Comment
 Write to Text File
 Run Program
 Write to Text File
+Comment
+Comment
+If
+MessageBox
+Set Variable
+End
 Code Folding Region
 Comment
 Code Folding Region
@@ -2682,6 +2688,12 @@ $
 {1D456B89-9376-450F-847B-C93EC368FF98}
 {BCBC7A89-88DD-4B9C-9751-41F773A801E6}
 {D99CA6C5-97D8-4FD9-A0DF-EF4F773076AB}
+{536759DF-BCF2-44C4-B498-AEE1038DF3AB}
+{CBF7FCB0-B4A2-4509-9B23-66A82E820F54}
+{625F78DF-3A0F-4197-87AE-43B80FE8D009}
+{A9D68BDF-E34C-4BCB-B5A4-0A5233D33E38}
+{FCDBEE94-93D1-481E-A51A-28F6DDDAE6A8}
+{23BEFA16-3860-4ED2-91FF-0D9FD40910AD}
 {2D9E05E9-AEDD-4785-8237-F0D0AC5D5126}
 {7E14B11F-4A4E-446B-8140-437648EA3C1D}
 {4ED27AFA-F362-480F-A5BB-717DC5544C1F}
@@ -4370,6 +4382,10 @@ We are running on Windows 10 so make sure that we are at least on Redstone
 Force use of the NASA download site because all of the USNo sites are unavailable at July 2020 and are predicted to be down until at least December 2020
 {87B20770-26C4-41EC-915E-EB6A24A1D261}
 Ensure that the corrrect Profile registry ACL is inslatted on every run to repair broken installations
+{536759DF-BCF2-44C4-B498-AEE1038DF3AB}
+
+{CBF7FCB0-B4A2-4509-9B23-66A82E820F54}
+Test whether an error occured when setting the Profile ACL and report this if necessary
 {C974C952-7C50-4503-BFEF-AF3B492C0AEE}
 MYPROGRESS
 100
@@ -5323,7 +5339,7 @@ SHORTCUTFOLDER$MYAH$MYAH$FALSE
 $SHORTCUTFILESALL$$ASCOMSTARTMENU$
 {A3DF923C-14FE-474C-9419-90C31D44ACA0}
 ASCOMERROR$MYAH$MYAH$FALSE
-$RC$
+Profile migration issue. RC: $RC$
 {36D59487-4C56-4F54-94F4-C89D4EFECAE5}
 PROGRESSTEXT$MYAH$MYAH$FALSE
 First time install - Installing Platform 6...
@@ -5453,6 +5469,9 @@ FINISH_CONTEXT$MYAH$MYAH$FALSE
 {E37988DD-62FB-42C3-BF8A-BD069F3406CB}
 FINISH_DESCRIPTION$MYAH$MYAH$FALSE
 
+{FCDBEE94-93D1-481E-A51A-28F6DDDAE6A8}
+ASCOMERROR$MYAH$MYAH$FALSE
+Profile permissions issue. RC: $RC$
 {340178B5-D93C-4075-ABA8-DE4CCDAFC689}
 MAINTENANCE
 0
@@ -6003,6 +6022,11 @@ CHECKSYSTEM
 0
 TRUE
 TRUE
+{625F78DF-3A0F-4197-87AE-43B80FE8D009}
+RC
+0
+0
+TRUE
 {B3EB30C5-5686-4186-96B5-86C9FC5D6576}
 $TITLE$ Setup Error
 This product requires at least Administrator Privileges.$NEWLINE$$NEWLINE$Setup cannot continue.
@@ -6041,7 +6065,7 @@ Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so 
 
 {679C4736-C81A-40A9-B1A1-099161BA6BC8}
 Profile Migration
-An error has occured during Profile migration, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
+Unable to set write access to the ASCOM Profile store. Please zip up all logs in your Documents\ASCOM folder and its subfolders  and attach the zip to a post on the ASCOM-Talk Groups.Io forum.
 3
 1
 
@@ -6078,6 +6102,12 @@ Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Win
 {5BAA2F47-2B2F-494B-A2A1-430AD1335688}
 $TITLE$ Setup issue
 Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
+3
+1
+
+{A9D68BDF-E34C-4BCB-B5A4-0A5233D33E38}
+Profile Migration
+An error has occured during Profile migration, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
 3
 1
 
@@ -13556,6 +13586,12 @@ C
 
 
 
+
+
+
+
+
+
 C
 
 
@@ -14596,6 +14632,12 @@ C
 
 
 $
+
+
+
+
+
+
 
 
 

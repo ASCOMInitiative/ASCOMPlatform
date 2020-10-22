@@ -592,8 +592,8 @@ if Variable MAINTENANCE not Equals TRUE
       end
     end
     if Variable RC not Equals 0
-      MessageBox: Profile Migration, An error has occured during Profile migration, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
-      Set Variable ASCOMERROR to $RC$
+      MessageBox: Profile Migration, Unable to set write access to the ASCOM Profile store. Please zip up all logs in your Documents\ASCOM folder and its subfolders  and attach the zip to a post on the ASCOM-Talk Groups.Io forum.
+      Set Variable ASCOMERROR to Profile migration issue. RC: $RC$
     end
   end
 end
@@ -806,6 +806,12 @@ Comment: Ensure that the corrrect Profile registry ACL is inslatted on every run
 Write into Text File $SETUPLOG$ from Value $TIME$ Setting Profile registry ACL (at end of file)
 Run Program $SUPPORTDIR$\UninstallAscom.exe /SETPROFILEACL (WAIT, get result into variable RC)
 Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM /SETPROFILEACL (at end of file)
+ 
+Comment: Test whether an error occured when setting the Profile ACL and report this if necessary
+if Variable RC not Equals 0
+  MessageBox: Profile Migration, An error has occured during Profile migration, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
+  Set Variable ASCOMERROR to Profile permissions issue. RC: $RC$
+end
 [END REGION]
  
 [DEFINE REGION: Install New Platform 6 version]
