@@ -75,7 +75,7 @@
 			<!--<h5>TheSky Controlled Telescope (Paramount, etc., 5.2.12) for TheSky X and TheSky 5/6<a href="http://download.ascom-standards.org/drivers/TheSkyTelescope(5.2.12)Setup.exe"><img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a></h5>-->
 			<h5><a name="Bisque2x" id="Bisque2x"></a>Ascom 2X Mount Adaptor (Paramount, etc., 6.1) for TheSky X and TheSky 5/6 (external link)</h5>
 
-			<a href="http://www.bisque.com/sc/media/p/112531.aspx"><img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>
+			<a href="https://www.bisque.com/downloads/ascom2xmount-adaptor-installer/"><img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>
 			<p>This is supplied by Software Bisque and is available from the Downloads section of the Software Bisque site, the file is called Ascom 2X Mount Adaptor Setup.exe</p>
 <p>Installs  a driver that connects to Software Bisque's  <a href="http://www.bisque.com/" target="_blank">TheSky X/6/5 Astronomy Software</a> and makes it look like a standard ASCOM telescope. This allows ASCOM-based astronomy software to use TheSky (including TPOINT and ProTrack) as a smart telescope controller. For more information see <a href="../FAQs/TheSky.htm" target="_blank">Working with TheSky</a> (section 1). It is <span class="underline">required for the Paramount</span> mounts, and may be used with TheSky controlling any other of its supported telescope types, or via its built-in outbound ASCOM support<a href="Plugins.htm" target="_blank"></a>, and then using ASCOM telescope drivers. This driver provides <a href="../Standards/Index.htm" target="_parent">Telescope V3</a> support, 100% <a href="DevTools.htm" target="_blank">conformance</a>, and compatibility with TheSky X (10.2.0 or later). It should also work with TheSky6 and TheSky5 but not all functionality will be present.</p>
 		</div>
@@ -86,13 +86,18 @@
 			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>This is the installer for the <a href="http://www.astro-physics.com/" target="_new">Astro-Physics</a> factory-supported driver for all Astro-Physics telescope models. Please go to the <a href="http://www.astro-physics.com/index.htm?products/accessories/software/ascom/ascom" target="_new">Astro-Physics Driver web page</a> for their driver and associated software.</div>
 
 		<div class="download">
-			<h5>Celestron Unified (6.1.70594, May 2019) Telescope & Focuser</h5>
-			<a href="https://download.ascom-standards.org/drivers/Celestron Telescope and Focuser Setup (6.1.7059).exe">
+			<h5>AstroShop Omegon EQ500X Equatorial Mounts</h5>
+			<a href="https://github.com/TallFurryMan/ascom-drivers/releases" target="_new">
+			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>This is the installer for the <a href="https://www.astroshop.eu/equatorial-without-goto/omegon-mount-montierung-eq-500-x-drive/p,56115" target="_new">Omegon Mount EQ-500X</a> sold by Astroshop.eu. Omegon mounts are a collection of Alt-Az and Equatorial mounts for visual observation and astrophotography. The Conformance report is part of the release. The mounts and driver pass with two errors related to coordinates granularity (1 arcsec minimum).</div>
+
+		<div class="download">
+			<h5>Celestron Unified (6.1.7350, Feb 2020) Telescope & Focuser</h5>
+			<a href="https://download.ascom-standards.org/drivers/Celestron Telescope and Focuser Setup (6.1.7350).exe" target="_new">
 			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>
 			<p>Installs a driver for all computerized <a href="http://www.celestron.com/" target="aux">Celestron</a> telescopes, now including the new Celestron Focuser.
-			NOTE: With this version, Focuser moves are prevented if the focuser is not calibrated. <span class="underline">Calibrate before anything else</span>!	This driver has passed the <a href="DevTools.htm">Conformance Checker</a> tests. See the help file and release notes(!), installed as part of the driver, for a full description.
+			NOTE: Focuser moves are prevented if the focuser is not calibrated. <span class="underline">Calibrate the Focuser before anything else</span>!	Also this driver does its best to compensate for the extra time needed for final approach in slews but which is not reported via the Celestron controller. This driver has passed the <a href="DevTools.htm">Conformance Checker</a> tests. See the help file and release notes(!), installed as part of the driver, for a full description.
 			</p>
-			<p class="note"><b>This driver does NOT support Synta mounts. Use the <a href="#synta">SkyWatcher driver</a> listed below.</b></p>
+			<p class="note"><b>This driver does NOT support Synta mounts. Use the <a href="#synta">Sky-Watcher drivers</a> listed below.</b></p>
 			</div>
 
 		<div class="download">
@@ -112,14 +117,19 @@
 			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>With the EQMOD ASCOM driver, the user will be able to control the <a href="http://eq-mod.sourceforge.net/" target="aux">Modded EQ mount</a> using any   ASCOM based astronomy software at 0.144 arcsecond resolution. This is an ongoing project, so be sure to check the site for updates.	</div>
 
 		<div class="download">
-			<h5>Gemini Telescope .NET (1.0.72, June 2017)</h5>
-			<a href="http://download.ascom-standards.org/drivers/GeminiTelescopeInstaller(1.0.72.0).exe">
-			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>Installs a driver for mounts controlled by René Görlich's <a href="http://www.docgoerlich.com/" target="aux">Gemini</a> Astronomical Telescope Positioning System. <span class="underline">Current firmware required!</span> <!--This version has passed the <a href="DevTools.htm">Conformance Checker</a> tests (<a href="http://download.ascom-standards.org/drivers/ASCOM.GeminiTelescope.Telescope.Validation.txt">see this report</a>)-->		</div>
+			<h5>Gemini Telescope .NET (1.0.75, April 2020)</h5>
+			<a href="http://download.ascom-standards.org/drivers/GeminiTelescopeInstaller(1.0.75.0).exe">
+			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>Installs a driver for mounts controlled by René Görlich's <a href="http://www.docgoerlich.com/" target="aux">Gemini</a> Astronomical Telescope Positioning System. This latest version (2020) addresses compatibility with <a href="../Developer/Alpaca.htm" target="_new">ASCOM Alpaca</a> and also makes some needed changes for soon to be released firmware (stay tuned for this upcoming firmware release). <span class="underline">Current firmware required!</span> <!--This version has passed the <a href="DevTools.htm">Conformance Checker</a> tests (<a href="http://download.ascom-standards.org/drivers/ASCOM.GeminiTelescope.Telescope.Validation.txt">see this report</a>)-->		</div>
 
 		<div class="download">
 			<h5>Generic LX-200 (5.0.1)</h5>
 			<a href="http://download.ascom-standards.org/drivers/LXPTelescope(5.0.1)Setup.exe">
 			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>Installs a driver that uses a small subset of the LX-200 protocol. Features are limited, and end-of-slew detection may be unreliable (requires adjustment of encoder resolution). Use this driver with mounts that purport to use the LX-200 protocol. Be prepared for limitations and problems. Simple applications (such as planetarium slewing) are more likely to work than demanding automation applications. </div>
+
+		<div class="download">
+			<h5>GS Server (July 2020) for Sky-Watcher and Orion Mounts</h5>
+			<a href="https://sites.google.com/view/greenswamp/" target="aux">
+			<img alt="Info &amp; Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>This is a server with its own graphical interface that provides an ASCOM Telescope interface as well as a Synta Protocol for Sky-Watcher and Orion mounts: EQ8, EQ8-R, HDX110, AZ-EQ5GT, Sirius Pro AZ/EQ-G, AZ-EQ6GT, Orion Atlas Pro AZ/EQ-G, EQ6-R PRO, NEQ6, HEQ5, EQ5, EQ4, AzGTi. </div>
 
 		<div class="download">
 			<h5>iOptron CEM60 and iEQ45 Pro</h5>
@@ -132,7 +142,7 @@
 			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>Driver for the LittleFoot Controller Project, specifically the LittleFoot Classic. For more info see <a href="http://forum.rajiva.de/">Astronomie &amp; Elektronik</a> (a German/English forum).</div>
 
 		<div class="download">
-			<h5>Meade Autostar/Audiostar Project (pre-release June 2019)</h5>
+			<h5>Meade Autostar/Audiostar Project (October 2019)</h5>
 			<a href="https://bitbucket.org/cjdskunkworks/meadeautostar497" target="_new">
 			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>Link to a new "Meade Generic" driver for the <a href="https://www.meade.com/technology/audiostar/" target="_new">Meade Autostar/Audiostar</a> controlled Meade telescopes. This driver project is listed in hopes that the author can get feedback and work out any remaining issues. This driver has been created after discovering that the &quot;<em>Meade LX200 Classic and Autostar #494, #495, and #497 (combined telescope/focuser, 5.0.4)&quot;</em> driver listed below does not implement enough features to allow the telescope to be properly operated remotely.The driver can be installed alongside any other driver (including the "universal" one listed below). See the <a href="https://bitbucket.org/cjdskunkworks/meadeautostar497" target="_new">driver project website</a> for details. Please provide feedback to the developer or via the <a href="https://ascomtalk.groups.io/g/Help/" target="_new">ASCOM Talk User's List</a>.</div>
 
@@ -169,12 +179,12 @@
 		<div class="download">
 			<h5>Sky Commander (2.1.0, external link)</h5>
 			<a href="http://www.unm.edu/~eschman/SkyCommander_Driver.htm" target="_new">
-			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>Driver for the Sky Commander digital setting circle (DSC) device. The author provides a self-contained installer.</div>
+			<img alt="Visit" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>Driver for the Sky Commander digital setting circle (DSC) device. The author provides a self-contained installer.</div>
 
 		<div class="download">
-			<h5>SkyWatcher SynScan Mount Controller (6.0.6262, June 2017)</h5>
-			<a href="http://download.ascom-standards.org/drivers/SkyWatcher(6.0.6262)Setup.exe">
-			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a><a name="synta" id="synta"></a>This driver is for all mounts that use the Synta SkyWatcher SynScan controller, including those provided by Orion etc. It should work with both AltAz and GEM mounts. The SynScan Hand Controller version must be 3.38 or 4.38 or later to get full functionality but limited functionality should be available for all HC versions.</div>
+			<h5>Sky-Watcher SynScan Physical Hand Controller and SynScan App (separate drivers)</h5>
+			<a href="http://www.skywatcher.com/download/software/ascom-driver/">
+			<img alt="Visit" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a><a name="synta" id="synta"></a>These drivers is for all mounts that use the Synta Sky-Watcher SynScan controller, including those provided by Orion etc. It should work with both AltAz and GEM mounts. The SynScan Hand Controller V3/V4 version must be 3.38 or 4.38 or later to get full functionality but limited functionality should be available for all HC versions. In addition a separate driver is available for the SynScan App, a virtual version of the Sky-Watcher SynScan hand controller. </div>
 
 		<div class="download">
 			<h5>Takahashi Temma  (5.0.26, external link)</h5>
@@ -196,7 +206,7 @@
 	</div>
 	<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright &copy; 1998-2019, The ASCOM Initiative. 
+	Copyright &copy; 1998-2020, The ASCOM Initiative. 
 	All rights reserved. </div>
 
 </body>

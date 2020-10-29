@@ -56,8 +56,7 @@
 	
 	</div></div></div></div>
 
-	<!-- #BeginEditable "LeftNav" -->
-	<!-- #EndEditable --></div>
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 <div class="article">
@@ -65,7 +64,7 @@
 	<h3>ASCOM Alpaca - ASCOM is not just for Windows any more</h3>
 	<p align="center"><iframe width="560" height="315" src="https://www.youtube.com/embed/eR9_Hw1ql7c" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
 	<p><img src="../Images/AlpacaLogo560.png" width="130" height="103" hspace="8" align="right" />
-	The introduction of <a href="https://github.com/ASCOMInitiative/ASCOMRemote" target="_new">ASCOM Remote</a> in 2018 began the process of extending the ASCOM ecosystem to include the internet, Linux, and MacOS, to include small embedded controllers like the Arduino and Raspberry Pi. As of early 2019, this effort has grown into a new wave of development, with several astronomy instrument vendors embracing the implementation of the ASCOM Interfaces as ReST resources, reachable over the internet. Now known as ASCOM Alpaca, the next steps are being taken. This effort is much farther along that you might imagine. If you are interested in learning more, visit the ASCOM Alpaca page:</p>
+	The introduction of <a href="https://github.com/ASCOMInitiative/ASCOMRemote/releases" target="_new">ASCOM Remote</a> in 2018 began the process of extending the ASCOM ecosystem to include the internet, Linux, and MacOS, to include small embedded controllers like the Arduino and Raspberry Pi. As of early 2019, this effort has grown into a new wave of development, with several astronomy instrument vendors embracing the implementation of the ASCOM Interfaces as ReST resources, reachable over the internet. Now known as ASCOM Alpaca, the next steps are being taken. This effort is much farther along that you might imagine. If you are interested in learning more, visit the ASCOM Alpaca page:</p>
 	<p align="center" style="font-size:large;"><a href="Alpaca.htm">Learn More about ASCOM Alpaca</a></p>
 <h3>Developer's Forum</h3>
 	<p>In October 2018, we migrated to Groups.io for our forum/mail-list application. As part of this we opened two separate forums, one for users and the other for developers. As a developer, we ask that you seek help and information using the <a href="https://ascomtalk.groups.io/g/Developer" target="_new">ASCOM Talk Developers Forum</a>.</p>
@@ -77,14 +76,14 @@
 	<p>If you're new to ASCOM, and you're an <i>application</i> developer (as opposed to a driver developer), check out the <a href="AppStart.htm">Getting Started</a> information. which includes an <a href="AppStart.htm#video">excellent video showing the development of a complete program</a> for controlling any telescope using Visual Studio using Visual Basic .NET. Then, if you are developing your application in one of the Microsoft .NET languages, learn about the <a href="ClientToolkit.htm">ASCOM .NET Client Toolkit</a>.</p>
 
 	<h3>Driver Developer Resources</h3>
-	<p>Most of the driver developer tools are contained within the <a href="../Downloads/PlatDevComponents.htm">ASCOM Platform Developer Components</a>. Driver developers are strongly encouraged to use those tools. This is particularly true for driver developers who write in C# or VB.NET. <span class="underline">The Developer Components contain templates for all driver types in both C# and VB.NET</span>. Using these templates will save you heaps of effort and troubles.</p>
+	<p>Most of the driver developer tools are contained within the <a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/v6.5Release/ASCOMPlatform65Developer.exe">ASCOM Platform Developer Components</a>. Driver developers are strongly encouraged to use those tools. This is particularly true for driver developers who write in C# or VB.NET. <span class="underline">The Developer Components contain templates for all driver types in both C# and VB.NET</span>. Using these templates will save you heaps of effort and troubles.</p>
 	<p>You may benefit from watching <a href="DriverImpl.htm#video">Tom How's excellent video showing how to develop a driver</a> for a telescope control system using the popular Arduino microcontroller kit.</p>
 	
 	<h3><a name="download" id="download"></a>Developer Components (separate download)</h3>
-	<p class="note">Before embarking on driver development, you should have the <a href="../Downloads/PlatDevComponents.htm" target="_blank">ASCOM Platform Developer Components</a> installed on your system. Driver templates, most of the developer documentation, and the installer generator are included in the Developer Components installation.  The developer components are provided as a separate download from the Platform itself. </p>
+	<p class="note">Before embarking on driver development, you should have the <a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/v6.5Release/ASCOMPlatform65Developer.exe" target="_blank">ASCOM Platform Developer Components</a> installed on your system. Driver templates, most of the developer documentation, and the installer generator are included in the Developer Components installation.  The developer components are provided as a separate download from the Platform itself. </p>
 
 	<h3>Conformance Checker</h3>
-	<p>See <a href="Conformance.htm">Conformance Testing</a>. Once you have your driver working, it's very important to test it with the <a href="../Downloads/DevTools.htm">Driver Conformance Checker tool</a>. This tool will exercise your driver and the device it handles, checking for common programming errors. </p>
+	<p>See <a href="Conformance.htm">Conformance Testing</a>. Once you have your driver working, it's very important to test it with the <a href="https://ascom-standards.org/Developer/Conformance.htm">Driver Conformance Checker tool</a>. This tool will exercise your driver and the device it handles, checking for common programming errors. </p>
 
 	<h3>Role of Simulators</h3>
 	<p>The ASCOM Platform includes <i>simulators </i> for each of the devices covered by an ASCOM standard. These simulators provide a convenient tool for application software developers to test their programs with known good drivers under controlled conditions. The simulators also serve driver developers as <i>reference implementations </i> of the driver standards. If there is a question about the behavior of a property or method, the behavior of the appropriate simulator serves as the reference. </p>
@@ -107,7 +106,7 @@
 	</div>
 &nbsp;<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright &copy; 1998-2019, The ASCOM Initiative. 
+	Copyright &copy; 1998-2020, The ASCOM Initiative. 
 	All rights reserved. </div>
 
 </body>

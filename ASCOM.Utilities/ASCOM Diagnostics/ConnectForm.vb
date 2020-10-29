@@ -105,7 +105,7 @@ Public Class ConnectForm
                     SetScriptButton() 'Enable or disable script button according todevice type
                     cmbDeviceType.Enabled = True
                 Catch ex As Exception
-                    txtStatus.Text = "Connect Failed..." & ex.Message & vbCrLf & vbCrLf & ex.ToString
+                    txtStatus.Text = "Disconnect Failed..." & ex.Message & vbCrLf & vbCrLf & ex.ToString
                 Finally
                     Try : Device.Dispose() : Catch : End Try
                     Try : Marshal.ReleaseComObject(Device) : Catch : End Try
