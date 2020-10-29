@@ -19,6 +19,7 @@ Set Variable FX to
 Set Variable MYPROGRESS to 0
 Set Variable PROGRESSTEXT to Installing $TITLE$
 Set Variable APPLYINSTALLSUCCESS to 
+Set Variable CFA to 
  
 Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
 Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$ASCOM" (WAIT)
@@ -328,6 +329,20 @@ if Variable CHECKSYSTEM not Equals TRUE
   MessageBox: $TITLE$ Setup Issue, Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
   Terminate Installation
 end
+ 
+Comment: Test whether Controlled Folder Access is enabled and warn the user if this is the case
+Comment: The test is made by trying to open the installer's log file and reading the first line. If this is blank there is no log file and CFA is active on the Documents folder
+Read from Text File $SETUPLOG$ into Variable CFA
+if Variable CFA Equals 
+  Comment: The read returned a blank line instead of the Platform version number so CFA is deemed to be active
+  MessageBox: Unable to write to Documents folder, The installer cannot write to your Documents folder, you may be using Controlled Folder Access.$NEWLINE$$NEWLINE$If so, please Cancel and  give the installer permission to write to your Documents folder. $NEWLINE$$NEWLINE$After installation, you will also need to give permission to Platform exectables including EarthRotationData, Diagnostics and Profile Explorer.
+   
+  Comment: Terminate the installation if the user presses the Cancel button, otherwise continue with installation
+  if Variable CFA Equals CANCEL
+    Terminate Installation
+  end
+end
+ 
 [END REGION]
  
 [DEFINE REGION: Check Application Pre-Requisites]

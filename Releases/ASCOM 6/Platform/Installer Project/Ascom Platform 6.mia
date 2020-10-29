@@ -19,6 +19,7 @@ Set Variable
 Set Variable
 Set Variable
 Set Variable
+Set Variable
 Comment
 Comment
 Run Program
@@ -328,6 +329,20 @@ Write to Text File
 MessageBox
 Terminate Install
 End
+Comment
+Comment
+Comment
+Read from Text File
+If
+Comment
+MessageBox
+Comment
+Comment
+If
+Terminate Install
+End
+End
+Comment
 Code Folding Region
 Comment
 Code Folding Region
@@ -1901,6 +1916,7 @@ $
 {2A2C67A4-CB91-4CA0-B14D-FA96E5DB7B8A}
 {D9006F83-2322-4622-A1B5-0944E5A29C55}
 {F63A07BB-A45A-4735-8070-7D54FE51C975}
+{BD793928-56B8-4CD6-8D8F-51D5E3F489D8}
 {FB47D698-8E25-4BEC-A9DB-3A31EFE79C5E}
 {B7DD3A6D-7A61-46D3-B0B3-809E61C477DE}
 {CAF232B9-C04D-4631-A39C-6C0DFFEAF5B2}
@@ -2210,6 +2226,20 @@ $
 {B898B1FB-3E92-46C8-80C3-06EDDD33752A}
 {E89AD19F-1AE7-4DC0-95A0-6FF071B1AC1A}
 {26FA7D9B-6D6D-469E-96A4-2DF0676A382F}
+{8E7B1EA2-D090-45D7-B760-EA8A8EF4C691}
+{B9765839-B989-4D6C-8DF2-5694BBAA9D13}
+{71A30974-DC01-4A51-B1F0-C6D7546CFBBD}
+{A88DEE26-2C95-414E-ADF7-0D75C55B5E9A}
+{264FB1F3-115E-49E8-A66E-BE88EF2A6174}
+{D6809C3F-1EC6-4CFC-AF7E-BE3944C4471E}
+{8E9173F5-2D82-4761-B444-CDB2DEA670A7}
+{89E9ED78-976A-47BB-9C01-8DFC17D9301F}
+{69C3E64F-2AD6-4DD5-9BA4-FA15C209683F}
+{F0A04FF2-4278-471F-A044-6D49347A9319}
+{054C88B8-4A0E-409B-AA0C-F9FF554D3BFF}
+{E176F7FD-D1EE-4539-AD83-CD2005FFFD1C}
+{19EE14C8-3768-4B2F-BBCF-0DB8F9CB20D5}
+{53CF0913-8EAE-4183-B2C2-243F346ABD92}
 {FDA6556D-7FB3-4A17-9C40-3D44528E12C4}
 {7E914B07-3670-4489-8E8A-F2EB97E0E06D}
 {657348F9-ACDF-43FC-9BFC-8577FE8B58EE}
@@ -4386,6 +4416,20 @@ Ensure that the corrrect Profile registry ACL is inslatted on every run to repai
 
 {CBF7FCB0-B4A2-4509-9B23-66A82E820F54}
 Test whether an error occured when setting the Profile ACL and report this if necessary
+{8E7B1EA2-D090-45D7-B760-EA8A8EF4C691}
+
+{53CF0913-8EAE-4183-B2C2-243F346ABD92}
+
+{B9765839-B989-4D6C-8DF2-5694BBAA9D13}
+Test whether Controlled Folder Access is enabled and warn the user if this is the case
+{71A30974-DC01-4A51-B1F0-C6D7546CFBBD}
+The test is made by trying to open the installer's log file and reading the first line. If this is blank there is no log file and CFA is active on the Documents folder
+{D6809C3F-1EC6-4CFC-AF7E-BE3944C4471E}
+The read returned a blank line instead of the Platform version number so CFA is deemed to be active
+{69C3E64F-2AD6-4DD5-9BA4-FA15C209683F}
+Terminate the installation if the user presses the Cancel button, otherwise continue with installation
+{89E9ED78-976A-47BB-9C01-8DFC17D9301F}
+
 {C974C952-7C50-4503-BFEF-AF3B492C0AEE}
 MYPROGRESS
 100
@@ -5472,6 +5516,9 @@ FINISH_DESCRIPTION$MYAH$MYAH$FALSE
 {FCDBEE94-93D1-481E-A51A-28F6DDDAE6A8}
 ASCOMERROR$MYAH$MYAH$FALSE
 Profile permissions issue. RC: $RC$
+{BD793928-56B8-4CD6-8D8F-51D5E3F489D8}
+CFA$MYAH$MYAH$FALSE
+
 {340178B5-D93C-4075-ABA8-DE4CCDAFC689}
 MAINTENANCE
 0
@@ -6027,6 +6074,16 @@ RC
 0
 0
 TRUE
+{264FB1F3-115E-49E8-A66E-BE88EF2A6174}
+CFA
+0
+
+FALSE
+{F0A04FF2-4278-471F-A044-6D49347A9319}
+CFA
+0
+CANCEL
+FALSE
 {B3EB30C5-5686-4186-96B5-86C9FC5D6576}
 $TITLE$ Setup Error
 This product requires at least Administrator Privileges.$NEWLINE$$NEWLINE$Setup cannot continue.
@@ -6111,6 +6168,12 @@ An error has occured during Profile migration, please save all logs in My Docume
 3
 1
 
+{8E9173F5-2D82-4761-B444-CDB2DEA670A7}
+Unable to write to Documents folder
+The installer cannot write to your Documents folder, you may be using Controlled Folder Access.$NEWLINE$$NEWLINE$If so, please Cancel and  give the installer permission to write to your Documents folder. $NEWLINE$$NEWLINE$After installation, you will also need to give permission to Platform exectables including EarthRotationData, Diagnostics and Profile Explorer.
+2
+2
+CFA
 {EAC1FFF4-CCCD-452E-886C-3AAFA5AC4558}
 welcome
 WIZARD
@@ -11112,6 +11175,10 @@ PLATFORMVERSIONMINOR
 $SUPPORTDIR$\MasterPlatformVersion.txt
 PLATFORMVERSIONMAJOR
 
+{A88DEE26-2C95-414E-ADF7-0D75C55B5E9A}
+$SETUPLOG$
+CFA
+
 {2405F679-5DB5-42E0-A2FD-2B17B6DBDB09}
 $SETUPLOG$
 $TIME$ RC: $GACINSTALLRC$ GACInstall Remove policy.5.5.ASCOM.Utiliites
@@ -12807,7 +12874,22 @@ $
 
 
 
+
 C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -14632,6 +14714,21 @@ C
 
 
 $
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
