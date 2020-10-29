@@ -31,6 +31,18 @@ else
   Set Variable SETUPLOG to $MYDOCUMENTS$ASCOM\ASCOMPlatform6Install$DISKSPACE$.txt
 end
 Write into Text File $SETUPLOG$ from Value $TIME$ $TITLE$ v$VERSION$ (at end of file)
+ 
+Comment: Test whether Controlled Folder Access is enabled and warn the user if this is the case
+Comment: The test is made by trying to open the installer's log file and reading the first line. If this is blank there is no log file and CFA is active on the Documents folder
+Read from Text File $SETUPLOG$ into Variable CFA
+if Variable CFA Equals 
+  Comment: The read returned a blank line instead of the Platform version number so CFA is deemed to be active
+  MessageBox: Unable to write to Documents folder, The installer cannot write to your Documents folder, you may have Controlled Folder Access enabled on this PC.$NEWLINE$$NEWLINE$The Platform's complex installation process cannot proceed without write access to create its multiple log files and the installer will now close.$NEWLINE$$NEWLINE$At this time the only way to install the Platform on a CFA protected PC is to turn off CFA protection, to run the Platform installer and then to re-enable CFA protection.
+   
+  Comment: Terminate the installation because we cannot continue with installation without write access to the Documents folder.
+  Terminate Installation
+end
+ 
 Write into Text File $SETUPLOG$ from Value $TIME$ Installation date: $DATE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value   (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Setup path: $SETUPPATH$ (at end of file)
@@ -330,19 +342,6 @@ if Variable CHECKSYSTEM not Equals TRUE
   Terminate Installation
 end
  
-Comment: Test whether Controlled Folder Access is enabled and warn the user if this is the case
-Comment: The test is made by trying to open the installer's log file and reading the first line. If this is blank there is no log file and CFA is active on the Documents folder
-Read from Text File $SETUPLOG$ into Variable CFA
-if Variable CFA Equals 
-  Comment: The read returned a blank line instead of the Platform version number so CFA is deemed to be active
-  MessageBox: Unable to write to Documents folder, The installer cannot write to your Documents folder, you may be using Controlled Folder Access.$NEWLINE$$NEWLINE$If so, please Cancel and  give the installer permission to write to your Documents folder. $NEWLINE$$NEWLINE$After installation, you will also need to give permission to Platform exectables including EarthRotationData, Diagnostics and Profile Explorer.
-   
-  Comment: Terminate the installation if the user presses the Cancel button, otherwise continue with installation
-  if Variable CFA Equals CANCEL
-    Terminate Installation
-  end
-end
- 
 [END REGION]
  
 [DEFINE REGION: Check Application Pre-Requisites]
@@ -583,7 +582,7 @@ if Variable MAINTENANCE not Equals TRUE
     end
     Write into Text File $SETUPLOG$ from Value $TIME$ Platform 5B - $UNINSTALLER5B$ (at end of file)
     Comment: Run the uninstaller if either platform is found
-    Set Variable RC to 999
+    Set Variable RC to 0
     if Variable PLATFORM5FOUND Equals TRUE
       Set Variable PROGRESSTEXT to Removing Platform 5...
       Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling Platform 5... (at end of file)
@@ -597,13 +596,6 @@ if Variable MAINTENANCE not Equals TRUE
         Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM  (at end of file)
         Set Variable PROGRESSTEXT to Installing Platform 6...
-      else
-        Comment: No previous Platform on this machine so UninstallASCOM must run in order to set the correct security ACL on the ASCOM registry profile store
-        Set Variable PROGRESSTEXT to Preparing ASCOM Profile Store...
-        Write into Text File $SETUPLOG$ from Value $TIME$ First time install, preparing ASCOM Profile Store (at end of file)
-        Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Set ACL on ASCOM Profile Store (at end of file)
-        Set Variable PROGRESSTEXT to First time install - Installing Platform 6...
       end
     end
     if Variable RC not Equals 0
@@ -817,14 +809,15 @@ Set Variable MYPROGRESS to 6
 Include Script: setupvc1410_25017_x86 (get result into variable VC32_REBOOT_REQUIRED)
 Set Variable MYPROGRESS to 9
  
-Comment: Ensure that the corrrect Profile registry ACL is inslatted on every run to repair broken installations
+Comment: Ensure that the corrrect Profile registry ACL is set on every run to repair broken installations
+Set Variable PROGRESSTEXT to Preparing ASCOM Profile Store...
 Write into Text File $SETUPLOG$ from Value $TIME$ Setting Profile registry ACL (at end of file)
 Run Program $SUPPORTDIR$\UninstallAscom.exe /SETPROFILEACL (WAIT, get result into variable RC)
-Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM /SETPROFILEACL (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Set ACL on ASCOM Profile Store (at end of file)
  
 Comment: Test whether an error occured when setting the Profile ACL and report this if necessary
 if Variable RC not Equals 0
-  MessageBox: Profile Migration, An error has occured during Profile migration, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
+  MessageBox: Profile Migration, An error has occured when setting the Registry ACL, please zip up all logs in your Documents\ASCOM folder and its sub-folders and report this on the ASCOM-Talk Groups.Io forum.$NEWLINE$$NEWLINE$Error code: $RC$
   Set Variable ASCOMERROR to Profile permissions issue. RC: $RC$
 end
 [END REGION]

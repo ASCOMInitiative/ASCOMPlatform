@@ -8,7 +8,6 @@ Platform 6.2 files
 Remove Previous Platform 6 install if present
 Install New Platform 6 version
 Extra activities if on a 64bit system
-Uninstall items installed by this installer
 Remove 64bit components
 ASCOM Cache
 Earth Rotation Date Update
@@ -16,4 +15,4 @@ Create shortcuts
 Remove 32bit components
 Maintenance Dialogue
 ASCOM Device Hub
-Set up log file and variables
+Uninstall items installed by this installer
