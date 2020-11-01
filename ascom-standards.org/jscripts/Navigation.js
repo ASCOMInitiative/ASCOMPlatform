@@ -211,7 +211,7 @@ function writesubmenu() {
 		SubMenuOutput += "<li><a href=\"ReleaseTesting.htm\">Release Testing</a></li>";
 		SubMenuOutput += "<li><a href=\"DriverSupt.htm\">Handling Support Issues</a></li>";
 	    SubMenuOutput += "</ul>";
-        SubMenuOutput += "<h3>Cross-Platform &amp; Internet</h3>";
+        SubMenuOutput += "<h3>Cross-Platform &amp; Net</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
 		SubMenuOutput += "<li><a href=\"Alpaca.htm\">Introduction to Alpaca</a></li>";
 		SubMenuOutput += "<li><a href=\"https://ascom-standards.org/api/\" target=\"_new\">ASCOM Alpaca API</a></li>";

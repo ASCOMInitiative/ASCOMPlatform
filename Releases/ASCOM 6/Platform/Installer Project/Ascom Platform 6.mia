@@ -19,6 +19,7 @@ Set Variable
 Set Variable
 Set Variable
 Set Variable
+Set Variable
 Comment
 Comment
 Run Program
@@ -30,6 +31,18 @@ Else
 Set Variable
 End
 Write to Text File
+Comment
+Comment
+Comment
+Read from Text File
+If
+Comment
+MessageBox
+Comment
+Comment
+Terminate Install
+End
+Comment
 Write to Text File
 Write to Text File
 Write to Text File
@@ -328,6 +341,7 @@ Write to Text File
 MessageBox
 Terminate Install
 End
+Comment
 Code Folding Region
 Comment
 Code Folding Region
@@ -577,13 +591,6 @@ Write to Text File
 Set Variable
 Else
 If
-Set Variable
-Write to Text File
-Run Program
-Write to Text File
-Set Variable
-Else
-Comment
 Set Variable
 Write to Text File
 Run Program
@@ -803,9 +810,16 @@ Include Script
 Set Variable
 Comment
 Comment
+Set Variable
 Write to Text File
 Run Program
 Write to Text File
+Comment
+Comment
+If
+MessageBox
+Set Variable
+End
 Code Folding Region
 Comment
 Code Folding Region
@@ -1895,6 +1909,7 @@ $
 {2A2C67A4-CB91-4CA0-B14D-FA96E5DB7B8A}
 {D9006F83-2322-4622-A1B5-0944E5A29C55}
 {F63A07BB-A45A-4735-8070-7D54FE51C975}
+{BD793928-56B8-4CD6-8D8F-51D5E3F489D8}
 {FB47D698-8E25-4BEC-A9DB-3A31EFE79C5E}
 {B7DD3A6D-7A61-46D3-B0B3-809E61C477DE}
 {CAF232B9-C04D-4631-A39C-6C0DFFEAF5B2}
@@ -1906,6 +1921,18 @@ $
 {7098B824-5579-42B5-9136-2D112D8E8C92}
 {6916C439-DB03-41E4-94EC-8F9A61CD2596}
 {266483B3-07A7-4B01-8648-0F365A346DBA}
+{D269FAF0-39B8-4A89-AE20-B4EAF73AE67A}
+{68552375-E8CA-4356-A1EF-17D682ED9B06}
+{105E2176-3FA8-4123-A1DB-A843B3CB5943}
+{0CE594CE-3668-48FF-9CDF-896FB5E6F0C0}
+{66A84DE4-F32E-44E1-91AF-5678DB00729F}
+{73A9B7F7-E5AC-423B-89C2-1E0C6967652B}
+{8DA5D4F1-2969-4879-A809-F1A9C4057243}
+{73516199-96D9-4F9A-8433-6C2316AC5E9C}
+{D1583C63-7841-435F-8DAA-3E904572B408}
+{2E3D061B-F556-43A9-8CC2-224BF5DDFFDF}
+{5FE15FC2-B8B1-4D74-B691-0FEEBAE83A2B}
+{EB0464C4-DAA9-4251-8EBF-47CCA4EC467F}
 {185281D6-BF72-4F34-97E0-E10CF80841FD}
 {B0917843-B6CC-4314-BB9D-D65E1F47367F}
 {C8F524BA-C003-4C02-BA1C-AFF8F4448707}
@@ -2204,6 +2231,7 @@ $
 {B898B1FB-3E92-46C8-80C3-06EDDD33752A}
 {E89AD19F-1AE7-4DC0-95A0-6FF071B1AC1A}
 {26FA7D9B-6D6D-469E-96A4-2DF0676A382F}
+{8E7B1EA2-D090-45D7-B760-EA8A8EF4C691}
 {FDA6556D-7FB3-4A17-9C40-3D44528E12C4}
 {7E914B07-3670-4489-8E8A-F2EB97E0E06D}
 {657348F9-ACDF-43FC-9BFC-8577FE8B58EE}
@@ -2458,13 +2486,6 @@ $
 {5EF594C3-96A2-4956-AD2D-02236E252D38}
 {6313C353-7A95-4E1B-888A-E6D57D2DF846}
 {B2AC1C08-8298-44F7-9FA5-80CF408EAB7E}
-{0390F009-63D8-4A88-8E6A-2F09AD0ACD78}
-{5ECA75DE-8BFF-4E37-9FF4-A3CCA4484B8A}
-{915DA640-C8CE-440A-B856-4A3B500D692E}
-{347BD953-1323-47EF-B3A9-06D9410CAC74}
-{F8F7EAB0-F146-4B3C-B8A4-127BB9A7FB91}
-{5A7660B8-134D-40C2-908A-8F8F0BD4D910}
-{36D59487-4C56-4F54-94F4-C89D4EFECAE5}
 {97DC455E-944B-43A4-A463-CBCE84A270A2}
 {DD36B160-5805-4282-A6AE-8947A37E166D}
 {0DFCE993-E984-4850-AE18-C087A553518E}
@@ -2679,9 +2700,16 @@ $
 {6563C58A-E208-4A4D-BC39-44C99AD778F0}
 {E48DE2BC-C1AD-4F09-8C2B-4C21FA63A1DE}
 {87B20770-26C4-41EC-915E-EB6A24A1D261}
+{C83AAA3F-4FAC-4223-8D07-677F0F2ED0E9}
 {1D456B89-9376-450F-847B-C93EC368FF98}
 {BCBC7A89-88DD-4B9C-9751-41F773A801E6}
-{D99CA6C5-97D8-4FD9-A0DF-EF4F773076AB}
+{7F4CCEF9-C3D5-4694-A705-57B0C65ACB10}
+{536759DF-BCF2-44C4-B498-AEE1038DF3AB}
+{CBF7FCB0-B4A2-4509-9B23-66A82E820F54}
+{625F78DF-3A0F-4197-87AE-43B80FE8D009}
+{A9D68BDF-E34C-4BCB-B5A4-0A5233D33E38}
+{FCDBEE94-93D1-481E-A51A-28F6DDDAE6A8}
+{23BEFA16-3860-4ED2-91FF-0D9FD40910AD}
 {2D9E05E9-AEDD-4785-8237-F0D0AC5D5126}
 {7E14B11F-4A4E-446B-8140-437648EA3C1D}
 {4ED27AFA-F362-480F-A5BB-717DC5544C1F}
@@ -4236,8 +4264,6 @@ Setup up shortcut locations
 
 {2950100D-F174-44B7-AD7D-7E6778F85A91}
 
-{5ECA75DE-8BFF-4E37-9FF4-A3CCA4484B8A}
-No previous Platform on this machine so UninstallASCOM must run in order to set the correct security ACL on the ASCOM registry profile store
 {F55957AA-8D70-4651-82E7-503C93930AEF}
 Run the uninstaller if either platform is found
 {1113E9A1-5DEE-4737-9EE6-035BE8A6B757}
@@ -4369,7 +4395,27 @@ We are running on Windows 10 so make sure that we are at least on Redstone
 {5E08D1D8-DBD1-44F7-8EA9-E904DE960CDB}
 Force use of the NASA download site because all of the USNo sites are unavailable at July 2020 and are predicted to be down until at least December 2020
 {87B20770-26C4-41EC-915E-EB6A24A1D261}
-Ensure that the corrrect Profile registry ACL is inslatted on every run to repair broken installations
+Ensure that the corrrect Profile registry ACL is set on every run to repair broken installations
+{536759DF-BCF2-44C4-B498-AEE1038DF3AB}
+
+{CBF7FCB0-B4A2-4509-9B23-66A82E820F54}
+Test whether an error occured when setting the Profile ACL and report this if necessary
+{8E7B1EA2-D090-45D7-B760-EA8A8EF4C691}
+
+{EB0464C4-DAA9-4251-8EBF-47CCA4EC467F}
+
+{D1583C63-7841-435F-8DAA-3E904572B408}
+Terminate the installation because we cannot continue with installation without write access to the Documents folder.
+{73516199-96D9-4F9A-8433-6C2316AC5E9C}
+
+{73A9B7F7-E5AC-423B-89C2-1E0C6967652B}
+The read returned a blank line instead of the Platform version number so CFA is deemed to be active
+{105E2176-3FA8-4123-A1DB-A843B3CB5943}
+The test is made by trying to open the installer's log file and reading the first line. If this is blank there is no log file and CFA is active on the Documents folder
+{68552375-E8CA-4356-A1EF-17D682ED9B06}
+Test whether Controlled Folder Access is enabled and warn the user if this is the case
+{D269FAF0-39B8-4A89-AE20-B4EAF73AE67A}
+
 {C974C952-7C50-4503-BFEF-AF3B492C0AEE}
 MYPROGRESS
 100
@@ -5323,13 +5369,7 @@ SHORTCUTFOLDER$MYAH$MYAH$FALSE
 $SHORTCUTFILESALL$$ASCOMSTARTMENU$
 {A3DF923C-14FE-474C-9419-90C31D44ACA0}
 ASCOMERROR$MYAH$MYAH$FALSE
-$RC$
-{36D59487-4C56-4F54-94F4-C89D4EFECAE5}
-PROGRESSTEXT$MYAH$MYAH$FALSE
-First time install - Installing Platform 6...
-{915DA640-C8CE-440A-B856-4A3B500D692E}
-PROGRESSTEXT$MYAH$MYAH$FALSE
-Preparing ASCOM Profile Store...
+Profile migration issue. RC: $RC$
 {B2AC1C08-8298-44F7-9FA5-80CF408EAB7E}
 PROGRESSTEXT$MYAH$MYAH$FALSE
 Installing Platform 6...
@@ -5344,7 +5384,7 @@ PROGRESSTEXT$MYAH$MYAH$FALSE
 Removing Platform 5...
 {C37EEF53-E11D-47E9-89B3-5590646171C7}
 RC$MYAH$MYAH$FALSE
-999
+0
 {D8B0D9A0-5EB7-4476-8466-F3E7DEB5A8E7}
 PLATFORM5FOUND$MYAH$MYAH$FALSE
 TRUE
@@ -5453,6 +5493,15 @@ FINISH_CONTEXT$MYAH$MYAH$FALSE
 {E37988DD-62FB-42C3-BF8A-BD069F3406CB}
 FINISH_DESCRIPTION$MYAH$MYAH$FALSE
 
+{FCDBEE94-93D1-481E-A51A-28F6DDDAE6A8}
+ASCOMERROR$MYAH$MYAH$FALSE
+Profile permissions issue. RC: $RC$
+{BD793928-56B8-4CD6-8D8F-51D5E3F489D8}
+CFA$MYAH$MYAH$FALSE
+
+{C83AAA3F-4FAC-4223-8D07-677F0F2ED0E9}
+PROGRESSTEXT$MYAH$MYAH$FALSE
+Preparing ASCOM Profile Store...
 {340178B5-D93C-4075-ABA8-DE4CCDAFC689}
 MAINTENANCE
 0
@@ -6003,6 +6052,16 @@ CHECKSYSTEM
 0
 TRUE
 TRUE
+{625F78DF-3A0F-4197-87AE-43B80FE8D009}
+RC
+0
+0
+TRUE
+{66A84DE4-F32E-44E1-91AF-5678DB00729F}
+CFA
+0
+
+FALSE
 {B3EB30C5-5686-4186-96B5-86C9FC5D6576}
 $TITLE$ Setup Error
 This product requires at least Administrator Privileges.$NEWLINE$$NEWLINE$Setup cannot continue.
@@ -6041,7 +6100,7 @@ Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so 
 
 {679C4736-C81A-40A9-B1A1-099161BA6BC8}
 Profile Migration
-An error has occured during Profile migration, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
+Unable to set write access to the ASCOM Profile store. Please zip up all logs in your Documents\ASCOM folder and its subfolders  and attach the zip to a post on the ASCOM-Talk Groups.Io forum.
 3
 1
 
@@ -6081,6 +6140,18 @@ Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Win
 3
 1
 
+{A9D68BDF-E34C-4BCB-B5A4-0A5233D33E38}
+Profile Migration
+An error has occured when setting the Registry ACL, please zip up all logs in your Documents\ASCOM folder and its sub-folders and report this on the ASCOM-Talk Groups.Io forum.$NEWLINE$$NEWLINE$Error code: $RC$
+3
+1
+
+{8DA5D4F1-2969-4879-A809-F1A9C4057243}
+Unable to write to Documents folder
+The installer cannot write to your Documents folder, you may have Controlled Folder Access enabled on this PC.$NEWLINE$$NEWLINE$The Platform's complex installation process cannot proceed without write access to create its multiple log files and the installer will now close.$NEWLINE$$NEWLINE$At this time the only way to install the Platform on a CFA protected PC is to turn off CFA protection, to run the Platform installer and then to re-enable CFA protection.
+3
+1
+CFA
 {EAC1FFF4-CCCD-452E-886C-3AAFA5AC4558}
 welcome
 WIZARD
@@ -9402,12 +9473,6 @@ FALSE
 
 FALSE
 
-{F8F7EAB0-F146-4B3C-B8A4-127BB9A7FB91}
-$SUPPORTDIR$\UninstallAscom.exe
-TRUE
-
-TRUE
-RC
 {5EF594C3-96A2-4956-AD2D-02236E252D38}
 $SUPPORTDIR$\UninstallAscom.exe
 TRUE
@@ -11082,6 +11147,10 @@ PLATFORMVERSIONMINOR
 $SUPPORTDIR$\MasterPlatformVersion.txt
 PLATFORMVERSIONMAJOR
 
+{0CE594CE-3668-48FF-9CDF-896FB5E6F0C0}
+$SETUPLOG$
+CFA
+
 {2405F679-5DB5-42E0-A2FD-2B17B6DBDB09}
 $SETUPLOG$
 $TIME$ RC: $GACINSTALLRC$ GACInstall Remove policy.5.5.ASCOM.Utiliites
@@ -11907,16 +11976,6 @@ $SETUPLOG$
 $TIME$ Install cache directory: $INSTALLCACHEDIRECTORY$
 FALSE
 TRUE
-{5A7660B8-134D-40C2-908A-8F8F0BD4D910}
-$SETUPLOG$
-$TIME$ RC: $RC$ Set ACL on ASCOM Profile Store
-FALSE
-TRUE
-{347BD953-1323-47EF-B3A9-06D9410CAC74}
-$SETUPLOG$
-$TIME$ First time install, preparing ASCOM Profile Store
-FALSE
-TRUE
 {6313C353-7A95-4E1B-888A-E6D57D2DF846}
 $SETUPLOG$
 $TIME$ RC: $RC$ UninstallASCOM 
@@ -12187,14 +12246,14 @@ $SETUPLOG$
 $TIME$ Found Windows 10 Threshold, terminating installation
 FALSE
 TRUE
-{D99CA6C5-97D8-4FD9-A0DF-EF4F773076AB}
-$SETUPLOG$
-$TIME$ RC: $RC$ UninstallASCOM /SETPROFILEACL
-FALSE
-TRUE
 {1D456B89-9376-450F-847B-C93EC368FF98}
 $SETUPLOG$
 $TIME$ Setting Profile registry ACL
+FALSE
+TRUE
+{7F4CCEF9-C3D5-4694-A705-57B0C65ACB10}
+$SETUPLOG$
+$TIME$ RC: $RC$ Set ACL on ASCOM Profile Store
 FALSE
 TRUE
 {C27DD540-EC7D-462C-9EE8-5D0F21EB2997}
@@ -12777,7 +12836,21 @@ $
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 C
+
 
 
 
@@ -14596,6 +14669,20 @@ C
 
 
 $
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

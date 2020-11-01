@@ -58,11 +58,11 @@
 	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" --><div class="article">
-	<h3>The ASCOM Standards Process</h3>
-	<p>The ASCOM standards process is  <i>informal </i> since relatively few people are involved and the astronomy community overall is relatively small. By avoiding the stilted and often political &quot;standards body&quot; approach, standards can be proposed, discussed, implemented, tested, refined, and accepted by vote more quickly and with a higher probability of success. See the <a href="InterfacePrinciple.htm" target="_new">ASCOM Interface Principle</a> and <a href="#philosophy">Philosophical Issues</a> below. Loosely stated, the process is:</p>
+	<h3>The ASCOM Standards Process (rev. April 2020)</h3>
+	<p>The ASCOM standards process is  <i>informal </i> since relatively few people are involved and the astronomy community overall is relatively small. By avoiding the stilted and often political &quot;standards body&quot; approach, standards can be proposed (<a href="#proposals">see below</a>), discussed, implemented, tested, refined, and accepted by vote more quickly and with a higher probability of success. See the <a href="InterfacePrinciple.htm" target="_new">ASCOM Interface Principle</a> and <a href="#philosophy">Philosophical Issues</a> below. Loosely stated, the process is:</p>
 	<ol>
 		<li>A <span class="underline">single author</span> publishes  a draft interface specification. Ideally, this will be derived from an interface already in use and not designed in a vacuum.  See <a href="#philosophy">Philosophical Issues</a> below.</li>
-		<li>Discuss the proposal on the <a href="https://ascomtalk.groups.io/g/Developer" target="_new">ASCOM Developer's Forum</a> until an interface agreement can be reached. See the <a href="InterfacePrinciple.htm" target="_new">ASCOM Interface Principle</a> as well as <a href="#philosophy">Philosophical Issues</a> below. </li>
+		<li>Discuss the proposal on the <a href="https://ascomtalk.groups.io/g/Developer" target="_new">ASCOM Developer's Forum</a> until an interface agreement can be reached. See the <a href="InterfacePrinciple.htm" target="_new">ASCOM Interface Principle</a> as well as <a href="#philosophy">Philosophical Issues</a> below.</li>
 		<li>Implement a simulator which has all of the properties and methods of the proposed interface (a reference implementation). Ideally this would be done by someone other than the author. Make the simulator available to anyone who wishes to play with it.</li>
 		<li>Refine the specification and simulator as dictated by experience, again reaching an interface agreement brokered by the author. Discussion is closed at this point. </li>
 		<li>The author  posts a poll on ASCOM-Talk, giving the community several weeks to vote yes or no. Further suggestions and other feedback will be rejected at this point. </li>
@@ -78,10 +78,32 @@
 	<h4>Interface Agreements</h4>
 	<p>Another important aspect of the standards process is that the author is  responsible for brokering the interface agreement, a difficult task requiring sensitivity and above all the strength to reject &quot;it would be nice if&quot; suggestions which have no clear use-case. </p>
 	</div>
+	
+<!--	<div class="article">
+		<a name="proposals" id="proposals"></a>
+		<h3>How to propose a new interface or change an existing interface</h3>
+		<p>Please start a new thread on the <a href="https://ascomtalk.groups.io/g/Developer" target="_new">ASCOM Developer forum</a> (not the general user help forum) providing:</p>
+		<ol>
+		<li>Brief and clear use cases showing the capabilities proposed. These need to address "what" and "why". Ideally you won't use IT terminology in this section, it should be about what the change needs to do in astronomy / observing terms.</li>
+		<li>A technical definition for each proposed new method or method change similar to this one:<br /> 
+			<a href="https://ascom-standards.org/Help/Platform/html/P_ASCOM_DeviceInterface_ICameraV2_Gains.htm" target="_new">https://ascom-standards.org/Help/Platform/html/P_ASCOM_DeviceInterface_ICameraV2_Gains.htm</a><br />
+		The Syntax, Exceptions and Remarks sections are just examples of the type of content required, replicating the Help presentation format precisely isn't required.</li>
+		</ol>
+		
+		<p>Here are some .NET best practices to ensure that the interface is compatible with COM and .NET, and for ease of definition for Alpaca.</p>
+		<ul>
+			<li>Use ArrayList if you need to return a collection of values, as COM doesn't support .NET generic lists. The ArrayList can contain simple types such as numbers or strings. While the ArrayList can also contain objects, we  recommend avoiding lists of classes, if possible, to reduce implementation complexity for client and driver authors.</li>
+			<li>To make the method "optional" state that it can throw a PropertyNotImplementedException or MethodNotImplementedException as appropriate.</li>
+			<li>If a method takes a parameter, implement it as a function rather than as a property</li>
+			<li>Don't use "optional" parameters that have implicit default values.</li>
+			<li>Try to avoid returning structures / classes if you can, this can be done but makes life a lot more difficult for implementers.</li>
+		</ul>
+	</div>-->
+
 
 	<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright &copy; 1998-2019, The ASCOM Initiative. 
+	Copyright &copy; 1998-2020, The ASCOM Initiative. 
 	All rights reserved. </div>
 
 </body>
