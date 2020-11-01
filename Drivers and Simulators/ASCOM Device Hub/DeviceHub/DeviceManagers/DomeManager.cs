@@ -355,8 +355,16 @@ namespace ASCOM.DeviceHub
 				// We don't actually need the result, but it allows us to wait for the async slew to start
 				// and for a status update to occur.
 
-				var task = SlewDomeAsync( targetAzimuth );
-				var result = task.Result;
+				try
+				{
+					var task = SlewDomeAsync( targetAzimuth );
+					var result = task.Result;
+				}
+				catch (AggregateException xcp )
+				{
+					Exception ex = xcp.InnerException;
+					throw ex;
+				}
 			}
 		}
 

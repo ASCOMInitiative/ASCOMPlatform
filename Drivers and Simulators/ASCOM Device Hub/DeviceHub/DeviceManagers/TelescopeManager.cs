@@ -1291,6 +1291,7 @@ namespace ASCOM.DeviceHub
 					{
 						PulseGuideEnd = DateTime.MinValue;
 						Status.IsPulseGuiding = false;
+						Status.Slewing = Service.Slewing;
 					}
 					else
 					{

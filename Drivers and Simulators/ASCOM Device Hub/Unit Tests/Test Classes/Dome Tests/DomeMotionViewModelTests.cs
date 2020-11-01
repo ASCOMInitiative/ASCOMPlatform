@@ -61,7 +61,7 @@ namespace Unit_Tests.Dome
 			_vm.IsSlaved = true;
 
 			result = (bool)_prVm.Invoke( "CanToggleShutterState" );
-			Assert.IsFalse( result );
+			Assert.IsTrue( result );
 
 			_vm.IsSlaved = false;
 
