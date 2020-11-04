@@ -823,6 +823,66 @@ end
 [END REGION]
  
 [DEFINE REGION: Install New Platform 6 version]
+ 
+[DEFINE REGION: Clean up any remaining simulator COM entries]
+Comment: Clean up any remaining 32bit COM registry entries
+Set Variable PROGRESSTEXT to Cleaning simulator COM entries
+Write into Text File $SETUPLOG$ from Value  Cleaning simulator COM entries (at end of file)
+ 
+Comment: Remove Camera simulator COM entry
+Delete Registry KEY HKCR\CLSID\{12229C31-E7D6-49E8-9C5D-5D7FF05C3BFE}\*.*
+Comment: Remove CoverCalibrator simulator COM entry
+Delete Registry KEY HKCR\CLSID\{096BB159-95FD-4963-809F-1F8FB6E7F833}\*.*
+Comment: Remove FilterWheel simulator COM entry
+Delete Registry KEY HKCR\CLSID\{f9043c88-f6f2-101a-a3c9-08002b2f49fc}\*.*
+Comment: Remove Focuser simulator COM entry
+Delete Registry KEY HKCR\CLSID\{24C040F2-2FA5-4DA4-B87B-6C1101828D2A}\*.*
+Comment: Remove ObservingConditions simulator COM entry
+Delete Registry KEY HKCR\CLSID\{3b0ce559-c92f-46a4-bcd8-1ccec6e33f58}\*.*
+Comment: Remove Rotator simulator COM entry
+Delete Registry KEY HKCR\CLSID\{347b5004-3662-42c0-96b8-3f8f6f0467d2}\*.*
+Comment: Remove SafetyMonitor simulator COM entry
+Delete Registry KEY HKCR\CLSID\{0EF59E5C-2715-4E91-8A5E-38FE388B4F00}\*.*
+Comment: Remove Switch simulator COM entry
+Delete Registry KEY HKCR\CLSID\{602b2780-d8fe-438b-a11a-e45a8df6e7c8}\*.*
+Comment: Remove Telescope simulator COM entry
+Delete Registry KEY HKCR\CLSID\{86931eac-1f52-4918-b6aa-7e9b0ff361bd}\*.*
+Comment: Remove Video simulator COM entry
+Delete Registry KEY HKCR\CLSID\{1D06B419-B330-42CA-BC41-992718C929F4}\*.*
+Comment: Remove OpenWeatherMap ObservingConditions COM entry
+Delete Registry KEY HKCR\CLSID\{F6670AB1-FE72-44DB-BF35-418BEB8C2D9F}\*.*
+ 
+Comment: Clean up any remaining 64bit COM registry entries
+if Variable WIN64MODE Equals TRUE
+  Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+   
+  Comment: Remove Camera simulator COM entry
+  Delete Registry KEY HKCR\CLSID\{12229C31-E7D6-49E8-9C5D-5D7FF05C3BFE}\*.*
+  Comment: Remove CoverCalibrator simulator COM entry
+  Delete Registry KEY HKCR\CLSID\{096BB159-95FD-4963-809F-1F8FB6E7F833}\*.*
+  Comment: Remove FilterWheel simulator COM entry
+  Delete Registry KEY HKCR\CLSID\{f9043c88-f6f2-101a-a3c9-08002b2f49fc}\*.*
+  Comment: Remove Focuser simulator COM entry
+  Delete Registry KEY HKCR\CLSID\{24C040F2-2FA5-4DA4-B87B-6C1101828D2A}\*.*
+  Comment: Remove ObservingConditions simulator COM entry
+  Delete Registry KEY HKCR\CLSID\{3b0ce559-c92f-46a4-bcd8-1ccec6e33f58}\*.*
+  Comment: Remove Rotator simulator COM entry
+  Delete Registry KEY HKCR\CLSID\{347b5004-3662-42c0-96b8-3f8f6f0467d2}\*.*
+  Comment: Remove SafetyMonitor simulator COM entry
+  Delete Registry KEY HKCR\CLSID\{0EF59E5C-2715-4E91-8A5E-38FE388B4F00}\*.*
+  Comment: Remove Switch simulator COM entry
+  Delete Registry KEY HKCR\CLSID\{602b2780-d8fe-438b-a11a-e45a8df6e7c8}\*.*
+  Comment: Remove Telescope simulator COM entry
+  Delete Registry KEY HKCR\CLSID\{86931eac-1f52-4918-b6aa-7e9b0ff361bd}\*.*
+  Comment: Remove Video simulator COM entry
+  Delete Registry KEY HKCR\CLSID\{1D06B419-B330-42CA-BC41-992718C929F4}\*.*
+  Comment: Remove OpenWeatherMap ObservingConditions COM entry
+  Delete Registry KEY HKCR\CLSID\{F6670AB1-FE72-44DB-BF35-418BEB8C2D9F}\*.*
+   
+  Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+end
+[END REGION]
+ 
 Comment: ***** Start of Platform Installation *****
 Set Variable PROGRESSTEXT to Installing $TITLE$
 Write into Text File $SETUPLOG$ from Value   (at end of file)
