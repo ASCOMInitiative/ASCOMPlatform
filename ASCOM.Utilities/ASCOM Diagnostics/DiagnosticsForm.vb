@@ -7784,7 +7784,14 @@ Public Class DiagnosticsForm
                                 'Do nothing
                         End Select
                     End If
-                    ProcessSubKey(RKey, p_Depth + 1, Container)
+
+                    ' Process the subkey if it is present
+                    If Not IsNothing(RKey) Then
+                        ProcessSubKey(RKey, p_Depth + 1, Container)
+                    Else ' Subkey cannot be opened so log message
+                        TL.LogMessage("ProcessSubKey", $"Unable to open subkey {SubKey}, ignoring and continuing with next key.")
+                    End If
+
                     RKey.Close()
                 Next
             Catch ex As Exception
