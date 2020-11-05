@@ -42,7 +42,7 @@
           	Diagnostics:
            	<list class="bullet">
           		<listItem>Now correctly reports the Windows 10 operating system version.</listItem>
-		        <listItem>A rare exception that occured when recursing registry keys has been fixed.</listItem>
+		        <listItem>A rare exception that occurred when recursing registry keys has been fixed.</listItem>
         	</list>
           </listItem>
           <listItem>Corrected a typo on in the message given if a disconnect fails when using the Choose and Connect to Device form. Thanks Marco!</listItem>
@@ -99,8 +99,10 @@
       <content>
         <list class="bullet">
           <listItem>Recent versions of Visual Studio have started trapping NullReferenceExceptions that previously were not caught. Utilities.Profile has been recoded to avoid these.</listItem>
-          <listItem> The CloudCover property has been added to the TimeSinceLastUpdate and SensorDescription methods in the ObservingConditions driver template.</listItem>
-          <listItem> The developer installer repair option no longer loops indefinitely.</listItem>
+          <listItem>The CloudCover property has been added to the TimeSinceLastUpdate and SensorDescription methods in the ObservingConditions driver template.</listItem>
+          <listItem>The developer installer repair option no longer loops indefinitely.</listItem>
+          <listItem>DriverAccess now returns PropertyNotImplementedExceptions for the new "offset" properties when an ICameraV2 driver is in use.</listItem>
+          <listItem>The new IRotatorV3 members in DriverAccess now return better formatted "not implemented" messages when an IRotatorV2 driver is in use.</listItem>
         </list>
       </content>
     </section>
