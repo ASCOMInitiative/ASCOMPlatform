@@ -580,6 +580,16 @@
             <param name = "property">The name of the driver property that caused the exception.</param>
             <param name = "accessorSet">True if the exception is being thrown for the 'set' accessor, else false</param>
         </member>
+        <member name="M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.String)">
+            <summary>
+            Create a new exception with the supplied message
+            </summary>
+            <param name = "method">Exception description</param>
+            <param name = "message">Exception description</param>
+            <remarks>
+            This overload applies the supplied message directly to the exception without interpreting it as is the case with other overloads
+            </remarks>
+        </member>
         <member name="M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean,System.Exception)">
             <summary>
             Create a new exception object and identify the specified driver property as the source,

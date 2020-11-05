@@ -1686,8 +1686,16 @@ namespace ASCOM.DriverAccess
         /// </remarks>
         public int Offset
         {
-            set { _memberFactory.CallMember(2, "Offset", new Type[] { }, new object[] { value }); }
-            get { return Convert.ToInt32(_memberFactory.CallMember(1, "Offset", new Type[] { }, new object[] { })); }
+            get
+            {
+                if (DriverInterfaceVersion < 3) throw new PropertyNotImplementedException("Offset", "Offset Get is not implemented because the driver interface is ICameraV2 or earlier.");
+                return Convert.ToInt32(_memberFactory.CallMember(1, "Offset", new Type[] { }, new object[] { }));
+            }
+            set
+            {
+                if (DriverInterfaceVersion < 3) throw new PropertyNotImplementedException("Offset", "Offset Set is not implemented because the driver interface is ICameraV2 or earlier.");
+                _memberFactory.CallMember(2, "Offset", new Type[] { }, new object[] { value });
+            }
         }
 
         /// <summary>
@@ -1709,7 +1717,11 @@ namespace ASCOM.DriverAccess
         /// </remarks>
         public int OffsetMax
         {
-            get { return Convert.ToInt32(_memberFactory.CallMember(1, "OffsetMax", new Type[] { }, new object[] { })); }
+            get
+            {
+                if (DriverInterfaceVersion < 3) throw new PropertyNotImplementedException("OffsetMax", "OffsetMax Get is not implemented because the driver interface is ICameraV2 or earlier.");
+                return Convert.ToInt32(_memberFactory.CallMember(1, "OffsetMax", new Type[] { }, new object[] { }));
+            }
         }
 
         /// <summary>
@@ -1731,7 +1743,11 @@ namespace ASCOM.DriverAccess
         /// </remarks>
         public int OffsetMin
         {
-            get { return Convert.ToInt32(_memberFactory.CallMember(1, "OffsetMin", new Type[] { }, new object[] { })); }
+            get
+            {
+                if (DriverInterfaceVersion < 3) throw new PropertyNotImplementedException("OffsetMin", "OffsetMin Get is not implemented because the driver interface is ICameraV2 or earlier.");
+                return Convert.ToInt32(_memberFactory.CallMember(1, "OffsetMin", new Type[] { }, new object[] { }));
+            }
         }
 
         /// <summary>
@@ -1754,7 +1770,11 @@ namespace ASCOM.DriverAccess
         /// </remarks>
         public ArrayList Offsets
         {
-            get { return _memberFactory.CallMember(1, "Offsets", new Type[] { }, new object[] { }).ComObjToArrayList(); }
+            get
+            {
+                if (DriverInterfaceVersion < 3) throw new PropertyNotImplementedException("Offsets", "Offsets Get is not implemented because the driver interface is ICameraV2 or earlier.");
+                return _memberFactory.CallMember(1, "Offsets", new Type[] { }, new object[] { }).ComObjToArrayList();
+            }
         }
 
         /// <summary>
@@ -1768,8 +1788,16 @@ namespace ASCOM.DriverAccess
         /// </remarks>
         public double SubExposureDuration
         {
-            get { return Convert.ToDouble(_memberFactory.CallMember(1, "SubExposureDuration", new Type[] { }, new object[] { })); }
-            set { _memberFactory.CallMember(2, "SubExposureDuration", new Type[] { }, new object[] { value }); }
+            get
+            {
+                if (DriverInterfaceVersion < 3) throw new PropertyNotImplementedException("SubExposureDuration", "SubExposureDuration Get is not implemented because the driver interface is ICameraV2 or earlier.");
+                return Convert.ToDouble(_memberFactory.CallMember(1, "SubExposureDuration", new Type[] { }, new object[] { }));
+            }
+            set
+            {
+                if (DriverInterfaceVersion < 3) throw new PropertyNotImplementedException("SubExposureDuration", "SubExposureDuration Set is not implemented because the driver interface is ICameraV2 or earlier.");
+                _memberFactory.CallMember(2, "SubExposureDuration", new Type[] { }, new object[] { value });
+            }
         }
 
         #endregion
