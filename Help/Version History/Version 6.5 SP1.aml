@@ -38,7 +38,13 @@
           <listItem>A serious bug was introduced in the Astrometry.Transform class during Platform 6.5 implementation, which prevented a single instance from being used for multiple transforms. 
           The bug has been fixed and Transform now works as it did in Platform 6.4.</listItem>
           <listItem>Clients will now see the correct type of NotImplementedException (PropertNotImplementedExceptiony or MethodNotImplementedException) when Alpaca devices report that a member is not implemented.</listItem>
-          <listItem>Diagnostics now correctly reports the Windows 10 operating system version.</listItem>
+          <listItem>
+          	Diagnostics:
+           	<list class="bullet">
+          		<listItem>Now correctly reports the Windows 10 operating system version.</listItem>
+		        <listItem>A rare exception that occured when recursing registry keys has been fixed.</listItem>
+        	</list>
+          </listItem>
           <listItem>Corrected a typo on in the message given if a disconnect fails when using the Choose and Connect to Device form. Thanks Marco!</listItem>
           <listItem>
           	Platform installer:
@@ -47,7 +53,8 @@
 		        <listItem>Handles unregistering drivers more gracefully.</listItem>
         		<listItem>Checks that the Windows Task Scheduler is enabled before attempting to create the earth rotation data update scheduled task.</listItem>
         		<listItem>Sets the required registry Profile store ACL on every install rather than assuming that it is correctly set when upgrading from a previous Platform version. Access to the Profile store is confirmed after setting the ACL and any issues will be reported by the installer.</listItem>
-        		<listItem>The installer now detects whether controlled folder access is enabled on the user's Documents folder and aborts installation in this scenario.</listItem>
+        		<listItem>Detects whether controlled folder access is enabled on the user's Documents folder and aborts installation in this scenario.</listItem>
+				<listItem>Removes simulator COM entries when uninstalled.</listItem>
         	</list>
           </listItem>
           <listItem>Device Hub
