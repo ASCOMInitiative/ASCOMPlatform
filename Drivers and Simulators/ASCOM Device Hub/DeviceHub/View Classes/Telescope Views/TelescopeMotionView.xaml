@@ -187,6 +187,8 @@
             
             <!-- Motion Rate/Amount -->
 			
+			<!-- Controls for selecting symmetric Axis Rate -->
+			
 			<StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal" Width="Auto" Height="Auto" Margin="0,4">
 				<StackPanel.Visibility>
 					<MultiBinding Converter="{StaticResource MultiBoolVis}" ConverterParameter="true|false">
@@ -198,9 +200,11 @@
 								Margin="0,2" Padding="4,0" Foreground="{DynamicResource NormalTextBrush}" />
 				<ComboBox Height="20" Width="84" Margin="0,4,0,0" IsSynchronizedWithCurrentItem="True" DisplayMemberPath="Name"								
 								ItemsSource="{Binding JogRates}" SelectedItem="{Binding SelectedJogRate}" 
-								IsEnabled="{Binding CanStartMoveTelescope}" />
+								IsEnabled="{Binding CanMoveAxis}" />
 			</StackPanel>
 
+			<!-- Controls for selecting asymmetric Axis rates -->
+			
 			<StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Vertical" Width="Auto" Height="Auto" Margin="0,4">
 				<StackPanel.Visibility>
 					<MultiBinding Converter="{StaticResource MultiBoolVis}" ConverterParameter="true|true">
@@ -213,21 +217,18 @@
 								Margin="0,2" Padding="4,0" Foreground="{DynamicResource NormalTextBrush}" />
 					<ComboBox Height="20" Width="84" Margin="0,4,0,0" IsSynchronizedWithCurrentItem="True" DisplayMemberPath="Name"								
 								ItemsSource="{Binding JogRates}" SelectedItem="{Binding SelectedJogRate}" 
-								IsEnabled="{Binding CanStartMoveTelescope}" />
+								IsEnabled="{Binding CanMoveAxis}" />
 				</StackPanel>
 				<StackPanel Orientation="Horizontal" Width="Auto" Height="Auto" Margin="0">
 					<Label Content="DEC/Alt Axis Rate:" HorizontalAlignment="Left" VerticalAlignment="Center" 
 								Margin="0,2" Padding="4,0" Foreground="{DynamicResource NormalTextBrush}" FontSize="11" />
 					<ComboBox Height="20" Width="84" Margin="0,4,0,0" IsSynchronizedWithCurrentItem="True" DisplayMemberPath="Name"								
 								ItemsSource="{Binding SecondaryJogRates}" SelectedItem="{Binding SelectedSecondaryJogRate}" 
-								IsEnabled="{Binding CanStartMoveTelescope}" />
+								IsEnabled="{Binding CanMoveAxis}" />
 				</StackPanel>
-
 			</StackPanel>
 
-			
-			
-			
+			<!-- Controls for fixed slew amount -->
 			
 			<StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal" Width="Auto" Height="Auto" Margin="0,4"
 									Visibility="{Binding IsVariableJog, Converter={StaticResource NegatedBooleanToVisibilityConverter}}" >

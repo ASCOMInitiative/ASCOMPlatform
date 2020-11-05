@@ -749,7 +749,7 @@ namespace ASCOM.DeviceHub
 
 		// Remove all traces of this from the registry. 
 
-		private static void UnregisterObjects( bool rerunningAsElevated = false )
+		private static void UnregisterObjects( bool keepProfile, bool rerunningAsElevated = false )
 		{
 			if ( rerunningAsElevated )
 			{
@@ -767,8 +767,8 @@ namespace ASCOM.DeviceHub
 				if ( !IsElevated )
 				{
 					// Here we want to elevate a copy of ourselves, unless we are running under the VS Debugger.
-
-					RerunAsAdministrator( "/unregElevated" );
+					
+					RerunAsAdministrator( keepProfile ? "/unregElevated" : "/unregElevated_full" );
 
 					return;
 				}
@@ -803,17 +803,22 @@ namespace ASCOM.DeviceHub
 				Registry.ClassesRoot.DeleteSubKey( String.Format( "CLSID\\{0}\\Programmable", clsid ), false );
 				Registry.ClassesRoot.DeleteSubKey( String.Format( "CLSID\\{0}", clsid ), false );
 
-				try
+				if ( !keepProfile )
 				{
-					// ASCOM
+					// Delete any profile settings for the device.
 
-					using ( var P = new ASCOM.Utilities.Profile() )
+					try
 					{
-						P.DeviceType = deviceType;
-						P.Unregister( progid );
+						// ASCOM
+
+						using ( var P = new ASCOM.Utilities.Profile() )
+						{
+							P.DeviceType = deviceType;
+							P.Unregister( progid );
+						}
 					}
+					catch ( Exception ) { }
 				}
-				catch ( Exception ) { }
 			}
 		}
 
@@ -872,7 +877,10 @@ namespace ASCOM.DeviceHub
 
 			if ( args.Length > 0 )
 			{
-				switch ( args[0].ToLower() )
+				string arg = args[0].ToLower();
+				bool keepProfile = !arg.EndsWith( "_full");
+
+				switch ( arg )
 				{
 					case "-embedding":
 						StartedByCOM = true;                                        // Indicate COM started us
@@ -892,7 +900,11 @@ namespace ASCOM.DeviceHub
 					case @"/unregister":
 					case "-unregserver":                                        // Emulate VB6
 					case @"/unregserver":
-						UnregisterObjects();                                    //Unregister each served object
+					case "-unregister_full":
+					case @"/unregister_full":
+					case "-unregserver_full":                                        // Emulate VB6
+					case @"/unregserver_full":
+						UnregisterObjects( keepProfile );                                    //Unregister each served object
 						retval = false;
 
 						break;
@@ -906,13 +918,15 @@ namespace ASCOM.DeviceHub
 
 					case "-unregelevated":
 					case @"/unregelevated":
-						UnregisterObjects( true );
+					case "-unregelevated_full":
+					case @"/unregelevated_full":
+						UnregisterObjects( keepProfile, true );
 						retval = false;
 
 						break;
 
 					default:
-						MessageBox.Show( "Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding",
+						MessageBox.Show( "Unknown argument: " + args[0] + "\nValid are : -register, -unregister, unregister_full, and -embedding",
 							"DeviceHub", MessageBoxButton.OK, MessageBoxImage.Exclamation );
 
 						break;

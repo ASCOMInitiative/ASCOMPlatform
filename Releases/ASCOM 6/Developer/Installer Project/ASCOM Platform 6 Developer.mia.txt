@@ -346,7 +346,7 @@ else
   if Variable INSTALLCACHEEXISTS Equals TRUE
     Comment: Cache directory does exist so remove it
     Write into Text File $SETUPLOG$ from Value Removing install cache found at $INSTALLCACHEDIRECTORY$ (at end of file)
-    Recursively Delete Files $INSTALLCACHEDIRECTORY$
+    Comment: Recursively Delete Files $INSTALLCACHEDIRECTORY$
   else
     Write into Text File $SETUPLOG$ from Value Install cache not found - $INSTALLCACHEDIRECTORY$ (at end of file)
   end

@@ -11,6 +11,8 @@ using ASCOM.DeviceHub;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 namespace Unit_Tests
 {
 	public enum SlewType
@@ -83,9 +85,7 @@ namespace Unit_Tests
 		public bool MockIsWeakDriver { get; set; }
 		public bool MockNullPrimaryAxisRates { get; set; }
 
-		private Vector _targetAxes;
 		private Vector _mountAxes;
-		private DateTime _settleTime;
 		public static bool isPulseGuidingRa;
 		public static bool isPulseGuidingDec;
 		public static Vector guideDuration = new Vector(); // In seconds
@@ -303,13 +303,17 @@ namespace Unit_Tests
 				if ( value != MockSideOfPier )
 				{
 					MockSlewing = true;
+					MockSideOfPier = PierSide.pierUnknown;
 
 					Task.Run( () =>
 					{
-						Thread.Sleep( 1000 );
+						Thread.Sleep( 2500 );
 
-						MockSideOfPier = value;
-						MockSlewing = false;
+						PierSide sop = value;
+						bool slewing = false;
+
+						MockSideOfPier = sop;
+						MockSlewing = slewing;
 					} );
 				}
 			}
@@ -760,110 +764,6 @@ namespace Unit_Tests
 			}
 		}
 
-		private Vector DoSlew()
-		{
-			Vector change = new Vector();
-
-			if ( !Slewing )
-			{
-				return change;
-			}
-
-			// Move towards the target position
-
-			double delta;
-			bool finished = true;
-			delta = _targetAxes.X - _mountAxes.X;
-
-			while ( delta < -180 || delta > 180 )
-			{
-				if ( delta < -180 ) delta += 360;
-				if ( delta > 180 ) delta -= 360;
-			}
-
-			int signDelta = delta < 0 ? -1 : +1;
-			delta = Math.Abs( delta );
-
-			if ( delta < slewSpeedSlow )
-			{
-				change.X = delta * signDelta;
-			}
-			else if ( delta < slewSpeedMedium * 2 )
-			{
-				change.X = slewSpeedSlow * signDelta;
-				finished = false;
-			}
-			else if ( delta < slewSpeedFast * 2 )
-			{
-				change.X = slewSpeedMedium * signDelta;
-				finished = false;
-			}
-			else
-			{
-				change.X = slewSpeedFast * signDelta;
-				finished = false;
-			}
-
-			delta = _targetAxes.Y - _mountAxes.Y;
-
-			while ( delta < -180 || delta > 180 )
-			{
-				if ( delta < -180 ) delta += 360;
-				if ( delta > 180 ) delta -= 360;
-			}
-
-			signDelta = delta < 0 ? -1 : +1;
-			delta = Math.Abs( delta );
-
-			if ( delta < slewSpeedSlow )
-			{
-				change.Y = delta * signDelta;
-			}
-			else if ( delta < slewSpeedMedium * 2 )
-			{
-				change.Y = slewSpeedSlow * signDelta;
-				finished = false;
-			}
-			else if ( delta < slewSpeedFast * 2 )
-			{
-				change.Y = slewSpeedMedium * signDelta;
-				finished = false;
-			}
-			else
-			{
-				change.Y = slewSpeedFast * signDelta;
-				finished = false;
-			}
-			if ( finished )
-			{
-				MockSlewing = false;
-
-				switch ( MockSlewState )
-				{
-					case SlewType.SlewRaDec:
-					case SlewType.SlewAltAz:
-						MockSlewState = SlewType.SlewSettle;
-						_settleTime = DateTime.Now + TimeSpan.FromSeconds( SlewSettleTime );
-						break;
-
-					case SlewType.SlewPark:
-						MockSlewState = SlewType.SlewNone;
-						MockAtPark = true;
-						break;
-
-					case SlewType.SlewHome:
-						MockSlewState = SlewType.SlewNone;
-						break;
-					case SlewType.SlewNone:
-						break;
-
-					default:
-						MockSlewState = SlewType.SlewNone;
-						break;
-				}
-			}
-			return change;
-		}
 
 		private Vector PulseGuide( double updateInterval )
 		{

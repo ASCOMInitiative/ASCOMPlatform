@@ -15,6 +15,10 @@ Friend Class ChooserForm
 
 #Region "Constants"
 
+    ' Debug constants
+    Private Const DEBUG_SINGLE_THREADING As Boolean = True
+
+    ' General constants
     Private Const ALERT_MESSAGEBOX_TITLE As String = "ASCOM Chooser"
     Private Const PROPERTIES_TOOLTIP_DISPLAY_TIME As Integer = 5000 ' Time to display the Properties tooltip (milliseconds)
     Private Const FORM_LOAD_WARNING_MESSAGE_DELAY_TIME As Integer = 250 ' Delay time before any warning message is displayed on form load
@@ -62,7 +66,7 @@ Friend Class ChooserForm
     Private currentWarningTitle, currentWarningMesage As String
     Private alpacaDevices As Generic.List(Of AscomDevice) = New Generic.List(Of AscomDevice)()
     Private selectedChooserItem As ChooserItem
-    Private WithEvents clientManagerProcess As Process
+    Private WithEvents ClientManagerProcess As Process
     Private driverGenerationComplete As Boolean
     Private currentOkButtonEnabledState As Boolean
     Private currentPropertiesButtonEnabledState As Boolean
@@ -73,7 +77,7 @@ Friend Class ChooserForm
     Private chooserPropertiesToolTip As ToolTip
     Private createAlpacaDeviceToolTip As ToolTip
     Private alpacaStatusToolstripLabel As ToolStripLabel
-    Private WithEvents alpacaStatusIndicatorTimer As System.Windows.Forms.Timer
+    Private WithEvents AlpacaStatusIndicatorTimer As System.Windows.Forms.Timer
     Private profile As Profile
     Private registryAccess As RegistryAccess
 
@@ -197,9 +201,9 @@ Friend Class ChooserForm
             RefreshTraceMenu() ' Refresh the trace menu
 
             ' Set up the Alpaca status blink timer but make sure its not running
-            alpacaStatusIndicatorTimer = New System.Windows.Forms.Timer
-            alpacaStatusIndicatorTimer.Interval = ALPACA_STATUS_BLINK_TIME ' Set it to fire after 250ms
-            alpacaStatusIndicatorTimer.Stop()
+            AlpacaStatusIndicatorTimer = New System.Windows.Forms.Timer
+            AlpacaStatusIndicatorTimer.Interval = ALPACA_STATUS_BLINK_TIME ' Set it to fire after 250ms
+            AlpacaStatusIndicatorTimer.Stop()
 
             TL.LogMessage("ChooserForm_Load", $"UI thread: {Thread.CurrentThread.ManagedThreadId}")
 
@@ -301,7 +305,7 @@ Friend Class ChooserForm
 
 #Region "Form, button, control and timer event handlers"
 
-    Private Sub comboProduct_DrawItem(ByVal sender As Object, ByVal e As DrawItemEventArgs) 'Handles CmbDriverSelector.DrawItem
+    Private Sub ComboProduct_DrawItem(ByVal sender As Object, ByVal e As DrawItemEventArgs) 'Handles CmbDriverSelector.DrawItem
         Dim brush As Brush
         Dim colour As Color
         Dim combo As ComboBox
@@ -351,7 +355,7 @@ Friend Class ChooserForm
         DisplayAlpacaDeviceToolTip()
     End Sub
 
-    Private Sub AlpacaStatusIndicatorTimerEventHandler(ByVal myObject As Object, ByVal myEventArgs As EventArgs) Handles alpacaStatusIndicatorTimer.Tick
+    Private Sub AlpacaStatusIndicatorTimerEventHandler(ByVal myObject As Object, ByVal myEventArgs As EventArgs) Handles AlpacaStatusIndicatorTimer.Tick
         If AlpacaStatus.BackColor = Color.Orange Then
             AlpacaStatus.BackColor = Color.DimGray
         Else
@@ -365,7 +369,7 @@ Friend Class ChooserForm
     ''' </summary>
     ''' <param name="eventSender"></param>
     ''' <param name="eventArgs"></param>
-    Private Sub cmdProperties_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnProperties.Click
+    Private Sub CmdProperties_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnProperties.Click
         Dim oDrv As Object = Nothing ' The driver
         Dim bConnected As Boolean
         Dim sProgID As String
@@ -403,7 +407,7 @@ Friend Class ChooserForm
                     WarningTooltipClear() ' Clear warning tool tip before entering setup so that the dialogue doesn't interfere with or obscure the setup dialogue.
                     oDrv.SetupDialog()
                 Catch ex As Exception
-                    MsgBox("Driver setup method failed: """ & sProgID & """ " & ex.Message, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
+                    MsgBox("Driver setup method failed: """ & sProgID & """ " & ex.ToString(), CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
                     LogEvent("ChooserForm", "Driver setup method failed for driver: """ & sProgID & """", Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserSetupFailed, ex.ToString)
                 End Try
             End If
@@ -422,12 +426,12 @@ Friend Class ChooserForm
 
     End Sub
 
-    Private Sub cmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnCancel.Click
+    Private Sub CmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnCancel.Click
         selectedProgIdValue = ""
         Me.Hide()
     End Sub
 
-    Private Sub cmdOK_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnOK.Click
+    Private Sub CmdOK_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles BtnOK.Click
         Dim newProgId As String
         Dim userResponse As DialogResult
 
@@ -477,7 +481,7 @@ Friend Class ChooserForm
                     TL.LogMessage("OK Click", $"Driver creation cancelled: {ex.Message}")
                     MessageBox.Show($"Driver creation cancelled: {ex.Message}")
                 Catch ex As Exception
-                    MessageBox.Show($"{ex.ToString()}")
+                    MessageBox.Show($"{ex}")
                 End Try
             End If
 
@@ -490,11 +494,11 @@ Friend Class ChooserForm
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub DriverGeneration_Complete(ByVal sender As Object, ByVal e As System.EventArgs) Handles clientManagerProcess.Exited
+    Private Sub DriverGeneration_Complete(ByVal sender As Object, ByVal e As System.EventArgs) Handles ClientManagerProcess.Exited
         driverGenerationComplete = True ' Flag that driver generation is complete
     End Sub
 
-    Private Sub cbDriverSelector_SelectionChangeCommitted(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles CmbDriverSelector.SelectionChangeCommitted
+    Private Sub CbDriverSelector_SelectionChangeCommitted(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles CmbDriverSelector.SelectionChangeCommitted
         If CmbDriverSelector.SelectedIndex >= 0 Then
 
             ' Save the newly selected chooser item
@@ -518,7 +522,7 @@ Friend Class ChooserForm
         End If
     End Sub
 
-    Private Sub picASCOM_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles picASCOM.Click
+    Private Sub PicASCOM_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles picASCOM.Click
         Try
             Process.Start("https://ASCOM-Standards.org/")
         Catch ex As Exception
@@ -674,12 +678,11 @@ Friend Class ChooserForm
 
     Private Sub MnuConfigureDiscovery_Click(sender As Object, e As EventArgs) Handles MnuConfigureChooser.Click
         Dim alpacaConfigurationForm As ChooserAlpacaConfigurationForm
-        Dim outcome As DialogResult
 
         TL.LogMessage("ConfigureDiscovery", $"About to create Alpaca configuration form")
         alpacaConfigurationForm = New ChooserAlpacaConfigurationForm(Me) ' Create a new configuration form
         alpacaConfigurationForm.ShowDialog() ' Display the form as a modal dialogue box
-        TL.LogMessage("ConfigureDiscovery", $"Exited Alpaca configuration form. Result: {alpacaConfigurationForm.DialogResult.ToString()}")
+        TL.LogMessage("ConfigureDiscovery", $"Exited Alpaca configuration form. Result: {alpacaConfigurationForm.DialogResult}")
 
         If alpacaConfigurationForm.DialogResult = DialogResult.OK Then ' If the user clicked OK then persist the new state
             TL.LogMessage("ConfigureDiscovery", $"Persisting new configuration for {deviceTypeValue}")
@@ -725,10 +728,9 @@ Friend Class ChooserForm
     End Sub
 
     ''' <summary>
-    ''' Find the lowest numbered unused ProgID in the series {progIdBase}{N}.{deviceType} where N Is an integer starting at 1
+    ''' Creates a new Alpaca driver instance with the given descriptive name
     ''' </summary>
-    ''' <param name="progIdBase">ProgID base string</param>
-    ''' <param name="deviceType">ASCOM device type</param>
+    ''' <param name="deviceDescription"></param>
     ''' <returns></returns>
     Private Function CreateNewAlpacaDriver(deviceDescription As String) As String
         Dim newProgId As String
@@ -760,7 +762,6 @@ Friend Class ChooserForm
 
     Private Sub MnuCreateAlpacaDriver_Click(sender As Object, e As EventArgs) Handles MnuCreateAlpacaDriver.Click
         Dim newProgId As String
-        Dim userResponse As MsgBoxResult
 
         ' Create a new Alpaca driver of the current ASCOM device type
         newProgId = CreateNewAlpacaDriver("")
@@ -862,16 +863,16 @@ Friend Class ChooserForm
         clientManagerProcessStartInfo.WorkingDirectory = clientManagerWorkingDirectory
 
         ' Create the management process
-        clientManagerProcess = New Process()
-        clientManagerProcess.StartInfo = clientManagerProcessStartInfo
-        clientManagerProcess.EnableRaisingEvents = True
+        ClientManagerProcess = New Process()
+        ClientManagerProcess.StartInfo = clientManagerProcessStartInfo
+        ClientManagerProcess.EnableRaisingEvents = True
 
         ' Initialise the process complete flag to false
         driverGenerationComplete = False
 
         ' Run the process
         TL.LogMessage("RunDynamicClientManager", $"Starting driver management process")
-        clientManagerProcess.Start()
+        ClientManagerProcess.Start()
 
         ' Wait for the process to complete at which point the process complete event will fire and driverGenerationComplete will be set true
         Do
@@ -881,7 +882,7 @@ Friend Class ChooserForm
 
         TL.LogMessage("RunDynamicClientManager", $"Completed driver management process")
 
-        clientManagerProcess.Dispose()
+        ClientManagerProcess.Dispose()
 
     End Sub
 
@@ -903,8 +904,22 @@ Friend Class ChooserForm
     End Function
 
     Private Sub InitialiseComboBox()
-        Dim discoveryThread As Thread = New Thread(AddressOf DiscoverAlpacaDevicesAndPopulateDriverComboBox)
-        discoveryThread.Start()
+
+        TL.LogMessage("InitialiseComboBox", $"Arrived at InitialiseComboBox - Running On thread: {Thread.CurrentThread.ManagedThreadId}.")
+
+        If DEBUG_SINGLE_THREADING Then
+            TL.LogMessage("InitialiseComboBox", $"Starting single threaded discovery...")
+            DiscoverAlpacaDevicesAndPopulateDriverComboBox()
+            TL.LogMessage("InitialiseComboBox", $"Completed single threaded discovery")
+        Else ' Normal multi-threading behaviour
+            TL.LogMessage("InitialiseComboBox", $"Creating discovery thread...")
+            Dim discoveryThread As Thread = New Thread(AddressOf DiscoverAlpacaDevicesAndPopulateDriverComboBox)
+            TL.LogMessage("InitialiseComboBox", $"Successfully created discovery thread, about to start discovery thread...")
+            discoveryThread.Start()
+            TL.LogMessage("InitialiseComboBox", $"Discovery thread started OK")
+        End If
+
+        TL.LogMessage("InitialiseComboBox", $"Exiting InitialiseComboBox on thread: {Thread.CurrentThread.ManagedThreadId}.")
     End Sub
 
     Private Sub DiscoverAlpacaDevicesAndPopulateDriverComboBox()
@@ -982,7 +997,7 @@ Friend Class ChooserForm
 
                     ' List discovered devices to the log
                     For Each ascomDevice As AscomDevice In discovery.GetAscomDevices("")
-                        TL.LogMessage("DiscoverAlpacaDevices", $"FOUND {ascomDevice.AscomDeviceType} {ascomDevice.AscomDeviceName} {ascomDevice.IPEndPoint.ToString()}")
+                        TL.LogMessage("DiscoverAlpacaDevices", $"FOUND {ascomDevice.AscomDeviceType} {ascomDevice.AscomDeviceName} {ascomDevice.IPEndPoint}")
                     Next
 
                     TL.LogMessage("DiscoverAlpacaDevices", $"Discovered {discovery.GetAscomDevices(deviceTypeValue).Count} {deviceTypeValue} devices")
@@ -993,9 +1008,9 @@ Friend Class ChooserForm
 
                 ' Add any Alpaca devices to the list
                 For Each device As AscomDevice In alpacaDevices
-                    TL.LogMessage("DiscoverAlpacaDevices", $"Discovered Alpaca device: {device.AscomDeviceType} {device.AscomDeviceName} {device.UniqueId} at  http://{device.HostName}:{device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber}")
+                    TL.LogMessage("DiscoverAlpacaDevices", $"Discovered Alpaca device: {device.AscomDeviceType} {device.AscomDeviceName} {device.UniqueId} at  http://{device.HostName}:{device.IPEndPoint.Port}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber}")
 
-                    Dim displayHostName As String = CType(IIf(device.HostName = device.IPEndPoint.Address.ToString(), device.IPEndPoint.Address.ToString(), $"{device.HostName} ({device.IPEndPoint.Address.ToString()})"), String)
+                    Dim displayHostName As String = CType(IIf(device.HostName = device.IPEndPoint.Address.ToString(), device.IPEndPoint.Address.ToString(), $"{device.HostName} ({device.IPEndPoint.Address})"), String)
                     Dim displayName As String
 
                     Dim deviceUniqueId, deviceHostName As String
@@ -1054,7 +1069,7 @@ Friend Class ChooserForm
                         TL.LogMessage("DiscoverAlpacaDevices", $"Found driver match for {device.AscomDeviceName}")
                         If AlpacaShowDiscoveredDevices Then
                             TL.LogMessage("DiscoverAlpacaDevices", $"Showing KNOWN ALPACA DEVICE entry for {device.AscomDeviceName}")
-                            displayName = $"* KNOWN ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.UniqueId}"
+                            displayName = $"* KNOWN ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.UniqueId}"
                             chooserList.Add(New ChooserItem(device.UniqueId, device.AlpacaDeviceNumber, device.HostName, device.IPEndPoint.Port, device.AscomDeviceName), displayName)
                         Else
                             TL.LogMessage("DiscoverAlpacaDevices", $"This device MATCHES an existing COM driver so NOT adding it to the Combo box list")
@@ -1062,7 +1077,7 @@ Friend Class ChooserForm
 
                     Else
                         TL.LogMessage("DiscoverAlpacaDevices", $"This device does NOT match an existing COM driver so ADDING it to the Combo box list")
-                        displayName = $"* NEW ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port.ToString()}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.UniqueId}"
+                        displayName = $"* NEW ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.UniqueId}"
                         chooserList.Add(New ChooserItem(device.UniqueId, device.AlpacaDeviceNumber, device.HostName, device.IPEndPoint.Port, device.AscomDeviceName), displayName)
                     End If
 
@@ -1210,7 +1225,7 @@ Friend Class ChooserForm
             BtnProperties.Enabled = currentPropertiesButtonEnabledState
             BtnOK.Enabled = currentOkButtonEnabledState
             AlpacaStatus.Visible = False
-            alpacaStatusIndicatorTimer.Stop()
+            AlpacaStatusIndicatorTimer.Stop()
         End If
     End Sub
 
@@ -1232,7 +1247,7 @@ Friend Class ChooserForm
             BtnOK.Enabled = False
             AlpacaStatus.Visible = True
             AlpacaStatus.BackColor = Color.Orange
-            alpacaStatusIndicatorTimer.Start()
+            AlpacaStatusIndicatorTimer.Start()
         End If
     End Sub
 
@@ -1254,7 +1269,7 @@ Friend Class ChooserForm
             BtnOK.Enabled = currentOkButtonEnabledState
             AlpacaStatus.Visible = True
             AlpacaStatus.BackColor = Color.Lime
-            alpacaStatusIndicatorTimer.Stop()
+            AlpacaStatusIndicatorTimer.Stop()
         End If
     End Sub
 
@@ -1276,7 +1291,7 @@ Friend Class ChooserForm
             BtnOK.Enabled = currentOkButtonEnabledState
             AlpacaStatus.Visible = True
             AlpacaStatus.BackColor = Color.Red
-            alpacaStatusIndicatorTimer.Stop()
+            AlpacaStatusIndicatorTimer.Stop()
         End If
     End Sub
 

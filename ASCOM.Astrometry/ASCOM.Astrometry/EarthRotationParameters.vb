@@ -1,6 +1,7 @@
 ﻿Imports ASCOM.Utilities
 Imports System.Globalization
 Imports System.IO
+Imports System.ServiceProcess
 Imports Microsoft.Win32.TaskScheduler
 
 Public Class EarthRotationParameters : Implements IDisposable
@@ -43,15 +44,12 @@ Public Class EarthRotationParameters : Implements IDisposable
     Private Shared LastDeltaUT1JulianDate As Double = DOUBLE_VALUE_NOT_AVAILABLE
     Private Shared LastDeltaUT1Value As Double
 
-    ' Constants to reference columns in the DownloadedLeapSecondValues array 
-    Private Const JULIAN_DATE As Integer = 0
-    Private Const YEAR As Integer = 1
-    Private Const MONTH As Integer = 2
-    Private Const LEAP_SECONDS As Integer = 3
-
     ' Constants for the minimum and maximum Julian date values that are accepted by the DeltaT function
     Private Const DELTAT_JULIAN_DATE_MINIMUM As Double = 1757582.5
     Private Const DELTAT_JULIAN_DATE_MAXIMUM As Double = 5373484.499999
+
+    ' Name of the Scheduler Task process, this should be the same on all Windows versions regardless of localisation
+    Private Const SCHEDULER_SERVICE_NAME As String = "Schedule"
 
     ' Downloaded leap second data. Format:  JulianDate, Year, Month, Day LeapSeconds
     Private DownloadedLeapSecondValues As SortedList(Of Double, Double) = New SortedList(Of Double, Double) ' Initialise to an empty list
@@ -994,140 +992,151 @@ Public Class EarthRotationParameters : Implements IDisposable
 
     Public Sub ManageScheduledTask()
         Dim taskDefinition As TaskDefinition
-        Dim timeTrigger As TimeTrigger = Nothing, dailyTrigger As DailyTrigger = Nothing, weeklyTrigger As WeeklyTrigger = Nothing, monthlyTrigger As MonthlyTrigger = Nothing
+        Dim timeTrigger As TimeTrigger, dailyTrigger As DailyTrigger, weeklyTrigger As WeeklyTrigger, monthlyTrigger As MonthlyTrigger
         Dim dayOfMonth(0) As Integer, executableName As String
 
         Try
             TL.BlankLine()
+            TL.LogMessage("ManageScheduledTask", "Testing whether scheduler is running")
 
-            TL.LogMessage("ManageScheduledTask", "Obtaining Scheduler information")
-            Using service = New TaskService()
+            ' Test whether the Task Scheduler Service is running so that the ASCOM task can be managed
+            Using serviceController = New ServiceController(SCHEDULER_SERVICE_NAME) ' Create a new service controller for the scheduler service
 
-                TL.LogMessage("ManageScheduledTask", String.Format("Highest supported scheduler version: {0}, Library version: {1}, Connected: {2}", service.HighestSupportedVersion, TaskService.LibraryVersion, service.Connected))
+                If (serviceController.Status = ServiceControllerStatus.Running) Then ' The scheduler is running normally so proceed with creating or updating the ASCOM EarthRotation parameters update task
+                    TL.LogMessage("ManageScheduledTask", $"Scheduler service is running OK - status: {serviceController.Status}. Obtaining Scheduler information...")
+                    Using service = New TaskService()
 
-                ' List current task state if any
-                Dim ASCOMTask As Task = service.GetTask(DOWNLOAD_TASK_PATH)
-                If (Not (ASCOMTask Is Nothing)) Then
-                    TL.LogMessage("ManageScheduledTask", String.Format("Found ASCOM task {0} last run: {1}, State: {2}, Enabled: {3}", ASCOMTask.Path, ASCOMTask.LastRunTime, ASCOMTask.State, ASCOMTask.Enabled))
-                Else
-                    TL.LogMessage("ManageScheduledTask", "ASCOM task does not exist")
-                End If
-                TL.BlankLine()
+                        TL.LogMessage("ManageScheduledTask", String.Format("Highest supported scheduler version: {0}, Library version: {1}, Connected: {2}", service.HighestSupportedVersion, TaskService.LibraryVersion, service.Connected))
 
-                Select Case UpdateTypeValue
-                    Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1, UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1 ' Just remove the update job if it exists so that it can't run
+                        ' List current task state if any
+                        Dim ASCOMTask As Task = service.GetTask(DOWNLOAD_TASK_PATH)
                         If (Not (ASCOMTask Is Nothing)) Then
-                            TL.LogMessage("ManageScheduledTask", String.Format("Update type is {0} and {1} task exists so it will be deleted.", UpdateTypeValue, DOWNLOAD_TASK_NAME))
-                            service.RootFolder.DeleteTask(DOWNLOAD_TASK_NAME)
-                            TL.LogMessage("ManageScheduledTask", String.Format("Task {0} deleted OK.", DOWNLOAD_TASK_NAME))
+                            TL.LogMessage("ManageScheduledTask", String.Format("Found ASCOM task {0} last run: {1}, State: {2}, Enabled: {3}", ASCOMTask.Path, ASCOMTask.LastRunTime, ASCOMTask.State, ASCOMTask.Enabled))
                         Else
-                            TL.LogMessage("ManageScheduledTask", String.Format("Update type is {0} and {1} task does not exist so no action.", UpdateTypeValue, DOWNLOAD_TASK_NAME))
+                            TL.LogMessage("ManageScheduledTask", "ASCOM task does not exist")
                         End If
+                        TL.BlankLine()
 
-                    Case UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1 ' Create a new or Update the existing scheduled job
-                        ' Get the task definition to work on, either a new one or the existing task, if it exists
-                        If (Not (ASCOMTask Is Nothing)) Then
-                            TL.LogMessage("ManageScheduledTask", String.Format("Update type is {0} and {1} task exists so it will be deleted.", UpdateTypeValue, DOWNLOAD_TASK_NAME))
-                            service.RootFolder.DeleteTask(DOWNLOAD_TASK_NAME)
-                            TL.LogMessage("ManageScheduledTask", String.Format("Task {0} deleted OK.", DOWNLOAD_TASK_NAME))
-                        End If
-                        TL.LogMessage("ManageScheduledTask", String.Format("{0} task will be created.", DOWNLOAD_TASK_NAME))
-                        taskDefinition = service.NewTask
+                        Select Case UpdateTypeValue
+                            Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1, UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1 ' Just remove the update job if it exists so that it can't run
+                                If (Not (ASCOMTask Is Nothing)) Then
+                                    TL.LogMessage("ManageScheduledTask", String.Format("Update type is {0} and {1} task exists so it will be deleted.", UpdateTypeValue, DOWNLOAD_TASK_NAME))
+                                    service.RootFolder.DeleteTask(DOWNLOAD_TASK_NAME)
+                                    TL.LogMessage("ManageScheduledTask", String.Format("Task {0} deleted OK.", DOWNLOAD_TASK_NAME))
+                                Else
+                                    TL.LogMessage("ManageScheduledTask", String.Format("Update type is {0} and {1} task does not exist so no action.", UpdateTypeValue, DOWNLOAD_TASK_NAME))
+                                End If
 
-                        taskDefinition.RegistrationInfo.Description = "ASCOM scheduled job to update earth rotation data: leap seconds and delta UT1. This job is managed through the ASCOM Diagnostics application and should not be manually edited."
+                            Case UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1 ' Create a new or Update the existing scheduled job
+                                ' Get the task definition to work on, either a new one or the existing task, if it exists
+                                If (Not (ASCOMTask Is Nothing)) Then
+                                    TL.LogMessage("ManageScheduledTask", String.Format("Update type is {0} and {1} task exists so it will be deleted.", UpdateTypeValue, DOWNLOAD_TASK_NAME))
+                                    service.RootFolder.DeleteTask(DOWNLOAD_TASK_NAME)
+                                    TL.LogMessage("ManageScheduledTask", String.Format("Task {0} deleted OK.", DOWNLOAD_TASK_NAME))
+                                End If
+                                TL.LogMessage("ManageScheduledTask", String.Format("{0} task will be created.", DOWNLOAD_TASK_NAME))
+                                taskDefinition = service.NewTask
 
-                        executableName = Process.GetCurrentProcess().MainModule.FileName 'Get the full path and name of the current executable
-                        TL.LogMessage("ManageScheduledTask", String.Format("Current Executable process full name and path: {0}", executableName))
+                                taskDefinition.RegistrationInfo.Description = "ASCOM scheduled job to update earth rotation data: leap seconds and delta UT1. This job is managed through the ASCOM Diagnostics application and should not be manually edited."
 
-                        executableName = Path.GetDirectoryName(executableName) ' Extract the path component of the full file name
-                        executableName += "\EarthRotationUpdate.exe" ' Append the name of the earth rotation update executable
-                        TL.LogMessage("ManageScheduledTask", String.Format("EarthRotationUpdate process full name and path: {0}", executableName))
+                                executableName = Process.GetCurrentProcess().MainModule.FileName 'Get the full path and name of the current executable
+                                TL.LogMessage("ManageScheduledTask", String.Format("Current Executable process full name and path: {0}", executableName))
 
-                        taskDefinition.Actions.Clear() ' Remove any existing actions and add the current one
-                        taskDefinition.Actions.Add(New ExecAction(executableName, Nothing, Nothing)) ' Add an action that will launch the updater application whenever the trigger fires
-                        'TL.LogMessage("UpdateTypeEvent", String.Format("", ))
-                        TL.LogMessage("ManageScheduledTask", String.Format("Added scheduled job action to run {0}", executableName))
+                                executableName = Path.GetDirectoryName(executableName) ' Extract the path component of the full file name
+                                executableName += "\EarthRotationUpdate.exe" ' Append the name of the earth rotation update executable
+                                TL.LogMessage("ManageScheduledTask", String.Format("EarthRotationUpdate process full name and path: {0}", executableName))
 
-                        ' Add settings appropriate to the task
-                        Try
-                            taskDefinition.Settings.AllowDemandStart = True ' Requires a V2 task library (XP is only V1)
-                            taskDefinition.Settings.StartWhenAvailable = True '' Requires a V2 task library (XP is only V1)
-                            TL.LogMessage("ManageScheduledTask", String.Format("Successfully added V2 AllowDemandStart and StartWhenAvailable settings."))
-                        Catch ex As NotV1SupportedException ' Swallow the not supported exception on XP
-                            TL.LogMessage("ManageScheduledTask", String.Format("This machine only has a V1 task scheduler - ignoring V2 AllowDemandStart and StartWhenAvailable settings."))
-                        End Try
-                        taskDefinition.Settings.ExecutionTimeLimit = New TimeSpan(0, 10, 0)
-                        taskDefinition.Settings.StopIfGoingOnBatteries = False
-                        taskDefinition.Settings.DisallowStartIfOnBatteries = False
-                        taskDefinition.Settings.Enabled = True
-                        TL.LogMessage("ManageScheduledTask", String.Format("Allow demand on start: {0}, Start when available: {1}, Execution time limit: {2} minutes, Stop if going on batteries: {3}, Disallow start if on batteries: {4}, Enabled: {5}, Run only if logged on: {6}",
-                                                          taskDefinition.Settings.AllowDemandStart, taskDefinition.Settings.StartWhenAvailable,
-                                                          taskDefinition.Settings.ExecutionTimeLimit.TotalMinutes, taskDefinition.Settings.StopIfGoingOnBatteries, taskDefinition.Settings.DisallowStartIfOnBatteries,
-                                                          taskDefinition.Settings.Enabled, taskDefinition.Settings.RunOnlyIfLoggedOn))
+                                taskDefinition.Actions.Clear() ' Remove any existing actions and add the current one
+                                taskDefinition.Actions.Add(New ExecAction(executableName, Nothing, Nothing)) ' Add an action that will launch the updater application whenever the trigger fires
+                                'TL.LogMessage("UpdateTypeEvent", String.Format("", ))
+                                TL.LogMessage("ManageScheduledTask", String.Format("Added scheduled job action to run {0}", executableName))
 
-                        taskDefinition.Triggers.Clear() ' Remove any previous triggers and add the new trigger to the task as the only trigger
-                        Select Case DownloadTaskRepeatFrequencyValue
-                            Case SCHEDULE_REPEAT_NONE ' Execute once at the specified day and time
-                                timeTrigger = New TimeTrigger()
-                                timeTrigger.StartBoundary = DownloadTaskScheduledTimeValue ' Add the user supplied date / time to the trigger
-                                taskDefinition.Triggers.Add(timeTrigger)
-                                TL.LogMessage("ManageScheduledTask", String.Format("Set trigger to run the job once at the specified time."))
+                                ' Add settings appropriate to the task
+                                Try
+                                    taskDefinition.Settings.AllowDemandStart = True ' Requires a V2 task library (XP is only V1)
+                                    taskDefinition.Settings.StartWhenAvailable = True '' Requires a V2 task library (XP is only V1)
+                                    TL.LogMessage("ManageScheduledTask", String.Format("Successfully added V2 AllowDemandStart and StartWhenAvailable settings."))
+                                Catch ex As NotV1SupportedException ' Swallow the not supported exception on XP
+                                    TL.LogMessage("ManageScheduledTask", String.Format("This machine only has a V1 task scheduler - ignoring V2 AllowDemandStart and StartWhenAvailable settings."))
+                                End Try
+                                taskDefinition.Settings.ExecutionTimeLimit = New TimeSpan(0, 10, 0)
+                                taskDefinition.Settings.StopIfGoingOnBatteries = False
+                                taskDefinition.Settings.DisallowStartIfOnBatteries = False
+                                taskDefinition.Settings.Enabled = True
+                                TL.LogMessage("ManageScheduledTask", String.Format("Allow demand on start: {0}, Start when available: {1}, Execution time limit: {2} minutes, Stop if going on batteries: {3}, Disallow start if on batteries: {4}, Enabled: {5}, Run only if logged on: {6}",
+                                                              taskDefinition.Settings.AllowDemandStart, taskDefinition.Settings.StartWhenAvailable,
+                                                              taskDefinition.Settings.ExecutionTimeLimit.TotalMinutes, taskDefinition.Settings.StopIfGoingOnBatteries, taskDefinition.Settings.DisallowStartIfOnBatteries,
+                                                              taskDefinition.Settings.Enabled, taskDefinition.Settings.RunOnlyIfLoggedOn))
 
-                            Case SCHEDULE_REPEAT_DAILY ' Execute daily at the specified time
-                                dailyTrigger = New DailyTrigger()
-                                dailyTrigger.StartBoundary = DownloadTaskScheduledTimeValue ' Add the user supplied date / time to the trigger
-                                taskDefinition.Triggers.Add(dailyTrigger)
-                                TL.LogMessage("ManageScheduledTask", String.Format("Set trigger to repeat the job daily at the specified time."))
+                                taskDefinition.Triggers.Clear() ' Remove any previous triggers and add the new trigger to the task as the only trigger
+                                Select Case DownloadTaskRepeatFrequencyValue
+                                    Case SCHEDULE_REPEAT_NONE ' Execute once at the specified day and time
+                                        timeTrigger = New TimeTrigger()
+                                        timeTrigger.StartBoundary = DownloadTaskScheduledTimeValue ' Add the user supplied date / time to the trigger
+                                        taskDefinition.Triggers.Add(timeTrigger)
+                                        TL.LogMessage("ManageScheduledTask", String.Format("Set trigger to run the job once at the specified time."))
 
-                            Case SCHEDULE_REPEAT_WEEKLY ' Execute once per week on the specified day of week
-                                weeklyTrigger = New WeeklyTrigger()
-                                weeklyTrigger.StartBoundary = DownloadTaskScheduledTimeValue ' Add the user supplied date / time to the trigger
-                                Select Case DownloadTaskScheduledTimeValue.DayOfWeek
-                                    Case DayOfWeek.Sunday
-                                        weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Sunday ' Set the specific day of the week when the task is required to run
-                                    Case DayOfWeek.Monday
-                                        weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Monday ' Set the specific day of the week when the task is required to run
-                                    Case DayOfWeek.Tuesday
-                                        weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Tuesday ' Set the specific day of the week when the task is required to run
-                                    Case DayOfWeek.Wednesday
-                                        weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Wednesday ' Set the specific day of the week when the task is required to run
-                                    Case DayOfWeek.Thursday
-                                        weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Thursday ' Set the specific day of the week when the task is required to run
-                                    Case DayOfWeek.Friday
-                                        weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Friday ' Set the specific day of the week when the task is required to run
-                                    Case DayOfWeek.Saturday
-                                        weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Saturday ' Set the specific day of the week when the task is required to run
+                                    Case SCHEDULE_REPEAT_DAILY ' Execute daily at the specified time
+                                        dailyTrigger = New DailyTrigger()
+                                        dailyTrigger.StartBoundary = DownloadTaskScheduledTimeValue ' Add the user supplied date / time to the trigger
+                                        taskDefinition.Triggers.Add(dailyTrigger)
+                                        TL.LogMessage("ManageScheduledTask", String.Format("Set trigger to repeat the job daily at the specified time."))
+
+                                    Case SCHEDULE_REPEAT_WEEKLY ' Execute once per week on the specified day of week
+                                        weeklyTrigger = New WeeklyTrigger()
+                                        weeklyTrigger.StartBoundary = DownloadTaskScheduledTimeValue ' Add the user supplied date / time to the trigger
+                                        Select Case DownloadTaskScheduledTimeValue.DayOfWeek
+                                            Case DayOfWeek.Sunday
+                                                weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Sunday ' Set the specific day of the week when the task is required to run
+                                            Case DayOfWeek.Monday
+                                                weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Monday ' Set the specific day of the week when the task is required to run
+                                            Case DayOfWeek.Tuesday
+                                                weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Tuesday ' Set the specific day of the week when the task is required to run
+                                            Case DayOfWeek.Wednesday
+                                                weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Wednesday ' Set the specific day of the week when the task is required to run
+                                            Case DayOfWeek.Thursday
+                                                weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Thursday ' Set the specific day of the week when the task is required to run
+                                            Case DayOfWeek.Friday
+                                                weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Friday ' Set the specific day of the week when the task is required to run
+                                            Case DayOfWeek.Saturday
+                                                weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Saturday ' Set the specific day of the week when the task is required to run
+                                        End Select
+                                        taskDefinition.Triggers.Add(weeklyTrigger)
+                                        TL.LogMessage("ManageScheduledTask", String.Format("Set trigger to repeat the job weekly on day {0} at the specified time.", DownloadTaskScheduledTimeValue.DayOfWeek.ToString()))
+
+                                    Case SCHEDULE_REPEAT_MONTHLY ' Execute once per month on the specified day number of the month
+                                        monthlyTrigger = New MonthlyTrigger()
+                                        monthlyTrigger.StartBoundary = DownloadTaskScheduledTimeValue ' Add the user supplied date / time to the trigger
+                                        dayOfMonth(0) = DownloadTaskScheduledTimeValue.Day ' Save the specific day on which the task is to run
+                                        monthlyTrigger.DaysOfMonth = dayOfMonth ' Set the specific day of the month when the task is required to run
+                                        monthlyTrigger.MonthsOfYear = MonthsOfTheYear.AllMonths
+                                        taskDefinition.Triggers.Add(monthlyTrigger)
+                                        TL.LogMessage("ManageScheduledTask", String.Format("Set trigger to repeat the job monthly on day {0} of the month at the specified time.", dayOfMonth(0)))
+
+                                    Case Else
+                                        MsgBox(String.Format("ManageScheduledTask - Unknown type of DownloadTaskRepeatFrequencyValue: {0}", DownloadTaskRepeatFrequencyValue))
+
                                 End Select
-                                taskDefinition.Triggers.Add(weeklyTrigger)
-                                TL.LogMessage("ManageScheduledTask", String.Format("Set trigger to repeat the job weekly on day {0} at the specified time.", DownloadTaskScheduledTimeValue.DayOfWeek.ToString()))
 
-                            Case SCHEDULE_REPEAT_MONTHLY ' Execute once per month on the specified day number of the month
-                                monthlyTrigger = New MonthlyTrigger()
-                                monthlyTrigger.StartBoundary = DownloadTaskScheduledTimeValue ' Add the user supplied date / time to the trigger
-                                dayOfMonth(0) = DownloadTaskScheduledTimeValue.Day ' Save the specific day on which the task is to run
-                                monthlyTrigger.DaysOfMonth = dayOfMonth ' Set the specific day of the month when the task is required to run
-                                monthlyTrigger.MonthsOfYear = MonthsOfTheYear.AllMonths
-                                taskDefinition.Triggers.Add(monthlyTrigger)
-                                TL.LogMessage("ManageScheduledTask", String.Format("Set trigger to repeat the job monthly on day {0} of the month at the specified time.", dayOfMonth(0)))
-
+                                ' Implement the new task in the root folder either by updating the existing task or creating a new task
+                                TL.LogMessage("ManageScheduledTask", String.Format("The {0} task does not exist so registering it now.", DOWNLOAD_TASK_NAME))
+                                service.RootFolder.RegisterTaskDefinition(DOWNLOAD_TASK_NAME, taskDefinition, TaskCreation.CreateOrUpdate, "SYSTEM", Nothing, TaskLogonType.ServiceAccount)
+                                TL.LogMessage("ManageScheduledTask", String.Format("New task registered OK."))
                             Case Else
-                                MsgBox(String.Format("ManageScheduledTask - Unknown type of DownloadTaskRepeatFrequencyValue: {0}", DownloadTaskRepeatFrequencyValue))
-
+                                MsgBox(String.Format("UpdateType - Unknown type of EarthRotationDataUpdateType: {0}", UpdateTypeValue))
                         End Select
 
-                        ' Implement the new task in the root folder either by updating the existing task or creating a new task
-                        TL.LogMessage("ManageScheduledTask", String.Format("The {0} task does not exist so registering it now.", DOWNLOAD_TASK_NAME))
-                        service.RootFolder.RegisterTaskDefinition(DOWNLOAD_TASK_NAME, taskDefinition, TaskCreation.CreateOrUpdate, "SYSTEM", Nothing, TaskLogonType.ServiceAccount)
-                        TL.LogMessage("ManageScheduledTask", String.Format("New task registered OK."))
-                    Case Else
-                        MsgBox(String.Format("UpdateType - Unknown type of EarthRotationDataUpdateType: {0}", UpdateTypeValue))
-                End Select
+                    End Using
+                Else ' The task scheduler is not running so provide a message
+                    Dim message As String = $"The ASCOM EarthRotation scheduled task cannot be created / updated because your PC's task scheduler is in the: {serviceController.Status} state. Please ensure that this service is running correctly, then repair the ASCOM installation."
+                    TL.LogMessage("ManageScheduledTask", message)
+                    MsgBox(message)
+                End If
 
             End Using
-
         Catch ex As Exception
             TL.LogMessageCrLf("ManageScheduledTask Exception", ex.ToString())
-            MsgBox("Something went wrong with the update, please report this on the ASCOM Talk Yahoo forum, including the ASCOM.EarthRotation.xx.yy.txt log file from your Documents\ASCOM\Logs yyyy-mm-dd folder." & vbCrLf & ex.ToString())
+            MsgBox("Something went wrong with the update, please report this on the ASCOM Talk Groups.IO forum, including the ASCOM.EarthRotation.xx.yy.txt log file from your Documents\ASCOM\Logs yyyy-mm-dd folder." & vbCrLf & ex.ToString())
         End Try
 
         TL.BlankLine()
@@ -1173,13 +1182,6 @@ Public Class EarthRotationParameters : Implements IDisposable
 
     End Function
 
-    Private Shared Function ProgramFilesx86() As String
-        If ((8 = IntPtr.Size) OrElse Not String.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))) Then
-            Return Environment.GetEnvironmentVariable("ProgramFiles(x86)")
-        End If
-
-        Return Environment.GetEnvironmentVariable("ProgramFiles")
-    End Function
 #End Region
 
 End Class

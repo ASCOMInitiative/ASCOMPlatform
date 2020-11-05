@@ -57,11 +57,11 @@ namespace ASCOM.DeviceHub
 				domeRadius = Convert.ToInt32( profile.GetValue( DriverID, _radiusProfileName, String.Empty, _radiusDefault ) );
 				gemAxisOffset = Convert.ToInt32( profile.GetValue( DriverID, _gemAxisOffsetProfileName, String.Empty, _gemAxisOffsetDefault ) );
 				azimuthAccuracy = Convert.ToInt32( profile.GetValue( DriverID, _azimuthAccuracyProfileName, String.Empty, _azimuthAccuracyDefault ) );
-				azimuthAdjustment = Convert.ToDouble( profile.GetValue( DriverID, _azimuthAdjustmentProfileName, String.Empty, _azimuthAdjustmentDefault ) );
+				azimuthAdjustment = Convert.ToDouble( profile.GetValue( DriverID, _azimuthAdjustmentProfileName, String.Empty, _azimuthAdjustmentDefault ), CultureInfo.InvariantCulture );
 				slaveInterval = Convert.ToInt32( profile.GetValue( DriverID, _slaveIntervalProfileName, String.Empty, _slaveIntervalDefault ) );
 				loggerEnabled = Convert.ToBoolean( profile.GetValue( DriverID, _traceStateProfileName, String.Empty, _traceStateDefault ) );
 				usePOTHCalculation = Convert.ToBoolean( profile.GetValue( DriverID, _usePOTHSlavingCalculationProfileName, String.Empty, _usePOTHSlavingCalculationDefault ) );
-				fastUpdatePeriod = Convert.ToDouble( profile.GetValue( DriverID, _fastUpdateProfileName, String.Empty, _fastUpdateDefault ) );
+				fastUpdatePeriod = Convert.ToDouble( profile.GetValue( DriverID, _fastUpdateProfileName, String.Empty, _fastUpdateDefault ), CultureInfo.InvariantCulture );
 			}
 
 			// Prevent the user from circumventing the valid fast update by setting the value in the profile store directly.
@@ -106,17 +106,17 @@ namespace ASCOM.DeviceHub
 			{
 				profile.DeviceType = "Dome";
 				profile.WriteValue( DriverID, _domeIDProfileName, DomeID );
-				profile.WriteValue( DriverID, _xOffsetProfileName, DomeLayout.DomeScopeOffset.X.ToString() );
-				profile.WriteValue( DriverID, _yOffsetProfileName, DomeLayout.DomeScopeOffset.Y.ToString() );
-				profile.WriteValue( DriverID, _zOffsetProfileName, DomeLayout.DomeScopeOffset.Z.ToString() );
+				profile.WriteValue( DriverID, _xOffsetProfileName, DomeLayout.DomeScopeOffset.X.ToString(CultureInfo.InvariantCulture) );
+				profile.WriteValue( DriverID, _yOffsetProfileName, DomeLayout.DomeScopeOffset.Y.ToString( CultureInfo.InvariantCulture ) );
+				profile.WriteValue( DriverID, _zOffsetProfileName, DomeLayout.DomeScopeOffset.Z.ToString( CultureInfo.InvariantCulture ) );
 				profile.WriteValue( DriverID, _radiusProfileName, DomeLayout.DomeRadius.ToString() );
 				profile.WriteValue( DriverID, _gemAxisOffsetProfileName, DomeLayout.GemAxisOffset.ToString() );
 				profile.WriteValue( DriverID, _azimuthAccuracyProfileName, DomeLayout.AzimuthAccuracy.ToString() );
-				profile.WriteValue( DriverID, _azimuthAdjustmentProfileName, AzimuthAdjustment.ToString() );
+				profile.WriteValue( DriverID, _azimuthAdjustmentProfileName, AzimuthAdjustment.ToString( CultureInfo.InvariantCulture ) );
 				profile.WriteValue( DriverID, _slaveIntervalProfileName, DomeLayout.SlaveInterval.ToString() );
 				profile.WriteValue( DriverID, _traceStateProfileName, IsLoggingEnabled.ToString() );
 				profile.WriteValue( DriverID, _usePOTHSlavingCalculationProfileName, UsePOTHDomeSlaveCalculation.ToString() );
-				profile.WriteValue( DriverID, _fastUpdateProfileName, FastUpdatePeriod.ToString() );
+				profile.WriteValue( DriverID, _fastUpdateProfileName, FastUpdatePeriod.ToString( CultureInfo.InvariantCulture ) );
 			}
 		}
 	}

@@ -309,7 +309,15 @@ namespace Unit_Tests.Telescope
 			_vm.Capabilities.CanMoveSecondaryAxis = true;
 
 			_prVm.Invoke( "UpdateCanStartMove" );
-			Assert.IsTrue( _vm.CanStartMoveTelescope ); // Not Tracking
+			Assert.IsFalse( _vm.CanStartMoveTelescope ); // No Axis Rates Defined
+
+			object[] rates = new IRate[] { new AxisRate( 0.0, 5.0) };
+			_vm.Capabilities.PrimaryAxisRates = (IRate[])rates;
+			Assert.IsFalse( _vm.CanStartMoveTelescope ); // No Secondary axis rates defined
+
+			_vm.Capabilities.SecondaryAxisRates = (IRate[])rates;
+			_prVm.Invoke( "UpdateCanStartMove" );
+			Assert.IsTrue( _vm.CanStartMoveTelescope ); // Not Tracking, but MoveAxis is OK ???
 
 			_vm.Status.Tracking = true;
 

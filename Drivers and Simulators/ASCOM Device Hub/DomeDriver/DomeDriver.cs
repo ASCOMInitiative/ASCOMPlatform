@@ -931,7 +931,7 @@ namespace ASCOM.DeviceHub
 
 			try
 			{
-				DomeManager.Park();
+				DomeManager.ParkTheDome();
 				msg += _done;
 			}
 			catch ( Exception )
@@ -1139,7 +1139,8 @@ namespace ASCOM.DeviceHub
 
 			try
 			{
-				DomeManager.SlewToAzimuth( azimuth );
+				//DomeManager.SlewToAzimuth( azimuth );
+				DomeManager.SlewDomeToAzimuth( azimuth );
 				msg += _done;
 			}
 			catch ( Exception )

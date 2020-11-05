@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="ASCOMStandardsURL" Description="The URL of the ASCOM Standards web site." Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://www.ascom-standards.org</Value>
+      <Value Profile="(Default)">https://www.ascom-standards.org</Value>
     </Setting>
     <Setting Name="TiGraAstronomyURL" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://www.tigranetworks.co.uk/Astronomy</Value>

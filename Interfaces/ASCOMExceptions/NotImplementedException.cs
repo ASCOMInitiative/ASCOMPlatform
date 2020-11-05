@@ -63,6 +63,19 @@ namespace ASCOM
         }
 
         /// <summary>
+        /// Create an exception using the supplied message text
+        /// </summary>
+        /// <param name="propertyOrMethod"></param>
+        /// <param name="message"></param>
+        /// <remarks>
+        /// Sets the member name and forms a not implemented exception with the supplied message.
+        /// </remarks>
+        protected NotImplementedException(string propertyOrMethod, string message) : base(message, ErrorCodes.NotImplemented)
+        {
+            PropertyOrMethod = propertyOrMethod;
+        }
+
+        /// <summary>
         /// The property/accessor or method that is not implemented
         /// </summary>
         public string PropertyOrMethod

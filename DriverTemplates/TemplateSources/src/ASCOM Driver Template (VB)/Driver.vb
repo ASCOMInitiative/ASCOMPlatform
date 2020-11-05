@@ -134,27 +134,31 @@ Public Class TEMPLATEDEVICECLASS
 
     Public Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False) Implements ITEMPLATEDEVICEINTERFACE.CommandBlind
         CheckConnected("CommandBlind")
-        ' Call CommandString and return as soon as it finishes
-        Me.CommandString(Command, Raw)
-        ' or
+        ' TODO The optional CommandBlind method should either be implemented OR throw a MethodNotImplementedException
+        ' If implemented, CommandBlind must send the supplied command to the mount And return immediately without waiting for a response
+
         Throw New MethodNotImplementedException("CommandBlind")
     End Sub
 
     Public Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean _
         Implements ITEMPLATEDEVICEINTERFACE.CommandBool
         CheckConnected("CommandBool")
-        Dim ret As String = CommandString(Command, Raw)
-        ' TODO decode the return string and return true or false
-        ' or
+        ' TODO The optional CommandBool method should either be implemented OR throw a MethodNotImplementedException
+        ' If implemented, CommandBool must send the supplied command to the mount, wait for a response and parse this to return a True Or False value
+
+        ' Dim retString as String = CommandString(command, raw) ' Send the command And wait for the response
+        ' Dim retBool as Boolean = XXXXXXXXXXXXX ' Parse the returned string And create a boolean True / False value
+        ' Return retBool ' Return the boolean value to the client
+
         Throw New MethodNotImplementedException("CommandBool")
     End Function
 
     Public Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String _
         Implements ITEMPLATEDEVICEINTERFACE.CommandString
         CheckConnected("CommandString")
-        ' it's a good idea to put all the low level communication with the device here,
-        ' then all communication calls this function
-        ' you need something to ensure that only one command is in progress at a time
+        ' TODO The optional CommandString method should either be implemented OR throw a MethodNotImplementedException
+        ' If implemented, CommandString must send the supplied command to the mount and wait for a response before returning this to the client
+
         Throw New MethodNotImplementedException("CommandString")
     End Function
 

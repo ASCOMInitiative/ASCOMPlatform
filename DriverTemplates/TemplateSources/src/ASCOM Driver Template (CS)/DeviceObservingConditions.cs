@@ -48,8 +48,8 @@ class DeviceObservingConditions
     /// <remarks>0%= clear sky, 100% = 100% cloud coverage</remarks>
     public double CloudCover
     {
-        get 
-        { 
+        get
+        {
             LogMessage("CloudCover", "get - not implemented");
             throw new PropertyNotImplementedException("CloudCover", false);
         }
@@ -132,35 +132,37 @@ class DeviceObservingConditions
     /// <summary>
     /// Provides a description of the sensor providing the requested property
     /// </summary>
-    /// <param name="PropertyName">Name of the property whose sensor description is required</param>
+    /// <param name="propertyName">Name of the property whose sensor description is required</param>
     /// <returns>The sensor description string</returns>
     /// <remarks>
     /// PropertyName must be one of the sensor properties, 
     /// properties that are not implemented must throw the MethodNotImplementedException
     /// </remarks>
-    public string SensorDescription(string PropertyName)
+    public string SensorDescription(string propertyName)
     {
-        switch (PropertyName.Trim().ToLowerInvariant())
+        switch (propertyName.Trim().ToLowerInvariant())
         {
             case "averageperiod":
                 return "Average period in hours, immediate values are only available";
+            case "cloudcover":
             case "dewpoint":
             case "humidity":
             case "pressure":
             case "rainrate":
             case "skybrightness":
             case "skyquality":
-            case "starfwhm":
             case "skytemperature":
+            case "starfwhm":
             case "temperature":
             case "winddirection":
             case "windgust":
             case "windspeed":
-                LogMessage("SensorDescription", "{0} - not implemented", PropertyName);
-                throw new MethodNotImplementedException("SensorDescription(" + PropertyName + ")");
+                // Throw an exception on the properties that are not implemented
+                LogMessage("SensorDescription", $"Property {propertyName} is not implemented");
+                throw new MethodNotImplementedException($"SensorDescription - Property {propertyName} is not implemented");
             default:
-                LogMessage("SensorDescription", "{0} - unrecognised", PropertyName);
-                throw new ASCOM.InvalidValueException("SensorDescription(" + PropertyName + ")");
+                LogMessage("SensorDescription", $"Invalid sensor name: {propertyName}");
+                throw new ASCOM.InvalidValueException($"SensorDescription - Invalid property name: {propertyName}");
         }
     }
 
@@ -227,45 +229,47 @@ class DeviceObservingConditions
     /// <summary>
     /// Provides the time since the sensor value was last updated
     /// </summary>
-    /// <param name="PropertyName">Name of the property whose time since last update Is required</param>
+    /// <param name="propertyName">Name of the property whose time since last update Is required</param>
     /// <returns>Time in seconds since the last sensor update for this property</returns>
     /// <remarks>
     /// PropertyName should be one of the sensor properties Or empty string to get
     /// the last update of any parameter. A negative value indicates no valid value
     /// ever received.
     /// </remarks>
-    public double TimeSinceLastUpdate(string PropertyName)
+    public double TimeSinceLastUpdate(string propertyName)
     {
-        // the checks can be removed if all properties have the same time.
-        if (!string.IsNullOrEmpty(PropertyName))
+        // Test for an empty property name, if found, return the time since the most recent update to any sensor
+        if (!string.IsNullOrEmpty(propertyName))
         {
-            switch (PropertyName.Trim().ToLowerInvariant())
+            switch (propertyName.Trim().ToLowerInvariant())
             {
-                // break or return the time on the properties that are implemented
+                // Return the time for properties that are implemented, otherwise fall through to the MethodNotImplementedException
                 case "averageperiod":
+                case "cloudcover":
                 case "dewpoint":
                 case "humidity":
                 case "pressure":
                 case "rainrate":
                 case "skybrightness":
                 case "skyquality":
-                case "starfwhm":
                 case "skytemperature":
+                case "starfwhm":
                 case "temperature":
                 case "winddirection":
                 case "windgust":
                 case "windspeed":
-                    // throw an exception on the properties that are not implemented
-                    LogMessage("TimeSinceLastUpdate", "{0} - not implemented", PropertyName);
-                    throw new MethodNotImplementedException("SensorDescription(" + PropertyName + ")");
+                    // Throw an exception on the properties that are not implemented
+                    LogMessage("TimeSinceLastUpdate", $"Property {propertyName} is not implemented");
+                    throw new MethodNotImplementedException($"TimeSinceLastUpdate - Property {propertyName} is not implemented");
                 default:
-                    LogMessage("TimeSinceLastUpdate", "{0} - unrecognised", PropertyName);
-                    throw new ASCOM.InvalidValueException("SensorDescription(" + PropertyName + ")");
+                    LogMessage("TimeSinceLastUpdate", $"Invalid sensor name: {propertyName}");
+                    throw new InvalidValueException($"TimeSinceLastUpdate - Invalid property name: {propertyName}");
             }
         }
-        // return the time
-        LogMessage("TimeSinceLastUpdate", "{0} - not implemented", PropertyName);
-        throw new MethodNotImplementedException("TimeSinceLastUpdate(" + PropertyName + ")");
+
+        // Return the time since the most recent update to any sensor
+        LogMessage("TimeSinceLastUpdate", $"The time since the most recent sensor update is not implemented");
+        throw new MethodNotImplementedException("TimeSinceLastUpdate(" + propertyName + ")");
     }
 
     /// <summary>

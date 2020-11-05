@@ -1,0 +1,101 @@
+            Updates for SOFA Release 16 : 2020 July 21
+            - - - - - - - - - - - - - - - - - - - - - -
+
+Summary of Changes
+------------------
+The changes fall into the following categories:
+
+1. Correction of a sign in routine P06E.
+
+2. Correction in the ANSI C macro function dnint in the include file
+   sofam.h, to improve rounding.
+
+3. Improvements in precision and rounding (see 2 and 3 below).
+
+4. Miscellaneous typographical corrections and improvements to
+   various other documents.
+
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+FORTRAN 77 Library
+------------------
+
+1. iau_P06E      Correction. The series are taken from Table 1 of
+                 Hilton, J. et al., 2006, Celest. Mech. Dyn. Astron.
+                 94, 351., and it has been discovered that the one
+                 for general precession, p_A, had the wrong sign for
+                 the t^5 coefficient. The error in the paper has
+                 been corrected in the SOFA code. The correct value
+                 is -0.0000000383 arcsec. (Even after five centuries
+                 the error would be lower than 250 microarcsec.)
+
+2. iau_PB06      Improvements in the method of decomposing the rotation
+                 matrix by ensuring that angles near zero are preferred.
+
+3. iau_JD2CAL    Improvements by ensuring precision is not lost when
+   iau_JDCALF    splitting date and time.
+
+4. iau_DAT       Release year updated.
+
+5. t_sofa_f.for  Updated due to the correction in iau_P06E.
+
+6. iau_FK524     Minor corrections/improvements to the documentation.
+   iau_FW2M
+   iau_GMST82
+   iau_TRXP
+   iau_XYS00A
+
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+ANSI C Library
+--------------
+
+1. iauP06e       Correction. The series are taken from Table 1 of
+                 Hilton, J. et al., 2006, Celest. Mech. Dyn. Astron.
+                 94, 351., and it has been discovered that the one
+                 for general precession, p_A, had the wrong sign for
+                 the t^5 coefficient. The error in the paper has
+                 been corrected in the SOFA code. The correct value
+                 is -0.0000000383 arcsec. (Even after five centuries
+                 the error would be lower than 250 microarcsec.)
+
+2. sofam.h       Correction to dnint(A).
+
+                 The existing dnint macro could incorrectly round
+                 numbers just over -0.5 and just under +0.5 due to
+                 the loss of precision when calculating ceil(A-0.5)
+                 or floor(A+0.5). A preliminary test for |A|<0.5
+                 has been added to ensure that such numbers always
+                 round to zero.  As none of the SOFA C functions
+                 depend critically on perfect rounding, the change
+                 is unlikely to affect user applications noticeably,
+                 though critical round-trip tests may see an
+                 improvement.
+
+3. iauPb06       Improvements in the method of decomposing the rotation
+                 matrix by ensuring that angles near zero are preferred.
+
+4. iauJd2cal     Improvements by ensuring precision is not lost when
+   iauJdcalf     splitting date and time.
+
+5. iauDat        Release year updated.
+
+6. t_sofa_c.c    Updated due to the correction in iauP06e.
+
+7. iauA2af       Minor corrections/improvements to the documentation.
+   iauA2tf
+   iauD2tf
+   iauFk524
+   iauFw2m
+   iauGmst82
+   iauTrxp
+   iauXys00a
+
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
++ SOFA thanks all those who have reported the various issues that go
++ to ensuring the libraries and documentation are kept up-to-date and
++ relevant.
++
++ End of updates
++ 2020 June 22
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +

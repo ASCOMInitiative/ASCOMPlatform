@@ -14,5 +14,5 @@ using System.Resources;
 [assembly: ComVisibleAttribute(false)]
 
 // AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
-[assembly: AssemblyVersion("6.5.0.0")]
+[assembly: AssemblyVersion("6.5.1.0")]
 [assembly: NeutralResourcesLanguageAttribute("en")]

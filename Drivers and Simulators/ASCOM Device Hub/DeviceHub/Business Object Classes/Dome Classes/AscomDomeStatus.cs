@@ -16,7 +16,7 @@ namespace ASCOM.DeviceHub
 
 			ShutterStatus = mgr.ShutterStatus;
 
-			if ( !mgr.CanSetAltitude )
+			if ( !mgr.Capabilities.CanSetAltitude )
 			{
 				// Driver doesn't support altitude control.
 

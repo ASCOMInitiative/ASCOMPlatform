@@ -355,8 +355,16 @@ namespace ASCOM.DeviceHub
 				// We don't actually need the result, but it allows us to wait for the async slew to start
 				// and for a status update to occur.
 
-				var task = SlewDomeAsync( targetAzimuth );
-				var result = task.Result;
+				try
+				{
+					var task = SlewDomeAsync( targetAzimuth );
+					var result = task.Result;
+				}
+				catch (AggregateException xcp )
+				{
+					Exception ex = xcp.InnerException;
+					throw ex;
+				}
 			}
 		}
 
@@ -434,7 +442,8 @@ namespace ASCOM.DeviceHub
 				}
 				else if ( index == 1 )
 				{
-					// We have been awakened externally; presumably to change the polling interval.
+					// We have been awakened externally; presumably to change the polling interval or in response
+					// to the scope being slewed.
 
 					PollingWake.Reset();
 				}
@@ -457,7 +466,7 @@ namespace ASCOM.DeviceHub
 				// We need to slew there immediately. We will get another message when the slew has finished, but
 				// until then we need to suspend normal slaved adjustments.
 
-				if ( SlavedSlewState.IsSlewInProgress )
+				if ( SlavedSlewState.IsSlewInProgress ) // The telescope is being slewed.
 				{
 					if ( !Status.Slewing )
 					{
@@ -467,27 +476,38 @@ namespace ASCOM.DeviceHub
 						LogActivityLine( ActivityMessageTypes.Commands
 										, "Dome position recalculation due to telescope slew-in-progress." );
 
-						Transform xform = new Transform
+						try
 						{
-							SiteElevation = TelescopeParameters.SiteElevation,
-							SiteLatitude = TelescopeParameters.SiteLatitude,
-							SiteLongitude = TelescopeParameters.SiteLongitude
-						};
+							Transform xform = new Transform
+							{
+								SiteElevation = TelescopeParameters.SiteElevation,
+								SiteLatitude = TelescopeParameters.SiteLatitude,
+								SiteLongitude = TelescopeParameters.SiteLongitude
+							};
 
-						if ( TelescopeParameters.EquatorialSystem == EquatorialCoordinateType.equJ2000 )
-						{
-							xform.SetJ2000( SlavedSlewState.RightAscension, SlavedSlewState.Declination );
+							if ( TelescopeParameters.EquatorialSystem == EquatorialCoordinateType.equJ2000 )
+							{
+								xform.SetJ2000( SlavedSlewState.RightAscension, SlavedSlewState.Declination );
+							}
+							else
+							{
+								xform.SetTopocentric( SlavedSlewState.RightAscension, SlavedSlewState.Declination );
+							}
+
+							Point scopeTargetPosition = new Point( xform.AzimuthTopocentric, xform.ElevationTopocentric );
+
+							// Get the hour angle of the telescope's destination position.
+
+							double localHourAngle = TelescopeStatus.CalculateHourAngle( SlavedSlewState.RightAscension );
+
+							SlaveDomePointing( scopeTargetPosition, localHourAngle, SlavedSlewState.SideOfPier );
 						}
-						else
+						catch ( Exception xcp )
 						{
-							xform.SetTopocentric( SlavedSlewState.RightAscension, SlavedSlewState.Declination );
+							LogActivityLine( ActivityMessageTypes.Commands, "Attempting to calculate a new dome slave position due to telescope "
+								 + "slew caught an exception. Details follow:" );
+							LogActivityLine( ActivityMessageTypes.Commands, xcp.Message );
 						}
-
-						Point scopeTargetPosition = new Point( xform.AzimuthTopocentric, xform.ElevationTopocentric );
-
-						double localHourAngle = TelescopeStatus.CalculateHourAngle( SlavedSlewState.RightAscension );
-
-						SlaveDomePointing( scopeTargetPosition, localHourAngle, SlavedSlewState.SideOfPier );
 					}
 				}
 				else if ( DateTime.Now > nextAdjustmentTime )
@@ -502,7 +522,16 @@ namespace ASCOM.DeviceHub
 
 						Point scopePosition = new Point( TelescopeStatus.Azimuth, TelescopeStatus.Altitude );
 
-						SlaveDomePointing( scopePosition, TelescopeStatus.LocalHourAngle, TelescopeStatus.SideOfPier );
+						try
+						{
+							SlaveDomePointing( scopePosition, TelescopeStatus.LocalHourAngle, TelescopeStatus.SideOfPier );
+						}
+						catch ( Exception xcp )
+						{
+							LogActivityLine( ActivityMessageTypes.Commands, "Attempting to calculate a new dome slave position "
+								 + "caught an exception. Details follow:" );
+							LogActivityLine( ActivityMessageTypes.Commands, xcp.Message );
+						}
 					}
 
 					TimeSpan syncSpan = new TimeSpan( 0, 0, Globals.DomeLayout.SlaveInterval );
@@ -878,6 +907,9 @@ namespace ASCOM.DeviceHub
 
 		private void InitiateSlavedSlew( SlewInProgressMessage action )
 		{
+			// Here we are notified when a telescope slew is initiated.
+			// Save the message data and wake up the polling loop.
+
 			SlavedSlewState = action;
 			PollingWake.Set();
 		}

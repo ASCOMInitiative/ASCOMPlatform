@@ -242,7 +242,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                string response = DynamicClientDriver.GetValue<string>(clientNumber, client, URIBase, TL, "Name");
+                string response = DynamicClientDriver.GetValue<string>(clientNumber, client, URIBase, TL, "Name", MemberTypes.Property);
                 TL.LogMessage(clientNumber, "Name", response);
                 return response;
             }
@@ -355,7 +355,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<int[]>(clientNumber, client, URIBase, TL, "FocusOffsets");
+                return DynamicClientDriver.GetValue<int[]>(clientNumber, client, URIBase, TL, "FocusOffsets", MemberTypes.Property);
             }
         }
 
@@ -367,7 +367,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<string[]>(clientNumber, client, URIBase, TL, "Names");
+                return DynamicClientDriver.GetValue<string[]>(clientNumber, client, URIBase, TL, "Names", MemberTypes.Property);
             }
         }
 
@@ -379,13 +379,13 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<short>(clientNumber, client, URIBase, TL, "Position");
+                return DynamicClientDriver.GetValue<short>(clientNumber, client, URIBase, TL, "Position", MemberTypes.Property);
             }
 
             set
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                DynamicClientDriver.SetShort(clientNumber, client, URIBase, TL, "Position", value);
+                DynamicClientDriver.SetShort(clientNumber, client, URIBase, TL, "Position", value, MemberTypes.Property);
             }
         }
 

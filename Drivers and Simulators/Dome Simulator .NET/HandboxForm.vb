@@ -252,7 +252,7 @@ Public Class HandboxForm
     <System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")>
     Private Sub picASCOM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles picASCOM.Click
         Try
-            System.Diagnostics.Process.Start("http://ascom-standards.org/")
+            System.Diagnostics.Process.Start("https://ascom-standards.org/")
         Catch noBrowser As System.ComponentModel.Win32Exception
             If noBrowser.ErrorCode = -2147467259 Then
                 MessageBox.Show(noBrowser.Message)

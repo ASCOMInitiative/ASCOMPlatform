@@ -1972,6 +1972,8 @@ namespace ASCOM.DeviceHub
 
 				try
 				{
+					retval = TelescopeManager.Status.SideOfPier;
+
 					Exception xcp = TelescopeManager.Status.GetException();
 
 					if ( xcp != null )
@@ -1979,7 +1981,6 @@ namespace ASCOM.DeviceHub
 						throw xcp;
 					}
 
-					retval = TelescopeManager.Status.SideOfPier;
 					msg += String.Format( "{0}{1}", retval, _done );
 				}
 				catch ( Exception )

@@ -199,7 +199,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                string response = DynamicClientDriver.GetValue<string>(clientNumber, client, URIBase, TL, "Name");
+                string response = DynamicClientDriver.GetValue<string>(clientNumber, client, URIBase, TL, "Name", MemberTypes.Property);
                 TL.LogMessage(clientNumber, "Name", response);
                 return response;
             }
@@ -300,37 +300,37 @@ namespace ASCOM.DynamicRemoteClients
         public void AbortSlew()
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "AbortSlew");
+            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "AbortSlew", MemberTypes.Method);
         }
 
         public void CloseShutter()
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "CloseShutter");
+            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "CloseShutter", MemberTypes.Method);
         }
 
         public void FindHome()
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "FindHome");
+            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "FindHome", MemberTypes.Method);
         }
 
         public void OpenShutter()
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "OpenShutter");
+            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "OpenShutter", MemberTypes.Method);
         }
 
         public void Park()
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "Park");
+            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "Park", MemberTypes.Method);
         }
 
         public void SetPark()
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "SetPark");
+            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "SetPark", MemberTypes.Method);
         }
 
         public void SlewToAltitude(double Altitude)
@@ -339,7 +339,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 { SharedConstants.ALT_PARAMETER_NAME, Altitude.ToString() }
             };
-            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "SlewToAltitude", Parameters, Method.PUT);
+            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "SlewToAltitude", Parameters, Method.PUT, MemberTypes.Method);
         }
 
         public void SlewToAzimuth(double Azimuth)
@@ -348,7 +348,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 { SharedConstants.AZ_PARAMETER_NAME, Azimuth.ToString() }
             };
-            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "SlewToAzimuth", Parameters, Method.PUT);
+            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "SlewToAzimuth", Parameters, Method.PUT, MemberTypes.Method);
         }
 
         public void SyncToAzimuth(double Azimuth)
@@ -357,7 +357,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 { SharedConstants.AZ_PARAMETER_NAME, Azimuth.ToString() }
             };
-            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "SyncToAzimuth", Parameters, Method.PUT);
+            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "SyncToAzimuth", Parameters, Method.PUT, MemberTypes.Method);
         }
 
         public double Altitude
@@ -365,7 +365,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<double>(clientNumber, client, URIBase, TL, "Altitude");
+                return DynamicClientDriver.GetValue<double>(clientNumber, client, URIBase, TL, "Altitude", MemberTypes.Property);
             }
         }
 
@@ -374,7 +374,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "AtHome");
+                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "AtHome", MemberTypes.Property);
             }
         }
 
@@ -383,7 +383,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "AtPark");
+                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "AtPark", MemberTypes.Property);
             }
         }
 
@@ -392,7 +392,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<double>(clientNumber, client, URIBase, TL, "Azimuth");
+                return DynamicClientDriver.GetValue<double>(clientNumber, client, URIBase, TL, "Azimuth", MemberTypes.Property);
             }
         }
 
@@ -401,7 +401,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanFindHome");
+                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanFindHome", MemberTypes.Property);
             }
         }
 
@@ -410,7 +410,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanPark");
+                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanPark", MemberTypes.Property);
             }
         }
 
@@ -419,7 +419,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSetAltitude");
+                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSetAltitude", MemberTypes.Property);
             }
         }
 
@@ -428,7 +428,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSetAzimuth");
+                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSetAzimuth", MemberTypes.Property);
             }
         }
 
@@ -437,7 +437,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSetPark");
+                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSetPark", MemberTypes.Property);
             }
         }
 
@@ -446,7 +446,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSetShutter");
+                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSetShutter", MemberTypes.Property);
             }
         }
 
@@ -455,7 +455,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSlave");
+                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSlave", MemberTypes.Property);
             }
         }
 
@@ -464,7 +464,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSyncAzimuth");
+                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanSyncAzimuth", MemberTypes.Property);
             }
         }
 
@@ -473,7 +473,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<ShutterState>(clientNumber, client, URIBase, TL, "ShutterStatus");
+                return DynamicClientDriver.GetValue<ShutterState>(clientNumber, client, URIBase, TL, "ShutterStatus", MemberTypes.Property);
             }
         }
 
@@ -482,13 +482,13 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "Slaved");
+                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "Slaved", MemberTypes.Property);
             }
 
             set
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                DynamicClientDriver.SetBool(clientNumber, client, URIBase, TL, "Slaved", value);
+                DynamicClientDriver.SetBool(clientNumber, client, URIBase, TL, "Slaved", value, MemberTypes.Property);
             }
         }
 
@@ -497,7 +497,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "Slewing");
+                return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "Slewing", MemberTypes.Property);
             }
         }
 

@@ -953,6 +953,7 @@ namespace ASCOM.DeviceHub
 			if ( Service.IsPulseGuiding )
 			{
 				Status.IsPulseGuiding = true;
+				Status.Slewing = Service.Slewing;
 				DateTime endTime = startTime.AddMilliseconds( duration );
 				Task.Run( () => MonitorPulseGuidingTask( endTime ) );
 			}

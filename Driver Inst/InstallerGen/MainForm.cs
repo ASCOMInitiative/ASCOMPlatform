@@ -31,7 +31,7 @@ namespace ASCOM.InstallerGen
 
         private void pbAscomLogo_Click(object sender, EventArgs e)
         {
-            OpenWebPage("http://ascom-standards.org/");
+            OpenWebPage("https://ascom-standards.org/");
         }
 
         private void llblInno_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

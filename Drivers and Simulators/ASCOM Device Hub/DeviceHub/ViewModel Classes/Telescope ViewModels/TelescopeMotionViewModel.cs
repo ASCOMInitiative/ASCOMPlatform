@@ -80,6 +80,22 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
+
+		private bool _canMoveAxis;
+
+		public bool CanMoveAxis
+		{
+			get { return _canMoveAxis; }
+			set
+			{
+				if ( value != _canMoveAxis )
+				{
+					_canMoveAxis = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
 		private DevHubTelescopeStatus _status;
 
 		public DevHubTelescopeStatus Status
@@ -321,8 +337,12 @@ namespace ASCOM.DeviceHub
 				{
 					if ( IsVariableJog )
 					{
-						bool canMoveAxis = Capabilities.CanMovePrimaryAxis && Capabilities.CanMoveSecondaryAxis;
-									
+						bool canMoveAxis = Capabilities.CanMovePrimaryAxis && Capabilities.CanMoveSecondaryAxis
+									&& Capabilities.PrimaryAxisRates != null && Capabilities.PrimaryAxisRates.Length > 0
+									&& Capabilities.SecondaryAxisRates != null && Capabilities.SecondaryAxisRates.Length > 0;
+
+						CanMoveAxis = canMoveAxis;
+
 						bool canMovePulse = Capabilities.CanPulseGuide && !Double.IsNaN( Status.GuideRateDeclination )
 								&& !Double.IsNaN( Status.GuideRateRightAscension );
 

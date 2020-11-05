@@ -200,7 +200,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                string response = DynamicClientDriver.GetValue<string>(clientNumber, client, URIBase, TL, "Name");
+                string response = DynamicClientDriver.GetValue<string>(clientNumber, client, URIBase, TL, "Name", MemberTypes.Property);
                 TL.LogMessage(clientNumber, "Name", response);
                 return response;
             }
@@ -303,7 +303,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<CoverStatus>(clientNumber, client, URIBase, TL, "CoverState");
+                return DynamicClientDriver.GetValue<CoverStatus>(clientNumber, client, URIBase, TL, "CoverState", MemberTypes.Property);
             }
         }
 
@@ -312,7 +312,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<CalibratorStatus>(clientNumber, client, URIBase, TL, "CalibratorState");
+                return DynamicClientDriver.GetValue<CalibratorStatus>(clientNumber, client, URIBase, TL, "CalibratorState", MemberTypes.Property);
             }
         }
 
@@ -321,7 +321,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<int>(clientNumber, client, URIBase, TL, "Brightness");
+                return DynamicClientDriver.GetValue<int>(clientNumber, client, URIBase, TL, "Brightness", MemberTypes.Property);
             }
         }
 
@@ -330,28 +330,28 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<int>(clientNumber, client, URIBase, TL, "MaxBrightness");
+                return DynamicClientDriver.GetValue<int>(clientNumber, client, URIBase, TL, "MaxBrightness", MemberTypes.Property);
             }
         }
 
         public void OpenCover()
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "OpenCover");
+            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "OpenCover", MemberTypes.Method);
             TL.LogMessage(clientNumber, "AbortSlew", "Cover opened OK");
         }
 
         public void CloseCover()
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "CloseCover");
+            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "CloseCover", MemberTypes.Method);
             TL.LogMessage(clientNumber, "AbortSlew", "Cover closed OK");
         }
 
         public void HaltCover()
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "HaltCover");
+            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "HaltCover", MemberTypes.Method);
             TL.LogMessage(clientNumber, "AbortSlew", "Cover halted OK");
         }
 
@@ -362,13 +362,13 @@ namespace ASCOM.DynamicRemoteClients
             {
                 { SharedConstants.BRIGHTNESS_PARAMETER_NAME, Brightness.ToString(CultureInfo.InvariantCulture) }
             };
-            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "CalibratorOn", Parameters, Method.PUT);
+            DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "CalibratorOn", Parameters, Method.PUT, MemberTypes.Method);
         }
 
         public void CalibratorOff()
         {
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "CalibratorOff");
+            DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "CalibratorOff", MemberTypes.Method);
             TL.LogMessage(clientNumber, "AbortSlew", $"Calibrator off OK");
         }
 

@@ -116,31 +116,62 @@ Class DeviceObservingConditions
     End Property
 
     Public Function TimeSinceLastUpdate(PropertyName As String) As Double Implements IObservingConditions.TimeSinceLastUpdate
-        TL.LogMessage("TimeSinceLastUpdate", "Get Not implemented")
-        Throw New ASCOM.MethodNotImplementedException("TimeSinceLastUpdate")
+        ' Test for an empty property name, if found, return the time since the most recent update to any sensor
+        If Not String.IsNullOrEmpty(PropertyName) Then
+            Select Case PropertyName.Trim.ToLowerInvariant
+                ' Return the time for properties that are implemented, otherwise fall through to the MethodNotImplementedException
+                Case "averageperiod"
+                Case "cloudcover"
+                Case "dewpoint"
+                Case "humidity"
+                Case "pressure"
+                Case "rainrate"
+                Case "skybrightness"
+                Case "skyquality"
+                Case "skytemperature"
+                Case "starfwhm"
+                Case "temperature"
+                Case "winddirection"
+                Case "windgust"
+                Case "windspeed"
+                    ' Throw an exception on the properties that are Not implemented
+                    TL.LogMessage("TimeSinceLastUpdate", PropertyName & " - not implemented")
+                    Throw New MethodNotImplementedException("TimeSinceLastUpdate(" + PropertyName + ")")
+                Case Else
+                    TL.LogMessage("TimeSinceLastUpdate", PropertyName & " - unrecognised")
+                    Throw New ASCOM.InvalidValueException("TimeSinceLastUpdate(" + PropertyName + ")")
+            End Select
+        Else
+            ' Return the time since the most recent update to any sensor
+            TL.LogMessage("TimeSinceLastUpdate", $"The time since the most recent sensor update is not implemented")
+            Throw New MethodNotImplementedException("TimeSinceLastUpdate(" + PropertyName + ")")
+        End If
     End Function
 
     Public Function SensorDescription(PropertyName As String) As String Implements IObservingConditions.SensorDescription
         Select Case PropertyName.Trim.ToLowerInvariant
             Case "averageperiod"
                 Return "Average period in hours, immediate values are only available"
+            Case "cloudcover"
             Case "dewpoint"
             Case "humidity"
             Case "pressure"
             Case "rainrate"
             Case "skybrightness"
             Case "skyquality"
-            Case "starfwhm"
             Case "skytemperature"
+            Case "starfwhm"
             Case "temperature"
             Case "winddirection"
             Case "windgust"
             Case "windspeed"
-                TL.LogMessage("SensorDescription", PropertyName & " - not implemented")
-                Throw New MethodNotImplementedException("SensorDescription(" + PropertyName + ")")
+                ' Throw an exception on the properties that are Not implemented
+                TL.LogMessage("SensorDescription", $"Property {PropertyName} is not implemented")
+                Throw New MethodNotImplementedException($"SensorDescription - Property {PropertyName} is not implemented")
         End Select
-        TL.LogMessage("SensorDescription", PropertyName & " - unrecognised")
-        Throw New ASCOM.InvalidValueException("SensorDescription(" + PropertyName + ")")
+
+        TL.LogMessage("SensorDescription", $"Invalid sensor name: {PropertyName}")
+        Throw New InvalidValueException($"SensorDescription - Invalid property name: {PropertyName}")
     End Function
 
     Public Sub Refresh() Implements IObservingConditions.Refresh

@@ -244,7 +244,7 @@ Friend Class ChooserForm
 
     Private Sub picASCOM_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles picASCOM.Click
         Try
-            Process.Start("http://ASCOM-Standards.org/")
+            Process.Start("https://ascom-standards.org/")
         Catch ex As Exception
             MsgBox("Unable to display ASCOM-Standards web site in your browser: " & ex.Message, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
         End Try

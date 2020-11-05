@@ -69,9 +69,9 @@ int iauUt1utc(double ut11, double ut12, double dut1,
 **
 **  This revision:  2019 June 20
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2020-07-21
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 */
 {
    int big1;
@@ -147,7 +147,7 @@ int iauUt1utc(double ut11, double ut12, double dut1,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2020
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

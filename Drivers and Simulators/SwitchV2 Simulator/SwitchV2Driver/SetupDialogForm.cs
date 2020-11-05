@@ -102,7 +102,7 @@ namespace ASCOM.Simulator
         {
             try
             {
-                System.Diagnostics.Process.Start("http://ascom-standards.org/");
+                System.Diagnostics.Process.Start("https://ascom-standards.org/");
             }
             catch (System.ComponentModel.Win32Exception noBrowser)
             {

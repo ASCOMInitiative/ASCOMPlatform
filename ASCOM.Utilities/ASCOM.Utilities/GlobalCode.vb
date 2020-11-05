@@ -418,7 +418,7 @@ Module VersionCode
         End Try
 
         Try 'Make sure this code never throws an exception back to the caller
-            TL.LogMessage("Versions", "OS Version: " & OS.Platform & ", Service Pack: " & OS.ServicePack & ", Full: " & OS.VersionString)
+            TL.LogMessage("Versions", $"OS Platform:  {OS.Platform}, Service Pack: {OS.ServicePack}, Version string: {OS.VersionString}")
             Select Case OSBits()
                 Case Bitness.Bits32
                     TL.LogMessage("Versions", "Operating system is 32bit")

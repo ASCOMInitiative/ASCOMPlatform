@@ -24,10 +24,10 @@ Public Class ConfiguredDevice
     ''' <summary>
     ''' Initialise the device name, device type, device number and ASCOM device unique ID
     ''' </summary>
-    ''' <paramname="deviceName">ASCOM device name</param>
-    ''' <paramname="deviceType">ASCOM device type</param>
-    ''' <paramname="deviceNumber">Alpaca API device number</param>
-    ''' <paramname="uniqueID">ASCOM device unique ID</param>
+    ''' <param name="deviceName">ASCOM device name</param>
+    ''' <param name="deviceType">ASCOM device type</param>
+    ''' <param name="deviceNumber">Alpaca API device number</param>
+    ''' <param name="uniqueID">ASCOM device unique ID</param>
     Friend Sub New(ByVal deviceName As String, ByVal deviceType As String, ByVal deviceNumber As Integer, ByVal uniqueID As String)
         deviceNameValue = deviceName
         deviceTypeValue = deviceType
