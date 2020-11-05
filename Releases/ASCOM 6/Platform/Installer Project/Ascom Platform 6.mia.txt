@@ -827,7 +827,7 @@ end
 [DEFINE REGION: Clean up any remaining simulator COM entries]
 Comment: Clean up any remaining 32bit COM registry entries
 Set Variable PROGRESSTEXT to Cleaning simulator COM entries
-Write into Text File $SETUPLOG$ from Value  Cleaning simulator COM entries (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Cleaning simulator 32bit COM entries (at end of file)
  
 Comment: Remove Camera simulator COM entry
 Delete Registry KEY HKCR\CLSID\{12229C31-E7D6-49E8-9C5D-5D7FF05C3BFE}\*.*
@@ -855,6 +855,7 @@ Delete Registry KEY HKCR\CLSID\{F6670AB1-FE72-44DB-BF35-418BEB8C2D9F}\*.*
 Comment: Clean up any remaining 64bit COM registry entries
 if Variable WIN64MODE Equals TRUE
   Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+  Write into Text File $SETUPLOG$ from Value $TIME$ Cleaning simulator 64bit COM entries (at end of file)
    
   Comment: Remove Camera simulator COM entry
   Delete Registry KEY HKCR\CLSID\{12229C31-E7D6-49E8-9C5D-5D7FF05C3BFE}\*.*
@@ -886,6 +887,7 @@ end
 Comment: ***** Start of Platform Installation *****
 Set Variable PROGRESSTEXT to Installing $TITLE$
 Write into Text File $SETUPLOG$ from Value   (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Start of Platform installation (at end of file)
  
 Comment: Create the main ASCOM folder in Common Files
 Create Folder $COMMONFILES$\ASCOM
