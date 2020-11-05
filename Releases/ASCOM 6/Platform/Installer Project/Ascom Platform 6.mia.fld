@@ -13,14 +13,14 @@ Set up log file and variables
 Platform 6.2 files
 Remove Previous Platform 6 install if present
 Extra activities if on a 64bit system
+Remove 64bit components
 ASCOM Cache
 Earth Rotation Date Update
 Remove Previous Platforms 4 and 5 if present
 Non-MSI installation activities
 Create shortcuts
+Remove 32bit components
 Install Application Pre-Requisites if required
 Maintenance Dialogue
 Alpaca Support for Chooser
 ASCOM Device Hub
-Remove 64bit components
-Remove 32bit components
