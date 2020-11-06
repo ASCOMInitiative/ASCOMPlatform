@@ -65,8 +65,8 @@ namespace ASCOM
         /// <summary>
         /// Create an exception using the supplied message text
         /// </summary>
-        /// <param name="propertyOrMethod"></param>
-        /// <param name="message"></param>
+        /// <param name="propertyOrMethod">Property or method name</param>
+        /// <param name="message">Exception message</param>
         /// <remarks>
         /// Sets the member name and forms a not implemented exception with the supplied message.
         /// </remarks>
