@@ -385,7 +385,7 @@
             <summary>
             Create a new exception with the supplied message
             </summary>
-            <param name = "method">Exception description</param>
+            <param name = "method">Method name</param>
             <param name = "message">Exception description</param>
             <remarks>
             This overload applies the supplied message directly to the exception without interpreting it as is the case with other overloads
@@ -511,8 +511,8 @@
             <summary>
             Create an exception using the supplied message text
             </summary>
-            <param name="propertyOrMethod"></param>
-            <param name="message"></param>
+            <param name="propertyOrMethod">Property or method name</param>
+            <param name="message">Exception message</param>
             <remarks>
             Sets the member name and forms a not implemented exception with the supplied message.
             </remarks>
@@ -584,7 +584,7 @@
             <summary>
             Create a new exception with the supplied message
             </summary>
-            <param name = "method">Exception description</param>
+            <param name = "property">Property name</param>
             <param name = "message">Exception description</param>
             <remarks>
             This overload applies the supplied message directly to the exception without interpreting it as is the case with other overloads
