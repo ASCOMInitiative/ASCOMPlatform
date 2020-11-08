@@ -60,7 +60,7 @@ namespace ASCOM.Simulator
     {
         // Driver ID and descriptive string that shows in the Chooser
         private static string s_csDriverID = "ASCOM.Simulator.Camera";
-        private static string s_csDriverDescription = "Camera V2 simulator";
+        private static string s_csDriverDescription = "Camera V3 simulator";
 
         #region Profile string constants
         private const string STR_InterfaceVersion = "InterfaceVersion";
