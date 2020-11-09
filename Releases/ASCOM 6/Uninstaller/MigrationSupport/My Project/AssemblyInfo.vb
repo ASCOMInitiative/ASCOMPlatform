@@ -31,7 +31,7 @@ Imports System.Runtime.CompilerServices
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
 
-<Assembly: AssemblyVersion("6.5.0.0")>
+<Assembly: AssemblyVersion("6.5.1.0")>
 
 'Permissions for particular assemblies to access internal "Friend" variables and methods of this assembly
 <Assembly: InternalsVisibleToAttribute("UninstallAscom, PublicKey= " + _
