@@ -15,6 +15,9 @@
       <title>Key Changes in 6.5 SP1 - For Everyone</title>
       <content>
         <list class="bullet">
+          <listItem>The Platform and Developer installers are now code signed.</listItem>
+          <listItem>The Hub, Pipe, POTH and ASCOM Dome driver profiles are now backed up by the installer before removal. This preserves configuration information for re-use in Device Hub, or the legacy drivers if these are reinstalled at a later date.
+          The configuration information is stored in the "Platform Driver Backups" Profile key and can be viewed through <link xlink:href="62da8408-c4ed-45d8-9398-9990dcbe8cbd">Profile Explorer</link>.</listItem>
           <listItem>Device Hub
           	<list class="bullet">
           		<listItem>Side Of Pier and Destination Side Of Pier will now be calculated by Device Hub if not available from the downstream driver.</listItem>
@@ -27,6 +30,8 @@
           <listItem>DeltaT predictions, good to December 2021, have been revised based on the latest IERS predictions.</listItem>
           <listItem>The SOFA component has been updated to use the latest IAU 21st July 2020 - Version 16 SOFA release.</listItem>
           <listItem>Chooser Properties Button - detailed failure information will now be provided if a driver does not connect correctly.</listItem>
+          <listItem>The Camera simulator description now reflects that it supports ICameraV3.</listItem>
+          <listItem>Platform simulators and hubs now have 6.5.1.0 assembly version numbers to reflect the service pack release.</listItem>
         </list>
       </content>
     </section>
@@ -37,6 +42,7 @@
         <list class="bullet">
           <listItem>A serious bug was introduced in the Astrometry.Transform class during Platform 6.5 implementation, which prevented a single instance from being used for multiple transforms. 
           The bug has been fixed and Transform now works as it did in Platform 6.4.</listItem>
+          <listItem>Writing to the Alpaca Dynamic Client Camera.Offset property now works correctly.</listItem>
           <listItem>Clients will now see the correct type of NotImplementedException (PropertNotImplementedExceptiony or MethodNotImplementedException) when Alpaca devices report that a member is not implemented.</listItem>
           <listItem>
           	Diagnostics:
@@ -66,6 +72,7 @@
           		<listItem>The telescope Slewing flag is now correctly maintained when the mount is pulse guiding.</listItem>
         	</list>
           </listItem>
+          <listItem>Profile Explorer - Renaming a key now retains its subkeys and their values.</listItem>
         </list>
       </content>
     </section>
