@@ -866,7 +866,7 @@ Install Files ..\..\..\..\Interfaces\HelperPIAs\Helper.tlb to $COMMONFILES$\ASCO
 Install Files ..\..\..\..\Interfaces\HelperPIAs\Helper2.tlb to $COMMONFILES$\ASCOM\Interface
 Install Files ..\..\..\..\Interfaces\IObjectSafety.tlb to $COMMONFILES$\ASCOM\Interface
 Comment: Type library installer
-Comment: Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\RegTlb.exe to $COMMONFILES$\ASCOM\Platform\Internal
+Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\RegTlb.exe to $COMMONFILES$\ASCOM\Platform\Internal
 Comment: Redistributable support files
 Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\mscomctl.OCX to $WINSYSDIR$ (Never Overwrite)
 Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\MSComm32.Ocx to $WINSYSDIR$ (Never Overwrite)
