@@ -28,26 +28,7 @@ For more information see http://ASCOM-Standards.org/.
 To unsubscribe from this group, send an email FROM THE ACCOUNT YOU USED TO SUBSCRIBE(!) to:
 ASCOM-Talk-unsubscribe@yahoogroups.com
 
-Yahoo! Groups Links
+ASCOM Talk Support
 
-<*> To visit your group on the web, go to:
-    http://groups.yahoo.com/group/ASCOM-Talk/
-
-<*> Your email settings:
-    Individual Email | Traditional
-
-<*> To change settings online go to:
-    http://groups.yahoo.com/group/ASCOM-Talk/join
-    (Yahoo! ID required)
-
-<*> To change settings via email:
-    ASCOM-Talk-digest@yahoogroups.com 
-    ASCOM-Talk-fullfeatured@yahoogroups.com
-
-<*> To unsubscribe from this group, send an email to:
-    ASCOM-Talk-unsubscribe@yahoogroups.com
-
-<*> Your use of Yahoo! Groups is subject to:
-    http://docs.yahoo.com/info/terms/
-
-
+<*> For support, please visit the ASCOM Talk Forum:
+    https://ascomtalk.groups.io/g/Help/topics
