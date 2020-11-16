@@ -15,15 +15,25 @@
       <title>Key Changes in 6.5 SP1 - For Everyone</title>
       <content>
         <list class="bullet">
-          <listItem>The Platform and Developer installers are now code signed.</listItem>
-          <listItem>The Hub, Pipe, POTH and ASCOM Dome driver profiles are now backed up by the installer before removal. This preserves configuration information for re-use in Device Hub, or the legacy drivers if these are reinstalled at a later date.
-          The configuration information is stored in the "Platform Driver Backups" Profile key and can be viewed through <link xlink:href="62da8408-c4ed-45d8-9398-9990dcbe8cbd">Profile Explorer</link>.</listItem>
-          <listItem>Device Hub
-          	<list class="bullet">
-          		<listItem>Side Of Pier and Destination Side Of Pier will now be calculated by Device Hub if not available from the downstream driver.</listItem>
-          		<listItem>The dome shutter can now be opened and closed when slaved.</listItem>
-          		<listItem>Exceptions are now trapped and logged during dome slaving calculations.</listItem>
-        	</list>
+          <listItem>
+            Platform:
+            <list class="bullet">
+              <listItem>The Platform and Developer installers are now code signed.</listItem>
+              <listItem>The Platform and Developer installer executable names now include SP1 to clearly differentiate them from the Platform 6.5.0 installers.</listItem>
+              <listItem>Platform simulators and hubs now have 6.5.1.0 assembly version numbers to reflect the service pack release.</listItem>
+            </list>
+          </listItem>
+          <listItem>
+            The Hub, Pipe, POTH and ASCOM Dome driver profiles are now backed up by the installer before removal. This preserves configuration information for re-use in Device Hub, or the legacy drivers if these are reinstalled at a later date.
+            The configuration information is stored in the "Platform Driver Backups" Profile key and can be viewed through <link xlink:href="62da8408-c4ed-45d8-9398-9990dcbe8cbd">Profile Explorer</link>.
+          </listItem>
+          <listItem>
+            Device Hub
+            <list class="bullet">
+              <listItem>Side Of Pier and Destination Side Of Pier will now be calculated by Device Hub if not available from the downstream driver.</listItem>
+              <listItem>The dome shutter can now be opened and closed when slaved.</listItem>
+              <listItem>Exceptions are now trapped and logged during dome slaving calculations.</listItem>
+            </list>
           </listItem>
           <listItem>All references to the Yahoo ASCOM Talk forum have been replaced with references to the new Groups.IO forum.</listItem>
           <listItem>All links referencing the ascom-standards.org web site now use HTTPS instead of HTTP.</listItem>
@@ -31,7 +41,6 @@
           <listItem>The SOFA component has been updated to use the latest IAU 21st July 2020 - Version 16 SOFA release.</listItem>
           <listItem>Chooser Properties Button - detailed failure information will now be provided if a driver does not connect correctly.</listItem>
           <listItem>The Camera simulator description now reflects that it supports ICameraV3.</listItem>
-          <listItem>Platform simulators and hubs now have 6.5.1.0 assembly version numbers to reflect the service pack release.</listItem>
         </list>
       </content>
     </section>
@@ -40,37 +49,40 @@
       <title>Issues Fixed - Platform</title>
       <content>
         <list class="bullet">
-          <listItem>A serious bug was introduced in the Astrometry.Transform class during Platform 6.5 implementation, which prevented a single instance from being used for multiple transforms. 
-          The bug has been fixed and Transform now works as it did in Platform 6.4.</listItem>
+          <listItem>
+            A serious bug was introduced in the Astrometry.Transform class during Platform 6.5 implementation, which prevented a single instance from being used for multiple transforms.
+            The bug has been fixed and Transform now works as it did in Platform 6.4.
+          </listItem>
           <listItem>Writing to the Alpaca Dynamic Client Camera.Offset property now works correctly.</listItem>
           <listItem>Clients will now see the correct type of NotImplementedException (PropertNotImplementedExceptiony or MethodNotImplementedException) when Alpaca devices report that a member is not implemented.</listItem>
           <listItem>
-          	Diagnostics:
-           	<list class="bullet">
-          		<listItem>Now correctly reports the Windows 10 operating system version.</listItem>
-		        <listItem>A rare exception that occurred when recursing registry keys has been fixed.</listItem>
-        	</list>
+            Diagnostics:
+            <list class="bullet">
+              <listItem>Now correctly reports the Windows 10 operating system version.</listItem>
+              <listItem>A rare exception that occurred when recursing registry keys has been fixed.</listItem>
+            </list>
           </listItem>
           <listItem>Corrected a typo on in the message given if a disconnect fails when using the Choose and Connect to Device form. Thanks Marco!</listItem>
           <listItem>
-          	Platform installer:
-           	<list class="bullet">
-          		<listItem>Works properly on machines whose PC Name contains a space character.</listItem>
-		        <listItem>Handles unregistering drivers more gracefully.</listItem>
-        		<listItem>Checks that the Windows Task Scheduler is enabled before attempting to create the earth rotation data update scheduled task.</listItem>
-        		<listItem>Sets the required registry Profile store ACL on every install rather than assuming that it is correctly set when upgrading from a previous Platform version. Access to the Profile store is confirmed after setting the ACL and any issues will be reported by the installer.</listItem>
-        		<listItem>Detects whether controlled folder access is enabled on the user's Documents folder and aborts installation in this scenario.</listItem>
-				<listItem>Removes simulator COM entries when uninstalled.</listItem>
-        	</list>
+            Platform installer:
+            <list class="bullet">
+              <listItem>Works properly on machines whose PC Name contains a space character.</listItem>
+              <listItem>Handles unregistering drivers more gracefully.</listItem>
+              <listItem>Checks that the Windows Task Scheduler is enabled before attempting to create the earth rotation data update scheduled task.</listItem>
+              <listItem>Sets the required registry Profile store ACL on every install rather than assuming that it is correctly set when upgrading from a previous Platform version. Access to the Profile store is confirmed after setting the ACL and any issues will be reported by the installer.</listItem>
+              <listItem>Detects whether controlled folder access is enabled on the user's Documents folder and aborts installation in this scenario.</listItem>
+              <listItem>Removes simulator COM entries when uninstalled.</listItem>
+            </list>
           </listItem>
-          <listItem>Device Hub
-          	<list class="bullet">
-          		<listItem>Improved support for locales that use comma as the decimal separator.</listItem>
-          		<listItem>Profile settings will now be preserved when upgrading.</listItem>
-          		<listItem>SideofPier exceptions will now be forwarded to the client.</listItem>
-        		<listItem>SlewDomeToAzimuth now responds with the correct exception if an invalid azimuth value is requested.</listItem>
-          		<listItem>The telescope Slewing flag is now correctly maintained when the mount is pulse guiding.</listItem>
-        	</list>
+          <listItem>
+            Device Hub
+            <list class="bullet">
+              <listItem>Improved support for locales that use comma as the decimal separator.</listItem>
+              <listItem>Profile settings will now be preserved when upgrading.</listItem>
+              <listItem>SideofPier exceptions will now be forwarded to the client.</listItem>
+              <listItem>SlewDomeToAzimuth now responds with the correct exception if an invalid azimuth value is requested.</listItem>
+              <listItem>The telescope Slewing flag is now correctly maintained when the mount is pulse guiding.</listItem>
+            </list>
           </listItem>
           <listItem>Profile Explorer - Renaming a key now retains its subkeys and their values.</listItem>
         </list>
