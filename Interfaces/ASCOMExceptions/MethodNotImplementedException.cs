@@ -33,7 +33,7 @@ namespace ASCOM
         /// <summary>
         /// Create a new exception with the supplied message
         /// </summary>
-        /// <param name = "method">Exception description</param>
+        /// <param name = "method">Method name</param>
         /// <param name = "message">Exception description</param>
         /// <remarks>
         /// This overload applies the supplied message directly to the exception without interpreting it as is the case with other overloads
