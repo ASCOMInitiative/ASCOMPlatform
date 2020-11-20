@@ -1,5 +1,7 @@
 ﻿Imports System.IO
 Imports System.Reflection
+Imports System.Runtime.InteropServices
+
 Public Class frmProfileExplorer
     Private RecursionLevel As Integer
     Private Values As Generic.SortedList(Of String, String) 'Variable to hold current key values
@@ -19,8 +21,10 @@ Public Class frmProfileExplorer
 
     Private Const ROOT_NAME As String = "Profile Root"
     Private Const TOOLTIP_ROOT_RO As String = "The Profile root is read-only for safety, use Options to enable write access"
-    Private Const TOOLTIP_ROOT_RW As String = "The Profile root is writable, please be very careful!"
+    Private Const TOOLTIP_ROOT_RW As String = "The Profile root is writeable, please be very careful!"
     Private Const REGISTRY_DEFAULT As String = "(Default)"
+
+    Private Const NEW_KEY_NAME As String = "New Key 1"
 
     Private Sub Form1_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Dim MyAssVer As Version, snd As Object, args As TreeNodeMouseClickEventArgs
@@ -52,7 +56,6 @@ Public Class frmProfileExplorer
     End Sub
 
     Private Sub Form1_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
-
         KeyValues.Width = Me.Width - 350
         KeyValues.Height = Me.Height - 65
         KeyTree.Height = Me.Height - 65
@@ -61,22 +64,14 @@ Public Class frmProfileExplorer
 
     Private Sub KeyValues_ColumnWidthChanged(ByVal sender As Object, ByVal e As DataGridViewColumnEventArgs) Handles KeyValues.ColumnWidthChanged
         Dim ColumnWidth As Integer
-        'ColumnWidth = CInt(KeyValues.Width - 60) \ 2
-        'KeyValues.Columns(0).Width = ColumnWidth
-        'KeyValues.Columns(1).Width = KeyValues.Width - ColumnWidth - 60
 
         ColumnWidth = CInt(KeyValues.Width - 60) \ 2
-        'KeyValues.Columns(0).Width = ColumnWidth
         KeyValues.Columns(1).Width = KeyValues.Width - KeyValues.Columns(0).Width - 60
-
-
-        'MsgBox("Cwidth")
     End Sub
 
 
     Private Sub ExpandedNodesGet(ByVal ThisNode As TreeNode, ByRef ExpandedNodes As Generic.List(Of String))
         For Each Nod As TreeNode In ThisNode.Nodes
-            'MsgBox(Nod.FullPath)
             If Nod.IsSelected Then SelectedFullPath = Nod.FullPath
             If Nod.IsExpanded Then
                 ExpandedNodes.Add(Nod.FullPath)
@@ -87,7 +82,6 @@ Public Class frmProfileExplorer
 
     Private Sub ExpandedNodesSet(ByVal ThisNode As TreeNode, ByVal ExpandedNodes As Generic.List(Of String))
         For Each Nod As TreeNode In ThisNode.Nodes
-            'MsgBox(Nod.FullPath)
             If Nod.FullPath = SelectedFullPath Then KeyTree.SelectedNode = Nod
             If ExpandedNodes.Contains(Nod.FullPath) Then
                 Nod.Expand()
@@ -114,9 +108,6 @@ Public Class frmProfileExplorer
 
                     If KeyTree.TopNode.IsSelected Then RootIsSelected = True
                     ExpandedNodesGet(KeyTree.Nodes(0), ExpandedNodes)
-                    For Each Path As String In ExpandedNodes
-                        'MsgBox(Path)
-                    Next
 
                     KeyTree.Nodes.Clear()
                     ProcessTree("", Nothing, -1) 'Process the directory tree starting at the base point = root node
@@ -171,19 +162,13 @@ Public Class frmProfileExplorer
                             KeyValues.CurrentRow.Cells(0).Value = ""
                         End If
 
-                        'MsgBox("Value name changed " & _
-                        '       e.RowIndex.ToString & " " & _
-                        '       KeyPath & "#" & _
-                        '       KeyValues.CurrentCell.Value.ToString & "#" & _
-                        '       Values.Keys(e.RowIndex).ToString & "#")
                         Try : Prof.WriteProfile(KeyPath, KeyValues.CurrentRow.Cells(0).Value.ToString, KeyValues.CurrentRow.Cells(1).Value.ToString) : Catch : End Try   'Create new value
                         If e.RowIndex <= (Values.Count - 1) Then Prof.DeleteProfile(KeyPath, Values.Keys(e.RowIndex)) 'Delete old value if not a new row
 
-                        'Make the last row value readonly if its data name is null or empty, i.e. hasn't been filled out yet
+                        'Make the last row value read only if its data name is null or empty, i.e. hasn't been filled out yet
 
                         KeyValues.CurrentRow.Cells(1).ReadOnly = False
                         KeyValues.CurrentRow.Cells(1).Style.BackColor = Color.White
-                        'RefreshKeyValues()
                     Case 1 'Value data has changed
                         'Write new value back to the profile
 
@@ -192,7 +177,6 @@ Public Class frmProfileExplorer
                                 KeyValues.CurrentRow.Cells(0).Value = ""
                             End If
                         Catch ex As Exception
-                            'MsgBox(ex.Message)
                             KeyValues.CurrentRow.Cells(0).Value = ""
                         End Try
                         ' Turn the (Default) key name into empty string
@@ -200,10 +184,7 @@ Public Class frmProfileExplorer
                         If KeyValues.CurrentCell.Value Is Nothing Then 'Guard against value deleted, in which case create an empty string
                             KeyValues.CurrentCell.Value = ""
                         End If
-                        'Prof.WriteProfile(KeyPath, Values.Keys(e.RowIndex), KeyValues.CurrentCell.Value.ToString)
                         Prof.WriteProfile(KeyPath, KeyValues.CurrentRow.Cells(0).Value.ToString, KeyValues.CurrentRow.Cells(1).Value.ToString)
-                        'MsgBox("Value data changed " & e.ColumnIndex.ToString & " " & e.RowIndex.ToString & " " & KeyPath & " " & Values.Keys(e.RowIndex) & " " & KeyValues.CurrentCell.Value.ToString)
-                        'Values = Prof.EnumProfile(KeyPath) 'Refresh the values from the profile store
                         RefreshKeyValues()
                 End Select
             End If
@@ -214,10 +195,11 @@ Public Class frmProfileExplorer
 
     Private Sub KeyValues_UserDeletingRow(ByVal sender As Object, ByVal e As DataGridViewRowCancelEventArgs) Handles KeyValues.UserDeletingRow
         Dim Res As MsgBoxResult
+
         Res = MsgBox("Are you sure you want to delete this row?", MsgBoxStyle.OkCancel Or MsgBoxStyle.Exclamation, "Confirm delete")
+
         If Res = MsgBoxResult.Ok Then
             Try
-                'MsgBox("Deleting: " & KeyPath & "#" & KeyValues.Rows(e.Row.Index).Cells(0).Value.ToString & "#")
                 If KeyValues.Rows(e.Row.Index).Cells(0).Value.ToString = REGISTRY_DEFAULT Then
                     Prof.DeleteProfile(KeyPath, "")
                 Else
@@ -240,8 +222,8 @@ Public Class frmProfileExplorer
         Dim DirNum, MyNodeNumber As Integer
         Dim KeyNameParts() As String
         Dim SubKeys As New Generic.SortedList(Of String, String)
-
         Dim NewNode As New TreeNode
+
         MyNodeNumber = NodeNumber + 1
         RecursionLevel += 1
         KeyTree.BeginUpdate()
@@ -311,7 +293,6 @@ Public Class frmProfileExplorer
                 CurrentSubKey = SubKey 'Save current value so that the display can be refreshed whenever required
                 KeyValues.Rows.Clear()
                 KeyPath = Mid(SubKey, Len(ROOT_NAME) + 1)
-                'If Microsoft.VisualBasic.Left(KeyPath, 1) <> "\" Then KeyPath = "\" & KeyPath
                 If Microsoft.VisualBasic.Left(KeyPath, 1) = "\" Then KeyPath = Mid(KeyPath, 2)
                 Try
                     Values = Prof.EnumProfile(KeyPath)
@@ -380,7 +361,7 @@ Public Class frmProfileExplorer
                 KeyValues.Rows(0).Cells(0).ReadOnly = True
                 KeyValues.Rows(0).Cells(0).Style.BackColor = Color.Crimson
 
-                'Make the last row value readonly if its data name is null or empty, i.e. hasn't been filled out yet
+                'Make the last row value read only if its data name is null or empty, i.e. hasn't been filled out yet
                 Try
                     If String.IsNullOrEmpty(KeyValues.Rows(KeyValues.RowCount - 1).Cells(0).Value.ToString) Then
                         KeyValues.Rows(KeyValues.RowCount - 1).Cells(1).ReadOnly = True
@@ -429,6 +410,7 @@ Public Class frmProfileExplorer
     Private Sub KeyValues_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles KeyValues.MouseUp
         Dim pt As Point
         Dim xpos, ypos As Integer
+
         Try
             Select Case e.Button
                 Case MouseButtons.Right
@@ -438,8 +420,6 @@ Public Class frmProfileExplorer
 
                         ypos = CInt((pt.Y + KeyValues.VerticalScrollingOffset - 20) \ KeyValues.Rows(0).Height)
                         xpos = CInt((pt.X - 40) \ KeyValues.Columns(0).Width)
-                        'MsgBox(pt.Y & " " & dgv.Rows(0).Height & " " & ypos)
-                        'MsgBox(xpos & " " & ypos)
                         KeyValues.CurrentCell = KeyValues(xpos, ypos)
 
                     Catch ex As Exception
@@ -519,10 +499,10 @@ Public Class frmProfileExplorer
 
     Private Sub mnuClearData_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles mnuClearData.MouseUp
         Dim Res As MsgBoxResult, EventArgs As DataGridViewCellEventArgs
+
         Try
             Res = MsgBox("Are you sure you want to clear this data?", MsgBoxStyle.OkCancel Or MsgBoxStyle.Exclamation, "Confirm delete")
             If Res = MsgBoxResult.Ok Then
-                ' MsgBox(KeyValues.CurrentRow.Index & " " & 0 & " " & KeyValues.CurrentRow.Cells(0).Value.ToString)
                 KeyValues.CurrentCell.Value = ""
                 EventArgs = New DataGridViewCellEventArgs(KeyValues.CurrentCell.ColumnIndex, KeyValues.CurrentRow.Index)
                 Me.KeyValues_CellValueChanged(New Object, EventArgs)
@@ -541,7 +521,6 @@ Public Class frmProfileExplorer
         Try
             Res = MsgBox("Are you sure you want to delete this row?", MsgBoxStyle.OkCancel Or MsgBoxStyle.Exclamation, "Confirm delete")
             If Res = MsgBoxResult.Ok Then
-                ' MsgBox(KeyValues.CurrentRow.Index & " " & 0 & " " & KeyValues.CurrentRow.Cells(0).Value.ToString)
                 Try
                     If KeyValues.CurrentRow.Cells(0).Value.ToString = REGISTRY_DEFAULT Then
                         Prof.DeleteProfile(KeyPath, "")
@@ -575,7 +554,7 @@ Public Class frmProfileExplorer
                 If Not (e.Label Is Nothing) Then
                     If e.Label.Length > 0 Then 'Check for label being empty string
                         If e.Label.IndexOfAny(New Char() {"@"c, ","c, "!"c}) = NOT_FOUND Then 'Check for invalid characters
-                            e.Node.EndEdit(False) ' Stop editing without canceling the label change.
+                            e.Node.EndEdit(False) ' Stop editing without cancelling the label change.
                             'MsgBox("Action" & Action.ToString)
                             'Check whether the new key is duplicate of one already existing
                             Select Case Action
@@ -584,7 +563,7 @@ Public Class frmProfileExplorer
                                     '1) Edited name, but now edited back to same as original
                                     'Test: name and label are the same then confirm name only occurs once in list
                                     '2) Edited name to different than original
-                                    'Test: Name and lable different so test if the name already eists in the collection
+                                    'Test: Name and label different so test if the name already exists in the collection
 
                                     If e.Node.Name = e.Label Then 'It has been edited back to its original form
                                         ct = 0
@@ -624,6 +603,8 @@ Public Class frmProfileExplorer
                                         If e.Label <> e.Node.Name Then Call KeyRename(e.Node, e.Label) 'Has been changed to a different value from original so rename the key
                                         Action = ActionType.None
                                         KeyTree.LabelEdit = False
+                                        ' Now enqueue an F5 Refresh so that the edited node appears in the correct position in the tree based on its new name
+                                        SendKeys.SendWait("{F5}")
                                     End If
                                 Case Else
                                     MsgBox("Unexpected Action type: " & Action.ToString)
@@ -631,14 +612,14 @@ Public Class frmProfileExplorer
                         Else
                             ' Cancel the label edit action, inform the user, and place the node in edit mode again. 
                             e.CancelEdit = True
-                            MessageBox.Show("Invalid tree node label." & Microsoft.VisualBasic.ControlChars.Cr & _
+                            MessageBox.Show("Invalid tree node label." & Microsoft.VisualBasic.ControlChars.Cr &
                                             "The invalid characters are: '@','.', ',', '!'", "Node Label Edit")
                             e.Node.BeginEdit()
                         End If
                     Else
                         ' Cancel the label edit action, inform the user and place the node in edit mode again. 
                         e.CancelEdit = True
-                        MessageBox.Show("Invalid tree node label." & Microsoft.VisualBasic.ControlChars.Cr & _
+                        MessageBox.Show("Invalid tree node label." & Microsoft.VisualBasic.ControlChars.Cr &
                                         "The label cannot be blank", "Node Label Edit")
                         e.Node.BeginEdit()
                     End If
@@ -646,7 +627,6 @@ Public Class frmProfileExplorer
                     'MsgBox("Text not changed")
                     Select Case Action
                         Case ActionType.Add
-                            'MsgBox(e.Node.FullPath & " " & e.Node.Name & " " & e.Node.Parent.FullPath)
                             ct = 0
                             For Each TN As TreeNode In e.Node.Parent.Nodes
                                 If TN.Name = e.Node.Name Then ct += 1
@@ -679,10 +659,9 @@ Public Class frmProfileExplorer
         Try
             Select Case e.Button
                 Case MouseButtons.Right
-                    'CtxMenu.Show(KeyTree, New Point(e.X, e.Y))
                     SetSelectedNodeByPosition(KeyTree, e.X, e.Y)
                     If Not (KeyTree.SelectedNode Is Nothing) Then
-                        If KeyTree.SelectedNode.FullPath = ROOT_NAME Then 'Prevent delete or rename of reoot node
+                        If KeyTree.SelectedNode.FullPath = ROOT_NAME Then 'Prevent delete or rename of root node
                             mnuDeleteKey.Enabled = False
                             mnuRenameKey.Enabled = False
                             mnuNewKey.Enabled = True
@@ -707,7 +686,7 @@ Public Class frmProfileExplorer
 
     Private Sub KeyCreate(ByVal Node As TreeNode)
         Dim SubKeyPath As String
-        'MsgBox(Node.FullPath)
+
         Node.Name = Node.Text 'Set the node name to be the same as the label
         SubKeyPath = Mid(Node.FullPath, InStr(Node.FullPath, "\"))
         Prof.CreateKey(SubKeyPath)
@@ -715,7 +694,6 @@ Public Class frmProfileExplorer
     End Sub
 
     Private Sub KeyRename(ByVal Node As TreeNode, ByVal NewName As String)
-        'MsgBox("Rename: " & Node.FullPath & " " & NewName)
         Prof.RenameKey(Mid(Node.FullPath, Len(ROOT_NAME) + 1), Mid(Node.Parent.FullPath, Len(ROOT_NAME) + 1) & "\" & NewName)
         Node.Name = NewName
         Node.Text = NewName
@@ -725,7 +703,7 @@ Public Class frmProfileExplorer
     Private Sub SetSelectedNodeByPosition(ByVal tv As TreeView, ByVal mouseX As Integer, ByVal mouseY As Integer)
         Dim Node As TreeNode
         Dim pt As Point
-        Node = Nothing
+
         Try
             pt = New Point(mouseX, mouseY)
             tv.PointToClient(pt)
@@ -740,9 +718,8 @@ Public Class frmProfileExplorer
 
     Private Sub RightClickAdd(ByVal sender As Object, ByVal e As System.EventArgs)
         Dim NewNode As TreeNode = New TreeNode
-        '  UI.Hourglass(true);
+
         Try
-            'TreeNode node = tvSample.SelectedNode;
             NewNode.Name = "New Node"
             NewNode.Text = "New Node"
 
@@ -758,20 +735,15 @@ Public Class frmProfileExplorer
 
     Private Sub mnuDeleteKey_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles mnuDeleteKey.MouseUp
         Dim Res As MsgBoxResult, SubKeyPath As String
+
         Try
             Res = MsgBox("Are you sure you want to delete this key?", MsgBoxStyle.OkCancel Or MsgBoxStyle.Exclamation, "Confirm delete")
             If Res = MsgBoxResult.Ok Then
-                'MsgBox("Deleting: " & KeyPath & "#" & KeyValues.Rows(e.Row.Index).Cells(0).Value.ToString & "#")
-                'Prof.DeleteProfile(KeyPath, KeyValues.Rows(e.Row.Index).Cells(0).Value.ToString)
-                'Values = Prof.EnumProfile(KeyPath) 'Refresh the values from the profile store
                 Action = ActionType.Delete
                 SubKeyPath = Mid(KeyTree.SelectedNode.FullPath, InStr(KeyTree.SelectedNode.FullPath, "\"))
                 Prof.DeleteKey(SubKeyPath)
                 KeyTree.SelectedNode.Remove()
                 RefreshKeyValues(KeyTree.SelectedNode.FullPath)
-
-            Else
-                'e.Cancel = True
             End If
         Catch ex As Exception
             LogException("mnuDeleteKey_MouseUp", ex)
@@ -789,8 +761,8 @@ Public Class frmProfileExplorer
     End Sub
 
     Private Sub mnuNewKey_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles mnuNewKey.MouseUp
-        Const NEW_KEY_NAME As String = "New Key 1"
         Dim NewNode As New TreeNode(NEW_KEY_NAME)
+
         Try
             NewNode.Name = NEW_KEY_NAME
             NewNode.Text = NEW_KEY_NAME

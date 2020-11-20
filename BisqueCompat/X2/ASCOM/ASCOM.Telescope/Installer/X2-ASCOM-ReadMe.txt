@@ -47,7 +47,7 @@ Operational Issues
 Reporting Problems
 ------------------
 
-This plugin is not part of TheSky X. It was developed for the ASCOM Initiative by Bob Denny. The place to report problems and ask questions is in the ASCOM Talk group on Yahoo:
+This plugin is not part of TheSky X. It was developed for the ASCOM Initiative by Bob Denny. The place to report problems and ask questions is in the ASCOM Talk group:
 
-http://tech.groups.yahoo.com/group/ASCOM-Talk/
+https://ascomtalk.groups.io/g/Help/topics
 

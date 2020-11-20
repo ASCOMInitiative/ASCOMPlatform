@@ -1435,6 +1435,35 @@ $
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 B
 
 
@@ -2049,24 +2078,24 @@ ASCOM Platform 6.5 SP1
 6.5.9999.9999
 English
 ASCOM Platform 6.5 SP1
-ASCOM Platform 6.5 SP1 Installation
+ASCOM Platform 6.5 SP1 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{8BED7988-8C48-4732-A365-B4A12A535FAC}
+{49927FF0-9871-439C-8CD2-2E7AEF3FA0A9}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
 https://ascom-standards.org/Downloads/Index.htm
 Copyright � 1998-2020, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform65
+ASCOMPlatform65SP1
 TRUE
-FALSE
+TRUE
 
-|
-http://timestamp.verisign.com/scripts/timstamp.dll
-
-UAC=requireAdministrator,CACHESOURCES=TRUE,MSI_ALL=FALSE,VM_TARGETFOLDER=%TEMP%,VM_INSTALL_COMMANDLINE=/s,"VM_UNINSTALL_COMMANDLINE=/s MODIFY=FALSE REMOVE=TRUE","VM_UNITTEST=C:\Program Files (x86)\InstallAware X6 Creators Update\unit.exe",LOADOLDDATA=TRUE
+|C:\Users\Peter\Desktop\petercodesign.pfx
+http://timestamp.globalsign.com/scripts/timstamp.dll
+https://ascom-standards.org
+UAC=requireAdministrator,CACHESOURCES=TRUE,MSI_ALL=FALSE,VM_TARGETFOLDER=%TEMP%,VM_INSTALL_COMMANDLINE=/s,"VM_UNINSTALL_COMMANDLINE=/s MODIFY=FALSE REMOVE=TRUE","VM_UNITTEST=C:\Program Files (x86)\InstallAware X6 Creators Update\unit.exe",LOADOLDDATA=TRUE,SIGN_ALL=DEFAULT
 $
 $
 
@@ -2089,9 +2118,10 @@ setupvc1410_25017_x86.mia
 checkvc1410_25017_x64.mia
 setupvc1410_25017_x64.mia
 checknet4.8_x86 .mia
+CleanRegistry.mia
 $
 FALSE
-
+P8tris9000cdK
 FALSE
 FALSE
 TRUE

@@ -18,7 +18,7 @@ using System.Globalization;
 
 namespace ConsoleApplication1
 {
-    class Program
+    public static class Program
     {
 
         [DllImport("ole32.dll")]
@@ -52,6 +52,10 @@ namespace ConsoleApplication1
                                                  AccessRights.EnumSubkey |
                                                  AccessRights.Notify |
                                                  AccessRights.StandardReadControl;
+
+        // Driver Profile backup constants
+        private const string ASCOM_ROOT_KEY_NAME = "SOFTWARE\\ASCOM";
+        private const string DRIVER_PROFILE_BACKUP_KEY_NAME = "Platform Driver Backups";
 
         /// <summary>
         /// Enum containing all the possible registry access rights values. The built-in RegistryRights enum only has a partial collection
@@ -98,7 +102,7 @@ namespace ConsoleApplication1
             GenericRead = 0x80000000
         }
 
-        static int Main(string[] args)
+        public static int Main(string[] args)
         {
             try
             {
@@ -216,8 +220,11 @@ namespace ConsoleApplication1
                 }
                 else // Executable not found so unregister from the Profile
                 {
+                    BackupDriverProfile("Telescope", "POTH.Telescope");
                     UnregAscom("POTH.Telescope");
+                    BackupDriverProfile("Dome", "POTH.Dome");
                     UnregAscom("POTH.Dome");
+                    BackupDriverProfile("Focuser", "POTH.Focuser");
                     UnregAscom("POTH.Focuser");
                 }
 
@@ -230,8 +237,11 @@ namespace ConsoleApplication1
                 }
                 else // Executable not found so unregister from the Profile
                 {
+                    BackupDriverProfile("Telescope", "Pipe.Telescope");
                     UnregAscom("Pipe.Telescope");
+                    BackupDriverProfile("Dome", "Pipe.Dome");
                     UnregAscom("Pipe.Dome");
+                    BackupDriverProfile("Focuser", "Pipe.Focuser");
                     UnregAscom("Pipe.Focuser");
                 }
 
@@ -244,8 +254,11 @@ namespace ConsoleApplication1
                 }
                 else // Executable not found so unregister from the Profile
                 {
+                    BackupDriverProfile("Telescope", "Hub.Telescope");
                     UnregAscom("Hub.Telescope");
+                    BackupDriverProfile("Dome", "Hub.Dome");
                     UnregAscom("Hub.Dome");
+                    BackupDriverProfile("Focuser", "Hub.Focuser");
                     UnregAscom("Hub.Focuser");
                 }
 
@@ -262,7 +275,9 @@ namespace ConsoleApplication1
                 }
                 else // Executable not found so unregister from the Profile
                 {
+                    BackupDriverProfile("Telescope", "ASCOMDome.Telescope");
                     UnregAscom("ASCOMDome.Telescope");
+                    BackupDriverProfile("Dome", "ASCOMDome.Dome");
                     UnregAscom("ASCOMDome.Dome");
                 }
 
@@ -447,16 +462,72 @@ namespace ConsoleApplication1
 
             try
             {
-                LogMessage("RegAscom", "  Setting device type");
                 tProfile.InvokeMember("DeviceType", BindingFlags.Default | BindingFlags.SetProperty, null, oProfile, new object[] { sType }, CultureInfo.InvariantCulture);
-
-                LogMessage("RegAscom", "  Registering device");
                 tProfile.InvokeMember("Register", BindingFlags.Default | BindingFlags.InvokeMethod, null, oProfile, new object[] { ProgID, Desc }, CultureInfo.InvariantCulture);
+                LogMessage("RegAscom", $"  {ProgID} has been successfully registered");
             }
             catch (Exception ex)
             {
                 SetReturnCode(2);
                 LogError("RegAscom", "Failed to register " + ProgID + " - " + ex.ToString());
+            }
+        }
+
+        static void BackupDriverProfile(string deviceType, string progID)
+        {
+            try
+            {
+                string sourceKeyName = $"{ASCOM_ROOT_KEY_NAME}\\{deviceType} Drivers\\{progID}";
+                LogMessage("BackupDriverProfile", $"Backing up {deviceType} driver {progID} in key {sourceKeyName}."); // in base key {localMachine32Bit}.");
+                using (RegistryKey driverSourceKey = Registry.LocalMachine.OpenSubKey(sourceKeyName))
+                {
+                    if (driverSourceKey != null) // We have a source key so a Profile entry must exist for this driver
+                    {
+                        string destinationKeyName = $"{ASCOM_ROOT_KEY_NAME}\\{DRIVER_PROFILE_BACKUP_KEY_NAME}\\{progID}";
+                        LogMessage("BackupDriverProfile", $"Copying Profile entry to {destinationKeyName}.");
+
+                        using (RegistryKey driverDestinationKey = Registry.LocalMachine.CreateSubKey(destinationKeyName, true))
+                        {
+                            if (driverDestinationKey != null) // We have a destination key so copy any information in the source to the destination
+                            {
+                                driverSourceKey.CopyTo(driverDestinationKey);
+                            }
+                            else
+                            {
+                                LogError("BackupDriverProfile", $"Unable to create destination key {destinationKeyName}");
+                            }
+                        }
+                    }
+                    else // No information to copy
+                    {
+                        LogMessage("BackupDriverProfile", $"{deviceType} driver {progID} does not have a Profile entry so there is nothing to back up.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogError("BackupDriverProfile", ex.ToString());
+            }
+        }
+        static void CopyTo(this RegistryKey src, RegistryKey dst)
+        {
+            // copy the values
+            foreach (string valueName in src.GetValueNames())
+            {
+                object sourceValue = src.GetValue(valueName, null, RegistryValueOptions.DoNotExpandEnvironmentNames);
+                LogMessage("CopyTo", $"  {valueName} = {sourceValue}");
+                dst.SetValue(valueName, sourceValue, src.GetValueKind(valueName));
+            }
+
+            // copy the subkeys
+            foreach (string subKeyName in src.GetSubKeyNames())
+            {
+                LogMessage("CopyTo", $"  Copying SubKey {subKeyName}");
+                using (var srcSubKey = src.OpenSubKey(subKeyName, false))
+                {
+                    var dstSubKey = dst.CreateSubKey(subKeyName);
+                    srcSubKey.CopyTo(dstSubKey);
+                }
             }
         }
 
@@ -467,11 +538,9 @@ namespace ConsoleApplication1
 
             try
             {
-                LogMessage("UnRegAscom", "  Setting device type");
                 tProfile.InvokeMember("DeviceType", BindingFlags.Default | BindingFlags.SetProperty, null, oProfile, new object[] { sType }, CultureInfo.InvariantCulture);
-
-                LogMessage("UnRegAscom", "  Unregistering device");
                 tProfile.InvokeMember("Unregister", BindingFlags.Default | BindingFlags.InvokeMethod, null, oProfile, new object[] { ProgID }, CultureInfo.InvariantCulture);
+                LogMessage("UnRegAscom", $"  {ProgID} has been successfully unregistered");
             }
             catch (Exception ex)
             {
@@ -559,7 +628,7 @@ namespace ConsoleApplication1
             catch { }
         }
 
-        protected static void FinaliseRestorePoint()
+        private static void FinaliseRestorePoint()
         {
             try
             {
@@ -588,7 +657,7 @@ namespace ConsoleApplication1
         /// Check and if required, fix permissions on HKEY_CLASSES_ROOT
         /// </summary>
         /// <param name="FixPermissions">True to fix missing permissions, false just to check and report permission state</param>
-        protected static void CheckHKCRPermissions(bool FixPermissions)
+        private static void CheckHKCRPermissions(bool FixPermissions)
         {
             try
             {
@@ -832,7 +901,7 @@ namespace ConsoleApplication1
         /// </summary>
         /// <returns>Localised name of the BUILTIN\Users group</returns>
         /// <remarks>This uses the WMI features and is pretty obscure - sorry, it was the only way I could find to do this! Peter</remarks>
-        protected static string GetBuiltInGroup(string DomainSID, string GroupSID)
+        private static string GetBuiltInGroup(string DomainSID, string GroupSID)
         {
             ManagementObjectSearcher Searcher = default(ManagementObjectSearcher);
             string Group = "Unknown";
@@ -901,7 +970,7 @@ namespace ConsoleApplication1
         /// <param name="AccountSID">SID of the account whose localised name is required</param>
         /// <returns>Localised name of the account</returns>
         /// <remarks>The SID should be in a form similar to S-1-5-18</remarks>
-        protected static string GetLocalAccountName(string AccountSID)
+        private static string GetLocalAccountName(string AccountSID)
         {
             SecurityIdentifier sid = new SecurityIdentifier(AccountSID);
             NTAccount acct = (NTAccount)sid.Translate(typeof(NTAccount));
