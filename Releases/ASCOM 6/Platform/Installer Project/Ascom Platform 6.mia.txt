@@ -45,7 +45,7 @@ if Variable CFABYPASS not Equals (Ignore Case) TRUE
     Terminate Installation
   end
 else
-  MessageBox: CFA Detection Bypass, CFA detection has been bypassed. The installer log file will be written to: $SETUPLOG$
+  MessageBox: CFA Detection Bypass, CFA check bypassed.$NEWLINE$$NEWLINE$The installer log file will be written to: $NEWLINE$$NEWLINE$$SETUPLOG$$NEWLINE$$NEWLINE$Documents: $NEWLINE$$NEWLINE$$MYDOCUMENTS$
 end
  
 Write into Text File $SETUPLOG$ from Value $TIME$ Installation date: $DATE$ (at end of file)

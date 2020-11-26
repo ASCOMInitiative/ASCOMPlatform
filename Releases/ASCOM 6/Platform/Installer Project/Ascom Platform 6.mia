@@ -6266,7 +6266,7 @@ The installer cannot write to your Documents folder, you may have Controlled Fol
 CFA
 {D6B00424-36C9-48A2-AB2C-32C26A7B6B6E}
 CFA Detection Bypass
-CFA detection has been bypassed. The installer log file will be written to: $SETUPLOG$
+CFA check bypassed.$NEWLINE$$NEWLINE$The installer log file will be written to: $NEWLINE$$NEWLINE$$SETUPLOG$$NEWLINE$$NEWLINE$Documents: $NEWLINE$$NEWLINE$$MYDOCUMENTS$
 0
 1
 CFA
