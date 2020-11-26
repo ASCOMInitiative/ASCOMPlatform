@@ -217,13 +217,23 @@
 
 					<!-- Right Ascension HH MM SS -->
 
-					<TextBlock Grid.Row="0" Height="22" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0" FontSize="16"
+					<!--<TextBlock Grid.Row="0" Height="22" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0" FontSize="16"
 							   ToolTip="Click here to change the target right ascension"
 							   Visibility="{Binding UseDecimalHours, Converter={StaticResource NegatedBooleanToVisibilityConverter}}" >
 						<Hyperlink Command="{Binding EditRightAscensionCommand}">
 							<Run Text="{Binding TargetRightAscension, Converter={StaticResource RightAscensionValueConverter}, FallbackValue=No value}" />
 						</Hyperlink>
-					</TextBlock>
+					</TextBlock>-->
+					<TextBox Grid.Row="0" Height="22" Width="80" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0" FontSize="12"
+							 VerticalContentAlignment="Top" Padding="0,0,0,0" IsReadOnly="True"
+							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan"
+						     ToolTip="Click here to change the target right ascension"
+							 Visibility="{Binding UseDecimalHours, Converter={StaticResource NegatedBooleanToVisibilityConverter}}"
+							 Text="{Binding TargetRightAscension, Converter={StaticResource RightAscensionValueConverter}, FallbackValue=No value}">
+						<TextBox.InputBindings>
+							<MouseBinding Command="{Binding EditRightAscensionCommand}" MouseAction="LeftClick" />
+						</TextBox.InputBindings>
+					</TextBox>
 
 					<!-- Right Ascension Decimal Hours -->
 
@@ -252,13 +262,23 @@
 
 					<!-- Declination DD MM SS -->
 
-					<TextBlock Grid.Row="0" Height="22" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,-1,0,0" FontSize="16"
+					<!--<TextBlock Grid.Row="0" Height="22" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,-1,0,0" FontSize="16"
 							   ToolTip="Click here to change the target declination"
 							   Visibility="{Binding UseDecimalHours, Converter={StaticResource NegatedBooleanToVisibilityConverter}}" >
 						<Hyperlink  Command="{Binding EditDeclinationCommand}">
 							<Run Text="{Binding TargetDeclination, Converter={StaticResource DeclinationValueConverter}, FallbackValue=No value}" />
 						</Hyperlink>
-					</TextBlock>
+					</TextBlock>-->
+					<TextBox Grid.Row="0" Height="22" Width="84" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0" FontSize="12"
+							 VerticalContentAlignment="Top" Padding="0,0,0,0" IsReadOnly="True"
+							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan"
+						     ToolTip="Click here to change the target declination"
+							 Visibility="{Binding UseDecimalHours, Converter={StaticResource NegatedBooleanToVisibilityConverter}}"
+							 Text="{Binding TargetDeclination, Converter={StaticResource DeclinationValueConverter}, FallbackValue=No value}">
+						<TextBox.InputBindings>
+							<MouseBinding Command="{Binding EditDeclinationCommand}" MouseAction="LeftClick" />
+						</TextBox.InputBindings>
+					</TextBox>
 
 					<!-- Declination decimal degrees -->
 
