@@ -20,6 +20,7 @@ Set Variable
 Set Variable
 Set Variable
 Set Variable
+Set Variable
 Comment
 Comment
 Run Program
@@ -33,6 +34,7 @@ End
 Write to Text File
 Comment
 Comment
+If
 Comment
 Read from Text File
 If
@@ -41,6 +43,9 @@ MessageBox
 Comment
 Comment
 Terminate Install
+End
+Else
+MessageBox
 End
 Comment
 Write to Text File
@@ -1939,6 +1944,7 @@ $
 {D9006F83-2322-4622-A1B5-0944E5A29C55}
 {F63A07BB-A45A-4735-8070-7D54FE51C975}
 {BD793928-56B8-4CD6-8D8F-51D5E3F489D8}
+{CC8D8A25-2B34-4A5A-B015-5F3D8B7BF26C}
 {FB47D698-8E25-4BEC-A9DB-3A31EFE79C5E}
 {B7DD3A6D-7A61-46D3-B0B3-809E61C477DE}
 {CAF232B9-C04D-4631-A39C-6C0DFFEAF5B2}
@@ -1952,6 +1958,7 @@ $
 {266483B3-07A7-4B01-8648-0F365A346DBA}
 {D269FAF0-39B8-4A89-AE20-B4EAF73AE67A}
 {68552375-E8CA-4356-A1EF-17D682ED9B06}
+{E038D499-E768-488A-8F56-660141060D13}
 {105E2176-3FA8-4123-A1DB-A843B3CB5943}
 {0CE594CE-3668-48FF-9CDF-896FB5E6F0C0}
 {66A84DE4-F32E-44E1-91AF-5678DB00729F}
@@ -1961,6 +1968,9 @@ $
 {D1583C63-7841-435F-8DAA-3E904572B408}
 {2E3D061B-F556-43A9-8CC2-224BF5DDFFDF}
 {5FE15FC2-B8B1-4D74-B691-0FEEBAE83A2B}
+{639A3BD7-C3C2-47EF-B05B-474D0D0A8DE7}
+{D6B00424-36C9-48A2-AB2C-32C26A7B6B6E}
+{E8700C0C-667F-45E4-8E2E-35DB02C6A034}
 {EB0464C4-DAA9-4251-8EBF-47CCA4EC467F}
 {185281D6-BF72-4F34-97E0-E10CF80841FD}
 {B0917843-B6CC-4314-BB9D-D65E1F47367F}
@@ -5591,6 +5601,9 @@ Cleaning 32bit simulator COM entries
 {8368D6E1-D7AA-4F7A-A933-FB4258A107AA}
 PROGRESSTEXT$MYAH$MYAH$FALSE
 Cleaning 64bit simulator COM entries
+{CC8D8A25-2B34-4A5A-B015-5F3D8B7BF26C}
+CFABYPASS$MYAH$MYAH$FALSE
+
 {340178B5-D93C-4075-ABA8-DE4CCDAFC689}
 MAINTENANCE
 0
@@ -6156,6 +6169,11 @@ WIN64MODE
 0
 TRUE
 FALSE
+{E038D499-E768-488A-8F56-660141060D13}
+CFABYPASS
+4
+TRUE
+TRUE
 {B3EB30C5-5686-4186-96B5-86C9FC5D6576}
 $TITLE$ Setup Error
 This product requires at least Administrator Privileges.$NEWLINE$$NEWLINE$Setup cannot continue.
@@ -6244,6 +6262,12 @@ An error has occured when setting the Registry ACL, please zip up all logs in yo
 Unable to write to Documents folder
 The installer cannot write to your Documents folder, you may have Controlled Folder Access enabled on this PC.$NEWLINE$$NEWLINE$The Platform's complex installation process cannot proceed without write access to create its multiple log files and the installer will now close.$NEWLINE$$NEWLINE$At this time the only way to install the Platform on a CFA protected PC is to turn off CFA protection, to run the Platform installer and then to re-enable CFA protection.
 3
+1
+CFA
+{D6B00424-36C9-48A2-AB2C-32C26A7B6B6E}
+CFA Detection Bypass
+CFA detection has been bypassed. The installer log file will be written to: $SETUPLOG$
+0
 1
 CFA
 {EAC1FFF4-CCCD-452E-886C-3AAFA5AC4558}
@@ -12990,6 +13014,11 @@ $
 
 
 
+
+
+
+
+
 C
 
 
@@ -14839,6 +14868,11 @@ C
 
 
 $
+
+
+
+
+
 
 
 

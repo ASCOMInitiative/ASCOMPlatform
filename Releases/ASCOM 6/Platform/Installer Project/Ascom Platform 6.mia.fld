@@ -9,7 +9,6 @@ Platform 6 files
 Platform 5.5 files
 Set Registry Keys
 Platform 6.1 files
-Set up log file and variables
 Platform 6.2 files
 Remove Previous Platform 6 install if present
 Extra activities if on a 64bit system
@@ -21,3 +20,6 @@ Install Application Pre-Requisites if required
 Maintenance Dialogue
 Alpaca Support for Chooser
 ASCOM Device Hub
+Uninstall items installed by this installer
+Clean up any remaining simulator COM entries
+Platform 5 files
