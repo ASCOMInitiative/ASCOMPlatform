@@ -7,72 +7,146 @@ namespace ASCOM.DeviceHub
 		public RotaryValue()
 		{}
 
-		public RotaryValue( int value, int minimum, int maximum, char units )
+		public RotaryValue( int value, int minimumScale, int maximumScale, char units )
+			: this( value, minimumScale, maximumScale, minimumScale, maximumScale, units )
+		{ 
+			// This constructor is used when the scale and the value range are the same.
+		}
+
+		public RotaryValue(int value, int minimumScale, int maximumScale, int minimumValue, int maximumValue, char units )
 		{
+			// Because of Conercion of the Dependency Properties, the order of the assignments
+			// is critical. The Maximum must be set before the Minimum and the scale must be set
+			// before the value rante. Then it is followed by the Value.
+
+			MaximumScale = maximumScale;
+			MinimumScale = minimumScale;
+			MaximumValue = maximumValue;
+			MinimumValue = minimumValue;
 			Value = value;
-			Minimum = minimum;
-			Maximum = maximum;
 			Units = units;
 		}
 
-		#region Minimum Dependency Property
+		#region MinimumScale Dependency Property
 
-		public int Minimum
+		public int MinimumScale
 		{
-			get { return (int)GetValue( MinimumProperty ); }
-			set { SetValue( MinimumProperty, value ); }
+			get { return (int)GetValue( MinimumScaleProperty ); }
+			set { SetValue( MinimumScaleProperty, value ); }
 		}
 
-		public static readonly DependencyProperty MinimumProperty =
+		public static readonly DependencyProperty MinimumScaleProperty =
 			DependencyProperty.Register( "Minimum", typeof( int ), typeof( RotaryValue )
-				, new PropertyMetadata( 0, null, CoerceMinimum ) );
+				, new PropertyMetadata( 0, null, CoerceMinimumScale ) );
 
-		private static object CoerceMinimum( DependencyObject d, object baseValue )
+		private static object CoerceMinimumScale( DependencyObject d, object baseValue )
 		{
 			RotaryValue rotary = (RotaryValue)d;
 
 			int newValue = (int)baseValue;
 
-			if ( newValue > rotary.Maximum )
+			if ( newValue > rotary.MaximumScale )
 			{
-				newValue = rotary.Maximum;
+				newValue = rotary.MaximumScale;
 			}
 
 			return newValue;
 		}
 
-		#endregion Minimum Dependency Property
+		#endregion MinimumScale Dependency Property
 
-		#region Maximum Dependency Property
+		#region MaximumScale Dependency Property
 
-		public int Maximum
+		public int MaximumScale
 		{
-			get { return (int)GetValue( MaximumProperty ); }
-			set { SetValue( MaximumProperty, value ); }
+			get { return (int)GetValue( MaximumScaleProperty ); }
+			set { SetValue( MaximumScaleProperty, value ); }
 		}
 
-		public static readonly DependencyProperty MaximumProperty =
+		public static readonly DependencyProperty MaximumScaleProperty =
 			DependencyProperty.Register( "Maximum", typeof( int ), typeof( RotaryValue )
-				, new PropertyMetadata( 0, null, CoerceMaximum ) );
+				, new PropertyMetadata( 0, null, CoerceMaximumScale ) );
 
-		private static object CoerceMaximum( DependencyObject d, object baseValue )
+		private static object CoerceMaximumScale( DependencyObject d, object baseValue )
 		{
 			RotaryValue rotary = (RotaryValue)d;
 
 			int newValue = (int)baseValue;
 
-			if ( newValue < rotary.Minimum )
+			if ( newValue < rotary.MinimumScale )
 			{
-				newValue = rotary.Minimum;
+				newValue = rotary.MinimumScale;
 			}
 
 			return newValue;
 		}
 
-		#endregion Maximum Dependency Property
+		#endregion MaximumScale Dependency Property
+
+		#region MinimumValue Dependency Property
+
+		public int MinimumValue
+		{
+			get { return (int)GetValue( MinimumValueProperty ); }
+			set { SetValue( MinimumValueProperty, value ); }
+		}
+
+		// Using a DependencyProperty as the backing store for MinimumValue.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty MinimumValueProperty =
+			DependencyProperty.Register("MinimumValue", typeof(int), typeof(RotaryValue)
+				, new PropertyMetadata(0, null, CoerceMinimumValue ) );
+
+		private static object CoerceMinimumValue( DependencyObject d, object baseValue )
+		{
+			RotaryValue rotary = (RotaryValue)d;
+
+			int newValue = (int)baseValue;
+
+			if ( newValue < rotary.MinimumScale )
+			{
+				newValue = rotary.MinimumScale;
+			}
+
+			return newValue;
+		}
+
+		#endregion MinimumValue Dependency Property
+
+		#region MaximumValue Dependency Property
+
+		public int MaximumValue
+		{
+			get { return (int)GetValue( MaximumValueProperty ); }
+			set { SetValue( MaximumValueProperty, value ); }
+		}
+
+		// Using a DependencyProperty as the backing store for MaximumValue.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty MaximumValueProperty =
+			DependencyProperty.Register("MaximumValue", typeof(int), typeof(RotaryValue)
+				, new PropertyMetadata(0, null, CoerceMaximumValue ) );
+
+		private static object CoerceMaximumValue( DependencyObject d, object baseValue )
+		{
+			RotaryValue rotary = (RotaryValue)d;
+
+			int newValue = (int)baseValue;
+
+			if ( newValue > rotary.MaximumScale )
+			{
+				newValue = rotary.MaximumScale;
+			}
+			else if ( newValue < rotary.MinimumScale )
+			{
+				newValue = rotary.MinimumScale;
+			}
+
+			return newValue;
+		}
+
+		#endregion MaximumValue Dependency Property
 
 		#region Units Dependency Property
-			   
+
 		public char Units
 		{
 			get { return (char)GetValue( UnitsProperty ); }
@@ -99,18 +173,16 @@ namespace ASCOM.DeviceHub
 		private static object CoerceValue( DependencyObject d, object baseValue )
 		{
 			RotaryValue rotary = (RotaryValue)d;
-			int min = rotary.Minimum;
-			int max = rotary.Maximum;
 
 			int newValue = (int)baseValue;
 
-			if ( newValue < min )
+			if ( newValue < rotary.MinimumValue )
 			{
-				newValue = min;
+				newValue = rotary.MinimumValue;
 			}
-			else if ( newValue > max )
+			else if ( newValue > rotary.MaximumValue )
 			{
-				newValue = max;
+				newValue = rotary.MaximumValue;
 			}
 
 			return newValue;

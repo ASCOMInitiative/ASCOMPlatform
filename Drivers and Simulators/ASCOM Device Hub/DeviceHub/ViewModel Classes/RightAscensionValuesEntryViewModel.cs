@@ -13,9 +13,9 @@ namespace ASCOM.DeviceHub
 			{
 				RotaryValues = new ObservableCollection<RotaryValue>
 				{
-					new RotaryValue( 0, 0, 24, 'h' ),
-					new RotaryValue( 0, 0, 60, 'm' ),
-					new RotaryValue( 0, 0, 60, 's' )
+					new RotaryValue( 0, 0, 24, 0, 23, 'h' ),
+					new RotaryValue( 0, 0, 60, 0, 59, 'm' ),
+					new RotaryValue( 0, 0, 60, 0, 59, 's' )
 				},
 				IsValueDefined = new bool[] { true, true, true }
 			};

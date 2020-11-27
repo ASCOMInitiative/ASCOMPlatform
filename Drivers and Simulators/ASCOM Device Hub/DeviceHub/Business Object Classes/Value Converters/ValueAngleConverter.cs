@@ -23,12 +23,7 @@ namespace ASCOM.DeviceHub
 
 		private double GetAngle( double value, double minimum, double maximum )
 		{
-			double current = ( value / ( maximum - minimum ) ) * 360.0;
-
-			if ( Math.Abs( current - 360.0 ) < 1E-05 )
-			{
-				current = 0.0;
-			}
+			double current = ( ( value - minimum ) / ( maximum - minimum ) ) * 360.0;
 
 			return current;
 		}

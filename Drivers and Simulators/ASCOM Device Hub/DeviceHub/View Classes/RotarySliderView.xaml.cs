@@ -110,7 +110,7 @@ namespace ASCOM.DeviceHub
 				double newValue = ( _knob.Maximum - _knob.Minimum ) * angle / ( 2 * Math.PI );
 				newValue = Math.Round( newValue / _knob.TickFrequency ) * _knob.TickFrequency;
 
-				if ( newValue >= _knob.Maximum )
+				if ( newValue > _knob.Maximum )
 				{
 					newValue = _knob.Minimum;
 				}
