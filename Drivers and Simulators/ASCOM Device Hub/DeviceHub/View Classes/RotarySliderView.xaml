@@ -84,8 +84,8 @@
 		</StackPanel>
 		<Slider Name="_knob" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top" 
 				TickFrequency="1" IsSnapToTickEnabled="True" 
-				Minimum="{Binding SelectedValue.Minimum}" 
-				Maximum="{Binding SelectedValue.Maximum}" 
+				Minimum="{Binding SelectedValue.MinimumScale}" 
+				Maximum="{Binding SelectedValue.MaximumScale}" 
 				Value="{Binding SelectedValue.Value}" >
 			<Slider.Template>
 				<ControlTemplate>

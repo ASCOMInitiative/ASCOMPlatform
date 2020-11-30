@@ -103,15 +103,13 @@ namespace ASCOM.DeviceHub
 
 			int newValue = SelectedValue.Value + adjValue;
 
-			if ( newValue > SelectedValue.Maximum )
+			if ( newValue > SelectedValue.MaximumScale )
 			{
-				newValue -= SelectedValue.Maximum;
-				newValue += SelectedValue.Minimum;
+				newValue = SelectedValue.MinimumValue;
 			}
-			else if ( newValue < SelectedValue.Minimum )
+			else if ( newValue < SelectedValue.MinimumScale )
 			{
-				newValue -= SelectedValue.Minimum;
-				newValue += SelectedValue.Maximum;
+				newValue = SelectedValue.MaximumValue;
 			}
 
 			SelectedValue.Value = newValue;
