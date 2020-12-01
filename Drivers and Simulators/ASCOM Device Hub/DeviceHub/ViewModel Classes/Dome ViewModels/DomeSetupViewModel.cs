@@ -452,7 +452,7 @@ namespace ASCOM.DeviceHub
 			int radius = DomeRadius;
 
 			SimpleValueEntryViewModel vm = new SimpleValueEntryViewModel( "DomeRadius"
-				, "Enter the radius of the dome, in mm", 20000, ' ' );
+				, "Enter the radius of the dome, in mm", 0, 20000, 0, 20000, ' ' );
 			vm.InitializeValues( new int[1] { radius } );
 
 			IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
@@ -496,7 +496,7 @@ namespace ASCOM.DeviceHub
 			int offset = GemAxisOffset;
 
 			SimpleValueEntryViewModel vm = new SimpleValueEntryViewModel( "GemAxisOffset"
-				, "Enter the GEM axis offset distance, in mm", 2000, ' ' );
+				, "Enter the GEM axis offset distance, in mm", 0, 2000, 0, 2000, ' ' );
 			vm.InitializeValues( new int[1] { offset } );
 
 			IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
@@ -540,7 +540,7 @@ namespace ASCOM.DeviceHub
 			int accuracy = AzimuthAccuracy;
 
 			SimpleValueEntryViewModel vm = new SimpleValueEntryViewModel( "AzimuthAccuracy"
-				, "Enter the allowed azimuth difference, in degrees", 10, ' ' );
+				, "Enter the allowed azimuth difference, in degrees", 0, 10, 0, 10, ' ' );
 			vm.InitializeValues( new int[1] { accuracy } );
 
 			IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
@@ -584,7 +584,7 @@ namespace ASCOM.DeviceHub
 			int interval = SlaveInterval;
 
 			SimpleValueEntryViewModel vm = new SimpleValueEntryViewModel( "SlaveInterval"
-				, "Enter the azimuth adjustment inverval, in seconds", 300, ' ' );
+				, "Enter the azimuth adjustment interval, in seconds", 0, 300, 5, 300, ' ' );
 			vm.InitializeValues( new int[1] { interval } );
 
 			IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
@@ -600,7 +600,7 @@ namespace ASCOM.DeviceHub
 			vm.Dispose();
 			vm = null;
 
-			// Don't allow a value less than 30 seconds.
+			// Don't allow a value less than 5 seconds.
 
 			SlaveInterval = Math.Max( interval, 5 );
 		}

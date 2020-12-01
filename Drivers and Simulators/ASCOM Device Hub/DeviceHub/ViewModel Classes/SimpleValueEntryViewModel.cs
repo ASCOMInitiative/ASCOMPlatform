@@ -4,7 +4,12 @@ namespace ASCOM.DeviceHub
 {
 	internal class SimpleValueEntryViewModel : ValuesEntryViewModelBase
     {
-		public SimpleValueEntryViewModel( string sourceID, string description, int maximumValue, char units )
+		public SimpleValueEntryViewModel( string sourceID, string description, int maximum, char units )
+			:this( sourceID, description, 0, maximum, 0, maximum, units)
+		{ }
+
+		public SimpleValueEntryViewModel( string sourceID, string description, int minimumScale, int maximumScale
+											, int minimumValue, int maximumValue, char units )
 			: base( sourceID )
 		{
 			_description = description;
@@ -13,7 +18,7 @@ namespace ASCOM.DeviceHub
 			{
 				RotaryValues = new ObservableCollection<RotaryValue>
 				{
-					new RotaryValue( 0, 0, maximumValue, units)
+					new RotaryValue( minimumValue, minimumScale, maximumScale, minimumValue, maximumValue, units)
 				},
 				IsValueDefined = new bool[] { true, false, false }
 			};

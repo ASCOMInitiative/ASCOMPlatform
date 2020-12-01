@@ -20,8 +20,10 @@ namespace ASCOM.DeviceHub
 		{
 			XDocument doc = ReadSettingsFromFile();
 			XmlSerializer ser = new XmlSerializer( typeof( ApplicationSettings ) );
+			XmlReader reader = doc.CreateReader();
+			reader.MoveToContent();
 
-			return (ApplicationSettings)ser.Deserialize( doc.CreateReader() );
+			return (ApplicationSettings)ser.Deserialize( reader );
 		}
 
 		#endregion Static Properties and Methods
@@ -55,7 +57,7 @@ namespace ASCOM.DeviceHub
 			{
 				var ns = new XmlSerializerNamespaces();
 				ns.Add( "", "" );
-				var ser = new XmlSerializer( this.GetType() );
+				var ser = new XmlSerializer( GetType() );
 				ser.Serialize( writer, this, ns );
 			}
 
@@ -82,6 +84,8 @@ namespace ASCOM.DeviceHub
 			using ( XmlWriter writer = XmlWriter.Create( strm, settings ) )
 			{
 				settingsDoc.Save( writer );
+				writer.Flush();
+				writer.Close();
 			}
 		}
 
@@ -92,11 +96,14 @@ namespace ASCOM.DeviceHub
 		private static XDocument ReadSettingsFromFile()
 		{
 			XDocument doc;
+			string filepath = null;
 
 			try
 			{
-				using ( Stream strm = GetIOStream(  FileMode.Open, FileAccess.Read ) )
+				using ( FileStream strm = GetIOStream(  FileMode.Open, FileAccess.Read ) )
 				{
+					filepath = strm.Name;
+
 					XmlReaderSettings settings = new XmlReaderSettings
 					{
 						ConformanceLevel = ConformanceLevel.Document,
@@ -108,6 +115,7 @@ namespace ASCOM.DeviceHub
 					using ( XmlReader reader = XmlReader.Create( strm, settings ) )
 					{
 						doc = XDocument.Load( reader );
+						reader.Close();
 					}
 				}
 			}
@@ -117,11 +125,29 @@ namespace ASCOM.DeviceHub
 
 				doc = new XDocument( new XElement( _rootElementName ) );
 			}
+			catch ( Exception )
+			{
+				// We can get here if the App Settings file has become corrupted. So we will notify the user,
+				// delete the file, and create an empty document.
+
+				string text = "An error occurred when attempting to restore the application settings.\r\n\r\n" +
+							  "The default settings will be used.";
+				string title = "Application Settings Read Error";
+
+				MessageBox.Show( text, title, MessageBoxButton.OK, MessageBoxImage.Error );
+
+				if ( filepath != null && File.Exists(filepath))
+				{
+					File.Delete( filepath );
+				}
+
+				doc = new XDocument( new XElement( _rootElementName ) );
+			}
 
 			return doc;
 		}
 
-		private static Stream GetIOStream( FileMode fileMode, FileAccess fileAccess )
+		private static FileStream GetIOStream( FileMode fileMode, FileAccess fileAccess )
 		{
 			string folderPath = Environment.GetFolderPath( Environment.SpecialFolder.LocalApplicationData );
 

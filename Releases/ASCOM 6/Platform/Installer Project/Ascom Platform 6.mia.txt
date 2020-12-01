@@ -20,6 +20,7 @@ Set Variable MYPROGRESS to 0
 Set Variable PROGRESSTEXT to Installing $TITLE$
 Set Variable APPLYINSTALLSUCCESS to 
 Set Variable CFA to 
+Set Variable CFABYPASS to 
  
 Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
 Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$ASCOM" (WAIT)
@@ -33,14 +34,18 @@ end
 Write into Text File $SETUPLOG$ from Value $TIME$ $TITLE$ v$VERSION$ (at end of file)
  
 Comment: Test whether Controlled Folder Access is enabled and warn the user if this is the case
-Comment: The test is made by trying to open the installer's log file and reading the first line. If this is blank there is no log file and CFA is active on the Documents folder
-Read from Text File $SETUPLOG$ into Variable CFA
-if Variable CFA Equals 
-  Comment: The read returned a blank line instead of the Platform version number so CFA is deemed to be active
-  MessageBox: Unable to write to Documents folder, The installer cannot write to your Documents folder, you may have Controlled Folder Access enabled on this PC.$NEWLINE$$NEWLINE$The Platform's complex installation process cannot proceed without write access to create its multiple log files and the installer will now close.$NEWLINE$$NEWLINE$At this time the only way to install the Platform on a CFA protected PC is to turn off CFA protection, to run the Platform installer and then to re-enable CFA protection.
-   
-  Comment: Terminate the installation because we cannot continue with installation without write access to the Documents folder.
-  Terminate Installation
+if Variable CFABYPASS not Equals (Ignore Case) TRUE
+  Comment: The test is made by trying to open the installer's log file and reading the first line. If this is blank there is no log file and CFA is active on the Documents folder
+  Read from Text File $SETUPLOG$ into Variable CFA
+  if Variable CFA Equals 
+    Comment: The read returned a blank line instead of the Platform version number so CFA is deemed to be active
+    MessageBox: Unable to write to Documents folder, The installer cannot write to your Documents folder, you may have Controlled Folder Access enabled on this PC.$NEWLINE$$NEWLINE$The Platform's complex installation process cannot proceed without write access to create its multiple log files and the installer will now close.$NEWLINE$$NEWLINE$At this time the only way to install the Platform on a CFA protected PC is to turn off CFA protection, to run the Platform installer and then to re-enable CFA protection.
+     
+    Comment: Terminate the installation because we cannot continue with installation without write access to the Documents folder.
+    Terminate Installation
+  end
+else
+  MessageBox: CFA Detection Bypass, CFA check bypassed.$NEWLINE$$NEWLINE$The installer log file will be written to: $NEWLINE$$NEWLINE$$SETUPLOG$$NEWLINE$$NEWLINE$Documents: $NEWLINE$$NEWLINE$$MYDOCUMENTS$
 end
  
 Write into Text File $SETUPLOG$ from Value $TIME$ Installation date: $DATE$ (at end of file)
