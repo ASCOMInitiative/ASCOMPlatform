@@ -103,22 +103,22 @@ Partial Class EarthRotationDataForm
         Me.LblManualDeltaUT1.AutoSize = True
         Me.LblManualDeltaUT1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblManualDeltaUT1.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.LblManualDeltaUT1.Location = New System.Drawing.Point(133, 64)
+        Me.LblManualDeltaUT1.Location = New System.Drawing.Point(71, 64)
         Me.LblManualDeltaUT1.Name = "LblManualDeltaUT1"
-        Me.LblManualDeltaUT1.Size = New System.Drawing.Size(56, 13)
+        Me.LblManualDeltaUT1.Size = New System.Drawing.Size(117, 13)
         Me.LblManualDeltaUT1.TabIndex = 15
-        Me.LblManualDeltaUT1.Text = "Delta UT1"
+        Me.LblManualDeltaUT1.Text = "UT1 - UTC (Delta UT1)"
         '
         'LblManualLeapSeconds
         '
         Me.LblManualLeapSeconds.AutoSize = True
         Me.LblManualLeapSeconds.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblManualLeapSeconds.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.LblManualLeapSeconds.Location = New System.Drawing.Point(113, 38)
+        Me.LblManualLeapSeconds.Location = New System.Drawing.Point(55, 38)
         Me.LblManualLeapSeconds.Name = "LblManualLeapSeconds"
-        Me.LblManualLeapSeconds.Size = New System.Drawing.Size(76, 13)
+        Me.LblManualLeapSeconds.Size = New System.Drawing.Size(133, 13)
         Me.LblManualLeapSeconds.TabIndex = 16
-        Me.LblManualLeapSeconds.Text = "Leap Seconds"
+        Me.LblManualLeapSeconds.Text = "TAI - UTC (Leap Seconds)"
         '
         'TxtManualLeapSeconds
         '
@@ -483,22 +483,22 @@ Partial Class EarthRotationDataForm
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label6.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label6.Location = New System.Drawing.Point(85, 35)
+        Me.Label6.Location = New System.Drawing.Point(28, 35)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(74, 13)
+        Me.Label6.Size = New System.Drawing.Size(131, 13)
         Me.Label6.TabIndex = 27
-        Me.Label6.Text = "Leap seconds"
+        Me.Label6.Text = "TAI - UTC (Leap seconds)"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label2.Location = New System.Drawing.Point(103, 61)
+        Me.Label2.Location = New System.Drawing.Point(41, 61)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(56, 13)
+        Me.Label2.Size = New System.Drawing.Size(117, 13)
         Me.Label2.TabIndex = 26
-        Me.Label2.Text = "Delta UT1"
+        Me.Label2.Text = "UT1 - UTC (Delta UT1)"
         '
         'GrpScheduleTime
         '
