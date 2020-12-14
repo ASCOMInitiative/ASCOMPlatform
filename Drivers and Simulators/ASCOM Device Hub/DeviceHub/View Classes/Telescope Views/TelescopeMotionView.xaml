@@ -277,7 +277,7 @@
 				  Header="Other Actions">
 			<Grid>
 				<Button Width="64" Height="64" HorizontalAlignment="Left" Margin="6,4" Style="{DynamicResource CircleButton}"
-								Content="Set Park" ToolTip="Set the telescope's Park position"
+								Content="Set Park" ToolTip="Set the telescope's park position to the current position"
 								Command="{Binding SetParkPositionCommand}" />
 
 			</Grid>
