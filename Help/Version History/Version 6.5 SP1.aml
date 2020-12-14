@@ -121,6 +121,7 @@
           <listItem>The CloudCover property has been added to the TimeSinceLastUpdate and SensorDescription methods in the ObservingConditions driver template.</listItem>
           <listItem>The developer installer repair option no longer loops indefinitely.</listItem>
           <listItem>DriverAccess now returns PropertyNotImplementedExceptions for the new "offset" properties when an ICameraV2 driver is in use.</listItem>
+          <listItem>DriverAccess.Camera now implements interface ICameraV3 instead of ICameraV2.</listItem>
           <listItem>The new IRotatorV3 members in DriverAccess now return better formatted "not implemented" messages when an IRotatorV2 driver is in use.</listItem>
         </list>
       </content>

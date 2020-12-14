@@ -4461,7 +4461,7 @@ We are running on Windows 10 with a Threshold version so cannot proceed because 
 {6026D396-5848-4256-91D3-8BEA22780392}
 We are running on Windows 10 so make sure that we are at least on Redstone
 {5E08D1D8-DBD1-44F7-8EA9-E904DE960CDB}
-Force use of the NASA download site because all of the USNo sites are unavailable at July 2020 and are predicted to be down until at least December 2020
+Force use of the ASCOM-STANDARDS download site because of unavailability of the USNO sites and the new NASA site security policy.
 {87B20770-26C4-41EC-915E-EB6A24A1D261}
 Ensure that the corrrect Profile registry ACL is set on every run to repair broken installations
 {536759DF-BCF2-44C4-B498-AEE1038DF3AB}
@@ -11171,7 +11171,7 @@ FALSE
 2|
 SOFTWARE\ASCOM\Astrometry
 Download Task Data Source
-ftp://cddis.gsfc.nasa.gov/pub/products/iers/
+https://download.ascom-standards.org/earthrot/
 TRUE
 FALSE
 {84D7BDB2-1906-470A-B9BC-948F23D84057}

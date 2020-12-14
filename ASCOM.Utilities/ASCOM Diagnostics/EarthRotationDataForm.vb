@@ -24,12 +24,13 @@ Public Class EarthRotationDataForm
     ' Initialise drop-down list options
     Private dataDownloadSources As New List(Of String) From
         {
-            EARTH_ROTATION_INTERNET_DATA_SOURCE_0,
-            EARTH_ROTATION_INTERNET_DATA_SOURCE_1,
-            EARTH_ROTATION_INTERNET_DATA_SOURCE_2,
-            EARTH_ROTATION_INTERNET_DATA_SOURCE_3,
-            EARTH_ROTATION_INTERNET_DATA_SOURCE_4
+             EARTH_ROTATION_INTERNET_DATA_SOURCE_0
         }
+    'EARTH_ROTATION_INTERNET_DATA_SOURCE_0,
+    'EARTH_ROTATION_INTERNET_DATA_SOURCE_1,
+    'EARTH_ROTATION_INTERNET_DATA_SOURCE_2,
+    'EARTH_ROTATION_INTERNET_DATA_SOURCE_3,
+    'EARTH_ROTATION_INTERNET_DATA_SOURCE_4
 
     Private ut1Sources As New List(Of String) From
         {
