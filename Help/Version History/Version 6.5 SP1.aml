@@ -64,7 +64,7 @@
             In October 2020, NASA disabled anonymous access to its earth rotation data files and this broke the Platform's update capability. This release restores functionality by
             mirroring the files on the ascom-standards web site and downloading them from there.
           </listItem>
-          <listItem>Corrected a typo on in the message given if a disconnect fails when using the Choose and Connect to Device form. Thanks Marco!</listItem>
+          <listItem>Corrected a typo in the message given if a disconnect fails when using the Choose and Connect to Device form. Thanks Marco!</listItem>
           <listItem>
             The Platform installer now:
             <list class="bullet">
