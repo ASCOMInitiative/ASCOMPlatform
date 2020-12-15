@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 using ASCOM.DeviceHub.MvvmMessenger;
@@ -801,9 +802,17 @@ namespace ASCOM.DeviceHub
 
 		private void SetParkPosition()
 		{
+			TelescopeManager.SetParkPosition();
+
+			IMessageBoxService msgSvc = ServiceContainer.Instance.GetService<IMessageBoxService>();
+
+			string text = "The current telescope position has been remembered as the Park position.";
+			string title = "Set ParkPosition";
+
+			msgSvc.Show( text, title, MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.None );
 		}
 
-		private bool CanSetParkPosition()
+			private bool CanSetParkPosition()
 		{
 			bool retval = false;
 
