@@ -14,7 +14,6 @@ Remove Previous Platform 6 install if present
 Extra activities if on a 64bit system
 Uninstall items installed by this installer
 ASCOM Cache
-Earth Rotation Date Update
 Remove Previous Platforms 4 and 5 if present
 Create shortcuts
 Install Application Pre-Requisites if required

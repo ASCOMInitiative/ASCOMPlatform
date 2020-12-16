@@ -38,6 +38,7 @@
               <listItem>The configuration persistence mechanic now tolerates a corrupted settings file.</listItem>
               <listItem>The dome setup and telescope direct slew dialogues now uses text boxes instead of value controls.</listItem>
               <listItem>The main window now displays help on how to expand all three expanders when in expansion mode.</listItem>
+              <listItem>There is now a confirmation message when the set park button is clicked.</listItem>
             </list>
           </listItem>
           <listItem>All references to the Yahoo ASCOM Talk forum have been replaced with references to the new Groups.IO forum.</listItem>
@@ -46,7 +47,6 @@
           <listItem>The SOFA component has been updated to use the latest IAU 21st July 2020 - Version 16 SOFA release.</listItem>
           <listItem>Chooser Properties Button - detailed failure information will now be provided if a driver does not connect correctly.</listItem>
           <listItem>The Camera simulator description now reflects that it supports ICameraV3.</listItem>
-          <listItem>There is now a confirmation message when the set park button is clicked.</listItem>
         </list>
       </content>
     </section>
@@ -64,6 +64,7 @@
             In October 2020, NASA disabled anonymous access to its earth rotation data files and this broke the Platform's update capability. This release restores functionality by
             mirroring the files on the ascom-standards web site and downloading them from there.
           </listItem>
+          <listItem>Parsing of earth rotation data files is more robust when files do not contain expected data.</listItem>
           <listItem>Corrected a typo in the message given if a disconnect fails when using the Choose and Connect to Device form. Thanks Marco!</listItem>
           <listItem>
             The Platform installer now:
