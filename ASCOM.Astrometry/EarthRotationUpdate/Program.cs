@@ -280,9 +280,6 @@ namespace EarthRotationUpdate
                         profile.DeleteKey(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME); ; // Clear out old leap second values
                         profile.CreateKey(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME);
 
-                        // Include a value that is in the SOFA library defaults but is not in the USNO files. It pre-dates the start of UTC but I am assuming that IAU is correct on this occasion
-                        profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME, double.Parse("2436934.5", CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture), double.Parse("1.4178180", CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture));
-
                         // Process the data file
                         using (var filestream = new FileStream(leapSecondsfileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
@@ -347,7 +344,17 @@ namespace EarthRotationUpdate
                             }
                             TL.BlankLine();
 
-                            if (currentLeapSeconds != UNKNOWN_LEAP_SECONDS) parameters.AutomaticLeapSecondsString = currentLeapSeconds.ToString(CultureInfo.InvariantCulture); // Persist the new leap second value to the Profile
+                            if (currentLeapSeconds == UNKNOWN_LEAP_SECONDS) // No valid leap seconds were found so indicate that this
+                            {
+                                profile.WriteProfile(GlobalItems.ASTROMETRY_SUBKEY, GlobalItems.AUTOMATIC_LEAP_SECONDS_VALUENAME, GlobalItems.AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT);
+                            }
+                            else  // Persist the current leap second value to the Profile
+                            {
+                                parameters.AutomaticLeapSecondsString = currentLeapSeconds.ToString(CultureInfo.InvariantCulture);
+                                // Also include a value that is in the SOFA library defaults but is not in the USNO files. It pre-dates the start of UTC but I am assuming that IAU is correct on this occasion
+                                profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME, double.Parse("2436934.5", CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture), double.Parse("1.4178180", CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture));
+
+                            }
 
                             // Persist the next leap second value and its implementation date if these have been announced
                             if (nextleapSecondsDate == UNKNOWN_DATE) // No announcement has been made

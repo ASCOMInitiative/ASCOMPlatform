@@ -1107,7 +1107,7 @@ Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dl
  
 [DEFINE REGION: Earth Rotation Date Update]
 Install Files ..\..\..\..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.exe to $TARGETDIR$\Tools
-Install Files ..\..\..\..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.pdb to $WINDIR$\Symbols\dll
+Install Files ..\..\..\..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.pdb to $TARGETDIR$\Tools
 Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\Microsoft.Win32.TaskScheduler.dll to $TARGETDIR$\Tools
 [END REGION]
  

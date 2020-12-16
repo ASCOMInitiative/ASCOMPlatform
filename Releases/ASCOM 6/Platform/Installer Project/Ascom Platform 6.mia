@@ -8646,7 +8646,7 @@ FALSE
 {BF1F3A7D-7CB1-4E26-AEF7-4B1122A54AAC}
 ..\..\..\..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.pdb
 FALSE|
-$WINDIR$\Symbols\dll
+$TARGETDIR$\Tools
 FALSE
 FALSE
 FALSE
