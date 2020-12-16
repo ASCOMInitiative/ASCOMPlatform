@@ -25,7 +25,7 @@ namespace EarthRotationUpdate
         private static int ReturnCode;
 
         private static readonly DateTime UNKNOWN_DATE = DateTime.MinValue; // Value for dates which have not yet been determined
-        private static readonly double UNKNOWN_LEAP_SECONDS = double.NaN; // Value for dates which have not yet been determined
+        private static readonly double UNKNOWN_LEAP_SECONDS = double.MinValue; // Value for dates which have not yet been determined
 
         static void Main(string[] args)
         {
