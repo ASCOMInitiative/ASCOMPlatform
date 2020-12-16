@@ -24,6 +24,9 @@ namespace EarthRotationUpdate
         private static string[] monthAbbrev;
         private static int ReturnCode;
 
+        private static readonly DateTime UNKNOWN_DATE = DateTime.MinValue; // Value for dates which have not yet been determined
+        private static readonly double UNKNOWN_LEAP_SECONDS = double.NaN; // Value for dates which have not yet been determined
+
         static void Main(string[] args)
         {
             try
@@ -283,15 +286,15 @@ namespace EarthRotationUpdate
                         // Process the data file
                         using (var filestream = new FileStream(leapSecondsfileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
-                            double currentLeapSeconds = 0.0;
+                            double currentLeapSeconds = UNKNOWN_LEAP_SECONDS;
                             double nextLeapSeconds = 0.0;
-                            DateTime leapSecondDate = DateTime.MinValue; ;
-                            DateTime nextleapSecondsDate = DateTime.MinValue;
+                            DateTime leapSecondDate = UNKNOWN_DATE;
+                            DateTime nextleapSecondsDate = UNKNOWN_DATE;
 
                             using (var file = new StreamReader(filestream, Encoding.ASCII, true, 4096))
                             {
                                 string lineOfText;
-                                DateTime latestLeapSecondDate = DateTime.MinValue;
+                                DateTime latestLeapSecondDate = UNKNOWN_DATE;
                                 while ((lineOfText = file.ReadLine()) != null) // Get lines of text one at a time and parse them 
                                 {
                                     try
@@ -321,7 +324,7 @@ namespace EarthRotationUpdate
                                             profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME, julianDate.ToString(CultureInfo.InvariantCulture), leapSeconds.ToString(CultureInfo.InvariantCulture));
 
                                             if ((leapSecondDate.Date >= latestLeapSecondDate) & (leapSecondDate.Date <= DateTime.UtcNow.Date.Subtract(new TimeSpan(GlobalItems.TEST_HISTORIC_DAYS_OFFSET, 0, 0, 0)))) currentLeapSeconds = leapSeconds;
-                                            if ((leapSecondDate.Date > DateTime.UtcNow.Date.Subtract(new TimeSpan(GlobalItems.TEST_HISTORIC_DAYS_OFFSET, 0, 0, 0))) & (nextleapSecondsDate == DateTime.MinValue)) // Record the next leap seconds value in the file
+                                            if ((leapSecondDate.Date > DateTime.UtcNow.Date.Subtract(new TimeSpan(GlobalItems.TEST_HISTORIC_DAYS_OFFSET, 0, 0, 0))) & (nextleapSecondsDate == UNKNOWN_DATE)) // Record the next leap seconds value in the file
                                             {
                                                 nextLeapSeconds = leapSeconds;
                                                 nextleapSecondsDate = leapSecondDate;
@@ -344,10 +347,10 @@ namespace EarthRotationUpdate
                             }
                             TL.BlankLine();
 
-                            parameters.AutomaticLeapSecondsString = currentLeapSeconds.ToString(CultureInfo.InvariantCulture); // Persist the new leap second value to the Profile
+                            if (currentLeapSeconds != UNKNOWN_LEAP_SECONDS) parameters.AutomaticLeapSecondsString = currentLeapSeconds.ToString(CultureInfo.InvariantCulture); // Persist the new leap second value to the Profile
 
                             // Persist the next leap second value and its implementation date if these have been announced
-                            if (nextleapSecondsDate == DateTime.MinValue) // No announcement has been made
+                            if (nextleapSecondsDate == UNKNOWN_DATE) // No announcement has been made
                             {
                                 parameters.NextLeapSecondsString = GlobalItems.DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE;
                                 parameters.NextLeapSecondsDateString = GlobalItems.DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE;
