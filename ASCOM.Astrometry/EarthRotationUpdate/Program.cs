@@ -31,6 +31,11 @@ namespace EarthRotationUpdate
         {
             try
             {
+                // In December 2020, ascom-standards.org minimum SSL protocol version is TLS1.2
+                // Normally, this application will use the OS default SSL protocol, but Windows 7 default protocol is earlier that TLS1.2 and connection cannot be established to ascom-standards.org from this OS.
+                // The following command ensures that TLS1.2 will be tried in addition to the OS default protocol.
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.SystemDefault;
+
                 // Get some basic details for this run
                 string runBy = WindowsIdentity.GetCurrent().Name; // Get the name of the user executing this program
                 bool isSystem = WindowsIdentity.GetCurrent().IsSystem;
