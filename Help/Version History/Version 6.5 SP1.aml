@@ -20,6 +20,17 @@
             <list class="bullet">
               <listItem>The Platform and Developer installers are now code signed.</listItem>
               <listItem>The Platform and Developer installer executable names now include SP1 to clearly differentiate them from the Platform 6.5.0 installers.</listItem>
+              <listItem>
+                The Platform installer requires write access to the user's Documents folder and, if this is not permitted, will recommend that installation is abandoned. Some situations where write access is known to be restricted are:
+                <list class="bullet">
+                  <listItem>Microsoft's Controlled Folder Access capability is enabled.</listItem>
+                  <listItem>An anti-ransomware program has restricted access.</listItem>
+                  <listItem>
+                    Windows is run in a Parallels virtualisation environment under MacOS and the Platform installer is located in the Documents folder that maps directly to the user's MacOS Documents folder.
+                    Running the installer from a "native" Windows folder within the Parallels virtual machine, e.g. a folder on the Windows C: drive, works fine.
+                  </listItem>
+                </list>
+              </listItem>
               <listItem>Platform simulators and hubs now have 6.5.1.0 assembly version numbers to reflect the service pack release.</listItem>
             </list>
           </listItem>
@@ -76,8 +87,8 @@
                 Sets the required registry Profile store ACL on every install rather than assuming that it is correctly set when upgrading from a previous Platform version.
                 Access to the Profile store is confirmed after setting the ACL and any issues will be reported by the installer.
               </listItem>
-              <listItem>Detects whether controlled folder access is enabled on the user's Documents folder and aborts installation in this scenario.</listItem>
               <listItem>Removes simulator COM entries when uninstalled.</listItem>
+              <listItem>Lists errors more clearly on the closing screen.</listItem>
             </list>
           </listItem>
           <listItem>

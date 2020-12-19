@@ -1469,7 +1469,23 @@ $
 
 
 
+
+
+
+
+
+
 B
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2086,7 +2102,7 @@ ASCOM Platform 6.5 SP1
 ASCOM Platform 6.5 SP1 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{FF07689B-06BD-4E80-8C37-033FDD75F0F2}
+{96FEBA4D-05AD-4875-98B9-FE2104A2B010}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
@@ -2095,7 +2111,7 @@ Copyright � 1998-2020, The ASCOM Initiative. All rights reserved.
 FALSE
 ASCOMPlatform65SP1
 TRUE
-TRUE
+FALSE
 
 |C:\Users\Peter\Desktop\petercodesign.pfx
 http://timestamp.globalsign.com/scripts/timstamp.dll
