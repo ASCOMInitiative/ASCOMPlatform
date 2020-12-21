@@ -3,11 +3,9 @@ Imports System.Net.Sockets
 Imports System.Runtime.InteropServices
 Imports ASCOM.Utilities.Interfaces
 
-#Disable Warning BC42309 ' XML comment has a tag with a 'cref' attribute that could not be resolved
 ''' <summary>
-''' Description of an ASCOM device that is served by an Alpaca device that is discovered by the <see cref="AlpacaDiscovery"/> component.
+''' Data object describing an ASCOM device that is served by an Alpaca device as returned by the <see cref="AlpacaDiscovery"/> component.
 ''' </summary>
-#Enable Warning BC42309 ' XML comment has a tag with a 'cref' attribute that could not be resolved
 <Guid("E768E0BB-D795-4CAE-95D0-9D0173BF57BC"),
 ComVisible(True),
 ClassInterface(ClassInterfaceType.None)>

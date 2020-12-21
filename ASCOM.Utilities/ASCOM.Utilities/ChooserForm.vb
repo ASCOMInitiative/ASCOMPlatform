@@ -16,7 +16,7 @@ Friend Class ChooserForm
 #Region "Constants"
 
     ' Debug constants
-    Private Const DEBUG_SINGLE_THREADING As Boolean = True
+    Private Const DEBUG_SINGLE_THREADING As Boolean = False ' If set TRUE, the Chooser form display will be suppressed until discovery completes, far from ideal, so normally leave FALSE
 
     ' General constants
     Private Const ALERT_MESSAGEBOX_TITLE As String = "ASCOM Chooser"

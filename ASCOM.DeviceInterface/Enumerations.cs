@@ -10,7 +10,7 @@ namespace ASCOM.DeviceInterface
     // </summary>
     // 
     // <copyright company="The ASCOM Initiative" author="Timothy P. Long">
-    // Copyright © 2020 The ASCOM Initiative
+    // Copyright © ASCOM Initiative 2021
     // </copyright>
     // 
     // <license>
