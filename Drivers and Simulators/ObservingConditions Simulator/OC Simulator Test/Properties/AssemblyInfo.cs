@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("ASCOM ObservingConditions Hub Test Form Application")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2020")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

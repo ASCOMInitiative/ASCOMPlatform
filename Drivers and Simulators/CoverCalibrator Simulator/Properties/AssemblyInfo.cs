@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The ASCOM Initiative")]
 [assembly: AssemblyProduct("ASCOM CoverCalibrator Simulator")]
-[assembly: AssemblyCopyright("Copyright © 2020 The ASCOM Initiative")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

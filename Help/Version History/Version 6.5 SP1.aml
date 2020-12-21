@@ -151,7 +151,7 @@
           <listItem>DriverAccess now returns PropertyNotImplementedExceptions for the new "offset" properties when an ICameraV2 driver is in use.</listItem>
           <listItem>DriverAccess.Camera now implements interface ICameraV3 instead of ICameraV2.</listItem>
           <listItem>The new IRotatorV3 members in DriverAccess now return better formatted "not implemented" messages when an IRotatorV2 driver is in use.</listItem>
-          <listItem>Clients will now receive the correct type of NotImplementedException (PropertNotImplementedExceptiony or MethodNotImplementedException) when Alpaca devices report that a member is not implemented.</listItem>
+          <listItem>Clients will now receive the correct type of NotImplementedException (PropertNotImplementedException or MethodNotImplementedException) when Alpaca devices report that a member is not implemented.</listItem>
         </list>
       </content>
     </section>

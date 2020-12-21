@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("InstallTemplates")]
-[assembly: AssemblyCopyright("Copyright © ASCOM 2020")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

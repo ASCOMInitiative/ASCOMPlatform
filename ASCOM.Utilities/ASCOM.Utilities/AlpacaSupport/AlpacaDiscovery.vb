@@ -6,8 +6,23 @@ Imports ASCOM.Utilities.Interfaces
 Imports Newtonsoft.Json
 
 ''' <summary>
-''' Enables clients to discover Alpaca devices by sending one or more discovery polls. Returns information on discovered Alpaca devices and the ASCOM devices that are available.
+''' Enables clients to discover Alpaca devices by sending one or more discovery polls. Returns information on discovered <see cref="AlpacaDevice">Alpaca devices</see> and the <see cref="AscomDevice">ASCOM devices</see> that are available.
 ''' </summary>
+''' <remarks>
+''' <para>
+''' The discovery process is asynchronous and is initiated by the <see cref="StartDiscovery(Integer, Integer, Integer, Double, Boolean, Boolean, Boolean)"/> method. Clients can then either work synchronously by looping and periodically 
+''' polling the <see cref="DiscoveryComplete"/> property or work asynchronously by handling the <see cref="AlpacaDevicesUpdated"/> and <see cref="DiscoveryCompleted"/> events while doing other work.
+''' </para>
+''' <para>
+''' The <see cref="StartDiscovery(Integer, Integer, Integer, Double, Boolean, Boolean, Boolean)"/> method is used to set the character of the discovery e.g. the discovery duration and whether to search for IPv4 and/or IPv6 devices. 
+''' After the specified discovery duration, the <see cref="DiscoveryComplete"/> event fires and the <see cref="DiscoveryCompleted"/> property returns True.
+''' </para>
+''' <para>
+''' Once discovery is complete, .NET clients can retrieve details of discovered Alpaca devices and associated ASCOM interface devices through the <see cref="GetAlpacaDevices"/> and <see cref="GetASCOMDevices"/> methods.
+''' COM clients must use the <see cref="GetAlpacaDevicesAsArrayList"/> and <see cref="GetASCOMDevicesAsArrayList"/> properties because COM does not support the generic classes used 
+''' in the <see cref="GetAlpacaDevices"/> and <see cref="GetASCOMDevices"/> methods. 
+''' </para>
+''' </remarks>
 <Guid("877A70E7-0A70-41EE-829A-8C00CAE2B9F0"),
 ComVisible(True),
 ClassInterface(ClassInterfaceType.None)>
@@ -435,7 +450,7 @@ Public Class AlpacaDiscovery
         Dim deviceIpEndPoint As IPEndPoint = TryCast(deviceIpEndPointObject, IPEndPoint) ' Get the supplied device endpoint as an IPEndPoint
 
         ' test whether the cast was successful
-        If Not deviceIpEndPoint Is Nothing Then ' The cast was successful so we can try to search for the host name
+        If deviceIpEndPoint IsNot Nothing Then ' The cast was successful so we can try to search for the host name
             Dim dnsResponse As DnsResponse = New DnsResponse() ' Create a new DnsResponse to hold and return the 
 
             ' Calculate the remaining time before this discovery needs to finish and only undertake DNS resolution if sufficient time remains
