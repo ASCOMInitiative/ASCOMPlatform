@@ -130,7 +130,7 @@ Partial Class ChooserAlpacaConfigurationForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(214, 13)
         Me.Label2.TabIndex = 7
-        Me.Label2.Text = "Number of Discovery Broadcasts (Default 1)"
+        Me.Label2.Text = "Number of Discovery Broadcasts (Default 2)"
         '
         'Label3
         '
