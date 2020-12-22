@@ -31,7 +31,7 @@
         ChkShowDeviceDetails.Checked = chooserForm.AlpacaShowDeviceDetails
         NumExtraChooserWidth.Value = Convert.ToDecimal(chooserForm.AlpacaChooserIncrementalWidth)
         ChkShowCreateNewAlpacaDriverMessage.Checked = Not GetBool(SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE, SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE_DEFAULT)
-
+        ChkMultiThreadedChooser.Checked = chooserForm.AlpacaMultiThreadedChooser
         ' Set the IP v4 / v6 radio boxes
         If chooserForm.AlpacaUseIpV4 And chooserForm.AlpacaUseIpV6 Then '// Both Then IPv4 And v6 are enabled so Set the "both" button
             RadIpV4AndV6.Checked = True
@@ -58,6 +58,7 @@
         chooserForm.AlpacaShowDeviceDetails = ChkShowDeviceDetails.Checked
         chooserForm.AlpacaChooserIncrementalWidth = Convert.ToInt32(NumExtraChooserWidth.Value)
         SetName(SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE, (Not ChkShowCreateNewAlpacaDriverMessage.Checked).ToString())
+        chooserForm.AlpacaMultiThreadedChooser = ChkMultiThreadedChooser.Checked
 
         ' Set the IP v4 And v6 variables as necessary
         If (RadIpV4.Checked) Then  ' The Then IPv4 radio button Is checked so Set the IP v4 And IP v6 variables accordingly
