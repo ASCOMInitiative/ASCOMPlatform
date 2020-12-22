@@ -15,9 +15,6 @@ Friend Class ChooserForm
 
 #Region "Constants"
 
-    ' Debug constants
-    Private Const DEBUG_SINGLE_THREADING As Boolean = False ' If set TRUE, the Chooser form display will be suppressed until discovery completes, far from ideal, so normally leave FALSE
-
     ' General constants
     Private Const ALERT_MESSAGEBOX_TITLE As String = "ASCOM Chooser"
     Private Const PROPERTIES_TOOLTIP_DISPLAY_TIME As Integer = 5000 ' Time to display the Properties tooltip (milliseconds)
@@ -43,6 +40,7 @@ Friend Class ChooserForm
     Private Const ALPACA_CHOOSER_WIDTH As String = "Alpaca Chooser width" : Private Const ALPACA_CHOOSER_WIDTH_DEFAULT As Integer = 0
     Private Const ALPACA_USE_IPV4 As String = "Use IPv4" : Private Const ALPACA_USE_IPV4_DEFAULT As Boolean = True
     Private Const ALPACA_USE_IPV6 As String = "Use IPv6" : Private Const ALPACA_USE_IPV6_DEFAULT As Boolean = False
+    Private Const ALPACA_MULTI_THREADED_CHOOSER As String = "Multi Threaded Chooser" : Private Const ALPACA_MULTI_THREADED_CHOOSER_DEFAULT As Boolean = True
 
     ' Alpaca integration constants
     Private Const ALPACA_DYNAMIC_CLIENT_MANAGER_RELATIVE_PATH As String = "ASCOM\Platform 6\Tools\AlpacaDynamicClientManager"
@@ -92,6 +90,7 @@ Friend Class ChooserForm
     Friend AlpacaChooserIncrementalWidth As Integer
     Friend AlpacaUseIpV4 As Boolean
     Friend AlpacaUseIpV6 As Boolean
+    Friend AlpacaMultiThreadedChooser As Boolean
 
     ' Delegates
     Private PopulateDriverComboBoxDelegate As MethodInvoker = AddressOf PopulateDriverComboBox ' Device list combo box delegate
@@ -799,6 +798,7 @@ Friend Class ChooserForm
             AlpacaChooserIncrementalWidth = Convert.ToInt32(registryAccess.GetProfile(CONFIGRATION_SUBKEY, ALPACA_CHOOSER_WIDTH, ALPACA_CHOOSER_WIDTH_DEFAULT.ToString()), CultureInfo.InvariantCulture)
             AlpacaUseIpV4 = Convert.ToBoolean(registryAccess.GetProfile(CONFIGRATION_SUBKEY, ALPACA_USE_IPV4, ALPACA_USE_IPV4_DEFAULT.ToString()), CultureInfo.InvariantCulture)
             AlpacaUseIpV6 = Convert.ToBoolean(registryAccess.GetProfile(CONFIGRATION_SUBKEY, ALPACA_USE_IPV6, ALPACA_USE_IPV6_DEFAULT.ToString()), CultureInfo.InvariantCulture)
+            AlpacaMultiThreadedChooser = Convert.ToBoolean(registryAccess.GetProfile(CONFIGRATION_SUBKEY, ALPACA_MULTI_THREADED_CHOOSER, ALPACA_MULTI_THREADED_CHOOSER_DEFAULT.ToString()), CultureInfo.InvariantCulture)
         Catch ex As Exception
             MsgBox("Chooser Read State " & ex.ToString)
             LogEvent("Chooser Read State ", ex.ToString, System.Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserFormLoad, ex.ToString)
@@ -823,6 +823,7 @@ Friend Class ChooserForm
             registryAccess.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_CHOOSER_WIDTH, AlpacaChooserIncrementalWidth.ToString(CultureInfo.InvariantCulture))
             registryAccess.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_USE_IPV4, AlpacaUseIpV4.ToString(CultureInfo.InvariantCulture))
             registryAccess.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_USE_IPV6, AlpacaUseIpV6.ToString(CultureInfo.InvariantCulture))
+            registryAccess.WriteProfile(CONFIGRATION_SUBKEY, ALPACA_MULTI_THREADED_CHOOSER, AlpacaMultiThreadedChooser.ToString(CultureInfo.InvariantCulture))
 
         Catch ex As Exception
             MsgBox("Chooser Write State " & ex.ToString)
@@ -907,16 +908,16 @@ Friend Class ChooserForm
 
         TL.LogMessage("InitialiseComboBox", $"Arrived at InitialiseComboBox - Running On thread: {Thread.CurrentThread.ManagedThreadId}.")
 
-        If DEBUG_SINGLE_THREADING Then
+        If AlpacaMultiThreadedChooser Then ' Multi-threading behaviour where the Chooser UI is displayed immediately while discovery runs in the background
+            TL.LogMessage("InitialiseComboBox", $"Creating discovery thread...")
+            Dim discoveryThread As Thread = New Thread(AddressOf DiscoverAlpacaDevicesAndPopulateDriverComboBox)
+            TL.LogMessage("InitialiseComboBox", $"Successfully created discovery thread, about to start discovery on thread {discoveryThread.ManagedThreadId}...")
+            discoveryThread.Start()
+            TL.LogMessage("InitialiseComboBox", $"Discovery thread started OK")
+        Else ' Single threaded behaviour where the Chooser UI is not displayed until discovery completes
             TL.LogMessage("InitialiseComboBox", $"Starting single threaded discovery...")
             DiscoverAlpacaDevicesAndPopulateDriverComboBox()
             TL.LogMessage("InitialiseComboBox", $"Completed single threaded discovery")
-        Else ' Normal multi-threading behaviour
-            TL.LogMessage("InitialiseComboBox", $"Creating discovery thread...")
-            Dim discoveryThread As Thread = New Thread(AddressOf DiscoverAlpacaDevicesAndPopulateDriverComboBox)
-            TL.LogMessage("InitialiseComboBox", $"Successfully created discovery thread, about to start discovery thread...")
-            discoveryThread.Start()
-            TL.LogMessage("InitialiseComboBox", $"Discovery thread started OK")
         End If
 
         TL.LogMessage("InitialiseComboBox", $"Exiting InitialiseComboBox on thread: {Thread.CurrentThread.ManagedThreadId}.")
