@@ -251,7 +251,7 @@ namespace ASCOM.DriverAccess
             }
             else
             {
-                throw new MethodNotImplementedException("Sync is not implemented because the driver is IRotatorV2 or earlier.");
+                throw new MethodNotImplementedException("Sync", "Sync is not implemented because the driver is IRotatorV2 or earlier.");
             }
         }
 
@@ -275,7 +275,7 @@ namespace ASCOM.DriverAccess
             }
             else
             {
-                throw new MethodNotImplementedException("Sync is not implemented because the driver is IRotatorV2 or earlier.");
+                throw new MethodNotImplementedException("MoveMechanical", "MoveMechanical is not implemented because the driver is IRotatorV2 or earlier.");
             }
         }
 

@@ -34,6 +34,19 @@ namespace ASCOM
         }
 
         /// <summary>
+        /// Create a new exception with the supplied message
+        /// </summary>
+        /// <param name = "property">Property name</param>
+        /// <param name = "message">Exception description</param>
+        /// <remarks>
+        /// This overload applies the supplied message directly to the exception without interpreting it as is the case with other overloads
+        /// </remarks>
+        public PropertyNotImplementedException(string property, string message) : base(property, message)
+        {
+            this.property = property;
+        }
+
+        /// <summary>
         /// Create a new exception object and identify the specified driver property as the source,
         /// and include an inner exception object containing a caught exception.
         /// </summary>

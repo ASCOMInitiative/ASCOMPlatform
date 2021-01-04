@@ -33,7 +33,7 @@
       <DocumentationSource sourceFile="..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll" />
     </DocumentationSources>
     <HelpTitle>ASCOM Platform Developer Help</HelpTitle>
-    <CopyrightText>Copyright &amp;#169%3b 2010-20, The ASCOM Initiative</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2010-21, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.Astrometry" isExposed="True">
         <Filter entryType="Class" fullName="ASCOM.Astrometry.EarthRotationParameters" filterName="EarthRotationParameters" isExposed="False" />

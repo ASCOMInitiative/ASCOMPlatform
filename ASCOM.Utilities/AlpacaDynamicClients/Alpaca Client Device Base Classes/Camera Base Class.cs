@@ -881,7 +881,7 @@ namespace ASCOM.DynamicRemoteClients
             set
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                DynamicClientDriver.SetInt(clientNumber, client, URIBase, TL, "Gain", value, MemberTypes.Property);
+                DynamicClientDriver.SetInt(clientNumber, client, URIBase, TL, "Offset", value, MemberTypes.Property);
             }
         }
 

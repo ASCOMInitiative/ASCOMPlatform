@@ -20,6 +20,7 @@ Set Variable MYPROGRESS to 0
 Set Variable PROGRESSTEXT to Installing $TITLE$
 Set Variable APPLYINSTALLSUCCESS to 
 Set Variable CFA to 
+Set Variable CFABYPASS to 
  
 Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
 Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$ASCOM" (WAIT)
@@ -33,14 +34,21 @@ end
 Write into Text File $SETUPLOG$ from Value $TIME$ $TITLE$ v$VERSION$ (at end of file)
  
 Comment: Test whether Controlled Folder Access is enabled and warn the user if this is the case
-Comment: The test is made by trying to open the installer's log file and reading the first line. If this is blank there is no log file and CFA is active on the Documents folder
-Read from Text File $SETUPLOG$ into Variable CFA
-if Variable CFA Equals 
-  Comment: The read returned a blank line instead of the Platform version number so CFA is deemed to be active
-  MessageBox: Unable to write to Documents folder, The installer cannot write to your Documents folder, you may have Controlled Folder Access enabled on this PC.$NEWLINE$$NEWLINE$The Platform's complex installation process cannot proceed without write access to create its multiple log files and the installer will now close.$NEWLINE$$NEWLINE$At this time the only way to install the Platform on a CFA protected PC is to turn off CFA protection, to run the Platform installer and then to re-enable CFA protection.
-   
-  Comment: Terminate the installation because we cannot continue with installation without write access to the Documents folder.
-  Terminate Installation
+if Variable CFABYPASS not Equals (Ignore Case) TRUE
+  Comment: Check whether CFA is enabled: The test is made by trying to open the installer's log file and reading the first line. If this is blank there is no log file and CFA is active on the Documents folder
+  Read from Text File $SETUPLOG$ into Variable CFA
+  if Variable CFA Equals 
+    Comment: The read returned a blank line instead of the Platform version number so CFA is deemed to be active
+    MessageBox: Unable to write to Documents folder, The installer cannot write to your Documents folder, you may have Microsoft Controlled Folder Access enabled or you may be running anti-ransomware software on this PC.$NEWLINE$$NEWLINE$Folder: $MYDOCUMENTS$$NEWLINE$$NEWLINE$The Platform's complex installation process cannot proceed without write access to create its multiple log files and is highly likely to display error messages and fail to complete successfully.$NEWLINE$$NEWLINE$At this time, the only way to install the Platform on a protected PC is to disable CFA or ransomware protection, to run the Platform installer and then to re-enable protection.$NEWLINE$$NEWLINE$Click "No" to terminate installation or click "Yes" to try anyway.
+     
+    Comment: The MessageBox returns its result in the CFA variable...
+    if Variable CFA Equals NO
+      Comment: Terminate the installation because we cannot continue with installation without write access to the Documents folder.
+      Terminate Installation
+    end
+  end
+else
+  MessageBox: CFA Detection Bypass, CFA check bypassed.$NEWLINE$$NEWLINE$The installer log file will be written to: $NEWLINE$$NEWLINE$$SETUPLOG$$NEWLINE$$NEWLINE$Documents: $NEWLINE$$NEWLINE$$MYDOCUMENTS$
 end
  
 Write into Text File $SETUPLOG$ from Value $TIME$ Installation date: $DATE$ (at end of file)
@@ -660,6 +668,12 @@ if Variable REMOVE Equals TRUE
     Set Variable PROGRESSTEXT to Unregistering 64bit COM component - ASCOM.Cache - v6.0.0.0
     Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6.4\ASCOM.Cache.dll" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm Unregister ASCOM.Cache 6.0.0.0 (at end of file)
+     
+    Comment: Clean up any remaining 64bit COM registry entries
+    Set Variable PROGRESSTEXT to Cleaning 64bit simulator COM entries
+    Write into Text File $SETUPLOG$ from Value $TIME$ Cleaning simulator 64bit COM entries (at end of file)
+    Include Script: CleanRegistry
+     
     Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
   end
    
@@ -773,6 +787,12 @@ if Variable REMOVE Equals TRUE
   Write into Text File $SETUPLOG$ from Value $TIME$ Unregistering ASCOM Master Interfaces typelib (at end of file)
   Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe -u "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Unregistered ASCOM Master Interfaces typelib (at end of file)
+   
+  Comment: Clean up any remaining 32bit COM registry entries
+  Set Variable PROGRESSTEXT to Cleaning 32bit simulator COM entries
+  Write into Text File $SETUPLOG$ from Value $TIME$ Cleaning simulator 32bit COM entries (at end of file)
+  Include Script: CleanRegistry
+   
   Set Variable MYPROGRESS to 90
   [END REGION]
    
@@ -817,15 +837,35 @@ Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Set ACL on ASCOM Prof
  
 Comment: Test whether an error occured when setting the Profile ACL and report this if necessary
 if Variable RC not Equals 0
-  MessageBox: Profile Migration, An error has occured when setting the Registry ACL, please zip up all logs in your Documents\ASCOM folder and its sub-folders and report this on the ASCOM-Talk Groups.Io forum.$NEWLINE$$NEWLINE$Error code: $RC$
-  Set Variable ASCOMERROR to Profile permissions issue. RC: $RC$
+  MessageBox: Set ASCOM Profile Permissions, An error has occured when setting the ASCOM Profile ACL, please zip up all logs in your Documents\ASCOM folder and its sub-folders and report this on the ASCOM-Talk Groups.Io forum.$NEWLINE$$NEWLINE$Error code: $RC$
+  if Variable ASCOMERROR not Equals 
+    Set Variable ASCOMERROR to $ASCOMERROR$$NEWLINE$
+  end
+  Set Variable ASCOMERROR to $ASCOMERROR$Error setting ASCOM Profile ACL. RC: $RC$
 end
 [END REGION]
  
 [DEFINE REGION: Install New Platform 6 version]
+ 
+[DEFINE REGION: Clean up any remaining simulator COM entries]
+Comment: Clean up any remaining 32bit COM registry entries
+Set Variable PROGRESSTEXT to Cleaning simulator COM entries
+Write into Text File $SETUPLOG$ from Value $TIME$ Cleaning simulator 32bit COM entries (at end of file)
+Include Script: CleanRegistry
+ 
+Comment: Clean up any remaining 64bit COM registry entries
+if Variable WIN64MODE Equals TRUE
+  Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+  Write into Text File $SETUPLOG$ from Value $TIME$ Cleaning simulator 64bit COM entries (at end of file)
+  Include Script: CleanRegistry
+  Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+end
+[END REGION]
+ 
 Comment: ***** Start of Platform Installation *****
 Set Variable PROGRESSTEXT to Installing $TITLE$
 Write into Text File $SETUPLOG$ from Value   (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Start of Platform installation (at end of file)
  
 Comment: Create the main ASCOM folder in Common Files
 Create Folder $COMMONFILES$\ASCOM
@@ -1073,7 +1113,7 @@ Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dl
  
 [DEFINE REGION: Earth Rotation Date Update]
 Install Files ..\..\..\..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.exe to $TARGETDIR$\Tools
-Install Files ..\..\..\..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.pdb to $WINDIR$\Symbols\dll
+Install Files ..\..\..\..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.pdb to $TARGETDIR$\Tools
 Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\Microsoft.Win32.TaskScheduler.dll to $TARGETDIR$\Tools
 [END REGION]
  
@@ -1145,8 +1185,8 @@ Comment: Leap Seconds = UTC-TAI offset - needs to be updated every time a leap s
 Comment: Value name changed from Leap Seconds to Manual Leap Seconds in Platform 6.4 so remove the old value
 Delete Registry VALUE HKLM\SOFTWARE\ASCOM\Astrometry\Leap Seconds
 Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Manual Leap Seconds, $LEAPSECONDS$
-Comment: Force use of the NASA download site because all of the USNo sites are unavailable at July 2020 and are predicted to be down until at least December 2020
-Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Download Task Data Source, ftp://cddis.gsfc.nasa.gov/pub/products/iers/
+Comment: Force use of the ASCOM-STANDARDS download site because of unavailability of the USNO sites and the new NASA site security policy.
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Download Task Data Source, https://download.ascom-standards.org/earthrot/
 Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\,  (permanent)
 Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
 Write Registry Key HKLM\SOFTWARE\ASCOM\Chooser\,  (permanent)
@@ -1607,6 +1647,13 @@ if Variable SUCCESS not Equals ERROR
   Set Variable PROGRESSTEXT to Initialising earth rotation data
   Run Program $TARGETDIR$\Tools\EarthRotationUpdate.exe /Initialise (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Initialise earth rotation data (at end of file)
+  if Variable RC not Equals 0
+    MessageBox: Initialise Earth Rotation Data, An error has occured while initialising the earth rotation data scheduled task, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
+    if Variable ASCOMERROR not Equals 
+      Set Variable ASCOMERROR to $ASCOMERROR$$NEWLINE$
+    end
+    Set Variable ASCOMERROR to $ASCOMERROR$Earth rotation data scheduled job issue. RC: $RC$
+  end
    
   [DEFINE REGION: Extra activities if on a 64bit system]
   Comment: Extra registration of 64bit components if on 64bit system
@@ -1762,7 +1809,10 @@ if Variable SUCCESS not Equals ERROR
   Set Variable MYPROGRESS to 100
   if Variable RC not Equals 0
     MessageBox: Finalise Setup, An error has occured while finalising the installation, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
-    Set Variable ASCOMERROR to $RC$
+    if Variable ASCOMERROR not Equals 
+      Set Variable ASCOMERROR to $ASCOMERROR$$NEWLINE$
+    end
+    Set Variable ASCOMERROR to $ASCOMERROR$Finalise setup issue. RC: $RC$
   end
   [END REGION]
    
@@ -1845,7 +1895,7 @@ else
   Comment: We have an error so set the error messages
   Set Variable FINISH_TITLE to $TITLE$ installation failed
   Set Variable FINISH_DESCRIPTION to Sorry, an error occurred during installation of Platform 6.$NEWLINE$$NEWLINE$Please review the PlatformInstall, UninstallASCOM and FinaliseInstall $NEWLINE$logs in the My Documents\ASCOM and the most recent$NEWLINE$My Documents\ASCOM\Logs YYYY MM DD folders.$NEWLINE$$NEWLINE$Please also run the Diagnostics Tool in ASCOM Platform 6 / Tools and $NEWLINE$post all logs on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$Many thanks, The ASCOM Platform Team.
-  Set Variable FINISH_CONTEXT to Last error: "$LASTERROR$"$NEWLINE$ASCOM Error: $ASCOMERROR$
+  Set Variable FINISH_CONTEXT to Last error: "$LASTERROR$"$NEWLINE$$ASCOMERROR$
 end
  
 Comment: Ensure that the variables are all upper case so that tests conducted within the dialogue fire correctly!

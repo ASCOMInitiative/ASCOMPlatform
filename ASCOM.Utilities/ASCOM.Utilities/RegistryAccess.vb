@@ -224,18 +224,40 @@ Friend Class RegistryAccess
         End Try
     End Sub
 
-    Friend Sub RenameKey(ByVal OriginalSubKeyName As String, ByVal NewSubKeyName As String) Implements IAccess.RenameKey
+    ''' <summary>
+    ''' Rename a subkey by copying its contents to the new name and deleting the original key
+    ''' </summary>
+    ''' <param name="CurrentSubKeyName">Current key name</param>
+    ''' <param name="NewSubKeyName">New key name</param>
+    ''' <remarks>The original version of this method just renamed the key and copied its values, however it did not copy any of the current key's subkeys. 
+    ''' As of Platform 6.5 SP1 the method recursively calls itself in order to copy any subkeys and their values as well.</remarks>
+    Friend Sub RenameKey(ByVal CurrentSubKeyName As String, ByVal NewSubKeyName As String) Implements IAccess.RenameKey
         'Rename a key by creating a copy of the original key with the new name then deleting the original key
-        'Throw New MethodNotImplementedException("RegistryAccess:RenameKey " & OriginalSubKeyName & " to " & NewSubKeyName)
-        Dim SubKey As RegistryKey, Values As Generic.SortedList(Of String, String)
+        Dim SubKey As RegistryKey, Values As Generic.SortedList(Of String, String), Keys As Generic.SortedList(Of String, String)
+
+        TL.LogMessage("RenameKey", $"Renaming key ""{CurrentSubKeyName}"" to ""{NewSubKeyName}""")
+
+
         SubKey = ProfileRegKey.OpenSubKey(CleanSubKey(NewSubKeyName))
         If SubKey Is Nothing Then 'Key does not exist so create it
             CreateKey(NewSubKeyName)
-            Values = EnumProfile(OriginalSubKeyName)
+
+            ' Copy values
+            Values = EnumProfile(CurrentSubKeyName)
             For Each Value As Generic.KeyValuePair(Of String, String) In Values
+                TL.LogMessage("RenameKey", $"Copying value ""{Value.Key}"" = ""{Value.Value}""")
                 WriteProfile(NewSubKeyName, Value.Key, Value.Value)
             Next
-            DeleteKey(OriginalSubKeyName)
+
+            ' Copy subkeys recursively
+            Keys = EnumKeys(CurrentSubKeyName)
+            For Each Key As Generic.KeyValuePair(Of String, String) In Keys
+                TL.LogMessage("RenameKey", $"Recursively copying subkey ""{CurrentSubKeyName}\{Key.Key}"" to ""{NewSubKeyName}\{Key.Key}""")
+                RenameKey($"{CurrentSubKeyName}\{Key.Key}", $"{NewSubKeyName}\{Key.Key}")
+            Next
+
+            ' Delete the original subkey
+            DeleteKey(CurrentSubKeyName)
         Else ' Key already exists so throw an exception
             SubKey.Close()
             Throw New ProfilePersistenceException("Key " & NewSubKeyName & " already exists")

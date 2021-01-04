@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ASCOM Installer Generator")]
 [assembly: AssemblyDescription("Generates Inno Setup scripts for driver installation")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2020")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2021")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

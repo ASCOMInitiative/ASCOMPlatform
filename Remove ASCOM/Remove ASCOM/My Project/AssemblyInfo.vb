@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Removes all ASCOM Platforms and Profile")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")> 
 <Assembly: AssemblyProduct("RemoveASCOM")>
-<Assembly: AssemblyCopyright("Copyright © ASCOM 2020")>
+<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2021")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
