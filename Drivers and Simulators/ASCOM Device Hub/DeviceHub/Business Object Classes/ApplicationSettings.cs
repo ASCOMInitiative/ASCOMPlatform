@@ -44,6 +44,7 @@ namespace ASCOM.DeviceHub
 		public bool SuppressTrayBubble { get; set; }
 		public bool UseCustomTheme { get; set; }
 		public bool UseExpandedScreenLayout { get; set; }
+		public bool AlwaysOnTop { get; set; }
 
 		#endregion Public Properties
 
