@@ -2,7 +2,7 @@
 Imports ASCOM.Utilities.Interfaces
 
 ''' <summary>
-''' Description of a single ASCOM device as returned within the <see cref="AlpacaDevice"/> class.
+''' Data object describing a single ASCOM device as returned within the <see cref="AlpacaDevice"/> class.
 ''' </summary>
 <Guid("AAB2619C-69FC-4717-8F01-10228D59E99E"),
 ComVisible(True),

@@ -22,7 +22,7 @@
       <DocumentationSource sourceFile="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj" />
     </DocumentationSources>
     <HelpTitle>ASCOM Platform Help</HelpTitle>
-    <CopyrightText>Copyright &amp;#169%3b 2010-20, The ASCOM Initiative</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2010-21, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.DeviceInterface" isExposed="True">
         <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICameraV2" filterName="ICameraV2" isExposed="False" />

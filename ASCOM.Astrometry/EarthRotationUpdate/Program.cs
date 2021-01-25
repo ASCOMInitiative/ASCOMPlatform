@@ -24,10 +24,18 @@ namespace EarthRotationUpdate
         private static string[] monthAbbrev;
         private static int ReturnCode;
 
+        private static readonly DateTime UNKNOWN_DATE = DateTime.MinValue; // Value for dates which have not yet been determined
+        private static readonly double UNKNOWN_LEAP_SECONDS = double.MinValue; // Value for dates which have not yet been determined
+
         static void Main(string[] args)
         {
             try
             {
+                // In December 2020, ascom-standards.org minimum SSL protocol version is TLS1.2
+                // Normally, this application will use the OS default SSL protocol, but Windows 7 default protocol is earlier that TLS1.2 and connection cannot be established to ascom-standards.org from this OS.
+                // The following command ensures that TLS1.2 will be tried in addition to the OS default protocol.
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.SystemDefault;
+
                 // Get some basic details for this run
                 string runBy = WindowsIdentity.GetCurrent().Name; // Get the name of the user executing this program
                 bool isSystem = WindowsIdentity.GetCurrent().IsSystem;
@@ -277,21 +285,18 @@ namespace EarthRotationUpdate
                         profile.DeleteKey(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME); ; // Clear out old leap second values
                         profile.CreateKey(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME);
 
-                        // Include a value that is in the SOFA library defaults but is not in the USNO files. It pre-dates the start of UTC but I am assuming that IAU is correct on this occasion
-                        profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME, double.Parse("2436934.5", CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture), double.Parse("1.4178180", CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture));
-
                         // Process the data file
                         using (var filestream = new FileStream(leapSecondsfileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
-                            double currentLeapSeconds = 0.0;
+                            double currentLeapSeconds = UNKNOWN_LEAP_SECONDS;
                             double nextLeapSeconds = 0.0;
-                            DateTime leapSecondDate = DateTime.MinValue; ;
-                            DateTime nextleapSecondsDate = DateTime.MinValue;
+                            DateTime leapSecondDate = UNKNOWN_DATE;
+                            DateTime nextleapSecondsDate = UNKNOWN_DATE;
 
                             using (var file = new StreamReader(filestream, Encoding.ASCII, true, 4096))
                             {
                                 string lineOfText;
-                                DateTime latestLeapSecondDate = DateTime.MinValue;
+                                DateTime latestLeapSecondDate = UNKNOWN_DATE;
                                 while ((lineOfText = file.ReadLine()) != null) // Get lines of text one at a time and parse them 
                                 {
                                     try
@@ -321,7 +326,7 @@ namespace EarthRotationUpdate
                                             profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME, julianDate.ToString(CultureInfo.InvariantCulture), leapSeconds.ToString(CultureInfo.InvariantCulture));
 
                                             if ((leapSecondDate.Date >= latestLeapSecondDate) & (leapSecondDate.Date <= DateTime.UtcNow.Date.Subtract(new TimeSpan(GlobalItems.TEST_HISTORIC_DAYS_OFFSET, 0, 0, 0)))) currentLeapSeconds = leapSeconds;
-                                            if ((leapSecondDate.Date > DateTime.UtcNow.Date.Subtract(new TimeSpan(GlobalItems.TEST_HISTORIC_DAYS_OFFSET, 0, 0, 0))) & (nextleapSecondsDate == DateTime.MinValue)) // Record the next leap seconds value in the file
+                                            if ((leapSecondDate.Date > DateTime.UtcNow.Date.Subtract(new TimeSpan(GlobalItems.TEST_HISTORIC_DAYS_OFFSET, 0, 0, 0))) & (nextleapSecondsDate == UNKNOWN_DATE)) // Record the next leap seconds value in the file
                                             {
                                                 nextLeapSeconds = leapSeconds;
                                                 nextleapSecondsDate = leapSecondDate;
@@ -344,10 +349,20 @@ namespace EarthRotationUpdate
                             }
                             TL.BlankLine();
 
-                            parameters.AutomaticLeapSecondsString = currentLeapSeconds.ToString(CultureInfo.InvariantCulture); // Persist the new leap second value to the Profile
+                            if (currentLeapSeconds == UNKNOWN_LEAP_SECONDS) // No valid leap seconds were found so indicate that this
+                            {
+                                profile.WriteProfile(GlobalItems.ASTROMETRY_SUBKEY, GlobalItems.AUTOMATIC_LEAP_SECONDS_VALUENAME, GlobalItems.AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE_DEFAULT);
+                            }
+                            else  // Persist the current leap second value to the Profile
+                            {
+                                parameters.AutomaticLeapSecondsString = currentLeapSeconds.ToString(CultureInfo.InvariantCulture);
+                                // Also include a value that is in the SOFA library defaults but is not in the USNO files. It pre-dates the start of UTC but I am assuming that IAU is correct on this occasion
+                                profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME, double.Parse("2436934.5", CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture), double.Parse("1.4178180", CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture));
+
+                            }
 
                             // Persist the next leap second value and its implementation date if these have been announced
-                            if (nextleapSecondsDate == DateTime.MinValue) // No announcement has been made
+                            if (nextleapSecondsDate == UNKNOWN_DATE) // No announcement has been made
                             {
                                 parameters.NextLeapSecondsString = GlobalItems.DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE;
                                 parameters.NextLeapSecondsDateString = GlobalItems.DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE;

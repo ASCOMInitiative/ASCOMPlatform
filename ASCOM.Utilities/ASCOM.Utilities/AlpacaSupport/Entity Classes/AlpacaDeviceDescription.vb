@@ -1,6 +1,7 @@
 ﻿''' <summary>
-''' Description of an Alpaca device that is is discovered by the <see cref="AlpacaDiscovery"/> component.
+''' Description of an Alpaca device that is discovered by the <see cref="AlpacaDiscovery"/> component.
 ''' </summary>
+''' <remarks>This class is used in JSON de-serialisation </remarks>
 Friend Class AlpacaDeviceDescription
     ''' <summary>
     ''' Class initialiser

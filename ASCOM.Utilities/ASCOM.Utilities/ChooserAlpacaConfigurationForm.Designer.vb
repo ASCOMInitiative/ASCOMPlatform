@@ -42,6 +42,7 @@ Partial Class ChooserAlpacaConfigurationForm
         Me.RadIpV4AndV6 = New System.Windows.Forms.RadioButton()
         Me.RadIpV6 = New System.Windows.Forms.RadioButton()
         Me.RadIpV4 = New System.Windows.Forms.RadioButton()
+        Me.ChkMultiThreadedChooser = New System.Windows.Forms.CheckBox()
         CType(Me.NumDiscoveryIpPort, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumDiscoveryBroadcasts, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumDiscoveryDuration, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -52,7 +53,8 @@ Partial Class ChooserAlpacaConfigurationForm
         '
         'BtnOK
         '
-        Me.BtnOK.Location = New System.Drawing.Point(519, 303)
+        Me.BtnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.BtnOK.Location = New System.Drawing.Point(516, 311)
         Me.BtnOK.Name = "BtnOK"
         Me.BtnOK.Size = New System.Drawing.Size(75, 23)
         Me.BtnOK.TabIndex = 5
@@ -61,8 +63,9 @@ Partial Class ChooserAlpacaConfigurationForm
         '
         'BtnCancel
         '
+        Me.BtnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.BtnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.BtnCancel.Location = New System.Drawing.Point(601, 303)
+        Me.BtnCancel.Location = New System.Drawing.Point(598, 311)
         Me.BtnCancel.Name = "BtnCancel"
         Me.BtnCancel.Size = New System.Drawing.Size(75, 23)
         Me.BtnCancel.TabIndex = 6
@@ -127,16 +130,16 @@ Partial Class ChooserAlpacaConfigurationForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(214, 13)
         Me.Label2.TabIndex = 7
-        Me.Label2.Text = "Number of Discovery Broadcasts (Default 1)"
+        Me.Label2.Text = "Number of Discovery Broadcasts (Default 2)"
         '
         'Label3
         '
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(291, 127)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(201, 13)
+        Me.Label3.Size = New System.Drawing.Size(187, 13)
         Me.Label3.TabIndex = 8
-        Me.Label3.Text = "Discovery Duration (Default 2.0 seconds)"
+        Me.Label3.Text = "Discovery Duration (Default 1 second)"
         '
         'PictureBox1
         '
@@ -243,13 +246,24 @@ Partial Class ChooserAlpacaConfigurationForm
         Me.RadIpV4.Text = "IP V4 Only"
         Me.RadIpV4.UseVisualStyleBackColor = True
         '
+        'ChkMultiThreadedChooser
+        '
+        Me.ChkMultiThreadedChooser.AutoSize = True
+        Me.ChkMultiThreadedChooser.Location = New System.Drawing.Point(269, 285)
+        Me.ChkMultiThreadedChooser.Name = "ChkMultiThreadedChooser"
+        Me.ChkMultiThreadedChooser.Size = New System.Drawing.Size(304, 17)
+        Me.ChkMultiThreadedChooser.TabIndex = 16
+        Me.ChkMultiThreadedChooser.Text = "DIsplay Chooser while discovery is underway (Default true))"
+        Me.ChkMultiThreadedChooser.UseVisualStyleBackColor = True
+        '
         'ChooserAlpacaConfigurationForm
         '
         Me.AcceptButton = Me.BtnOK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.BtnCancel
-        Me.ClientSize = New System.Drawing.Size(700, 338)
+        Me.ClientSize = New System.Drawing.Size(685, 346)
+        Me.Controls.Add(Me.ChkMultiThreadedChooser)
         Me.Controls.Add(Me.GrpIpVersion)
         Me.Controls.Add(Me.ChkShowCreateNewAlpacaDriverMessage)
         Me.Controls.Add(Me.Label4)
@@ -300,4 +314,5 @@ Partial Class ChooserAlpacaConfigurationForm
     Friend WithEvents RadIpV4AndV6 As RadioButton
     Friend WithEvents RadIpV6 As RadioButton
     Friend WithEvents RadIpV4 As RadioButton
+    Friend WithEvents ChkMultiThreadedChooser As CheckBox
 End Class
