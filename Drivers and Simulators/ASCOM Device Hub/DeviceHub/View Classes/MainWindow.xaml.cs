@@ -19,6 +19,7 @@ namespace ASCOM.DeviceHub
 
 			Left = Globals.MainWindowLeft;
 			Top = Globals.MainWindowTop;
+			Topmost = Globals.AlwaysOnTop;
 
 			// Call the extension method to allow us to minimize the app to
 			// the system tray, rather than the task bar.

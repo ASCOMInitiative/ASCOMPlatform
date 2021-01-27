@@ -60,6 +60,7 @@
 							<RowDefinition Height="Auto" />
 							<RowDefinition Height="Auto" />
 							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
 						</Grid.RowDefinitions>
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
@@ -77,6 +78,9 @@
 						<CheckBox Grid.Row="2" Grid.Column="0" Margin="10,6" Content="Use Expanded Screen Layout" Foreground="{DynamicResource NormalTextBrush}" 
 							  ToolTip="Display Dome and Focuser control in Expanders rather than Tabs"
 							  IsChecked="{Binding UseExpandedScreenLayout}" />
+						<CheckBox Grid.Row="3" Grid.Column="0" Margin="10,6" Content="Keep Device Hub Window On Top (requires restart)" Foreground="{DynamicResource NormalTextBrush}" 
+							  ToolTip="Keep Device Hub main window on top of other main windows"
+							  IsChecked="{Binding KeepWindowOnTop}" />
 					</Grid>
 				</Grid>
 			</TabItem>

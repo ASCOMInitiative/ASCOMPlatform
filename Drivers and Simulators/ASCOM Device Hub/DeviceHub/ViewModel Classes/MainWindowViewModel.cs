@@ -86,7 +86,6 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-
 		private bool _useExpandedScreenLayout;
 
 		public bool UseExpandedScreenLayout
@@ -101,6 +100,7 @@ namespace ASCOM.DeviceHub
 				}
 			}
 		}
+
 		#endregion Change Notification Properties
 
 		#region Public Methods
@@ -231,6 +231,7 @@ namespace ASCOM.DeviceHub
 			if ( result.HasValue && result.Value )
 			{
 				Globals.UseExpandedScreenLayout = SetupVm.UseExpandedScreenLayout;
+				Globals.AlwaysOnTop = SetupVm.KeepWindowOnTop;
 				AppSettingsManager.SaveAppSettings();
 			}
 

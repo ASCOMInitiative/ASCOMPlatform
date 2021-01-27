@@ -18,6 +18,7 @@
 				settings.ActivityWindowLocation = new System.Windows.Point( 100.0, 100.0 );
 				settings.ActivityWindowSize = new System.Windows.Point( 480.0, 540.0 );
 				settings.RegistryVersion = Globals.RegistryVersion;
+				settings.AlwaysOnTop = false;
 
 				svc.SaveSettings( settings );
 			}
@@ -48,6 +49,7 @@
 			Globals.MainWindowTop = settings.MainWindowLocation.Y;
 			Globals.UseCustomTheme = settings.UseCustomTheme;
 			Globals.UseExpandedScreenLayout = settings.UseExpandedScreenLayout;
+			Globals.AlwaysOnTop = settings.AlwaysOnTop;
 		}
 
 		public static void SaveAppSettings()
@@ -60,7 +62,8 @@
 				RegistryVersion = Globals.RegistryVersion,
 				SuppressTrayBubble = Globals.SuppressTrayBubble,
 				UseCustomTheme = Globals.UseCustomTheme,
-				UseExpandedScreenLayout = Globals.UseExpandedScreenLayout
+				UseExpandedScreenLayout = Globals.UseExpandedScreenLayout,
+				AlwaysOnTop = Globals.AlwaysOnTop
 			};
 
 			ServiceContainer.Instance.GetService<IAppSettingsService>().SaveSettings( settings );
