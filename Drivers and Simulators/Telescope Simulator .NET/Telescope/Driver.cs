@@ -246,7 +246,7 @@ namespace ASCOM.Simulator
                     return new AxisRates(TelescopeAxes.axisTertiary);
 
                 default: // Anything else is invalid so throw an exception
-                    throw new InvalidValueException($"AxisRates - Invalid Axis parameter: {Axis}, The valid range is {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<GuideDirections>().Min())} to {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<GuideDirections>().Max())}");
+                    throw new InvalidValueException($"AxisRates - Invalid Axis parameter: {Axis}, The valid range is {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<TelescopeAxes>().Min())} to {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<TelescopeAxes>().Max())}");
             }
         }
 
@@ -292,7 +292,7 @@ namespace ASCOM.Simulator
                     return TelescopeHardware.CanMoveAxis(Axis);
 
                 default:  // Anything else is invalid so throw an exception
-                    throw new InvalidValueException($"CanMoveAxis - Invalid Axis parameter: {Axis}, The valid range is {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<GuideDirections>().Min())} to {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<GuideDirections>().Max())}");
+                    throw new InvalidValueException($"CanMoveAxis - Invalid Axis parameter: {Axis}, The valid range is {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<TelescopeAxes>().Min())} to {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<TelescopeAxes>().Max())}");
             }
         }
 
@@ -740,7 +740,7 @@ namespace ASCOM.Simulator
                     break;
 
                 default:  // Anything else is invalid so throw an exception
-                    throw new InvalidValueException($"MoveAxis - Invalid Axis parameter: {Axis}, The valid range is {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<GuideDirections>().Min())} to {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<GuideDirections>().Max())}");
+                    throw new InvalidValueException($"MoveAxis - Invalid Axis parameter: {Axis}, The valid range is {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<TelescopeAxes>().Min())} to {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<TelescopeAxes>().Max())}");
             }
 
         }
