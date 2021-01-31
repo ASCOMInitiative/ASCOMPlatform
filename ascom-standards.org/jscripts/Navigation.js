@@ -126,7 +126,7 @@ function writesubmenu() {
         SubMenuOutput += "<li><a href=\"StructureAndPolicies.htm\">Structure and Policies</a></li>";
         SubMenuOutput += "<li><a href=\"Surveys.htm\">How Well are We Doing?</a></li>";
         SubMenuOutput += "<li><a href=\"Projects.htm\">Projects in Progress (2019)</a></li>";
-        SubMenuOutput += "<li><a href=\"History.htm\">A Brief History</a></li>";
+        SubMenuOutput += "<li><a href=\"History.htm\">Detailed History</a></li>";
         SubMenuOutput += "<li><a href=\"Licensing.htm\">Ownership and Licensing</a></li>";
         SubMenuOutput += "<li><a href=\"HowWorks.htm\">How Does ASCOM Work?</a></li>";
         SubMenuOutput += "<li><a href=\"WhyImportant.htm\">Why are Drivers Important?</a></li>";
