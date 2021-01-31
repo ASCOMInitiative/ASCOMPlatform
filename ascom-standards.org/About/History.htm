@@ -59,9 +59,12 @@
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
-		<h3>A Graphical History of ASCOM Platform Development</h3>
-		<p>Core Team member Tim Long has made this interesting video showing a graphical history of ASCOM from V5.0 (Feb. 2008) to the present. It will give you some idea of the amount of work and skill that has gone into the ASCOM Platform over the last eleven years:</p>
-		<a name="videos" id="videos"></a><p align="center"><iframe width="910" height="512" src="https://www.youtube.com/embed/rn1637PUglY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
+		<h3>History of ASCOM and Alpaca Development</h3>
+		<p style="font-size:larger">For a detailed technical hostory of activity, changes, and additions to the ASCOM Platform for Windows since 2009 see the <a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases" target="_new">ASCOM GitHub Releases and Release Notes pages (there are many continuation pages going back to 5.0 in 2008)</a>. </p>
+		
+		<!--<p>Core Team member Tim Long has made this interesting video showing a graphical history of ASCOM from V5.0 (Feb. 2008) to mid-2018. It will give you some idea of the amount of work and skill that has gone into the ASCOM Platform over the last twelve years:</p>
+		<a name="videos" id="videos"></a><p align="center"><iframe width="910" height="512" src="https://www.youtube.com/embed/rn1637PUglY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>-->
+		
 		<h3>Early Years</h3>
 		<p>During 1998, DC-3 Dreams developed its Astronomer's Control Panel (ACP1), a Windows program that gave access to all of the capabilities of the Meade LX200 Classic.  During the process, DC-3 Dreams focused on including an open Windows Scripting interface that included a Telescope object. Other programs could use this for a high-level way to control the LX200. As this project evolved, it became clear that ACP1 could be used for observatory automation if it could somehow control the CCD camera. DC-3 Dreams contacted Diffraction Limited and together they conceived of an open Windows Scripting interface to Diffraction's MaxIm DL/CCD program. With this key piece of the puzzle, DC-3 Dreams developed Windows Scripts that controlled both the telescope and CCD camera using ACP and MaxIm. This effort culminated in DC-3 Dreams showing the first off-the-shelf automated observing system at the Riverside Telescope Maker's Conference in the Meade tent on Memorial Day Weekend 1999.</p>
 		<p>As things progressed during 1999, Diffraction and DC-3 Dreams decided that astronomy software needed a driver/client architecture like the rest of the computing world. At that time, there were only a few astronomy software packages that could control telescopes, cameras, filter wheels, etc. All of them contained their own code for each of the devices they supported. This sort of architecture had long since been abandoned by the computing community in favor of the now-familiar driver-client architecture. Neither DC-3 Dreams nor Diffraction wanted to undertake writing their own built-in control code for the rapidly growing family of astronomy devices out there. Led by Bob Denny of DC-3 Dreams, they undertook to establish the ASCOM Initiative to promote the driver-client architecture in astronomy software.</p>
@@ -85,6 +88,8 @@
 		<p>During 2003, it was becoming clear that the Telescope Interface Standard needed to grow. A rather large group of application  and driver authors  participated in discussing additions to the Telescope interface. Additions included control of guiding rates, a new ability to move about the mount's axis, and better pier-side monitoring and control. The interface was adopted in April, 2004. </p>
 		<h3>ASCOM Platform 4.0</h3>
 		<p>In December 2004, the ASCOM Platform 4.0 was released. This Platform contained the new Telescope V2 interface spec, updates for many drivers, and a few new drivers. An update, Platform 4.1 was released about six months later. </p>
+		<h3>The Camera Interface</h3>
+		<p>Doug Grorege of Diffraction Limited first proposed the Camera inteface (based on his extensive experience with Diffraction's Camera API) in 2005. In the Fall of 2009 the last multi-party negotiation, the universal format for Bayer Matrix representation, was completed at the AIC Conference. The Camera interface spec was adopted shortly thereafter. </p>
 		<h3>Stability and Maturity</h3>
 		<p>The release of Platform 4 marked the beginning of a long period of stability for ASCOM. The Platform 4.1  remained the standard for several years, though individual drivers were updated during this period. by this time, there were nearly a thousand people on the ASCOM Talk group, and over a dozen people had developed drivers and programs that used them. The big issue was the lack of commitment by device manufacturers to provide drivers and support with their devices. </p>
 		<h3>ASCOM Platform 5.0  </h3>
@@ -128,13 +133,32 @@
 		<p>During 2016, as people started using WIndows 10, some issues with installation and ASCOM driver stability arose. It took a fair bit of time for the underlying issues to surface. As of late 2016, a project is underway to positively identify the problem(s) and to mitigate them as best we can (considering they appear to be bugs in Windows 10 itself). </p>
 		<h3>Platform 6.3 (and the developer tools)</h3>
 		<p>In early 2017, lead ASCOM Platform developer Peter Simpson researched and identified the source of the problems with Windows 10. In addition, he addressed several small issues that arose in Platform 6.2. On 27-Jan-2017 Platform 6.3 was released.</p>
+		<h3>Conform - Tool for Interface and Conformance Testing</h3>
+		<p>In order to help driver developers assure that their devices and drivers meet the requirements for interface strructure, members, and behavior, the Conform tool was developed in 2017. When run, the tool exercises a device/driver including all required and optional features, as well as out-of range conditions and error responses. It is updated to include additional tests when an undetected problem appears with a device. This tool's	development	is ongoing so it is not part of the Platform. For details see the <a href="https://github.com/ASCOMInitiative/Conform/releases" target="_new">Conform GitHub Releases and Release Notes</a> pages.</p>
 		<h3>Platform 6.4 (and the developer tools)</h3>
-		<p>Lead ASCOM Platform developer Peter Simpson did a major overhaul and upgrade of the installation technology for the Platform, as well as incorporating several problems and suggestions during the previous 18 months. In July 2018 Platform 6.4 was released, with a Service Pack in September 2018. For info on these releases see the <a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases" target="_new">GitHub Latest Release page and the release notes there</a>. </p>
-		<h3>Cross-Platform (ASCOM Alpaca)</h3>
-	This project started in mid 2018 with the development of ASCOM Remote, and has now (November 2019) yielded surprising acceptance in the astronomy software and device community. For more information see the <a href="../Developer/Alpaca.htm" target="_new">ASCOM Alpaca page and other info here</a>. This project is ongoing. </div>
+		<p>Lead ASCOM Platform developer Peter Simpson did a major overhaul and upgrade of the installation technology for the Platform, as well as incorporating several problems and suggestions during the previous 18 months. In July 2018 Platform 6.4 was released, with a Service Pack in September 2018. </p>
+		<h3>ASCOM Remote</h3>
+		<p>This tool was originally developed by Peter Simpson in late 2017 to allow distributing ASCOM/COM clients and drivers across multiple computers via a network connection. The communication between computers used the REST protocol. However it turned out to be a happy accident, as his design for the REST protocol could itself be standardized into a next-generation implementation of the standard ASCOM interfaces. ASCOM Remote was the genesis of the cross-platform Alpaca standards. It was first released in May 2018. A more detailed history of ASCOM Remote maybe seen on the <a href="https://github.com/ASCOMInitiative/ASCOMRemote/releases" target="_new">ASCOM Remote GitHub Releases and Release Notes pages</a> (there are several continuation pages going back to May 2018)</p>
+		<h3>Cross-Platform (Alpaca)</h3>
+		This project started in mid 2018 with the development of ASCOM Remote, and has now yielded surprising acceptance in the astronomy software and device community. For more information see the <a href="../Developer/Alpaca.htm" target="_new"> Introduction to Alpaca</a>. This project is ongoing and has become an integral part of the ASCOM Initiative's process and deliverables.
+		<h3>Rotator V3</h3>
+		<p>During 2018, several community and device maker requests made it clear that the Rotator interface needed enhancement to support keeping the offset between the mechanical angle and the sky/equatorial Position Angle within the Rotator, to be shared between multiple client applications. As a result  the Rotator interface was enhanced to add these capabilities in a universal/device-independent way. This new version was introduced in Platform 6.5.</p>
+		<h3>CoverCalibrator</h3>
+		<p>During 2018 and 2019, community feedback indicated that the Switch interface is awkward for use with combination cover and flat light-source devices. As a result a new interface, CoverCalibrator, was designed and offered for comment. The resulting new interface was introduced in Platform 6.5.</p>
+		<h3>Camera V3</h3>
+		<p>During 2018 and 2019, it became evident athat the Camera interface needed some additional capability to support the new CMOS sensor technology. After community discussion and negotiation, several new members were added to the Camera interface. One set of properties was added to support control of bias or offset for the CMOS sensor. The other member, SubexposureDuration, is used to allow CMOS cameras to combine optimal short exposures (to realize the CMOS dynamic range) into a single image for transfer to the host computer. In late 2020 Camera V3 was adopted and incorporated into the Platform 6.5 SP1 final, as well as the Alpaca specifications and tools.</p>
+		<h3>Platform 6.5 (including Alpaca Support and Developer Tools)</h3>
+		<p>This Platform version is the most ambitious and comprehensive in the history of ASCOM. Two new interfaces were added (including simulators, documentation, etc) and one was updated. Many  other smaller changes and improvements were made. Also, Alpaca capabilities were addeed to the Chooser. During 2018 and 2019, work on Platform 6.5 resulted in a number of pre-releases and Release Candidates being made available, with the <a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/tag/v6.5Release" target="_new">6.5 production release</a> made in July 2020. In addition, a <a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/tag/v6.5SP1Release" target="_new">Service Pack 1 release</a> was made in December 2020, mainly to fix a problem in Astrometry.Transform library made necessary by NASA restricting access to their Earth Rotation parameter updates. Notable items are</p>
+		<ul>
+			<li>The DeviceHub tool replaces the older POTH and ASCOMDome hubs.</li>
+			<li>The Windows ASCOM Device Chooser now has integrated Alpaca device discovery and automatic gateway connection from Windows ASCOM/COM to any Alpaca device on amy platform. Windows applications that use the Chooser need <em>no modifications</em> to use Alpaca devices. </li>
+			<li>Addition of CoverCalibrator V1 and Rotator V3 including simulators, developer templates, etc. </li>
+			<li>Upgrading of Camera V2 to Camera V3 including simulator and templates.</li>
+		</ul>
+	</div>
 	<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright &copy; 1998-2020, The ASCOM Initiative. 
+	Copyright &copy; 1998-2021, The ASCOM Initiative. 
 	All rights reserved. </div>
 
 </body>
