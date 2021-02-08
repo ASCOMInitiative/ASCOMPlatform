@@ -3,6 +3,7 @@ Imports System.Environment
 Imports ASCOM.Utilities
 Imports ASCOM.Utilities.Exceptions
 Imports System.Text
+Imports System.IO
 
 Namespace SOFA
     ''' <summary>
@@ -131,6 +132,12 @@ Namespace SOFA
             End If
             TL.LogMessage("New", "PRODUCTION build")
 #End If
+            If Not File.Exists(SofaDllFile) Then
+                TL.LogMessage("New", $"SOFA Initialise - Unable to locate SOFA library DLL: {SofaDllFile}")
+                Throw New HelperException($"SOFA Initialise - Unable to locate SOFA library DLL: {SofaDllFile}")
+            Else
+                TL.LogMessage("New", $"Found SOFA library DLL: {SofaDllFile}")
+            End If
 
             TL.LogMessage("New", "Loading SOFA library DLL: " + SofaDllFile)
 

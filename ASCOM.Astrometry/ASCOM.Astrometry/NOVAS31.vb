@@ -3,6 +3,7 @@ Imports System.Environment
 Imports ASCOM.Utilities
 Imports ASCOM.Utilities.Exceptions
 Imports System.Threading
+Imports System.IO
 
 Namespace NOVAS
 
@@ -81,6 +82,33 @@ Namespace NOVAS
                     RACIOFile = GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & RACIO_FILE
                     JPLEphFile = GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & JPL_EPHEM_FILE_NAME
                 End If
+
+                ' Validate that the files exist
+                TL.LogMessage("New", $"Path to NOVAS31 DLL: {Novas31DllFile}")
+                TL.LogMessage("New", $"Path to RACIO file: {Novas31DllFile}")
+                TL.LogMessage("New", $"Path to JPL ephemeris file: {Novas31DllFile}")
+
+                If Not File.Exists(Novas31DllFile) Then
+                    TL.LogMessage("New", $"NOVAS31 Initialise - Unable to locate NOVAS support DLL: {Novas31DllFile}")
+                    Throw New HelperException($"NOVAS31 Initialise - Unable to locate NOVAS support DLL: {Novas31DllFile}")
+                Else
+                    TL.LogMessage("New", $"Found NOVAS31 DLL: {Novas31DllFile}")
+                End If
+
+                If Not File.Exists(RACIOFile) Then
+                    TL.LogMessage("New", $"NOVAS31 Initialise - Unable to locate RACIO file: {Novas31DllFile}")
+                    Throw New HelperException($"NOVAS31 Initialise - Unable to locate RACIO file: {RACIOFile}")
+                Else
+                    TL.LogMessage("New", $"Found RACIO file: {Novas31DllFile}")
+                End If
+
+                If Not File.Exists(JPLEphFile) Then
+                    TL.LogMessage("New", $"NOVAS31 Initialise - Unable to locate JPL ephemeris file: {Novas31DllFile}")
+                    Throw New HelperException($"NOVAS31 Initialise - Unable to locate JPL ephemeris file: {JPLEphFile}")
+                Else
+                    TL.LogMessage("New", $"Found  JPL ephemeris file: {Novas31DllFile}")
+                End If
+
                 TL.LogMessage("New", "Loading NOVAS31 library DLL: " + Novas31DllFile)
 
                 Novas31DllHandle = LoadLibrary(Novas31DllFile)
