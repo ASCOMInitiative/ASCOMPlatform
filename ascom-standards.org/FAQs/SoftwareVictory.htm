@@ -59,7 +59,7 @@
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
-		<h3>Why Can't You Just Add Logic to Your Program to Compensate For My Device's Problem?</h3>
+		<h3>Why Can't Astronomy Programs Just Compensate For My Device's Problem?</h3>
 		<p>Periodically, the developers of astronomy software (planetariums, imaging software, automation software, etc.) are asked to add logic to their software to &quot;correct for&quot; a problem in some device like a telescope mount. This usually creates tension between the program's user and its developer because the developer will almost always refuse to do it. Why?</p>
 		<p>Consider what the program's developer faces: He's responsible for controlling many different devices, and he's depending on the ASCOM driver-client architecture to <a href="../About/WhyImportant.htm" target="_blank">avoid having to program special code for each device</a>. If he routinely adds special code to compensate for problems, his program will become littered with code for various device problems, making it less reliable and far more difficult to maintain (and breaking the driver-client model). </p>
 		<p>Now, what happens when some change to a device or its driver corrects the problem? Now the application contains code that (at best) is useless and possibly creates a new error. Multiply this by a dozen or more different devices of a given type and you can see that the software developer will need to make frequent releases just to manage the hacks he has for device problems. </p>

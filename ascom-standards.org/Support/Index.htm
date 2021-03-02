@@ -59,29 +59,29 @@
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
-		<h3>Supported Devices</h3>
-		<p>Look in the orange area to the left. Click on the link for the type of device you're interested in.  There, you'll find a list of devices that have ASCOM drivers available. Some come with the device itself, others are available from the <a href="../Downloads/Index.htm">Download Center</a> here. </p>
 		<h3>How to Get Support</h3>
-		<p>If your device (e.g., telescope) shipped with its ASCOM driver, <span class="underline">contact the device manufacturer first</span>. Otherwise, if your device has a driver that was developed by a third party developer, the place to get help is either directly from the developer or on the <a href="https://ascomtalk.groups.io/g/Help" target="aux">ASCOM Talk</a> group. People on the <a href="https://ascomtalk.groups.io/g/Help" target="aux">ASCOM-Talk</a> group are happy to help with problems. Most driver authors want people to use their drivers and will at least lurk on the group. There are a number of things that you can do to help and these will result in getting a suggested fix much faster.</p>
+		<div class="note">If your device (e.g., telescope) shipped with its ASCOM driver, <span class="underline">contact the device manufacturer first</span>. Otherwise, if your device has a driver that was developed by a third party developer, the first place to get help is directly from the driver developer. The people to whom you paid the money for your program or device are always the best place to get help because they know the most about your program or device.</div>
+		<p><span class="underline">If you can't get help from the people responsible for developing your program or device and driver</span>, you can try getting help on the <a href="https://ascomtalk.groups.io/g/Help" target="aux">ASCOM Talk</a> group. People on the <a href="https://ascomtalk.groups.io/g/Help" target="aux">ASCOM-Talk</a> group are happy to help with problems, but keep in mind that they generally won't know about the internals of your device. Most driver authors want people to use their drivers and will at least lurk on the group. There are a number of things that you can do to help these people to help you.</p>
 		<ol>
-		<li>Report information accurately and completely. It is almost impossible to help if insufficient information is given. We get  error reports that basically say &quot;ASCOM isn't working, please  fix it&quot;. If you are lucky you'll get emails asking questions. More likely you'll not get a reply at all.</li>
-		<li>Read the help that comes with the driver. Many support questions have already been answered in the driver help. This should be accessible from the driver setup or properties window.</li>
+		<li>Report information accurately and completely. It is almost impossible to help if insufficient information is given. We get  error reports that basically say &quot;ASCOM isn't working, please  fix it&quot;. ASCOM is neither an application, nor a driver, nor a device. This sort of request for help is unanswerable and will result in disappointment and frustration for you. </li>
+		<li>Read the help that comes with the app or device. Many support questions have already been answered in the supplied help. This should be accessible from the app's help menu, the driver setup, or its properties window.</li>
 		<li>If you can cause the problem at will, write down the steps you took to cause it, producing a &quot;repro scenario&quot;. This can be invaluable information. </li>
-		<li>Contact the driver author or supporter directly or on the <a href="https://ascomtalk.groups.io/g/Help" target="aux">ASCOM-Talk</a> group. Look in the driver help file for contact info. </li>
+		<li>Contact the app or driver author or a supporter directly or on the <a href="https://ascomtalk.groups.io/g/Help" target="aux">ASCOM-Talk</a> group. Look in the app or driver help file for contact info. </li>
 		</ol>
+		<div class="note">Uninstalling and reinstalling the ASCOM Platform, and/or a program/application you are struggling with, is almost always a waste of time. The problems we see are most commonly caused by flaky cables, driver bugs, bad USB connectors, bad power supplies for devices, or other hardware and driver related issues (<a href="#tryfirst">see below</a>). What the device maker, driver author and people here who try to help need most is a way to make the problem happen reproduceably. There are no gremlins living in computers and devices. The causes of problems can virtually always be explained logically. Give the developers and others who want to help a chance to zero in on the problem and solve it. Keep in mind that &quot;ASCOM&quot; and the &quot;ASCOM Platform&quot; is a set of documentation, tools, and libraries used by many developers. It is not a &quot;program&quot; that is causing your problem.</div>
 		<p>Remember that we aren't looking over your shoulder; we can't see things that are totally obvious to you. We need to know:</p>
 		<ul>
 			<li>What brand of device (e.g. telescope and mount) you are
 				using.</li>
 			<li>What driver you have selected, including its version (normally visible on the driver setup or properties window).</li>
 			<li>What application you are using.</li>
-			<li>What PC operating system you are using, including the SP.</li>
+			<li>What operating system you are using, including the release number etc..</li>
 			<li>Exactly what you did, what worked and what did not.</li>
 			<li>An exact reproduction of any error messages, with what was done just before the error happened.</li>
 			<li>Ideally an exact sequence of actions that will generate the error ( repro scenario). </li>
 		</ul>
-		<h3>Things to Try First </h3>
-		<p>If the driver doesn't work at all then in the  majority of
+		<h3><a name="tryfirst" id="tryfirst"></a>Things to Try First for Devices</h3>
+		<p>If a device or driver doesn't work at all then in the  majority of
 			cases it is one of the following causes:</p>
 		<ul>
 			<li>The connection cable between the PC and the mount.</li>
@@ -101,7 +101,7 @@
 			<li>If you are only trying advanced functions, such as guiding, but haven't tried something simple then it is a good idea to try a simple planetarium program, such as Cartes du Ciel, and see if the basic connectivity and control works.</li>
 		</ul>
 		<p>A good technique, especially for application or script authors, is to post a code fragment that demonstrates the problem. Try to reduce this to the minimum that shows the problem.</p>
-		<p>Remember that some of the people involved in ASCOM are part time and often have other jobs, so replies can take a few days.</p>
+		<p>Remember that some of the people involved in ASCOM are volunteers and often have other jobs, so replies can take a few days.</p>
 	</div>
 	<!-- #EndEditable --></div>
 <div id="footer">

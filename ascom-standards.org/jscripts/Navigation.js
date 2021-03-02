@@ -31,19 +31,19 @@ else if (sLocation.match(/Downloads\//i) !== null) {
     TopLevelIndex = 2;
 }
 else if (sLocation.match(/Support\//i) !== null) {
-    TopLevelIndex = 3;
-}
-else if (sLocation.match(/Standards\//i) !== null) {
-    TopLevelIndex = 4;
-}
-else if (sLocation.match(/Developer\//i) !== null) {
     TopLevelIndex = 5;
 }
-else if (sLocation.match(/Community\//i) !== null) {
+else if (sLocation.match(/Standards\//i) !== null) {
+    TopLevelIndex = 7;
+}
+else if (sLocation.match(/Developer\//i) !== null) {
     TopLevelIndex = 6;
 }
+else if (sLocation.match(/Community\//i) !== null) {
+    TopLevelIndex = 4;
+}
 else if (sLocation.match(/FAQs\//i) !== null) {
-    TopLevelIndex = 7;
+    TopLevelIndex = 3;
 }
 
 if (TopLevelIndex > 0) RelativePath = "../";
@@ -58,20 +58,20 @@ MainMenuURL[1] = RelativePath + "About/Index.htm";
 MainMenuItem[2] = "Downloads";
 MainMenuURL[2] = RelativePath + "Downloads/Index.htm";
 
-MainMenuItem[3] = "Support";
-MainMenuURL[3] = RelativePath + "Support/Index.htm";
+MainMenuItem[5] = "Support";
+MainMenuURL[5] = RelativePath + "Support/Index.htm";
 
-MainMenuItem[4] = "Standards";
-MainMenuURL[4] = RelativePath + "Standards/Index.htm";
+MainMenuItem[7] = "Standards";
+MainMenuURL[7] = RelativePath + "Standards/Index.htm";
 
-MainMenuItem[5] = "Developers";
-MainMenuURL[5] = RelativePath + "Developer/Index.htm";
+MainMenuItem[6] = "Developers";
+MainMenuURL[6] = RelativePath + "Developer/Index.htm";
 
-MainMenuItem[6] = "Community";
-MainMenuURL[6] = RelativePath + "Community/Index.htm";
+MainMenuItem[4] = "Community";
+MainMenuURL[4] = RelativePath + "Community/Index.htm";
 
-MainMenuItem[7] = "FAQs";
-MainMenuURL[7] = RelativePath + "FAQs/Index.htm";
+MainMenuItem[3] = "FAQs";
+MainMenuURL[3] = RelativePath + "FAQs/Index.htm";
 
 var BreadCrumbString = "<a href=\"" + RelativePath + "index.htm" + "\">" +  "Home" + "</a>" + " > ";
 
@@ -112,11 +112,11 @@ function writesubmenu() {
         SubMenuOutput += "<ul class=\"treeview\">";
         SubMenuOutput += "<li><a href=\"About/Index.htm\">About ASCOM</a></li>";
         SubMenuOutput += "<li><a href=\"Downloads/Index.htm\">Downloads</a></li>";
-        SubMenuOutput += "<li><a href=\"Support/Index.htm\">Support</a></li>";
-        SubMenuOutput += "<li><a href=\"Standards/Index.htm\">Standards</a></li>";
-        SubMenuOutput += "<li><a href=\"Developer/Index.htm\">Developers</a></li>";
-        SubMenuOutput += "<li><a href=\"Community/Index.htm\">Community</a></li>";
         SubMenuOutput += "<li><a href=\"FAQs/Index.htm\">FAQs</a></li>";
+        SubMenuOutput += "<li><a href=\"Community/Index.htm\">Community</a></li>";
+        SubMenuOutput += "<li><a href=\"Support/Index.htm\">Support</a></li>";
+        SubMenuOutput += "<li><a href=\"Developer/Index.htm\">Developers</a></li>";
+        SubMenuOutput += "<li><a href=\"Standards/Index.htm\">Standards</a></li>";
         SubMenuOutput += "</ul>";
         break;
     case 1: // About
@@ -228,12 +228,12 @@ function writesubmenu() {
     case 7: // FAQs
         SubMenuOutput += "<h3>Detailed FAQ Answers</h3>";
         SubMenuOutput += "<ul class=\"treeview\">";
-	    SubMenuOutput += "<li><a href=\"Plat6OnW7.htm\">Platform on Windows 7</a></li>";
+	    SubMenuOutput += "<li><a href=\"Plat6OnW7.htm\">Platform on Windows 7 &amp; 10</a></li>";
 	    SubMenuOutput += "<li><a href=\"Plat6OnXP.htm\">Platform on Windows XP</a></li>";
 	    SubMenuOutput += "<li><a href=\"Platform5.5only.htm\">Driver for Platform 5 Only?</a></li>";
 	    SubMenuOutput += "<li><a href=\"SoftwareVictory.htm\">Correcting for Problems</a></li>";
-	    SubMenuOutput += "<li><a href=\"TheSky.htm\">Working With TheSky</a></li>";
-	    SubMenuOutput += "<li><a href=\"POTH.htm\">Using POTH</a></li>";
+//	    SubMenuOutput += "<li><a href=\"TheSky.htm\">Working With TheSky</a></li>";
+	    SubMenuOutput += "<li><a href=\"DevHub.htm\">Using DeviceHub</a></li>";
 	    SubMenuOutput += "</ul>";
 	    break;
 	default:
