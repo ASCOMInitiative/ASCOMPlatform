@@ -26,6 +26,7 @@ using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Linq;
 
 namespace ASCOM.Simulator
 {
@@ -236,16 +237,16 @@ namespace ASCOM.Simulator
             switch (Axis)
             {
                 case TelescopeAxes.axisPrimary:
-                    //                    return m_AxisRates[0];
                     return new AxisRates(TelescopeAxes.axisPrimary);
+
                 case TelescopeAxes.axisSecondary:
-                    //                    return m_AxisRates[1];
                     return new AxisRates(TelescopeAxes.axisSecondary);
+
                 case TelescopeAxes.axisTertiary:
-                    //                    return m_AxisRates[2];
                     return new AxisRates(TelescopeAxes.axisTertiary);
-                default:
-                    return null;
+
+                default: // Anything else is invalid so throw an exception
+                    throw new InvalidValueException($"AxisRates - Invalid Axis parameter: {Axis}, The valid range is {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<TelescopeAxes>().Min())} to {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<TelescopeAxes>().Max())}");
             }
         }
 
@@ -279,10 +280,20 @@ namespace ASCOM.Simulator
         public bool CanMoveAxis(TelescopeAxes Axis)
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Capabilities, string.Format(CultureInfo.CurrentCulture, "CanMoveAxis {0}: ", Axis.ToString()));
-            CheckVersionOne("CanMoveAxis");
-            SharedResources.TrafficEnd(TelescopeHardware.CanMoveAxis(Axis).ToString());
 
-            return TelescopeHardware.CanMoveAxis(Axis);
+            // Validate the supplied axis parameter and action if valid
+            switch (Axis)
+            {
+                case TelescopeAxes.axisPrimary: // Valid values
+                case TelescopeAxes.axisSecondary:
+                case TelescopeAxes.axisTertiary:
+                    CheckVersionOne("CanMoveAxis");
+                    SharedResources.TrafficEnd(TelescopeHardware.CanMoveAxis(Axis).ToString());
+                    return TelescopeHardware.CanMoveAxis(Axis);
+
+                default:  // Anything else is invalid so throw an exception
+                    throw new InvalidValueException($"CanMoveAxis - Invalid Axis parameter: {Axis}, The valid range is {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<TelescopeAxes>().Min())} to {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<TelescopeAxes>().Max())}");
+            }
         }
 
         public bool CanPark
@@ -698,27 +709,40 @@ namespace ASCOM.Simulator
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, string.Format(CultureInfo.CurrentCulture, "MoveAxis {0} {1}:  ", Axis.ToString(), Rate));
             CheckVersionOne("MoveAxis");
-            CheckRate(Axis, Rate);
 
-            if (!CanMoveAxis(Axis))
-                throw new MethodNotImplementedException("CanMoveAxis " + Enum.GetName(typeof(TelescopeAxes), Axis));
-
-            CheckParked("MoveAxis");
-
+            // Validate the supplied axis parameter and action if valid
             switch (Axis)
             {
-                case ASCOM.DeviceInterface.TelescopeAxes.axisPrimary:
-                    TelescopeHardware.rateMoveAxes.X = Rate;
+                case TelescopeAxes.axisPrimary: // Valid values
+                case TelescopeAxes.axisSecondary:
+                case TelescopeAxes.axisTertiary:
+                    CheckRate(Axis, Rate);
+
+                    if (!CanMoveAxis(Axis))
+                        throw new MethodNotImplementedException("CanMoveAxis " + Enum.GetName(typeof(TelescopeAxes), Axis));
+
+                    CheckParked("MoveAxis");
+
+                    switch (Axis)
+                    {
+                        case ASCOM.DeviceInterface.TelescopeAxes.axisPrimary:
+                            TelescopeHardware.rateMoveAxes.X = Rate;
+                            break;
+                        case ASCOM.DeviceInterface.TelescopeAxes.axisSecondary:
+                            TelescopeHardware.rateMoveAxes.Y = Rate;
+                            break;
+                        case ASCOM.DeviceInterface.TelescopeAxes.axisTertiary:
+                            // not implemented
+                            break;
+                    }
+
+                    SharedResources.TrafficEnd("(done)");
                     break;
-                case ASCOM.DeviceInterface.TelescopeAxes.axisSecondary:
-                    TelescopeHardware.rateMoveAxes.Y = Rate;
-                    break;
-                case ASCOM.DeviceInterface.TelescopeAxes.axisTertiary:
-                    // not implemented
-                    break;
+
+                default:  // Anything else is invalid so throw an exception
+                    throw new InvalidValueException($"MoveAxis - Invalid Axis parameter: {Axis}, The valid range is {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<TelescopeAxes>().Min())} to {Convert.ToInt32(Enum.GetValues(typeof(TelescopeAxes)).Cast<TelescopeAxes>().Max())}");
             }
 
-            SharedResources.TrafficEnd("(done)");
         }
 
         public string Name
@@ -755,68 +779,78 @@ namespace ASCOM.Simulator
         {
             if (TelescopeHardware.AtPark) throw new ParkedException();
 
-            SharedResources.TrafficStart(SharedResources.MessageType.Slew, string.Format(CultureInfo.CurrentCulture, "Pulse Guide: {0}, {1}", Direction, Duration.ToString(CultureInfo.InvariantCulture)));
-
-            CheckCapability(TelescopeHardware.CanPulseGuide, "PulseGuide");
-            CheckRange(Duration, 0, 30000, "PulseGuide", "Duration");
-            if (Duration == 0)
+            // Validate the supplied direction and action if valid
+            switch (Direction)
             {
-                // stops the current guide command
-                switch (Direction)
-                {
-                    case GuideDirections.guideNorth:
-                    case GuideDirections.guideSouth:
+                case GuideDirections.guideNorth: // Valid direction parameter
+                case GuideDirections.guideSouth:
+                case GuideDirections.guideEast:
+                case GuideDirections.guideWest:
+                    SharedResources.TrafficStart(SharedResources.MessageType.Slew, string.Format(CultureInfo.CurrentCulture, "Pulse Guide: {0}, {1}", Direction, Duration.ToString(CultureInfo.InvariantCulture)));
+
+                    CheckCapability(TelescopeHardware.CanPulseGuide, "PulseGuide");
+                    CheckRange(Duration, 0, 30000, "PulseGuide", "Duration");
+
+                    if (Duration == 0)
+                    {
+                        // stops the current guide command
+                        switch (Direction)
+                        {
+                            case GuideDirections.guideNorth:
+                            case GuideDirections.guideSouth:
+                                TelescopeHardware.isPulseGuidingDec = false;
+                                TelescopeHardware.guideDuration.Y = 0;
+                                break;
+                            case GuideDirections.guideEast:
+                            case GuideDirections.guideWest:
+                                TelescopeHardware.isPulseGuidingRa = false;
+                                TelescopeHardware.guideDuration.X = 0;
+                                break;
+                        }
+                    }
+                    else // Start the pulse guide
+                    {
+                        switch (Direction)
+                        {
+                            case GuideDirections.guideNorth:
+                                TelescopeHardware.guideRate.Y = Math.Abs(TelescopeHardware.guideRate.Y);
+                                TelescopeHardware.isPulseGuidingDec = true;
+                                TelescopeHardware.guideDuration.Y = Duration / 1000.0;
+                                break;
+                            case GuideDirections.guideSouth:
+                                TelescopeHardware.guideRate.Y = -Math.Abs(TelescopeHardware.guideRate.Y);
+                                //TelescopeHardware.pulseGuideDecEndTime = endTime;
+                                TelescopeHardware.isPulseGuidingDec = true;
+                                TelescopeHardware.guideDuration.Y = Duration / 1000.0;
+                                break;
+
+                            case GuideDirections.guideEast:
+                                TelescopeHardware.guideRate.X = Math.Abs(TelescopeHardware.guideRate.X);
+                                //TelescopeHardware.pulseGuideRaEndTime = endTime;
+                                TelescopeHardware.isPulseGuidingRa = true;
+                                TelescopeHardware.guideDuration.X = Duration / 1000.0;
+                                break;
+                            case GuideDirections.guideWest:
+                                TelescopeHardware.guideRate.X = -Math.Abs(TelescopeHardware.guideRate.X);
+                                //TelescopeHardware.pulseGuideRaEndTime = endTime;
+                                TelescopeHardware.isPulseGuidingRa = true;
+                                TelescopeHardware.guideDuration.X = Duration / 1000.0;
+                                break;
+                        }
+                    }
+
+                    if (!TelescopeHardware.CanDualAxisPulseGuide) // Single axis synchronous pulse guide
+                    {
+                        System.Threading.Thread.Sleep(Duration); // Must be synchronous so wait out the pulseguide duration here
+                        TelescopeHardware.isPulseGuidingRa = false; // Make sure that IsPulseGuiding will return false
                         TelescopeHardware.isPulseGuidingDec = false;
-                        TelescopeHardware.guideDuration.Y = 0;
-                        break;
-                    case GuideDirections.guideEast:
-                    case GuideDirections.guideWest:
-                        TelescopeHardware.isPulseGuidingRa = false;
-                        TelescopeHardware.guideDuration.X = 0;
-                        break;
-                }
+                    }
+                    SharedResources.TrafficEnd(" (done) ");
+                    break;
+
+                default: // Anything else is invalid
+                    throw new InvalidValueException($"PulseGuide - Invalid Direction parameter: {Direction}, The valid range is {Convert.ToInt32(Enum.GetValues(typeof(GuideDirections)).Cast<GuideDirections>().Min())} to {Convert.ToInt32(Enum.GetValues(typeof(GuideDirections)).Cast<GuideDirections>().Max())}");
             }
-            else
-            {
-
-                //DateTime endTime = DateTime.Now + TimeSpan.FromMilliseconds(Duration);
-
-                switch (Direction)
-                {
-                    case GuideDirections.guideNorth:
-                        TelescopeHardware.guideRate.Y = Math.Abs(TelescopeHardware.guideRate.Y);
-                        TelescopeHardware.isPulseGuidingDec = true;
-                        TelescopeHardware.guideDuration.Y = Duration / 1000.0;
-                        break;
-                    case GuideDirections.guideSouth:
-                        TelescopeHardware.guideRate.Y = -Math.Abs(TelescopeHardware.guideRate.Y);
-                        //TelescopeHardware.pulseGuideDecEndTime = endTime;
-                        TelescopeHardware.isPulseGuidingDec = true;
-                        TelescopeHardware.guideDuration.Y = Duration / 1000.0;
-                        break;
-
-                    case GuideDirections.guideEast:
-                        TelescopeHardware.guideRate.X = Math.Abs(TelescopeHardware.guideRate.X);
-                        //TelescopeHardware.pulseGuideRaEndTime = endTime;
-                        TelescopeHardware.isPulseGuidingRa = true;
-                        TelescopeHardware.guideDuration.X = Duration / 1000.0;
-                        break;
-                    case GuideDirections.guideWest:
-                        TelescopeHardware.guideRate.X = -Math.Abs(TelescopeHardware.guideRate.X);
-                        //TelescopeHardware.pulseGuideRaEndTime = endTime;
-                        TelescopeHardware.isPulseGuidingRa = true;
-                        TelescopeHardware.guideDuration.X = Duration / 1000.0;
-                        break;
-                }
-            }
-
-            if (!TelescopeHardware.CanDualAxisPulseGuide) // Single axis synchronous pulse guide
-            {
-                System.Threading.Thread.Sleep(Duration); // Must be synchronous so wait out the pulseguide duration here
-                TelescopeHardware.isPulseGuidingRa = false; // Make sure that IsPulseGuiding will return false
-                TelescopeHardware.isPulseGuidingDec = false;
-            }
-            SharedResources.TrafficEnd(" (done) ");
         }
 
         public double RightAscension
@@ -1381,7 +1415,7 @@ namespace ASCOM.Simulator
             if (TelescopeHardware.VersionOneOnly)
             {
                 SharedResources.TrafficEnd(property + " is not implemented in version 1");
-                throw new System.NotImplementedException(property);
+                throw new NotImplementedException(property);
             }
         }
 
