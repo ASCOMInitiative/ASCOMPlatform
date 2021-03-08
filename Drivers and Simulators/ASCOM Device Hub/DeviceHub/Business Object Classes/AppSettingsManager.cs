@@ -37,6 +37,7 @@
 			Globals.SuppressTrayBubble = settings.SuppressTrayBubble;
 			Globals.UseCustomTheme = settings.UseCustomTheme;
 			Globals.UseExpandedScreenLayout = settings.UseExpandedScreenLayout;
+			Globals.UseCompositeSlewingFlag = settings.UseCompositeSlewingFlag;
 		}
 
 		public static void LoadMainWindowSettings()
@@ -63,7 +64,8 @@
 				SuppressTrayBubble = Globals.SuppressTrayBubble,
 				UseCustomTheme = Globals.UseCustomTheme,
 				UseExpandedScreenLayout = Globals.UseExpandedScreenLayout,
-				AlwaysOnTop = Globals.AlwaysOnTop
+				AlwaysOnTop = Globals.AlwaysOnTop,
+				UseCompositeSlewingFlag = Globals.UseCompositeSlewingFlag
 			};
 
 			ServiceContainer.Instance.GetService<IAppSettingsService>().SaveSettings( settings );

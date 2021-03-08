@@ -56,6 +56,13 @@ namespace ASCOM.DeviceHub
 		public static bool UsePOTHDomeSlaveCalculation { get; set; }
 		public static bool UseExpandedScreenLayout { get; set; }
 		public static double DomeAzimuthAdjustment { get; set; }
+		public static bool UseCompositeSlewingFlag { get; set; }
+
+		// The raw statuses for telescope and dome are maintained here in order to
+		// correctly set and reset the Composite Slewing Flag.
+
+		public static DevHubDomeStatus LatestRawDomeStatus { get; set; }
+		public static DevHubTelescopeStatus LatestRawTelescopeStatus { get; set; }
 
 		public static TaskScheduler UISyncContext { get; set; }
 	}

@@ -1,11 +1,10 @@
 ﻿using System;
 
-using ASCOM.Astrometry.AstroUtils;
 using ASCOM.DeviceInterface;
 
 namespace ASCOM.DeviceHub
 {
-    public class DevHubTelescopeStatus : AscomTelescopeStatus
+    public class DevHubTelescopeStatus : AscomTelescopeStatus, ICloneable
     {
         public static DevHubTelescopeStatus GetEmptyStatus()
         {
@@ -18,6 +17,14 @@ namespace ASCOM.DeviceHub
         public DevHubTelescopeStatus()
             : base()
         { }
+
+        public DevHubTelescopeStatus( DevHubTelescopeStatus other )
+            : base( other )
+		{
+            this.IsCounterWeightUp = other.IsCounterWeightUp;
+            this.LocalHourAngle = other.LocalHourAngle;
+            this.ParkingState = other.ParkingState;
+		}
 
         public DevHubTelescopeStatus( TelescopeManager mgr )
             : base( mgr )
@@ -130,7 +137,21 @@ namespace ASCOM.DeviceHub
             LocalHourAngle = Double.NaN;
         }
 
-        #endregion
+		#region ICloneable Implementation
+
+		object ICloneable.Clone()
+		{
+            return new DevHubTelescopeStatus( this );
+		}
+
+        public new DevHubTelescopeStatus Clone()
+		{
+            return new DevHubTelescopeStatus( this );
+		}
+
+        #endregion ICloneable Implementation
+
+        #endregion Public Methods
 
         #region Helper Methods
 
