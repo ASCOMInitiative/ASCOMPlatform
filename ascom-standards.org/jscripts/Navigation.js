@@ -167,7 +167,7 @@ function writesubmenu() {
 	    SubMenuOutput += "<li><a href=\"DevSamples.htm\">Samples &amp; Sources</a></li>";
 	    SubMenuOutput += "</ul>";
         break;
-    case 3: // Support
+    case 5: // Support
         SubMenuOutput += "<h3>Supported Devices</h3>";
         SubMenuOutput += "<ul class=\"treeview\">";
 		SubMenuOutput += "<li><a href=\"Cameras.htm\">Cameras</a></li>";
@@ -178,7 +178,7 @@ function writesubmenu() {
 		SubMenuOutput += "<li><a href=\"Scopes.htm\">Telescopes and Mounts</a></li>";
 	    SubMenuOutput += "</ul>";
         break;
-    case 4: // Standards
+    case 7: // Standards
         SubMenuOutput += "<h3>Standards</h3>";
         SubMenuOutput += "<ul class=\"treeview\">";
 		SubMenuOutput += "<li><a href=\"InterfacePrinciple.htm\">ASCOM Interface Principle</a></li>";
@@ -186,7 +186,7 @@ function writesubmenu() {
 		SubMenuOutput += "<li><a href=\"Requirements.htm\">General Requirements</a></li>";
 	    SubMenuOutput += "</ul>";
         break;
-    case 5: // Developers
+    case 6: // Developers
         SubMenuOutput += "<h3>Application Development</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
 		SubMenuOutput += "<li><a href=\"AppStart.htm\">Getting Started</a></li>";
@@ -218,14 +218,14 @@ function writesubmenu() {
 		SubMenuOutput += "<li><a href=\"ASCOM%20Alpaca%20API%20Reference.pdf\" target=\"_new\">API Reference (PDF)</a></li>";
 	    SubMenuOutput += "</ul>";
        break;
-    case 6: // Community
+    case 4: // Community
         SubMenuOutput += "<h3>Community</h3>";
 		SubMenuOutput += "<ul class=\"treeview\">";
 	    SubMenuOutput += "<li><a href=\"Partners.htm\">ASCOM Partners</a></li>";
 	    SubMenuOutput += "<li><a href=\"Advocacy.htm\">ASCOM Advocacy</a></li>";
 	    SubMenuOutput += "</ul>";
 	    break;
-    case 7: // FAQs
+    case 3: // FAQs
         SubMenuOutput += "<h3>Detailed FAQ Answers</h3>";
         SubMenuOutput += "<ul class=\"treeview\">";
 	    SubMenuOutput += "<li><a href=\"Plat6OnW7.htm\">Platform on Windows 7 &amp; 10</a></li>";
