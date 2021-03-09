@@ -77,12 +77,6 @@
                         <LineBreak />
                         <Run Text="+E/-W (mm):" />
                     </TextBlock>
-					<!--<TextBlock Grid.Row="0" Grid.Column="1" Height="20" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
-								ToolTip="Click the value to edit">
-						<Hyperlink  Command="{Binding EditEastWestOffsetCommand}">
-							<Run Text="{Binding ScopeOffsetEWX, FallbackValue=No value}" />
-						</Hyperlink>
-					</TextBlock>-->
 					<TextBox Grid.Row="0" Grid.Column="1" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
@@ -98,12 +92,6 @@
                         <Run Text="+N/-S (mm):" />
                     </TextBlock>
 
-					<!--<TextBlock Grid.Row="1" Grid.Column="1" Height="20" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
-								ToolTip="Click the value to edit">
-						<Hyperlink  Command="{Binding EditNorthSouthOffsetCommand}">
-							<Run Text="{Binding ScopeOffsetNSY, FallbackValue=No value}" />
-						</Hyperlink>
-					</TextBlock>-->
 					<TextBox Grid.Row="1" Grid.Column="1" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
@@ -120,12 +108,6 @@
                         <Run Text="+U/-D (mm):" />
                     </TextBlock>
 
-					<!--<TextBlock Grid.Row="2" Grid.Column="1" Height="20" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" 
-							   FontSize="16" ToolTip="Click the value to edit">
-						<Hyperlink  Command="{Binding EditUpDownOffsetCommand}">
-							<Run Text="{Binding ScopeOffsetUDZ, FallbackValue=No value}" />
-						</Hyperlink>
-					</TextBlock>-->
 					<TextBox Grid.Row="2" Grid.Column="1" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
@@ -138,12 +120,6 @@
 
 					<TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right" Margin="12,0,0,0"
                                 Text="Dome Radius (mm):" />
-					<!--<TextBlock Grid.Row="0" Grid.Column="3" Height="20" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" 
-							   FontSize="16" ToolTip="Click the value to edit">
-						<Hyperlink  Command="{Binding EditDomeRadiusCommand}">
-							<Run Text="{Binding DomeRadius, FallbackValue=No value}" />
-						</Hyperlink>
-					</TextBlock>-->
 					<TextBox Grid.Row="0" Grid.Column="3" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
@@ -159,12 +135,6 @@
                         <LineBreak />
                         <Run Text="Offset (mm):" />
                     </TextBlock>
-					<!--<TextBlock Grid.Row="1" Grid.Column="3" Height="20" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" 
-							   FontSize="16" ToolTip="Click the value to edit">
-						<Hyperlink  Command="{Binding EditGemAxisOffsetCommand}">
-							<Run Text="{Binding GemAxisOffset, FallbackValue=No value}" />
-						</Hyperlink>
-					</TextBlock>-->
 					<TextBox Grid.Row="1" Grid.Column="3" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
@@ -192,12 +162,6 @@
                         <LineBreak />
                         <Run Text="(deg):" />
                     </TextBlock>
-					<!--<TextBlock Grid.Row="0" Grid.Column="1" Height="20" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" 
-							   FontSize="16" ToolTip="Click the value to edit">
-						<Hyperlink  Command="{Binding EditAzimuthAccuracyCommand}">
-							<Run Text="{Binding AzimuthAccuracy, FallbackValue=No value}" />
-						</Hyperlink>
-					</TextBlock>-->
 					<TextBox Grid.Row="0" Grid.Column="1" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
@@ -213,12 +177,6 @@
                         <LineBreak />
                         <Run Text="(sec):" />
                     </TextBlock>
-					<!--<TextBlock Grid.Row="0" Grid.Column="3" Height="20" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" 
-							   FontSize="16" ToolTip="Click here to enter a value between 5 and 300 seconds">
-						<Hyperlink  Command="{Binding EditSlaveIntervalCommand}">
-							<Run Text="{Binding SlaveInterval, FallbackValue=No value}" />
-						</Hyperlink>
-					</TextBlock>-->
 					<TextBox Grid.Row="0" Grid.Column="3" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
