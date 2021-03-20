@@ -1012,9 +1012,8 @@ namespace ASCOM.DynamicRemoteClients
                                 ratesArray[i] = rate;
                                 i++;
                             }
-#pragma warning disable IDE0068 // Use recommended dispose pattern warning disabled because this class will be used by other processes so I'm not going to dispose it here
+
                             TrackingRates trackingRates = new TrackingRates();
-#pragma warning restore IDE0068 // Use recommended dispose pattern re-enabled
                             trackingRates.SetRates(ratesArray);
                             if (CallWasSuccessful(TL, trackingRatesResponse))
                             {
@@ -1083,9 +1082,7 @@ namespace ASCOM.DynamicRemoteClients
                         if (typeof(T) == typeof(IAxisRates))
                         {
                             AxisRatesResponse axisRatesResponse = JsonConvert.DeserializeObject<AxisRatesResponse>(deviceJsonResponse.Content);
-#pragma warning disable IDE0068 // Use recommended dispose pattern warning disabled because this class will be used by other processes so I'm not going to dispose it here
                             AxisRates axisRates = new AxisRates((TelescopeAxes)(Convert.ToInt32(parameters[SharedConstants.AXIS_PARAMETER_NAME])));
-#pragma warning restore IDE0068 // Use recommended dispose pattern re-enabled
                             TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, axisRatesResponse.ClientTransactionID.ToString(), axisRatesResponse.ServerTransactionID.ToString(), axisRatesResponse.Value.Count.ToString()));
                             foreach (RateResponse rr in axisRatesResponse.Value)
                             {
