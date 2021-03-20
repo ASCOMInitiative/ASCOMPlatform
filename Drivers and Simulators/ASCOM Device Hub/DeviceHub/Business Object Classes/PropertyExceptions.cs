@@ -16,6 +16,10 @@ namespace ASCOM.DeviceHub
 		{
 			this.Exceptions = new Dictionary<string, Exception>();
 
+			foreach ( KeyValuePair<string, Exception> kvp in other.Exceptions )
+			{
+				this.Exceptions.Add( kvp.Key, kvp.Value );
+			}
 		}
 
 		public Exception GetException( string propertyName )

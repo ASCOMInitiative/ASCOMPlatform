@@ -4,12 +4,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+using ASCOM.Astrometry.AstroUtils;
 using ASCOM.Astrometry.Transform;
 using ASCOM.DeviceInterface;
 
 using ASCOM.DeviceHub.MvvmMessenger;
-using ASCOM.Astrometry.AstroUtils;
-using System.Diagnostics;
 
 namespace ASCOM.DeviceHub
 {
@@ -90,9 +89,8 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private bool IsSlaved { get; set; }
-
 		private SlewInProgressMessage PreviousSlewInProgressMessage { get; set; }
+
 		#endregion Private Properties
 
 		#region Instance Constructor
@@ -104,7 +102,6 @@ namespace ASCOM.DeviceHub
 			Capabilities = null;
 			Parameters = null;
 			Status = null;
-			IsSlaved = false;
 			PulseGuideEnd = DateTime.MinValue;
 			PollingTask = null;
 
@@ -251,6 +248,7 @@ namespace ASCOM.DeviceHub
 					IsConnected = false;
 					Messenger.Default.Send( new DeviceDisconnectedMessage( DeviceTypeEnum.Telescope ) );
 					ReleaseTelescopeService();
+					Globals.LatestRawTelescopeStatus = null;
 				}
 			}
 		}
@@ -737,8 +735,22 @@ namespace ASCOM.DeviceHub
 			}
 			else
 			{
+				Globals.LatestRawTelescopeStatus = sts.Clone();
+				AdjustForCompositeSlewing( sts );
 				Status = sts;
+
 				Messenger.Default.Send( new TelescopeStatusUpdatedMessage( sts ) );
+			}
+		}
+
+		private void AdjustForCompositeSlewing( DevHubTelescopeStatus sts )
+		{
+			if ( Globals.LatestRawDomeStatus != null && Globals.IsDomeSlaved && Globals.UseCompositeSlewingFlag )
+			{
+				if ( Globals.LatestRawDomeStatus.Slewing )
+				{
+					sts.Slewing = true;
+				}
 			}
 		}
 

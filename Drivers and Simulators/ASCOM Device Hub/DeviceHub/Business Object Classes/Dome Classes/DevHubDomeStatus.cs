@@ -3,7 +3,7 @@ using ASCOM.DeviceInterface;
 
 namespace ASCOM.DeviceHub
 {
-	public class DevHubDomeStatus : AscomDomeStatus
+	public class DevHubDomeStatus : AscomDomeStatus, ICloneable
     {
 		public static DevHubDomeStatus GetEmptyStatus()
 		{
@@ -16,6 +16,15 @@ namespace ASCOM.DeviceHub
 		public DevHubDomeStatus()
 			: base()
 		{}
+
+		public DevHubDomeStatus( DevHubDomeStatus other )
+			: base( other )
+		{
+			this.HomingState = other.HomingState;
+			this.ParkingState = other.ParkingState;
+			this.ShutterPosition = other.ShutterPosition;
+			this.LastUpdateTime = other.LastUpdateTime;
+		}
 
 		public DevHubDomeStatus( DomeManager mgr )
 			: base( mgr )
@@ -130,6 +139,16 @@ namespace ASCOM.DeviceHub
 			HomingState = HomingStateEnum.NotAtHome;
 
 			LastUpdateTime = DateTime.Now;
+		}
+
+		object ICloneable.Clone()
+		{
+			return new DevHubDomeStatus( this );
+		}
+
+		public new DevHubDomeStatus Clone()
+		{
+			return new DevHubDomeStatus( this );
 		}
 
 		#endregion Helper Methods

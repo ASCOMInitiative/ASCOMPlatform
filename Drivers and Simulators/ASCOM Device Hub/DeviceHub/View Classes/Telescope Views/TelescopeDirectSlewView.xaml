@@ -217,13 +217,6 @@
 
 					<!-- Right Ascension HH MM SS -->
 
-					<!--<TextBlock Grid.Row="0" Height="22" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0" FontSize="16"
-							   ToolTip="Click here to change the target right ascension"
-							   Visibility="{Binding UseDecimalHours, Converter={StaticResource NegatedBooleanToVisibilityConverter}}" >
-						<Hyperlink Command="{Binding EditRightAscensionCommand}">
-							<Run Text="{Binding TargetRightAscension, Converter={StaticResource RightAscensionValueConverter}, FallbackValue=No value}" />
-						</Hyperlink>
-					</TextBlock>-->
 					<TextBox Grid.Row="0" Height="22" Width="80" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0" FontSize="12"
 							 VerticalContentAlignment="Top" Padding="0,0,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan"

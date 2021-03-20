@@ -61,6 +61,7 @@
 							<RowDefinition Height="Auto" />
 							<RowDefinition Height="Auto" />
 							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
 						</Grid.RowDefinitions>
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
@@ -81,6 +82,9 @@
 						<CheckBox Grid.Row="3" Grid.Column="0" Margin="10,6" Content="Keep Device Hub Window On Top (requires restart)" Foreground="{DynamicResource NormalTextBrush}" 
 							  ToolTip="Keep Device Hub main window on top of other main windows"
 							  IsChecked="{Binding KeepWindowOnTop}" />
+						<CheckBox Grid.Row="4" Grid.Column="0" Margin="10,6" Content="Report Composite Slewing When Dome Is Slaved" Foreground="{DynamicResource NormalTextBrush}" 								  
+							  ToolTip="When the dome is slaved to the telescope, both devices report Slewing = True while either device is slewing."
+							  IsChecked="{Binding UseCompositeSlewingFlag}" />
 					</Grid>
 				</Grid>
 			</TabItem>

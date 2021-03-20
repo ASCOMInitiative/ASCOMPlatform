@@ -45,6 +45,7 @@ namespace ASCOM.DeviceHub
 		public bool UseCustomTheme { get; set; }
 		public bool UseExpandedScreenLayout { get; set; }
 		public bool AlwaysOnTop { get; set; }
+		public bool UseCompositeSlewingFlag { get; set; }
 
 		#endregion Public Properties
 

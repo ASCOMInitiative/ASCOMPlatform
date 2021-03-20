@@ -96,6 +96,7 @@ namespace ASCOM.DeviceHub
 
 			Messenger.Default.Register<TelescopeParametersUpdatedMessage>( this, ( action ) => UpdateTelescopeParameters( action ) );
 			Messenger.Default.Register<TelescopeStatusUpdatedMessage>( this, ( action ) => UpdateTelescopeStatus( action ) );
+			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => ClearTelescopeStatus( action ) );
 			Messenger.Default.Register<SlewInProgressMessage>( this, ( action ) => InitiateSlavedSlew( action ) );
 		}
 
@@ -274,6 +275,7 @@ namespace ASCOM.DeviceHub
 					Messenger.Default.Send( new DomeSlavedChangedMessage( false ) );
 					Messenger.Default.Send( new DeviceDisconnectedMessage( DeviceTypeEnum.Dome ) );
 					ReleaseDomeService();
+					Globals.LatestRawDomeStatus = null;
 				}
 			}
 		}
@@ -468,7 +470,7 @@ namespace ASCOM.DeviceHub
 
 				if ( SlavedSlewState.IsSlewInProgress ) // The telescope is being slewed.
 				{
-					if ( !Status.Slewing )
+					if ( !Status.Slewing || Globals.UseCompositeSlewingFlag )
 					{
 						// The telescope is slewing and we are slaved but not slewing so initiate a dome slew
 						// to the telescope's target position.
@@ -512,10 +514,10 @@ namespace ASCOM.DeviceHub
 				}
 				else if ( DateTime.Now > nextAdjustmentTime )
 				{
-					if ( !Status.Slewing )
+					if ( !Status.Slewing || (TelescopeStatus.Slewing && Globals.UseCompositeSlewingFlag ) )
 					{
-						// Here is where we re-slew the dome to adjust for non-slew scope movement such as
-						// tracking or jogging.
+						// Here is where we re-slew the dome to adjust for non-slew scope movement such as parking,
+						// tracking, or jogging.
 
 						LogActivityLine( ActivityMessageTypes.Commands
 										, "Dome position recalculation due to periodic timer expiration." );
@@ -673,9 +675,24 @@ namespace ASCOM.DeviceHub
 			}
 			else
 			{
+				Globals.LatestRawDomeStatus = sts.Clone();
+
+				AdjustForCompositeSlewing( sts );
 				Status = sts;
+
 				StatusUpdated = true;
 				Messenger.Default.Send( new DomeStatusUpdatedMessage( sts ) );
+			}
+		}
+
+		private void AdjustForCompositeSlewing( DevHubDomeStatus sts )
+		{
+			if ( Globals.LatestRawTelescopeStatus != null && Globals.IsDomeSlaved && Globals.UseCompositeSlewingFlag )
+			{
+				if ( Globals.LatestRawTelescopeStatus.Slewing )
+				{
+					sts.Slewing = true;
+				}
 			}
 		}
 
@@ -903,6 +920,14 @@ namespace ASCOM.DeviceHub
 		private void UpdateTelescopeStatus( TelescopeStatusUpdatedMessage action )
 		{
 			TelescopeStatus = action.Status;
+		}
+
+		private void ClearTelescopeStatus( DeviceDisconnectedMessage action )
+		{
+			if ( action.DeviceType == DeviceTypeEnum.Telescope )
+			{
+				TelescopeStatus = null;
+			}
 		}
 
 		private void InitiateSlavedSlew( SlewInProgressMessage action )
