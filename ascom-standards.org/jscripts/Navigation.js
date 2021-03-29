@@ -117,7 +117,9 @@ function writesubmenu() {
         SubMenuOutput += "<li><a href=\"Support/Index.htm\">Support</a></li>";
         SubMenuOutput += "<li><a href=\"Developer/Index.htm\">Developers</a></li>";
         SubMenuOutput += "<li><a href=\"Standards/Index.htm\">Standards</a></li>";
-        SubMenuOutput += "</ul>";
+ 	    SubMenuOutput += "<li><a href=\"https://ascomtalk.groups.io/g/Help/wiki\" target=\"_new\">Users Wiki</a></li>";
+	    SubMenuOutput += "<li><a href=\"https://ascomtalk.groups.io/g/Developer/wiki\" target=\"_new\">Developers Wiki</a></li>";
+       SubMenuOutput += "</ul>";
         break;
     case 1: // About
         SubMenuOutput += "<h3>About ASCOM</h3>";
@@ -191,7 +193,8 @@ function writesubmenu() {
 	    SubMenuOutput += "<ul class=\"treeview\">";
 		SubMenuOutput += "<li><a href=\"AppStart.htm\">Getting Started</a></li>";
 		SubMenuOutput += "<li><a href=\"ClientToolkit.htm\">.NET Client Toolkit</a></li>";
- 	    SubMenuOutput += "</ul>";
+ 	    SubMenuOutput += "<li><a href=\"https://ascomtalk.groups.io/g/Developer/wiki\" target=\"_new\">Developers Wiki</a></li>";
+	    SubMenuOutput += "</ul>";
         SubMenuOutput += "<h3>Driver Design Principles</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
 		SubMenuOutput += "<li><a href=\"Principles.htm\">The General Principles</a></li>";
@@ -223,6 +226,8 @@ function writesubmenu() {
 		SubMenuOutput += "<ul class=\"treeview\">";
 	    SubMenuOutput += "<li><a href=\"Partners.htm\">ASCOM Partners</a></li>";
 	    SubMenuOutput += "<li><a href=\"Advocacy.htm\">ASCOM Advocacy</a></li>";
+	    SubMenuOutput += "<li><a href=\"https://ascomtalk.groups.io/g/Help/wiki\" target=\"_new\">Users Wiki</a></li>";
+	    SubMenuOutput += "<li><a href=\"https://ascomtalk.groups.io/g/Developer/wiki\" target=\"_new\">Developers Wiki</a></li>";
 	    SubMenuOutput += "</ul>";
 	    break;
     case 3: // FAQs
@@ -234,6 +239,8 @@ function writesubmenu() {
 	    SubMenuOutput += "<li><a href=\"SoftwareVictory.htm\">Correcting for Problems</a></li>";
 //	    SubMenuOutput += "<li><a href=\"TheSky.htm\">Working With TheSky</a></li>";
 	    SubMenuOutput += "<li><a href=\"DevHub.htm\">Using DeviceHub</a></li>";
+	    SubMenuOutput += "<li><a href=\"https://ascomtalk.groups.io/g/Help/wiki\" target=\"_new\">Users Wiki</a></li>";
+	    SubMenuOutput += "<li><a href=\"https://ascomtalk.groups.io/g/Developer/wiki\" target=\"_new\">Developers Wiki</a></li>";
 	    SubMenuOutput += "</ul>";
 	    break;
 	default:
