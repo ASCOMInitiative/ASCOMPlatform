@@ -13,7 +13,7 @@ namespace ASCOM.DeviceHub
 
 			if ( rawDegrees < minDegrees || rawDegrees > maxDegrees )
 			{
-				string msg = String.Format( "Degree value must be greater than or equal to {0} and less than or equal to {1}.", minDegrees, maxDegrees );
+				string msg = $"Degree value must be greater than or equal to {minDegrees} and less than or equal to {maxDegrees}.";
 
 				throw new ASCOM.InvalidValueException( msg );
 			}
@@ -34,7 +34,7 @@ namespace ASCOM.DeviceHub
 
 			if ( degrees < minDegrees || degrees > maxDegrees )
 			{
-				string msg = String.Format( "Degrees must be greater than or equal to {0} and less than or equal to {1}.", minDegrees, maxDegrees );
+				string msg = $"Degrees must be greater than or equal to {minDegrees} and less than or equal to {maxDegrees}.";
 
 				throw new ASCOM.InvalidValueException( msg );
 			}
@@ -90,7 +90,7 @@ namespace ASCOM.DeviceHub
 			char signChar = ( _degrees < 0.0 ) ? '-' : ' ';
 			decimal degrees = Math.Abs( _degrees );
 
-			return String.Format( "{0}{1:000}° {2:00}' {3:00}\"", signChar, degrees, _minutes, _seconds );
+			return $"{signChar}{degrees:000}° {_minutes:00}' {_seconds:00}\"";
 		}
 
 		private decimal DmsToDec( int degrees, int minutes, int seconds )

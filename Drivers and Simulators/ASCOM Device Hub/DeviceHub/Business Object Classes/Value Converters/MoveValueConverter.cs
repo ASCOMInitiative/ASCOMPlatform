@@ -10,7 +10,7 @@ namespace ASCOM.DeviceHub
 		{
 			int moveAmount = (int)value;
 
-			return String.Format( "{0} step{1}/move", moveAmount, moveAmount == 1 ? "" : "s" );
+			return $"{moveAmount} step{(moveAmount == 1 ? "" : "s")}/move";
 		}
 
 		public object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )

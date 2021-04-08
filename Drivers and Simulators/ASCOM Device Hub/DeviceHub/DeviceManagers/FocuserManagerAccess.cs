@@ -56,7 +56,8 @@ namespace ASCOM.DeviceHub
 			{
 				if ( throwException )
 				{
-					string msg = String.Format( "The {0} object is null.", DeviceType );
+					string msg = $"The {DeviceType.GetDisplayName()} object is null.";
+
 					throw new NullReferenceException( msg );
 				}
 
@@ -71,7 +72,8 @@ namespace ASCOM.DeviceHub
 			{
 				if ( throwException )
 				{
-					string msg = String.Format( "There is no connected {0}.", DeviceType );
+					string msg = $"There is no connected {DeviceType.GetDisplayName()}.";
+
 					throw new NotConnectedException( msg );
 				}
 

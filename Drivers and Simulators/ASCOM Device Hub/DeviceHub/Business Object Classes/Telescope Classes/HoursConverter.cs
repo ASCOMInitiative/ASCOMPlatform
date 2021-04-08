@@ -13,9 +13,8 @@ namespace ASCOM.DeviceHub
 
 			if ( rawHours < minHours || rawHours >= maxHours )
 			{
-				string msg = String.Format( "Hour value must be greater than or equal to {0} and less than  {1}.", minHours, maxHours );
-
-				throw new ASCOM.InvalidValueException( msg );
+				throw new ASCOM.InvalidValueException( 
+							$"Hour value must be greater than or equal to {minHours} and less than {maxHours}." );
 			}
 
 			_minHours = minHours;
@@ -34,9 +33,8 @@ namespace ASCOM.DeviceHub
 
 			if ( hours < minHours || hours > maxHours )
 			{
-				string msg = String.Format( "Hour value must be greater than or equal to {0} and less than or equal to {1}.", minHours, maxHours );
-
-				throw new ASCOM.InvalidValueException( msg );
+				throw new ASCOM.InvalidValueException(
+							$"Hour value must be greater than or equal to {minHours} and less than or equal to {maxHours}." );
 			}
 
 			if ( ( hours == minHours || hours == maxHours )
@@ -85,8 +83,7 @@ namespace ASCOM.DeviceHub
 		{
 			decimal hours = Math.Abs( _hours );
 
-			return String.Format( "{0}{1:00}:{2:00}:{3:00}"
-				, ( _hours < 0.0 ) ? "-" : "", hours, _minutes, _seconds );
+			return $"{( _hours < 0.0 ? "-" : "" )}{hours:00}:{_minutes:00}:{_seconds:00}";
 		}
 
 		private decimal HmsToHours( int hours, int minutes, int seconds )

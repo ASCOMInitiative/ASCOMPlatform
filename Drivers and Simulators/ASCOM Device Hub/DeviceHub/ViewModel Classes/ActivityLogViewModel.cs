@@ -472,8 +472,8 @@ namespace ASCOM.DeviceHub
 				if ( (uint)xcp.HResult == 0x800401d0 )
 				{
 					string processName = GetClipboardLocker();
-					msg = String.Format( "Control of the Windows Clipboard has been taken by a process named {0}.\r\n\r\nPlease wait and try again or close {0} to release the Clipboard..",
-						( String.IsNullOrEmpty( processName ) ) ? "" : processName );
+					processName = String.IsNullOrEmpty( processName ) ? "Unknown process" : processName;
+					msg = $"Control of the Windows Clipboard has been taken by a process named {processName}.\r\n\r\nPlease wait and try again or close {processName} to release the Clipboard..";
 				}
 
 				IMessageBoxService svc = ServiceContainer.Instance.GetService<IMessageBoxService>();

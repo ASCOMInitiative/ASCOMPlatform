@@ -68,8 +68,7 @@ namespace ASCOM.DeviceHub
 			// attached to the server for debugging.
 
 			//int procId = Process.GetCurrentProcess().Id;
-			//string msg = String.Format( "Attach the debugger to process #{0} now.", procId );
-			//MessageBox.Show( msg );
+			//MessageBox.Show( $"Attach the debugger to process #{procId} now." );
 
 			Globals.UISyncContext = TaskScheduler.FromCurrentSynchronizationContext();
 
@@ -194,6 +193,9 @@ namespace ASCOM.DeviceHub
 
 		public static int CountObject( DeviceTypeEnum devType )
 		{
+
+			string name = devType.GetDisplayName();
+
 			int retval;
 
 			// Increment the count of objects for the specified device type.
@@ -389,8 +391,8 @@ namespace ASCOM.DeviceHub
 
 			if ( ObjectsCount > 0 )
 			{
-				string text = String.Format( "Device Hub has {0} client connection{1}. Are you sure that you want to shut down?"
-											, ObjectsCount, ( ObjectsCount > 1 ) ? "s" : "" );
+				string text = $"Device Hub has {ObjectsCount} client connection{(ObjectsCount > 1 ? "s" : "")}. "
+								+ "Are you sure that you want to shut down ? ";
 				string title = "Confirm Forced Shutdown";
 
 				MessageBoxResult result = msgSvc.Show( text, title, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No, MessageBoxOptions.None );
@@ -405,7 +407,7 @@ namespace ASCOM.DeviceHub
 
 				if ( deviceConnections )
 				{
-					string text = String.Format( "Device Hub is still connected to one or more devices. Are you sure that you want to shut down?", Server.ObjectsCount );
+					string text = "Device Hub is still connected to one or more devices. Are you sure that you want to shut down?";
 					string title = "Confirm Forced Shutdown";
 
 					MessageBoxResult result = msgSvc.Show( text, title, MessageBoxButton.YesNo, MessageBoxImage.Question, System.Windows.MessageBoxResult.No, System.Windows.MessageBoxOptions.None );
@@ -498,7 +500,7 @@ namespace ASCOM.DeviceHub
 				}
 				catch ( Exception e )
 				{
-					string msg = String.Format( "Failed to load served COM class assembly {0} - {1}", file.Name, e.Message );
+					string msg = $"Failed to load served COM class assembly {file.Name} - {e.Message}";
 					throw new Exception( msg, e );
 				}
 			}
@@ -637,8 +639,7 @@ namespace ASCOM.DeviceHub
 
 					// HKCR\APPID\exename.ext
 
-				using ( RegistryKey key = Registry.ClassesRoot.CreateSubKey( string.Format( "APPID\\{0}",
-						GetExecutableFileName() ) ) )
+				using ( RegistryKey key = Registry.ClassesRoot.CreateSubKey( $"APPID\\{GetExecutableFileName()}" ) )
 				{
 					key.SetValue( "AppID", _appId );
 				}
@@ -668,7 +669,7 @@ namespace ASCOM.DeviceHub
 
 					string deviceType = type.Name;
 
-					using ( RegistryKey key = Registry.ClassesRoot.CreateSubKey( string.Format( "CLSID\\{0}", clsid ) ) )
+					using ( RegistryKey key = Registry.ClassesRoot.CreateSubKey( $"CLSID\\{clsid}" ) )
 					{
 						key.SetValue( null, progid );                     // Could be assyTitle/Desc??, but .NET components show ProgId here
 						key.SetValue( "AppId", _appId );
@@ -776,8 +777,8 @@ namespace ASCOM.DeviceHub
 
 			// Local server's DCOM/AppID information
 
-			Registry.ClassesRoot.DeleteSubKey( String.Format( "APPID\\{0}", _appId ), false );
-			Registry.ClassesRoot.DeleteSubKey( String.Format( "APPID\\{0}", GetExecutableFileName() ), false );
+			Registry.ClassesRoot.DeleteSubKey( $"APPID\\{_appId}", false );
+			Registry.ClassesRoot.DeleteSubKey( $"APPID\\{GetExecutableFileName()}", false );
 
 			// For each of the driver assemblies
 
@@ -791,17 +792,17 @@ namespace ASCOM.DeviceHub
 
 				// HKCR\progid
 
-				Registry.ClassesRoot.DeleteSubKey( String.Format( "{0}\\CLSID", progid ), false );
+				Registry.ClassesRoot.DeleteSubKey( $"{progid}\\CLSID", false );
 				Registry.ClassesRoot.DeleteSubKey( progid, false );
 
 				// HKCR\CLSID\clsid
 
-				Registry.ClassesRoot.DeleteSubKey( String.Format( "CLSID\\{0}\\Implemented Categories\\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}", clsid ), false );
-				Registry.ClassesRoot.DeleteSubKey( String.Format( "CLSID\\{0}\\Implemented Categories", clsid ), false );
-				Registry.ClassesRoot.DeleteSubKey( String.Format( "CLSID\\{0}\\ProgId", clsid ), false );
-				Registry.ClassesRoot.DeleteSubKey( String.Format( "CLSID\\{0}\\LocalServer32", clsid ), false );
-				Registry.ClassesRoot.DeleteSubKey( String.Format( "CLSID\\{0}\\Programmable", clsid ), false );
-				Registry.ClassesRoot.DeleteSubKey( String.Format( "CLSID\\{0}", clsid ), false );
+				Registry.ClassesRoot.DeleteSubKey( $"CLSID\\{clsid}\\Implemented Categories\\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}", false );
+				Registry.ClassesRoot.DeleteSubKey( $"CLSID\\{clsid}\\Implemented Categories", false );
+				Registry.ClassesRoot.DeleteSubKey( $"CLSID\\{clsid}\\ProgId", false );
+				Registry.ClassesRoot.DeleteSubKey( $"CLSID\\{clsid}\\LocalServer32", false );
+				Registry.ClassesRoot.DeleteSubKey( $"CLSID\\{clsid}\\Programmable", false );
+				Registry.ClassesRoot.DeleteSubKey( $"CLSID\\{clsid}", false );
 
 				if ( !keepProfile )
 				{

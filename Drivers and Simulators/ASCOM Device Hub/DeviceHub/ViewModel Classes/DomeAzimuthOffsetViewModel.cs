@@ -11,7 +11,7 @@ namespace ASCOM.DeviceHub
 		public DomeAzimuthOffsetViewModel()
 			: base( "DomeAzimuthAdjustment" )
 		{
-			_description = String.Format( "Enter the dome azimuth adjustment, in degrees" );
+			_description = "Enter the dome azimuth adjustment, in degrees";
 
 			_rotarySliderVm = new RotarySliderViewModel
 			{

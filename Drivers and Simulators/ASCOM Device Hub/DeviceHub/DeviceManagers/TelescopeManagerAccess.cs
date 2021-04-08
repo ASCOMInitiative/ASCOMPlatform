@@ -777,7 +777,7 @@ namespace ASCOM.DeviceHub
 			ActivityMessageTypes messageType = ActivityMessageTypes.Capabilities;
 
 			string axisName = GetNameFromAxis( axis );
-			string msg = String.Format( "Calling AxisRates( {0} )", axisName );
+			string msg = $"Calling AxisRates( {axisName} )";
 
 			try
 			{
@@ -825,7 +825,7 @@ namespace ASCOM.DeviceHub
 			ActivityMessageTypes messageType = ActivityMessageTypes.Capabilities;
 
 			string axisName = GetNameFromAxis( axis );
-			string msg = String.Format( "Calling CanMoveAxis( {0} )", axisName );
+			string msg = $"Calling CanMoveAxis( {axisName} )";
 
 			try
 			{

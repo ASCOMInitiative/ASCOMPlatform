@@ -140,11 +140,11 @@ namespace ASCOM.DeviceHub
 
 			if ( factor < 100 )
 			{
-				retval = String.Format( "{0:###}X Sidereal", factor );
+				retval = $"{factor:###}X Sidereal";
 			}
 			else 
 			{			
-				retval = String.Format( "{0:0.##} °/sec", rateValue );
+				retval = $"{rateValue:0.##} °/sec";
 			}
 
 			return retval;

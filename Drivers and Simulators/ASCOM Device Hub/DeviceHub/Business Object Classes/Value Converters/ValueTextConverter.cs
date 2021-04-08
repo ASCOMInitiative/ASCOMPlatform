@@ -9,7 +9,8 @@ namespace ASCOM.DeviceHub
 				  System.Globalization.CultureInfo culture )
 		{
 			double v = (double)value;
-			return String.Format( "{0:F2}", v );
+
+			return $"{v:F2}";
 		}
 
 		public object ConvertBack( object value, Type targetType, object parameter,

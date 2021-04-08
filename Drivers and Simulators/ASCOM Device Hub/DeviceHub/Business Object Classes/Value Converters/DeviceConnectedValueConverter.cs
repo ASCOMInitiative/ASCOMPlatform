@@ -13,7 +13,7 @@ namespace ASCOM.DeviceHub
 			string device = parameter.ToString();
 
 
-			return String.Format( "{0} {1}", isConnected ? "Disconnect" : "Connect", device );
+			return $"{(isConnected ? "Disconnect" : "Connect")} {device}";
 		}
 
 		public object ConvertBack( object value, Type targetType, object parameter, System.Globalization.CultureInfo culture )
