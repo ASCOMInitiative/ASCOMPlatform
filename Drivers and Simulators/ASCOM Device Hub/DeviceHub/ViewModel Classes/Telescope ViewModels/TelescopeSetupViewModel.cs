@@ -118,7 +118,7 @@ namespace ASCOM.DeviceHub
 
 			if ( newID == Globals.DevHubTelescopeID )
 			{
-				string msg = Globals.DevHubTelescopeID + " cannot be chosen as the telescope!";
+				string msg = $"{Globals.DevHubTelescopeID} cannot be chosen as the telescope!";
 				ShowMessage( msg, "Invalid Telescope Selected" );
 
 				return;

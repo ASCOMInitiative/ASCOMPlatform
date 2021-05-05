@@ -11,7 +11,7 @@ namespace ASCOM.DeviceHub
 			string deviceType = parameter.ToString();
 			string id = ( value != null ) ? value.ToString() : "";
 
-			return ( String.IsNullOrEmpty( id ) ) ? String.Format("(No {0})", deviceType) : id;
+			return ( String.IsNullOrEmpty( id ) ) ? $"(No {deviceType})" : id;
 		}
 
 		public object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )

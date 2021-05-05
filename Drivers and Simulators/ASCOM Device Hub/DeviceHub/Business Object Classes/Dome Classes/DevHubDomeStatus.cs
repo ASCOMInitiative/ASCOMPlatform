@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+
 using ASCOM.DeviceInterface;
 
 namespace ASCOM.DeviceHub
@@ -101,6 +103,7 @@ namespace ASCOM.DeviceHub
 		{
 			string position = "Unknown";
 			ShutterState shutterStatus = this.ShutterStatus;
+
 			double fractionOpen = ( mgr.Capabilities.CanSetAltitude ) ? this.Altitude / 90.0 : Double.NaN;
 			bool useFraction = ( !Double.IsNaN( fractionOpen ) );
 
@@ -111,22 +114,27 @@ namespace ASCOM.DeviceHub
 					break;
 
 				case ShutterState.shutterClosing:
-					position = "Closing" + ( ( useFraction ) ? String.Format( " at {0:P0}", fractionOpen ) : "" );
+					position = "Closing";
+
 					break;
 
 				case ShutterState.shutterError:
 					position = "Unknown";
+
 					break;
 
 				case ShutterState.shutterOpen:
-					position = "Open" + ( ( useFraction ) ? String.Format( " at {0:P0}", fractionOpen ) : "" );
+					position = "Open";
+
 					break;
 
 				case ShutterState.shutterOpening:
-					position = "Opening" + ( ( useFraction ) ? String.Format( " at {0:P0}", fractionOpen ) : "" );
+					position = "Opening";
 
 					break;
 			}
+
+			position += ( useFraction ) ? $" at {fractionOpen:P0}" : "";
 
 			return position;
 		}

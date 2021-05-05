@@ -207,7 +207,7 @@ namespace ASCOM.DeviceHub
 						break;
 				}
 
-				TrackingRateText = String.Format( "Currently tracking at the {0} rate.", rate );
+				TrackingRateText = $"Currently tracking at the {rate} rate.";
 			}
 		}
 

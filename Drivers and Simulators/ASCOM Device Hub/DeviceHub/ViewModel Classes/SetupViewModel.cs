@@ -162,7 +162,7 @@ namespace ASCOM.DeviceHub
 			{}
 			else
 			{
-				string msg = String.Format( "SetupViewModel.ChangeActiveFunction called with invalid function Name - {0}", functionName );
+				string msg = $"SetupViewModel.ChangeActiveFunction called with invalid function Name - {functionName}.";
 				throw new ArgumentException( msg );
 			}
 		}

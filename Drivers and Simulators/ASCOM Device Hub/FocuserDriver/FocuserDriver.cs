@@ -31,6 +31,8 @@ using System.Threading.Tasks;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 
+using static System.FormattableString;
+
 namespace ASCOM.DeviceHub
 {
 	// Your driver's DeviceID is ASCOM.DeviceHub.Focuser
@@ -161,7 +163,7 @@ namespace ASCOM.DeviceHub
 				try
 				{
 					retval = FocuserManager.SupportedActions;
-					msg += "Returning list from driver" + _done;
+					msg += $"Returning list from driver{_done}";
 				}
 				catch ( Exception )
 				{
@@ -187,12 +189,12 @@ namespace ASCOM.DeviceHub
 				throw new InvalidValueException( "Action method: no actionName was provided." );
 			}
 
-			string msg = String.Format( "Action {0}, parameters {1}", actionName, actionParameters );
+			string msg = $"Action {actionName}, parameters {actionParameters}";
 
 			try
 			{
 				retval = FocuserManager.Action( actionName, actionParameters );
-				msg += String.Format( ", returned {0}{1}", retval, _done );
+				msg += $", returned {retval}{_done}";
 			}
 			catch ( Exception )
 			{
@@ -210,7 +212,7 @@ namespace ASCOM.DeviceHub
 
 		public void CommandBlind( string command, bool raw )
 		{
-			string msg = String.Format( "Command {0}, Raw {1}", command, raw );
+			string msg = $"Command {command}, Raw {raw}";
 
 			try
 			{
@@ -232,12 +234,12 @@ namespace ASCOM.DeviceHub
 		public bool CommandBool( string command, bool raw )
 		{
 			bool retval;
-			string msg = String.Format( "Command {0}, Raw {1}", command, raw );
+			string msg = $"Command {command}, Raw {raw}";
 
 			try
 			{
 				retval = FocuserManager.CommandBool( command, raw );
-				msg += String.Format( ", Returned {0}{1}.", retval, _done );
+				msg += $", Returned {retval}{_done}.";
 			}
 			catch ( Exception )
 			{
@@ -256,12 +258,12 @@ namespace ASCOM.DeviceHub
 		public string CommandString( string command, bool raw )
 		{
 			string retval;
-			string msg = String.Format( "Command {0}, Raw {1}", command, raw );
+			string msg = $"Command {command}, Raw {raw}";
 
 			try
 			{
 				retval = FocuserManager.CommandString( command, raw );
-				msg += String.Format( ", Returned {0}{1}.", retval, _done );
+				msg += $", Returned {retval}{_done}.";
 			}
 			catch ( Exception )
 			{
@@ -297,7 +299,7 @@ namespace ASCOM.DeviceHub
 			}
 			set
 			{
-				string msg = String.Format( "Setting Connected to {0}", value );
+				string msg = $"Setting Connected to {value}";
 
 				try
 				{
@@ -310,14 +312,14 @@ namespace ASCOM.DeviceHub
 
 					if ( value )
 					{
-						msg += String.Format( " (connecting to {0})", FocuserManager.FocuserID );
+						msg += $" (connecting to {FocuserManager.FocuserID})";
 
 						// Do this on the U/I thread.
 
-						Task task = new Task(() =>
+						Task task = new Task( () =>
 						{
 							ConnectedState = FocuserManager.Connect();
-						});
+						} );
 
 						task.Start(Globals.UISyncContext);
 						task.Wait();
@@ -326,7 +328,7 @@ namespace ASCOM.DeviceHub
 					{
 						ConnectedState = false;
 						Server.DisconnectFocuserIf();
-						msg += String.Format( " (disconnecting from {0}){1}", FocuserManager.FocuserID, _done );
+						msg += $" (disconnecting from {FocuserManager.FocuserID}){_done}";
 					}
 				}
 				catch ( Exception )
@@ -357,7 +359,7 @@ namespace ASCOM.DeviceHub
 			get
 			{
 				Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-				string driverInfo = "DeviceHub focuser driver. Version: " + String.Format( CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor );
+				string driverInfo = Invariant( $"DeviceHub focuser driver. Version: {version.Major}.{version.Minor}" );
 
 				LogMessage( "Get DriverInfo:", driverInfo );
 
@@ -370,7 +372,7 @@ namespace ASCOM.DeviceHub
 			get
 			{
 				Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-				string driverVersion = String.Format( CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor );
+				string driverVersion = Invariant( $"{version.Major}.{version.Minor}" );
 
 				LogMessage( "Get DriverVersion:", driverVersion );
 
@@ -404,7 +406,7 @@ namespace ASCOM.DeviceHub
 
 				if ( !String.IsNullOrEmpty( downstreamName ) )
 				{
-					name += " -> " + downstreamName;
+					name += $" -> {downstreamName}";
 				}
 
 				LogMessage( "Get Name", name );
@@ -434,7 +436,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = FocuserManager.Parameters.Absolute;
-					msg += retval.ToString() + _done;
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -498,7 +500,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = FocuserManager.Status.IsMoving;
-					msg += String.Format( "{0}{1}", retval, _done );
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -525,7 +527,7 @@ namespace ASCOM.DeviceHub
 			}
 			set
 			{
-				string msg = String.Format( "Setting Link to {0}", value );
+				string msg = $"Setting Link to {value}";
 
 				try
 				{
@@ -538,7 +540,7 @@ namespace ASCOM.DeviceHub
 
 					if ( value )
 					{
-						msg += String.Format( " (connecting to {0})", FocuserManager.FocuserID );
+						msg += $" (connecting to {FocuserManager.FocuserID})";
 
 						// Do this on the U/I thread.
 
@@ -555,7 +557,7 @@ namespace ASCOM.DeviceHub
 						FocuserManager.Disconnect();
 						ConnectedState = false;
 						Server.DisconnectFocuserIf();
-						msg += String.Format( " (disconnecting from {0}){1}", FocuserManager.FocuserID, _done );
+						msg += $" (disconnecting from {FocuserManager.FocuserID}){_done}";
 					}
 				}
 				catch ( Exception )
@@ -588,7 +590,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = FocuserManager.Parameters.MaxIncrement;
-					msg += retval.ToString() + _done;
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -623,7 +625,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = FocuserManager.Parameters.MaxStep;
-					msg += retval.ToString() + _done;
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -646,7 +648,7 @@ namespace ASCOM.DeviceHub
 
 			CheckConnected( name, ConnectedState );
 
-			string msg = String.Format( " Position = {0}", newPosition );
+			string msg = $"Position = {newPosition}";
 
 			try
 			{
@@ -694,7 +696,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = FocuserManager.Status.Position;
-					msg += retval.ToString() + _done;
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -728,7 +730,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = FocuserManager.Parameters.StepSize;
-					msg += retval.ToString() + _done;
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -766,7 +768,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = FocuserManager.Status.TempComp;
-					msg += retval.ToString() + _done;
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -826,7 +828,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = FocuserManager.Parameters.TempCompAvailable;
-					msg += retval.ToString() + _done;
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -860,7 +862,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = FocuserManager.Status.Temperature;
-					msg += retval.ToString() + _done;
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{

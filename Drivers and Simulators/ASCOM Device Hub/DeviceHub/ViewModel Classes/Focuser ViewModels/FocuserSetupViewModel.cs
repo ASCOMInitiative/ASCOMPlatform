@@ -143,7 +143,7 @@ namespace ASCOM.DeviceHub
 
 			if ( newID == Globals.DevHubFocuserID )
 			{
-				string msg = Globals.DevHubFocuserID + " cannot be chosen as the focuser!";
+				string msg = $"{Globals.DevHubFocuserID} cannot be chosen as the focuser!";
 				ShowMessage( msg, "Invalid Focuser Selected" );
 
 				return;

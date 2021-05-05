@@ -125,7 +125,7 @@ namespace ASCOM.DeviceHub
 											, [System.Runtime.CompilerServices.CallerMemberName] string propName = "???" )
 		{
 			Exception xcp = null;
-			string msg = String.Format( "Set {0} -> {1} ", propName, value );
+			string msg = $"Set {propName} -> {value} ";
 			CheckDevice();
 
 			try
@@ -153,7 +153,7 @@ namespace ASCOM.DeviceHub
 		protected void SetServiceProperty<T>( Action setCmd, string name, T value, ActivityMessageTypes messageType = ActivityMessageTypes.Status )
 		{
 			Exception xcp = null;
-			string msg = String.Format( "Set {0} -> {1} ", name, value );
+			string msg = $"Set {name} -> {value} ";
 			CheckDevice();
 
 			try
@@ -194,7 +194,7 @@ namespace ASCOM.DeviceHub
 			string deviceTypeText = DeviceType.ToString();
 			string messageTypeText = GetMessageTypeName( msgType );
 			string timestamp = DateTime.Now.ToString( "HH:mm:ss.fff" );
-			string text = String.Format( "{0}: {1} - {2}{3}", timestamp, deviceTypeText, messageTypeText, msg );
+			string text = $"{timestamp}: {deviceTypeText} - {messageTypeText}{msg}";
             LogMessage( msgType, text );
         }
 
@@ -223,9 +223,8 @@ namespace ASCOM.DeviceHub
 		{
 			string deviceTypeText = DeviceType.ToString();
 			string messageTypeText = GetMessageTypeName( msgType );
-			//string timestamp = DateTime.Now.ToLongTimeString();
 			string timestamp = DateTime.Now.ToString( "HH:mm:ss.fff" );
-			string text = String.Format( "{0}: {1} - {2}{3}\r\n", timestamp, deviceTypeText, messageTypeText, msg );
+			string text = $"{timestamp}: {deviceTypeText} - {messageTypeText}{msg}\r\n";
 
 			LogMessage( msgType, text );
 

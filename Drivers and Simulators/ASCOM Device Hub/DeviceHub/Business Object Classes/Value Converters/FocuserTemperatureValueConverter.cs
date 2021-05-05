@@ -38,7 +38,7 @@ namespace ASCOM.DeviceHub
 					rawTemp = rawTemp * 1.8 + 32.0;
 				}
 
-				retval = String.Format( "{0:F1}", rawTemp );
+				retval = $"{rawTemp:F1}";
 			}
 
 			return retval;

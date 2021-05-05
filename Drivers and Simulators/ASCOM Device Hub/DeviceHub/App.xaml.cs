@@ -64,7 +64,7 @@ namespace ASCOM.DeviceHub
 			}
 			catch ( Exception xcp )
 			{
-				string msg = String.Format( "DeviceHub caught a fatal exception during startup\r\n{0}", xcp.Message );
+				string msg = $"DeviceHub caught a fatal exception during startup\r\n{xcp.Message}";
 				MessageBox.Show( msg, "DeviceHub", MessageBoxButton.OK, MessageBoxImage.Stop );
 
 				if ( Application.Current != null )

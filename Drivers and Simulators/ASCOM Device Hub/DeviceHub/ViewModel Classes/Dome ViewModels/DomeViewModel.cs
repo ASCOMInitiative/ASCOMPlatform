@@ -143,8 +143,6 @@ namespace ASCOM.DeviceHub
 				{
 					// No exception, but did not connect!
 
-					//string message = String.Format( "{0}\r\n{1}", DomeManager.ConnectError, DomeManager.ConnectException.Message );
-					//ShowMessage( message, "Dome Connection Error" );
 					string message = "Use the Activity Log to view any errors!";
 
 					if ( DomeManager.ConnectException != null )
@@ -159,7 +157,7 @@ namespace ASCOM.DeviceHub
 			{
 				// Connection attempt caused exception.
 
-				string message = String.Format( "{0}\r\n{1}", DomeManager.ConnectError, xcp.Message );
+				string message = $"{DomeManager.ConnectError}\r\n{xcp.Message}";
 				ShowMessage( message, "Dome Connection Error" );
 			}
 		}

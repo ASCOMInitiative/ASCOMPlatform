@@ -91,7 +91,7 @@ namespace ASCOM.DeviceHub
 			// public, instance property on this object.
 			if ( TypeDescriptor.GetProperties( this )[propertyName] == null )
 			{
-				string msg = "Invalid property name: " + propertyName;
+				string msg = $"Invalid property name: {propertyName}";
 
 				if ( ThrowOnInvalidPropertyName )
 				{
