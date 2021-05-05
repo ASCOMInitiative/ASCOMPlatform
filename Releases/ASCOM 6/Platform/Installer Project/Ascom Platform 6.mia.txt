@@ -1182,7 +1182,7 @@ Write Registry Key HKLM\SOFTWARE\ASCOM\,  (permanent)
 Apply Install (get result into variable SUCCESS)
 Write into Text File $SETUPLOG$ from Value $TIME$ Created base registry key: $SUCCESS$ (at end of file)
  
-Set Read Write Permissions on Registry Key "HKLM\SOFTWARE\ASCOM\" for Authenticated Users 
+Set Read Write Permissions on Registry Key "HKLM\SOFTWARE\ASCOM\" for BUILTIN\USERS
 Apply Install (get result into variable SUCCESS)
 Write into Text File $SETUPLOG$ from Value $TIME$ Set registry permissions: $SUCCESS$ (at end of file)
  
