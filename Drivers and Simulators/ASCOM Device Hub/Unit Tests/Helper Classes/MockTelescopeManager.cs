@@ -5,11 +5,17 @@ using ASCOM.Astrometry.Transform;
 using ASCOM.DeviceHub;
 using ASCOM.DeviceInterface;
 using ASCOM.DeviceHub.MvvmMessenger;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Unit_Tests
 {
 	public class MockTelescopeManager : ITelescopeManager
 	{
+		private const int PulseGuidePollRate = 220; // milli-seconds
+
+		private CancellationTokenSource PulseGuideCancelTokenSource { get; set; }
+
 		public MockTelescopeManager()
 		{
 			IsConnected = false;
@@ -17,16 +23,35 @@ namespace Unit_Tests
 			MockTrackingRate = DriveRates.driveSidereal;
 			MockRightAscensionOffsetRate = 0.0;
 			MockDeclinationOffsetRate = 0.0;
+			_jogDirections = null;
+			PulseGuideCancelTokenSource = null;
+			MockIsPulseGuiding = false;
 		}
 
 		public string MockTelescopeID { get; set; }
 		public string MockTelescopeName { get; set; }
 
 		public bool MockIsConnected { get; set; }
+		public bool MockIsPulseGuiding { get; set; }
+		public double FastPollingPeriod { get; set; }
 
 		public TelescopeCapabilities Capabilities { get; set; }
 		public TelescopeParameters Parameters { get; set; }
 		public DevHubTelescopeStatus Status { get; set; }
+
+		ObservableCollection<JogDirection> _jogDirections;
+		public ObservableCollection<JogDirection> JogDirections
+		{
+			get
+			{
+				if ( _jogDirections == null )
+				{
+					SetJogDirections();
+				}
+
+				return _jogDirections;
+			}
+		}
 
 		public ParkingStateEnum MockParkingState
 		{
@@ -170,8 +195,9 @@ namespace Unit_Tests
 			MockTrackingRate = rate;
 		}
 
-		public void StartFixedSlew( MoveDirections direction, double distance )
+		public void StartFixedSlew( int ndx, double distance )
 		{
+			MoveDirections direction = JogDirections[ndx].MoveDirection;
 			if ( IsRaDecSlew( direction ) )
 			{
 				StartFixedSlewRaDec( direction, distance );
@@ -182,11 +208,27 @@ namespace Unit_Tests
 			}
 		}
 
+		public void StartJogScope( int ndx, double rate )
+		{
+			MoveDirections jogDirection = JogDirections[ndx].MoveDirection;
+
+			StartJogScope( jogDirection, rate );
+		}
+
+		public void StartJogScope( MoveDirections jogDirection, double rate )
+		{
+			JogRate jogRate = new JogRate { Name="", Rate = rate };
+
+			StartJogScope( jogDirection, jogRate );
+		}
+
 		public void StartJogScope( MoveDirections jogDirection, JogRate jogRate )
 		{
 			if ( MockJogWithPulseGuide )
 			{
-				StartJogPulseGuide( jogDirection, jogRate );
+				JogDirection direction = JogDirections.Where( j => j.MoveDirection == jogDirection).First();
+
+				StartJogPulseGuide( direction.GuideDirection );
 			}
 			else
 			{
@@ -218,15 +260,20 @@ namespace Unit_Tests
 			}
 		}
 
-		public void StopJogScope( MoveDirections jogDirection )
+		public void StopJogScope( int ndx )
+		{
+			StopJogScope( JogDirections[ndx].Axis );
+		}
+
+		public void StopJogScope( TelescopeAxes axis )
 		{
 			if ( MockJogWithPulseGuide )
 			{
-				throw new NotImplementedException();
+				StopJogPulseGuide();
 			}
 			else
 			{
-				StopJogMoveAxis( jogDirection );
+				StopJogMoveAxis( axis );
 			}
 		}
 
@@ -243,7 +290,7 @@ namespace Unit_Tests
 
 			Status = DevHubTelescopeStatus.GetEmptyStatus();
 			Status.ParkingState = MockParkingState;
-			
+
 			Messenger.Default.Send( new TelescopeStatusUpdatedMessage( Status ) );
 
 			Thread.Sleep( 1000 );
@@ -255,10 +302,47 @@ namespace Unit_Tests
 			Messenger.Default.Send( new TelescopeStatusUpdatedMessage( Status ) );
 		}
 
-		private void StartJogPulseGuide( MoveDirections jogDirection, JogRate jogRate )
+		private void StartJogPulseGuide( GuideDirections? direction )
 		{
-			throw new NotImplementedException();
+			// Don't start jogging if we don't have a valid direction.
+
+			if ( !direction.HasValue )
+			{
+				return;
+			}
+
+			try
+			{
+				MockIsPulseGuiding = true;
+
+				PulseGuideCancelTokenSource = new CancellationTokenSource();
+
+				Task.Factory.StartNew( () => DoPulseGuideTask( direction.Value, PulseGuideCancelTokenSource.Token ), PulseGuideCancelTokenSource.Token, TaskCreationOptions.None, TaskScheduler.Default );
+			}
+			catch ( Exception xcp )
+			{
+				throw xcp;
+			}
 		}
+
+		private void DoPulseGuideTask( GuideDirections direction, CancellationToken cancelToken )
+		{
+			try
+			{
+				while ( !cancelToken.IsCancellationRequested )
+				{
+					while ( MockIsPulseGuiding )
+					{
+						Thread.Sleep( PulseGuidePollRate );
+					}
+				}
+			}
+			catch ( Exception xcp )
+			{
+				throw xcp;
+			}
+		}
+
 
 		private void StartJogMoveAxis( MoveDirections jogDirection, JogRate jogRate )
 		{
@@ -276,10 +360,8 @@ namespace Unit_Tests
 			}
 		}
 
-		private void StopJogMoveAxis( MoveDirections jogDirection )
+		private void StopJogMoveAxis( TelescopeAxes axis )
 		{
-			TelescopeAxes axis = GetJogAxis( jogDirection );
-
 			if ( axis == TelescopeAxes.axisPrimary )
 			{
 				MockRightAscensionAxisRate = 0.0;
@@ -288,6 +370,13 @@ namespace Unit_Tests
 			{
 				MockDeclinationAxisRate = 0.0;
 			}
+		}
+
+		private void StopJogPulseGuide()
+		{
+			MockIsPulseGuiding = false;
+
+			PulseGuideCancelTokenSource.Cancel();
 		}
 
 		private TelescopeAxes GetJogAxis( MoveDirections direction )
@@ -351,7 +440,7 @@ namespace Unit_Tests
 				}
 				else if ( Capabilities.CanSlewAltAz || Capabilities.CanSlewAltAzAsync )
 				{
-					throw new NotImplementedException( 
+					throw new NotImplementedException(
 						"Unsupported telescope encountered...German equatorial that cannot be slewed to an RA and Dec position!!!" );
 				}
 			}
@@ -413,7 +502,7 @@ namespace Unit_Tests
 
 				if ( Capabilities.CanSlewAltAz || Capabilities.CanSlewAltAzAsync )
 				{
-					Task.Run ( () => SlewScopeToAltAz( targetAz, targetAlt ) );
+					Task.Run( () => SlewScopeToAltAz( targetAz, targetAlt ) );
 				}
 				else if ( Capabilities.CanSlew || Capabilities.CanSlewAsync )
 				{
@@ -488,6 +577,44 @@ namespace Unit_Tests
 			}
 
 			return retval;
+		}
+
+		private void SetJogDirections()
+		{
+			_jogDirections = new ObservableCollection<JogDirection>()
+			{
+				new JogDirection { Name = "N", Description = "North", MoveDirection = MoveDirections.North, Axis = TelescopeAxes.axisSecondary, RateSign = 1.0, GuideDirection = GuideDirections.guideNorth },
+				new JogDirection { Name = "S", Description = "South", MoveDirection = MoveDirections.South, Axis = TelescopeAxes.axisSecondary, RateSign = -1.0, GuideDirection = GuideDirections.guideSouth },
+				new JogDirection { Name = "W", Description = "West", MoveDirection = MoveDirections.West, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0, GuideDirection = GuideDirections.guideWest },
+				new JogDirection { Name = "E", Description = "East", MoveDirection = MoveDirections.East, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0, GuideDirection = GuideDirections.guideEast }
+			};
+
+			try
+			{
+				if ( IsConnected )
+				{
+					if ( Parameters.AlignmentMode == AlignmentModes.algAltAz )
+					{
+						_jogDirections.Clear();
+
+						_jogDirections.Add( new JogDirection { Name = "U", Description = "Up", MoveDirection = MoveDirections.Up, Axis = TelescopeAxes.axisSecondary, RateSign = 1.0 } );
+						_jogDirections.Add( new JogDirection { Name = "D", Description = "Down", MoveDirection = MoveDirections.Down, Axis = TelescopeAxes.axisSecondary, RateSign = -1.0 } );
+						_jogDirections.Add( new JogDirection { Name = "L", Description = "Left", MoveDirection = MoveDirections.Left, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0 } );
+						_jogDirections.Add( new JogDirection { Name = "R", Description = "Right", MoveDirection = MoveDirections.Right, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0 } );
+					}
+					else if ( Parameters.SiteLatitude < 0 )
+					{
+						_jogDirections.Clear();
+
+						_jogDirections.Add( new JogDirection { Name = "S", Description = "South", MoveDirection = MoveDirections.South, Axis = TelescopeAxes.axisSecondary, RateSign = 1.0, GuideDirection = GuideDirections.guideSouth } );
+						_jogDirections.Add( new JogDirection { Name = "N", Description = "North", MoveDirection = MoveDirections.North, Axis = TelescopeAxes.axisSecondary, RateSign = -1.0, GuideDirection = GuideDirections.guideNorth } );
+						_jogDirections.Add( new JogDirection { Name = "W", Description = "West", MoveDirection = MoveDirections.West, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0, GuideDirection = GuideDirections.guideWest } );
+						_jogDirections.Add( new JogDirection { Name = "E", Description = "East", MoveDirection = MoveDirections.East, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0, GuideDirection = GuideDirections.guideEast } );
+					}
+				}
+			}
+			catch ( Exception )
+			{ }
 		}
 
 		#endregion

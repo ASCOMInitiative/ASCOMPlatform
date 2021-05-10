@@ -79,6 +79,7 @@ namespace ConformanceTests
 			{
 				Telescope = new Telescope( _telescopeID );
 				msg = "Driver instance created successfully";
+
 			}
 			catch ( Exception xcp )
 			{
@@ -1628,7 +1629,7 @@ namespace ConformanceTests
 				Telescope.TargetDeclination = target.Y;
 
 				Telescope.SlewToTargetAsync();
-				timedOut = WaitForSlewToComplete( 60.0 );
+				timedOut = WaitForSlewToComplete( 600.0 );
 
 				if ( timedOut )
 				{

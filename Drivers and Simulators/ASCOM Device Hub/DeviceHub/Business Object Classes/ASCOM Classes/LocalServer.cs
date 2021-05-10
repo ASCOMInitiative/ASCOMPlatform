@@ -358,18 +358,18 @@ namespace ASCOM.DeviceHub
 		{
 			TelescopeSettings scopeSettings = TelescopeSettings.FromProfile();
 			TelescopeManager.SetTelescopeID( scopeSettings.TelescopeID );
-			TelescopeManager.SetFastUpdatePeriod( scopeSettings.FastUpdatePeriod );
+			TelescopeManager.Instance.SetFastUpdatePeriod( scopeSettings.FastUpdatePeriod );
 
 			DomeSettings domeSettings = DomeSettings.FromProfile();
 			DomeManager.SetDomeID( domeSettings.DomeID );
-			DomeManager.SetFastUpdatePeriod( domeSettings.FastUpdatePeriod );
+			DomeManager.Instance.SetFastUpdatePeriod( domeSettings.FastUpdatePeriod );
 			Globals.DomeLayout = domeSettings.DomeLayout;
 			Globals.DomeAzimuthAdjustment = domeSettings.AzimuthAdjustment;
 			Globals.UsePOTHDomeSlaveCalculation = domeSettings.UsePOTHDomeSlaveCalculation;
 
 			FocuserSettings focuserSettings = FocuserSettings.FromProfile();
 			FocuserManager.SetFocuserID( focuserSettings.FocuserID );
-			FocuserManager.SetFastUpdatePeriod( focuserSettings.FastUpdatePeriod);
+			FocuserManager.Instance.SetFastUpdatePeriod( focuserSettings.FastUpdatePeriod);
 			Globals.FocuserTemperatureOffset = focuserSettings.TemperatureOffset;
 		}
 

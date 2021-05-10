@@ -14,5 +14,6 @@ namespace ASCOM.DeviceHub
 		void MoveFocuserBy( int amount );
 		void HaltFocuser();
 		void SetTemperatureCompensation( bool state );
+
 	}
 }

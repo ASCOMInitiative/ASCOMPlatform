@@ -4,9 +4,10 @@
 ;
 
 #define MyAppName "ASCOM.DeviceHub"
-#define MyAppVersion "6.5.0.1"
+#define MyAppVersion "6.5.1.4"
 #define MyDestSubdirName "DeviceHub"
-#define MyPlatformRoot "D:\Github Repos\ASCOMPlatform\"
+; #define MyPlatformRoot "D:\Github Repos\ASCOMPlatform\"
+#define MyPlatformRoot "D:\My Projects\Visual Studio 2019\Ascom\"
 
 [Setup]
 AppID={{94c74c75-8747-48e2-9100-736565caf056}
@@ -19,7 +20,7 @@ AppUpdatesURL=https://ascom-standards.org/
 VersionInfoVersion=1.0.0
 MinVersion=0,5.0.2195sp4
 DefaultDirName="{cf}\ASCOM\DeviceHub"
-DefaultGroupName=ASCOM Device Hub
+DefaultGroupName=ASCOM Platform 6
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 OutputDir="{#SourcePath}\Output"
@@ -27,10 +28,11 @@ OutputBaseFilename={#MyAppName}({#MyAppVersion})_setup
 Compression=lzma
 SolidCompression=yes
 ; Put there by Platform if Driver Installer Support selected
-WizardImageFile="{#MyPlatformRoot}Driver Inst\InstallerGen\Graphics\WizardImage.bmp"
-LicenseFile="{#MyPlatformRoot}Driver Inst\InstallerGen\License\CreativeCommons.txt"
+WizardImageFile="D:\Github Repos\ASCOMPlatform\Driver Inst\InstallerGen\Graphics\WizardImage.bmp"
+LicenseFile="D:\Github Repos\ASCOMPlatform\Driver Inst\InstallerGen\License\CreativeCommons.txt"
 UninstallFilesDir="{cf}\ASCOM\Uninstall\{#MyDestSubdirName}"
-SourceDir="{#MyPlatformRoot}Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release"
+; SourceDir="{#MyPlatformRoot}Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release"
+SourceDir="{#MyPlatformRoot}ASCOMDeviceHub\DeviceHub\bin\Release"
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -47,16 +49,18 @@ Source: "ASCOM.DeviceHub.Dome.dll";       DestDir: "{app}"; Flags: ignoreversion
 Source: "ASCOM.DeviceHub.Focuser.dll";    DestDir: "{app}"; Flags: ignoreversion
 Source: "MvvmMessenger.dll";              DestDir: "{app}"; Flags: ignoreversion
 Source: "PresentationFramework.Aero.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MyPlatformRoot}Drivers and Simulators\ASCOM Device Hub\Documents\ASCOM Device Hub User and Technical Information.pdf"; DestDir: "{app}";
+Source: "{#MyPlatformRoot}ASCOMDeviceHub\Documents\ASCOM Device Hub User and Technical Information.pdf"; DestDir: "{app}";
 Source: "ASCOM.DeviceHub.pdb";            DestDir: "{app}"; Flags: ignoreversion
 Source: "MvvmMessenger.pdb";              DestDir: "{app}"; Flags: ignoreversion
 Source: "ASCOM.DeviceHub.Telescope.pdb";  DestDir: "{app}"; Flags: ignoreversion
 Source: "ASCOM.DeviceHub.Dome.pdb";       DestDir: "{app}"; Flags: ignoreversion
 Source: "ASCOM.DeviceHub.Focuser.pdb";    DestDir: "{app}"; Flags: ignoreversion
 
+[InstallDelete]
+Type: files; Name: "{app}\*.*"
+
 [Icons]
-Name: "{commondesktop}\ASCOM Device Hub"; Filename: "{app}\ASCOM.DeviceHub.exe"; WorkingDir: "{app}"
-Name: "{commonprograms}\ASCOM Device Hub"; Filename: "{app}\ASCOM.DeviceHub.exe"; WorkingDir: "{app}"
+Name: "{commonprograms}\ASCOM Platform 6\ASCOM Device Hub"; Filename: "{app}\ASCOM.DeviceHub.exe"; WorkingDir: "{app}"
 
 ; Only if driver is .NET
 [Run]
@@ -74,7 +78,7 @@ Filename: "{app}\ASCOM.DeviceHub.exe"; Parameters: "/unregister"
 
 [Code]
 const
-   REQUIRED_PLATFORM_VERSION = 6.4;    // Set this to the minimum required ASCOM Platform version for this application
+   REQUIRED_PLATFORM_VERSION = 6.5;    // Set this to the minimum required ASCOM Platform version for this application
    REQUIRED_DOTNET_VERSION = 4.6;
 
 //

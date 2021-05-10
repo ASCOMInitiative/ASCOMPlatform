@@ -242,35 +242,35 @@
             <!-- Motion directions -->
             
 			<Button Grid.Row="3" Grid.Column="1" Width="24" Height="24" Margin="0,6,0,0"
-								Content="{Binding SlewDirections[0].Name, FallbackValue=N, Mode=Default}" 
+								Content="{Binding JogDirections[0].Name, FallbackValue=N, Mode=Default}" 
 								IsEnabled="{Binding CanStartMoveTelescope}"
-								Command="{Binding DoFixedSlewCommand}" CommandParameter="{Binding SlewDirections[0].Direction}"
-								local:MouseBehavior.MouseDownCommand="{Binding StartMoveCommand}" local:MouseBehavior.MouseDownCommandParameter="{Binding SlewDirections[0].Direction}"
-								local:MouseBehavior.MouseUpCommand="{Binding StopMotionCommand}" local:MouseBehavior.MouseUpCommandParameter="{Binding SlewDirections[0].Direction}" />
+								Command="{Binding DoFixedSlewCommand}" CommandParameter="0"
+								local:MouseBehavior.MouseDownCommand="{Binding StartMoveCommand}" local:MouseBehavior.MouseDownCommandParameter="0"
+								local:MouseBehavior.MouseUpCommand="{Binding StopMotionCommand}" local:MouseBehavior.MouseUpCommandParameter="0" />
 			<Button Grid.Row="4" Grid.Column="0" Width="24" Height="24"  HorizontalAlignment="Right"
-								Content="{Binding SlewDirections[2].Name, FallbackValue=W, Mode=Default}" 
+								Content="{Binding JogDirections[2].Name, FallbackValue=W, Mode=Default}" 
 								IsEnabled="{Binding CanStartMoveTelescope}"
-								Command="{Binding DoFixedSlewCommand}" CommandParameter="{Binding SlewDirections[2].Direction}"
-							local:MouseBehavior.MouseDownCommand="{Binding StartMoveCommand}" local:MouseBehavior.MouseDownCommandParameter="{Binding SlewDirections[2].Direction}"
-							local:MouseBehavior.MouseUpCommand="{Binding StopMotionCommand}" local:MouseBehavior.MouseUpCommandParameter="{Binding SlewDirections[2].Direction}" />
+								Command="{Binding DoFixedSlewCommand}" CommandParameter="2"
+							local:MouseBehavior.MouseDownCommand="{Binding StartMoveCommand}" local:MouseBehavior.MouseDownCommandParameter="2"
+							local:MouseBehavior.MouseUpCommand="{Binding StopMotionCommand}" local:MouseBehavior.MouseUpCommandParameter="2" />
 			<Button Grid.Row="4" Grid.Column="1" Width="24" Height="24" Margin="0,5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
 					ToolTip="Abort Slew"
-					Command="{Binding StopMotionCommand}"
+					Command="{Binding StopMotionCommand}" CommandParameter="-1"
 					IsEnabled="{Binding Status.Connected, FallbackValue=False}">
 				<Image Margin="2" Source="/ASCOM.DeviceHub;component/Images/Stop.ico" />
 			</Button>
 			<Button Grid.Row="4" Grid.Column="2" Width="24" Height="24" HorizontalAlignment="Left"
-								Content="{Binding SlewDirections[3].Name, FallbackValue=E, Mode=Default}" 
+								Content="{Binding JogDirections[3].Name, FallbackValue=E, Mode=Default}" 
 								IsEnabled="{Binding CanStartMoveTelescope}"
-								Command="{Binding DoFixedSlewCommand}" CommandParameter="{Binding SlewDirections[3].Direction}"
-								local:MouseBehavior.MouseDownCommand="{Binding StartMoveCommand}" local:MouseBehavior.MouseDownCommandParameter="{Binding SlewDirections[3].Direction}"
-								local:MouseBehavior.MouseUpCommand="{Binding StopMotionCommand}" local:MouseBehavior.MouseUpCommandParameter="{Binding SlewDirections[3].Direction}" />
+								Command="{Binding DoFixedSlewCommand}" CommandParameter="3"
+								local:MouseBehavior.MouseDownCommand="{Binding StartMoveCommand}" local:MouseBehavior.MouseDownCommandParameter="3"
+								local:MouseBehavior.MouseUpCommand="{Binding StopMotionCommand}" local:MouseBehavior.MouseUpCommandParameter="3" />
 			<Button Grid.Row="5" Grid.Column="1" Width="24" Height="24" 
-								Content="{Binding SlewDirections[1].Name, FallbackValue=S, Mode=Default}" 
+								Content="{Binding JogDirections[1].Name, FallbackValue=S, Mode=Default}" 
 								IsEnabled="{Binding CanStartMoveTelescope}"
-								Command="{Binding DoFixedSlewCommand}" CommandParameter="{Binding SlewDirections[1].Direction}"
-								local:MouseBehavior.MouseDownCommand="{Binding StartMoveCommand}" local:MouseBehavior.MouseDownCommandParameter="{Binding SlewDirections[1].Direction}"
-								local:MouseBehavior.MouseUpCommand="{Binding StopMotionCommand}" local:MouseBehavior.MouseUpCommandParameter="{Binding SlewDirections[1].Direction}" />
+								Command="{Binding DoFixedSlewCommand}" CommandParameter="1"
+								local:MouseBehavior.MouseDownCommand="{Binding StartMoveCommand}" local:MouseBehavior.MouseDownCommandParameter="1"
+								local:MouseBehavior.MouseUpCommand="{Binding StopMotionCommand}" local:MouseBehavior.MouseUpCommandParameter="1" />
 		</Grid>
 		<Expander Grid.Row="2" Grid.Column="0" Foreground="{DynamicResource NormalTextBrush}" 
 				  Template="{DynamicResource StretchyExpanderTemplate}" 

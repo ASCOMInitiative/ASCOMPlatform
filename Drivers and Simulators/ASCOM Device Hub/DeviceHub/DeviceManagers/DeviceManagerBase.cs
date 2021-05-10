@@ -3,6 +3,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
+using System.Threading;
 using System.Windows;
 
 using ASCOM.DeviceHub.MvvmMessenger;
@@ -23,6 +24,11 @@ namespace ASCOM.DeviceHub
 		protected bool ThrowOnInvalidPropertyName { get; set; }
         protected DeviceTypeEnum DeviceType { get; set; }
 		protected PropertyExceptions Exceptions { get; set; }
+
+		protected int PollingPeriod { get; set; }
+		protected ManualResetEvent PollingChange { get; set; }
+
+		public double FastPollingPeriod { get; set; }
 
 		public DeviceManagerBase( DeviceTypeEnum deviceType )
 		{
@@ -179,6 +185,30 @@ namespace ASCOM.DeviceHub
 
 		protected virtual void CheckDevice()
 		{ }
+
+		protected void SetFastPolling( string caller = "")
+		{
+			string fromCaller = String.Empty;
+
+			if ( !String.IsNullOrEmpty( caller ) )
+			{
+				fromCaller = " from " + caller;
+			}
+
+			int newInterval = (int)( FastPollingPeriod * 1000 );
+
+			if ( PollingPeriod != newInterval )
+			{
+				PollingPeriod = newInterval;
+				PollingChange.Set();
+
+				LogActivityLine( ActivityMessageTypes.Commands, $"Started fast polling{fromCaller} every {PollingPeriod} ms." );
+			}
+			else
+			{
+				LogActivityLine( ActivityMessageTypes.Commands, $"SetFastPolling called{fromCaller} when already fast polling." );
+			}
+		}
 
 		#region Activity Log Members
 

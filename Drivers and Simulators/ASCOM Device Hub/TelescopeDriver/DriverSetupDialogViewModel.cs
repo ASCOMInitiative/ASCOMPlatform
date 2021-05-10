@@ -46,10 +46,10 @@ namespace ASCOM.DeviceHub
 
 		#region Public Methods
 
-		public void InitializeCurrentTelescope( string telescopeID )
+		public void InitializeCurrentTelescope( string telescopeID, double fastPollingPeriod )
 		{
 			TelescopeSetupVm.TelescopeID = telescopeID;
-			TelescopeSetupVm.FastUpdatePeriod = TelescopeManager.FastPollingPeriod;
+			TelescopeSetupVm.FastUpdatePeriod = fastPollingPeriod;
 		}
 
 		#endregion Public Methods

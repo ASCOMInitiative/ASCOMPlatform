@@ -177,7 +177,10 @@ namespace Unit_Tests
 		{
 			if ( MoveTaskTokenSource != null )
 			{
+				MockIsMoving = false;
 				MoveTaskTokenSource.Cancel();
+				MockMoveTask.Wait();
+				MockMoveTask = null;
 			}
 		}
 
