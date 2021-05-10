@@ -831,9 +831,9 @@ Set Variable MYPROGRESS to 9
  
 Comment: Ensure that the corrrect Profile registry ACL is set on every run to repair broken installations
 Set Variable PROGRESSTEXT to Preparing ASCOM Profile Store...
-Write into Text File $SETUPLOG$ from Value $TIME$ Setting Profile registry ACL (at end of file)
-Run Program $SUPPORTDIR$\UninstallAscom.exe /SETPROFILEACL (WAIT, get result into variable RC)
-Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Set ACL on ASCOM Profile Store (at end of file)
+Comment: Write into Text File $SETUPLOG$ from Value $TIME$ Setting Profile registry ACL (at end of file)
+Comment: Run Program $SUPPORTDIR$\UninstallAscom.exe /SETPROFILEACL (WAIT, get result into variable RC)
+Comment: Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Set ACL on ASCOM Profile Store (at end of file)
  
 Comment: Test whether an error occured when setting the Profile ACL and report this if necessary
 if Variable RC not Equals 0
@@ -1179,6 +1179,13 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Installing 32bit Registry entr
  
 Comment: Create registry keys
 Write Registry Key HKLM\SOFTWARE\ASCOM\,  (permanent)
+Apply Install (get result into variable SUCCESS)
+Write into Text File $SETUPLOG$ from Value $TIME$ Created base registry key: $SUCCESS$ (at end of file)
+ 
+Set Read Write Permissions on Registry Key "HKLM\SOFTWARE\ASCOM\" for BUILTIN\USERS
+Apply Install (get result into variable SUCCESS)
+Write into Text File $SETUPLOG$ from Value $TIME$ Set registry permissions: $SUCCESS$ (at end of file)
+ 
 Write Registry Key HKLM\SOFTWARE\ASCOM\PlatformVersion, $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$ (permanent)
 Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\,  (permanent)
 Comment: Leap Seconds = UTC-TAI offset - needs to be updated every time a leap second is added or removed.
