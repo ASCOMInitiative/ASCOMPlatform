@@ -289,12 +289,24 @@ namespace UninstallAscom
         static private bool UserhasFullProfileAccessRights(RegistryKey key, string subKey)
         {
             RegistryKey sKey;
-            bool foundFullAccess = false;
+            bool foundFullAccess = false; // Initialise to the failed condition
             string builtInUsers;
 
             try
             {
-                builtInUsers = GetBuiltInUsers().ToUpperInvariant();
+                // Find the localised name of the BUILTIN\Users group
+                try
+                {
+                    builtInUsers = new SecurityIdentifier("S-1-5-32-545").Translate(typeof(NTAccount)).ToString(); // S-1-5-32-545 is the locale independent descriptor for the BUILTIN\Users group
+                    TL.LogMessage("RegistryRights", $"Localised name of BUILTIN\\users group is: '{builtInUsers}'");
+
+                }
+                catch (Exception ex)
+                {
+                    TL.LogMessageCrLf("RegistryRights", $"Exception when getting BUILTIN\\Users localised name: {ex}");
+                    builtInUsers = "BUILTIN\\Users"; // Initialise to a common value in case we get lucky and this is the correct localised name
+                }
+
                 TL.LogMessage("RegistryRights", (subKey == "") ? key.Name.ToString() : key.Name.ToString() + @"\" + subKey);
 
                 if (subKey == "")
@@ -302,7 +314,7 @@ namespace UninstallAscom
                 else
                     sKey = key.OpenSubKey(subKey);
 
-                RegistrySecurity sec = sKey.GetAccessControl(); // System.Security.AccessControl.AccessControlSections.All)
+                RegistrySecurity sec = sKey.GetAccessControl();
 
                 foreach (RegistryAccessRule RegRule in sec.GetAccessRules(true, true, typeof(NTAccount))) // Iterate over the rule set and list them
                 {
@@ -315,7 +327,7 @@ namespace UninstallAscom
                         TL.LogMessageCrLf("RegistryRights", "Issue formatting registry rights: " + ex1.ToString());
                     }
 
-                    if ((RegRule.IdentityReference.ToString().ToUpperInvariant() == builtInUsers) & (RegRule.RegistryRights == global::System.Security.AccessControl.RegistryRights.FullControl))
+                    if ((RegRule.IdentityReference.ToString().ToUpperInvariant() == builtInUsers.ToUpperInvariant()) & (RegRule.RegistryRights == global::System.Security.AccessControl.RegistryRights.FullControl))
                         foundFullAccess = true;
                 }
 
@@ -345,57 +357,63 @@ namespace UninstallAscom
         /// Returns the localised text name of the BUILTIN\Users group. This varies by locale so has to be derived on the users system.
         /// </summary>
         /// <returns>Localised name of the BUILTIN\Users group</returns>
-        /// <remarks>This uses the WMI features and is pretty obscure but is the only way I could find to do this! Peter</remarks>
-        private static string GetBuiltInUsers()
-        {
-            ManagementObjectSearcher searcher;
-            string Group = "Unknown"; // Initialise to some values
-            string Name = "Unknown";
+        /// <remarks>
+        /// This uses the WMI features and is pretty obscure but is the only way I could find to do this! Peter
+        /// Now superseded by much better non WMI code: builtInUsers = new SecurityIdentifier("S-1-5-32-545").Translate(typeof(System.Security.Principal.NTAccount)).ToString();
+        /// </remarks>
+        //private static string GetBuiltInUsers()
+        //{
+        //    ManagementObjectSearcher searcher;
+        //    string Group = "BUILTIN"; // Initialise to default values
+        //    string Name = "Users";
 
-            try
-            {
-                searcher = new ManagementObjectSearcher(new ManagementScope(@"\\localhost\root\cimv2"), new WqlObjectQuery("Select * From Win32_Account Where SID = 'S-1-5-32'"), null);
+        //    try
+        //    {
+        //        searcher = new ManagementObjectSearcher(new ManagementScope(@"\\localhost\root\cimv2"), new WqlObjectQuery("Select * From Win32_Account Where SID = 'S-1-5-32'"), null);
+        //        TL.LogMessage("GetBuiltInUsers", $"Searcher object for S-1-5-32 is null: {searcher == null}");
 
-                foreach (var wmiClass in searcher.Get())
-                {
-                    PropertyDataCollection p;
-                    p = wmiClass.Properties;
-                    foreach (var pr in p)
-                    {
-                        if (pr.Name == "Name")
-                            Group = pr.Value.ToString();
-                    }
-                }
-                searcher.Dispose();
-            }
-            catch (Exception ex)
-            {
-                TL.LogMessageCrLf("GetBuiltInUsers 1", ex.ToString());
-            }
+        //        foreach (var wmiClass in searcher.Get())
+        //        {
+        //            PropertyDataCollection p;
+        //            p = wmiClass.Properties;
+        //            foreach (var pr in p)
+        //            {
+        //                if (pr.Name == "Name")
+        //                    Group = pr.Value.ToString();
+        //            }
+        //        }
+        //        searcher.Dispose();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        TL.LogMessageCrLf("GetBuiltInUsers 1", ex.ToString());
+        //    }
 
-            try
-            {
-                searcher = new ManagementObjectSearcher(new ManagementScope(@"\\localhost\root\cimv2"), new WqlObjectQuery("Select * From Win32_Group Where SID = 'S-1-5-32-545'"), null);
+        //    try
+        //    {
+        //        searcher = new ManagementObjectSearcher(new ManagementScope(@"\\localhost\root\cimv2"), new WqlObjectQuery("Select * From Win32_Group Where SID = 'S-1-5-32-545'"), null);
+        //        TL.LogMessage("GetBuiltInUsers", $"Searcher object for S-1-5-32-545 is null: {searcher == null}");
 
-                foreach (var wmiClass in searcher.Get())
-                {
-                    PropertyDataCollection p;
-                    p = wmiClass.Properties;
-                    foreach (var pr in p)
-                    {
-                        if (pr.Name == "Name")
-                            Name = pr.Value.ToString();
-                    }
-                }
-                searcher.Dispose();
-            }
-            catch (Exception ex)
-            {
-                TL.LogMessageCrLf("GetBuiltInUsers 2", ex.ToString());
-            }
+        //        foreach (var wmiClass in searcher.Get())
+        //        {
+        //            PropertyDataCollection p;
+        //            p = wmiClass.Properties;
+        //            foreach (var pr in p)
+        //            {
+        //                if (pr.Name == "Name")
+        //                    Name = pr.Value.ToString();
+        //            }
+        //        }
+        //        searcher.Dispose();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        TL.LogMessageCrLf("GetBuiltInUsers 2", ex.ToString());
+        //    }
 
-            return Group + @"\" + Name;
-        }
+        //    TL.LogMessage("GetBuiltInUsers", $"Returning {Group}\\{Name}");
+        //    return Group + @"\" + Name;
+        //}
 
         public static void FixHelper(string HelperName, int MajorVersion, int MinorVersion)
         {
