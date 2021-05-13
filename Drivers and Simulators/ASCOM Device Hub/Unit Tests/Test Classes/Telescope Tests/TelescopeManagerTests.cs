@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using ASCOM.Astrometry.Transform;
 using ASCOM.DeviceHub;
@@ -31,11 +32,13 @@ namespace Unit_Tests.Telescope
 			ServiceContainer.Instance.AddService<ITelescopeService>( new MockTelescopeService() );
 			_mgr = TelescopeManager.Instance;
 			_svc = (MockTelescopeService)ServiceContainer.Instance.GetService<ITelescopeService>();
-
+			TelescopeManager.Instance.SetFastUpdatePeriod( 0.5 );
 			bool retval = _mgr.Connect( ScopeID );
 			Assert.AreEqual( true, retval );
 
 			Thread.Sleep( _startupDelayMs );
+
+			Globals.UISyncContext = TaskScheduler.Default;
 		}
 
 		[TestCleanup]
@@ -107,24 +110,27 @@ namespace Unit_Tests.Telescope
 
 			// Start moving the scope to the west.
 
-			_mgr.StartJogScope( MoveDirections.West, jogRates[0] );
+			int ndx = GetIndexOfJogDirection( MoveDirections.West );
+
+			_mgr.StartJogScope( ndx, jogRates[0].Rate );
 
 			double actualRate = _svc.MockMoveAxisRates.X;
-			Assert.AreEqual( jogRates[0].Rate, actualRate );
+			Assert.AreEqual( jogRates[0].Rate, actualRate * -1.0 );
 
-			_mgr.StopJogScope( MoveDirections.West );
+			_mgr.StopJogScope( ndx );
 
 			actualRate = _svc.MockMoveAxisRates.X;
 			Assert.AreEqual( 0.0, actualRate );
 
 			// Start moving the scope to the east.
 
-			_mgr.StartJogScope( MoveDirections.East, jogRates[0] );
+			ndx = GetIndexOfJogDirection( MoveDirections.East );
+			_mgr.StartJogScope( ndx, jogRates[0].Rate );
 
 			actualRate = _svc.MockMoveAxisRates.X;
-			Assert.AreEqual( jogRates[0].Rate, actualRate * -1 );
+			Assert.AreEqual( jogRates[0].Rate, actualRate );
 
-			_mgr.StopJogScope( MoveDirections.East );
+			_mgr.StopJogScope( ndx );
 
 			actualRate = _svc.MockMoveAxisRates.X;
 			Assert.AreEqual( 0.0, actualRate );
@@ -139,24 +145,26 @@ namespace Unit_Tests.Telescope
 
 			// Start moving the scope to the north.
 
-			_mgr.StartJogScope( MoveDirections.North, jogRates[0] );
+			int ndx = GetIndexOfJogDirection( MoveDirections.North );
+			_mgr.StartJogScope( ndx, jogRates[0].Rate );
 
 			double actualRate = _svc.MockMoveAxisRates.Y;
 			Assert.AreEqual( jogRates[0].Rate, actualRate );
 
-			_mgr.StopJogScope( MoveDirections.North );
+			_mgr.StopJogScope( ndx );
 
 			actualRate = _svc.MockMoveAxisRates.Y;
 			Assert.AreEqual( 0.0, actualRate );
 
 			// Start moving the scope to the south.
 
-			_mgr.StartJogScope( MoveDirections.South, jogRates[0] );
+			ndx = GetIndexOfJogDirection( MoveDirections.South );
+			_mgr.StartJogScope( ndx, jogRates[0].Rate );
 
 			actualRate = _svc.MockMoveAxisRates.Y;
 			Assert.AreEqual( jogRates[0].Rate, actualRate * -1 );
 
-			_mgr.StopJogScope( MoveDirections.South );
+			_mgr.StopJogScope( ndx );
 
 			actualRate = _svc.MockMoveAxisRates.Y;
 			Assert.AreEqual( 0.0, actualRate );
@@ -179,7 +187,8 @@ namespace Unit_Tests.Telescope
 			_svc.MockRaDec = targetRaDec;
 
 			ForceTelescopeStatusUpdate();
-			_mgr.StartFixedSlew( MoveDirections.East, 4.0 );
+			int ndx = GetIndexOfJogDirection( MoveDirections.East ); 
+			_mgr.StartFixedSlew( ndx, 4.0 );
 
 			// Wait until it stops slewing.
 
@@ -200,7 +209,8 @@ namespace Unit_Tests.Telescope
 			_svc.MockRaDec = targetRaDec;
 
 			ForceTelescopeStatusUpdate();
-			_mgr.StartFixedSlew( MoveDirections.West, 4.0 );
+			ndx = GetIndexOfJogDirection( MoveDirections.West );
+			_mgr.StartFixedSlew( ndx, 4.0 );
 
 			// Wait until it stops slewing.
 
@@ -221,7 +231,8 @@ namespace Unit_Tests.Telescope
 			_svc.MockRaDec = targetRaDec;
 
 			ForceTelescopeStatusUpdate();
-			_mgr.StartFixedSlew( MoveDirections.North, 4.0 );
+			ndx = GetIndexOfJogDirection( MoveDirections.North );
+			_mgr.StartFixedSlew( ndx, 4.0 );
 
 			// Wait until it stops slewing.
 
@@ -242,7 +253,8 @@ namespace Unit_Tests.Telescope
 			_svc.MockRaDec = targetRaDec;
 
 			ForceTelescopeStatusUpdate();
-			_mgr.StartFixedSlew( MoveDirections.South, 4.0 );
+			ndx = GetIndexOfJogDirection( MoveDirections.South );
+			_mgr.StartFixedSlew( ndx, 4.0 );
 
 			// Wait until it stops slewing.
 
@@ -551,6 +563,13 @@ namespace Unit_Tests.Telescope
 			}
 
 			return rateArr;
+		}
+
+		private int GetIndexOfJogDirection( MoveDirections direction )
+		{
+			var item = _mgr.JogDirections.Where( d => d.MoveDirection == direction).First();
+
+			return _mgr.JogDirections.IndexOf( item );
 		}
 
 		#endregion Helper Methods

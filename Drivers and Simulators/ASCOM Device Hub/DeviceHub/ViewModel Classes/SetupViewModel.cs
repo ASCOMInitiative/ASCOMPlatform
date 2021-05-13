@@ -231,7 +231,7 @@ namespace ASCOM.DeviceHub
 
 			TelescopeSettings settings = TelescopeSettings.FromProfile();
 			settings.TelescopeID = TelescopeManager.TelescopeID;
-			settings.FastUpdatePeriod = TelescopeManager.FastPollingPeriod;
+			settings.FastUpdatePeriod = TelescopeManager.Instance.FastPollingPeriod;
 			settings.ToProfile();
 		}
 
@@ -243,7 +243,7 @@ namespace ASCOM.DeviceHub
 			DomeSettings settings = DomeSettings.FromProfile();
 			settings.DomeID = DomeManager.DomeID;
 			settings.DomeLayout = Globals.DomeLayout;
-			settings.FastUpdatePeriod = DomeManager.FastPollingPeriod;
+			settings.FastUpdatePeriod = DomeManager.Instance.FastPollingPeriod;
 			settings.ToProfile();
 		}
 
@@ -252,7 +252,7 @@ namespace ASCOM.DeviceHub
 			FocuserSettings settings = FocuserSettings.FromProfile();
 			settings.FocuserID = FocuserManager.FocuserID;
 			settings.TemperatureOffset = Globals.FocuserTemperatureOffset;
-			settings.FastUpdatePeriod = FocuserManager.FastPollingPeriod;
+			settings.FastUpdatePeriod = FocuserManager.Instance.FastPollingPeriod;
 			settings.ToProfile();
 		}
 
@@ -286,7 +286,7 @@ namespace ASCOM.DeviceHub
 					TelescopeManager.SetTelescopeID( TelescopeID );
 				}
 
-				TelescopeManager.SetFastUpdatePeriod( TelescopeSetupVm.FastUpdatePeriod );
+				TelescopeManager.Instance.SetFastUpdatePeriod( TelescopeSetupVm.FastUpdatePeriod );
 			}
 
 			if ( !IsDomeActive )
@@ -297,7 +297,7 @@ namespace ASCOM.DeviceHub
 					DomeManager.SetDomeID( DomeID );
 				}
 
-				DomeManager.SetFastUpdatePeriod( DomeSetupVm.FastUpdatePeriod );
+				DomeManager.Instance.SetFastUpdatePeriod( DomeSetupVm.FastUpdatePeriod );
 				Globals.DomeLayout = DomeSetupVm.GetLayout();
 			}
 
@@ -309,7 +309,7 @@ namespace ASCOM.DeviceHub
 					FocuserManager.SetFocuserID( FocuserID );
 				}
 
-				FocuserManager.SetFastUpdatePeriod( FocuserSetupVm.FastUpdatePeriod );
+				FocuserManager.Instance.SetFastUpdatePeriod( FocuserSetupVm.FastUpdatePeriod );
 			}
 			
 

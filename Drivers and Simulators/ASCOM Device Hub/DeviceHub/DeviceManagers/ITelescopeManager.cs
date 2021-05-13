@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+
 using ASCOM.DeviceInterface;
 
 namespace ASCOM.DeviceHub
@@ -8,12 +10,14 @@ namespace ASCOM.DeviceHub
 		bool IsConnected { get; }
 		string ConnectError { get; }
 		Exception ConnectException { get; }
+		ObservableCollection<JogDirection> JogDirections { get; }
 
 		bool Connect( string scopeID );
 		void Disconnect();
-		void StartJogScope( MoveDirections jogDirection, JogRate jogRate );
-		void StopJogScope( MoveDirections jogDirection );
-		void StartFixedSlew( MoveDirections direction, double distance );
+		void StartJogScope( int ndx, double rate );
+		void StopJogScope( int ndx );
+		void StopJogScope( TelescopeAxes axis );
+		void StartFixedSlew( int ndx, double distance );
 		void AbortDirectSlew();
 		void SetParkingState( ParkingStateEnum desiredState );
 		void DoSlewToCoordinates( double ra, double dec, bool useSynchronousMethodCall );

@@ -888,7 +888,7 @@ namespace ASCOM.DeviceHub
 			RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
 			DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
 
-			LogActivityStart( ActivityMessageTypes.Other, " Get DestinationSideOfPier \r\n   RA {0}\r\n   Dec {1}: ", raConverter, decConverter );
+			LogActivityStart( ActivityMessageTypes.Other, "DestinationSideOfPier RA = {0}, Dec = {1}: ", raConverter, decConverter );
 			CheckDevice();
 
 			try
@@ -978,7 +978,7 @@ namespace ASCOM.DeviceHub
 			AzimuthConverter azConverter = new AzimuthConverter( (decimal)azimuth );
 			AltitudeConverter altConverter = new AltitudeConverter( (decimal)altitude );
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToAltAz \r\nAz {0}\r\nAlt {1}: {2}"
+			LogActivityLine( ActivityMessageTypes.Commands, "SlewToAltAz - Az = {0}, Alt = {1}: {2}"
 							, azConverter, altConverter, SlewStarted );
 			CheckDevice();
 			Status.Slewing = true;
@@ -1008,7 +1008,7 @@ namespace ASCOM.DeviceHub
 			AzimuthConverter azConverter = new AzimuthConverter( (decimal)azimuth );
 			AltitudeConverter altConverter = new AltitudeConverter( (decimal)altitude );
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToAltAzAsync \r\nAz {0}\r\nAlt {1}: {2}"
+			LogActivityLine( ActivityMessageTypes.Commands, "SlewToAltAzAsync - Az = {0}, Alt = {1}: {2}"
 							, azConverter, altConverter, SlewStarted );
 			CheckDevice();
 			Status.Slewing = true;
@@ -1020,7 +1020,7 @@ namespace ASCOM.DeviceHub
 			RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
 			DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToCoordinates \r\nRA  {0}\r\nDec {1}: {2}"
+			LogActivityLine( ActivityMessageTypes.Commands, "SlewToCoordinates - RA = {0}, Dec = {1}: {2}"
 							, raConverter, decConverter, SlewStarted );
 			CheckDevice();
 			Status.Slewing = true;
@@ -1040,7 +1040,7 @@ namespace ASCOM.DeviceHub
 			RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
 			DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToCoordinatesAsync \r\nRA  {0}\r\nDec {1}: {2}"
+			LogActivityLine( ActivityMessageTypes.Commands, "SlewToCoordinatesAsync - RA = {0}, Dec {1}: {2}"
 							, raConverter, decConverter, SlewStarted );
 			CheckDevice();
 			Status.Slewing = true;
@@ -1076,7 +1076,7 @@ namespace ASCOM.DeviceHub
 			AzimuthConverter azConverter = new AzimuthConverter( (decimal)azimuth );
 			AltitudeConverter altConverter = new AltitudeConverter( (decimal)altitude );
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SyncToAltAz \r\nAz {0}\r\nAlt {1}:", azConverter, altConverter );
+			LogActivityLine( ActivityMessageTypes.Commands, "SyncToAltAz - Az = {0}, Alt = {1}:", azConverter, altConverter );
 			CheckDevice();
 			Service.SyncToAltAz( azimuth, altitude );
 			Status.Slewing = true;
@@ -1094,7 +1094,7 @@ namespace ASCOM.DeviceHub
 			RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
 			DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToCoordinates \r\nRA  {0}\r\nDec {1}:", raConverter, decConverter );
+			LogActivityLine( ActivityMessageTypes.Commands, "SyncToCoordinates - RA = {0}, Dec = {1}", raConverter, decConverter );
 			CheckDevice();
 			Service.SyncToCoordinates( rightAscension, declination );
 			Status.Slewing = true;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -36,7 +37,7 @@ namespace ASCOM.DeviceHub
 			_slewAmounts = new TelescopeSlewAmounts();
 			_selectedSlewAmount = _slewAmounts[0];
 			_status = null;
-			_slewDirections = null;
+			_jogDirections = null;
 			_hasAsymmetricJogRates = false;
 
 			SetParkCommandAction();
@@ -81,7 +82,6 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-
 		private bool _canMoveAxis;
 
 		public bool CanMoveAxis
@@ -112,6 +112,8 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
+		// This is set by radio buttons on the View.
+
 		private bool _isVariableJog;
 
 		public bool IsVariableJog
@@ -123,7 +125,7 @@ namespace ASCOM.DeviceHub
 				{
 					_isVariableJog = value;
 					OnPropertyChanged();
-					SetSlewDirections();
+					// SetSlewDirections(); ??? Do we really need to do this?
 				}
 			}
 		}
@@ -203,9 +205,9 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private SlewAmount _selectedSlewAmount;
+		private JogAmount _selectedSlewAmount;
 
-		public SlewAmount SelectedSlewAmount
+		public JogAmount SelectedSlewAmount
 		{
 			get { return _selectedSlewAmount; }
 			set
@@ -233,16 +235,24 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private ObservableCollection<SlewDirection> _slewDirections;
+		private ObservableCollection<JogDirection> _jogDirections;
 
-		public ObservableCollection<SlewDirection> SlewDirections
+		public ObservableCollection<JogDirection> JogDirections
 		{
-			get { return _slewDirections; }
+			get
+			{
+				if ( TelescopeManager != null && _jogDirections == null )
+				{
+					_jogDirections = TelescopeManager.JogDirections;
+				}
+
+				return _jogDirections; 
+			}
 			set
 			{
-				if ( value != _slewDirections )
+				if ( value != _jogDirections )
 				{
-					_slewDirections = value;
+					_jogDirections = value;
 					OnPropertyChanged();
 				}
 			}
@@ -449,9 +459,12 @@ namespace ASCOM.DeviceHub
 					BuildJogRatesLists();
 				}
 
-				if ( SlewDirections == null )
+				if ( JogDirections == null )
 				{
-					SetSlewDirections();
+					Task.Factory.StartNew( () =>
+					{
+						JogDirections = TelescopeManager.JogDirections;
+					}, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
 				}
 
 				UpdateCanStartMove();
@@ -496,19 +509,19 @@ namespace ASCOM.DeviceHub
 					CanStartMoveTelescope = false;
 					BuildJogRatesLists();
 					IsTracking = false;
-					SlewDirections = null;
+					JogDirections = null;
 				}, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
 			}
 		}
 
 		private void SetSlewDirections()
 		{
-			SlewDirections = new ObservableCollection<SlewDirection>()
+			JogDirections = new ObservableCollection<JogDirection>()
 			{
-				new SlewDirection { Name = "N", Description = "North", Direction = MoveDirections.North },
-				new SlewDirection { Name = "S", Description = "South", Direction = MoveDirections.South },
-				new SlewDirection { Name = "W", Description = "West", Direction = MoveDirections.West },
-				new SlewDirection { Name = "E", Description = "East", Direction = MoveDirections.East }
+				new JogDirection { Name = "N", Description = "North", MoveDirection = MoveDirections.North, Axis = TelescopeAxes.axisSecondary, RateSign = 1.0 },
+				new JogDirection { Name = "S", Description = "South", MoveDirection = MoveDirections.South, Axis = TelescopeAxes.axisSecondary, RateSign = -1.0  },
+				new JogDirection { Name = "W", Description = "West", MoveDirection = MoveDirections.West, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0  },
+				new JogDirection { Name = "E", Description = "East", MoveDirection = MoveDirections.East, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0  }
 			};
 
 			try
@@ -517,21 +530,21 @@ namespace ASCOM.DeviceHub
 				{
 					if ( Parameters.AlignmentMode == AlignmentModes.algAltAz && IsVariableJog )
 					{
-						SlewDirections.Clear();
+						JogDirections.Clear();
 
-						SlewDirections.Add( new SlewDirection { Name = "U", Description = "Up", Direction = MoveDirections.Up } );
-						SlewDirections.Add( new SlewDirection { Name = "D", Description = "Down", Direction = MoveDirections.Down } );
-						SlewDirections.Add( new SlewDirection { Name = "L", Description = "Left", Direction = MoveDirections.Left } );
-						SlewDirections.Add( new SlewDirection { Name = "R", Description = "Right", Direction = MoveDirections.Right } );
+						JogDirections.Add( new JogDirection { Name = "U", Description = "Up", MoveDirection = MoveDirections.Up, Axis = TelescopeAxes.axisSecondary, RateSign = 1.0 } );
+						JogDirections.Add( new JogDirection { Name = "D", Description = "Down", MoveDirection = MoveDirections.Down, Axis = TelescopeAxes.axisSecondary, RateSign = -1.0 } );
+						JogDirections.Add( new JogDirection { Name = "L", Description = "Left", MoveDirection = MoveDirections.Left, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0 } );
+						JogDirections.Add( new JogDirection { Name = "R", Description = "Right", MoveDirection = MoveDirections.Right, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0 } );
 					}
 					else if ( Parameters.SiteLatitude < 0 )
 					{
-						SlewDirections.Clear();
+						JogDirections.Clear();
 
-						SlewDirections.Add( new SlewDirection { Name = "S", Description = "South", Direction = MoveDirections.South } );
-						SlewDirections.Add( new SlewDirection { Name = "N", Description = "North", Direction = MoveDirections.North } );
-						SlewDirections.Add( new SlewDirection { Name = "W", Description = "West", Direction = MoveDirections.West } );
-						SlewDirections.Add( new SlewDirection { Name = "E", Description = "East", Direction = MoveDirections.East } );
+						JogDirections.Add( new JogDirection { Name = "S", Description = "South", MoveDirection = MoveDirections.South, Axis = TelescopeAxes.axisSecondary, RateSign = 1.0 } );
+						JogDirections.Add( new JogDirection { Name = "N", Description = "North", MoveDirection = MoveDirections.North, Axis = TelescopeAxes.axisSecondary, RateSign = -1.0 } );
+						JogDirections.Add( new JogDirection { Name = "W", Description = "West", MoveDirection = MoveDirections.West, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0 } );
+						JogDirections.Add( new JogDirection { Name = "E", Description = "East", MoveDirection = MoveDirections.East, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0 } );
 					}
 				}
 			}
@@ -686,12 +699,16 @@ namespace ASCOM.DeviceHub
 
 		private void StartMove( object param )
 		{
-			MoveDirections direction = (MoveDirections)param;
-			JogRate rate;
+			int ndx = Int32.Parse( (string)param );
+			Debug.WriteLine( $"Start Move parameter is {param}." );
+			MoveDirections direction = JogDirections[ndx].MoveDirection;
+			Debug.WriteLine( $"Start Move direction is {direction}." );
+
+			double rate;
 
 			if ( IsVariableJog )
 			{
-				rate = SelectedJogRate;
+				rate = SelectedJogRate.Rate;
 
 				// If the telescope has different rates for the secondary (Dec or Altitude) axis, use them.
 
@@ -699,12 +716,12 @@ namespace ASCOM.DeviceHub
 					(   direction == MoveDirections.Up || direction == MoveDirections.Down
 					 || direction == MoveDirections.North || direction == MoveDirections.South ) )
 				{
-					rate = SelectedSecondaryJogRate;
+					rate = SelectedSecondaryJogRate.Rate;
 				}
 
 				try
 				{
-					TelescopeManager.StartJogScope( direction, rate );
+					TelescopeManager.StartJogScope( ndx, rate );
 					_jogInProgress = true;
 				}
 				catch ( Exception xcp )
@@ -737,10 +754,11 @@ namespace ASCOM.DeviceHub
 
 		private void StopMotion( object param )
 		{
+			int ndx = Int32.Parse( (string)param );
+
 			if ( IsVariableJog && _jogInProgress )
 			{
-				MoveDirections direction = ( param == null ) ? MoveDirections.None : (MoveDirections)param;
-				TelescopeManager.StopJogScope( direction );
+				TelescopeManager.StopJogScope( ndx );
 			}
 		}
 
@@ -766,13 +784,17 @@ namespace ASCOM.DeviceHub
 
 		private void DoFixedSlew( object param )
 		{
+			// Param is index into JogDirections collection, as a string.
+
 			if ( !IsVariableJog )
 			{
-				MoveDirections direction = ( param == null ) ? MoveDirections.None : (MoveDirections)param;
+				//MoveDirections direction = ( param == null ) ? MoveDirections.None : (MoveDirections)param;
 
-				if ( direction != MoveDirections.None )
+				if ( param != null )
 				{
-					TelescopeManager.StartFixedSlew( direction, SelectedSlewAmount.Amount );
+					int ndx = Int32.Parse( (string)param );
+
+					TelescopeManager.StartFixedSlew( ndx, SelectedSlewAmount.Amount );
 
 					_isFixedSlewInProgress = true;
 				}

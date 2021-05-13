@@ -79,7 +79,6 @@ namespace ASCOM.DeviceHub
 
 			_logger.LogMessage( "Dome", "Starting initialization" );
 
-			//ConnectedState = false; // Initialize connected to false
 			ConnectedState = DomeManager.IsConnected;
 			Utilities = new Util(); //Initialize util object
 
@@ -126,7 +125,7 @@ namespace ASCOM.DeviceHub
 				DomeDriverSetupDialogViewModel vm = new DomeDriverSetupDialogViewModel();
 				DomeDriverSetupDialogView view = new DomeDriverSetupDialogView { DataContext = vm };
 				vm.RequestClose += view.OnRequestClose;
-				vm.InitializeCurrentDome( DomeManager.DomeID );
+				vm.InitializeCurrentDome( DomeManager.DomeID, DomeManager.Instance.FastPollingPeriod );
 				vm.IsLoggingEnabled = _logger.Enabled;
 				view.ContentRendered += ( sender, eventArgs ) => view.Activate();
 
@@ -135,10 +134,11 @@ namespace ASCOM.DeviceHub
 				if ( result.HasValue && result.Value )
 				{
 					_logger.Enabled = vm.IsLoggingEnabled;
-					string domeID = vm.DomeSetupVm.DomeID;
-					DomeManager.DomeID = domeID;
+					DomeManager.DomeID = vm.DomeSetupVm.DomeID;
+					DomeManager.Instance.SetFastUpdatePeriod( vm.DomeSetupVm.FastUpdatePeriod );
+
 					SaveProfile();
-					UpdateAppProfile( domeID );
+					UpdateAppProfile( DomeManager.DomeID );
 
 					view.DataContext = null;
 					view = null;
@@ -1121,9 +1121,7 @@ namespace ASCOM.DeviceHub
 
 			try
 			{
-				//DomeManager.SlewDomeShutter( altitude );
-
-				DomeManager.SlewToAltitude( altitude );
+				DomeManager.SlewDomeShutter( altitude );
 				msg += _done;
 			}
 			catch ( Exception )
@@ -1276,7 +1274,8 @@ namespace ASCOM.DeviceHub
 				DomeID = DomeManager.DomeID,
 				DomeLayout = Globals.DomeLayout,
 				AzimuthAdjustment = Globals.DomeAzimuthAdjustment,
-				IsLoggingEnabled = _logger.Enabled
+				IsLoggingEnabled = _logger.Enabled,
+				FastUpdatePeriod = DomeManager.FastPollingPeriod
 			};
 
 			settings.ToProfile();

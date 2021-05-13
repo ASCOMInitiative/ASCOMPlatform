@@ -7,6 +7,7 @@ using ASCOM.DeviceInterface;
 using ASCOM.Astrometry.Transform;
 
 using ASCOM.DeviceHub.MvvmMessenger;
+using System.Diagnostics;
 
 namespace ASCOM.DeviceHub
 {
@@ -17,7 +18,6 @@ namespace ASCOM.DeviceHub
 		private const int POLLING_INTERVAL_NORMAL = 5000;   // once every 5 seconds
 
 		public static string DomeID { get; set; }
-		public static double FastPollingPeriod { get; private set; }
 
 		private static DomeManager _instance = null;
 
@@ -47,11 +47,6 @@ namespace ASCOM.DeviceHub
 			Messenger.Default.Send( new DomeIDChangedMessage( id ) );
 		}
 
-		public static void SetFastUpdatePeriod( double period )
-		{
-			FastPollingPeriod = period;
-		}
-
 		#endregion Static Constructor, Properties, Fields, and Methods
 
 		#region Private Properties
@@ -63,8 +58,6 @@ namespace ASCOM.DeviceHub
 		private Task PollingTask { get; set; }
 
 		private bool IsPolling { get; set; }
-		private int PollingInterval { get; set; }
-		private ManualResetEvent PollingWake { get; set; }
 		private bool StatusUpdated { get; set; }
 
 		// We need telescope info in order to slave our position with the telescope.
@@ -91,8 +84,8 @@ namespace ASCOM.DeviceHub
 			TelescopeStatus = null;
 			SlavedSlewState = new SlewInProgressMessage( false );
 
-			PollingInterval = POLLING_INTERVAL_NORMAL;
-			PollingWake = new ManualResetEvent( false );
+			PollingPeriod = POLLING_INTERVAL_NORMAL;
+			PollingChange = new ManualResetEvent( false );
 
 			Messenger.Default.Register<TelescopeParametersUpdatedMessage>( this, ( action ) => UpdateTelescopeParameters( action ) );
 			Messenger.Default.Register<TelescopeStatusUpdatedMessage>( this, ( action ) => UpdateTelescopeStatus( action ) );
@@ -280,6 +273,11 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
+		public void SetFastUpdatePeriod( double period )
+		{
+			FastPollingPeriod = period;
+		}
+
 		public void OpenDomeShutter()
 		{
 			// The name of this method must be different from the ASCOM method name.
@@ -337,8 +335,17 @@ namespace ASCOM.DeviceHub
 			if ( Connected && !Slewing && Capabilities.CanSetAltitude
 				&& ( status != ShutterState.shutterClosed && status != ShutterState.shutterError ) )
 			{
-				var task = SlewShutterAsync( targetAltitude );
-				var result = task.Result;
+				Task task;
+
+				try
+				{
+					task = SlewShutterAsync( targetAltitude );
+					task.Wait();
+				}
+				catch ( AggregateException xcp )
+				{
+					throw xcp.InnerException;
+				}
 			}
 		}
 
@@ -417,37 +424,67 @@ namespace ASCOM.DeviceHub
 		private void PollDomeTask( CancellationToken token )
 		{
 			IsPolling = true;
-
 			bool taskCancelled = token.IsCancellationRequested;
 			DateTime nextSlaveAdjustmentTime = DateTime.MinValue;
-			WaitHandle[] waitHandles = new WaitHandle[] { token.WaitHandle, PollingWake };
+			WaitHandle[] waitHandles = new WaitHandle[] { token.WaitHandle, PollingChange };
+			Stopwatch watch = new Stopwatch();
+			double overhead = 0.0;
 
 			while ( !taskCancelled )
 			{
+				DateTime wakeupTime = DateTime.Now;
+				//Debug.WriteLine( $"Awakened @ {wakeupTime:hh:mm:ss.fff}." );
+
 				if ( Service.DeviceAvailable )
 				{
 					UpdateDomeStatusTask();
 					SlewTheSlavedDome( ref nextSlaveAdjustmentTime );
 					bool shutterMoving = Status.ShutterStatus == ShutterState.shutterOpening
 										|| Status.ShutterStatus == ShutterState.shutterClosing;
-					PollingInterval = ( Status.Slewing || shutterMoving ) ? Convert.ToInt32( FastPollingPeriod * 1000.0 ) : POLLING_INTERVAL_NORMAL;
+
+					if ( !( Status.Slewing || shutterMoving ) && PollingPeriod != POLLING_INTERVAL_NORMAL )
+					{
+						LogActivityLine( ActivityMessageTypes.Commands, $"Returning to normal polling every {POLLING_INTERVAL_NORMAL} ms." );
+					}
+
+					PollingPeriod = ( Status.Slewing || shutterMoving ) ? Convert.ToInt32( FastPollingPeriod * 1000.0 ) : POLLING_INTERVAL_NORMAL;
+				}
+
+				TimeSpan waitInterval = wakeupTime.AddMilliseconds( (double)PollingPeriod ) - DateTime.Now;
+				waitInterval -= TimeSpan.FromMilliseconds( overhead );
+
+				if ( waitInterval.TotalMilliseconds < 0 )
+				{
+					waitInterval = TimeSpan.FromMilliseconds( 0 );
 				}
 
 				// Wait until the polling interval has expired, we have been cancelled, or we have been
 				// awakened early because the polling interval has been changed.
 
-				int index = WaitHandle.WaitAny( waitHandles, PollingInterval );
+				watch.Start();
+				int index = WaitHandle.WaitAny( waitHandles, waitInterval );
+				watch.Stop();
+
+				// overhead is how much time it took us to get control back, in excess of the waitInterval.
+
+				overhead = Convert.ToDouble( watch.ElapsedMilliseconds ) - waitInterval.TotalMilliseconds;
+				watch.Reset();
 
 				if ( index == 0 )
 				{
 					taskCancelled = true;
+
 				}
 				else if ( index == 1 )
 				{
 					// We have been awakened externally; presumably to change the polling interval or in response
 					// to the scope being slewed.
 
-					PollingWake.Reset();
+					PollingChange.Reset();
+
+					// Reset the overhead value since we were awakened early.
+
+					overhead = 0.0;
 				}
 				else if ( index == WaitHandle.WaitTimeout )
 				{
@@ -595,12 +632,7 @@ namespace ASCOM.DeviceHub
 				{
 					SlewToAzimuth( targetAzimuth );
 					Status.Slewing = true;
-
-					if ( PollingInterval != (int)(FastPollingPeriod * 1000.0) )
-					{
-						PollingInterval = (int)(FastPollingPeriod * 1000.0);
-						PollingWake.Set();
-					}
+					SetFastPolling();
 				}, CancellationToken.None );
 			}
 
@@ -744,8 +776,7 @@ namespace ASCOM.DeviceHub
 			{
 				OpenShutter();
 
-				PollingInterval = (int)(FastPollingPeriod * 1000.0);
-				PollingWake.Set();
+				SetFastPolling();
 
 				WaitForStatusUpdate();
 
@@ -767,8 +798,7 @@ namespace ASCOM.DeviceHub
 
 				// Put the polling task into high gear.
 
-				PollingInterval = (int)(FastPollingPeriod * 1000.0);
-				PollingWake.Set();
+				SetFastPolling();
 
 				WaitForStatusUpdate();
 
@@ -778,24 +808,21 @@ namespace ASCOM.DeviceHub
 			return task;
 		}
 
-		private Task<bool> SlewShutterAsync( double altitude )
+		private Task SlewShutterAsync( double altitude )
 		{
 			// This method creates a task to run on a worker thread. It issues the slew shutter command, 
 			// speeds up the polling cycle, and waits until the next status update before completing.
 			// This allows the caller to wait for completion before continuing.
 
-			Task<bool> task = Task<bool>.Run( () =>
+			Task task = Task.Run( () =>
 			{
 				SlewToAltitude( altitude );
 
 				// Put the polling task into high gear.
 
-				PollingInterval = (int)( FastPollingPeriod * 1000.0 );
-				PollingWake.Set();
+				SetFastPolling();
 
 				WaitForStatusUpdate();
-
-				return Status.Slewing;
 			} );
 
 			return task;
@@ -813,8 +840,7 @@ namespace ASCOM.DeviceHub
 
 				// Put the polling task into high gear.
 
-				PollingInterval = (int)( FastPollingPeriod * 1000.0 );
-				PollingWake.Set();
+				SetFastPolling();
 
 				WaitForStatusUpdate();
 
@@ -848,8 +874,7 @@ namespace ASCOM.DeviceHub
 
 				// Put the polling task into high gear.
 
-				PollingInterval = (int)( FastPollingPeriod * 1000.0 );
-				PollingWake.Set();
+				SetFastPolling();
 
 				WaitForStatusUpdate();
 
@@ -871,8 +896,7 @@ namespace ASCOM.DeviceHub
 
 				// Put the polling task into high gear.
 
-				PollingInterval = (int)( FastPollingPeriod * 1000.0 );
-				PollingWake.Set();
+				SetFastPolling();
 
 				WaitForStatusUpdate();
 
@@ -936,7 +960,7 @@ namespace ASCOM.DeviceHub
 			// Save the message data and wake up the polling loop.
 
 			SlavedSlewState = action;
-			PollingWake.Set();
+			SetFastPolling();
 		}
 
 		#endregion Helper Methods

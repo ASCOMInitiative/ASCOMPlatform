@@ -129,7 +129,7 @@ namespace ASCOM.DeviceHub
 				DriverSetupDialogViewModel vm = new DriverSetupDialogViewModel();
 				DriverSetupDialogView view = new DriverSetupDialogView { DataContext = vm };
 				vm.RequestClose += view.OnRequestClose;
-				vm.InitializeCurrentTelescope( TelescopeManager.TelescopeID );
+				vm.InitializeCurrentTelescope( TelescopeManager.TelescopeID, TelescopeManager.Instance.FastPollingPeriod );
 				vm.IsLoggingEnabled = _logger.Enabled;
 				view.ContentRendered += ( sender, eventArgs ) => view.Activate();
 
@@ -140,6 +140,7 @@ namespace ASCOM.DeviceHub
 					_logger.Enabled = vm.IsLoggingEnabled;
 					string telescopeID = vm.TelescopeSetupVm.TelescopeID;
 					TelescopeManager.TelescopeID = telescopeID;
+					TelescopeManager.Instance.FastPollingPeriod = vm.TelescopeSetupVm.FastUpdatePeriod;
 					SaveProfile();
 
 					view.DataContext = null;
@@ -1761,7 +1762,15 @@ namespace ASCOM.DeviceHub
 
 			try
 			{
-				TelescopeManager.MoveAxis( axis, rate );
+				if ( rate == 0 )
+				{
+					TelescopeManager.StopJogMoveAxis( axis );
+				}
+				else
+				{
+					TelescopeManager.StartJogMoveAxis( axis, rate );
+				}
+
 				msg += _done;
 			}
 			catch ( Exception )
@@ -1792,7 +1801,7 @@ namespace ASCOM.DeviceHub
 
 			try
 			{
-				TelescopeManager.Park();
+				TelescopeManager.SetParkingState( ParkingStateEnum.IsAtPark );
 				msg += _done;
 			}
 			catch ( Exception )
@@ -3036,6 +3045,8 @@ namespace ASCOM.DeviceHub
 		{
 			TelescopeSettings settings = TelescopeSettings.FromProfile();
 			_logger.Enabled = settings.IsLoggingEnabled;
+			TelescopeManager.TelescopeID = settings.TelescopeID;
+			TelescopeManager.FastPollingPeriod = settings.FastUpdatePeriod;
 		}
 
 		/// <summary>
@@ -3046,6 +3057,7 @@ namespace ASCOM.DeviceHub
 			TelescopeSettings settings = new TelescopeSettings
 			{
 				TelescopeID = TelescopeManager.TelescopeID,
+				FastUpdatePeriod = TelescopeManager.FastPollingPeriod,
 				IsLoggingEnabled = _logger.Enabled
 			};
 

@@ -60,9 +60,9 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private SlewAmount _selectedSlewAmount;
+		private JogAmount _selectedSlewAmount;
 
-		public SlewAmount SelectedSlewAmount
+		public JogAmount SelectedSlewAmount
 		{
 			get { return _selectedSlewAmount; }
 			set

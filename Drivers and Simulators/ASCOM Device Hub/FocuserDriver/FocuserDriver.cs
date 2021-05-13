@@ -124,7 +124,7 @@ namespace ASCOM.DeviceHub
 				FocuserDriverSetupDialogViewModel vm = new FocuserDriverSetupDialogViewModel();
 				FocuserDriverSetupDialogView view = new FocuserDriverSetupDialogView { DataContext = vm };
 				vm.RequestClose += view.OnRequestClose;
-				vm.InitializeCurrentFocuser( FocuserManager.FocuserID );
+				vm.InitializeCurrentFocuser( FocuserManager.FocuserID,  FocuserManager.FastPollingPeriod );
 				vm.IsLoggingEnabled = _logger.Enabled;
 				view.ContentRendered += ( sender, eventArgs ) => view.Activate();
 
@@ -133,8 +133,8 @@ namespace ASCOM.DeviceHub
 				if ( result.HasValue && result.Value )
 				{
 					_logger.Enabled = vm.IsLoggingEnabled;
-					string focuserID = vm.FocuserSetupVm.FocuserID;
-					FocuserManager.FocuserID = focuserID;
+					FocuserManager.FocuserID = vm.FocuserSetupVm.FocuserID;
+					FocuserManager.FastPollingPeriod = vm.FocuserSetupVm.FastUpdatePeriod;
 					SaveProfile();
 					AppSettingsManager.SaveAppSettings();
 
@@ -943,7 +943,8 @@ namespace ASCOM.DeviceHub
 			{
 				FocuserID = FocuserManager.FocuserID,
 				TemperatureOffset = Globals.FocuserTemperatureOffset,
-				IsLoggingEnabled = _logger.Enabled
+				IsLoggingEnabled = _logger.Enabled,
+				FastUpdatePeriod = FocuserManager.FastPollingPeriod
 			};
 
 			settings.ToProfile();

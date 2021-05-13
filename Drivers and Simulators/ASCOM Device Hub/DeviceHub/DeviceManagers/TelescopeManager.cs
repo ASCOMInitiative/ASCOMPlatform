@@ -9,6 +9,8 @@ using ASCOM.Astrometry.Transform;
 using ASCOM.DeviceInterface;
 
 using ASCOM.DeviceHub.MvvmMessenger;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace ASCOM.DeviceHub
 {
@@ -16,10 +18,9 @@ namespace ASCOM.DeviceHub
 	{
 		#region Static Constructor, Properties, Fields, and Methods
 
-		private const int POLLING_INTERVAL_NORMAL = 3000;   // once per 3 seconds
+		private const int POLLING_PERIOD_NORMAL = 3000;   // once per 3 seconds
 
 		public static string TelescopeID { get; set; }
-		public static double FastPollingPeriod { get; private set; }
 
 		private static TelescopeManager _instance = null;
 
@@ -53,11 +54,6 @@ namespace ASCOM.DeviceHub
 			Messenger.Default.Send( new TelescopeIDChangedMessage( id ) );
 		}
 
-		public static void SetFastUpdatePeriod( double period )
-		{
-			FastPollingPeriod = period;
-		}
-
 		#endregion Static Constructor, Properties, Fields, and Methods
 
 		#region Private Properties
@@ -69,7 +65,6 @@ namespace ASCOM.DeviceHub
 		private Task PollingTask { get; set; }
 
 		private bool IsPolling { get; set; }
-		private int PollingInterval { get; set; }
 		private bool ForceParameterUpdate { get; set; }
 		private CancellationTokenSource PulseGuideCancelTokenSource { get; set; }
 
@@ -102,10 +97,13 @@ namespace ASCOM.DeviceHub
 			Capabilities = null;
 			Parameters = null;
 			Status = null;
+			JogDirections = null;
 			PulseGuideEnd = DateTime.MinValue;
 			PollingTask = null;
 
-			PollingInterval = POLLING_INTERVAL_NORMAL;
+			PollingPeriod = POLLING_PERIOD_NORMAL;
+			PollingChange = new ManualResetEvent( false );
+
 			PreviousSlewInProgressMessage = new SlewInProgressMessage( false );
 		}
 
@@ -122,6 +120,21 @@ namespace ASCOM.DeviceHub
 		public TelescopeCapabilities Capabilities { get; private set; }
 		public TelescopeParameters Parameters { get; private set; }
 		public DevHubTelescopeStatus Status { get; private set; }
+
+		private ObservableCollection<JogDirection> _jogDirections;
+
+		public ObservableCollection<JogDirection> JogDirections
+		{
+			get { return _jogDirections; }
+			set
+			{
+				if ( value != _jogDirections )
+				{
+					_jogDirections = value;
+					OnPropertyChanged();
+				}
+			}
+		}
 
 		#endregion Public Properties
 
@@ -215,7 +228,7 @@ namespace ASCOM.DeviceHub
 					ReleaseTelescopeService();
 				}
 
-				if (Connected )
+				if ( Connected )
 				{
 					StartDevicePolling();
 				}
@@ -249,27 +262,54 @@ namespace ASCOM.DeviceHub
 					Messenger.Default.Send( new DeviceDisconnectedMessage( DeviceTypeEnum.Telescope ) );
 					ReleaseTelescopeService();
 					Globals.LatestRawTelescopeStatus = null;
+					_jogDirections = null;
 				}
 			}
 		}
 
-		public void StartJogScope( MoveDirections jogDirection, JogRate jogRate )
+		public void SetFastUpdatePeriod( double period )
 		{
+			FastPollingPeriod = period;
+		}
+
+		public void StartJogScope( int ndx, double rate )
+		{
+			JogDirection direction = JogDirections[ndx];
+
 			if ( Capabilities.CanMovePrimaryAxis && Capabilities.CanMoveSecondaryAxis )
 			{
-				StartJogMoveAxis( jogDirection, jogRate );
+				TelescopeAxes axis = direction.Axis;
+				double trueRate = rate * direction.RateSign;
+
+				StartJogMoveAxis( axis, trueRate );
 			}
 			else if ( Capabilities.CanPulseGuide )
 			{
-				StartJogPulseGuide( jogDirection );
+				// We don't use the rate for jogging with PulseGuide, we keep jogging until
+				// The StopJogScope method is called.
+
+				StartJogPulseGuide( direction.GuideDirection );
 			}
 		}
 
-		public void StopJogScope( MoveDirections jogDirection )
+		public void StopJogScope( int ndx )
+		{
+			if ( ndx < 0 || ndx >= JogDirections.Count )
+			{
+				StopJogScope( TelescopeAxes.axisPrimary );
+				StopJogScope( TelescopeAxes.axisSecondary );
+			}
+			else
+			{
+				StopJogScope( JogDirections[ndx].Axis );
+			}
+		}
+
+		public void StopJogScope( TelescopeAxes axis )
 		{
 			if ( Capabilities.CanMovePrimaryAxis && Capabilities.CanMoveSecondaryAxis )
 			{
-				StopJogMoveAxis( jogDirection );
+				StopJogMoveAxis( axis );
 			}
 			else if ( Capabilities.CanPulseGuide )
 			{
@@ -277,8 +317,10 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		public void StartFixedSlew( MoveDirections direction, double distance )
+		public void StartFixedSlew( int ndx, double distance )
 		{
+			MoveDirections direction = JogDirections[ndx].MoveDirection;
+
 			if ( IsRaDecSlew( direction ) )
 			{
 				StartFixedSlewRaDec( direction, distance );
@@ -352,6 +394,8 @@ namespace ASCOM.DeviceHub
 
 					Task.Run( () => SlewToCoordinates( ra, dec ) );
 					slewed = true;
+
+					SetFastPolling();
 				}
 			}
 			catch ( Exception xcp )
@@ -383,6 +427,8 @@ namespace ASCOM.DeviceHub
 				SendSlewMessage( ra, dec );
 				SlewToCoordinatesAsync( ra, dec );
 				slewed = true;
+
+				SetFastPolling();
 			}
 			catch ( Exception xcp )
 			{
@@ -427,6 +473,8 @@ namespace ASCOM.DeviceHub
 
 					Task.Run( () => SlewToTarget() );
 					slewed = true;
+
+					SetFastPolling();
 				}
 			}
 			catch ( Exception xcp )
@@ -458,6 +506,8 @@ namespace ASCOM.DeviceHub
 				SendSlewMessage( Status.TargetRightAscension, Status.Declination );
 				SlewToTargetAsync();
 				slewed = true;
+
+				SetFastPolling();
 			}
 			catch ( Exception xcp )
 			{
@@ -499,6 +549,8 @@ namespace ASCOM.DeviceHub
 
 					Task.Run( () => SlewToAltAz( azimuth, altitude ) );
 					slewed = true;
+
+					SetFastPolling();
 				}
 			}
 			catch ( Exception xcp )
@@ -523,7 +575,6 @@ namespace ASCOM.DeviceHub
 
 			bool slewed = false;
 
-
 			try
 			{
 				double ra, dec;
@@ -532,6 +583,8 @@ namespace ASCOM.DeviceHub
 
 				SlewToAltAzAsync( azimuth, altitude );
 				slewed = true;
+
+				SetFastPolling();
 			}
 			catch ( Exception xcp )
 			{
@@ -573,13 +626,18 @@ namespace ASCOM.DeviceHub
 			{
 				if ( Capabilities.CanSetPierSide )
 				{
+					LogActivityLine( ActivityMessageTypes.Commands, "Starting Meridian Flip using Set SideOfPier" );
+
 					SideOfPier = newSide;
 				}
 				else
 				{
-					SlewToCoordinatesAsync( ra, dec );
+					LogActivityLine( ActivityMessageTypes.Commands, "Starting Meridian Flip using SlewToCoordinates" );
+
+					DoSlewToCoordinates( ra, dec );
 				}
 
+				SetFastPolling();
 				SlewInProgressMessage msg = new SlewInProgressMessage( true, ra, dec, newSide );
 				Messenger.Default.Send( msg );
 				PreviousSlewInProgressMessage = msg;
@@ -668,9 +726,15 @@ namespace ASCOM.DeviceHub
 		{
 			IsPolling = true;
 			bool taskCancelled = token.IsCancellationRequested;
+			WaitHandle[] waitHandles = new WaitHandle[] { token.WaitHandle, PollingChange };
+			Stopwatch watch = new Stopwatch();
+			double overhead = 0.0;
 
 			while ( !taskCancelled )
 			{
+				DateTime wakeupTime = DateTime.Now;
+				//Debug.WriteLine( $"Awakened @ {wakeupTime:hh:mm:ss.fff}." );
+
 				if ( Service.DeviceAvailable )
 				{
 					if ( ForceParameterUpdate )
@@ -681,6 +745,16 @@ namespace ASCOM.DeviceHub
 
 					UpdateScopeStatusTask();
 
+					if ( IsConnected && JogDirections == null )
+					{
+						// Make sure that we update the JogDirections on the U/I thread.
+
+						Task.Factory.StartNew( () =>
+						{
+							JogDirections = InitializeJogDirections();
+						}, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
+					}
+
 					if ( PreviousSlewInProgressMessage.IsSlewInProgress && !Status.Slewing )
 					{
 						SlewInProgressMessage msg = new SlewInProgressMessage( false );
@@ -688,12 +762,52 @@ namespace ASCOM.DeviceHub
 						PreviousSlewInProgressMessage = msg;
 					}
 
-					PollingInterval = ( Status.Slewing ) ? Convert.ToInt32( FastPollingPeriod * 1000.0) : POLLING_INTERVAL_NORMAL;
+					if ( !Status.Slewing && PollingPeriod != POLLING_PERIOD_NORMAL )
+					{
+						LogActivityLine( ActivityMessageTypes.Commands, $"Returning to normal polling every {POLLING_PERIOD_NORMAL} ms." );
+					}
+
+					PollingPeriod = ( Status.Slewing ) ? Convert.ToInt32( FastPollingPeriod * 1000.0 ) : POLLING_PERIOD_NORMAL;
 				}
 
-				if ( token.WaitHandle.WaitOne( PollingInterval ) )
+				TimeSpan waitInterval = wakeupTime.AddMilliseconds( (double)PollingPeriod ) - DateTime.Now;
+				waitInterval -= TimeSpan.FromMilliseconds( overhead );
+
+				if ( waitInterval.TotalMilliseconds < 0 )
+				{
+					waitInterval = TimeSpan.FromMilliseconds( 0 );
+				}
+
+				// Wait until the wait interval has expired, we have been cancelled, or we have been
+				// awakened early because the polling interval has been changed.
+
+				watch.Start();
+				int index = WaitHandle.WaitAny( waitHandles, waitInterval );
+				watch.Stop();
+
+				// overhead is how much time it took us to get control back, in excess of the waitInterval.
+
+				overhead = Convert.ToDouble( watch.ElapsedMilliseconds ) - waitInterval.TotalMilliseconds;
+				watch.Reset();
+
+				if ( index == 0 )
 				{
 					taskCancelled = true;
+				}
+				else if ( index == 1 )
+				{
+					// We have been awakened externally; presumably to change the polling interval or in response
+					// to the scope being slewed.
+
+					PollingChange.Reset();
+
+					// Reset the overhead value since we were awakened early.
+
+					overhead = 0.0;
+				}
+				else if ( index == WaitHandle.WaitTimeout )
+				{
+					// The polling interval has expired.
 				}
 			}
 
@@ -954,6 +1068,8 @@ namespace ASCOM.DeviceHub
 			if ( Connected )
 			{
 				Task.Run( () => ParkScopeTask() );
+
+				SetFastPolling();
 			}
 		}
 
@@ -971,7 +1087,7 @@ namespace ASCOM.DeviceHub
 			return axisName;
 		}
 
-		private string GetPierSideName( PierSide sideOfPier, bool isSimulated=false )
+		private string GetPierSideName( PierSide sideOfPier, bool isSimulated = false )
 		{
 			string name = "";
 
@@ -992,7 +1108,7 @@ namespace ASCOM.DeviceHub
 
 		private string GetGuideDirectionName( GuideDirections direction )
 		{
-			string name = "";
+			string name;
 
 			switch ( direction )
 			{
@@ -1049,16 +1165,15 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void StartJogMoveAxis( MoveDirections jogDirection, JogRate jogRate )
+		public void StartJogMoveAxis( TelescopeAxes axis, double rate )
 		{
-			TelescopeAxes axis = GetJogAxis( jogDirection );
-
-			ValidateMoveAxisRate( axis, jogRate );
-			double trueRate = jogRate.Rate * GetJogSign( jogDirection );
+			ValidateMoveAxisRate( axis, rate );
 
 			try
 			{
-				MoveAxis( axis, trueRate );
+				MoveAxis( axis, rate );
+
+				SetFastPolling();
 			}
 			catch ( Exception xcp )
 			{
@@ -1066,40 +1181,21 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void StopJogMoveAxis( MoveDirections jogDirection )
+		public void StopJogMoveAxis( TelescopeAxes axis )
 		{
-			if ( jogDirection == MoveDirections.None )
+			try
 			{
-				// If we get here we don't know which axis to stop moving, so stop both axes, if supported.
-
-				if ( Capabilities.CanMovePrimaryAxis )
-				{
-					MoveAxis( TelescopeAxes.axisPrimary, 0.0 );
-				}
-
-				if ( Capabilities.CanMoveSecondaryAxis )
-				{
-					MoveAxis( TelescopeAxes.axisSecondary, 0.0 );
-				}
+				MoveAxis( axis, 0.0 );
 			}
-			else
+			catch ( Exception xcp )
 			{
-				TelescopeAxes axis = GetJogAxis( jogDirection );
-
-				try
-				{
-					MoveAxis( axis, 0.0 );
-				}
-				catch ( Exception xcp )
-				{
-					throw xcp;
-				}
+				throw xcp;
 			}
 		}
 
-		private void StartJogPulseGuide( MoveDirections jogDirection )
+		private void StartJogPulseGuide( GuideDirections? guideDirection )
 		{
-			GuideDirections? direction = GetPulseGuideDirection( jogDirection );
+			GuideDirections? direction = guideDirection;
 
 			// Don't start jogging if we don't have a valid direction.
 
@@ -1114,38 +1210,12 @@ namespace ASCOM.DeviceHub
 
 				Task.Factory.StartNew( () => DoPulseGuideTask( direction.Value, PulseGuideCancelTokenSource.Token ), PulseGuideCancelTokenSource.Token, TaskCreationOptions.None, TaskScheduler.Default );
 
+				SetFastPolling();
 			}
 			catch ( Exception xcp )
 			{
 				throw xcp;
 			}
-		}
-
-		private GuideDirections? GetPulseGuideDirection( MoveDirections jogDirection )
-		{
-			GuideDirections? direction = null;
-
-			switch ( jogDirection )
-			{
-				case MoveDirections.North:
-					direction = GuideDirections.guideNorth;
-					break;
-
-				case MoveDirections.South:
-					direction = GuideDirections.guideSouth;
-					break;
-
-				case MoveDirections.East:
-					direction = GuideDirections.guideEast;
-					break;
-
-				case MoveDirections.West:
-					direction = GuideDirections.guideWest;
-					break;
-
-			}
-
-			return direction;
 		}
 
 		private void StopJogPulseGuide()
@@ -1176,23 +1246,7 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private TelescopeAxes GetJogAxis( MoveDirections direction )
-		{
-			return ( direction == MoveDirections.East
-					|| direction == MoveDirections.West
-					|| direction == MoveDirections.Left
-					|| direction == MoveDirections.Right ) ? TelescopeAxes.axisPrimary : TelescopeAxes.axisSecondary;
-		}
-
-		private double GetJogSign( MoveDirections direction )
-		{
-			return ( direction == MoveDirections.South
-					|| direction == MoveDirections.East
-					|| direction == MoveDirections.Down
-					|| direction == MoveDirections.Left ) ? -1.0 : 1.0;
-		}
-
-		private void ValidateMoveAxisRate( TelescopeAxes axis, JogRate rate )
+		private void ValidateMoveAxisRate( TelescopeAxes axis, double rate )
 		{
 			bool rateValid = false;
 
@@ -1208,9 +1262,11 @@ namespace ASCOM.DeviceHub
 				double minimum = axisRate.Minimum - tolerance;
 				double maximum = axisRate.Maximum + tolerance;
 
-				if ( rate.Rate >= minimum && rate.Rate <= maximum )
+				if ( Math.Abs( rate ) >= minimum && Math.Abs( rate ) <= maximum )
 				{
 					rateValid = true;
+
+					break;
 				}
 			}
 
@@ -1282,16 +1338,11 @@ namespace ASCOM.DeviceHub
 			return NormalizeValue( dblValue, 0.0, 24.0 );
 		}
 
-		private double NormalizeAzimuth( double dblValue )
-		{
-			return NormalizeValue( dblValue, 0.0, 360.0 );
-		}
-
 		private void MonitorPulseGuidingTask( DateTime endTime )
 		{
 			// This task runs on a worker thread to monitor pulse guiding.
 
-			if (PulseGuideEnd == DateTime.MinValue )
+			if ( PulseGuideEnd == DateTime.MinValue )
 			{
 				// Here, set the end time and start monitoring.
 
@@ -1326,6 +1377,46 @@ namespace ASCOM.DeviceHub
 			SlewInProgressMessage msg = new SlewInProgressMessage( true, ra, dec, sideOfPier );
 			Messenger.Default.Send( msg );
 			PreviousSlewInProgressMessage = msg;
+		}
+
+		private ObservableCollection<JogDirection> InitializeJogDirections()
+		{
+			ObservableCollection<JogDirection> directions = new ObservableCollection<JogDirection>()
+			{
+				new JogDirection { Name = "N", Description = "North", MoveDirection = MoveDirections.North, Axis = TelescopeAxes.axisSecondary, RateSign = 1.0, GuideDirection = GuideDirections.guideNorth },
+				new JogDirection { Name = "S", Description = "South", MoveDirection = MoveDirections.South, Axis = TelescopeAxes.axisSecondary, RateSign = -1.0, GuideDirection = GuideDirections.guideSouth },
+				new JogDirection { Name = "W", Description = "West", MoveDirection = MoveDirections.West, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0, GuideDirection = GuideDirections.guideWest },
+				new JogDirection { Name = "E", Description = "East", MoveDirection = MoveDirections.East, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0, GuideDirection = GuideDirections.guideEast }
+			};
+
+			try
+			{
+				if ( IsConnected )
+				{
+					if ( Parameters.AlignmentMode == AlignmentModes.algAltAz )
+					{
+						directions.Clear();
+
+						directions.Add( new JogDirection { Name = "U", Description = "Up", MoveDirection = MoveDirections.Up, Axis = TelescopeAxes.axisSecondary, RateSign = 1.0 } );
+						directions.Add( new JogDirection { Name = "D", Description = "Down", MoveDirection = MoveDirections.Down, Axis = TelescopeAxes.axisSecondary, RateSign = -1.0 } );
+						directions.Add( new JogDirection { Name = "L", Description = "Left", MoveDirection = MoveDirections.Left, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0 } );
+						directions.Add( new JogDirection { Name = "R", Description = "Right", MoveDirection = MoveDirections.Right, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0 } );
+					}
+					else if ( Parameters.SiteLatitude < 0 )
+					{
+						directions.Clear();
+
+						directions.Add( new JogDirection { Name = "S", Description = "South", MoveDirection = MoveDirections.South, Axis = TelescopeAxes.axisSecondary, RateSign = -1.0, GuideDirection = GuideDirections.guideSouth } );
+						directions.Add( new JogDirection { Name = "N", Description = "North", MoveDirection = MoveDirections.North, Axis = TelescopeAxes.axisSecondary, RateSign = 1.0, GuideDirection = GuideDirections.guideNorth } );
+						directions.Add( new JogDirection { Name = "W", Description = "West", MoveDirection = MoveDirections.West, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0, GuideDirection = GuideDirections.guideWest } );
+						directions.Add( new JogDirection { Name = "E", Description = "East", MoveDirection = MoveDirections.East, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0, GuideDirection = GuideDirections.guideEast } );
+					}
+				}
+			}
+			catch ( Exception )
+			{ }
+
+			return directions;
 		}
 
 		#endregion Helper Methods

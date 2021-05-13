@@ -1,8 +1,8 @@
 ﻿namespace ASCOM.DeviceHub
 {
-	public class SlewAmount
+	public class JogAmount
     {
-		public SlewAmount( string name, double amount )
+		public JogAmount( string name, double amount )
 		{
 			Name = name;
 			Amount = amount;

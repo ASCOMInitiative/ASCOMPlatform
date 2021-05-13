@@ -46,10 +46,10 @@ namespace ASCOM.DeviceHub
 
 		#region Public Methods
 
-		public void InitializeCurrentDome( string domeID )
+		public void InitializeCurrentDome( string domeID, double fastUpdatePeriod )
 		{
 			DomeSetupVm.DomeID = domeID;
-			DomeSetupVm.FastUpdatePeriod = DomeManager.FastPollingPeriod;
+			DomeSetupVm.FastUpdatePeriod = fastUpdatePeriod;
 			DomeSetupVm.InitializeLayout( Globals.DomeLayout );
 		}
 
