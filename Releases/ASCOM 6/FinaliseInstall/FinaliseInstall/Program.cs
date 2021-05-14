@@ -903,65 +903,69 @@ namespace ConsoleApplication1
         /// <remarks>This uses the WMI features and is pretty obscure - sorry, it was the only way I could find to do this! Peter</remarks>
         private static string GetBuiltInGroup(string DomainSID, string GroupSID)
         {
-            ManagementObjectSearcher Searcher = default(ManagementObjectSearcher);
-            string Group = "Unknown";
-            // Initialise to some values
-            string Name = "Unknown";
-            PropertyDataCollection p = default(PropertyDataCollection);
+            string builtInUsers = new SecurityIdentifier("S-1-5-32-545").Translate(typeof(NTAccount)).ToString(); // S-1-5-32-545 is the locale independent descriptor for the BUILTIN\Users group
+            LogMessage("RegistryRights", $"Localised name of BUILTIN\\users group is: '{builtInUsers}'");
+            return builtInUsers;
 
-            //LogMessage("", "Start: " + DomainSID + " " + GroupSID);
+            //ManagementObjectSearcher Searcher = default(ManagementObjectSearcher);
+            //string Group = "Unknown";
+            //// Initialise to some values
+            //string Name = "Unknown";
+            //PropertyDataCollection p = default(PropertyDataCollection);
 
-            try
-            {
-                //Searcher = new ManagementObjectSearcher(new ManagementScope("\\\\localhost\\root\\cimv2"), new WqlObjectQuery("Select * From Win32_Account "), null);
-                Searcher = new ManagementObjectSearcher(new ManagementScope("\\\\localhost\\root\\cimv2"),
-                    new WqlObjectQuery("Select * From Win32_Account Where SID = '" + DomainSID + "'"), null);
-                //new WqlObjectQuery("Select * From Win32_Account Where SID = 'S-1-5-32'"), null);
-                //new WqlObjectQuery("Select * From Win32_Account"), null);
+            ////LogMessage("", "Start: " + DomainSID + " " + GroupSID);
 
-                //LogMessage("GetBuiltInGroup", "Found " + Searcher.Get().Count + " entries");
-                int count = 0;
-                foreach (ManagementBaseObject wmiClass in Searcher.Get())
-                {
-                    count += 1;
-                    p = wmiClass.Properties;
-                    foreach (PropertyData pr in p)
-                    {
-                        if (pr.Name == "Name")
-                        {
-                            Group = pr.Value.ToString();
-                            //LogMessage("GetBuiltInGroup Name " + count, pr.Name + " = " + pr.Value.ToString());
-                        }
-                    }
-                }
-                Searcher.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogMessage("GetBuiltInUsers 1", ex.ToString());
-            }
+            //try
+            //{
+            //    //Searcher = new ManagementObjectSearcher(new ManagementScope("\\\\localhost\\root\\cimv2"), new WqlObjectQuery("Select * From Win32_Account "), null);
+            //    Searcher = new ManagementObjectSearcher(new ManagementScope("\\\\localhost\\root\\cimv2"),
+            //        new WqlObjectQuery("Select * From Win32_Account Where SID = '" + DomainSID + "'"), null);
+            //    //new WqlObjectQuery("Select * From Win32_Account Where SID = 'S-1-5-32'"), null);
+            //    //new WqlObjectQuery("Select * From Win32_Account"), null);
 
-            try
-            {
-                Searcher = new ManagementObjectSearcher(new ManagementScope("\\\\localhost\\root\\cimv2"),
-                    new WqlObjectQuery("Select * From Win32_Group Where SID = '" + GroupSID + "'"), null);
+            //    //LogMessage("GetBuiltInGroup", "Found " + Searcher.Get().Count + " entries");
+            //    int count = 0;
+            //    foreach (ManagementBaseObject wmiClass in Searcher.Get())
+            //    {
+            //        count += 1;
+            //        p = wmiClass.Properties;
+            //        foreach (PropertyData pr in p)
+            //        {
+            //            if (pr.Name == "Name")
+            //            {
+            //                Group = pr.Value.ToString();
+            //                //LogMessage("GetBuiltInGroup Name " + count, pr.Name + " = " + pr.Value.ToString());
+            //            }
+            //        }
+            //    }
+            //    Searcher.Dispose();
+            //}
+            //catch (Exception ex)
+            //{
+            //    LogMessage("GetBuiltInUsers 1", ex.ToString());
+            //}
 
-                foreach (ManagementBaseObject wmiClass in Searcher.Get())
-                {
-                    p = wmiClass.Properties;
-                    foreach (PropertyData pr in p)
-                    {
-                        if (pr.Name == "Name") Name = pr.Value.ToString();
-                    }
-                }
-                Searcher.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogMessage("GetBuiltInUsers 2", ex.ToString());
-            }
-            // LogMessage("GetBuiltInUsers", "Returning: " + Group + "\\" + Name);
-            return Group + "\\" + Name;
+            //try
+            //{
+            //    Searcher = new ManagementObjectSearcher(new ManagementScope("\\\\localhost\\root\\cimv2"),
+            //        new WqlObjectQuery("Select * From Win32_Group Where SID = '" + GroupSID + "'"), null);
+
+            //    foreach (ManagementBaseObject wmiClass in Searcher.Get())
+            //    {
+            //        p = wmiClass.Properties;
+            //        foreach (PropertyData pr in p)
+            //        {
+            //            if (pr.Name == "Name") Name = pr.Value.ToString();
+            //        }
+            //    }
+            //    Searcher.Dispose();
+            //}
+            //catch (Exception ex)
+            //{
+            //    LogMessage("GetBuiltInUsers 2", ex.ToString());
+            //}
+            //// LogMessage("GetBuiltInUsers", "Returning: " + Group + "\\" + Name);
+            //return Group + "\\" + Name;
         }
 
         /// <summary>

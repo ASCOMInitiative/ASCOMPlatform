@@ -6633,46 +6633,12 @@ Public Class DiagnosticsForm
     ''' <returns>Localised name of the BUILTIN\Users group</returns>
     ''' <remarks>This uses the WMI features and is pretty obscure - sorry, it was the only way I could find to do this! Peter</remarks>
     Private Function GetBuiltInUsers() As String
-        Dim Searcher As ManagementObjectSearcher
-        Dim Group As String = "Unknown" ' Initialise to some values
-        Dim Name As String = "Unknown"
+        Dim builtInUsers As String
 
-        Try
+        builtInUsers = New SecurityIdentifier("S-1-5-32-545").Translate(GetType(NTAccount)).ToString() ' S-1-5-32-545 Is the locale independent descriptor For the BUILTIN\Users group
+        TL.LogMessage("GetBuiltInUsers", $"Localised name of BUILTIN\\users group is: '{builtInUsers}'")
 
-            Searcher = New ManagementObjectSearcher(New ManagementScope("\\localhost\root\cimv2"),
-                                                    New WqlObjectQuery("Select * From Win32_Account Where SID = 'S-1-5-32'"),
-                                                    Nothing)
-
-            For Each wmiClass In Searcher.Get
-                Dim p As PropertyDataCollection
-                p = wmiClass.Properties
-                For Each pr In p
-                    If pr.Name = "Name" Then Group = pr.Value
-                Next
-            Next
-            Searcher.Dispose()
-        Catch ex As Exception
-            LogException("GetBuiltInUsers 1", ex.ToString)
-        End Try
-
-        Try
-            Searcher = New ManagementObjectSearcher(New ManagementScope("\\localhost\root\cimv2"),
-                                                    New WqlObjectQuery("Select * From Win32_Group Where SID = 'S-1-5-32-545'"),
-                                                    Nothing)
-
-            For Each wmiClass In Searcher.Get
-                Dim p As PropertyDataCollection
-                p = wmiClass.Properties
-                For Each pr In p
-                    If pr.Name = "Name" Then Name = pr.Value
-                Next
-            Next
-            Searcher.Dispose()
-        Catch ex As Exception
-            LogException("GetBuiltInUsers 2", ex.ToString)
-        End Try
-
-        Return Group & "\" & Name
+        Return builtInUsers
     End Function
 
     Private Sub ScanRegistry()
