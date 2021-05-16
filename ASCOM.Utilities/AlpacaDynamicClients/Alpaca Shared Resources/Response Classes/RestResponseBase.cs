@@ -8,11 +8,32 @@ namespace ASCOM.DynamicRemoteClients
     public abstract class RestResponseBase
     {
         private Exception exception;
+        private string errorMessage = "";
 
         public uint ClientTransactionID { get; set; }
         public uint ServerTransactionID { get; set; }
         public int ErrorNumber { get; set; } = 0;
-        public string ErrorMessage { get; set; } = "";
+
+        public string ErrorMessage
+        {
+            get
+            {
+                return errorMessage;
+            }
+            set
+            {
+                //  Force ErrorMessage to return an empty string even if set to a null value. This prevents having to test ErrorMessage for a null value within the rest of the application
+                if (value is null)
+                {
+                    errorMessage = "";
+                }
+                else
+                {
+                    errorMessage = value;
+                }
+            }
+        }
+
         public Exception DriverException
         {
             get
