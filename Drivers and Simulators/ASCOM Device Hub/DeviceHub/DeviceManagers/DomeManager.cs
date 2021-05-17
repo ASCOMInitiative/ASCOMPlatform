@@ -614,6 +614,40 @@ namespace ASCOM.DeviceHub
 
 			Point domeAltAz = GetDomeCoord( scopePosition, localHourAngle, sideOfPier );
 			double targetAzimuth = domeAltAz.X;
+			double targetAltitude = domeAltAz.Y;
+
+			bool targetsValid = true;
+
+			// Validate the calculated azimuth appears sane.
+			// If the scope position is NaN or any other input to the slaving calculation is NaN then
+			// the resultant targetAlt and targetAz could also be NaN. We do not want to send NaN to
+			// the dome, even though it should reject it.
+
+			if ( Double.IsNaN(targetAzimuth) || targetAzimuth < 0.0 || targetAzimuth > 360.0 )
+			{
+				targetsValid = false;
+				LogActivityLine( ActivityMessageTypes.Commands
+								, "An invalid azimuth value ({0:f2}) was calculated...short circuiting the slew"
+								, targetAzimuth );
+			}
+
+			// Validate the calculated altitude appears sane.
+			// Using 180 degrees for the upper limit for a clamshell type of dome that may be able to open to 180.
+
+			if ( Double.IsNaN( targetAltitude) || targetAltitude < 0.0 || targetAltitude > 180.0 )
+			{
+				targetsValid = false;
+				LogActivityLine( ActivityMessageTypes.Commands
+								, "An invalid altitude value ({0:f2}) was calculated...short circuiting the slew"
+								, targetAltitude );
+			}
+
+			// If either the target azimuth or altitude are invalid, return without slewing the dome!!!
+
+			if ( !targetsValid )
+			{
+				return;
+			}
 
 			LogActivityLine( ActivityMessageTypes.Commands, "The calculated dome position is Az: {0:f2}, Alt: {1:f2}."
 							, domeAltAz.X, domeAltAz.Y );
@@ -635,8 +669,6 @@ namespace ASCOM.DeviceHub
 					SetFastPolling();
 				}, CancellationToken.None );
 			}
-
-			double targetAltitude = domeAltAz.Y;
 
 			if ( Capabilities.CanSetAltitude && Status.Altitude < targetAltitude )
 			{
