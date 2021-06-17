@@ -71,6 +71,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassFactory.cs" />
+    <Compile Include="Driver\DeviceCamera.cs" />
+    <Compile Include="Driver\DeviceCoverCalibrator.cs" />
+    <Compile Include="Driver\DeviceDome.cs" />
+    <Compile Include="Driver\DeviceFilterWheel.cs" />
+    <Compile Include="Driver\DeviceFocuser.cs" />
+    <Compile Include="Driver\DeviceObservingConditions.cs" />
+    <Compile Include="Driver\DeviceRotator.cs" />
+    <Compile Include="Driver\DeviceSafetyMonitor.cs" />
+    <Compile Include="Driver\DeviceSwitch.cs" />
+    <Compile Include="Driver\DeviceTelescope.cs" />
+    <Compile Include="Driver\DeviceVideo.cs" />
+    <Compile Include="Driver\Driver.cs" />
+    <Compile Include="Driver\PlaceholderInterface.cs" />
+    <Compile Include="Driver\Rates.cs" />
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
