@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace ASCOM.$safeprojectname$
+namespace ASCOM.TEMPLATEDEVICENAME.Server
 {
 	[ComVisible(false)]
 	public class ReferenceCountedObjectBase

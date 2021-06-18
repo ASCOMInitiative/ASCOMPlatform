@@ -1,24 +1,21 @@
-﻿// Template Wizard to perform unique ASCOM subsititutions and file manipulations when creating driver templates
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.VisualStudio.TemplateWizard;
+using System.Windows.Forms;
+using EnvDTE;
+using EnvDTE80;
+using System.IO;
+using System.Diagnostics;
 
 namespace ASCOM.Setup
 {
-    using System;
-    using System.Collections.Generic;
-    using Microsoft.VisualStudio.TemplateWizard;
-    using System.Windows.Forms;
-    using EnvDTE;
-    using EnvDTE80;
-    using System.IO;
-    using System.Diagnostics;
-
-    //using ASCOM.Internal;
-
     public class DriverWizard : IWizard
     {
+        #region Variables and constants
+
         private DeviceDriverForm inputForm;
 
-        // These Guids are placeholder Guids. Wherever they are used in the template project, they'll be replaced with new
-        // values when the template is expanded. THE TEMPLATE PROJECTS MUST USE THESE GUIDS.
+        // These GUIDs are placeholder GUIDs. Wherever they are used in the template project, they'll be replaced with new values when the template is expanded. THE TEMPLATE PROJECTS MUST USE THESE GUIDS.
         private const string csTemplateAssemblyGuid = "28D679BA-2AF1-4557-AE15-C528C5BF91E0";
         private const string csTemplateInterfaceGuid = "3A02C211-FA08-4747-B0BD-4B00EB159297";
         private const string csTemplateRateGuid = "AD6248B3-3F51-4FFF-B62B-E3E942DD817E";
@@ -28,14 +25,16 @@ namespace ASCOM.Setup
         // Private properties
         private string DeviceClass { get; set; }
         private string DeviceName { get; set; }
-        private string DeviceInterface { get; set; }
         private string DeviceId { get; set; }
-        private int InterfaceVersion { get; set; }
         private string Namespace { get; set; }
+        private string DeviceInterface { get; set; }
+        private int InterfaceVersion { get; set; }
 
-        private ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("TemplateWizard");
+        private ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("TemplateWizardDr");
         private DTE2 myDTE;
         private ProjectItem driverTemplate;
+
+        #endregion
 
         /// <summary>
         /// Runs custom wizard logic at the beginning of a template wizard run.
@@ -68,7 +67,6 @@ namespace ASCOM.Setup
 
             try
             {
-
                 // Save user inputs.
                 DeviceId = inputForm.DeviceId;
                 DeviceName = inputForm.DeviceName;
@@ -99,7 +97,7 @@ namespace ASCOM.Setup
                 {
                     replacementsDictionary.Add("TEMPLATEDEVICECLASS", "Video"); // This ensures that the class is named Video and not VideoWithBaseClass
                 }
-                else // ALl other templates process normally because the selected device name exatly matches the device type e.g. Telescope, Rotator etc.
+                else // ALl other templates process normally because the selected device name exactly matches the device type e.g. Telescope, Rotator etc.
                 {
                     replacementsDictionary.Add("TEMPLATEDEVICECLASS", DeviceClass);
                 }
@@ -118,36 +116,6 @@ namespace ASCOM.Setup
                 TL.LogMessageCrLf("RunStarted", "Result Exception: " + ex.ToString());
                 MessageBox.Show("Form result setup exception: " + ex.ToString());
             }
-
-        }
-
-        /// <summary>
-        /// Indicates whether the specified project item should be added to the project.
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <returns></returns>
-        /// <remarks>This method is only called for item templates, not for project templates.</remarks>
-        public bool ShouldAddProjectItem(string filePath)
-        {
-            return true;
-        }
-
-        /// <summary>
-        /// Runs custom wizard logic when a project item has finished generating.
-        /// </summary>
-        /// <param name="projectItem"></param>
-        /// <remarks>This method is only called for item templates, not for project templates.</remarks>
-        public void ProjectItemFinishedGenerating(ProjectItem projectItem)
-        {
-        }
-
-        /// <summary>
-        /// Runs custom wizard logic before opening an item in the template.
-        /// </summary>
-        /// <param name="projectItem"></param>
-        /// <remarks>This method is called before opening any item that has the OpenInEditor attribute.</remarks>
-        public void BeforeOpeningFile(ProjectItem projectItem)
-        {
         }
 
         /// <summary>
@@ -295,74 +263,37 @@ namespace ASCOM.Setup
         /// </summary>
         public void RunFinished()
         {
-            try
-            {
-                // The interface implementation inserted in the ProjectFinishedGenerating event has its Region twistie open
-                // This code is to close the interface implementation twistie so that the region appears like the common methods and support code twisties
-
-                TL.Enabled = true;
-                TL.LogMessage("RunFinished", "Start");
-
-                // Code here commented out in order to stop the creator freezing when say a C# template is created immediately after a VB template
-                // I can't figure out why this code is unreliable so I'm doing away with it because its effect is just cosmetic
-
-                //if (driverTemplate != null) // We do have a project item to work on
-                //{
-                //    driverTemplate.Open(); // Open the item for editing
-                //    TL.LogMessage("RunFinished", "Done Open");
-
-                //    Document driverTemplateDocument = driverTemplate.Document; // Get the open file's document object
-                //    TL.LogMessage("RunFinished", "Created Document");
-
-                //    driverTemplateDocument.Activate(); // Make this the current document
-                //    TL.LogMessage("RunFinished", "Activated Document");
-
-                //    TextSelection selectedText = (TextSelection)driverTemplateDocument.Selection; // Create a document selection
-                //    TL.LogMessage("RunFinished", "Created Selection object");
-
-                //    selectedText.StartOfDocument(); // GO to the top of the document
-                //    TL.LogMessage("RunFinished", "Done StartOfDocument Region");
-
-                //    string pattern = "[Rr]egion \"*I" + DeviceClass; // Create a regular expression string that works for region in both VB and C#
-                //    TL.LogMessage("", "RegEx search pattern: " + pattern);
-                //    if (selectedText.FindText(pattern, (int)vsFindOptions.vsFindOptionsRegularExpression)) // Search for the interface implementation start of region 
-                //    {
-                //        // Found the interface implementation region so toggle its twistie closed
-                //        selectedText.SelectLine();
-                //        TL.LogMessage("RunFinished", "Found region I" + DeviceClass + " - " + selectedText.Text); // Log the line actually found
-                //        myDTE.ExecuteCommand("Edit.ToggleOutliningExpansion"); // Toggle the twistie closed
-                //        TL.LogMessage("RunFinished", "Done ToggleOutliningExpansion Region");
-                //    }
-
-                //    driverTemplateDocument.Close(vsSaveChanges.vsSaveChangesYes); // Save changes and close the file
-
-                //    TL.LogMessage("RunFinished", "Done Save");
-                //}
-                //else // No project item so just report this (happens when a test project is being created)
-                //{
-                //    TL.LogMessage("RunFinished", "Project item is null, no action taken");
-                //}
-                TL.LogMessage("RunFinished", "End");
-            }
-            catch (Exception ex)
-            {
-                TL.LogMessageCrLf(" RunFinished Exception", ex.ToString()); // Log any error message
-                MessageBox.Show(ex.ToString(), "RunFinished Wizard Error", MessageBoxButtons.OK, MessageBoxIcon.Error); // Show an error message
-            }
-
         }
 
-#if DEBUG
-        void DumpCodeModel(Project project)
+        #region Unused interface members not applicable to Project templates
+
+        /// <summary>
+        /// Runs custom wizard logic before opening an item in the template. (Not used for Project templates.)
+        /// </summary>
+        /// <param name="projectItem"></param>
+        public void BeforeOpeningFile(ProjectItem projectItem)
         {
-            MessageBox.Show("Attach to process now", "Debug");
-            ProjectItem item = project.ProjectItems.Item("Driver.cs");
-            FileCodeModel fcm = item.FileCodeModel;
-            CodeClass codeClass = (CodeClass2)fcm.CodeElements.Item(DeviceClass);
-            // Implement the I<DeviceClass> interface on the driver class. Does not insert method stubs.
-            codeClass.AddImplementedInterface("ASCOM.Interface.I" + DeviceClass, 0);
         }
-#endif
+
+        /// <summary>
+        /// Runs custom wizard logic when a project item has finished generating. (Not used for Project templates.)
+        /// </summary>
+        /// <param name="projectItem"></param>
+        public void ProjectItemFinishedGenerating(ProjectItem projectItem)
+        {
+        }
+
+        /// <summary>
+        /// Indicates whether the specified project item should be added to the project. (Not used for project templates.)
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public bool ShouldAddProjectItem(string filePath)
+        {
+            return true;
+        }
+
+        #endregion
 
     }
 }

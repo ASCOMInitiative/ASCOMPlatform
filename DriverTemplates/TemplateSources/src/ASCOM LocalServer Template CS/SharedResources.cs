@@ -17,8 +17,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using ASCOM;
+using ASCOM.Utilities;
 
-namespace ASCOM.$safeprojectname$
+namespace ASCOM.TEMPLATEDEVICENAME.Server
 {
     /// <summary>
     /// The resources shared by all drivers and devices, in this example it's a serial port with a shared SendMessage method
@@ -34,7 +35,7 @@ namespace ASCOM.$safeprojectname$
         private static readonly object lockObject = new object();
 
         // Shared serial port. This will allow multiple drivers to use one single serial port.
-		private static ASCOM.Utilities.Serial s_sharedSerial = new ASCOM.Utilities.Serial();		// Shared serial port
+		private static Serial s_sharedSerial = new Serial();		// Shared serial port
 		private static int s_z = 0;     // counter for the number of connections to the serial port
 
 		//

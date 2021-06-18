@@ -1,6 +1,6 @@
 using System;
 
-namespace ASCOM.$safeprojectname$
+namespace ASCOM.TEMPLATEDEVICENAME.Server
 {
 	partial class frmMain
 	{

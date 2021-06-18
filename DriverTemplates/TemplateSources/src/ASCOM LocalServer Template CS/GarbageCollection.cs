@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace ASCOM.$safeprojectname$
+namespace ASCOM.TEMPLATEDEVICENAME.Server
 {
 	/// <summary>
 	/// Summary description for GarbageCollection.

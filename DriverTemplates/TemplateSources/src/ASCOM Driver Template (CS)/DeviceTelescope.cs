@@ -426,10 +426,7 @@ class DeviceTelescope
             using (var novas = new ASCOM.Astrometry.NOVAS.NOVAS31())
             {
                 var jd = utilities.DateUTCToJulian(DateTime.UtcNow);
-                novas.SiderealTime(jd, 0, novas.DeltaT(jd),
-                    ASCOM.Astrometry.GstType.GreenwichApparentSiderealTime,
-                    ASCOM.Astrometry.Method.EquinoxBased,
-                    ASCOM.Astrometry.Accuracy.Reduced, ref siderealTime);
+                novas.SiderealTime(jd, 0, novas.DeltaT(jd), ASCOM.Astrometry.GstType.GreenwichApparentSiderealTime, ASCOM.Astrometry.Method.EquinoxBased, ASCOM.Astrometry.Accuracy.Reduced, ref siderealTime);
             }
 
             // Allow for the longitude
@@ -475,8 +472,8 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("SiteLongitude Get", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException("SiteLongitude", false);
+            tl.LogMessage("SiteLongitude Get", "Returning 0.0 to ensure that SiderealTime method is functional out of the box.");
+            return 0.0;
         }
         set
         {
@@ -609,8 +606,9 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("TrackingRate Get", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException("TrackingRate", false);
+            const DriveRates DEFAULT_DRIVERATE = DriveRates.driveSidereal;
+            tl.LogMessage("TrackingRate Get", $"{DEFAULT_DRIVERATE}");
+            return DEFAULT_DRIVERATE;
         }
         set
         {
