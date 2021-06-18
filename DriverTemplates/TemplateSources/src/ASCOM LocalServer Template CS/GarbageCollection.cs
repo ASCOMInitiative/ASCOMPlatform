@@ -3,55 +3,55 @@ using System.Threading;
 
 namespace ASCOM.TEMPLATEDEVICENAME.Server
 {
-	/// <summary>
-	/// Summary description for GarbageCollection.
-	/// </summary>
-	class GarbageCollection
-	{
-		protected bool				m_bContinueThread;
-		protected bool				m_GCWatchStopped;
-		protected int				m_iInterval;
-		protected ManualResetEvent	m_EventThreadEnded;
+    /// <summary>
+    /// Summary description for GarbageCollection.
+    /// </summary>
+    class GarbageCollection
+    {
+        protected bool continueThread;
+        protected bool gCWatchStopped;
+        protected int interval;
+        protected ManualResetEvent eventThreadEnded;
 
-		public GarbageCollection(int iInterval)
-		{
-			m_bContinueThread = true;
-			m_GCWatchStopped = false;
-			m_iInterval = iInterval;
-			m_EventThreadEnded = new ManualResetEvent(false);
-		}
+        public GarbageCollection(int iInterval)
+        {
+            continueThread = true;
+            gCWatchStopped = false;
+            interval = iInterval;
+            eventThreadEnded = new ManualResetEvent(false);
+        }
 
-		public void GCWatch()
-		{
-			// Pause for a moment to provide a delay to make threads more apparent.
-			while (ContinueThread())
-			{
-				GC.Collect();
-				Thread.Sleep(m_iInterval);
-			}
-			m_EventThreadEnded.Set();
-		}
+        public void GCWatch()
+        {
+            // Pause for a moment to provide a delay to make threads more apparent.
+            while (ContinueThread())
+            {
+                GC.Collect();
+                Thread.Sleep(interval);
+            }
+            eventThreadEnded.Set();
+        }
 
-		protected bool ContinueThread()
-		{
-			lock(this)
-			{
-				return m_bContinueThread;
-			}
-		}
+        protected bool ContinueThread()
+        {
+            lock (this)
+            {
+                return continueThread;
+            }
+        }
 
-		public void StopThread()
-		{
-			lock(this)
-			{
-				m_bContinueThread = false;
-			}
-		}
+        public void StopThread()
+        {
+            lock (this)
+            {
+                continueThread = false;
+            }
+        }
 
-		public void WaitForThreadToStop()
-		{
-			m_EventThreadEnded.WaitOne();
-			m_EventThreadEnded.Reset();
-		}
-	}
+        public void WaitForThreadToStop()
+        {
+            eventThreadEnded.WaitOne();
+            eventThreadEnded.Reset();
+        }
+    }
 }

@@ -14,6 +14,8 @@ namespace ASCOM.TEMPLATEDEVICENAME.Server
 		public frmMain()
 		{
 			InitializeComponent();
+			this.ShowInTaskbar = false;
+			this.Visible = false;
 		}
 
 	}
