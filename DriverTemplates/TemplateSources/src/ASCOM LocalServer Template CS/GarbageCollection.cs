@@ -8,50 +8,34 @@ namespace ASCOM.TEMPLATEDEVICENAME.Server
     /// </summary>
     class GarbageCollection
     {
-        protected bool continueThread;
-        protected bool gCWatchStopped;
-        protected int interval;
-        protected ManualResetEvent eventThreadEnded;
+        private readonly int _interval;
 
-        public GarbageCollection(int iInterval)
+        public GarbageCollection(int interval)
         {
-            continueThread = true;
-            gCWatchStopped = false;
-            interval = iInterval;
-            eventThreadEnded = new ManualResetEvent(false);
+            _interval = interval;
         }
 
-        public void GCWatch()
+        public void GCWatch(CancellationToken token)
         {
-            // Pause for a moment to provide a delay to make threads more apparent.
-            while (ContinueThread())
+            if (token == null)
+            {
+                throw new ArgumentException("GCWatch was called with a null cancellation token!");
+            }
+
+            bool taskCancelled = false;
+
+            while (!taskCancelled)
             {
                 GC.Collect();
-                Thread.Sleep(interval);
-            }
-            eventThreadEnded.Set();
-        }
 
-        protected bool ContinueThread()
-        {
-            lock (this)
-            {
-                return continueThread;
-            }
-        }
+                // Sleep until the interval expires or we are cancelled.
 
-        public void StopThread()
-        {
-            lock (this)
-            {
-                continueThread = false;
+                taskCancelled = token.WaitHandle.WaitOne(_interval);
             }
-        }
 
-        public void WaitForThreadToStop()
-        {
-            eventThreadEnded.WaitOne();
-            eventThreadEnded.Reset();
+            // Collect garbage one more time.
+
+            GC.Collect();
         }
     }
 }

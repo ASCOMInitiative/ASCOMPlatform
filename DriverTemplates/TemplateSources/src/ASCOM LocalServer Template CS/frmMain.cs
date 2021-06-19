@@ -7,11 +7,11 @@ using System.Windows.Forms;
 
 namespace ASCOM.TEMPLATEDEVICENAME.Server
 {
-	public partial class frmMain : Form
+	public partial class FrmMain : Form
 	{
 		delegate void SetTextCallback(string text);
 
-		public frmMain()
+		public FrmMain()
 		{
 			InitializeComponent();
 			this.ShowInTaskbar = false;

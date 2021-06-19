@@ -1,7 +1,7 @@
 ﻿using ASCOM;
 using ASCOM.DeviceInterface;
 
-namespace TEMPLATEDEVICENAME
+namespace TEMPLATENAMESPACE
 {
 
 	interface ITEMPLATEDEVICEINTERFACE

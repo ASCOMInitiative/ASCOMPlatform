@@ -423,21 +423,30 @@ class DeviceTelescope
     {
         get
         {
-            // Now using NOVAS 3.1
-            double siderealTime = 0.0;
+            double siderealTime = 0.0; // Sidereal time return value
+
+            // Use NOVAS 3.1 to calculate the sidereal time
             using (var novas = new NOVAS31())
             {
-                var jd = utilities.DateUTCToJulian(DateTime.UtcNow);
-                novas.SiderealTime(jd, 0, novas.DeltaT(jd),
-                    GstType.GreenwichApparentSiderealTime,
-                    Method.EquinoxBased,
-                    Accuracy.Reduced, ref siderealTime);
+                double julianDate = utilities.DateUTCToJulian(DateTime.UtcNow);
+                novas.SiderealTime(julianDate, 0, novas.DeltaT(julianDate), GstType.GreenwichApparentSiderealTime, Method.EquinoxBased, Accuracy.Full, ref siderealTime);
             }
 
-            // Allow for the longitude
-            siderealTime += SiteLongitude / 360.0 * 24.0;
+            // Adjust the calculated sidereal time for longitude using the value returned by the SiteLongitude property, allowing for the possibility that this property has not yet been implemented
+            try
+            {
+                siderealTime += SiteLongitude / 360.0 * 24.0;
+            }
+            catch (PropertyNotImplementedException) // SiteLongitude hasn't been implemented
+            {
+                // No action, just return the calculated sidereal time unadjusted for longitude
+            }
+            catch (Exception) // Some other exception occurred so return it to the client
+            {
+                throw;
+            }
 
-            // Reduce to the range 0 to 24 hours
+            // Reduce sidereal time to the range 0 to 24 hours
             siderealTime = astroUtilities.ConditionRA(siderealTime);
 
             tl.LogMessage("SiderealTime", "Get - " + siderealTime.ToString());
