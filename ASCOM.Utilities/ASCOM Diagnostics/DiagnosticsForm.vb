@@ -7870,7 +7870,7 @@ Public Class DiagnosticsForm
                         If CompatibiityMessage64Bit = "" Then CompatibiityMessage64Bit = "OK for 64bit applications"
                         TL.LogMessage("Registered Devices", "       " & CompatibiityMessage64Bit)
                     End If
-
+                    TL.BlankLine()
                 Next
             Next
             TL.BlankLine()
