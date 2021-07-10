@@ -11,11 +11,13 @@ namespace MakeASCOMTemplates
     {
         static void Main(string[] args)
         {
+            // Validate input arguments
             if (args.Length < 2)
             {
                 Console.WriteLine("Command MakeASCOMTemplate [destination path] [src directory]");
                 return;
             }
+
             string srcPath = Path.Combine(args[0], args[1]);
             if (!Directory.Exists(srcPath))
             {
@@ -23,6 +25,7 @@ namespace MakeASCOMTemplates
                 return;
             }
 
+            // Make the template ZIP files and construct the VSI file
             MakeZipTemplates(srcPath);
             MakeVSIFile(args[0], args[1]);
         }
@@ -41,43 +44,55 @@ namespace MakeASCOMTemplates
                 using (ZipFile zip = new ZipFile())
                 {
                     // check it's a template folder
-                    if (! File.Exists(Path.Combine(folder.FullName, "MyTemplate.vstemplate")))
+                    if (!File.Exists(Path.Combine(folder.FullName, "MyTemplate.vstemplate")))
                         continue;
+
                     // add the directories
                     foreach (var directory in folder.GetDirectories())
                     {
                         zip.AddDirectory(directory.FullName, directory.Name);
                     }
+
                     // add the files
                     foreach (var item in folder.GetFiles())
                     {
                         zip.AddFile(item.FullName, "");
                     }
-                    zip.Name = Path.Combine(basePath, folder.Name + ".zip");
-                    if (File.Exists(zip.Name))
-                        File.Delete(zip.Name);
 
+                    // Delete previous version if present
+                    zip.Name = Path.Combine(basePath, folder.Name + ".zip");
+                    if (File.Exists(zip.Name)) File.Delete(zip.Name);
+
+                    // Save the new version
                     zip.Save();
                     Console.WriteLine("Template {0} created", zip.Name);
                 }
             }
         }
 
+        /// <summary>
+        /// Make the VSI file from the project template zip files
+        /// </summary>
+        /// <param name="basePath"></param>
+        /// <param name="templatePath"></param>
         private static void MakeVSIFile(string basePath, string templatePath)
         {
             string fullPath = Path.Combine(basePath, templatePath);
             DirectoryInfo di = new DirectoryInfo(fullPath);
+
             using (ZipFile zip = new ZipFile())
             {
                 foreach (var zipFile in di.GetFiles("*.zip"))
                 {
                     zip.AddFile(zipFile.FullName, "");
                 }
-                zip.AddFile(Path.Combine(fullPath, "driverTemplates.vscontent"),"");
+                
+                zip.AddFile(Path.Combine(fullPath, "driverTemplates.vscontent"), "");
                 string vsiFile = Path.Combine(basePath, "ASCOM 6 Driver Templates.vsi");
                 if (File.Exists(vsiFile))
                     File.Delete(vsiFile);
                 zip.Save(vsiFile);
+
                 Console.WriteLine("VSI file {0} created", vsiFile);
             }
 

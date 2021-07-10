@@ -33,7 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Telescope", "Telescope", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Driver Installer and Templates", "Driver Installer and Templates", "{02FC4179-0ADE-45D2-9C78-52F74FF6156C}"
 	ProjectSection(SolutionItems) = preProject
-		DriverTemplateDeveloperNotes.htm = DriverTemplateDeveloperNotes.htm
+		DriverTemplates\DriverTemplateDeveloperNotes.htm = DriverTemplates\DriverTemplateDeveloperNotes.htm
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Controls", "ASCOM.Controls\ASCOM.Controls\ASCOM.Controls.csproj", "{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026}"

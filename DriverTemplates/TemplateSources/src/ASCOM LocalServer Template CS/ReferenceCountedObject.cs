@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace ASCOM.$safeprojectname$
+namespace ASCOM.TEMPLATEDEVICENAME.Server
 {
 	[ComVisible(false)]
 	public class ReferenceCountedObjectBase
@@ -9,13 +9,13 @@ namespace ASCOM.$safeprojectname$
 		public ReferenceCountedObjectBase()
 		{
 			// We increment the global count of objects.
-			Server.CountObject();
+			Server.IncrementObjectCount();
 		}
 
 		~ReferenceCountedObjectBase()
 		{
 			// We decrement the global count of objects.
-			Server.UncountObject();
+			Server.DecrementObjectCount();
 			// We then immediately test to see if we the conditions
 			// are right to attempt to terminate this server application.
 			Server.ExitIf();
