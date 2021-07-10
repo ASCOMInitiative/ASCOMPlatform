@@ -56,6 +56,17 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
+		protected void CheckParkingStatus( string ident, ParkingStateEnum actualState, ParkingStateEnum expectedState )
+		{
+			if ( actualState != expectedState )
+			{
+				string msg = $"Invalid operation when the parking status is {actualState}.";
+				LogMessage( ident, msg );
+
+				throw new InvalidOperationException( $"{ident} not allowed when the parking status is {actualState}." );
+			}
+		}
+
 		protected void CheckCapabilityForMethod( string ident, string capabilityName, bool capabilityValue )
 		{
 			if ( !capabilityValue )
