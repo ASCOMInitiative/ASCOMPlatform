@@ -131,6 +131,9 @@ namespace ASCOM.Simulator
         {
             DoSetupDialog();
             SetSlewButtons();
+
+			checkBoxTrack.CheckState = TelescopeHardware.CanSetTracking ? CheckState.Checked : CheckState.Unchecked;
+			checkBoxTrack.AutoCheck = TelescopeHardware.CanSetTracking;
         }
 
         private void ButtonTraffic_Click(object sender, EventArgs e)
@@ -215,6 +218,12 @@ namespace ASCOM.Simulator
         {
             SetSlewButtons();
             TelescopeHardware.Start();
+
+			if ( !TelescopeHardware.CanSetTracking )
+			{
+				checkBoxTrack.CheckState = CheckState.Unchecked;
+				checkBoxTrack.AutoCheck = false;
+			}
         }
 
         #region Thread Safe Callback Functions
@@ -405,10 +414,14 @@ namespace ASCOM.Simulator
         {
             checkBoxTrack.Invoke((MethodInvoker)delegate
             {
-                if (TelescopeHardware.Tracking == checkBoxTrack.Checked)
-                    return;
-                // this avoids triggering the checked changed event
-                checkBoxTrack.CheckState = TelescopeHardware.Tracking ? CheckState.Checked : CheckState.Unchecked;
+				if ( TelescopeHardware.CanSetTracking )
+				{
+					if ( TelescopeHardware.Tracking == checkBoxTrack.Checked )
+						return;
+					
+					// this avoids triggering the checked changed event
+					checkBoxTrack.CheckState = TelescopeHardware.Tracking ? CheckState.Checked : CheckState.Unchecked;
+				}
             });
         }
 
