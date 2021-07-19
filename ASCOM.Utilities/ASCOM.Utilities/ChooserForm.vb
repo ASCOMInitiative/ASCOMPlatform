@@ -1132,9 +1132,10 @@ Friend Class ChooserForm
 
                 ' Set the combo box data source to the chooserList list of items to display
                 CmbDriverSelector.SelectedIndex = -1
-                CmbDriverSelector.DataSource = New BindingSource(chooserList, Nothing)
                 CmbDriverSelector.DisplayMember = "Value"
                 CmbDriverSelector.ValueMember = "Key"
+                CmbDriverSelector.DataSource = New BindingSource(chooserList, Nothing)
+                CmbDriverSelector.BindingContext = Me.BindingContext ' Order revised per https://stackoverflow.com/questions/25761803/cannot-bind-to-the-new-display-member-in-combobox in attempt to fix failure in AllSkEye app
 
                 CmbDriverSelector.DropDownWidth = DropDownWidth(CmbDriverSelector) ' AutoSize the combo box width
 
