@@ -221,7 +221,6 @@ namespace ASCOM.Simulator
 
 			if ( !TelescopeHardware.CanSetTracking )
 			{
-				checkBoxTrack.CheckState = CheckState.Unchecked;
 				checkBoxTrack.AutoCheck = false;
 			}
         }
