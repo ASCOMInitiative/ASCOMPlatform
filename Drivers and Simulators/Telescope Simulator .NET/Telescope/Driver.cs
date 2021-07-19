@@ -1260,7 +1260,8 @@ namespace ASCOM.Simulator
             }
             set
             {
-                SharedResources.TrafficLine(SharedResources.MessageType.Polls, "Tracking:-> " + value.ToString());
+				CheckCapability( TelescopeHardware.CanSetTracking, "Tracking", true );
+				SharedResources.TrafficLine(SharedResources.MessageType.Polls, "Tracking:-> " + value.ToString());
                 TelescopeHardware.Tracking = value;
             }
         }
