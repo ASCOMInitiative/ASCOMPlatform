@@ -8,6 +8,8 @@
 // Developer Getting Started (Bob Denny 28-Jul-10)
 // Unknown who/when SafetyMonitor Drivers was added (Jan 2015 maybe?)
 // Observing Conditions Drivers (Bob Denny 06-Jan-2016)
+// Reorganize topics (Bob Denny 29-Mar-2021?)
+// Reorganize logic, add wiki entries to MainMenu (Bob Denny 14-Jul-2021 )
 //
 //* Initialize globals
 
@@ -30,20 +32,26 @@ if (sLocation.match(/About\//i) !== null) {
 else if (sLocation.match(/Downloads\//i) !== null) {
     TopLevelIndex = 2;
 }
-else if (sLocation.match(/Support\//i) !== null) {
-    TopLevelIndex = 5;
-}
-else if (sLocation.match(/Standards\//i) !== null) {
-    TopLevelIndex = 7;
-}
-else if (sLocation.match(/Developer\//i) !== null) {
-    TopLevelIndex = 6;
+else if (sLocation.match(/FAQs\//i) !== null) {
+    TopLevelIndex = 3;
 }
 else if (sLocation.match(/Community\//i) !== null) {
     TopLevelIndex = 4;
 }
-else if (sLocation.match(/FAQs\//i) !== null) {
-    TopLevelIndex = 3;
+else if (sLocation.match(/Support\//i) !== null) {
+    TopLevelIndex = 5;
+}
+else if (sLocation.match(/Developer\//i) !== null) {
+    TopLevelIndex = 6;
+}
+else if (sLocation.match(/Standards\//i) !== null) {
+    TopLevelIndex = 7;
+}
+else if (sLocation.match(/Users Wiki\//i) !== null) {
+    TopLevelIndex = 8;
+}
+else if (sLocation.match(/Developers Wiki\//i) !== null) {
+    TopLevelIndex = 9;
 }
 
 if (TopLevelIndex > 0) RelativePath = "../";
@@ -58,20 +66,26 @@ MainMenuURL[1] = RelativePath + "About/Index.htm";
 MainMenuItem[2] = "Downloads";
 MainMenuURL[2] = RelativePath + "Downloads/Index.htm";
 
-MainMenuItem[5] = "Support";
-MainMenuURL[5] = RelativePath + "Support/Index.htm";
-
-MainMenuItem[7] = "Standards";
-MainMenuURL[7] = RelativePath + "Standards/Index.htm";
-
-MainMenuItem[6] = "Developers";
-MainMenuURL[6] = RelativePath + "Developer/Index.htm";
+MainMenuItem[3] = "FAQs";
+MainMenuURL[3] = RelativePath + "FAQs/Index.htm";
 
 MainMenuItem[4] = "Community";
 MainMenuURL[4] = RelativePath + "Community/Index.htm";
 
-MainMenuItem[3] = "FAQs";
-MainMenuURL[3] = RelativePath + "FAQs/Index.htm";
+MainMenuItem[5] = "Support";
+MainMenuURL[5] = RelativePath + "Support/Index.htm";
+
+MainMenuItem[6] = "Developers";
+MainMenuURL[6] = RelativePath + "Developer/Index.htm";
+
+MainMenuItem[7] = "Standards";
+MainMenuURL[7] = RelativePath + "Standards/Index.htm";
+
+MainMenuItem[8] = "Users Wiki";
+MainMenuURL[8] = "https://ascomtalk.groups.io/g/Help/wiki";
+
+MainMenuItem[9] = "Developers Wiki";
+MainMenuURL[9] = "https://ascomtalk.groups.io/g/Developer/wiki";
 
 var BreadCrumbString = "<a href=\"" + RelativePath + "index.htm" + "\">" +  "Home" + "</a>" + " > ";
 
@@ -84,20 +98,26 @@ if (TopLevelIndex > 0) {
 function writemainmenu() {
     var output = "";
     var classname = "";
+	var target = "";
     
     document.write("<ul class=\"solidblockmenu\">");
     for (var i=0; i < MainMenuItem.length; i++)  {
         
-        
         if (TopLevelIndex == i) {
-            classname = "current";
-        }
-        else {
-            classname = "";
-        }  
-        
+            classname = "class='current'";
+        } else {
+			classname = "";
+		}
+		if (MainMenuItem[i] == "Users Wiki" ||
+					MainMenuItem[i] == "Developers Wiki") {
+			target = "target='_new'";
+		} else {
+			target = "";
+		}
+		
         //Concat a string for the <li> menu item
-        output = "<li><a href=\"" + MainMenuURL[i] + "\" class=\"" + classname + "\">" + MainMenuItem[i] + "</a></li>";
+        output = "<li><a href=\"" + MainMenuURL[i] + "\" " + classname + " " + target + 
+					 ">" + MainMenuItem[i] + "</a></li>";
         document.write(output);
     }
     document.write("</ul>");
@@ -169,6 +189,28 @@ function writesubmenu() {
 	    SubMenuOutput += "<li><a href=\"DevSamples.htm\">Samples &amp; Sources</a></li>";
 	    SubMenuOutput += "</ul>";
         break;
+    case 3: // FAQs
+        SubMenuOutput += "<h3>Detailed FAQ Answers</h3>";
+        SubMenuOutput += "<ul class=\"treeview\">";
+	    SubMenuOutput += "<li><a href=\"Plat6OnW7.htm\">Platform on Windows 7 &amp; 10</a></li>";
+	    SubMenuOutput += "<li><a href=\"Plat6OnXP.htm\">Platform on Windows XP</a></li>";
+	    SubMenuOutput += "<li><a href=\"Platform5.5only.htm\">Driver for Platform 5 Only?</a></li>";
+	    SubMenuOutput += "<li><a href=\"SoftwareVictory.htm\">Correcting for Problems</a></li>";
+//	    SubMenuOutput += "<li><a href=\"TheSky.htm\">Working With TheSky</a></li>";
+	    SubMenuOutput += "<li><a href=\"DevHub.htm\">Using DeviceHub</a></li>";
+	    SubMenuOutput += "<li><a href=\"https://ascomtalk.groups.io/g/Help/wiki\" target=\"_new\">Users Wiki</a></li>";
+	    SubMenuOutput += "<li><a href=\"https://ascomtalk.groups.io/g/Developer/wiki\" target=\"_new\">Developers Wiki</a></li>";
+	    SubMenuOutput += "</ul>";
+	    break;
+    case 4: // Community
+        SubMenuOutput += "<h3>Community</h3>";
+		SubMenuOutput += "<ul class=\"treeview\">";
+	    SubMenuOutput += "<li><a href=\"Partners.htm\">ASCOM Partners</a></li>";
+	    SubMenuOutput += "<li><a href=\"Advocacy.htm\">ASCOM Advocacy</a></li>";
+	    SubMenuOutput += "<li><a href=\"https://ascomtalk.groups.io/g/Help/wiki\" target=\"_new\">Users Wiki</a></li>";
+	    SubMenuOutput += "<li><a href=\"https://ascomtalk.groups.io/g/Developer/wiki\" target=\"_new\">Developers Wiki</a></li>";
+	    SubMenuOutput += "</ul>";
+	    break;
     case 5: // Support
         SubMenuOutput += "<h3>Supported Devices</h3>";
         SubMenuOutput += "<ul class=\"treeview\">";
@@ -178,14 +220,6 @@ function writesubmenu() {
 		SubMenuOutput += "<li><a href=\"Focusers.htm\">Focusers</a></li>";
 		SubMenuOutput += "<li><a href=\"Rotators.htm\">Rotators</a></li>";
 		SubMenuOutput += "<li><a href=\"Scopes.htm\">Telescopes and Mounts</a></li>";
-	    SubMenuOutput += "</ul>";
-        break;
-    case 7: // Standards
-        SubMenuOutput += "<h3>Standards</h3>";
-        SubMenuOutput += "<ul class=\"treeview\">";
-		SubMenuOutput += "<li><a href=\"InterfacePrinciple.htm\">ASCOM Interface Principle</a></li>";
-		SubMenuOutput += "<li><a href=\"StandardsProcess.htm\">The Standards Process</a></li>";
-		SubMenuOutput += "<li><a href=\"Requirements.htm\">General Requirements</a></li>";
 	    SubMenuOutput += "</ul>";
         break;
     case 6: // Developers
@@ -221,28 +255,14 @@ function writesubmenu() {
 		SubMenuOutput += "<li><a href=\"ASCOM%20Alpaca%20API%20Reference.pdf\" target=\"_new\">API Reference (PDF)</a></li>";
 	    SubMenuOutput += "</ul>";
        break;
-    case 4: // Community
-        SubMenuOutput += "<h3>Community</h3>";
-		SubMenuOutput += "<ul class=\"treeview\">";
-	    SubMenuOutput += "<li><a href=\"Partners.htm\">ASCOM Partners</a></li>";
-	    SubMenuOutput += "<li><a href=\"Advocacy.htm\">ASCOM Advocacy</a></li>";
-	    SubMenuOutput += "<li><a href=\"https://ascomtalk.groups.io/g/Help/wiki\" target=\"_new\">Users Wiki</a></li>";
-	    SubMenuOutput += "<li><a href=\"https://ascomtalk.groups.io/g/Developer/wiki\" target=\"_new\">Developers Wiki</a></li>";
-	    SubMenuOutput += "</ul>";
-	    break;
-    case 3: // FAQs
-        SubMenuOutput += "<h3>Detailed FAQ Answers</h3>";
+    case 7: // Wikis
+        SubMenuOutput += "<h3>Standards</h3>";
         SubMenuOutput += "<ul class=\"treeview\">";
-	    SubMenuOutput += "<li><a href=\"Plat6OnW7.htm\">Platform on Windows 7 &amp; 10</a></li>";
-	    SubMenuOutput += "<li><a href=\"Plat6OnXP.htm\">Platform on Windows XP</a></li>";
-	    SubMenuOutput += "<li><a href=\"Platform5.5only.htm\">Driver for Platform 5 Only?</a></li>";
-	    SubMenuOutput += "<li><a href=\"SoftwareVictory.htm\">Correcting for Problems</a></li>";
-//	    SubMenuOutput += "<li><a href=\"TheSky.htm\">Working With TheSky</a></li>";
-	    SubMenuOutput += "<li><a href=\"DevHub.htm\">Using DeviceHub</a></li>";
-	    SubMenuOutput += "<li><a href=\"https://ascomtalk.groups.io/g/Help/wiki\" target=\"_new\">Users Wiki</a></li>";
-	    SubMenuOutput += "<li><a href=\"https://ascomtalk.groups.io/g/Developer/wiki\" target=\"_new\">Developers Wiki</a></li>";
+		SubMenuOutput += "<li><a href=\"InterfacePrinciple.htm\">ASCOM Interface Principle</a></li>";
+		SubMenuOutput += "<li><a href=\"StandardsProcess.htm\">The Standards Process</a></li>";
+		SubMenuOutput += "<li><a href=\"Requirements.htm\">General Requirements</a></li>";
 	    SubMenuOutput += "</ul>";
-	    break;
+        break;
 	default:
 	    SubMenuOutput += "<h3>OOPS! Missing SubMenu case " + TopLevelIndex + "</h3>";
 	    break;
