@@ -353,15 +353,30 @@ namespace ASCOM.DeviceHub
 			}
 			else if ( desiredState == ParkingStateEnum.Unparked )
 			{
-				// Unpark the scope.
-
-				Unpark();
-
-				if ( !Status.AtPark )
+				if ( Service.AtPark )
 				{
-					ParkingState = ParkingStateEnum.Unparked;
+					// Unpark the scope.
+
+					Unpark();
+
+					if ( !Service.AtPark )
+					{
+						ParkingState = ParkingStateEnum.Unparked;
+						Status.AtPark = false;
+						Status.ParkingState = ParkingStateEnum.Unparked;
+					}
 				}
+
+				Status.ParkingState = ParkingStateEnum.Unparked;
+
+				//if ( !Status.AtPark )
+				//{
+				//	ParkingState = ParkingStateEnum.Unparked;
+				//}
 			}
+
+			Debug.WriteLine( $"ParkingState set to {ParkingState}." );
+
 		}
 
 		public void DoSlewToCoordinates( double ra, double dec, bool useSynchronousMethodCall = true )
@@ -601,12 +616,9 @@ namespace ASCOM.DeviceHub
 
 		public void SetTracking( bool state )
 		{
-			if ( Status != null && Status.Connected )
+			if ( state != Tracking )
 			{
-				if ( state != Tracking )
-				{
-					Tracking = state;
-				}
+				Tracking = state;
 			}
 		}
 

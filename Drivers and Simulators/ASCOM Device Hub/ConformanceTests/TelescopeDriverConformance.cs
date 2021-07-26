@@ -348,7 +348,15 @@ namespace ConformanceTests
 			ReadHourProperty( "TargetRightAscension", "Read" );
 
 			ReadProperty<bool>( "Tracking", "", "Read" );
-			WriteProperty<bool>( "Tracking", false, "", "Write" );
+
+			if ( Telescope.CanSetTracking )
+			{
+				WriteProperty<bool>( "Tracking", false, "", "Write" );
+			}
+			else
+			{
+				WriteProperty<bool>( "Tracking", false, "", "Write", "", typeof( TargetInvocationException ) );
+			}
 
 			ITrackingRates trackingRates = ReadAndReportTrackingRates();
 			ReadProperty<DriveRates>( "TrackingRate", "", "Read" );
@@ -379,12 +387,10 @@ namespace ConformanceTests
 
 			GetCanMoveAxes();
 			TestParkUnpark();
-			TestAbortSlewNotSlewing();
 			TestAxisRates();
 			TestFindHome();
 			TestMoveAxes();
 			TestPulseGuide();
-
 			TestCoordinateSlew();
 			TestCoordinateSlewAsync();
 			TestTargetSlew();
@@ -401,11 +407,32 @@ namespace ConformanceTests
 
 		private void TestSyncToAltAz()
 		{
+			bool trackingFlag = Telescope.Tracking;
+
+			if ( trackingFlag )
+			{
+				if ( Telescope.CanSetTracking )
+				{
+					Telescope.Tracking = false;
+				}
+				else
+				{
+					TestContext.WriteLine( _fmt, NowTime(), "SyncToAltAz", "INFO", "Unable to turn tracking off; test skipped" );
+
+					return;
+				}
+			}
+
 			TestSyncToAltAz_Valid();
 			TestSyncToAltAz_BadValue( true, -100.0, "(Bad L)" );
 			TestSyncToAltAz_BadValue( false, -10.0, "(Bad L)" );
 			TestSyncToAltAz_BadValue( true, 100.0, "(Bad H)" );
 			TestSyncToAltAz_BadValue( false, 370.0, "(Bad H)" );
+
+			if ( Telescope.Tracking != trackingFlag && Telescope.CanSetTracking )
+			{
+				Telescope.Tracking = trackingFlag;
+			}
 		}
 
 		private void TestSyncToAltAz_BadValue( bool isAlt, double badValue, string suffix )
@@ -475,9 +502,6 @@ namespace ConformanceTests
 									: typeof( MethodNotImplementedException );
 
 			target = new Vector( 135.0, 50.0 );
-
-			bool trackingFlag = Telescope.Tracking;
-			Telescope.Tracking = false;
 
 			if ( !PositionTelescopeToAltAz( target, "SyncToAltAz", false ) )
 			{
@@ -653,13 +677,32 @@ namespace ConformanceTests
 
 		private void TestSyncToTarget()
 		{
+			bool trackingFlag = Telescope.Tracking;
 
-			Telescope.Tracking = true;
+			if ( !trackingFlag )
+			{
+				if ( Telescope.CanSetTracking )
+				{
+					Telescope.Tracking = true;
+				}
+				else
+				{
+					TestContext.WriteLine( _fmt, NowTime(), "SyncToTarget", "INFO", "Unable to turn tracking on; test skipped" );
+
+					return;
+				}
+			}
+
 			TestSyncToTarget_Valid();
 			TestSyncToTarget_BadValue( true, -1.0, "(Bad L)" );
 			TestSyncToTarget_BadValue( false, -100.0, "(Bad L)" );
 			TestSyncToTarget_BadValue( true, 25.0, "(Bad H)" );
 			TestSyncToTarget_BadValue( false, 100.0, "(Bad H)" );
+
+			if ( Telescope.Tracking != trackingFlag && Telescope.CanSetTracking )
+			{
+				Telescope.Tracking = trackingFlag;
+			}
 		}
 
 		private void TestSyncToTarget_BadValue( bool isRA, double badValue, string suffix )
@@ -877,13 +920,32 @@ namespace ConformanceTests
 
 		private void TestSyncToCoordinates()
 		{
+			bool trackingFlag = Telescope.Tracking;
 
-			Telescope.Tracking = true;
+			if ( !trackingFlag )
+			{
+				if ( Telescope.CanSetTracking )
+				{
+					Telescope.Tracking = true;
+				}
+				else
+				{
+					TestContext.WriteLine( _fmt, NowTime(), "SyncToCoordinates", "INFO", "Unable to turn tracking off; test skipped" );
+
+					return;
+				}
+			}
+
 			TestSyncToCoordinates_Valid();
 			TestSyncToCoordinates_BadValue( true, -1.0, "(Bad L)" );
 			TestSyncToCoordinates_BadValue( false, -100.0, "(Bad L)" );
 			TestSyncToCoordinates_BadValue( true, 25.0, "(Bad H)" );
 			TestSyncToCoordinates_BadValue( false, 100.0, "(Bad H)" );
+
+			if ( Telescope.Tracking != trackingFlag && Telescope.CanSetTracking )
+			{
+				Telescope.Tracking = trackingFlag;
+			}
 		}
 
 		private void TestSyncToCoordinates_BadValue( bool isRA, double badValue, string suffix )
@@ -1143,7 +1205,20 @@ namespace ConformanceTests
 			// Make sure that we restore tracking.
 
 			bool trackingFlag = Telescope.Tracking;
-			Telescope.Tracking = false;
+
+			if ( trackingFlag )
+			{
+				if ( Telescope.CanSetTracking )
+				{
+					Telescope.Tracking = false;
+				}
+				else
+				{
+					TestContext.WriteLine( _fmt, NowTime(), "SlewToAltAzAsync", "INFO", "Unable to turn tracking off; test skipped" );
+
+					return;
+				}
+			}
 
 			try
 			{
@@ -1159,7 +1234,10 @@ namespace ConformanceTests
 			}
 			finally
 			{
-				Telescope.Tracking = trackingFlag;
+				if ( Telescope.Tracking != trackingFlag && Telescope.CanSetTracking )
+				{
+					Telescope.Tracking = trackingFlag;
+				}
 			}
 		}
 
@@ -1282,19 +1360,19 @@ namespace ConformanceTests
 				if ( expectedException == null || xcp.GetType() != expectedException )
 				{
 					status = _error;
-					msg1 = GetExceptionMessage( xcp ) + " when attempting to SlewToAltAz.";
+					msg1 = GetExceptionMessage( xcp ) + " when attempting to SlewToAltAzAsync.";
 				}
 				else
 				{
-					msg1 = String.Format( "CanSlewAltAz is False and a {0} exception was generated as expected", expectedException.Name );
+					msg1 = String.Format( "CanSlewAltAzAsync is False and a {0} exception was generated as expected", expectedException.Name );
 				}
 			}
 
-			TestContext.WriteLine( _fmt, NowTime(), "SlewToAltAz", status, msg1 );
+			TestContext.WriteLine( _fmt, NowTime(), "SlewToAltAzAsync", status, msg1 );
 
 			if ( !String.IsNullOrEmpty( msg2 ) )
 			{
-				TestContext.WriteLine( _fmt, NowTime(), "SlewToAltAz", status, msg2 );
+				TestContext.WriteLine( _fmt, NowTime(), "SlewToAltAzAsync", status, msg2 );
 			}
 
 			if ( status == _error )
@@ -1308,7 +1386,22 @@ namespace ConformanceTests
 			// Make sure that we restore tracking.
 
 			bool trackingFlag = Telescope.Tracking;
-			Telescope.Tracking = false;
+
+			//TestContext.WriteLine( _fmt, NowTime(), "SlewToAltAz", "INFO", $"Starting with tracking flag = {trackingFlag}" );
+
+			if ( trackingFlag )
+			{
+				if ( Telescope.CanSetTracking )
+				{
+					Telescope.Tracking = false;
+				}
+				else
+				{
+					TestContext.WriteLine( _fmt, NowTime(), "SlewToAltAz", "INFO", "Unable to turn tracking off; test skipped" );
+
+					return;
+				}
+			}
 
 			try
 			{
@@ -1324,7 +1417,10 @@ namespace ConformanceTests
 			}
 			finally
 			{
-				Telescope.Tracking = trackingFlag;
+				if ( Telescope.Tracking != trackingFlag && Telescope.CanSetTracking )
+				{
+					Telescope.Tracking = trackingFlag;
+				}
 			}
 		}
 
@@ -1469,7 +1565,20 @@ namespace ConformanceTests
 			Vector targetPierEast = GetSaneRaDec( -6, 0 );
 
 			bool trackingFlag = Telescope.Tracking;
-			Telescope.Tracking = true;
+
+			if ( !trackingFlag )
+			{
+				if ( Telescope.CanSetTracking )
+				{
+					Telescope.Tracking = true;
+				}
+				else
+				{
+					TestContext.WriteLine( _fmt, NowTime(), "DestinationSideOfPier", "INFO", "Unable to enable tracking; test skipped" );
+
+					return;
+				}
+			}
 
 			PierSide currentPierSide = PierSide.pierUnknown;
 
@@ -1517,7 +1626,10 @@ namespace ConformanceTests
 
 			TestContext.WriteLine( _fmt, NowTime(), "DestinationSideOfPier", status, msg );
 
-			Telescope.Tracking = trackingFlag;
+			if ( Telescope.Tracking != trackingFlag && Telescope.CanSetTracking )
+			{
+				Telescope.Tracking = trackingFlag;
+			}
 
 			if ( status == _error )
 			{
@@ -1528,7 +1640,21 @@ namespace ConformanceTests
 		private void TestTargetAsyncSlew()
 		{
 			bool trackingFlag = Telescope.Tracking;
-			Telescope.Tracking = true;
+
+			if ( !trackingFlag )
+			{
+				if ( Telescope.CanSetTracking )
+				{
+					Telescope.Tracking = true;
+				}
+				else
+				{
+					TestContext.WriteLine( _fmt, NowTime(), "SlewToCoordinatesAsync", "INFO", "Unable to enable tracking; test skipped" );
+
+					return;
+
+				}
+			}
 
 			goto StartTest;
 			StartTest:
@@ -1539,7 +1665,10 @@ namespace ConformanceTests
 			TestTargetSlewAsync_BadValue( true, 25.0, "(Bad H)" );
 			TestTargetSlewAsync_BadValue( false, 100.0, "(Bad H)" );
 
-			Telescope.Tracking = trackingFlag;
+			if ( trackingFlag != Telescope.Tracking && Telescope.CanSetTracking )
+			{
+				Telescope.Tracking = trackingFlag;
+			}
 		}
 
 		private void TestTargetSlewAsync_BadValue( bool isRA, double badValue, string suffix )
@@ -1692,7 +1821,21 @@ namespace ConformanceTests
 		private void TestTargetSlew()
 		{
 			bool trackingFlag = Telescope.Tracking;
-			Telescope.Tracking = true;
+
+			if ( !trackingFlag )
+			{
+				if ( Telescope.CanSetTracking )
+				{
+					Telescope.Tracking = true;
+				}
+				else
+				{
+					TestContext.WriteLine( _fmt, NowTime(), "SlewToTarget", "INFO", "Unable to enable tracking; test skipped" );
+
+					return;
+
+				}
+			}
 
 			goto StartTest;
 			StartTest:
@@ -1703,7 +1846,10 @@ namespace ConformanceTests
 			TestTargetSlew_BadValue( true, 25.0, "(Bad H)" );
 			TestTargetSlew_BadValue( false, 100.0, "(Bad H)" );
 
-			Telescope.Tracking = trackingFlag;
+			if ( trackingFlag != Telescope.Tracking && Telescope.CanSetTracking )
+			{
+				Telescope.Tracking = trackingFlag;
+			}
 		}
 
 		private void TestTargetSlew_BadValue( bool isRA, double badValue, string suffix )
@@ -1836,15 +1982,32 @@ namespace ConformanceTests
 		private void TestCoordinateSlewAsync()
 		{
 			bool trackingFlag = Telescope.Tracking;
-			Telescope.Tracking = true;
 
+			if ( !trackingFlag )
+			{
+				if ( Telescope.CanSetTracking )
+				{
+					Telescope.Tracking = true;
+				}
+				else
+				{
+					TestContext.WriteLine( _fmt, NowTime(), "SlewToCoordinatesAsync", "INFO", "Unable to enable tracking; test skipped" );
+
+					return;
+
+				}
+			}
+			
 			TestCoordinateSlewAsync_Valid();
 			TestCoordinateSlewAsync_BadValue( true, -1.0, "(Bad L)" );
 			TestCoordinateSlewAsync_BadValue( false, -100.0, "(Bad L)" );
 			TestCoordinateSlewAsync_BadValue( true, 25.0, "(Bad H)" );
 			TestCoordinateSlewAsync_BadValue( false, 100.0, "(Bad H)" );
 
-			Telescope.Tracking = trackingFlag;
+			if ( Telescope.Tracking != trackingFlag && Telescope.CanSetTracking )
+			{
+				Telescope.Tracking = trackingFlag;
+			}
 		}
 
 		private void TestCoordinateSlewAsync_BadValue( bool isRA, double badValue, string suffix )
@@ -2010,7 +2173,19 @@ namespace ConformanceTests
 		{
 			bool trackingFlag = Telescope.Tracking;
 
-			Telescope.Tracking = true;
+			if ( !trackingFlag )
+			{
+				if ( Telescope.CanSetTracking )
+				{
+					Telescope.Tracking = true;
+				}
+				else
+				{
+					TestContext.WriteLine( _fmt, NowTime(), "SlewToCoordinates", "INFO", "Unable to enable tracking; test skipped" );
+
+					return;
+				}
+			}
 
 			TestCoordinateSlew_Valid();
 			TestCoordinateSlew_BadValue( true, -1.0, "(Bad L)" );
@@ -2018,7 +2193,10 @@ namespace ConformanceTests
 			TestCoordinateSlew_BadValue( true, 25.0, "(Bad H)" );
 			TestCoordinateSlew_BadValue( false, 100.0, "(Bad H)" );
 
-			Telescope.Tracking = trackingFlag;
+			if ( trackingFlag != Telescope.Tracking && Telescope.CanSetTracking )
+			{
+				Telescope.Tracking = trackingFlag;
+			}
 		}
 
 		private void TestCoordinateSlew_BadValue( bool isRA, double badValue, string suffix )
@@ -2787,7 +2965,7 @@ namespace ConformanceTests
 
 		private void WriteProperty<T>( string propName, T propValue, string valueFormat = ""
 									, string nameSuffix="", string customResultFormat=""
-									, Type expectedException=null  )
+									, Type expectedExceptionType=null  )
 		{
 			string status = _error;
 			string exception = "";
@@ -2807,12 +2985,17 @@ namespace ConformanceTests
 				exception = GetExceptionMessage( xcp );
 			}
 
-			if ( except != null && expectedException != null && except.GetType() == expectedException )
+			if ( except != null && expectedExceptionType != null )
 			{
-				except = null;
-				status = _ok;
+				Type actualExceptionType = except.GetType();
+
+				if ( actualExceptionType == expectedExceptionType )
+				{
+					except = null;
+					status = _ok;
+				}
 			}
-			else if ( except == null && expectedException != null )
+			else if ( except == null && expectedExceptionType != null )
 			{
 				status = _issue;
 				msg = String.Format( "The expected error was not generated when {0} was set to {1}.", propName, propValue );
