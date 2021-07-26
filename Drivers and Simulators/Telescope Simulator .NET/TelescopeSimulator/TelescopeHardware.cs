@@ -51,7 +51,7 @@ namespace ASCOM.Simulator
 
         #endregion
         #region Constants
-        // Startup options values       
+        // Start-up options values       
         private const string STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION = "Start up at simulator Default Position";
         private const string STARTUP_OPTION_START_POSITION = "Start up at configured Start Position";
         private const string STARTUP_OPTION_PARKED_POSITION = "Start up at configured Park Position";
@@ -231,7 +231,7 @@ namespace ASCOM.Simulator
 
         internal static double GuideDurationLong { get; private set; }
 
-        // Internal variables used to communicate with the Startup / Park / Home configuration form
+        // Internal variables used to communicate with the Start-up / Park / Home configuration form
         /// <summary>
         /// Start position in Alt/Az degrees
         /// </summary>
@@ -311,7 +311,7 @@ namespace ASCOM.Simulator
                 connectStates = new ConcurrentDictionary<long, bool>();
                 idCount = 0; // Initialise count to zero
 
-                // Populate the startup options collection
+                // Populate the start-up options collection
                 StartupOptions = new List<string>() { STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION, STARTUP_OPTION_LASTUSED_POSITION, STARTUP_OPTION_START_POSITION, STARTUP_OPTION_PARKED_POSITION, STARTUP_OPTION_HOME_POSITION };
 
                 // check if the profile settings are correct 
@@ -322,7 +322,7 @@ namespace ASCOM.Simulator
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "RegVer", SharedResources.REGISTRATION_VERSION);
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "AlwaysOnTop", "false");
 
-                    // Telescope Implemention
+                    // Telescope Implementation
                     // Initialise mount type to German Polar
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "AlignMode", "1"); // 1 = Start as German Polar m9ount type
                     alignmentMode = AlignmentModes.algGermanPolar; // Added by Peter because the Profile setting was set to German Polar but the alignment mode value at this point was still zer0 = Alt/Az!
@@ -405,7 +405,7 @@ namespace ASCOM.Simulator
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "ShutdownAzimuth", HomePosition.X.ToString(CultureInfo.InvariantCulture)); // Set some default last shutdown values
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "ShutdownAltitude", HomePosition.Y.ToString(CultureInfo.InvariantCulture));
 
-                    s_Profile.WriteValue(SharedResources.PROGRAM_ID, "StartupMode", STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION); // Set the original simulator behaviour as the default staretup mode
+                    s_Profile.WriteValue(SharedResources.PROGRAM_ID, "StartupMode", STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION); // Set the original simulator behaviour as the default start-up mode
 
                     //Capabilities Settings
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "V1", "false", "Capabilities");
@@ -483,14 +483,14 @@ namespace ASCOM.Simulator
                 HomePosition.X = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "HomeAzimuth", "", "0"), CultureInfo.InvariantCulture);
                 HomePosition.Y = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "HomeAltitude", "", "0"), CultureInfo.InvariantCulture);
 
-                // Retrieve the previous shutdown position position
+                // Retrieve the previous shutdown position
                 shutdownPosition.X = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "ShutdownAzimuth", "", "0"), CultureInfo.InvariantCulture);
                 shutdownPosition.Y = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "ShutdownAltitude", "", "0"), CultureInfo.InvariantCulture);
 
-                // Retrieve the startup mode
+                // Retrieve the start-up mode
                 startupMode = s_Profile.GetValue(SharedResources.PROGRAM_ID, "StartupMode", "", STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION);
 
-                // Select the configured startup position
+                // Select the configured start-up position
                 switch (startupMode)
                 {
                     case STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION: // No action just go with the built-in values already in altAzm
@@ -507,7 +507,7 @@ namespace ASCOM.Simulator
                     case STARTUP_OPTION_HOME_POSITION:
                         altAzm = HomePosition;
                         break;
-                    default: // No action just go with the built-in simulator startup position already in altAzm
+                    default: // No action just go with the built-in simulator start-up position already in altAzm
                         break;
                 }
 
@@ -538,7 +538,7 @@ namespace ASCOM.Simulator
                 canLatLongElev = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanLatLongElev", "Capabilities"));
                 canSiderealTime = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanSiderealTime", "Capabilities"));
                 canPierSide = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanPierSide", "Capabilities"));
-                canDestinationSideOfPier = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanDestinationSideOfPier", "Capabilities","True"));
+                canDestinationSideOfPier = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanDestinationSideOfPier", "Capabilities", "True"));
                 canTrackingRates = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanTrackingRates", "Capabilities"));
                 canDualAxisPulseGuide = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanDualAxisPulseGuide", "Capabilities"));
                 noSyncPastMeridian = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "NoSyncPastMeridian", "Capabilities", "false"));
@@ -578,7 +578,7 @@ namespace ASCOM.Simulator
                 SlewState = SlewType.SlewNone;
 
                 mountAxes = MountFunctions.ConvertAltAzmToAxes(altAzm); // Convert the start position AltAz coordinates into the current axes representation and set this as the simulator start position
-                TL.LogMessage("TelescopeHardware New", string.Format("Startup mode: {0}, Azimuth: {1}, Altitude: {2}", startupMode, altAzm.X.ToString(CultureInfo.InvariantCulture), altAzm.Y.ToString(CultureInfo.InvariantCulture)));
+                TL.LogMessage("TelescopeHardware New", string.Format("Start-up mode: {0}, Azimuth: {1}, Altitude: {2}", startupMode, altAzm.X.ToString(CultureInfo.InvariantCulture), altAzm.Y.ToString(CultureInfo.InvariantCulture)));
 
                 TL.LogMessage("TelescopeHardware New", "Successfully initialised hardware");
 
@@ -592,7 +592,7 @@ namespace ASCOM.Simulator
 
         public static void Start()
         {
-            //Connected = false;
+            // Start with the configured Tracking state and the mount unparked
             Tracking = AutoTrack;
             AtPark = false;
 
@@ -1152,7 +1152,7 @@ namespace ASCOM.Simulator
         {
             lock (getIdLockObj)
             {
-                Interlocked.Increment(ref idCount); // Increment the counter in a threadsafe fashion
+                Interlocked.Increment(ref idCount); // Increment the counter in a thread safe fashion
                 TL.LogMessage("GetId", "Generated new ID: " + idCount.ToString());
                 return idCount;
             }
@@ -1498,13 +1498,26 @@ namespace ASCOM.Simulator
             StartSlewAxes(MountFunctions.ConvertAltAzmToAxes(HomePosition), SlewType.SlewHome);
         }
 
+        /// <summary>
+        /// Restore the configured Tracking state when configuration prevent s clients from doing this themselves
+        /// </summary>
+        /// <remarks>
+        /// When the simulator is configured to prevent clients from changing the Tracking state it is necessary to restore the configured state after
+        /// performing functions such as Park() and FindHome. This method is called in several places to ensure that the configured Tracking state is active 
+        /// even after commands where tracking is intentionally disabled by the simulator itself.
+        /// </remarks>
+        public static void RestoreTrackingStateIfNecessary()
+        {
+            if (!CanSetTracking) Tracking = AutoTrack;
+        }
+
         #endregion
 
         #region Helper Functions
 
         /// <summary>
         /// Gets the side of pier using the right ascension, assuming it depends on the
-        /// hour aangle only.  Used for Destinaation side of Pier, NOT to determine the mount
+        /// hour angle only.  Used for Destination side of Pier, NOT to determine the mount
         /// pointing state
         /// </summary>
         /// <param name="rightAscension">The right ascension.</param>
@@ -1570,7 +1583,7 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// returns the mount traacking movement in hour angle during the update intervaaal
+        /// returns the mount tracking movement in hour angle during the update interval
         /// </summary>
         /// <param name="updateInterval">The update interval.</param>
         /// <returns></returns>
@@ -1678,7 +1691,7 @@ namespace ASCOM.Simulator
                 finished = false;
             }
 
-            // If finsihed then complete processing
+            // If finished then complete processing
             if (finished)
             {
                 slewing = false;
@@ -1816,7 +1829,7 @@ namespace ASCOM.Simulator
         {
             // check the ranges of the axes
             // primary axis must be in the range 0 to 360 for AltAz or Polar
-            // and -hourAngleLimit to 180 + hourAngleLimit for german polar
+            // and -hourAngleLimit to 180 + hourAngleLimit for German polar
             switch (alignmentMode)
             {
                 case AlignmentModes.algAltAz:
