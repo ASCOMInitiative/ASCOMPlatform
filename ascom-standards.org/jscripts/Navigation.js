@@ -181,6 +181,8 @@ function writesubmenu() {
 	    SubMenuOutput += "<ul class=\"treeview\">";
 	    SubMenuOutput += "<li><a href=\"ScriptableComponents.htm\">Scriptable Components</a></li>";
 	    SubMenuOutput += "<li><a href=\"https://github.com/ASCOMInitiative/ASCOMRemote/releases\" target=\"_new\">ASCOM Remote (Alpaca)</a></li>";
+	    SubMenuOutput += "<li><a href=\"https://github.com/synfinatic/alpacascope#readme\" target=\"_new\">AlpacaScope (SkySafari)</a></li>";
+		
 	    SubMenuOutput += "</ul>";
     	SubMenuOutput += "<h3>Developer Downloads</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
