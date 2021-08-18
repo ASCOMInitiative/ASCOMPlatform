@@ -92,6 +92,12 @@ Namespace AstroUtils
             Dispose(True)
             GC.SuppressFinalize(Me)
         End Sub
+
+        Protected Overrides Sub Finalize()
+            ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+            Dispose(False)
+            MyBase.Finalize()
+        End Sub
 #End Region
 
         ''' <summary>
