@@ -32,12 +32,7 @@ namespace ASCOM.DeviceHub
         {
             try
             {
-				//if ( mgr.ParkingState != ParkingStateEnum.ParkInProgress )
-				//{
-				//    ParkingState = ( AtPark ) ? ParkingStateEnum.IsAtPark : ParkingStateEnum.Unparked;
-				//}
 				ParkingState = mgr.ParkingState;
-				Debug.WriteLine( $"ParkingState = {ParkingState}." );
 
                 double sidTime = SiderealTime;
                 double ra = RightAscension;

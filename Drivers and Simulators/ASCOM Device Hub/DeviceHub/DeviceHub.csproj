@@ -84,6 +84,7 @@
     <Compile Include="Business Object Classes\Telescope Classes\JogDirection.cs" />
     <Compile Include="Business Object Classes\Value Converters\BooleanOnOffConverter.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\TelescopeRates.cs" />
+    <Compile Include="Business Object Classes\Value Converters\MultiBindingTrueIfNotParking.cs" />
     <Compile Include="Business Object Classes\Value Converters\MultiBooleanVisibilityConverter.cs" />
     <Compile Include="Business Object Classes\DisplayAttribute.cs" />
     <Compile Include="View Classes\AboutView.xaml.cs">

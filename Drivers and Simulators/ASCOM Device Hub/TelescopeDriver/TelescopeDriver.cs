@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -1758,9 +1759,6 @@ namespace ASCOM.DeviceHub
 				throw new MethodNotImplementedException( $"CanMoveAxis {axisName}" );
 			}
 
-			//CheckParked( name, TelescopeManager.Status.AtPark );
-			CheckParkingStatus( name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked );
-
 			try
 			{
 				if ( rate == 0 )
@@ -1769,13 +1767,20 @@ namespace ASCOM.DeviceHub
 				}
 				else
 				{
+					Debug.WriteLine( "MoveAxis - Checking if Parked" );
+					CheckParked( name, TelescopeManager.Status.AtPark );
+					Debug.WriteLine( "MoveAxis - Verifying NOT in the process of parking." );
+					CheckParkingStatus( name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked );
+					Debug.WriteLine( $"TelescopeDriver: StartJogMoveAxis - {axis} {rate:F3}" );
 					TelescopeManager.StartJogMoveAxis( axis, rate );
+					Debug.WriteLine( "Back from StartJogMoveAxis" );
 				}
 
 				msg += _done;
 			}
-			catch ( Exception )
+			catch ( Exception xcp )
 			{
+				Debug.WriteLine( $"StartJogMoveAxis caught exception - {xcp.Message}" );
 				msg += _failed;
 
 				throw;
@@ -1822,7 +1827,7 @@ namespace ASCOM.DeviceHub
 			string name = "PulseGuide:";
 
 			CheckConnected( name );
-			//CheckParked( name, TelescopeManager.Status.AtPark );
+			CheckParked( name, TelescopeManager.Status.AtPark );
 			CheckParkingStatus( name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked );
 			CheckCapabilityForMethod( name, "CanPulseGuide", TelescopeManager.Capabilities.CanPulseGuide );
 			CheckRange( name, duration, 0, 30000 );
@@ -2316,7 +2321,7 @@ namespace ASCOM.DeviceHub
 		{
 			string name = "SlewToAltAz:";
 			CheckCapabilityForMethod( name, "CanSlewAltAz", TelescopeManager.Capabilities.CanSlewAltAz );
-			//CheckParked( name, TelescopeManager.Status.AtPark );
+			CheckParked( name, TelescopeManager.Status.AtPark );
 			CheckParkingStatus( name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked );
 			CheckTracking( name, false );
 			CheckRange( name, azimuth, 0, 360 );
@@ -2345,7 +2350,7 @@ namespace ASCOM.DeviceHub
 		{
 			string name = "SlewToAltAzAsync:";
 			CheckCapabilityForMethod( name, "CanSlewAltAzAzsync", TelescopeManager.Capabilities.CanSlewAltAzAsync );
-			//CheckParked( name, TelescopeManager.Status.AtPark );
+			CheckParked( name, TelescopeManager.Status.AtPark );
 			CheckParkingStatus( name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked );
 			CheckTracking( name, false );
 			CheckRange( name, azimuth, 0, 360 );
@@ -2375,7 +2380,7 @@ namespace ASCOM.DeviceHub
 			CheckCapabilityForMethod( name, "CanSlew", TelescopeManager.Capabilities.CanSlew );
 			CheckRange( name, rightAscension, 0.0, 24.0 );
 			CheckRange( name, declination, -90.0, 90.0 );
-			//CheckParked( name, TelescopeManager.Status.AtPark );
+			CheckParked( name, TelescopeManager.Status.AtPark );
 			CheckParkingStatus( name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked );
 			CheckTracking( name, true );
 
@@ -2406,7 +2411,7 @@ namespace ASCOM.DeviceHub
 			CheckCapabilityForMethod( name, "CanSlewAsync", TelescopeManager.Capabilities.CanSlewAsync );
 			CheckRange( name, rightAscension, 0.0, 24.0 );
 			CheckRange( name, declination, -90.0, 90.0 );
-			//CheckParked( name, TelescopeManager.Status.AtPark );
+			CheckParked( name, TelescopeManager.Status.AtPark );
 			CheckParkingStatus( name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked );
 			CheckTracking( name, true );
 
@@ -2434,7 +2439,7 @@ namespace ASCOM.DeviceHub
 			CheckCapabilityForMethod( name, "CanSlew", TelescopeManager.Capabilities.CanSlew );
 			CheckRange( name, TelescopeManager.TargetRightAscension, 0.0, 24.0 );
 			CheckRange( name, TelescopeManager.TargetDeclination, -90.0, 90.0 );
-			//CheckParked( name, TelescopeManager.Status.AtPark );
+			CheckParked( name, TelescopeManager.Status.AtPark );
 			CheckParkingStatus( name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked );
 			CheckTracking( name, true );
 
@@ -2464,7 +2469,7 @@ namespace ASCOM.DeviceHub
 			CheckCapabilityForMethod( name, "CanSlewAsync", TelescopeManager.Capabilities.CanSlew );
 			CheckRange( name, TelescopeManager.TargetRightAscension, 0.0, 24.0 );
 			CheckRange( name, TelescopeManager.TargetDeclination, -90.0, 90.0 );
-			//CheckParked( name, TelescopeManager.Status.AtPark );
+			CheckParked( name, TelescopeManager.Status.AtPark );
 			CheckParkingStatus( name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked );
 			CheckTracking( name, true );
 
@@ -2530,7 +2535,7 @@ namespace ASCOM.DeviceHub
 			CheckCapabilityForMethod( name, "CanSyncAltAz", TelescopeManager.Capabilities.CanSyncAltAz );
 			CheckRange( name, azimuth, 0.0, 360.0 );
 			CheckRange( name, altitude, -90.0, 90.0 );
-			//CheckParked( name, TelescopeManager.Status.AtPark );
+			CheckParked( name, TelescopeManager.Status.AtPark );
 			CheckParkingStatus( name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked );
 			CheckTracking( name, false );
 
@@ -2559,7 +2564,7 @@ namespace ASCOM.DeviceHub
 			CheckCapabilityForMethod( name, "CanSync", TelescopeManager.Capabilities.CanSync );
 			CheckRange( name, rightAscension, 0.0, 24.0 );
 			CheckRange( name, declination, -90.0, 90.0 );
-			//CheckParked( name, TelescopeManager.Status.AtPark );
+			CheckParked( name, TelescopeManager.Status.AtPark );
 			CheckParkingStatus( name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked );
 			CheckTracking( name, true );
 
@@ -2588,7 +2593,7 @@ namespace ASCOM.DeviceHub
 			CheckCapabilityForMethod( name, "CanSync", TelescopeManager.Capabilities.CanSync );
 			CheckRange( name, TelescopeManager.Status.TargetRightAscension, 0.0, 24.0 );
 			CheckRange( name, TelescopeManager.Status.TargetDeclination, -90.0, 90.0 );
-			//CheckParked( name, TelescopeManager.Status.AtPark );
+			CheckParked( name, TelescopeManager.Status.AtPark );
 			CheckParkingStatus( name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked );
 			CheckTracking( name, true );
 
@@ -2949,7 +2954,7 @@ namespace ASCOM.DeviceHub
 
 			try
 			{
-				TelescopeManager.Unpark();
+				TelescopeManager.SetParkingState( ParkingStateEnum.Unparked );
 				msg += _done;
 			}
 			catch ( Exception )
@@ -2999,7 +3004,7 @@ namespace ASCOM.DeviceHub
 
 			}
 
-			string rateText = String.Empty;
+			StringBuilder sb = new StringBuilder();
 
 			foreach ( IRate rateItem in rates )
 			{
@@ -3008,10 +3013,15 @@ namespace ASCOM.DeviceHub
 					return;
 				}
 
-				rateText = $"{rateText}, {rateItem.Minimum:f5} to {rateItem.Maximum:f5}";
+				if ( sb.Length > 0 )
+				{
+					sb.Append( ", " );
+				}
+
+				sb.Append( $"{rateItem.Minimum:f5} to {rateItem.Maximum:f5}" );
 			}
 
-			throw new InvalidValueException( ident, rate.ToString( CultureInfo.InvariantCulture ), rateText );
+			throw new InvalidValueException( ident, rate.ToString( CultureInfo.InvariantCulture ), sb.ToString() );
 		}
 
 		private void CheckTracking( string ident,  bool raDecSlew )

@@ -585,7 +585,8 @@ namespace ASCOM.DeviceHub
 		{
 			bool retval = false;
 
-			if  ( Status != null && Status.Connected && Status.ParkingState == ParkingStateEnum.Unparked )
+			if  ( Capabilities != null && Capabilities.CanSetTracking
+					&& Status != null && Status.Connected && Status.ParkingState == ParkingStateEnum.Unparked )
 			{
 				retval = true;
 			}
@@ -617,6 +618,22 @@ namespace ASCOM.DeviceHub
 		private void ChangeParkState()
 		{
 			ParkingStateEnum newState = ( Status.ParkingState == ParkingStateEnum.Unparked ) ? ParkingStateEnum.IsAtPark : ParkingStateEnum.Unparked;
+
+			if ( newState == ParkingStateEnum.IsAtPark )
+			{
+				IMessageBoxService msgSvc = ServiceContainer.Instance.GetService<IMessageBoxService>();
+
+				string text = "Once you start to park the telescope it will not be abortable and must be allowed to complete. \r\n\r\n"
+					+ "Are you sure that you want to continue?";
+				string title = "Park The Telescope";
+
+				MessageBoxResult result = msgSvc.Show( text, title, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No, MessageBoxOptions.None );
+
+				if ( result != MessageBoxResult.Yes )
+				{
+					return;
+				}
+			}
 
 			TelescopeManager.SetParkingState( newState );
 		}

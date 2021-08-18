@@ -63,7 +63,14 @@ namespace ASCOM.DeviceHub
 				string msg = $"Invalid operation when the parking status is {actualState}.";
 				LogMessage( ident, msg );
 
-				throw new InvalidOperationException( $"{ident} not allowed when the parking status is {actualState}." );
+				if ( actualState == ParkingStateEnum.ParkInProgress )
+				{
+					throw new InvalidOperationException( $"{ident} not allowed when the parking status is {actualState}." );
+				}
+				else if ( actualState == ParkingStateEnum.IsAtPark )
+				{
+					throw new ParkedException( $"{ident} not allowed when the telescope is AtPark." );
+				}
 			}
 		}
 

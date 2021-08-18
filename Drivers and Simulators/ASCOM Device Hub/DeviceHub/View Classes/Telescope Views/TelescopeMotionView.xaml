@@ -19,6 +19,7 @@
 		<local:SideOfPierStringConverter x:Key="SideOfPierConverter" />
 		<local:HourAngleValueConverter x:Key="HourAngleValueConverter" />
 		<local:MultiBooleanVisibilityConverter x:Key="MultiBoolVis" />
+		<local:MultiBindingTrueIfNotParking x:Key="TrueIfNotParking" />
 
 		<Style x:Key="StateLabel" TargetType="{x:Type Label}">
 			<Setter Property="Margin" Value="0" />
@@ -253,12 +254,17 @@
 								Command="{Binding DoFixedSlewCommand}" CommandParameter="2"
 							local:MouseBehavior.MouseDownCommand="{Binding StartMoveCommand}" local:MouseBehavior.MouseDownCommandParameter="2"
 							local:MouseBehavior.MouseUpCommand="{Binding StopMotionCommand}" local:MouseBehavior.MouseUpCommandParameter="2" />
-			<Button Grid.Row="4" Grid.Column="1" Width="24" Height="24" Margin="0,5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+		<Button Grid.Row="4" Grid.Column="1" Width="24" Height="24" Margin="0,5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
 					ToolTip="Abort Slew"
-					Command="{Binding StopMotionCommand}" CommandParameter="-1"
-					IsEnabled="{Binding Status.Connected, FallbackValue=False}">
-				<Image Margin="2" Source="/ASCOM.DeviceHub;component/Images/Stop.ico" />
-			</Button>
+					Command="{Binding StopMotionCommand}" CommandParameter="-1">
+			<Button.IsEnabled>
+				<MultiBinding Converter="{StaticResource TrueIfNotParking}">
+					<Binding Path="Status.Connected"  />
+					<Binding Path="Status.ParkingState" />
+				</MultiBinding>
+			</Button.IsEnabled>
+			<Image Margin="2" Source="/ASCOM.DeviceHub;component/Images/Stop.ico" />
+		</Button>
 			<Button Grid.Row="4" Grid.Column="2" Width="24" Height="24" HorizontalAlignment="Left"
 								Content="{Binding JogDirections[3].Name, FallbackValue=E, Mode=Default}" 
 								IsEnabled="{Binding CanStartMoveTelescope}"
