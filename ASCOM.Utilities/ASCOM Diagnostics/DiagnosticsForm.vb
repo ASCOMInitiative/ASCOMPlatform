@@ -21,11 +21,13 @@ Public Class DiagnosticsForm
 #Region "Constants and Enums"
     ' Controls to reduce the scope of tests to be run - only set to false to speed up testing during development. Must all be set True for production builds!
     Private Const TEST_ASTROMETRY As Boolean = True
-    Private Const TEST_CACHE As Boolean = True
-    Private Const TEST_LOGS_AND_APPLICATIONS As Boolean = True
-    Private Const TEST_REGISTRY As Boolean = True
-    Private Const TEST_SIMULATORS As Boolean = True
-    Private Const TEST_UTILITIES As Boolean = True
+    Private Const TEST_CACHE As Boolean = False
+    Private Const TEST_LOGS_AND_APPLICATIONS As Boolean = False
+    Private Const TEST_REGISTRY As Boolean = False
+    Private Const TEST_SIMULATORS As Boolean = False
+    Private Const TEST_UTILITIES As Boolean = False
+    Private Const TEST_SCAN_DRIVES As Boolean = False
+    Private Const CREATE_DEBUG_COLSOLE As Boolean = True
 
     Private Const ASCOM_PLATFORM_NAME As String = "ASCOM Platform 6"
     Private Const INST_DISPLAY_NAME As String = "DisplayName"
@@ -77,6 +79,16 @@ Public Class DiagnosticsForm
     Private Const OPTIONS_AUTOVIEW_REGISTRYKEY As String = "Diagnostics Auto View Log"
     Private Const OPTIONS_AUTOVIEW_REGISTRYKEY_DEFAULT As Boolean = False
 
+#Region "DLL Call Definitions"
+    <DllImport("kernel32.dll")>
+    Public Shared Function AllocConsole() As Boolean
+    End Function
+
+    <DllImport("kernel32.dll")>
+    Public Shared Function FreeConsole() As Boolean
+    End Function
+#End Region
+
     Private Enum DoubleType
         Number
         Hours0To24
@@ -127,6 +139,7 @@ Public Class DiagnosticsForm
     Private NumberOfTicks As Integer
 
     Private Nov3 As ASCOM.Astrometry.NOVAS.NOVAS3, Nov31 As ASCOM.Astrometry.NOVAS.NOVAS31
+    Private transform As ASCOM.Astrometry.Transform.Transform
     Private AstroUtil As AstroUtils.AstroUtils
     Private DeviceObject As Object ' Device test object
 
@@ -171,12 +184,22 @@ Public Class DiagnosticsForm
             RefreshTraceItems() ' Get current values for the trace menu settings
             MenuAutoViewLog.Checked = GetBool(OPTIONS_AUTOVIEW_REGISTRYKEY, OPTIONS_AUTOVIEW_REGISTRYKEY_DEFAULT) ' Get the auto view log setting
 
+            ' Create a debug console if required
+            If CREATE_DEBUG_COLSOLE Then
+                AllocConsole()
+                Console.OpenStandardError()
+                Console.OpenStandardOutput()
+                Console.WriteLine("Console created")
+            End If
+
             AstroUtil = New AstroUtils.AstroUtils
             Nov3 = New NOVAS.NOVAS3
             Nov31 = New NOVAS.NOVAS31
-            AscomUtil = New ASCOM.Utilities.Util
+            AscomUtil = New Util
+            transform = New Astrometry.Transform.Transform()
             Me.BringToFront()
             Me.KeyPreview = True ' Ensure that key press events are sent to the form so that the key press event handler can respond to them
+
 
         Catch ex As Exception
             EventLogCode.LogEvent("Diagnostics Load", "Exception", EventLogEntryType.Error, EventLogErrors.DiagnosticsLoadException, ex.ToString)
@@ -281,11 +304,13 @@ Public Class DiagnosticsForm
                     LogException("RunningVersions", ex.ToString)
                 End Try
 
-                Try
-                    ScanDrives() 'Scan PC drives and report information
-                Catch ex As Exception
-                    LogException("ScanDrives", ex.ToString)
-                End Try
+                If TEST_SCAN_DRIVES Then
+                    Try
+                        ScanDrives() 'Scan PC drives and report information
+                    Catch ex As Exception
+                        LogException("ScanDrives", ex.ToString)
+                    End Try
+                End If
 
                 Try
                     ScanFrameworks() 'Report on installed .NET Framework versions
@@ -503,6 +528,8 @@ Public Class DiagnosticsForm
                 CompareBoolean("Test Configuration", "Registry Tests Enabled", TEST_REGISTRY, True)
                 CompareBoolean("Test Configuration", "Simulators Tests Enabled", TEST_SIMULATORS, True)
                 CompareBoolean("Test Configuration", "Utilities Tests Enabled", TEST_UTILITIES, True)
+                CompareBoolean("Test Configuration", "Utilities Tests Enabled", TEST_SCAN_DRIVES, True)
+                CompareBoolean("Test Configuration", "Create Debug Console Disabled", TEST_SCAN_DRIVES, False)
 
                 If (NNonMatches = 0) And (NExceptions = 0) Then
                     SuccessMessage = "Congratulations, all " & NMatches & " function tests passed!"
@@ -3447,7 +3474,7 @@ Public Class DiagnosticsForm
     End Enum
 
     Private Sub NOVAS2Tests()
-        Dim T As Transform.Transform = New Transform.Transform
+        'Dim transform As Transform.Transform = New Transform.Transform
         Dim u As New Util
         Dim EarthBody, SunBody As New BodyDescription, StarStruct As New CatEntry, LocationStruct As New SiteInfo
         Dim Star(), SKYPOS(), POS(), POS2(), POSEarth(), VEL2(), POSNow(), VEL() As Double
@@ -3859,30 +3886,30 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Sub TransformTest()
-        Dim TR As Transform.Transform = New Transform.Transform
+        'Dim transform As Transform.Transform = New Transform.Transform
 
-        TransformExceptionTest(TR, TransformExceptionTestType.SiteLatitude, 0.0, -91.0, 91.0)
-        TransformExceptionTest(TR, TransformExceptionTestType.SiteLongitude, 0.0, -181.0, 181.0)
-        TransformExceptionTest(TR, TransformExceptionTestType.SiteElevation, 0.0, -301.0, 10001.0)
-        TransformExceptionTest(TR, TransformExceptionTestType.SiteTemperature, 0.0, -275.0, 101.0)
-        TransformExceptionTest(TR, TransformExceptionTestType.JulianDateTT, 2451545.0, -1.0, 6000000.0)
-        TransformExceptionTest(TR, TransformExceptionTestType.JulianDateTT, 0.0, -1.0, 6000000.0) ' Confirm that the special JulianDateTT value of 0.0 passes
-        TransformExceptionTest(TR, TransformExceptionTestType.JulianDateUTC, 2451545.0, -1.0, 6000000.0)
-        TransformExceptionTest(TR, TransformExceptionTestType.JulianDateUTC, 0.0, -1.0, 6000000.0) ' Confirm that the special JulianDateUTC value of 0.0 passes
-        TransformExceptionTest(TR, TransformExceptionTestType.SetJ2000RA, 0.0, -1.0, 24.0)
-        TransformExceptionTest(TR, TransformExceptionTestType.SetJ2000Dec, 0.0, -91.0, 91.0)
-        TransformExceptionTest(TR, TransformExceptionTestType.SetApparentRA, 0.0, -1.0, 24.0)
-        TransformExceptionTest(TR, TransformExceptionTestType.SetApparentDec, 0.0, -91.0, 91.0)
-        TransformExceptionTest(TR, TransformExceptionTestType.SetTopocentricRA, 0.0, -1.0, 24.0)
-        TransformExceptionTest(TR, TransformExceptionTestType.SetTopocentricDec, 0.0, -91.0, 91.0)
-        TransformExceptionTest(TR, TransformExceptionTestType.SetAzElAzimuth, 0.0, -1.0, 360.0)
-        TransformExceptionTest(TR, TransformExceptionTestType.SetAzElElevation, 0.0, -91.0, 91.0)
+        TransformExceptionTest(transform, TransformExceptionTestType.SiteLatitude, 0.0, -91.0, 91.0)
+        TransformExceptionTest(transform, TransformExceptionTestType.SiteLongitude, 0.0, -181.0, 181.0)
+        TransformExceptionTest(transform, TransformExceptionTestType.SiteElevation, 0.0, -301.0, 10001.0)
+        TransformExceptionTest(transform, TransformExceptionTestType.SiteTemperature, 0.0, -275.0, 101.0)
+        TransformExceptionTest(transform, TransformExceptionTestType.JulianDateTT, 2451545.0, -1.0, 6000000.0)
+        TransformExceptionTest(transform, TransformExceptionTestType.JulianDateTT, 0.0, -1.0, 6000000.0) ' Confirm that the special JulianDateTT value of 0.0 passes
+        TransformExceptionTest(transform, TransformExceptionTestType.JulianDateUTC, 2451545.0, -1.0, 6000000.0)
+        TransformExceptionTest(transform, TransformExceptionTestType.JulianDateUTC, 0.0, -1.0, 6000000.0) ' Confirm that the special JulianDateUTC value of 0.0 passes
+        TransformExceptionTest(transform, TransformExceptionTestType.SetJ2000RA, 0.0, -1.0, 24.0)
+        TransformExceptionTest(transform, TransformExceptionTestType.SetJ2000Dec, 0.0, -91.0, 91.0)
+        TransformExceptionTest(transform, TransformExceptionTestType.SetApparentRA, 0.0, -1.0, 24.0)
+        TransformExceptionTest(transform, TransformExceptionTestType.SetApparentDec, 0.0, -91.0, 91.0)
+        TransformExceptionTest(transform, TransformExceptionTestType.SetTopocentricRA, 0.0, -1.0, 24.0)
+        TransformExceptionTest(transform, TransformExceptionTestType.SetTopocentricDec, 0.0, -91.0, 91.0)
+        TransformExceptionTest(transform, TransformExceptionTestType.SetAzElAzimuth, 0.0, -1.0, 360.0)
+        TransformExceptionTest(transform, TransformExceptionTestType.SetAzElElevation, 0.0, -91.0, 91.0)
 
         TransformTest2000("Deneb", "20:41:25.916", "45:16:49.23", TOLERANCE_E5, TOLERANCE_E4)
         TransformTest2000("Polaris", "02:31:51.263", "89:15:50.68", TOLERANCE_E5, TOLERANCE_E4)
         TransformTest2000("Arcturus", "14:15:38.943", "19:10:37.93", TOLERANCE_E5, TOLERANCE_E4)
 
-        TR.Dispose()
+        transform.Dispose()
 
         TL.BlankLine()
     End Sub
@@ -3948,7 +3975,7 @@ Public Class DiagnosticsForm
         Dim Util As New Util
         Dim AstroRA, AstroDEC As Double
         Dim SiteLat, SiteLong, SiteElev As Double
-        Dim TR As Transform.Transform = New Transform.Transform
+        'Dim transform As Transform.Transform = New Transform.Transform
         Dim RA, DEC As Double
         Dim rc As Short
         Dim OnSurface3 As New OnSurface, Cat3 As New CatEntry3
@@ -3964,12 +3991,12 @@ Public Class DiagnosticsForm
             SiteLong = 0.0 - (17.0 / 60.0) - (40.0 / 3600.0)
 
             'Set up Transform component
-            TR.SiteElevation = 80.0
-            TR.SiteLatitude = SiteLat
-            TR.SiteLongitude = SiteLong
-            TR.SiteTemperature = 10.0
-            TR.Refraction = False
-            TR.SetJ2000(AstroRA, AstroDEC)
+            transform.SiteElevation = 80.0
+            transform.SiteLatitude = SiteLat
+            transform.SiteLongitude = SiteLong
+            transform.SiteTemperature = 10.0
+            transform.Refraction = False
+            transform.SetJ2000(AstroRA, AstroDEC)
 
             Cat3.RA = AstroRA
             Cat3.Dec = AstroDEC
@@ -3980,10 +4007,10 @@ Public Class DiagnosticsForm
             OnSurface3.Temperature = 10.0
 
             rc = Nov31.TopoStar(AstroUtil.JulianDateTT(0.0), AstroUtil.DeltaT, Cat3, OnSurface3, Accuracy.Full, RA, DEC)
-            TL.LogMessage("TransformTest", Name & " Novas31 RA/DEC Actual  : " & Util.HoursToHMS(TR.RATopocentric, ":", ":", "", 3) & " " & Util.DegreesToDMS(TR.DECTopocentric, ":", ":", "", 3))
+            TL.LogMessage("TransformTest", Name & " Novas31 RA/DEC Actual  : " & Util.HoursToHMS(transform.RATopocentric, ":", ":", "", 3) & " " & Util.DegreesToDMS(transform.DECTopocentric, ":", ":", "", 3))
             TL.LogMessage("TransformTest", Name & " Novas31 RA/DEC Expected: " & Util.HoursToHMS(RA, ":", ":", "", 3) & " " & Util.DegreesToDMS(DEC, ":", ":", "", 3))
-            CompareDouble("TransformTest", Name & " Novas31 Topocentric RA", TR.RATopocentric, RA, RATolerance, DoubleType.Hours0To24)
-            CompareDouble("TransformTest", Name & " Novas31 Topocentric Dec", TR.DECTopocentric, DEC, DecTolerance, DoubleType.Degrees0To360)
+            CompareDouble("TransformTest", Name & " Novas31 Topocentric RA", transform.RATopocentric, RA, RATolerance, DoubleType.Hours0To24)
+            CompareDouble("TransformTest", Name & " Novas31 Topocentric Dec", transform.DECTopocentric, DEC, DecTolerance, DoubleType.Degrees0To360)
 
         Catch ex As Exception
             LogException("TransformTest2000 Exception", ex.ToString)
@@ -8196,17 +8223,17 @@ Public Class DiagnosticsForm
 
     Private Sub AstroUtilsTests()
         Dim Events As RiseSet
-        Dim Nov31 As New NOVAS.NOVAS31
+        'Dim Nov31 As New NOVAS.NOVAS31
         Dim TimeDifference, DUT1, DT0, DTDUT1, JDUtc As Double
 
         Try
             Status("Running Astro Utilities functional tests")
             TL.LogMessage("AstroUtilTests", "Creating ASCOM.Astrometry.AstroUtils.AstroUtils")
             sw.Reset() : sw.Start()
-            Dim AstroUtil2 As New AstroUtils.AstroUtils
+            'Dim AstroUtil As New AstroUtils.AstroUtils
             TL.LogMessage("AstroUtilTests", "ASCOM.Astrometry.AstroUtils.AstroUtils Created OK in " & sw.ElapsedMilliseconds & " milliseconds")
 
-            TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.DeltaT: {0}", AstroUtil2.DeltaT))
+            TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.DeltaT: {0}", AstroUtil.DeltaT))
 
             ' Earth rotation data tests
             CompareInteger("AstroUtilTests", "Historic Offset Development Test Value", GlobalItems.TEST_HISTORIC_DAYS_OFFSET, 0)
@@ -8214,20 +8241,20 @@ Public Class DiagnosticsForm
             CompareInteger("AstroUtilTests", "UTC Hours Offset Development Test Value", GlobalItems.TEST_UTC_HOURS_OFFSET, 0)
             CompareInteger("AstroUtilTests", "UTC Minutes Offset Development Test Value", GlobalItems.TEST_UTC_MINUTES_OFFSET, 0)
 
-            JDUtc = AstroUtil2.JulianDateUtc
-            DUT1 = AstroUtil2.DeltaUT(JDUtc)
+            JDUtc = AstroUtil.JulianDateUtc
+            DUT1 = AstroUtil.DeltaUT(JDUtc)
             If (DUT1 > -0.9) And (DUT1 < 0.9) Then ' We have a valid value so proceed to test
                 TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.DeltaUT1 returned a valid value: {0}", DUT1))
-                DT0 = AstroUtil2.JulianDateUT1(0.0)
-                DTDUT1 = AstroUtil2.JulianDateUT1(DUT1)
+                DT0 = AstroUtil.JulianDateUT1(0.0)
+                DTDUT1 = AstroUtil.JulianDateUT1(DUT1)
                 TimeDifference = (DT0 - DTDUT1) * 24.0 * 60.0 * 60.0
                 TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateUT1(0.0): {0}", DT0))
                 TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateUT1(DeltaUT1): {0}", DTDUT1))
                 TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateUT1 Difference: {0} seconds", TimeDifference))
                 CompareDouble("AstroUtilTests", "JulianDateUT1", DT0, DTDUT1, TOLERANCE_E3)
 
-                DT0 = AstroUtil2.JulianDateTT(0.0)
-                DTDUT1 = AstroUtil2.JulianDateTT(DUT1)
+                DT0 = AstroUtil.JulianDateTT(0.0)
+                DTDUT1 = AstroUtil.JulianDateTT(DUT1)
                 TimeDifference = (DT0 - DTDUT1) * 24.0 * 60.0 * 60.0
                 TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateTT(0.0): {0}", DT0))
                 TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateTT(DeltaUT1): {0}", DTDUT1))
@@ -8239,26 +8266,26 @@ Public Class DiagnosticsForm
             TL.LogMessage("", "")
 
             'Range Tests
-            CompareDouble("AstroUtilTests", "ConditionHA -12.0", AstroUtil2.ConditionHA(-12.0), -12.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "ConditionHA 0.0", AstroUtil2.ConditionHA(0.0), 0.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "ConditionHA 12.0", AstroUtil2.ConditionHA(12.0), 12.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "ConditionHA -13.0", AstroUtil2.ConditionHA(-13.0), 11.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "ConditionHA 13.0", AstroUtil2.ConditionHA(13.0), -11.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionHA -12.0", AstroUtil.ConditionHA(-12.0), -12.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionHA 0.0", AstroUtil.ConditionHA(0.0), 0.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionHA 12.0", AstroUtil.ConditionHA(12.0), 12.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionHA -13.0", AstroUtil.ConditionHA(-13.0), 11.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionHA 13.0", AstroUtil.ConditionHA(13.0), -11.0, TOLERANCE_E6)
 
-            CompareDouble("AstroUtilTests", "ConditionRA 0.0", AstroUtil2.ConditionRA(0.0), 0.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "ConditionRA 12.0", AstroUtil2.ConditionRA(12.0), 12.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "ConditionRA 23.999", AstroUtil2.ConditionRA(23.999), 23.999, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "ConditionRA -1.0", AstroUtil2.ConditionRA(-1.0), 23.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "ConditionRA 25.0", AstroUtil2.ConditionRA(25.0), 1.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "Range 0:359.999 0.0", AstroUtil2.Range(0.0, 0.0, True, 360.0, False), 0.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "Range 0:359.999 359.0", AstroUtil2.Range(359.0, 0.0, True, 360.0, False), 359.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "Range 0:359.999 -30.0", AstroUtil2.Range(-30.0, 0.0, True, 360.0, False), 330.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "Range 0:359.999 390.0", AstroUtil2.Range(390.0, 0.0, True, 360.0, False), 30.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "Range 0:359.999 360.0", AstroUtil2.Range(360.0, 0.0, True, 360.0, False), 0.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "Range 0:360.0 360.0", AstroUtil2.Range(360.0, 0.0, True, 360.0, True), 360.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionRA 0.0", AstroUtil.ConditionRA(0.0), 0.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionRA 12.0", AstroUtil.ConditionRA(12.0), 12.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionRA 23.999", AstroUtil.ConditionRA(23.999), 23.999, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionRA -1.0", AstroUtil.ConditionRA(-1.0), 23.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionRA 25.0", AstroUtil.ConditionRA(25.0), 1.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:359.999 0.0", AstroUtil.Range(0.0, 0.0, True, 360.0, False), 0.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:359.999 359.0", AstroUtil.Range(359.0, 0.0, True, 360.0, False), 359.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:359.999 -30.0", AstroUtil.Range(-30.0, 0.0, True, 360.0, False), 330.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:359.999 390.0", AstroUtil.Range(390.0, 0.0, True, 360.0, False), 30.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:359.999 360.0", AstroUtil.Range(360.0, 0.0, True, 360.0, False), 0.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:360.0 360.0", AstroUtil.Range(360.0, 0.0, True, 360.0, True), 360.0, TOLERANCE_E6)
 
-            CompareWithin("AstroUtilTests", "DeltaT", AstroUtil2.DeltaT(), 67.0, 71.0) ' Upper bound increased because DeltaT has reached the original upper bound value! PWGS 9/10/2017
-            CompareWithin("AstroUtilTests", "DeltaUT", AstroUtil2.DeltaUT(AstroUtil2.JulianDateTT(0.0)), -1.0, 1.0)
+            CompareWithin("AstroUtilTests", "DeltaT", AstroUtil.DeltaT(), 67.0, 71.0) ' Upper bound increased because DeltaT has reached the original upper bound value! PWGS 9/10/2017
+            CompareWithin("AstroUtilTests", "DeltaUT", AstroUtil.DeltaUT(AstroUtil.JulianDateTT(0.0)), -1.0, 1.0)
             Events = GetEvents(ASCOM.Astrometry.EventType.SunRiseSunset, 5, 8, 2012, 51.0, -60.0, -5.0)
 
             CompareBoolean("AstroUtilTests", "Events Sun Risen at Midnight", Events.RisenAtMidnight, False)
@@ -8301,26 +8328,26 @@ Public Class DiagnosticsForm
             CompareDouble("AstroUtilTests", "Events Astronomical Twilight Start", Events.RiseTime(0), 1.01115193589165, TOLERANCE_E4)
             CompareDouble("AstroUtilTests", "Events Astronomical Twilight End", Events.SetTime(0), 22.9472021943943, TOLERANCE_E5)
 
-            CompareDouble("AstroUtilTests", "Moon Illumination", AstroUtil2.MoonIllumination(Nov31.JulianDate(2012, 8, 5, 12.0)), 0.872250725459045, TOLERANCE_E5)
-            CompareDouble("AstroUtilTests", "Moon Phase", AstroUtil2.MoonPhase(Nov31.JulianDate(2012, 8, 5, 12.0)), -142.145753888332, TOLERANCE_E5)
+            CompareDouble("AstroUtilTests", "Moon Illumination", AstroUtil.MoonIllumination(Nov31.JulianDate(2012, 8, 5, 12.0)), 0.872250725459045, TOLERANCE_E5)
+            CompareDouble("AstroUtilTests", "Moon Phase", AstroUtil.MoonPhase(Nov31.JulianDate(2012, 8, 5, 12.0)), -142.145753888332, TOLERANCE_E5)
 
-            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second January 1961", AstroUtil2.DeltaUT(2437300.5), -0.9, 0.9)
-            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second March 1965", AstroUtil2.DeltaUT(2438820.5), -0.9, 0.9)
-            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second January 1966", AstroUtil2.DeltaUT(2439126.5), -0.9, 0.9)
-            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 10", AstroUtil2.DeltaUT(2441317.5), -0.9, 0.9)
-            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 15", AstroUtil2.DeltaUT(2442777.5), -0.9, 0.9)
-            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 15", AstroUtil2.DeltaUT(2442778.5), -0.9, 0.9)
-            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 20", AstroUtil2.DeltaUT(2444785.5), -0.9, 0.9)
-            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 20", AstroUtil2.DeltaUT(2444786.5), -0.9, 0.9)
-            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 25", AstroUtil2.DeltaUT(2447891.5), -0.9, 0.9)
-            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 25", AstroUtil2.DeltaUT(2447892.5), -0.9, 0.9)
-            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 30", AstroUtil2.DeltaUT(2450082.5), -0.9, 0.9)
-            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 30", AstroUtil2.DeltaUT(2450083.5), -0.9, 0.9)
-            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 35", AstroUtil2.DeltaUT(2456108.5), -0.9, 0.9)
-            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 35", AstroUtil2.DeltaUT(2456109.5), -0.9, 0.9)
-            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 37", AstroUtil2.DeltaUT(2457753.5), -0.9, 0.9)
-            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 37", AstroUtil2.DeltaUT(2457754.5), -0.9, 0.9)
-            CompareWithin("AstroUtilTests", "DeltaUT1 - Today", AstroUtil2.DeltaUT(AstroUtil2.JulianDateUtc), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second January 1961", AstroUtil.DeltaUT(2437300.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second March 1965", AstroUtil.DeltaUT(2438820.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second January 1966", AstroUtil.DeltaUT(2439126.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 10", AstroUtil.DeltaUT(2441317.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 15", AstroUtil.DeltaUT(2442777.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 15", AstroUtil.DeltaUT(2442778.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 20", AstroUtil.DeltaUT(2444785.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 20", AstroUtil.DeltaUT(2444786.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 25", AstroUtil.DeltaUT(2447891.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 25", AstroUtil.DeltaUT(2447892.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 30", AstroUtil.DeltaUT(2450082.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 30", AstroUtil.DeltaUT(2450083.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 35", AstroUtil.DeltaUT(2456108.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 35", AstroUtil.DeltaUT(2456109.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 37", AstroUtil.DeltaUT(2457753.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 37", AstroUtil.DeltaUT(2457754.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Today", AstroUtil.DeltaUT(AstroUtil.JulianDateUtc), -0.9, 0.9)
 
             Dim parameters As New EarthRotationParameters()
 
@@ -8335,12 +8362,12 @@ Public Class DiagnosticsForm
             TL.BlankLine()
 
             Try
-                AstroUtil2.Dispose()
+                AstroUtil.Dispose()
                 TL.LogMessage("AstroUtilTests", "ASCOM.Astrometry.AstroUtils.AstroUtils, Disposed OK")
             Catch ex As Exception
                 LogException("AstroUtilTests", "ASCOM.Astrometry.AstroUtils.AstroUtils: " & ex.ToString)
             End Try
-            AstroUtil2 = Nothing
+            AstroUtil = Nothing
             TL.LogMessage("AstroUtilTests", "Finished")
             TL.BlankLine()
 
