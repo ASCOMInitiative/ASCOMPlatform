@@ -21,13 +21,13 @@ Public Class DiagnosticsForm
 #Region "Constants and Enums"
     ' Controls to reduce the scope of tests to be run - only set to false to speed up testing during development. Must all be set True for production builds!
     Private Const TEST_ASTROMETRY As Boolean = True
-    Private Const TEST_CACHE As Boolean = False
-    Private Const TEST_LOGS_AND_APPLICATIONS As Boolean = False
-    Private Const TEST_REGISTRY As Boolean = False
-    Private Const TEST_SIMULATORS As Boolean = False
-    Private Const TEST_UTILITIES As Boolean = False
-    Private Const TEST_SCAN_DRIVES As Boolean = False
-    Private Const CREATE_DEBUG_COLSOLE As Boolean = True
+    Private Const TEST_CACHE As Boolean = True
+    Private Const TEST_LOGS_AND_APPLICATIONS As Boolean = True
+    Private Const TEST_REGISTRY As Boolean = True
+    Private Const TEST_SIMULATORS As Boolean = True
+    Private Const TEST_UTILITIES As Boolean = True
+    Private Const TEST_SCAN_DRIVES As Boolean = True
+    Private Const CREATE_DEBUG_COLSOLE As Boolean = False
 
     Private Const ASCOM_PLATFORM_NAME As String = "ASCOM Platform 6"
     Private Const INST_DISPLAY_NAME As String = "DisplayName"
@@ -529,7 +529,7 @@ Public Class DiagnosticsForm
                 CompareBoolean("Test Configuration", "Simulators Tests Enabled", TEST_SIMULATORS, True)
                 CompareBoolean("Test Configuration", "Utilities Tests Enabled", TEST_UTILITIES, True)
                 CompareBoolean("Test Configuration", "Utilities Tests Enabled", TEST_SCAN_DRIVES, True)
-                CompareBoolean("Test Configuration", "Create Debug Console Disabled", TEST_SCAN_DRIVES, False)
+                CompareBoolean("Test Configuration", "Create Debug Console Disabled", CREATE_DEBUG_COLSOLE, False)
 
                 If (NNonMatches = 0) And (NExceptions = 0) Then
                     SuccessMessage = "Congratulations, all " & NMatches & " function tests passed!"
@@ -2130,12 +2130,6 @@ Public Class DiagnosticsForm
                 End If
             Next
         Next
-
-
-        'Ephem_Close ();
-        'return (0);
-
-
 
     End Sub
 

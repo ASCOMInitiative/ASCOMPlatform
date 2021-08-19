@@ -173,7 +173,6 @@ Namespace NOVAS
                     End If
 
                     ' Free your own state (unmanaged objects) and set large fields to null.
-                    'Try : Ephem_Close() : Catch : End Try ' Close the ephemeris file if its open
                     Try : FreeLibrary(Novas31DllHandle) : Catch : End Try ' Free the NOVAS library but don't return any error value
                 End If
                 Me.disposedValue = True
