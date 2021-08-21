@@ -1,0 +1,94 @@
+<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+<!DOCTYPE html>
+ 
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="expires" content="Fri, 1 Jan 1990 00:00:00 GMT">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+
+<!-- #BeginEditable "Title" -->
+<title>5. Key Principles and Characteristics</title>
+
+<style type="text/css">
+dt {
+	color: #FF9900;
+	margin-top:12pt;
+	margin-bottom:2pt;
+}
+</style>
+
+<!-- #EndEditable -->
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		breadcrumbs(); 
+	-->
+	</script>
+	</div>
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+	<!-- 
+		writemainmenu();
+	-->
+    </script>
+  	</div>
+</div>
+<div id="leftcontent">
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		writesubmenu(); 
+	-->
+	</script>
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->
+	<!-- #EndEditable -->
+</div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+		<h3>5. Key Principles and Characteristics</h3>
+		<p>ASCOM establishes a universal connectivity ecosystem for connecting astronomy applications with astronomical devices like mounts, cameras, and focusers (to name a few). Apart from the interface definitions themselves, the ecosystem itself depends on apps and devices adhering to come common principles and characteristics. </p>
+		<p class="note">These principles are critical to the stability and reliability of observatory systems that use ASCOM universal interfacing. </p>
+		<dl>
+			<dt>Devices (and their adapter/drivers) are <em>Stateless</em></dt>
+			<dd>Some devices, particularly cameras and mounts, have modes and conditions. For example, a camera may be set to a certain binning level, or it might be in the process of exposing an image. Also some devices may be used concurrently by more than one app. ASCOM devices are <em>stateless</em> (<sup>1</sup>). There is no mechanism in ASCOM for managing concurrent but conflicting actions by apps (<sup>2</sup>). <em>This is by design</em>. Each client app is therefore responsible for getting the device into the needed mode/condition it needs by setting properties and making method calls. Clearly, for example, it makes no sense for a mount to be required to arbitrate multiple student planetarium apps connected to a mount with each of them concurrently trying to move the telescope to a different place, changing its tracking rate, etc. </dd>
+			<dt>Device Requests are <em>Asynchronous</em></dt>
+			<dd>In simple terms, this means that apps can ask to <em>start</em> a lengthy operation, during which the device is free to respond to subsequent requests like checking for completion, other status, or even an abort. Legacy ASCOM-COM includes a few synchronous functions/methods that violate this principle. There are always asynchronous versions of these. App developers should avoid using deprecated synchronous methods.</dd>
+			<dt>Devices Respond First-Come-First-Serve</dt>
+			<dd>When more than one app has concurrent access to a device, the device handles incoming requests in First-In First-Out (FIFO) order. This is by design, and drivers are required to have this behavior. </dd>
+			<dt>Do it Right or Signal an Error</dt>
+			<dd>A vital principle to all modular systems is <em>Do it right or signal an error</em>. It is illegal (a bug) to accept a function/method call and then do nothing, or worse, do the wrong thing. Likewise, it is a bug to return incorrect data when reading a variable/property, or corrupt a value being written to a property. This may seem obvious but it can be subtle. This has subtle consequences which are covered in the section <strong>How Errors are Handled</strong>. Don't jump there right now though, the upcoming connectivity sections are vital!</dd>
+			<dt>Alpaca is Designed for Local Networks</dt>
+			<dd>In order to keep Alpaca as simple and compact as possible, the network protocol is designed to be constrained to within a local network (within an observatory, even including an air-gapped local net). It is not designed for use over the public Internet. The only security provided is username/password. If a system needing encryption or other hardening against a wide-area or public internet environment is needed, users can employ encrypting proxies and other hardened appliances. The point is that the devices themselves can be simple but functional.</dd>
+			<dt>No Provision for Network Delays or Limited Bandwidth</dt>
+			<dd>A consequence of Alpaca's design for local net only is that Alpaca is purposely kept simple. No provisions for efficiency in the presence of significant network delays or bandwidth limits have been included. When operated in a local environment with network bandwidth being essentially unlimited and delays being essentially zero, and with property reading scattered through app code, little advantage is gained by aggregating property reading(<sup>3</sup>). The same goes for including the complexity of completion events for asynchronous processes. Communication between apps and devices doesn't include high-frequency processes which operate with the need for millisecond response times, and with essentially zero delay the status of an operation may be determined when needed without significant delay. ASCOM's implementation neutral interfaces don't include provisions for low level real-time servo controls, etc. This is by design. Those type of operations belong inside the device itself.</dd>
+		</dl>
+		<p>Now let's look at the real world. First, how this applies to classic ASCOM COM in <a href="Conn-COM.htm">6. COM Connectivity</a>.</p>
+	<hr>
+	<p style="font-size:small;"><sup>1</sup>Alpaca is ReST which is stateless<br>
+	<sup>2</sup>No publish/subscribe or anything like that<br>
+	<sup>3</sup>Aggregated properties must be demultiplexed in the app, adding complexity and overhead.
+	</div>
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright &copy; 1998-2021, The ASCOM Initiative. 
+	All rights reserved.
+</div>
+
+</body>
+
+<!-- #EndTemplate --></html>

@@ -1,0 +1,69 @@
+<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+<!DOCTYPE html>
+ 
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="expires" content="Fri, 1 Jan 1990 00:00:00 GMT">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+
+<!-- #BeginEditable "Title" -->
+<title>2. Modular Architecture</title><!-- #EndEditable -->
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		breadcrumbs(); 
+	-->
+	</script>
+	</div>
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+	<!-- 
+		writemainmenu();
+	-->
+    </script>
+  	</div>
+</div>
+<div id="leftcontent">
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		writesubmenu(); 
+	-->
+	</script>
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->
+	<!-- #EndEditable -->
+</div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+		<h3>2. Modular Architecture</h3>
+		<p><img src="../Images/AvionicsBay.jpg" width="240" height="360" hspace="8" vspace="4" align="right" class="responsive" />All modern systems are modular. Imagine an airliner with one giant black box in the belly that has hundreds of connectors and bundles of wire running to the engine fuel controllers, the autopilot, the GPS navigation system, the toilets, the in-flight TVs, well, you get the idea. Instead, real airliners have dozens of boxes, modules, each of which is responsible for a <em>specific task</em>. This is the key to modern complex and scalable systems design. </p>
+		<p>This is also true of computer systems and the devices with which they <em>interface</em> (&lt;- key word here). The days of &quot;I wish I had one program that does it all so it would be more reliable&quot; are gone. If the one &quot;do-all&quot; program encounters a bug, then that one &quot;do-all&quot; program fails anyway, right? So the effect is the same as that of a failing module.</p>
+		<p>Modular systems are <em>scalable</em>. Modular systems are <em>easier to troubleshoot</em> (divide and conquer). Look at the photo to the right. You can see that multiple suppliers are involved, yet you see that the packaging form factor (an <em>interface</em>) is standardized. Behind these boxes are electrical and data communication <em>interfaces</em> which are standard. Often a box (a module) may be supplied by alternative vendors and are <em>interchangeable</em>. Of course some modules are <em>programs</em> running in an onboard computer, or even on the ground (with data link communications)! For any of this to be practical, the interfaces must be standardized. </p>
+		<h4>Observatories</h4>
+		<p>Observatories are modular systems. Even at the simplest level are hardware devices with separate hand boxes, <em>interfaces</em> (&lt;- there it is again!) for the hand box or for computer controls. More complex observatories include a computer controlled mount, computer controlled camera, maybe a dome with computer control for rotation and opening/closing, a computer controlled focuser, a computer controlled filter wheel, maybe more. All of these devices must have one of more interfaces to allow the &quot;computer&quot; to control them.... well ... really <em>astronomy apps</em> on the computer that want to make use of the devices in a way that assists the astronomer.</p>
+		<p>Now let's learn how modules work together. Onward to <a href="UniversalInt.htm" target="_self">3. Universal Interfaces</a>.</p>
+	</div>
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright &copy; 1998-2021, The ASCOM Initiative. 
+	All rights reserved.
+</div>
+
+</body>
+
+<!-- #EndTemplate --></html>

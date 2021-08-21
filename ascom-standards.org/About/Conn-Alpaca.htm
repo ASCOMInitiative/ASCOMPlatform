@@ -1,0 +1,70 @@
+<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+<!DOCTYPE html>
+ 
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="expires" content="Fri, 1 Jan 1990 00:00:00 GMT">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+
+<!-- #BeginEditable "Title" -->
+<title>7. ASCOM-Alpaca Connectivity</title><!-- #EndEditable -->
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		breadcrumbs(); 
+	-->
+	</script>
+	</div>
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+	<!-- 
+		writemainmenu();
+	-->
+    </script>
+  	</div>
+</div>
+<div id="leftcontent">
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		writesubmenu(); 
+	-->
+	</script>
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->
+	<!-- #EndEditable -->
+</div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+		<h3>7. ASCOM Alpaca Connectivity </h3>
+		<p>In 2018, as astronomy software began to grow on Linux and MacOS, and as cheap but powerful embedded processors appeared, it was obvious that <a href="UniversalInt.htm">universal interfaces</a> were needed in this ecosystem. Since the ASCOM patterns were mature and proven, we just applied the same patterns to a new connectivity scheme, ASCOM Alpaca, <span class="underline">which has no dependence on Windows at all</span>. </p>
+		<p><img src="../Images/AlpacaConnectivityA.png" width="430" height="250" hspace="8" vspace="4" align="right" class="responsive" />ASCOM Alpaca employs widely used network protocols to provide apps with the ability to use the same properties and methods already defined in the ASCOM interfaces. These choices greatly reduced the technical risk inherent in this new scheme to connect astronomy apps with their devices. If you're interested in the details and have some technical background, see the <a href="../AlpacaDeveloper/Alpaca.htm">Developers Introduction to ASCOM Alpaca</a>.</p>
+		<p>The two diagrams show the most common connectivity patterns when using Alpaca. In the top one, the astronomy app includes the Alpaca network protocol, as does the adapter/driver. The &quot;network&quot; in this case connects two programs running on the same box but still using TCP/IP and other common layers. Both reside on the same physical computer, similar to how apps and devices relate on Windows systems with COM, but <em>here we may be on a box running any OS</em>.</p><br clear="all" />
+		<p><img src="../Images/AlpacaConnectivityB.png" width="430" height="172" hspace="8" vspace="4" align="right" class="responsive" />In the bottom diagram. the astronomy app also includes the Alpaca network protocol, but the driver is within a self-contained device. An example would be mount with embedded Raspberry Pi controlling the motors and the hand box, but also including a tiny server that provides Alpaca access.</p>
+		<p>The key is that<em> the astronomy app is the same</em>, with Alpaca logic using common libraries for the protocols, yet able to talk to an Alpaca device with a driver on the same computer, on a different computer with maybe a different OS or a dedicated device with embedded computer or micro-processor and using WiFi or Ethernet. </p>
+		<p>Congratulations, at this point you have developed a thorough understanding of the layers of technology and concepts on which the ASCOM ecosystem is based. But wait, there is a bit more. When things go wrong, it's vital that there is a solid reasonable process for declarinng problems and handling them. For the first of two parts on this last topic, read <a href="ErrorHandling.htm">8. Error Handling</a>. </p>
+<p>&nbsp;</p>
+	</div>
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright &copy; 1998-2021, The ASCOM Initiative. 
+	All rights reserved.
+</div>
+
+</body>
+
+<!-- #EndTemplate --></html>

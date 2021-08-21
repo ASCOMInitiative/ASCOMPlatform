@@ -1,0 +1,71 @@
+<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+<!DOCTYPE html>
+ 
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="expires" content="Fri, 1 Jan 1990 00:00:00 GMT">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+
+<!-- #BeginEditable "Title" -->
+<title>3. Universal Interfaces</title><!-- #EndEditable -->
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		breadcrumbs(); 
+	-->
+	</script>
+	</div>
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+	<!-- 
+		writemainmenu();
+	-->
+    </script>
+  	</div>
+</div>
+<div id="leftcontent">
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		writesubmenu(); 
+	-->
+	</script>
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->
+	<!-- #EndEditable -->
+</div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+		<h3>3. Universal Interfaces</h3>
+		<p>Standardized interfaces are everywhere. For USB (<em>Universal</em> Serial Bus) there has been an evolution in both the physical connector standard (and the connector is an interface right?) as well as the electrical and signaling protocol (USB-1/2/3). But these interfaces are indeed universal and they are standardized. If a USB thumb drive says USB-3, and your computer supports USB-3 then you expect to be able to use that thumb drive. </p>
+
+		<h4>Observatories</h4>
+<p>In an observatory, the main interfaces are between the computer programs (apps) that use devices and the devices themselves. Usually the device is modular itself, with adapter software on the computer (a <em>driver</em>) and the separate physical device hardware (e.g. mount).</p>
+<div align="center"><img src="../Images/AbstractInterfaceObservatory.png" width="638" height="375" hspace="8" vspace="4" class="responsive" /></div>
+<p>The two device modules communicate any way they want. The adapter provides a standardized interface to make the device look the same to all apps as all other devices of that type. in the above diagram the <strong>Driver-Client Interface</strong> points to the <em>common</em> interface on the app and on the adapter/driver. Note that the &quot;device&quot; in the diagram includes both the physical hardware and the adapter/driver. They form a unit consisting of two modules and some private interface between them. </p>
+
+<p>If you're still a bit blurry about interfaces, go back to <a href="Overview.htm">1. Overview of ASCOM</a> and re-run the little flip chart presentation. See if you can identify where the interfaces are in each modular diagram. (hint: look for the <em>horizontal</em> lines). If you have the concept now, please continue onward to <a href="Basics.htm" target="_self">4. ASCOM Basics</a></p>
+	</div>
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright &copy; 1998-2021, The ASCOM Initiative. 
+	All rights reserved.
+</div>
+
+</body>
+
+<!-- #EndTemplate --></html>

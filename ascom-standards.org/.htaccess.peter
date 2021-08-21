@@ -1,0 +1,26 @@
+Options +FollowSymLinks
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule (.*) https://ascom-standards.org/$1 [R=301,L]
+
+<Files 403.shtml>
+order allow,deny
+allow from all
+</Files>
+
+deny from 220.181.
+deny from 219.217.
+deny from 120.202.
+deny from 202.114.
+deny from 218.30.
+deny from 120.198.
+deny from 222.26.
+deny from 118.188.
+deny from 211.67.
+deny from 103.2.
+deny from 211.136.
+deny from 120.192.
+deny from 223.87.
+deny from 111.8.
+deny from 211.137.
+deny from 123.108.

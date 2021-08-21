@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+<!DOCTYPE html>
  
 <head>
 
@@ -11,57 +11,48 @@
 
 <!-- #BeginEditable "Title" -->
 <title>Handling Quirks and Errors in Devices</title><!-- #EndEditable -->
-
 <link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
-
 <script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
-
 </head>
  
 <body>
 
 <div id="banner">
 	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
-	
 	<div id="breadcrumbs">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-	breadcrumbs(); 
+		breadcrumbs(); 
 	-->
 	</script>
-</div>
-
+	</div>
 	<div class="topmenucontainer">
     <script type="text/javascript" language="javascript">
-      <!-- 
-	        writemainmenu();
-	        -->
+	<!-- 
+		writemainmenu();
+	-->
     </script>
-  </div>
+  	</div>
 </div>
-
-
-
 <div id="leftcontent">
-
-
 	<div class="LeftNav">
 	<div class="center"><div class="north"><div class="south">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-	writesubmenu(); 
+		writesubmenu(); 
 	-->
 	</script>
-	
 	</div></div></div></div>
 
-	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
+	<!-- #BeginEditable "LeftNav" -->
+	<!-- #EndEditable -->
+</div>
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
 		<h3>Why Can't Astronomy Programs Just Compensate For My Device's Problem?</h3>
 		<p>Periodically, the developers of astronomy software (planetariums, imaging software, automation software, etc.) are asked to add logic to their software to &quot;correct for&quot; a problem in some device like a telescope mount. This usually creates tension between the program's user and its developer because the developer will almost always refuse to do it. Why?</p>
-		<p>Consider what the program's developer faces: He's responsible for controlling many different devices, and he's depending on the ASCOM driver-client architecture to <a href="../About/WhyImportant.htm" target="_blank">avoid having to program special code for each device</a>. If he routinely adds special code to compensate for problems, his program will become littered with code for various device problems, making it less reliable and far more difficult to maintain (and breaking the driver-client model). </p>
+		<p>Consider what the program's developer faces: He's responsible for controlling many different devices, and he's depending on the ASCOM driver-client architecture to <a href="../About/Index.htm" target="_blank">avoid having to program special code for each device</a>. If he routinely adds special code to compensate for problems, his program will become littered with code for various device problems, making it less reliable and far more difficult to maintain (and breaking the driver-client model). </p>
 		<p>Now, what happens when some change to a device or its driver corrects the problem? Now the application contains code that (at best) is useless and possibly creates a new error. Multiply this by a dozen or more different devices of a given type and you can see that the software developer will need to make frequent releases just to manage the hacks he has for device problems. </p>
 		<p>Furthermore, <i>how</i> do you correct for a given problem? And <i>can</i> you correct for it? The application developer has no knowledge of the internals of the device or its driver. In order to test his hack, he needs to have one of the devices in his lab. How many different types of devices do you expect an application developer to buy and keep around just for hack testing? And what about devices that are out of production? Oh, and what about devices that have multiple firmware versions? Must the developer test with a bunch of different firmware releases, and maybe alter the hack for each one? Can he detect the firmware version in use?</p>
 		<p>Finally, consider that every astronomy software program that uses a problematic device will have to contain its own hack to correct for the problem(s). Imagine five planetariums, three automation systems, a couple of guiding programs, all needing to contain hacks for some problem in a particular telescope mount. WIll each of those developers &quot;correct&quot; the problem the same way? WIll all of their &quot;solutions&quot; work reliably? Now what happens when one program's hack works better than another's? The users will beat up on the developer whose hack isn't as reliable, and the hapless developer has no control over the problem at all. He's fired a &quot;shot in the dark&quot; to try to correct it and failed to hit the bulls eye. How much does that divert the developer's attention away from  his program's primary purpose?</p>
@@ -74,7 +65,8 @@
 	<!-- #EndEditable --></div>
 <div id="footer">
 	Copyright &copy; 1998-2021, The ASCOM Initiative. 
-	All rights reserved. </div>
+	All rights reserved.
+</div>
 
 </body>
 

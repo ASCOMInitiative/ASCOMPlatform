@@ -1,0 +1,127 @@
+<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+<!DOCTYPE html>
+ 
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="expires" content="Fri, 1 Jan 1990 00:00:00 GMT">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+
+<!-- #BeginEditable "Title" -->
+<title>Documentation Center</title><!-- #EndEditable -->
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		breadcrumbs(); 
+	-->
+	</script>
+	</div>
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+	<!-- 
+		writemainmenu();
+	-->
+    </script>
+  	</div>
+</div>
+<div id="leftcontent">
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		writesubmenu(); 
+	-->
+	</script>
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->
+	<!-- #EndEditable -->
+</div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+	<h3>Documentation Center</h3>
+	<p>This section contains downloadable documentation for ASCOM, both Alpaca and COM, as well as conceptual documents that cover both. These documents cover ASCOM theory, ASCOM-COM, and ASCOM Alpaca in more depth than the <a href="../About/Index.htm">About Ascom section</a> here on this web site. <strong>End Users</strong> and <strong>Developers</strong>, if you are starting from scratch it is recommended that you first read through the <a href="../About/Index.htm">About ASCOM section</a> so that you have a basic understanding of the design objectives and implementation concepts. This way you can avoid getting the details from these documents within a framework of preconceived ideas which may not be appropriate. </p>
+	
+	<h3><a name="usr"></a>End Users</h3>
+
+	<div class="download">
+	<h5><span class="underline">General</span>: All About ASCOM - History, Design, Objectives, and Basic Tech (online)</h5>
+	<a href="../About/Index.htm" target="_new"><img alt="View this document" src="../Images/JumpButton.jpg" width="149" height="44" align="right" border="0" /></a>If you want to learn about ASCOM, including why it exists, what it does for astronomy technology, its computing and design roots, and where it's going in the future, this is where to go. </div>
+
+	<div class="download">
+	<h5><span class="underline">General</span>: Pointing State and Physical Side of Pier for German Mounts (PDF)</h5>
+	<a href="https://download.ascom-standards.org/docs/SideOfPier(1.2).pdf" target="_new"><img src="../Images/Button2.jpg" alt="Download" width="149" height="44" border="0" align="right" /></a>German Equatorial mount behavior is frequently misunderstood. This document describes the terminology and behavior expected via ASCOM interfaces (and of course the Conformance Checker tool) with regard to German mount <em>pointing state</em> and <em>side of pier</em>. It's vital for developers to understand the meaning of the terms, the geometry, and German mount behavior. </div>
+
+	<div class="download">
+	<h5><span class="underline">Alpaca</span>: Alpaca TL;DR (PDF)</h5>
+	<a href="https://download.ascom-standards.org/docs/AlpacaTLDR.pdf" target="_new"><img src="../Images/Button2.jpg" alt="Download" width="149" height="44" border="0" align="right" /></a>This is a FAQ format document that answers some common questions about Alpaca.
+	</div>
+	
+	<div class="download">
+	<h5><span class="underline">Alpaca</span>: Alpaca Introduction: Concepts and Uses (PDF)</h5>
+	<a href="https://download.ascom-standards.org/docs/AlpacaIntroduction.pdf" target="_new"><img src="../Images/Button2.jpg" alt="Download" width="149" height="44" border="0" align="right" /></a>This covers the fundamentals of Alpaca at a fairly detailed level, including its Application Programming Interfaces (APIs), device discovery, app-driver relationships, and ways in which it may be used and Interoperability with classic ASCOM on Windows via ASCOM Remote. </div>
+	
+	<div class="download">
+	<h5><span class="underline">Alpaca</span>: ASCOM Remote Installation and Configuration (PDF)</h5>
+	<a href="https://download.ascom-standards.org/docs/RemoteInstConf.pdf" target="_new"><img src="../Images/Button2.jpg" alt="Download" width="149" height="44" border="0" align="right" /></a>User's Guide to <a href="https://github.com/ASCOMInitiative/ASCOMRemote/releases" target="_new">ASCOM Remote</a>, the middleware that provides a bridge between ASCOM COM and ASCOM Alpaca. This document is also included with ASCOM Remote.</div>
+
+	<div class="download">
+	<h5><span class="underline">Windows COM</span>: ASCOM Platform Tools and Features (online)</h5>
+	<a href="https://ascom-standards.org/Help/Platform65a/html/e3870a2f-582a-4ab4-b37f-e9b1c37a2030.htm" target="_new"><img alt="View this document" src="../Images/JumpButton.jpg" width="149" height="44" align="right" border="0" /></a>This is an online copy of the comprehensive help information that is part of the ASCOM Platform for Windows. This contains a wealth of information on the Chooser and end-user tools that are provided as part of the ASCOM Platform. This info is also installed as part of the ASCOM PLatform and is easily accessible via the usual Windows Start button's menus.</div>
+
+	<h3><a name="dev"></a>Developers</h3>
+	
+	<div class="download">
+	<h5><span class="underline">General</span>: ASCOM Interface Principle</h5>
+	<a href="../Standards/InterfacePrinciple.htm" target="_self"><img alt="View this document" src="../Images/JumpButton.jpg" width="149" height="44" align="right" border="0" /></a>This is a reference to the Standards section here in which the principles on which decisions on creating new interfaces and modifying existing ones are made. Understanding these principles that guide our decision processes may help you understand why the interfaces are the way they are.</div>
+	
+	<div class="download">
+	<h5><span class="underline">General</span>: ASCOM Implementation Neutral Interface Definitions (online)</h5>
+	<a href="https://ascom-standards.org/Help/Platform65a/html/N_ASCOM_DeviceInterface.htm" target="_new"><img alt="View this document" src="../Images/JumpButton.jpg" width="149" height="44" align="right" border="0" /></a>This is an online copy of the master <em>implementation neutral</em> ASCOM interface definitions. This is the definitive reference for the various device interface (patterns) and the detailed functions/methods and variables/properties. These abstract definitions apply to both ASCOM Alpaca and ASCOM COM. </div>
+
+	<div class="download">
+	<h5><span class="underline">General</span>: Pointing State and Physical Side of Pier for German Mounts (PDF)</h5>
+	<a href="https://download.ascom-standards.org/docs/SideOfPier(1.2).pdf" target="_new"><img src="../Images/Button2.jpg" alt="Download" width="149" height="44" border="0" align="right" /></a>German Equatorial mount behavior is frequently misunderstood. This document describes the terminology and behavior expected via ASCOM interfaces (and of course the Conformance Checker tool) with regard to German mount <em>pointing state</em> and <em>side of pier</em>. It's vital for developers to understand the meaning of the terms, the geometry, and German mount behavior. </div>
+
+	<div class="download">
+	<h5><span class="underline">Alpaca</span>: Alpaca Introduction: Concepts and Uses (PDF)</h5>
+	<a href="https://download.ascom-standards.org/docs/AlpacaIntroduction.pdf" target="_new"><img src="../Images/Button2.jpg" alt="Download" width="149" height="44" border="0" align="right" /></a>This covers the fundamentals of Alpaca at a fairly detailed level, including its Application Programming Interfaces (APIs), device discovery, app-driver relationships, and ways in which it may be used and Interoperability with classic ASCOM on Windows via ASCOM Remote. </div>
+
+	<div class="download">
+	<h5><span class="underline">Alpaca</span>: ASCOM Remote Installation and Configuration (PDF)</h5>
+	<a href="https://download.ascom-standards.org/docs/RemoteInstConf.pdf" target="_new"><img src="../Images/Button2.jpg" alt="Download" width="149" height="44" border="0" align="right" /></a>User's Guide to <a href="https://github.com/ASCOMInitiative/ASCOMRemote/releases" target="_new">ASCOM Remote</a>, the middleware that provides a bridge between ASCOM COM and ASCOM Alpaca. This document is also included with ASCOM Remote.</div>
+
+	<div class="download">
+	<h5><span class="underline">Alpaca</span>: Alpaca API Reference (PDF)</h5>
+	<a href="https://github.com/ASCOMInitiative/ASCOMRemote/raw/master/Documentation/ASCOM%20Alpaca%20API%20Reference.pdf" target="_new"><img src="../Images/Button2.jpg" alt="Download" width="149" height="44" border="0" align="right" /></a>
+	<p>This document is the technical reference for the ASCOM Alpaca APIs and describes how to use them. It also describes the Alpaca Discovery protocol and some of the fundamental behavioural principles that underly the APIs and their effective exploitation. These device APIs are the REST implementations of the <a href="https://ascom-standards.org/Help/Platform65a/html/N_ASCOM_DeviceInterface.htm" target="_new">master implementation neutral definitions</a> listed above.</p></div>
+
+	<div class="download">
+	<h5><span class="underline">Alpaca</span>: Live Alpaca API Reference (online)</h5>
+	<a href="https://ascom-standards.org/api/" target="_new"><img alt="View this document" src="../Images/JumpButton.jpg" width="149" height="44" align="right" border="0" /></a>This is a live API reference and test document. It provides a structured description of each endpoint for all ASCOM device APIs as well as the Alpaca Management API. With this document you can exercise the Alpaca APIs with live data and see the results. It uses a "mocked" implementation of each device and the management server. The devices will not exhibit real behavior. You can only  see how the Alpaca API itself works. </div>
+
+	<div class="download">
+	<h5><span class="underline">Windows COM</span>: ASCOM Platform Developer Help (online)</h5>
+	<a href="https://ascom-standards.org/Help/Developer/html/7d9253c2-fdfd-4c0d-8225-a96bddb49731.htm" target="_new"><img alt="View this document" src="../Images/JumpButton.jpg" width="149" height="44" align="right" border="0" /></a>This is an online copy of the comprehensive help information that is part of the <a href="/Downloads/PlatDevComponents.htm" target="_new">ASCOM Platform Developer Components</a>. This contains a wealth of developer and reference information about &quot;classic&quot; ASCOM on Windows (using COM). </div>
+
+	</div>
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright &copy; 1998-2021, The ASCOM Initiative. 
+	All rights reserved.
+</div>
+
+</body>
+
+<!-- #EndTemplate --></html>
