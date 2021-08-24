@@ -182,6 +182,8 @@ function writesubmenu() {
 		SubMenuOutput += "<li><a href=\"AppSupport.htm\">Applications</a></li>";
 		SubMenuOutput += "<li><a href=\"PlatformSupport.htm\">Platform (Windows)</a></li>";
 		SubMenuOutput += "<li><a href=\"AlpacaSupport.htm\">Alpaca Connectivity</a></li>";
+		SubMenuOutput += "<li><a href=\"../AlpacaDeveloper/Index.htm\">Alpaca Development</a></li>";
+		SubMenuOutput += "<li><a href=\"../COMDeveloper/Index.htm\">COM Development</a></li>";
 		SubMenuOutput += "<li><a href=\"https://ascomtalk.groups.io/g/Help\" target=\"_new\">Community Support</a></li>";
 	    SubMenuOutput += "</ul>";
         break;
