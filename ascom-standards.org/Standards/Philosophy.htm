@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+<!DOCTYPE html>
  
 <head>
 
@@ -14,57 +14,48 @@
 
 <script type="text/javascript" language="javascript" src="../jscripts/expando.js"></script>
 <!-- #EndEditable -->
-
 <link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
-
 <script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
-
 </head>
  
 <body>
 
 <div id="banner">
 	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
-	
 	<div id="breadcrumbs">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-	breadcrumbs(); 
+		breadcrumbs(); 
 	-->
 	</script>
-</div>
-
+	</div>
 	<div class="topmenucontainer">
     <script type="text/javascript" language="javascript">
-      <!-- 
-	        writemainmenu();
-	        -->
+	<!-- 
+		writemainmenu();
+	-->
     </script>
-  </div>
+  	</div>
 </div>
-
-
-
 <div id="leftcontent">
-
-
 	<div class="LeftNav">
 	<div class="center"><div class="north"><div class="south">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-	writesubmenu(); 
+		writesubmenu(); 
 	-->
 	</script>
-	
 	</div></div></div></div>
 
-	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
+	<!-- #BeginEditable "LeftNav" -->
+	<!-- #EndEditable -->
+</div>
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
 		<h3>General Interface Design Philosophy</h3>
 		<p>It's important to understand some general philosophical issues as applied to ASCOM driver interface designs. In addition there are specific issues that are covered by the <a href="Interface Principle.htm">ASCOM Interface Principle</a> document which you should also look over.</p>
-		<p>First, as stated in the <a href="../Developer/Principles.htm">General Principle</a> (Developer section), the job of a driver is to <span class="underline">hide all device-dependencies</span> from clients. If it were only that simple. Reaching an interface agreement always involves the interplay between the basic operations needed for the device, and the &quot;value added&quot; features present in some devices and not others. The makers of more sophisticated devices want their unique features to be exposed to clients, yet a driver by its nature cannot expose device dependent features! Our standards process requires the interface author to broker the interface agreement. </p>
+		<p>First, as stated in the <a href="../COMDeveloper/Principles.htm">General Principle</a> (Developer section), the job of a driver is to <span class="underline">hide all device-dependencies</span> from clients. If it were only that simple. Reaching an interface agreement always involves the interplay between the basic operations needed for the device, and the &quot;value added&quot; features present in some devices and not others. The makers of more sophisticated devices want their unique features to be exposed to clients, yet a driver by its nature cannot expose device dependent features! Our standards process requires the interface author to broker the interface agreement. </p>
 		<p>There are some (semi-related) guiding principles that can be applied to maximize the chances of success:</p>
 		<ul>
 			<li><a href="javascript:;" id="simple" onclick="toggleSlide('sSimple');" title="click for details">Simple is better&#8230;</a>
@@ -91,8 +82,9 @@
 	</script>
 	<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright &copy; 1998-2020, The ASCOM Initiative. 
-	All rights reserved. </div>
+	Copyright &copy; 1998-2021, The ASCOM Initiative. 
+	All rights reserved.
+</div>
 
 </body>
 

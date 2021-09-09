@@ -1,0 +1,67 @@
+<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+<!DOCTYPE html>
+ 
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="expires" content="Fri, 1 Jan 1990 00:00:00 GMT">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+
+<!-- #BeginEditable "Title" -->
+<title>DeviceHub - Universal Hub and Analysis Tool</title><!-- #EndEditable -->
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		breadcrumbs(); 
+	-->
+	</script>
+	</div>
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+	<!-- 
+		writemainmenu();
+	-->
+    </script>
+  	</div>
+</div>
+<div id="leftcontent">
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		writesubmenu(); 
+	-->
+	</script>
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->
+	<!-- #EndEditable -->
+</div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+		<h3>ASCOM DeviceHub (replaces the old POTH)</h3>
+		<p>DeviceHub is a tool which is supplied as part of the ASCOM Platform. It is a powerful tool for both routine use as well as disgnostic testing. We have <a href="../Initiative/HallOfFame.htm">Hall of Famer Rick Burke</a> to thank for DeviceHub. Let's look at a block diagram of a typical usage:</p>
+<p align="center"><img src="../Images/DevHub.png" alt="Diagram" width="540" height="367" /> </p>
+		<p>MaxIm DL's telescope controls are fed into POTH, which calculates the proper dome slit azimuth for the mount geometry. POTH passes commands from connected programs through to the drivers, allowing the programs to share the devices. Both MaxIm DL and Cartes du Ciel are controlling the telescdope and reading back its coordinates, etc. The telescope's driver can be either a DLL type or an EXE type. Also any of the programs on the left can be either 64-bit or 32-bit. A slew from either MaxIm DL or Cartes du Ciel will cause the dome to immediately move to the proper new slit azimuth while the scope slews, maybe flips (without the dome stupidly following the scope around the wrong way). <!--Also, DeviceHub will not declare either the telescope or the dome to be finished moving until <i>both </i> have stopped moving. Thus, MaxIm's imaging sequencer will not start an exposure until everything is settled.--> In the diagram, FocusMax could be attached to the focuser and telescope (for AcquireStar) as well. Of course a dome monitor could see through DeviceHub and report the status of dome rotation and shutter.</p>
+		<p>DeviceHub has many useful features such as traffic logging and its own set of &quot;handset&quot; controls for the telescope, dome, and focuser. There is a detailed help file for DeviceHub, accessible from the Start menu and DeviceHub's Help menu. You can find DeviceHub under the Windows Start Button, ASCOM PLatform 6, Scope-Dome Hubs. </p>
+	</div>
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright &copy; 1998-2021, The ASCOM Initiative. 
+	All rights reserved.
+</div>
+
+</body>
+
+<!-- #EndTemplate --></html>

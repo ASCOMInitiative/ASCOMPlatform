@@ -1,0 +1,130 @@
+<!-- #BeginTemplate "/Templates/Fixed_Fluid_Fixed.dwt" --><!-- DW6 -->
+<!DOCTYPE html>
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="expires" content="Fri, 1 Jan 1990 00:00:00 GMT">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+
+<!-- #BeginEditable "Title" -->
+<title>ASCOM COM Developers</title>
+<!-- #EndEditable -->
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid_Fixed.css" />
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+</head>
+
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		breadcrumbs(); 
+	-->
+	</script>
+	</div>
+	<div class="topmenucontainer">
+	<script type="text/javascript" language="javascript">
+    <!-- 
+	    writemainmenu();
+	-->
+    </script>
+	</div>
+</div>
+<div id="leftcontent">
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		writesubmenu(); 
+	-->
+	</script>
+	</div></div></div></div>
+
+
+	<!-- #BeginEditable "LeftNav" -->
+	<!-- #EndEditable --></div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+<div class="article">
+<h3>This Section is for Developers of Classic ASCOM COM Apps and Drivers</h3>
+	<p>For ASCOM Alpaca appliction and driver development see the <a href="../AlpacaDeveloper/Index.htm">Alpaca Developers Section</a>.</p>  
+	<p class="note">If you are new to ASCOM, is is strongly suggested that you first go through the <a href="../About/Index.htm">About Alpaca and ASCOM</a> section and then return here. ASCOM. There is a lot of information here <span class="underline">and in the pages on the list to the left</span> as well as the <a href="https://ascom-standards.org/Help/Developer/Index.html" target="_blank">Help for the ASCOM Platform Developer Components (direct link)</a>. This information can save you time and frustration during your development. Please invest some time to check it out before getting heavily into your development.	</p>
+	<h3>Developer's Forum</h3>
+	<p>We have two separate forums, one for users and the other for developers. As a developer, we ask that you seek help and information using the <a href="https://ascomtalk.groups.io/g/Developer" target="_new">ASCOM Talk Developers Forum</a>.</p>
+	
+	<p align="center"><a href="https://ascomtalk.groups.io/g/Developer" target="_new" style="font-size: large;"><img src="../Images/Groups.io.jpg" width="188" height="53" vspace="8" border="0" alt="Join or Visit the ASCOM Talk group" /><br />
+	Visit the ASCOM-Talk Developers Forum</a></p>
+	
+	<h3>Application Developer Resources</h3>
+	<p>If you're new to ASCOM, and you're an <i>application</i> developer (as opposed to a driver developer), check out the <a href="AppStart.htm">Getting Started</a> info which includes this <a href="AppStart.htm#video">excellent video showing the development of a complete program</a> for controlling any telescope using Visual Studio using Visual Basic .NET. Then, if you are developing your application in one of the Microsoft .NET languages, learn about the <a href="ClientToolkit.htm">ASCOM .NET Client Toolkit</a>.</p>
+
+	<h3>Driver Developer Resources</h3>
+	<p>Most of the driver developer tools are contained within the <a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/v6.5SP1Release/ASCOMPlatform65SP1Developer.exe">ASCOM Platform Developer Components</a>. Driver developers are strongly encouraged to use those tools. This is particularly true for driver developers who write in C# or VB.NET. <span class="underline">The Developer Components contain templates for all driver types in both C# and VB.NET</span>. Using these templates will save you heaps of effort and troubles.</p>
+	<p>You may benefit from watching <a href="DriverImpl.htm#video">Tom How's excellent video showing how to develop a driver</a> for a telescope control system using the popular Arduino microcontroller kit.</p>
+	
+	<h3><a name="download" id="download"></a>Developer Components (separate download)</h3>
+	<p class="note">Before embarking on driver development, you should have the <a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/v6.5SP1Release/ASCOMPlatform65SP1Developer.exe">ASCOM Platform Developer Components</a> installed on your system. Driver templates, most of the developer documentation, and the installer generator are included in the Developer Components installation.  The developer components are provided as a separate download from the Platform itself. </p>
+
+	<h3>Conformance Checker</h3>
+	<p>See <a href="Conformance.htm">Conformance Testing</a>. Once you have your driver working, it's very important to test it with the <a href="https://ascom-standards.org/Developer/Conformance.htm">Driver Conformance Checker tool</a>. This tool will exercise your driver and the device it handles, checking for common programming errors. </p>
+
+	<h3>Role of Simulators</h3>
+	<p>The ASCOM Platform includes <i>simulators </i> for each of the devices covered by an ASCOM standard. These simulators provide a convenient tool for application software developers to test their programs with known good drivers under controlled conditions. The simulators also serve driver developers as <i>reference implementations </i> of the driver standards. If there is a question about the behavior of a property or method, the behavior of the appropriate simulator serves as the reference. </p>
+	<h3>Driver Design Principles</h3>
+	
+	<p>The interface specifications aren't the full story! There are some design principles that, if adhered-to, will maximize the chances that your driver will operate properly with a variety of client software. <span class="underline">The links on the left lead to information on each of these design principles</span>. </p>
+	<h3>Common Traps and Mistakes (mostly for driver developers)</h3>
+	<p>It probably seems unprofessional to start this section with what <i>not</i> to do, but we're just trying to save you time and pain. Over the last 12+ years we've seen the same mistakes repeated by driver developers enough times to rate being listed here. Hopefully a word to the wise is enough.</p>
+	<ul>
+		<li>Not understanding the driver-client architecture and that your driver will be used by many applications, some of which don't  yet exist</li>
+		<li>Using sources for another driver (or worse, one of the simulators) as a starting point (you start with other peoples' mistakes and the wrong design)</li>
+		<li>Developing for both 32-bit and 64-bit using &quot;any cpu&quot; in .NET, yet depending on an external library that is 32-bit only (C++ DLL for 32-bits etc.).</li>
+		<li>Giving a driver  a &quot;kitchen sink&quot; window that lets people &quot;control&quot; and &quot;tune&quot; your device. They just want it to work with <i>their</i> program.</li>
+		<li>Insisting on using C++ because that's the only language you know, but you know nothing about COM (bare metal COM in C++ is <i>tough</i>)</li>
+		<li>Ignoring the support services provided by the Platform (Chooser, Profile, Serial, etc.) and rolling your own</li>
+		<li>Asking users to run BAT files or double-click registry files to install your driver (instead of providing a real installer using our tools)</li>
+		<li>Exposing timing restrictions or other device quirks to driver clients (they don't want to do stuff just for your goofy device)</li>
+		<li>Including (and worse, installing) parts taken from the Platform as part of your driver or applicaition</li>
+	</ul>
+	</div>
+&nbsp;<!-- #EndEditable --></div>
+<div id="rightcontent">
+	<!-- #BeginEditable "RightSideBar" -->
+	
+<div class="BlueBorder">
+	<!-- Images for container -->
+	<div class="north">
+	<div class="east">
+	<div class="south">
+	<div class="west">
+	<div class="ne">
+	<div class="se">
+	<div class="sw">
+	<div class="nw">
+	<div>
+		<h3 style="color:#FF9900; text-align: center;">Developer Components</h3>
+		<p style="text-align: center">
+		<a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/v6.5SP1Release/ASCOMPlatform65SP1Developer.exe" target="_new">
+		<img alt="Download Developer Components" src="../Images/Button2.jpg" width="149" height="44" border="0" /></a>		</p>
+		<p style="text-align: center"><a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/" target="_blank">Developer Components<br /> 6.5SP1 Release Notes</a><br /><br />
+		<a href="https://ascom-standards.org/Help/Developer/Index.html" target="_blank">Developer Components Help</a></p>
+		<p>Additional components for developers of client applications and drivers.  </p>
+	</div>
+
+	</div></div></div></div></div></div></div></div>
+</div>
+	
+	
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright &copy; 1998-2021, The ASCOM Initiative. 
+	All rights reserved. </div>
+
+</body>
+
+<!-- #EndTemplate --></html>

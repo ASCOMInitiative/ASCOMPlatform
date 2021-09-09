@@ -1,6 +1,6 @@
 ﻿body {
 	font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
-	font-size: 10pt;
+	font-size: 12pt;
 	color: #E4F0F3;
 	margin: 0px;
 	padding: 0px;
@@ -11,7 +11,7 @@ h6 {
 	color: #CC6600;
 }
 h5 {
-	font-size: 9pt;
+	font-size: 11pt;
 	color: #FF9900;
 }
 h4 {
@@ -94,3 +94,4 @@ th {
 
 td {
 }
+

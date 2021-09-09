@@ -1,0 +1,95 @@
+<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+<!DOCTYPE html>
+ 
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="expires" content="Fri, 1 Jan 1990 00:00:00 GMT">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+
+<!-- #BeginEditable "Title" -->
+<title>Device Support</title><!-- #EndEditable -->
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		breadcrumbs(); 
+	-->
+	</script>
+	</div>
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+	<!-- 
+		writemainmenu();
+	-->
+    </script>
+  	</div>
+</div>
+<div id="leftcontent">
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		writesubmenu(); 
+	-->
+	</script>
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->
+	<!-- #EndEditable -->
+</div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+<h3>How to Get Support - Devices</h3>
+		<div class="note" style="font-style:normal">If the manufacturer of your device (e.g., telescope) supplied the driver (download or packaged), <span class="underline">contact the anufacturer first</span>. The people to whom you paid the money for your program or device are always the best place to get help because they know the most about your program or device. Otherwise, if your device has a driver that was developed by a third party, the first place to get help is directly from the driver developer (who may monitor <a href="https://ascomtalk.groups.io/g/Help" target="_new">ASCOM Talk</a>).</div>
+		<p><span class="underline">If you can't get help directly from the people responsible for your device and driver</span>, you can try getting help on the <a href="https://ascomtalk.groups.io/g/Help" target="_new">ASCOM Talk</a> group. For some third-party drivers, the developer(s) may be available on <a href="https://ascomtalk.groups.io/g/Help" target="_new">ASCOM Talk</a>. People on the <a href="https://ascomtalk.groups.io/g/Help" target="_new">ASCOM-Talk</a> group are happy to help with problems, but keep in mind that they generally won't know about the internals of your device. Most driver authors want people to use their drivers and will at least lurk on the group. There are a number of things that you can do to help these people to help you.</p>
+		<ol>
+		<li>Report information accurately and completely. It is almost impossible to help if insufficient information is given. We get  error reports that basically say &quot;ASCOM isn't working, please  fix it&quot;. ASCOM is neither an application, nor a driver, nor a device. This sort of request for help is unanswerable and will result in disappointment and frustration for you. </li>
+		<li>Read the help that comes with the app or device. Many support questions have already been answered in the supplied help. This should be accessible from the app's help menu, the driver setup, or its properties window.</li>
+		<li>If you can cause the problem at will, write down the steps you took to cause it, producing a &quot;repro scenario&quot;. This can be invaluable information. </li>
+		<li>Contact the app or driver author or a supporter directly or on the <a href="https://ascomtalk.groups.io/g/Help" target="_new">ASCOM-Talk</a> group. Look in the app or driver help file for contact info. </li>
+		</ol>
+		<h3><a name="tryfirst" id="tryfirst"></a>Things to Try First for Devices</h3>
+		<p>If a device or driver doesn't work at all then in the  majority of
+			cases it is one of the following causes:</p>
+		<ul>
+			<li>The connection cable between the PC and the mount.</li>
+			<li>The cable between the PC and the mount (it's worth double checking, this is the source of the majority of problems).</li>
+			<li>Does the manufacturer's cable require a low level driver (e.g. FTDI etc.)? </li>
+			<li>The USB to serial connector. These are quitevariable, good ones are fine but there are a lot that aren't so good and it's not obvious which are which.</li>
+			<li>Is the right cable being used? (The Meade cable doesn't work with the Celestron and (presumably) vice versa).</li>
+			<li>Is the cable connected to the correct port on the scope?</li>
+			<li>Is the correct COM port being used? Some (poorly designed) USB to serial connectors can select a different port each time they are connected, especially if they are plugged into a different USB socket or in a different order.</li>
+			<li>Is the correct driver being used?</li>
+			<li>Are you running your application or executable driver &quot;as Administrator&quot; or using any Windows Compatibility options? If so, turn off <em>all</em> of those options. Runnning &quot;as Administrator&quot; can cause connectivity problems because the modules are in different environments. </li>
+			<li>Installation problems tend to give rather cryptic errors saying that something does not exist or cannot be loaded. If you get these right at the start of trying to connect, or especially if you get this when you are trying to select a driver, then try reinstalling the driver. <a href="https://ascomtalk.groups.io/g/Help" target="_new">Go to the ASCOM Talk group</a> and ask for help before uninstalling and reinstalling the Platform.</li>
+		</ul>
+		<p>If the driver connects and some things work but some don't or the driver connects in one application but not in others then the basic connectivity is OK and the challenge is to find out why a particular function isn't working; we need to know:</p>
+		<ul>
+			<li>What works, let us know what programs or functions work for you.</li>
+			<li>What doesn't work, which program and where in the program it fails.</li>
+			<li>The exact way it fails, including what you do, what happens and exactly what error messages are shown.</li>
+			<li>If you are only trying advanced functions, such as guiding, but haven't tried something simple then it is a good idea to try a simple planetarium program, such as Cartes du Ciel, and see if the basic connectivity and control works.</li>
+		</ul>
+		<p>A good technique, especially for application or script authors, is to post a code fragment that demonstrates the problem. Try to reduce this to the minimum that shows the problem.</p>
+		<p>Remember that some of the people involved in ASCOM are volunteers and often have other jobs, so replies can take a few days.</p>
+	</div>
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright &copy; 1998-2021, The ASCOM Initiative. 
+	All rights reserved.
+</div>
+
+</body>
+
+<!-- #EndTemplate --></html>

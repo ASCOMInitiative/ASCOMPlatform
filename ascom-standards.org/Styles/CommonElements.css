@@ -27,7 +27,7 @@
 #leftcontent {
 	position: absolute;
 	left: 0px;
-	top: 100px;
+	top: 22px; /* 100px */
 	width: 209px;
 	height: 420px;
 	/*background: #333333 url('../Images/LeftNavBG.jpg');*/
@@ -35,8 +35,8 @@
 }
 #leftcontent h3 {
 	color: white;
-	margin: 10px;
-	font-size: 14px;
+	margin: 4px;
+	font-size: 18px;
 }
 #centercontent {
 	background: #333333;
@@ -100,18 +100,19 @@
 .treeview li {
 	background: url('../Images/listYellow.gif') no-repeat left top;
 	list-style-type: none;
+	font-size: 14px;
 	padding-left: 15px;
-	margin-bottom: 3px;
-	margin-left: -24px;
+	margin-bottom: 8px;
+	margin-left: -40px;
 	color: white;
 }
 .treeview li a {
-	font-size: 12px;
+	font-size: 14px;
 	color: white;
 	text-decoration: none;
 }
 .treeview li a:hover {
-	font-size: 12px;
+	font-size: 14px;
 	color: #66CCFF;
 	text-decoration: none;
 }
@@ -174,4 +175,11 @@
 
 div.expando {
 	overflow: hidden;
+}
+
+/* For responsive images. No expansion. */
+
+.responsive {
+	max-width: 100%;
+	height: auto;
 }

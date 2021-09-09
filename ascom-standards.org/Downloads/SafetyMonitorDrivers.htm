@@ -60,35 +60,57 @@
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
 		<h3>Safety Monitor Drivers</h3>
+
+		<div class="download">
+			<h5 style="color: #ffff00"><span class="underline">SPECIAL COMPONENT</span> - Safety Monitor Hub (June 2019)</h5>
+			<a href=" http://www.dehilster.info/astronomy/ascom-safetymonitor-hub.php" target="_new">
+			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>
+			SafetyMonitor driver for use with programs that may want to monitor more than one SafetyMonitor source (e.g. power conditions and weather). For more information click the button to visit the author's web site and download the driver. 
+		</div>
+
+			
+		<div class="download">
+			<h5>Boltwood Safety Monitor (V6.2 January 2016)</h5>
+			<a href="https://download.ascom-standards.org/drivers/Boltwood.SafetyMonitorSetup.exe" target="_self">
+			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>
+			This multi-object driver implements Safety Monitor drivers that interface to the Boltwood Weather station and it's clones.
+			Two drivers are provided, OK to Image and OK to Open, they can have different safety limits.
+			In addition, this driver also implements an <a href="ObservingConditionsDrivers.htm">Observing Conditions driver</a>. This was developed by Chris Rowland. Please address messages relating to this on the <a href="https://ascomtalk.groups.io/g/Help" target="_new">ASCOM-Talk Users Group</a>. Requires current ASCOM Platform.
+		</div>
+
+		<div class="download">
+			<h5>Environment Safety Monitor (Jan 2021)</h5>
+			<a href="http://www.dehilster.info/astronomy/ascom_environment_safetymonitor.php" target="_new">
+			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>
+			The Environment SafetyMonitor reads observations from an ObservationConditions Driver (preferably OCH, but any driver can be used) and allows to trigger SAFE/UNSAFE events on 11 observation types in a maximum of 13 rules (the 2 additional ones are to allow for upper/lower limits for wind direction and temperature). For more information click the button to visit the author's web site and download the driver.
+		</div>
+
+		<div class="download">
+			<h5>Generic File Safety Monitor (Jan 2021)</h5>
+			<a href="http://www.dehilster.info/astronomy/ascom_generic_file_safetymonitor.php" target="_new">
+			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>
+			The Generic File SafetyMonitor monitors any ASCII-file(s) on the local hard drive or on the network, scans it for a preamble (e.g. ROOF) and a trigger in that same line (e.g. CLOSED) and sets the SAFE/UNSAFE event based on the user settings. For more information click the button to visit the author's web site and download the driver.
+		</div>
+
+		<div class="download">
+			<h5>Generic Power Condition Driver (June 2019)</h5>
+			<a href="http://www.dehilster.info/astronomy/ascom_generic_ups_driver.php" target="_new">
+			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>
+			Generic SafetyMonitor driver for use with programs such as SGP that have power monitoring and power failure capabilities. It works with the events in the Windows Application and System Events Logbook to provide safety monitoring with most any brand of UPS that lists its events in these Logbooks. Has passed the Conform tests. For more information click the button to visit the author's web site and download the driver. For more information click the button to visit the author's web site and download the driver.
+		</div>
+
+		<div class="download">
+			<h5>Lunatico's AAG CloudWatcher and Solo safety monitor driver</h5>
+			<a href="https://lunatico.es/aagcw/AAGCWSafetyDriverSetup.exe" target="_self">
+			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>This driver will work with the <a href="http://tienda.lunatico.es/AAG-CloudWatcher-cloud-detector-1" target="_new">AAG CloudWatcher</a>, connected to either a PC running the Windows software or to a "Solo", accessing the shared data file from the network. THis has been varified by the ASOCM CONformance chedker. <a href="https://download.ascom-standards.org/drivers/ASCOM.AAGCW.SafetyMonitor.Validation.txt" target="_new">Report is located here</a>.
+		</div>
+
 		<div class="download">
 			<h5>PowerStatus Safety Monitor (June 2019)</h5>
 			<p><a href="https://github.com/Chris-Rowland/ASCOM-PowerStatus-SafetyMonitor/raw/master/PowerStatus%20Setup.exe" target="_self"> 
 			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a> 			This SafetyMonitor driver alternative uses the .NET <tt style="font-size:10pt" larger>SystemInformation.PowerStatus</tt> object to check for the power state and/or battery state of a laptop and uses that to set the IsSafe property. </p>
 		</div>
-		<div class="download">
-			<h5>Generic Power Condition Driver (June 2019)</h5>
-			<a href="http://www.dehilster.info/astronomy/ascom_generic_ups_driver.php" target="_new">
-			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>
-			Generic SafetyMonitor driver for use with programs such as SGP that have power monitoring and power failure capabilities. It works with the events in the Windows Application Events Logbook to provide safety monitoring with most any brand of UPS. Has passed the Conform tests. For more information click the button to visit the author's web site and download the driver. </div>
 
-		<div class="download">
-			<h5>Safety Monitor Hub (June 2019)</h5>
-			<a href=" http://www.dehilster.info/astronomy/ascom-safetymonitor-hub.php" target="_new">
-			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>
-			SafetyMonitor driver for use with programs such as SGP that may want to monitor more than one SafetyMonitor source (e.g. power conditions and weather). For more information click the button to visit the author's web site and download the driver. </div>
-
-		<div class="download">
-			<h5>Boltwood Safety Monitor (V6.2 January 2016)</h5>
-			<a href="http://download.ascom-standards.org/drivers/Boltwood.SafetyMonitorSetup.exe" target="_self">
-			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>
-			This multi-object driver implements Safety Monitor drivers that interface to the Boltwood Weather station and it's clones.
-			Two drivers are provided, OK to Image and OK to Open, they can have different safety limits.
-			In addition, this driver also implements an <a href="ObservingConditionsDrivers.htm">Observing Conditions driver</a>. This was developed by Chris Rowland. Please address messages relating to this on the <a href="https://ascomtalk.groups.io/g/Help" target="_new">ASCOM-Talk Users Group</a>. Requires ASCOM Platform 6.2 or later.</div>
-			
-		<div class="download">
-			<h5>Lunatico's AAG CloudWatcher and Solo safety monitor driver</h5>
-			<a href="http://lunatico.es/aagcw/AAGCWSafetyDriverSetup.exe" target="_self">
-			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>This driver will work with the <a href="http://tienda.lunatico.es/AAG-CloudWatcher-cloud-detector-1" target="_new">AAG CloudWatcher</a>, connected to either a PC running the Windows software or to a "Solo", accessing the shared data file from the network. THis has been varified by the ASOCM CONformance chedker. <a href="http://download.ascom-standards.org/drivers/ASCOM.AAGCW.SafetyMonitor.Validation.txt" target="_new">Report is located here</a>.</div>
 
 </div>
 	<!-- #EndEditable --></div>

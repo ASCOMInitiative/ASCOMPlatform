@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+<!DOCTYPE html>
  
 <head>
 
@@ -11,51 +11,42 @@
 
 <!-- #BeginEditable "Title" -->
 <title>ASCOM General Requirements</title><!-- #EndEditable -->
-
 <link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
-
 <script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
-
 </head>
  
 <body>
 
 <div id="banner">
 	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
-	
 	<div id="breadcrumbs">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-	breadcrumbs(); 
+		breadcrumbs(); 
 	-->
 	</script>
-</div>
-
+	</div>
 	<div class="topmenucontainer">
     <script type="text/javascript" language="javascript">
-      <!-- 
-	        writemainmenu();
-	        -->
+	<!-- 
+		writemainmenu();
+	-->
     </script>
-  </div>
+  	</div>
 </div>
-
-
-
 <div id="leftcontent">
-
-
 	<div class="LeftNav">
 	<div class="center"><div class="north"><div class="south">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-	writesubmenu(); 
+		writesubmenu(); 
 	-->
 	</script>
-	
 	</div></div></div></div>
 
-	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
+	<!-- #BeginEditable "LeftNav" -->
+	<!-- #EndEditable -->
+</div>
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
@@ -68,24 +59,24 @@
 	<ul>
 		<li>The technical details of some of the requirements here are automatically taken care of if you are developing for Windows in .NET and use the driver templates or the client toolkit, both of which are provided with the ASCOM Platform.</li>
 		<li>The Windows ASCOM Platform includes a free tool for making driver installers which use the free Inno Setup package. </li>
-		<li class="note">This document does not yet cover the requirements for drivers and applications that use the new <a href="../Developer/Alpaca.htm" target="_new">ASCOM Alpaca infrastructure</a>. Please review the Drivers and Applications requirements and apply those that would apply to your Alpaca enabled device or app. <span class="underline">For ASCOM Alpaca, feel free to use the ASCOM Alpaca logo if your driver or application uses ASCOM Alpaca</span>.</li>
+		<li class="note">This document does not yet cover the requirements for drivers and applications that use the new <a href="../AlpacaDeveloper/Alpaca.htm" target="_new">ASCOM Alpaca infrastructure</a>. Please review the Drivers and Applications requirements and apply those that would apply to your Alpaca enabled device or app. <span class="underline">For ASCOM Alpaca, feel free to use the ASCOM Alpaca logo if your driver or application uses ASCOM Alpaca</span>.</li>
 	</ul>
 	<h2>Windows/COM Drivers</h2>
 	<ol>
 		<li>The driver <i>must</i> install and run on on Microsoft Windows 10 and 7 with the latest service packs at the time of driver release, and with User Account Control enabled at its default/normal setting. It <i>should</i> work on both 32- and 64-bit systems.
 			<span class="underline">Support for Windows 2000 and XP are no longer provided</span>.</li>
-		<li>The driver author must implement the published standard   for the device type as a <a href="../Developer/Binding.htm" target="_blank">late-bound COM interface</a>. The published standards are specific about the data types that are used for properties and method parameters. These data types (and COM itself) are what make drivers <a href="../About/CompatLang.htm" target="_blank">cross language compatible</a>. Note that by using a .NET language and the .NET driver templates we provide with the <a href="../Downloads/PlatDevComponents.htm" target="_blank">Platform Developer Components</a>, this is all taken care-of for you. Also see item 6 below.</li>
+		<li>The driver author must implement the published standard   for the device type as a <a href="../COMDeveloper/Binding.htm" target="_blank">late-bound COM interface</a>. The published standards are specific about the data types that are used for properties and method parameters. These data types (and COM itself) are what make drivers <a href="../About/CompatLang.htm" target="_blank">cross language compatible</a>. Note that by using a .NET language and the .NET driver templates we provide with the <a href="../Downloads/PlatDevComponents.htm" target="_blank">Platform Developer Components</a>, this is all taken care-of for you. Also see item 6 below.</li>
 		<li>The driver <i>must never</i> &quot;extend&quot; the standard interface (add private members - properties and/or methods). If private members are desired, they <i>must</i> be exposed through a separate non-standard interface. Driver authors can also extend their drivers through the new <tt><span style="color: #CF0">Action</span></tt> and <tt><span style="color: #CF0">SupportedActions</span></tt> members that are common to all device interface standards.</li>
 		<li>The driver <i>must never</i> display a modal window which requires user interaction to dismiss. All errors must be raised/thrown back to the client.</li>
 		<li>The driver <i>must</i> use the   Profile's Register() method for ASCOM registration. It is recommended that drivers also use the Profile object for storage of their persistent configuration, state data, etc. Many useful components are part of the ASCOM Platform and serve to isolate drivers from changes in Platform architecture. They also make development easier by providing high level functionality commonly needed by drivers.</li>
-		<li>Prior to release, the driver <i>must</i> pass the Conform tests using the current/latest version of the <a href="../Developer/Conformance.htm">Conformance Checker</a> test tool. </li>
-		<li>The driver <i>must</i> be delivered as a self-contained installer. It is unacceptable to ask users to copy files, edit the registry, run BAT files, etc. See <a href="../Developer/DriverDist.htm">Creating a Driver Installer</a>.</li>
+		<li>Prior to release, the driver <i>must</i> pass the Conform tests using the current/latest version of the <a href="../COMDeveloper/Conformance.htm">Conformance Checker</a> test tool. </li>
+		<li>The driver <i>must</i> be delivered as a self-contained installer. It is unacceptable to ask users to copy files, edit the registry, run BAT files, etc. See <a href="../COMDeveloper/DriverDist.htm">Creating a Driver Installer</a>.</li>
 	</ol>
 	<h2>Windows Applications</h2>
 	<ol>
 	<li>The application must run (at a minimum) on Microsoft Windows 10 and 7, with the latest service packs at the time of driver release, and with User Account Control enabled at its default/normal setting.
 	 It <i>should</i> work on both 32- and 64-bit systems. <span class="underline">Support for Windows 2000 and XP are no longer provided</span>.</li>
-	<li>The application must rely on at least one of the ASCOM standard interfaces via <a href="../Developer/Binding.htm" target="_blank">late-bound COM interface</a> or .NET assembly binding to control an astronomical instrument. It is obviously preferable that the application use only universal ASCOM interfaces for instrument control (where applicable ASCOM interfaces exist). Of course test tools etc. would often ned use device specific (&quot;native&quot;) interfaces, but to use the ASCOM logo the tool would still need to rely on at least one universal ASCOM interface.</li>
+	<li>The application must rely on at least one of the ASCOM standard interfaces via <a href="../COMDeveloper/Binding.htm" target="_blank">late-bound COM interface</a> or .NET assembly binding to control an astronomical instrument. It is obviously preferable that the application use only universal ASCOM interfaces for instrument control (where applicable ASCOM interfaces exist). Of course test tools etc. would often ned use device specific (&quot;native&quot;) interfaces, but to use the ASCOM logo the tool would still need to rely on at least one universal ASCOM interface.</li>
 	<li>The application <em>must not</em> rely on being run with elevated privileges (&quot;as Administrator&quot;) when User Account Control is active as usual.</li>
 	</ol>
 
@@ -94,7 +85,7 @@
 
 	<ol>
 	<li>The names ASCOM, ASCOM Alpaca and/or the ASCOM and Alpaca logos must <i>never</i> be displayed for products which are in experimental, beta, preview, or any other such state. Only production products which are available and supported by the vendor or author are eligible. </li>
-	<li>Interfaces and tools which do not implement the ASCOM standards (including ASCOM Alpaca), or which contain additions of non-standard interfaces or features, are prohibited from using the ASCOM names and logos. See the policy on <a href="../About/StructureAndPolicies.htm#fork">Forking of Interfaces, Platform and/or Tools</a>. </li>
+	<li>Interfaces and tools which do not implement the ASCOM standards (including ASCOM Alpaca), or which contain additions of non-standard interfaces or features, are prohibited from using the ASCOM names and logos. See the policy on <a href="../Initiative/StructureAndPolicies.htm#fork">Forking of Interfaces, Platform and/or Tools</a>. </li>
 	<li>If you use any of our logos on a web site, please link it back to this site <a href="http://ascom-standards.org/index.htm">http://ascom-standards.org/</a>
 		
 	</li>
@@ -105,8 +96,9 @@ Please  This is on the honor system, there are no contracts or other covenants r
 	</div>
 	<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright &copy; 1998-2020, The ASCOM Initiative. 
-	All rights reserved. </div>
+	Copyright &copy; 1998-2021, The ASCOM Initiative. 
+	All rights reserved.
+</div>
 
 </body>
 

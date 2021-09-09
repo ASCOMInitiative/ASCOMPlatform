@@ -1,0 +1,69 @@
+<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+<!DOCTYPE html>
+ 
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="expires" content="Fri, 1 Jan 1990 00:00:00 GMT">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+
+<!-- #BeginEditable "Title" -->
+<title>8. How Errors are Handled</title><!-- #EndEditable -->
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		breadcrumbs(); 
+	-->
+	</script>
+	</div>
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+	<!-- 
+		writemainmenu();
+	-->
+    </script>
+  	</div>
+</div>
+<div id="leftcontent">
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		writesubmenu(); 
+	-->
+	</script>
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->
+	<!-- #EndEditable -->
+</div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+		<h3>8. How Errors are Handled</h3>
+		<p>A vital principle to all modular systems is <span class="note">Do it right or signal an error</span>. It is illegal (a bug) to accept a function/method call and then do nothing, or worse, do the wrong thing. Likewise, it is a bug to return incorrect data when reading a variable/property, or corrupt a value being written to a property. This may seem obvious but it can be subtle.</p>
+		<p>In all modern software, errors are declared by a signaling mechanism. If the method or property cannot, for any reason, do the right thing, it <em>must signal an error</em>. The caller experiences a &quot;run time error&quot;, also called an exception, and is responsible for reacting in some sort or rational way. An app that fails to handle a run-time error will crash (unhandled exception, &quot;xxx has stopped working&quot;, etc.). Silent failures are a serious violation of this principle. Let's take a couple of examples:</p>
+		<p>Suppose a roll-off roof controller is tied into  safety position sensors which electrically prevent the roof from moving unless the scope is parked (a common configuration). Now let's say the scope gets bumped or fails to complete parking somehow. Then the app calls OpenShutter() and nothing happens. The roof controller activates the motor relay, but the sensors have cut off the power for safety. This is a bug. The roof controller <em>must know</em> that it cannot open the roof in this case and signal an error &quot;cannot open, safety sensors are tripped&quot;. A silent failure (call to OpenShutter() without an error yet no roof motion) is a bug, plain and simple. </p>
+		<p>Another  subtle example is a roof controller which, after being called to OpenShutter(), takes &quot;a few seconds&quot; to move the roof enough to clear the roof-closed microswitch. During these few seconds, the ShutterStatus property might report ShutterClosed. This is a lie -- the shutter has been <em>successfully</em> told to open (no raised error from OpenShutter) so it <em>must</em> be in the state of opening (or maybe it's already open). Just because it takes a second or two to &quot;get going&quot; doesn't matter. Anything but opening or open is an unexpected condition. An app, seeing a successful call to open, then looking immediately thereafter and seeing closed, is well within its rights to stop everything and declare a problem. </p>
+		<p class="note">Modular system stability and reliability is critically dependent on all components adhering to this rule.</p>
+		<p>When something does go wrong, it's critical that there is a reasonable way to diagnose a problem. ASCOM's universal interfaces help isolate the problem as you can see in <a href="ProblemSolving.htm">9. Problem Solving</a>.</p>
+	</div>
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright &copy; 1998-2021, The ASCOM Initiative. 
+	All rights reserved.
+</div>
+
+</body>
+
+<!-- #EndTemplate --></html>

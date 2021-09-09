@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<HelpKI>
+  <HelpKINode Title="ASCOM namespace" Url="html/15e22519-edee-307f-4255-c75f58a9d4cb.htm" />
+  <HelpKINode Title="ASCOM.DeviceInterface namespace" Url="html/61c13df7-31ad-9189-e87e-be53f2decf85.htm" />
+  <HelpKINode Title="ASCOM.DeviceInterface.ICameraV3 interface" Url="html/71a7295e-fc4e-7493-ba62-4b3bc3201c05.htm" />
+  <HelpKINode Title="ASCOM.InvalidValueException class" Url="html/9dd2a405-3bda-9dcf-677e-aed3f7e4fe47.htm" />
+  <HelpKINode Title="ASCOM.MethodNotImplementedException class" Url="html/1af0a5d6-48e9-f779-e8dd-90118285b56e.htm" />
+  <HelpKINode Title="ASCOM.NotConnectedException class" Url="html/974d2a46-086a-fce0-9e10-345d33c37044.htm" />
+  <HelpKINode Title="ASCOM.PropertyNotImplementedException class" Url="html/4c8e892c-7556-a6c8-e9a7-88137b90381d.htm" />
+  <HelpKINode Title="FromValue property" Url="html/3756f84d-edc9-6f1a-ddbf-23e5358241e5.htm" />
+  <HelpKINode Title="Gain property" Url="html/a88359b2-0415-f9fb-8147-ea7e545c0617.htm" />
+  <HelpKINode Title="GainMax property" Url="html/f8b35947-6e3d-27fb-e6cd-836164e00629.htm" />
+  <HelpKINode Title="GainMin property" Url="html/4c139d31-e991-d666-df3b-2e667989ee14.htm" />
+  <HelpKINode Title="Gains property" Url="html/af25787e-0919-41d1-a1ae-1a849a9dd7d4.htm" />
+  <HelpKINode Title="ICameraV3 interface">
+    <HelpKINode Title="ICameraV3 Interface" Url="html/71a7295e-fc4e-7493-ba62-4b3bc3201c05.htm" />
+    <HelpKINode Title="properties" Url="html/58d8bdef-d388-0218-1641-e28628904349.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ICameraV3.Gain property" Url="html/a88359b2-0415-f9fb-8147-ea7e545c0617.htm" />
+  <HelpKINode Title="ICameraV3.GainMax property" Url="html/f8b35947-6e3d-27fb-e6cd-836164e00629.htm" />
+  <HelpKINode Title="ICameraV3.GainMin property" Url="html/4c139d31-e991-d666-df3b-2e667989ee14.htm" />
+  <HelpKINode Title="ICameraV3.Gains property" Url="html/af25787e-0919-41d1-a1ae-1a849a9dd7d4.htm" />
+  <HelpKINode Title="ICameraV3.Offset property" Url="html/56b23f96-74ba-42da-84f3-684b27992656.htm" />
+  <HelpKINode Title="ICameraV3.OffsetMax property" Url="html/d2e53df8-d3a6-f9b8-b389-9e0d37552be0.htm" />
+  <HelpKINode Title="ICameraV3.OffsetMin property" Url="html/a7e2fade-edcf-ee91-797c-5784fc21d829.htm" />
+  <HelpKINode Title="ICameraV3.Offsets property" Url="html/501509d8-1f1c-202e-7507-3e524d9368a6.htm" />
+  <HelpKINode Title="ICameraV3.SubExposureDuration property" Url="html/c6c6061f-1654-b26f-8b3a-8fc476534079.htm" />
+  <HelpKINode Title="InvalidValueException class">
+    <HelpKINode Title="InvalidValueException Class" Url="html/9dd2a405-3bda-9dcf-677e-aed3f7e4fe47.htm" />
+    <HelpKINode Title="constructor" Url="html/352ac170-3c61-25e5-2fcf-122318a6c186.htm" />
+    <HelpKINode Title="events" Url="html/fa4f7f25-dee5-7a53-4ae5-7f32732656b0.htm" />
+    <HelpKINode Title="methods" Url="html/dee11cd6-eba4-b26d-80a7-567f61be0ec1.htm" />
+    <HelpKINode Title="properties" Url="html/1fdc5211-3ff5-6d8d-e761-7fc398d3adc7.htm" />
+  </HelpKINode>
+  <HelpKINode Title="InvalidValueException.FromValue property" Url="html/3756f84d-edc9-6f1a-ddbf-23e5358241e5.htm" />
+  <HelpKINode Title="InvalidValueException.InvalidValueException constructor" Url="html/352ac170-3c61-25e5-2fcf-122318a6c186.htm" />
+  <HelpKINode Title="InvalidValueException.PropertyOrMethod property" Url="html/d46ab10b-c9a5-7f9e-6e24-24570ceaa7f5.htm" />
+  <HelpKINode Title="InvalidValueException.Range property" Url="html/1213ae10-cc6b-0fa4-9f9f-5de3cad09d4d.htm" />
+  <HelpKINode Title="InvalidValueException.ToValue property" Url="html/d33e97f1-1419-541b-4a5a-0d4482528e11.htm" />
+  <HelpKINode Title="InvalidValueException.Value property" Url="html/c6a9548d-ce5f-2ef8-3898-d860ee153034.htm" />
+  <HelpKINode Title="MethodNotImplementedException class">
+    <HelpKINode Title="MethodNotImplementedException Class" Url="html/1af0a5d6-48e9-f779-e8dd-90118285b56e.htm" />
+    <HelpKINode Title="events" Url="html/538489ab-b230-e909-3095-2b9586d719e7.htm" />
+    <HelpKINode Title="methods" Url="html/44db7799-2e85-0af2-a78b-6108d70e9631.htm" />
+    <HelpKINode Title="properties" Url="html/b35849a2-832d-8b11-7843-8609b0c564eb.htm" />
+  </HelpKINode>
+  <HelpKINode Title="NotConnectedException class">
+    <HelpKINode Title="NotConnectedException Class" Url="html/974d2a46-086a-fce0-9e10-345d33c37044.htm" />
+    <HelpKINode Title="constructor" Url="html/0d68ecf4-5010-5aef-7e66-7a4d1061f4a0.htm" />
+    <HelpKINode Title="events" Url="html/b7258860-f7bb-e459-3287-5ff41c51eaab.htm" />
+    <HelpKINode Title="methods" Url="html/21371477-3e22-a866-574c-6914dbc08dab.htm" />
+    <HelpKINode Title="properties" Url="html/8e37afbf-d0ed-1b74-8a49-ba3606703c0f.htm" />
+  </HelpKINode>
+  <HelpKINode Title="NotConnectedException.NotConnectedException constructor" Url="html/0d68ecf4-5010-5aef-7e66-7a4d1061f4a0.htm" />
+  <HelpKINode Title="Offset property" Url="html/56b23f96-74ba-42da-84f3-684b27992656.htm" />
+  <HelpKINode Title="OffsetMax property" Url="html/d2e53df8-d3a6-f9b8-b389-9e0d37552be0.htm" />
+  <HelpKINode Title="OffsetMin property" Url="html/a7e2fade-edcf-ee91-797c-5784fc21d829.htm" />
+  <HelpKINode Title="Offsets property" Url="html/501509d8-1f1c-202e-7507-3e524d9368a6.htm" />
+  <HelpKINode Title="PropertyNotImplementedException class">
+    <HelpKINode Title="PropertyNotImplementedException Class" Url="html/4c8e892c-7556-a6c8-e9a7-88137b90381d.htm" />
+    <HelpKINode Title="events" Url="html/87b6abc6-ba68-0d68-a208-9782bf8c177f.htm" />
+    <HelpKINode Title="methods" Url="html/c7da56e2-7434-ffc1-de67-d682bca8583a.htm" />
+    <HelpKINode Title="properties" Url="html/50d28826-dc36-8bff-8ea1-607171a0a6e5.htm" />
+  </HelpKINode>
+  <HelpKINode Title="PropertyOrMethod property" Url="html/d46ab10b-c9a5-7f9e-6e24-24570ceaa7f5.htm" />
+  <HelpKINode Title="Range property" Url="html/1213ae10-cc6b-0fa4-9f9f-5de3cad09d4d.htm" />
+  <HelpKINode Title="SubExposureDuration property" Url="html/c6c6061f-1654-b26f-8b3a-8fc476534079.htm" />
+  <HelpKINode Title="ToValue property" Url="html/d33e97f1-1419-541b-4a5a-0d4482528e11.htm" />
+  <HelpKINode Title="Value property" Url="html/c6a9548d-ce5f-2ef8-3898-d860ee153034.htm" />
+  <HelpKINode Title="version">
+    <HelpKINode Title="history" Url="html/af1b314f-8afc-4055-9d26-7e6176b57498.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Welcome" Url="html/a2801d16-78a2-4971-88b9-96cea794d685.htm" />
+</HelpKI>

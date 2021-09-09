@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid_Fixed.dwt" --><!-- DW6 -->
+<!-- #BeginTemplate "/Templates/Fixed_Fluid_Fixed.dwt" --><!-- DW6 -->
+<!DOCTYPE html>
 
 <head>
 
@@ -21,30 +21,28 @@
 <div id="banner">
 	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
 	<div id="breadcrumbs">
-		<script type="text/javascript" language="javascript">
+	<script type="text/javascript" language="javascript">
 	<!-- 
-	breadcrumbs(); 
+		breadcrumbs(); 
 	-->
 	</script>
 	</div>
 	<div class="topmenucontainer">
-		<script type="text/javascript" language="javascript">
-      <!-- 
-	        writemainmenu();
-	        -->
+	<script type="text/javascript" language="javascript">
+    <!-- 
+	    writemainmenu();
+	-->
     </script>
 	</div>
 </div>
 <div id="leftcontent">
-
 	<div class="LeftNav">
 	<div class="center"><div class="north"><div class="south">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-	writesubmenu(); 
+		writesubmenu(); 
 	-->
 	</script>
-	
 	</div></div></div></div>
 
 
@@ -61,7 +59,7 @@
 
 	<div class="article">
 		<h3>Platform Installation Notes</h3>	
-		<p>There has been confusion about getting the Microsoft .NET Framework installed. It is a pre-requisite to the ASCOM Platform. Please read the notes for <a href="../FAQs/Plat6OnW7.htm">Windows 7</a> as it applies to you. It may save you some pain. <span class="underline">We no longer support Windows XP</span>.</p>
+		<p>There has been confusion about getting the Microsoft .NET 3.5 Framework installed. It is a pre-requisite to the ASCOM Platform. Please read the notes for <a href="../FAQs/Plat6OnW7.htm">Windows 7 &amp; 10</a> as it applies to you. It may save you some pain. <span class="underline">We no longer support Windows XP</span>.</p>
 	</div>
 
 	<div class="article">
@@ -72,7 +70,7 @@
         <strong><span class="underline">Don&#39;t be tempted to downgrade your Platform install</span></strong> to fix this type of issue, 
         please refer to the <a href="../FAQs/Index.htm">FAQ</a> for advice or post a message on ASCOM-Talk.</p>
 
-	<p>If you don't find a driver for your device here, <span class="underline">contact the manufacturer and inquire about availability of a driver</span>. An increasing number of manufacturers are shipping drivers with their hardware (see the <a href="../About/Projects.htm" target="_blank">Projects page</a>). If they don't have one, suggest to them that they have one developed, as it will greatly enhance the value of their product. See the <a href="../Community/Advocacy.htm" target="_blank">Advocacy page</a> for some suggestions in this regard. </p>
+	<p>If you don't find a driver for your device here, <span class="underline">contact the manufacturer and inquire about availability of a driver</span>. An increasing number of manufacturers are shipping drivers with their hardware (see the <a href="../Initiative/Projects.htm" target="_blank">Projects page</a>). If they don't have one, suggest to them that they have one developed, as it will greatly enhance the value of their product. See the <a href="../Community/Advocacy.htm" target="_blank">Advocacy page</a> for some suggestions in this regard. </p>
 
 		<h3>Plug-in Downloads</h3>
 		This is where you can get the plug-ins that allow programs such as TheSky and SkyMap Pro to connect to ASCOM Drivers.  
@@ -84,11 +82,11 @@
 		<p>These components are not drivers; they are engines that are primarily of interest to developers. Included are a scriptable positional astronomy engine based on the USNO NOVAS Vector Astrometry package, an orbit engine that can generate ephemerides from orbital elements, and a scriptable deep sky catalog server with over 70,000 object names listed.</p>
 		
 		<h3>Developer Downloads</h3>
-		<p>The most useful item here (under <a href="DevTools.htm" target="_blank">Additional Tools</a>) is the <a href="../Developer/Conformance.htm" target="_blank">Conformance Checker</a> (written by Peter Simpson). This tool can be used to check many aspects of yor driver against the relevant ASCOM specification.		<!--<h3>Older ASCOM Platform (4.1)</h3>
+		<p>The most useful item here (under <a href="DevTools.htm" target="_blank">Additional Tools</a>) is the <a href="../COMDeveloper/Conformance.htm" target="_blank">Conformance Checker</a> (written by Peter Simpson). This tool can be used to check many aspects of yor driver against the relevant ASCOM specification.		<!--<h3>Older ASCOM Platform (4.1)</h3>
 		<p>This older platform is for <span class="underline">Windows 2000 users only</span>! Do not install this in the hopes that some problem will be resolved. Work with us on the ASCOM-Talk list to resolve your problem. If, and only if, you are running Windows 2000, you can download and install the <a href="http://download.ascom-standards.org/ascom41.exe">ASCOM Platform 4.1</a>.</p>-->	</p>
 		
 		<h3>ASCOM Alpaca Cross-Platform Downloads</h3>
-		<p>For more information and download links, see the <a href="../Developer/Alpaca.htm">separate ASCOM Alpaca page here</a>.</p>
+		<p>For more information and download links, see the <a href="../AlpacaDeveloper/Alpaca.htm">separate ASCOM Alpaca page here</a>.</p>
 	</div>
 		
 	<!-- #EndEditable --></div>
@@ -107,13 +105,11 @@
 	<div class="nw">
 	<div class="article">
 		<h3> Platform 6.5SP1</h3>
-		<p style="text-align: center">
-		<a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/v6.5SP1-RC1/ASCOMPlatform65.exe" target="_self">
-		<img alt="Download Platform" src="../Images/Button2.jpg" width="149" height="44" border="0" /></a>		</p>
-		<p style="text-align: center"><a href="https://ascom-standards.org/Help/Platform/html/FC49CB34-01CF-4D01-BE66-6D55796512D5.htm" target="_blank">Platform 6.5SP1 Release Notes</a><br />
+		<p><span style="background: yellow; color: black;">Prerequisite!</span> .NET 3.5 activation required. <a href="FAQs/Plat6OnW7.htm">Click here for easy directions</a>.</p> 
+		<p style="text-align: center"><a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/v6.5SP1Release/ASCOMPlatform65SP1.exe" target="_self"><img alt="Download Platform" src="../Images/Button2.jpg" width="149" height="44" border="0" /></a></p>
+		<p style="text-align: center; font-size:smaller;"><a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/" target="_blank">Platform 6.5SP1 Release Notes</a><br />
 		<a href="https://ascom-standards.org/Help/Platform/html/7d9253c2-fdfd-4c0d-8225-a96bddb49731.htm" target="_blank">Platform 6.5 Help (online)</a></p>
-		<p><span class="underline">Required for all drivers</span> (see notes for <a href="../FAQs/Plat6OnW7.htm">Windows 7</a>). This will install the Platform on a new PC, and it will also upgrade earlier installations of Platform versions 4, 5, and 6. </p>
-		<!--<p>Windows 2000 users <em>only</em>, install the <a href="http://download.ascom-standards.org/ascom41.exe">ASCOM Platform 4.1</a>. You will have very old drivers and you'll be unable to update most of them.</p>-->
+		<p>This will install the Platform on a new PC, and it will also upgrade older Platform versions.</p>
 	</div>
 
 	</div></div></div></div></div></div></div></div>
@@ -121,7 +117,7 @@
 
 	<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright &copy; 1998-2020, The ASCOM Initiative. 
+	Copyright &copy; 1998-2021, The ASCOM Initiative. 
 	All rights reserved. </div>
 
 </body>

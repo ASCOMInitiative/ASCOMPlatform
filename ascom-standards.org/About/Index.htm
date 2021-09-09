@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+<!DOCTYPE html>
  
 <head>
 
@@ -10,66 +10,95 @@
 <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
 
 <!-- #BeginEditable "Title" -->
-<title>About the ASCOM Initiative</title><!-- #EndEditable -->
+<title>Motivation for ASCOM</title>
 
+        <script type="text/javascript" src="../jscripts/jquery-3.6.0.min.js"></script>
+		<script src="../jscripts/jquery.bxslider.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../Styles/jquery.bxslider.css">
+		<!-- bxslider-4.2.15 (2018) https://github.com/stevenwanderski/bxslider-4 -->
+
+<!-- #EndEditable -->
 <link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
-
 <script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
-
 </head>
  
 <body>
 
 <div id="banner">
 	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
-	
 	<div id="breadcrumbs">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-	breadcrumbs(); 
+		breadcrumbs(); 
 	-->
 	</script>
-</div>
-
+	</div>
 	<div class="topmenucontainer">
     <script type="text/javascript" language="javascript">
-      <!-- 
-	        writemainmenu();
-	        -->
+	<!-- 
+		writemainmenu();
+	-->
     </script>
-  </div>
+  	</div>
 </div>
-
-
-
 <div id="leftcontent">
-
-
 	<div class="LeftNav">
 	<div class="center"><div class="north"><div class="south">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-	writesubmenu(); 
+		writesubmenu(); 
 	-->
 	</script>
-	
 	</div></div></div></div>
 
-	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
+	<!-- #BeginEditable "LeftNav" -->
+	<!-- #EndEditable -->
+</div>
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
+	<script>
+		$(document).ready(function(){
+			$('.bxslider').bxSlider({
+				startSlide: 0,
+				slideWidth:754,
+				captions: true,
+				infiniteLoop: true,
+				onSliderLoad: function(){
+					//bugfix https://github.com/stevenwanderski/bxslider-4/issues/1284
+					//force move to first slide
+					firstChild=$(this).children().first();
+					width=firstChild.width();
+					$(this).css("transform","translate3d(-"+width+"px,0,0)");
+				},
+			});
+		});
+	</script>
 	<div class="article">
-		<h3><a name="what" id="what"></a>What is the ASCOM Initiative?</h3>
-		<p>The ASCOM Initiative is a loosely-knit group of developers and astronomical instrument makers that work together to bring <span class="underline">vendor-independent</span> and <a href="CompatLang.htm">language-independent</a> plug-and play compatibility between astronomy software and astronomical instruments on Windows, <a href="../Developer/Alpaca.htm">and now Linux and MacOS</a> computers. ASCOM stands for the Astronomy Common Object Model. </p>
-		<p>See the pages listed on the left for more information about ASCOM. See the <a href="../FAQs/Index.htm">Frequently Asked Questions</a> section for info on using drivers and tools in the ASCOM Platform. </p>
-		<h3>A Graphical History of ASCOM Platform Development</h3>
-		<p>Core Team member Tim Long has made this interesting video showing a graphical history of ASCOM from V5.0 (Feb. 2008) to the present. It will give you some idea of the amount of work and skill that has gone into the ASCOM Platform over the last eleven years:</p>
-		<a name="videos" id="videos"></a><p align="center"><iframe width="910" height="512" src="https://www.youtube.com/embed/rn1637PUglY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
+		<h3>Motivation for ASCOM - Why Does it Exist?</h3>
+		<p>In the early days of computer-assisted astronomy, devices came with their own &quot;computer control&quot; (usually ASCII over RS-232).One such protocol was the so-called LX-200 standard, derived from the commands published by Meade Instruments Corporation for use with their Meade LX-200 series of telescopes. The LX-200 protocol was copied by other mount makers so their mounts would run with apps that spoke &quot;LX200&quot;. But each mount maker eventually customized their mount's ASCII commands because their mounts had unique features, so these protocols diverged and became unique. Other high-end mounts had their own unique ASCII or TCP/IP protocols from the outset. A few kept their control protocol private and provided their own apps (software hand boxes or planetariums) completely locking out others from controlling the mount.</p>
+		<p>In the story board below  you can see some of the problems. There are eight pictures in the story. There is more historical context below the story board. Take your time, these are important concepts.</p>
+		<p></p>
+
+		<div align="center">
+			<ul class="bxslider">
+				<li><img src="../Images/WhyHowCarousels/AppDevLament1.png" title="Each app developer writes their own adapter code for each device."></li>
+				<li><img src="../Images/WhyHowCarousels/AppDevLament2.png" title="New mount means more adapter code and maybe another release!"></li>
+				<li><img src="../Images/WhyHowCarousels/DeviceDevLament.png" title="Mount maker must beg all app developers to write new code."></li>
+				<li><img src="../Images/WhyHowCarousels/WhoResponsible.png" title="The mount uses code from two developers. Who is responsible?"></li>
+				<li><img src="../Images/WhyHowCarousels/NSquaredProblem.png" title="This environment greatly suppresses new entrants and innovation."></li>
+				<li><img src="../Images/WhyHowCarousels/RatsNest.jpg" title="In the long run, the ecosystem looks like this. We can do better!"></li>
+				<li><img src="../Images/WhyHowCarousels/ASCOMBus.png" title="With a universal interface, new app and device makers have a reasonable outlook."></li>
+			</ul>
+		</div>
+
+<p>First, each application had to include its own unique adapter code for <em>each</em> mount, <em>written by the app developer</em>. The poor app writers were developing special interface logic for each mount, relying on often sketchy documentation of the mount controller's protocol (and timing quirks), plus apathetic or even hostile attitudes from some mount makers. The app developer was taken away from creating the envisioned app, instead slogging away re-inventing unique control logic for every mount out there (and creating  support headaches as well)! Worse, when a new mount came out, the mount maker, <em>and</em> the prospective users, pressured <em>all</em> of the app makers to add &quot;support&quot; (to write <em>more</em> special code and another support headache) for that new mount type. Must the app developers write and test more adapter code and release a new update of their apps? And what about the person who has a great idea for a new astronomy app? That developer is faced with the daunting task of writing adapter code for a whole load of mounts (and other devices) before the app can even go to market, a huge barrier to entry and innovation. And must a hapless app developer have a warehouse full of mounts in order to develop <em>and support</em> these things? A year from now a customer complains that the mount went wonky. Does the app developer deserve to be saddled with supporting this thing? That's how it usually went. The problems go even deeper but I'll spare you the pain. </p>
+<p>Perhaps this will help you understand why universal standard interfaces became the norm in computers <span class="underline">as well as virtually every other modular ecosystem</span> back in the early 1980s, almost <em>forty years ago</em>. ASCOM brought a standardized ecosystem to astronomy in 1998. Now you can start to learn about the environment and design elements of ASCOM. Continue to <a href="Overview.htm">1. Overview of ASCOM</a>.</p>
 	</div>
 	<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright &copy; 1998-2020, The ASCOM Initiative. 
-	All rights reserved. </div>
+	Copyright &copy; 1998-2021, The ASCOM Initiative. 
+	All rights reserved.
+</div>
 
 </body>
 
