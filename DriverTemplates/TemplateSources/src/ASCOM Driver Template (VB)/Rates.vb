@@ -4,7 +4,7 @@
 ' The Rate class implements IRate, and is used to hold values
 ' for AxisRates. You do not need to change this class.
 '
-' The Guid attribute sets the CLSID for ASCOM.$safeprojectname$.Rate
+' The Guid attribute sets the CLSID for $safeprojectname$.Rate
 ' The ClassInterface/None attribute prevents an empty interface called
 ' _Rate from being created and used as the [default] interface
 '
@@ -62,7 +62,7 @@ End Class
 ' both COM and .NET. The IAxisRates and IEnumerable interfaces provide
 ' this polymorphism. 
 '
-' The Guid attribute sets the CLSID for ASCOM.$safeprojectname$.AxisRates
+' The Guid attribute sets the CLSID for $safeprojectname$.AxisRates
 ' The ClassInterface/None attribute prevents an empty interface called
 ' _AxisRates from being created and used as the [default] interface
 '
@@ -141,7 +141,7 @@ End Class
 ' both COM and .NET. The ITrackingRates and IEnumerable interfaces provide
 ' this polymorphism. 
 '
-' The Guid attribute sets the CLSID for ASCOM.$safeprojectname$.TrackingRates
+' The Guid attribute sets the CLSID for $safeprojectname$.TrackingRates
 ' The ClassInterface/None attribute prevents an empty interface called
 ' _TrackingRates from being created and used as the [default] interface
 '

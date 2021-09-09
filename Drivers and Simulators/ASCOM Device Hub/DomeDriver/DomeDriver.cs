@@ -31,6 +31,8 @@ using System.Threading.Tasks;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 
+using static System.FormattableString;
+
 namespace ASCOM.DeviceHub
 {
 	// Your driver's DeviceID is ASCOM.DeviceHub.Dome
@@ -77,7 +79,6 @@ namespace ASCOM.DeviceHub
 
 			_logger.LogMessage( "Dome", "Starting initialization" );
 
-			//ConnectedState = false; // Initialize connected to false
 			ConnectedState = DomeManager.IsConnected;
 			Utilities = new Util(); //Initialize util object
 
@@ -124,7 +125,7 @@ namespace ASCOM.DeviceHub
 				DomeDriverSetupDialogViewModel vm = new DomeDriverSetupDialogViewModel();
 				DomeDriverSetupDialogView view = new DomeDriverSetupDialogView { DataContext = vm };
 				vm.RequestClose += view.OnRequestClose;
-				vm.InitializeCurrentDome( DomeManager.DomeID );
+				vm.InitializeCurrentDome( DomeManager.DomeID, DomeManager.Instance.FastPollingPeriod );
 				vm.IsLoggingEnabled = _logger.Enabled;
 				view.ContentRendered += ( sender, eventArgs ) => view.Activate();
 
@@ -133,10 +134,11 @@ namespace ASCOM.DeviceHub
 				if ( result.HasValue && result.Value )
 				{
 					_logger.Enabled = vm.IsLoggingEnabled;
-					string domeID = vm.DomeSetupVm.DomeID;
-					DomeManager.DomeID = domeID;
+					DomeManager.DomeID = vm.DomeSetupVm.DomeID;
+					DomeManager.Instance.SetFastUpdatePeriod( vm.DomeSetupVm.FastUpdatePeriod );
+
 					SaveProfile();
-					UpdateAppProfile( domeID );
+					UpdateAppProfile( DomeManager.DomeID );
 
 					view.DataContext = null;
 					view = null;
@@ -163,7 +165,7 @@ namespace ASCOM.DeviceHub
 				try
 				{
 					retval = DomeManager.SupportedActions;
-					msg += "Returning list from driver" + _done;
+					msg += $"Returning list from driver {_done}";
 				}
 				catch ( Exception )
 				{
@@ -183,12 +185,19 @@ namespace ASCOM.DeviceHub
 		public string Action( string actionName, string actionParameters )
 		{
 			string retval;
-			string msg = String.Format( "Action {0}, parameters {1}", actionName, actionParameters );
+
+			if ( String.IsNullOrEmpty( actionName ) )
+			{
+				throw new InvalidValueException( "Action method: no actionName was provided." );
+			}
+
+			string msg = $"Action {actionName}, parameters {actionParameters}";
+
 
 			try
 			{
 				retval = DomeManager.Action( actionName, actionParameters );
-				msg += String.Format( ", returned {0}{1}", retval, _done );
+				msg += $", returned {retval}{_done}";
 			}
 			catch ( Exception )
 			{
@@ -206,7 +215,7 @@ namespace ASCOM.DeviceHub
 
 		public void CommandBlind( string command, bool raw )
 		{
-			string msg = String.Format( "Command {0}, Raw {1}", command, raw );
+			string msg = $"Command {command}, Raw {raw}";
 
 			try
 			{
@@ -228,12 +237,12 @@ namespace ASCOM.DeviceHub
 		public bool CommandBool( string command, bool raw )
 		{
 			bool retval;
-			string msg = String.Format( "Command {0}, Raw {1}", command, raw );
+			string msg = $"Command {command}, Raw {raw}";
 
 			try
 			{
 				retval = DomeManager.CommandBool( command, raw );
-				msg += String.Format( ", Returned {0}{1}.", retval, _done );
+				msg += $", Returned {retval}{_done}.";
 			}
 			catch ( Exception )
 			{
@@ -252,12 +261,12 @@ namespace ASCOM.DeviceHub
 		public string CommandString( string command, bool raw )
 		{
 			string retval;
-			string msg = String.Format( "Command {0}, Raw {1}", command, raw );
+			string msg = $"Command {command}, Raw {raw}";
 
 			try
 			{
 				retval = DomeManager.CommandString( command, raw );
-				msg += String.Format( ", Returned {0}{1}.", retval, _done );
+				msg += $", Returned {retval}{_done}.";
 			}
 			catch ( Exception )
 			{
@@ -294,7 +303,7 @@ namespace ASCOM.DeviceHub
 			}
 			set
 			{
-				string msg = String.Format( "Setting Connected to {0}", value );
+				string msg = $"Setting Connected to {value}";
 
 				try
 				{
@@ -307,8 +316,8 @@ namespace ASCOM.DeviceHub
 
 					if ( value )
 					{
-						msg += String.Format( " (connecting to {0})", DomeManager.DomeID );
-						//ConnectedState = DomeManager.Connect();
+						msg += $" (connecting to {DomeManager.DomeID})";
+
 						// Do this on the U/I thread.
 
 						Task task = new Task(() =>
@@ -323,7 +332,7 @@ namespace ASCOM.DeviceHub
 					{
 						ConnectedState = false;
 						Server.DisconnectDomeIf();
-						msg += String.Format( " (disconnecting from {0}){1}", DomeManager.DomeID, _done );
+						msg += $" (disconnecting from {DomeManager.DomeID}){_done}";
 					}
 				}
 				catch ( Exception )
@@ -354,7 +363,7 @@ namespace ASCOM.DeviceHub
 			get
 			{
 				Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-				string driverInfo = "DeviceHub dome driver. Version: " + String.Format( CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor );
+				string driverInfo = Invariant( $"DeviceHub dome driver. Version: {version.Major}.{version.Minor}" );
 
 				LogMessage( "Get DriverInfo:", driverInfo );
 
@@ -367,7 +376,7 @@ namespace ASCOM.DeviceHub
 			get
 			{
 				Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-				string driverVersion = String.Format( CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor );
+				string driverVersion = Invariant( $"{version.Major}.{version.Minor}" );
 
 				LogMessage( "Get DriverVersion:", driverVersion );
 
@@ -401,7 +410,7 @@ namespace ASCOM.DeviceHub
 
 				if ( !String.IsNullOrEmpty( downstreamName ) )
 				{
-					name += " -> " + downstreamName;
+					name += $" -> {downstreamName}";
 				}
 
 				LogMessage( "Get Name", name );
@@ -461,7 +470,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = DomeManager.Status.Altitude;
-					msg += Utilities.DegreesToDMS( retval ) + _done;
+					msg += $"{Utilities.DegreesToDMS( retval )}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -498,7 +507,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = DomeManager.Status.AtHome;
-					msg += retval.ToString() + _done;
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -535,7 +544,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					atPark = DomeManager.Status.AtPark;
-					msg += atPark.ToString() + _done;
+					msg += $"{atPark}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -572,7 +581,8 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = DomeManager.Status.Azimuth;
-					msg += Utilities.DegreesToDMS( retval ) + _done;
+					msg += $"{Utilities.DegreesToDMS( retval )}{ _done}";
+
 				}
 				catch ( Exception )
 				{
@@ -606,7 +616,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = DomeManager.Capabilities.CanFindHome;
-					msg += retval.ToString() + _done;
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -640,7 +650,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = DomeManager.Capabilities.CanPark;
-					msg += String.Format( "{0}{1}", retval, _done );
+					msg += $", Returned {retval}{_done}.";
 				}
 				catch ( Exception )
 				{
@@ -674,7 +684,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = DomeManager.Capabilities.CanSetAltitude;
-					msg += String.Format( "{0}{1}", retval, _done );
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -708,7 +718,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = DomeManager.Capabilities.CanSetAzimuth;
-					msg += String.Format( "{0}{1}", retval, _done );
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -742,7 +752,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = DomeManager.Capabilities.CanSetPark;
-					msg += String.Format( "{0}{1}", retval, _done );
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -776,7 +786,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = DomeManager.Capabilities.CanSetShutter;
-					msg += String.Format( "{0}{1}", retval, _done );
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -822,7 +832,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = DomeManager.Capabilities.CanSyncAzimuth;
-					msg += String.Format( "{0}{1}", retval, _done );
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -994,7 +1004,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = DomeManager.Status.ShutterStatus;
-					msg += String.Format( "{0}{1}", retval, _done );
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -1032,7 +1042,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = Globals.IsDomeSlaved;
-					msg += String.Format( "{0}{1}", retval, _done );
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -1054,7 +1064,7 @@ namespace ASCOM.DeviceHub
 				CheckConnected( name );
 				CheckCapabilityForProperty( name, "CanSetAzimuth", DomeManager.Capabilities.CanSetAzimuth );
 
-				string msg = String.Format( "Setting Slaved to {0}", value );
+				string msg = $"Setting Slaved to {value}";
 
 				try
 				{
@@ -1078,11 +1088,11 @@ namespace ASCOM.DeviceHub
 
 					if ( value )
 					{
-						msg += String.Format( "(Enable slaving for {0}){1}", DomeManager.DomeID, _done );
+						msg += $"(Enable slaving for {DomeManager.DomeID}){_done}";
 					}
 					else
 					{
-						msg += String.Format( "Disable slaving for {0}){1}", DomeManager.DomeID, _done );
+						msg += $"(Disable slaving for {DomeManager.DomeID}){_done}";
 					}
 
 					DomeManager.SetSlavedState( value );
@@ -1107,13 +1117,11 @@ namespace ASCOM.DeviceHub
 			CheckConnected( name );
 			CheckCapabilityForMethod( name, "CanSetAltitude", DomeManager.Capabilities.CanSetAltitude );
 
-			string msg = String.Format( "Altitude = {0:F5}", altitude );
+			string msg = $"Altitude = {altitude:F5}";
 
 			try
 			{
-				//DomeManager.SlewDomeShutter( altitude );
-
-				DomeManager.SlewToAltitude( altitude );
+				DomeManager.SlewDomeShutter( altitude );
 				msg += _done;
 			}
 			catch ( Exception )
@@ -1135,11 +1143,10 @@ namespace ASCOM.DeviceHub
 			CheckConnected( name );
 			CheckCapabilityForMethod( name, "CanSetAzimuth", DomeManager.Capabilities.CanSetAzimuth );
 
-			string msg = String.Format( "Azimuth = {0:F5}", azimuth );
+			string msg = $"Azimuth = {azimuth:F5}";
 
 			try
 			{
-				//DomeManager.SlewToAzimuth( azimuth );
 				DomeManager.SlewDomeToAzimuth( azimuth );
 				msg += _done;
 			}
@@ -1172,7 +1179,7 @@ namespace ASCOM.DeviceHub
 					}
 
 					retval = DomeManager.Status.Slewing;
-					msg += String.Format( "{0}{1}", retval, _done );
+					msg += $"{retval}{_done}";
 				}
 				catch ( Exception )
 				{
@@ -1195,7 +1202,7 @@ namespace ASCOM.DeviceHub
 			CheckCapabilityForMethod( name, "CanSyncAzimuth", DomeManager.Capabilities.CanSyncAzimuth );
 			CheckRange( name, azimuth, 0.0, 360.0 );
 
-			string msg = String.Format( "Azimuth = {0}", azimuth );
+			string msg = $"Azimuth = {azimuth:f5}";
 
 			try
 			{
@@ -1267,7 +1274,8 @@ namespace ASCOM.DeviceHub
 				DomeID = DomeManager.DomeID,
 				DomeLayout = Globals.DomeLayout,
 				AzimuthAdjustment = Globals.DomeAzimuthAdjustment,
-				IsLoggingEnabled = _logger.Enabled
+				IsLoggingEnabled = _logger.Enabled,
+				FastUpdatePeriod = DomeManager.FastPollingPeriod
 			};
 
 			settings.ToProfile();

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
+
 using ASCOM.DeviceInterface;
 
 namespace ASCOM.DeviceHub
 {
-	public class DevHubDomeStatus : AscomDomeStatus
+	public class DevHubDomeStatus : AscomDomeStatus, ICloneable
     {
 		public static DevHubDomeStatus GetEmptyStatus()
 		{
@@ -16,6 +18,15 @@ namespace ASCOM.DeviceHub
 		public DevHubDomeStatus()
 			: base()
 		{}
+
+		public DevHubDomeStatus( DevHubDomeStatus other )
+			: base( other )
+		{
+			this.HomingState = other.HomingState;
+			this.ParkingState = other.ParkingState;
+			this.ShutterPosition = other.ShutterPosition;
+			this.LastUpdateTime = other.LastUpdateTime;
+		}
 
 		public DevHubDomeStatus( DomeManager mgr )
 			: base( mgr )
@@ -92,6 +103,7 @@ namespace ASCOM.DeviceHub
 		{
 			string position = "Unknown";
 			ShutterState shutterStatus = this.ShutterStatus;
+
 			double fractionOpen = ( mgr.Capabilities.CanSetAltitude ) ? this.Altitude / 90.0 : Double.NaN;
 			bool useFraction = ( !Double.IsNaN( fractionOpen ) );
 
@@ -102,22 +114,27 @@ namespace ASCOM.DeviceHub
 					break;
 
 				case ShutterState.shutterClosing:
-					position = "Closing" + ( ( useFraction ) ? String.Format( " at {0:P0}", fractionOpen ) : "" );
+					position = "Closing";
+
 					break;
 
 				case ShutterState.shutterError:
 					position = "Unknown";
+
 					break;
 
 				case ShutterState.shutterOpen:
-					position = "Open" + ( ( useFraction ) ? String.Format( " at {0:P0}", fractionOpen ) : "" );
+					position = "Open";
+
 					break;
 
 				case ShutterState.shutterOpening:
-					position = "Opening" + ( ( useFraction ) ? String.Format( " at {0:P0}", fractionOpen ) : "" );
+					position = "Opening";
 
 					break;
 			}
+
+			position += ( useFraction ) ? $" at {fractionOpen:P0}" : "";
 
 			return position;
 		}
@@ -130,6 +147,16 @@ namespace ASCOM.DeviceHub
 			HomingState = HomingStateEnum.NotAtHome;
 
 			LastUpdateTime = DateTime.Now;
+		}
+
+		object ICloneable.Clone()
+		{
+			return new DevHubDomeStatus( this );
+		}
+
+		public new DevHubDomeStatus Clone()
+		{
+			return new DevHubDomeStatus( this );
 		}
 
 		#endregion Helper Methods

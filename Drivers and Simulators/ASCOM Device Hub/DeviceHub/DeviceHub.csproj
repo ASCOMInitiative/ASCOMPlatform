@@ -80,9 +80,13 @@
     </Compile>
     <Compile Include="Business Object Classes\AssemblyGuidAttribute.cs" />
     <Compile Include="Business Object Classes\Message Types\DomeSlavedChangedMessage.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\JogAmount.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\JogDirection.cs" />
     <Compile Include="Business Object Classes\Value Converters\BooleanOnOffConverter.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\TelescopeRates.cs" />
+    <Compile Include="Business Object Classes\Value Converters\MultiBindingTrueIfNotParking.cs" />
     <Compile Include="Business Object Classes\Value Converters\MultiBooleanVisibilityConverter.cs" />
+    <Compile Include="Business Object Classes\DisplayAttribute.cs" />
     <Compile Include="View Classes\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
@@ -264,8 +268,6 @@
     </Compile>
     <Compile Include="Business Object Classes\Value Converters\RightAscensionValueConverter.cs" />
     <Compile Include="Business Object Classes\Value Converters\DeviceConnectedValueConverter.cs" />
-    <Compile Include="Business Object Classes\Telescope Classes\SlewDirection.cs" />
-    <Compile Include="Business Object Classes\Telescope Classes\SlewAmount.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\TelescopeSlewAmounts.cs" />
     <Compile Include="Business Object Classes\Value Converters\SideOfPierStringConverter.cs" />
     <Compile Include="DeviceManagers\TelescopeManagerAccess.cs" />

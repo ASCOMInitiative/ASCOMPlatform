@@ -247,13 +247,14 @@ namespace ASCOM.DeviceHub
 
 		private int EditTheOffset( int offset, string negativeText, string positiveText )
 		{
-			string directions = String.Format( "{0}/{1}", positiveText, negativeText );
+			string directions = $"{positiveText}/{negativeText}";
 
 			ScopeDomeOffsetViewModel vm = new ScopeDomeOffsetViewModel( directions )
 			{
 				NegativeText = negativeText,
 				PositiveText = positiveText
 			};
+
 			vm.InitializeValues( new int[1] { offset } );
 
 			IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
@@ -320,7 +321,7 @@ namespace ASCOM.DeviceHub
 
 			if ( newID == Globals.DevHubDomeID )
 			{
-				string msg = Globals.DevHubDomeID + " cannot be chosen as the dome!";
+				string msg = $"{Globals.DevHubDomeID} cannot be chosen as the dome!";
 				ShowMessage( msg, "Invalid Dome Selected" );
 
 				return;

@@ -13,16 +13,15 @@ namespace ASCOM.DeviceHub
 
 			if ( rawHours < minHours || rawHours >= maxHours )
 			{
-				string msg = String.Format( "Hour value must be greater than or equal to {0} and less than  {1}.", minHours, maxHours );
-
-				throw new ASCOM.InvalidValueException( msg );
+				throw new ASCOM.InvalidValueException( 
+							$"Hour value must be greater than or equal to {minHours} and less than {maxHours}." );
 			}
 
 			_minHours = minHours;
 			_maxHours = maxHours;
 
 			_value = rawHours;
-			HoursToHms( rawHours, ref _hours, ref _minutes, ref _seconds );
+			HoursToHms( rawHours, ref _sign, ref _hours, ref _minutes, ref _seconds );
 		}
 
 		public HoursConverter( int hours, int minutes, int seconds, int minHours, int maxHours )
@@ -34,9 +33,8 @@ namespace ASCOM.DeviceHub
 
 			if ( hours < minHours || hours > maxHours )
 			{
-				string msg = String.Format( "Hour value must be greater than or equal to {0} and less than or equal to {1}.", minHours, maxHours );
-
-				throw new ASCOM.InvalidValueException( msg );
+				throw new ASCOM.InvalidValueException(
+							$"Hour value must be greater than or equal to {minHours} and less than or equal to {maxHours}." );
 			}
 
 			if ( ( hours == minHours || hours == maxHours )
@@ -57,7 +55,18 @@ namespace ASCOM.DeviceHub
 
 			_minHours = minHours;
 			_maxHours = maxHours;
-			_hours = hours;
+
+			if ( hours >= 0 )
+			{
+				_sign = 1;
+				_hours = hours;
+			}
+			else
+			{
+				_sign = -1;
+				_hours = Math.Abs( hours );
+			}
+
 			_minutes = minutes;
 			_seconds = seconds;
 
@@ -69,6 +78,9 @@ namespace ASCOM.DeviceHub
 
 		private decimal _value;
 		public decimal Value { get => _value; }
+
+		private int _sign;
+		public int Sign { get => _sign; }
 
 		private int _hours;
 		public int Hours { get => _hours; }
@@ -84,9 +96,8 @@ namespace ASCOM.DeviceHub
 		public override string ToString()
 		{
 			decimal hours = Math.Abs( _hours );
-
-			return String.Format( "{0}{1:00}:{2:00}:{3:00}"
-				, ( _hours < 0.0 ) ? "-" : "", hours, _minutes, _seconds );
+			char signChar = (_sign < 0 ) ? '-' : '+';
+			return $"{signChar}{hours:00}:{_minutes:00}:{_seconds:00}";
 		}
 
 		private decimal HmsToHours( int hours, int minutes, int seconds )
@@ -100,14 +111,14 @@ namespace ASCOM.DeviceHub
 			return retval;
 		}
 
-		private void HoursToHms( decimal hoursValue, ref int hours, ref int minutes, ref int seconds )
+		private void HoursToHms( decimal hoursValue, ref int sign, ref int hours, ref int minutes, ref int seconds )
 		{
-			decimal sign;
+			decimal tempSign;
 			decimal tempHours;
 			decimal tempMinutes;
 			decimal tempSeconds;
 
-			sign = ( hoursValue < 0.0m ) ? -1.0m : 1.0m;
+			tempSign = ( hoursValue < 0.0m ) ? -1.0m : 1.0m;
 			decimal temp = Math.Abs( hoursValue );
 			tempHours = Math.Truncate( temp );
 
@@ -130,6 +141,7 @@ namespace ASCOM.DeviceHub
 				}
 			}
 
+			sign = (int)tempSign;
 			hours = (int)( tempHours * sign );
 			minutes = (int)tempMinutes;
 			seconds = (int)tempSeconds;

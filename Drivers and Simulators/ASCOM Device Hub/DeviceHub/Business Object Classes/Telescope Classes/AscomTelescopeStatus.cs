@@ -4,10 +4,36 @@ using ASCOM.DeviceInterface;
 
 namespace ASCOM.DeviceHub
 {
-	public class AscomTelescopeStatus : DevicePropertiesBase
+	public class AscomTelescopeStatus : DevicePropertiesBase, ICloneable
 	{
 		public AscomTelescopeStatus()
 		{}
+
+		public AscomTelescopeStatus( AscomTelescopeStatus other )
+		{
+			this.Altitude = other.Altitude;
+			this.AtHome = other.AtHome;
+			this.AtPark = other.AtPark;
+			this.Azimuth = other.Azimuth;
+			this.Connected = other.Connected;
+			this.Declination = other.Declination;
+			this.DeclinationRate = other.DeclinationRate;
+			this.DeviceManager = other.DeviceManager;
+			this.Exceptions = other.Exceptions.Clone();
+			this.GuideRateDeclination = other.GuideRateDeclination;
+			this.GuideRateRightAscension = other.GuideRateRightAscension;
+			this.IsPulseGuiding = other.IsPulseGuiding;
+			this.RightAscension = other.RightAscension;
+			this.RightAscensionRate = other.RightAscensionRate;
+			this.SideOfPier = other.SideOfPier;
+			this.SiderealTime = other.SiderealTime;
+			this.Slewing = other.Slewing;
+			this.TargetDeclination = other.TargetDeclination;
+			this.TargetRightAscension = other.TargetRightAscension;
+			this.Tracking = other.Tracking;
+			this.TrackingRate = other.TrackingRate;
+			this.UTCDate = other.UTCDate;
+		}
 
 		public AscomTelescopeStatus( TelescopeManager mgr )
 		{
@@ -418,6 +444,20 @@ namespace ASCOM.DeviceHub
 			TrackingRate = DriveRates.driveSidereal;
 			UTCDate = DateTime.Now.ToUniversalTime();
 		}
+
+		#region ICloneable Implementation
+
+		object ICloneable.Clone()
+		{
+			return new AscomTelescopeStatus( this );
+		}
+
+		public AscomTelescopeStatus Clone()
+		{
+			return new AscomTelescopeStatus( this );
+		}
+
+		#endregion ICloneable Implementation
 
 		#endregion Protected Methods
 	}

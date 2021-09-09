@@ -820,8 +820,10 @@ namespace ConformanceTests
 
 		private void TestSlewToAltitude()
 		{
-			goto StartHere;
-		StartHere:
+
+			//goto StartHere;
+			//StartHere:
+
 			TestSlewToAltitude( 0 );
 			TestSlewToAltitude( 15 );
 			TestSlewToAltitude( 30 );

@@ -400,25 +400,34 @@ namespace Unit_Tests.Telescope
 		[TestMethod]
 		public void JogMoveAxis()
 		{
+			_mgr.MockIsConnected = true;
+			_mgr.Parameters = InitializeTestDefaultParameters( AlignmentModes.algGermanPolar );
+
 			double moveRate = 1.0;
 			_mgr.MockRightAscensionAxisRate = 0.0;
 
 			_vm.IsVariableJog = true;
 			_vm.SelectedJogRate = new JogRate { Name = "1 deg/sec", Rate = moveRate };
 
-			_prVm.Invoke( "StartMove", MoveDirections.East );
+			int ndx = GetIndexOfJogDirection( MoveDirections.East);
+			Assert.IsTrue( ndx >= 0 );
+
+			_prVm.Invoke( "StartMove", ndx.ToString() );
 
 			Assert.AreEqual( -moveRate, _mgr.MockRightAscensionAxisRate );
 
-			_prVm.Invoke( "StopMotion", MoveDirections.East );
+			_prVm.Invoke( "StopMotion", ndx.ToString() );
 
 			Assert.AreEqual( 0.0, _mgr.MockRightAscensionAxisRate );
 
-			_prVm.Invoke( "StartMove", MoveDirections.North );
+			ndx = GetIndexOfJogDirection( MoveDirections.North);
+			Assert.IsTrue( ndx >= 0 );
+
+			_prVm.Invoke( "StartMove", ndx.ToString() );
 
 			Assert.AreEqual( moveRate, _mgr.MockDeclinationAxisRate );
 
-			_prVm.Invoke( "StopMotion", MoveDirections.North );
+			_prVm.Invoke( "StopMotion", ndx.ToString() );
 
 			Assert.AreEqual( 0.0, _mgr.MockDeclinationAxisRate );
 		}
@@ -426,37 +435,54 @@ namespace Unit_Tests.Telescope
 		[TestMethod]
 		public void JogPulseGuide()
 		{
+			_mgr.MockIsConnected = true;
+			_mgr.MockJogWithPulseGuide = true;
+			_mgr.Parameters = InitializeTestDefaultParameters( AlignmentModes.algGermanPolar );
+
 			double moveRate = 1.0;
 			_mgr.MockRightAscensionAxisRate = 0.0;
 
 			_vm.IsVariableJog = true;
 			_vm.SelectedJogRate = new JogRate { Name = "1 deg/sec", Rate = moveRate };
 
-			_prVm.Invoke( "StartMove", MoveDirections.East );
+			// Jog East with Pulse Guiding.
 
-			Assert.AreEqual( -moveRate, _mgr.MockRightAscensionAxisRate );
+			int ndx = GetIndexOfJogDirection( MoveDirections.East);
+			Assert.IsTrue( ndx >= 0 );
 
-			_prVm.Invoke( "StopMotion", MoveDirections.East );
+			_prVm.Invoke( "StartMove", ndx.ToString() );
 
-			Assert.AreEqual( 0.0, _mgr.MockRightAscensionAxisRate );
+			Assert.IsTrue( _mgr.MockIsPulseGuiding );
 
-			_prVm.Invoke( "StartMove", MoveDirections.North );
+			_prVm.Invoke( "StopMotion", ndx.ToString() );
 
-			Assert.AreEqual( moveRate, _mgr.MockDeclinationAxisRate );
+			Assert.IsFalse( _mgr.MockIsPulseGuiding );
 
-			_prVm.Invoke( "StopMotion", MoveDirections.North );
+			// Jog North with Pulse Guiding.
 
-			Assert.AreEqual( 0.0, _mgr.MockDeclinationAxisRate );
+			ndx = GetIndexOfJogDirection( MoveDirections.North );
+			Assert.IsTrue( ndx >= 0 );
+
+			_prVm.Invoke( "StartMove", ndx.ToString() );
+
+			Assert.IsTrue( _mgr.MockIsPulseGuiding );
+
+			_prVm.Invoke( "StopMotion", ndx.ToString() );
+
+			Assert.IsFalse( _mgr.MockIsPulseGuiding );
 		}
 
 		[TestMethod]
 		public void DoFixedSlewEastRaDec()
 		{
-			Vector startPosition = GetSaneRaDec();
-			SlewDirection direction = SlewDirection.SlewEast;
-			SlewAmount amount = new SlewAmount( "4°", 4.0 );
 
-			Vector finalPosition = DoFixedSlewRaDec( startPosition, direction, amount );
+			Vector startPosition = GetSaneRaDec();
+			int ndx = GetIndexOfJogDirection( MoveDirections.East );
+			Assert.IsTrue( ndx >= 0 );
+
+			JogAmount amount = new JogAmount( "4°", 4.0 );
+
+			Vector finalPosition = DoFixedSlewRaDec( startPosition, ndx, amount );
 
 			Assert.AreNotEqual( startPosition.X, finalPosition.X, 0.00001 );
 			Assert.AreEqual( startPosition.Y, finalPosition.Y, 0.00001 );
@@ -466,10 +492,10 @@ namespace Unit_Tests.Telescope
 		public void DoFixedSlewWestRaDec()
 		{
 			Vector startPosition = GetSaneRaDec();
-			SlewDirection direction = SlewDirection.SlewWest;
-			SlewAmount amount = new SlewAmount( "4°", 4.0 );
+			int ndx = GetIndexOfJogDirection( MoveDirections.West );
+			JogAmount amount = new JogAmount( "4°", 4.0 );
 
-			Vector finalPosition = DoFixedSlewRaDec( startPosition, direction, amount );
+			Vector finalPosition = DoFixedSlewRaDec( startPosition, ndx, amount );
 
 			Assert.AreNotEqual( startPosition.X, finalPosition.X, 0.00001 );
 			Assert.AreEqual( startPosition.Y, finalPosition.Y, 0.00001 );
@@ -479,10 +505,10 @@ namespace Unit_Tests.Telescope
 		public void DoFixedSlewNorthRaDec()
 		{
 			Vector startPosition = GetSaneRaDec();
-			SlewDirection direction = SlewDirection.SlewNorth;
-			SlewAmount amount = new SlewAmount( "4°", 4.0 );
+			int ndx = GetIndexOfJogDirection( MoveDirections.North );
+			JogAmount amount = new JogAmount( "4°", 4.0 );
 
-			Vector finalPosition = DoFixedSlewRaDec( startPosition, direction, amount );
+			Vector finalPosition = DoFixedSlewRaDec( startPosition, ndx, amount );
 
 			Assert.AreEqual( startPosition.X, finalPosition.X, 0.00001 );
 			Assert.AreNotEqual( startPosition.Y, finalPosition.Y, 0.00001 );
@@ -492,10 +518,10 @@ namespace Unit_Tests.Telescope
 		public void DoFixedSlewSouthRaDec()
 		{
 			Vector startPosition = GetSaneRaDec();
-			SlewDirection direction = SlewDirection.SlewSouth;
-			SlewAmount amount = new SlewAmount( "4°", 4.0 );
+			int ndx = GetIndexOfJogDirection( MoveDirections.South );
+			JogAmount amount = new JogAmount( "4°", 4.0 );
 
-			Vector finalPosition = DoFixedSlewRaDec( startPosition, direction, amount );
+			Vector finalPosition = DoFixedSlewRaDec( startPosition, ndx, amount );
 
 			Assert.AreEqual( startPosition.X, finalPosition.X, 0.00001 );
 			Assert.AreNotEqual( startPosition.Y, finalPosition.Y, 0.00001 );
@@ -504,11 +530,17 @@ namespace Unit_Tests.Telescope
 		[TestMethod]
 		public void DoFixedSlewUpAltAz()
 		{
-			Vector startPosition = GetSaneAltAz();
-			SlewDirection direction = SlewDirection.SlewUp;
-			SlewAmount amount = new SlewAmount( "4°", 4.0 );
+			_mgr.MockIsConnected = true;
+			_mgr.Parameters = InitializeTestDefaultParameters( AlignmentModes.algAltAz );
 
-			Vector finalPosition = DoFixedSlewAltAz( startPosition, direction, amount );
+			Vector startPosition = GetSaneAltAz();
+
+			int ndx = GetIndexOfJogDirection( MoveDirections.Up );
+			Assert.IsTrue( ndx >= 0 );
+
+			JogAmount amount = new JogAmount( "4°", 4.0 );
+
+			Vector finalPosition = DoFixedSlewAltAz( startPosition, ndx, amount );
 
 			Assert.AreEqual( startPosition.X, finalPosition.X, 0.00001 );
 			Assert.AreEqual( startPosition.Y + amount.Amount, finalPosition.Y, 0.00001 );
@@ -517,11 +549,16 @@ namespace Unit_Tests.Telescope
 		[TestMethod]
 		public void DoFixedSlewDownAltAz()
 		{
-			Vector startPosition = GetSaneAltAz();
-			SlewDirection direction = SlewDirection.SlewDown;
-			SlewAmount amount = new SlewAmount( "4°", 4.0 );
+			_mgr.MockIsConnected = true;
+			_mgr.Parameters = InitializeTestDefaultParameters( AlignmentModes.algAltAz );
 
-			Vector finalPosition = DoFixedSlewAltAz( startPosition, direction, amount );
+			Vector startPosition = GetSaneAltAz();
+			int ndx = GetIndexOfJogDirection( MoveDirections.Down );
+			Assert.IsTrue( ndx >= 0 );
+
+			JogAmount amount = new JogAmount( "4°", 4.0 );
+
+			Vector finalPosition = DoFixedSlewAltAz( startPosition, ndx, amount );
 
 			Assert.AreEqual( startPosition.X, finalPosition.X, 0.00001 );
 			Assert.AreEqual( startPosition.Y - amount.Amount, finalPosition.Y, 0.00001 );
@@ -530,11 +567,17 @@ namespace Unit_Tests.Telescope
 		[TestMethod]
 		public void DoFixedSlewLeftAltAz()
 		{
-			Vector startPosition = GetSaneAltAz();
-			SlewDirection direction = SlewDirection.SlewLeft;
-			SlewAmount amount = new SlewAmount( "4°", 4.0 );
+			_mgr.MockIsConnected = true;
+			_mgr.Parameters = InitializeTestDefaultParameters( AlignmentModes.algAltAz );
 
-			Vector finalPosition = DoFixedSlewAltAz( startPosition, direction, amount );
+			Vector startPosition = GetSaneAltAz();
+
+			int ndx = GetIndexOfJogDirection( MoveDirections.Left );
+			Assert.IsTrue( ndx >= 0 );
+
+			JogAmount amount = new JogAmount( "4°", 4.0 );
+
+			Vector finalPosition = DoFixedSlewAltAz( startPosition, ndx, amount );
 
 			Assert.AreEqual( startPosition.X - amount.Amount, finalPosition.X, 0.00001 );
 			Assert.AreEqual( startPosition.Y, finalPosition.Y, 0.00001 );
@@ -543,11 +586,17 @@ namespace Unit_Tests.Telescope
 		[TestMethod]
 		public void DoFixedSlewRightAltAz()
 		{
-			Vector startPosition = GetSaneAltAz();
-			SlewDirection direction = SlewDirection.SlewRight;
-			SlewAmount amount = new SlewAmount( "4°", 4.0 );
+			_mgr.MockIsConnected = true;
+			_mgr.Parameters = InitializeTestDefaultParameters( AlignmentModes.algAltAz );
 
-			Vector finalPosition = DoFixedSlewAltAz( startPosition, direction, amount );
+			Vector startPosition = GetSaneAltAz();
+
+			int ndx = GetIndexOfJogDirection( MoveDirections.Right );
+			Assert.IsTrue( ndx >= 0 );
+
+			JogAmount amount = new JogAmount( "4°", 4.0 );
+
+			Vector finalPosition = DoFixedSlewAltAz( startPosition, ndx, amount );
 
 			Assert.AreEqual( startPosition.X + amount.Amount, finalPosition.X, 0.00001 );
 			Assert.AreEqual( startPosition.Y, finalPosition.Y, 0.00001 );
@@ -555,7 +604,7 @@ namespace Unit_Tests.Telescope
 
 		#region Helper Methods
 
-		private Vector DoFixedSlewRaDec( Vector startPosition, SlewDirection direction, SlewAmount amount )
+		private Vector DoFixedSlewRaDec( Vector startPosition, int ndx, JogAmount amount )
 		{
 			_vm.IsVariableJog = false;
 			_mgr.MockIsConnected = true;
@@ -573,7 +622,7 @@ namespace Unit_Tests.Telescope
 			_mgr.Status = sts;
 
 			_prVm.Invoke( "RegisterStatusUpdateMessage", true );
-			_prVm.Invoke( "DoFixedSlew", direction );
+			_prVm.Invoke( "DoFixedSlew", ndx.ToString() );
 
 			Thread.Sleep( 3500 );
 
@@ -582,12 +631,13 @@ namespace Unit_Tests.Telescope
 			return new Vector( _vm.Status.RightAscension, _vm.Status.Declination );
 		}
 
-		private Vector DoFixedSlewAltAz( Vector startPosition, SlewDirection direction, SlewAmount amount )
+		private Vector DoFixedSlewAltAz( Vector startPosition, int ndx, JogAmount amount )
 		{
 			_vm.IsVariableJog = false;
 			_mgr.MockIsConnected = true;
 			_mgr.Capabilities = InitializeFullCapabilities();
 			_mgr.Parameters = InitializeTestDefaultParameters( AlignmentModes.algAltAz );
+
 
 			_vm.SelectedSlewAmount = amount;
 
@@ -600,7 +650,7 @@ namespace Unit_Tests.Telescope
 			_mgr.Status = sts;
 
 			_prVm.Invoke( "RegisterStatusUpdateMessage", true );
-			_prVm.Invoke( "DoFixedSlew", direction );
+			_prVm.Invoke( "DoFixedSlew", ndx.ToString() );
 
 			Thread.Sleep( 4000 );
 
@@ -719,6 +769,13 @@ namespace Unit_Tests.Telescope
 			parms.SlewSettleTime = 0;
 
 			return parms;
+		}
+
+		private int GetIndexOfJogDirection( MoveDirections direction )
+		{
+			var item = _mgr.JogDirections.Where( d => d.MoveDirection == direction).First();
+
+			return _mgr.JogDirections.IndexOf( item );
 		}
 
 		#endregion

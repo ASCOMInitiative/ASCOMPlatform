@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,10 +11,9 @@ namespace ASCOM.DeviceHub
 	{
 		#region Static Constructor, Properties, Fields, and Methods
 
-		private const int POLLING_INTERVAL_NORMAL = 5000;	// once every 5 seconds
+		private const int POLLING_PERIOD_NORMAL = 5000;	// once every 5 seconds
 
 		public static string FocuserID { get; set; }
-		public static double FastPollingPeriod { get; private set; }
 
 		private static FocuserManager _instance = null;
 
@@ -43,11 +43,6 @@ namespace ASCOM.DeviceHub
 			Messenger.Default.Send( new FocuserIDChangedMessage( id ) );
 		}
 
-		public static void SetFastUpdatePeriod( double period )
-		{
-			FastPollingPeriod = period;
-		}
-
 		#endregion Static Constructor, Properties, Fields, and Methods
 
 		#region Private Properties
@@ -58,11 +53,6 @@ namespace ASCOM.DeviceHub
 		private CancellationTokenSource PollingTokenSource { get; set; }
 		private Task PollingTask { get; set; }
 		private bool IsPolling { get; set; }
-		private int PollingInterval { get; set; }
-		private ManualResetEvent PollingWake { get; set; }
-
-		private CancellationTokenSource MoveCancelTokenSource { get; set; }
-		private CancellationTokenSource PollRateChangeTokenSource { get; set; }
 		private bool ReEnableTempComp { get; set; }
 		private bool MoveInProgress { get; set; }
 
@@ -79,8 +69,8 @@ namespace ASCOM.DeviceHub
 			PollingTask = null;
 			ReEnableTempComp = false;
 			MoveInProgress = false;
-			PollingInterval = POLLING_INTERVAL_NORMAL;
-			PollingWake = new ManualResetEvent( false );
+			PollingPeriod = POLLING_PERIOD_NORMAL;
+			PollingChange = new ManualResetEvent( false );
 		}
 
 		#endregion Instance Constructor
@@ -223,6 +213,11 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
+		public void SetFastUpdatePeriod( double period )
+		{
+			FastPollingPeriod = period;
+		}
+
 		public void MoveFocuserBy( int amount )
 		{
 			int maxIncrement = Parameters.MaxIncrement;
@@ -241,14 +236,6 @@ namespace ASCOM.DeviceHub
 				// Make sure that we do not exceed the maximum allowable position (either positive or negative).
 
 				moveAmount = Math.Max( Math.Min( moveAmount, maxStep ), -maxStep );
-
-				int fastInterval = Convert.ToInt32( FastPollingPeriod * 1000.0 );
-
-				if ( PollingInterval != fastInterval )
-				{
-					PollingInterval = fastInterval;
-					PollingWake.Set();
-				}
 			}
 
 			// If the driver is earlier than IFocuserV3 and temp comp is on then we need to disable it for the move.
@@ -262,8 +249,8 @@ namespace ASCOM.DeviceHub
 			Move( moveAmount );
 
 			Status.IsMoving = true;
-
 			MoveInProgress = true;
+			SetFastPolling();
 		}
 
 		public void HaltFocuser()
@@ -273,12 +260,12 @@ namespace ASCOM.DeviceHub
 				// Stop the focuser and cancel any move that we have in progress.
 
 				Halt();
+
+				MoveInProgress = false;
 				Status.IsMoving = false;
 
-				if ( MoveCancelTokenSource != null )
-				{
-					MoveCancelTokenSource.Cancel();
-				}
+				Messenger.Default.Send( new FocuserMoveCompletedMessage() );
+
 			}
 		}
 
@@ -324,17 +311,8 @@ namespace ASCOM.DeviceHub
 				// so add a cancellation token for that.
 
 				PollingTokenSource = new CancellationTokenSource();
-				PollRateChangeTokenSource = new CancellationTokenSource();
-
-				CancellationToken[] tokens = new CancellationToken[]
-				{
-					PollingTokenSource.Token
-					, PollRateChangeTokenSource.Token
-				};
-
-				CancellationTokenSource ctsLinked = CancellationTokenSource.CreateLinkedTokenSource( tokens );
 				PollingTask = Task.Factory.StartNew( () => PollFocuserTask( PollingTokenSource.Token )
-												, ctsLinked.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default );
+												, PollingTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default );
 			}
 		}
 
@@ -342,10 +320,15 @@ namespace ASCOM.DeviceHub
 		{
 			IsPolling = true;
 			bool taskCancelled = token.IsCancellationRequested;
-			WaitHandle[] waitHandles = new WaitHandle[] { token.WaitHandle, PollingWake };
+			WaitHandle[] waitHandles = new WaitHandle[] { token.WaitHandle, PollingChange };
+			Stopwatch watch = new Stopwatch();
+			double overhead = 0.0;
 
 			while ( !taskCancelled )
 			{
+				DateTime wakeupTime = DateTime.Now;
+				//Debug.WriteLine( $"Awakened @ {wakeupTime:hh:mm:ss.fff}." );
+
 				if ( Service.DeviceAvailable )
 				{
 					if ( MoveInProgress && !Status.IsMoving )
@@ -366,14 +349,34 @@ namespace ASCOM.DeviceHub
 					{
 						UpdateFocuserStatusTask();
 					}
+
+					if ( !MoveInProgress && PollingPeriod != POLLING_PERIOD_NORMAL )
+					{
+						LogActivityLine( ActivityMessageTypes.Commands, $"Returning to normal polling every {POLLING_PERIOD_NORMAL} ms." );
+					}
+
+					PollingPeriod = MoveInProgress ? Convert.ToInt32( FastPollingPeriod * 1000.0 ) : POLLING_PERIOD_NORMAL;
 				}
 
-				PollingInterval = MoveInProgress ? Convert.ToInt32( FastPollingPeriod * 1000.0 ) : POLLING_INTERVAL_NORMAL;
+				TimeSpan waitPeriod = wakeupTime.AddMilliseconds( (double)PollingPeriod ) - DateTime.Now;
+				waitPeriod -= TimeSpan.FromMilliseconds( overhead );
+
+				if ( waitPeriod.TotalMilliseconds < 0 )
+				{
+					waitPeriod = TimeSpan.FromMilliseconds( 0 );
+				}
 
 				// Wait until the polling interval has expired, we have been cancelled, or we have been
 				// awakened early because the polling interval has been changed.
 
-				int index = WaitHandle.WaitAny( waitHandles, PollingInterval );
+				watch.Start();
+				int index = WaitHandle.WaitAny( waitHandles, waitPeriod );
+				watch.Stop();
+
+				// overhead is how much time it took us to get control back, in excess of the waitInterval.
+
+				overhead = Convert.ToDouble( watch.ElapsedMilliseconds ) - waitPeriod.TotalMilliseconds;
+				watch.Reset();
 
 				if ( index == 0 )
 				{
@@ -383,7 +386,11 @@ namespace ASCOM.DeviceHub
 				{
 					// We have been awakened externally; perhaps just to change the polling rate.
 
-					PollingWake.Reset();
+					PollingChange.Reset();
+
+					// Reset the overhead value since we were awakened early.
+
+					overhead = 0.0;
 				}
 				else if ( index == WaitHandle.WaitTimeout )
 				{
@@ -435,8 +442,6 @@ namespace ASCOM.DeviceHub
 				PollingTask.Wait();
 				PollingTokenSource.Dispose();
 				PollingTokenSource = null;
-				PollRateChangeTokenSource.Dispose();
-				PollRateChangeTokenSource = null;
 			}
 		}
 

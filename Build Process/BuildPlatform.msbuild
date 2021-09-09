@@ -3,7 +3,7 @@
     <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
     <PropertyGroup>
 	        <!-- GIT Barch to Check Out-->
-        <GitCheckoutBranch>develop</GitCheckoutBranch>
+        <GitCheckoutBranch>release</GitCheckoutBranch>
 	
         <!-- Directory in which to export the latest ASCOM code base from GitHub-->
 		<CheckoutDirectoryRelative>Export</CheckoutDirectoryRelative>
@@ -47,6 +47,11 @@
 		
         <!-- NuGet location and command to restore Platform NuGet dependencies -->
 		<NuGetCommand>..\nuget restore</NuGetCommand>
+		
+		<!-- Code signing tool command line bases for SHA1 and SHA256 signing -->
+		<SignToolBase1>signtool sign /as /as /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256</SignToolBase1>
+		<SignToolBase256>signtool sign /a /fd SHA256 /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256</SignToolBase256>
+
     </PropertyGroup>
 
     <!-- Main build target for this build -->
@@ -161,6 +166,17 @@
 	    <!-- Build the 64bit executables after cleaning the solution (just in case executables get committed to SVN) -->
         <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=Release;Platform=x64" />
         <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=Release;Platform=x64" />
+
+        <!-- Sign the executables that support the installation process, these are not automatically signed by the InstallAware build process -->
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
+		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
+		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
+
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
+		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
+		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
 
         <!-- Make the VS Template zip files from their source files-->
         <Exec Command='"$(CheckoutDirectory)\$(MakeTemplatesExecutable)" "$(CheckoutDirectory)\$(DriverTemplatesDirectory)" "TemplateSources"' />

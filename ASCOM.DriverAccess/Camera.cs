@@ -942,10 +942,9 @@ namespace ASCOM.DriverAccess
         /// Sensor name, Interface Version 2 only
         /// </summary>
         /// <returns>The name of sensor used within the camera</returns>
-        /// <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
-        /// active <see cref="AscomDriver.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-        /// <remarks>Returns the name (data sheet part number) of the sensor, e.g. ICX285AL.  The format is to be exactly as shown on 
-        /// manufacturer data sheet, subject to the following rules. All letter shall be upper case.  Spaces shall not be included.
+        /// <remarks>Must return an empty string if the sensor name is not known.
+        /// <para>Returns the name (data sheet part number) of the sensor, e.g. ICX285AL.  The format is to be exactly as shown on 
+        /// manufacturer data sheet, subject to the following rules. All letters shall be upper case.  Spaces shall not be included.</para>
         /// <para>Any extra suffixes that define region codes, package types, temperature range, coatings, grading, colour/monochrome, 
         /// etc. shall not be included. For colour sensors, if a suffix differentiates different Bayer matrix encodings, it shall be 
         /// included.</para>

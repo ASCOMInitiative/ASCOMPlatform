@@ -13,7 +13,7 @@ Public Class ChooserItem
         ChooserID = Guid.NewGuid
         IsComDriver = False
         ProgID = ""
-        Name = ""
+        AscomName = ""
         DeviceNumber = 0
         HostName = IPAddress.Loopback.ToString()
         Port = 0
@@ -23,12 +23,13 @@ Public Class ChooserItem
     ''' Initialiser called to create an item for a COM driver
     ''' </summary>
     ''' <param name="progId">The driver's ProgID</param>
-    ''' <param name="name">The driver's display name</param>
-    Public Sub New(progId As String, name As String)
+    ''' <param name="ascomName">The driver's display name</param>
+    Public Sub New(progId As String, ascomName As String)
         Me.New()
         Me.ProgID = progId
-        Me.Name = name
+        Me.AscomName = ascomName
         Me.IsComDriver = True
+        Me.DisplayName = ascomName
     End Sub
 
     ''' <summary>
@@ -37,15 +38,16 @@ Public Class ChooserItem
     ''' <param name="deviceNumber">The Alpaca device access number</param>
     ''' <param name="hostName">The host name (or IP address) used to access the Alpaca device</param>
     ''' <param name="port">The Alpaca port number</param>
-    ''' <param name="name">The device's display name</param>
-    Public Sub New(deviceUniqueId As String, deviceNumber As Integer, hostName As String, port As Integer, name As String)
+    ''' <param name="ascomName">The device's display name</param>
+    Public Sub New(deviceUniqueId As String, deviceNumber As Integer, hostName As String, port As Integer, ascomName As String, displayName As String)
         Me.New()
         Me.DeviceUniqueID = deviceUniqueId
         Me.DeviceNumber = deviceNumber
         Me.HostName = hostName
         Me.Port = port
-        Me.Name = name
+        Me.AscomName = ascomName
         Me.IsComDriver = False
+        Me.DisplayName = displayName
     End Sub
 
     ''' <summary>
@@ -74,10 +76,21 @@ Public Class ChooserItem
     Public Property ProgID As String
 
     ''' <summary>
-    ''' The device's display name
+    ''' The device's ASCOM device name
     ''' </summary>
     ''' <returns></returns>
-    Public Property Name As String
+    Public Property AscomName As String
+
+    ''' <summary>
+    ''' The device's Display name that will be used in the Chooser list
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' For COM drivers this property has the same value as the AscomName property
+    ''' For Alpaca devices this is the AscomName but may be prefixed with information about whether this is an existing or a new Alpaca device.
+    ''' The Chooser combo box uses this property as the display variable rather than the AscomName property so that the additional Alpaca information can be included when required
+    ''' </remarks>
+    Public Property DisplayName As String
 
     ''' <summary>
     ''' The Alpaca device access number
@@ -110,12 +123,12 @@ Public Class ChooserItem
 
         Dim otherChooserItem As ChooserItem = CType(otherChooserItemAsObject, ChooserItem)
 
-        If Me.IsComDriver Then ' Sort based on name And ProgID
-            myNameId = $"{Me.Name}{Me.ProgID}"
-            otherNameId = $"{otherChooserItem.Name}{otherChooserItem.ProgID}"
-        Else ' Sort based on name and ChooserID
-            myNameId = $"{Me.Name}{Me.ChooserID}"
-            otherNameId = $"{otherChooserItem.Name}{otherChooserItem.ChooserID}"
+        If Me.IsComDriver Then ' COM driver so sort based on name And ProgID
+            myNameId = $"{Me.AscomName}{Me.ProgID}"
+            otherNameId = $"{otherChooserItem.AscomName}{otherChooserItem.ProgID}"
+        Else ' Alpaca device so sort based on name and ChooserID
+            myNameId = $"{Me.AscomName}{Me.ChooserID}"
+            otherNameId = $"{otherChooserItem.AscomName}{otherChooserItem.ChooserID}"
         End If
 
         Return myNameId.CompareTo(otherNameId)

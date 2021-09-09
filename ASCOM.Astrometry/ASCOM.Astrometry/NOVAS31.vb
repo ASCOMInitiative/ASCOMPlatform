@@ -3,6 +3,7 @@ Imports System.Environment
 Imports ASCOM.Utilities
 Imports ASCOM.Utilities.Exceptions
 Imports System.Threading
+Imports System.IO
 
 Namespace NOVAS
 
@@ -52,6 +53,7 @@ Namespace NOVAS
             Dim rc As Boolean, rc1 As Short, Novas31DllFile, RACIOFile, JPLEphFile As String, DENumber As Short
             Dim ReturnedPath As New System.Text.StringBuilder(260), LastError As Integer
             Dim Novas31Mutex As Mutex
+            Dim gotMutex As Boolean ' Flag indicating whether the NOVAS initialisation mutex was successfully claimed
 
             TL = New TraceLogger("", "NOVAS31")
             TL.Enabled = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT) 'Get enabled / disabled state from the user registry
@@ -62,8 +64,8 @@ Namespace NOVAS
                 TL.LogMessage("New", "Creating EarthRotationParameters object")
                 Parameters = New EarthRotationParameters(TL)
                 TL.LogMessage("New", "Waiting for mutex")
-                Novas31Mutex.WaitOne(10000) ' Wait up to 10 seconds for the mutex to become available
-                TL.LogMessage("New", "Got mutex")
+                gotMutex = Novas31Mutex.WaitOne(10000) ' Wait up to 10 seconds for the mutex to become available
+                TL.LogMessage("New", $"Got mutex: {gotMutex}")
 
                 Utl = New Util
 
@@ -80,6 +82,33 @@ Namespace NOVAS
                     RACIOFile = GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & RACIO_FILE
                     JPLEphFile = GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & JPL_EPHEM_FILE_NAME
                 End If
+
+                ' Validate that the files exist
+                TL.LogMessage("New", $"Path to NOVAS31 DLL: {Novas31DllFile}")
+                TL.LogMessage("New", $"Path to RACIO file: {Novas31DllFile}")
+                TL.LogMessage("New", $"Path to JPL ephemeris file: {Novas31DllFile}")
+
+                If Not File.Exists(Novas31DllFile) Then
+                    TL.LogMessage("New", $"NOVAS31 Initialise - Unable to locate NOVAS support DLL: {Novas31DllFile}")
+                    Throw New HelperException($"NOVAS31 Initialise - Unable to locate NOVAS support DLL: {Novas31DllFile}")
+                Else
+                    TL.LogMessage("New", $"Found NOVAS31 DLL: {Novas31DllFile}")
+                End If
+
+                If Not File.Exists(RACIOFile) Then
+                    TL.LogMessage("New", $"NOVAS31 Initialise - Unable to locate RACIO file: {Novas31DllFile}")
+                    Throw New HelperException($"NOVAS31 Initialise - Unable to locate RACIO file: {RACIOFile}")
+                Else
+                    TL.LogMessage("New", $"Found RACIO file: {Novas31DllFile}")
+                End If
+
+                If Not File.Exists(JPLEphFile) Then
+                    TL.LogMessage("New", $"NOVAS31 Initialise - Unable to locate JPL ephemeris file: {Novas31DllFile}")
+                    Throw New HelperException($"NOVAS31 Initialise - Unable to locate JPL ephemeris file: {JPLEphFile}")
+                Else
+                    TL.LogMessage("New", $"Found  JPL ephemeris file: {Novas31DllFile}")
+                End If
+
                 TL.LogMessage("New", "Loading NOVAS31 library DLL: " + Novas31DllFile)
 
                 Novas31DllHandle = LoadLibrary(Novas31DllFile)
@@ -88,8 +117,8 @@ Namespace NOVAS
                 If Novas31DllHandle <> IntPtr.Zero Then ' Loaded successfully
                     TL.LogMessage("New", "Loaded NOVAS31 library OK")
                 Else ' Did not load 
-                    TL.LogMessage("New", "Error loading NOVAS31 library: " & LastError.ToString("X8"))
-                    Throw New Exception("Error code returned from LoadLibrary when loading NOVAS31 library: " & LastError.ToString("X8"))
+                    TL.LogMessage("New", $"Error loading NOVAS31 library: {LastError:X8} from {Novas31DllFile}")
+                    Throw New HelperException($"NOVAS31 Initialisation - Error code {LastError:X8} returned from LoadLibrary when loading NOVAS31 library {Novas31DllFile}")
                 End If
 
                 'Establish the location of the file of CIO RAs
@@ -99,12 +128,14 @@ Namespace NOVAS
                 rc1 = Ephem_Open(JPLEphFile, JPL_EPHEM_START_DATE, JPL_EPHEM_END_DATE, DENumber)
             Catch ex As Exception
                 TL.LogMessageCrLf("New", "Exception: " & ex.ToString())
+                Throw New HelperException($"NOVAS31 Initialisation Exception - {ex.Message} (See inner exception for details)", ex)
             Finally
-                Novas31Mutex.ReleaseMutex() ' Release the initialisation mutex
+                If gotMutex Then Try : Novas31Mutex.ReleaseMutex() : Catch : End Try  ' Release the initialisation mutex if we got it in the first place
             End Try
+
             If rc1 > 0 Then
                 TL.LogMessage("New", "Unable to open ephemeris file: " & JPLEphFile & ", RC: " & rc1)
-                Throw New HelperException("Unable to open ephemeris file: " & JPLEphFile & ", RC: " & rc1)
+                Throw New HelperException($"NOVAS31 Initialisation - Unable to open ephemeris file: {JPLEphFile} RC: {rc1}")
             End If
 
             TL.LogMessage("New", "NOVAS31 initialised OK")
@@ -142,7 +173,6 @@ Namespace NOVAS
                     End If
 
                     ' Free your own state (unmanaged objects) and set large fields to null.
-                    Try : Ephem_Close() : Catch : End Try ' Close the ephemeris file if its open
                     Try : FreeLibrary(Novas31DllHandle) : Catch : End Try ' Free the NOVAS library but don't return any error value
                 End If
                 Me.disposedValue = True

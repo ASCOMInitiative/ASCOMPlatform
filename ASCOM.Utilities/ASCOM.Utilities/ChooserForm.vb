@@ -59,7 +59,7 @@ Friend Class ChooserForm
 
     ' Chooser variables
     Private deviceTypeValue, selectedProgIdValue As String
-    Private chooserList As Generic.SortedList(Of ChooserItem, String)
+    Private chooserList As Generic.List(Of ChooserItem)
     Private driverIsCompatible As String = ""
     Private currentWarningTitle, currentWarningMesage As String
     Private alpacaDevices As Generic.List(Of AscomDevice) = New Generic.List(Of AscomDevice)()
@@ -168,27 +168,6 @@ Friend Class ChooserForm
 
             ' Create Alpaca information tooltip 
             createAlpacaDeviceToolTip = New ToolTip()
-
-            ' Configure the Create Alpaca Device tooltip
-            'createAlpacaDeviceToolTip.IsBalloon = True
-            'createAlpacaDeviceToolTip.ToolTipIcon = ToolTipIcon.Info
-            'createAlpacaDeviceToolTip.UseFading = True
-            'createAlpacaDeviceToolTip.ToolTipTitle = TOOLTIP_CREATE_ALPACA_DEVICE_TITLE
-
-
-
-            'createAlpacaDeviceToolTip.UseAnimation = True
-            'createAlpacaDeviceToolTip.UseFading = False
-            'createAlpacaDeviceToolTip.ToolTipIcon = ToolTipIcon.Warning
-            'createAlpacaDeviceToolTip.AutoPopDelay = 5000
-            'createAlpacaDeviceToolTip.InitialDelay = 0
-            'createAlpacaDeviceToolTip.IsBalloon = False
-            'createAlpacaDeviceToolTip.ReshowDelay = 0
-            'createAlpacaDeviceToolTip.OwnerDraw = False
-            'createAlpacaDeviceToolTip.ToolTipTitle = TOOLTIP_CREATE_ALPACA_DEVICE_TITLE
-            'createAlpacaDeviceToolTip.ShowAlways = True
-
-
 
             ' Set a custom rendered for the tool strip so that colours and appearance can be controlled better
             ChooserMenu.Renderer = New ChooserCustomToolStripRenderer()
@@ -318,26 +297,23 @@ Friend Class ChooserForm
             colour = Color.White
 
             If combo.SelectedIndex >= 0 Then
-                Dim chooseritem As Generic.KeyValuePair(Of ChooserItem, String) = CType(combo.Items(e.Index), Generic.KeyValuePair(Of ChooserItem, String))
+                Dim chooseritem As ChooserItem = CType(combo.Items(e.Index), ChooserItem)
 
-                TL.LogMessage("comboProduct_DrawItem", $"IsComDriver: {chooseritem.Key.IsComDriver} {chooseritem.Key.Name} {chooseritem.Value}")
-                text = chooseritem.Value
-                If chooseritem.Key.IsComDriver Then
-                    If chooseritem.Key.ProgID.ToLowerInvariant().StartsWith(DRIVER_PROGID_BASE.ToLowerInvariant()) Then
+                TL.LogMessage("comboProduct_DrawItem", $"IsComDriver: {chooseritem.IsComDriver} {chooseritem.AscomName}")
+                text = chooseritem.AscomName
+                If chooseritem.IsComDriver Then
+                    If chooseritem.ProgID.ToLowerInvariant().StartsWith(DRIVER_PROGID_BASE.ToLowerInvariant()) Then
                         brush = Brushes.Red
                         colour = Color.Red
                     Else
                         brush = Brushes.LightPink
                         colour = Color.LightPink
-
                     End If
                 Else
                     brush = Brushes.LightGreen
                     colour = Color.LightGreen
                 End If
             End If
-
-
 
             e.Graphics.DrawRectangle(New Pen(Color.Black), e.Bounds)
             e.Graphics.FillRectangle(brush, e.Bounds)
@@ -376,7 +352,7 @@ Friend Class ChooserForm
         Dim UseCreateObject As Boolean = False
 
         'Find ProgID corresponding to description
-        sProgID = CType(CmbDriverSelector.SelectedItem, Generic.KeyValuePair(Of ChooserItem, String)).Key.ProgID
+        sProgID = CType(CmbDriverSelector.SelectedItem, ChooserItem).ProgID
 
         TL.LogMessage("PropertiesClick", "ProgID:" & sProgID)
         Try
@@ -459,7 +435,7 @@ Friend Class ChooserForm
 
                 Try
                     ' Create a new Alpaca driver of the current ASCOM device type
-                    newProgId = CreateNewAlpacaDriver(selectedChooserItem.Name)
+                    newProgId = CreateNewAlpacaDriver(selectedChooserItem.AscomName)
 
                     ' Configure the IP address, port number and Alpaca device number in the newly registered driver
                     profile.DeviceType = deviceTypeValue
@@ -501,15 +477,15 @@ Friend Class ChooserForm
         If CmbDriverSelector.SelectedIndex >= 0 Then
 
             ' Save the newly selected chooser item
-            selectedChooserItem = CType(CmbDriverSelector.SelectedItem, Generic.KeyValuePair(Of ChooserItem, String)).Key
+            selectedChooserItem = CType(CmbDriverSelector.SelectedItem, ChooserItem)
             selectedProgIdValue = selectedChooserItem.ProgID
 
             ' Validate the driver if it is a COM driver
             If selectedChooserItem.IsComDriver Then ' This is a COM driver
-                TL.LogMessage("SelectedIndexChanged", $"New COM driver selected. ProgID: {selectedChooserItem.ProgID} {selectedChooserItem.Name}")
+                TL.LogMessage("SelectedIndexChanged", $"New COM driver selected. ProgID: {selectedChooserItem.ProgID} {selectedChooserItem.AscomName}")
                 ValidateDriver(selectedChooserItem.ProgID)
             Else ' This is a new Alpaca driver
-                TL.LogMessage("SelectedIndexChanged", $"New Alpaca driver selected : {selectedChooserItem.Name}")
+                TL.LogMessage("SelectedIndexChanged", $"New Alpaca driver selected : {selectedChooserItem.AscomName}")
                 EnablePropertiesButton(False) ' Disable the Properties button because there is not yet a COM driver to configure
                 WarningTooltipClear()
                 EnableOkButton(True)
@@ -928,7 +904,7 @@ Friend Class ChooserForm
 
             TL.LogMessage("DiscoverAlpacaDevices", $"Running On thread: {Thread.CurrentThread.ManagedThreadId}.")
 
-            chooserList = New SortedList(Of ChooserItem, String)
+            chooserList = New List(Of ChooserItem)
 
             ' Enumerate the available drivers, and load their descriptions and ProgIDs into the driversList generic sorted list collection. Key is ProgID, value is friendly name.
             Try
@@ -965,7 +941,7 @@ Friend Class ChooserForm
                         End If
                     End If
 
-                    chooserList.Add(New ChooserItem(driverProgId, driverName), driverName)
+                    chooserList.Add(New ChooserItem(driverProgId, driverName))
                 Next
 
             Catch ex1 As Exception
@@ -1071,7 +1047,7 @@ Friend Class ChooserForm
                         If AlpacaShowDiscoveredDevices Then
                             TL.LogMessage("DiscoverAlpacaDevices", $"Showing KNOWN ALPACA DEVICE entry for {device.AscomDeviceName}")
                             displayName = $"* KNOWN ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.UniqueId}"
-                            chooserList.Add(New ChooserItem(device.UniqueId, device.AlpacaDeviceNumber, device.HostName, device.IPEndPoint.Port, device.AscomDeviceName), displayName)
+                            chooserList.Add(New ChooserItem(device.UniqueId, device.AlpacaDeviceNumber, device.HostName, device.IPEndPoint.Port, device.AscomDeviceName, displayName))
                         Else
                             TL.LogMessage("DiscoverAlpacaDevices", $"This device MATCHES an existing COM driver so NOT adding it to the Combo box list")
                         End If
@@ -1079,7 +1055,7 @@ Friend Class ChooserForm
                     Else
                         TL.LogMessage("DiscoverAlpacaDevices", $"This device does NOT match an existing COM driver so ADDING it to the Combo box list")
                         displayName = $"* NEW ALPACA DEVICE   {device.AscomDeviceName}   {displayHostName}:{ device.IPEndPoint.Port}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber} - {device.UniqueId}"
-                        chooserList.Add(New ChooserItem(device.UniqueId, device.AlpacaDeviceNumber, device.HostName, device.IPEndPoint.Port, device.AscomDeviceName), displayName)
+                        chooserList.Add(New ChooserItem(device.UniqueId, device.AlpacaDeviceNumber, device.HostName, device.IPEndPoint.Port, device.AscomDeviceName, displayName))
                     End If
 
                 Next
@@ -1087,8 +1063,8 @@ Friend Class ChooserForm
 
             ' List the ChooserList contents
             TL.LogMessage("DiscoverAlpacaDevices", $"Start of Chooser List")
-            For Each item As System.Collections.Generic.KeyValuePair(Of ChooserItem, String) In chooserList
-                TL.LogMessage("DiscoverAlpacaDevices", $"List includes device {item.Value}")
+            For Each item As ChooserItem In chooserList
+                TL.LogMessage("DiscoverAlpacaDevices", $"List includes device {item.AscomName}")
             Next
             TL.LogMessage("DiscoverAlpacaDevices", $"End of Chooser List")
 
@@ -1127,14 +1103,12 @@ Friend Class ChooserForm
             Try
                 TL.LogMessage("PopulateDriverComboBox", $"Running on thread: {Thread.CurrentThread.ManagedThreadId}")
 
-                ' Initialise the selected chooser item
-                'selectedChooserItem = Nothing
-
-                ' Set the combo box data source to the chooserList list of items to display
+                ' Clear the combo box list, sort the discovered drivers / devices and add them to the Chooser's combo box list
+                CmbDriverSelector.Items.Clear() ' Clear the combo box list
                 CmbDriverSelector.SelectedIndex = -1
-                CmbDriverSelector.DataSource = New BindingSource(chooserList, Nothing)
-                CmbDriverSelector.DisplayMember = "Value"
-                CmbDriverSelector.ValueMember = "Key"
+                chooserList.Sort() ' Sort the ChooserItem instances into alphabetical order
+                CmbDriverSelector.Items.AddRange(chooserList.ToArray()) ' Add the ChooserItem instances to the combo box
+                CmbDriverSelector.DisplayMember = "DisplayName" ' Set the name of the ChooserItem property whose contents should be displayed in the drop-down list
 
                 CmbDriverSelector.DropDownWidth = DropDownWidth(CmbDriverSelector) ' AutoSize the combo box width
 
@@ -1142,12 +1116,12 @@ Friend Class ChooserForm
                 If selectedProgIdValue <> "" Then ' A progID was provided
 
                     ' Select the current device in the list
-                    For Each driver As Generic.KeyValuePair(Of ChooserItem, String) In CmbDriverSelector.Items
-                        TL.LogMessage("PopulateDriverComboBox", $"Searching for ProgID: {selectedProgIdValue}, found ProgID: {driver.Key.ProgID}")
-                        If driver.Key.ProgID.ToLowerInvariant() = selectedProgIdValue.ToLowerInvariant() Then
+                    For Each driver As ChooserItem In CmbDriverSelector.Items
+                        TL.LogMessage("PopulateDriverComboBox", $"Searching for ProgID: {selectedProgIdValue}, found ProgID: {driver.ProgID}")
+                        If driver.ProgID.ToLowerInvariant() = selectedProgIdValue.ToLowerInvariant() Then
                             TL.LogMessage("PopulateDriverComboBox", $"*** Found ProgID: {selectedProgIdValue}")
                             CmbDriverSelector.SelectedItem = driver
-                            selectedChooserItem = driver.Key
+                            selectedChooserItem = driver
                             EnableOkButton(True) ' Enable the OK button
                         End If
                     Next
@@ -1162,7 +1136,7 @@ Friend Class ChooserForm
                     EnablePropertiesButton(False)
                     EnableOkButton(False)
                 Else
-                    TL.LogMessage("PopulateDriverComboBox", $"Selected ProgID {selectedProgIdValue} WAS found. Device is: {selectedChooserItem.Name}, Is COM driver: {selectedChooserItem.IsComDriver}")
+                    TL.LogMessage("PopulateDriverComboBox", $"Selected ProgID {selectedProgIdValue} WAS found. Device is: {selectedChooserItem.AscomName}, Is COM driver: {selectedChooserItem.IsComDriver}")
 
                     ' Validate the selected driver if it is a COM driver
                     If selectedChooserItem.IsComDriver Then ' This is a COM driver so validate that it is functional
@@ -1194,8 +1168,8 @@ Friend Class ChooserForm
         maxWidth = comboBox.Width ' Ensure that the minimum width is the width of the combo box
         TL.LogMessage("DropDownWidth", $"Combo box: {comboBox.Name} Number of items: {comboBox.Items.Count} ")
 
-        For Each obj As Generic.KeyValuePair(Of ChooserItem, String) In comboBox.Items
-            label1.Text = obj.Value
+        For Each obj As ChooserItem In comboBox.Items
+            label1.Text = obj.AscomName
             temp = label1.PreferredWidth
 
             If temp > maxWidth Then
@@ -1364,7 +1338,7 @@ Friend Class ChooserForm
     Private displayCreateAlpacDeviceTooltip As NoParameterDelegate = New NoParameterDelegate(AddressOf DisplayAlpacaDeviceToolTip)
 
     Private Sub DisplayAlpacaDeviceToolTip()
-        Dim selectedItem As Generic.KeyValuePair(Of ChooserItem, String)
+        Dim selectedItem As ChooserItem
 
         ' Only consider displaying the tooltip if it has been instantiated
         If Not createAlpacaDeviceToolTip Is Nothing Then
@@ -1379,10 +1353,10 @@ Friend Class ChooserForm
                 Else
                     ' Only display the tooltip if a device has been selected
                     If Not CmbDriverSelector.SelectedItem Is Nothing Then
-                        selectedItem = CType(CmbDriverSelector.SelectedItem, Generic.KeyValuePair(Of ChooserItem, String))
+                        selectedItem = CType(CmbDriverSelector.SelectedItem, ChooserItem)
 
                         ' Only display the tooltip if the an Alpaca driver has been selected
-                        If Not selectedItem.Key.IsComDriver Then
+                        If Not selectedItem.IsComDriver Then
 
                             createAlpacaDeviceToolTip.RemoveAll()
 
@@ -1396,7 +1370,6 @@ Friend Class ChooserForm
                             createAlpacaDeviceToolTip.OwnerDraw = False
                             createAlpacaDeviceToolTip.ToolTipTitle = TOOLTIP_CREATE_ALPACA_DEVICE_TITLE
 
-                            'createAlpacaDeviceToolTip.Show(TOOLTIP_CREATE_ALPACA_DEVICE_MESSAGE, Me, 295, 85, TOOLTIP_CREATE_ALPACA_DEVICE_DISPLAYTIME * 1000) 'Display at position for a two line message
                             createAlpacaDeviceToolTip.Show(TOOLTIP_CREATE_ALPACA_DEVICE_MESSAGE, BtnOK, 45, -60, TOOLTIP_CREATE_ALPACA_DEVICE_DISPLAYTIME * 1000) 'Display at position for a two line message
                             TL.LogMessage("DisplayAlpacaDeviceToolTip", $"Set tooltip on thread {Thread.CurrentThread.ManagedThreadId}")
                         End If

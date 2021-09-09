@@ -15,6 +15,8 @@ namespace ASCOM.DeviceHub
 			SuppressTrayBubble = Globals.SuppressTrayBubble;
 			UseCustomTheme = Globals.UseCustomTheme;
 			UseExpandedScreenLayout = Globals.UseExpandedScreenLayout;
+			KeepWindowOnTop = Globals.AlwaysOnTop;
+			UseCompositeSlewingFlag = Globals.UseCompositeSlewingFlag;
 
 			TelescopeSetupVm = new TelescopeSetupViewModel();
 			DomeSetupVm = new DomeSetupViewModel();
@@ -71,6 +73,36 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
+		private bool _keepWindowOnTop;
+
+		public bool KeepWindowOnTop
+		{
+			get { return _keepWindowOnTop; }
+			set
+			{
+				if ( value != _keepWindowOnTop )
+				{
+					_keepWindowOnTop = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+
+		private bool _useCompositeSlewingFlag;
+
+		public bool UseCompositeSlewingFlag
+		{
+			get { return _useCompositeSlewingFlag; }
+			set
+			{
+				if ( value != _useCompositeSlewingFlag )
+				{
+					_useCompositeSlewingFlag = value;
+					OnPropertyChanged();
+				}
+			}
+		}
 		private bool _isTelescopeActive;
 
 		public bool IsTelescopeActive
@@ -130,7 +162,7 @@ namespace ASCOM.DeviceHub
 			{}
 			else
 			{
-				string msg = String.Format( "SetupViewModel.ChangeActiveFunction called with invalid function Name - {0}", functionName );
+				string msg = $"SetupViewModel.ChangeActiveFunction called with invalid function Name - {functionName}.";
 				throw new ArgumentException( msg );
 			}
 		}
@@ -186,6 +218,9 @@ namespace ASCOM.DeviceHub
 		{
 			Globals.SuppressTrayBubble = SuppressTrayBubble;
 			Globals.UseCustomTheme = UseCustomTheme;
+			Globals.AlwaysOnTop = KeepWindowOnTop;
+			Globals.UseCompositeSlewingFlag = UseCompositeSlewingFlag;
+
 			AppSettingsManager.SaveAppSettings();
 		}
 
@@ -196,7 +231,7 @@ namespace ASCOM.DeviceHub
 
 			TelescopeSettings settings = TelescopeSettings.FromProfile();
 			settings.TelescopeID = TelescopeManager.TelescopeID;
-			settings.FastUpdatePeriod = TelescopeManager.FastPollingPeriod;
+			settings.FastUpdatePeriod = TelescopeManager.Instance.FastPollingPeriod;
 			settings.ToProfile();
 		}
 
@@ -208,7 +243,7 @@ namespace ASCOM.DeviceHub
 			DomeSettings settings = DomeSettings.FromProfile();
 			settings.DomeID = DomeManager.DomeID;
 			settings.DomeLayout = Globals.DomeLayout;
-			settings.FastUpdatePeriod = DomeManager.FastPollingPeriod;
+			settings.FastUpdatePeriod = DomeManager.Instance.FastPollingPeriod;
 			settings.ToProfile();
 		}
 
@@ -217,7 +252,7 @@ namespace ASCOM.DeviceHub
 			FocuserSettings settings = FocuserSettings.FromProfile();
 			settings.FocuserID = FocuserManager.FocuserID;
 			settings.TemperatureOffset = Globals.FocuserTemperatureOffset;
-			settings.FastUpdatePeriod = FocuserManager.FastPollingPeriod;
+			settings.FastUpdatePeriod = FocuserManager.Instance.FastPollingPeriod;
 			settings.ToProfile();
 		}
 
@@ -251,7 +286,7 @@ namespace ASCOM.DeviceHub
 					TelescopeManager.SetTelescopeID( TelescopeID );
 				}
 
-				TelescopeManager.SetFastUpdatePeriod( TelescopeSetupVm.FastUpdatePeriod );
+				TelescopeManager.Instance.SetFastUpdatePeriod( TelescopeSetupVm.FastUpdatePeriod );
 			}
 
 			if ( !IsDomeActive )
@@ -262,7 +297,7 @@ namespace ASCOM.DeviceHub
 					DomeManager.SetDomeID( DomeID );
 				}
 
-				DomeManager.SetFastUpdatePeriod( DomeSetupVm.FastUpdatePeriod );
+				DomeManager.Instance.SetFastUpdatePeriod( DomeSetupVm.FastUpdatePeriod );
 				Globals.DomeLayout = DomeSetupVm.GetLayout();
 			}
 
@@ -274,7 +309,7 @@ namespace ASCOM.DeviceHub
 					FocuserManager.SetFocuserID( FocuserID );
 				}
 
-				FocuserManager.SetFastUpdatePeriod( FocuserSetupVm.FastUpdatePeriod );
+				FocuserManager.Instance.SetFastUpdatePeriod( FocuserSetupVm.FastUpdatePeriod );
 			}
 			
 

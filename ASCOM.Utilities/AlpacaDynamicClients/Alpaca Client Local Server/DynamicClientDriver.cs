@@ -30,6 +30,9 @@ namespace ASCOM.DynamicRemoteClients
     {
         #region Private variables and constants
 
+        // Private constants
+        private const int DYNAMIC_DRIVER_ERROR_NUMBER = 4095; // Alpaca error number that will be returned when a required JSON "Value" element is either absent from the response or is set to "null"
+        
         //Private variables
         private static TraceLoggerPlus TLLocalServer;
 
@@ -937,14 +940,14 @@ namespace ASCOM.DynamicRemoteClients
                         if (typeof(T) == typeof(string))
                         {
                             StringResponse stringResponse = JsonConvert.DeserializeObject<StringResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, stringResponse.ClientTransactionID, stringResponse.ServerTransactionID, stringResponse.Value.ToString()));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, stringResponse.ClientTransactionID, stringResponse.ServerTransactionID, (stringResponse.Value is null) ? "NO VALUE OR NULL VALUE RETURNED" : stringResponse.Value.ToString()));
                             if (CallWasSuccessful(TL, stringResponse)) return (T)((object)stringResponse.Value);
                             restResponseBase = (RestResponseBase)stringResponse;
                         }
                         if (typeof(T) == typeof(string[]))
                         {
                             StringArrayResponse stringArrayResponse = JsonConvert.DeserializeObject<StringArrayResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, stringArrayResponse.ClientTransactionID, stringArrayResponse.ServerTransactionID, stringArrayResponse.Value.Count()));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, stringArrayResponse.ClientTransactionID, stringArrayResponse.ServerTransactionID, (stringArrayResponse.Value is null) ? "NO VALUE OR NULL VALUE RETURNED" : stringArrayResponse.Value.Count().ToString()));
                             if (CallWasSuccessful(TL, stringArrayResponse)) return (T)((object)stringArrayResponse.Value);
                             restResponseBase = (RestResponseBase)stringArrayResponse;
                         }
@@ -965,7 +968,7 @@ namespace ASCOM.DynamicRemoteClients
                         if (typeof(T) == typeof(int[]))
                         {
                             IntArray1DResponse intArrayResponse = JsonConvert.DeserializeObject<IntArray1DResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, intArrayResponse.ClientTransactionID, intArrayResponse.ServerTransactionID, intArrayResponse.Value.Count()));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, intArrayResponse.ClientTransactionID, intArrayResponse.ServerTransactionID, (intArrayResponse.Value is null) ? "NO VALUE OR NULL VALUE RETURNED" : intArrayResponse.Value.Count().ToString()));
                             if (CallWasSuccessful(TL, intArrayResponse)) return (T)((object)intArrayResponse.Value);
                             restResponseBase = (RestResponseBase)intArrayResponse;
                         }
@@ -979,7 +982,7 @@ namespace ASCOM.DynamicRemoteClients
                         if (typeof(T) == typeof(List<string>)) // Used for ArrayLists of string
                         {
                             StringListResponse stringListResponse = JsonConvert.DeserializeObject<StringListResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, stringListResponse.ClientTransactionID, stringListResponse.ServerTransactionID, stringListResponse.Value.Count.ToString()));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, stringListResponse.ClientTransactionID, stringListResponse.ServerTransactionID, (stringListResponse.Value is null) ? "NO VALUE OR NULL VALUE RETURNED" : stringListResponse.Value.Count.ToString()));
                             if (CallWasSuccessful(TL, stringListResponse)) return (T)((object)stringListResponse.Value);
                             restResponseBase = (RestResponseBase)stringListResponse;
                         }
@@ -1002,26 +1005,36 @@ namespace ASCOM.DynamicRemoteClients
                         if (typeof(T) == typeof(ITrackingRates))
                         {
                             TrackingRatesResponse trackingRatesResponse = JsonConvert.DeserializeObject<TrackingRatesResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format("Trackingrates Count: {0} - Txn ID: {1}, Method: {1}", trackingRatesResponse.Value.Count.ToString(), trackingRatesResponse.ServerTransactionID.ToString()));
-                            List<DriveRates> rates = new List<DriveRates>();
-                            DriveRates[] ratesArray = new DriveRates[trackingRatesResponse.Value.Count];
-                            int i = 0;
-                            foreach (DriveRates rate in trackingRatesResponse.Value)
+                            if (trackingRatesResponse.Value != null) // A TrackingRates object was returned so process the response normally
                             {
-                                TL.LogMessage(clientNumber, method, string.Format("Rate: {0}", rate.ToString()));
-                                ratesArray[i] = rate;
-                                i++;
+                                TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, trackingRatesResponse.ClientTransactionID, trackingRatesResponse.ServerTransactionID, trackingRatesResponse.Value.Count));
+                                List<DriveRates> rates = new List<DriveRates>();
+                                DriveRates[] ratesArray = new DriveRates[trackingRatesResponse.Value.Count];
+                                int i = 0;
+                                foreach (DriveRates rate in trackingRatesResponse.Value)
+                                {
+                                    TL.LogMessage(clientNumber, method, string.Format("Rate: {0}", rate.ToString()));
+                                    ratesArray[i] = rate;
+                                    i++;
+                                }
+
+                                TrackingRates trackingRates = new TrackingRates();
+                                trackingRates.SetRates(ratesArray);
+                                if (CallWasSuccessful(TL, trackingRatesResponse))
+                                {
+                                    TL.LogMessage(clientNumber, method, $"Returning {trackingRates.Count} tracking rates to the client - now measured from trackingRates");
+                                    return (T)((object)trackingRates);
+                                }
                             }
-#pragma warning disable IDE0068 // Use recommended dispose pattern warning disabled because this class will be used by other processes so I'm not going to dispose it here
-                            TrackingRates trackingRates = new TrackingRates();
-#pragma warning restore IDE0068 // Use recommended dispose pattern re-enabled
-                            trackingRates.SetRates(ratesArray);
-                            if (CallWasSuccessful(TL, trackingRatesResponse))
+                            else // No TrackingRates object was returned so handle this as an error
                             {
-                                TL.LogMessage(clientNumber, method, string.Format("Returning {0} tracking rates to the client - now measured from trackingRates", trackingRates.Count));
-                                return (T)((object)trackingRates);
+                                TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, trackingRatesResponse.ClientTransactionID, trackingRatesResponse.ServerTransactionID, "NO VALUE OR NULL VALUE RETURNED"));
+
+                                // Now force an error return
+                                if (trackingRatesResponse.ErrorNumber == 0) trackingRatesResponse.ErrorNumber = DYNAMIC_DRIVER_ERROR_NUMBER;
+                                if (string.IsNullOrEmpty(trackingRatesResponse.ErrorMessage)) trackingRatesResponse.ErrorMessage = "Dynamic driver generated error: the Alpaca device returned no value or a null value for TrackingRates";
+
                             }
-                            TL.LogMessage(clientNumber, method, "trackingRatesResponse.DriverException is NOT NULL!");
                             restResponseBase = (RestResponseBase)trackingRatesResponse;
                         }
                         if (typeof(T) == typeof(EquatorialCoordinateType))
@@ -1083,17 +1096,27 @@ namespace ASCOM.DynamicRemoteClients
                         if (typeof(T) == typeof(IAxisRates))
                         {
                             AxisRatesResponse axisRatesResponse = JsonConvert.DeserializeObject<AxisRatesResponse>(deviceJsonResponse.Content);
-#pragma warning disable IDE0068 // Use recommended dispose pattern warning disabled because this class will be used by other processes so I'm not going to dispose it here
-                            AxisRates axisRates = new AxisRates((TelescopeAxes)(Convert.ToInt32(parameters[SharedConstants.AXIS_PARAMETER_NAME])));
-#pragma warning restore IDE0068 // Use recommended dispose pattern re-enabled
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, axisRatesResponse.ClientTransactionID.ToString(), axisRatesResponse.ServerTransactionID.ToString(), axisRatesResponse.Value.Count.ToString()));
-                            foreach (RateResponse rr in axisRatesResponse.Value)
+                            if (axisRatesResponse.Value != null) // A AxisRates object was returned so process the response normally
                             {
-                                axisRates.Add(rr.Minimum, rr.Maximum, TL);
-                                TL.LogMessage(clientNumber, method, string.Format("Found rate: {0} - {1}", rr.Minimum, rr.Maximum));
+                                AxisRates axisRates = new AxisRates((TelescopeAxes)(Convert.ToInt32(parameters[SharedConstants.AXIS_PARAMETER_NAME])));
+                                TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, axisRatesResponse.ClientTransactionID.ToString(), axisRatesResponse.ServerTransactionID.ToString(), axisRatesResponse.Value.Count.ToString()));
+                                foreach (RateResponse rr in axisRatesResponse.Value)
+                                {
+                                    axisRates.Add(rr.Minimum, rr.Maximum, TL);
+                                    TL.LogMessage(clientNumber, method, string.Format("Found rate: {0} - {1}", rr.Minimum, rr.Maximum));
+                                }
+
+                                if (CallWasSuccessful(TL, axisRatesResponse)) return (T)((object)axisRates);
+                            }
+                            else // No AxisRates object was returned so handle this as an error
+                            {
+                                TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, axisRatesResponse.ClientTransactionID, axisRatesResponse.ServerTransactionID, "NO VALUE OR NULL VALUE RETURNED"));
+
+                                // Now force an error return
+                                if (axisRatesResponse.ErrorNumber == 0) axisRatesResponse.ErrorNumber = DYNAMIC_DRIVER_ERROR_NUMBER;
+                                if (string.IsNullOrEmpty(axisRatesResponse.ErrorMessage)) axisRatesResponse.ErrorMessage = "Dynamic driver generated error: the Alpaca device returned no value or a null value for AxisRates";
                             }
 
-                            if (CallWasSuccessful(TL, axisRatesResponse)) return (T)((object)axisRates);
                             restResponseBase = (RestResponseBase)axisRatesResponse;
                         }
                         if (typeof(T) == typeof(Array)) // Used for Camera.ImageArray and Camera.ImageArrayVariant
@@ -1400,7 +1423,7 @@ namespace ASCOM.DynamicRemoteClients
                                     if (memberType == MemberTypes.Property) // Calling member is a property so throw a PropertyNotImplementedException
                                     {
                                         TL.LogMessageCrLf(clientNumber, method, string.Format("Alpaca property not implemented error, throwing PropertyNotImplementedException - ErrorMessage: \"{0}\", ErrorNumber: 0x{1:X8}", restResponseBase.ErrorMessage, ascomCOMErrorNumber));
-                                        throw new PropertyNotImplementedException(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(method), httpMethod == Method.PUT , restResponseBase.ErrorMessage);
+                                        throw new PropertyNotImplementedException(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(method), httpMethod == Method.PUT, restResponseBase.ErrorMessage);
                                     }
                                     else // Calling member is a method so throw a MethodNotImplementedException
                                     {

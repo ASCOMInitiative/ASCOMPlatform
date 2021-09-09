@@ -1,5 +1,5 @@
 //
-// ASCOM.$safeprojectname$ Local COM Server
+// $safeprojectname$ Local COM Server
 //
 // This is the core of a managed COM Local Server, capable of serving
 // multiple instances of multiple interfaces, within a single
@@ -26,618 +26,638 @@ using System.Threading;
 using System.Security.Principal;
 using System.Diagnostics;
 using ASCOM;
+using System.Threading.Tasks;
 
-namespace ASCOM.$safeprojectname$
+namespace ASCOM.TEMPLATEDEVICENAME.Server
 {
-	public static class Server
-	{
+    public static class Server
+    {
 
-		#region Access to kernel32.dll, user32.dll, and ole32.dll functions
-		[Flags]
-		enum CLSCTX : uint
-		{
-			CLSCTX_INPROC_SERVER = 0x1,
-			CLSCTX_INPROC_HANDLER = 0x2,
-			CLSCTX_LOCAL_SERVER = 0x4,
-			CLSCTX_INPROC_SERVER16 = 0x8,
-			CLSCTX_REMOTE_SERVER = 0x10,
-			CLSCTX_INPROC_HANDLER16 = 0x20,
-			CLSCTX_RESERVED1 = 0x40,
-			CLSCTX_RESERVED2 = 0x80,
-			CLSCTX_RESERVED3 = 0x100,
-			CLSCTX_RESERVED4 = 0x200,
-			CLSCTX_NO_CODE_DOWNLOAD = 0x400,
-			CLSCTX_RESERVED5 = 0x800,
-			CLSCTX_NO_CUSTOM_MARSHAL = 0x1000,
-			CLSCTX_ENABLE_CODE_DOWNLOAD = 0x2000,
-			CLSCTX_NO_FAILURE_LOG = 0x4000,
-			CLSCTX_DISABLE_AAA = 0x8000,
-			CLSCTX_ENABLE_AAA = 0x10000,
-			CLSCTX_FROM_DEFAULT_CONTEXT = 0x20000,
-			CLSCTX_INPROC = CLSCTX_INPROC_SERVER | CLSCTX_INPROC_HANDLER,
-			CLSCTX_SERVER = CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER | CLSCTX_REMOTE_SERVER,
-			CLSCTX_ALL = CLSCTX_SERVER | CLSCTX_INPROC_HANDLER
-		}
+        #region Variables
 
-		[Flags]
-		enum COINIT : uint
-		{
-			/// Initializes the thread for multi-threaded object concurrency.
-			COINIT_MULTITHREADED = 0x0,
-			/// Initializes the thread for apartment-threaded object concurrency. 
-			COINIT_APARTMENTTHREADED = 0x2,
-			/// Disables DDE for Ole1 support.
-			COINIT_DISABLE_OLE1DDE = 0x4,
-			/// Trades memory for speed.
-			COINIT_SPEED_OVER_MEMORY = 0x8
-		}
+        private static uint mainThreadId; // Stores the main thread's thread id.
+        private static bool startedByCOM; // True if server started by COM (-embedding)
+        private static FrmMain localServerMainForm = null; // Reference to our main form.
+        private static int driversInUseCount; // Keeps a count on the total number of objects alive.
+        private static int serverLockCount; // Keeps a lock count on this application.
+        private static ArrayList driverTypes; // Served COM object types
+        private static ArrayList classFactories; // Served COM object class factories
+        private static string localServerAppId = "{$guid1$}"; // Our AppId
+        private static readonly Object lockObject = new object(); // Counter lock object
+        private static TraceLogger TL; // TraceLogger for the local server (not the served driver, which has its own) - primarily to help debug local server issues
+        private static Task GCTask; // The garbage collection task
+        private static CancellationTokenSource GCTokenSource; // Token source used to end periodic garbage collection.
 
-		[Flags]
-		enum REGCLS : uint
-		{
-			REGCLS_SINGLEUSE = 0,
-			REGCLS_MULTIPLEUSE = 1,
-			REGCLS_MULTI_SEPARATE = 2,
-			REGCLS_SUSPENDED = 4,
-			REGCLS_SURROGATE = 8
-		}
-
-
-		// CoInitializeEx() can be used to set the apartment model
-		// of individual threads.
-		[DllImport("ole32.dll")]
-		static extern int CoInitializeEx(IntPtr pvReserved, uint dwCoInit);
-
-		// CoUninitialize() is used to uninitialize a COM thread.
-		[DllImport("ole32.dll")]
-		static extern void CoUninitialize();
-
-		// PostThreadMessage() allows us to post a Windows Message to
-		// a specific thread (identified by its thread id).
-		// We will need this API to post a WM_QUIT message to the main 
-		// thread in order to terminate this application.
-		[DllImport("user32.dll")]
-		static extern bool PostThreadMessage(uint idThread, uint Msg, UIntPtr wParam,
-			IntPtr lParam);
-
-		// GetCurrentThreadId() allows us to obtain the thread id of the
-		// calling thread. This allows us to post the WM_QUIT message to
-		// the main thread.
-		[DllImport("kernel32.dll")]
-		static extern uint GetCurrentThreadId();
-		#endregion
-
-		#region Private Data
-		private static int objsInUse;						// Keeps a count on the total number of objects alive.
-		private static int serverLocks;						// Keeps a lock count on this application.
-		private static frmMain s_MainForm = null;				// Reference to our main form
-		private static ArrayList s_ComObjectAssys;				// Dynamically loaded assemblies containing served COM objects
-		private static ArrayList s_ComObjectTypes;				// Served COM object types
-		private static ArrayList s_ClassFactories;				// Served COM object class factories
-		private static string s_appId = "{$guid1$}";	// Our AppId
-        private static readonly Object lockObject = new object();
         #endregion
 
-		// This property returns the main thread's id.
-        public static uint MainThreadId { get; private set; }	// Stores the main thread's thread id.
+        #region Local Server entry point (main)
 
-		// Used to tell if started by COM or manually
-        public static bool StartedByCOM { get; private set; }   // True if server started by COM (-embedding)
+        /// <summary>
+        /// Main server entry point
+        /// </summary>
+        /// <param name="args">Command line parameters</param>
+        [STAThread]
+        static void Main(string[] args)
+        {
+            // Create a trace logger for the local server.
+            TL = new TraceLogger("", "ASCOM.TEMPLATEDEVICENAME.Server")
+            {
+                Enabled = true // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
+            };
+            TL.LogMessage("Main", $"Server started");
 
+            // Load driver COM assemblies and get types, ending the program if something goes wrong.
+            TL.LogMessage("Main", $"Loading drivers");
+            if (!PopulateListOfAscomDrivers()) return;
 
-		#region Server Lock, Object Counting, and AutoQuit on COM startup
-		// Returns the total number of objects alive currently.
-		public static int ObjectsCount
-		{
-			get
-			{
-				lock (lockObject)
-				{
-					return objsInUse;
-				}
-			}
-		}
+            // Process command line arguments e.g. to Register/Unregister drivers, ending the program if required.
+            TL.LogMessage("Main", $"Processing command-line arguments");
+            if (!ProcessArguments(args)) return;
 
-		// This method performs a thread-safe incrementation of the objects count.
-		public static int CountObject()
-		{
-			// Increment the global count of objects.
-			return Interlocked.Increment(ref objsInUse);
-		}
+            // Initialize variables.
+            TL.LogMessage("Main", $"Initialising variables");
+            driversInUseCount = 0;
+            serverLockCount = 0;
+            mainThreadId = GetCurrentThreadId();
+            Thread.CurrentThread.Name = "TEMPLATEDEVICENAME Local Server Thread";
 
-		// This method performs a thread-safe decrementation the objects count.
-		public static int UncountObject()
-		{
-			// Decrement the global count of objects.
-			return Interlocked.Decrement(ref objsInUse);
-		}
+            // Create and configure the local server host form that runs the Windows message loop required to support driver operation
+            TL.LogMessage("Main", $"Creating host form");
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            localServerMainForm = new FrmMain();
+            if (startedByCOM) localServerMainForm.WindowState = FormWindowState.Minimized;
 
-		// Returns the current server lock count.
-		public static int ServerLockCount
-		{
-			get
-			{
-				lock (lockObject)
-				{
-					return serverLocks;
-				}
-			}
-		}
+            // Register the class factories of the served objects
+            TL.LogMessage("Main", $"Registering class factories");
+            RegisterClassFactories();
 
-		// This method performs a thread-safe incrementation the 
-		// server lock count.
-		public static int CountLock()
-		{
-			// Increment the global lock count of this server.
-			return Interlocked.Increment(ref serverLocks);
-		}
+            // Start the garbage collection thread.
+            TL.LogMessage("Main", $"Starting garbage collection");
+            StartGarbageCollection(10000);
+            TL.LogMessage("Main", $"Garbage collector thread started");
 
-		// This method performs a thread-safe decrementation the 
-		// server lock count.
-		public static int UncountLock()
-		{
-			// Decrement the global lock count of this server.
-			return Interlocked.Decrement(ref serverLocks);
-		}
+            // Start the message loop to serialize incoming calls to the served driver COM objects.
+            try
+            {
+                TL.LogMessage("Main", $"Starting main form");
+                Application.Run(localServerMainForm);
+                TL.LogMessage("Main", $"Main form has ended");
+            }
+            finally
+            {
+                // Revoke the class factories immediately without waiting until the thread has stopped
+                TL.LogMessage("Main", $"Revoking class factories");
+                RevokeClassFactories();
+                TL.LogMessage("Main", $"Class factories revoked");
 
-		// AttemptToTerminateServer() will check to see if the objects count and the server 
-		// lock count have both dropped to zero.
-		//
-		// If so, and if we were started by COM, we post a WM_QUIT message to the main thread's
-		// message loop. This will cause the message loop to exit and hence the termination 
-		// of this application. If hand-started, then just trace that it WOULD exit now.
-		//
-		public static void ExitIf()
-		{
-			lock (lockObject)
-			{
-				if ((ObjectsCount <= 0) && (ServerLockCount <= 0))
-				{
-                    if (StartedByCOM)
-					{
-						UIntPtr wParam = new UIntPtr(0);
-						IntPtr lParam = new IntPtr(0);
-						PostThreadMessage(MainThreadId, 0x0012, wParam, lParam);
-					}
-				}
-			}
-		}
-		#endregion
+                // Now stop the Garbage Collector thread.
+                TL.LogMessage("Main", $"Stopping garbage collector");
+                StopGarbageCollection();
+            }
 
-		// -----------------
-		// PRIVATE FUNCTIONS
-		// -----------------
+            TL.LogMessage("Main", $"Local server closing");
+            TL.Dispose();
 
-		#region Dynamic Driver Assembly Loader
-		//
-		// Load the assemblies that contain the classes that we will serve
-		// via COM. These will be located in the same folder as
-		// our executable.
-		//
-		private static bool LoadComObjectAssemblies()
-		{
-			s_ComObjectAssys = new ArrayList();
-			s_ComObjectTypes = new ArrayList();
+        }
 
-            // put everything into one folder, the same as the server.
-            string assyPath = Assembly.GetEntryAssembly().Location;
-            assyPath = Path.GetDirectoryName(assyPath);
+        #endregion
 
-			DirectoryInfo d = new DirectoryInfo(assyPath);
-			foreach (FileInfo fi in d.GetFiles("*.dll"))
-			{
-				string aPath = fi.FullName;
-				//
-				// First try to load the assembly and get the types for
-				// the class and the class factory. If this doesn't work ????
-				//
-				try
-				{
-					Assembly so = Assembly.LoadFrom(aPath);
-                    //PWGS Get the types in the assembly
-                    Type[] types = so.GetTypes();
-                    foreach (Type type in types)
-                    {
-                        // PWGS Now checks the type rather than the assembly
-                        // Check to see if the type has the ServedClassName attribute, only use it if it does.
-                        MemberInfo info = type;
+        #region Server Lock, Object Counting, and AutoQuit on COM start-up
 
-                        object[] attrbutes = info.GetCustomAttributes(typeof(ServedClassNameAttribute), false);
-                        if (attrbutes.Length > 0)
-                        {
-                            //MessageBox.Show("Adding Type: " + type.Name + " " + type.FullName);
-                            s_ComObjectTypes.Add(type); //PWGS - much simpler
-                            s_ComObjectAssys.Add(so);
-                        }
-                    }
-				}
-                catch (BadImageFormatException)
-                {
-                    // Probably an attempt to load a Win32 DLL (i.e. not a .net assembly)
-                    // Just swallow the exception and continue to the next item.
-                    continue;
-                }
-                catch (Exception e)
-				{
-					MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.Message,
-						"$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-					return false;
-				}
-
-			}
-            return true;
-		}
-		#endregion
-
-		#region COM Registration and Unregistration
-        //
-        // Test if running elevated
-        //
-        private static bool IsAdministrator
+        /// <summary>
+        /// Returns the total number of objects alive currently. 
+        /// </summary>
+        public static int ObjectCount
         {
             get
             {
-                WindowsIdentity i = WindowsIdentity.GetCurrent();
-                WindowsPrincipal p = new WindowsPrincipal(i);
-                return p.IsInRole(WindowsBuiltInRole.Administrator);
+                lock (lockObject)
+                {
+                    return driversInUseCount; // Return the object count
+                }
             }
         }
 
-        //
-        // Elevate by re-running ourselves with elevation dialog
-        //
-        private static void ElevateSelf(string arg)
+        /// <summary>
+        /// Performs a thread-safe incrementation of the object count. 
+        /// </summary>
+        /// <returns></returns>
+        public static int IncrementObjectCount()
         {
-            ProcessStartInfo si = new ProcessStartInfo();
-            si.Arguments = arg;
-            si.WorkingDirectory = Environment.CurrentDirectory;
-            si.FileName = Application.ExecutablePath;
-            si.Verb = "runas";
-            try { Process.Start(si); }
-            catch (System.ComponentModel.Win32Exception)
-            {
-                MessageBox.Show("The $safeprojectname$ was not " + (arg == "/register" ? "registered" : "unregistered") +
-                    " because you did not allow it.", "$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-            }
-            return;
+            int newCount = Interlocked.Increment(ref driversInUseCount); // Increment the object count.
+            TL.LogMessage("IncrementObjectCount", $"New object count: {newCount}");
+
+            return newCount;
         }
 
-        //
-		// Do everything to register this for COM. Never use REGASM on
-		// this exe assembly! It would create InProcServer32 entries 
-		// which would prevent proper activation!
-		//
-		// Using the list of COM object types generated during dynamic
-		// assembly loading, it registers each one for COM as served by our
-		// exe/local server, as well as registering it for ASCOM. It also
-		// adds DCOM info for the local server itself, so it can be activated
-		// via an outboiud connection from TheSky.
-		//
-		private static void RegisterObjects()
-		{
+        /// <summary>
+        /// Performs a thread-safe decrementation the objects count.
+        /// </summary>
+        /// <returns></returns>
+        public static int DecrementObjectCount()
+        {
+            int newCount= Interlocked.Decrement(ref driversInUseCount); // Decrement the object count.
+            TL.LogMessage("DecrementObjectCount", $"New object count: {newCount}");
+
+            return newCount;
+        }
+
+        /// <summary>
+        /// Returns the current server lock count.
+        /// </summary>
+        public static int ServerLockCount
+        {
+            get
+            {
+                lock (lockObject)
+                {
+                    return serverLockCount; // Return the lock count
+                }
+            }
+        }
+
+        /// <summary>
+        /// Performs a thread-safe incrementation of the server lock count. 
+        /// </summary>
+        /// <returns></returns>
+        public static int IncrementServerLockCount()
+        {
+            int newCount= Interlocked.Increment(ref serverLockCount); // Increment the server lock count for this server.
+            TL.LogMessage("IncrementServerLockCount", $"New server lock count: {newCount}");
+
+            return newCount;
+        }
+
+        /// <summary>
+        /// Performs a thread-safe decrementation the server lock count.
+        /// </summary>
+        /// <returns></returns>
+        public static int DecrementServerLockLock()
+        {
+            int newCount = Interlocked.Decrement(ref serverLockCount); // Decrement the server lock count for this server.
+            TL.LogMessage("DecrementServerLockLock", $"New server lock count: {newCount}");
+            return newCount;
+        }
+
+        /// <summary>
+        /// Test whether the objects count and server lock count have both dropped to zero and, if so, terminate the application.
+        /// </summary>
+        /// <remarks>
+        /// If the counts are zero, the application is terminated by posting a WM_QUIT message to the main thread's message loop, causing it to terminate and exit.
+        /// </remarks>
+        public static void ExitIf()
+        {
+            lock (lockObject)
+            {
+                TL.LogMessage("ExitIf", $"Object count: {ObjectCount}, Server lock count: {serverLockCount}");
+                if ((ObjectCount <= 0) && (ServerLockCount <= 0))
+                {
+                    if (startedByCOM)
+                    {
+                        TL.LogMessage("ExitIf", $"Server started by COM so shutting down the Windows message loop on the main process to end the local server.");
+
+                        UIntPtr wParam = new UIntPtr(0);
+                        IntPtr lParam = new IntPtr(0);
+                        PostThreadMessage(mainThreadId, 0x0012, wParam, lParam);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Dynamic Driver Assembly Loader
+
+        /// <summary>
+        /// Populates the list of ASCOM drivers by searching for driver classes within the local server executable.
+        /// </summary>
+        /// <returns>True if successful, otherwise False</returns>
+        private static bool PopulateListOfAscomDrivers()
+        {
+            // Initialise the driver types list
+            driverTypes = new ArrayList();
+
+            try
+            {
+                // Get the types contained within the local server assembly
+                Assembly so = Assembly.GetExecutingAssembly(); // Get the local server assembly 
+                Type[] types = so.GetTypes(); // Get the types in the assembly
+
+                // Iterate over the types identifying those which are drivers
+                foreach (Type type in types)
+                {
+                    TL.LogMessage("PopulateListOfAscomDrivers", $"Found type: {type.Name}");
+
+                    // Check to see if this type has the ServedClassName attribute, which indicates that this is a driver class.
+                    object[] attrbutes = type.GetCustomAttributes(typeof(ServedClassNameAttribute), false);
+                    if (attrbutes.Length > 0) // There is a ServedClassName attribute on this class so it is a driver
+                    {
+                        TL.LogMessage("PopulateListOfAscomDrivers", $"  {type.Name} is a driver assembly");
+                        driverTypes.Add(type); // Add the driver type to the list
+                    }
+                }
+                TL.BlankLine();
+
+                // Log discovered drivers
+                TL.LogMessage("PopulateListOfAscomDrivers", $"Found {driverTypes.Count} drivers");
+                foreach (Type type in driverTypes)
+                {
+                    TL.LogMessage("PopulateListOfAscomDrivers", $"Found Driver : {type.Name}");
+                }
+                TL.BlankLine();
+            }
+            catch (Exception e)
+            {
+                TL.LogMessageCrLf("PopulateListOfAscomDrivers", $"Exception: {e}");
+                MessageBox.Show($"Failed to load served COM class assembly from within this local server - {e.Message}", "Rotator Simulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion
+
+        #region COM Registration and Unregistration
+
+        /// <summary>
+        /// Register drivers contained in this local server. (Must run as Administrator.)
+        /// </summary>
+        /// <remarks>
+        /// Do everything to register this for COM. Never use REGASM on this exe assembly! It would create InProcServer32 entries which would prevent proper activation!
+        /// Using the list of COM object types generated during dynamic assembly loading, this method registers each driver for COM and registers it for ASCOM. 
+        /// It also adds DCOM info for the local server itself, so it can be activated via an outbound connection from TheSky.
+        /// </remarks>
+        private static void RegisterObjects()
+        {
+            // Request administrator privilege if we don't already have it
             if (!IsAdministrator)
             {
                 ElevateSelf("/register");
                 return;
             }
-            //
-            // If reached here, we're running elevated
-            //
 
-			Assembly assy = Assembly.GetExecutingAssembly();
-			Attribute attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyTitleAttribute));
-			string assyTitle = ((AssemblyTitleAttribute)attr).Title;
-			attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyDescriptionAttribute));
-			string assyDescription = ((AssemblyDescriptionAttribute)attr).Description;
+            // If we reach here, we're running elevated
 
-			//
-			// Local server's DCOM/AppID information
-			//
-			try
-			{
-				//
-				// HKCR\APPID\appid
-				//
-                using (RegistryKey key = Registry.ClassesRoot.CreateSubKey("APPID\\" + s_appId))
+            // Initialise variables
+            Assembly executingAssembly = Assembly.GetExecutingAssembly();
+            Attribute assemblyTitleAttribute = Attribute.GetCustomAttribute(executingAssembly, typeof(AssemblyTitleAttribute));
+            string assemblyTitle = ((AssemblyTitleAttribute)assemblyTitleAttribute).Title;
+            assemblyTitleAttribute = Attribute.GetCustomAttribute(executingAssembly, typeof(AssemblyDescriptionAttribute));
+            string assemblyDescription = ((AssemblyDescriptionAttribute)assemblyTitleAttribute).Description;
+
+            // Set the local server's DCOM/AppID information
+            try
+            {
+                TL.LogMessage("RegisterObjects", $"Setting local server's APPID");
+
+                // Set HKCR\APPID\appid
+                using (RegistryKey appIdKey = Registry.ClassesRoot.CreateSubKey($"APPID\\{localServerAppId}"))
                 {
-                    key.SetValue(null, assyDescription);
-                    key.SetValue("AppID", s_appId);
-                    key.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
-                    key.SetValue("RunAs", "Interactive User", RegistryValueKind.String); // Added to ensure that only one copy of the local server runs if the user uses both elevated and non-elevated clients concurrently
-            }
-            //
-            // HKCR\APPID\exename.ext
-            //
-            using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(string.Format("APPID\\{0}",
-                            Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1))))
-                {
-                    key.SetValue("AppID", s_appId);
+                    appIdKey.SetValue(null, assemblyDescription);
+                    appIdKey.SetValue("AppID", localServerAppId);
+                    appIdKey.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
+                    appIdKey.SetValue("RunAs", "Interactive User", RegistryValueKind.String); // Added to ensure that only one copy of the local server runs if the user uses both elevated and non-elevated clients concurrently
                 }
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show("Error while registering the server:\n" + ex.ToString(),
-						"$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-				return;
-			}
-			finally
-			{
-			}
 
-			//
-			// For each of the driver assemblies
-			//
-			foreach (Type type in s_ComObjectTypes)
-			{
-				bool bFail = false;
-				try
-				{
-					//
-					// HKCR\CLSID\clsid
-					//
-					string clsid = Marshal.GenerateGuidForType(type).ToString("B");
-					string progid = Marshal.GenerateProgIdForType(type);
-                    //PWGS Generate device type from the Class name
-                    string deviceType = type.Name;
+                // Set HKCR\APPID\exename.ext
+                using (RegistryKey exeNameKey = Registry.ClassesRoot.CreateSubKey($"APPID\\{Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)}"))
+                {
+                    exeNameKey.SetValue("AppID", localServerAppId);
+                }
+                TL.LogMessage("RegisterObjects", $"APPID set successfully");
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessageCrLf("RegisterObjects", $"Setting AppID exception: {ex}");
+                MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
 
-                    using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(string.Format("CLSID\\{0}", clsid)))
+            // Register each discovered driver
+            foreach (Type driverType in driverTypes)
+            {
+                TL.LogMessage("RegisterObjects", $"Creating COM registration for {driverType.Name}");
+                bool bFail = false;
+                try
+                {
+                    // HKCR\CLSID\clsid
+                    string clsId = Marshal.GenerateGuidForType(driverType).ToString("B");
+                    string progId = Marshal.GenerateProgIdForType(driverType);
+                    string deviceType = driverType.Name; // Generate device type from the Class name
+                    TL.LogMessage("RegisterObjects", $"Assembly title: {assemblyTitle}, ASsembly description: {assemblyDescription}, CLSID: {clsId}, ProgID: {progId}, Device type: {deviceType}");
+
+                    using (RegistryKey clsIdKey = Registry.ClassesRoot.CreateSubKey($"CLSID\\{clsId}"))
                     {
-                        key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
-                        key.SetValue("AppId", s_appId);
-                        using (RegistryKey key2 = key.CreateSubKey("Implemented Categories"))
+                        clsIdKey.SetValue(null, progId);
+                        clsIdKey.SetValue("AppId", localServerAppId);
+                        using (RegistryKey implementedCategoriesKey = clsIdKey.CreateSubKey("Implemented Categories"))
                         {
-                            key2.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}");
+                            implementedCategoriesKey.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}");
                         }
-                        using (RegistryKey key2 = key.CreateSubKey("ProgId"))
+
+                        using (RegistryKey progIdKey = clsIdKey.CreateSubKey("ProgId"))
                         {
-                            key2.SetValue(null, progid);
+                            progIdKey.SetValue(null, progId);
                         }
-                        key.CreateSubKey("Programmable");
-                        using (RegistryKey key2 = key.CreateSubKey("LocalServer32"))
+                        clsIdKey.CreateSubKey("Programmable");
+
+                        using (RegistryKey localServer32Key = clsIdKey.CreateSubKey("LocalServer32"))
                         {
-                            key2.SetValue(null, Application.ExecutablePath);
+                            localServer32Key.SetValue(null, Application.ExecutablePath);
                         }
                     }
-					//
-					// HKCR\CLSID\progid
-					//
-                    using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(progid))
+
+                    // HKCR\CLSID\progid
+                    using (RegistryKey progIdKey = Registry.ClassesRoot.CreateSubKey(progId))
                     {
-                        key.SetValue(null, assyTitle);
-                        using (RegistryKey key2 = key.CreateSubKey("CLSID"))
+                        progIdKey.SetValue(null, assemblyTitle);
+                        using (RegistryKey clsIdKey = progIdKey.CreateSubKey("CLSID"))
                         {
-                            key2.SetValue(null, clsid);
+                            clsIdKey.SetValue(null, clsId);
                         }
                     }
-					//
-					// ASCOM 
-					//
-					assy = type.Assembly;
 
                     // Pull the display name from the ServedClassName attribute.
-                    attr = Attribute.GetCustomAttribute(type, typeof(ServedClassNameAttribute)); //PWGS Changed to search type for attribute rather than assembly
-                    string chooserName = ((ServedClassNameAttribute)attr).DisplayName ?? "MultiServer";
-                    using (var P = new ASCOM.Utilities.Profile())
+                    assemblyTitleAttribute = Attribute.GetCustomAttribute(driverType, typeof(ServedClassNameAttribute));
+                    string chooserName = ((ServedClassNameAttribute)assemblyTitleAttribute).DisplayName ?? "MultiServer";
+                    TL.LogMessage("RegisterObjects", $"Registering {chooserName} ({driverType.Name}) in Profile");
+
+                    using (var profile = new Profile())
                     {
-                        P.DeviceType = deviceType;
-                        P.Register(progid, chooserName);
+                        profile.DeviceType = deviceType;
+                        profile.Register(progId, chooserName);
                     }
                 }
-				catch (Exception ex)
-				{
-					MessageBox.Show("Error while registering the server:\n" + ex.ToString(),
-							"$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-					bFail = true;
-				}
-				finally
-				{
-				}
-				if (bFail) break;
-			}
-		}
+                catch (Exception ex)
+                {
+                    TL.LogMessageCrLf("RegisterObjects", $"Driver registration exception: {ex}");
+                    MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    bFail = true;
+                }
 
-		//
-		// Remove all traces of this from the registry. 
-		//
-		// **TODO** If the above does AppID/DCOM stuff, this would have
-		// to remove that stuff too.
-		//
-		private static void UnregisterObjects()
-		{
+                // Stop processing drivers if something has gone wrong
+                if (bFail) break;
+            }
+        }
+
+        /// <summary>
+        /// Unregister drivers contained in this local server. (Must run as administrator.)
+        /// </summary>
+        private static void UnregisterObjects()
+        {
+            // Request administrator privilege if we don't already have it
             if (!IsAdministrator)
             {
                 ElevateSelf("/unregister");
                 return;
             }
 
-            //
-			// Local server's DCOM/AppID information
-			//
-			Registry.ClassesRoot.DeleteSubKey(string.Format("APPID\\{0}", s_appId), false);
-			Registry.ClassesRoot.DeleteSubKey(string.Format("APPID\\{0}",
-					Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)), false);
+            // If we reach here, we're running elevated
 
-			//
-			// For each of the driver assemblies
-			//
-			foreach (Type type in s_ComObjectTypes)
-			{
-				string clsid = Marshal.GenerateGuidForType(type).ToString("B");
-				string progid = Marshal.GenerateProgIdForType(type);
-                string deviceType = type.Name;
-                //
-				// Best efforts
-				//
-				//
-				// HKCR\progid
-				//
-                Registry.ClassesRoot.DeleteSubKey(String.Format("{0}\\CLSID", progid), false);
-                Registry.ClassesRoot.DeleteSubKey(progid, false);
-                //
-                // HKCR\CLSID\clsid
-                //
-                Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\Implemented Categories\\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}", clsid), false);
-                Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\Implemented Categories", clsid), false);
-                Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\ProgId", clsid), false);
-                Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\LocalServer32", clsid), false);
-                Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\Programmable", clsid), false);
-                Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}", clsid), false);
-                try
-				{
-					//
-					// ASCOM
-					//
-                    using (var P = new ASCOM.Utilities.Profile())
-                    {
-                        P.DeviceType = deviceType;
-                        P.Unregister(progid);
-                    }
+            // Delete the Local Server's DCOM/AppID information
+            Registry.ClassesRoot.DeleteSubKey($"APPID\\{localServerAppId}", false);
+            Registry.ClassesRoot.DeleteSubKey($"APPID\\{Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)}", false);
+
+            // Delete each driver's COM registration
+            foreach (Type driverType in driverTypes)
+            {
+                TL.LogMessage("UnregisterObjects", $"Removing COM registration for {driverType.Name}");
+
+                string clsId = Marshal.GenerateGuidForType(driverType).ToString("B");
+                string progId = Marshal.GenerateProgIdForType(driverType);
+
+                // Remove ProgID entries
+                Registry.ClassesRoot.DeleteSubKey($"{progId}\\CLSID", false);
+                Registry.ClassesRoot.DeleteSubKey(progId, false);
+
+                // Remove CLSID entries
+                Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}\\Implemented Categories\\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}", false);
+                Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}\\Implemented Categories", false);
+                Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}\\ProgId", false);
+                Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}\\LocalServer32", false);
+                Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}\\Programmable", false);
+                Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}", false);
+
+                // Uncomment the following lines to remove ASCOM Profile information when unregistering.
+                // Unregistering often occurs during version upgrades and, if the code below is enabled, will result in loss of all device configuration during the upgrade.
+                // For this reason, enabling this capability is not recommended.
+
+                //try
+                //{
+                //    TL.LogMessage("UnregisterObjects", $"Deleting ASCOM Profile registration for {driverType.Name} ({progId})");
+                //    using (var profile = new Profile())
+                //    {
+                //        profile.DeviceType = driverType.Name;
+                //        profile.Unregister(progId);
+                //    }
+                //}
+                //catch (Exception) { }
+            }
+        }
+
+        /// <summary>
+        /// Test whether the session is running with elevated credentials
+        /// </summary>
+        private static bool IsAdministrator
+        {
+            get
+            {
+                WindowsIdentity userIdentity = WindowsIdentity.GetCurrent();
+                WindowsPrincipal userPrincipal = new WindowsPrincipal(userIdentity);
+                bool isAdministrator = userPrincipal.IsInRole(WindowsBuiltInRole.Administrator);
+
+                TL.LogMessage("IsAdministrator", isAdministrator.ToString());
+                return isAdministrator;
+            }
+        }
+
+        /// <summary>
+        /// Elevate privileges by re-running ourselves with elevation dialogue
+        /// </summary>
+        /// <param name="argument">Argument to pass to ourselves</param>
+        private static void ElevateSelf(string argument)
+        {
+            ProcessStartInfo processStartInfo = new ProcessStartInfo();
+            processStartInfo.Arguments = argument;
+            processStartInfo.WorkingDirectory = Environment.CurrentDirectory;
+            processStartInfo.FileName = Application.ExecutablePath;
+            processStartInfo.Verb = "runas";
+            try
+            {
+                TL.LogMessage("IsAdministrator", $"Starting elevated process");
+                Process.Start(processStartInfo);
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                TL.LogMessage("IsAdministrator", $"The $safeprojectname$ was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it."));
+                MessageBox.Show("The $safeprojectname$ was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it.", "$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Warning));
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessageCrLf("IsAdministrator", $"Exception: {ex}");
+                MessageBox.Show(ex.ToString(), "$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            }
+            return;
+        }
+
+        #endregion
+
+        #region Class Factory Support
+
+        /// <summary>
+        /// Register the class factories of drivers that this local server serves.
+        /// </summary>
+        /// <remarks>This requires the class factory name to be equal to the served class name + "ClassFactory".</remarks>
+        /// <returns>True if there are no errors, otherwise false.</returns>
+        private static bool RegisterClassFactories()
+        {
+            TL.LogMessage("RegisterClassFactories", $"Registering class factories");
+            classFactories = new ArrayList();
+            foreach (Type driverType in driverTypes)
+            {
+                TL.LogMessage("RegisterClassFactories", $"  Creating class factory for: {driverType.Name}");
+                ClassFactory factory = new ClassFactory(driverType); // Use default context & flags
+                classFactories.Add(factory);
+
+                TL.LogMessage("RegisterClassFactories", $"  Registering class factory for: {driverType.Name}");
+                if (!factory.RegisterClassObject())
+                {
+                    TL.LogMessage("RegisterClassFactories", $"  Failed to register class factory for " + driverType.Name);
+                    MessageBox.Show("Failed to register class factory for " + driverType.Name, "$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return false;
                 }
-				catch (Exception) { }
-			}
-		}
-		#endregion
+                TL.LogMessage("RegisterClassFactories", $"  Registered class factory OK for: {driverType.Name}");
+            }
 
-		#region Class Factory Support
-		//
-		// On startup, we register the class factories of the COM objects
-		// that we serve. This requires the class facgtory name to be
-		// equal to the served class name + "ClassFactory".
-		//
-		private static bool RegisterClassFactories()
-		{
-			s_ClassFactories = new ArrayList();
-			foreach (Type type in s_ComObjectTypes)
-			{
-				ClassFactory factory = new ClassFactory(type);					// Use default context & flags
-				s_ClassFactories.Add(factory);
-				if (!factory.RegisterClassObject())
-				{
-					MessageBox.Show("Failed to register class factory for " + type.Name,
-						"$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-					return false;
-				}
-			}
-			ClassFactory.ResumeClassObjects();									// Served objects now go live
-			return true;
-		}
+            TL.LogMessage("RegisterClassFactories", $"Making class factories live");
+            ClassFactory.ResumeClassObjects(); // Served objects now go live
+            TL.LogMessage("RegisterClassFactories", $"Class factories live OK");
+            return true;
+        }
 
-		private static void RevokeClassFactories()
-		{
-			ClassFactory.SuspendClassObjects();									// Prevent race conditions
-			foreach (ClassFactory factory in s_ClassFactories)
-				factory.RevokeClassObject();
-		}
-		#endregion
+        /// <summary>
+        /// Revoke the class factories
+        /// </summary>
+        private static void RevokeClassFactories()
+        {
+            TL.LogMessage("RevokeClassFactories", $"Suspending class factories");
+            ClassFactory.SuspendClassObjects(); // Prevent race conditions
+            TL.LogMessage("RevokeClassFactories", $"Class factories suspended OK");
 
-		#region Command Line Arguments
-		//
-		// ProcessArguments() will process the command-line arguments
-		// If the return value is true, we carry on and start this application.
-		// If the return value is false, we terminate this application immediately.
-		//
-		private static bool ProcessArguments(string[] args)
-		{
-			bool bRet = true;
+            foreach (ClassFactory factory in classFactories)
+            {
+                factory.RevokeClassObject();
+            }
+        }
 
-			//
-			//**TODO** -Embedding is "ActiveX start". Prohibit non_AX starting?
-			//
-			if (args.Length > 0)
-			{
+        #endregion
 
-				switch (args[0].ToLower())
-				{
-					case "-embedding":
-						StartedByCOM = true;										// Indicate COM started us
-						break;
+        #region Command line argument processing
 
-					case "-register":
-					case @"/register":
-					case "-regserver":											// Emulate VB6
-					case @"/regserver":
-						RegisterObjects();										// Register each served object
-						bRet = false;
-						break;
+        /// <summary>
+        ///Process the command-line arguments returning true to continue execution or false to terminate the application immediately.
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        private static bool ProcessArguments(string[] args)
+        {
+            bool returnStatus = true;
 
-					case "-unregister":
-					case @"/unregister":
-					case "-unregserver":										// Emulate VB6
-					case @"/unregserver":
-						UnregisterObjects();									//Unregister each served object
-						bRet = false;
-						break;
+            if (args.Length > 0)
+            {
+                switch (args[0].ToLower())
+                {
+                    case "-embedding":
+                        TL.LogMessage("ProcessArguments", $"Started by COM: {args[0]}");
+                        startedByCOM = true; // Indicate COM started us and continue
+                        returnStatus = true; // Continue on return
+                        break;
 
-					default:
-						MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding",
-							"$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-						break;
-				}
-			}
-			else
-                StartedByCOM = false;
+                    case "-register":
+                    case @"/register":
+                    case "-regserver": // Emulate VB6
+                    case @"/regserver":
+                        TL.LogMessage("ProcessArguments", $"Registering drivers: {args[0]}");
+                        RegisterObjects(); // Register each served object
+                        returnStatus = false; // Terminate on return
+                        break;
 
-			return bRet;
-		}
-		#endregion
+                    case "-unregister":
+                    case @"/unregister":
+                    case "-unregserver": // Emulate VB6
+                    case @"/unregserver":
+                        TL.LogMessage("ProcessArguments", $"Unregistering drivers: {args[0]}");
+                        UnregisterObjects(); //Unregister each served object
+                        returnStatus = false; // Terminate on return
+                        break;
 
-		#region SERVER ENTRY POINT (main)
-		//
-		// ==================
-		// SERVER ENTRY POINT
-		// ==================
-		//
-		[STAThread]
-		static void Main(string[] args)
-		{
-			if (!LoadComObjectAssemblies()) return;						// Load served COM class assemblies, get types
+                    default:
+                        TL.LogMessage("ProcessArguments", $"Unknown argument: {args[0]}");
+                        MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        break;
+                }
+            }
+            else
+            {
+                startedByCOM = false;
+                TL.LogMessage("ProcessArguments", $"No arguments supplied");
+            }
 
-			if (!ProcessArguments(args)) return;						// Register/Unregister
+            return returnStatus;
+        }
 
-			// Initialize critical member variables.
-			objsInUse = 0;
-			serverLocks = 0;
-			MainThreadId = GetCurrentThreadId();
-			Thread.CurrentThread.Name = "Main Thread";
+        #endregion
 
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			s_MainForm = new frmMain();
-            if (StartedByCOM) s_MainForm.WindowState = FormWindowState.Minimized;
+        #region Garbage collection support
 
-			// Register the class factories of the served objects
-			RegisterClassFactories();
+        /// <summary>
+        /// Start a garbage collection thread that can be cancelled
+        /// </summary>
+        /// <param name="interval">Frequency of garbage collections</param>
+        private static void StartGarbageCollection(int interval)
+        {
+            // Create the garbage collection object
+            TL.LogMessage("StartGarbageCollection", $"Creating garbage collector with interval: {interval} seconds");
+            GarbageCollection garbageCollector = new GarbageCollection(interval);
 
-			// Start up the garbage collection thread.
-			GarbageCollection GarbageCollector = new GarbageCollection(1000);
-			Thread GCThread = new Thread(new ThreadStart(GarbageCollector.GCWatch));
-			GCThread.Name = "Garbage Collection Thread";
-			GCThread.Start();
+            // Create a cancellation token and start the garbage collection task 
+            TL.LogMessage("StartGarbageCollection", $"Starting garbage collector thread");
+            GCTokenSource = new CancellationTokenSource();
+            GCTask = Task.Factory.StartNew(() => garbageCollector.GCWatch(GCTokenSource.Token), GCTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+            TL.LogMessage("StartGarbageCollection", $"Garbage collector thread started OK");
+        }
 
-			//
-			// Start the message loop. This serializes incoming calls to our
-			// served COM objects, making this act like the VB6 equivalent!
-			//
-			try
-			{
-				Application.Run(s_MainForm);
-			}
-			finally
-			{
-				// Revoke the class factories immediately.
-				// Don't wait until the thread has stopped before
-				// we perform revocation!!!
-				RevokeClassFactories();
+        /// <summary>
+        /// Stop the garbage collection task by sending it the cancellation token and wait for the task to complete
+        /// </summary>
+        private static void StopGarbageCollection()
+        {
+            // Signal the garbage collector thread to stop
+            TL.LogMessage("StopGarbageCollection", $"Stopping garbage collector thread");
+            GCTokenSource.Cancel();
+            GCTask.Wait();
+            TL.LogMessage("StopGarbageCollection", $"Garbage collector thread stopped OK");
 
-				// Now stop the Garbage Collector thread.
-				GarbageCollector.StopThread();
-				GarbageCollector.WaitForThreadToStop();
-			}
-		}
-		#endregion
-	}
+            // Clean up
+            GCTask = null;
+            GCTokenSource.Dispose();
+            GCTokenSource = null;
+        }
+
+        #endregion
+
+        #region kernel32.dll and user32.dll functions
+
+        // Post a Windows Message to a specific thread (identified by its thread id). Used to post a WM_QUIT message to the main thread in order to terminate this application.)
+        [DllImport("user32.dll")]
+        static extern bool PostThreadMessage(uint idThread, uint Msg, UIntPtr wParam, IntPtr lParam);
+
+        // Obtain the thread id of the calling thread allowing us to post the WM_QUIT message to the main thread.
+        [DllImport("kernel32.dll")]
+        static extern uint GetCurrentThreadId();
+
+        #endregion
+    }
 }

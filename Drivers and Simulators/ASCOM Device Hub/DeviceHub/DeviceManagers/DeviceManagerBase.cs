@@ -3,6 +3,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
+using System.Threading;
 using System.Windows;
 
 using ASCOM.DeviceHub.MvvmMessenger;
@@ -23,6 +24,11 @@ namespace ASCOM.DeviceHub
 		protected bool ThrowOnInvalidPropertyName { get; set; }
         protected DeviceTypeEnum DeviceType { get; set; }
 		protected PropertyExceptions Exceptions { get; set; }
+
+		protected int PollingPeriod { get; set; }
+		protected ManualResetEvent PollingChange { get; set; }
+
+		public double FastPollingPeriod { get; set; }
 
 		public DeviceManagerBase( DeviceTypeEnum deviceType )
 		{
@@ -125,7 +131,7 @@ namespace ASCOM.DeviceHub
 											, [System.Runtime.CompilerServices.CallerMemberName] string propName = "???" )
 		{
 			Exception xcp = null;
-			string msg = String.Format( "Set {0} -> {1} ", propName, value );
+			string msg = $"Set {propName} -> {value} ";
 			CheckDevice();
 
 			try
@@ -153,7 +159,7 @@ namespace ASCOM.DeviceHub
 		protected void SetServiceProperty<T>( Action setCmd, string name, T value, ActivityMessageTypes messageType = ActivityMessageTypes.Status )
 		{
 			Exception xcp = null;
-			string msg = String.Format( "Set {0} -> {1} ", name, value );
+			string msg = $"Set {name} -> {value} ";
 			CheckDevice();
 
 			try
@@ -180,6 +186,30 @@ namespace ASCOM.DeviceHub
 		protected virtual void CheckDevice()
 		{ }
 
+		protected void SetFastPolling( string caller = "")
+		{
+			string fromCaller = String.Empty;
+
+			if ( !String.IsNullOrEmpty( caller ) )
+			{
+				fromCaller = " from " + caller;
+			}
+
+			int newInterval = (int)( FastPollingPeriod * 1000 );
+
+			if ( PollingPeriod != newInterval )
+			{
+				PollingPeriod = newInterval;
+				PollingChange.Set();
+
+				LogActivityLine( ActivityMessageTypes.Commands, $"Started fast polling{fromCaller} every {PollingPeriod} ms." );
+			}
+			else
+			{
+				LogActivityLine( ActivityMessageTypes.Commands, $"SetFastPolling called{fromCaller} when already fast polling." );
+			}
+		}
+
 		#region Activity Log Members
 
 		protected void LogActivityStart( ActivityMessageTypes msgType, string msgFormat, params object[] parms )
@@ -194,7 +224,7 @@ namespace ASCOM.DeviceHub
 			string deviceTypeText = DeviceType.ToString();
 			string messageTypeText = GetMessageTypeName( msgType );
 			string timestamp = DateTime.Now.ToString( "HH:mm:ss.fff" );
-			string text = String.Format( "{0}: {1} - {2}{3}", timestamp, deviceTypeText, messageTypeText, msg );
+			string text = $"{timestamp}: {deviceTypeText} - {messageTypeText}{msg}";
             LogMessage( msgType, text );
         }
 
@@ -223,9 +253,8 @@ namespace ASCOM.DeviceHub
 		{
 			string deviceTypeText = DeviceType.ToString();
 			string messageTypeText = GetMessageTypeName( msgType );
-			//string timestamp = DateTime.Now.ToLongTimeString();
 			string timestamp = DateTime.Now.ToString( "HH:mm:ss.fff" );
-			string text = String.Format( "{0}: {1} - {2}{3}\r\n", timestamp, deviceTypeText, messageTypeText, msg );
+			string text = $"{timestamp}: {deviceTypeText} - {messageTypeText}{msg}\r\n";
 
 			LogMessage( msgType, text );
 

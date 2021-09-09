@@ -74,7 +74,7 @@ namespace ASCOM.DeviceHub
 
 			if ( item == null )
 			{
-				throw new Exception( String.Format( "Invalid classname, {0), passed to DialogService.LaunchDialog().", viewModelClassname ) );
+				throw new Exception( $"Invalid classname, {viewModelClassname}, passed to DialogService.LaunchDialog()." );
 			}
 
 			Type viewType = Type.GetType( item.ViewClassname );

@@ -297,11 +297,10 @@ namespace Unit_Tests.Focuser
 			_mgr.MoveFocuserBy( requestedMove );
 			Assert.IsTrue( _mgr.Status.IsMoving, "Positive move did not start." );
 
-			Thread.Sleep( 2000 );
-			Assert.IsTrue( _mgr.Status.IsMoving, "Positive move ended too soon." );
-
 			_mgr.HaltFocuser();
-			
+
+			// This can fail if the focuser reached the requested position before the Halt was issued.
+
 			Assert.IsFalse( _mgr.Status.IsMoving, "Positive move was not halted." );
 			Assert.AreNotEqual( 22000, _mgr.Status.Position, "Positive move was not halted." );
 		}

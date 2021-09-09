@@ -30,16 +30,16 @@ long int NRL, NP, NV;
 long int RECORD_LENGTH;
 
 double SS[3], JPLAU, PC[18], VC[18], TWOT, EM_RATIO;
-double *BUFFER;
+double* BUFFER;
 
-FILE *EPHFILE = NULL;
+FILE* EPHFILE = NULL;
 
 /********ephem_open */
 
-short int ephem_open(char *ephem_name,
+short int ephem_open(char* ephem_name,
 
-	double *jd_begin, double *jd_end,
-	short int *de_number)
+	double* jd_begin, double* jd_end,
+	short int* de_number)
 	/*
 	------------------------------------------------------------------------
 
@@ -134,8 +134,13 @@ short int ephem_open(char *ephem_name,
 
 	if (EPHFILE)
 	{
+		printf("***** EPHEM_OPEN - File already open so closing it.\r\n");
 		fclose(EPHFILE);
 		free(BUFFER);
+	}
+	else
+	{
+		printf("***** EPHEM_OPEN - File NOT already open.\r\n");
 	}
 
 	/*
@@ -254,13 +259,13 @@ short int ephem_open(char *ephem_name,
 			break;
 		}
 
-		BUFFER = (double *)calloc(RECORD_LENGTH / 8, sizeof(double));
+		BUFFER = (double*)calloc(RECORD_LENGTH / 8, sizeof(double));
 
 		*de_number = (short int)denum;
 		*jd_begin = SS[0];
 		*jd_end = SS[1];
 	}
-
+	printf("***** EPHEM_OPEN %i\r\n", (EPHFILE == NULL));
 	return 0;
 }
 
@@ -317,15 +322,19 @@ short int ephem_close(void)
 */
 {
 	short int error = 0;
-
 	if (EPHFILE)
 	{
 		error = (short int)fclose(EPHFILE);
 		// free (BUFFER);
 		// EPHFILE = 0; //Peter Simpson - Added this so that the fclose in Ephem_Open wil not run if the file has been closed
-		// Replaced above two liones with Novas 3.1 Errata from http://aa.usno.navy.mil/software/novas/novas_faq.php 
+		// Replaced above two lines with Novas 3.1 Errata from http://aa.usno.navy.mil/software/novas/novas_faq.php 
+		printf("***** EPHEM_CLOSE - FREEING BUFFER AND CLOSING EPHFILE *****\r\n");
 		EPHFILE = NULL; // new line, reset pointer 
 		free(BUFFER);
+	}
+	else
+	{
+		printf("***** EPHEM_CLOSE - File already closed, no action taken\r\n");
 	}
 	return error;
 }
@@ -335,7 +344,7 @@ short int ephem_close(void)
 short int planet_ephemeris(double tjd[2], short int target,
 	short int center,
 
-	double *position, double *velocity)
+	double* position, double* velocity)
 	/*
 	------------------------------------------------------------------------
 
@@ -411,6 +420,9 @@ short int planet_ephemeris(double tjd[2], short int target,
 	------------------------------------------------------------------------
 	*/
 {
+	printf("***** PLANET_EPHEMERIS - JD[0]: %g, JD[1: ]%g, Target: %i, Centre: %i \r\n", tjd[0], tjd[1], target, center);
+
+
 	short int i, error = 0, earth = 2, moon = 9;
 	short int do_earth = 0, do_moon = 0;
 
@@ -618,9 +630,9 @@ short int planet_ephemeris(double tjd[2], short int target,
 
 /********state */
 
-short int state(double *jed, short int target,
+short int state(double* jed, short int target,
 
-	double *target_pos, double *target_vel)
+	double* target_pos, double* target_vel)
 	/*
 	------------------------------------------------------------------------
 
@@ -791,9 +803,9 @@ short int state(double *jed, short int target,
 
 /********interpolate */
 
-void interpolate(double *buf, double *t, long int ncf, long int na,
+void interpolate(double* buf, double* t, long int ncf, long int na,
 
-	double *position, double *velocity)
+	double* position, double* velocity)
 	/*
 	------------------------------------------------------------------------
 
@@ -956,7 +968,7 @@ void interpolate(double *buf, double *t, long int ncf, long int na,
 
 void split(double tt,
 
-	double *fr)
+	double* fr)
 	/*
 	------------------------------------------------------------------------
 

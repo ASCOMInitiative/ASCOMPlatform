@@ -42,6 +42,9 @@
     <ClCompile Include="solsys1.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DllMain.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe - Changes to USNO Source Files.txt">

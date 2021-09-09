@@ -77,7 +77,7 @@ namespace ASCOM.DeviceHub
 			}
 			else
 			{
-				string msg = String.Format( "TelescopeViewModel.ChangeActiveFunction called with invalid function Name - {0}", functionName );
+				string msg = $"TelescopeViewModel.ChangeActiveFunction called with invalid function Name - {functionName}.";
 				throw new ArgumentException( msg );
 			}
 		}
@@ -221,7 +221,7 @@ namespace ASCOM.DeviceHub
 			{
 				// Connection attempt caused exception.
 
-				string message = String.Format( "{0}\r\n{1}", TelescopeManager.ConnectError, xcp.Message );
+				string message = $"{TelescopeManager.ConnectError}\r\n{xcp.Message}";
 				ShowMessage( message, "Telescope Connection Error" );
 			}
 		}

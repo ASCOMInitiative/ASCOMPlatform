@@ -6,9 +6,9 @@ namespace ASCOM.DeviceHub
 	internal class ScopeDomeOffsetViewModel : ValuesEntryViewModelBase
 	{
 		public ScopeDomeOffsetViewModel( string offsetDirections )
-			: base( offsetDirections + "OffsetValuesEntry" )
+			: base( $"{offsetDirections}OffsetValuesEntry" )
 		{
-			_description = String.Format( "Enter the {0} offset distance, in mm", offsetDirections );
+			_description = $"Enter the {offsetDirections} offset distance, in mm";
 
 			_rotarySliderVm = new RotarySliderViewModel
 			{

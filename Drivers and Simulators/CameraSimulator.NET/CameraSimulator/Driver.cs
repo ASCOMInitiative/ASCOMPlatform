@@ -46,6 +46,7 @@ using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace ASCOM.Simulator
 {
@@ -1593,7 +1594,7 @@ namespace ASCOM.Simulator
                     pulseGuideDecTimer.Enabled = true;
                     break;
                 default:
-                    break;
+                    throw new InvalidValueException($"PulseGuide - Invalid Direction parameter: {Direction}, The valid range is {Convert.ToInt32(Enum.GetValues(typeof(GuideDirections)).Cast<GuideDirections>().Min())} to {Convert.ToInt32(Enum.GetValues(typeof(GuideDirections)).Cast<GuideDirections>().Max())}");
             }
         }
 

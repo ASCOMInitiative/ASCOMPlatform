@@ -214,7 +214,7 @@ namespace Unit_Tests.Dome
 			double slewValue = 4.0;
 			double startingAltitude = 45.0;
 
-			_vm.SelectedSlewAmount = new SlewAmount( "4 degrees", slewValue );
+			_vm.SelectedSlewAmount = new JogAmount( "4 degrees", slewValue );
 			_vm.Status.Altitude = startingAltitude;
 			_mgr.MockAltitude = startingAltitude;
 
@@ -303,7 +303,7 @@ namespace Unit_Tests.Dome
 			double slewValue = 10.0;
 			double startingAzimuth = 225.0;
 
-			_vm.SelectedSlewAmount = new SlewAmount( "10 degrees", slewValue );
+			_vm.SelectedSlewAmount = new JogAmount( "10 degrees", slewValue );
 			_vm.Status.Azimuth = startingAzimuth;
 			_mgr.MockAzimuth = startingAzimuth;
 

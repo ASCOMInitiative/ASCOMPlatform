@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
 using ASCOM.DeviceInterface;
-using ASCOM.DriverAccess;
 using ASCOM.Utilities;
 
 namespace ASCOM.DeviceHub
@@ -40,10 +40,7 @@ namespace ASCOM.DeviceHub
 
 				return _service;
 			}
-			set
-			{
-				_service = value;
-			}
+			set => _service = value;
 		}
 
 		public void InitializeTelescopeService( string id )
@@ -168,45 +165,15 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		public string Description
-		{
-			get
-			{
-				return GetServiceProperty<string>( () => Service.Description, "N/A", ActivityMessageTypes.Parameters );
-			}
-		}
+		public string Description => GetServiceProperty<string>( () => Service.Description, "N/A", ActivityMessageTypes.Parameters );
 
-		public string DriverInfo
-		{
-			get
-			{
-				return GetServiceProperty<string>( () => Service.DriverInfo, "N/A", ActivityMessageTypes.Parameters );
-			}
-		}
+		public string DriverInfo => GetServiceProperty<string>( () => Service.DriverInfo, "N/A", ActivityMessageTypes.Parameters );
 
-		public string DriverVersion
-		{
-			get
-			{
-				return GetServiceProperty<string>( () => Service.DriverVersion, "N/A", ActivityMessageTypes.Parameters );
-			}
-		}
+		public string DriverVersion => GetServiceProperty<string>( () => Service.DriverVersion, "N/A", ActivityMessageTypes.Parameters );
 
-		public short InterfaceVersion
-		{
-			get
-			{
-				return  GetServiceProperty<short>( () => Service.InterfaceVersion, 0, ActivityMessageTypes.Parameters );
-			}
-		}
+		public short InterfaceVersion => GetServiceProperty<short>( () => Service.InterfaceVersion, 0, ActivityMessageTypes.Parameters );
 
-		public string Name
-		{
-			get
-			{
-				return  GetServiceProperty<string>( () => Service.Name, "N/A", ActivityMessageTypes.Other );
-			}
-		}
+		public string Name => GetServiceProperty<string>( () => Service.Name, "N/A", ActivityMessageTypes.Other );
 
 		public ArrayList SupportedActions
 		{
@@ -217,227 +184,73 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		public AlignmentModes AlignmentMode
-		{
-			get
-			{
-				return GetServiceProperty<AlignmentModes>( () => Service.AlignmentMode, AlignmentModes.algAltAz
+		public AlignmentModes AlignmentMode => GetServiceProperty<AlignmentModes>( () => Service.AlignmentMode, AlignmentModes.algAltAz
 															, ActivityMessageTypes.Parameters );
-			}
-		}
 
-		public double Altitude
-		{
-			get
-			{
-				return GetServiceProperty<double>( () => Service.Altitude, Double.NaN );
-			}
-		}
+		public double Altitude => GetServiceProperty<double>( () => Service.Altitude, Double.NaN );
 
-		public double ApertureArea
-		{
-			get
-			{
-				return GetServiceProperty<double>( () => Service.ApertureArea, Double.NaN, ActivityMessageTypes.Parameters );
-			}
-		}
+		public double ApertureArea => GetServiceProperty<double>( () => Service.ApertureArea, Double.NaN, ActivityMessageTypes.Parameters );
 
-		public double ApertureDiameter
-		{
-			get
-			{
-				return GetServiceProperty<double>( () => Service.ApertureDiameter, Double.NaN, ActivityMessageTypes.Parameters );
-			}
-		}
+		public double ApertureDiameter => GetServiceProperty<double>( () => Service.ApertureDiameter, Double.NaN, ActivityMessageTypes.Parameters );
 
-		public bool AtHome
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.AtHome, false );
-			}
-		}
+		public bool AtHome => GetServiceProperty<bool>( () => Service.AtHome, false );
 
-		public bool AtPark
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.AtPark, false );
-			}
-		}
+		public bool AtPark => GetServiceProperty<bool>( () => Service.AtPark, false );
 
-		public double Azimuth
-		{
-			get
-			{
-				return GetServiceProperty<double>( () => Service.Azimuth, Double.NaN );
-			}
-		}
+		public double Azimuth => GetServiceProperty<double>( () => Service.Azimuth, Double.NaN );
 
-		public bool CanFindHome
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.CanFindHome, false, ActivityMessageTypes.Capabilities );
-			}
-		}
+		public bool CanFindHome => GetServiceProperty<bool>( () => Service.CanFindHome, false, ActivityMessageTypes.Capabilities );
 
-		public bool CanPark
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.CanPark, false, ActivityMessageTypes.Capabilities );
-			}
-		}
+		public bool CanPark => GetServiceProperty<bool>( () => Service.CanPark, false, ActivityMessageTypes.Capabilities );
 
-		public bool CanPulseGuide
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.CanPulseGuide, false, ActivityMessageTypes.Capabilities );
-			}
-		}
+		public bool CanPulseGuide => GetServiceProperty<bool>( () => Service.CanPulseGuide, false, ActivityMessageTypes.Capabilities );
 
-		public bool CanSetDeclinationRate
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.CanSetDeclinationRate, false, ActivityMessageTypes.Capabilities );
-			}
-		}
+		public bool CanSetDeclinationRate => GetServiceProperty<bool>( () => Service.CanSetDeclinationRate, false, ActivityMessageTypes.Capabilities );
 
-		public bool CanSetGuideRates
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.CanSetGuideRates, false, ActivityMessageTypes.Capabilities );
-			}
-		}
+		public bool CanSetGuideRates => GetServiceProperty<bool>( () => Service.CanSetGuideRates, false, ActivityMessageTypes.Capabilities );
 
-		public bool CanSetPark
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.CanSetPark, false, ActivityMessageTypes.Capabilities );
-			}
-		}
+		public bool CanSetPark => GetServiceProperty<bool>( () => Service.CanSetPark, false, ActivityMessageTypes.Capabilities );
 
-		public bool CanSetPierSide
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.CanSetPierSide, false, ActivityMessageTypes.Capabilities );
-			}
-		}
+		public bool CanSetPierSide => GetServiceProperty<bool>( () => Service.CanSetPierSide, false, ActivityMessageTypes.Capabilities );
 
-		public bool CanSetRightAscensionRate
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.CanSetRightAscensionRate, false, ActivityMessageTypes.Capabilities );
-			}
-		}
+		public bool CanSetRightAscensionRate => GetServiceProperty<bool>( () => Service.CanSetRightAscensionRate, false, ActivityMessageTypes.Capabilities );
 
-		public bool CanSetTracking
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.CanSetTracking, false, ActivityMessageTypes.Capabilities );
-			}
-		}
+		public bool CanSetTracking => GetServiceProperty<bool>( () => Service.CanSetTracking, false, ActivityMessageTypes.Capabilities );
 
-		public bool CanSlew
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.CanSlew, false, ActivityMessageTypes.Capabilities );
-			}
-		}
+		public bool CanSlew => GetServiceProperty<bool>( () => Service.CanSlew, false, ActivityMessageTypes.Capabilities );
 
-		public bool CanSlewAltAz
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.CanSlewAltAz, false, ActivityMessageTypes.Capabilities );
-			}
-		}
+		public bool CanSlewAltAz => GetServiceProperty<bool>( () => Service.CanSlewAltAz, false, ActivityMessageTypes.Capabilities );
 
-		public bool CanSlewAltAzAsync
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.CanSlewAltAzAsync, false, ActivityMessageTypes.Capabilities );
-			}
-		}
+		public bool CanSlewAltAzAsync => GetServiceProperty<bool>( () => Service.CanSlewAltAzAsync, false, ActivityMessageTypes.Capabilities );
 
-		public bool CanSlewAsync
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.CanSlewAsync, false, ActivityMessageTypes.Capabilities );
-			}
-		}
+		public bool CanSlewAsync => GetServiceProperty<bool>( () => Service.CanSlewAsync, false, ActivityMessageTypes.Capabilities );
 
-		public bool CanSync
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.CanSync, false, ActivityMessageTypes.Capabilities );
-			}
-		}
+		public bool CanSync => GetServiceProperty<bool>( () => Service.CanSync, false, ActivityMessageTypes.Capabilities );
 
-		public bool CanSyncAltAz
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.CanSyncAltAz, false, ActivityMessageTypes.Capabilities );
-			}
-		}
+		public bool CanSyncAltAz => GetServiceProperty<bool>( () => Service.CanSyncAltAz, false, ActivityMessageTypes.Capabilities );
 
-		public bool CanUnpark
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.CanUnpark, false, ActivityMessageTypes.Capabilities );
-			}
-		}
+		public bool CanUnpark => GetServiceProperty<bool>( () => Service.CanUnpark, false, ActivityMessageTypes.Capabilities );
 
-		public double Declination
-		{
-			get
-			{
-				return GetServiceProperty<double>( () => Service.Declination, Double.NaN );
-			}
-		}
-		
+		public double Declination => GetServiceProperty<double>( () => Service.Declination, Double.NaN );
+
 		public double DeclinationRate
 		{
-			get
-			{
-				return GetServiceProperty<double>( () => Service.DeclinationRate, Double.NaN );
-			}
-			set
-			{
-				SetServiceProperty<double>( () =>
-				{
-					Service.DeclinationRate = value;
+			get => GetServiceProperty<double>( () => Service.DeclinationRate, Double.NaN );
+			set => SetServiceProperty<double>( () =>
+				   {
+					   Service.DeclinationRate = value;
 
-					if ( Status != null )
-					{
-						Status.DeclinationRate = value;
-						Status.ClearException();
-					}
-				}, value );
-			}
+					   if ( Status != null )
+					   {
+						   Status.DeclinationRate = value;
+						   Status.ClearException();
+					   }
+				   }, value );
 		}
 
 		public bool DoesRefraction
 		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.DoesRefraction, false, ActivityMessageTypes.Parameters );
-
-			}
+			get => GetServiceProperty<bool>( () => Service.DoesRefraction, false, ActivityMessageTypes.Parameters );
 			set
 			{
 				SetServiceProperty<bool>( () => Service.DoesRefraction = value, value, ActivityMessageTypes.Parameters );
@@ -445,137 +258,80 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		public EquatorialCoordinateType EquatorialSystem
-		{
-			get
-			{
-				return GetServiceProperty<EquatorialCoordinateType>( () => Service.EquatorialSystem
+		public EquatorialCoordinateType EquatorialSystem => GetServiceProperty<EquatorialCoordinateType>( () => Service.EquatorialSystem
 														, EquatorialCoordinateType.equTopocentric, ActivityMessageTypes.Parameters );
-			}
-		}
 
-		public double FocalLength
-		{
-			get
-			{
-				return GetServiceProperty<double>( () => Service.FocalLength, Double.NaN, ActivityMessageTypes.Parameters );
-			}
-		}
+		public double FocalLength => GetServiceProperty<double>( () => Service.FocalLength, Double.NaN, ActivityMessageTypes.Parameters );
 
 		public double GuideRateDeclination
 		{
-			get
-			{
-				return GetServiceProperty<double>( () => Service.GuideRateDeclination, Double.NaN );
-			}
-			set
-			{
-				SetServiceProperty<double>( () =>
-				{
-					Service.GuideRateDeclination = value;
+			get => GetServiceProperty<double>( () => Service.GuideRateDeclination, Double.NaN );
+			set => SetServiceProperty<double>( () =>
+				   {
+					   Service.GuideRateDeclination = value;
 
-					if ( Status != null )
-					{
-						Status.GuideRateDeclination = value;
-						Status.ClearException();
-					}
-				}, value );
-			}
+					   if ( Status != null )
+					   {
+						   Status.GuideRateDeclination = value;
+						   Status.ClearException();
+					   }
+				   }, value );
 		}
 
 		public double GuideRateRightAscension
 		{
-			get
-			{
-				return GetServiceProperty<double>( () => Service.GuideRateRightAscension, Double.NaN );
-			}
-			set
-			{
-				SetServiceProperty<double>( () =>
-				{
-					Service.GuideRateRightAscension = value;
+			get => GetServiceProperty<double>( () => Service.GuideRateRightAscension, Double.NaN );
+			set => SetServiceProperty<double>( () =>
+				   {
+					   Service.GuideRateRightAscension = value;
 
-					if ( Status != null )
-					{
-						Status.GuideRateRightAscension = value;
-						Status.ClearException();
-					}
-				}, value );
-			}
+					   if ( Status != null )
+					   {
+						   Status.GuideRateRightAscension = value;
+						   Status.ClearException();
+					   }
+				   }, value );
 		}
 
-		public bool IsPulseGuiding
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.IsPulseGuiding, false );
-			}
-		}
+		public bool IsPulseGuiding => GetServiceProperty<bool>( () => Service.IsPulseGuiding, false );
 
-		public double RightAscension
-		{
-			get
-			{
-				return GetServiceProperty<double>( () => Service.RightAscension, Double.NaN );
-			}
-		}
+		public double RightAscension => GetServiceProperty<double>( () => Service.RightAscension, Double.NaN );
 
 		public double RightAscensionRate
 		{
-			get
-			{
-				return GetServiceProperty<double>( () => Service.RightAscensionRate, Double.NaN );
-			}
-			set
-			{
-				SetServiceProperty<double>( () =>
-				{
-					Service.RightAscensionRate = value;
+			get => GetServiceProperty<double>( () => Service.RightAscensionRate, Double.NaN );
+			set => SetServiceProperty<double>( () =>
+				   {
+					   Service.RightAscensionRate = value;
 
-					if ( Status != null )
-					{
-						Status.RightAscensionRate = value;
-						Status.ClearException();
-					}
-				}, value );
-			}
+					   if ( Status != null )
+					   {
+						   Status.RightAscensionRate = value;
+						   Status.ClearException();
+					   }
+				   }, value );
 		}
 
 		public PierSide SideOfPier
 		{
-			get
-			{
-				return GetServiceProperty<PierSide>( () => Service.SideOfPier, PierSide.pierUnknown );
-			}
-			set
-			{
-				SetServiceProperty<PierSide>( () =>
-				{
-					Service.SideOfPier = value;
+			get => GetServiceProperty<PierSide>( () => Service.SideOfPier, PierSide.pierUnknown );
+			set => SetServiceProperty<PierSide>( () =>
+				   {
+					   Service.SideOfPier = value;
 
-					if ( Status != null )
-					{
-						Status.SideOfPier = value;
-						Status.ClearException();
-					}
-				}, value );
-			}
+					   if ( Status != null )
+					   {
+						   Status.SideOfPier = value;
+						   Status.ClearException();
+					   }
+				   }, value );
 		}
 
-		public double SiderealTime
-		{
-			get
-			{
-				return GetServiceProperty<double>( () => Service.SiderealTime, Double.NaN );
-			}
-		}
+		public double SiderealTime => GetServiceProperty<double>( () => Service.SiderealTime, Double.NaN );
 
 		public double SiteElevation
 		{
-			get
-			{
-				return GetServiceProperty<double>( () => Service.SiteElevation, Double.NaN, ActivityMessageTypes.Parameters );
-			}
+			get => GetServiceProperty<double>( () => Service.SiteElevation, Double.NaN, ActivityMessageTypes.Parameters );
 			set
 			{
 				SetServiceProperty<double>( () => Service.SiteElevation = value, value, ActivityMessageTypes.Parameters );
@@ -585,10 +341,7 @@ namespace ASCOM.DeviceHub
 
 		public double SiteLatitude
 		{
-			get
-			{
-				return GetServiceProperty<double>( () => Service.SiteLatitude, Double.NaN, ActivityMessageTypes.Parameters );
-			}
+			get => GetServiceProperty<double>( () => Service.SiteLatitude, Double.NaN, ActivityMessageTypes.Parameters );
 			set
 			{
 				SetServiceProperty<double>( () => Service.SiteLatitude = value, value, ActivityMessageTypes.Parameters );
@@ -598,10 +351,7 @@ namespace ASCOM.DeviceHub
 
 		public double SiteLongitude
 		{
-			get
-			{
-				return GetServiceProperty<double>( () => Service.SiteLongitude, Double.NaN, ActivityMessageTypes.Parameters );
-			}
+			get => GetServiceProperty<double>( () => Service.SiteLongitude, Double.NaN, ActivityMessageTypes.Parameters );
 			set
 			{
 				SetServiceProperty<double>( () => Service.SiteLongitude = value, value, ActivityMessageTypes.Parameters );
@@ -609,20 +359,11 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		public bool Slewing
-		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.Slewing, false );
-			}
-		}
+		public bool Slewing => GetServiceProperty<bool>( () => Service.Slewing, false );
 
 		public short SlewSettleTime
 		{
-			get
-			{
-				return GetServiceProperty<short>( () => Service.SlewSettleTime, 0, ActivityMessageTypes.Parameters );
-			}
+			get => GetServiceProperty<short>( () => Service.SlewSettleTime, 0, ActivityMessageTypes.Parameters );
 			set
 			{
 				SetServiceProperty<short>( () => Service.SlewSettleTime = value, value, ActivityMessageTypes.Parameters );
@@ -632,86 +373,62 @@ namespace ASCOM.DeviceHub
 
 		public double TargetDeclination
 		{
-			get
-			{
-				return GetServiceProperty<double>( () => Service.TargetDeclination, Double.NaN );
-			}
-			set
-			{
-				SetServiceProperty<double>( () =>
-				{
-					Service.TargetDeclination = value;
+			get => GetServiceProperty<double>( () => Service.TargetDeclination, Double.NaN );
+			set => SetServiceProperty<double>( () =>
+				   {
+					   Service.TargetDeclination = value;
 
-					if ( Status != null )
-					{
-						Status.TargetDeclination = value;
-						Status.ClearException();
-					}
-				}, value );
-			}
+					   if ( Status != null )
+					   {
+						   Status.TargetDeclination = value;
+						   Status.ClearException();
+					   }
+				   }, value );
 		}
 
 		public double TargetRightAscension
 		{
-			get
-			{
-				return GetServiceProperty<double>( () => Service.TargetRightAscension, Double.NaN );
-			}
-			set
-			{
-				SetServiceProperty<double>( () =>
-				{
-					Service.TargetRightAscension = value;
+			get => GetServiceProperty<double>( () => Service.TargetRightAscension, Double.NaN );
+			set => SetServiceProperty<double>( () =>
+				   {
+					   Service.TargetRightAscension = value;
 
-					if ( Status != null )
-					{
-						Status.TargetRightAscension = value;
-						Status.ClearException();
-					}
-				}, value );
-			}
+					   if ( Status != null )
+					   {
+						   Status.TargetRightAscension = value;
+						   Status.ClearException();
+					   }
+				   }, value );
 		}
 
 		public bool Tracking
 		{
-			get
-			{
-				return GetServiceProperty<bool>( () => Service.Tracking, false );
-			}
-			set
-			{
-				SetServiceProperty<bool>( () =>
-				{
-					Service.Tracking = value;
+			get => GetServiceProperty<bool>( () => Service.Tracking, false );
+			set => SetServiceProperty<bool>( () =>
+				   {
+					   Service.Tracking = value;
 
-					if ( Status != null )
-					{
-						Status.Tracking = value;
-						Status.ClearException();
-					}
-				}, value );
-			}
+					   if ( Status != null )
+					   {
+						   Status.Tracking = value;
+						   Status.ClearException();
+					   }
+				   }, value );
 		}
 
 		public DriveRates TrackingRate
 		{
-			get
-			{
-				return GetServiceProperty<DriveRates>( () => Service.TrackingRate, DriveRates.driveSidereal );
-			}
-			set
-			{
-				SetServiceProperty<DriveRates>( () =>
-				{
-					Service.TrackingRate = value;
+			get => GetServiceProperty<DriveRates>( () => Service.TrackingRate, DriveRates.driveSidereal );
+			set => SetServiceProperty<DriveRates>( () =>
+				   {
+					   Service.TrackingRate = value;
 
-					if ( Status != null )
-					{
-						Status.TrackingRate = value;
-						Status.ClearException();
-					}
-				}, value );
-			}
+					   if ( Status != null )
+					   {
+						   Status.TrackingRate = value;
+						   Status.ClearException();
+					   }
+				   }, value );
 		}
 
 		public ITrackingRates TrackingRates
@@ -728,23 +445,17 @@ namespace ASCOM.DeviceHub
 
 		public DateTime UTCDate
 		{
-			get
-			{
-				return GetServiceProperty<DateTime>( () => Service.UTCDate, DateTime.MinValue );
-			}
-			set
-			{
-				SetServiceProperty<DateTime>( () =>
-				{
-					Service.UTCDate = value;
+			get => GetServiceProperty<DateTime>( () => Service.UTCDate, DateTime.MinValue );
+			set => SetServiceProperty<DateTime>( () =>
+				   {
+					   Service.UTCDate = value;
 
-					if ( Status != null )
-					{
-						Status.UTCDate = value;
-						Status.ClearException();
-					}
-				}, value );
-			}
+					   if ( Status != null )
+					   {
+						   Status.UTCDate = value;
+						   Status.ClearException();
+					   }
+				   }, value );
 		}
 
 		#endregion
@@ -777,7 +488,7 @@ namespace ASCOM.DeviceHub
 			ActivityMessageTypes messageType = ActivityMessageTypes.Capabilities;
 
 			string axisName = GetNameFromAxis( axis );
-			string msg = String.Format( "Calling AxisRates( {0} )", axisName );
+			string msg = $"Calling AxisRates( {axisName} )";
 
 			try
 			{
@@ -825,7 +536,7 @@ namespace ASCOM.DeviceHub
 			ActivityMessageTypes messageType = ActivityMessageTypes.Capabilities;
 
 			string axisName = GetNameFromAxis( axis );
-			string msg = String.Format( "Calling CanMoveAxis( {0} )", axisName );
+			string msg = $"Calling CanMoveAxis( {axisName} )";
 
 			try
 			{
@@ -888,7 +599,7 @@ namespace ASCOM.DeviceHub
 			RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
 			DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
 
-			LogActivityStart( ActivityMessageTypes.Other, " Get DestinationSideOfPier \r\n   RA {0}\r\n   Dec {1}: ", raConverter, decConverter );
+			LogActivityStart( ActivityMessageTypes.Other, "DestinationSideOfPier RA = {0}, Dec = {1}: ", raConverter, decConverter );
 			CheckDevice();
 
 			try
@@ -926,7 +637,17 @@ namespace ASCOM.DeviceHub
 
 			LogActivityStart( ActivityMessageTypes.Commands, "MoveAxis {0} at {1} deg/sec: ", name, rate );
 			CheckDevice();
-			Service.MoveAxis( axis, rate );
+			Debug.WriteLine( $"TelescopeManagerAccess.MoveAxis - Axis = {axis}, Rate = {rate:f3}" );
+			try
+			{
+				Service.MoveAxis( axis, rate );
+			}
+			catch ( Exception xcp )
+			{
+				Debug.WriteLine( "TelescopeManagerAccess.MoveAxis caught an exception." );
+				throw xcp;
+			}
+
 			Status.Slewing = rate != 0.0;
 			LogActivityEnd( ActivityMessageTypes.Commands, Done );
 		}
@@ -978,7 +699,7 @@ namespace ASCOM.DeviceHub
 			AzimuthConverter azConverter = new AzimuthConverter( (decimal)azimuth );
 			AltitudeConverter altConverter = new AltitudeConverter( (decimal)altitude );
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToAltAz \r\nAz {0}\r\nAlt {1}: {2}"
+			LogActivityLine( ActivityMessageTypes.Commands, "SlewToAltAz - Az = {0}, Alt = {1}: {2}"
 							, azConverter, altConverter, SlewStarted );
 			CheckDevice();
 			Status.Slewing = true;
@@ -1008,7 +729,7 @@ namespace ASCOM.DeviceHub
 			AzimuthConverter azConverter = new AzimuthConverter( (decimal)azimuth );
 			AltitudeConverter altConverter = new AltitudeConverter( (decimal)altitude );
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToAltAzAsync \r\nAz {0}\r\nAlt {1}: {2}"
+			LogActivityLine( ActivityMessageTypes.Commands, "SlewToAltAzAsync - Az = {0}, Alt = {1}: {2}"
 							, azConverter, altConverter, SlewStarted );
 			CheckDevice();
 			Status.Slewing = true;
@@ -1020,7 +741,7 @@ namespace ASCOM.DeviceHub
 			RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
 			DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToCoordinates \r\nRA  {0}\r\nDec {1}: {2}"
+			LogActivityLine( ActivityMessageTypes.Commands, "SlewToCoordinates - RA = {0}, Dec = {1}: {2}"
 							, raConverter, decConverter, SlewStarted );
 			CheckDevice();
 			Status.Slewing = true;
@@ -1040,7 +761,7 @@ namespace ASCOM.DeviceHub
 			RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
 			DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToCoordinatesAsync \r\nRA  {0}\r\nDec {1}: {2}"
+			LogActivityLine( ActivityMessageTypes.Commands, "SlewToCoordinatesAsync - RA = {0}, Dec {1}: {2}"
 							, raConverter, decConverter, SlewStarted );
 			CheckDevice();
 			Status.Slewing = true;
@@ -1076,7 +797,7 @@ namespace ASCOM.DeviceHub
 			AzimuthConverter azConverter = new AzimuthConverter( (decimal)azimuth );
 			AltitudeConverter altConverter = new AltitudeConverter( (decimal)altitude );
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SyncToAltAz \r\nAz {0}\r\nAlt {1}:", azConverter, altConverter );
+			LogActivityLine( ActivityMessageTypes.Commands, "SyncToAltAz - Az = {0}, Alt = {1}:", azConverter, altConverter );
 			CheckDevice();
 			Service.SyncToAltAz( azimuth, altitude );
 			Status.Slewing = true;
@@ -1094,7 +815,7 @@ namespace ASCOM.DeviceHub
 			RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
 			DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToCoordinates \r\nRA  {0}\r\nDec {1}:", raConverter, decConverter );
+			LogActivityLine( ActivityMessageTypes.Commands, "SyncToCoordinates - RA = {0}, Dec = {1}", raConverter, decConverter );
 			CheckDevice();
 			Service.SyncToCoordinates( rightAscension, declination );
 			Status.Slewing = true;

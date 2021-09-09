@@ -310,8 +310,8 @@ Public Class Dome
 
             check_connected()
 
-            If g_eShutterState = ShutterState.shutterError Then Err.Raise(SCODE_SHUTTER_ERROR, ERR_SOURCE, "Property Altitude: " & MSG_SHUTTER_ERROR)
-            If g_eShutterState <> ShutterState.shutterOpen Then Err.Raise(SCODE_SHUTTER_NOT_OPEN, ERR_SOURCE, "Property Altitude: " & MSG_SHUTTER_NOT_OPEN)
+            If g_eShutterState = ShutterState.shutterError Then Throw New DriverException("Property Altitude: " & MSG_SHUTTER_ERROR, SCODE_SHUTTER_ERROR)
+            If g_eShutterState <> ShutterState.shutterOpen Then Throw New ASCOM.DriverException("Property Altitude: " & MSG_SHUTTER_NOT_OPEN, SCODE_SHUTTER_NOT_OPEN)
 
             Altitude = g_dDomeAlt
 
@@ -671,7 +671,7 @@ Public Class Dome
 
         check_connected()
 
-        If g_eShutterState = ShutterState.shutterError Then Err.Raise(SCODE_SHUTTER_ERROR, ERR_SOURCE, "Method OpenShutter: " & MSG_SHUTTER_ERROR)
+        If g_eShutterState = ShutterState.shutterError Then Throw New DriverException("Method OpenShutter: " & MSG_SHUTTER_ERROR, SCODE_SHUTTER_ERROR)
 
         HW_OpenShutter()
     End Sub
@@ -837,8 +837,8 @@ Public Class Dome
 
         check_connected()
 
-        If g_eShutterState = ShutterState.shutterError Then Err.Raise(SCODE_SHUTTER_ERROR, ERR_SOURCE, "Method SlewToAltitude " & MSG_SHUTTER_ERROR)
-        If g_eShutterState <> ShutterState.shutterOpen Then Err.Raise(SCODE_SHUTTER_NOT_OPEN, ERR_SOURCE, "Method SlewToAltitude " & MSG_SHUTTER_NOT_OPEN)
+        If g_eShutterState = ShutterState.shutterError Then Throw New DriverException("Method SlewToAltitude " & MSG_SHUTTER_ERROR, SCODE_SHUTTER_ERROR)
+        If g_eShutterState <> ShutterState.shutterOpen Then Throw New InvalidOperationException("Method SlewToAltitude " & MSG_SHUTTER_NOT_OPEN)
         If Altitude < g_dMinAlt Or Altitude > g_dMaxAlt Then Throw New InvalidValueException("SlewToAltitude", Altitude.ToString, g_dMinAlt.ToString & " to " & g_dMaxAlt.ToString)
 
         HW_MoveShutter(Altitude)

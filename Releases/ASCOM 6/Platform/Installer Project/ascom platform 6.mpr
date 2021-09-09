@@ -1475,6 +1475,13 @@ $
 
 
 
+
+
+
+
+
+
+
 B
 
 
@@ -2093,28 +2100,28 @@ $
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 6.5 SP1
+ASCOM Platform 6.5 SP2
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {A6BBF69E-978B-43BE-B8DF-21EFC599A93A}
 6.5.9999.9999
 English
-ASCOM Platform 6.5 SP1
-ASCOM Platform 6.5 SP1 - Installation
+ASCOM Platform 6.5 SP2
+ASCOM Platform 6.5 SP2 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{3B7B6B56-5028-4641-8DF4-4CFCDB362908}
+{7B854534-1B49-4E5A-A53D-CDF3E95FEE7B}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
 https://ascom-standards.org/Downloads/Index.htm
-Copyright � 1998-2020, The ASCOM Initiative. All rights reserved. 
+Copyright � 1998-2021, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform65SP1
+ASCOMPlatform65SP2
 TRUE
 TRUE
 
 |C:\Users\Peter\Desktop\petercodesign.pfx
-http://timestamp.globalsign.com/scripts/timstamp.dll
+http://time.certum.pl
 https://ascom-standards.org
 UAC=requireAdministrator,CACHESOURCES=TRUE,MSI_ALL=FALSE,VM_TARGETFOLDER=%TEMP%,VM_INSTALL_COMMANDLINE=/s,"VM_UNINSTALL_COMMANDLINE=/s MODIFY=FALSE REMOVE=TRUE","VM_UNITTEST=C:\Program Files (x86)\InstallAware X6 Creators Update\unit.exe",LOADOLDDATA=TRUE,SIGN_ALL=DEFAULT
 $

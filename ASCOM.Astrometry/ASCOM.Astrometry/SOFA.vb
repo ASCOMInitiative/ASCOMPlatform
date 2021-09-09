@@ -3,6 +3,7 @@ Imports System.Environment
 Imports ASCOM.Utilities
 Imports ASCOM.Utilities.Exceptions
 Imports System.Text
+Imports System.IO
 
 Namespace SOFA
     ''' <summary>
@@ -131,6 +132,12 @@ Namespace SOFA
             End If
             TL.LogMessage("New", "PRODUCTION build")
 #End If
+            If Not File.Exists(SofaDllFile) Then
+                TL.LogMessage("New", $"SOFA Initialise - Unable to locate SOFA library DLL: {SofaDllFile}")
+                Throw New HelperException($"SOFA Initialise - Unable to locate SOFA library DLL: {SofaDllFile}")
+            Else
+                TL.LogMessage("New", $"Found SOFA library DLL: {SofaDllFile}")
+            End If
 
             TL.LogMessage("New", "Loading SOFA library DLL: " + SofaDllFile)
 
@@ -224,12 +231,12 @@ Namespace SOFA
 
                 Catch ex As Exception
                     TL.LogMessageCrLf("New", "Exception: " & ex.ToString())
-                    MsgBox("SOFA exception " & ex.ToString())
+                    Throw New HelperException($"SOFA Initialisation Exception - {ex.Message} (See inner exception for details)", ex)
                 End Try
 
             Else ' Did not load 
-                TL.LogMessage("New", "Error loading SOFA library: " & LastError.ToString("X8"))
-                Throw New HelperException(String.Format("Error code {0} returned from LoadLibrary when loading SOFA library: {1}  ", LastError.ToString("X8"), SofaDllFile))
+                TL.LogMessage("New", $"Error code {LastError:X8} returned while loading SOFA library from {SofaDllFile}")
+                Throw New HelperException($"SOFA Initialisation - Error code {LastError:X8} returned from LoadLibrary when loading SOFA library: {SofaDllFile}")
             End If
 
             TL.LogMessage("New", "SOFA Initialised OK")

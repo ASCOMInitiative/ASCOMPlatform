@@ -247,7 +247,7 @@ namespace ASCOM.DeviceHub
 					SetDirectCoordinates( ra, dec, az, alt );
 				}
 
-				if ( _isActive && _isSlewInProgress && !Status.Slewing )
+				if ( _isActive && _isSlewInProgress && Status != null && !Status.Slewing )
 				{
 					_isSlewInProgress = false;
 					Messenger.Default.Send( new SlewInProgressMessage( false ) );

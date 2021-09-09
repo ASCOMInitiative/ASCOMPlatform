@@ -3,12 +3,25 @@ using ASCOM.DeviceInterface;
 
 namespace ASCOM.DeviceHub
 {
-	public class AscomDomeStatus : DevicePropertiesBase
+	public class AscomDomeStatus : DevicePropertiesBase, ICloneable
     {
 		#region Instance Constructor
 
 		public AscomDomeStatus()
 		{ }
+
+		public AscomDomeStatus( AscomDomeStatus other )
+		{
+			this.Altitude = other.Altitude;
+			this.AtHome = other.AtHome;
+			this.AtPark = other.AtPark;
+			this.Azimuth = other.Azimuth;
+			this.Connected = other.Connected;
+			this.DeviceManager = other.DeviceManager;
+			this.Exceptions = other.Exceptions.Clone();
+			this.ShutterStatus = other.ShutterStatus;
+			this.Slewing = other.Slewing;
+		}
 
 		public AscomDomeStatus( DomeManager mgr )
 		{
@@ -173,6 +186,19 @@ namespace ASCOM.DeviceHub
 			ShutterStatus = ShutterState.shutterClosed;
 			Slewing = false;
 		}
+
+		#region ICloneable Implementation
+
+		object ICloneable.Clone()
+		{
+			return new AscomDomeStatus( this );
+		}
+
+		public AscomDomeStatus Clone()
+		{
+			return new AscomDomeStatus( this );
+		}
+		#endregion ICloneable Implementation
 
 		#endregion
 	}

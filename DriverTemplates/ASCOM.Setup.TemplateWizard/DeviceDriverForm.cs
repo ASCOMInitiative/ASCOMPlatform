@@ -14,33 +14,18 @@ namespace ASCOM.Setup
     {
         #region Constants, class variables and initialiser
 
-        /// <summary>
-        /// Format string for ASCOM DeviceId.
-        /// </summary>
-        private const string csDeviceIdFormat = "ASCOM.{0}.{1}";
-        /// <summary>
-        /// Format string for driver namespace.
-        /// </summary>
-        private const string csNamespaceFormat = "ASCOM.{0}";
-        /// <summary>
-        /// Placeholder text used for null or invalid DeviceName.
-        /// </summary>
-        private const string csDeviceNamePlaceholder = "<DeviceName>";
-        /// <summary>
-        /// Placeholder text used for null or invalid DeviceClass.
-        /// </summary>
-        private const string csDeviceClassPlaceholder = "<DeviceClass>";
+        private const string csDeviceIdFormat = "ASCOM.{0}.{1}"; // Format string for ASCOM DeviceId.
+        private const string csNamespaceFormat = "ASCOM.{0}"; // Format string for driver namespace.
+        private const string csDeviceNamePlaceholder = "<DeviceName>"; // Placeholder text used for null or invalid DeviceName.
+        private const string csDeviceClassPlaceholder = "<DeviceClass>"; // Placeholder text used for null or invalid DeviceClass.
 
         private const string DEVICE_TYPE = "DeviceType"; // Name of the Regex group that will hold the device type
         private const string INTERFACE_VERSION = "InterfaceVersion"; // Name of the Regex group that will hold the interface version number
 
-        /// <summary>
-        /// REGEX format string to extract device type and version number fropm the interface name
-        /// </summary>
-        private const string REGEX_FORMAT = @"^[Ii](?'" + DEVICE_TYPE + @"'\w+)[Vv](?'" + INTERFACE_VERSION + @"'\d+)";
+        private const string REGEX_FORMAT = @"^[Ii](?'" + DEVICE_TYPE + @"'\w+)[Vv](?'" + INTERFACE_VERSION + @"'\d+)"; // REGEX format string to extract device type and version number from the interface name
 
-        // key is the class name, value is the ASCOM interface properties
-        Dictionary<string, ASCOMInterface> interfaceList;
+
+        Dictionary<string, ASCOMInterface> interfaceList; // The key is the class name, the value is the ASCOM interface properties
 
         TraceLogger TL;
 
@@ -53,11 +38,10 @@ namespace ASCOM.Setup
 
         #endregion
 
-        #region External Properties
+        #region Properties returning user input
 
         /// <summary>
-        /// Gets the full ASCOM device id (COM ProgID), in the format
-        /// ASCOM.{DeviceName}.{DeviceClass}
+        /// Returns the full ASCOM device id (COM ProgID), in the format ASCOM.{DeviceName}.{DeviceClass}
         /// </summary>
         /// <value>The full ASCOM device id (COM ProgID).</value>
         internal string DeviceId
@@ -69,7 +53,7 @@ namespace ASCOM.Setup
         }
 
         /// <summary>
-        /// Gets the ASCOM DeviceClass of the device.
+        /// Returns the ASCOM DeviceClass of the device.
         /// </summary>
         /// <value>The ASCOM device class.</value>
         internal string DeviceClass
@@ -81,23 +65,23 @@ namespace ASCOM.Setup
         }
 
         /// <summary>
-        /// Gets the ASCOM DeviceName of the device.
+        /// Returns the ASCOM DeviceName of the device.
         /// </summary>
         /// <value>The name of the device.</value>
         internal string DeviceName
         {
             get
             {
-                if (String.IsNullOrEmpty(this.txtDeviceName.Text))
+                if (String.IsNullOrEmpty(txtDeviceName.Text))
                 {
                     return csDeviceNamePlaceholder;
                 }
-                return (this.txtOrganizationName.Text ?? String.Empty) + this.txtDeviceName.Text;
+                return (txtOrganizationName.Text ?? String.Empty) + txtDeviceName.Text;
             }
         }
 
         /// <summary>
-        /// return the device interface from the device class
+        /// Returns the device interface from the device class
         /// </summary>
         internal string DeviceInterface
         {
@@ -108,7 +92,7 @@ namespace ASCOM.Setup
         }
 
         /// <summary>
-        /// Return the interface version from the device class
+        /// Returns the interface version from the device class
         /// </summary>
         internal int InterfaceVersion
         {
@@ -125,17 +109,16 @@ namespace ASCOM.Setup
         {
             get
             {
-                return String.Format(csNamespaceFormat, this.DeviceName);
+                return String.Format(csNamespaceFormat, DeviceName);
             }
         }
 
         #endregion
 
-        #region Form Event Handlers
+        #region Form event handlers
 
         /// <summary>
-        /// Handles the TextChanged event of the txtDeviceName and txtDeviceName controls.
-        /// Sets the value of lblDeviceId based on user input.
+        /// Handles the TextChanged event of the txtDeviceName and txtDeviceName controls and sets the value of lblDeviceId based on user input.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
@@ -145,35 +128,31 @@ namespace ASCOM.Setup
         }
 
         /// <summary>
-        /// Handles the Validating event of the txtDeviceName control.
-        /// Checks that the typed text is a valid ASCOM DeviceName.
+        /// Handles the Validating event of the txtDeviceName control and checks that the typed text is a valid ASCOM DeviceName.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.ComponentModel.CancelEventArgs"/> instance containing the event data.</param>
         /// <remarks>
-        /// The device name must start with an alphabetic character and may be followed by any number of alphanumeric
-        /// characters. There may be no whitespace or punctuation.
+        /// The device name must start with an alphabetic character and may be followed by any number of alphanumeric characters. There may be no white space or punctuation.
         /// </remarks>
         private void txtDeviceName_Validating(object sender, CancelEventArgs e)
         {
             Regex rxValidateDeviceName = new Regex(@"^[a-zA-Z]([a-zA-Z0-9]*)$");
-            if (!rxValidateDeviceName.IsMatch(this.txtDeviceName.Text))
+            if (!rxValidateDeviceName.IsMatch(txtDeviceName.Text))
             {
                 e.Cancel = true;
-                errorProvider.SetError(this.txtDeviceName, "Invalid DeviceId. Must begin with a letter and contain only alphanumeric characters");
+                errorProvider.SetError(txtDeviceName, "Invalid DeviceId. Must begin with a letter and contain only alphanumeric characters");
             }
 
-            if (string.IsNullOrEmpty(this.txtDeviceName.Text))
+            if (string.IsNullOrEmpty(txtDeviceName.Text))
             {
                 e.Cancel = true;
-                errorProvider.SetError(this.txtDeviceName, "Please enter a device name");
+                errorProvider.SetError(txtDeviceName, "Please enter a device name");
             }
-
         }
 
         /// <summary>
-        /// Handles the Validated event of the <see cref="txtDeviceName"/> control
-        /// and clears the control's error state.
+        /// Handles the Validated event of the <see cref="txtDeviceName"/> control and clears the control's error state.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
@@ -183,8 +162,7 @@ namespace ASCOM.Setup
         }
 
         /// <summary>
-        /// Handles the Validating event of the txtOrganizationName control.
-        /// The value of this control must either be empty, or must contain only alphabetics.
+        /// Handles the Validating event of the txtOrganizationName control. The value of this control must either be empty, or must contain only alphabetic characters.
         /// </summary>
         /// <param name="sender">The source of the event, not used.</param>
         /// <param name="e">The <see cref="System.ComponentModel.CancelEventArgs"/> instance containing the event data.</param>
@@ -197,7 +175,7 @@ namespace ASCOM.Setup
             if (String.IsNullOrEmpty(txtOrganizationName.Text))
                 return;
             Regex rxValidateOrgName = new Regex(@"^[a-zA-Z]+$");
-            if (!rxValidateOrgName.IsMatch(this.txtOrganizationName.Text))
+            if (!rxValidateOrgName.IsMatch(txtOrganizationName.Text))
             {
                 e.Cancel = true;
                 errorProvider.SetError(this.txtOrganizationName, "Invalid organization name. Must either be empty, or contain only alphabetic characters.\nBy convention, the first character should be upper case.");
@@ -205,14 +183,13 @@ namespace ASCOM.Setup
         }
 
         /// <summary>
-        /// Handles the Validated event of the <see cref="txtOrganizationName"/> control
-        /// and clears the control's error state.
+        /// Handles the Validated event of the <see cref="txtOrganizationName"/> control and clears the control's error state.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void txtOrganizationName_Validated(object sender, EventArgs e)
         {
-            errorProvider.SetError(this.txtOrganizationName, String.Empty);
+            errorProvider.SetError(txtOrganizationName, String.Empty);
         }
 
         /// <summary>
@@ -222,19 +199,18 @@ namespace ASCOM.Setup
         /// <param name="e"></param>
         private void cbDeviceClass_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.lblDeviceId.Text = this.DeviceId;
+            lblDeviceId.Text = this.DeviceId;
         }
 
         /// <summary>
-        /// Handles the Click event of the btnCreate control.
-        /// Closes the form.
+        /// Handles the Click event of the btnCreate control and closes the form.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            // Before dismissing the dialog, run one final validation pass.
-            if (!this.ValidateChildren(ValidationConstraints.Enabled))
+            // Before dismissing the dialogue, run one final validation pass.
+            if (!ValidateChildren(ValidationConstraints.Enabled))
                 return;
 
             if (cbDeviceClass.SelectedIndex < 0 || !cbDeviceClass.Items.Contains(cbDeviceClass.Text) || String.IsNullOrEmpty(cbDeviceClass.Text))
@@ -245,26 +221,31 @@ namespace ASCOM.Setup
 
             if (string.IsNullOrEmpty(txtDeviceName.Text.Trim()))
             {
-                errorProvider.SetError(this.txtDeviceName, "Please enter a driver name.");
+                errorProvider.SetError(txtDeviceName, "Please enter a driver name.");
                 return;
             }
 
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         #endregion
 
+        #region Support code
+
         /// <summary>
-        /// Goes through the ASCOM.DeviceInterfaces assembly extracting the interfacces that implement drivers
-        /// Use this information to build a list of interfaces with the associated class name and interfacce version
+        /// Builds a list of ASCOM interfaces
+        /// </summary>
+        /// <remarks>
+        /// Goes through the ASCOM.DeviceInterfaces assembly extracting the interfaces that implement drivers
+        /// Use this information to build a list of interfaces with the associated class name and interface version
         /// put the class names in the device names combo box
         /// 
         /// Can also adapt its behaviour depending on which Wizard called the form. This capability was added to support additional 
-        /// wizards beyond the basic wizard that creates empty projects. At present this capability is not exploited becuase the 
+        /// wizards beyond the basic wizard that creates empty projects. At present this capability is not exploited because the 
         /// Video Project is no longer going to distribute a second template based on an inherited class. The capability is left in to support
         /// similar requirements should they arise in future. Peter Simpson - October 2013.
-        /// </summary>
+        /// </remarks>
         private void InitASCOMClasses()
         {
             Regex interfaceRegex = new Regex(REGEX_FORMAT); // Create a regex to parse out the interface name and version number from type names of form: IaaaaaVn
@@ -285,8 +266,7 @@ namespace ASCOM.Setup
             // Add the relevant device types into the drop-down combo box.
             if (CallingType == typeof(ASCOM.Setup.DriverWizard)) // Form called from DriverWizard
             {
-                // get a list of the current interfaces
-                // look for the interfaces
+                // get a list of the current interfaces, look for the interfaces
                 foreach (var type in DeviceInterfacesAssembly.GetExportedTypes())
                 {
                     if (type.IsInterface)
@@ -374,7 +354,7 @@ namespace ASCOM.Setup
         }
 
         /// <summary>
-        /// Class to hold information about a device type
+        /// Internal class to hold information about a device type
         /// </summary>
         private class ASCOMInterface
         {
@@ -390,5 +370,7 @@ namespace ASCOM.Setup
             }
 
         }
+
+        #endregion
     }
 }

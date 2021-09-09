@@ -56,6 +56,24 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
+		protected void CheckParkingStatus( string ident, ParkingStateEnum actualState, ParkingStateEnum expectedState )
+		{
+			if ( actualState != expectedState )
+			{
+				string msg = $"Invalid operation when the parking status is {actualState}.";
+				LogMessage( ident, msg );
+
+				if ( actualState == ParkingStateEnum.ParkInProgress )
+				{
+					throw new InvalidOperationException( $"{ident} not allowed when the parking status is {actualState}." );
+				}
+				else if ( actualState == ParkingStateEnum.IsAtPark )
+				{
+					throw new ParkedException( $"{ident} not allowed when the telescope is AtPark." );
+				}
+			}
+		}
+
 		protected void CheckCapabilityForMethod( string ident, string capabilityName, bool capabilityValue )
 		{
 			if ( !capabilityValue )
@@ -88,7 +106,7 @@ namespace ASCOM.DeviceHub
 			{
 				LogMessage( ident, "{0} is out of range from {1} to {2}", value, min, max );
 
-				throw new InvalidValueException( ident, value.ToString( CultureInfo.CurrentCulture ), String.Format( CultureInfo.CurrentCulture, "{0} to {1}", min, max ) );
+				throw new InvalidValueException( ident, $"{value:f5}", $"{min:f5} to {max:f5}" );
 			}
 		}
 
@@ -103,9 +121,9 @@ namespace ASCOM.DeviceHub
 
 			if ( value < min || value > max )
 			{
-				LogMessage( ident, "{0} = {1} is out of range from {2} to {3}", valueProperty, value, min, max );
+				LogMessage( ident, $"{valueProperty} = {value:f5} is out of range from {min:f5} to {max:f5}" );
 
-				throw new InvalidValueException( ident, valueProperty + " = " + value.ToString( CultureInfo.CurrentCulture ), string.Format( CultureInfo.CurrentCulture, "{0} to {1}", min, max ) );
+				throw new InvalidValueException( ident, $"{valueProperty} = {value:f5}", $"{min:f5} to {max:f5}" );
 			}
 		}
 
@@ -113,7 +131,8 @@ namespace ASCOM.DeviceHub
 		{
 			if ( _logger != null && _logger.Enabled )
 			{
-				var msg = string.Format( CultureInfo.CurrentCulture, message, args );
+				var msg = String.Format( message, args );
+
 				_logger.LogMessage( identifier, msg );
 			}
 		}

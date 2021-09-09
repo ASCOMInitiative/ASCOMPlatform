@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -409,7 +410,7 @@ namespace ASCOM.DynamicRemoteClients
             DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { SharedConstants.POSITION_PARAMETER_NAME, Position.ToString() }
+                { SharedConstants.POSITION_PARAMETER_NAME, Position.ToString(CultureInfo.InvariantCulture) }
             };
             DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "Move", Parameters, Method.PUT, MemberTypes.Method);
         }

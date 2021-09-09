@@ -127,7 +127,7 @@
             // lblDeviceId
             // 
             this.lblDeviceId.AutoSize = true;
-            this.lblDeviceId.Location = new System.Drawing.Point(181, 118);
+            this.lblDeviceId.Location = new System.Drawing.Point(178, 119);
             this.lblDeviceId.Name = "lblDeviceId";
             this.lblDeviceId.Size = new System.Drawing.Size(196, 13);
             this.lblDeviceId.TabIndex = 7;
@@ -149,7 +149,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(19, 117);
+            this.label5.Location = new System.Drawing.Point(16, 119);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(91, 13);
             this.label5.TabIndex = 6;
@@ -193,7 +193,7 @@
             this.Controls.Add(this.cbDeviceClass);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DeviceDriverForm";
-            this.Text = "ASCOM Driver Project Wizard";
+            this.Text = "ASCOM Device Driver Project Wizard";
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

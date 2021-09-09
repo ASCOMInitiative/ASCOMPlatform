@@ -21,7 +21,7 @@ namespace Unit_Tests.Telescope
 		private int _testRaHours = 12;
 		private int _testRaMinutes = 20;
 		private int _testRaSeconds = 44;
-		private string _testRaString = "12:20:44";
+		private string _testRaString = "+12:20:44";
 
 		private decimal _testValueRoundUp = 16.6499917m;
 		private int _testDegreesRoundUp = 16;

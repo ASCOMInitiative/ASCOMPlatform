@@ -47,10 +47,10 @@ namespace ASCOM.DeviceHub
 
 		#region Public Methods
 
-		public void InitializeCurrentFocuser( string focuserID )
+		public void InitializeCurrentFocuser( string focuserID, double fastUpdatePeriod )
 		{
 			FocuserSetupVm.FocuserID = focuserID;
-			FocuserSetupVm.FastUpdatePeriod = FocuserManager.FastPollingPeriod;
+			FocuserSetupVm.FastUpdatePeriod = fastUpdatePeriod;
 			FocuserSetupVm.Initialize( Globals.FocuserTemperatureOffset );
 		}
 
