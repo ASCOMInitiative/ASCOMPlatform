@@ -80,12 +80,9 @@ namespace ASCOM.Simulator
         {
             try
             {
-                //driver = new ASCOM.DriverAccess.ObservingConditions(Properties.Settings.Default.DriverId);
                 if (driver.Connected) driver.Connected = false;
                 SetUIState();
                 driver.SetupDialog();
-                //driver.Dispose();
-                //driver = null;
             }
             catch (Exception ex)
             {

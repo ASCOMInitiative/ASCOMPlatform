@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-
 namespace ASCOM.Simulator
 {
     public partial class Form1 : Form
@@ -19,6 +18,8 @@ namespace ASCOM.Simulator
             InitializeComponent();
         }
 
+        #region Event handlers
+
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (IsConnected)
@@ -27,23 +28,17 @@ namespace ASCOM.Simulator
             Properties.Settings.Default.Save();
         }
 
-        private void buttonChoose_Click(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.DriverId = ASCOM.DriverAccess.ObservingConditions.Choose(DEVICE_PROGID);
-            SetUIState();
-        }
-
-        private void buttonConnect_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Toggle the connected state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonToggleConnected_Click(object sender, EventArgs e)
         {
             if (IsConnected)
             {
-                if (!(refreshTimer == null))
-                    {
-                    refreshTimer.Stop();
-                    System.Threading.Thread.Sleep(1000); // Wait for anything nin progress to complete
-                    refreshTimer.Dispose();
-                    refreshTimer = null;
-                }
+                if (!(refreshTimer is null))
+                    StopTimer();
                 driver.Connected = false;
                 LogMessage("Disconnected OK");
             }
@@ -65,12 +60,92 @@ namespace ASCOM.Simulator
             SetUIState();
         }
 
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            if (IsConnected)
+            {
+                driver.Connected = false;
+                LogMessage("Disconnected OK");
+            }
+
+            Application.Exit();
+        }
+
+        private void btnSetup_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (driver.Connected) driver.Connected = false;
+                SetUIState();
+                driver.SetupDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "OCH Test.btnSetup_Click");
+            }
+        }
+
+        private void buttonRefresh_Click(object sender, EventArgs e)
+        {
+            txtStatus.Clear();
+            DisplayProperties();
+        }
+
+        private void buttonAutoRefresh_Click(object sender, EventArgs e)
+        {
+            if (refreshTimer is null)
+                StartTimer();
+            else
+                StopTimer();
+        }
+
+        private void RefreshTimer_Tick(object sender, EventArgs e)
+        {
+            txtStatus.Clear();
+            DisplayProperties();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.DriverId = DEVICE_PROGID;
+            labelDriverId.Text = DEVICE_PROGID;
+            driver = new ASCOM.DriverAccess.ObservingConditions(DEVICE_PROGID);
+            SetUIState();
+        }
+
+        private void btnQuery_Click(object sender, EventArgs e)
+        {
+            driver.Refresh();
+            txtStatus.Clear();
+            DisplayProperties();
+        }
+
+        #endregion
+
+        #region Support code
+
+        private void StartTimer()
+        {
+            refreshTimer = new Timer();
+            refreshTimer.Interval = 1000; // 1 second refresh interval
+            refreshTimer.Start();
+            refreshTimer.Tick += RefreshTimer_Tick;
+            buttonAutoRefresh.Text = "Stop Refresh";
+        }
+
+        private void StopTimer()
+        {
+            refreshTimer.Tick -= RefreshTimer_Tick;
+            refreshTimer.Stop();
+            refreshTimer.Dispose();
+            refreshTimer = null;
+            buttonAutoRefresh.Text = "Auto Refresh";
+        }
+
         private void SetUIState()
         {
-            buttonConnect.Enabled = !string.IsNullOrEmpty(Properties.Settings.Default.DriverId);
-            buttonChoose.Enabled = !IsConnected;
-            buttonConnect.Text = IsConnected ? "Disconnect" : "Connect";
-            buttonChoose.Enabled = !IsConnected;
+            buttonToggleConnected.Enabled = !string.IsNullOrEmpty(Properties.Settings.Default.DriverId);
+            buttonToggleConnected.Text = IsConnected ? "Disconnect" : "Connect";
             buttonRefresh.Enabled = IsConnected;
             buttonAutoRefresh.Enabled = IsConnected;
             btnSetup.Enabled = !IsConnected;
@@ -89,41 +164,6 @@ namespace ASCOM.Simulator
         {
             if (txtStatus.Text == "") txtStatus.Text = message;
             else txtStatus.Text = txtStatus.Text + "\r\n" + message;
-        }
-
-        private void btnExit_Click(object sender, EventArgs e)
-        {
-            if (IsConnected)
-            {
-                driver.Connected = false;
-                LogMessage("Disconnected OK");
-            }
-            //driver.Dispose();
-
-            Application.Exit();
-        }
-
-        private void btnSetup_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                //driver = new ASCOM.DriverAccess.ObservingConditions(Properties.Settings.Default.DriverId);
-                if (driver.Connected) driver.Connected = false;
-                SetUIState();
-                driver.SetupDialog();
-                //driver.Dispose();
-                //driver = null;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "OCH Test.btnSetup_Click");
-            }
-        }
-
-        private void buttonRefresh_Click(object sender, EventArgs e)
-        {
-            txtStatus.Clear();
-            DisplayProperties();
         }
 
         private void DisplayProperties()
@@ -258,34 +298,7 @@ namespace ASCOM.Simulator
             }
         }
 
-        private void buttonAutoRefresh_Click(object sender, EventArgs e)
-        {
+        #endregion
 
-            refreshTimer = new Timer();
-            refreshTimer.Interval = 1000; // 1 second refresh interval
-            refreshTimer.Start();
-            refreshTimer.Tick += RefreshTimer_Tick;
-        }
-
-        private void RefreshTimer_Tick(object sender, EventArgs e)
-        {
-            txtStatus.Clear();
-            DisplayProperties();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.DriverId = DEVICE_PROGID;
-            labelDriverId.Text = DEVICE_PROGID;
-            driver = new ASCOM.DriverAccess.ObservingConditions(DEVICE_PROGID);
-            SetUIState();
-        }
-
-        private void btnQuery_Click(object sender, EventArgs e)
-        {
-            driver.Refresh();
-            txtStatus.Clear();
-            DisplayProperties();
-        }
     }
 }
