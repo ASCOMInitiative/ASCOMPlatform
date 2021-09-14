@@ -125,7 +125,6 @@ namespace ASCOM.Simulator
 
 #endregion
 
-
 #region Event Handlers
 
         private void OK_Button_Click(object sender, EventArgs e)
@@ -245,12 +244,16 @@ namespace ASCOM.Simulator
         {
             EnableDisableControls();
             this.BringToFront();
+
+            // Bring this form to the front of the screen
+            this.WindowState = FormWindowState.Minimized;
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
         }
 
-#endregion
+        #endregion
 
-
-#region Helpers
+        #region Helpers
 
         //
         // Make sure GUI elements are in sync with the number of slots
@@ -294,7 +297,6 @@ namespace ASCOM.Simulator
         }
 
 #endregion
-
 
     }
 }

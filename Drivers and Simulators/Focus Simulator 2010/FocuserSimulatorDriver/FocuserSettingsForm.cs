@@ -47,6 +47,12 @@ namespace ASCOM.Simulator
             radAbsoluteFocuser.Checked = _focuser.Absolute;
             radRelativeFocuser.Checked = !radAbsoluteFocuser.Checked;
             this.BringToFront();
+
+            // Bring this form to the front of the screen
+            this.WindowState = FormWindowState.Minimized;
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+
             _focuser.TL.LogMessage("FocusSettingsForm", "Form loaded");
         }
 

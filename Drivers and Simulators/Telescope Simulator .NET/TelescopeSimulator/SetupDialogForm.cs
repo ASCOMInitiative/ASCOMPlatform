@@ -19,6 +19,8 @@ namespace ASCOM.Simulator
         {
             InitializeComponent();
 
+            this.Load += SetupDialogForm_Load1;
+
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
             labelVersion.Text = string.Format(CultureInfo.CurrentCulture, "ASCOM Telescope Simulator .NET Version {0}.{1}.{2}", version.Major, version.Minor, version.Build);
             TimeZone localZone = TimeZone.CurrentTimeZone;
@@ -66,6 +68,14 @@ namespace ASCOM.Simulator
             // J2000,2
             // J2050,3
             // Other,0
+        }
+
+        private void SetupDialogForm_Load1(object sender, EventArgs e)
+        {
+            // Bring this form to the front of the screen
+            this.WindowState = FormWindowState.Minimized;
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
         }
 
         private void CmdOK_Click(object sender, EventArgs e)

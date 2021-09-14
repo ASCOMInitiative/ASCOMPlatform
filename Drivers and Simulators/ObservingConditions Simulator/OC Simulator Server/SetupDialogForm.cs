@@ -47,8 +47,8 @@ namespace ASCOM.Simulator
             numAveragePeriod.Value = Convert.ToDecimal(OCSimulator.AveragePeriod);
             numNumberOfReadingsToAverage.Value = Convert.ToDecimal(OCSimulator.NumberOfReadingsToAverage);
             EnableNumberOfReadingsToAverage();
-            // Initialise sensorview items here
 
+            // Initialise sensorview items here
             foreach (string sensor in OCSimulator.SimulatedProperties)
             {
                 SensorView thisSensorView = (SensorView)this.Controls[OCSimulator.SENSORVIEW_CONTROL_PREFIX + sensor];
@@ -60,7 +60,10 @@ namespace ASCOM.Simulator
                 thisSensorView.ValueCycleTime = OCSimulator.Sensors[sensor].ValueCycleTime;
             }
 
-            // Initialise current values of user settings from the ASCOM Profile 
+            // Bring this form to the front of the screen
+            this.WindowState = FormWindowState.Minimized;
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
 
         }
 

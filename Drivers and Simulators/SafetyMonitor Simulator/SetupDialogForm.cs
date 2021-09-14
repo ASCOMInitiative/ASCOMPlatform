@@ -22,7 +22,15 @@ namespace ASCOM.Simulator
             InitializeComponent();
             LoadImagesFromResources();
             DisplaySafetyMonitor();
+            this.Load += SetupDialogForm_Load;
+        }
 
+        private void SetupDialogForm_Load(object sender, EventArgs e)
+        {
+            // Bring this form to the front of the screen
+            this.WindowState = FormWindowState.Minimized;
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
         }
 
         /// <summary>
