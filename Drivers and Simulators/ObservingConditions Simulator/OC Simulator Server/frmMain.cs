@@ -107,9 +107,6 @@ namespace ASCOM.Simulator
             OCSimulator.TL.LogMessage(clientNumber, "SetupDialog", "Creating setup form");
             using (Form setupForm = new SetupDialogForm(OCSimulator.TL))
             {
-                //this.BringToFront();
-                //DialogResult ans = setupForm.ShowDialog(this);
-
                 OCSimulator.TL.LogMessage(clientNumber, "SetupDialog", "Showing Dialogue");
                 this.BringToFront();
                 DialogResult result = setupForm.ShowDialog();
@@ -122,15 +119,6 @@ namespace ASCOM.Simulator
                 }
                 else OCSimulator.TL.LogMessage(clientNumber, "SetupDialog", "Dialogue closed with Cancel status");
             }
-            //if (!(setupForm == null))
-            //{
-            //    setupForm.Dispose();
-            //    setupForm = null;
-            //}
-
-
-
-
         }
 
         #region Support code
