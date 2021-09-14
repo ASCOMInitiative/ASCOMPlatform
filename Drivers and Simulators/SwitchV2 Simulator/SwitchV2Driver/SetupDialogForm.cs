@@ -46,10 +46,7 @@ namespace ASCOM.Simulator
         private void SetupDialogForm_Load(object sender, EventArgs e)
         {
             // Bring this form to the front of the screen
-            this.WindowState = FormWindowState.Minimized;
-            this.Show();
-            this.WindowState = FormWindowState.Normal;
-        }
+            this.BringToFront();        }
 
         void dataGridViewSwitches_RowHeightChanged(object sender, DataGridViewRowEventArgs e)
         {

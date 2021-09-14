@@ -244,11 +244,6 @@ namespace ASCOM.Simulator
         {
             EnableDisableControls();
             this.BringToFront();
-
-            // Bring this form to the front of the screen
-            this.WindowState = FormWindowState.Minimized;
-            this.Show();
-            this.WindowState = FormWindowState.Normal;
         }
 
         #endregion
