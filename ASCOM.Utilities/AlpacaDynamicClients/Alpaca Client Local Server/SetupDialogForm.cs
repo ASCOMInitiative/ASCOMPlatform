@@ -163,10 +163,16 @@ namespace ASCOM.DynamicRemoteClients
                 if (CmbImageArrayTransferType.SelectedItem == null) CmbImageArrayTransferType.SelectedItem = SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT;
                 if (cmbImageArrayCompression.SelectedItem == null) cmbImageArrayCompression.SelectedItem = SharedConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT;
 
-                // Bring this form to the front of the screen
-                this.WindowState = FormWindowState.Minimized;
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
+                // Bring the setup dialogue to the front of the screen
+                if (WindowState == FormWindowState.Minimized)
+                    WindowState = FormWindowState.Normal;
+                else
+                {
+                    TopMost = true;
+                    Focus();
+                    BringToFront();
+                    TopMost = false;
+                }
             }
             catch (Exception ex)
             {

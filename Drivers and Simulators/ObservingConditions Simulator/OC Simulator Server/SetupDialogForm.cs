@@ -60,7 +60,16 @@ namespace ASCOM.Simulator
                 thisSensorView.ValueCycleTime = OCSimulator.Sensors[sensor].ValueCycleTime;
             }
 
-            this.BringToFront();
+            // Bring the setup dialogue to the front of the screen
+            if (WindowState == FormWindowState.Minimized)
+                WindowState = FormWindowState.Normal;
+            else
+            {
+                TopMost = true;
+                Focus();
+                BringToFront();
+                TopMost = false;
+            }
         }
 
         #endregion
