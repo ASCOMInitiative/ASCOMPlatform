@@ -28,8 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.buttonChoose = new System.Windows.Forms.Button();
-            this.buttonConnect = new System.Windows.Forms.Button();
+            this.buttonToggleConnected = new System.Windows.Forms.Button();
             this.labelDriverId = new System.Windows.Forms.Label();
             this.txtStatus = new System.Windows.Forms.TextBox();
             this.btnExit = new System.Windows.Forms.Button();
@@ -38,25 +37,15 @@
             this.buttonAutoRefresh = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // buttonChoose
+            // buttonToggleConnected
             // 
-            this.buttonChoose.Location = new System.Drawing.Point(646, 39);
-            this.buttonChoose.Name = "buttonChoose";
-            this.buttonChoose.Size = new System.Drawing.Size(86, 23);
-            this.buttonChoose.TabIndex = 0;
-            this.buttonChoose.Text = "Choose";
-            this.buttonChoose.UseVisualStyleBackColor = true;
-            this.buttonChoose.Click += new System.EventHandler(this.buttonChoose_Click);
-            // 
-            // buttonConnect
-            // 
-            this.buttonConnect.Location = new System.Drawing.Point(646, 10);
-            this.buttonConnect.Name = "buttonConnect";
-            this.buttonConnect.Size = new System.Drawing.Size(86, 23);
-            this.buttonConnect.TabIndex = 0;
-            this.buttonConnect.Text = "Connect";
-            this.buttonConnect.UseVisualStyleBackColor = true;
-            this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
+            this.buttonToggleConnected.Location = new System.Drawing.Point(646, 10);
+            this.buttonToggleConnected.Name = "buttonToggleConnected";
+            this.buttonToggleConnected.Size = new System.Drawing.Size(86, 23);
+            this.buttonToggleConnected.TabIndex = 0;
+            this.buttonToggleConnected.Text = "Connect";
+            this.buttonToggleConnected.UseVisualStyleBackColor = true;
+            this.buttonToggleConnected.Click += new System.EventHandler(this.buttonToggleConnected_Click);
             // 
             // labelDriverId
             // 
@@ -118,7 +107,7 @@
             // 
             // Form1
             // 
-            this.AcceptButton = this.buttonConnect;
+            this.AcceptButton = this.buttonToggleConnected;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnExit;
@@ -129,8 +118,7 @@
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.txtStatus);
             this.Controls.Add(this.labelDriverId);
-            this.Controls.Add(this.buttonConnect);
-            this.Controls.Add(this.buttonChoose);
+            this.Controls.Add(this.buttonToggleConnected);
             this.Name = "Form1";
             this.Text = "Observing conditions Simulator test harness";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
@@ -140,9 +128,7 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button buttonChoose;
-        private System.Windows.Forms.Button buttonConnect;
+        private System.Windows.Forms.Button buttonToggleConnected;
         private System.Windows.Forms.Label labelDriverId;
         private System.Windows.Forms.TextBox txtStatus;
         private System.Windows.Forms.Button btnExit;
