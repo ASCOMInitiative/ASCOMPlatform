@@ -591,6 +591,7 @@ namespace ASCOM.DynamicRemoteClients
                 s_MainForm.WindowState = FormWindowState.Minimized;
                 s_MainForm.Visible = false;
                 s_MainForm.Hide();
+                s_MainForm.ShowInTaskbar = false;
             }
 
             // Register the class factories of the served objects
