@@ -23,6 +23,7 @@ namespace ASCOM.Simulator
         {
             InitializeComponent();
 
+            this.Load += SetupDialogForm_Load;
             this.FormClosing += SetupDialogForm_FormClosing;
 
             // Set a common event handler for the gain radio buttons
@@ -35,6 +36,14 @@ namespace ASCOM.Simulator
             RadOffsets.CheckedChanged += OffsetRadioButton_CheckedChanged;
             RadOffsetMinMax.CheckedChanged += OffsetRadioButton_CheckedChanged;
 
+        }
+
+        private void SetupDialogForm_Load(object sender, EventArgs e)
+        {
+            // Bring this form to the front of the screen
+            this.WindowState = FormWindowState.Minimized;
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
         }
 
         private void SetupDialogForm_FormClosing(object sender, FormClosingEventArgs e)

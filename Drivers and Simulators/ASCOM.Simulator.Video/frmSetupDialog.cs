@@ -43,8 +43,17 @@ namespace ASCOM.Simulator
         public frmSetupDialog()
         {
             InitializeComponent();
+            this.Load += FrmSetupDialog_Load;
 
             InitAllPropertyPages();
+        }
+
+        private void FrmSetupDialog_Load(object sender, EventArgs e)
+        {
+            // Bring this form to the front of the screen
+            this.WindowState = FormWindowState.Minimized;
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
         }
 
         private void InitAllPropertyPages()

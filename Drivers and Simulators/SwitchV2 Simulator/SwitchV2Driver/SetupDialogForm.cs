@@ -17,8 +17,12 @@ namespace ASCOM.Simulator
         public SetupDialogForm()
         {
             InitializeComponent();
+
+            this.Load += SetupDialogForm_Load;
+            
             // Initialise current values of user settings from the ASCOM Profile 
             chkTrace.Checked = Switch.traceState;
+            
             // get a copy of the switches for editing
             dataGridViewSwitches.Rows.Clear();
             var i = 0;
@@ -37,6 +41,14 @@ namespace ASCOM.Simulator
             
             ResizeForm();
 
+        }
+
+        private void SetupDialogForm_Load(object sender, EventArgs e)
+        {
+            // Bring this form to the front of the screen
+            this.WindowState = FormWindowState.Minimized;
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
         }
 
         void dataGridViewSwitches_RowHeightChanged(object sender, DataGridViewRowEventArgs e)
