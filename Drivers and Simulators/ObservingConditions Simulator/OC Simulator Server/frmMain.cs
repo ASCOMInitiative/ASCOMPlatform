@@ -21,6 +21,7 @@ namespace ASCOM.Simulator
         public frmMain()
         {
             InitializeComponent();
+            this.BringToFront();
             Application.ThreadException += Application_ThreadException;
             refreshTimer.Elapsed += refreshTimer_Elapsed;
             refreshTimer.Enabled = true;
@@ -100,6 +101,38 @@ namespace ASCOM.Simulator
         }
         #endregion
 
+        public void DoSetupDialog(int clientNumber)
+        {
+            OCSimulator.TL.LogMessage(clientNumber, "SetupDialog", "Connected: " + OCSimulator.IsHardwareConnected().ToString());
+            OCSimulator.TL.LogMessage(clientNumber, "SetupDialog", "Creating setup form");
+            using (Form setupForm = new SetupDialogForm(OCSimulator.TL))
+            {
+                //this.BringToFront();
+                //DialogResult ans = setupForm.ShowDialog(this);
+
+                OCSimulator.TL.LogMessage(clientNumber, "SetupDialog", "Showing Dialogue");
+                this.BringToFront();
+                DialogResult result = setupForm.ShowDialog();
+                OCSimulator.TL.LogMessage(clientNumber, "SetupDialog", "Dialogue closed");
+                setupForm.Close();
+                if (result == DialogResult.OK)
+                {
+                    OCSimulator.TL.LogMessage(clientNumber, "SetupDialog", "Dialogue closed with OK status");
+                    OCSimulator.WriteProfile(); // Persist device configuration values to the ASCOM Profile store
+                }
+                else OCSimulator.TL.LogMessage(clientNumber, "SetupDialog", "Dialogue closed with Cancel status");
+            }
+            //if (!(setupForm == null))
+            //{
+            //    setupForm.Dispose();
+            //    setupForm = null;
+            //}
+
+
+
+
+        }
+
         #region Support code
 
         private delegate void SetControlPropertyThreadSafeDelegate(Control control, string propertyName, object propertyValue);
@@ -112,7 +145,7 @@ namespace ASCOM.Simulator
             }
             else
             {
-                control.GetType().InvokeMember(propertyName, BindingFlags.SetProperty, null, control, new object[] { propertyValue },CultureInfo.InvariantCulture);
+                control.GetType().InvokeMember(propertyName, BindingFlags.SetProperty, null, control, new object[] { propertyValue }, CultureInfo.InvariantCulture);
             }
         }
 

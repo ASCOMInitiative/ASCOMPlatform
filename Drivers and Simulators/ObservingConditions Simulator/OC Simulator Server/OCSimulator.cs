@@ -438,35 +438,35 @@ namespace ASCOM.Simulator
             return name;
         }
 
-        public static void SetupDialog(int clientNumber)
-        {
-            TL.LogMessage(clientNumber, "SetupDialog", "Connected: " + IsHardwareConnected().ToString());
-            if (IsHardwareConnected())
-            {
-                MessageBox.Show("Simulator is connected, setup parameters cannot be changed, please press OK");
-            }
-            else
-            {
-                TL.LogMessage(clientNumber, "SetupDialog", "Creating setup form");
-                using (setupForm = new SetupDialogForm())
-                {
-                    TL.LogMessage(clientNumber, "SetupDialog", "Showing Dialogue");
-                    var result = setupForm.ShowDialog();
-                    TL.LogMessage(clientNumber, "SetupDialog", "Dialogue closed");
-                    if (result == DialogResult.OK)
-                    {
-                        TL.LogMessage(clientNumber, "SetupDialog", "Dialogue closed with OK status");
-                        WriteProfile(); // Persist device configuration values to the ASCOM Profile store
-                    }
-                    else TL.LogMessage(clientNumber, "SetupDialog", "Dialogue closed with Cancel status");
-                }
-                if (!(setupForm == null))
-                {
-                    setupForm.Dispose();
-                    setupForm = null;
-                }
-            }
-        }
+        //public static void SetupDialog(int clientNumber)
+        //{
+        //    TL.LogMessage(clientNumber, "SetupDialog", "Connected: " + IsHardwareConnected().ToString());
+        //    if (IsHardwareConnected())
+        //    {
+        //        MessageBox.Show("Simulator is connected, setup parameters cannot be changed, please press OK");
+        //    }
+        //    else
+        //    {
+        //        TL.LogMessage(clientNumber, "SetupDialog", "Creating setup form");
+        //        using (setupForm = new SetupDialogForm())
+        //        {
+        //            TL.LogMessage(clientNumber, "SetupDialog", "Showing Dialogue");
+        //            var result = setupForm.ShowDialog();
+        //            TL.LogMessage(clientNumber, "SetupDialog", "Dialogue closed");
+        //            if (result == DialogResult.OK)
+        //            {
+        //                TL.LogMessage(clientNumber, "SetupDialog", "Dialogue closed with OK status");
+        //                WriteProfile(); // Persist device configuration values to the ASCOM Profile store
+        //            }
+        //            else TL.LogMessage(clientNumber, "SetupDialog", "Dialogue closed with Cancel status");
+        //        }
+        //        if (!(setupForm == null))
+        //        {
+        //            setupForm.Dispose();
+        //            setupForm = null;
+        //        }
+        //    }
+        //}
 
         public static ArrayList SupportedActions(int clientNumber)
         {
