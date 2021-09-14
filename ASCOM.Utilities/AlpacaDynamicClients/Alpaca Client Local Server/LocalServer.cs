@@ -566,7 +566,7 @@ namespace ASCOM.DynamicRemoteClients
         static void Main(string[] args)
         {
             TL = new TraceLogger("DynamicClientServer");
-            TL.Enabled = true;
+            TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.SIMULATOR_TRACE, GlobalConstants.SIMULATOR_TRACE_DEFAULT);
 
             TL.LogMessage("Main", $"Dynamic client version: {Application.ProductVersion}");
             TL.LogMessage("Main", $"Running as a {(string)(Environment.Is64BitProcess ? "64bit" : "32bit")} process on a {(string)(Environment.Is64BitOperatingSystem ? "64bit" : "32bit")} operating system.");
@@ -585,6 +585,7 @@ namespace ASCOM.DynamicRemoteClients
             Application.SetCompatibleTextRenderingDefault(false);
             s_MainForm = new LocalServerForm();
 
+            TL.LogMessage("Main", $"Started by COM: {StartedByCOM}");
             if (StartedByCOM)
             {
                 s_MainForm.WindowState = FormWindowState.Minimized;

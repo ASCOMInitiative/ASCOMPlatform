@@ -1,0 +1,7 @@
+The following version numbers need to be changed when creating a new Platform or service pack release.
+
+1) Update the version number text in the InstallAware Platform installer project file
+2) Update the version number text in the InstallAware Developer Tools installer project file
+3) Update the master version number in .\Releases\ASCOM 6\Platform\Installer Project\MasterPlatformVersion.txt (Also available as a link in the Platform solution)
+4) Update assembly and file version numbers: global replace "CurrentMajor.CurrentMinor.CurrentServicePack.0" with "NewMajor.NewMinor.NewServicePack.0" in the Platform VS solution (over 40 changes expected). Note that the surrounding double quote characters must be included as part of the find and replacement strings
+5) Update SOFA version numbers: global replace CurrentMajor,CurrentMinor,CurrentServicePack,0 with NewMajor,NewMinor,NewServicePack,0 in the Platform VS solution (4 changes expected). Note comma separators and no surrounding quotes.
