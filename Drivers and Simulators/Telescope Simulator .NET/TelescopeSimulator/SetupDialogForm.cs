@@ -11,7 +11,6 @@ using System.Reflection;
 
 namespace ASCOM.Simulator
 {
-
     [ComVisible(false)]					// Form not registered for COM!
     public partial class SetupDialogForm : Form
     {
@@ -457,15 +456,10 @@ namespace ASCOM.Simulator
         private void SetupDialogForm_Load(object sender, EventArgs e)
         {
             // Bring the setup dialogue to the front of the screen
-            if (WindowState == FormWindowState.Minimized)
-                WindowState = FormWindowState.Normal;
-            else
-            {
-                TopMost = true;
-                Focus();
-                BringToFront();
-                TopMost = false;
-            }
+            TopMost = true;
+            Focus();
+            BringToFront();
+            TopMost = false;
 
             // this bizarre sequence seems to be required to bring the setup dialog to the front.
             //this.TopMost = true;

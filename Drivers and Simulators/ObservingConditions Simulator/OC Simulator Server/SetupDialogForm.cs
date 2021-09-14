@@ -20,16 +20,18 @@ namespace ASCOM.Simulator
         internal static List<KeyValuePair> allDevices = new List<KeyValuePair>();
 
         #region Initialiser and form load
-        public SetupDialogForm()
+        public SetupDialogForm(TraceLoggerPlus TL)
         {
             try
             {
                 InitializeComponent();
-
+                this.TL = TL;
+                TL.LogMessage("SetupDialogForm", "Start");
                 util = new Util();
                 TL = OCSimulator.TL;
 
                 numAveragePeriod.ValueChanged += numAveragePeriod_ValueChanged;
+                TL.LogMessage("SetupDialogForm", "Completed");
 
             }
             catch (Exception ex)
@@ -40,6 +42,12 @@ namespace ASCOM.Simulator
 
         private void SetupDialogForm_Load(object sender, EventArgs e)
         {
+            TL.LogMessage("SetupDialogFormLoad", "Started");
+            TopMost = true;
+            Focus();
+            BringToFront();
+            TopMost = false;
+
             // Initialise current values of user settings from the ASCOM Profile 
             chkTrace.Checked = OCSimulator.TraceState;
             chkDebugTrace.Checked = OCSimulator.DebugTraceState;
@@ -47,6 +55,7 @@ namespace ASCOM.Simulator
             numAveragePeriod.Value = Convert.ToDecimal(OCSimulator.AveragePeriod);
             numNumberOfReadingsToAverage.Value = Convert.ToDecimal(OCSimulator.NumberOfReadingsToAverage);
             EnableNumberOfReadingsToAverage();
+            TL.LogMessage("SetupDialogFormLoad", "Before initialising sensors");
 
             // Initialise sensor view items here
             foreach (string sensor in OCSimulator.SimulatedProperties)
@@ -59,17 +68,29 @@ namespace ASCOM.Simulator
                 thisSensorView.NotReadyDelay = OCSimulator.Sensors[sensor].NotReadyDelay;
                 thisSensorView.ValueCycleTime = OCSimulator.Sensors[sensor].ValueCycleTime;
             }
+            //try
+            //{
+            //    Control parent = this.Parent;
+            //    (parent as Form).TopMost = true;
+            //    (parent as Form).Focus();
+            //    (parent as Form).BringToFront();
+            //    (parent as Form).TopMost = false;
+            //    this.Focus();
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    TL.LogMessageCrLf("SetupDialogForm_Load", ex.ToString());
+            //    MessageBox.Show($"SetupDialogForm_Load {ex}");
+            //}
 
             // Bring the setup dialogue to the front of the screen
-            if (WindowState == FormWindowState.Minimized)
-                WindowState = FormWindowState.Normal;
-            else
-            {
-                TopMost = true;
-                Focus();
-                BringToFront();
-                TopMost = false;
-            }
+            //if (WindowState == FormWindowState.Minimized)
+            //    WindowState = FormWindowState.Normal;
+            //else
+            //{
+            //}
+            TL.LogMessage("SetupDialogFormLoad", "Completed");
         }
 
         #endregion
@@ -78,6 +99,7 @@ namespace ASCOM.Simulator
 
         private void cmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
         {
+            TL.LogMessage("cmdCancel_Click", "Called");
             Close();
         }
 

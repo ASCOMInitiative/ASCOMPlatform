@@ -62,7 +62,20 @@ namespace ASCOM.Simulator
         /// </summary>
         public void SetupDialog()
         {
-            OCSimulator.SetupDialog(clientNumber);
+            //OCSimulator.SetupDialog(clientNumber);
+            if (OCSimulator.IsHardwareConnected())
+                throw new InvalidOperationException("The hardware is connected, cannot do SetupDialog()");
+            try
+            {
+                TL.LogMessage("SetupDialog()", $"Calling DoSetupDialog");
+                Server.s_MainForm.DoSetupDialog(clientNumber);
+            }
+            catch (Exception ex)
+            {
+                //EventLogCode.LogEvent("ASCOM.Simulator.Telescope", "Exception on SetupDialog", EventLogEntryType.Error, GlobalConstants.EventLogErrors.TelescopeSimulatorSetup, ex.ToString());
+                System.Windows.Forms.MessageBox.Show("ObservingConditions Simulator SetUp: " + ex.ToString());
+            }
+
         }
 
         public ArrayList SupportedActions
