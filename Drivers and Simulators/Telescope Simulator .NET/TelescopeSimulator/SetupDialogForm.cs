@@ -19,8 +19,6 @@ namespace ASCOM.Simulator
         {
             InitializeComponent();
 
-            this.Load += SetupDialogForm_Load1;
-
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
             labelVersion.Text = string.Format(CultureInfo.CurrentCulture, "ASCOM Telescope Simulator .NET Version {0}.{1}.{2}", version.Major, version.Minor, version.Build);
             TimeZone localZone = TimeZone.CurrentTimeZone;
@@ -68,11 +66,6 @@ namespace ASCOM.Simulator
             // J2000,2
             // J2050,3
             // Other,0
-        }
-
-        private void SetupDialogForm_Load1(object sender, EventArgs e)
-        {
-            this.BringToFront();
         }
 
         private void CmdOK_Click(object sender, EventArgs e)
@@ -463,11 +456,22 @@ namespace ASCOM.Simulator
 
         private void SetupDialogForm_Load(object sender, EventArgs e)
         {
+            // Bring the setup dialogue to the front of the screen
+            if (WindowState == FormWindowState.Minimized)
+                WindowState = FormWindowState.Normal;
+            else
+            {
+                TopMost = true;
+                Focus();
+                BringToFront();
+                TopMost = false;
+            }
+
             // this bizarre sequence seems to be required to bring the setup dialog to the front.
-            this.TopMost = true;
-            this.Activate();
-            this.BringToFront();
-            this.TopMost = false;
+            //this.TopMost = true;
+            //this.Activate();
+            //this.BringToFront();
+            //this.TopMost = false;
         }
     }
 
