@@ -21,6 +21,8 @@ namespace ASCOM.Simulator
             SetUIState();
         }
 
+        #region Event handlers
+
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (IsConnected)
@@ -29,27 +31,22 @@ namespace ASCOM.Simulator
             Properties.Settings.Default.Save();
         }
 
-        private void buttonChoose_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Toggle the connected state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonToggleConnected_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DriverId = ASCOM.DriverAccess.ObservingConditions.Choose(DEVICE_PROGID);
-            SetUIState();
-        }
-
-        private void buttonConnect_Click(object sender, EventArgs e)
-        {
-            if (IsConnected)
+            if (IsConnected) // Currently connected so disconnect
             {
-                if (!(refreshTimer == null))
-                    {
-                    refreshTimer.Stop();
-                    System.Threading.Thread.Sleep(1000); // Wait for anything nin progress to complete
-                    refreshTimer.Dispose();
-                    refreshTimer = null;
-                }
+                if (!(refreshTimer is null))
+                    StopTimer();
+
                 driver.Connected = false;
                 LogMessage("Disconnected OK");
             }
-            else
+            else // Currently not connected so connect
             {
                 try
                 {
@@ -67,39 +64,14 @@ namespace ASCOM.Simulator
             SetUIState();
         }
 
-        private void SetUIState()
-        {
-            buttonConnect.Enabled = !string.IsNullOrEmpty(Properties.Settings.Default.DriverId);
-            buttonChoose.Enabled = !IsConnected;
-            buttonConnect.Text = IsConnected ? "Disconnect" : "Connect";
-            buttonChoose.Enabled = !IsConnected;
-            buttonRefresh.Enabled = IsConnected;
-            buttonAutoRefresh.Enabled = IsConnected;
-            btnSetup.Enabled = !IsConnected;
-        }
-
-        private bool IsConnected
-        {
-            get
-            {
-                return ((this.driver != null) && (driver.Connected == true));
-            }
-        }
-
-        private void LogMessage(string message)
-        {
-            if (txtStatus.Text == "") txtStatus.Text = message;
-            else txtStatus.Text = txtStatus.Text + "\r\n" + message;
-        }
-
         private void btnExit_Click(object sender, EventArgs e)
         {
             if (IsConnected)
             {
                 driver.Connected = false;
                 LogMessage("Disconnected OK");
+
             }
-            //driver.Dispose();
 
             Application.Exit();
         }
@@ -125,6 +97,65 @@ namespace ASCOM.Simulator
         {
             txtStatus.Clear();
             DisplayProperties();
+        }
+
+        private void buttonAutoRefresh_Click(object sender, EventArgs e)
+        {
+            if (refreshTimer is null)
+                StartTimer();
+            else
+                StopTimer();
+        }
+
+        private void RefreshTimer_Tick(object sender, EventArgs e)
+        {
+            txtStatus.Clear();
+            DisplayProperties();
+        }
+
+        #endregion
+
+        #region Support code
+
+        private void StartTimer()
+        {
+            refreshTimer = new Timer();
+            refreshTimer.Interval = 1000; // 1 second refresh interval
+            refreshTimer.Start();
+            refreshTimer.Tick += RefreshTimer_Tick;
+            buttonAutoRefresh.Text = "Stop Refresh";
+        }
+
+        private void StopTimer()
+        {
+            refreshTimer.Tick -= RefreshTimer_Tick;
+            refreshTimer.Stop();
+            refreshTimer.Dispose();
+            refreshTimer = null;
+            buttonAutoRefresh.Text = "Auto Refresh";
+        }
+
+        private void SetUIState()
+        {
+            buttonToggleConnected.Enabled = !string.IsNullOrEmpty(Properties.Settings.Default.DriverId);
+            buttonToggleConnected.Text = IsConnected ? "Disconnect" : "Connect";
+            buttonRefresh.Enabled = IsConnected;
+            buttonAutoRefresh.Enabled = IsConnected;
+            btnSetup.Enabled = !IsConnected;
+        }
+
+        private bool IsConnected
+        {
+            get
+            {
+                return ((this.driver != null) && (driver.Connected == true));
+            }
+        }
+
+        private void LogMessage(string message)
+        {
+            if (txtStatus.Text == "") txtStatus.Text = message;
+            else txtStatus.Text = txtStatus.Text + "\r\n" + message;
         }
 
         private void DisplayProperties()
@@ -220,7 +251,6 @@ namespace ASCOM.Simulator
             }
         }
 
-
         private void ListProperty(string PropertyName)
         {
             try
@@ -261,19 +291,7 @@ namespace ASCOM.Simulator
 
         }
 
-        private void buttonAutoRefresh_Click(object sender, EventArgs e)
-        {
+        #endregion
 
-            refreshTimer = new Timer();
-            refreshTimer.Interval = 1000; // 1 second refresh interval
-            refreshTimer.Start();
-            refreshTimer.Tick += RefreshTimer_Tick;
-        }
-
-        private void RefreshTimer_Tick(object sender, EventArgs e)
-        {
-            txtStatus.Clear();
-            DisplayProperties();
-        }
     }
 }
