@@ -52,19 +52,19 @@
 	<!-- #BeginEditable "MainContent" -->
 <div class="article">
 <h3>This Section is for Developers of Classic ASCOM COM Apps and Drivers</h3>
-	<p>For ASCOM Alpaca appliction and driver development see the <a href="../AlpacaDeveloper/Index.htm">Alpaca Developers Section</a>.</p>  
-	<p class="note">If you are new to ASCOM, is is strongly suggested that you first go through the <a href="../About/Index.htm">About Alpaca and ASCOM</a> section and then return here. ASCOM. There is a lot of information here <span class="underline">and in the pages on the list to the left</span> as well as the <a href="https://ascom-standards.org/Help/Developer/Index.html" target="_blank">Help for the ASCOM Platform Developer Components (direct link)</a>. This information can save you time and frustration during your development. Please invest some time to check it out before getting heavily into your development.	</p>
-	<h3>Developer's Forum</h3>
+	<p>For ASCOM Alpaca application and driver development see the <a href="../AlpacaDeveloper/Index.htm">Alpaca Developers Section</a>.</p>  
+	<p class="note">If you are new to ASCOM, is is strongly suggested that you first go through the <a href="../About/Index.htm">About Alpaca and ASCOM</a> section and then return here. Next familiarize yourself with <span class="underline">all three sections</span> of the Design Principles in the orange menu on the left. There is a lot of information here as well as in the <a href="https://ascom-standards.org/Help/Developer/Index.html" target="_blank">Help for the ASCOM Platform Developer Components (direct link)</a>. This information can save you time and frustration during your development. Please invest some time to check it out before getting heavily into your development.	</p>
+<h3>Developer's Forum</h3>
 	<p>We have two separate forums, one for users and the other for developers. As a developer, we ask that you seek help and information using the <a href="https://ascomtalk.groups.io/g/Developer" target="_new">ASCOM Talk Developers Forum</a>.</p>
 	
 	<p align="center"><a href="https://ascomtalk.groups.io/g/Developer" target="_new" style="font-size: large;"><img src="../Images/Groups.io.jpg" width="188" height="53" vspace="8" border="0" alt="Join or Visit the ASCOM Talk group" /><br />
 	Visit the ASCOM-Talk Developers Forum</a></p>
 	
 	<h3>Application Developer Resources</h3>
-	<p>If you're new to ASCOM, and you're an <i>application</i> developer (as opposed to a driver developer), check out the <a href="AppStart.htm">Getting Started</a> info which includes this <a href="AppStart.htm#video">excellent video showing the development of a complete program</a> for controlling any telescope using Visual Studio using Visual Basic .NET. Then, if you are developing your application in one of the Microsoft .NET languages, learn about the <a href="ClientToolkit.htm">ASCOM .NET Client Toolkit</a>.</p>
+	<p>Once you have become familiar with the ASCOM ecosystem (see above), Look over the COM App Development topics in the orange menu. In particular, the <a href="AppStart.htm">Getting Started</a> info  includes this <a href="AppStart.htm#video">excellent video showing the development of a complete program</a> for controlling any telescope using Visual Studio using Visual Basic .NET. Then, if you are developing your application in one of the Microsoft .NET languages, learn about the <a href="ClientToolkit.htm">ASCOM .NET Client Toolkit</a>.</p>
 
 	<h3>Driver Developer Resources</h3>
-	<p>Most of the driver developer tools are contained within the <a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/v6.5SP1Release/ASCOMPlatform65SP1Developer.exe">ASCOM Platform Developer Components</a>. Driver developers are strongly encouraged to use those tools. This is particularly true for driver developers who write in C# or VB.NET. <span class="underline">The Developer Components contain templates for all driver types in both C# and VB.NET</span>. Using these templates will save you heaps of effort and troubles.</p>
+	<p>Once you have become familiar with the ASCOM ecosystem (see above), look over the COM Driver Design topics and the COM Driver Practical Issues in the orange menu. Most of the driver developer tools are contained within the <a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/v6.5SP1Release/ASCOMPlatform65SP1Developer.exe">ASCOM Platform Developer Components</a>. Driver developers are strongly encouraged to use those tools. This is particularly true for driver developers who write in C# or VB.NET. <span class="underline">The Developer Components contain templates for all driver types in both C# and VB.NET</span>. Using these templates will save you heaps of effort and troubles.</p>
 	<p>You may benefit from watching <a href="DriverImpl.htm#video">Tom How's excellent video showing how to develop a driver</a> for a telescope control system using the popular Arduino microcontroller kit.</p>
 	
 	<h3><a name="download" id="download"></a>Developer Components (separate download)</h3>
@@ -81,14 +81,13 @@
 	<h3>Common Traps and Mistakes (mostly for driver developers)</h3>
 	<p>It probably seems unprofessional to start this section with what <i>not</i> to do, but we're just trying to save you time and pain. Over the last 12+ years we've seen the same mistakes repeated by driver developers enough times to rate being listed here. Hopefully a word to the wise is enough.</p>
 	<ul>
-		<li>Not understanding the driver-client architecture and that your driver will be used by many applications, some of which don't  yet exist</li>
+		<li>Not understanding the driver-client architecture and that your driver will be used by many applications, some of which don't  yet exist. See <a href="../About/Index.htm">About Alpaca and ASCOM</a> for the basics.</li>
+		<li>Exposing timing restrictions or other device quirks to driver clients/apps (they don't want to do stuff just for your needy device). See <a href="Principles.htm">The General Principle</a> under the COM Developer info. The principles also apply to Alpaca.</li>
 		<li>Using sources for another driver (or worse, one of the simulators) as a starting point (you start with other peoples' mistakes and the wrong design)</li>
 		<li>Developing for both 32-bit and 64-bit using &quot;any cpu&quot; in .NET, yet depending on an external library that is 32-bit only (C++ DLL for 32-bits etc.).</li>
-		<li>Giving a driver  a &quot;kitchen sink&quot; window that lets people &quot;control&quot; and &quot;tune&quot; your device. They just want it to work with <i>their</i> program.</li>
 		<li>Insisting on using C++ because that's the only language you know, but you know nothing about COM (bare metal COM in C++ is <i>tough</i>)</li>
 		<li>Ignoring the support services provided by the Platform (Chooser, Profile, Serial, etc.) and rolling your own</li>
 		<li>Asking users to run BAT files or double-click registry files to install your driver (instead of providing a real installer using our tools)</li>
-		<li>Exposing timing restrictions or other device quirks to driver clients (they don't want to do stuff just for your goofy device)</li>
 		<li>Including (and worse, installing) parts taken from the Platform as part of your driver or applicaition</li>
 	</ul>
 	</div>
