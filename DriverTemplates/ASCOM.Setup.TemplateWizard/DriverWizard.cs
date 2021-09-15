@@ -246,6 +246,11 @@ namespace ASCOM.Setup
                     project.ProjectItems.Item(item).Delete();
                 }
 
+                // Rename the Driver
+                TL.LogMessage("ProjectFinishedGenerating", $"Renaming driver: '{driverTemplate.Name}' to '{DeviceClass}{driverTemplate.Name}'");
+                driverTemplate.Name = $"{DeviceClass}{driverTemplate.Name}";
+                TL.LogMessage("ProjectFinishedGenerating", $"New driver name: '{driverTemplate.Name}'");
+
             }
             catch (Exception ex)
             {
