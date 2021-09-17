@@ -11,13 +11,12 @@
 <file name="DriverDist.htm" server="ascom-standards.org//public_html/ascomsite/" local="132719727059614516" remote="132740667600000000" />
 <file name="DriverImpl.htm" server="ascom-standards.org//public_html/ascomsite/" local="132738863164670663" remote="132740667600000000" />
 <file name="DriverSupt.htm" server="ascom-standards.org//public_html/ascomsite/" local="132719727059834529" remote="132740667600000000" />
-<file name="Errors.htm" server="ascom-standards.org//public_html/ascomsite/" local="132738863163755546" remote="132740667600000000" />
-<file name="Index.htm" server="ascom-standards.org//public_html/ascomsite/" local="132738877419355778" remote="132740667600000000" />
-<file name="Principles.htm" server="ascom-standards.org//public_html/ascomsite/" local="132735519000000000" remote="132740667600000000" />
+<file name="Errors.htm" server="ascom-standards.org//public_html/ascomsite/" local="132761953624382837" remote="132762061800000000" />
+<file name="Index.htm" server="ascom-standards.org//public_html/ascomsite/" local="132761365588321740" remote="132761473800000000" />
+<file name="Principles.htm" server="ascom-standards.org//public_html/ascomsite/" local="132761965013349052" remote="132762087600000000" />
 <file name="ReleaseTesting.htm" server="ascom-standards.org//public_html/ascomsite/" local="132719727060134546" remote="132740667600000000" />
 <file name="TheSky.htm" server="ascom-standards.org//public_html/ascomsite/" local="132738863161890309" remote="132740667600000000" />
 <file name="Throttling.htm" server="ascom-standards.org//public_html/ascomsite/" local="132738863163915567" remote="132740667600000000" />
-<file name="ThrottlingOrg.htm" server="ascom-standards.org//public_html/ascomsite/" local="132738863164135595" remote="132740667600000000" />
 <file name="AppStart.htm" server="ascom-standards.org//public_html/ascoms2/" local="131931100200000000" remote="131931100200000000" />
 <file name="Binding.htm" server="ascom-standards.org//public_html/ascoms2/" local="131931075600000000" remote="131931075600000000" />
 <file name="Chooser.htm" server="ascom-standards.org//public_html/ascoms2/" local="131931075600000000" remote="131931075600000000" />
@@ -35,7 +34,6 @@
 <file name="ReleaseTesting.htm" server="ascom-standards.org//public_html/ascoms2/" local="131931075600000000" remote="131931075600000000" />
 <file name="TheSky.htm" server="ascom-standards.org//public_html/ascoms2/" local="131931075600000000" remote="131931075600000000" />
 <file name="Throttling.htm" server="ascom-standards.org//public_html/ascoms2/" local="131931075600000000" remote="131931075600000000" />
-<file name="ThrottlingOrg.htm" server="ascom-standards.org//public_html/ascoms2/" local="131931075600000000" remote="131931075600000000" />
 <file name="File.History" server="ascom-standards.org//public_html/ascomsite/" local="132718386600000000" remote="132740667600000000" />
 <file name="AppStart.htm" server="ascom-standards.org//public_html/ascomtest/" local="132738863159094955" remote="132738996000000000" />
 <file name="Binding.htm" server="ascom-standards.org//public_html/ascomtest/" local="132738863159259975" remote="132738996000000000" />
@@ -55,5 +53,5 @@
 <file name="ReleaseTesting.htm" server="ascom-standards.org//public_html/ascomtest/" local="132719727060134546" remote="132738996000000000" />
 <file name="TheSky.htm" server="ascom-standards.org//public_html/ascomtest/" local="132738863161890309" remote="132738996000000000" />
 <file name="Throttling.htm" server="ascom-standards.org//public_html/ascomtest/" local="132738863163915567" remote="132738996000000000" />
-<file name="ThrottlingOrg.htm" server="ascom-standards.org//public_html/ascomtest/" local="132738863164135595" remote="132738996000000000" />
+<file name="Async.htm" server="ascom-standards.org//public_html/ascomsite/" local="132762136984741645" remote="132762245400000000" />
 </dwsync>

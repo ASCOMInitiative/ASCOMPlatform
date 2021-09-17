@@ -15,6 +15,7 @@
 // Late July and August, many many changes..... (rbd)
 // Mid-August New documents top section
 // Mid-August loads of reorganization again
+// September, more!!
 //
 // ************************
 // ** I AM AWARE OF THIS **
@@ -225,32 +226,48 @@ function writesubmenu() {
 	    SubMenuOutput += "</ul>";
 		break;
     case 5: // Alpaca Developers
-        SubMenuOutput += "<h3>Alpaca Development</h3>";
+        SubMenuOutput += "<h3>Design Principles</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
-		SubMenuOutput += "<li><a href=\"Alpaca.htm\">Introduction to Alpaca</a></li>";
+		SubMenuOutput += "<li><a href=\"Principles.htm\">The General Principles</a></li>";
+		SubMenuOutput += "<li><a href=\"async.htm\">Asynchronous APIs</a></li>";
+	    SubMenuOutput += "</ul>";
+        SubMenuOutput += "<h3>Alpaca References</h3>";
+	    SubMenuOutput += "<ul class=\"treeview\">";
+ 		SubMenuOutput += "<li><a href=\"Alpaca.htm\">Introduction to Alpaca</a></li>";
 		SubMenuOutput += "<li><a href=\"https://ascom-standards.org/api/\" target=\"_new\">ASCOM Alpaca API</a></li>";
 		SubMenuOutput += "<li><a href=\"ASCOM%20Alpaca%20API%20Reference.pdf\" target=\"_new\">API Reference (PDF)</a></li>";
 	    SubMenuOutput += "</ul>";
+        SubMenuOutput += "<h3>Alpaca App Development</h3>";
+	    SubMenuOutput += "<ul class=\"treeview\">";
+		SubMenuOutput += "<li>(to be written)</li>";
+	    SubMenuOutput += "</ul>";
+        SubMenuOutput += "<h3>Alpaca Driver Development</h3>";
+	    SubMenuOutput += "<ul class=\"treeview\">";
+		SubMenuOutput += "<li>(to be written)</li>";
 	    SubMenuOutput += "</ul>";
 		break;
     case 6: // COM Developers
+        SubMenuOutput += "<h3>Design Principles</h3>";
+	    SubMenuOutput += "<ul class=\"treeview\">";
+		SubMenuOutput += "<li><a href=\"Principles.htm\">The General Principles</a></li>";
+		SubMenuOutput += "<li><a href=\"async.htm\">Asynchronous APIs</a></li>";
+	    SubMenuOutput += "</ul>";
         SubMenuOutput += "<h3>COM App Development</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
 		SubMenuOutput += "<li><a href=\"AppStart.htm\">Getting Started</a></li>";
+		SubMenuOutput += "<li><a href=\"Chooser.htm\">Using the Chooser</a></li>";
 		SubMenuOutput += "<li><a href=\"ClientToolkit.htm\">.NET Client Toolkit</a></li>";
  	    SubMenuOutput += "<li><a href=\"https://ascomtalk.groups.io/g/Developer/wiki\" target=\"_new\">Developers Wiki</a></li>";
 	    SubMenuOutput += "</ul>";
-        SubMenuOutput += "<h3>Driver Design Principles</h3>";
+        SubMenuOutput += "<h3>COM Driver Design Points</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
-		SubMenuOutput += "<li><a href=\"Principles.htm\">The General Principles</a></li>";
 		SubMenuOutput += "<li><a href=\"Errors.htm\">Errors and Retries</a></li>";
 		SubMenuOutput += "<li><a href=\"Throttling.htm\">Traffic Throttling</a></li>";
 		SubMenuOutput += "<li><a href=\"Binding.htm\">Early and Late Binding</a></li>";
-		SubMenuOutput += "<li><a href=\"Chooser.htm\">Using the Chooser</a></li>";
-		SubMenuOutput += "<li><a href=\"Distributing.htm\">Distributing the ASCOM Platform</a></li>";
 		SubMenuOutput += "<li><a href=\"TheSky.htm\">EXE Drivers and TheSky&trade;</a></li>";
+		SubMenuOutput += "<li><a href=\"Distributing.htm\">Distributing the ASCOM Platform</a></li>";
 	    SubMenuOutput += "</ul>";
-        SubMenuOutput += "<h3>Driver Practical Issues</h3>";
+        SubMenuOutput += "<h3>COM Driver Practical Issues</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
 		SubMenuOutput += "<li><a href=\"DriverImpl.htm\">Driver Development</a></li>";
 		SubMenuOutput += "<li><a href=\"DevFor32And64Bits.htm\">Developing for 32/64-bits</a></li>";
