@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace ASCOM.TEMPLATEDEVICENAME.Server
+namespace ASCOM.LocalServer
 {
     /// <summary>
     /// Summary description for GarbageCollection.

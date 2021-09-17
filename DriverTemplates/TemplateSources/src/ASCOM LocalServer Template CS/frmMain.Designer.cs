@@ -1,6 +1,6 @@
 using System;
 
-namespace ASCOM.TEMPLATEDEVICENAME.Server
+namespace ASCOM.LocalServer
 {
 	partial class FrmMain
 	{

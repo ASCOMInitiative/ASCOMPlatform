@@ -28,7 +28,7 @@ using System.Diagnostics;
 using ASCOM;
 using System.Threading.Tasks;
 
-namespace ASCOM.TEMPLATEDEVICENAME.Server
+namespace ASCOM.LocalServer
 {
     public static class Server
     {
@@ -60,7 +60,7 @@ namespace ASCOM.TEMPLATEDEVICENAME.Server
         static void Main(string[] args)
         {
             // Create a trace logger for the local server.
-            TL = new TraceLogger("", "ASCOM.TEMPLATEDEVICENAME.Server")
+            TL = new TraceLogger("", "ASCOM.LocalServer")
             {
                 Enabled = true // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
             };
