@@ -28,6 +28,7 @@ namespace TEMPLATENAMESPACE
 		/// </summary>
 		private void InitializeComponent()
 		{
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupDialogForm));
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -74,7 +75,7 @@ namespace TEMPLATENAMESPACE
             // 
             this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picASCOM.Image = global::ASCOM.TEMPLATEDEVICENAME.Server.Properties.Resources.ASCOM;
+            this.picASCOM.Image = ((System.Drawing.Image)(resources.GetObject("picASCOM.Image")));
             this.picASCOM.Location = new System.Drawing.Point(292, 9);
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.Size = new System.Drawing.Size(48, 56);
