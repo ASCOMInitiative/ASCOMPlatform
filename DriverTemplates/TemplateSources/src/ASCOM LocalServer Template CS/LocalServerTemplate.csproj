@@ -102,11 +102,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="ReferenceCountedObject.cs" />
     <Compile Include="Driver\SetupDialogForm.cs">
       <SubType>Form</SubType>
@@ -115,10 +110,6 @@
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SharedResources.cs" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Driver\SetupDialogForm.resx">
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
       <SubType>Designer</SubType>
