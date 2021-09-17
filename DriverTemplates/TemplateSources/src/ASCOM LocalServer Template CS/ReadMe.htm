@@ -85,10 +85,10 @@
             Modern astronomical observatories often use multiple clients concurrently such as planetariums, session managers and device managers and typically these clients expect drivers to handle
             concurrent access to ASCOM interface properties and methods. To be successful, your driver will therefore need to operate asynchronously e.g. by being able to respond to device
             position properties while the device is moving.
-            <BR />&nbsp;<BR />
+            <BR /><BR />
             Device implementation complexity is closely related to ASCOM device interface complexity. In broadly increasing order of complexity the ASCOM interfaces are:
             SafetyMonitor, ObservingConditions, FilterWheel, CoverCalibrator, Focuser, Rotator, Switch, Camera, Dome, Video and Telescope.
-            <BR />&nbsp;<BR />
+            <BR /><BR />
             In addition to responding to asynchronous client requests, you will need to reliably serialise communications with your hardware if it does not intrinsically
             support concurrent operation. This means that you will need to be familiar with asynchronous programming techniques or be prepared to navigate a steep learning curve.
         </SPAN>
