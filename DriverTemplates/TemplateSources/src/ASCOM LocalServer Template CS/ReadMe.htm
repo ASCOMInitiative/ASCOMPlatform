@@ -14,12 +14,7 @@
             margin: 2cm
         }
 
-        ol {
-            font-family: "Verdana", "Arial", "Helvetica", sans-serif;
-            font-weight: normal
-        }
-
-        P {
+        ol, ul, p {
             font-family: "Verdana", "Arial", "Helvetica", sans-serif;
             font-weight: normal
         }
@@ -165,27 +160,34 @@
     </OL>
 
     <h3>How to add further drivers if required</h3>
+    <p>
+        This method works when:
+    </p>
+    <ul>
+        <li>
+            Adding a completely new served device type e.g. adding a FOCUSER device to a local server already hosting a TELESCOPE device.
+        </li>
+        <li>
+            Adding a second or further instance of an existing served device type e.g. adding a second FOCUSER to a local server already hosting a FOCUSER device.
+        </li>
+    </ul>
+    <p>Method</p>
     <ol>
         <li>
-            Add a new "Local Server" project to the solution, configuring it to the new device type that you require.
+            Add a new "Local Server" project to the solution ensuring that:
+            <ul>
+                <li>It is configured as the device type that you require.</li>
+                <li>It's ASCOM DeviceId is different to all other drivers in the local server.</li>
+                <li>You rename the driver folder in the new project if it matches one already present in original project.</li>
+            </ul>
         </li>
-        <li>Rename the folder in the new project if it matches a folder name already present in original project.</li>
         <li>
             Within Visual Studio drag and drop the driver folder from the new project to the root of the original project.
         </li>
         <li>
             Delete the new local server project added in step 1.
         </li>
-        <li>
-            Configure the new driver to work as a local server driver.
-            <ul>
-                <li>
-                    In the driver transferred in step 3, delete the Using ASCOM.XXXX.Server line .
-                </li>
-                <li>
-                    In the driver transferred in step 3, hover over the ReferenceCountedObjectBase text on the Class statement and permit VS to add the proposed "Using" statement.
-                </li>
-            </ul>
+        <li>Compile the project</li>
         <li>Register the driver as described above with /regserver.</li>
         <li>Verify that the driver is visible in an application Chooser dialogue.</li>
         <li>Implement the new driver's methods.</li>
