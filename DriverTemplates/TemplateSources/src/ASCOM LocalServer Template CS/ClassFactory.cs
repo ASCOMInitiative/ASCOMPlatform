@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Collections;
 
-namespace ASCOM.TEMPLATEDEVICENAME.Server
+namespace ASCOM.LocalServer
 {
 
     #region C# Definition of IClassFactory

@@ -55,8 +55,6 @@
       <ProjectItem ReplaceParameters="false" TargetFileName="LocalServer.snk">LocalServer.snk</ProjectItem>
       <Folder Name="Properties" TargetFolderName="Properties">
         <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
-        <ProjectItem ReplaceParameters="true" TargetFileName="Resources.resx">Resources.resx</ProjectItem>
-        <ProjectItem ReplaceParameters="true" TargetFileName="Resources.Designer.cs">Resources.Designer.cs</ProjectItem>
       </Folder>
       <ProjectItem ReplaceParameters="true" TargetFileName="ReadMe.htm" OpenInWebBrowser="true">ReadMe.htm</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="ReferenceCountedObject.cs">ReferenceCountedObject.cs</ProjectItem>

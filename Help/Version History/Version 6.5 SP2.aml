@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="2c6cb374-9a44-4bc4-b3a5-f867033a3b93" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-      <section address="Intro65SP2">
+    <section address="Intro65SP2">
       <title>Introduction</title>
       <content>
         <para>
@@ -33,12 +33,12 @@
             <list class="bullet">
               <listItem>Added a setting to keep Device Hub as the topmost application.</listItem>
               <listItem>Polling frequency is increased for the duration of a slew.</listItem>
-              <listItem>Implements a stricter interpretation of the the Park command requirements.</listItem>
+              <listItem>Implements a stricter interpretation of the Park command requirements.</listItem>
             </list>
           </listItem>
-          <listItem>The mechanic to bring Simulator setup dialogues to the front of screen has been made more releiable.</listItem>
+          <listItem>The mechanic to bring Simulator setup dialogues to the front of screen has been made more reliable.</listItem>
           <listItem>
-             ObservingConditions Simulator and ObservingConditions Hub test applications
+            ObservingConditions Simulator and ObservingConditions Hub test applications
             <list class="bullet">
               <listItem>Redundant "Chooser" buttons have been removed.</listItem>
               <listItem>Automatic polling can now be toggled on and off.</listItem>
@@ -49,7 +49,7 @@
     </section>
 
     <section address="IssuesFixedPlatform65SP2">
-      <title>Issues Fixed - Platform</title>
+      <title>Issues Fixed in 6.5 SP2 - Platform</title>
       <content>
         <list class="bullet">
           <listItem>Chooser drop-down list management has been refined to avoid an issue in AllSkEye.</listItem>
@@ -62,8 +62,8 @@
             Dynamic Clients
             <list class="bullet">
               <listItem>
-              	The Camera, Dome and Focuser Dynamic Clients now send every parameter value in the Invariant Culture, as required by the Alpaca specification,
-              	this avoids parsing issues in locales where the decimal separator is not the point character.
+                The Camera, Dome and Focuser Dynamic Clients now send every parameter value in the Invariant Culture, as required by the Alpaca specification,
+                this avoids parsing issues in locales where the decimal separator is not the point character.
               </listItem>
               <listItem>All clients are now tolerant of missing "Value" and ErrorMessage fields in returned responses.</listItem>
             </list>
@@ -74,8 +74,8 @@
             <list class="bullet">
               <listItem>The mechanic used to set the ASCOM Profile registry ACL has been improved to avoid installation issues observed on some PCs.</listItem>
               <listItem>
-              	The mechanic used to find the localised name of the BUILTIN\USERS group has been changed to avoid installation issues that a small number of users experienced 
-              	if their WMI installations were not fully functional.
+                The mechanic used to find the localised name of the BUILTIN\USERS group has been changed to avoid installation issues that a small number of users experienced
+                if their WMI installations were not fully functional.
               </listItem>
               <listItem>All installer support executables are now code signed to avoid issues with some anti-virus programs.</listItem>
             </list>
@@ -83,9 +83,9 @@
           <listItem>
             Device Hub
             <list class="bullet">
-              <listItem>Telescope. Slewing remains true if an associated Dome is still in motion.</listItem>
-              <listItem>Dome slaving is more resilient.</listItem>
-              <listItem>The telescope driver rejects method calls when the scope is being parked or unparked.</listItem>
+              <listItem>Telescope: Slewing remains true if an associated Dome is still in motion.</listItem>
+              <listItem>Telescope: The driver rejects method calls when the scope is being parked or unparked.</listItem>
+              <listItem>Dome: Slaving is more resilient.</listItem>
             </list>
           </listItem>
         </list>
@@ -112,16 +112,30 @@
       <title>Key Changes in 6.5 SP2 - For Developers</title>
       <content>
         <list class="bullet">
-          <listItem>The Local Server Driver Generator now creates a project that uses a more secure mechanic to locate drivers that are to be served. A separate project for each driver is no longer required.</listItem>
+          <listItem>
+            The Local Server Driver Generator now creates a project that uses a more secure mechanic to locate drivers that are to be served.
+            <list class="bullet">
+              <listItem>
+                Drivers are now held as classes within the local server executable rather than as separate DLL's.
+                This eliminates the need to dynamically search for and load driver DLLs at run-time, a mechanic which could have been abused to load malicious code.
+              </listItem>
+              <listItem>
+                The local server template now creates a single project containing both the local server and a single driver.
+              </listItem>
+              <listItem>
+                Instructions on how to add further drivers, if required, are included in the ReadMe that appears on creation of the local server.
+              </listItem>
+            </list>
+          </listItem>
         </list>
       </content>
     </section>
 
     <section address="IssuesFixedDeveloper65SP2">
-      <title>Issues Fixed - Developers</title>
+      <title>Issues Fixed in 6.5 SP2 - For Developers</title>
       <content>
         <list class="bullet">
-          <listItem>Links to support forums in the developer templates have been updated to reference the Groups.Io forum..</listItem>
+          <listItem>Links to support forums in the developer templates have been updated to reference the Groups.Io forum.</listItem>
           <listItem>An inconsistency in the Camera.SensorName documentation has been resolved.</listItem>
         </list>
       </content>

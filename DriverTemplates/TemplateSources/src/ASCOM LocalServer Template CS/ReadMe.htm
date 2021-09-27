@@ -14,12 +14,7 @@
             margin: 2cm
         }
 
-        ol {
-            font-family: "Verdana", "Arial", "Helvetica", sans-serif;
-            font-weight: normal
-        }
-
-        P {
+        ol, ul, p {
             font-family: "Verdana", "Arial", "Helvetica", sans-serif;
             font-weight: normal
         }
@@ -85,10 +80,10 @@
             Modern astronomical observatories often use multiple clients concurrently such as planetariums, session managers and device managers and typically these clients expect drivers to handle
             concurrent access to ASCOM interface properties and methods. To be successful, your driver will therefore need to operate asynchronously e.g. by being able to respond to device
             position properties while the device is moving.
-            <BR />&nbsp;<BR />
+            <BR /><BR />
             Device implementation complexity is closely related to ASCOM device interface complexity. In broadly increasing order of complexity the ASCOM interfaces are:
             SafetyMonitor, ObservingConditions, FilterWheel, CoverCalibrator, Focuser, Rotator, Switch, Camera, Dome, Video and Telescope.
-            <BR />&nbsp;<BR />
+            <BR /><BR />
             In addition to responding to asynchronous client requests, you will need to reliably serialise communications with your hardware if it does not intrinsically
             support concurrent operation. This means that you will need to be familiar with asynchronous programming techniques or be prepared to navigate a steep learning curve.
         </SPAN>
@@ -165,46 +160,37 @@
     </OL>
 
     <h3>How to add further drivers if required</h3>
-    <p>The best approach is to:</p>
-    <ol>
+    <p>
+        This method works when:
+    </p>
+    <ul>
         <li>
-            Add a new "Local Server" project to the solution, configuring it to the new device type that you require.
+            Adding a completely new served device type e.g. adding a FOCUSER device to a local server already hosting a TELESCOPE device.
         </li>
         <li>
-            Copy the DEVICETYPEDriver folder from the new project to the original local server project at the same level as the original device driver folder.
+            Adding a second or further instance of an existing served device type e.g. adding a second FOCUSER to a local server already hosting a FOCUSER device.
+        </li>
+    </ul>
+    <p>Method</p>
+    <ol>
+        <li>
+            Add a new "Local Server" project to the solution ensuring that:
+            <ul>
+                <li>It is configured as the device type that you require.</li>
+                <li>It's ASCOM DeviceId is different to all other drivers in the local server.</li>
+                <li>You rename the driver folder in the new project if it matches one already present in original project.</li>
+            </ul>
+        </li>
+        <li>
+            Within Visual Studio drag and drop the driver folder from the new project to the root of the original project.
         </li>
         <li>
             Delete the new local server project added in step 1.
         </li>
-        <li>
-            The location of the image for the setup dialogue in the copied SetupDialogForm will be incorrect and must be fixed before the Form Designer will work correctly. To fix the issue:
-            <ul>
-                <li>Edit the SetupDialogForm.Designer.cs file in the folder copied in step 2 (click the SetupDialogForm.cs twistie to reveal this file).</li>
-                <li>Delete the line in the picASCOM section that starts with: this.picASCOM.Image = global::</li>
-                <li>Save the file.</li>
-                <li>Double click the edited setup dialogue file to open it in the editor.</li>
-                <li>select the grey rectangle in the top right of the form.</li>
-                <li>Right click and select Properties</li>
-                <li>Click the ... button at the right of the Image property </li>
-                <li>Select ASCOM and press OK</li>
-                <li>Save the form and close the form editor.</li>
-            </ul>
-        </li>
-        <li>
-            Configure the new driver to work as a local server driver.
-            <ul>
-                <li>Edit the driver in the folder added in step 2.</li>
-                <li>
-                    Delete the Using ASCOM.XXXX.Server line 
-                </li>
-                <li>
-                    Hover over the ReferenceCountedObjectBase text on the Class statement and allow VS to add the proposed "Using" statement to fix the issue.
-                </li>
-                <li>
-                <li>Register the driver as described above with /regserver.</li>
-                <li>Verify that the driver is visible in an application Chooser dialogue.</li>
-                <li>Add capabilities to the driver.</li>
-            </ul>
+        <li>Compile the project</li>
+        <li>Register the driver as described above with /regserver.</li>
+        <li>Verify that the driver is visible in an application Chooser dialogue.</li>
+        <li>Implement the new driver's methods.</li>
     </ol>
 
     <H3>Notes</H3>
