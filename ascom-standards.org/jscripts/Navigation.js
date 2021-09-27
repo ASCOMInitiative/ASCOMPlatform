@@ -229,7 +229,7 @@ function writesubmenu() {
         SubMenuOutput += "<h3>Design Principles</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
 		SubMenuOutput += "<li><a href=\"Principles.htm\">The General Principles</a></li>";
-		SubMenuOutput += "<li><a href=\"async.htm\">Asynchronous APIs</a></li>";
+		SubMenuOutput += "<li><a href=\"Async.htm\">Asynchronous APIs</a></li>";
 	    SubMenuOutput += "</ul>";
         SubMenuOutput += "<h3>Alpaca References</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
@@ -250,7 +250,7 @@ function writesubmenu() {
         SubMenuOutput += "<h3>Design Principles</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
 		SubMenuOutput += "<li><a href=\"Principles.htm\">The General Principles</a></li>";
-		SubMenuOutput += "<li><a href=\"async.htm\">Asynchronous APIs</a></li>";
+		SubMenuOutput += "<li><a href=\"Async.htm\">Asynchronous APIs</a></li>";
 	    SubMenuOutput += "</ul>";
         SubMenuOutput += "<h3>COM App Development</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
