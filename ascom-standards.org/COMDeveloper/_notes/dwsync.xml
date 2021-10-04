@@ -54,4 +54,6 @@
 <file name="TheSky.htm" server="ascom-standards.org//public_html/ascomtest/" local="132738863161890309" remote="132738996000000000" />
 <file name="Throttling.htm" server="ascom-standards.org//public_html/ascomtest/" local="132738863163915567" remote="132738996000000000" />
 <file name="Async.htm" server="ascom-standards.org//public_html/ascomsite/" local="132763052161919388" remote="132763160400000000" />
+<file name="Async.htm" server="a2.dc3.com//public_html/ascomsite/" local="132777701736698953" remote="132777810000000000" />
+<file name="Exceptions.htm" server="a2.dc3.com//public_html/ascomsite/" local="132778618200000000" remote="132778619400000000" />
 </dwsync>

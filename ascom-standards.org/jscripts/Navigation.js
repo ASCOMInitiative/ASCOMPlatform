@@ -16,6 +16,8 @@
 // Mid-August New documents top section
 // Mid-August loads of reorganization again
 // September, more!!
+// October, more!!
+
 //
 // ************************
 // ** I AM AWARE OF THIS **
@@ -230,6 +232,7 @@ function writesubmenu() {
 	    SubMenuOutput += "<ul class=\"treeview\">";
 		SubMenuOutput += "<li><a href=\"Principles.htm\">The General Principles</a></li>";
 		SubMenuOutput += "<li><a href=\"Async.htm\">Asynchronous APIs</a></li>";
+		SubMenuOutput += "<li><a href=\"Exceptions.htm\">Exceptions in ASCOM</a></li>";
 	    SubMenuOutput += "</ul>";
         SubMenuOutput += "<h3>Alpaca References</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
@@ -251,6 +254,7 @@ function writesubmenu() {
 	    SubMenuOutput += "<ul class=\"treeview\">";
 		SubMenuOutput += "<li><a href=\"Principles.htm\">The General Principles</a></li>";
 		SubMenuOutput += "<li><a href=\"Async.htm\">Asynchronous APIs</a></li>";
+		SubMenuOutput += "<li><a href=\"Exceptions.htm\">Exceptions in ASCOM</a></li>";
 	    SubMenuOutput += "</ul>";
         SubMenuOutput += "<h3>COM App Development</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
