@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using static ASCOM.DynamicRemoteClients.SharedConstants;
 
 namespace ASCOM.DynamicRemoteClients
 {
@@ -135,6 +136,8 @@ namespace ASCOM.DynamicRemoteClients
 
                 CmbImageArrayTransferType.Items.Add(SharedConstants.ImageArrayTransferType.JSON);
                 CmbImageArrayTransferType.Items.Add(SharedConstants.ImageArrayTransferType.Base64HandOff);
+                CmbImageArrayTransferType.Items.Add(SharedConstants.ImageArrayTransferType.GetBase64Image);
+                CmbImageArrayTransferType.Items.Add(SharedConstants.ImageArrayTransferType.BestAvailable);
                 CmbImageArrayTransferType.SelectedItem = ImageArrayTransferType;
 
                 cmbImageArrayCompression.Items.Add(SharedConstants.ImageArrayCompression.None);
@@ -341,13 +344,13 @@ namespace ASCOM.DynamicRemoteClients
 
         private void CmbImageArrayTransferType_SelectedValueChanged(object sender, EventArgs e)
         {
-            if ((SharedConstants.ImageArrayTransferType)CmbImageArrayTransferType.SelectedItem == SharedConstants.ImageArrayTransferType.Base64HandOff)
+            if ((ImageArrayTransferType)CmbImageArrayTransferType.SelectedItem == ImageArrayTransferType.JSON)
             {
-                cmbImageArrayCompression.Enabled = false;
+                cmbImageArrayCompression.Enabled = true;
             }
             else
             {
-                cmbImageArrayCompression.Enabled = true;
+                cmbImageArrayCompression.Enabled = false;
             }
         }
 

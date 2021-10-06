@@ -88,9 +88,13 @@ namespace ASCOM.DynamicRemoteClients
         public enum ImageArrayElementTypes
         {
             Unknown = 0,
-            Short = 1,
-            Int = 2,
-            Double = 3
+            Int16 = 1,
+            Int32 = 2,
+            Double = 3,
+            Float = 4,
+            Byte = 5,
+            Int64 = 6
+
         }
 
         // Enum used by the dynamic client to indicate what type of image array transfer should be used
@@ -98,6 +102,8 @@ namespace ASCOM.DynamicRemoteClients
         {
             JSON = 0,
             Base64HandOff = 1,
+            GetBase64Image = 2,
+            BestAvailable = 3
         }
 
         // Enum used by the dynamic client to indicate what type of compression should be used in responses
@@ -111,12 +117,14 @@ namespace ASCOM.DynamicRemoteClients
 
         // Default image array transfer constants
         public const ImageArrayCompression DEFAULT_IMAGE_ARRAY_COMPRESSION = ImageArrayCompression.None;
-        public const ImageArrayTransferType DEFAULT_IMAGE_ARRAY_TRANSFER_TYPE = ImageArrayTransferType.Base64HandOff;
+        public const ImageArrayTransferType DEFAULT_IMAGE_ARRAY_TRANSFER_TYPE = ImageArrayTransferType.BestAvailable;
 
         // Image array base64 hand-off support constants
         public const string BASE64_HANDOFF_HEADER = "base64handoff"; // Name of HTTP header used to affirm binary serialisation support for image array data
         public const string BASE64_HANDOFF_SUPPORTED = "true"; // Value of HTTP header to indicate support for binary serialised image array data
         public const string BASE64_HANDOFF_FILE_DOWNLOAD_URI_EXTENSION = "base64"; // Addition to the ImageArray and ImageArrayVariant method names from which base64 serialised image files can be downloaded
+        public const string GETBASE64IMAGE_ACTION_NAME = "GetBase64Image";
+        public const int GETBASE64IMAGE_SUPPORTED_VERSION = 1;
 
         public const string DEVICE_NOT_CONFIGURED = "None"; // ProgID / UniqueID / device type value indicating no device configured
 

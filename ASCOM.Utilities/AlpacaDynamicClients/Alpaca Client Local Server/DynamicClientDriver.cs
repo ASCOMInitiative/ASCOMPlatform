@@ -32,7 +32,7 @@ namespace ASCOM.DynamicRemoteClients
 
         // Private constants
         private const int DYNAMIC_DRIVER_ERROR_NUMBER = 4095; // Alpaca error number that will be returned when a required JSON "Value" element is either absent from the response or is set to "null"
-        
+
         //Private variables
         private static TraceLoggerPlus TLLocalServer;
 
@@ -504,7 +504,7 @@ namespace ASCOM.DynamicRemoteClients
                 password = driverProfile.GetValue(driverProgID, SharedConstants.PASSWORD_PROFILENAME, string.Empty, SharedConstants.PASSWORD_DEFAULT);
                 manageConnectLocally = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.MANAGE_CONNECT_LOCALLY_PROFILENAME, string.Empty, SharedConstants.MANAGE_CONNECT_LOCALLY_DEFAULT);
                 imageArrayTransferType = (SharedConstants.ImageArrayTransferType)GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_PROFILENAME, string.Empty, (int)SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT);
-                imageArrayCompression = (SharedConstants.ImageArrayCompression)GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.IMAGE_ARRAY_COMPRESSION_PROFILENAME, string.Empty, (int)SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT);
+                imageArrayCompression = (SharedConstants.ImageArrayCompression)GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.IMAGE_ARRAY_COMPRESSION_PROFILENAME, string.Empty, (int)SharedConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT);
                 uniqueId = driverProfile.GetValue(driverProgID, SharedConstants.UNIQUEID_PROFILENAME, string.Empty, SharedConstants.UNIQUEID_DEFAULT);
                 enableRediscovery = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.ENABLE_REDISCOVERY_PROFILENAME, string.Empty, SharedConstants.ENABLE_REDISCOVERY_DEFAULT);
                 ipV4Enabled = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.ENABLE_IPV4_DISCOVERY_PROFILENAME, string.Empty, SharedConstants.ENABLE_IPV4_DISCOVERY_DEFAULT);
@@ -880,6 +880,9 @@ namespace ASCOM.DynamicRemoteClients
                             case SharedConstants.ImageArrayTransferType.JSON:
                                 // No extra action because "accepts = application/json" will be applied automatically by the client
                                 break;
+
+                            case SharedConstants.ImageArrayTransferType.GetBase64Image:
+                            case SharedConstants.ImageArrayTransferType.BestAvailable:
                             case SharedConstants.ImageArrayTransferType.Base64HandOff:
                                 request.AddHeader(SharedConstants.BASE64_HANDOFF_HEADER, SharedConstants.BASE64_HANDOFF_SUPPORTED);
                                 break;
@@ -939,8 +942,9 @@ namespace ASCOM.DynamicRemoteClients
                         }
                         if (typeof(T) == typeof(string))
                         {
+                            TL.LogMessage(clientNumber, method, "About to de-serialise StringResponse");
                             StringResponse stringResponse = JsonConvert.DeserializeObject<StringResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, stringResponse.ClientTransactionID, stringResponse.ServerTransactionID, (stringResponse.Value is null) ? "NO VALUE OR NULL VALUE RETURNED" : stringResponse.Value.ToString()));
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, stringResponse.ClientTransactionID, stringResponse.ServerTransactionID, (stringResponse.Value is null) ? "NO VALUE OR NULL VALUE RETURNED" : (stringResponse.Value.Length < 1000) ? stringResponse.Value : stringResponse.Value.Substring(0, 1000)));
                             if (CallWasSuccessful(TL, stringResponse)) return (T)((object)stringResponse.Value);
                             restResponseBase = (RestResponseBase)stringResponse;
                         }
@@ -1207,7 +1211,7 @@ namespace ASCOM.DynamicRemoteClients
                                 // Now create and populate an appropriate array to return to the client that mirrors the array type returned by the device
                                 switch (arrayType) // Handle the different array return types
                                 {
-                                    case SharedConstants.ImageArrayElementTypes.Int:
+                                    case SharedConstants.ImageArrayElementTypes.Int32:
                                         switch (base64HandOffresponse.Rank)
                                         {
                                             case 2:
@@ -1226,7 +1230,7 @@ namespace ASCOM.DynamicRemoteClients
                                         Buffer.BlockCopy(base64ArrayByteArray, 0, remoteArray, 0, base64ArrayByteArray.Length);
                                         break;
 
-                                    case SharedConstants.ImageArrayElementTypes.Short:
+                                    case SharedConstants.ImageArrayElementTypes.Int16:
                                         switch (base64HandOffresponse.Rank)
                                         {
                                             case 2:
@@ -1261,7 +1265,7 @@ namespace ASCOM.DynamicRemoteClients
                                         break;
 
                                     default:
-                                        throw new InvalidOperationException("Image array element type" + arrayType + " is not supported.");
+                                        throw new InvalidOperationException("Image array element type " + arrayType + " is not supported.");
                                 }
 
                                 if (TL.DebugTraceState)
@@ -1289,7 +1293,7 @@ namespace ASCOM.DynamicRemoteClients
                                 sw.Restart(); // Clear and start the stopwatch
                                 switch (arrayType) // Handle the different return types that may come from ImageArrayVariant
                                 {
-                                    case SharedConstants.ImageArrayElementTypes.Int:
+                                    case SharedConstants.ImageArrayElementTypes.Int32:
                                         switch (arrayRank)
                                         {
                                             case 2:
@@ -1313,7 +1317,7 @@ namespace ASCOM.DynamicRemoteClients
                                         }
                                         break;
 
-                                    case SharedConstants.ImageArrayElementTypes.Short:
+                                    case SharedConstants.ImageArrayElementTypes.Int16:
                                         switch (arrayRank)
                                         {
                                             case 2:
@@ -1549,7 +1553,7 @@ namespace ASCOM.DynamicRemoteClients
             };
             string remoteString = SendToRemoteDevice<string>(clientNumber, client, URIBase, TL, "Action", Parameters, Method.PUT, MemberTypes.Method);
 
-            TL.LogMessage(clientNumber, "Action", "Response: " + remoteString);
+            TL.LogMessage(clientNumber, "Action", $"Response: {(remoteString.Length < 1000 ? remoteString : remoteString.Substring(0, 1000))}");
             return remoteString;
         }
 
