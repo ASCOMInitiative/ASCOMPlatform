@@ -61,8 +61,16 @@ Virtually  all popular languages use Structured Exception Handling. Most commonl
 <p>Finally some programming environments (e.g. C# and Java) support multiple types of exceptions and separate multiple individual <tt>catch(<em>exception-type</em> ex)</tt> error handling blocks for each type of exception.</p>
 <h4>Exceptions in ASCOM Alpaca and COM</h4>
 <p>Applications must be prepared to catch exceptions from any Alpaca endpoint or ASCOM COM property or method, including <a href="Async.htm">Completion Properties for (asynchronous) ASCOM methods</a>. This should go without saying since anyone who writes software in a modern language and ecosystem needs to be prepared for run time errors and exceptions. Unfortunately, writing software to control physical devices (mounts, domes, etc) needs to be prepared for exceptions because those physical devices (and ther connections like USB) are much more susceptible to error states compared to pure code. </p>
-	<div align="center"><span class="note">All error conditions in ASCOM are reported by raising exceptions. </span></div>
-<p>This includes both Alpaca and COM. Both method calls and completion properties may raise exceptions. For example, be prepared for an Alpaca response like this. The exception came from the ASCOM COM Telescope Simulator.NET, and was converted into an Alpaca exception by ASCOM Remote. This is an extreme example. The point here is that you need to be prepared for anything that is a legal exception. If you get something like this from an Alpaca end point, you should consider this just like an out-of-band run time error raised by the Alpaca-speaking device.</p>
+	<div align="center"><span class="note">All error conditions are reported by raising exceptions, and you may get exceptions from any property or method, so be prepared!</span></div>
+<p>This includes both Alpaca and COM. Both method calls and completion properties may raise exceptions. In COM the exception is a true run-time error. WIth Alpaca, the exception comes back as a JSON object with non-zero ErrorNumber and non-null ErrorMessage. A simple exception in Alpaca is this one coming from a mount that cannot slew when sidereal tracking is false.</p>
+<pre>
+{
+   "ClientTransactionID":4531,
+   "ServerTransactionID":4527,
+   "ErrorNumber":1035,
+   "ErrorMessage":<span style='color:yellow;'>""SlewToCoordinatesAsync is not allowed when tracking is False"</span>
+}</pre>
+<p>Exceptions aren't always this simple. Be prepared for an Alpaca response like this. This is the same exception but from the ASCOM COM Telescope Simulator.NET, converted into an Alpaca exception by ASCOM Remote. This is an extreme example. The point here is that you need to be prepared for anything that is a legal exception. Note that if you wish, you can ignore the DriverException field of the Alpaca JSON response object if you don't think your users would care. In any case the key is that there is a non-zero ErrorNumber, and a non-null Error Message. Be sure to report the primary error to your user!</p>
 <pre>
 {
    "ClientTransactionID":26243,
@@ -84,8 +92,9 @@ Virtually  all popular languages use Structured Exception Handling. Most commonl
       "WatsonBuckets":null
    }
 }</pre>
+<p>If you get something like this from an Alpaca end point, you should consider this just like an out-of-band run time error raised by the Alpaca-speaking device.</p>
 <hr />
-		<div style="font-size:small"><a name="_ftn1"> </a>[*] It is no longer acceptable to use &quot;sentinel&quot; return values like -1 or a Boolean to indicate if an error occurred within the called logic.  The disadvantages of this to app developers are beyond belief. </div>
+		<div style="font-size:small"><a name="ftn1"> </a>[*] It is no longer acceptable to use &quot;sentinel&quot; return values like -1 or a Boolean to indicate if an error occurred within the called logic.  The disadvantages of this to app developers are beyond belief. </div>
 	</div>
 
 	<!-- #EndEditable --></div>
