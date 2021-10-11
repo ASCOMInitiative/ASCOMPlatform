@@ -106,6 +106,7 @@ Public Class DiagnosticsForm
         SiteLongitude
         SiteElevation
         SiteTemperature
+        SitePressure
         JulianDateUTC
         JulianDateTT
         SetJ2000RA
@@ -3882,6 +3883,20 @@ Public Class DiagnosticsForm
     Private Sub TransformTest()
         'Dim transform As Transform.Transform = New Transform.Transform
 
+        ' SitePressure tests must be run ahead of other Transform tests
+        CompareDouble("TransformSitePressure", "SitePressure", transform.SitePressure, 1013.25, TOLERANCE_E5) ' Make sure the default value is correct
+        transform.SiteTemperature = 20.0 ' Set parameters ready for trasnformation
+        transform.SiteElevation = 1500
+        transform.SiteLatitude = 0.0
+        transform.SiteLongitude = 0.0
+
+        CompareDouble("TransformSitePressure", "SitePressure", transform.SitePressure, 1013.25, TOLERANCE_E5) ' Make sure the default value is still in place
+        transform.SetJ2000(0.0, 0.0) ' Set coordinates 0.0,0.0
+        CompareDouble("TransformSitePressure", "SitePressure", transform.SitePressure, 1013.25, TOLERANCE_E5) ' Make sure the default value is still in place
+        Dim ra As Double = transform.RATopocentric ' Get the topocentric RA
+        CompareDouble("TransformSitePressure", "SitePressure", transform.SitePressure, 855.686105478878, TOLERANCE_E5) ' Make sure that the pressure has been auto-calculated correctly from the site elevation
+
+        ' Transform acceptable parameter range tests
         TransformExceptionTest(transform, TransformExceptionTestType.SiteLatitude, 0.0, -91.0, 91.0)
         TransformExceptionTest(transform, TransformExceptionTestType.SiteLongitude, 0.0, -181.0, 181.0)
         TransformExceptionTest(transform, TransformExceptionTestType.SiteElevation, 0.0, -301.0, 10001.0)
@@ -3898,6 +3913,7 @@ Public Class DiagnosticsForm
         TransformExceptionTest(transform, TransformExceptionTestType.SetTopocentricDec, 0.0, -91.0, 91.0)
         TransformExceptionTest(transform, TransformExceptionTestType.SetAzElAzimuth, 0.0, -1.0, 360.0)
         TransformExceptionTest(transform, TransformExceptionTestType.SetAzElElevation, 0.0, -91.0, 91.0)
+        TransformExceptionTest(transform, TransformExceptionTestType.SitePressure, 1000.0, -1.0, 1300.0)
 
         TransformTest2000("Deneb", "20:41:25.916", "45:16:49.23", TOLERANCE_E5, TOLERANCE_E4)
         TransformTest2000("Polaris", "02:31:51.263", "89:15:50.68", TOLERANCE_E5, TOLERANCE_E4)
@@ -3929,6 +3945,8 @@ Public Class DiagnosticsForm
                     TR.SiteElevation = Value
                 Case TransformExceptionTestType.SiteTemperature
                     TR.SiteTemperature = Value
+                Case TransformExceptionTestType.SitePressure
+                    TR.SitePressure = Value
                 Case TransformExceptionTestType.SetJ2000RA
                     TR.SetJ2000(Value, 0.0)
                 Case TransformExceptionTestType.SetJ2000Dec
@@ -3985,7 +4003,7 @@ Public Class DiagnosticsForm
             SiteLong = 0.0 - (17.0 / 60.0) - (40.0 / 3600.0)
 
             'Set up Transform component
-            transform.SiteElevation = 80.0
+            transform.SiteElevation = 1580.0
             transform.SiteLatitude = SiteLat
             transform.SiteLongitude = SiteLong
             transform.SiteTemperature = 10.0
