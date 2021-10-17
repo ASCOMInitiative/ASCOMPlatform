@@ -40,8 +40,8 @@ Module DeltatCode
 
         ' NOTE: Starting April 2018 - Please note the use of modified Julian date in the formula rather than year fraction as in previous formulae
 
-        ' DATE RANGE January 2022 Onwards - This is beyond the sensible extrapolation range of the most recent data analysis so revert to the basic formula: DeltaT = LeapSeconds + 32.184
-        If (YearFraction >= 2022.0) Then
+        ' DATE RANGE November 2022 Onwards - This is beyond the sensible extrapolation range of the most recent data analysis so revert to the basic formula: DeltaT = LeapSeconds + 32.184
+        If (YearFraction >= 2022.83) Then
 
             ' Create an EarthRotationParameters object and retrieve the current leap second value. If something goes wrong return the fall-back value
             Try
@@ -52,6 +52,15 @@ Module DeltatCode
                 ' Ultimate fallback value if all else fails!
                 Retval = LEAP_SECOND_ULTIMATE_FALLBACK_VALUE + TT_TAI_OFFSET
             End Try
+
+            ' DATE RANGE October 17th 2021 Onwards - The analysis was performed on 17th October 2021 and creates values within 0.01 of a second of the projections to the end of October 2022.
+        ElseIf (YearFraction >= 2021.79) Then
+            Retval = (0.000000000000926333089959963 * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay) _
+                   + (-0.000000276351646101278 * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay) _
+                   + (0.0329773938043592 * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay) _
+                   + (-1967.61450470546 * ModifiedJulianDay * ModifiedJulianDay) _
+                   + (58699325.5212533 * ModifiedJulianDay) _
+                   - 700463653286.072
 
             ' DATE RANGE October 17th 2020 Onwards - The analysis was performed on 17th July 2020 and creates values within 0.01 of a second of the projections to October 2021 and sensible extrapolation to the end of 2021
         ElseIf (YearFraction >= 2020.79) Then
