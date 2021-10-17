@@ -31,7 +31,6 @@ namespace ASCOM.Setup
         private int InterfaceVersion { get; set; }
 
         private ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("TemplateWizardDr");
-        private DTE2 myDTE;
         private ProjectItem driverTemplate;
 
         #endregion
@@ -46,8 +45,6 @@ namespace ASCOM.Setup
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             TL.LogMessage("RunStarted", $"Started wizard");
-
-            myDTE = (DTE2)automationObject;
 
             DialogResult dialogResult = DialogResult.Cancel;
             try

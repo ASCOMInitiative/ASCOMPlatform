@@ -14,7 +14,6 @@ namespace ASCOM.Setup
         #region Variables and constants
 
         private LocalServerForm inputForm;
-        private const string csDeviceIdFormat = "ASCOM.{0}.{1}";
 
         // These GUIDs are placeholder GUIDs. Wherever they are used in the template project, they'll be replaced with new values when the template is expanded. THE TEMPLATE PROJECTS MUST USE THESE GUIDS.
         private const string csTemplateAssemblyGuid = "28D679BA-2AF1-4557-AE15-C528C5BF91E0";
@@ -32,7 +31,6 @@ namespace ASCOM.Setup
         private int InterfaceVersion { get; set; }
 
         private ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("TemplateWizardLS");
-        private DTE2 myDTE;
         private ProjectItem driverTemplate;
 
         #endregion
@@ -47,8 +45,6 @@ namespace ASCOM.Setup
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             TL.LogMessage("RunStarted", $"Started wizard");
-
-            myDTE = (DTE2)automationObject;
 
             DialogResult dialogResult = DialogResult.Cancel;
             try
