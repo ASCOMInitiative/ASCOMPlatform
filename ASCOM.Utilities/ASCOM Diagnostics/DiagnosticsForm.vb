@@ -586,9 +586,9 @@ Public Class DiagnosticsForm
         SOFA = New SOFA.SOFA
 
         ' SOFA version tests
-        CompareInteger("SOFATests", "SOFA release number", SOFA.SofaReleaseNumber(), 16)
-        Compare("SOFATests", "SOFA issue date", SOFA.SofaIssueDate, "2020-07-21")
-        Compare("SOFATests", "SOFA revision date", SOFA.SofaRevisionDate, "2020-07-21")
+        CompareInteger("SOFATests", "SOFA release number", SOFA.SofaReleaseNumber(), 18)
+        Compare("SOFATests", "SOFA issue date", SOFA.SofaIssueDate, "2021-05-12")
+        Compare("SOFATests", "SOFA revision date", SOFA.SofaRevisionDate, "2021-05-12")
 
         'Af2a tests
         j = SOFA.Af2a("-", 45, 13, 27.2, a)
