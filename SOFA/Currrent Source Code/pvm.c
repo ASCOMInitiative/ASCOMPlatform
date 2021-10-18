@@ -23,11 +23,11 @@ void iauPvm(double pv[2][3], double *r, double *s)
 **  Called:
 **     iauPm        modulus of p-vector
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 /* Distance. */
@@ -36,11 +36,11 @@ void iauPvm(double pv[2][3], double *r, double *s)
 /* Speed. */
    *s = iauPm(pv[1]);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauNut00b(double date1, double date2, double *dpsi, double *deps)
 /*
@@ -121,11 +122,11 @@ void iauNut00b(double date1, double date2, double *dpsi, double *deps)
 **     Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 **     Francou, G., Laskar, J., Astron.Astrophys. 282, 663-683 (1994)
 **
-**  This revision:  2019 June 23
+**  This revision:  2021 May 11
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double t, el, elp, f, d, om, arg, dp, de, sarg, carg,
@@ -322,11 +323,11 @@ void iauNut00b(double date1, double date2, double *dpsi, double *deps)
    *dpsi = dpsils + dpsipl;
    *deps = depsls + depspl;
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

@@ -19,7 +19,7 @@ void iauAtci13(double rc, double dc,
 **  Given:
 **     rc     double   ICRS right ascension at J2000.0 (radians, Note 1)
 **     dc     double   ICRS declination at J2000.0 (radians, Note 1)
-**     pr     double   RA proper motion (radians/year; Note 2)
+**     pr     double   RA proper motion (radians/year, Note 2)
 **     pd     double   Dec proper motion (radians/year)
 **     px     double   parallax (arcsec)
 **     rv     double   radial velocity (km/s, +ve if receding)
@@ -83,11 +83,11 @@ void iauAtci13(double rc, double dc,
 **     iauApci13    astrometry parameters, ICRS-CIRS, 2013
 **     iauAtciq     quick ICRS to CIRS
 **
-**  This revision:   2017 March 12
+**  This revision:   2021 April 3
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 /* Star-independent astrometry parameters */
@@ -104,7 +104,7 @@ void iauAtci13(double rc, double dc,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

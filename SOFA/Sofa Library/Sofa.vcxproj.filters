@@ -21,17 +21,14 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ASCOM Sofa  Files\ASCOMDat.h">
+      <Filter>ASCOM Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\Currrent Source Code\sofa.h">
       <Filter>SOFA Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Currrent Source Code\sofam.h">
       <Filter>SOFA Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>SOFA Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ASCOM Sofa  Files\ASCOMDat.h">
-      <Filter>ASCOM Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +90,12 @@
       <Filter>SOFA Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Currrent Source Code\apio13.c">
+      <Filter>SOFA Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Currrent Source Code\atcc13.c">
+      <Filter>SOFA Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Currrent Source Code\atccq.c">
       <Filter>SOFA Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Currrent Source Code\atci13.c">
@@ -426,6 +429,9 @@
       <Filter>SOFA Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Currrent Source Code\ltpequ.c">
+      <Filter>SOFA Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Currrent Source Code\moon98.c">
       <Filter>SOFA Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Currrent Source Code\num00a.c">

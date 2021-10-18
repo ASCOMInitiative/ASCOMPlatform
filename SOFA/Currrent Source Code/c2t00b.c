@@ -8,7 +8,7 @@ void iauC2t00b(double tta, double ttb, double uta, double utb,
 **  - - - - - - - - - -
 **
 **  Form the celestial to terrestrial matrix given the date, the UT1 and
-**  the polar motion, using the IAU 2000B nutation model.
+**  the polar motion, using the IAU 2000B precession-nutation model.
 **
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards Of Fundamental Astronomy) software collection.
@@ -49,7 +49,7 @@ void iauC2t00b(double tta, double ttb, double uta, double utb,
 **  2) The arguments xp and yp are the coordinates (in radians) of the
 **     Celestial Intermediate Pole with respect to the International
 **     Terrestrial Reference System (see IERS Conventions 2003),
-**     measured along the meridians to 0 and 90 deg west respectively.
+**     measured along the meridians 0 and 90 deg west respectively.
 **
 **  3) The matrix rc2t transforms from celestial to terrestrial
 **     coordinates:
@@ -78,11 +78,11 @@ void iauC2t00b(double tta, double ttb, double uta, double utb,
 **     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG (2004)
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double rc2i[3][3], era, rpom[3][3];
@@ -100,11 +100,11 @@ void iauC2t00b(double tta, double ttb, double uta, double utb,
 /* Combine to form the celestial-to-terrestrial matrix. */
    iauC2tcio(rc2i, era, rpom, rc2t);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

@@ -161,7 +161,6 @@
     <ClInclude Include="..\ASCOM Sofa  Files\ASCOMDat.h" />
     <ClInclude Include="..\Currrent Source Code\sofa.h" />
     <ClInclude Include="..\Currrent Source Code\sofam.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ASCOM Sofa  Files\ASCOMDat.c" />
@@ -184,6 +183,8 @@
     <ClCompile Include="..\Currrent Source Code\aper13.c" />
     <ClCompile Include="..\Currrent Source Code\apio.c" />
     <ClCompile Include="..\Currrent Source Code\apio13.c" />
+    <ClCompile Include="..\Currrent Source Code\atcc13.c" />
+    <ClCompile Include="..\Currrent Source Code\atccq.c" />
     <ClCompile Include="..\Currrent Source Code\atci13.c" />
     <ClCompile Include="..\Currrent Source Code\atciq.c" />
     <ClCompile Include="..\Currrent Source Code\atciqn.c" />
@@ -295,6 +296,7 @@
     <ClCompile Include="..\Currrent Source Code\ltpb.c" />
     <ClCompile Include="..\Currrent Source Code\ltpecl.c" />
     <ClCompile Include="..\Currrent Source Code\ltpequ.c" />
+    <ClCompile Include="..\Currrent Source Code\moon98.c" />
     <ClCompile Include="..\Currrent Source Code\num00a.c" />
     <ClCompile Include="..\Currrent Source Code\num00b.c" />
     <ClCompile Include="..\Currrent Source Code\num06a.c" />

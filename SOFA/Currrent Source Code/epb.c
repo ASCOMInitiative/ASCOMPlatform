@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 double iauEpb(double dj1, double dj2)
 /*
@@ -31,11 +32,11 @@ double iauEpb(double dj1, double dj2)
 **
 **     Lieske, J.H., 1979. Astron.Astrophys., 73, 282.
 **
-**  This revision:  2013 August 21
+**  This revision:  2021 May 11
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 /* J2000.0-B1900.0 (2415019.81352) in days */
@@ -43,9 +44,11 @@ double iauEpb(double dj1, double dj2)
 
    return 1900.0 + ((dj1 - DJ00) + (dj2 + D1900)) / DTY;
 
+/* Finished. */
+
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

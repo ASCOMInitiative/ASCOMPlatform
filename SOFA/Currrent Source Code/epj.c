@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 double iauEpj(double dj1, double dj2)
 /*
@@ -31,11 +32,11 @@ double iauEpj(double dj1, double dj2)
 **
 **     Lieske, J.H., 1979, Astron.Astrophys. 73, 282.
 **
-**  This revision:  2013 August 7
+**  This revision:  2021 May 11
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double epj;
@@ -45,9 +46,11 @@ double iauEpj(double dj1, double dj2)
 
    return epj;
 
+/* Finished. */
+
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

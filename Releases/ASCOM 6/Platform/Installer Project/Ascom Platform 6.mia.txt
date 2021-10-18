@@ -1077,10 +1077,10 @@ Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer
 Comment: Platform 6.1 SP1 SOFA Files
 Install Files ..\..\..\..\SOFA\SOFA Library\Win32\Release\SOFA.dll to $COMMONFILES$\ASCOM\Astrometry
 Install Files ..\..\..\..\SOFA\SOFA Library\Win32\Release\SOFA.pdb to $WINDIR$\Symbols\dll
-Install Files ..\..\..\..\SOFA\Sofa Test Application\Win32\Release\Sofa Test Application.exe to $COMMONFILES$\ASCOM\Astrometry
+Install Files ..\..\..\..\SOFA\Sofa Test Application\Win32\Release\SofaTestApplication-32.exe to $COMMONFILES$\ASCOM\Astrometry
 Install Files ..\..\..\..\SOFA\SOFA Library\x64\Release\SOFA-64.dll to $COMMONFILES$\ASCOM\Astrometry
 Install Files ..\..\..\..\SOFA\SOFA Library\x64\Release\SOFA-64.pdb to $WINDIR$\Symbols\dll
-Install Files ..\..\..\..\SOFA\SOFA Test Application\x64\Release\Sofa Test Application-64.exe to $COMMONFILES$\ASCOM\Astrometry
+Install Files ..\..\..\..\SOFA\SOFA Test Application\x64\Release\SofaTestApplication-64.exe to $COMMONFILES$\ASCOM\Astrometry
 [END REGION]
  
 [DEFINE REGION: Platform 6.2 files]

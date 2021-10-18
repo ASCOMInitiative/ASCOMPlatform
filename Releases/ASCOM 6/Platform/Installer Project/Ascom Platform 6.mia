@@ -8398,7 +8398,7 @@ FALSE
 FALSE
 FALSE
 {BD20D395-35BC-44D1-AC77-B54024C41505}
-..\..\..\..\SOFA\Sofa Test Application\Win32\Release\Sofa Test Application.exe
+..\..\..\..\SOFA\Sofa Test Application\Win32\Release\SofaTestApplication-32.exe
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -8411,7 +8411,7 @@ FALSE
 FALSE
 FALSE
 {A2E1184F-EE0D-4204-AD36-37C499DF5BCF}
-..\..\..\..\SOFA\SOFA Test Application\x64\Release\Sofa Test Application-64.exe
+..\..\..\..\SOFA\SOFA Test Application\x64\Release\SofaTestApplication-64.exe
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE

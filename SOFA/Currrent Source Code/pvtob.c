@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauPvtob(double elong, double phi, double hm,
               double xp, double yp, double sp, double theta,
@@ -66,11 +67,11 @@ void iauPvtob(double elong, double phi, double hm,
 **     iauPom00     polar motion matrix
 **     iauTrxp      product of transpose of r-matrix and p-vector
 **
-**  This revision:   2013 October 9
+**  This revision:   2021 February 24
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 /* Earth rotation rate in radians per UT1 second */
@@ -107,7 +108,7 @@ void iauPvtob(double elong, double phi, double hm,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
