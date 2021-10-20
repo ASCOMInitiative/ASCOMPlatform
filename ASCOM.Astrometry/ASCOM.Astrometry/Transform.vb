@@ -34,7 +34,7 @@ Namespace Transform
         Dim SOFA As SOFA.SOFA
         Private RAJ2000Value, RATopoValue, DECJ2000Value, DECTopoValue, SiteElevValue, SiteLatValue, SiteLongValue, SiteTempValue, SitePressureValue As Double
         Private RAApparentValue, DECApparentValue, AzimuthTopoValue, ElevationTopoValue, JulianDateTTValue, JulianDateUTCValue As Double
-        Private RefracValue, RequiresRecalculate, SitePressurehasBeenSet As Boolean
+        Private RefracValue, RequiresRecalculate As Boolean
         Private LastSetBy As SetBy
 
         Private TL As TraceLogger
@@ -78,10 +78,7 @@ Namespace Transform
             SiteElevValue = Double.NaN
             SiteLatValue = Double.NaN
             SiteLongValue = Double.NaN
-
-            ' Initialise pressure variables
-            SitePressureValue = STANDARD_PRESSURE
-            SitePressurehasBeenSet = False
+            SitePressureValue = Double.NaN
 
             RefracValue = False
             LastSetBy = SetBy.Never
@@ -215,14 +212,14 @@ Namespace Transform
         ''' <remarks>This property represents the atmospheric pressure as measured by a barometer at the observing site. It must not be a "reduced to sea level" value.</remarks>
         Property SitePressure() As Double
             Get
+                CheckSet("SitePressure", SitePressureValue, "Site atmospheric pressure has not been set")
                 TL.LogMessage("SitePressure Get", SitePressureValue.ToString())
                 Return SitePressureValue
             End Get
             Set(ByVal value As Double)
-                If (value < 0.0) Or (value > 1200.0) Then Throw New ASCOM.InvalidValueException("SitePressure", value.ToString(), "0.0 hPa (mbar)", "+1200.0 hPa (mbar)")
+                If (value < 0.0) Or (value > 1200.0) Then Throw New ASCOM.InvalidValueException("SitePressure", value.ToString(), "0.0hPa (mbar)", "+1200.0hPa (mbar)")
                 If SitePressureValue <> value Then RequiresRecalculate = True
                 SitePressureValue = value
-                SitePressurehasBeenSet = True ' Flag that the site pressure has been explicitly set so that setting the site elevation after setting the pressure won't override the set pressure value
                 TL.LogMessage("SitePressure Set", value.ToString())
             End Set
         End Property
@@ -868,8 +865,8 @@ Namespace Transform
 
         Private Sub CalculateSitePressureIfRequired()
             ' Derive the site pressure from the site elevation if the pressure has not been set explicitly
-            If SitePressurehasBeenSet Then ' Site pressure has already been set so don't override the set value
-                TL.LogMessage("CalculateSitePressure", $"Site pressure has already been set to {SitePressureValue:0.0}hPa.")
+            If Double.IsNaN(SitePressureValue) Then ' Site pressure has already been set so don't override the set value
+                TL.LogMessage("CalculateSitePressure", $"Site pressure has been set to {SitePressureValue:0.0}hPa.")
             Else ' Site pressure has not been set so derive a value based on the supplied observatory height and temperature
                 ' phpa = 1013.25 * exp ( −hm / ( 29.3 * tsl ) ); NOTE this equation calculates the site pressure and uses the site temperature REDUCED TO SEA LEVEL MESURED IN DEGREES KELVIN
                 ' tsl = tSite − 0.0065(0 − hsite);  NOTE this equation reduces the site temperature to sea level
