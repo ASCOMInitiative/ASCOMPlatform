@@ -157,7 +157,9 @@
         <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=Release;Platform=Mixed Platforms" />
         <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=Release;Platform=Mixed Platforms" />
 
-        <!-- Copy the ForceASCOM executables, that have just been built, to the installer main directory so that the latest versions are included in the installer -->
+        <!-- Sign and copy the RemoveASCOM executables, that have just been built, to the installer main directory so that the latest versions are included in the installer -->
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(RemoveASCOMExe)&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
+		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(RemoveASCOMExe)&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
         <ItemGroup>
             <RemoveASCOMExecutables Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb)" />
         </ItemGroup>
