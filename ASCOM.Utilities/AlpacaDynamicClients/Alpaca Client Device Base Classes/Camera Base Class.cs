@@ -23,6 +23,18 @@ namespace ASCOM.DynamicRemoteClients
         // Constant to set the device type
         private const string DEVICE_TYPE = "Camera";
 
+        // GetBase64Image constants
+        private const string BASE64RESPONSE_COMMAND_NAME = "GetBase64Image";
+        private const int BASE64RESPONSE_VERSION_NUMBER = 1;
+        private const int BASE64RESPONSE_VERSION_POSITION = 0;
+        private const int BASE64RESPONSE_OUTPUTTYPE_POSITION = 4;
+        private const int BASE64RESPONSE_TRANSMISSIONTYPE_POSITION = 8;
+        private const int BASE64RESPONSE_RANK_POSITION = 12;
+        private const int BASE64RESPONSE_DIMENSION0_POSITION = 16;
+        private const int BASE64RESPONSE_DIMENSION1_POSITION = 20;
+        private const int BASE64RESPONSE_DIMENSION2_POSITION = 24;
+        private const int BASE64RESPONSE_DATA_POSITION = 48;
+
         // Instance specific variables
         private TraceLoggerPlus TL; // Private variable to hold the trace logger object
         private string DriverNumber; // This driver's number in the series 1, 2, 3...
@@ -522,7 +534,6 @@ namespace ASCOM.DynamicRemoteClients
             {
                 try
                 {
-
                     // Special handling for Getbase64Image transfers
                     TL.LogMessage(clientNumber, DEVICE_TYPE, $"CameraBaseClass.ImageArray called...");
                     TL.LogMessage(clientNumber, DEVICE_TYPE, $"CameraBaseClass.ImageArray called - canGetBase64Image.HasValue: {canGetBase64Image.HasValue}, imageArrayTransferType: {imageArrayTransferType}");
@@ -563,7 +574,7 @@ namespace ASCOM.DynamicRemoteClients
                         sw.Start();
 
                         // Call the GetBase64Image Action method to retrieve the image in base64 encoded form
-                        string base64String = this.Action("GetBase64Image", "");
+                        string base64String = this.Action(BASE64RESPONSE_COMMAND_NAME, "");
                         TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Received {base64String.Length} bytes in {sw.ElapsedMilliseconds}ms.");
 
                         sw.Restart();
@@ -571,13 +582,13 @@ namespace ASCOM.DynamicRemoteClients
                         TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Converted string to byte array in {sw.ElapsedMilliseconds}ms.");
 
                         // Set the array type, rank and dimensions
-                        int version = BitConverter.ToInt32(base64ArrayByteArray, 0);
-                        ImageArrayElementTypes outputType = (ImageArrayElementTypes)BitConverter.ToInt32(base64ArrayByteArray, 4);
-                        ImageArrayElementTypes transmissionType = (ImageArrayElementTypes)BitConverter.ToInt32(base64ArrayByteArray, 8);
-                        int rank = BitConverter.ToInt32(base64ArrayByteArray, 12);
-                        int dimension0 = BitConverter.ToInt32(base64ArrayByteArray, 16);
-                        int dimension1 = BitConverter.ToInt32(base64ArrayByteArray, 20);
-                        int dimension2 = BitConverter.ToInt32(base64ArrayByteArray, 24);
+                        int version = BitConverter.ToInt32(base64ArrayByteArray, BASE64RESPONSE_VERSION_POSITION);
+                        ImageArrayElementTypes outputType = (ImageArrayElementTypes)BitConverter.ToInt32(base64ArrayByteArray, BASE64RESPONSE_OUTPUTTYPE_POSITION);
+                        ImageArrayElementTypes transmissionType = (ImageArrayElementTypes)BitConverter.ToInt32(base64ArrayByteArray, BASE64RESPONSE_TRANSMISSIONTYPE_POSITION);
+                        int rank = BitConverter.ToInt32(base64ArrayByteArray, BASE64RESPONSE_RANK_POSITION);
+                        int dimension0 = BitConverter.ToInt32(base64ArrayByteArray, BASE64RESPONSE_DIMENSION0_POSITION);
+                        int dimension1 = BitConverter.ToInt32(base64ArrayByteArray, BASE64RESPONSE_DIMENSION1_POSITION);
+                        int dimension2 = BitConverter.ToInt32(base64ArrayByteArray, BASE64RESPONSE_DIMENSION2_POSITION);
                         TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Version: {version}, Output Type: {outputType}, Transmission Type: {transmissionType}, Rank: {rank}, Dimension 0: {dimension0}, Dimension 1: {dimension1}, Dimension 2: {dimension2}");
 
                         // Validate returned metadata values
@@ -591,7 +602,7 @@ namespace ASCOM.DynamicRemoteClients
                             {
                                 case 2: // Rank 2
                                     short[,] short2dArray = new short[dimension0, dimension1];
-                                    Buffer.BlockCopy(base64ArrayByteArray, 48, short2dArray, 0, base64ArrayByteArray.Length - 48);
+                                    Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, short2dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
                                     TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
 
                                     int[,] int2dArray = new int[dimension0, dimension1];
@@ -607,7 +618,7 @@ namespace ASCOM.DynamicRemoteClients
 
                                 case 3: // Rank 3
                                     short[,,] short3dArray = new short[dimension0, dimension1, dimension2];
-                                    Buffer.BlockCopy(base64ArrayByteArray, 48, short3dArray, 0, base64ArrayByteArray.Length - 48);
+                                    Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, short3dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
                                     TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
 
                                     int[,,] int3dArray = new int[dimension0, dimension1, dimension2];
@@ -639,13 +650,13 @@ namespace ASCOM.DynamicRemoteClients
                                         {
                                             case 2: // Rank 2
                                                 byte[,] byte2dArray = new byte[dimension0, dimension1];
-                                                Buffer.BlockCopy(base64ArrayByteArray, 48, byte2dArray, 0, base64ArrayByteArray.Length - 48);
+                                                Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, byte2dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
                                                 TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed byte[,] block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
                                                 return byte2dArray;
 
                                             case 3: // Rank 3
                                                 byte[,,] byte3dArray = new byte[dimension0, dimension1, dimension2];
-                                                Buffer.BlockCopy(base64ArrayByteArray, 48, byte3dArray, 0, base64ArrayByteArray.Length - 48);
+                                                Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, byte3dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
                                                 TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed byte[,,] block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
                                                 return byte3dArray;
 
@@ -658,13 +669,13 @@ namespace ASCOM.DynamicRemoteClients
                                         {
                                             case 2: // Rank 2
                                                 short[,] short2dArray = new short[dimension0, dimension1];
-                                                Buffer.BlockCopy(base64ArrayByteArray, 48, short2dArray, 0, base64ArrayByteArray.Length - 48);
+                                                Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, short2dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
                                                 TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed Int16[,] block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
                                                 return short2dArray;
 
                                             case 3: // Rank 3
                                                 short[,,] short3dArray = new short[dimension0, dimension1, dimension2];
-                                                Buffer.BlockCopy(base64ArrayByteArray, 48, short3dArray, 0, base64ArrayByteArray.Length - 48);
+                                                Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, short3dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
                                                 TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed Int16[,,] block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
                                                 return short3dArray;
 
@@ -677,13 +688,13 @@ namespace ASCOM.DynamicRemoteClients
                                         {
                                             case 2: // Rank 2
                                                 int[,] int2dArray = new int[dimension0, dimension1];
-                                                Buffer.BlockCopy(base64ArrayByteArray, 48, int2dArray, 0, base64ArrayByteArray.Length - 48);
+                                                Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, int2dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
                                                 TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed Int32[,] block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
                                                 return int2dArray;
 
                                             case 3: // Rank 3
                                                 int[,,] int3dArray = new int[dimension0, dimension1, dimension2];
-                                                Buffer.BlockCopy(base64ArrayByteArray, 48, int3dArray, 0, base64ArrayByteArray.Length - 48);
+                                                Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, int3dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
                                                 TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed Int32[,,] block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
                                                 return int3dArray;
 
@@ -696,13 +707,13 @@ namespace ASCOM.DynamicRemoteClients
                                         {
                                             case 2: // Rank 2
                                                 Int64[,] int642dArray = new Int64[dimension0, dimension1];
-                                                Buffer.BlockCopy(base64ArrayByteArray, 48, int642dArray, 0, base64ArrayByteArray.Length - 48);
+                                                Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, int642dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
                                                 TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed Int64[,] block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
                                                 return int642dArray;
 
                                             case 3: // Rank 3
                                                 Int64[,,] int643dArray = new Int64[dimension0, dimension1, dimension2];
-                                                Buffer.BlockCopy(base64ArrayByteArray, 48, int643dArray, 0, base64ArrayByteArray.Length - 48);
+                                                Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, int643dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
                                                 TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed Int64[,,] block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
                                                 return int643dArray;
 
@@ -712,7 +723,6 @@ namespace ASCOM.DynamicRemoteClients
 
                                     default:
                                         throw new InvalidValueException($"The device has returned an unsupported image array element type: {outputType}.");
-
                                 }
                             }
                             else // An unsupported combination of array element types has been returned
