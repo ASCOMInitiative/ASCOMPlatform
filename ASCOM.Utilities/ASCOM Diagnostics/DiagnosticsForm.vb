@@ -21,13 +21,13 @@ Public Class DiagnosticsForm
 #Region "Constants and Enums"
     ' Controls to reduce the scope of tests to be run - only set to false to speed up testing during development. Must all be set True for production builds!
     Private Const TEST_ASTROMETRY As Boolean = True
-    Private Const TEST_CACHE As Boolean = True
-    Private Const TEST_LOGS_AND_APPLICATIONS As Boolean = True
-    Private Const TEST_REGISTRY As Boolean = True
-    Private Const TEST_SIMULATORS As Boolean = True
-    Private Const TEST_UTILITIES As Boolean = True
-    Private Const TEST_SCAN_DRIVES As Boolean = True
-    Private Const CREATE_DEBUG_COLSOLE As Boolean = False
+    Private Const TEST_CACHE As Boolean = False
+    Private Const TEST_LOGS_AND_APPLICATIONS As Boolean = False
+    Private Const TEST_REGISTRY As Boolean = False
+    Private Const TEST_SIMULATORS As Boolean = False
+    Private Const TEST_UTILITIES As Boolean = False
+    Private Const TEST_SCAN_DRIVES As Boolean = False
+    Private Const CREATE_DEBUG_COLSOLE As Boolean = True
 
     Private Const ASCOM_PLATFORM_NAME As String = "ASCOM Platform 6"
     Private Const INST_DISPLAY_NAME As String = "DisplayName"
@@ -3886,8 +3886,12 @@ Public Class DiagnosticsForm
         transform.SiteElevation = 1500
         transform.SiteLatitude = 0.0
         transform.SiteLongitude = 0.0
+        Try
+            transform.SetJ2000(0.0, 0.0) ' Set coordinates 0.0,0.0
 
-        transform.SetJ2000(0.0, 0.0) ' Set coordinates 0.0,0.0
+        Catch ex As Exception
+
+        End Try
         CompareDouble("TransformSitePressure", "SitePressure", transform.SitePressure, 1013.25, TOLERANCE_E5) ' Make sure the default value is still in place
         Dim ra As Double = transform.RATopocentric ' Get the topocentric RA
         CompareDouble("TransformSitePressure", "SitePressure", transform.SitePressure, 855.686105478878, TOLERANCE_E5) ' Make sure that the pressure has been auto-calculated correctly from the site elevation
