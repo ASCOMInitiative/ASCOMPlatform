@@ -655,7 +655,7 @@ Public Class DiagnosticsForm
         'Eo06a tests
         eo = SOFA.Eo06a(2400000.5, 53736.0)
 
-        CompareDouble("SOFATests", "Eo06a-eo", eo, -0.0013328823719418338, 0.000000000000001)
+        CompareDouble("SOFATests", "Eo06a-eo", eo, -0.0013328823719418337, 0.000000000000001)
 
         'Atic13 tests
         ri = 2.7101215729690389
@@ -3881,16 +3881,12 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Sub TransformTest()
-        'Dim transform As Transform.Transform = New Transform.Transform
-
-        ' SitePressure tests must be run ahead of other Transform tests
-        CompareDouble("TransformSitePressure", "SitePressure", transform.SitePressure, 1013.25, TOLERANCE_E5) ' Make sure the default value is correct
-        transform.SiteTemperature = 20.0 ' Set parameters ready for trasnformation
+        ' Set parameters ready for trasnformation
+        transform.SiteTemperature = 20.0
         transform.SiteElevation = 1500
         transform.SiteLatitude = 0.0
         transform.SiteLongitude = 0.0
 
-        CompareDouble("TransformSitePressure", "SitePressure", transform.SitePressure, 1013.25, TOLERANCE_E5) ' Make sure the default value is still in place
         transform.SetJ2000(0.0, 0.0) ' Set coordinates 0.0,0.0
         CompareDouble("TransformSitePressure", "SitePressure", transform.SitePressure, 1013.25, TOLERANCE_E5) ' Make sure the default value is still in place
         Dim ra As Double = transform.RATopocentric ' Get the topocentric RA
@@ -3901,6 +3897,7 @@ Public Class DiagnosticsForm
         TransformExceptionTest(transform, TransformExceptionTestType.SiteLongitude, 0.0, -181.0, 181.0)
         TransformExceptionTest(transform, TransformExceptionTestType.SiteElevation, 0.0, -301.0, 10001.0)
         TransformExceptionTest(transform, TransformExceptionTestType.SiteTemperature, 0.0, -275.0, 101.0)
+        TransformExceptionTest(transform, TransformExceptionTestType.SitePressure, 1013.25, -0.1, 1200.1)
         TransformExceptionTest(transform, TransformExceptionTestType.JulianDateTT, 2451545.0, -1.0, 6000000.0)
         TransformExceptionTest(transform, TransformExceptionTestType.JulianDateTT, 0.0, -1.0, 6000000.0) ' Confirm that the special JulianDateTT value of 0.0 passes
         TransformExceptionTest(transform, TransformExceptionTestType.JulianDateUTC, 2451545.0, -1.0, 6000000.0)
@@ -3973,11 +3970,9 @@ Public Class DiagnosticsForm
         Catch ex As Exception
             If Not ExpectedPass Then
                 TL.LogMessage("TransformExceptionTester", String.Format("Exception generated as expected for {0} invalid value of {1}", test.ToString(), Value))
-                'TL.LogMessageCrLf("TransformExceptionTester", ex.ToString())
                 NMatches += 1
             Else
                 LogError("TransformExceptionTester", String.Format("Unexpected exception generated on valid {0} value of {1}", test.ToString(), Value))
-                'TL.LogMessageCrLf("TransformExceptionTester", ex.ToString())
             End If
         End Try
 
