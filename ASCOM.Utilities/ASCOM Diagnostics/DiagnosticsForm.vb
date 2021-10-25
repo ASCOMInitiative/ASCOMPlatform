@@ -15,19 +15,20 @@ Imports System.Security.AccessControl
 Imports System.Security.Principal
 Imports System.Threading
 Imports System.Text
+Imports ASCOM.Astrometry.Exceptions
 
 Public Class DiagnosticsForm
 
 #Region "Constants and Enums"
     ' Controls to reduce the scope of tests to be run - only set to false to speed up testing during development. Must all be set True for production builds!
     Private Const TEST_ASTROMETRY As Boolean = True
-    Private Const TEST_CACHE As Boolean = False
-    Private Const TEST_LOGS_AND_APPLICATIONS As Boolean = False
-    Private Const TEST_REGISTRY As Boolean = False
-    Private Const TEST_SIMULATORS As Boolean = False
-    Private Const TEST_UTILITIES As Boolean = False
-    Private Const TEST_SCAN_DRIVES As Boolean = False
-    Private Const CREATE_DEBUG_COLSOLE As Boolean = True
+    Private Const TEST_CACHE As Boolean = True
+    Private Const TEST_LOGS_AND_APPLICATIONS As Boolean = True
+    Private Const TEST_REGISTRY As Boolean = True
+    Private Const TEST_SIMULATORS As Boolean = True
+    Private Const TEST_UTILITIES As Boolean = True
+    Private Const TEST_SCAN_DRIVES As Boolean = True
+    Private Const CREATE_DEBUG_COLSOLE As Boolean = False
 
     Private Const ASCOM_PLATFORM_NAME As String = "ASCOM Platform 6"
     Private Const INST_DISPLAY_NAME As String = "DisplayName"
@@ -3881,20 +3882,22 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Sub TransformTest()
+        ' Confirm that site property read before write generates an errpr
+        TransformInitalGetTest(transform, TransformExceptionTestType.SiteLatitude)
+        TransformInitalGetTest(transform, TransformExceptionTestType.SiteLongitude)
+        TransformInitalGetTest(transform, TransformExceptionTestType.SiteElevation)
+        ' Cannot test SiteTemperature because a coding omission in Transform caused it never to be forced to be set. Now it cannot be forced to be set because it could break existing applications. :(
+        ' TransformInitalGetTest(transform, TransformExceptionTestType.SiteTemperature)
+        TransformInitalGetTest(transform, TransformExceptionTestType.SitePressure)
+
         ' Set parameters ready for trasnformation
         transform.SiteTemperature = 20.0
         transform.SiteElevation = 1500
         transform.SiteLatitude = 0.0
         transform.SiteLongitude = 0.0
-        Try
-            transform.SetJ2000(0.0, 0.0) ' Set coordinates 0.0,0.0
+        transform.SetJ2000(0.0, 0.0) ' Set coordinates 0.0,0.0
 
-        Catch ex As Exception
-
-        End Try
-        CompareDouble("TransformSitePressure", "SitePressure", transform.SitePressure, 1013.25, TOLERANCE_E5) ' Make sure the default value is still in place
         Dim ra As Double = transform.RATopocentric ' Get the topocentric RA
-        CompareDouble("TransformSitePressure", "SitePressure", transform.SitePressure, 855.686105478878, TOLERANCE_E5) ' Make sure that the pressure has been auto-calculated correctly from the site elevation
 
         ' Transform acceptable parameter range tests
         TransformExceptionTest(transform, TransformExceptionTestType.SiteLatitude, 0.0, -91.0, 91.0)
@@ -3914,7 +3917,6 @@ Public Class DiagnosticsForm
         TransformExceptionTest(transform, TransformExceptionTestType.SetTopocentricDec, 0.0, -91.0, 91.0)
         TransformExceptionTest(transform, TransformExceptionTestType.SetAzElAzimuth, 0.0, -1.0, 360.0)
         TransformExceptionTest(transform, TransformExceptionTestType.SetAzElElevation, 0.0, -91.0, 91.0)
-        TransformExceptionTest(transform, TransformExceptionTestType.SitePressure, 1000.0, -1.0, 1300.0)
 
         TransformTest2000("Deneb", "20:41:25.916", "45:16:49.23", TOLERANCE_E5, TOLERANCE_E4)
         TransformTest2000("Polaris", "02:31:51.263", "89:15:50.68", TOLERANCE_E5, TOLERANCE_E4)
@@ -3923,6 +3925,32 @@ Public Class DiagnosticsForm
         transform.Dispose()
 
         TL.BlankLine()
+    End Sub
+
+    Private Sub TransformInitalGetTest(TR As Transform.Transform, test As TransformExceptionTestType)
+        Dim value As Double
+
+        Try
+            Select Case test
+                Case TransformExceptionTestType.SiteLatitude
+                    value = TR.SiteLatitude
+                Case TransformExceptionTestType.SiteLongitude
+                    value = TR.SiteLongitude
+                Case TransformExceptionTestType.SiteElevation
+                    value = TR.SiteElevation
+                Case TransformExceptionTestType.SiteTemperature
+                    value = TR.SiteTemperature
+                Case TransformExceptionTestType.SitePressure
+                    value = TR.SitePressure
+            End Select
+            LogError("TransformInitalGetTest", $"Inital read of Transform.{test} did not raise an exception.")
+        Catch ex As TransformUninitialisedException
+            TL.LogMessage("TransformInitalGetTest", $"Exception generated as expected for {test} invalid value of {1}")
+            NMatches += 1
+        Catch ex As Exception
+            LogError("TransformInitalGetTest", $"Unexpected exception generated for {test}: {ex}")
+        End Try
+
     End Sub
 
     Private Sub TransformExceptionTest(TR As Transform.Transform, test As TransformExceptionTestType, InRange As Double, OutofRangeLow As Double, OutofRangeHigh As Double)

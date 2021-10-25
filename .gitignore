@@ -279,3 +279,6 @@ ascom-standards.org/Templates/_notes/dwsync.xml
 Help/Output
 /ASCOM.DeviceInterface/ASCOM.DeviceInterfaces.xml
 /SOFA/Sofa Library/ReleaseZipFiles
+/ASCOM.Native.6.1$/ASCOM.Native.6.1.lib
+/ASCOM.Native.6.1$/ASCOM.Native.6.1.exp
+/ASCOM.Native.6.1$/ASCOM.Native.6.1.dll
