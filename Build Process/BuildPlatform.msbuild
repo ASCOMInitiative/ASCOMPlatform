@@ -2,8 +2,11 @@
     <!-- Required Import to use MSBuild Community Tasks -->
     <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
     <PropertyGroup>
-	        <!-- GIT Barch to Check Out-->
-        <GitCheckoutBranch>release</GitCheckoutBranch>
+		<!--  Specify Release or Debug builds -->
+		<Configuration>Release</Configuration>
+	    
+		<!-- GIT Branch to Check Out-->
+        <GitCheckoutBranch>master</GitCheckoutBranch>
 	
         <!-- Directory in which to export the latest ASCOM code base from GitHub-->
 		<CheckoutDirectoryRelative>Export</CheckoutDirectoryRelative>
@@ -36,10 +39,10 @@
         <DeveloperInstallerDirectory>Releases\ASCOM 6\Developer\Installer Project</DeveloperInstallerDirectory>
         <PlatformInstallerProject>$(PlatformInstallerDirectory)\ASCOM Platform 6.mpr</PlatformInstallerProject>
         <DeveloperInstallerProject>$(DeveloperInstallerDirectory)\ASCOM Platform 6 Developer.mpr</DeveloperInstallerProject>
-        <MakeTemplatesExecutable>\DriverTemplates\MakeASCOMTemplates\MakeASCOMTemplates\bin\Release\MakeASCOMTemplates.exe</MakeTemplatesExecutable>
+        <MakeTemplatesExecutable>\DriverTemplates\MakeASCOMTemplates\MakeASCOMTemplates\bin\$(Configuration)\MakeASCOMTemplates.exe</MakeTemplatesExecutable>
         <DriverTemplatesDirectory>DriverTemplates</DriverTemplatesDirectory>
         <FindGUIDsDirectory>Remove ASCOM\Find GUIDs\bin\Release</FindGUIDsDirectory>
-        <RemoveASCOMDirectory>Remove ASCOM\Remove ASCOM\bin\Release</RemoveASCOMDirectory>
+        <RemoveASCOMDirectory>Remove ASCOM\Remove ASCOM\bin\$(Configuration)</RemoveASCOMDirectory>
         <RemoveASCOMExe>$(RemoveASCOMDirectory)\RemoveASCOM.exe</RemoveASCOMExe>
         <RemoveASCOMPdb>$(RemoveASCOMDirectory)\RemoveASCOM.pdb</RemoveASCOMPdb>
         <RemoveASCOMTxt>$(RemoveASCOMDirectory)\GUIDList.txt</RemoveASCOMTxt>
@@ -154,8 +157,8 @@
         <Exec Command='"$(CheckoutDirectory)\$(FindGUIDsDirectory)\MakeDynamicLists.exe" "$(CheckoutDirectory)" ' />
 
         <!-- Build the main Platform after cleaning the solution (just in case executables get committed to SVN) -->
-        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=Release;Platform=Mixed Platforms" />
-        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=Release;Platform=Mixed Platforms" />
+        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=$(Configuration);Platform=Mixed Platforms" />
+        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=$(Configuration);Platform=Mixed Platforms" />
 
         <!-- Sign and copy the RemoveASCOM executables, that have just been built, to the installer main directory so that the latest versions are included in the installer -->
 		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(RemoveASCOMExe)&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
@@ -166,8 +169,8 @@
         <Copy SourceFiles="@(RemoveASCOMExecutables)" DestinationFolder="$(CheckoutDirectory)\$(PlatformInstallerDirectory)" />
 
 	    <!-- Build the 64bit executables after cleaning the solution (just in case executables get committed to SVN) -->
-        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=Release;Platform=x64" />
-        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=Release;Platform=x64" />
+        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=$(Configuration);Platform=x64" />
+        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=$(Configuration);Platform=x64" />
 
         <!-- Sign the executables that support the installation process, these are not automatically signed by the InstallAware build process -->
 		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
@@ -184,8 +187,8 @@
         <Exec Command='"$(CheckoutDirectory)\$(MakeTemplatesExecutable)" "$(CheckoutDirectory)\$(DriverTemplatesDirectory)" "TemplateSources"' />
     
         <!-- Build the help files for Platform and Developer.-->
-        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=Release;Platform=AnyCPU" />
-        <MSBuild Projects="$(CheckoutDirectory)\$(DeveloperHelpProject)" Properties="Configuration=Release;Platform=AnyCPU" />
+        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=$(Configuration);Platform=AnyCPU" />
+        <MSBuild Projects="$(CheckoutDirectory)\$(DeveloperHelpProject)" Properties="Configuration=$(Configuration);Platform=AnyCPU" />
 	    
 		<!-- Update the file version numbers in the InstallAware project files -->
 	    <ItemGroup>
