@@ -3943,12 +3943,12 @@ Public Class DiagnosticsForm
                 Case TransformExceptionTestType.SitePressure
                     value = TR.SitePressure
             End Select
-            LogError("TransformInitalGetTest", $"Inital read of Transform.{test} did not raise an exception.")
+            LogError("TransformInitalGetTest", $"Inital read of Transform.{test} did not raise a TransformUninitialisedException as expected.")
         Catch ex As TransformUninitialisedException
-            TL.LogMessage("TransformInitalGetTest", $"Exception generated as expected for {test} invalid value of {1}")
+            TL.LogMessage("TransformInitalGetTest", $"A TransformUninitialisedException was generated as expected when readsing Transform{test} for the first time.")
             NMatches += 1
         Catch ex As Exception
-            LogError("TransformInitalGetTest", $"Unexpected exception generated for {test}: {ex}")
+            LogError("TransformInitalGetTest", $"Unexpected exception when reading Transform.{test} for the first time: {ex}")
         End Try
 
     End Sub
