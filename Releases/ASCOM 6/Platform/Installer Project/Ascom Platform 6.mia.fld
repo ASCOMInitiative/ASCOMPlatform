@@ -9,11 +9,9 @@ Platform 5.5 files
 Platform 5 files
 Platform 6.2 files
 Remove Previous Platform 6 install if present
-Extra activities if on a 64bit system
 Uninstall items installed by this installer
 ASCOM Cache
 Create shortcuts
 Maintenance Dialogue
-Alpaca Support for Chooser
 ASCOM Device Hub
 Clean up any remaining simulator COM entries
