@@ -70,8 +70,8 @@ namespace ASCOM.DynamicRemoteClients
         public const string USERNAME_PROFILENAME = "User Name"; public const string USERNAME_DEFAULT = "";
         public const string PASSWORD_PROFILENAME = "Password"; public const string PASSWORD_DEFAULT = "";
         public const string MANAGE_CONNECT_LOCALLY_PROFILENAME = "Manage Connect Locally"; public const bool MANAGE_CONNECT_LOCALLY_DEFAULT = false;
-        public const string IMAGE_ARRAY_TRANSFER_TYPE_PROFILENAME = "Image Array Transfer Type"; public const ImageArrayTransferType IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT = DEFAULT_IMAGE_ARRAY_TRANSFER_TYPE;
-        public const string IMAGE_ARRAY_COMPRESSION_PROFILENAME = "Image Array Compression"; public const ImageArrayCompression IMAGE_ARRAY_COMPRESSION_DEFAULT = DEFAULT_IMAGE_ARRAY_COMPRESSION;
+        public const string IMAGE_ARRAY_TRANSFER_TYPE_PROFILENAME = "Image Array Transfer Type"; public const ASCOM.Common.Alpaca.ImageArrayTransferType IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT = DEFAULT_IMAGE_ARRAY_TRANSFER_TYPE;
+        public const string IMAGE_ARRAY_COMPRESSION_PROFILENAME = "Image Array Compression"; public const ASCOM.Common.Alpaca.ImageArrayCompression IMAGE_ARRAY_COMPRESSION_DEFAULT = DEFAULT_IMAGE_ARRAY_COMPRESSION;
         public const string UNIQUEID_PROFILENAME = "UniqueID"; public const string UNIQUEID_DEFAULT = "Unknown";
         public const string ENABLE_REDISCOVERY_PROFILENAME = "Enable Rediscovery"; public const bool ENABLE_REDISCOVERY_DEFAULT = true;
         public const string ENABLE_IPV4_DISCOVERY_PROFILENAME = "Enable IPv4 Discovery"; public const bool ENABLE_IPV4_DISCOVERY_DEFAULT = true;
@@ -85,40 +85,40 @@ namespace ASCOM.DynamicRemoteClients
         public const string TRACELOGGER_NAME_FORMAT_STRING = "AlpacaDynamic{0}.{1}";
 
         // Enum to describe Camera.ImageArray and ImageArrayVCariant array types
-        public enum ImageArrayElementTypes
-        {
-            Unknown = 0,
-            Int16 = 1,
-            Int32 = 2,
-            Double = 3,
-            Float = 4,
-            Byte = 5,
-            Int64 = 6
+        //public enum ImageArrayElementTypes
+        //{
+        //    Unknown = 0,
+        //    Int16 = 1,
+        //    Int32 = 2,
+        //    Double = 3,
+        //    Float = 4,
+        //    Byte = 5,
+        //    Int64 = 6
 
-        }
+        //}
 
-        // Enum used by the dynamic client to indicate what type of image array transfer should be used
-        public enum ImageArrayTransferType
-        {
-            JSON = 0,
-            Base64HandOff = 1,
-            GetBase64Image = 2,
-            GetImageBytes = 3,
-            BestAvailable = 4
-        }
+        //// Enum used by the dynamic client to indicate what type of image array transfer should be used
+        //public enum ImageArrayTransferType
+        //{
+        //    JSON = 0,
+        //    Base64HandOff = 1,
+        //    GetBase64Image = 2,
+        //    GetImageBytes = 3,
+        //    BestAvailable = 4
+        //}
 
         // Enum used by the dynamic client to indicate what type of compression should be used in responses
-        public enum ImageArrayCompression
-        {
-            None = 0,
-            Deflate = 1,
-            GZip = 2,
-            GZipOrDeflate = 3
-        }
+        //public enum ImageArrayCompression
+        //{
+        //    None = 0,
+        //    Deflate = 1,
+        //    GZip = 2,
+        //    GZipOrDeflate = 3
+        //}
 
         // Default image array transfer constants
-        public const ImageArrayCompression DEFAULT_IMAGE_ARRAY_COMPRESSION = ImageArrayCompression.None;
-        public const ImageArrayTransferType DEFAULT_IMAGE_ARRAY_TRANSFER_TYPE = ImageArrayTransferType.BestAvailable;
+        public const ASCOM.Common.Alpaca.ImageArrayCompression DEFAULT_IMAGE_ARRAY_COMPRESSION = ASCOM.Common.Alpaca.ImageArrayCompression.None;
+        public const ASCOM.Common.Alpaca.ImageArrayTransferType DEFAULT_IMAGE_ARRAY_TRANSFER_TYPE = ASCOM.Common.Alpaca.ImageArrayTransferType.BestAvailable;
 
         // Image array base64 hand-off support constants
         public const string BASE64_HANDOFF_HEADER = "base64handoff"; // Name of HTTP header used to affirm binary serialisation support for image array data

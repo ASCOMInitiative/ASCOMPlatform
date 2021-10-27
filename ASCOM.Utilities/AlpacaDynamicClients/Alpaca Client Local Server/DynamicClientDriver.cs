@@ -474,8 +474,8 @@ namespace ASCOM.DynamicRemoteClients
                                        ref string userName,
                                        ref string password,
                                        ref bool manageConnectLocally,
-                                       ref SharedConstants.ImageArrayTransferType imageArrayTransferType,
-                                       ref SharedConstants.ImageArrayCompression imageArrayCompression,
+                                       ref ASCOM.Common.Alpaca.ImageArrayTransferType imageArrayTransferType,
+                                       ref ASCOM.Common.Alpaca.ImageArrayCompression imageArrayCompression,
                                        ref string uniqueId,
                                        ref bool enableRediscovery,
                                        ref bool ipV4Enabled,
@@ -503,8 +503,8 @@ namespace ASCOM.DynamicRemoteClients
                 userName = driverProfile.GetValue(driverProgID, SharedConstants.USERNAME_PROFILENAME, string.Empty, SharedConstants.USERNAME_DEFAULT);
                 password = driverProfile.GetValue(driverProgID, SharedConstants.PASSWORD_PROFILENAME, string.Empty, SharedConstants.PASSWORD_DEFAULT);
                 manageConnectLocally = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.MANAGE_CONNECT_LOCALLY_PROFILENAME, string.Empty, SharedConstants.MANAGE_CONNECT_LOCALLY_DEFAULT);
-                imageArrayTransferType = (SharedConstants.ImageArrayTransferType)GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_PROFILENAME, string.Empty, (int)SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT);
-                imageArrayCompression = (SharedConstants.ImageArrayCompression)GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.IMAGE_ARRAY_COMPRESSION_PROFILENAME, string.Empty, (int)SharedConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT);
+                imageArrayTransferType = (ASCOM.Common.Alpaca.ImageArrayTransferType)GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_PROFILENAME, string.Empty, (int)SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT);
+                imageArrayCompression = (ASCOM.Common.Alpaca.ImageArrayCompression)GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.IMAGE_ARRAY_COMPRESSION_PROFILENAME, string.Empty, (int)SharedConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT);
                 uniqueId = driverProfile.GetValue(driverProgID, SharedConstants.UNIQUEID_PROFILENAME, string.Empty, SharedConstants.UNIQUEID_DEFAULT);
                 enableRediscovery = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.ENABLE_REDISCOVERY_PROFILENAME, string.Empty, SharedConstants.ENABLE_REDISCOVERY_DEFAULT);
                 ipV4Enabled = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.ENABLE_IPV4_DISCOVERY_PROFILENAME, string.Empty, SharedConstants.ENABLE_IPV4_DISCOVERY_DEFAULT);
@@ -533,8 +533,8 @@ namespace ASCOM.DynamicRemoteClients
                                         string userName,
                                         string password,
                                         bool manageConnectLocally,
-                                        SharedConstants.ImageArrayTransferType imageArrayTransferType,
-                                        SharedConstants.ImageArrayCompression imageArrayCompression,
+                                        ASCOM.Common.Alpaca.ImageArrayTransferType imageArrayTransferType,
+                                        ASCOM.Common.Alpaca.ImageArrayCompression imageArrayCompression,
                                         string uniqueId,
                                         bool enableRediscovery,
                                         bool ipV4Enabled,
@@ -683,7 +683,7 @@ namespace ASCOM.DynamicRemoteClients
         /// <param name="imageArrayCompression"></param>
         /// <param name="memberType"></param>
         /// <returns></returns>
-        public static T GetValue<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, SharedConstants.ImageArrayTransferType imageArrayTransferType, SharedConstants.ImageArrayCompression imageArrayCompression, MemberTypes memberType)
+        public static T GetValue<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, ASCOM.Common.Alpaca.ImageArrayTransferType imageArrayTransferType, ASCOM.Common.Alpaca.ImageArrayCompression imageArrayCompression, MemberTypes memberType)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>();
             return SendToRemoteDevice<T>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET, imageArrayTransferType, imageArrayCompression, memberType);
@@ -830,7 +830,7 @@ namespace ASCOM.DynamicRemoteClients
         /// <param name="httpMethod"></param>
         /// <param name="imageArrayTransferType"></param>
         /// <returns></returns>
-        public static T SendToRemoteDevice<T>(uint clientNumber, RestClient client, string uriBase, TraceLoggerPlus TL, string method, Dictionary<string, string> parameters, Method httpMethod, SharedConstants.ImageArrayTransferType imageArrayTransferType, SharedConstants.ImageArrayCompression imageArrayCompression, MemberTypes memberType)
+        public static T SendToRemoteDevice<T>(uint clientNumber, RestClient client, string uriBase, TraceLoggerPlus TL, string method, Dictionary<string, string> parameters, Method httpMethod, ASCOM.Common.Alpaca.ImageArrayTransferType imageArrayTransferType, ASCOM.Common.Alpaca.ImageArrayCompression imageArrayCompression, MemberTypes memberType)
         {
             int retryCounter = 0; // Initialise the socket error retry counter
             Stopwatch sw = new Stopwatch(); // Stopwatch to time activities
@@ -859,16 +859,16 @@ namespace ASCOM.DynamicRemoteClients
                     {
                         switch (imageArrayCompression)
                         {
-                            case SharedConstants.ImageArrayCompression.None:
+                            case ASCOM.Common.Alpaca.ImageArrayCompression.None:
                                 client.ConfigureWebRequest(wr => wr.AutomaticDecompression = DecompressionMethods.None); // Prevent any decompression
                                 break;
-                            case SharedConstants.ImageArrayCompression.Deflate:
+                            case ASCOM.Common.Alpaca.ImageArrayCompression.Deflate:
                                 client.ConfigureWebRequest(wr => wr.AutomaticDecompression = DecompressionMethods.Deflate); // Allow only Deflate decompression
                                 break;
-                            case SharedConstants.ImageArrayCompression.GZip:
+                            case ASCOM.Common.Alpaca.ImageArrayCompression.GZip:
                                 client.ConfigureWebRequest(wr => wr.AutomaticDecompression = DecompressionMethods.GZip); // Allow only GZip decompression
                                 break;
-                            case SharedConstants.ImageArrayCompression.GZipOrDeflate:
+                            case ASCOM.Common.Alpaca.ImageArrayCompression.GZipOrDeflate:
                                 client.ConfigureWebRequest(wr => wr.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip); // Allow both Deflate and GZip decompression
                                 break;
                             default:
@@ -877,13 +877,14 @@ namespace ASCOM.DynamicRemoteClients
 
                         switch (imageArrayTransferType)
                         {
-                            case SharedConstants.ImageArrayTransferType.JSON:
+                            case ASCOM.Common.Alpaca.ImageArrayTransferType.JSON:
                                 // No extra action because "accepts = application/json" will be applied automatically by the client
                                 break;
 
-                            case SharedConstants.ImageArrayTransferType.GetBase64Image:
-                            case SharedConstants.ImageArrayTransferType.BestAvailable:
-                            case SharedConstants.ImageArrayTransferType.Base64HandOff:
+                            case ASCOM.Common.Alpaca.ImageArrayTransferType.GetBase64Image:
+                            case ASCOM.Common.Alpaca.ImageArrayTransferType.BestAvailable:
+                            case ASCOM.Common.Alpaca.ImageArrayTransferType.Base64HandOff:
+                            case ASCOM.Common.Alpaca.ImageArrayTransferType.GetImageBytes:
                                 request.AddHeader(SharedConstants.BASE64_HANDOFF_HEADER, SharedConstants.BASE64_HANDOFF_SUPPORTED);
                                 break;
                             default:
@@ -1140,7 +1141,7 @@ namespace ASCOM.DynamicRemoteClients
                                 // De-serialise the JSON image array hand-off response 
                                 sw.Restart(); // Clear and start the stopwatch
                                 Base64ArrayHandOffResponse base64HandOffresponse = JsonConvert.DeserializeObject<Base64ArrayHandOffResponse>(deviceJsonResponse.Content);
-                                SharedConstants.ImageArrayElementTypes arrayType = (SharedConstants.ImageArrayElementTypes)base64HandOffresponse.Type; // Extract the array type from the JSON response
+                                ASCOM.Common.Alpaca.ImageArrayElementTypes arrayType = (ASCOM.Common.Alpaca.ImageArrayElementTypes)base64HandOffresponse.Type; // Extract the array type from the JSON response
 
                                 TL.LogMessage(clientNumber, method, $"Base64 - Extracted array information in {sw.ElapsedMilliseconds}ms. Array Type: {arrayType}, Rank: {base64HandOffresponse.Rank}, Dimension 0 length: {base64HandOffresponse.Dimension0Length}, Dimension 1 length: {base64HandOffresponse.Dimension1Length}, Dimension 2 length: {base64HandOffresponse.Dimension2Length}");
                                 sw.Restart();
@@ -1159,16 +1160,16 @@ namespace ASCOM.DynamicRemoteClients
                                 {
                                     switch (imageArrayCompression)
                                     {
-                                        case SharedConstants.ImageArrayCompression.None:
+                                        case ASCOM.Common.Alpaca.ImageArrayCompression.None:
                                             imageDownloadHandler.AutomaticDecompression = DecompressionMethods.None;
                                             break;
-                                        case SharedConstants.ImageArrayCompression.Deflate:
+                                        case ASCOM.Common.Alpaca.ImageArrayCompression.Deflate:
                                             imageDownloadHandler.AutomaticDecompression = DecompressionMethods.Deflate;
                                             break;
-                                        case SharedConstants.ImageArrayCompression.GZip:
+                                        case ASCOM.Common.Alpaca.ImageArrayCompression.GZip:
                                             imageDownloadHandler.AutomaticDecompression = DecompressionMethods.GZip;
                                             break;
-                                        case SharedConstants.ImageArrayCompression.GZipOrDeflate:
+                                        case ASCOM.Common.Alpaca.ImageArrayCompression.GZipOrDeflate:
                                             imageDownloadHandler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip; // Allow both Deflate and GZip decompression
                                             break;
                                         default:
@@ -1211,7 +1212,7 @@ namespace ASCOM.DynamicRemoteClients
                                 // Now create and populate an appropriate array to return to the client that mirrors the array type returned by the device
                                 switch (arrayType) // Handle the different array return types
                                 {
-                                    case SharedConstants.ImageArrayElementTypes.Int32:
+                                    case ASCOM.Common.Alpaca.ImageArrayElementTypes.Int32:
                                         switch (base64HandOffresponse.Rank)
                                         {
                                             case 2:
@@ -1230,7 +1231,7 @@ namespace ASCOM.DynamicRemoteClients
                                         Buffer.BlockCopy(base64ArrayByteArray, 0, remoteArray, 0, base64ArrayByteArray.Length);
                                         break;
 
-                                    case SharedConstants.ImageArrayElementTypes.Int16:
+                                    case ASCOM.Common.Alpaca.ImageArrayElementTypes.Int16:
                                         switch (base64HandOffresponse.Rank)
                                         {
                                             case 2:
@@ -1247,7 +1248,7 @@ namespace ASCOM.DynamicRemoteClients
                                         Buffer.BlockCopy(base64ArrayByteArray, 0, remoteArray, 0, base64ArrayByteArray.Length); // Copy the array bytes to the response array that will return to the client
                                         break;
 
-                                    case SharedConstants.ImageArrayElementTypes.Double:
+                                    case ASCOM.Common.Alpaca.ImageArrayElementTypes.Double:
                                         switch (base64HandOffresponse.Rank)
                                         {
                                             case 2:
@@ -1281,7 +1282,7 @@ namespace ASCOM.DynamicRemoteClients
                             {
                                 sw.Restart(); // Clear and start the stopwatch
                                 ImageArrayResponseBase responseBase = JsonConvert.DeserializeObject<ImageArrayResponseBase>(deviceJsonResponse.Content);
-                                SharedConstants.ImageArrayElementTypes arrayType = (SharedConstants.ImageArrayElementTypes)responseBase.Type;
+                                ASCOM.Common.Alpaca.ImageArrayElementTypes arrayType = (ASCOM.Common.Alpaca.ImageArrayElementTypes)responseBase.Type;
                                 int arrayRank = responseBase.Rank;
 
                                 // Include some debug logging
@@ -1293,13 +1294,13 @@ namespace ASCOM.DynamicRemoteClients
                                 sw.Restart(); // Clear and start the stopwatch
                                 switch (arrayType) // Handle the different return types that may come from ImageArrayVariant
                                 {
-                                    case SharedConstants.ImageArrayElementTypes.Int32:
+                                    case ASCOM.Common.Alpaca.ImageArrayElementTypes.Int32:
                                         switch (arrayRank)
                                         {
                                             case 2:
                                                 IntArray2DResponse intArray2DResponse = JsonConvert.DeserializeObject<IntArray2DResponse>(deviceJsonResponse.Content);
                                                 TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, intArray2DResponse.ClientTransactionID, intArray2DResponse.ServerTransactionID, intArray2DResponse.Rank.ToString())); //, intArray2DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(SharedConstants.ImageArrayElementTypes)intArray2DResponse.Type}, Rank: {intArray2DResponse.Rank}");
+                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ASCOM.Common.Alpaca.ImageArrayElementTypes)intArray2DResponse.Type}, Rank: {intArray2DResponse.Rank}");
                                                 if (CallWasSuccessful(TL, intArray2DResponse)) return (T)((object)intArray2DResponse.Value);
                                                 restResponseBase = (RestResponseBase)intArray2DResponse;
                                                 break;
@@ -1307,7 +1308,7 @@ namespace ASCOM.DynamicRemoteClients
                                             case 3:
                                                 IntArray3DResponse intArray3DResponse = JsonConvert.DeserializeObject<IntArray3DResponse>(deviceJsonResponse.Content);
                                                 TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, intArray3DResponse.ClientTransactionID, intArray3DResponse.ServerTransactionID, intArray3DResponse.Rank.ToString())); //, intArray3DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(SharedConstants.ImageArrayElementTypes)intArray3DResponse.Type}, Rank: {intArray3DResponse.Rank}");
+                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ASCOM.Common.Alpaca.ImageArrayElementTypes)intArray3DResponse.Type}, Rank: {intArray3DResponse.Rank}");
                                                 if (CallWasSuccessful(TL, intArray3DResponse)) return (T)((object)intArray3DResponse.Value);
                                                 restResponseBase = (RestResponseBase)intArray3DResponse;
                                                 break;
@@ -1317,13 +1318,13 @@ namespace ASCOM.DynamicRemoteClients
                                         }
                                         break;
 
-                                    case SharedConstants.ImageArrayElementTypes.Int16:
+                                    case ASCOM.Common.Alpaca.ImageArrayElementTypes.Int16:
                                         switch (arrayRank)
                                         {
                                             case 2:
                                                 ShortArray2DResponse shortArray2DResponse = JsonConvert.DeserializeObject<ShortArray2DResponse>(deviceJsonResponse.Content);
                                                 TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, shortArray2DResponse.ClientTransactionID, shortArray2DResponse.ServerTransactionID, shortArray2DResponse.Rank.ToString())); //, shortArray2DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(SharedConstants.ImageArrayElementTypes)shortArray2DResponse.Type}, Rank: {shortArray2DResponse.Rank}");
+                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ASCOM.Common.Alpaca.ImageArrayElementTypes)shortArray2DResponse.Type}, Rank: {shortArray2DResponse.Rank}");
                                                 if (CallWasSuccessful(TL, shortArray2DResponse)) return (T)((object)shortArray2DResponse.Value);
                                                 restResponseBase = (RestResponseBase)shortArray2DResponse;
                                                 break;
@@ -1331,7 +1332,7 @@ namespace ASCOM.DynamicRemoteClients
                                             case 3:
                                                 ShortArray3DResponse shortArray3DResponse = JsonConvert.DeserializeObject<ShortArray3DResponse>(deviceJsonResponse.Content);
                                                 TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, shortArray3DResponse.ClientTransactionID, shortArray3DResponse.ServerTransactionID, shortArray3DResponse.Rank.ToString())); //, shortArray3DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(SharedConstants.ImageArrayElementTypes)shortArray3DResponse.Type}, Rank: {shortArray3DResponse.Rank}");
+                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ASCOM.Common.Alpaca.ImageArrayElementTypes)shortArray3DResponse.Type}, Rank: {shortArray3DResponse.Rank}");
                                                 if (CallWasSuccessful(TL, shortArray3DResponse)) return (T)((object)shortArray3DResponse.Value);
                                                 restResponseBase = (RestResponseBase)shortArray3DResponse;
                                                 break;
@@ -1341,13 +1342,13 @@ namespace ASCOM.DynamicRemoteClients
                                         }
                                         break;
 
-                                    case SharedConstants.ImageArrayElementTypes.Double:
+                                    case ASCOM.Common.Alpaca.ImageArrayElementTypes.Double:
                                         switch (arrayRank)
                                         {
                                             case 2:
                                                 DoubleArray2DResponse doubleArray2DResponse = JsonConvert.DeserializeObject<DoubleArray2DResponse>(deviceJsonResponse.Content);
                                                 TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, doubleArray2DResponse.ClientTransactionID, doubleArray2DResponse.ServerTransactionID, doubleArray2DResponse.Rank.ToString())); //, doubleArray2DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(SharedConstants.ImageArrayElementTypes)doubleArray2DResponse.Type}, Rank: {doubleArray2DResponse.Rank}");
+                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ASCOM.Common.Alpaca.ImageArrayElementTypes)doubleArray2DResponse.Type}, Rank: {doubleArray2DResponse.Rank}");
                                                 if (CallWasSuccessful(TL, doubleArray2DResponse)) return (T)((object)doubleArray2DResponse.Value);
                                                 restResponseBase = (RestResponseBase)doubleArray2DResponse;
                                                 break;
@@ -1355,7 +1356,7 @@ namespace ASCOM.DynamicRemoteClients
                                             case 3:
                                                 DoubleArray3DResponse doubleArray3DResponse = JsonConvert.DeserializeObject<DoubleArray3DResponse>(deviceJsonResponse.Content);
                                                 TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, doubleArray3DResponse.ClientTransactionID, doubleArray3DResponse.ServerTransactionID, doubleArray3DResponse.Rank.ToString())); //, doubleArray3DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(SharedConstants.ImageArrayElementTypes)doubleArray3DResponse.Type}, Rank: {doubleArray3DResponse.Rank}");
+                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ASCOM.Common.Alpaca.ImageArrayElementTypes)doubleArray3DResponse.Type}, Rank: {doubleArray3DResponse.Rank}");
                                                 if (CallWasSuccessful(TL, doubleArray3DResponse)) return (T)((object)doubleArray3DResponse.Value);
                                                 restResponseBase = (RestResponseBase)doubleArray3DResponse;
                                                 break;
@@ -1699,7 +1700,7 @@ namespace ASCOM.DynamicRemoteClients
             return parameterValue;
         }
 
-        public static object ImageArrayVariant(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, SharedConstants.ImageArrayTransferType imageArrayTransferType, SharedConstants.ImageArrayCompression imageArrayCompression)
+        public static object ImageArrayVariant(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, ASCOM.Common.Alpaca.ImageArrayTransferType imageArrayTransferType, ASCOM.Common.Alpaca.ImageArrayCompression imageArrayCompression)
         {
             Array returnArray;
             object[,] objectArray2D;

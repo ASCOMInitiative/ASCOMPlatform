@@ -10,13 +10,13 @@ namespace ASCOM.DynamicRemoteClients
     public class ImageArrayResponseBase : RestResponseBase
     {
         private int rank = 0;
-        private SharedConstants.ImageArrayElementTypes type = SharedConstants.ImageArrayElementTypes.Unknown;
+        private ASCOM.Common.Alpaca.ImageArrayElementTypes type = ASCOM.Common.Alpaca.ImageArrayElementTypes.Unknown;
 
         [JsonProperty(Order = -3)]
         public int Type
         {
             get { return (int)type; }
-            set { type = (SharedConstants.ImageArrayElementTypes)value; }
+            set { type = (ASCOM.Common.Alpaca.ImageArrayElementTypes)value; }
         }
 
         [JsonProperty(Order = -2)]

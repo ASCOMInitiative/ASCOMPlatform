@@ -7,7 +7,7 @@ namespace ASCOM.DynamicRemoteClients
         private int[,] intArray2D;
 
         private const int RANK = 2;
-        private const SharedConstants.ImageArrayElementTypes TYPE = SharedConstants.ImageArrayElementTypes.Int32;
+        private const ASCOM.Common.Alpaca.ImageArrayElementTypes TYPE = ASCOM.Common.Alpaca.ImageArrayElementTypes.Int32;
 
         public IntArray2DResponse(uint clientTransactionID, uint transactionID)
         {

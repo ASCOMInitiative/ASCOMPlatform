@@ -38,8 +38,8 @@ namespace ASCOM.DynamicRemoteClients
         public bool TraceState { get; set; }
         public bool DebugTraceState { get; set; }
         public bool ManageConnectLocally { get; set; }
-        public SharedConstants.ImageArrayTransferType ImageArrayTransferType { get; set; }
-        public SharedConstants.ImageArrayCompression ImageArrayCompression { get; set; }
+        public ASCOM.Common.Alpaca.ImageArrayTransferType ImageArrayTransferType { get; set; }
+        public ASCOM.Common.Alpaca.ImageArrayCompression ImageArrayCompression { get; set; }
         public string DeviceType { get; set; }
         public bool EnableRediscovery { get; set; }
         public bool IpV4Enabled { get; set; }
@@ -134,16 +134,17 @@ namespace ASCOM.DynamicRemoteClients
                     radManageConnectRemotely.Checked = true;
                 }
 
-                CmbImageArrayTransferType.Items.Add(SharedConstants.ImageArrayTransferType.JSON);
-                CmbImageArrayTransferType.Items.Add(SharedConstants.ImageArrayTransferType.Base64HandOff);
-                CmbImageArrayTransferType.Items.Add(SharedConstants.ImageArrayTransferType.GetBase64Image);
-                CmbImageArrayTransferType.Items.Add(SharedConstants.ImageArrayTransferType.BestAvailable);
+                CmbImageArrayTransferType.Items.Add(ASCOM.Common.Alpaca.ImageArrayTransferType.JSON);
+                CmbImageArrayTransferType.Items.Add(ASCOM.Common.Alpaca.ImageArrayTransferType.Base64HandOff);
+                CmbImageArrayTransferType.Items.Add(ASCOM.Common.Alpaca.ImageArrayTransferType.GetBase64Image);
+                CmbImageArrayTransferType.Items.Add(ASCOM.Common.Alpaca.ImageArrayTransferType.GetImageBytes);
+                CmbImageArrayTransferType.Items.Add(ASCOM.Common.Alpaca.ImageArrayTransferType.BestAvailable);
                 CmbImageArrayTransferType.SelectedItem = ImageArrayTransferType;
 
-                cmbImageArrayCompression.Items.Add(SharedConstants.ImageArrayCompression.None);
-                cmbImageArrayCompression.Items.Add(SharedConstants.ImageArrayCompression.Deflate);
-                cmbImageArrayCompression.Items.Add(SharedConstants.ImageArrayCompression.GZip);
-                cmbImageArrayCompression.Items.Add(SharedConstants.ImageArrayCompression.GZipOrDeflate);
+                cmbImageArrayCompression.Items.Add(ASCOM.Common.Alpaca.ImageArrayCompression.None);
+                cmbImageArrayCompression.Items.Add(ASCOM.Common.Alpaca.ImageArrayCompression.Deflate);
+                cmbImageArrayCompression.Items.Add(ASCOM.Common.Alpaca.ImageArrayCompression.GZip);
+                cmbImageArrayCompression.Items.Add(ASCOM.Common.Alpaca.ImageArrayCompression.GZipOrDeflate);
                 cmbImageArrayCompression.SelectedItem = ImageArrayCompression;
 
                 // Make the ImageArray transfer configuration drop-downs visible only when a camera driver is being accessed.
@@ -201,8 +202,8 @@ namespace ASCOM.DynamicRemoteClients
             UserName = txtUserName.Text.Encrypt(TL); // Encrypt the provided username and password
             Password = txtPassword.Text.Encrypt(TL);
             ManageConnectLocally = radManageConnectLocally.Checked;
-            ImageArrayTransferType = (SharedConstants.ImageArrayTransferType)CmbImageArrayTransferType.SelectedItem;
-            ImageArrayCompression = (SharedConstants.ImageArrayCompression)cmbImageArrayCompression.SelectedItem;
+            ImageArrayTransferType = (ASCOM.Common.Alpaca.ImageArrayTransferType)CmbImageArrayTransferType.SelectedItem;
+            ImageArrayCompression = (ASCOM.Common.Alpaca.ImageArrayCompression)cmbImageArrayCompression.SelectedItem;
             EnableRediscovery = ChkEnableRediscovery.Checked;
             DiscoveryPort = Convert.ToInt32(NumDiscoveryPort.Value);
 
@@ -344,7 +345,7 @@ namespace ASCOM.DynamicRemoteClients
 
         private void CmbImageArrayTransferType_SelectedValueChanged(object sender, EventArgs e)
         {
-            if ((ImageArrayTransferType)CmbImageArrayTransferType.SelectedItem == ImageArrayTransferType.JSON)
+            if ((ASCOM.Common.Alpaca.ImageArrayTransferType)CmbImageArrayTransferType.SelectedItem == ASCOM.Common.Alpaca.ImageArrayTransferType.JSON)
             {
                 cmbImageArrayCompression.Enabled = true;
             }

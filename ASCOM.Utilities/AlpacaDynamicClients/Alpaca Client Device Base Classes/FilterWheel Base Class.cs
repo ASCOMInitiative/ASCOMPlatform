@@ -43,8 +43,8 @@ namespace ASCOM.DynamicRemoteClients
         private string userName;
         private string password;
         private bool manageConnectLocally;
-        private SharedConstants.ImageArrayTransferType imageArrayTransferType;
-        private SharedConstants.ImageArrayCompression imageArrayCompression;
+        private ASCOM.Common.Alpaca.ImageArrayTransferType imageArrayTransferType;
+        private ASCOM.Common.Alpaca.ImageArrayCompression imageArrayCompression;
         private string uniqueId;
         private bool enableRediscovery;
         private bool ipV4Enabled;

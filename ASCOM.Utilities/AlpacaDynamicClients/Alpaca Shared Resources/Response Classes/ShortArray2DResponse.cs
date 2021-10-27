@@ -7,7 +7,7 @@ namespace ASCOM.DynamicRemoteClients
         private short[,] shortArray2D;
 
         private const int RANK = 2;
-        private const SharedConstants.ImageArrayElementTypes TYPE = SharedConstants.ImageArrayElementTypes.Int16;
+        private const ASCOM.Common.Alpaca.ImageArrayElementTypes TYPE = ASCOM.Common.Alpaca.ImageArrayElementTypes.Int16;
 
         public ShortArray2DResponse(uint clientTransactionID, uint transactionID, short[,] value)
         {

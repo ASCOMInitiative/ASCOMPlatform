@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using ASCOM.Common.Alpaca;
 using ASCOM.DeviceInterface;
 using RestSharp;
 using static ASCOM.DynamicRemoteClients.SharedConstants;
@@ -535,32 +535,41 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
+                object returnArray;
+
                 try
                 {
                     // Special handling for GetBase64Image transfers
-                    TL.LogMessage(clientNumber, DEVICE_TYPE, $"CameraBaseClass.ImageArray called - canGetBase64Image.HasValue: {canGetBase64Image.HasValue}, canGetImageBytes: {canGetImageBytes.HasValue} , imageArrayTransferType: {imageArrayTransferType}");
+                    TL.LogMessage(clientNumber, "ImageArray", $"ImageArray called - canGetBase64Image.HasValue: {canGetBase64Image.HasValue}, canGetImageBytes: {canGetImageBytes.HasValue} , imageArrayTransferType: {imageArrayTransferType}");
 
                     // Determine whether we need to find out whether Getbase64Image functionality is provided by this driver
-                    if ((!canGetBase64Image.HasValue) & ((imageArrayTransferType == ImageArrayTransferType.GetBase64Image) | (imageArrayTransferType == ImageArrayTransferType.BestAvailable)))
+                    if (
+                        (!canGetBase64Image.HasValue) &
+                        ((imageArrayTransferType == ImageArrayTransferType.GetBase64Image) |
+                         (imageArrayTransferType == ImageArrayTransferType.BestAvailable) |
+                         (imageArrayTransferType == ImageArrayTransferType.GetImageBytes)
+                        )
+                       )
                     {
                         // Try to get an answer from the device, if anything goes wrong assume that the feature is not available
                         try
                         {
                             // Initialise the supported flag to false
                             canGetBase64Image = false;
+                            canGetImageBytes = false;
                             ArrayList supportedActions = this.SupportedActions;
                             foreach (string action in supportedActions)
                             {
                                 // Set the supported flag true if the device advertises that it supports GetBase64Image
                                 if (action.ToLowerInvariant() == GETBASE64IMAGE_ACTION_NAME.ToLowerInvariant()) canGetBase64Image = true;
-                                if (action.ToLowerInvariant() == "getimagebytes") canGetImageBytes = true;
-                                TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"CameraBaseClass.ImageArray Found action: {action}, canGetBase64Image: {canGetBase64Image.Value}");
+                                if (action.ToLowerInvariant() == "imagearraybytes") canGetImageBytes = true;
+                                TL.LogMessage(clientNumber, "ImageArray", $"Found SupportedAction: {action}, canGetBase64Image: {canGetBase64Image.Value}, canGetImageBytes: {canGetImageBytes.Value}");
                             }
                         }
                         catch (Exception ex)
                         {
                             // Just log any errors but otherwise ignore them
-                            TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Received an exception when trying to get the device's SupportedActions: {ex.Message}");
+                            TL.LogMessage(clientNumber, "ImageArray", $"Received an exception when trying to get the device's SupportedActions: {ex.Message}");
                         }
                     }
                     if (!canGetBase64Image.HasValue) canGetBase64Image = false; // Set false if we have no value at this point
@@ -570,13 +579,20 @@ namespace ASCOM.DynamicRemoteClients
                     if (imageArrayTransferType == ImageArrayTransferType.GetBase64Image & !canGetBase64Image.Value) throw new InvalidOperationException("GetBase64Image transfer mode has been requested by the device does not support this mode.");
 
                     // Use a fast transfer mode if possible
-                    if (canGetImageBytes.Value & imageArrayTransferType == ImageArrayTransferType.GetImageBytes)
-                    {
-                        Stopwatch swOverall = new Stopwatch();
-                        swOverall.Start();
+                    TL.LogMessage(clientNumber, "ImageArray", $"ImageArray 1 called - canGetBase64Image: {canGetBase64Image.Value}, canGetImageBytes: {canGetImageBytes.Value} , imageArrayTransferType: {imageArrayTransferType}");
 
-                        RestRequest request = new RestRequest((URIBase + "ImageArrayBytes").ToLowerInvariant(), Method.GET);
-                        request.RequestFormat = DataFormat.None;
+                    if (canGetImageBytes.Value & (imageArrayTransferType == ImageArrayTransferType.GetImageBytes))
+                    {
+                        Stopwatch sw = new Stopwatch();
+                        Stopwatch swOverall = new Stopwatch();
+
+                        // Configure communications
+                        sw.Start();
+                        swOverall.Start();
+                        RestRequest request = new RestRequest((URIBase + "ImageArrayBytes").ToLowerInvariant(), Method.GET)
+                        {
+                            RequestFormat = DataFormat.None
+                        };
                         client.ConfigureWebRequest(wr => wr.AutomaticDecompression = DecompressionMethods.None); // Prevent any decompression
 
                         // Add the transaction number and client ID parameters
@@ -584,30 +600,42 @@ namespace ASCOM.DynamicRemoteClients
                         request.AddParameter(SharedConstants.CLIENTTRANSACTION_PARAMETER_NAME, transaction.ToString());
                         request.AddParameter(SharedConstants.CLIENTID_PARAMETER_NAME, clientNumber.ToString());
 
-                        TL.LogMessage(clientNumber, "ImageArrayBytes", "Client Txn ID: " + transaction.ToString() + ", Sending command to remote device");
-                        Stopwatch sw = new Stopwatch();
-                        sw.Start();
+                        // Download the binary byte[] data stream
                         byte[] imageBytes = client.DownloadData(request, true);
                         sw.Stop();
                         TL.LogMessage(clientNumber, "ImageArrayBytes", $"Downloaded {imageBytes.Length} bytes in {sw.ElapsedMilliseconds}ms.");
-                        return ConvertByteArray(swOverall, imageBytes);
+
+                        // Convert the byte[] back to an image array
+                        sw.Restart();
+                        returnArray = AlpacaTools.ByteArray2ImageArray(imageBytes);
+                        TL.LogMessage(clientNumber, "ImageArrayBytes", $"Converted byte[] to image array in {sw.ElapsedMilliseconds}ms. Overall time: {swOverall.ElapsedMilliseconds}ms.");
+
+                        return returnArray;
                     }
                     else if (canGetBase64Image.Value)
                     {
                         Stopwatch sw = new Stopwatch();
                         Stopwatch swOverall = new Stopwatch();
-                        swOverall.Start();
-                        sw.Start();
 
                         // Call the GetBase64Image Action method to retrieve the image in base64 encoded form
+                        swOverall.Start();
+                        sw.Start();
                         string base64String = this.Action(BASE64RESPONSE_COMMAND_NAME, "");
-                        TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Received {base64String.Length} bytes in {sw.ElapsedMilliseconds}ms.");
+                        sw.Stop();
+                        TL.LogMessage(clientNumber, "GetBase64Image", $"Received {base64String.Length} bytes in {sw.ElapsedMilliseconds}ms.");
 
+                        // Convert from base 64 encoding to byte[]
                         sw.Restart();
                         byte[] base64ArrayByteArray = Convert.FromBase64String(base64String);
-                        TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Converted string to byte array in {sw.ElapsedMilliseconds}ms.");
+                        sw.Stop();
+                        TL.LogMessage(clientNumber, "GetBase64Image", $"Converted string to byte array in {sw.ElapsedMilliseconds}ms.");
 
-                        return ConvertByteArray(swOverall, base64ArrayByteArray);
+                        // Convert the byte[] back to an image array
+                        sw.Restart();
+                        returnArray = AlpacaTools.ByteArray2ImageArray(base64ArrayByteArray);
+                        TL.LogMessage(clientNumber, "GetBase64Image", $"Converted byte[] to image array in {sw.ElapsedMilliseconds}ms. Overall time: {swOverall.ElapsedMilliseconds}ms.");
+
+                        return returnArray;
                     }
                     else
                     {
@@ -617,164 +645,8 @@ namespace ASCOM.DynamicRemoteClients
                 }
                 catch (Exception ex)
                 {
-                    TL.LogMessageCrLf(clientNumber, "CameraBaseClass.ImageArray", $"CameraBaseClass.ImageArray exception: {ex}");
-
+                    TL.LogMessageCrLf(clientNumber, "ImageArray", $"CameraBaseClass.ImageArray exception: {ex}");
                     throw;
-                }
-            }
-        }
-
-        private object ConvertByteArray(Stopwatch swOverall, byte[] base64ArrayByteArray)
-        {
-            Stopwatch sw = new Stopwatch();
-
-            // Set the array type, rank and dimensions
-            int version = BitConverter.ToInt32(base64ArrayByteArray, BASE64RESPONSE_VERSION_POSITION);
-            ImageArrayElementTypes outputType = (ImageArrayElementTypes)BitConverter.ToInt32(base64ArrayByteArray, BASE64RESPONSE_OUTPUTTYPE_POSITION);
-            ImageArrayElementTypes transmissionType = (ImageArrayElementTypes)BitConverter.ToInt32(base64ArrayByteArray, BASE64RESPONSE_TRANSMISSIONTYPE_POSITION);
-            int rank = BitConverter.ToInt32(base64ArrayByteArray, BASE64RESPONSE_RANK_POSITION);
-            int dimension0 = BitConverter.ToInt32(base64ArrayByteArray, BASE64RESPONSE_DIMENSION0_POSITION);
-            int dimension1 = BitConverter.ToInt32(base64ArrayByteArray, BASE64RESPONSE_DIMENSION1_POSITION);
-            int dimension2 = BitConverter.ToInt32(base64ArrayByteArray, BASE64RESPONSE_DIMENSION2_POSITION);
-            TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Version: {version}, Output Type: {outputType}, Transmission Type: {transmissionType}, Rank: {rank}, Dimension 0: {dimension0}, Dimension 1: {dimension1}, Dimension 2: {dimension2}");
-
-            // Validate returned metadata values
-            if (version != GETBASE64IMAGE_SUPPORTED_VERSION) throw new InvalidValueException($"GetBase64Image - The device returned an unsupported version: {version}, this Alpaca client supports version: {GETBASE64IMAGE_SUPPORTED_VERSION}");
-
-            sw.Restart();
-            // Convert the returned byte[] into the form that the client is expecting
-            if ((outputType == ImageArrayElementTypes.Int32) & (transmissionType == ImageArrayElementTypes.Int16)) // Handle the special case where Int32 has been converted to Int16 for transmission
-            {
-                switch (rank)
-                {
-                    case 2: // Rank 2
-                        short[,] short2dArray = new short[dimension0, dimension1];
-                        Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, short2dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
-                        TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
-
-                        int[,] int2dArray = new int[dimension0, dimension1];
-                        Parallel.For(0, short2dArray.GetLength(0) - 1, (i) =>
-                        {
-                            Parallel.For(0, short2dArray.GetLength(1) - 1, (j) =>
-                            {
-                                int2dArray[i, j] = short2dArray[i, j];
-                            });
-                        });
-                        TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"CONVERTED 2D INT16 ARRAY TO INT32 ARRAY - GetBase64Image time: {swOverall.ElapsedMilliseconds}ms, Input length: {short2dArray.Length}, Output length: {int2dArray.Length}");
-                        return int2dArray;
-
-                    case 3: // Rank 3
-                        short[,,] short3dArray = new short[dimension0, dimension1, dimension2];
-                        Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, short3dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
-                        TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
-
-                        int[,,] int3dArray = new int[dimension0, dimension1, dimension2];
-                        Parallel.For(0, short3dArray.GetLength(2) - 1, (k) =>
-                        {
-                            Parallel.For(0, short3dArray.GetLength(1) - 1, (j) =>
-                            {
-                                Parallel.For(0, short3dArray.GetLength(0) - 1, (i) =>
-                                {
-                                    int3dArray[i, j, k] = short3dArray[i, j, k];
-                                });
-                            });
-                        });
-                        TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"CONVERTED 3D INT16 ARRAY TO INT32 ARRAY - GetBase64Image time: {swOverall.ElapsedMilliseconds}ms, Input length: {short3dArray.Length}, Output length: {int3dArray.Length}");
-                        return int3dArray;
-
-                    default:
-                        throw new InvalidValueException($"CameraBaseClass.ImageArray - Returned array cannot be handled because it does not have a rank of 2 or 3. Returned array rank:{rank}.");
-                }
-            }
-            else // Handle all other cases where the expected array type and the transmitted array type are the same
-            {
-                if (outputType == transmissionType) // Required and transmitted array element types are the same
-                {
-                    switch (outputType)
-                    {
-                        case ImageArrayElementTypes.Byte:
-                            switch (rank)
-                            {
-                                case 2: // Rank 2
-                                    byte[,] byte2dArray = new byte[dimension0, dimension1];
-                                    Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, byte2dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
-                                    TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed byte[,] block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
-                                    return byte2dArray;
-
-                                case 3: // Rank 3
-                                    byte[,,] byte3dArray = new byte[dimension0, dimension1, dimension2];
-                                    Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, byte3dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
-                                    TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed byte[,,] block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
-                                    return byte3dArray;
-
-                                default:
-                                    throw new InvalidValueException($"ImageArray - Returned byte array cannot be handled because it does not have a rank of 2 or 3. Returned array rank:{rank}.");
-                            }
-
-                        case ImageArrayElementTypes.Int16:
-                            switch (rank)
-                            {
-                                case 2: // Rank 2
-                                    short[,] short2dArray = new short[dimension0, dimension1];
-                                    Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, short2dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
-                                    TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed Int16[,] block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
-                                    return short2dArray;
-
-                                case 3: // Rank 3
-                                    short[,,] short3dArray = new short[dimension0, dimension1, dimension2];
-                                    Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, short3dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
-                                    TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed Int16[,,] block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
-                                    return short3dArray;
-
-                                default:
-                                    throw new InvalidValueException($"ImageArray - Returned Int16 array cannot be handled because it does not have a rank of 2 or 3. Returned array rank:{rank}.");
-                            }
-
-                        case ImageArrayElementTypes.Int32:
-                            switch (rank)
-                            {
-                                case 2: // Rank 2
-                                    int[,] int2dArray = new int[dimension0, dimension1];
-                                    Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, int2dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
-                                    TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed Int32[,] block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
-                                    return int2dArray;
-
-                                case 3: // Rank 3
-                                    int[,,] int3dArray = new int[dimension0, dimension1, dimension2];
-                                    Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, int3dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
-                                    TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed Int32[,,] block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
-                                    return int3dArray;
-
-                                default:
-                                    throw new InvalidValueException($"ImageArray - Returned Int32 array cannot be handled because it does not have a rank of 2 or 3. Returned array rank:{rank}.");
-                            }
-
-                        case ImageArrayElementTypes.Int64:
-                            switch (rank)
-                            {
-                                case 2: // Rank 2
-                                    Int64[,] int642dArray = new Int64[dimension0, dimension1];
-                                    Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, int642dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
-                                    TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed Int64[,] block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
-                                    return int642dArray;
-
-                                case 3: // Rank 3
-                                    Int64[,,] int643dArray = new Int64[dimension0, dimension1, dimension2];
-                                    Buffer.BlockCopy(base64ArrayByteArray, BASE64RESPONSE_DATA_POSITION, int643dArray, 0, base64ArrayByteArray.Length - BASE64RESPONSE_DATA_POSITION);
-                                    TL.LogMessage(clientNumber, "CameraBaseClass.ImageArray", $"Completed Int64[,,] block copy of {base64ArrayByteArray.Length} bytes in {sw.ElapsedMilliseconds}ms");
-                                    return int643dArray;
-
-                                default:
-                                    throw new InvalidValueException($"ImageArray - Returned Int64 array cannot be handled because it does not have a rank of 2 or 3. Returned array rank:{rank}.");
-                            }
-
-                        default:
-                            throw new InvalidValueException($"The device has returned an unsupported image array element type: {outputType}.");
-                    }
-                }
-                else // An unsupported combination of array element types has been returned
-                {
-                    throw new InvalidValueException($"The device has returned an unsupported combination of Output type: {outputType} and Transmission type: {transmissionType}.");
                 }
             }
         }
