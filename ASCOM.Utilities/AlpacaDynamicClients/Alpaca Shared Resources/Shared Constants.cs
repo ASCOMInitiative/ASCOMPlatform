@@ -85,7 +85,7 @@ namespace ASCOM.DynamicRemoteClients
         public const string TRACELOGGER_NAME_FORMAT_STRING = "AlpacaDynamic{0}.{1}";
 
         // Enum to describe Camera.ImageArray and ImageArrayVCariant array types
-        //public enum ImageArrayElementTypes
+        //public enum Base64HandoffElementTypes
         //{
         //    Unknown = 0,
         //    Int16 = 1,
