@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ASCOM.Common.Alpaca;
+using ASCOM.Common.Helpers;
 using ASCOM.DeviceInterface;
 using RestSharp;
 using static ASCOM.Common.Alpaca.AlpacaTools;
@@ -587,7 +588,7 @@ namespace ASCOM.DynamicRemoteClients
                     // Use a fast transfer mode if possible
                     TL.LogMessage(clientNumber, "ImageArray", $"ImageArray 1 called - canGetBase64Image: {canGetBase64Image.Value}, canGetImageBytes: {canGetImageBytes.Value} , imageArrayTransferType: {imageArrayTransferType}");
 
-                    // Use the getImageBytes mechanic if available
+                    // Use the GetImageBytes mechanic if available
                     if (canGetImageBytes.Value & ((imageArrayTransferType == ImageArrayTransferType.GetImageBytes) | (imageArrayTransferType == ImageArrayTransferType.BestAvailable)))
                     {
                         Stopwatch sw = new Stopwatch();
@@ -612,30 +613,45 @@ namespace ASCOM.DynamicRemoteClients
                         sw.Stop();
                         TL.LogMessage(clientNumber, "ImageArrayBytes", $"Downloaded {imageBytes.Length} bytes in {sw.ElapsedMilliseconds}ms.");
 
-                        TL.LogMessage(clientNumber, "ImageArrayBytes", $"Metadata bytes: [ {imageBytes[0]:X2} {imageBytes[1]:X2} {imageBytes[2]:X2} {imageBytes[3]:X2} ] [ {imageBytes[4]:X2} {imageBytes[5]:X2} {imageBytes[6]:X2} {imageBytes[7]:X2} ] [ {imageBytes[8]:X2} {imageBytes[9]:X2} {imageBytes[10]:X2} " +
-                            $"{imageBytes[11]:X2} ] [ {imageBytes[12]:X2} {imageBytes[13]:X2} {imageBytes[14]:X2} {imageBytes[15]:X2} ] [ {imageBytes[16]:X2} {imageBytes[17]:X2} {imageBytes[18]:X2} {imageBytes[19]:X2} ]" +
-                            $" [ {imageBytes[20]:X2} {imageBytes[21]:X2} {imageBytes[22]:X2} {imageBytes[23]:X2} ] [ {imageBytes[24]:X2} {imageBytes[25]:X2} {imageBytes[26]:X2} {imageBytes[27]:X2} ]");
+                        TL.LogMessage(clientNumber, "ImageArrayBytes", $"Metadata bytes: " +
+                            $"[ {imageBytes[0]:X2} {imageBytes[1]:X2} {imageBytes[2]:X2} {imageBytes[3]:X2} ] [ {imageBytes[4]:X2} {imageBytes[5]:X2} {imageBytes[6]:X2} {imageBytes[7]:X2} ] " +
+                            $"[ {imageBytes[8]:X2} {imageBytes[9]:X2} {imageBytes[10]:X2} {imageBytes[11]:X2} ] [ {imageBytes[12]:X2} {imageBytes[13]:X2} {imageBytes[14]:X2} {imageBytes[15]:X2} ] " +
+                            $"[ {imageBytes[16]:X2} {imageBytes[17]:X2} {imageBytes[18]:X2} {imageBytes[19]:X2} ] [ {imageBytes[20]:X2} {imageBytes[21]:X2} {imageBytes[22]:X2} {imageBytes[23]:X2} ] " +
+                            $"[ {imageBytes[24]:X2} {imageBytes[25]:X2} {imageBytes[26]:X2} {imageBytes[27]:X2} ] [ {imageBytes[28]:X2} {imageBytes[29]:X2} {imageBytes[30]:X2} {imageBytes[31]:X2} ] " +
+                            $"[ {imageBytes[32]:X2} {imageBytes[33]:X2} {imageBytes[34]:X2} {imageBytes[35]:X2} ]");
 
                         int metadataVersion = imageBytes.GetMetadataVersion();
                         TL.LogMessage(clientNumber, "ImageArrayBytes", $"Metadata version: {metadataVersion}");
 
+                        AlpacaErrors errorNumber;
                         switch (metadataVersion)
                         {
                             case 1:
                                 ArrayMetadataV1 metadataV1 = imageBytes.GetMetadataV1();
-                                TL.LogMessage(clientNumber, "ImageArrayBytes", $"Received array: Metadata version: {metadataV1.MetadataVersion} Image element type: {metadataV1.ImageElementType} Transmission element type: {metadataV1.TransmissionElementType} Array rank: {metadataV1.Rank} Dimension 0: {metadataV1.Dimension0} Dimension 1: {metadataV1.Dimension1} Dimension 2: {metadataV1.Dimension2}");
+                                TL.LogMessage(clientNumber, "ImageArrayBytes", $"Received array: Metadata version: {metadataV1.MetadataVersion} Image element type: {metadataV1.ImageElementType} Transmission element type: {metadataV1.TransmissionElementType} Array rank: {metadataV1.Rank} Dimension 0: {metadataV1.Dimension0} Dimension 1: {metadataV1.Dimension1} Dimension 2: {metadataV1.Dimension2} Error number: {metadataV1.ErrorNumber}.");
+                                errorNumber = metadataV1.ErrorNumber;
                                 break;
 
                             default:
                                 throw new InvalidValueException($"ImageArray - ImageArrayBytes - Received an unsupported metadata version number: {metadataVersion} from the Alpaca device.");
                         }
 
-                        // Convert the byte[] back to an image array
-                        sw.Restart();
-                        returnArray = imageBytes.ToImageArray();
-                        TL.LogMessage(clientNumber, "ImageArrayBytes", $"Converted byte[] to image array in {sw.ElapsedMilliseconds}ms. Overall time: {swOverall.ElapsedMilliseconds}ms.");
+                        // Handle success or failure of the call
+                        if (errorNumber == AlpacaErrors.AlpacaNoError) // Success so return the image array
+                        {
+                            // Convert the byte[] back to an image array
+                            sw.Restart();
+                            returnArray = imageBytes.ToImageArray();
+                            TL.LogMessage(clientNumber, "ImageArrayBytes", $"Converted byte[] to image array in {sw.ElapsedMilliseconds}ms. Overall time: {swOverall.ElapsedMilliseconds}ms.");
+                            return returnArray;
+                        }
+                        else // An error occurred so throw an exception
+                        {
+                            string errorMessage = imageBytes.GetErrrorMessage();
+                            TL.LogMessage(clientNumber, "ImageArrayBytes", $"The Alpaca device returned an error: {errorNumber} - {errorMessage}.");
+                            throw ExceptionHelpers.ExceptionFromErrorCode(errorNumber, errorMessage);
+                        }
 
-                        return returnArray;
                     }
                     else if (canGetBase64Image.Value & ((imageArrayTransferType == ImageArrayTransferType.GetBase64Image) | (imageArrayTransferType == ImageArrayTransferType.BestAvailable)))
                     // Fall back to GetBase64Image if available
