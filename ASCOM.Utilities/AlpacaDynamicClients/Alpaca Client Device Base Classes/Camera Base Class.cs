@@ -553,25 +553,43 @@ namespace ASCOM.DynamicRemoteClients
                         )
                        )
                     {
-                        // Try to get an answer from the device, if anything goes wrong assume that the feature is not available
+                        // Determine whether the remote device supports GetBase64Image
+                        // Try to get a SupportedActions response from the device, if anything goes wrong assume that the feature is not available
                         try
                         {
                             // Initialise the supported flag to false
                             canGetBase64Image = false;
-                            canGetImageBytes = false;
                             ArrayList supportedActions = this.SupportedActions;
                             foreach (string action in supportedActions)
                             {
                                 // Set the supported flag true if the device advertises that it supports GetBase64Image
                                 if (action.ToLowerInvariant() == GETBASE64IMAGE_ACTION_NAME.ToLowerInvariant()) canGetBase64Image = true;
-                                if (action.ToLowerInvariant() == "imagearraybytes") canGetImageBytes = true;
-                                TL.LogMessage(clientNumber, "ImageArray", $"Found SupportedAction: {action}, canGetBase64Image: {canGetBase64Image.Value}, canGetImageBytes: {canGetImageBytes.Value}");
+                                TL.LogMessage(clientNumber, "ImageArray", $"Found SupportedAction: {action}, canGetBase64Image: {canGetBase64Image.Value}.");
                             }
                         }
                         catch (Exception ex)
                         {
                             // Just log any errors but otherwise ignore them
                             TL.LogMessage(clientNumber, "ImageArray", $"Received an exception when trying to get the device's SupportedActions: {ex.Message}");
+                        }
+
+                        // Determine whether the remote device supports the ImageArrayBytes property
+                        // Try to get an answer from the device, if anything goes wrong assume that the feature is not available
+                        try
+                        {
+                            // Initialise the supported flag to false
+                            canGetImageBytes = false;
+
+                            // Call the CanGetImageBytes property and store the value
+                            DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                            canGetImageBytes = DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanImageArrayBytes", MemberTypes.Property);
+
+                            TL.LogMessage(clientNumber, "ImageArray", $"CanImageArrayBytes returned {canGetImageBytes}");
+                        }
+                        catch (Exception ex)
+                        {
+                            // Just log any errors but otherwise ignore them
+                            TL.LogMessage(clientNumber, "ImageArray", $"Received an exception when calling the device's CanImageArrayBytes property : {ex.Message}");
                         }
                     }
 
