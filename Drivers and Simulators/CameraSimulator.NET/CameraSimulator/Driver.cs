@@ -47,6 +47,7 @@ using ASCOM.Utilities;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ASCOM.Simulator
 {
@@ -175,6 +176,9 @@ namespace ASCOM.Simulator
         #endregion
 
         #region Internal properties
+
+        // Testing values
+        internal string returnImageAs;
 
         //Interface version
         internal short interfaceVersion;
@@ -1271,7 +1275,7 @@ namespace ASCOM.Simulator
 
                 Log.LogMessage("ImageArray", "get");
                 if (sensorType == SensorType.Color)
-                {                
+                {
                     // Test code to demonstrate the order of returned array values. Not required in production code!
                     //for (int k = 0; k < 3; k++)
                     //{
@@ -1293,6 +1297,14 @@ namespace ASCOM.Simulator
                     //    for (int i = 0; i < numX; i++)
                     //    {
                     //        imageArray[i, j] = i + 10 * j;
+                    //    }
+                    //}
+                    // Test code to provide a consistent array every time. Not required in production code!
+                    //for (int i = 0; i < numX; i++)
+                    //{
+                    //    for (int j = 0; j < numY; j++)
+                    //    {
+                    //        imageArray[i, j] = i + j;
                     //    }
                     //}
                     return imageArray;
@@ -2505,6 +2517,9 @@ namespace ASCOM.Simulator
                 coolerSetPointMinimum = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_CoolerSetPointMinimum, "Cooler", COOLER_SETPOINT_MINIMUM_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
                 coolerGraphRange = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CoolerGraphRange, "Cooler", COOLER_GRAPH_RANGE_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
 
+                // Read testing properties - not settable through the Setup GUI
+                returnImageAs = profile.GetValue(s_csDriverID, "ReturnImageAs", string.Empty, "SimulatedImage");
+
                 // read properties from profile
                 Log.Enabled = Convert.ToBoolean(profile.GetValue(s_csDriverID, "Trace", string.Empty, "false"), CultureInfo.InvariantCulture);
                 interfaceVersion = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_InterfaceVersion, string.Empty, "3"), CultureInfo.InvariantCulture);
@@ -2801,27 +2816,150 @@ namespace ASCOM.Simulator
             darkCurrent += readNoise;
             // fill the array using binning and image offsets
             // indexes into the imageData
-            for (int y = 0; y < numY; y++)
+
+            switch (returnImageAs)
             {
-                for (int x = 0; x < numX; x++)
-                {
-                    double s;
-                    if (sensorType == SensorType.Color)
+                case string value when value.Equals("Int16", StringComparison.InvariantCultureIgnoreCase):
+                case string value1 when value1.Equals("UInt16", StringComparison.InvariantCultureIgnoreCase):
+                case string value2 when value2.Equals("Int32", StringComparison.InvariantCultureIgnoreCase):
+
+                    // Set the appropriate element value
+                    Int32 elementValue;
+                    if (returnImageAs.ToLowerInvariant() == "int16") elementValue = -32768; // Int16
+                    else if (returnImageAs.ToLowerInvariant() == "uint16") elementValue = 65535; // UInt16
+                    else elementValue = 100000; // Int32
+
+                    if (sensorType == SensorType.Color) // Colour sensor
                     {
-                        s = shutterProcess((x + startX) * binX, (y + startY) * binY, 0);
-                        imageArrayColour[x, y, 0] = pixelProcess(s + darkCurrent);
-                        s = shutterProcess((x + startX) * binX, (y + startY) * binY, 1);
-                        imageArrayColour[x, y, 1] = pixelProcess(s + darkCurrent);
-                        s = shutterProcess((x + startX) * binX, (y + startY) * binY, 2);
-                        imageArrayColour[x, y, 2] = pixelProcess(s + darkCurrent);
+                        for (int x = 0; x < numX; x++)
+                        {
+                            for (int y = 0; y < numY; y++)
+                            {
+                                imageArrayColour[x, y, 0] = elementValue;
+                                imageArrayColour[x, y, 1] = elementValue;
+                                imageArrayColour[x, y, 2] = elementValue;
+                            }
+                        }
                     }
-                    else
+                    else // Monochrome sensor
                     {
-                        s = shutterProcess((x + startX) * binX, (y + startY) * binY, 0);
-                        imageArray[x, y] = pixelProcess(s + darkCurrent);
+                        for (int x = 0; x < numX; x++)
+                        {
+                            for (int y = 0; y < numY; y++)
+                            {
+                                imageArray[x, y] = elementValue;
+                            }
+                        }
                     }
-                    //s *= lastExposureDuration;
-                }
+                    break;
+
+                case string value when value.Equals("ImageAsIs", StringComparison.InvariantCultureIgnoreCase):
+                    if (sensorType == SensorType.Color) // Colour sensor
+                    {
+                        for (int x = 0; x < numX; x++)
+                        {
+                            for (int y = 0; y < numY; y++)
+                            {
+                                imageArrayColour[x, y, 0] = (int)imageData[x, y, 0];
+                                imageArrayColour[x, y, 1] = (int)imageData[x, y, 1];
+                                imageArrayColour[x, y, 2] = (int)imageData[x, y, 2];
+                            }
+                        }
+                    }
+                    else // Monochrome sensor
+                    {
+                        for (int x = 0; x < numX; x++)
+                        {
+                            for (int y = 0; y < numY; y++)
+                            {
+                                imageArray[x, y] = (int)imageData[x, y, 0];
+                            }
+                        }
+                    }
+                    break;
+
+                case string value when value.Equals("RandomData", StringComparison.InvariantCultureIgnoreCase):
+                    Random random = new Random();
+                    if (sensorType == SensorType.Color) // Colour sensor
+                    {
+                        for (int x = 0; x < numX; x++)
+                        {
+                            for (int y = 0; y < numY; y++)
+                            {
+                                imageArrayColour[x, y, 0] = random.Next(0, 65535);
+                                imageArrayColour[x, y, 1] = random.Next(0, 65535);
+                                imageArrayColour[x, y, 2] = random.Next(0, 65535);
+                            }
+                        }
+                    }
+                    else // Monochrome sensor
+                    {
+                        for (int x = 0; x < numX; x++)
+                        {
+                            for (int y = 0; y < numY; y++)
+                            {
+                                imageArray[x, y] = random.Next(0, 65535);
+                            }
+                        }
+                    }
+                    break;
+
+                case string value when value.Equals("IncreasingData", StringComparison.InvariantCultureIgnoreCase):
+                    if (sensorType == SensorType.Color) // Colour sensor
+                    {
+                        for (int x = 0; x < numX; x++)
+                        {
+                            for (int y = 0; y < numY; y++)
+                            {
+                                imageArrayColour[x, y, 0] = x + y;
+                                imageArrayColour[x, y, 1] = x + y;
+                                imageArrayColour[x, y, 2] = x + y;
+                            }
+                        }
+
+                    }
+                    else // Monochrome sensor
+                    {
+                        for (int x = 0; x < numX; x++)
+                        {
+                            for (int y = 0; y < numY; y++)
+                            {
+                                imageArray[x, y] = x + y;
+                            }
+                        }
+                    }
+                    break;
+
+                default: // Everything else returns a normal simulated image
+                    if (sensorType == SensorType.Color) // Colour sensor
+                    {
+                        for (int y = 0; y < numY; y++)
+                        {
+                            for (int x = 0; x < numX; x++)
+                            {
+                                double s;
+                                s = shutterProcess((x + startX) * binX, (y + startY) * binY, 0);
+                                imageArrayColour[x, y, 0] = pixelProcess(s + darkCurrent);
+                                s = shutterProcess((x + startX) * binX, (y + startY) * binY, 1);
+                                imageArrayColour[x, y, 1] = pixelProcess(s + darkCurrent);
+                                s = shutterProcess((x + startX) * binX, (y + startY) * binY, 2);
+                                imageArrayColour[x, y, 2] = pixelProcess(s + darkCurrent);
+                            }
+                        }
+                    }
+                    else // Monochrome sensor
+                    {
+                        for (int x = 0; x < numX; x++)
+                        {
+                            for (int y = 0; y < numY; y++)
+                            {
+                                double s;
+                                s = shutterProcess((x + startX) * binX, (y + startY) * binY, 0);
+                                imageArray[x, y] = pixelProcess(s + darkCurrent);
+                            }
+                        }
+                    }
+                    break;
             }
         }
 

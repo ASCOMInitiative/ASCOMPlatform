@@ -626,8 +626,19 @@ namespace ASCOM.DynamicRemoteClients
                         request.AddParameter(SharedConstants.CLIENTTRANSACTION_PARAMETER_NAME, transaction.ToString());
                         request.AddParameter(SharedConstants.CLIENTID_PARAMETER_NAME, clientNumber.ToString());
 
-                        // Download the binary byte[] data stream
-                        byte[] imageBytes = client.DownloadData(request, true);
+                        // Download the binary byte[] data
+                        string imageArrayBytesUri = $"{serviceType.ToString().ToLowerInvariant()}://{ipAddressString}:{portNumber}{URIBase}ImageArrayBytes".ToLowerInvariant();
+                        TL.LogMessage(clientNumber, "ImageArrayBytes", $"Downloading byte[] from {imageArrayBytesUri}");
+                        
+                        // Create a task to download the byte[]
+                        Task<byte[]> getByteArrayTask = GetByteArray(imageArrayBytesUri);
+
+                        // Wait for the task to complete
+                        Task.WaitAll(getByteArrayTask);
+
+                        // Get the byte array from the task
+                        byte[] imageBytes = getByteArrayTask.Result;
+
                         sw.Stop();
                         TL.LogMessage(clientNumber, "ImageArrayBytes", $"Downloaded {imageBytes.Length} bytes in {sw.ElapsedMilliseconds}ms.");
 
@@ -1143,5 +1154,15 @@ namespace ASCOM.DynamicRemoteClients
 
         #endregion
 
+        #region Support code
+
+        private async Task<byte[]> GetByteArray(string url)
+        {
+            HttpClient wClient = new HttpClient();
+            byte[] imageBytes = await wClient.GetByteArrayAsync(url);
+            return imageBytes;
+        }
+
+        #endregion
     }
 }
