@@ -224,6 +224,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\$(OutDir)$(TargetFileName)"</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\x86\$(ConfigurationName)\$(TargetFileName)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
