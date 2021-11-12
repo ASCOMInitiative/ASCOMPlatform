@@ -152,7 +152,7 @@ Class DeviceSwitch
 
     ''' <summary>
     ''' Set the analogue value for this switch.
-    ''' If the switch cannot be set then throws a MethodNotImplementedException.
+    ''' A MethodNotImplementedException should be thrown if CanWrite returns False
     ''' If the value is not between the maximum and minimum then throws an InvalidValueException
     ''' boolean switches must throw a MethodNotImplementedException
     ''' </summary>
