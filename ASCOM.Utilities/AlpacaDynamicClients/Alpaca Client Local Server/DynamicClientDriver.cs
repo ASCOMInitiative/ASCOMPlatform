@@ -879,16 +879,24 @@ namespace ASCOM.DynamicRemoteClients
 
                         switch (imageArrayTransferType)
                         {
-                            case ASCOM.Common.Alpaca.ImageArrayTransferType.JSON:
+                            case ImageArrayTransferType.JSON:
                                 // No extra action because "accepts = application/json" will be applied automatically by the client
                                 break;
 
-                            case ASCOM.Common.Alpaca.ImageArrayTransferType.GetBase64Image:
-                            case ASCOM.Common.Alpaca.ImageArrayTransferType.BestAvailable:
-                            case ASCOM.Common.Alpaca.ImageArrayTransferType.Base64HandOff:
-                            case ASCOM.Common.Alpaca.ImageArrayTransferType.GetImageBytes:
+                            case ImageArrayTransferType.GetBase64Image:
+                            case ImageArrayTransferType.Base64HandOff:
                                 request.AddHeader(SharedConstants.BASE64_HANDOFF_HEADER, SharedConstants.BASE64_HANDOFF_SUPPORTED);
                                 break;
+
+                            case ImageArrayTransferType.GetImageBytes:
+                                request.AddHeader(SharedConstants.GET_IMAGE_BYTES_HEADER,SharedConstants.GET_IMAGE_BYTES_SUPPORTED);
+                                break;
+
+                            case ImageArrayTransferType.BestAvailable:
+                                request.AddHeader(SharedConstants.BASE64_HANDOFF_HEADER, SharedConstants.BASE64_HANDOFF_SUPPORTED);
+                                request.AddHeader(SharedConstants.GET_IMAGE_BYTES_HEADER, SharedConstants.GET_IMAGE_BYTES_SUPPORTED);
+                                break;
+
                             default:
                                 throw new InvalidValueException($"Invalid image array transfer type: {imageArrayTransferType} - Correct this in the Dynamic Client setup dialogue.");
                         }
@@ -1139,7 +1147,7 @@ namespace ASCOM.DynamicRemoteClients
                             }
 
                             // Handle base64 hand-off image transfer mechanic
-                            if (deviceJsonResponse.Headers.Any(t => t.Name.ToString() == SharedConstants.BASE64_HANDOFF_HEADER)) // Base64 format header is present so the server supports base64 serialised transfer
+                            if (deviceJsonResponse.Headers.Any(t => t.Name == SharedConstants.BASE64_HANDOFF_HEADER)) // Base64 format header is present so the server supports base64 serialised transfer
                             {
                                 // De-serialise the JSON image array hand-off response 
                                 sw.Restart(); // Clear and start the stopwatch
@@ -1284,6 +1292,11 @@ namespace ASCOM.DynamicRemoteClients
                                 restResponseBase = (RestResponseBase)base64HandOffresponse;
                             }
 
+                            // Handle the GetImageBytes image transfer mechanic
+                            else if (deviceJsonResponse.Headers.Any(t => t.Name == SharedConstants.GET_IMAGE_BYTES_HEADER)) // GetImageBytes header is present so the server supports raw array data transfer
+                            {
+                            }
+
                             // Handle conventional JSON response with integer array elements individually serialised
                             else
                             {
@@ -1292,90 +1305,90 @@ namespace ASCOM.DynamicRemoteClients
                                 if (CallWasSuccessful(TL, responseBase))
                                 {
                                     ImageArrayElementTypes arrayType = (ImageArrayElementTypes)responseBase.Type;
-                                int arrayRank = responseBase.Rank;
+                                    int arrayRank = responseBase.Rank;
 
-                                // Include some debug logging
-                                if (TL.DebugTraceState)
-                                {
-                                    TL.LogMessage(clientNumber, method, $"Extracted array type and rank by JsonConvert.DeserializeObject in {sw.ElapsedMilliseconds}ms. Type: {arrayType}, Rank: {arrayRank}, Response values - Type: {responseBase.Type}, Rank: {responseBase.Rank}");
-                                }
+                                    // Include some debug logging
+                                    if (TL.DebugTraceState)
+                                    {
+                                        TL.LogMessage(clientNumber, method, $"Extracted array type and rank by JsonConvert.DeserializeObject in {sw.ElapsedMilliseconds}ms. Type: {arrayType}, Rank: {arrayRank}, Response values - Type: {responseBase.Type}, Rank: {responseBase.Rank}");
+                                    }
 
-                                sw.Restart(); // Clear and start the stopwatch
-                                switch (arrayType) // Handle the different return types that may come from ImageArrayVariant
-                                {
-                                    case ImageArrayElementTypes.Int32:
-                                        switch (arrayRank)
-                                        {
-                                            case 2:
-                                                IntArray2DResponse intArray2DResponse = JsonConvert.DeserializeObject<IntArray2DResponse>(deviceJsonResponse.Content);
-                                                TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, intArray2DResponse.ClientTransactionID, intArray2DResponse.ServerTransactionID, intArray2DResponse.Rank.ToString())); //, intArray2DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ImageArrayElementTypes)intArray2DResponse.Type}, Rank: {intArray2DResponse.Rank}");
-                                                if (CallWasSuccessful(TL, intArray2DResponse)) return (T)((object)intArray2DResponse.Value);
-                                                restResponseBase = (RestResponseBase)intArray2DResponse;
-                                                break;
+                                    sw.Restart(); // Clear and start the stopwatch
+                                    switch (arrayType) // Handle the different return types that may come from ImageArrayVariant
+                                    {
+                                        case ImageArrayElementTypes.Int32:
+                                            switch (arrayRank)
+                                            {
+                                                case 2:
+                                                    IntArray2DResponse intArray2DResponse = JsonConvert.DeserializeObject<IntArray2DResponse>(deviceJsonResponse.Content);
+                                                    TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, intArray2DResponse.ClientTransactionID, intArray2DResponse.ServerTransactionID, intArray2DResponse.Rank.ToString())); //, intArray2DResponse.Method));
+                                                    TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ImageArrayElementTypes)intArray2DResponse.Type}, Rank: {intArray2DResponse.Rank}");
+                                                    if (CallWasSuccessful(TL, intArray2DResponse)) return (T)((object)intArray2DResponse.Value);
+                                                    restResponseBase = (RestResponseBase)intArray2DResponse;
+                                                    break;
 
-                                            case 3:
-                                                IntArray3DResponse intArray3DResponse = JsonConvert.DeserializeObject<IntArray3DResponse>(deviceJsonResponse.Content);
-                                                TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, intArray3DResponse.ClientTransactionID, intArray3DResponse.ServerTransactionID, intArray3DResponse.Rank.ToString())); //, intArray3DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ImageArrayElementTypes)intArray3DResponse.Type}, Rank: {intArray3DResponse.Rank}");
-                                                if (CallWasSuccessful(TL, intArray3DResponse)) return (T)((object)intArray3DResponse.Value);
-                                                restResponseBase = (RestResponseBase)intArray3DResponse;
-                                                break;
+                                                case 3:
+                                                    IntArray3DResponse intArray3DResponse = JsonConvert.DeserializeObject<IntArray3DResponse>(deviceJsonResponse.Content);
+                                                    TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, intArray3DResponse.ClientTransactionID, intArray3DResponse.ServerTransactionID, intArray3DResponse.Rank.ToString())); //, intArray3DResponse.Method));
+                                                    TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ImageArrayElementTypes)intArray3DResponse.Type}, Rank: {intArray3DResponse.Rank}");
+                                                    if (CallWasSuccessful(TL, intArray3DResponse)) return (T)((object)intArray3DResponse.Value);
+                                                    restResponseBase = (RestResponseBase)intArray3DResponse;
+                                                    break;
 
-                                            default:
-                                                throw new InvalidOperationException("Arrays of Rank " + arrayRank + " are not supported.");
-                                        }
-                                        break;
+                                                default:
+                                                    throw new InvalidOperationException("Arrays of Rank " + arrayRank + " are not supported.");
+                                            }
+                                            break;
 
-                                    case ImageArrayElementTypes.Int16:
-                                        switch (arrayRank)
-                                        {
-                                            case 2:
-                                                ShortArray2DResponse shortArray2DResponse = JsonConvert.DeserializeObject<ShortArray2DResponse>(deviceJsonResponse.Content);
-                                                TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, shortArray2DResponse.ClientTransactionID, shortArray2DResponse.ServerTransactionID, shortArray2DResponse.Rank.ToString())); //, shortArray2DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ImageArrayElementTypes)shortArray2DResponse.Type}, Rank: {shortArray2DResponse.Rank}");
-                                                if (CallWasSuccessful(TL, shortArray2DResponse)) return (T)((object)shortArray2DResponse.Value);
-                                                restResponseBase = (RestResponseBase)shortArray2DResponse;
-                                                break;
+                                        case ImageArrayElementTypes.Int16:
+                                            switch (arrayRank)
+                                            {
+                                                case 2:
+                                                    ShortArray2DResponse shortArray2DResponse = JsonConvert.DeserializeObject<ShortArray2DResponse>(deviceJsonResponse.Content);
+                                                    TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, shortArray2DResponse.ClientTransactionID, shortArray2DResponse.ServerTransactionID, shortArray2DResponse.Rank.ToString())); //, shortArray2DResponse.Method));
+                                                    TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ImageArrayElementTypes)shortArray2DResponse.Type}, Rank: {shortArray2DResponse.Rank}");
+                                                    if (CallWasSuccessful(TL, shortArray2DResponse)) return (T)((object)shortArray2DResponse.Value);
+                                                    restResponseBase = (RestResponseBase)shortArray2DResponse;
+                                                    break;
 
-                                            case 3:
-                                                ShortArray3DResponse shortArray3DResponse = JsonConvert.DeserializeObject<ShortArray3DResponse>(deviceJsonResponse.Content);
-                                                TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, shortArray3DResponse.ClientTransactionID, shortArray3DResponse.ServerTransactionID, shortArray3DResponse.Rank.ToString())); //, shortArray3DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ImageArrayElementTypes)shortArray3DResponse.Type}, Rank: {shortArray3DResponse.Rank}");
-                                                if (CallWasSuccessful(TL, shortArray3DResponse)) return (T)((object)shortArray3DResponse.Value);
-                                                restResponseBase = (RestResponseBase)shortArray3DResponse;
-                                                break;
+                                                case 3:
+                                                    ShortArray3DResponse shortArray3DResponse = JsonConvert.DeserializeObject<ShortArray3DResponse>(deviceJsonResponse.Content);
+                                                    TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, shortArray3DResponse.ClientTransactionID, shortArray3DResponse.ServerTransactionID, shortArray3DResponse.Rank.ToString())); //, shortArray3DResponse.Method));
+                                                    TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ImageArrayElementTypes)shortArray3DResponse.Type}, Rank: {shortArray3DResponse.Rank}");
+                                                    if (CallWasSuccessful(TL, shortArray3DResponse)) return (T)((object)shortArray3DResponse.Value);
+                                                    restResponseBase = (RestResponseBase)shortArray3DResponse;
+                                                    break;
 
-                                            default:
-                                                throw new InvalidOperationException("Arrays of Rank " + arrayRank + " are not supported.");
-                                        }
-                                        break;
+                                                default:
+                                                    throw new InvalidOperationException("Arrays of Rank " + arrayRank + " are not supported.");
+                                            }
+                                            break;
 
-                                    case ImageArrayElementTypes.Double:
-                                        switch (arrayRank)
-                                        {
-                                            case 2:
-                                                DoubleArray2DResponse doubleArray2DResponse = JsonConvert.DeserializeObject<DoubleArray2DResponse>(deviceJsonResponse.Content);
-                                                TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, doubleArray2DResponse.ClientTransactionID, doubleArray2DResponse.ServerTransactionID, doubleArray2DResponse.Rank.ToString())); //, doubleArray2DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ImageArrayElementTypes)doubleArray2DResponse.Type}, Rank: {doubleArray2DResponse.Rank}");
-                                                if (CallWasSuccessful(TL, doubleArray2DResponse)) return (T)((object)doubleArray2DResponse.Value);
-                                                restResponseBase = (RestResponseBase)doubleArray2DResponse;
-                                                break;
+                                        case ImageArrayElementTypes.Double:
+                                            switch (arrayRank)
+                                            {
+                                                case 2:
+                                                    DoubleArray2DResponse doubleArray2DResponse = JsonConvert.DeserializeObject<DoubleArray2DResponse>(deviceJsonResponse.Content);
+                                                    TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, doubleArray2DResponse.ClientTransactionID, doubleArray2DResponse.ServerTransactionID, doubleArray2DResponse.Rank.ToString())); //, doubleArray2DResponse.Method));
+                                                    TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ImageArrayElementTypes)doubleArray2DResponse.Type}, Rank: {doubleArray2DResponse.Rank}");
+                                                    if (CallWasSuccessful(TL, doubleArray2DResponse)) return (T)((object)doubleArray2DResponse.Value);
+                                                    restResponseBase = (RestResponseBase)doubleArray2DResponse;
+                                                    break;
 
-                                            case 3:
-                                                DoubleArray3DResponse doubleArray3DResponse = JsonConvert.DeserializeObject<DoubleArray3DResponse>(deviceJsonResponse.Content);
-                                                TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, doubleArray3DResponse.ClientTransactionID, doubleArray3DResponse.ServerTransactionID, doubleArray3DResponse.Rank.ToString())); //, doubleArray3DResponse.Method));
-                                                TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ImageArrayElementTypes)doubleArray3DResponse.Type}, Rank: {doubleArray3DResponse.Rank}");
-                                                if (CallWasSuccessful(TL, doubleArray3DResponse)) return (T)((object)doubleArray3DResponse.Value);
-                                                restResponseBase = (RestResponseBase)doubleArray3DResponse;
-                                                break;
+                                                case 3:
+                                                    DoubleArray3DResponse doubleArray3DResponse = JsonConvert.DeserializeObject<DoubleArray3DResponse>(deviceJsonResponse.Content);
+                                                    TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, doubleArray3DResponse.ClientTransactionID, doubleArray3DResponse.ServerTransactionID, doubleArray3DResponse.Rank.ToString())); //, doubleArray3DResponse.Method));
+                                                    TL.LogMessage(clientNumber, method, $"Array was deserialised in {sw.ElapsedMilliseconds} ms, Type: {(ImageArrayElementTypes)doubleArray3DResponse.Type}, Rank: {doubleArray3DResponse.Rank}");
+                                                    if (CallWasSuccessful(TL, doubleArray3DResponse)) return (T)((object)doubleArray3DResponse.Value);
+                                                    restResponseBase = (RestResponseBase)doubleArray3DResponse;
+                                                    break;
 
-                                            default:
-                                                throw new InvalidOperationException("Arrays of Rank " + arrayRank + " are not supported.");
-                                        }
-                                        break;
+                                                default:
+                                                    throw new InvalidOperationException("Arrays of Rank " + arrayRank + " are not supported.");
+                                            }
+                                            break;
 
-                                    default:
+                                        default:
                                             throw new InvalidOperationException($"SendToRemoteDevice JSON - Image array element type {arrayType} is not supported. The device returned this value: {responseBase.Type}");
                                     }
                                 }
