@@ -861,16 +861,16 @@ namespace ASCOM.DynamicRemoteClients
                     {
                         switch (imageArrayCompression)
                         {
-                            case ASCOM.Common.Alpaca.ImageArrayCompression.None:
+                            case ImageArrayCompression.None:
                                 client.ConfigureWebRequest(wr => wr.AutomaticDecompression = DecompressionMethods.None); // Prevent any decompression
                                 break;
-                            case ASCOM.Common.Alpaca.ImageArrayCompression.Deflate:
+                            case ImageArrayCompression.Deflate:
                                 client.ConfigureWebRequest(wr => wr.AutomaticDecompression = DecompressionMethods.Deflate); // Allow only Deflate decompression
                                 break;
-                            case ASCOM.Common.Alpaca.ImageArrayCompression.GZip:
+                            case ImageArrayCompression.GZip:
                                 client.ConfigureWebRequest(wr => wr.AutomaticDecompression = DecompressionMethods.GZip); // Allow only GZip decompression
                                 break;
-                            case ASCOM.Common.Alpaca.ImageArrayCompression.GZipOrDeflate:
+                            case ImageArrayCompression.GZipOrDeflate:
                                 client.ConfigureWebRequest(wr => wr.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip); // Allow both Deflate and GZip decompression
                                 break;
                             default:
@@ -889,12 +889,12 @@ namespace ASCOM.DynamicRemoteClients
                                 break;
 
                             case ImageArrayTransferType.GetImageBytes:
-                                request.AddHeader(SharedConstants.GET_IMAGE_BYTES_HEADER,SharedConstants.GET_IMAGE_BYTES_SUPPORTED);
+                                request.AddHeader(SharedConstants.ACCEPT_HEADER_NAME, SharedConstants.IMAGE_BYTES_ACCEPT_HEADER);
                                 break;
 
                             case ImageArrayTransferType.BestAvailable:
                                 request.AddHeader(SharedConstants.BASE64_HANDOFF_HEADER, SharedConstants.BASE64_HANDOFF_SUPPORTED);
-                                request.AddHeader(SharedConstants.GET_IMAGE_BYTES_HEADER, SharedConstants.GET_IMAGE_BYTES_SUPPORTED);
+                                request.AddHeader(SharedConstants.ACCEPT_HEADER_NAME, SharedConstants.IMAGE_BYTES_ACCEPT_HEADER);
                                 break;
 
                             default:
@@ -919,10 +919,18 @@ namespace ASCOM.DynamicRemoteClients
                     IRestResponse deviceJsonResponse = client.Execute(request);
                     long timeDeviceResponse = sw.ElapsedMilliseconds - lastTime;
 
-                    string responseContent;
-                    if (deviceJsonResponse.Content.Length > 1000) responseContent = deviceJsonResponse.Content.Substring(0, 1000);
-                    else responseContent = deviceJsonResponse.Content;
-                    TL.LogMessage(clientNumber, method, string.Format("Response Status: '{0}', Response: {1}", deviceJsonResponse.StatusDescription, responseContent));
+                    // Log the device's response
+                    if (deviceJsonResponse.ContentType.ToLowerInvariant().Contains(SharedConstants.IMAGE_BYTES_MIME_TYPE)) // Image bytes response
+                    {
+                        TL.LogMessage(clientNumber, method, $"Response Status: '{deviceJsonResponse.StatusDescription}', Content type: {deviceJsonResponse.ContentType}, Content encoding: {deviceJsonResponse.ContentEncoding}, Content length: {deviceJsonResponse.ContentLength}, Protocol version: {deviceJsonResponse.ProtocolVersion}");
+                    }
+                    else // JSON response
+                    {
+                        string responseContent;
+                        if (deviceJsonResponse.Content.Length > 1000) responseContent = deviceJsonResponse.Content.Substring(0, 1000);
+                        else responseContent = deviceJsonResponse.Content;
+                        TL.LogMessage(clientNumber, method, string.Format("Response Status: '{0}', Response: {1}", deviceJsonResponse.StatusDescription, responseContent));
+                    }
 
                     // Assess success at the communications level and handle accordingly 
                     if ((deviceJsonResponse.ResponseStatus == ResponseStatus.Completed) & (deviceJsonResponse.StatusCode == System.Net.HttpStatusCode.OK))
@@ -1293,8 +1301,46 @@ namespace ASCOM.DynamicRemoteClients
                             }
 
                             // Handle the GetImageBytes image transfer mechanic
-                            else if (deviceJsonResponse.Headers.Any(t => t.Name == SharedConstants.GET_IMAGE_BYTES_HEADER)) // GetImageBytes header is present so the server supports raw array data transfer
+                            else if (deviceJsonResponse.ContentType.ToLowerInvariant().Contains(SharedConstants.IMAGE_BYTES_MIME_TYPE)) // Image bytes have been returned so the server supports raw array data transfer
                             {
+                                Stopwatch swOverall = new Stopwatch();
+
+                                // Get the byte array from the task
+                                byte[] imageBytes = deviceJsonResponse.RawBytes;
+
+                                sw.Stop();
+                                TL.LogMessage(clientNumber, "ImageArrayBytes", $"Downloaded {imageBytes.Length} bytes in {sw.ElapsedMilliseconds}ms.");
+
+                                TL.LogMessage(clientNumber, "ImageArrayBytes", $"Metadata bytes: " +
+                                    $"[ {imageBytes[0]:X2} {imageBytes[1]:X2} {imageBytes[2]:X2} {imageBytes[3]:X2} ] [ {imageBytes[4]:X2} {imageBytes[5]:X2} {imageBytes[6]:X2} {imageBytes[7]:X2} ] " +
+                                    $"[ {imageBytes[8]:X2} {imageBytes[9]:X2} {imageBytes[10]:X2} {imageBytes[11]:X2} ] [ {imageBytes[12]:X2} {imageBytes[13]:X2} {imageBytes[14]:X2} {imageBytes[15]:X2} ] " +
+                                    $"[ {imageBytes[16]:X2} {imageBytes[17]:X2} {imageBytes[18]:X2} {imageBytes[19]:X2} ] [ {imageBytes[20]:X2} {imageBytes[21]:X2} {imageBytes[22]:X2} {imageBytes[23]:X2} ] " +
+                                    $"[ {imageBytes[24]:X2} {imageBytes[25]:X2} {imageBytes[26]:X2} {imageBytes[27]:X2} ] [ {imageBytes[28]:X2} {imageBytes[29]:X2} {imageBytes[30]:X2} {imageBytes[31]:X2} ] " +
+                                    $"[ {imageBytes[32]:X2} {imageBytes[33]:X2} {imageBytes[34]:X2} {imageBytes[35]:X2} ]");
+
+                                int metadataVersion = imageBytes.GetMetadataVersion();
+                                TL.LogMessage(clientNumber, "ImageArrayBytes", $"Metadata version: {metadataVersion}");
+
+                                AlpacaErrors errorNumber;
+                                switch (metadataVersion)
+                                {
+                                    case 1:
+                                        ArrayMetadataV1 metadataV1 = imageBytes.GetMetadataV1();
+                                        TL.LogMessage(clientNumber, "ImageArrayBytes", $"Received array: Metadata version: {metadataV1.MetadataVersion} Image element type: {metadataV1.ImageElementType} Transmission element type: {metadataV1.TransmissionElementType} Array rank: {metadataV1.Rank} Dimension 0: {metadataV1.Dimension0} Dimension 1: {metadataV1.Dimension1} Dimension 2: {metadataV1.Dimension2} Error number: {metadataV1.ErrorNumber}.");
+                                        errorNumber = metadataV1.ErrorNumber;
+                                        break;
+
+                                    default:
+                                        throw new InvalidValueException($"ImageArray - ImageArrayBytes - Received an unsupported metadata version number: {metadataVersion} from the Alpaca device.");
+                                }
+
+                                // Convert the byte[] back to an image array
+                                sw.Restart();
+                                Array returnArray = imageBytes.ToImageArray();
+                                TL.LogMessage(clientNumber, "ImageArrayBytes", $"Converted byte[] to image array in {sw.ElapsedMilliseconds}ms. Overall time: {swOverall.ElapsedMilliseconds}ms.");
+                                return (T)(Object)returnArray;
+
+                                // No need for error handling here because any error will have been returned as a JSON response rather than as this ImageBytes response.
                             }
 
                             // Handle conventional JSON response with integer array elements individually serialised

@@ -126,8 +126,10 @@ namespace ASCOM.DynamicRemoteClients
         public const string BASE64_HANDOFF_FILE_DOWNLOAD_URI_EXTENSION = "base64"; // Addition to the ImageArray and ImageArrayVariant method names from which base64 serialised image files can be downloaded
         public const string GETBASE64IMAGE_ACTION_NAME = "GetBase64Image";
         public const int GETBASE64IMAGE_SUPPORTED_VERSION = 1;
-        public const string GET_IMAGE_BYTES_HEADER = "getimagebytes"; // Name of HTTP header used to affirm GetImageBytes support for image array data
-        public const string GET_IMAGE_BYTES_SUPPORTED = "true"; // Value of HTTP header to indicate support for the GetImageBytes mechanic
+
+        public const string ACCEPT_HEADER_NAME = "Accept"; // Name of HTTP header used to affirm ImageBytes support for image array data
+        public const string IMAGE_BYTES_MIME_TYPE = "application/imagebytes";
+        public const string IMAGE_BYTES_ACCEPT_HEADER = "application/json, text/json, " + IMAGE_BYTES_MIME_TYPE; // Value of HTTP header to indicate support for the GetImageBytes mechanic
 
         public const string DEVICE_NOT_CONFIGURED = "None"; // ProgID / UniqueID / device type value indicating no device configured
 
