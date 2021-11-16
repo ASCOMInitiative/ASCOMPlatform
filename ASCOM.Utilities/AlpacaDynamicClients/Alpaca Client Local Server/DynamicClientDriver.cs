@@ -25,6 +25,8 @@ using System.Threading.Tasks;
 using System.Numerics;
 using ASCOM.Common.Alpaca;
 using ASCOM.Alpaca.Clients;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace ASCOM.DynamicRemoteClients
 {
@@ -913,10 +915,24 @@ namespace ASCOM.DynamicRemoteClients
                         request.AddParameter(parameter.Key, parameter.Value);
                     }
 
-                    lastTime = sw.ElapsedMilliseconds;
                     // Call the remote device and get the response
+                    lastTime = sw.ElapsedMilliseconds;
                     if (TL.DebugTraceState) TL.LogMessage(clientNumber, method, "Client Txn ID: " + transaction.ToString() + ", Sending command to remote device");
-                    IRestResponse deviceJsonResponse = client.Execute(request);
+
+                    IRestResponse deviceJsonResponse;
+
+                    // Use the more efficient .NET HttpClient to get the large image array as a byte[]
+                    if (imageArrayTransferType == ImageArrayTransferType.GetImageBytes)
+                    {
+                        deviceJsonResponse = GetResponse($"{client.BaseUrl}{uriBase}{method}".ToLowerInvariant(), SharedConstants.IMAGE_BYTES_ACCEPT_HEADER, TL); ;
+                    }
+                    else // Use the RestSharp client for everything else
+                    {
+                        deviceJsonResponse = client.Execute(request);
+                    }
+                    if (TL.DebugTraceState) TL.LogMessage(clientNumber, method, $"Returned data content type: '{deviceJsonResponse.ContentType}'");
+
+
                     long timeDeviceResponse = sw.ElapsedMilliseconds - lastTime;
 
                     // Log the device's response
@@ -929,7 +945,7 @@ namespace ASCOM.DynamicRemoteClients
                         string responseContent;
                         if (deviceJsonResponse.Content.Length > 1000) responseContent = deviceJsonResponse.Content.Substring(0, 1000);
                         else responseContent = deviceJsonResponse.Content;
-                        TL.LogMessage(clientNumber, method, string.Format("Response Status: '{0}', Response: {1}", deviceJsonResponse.StatusDescription, responseContent));
+                        TL.LogMessage(clientNumber, method, $"Response Status: '{deviceJsonResponse.StatusDescription}', Response: {responseContent}");
                     }
 
                     // Assess success at the communications level and handle accordingly 
@@ -1294,6 +1310,7 @@ namespace ASCOM.DynamicRemoteClients
                                     {
                                         TL.LogMessage(clientNumber, method, $"Created and copied the array in {sw.ElapsedMilliseconds}ms"); sw.Restart();
                                     }
+                                    TL.LogMessage(clientNumber, "", $"");
 
                                     return (T)(object)remoteArray;
                                 }
@@ -1309,9 +1326,9 @@ namespace ASCOM.DynamicRemoteClients
                                 byte[] imageBytes = deviceJsonResponse.RawBytes;
 
                                 sw.Stop();
-                                TL.LogMessage(clientNumber, "ImageArrayBytes", $"Downloaded {imageBytes.Length} bytes in {sw.ElapsedMilliseconds}ms.");
+                                TL.LogMessage(clientNumber, "ImageBytes", $"Downloaded {imageBytes.Length} bytes in {sw.ElapsedMilliseconds}ms.");
 
-                                TL.LogMessage(clientNumber, "ImageArrayBytes", $"Metadata bytes: " +
+                                TL.LogMessage(clientNumber, "ImageBytes", $"Metadata bytes: " +
                                     $"[ {imageBytes[0]:X2} {imageBytes[1]:X2} {imageBytes[2]:X2} {imageBytes[3]:X2} ] [ {imageBytes[4]:X2} {imageBytes[5]:X2} {imageBytes[6]:X2} {imageBytes[7]:X2} ] " +
                                     $"[ {imageBytes[8]:X2} {imageBytes[9]:X2} {imageBytes[10]:X2} {imageBytes[11]:X2} ] [ {imageBytes[12]:X2} {imageBytes[13]:X2} {imageBytes[14]:X2} {imageBytes[15]:X2} ] " +
                                     $"[ {imageBytes[16]:X2} {imageBytes[17]:X2} {imageBytes[18]:X2} {imageBytes[19]:X2} ] [ {imageBytes[20]:X2} {imageBytes[21]:X2} {imageBytes[22]:X2} {imageBytes[23]:X2} ] " +
@@ -1319,7 +1336,7 @@ namespace ASCOM.DynamicRemoteClients
                                     $"[ {imageBytes[32]:X2} {imageBytes[33]:X2} {imageBytes[34]:X2} {imageBytes[35]:X2} ]");
 
                                 int metadataVersion = imageBytes.GetMetadataVersion();
-                                TL.LogMessage(clientNumber, "ImageArrayBytes", $"Metadata version: {metadataVersion}");
+                                TL.LogMessage(clientNumber, "ImageBytes", $"Metadata version: {metadataVersion}");
 
                                 AlpacaErrors errorNumber;
                                 switch (metadataVersion)
@@ -1337,7 +1354,9 @@ namespace ASCOM.DynamicRemoteClients
                                 // Convert the byte[] back to an image array
                                 sw.Restart();
                                 Array returnArray = imageBytes.ToImageArray();
-                                TL.LogMessage(clientNumber, "ImageArrayBytes", $"Converted byte[] to image array in {sw.ElapsedMilliseconds}ms. Overall time: {swOverall.ElapsedMilliseconds}ms.");
+                                TL.LogMessage(clientNumber, "ImageBytes", $"Converted byte[] to image array in {sw.ElapsedMilliseconds}ms. Overall time: {swOverall.ElapsedMilliseconds}ms.");
+                                TL.LogMessage(clientNumber, "", $"");
+
                                 return (T)(Object)returnArray;
 
                                 // No need for error handling here because any error will have been returned as a JSON response rather than as this ImageBytes response.
@@ -1929,6 +1948,82 @@ namespace ASCOM.DynamicRemoteClients
             }
         }
 
+        #endregion
+
+        #region Support code
+
+        private static IRestResponse GetResponse(string url, string acceptString, TraceLogger TL)
+        {
+            HttpClient wClient = new HttpClient();
+            IEnumerable<string> contentTypeValues;
+            string contentType = string.Empty;
+            Stopwatch sw = new Stopwatch();
+            Stopwatch swOverall = new Stopwatch();
+
+            wClient.DefaultRequestHeaders.Accept.ParseAdd(acceptString);//Add an ACCEPT header
+            sw.Start();
+            swOverall.Start();
+
+            using (HttpResponseMessage response = wClient.GetAsync(url, HttpCompletionOption.ResponseContentRead).Result)
+            {
+                TL.LogMessage("GetResponse", $"GetAsync time: {sw.ElapsedMilliseconds}ms, Overall time: {swOverall.ElapsedMilliseconds}ms.");
+
+                response.EnsureSuccessStatusCode();
+
+                sw.Restart();
+                HttpContentHeaders headers = response.Content.Headers;
+                TL.LogMessage("GetResponse", $"Headers time: {sw.ElapsedMilliseconds}ms, Overall time: {swOverall.ElapsedMilliseconds}ms.");
+
+                if (headers is null) throw new InvalidValueException("The device did not return any headers. Expected a Content-Type header with a value of 'application/json' or 'text/json' or 'application/imagebytes'.");
+
+                if (headers.TryGetValues(SharedConstants.CONTENT_TYPE_HEADER_NAME, out contentTypeValues))
+                {
+                    contentType = contentTypeValues.First().ToLowerInvariant();
+                }
+
+                sw.Restart();
+                byte[] rawbytes = response.Content.ReadAsByteArrayAsync().Result;
+                TL.LogMessage("GetResponse", $"ReadAsByteArrayAsync time: {sw.ElapsedMilliseconds}ms, Overall time: {swOverall.ElapsedMilliseconds}ms.");
+                var a=response.Content.en
+                if ((contentType.Contains(SharedConstants.APPLICATION_JSON_MIME_TYPE)) | (contentType.Contains(SharedConstants.TEXT_JSON_MIME_TYPE)))
+                {
+                    sw.Restart();
+                    RestResponse restResponse = new RestResponse()
+                    {
+                        Content = Encoding.UTF8.GetString(rawbytes),
+                        ContentType = contentType,
+                        ResponseStatus = ResponseStatus.Completed,
+                        StatusCode = response.StatusCode,
+                        StatusDescription = response.ReasonPhrase
+                    };
+                    TL.LogMessage("GetResponse", $"GetStringAsync time: {sw.ElapsedMilliseconds}ms, Overall time: {swOverall.ElapsedMilliseconds}ms.");
+
+                    return restResponse;
+                }
+                else if (contentType.ToLowerInvariant().Contains(SharedConstants.IMAGE_BYTES_MIME_TYPE))
+                {
+                    sw.Restart();
+                    RestResponse restResponse = new RestResponse
+                    {
+                        RawBytes = rawbytes,
+                        ContentType = contentType,
+                        ResponseStatus = ResponseStatus.Completed,
+                        StatusCode = response.StatusCode,
+                        StatusDescription = response.ReasonPhrase
+                    };
+                    TL.LogMessage("GetResponse", $"GetByteArrayAsync time: {sw.ElapsedMilliseconds}ms, Overall time: {swOverall.ElapsedMilliseconds}ms.");
+
+                    return restResponse;
+                }
+                else
+                {
+                    TL.LogMessage("GetResponse", $"Did not find expected content type of 'application.json' or 'application/imagebytes'. Found: {contentType}");
+                    throw new InvalidValueException($"The device did not return a content type or returned an unsupported content type: '{contentType}'");
+                }
+
+
+            }
+        }
         #endregion
 
     }

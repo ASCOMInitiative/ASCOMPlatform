@@ -127,9 +127,16 @@ namespace ASCOM.DynamicRemoteClients
         public const string GETBASE64IMAGE_ACTION_NAME = "GetBase64Image";
         public const int GETBASE64IMAGE_SUPPORTED_VERSION = 1;
 
+        // Basic mime-type values
         public const string ACCEPT_HEADER_NAME = "Accept"; // Name of HTTP header used to affirm ImageBytes support for image array data
-        public const string IMAGE_BYTES_MIME_TYPE = "application/imagebytes";
-        public const string IMAGE_BYTES_ACCEPT_HEADER = "application/json, text/json, " + IMAGE_BYTES_MIME_TYPE; // Value of HTTP header to indicate support for the GetImageBytes mechanic
+        public const string CONTENT_TYPE_HEADER_NAME = "Content-Type"; // Name of HTTP header used to affirm the type of data returned by the device
+        public const string IMAGE_BYTES_MIME_TYPE = "application/imagebytes"; // Image bytes mime type
+        public const string APPLICATION_JSON_MIME_TYPE = "application/json"; // Application/json mime type
+        public const string TEXT_JSON_MIME_TYPE = "text/json"; // Text/json mime type
+
+        // Combined mime-type values
+        public const string JSON_MIME_TYPES = APPLICATION_JSON_MIME_TYPE + ", " + TEXT_JSON_MIME_TYPE; // JSON mime types
+        public const string IMAGE_BYTES_ACCEPT_HEADER = IMAGE_BYTES_MIME_TYPE + ", " + JSON_MIME_TYPES; // Value of HTTP header to indicate support for the GetImageBytes mechanic
 
         public const string DEVICE_NOT_CONFIGURED = "None"; // ProgID / UniqueID / device type value indicating no device configured
 
