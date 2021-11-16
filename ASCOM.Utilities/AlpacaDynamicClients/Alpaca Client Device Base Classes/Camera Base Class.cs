@@ -546,8 +546,7 @@ namespace ASCOM.DynamicRemoteClients
                     if (
                         (!canGetBase64Image.HasValue) &
                         ((imageArrayTransferType == ImageArrayTransferType.GetBase64Image) |
-                         (imageArrayTransferType == ImageArrayTransferType.BestAvailable) |
-                         (imageArrayTransferType == ImageArrayTransferType.GetImageBytes)
+                         (imageArrayTransferType == ImageArrayTransferType.BestAvailable)
                         )
                        )
                     {
@@ -581,7 +580,7 @@ namespace ASCOM.DynamicRemoteClients
 
                     TL.LogMessage(clientNumber, "ImageArray", $"ImageArray called - canGetBase64Image: {canGetBase64Image.Value}, imageArrayTransferType: {imageArrayTransferType}");
 
-                    // Use GetBase64Image mode if specified and available
+                    // Use GetBase64Image mechanic if specified and available
                    if (canGetBase64Image.Value & (imageArrayTransferType == ImageArrayTransferType.GetBase64Image))
                     {
                         Stopwatch sw = new Stopwatch();
@@ -621,11 +620,15 @@ namespace ASCOM.DynamicRemoteClients
 
                         return returnArray;
                     }
-                    else if (!canGetBase64Image.Value & (imageArrayTransferType == ImageArrayTransferType.GetBase64Image)) // Throw an exception if GetBase64Image is specified but not available
+
+                    // Throw an exception if GetBase64Image is specified but not available
+                    else if (!canGetBase64Image.Value & (imageArrayTransferType == ImageArrayTransferType.GetBase64Image))
                     {
                         throw new InvalidOperationException("GetBase64Image - The GetBase64Image transfer mechanic was specified but is not supported by this device.");
                     }
-                    else // Fall through to use ImageBytes or Base64 hand-off if available, otherwise to the JSON mechanic.
+
+                    // Fall through to use ImageBytes or Base64 hand-off if available, otherwise to the JSON mechanic.
+                    else
                     {
                         DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
                         return DynamicClientDriver.GetValue<Array>(clientNumber, client, URIBase, TL, "ImageArray", imageArrayTransferType, imageArrayCompression, MemberTypes.Property);
