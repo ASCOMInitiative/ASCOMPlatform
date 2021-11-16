@@ -50,7 +50,6 @@ namespace ASCOM.DynamicRemoteClients
         private bool clientIsConnected;  // Connection state of this driver
         private string URIBase; // URI base unique to this driver
         private bool? canGetBase64Image = null; // Indicator of whether the remote device supports GetBase64Image functionality
-        private bool? canGetImageBytes = null; // Indicator of whether the remote device supports GetBase64Image functionality
 
         // Variables to hold values that can be configured by the user through the setup form
         private bool traceState = true;
@@ -542,7 +541,6 @@ namespace ASCOM.DynamicRemoteClients
                 try
                 {
                     // Special handling for GetBase64Image transfers
-                    TL.LogMessage(clientNumber, "ImageArray", $"ImageArray called - canGetBase64Image: {(canGetBase64Image.HasValue ? canGetBase64Image.Value.ToString() : "VALUE NOT SET")}, canGetImageBytes: {(canGetImageBytes.HasValue ? canGetImageBytes.Value.ToString() : "VALUE NOT SET")} , imageArrayTransferType: {imageArrayTransferType}");
 
                     // Determine whether we need to find out whether Getbase64Image functionality is provided by this driver
                     if (
@@ -573,119 +571,18 @@ namespace ASCOM.DynamicRemoteClients
                             TL.LogMessage(clientNumber, "ImageArray", $"Received an exception when trying to get the device's SupportedActions: {ex.Message}");
                         }
 
-                        // Determine whether the remote device supports the ImageArrayBytes property
-                        // Try to get an answer from the device, if anything goes wrong assume that the feature is not available
-                        try
-                        {
-                            // Initialise the supported flag to false
-                            canGetImageBytes = false;
-
-                            // Call the CanGetImageBytes property and store the value
-                            DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                            canGetImageBytes = DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CanImageArrayBytes", MemberTypes.Property);
-
-                            TL.LogMessage(clientNumber, "ImageArray", $"CanImageArrayBytes returned {canGetImageBytes}");
-                        }
-                        catch (Exception ex)
-                        {
-                            // Just log any errors but otherwise ignore them
-                            TL.LogMessage(clientNumber, "ImageArray", $"Received an exception when calling the device's CanImageArrayBytes property : {ex.Message}");
-                        }
                     }
 
                     // As a precaution, set values false if we have no value at this point
                     if (!canGetBase64Image.HasValue) canGetBase64Image = false;
-                    if (!canGetImageBytes.HasValue) canGetImageBytes = false;
 
                     // Throw an exception if GetBase64Image mode is explicitly requested but the device does not support this mode
                     if ((imageArrayTransferType == ImageArrayTransferType.GetBase64Image) & !canGetBase64Image.Value) throw new InvalidOperationException("GetBase64Image transfer mode has been requested but the device does not support this mode.");
 
-                    // Throw an exception if GetBase64Image mode is explicitly requested but the device does not support this mode
-                    if ((imageArrayTransferType == ImageArrayTransferType.GetImageBytes) & !canGetImageBytes.Value) throw new InvalidOperationException("GetImageBytes transfer mode has been requested but the device does not support this mode.");
+                    TL.LogMessage(clientNumber, "ImageArray", $"ImageArray called - canGetBase64Image: {canGetBase64Image.Value}, imageArrayTransferType: {imageArrayTransferType}");
 
-                    // Use a fast transfer mode if possible
-                    TL.LogMessage(clientNumber, "ImageArray", $"ImageArray 1 called - canGetBase64Image: {canGetBase64Image.Value}, canGetImageBytes: {canGetImageBytes.Value} , imageArrayTransferType: {imageArrayTransferType}");
-
-                    // Use the GetImageBytes mechanic if available
-                    //if (canGetImageBytes.Value & ((imageArrayTransferType == ImageArrayTransferType.GetImageBytes) | (imageArrayTransferType == ImageArrayTransferType.BestAvailable)))
-                    //{
-                    //    Stopwatch sw = new Stopwatch();
-                    //    Stopwatch swOverall = new Stopwatch();
-
-                    //    // Configure communications
-                    //    sw.Start();
-                    //    swOverall.Start();
-                    //    RestRequest request = new RestRequest((URIBase + "ImageArrayBytes").ToLowerInvariant(), Method.GET)
-                    //    {
-                    //        RequestFormat = DataFormat.None
-                    //    };
-                    //    client.ConfigureWebRequest(wr => wr.AutomaticDecompression = DecompressionMethods.None); // Prevent any decompression
-
-                    //    // Add the transaction number and client ID parameters
-                    //    uint transaction = DynamicClientDriver.TransactionNumber();
-                    //    request.AddParameter(SharedConstants.CLIENTTRANSACTION_PARAMETER_NAME, transaction.ToString());
-                    //    request.AddParameter(SharedConstants.CLIENTID_PARAMETER_NAME, clientNumber.ToString());
-
-                    //    // Download the binary byte[] data
-                    //    string imageArrayBytesUri = $"{serviceType.ToString().ToLowerInvariant()}://{ipAddressString}:{portNumber}{URIBase}ImageArrayBytes".ToLowerInvariant();
-                    //    TL.LogMessage(clientNumber, "ImageArrayBytes", $"Downloading byte[] from {imageArrayBytesUri}");
-
-                    //    // Create a task to download the byte[]
-                    //    Task<byte[]> getByteArrayTask = GetByteArray(imageArrayBytesUri);
-
-                    //    // Wait for the task to complete
-                    //    Task.WaitAll(getByteArrayTask);
-
-                    //    // Get the byte array from the task
-                    //    byte[] imageBytes = getByteArrayTask.Result;
-
-                    //    sw.Stop();
-                    //    TL.LogMessage(clientNumber, "ImageArrayBytes", $"Downloaded {imageBytes.Length} bytes in {sw.ElapsedMilliseconds}ms.");
-
-                    //    TL.LogMessage(clientNumber, "ImageArrayBytes", $"Metadata bytes: " +
-                    //        $"[ {imageBytes[0]:X2} {imageBytes[1]:X2} {imageBytes[2]:X2} {imageBytes[3]:X2} ] [ {imageBytes[4]:X2} {imageBytes[5]:X2} {imageBytes[6]:X2} {imageBytes[7]:X2} ] " +
-                    //        $"[ {imageBytes[8]:X2} {imageBytes[9]:X2} {imageBytes[10]:X2} {imageBytes[11]:X2} ] [ {imageBytes[12]:X2} {imageBytes[13]:X2} {imageBytes[14]:X2} {imageBytes[15]:X2} ] " +
-                    //        $"[ {imageBytes[16]:X2} {imageBytes[17]:X2} {imageBytes[18]:X2} {imageBytes[19]:X2} ] [ {imageBytes[20]:X2} {imageBytes[21]:X2} {imageBytes[22]:X2} {imageBytes[23]:X2} ] " +
-                    //        $"[ {imageBytes[24]:X2} {imageBytes[25]:X2} {imageBytes[26]:X2} {imageBytes[27]:X2} ] [ {imageBytes[28]:X2} {imageBytes[29]:X2} {imageBytes[30]:X2} {imageBytes[31]:X2} ] " +
-                    //        $"[ {imageBytes[32]:X2} {imageBytes[33]:X2} {imageBytes[34]:X2} {imageBytes[35]:X2} ]");
-
-                    //    int metadataVersion = imageBytes.GetMetadataVersion();
-                    //    TL.LogMessage(clientNumber, "ImageArrayBytes", $"Metadata version: {metadataVersion}");
-
-                    //    AlpacaErrors errorNumber;
-                    //    switch (metadataVersion)
-                    //    {
-                    //        case 1:
-                    //            ArrayMetadataV1 metadataV1 = imageBytes.GetMetadataV1();
-                    //            TL.LogMessage(clientNumber, "ImageArrayBytes", $"Received array: Metadata version: {metadataV1.MetadataVersion} Image element type: {metadataV1.ImageElementType} Transmission element type: {metadataV1.TransmissionElementType} Array rank: {metadataV1.Rank} Dimension 0: {metadataV1.Dimension0} Dimension 1: {metadataV1.Dimension1} Dimension 2: {metadataV1.Dimension2} Error number: {metadataV1.ErrorNumber}.");
-                    //            errorNumber = metadataV1.ErrorNumber;
-                    //            break;
-
-                    //        default:
-                    //            throw new InvalidValueException($"ImageArray - ImageArrayBytes - Received an unsupported metadata version number: {metadataVersion} from the Alpaca device.");
-                    //    }
-
-                    //    // Handle success or failure of the call
-                    //    if (errorNumber == AlpacaErrors.AlpacaNoError) // Success so return the image array
-                    //    {
-                    //        // Convert the byte[] back to an image array
-                    //        sw.Restart();
-                    //        returnArray = imageBytes.ToImageArray();
-                    //        TL.LogMessage(clientNumber, "ImageArrayBytes", $"Converted byte[] to image array in {sw.ElapsedMilliseconds}ms. Overall time: {swOverall.ElapsedMilliseconds}ms.");
-                    //        return returnArray;
-                    //    }
-                    //    else // An error occurred so throw an exception
-                    //    {
-                    //        string errorMessage = imageBytes.GetErrrorMessage();
-                    //        TL.LogMessage(clientNumber, "ImageArrayBytes", $"The Alpaca device returned an error: {errorNumber} - {errorMessage}.");
-                    //        throw ExceptionHelpers.ExceptionFromErrorCode(errorNumber, errorMessage);
-                    //    }
-
-                    //}
-                    // else if 
-
-                    if (canGetBase64Image.Value & ((imageArrayTransferType == ImageArrayTransferType.GetBase64Image) | (imageArrayTransferType == ImageArrayTransferType.BestAvailable)))
-                    // Fall back to GetBase64Image if available
+                    // Use GetBase64Image mode if specified and available
+                   if (canGetBase64Image.Value & (imageArrayTransferType == ImageArrayTransferType.GetBase64Image))
                     {
                         Stopwatch sw = new Stopwatch();
                         Stopwatch swOverall = new Stopwatch();
@@ -702,7 +599,6 @@ namespace ASCOM.DynamicRemoteClients
                         byte[] base64ArrayByteArray = Convert.FromBase64String(base64String);
                         sw.Stop();
                         TL.LogMessage(clientNumber, "GetBase64Image", $"Converted string to byte array in {sw.ElapsedMilliseconds}ms.");
-
 
                         int metadataVersion = base64ArrayByteArray.GetMetadataVersion();
                         TL.LogMessage(clientNumber, "GetBase64Image", $"Metadata version: {metadataVersion}");
@@ -725,16 +621,11 @@ namespace ASCOM.DynamicRemoteClients
 
                         return returnArray;
                     }
-                    //else if (!canGetImageBytes.Value & (imageArrayTransferType == ImageArrayTransferType.GetImageBytes)) // Throw an exception if GetImageBytes is specified but not available
-                    //{
-                    //    throw new InvalidOperationException("ImageArrayBytes - The GetImageBytes transfer mechanic was specified but is not supported by this device.");
-                    //}
                     else if (!canGetBase64Image.Value & (imageArrayTransferType == ImageArrayTransferType.GetBase64Image)) // Throw an exception if GetBase64Image is specified but not available
                     {
                         throw new InvalidOperationException("GetBase64Image - The GetBase64Image transfer mechanic was specified but is not supported by this device.");
                     }
-                    else
-                    // Fall back to Base64 hand-off if available, otherwise use JSON
+                    else // Fall through to use ImageBytes or Base64 hand-off if available, otherwise to the JSON mechanic.
                     {
                         DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
                         return DynamicClientDriver.GetValue<Array>(clientNumber, client, URIBase, TL, "ImageArray", imageArrayTransferType, imageArrayCompression, MemberTypes.Property);

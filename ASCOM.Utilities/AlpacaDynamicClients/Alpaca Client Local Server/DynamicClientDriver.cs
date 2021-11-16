@@ -921,7 +921,7 @@ namespace ASCOM.DynamicRemoteClients
 
                     IRestResponse deviceJsonResponse;
 
-                    // Use the more efficient .NET HttpClient to get the large image array as a byte[]
+                    // Use the more efficient .NET HttpClient to get the large image array as a byte[] for the ImageBytes mechanic
                     if (imageArrayTransferType == ImageArrayTransferType.GetImageBytes)
                     {
                         deviceJsonResponse = GetResponse($"{client.BaseUrl}{uriBase}{method}".ToLowerInvariant(), SharedConstants.IMAGE_BYTES_ACCEPT_HEADER, TL); ;
@@ -1170,7 +1170,7 @@ namespace ASCOM.DynamicRemoteClients
                                 }
                             }
 
-                            // Handle base64 hand-off image transfer mechanic
+                            // Handle the base64 hand-off image transfer mechanic
                             if (deviceJsonResponse.Headers.Any(t => t.Name == SharedConstants.BASE64_HANDOFF_HEADER)) // Base64 format header is present so the server supports base64 serialised transfer
                             {
                                 // De-serialise the JSON image array hand-off response 
@@ -1317,7 +1317,7 @@ namespace ASCOM.DynamicRemoteClients
                                 restResponseBase = (RestResponseBase)base64HandOffresponse;
                             }
 
-                            // Handle the GetImageBytes image transfer mechanic
+                            // Handle the ImageBytes image transfer mechanic
                             else if (deviceJsonResponse.ContentType.ToLowerInvariant().Contains(SharedConstants.IMAGE_BYTES_MIME_TYPE)) // Image bytes have been returned so the server supports raw array data transfer
                             {
                                 Stopwatch swOverall = new Stopwatch();
@@ -1362,7 +1362,7 @@ namespace ASCOM.DynamicRemoteClients
                                 // No need for error handling here because any error will have been returned as a JSON response rather than as this ImageBytes response.
                             }
 
-                            // Handle conventional JSON response with integer array elements individually serialised
+                            // Handle a conventional JSON response with integer array elements individually serialised
                             else
                             {
                                 sw.Restart(); // Clear and start the stopwatch
@@ -1952,6 +1952,14 @@ namespace ASCOM.DynamicRemoteClients
 
         #region Support code
 
+        /// <summary>
+        /// Use an HttpClient to retrieve the image array byte data
+        /// </summary>
+        /// <param name="url">URL from which to retireve data</param>
+        /// <param name="acceptString">The Acdept string og mim types that we are prepared to accept.</param>
+        /// <param name="TL">TraceLogger for logging purposes.</param>
+        /// <returns>A populated RestSharp RestResponse</returns>
+        /// <remarks>This approach is used because of inexplicable delays that occured when using the RestSharp client to retieve large binary byte arrays.</remarks>
         private static IRestResponse GetResponse(string url, string acceptString, TraceLogger TL)
         {
             HttpClient wClient = new HttpClient();
@@ -1960,31 +1968,34 @@ namespace ASCOM.DynamicRemoteClients
             Stopwatch sw = new Stopwatch();
             Stopwatch swOverall = new Stopwatch();
 
-            wClient.DefaultRequestHeaders.Accept.ParseAdd(acceptString);//Add an ACCEPT header
+            //Add an ACCEPT header
+            wClient.DefaultRequestHeaders.Accept.ParseAdd(acceptString);
             sw.Start();
             swOverall.Start();
 
+            // Get the data from the Alpaca device
             using (HttpResponseMessage response = wClient.GetAsync(url, HttpCompletionOption.ResponseContentRead).Result)
             {
                 TL.LogMessage("GetResponse", $"GetAsync time: {sw.ElapsedMilliseconds}ms, Overall time: {swOverall.ElapsedMilliseconds}ms.");
 
-                response.EnsureSuccessStatusCode();
-
+                // Get the response CONTENT headers (different to response TRANSPORT headers, hard won knowledge!)
                 sw.Restart();
                 HttpContentHeaders headers = response.Content.Headers;
-                TL.LogMessage("GetResponse", $"Headers time: {sw.ElapsedMilliseconds}ms, Overall time: {swOverall.ElapsedMilliseconds}ms.");
 
                 if (headers is null) throw new InvalidValueException("The device did not return any headers. Expected a Content-Type header with a value of 'application/json' or 'text/json' or 'application/imagebytes'.");
 
+                // Extract the content type from tyhe headers
                 if (headers.TryGetValues(SharedConstants.CONTENT_TYPE_HEADER_NAME, out contentTypeValues))
                 {
                     contentType = contentTypeValues.First().ToLowerInvariant();
                 }
 
+                // Get the returned data as a byte[] (could be JSON or ImageBytes image data)
                 sw.Restart();
                 byte[] rawbytes = response.Content.ReadAsByteArrayAsync().Result;
                 TL.LogMessage("GetResponse", $"ReadAsByteArrayAsync time: {sw.ElapsedMilliseconds}ms, Overall time: {swOverall.ElapsedMilliseconds}ms.");
-                var a=response.Content.en
+
+                // If the content type is JSON - Populate the Content property with a string converted from the byte[] 
                 if ((contentType.Contains(SharedConstants.APPLICATION_JSON_MIME_TYPE)) | (contentType.Contains(SharedConstants.TEXT_JSON_MIME_TYPE)))
                 {
                     sw.Restart();
@@ -2000,6 +2011,8 @@ namespace ASCOM.DynamicRemoteClients
 
                     return restResponse;
                 }
+
+                // If the content type is ImageBytes - ASsign the byte[] to the rawBytes property 
                 else if (contentType.ToLowerInvariant().Contains(SharedConstants.IMAGE_BYTES_MIME_TYPE))
                 {
                     sw.Restart();
@@ -2015,13 +2028,13 @@ namespace ASCOM.DynamicRemoteClients
 
                     return restResponse;
                 }
+
+                // Otherwise we didn't receive a content type header or received an unsupported content type, so throw an exception to indicate the problem.
                 else
                 {
                     TL.LogMessage("GetResponse", $"Did not find expected content type of 'application.json' or 'application/imagebytes'. Found: {contentType}");
                     throw new InvalidValueException($"The device did not return a content type or returned an unsupported content type: '{contentType}'");
                 }
-
-
             }
         }
         #endregion
