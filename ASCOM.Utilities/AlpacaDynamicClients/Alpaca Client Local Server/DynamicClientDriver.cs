@@ -922,7 +922,7 @@ namespace ASCOM.DynamicRemoteClients
                     IRestResponse deviceJsonResponse;
 
                     // Use the more efficient .NET HttpClient to get the large image array as a byte[] for the ImageBytes mechanic
-                    if (imageArrayTransferType == ImageArrayTransferType.GetImageBytes)
+                    if ((method == SharedConstants.IMAGE_ARRAY_METHOD_NAME) & ((imageArrayTransferType == ImageArrayTransferType.GetImageBytes) | ((imageArrayTransferType == ImageArrayTransferType.BestAvailable))))
                     {
                         deviceJsonResponse = GetResponse($"{client.BaseUrl}{uriBase}{method}".ToLowerInvariant(), SharedConstants.IMAGE_BYTES_ACCEPT_HEADER, TL); ;
                     }

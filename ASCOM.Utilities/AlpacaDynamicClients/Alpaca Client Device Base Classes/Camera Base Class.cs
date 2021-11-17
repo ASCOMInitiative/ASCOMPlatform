@@ -631,7 +631,7 @@ namespace ASCOM.DynamicRemoteClients
                     else
                     {
                         DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
-                        return DynamicClientDriver.GetValue<Array>(clientNumber, client, URIBase, TL, "ImageArray", imageArrayTransferType, imageArrayCompression, MemberTypes.Property);
+                        return DynamicClientDriver.GetValue<Array>(clientNumber, client, URIBase, TL, SharedConstants.IMAGE_ARRAY_METHOD_NAME, imageArrayTransferType, imageArrayCompression, MemberTypes.Property);
                     }
                 }
                 catch (Exception ex)

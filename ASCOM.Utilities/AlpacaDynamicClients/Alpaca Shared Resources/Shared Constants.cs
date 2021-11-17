@@ -120,12 +120,13 @@ namespace ASCOM.DynamicRemoteClients
         public const ASCOM.Common.Alpaca.ImageArrayCompression DEFAULT_IMAGE_ARRAY_COMPRESSION = ASCOM.Common.Alpaca.ImageArrayCompression.None;
         public const ASCOM.Common.Alpaca.ImageArrayTransferType DEFAULT_IMAGE_ARRAY_TRANSFER_TYPE = ASCOM.Common.Alpaca.ImageArrayTransferType.BestAvailable;
 
-        // Image array base64 hand-off support constants
+        // Image array base64 hand-off and ImageBytes support constants
         public const string BASE64_HANDOFF_HEADER = "base64handoff"; // Name of HTTP header used to affirm binary serialisation support for image array data
         public const string BASE64_HANDOFF_SUPPORTED = "true"; // Value of HTTP header to indicate support for binary serialised image array data
         public const string BASE64_HANDOFF_FILE_DOWNLOAD_URI_EXTENSION = "base64"; // Addition to the ImageArray and ImageArrayVariant method names from which base64 serialised image files can be downloaded
         public const string GETBASE64IMAGE_ACTION_NAME = "GetBase64Image";
         public const int GETBASE64IMAGE_SUPPORTED_VERSION = 1;
+        public const string IMAGE_ARRAY_METHOD_NAME = "ImageArray";
 
         // Basic mime-type values
         public const string ACCEPT_HEADER_NAME = "Accept"; // Name of HTTP header used to affirm ImageBytes support for image array data
