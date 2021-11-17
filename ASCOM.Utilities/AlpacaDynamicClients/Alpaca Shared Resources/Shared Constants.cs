@@ -84,38 +84,6 @@ namespace ASCOM.DynamicRemoteClients
         public const string NOT_CONNECTED_MESSAGE = "is not connected."; // This is appended to the driver display name + driver number and displayed when the driver is not connected
         public const string TRACELOGGER_NAME_FORMAT_STRING = "AlpacaDynamic{0}.{1}";
 
-        // Enum to describe Camera.ImageArray and ImageArrayVCariant array types
-        //public enum Base64HandoffElementTypes
-        //{
-        //    Unknown = 0,
-        //    Int16 = 1,
-        //    Int32 = 2,
-        //    Double = 3,
-        //    Float = 4,
-        //    Byte = 5,
-        //    Int64 = 6
-
-        //}
-
-        //// Enum used by the dynamic client to indicate what type of image array transfer should be used
-        //public enum ImageArrayTransferType
-        //{
-        //    JSON = 0,
-        //    Base64HandOff = 1,
-        //    GetBase64Image = 2,
-        //    GetImageBytes = 3,
-        //    BestAvailable = 4
-        //}
-
-        // Enum used by the dynamic client to indicate what type of compression should be used in responses
-        //public enum ImageArrayCompression
-        //{
-        //    None = 0,
-        //    Deflate = 1,
-        //    GZip = 2,
-        //    GZipOrDeflate = 3
-        //}
-
         // Default image array transfer constants
         public const ASCOM.Common.Alpaca.ImageArrayCompression DEFAULT_IMAGE_ARRAY_COMPRESSION = ASCOM.Common.Alpaca.ImageArrayCompression.None;
         public const ASCOM.Common.Alpaca.ImageArrayTransferType DEFAULT_IMAGE_ARRAY_TRANSFER_TYPE = ASCOM.Common.Alpaca.ImageArrayTransferType.BestAvailable;
@@ -124,8 +92,6 @@ namespace ASCOM.DynamicRemoteClients
         public const string BASE64_HANDOFF_HEADER = "base64handoff"; // Name of HTTP header used to affirm binary serialisation support for image array data
         public const string BASE64_HANDOFF_SUPPORTED = "true"; // Value of HTTP header to indicate support for binary serialised image array data
         public const string BASE64_HANDOFF_FILE_DOWNLOAD_URI_EXTENSION = "base64"; // Addition to the ImageArray and ImageArrayVariant method names from which base64 serialised image files can be downloaded
-        public const string GETBASE64IMAGE_ACTION_NAME = "GetBase64Image";
-        public const int GETBASE64IMAGE_SUPPORTED_VERSION = 1;
         public const string IMAGE_ARRAY_METHOD_NAME = "ImageArray";
 
         // Basic mime-type values

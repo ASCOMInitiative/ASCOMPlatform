@@ -885,12 +885,11 @@ namespace ASCOM.DynamicRemoteClients
                                 // No extra action because "accepts = application/json" will be applied automatically by the client
                                 break;
 
-                            case ImageArrayTransferType.GetBase64Image:
                             case ImageArrayTransferType.Base64HandOff:
                                 request.AddHeader(SharedConstants.BASE64_HANDOFF_HEADER, SharedConstants.BASE64_HANDOFF_SUPPORTED);
                                 break;
 
-                            case ImageArrayTransferType.GetImageBytes:
+                            case ImageArrayTransferType.ImageBytes:
                                 request.AddHeader(SharedConstants.ACCEPT_HEADER_NAME, SharedConstants.IMAGE_BYTES_ACCEPT_HEADER);
                                 break;
 
@@ -922,7 +921,7 @@ namespace ASCOM.DynamicRemoteClients
                     IRestResponse deviceJsonResponse;
 
                     // Use the more efficient .NET HttpClient to get the large image array as a byte[] for the ImageBytes mechanic
-                    if ((method == SharedConstants.IMAGE_ARRAY_METHOD_NAME) & ((imageArrayTransferType == ImageArrayTransferType.GetImageBytes) | ((imageArrayTransferType == ImageArrayTransferType.BestAvailable))))
+                    if ((method == SharedConstants.IMAGE_ARRAY_METHOD_NAME) & ((imageArrayTransferType == ImageArrayTransferType.ImageBytes) | ((imageArrayTransferType == ImageArrayTransferType.BestAvailable))))
                     {
                         deviceJsonResponse = GetResponse($"{client.BaseUrl}{uriBase}{method}".ToLowerInvariant(), SharedConstants.IMAGE_BYTES_ACCEPT_HEADER, TL); ;
                     }

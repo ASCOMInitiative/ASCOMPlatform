@@ -27,18 +27,6 @@ namespace ASCOM.DynamicRemoteClients
         // Constant to set the device type
         private const string DEVICE_TYPE = "Camera";
 
-        // GetBase64Image constants
-        private const string BASE64RESPONSE_COMMAND_NAME = "GetBase64Image";
-        private const int BASE64RESPONSE_VERSION_NUMBER = 1;
-        private const int BASE64RESPONSE_VERSION_POSITION = 0;
-        private const int BASE64RESPONSE_OUTPUTTYPE_POSITION = 4;
-        private const int BASE64RESPONSE_TRANSMISSIONTYPE_POSITION = 8;
-        private const int BASE64RESPONSE_RANK_POSITION = 12;
-        private const int BASE64RESPONSE_DIMENSION0_POSITION = 16;
-        private const int BASE64RESPONSE_DIMENSION1_POSITION = 20;
-        private const int BASE64RESPONSE_DIMENSION2_POSITION = 24;
-        private const int BASE64RESPONSE_DATA_POSITION = 48;
-
         // Instance specific variables
         private TraceLoggerPlus TL; // Private variable to hold the trace logger object
         private string DriverNumber; // This driver's number in the series 1, 2, 3...
@@ -49,7 +37,6 @@ namespace ASCOM.DynamicRemoteClients
         private uint clientNumber; // Unique number for this driver within the locaL server, i.e. across all drivers that the local server is serving
         private bool clientIsConnected;  // Connection state of this driver
         private string URIBase; // URI base unique to this driver
-        private bool? canGetBase64Image = null; // Indicator of whether the remote device supports GetBase64Image functionality
 
         // Variables to hold values that can be configured by the user through the setup form
         private bool traceState = true;
@@ -536,109 +523,8 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
-                object returnArray;
-
-                try
-                {
-                    // Special handling for GetBase64Image transfers
-
-                    // Determine whether we need to find out whether Getbase64Image functionality is provided by this driver
-                    if (
-                        (!canGetBase64Image.HasValue) &
-                        ((imageArrayTransferType == ImageArrayTransferType.GetBase64Image) |
-                         (imageArrayTransferType == ImageArrayTransferType.BestAvailable)
-                        )
-                       )
-                    {
-                        // Determine whether the remote device supports GetBase64Image
-                        // Try to get a SupportedActions response from the device, if anything goes wrong assume that the feature is not available
-                        try
-                        {
-                            // Initialise the supported flag to false
-                            canGetBase64Image = false;
-                            ArrayList supportedActions = this.SupportedActions;
-                            foreach (string action in supportedActions)
-                            {
-                                // Set the supported flag true if the device advertises that it supports GetBase64Image
-                                if (action.ToLowerInvariant() == GETBASE64IMAGE_ACTION_NAME.ToLowerInvariant()) canGetBase64Image = true;
-                                TL.LogMessage(clientNumber, "ImageArray", $"Found SupportedAction: {action}, canGetBase64Image: {canGetBase64Image.Value}.");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            // Just log any errors but otherwise ignore them
-                            TL.LogMessage(clientNumber, "ImageArray", $"Received an exception when trying to get the device's SupportedActions: {ex.Message}");
-                        }
-
-                    }
-
-                    // As a precaution, set values false if we have no value at this point
-                    if (!canGetBase64Image.HasValue) canGetBase64Image = false;
-
-                    // Throw an exception if GetBase64Image mode is explicitly requested but the device does not support this mode
-                    if ((imageArrayTransferType == ImageArrayTransferType.GetBase64Image) & !canGetBase64Image.Value) throw new InvalidOperationException("GetBase64Image transfer mode has been requested but the device does not support this mode.");
-
-                    TL.LogMessage(clientNumber, "ImageArray", $"ImageArray called - canGetBase64Image: {canGetBase64Image.Value}, imageArrayTransferType: {imageArrayTransferType}");
-
-                    // Use GetBase64Image mechanic if specified and available
-                   if (canGetBase64Image.Value & (imageArrayTransferType == ImageArrayTransferType.GetBase64Image))
-                    {
-                        Stopwatch sw = new Stopwatch();
-                        Stopwatch swOverall = new Stopwatch();
-
-                        // Call the GetBase64Image Action method to retrieve the image in base64 encoded form
-                        swOverall.Start();
-                        sw.Start();
-                        string base64String = this.Action(BASE64RESPONSE_COMMAND_NAME, "");
-                        sw.Stop();
-                        TL.LogMessage(clientNumber, "GetBase64Image", $"Received {base64String.Length} bytes in {sw.ElapsedMilliseconds}ms.");
-
-                        // Convert from base 64 encoding to byte[]
-                        sw.Restart();
-                        byte[] base64ArrayByteArray = Convert.FromBase64String(base64String);
-                        sw.Stop();
-                        TL.LogMessage(clientNumber, "GetBase64Image", $"Converted string to byte array in {sw.ElapsedMilliseconds}ms.");
-
-                        int metadataVersion = base64ArrayByteArray.GetMetadataVersion();
-                        TL.LogMessage(clientNumber, "GetBase64Image", $"Metadata version: {metadataVersion}");
-
-                        switch (metadataVersion)
-                        {
-                            case 1:
-                                ArrayMetadataV1 metadataV1 = base64ArrayByteArray.GetMetadataV1();
-                                TL.LogMessage(clientNumber, "GetBase64Image", $"Received array: Metadata version: {metadataV1.MetadataVersion} Image element type: {metadataV1.ImageElementType} Transmission element type: {metadataV1.TransmissionElementType} Array rank: {metadataV1.Rank} Dimension 0: {metadataV1.Dimension0} Dimension 1: {metadataV1.Dimension1} Dimension 2: {metadataV1.Dimension2}");
-                                break;
-
-                            default:
-                                throw new InvalidValueException($"GetBase64Image - ImageArrayBytes - Received an unsupported metadata version number: {metadataVersion} from the Alpaca device.");
-                        }
-
-                        // Convert the byte[] back to an image array
-                        sw.Restart();
-                        returnArray = base64ArrayByteArray.ToImageArray();
-                        TL.LogMessage(clientNumber, "GetBase64Image", $"Converted byte[] to image array in {sw.ElapsedMilliseconds}ms. Overall time: {swOverall.ElapsedMilliseconds}ms.");
-
-                        return returnArray;
-                    }
-
-                    // Throw an exception if GetBase64Image is specified but not available
-                    else if (!canGetBase64Image.Value & (imageArrayTransferType == ImageArrayTransferType.GetBase64Image))
-                    {
-                        throw new InvalidOperationException("GetBase64Image - The GetBase64Image transfer mechanic was specified but is not supported by this device.");
-                    }
-
-                    // Fall through to use ImageBytes or Base64 hand-off if available, otherwise to the JSON mechanic.
-                    else
-                    {
-                        DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
-                        return DynamicClientDriver.GetValue<Array>(clientNumber, client, URIBase, TL, SharedConstants.IMAGE_ARRAY_METHOD_NAME, imageArrayTransferType, imageArrayCompression, MemberTypes.Property);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    TL.LogMessageCrLf(clientNumber, "ImageArray", $"CameraBaseClass.ImageArray exception: {ex}");
-                    throw;
-                }
+                DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
+                return DynamicClientDriver.GetValue<Array>(clientNumber, client, URIBase, TL, SharedConstants.IMAGE_ARRAY_METHOD_NAME, imageArrayTransferType, imageArrayCompression, MemberTypes.Property);
             }
         }
 

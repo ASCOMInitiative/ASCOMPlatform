@@ -136,8 +136,7 @@ namespace ASCOM.DynamicRemoteClients
 
                 CmbImageArrayTransferType.Items.Add(ASCOM.Common.Alpaca.ImageArrayTransferType.JSON);
                 CmbImageArrayTransferType.Items.Add(ASCOM.Common.Alpaca.ImageArrayTransferType.Base64HandOff);
-                CmbImageArrayTransferType.Items.Add(ASCOM.Common.Alpaca.ImageArrayTransferType.GetBase64Image);
-                CmbImageArrayTransferType.Items.Add(ASCOM.Common.Alpaca.ImageArrayTransferType.GetImageBytes);
+                CmbImageArrayTransferType.Items.Add(ASCOM.Common.Alpaca.ImageArrayTransferType.ImageBytes);
                 CmbImageArrayTransferType.Items.Add(ASCOM.Common.Alpaca.ImageArrayTransferType.BestAvailable);
                 CmbImageArrayTransferType.SelectedItem = ImageArrayTransferType;
 
