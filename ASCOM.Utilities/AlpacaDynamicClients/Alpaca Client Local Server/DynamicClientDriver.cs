@@ -1185,7 +1185,8 @@ namespace ASCOM.DynamicRemoteClients
                                     $"[ {imageBytes[8]:X2} {imageBytes[9]:X2} {imageBytes[10]:X2} {imageBytes[11]:X2} ] [ {imageBytes[12]:X2} {imageBytes[13]:X2} {imageBytes[14]:X2} {imageBytes[15]:X2} ] " +
                                     $"[ {imageBytes[16]:X2} {imageBytes[17]:X2} {imageBytes[18]:X2} {imageBytes[19]:X2} ] [ {imageBytes[20]:X2} {imageBytes[21]:X2} {imageBytes[22]:X2} {imageBytes[23]:X2} ] " +
                                     $"[ {imageBytes[24]:X2} {imageBytes[25]:X2} {imageBytes[26]:X2} {imageBytes[27]:X2} ] [ {imageBytes[28]:X2} {imageBytes[29]:X2} {imageBytes[30]:X2} {imageBytes[31]:X2} ] " +
-                                    $"[ {imageBytes[32]:X2} {imageBytes[33]:X2} {imageBytes[34]:X2} {imageBytes[35]:X2} ]");
+                                    $"[ {imageBytes[32]:X2} {imageBytes[33]:X2} {imageBytes[34]:X2} {imageBytes[35]:X2} ] [ {imageBytes[36]:X2} {imageBytes[37]:X2} {imageBytes[38]:X2} {imageBytes[39]:X2} ] " +
+                                    $"[ {imageBytes[40]:X2} {imageBytes[41]:X2} {imageBytes[42]:X2} {imageBytes[43]:X2} ]");
 
                                 int metadataVersion = imageBytes.GetMetadataVersion();
                                 TL.LogMessage(clientNumber, "ImageBytes", $"Metadata version: {metadataVersion}");
@@ -1195,7 +1196,17 @@ namespace ASCOM.DynamicRemoteClients
                                 {
                                     case 1:
                                         ArrayMetadataV1 metadataV1 = imageBytes.GetMetadataV1();
-                                        TL.LogMessage(clientNumber, "ImageArrayBytes", $"Received array: Metadata version: {metadataV1.MetadataVersion} Image element type: {metadataV1.ImageElementType} Transmission element type: {metadataV1.TransmissionElementType} Array rank: {metadataV1.Rank} Dimension 0: {metadataV1.Dimension0} Dimension 1: {metadataV1.Dimension1} Dimension 2: {metadataV1.Dimension2} Error number: {metadataV1.ErrorNumber}.");
+                                        TL.LogMessage(clientNumber, "ImageArrayBytes", $"Received array: Metadata version: {metadataV1.MetadataVersion} " +
+                                            $"Error number: {metadataV1.ErrorNumber} " +
+                                            $"Client transaction ID: {metadataV1.ClientTransactionID} " +
+                                            $"Server transaction ID: {metadataV1.ServerTransactionID} " +
+                                            $"Image element type: {metadataV1.ImageElementType} " +
+                                            $"Transmission element type: {metadataV1.TransmissionElementType} " +
+                                            $"Array rank: {metadataV1.Rank} " +
+                                            $"Dimension 1: {metadataV1.Dimension1} " +
+                                            $"Dimension 2: {metadataV1.Dimension2} " +
+                                            $"Dimension 3: {metadataV1.Dimension3}.");
+
                                         errorNumber = metadataV1.ErrorNumber;
                                         break;
 
