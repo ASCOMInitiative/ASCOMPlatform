@@ -90,7 +90,7 @@ namespace ASCOM.DynamicRemoteClients
                 DynamicClientDriver.ConnectToRemoteDevice(ref client, ipAddressString, portNumber, establishConnectionTimeout, serviceType, TL, clientNumber, DriverProgId, DEVICE_TYPE,
                                                           standardDeviceResponseTimeout, userName, password, uniqueId, enableRediscovery, ipV6Enabled, ipV6Enabled, discoveryPort);
 
-                URIBase = string.Format("{0}{1}/{2}/{3}/", API_URL_BASE, API_VERSION_V1, DEVICE_TYPE, remoteDeviceNumber.ToString());
+                URIBase = string.Format("{0}{1}/{2}/{3}/", AlpacaConstants.API_URL_BASE, AlpacaConstants.API_VERSION_V1, DEVICE_TYPE, remoteDeviceNumber.ToString());
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "This devices's base URI: " + URIBase);
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "Establish communications timeout: " + establishConnectionTimeout.ToString());
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "Standard device response timeout: " + standardDeviceResponseTimeout.ToString());
@@ -317,8 +317,8 @@ namespace ASCOM.DynamicRemoteClients
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { DIRECTION_PARAMETER_NAME, ((int)Direction).ToString(CultureInfo.InvariantCulture) },
-                { DURATION_PARAMETER_NAME, Duration.ToString(CultureInfo.InvariantCulture) }
+                {AlpacaConstants.DIRECTION_PARAMETER_NAME, ((int)Direction).ToString(CultureInfo.InvariantCulture) },
+                { AlpacaConstants.DURATION_PARAMETER_NAME, Duration.ToString(CultureInfo.InvariantCulture) }
             };
             DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "PulseGuide", Parameters, Method.PUT, MemberTypes.Method);
         }
@@ -327,8 +327,8 @@ namespace ASCOM.DynamicRemoteClients
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { DURATION_PARAMETER_NAME, Duration.ToString(CultureInfo.InvariantCulture) },
-                { LIGHT_PARAMETER_NAME, Light.ToString() }
+                { AlpacaConstants.DURATION_PARAMETER_NAME, Duration.ToString(CultureInfo.InvariantCulture) },
+                { AlpacaConstants.LIGHT_PARAMETER_NAME, Light.ToString() }
             };
             DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "StartExposure", Parameters, Method.PUT, MemberTypes.Method);
         }
@@ -524,7 +524,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<Array>(clientNumber, client, URIBase, TL, SharedConstants.IMAGE_ARRAY_METHOD_NAME, imageArrayTransferType, imageArrayCompression, MemberTypes.Property);
+                return DynamicClientDriver.GetValue<Array>(clientNumber, client, URIBase, TL, AlpacaConstants.IMAGE_ARRAY_METHOD_NAME, imageArrayTransferType, imageArrayCompression, MemberTypes.Property);
             }
         }
 

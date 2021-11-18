@@ -27,6 +27,9 @@ using ASCOM.Common.Alpaca;
 using ASCOM.Alpaca.Clients;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Security.Policy;
+using System.Web;
+using ASCOM.Common.Com;
 
 namespace ASCOM.DynamicRemoteClients
 {
@@ -671,7 +674,7 @@ namespace ASCOM.DynamicRemoteClients
         /// <returns></returns>
         public static T GetValue<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, MemberTypes memberType)
         {
-            return GetValue<T>(clientNumber, client, URIBase, TL, method, SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, SharedConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT, memberType); // Set an arbitrary value for ImageArrayTransferType
+            return GetValue<T>(clientNumber, client, URIBase, TL, method, AlpacaConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, AlpacaConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT, memberType); // Set an arbitrary value for ImageArrayTransferType
         }
 
         /// <summary>
@@ -733,8 +736,8 @@ namespace ASCOM.DynamicRemoteClients
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { SharedConstants.ID_PARAMETER_NAME, index.ToString(CultureInfo.InvariantCulture) },
-                { SharedConstants.VALUE_PARAMETER_NAME, parmeterValue.ToString(CultureInfo.InvariantCulture) }
+                { AlpacaConstants.ID_PARAMETER_NAME, index.ToString(CultureInfo.InvariantCulture) },
+                { AlpacaConstants.VALUE_PARAMETER_NAME, parmeterValue.ToString(CultureInfo.InvariantCulture) }
             };
             SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT, memberType);
         }
@@ -743,8 +746,8 @@ namespace ASCOM.DynamicRemoteClients
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { SharedConstants.ID_PARAMETER_NAME, index.ToString(CultureInfo.InvariantCulture) },
-                { SharedConstants.STATE_PARAMETER_NAME, parmeterValue.ToString(CultureInfo.InvariantCulture) }
+                { AlpacaConstants.ID_PARAMETER_NAME, index.ToString(CultureInfo.InvariantCulture) },
+                { AlpacaConstants.STATE_PARAMETER_NAME, parmeterValue.ToString(CultureInfo.InvariantCulture) }
             };
             SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT, memberType);
         }
@@ -753,8 +756,8 @@ namespace ASCOM.DynamicRemoteClients
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { SharedConstants.ID_PARAMETER_NAME, index.ToString(CultureInfo.InvariantCulture) },
-                { SharedConstants.NAME_PARAMETER_NAME, parmeterValue.ToString(CultureInfo.InvariantCulture) }
+                { AlpacaConstants.ID_PARAMETER_NAME, index.ToString(CultureInfo.InvariantCulture) },
+                { AlpacaConstants.NAME_PARAMETER_NAME, parmeterValue.ToString(CultureInfo.InvariantCulture) }
             };
             SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, method, Parameters, Method.PUT, memberType);
         }
@@ -763,7 +766,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { SharedConstants.SENSORNAME_PARAMETER_NAME, parameterValue }
+                { AlpacaConstants.SENSORNAME_PARAMETER_NAME, parameterValue }
             };
             return SendToRemoteDevice<string>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET, memberType);
         }
@@ -772,7 +775,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { SharedConstants.SENSORNAME_PARAMETER_NAME, parameterValue }
+                { AlpacaConstants.SENSORNAME_PARAMETER_NAME, parameterValue }
             };
             return SendToRemoteDevice<double>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET, memberType);
         }
@@ -781,7 +784,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { SharedConstants.ID_PARAMETER_NAME, parameterValue.ToString(CultureInfo.InvariantCulture) }
+                { AlpacaConstants.ID_PARAMETER_NAME, parameterValue.ToString(CultureInfo.InvariantCulture) }
             };
             return SendToRemoteDevice<double>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET, memberType);
         }
@@ -790,7 +793,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { SharedConstants.ID_PARAMETER_NAME, parameterValue.ToString(CultureInfo.InvariantCulture) }
+                { AlpacaConstants.ID_PARAMETER_NAME, parameterValue.ToString(CultureInfo.InvariantCulture) }
             };
             return SendToRemoteDevice<bool>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET, memberType);
         }
@@ -799,7 +802,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { SharedConstants.ID_PARAMETER_NAME, parameterValue.ToString(CultureInfo.InvariantCulture) }
+                { AlpacaConstants.ID_PARAMETER_NAME, parameterValue.ToString(CultureInfo.InvariantCulture) }
             };
             return SendToRemoteDevice<string>(clientNumber, client, URIBase, TL, method, Parameters, Method.GET, memberType);
         }
@@ -818,7 +821,7 @@ namespace ASCOM.DynamicRemoteClients
         /// <returns></returns>
         public static T SendToRemoteDevice<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, Dictionary<string, string> Parameters, Method HttpMethod, MemberTypes memberType)
         {
-            return SendToRemoteDevice<T>(clientNumber, client, URIBase, TL, method, Parameters, HttpMethod, SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, SharedConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT, memberType);
+            return SendToRemoteDevice<T>(clientNumber, client, URIBase, TL, method, Parameters, HttpMethod, AlpacaConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, AlpacaConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT, memberType);
         }
 
         /// <summary>
@@ -886,16 +889,16 @@ namespace ASCOM.DynamicRemoteClients
                                 break;
 
                             case ImageArrayTransferType.Base64HandOff:
-                                request.AddHeader(SharedConstants.BASE64_HANDOFF_HEADER, SharedConstants.BASE64_HANDOFF_SUPPORTED);
+                                request.AddHeader(AlpacaConstants.BASE64_HANDOFF_HEADER, AlpacaConstants.BASE64_HANDOFF_SUPPORTED);
                                 break;
 
                             case ImageArrayTransferType.ImageBytes:
-                                request.AddHeader(SharedConstants.ACCEPT_HEADER_NAME, SharedConstants.IMAGE_BYTES_ACCEPT_HEADER);
+                                request.AddHeader(AlpacaConstants.ACCEPT_HEADER_NAME, AlpacaConstants.IMAGE_BYTES_ACCEPT_HEADER);
                                 break;
 
                             case ImageArrayTransferType.BestAvailable:
-                                request.AddHeader(SharedConstants.BASE64_HANDOFF_HEADER, SharedConstants.BASE64_HANDOFF_SUPPORTED);
-                                request.AddHeader(SharedConstants.ACCEPT_HEADER_NAME, SharedConstants.IMAGE_BYTES_ACCEPT_HEADER);
+                                request.AddHeader(AlpacaConstants.BASE64_HANDOFF_HEADER, AlpacaConstants.BASE64_HANDOFF_SUPPORTED);
+                                request.AddHeader(AlpacaConstants.ACCEPT_HEADER_NAME, AlpacaConstants.IMAGE_BYTES_ACCEPT_HEADER);
                                 break;
 
                             default:
@@ -905,8 +908,8 @@ namespace ASCOM.DynamicRemoteClients
 
                     // Add the transaction number and client ID parameters
                     uint transaction = TransactionNumber();
-                    request.AddParameter(SharedConstants.CLIENTTRANSACTION_PARAMETER_NAME, transaction.ToString());
-                    request.AddParameter(SharedConstants.CLIENTID_PARAMETER_NAME, clientNumber.ToString());
+                    request.AddParameter(AlpacaConstants.CLIENTTRANSACTION_PARAMETER_NAME, transaction.ToString());
+                    request.AddParameter(AlpacaConstants.CLIENTID_PARAMETER_NAME, clientNumber.ToString());
 
                     // Add any supplied parameters to the request
                     foreach (KeyValuePair<string, string> parameter in parameters)
@@ -921,9 +924,9 @@ namespace ASCOM.DynamicRemoteClients
                     IRestResponse deviceJsonResponse;
 
                     // Use the more efficient .NET HttpClient to get the large image array as a byte[] for the ImageBytes mechanic
-                    if ((method == SharedConstants.IMAGE_ARRAY_METHOD_NAME) & ((imageArrayTransferType == ImageArrayTransferType.ImageBytes) | ((imageArrayTransferType == ImageArrayTransferType.BestAvailable))))
+                    if ((method == AlpacaConstants.IMAGE_ARRAY_METHOD_NAME) & ((imageArrayTransferType == ImageArrayTransferType.ImageBytes) | ((imageArrayTransferType == ImageArrayTransferType.BestAvailable))))
                     {
-                        deviceJsonResponse = GetResponse($"{client.BaseUrl}{uriBase}{method}".ToLowerInvariant(), SharedConstants.IMAGE_BYTES_ACCEPT_HEADER, TL); ;
+                        deviceJsonResponse = GetResponse($"{client.BaseUrl}{uriBase}{method}".ToLowerInvariant(), AlpacaConstants.IMAGE_BYTES_ACCEPT_HEADER, clientNumber, transaction, TL); ;
                     }
                     else // Use the RestSharp client for everything else
                     {
@@ -935,7 +938,7 @@ namespace ASCOM.DynamicRemoteClients
                     long timeDeviceResponse = sw.ElapsedMilliseconds - lastTime;
 
                     // Log the device's response
-                    if (deviceJsonResponse.ContentType.ToLowerInvariant().Contains(SharedConstants.IMAGE_BYTES_MIME_TYPE)) // Image bytes response
+                    if (deviceJsonResponse.ContentType.ToLowerInvariant().Contains(AlpacaConstants.IMAGE_BYTES_MIME_TYPE)) // Image bytes response
                     {
                         TL.LogMessage(clientNumber, method, $"Response Status: '{deviceJsonResponse.StatusDescription}', Content type: {deviceJsonResponse.ContentType}, Content encoding: {deviceJsonResponse.ContentEncoding}, Content length: {deviceJsonResponse.ContentLength}, Protocol version: {deviceJsonResponse.ProtocolVersion}");
                     }
@@ -1136,7 +1139,7 @@ namespace ASCOM.DynamicRemoteClients
                             AxisRatesResponse axisRatesResponse = JsonConvert.DeserializeObject<AxisRatesResponse>(deviceJsonResponse.Content);
                             if (axisRatesResponse.Value != null) // A AxisRates object was returned so process the response normally
                             {
-                                AxisRates axisRates = new AxisRates((TelescopeAxes)(Convert.ToInt32(parameters[SharedConstants.AXIS_PARAMETER_NAME])));
+                                AxisRates axisRates = new AxisRates((TelescopeAxes)(Convert.ToInt32(parameters[AlpacaConstants.AXIS_PARAMETER_NAME])));
                                 TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, axisRatesResponse.ClientTransactionID.ToString(), axisRatesResponse.ServerTransactionID.ToString(), axisRatesResponse.Value.Count.ToString()));
                                 foreach (RateResponse rr in axisRatesResponse.Value)
                                 {
@@ -1170,7 +1173,7 @@ namespace ASCOM.DynamicRemoteClients
                             }
 
                             // Handle the ImageBytes image transfer mechanic
-                            if (deviceJsonResponse.ContentType.ToLowerInvariant().Contains(SharedConstants.IMAGE_BYTES_MIME_TYPE)) // Image bytes have been returned so the server supports raw array data transfer
+                            if (deviceJsonResponse.ContentType.ToLowerInvariant().Contains(AlpacaConstants.IMAGE_BYTES_MIME_TYPE)) // Image bytes have been returned so the server supports raw array data transfer
                             {
                                 Stopwatch swOverall = new Stopwatch();
 
@@ -1196,15 +1199,15 @@ namespace ASCOM.DynamicRemoteClients
                                 {
                                     case 1:
                                         ArrayMetadataV1 metadataV1 = imageBytes.GetMetadataV1();
-                                        TL.LogMessage(clientNumber, "ImageArrayBytes", $"Received array: Metadata version: {metadataV1.MetadataVersion} " +
-                                            $"Error number: {metadataV1.ErrorNumber} " +
-                                            $"Client transaction ID: {metadataV1.ClientTransactionID} " +
-                                            $"Server transaction ID: {metadataV1.ServerTransactionID} " +
-                                            $"Image element type: {metadataV1.ImageElementType} " +
-                                            $"Transmission element type: {metadataV1.TransmissionElementType} " +
-                                            $"Array rank: {metadataV1.Rank} " +
-                                            $"Dimension 1: {metadataV1.Dimension1} " +
-                                            $"Dimension 2: {metadataV1.Dimension2} " +
+                                        TL.LogMessage(clientNumber, "ImageArrayBytes", $"Received array: Metadata version: {metadataV1.MetadataVersion}, " +
+                                            $"Error number: {metadataV1.ErrorNumber}, " +
+                                            $"Client transaction ID: {metadataV1.ClientTransactionID}, " +
+                                            $"Server transaction ID: {metadataV1.ServerTransactionID}, " +
+                                            $"Image element type: {metadataV1.ImageElementType}, " +
+                                            $"Transmission element type: {metadataV1.TransmissionElementType}, " +
+                                            $"Array rank: {metadataV1.Rank}, " +
+                                            $"Dimension 1: {metadataV1.Dimension1}, " +
+                                            $"Dimension 2: {metadataV1.Dimension2}, " +
                                             $"Dimension 3: {metadataV1.Dimension3}.");
 
                                         errorNumber = metadataV1.ErrorNumber;
@@ -1226,7 +1229,7 @@ namespace ASCOM.DynamicRemoteClients
                             }
 
                             // Handle the base64 hand-off image transfer mechanic
-                            else if (deviceJsonResponse.Headers.Any(t => t.Name == SharedConstants.BASE64_HANDOFF_HEADER)) // Base64 format header is present so the server supports base64 serialised transfer
+                            else if (deviceJsonResponse.Headers.Any(t => t.Name == AlpacaConstants.BASE64_HANDOFF_HEADER)) // Base64 format header is present so the server supports base64 serialised transfer
                             {
                                 // De-serialise the JSON image array hand-off response 
                                 sw.Restart(); // Clear and start the stopwatch
@@ -1241,7 +1244,7 @@ namespace ASCOM.DynamicRemoteClients
                                     TL.LogMessage(clientNumber, method, $"Base64 - Downloading base64 serialised image");
 
                                     // Construct an HTTP request to get the base 64 encoded image
-                                    string base64Uri = (client.BaseUrl + uriBase.TrimStart('/') + method.ToLowerInvariant() + SharedConstants.BASE64_HANDOFF_FILE_DOWNLOAD_URI_EXTENSION).ToLowerInvariant(); // Create the download URI from the REST client elements
+                                    string base64Uri = (client.BaseUrl + uriBase.TrimStart('/') + method.ToLowerInvariant() + AlpacaConstants.BASE64_HANDOFF_FILE_DOWNLOAD_URI_EXTENSION).ToLowerInvariant(); // Create the download URI from the REST client elements
                                     if (TL.DebugTraceState) TL.LogMessage(clientNumber, method, $"Base64 URI: {base64Uri}");
 
                                     // Create a variable to hold the returned base 64 string
@@ -1484,10 +1487,10 @@ namespace ASCOM.DynamicRemoteClients
                             TL.LogMessageCrLf(clientNumber, method, string.Format("Received an Alpaca error - ErrorMessage: \"{0}\", ErrorNumber: 0x{1}", restResponseBase.ErrorMessage, restResponseBase.ErrorNumber.ToString("X8")));
 
                             // Handle ASCOM Alpaca reserved error numbers between 0x400 and 0xFFF by translating these to the COM HResult error number range: 0x80040400 to 0x80040FFF and throwing the translated value as an exception
-                            if ((restResponseBase.ErrorNumber >= SharedConstants.ALPACA_ERROR_CODE_BASE) & (restResponseBase.ErrorNumber <= SharedConstants.ALPACA_ERROR_CODE_MAX)) // This error is within the ASCOM Alpaca reserved error number range
+                            if ((restResponseBase.ErrorNumber >= (int)AlpacaErrors.AlpacaErrorCodeBase) & (restResponseBase.ErrorNumber <= (int)AlpacaErrors.AlpacaErrorCodeMax)) // This error is within the ASCOM Alpaca reserved error number range
                             {
                                 // Calculate the equivalent COM HResult error number from the supplied Alpaca error number so that comparison can be made with the original ASCOM COM exception HResult numbers that Windows clients expect in their exceptions
-                                int ascomCOMErrorNumber = restResponseBase.ErrorNumber + SharedConstants.ASCOM_ERROR_NUMBER_OFFSET;
+                                int ascomCOMErrorNumber = restResponseBase.ErrorNumber + (int)ComErrorCodes.ComErrorNumberOffset;
                                 TL.LogMessageCrLf(clientNumber, method, string.Format("Received Alpaca error code: {0} (0x{0:X4}), the equivalent COM error HResult error code is {1} (0x{1:X8})", restResponseBase.ErrorNumber, ascomCOMErrorNumber));
 
                                 // Now check whether the COM HResult matches any of the built-in ASCOM exception types. If so, we throw that exception type otherwise we throw a generic DriverException
@@ -1579,14 +1582,14 @@ namespace ASCOM.DynamicRemoteClients
                             if (ex.InnerException is System.Net.Sockets.SocketException) // There is an inner exception and it is a SocketException so apply the retry logic
                             {
                                 retryCounter += 1; // Increment the retry counter
-                                if (retryCounter <= SharedConstants.SOCKET_ERROR_MAXIMUM_RETRIES) // The retry count is less than or equal to the maximum allowed so retry the command
+                                if (retryCounter <= AlpacaConstants.SOCKET_ERROR_MAXIMUM_RETRIES) // The retry count is less than or equal to the maximum allowed so retry the command
                                 {
                                     TL.LogMessageCrLf(clientNumber, method, typeof(T).Name + " " + ex.Message);
                                     if (TL.DebugTraceState) TL.LogMessageCrLf(clientNumber, method, "SocketException: " + ex.ToString());
 
                                     // Log that we are retrying the command and wait a short time in the hope that the transient condition clears
-                                    TL.LogMessage(clientNumber, method, string.Format("Socket exception, retrying command - retry-count {0}/{1}", retryCounter, SharedConstants.SOCKET_ERROR_MAXIMUM_RETRIES));
-                                    Thread.Sleep(SharedConstants.SOCKET_ERROR_RETRY_DELAY_TIME);
+                                    TL.LogMessage(clientNumber, method, string.Format("Socket exception, retrying command - retry-count {0}/{1}", retryCounter, AlpacaConstants.SOCKET_ERROR_MAXIMUM_RETRIES));
+                                    Thread.Sleep(AlpacaConstants.SOCKET_ERROR_RETRY_DELAY_TIME);
                                 }
                                 else // The retry count exceeds the maximum allowed so throw the exception to the client
                                 {
@@ -1655,8 +1658,8 @@ namespace ASCOM.DynamicRemoteClients
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { SharedConstants.ACTION_COMMAND_PARAMETER_NAME, actionName },
-                { SharedConstants.ACTION_PARAMETERS_PARAMETER_NAME, actionParameters }
+                { AlpacaConstants.ACTION_COMMAND_PARAMETER_NAME, actionName },
+                { AlpacaConstants.ACTION_PARAMETERS_PARAMETER_NAME, actionParameters }
             };
             string remoteString = SendToRemoteDevice<string>(clientNumber, client, URIBase, TL, "Action", Parameters, Method.PUT, MemberTypes.Method);
 
@@ -1668,8 +1671,8 @@ namespace ASCOM.DynamicRemoteClients
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { SharedConstants.COMMAND_PARAMETER_NAME, command },
-                { SharedConstants.RAW_PARAMETER_NAME, raw.ToString() }
+                { AlpacaConstants.COMMAND_PARAMETER_NAME, command },
+                { AlpacaConstants.RAW_PARAMETER_NAME, raw.ToString() }
             };
             SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "CommandBlind", Parameters, Method.PUT, MemberTypes.Method);
             TL.LogMessage(clientNumber, "CommandBlind", "Completed OK");
@@ -1679,8 +1682,8 @@ namespace ASCOM.DynamicRemoteClients
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { SharedConstants.COMMAND_PARAMETER_NAME, command },
-                { SharedConstants.RAW_PARAMETER_NAME, raw.ToString() }
+                { AlpacaConstants.COMMAND_PARAMETER_NAME, command },
+                { AlpacaConstants.RAW_PARAMETER_NAME, raw.ToString() }
             };
             bool remoteBool = SendToRemoteDevice<bool>(clientNumber, client, URIBase, TL, "CommandBool", Parameters, Method.PUT, MemberTypes.Method);
 
@@ -1692,8 +1695,8 @@ namespace ASCOM.DynamicRemoteClients
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { SharedConstants.COMMAND_PARAMETER_NAME, command },
-                { SharedConstants.RAW_PARAMETER_NAME, raw.ToString() }
+                { AlpacaConstants.COMMAND_PARAMETER_NAME, command },
+                { AlpacaConstants.RAW_PARAMETER_NAME, raw.ToString() }
             };
             string remoteString = SendToRemoteDevice<string>(clientNumber, client, URIBase, TL, "CommandString", Parameters, Method.PUT, MemberTypes.Method);
 
@@ -1970,7 +1973,7 @@ namespace ASCOM.DynamicRemoteClients
         /// <param name="TL">TraceLogger for logging purposes.</param>
         /// <returns>A populated RestSharp RestResponse</returns>
         /// <remarks>This approach is used because of inexplicable delays that occured when using the RestSharp client to retieve large binary byte arrays.</remarks>
-        private static IRestResponse GetResponse(string url, string acceptString, TraceLogger TL)
+        private static IRestResponse GetResponse(string url, string acceptString, uint clientId, uint clientTransactionId, TraceLogger TL)
         {
             HttpClient wClient = new HttpClient();
             IEnumerable<string> contentTypeValues;
@@ -1980,11 +1983,20 @@ namespace ASCOM.DynamicRemoteClients
 
             //Add an ACCEPT header
             wClient.DefaultRequestHeaders.Accept.ParseAdd(acceptString);
+
+            // Add the ClientID and ClientTransactionID parameters
+            UriBuilder builder = new UriBuilder(url)
+            {
+                Query = $"{AlpacaConstants.CLIENTID_PARAMETER_NAME}={clientId}&{AlpacaConstants.CLIENTTRANSACTION_PARAMETER_NAME}={clientTransactionId}"
+            };
+
             sw.Start();
             swOverall.Start();
 
             // Get the data from the Alpaca device
-            using (HttpResponseMessage response = wClient.GetAsync(url, HttpCompletionOption.ResponseContentRead).Result)
+            // using (HttpResponseMessage response = wClient.GetAsync(url, HttpCompletionOption.ResponseContentRead).Result)
+
+            using (HttpResponseMessage response = wClient.GetAsync(builder.Uri, HttpCompletionOption.ResponseContentRead).Result)
             {
                 TL.LogMessage("GetResponse", $"GetAsync time: {sw.ElapsedMilliseconds}ms, Overall time: {swOverall.ElapsedMilliseconds}ms.");
 
@@ -1995,7 +2007,7 @@ namespace ASCOM.DynamicRemoteClients
                 if (headers is null) throw new InvalidValueException("The device did not return any headers. Expected a Content-Type header with a value of 'application/json' or 'text/json' or 'application/imagebytes'.");
 
                 // Extract the content type from tyhe headers
-                if (headers.TryGetValues(SharedConstants.CONTENT_TYPE_HEADER_NAME, out contentTypeValues))
+                if (headers.TryGetValues(AlpacaConstants.CONTENT_TYPE_HEADER_NAME, out contentTypeValues))
                 {
                     contentType = contentTypeValues.First().ToLowerInvariant();
                 }
@@ -2006,7 +2018,7 @@ namespace ASCOM.DynamicRemoteClients
                 TL.LogMessage("GetResponse", $"ReadAsByteArrayAsync time: {sw.ElapsedMilliseconds}ms, Overall time: {swOverall.ElapsedMilliseconds}ms.");
 
                 // If the content type is JSON - Populate the Content property with a string converted from the byte[] 
-                if ((contentType.Contains(SharedConstants.APPLICATION_JSON_MIME_TYPE)) | (contentType.Contains(SharedConstants.TEXT_JSON_MIME_TYPE)))
+                if ((contentType.Contains(AlpacaConstants.APPLICATION_JSON_MIME_TYPE)) | (contentType.Contains(AlpacaConstants.TEXT_JSON_MIME_TYPE)))
                 {
                     sw.Restart();
                     RestResponse restResponse = new RestResponse()
@@ -2023,7 +2035,7 @@ namespace ASCOM.DynamicRemoteClients
                 }
 
                 // If the content type is ImageBytes - ASsign the byte[] to the rawBytes property 
-                else if (contentType.ToLowerInvariant().Contains(SharedConstants.IMAGE_BYTES_MIME_TYPE))
+                else if (contentType.ToLowerInvariant().Contains(AlpacaConstants.IMAGE_BYTES_MIME_TYPE))
                 {
                     sw.Restart();
                     RestResponse restResponse = new RestResponse
