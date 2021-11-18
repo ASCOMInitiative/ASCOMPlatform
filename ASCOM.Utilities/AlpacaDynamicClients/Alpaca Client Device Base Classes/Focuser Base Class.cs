@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Windows.Forms;
-
+using ASCOM.Common.Alpaca;
 using ASCOM.DeviceInterface;
 using RestSharp;
 
@@ -84,7 +84,7 @@ namespace ASCOM.DynamicRemoteClients
                 DynamicClientDriver.ConnectToRemoteDevice(ref client, ipAddressString, portNumber, establishConnectionTimeout, serviceType, TL, clientNumber, DriverProgId, DEVICE_TYPE,
                                                           standardDeviceResponseTimeout, userName, password, uniqueId, enableRediscovery, ipV4Enabled, ipV6Enabled, discoveryPort);
 
-                URIBase = string.Format("{0}{1}/{2}/{3}/", SharedConstants.API_URL_BASE, SharedConstants.API_VERSION_V1, DEVICE_TYPE, remoteDeviceNumber.ToString());
+                URIBase = string.Format("{0}{1}/{2}/{3}/", AlpacaConstants.API_URL_BASE, AlpacaConstants.API_VERSION_V1, DEVICE_TYPE, remoteDeviceNumber.ToString());
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "This devices's base URI: " + URIBase);
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "Establish communications timeout: " + establishConnectionTimeout.ToString());
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "Standard device response timeout: " + standardDeviceResponseTimeout.ToString());
@@ -410,7 +410,7 @@ namespace ASCOM.DynamicRemoteClients
             DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { SharedConstants.POSITION_PARAMETER_NAME, Position.ToString(CultureInfo.InvariantCulture) }
+                { AlpacaConstants.POSITION_PARAMETER_NAME, Position.ToString(CultureInfo.InvariantCulture) }
             };
             DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "Move", Parameters, Method.PUT, MemberTypes.Method);
         }

@@ -32,5 +32,14 @@ namespace ASCOM.DynamicRemoteClients
         public const ImageArrayCompression DEFAULT_IMAGE_ARRAY_COMPRESSION = ImageArrayCompression.None;
         public const ImageArrayTransferType DEFAULT_IMAGE_ARRAY_TRANSFER_TYPE = ImageArrayTransferType.BestAvailable;
 
+        // Constants used by the generated dynamic client driver assembly
+        public const string ALPACA_CLIENT_LOCAL_SERVER_PATH = @"\ASCOM\AlpacaDynamicClients\"; // Relative path from CommonFiles
+        public const string ALPACA_CLIENT_LOCAL_SERVER = @"ASCOM.AlpacaClientLocalServer.exe"; // Name of the remote client local server application
+
+        // Driver naming constants
+        public const string DRIVER_DISPLAY_NAME = "ASCOM Alpaca Dynamic Client";
+        public const string DRIVER_PROGID_BASE = "ASCOM.AlpacaDynamic";
+        public const string NOT_CONNECTED_MESSAGE = "is not connected."; // This is appended to the driver display name + driver number and displayed when the driver is not connected
+
     }
 }
