@@ -22,9 +22,18 @@ namespace ASCOM.Simulator
             InitializeComponent();
             TL = traceLogger;
 
+            this.Load += SetupDialogForm_Load;
             // Initialise current values of user settings from the ASCOM Profile
             InitUI();
 
+        }
+
+        private void SetupDialogForm_Load(object sender, EventArgs e)
+        {
+            // Bring this form to the front of the screen
+            this.WindowState = FormWindowState.Minimized;
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
         }
 
         private void CmdOK_Click(object sender, EventArgs e) // OK button event handler

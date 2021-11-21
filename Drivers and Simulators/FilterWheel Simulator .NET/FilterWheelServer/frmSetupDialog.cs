@@ -15,7 +15,7 @@ namespace ASCOM.Simulator
     {
 
         // Declare Form control arrays.
-        private static TextBoxArray m_arrNameTextBox; 
+        private static TextBoxArray m_arrNameTextBox;
         private static TextBoxArray m_arrOffsetTextBox;
         private static PictureBoxArray m_arrColourPicBox;
 
@@ -24,12 +24,13 @@ namespace ASCOM.Simulator
         public frmSetupDialog()
         {
             InitializeComponent();
+            this.Load += FrmSetupDialog_Load;
 
             // Uncomment the line below to change the locale to German, for testing dot/comma decimal issues
             // System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("de-DE");
 
             // Create a tooltip object, and assign a few values
-            ToolTip aTooltip  = new ToolTip();
+            ToolTip aTooltip = new ToolTip();
             aTooltip.SetToolTip(picASCOM, "Visit the ASCOM website");
             aTooltip.SetToolTip(chkImplementsNames, "Driver returns default names if cleared");
             aTooltip.SetToolTip(chkImplementsOffsets, "Driver raises an exception if cleared");
@@ -40,11 +41,11 @@ namespace ASCOM.Simulator
             m_arrColourPicBox = new PictureBoxArray(this);
 
             // Populate the time combo with localised values
-            for (double j=0.5; j <= 4; j+=0.5)
+            for (double j = 0.5; j <= 4; j += 0.5)
                 cmbTime.Items.Add(j.ToString("F1"));
 
             // Create the textbox and picture controls on the form
-            for (int i=0; i <= 7; i++)
+            for (int i = 0; i <= 7; i++)
             {
                 // Add a new control
                 m_arrNameTextBox.AddNewTextBox(false);
@@ -77,7 +78,21 @@ namespace ASCOM.Simulator
 
         }
 
-#region Properties and Methods
+        private void FrmSetupDialog_Load(object sender, EventArgs e)
+        {
+            // Bring the setup dialogue to the front of the screen
+            if (WindowState == FormWindowState.Minimized)
+                WindowState = FormWindowState.Normal;
+            else
+            {
+                TopMost = true;
+                Focus();
+                BringToFront();
+                TopMost = false;
+            }
+        }
+
+        #region Properties and Methods
 
         public int Slots { set { cmbSlots.Text = value.ToString(); } }
 
@@ -121,12 +136,11 @@ namespace ASCOM.Simulator
 
         public bool ImplementsOffsets { set { chkImplementsOffsets.Checked = value; } }
 
-        public bool PreemptsMoves { set {chkPreemptMoves.Checked = value; } }
+        public bool PreemptsMoves { set { chkPreemptMoves.Checked = value; } }
 
-#endregion
+        #endregion
 
-
-#region Event Handlers
+        #region Event Handlers
 
         private void OK_Button_Click(object sender, EventArgs e)
         {
@@ -139,7 +153,7 @@ namespace ASCOM.Simulator
             try { i = Convert.ToInt32(float.Parse(cmbTime.Text, System.Globalization.NumberStyles.AllowDecimalPoint) * 1000); }
             catch { i = 1000; }
             SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, "Time", i.ToString());
-            for (i=0; i <= 7; i++)
+            for (i = 0; i <= 7; i++)
             {
                 SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, i.ToString(), m_arrNameTextBox[i].Text, "FilterNames");
                 SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, i.ToString(), m_arrOffsetTextBox[i].Text, "FocusOffsets");
@@ -244,13 +258,11 @@ namespace ASCOM.Simulator
         private void frmSetupDialog_Shown(object sender, EventArgs e)
         {
             EnableDisableControls();
-            this.BringToFront();
         }
 
-#endregion
+        #endregion
 
-
-#region Helpers
+        #region Helpers
 
         //
         // Make sure GUI elements are in sync with the number of slots
@@ -293,8 +305,7 @@ namespace ASCOM.Simulator
             }
         }
 
-#endregion
-
+        #endregion
 
     }
 }

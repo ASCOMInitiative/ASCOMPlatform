@@ -20,11 +20,11 @@ void iauS2c(double theta, double phi, double c[3])
 **  Returned:
 **     c        double[3]    direction cosines
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double cp;
@@ -35,11 +35,11 @@ void iauS2c(double theta, double phi, double c[3])
    c[1] = sin(theta) * cp;
    c[2] = sin(phi);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

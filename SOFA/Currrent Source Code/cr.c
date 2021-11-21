@@ -22,22 +22,22 @@ void iauCr(double r[3][3], double c[3][3])
 **  Called:
 **     iauCp        copy p-vector
 **
-**  This revision:  2016 May 19
+**  This revision:  2021 May 11
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    iauCp(r[0], c[0]);
    iauCp(r[1], c[1]);
    iauCp(r[2], c[2]);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

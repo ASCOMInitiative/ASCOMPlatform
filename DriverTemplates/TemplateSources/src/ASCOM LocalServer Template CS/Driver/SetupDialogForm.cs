@@ -17,7 +17,7 @@ namespace TEMPLATENAMESPACE
         public SetupDialogForm(TraceLogger tlDriver)
         {
             InitializeComponent();
-            
+
             // Save the provided trace logger for use within the setup dialogue
             tl = tlDriver;
 
@@ -28,9 +28,19 @@ namespace TEMPLATENAMESPACE
         private void CmdOK_Click(object sender, EventArgs e) // OK button event handler
         {
             // Place any validation constraint checks here and update the state variables with results from the dialogue
-            TEMPLATEDEVICECLASS.comPort = (string)comboBoxComPort.SelectedItem;
+
             tl.Enabled = chkTrace.Checked;
-            tl.LogMessage("Setup OK", $"New configuration values - Trace: {chkTrace.Checked}, COM Port: {comboBoxComPort.SelectedItem}");
+
+            // Update the COM port variable if one has been selected
+            if (comboBoxComPort.SelectedItem is null) // No COM port selected
+            {
+                tl.LogMessage("Setup OK", $"New configuration values - Trace: {chkTrace.Checked}, COM Port: Not selected");
+            }
+            else // A COM port has been selected
+            {
+                TEMPLATEDEVICECLASS.comPort = (string)comboBoxComPort.SelectedItem;
+                tl.LogMessage("Setup OK", $"New configuration values - Trace: {chkTrace.Checked}, COM Port: {comboBoxComPort.SelectedItem}");
+            }
         }
 
         private void CmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
@@ -57,7 +67,7 @@ namespace TEMPLATENAMESPACE
 
         private void InitUI()
         {
-            
+
             // Set the trace checkbox
             chkTrace.Checked = tl.Enabled;
 
@@ -71,16 +81,21 @@ namespace TEMPLATENAMESPACE
                 comboBoxComPort.SelectedItem = TEMPLATEDEVICECLASS.comPort;
             }
 
-            tl.LogMessage("InitUI",$"Set UI controls to Trace: {chkTrace.Checked}, COM Port: {comboBoxComPort.SelectedItem}");
+            tl.LogMessage("InitUI", $"Set UI controls to Trace: {chkTrace.Checked}, COM Port: {comboBoxComPort.SelectedItem}");
         }
 
         private void SetupDialogForm_Load(object sender, EventArgs e)
         {
-            // Bring this form to the front of the screen
-            this.WindowState = FormWindowState.Minimized;
-            this.Show();
-            this.WindowState = FormWindowState.Normal;
-
+            // Bring the setup dialogue to the front of the screen
+            if (WindowState == FormWindowState.Minimized)
+                WindowState = FormWindowState.Normal;
+            else
+            {
+                TopMost = true;
+                Focus();
+                BringToFront();
+                TopMost = false;
+            }
         }
     }
 }

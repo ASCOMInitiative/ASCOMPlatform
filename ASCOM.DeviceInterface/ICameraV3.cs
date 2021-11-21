@@ -950,12 +950,9 @@ namespace ASCOM.DeviceInterface
 
         /// <summary>
         /// Sensor name, Interface Version 2 only
-        /// ## Mandatory must return an empty string if the sensor is unknown
         /// </summary>
         /// <returns>The name of the sensor used within the camera.</returns>
-        /// <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an
-        /// active <see cref="Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-        /// <remarks><p style="color:red"><b>May throw a PropertyNotImplementedException if the sensor's name is not known.</b></p>
+        /// <remarks><p style="color:red"><b>Mandatory, must return an empty string if the sensor's name is not known.</b></p>
         /// <para>Returns the name (data sheet part number) of the sensor, e.g. ICX285AL.  The format is to be exactly as shown on
         /// manufacturer data sheet, subject to the following rules:
         /// <list type="bullet">

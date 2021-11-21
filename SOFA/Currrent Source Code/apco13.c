@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 int iauApco13(double utc1, double utc2, double dut1,
               double elong, double phi, double hm, double xp, double yp,
@@ -178,11 +179,11 @@ int iauApco13(double utc1, double utc2, double dut1,
 **     iauApco      astrometry parameters, ICRS-observed
 **     iauEors      equation of the origins, given NPB matrix and s
 **
-**  This revision:   2013 December 5
+**  This revision:   2021 February 24
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    int j;
@@ -232,7 +233,7 @@ int iauApco13(double utc1, double utc2, double dut1,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

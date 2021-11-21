@@ -8,7 +8,16 @@
     ' StartupNextInstance: Raised when launching a single-instance application and the application is already active. 
     ' NetworkAvailabilityChanged: Raised when the network connection is connected or disconnected.
     Partial Friend Class MyApplication
-
+        ' Catch an unhandled exception.
+        Private Sub MyApplication_UnhandledException(ByVal sender As Object, ByVal e As Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventArgs) Handles Me.UnhandledException
+            ' If the user clicks No, then exit.
+            e.ExitApplication =
+                MessageBox.Show(e.Exception.ToString() &
+                        vbCrLf & "Continue?", "Continue?",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question) _
+                        = DialogResult.No
+        End Sub
     End Class
 
 

@@ -17,7 +17,7 @@ using System.Text;
 using ASCOM;
 using ASCOM.Utilities;
 
-namespace ASCOM.TEMPLATEDEVICENAME.Server
+namespace ASCOM.LocalServer
 {
     /// <summary>
     /// The resources shared by all drivers and devices, in this example it's a serial port with a shared SendMessage method an idea for locking the message and handling connecting is given.

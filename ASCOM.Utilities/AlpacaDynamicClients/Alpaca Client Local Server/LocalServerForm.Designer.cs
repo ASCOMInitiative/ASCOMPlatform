@@ -53,6 +53,8 @@ namespace ASCOM.DynamicRemoteClients
             this.Name = "LocalServerForm";
             this.ShowInTaskbar = false;
             this.Text = "ASCOM Alpaca Dynamic Driver Host";
+            this.TopMost = true;
+            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.ResumeLayout(false);
 
         }

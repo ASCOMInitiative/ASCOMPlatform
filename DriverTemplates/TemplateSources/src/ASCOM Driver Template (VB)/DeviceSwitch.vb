@@ -3,7 +3,6 @@
 ' The //ENDOFINSERTEDFILE tag must be the last but one line in this file
 
 Imports ASCOM.DeviceInterface
-Imports ASCOM
 Imports ASCOM.Utilities
 
 Class DeviceSwitch
@@ -13,7 +12,7 @@ Class DeviceSwitch
 
 #Region "ISwitchV2 Implementation"
 
-    Dim numSwitches As Short
+    Dim numSwitches As Short = 0
 
     ''' <summary>
     ''' The number of switches managed by this driver
@@ -33,7 +32,7 @@ Class DeviceSwitch
     Public Function GetSwitchName(id As Short) As String Implements ISwitchV2.GetSwitchName
         Validate("GetSwitchName", id)
         TL.LogMessage("GetSwitchName", "Not Implemented")
-        Throw New ASCOM.MethodNotImplementedException("GetSwitchName")
+        Throw New MethodNotImplementedException("GetSwitchName")
     End Function
 
     ''' <summary>
@@ -44,29 +43,27 @@ Class DeviceSwitch
     Sub SetSwitchName(id As Short, name As String) Implements ISwitchV2.SetSwitchName
         Validate("SetSwitchName", id)
         TL.LogMessage("SetSwitchName", "Not Implemented")
-        Throw New ASCOM.MethodNotImplementedException("SetSwitchName")
+        Throw New MethodNotImplementedException("SetSwitchName")
     End Sub
 
     ''' <summary>
-    ''' Gets the description of the specified switch. This is to allow a fuller description of
-    ''' the switch to be returned, for example for a tool tip.
+    ''' Gets the description of the specified switch. This is to allow a fuller description of the switch to be returned, for example for a tool tip.
     ''' </summary>
     ''' <param name="id">The number of the switch whose description is to be returned</param><returns></returns>
-    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
     Public Function GetSwitchDescription(id As Short) As String Implements ISwitchV2.GetSwitchDescription
         Validate("GetSwitchDescription", id)
         TL.LogMessage("GetSwitchDescription", "Not Implemented")
-        Throw New ASCOM.MethodNotImplementedException("GetSwitchDescription")
+        Throw New MethodNotImplementedException("GetSwitchDescription")
     End Function
 
     ''' <summary>
     ''' Reports if the specified switch can be written to.
     ''' This is false if the switch cannot be written to, for example a limit switch or a sensor.
-    ''' The default is true.
     ''' </summary>
-    ''' <param name="id">The number of the switch whose write state is to be returned</param><returns>
-    '''   <c>true</c> if the switch can be set, otherwise <c>false</c>.
+    ''' <param name="id">The number of the switch whose write state is to be returned</param>
+    ''' <returns>
+    ''' <c>true</c> if the switch can be set, otherwise <c>false</c>.
     ''' </returns>
     ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
@@ -78,7 +75,7 @@ Class DeviceSwitch
 
 #Region "boolean members"
     ''' <summary>
-    ''' Return the state of switch n as a boolean
+    ''' Return the state of switch n as a boolean.
     ''' A multi-value switch must throw a MethodNotImplementedException.
     ''' </summary>
     ''' <param name="id">The switch number to return</param>
@@ -92,7 +89,6 @@ Class DeviceSwitch
     ''' <summary>
     ''' Sets a switch to the specified state, true or false.
     ''' If the switch cannot be set then throws a MethodNotImplementedException.
-    ''' A multi-value switch must throw a MethodNotImplementedException.
     ''' </summary>
     ''' <param name="ID">The number of the switch to set</param>
     ''' <param name="State">The required switch state</param>
@@ -106,32 +102,31 @@ Class DeviceSwitch
 
 #Region "Analogue members"
     ''' <summary>
-    ''' returns the maximum analogue value for this switch
-    ''' boolean switches must return 1.0
+    ''' Returns the maximum analogue value for this switch
+    ''' Boolean switches must return 1.0
     ''' </summary>
     ''' <param name="id"></param>
     ''' <returns></returns>
     Function MaxSwitchValue(id As Short) As Double Implements ISwitchV2.MaxSwitchValue
         Validate("MaxSwitchValue", id)
         TL.LogMessage("MaxSwitchValue", "Not Implemented")
-        Throw New ASCOM.MethodNotImplementedException("MaxSwitchValue")
+        Throw New MethodNotImplementedException("MaxSwitchValue")
     End Function
 
     ''' <summary>
-    ''' returns the minimum analogue value for this switch
-    ''' boolean switches must return 0.0
+    ''' Returns the minimum analogue value for this switch
+    ''' Boolean switches must return 0.0
     ''' </summary>
     ''' <param name="id"></param>
     ''' <returns></returns>
     Function MinSwitchValue(id As Short) As Double Implements ISwitchV2.MinSwitchValue
         Validate("MinSwitchValue", id)
         TL.LogMessage("MinSwitchValue", "Not Implemented")
-        Throw New ASCOM.MethodNotImplementedException("MinSwitchValue")
+        Throw New MethodNotImplementedException("MinSwitchValue")
     End Function
 
     ''' <summary>
-    ''' returns the step size that this switch supports. This gives the difference between
-    ''' successive values of the switch.
+    ''' returns the step size that this switch supports. This gives the difference between successive values of the switch.
     ''' The number of values is ((MaxSwitchValue - MinSwitchValue) / SwitchStep) + 1
     ''' boolean switches must return 1.0, giving two states.
     ''' </summary>
@@ -140,24 +135,24 @@ Class DeviceSwitch
     Function SwitchStep(id As Short) As Double Implements ISwitchV2.SwitchStep
         Validate("SwitchStep", id)
         TL.LogMessage("SwitchStep", "Not Implemented")
-        Throw New ASCOM.MethodNotImplementedException("SwitchStep")
+        Throw New MethodNotImplementedException("SwitchStep")
     End Function
 
     ''' <summary>
-    ''' returns the analogue switch value for switch id
-    ''' boolean switches must throw a MethodNotImplementedException
+    ''' Returns the analogue switch value for switch id
+    ''' Boolean switches must throw a MethodNotImplementedException
     ''' </summary>
     ''' <param name="id"></param>
     ''' <returns></returns>
     Function GetSwitchValue(id As Short) As Double Implements ISwitchV2.GetSwitchValue
         Validate("GetSwitchValue", id, False)
         TL.LogMessage("GetSwitchValue", "Not Implemented")
-        Throw New ASCOM.MethodNotImplementedException("GetSwitchValue")
+        Throw New MethodNotImplementedException("GetSwitchValue")
     End Function
 
     ''' <summary>
-    ''' set the analogue value for this switch.
-    ''' If the switch cannot be set then throws a MethodNotImplementedException.
+    ''' Set the analogue value for this switch.
+    ''' A MethodNotImplementedException should be thrown if CanWrite returns False
     ''' If the value is not between the maximum and minimum then throws an InvalidValueException
     ''' boolean switches must throw a MethodNotImplementedException
     ''' </summary>
@@ -169,11 +164,14 @@ Class DeviceSwitch
             Throw New InvalidValueException("", value.ToString(), String.Format("{0} to {1}", MinSwitchValue(id), MaxSwitchValue(id)))
         End If
         TL.LogMessage("SetSwitchValue", "Not Implemented")
-        Throw New ASCOM.MethodNotImplementedException("SetSwitchValue")
+        Throw New MethodNotImplementedException("SetSwitchValue")
     End Sub
 
 #End Region
+
 #End Region
+
+#Region "Private methods"
 
     ''' <summary>
     ''' Checks that the switch id is in range and throws an InvalidValueException if it isn't
@@ -182,7 +180,7 @@ Class DeviceSwitch
     ''' <param name="id">The id.</param>
     Private Sub Validate(message As String, id As Short)
         If (id < 0 Or id >= numSwitches) Then
-            Throw New ASCOM.InvalidValueException(message, id.ToString(), String.Format("0 to {0}", numSwitches - 1))
+            Throw New InvalidValueException(message, id.ToString(), String.Format("0 to {0}", numSwitches - 1))
         End If
     End Sub
 
@@ -218,7 +216,7 @@ Class DeviceSwitch
             Throw New InvalidValueException(message, value.ToString(), String.Format("Switch({0}) range {1} to {2}", id, min, max))
         End If
     End Sub
-
+#End Region
 
     '//ENDOFINSERTEDFILE
 End Class

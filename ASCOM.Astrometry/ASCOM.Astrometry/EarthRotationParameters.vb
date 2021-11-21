@@ -89,7 +89,10 @@ Public Class EarthRotationParameters : Implements IDisposable
     Protected Overridable Sub Dispose(disposing As Boolean)
         If Not disposedValue Then
             If disposing Then
-                Try : profile.Dispose() : Catch : End Try
+            End If
+            If Not (profile Is Nothing) Then
+                profile.Dispose()
+                profile = Nothing
             End If
         End If
         disposedValue = True
@@ -99,6 +102,13 @@ Public Class EarthRotationParameters : Implements IDisposable
     Public Sub Dispose() Implements IDisposable.Dispose
         ' Do not change this code.  Put clean-up code in Dispose(disposing As Boolean) above.
         Dispose(True)
+        GC.SuppressFinalize(Me)
+    End Sub
+
+    Protected Overrides Sub Finalize()
+        ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+        Dispose(False)
+        MyBase.Finalize()
     End Sub
 #End Region
 

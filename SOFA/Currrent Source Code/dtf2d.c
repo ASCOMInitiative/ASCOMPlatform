@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 #include <string.h>
 
 int iauDtf2d(const char *scale, int iy, int im, int id,
@@ -80,11 +81,11 @@ int iauDtf2d(const char *scale, int iy, int im, int id,
 **     iauDat       delta(AT) = TAI-UTC
 **     iauJd2cal    JD to Gregorian calendar
 **
-**  This revision:  2013 July 26
+**  This revision:  2021 May 11
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    int js, iy2, im2, id2;
@@ -155,9 +156,11 @@ int iauDtf2d(const char *scale, int iy, int im, int id,
 /* Status. */
    return js;
 
+/* Finished. */
+
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

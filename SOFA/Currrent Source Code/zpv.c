@@ -14,26 +14,26 @@ void iauZpv(double pv[2][3])
 **  Status:  vector/matrix support function.
 **
 **  Returned:
-**     pv       double[2][3]      pv-vector
+**     pv       double[2][3]      zero pv-vector
 **
 **  Called:
 **     iauZp        zero p-vector
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    iauZp(pv[0]);
    iauZp(pv[1]);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

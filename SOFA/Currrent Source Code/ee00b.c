@@ -46,9 +46,9 @@ double iauEe00b(double date1, double date2)
 **        Greenwich apparent ST = GMST + equation of the equinoxes
 **
 **  3) The result is compatible with the IAU 2000 resolutions except
-**     that accuracy has been compromised for the sake of speed.  For
-**     further details, see McCarthy & Luzum (2001), IERS Conventions
-**     2003 and Capitaine et al. (2003).
+**     that accuracy has been compromised (1 mas) for the sake of speed.
+**     For further details, see McCarthy & Luzum (2003), IERS
+**     Conventions 2003 and Capitaine et al. (2003).
 **
 **  Called:
 **     iauPr00      IAU 2000 precession adjustments
@@ -69,11 +69,11 @@ double iauEe00b(double date1, double date2)
 **     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG (2004)
 **
-**  This revision:  2008 May 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double dpsipr, depspr, epsa, dpsi, deps, ee;
@@ -93,9 +93,11 @@ double iauEe00b(double date1, double date2)
 
    return ee;
 
+/* Finished. */
+
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

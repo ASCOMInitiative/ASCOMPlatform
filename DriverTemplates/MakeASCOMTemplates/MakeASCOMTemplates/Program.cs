@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using Ionic.Zip;
+using System.IO.Compression;
 
 namespace MakeASCOMTemplates
 {
@@ -38,35 +38,18 @@ namespace MakeASCOMTemplates
         private static void MakeZipTemplates(string basePath)
         {
             DirectoryInfo di = new DirectoryInfo(Path.Combine(basePath, "src"));
-            foreach (var folder in di.GetDirectories())
+            foreach (DirectoryInfo folder in di.GetDirectories())
             {
-                // zip up the contents of the folder
-                using (ZipFile zip = new ZipFile())
-                {
-                    // check it's a template folder
-                    if (!File.Exists(Path.Combine(folder.FullName, "MyTemplate.vstemplate")))
-                        continue;
+                // Create the name of zipped zip archive
+                string zipFileName = Path.Combine(basePath, folder.Name + ".zip");
+                Console.WriteLine($"Zip filename: {zipFileName}");
 
-                    // add the directories
-                    foreach (var directory in folder.GetDirectories())
-                    {
-                        zip.AddDirectory(directory.FullName, directory.Name);
-                    }
+                // Delete previous version if present
+                if (File.Exists(zipFileName)) File.Delete(zipFileName);
 
-                    // add the files
-                    foreach (var item in folder.GetFiles())
-                    {
-                        zip.AddFile(item.FullName, "");
-                    }
-
-                    // Delete previous version if present
-                    zip.Name = Path.Combine(basePath, folder.Name + ".zip");
-                    if (File.Exists(zip.Name)) File.Delete(zip.Name);
-
-                    // Save the new version
-                    zip.Save();
-                    Console.WriteLine("Template {0} created", zip.Name);
-                }
+                // Create the ZIP file
+                ZipFile.CreateFromDirectory(folder.FullName, zipFileName);
+                Console.WriteLine("Template {0} created", zipFileName);
             }
         }
 
@@ -79,22 +62,18 @@ namespace MakeASCOMTemplates
         {
             string fullPath = Path.Combine(basePath, templatePath);
             DirectoryInfo di = new DirectoryInfo(fullPath);
-
-            using (ZipFile zip = new ZipFile())
+            string vsiFile = Path.Combine(basePath, "ASCOM 6 Driver Templates.vsi");
+            if (File.Exists(vsiFile))
+                File.Delete(vsiFile);
+            ZipArchive zipArchive = ZipFile.Open(vsiFile, ZipArchiveMode.Create);
+            foreach (FileInfo zipFile in di.GetFiles("*.zip"))
             {
-                foreach (var zipFile in di.GetFiles("*.zip"))
-                {
-                    zip.AddFile(zipFile.FullName, "");
-                }
-                
-                zip.AddFile(Path.Combine(fullPath, "driverTemplates.vscontent"), "");
-                string vsiFile = Path.Combine(basePath, "ASCOM 6 Driver Templates.vsi");
-                if (File.Exists(vsiFile))
-                    File.Delete(vsiFile);
-                zip.Save(vsiFile);
-
-                Console.WriteLine("VSI file {0} created", vsiFile);
+                zipArchive.CreateEntryFromFile(zipFile.FullName,zipFile.Name);
             }
+            zipArchive.CreateEntryFromFile(Path.Combine(fullPath, "driverTemplates.vscontent"), "driverTemplates.vscontent");
+            zipArchive.Dispose();
+
+            Console.WriteLine("VSI file {0} created", vsiFile);
 
         }
     }

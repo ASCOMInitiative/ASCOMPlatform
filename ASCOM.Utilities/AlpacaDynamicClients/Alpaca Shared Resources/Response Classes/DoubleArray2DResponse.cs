@@ -7,7 +7,7 @@ namespace ASCOM.DynamicRemoteClients
         private double[,] doubleArray2D;
 
         private const int RANK = 2;
-        private const SharedConstants.ImageArrayElementTypes TYPE = SharedConstants.ImageArrayElementTypes.Double;
+        private const ASCOM.Common.Alpaca.ImageArrayElementTypes TYPE = ASCOM.Common.Alpaca.ImageArrayElementTypes.Double;
 
         public DoubleArray2DResponse(uint clientTransactionID, uint transactionID, double[,] value)
         {
