@@ -920,6 +920,7 @@ namespace ASCOM.DynamicRemoteClients
                     // Call the remote device and get the response
                     lastTime = sw.ElapsedMilliseconds;
                     if (TL.DebugTraceState) TL.LogMessage(clientNumber, method, "Client Txn ID: " + transaction.ToString() + ", Sending command to remote device");
+                    if (TL.DebugTraceState) TL.LogMessage(clientNumber, method, $"Client base URL: '{client.BaseUrl}', URI base: '{uriBase}', Method: {method}.");
 
                     IRestResponse deviceJsonResponse;
 
@@ -1995,6 +1996,7 @@ namespace ASCOM.DynamicRemoteClients
 
             // Get the data from the Alpaca device
             // using (HttpResponseMessage response = wClient.GetAsync(url, HttpCompletionOption.ResponseContentRead).Result)
+            TL.LogMessage("GetResponse", $"Base address: '{wClient.BaseAddress}', relative URI: '{builder.Uri}'.");
 
             using (HttpResponseMessage response = wClient.GetAsync(builder.Uri, HttpCompletionOption.ResponseContentRead).Result)
             {
