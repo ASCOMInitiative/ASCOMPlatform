@@ -1,119 +1,119 @@
 ﻿using System;
-using System.Diagnostics;
+//using System.Diagnostics;
 
 using ASCOM.DeviceInterface;
 
 namespace ASCOM.DeviceHub
 {
-    public class DevHubTelescopeStatus : AscomTelescopeStatus, ICloneable
-    {
-        public static DevHubTelescopeStatus GetEmptyStatus()
-        {
-            DevHubTelescopeStatus status = new DevHubTelescopeStatus();
-            status.Clean();
-
-            return status;
-        }
-
-        public DevHubTelescopeStatus()
-            : base()
-        { }
-
-        public DevHubTelescopeStatus( DevHubTelescopeStatus other )
-            : base( other )
+	public class DevHubTelescopeStatus : AscomTelescopeStatus, ICloneable
+	{
+		public static DevHubTelescopeStatus GetEmptyStatus()
 		{
-            this.IsCounterWeightUp = other.IsCounterWeightUp;
-            this.LocalHourAngle = other.LocalHourAngle;
-            this.ParkingState = other.ParkingState;
+			DevHubTelescopeStatus status = new DevHubTelescopeStatus();
+			status.Clean();
+
+			return status;
 		}
 
-        public DevHubTelescopeStatus( TelescopeManager mgr )
-            : base( mgr )
-        {
-            try
-            {
-				ParkingState = mgr.ParkingState;
+		public DevHubTelescopeStatus()
+			: base()
+		{ }
 
-                double sidTime = SiderealTime;
-                double ra = RightAscension;
+		public DevHubTelescopeStatus( DevHubTelescopeStatus other )
+			: base( other )
+		{
+			this.IsCounterWeightUp = other.IsCounterWeightUp;
+			this.LocalHourAngle = other.LocalHourAngle;
+			this.ParkingState = other.ParkingState;
+		}
 
-                if ( Double.IsNaN( sidTime ) || Double.IsNaN( ra ) )
-                {
-                    LocalHourAngle = Double.NaN;
-                }
-                else
-                {
-                    LocalHourAngle = CalculateHourAngle( RightAscension );
-                }
+		public DevHubTelescopeStatus( TelescopeManager mgr )
+			: base( mgr )
+		{
+			try
+			{
+				ParkingState = this.AtPark ? ParkingStateEnum.IsAtPark : ParkingStateEnum.Unparked;
+
+				double sidTime = SiderealTime;
+				double ra = RightAscension;
+
+				if ( Double.IsNaN( sidTime ) || Double.IsNaN( ra ) )
+				{
+					LocalHourAngle = Double.NaN;
+				}
+				else
+				{
+					LocalHourAngle = CalculateHourAngle( RightAscension );
+				}
 
 				IsCounterWeightUp = ( mgr.Parameters.AlignmentMode == AlignmentModes.algGermanPolar
 										&& CalculateCounterWeightUp( SideOfPier, LocalHourAngle ) );
 
 			}
 			catch ( Exception )
-            {
-                IsCounterWeightUp = false;
-                ParkingState = ParkingStateEnum.Unparked;
-                LocalHourAngle = Double.NaN;
-            }
-        }
+			{
+				IsCounterWeightUp = false;
+				ParkingState = ParkingStateEnum.Unparked;
+				LocalHourAngle = Double.NaN;
+			}
+		}
 
-        #region Public Properties
+		#region Public Properties
 
-        public bool IsReadyToSlew => ParkingState == ParkingStateEnum.Unparked && !Slewing;
+		public bool IsReadyToSlew => ParkingState == ParkingStateEnum.Unparked && !Slewing;
 
-        #endregion
+		#endregion
 
-        #region Change Notification Properties
+		#region Change Notification Properties
 
-        private bool _isCounterWeightUp;
+		private bool _isCounterWeightUp;
 
-        public bool IsCounterWeightUp
-        {
-            get { return _isCounterWeightUp; }
-            set
-            {
-                if ( value != _isCounterWeightUp )
-                {
-                    _isCounterWeightUp = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+		public bool IsCounterWeightUp
+		{
+			get { return _isCounterWeightUp; }
+			set
+			{
+				if ( value != _isCounterWeightUp )
+				{
+					_isCounterWeightUp = value;
+					OnPropertyChanged();
+				}
+			}
+		}
 
-        private ParkingStateEnum _parkingState;
+		private ParkingStateEnum _parkingState;
 
-        public ParkingStateEnum ParkingState
-        {
-            get { return _parkingState; }
-            set
-            {
-                if ( value != _parkingState )
-                {
-                    _parkingState = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+		public ParkingStateEnum ParkingState
+		{
+			get { return _parkingState; }
+			set
+			{
+				if ( value != _parkingState )
+				{
+					_parkingState = value;
+					OnPropertyChanged();
+				}
+			}
+		}
 
-        private double _localHourAngle;
+		private double _localHourAngle;
 
-        public double LocalHourAngle
-        {
-            get { return _localHourAngle; }
-            set
-            {
-                if ( value != _localHourAngle )
-                {
-                    _localHourAngle = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+		public double LocalHourAngle
+		{
+			get { return _localHourAngle; }
+			set
+			{
+				if ( value != _localHourAngle )
+				{
+					_localHourAngle = value;
+					OnPropertyChanged();
+				}
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region Public Methods
+		#region Public Methods
 
 		public double CalculateHourAngle( double rightAscension )
 		{
@@ -126,35 +126,35 @@ namespace ASCOM.DeviceHub
 			return retval;
 		}
 
-        public override void Clean()
-        {
-            base.Clean();
+		public override void Clean()
+		{
+			base.Clean();
 
-            IsCounterWeightUp = false;
-            ParkingState = ( AtPark ) ? ParkingStateEnum.IsAtPark : ParkingStateEnum.Unparked;
-            LocalHourAngle = Double.NaN;
-        }
+			IsCounterWeightUp = false;
+			ParkingState = ( AtPark ) ? ParkingStateEnum.IsAtPark : ParkingStateEnum.Unparked;
+			LocalHourAngle = Double.NaN;
+		}
 
 		#region ICloneable Implementation
 
 		object ICloneable.Clone()
 		{
-            return new DevHubTelescopeStatus( this );
+			return new DevHubTelescopeStatus( this );
 		}
 
-        public new DevHubTelescopeStatus Clone()
+		public new DevHubTelescopeStatus Clone()
 		{
-            return new DevHubTelescopeStatus( this );
+			return new DevHubTelescopeStatus( this );
 		}
 
-        #endregion ICloneable Implementation
+		#endregion ICloneable Implementation
 
-        #endregion Public Methods
+		#endregion Public Methods
 
-        #region Helper Methods
+		#region Helper Methods
 
-        private bool CalculateCounterWeightUp( PierSide pierSide, double hourAngle )
-        {
+		private bool CalculateCounterWeightUp( PierSide pierSide, double hourAngle )
+		{
 			//	The CW state is determined by looking at two things:  pier side and hour angle (HA = LST – RA).  
 			//		Pier Side = West;                    0 > HA > -12              CW Down
 			//		Pier Side = East;                    0 < HA < +12              CW Down
@@ -164,25 +164,25 @@ namespace ASCOM.DeviceHub
 
 			bool retval = false;
 
-            if ( pierSide == PierSide.pierEast && -12 < hourAngle && hourAngle < 0 )
-            {
-                retval = true;
-            }
-            else if ( pierSide == PierSide.pierWest && 0 < hourAngle && hourAngle < 12 )
-            {
-                retval = true;
-            }
+			if ( pierSide == PierSide.pierEast && -12 < hourAngle && hourAngle < 0 )
+			{
+				retval = true;
+			}
+			else if ( pierSide == PierSide.pierWest && 0 < hourAngle && hourAngle < 12 )
+			{
+				retval = true;
+			}
 
-            return retval;
-        }
+			return retval;
+		}
 
 		private double ConditionHA( double ha )
-        {
-            double lowerBound = -12.0;
-            double upperBound = 12.0;
-            double range = upperBound - lowerBound;
+		{
+			double lowerBound = -12.0;
+			double upperBound = 12.0;
+			double range = upperBound - lowerBound;
 
-            double retval = ha;
+			double retval = ha;
 
 			while ( retval < lowerBound )
 			{
@@ -194,9 +194,9 @@ namespace ASCOM.DeviceHub
 				retval -= range;
 			}
 
-            return retval;
-        }
+			return retval;
+		}
 
-        #endregion
-    }
+		#endregion
+	}
 }

@@ -163,13 +163,14 @@ namespace Unit_Tests
 		{
 			if ( desiredState == ParkingStateEnum.IsAtPark )
 			{
-				Task.Run( () => ParkScopeTask() );
+				Task.Run( () => ParkScopeTask() ).Wait();
 			}
 			else
 			{
 				MockParkingState = ParkingStateEnum.Unparked;
 
 				Status = DevHubTelescopeStatus.GetEmptyStatus();
+				Status.AtPark = ( desiredState == ParkingStateEnum.IsAtPark );
 				Status.ParkingState = desiredState;
 
 				Messenger.Default.Send( new TelescopeStatusUpdatedMessage( Status ) );
@@ -297,6 +298,7 @@ namespace Unit_Tests
 
 			MockParkingState = ParkingStateEnum.IsAtPark;
 
+			Status.AtPark = true;
 			Status.ParkingState = MockParkingState;
 
 			Messenger.Default.Send( new TelescopeStatusUpdatedMessage( Status ) );
