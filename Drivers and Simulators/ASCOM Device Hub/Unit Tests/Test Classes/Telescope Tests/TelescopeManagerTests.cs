@@ -30,6 +30,8 @@ namespace Unit_Tests.Telescope
 		{
 			ServiceContainer.Instance.ClearAllServices();
 			ServiceContainer.Instance.AddService<ITelescopeService>( new MockTelescopeService() );
+			Globals.UISyncContext = TaskScheduler.Default;
+
 			_mgr = TelescopeManager.Instance;
 			_svc = (MockTelescopeService)ServiceContainer.Instance.GetService<ITelescopeService>();
 			TelescopeManager.Instance.SetFastUpdatePeriod( 0.5 );
@@ -37,8 +39,6 @@ namespace Unit_Tests.Telescope
 			Assert.AreEqual( true, retval );
 
 			Thread.Sleep( _startupDelayMs );
-
-			Globals.UISyncContext = TaskScheduler.Default;
 		}
 
 		[TestCleanup]
@@ -324,13 +324,16 @@ namespace Unit_Tests.Telescope
 
 			_mgr.BeginSlewToCoordinatesAsync( targetRaDec.X, targetRaDec.Y );
 
-			while( _mgr.Slewing )
+			while ( _mgr.Slewing )
 			{
 				Thread.Sleep( 1000 );
 			}
 
-			Assert.AreEqual( _svc.MockRaDec.X, targetRaDec.X, _tolerance );
-			Assert.AreEqual( _svc.MockRaDec.Y, targetRaDec.Y, _tolerance );
+			if ( !Double.IsNaN( _svc.MockRaDec.X ) || !Double.IsNaN( targetRaDec.X ) )
+			{
+				Assert.AreEqual( _svc.MockRaDec.X, targetRaDec.X, _tolerance );
+				Assert.AreEqual( _svc.MockRaDec.Y, targetRaDec.Y, _tolerance );
+			}
 		}
 
 		[TestMethod]
@@ -409,6 +412,37 @@ namespace Unit_Tests.Telescope
 		}
 
 		[TestMethod]
+		[ExpectedException( typeof( ASCOM.InvalidOperationException ) )]
+		public void MeridianFlipTestNonGem()
+		{
+			// Unpark the scope and start tracking.
+
+			_svc.MockAtPark = false;
+			_svc.MockTracking = true;
+			_svc.MockSideOfPier = PierSide.pierUnknown;
+			_svc.MockAlignmentMode = AlignmentModes.algPolar;
+			_mgr.Parameters.AlignmentMode = AlignmentModes.algPolar;
+			_mgr.Status.SideOfPier = PierSide.pierUnknown;
+
+			Thread.Sleep( 5000 ); // Give the telescope manager time to do a status update.
+
+			Assert.IsFalse( _mgr.AtPark );
+			Assert.IsTrue( _mgr.Tracking );
+			Assert.IsTrue( _mgr.Capabilities.CanSetPierSide );
+			Assert.IsTrue( _mgr.Status.SideOfPier == PierSide.pierUnknown );
+
+			// Verify that both the Manager and the Service have unknown side-of-pier.
+
+			PierSide sop = _mgr.SideOfPier;
+			Assert.IsTrue( sop == PierSide.pierUnknown );
+			Assert.IsTrue( sop == _svc.SideOfPier );
+
+			// Do the flip. This should cause an InvalidOperationException.
+
+			_mgr.StartMeridianFlip();
+		}
+
+		[TestMethod]
 		public void SetRaOffsetTrackingRateTest()
 		{
 			double raRate = 0.95;
@@ -469,6 +503,17 @@ namespace Unit_Tests.Telescope
 			_svc.MockIsWeakDriver = true;
 			targetSOP = _mgr.GetTargetSideOfPier( targetPosition.X, targetPosition.Y );
 			Assert.IsTrue( targetSOP == PierSide.pierEast );
+
+			// Testing for unflippable mounts.
+
+			_svc.MockIsWeakDriver = false;
+			_svc.MockAlignmentMode = AlignmentModes.algPolar;
+			_mgr.Parameters.AlignmentMode = AlignmentModes.algPolar;
+			targetSOP = _mgr.GetTargetSideOfPier( targetPosition.X, targetPosition.Y );
+			Assert.IsTrue( targetSOP == PierSide.pierUnknown );
+			_svc.MockAlignmentMode = AlignmentModes.algAltAz;
+			targetSOP = _mgr.GetTargetSideOfPier( targetPosition.X, targetPosition.Y );
+			Assert.IsTrue( targetSOP == PierSide.pierUnknown );
 		}
 
 		[TestMethod]

@@ -132,8 +132,8 @@ namespace Unit_Tests.Telescope
 		public void ChangeParkState()
 		{
 			DevHubTelescopeStatus sts = DevHubTelescopeStatus.GetEmptyStatus();
-			sts.ParkingState = ParkingStateEnum.IsAtPark;
 			sts.AtPark = true;
+			sts.ParkingState = ParkingStateEnum.IsAtPark;
 			_mgr.Status = sts;
 			_vm.Status = sts;
 
@@ -142,11 +142,13 @@ namespace Unit_Tests.Telescope
 			_prVm.Invoke( "ChangeParkState" );
 			Thread.Sleep( 2500 );
 			Assert.IsFalse( _vm.Status.AtPark );
+			Assert.AreEqual<ParkingStateEnum>( ParkingStateEnum.Unparked, _vm.Status.ParkingState );
 
 			_prVm.Invoke( "ChangeParkState" );
 
 			Thread.Sleep( 2500 );
-			Assert.AreEqual( ParkingStateEnum.IsAtPark, _vm.Status.ParkingState );
+			Assert.IsTrue( _vm.Status.AtPark );
+			Assert.AreEqual<ParkingStateEnum>( ParkingStateEnum.IsAtPark, _vm.Status.ParkingState );
 
 			_prVm.Invoke( "RegisterStatusUpdateMessage", false );
 		}

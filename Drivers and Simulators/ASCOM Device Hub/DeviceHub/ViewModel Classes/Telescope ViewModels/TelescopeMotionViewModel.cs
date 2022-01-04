@@ -777,10 +777,6 @@ namespace ASCOM.DeviceHub
 			{
 				TelescopeManager.StopJogScope( ndx );
 			}
-			else if ( _isFixedSlewInProgress )
-			{
-				TelescopeManager.AbortDirectSlew();
-			}
 		}
 
 		#endregion StopMotionCommand
