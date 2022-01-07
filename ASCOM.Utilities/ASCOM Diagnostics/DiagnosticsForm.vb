@@ -7003,7 +7003,7 @@ Public Class DiagnosticsForm
     Private Sub ScanPlatform6Logs()
 
         Dim fileList() As String
-        Dim setupFiles As SortedList(Of DateTime, String) = New SortedList(Of DateTime, String)
+        Dim setupFiles As List(Of KeyValuePair(Of DateTime, String)) = New List(Of KeyValuePair(Of DateTime, String))
         Dim streamReader As StreamReader = Nothing
         Dim fileInfo As FileInfo
 
@@ -7015,24 +7015,24 @@ Public Class DiagnosticsForm
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOMPlatform6Install*.txt", SearchOption.TopDirectoryOnly)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
-                setupFiles.Add(fileInfo.CreationTime, foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
             Next
 
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.UninstallASCOM.*.txt", SearchOption.AllDirectories)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
-                setupFiles.Add(fileInfo.CreationTime, foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
             Next
 
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.FinaliseInstall.*.txt", SearchOption.AllDirectories)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
-                setupFiles.Add(fileInfo.CreationTime, foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
             Next
 
             TL.LogMessage("ScanPlatform6Logs", "Found the following installation logs:")
             For Each foundFile In setupFiles
-                TL.LogMessage("ScanPlatform6Logs", String.Format("  Date: {0} Log: {1}", foundFile.Key.ToString("dd MMM yyyy HH:mm:ss"), foundFile.Value))
+                TL.LogMessage("ScanPlatform6Logs", $"  Date: {foundFile.Key:dd MMM yyyy HH:mm:ss} Log: {foundFile.Value}")
             Next
 
             TL.BlankLine()
