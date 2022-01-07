@@ -925,7 +925,7 @@ namespace ASCOM.DynamicRemoteClients
                     IRestResponse deviceJsonResponse;
 
                     // Use the more efficient .NET HttpClient to get the large image array as a byte[] for the ImageBytes mechanic
-                    if ((method == AlpacaConstants.IMAGE_ARRAY_METHOD_NAME) & ((imageArrayTransferType == ImageArrayTransferType.ImageBytes) | ((imageArrayTransferType == ImageArrayTransferType.BestAvailable))))
+                    if ((typeof(T) == typeof(Array)) & ((imageArrayTransferType == ImageArrayTransferType.ImageBytes) | ((imageArrayTransferType == ImageArrayTransferType.BestAvailable))))
                     {
                         deviceJsonResponse = GetResponse($"{client.BaseUrl}{uriBase}{method}".ToLowerInvariant(), AlpacaConstants.IMAGE_BYTES_ACCEPT_HEADER, clientNumber, transaction, TL); ;
                     }
@@ -934,7 +934,6 @@ namespace ASCOM.DynamicRemoteClients
                         deviceJsonResponse = client.Execute(request);
                     }
                     if (TL.DebugTraceState) TL.LogMessage(clientNumber, method, $"Returned data content type: '{deviceJsonResponse.ContentType}'");
-
 
                     long timeDeviceResponse = sw.ElapsedMilliseconds - lastTime;
 
@@ -1845,11 +1844,26 @@ namespace ASCOM.DynamicRemoteClients
                         objectArray2D = new object[returnArray.GetLength(0), returnArray.GetLength(1)];
                         switch (variantType)
                         {
+                            case "Byte[,]":
+                                Byte[,] byte2DArray = (Byte[,])returnArray;
+
+                                sw.Restart();
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
+                                {
+                                    for (int j = 0; j < returnArray.GetLength(1); j++)
+                                    {
+                                        objectArray2D[i, j] = byte2DArray[i, j];
+                                    }
+                                });
+
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying Byte[,] array in {sw.ElapsedMilliseconds}ms.");
+                                return objectArray2D;
+
                             case "Int16[,]":
                                 Int16[,] short2DArray = (Int16[,])returnArray;
 
                                 sw.Restart();
-                                Parallel.For(0, short2DArray.GetLength(0), (i) =>
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
                                 {
                                     for (int j = 0; j < returnArray.GetLength(1); j++)
                                     {
@@ -1860,11 +1874,26 @@ namespace ASCOM.DynamicRemoteClients
                                 TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying Int16[,] array in {sw.ElapsedMilliseconds}ms.");
                                 return objectArray2D;
 
-                            case "Int32[,]":
-                                int[,] int2DArray = (int[,])returnArray;
+                            case "UInt16[,]":
+                                UInt16[,] uint16Array2D = (UInt16[,])returnArray;
 
                                 sw.Restart();
-                                Parallel.For(0, int2DArray.GetLength(0), (i) =>
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
+                                {
+                                    for (int j = 0; j < returnArray.GetLength(1); j++)
+                                    {
+                                        objectArray2D[i, j] = uint16Array2D[i, j];
+                                    }
+                                });
+
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying UInt16[,] array in {sw.ElapsedMilliseconds}ms.");
+                                return objectArray2D;
+
+                            case "Int32[,]":
+                                Int32[,] int2DArray = (Int32[,])returnArray;
+
+                                sw.Restart();
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
                                 {
                                     for (int j = 0; j < returnArray.GetLength(1); j++)
                                     {
@@ -1875,11 +1904,71 @@ namespace ASCOM.DynamicRemoteClients
                                 TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying Int32[,] array in {sw.ElapsedMilliseconds}ms.");
                                 return objectArray2D;
 
-                            case "Double[,]":
-                                double[,] double2DArray = (double[,])returnArray;
+                            case "UInt32[,]":
+                                UInt32[,] uint2DArray = (UInt32[,])returnArray;
 
                                 sw.Restart();
-                                Parallel.For(0, double2DArray.GetLength(0), (i) =>
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
+                                {
+                                    for (int j = 0; j < returnArray.GetLength(1); j++)
+                                    {
+                                        objectArray2D[i, j] = uint2DArray[i, j];
+                                    }
+                                });
+
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying UInt32[,] array in {sw.ElapsedMilliseconds}ms.");
+                                return objectArray2D;
+
+                            case "Int64[,]":
+                                Int64[,] int64Array2D = (Int64[,])returnArray;
+
+                                sw.Restart();
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
+                                {
+                                    for (int j = 0; j < returnArray.GetLength(1); j++)
+                                    {
+                                        objectArray2D[i, j] = int64Array2D[i, j];
+                                    }
+                                });
+
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying Int64[,] array in {sw.ElapsedMilliseconds}ms.");
+                                return objectArray2D;
+
+                            case "UInt64[,]":
+                                UInt64[,] uint64Array2D = (UInt64[,])returnArray;
+
+                                sw.Restart();
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
+                                {
+                                    for (int j = 0; j < returnArray.GetLength(1); j++)
+                                    {
+                                        objectArray2D[i, j] = uint64Array2D[i, j];
+                                    }
+                                });
+
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying UInt64[,] array in {sw.ElapsedMilliseconds}ms.");
+                                return objectArray2D;
+
+                            case "Single[,]":
+                                Single[,] single2DArray = (Single[,])returnArray;
+
+                                sw.Restart();
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
+                                {
+                                    for (int j = 0; j < returnArray.GetLength(1); j++)
+                                    {
+                                        objectArray2D[i, j] = single2DArray[i, j];
+                                    }
+                                });
+
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying Single[,] array in {sw.ElapsedMilliseconds}ms.");
+                                return objectArray2D;
+
+                            case "Double[,]":
+                                Double[,] double2DArray = (Double[,])returnArray;
+
+                                sw.Restart();
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
                                 {
                                     for (int j = 0; j < returnArray.GetLength(1); j++)
                                     {
@@ -1891,7 +1980,7 @@ namespace ASCOM.DynamicRemoteClients
                                 return objectArray2D;
 
                             case "Object[,]":
-                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Returning Object[,] array to client");
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Received an Object[,] array, returning it directly to the client without further processing.");
                                 return returnArray;
 
                             default:
@@ -1901,50 +1990,160 @@ namespace ASCOM.DynamicRemoteClients
                         objectArray3D = new object[returnArray.GetLength(0), returnArray.GetLength(1), returnArray.GetLength(2)];
                         switch (variantType)
                         {
-                            case "Int16[,,]":
-                                objectArray3D = new object[returnArray.GetLength(0), returnArray.GetLength(1), 3];
-                                for (int i = 0; i < returnArray.GetLength(1); i++)
-                                {
-                                    for (int j = 0; j < returnArray.GetLength(0); j++)
-                                    {
-                                        for (int k = 0; k < 3; k++)
-                                            objectArray3D[j, i, k] = ((short[,,])returnArray)[j, i, k];
-                                    }
-                                }
-                                return objectArray3D;
+                            case "Byte[,,]":
+                                Byte[,,] byte3DArray = (Byte[,,])returnArray;
 
-                            case "Int32[,,]":
                                 sw.Restart();
-                                int[,,] int3DArray = (int[,,])returnArray;
-
-                                for (int k = 0; k < returnArray.GetLength(2); k++)
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
                                 {
                                     for (int j = 0; j < returnArray.GetLength(1); j++)
                                     {
-                                        for (int i = 0; i < returnArray.GetLength(0); i++)
+                                        for (int k = 0; k < returnArray.GetLength(2); k++)
+                                            objectArray3D[i, j, k] = byte3DArray[i, j, k];
+                                    }
+                                });
+
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying Byte[,,] array in {sw.ElapsedMilliseconds}ms.");
+                                return objectArray3D;
+
+                            case "Int16[,,]":
+                                Int16[,,] short3DArray = (Int16[,,])returnArray;
+
+                                sw.Restart();
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
+                                {
+                                    for (int j = 0; j < returnArray.GetLength(1); j++)
+                                    {
+                                        for (int k = 0; k < returnArray.GetLength(2); k++)
+                                            objectArray3D[i, j, k] = short3DArray[i, j, k];
+                                    }
+                                });
+
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying Int16[,,] array in {sw.ElapsedMilliseconds}ms.");
+                                return objectArray3D;
+
+                            case "UInt16[,,]":
+                                UInt16[,,] uint16Array3D = (UInt16[,,])returnArray;
+ 
+                                sw.Restart();
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
+                                {
+                                    for (int j = 0; j < returnArray.GetLength(1); j++)
+                                    {
+                                        for (int k = 0; k < returnArray.GetLength(2); k++)
+                                            objectArray3D[i, j, k] = uint16Array3D[i, j, k];
+                                    }
+                                });
+
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying UInt16[,,] array in {sw.ElapsedMilliseconds}ms.");
+                                return objectArray3D;
+
+                            case "Int32[,,]":
+                                Int32[,,] int3DArray = (Int32[,,])returnArray;
+   
+                                sw.Restart();
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
+                                {
+                                    for (int j = 0; j < returnArray.GetLength(1); j++)
+                                    {
+                                        for (int k = 0; k < returnArray.GetLength(2); k++)
                                         {
                                             objectArray3D[i, j, k] = int3DArray[i, j, k];
                                         }
                                     }
-                                }
+                                });
 
                                 TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying Int32[,,] array in {sw.ElapsedMilliseconds}ms.");
+                                return objectArray3D;
 
+                            case "UInt32[,,]":
+                                UInt32[,,] uint32Array3D = (UInt32[,,])returnArray;
+
+                                sw.Restart();
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
+                                {
+                                    for (int j = 0; j < returnArray.GetLength(1); j++)
+                                    {
+                                        for (int k = 0; k < returnArray.GetLength(2); k++)
+                                        {
+                                            objectArray3D[i, j, k] = uint32Array3D[i, j, k];
+                                        }
+                                    }
+                                });
+
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying UInt32[,,] array in {sw.ElapsedMilliseconds}ms.");
+                                return objectArray3D;
+
+                            case "Int64[,,]":
+                                Int64[,,] int64Array3D = (Int64[,,])returnArray;
+
+                                sw.Restart();
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
+                                {
+                                    for (int j = 0; j < returnArray.GetLength(1); j++)
+                                    {
+                                        for (int k = 0; k < returnArray.GetLength(2); k++)
+                                        {
+                                            objectArray3D[i, j, k] = int64Array3D[i, j, k];
+                                        }
+                                    }
+                                });
+
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying Int64[,,] array in {sw.ElapsedMilliseconds}ms.");
+                                return objectArray3D;
+
+                            case "UInt64[,,]":
+                                UInt64[,,] uint64Array3D = (UInt64[,,])returnArray;
+
+                                sw.Restart();
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
+                                {
+                                    for (int j = 0; j < returnArray.GetLength(1); j++)
+                                    {
+                                        for (int k = 0; k < returnArray.GetLength(2); k++)
+                                        {
+                                            objectArray3D[i, j, k] = uint64Array3D[i, j, k];
+                                        }
+                                    }
+                                });
+
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying UInt64[,,] array in {sw.ElapsedMilliseconds}ms.");
+                                return objectArray3D;
+
+                            case "Single[,,]":
+                                Single[,,] single3DDArray = (Single[,,])returnArray;
+
+                                sw.Restart();
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
+                                {
+                                    for (int j = 0; j < returnArray.GetLength(1); j++)
+                                    {
+                                        for (int k = 0; k < returnArray.GetLength(2); k++)
+                                            objectArray3D[i, j, k] = single3DDArray[i, j, k];
+                                    }
+                                });
+
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying Single[,,] array in {sw.ElapsedMilliseconds}ms.");
                                 return objectArray3D;
 
                             case "Double[,,]":
-                                for (int i = 0; i < returnArray.GetLength(1); i++)
+                                Double[,,] double3DDArray = (Double[,,])returnArray;
+
+                                sw.Restart();
+                                Parallel.For(0, returnArray.GetLength(0), (i) =>
                                 {
-                                    for (int j = 0; j < returnArray.GetLength(0); j++)
+                                    for (int j = 0; j < returnArray.GetLength(1); j++)
                                     {
                                         for (int k = 0; k < returnArray.GetLength(2); k++)
-                                            objectArray3D[j, i, k] = ((double[,,])returnArray)[j, i, k];
+                                            objectArray3D[i, j, k] = double3DDArray[i, j, k];
                                     }
-                                }
+                                });
+
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Finished copying Double[,,] array in {sw.ElapsedMilliseconds}ms.");
                                 return objectArray3D;
 
                             case "Object[,,]":
-                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Returning Object[,,] array to client");
+                                TL.LogMessage(clientNumber, "ImageArrayVariant", $"Received an Object[,,] array, returning it directly to the client without further processing.");
                                 return returnArray;
 
                             default:
