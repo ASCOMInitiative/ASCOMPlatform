@@ -2819,14 +2819,16 @@ namespace ASCOM.Simulator
 
             switch (returnImageAs)
             {
-                case string value when value.Equals("Int16", StringComparison.InvariantCultureIgnoreCase):
-                case string value1 when value1.Equals("UInt16", StringComparison.InvariantCultureIgnoreCase):
-                case string value2 when value2.Equals("Int32", StringComparison.InvariantCultureIgnoreCase):
+                case string value when value.Equals("Byte", StringComparison.InvariantCultureIgnoreCase):
+                case string value1 when value1.Equals("Int16", StringComparison.InvariantCultureIgnoreCase):
+                case string value2 when value2.Equals("UInt16", StringComparison.InvariantCultureIgnoreCase):
+                case string value3 when value3.Equals("Int32", StringComparison.InvariantCultureIgnoreCase):
 
                     // Set the appropriate element value
                     Int32 elementValue;
-                    if (returnImageAs.ToLowerInvariant() == "int16") elementValue = -32768; // Int16
-                    else if (returnImageAs.ToLowerInvariant() == "uint16") elementValue = 65535; // UInt16
+                    if (returnImageAs.ToLowerInvariant() == "byte") elementValue = 127; // Byte
+                    else if (returnImageAs.ToLowerInvariant() == "int16") elementValue = -32768; // Int16
+                    else if (returnImageAs.ToLowerInvariant() == "uint16") elementValue = 32767; // UInt16
                     else elementValue = 100000; // Int32
 
                     if (sensorType == SensorType.Color) // Colour sensor
@@ -2836,8 +2838,8 @@ namespace ASCOM.Simulator
                             for (int y = 0; y < numY; y++)
                             {
                                 imageArrayColour[x, y, 0] = elementValue;
-                                imageArrayColour[x, y, 1] = elementValue;
-                                imageArrayColour[x, y, 2] = elementValue;
+                                imageArrayColour[x, y, 1] = elementValue + 1;
+                                imageArrayColour[x, y, 2] = elementValue + 2;
                             }
                         }
                     }
@@ -2878,17 +2880,44 @@ namespace ASCOM.Simulator
                     }
                     break;
 
-                case string value when value.Equals("RandomData", StringComparison.InvariantCultureIgnoreCase):
+                case string value when value.Equals("RandomByte", StringComparison.InvariantCultureIgnoreCase):
+                case string value1 when value1.Equals("RandomInt16", StringComparison.InvariantCultureIgnoreCase):
+                case string value2 when value2.Equals("RandomUInt16", StringComparison.InvariantCultureIgnoreCase):
+                case string value3 when value3.Equals("RandomInt32", StringComparison.InvariantCultureIgnoreCase):
                     Random random = new Random();
+                    int lowerBound = 0; // Random range lower bound
+                    int upperBound = 0; // Random range upper bound
+
+                    if (returnImageAs.ToLowerInvariant() == "randombyte") // Byte
+                    {
+                        lowerBound = Byte.MinValue;
+                        upperBound = Byte.MaxValue;
+                    }
+                    else if (returnImageAs.ToLowerInvariant() == "randomint16") // Int16
+                    {
+                        lowerBound = Int16.MinValue;
+                        upperBound = Int16.MaxValue;
+                    }
+                    else if (returnImageAs.ToLowerInvariant() == "randomuint16") // UInt16
+                    {
+                        lowerBound = UInt16.MinValue;
+                        upperBound = UInt16.MaxValue;
+                    }
+                    else // Int32
+                    {
+                        lowerBound = Int32.MinValue;
+                        upperBound = Int32.MaxValue;
+                    }
+
                     if (sensorType == SensorType.Color) // Colour sensor
                     {
                         for (int x = 0; x < numX; x++)
                         {
                             for (int y = 0; y < numY; y++)
                             {
-                                imageArrayColour[x, y, 0] = random.Next(0, 65535);
-                                imageArrayColour[x, y, 1] = random.Next(0, 65535);
-                                imageArrayColour[x, y, 2] = random.Next(0, 65535);
+                                imageArrayColour[x, y, 0] = random.Next(lowerBound,upperBound);
+                                imageArrayColour[x, y, 1] = random.Next(lowerBound, upperBound);
+                                imageArrayColour[x, y, 2] = random.Next(lowerBound, upperBound);
                             }
                         }
                     }
@@ -2898,7 +2927,7 @@ namespace ASCOM.Simulator
                         {
                             for (int y = 0; y < numY; y++)
                             {
-                                imageArray[x, y] = random.Next(0, 65535);
+                                imageArray[x, y] = random.Next(upperBound, upperBound);
                             }
                         }
                     }
