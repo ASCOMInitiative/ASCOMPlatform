@@ -15,6 +15,7 @@
       <title>Key Changes in 6.5 SP2 - For Everyone</title>
       <content>
         <list class="bullet">
+          <listItem>The Alpaca Dynamic Camera Client now supports the ImageBytes protocol.</listItem>
           <listItem>
             Telescope Simulator:
             <list class="bullet">
@@ -57,7 +58,6 @@
           <listItem>Registry handles are now properly released in AstroUtils and EarthRotationParameters.</listItem>
           <listItem>Diagnostics - A video utilities test failure that only occurred on Windows 7 64bit when the text size was above 100% has been fixed.</listItem>
           <listItem>The Dome Simulator now throws ASCOM DriverExceptions when appropriate rather than using the original VB6 Err.Raise mechanic.</listItem>
-
           <listItem>
             Dynamic Clients
             <list class="bullet">
@@ -68,7 +68,6 @@
               <listItem>All clients are now tolerant of missing "Value" and ErrorMessage fields in returned responses.</listItem>
             </list>
           </listItem>
-
           <listItem>
             Platform Installer
             <list class="bullet">
@@ -85,9 +84,14 @@
             <list class="bullet">
               <listItem>Telescope: Slewing remains true if an associated Dome is still in motion.</listItem>
               <listItem>Telescope: The driver rejects method calls when the scope is being parked or unparked.</listItem>
+              <listItem>Telescope: Corrected logic to support aborting a fixed slew.</listItem>
+              <listItem>Telescope: Ensure that a telescope side-of-pier is only calculated for a German Equatorial mount.</listItem>
+              <listItem>Telescope: Corrected expected answer for ChangeParkState MessageBox from OK to Yes.</listItem>
               <listItem>Dome: Slaving is more resilient.</listItem>
             </list>
           </listItem>
+          <listItem>The RemoveASCOM component is now code signed.</listItem>
+          <listItem>Improved handling when Alpaca devices report errors when calling the ImageArray, ImageArrayVariant, TrackingRates and AxisRates properties.</listItem>
         </list>
       </content>
     </section>
@@ -112,6 +116,8 @@
       <title>Key Changes in 6.5 SP2 - For Developers</title>
       <content>
         <list class="bullet">
+          <listItem>A SitePressure property has been added to the Transform component to improve the accuracy of refraction calculations.</listItem>
+          <listItem>The SOFA component has been updated to the latest SOFA 18.0 release, 12th May 2021.</listItem>
           <listItem>
             The Local Server Driver Generator now creates a project that uses a more secure mechanic to locate drivers that are to be served.
             <list class="bullet">
@@ -127,6 +133,8 @@
               </listItem>
             </list>
           </listItem>
+          <listItem>The comments in the Switch template have been expanded and clarified.</listItem>
+          <listItem>Camera.ImageArray element ordering has been clarified.</listItem>
         </list>
       </content>
     </section>
