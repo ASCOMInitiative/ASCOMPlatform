@@ -636,7 +636,7 @@ ASCOM Platform 6.5 SP2 Developer Components
 ASCOM Platform 6.5 SP2 Developer Components Installation
 ASCOM Initiative
 All rights reserved. https://www.ascom-standards.org
-{6CD3A202-AC37-451C-A7BD-57BDE64C89F5}
+{1CCBAF56-1A9B-4031-B74B-9DF737A20265}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
@@ -647,7 +647,7 @@ ASCOMPlatform65SP2Developer
 TRUE
 TRUE
 
-|C:\Users\Peter\Desktop\petercodesign.pfx
+|C:\CodeSigningCertificate\petercodesign.pfx
 http://time.certum.pl
 https://ascom-standards.org
 UAC=requireAdministrator,CACHESOURCES=TRUE,BUILDMODE=SFX,LANGUAGE=English,"TITLE=ASCOM Platform 6.5 RC2 Developer Components",TARGETDIR=$TARGETDIR$,IADIR=C:\PROGRA~2\INSTAL~2\INSTAL~1,PROJDIR=c:\ASCOMT~1\releases\ASCOM6~1\DEVELO~1\INSTAL~1,IAVER=10.00,LANGUAGE=English,LANGUAGE=English,VM_INSTALL_COMMANDLINE=,VM_UNINSTALL_COMMANDLINE=,VM_UNITTEST=,SIGN_ALL=DEFAULT
