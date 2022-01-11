@@ -1200,7 +1200,7 @@ Public Class DiagnosticsForm
                 .Description = "Platform 6 Switch Simulator",
                 .DeviceType = "Switch",
                 .Name = "ASCOM Switch V2 Simulator",
-                .DriverVersion = DiagnosticsMajorMinorVersionNumber,
+                .DriverVersion = "6.6",
                 .InterfaceVersion = 2,
                 .IsPlatform5 = False,
                 .SixtyFourBit = True
@@ -5946,7 +5946,8 @@ Public Class DiagnosticsForm
             Compare("UtilTests", "IsMinimumRequiredVersion 6.3", Utl.IsMinimumRequiredVersion(6, 3).ToString, "True")
             Compare("UtilTests", "IsMinimumRequiredVersion 6.4", Utl.IsMinimumRequiredVersion(6, 4).ToString, "True")
             Compare("UtilTests", "IsMinimumRequiredVersion 6.5", Utl.IsMinimumRequiredVersion(6, 5).ToString, "True")
-            Compare("UtilTests", "IsMinimumRequiredVersion 6.6", Utl.IsMinimumRequiredVersion(6, 6).ToString, "False")
+            Compare("UtilTests", "IsMinimumRequiredVersion 6.6", Utl.IsMinimumRequiredVersion(6, 6).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 6.7", Utl.IsMinimumRequiredVersion(6, 7).ToString, "False")
 
             ' Check that the platform version properties return the correct values
             Dim FV As FileVersionInfo

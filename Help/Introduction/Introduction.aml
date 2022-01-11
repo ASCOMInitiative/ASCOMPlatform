@@ -2,7 +2,7 @@
 <topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <para>
-      Please see <link xlink:href="3417e177-f705-497d-8127-fb30e8519d50" /> for detailed information on Platform 6.5 changes and <link xlink:href="2c6cb374-9a44-4bc4-b3a5-f867033a3b93" /> for updates in service pack 2.
+      Please see <link xlink:href="3417e177-f705-497d-8127-fb30e8519d50" /> for detailed information on Platform 6.5 changes and <link xlink:href="2c6cb374-9a44-4bc4-b3a5-f867033a3b93" /> for updates in Platform 6.6.
     </para>
 
     <para>
@@ -82,7 +82,7 @@
             See the section titled <link xlink:href="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" /> for a summary of Platform 5.5 updates and new functionality.
           </listItem>
           <listItem>
-            This platform appears as <quoteInline>ASCOM Platform 6.5</quoteInline> in the Apps  and add/remove programs dialogues
+            This platform appears as <quoteInline>ASCOM Platform 6.6</quoteInline> in the Apps and add/remove programs dialogues
           </listItem>
           <listItem>The Platform has been tested in 32 and 64bit bit versions of Windows 7 and Windows 10.</listItem>
         </list>

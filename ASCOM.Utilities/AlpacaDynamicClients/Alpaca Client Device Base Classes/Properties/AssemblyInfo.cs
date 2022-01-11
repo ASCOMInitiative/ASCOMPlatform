@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Dynamic remote client driver base classes")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2021")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
