@@ -2113,7 +2113,7 @@ ASCOM Platform 6.5 SP2
 ASCOM Platform 6.5 SP2 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{4C4DA993-FC5E-4D3A-AC50-E962A4735DC2}
+{8C11C82F-350F-4EB6-9A47-E080378840C7}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
@@ -2124,7 +2124,7 @@ ASCOMPlatform65SP2
 TRUE
 TRUE
 
-|C:\Users\Peter\Desktop\petercodesign.pfx
+|C:\CodeSigningCertificate\codesignexport.pfx
 http://time.certum.pl
 https://ascom-standards.org
 UAC=requireAdministrator,CACHESOURCES=TRUE,MSI_ALL=FALSE,VM_TARGETFOLDER=%TEMP%,VM_INSTALL_COMMANDLINE=/s,"VM_UNINSTALL_COMMANDLINE=/s MODIFY=FALSE REMOVE=TRUE","VM_UNITTEST=C:\Program Files (x86)\InstallAware X6 Creators Update\unit.exe",LOADOLDDATA=TRUE,SIGN_ALL=DEFAULT
