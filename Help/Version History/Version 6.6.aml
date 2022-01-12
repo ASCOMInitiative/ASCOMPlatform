@@ -88,6 +88,7 @@
               <listItem>Telescope: Ensure that a telescope side-of-pier is only calculated for a German Equatorial mount.</listItem>
               <listItem>Telescope: Corrected expected answer for ChangeParkState MessageBox from OK to Yes.</listItem>
               <listItem>Dome: Slaving is more resilient.</listItem>
+              <listItem>Dome: Fixed shutter position reporting and disabled Open/Close Shutter button when CanSetShutter is false.</listItem>
             </list>
           </listItem>
           <listItem>The RemoveASCOM component is now code signed.</listItem>
