@@ -702,7 +702,7 @@ namespace ASCOM.DeviceHub
 				// Unable to get side-of-pier for this German Equatorial Mount so we need to simulate it.
 
 				double hourAngle = AstroUtils.ConditionHA( Status.SiderealTime - rightAscension );
-				PierSide currentSOP = Status.SideOfPier ;
+				PierSide currentSOP = Status.SideOfPier;
 				PierSide destinationSOP = currentSOP; // Favor the current side-of-pier for 0 hour angle;
 
 				destinationSOP = ( hourAngle > 0 ) ? PierSide.pierEast : destinationSOP;

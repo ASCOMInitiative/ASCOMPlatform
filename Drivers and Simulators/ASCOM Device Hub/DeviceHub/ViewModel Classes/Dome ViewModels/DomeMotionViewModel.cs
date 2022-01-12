@@ -254,7 +254,7 @@ namespace ASCOM.DeviceHub
 				Status = action.Status;
 				IsSlewing = Status.Slewing;
 
-				if ( Status.ShutterStatus == ShutterState.shutterClosed )
+				if ( !Capabilities.CanSetShutter || Status.ShutterStatus == ShutterState.shutterClosed )
 				{
 					ShutterCommandAction = "Open Shutter";
 				}
@@ -340,10 +340,11 @@ namespace ASCOM.DeviceHub
 		{
 			bool retval = false;
 
-			if ( Status != null && Status.Connected && !Status.Slewing 
-				&& Status.ShutterStatus != ShutterState.shutterClosing && Status.ShutterStatus != ShutterState.shutterOpening )
+			if ( Status != null && Capabilities != null 
+				&& Status.Connected && !Status.Slewing 
+				&& Capabilities.CanSetShutter )
 			{
-				retval = true;
+				retval = Status.ShutterStatus != ShutterState.shutterClosing && Status.ShutterStatus != ShutterState.shutterOpening;
 			}
 
 			return retval;
@@ -445,9 +446,9 @@ namespace ASCOM.DeviceHub
 			bool retval = false;
 
 			if ( Status != null && Capabilities != null 
-				&& Status.Connected && !Status.Slewing && Status.ShutterStatus == ShutterState.shutterOpen )
+				&& Status.Connected && !Status.Slewing && Capabilities.CanSetAltitude )
 			{
-				retval = Capabilities.CanSetAltitude;
+				retval = Status.ShutterStatus == ShutterState.shutterOpen;
 			}
 
 			return retval;
