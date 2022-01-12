@@ -1,20 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="2c6cb374-9a44-4bc4-b3a5-f867033a3b93" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <section address="Intro65SP2">
+    <section address="Intro66">
       <title>Introduction</title>
       <content>
         <para>
-          In line with previous Platform installers, 6.5 SP2 is a cumulative release that contains all enhancements and fixes from previous Platform releases and service packs. The Platform
-          environment pre-requisites are listed here <link xlink:href="#PreReqs65SP2">Platform Prerequisites</link>.
+          In line with previous Platform installers, 6.6 is a cumulative release that contains all enhancements and fixes from previous Platform releases and service packs. The Platform
+          environment pre-requisites are listed here <link xlink:href="#PreReqs66">Platform Prerequisites</link>.
         </para>
       </content>
     </section>
 
-    <section address="Changes65SP2">
-      <title>Key Changes in 6.5 SP2 - For Everyone</title>
+    <section address="Changes66">
+      <title>Key Changes in 6.6 - For Everyone</title>
       <content>
         <list class="bullet">
+          <listItem>The Alpaca Dynamic Camera Client now supports the ImageBytes protocol.</listItem>
           <listItem>
             Telescope Simulator:
             <list class="bullet">
@@ -48,8 +49,8 @@
       </content>
     </section>
 
-    <section address="IssuesFixedPlatform65SP2">
-      <title>Issues Fixed in 6.5 SP2 - Platform</title>
+    <section address="IssuesFixedPlatform66">
+      <title>Issues Fixed in 6.6 - Platform</title>
       <content>
         <list class="bullet">
           <listItem>Chooser drop-down list management has been refined to avoid an issue in AllSkEye.</listItem>
@@ -57,7 +58,6 @@
           <listItem>Registry handles are now properly released in AstroUtils and EarthRotationParameters.</listItem>
           <listItem>Diagnostics - A video utilities test failure that only occurred on Windows 7 64bit when the text size was above 100% has been fixed.</listItem>
           <listItem>The Dome Simulator now throws ASCOM DriverExceptions when appropriate rather than using the original VB6 Err.Raise mechanic.</listItem>
-
           <listItem>
             Dynamic Clients
             <list class="bullet">
@@ -68,7 +68,6 @@
               <listItem>All clients are now tolerant of missing "Value" and ErrorMessage fields in returned responses.</listItem>
             </list>
           </listItem>
-
           <listItem>
             Platform Installer
             <list class="bullet">
@@ -85,9 +84,14 @@
             <list class="bullet">
               <listItem>Telescope: Slewing remains true if an associated Dome is still in motion.</listItem>
               <listItem>Telescope: The driver rejects method calls when the scope is being parked or unparked.</listItem>
+              <listItem>Telescope: Corrected logic to support aborting a fixed slew.</listItem>
+              <listItem>Telescope: Ensure that a telescope side-of-pier is only calculated for a German Equatorial mount.</listItem>
+              <listItem>Telescope: Corrected expected answer for ChangeParkState MessageBox from OK to Yes.</listItem>
               <listItem>Dome: Slaving is more resilient.</listItem>
             </list>
           </listItem>
+          <listItem>The RemoveASCOM component is now code signed.</listItem>
+          <listItem>Improved handling when Alpaca devices report errors when calling the ImageArray, ImageArrayVariant, TrackingRates and AxisRates properties.</listItem>
         </list>
       </content>
     </section>
@@ -96,7 +100,7 @@
       <title>Retired Components</title>
       <content>
         <para>
-          The following Platform 5 hubs have been retired in Platform 6.5 and are replaced by the new Device Hub. We strongly recommend that you switch over to using the Device Hub because
+          The following Platform 5 hubs were retired in Platform 6.5 and replaced by the new Device Hub. We strongly recommend that you switch over to using the Device Hub because
           these components will be removed in a future release.
         </para>
         <list class="bullet">
@@ -108,10 +112,12 @@
       </content>
     </section>
 
-    <section address="Changes65DevSP2">
-      <title>Key Changes in 6.5 SP2 - For Developers</title>
+    <section address="ChangesDeveloper66">
+      <title>Key Changes in 6.6 - For Developers</title>
       <content>
         <list class="bullet">
+          <listItem>A SitePressure property has been added to the Transform component to improve the accuracy of refraction calculations.</listItem>
+          <listItem>The SOFA component has been updated to the latest SOFA 18.0 release, 12th May 2021.</listItem>
           <listItem>
             The Local Server Driver Generator now creates a project that uses a more secure mechanic to locate drivers that are to be served.
             <list class="bullet">
@@ -127,12 +133,14 @@
               </listItem>
             </list>
           </listItem>
+          <listItem>The comments in the Switch template have been expanded and clarified.</listItem>
+          <listItem>Camera.ImageArray element ordering has been clarified.</listItem>
         </list>
       </content>
     </section>
 
-    <section address="IssuesFixedDeveloper65SP2">
-      <title>Issues Fixed in 6.5 SP2 - For Developers</title>
+    <section address="IssuesFixedDeveloper66">
+      <title>Issues Fixed in 6.6 - For Developers</title>
       <content>
         <list class="bullet">
           <listItem>Links to support forums in the developer templates have been updated to reference the Groups.Io forum.</listItem>
@@ -141,8 +149,8 @@
       </content>
     </section>
 
-    <section address="BreakingChanges65SP2">
-      <title>Breaking Changes (For Developers) in Platform 6.5</title>
+    <section address="BreakingChanges66">
+      <title>Breaking Changes (For Developers) in Platform 6.6</title>
       <content>
         <list class="bullet">
           <listItem>
@@ -153,7 +161,7 @@
         <alert class="note">
           <para>
             <legacyBold>Driver and application developers</legacyBold>: In order to maintain a healthy code base, some tidying up is planned for the
-            next <legacyBold>major</legacyBold> update and details of the changes are given in the <link xlink:href="#DeprecatedCapability65">Deprecated Features</link> section below. Please will you review
+            next <legacyBold>major</legacyBold> update and details of the changes are given in the <link xlink:href="#DeprecatedCapability66">Deprecated Features</link> section below. Please will you review
             this and update your applications and drivers as advised; these changes are not currently scheduled for introduction before Q2 2020 at the earliest.
             In the meantime service packs will be issued as required to correct bugs.
           </para>
@@ -161,7 +169,7 @@
       </content>
     </section>
 
-    <section address="KnownIssuesDevelopment65SP2">
+    <section address="KnownIssuesDevelopment66">
       <title>Known Limitations - Developers</title>
       <content>
         <list class="bullet">
@@ -182,7 +190,7 @@
       </content>
     </section>
 
-    <section address="DeprecatedCapability65SP2">
+    <section address="DeprecatedCapability66">
       <title>Deprecated Capabilities (For Developers)</title>
       <content>
         <list class="bullet">
@@ -345,17 +353,17 @@
       </content>
     </section>
 
-    <section address="PreReqs65SP2">
+    <section address="PreReqs66">
       <title>Platform Prerequisites</title>
       <content>
-        <para>Platform 6.5 requires the following .NET framework version and library:</para>
+        <para>Platform 6.6 requires the following .NET framework version and library:</para>
         <list class="bullet">
           <listItem>.NET Framework 4.8</listItem>
           <listItem>For WIndows 8 and Windows 10 the .NET Framework 3.5 option must be enabled in Control Panel / Programs and Features / Turn Windows Features On and Off</listItem>
           <listItem>Visual C++ 16.0 libraries (these are provided by the Platform installer if required)</listItem>
         </list>
         <para>
-          While previous Platforms required .NET Framework 4.0, Platform 6.5 requires that .NET Framework 4.8 is installed on your PC. This change is to enable Platform components to take
+          While previous Platforms required .NET Framework 4.0, Platform 6.6 requires that .NET Framework 4.8 is installed on your PC. This change is to enable Platform components to take
           advantage of new features introduced after Framework 4.0 was released and to put the Platform onto what Microsoft has flagged as the last release of .NET Framework.
         </para>
         <para>

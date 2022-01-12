@@ -1200,7 +1200,7 @@ Public Class DiagnosticsForm
                 .Description = "Platform 6 Switch Simulator",
                 .DeviceType = "Switch",
                 .Name = "ASCOM Switch V2 Simulator",
-                .DriverVersion = DiagnosticsMajorMinorVersionNumber,
+                .DriverVersion = "6.6",
                 .InterfaceVersion = 2,
                 .IsPlatform5 = False,
                 .SixtyFourBit = True
@@ -5946,7 +5946,8 @@ Public Class DiagnosticsForm
             Compare("UtilTests", "IsMinimumRequiredVersion 6.3", Utl.IsMinimumRequiredVersion(6, 3).ToString, "True")
             Compare("UtilTests", "IsMinimumRequiredVersion 6.4", Utl.IsMinimumRequiredVersion(6, 4).ToString, "True")
             Compare("UtilTests", "IsMinimumRequiredVersion 6.5", Utl.IsMinimumRequiredVersion(6, 5).ToString, "True")
-            Compare("UtilTests", "IsMinimumRequiredVersion 6.6", Utl.IsMinimumRequiredVersion(6, 6).ToString, "False")
+            Compare("UtilTests", "IsMinimumRequiredVersion 6.6", Utl.IsMinimumRequiredVersion(6, 6).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 6.7", Utl.IsMinimumRequiredVersion(6, 7).ToString, "False")
 
             ' Check that the platform version properties return the correct values
             Dim FV As FileVersionInfo
@@ -7003,7 +7004,7 @@ Public Class DiagnosticsForm
     Private Sub ScanPlatform6Logs()
 
         Dim fileList() As String
-        Dim setupFiles As SortedList(Of DateTime, String) = New SortedList(Of DateTime, String)
+        Dim setupFiles As List(Of KeyValuePair(Of DateTime, String)) = New List(Of KeyValuePair(Of DateTime, String))
         Dim streamReader As StreamReader = Nothing
         Dim fileInfo As FileInfo
 
@@ -7015,24 +7016,24 @@ Public Class DiagnosticsForm
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOMPlatform6Install*.txt", SearchOption.TopDirectoryOnly)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
-                setupFiles.Add(fileInfo.CreationTime, foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
             Next
 
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.UninstallASCOM.*.txt", SearchOption.AllDirectories)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
-                setupFiles.Add(fileInfo.CreationTime, foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
             Next
 
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.FinaliseInstall.*.txt", SearchOption.AllDirectories)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
-                setupFiles.Add(fileInfo.CreationTime, foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
             Next
 
             TL.LogMessage("ScanPlatform6Logs", "Found the following installation logs:")
             For Each foundFile In setupFiles
-                TL.LogMessage("ScanPlatform6Logs", String.Format("  Date: {0} Log: {1}", foundFile.Key.ToString("dd MMM yyyy HH:mm:ss"), foundFile.Value))
+                TL.LogMessage("ScanPlatform6Logs", $"  Date: {foundFile.Key:dd MMM yyyy HH:mm:ss} Log: {foundFile.Value}")
             Next
 
             TL.BlankLine()

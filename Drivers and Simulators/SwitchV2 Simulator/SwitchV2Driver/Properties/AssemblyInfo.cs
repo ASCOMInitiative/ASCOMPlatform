@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The ASCOM Initiative")]
 [assembly: AssemblyProduct("ASCOM Switch driver for Simulator")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2021")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
