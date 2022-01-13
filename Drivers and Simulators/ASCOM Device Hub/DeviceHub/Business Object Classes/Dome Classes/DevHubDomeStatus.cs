@@ -125,6 +125,7 @@ namespace ASCOM.DeviceHub
 
 				case ShutterState.shutterOpen:
 					position = "Open";
+					position += (useFraction) ? $" at {fractionOpen:P0}" : "";
 
 					break;
 
@@ -133,8 +134,6 @@ namespace ASCOM.DeviceHub
 
 					break;
 			}
-
-			position += ( useFraction ) ? $" at {fractionOpen:P0}" : "";
 
 			return position;
 		}

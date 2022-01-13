@@ -55,11 +55,11 @@ void iauFw2xy(double gamb, double phib, double psi, double eps,
 **
 **     Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 **
-**  This revision:  2013 September 2
+**  This revision:  2021 May 11
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double r[3][3];
@@ -71,11 +71,11 @@ void iauFw2xy(double gamb, double phib, double psi, double eps,
 /* Extract CIP X,Y. */
    iauBpn2xy(r, x, y);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

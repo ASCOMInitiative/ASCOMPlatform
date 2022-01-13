@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 int iauGd2gc ( int n, double elong, double phi, double height,
                double xyz[3] )
@@ -59,11 +60,11 @@ int iauGd2gc ( int n, double elong, double phi, double height,
 **     iauGd2gce    geodetic to geocentric transformation, general
 **     iauZp        zero p-vector
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    int j;
@@ -85,9 +86,11 @@ int iauGd2gc ( int n, double elong, double phi, double height,
 /* Return the status. */
    return j;
 
+/* Finished. */
+
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

@@ -80,10 +80,11 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(OutDir)\Intermediate Files\</IntDir>
+    <TargetName>SofaTestApplication-32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <TargetName>$(ProjectName)-64</TargetName>
+    <TargetName>SofaTestApplication-64</TargetName>
     <OutDir>$(ProjectDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(OutDir)\Intermediate Files\</IntDir>
   </PropertyGroup>
@@ -152,20 +153,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Currrent Source Code\sofa.h" />
-    <ClInclude Include="..\Currrent Source Code\sofam.h" />
-    <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Currrent Source Code\t_sofa_c.c" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="Sofa Test Application.rc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sofa Library\Sofa.vcxproj">
       <Project>{82d4a273-6125-40f5-bf29-9445d302a407}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Currrent Source Code\sofa.h" />
+    <ClInclude Include="..\Currrent Source Code\sofam.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Currrent Source Code\t_sofa_c.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

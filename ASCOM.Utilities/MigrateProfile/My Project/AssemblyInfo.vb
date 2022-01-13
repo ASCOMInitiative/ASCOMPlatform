@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("ASCOM")>
 <Assembly: AssemblyProduct("MigrateProfile")>
-<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2021")>
+<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2022")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

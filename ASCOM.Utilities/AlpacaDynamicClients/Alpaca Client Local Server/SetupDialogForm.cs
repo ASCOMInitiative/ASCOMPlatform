@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ASCOM.Common.Alpaca;
+using System;
 using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
@@ -18,8 +19,8 @@ namespace ASCOM.DynamicRemoteClients
         private bool selectByMouse = false; // Variable to help select the whole contents of a numeric up-down box when tabbed into our selected by mouse
 
         // Create validating regular expression
-        Regex validHostnameRegex = new Regex(SharedConstants.ValidHostnameRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        //Regex validIpAddressRegex = new Regex(SharedConstants.ValidIpAddressRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        Regex validHostnameRegex = new Regex(AlpacaConstants.ValidHostnameRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        //Regex validIpAddressRegex = new Regex(AlpacaConstants.ValidIpAddressRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
         #endregion
 
         #region Public Properties
@@ -37,8 +38,8 @@ namespace ASCOM.DynamicRemoteClients
         public bool TraceState { get; set; }
         public bool DebugTraceState { get; set; }
         public bool ManageConnectLocally { get; set; }
-        public SharedConstants.ImageArrayTransferType ImageArrayTransferType { get; set; }
-        public SharedConstants.ImageArrayCompression ImageArrayCompression { get; set; }
+        public ASCOM.Common.Alpaca.ImageArrayTransferType ImageArrayTransferType { get; set; }
+        public ASCOM.Common.Alpaca.ImageArrayCompression ImageArrayCompression { get; set; }
         public string DeviceType { get; set; }
         public bool EnableRediscovery { get; set; }
         public bool IpV4Enabled { get; set; }
@@ -133,14 +134,16 @@ namespace ASCOM.DynamicRemoteClients
                     radManageConnectRemotely.Checked = true;
                 }
 
-                CmbImageArrayTransferType.Items.Add(SharedConstants.ImageArrayTransferType.JSON);
-                CmbImageArrayTransferType.Items.Add(SharedConstants.ImageArrayTransferType.Base64HandOff);
+                CmbImageArrayTransferType.Items.Add(ASCOM.Common.Alpaca.ImageArrayTransferType.JSON);
+                CmbImageArrayTransferType.Items.Add(ASCOM.Common.Alpaca.ImageArrayTransferType.Base64HandOff);
+                CmbImageArrayTransferType.Items.Add(ASCOM.Common.Alpaca.ImageArrayTransferType.ImageBytes);
+                CmbImageArrayTransferType.Items.Add(ASCOM.Common.Alpaca.ImageArrayTransferType.BestAvailable);
                 CmbImageArrayTransferType.SelectedItem = ImageArrayTransferType;
 
-                cmbImageArrayCompression.Items.Add(SharedConstants.ImageArrayCompression.None);
-                cmbImageArrayCompression.Items.Add(SharedConstants.ImageArrayCompression.Deflate);
-                cmbImageArrayCompression.Items.Add(SharedConstants.ImageArrayCompression.GZip);
-                cmbImageArrayCompression.Items.Add(SharedConstants.ImageArrayCompression.GZipOrDeflate);
+                cmbImageArrayCompression.Items.Add(ASCOM.Common.Alpaca.ImageArrayCompression.None);
+                cmbImageArrayCompression.Items.Add(ASCOM.Common.Alpaca.ImageArrayCompression.Deflate);
+                cmbImageArrayCompression.Items.Add(ASCOM.Common.Alpaca.ImageArrayCompression.GZip);
+                cmbImageArrayCompression.Items.Add(ASCOM.Common.Alpaca.ImageArrayCompression.GZipOrDeflate);
                 cmbImageArrayCompression.SelectedItem = ImageArrayCompression;
 
                 // Make the ImageArray transfer configuration drop-downs visible only when a camera driver is being accessed.
@@ -160,8 +163,8 @@ namespace ASCOM.DynamicRemoteClients
                 }
 
                 // Handle cases where the stored registry value is not one of the currently supported modes
-                if (CmbImageArrayTransferType.SelectedItem == null) CmbImageArrayTransferType.SelectedItem = SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT;
-                if (cmbImageArrayCompression.SelectedItem == null) cmbImageArrayCompression.SelectedItem = SharedConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT;
+                if (CmbImageArrayTransferType.SelectedItem == null) CmbImageArrayTransferType.SelectedItem = AlpacaConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT;
+                if (cmbImageArrayCompression.SelectedItem == null) cmbImageArrayCompression.SelectedItem = AlpacaConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT;
 
                 // Bring the setup dialogue to the front of the screen
                 if (WindowState == FormWindowState.Minimized)
@@ -198,8 +201,8 @@ namespace ASCOM.DynamicRemoteClients
             UserName = txtUserName.Text.Encrypt(TL); // Encrypt the provided username and password
             Password = txtPassword.Text.Encrypt(TL);
             ManageConnectLocally = radManageConnectLocally.Checked;
-            ImageArrayTransferType = (SharedConstants.ImageArrayTransferType)CmbImageArrayTransferType.SelectedItem;
-            ImageArrayCompression = (SharedConstants.ImageArrayCompression)cmbImageArrayCompression.SelectedItem;
+            ImageArrayTransferType = (ASCOM.Common.Alpaca.ImageArrayTransferType)CmbImageArrayTransferType.SelectedItem;
+            ImageArrayCompression = (ASCOM.Common.Alpaca.ImageArrayCompression)cmbImageArrayCompression.SelectedItem;
             EnableRediscovery = ChkEnableRediscovery.Checked;
             DiscoveryPort = Convert.ToInt32(NumDiscoveryPort.Value);
 
@@ -341,13 +344,13 @@ namespace ASCOM.DynamicRemoteClients
 
         private void CmbImageArrayTransferType_SelectedValueChanged(object sender, EventArgs e)
         {
-            if ((SharedConstants.ImageArrayTransferType)CmbImageArrayTransferType.SelectedItem == SharedConstants.ImageArrayTransferType.Base64HandOff)
+            if ((ASCOM.Common.Alpaca.ImageArrayTransferType)CmbImageArrayTransferType.SelectedItem == ASCOM.Common.Alpaca.ImageArrayTransferType.JSON)
             {
-                cmbImageArrayCompression.Enabled = false;
+                cmbImageArrayCompression.Enabled = true;
             }
             else
             {
-                cmbImageArrayCompression.Enabled = true;
+                cmbImageArrayCompression.Enabled = false;
             }
         }
 
@@ -385,7 +388,7 @@ namespace ASCOM.DynamicRemoteClients
             if (RadIpV4.Checked | RadIpV4AndV6.Checked) // IPv4 addresses are required
             {
                 // Add a local host entry
-                addressList.Items.Add(SharedConstants.LOCALHOST_NAME_IPV4); // Make "localhost" the first entry in the list of IPv4 addresses
+                addressList.Items.Add(AlpacaConstants.LOCALHOST_NAME_IPV4); // Make "localhost" the first entry in the list of IPv4 addresses
                 foreach (IPAddress ipAddress in HostPc.IpV4Addresses)
                 {
                     addressList.Items.Add(ipAddress.ToString());
@@ -446,7 +449,7 @@ namespace ASCOM.DynamicRemoteClients
             // Add the wild card addresses at the end of the list
 
             // Include the strong wild card character in the list of addresses if not already in use
-            if (IPAddressString != SharedConstants.STRONG_WILDCARD_NAME) addressList.Items.Add(SharedConstants.STRONG_WILDCARD_NAME);
+            if (IPAddressString != AlpacaConstants.STRONG_WILDCARD_NAME) addressList.Items.Add(AlpacaConstants.STRONG_WILDCARD_NAME);
 
             // Set the combo box selected item
             addressList.SelectedIndex = selectedIndex;

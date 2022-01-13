@@ -35,7 +35,7 @@ class DeviceSwitch
     public string GetSwitchName(short id)
     {
         Validate("GetSwitchName", id);
-        tl.LogMessage("GetSwitchName", string.Format("GetSwitchName({0}) - not implemented", id));
+        tl.LogMessage("GetSwitchName", $"GetSwitchName({id}) - not implemented");
         throw new MethodNotImplementedException("GetSwitchName");
         // or
         //tl.LogMessage("GetSwitchName", string.Format("GetSwitchName({0}) - default Switch{0}", id));
@@ -50,7 +50,7 @@ class DeviceSwitch
     public void SetSwitchName(short id, string name)
     {
         Validate("SetSwitchName", id);
-        tl.LogMessage("SetSwitchName", string.Format("SetSwitchName({0}) = {1} - not implemented", id, name));
+        tl.LogMessage("SetSwitchName", $"SetSwitchName({id}) = {name} - not implemented");
         throw new MethodNotImplementedException("SetSwitchName");
     }
 
@@ -62,7 +62,7 @@ class DeviceSwitch
     public string GetSwitchDescription(short id)
     {
         Validate("GetSwitchDescription", id);
-        tl.LogMessage("GetSwitchDescription", string.Format("GetSwitchDescription({0}) - not implemented", id));
+        tl.LogMessage("GetSwitchDescription", $"GetSwitchDescription({id}) - not implemented");
         throw new MethodNotImplementedException("GetSwitchDescription");
     }
 
@@ -78,16 +78,14 @@ class DeviceSwitch
     /// <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
     public bool CanWrite(short id)
     {
+        bool writable = true;
         Validate("CanWrite", id);
         // default behavour is to report true
-        tl.LogMessage("CanWrite", string.Format("CanWrite({0}) - default true", id));
+        tl.LogMessage("CanWrite", $"CanWrite({id}): {writable}");
         return true;
-        // implementation should report the correct behaviour
-        //tl.LogMessage("CanWrite", string.Format("CanWrite({0}) - not implemented", id));
-        //throw new MethodNotImplementedException("CanWrite");
     }
 
-    #region boolean switch members
+    #region Boolean switch members
 
     /// <summary>
     /// Return the state of switch n
@@ -100,7 +98,7 @@ class DeviceSwitch
     public bool GetSwitch(short id)
     {
         Validate("GetSwitch", id);
-        tl.LogMessage("GetSwitch", string.Format("GetSwitch({0}) - not implemented", id));
+        tl.LogMessage("GetSwitch", $"GetSwitch({id}) - not implemented");
         throw new MethodNotImplementedException("GetSwitch");
     }
 
@@ -117,17 +115,17 @@ class DeviceSwitch
         Validate("SetSwitch", id);
         if (!CanWrite(id))
         {
-            var str = string.Format("SetSwitch({0}) - Cannot Write", id);
+            var str = $"SetSwitch({id}) - Cannot Write";
             tl.LogMessage("SetSwitch", str);
             throw new MethodNotImplementedException(str);
         }
-        tl.LogMessage("SetSwitch", string.Format("SetSwitch({0}) = {1} - not implemented", id, state));
+        tl.LogMessage("SetSwitch", $"SetSwitch({id}) = {state} - not implemented");
         throw new MethodNotImplementedException("SetSwitch");
     }
 
     #endregion
 
-    #region analogue members
+    #region Analogue members
 
     /// <summary>
     /// returns the maximum value for this switch
@@ -138,11 +136,8 @@ class DeviceSwitch
     public double MaxSwitchValue(short id)
     {
         Validate("MaxSwitchValue", id);
-        // boolean switch implementation:
-        return 1;
-        // or
-        //tl.LogMessage("MaxSwitchValue", string.Format("MaxSwitchValue({0}) - not implemented", id));
-        //throw new MethodNotImplementedException("MaxSwitchValue");
+        tl.LogMessage("MaxSwitchValue", $"MaxSwitchValue({id}) - not implemented");
+        throw new MethodNotImplementedException("MaxSwitchValue");
     }
 
     /// <summary>
@@ -154,16 +149,12 @@ class DeviceSwitch
     public double MinSwitchValue(short id)
     {
         Validate("MinSwitchValue", id);
-        // boolean switch implementation:
-        return 0;
-        // or
-        //tl.LogMessage("MinSwitchValue", string.Format("MinSwitchValue({0}) - not implemented", id));
-        //throw new MethodNotImplementedException("MinSwitchValue");
+        tl.LogMessage("MinSwitchValue", $"MinSwitchValue({id}) - not implemented");
+        throw new MethodNotImplementedException("MinSwitchValue");
     }
 
     /// <summary>
-    /// returns the step size that this switch supports. This gives the difference between
-    /// successive values of the switch.
+    /// returns the step size that this switch supports. This gives the difference between successive values of the switch.
     /// The number of values is ((MaxSwitchValue - MinSwitchValue) / SwitchStep) + 1
     /// boolean switches must return 1.0, giving two states.
     /// </summary>
@@ -172,11 +163,8 @@ class DeviceSwitch
     public double SwitchStep(short id)
     {
         Validate("SwitchStep", id);
-        // boolean switch implementation:
-        return 1;
-        // or
-        //tl.LogMessage("SwitchStep", string.Format("SwitchStep({0}) - not implemented", id));
-        //throw new MethodNotImplementedException("SwitchStep");
+        tl.LogMessage("SwitchStep", $"SwitchStep({id}) - not implemented");
+        throw new MethodNotImplementedException("SwitchStep");
     }
 
     /// <summary>
@@ -188,13 +176,13 @@ class DeviceSwitch
     public double GetSwitchValue(short id)
     {
         Validate("GetSwitchValue", id);
-        tl.LogMessage("GetSwitchValue", string.Format("GetSwitchValue({0}) - not implemented", id));
+        tl.LogMessage("GetSwitchValue", $"GetSwitchValue({id}) - not implemented");
         throw new MethodNotImplementedException("GetSwitchValue");
     }
 
     /// <summary>
     /// set the analogue value for this switch.
-    /// If the switch cannot be set then throws a MethodNotImplementedException.
+    /// A MethodNotImplementedException should be thrown if CanWrite returns False
     /// If the value is not between the maximum and minimum then throws an InvalidValueException
     /// boolean switches must throw a not implemented exception.
     /// </summary>
@@ -205,17 +193,17 @@ class DeviceSwitch
         Validate("SetSwitchValue", id, value);
         if (!CanWrite(id))
         {
-            tl.LogMessage("SetSwitchValue", string.Format("SetSwitchValue({0}) - Cannot write", id));
-            throw new MethodNotImplementedException(string.Format("SetSwitchValue({0}) - Cannot write", id));
+            tl.LogMessage("SetSwitchValue", $"SetSwitchValue({id}) - Cannot write");
+            throw new ASCOM.MethodNotImplementedException($"SetSwitchValue({id}) - Cannot write");
         }
-        tl.LogMessage("SetSwitchValue", string.Format("SetSwitchValue({0}) = {1} - not implemented", id, value));
+        tl.LogMessage("SetSwitchValue", $"SetSwitchValue({id}) = {value} - not implemented");
         throw new MethodNotImplementedException("SetSwitchValue");
     }
 
     #endregion
     #endregion
 
-    #region private methods
+    #region Private methods
 
     /// <summary>
     /// Checks that the switch id is in range and throws an InvalidValueException if it isn't

@@ -70,22 +70,22 @@ void iauC2ixy(double date1, double date2, double x, double y,
 **     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG (2004)
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 
 {
 /* Compute s and then the matrix. */
    iauC2ixys(x, y, iauS00(date1, date2, x, y), rc2i);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

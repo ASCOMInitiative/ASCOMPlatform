@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauPn06(double date1, double date2, double dpsi, double deps,
              double *epsa,
@@ -28,7 +29,7 @@ void iauPn06(double date1, double date2, double dpsi, double deps,
 **     rp           double[3][3]    precession matrix (Note 5)
 **     rbp          double[3][3]    bias-precession matrix (Note 6)
 **     rn           double[3][3]    nutation matrix (Note 7)
-**     rbpn         double[3][3]    GCRS-to-true matrix (Note 8)
+**     rbpn         double[3][3]    GCRS-to-true matrix (Notes 8,9)
 **
 **  Notes:
 **
@@ -98,11 +99,11 @@ void iauPn06(double date1, double date2, double dpsi, double deps,
 **
 **     Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 **
-**  This revision:  2013 November 14
+**  This revision:  2021 May 11
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double gamb, phib, psib, eps, r1[3][3], r2[3][3], rt[3][3];
@@ -137,11 +138,11 @@ void iauPn06(double date1, double date2, double dpsi, double deps,
 /* Obliquity, mean of date. */
    *epsa = eps;
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

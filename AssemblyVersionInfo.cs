@@ -21,7 +21,7 @@ using System.Runtime.CompilerServices;
  * ***/
 
 // Revision and Build both set to 9999 indicates a private build on a developer's private workstation.
-[assembly: AssemblyFileVersion("6.5.9999.9999")]	    // Win32 File Version (not used by .NET)
+[assembly: AssemblyFileVersion("6.6.9999.9999")]	    // Win32 File Version (not used by .NET)
 
 [assembly: InternalsVisibleToAttribute("Conform, PublicKey= " +
 "0024000004800000940000000602000000240000525341310004000001000100afa2def19e73b7" +

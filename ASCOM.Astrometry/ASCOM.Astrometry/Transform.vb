@@ -32,7 +32,7 @@ Namespace Transform
         Private disposedValue As Boolean = False        ' To detect redundant calls
         Private Utl As Util, AstroUtl As AstroUtils.AstroUtils
         Dim SOFA As SOFA.SOFA
-        Private RAJ2000Value, RATopoValue, DECJ2000Value, DECTopoValue, SiteElevValue, SiteLatValue, SiteLongValue, SiteTempValue As Double
+        Private RAJ2000Value, RATopoValue, DECJ2000Value, DECTopoValue, SiteElevValue, SiteLatValue, SiteLongValue, SiteTempValue, SitePressureValue As Double
         Private RAApparentValue, DECApparentValue, AzimuthTopoValue, ElevationTopoValue, JulianDateTTValue, JulianDateUTCValue As Double
         Private RefracValue, RequiresRecalculate As Boolean
         Private LastSetBy As SetBy
@@ -44,10 +44,11 @@ Namespace Transform
         Private Const DEGREES2RADIANS As Double = Math.PI / 180.0
         Private Const RADIANS2HOURS As Double = 12.0 / Math.PI
         Private Const RADIANS2DEGREES As Double = 180.0 / Math.PI
-        Private Const TWOPI As Double = 2.0 * Math.PI
 
         Private Const DATE_FORMAT As String = "dd/MM/yyyy HH:mm:ss.fff"
 
+        Private Const STANDARD_PRESSURE As Double = 1013.25 ' Standard atmospheric pressure (hPa)
+        Private Const ABSOLUTE_ZERO_CELSIUS = -273.15 ' Absolute zero expressed in Celsius
         Private Enum SetBy
             Never
             J2000
@@ -69,13 +70,16 @@ Namespace Transform
             AstroUtl = New AstroUtils.AstroUtils
             SOFA = New SOFA.SOFA
 
-            RAJ2000Value = Double.NaN 'Initialise to invalid values in case these are read before they are set
+            'Initialise to invalid values in case these are read before they are set
+            RAJ2000Value = Double.NaN
             DECJ2000Value = Double.NaN
             RATopoValue = Double.NaN
             DECTopoValue = Double.NaN
             SiteElevValue = Double.NaN
             SiteLatValue = Double.NaN
             SiteLongValue = Double.NaN
+            SitePressureValue = Double.NaN
+
             RefracValue = False
             LastSetBy = SetBy.Never
             RequiresRecalculate = True
@@ -181,11 +185,11 @@ Namespace Transform
         End Property
 
         ''' <summary>
-        ''' Gets or sets the site ambient temperature
+        ''' Gets or sets the site ambient temperature (not reduced to sea level)
         ''' </summary>
         ''' <value>Site ambient temperature (-273.15 to 100.0 Celsius)</value>
         ''' <returns>Temperature in degrees Celsius</returns>
-        ''' <remarks></remarks>
+        ''' <remarks>This property represents the air temperature as measured by a thermometer at the observing site. It must not be a "reduced to sea level" value.</remarks>
         Property SiteTemperature() As Double Implements ITransform.SiteTemperature
             Get
                 CheckSet("SiteTemperature", SiteTempValue, "Site temperature has not been set")
@@ -193,10 +197,30 @@ Namespace Transform
                 Return SiteTempValue
             End Get
             Set(ByVal value As Double)
-                If (value < -273.15) Or (value > 100.0) Then Throw New ASCOM.InvalidValueException("SiteElevation", value.ToString(), "-273.15 Celsius", "+100.0 Celsius")
+                If (value < -273.15) Or (value > 100.0) Then Throw New ASCOM.InvalidValueException("SiteTemperature", value.ToString(), "-273.15 Celsius", "+100.0 Celsius")
                 If SiteTempValue <> value Then RequiresRecalculate = True
                 SiteTempValue = value
                 TL.LogMessage("SiteTemperature Set", value.ToString)
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Gets or sets the site atmospheric pressure (not reduced to sea level)
+        ''' </summary>
+        ''' <value>Site atmospheric pressure (0.0 to 1200.0 hPa (mbar))</value>
+        ''' <returns>Atmospheric pressure (hPa)</returns>
+        ''' <remarks>This property represents the atmospheric pressure as measured by a barometer at the observing site. It must not be a "reduced to sea level" value.</remarks>
+        Property SitePressure() As Double
+            Get
+                CheckSet("SitePressure", SitePressureValue, "Site atmospheric pressure has not been set")
+                TL.LogMessage("SitePressure Get", SitePressureValue.ToString())
+                Return SitePressureValue
+            End Get
+            Set(ByVal value As Double)
+                If (value < 0.0) Or (value > 1200.0) Then Throw New ASCOM.InvalidValueException("SitePressure", value.ToString(), "0.0hPa (mbar)", "+1200.0hPa (mbar)")
+                If SitePressureValue <> value Then RequiresRecalculate = True
+                SitePressureValue = value
+                TL.LogMessage("SitePressure Set", value.ToString())
             End Set
         End Property
 
@@ -496,7 +520,7 @@ Namespace Transform
                     If (SOFA.TaiUtc(tai1, tai2, utc1, utc2) <> 0) Then TL.LogMessage("JulianDateTT Set", "TaiUtc - Bad return code")
                     JulianDateUTCValue = utc1 + utc2
 
-                    TL.LogMessage("JulianDateTT Set", JulianDateTTValue.ToString & " " & Julian2DateTime(JulianDateTTValue).ToString(DATE_FORMAT) & ", JDUTC: " & Julian2DateTime(JulianDateUTCValue).ToString(DATE_FORMAT))
+                    TL.LogMessage("JulianDateTT Set", JulianDateTTValue.ToString & " " & Utl.DateJulianToUTC(JulianDateTTValue).ToString(DATE_FORMAT) & ", JDUTC: " & Utl.DateJulianToUTC(JulianDateUTCValue).ToString(DATE_FORMAT))
                 Else ' Handle special case of 0.0
                     JulianDateUTCValue = 0.0
                     TL.LogMessage("JulianDateTT Set", "Calculations will now be based on PC the DateTime")
@@ -532,7 +556,7 @@ Namespace Transform
                     If (SOFA.TaiTt(tai1, tai2, tt1, tt2) <> 0) Then TL.LogMessage("JulianDateUTC Set", "TaiTt - Bad return code")
                     JulianDateTTValue = tt1 + tt2
 
-                    TL.LogMessage("JulianDateUTC Set", JulianDateTTValue.ToString & " " & Julian2DateTime(JulianDateUTCValue).ToString(DATE_FORMAT) & ", JDTT: " & Julian2DateTime(JulianDateTTValue).ToString(DATE_FORMAT))
+                    TL.LogMessage("JulianDateUTC Set", JulianDateTTValue.ToString & " " & Utl.DateJulianToUTC(JulianDateUTCValue).ToString(DATE_FORMAT) & ", JDTT: " & Utl.DateJulianToUTC(JulianDateTTValue).ToString(DATE_FORMAT))
                 Else ' Handle special case of 0.0
                     JulianDateTTValue = 0.0
                     TL.LogMessage("JulianDateUTC Set", "Calculations will now be based on PC the DateTime")
@@ -559,6 +583,9 @@ Namespace Transform
             If Double.IsNaN(SiteLongValue) Then Throw New Exceptions.TransformUninitialisedException("Site longitude has not been set")
             If Double.IsNaN(SiteTempValue) Then Throw New Exceptions.TransformUninitialisedException("Site temperature has not been set")
 
+            ' Calculate site pressure at site elevation if this has not been provided
+            CalculateSitePressureIfRequired()
+
             Sw.Reset() : Sw.Start()
 
             JDUTCSofa = GetJDUTCSofa()
@@ -568,7 +595,7 @@ Namespace Transform
 
             If RefracValue Then ' Include refraction
                 SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, JDUTCSofa, 0.0, DUT1,
-                                         SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 1000.0, SiteTempValue, 0.8, 0.57, aob, zob, hob, dob, rob, eo)
+                                         SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, SitePressureValue, SiteTempValue, 0.8, 0.57, aob, zob, hob, dob, rob, eo)
             Else ' No refraction
                 SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, JDUTCSofa, 0.0, DUT1,
                                          SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, aob, zob, hob, dob, rob, eo)
@@ -579,7 +606,8 @@ Namespace Transform
             AzimuthTopoValue = aob * RADIANS2DEGREES
             ElevationTopoValue = 90.0 - zob * RADIANS2DEGREES
 
-            TL.LogMessage("  J2000 To Topo", "  Topocentric RA/DEC (including refraction if specified):  " & FormatRA(RATopoValue) & " " & FormatDec(DECTopoValue) & " Refraction: " & RefracValue.ToString & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+            TL.LogMessage("  J2000 To Topo", "  Topocentric RA/DEC (including refraction if specified):  " & FormatRA(RATopoValue) & " " & FormatDec(DECTopoValue) & " Refraction: " & RefracValue.ToString & ", " &
+                          FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
             TL.LogMessage("  J2000 To Topo", "  Azimuth/Elevation: " & FormatDec(AzimuthTopoValue) & " " & FormatDec(ElevationTopoValue) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
             TL.LogMessage("  J2000 To Topo", "  Completed")
             TL.BlankLine()
@@ -609,6 +637,9 @@ Namespace Transform
             If Double.IsNaN(SiteLongValue) Then Throw New Exceptions.TransformUninitialisedException("Site longitude has not been set")
             If Double.IsNaN(SiteTempValue) Then Throw New Exceptions.TransformUninitialisedException("Site temperature has not been set")
 
+            ' Calculate site pressure at site elevation if this has not been provided
+            CalculateSitePressureIfRequired()
+
             Sw.Reset() : Sw.Start()
 
             JDUTCSofa = GetJDUTCSofa()
@@ -617,9 +648,11 @@ Namespace Transform
 
             Sw.Reset() : Sw.Start()
             If RefracValue Then ' Refraction is required
-                RetCode = SOFA.ObservedToCelestial("R", SOFA.Anp(RATopoValue * HOURS2RADIANS + SOFA.Eo06a(JDTTSofa, 0.0)), DECTopoValue * DEGREES2RADIANS, JDUTCSofa, 0.0, DUT1, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 1000, SiteTempValue, 0.85, 0.57, RACelestrial, DecCelestial)
+                RetCode = SOFA.ObservedToCelestial("R", SOFA.Anp(RATopoValue * HOURS2RADIANS + SOFA.Eo06a(JDTTSofa, 0.0)), DECTopoValue * DEGREES2RADIANS, JDUTCSofa, 0.0, DUT1,
+                                                   SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, SitePressureValue, SiteTempValue, 0.85, 0.57, RACelestrial, DecCelestial)
             Else
-                RetCode = SOFA.ObservedToCelestial("R", SOFA.Anp(RATopoValue * HOURS2RADIANS + SOFA.Eo06a(JDTTSofa, 0.0)), DECTopoValue * DEGREES2RADIANS, JDUTCSofa, 0.0, DUT1, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, RACelestrial, DecCelestial)
+                RetCode = SOFA.ObservedToCelestial("R", SOFA.Anp(RATopoValue * HOURS2RADIANS + SOFA.Eo06a(JDTTSofa, 0.0)), DECTopoValue * DEGREES2RADIANS, JDUTCSofa, 0.0, DUT1,
+                                                   SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, RACelestrial, DecCelestial)
             End If
 
             RAJ2000Value = RACelestrial * RADIANS2HOURS
@@ -629,9 +662,11 @@ Namespace Transform
             ' Now calculate the corresponding AzEl values from the J2000 values
             Sw.Reset() : Sw.Start()
             If RefracValue Then ' Include refraction
-                SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, JDUTCSofa, 0.0, DUT1, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 1000.0, SiteTempValue, 0.8, 0.57, aob, zob, hob, dob, rob, eo)
+                SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, JDUTCSofa, 0.0, DUT1,
+                                         SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, SitePressureValue, SiteTempValue, 0.8, 0.57, aob, zob, hob, dob, rob, eo)
             Else ' No refraction
-                SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, JDUTCSofa, 0.0, DUT1, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, aob, zob, hob, dob, rob, eo)
+                SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, JDUTCSofa, 0.0, DUT1,
+                                         SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, aob, zob, hob, dob, rob, eo)
             End If
 
             AzimuthTopoValue = aob * RADIANS2DEGREES
@@ -747,13 +782,18 @@ Namespace Transform
             If Double.IsNaN(SiteLongValue) Then Throw New Exceptions.TransformUninitialisedException("Site longitude has not been set")
             If Double.IsNaN(SiteTempValue) Then Throw New Exceptions.TransformUninitialisedException("Site temperature has not been set")
 
+            ' Calculate site pressure at site elevation if this has not been provided
+            CalculateSitePressureIfRequired()
+
             JulianDateUTCSofa = GetJDUTCSofa()
             DUT1 = AstroUtl.DeltaUT(JulianDateUTCSofa)
 
             If RefracValue Then ' Refraction is required
-                RetCode = SOFA.ObservedToCelestial("A", AzimuthTopoValue * DEGREES2RADIANS, (90.0 - ElevationTopoValue) * DEGREES2RADIANS, JulianDateUTCSofa, 0.0, DUT1, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 1000, SiteTempValue, 0.85, 0.57, RACelestial, DecCelestial)
+                RetCode = SOFA.ObservedToCelestial("A", AzimuthTopoValue * DEGREES2RADIANS, (90.0 - ElevationTopoValue) * DEGREES2RADIANS, JulianDateUTCSofa, 0.0, DUT1,
+                                                   SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, SitePressureValue, SiteTempValue, 0.85, 0.57, RACelestial, DecCelestial)
             Else
-                RetCode = SOFA.ObservedToCelestial("A", AzimuthTopoValue * DEGREES2RADIANS, (90.0 - ElevationTopoValue) * DEGREES2RADIANS, JulianDateUTCSofa, 0.0, DUT1, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, RACelestial, DecCelestial)
+                RetCode = SOFA.ObservedToCelestial("A", AzimuthTopoValue * DEGREES2RADIANS, (90.0 - ElevationTopoValue) * DEGREES2RADIANS, JulianDateUTCSofa, 0.0, DUT1,
+                                                   SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, RACelestial, DecCelestial)
             End If
 
             RAJ2000Value = RACelestial * RADIANS2HOURS
@@ -775,7 +815,7 @@ Namespace Transform
             Else ' A specific UTC date / time has been set so use it
                 Retval = JulianDateUTCValue
             End If
-            TL.LogMessage("  GetJDUTCSofa", "  " & Retval.ToString & " " & Julian2DateTime(Retval).ToString(DATE_FORMAT))
+            TL.LogMessage("  GetJDUTCSofa", "  " & Retval.ToString & " " & Utl.DateJulianToUTC(Retval).ToString(DATE_FORMAT))
             Return Retval
         End Function
 
@@ -794,7 +834,7 @@ Namespace Transform
             Else ' A specific TT date / time has been set so use it
                 Retval = JulianDateTTValue
             End If
-            TL.LogMessage("  GetJDTTSofa", "  " & Retval.ToString & " " & Julian2DateTime(Retval).ToString(DATE_FORMAT))
+            TL.LogMessage("  GetJDTTSofa", "  " & Retval.ToString & " " & Utl.DateJulianToUTC(Retval).ToString(DATE_FORMAT))
             Return Retval
         End Function
 
@@ -815,63 +855,6 @@ Namespace Transform
             Return Dec
         End Function
 
-        Private Function Julian2DateTime(m_JulianDate As Double) As DateTime
-            Dim L, N, I, J, JDLong As Long
-            Dim JDFraction, Remainder As Double
-            Dim Day, Month, Year, Hours, Minutes, Seconds, MilliSeconds As Integer
-            Dim Retval As DateTime
-
-            Dim debug As Boolean = False ' Local flag to create some additional debug output
-
-            Try
-                If m_JulianDate > 2378507.5 Then ' 1/1/1800
-                    JDLong = CLng(Math.Floor(m_JulianDate))
-                    JDFraction = m_JulianDate - Math.Floor(m_JulianDate)
-                    If debug Then TL.LogMessage("ConvertFromJulian", "Initial: " & JDLong & " " & JDFraction)
-
-                    L = JDLong + 68569
-                    N = CLng((4 * L) \ 146097)
-                    L = L - CLng((146097 * N + 3) \ 4)
-                    I = CLng((4000 * (L + 1) \ 1461001))
-                    L = L - CLng((1461 * I) \ 4) + 31
-                    J = CLng((80 * L) \ 2447)
-                    Day = CInt(L - CLng((2447 * J) \ 80))
-                    L = CLng(J \ 11)
-                    Month = CInt(J + 2 - 12 * L)
-                    Year = CInt(100 * (N - 49) + I + L)
-
-                    If debug Then TL.LogMessage("ConvertFromJulian", "DMY: " & Day & " " & Month & " " & Year)
-
-                    JDFraction += (5.0 / (24.0 * 60.0 * 60.0 * 10000.0))
-
-                    ' Allow for Julian days to start at 12:00 rather than 00:00  
-                    If JDFraction >= 0.5 Then ' After midnight so add 1 to the Julian day and remove half a day from the day fraction
-                        If debug Then TL.LogMessage("ConvertFromJulian", "JDFraction >= 0.5: " & JDFraction)
-                        Day += 1
-                        JDFraction -= 0.5
-                        If debug Then TL.LogMessage("ConvertFromJulian", "DMY: " & Day & " " & JDFraction)
-                    Else ' Before midnight so just add half a day 
-                        JDFraction += 0.5
-                    End If
-
-                    Hours = CInt(Int(JDFraction * 24.0)) : Remainder = (JDFraction * 24.0) - CDbl(Hours) : If debug Then TL.LogMessage("ConvertFromJulian", "Hours: " & Hours & " " & Remainder) 'Remainder as a fraction of an hour
-                    Minutes = CInt(Int(Remainder * 60.0)) : Remainder = (Remainder * 60.0) - CDbl(Minutes) : If debug Then TL.LogMessage("ConvertFromJulian", "Minutes: " & Minutes & " " & Remainder) 'Remainder as a fraction of a minute
-                    Seconds = CInt(Int(Remainder * 60.0)) : Remainder = (Remainder * 60.0) - CDbl(Seconds) : If debug Then TL.LogMessage("ConvertFromJulian", "Seconds: " & Seconds & " " & Remainder) 'Remainder as a fraction of a second
-                    MilliSeconds = CInt(Int(Remainder * 1000.0))
-
-                    If debug Then TL.LogMessage("ConvertFromJulian", JDLong & " " & JDFraction & " " & Day & " " & Hours & " " & Minutes & " " & Seconds & " " & MilliSeconds)
-                    Retval = New DateTime(Year, Month, Day, Hours, Minutes, Seconds, MilliSeconds)
-                Else ' Early or invalid Julian date so return a default value
-                    Retval = New Date(1800, 1, 10) ' Return this as a default bad value
-                End If
-            Catch ex As Exception
-                TL.LogMessageCrLf("", "Exception: " & ex.ToString)
-                Retval = New Date(1900, 1, 10) ' Return this as a default bad value
-            End Try
-
-            Return (Retval)
-        End Function
-
         Private Function FormatRA(RA As Double) As String
             Return Utl.HoursToHMS(RA, ":", ":", "", 3)
         End Function
@@ -879,6 +862,18 @@ Namespace Transform
         Private Function FormatDec(Dec As Double) As String
             Return Utl.DegreesToDMS(Dec, ":", ":", "", 3)
         End Function
+
+        Private Sub CalculateSitePressureIfRequired()
+            ' Derive the site pressure from the site elevation if the pressure has not been set explicitly
+            If Double.IsNaN(SitePressureValue) Then ' Site pressure has already been set so don't override the set value
+                TL.LogMessage("CalculateSitePressure", $"Site pressure has been set to {SitePressureValue:0.0}hPa.")
+            Else ' Site pressure has not been set so derive a value based on the supplied observatory height and temperature
+                ' phpa = 1013.25 * exp ( −hm / ( 29.3 * tsl ) ); NOTE this equation calculates the site pressure and uses the site temperature REDUCED TO SEA LEVEL MESURED IN DEGREES KELVIN
+                ' tsl = tSite − 0.0065(0 − hsite);  NOTE this equation reduces the site temperature to sea level
+                SitePressureValue = STANDARD_PRESSURE * Math.Exp(-SiteElevValue / (29.3 * (SiteTempValue + 0.0065 * SiteElevValue - ABSOLUTE_ZERO_CELSIUS)))
+                TL.LogMessage("CalculateSitePressure", $"Site pressure has not been set by user, calculated value: {SitePressureValue:0.0}hPa.")
+            End If
+        End Sub
 
 #End Region
 

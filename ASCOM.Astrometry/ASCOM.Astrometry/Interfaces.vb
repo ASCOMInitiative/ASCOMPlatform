@@ -36,7 +36,7 @@ Namespace Transform
         ''' </summary>
         ''' <value>Site longitude</value>
         ''' <returns>Longitude in degrees</returns>
-        ''' <remarks>Positive numbers east of the Greenwich meridian, negative numbes west of the Greenwich meridian.</remarks>
+        ''' <remarks>Positive numbers east of the Greenwich meridian, negative numbers west of the Greenwich meridian.</remarks>
         <DispId(2)> Property SiteLongitude() As Double
         ''' <summary>
         ''' Gets or sets the site elevation above sea level
@@ -55,12 +55,12 @@ Namespace Transform
         ''' <summary>
         ''' Gets or sets a flag indicating whether refraction is calculated for topocentric co-ordinates
         ''' </summary>
-        ''' <value>True / false flag indicating refaction is included / omitted from topocentric co-ordinates</value>
+        ''' <value>True / false flag indicating refraction is included / omitted from topocentric co-ordinates</value>
         ''' <returns>Boolean flag</returns>
         ''' <remarks></remarks>
         <DispId(5)> Property Refraction() As Boolean
         ''' <summary>
-        ''' Causes the transform component to recalculate values derrived from the last Set command
+        ''' Causes the transform component to recalculate values derived from the last Set command
         ''' </summary>
         ''' <remarks>Use this when you have set J2000 co-ordinates and wish to ensure that the mount points to the same 
         ''' co-ordinates allowing for local effects that change with time such as refraction.</remarks>
@@ -153,7 +153,7 @@ Namespace Transform
         ''' <remarks></remarks>
         <DispId(15)> ReadOnly Property DECApparent() As Double
         ''' <summary>
-        ''' Returns the topocentric azimth angle of the target
+        ''' Returns the topocentric azimuth angle of the target
         ''' </summary>
         ''' <value>Topocentric azimuth angle</value>
         ''' <returns>Azimuth angle in degrees</returns>
@@ -189,9 +189,9 @@ Namespace Transform
         ''' the Julian date.</returns>
         ''' <remarks>This method was introduced in May 2012. Previously, Transform used the current date-time of the PC when calculating transforms; 
         ''' this remains the default behaviour for backward compatibility.
-        ''' The inital value of this parameter is 0 which is a special value that forces Transform to replicate original behaviour by determining the  
+        ''' The initial value of this parameter is 0 which is a special value that forces Transform to replicate original behaviour by determining the  
         ''' Julian date from the PC's current date and time. If this property is non zero, that terrestrial time Julian date is used in preference 
-        ''' to the value derrived from the PC's clock.</remarks>
+        ''' to the value derived from the PC's clock.</remarks>
         <DispId(19)> Property JulianDateTT As Double
         ''' <summary>
         ''' Sets or return the Julian date (UTC) for which the transform will be made
@@ -257,11 +257,11 @@ Namespace Kepler
     ''' <br /><br /><i>UTC Time Scale </i><br />
     ''' Most of the ASCOM methods and properties that accept date/time values (either Date or Julian) 
     ''' assume that the date/time is in Coordinated Universal Time (UTC). Where necessary, this time 
-    ''' is converted internally to other scales. Note that UTC seconds are based on the Cesium atom, 
+    ''' is converted internally to other scales. Note that UTC seconds are based on the Caesium atom, 
     ''' not planetary motions. In order to keep UTC in sync with planetary motion, leap seconds are 
     ''' inserted periodically. The error is at most 900 milliseconds.
     ''' <br /><br /><i>UT1 Time Scale </i><br />
-    ''' The UT1 time scale is the planetary equivalent of UTC. It it runs smoothly and varies a bit 
+    ''' The UT1 time scale is the planetary equivalent of UTC. It runs smoothly and varies a bit 
     ''' with time, but it is never more than 900 milliseconds different from UTC. 
     ''' <br /><br /><i>TT Time Scale </i><br />
     ''' The Terrestrial Dynamical Time (TT) scale is used in solar system orbital calculations. 
@@ -295,7 +295,7 @@ Namespace Kepler
         ''' The type of solar system body represented by this instance of the ephemeris engine (enum)
         ''' </summary>
         ''' <value>The type of solar system body represented by this instance of the ephemeris engine (enum)</value>
-        ''' <returns>0 for major planet, 1 for minot planet and 2 for comet</returns>
+        ''' <returns>0 for major planet, 1 for minor planet and 2 for comet</returns>
         ''' <remarks></remarks>
         <DispId(3)> Property BodyType() As BodyType
         ''' <summary>
@@ -481,7 +481,7 @@ Namespace NOVASCOM
         ''' <remarks></remarks>
         <DispId(8)> ReadOnly Property HeliocentricVelocity() As VelocityVector
         ''' <summary>
-        ''' Earth mean objiquity
+        ''' Earth mean obliquity
         ''' </summary>
         ''' <value>Mean obliquity of the ecliptic</value>
         ''' <returns>Degrees</returns>

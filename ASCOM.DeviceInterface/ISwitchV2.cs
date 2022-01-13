@@ -95,7 +95,7 @@ namespace ASCOM.DeviceInterface
         string DriverVersion { get; }
 
         /// <summary>
-        /// The interface version number that this device supports. Should return 2 for this interface version.
+        /// The interface version number that this device supports. Must return 2 for this interface version.
         /// </summary>
         /// <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
         /// <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read ths property.
@@ -306,7 +306,7 @@ namespace ASCOM.DeviceInterface
         /// <returns>The maximum value to which this device can be set or which a read only sensor will return.</returns>
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <remarks><p style="color:red"><b>Must be implemented, must not throw a <see cref="ASCOM.MethodNotImplementedException"/>.</b></p>
-        /// <para>If a two state device cannot report its state,  <see cref="MaxSwitchValue"/> should return the value 1.0.</para>
+        /// <para>If a two state device cannot report its state,  <see cref="MaxSwitchValue"/> must return the value 1.0.</para>
         /// <para> Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
         /// <para>This is a Version 2 method.</para>
         /// </remarks>
@@ -319,7 +319,7 @@ namespace ASCOM.DeviceInterface
         /// <returns>The minimum value to which this device can be set or which a read only sensor will return.</returns>
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <remarks><p style="color:red"><b>Must be implemented, must not throw a <see cref="ASCOM.MethodNotImplementedException"/>.</b></p>
-        /// <para>If a two state device cannot report its state, <see cref="MinSwitchValue"/> should return the value 0.0.</para>
+        /// <para>If a two state device cannot report its state, <see cref="MinSwitchValue"/> must return the value 0.0.</para>
         /// <para> Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
         /// <para>This is a Version 2 method.</para>
         /// </remarks>
@@ -337,7 +337,7 @@ namespace ASCOM.DeviceInterface
         /// <para><see cref="SwitchStep"/> must be greater than zero and the number of steps can be calculated as:
         /// ((<see cref="MaxSwitchValue"/> - <see cref="MinSwitchValue"/>) / <see cref="SwitchStep"/>) + 1.</para>
         /// <para>The switch range (<see cref="MaxSwitchValue"/> - <see cref="MinSwitchValue"/>) must be an exact multiple of <see cref="SwitchStep"/>.</para>
-        /// <para>If a two state device cannot report its state, <see cref="SwitchStep"/> should return the value 1.0.</para>
+        /// <para>If a two state device cannot report its state, <see cref="SwitchStep"/> must return the value 1.0.</para>
         /// <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
         /// <para>This is a Version 2 method.</para>
         /// </remarks>
@@ -375,7 +375,7 @@ namespace ASCOM.DeviceInterface
         /// <remarks><p style="color:red"><b>Can throw a <see cref="ASCOM.MethodNotImplementedException"/> if <see cref="CanWrite"/> is False.</b></p>
         /// <para>If the value is more than <see cref="MaxSwitchValue"/> or less than <see cref="MinSwitchValue"/>
         /// then the method must throw an <see cref="ASCOM.InvalidValueException"/>.</para>
-        /// <para>A set value that is intermediate between the values specified by <see cref="SwitchStep"/> should result in the device being set to an achievable value close to the requested set value.</para>
+        /// <para>A set value that is intermediate between the values specified by <see cref="SwitchStep"/> must result in the device being set to an achievable value close to the requested set value.</para>
         /// <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
         /// <para>This is a Version 2 method.</para>
         /// </remarks>

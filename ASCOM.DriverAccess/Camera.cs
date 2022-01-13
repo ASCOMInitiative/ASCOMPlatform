@@ -332,6 +332,22 @@ namespace ASCOM.DriverAccess
         /// images since it requires much less memory.</para>
         /// <para>For colour or multispectral cameras, will produce an array of  <see cref="NumX" /> * <see cref="NumY" /> *
         /// NumPlanes.  If the application cannot handle multispectral images, it should use just the first plane.</para>
+        /// <para><b>Clarification December 2021.</b></para>
+        /// <para>
+        /// The two dimensional array that supports monochrome and Bayer matrix colour sensors is specified with width as its first dimension and height as its second, rightmost, dimension.
+        /// From an <b>infrastructure</b> perspective, the .NET CLR and C like languages store arrays in memory using row major order, which means that the rightmost array index changes most rapidly. For an array Array[X, Y]  it is the Y index that changes most rapidly, 
+        /// leading to a memory layout that looks like this:
+        /// </para>
+        /// <para>
+        /// Array[0, 0], Array[0, 1] ... Array[0, Y - 1], Array[1, 0], Array[1, 1] ... Array[1, Y - 1] ... Array[X - 1, 0], Array[X - 1, 1] ... Array[X - 1, Y - 1]
+        /// </para>
+        /// <para>
+        /// The <b>ImageArray property</b> is specified to return Array[NumX, NumY] where X represents width (horizontal lines) and Y represents height (vertical columns). 
+        /// For the ImageArray array, the rightmost dimension is defined as the image height, hence, when stored in memory, the height index will change most rapidly.This means that, from an <b>application</b> perspective, 
+        /// values are held in memory in column major order despite being stored in row major order from an <b>infrastructure</b> perspective.
+        /// </para>
+        /// <para>We consider the <b>application</b> view to have primacy and thus consider the returned array to be column major in structure, regardless of the form in which it is stored in memory.</para>
+        /// <para>Furthermore, for the avoidence of doubt, the pixel at coordinate 0,0 is the top left image pixel.</para>
         /// </remarks>
         /// <value>The image array.</value>
         /// <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
@@ -354,6 +370,22 @@ namespace ASCOM.DriverAccess
         /// <para>For colour or multispectral cameras, will produce an array of <see cref="NumX" /> * <see cref="NumY" /> *
         /// NumPlanes.  If the application cannot handle multispectral images, it should use
         /// just the first plane.</para>
+        /// <para><b>Clarification December 2021.</b></para>
+        /// <para>
+        /// The two dimensional array that supports monochrome and Bayer matrix colour sensors is specified with width as its first dimension and height as its second, rightmost, dimension.
+        /// From an <b>infrastructure</b> perspective, the .NET CLR and C like languages store arrays in memory using row major order, which means that the rightmost array index changes most rapidly. For an array Array[X, Y]  it is the Y index that changes most rapidly, 
+        /// leading to a memory layout that looks like this:
+        /// </para>
+        /// <para>
+        /// Array[0, 0], Array[0, 1] ... Array[0, Y - 1], Array[1, 0], Array[1, 1] ... Array[1, Y - 1] ... Array[X - 1, 0], Array[X - 1, 1] ... Array[X - 1, Y - 1]
+        /// </para>
+        /// <para>
+        /// The <b>ImageArrayVariant property</b> is specified to return Array[NumX, NumY] where X represents width (horizontal lines) and Y represents height (vertical columns). 
+        /// For the ImageArrayVariant array, the rightmost dimension is defined as the image height, hence, when stored in memory, the height index will change most rapidly.This means that, from an <b>application</b> perspective, 
+        /// values are held in memory in column major order despite being stored in row major order from an <b>infrastructure</b> perspective.
+        /// </para>
+        /// <para>We consider the <b>application</b> view to have primacy and thus consider the returned array to be column major in structure, regardless of the form in which it is stored in memory.</para>
+        /// <para>Furthermore, for the avoidence of doubt, the pixel at coordinate 0,0 is the top left image pixel.</para>
         /// </remarks>
         /// <value>The image array variant.</value>
         /// <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>

@@ -1132,6 +1132,10 @@ Install Files
 Install Files
 Install Files
 Install Files
+Install Files
+Install Files
+Install Files
+Install Files
 Comment
 Install Files
 Install Files
@@ -3078,7 +3082,11 @@ $
 {3583042B-2D97-4F7C-BD27-3F0A6B7FD411}
 {9F5F901E-69E1-45A7-AA19-2D5FCB51D653}
 {364763FD-78C9-4988-A0A5-D194EE0C970B}
-{DA668ED1-C328-4E28-B02C-A35680941BBD}
+{E2A59BC6-86E8-482D-AF1B-443C214A066B}
+{68C64F2C-BF56-4F57-92BD-28E02A8B72A6}
+{EDCAC9A0-4730-4BC4-85E0-407DD241E807}
+{688B8357-2855-4FDA-8667-A1FE818A78DD}
+{063D8F75-0450-41B5-AB0A-576047E55A90}
 {4CC1714A-F4E4-48E8-BCBD-5F4704A11BF1}
 {23D1AEE3-7817-47F4-BA58-5D0EE99EA6A3}
 {2AD14A0C-AFC6-43C0-9691-1BC843C62755}
@@ -8398,7 +8406,7 @@ FALSE
 FALSE
 FALSE
 {BD20D395-35BC-44D1-AC77-B54024C41505}
-..\..\..\..\SOFA\Sofa Test Application\Win32\Release\Sofa Test Application.exe
+..\..\..\..\SOFA\Sofa Test Application\Win32\Release\SofaTestApplication-32.exe
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -8411,7 +8419,7 @@ FALSE
 FALSE
 FALSE
 {A2E1184F-EE0D-4204-AD36-37C499DF5BCF}
-..\..\..\..\SOFA\SOFA Test Application\x64\Release\Sofa Test Application-64.exe
+..\..\..\..\SOFA\SOFA Test Application\x64\Release\SofaTestApplication-64.exe
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -8930,19 +8938,6 @@ FALSE
 FALSE
 FALSE
 FALSE
-{DA668ED1-C328-4E28-B02C-A35680941BBD}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\RestSharp.dll
-FALSE|
-$COMMONFILES$\ASCOM\AlpacaDynamicClients
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
 {93F921A4-C61C-41AF-856A-EB87C02CCD28}
 ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe
 FALSE|
@@ -9207,6 +9202,71 @@ FALSE
 ..\..\..\..\Releases\ASCOM 6\Platform\Files\Astro32.dll
 FALSE|
 $COMMONFILES$\ASCOM\Telescope
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{E2A59BC6-86E8-482D-AF1B-443C214A066B}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\RestSharp.dll
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{68C64F2C-BF56-4F57-92BD-28E02A8B72A6}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Alpaca.dll
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{EDCAC9A0-4730-4BC4-85E0-407DD241E807}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Common.dll
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{688B8357-2855-4FDA-8667-A1FE818A78DD}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Tools.dll
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{063D8F75-0450-41B5-AB0A-576047E55A90}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\Newtonsoft.Json.dll
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
 FALSE
 FALSE
@@ -14257,6 +14317,10 @@ C
 
 
 
+
+
+
+
 C
 C
 C
@@ -15023,6 +15087,10 @@ C
 
 
 $
+
+
+
+
 
 
 

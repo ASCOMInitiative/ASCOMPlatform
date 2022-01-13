@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauApcs(double date1, double date2, double pv[2][3],
              double ebpv[2][3], double ehp[3],
@@ -127,11 +128,11 @@ void iauApcs(double date1, double date2, double pv[2][3],
 **     iauPn        decompose p-vector into modulus and direction
 **     iauIr        initialize r-matrix to identity
 **
-**  This revision:   2017 March 16
+**  This revision:   2021 February 24
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 /* au/d to m/s */
@@ -178,7 +179,7 @@ void iauApcs(double date1, double date2, double pv[2][3],
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

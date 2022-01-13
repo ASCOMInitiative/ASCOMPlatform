@@ -161,7 +161,7 @@ namespace ASCOM.DriverAccess
         /// </returns>
         /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="T:ASCOM.InvalidOperationException">If the state cannot be read. This is not recommended but it is not always possible to read
-        /// the state from some hardware. Once the state has been set the last state set should be returned.</exception>
+        /// the state from some hardware. Once the state has been set the last state set must be returned.</exception>
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
         /// <para>All devices must implement this. A multi-state device will return true if the device is at the maximum value, false if the value is at the minimum
@@ -195,7 +195,7 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Returns the maximum value for this switch device, this must be greater than <see cref="MinSwitchValue"/>.
         /// </summary>
-        /// <param name="id">The device whose value should be returned</param>
+        /// <param name="id">The device whose value must be returned</param>
         /// <returns>
         /// The maximum value to which this device can be set or a read only sensor will return.
         /// </returns>
@@ -213,13 +213,13 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Returns the minimum value for this switch device, this must be less than <see cref="MaxSwitchValue"/>.
         /// </summary>
-        /// <param name="id">The device whose value should be returned</param>
+        /// <param name="id">The device whose value must be returned</param>
         /// <returns>
         /// The minimum value to which this device can be set or a read only sensor will return.
         /// </returns>
         /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <remarks>
-        /// <para>Two state devices should return 0.0 as their minimum value.</para>
+        /// <para>Two state devices must return 0.0 as their minimum value.</para>
         /// <para>This method was first introduced in Version 2.</para>
         /// </remarks>
         public double MinSwitchValue(short id)
@@ -238,7 +238,7 @@ namespace ASCOM.DriverAccess
         /// </returns>
         /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <remarks>
-        /// <para><see cref="SwitchStep"/> must be greater than zero, two state devices should return 1.0.</para>
+        /// <para><see cref="SwitchStep"/> must be greater than zero, two state devices must return 1.0.</para>
         /// <para>The number of states is determined from (<see cref="MaxSwitchValue"/> - <see cref="MinSwitchValue"/> ) / <see cref="SwitchStep"/> + 1,
         /// this must be an integer, value 2 for a boolean device and more than 2 for a multi-state device.</para>
         /// <para>SwitchStep, MinSwitchValue and MaxSwitchValue can be used to determine the way the device is controlled and/or displayed,
@@ -254,11 +254,11 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Returns the value for switch device id as a double.
         /// </summary>
-        /// <param name="id">The device number whose value should be returned</param>
+        /// <param name="id">The device number whose value must be returned</param>
         /// <returns>The value for this switch, this is expected to be between <see cref="MinSwitchValue"/> and
         /// <see cref="MaxSwitchValue"/>.</returns>
         /// <exception cref="T:ASCOM.InvalidOperationException">If the value cannot be read. This is not recommended but it is not always possible to read
-        /// the value from some hardware. Once the value has been set the last value set should be returned.</exception>
+        /// the value from some hardware. Once the value has been set the last value set must be returned.</exception>
         /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <remarks>
         /// <para>This method was first introduced in Version 2.</para>
@@ -278,13 +278,13 @@ namespace ASCOM.DriverAccess
         /// If the value is not between the <see cref="MaxSwitchValue"/> and <see cref="MinSwitchValue"/> then throws an
         /// <see cref="T:ASCOM.InvalidValueException"/>.
         /// </summary>
-        /// <param name="id">The switch number whose value should be set</param>
+        /// <param name="id">The switch number whose value must be set</param>
         /// <param name="value">Value to be set, between <see cref="MinSwitchValue"/> and <see cref="MaxSwitchValue"/></param>
         /// <exception cref="T:ASCOM.InvalidValueException">If the value is not between the maximum and minimum.</exception>
         /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented, if <see cref="CanWrite"/> is false.</exception>
         /// <remarks>
-        /// <para>A value that is intermediate between the values specified by <see cref="SwitchStep"/> should be set to an achievable value.</para>
+        /// <para>A value that is intermediate between the values specified by <see cref="SwitchStep"/> must be set to an achievable value.</para>
         /// <para>This method was first introduced in Version 2.</para>
         /// </remarks>
         public void SetSwitchValue(short id, double value)

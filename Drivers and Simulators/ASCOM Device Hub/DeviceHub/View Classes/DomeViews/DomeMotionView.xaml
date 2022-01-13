@@ -62,7 +62,7 @@
 					Command="{Binding ToggleShutterStateCommand}">
 				<Button.Content>
 					<TextBlock TextAlignment="Center" TextWrapping="Wrap"
-							   Text="{Binding ShutterCommandAction, FallbackValue=Close Shutter, TargetNullValue=Open Shutter}" />
+							   Text="{Binding ShutterCommandAction, FallbackValue=Open Shutter, TargetNullValue=Open Shutter}" />
 				</Button.Content>
 			</Button>
 			<Button Height="60" Width="60" Margin="4,0" Style="{StaticResource CircleButton}"

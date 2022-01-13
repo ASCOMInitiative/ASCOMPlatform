@@ -115,8 +115,6 @@ namespace ASCOM.DeviceHub
 
 		public string ConnectError { get; protected set; }
 		public Exception ConnectException { get; protected set; }
-		public ParkingStateEnum ParkingState { get; private set; }
-
 		public TelescopeCapabilities Capabilities { get; private set; }
 		public TelescopeParameters Parameters { get; private set; }
 		public DevHubTelescopeStatus Status { get; private set; }
@@ -361,21 +359,13 @@ namespace ASCOM.DeviceHub
 
 					if ( !Service.AtPark )
 					{
-						ParkingState = ParkingStateEnum.Unparked;
 						Status.AtPark = false;
 						Status.ParkingState = ParkingStateEnum.Unparked;
 					}
 				}
-
-				Status.ParkingState = ParkingStateEnum.Unparked;
-
-				//if ( !Status.AtPark )
-				//{
-				//	ParkingState = ParkingStateEnum.Unparked;
-				//}
 			}
 
-			Debug.WriteLine( $"ParkingState set to {ParkingState}." );
+			//Debug.WriteLine( $"ParkingState set to {ParkingState}." );
 
 		}
 
@@ -624,6 +614,11 @@ namespace ASCOM.DeviceHub
 
 		public void StartMeridianFlip()
 		{
+			if ( Parameters.AlignmentMode != AlignmentModes.algGermanPolar )
+			{
+				throw new InvalidOperationException( "Only German Equatorial telescopes can perform a meridian flip." );
+			}
+
 			// Change the Side of the Pier
 
 			double ra = Status.RightAscension;
@@ -695,11 +690,16 @@ namespace ASCOM.DeviceHub
 
 		public PierSide GetTargetSideOfPier( double rightAscension, double declination )
 		{
-			PierSide retval = DestinationSideOfPier( rightAscension, declination );
+			PierSide retval = PierSide.pierUnknown;
 
-			if ( retval == PierSide.pierUnknown )
+			if ( Parameters.AlignmentMode == AlignmentModes.algGermanPolar )
 			{
-				// Unable to get side-of-pier from the mount so we need to simulate it.
+				retval = DestinationSideOfPier( rightAscension, declination );
+			}
+
+			if ( retval == PierSide.pierUnknown && Parameters.AlignmentMode == AlignmentModes.algGermanPolar )
+			{
+				// Unable to get side-of-pier for this German Equatorial Mount so we need to simulate it.
 
 				double hourAngle = AstroUtils.ConditionHA( Status.SiderealTime - rightAscension );
 				PierSide currentSOP = Status.SideOfPier;
@@ -1138,7 +1138,7 @@ namespace ASCOM.DeviceHub
 		{
 			// This method is called as a Task to run on a worker thread.
 
-			ParkingState = ParkingStateEnum.ParkInProgress;
+			Status.ParkingState = ParkingStateEnum.ParkInProgress;
 
 			// Since we don't know whether Park is synchronous or asynchronous, call it on another thread.
 			// which is set it up to cancel after 60 seconds.
@@ -1157,17 +1157,16 @@ namespace ASCOM.DeviceHub
 				if ( Status.AtPark )
 				{
 					more = false;
-					ParkingState = ParkingStateEnum.IsAtPark;
 				}
 				else if ( task.IsCanceled ) // not parked in 60 seconds causes cancellation.
 				{
 					more = false;
-					ParkingState = ParkingStateEnum.ParkFailed;
+					Status.ParkingState = ParkingStateEnum.Unparked; // Err on the side of caution.
 				}
 				else if ( task.IsFaulted )
 				{
 					more = false;
-					ParkingState = ParkingStateEnum.ParkFailed;
+					Status.ParkingState = ParkingStateEnum.Unparked; // Err on the side of caution.
 				}
 
 				if ( more )

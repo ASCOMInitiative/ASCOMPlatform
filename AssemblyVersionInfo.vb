@@ -11,10 +11,10 @@
 '     <Link>Properties\SolutionInfo.vb</Link>
 '   </Compile>
 ' 
-' Version information is isolated in a seperate file to facilitate integration with the build server.
+' Version information is isolated in a separate file to facilitate integration with the build server.
 ' The build server will replace this entire file with a machine-generated one. Therefore,
 ' this file should contain ONLY the global file version number and no other settings.
 ' 
 ' For local builds, the version is always 6.x.9999.9999, indicating an uncontrolled release.
 
-<Assembly: AssemblyFileVersion("6.5.9999.9999")>
+<Assembly: AssemblyFileVersion("6.6.9999.9999")>

@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("ASCOM Device Interfaces for Platform 6")]
 [assembly: AssemblyCompany("ASCOM")]
 [assembly: AssemblyProduct("ASCOM.DeviceInterfaces.Platform6")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2021")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]

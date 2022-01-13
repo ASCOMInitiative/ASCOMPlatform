@@ -59,11 +59,11 @@ void iauEqec06(double date1, double date2, double dr, double dd,
 **     iauAnp       normalize angle into range 0 to 2pi
 **     iauAnpm      normalize angle into range +/- pi
 **
-**  This revision:  2016 February 9
+**  This revision:  2021 May 11
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double rm[3][3], v1[3], v2[3], a, b;
@@ -85,9 +85,11 @@ void iauEqec06(double date1, double date2, double dr, double dd,
    *dl = iauAnp(a);
    *db = iauAnpm(b);
 
+/* Finished. */
+
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

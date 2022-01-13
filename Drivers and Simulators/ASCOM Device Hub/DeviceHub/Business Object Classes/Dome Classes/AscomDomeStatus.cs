@@ -35,9 +35,9 @@ namespace ASCOM.DeviceHub
 
 				// Return NaN
 			}
-			else if ( ShutterStatus != ShutterState.shutterOpen )
+			else if ( ShutterStatus == ShutterState.shutterClosed )
 			{
-				// Can't get altitude unless the shutter is open.
+				// Don't report the altitude when the shutter is closed.
 				// Use the previous value or NaN, if none.
 
 				double previousAltitude = Double.NaN;

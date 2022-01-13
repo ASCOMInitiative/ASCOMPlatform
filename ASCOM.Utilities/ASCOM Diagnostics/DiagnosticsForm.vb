@@ -15,6 +15,7 @@ Imports System.Security.AccessControl
 Imports System.Security.Principal
 Imports System.Threading
 Imports System.Text
+Imports ASCOM.Astrometry.Exceptions
 
 Public Class DiagnosticsForm
 
@@ -106,6 +107,7 @@ Public Class DiagnosticsForm
         SiteLongitude
         SiteElevation
         SiteTemperature
+        SitePressure
         JulianDateUTC
         JulianDateTT
         SetJ2000RA
@@ -585,9 +587,9 @@ Public Class DiagnosticsForm
         SOFA = New SOFA.SOFA
 
         ' SOFA version tests
-        CompareInteger("SOFATests", "SOFA release number", SOFA.SofaReleaseNumber(), 16)
-        Compare("SOFATests", "SOFA issue date", SOFA.SofaIssueDate, "2020-07-21")
-        Compare("SOFATests", "SOFA revision date", SOFA.SofaRevisionDate, "2020-07-21")
+        CompareInteger("SOFATests", "SOFA release number", SOFA.SofaReleaseNumber(), 18)
+        Compare("SOFATests", "SOFA issue date", SOFA.SofaIssueDate, "2021-05-12")
+        Compare("SOFATests", "SOFA revision date", SOFA.SofaRevisionDate, "2021-05-12")
 
         'Af2a tests
         j = SOFA.Af2a("-", 45, 13, 27.2, a)
@@ -654,7 +656,7 @@ Public Class DiagnosticsForm
         'Eo06a tests
         eo = SOFA.Eo06a(2400000.5, 53736.0)
 
-        CompareDouble("SOFATests", "Eo06a-eo", eo, -0.0013328823719418338, 0.000000000000001)
+        CompareDouble("SOFATests", "Eo06a-eo", eo, -0.0013328823719418337, 0.000000000000001)
 
         'Atic13 tests
         ri = 2.7101215729690389
@@ -1198,7 +1200,7 @@ Public Class DiagnosticsForm
                 .Description = "Platform 6 Switch Simulator",
                 .DeviceType = "Switch",
                 .Name = "ASCOM Switch V2 Simulator",
-                .DriverVersion = DiagnosticsMajorMinorVersionNumber,
+                .DriverVersion = "6.6",
                 .InterfaceVersion = 2,
                 .IsPlatform5 = False,
                 .SixtyFourBit = True
@@ -3880,12 +3882,29 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Sub TransformTest()
-        'Dim transform As Transform.Transform = New Transform.Transform
+        ' Confirm that site property read before write generates an errpr
+        TransformInitalGetTest(transform, TransformExceptionTestType.SiteLatitude)
+        TransformInitalGetTest(transform, TransformExceptionTestType.SiteLongitude)
+        TransformInitalGetTest(transform, TransformExceptionTestType.SiteElevation)
+        ' Cannot test SiteTemperature because a coding omission in Transform caused it never to be forced to be set. Now it cannot be forced to be set because it could break existing applications. :(
+        ' TransformInitalGetTest(transform, TransformExceptionTestType.SiteTemperature)
+        TransformInitalGetTest(transform, TransformExceptionTestType.SitePressure)
 
+        ' Set parameters ready for trasnformation
+        transform.SiteTemperature = 20.0
+        transform.SiteElevation = 1500
+        transform.SiteLatitude = 0.0
+        transform.SiteLongitude = 0.0
+        transform.SetJ2000(0.0, 0.0) ' Set coordinates 0.0,0.0
+
+        Dim ra As Double = transform.RATopocentric ' Get the topocentric RA
+
+        ' Transform acceptable parameter range tests
         TransformExceptionTest(transform, TransformExceptionTestType.SiteLatitude, 0.0, -91.0, 91.0)
         TransformExceptionTest(transform, TransformExceptionTestType.SiteLongitude, 0.0, -181.0, 181.0)
         TransformExceptionTest(transform, TransformExceptionTestType.SiteElevation, 0.0, -301.0, 10001.0)
         TransformExceptionTest(transform, TransformExceptionTestType.SiteTemperature, 0.0, -275.0, 101.0)
+        TransformExceptionTest(transform, TransformExceptionTestType.SitePressure, 1013.25, -0.1, 1200.1)
         TransformExceptionTest(transform, TransformExceptionTestType.JulianDateTT, 2451545.0, -1.0, 6000000.0)
         TransformExceptionTest(transform, TransformExceptionTestType.JulianDateTT, 0.0, -1.0, 6000000.0) ' Confirm that the special JulianDateTT value of 0.0 passes
         TransformExceptionTest(transform, TransformExceptionTestType.JulianDateUTC, 2451545.0, -1.0, 6000000.0)
@@ -3906,6 +3925,32 @@ Public Class DiagnosticsForm
         transform.Dispose()
 
         TL.BlankLine()
+    End Sub
+
+    Private Sub TransformInitalGetTest(TR As Transform.Transform, test As TransformExceptionTestType)
+        Dim value As Double
+
+        Try
+            Select Case test
+                Case TransformExceptionTestType.SiteLatitude
+                    value = TR.SiteLatitude
+                Case TransformExceptionTestType.SiteLongitude
+                    value = TR.SiteLongitude
+                Case TransformExceptionTestType.SiteElevation
+                    value = TR.SiteElevation
+                Case TransformExceptionTestType.SiteTemperature
+                    value = TR.SiteTemperature
+                Case TransformExceptionTestType.SitePressure
+                    value = TR.SitePressure
+            End Select
+            LogError("TransformInitalGetTest", $"Inital read of Transform.{test} did not raise a TransformUninitialisedException as expected.")
+        Catch ex As TransformUninitialisedException
+            TL.LogMessage("TransformInitalGetTest", $"A TransformUninitialisedException was generated as expected when readsing Transform{test} for the first time.")
+            NMatches += 1
+        Catch ex As Exception
+            LogError("TransformInitalGetTest", $"Unexpected exception when reading Transform.{test} for the first time: {ex}")
+        End Try
+
     End Sub
 
     Private Sub TransformExceptionTest(TR As Transform.Transform, test As TransformExceptionTestType, InRange As Double, OutofRangeLow As Double, OutofRangeHigh As Double)
@@ -3929,6 +3974,8 @@ Public Class DiagnosticsForm
                     TR.SiteElevation = Value
                 Case TransformExceptionTestType.SiteTemperature
                     TR.SiteTemperature = Value
+                Case TransformExceptionTestType.SitePressure
+                    TR.SitePressure = Value
                 Case TransformExceptionTestType.SetJ2000RA
                     TR.SetJ2000(Value, 0.0)
                 Case TransformExceptionTestType.SetJ2000Dec
@@ -3955,11 +4002,9 @@ Public Class DiagnosticsForm
         Catch ex As Exception
             If Not ExpectedPass Then
                 TL.LogMessage("TransformExceptionTester", String.Format("Exception generated as expected for {0} invalid value of {1}", test.ToString(), Value))
-                'TL.LogMessageCrLf("TransformExceptionTester", ex.ToString())
                 NMatches += 1
             Else
                 LogError("TransformExceptionTester", String.Format("Unexpected exception generated on valid {0} value of {1}", test.ToString(), Value))
-                'TL.LogMessageCrLf("TransformExceptionTester", ex.ToString())
             End If
         End Try
 
@@ -3985,7 +4030,7 @@ Public Class DiagnosticsForm
             SiteLong = 0.0 - (17.0 / 60.0) - (40.0 / 3600.0)
 
             'Set up Transform component
-            transform.SiteElevation = 80.0
+            transform.SiteElevation = 1580.0
             transform.SiteLatitude = SiteLat
             transform.SiteLongitude = SiteLong
             transform.SiteTemperature = 10.0
@@ -5901,7 +5946,8 @@ Public Class DiagnosticsForm
             Compare("UtilTests", "IsMinimumRequiredVersion 6.3", Utl.IsMinimumRequiredVersion(6, 3).ToString, "True")
             Compare("UtilTests", "IsMinimumRequiredVersion 6.4", Utl.IsMinimumRequiredVersion(6, 4).ToString, "True")
             Compare("UtilTests", "IsMinimumRequiredVersion 6.5", Utl.IsMinimumRequiredVersion(6, 5).ToString, "True")
-            Compare("UtilTests", "IsMinimumRequiredVersion 6.6", Utl.IsMinimumRequiredVersion(6, 6).ToString, "False")
+            Compare("UtilTests", "IsMinimumRequiredVersion 6.6", Utl.IsMinimumRequiredVersion(6, 6).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 6.7", Utl.IsMinimumRequiredVersion(6, 7).ToString, "False")
 
             ' Check that the platform version properties return the correct values
             Dim FV As FileVersionInfo
@@ -6958,7 +7004,7 @@ Public Class DiagnosticsForm
     Private Sub ScanPlatform6Logs()
 
         Dim fileList() As String
-        Dim setupFiles As SortedList(Of DateTime, String) = New SortedList(Of DateTime, String)
+        Dim setupFiles As List(Of KeyValuePair(Of DateTime, String)) = New List(Of KeyValuePair(Of DateTime, String))
         Dim streamReader As StreamReader = Nothing
         Dim fileInfo As FileInfo
 
@@ -6970,24 +7016,24 @@ Public Class DiagnosticsForm
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOMPlatform6Install*.txt", SearchOption.TopDirectoryOnly)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
-                setupFiles.Add(fileInfo.CreationTime, foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
             Next
 
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.UninstallASCOM.*.txt", SearchOption.AllDirectories)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
-                setupFiles.Add(fileInfo.CreationTime, foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
             Next
 
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.FinaliseInstall.*.txt", SearchOption.AllDirectories)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
-                setupFiles.Add(fileInfo.CreationTime, foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
             Next
 
             TL.LogMessage("ScanPlatform6Logs", "Found the following installation logs:")
             For Each foundFile In setupFiles
-                TL.LogMessage("ScanPlatform6Logs", String.Format("  Date: {0} Log: {1}", foundFile.Key.ToString("dd MMM yyyy HH:mm:ss"), foundFile.Value))
+                TL.LogMessage("ScanPlatform6Logs", $"  Date: {foundFile.Key:dd MMM yyyy HH:mm:ss} Log: {foundFile.Value}")
             Next
 
             TL.BlankLine()

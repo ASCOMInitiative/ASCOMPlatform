@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ASCOM.Common.Alpaca;
+using ASCOM.Common.Com;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,9 +52,9 @@ namespace ASCOM.DynamicRemoteClients
                     ErrorMessage = exception.Message;
 
                     // Convert ASCOM exception error numbers (0x80040400 - 0x80040FFF) to equivalent Alpaca error numbers (0x400 to 0xFFF) so that they will be interpreted correctly by native Alpaca clients
-                    if ((ErrorNumber >= SharedConstants.ASCOM_ERROR_NUMBER_BASE) && (ErrorNumber <= SharedConstants.ASCOM_ERROR_NUMBER_MAX))
+                    if ((ErrorNumber >= (int)AlpacaErrors.AlpacaErrorCodeBase) && (ErrorNumber <= (int)AlpacaErrors.AlpacaErrorCodeMax))
                     {
-                        ErrorNumber = ErrorNumber - SharedConstants.ASCOM_ERROR_NUMBER_OFFSET;
+                        ErrorNumber = ErrorNumber - (int)ComErrorCodes.ComErrorNumberOffset;
                     }
                 }
             }

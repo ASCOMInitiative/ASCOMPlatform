@@ -90,11 +90,11 @@ void iauPn06a(double date1, double date2,
 **
 **     Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 **
-**  This revision:  2013 November 13
+**  This revision:  2021 May 11
 **
-**  SOFA release 2020-07-21
+**  SOFA release 2021-05-12
 **
-**  Copyright (C) 2020 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 /* Nutation. */
@@ -103,11 +103,11 @@ void iauPn06a(double date1, double date2,
 /* Remaining results. */
    iauPn06(date1, date2, *dpsi, *deps, epsa, rb, rp, rbp, rn, rbpn);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2020
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

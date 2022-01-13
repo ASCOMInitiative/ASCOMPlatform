@@ -3,11 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Net;
+using System.Net.Http;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using ASCOM.Common.Alpaca;
+using ASCOM.Common.Helpers;
 using ASCOM.DeviceInterface;
 using RestSharp;
+using static ASCOM.Common.Alpaca.AlpacaTools;
+using static ASCOM.DynamicRemoteClients.SharedConstants;
 
 namespace ASCOM.DynamicRemoteClients
 {
@@ -45,8 +51,8 @@ namespace ASCOM.DynamicRemoteClients
         private string userName;
         private string password;
         private bool manageConnectLocally;
-        private SharedConstants.ImageArrayTransferType imageArrayTransferType;
-        private SharedConstants.ImageArrayCompression imageArrayCompression;
+        private ImageArrayTransferType imageArrayTransferType;
+        private ImageArrayCompression imageArrayCompression;
         private string uniqueId;
         private bool enableRediscovery;
         private bool ipV4Enabled;
@@ -70,7 +76,7 @@ namespace ASCOM.DynamicRemoteClients
                 DriverDisplayName = RequiredDriverDisplayName; // Driver description that displays in the ASCOM Chooser.
                 DriverProgId = RequiredProgId;
 
-                if (TL == null) TL = new TraceLoggerPlus("", string.Format(SharedConstants.TRACELOGGER_NAME_FORMAT_STRING, DriverNumber, DEVICE_TYPE));
+                if (TL == null) TL = new TraceLoggerPlus("", string.Format(TRACELOGGER_NAME_FORMAT_STRING, DriverNumber, DEVICE_TYPE));
                 DynamicClientDriver.ReadProfile(clientNumber, TL, DEVICE_TYPE, DriverProgId,
                     ref traceState, ref debugTraceState, ref ipAddressString, ref portNumber, ref remoteDeviceNumber, ref serviceType, ref establishConnectionTimeout, ref standardDeviceResponseTimeout,
                     ref longDeviceResponseTimeout, ref userName, ref password, ref manageConnectLocally, ref imageArrayTransferType, ref imageArrayCompression, ref uniqueId, ref enableRediscovery, ref ipV4Enabled, ref ipV6Enabled, ref discoveryPort);
@@ -84,7 +90,7 @@ namespace ASCOM.DynamicRemoteClients
                 DynamicClientDriver.ConnectToRemoteDevice(ref client, ipAddressString, portNumber, establishConnectionTimeout, serviceType, TL, clientNumber, DriverProgId, DEVICE_TYPE,
                                                           standardDeviceResponseTimeout, userName, password, uniqueId, enableRediscovery, ipV6Enabled, ipV6Enabled, discoveryPort);
 
-                URIBase = string.Format("{0}{1}/{2}/{3}/", SharedConstants.API_URL_BASE, SharedConstants.API_VERSION_V1, DEVICE_TYPE, remoteDeviceNumber.ToString());
+                URIBase = string.Format("{0}{1}/{2}/{3}/", AlpacaConstants.API_URL_BASE, AlpacaConstants.API_VERSION_V1, DEVICE_TYPE, remoteDeviceNumber.ToString());
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "This devices's base URI: " + URIBase);
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "Establish communications timeout: " + establishConnectionTimeout.ToString());
                 TL.LogMessage(clientNumber, DEVICE_TYPE, "Standard device response timeout: " + standardDeviceResponseTimeout.ToString());
@@ -311,8 +317,8 @@ namespace ASCOM.DynamicRemoteClients
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { SharedConstants.DIRECTION_PARAMETER_NAME, ((int)Direction).ToString(CultureInfo.InvariantCulture) },
-                { SharedConstants.DURATION_PARAMETER_NAME, Duration.ToString(CultureInfo.InvariantCulture) }
+                {AlpacaConstants.DIRECTION_PARAMETER_NAME, ((int)Direction).ToString(CultureInfo.InvariantCulture) },
+                { AlpacaConstants.DURATION_PARAMETER_NAME, Duration.ToString(CultureInfo.InvariantCulture) }
             };
             DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "PulseGuide", Parameters, Method.PUT, MemberTypes.Method);
         }
@@ -321,8 +327,8 @@ namespace ASCOM.DynamicRemoteClients
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>
             {
-                { SharedConstants.DURATION_PARAMETER_NAME, Duration.ToString(CultureInfo.InvariantCulture) },
-                { SharedConstants.LIGHT_PARAMETER_NAME, Light.ToString() }
+                { AlpacaConstants.DURATION_PARAMETER_NAME, Duration.ToString(CultureInfo.InvariantCulture) },
+                { AlpacaConstants.LIGHT_PARAMETER_NAME, Light.ToString() }
             };
             DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "StartExposure", Parameters, Method.PUT, MemberTypes.Method);
         }
@@ -518,7 +524,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 DynamicClientDriver.SetClientTimeout(client, longDeviceResponseTimeout);
-                return DynamicClientDriver.GetValue<Array>(clientNumber, client, URIBase, TL, "ImageArray", imageArrayTransferType, imageArrayCompression, MemberTypes.Property);
+                return DynamicClientDriver.GetValue<Array>(clientNumber, client, URIBase, TL, AlpacaConstants.IMAGE_ARRAY_METHOD_NAME, imageArrayTransferType, imageArrayCompression, MemberTypes.Property);
             }
         }
 
@@ -938,5 +944,15 @@ namespace ASCOM.DynamicRemoteClients
 
         #endregion
 
+        #region Support code
+
+        private async Task<byte[]> GetByteArray(string url)
+        {
+            HttpClient wClient = new HttpClient();
+            byte[] imageBytes = await wClient.GetByteArrayAsync(url);
+            return imageBytes;
+        }
+
+        #endregion
     }
 }

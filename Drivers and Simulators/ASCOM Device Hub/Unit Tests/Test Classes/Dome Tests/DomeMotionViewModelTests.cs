@@ -41,6 +41,8 @@ namespace Unit_Tests.Dome
 		[TestMethod]
 		public void CanToggleShutterState()
 		{
+			_vm.Capabilities = DomeCapabilities.GetFullCapabilities();
+
 			DevHubDomeStatus status = DevHubDomeStatus.GetEmptyStatus();
 			status.Connected = true;
 			status.ShutterStatus = ShutterState.shutterClosed;
@@ -67,6 +69,10 @@ namespace Unit_Tests.Dome
 
 			result = (bool)_prVm.Invoke( "CanToggleShutterState" );
 			Assert.IsTrue( result );
+
+			_vm.Capabilities.CanSetShutter = false;
+			result = (bool)_prVm.Invoke( "CanToggleShutterState" );
+			Assert.IsFalse( result );
 		}
 
 		[TestMethod]
