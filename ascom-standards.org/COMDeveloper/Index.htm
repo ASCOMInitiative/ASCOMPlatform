@@ -54,6 +54,15 @@
 <h3>This Section is for Developers of Classic ASCOM COM Apps and Drivers</h3>
 	<p>For ASCOM Alpaca application and driver development see the <a href="../AlpacaDeveloper/Index.htm">Alpaca Developers Section</a>.</p>  
 	<p class="note">If you are new to ASCOM, is is strongly suggested that you first go through the <a href="../About/Index.htm">About Alpaca and ASCOM</a> section and then return here. Next familiarize yourself with <span class="underline">all three sections</span> of the Design Principles in the orange menu on the left. There is a lot of information here as well as in the <a href="https://ascom-standards.org/Help/Developer/Index.html" target="_blank">Help for the ASCOM Platform Developer Components (direct link)</a>. This information can save you time and frustration during your development. Please invest some time to check it out before getting heavily into your development.	</p>
+	<h3>Driver Design Principles</h3>
+	
+	<p>The interface specifications aren't the full story! There are some vital design principles that, if adhered-to, will maximize the chances that your driver will operate properly with a variety of client software. See the Design Principles topics in the orange menu at the top left and repearted here:
+	<ul>
+		<li><a href="Principles.htm">The General Principles</a> </li>
+		<li><a href="Async.htm">Asynchronous APIs</a></li>
+		<li><a href="Exceptions.htm">Exceptions in ASCOM</a> (applies to Alpaca!)</li>
+	</ul>
+
 <h3>Developer's Forum</h3>
 	<p>We have two separate forums, one for users and the other for developers. As a developer, we ask that you seek help and information using the <a href="https://ascomtalk.groups.io/g/Developer" target="_new">ASCOM Talk Developers Forum</a>.</p>
 	
@@ -64,20 +73,18 @@
 	<p>Once you have become familiar with the ASCOM ecosystem (see above), Look over the COM App Development topics in the orange menu. In particular, the <a href="AppStart.htm">Getting Started</a> info  includes this <a href="AppStart.htm#video">excellent video showing the development of a complete program</a> for controlling any telescope using Visual Studio using Visual Basic .NET. Then, if you are developing your application in one of the Microsoft .NET languages, learn about the <a href="ClientToolkit.htm">ASCOM .NET Client Toolkit</a>.</p>
 
 	<h3>Driver Developer Resources</h3>
-	<p>Once you have become familiar with the ASCOM ecosystem (see above), look over the COM Driver Design topics and the COM Driver Practical Issues in the orange menu. Most of the driver developer tools are contained within the <a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/v6.5SP1Release/ASCOMPlatform65SP1Developer.exe">ASCOM Platform Developer Components</a>. Driver developers are strongly encouraged to use those tools. This is particularly true for driver developers who write in C# or VB.NET. <span class="underline">The Developer Components contain templates for all driver types in both C# and VB.NET</span>. Using these templates will save you heaps of effort and troubles.</p>
+	<p>Once you have become familiar with the ASCOM ecosystem (see above), look over the COM Driver Design topics and the COM Driver Practical Issues in the orange menu. Most of the driver developer tools are contained within the <a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/v6.6Release/ASCOMPlatform66Developer.exe">ASCOM Platform Developer Components</a>. Driver developers are strongly encouraged to use those tools. This is particularly true for driver developers who write in C# or VB.NET. <span class="underline">The Developer Components contain templates for all driver types in both C# and VB.NET</span>. Using these templates will save you heaps of effort and troubles.</p>
 	<p>You may benefit from watching <a href="DriverImpl.htm#video">Tom How's excellent video showing how to develop a driver</a> for a telescope control system using the popular Arduino microcontroller kit.</p>
 	
 	<h3><a name="download" id="download"></a>Developer Components (separate download)</h3>
-	<p class="note">Before embarking on driver development, you should have the <a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/v6.5SP1Release/ASCOMPlatform65SP1Developer.exe">ASCOM Platform Developer Components</a> installed on your system. Driver templates, most of the developer documentation, and the installer generator are included in the Developer Components installation.  The developer components are provided as a separate download from the Platform itself. </p>
+	<p class="note">Before embarking on driver development, you should have the <a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/v6.6Release/ASCOMPlatform66Developer.exe">ASCOM Platform Developer Components</a> installed on your system. Driver templates, most of the developer documentation, and the installer generator are included in the Developer Components installation.  The developer components are provided as a separate download from the Platform itself. </p>
 
 	<h3>Conformance Checker</h3>
 	<p>See <a href="Conformance.htm">Conformance Testing</a>. Once you have your driver working, it's very important to test it with the <a href="https://ascom-standards.org/Developer/Conformance.htm">Driver Conformance Checker tool</a>. This tool will exercise your driver and the device it handles, checking for common programming errors. </p>
 
 	<h3>Role of Simulators</h3>
 	<p>The ASCOM Platform includes <i>simulators </i> for each of the devices covered by an ASCOM standard. These simulators provide a convenient tool for application software developers to test their programs with known good drivers under controlled conditions. The simulators also serve driver developers as <i>reference implementations </i> of the driver standards. If there is a question about the behavior of a property or method, the behavior of the appropriate simulator serves as the reference. </p>
-	<h3>Driver Design Principles</h3>
-	
-	<p>The interface specifications aren't the full story! There are some design principles that, if adhered-to, will maximize the chances that your driver will operate properly with a variety of client software. <span class="underline">The links on the left lead to information on each of these design principles</span>. </p>
+
 	<h3>Common Traps and Mistakes (mostly for driver developers)</h3>
 	<p>It probably seems unprofessional to start this section with what <i>not</i> to do, but we're just trying to save you time and pain. Over the last 12+ years we've seen the same mistakes repeated by driver developers enough times to rate being listed here. Hopefully a word to the wise is enough.</p>
 	<ul>
@@ -108,10 +115,10 @@
 	<div>
 		<h3 style="color:#FF9900; text-align: center;">Developer Components</h3>
 		<p style="text-align: center">
-		<a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/v6.5SP1Release/ASCOMPlatform65SP1Developer.exe" target="_new">
+		<a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/v6.6Release/ASCOMPlatform66Developer.exe" target="_new">
 		<img alt="Download Developer Components" src="../Images/Button2.jpg" width="149" height="44" border="0" /></a>		</p>
-		<p style="text-align: center"><a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/" target="_blank">Developer Components<br /> 6.5SP1 Release Notes</a><br /><br />
-		<a href="https://ascom-standards.org/Help/Developer/Index.html" target="_blank">Developer Components Help</a></p>
+		<p style="text-align: center"><a href="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/" target="_blank">Developer Components<br /> 6.5SP1 Release Notes</a><!--<br /><br />
+		<a href="https://ascom-standards.org/Help/Developer/Index.html" target="_blank">Developer Components Help</a></p>-->
 		<p>Additional components for developers of client applications and drivers.  </p>
 	</div>
 
