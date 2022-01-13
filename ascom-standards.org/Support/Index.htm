@@ -54,14 +54,25 @@
 		<div class="note" style="font-style: normal!important">
 		<h3>Getting Help - Up Front</h3>
 		<ul>
-			<li>Communicate with us on the <a href="https://ascomtalk.groups.io/g/Help/" target="_new">ASCOM Talk Help Forum</a></li>
-			<li>Keep in mind that &quot;ASCOM&quot; and the &quot;ASCOM Platform&quot; is a set of documentation, tools, and libraries used by many developers. It is not a &quot;program&quot; that is causing your problem. </li>
-			<li>Uninstalling and reinstalling the ASCOM Platform or a program you are struggling with is almost always a waste of time. </li>
+			<li>Keep in mind that &quot;ASCOM&quot;, &quot;Alpaca&quot;, and the &quot;ASCOM Platform&quot; are a set of specifications, documentation, tools, and libraries used by many developers for apps, devices, and drivers. If you have a problem with an app or a device that uses ASCOM or Alpaca, the first place to go for help is the app or device maker.</li>
+			<li>WIth the above in mind, feel free to communicate with us on the <a href="https://ascomtalk.groups.io/g/Help/" target="_new">ASCOM Talk Help Forum</a>.</li>
+			<li>Use the detailed links in the orange box to get help on your specific type of problem. </li>
 			<li>The problems we see most commonly are with devices, and are most often caused by flaky cables, bad USB connectors, bad power supplies for devices, or other hardware and driver related issues. The device maker, driver author, and people here who try to help need a way to make the problem happen reproduceably. Divide and conquer is another concept to consider. </li>
 			<li>There are no gremlins living in computers and devices. The causes of problems can virtually always be explained logically. Give the developers and others who want to help a chance to focus on the problem and solve it. </li>
-		</ul>
+	</ul>
 		</div>
-	<h3>General Advice - If You Ask Us for Help</h3>
+	<h3>How to Avoid Frustration</h3>
+	<p>If you find yourself not understanding and not getting help from device manufacturer or the app developer, it's easy to get into the "If all you have is a hammer, everything looks like a nail" mode. When you find yourself there, beware, you're likely to do something that makes things worse and/or obscures the real problem. Here are some common frustrating scenarios to be aware of <strong>and avoid</strong>:</p>
+	<ul>
+		<li>Uninstall/Reinstall cycles. This virtually <em>never</em> helps, and often makes things worse.</li>
+		<li>Trying to back-rev by uninstalling and reinstalling an <em>older version</em>. This can make things really bad because an upgrade may have changed the format or layout of data, components may have been replaced by newer versions and back revving may not downgrade them (&quot;DLL-hell&quot;). It's a very bad idea. </li>
+		<li>Running things on Windows &quot;as Administrator&quot;. Running "as Administrator" puts apps or drivers into a separate high-privilege execution environment where they cannot communicate or interact with apps or drivers not running "as Administrator". All sorts of inscrutable problems can arise. You may find yourself deciding to run first one app or driver "as Administrator" then that makes it necessary  to run another that way, and so on until <em>everything</em> is running "as Administrator! Apps see different areas of  the registry, your settings may change. It's ugly.</li>
+		<li>Blaming &quot;ASCOM&quot; for some problem in a program or driver. &quot;ASCOM&quot; and the &quot;ASCOM Platform&quot; is a set of documentation, tools, and libraries used by many developers. It is not a &quot;program&quot; that is causing your problem. </li>
+		<li>Blaming Windows Updates for changes in behavior or failures of your apps or drivers. An extreme example is the person who blamed a Windows Update for a change in the slew limits on a mount. This is simply ridiculous.</li>
+		<li>Asking for help on some forum or Facebook group before first contacting the program author or device manufacturer for help. Your chances of getting useful help from old Uncle Festus are not as good as would be if you asked the author or maker.</li>
+		</ul>
+	<p>There is no end to the Old Wives' Tales out there relating to fixing software and hardware problems.</p>
+<h3>General Advice - If You Ask Us for Help</h3>
 		<p>Communicate with us on the <a href="https://ascomtalk.groups.io/g/Help/" target="_new">ASCOM Talk Help Forum</a>. Remember that we aren't looking over your shoulder; we can't see things that are totally obvious to you. We need to know:</p>
 		<ul>
 			<li>What brand of device (e.g. telescope and mount) you are

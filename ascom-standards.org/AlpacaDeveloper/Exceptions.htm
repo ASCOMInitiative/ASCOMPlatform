@@ -1,0 +1,108 @@
+<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+<!DOCTYPE html>
+ 
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="expires" content="Fri, 1 Jan 1990 00:00:00 GMT">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+
+<!-- #BeginEditable "Title" -->
+<title>Exception Handling</title><!-- #EndEditable -->
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		breadcrumbs(); 
+	-->
+	</script>
+	</div>
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+	<!-- 
+		writemainmenu();
+	-->
+    </script>
+  	</div>
+</div>
+<div id="leftcontent">
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+		writesubmenu(); 
+	-->
+	</script>
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->
+	<!-- #EndEditable -->
+</div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+	<h3>Run-Time Errors and Exception Handling</h3>
+
+	<p>ASCOM's Application Programming Interfaces (APIs) incorporate the fundamental programming principle of &quot;<a href="Principles.htm#doitright">Do it right or raise an exception</a>&quot;. If you need to refresh your understanding of this principle and its consequences, please use the preceding link then come back here to understand the details of exceptions within the ASCOM COM and ASCOM Alpaca environment. </p>
+	<h4>Modern Exception Handling</h4>
+	<p>All modern languages and run time environments use &quot;out of band&quot; exception  reporting and handling [<a href="#ftn1">*</a>]. By out of band is meant that upon an error condition being detected or reported (an &quot;exceptional&quot; condition), the normal program execution flow is interrupted, and execution resumes somewhere else in some sort of pre-arranged error handling code. This goes back as far as the original C language which has setjmp/longjmp (&quot;hack the stack and go back Jack!&quot;) which is an out of band exception system.  Unix &quot;signals&quot; are another example.</p>
+Virtually  all popular languages use Structured Exception Handling. Most commonly this consists of a special statement like <tt>throw</tt> or <t>raise</tt> which carries packaged information like a line number, textual error message, and a numeric error code, or even an encapsulated &quot;inner exception&quot;. Exception handling code is pre-arranged via <tt>try{}catch(e){}</tt> or the syntactic equivalent, with 'e' being the exception info package/object. It's beyond the scope of this paper to provide more detail as this technique is  universal.
+<p>In modular systems where a program may be using a 3rd party package, library, or a separate process, or in a system like Python or Node.js where packages are widely used, it's often essential that the name of the <em>source</em> of the exception be part of the packaged info. Furthermore in some languages, it is possible for the exception package to contain an entire embedded exception package (&quot;inner exception&quot;) that may originate in a downstream or sub-module.</p>
+	<p>For example, your code makes a call to a local library and that library makes a REST call to an endpoint on another system.  On the REST server an error occurs and the local library receives an error response. The library function you called has now failed and must raise an exception. The exception source would be the library you called, and the details might include a message that a particular REST API call (one of several possibilities) failed and which describes the consequences of that failure to the library. That exception package could (should) include an inner exception whose source is the Rest API itself, and message indicating what went wrong over on the REST server and ideally why.</p>
+<p>Finally some programming environments (e.g. C# and Java) support multiple types of exceptions and separate multiple individual <tt>catch(<em>exception-type</em> ex)</tt> error handling blocks for each type of exception.</p>
+<h4>Exceptions in ASCOM Alpaca and COM</h4>
+<p>Applications must be prepared to catch exceptions from any Alpaca endpoint or ASCOM COM property or method, including <a href="Async.htm">Completion Properties for (asynchronous) ASCOM methods</a>. This should go without saying since anyone who writes software in a modern language and ecosystem needs to be prepared for run time errors and exceptions. Unfortunately, writing software to control physical devices (mounts, domes, etc) needs to be prepared for exceptions because those physical devices (and ther connections like USB) are much more susceptible to error states compared to pure code. </p>
+	<div align="center"><span class="note">All error conditions are reported by raising exceptions, and you may get exceptions from any property or method, so be prepared!</span></div>
+<p>This includes both Alpaca and COM. Both method calls and completion properties may raise exceptions. In COM the exception is a true run-time error. WIth Alpaca, the exception comes back as a JSON object with non-zero ErrorNumber and non-null ErrorMessage. A simple exception in Alpaca is this one coming from a mount that cannot slew when sidereal tracking is false.</p>
+<pre>
+{
+   "ClientTransactionID":4531,
+   "ServerTransactionID":4527,
+   "ErrorNumber":1035,
+   "ErrorMessage":<span style='color:yellow;'>""SlewToCoordinatesAsync is not allowed when tracking is False"</span>
+}</pre>
+<p>Exceptions aren't always this simple. Be prepared for an Alpaca response like this. This is the same exception but from the ASCOM COM Telescope Simulator.NET, converted into an Alpaca exception by ASCOM Remote. This is an extreme example. The point here is that you need to be prepared for anything that is a legal exception. Note that if you wish, you can ignore the DriverException field of the Alpaca JSON response object if you don't think your users would care. In any case the key is that there is a non-zero ErrorNumber, and a non-null Error Message. Be sure to report the primary error to your user!</p>
+<pre>
+{
+   "ClientTransactionID":26243,
+   "ServerTransactionID":310,
+   "ErrorNumber":1035,
+   "ErrorMessage":<span style='color:yellow;'>"SlewToCoordinatesAsync is not allowed when tracking is False"</span>,
+   "DriverException":{
+      "ClassName":"System.Runtime.InteropServices.COMException",
+      "Message":"SlewToCoordinatesAsync is not allowed when tracking is False",
+      "Data":null,
+      "InnerException":null,
+      "HelpURL":null,
+      "StackTraceString":"   at System.Dynamic.ComRuntimeHelpers.CheckThrowException(Int32 hresult, ExcepInfo& excepInfo, UInt32 argErr, String message)\r\n   at CallSite.Target(Closure , CallSite , ComObject , Double , Double )\r\n   at CallSite.Target(Closure , CallSite , Object , Double , Double )\r\n   at ASCOM.Remote.ServerForm.CallMethod(String deviceType, RequestData requestData) in J:\\ASCOMRemote\\Remote Server\\ServerForm.cs:line 5792",
+      "RemoteStackTraceString":null,
+      "RemoteStackIndex":0,
+      "ExceptionMethod":"8\nCheckThrowException\nSystem.Dynamic, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\nSystem.Dynamic.ComRuntimeHelpers\nVoid CheckThrowException(Int32, System.Dynamic.ExcepInfo ByRef, UInt32, System.String)",
+      "HResult":-2147220469,
+      "Source":"ASCOM.Simulator.Telescope",
+      "WatsonBuckets":null
+   }
+}</pre>
+<p>If you get something like this from an Alpaca end point, you should consider this just like an out-of-band run time error raised by the Alpaca-speaking device.</p>
+<hr />
+		<div style="font-size:small"><a name="ftn1"> </a>[*] It is no longer acceptable to use &quot;sentinel&quot; return values like -1 or a Boolean to indicate if an error occurred within the called logic.  The disadvantages of this to app developers are beyond belief. </div>
+	</div>
+
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright &copy; 1998-2021, The ASCOM Initiative. 
+	All rights reserved.
+</div>
+
+</body>
+
+<!-- #EndTemplate --></html>
