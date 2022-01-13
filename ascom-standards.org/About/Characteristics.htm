@@ -1,5 +1,5 @@
-<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
  
 <head>
 
@@ -21,42 +21,51 @@ dt {
 </style>
 
 <!-- #EndEditable -->
+
 <link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
 <script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
 </head>
  
 <body>
 
 <div id="banner">
 	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
 	<div id="breadcrumbs">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-		breadcrumbs(); 
+	breadcrumbs(); 
 	-->
 	</script>
-	</div>
+</div>
+
 	<div class="topmenucontainer">
     <script type="text/javascript" language="javascript">
-	<!-- 
-		writemainmenu();
-	-->
+      <!-- 
+	        writemainmenu();
+	        -->
     </script>
-  	</div>
+  </div>
 </div>
+
+
+
 <div id="leftcontent">
+
+
 	<div class="LeftNav">
 	<div class="center"><div class="north"><div class="south">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-		writesubmenu(); 
+	writesubmenu(); 
 	-->
 	</script>
+	
 	</div></div></div></div>
 
-	<!-- #BeginEditable "LeftNav" -->
-	<!-- #EndEditable -->
-</div>
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
@@ -78,16 +87,16 @@ dt {
 			<dd>A consequence of Alpaca's design for local net only is that Alpaca is purposely kept simple. No provisions for efficiency in the presence of significant network delays or bandwidth limits have been included. When operated in a local environment with network bandwidth being essentially unlimited and delays being essentially zero, and with property reading scattered through app code, little advantage is gained by aggregating property reading(<sup>3</sup>). The same goes for including the complexity of completion events for asynchronous processes. Communication between apps and devices doesn't include high-frequency processes which operate with the need for millisecond response times, and with essentially zero delay the status of an operation may be determined when needed without significant delay. ASCOM's implementation neutral interfaces don't include provisions for low level real-time servo controls, etc. This is by design. Those type of operations belong inside the device itself.</dd>
 		</dl>
 		<p>Now let's look at the real world. First, how this applies to classic ASCOM COM in <a href="Conn-COM.htm">6. COM Connectivity</a>.</p>
-	<hr>
-	<p style="font-size:small;"><sup>1</sup>Alpaca is ReST which is stateless<br>
-	<sup>2</sup>No publish/subscribe or anything like that<br>
+	<hr />
+	<p style="font-size:small;"><sup>1</sup>Alpaca is ReST which is stateless<br />
+	<sup>2</sup>No publish/subscribe or anything like that<br />
 	<sup>3</sup>Aggregated properties must be demultiplexed in the app, adding complexity and overhead.
+	</p>
 	</div>
 	<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright &copy; 1998-2021, The ASCOM Initiative. 
-	All rights reserved.
-</div>
+	Copyright &copy; 1998-2022, The ASCOM Initiative. 
+	All rights reserved. </div>
 
 </body>
 

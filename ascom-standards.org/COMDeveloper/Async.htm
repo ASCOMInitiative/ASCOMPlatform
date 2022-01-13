@@ -1,5 +1,5 @@
-<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
  
 <head>
 
@@ -11,42 +11,51 @@
 
 <!-- #BeginEditable "Title" -->
 <title>Asynchronous Programming</title><!-- #EndEditable -->
+
 <link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
 <script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
 </head>
  
 <body>
 
 <div id="banner">
 	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
 	<div id="breadcrumbs">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-		breadcrumbs(); 
+	breadcrumbs(); 
 	-->
 	</script>
-	</div>
+</div>
+
 	<div class="topmenucontainer">
     <script type="text/javascript" language="javascript">
-	<!-- 
-		writemainmenu();
-	-->
+      <!-- 
+	        writemainmenu();
+	        -->
     </script>
-  	</div>
+  </div>
 </div>
+
+
+
 <div id="leftcontent">
+
+
 	<div class="LeftNav">
 	<div class="center"><div class="north"><div class="south">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-		writesubmenu(); 
+	writesubmenu(); 
 	-->
 	</script>
+	
 	</div></div></div></div>
 
-	<!-- #BeginEditable "LeftNav" -->
-	<!-- #EndEditable -->
-</div>
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
@@ -61,28 +70,27 @@
 		<h4>Asynchronous Completion Property</h4>
 		<p>Later, while the operation is <em>in progress</em>, the app may wish to check to see if it has completed. Using the example above, the app would read the Dome.Slewing property. If it is True, then the operation is still in progress. At some point the app will need the dome to have rotated to the requested azimuth before it can move on with its other work. The app would then repeatedly check Dome.Slewing until it sees that it has changed to False. At this point the app can be 100% certain that the operation has <span class="underline">successfully completed</span>. Thus Dome.Slewing is the <em>completion property</em> for the Dome.SlewToAzimuth() method. </p>
 		<p>On the other hand, if an unanticipated problem occurs <em>during</em> the operation (after the method call returns) the next time the app tries to read the completion property it will not get a result back, but instead it will see a raised exception. So continuing our example, if the dome encounters a mechanical problem, or if the serial connection fails, or whatever, the next attempt to read Dome.Slewing will raise an exception. The interpretation is &quot;I can't give you a straight answer because I have a problem: xxx error message xxxx&quot;. </p>
-		<h4><a name="mistakes"></a>Common Mistake - Timing Bugs</h4>
+		<h4><a name="mistakes" id="mistakes"></a>Common Mistake - Timing Bugs</h4>
 		<p>When an app initiates an operation, for example Dome.OpenShutter, the app rightly expects to <em>immediately</em> see Dome.Slewing = True, and Dome.ShutterStatus = ShutterOpening. It is a common mistake for driver developers to expose their internal state ands violate this. For example, say it takes &quot;a little bit of time&quot; for the shutter to start moving. If Slewing and ShutterState are the raw internal states, it may be possible for an app to see ShutterClosed and/or Slewing = False <em>after the OpenShutter() returns</em>. This is a bug! No dome is that fast (opening the shutter in zero time). </p>
 		<h4>Other Properties</h4>
 		<p>Taking this further, if an app reads a property and gets back a result, then the app can be 100% certain that the value of the property is what the device says it is. If the device has encountered an error or failure such that the property value is compromised the device must raise an exception when that property is read. For example, if an app reads Telescope.RightAscension and the mount has lost communications, clearly the mount's driver must raise an exception. But what if the mount gets mechanically stuck? It is  compromised and therefore must raise an exception. The same logic applies to writing properties.</p>
 		<h4>Consequences for App Developers</h4>
 		<p>As an app developer, if you call an ASCOM API method, you can be 100% certain that the device successfully started the requested operation with the expectation that it could (later) complete it successfully. Later, when you see the completion property change to &quot;complete&quot;, you can be 100% certain that the request did in fact complete successfully. Also, if you read another property and it returns normally, you can be certain that you got a truthful answer. Likewise, if you write a property and it returns normally you can be certain that the corresponding value in the device was successfully changed as you requested.</p>
 		<p>As described above, you must be prepared to receive exceptions from both method calls and property reading/writing. This indicates that something has gone wrong in the device and it is compromised. It's usually a bad idea for apps to try to diagnose and correct problems based on error responses. </p>
-		<a name="poll"></a>
+		<a name="poll" id="poll"></a>
 		<h4>Needless Polling of Completion Properties</h4>
 		<p>It's <em>en vogue</em> to use an asynchronous operation by &quot;spinning off a thread&quot; in which you call the method, then repeatedly poll the completion property until it becomes &quot;complete&quot;. Meanwhile in your main logic flow you do other things that don't require the operation to have completed. Finally you come back and look when you need to know if it has completed before you can move on. Well all that time your spun-off thread is mindlessly polling for completion <span class="underline">before you even care</span>! It's bad form to create traffic for the device and the net with useless polling for async completion. Would it make more sense to kick off the operation with the method call, then go on about your other business, then when you need it to be done, check to see if it has completed right there? If not, now you're stuck and can't press on anyway, so loop right there waiting for it to complete. You may end up never waiting at all. </p>
 		<h4>Consequences for Device/Driver Developers</h4>
 		<p>Fundamentally, your device must<em> never lie to apps</em>. If you can't give a correct answer or initiate a requested operation with an expectation of success, you must raise an exception. If your device becomes compromised, you must raise an exception thereafter on any request that is related to the problem. For example, if your dome shutter becomes jammed and an app calls Dome.OpenShutter() you must raise an exception when the app tries to read Slewing (the completion property). As designed, however, the ShutterStatus property has an error state so it is OK to return ShutterError. Unfortunately this won't give any additional data to the app. If the app reads Slewing, you can raise an exception containing an error message describing the problem. It never hurts to raise an exception if you have any question about the integrity of the device.</p>
 		<p>Also see <a href="#mistakes">Common Mistake - Timing Bugs above</a>. As a driver developer you are responsible for avoiding this issue. </p>
 		<hr />
-		<p style="font-size:small;"><a name="foot1"></a>(*) There are a few historical methods which are  synchronous, as well as the Connected property which is actually a property masquerading as a <em>synchronous</em> method. We are aware of these issues and are deprecating these in the future. </p>
+		<p style="font-size:small;"><a name="foot1" id="foot1"></a>(*) There are a few historical methods which are  synchronous, as well as the Connected property which is actually a property masquerading as a <em>synchronous</em> method. We are aware of these issues and are deprecating these in the future. </p>
 	</div>
 
 	<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright &copy; 1998-2021, The ASCOM Initiative. 
-	All rights reserved.
-</div>
+	Copyright &copy; 1998-2022, The ASCOM Initiative. 
+	All rights reserved. </div>
 
 </body>
 

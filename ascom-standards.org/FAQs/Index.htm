@@ -1,5 +1,5 @@
-<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
  
 <head>
 
@@ -22,42 +22,51 @@ dt {
 -->
 </style>
 <!-- #EndEditable -->
+
 <link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
 <script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
 </head>
  
 <body>
 
 <div id="banner">
 	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
 	<div id="breadcrumbs">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-		breadcrumbs(); 
+	breadcrumbs(); 
 	-->
 	</script>
-	</div>
+</div>
+
 	<div class="topmenucontainer">
     <script type="text/javascript" language="javascript">
-	<!-- 
-		writemainmenu();
-	-->
+      <!-- 
+	        writemainmenu();
+	        -->
     </script>
-  	</div>
+  </div>
 </div>
+
+
+
 <div id="leftcontent">
+
+
 	<div class="LeftNav">
 	<div class="center"><div class="north"><div class="south">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-		writesubmenu(); 
+	writesubmenu(); 
 	-->
 	</script>
+	
 	</div></div></div></div>
 
-	<!-- #BeginEditable "LeftNav" -->
-	<!-- #EndEditable -->
-</div>
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
@@ -94,7 +103,7 @@ dt {
 		<h3>Frequently Asked Questions &#8212; Classic ASCOM COM</h3>
 		<dl style="margin-top: 0px; margin-bottom: 0px;">
 			
-			<dt><img src="../Images/ASCOM COM 80.png" width="80" height="88" hspace="8" vspace="4" align="right"><a name="hub" id="hub"></a>What is a Classic ASCOM Hub?</dt>
+			<dt><img src="../Images/ASCOM COM 80.png" width="80" height="88" hspace="8" vspace="4" align="right" /><a name="hub" id="hub"></a>What is a Classic ASCOM Hub?</dt>
 			<dd> A hub is an executable program that allows multiple ASCOM astronomy programs to share a device which has a DLL driver (which could ordinarily serve only a single app at a time). For details in context see ASCOM-COM COnnectivity in the About section. A hub can allow more than one program to connect to it just like an EXE driver, and it in turn provides sharing of the  DLL driver for the real device. Hubs can exist for any type of device. The diagram below shows a telescope hub only as an example. The ASCOM Platform comes with a useful hub. See <a href="DevHub.htm">Using DeviceHub</a> (also in the menu on the left). <br />
 				<img src="../Images/Hub.png" alt="Diagram" width="521" height="233" vspace="6" /> <br />
 				As explained in the previous question, a hub is not needed for an EXE (Local Server) driver. An EXE driver is itself a hub since it is able to serve multiple apps.</dd>
@@ -112,9 +121,8 @@ dt {
 	</div>
 <!-- #EndEditable --></div>
 <div id="footer">
-	Copyright &copy; 1998-2021, The ASCOM Initiative. 
-	All rights reserved.
-</div>
+	Copyright &copy; 1998-2022, The ASCOM Initiative. 
+	All rights reserved. </div>
 
 </body>
 

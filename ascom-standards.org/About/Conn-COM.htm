@@ -1,5 +1,5 @@
-<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
  
 <head>
 
@@ -11,42 +11,51 @@
 
 <!-- #BeginEditable "Title" -->
 <title>6. COM Connectivity</title><!-- #EndEditable -->
+
 <link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
 <script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
 </head>
  
 <body>
 
 <div id="banner">
 	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
 	<div id="breadcrumbs">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-		breadcrumbs(); 
+	breadcrumbs(); 
 	-->
 	</script>
-	</div>
+</div>
+
 	<div class="topmenucontainer">
     <script type="text/javascript" language="javascript">
-	<!-- 
-		writemainmenu();
-	-->
+      <!-- 
+	        writemainmenu();
+	        -->
     </script>
-  	</div>
+  </div>
 </div>
+
+
+
 <div id="leftcontent">
+
+
 	<div class="LeftNav">
 	<div class="center"><div class="north"><div class="south">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-		writesubmenu(); 
+	writesubmenu(); 
 	-->
 	</script>
+	
 	</div></div></div></div>
 
-	<!-- #BeginEditable "LeftNav" -->
-	<!-- #EndEditable -->
-</div>
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
@@ -56,14 +65,13 @@
 		<p>The<span class="note"> In Process</span> driver is the simplest type of COM driver. It is a DLL that loads into the app. In this case only that app may use the driver (and the device). The DLL has a special low-level structure that exposes the driver's interface via the Windows COM rules. The driver's bit-ness (32- or 64) must match that of the app. These types of drivers support a single type of device, and are often used with simple devices like focusers and rotators.</p>
 		<p>The <span class="note">Local Server</span> driver is the most flexible type of COM driver. It is a separate executable. The app and driver communicate through the Windows OS using a service called Local Procedure Calls (LPC), along with special structures to preserve that language independence and manage the two programs (the app and the driver, which in this case is also a program). When the app makes a request (read/write a variable or call a function), the app is put to sleep awaiting the response from the driver program. When a request comes into the driver program it processes the request, and for reading variables/properties, returns a value. The local server can (and usually does) perform other functions for the device, with incoming app requests being only one of its tasks. An example is a mount control program which is doing servo loops, pointing corrections, PEC, etc., along with handling incoming ASCOM app requests. Also, a single local server executable may serve drivers for more than one type of device, such as a Telescope and Focuser.</p>
 		<p>COM has provided the communication between apps and devices for years, but now ASCOM's universal interfaces (patterns) are also implemented using network protocols as the communication medium. For information on this, continue on to <a href="Conn-Alpaca.htm">7. Alpaca Connectivity</a>.</p>
-		<hr>
+		<hr />
 		<p style="font-size:small">(*) Rumors continue to persist that COM is going away. That's not going to happen. To be convinced, just open the Registry Editor to HKEY_LOCAL_MACHINE and count the COM objects upon which Windows itself depends, many of which are intrinsically part of the Windows OS itself. Most WIndows services are accessible through COM. </p>
 	</div>
 	<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright &copy; 1998-2021, The ASCOM Initiative. 
-	All rights reserved.
-</div>
+	Copyright &copy; 1998-2022, The ASCOM Initiative. 
+	All rights reserved. </div>
 
 </body>
 

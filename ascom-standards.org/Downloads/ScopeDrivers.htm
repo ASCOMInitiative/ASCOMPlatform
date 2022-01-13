@@ -1,5 +1,5 @@
-<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
  
 <head>
 
@@ -11,42 +11,51 @@
 
 <!-- #BeginEditable "Title" -->
 <title>Telescope/Mount Drivers</title><!-- #EndEditable -->
+
 <link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
 <script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
 </head>
  
 <body>
 
 <div id="banner">
 	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
 	<div id="breadcrumbs">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-		breadcrumbs(); 
+	breadcrumbs(); 
 	-->
 	</script>
-	</div>
+</div>
+
 	<div class="topmenucontainer">
     <script type="text/javascript" language="javascript">
-	<!-- 
-		writemainmenu();
-	-->
+      <!-- 
+	        writemainmenu();
+	        -->
     </script>
-  	</div>
+  </div>
 </div>
+
+
+
 <div id="leftcontent">
+
+
 	<div class="LeftNav">
 	<div class="center"><div class="north"><div class="south">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-		writesubmenu(); 
+	writesubmenu(); 
 	-->
 	</script>
+	
 	</div></div></div></div>
 
-	<!-- #BeginEditable "LeftNav" -->
-	<!-- #EndEditable -->
-</div>
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
@@ -87,20 +96,20 @@
 			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>This is the installer for the <a href="https://www.astroshop.eu/equatorial-without-goto/omegon-mount-montierung-eq-500-x-drive/p,56115" target="_new">Omegon Mount EQ-500X</a> sold by Astroshop.eu. Omegon mounts are a collection of Alt-Az and Equatorial mounts for visual observation and astrophotography. The Conformance report is part of the release. The mounts and driver pass with two errors related to coordinates granularity (1 arcsec minimum).</div>
 
 		<div class="download">
-			<h5>Celestron Unified (6.1.7350, Feb 2020) Telescope & Focuser</h5>
+			<h5>Celestron Unified (6.1.7350, Feb 2020) Telescope &amp; Focuser</h5>
 			<a href="https://download.ascom-standards.org/drivers/Celestron Telescope and Focuser Setup (6.1.7350).exe" target="_new">
 			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>
 			<p>Installs a driver for all computerized <a href="http://www.celestron.com/" target="aux">Celestron</a> telescopes, now including the new Celestron Focuser.
 			NOTE: Focuser moves are prevented if the focuser is not calibrated. <span class="underline">Calibrate the Focuser before anything else</span>!	Also this driver does its best to compensate for the extra time needed for final approach in slews but which is not reported via the Celestron controller. This driver has passed the <a href="DevTools.htm">Conformance Checker</a> tests. See the help file and release notes(!), installed as part of the driver, for a full description.
 			</p>
 			<p class="note"><b>This driver does NOT support Synta mounts. Use the <a href="#synta">Sky-Watcher drivers</a> listed below.</b></p>
-			</div>
+		</div>
 
 		<div class="download">
 			<h5>Digital Setting Circles (David Ek, external link)</h5>
 			<a href="http://eksfiles.net/digital-setting-circles/ascom-driver-for-digital-setting-circles/" target="_new">
 			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>This ASCOM driver allows the use of a variety of commercial and homebrew passive encoder-based digital setting circles systems with any Windows software that supports the ASCOM standard. This driver works with either alt-az mounts (like a dobsonian) or equatorial mounts. Equatorial mounts do not need to be accurately polar-aligned (although an accurate polar alignment will likely lead to a more satisfying observing experience). The button leads to David's web site for this driver as well as other info on DSCs.
-			</div>
+		</div>
 
 		<div class="download">
 			<h5>Explore Scientific PMC-Eight Mount Controller Driver</h5>
@@ -140,7 +149,7 @@
 		<div class="download">
 			<h5>Meade Autostar/Audiostar Project (October 2019) <span style="background:yellow; color: black; font-size: larger">&lt;- TRY THIS FIRST</span></h5>
 			<a href="https://bitbucket.org/cjdskunkworks/meadeautostar497" target="_new">
-			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>Link to a new "Meade Generic" driver for the <a href="https://www.meade.com/technology/audiostar/" target="_new">Meade Autostar/Audiostar</a> controlled Meade telescopes. This driver project is listed in hopes that the author can get feedback and work out any remaining issues. This driver has been created after discovering that the &quot;<em>Meade LX200 Classic and Autostar #494, #495, and #497 (combined telescope/focuser, 5.0.4)&quot;</em> driver listed below does not implement enough features to allow the telescope to be properly operated remotely.The driver can be installed alongside any other driver (including the "universal" one listed below). See the <a href="https://bitbucket.org/cjdskunkworks/meadeautostar497" target="_new">driver project website</a> for details.</div>
+			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>Link to a new &quot;Meade Generic&quot; driver for the <a href="https://www.meade.com/technology/audiostar/" target="_new">Meade Autostar/Audiostar</a> controlled Meade telescopes. This driver project is listed in hopes that the author can get feedback and work out any remaining issues. This driver has been created after discovering that the &quot;<em>Meade LX200 Classic and Autostar #494, #495, and #497 (combined telescope/focuser, 5.0.4)&quot;</em> driver listed below does not implement enough features to allow the telescope to be properly operated remotely.The driver can be installed alongside any other driver (including the &quot;universal&quot; one listed below). See the <a href="https://bitbucket.org/cjdskunkworks/meadeautostar497" target="_new">driver project website</a> for details.</div>
 
 		<div class="download">
 			<h5>Meade Universal Driver Project (June 2014)</h5>
@@ -160,7 +169,7 @@
 		<div class="download">
 			<h5>Meade MaxMount (1.0.0, March 2012)</h5>
 			<a href="https://download.ascom-standards.org/drivers/MeadeMaxMount(1.0.0)Setup.exe">
-			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>Installs a driver for the <a href="http://www.meade.com/max" target="aux">Meade MaxMount and MAX 20" ACF</a> telescope mount. </div>
+			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>Installs a driver for the <a href="http://www.meade.com/max" target="aux">Meade MaxMount and MAX 20&quot; ACF</a> telescope mount. </div>
 
 		<div class="download">
 			<h5>PC-TCS (combined telescope/focuser/dome 5.0.1)</h5>
@@ -202,9 +211,8 @@
 	</div>
 	<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright &copy; 1998-2021, The ASCOM Initiative. 
-	All rights reserved.
-</div>
+	Copyright &copy; 1998-2022, The ASCOM Initiative. 
+	All rights reserved. </div>
 
 </body>
 

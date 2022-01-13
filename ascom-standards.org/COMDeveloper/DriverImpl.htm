@@ -1,5 +1,5 @@
-<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
  
 <head>
 
@@ -11,54 +11,63 @@
 
 <!-- #BeginEditable "Title" -->
 <title>Driver Development</title><!-- #EndEditable -->
+
 <link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
 <script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
 </head>
  
 <body>
 
 <div id="banner">
 	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
 	<div id="breadcrumbs">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-		breadcrumbs(); 
+	breadcrumbs(); 
 	-->
 	</script>
-	</div>
+</div>
+
 	<div class="topmenucontainer">
     <script type="text/javascript" language="javascript">
-	<!-- 
-		writemainmenu();
-	-->
+      <!-- 
+	        writemainmenu();
+	        -->
     </script>
-  	</div>
+  </div>
 </div>
+
+
+
 <div id="leftcontent">
+
+
 	<div class="LeftNav">
 	<div class="center"><div class="north"><div class="south">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-		writesubmenu(); 
+	writesubmenu(); 
 	-->
 	</script>
+	
 	</div></div></div></div>
 
-	<!-- #BeginEditable "LeftNav" -->
-	<!-- #EndEditable -->
-</div>
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
 		<h3><a name="download" id="download"></a>Developer Components (separate download)</h3>
 		<p class="note">Before embarking on driver development, you should have the <a href="../Downloads/PlatDevComponents.htm" target="_blank">ASCOM Platform Developer Components</a> installed on your system. Driver templates, most of the developer documentation, and the installer generator are included in the Developer Components installation. The developer components are provided as a separate download from the Platform itself.</p>
 		<p>Here is a video by Tom How showing how he developed a driver for his telescope control system using the popular Arduino microcontroller kit.</p>
-		<p align="center"><a name="video"></a><iframe width="560" height="315" src="https://www.youtube.com/embed/XVlrDyIBd5I" frameborder="5" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
+		<p align="center"><a name="video" id="video"></a><iframe width="560" height="315" src="https://www.youtube.com/embed/XVlrDyIBd5I" frameborder="5" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen"></iframe></p>
 <h3>Driver Development Notes </h3>
-			<h5>Using the .NET Templates</h5>
-			<p>The Platform development team has done quite a bit of work to assist driver developers who use .NET languages. .NET is Microsoft's  supported development environment, with Visual Basic and C# being the most commonly used languages. For those who are starting driver development, it is suggested that you use one of these languages, and use the appropriate driver project template we have provided. 
-		<p class="note">The worst way to undertake driver development is to use the sources for another	driver.	While it may seem like a shortcut to success, it is almost always a shortcut to troubles, misunderstandings, and propagation of others' mistakes. Roll your sleeves up, learn what you need to learn, use the tools, and do your best.
-<h5>Storage of Driver-Specific Data </h5>
+		<h5>Using the .NET Templates</h5>
+			<p>The Platform development team has done quite a bit of work to assist driver developers who use .NET languages. .NET is Microsoft's  supported development environment, with Visual Basic and C# being the most commonly used languages. For those who are starting driver development, it is suggested that you use one of these languages, and use the appropriate driver project template we have provided.		</p>
+		<p class="note">The worst way to undertake driver development is to use the sources for another	driver.	While it may seem like a shortcut to success, it is almost always a shortcut to troubles, misunderstandings, and propagation of others' mistakes. Roll your sleeves up, learn what you need to learn, use the tools, and do your best.</p>
+		<h5>Storage of Driver-Specific Data </h5>
 <p>Most drivers will need to save persistent data (e.g. COM port selection). It's highly recommended that you use the DriverHelper.Profile object for this. It has a very simple interface and guarantees that you will get private storage for your persistent data items. It  uses an area of the registry set aside for ASCOM drivers. A browser, the Profile Explorer, is provided in the Platform to help diagnose ASCOM registration issues and to allow inspection and editing of driver-specific data. </p>
 			<p>It is possible that the layout of data in the registry will change due to future opperating system restrictions. This already happened twice(!) for Vista and Windows 7. Either way, <span class="underline">if you write directly to the registry you're asking for trouble</span>. Drivers which used the Profile object were <i>unaffected</i> by those changes to the Platform. On the other hand, if you choose to write your own private persistence storage code (e.g. to an XML file) that's fine too. Just be aware that your persistent data will not show (and be editable) in the ASCOM Profile Explorer, which is a useful troubleshooting tool.</p>
 	<h5>The Setup Dialog</h5>
@@ -71,9 +80,8 @@
 	</div>
 	<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright &copy; 1998-2021, The ASCOM Initiative. 
-	All rights reserved.
-</div>
+	Copyright &copy; 1998-2022, The ASCOM Initiative. 
+	All rights reserved. </div>
 
 </body>
 

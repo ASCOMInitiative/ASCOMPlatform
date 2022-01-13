@@ -1,5 +1,5 @@
-<!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
  
 <head>
 
@@ -12,44 +12,53 @@
 <!-- #BeginEditable "Title" -->
 <title>Interface Design Philosophy</title>
 
-<script type="text/javascript" language="javascript" src="../jscripts/expando.js"></script>
+<script type="text/javascript" language="JavaScript" src="../jscripts/expando.js"></script>
 <!-- #EndEditable -->
+
 <link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
 <script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
 </head>
  
 <body>
 
 <div id="banner">
 	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
 	<div id="breadcrumbs">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-		breadcrumbs(); 
+	breadcrumbs(); 
 	-->
 	</script>
-	</div>
+</div>
+
 	<div class="topmenucontainer">
     <script type="text/javascript" language="javascript">
-	<!-- 
-		writemainmenu();
-	-->
+      <!-- 
+	        writemainmenu();
+	        -->
     </script>
-  	</div>
+  </div>
 </div>
+
+
+
 <div id="leftcontent">
+
+
 	<div class="LeftNav">
 	<div class="center"><div class="north"><div class="south">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-		writesubmenu(); 
+	writesubmenu(); 
 	-->
 	</script>
+	
 	</div></div></div></div>
 
-	<!-- #BeginEditable "LeftNav" -->
-	<!-- #EndEditable -->
-</div>
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
@@ -68,11 +77,11 @@
 				<div class="expando" style="display:block;" id="sPerfect"><span id="tsPerfect">Some devices will inherently perform close to the ideal. Design the interface (at least initially) for a perfect device. Then add only those functions that are absolutely necessary during routine operation (observing). </span></div>
 			</li>
 			<li><a href="javascript:;" id="adapt" onclick="toggleSlide('sAdapt');" title="click for details">Minimize the need for clients to discover and adapt to device differences and limits&#8230;</a>
-				<div class="expando" style="display:block;" id="sAdapt"><span id="tsAdapt">This can get tricky. It will be the focus of much of the negotiations over the interface. A family of devices may come in more than one flavor (e.g. simple vs German equatorial mounts) and the clients may need to know what flavor a device is (e.g., know whether it needs to manage flipping). Device limits fall into this category too. Do you provide functions to allow a client to discover slewing/tracking limits pro-actively, or do you raise an error when a client attempts to slew past the limits, or when the mount tracks into a limit? One general rule we've followed is to provide "CanWhatever" properties only for those functions that will "do something" when used. Other things that can be tried, and allowed to raise an error if not supported, don't have a CanWhatever property. The client can try using the function without altering the state of the device, and if no error is raised, the client can unwind that and know that the function is supported.</span></div>
+				<div class="expando" style="display:block;" id="sAdapt"><span id="tsAdapt">This can get tricky. It will be the focus of much of the negotiations over the interface. A family of devices may come in more than one flavor (e.g. simple vs German equatorial mounts) and the clients may need to know what flavor a device is (e.g., know whether it needs to manage flipping). Device limits fall into this category too. Do you provide functions to allow a client to discover slewing/tracking limits pro-actively, or do you raise an error when a client attempts to slew past the limits, or when the mount tracks into a limit? One general rule we've followed is to provide &quot;CanWhatever&quot; properties only for those functions that will &quot;do something&quot; when used. Other things that can be tried, and allowed to raise an error if not supported, don't have a CanWhatever property. The client can try using the function without altering the state of the device, and if no error is raised, the client can unwind that and know that the function is supported.</span></div>
 			</li>
 		</ul>
 	</div>
-	<script type="text/javascript" language="javascript">
+	<script type="text/javascript" language="JavaScript">
 	// Hide expando blocks at runtime. Allows editing in DW
 	var divs = document.getElementsByTagName("div");
 	for(var i = 0; i < divs.length; i++) {
@@ -82,9 +91,8 @@
 	</script>
 	<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright &copy; 1998-2021, The ASCOM Initiative. 
-	All rights reserved.
-</div>
+	Copyright &copy; 1998-2022, The ASCOM Initiative. 
+	All rights reserved. </div>
 
 </body>
 
