@@ -45,6 +45,7 @@ Partial Class DiagnosticsForm
         Me.MenuSerialTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuIncludeSerialTraceDebugInformation = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuProfileTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuRegistryTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuUtilTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuTimerTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuSimulatorTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
@@ -65,7 +66,6 @@ Partial Class DiagnosticsForm
         Me.lblAction = New System.Windows.Forms.Label()
         Me.btnViewLastLog = New System.Windows.Forms.Button()
         Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
-        Me.MenuRegistryTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -115,12 +115,13 @@ Partial Class DiagnosticsForm
         '
         Me.lblResult.AutoSize = True
         Me.lblResult.Location = New System.Drawing.Point(2, 206)
-        Me.lblResult.MinimumSize = New System.Drawing.Size(400, 0)
+        Me.lblResult.MaximumSize = New System.Drawing.Size(400, 13)
+        Me.lblResult.MinimumSize = New System.Drawing.Size(400, 13)
         Me.lblResult.Name = "lblResult"
         Me.lblResult.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblResult.Size = New System.Drawing.Size(400, 13)
         Me.lblResult.TabIndex = 4
-        Me.lblResult.Text = "Label1"
+        Me.lblResult.Text = "Result"
         Me.lblResult.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'MenuStrip1
@@ -230,6 +231,12 @@ Partial Class DiagnosticsForm
         Me.MenuProfileTraceEnabled.Size = New System.Drawing.Size(282, 22)
         Me.MenuProfileTraceEnabled.Text = "Profile Trace Enabled"
         '
+        'MenuRegistryTraceEnabled
+        '
+        Me.MenuRegistryTraceEnabled.Name = "MenuRegistryTraceEnabled"
+        Me.MenuRegistryTraceEnabled.Size = New System.Drawing.Size(282, 22)
+        Me.MenuRegistryTraceEnabled.Text = "Registry Trace Enabled"
+        '
         'MenuUtilTraceEnabled
         '
         Me.MenuUtilTraceEnabled.Name = "MenuUtilTraceEnabled"
@@ -338,12 +345,13 @@ Partial Class DiagnosticsForm
         '
         Me.lblAction.AutoSize = True
         Me.lblAction.Location = New System.Drawing.Point(22, 236)
-        Me.lblAction.MinimumSize = New System.Drawing.Size(380, 0)
+        Me.lblAction.MaximumSize = New System.Drawing.Size(380, 13)
+        Me.lblAction.MinimumSize = New System.Drawing.Size(380, 13)
         Me.lblAction.Name = "lblAction"
         Me.lblAction.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblAction.Size = New System.Drawing.Size(380, 13)
         Me.lblAction.TabIndex = 6
-        Me.lblAction.Text = "Label1"
+        Me.lblAction.Text = "Action"
         Me.lblAction.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'btnViewLastLog
@@ -355,12 +363,6 @@ Partial Class DiagnosticsForm
         Me.btnViewLastLog.TabIndex = 7
         Me.btnViewLastLog.Text = "View Last Log"
         Me.btnViewLastLog.UseVisualStyleBackColor = True
-        '
-        'MenuRegistryTraceEnabled
-        '
-        Me.MenuRegistryTraceEnabled.Name = "MenuRegistryTraceEnabled"
-        Me.MenuRegistryTraceEnabled.Size = New System.Drawing.Size(282, 22)
-        Me.MenuRegistryTraceEnabled.Text = "Registry Trace Enabled"
         '
         'DiagnosticsForm
         '

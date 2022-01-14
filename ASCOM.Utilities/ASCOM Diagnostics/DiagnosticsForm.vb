@@ -194,11 +194,6 @@ Public Class DiagnosticsForm
                 Console.WriteLine("Console created")
             End If
 
-            AstroUtil = New AstroUtils.AstroUtils
-            Nov3 = New NOVAS.NOVAS3
-            Nov31 = New NOVAS.NOVAS31
-            AscomUtil = New Util
-            transform = New Astrometry.Transform.Transform()
             Me.BringToFront()
             Me.KeyPreview = True ' Ensure that key press events are sent to the form so that the key press event handler can respond to them
 
@@ -220,6 +215,12 @@ Public Class DiagnosticsForm
             TL = New TraceLogger("", "Diagnostics") With {
                 .Enabled = True
             }
+
+            transform = New Astrometry.Transform.Transform() ' Create a new Transform component for this run
+            AstroUtil = New AstroUtils.AstroUtils
+            Nov3 = New NOVAS.NOVAS3
+            Nov31 = New NOVAS.NOVAS31
+            AscomUtil = New Util
 
             btnExit.Enabled = False ' Disable buttons during run
             btnViewLastLog.Enabled = False
@@ -545,6 +546,22 @@ Public Class DiagnosticsForm
                     TL.BlankLine()
                 End If
 
+                Try
+                    AstroUtil.Dispose()
+                    TL.LogMessage("AstroUtilTests", "AstroUtils Disposed OK")
+                Catch ex As Exception
+                    LogException("AstroUtilTests", "AstroUtils: " & ex.ToString)
+                End Try
+                AstroUtil = Nothing
+
+                Try
+                    transform.Dispose()
+                    TL.LogMessage("Diagnostics", "Transform Disposed OK")
+                Catch ex As Exception
+                    LogException("Diagnostics", "Transform: " & ex.ToString)
+                End Try
+                transform = Nothing
+
                 TL.BlankLine()
                 TL.LogMessage("Diagnostics", SuccessMessage)
                 TL.Enabled = False
@@ -656,7 +673,7 @@ Public Class DiagnosticsForm
         'Eo06a tests
         eo = SOFA.Eo06a(2400000.5, 53736.0)
 
-        CompareDouble("SOFATests", "Eo06a-eo", eo, -0.0013328823719418337, 0.000000000000001)
+        CompareDouble("SOFATests", "Eo06a-eo", eo, -0.0013328823719418338, 0.000000000000001)
 
         'Atic13 tests
         ri = 2.7101215729690389
@@ -3921,8 +3938,6 @@ Public Class DiagnosticsForm
         TransformTest2000("Deneb", "20:41:25.916", "45:16:49.23", TOLERANCE_E5, TOLERANCE_E4)
         TransformTest2000("Polaris", "02:31:51.263", "89:15:50.68", TOLERANCE_E5, TOLERANCE_E4)
         TransformTest2000("Arcturus", "14:15:38.943", "19:10:37.93", TOLERANCE_E5, TOLERANCE_E4)
-
-        transform.Dispose()
 
         TL.BlankLine()
     End Sub
@@ -8401,13 +8416,6 @@ Public Class DiagnosticsForm
 
             TL.BlankLine()
 
-            Try
-                AstroUtil.Dispose()
-                TL.LogMessage("AstroUtilTests", "ASCOM.Astrometry.AstroUtils.AstroUtils, Disposed OK")
-            Catch ex As Exception
-                LogException("AstroUtilTests", "ASCOM.Astrometry.AstroUtils.AstroUtils: " & ex.ToString)
-            End Try
-            AstroUtil = Nothing
             TL.LogMessage("AstroUtilTests", "Finished")
             TL.BlankLine()
 
