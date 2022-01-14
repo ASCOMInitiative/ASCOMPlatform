@@ -42,6 +42,8 @@
             // 
             // cmbDeviceType
             // 
+            this.cmbDeviceType.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cmbDeviceType.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbDeviceType.FormattingEnabled = true;
             this.cmbDeviceType.Location = new System.Drawing.Point(12, 28);
             this.cmbDeviceType.Name = "cmbDeviceType";
