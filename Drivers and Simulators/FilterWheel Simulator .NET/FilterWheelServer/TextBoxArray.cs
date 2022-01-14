@@ -8,7 +8,7 @@ namespace ASCOM.Simulator
     class TextBoxArray : System.Collections.CollectionBase
     {
 
-        const string validOffsetCharacters = "0123456789-\b"; // List of valid character in an Offset text box: 0 to 9, minus and backspace
+        const string validOffsetCharacters = "0123456789+-\b"; // List of valid character in an Offset text box: 0 to 9, plus, minus and backspace
         private Form HostForm;
 
         public TextBoxArray(Form host)
@@ -33,9 +33,26 @@ namespace ASCOM.Simulator
             aTextBox.Text = "TextBox " + this.Count;
 
             if (bOffsetBox)
+            {
                 aTextBox.KeyPress += new KeyPressEventHandler(KeyPressHandler);
-
+                aTextBox.Validating += ATextBox_Validating;
+            }
             return aTextBox;
+        }
+
+        private void ATextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            if (!IsInt(textBox.Text))
+            {
+                MessageBox.Show($"The offset '{textBox.Text}' is not a valid integer, please correct it.", "Invalid Offset", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                e.Cancel = true;
+            }
+        }
+
+        public static bool IsInt(string text)
+        {
+            return int.TryParse(text, out _);
         }
 
         public TextBox this[int Index]
@@ -57,13 +74,13 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// Validate  key presses to restrict input to the keys: 0 to 9, minus and backspace.
+        /// Validate  key presses to restrict input to the keys: 0 to 9, plus, minus and backspace.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         public void KeyPressHandler(Object sender, KeyPressEventArgs e)
         {
-            // Validate keys as they are pushed. Valid keys are minus and 0 to 9, minus and backspace
+            // Validate keys as they are pushed.
             if (!validOffsetCharacters.Contains(e.KeyChar.ToString())) e.Handled = true; // Character is not valid so set handled true to prevent the character being added to the text box.
         }
     }
