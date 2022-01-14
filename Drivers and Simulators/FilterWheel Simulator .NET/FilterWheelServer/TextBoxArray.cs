@@ -7,7 +7,9 @@ namespace ASCOM.Simulator
 {
     class TextBoxArray : System.Collections.CollectionBase
     {
-        private  Form HostForm;
+
+        const string validOffsetCharacters = "0123456789-\b"; // List of valid character in an Offset text box: 0 to 9, minus and backspace
+        private Form HostForm;
 
         public TextBoxArray(Form host)
         {
@@ -54,13 +56,15 @@ namespace ASCOM.Simulator
             }
         }
 
+        /// <summary>
+        /// Validate  key presses to restrict input to the keys: 0 to 9, minus and backspace.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void KeyPressHandler(Object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar < '0' || e.KeyChar > '9')
-                if (e.KeyChar != '\b')  e.Handled = true;
-
+            // Validate keys as they are pushed. Valid keys are minus and 0 to 9, minus and backspace
+            if (!validOffsetCharacters.Contains(e.KeyChar.ToString())) e.Handled = true; // Character is not valid so set handled true to prevent the character being added to the text box.
         }
-
-
     }
 }
