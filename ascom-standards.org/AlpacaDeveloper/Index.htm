@@ -1,5 +1,5 @@
-<!-- #BeginTemplate "/Templates/Fixed_Fluid_Fixed.dwt" --><!-- DW6 -->
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid_Fixed.dwt" --><!-- DW6 -->
 
 <head>
 
@@ -21,45 +21,54 @@
 <div id="banner">
 	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
 	<div id="breadcrumbs">
-	<script type="text/javascript" language="javascript">
+		<script type="text/javascript" language="javascript">
 	<!-- 
-		breadcrumbs(); 
+	breadcrumbs(); 
 	-->
 	</script>
 	</div>
 	<div class="topmenucontainer">
-	<script type="text/javascript" language="javascript">
-    <!-- 
-	    writemainmenu();
-	-->
+		<script type="text/javascript" language="javascript">
+      <!-- 
+	        writemainmenu();
+	        -->
     </script>
 	</div>
 </div>
 <div id="leftcontent">
+
 	<div class="LeftNav">
 	<div class="center"><div class="north"><div class="south">
 	<script type="text/javascript" language="javascript">
 	<!-- 
-		writesubmenu(); 
+	writesubmenu(); 
 	-->
 	</script>
+	
 	</div></div></div></div>
 
 
 	<!-- #BeginEditable "LeftNav" -->
-		<img src="../Images/WebSiteDestinations.png" width="211" height="160"><br>
+		<img src="../Images/WebSiteDestinations.png" width="211" height="160" /><br />
 	<!-- #EndEditable --></div>
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 <div class="article">
-	<H3>UNDER CONSTRUCTION - LOOK AT THE ORANGE MENU (AS USUAL)!</H3>
+	<h3>UNDER CONSTRUCTION - LOOK AT THE ORANGE MENU</h3>
 <p style="color:#FF9900;font-size: large;border: 2px solid; background: #222222">NOTE: Alpaca is 100% independent of Windows. Nowhere in the Alpaca ecosystem is Windows (or COM) needed. Please look over <a href="../About/Index.htm">About Alpaca and ASCOM</a> if you haven't yet.</p>
 <h3>ASCOM Alpaca - ASCOM is not just for Windows any more</h3>
-	<p>If you are new to ASCOM in general and plan to develop an ALpaca app or driver, <em>please</em> take the time to go through the <a href="../About/Index.htm">overview of ASCOM, Alpaca, and Classic ASCOM given in the About Ascom section here</a>. <!--The video below goes through esesentially the same things. Hopefully one or the other will help you gain context.</p>
-	<p align="center"><iframe width="560" height="315" src="https://www.youtube.com/embed/iijCnKQylXw" rel="0" modestbranding="1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
-	<p><img src="../Images/AlpacaLogo560.png" width="130" height="103" hspace="8" align="right" />
-	The introduction of <a href="https://github.com/ASCOMInitiative/ASCOMRemote/releases" target="_new">ASCOM Remote</a> in 2018 began the process of extending the ASCOM ecosystem to include the internet, Linux, and MacOS, to include small embedded controllers like the Arduino and Raspberry Pi. As of early 2019, this effort has grown into a new wave of development, with several astronomy instrument vendors embracing the implementation of the ASCOM Interfaces as ReST resources, reachable over the internet. Now known as ASCOM Alpaca, the next steps are being taken. This effort is much farther along that you might imagine. If you are interested in learning more, visit the ASCOM Alpaca page:</p>
-	<p align="center" style="font-size:large;"><a href="Alpaca.htm">Learn More about ASCOM Alpaca</a></p>-->
+	<p>P<em>lease</em> take the time to go through the <a href="../About/Index.htm">overview of ASCOM, Alpaca, and Classic ASCOM given in the About Ascom section here</a>.
+	</p>
+	<p class="note">If you are new to ASCOM in general and plan to develop an Alpaca app or driver, is is strongly suggested that you first go through the <a href="../About/Index.htm">About Alpaca and ASCOM</a> section and then return here. Next familiarize yourself with <span class="underline">all three sections</span> of the Design Principles in the orange menu on the left. There is a lot of information here that can save you time and frustration during your development. Please invest some time to check it out before getting heavily into your development.	</p>
+
+	<h3>Driver Design Principles</h3>
+	
+	<p>The interface specifications aren't the full story! There are some vital design principles that, if adhered-to, will maximize the chances that your driver will operate properly with a variety of client software. See the Design Principles topics in the orange menu at the top left and repearted here:	</p>
+	<ul>
+		<li><a href="Principles.htm">The General Principles</a> </li>
+		<li><a href="Async.htm">Asynchronous APIs</a></li>
+		<li><a href="Exceptions.htm">Exceptions in ASCOM</a> (applies to Alpaca!)</li>
+	</ul>
 <h3>Alpaca Documentation</h3>
 <p>We have extensive developer level introductory and API reference documentation for Alpaca online here. See the links in the orange box menu at the upper left, as well as the <a href="../Documentation/Index.htm#dev">Developer section of our Documentation Center</a>.</p>
 <h3>Help - Use the Developer's Forum</h3>
@@ -68,9 +77,6 @@
 	<p align="center"><a href="https://ascomtalk.groups.io/g/Developer" target="_new" style="font-size: large;"><img src="../Images/Groups.io.jpg" width="188" height="53" vspace="8" border="0" alt="Join or Visit the ASCOM Talk group" /><br />
 	Visit the ASCOM-Talk Developers Forum</a></p>
 	
-	<h3>Driver Design Principles</h3>
-	
-	<p>The interface specifications aren't the full story! There are some design principles that, if adhered-to, will maximize the chances that your driver will operate properly with a variety of client software. See the <a href="../About/Characteristics.htm">About Alpaca and ASCOM, Section 5 Key Characteristics</a>
 	<h3>Common Traps and Mistakes (mostly for Alpaca driver developers)</h3>
 	<p>It probably seems unprofessional to start this section with what <i>not</i> to do, but we're just trying to save you time and pain.</p>
 	<ul>
@@ -96,7 +102,8 @@
 	<div class="nw">
 	<div>
 		<h3 style="color:#FF9900; text-align: center;">Alpaca Resources</h3>
-		<p>Coming Soon: Additional components and tools for developers of client applications and drivers.  </p>
+		<p><a href="https://github.com/DanielVanNoord/ASCOM.Alpaca.Simulators/releases/latest" target="_new">ASCOM.Alpaca.Simulators</a></p>
+		<p>Multi-platform single package of simulator reference implemenations of <em>all</em> Alpaca devices. </p>
 	</div>
 
 	</div></div></div></div></div></div></div></div>
@@ -105,7 +112,7 @@
 	
 	<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright &copy; 1998-2021, The ASCOM Initiative. 
+	Copyright &copy; 1998-2022, The ASCOM Initiative. 
 	All rights reserved. </div>
 
 </body>
