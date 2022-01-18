@@ -227,13 +227,15 @@ namespace ASCOM.Setup
                 // These are the partial device implementations that are merged in to create a complete device driver template by the code above
                 // They are not required in the final project
 
+                TL.LogMessage("ProjectFinishedGenerating", $"Identifying files to delete");
+
                 // Done this way to avoid removing items from inside a foreach loop
                 rems = new List<string>();
                 foreach (ProjectItem item in project.ProjectItems)
                 {
                     if (item.Name.StartsWith("Device", StringComparison.OrdinalIgnoreCase))
                     {
-                        //MessageBox.Show("adding " + item.Name);
+                        TL.LogMessage("ProjectFinishedGenerating", $"Adding {item.Name} to the delete list.");
                         rems.Add(item.Name);
                     }
                 }
@@ -243,11 +245,21 @@ namespace ASCOM.Setup
                     project.ProjectItems.Item(item).Delete();
                 }
 
-                // Rename the Driver
-                TL.LogMessage("ProjectFinishedGenerating", $"Renaming driver: '{driverTemplate.Name}' to '{DeviceClass}{driverTemplate.Name}'");
-                driverTemplate.Name = $"{DeviceClass}{driverTemplate.Name}";
-                TL.LogMessage("ProjectFinishedGenerating", $"New driver name: '{driverTemplate.Name}'");
 
+
+                TL.LogMessage("ProjectFinishedGenerating", $"About to rename driver. TL exists: {!(TL is null)}, Driver template exists: {!(driverTemplate is null)}.");
+
+                // Rename the Driver if this is a driver template
+                if (!(driverTemplate is null))
+                {
+                    TL.LogMessage("ProjectFinishedGenerating", $"Renaming driver: '{driverTemplate.Name}' to '{DeviceClass}{driverTemplate.Name}'");
+                    driverTemplate.Name = $"{DeviceClass}{driverTemplate.Name}";
+                    TL.LogMessage("ProjectFinishedGenerating", $"New driver name: '{driverTemplate.Name}'");
+                }
+                else
+                {
+                    TL.LogMessage("ProjectFinishedGenerating", $"No driver in this template so no need to rename it.");
+                }
             }
             catch (Exception ex)
             {
