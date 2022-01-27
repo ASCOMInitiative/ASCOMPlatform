@@ -20,6 +20,11 @@ namespace ASCOM.OpenWeatherMap
         /// </summary>
         internal static string driverID = "ASCOM.OpenWeatherMap.ObservingConditions";
 
+        /// <summary>
+        /// Minimum period between OpenAPI calls (seconds).  Requests to Refresh that occur before this interval has passed will be ignored.
+        /// </summary>
+        internal static double MinimumQueryInterval { get; set; }
+
         internal static string CityName { get; set; }
 
         internal static double SiteLongitude { get; set; }
@@ -57,6 +62,7 @@ namespace ASCOM.OpenWeatherMap
                 var lu = FromUnix(weatherData.dt);
                 var sr = FromUnix(weatherData.sys.sunrise.Value);
                 var ss = FromUnix(weatherData.sys.sunset.Value);
+                lastUpdate = DateTime.Now;
                 Log.LogMessage("UpdateWeather", "update {0}, sunrise {1}, sunset {2}", lu, sr, ss);
                 return true;
             }
@@ -109,10 +115,9 @@ namespace ASCOM.OpenWeatherMap
         {
             try
             {
-                if (weatherData == null || (DateTime.Now - lastUpdate).TotalMinutes > 10)
+                if (weatherData == null || (DateTime.Now - lastUpdate).TotalSeconds > MinimumQueryInterval)
                 {
                     UpdateWeather();
-                    lastUpdate = DateTime.Now;
                 }
             }
             catch (Exception ex)
@@ -157,7 +162,7 @@ namespace ASCOM.OpenWeatherMap
                 throw new PropertyNotImplementedException("DewPoint");
             }
         }
-        
+
         internal static double Humidity
         {
             get
@@ -176,7 +181,7 @@ namespace ASCOM.OpenWeatherMap
                 throw new PropertyNotImplementedException("Humidity");
             }
         }
-        
+
         internal static double Pressure
         {
             get
@@ -216,13 +221,13 @@ namespace ASCOM.OpenWeatherMap
                 throw new PropertyNotImplementedException("Pressure");
             }
         }
-        
+
         internal static double RainRate
         {
             get
             {
                 GetData("RainRate");
-                try 
+                try
                 {
                     var rr = 0.0;
                     if (weatherData.rain.rate1h.HasValue)
@@ -233,7 +238,7 @@ namespace ASCOM.OpenWeatherMap
                         rr = weatherData.snow.rate1h.Value;
                     else if (weatherData.snow.rate3h.HasValue)
                         rr = weatherData.snow.rate3h.Value;
-                    return rr; 
+                    return rr;
                 }
                 catch
                 {
@@ -290,6 +295,17 @@ namespace ASCOM.OpenWeatherMap
             }
         }
 
+        internal static double WindGust
+        {
+            get
+            {
+                GetData("WindGust");
+                if (weatherData.wind.gust.HasValue)
+                    return Math.Round(weatherData.wind.gust.Value, 1);
+                throw new PropertyNotImplementedException("WindGust");
+            }
+        }
+
         internal static double TimeSinceLastUpdate
         {
             get
@@ -300,7 +316,7 @@ namespace ASCOM.OpenWeatherMap
                     GetData("TimeSinceLastUpdate");
                     lu = FromUnix(weatherData.dt);
                 }
-                catch {}
+                catch { }
                 return (DateTime.UtcNow - lu).TotalSeconds;
             }
         }
@@ -339,6 +355,7 @@ namespace ASCOM.OpenWeatherMap
                 SiteLongitude = double.Parse(profile.GetValue(driverID, "SiteLongitude", string.Empty, "0"), CultureInfo.InvariantCulture);
                 apiKey = profile.GetValue(driverID, "ApiKey");
                 apiUrl = profile.GetValue(driverID, "ApiUrl", string.Empty, apiUrl);
+                MinimumQueryInterval = double.Parse(profile.GetValue(driverID, "MinimumQueryInterval", string.Empty, "600.0"), CultureInfo.InvariantCulture);
             }
         }
 
@@ -358,12 +375,13 @@ namespace ASCOM.OpenWeatherMap
                 driverProfile.WriteValue(driverID, "SiteLongitude", SiteLongitude.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(driverID, "ApiKey", apiKey);
                 driverProfile.WriteValue(driverID, "ApiUrl", apiUrl);
+                driverProfile.WriteValue(driverID, "MinimumQueryInterval", MinimumQueryInterval.ToString(CultureInfo.InvariantCulture));
             }
         }
 
         public static bool Connected
         {
-            get 
+            get
             {
                 Log.LogMessage("Connected", "Get {0}", isConnected);
                 return isConnected;
@@ -378,8 +396,8 @@ namespace ASCOM.OpenWeatherMap
                 if (string.IsNullOrEmpty(apiKey))
                     throw new DriverException("Cannot connect, no API key has been defined.");
                 switch (locationType)
-	            {
-		            case LocationType.CityName:
+                {
+                    case LocationType.CityName:
                         if (string.IsNullOrEmpty(CityName))
                             throw new DriverException("City name is selected but no city name has been defined");
                         break;
@@ -389,7 +407,7 @@ namespace ASCOM.OpenWeatherMap
                         break;
                     default:
                         throw new DriverException("Unspecified Location type is defined");
-	            }
+                }
                 isConnected = value;
                 lastUpdate = DateTime.MinValue;
             }

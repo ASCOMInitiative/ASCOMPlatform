@@ -12,8 +12,8 @@ AppPublisherURL=mailto:chris.rowland@cherryfield.me.uk
 AppSupportURL=https://ascomtalk.groups.io/g/Help/topics
 AppUpdatesURL=https://ascom-standards.org/
 VersionInfoVersion=1.0.0
-MinVersion=0,5.0.2195sp4
-DefaultDirName="{cf}\ASCOM\ObservingConditions"
+MinVersion=6.1SP1
+DefaultDirName="{cf}\ASCOM\ObservingConditions\OpenWeatherMap"
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 OutputDir="."
@@ -25,25 +25,24 @@ WizardImageFile="C:\Program Files (x86)\ASCOM\Platform 6 Developer Components\In
 LicenseFile="C:\Program Files (x86)\ASCOM\Platform 6 Developer Components\Installer Generator\Resources\CreativeCommons.txt"
 ; {cf}\ASCOM\Uninstall\ObservingConditions folder created by Platform, always
 UninstallFilesDir="{cf}\ASCOM\Uninstall\ObservingConditions\OpenWeatherMap"
+SignTool = SignOpenWeatherMap
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Dirs]
 Name: "{cf}\ASCOM\Uninstall\ObservingConditions\OpenWeatherMap"
-; TODO: Add subfolders below {app} as needed (e.g. Name: "{app}\MyFolder")
 
 ;  Add an option to install the source files
-[Tasks]
-Name: source; Description: Install the Source files; Flags: unchecked
+;[Tasks]
+;Name: source; Description: Install the Source files; Flags: unchecked
 
 [Files]
-Source: "OpenWeatherMap\bin\Debug\ASCOM.OpenWeatherMap.ObservingConditions.dll"; DestDir: "{app}"
-; Require a read-me HTML to appear after installation, maybe driver's Help doc
-;Source: "OpenWeatherMap\ReadMe.htm"; DestDir: "{app}"; Flags: isreadme
+Source: "OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.dll"; DestDir: "{app}"
+Source: "OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.pdb"; DestDir: "{app}"
 Source: "OpenWeatherMap.doc"; DestDir: {app}; Flags: isreadme; 
 ; Optional source files (COM and .NET aware)
-Source: "*"; Excludes: *.zip,*.exe,*.dll, \bin\*, \obj\*; DestDir: "{app}\Source\OpenWeatherMap Driver"; Tasks: source; Flags: recursesubdirs
+;Source: "*"; Excludes: *.zip,*.exe,*.dll, \bin\*, \obj\*; DestDir: "{app}\Source\OpenWeatherMap Driver"; Tasks: source; Flags: recursesubdirs
 ; TODO: Add other files needed by your driver here (add subfolders above)
 
 ; Only if driver is .NET
@@ -60,37 +59,47 @@ Filename: "{dotnet4032}\regasm.exe"; Parameters: "-u ""{app}\ASCOM.OpenWeatherMa
 Filename: "{dotnet4064}\regasm.exe"; Parameters: "/codebase ""{app}\ASCOM.OpenWeatherMap.ObservingConditions.dll"""; Flags: runhidden 64bit; Check: IsWin64
 Filename: "{dotnet4064}\regasm.exe"; Parameters: "-u ""{app}\ASCOM.OpenWeatherMap.ObservingConditions.dll"""; Flags: runhidden 64bit; Check: IsWin64
 
-
 [CODE]
 //
 // Before the installer UI appears, verify that the (prerequisite)
 // ASCOM Platform 6.0 or greater is installed, including both Helper
 // components. Utility is required for all types (COM and .NET)!
 //
+const
+   REQUIRED_PLATFORM_VERSION = 6.0; // Set this to the minimum required ASCOM Platform version for this application
+
+//
+// Function to return the ASCOM Platform's version number as a double.
+//
+function PlatformVersion(): Extended;
+var
+   PlatVerString : String;
+begin
+   Result := 0.0;  // Initialise the return value in case we can't read the registry
+   try
+      if RegQueryStringValue(HKEY_LOCAL_MACHINE_32, 'Software\ASCOM','PlatformVersion', PlatVerString) then 
+      begin // Successfully read the value from the registry
+         Result := StrToFloat(PlatVerString); // Create a double from the X.Y Platform version string
+      end;
+   except                                                                   
+      ShowExceptionMessage;
+      Result:= -1.0; // Indicate in the return value that an exception was generated
+   end;
+end;
+
 function InitializeSetup(): Boolean;
 var
-   U : Variant;
-   H : Variant;
-begin
+   PlatformVersionNumber : double;
+ begin
    Result := FALSE;  // Assume failure
-   // check that the DriverHelper and Utilities objects exist, report errors if they don't
-   try
-      H := CreateOLEObject('DriverHelper.Util');
-   except
-      MsgBox('The ASCOM DriverHelper object has failed to load, this indicates a serious problem with the ASCOM installation', mbInformation, MB_OK);
-   end;
-   try
-      U := CreateOLEObject('ASCOM.Utilities.Util');
-   except
-      MsgBox('The ASCOM Utilities object has failed to load, this indicates that the ASCOM Platform has not been installed correctly', mbInformation, MB_OK);
-   end;
-   try
-      if (U.IsMinimumRequiredVersion(6,0)) then	// this will work in all locales
-         Result := TRUE;
-   except
-   end;
-   if(not Result) then
-      MsgBox('The ASCOM Platform 6.0 or greater is required for this driver.', mbInformation, MB_OK);
+   PlatformVersionNumber := PlatformVersion(); // Get the installed Platform version as a double
+   If PlatformVersionNumber >= REQUIRED_PLATFORM_VERSION then	// Check whether we have the minimum required Platform or newer
+      Result := TRUE
+   else
+      if PlatformVersionNumber = 0.0 then
+         MsgBox('No ASCOM Platform is installed. Please install Platform ' + Format('%3.1f', [REQUIRED_PLATFORM_VERSION]) + ' or later from http://www.ascom-standards.org', mbCriticalError, MB_OK)
+      else  
+         MsgBox('This driver requires ASCOM Platform ' + Format('%3.1f', [REQUIRED_PLATFORM_VERSION]) + ' or later, but Platform '+ Format('%3.1f', [PlatformVersionNumber]) + ' is installed.' #13#13 'Please install the latest Platform before continuing; you will find it at https://www.ascom-standards.org', mbCriticalError, MB_OK);
 end;
 
 // Code to enable the installer to uninstall previous versions of itself when a new version is installed

@@ -47,6 +47,7 @@ namespace ASCOM.OpenWeatherMap
             OpenWeatherMap.SiteLongitude = util.DMSToDegrees(textBoxSiteLongitude.Text);
             OpenWeatherMap.apiKey = textBoxApiKey.Text;
             OpenWeatherMap.apiUrl = textBoxApiUrl.Text;
+            OpenWeatherMap.MinimumQueryInterval = (double)MinimumRefreshInterval.Value;
         }
 
         private void cmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
@@ -95,6 +96,7 @@ namespace ASCOM.OpenWeatherMap
             }
             else
                 tabControl.SelectTab(1);
+            MinimumRefreshInterval.Value = (decimal)OpenWeatherMap.MinimumQueryInterval;
         }
 
         private void ShowLatLonList()

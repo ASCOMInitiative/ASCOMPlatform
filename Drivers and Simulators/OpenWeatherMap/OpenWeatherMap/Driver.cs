@@ -367,11 +367,12 @@ namespace ASCOM.OpenWeatherMap
                     return "Wind direction, deg";
                 case "WindSpeed":
                     return "Wind speed, m/s";
+                case "WindGust":
+                    return "Wind speed, m/s";
                 case "SkyBrightness":
                 case "SkyQuality":
                 case "StarFWHM":
                 case "SkyTemperature":
-                case "WindGust":
                     Log.LogMessage("SensorDescription", PropertyName + " - not implemented");
                     throw new MethodNotImplementedException("SensorDescription(" + PropertyName + ")");
                 default:
@@ -487,8 +488,9 @@ namespace ASCOM.OpenWeatherMap
         {
             get
             {
-                Log.LogMessage("WindGust", "get - not implemented");
-                throw new PropertyNotImplementedException("WindGust", false);
+                var ws = OpenWeatherMap.WindGust;
+                Log.LogMessage("WindGust", "get {0}", ws);
+                return ws;
             }
         }
 
@@ -590,7 +592,8 @@ namespace ASCOM.OpenWeatherMap
         [ComUnregisterFunction]
         public static void UnregisterASCOM(Type t)
         {
-            RegUnregASCOM(false);
+            // Commented out in order to preserve profile information, including the API key, across reinstalls
+            // RegUnregASCOM(false);
         }
 
         #endregion
