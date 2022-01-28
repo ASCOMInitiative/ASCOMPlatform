@@ -17,7 +17,7 @@ DefaultDirName="{cf}\ASCOM\ObservingConditions\OpenWeatherMap"
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 OutputDir="."
-OutputBaseFilename="OpenWeatherMap Setup"
+OutputBaseFilename="OpenWeatherMapSetup"
 Compression=lzma
 SolidCompression=yes
 ; Put there by Platform if Driver Installer Support selected
