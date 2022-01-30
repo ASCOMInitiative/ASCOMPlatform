@@ -1,0 +1,254 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+    <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252" />
+    <TITLE>Untitled Document</TITLE>
+    <META NAME="GENERATOR" CONTENT="OpenOffice.org 3.2  (Win32)" />
+    <META NAME="CREATED" CONTENT="0;0" />
+    <META NAME="CHANGEDBY" CONTENT="Chris Rowland" />
+    <META NAME="CHANGED" CONTENT="20110422;10442800" />
+    <META NAME="CHANGEDBY" CONTENT="Chris Rowland" />
+    <STYLE TYPE="text/css">
+        <!--
+        @page {
+            margin: 2cm
+        }
+
+        ol, ul, p {
+            font-family: "Verdana", "Arial", "Helvetica", sans-serif;
+            font-weight: normal
+        }
+
+        TD P {
+            font-family: "Verdana", "Arial", "Helvetica", sans-serif;
+            font-weight: normal
+        }
+
+        H3 {
+            font-family: "Arial", "Helvetica", sans-serif
+        }
+
+        H2 {
+            font-family: "Arial", "Helvetica", sans-serif
+        }
+
+        H4 {
+            font-family: "Arial", "Helvetica", sans-serif
+        }
+
+        PRE {
+            margin-left: 0.18cm;
+            margin-right: 0.18cm;
+            margin-top: 0.18cm;
+            margin-bottom: 0.18cm;
+            background: #ccffff
+        }
+
+            PRE.western {
+                font-weight: normal
+            }
+
+            PRE.cjk {
+                font-family: "NSimSun", monospace;
+                font-weight: normal
+            }
+
+            PRE.ctl {
+                font-weight: normal
+            }
+
+        EM.underline {
+            text-decoration: underline
+        }
+        -->
+    </STYLE>
+</HEAD>
+<BODY LANG="en-GB" DIR="LTR">
+    <H2>
+        ASCOM LocalServer Driver
+    </H2>
+    <H4>You have just created an ASCOM Local Server driver.</H4>
+    <P>
+        This project creates an ASCOM local server executable and a driver class that will support multiple clients. It can also be extended to serve multiple ASCOM devices such
+        as a Telescope and a Focuser or multiple devices of the same type such as two focusers.
+    </P>
+    <P STYLE="margin-left: 0.42cm; margin-right: 0.42cm; border: 1px solid #000000; padding: 0.21cm">
+        <STRONG>
+            <SPAN STYLE="background: #ffee88">NOTE:</SPAN>
+        </STRONG>
+        <SPAN STYLE="background: #ffee88">
+            Modern astronomical observatories often use multiple clients concurrently such as planetariums, session managers and device managers and typically these clients expect drivers to handle
+            concurrent access to ASCOM interface properties and methods. To be successful, your driver will therefore need to operate asynchronously e.g. by being able to respond to device
+            position properties while the device is moving.
+            <BR /><BR />
+            Device implementation complexity is closely related to ASCOM device interface complexity. In broadly increasing order of complexity the ASCOM interfaces are:
+            SafetyMonitor, ObservingConditions, FilterWheel, CoverCalibrator, Focuser, Rotator, Switch, Camera, Dome, Video and Telescope.
+            <BR /><BR />
+            In addition to responding to asynchronous client requests, you will need to reliably serialise communications with your hardware if it does not intrinsically
+            support concurrent operation. This means that you will need to be familiar with asynchronous programming techniques or be prepared to navigate a steep learning curve.
+        </SPAN>
+    </P>
+    <P>
+        You're probably anxious to get going, but if you are new to this it will help to read through the short <A HREF="#theory">Theory of Operation</A> > section below.
+    </P>
+    <h3>To complete your local server driver, please follow these steps in order:</h3>
+    <OL>
+        <LI style="margin-bottom:20px">
+            Review the local server's project properties:
+            <UL>
+                <LI>Review the Application tab and change the AssemblyName and default namespace if required, the recommended format is ASCOM.xxx.</LI>
+                <LI>Click the Assembly Information button and review and update the text if required.</LI>
+                <LI>Do not check the "Make assembly COM visible" checkbox, the local server will register the COM drivers dynamically at run-time and checking this box interferes with this process.</LI>
+                <LI>
+                    Change the assembly version number if required but do not use wild-card (*) numbering because it causes issues with COM registration.
+                    It is not recommended that the assembly version number is changed on each release, use the file version number to identify different releases.
+                </LI>
+                <LI>Change the assembly file version if required, this can use wild-card numbering.</LI>
+                <LI>
+                    Do not change the Platform Target on the Build tab from x86, this must remain as set for correct local server operation. The local server runs as a fully independent process rather than as a thread
+                    within the client application and behind the scenes COM automatically translates between both 32bit and 64bit client processes and the 32bit local server process.
+                    <br />
+                </LI>
+            </UL>
+        </LI>
+
+        <LI style="margin-bottom:20px">
+            Check and test the driver created from the template
+            <ul>
+                <li>Review the ProgID and ServedClassName fields above the Class name for suitability.</li>
+                <li>Compile the whole solution but don't run it.</li>
+                <li>
+                    To support debugging, the driver will create two log files in a Documents\ASCOM\Logs yyyy-mm-dd folder. The first is from the local server executable itself and can be disabled once
+                    the driver is running stably. The second is from the driver and can be enabled / disabled through the Setup dialogue as required.
+                </li>
+                <li>Open a command prompt at the folder where the local server executable is located.</li>
+                <li>
+                    Run the local server exe with the /regserver parameter (requires admin privilege), which will create the entry that appears in the ASCOM Chooser. This registration only needs to be done once on each PC.
+                    Use the /unregserver parameter to unregister the server when no longer required. Never use REGASM on the local server executable, this way lies confusion and much time wasting!
+                </li>
+                <li>Close the command prompt</li>
+                <li>
+                    Start an ASCOM client application or Conform or a Connection form in the Diagnostics tool and use the client to open a Chooser for the device type of your driver.
+                    You will see your driver in the list, will be able to select it and open its Setup dialogue.
+                </li>
+                <li>
+                    At this point the basics are proved and its time to start making the driver do something! If you have issues in getting to this point, check the
+                    logs in your Documents\ASCOM folder, which will help determine what has gone wrong. You are welcome to post at the forum listed below if you get stuck.'.
+                </li>
+            </ul>
+        </LI>
+
+        <LI style="margin-bottom:20px">
+            Implement the driver methods
+            <ul>
+                <li>
+                    Since your driver can instanciated by multiple threads and clients the driver code should not directly handle communications with your hardware unless it
+                    fully supports asynchronous operation.
+                </li>
+                <li>
+                    A good pattern to follow is to implement hardware communications code as a static class that can be called by the multiple driver instances and that thus
+                    gets the opportunity to handle any communications concurrency requirements.
+                </li>
+                <li>The first implementation task is to fully implement the Connected property to establish communications to your device hardware.</li>
+                <li>
+                    After this, it's a good idea to implement a straightforward property before moving on to more complex properties and finally to methods. This approach will
+                    enable you to focus up the driver / application infrastructure initially before having to deal with more complex device functions.
+                </li>
+            </ul>
+        </LI>
+
+    </OL>
+
+    <h3>How to add further drivers if required</h3>
+    <p>
+        This method works when:
+    </p>
+    <ul>
+        <li>
+            Adding a completely new served device type e.g. adding a FOCUSER device to a local server already hosting a TELESCOPE device.
+        </li>
+        <li>
+            Adding a second or further instance of an existing served device type e.g. adding a second FOCUSER to a local server already hosting a FOCUSER device.
+        </li>
+    </ul>
+    <p>Method</p>
+    <ol>
+        <li>
+            Add a new "Local Server" project to the solution ensuring that:
+            <ul>
+                <li>It is configured as the device type that you require.</li>
+                <li>It's ASCOM DeviceId is different to all other drivers in the local server.</li>
+                <li>You rename the driver folder in the new project if it matches one already present in original project.</li>
+            </ul>
+        </li>
+        <li>
+            Within Visual Studio drag and drop the driver folder from the new project to the root of the original project.
+        </li>
+        <li>
+            Delete the new local server project added in step 1.
+        </li>
+        <li>Compile the project</li>
+        <li>Register the driver as described above with /regserver.</li>
+        <li>Verify that the driver is visible in an application Chooser dialogue.</li>
+        <li>Implement the new driver's methods.</li>
+    </ol>
+
+    <H3>Notes</H3>
+    <UL>
+        <LI>
+            <P STYLE="margin-bottom: 0cm">
+                if required, a serial port is already provided (see SharedResources.cs) as <FONT FACE="Lucida Console, Courier New, Courier, monospace">SharedResources.SharedSerial</FONT>.
+                You may wish to define additional shared resources in static member variables with public static accessor properties as is already done for SharedSerial.
+                If you don't need the serial port you can remove the public static SharedSerial property, the m_SharedSerial member in the private data region, and the line in main that initializes it.
+                If you don't need any other shared resources for your hub, then you can remove the SharedResources.cs file completely.
+            </P>
+        </LI>
+        <LI>
+            <P>
+                You may want to add controls and/or status information to the main form frmMain of the local server. Please resist the temptation to turn the local server's main form into a graphical device control
+                panel. A better approach is to create a separate application that connects to the served driver(s).
+            </P>
+        </LI>
+    </UL>
+    <H3>
+        <A NAME="theory"></A>Theory of Operation
+    </H3>
+    <P>
+        The local server is an executable that can provide multiple instances of multiple drivers to multiple clients, and which supports two core capabilities:
+    </P>
+    <UL>
+        <LI>
+            <P STYLE="margin-bottom: 0cm">
+                Being a hub, which allows multiple clients to share a single device
+            </P>
+        </LI>
+        <LI>
+            <P>
+                Supporting hardware that contains multiple devices such as a telescope that has a built-in focuser, where both the telescope and focuser are controlled by the same connection.
+            </P>
+        </LI>
+    </UL>
+    <P>
+        A driver is an assembly which contains a class that <EM>implements</EM> one of the ASCOM standard driver interfaces and <EM>inherits</EM> the ReferenceCountedObjectBase class of the local server.
+    </P>
+    <P>
+        The fact that driver classes inherit from the local server's ReferenceCountedObjectBase class allows the local server to maintain a reference count on the driver class. If a client creates an
+        instance of a served driver, the local server automatically starts up and provides an instance of the class to the client. Once started the local server can provide additional instances of any of its served
+        driver classes. If the reference count of all served classes drops to zero as a result of clients releasing their instances, the local server will automatically exit.
+    </P>
+    <P>
+        The local server's registration services include not only basic COM class registration, but also the DCOM/AppID info needed to use the served classes from outbound connections from Software Bisque's TheSky. It
+        also registers the served classes for the ASCOM Chooser. The &quot;friendly&quot; name of each served driver that appears in the chooser comes from the driver's ServedClassName attribute.
+        The COM ProgID for each served driver is specified in the ProgId attribute for example, ASCOM.AlphaTech.Telescope, where AlphaTech is the local server name and Telescope is the ASCOM type of the driver.
+    </P>
+    <H3>ASCOM Initiative</H3>
+    <P>
+        The ASCOM Initiative consists of a group of astronomy software  developers and instrument vendors whose goals are to promote the driver/client model and scripting automation.
+    </P>
+    <P>
+        See the <A HREF="http://ascom-standards.org/" TARGET="browser">ASCOM web site</A> for more information.
+        If you have questions, please post here: <A HREF="https://ascomtalk.groups.io/g/Help/topics" TARGET="browser">ASCOM-Talk Group</A>.
+    </P>
+
+</BODY>
+</HTML>
