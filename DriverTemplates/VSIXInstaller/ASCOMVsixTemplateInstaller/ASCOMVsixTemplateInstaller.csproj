@@ -134,6 +134,6 @@
   </PropertyGroup>
   <Target Name="AfterBuild" DependsOnTargets="CoreCompile">
     <Message Text="Signing $(TargetVsixContainer)" />
-    <Exec Command="$(VsixSignCommand) $(MSBuildProjectDirectory)\$(TargetVsixContainer)" />
+    <Exec Command='$(VsixSignCommand) "$(MSBuildProjectDirectory)\$(TargetVsixContainer)"' />
   </Target>
 </Project>
