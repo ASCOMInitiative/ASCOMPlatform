@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="ASCOMVsixTemplateInstaller.f7cd9a97-558f-4cfb-9d8e-c325b6df08a2" Version="1.8" Language="en-US" Publisher="Peter Simpson" />
+        <Identity Id="ASCOMVsixTemplateInstaller.f7cd9a97-558f-4cfb-9d8e-c325b6df08a2" Version="1.10" Language="en-US" Publisher="Peter Simpson" />
         <DisplayName>ASCOMVsixTemplateInstaller</DisplayName>
         <Description xml:space="preserve">ASCOM VSIX template installer</Description>
         <Icon>ASCOM.ico</Icon>
@@ -29,6 +29,6 @@
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="TestFormsApp(VB)" d:TargetPath="|TestFormsApp(VB);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
     </Assets>
     <Prerequisites>
-        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,18.0)" DisplayName="Visual Studio core editor" />
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,18.0)" DisplayName="Visual Studio core editor" />
     </Prerequisites>
 </PackageManifest>

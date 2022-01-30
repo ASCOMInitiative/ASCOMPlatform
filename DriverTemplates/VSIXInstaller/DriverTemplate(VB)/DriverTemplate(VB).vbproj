@@ -47,11 +47,6 @@
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
-    <Reference Include="ASCOM.Attributes, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
-    <Reference Include="ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
-    <Reference Include="ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
-    <Reference Include="ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -130,7 +125,24 @@
       <LastGenOutput>Settings1.Designer.vb</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj">
+      <Project>{bce07b80-9e3d-43d9-be5b-50d121d40ed3}</Project>
+      <Name>ASCOM.Astrometry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj">
+      <Project>{350a73bd-60d1-03e4-2edc-a617d2d79ce3}</Project>
+      <Name>ASCOM.DeviceInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
+      <Project>{c9bf0a8b-594f-4ab9-938a-edc8448d8520}</Project>
+      <Name>ASCOM.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
+      <Project>{5f6cf410-7b16-4a32-99d2-0d92196c4490}</Project>
+      <Name>ASCOM.Exceptions</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
