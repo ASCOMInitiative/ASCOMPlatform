@@ -6,8 +6,8 @@
 		<ProjectSubType>ASCOM6</ProjectSubType>
 		<SortOrder>1000</SortOrder>
 		<CreateNewFolder>true</CreateNewFolder>
-		<DefaultName>ASCOM.DeviceName.DeviceClass</DefaultName>
-		<ProvideDefaultName>false</ProvideDefaultName>
+		<DefaultName>ReplaceWithYourOwnName</DefaultName>
+		<ProvideDefaultName>true</ProvideDefaultName>
 		<LocationField>Enabled</LocationField>
 		<EnableLocationBrowseButton>true</EnableLocationBrowseButton>
 		<Icon>PackageIconVB.ico</Icon>

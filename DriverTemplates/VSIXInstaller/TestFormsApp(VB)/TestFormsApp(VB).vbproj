@@ -49,6 +49,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -65,24 +67,38 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class1.vb" />
+    <Compile Include="Form1.designer.vb">
+      <DependentUpon>Form1.vb</DependentUpon>
+    </Compile>
+    <Content Include="Form1.vb">
+      <SubType>Form</SubType>
+    </Content>
     <Compile Include="My Project\AssemblyInfo.vb" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="AssemblyInfo.vb" />
-    <None Include="Class1.vb" />
-    <None Include="MyApplication.Designer.vb" />
-    <None Include="MyApplication.myapp" />
-    <None Include="ProjectTemplate.vbproj" />
-    <None Include="Resources.Designer.vb" />
-    <None Include="Resources.resx" />
-    <None Include="Settings.Designer.vb" />
-    <None Include="Settings.settings" />
+    <Compile Include="PlaceholderClass.vb" />
+    <Content Include="TemplateMyProject\Application.Designer.vb" />
+    <Content Include="TemplateMyProject\AssemblyInfo.vb" />
+    <Compile Include="TemplateMyProject\Resources.Designer.vb" />
+    <Content Include="TemplateMyProject\Settings.Designer.vb" />
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="TestFormsApp(VB).vstemplate" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PackageIconVB.ico" />
+    <Content Include="TemplateMyProject\Application.myapp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TemplateMyProject\Resources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="ASCOM Test Forms App %28VB%29.vbproj" />
+    <None Include="TemplateMyProject\app.manifest" />
+    <None Include="TemplateMyProject\Settings.settings" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />

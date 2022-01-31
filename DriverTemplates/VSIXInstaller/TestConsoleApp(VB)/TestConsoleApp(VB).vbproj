@@ -65,24 +65,30 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Module1.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="AssemblyInfo.vb" />
-    <None Include="Class1.vb" />
-    <None Include="MyApplication.Designer.vb" />
-    <None Include="MyApplication.myapp" />
-    <None Include="ProjectTemplate.vbproj" />
-    <None Include="Resources.Designer.vb" />
-    <None Include="Resources.resx" />
-    <None Include="Settings.Designer.vb" />
-    <None Include="Settings.settings" />
+    <Compile Include="PlaceholderClass.vb" />
+    <Compile Include="TemplateMyProject\Application.Designer.vb" />
+    <Content Include="TemplateMyProject\AssemblyInfo.vb" />
+    <Compile Include="TemplateMyProject\Resources.Designer.vb" />
+    <Content Include="TemplateMyProject\Settings.Designer.vb" />
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="TestConsoleApp(VB).vstemplate" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MyTemplate.vstemplate" />
     <Content Include="PackageIconVB.ico" />
+    <Content Include="TemplateMyProject\Application.myapp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="ASCOM Test Console App %28VB%29.vbproj" />
+    <None Include="TemplateMyProject\app.manifest" />
+    <None Include="TemplateMyProject\Settings.settings" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TemplateMyProject\Resources.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />

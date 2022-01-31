@@ -5,10 +5,10 @@
 		<Description>Creates a skeleton ASCOM driver in C#. Use the wizard to specify the device type.</Description>
 		<ProjectType>CSharp</ProjectType>
 		<ProjectSubType>ASCOM6</ProjectSubType>
-		<SortOrder>1000</SortOrder>
+		<SortOrder>1100</SortOrder>
 		<CreateNewFolder>true</CreateNewFolder>
-		<DefaultName>ASCOM.DeviceName.DeviceClass</DefaultName>
-		<ProvideDefaultName>false</ProvideDefaultName>
+		<DefaultName>ReplaceWithYourOwnName</DefaultName>
+		<ProvideDefaultName>true</ProvideDefaultName>
 		<LocationField>Enabled</LocationField>
 		<EnableLocationBrowseButton>true</EnableLocationBrowseButton>
 		<Icon>PackageIconCSharp.ico</Icon>
@@ -18,7 +18,6 @@
 		<ProjectTypeTag>ASCOM</ProjectTypeTag>
 		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
 		<TemplateID>0b275c83-d0b5-4ce2-805b-5053cd803830</TemplateID>
-		<ProvideDefaultName>true</ProvideDefaultName>
 	</TemplateData>
 	<TemplateContent>
 		<Project TargetFileName="ASCOM Device Driver.csproj" File="ASCOM Device Driver CS.csproj" ReplaceParameters="true">

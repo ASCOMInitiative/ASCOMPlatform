@@ -6,27 +6,37 @@
 		<ProjectType>VisualBasic</ProjectType>
 		<LanguageTag>visualbasic</LanguageTag>
 		<TemplateID>5c97c346-3521-43d3-b801-8beba72a7a9a</TemplateID>
-		<SortOrder>1000</SortOrder>
+		<SortOrder>1200</SortOrder>
 		<NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
 		<CreateNewFolder>true</CreateNewFolder>
-		<DefaultName>TestFormsApp(VB)</DefaultName>
+		<DefaultName>ReplaceWithYourOwnName</DefaultName>
 		<ProvideDefaultName>true</ProvideDefaultName>
 		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
 		<PlatformTag>windows</PlatformTag>
 		<ProjectTypeTag>desktop</ProjectTypeTag>
 		<ProjectTypeTag>ASCOM</ProjectTypeTag>
-
 	</TemplateData>
 	<TemplateContent>
-		<Project File="ProjectTemplate.vbproj" ReplaceParameters="true">
-			<ProjectItem ReplaceParameters="true" OpenInEditor="true" OpenOrder="10">Class1.vb</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="My Project\AssemblyInfo.vb">AssemblyInfo.vb</ProjectItem>
-			<ProjectItem ReplaceParameters="false" TargetFileName="My Project\Application.myapp">MyApplication.myapp</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="My Project\Application.Designer.vb">MyApplication.Designer.vb</ProjectItem>
-			<ProjectItem ReplaceParameters="false" TargetFileName="My Project\Resources.resx">Resources.resx</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="My Project\Resources.Designer.vb">Resources.Designer.vb</ProjectItem>
-			<ProjectItem ReplaceParameters="false" TargetFileName="My Project\Settings.settings">Settings.settings</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="My Project\Settings.Designer.vb">Settings.Designer.vb</ProjectItem>
+		<Project TargetFileName="ASCOM Test Forms App (VB).vbproj" File="ASCOM Test Forms App (VB).vbproj" ReplaceParameters="true">
+			<ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Form1.vb">Form1.vb</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Form1.Designer.vb">Form1.Designer.vb</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Form1.resx">Form1.resx</ProjectItem>
+			<Folder Name="TemplateMyProject" TargetFolderName="My Project">
+				<ProjectItem ReplaceParameters="true" TargetFileName="Application.myapp">Application.myapp</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="Application.Designer.vb">Application.Designer.vb</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.vb">AssemblyInfo.vb</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="Resources.resx">Resources.resx</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="Resources.Designer.vb">Resources.Designer.vb</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="Settings.settings">Settings.settings</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="Settings.Designer.vb">Settings.Designer.vb</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="App.Manifest">App.Manifest</ProjectItem>
+			</Folder>
+			<ProjectItem ReplaceParameters="true" TargetFileName="PlaceholderClass.vb">PlaceholderClass.vb</ProjectItem>
 		</Project>
 	</TemplateContent>
+	<WizardExtension>
+		<Assembly>ASCOM.Setup.TemplateWizard, Version=6.0.0.0, Culture=Neutral, PublicKeyToken=565de7938946fba7</Assembly>
+		<FullClassName>ASCOM.Setup.DriverWizard</FullClassName>
+	</WizardExtension>
 </VSTemplate>

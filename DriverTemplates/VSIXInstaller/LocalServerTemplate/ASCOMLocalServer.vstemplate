@@ -3,15 +3,12 @@
 	<TemplateData>
 		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
 		<TemplateID>e2d8220d-ceab-44b9-a510-b83adbb3f636</TemplateID>
+		<DefaultName>ReplaceWithYourOwnName</DefaultName>
 		<ProvideDefaultName>true</ProvideDefaultName>
-		<Name>Local Server Template (C#)</Name>
 		<Description>Creates an EXE based (local server/singleton) host for multiple devices and drivers. The Project name is the server name and namespace, CHOOSE CAREFULLY!</Description>
 		<ProjectType>CSharp</ProjectType>
-		<ProjectSubType>
-		</ProjectSubType>
-		<SortOrder>1030</SortOrder>
+		<SortOrder>1000</SortOrder>
 		<CreateNewFolder>true</CreateNewFolder>
-		<DefaultName>ReplaceWithYourName</DefaultName>
 		<LocationField>Enabled</LocationField>
 		<EnableLocationBrowseButton>true</EnableLocationBrowseButton>
 		<Icon>PackageIconCSharp.ico</Icon>
