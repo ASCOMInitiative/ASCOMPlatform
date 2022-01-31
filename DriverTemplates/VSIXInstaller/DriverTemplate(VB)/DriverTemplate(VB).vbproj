@@ -108,7 +108,6 @@
     <Content Include="MyProjectTemplate\Application.myapp" />
     <Content Include="MyTemplate.vstemplate" />
     <Content Include="ReadMe.htm" />
-    <Content Include="__TemplateIcon.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MyProjectTemplate\Resources.resx" />

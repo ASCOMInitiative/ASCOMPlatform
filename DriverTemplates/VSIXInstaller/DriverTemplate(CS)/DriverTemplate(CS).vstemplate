@@ -11,7 +11,7 @@
 		<ProvideDefaultName>false</ProvideDefaultName>
 		<LocationField>Enabled</LocationField>
 		<EnableLocationBrowseButton>true</EnableLocationBrowseButton>
-		<Icon>CSharpASCOM.ico</Icon>
+		<Icon>PackageIconCSharp.ico</Icon>
 		<LanguageTag>csharp</LanguageTag>
 		<PlatformTag>windows</PlatformTag>
 		<ProjectTypeTag>desktop</ProjectTypeTag>

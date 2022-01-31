@@ -63,12 +63,14 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ASCOM.Setup.TemplateWizard.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ASCOM.Setup.TemplateWizard\ASCOM.Setup.TemplateWizard.csproj">
+      <Project>{6E5A18A3-EA09-4D55-ABC8-A7AEAC3DDA2D}</Project>
+      <Name>ASCOM.Setup.TemplateWizard</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
     <ProjectReference Include="..\DriverTemplate%28CS%29\DriverTemplate%28CS%29.csproj">
       <Project>{BE799053-8F78-44BF-8581-68BBDC955102}</Project>
       <Name>DriverTemplate%28CS%29</Name>
@@ -134,6 +136,6 @@
   </PropertyGroup>
   <Target Name="AfterBuild" DependsOnTargets="CoreCompile">
     <Message Text="Signing $(TargetVsixContainer)" />
-    <Exec Command='$(VsixSignCommand) "$(MSBuildProjectDirectory)\$(TargetVsixContainer)"' />
+    <Exec Command="$(VsixSignCommand) &quot;$(MSBuildProjectDirectory)\$(TargetVsixContainer)&quot;" />
   </Target>
 </Project>

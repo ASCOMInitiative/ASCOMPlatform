@@ -86,11 +86,8 @@
   <ItemGroup>
     <Content Include="ASCOM.ico" />
     <Content Include="ASCOM.png" />
-    <Content Include="CSharpASCOM.ico" />
     <Content Include="ReadMe.htm" />
     <Content Include="Resources\ASCOM.bmp" />
-    <Content Include="_TemplateIcon.ico" />
-    <Content Include="__TemplateIcon.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SetupDialogForm.resx">

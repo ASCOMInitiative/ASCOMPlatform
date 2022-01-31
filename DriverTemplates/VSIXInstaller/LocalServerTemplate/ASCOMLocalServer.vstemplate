@@ -14,8 +14,7 @@
 		<DefaultName>ReplaceWithYourName</DefaultName>
 		<LocationField>Enabled</LocationField>
 		<EnableLocationBrowseButton>true</EnableLocationBrowseButton>
-		<Icon>CSharpASCOM.ico</Icon>
-		<PreviewImage>__PreviewImage.ico</PreviewImage>
+		<Icon>PackageIconCSharp.ico</Icon>
 		<LanguageTag>csharp</LanguageTag>
 		<PlatformTag>windows</PlatformTag>
 		<ProjectTypeTag>desktop</ProjectTypeTag>

@@ -72,7 +72,6 @@
     <None Include="Class1.vb" />
     <None Include="MyApplication.Designer.vb" />
     <None Include="MyApplication.myapp" />
-    <None Include="TestFormsApp(VB).ico" />
     <None Include="ProjectTemplate.vbproj" />
     <None Include="Resources.Designer.vb" />
     <None Include="Resources.resx" />
@@ -81,6 +80,9 @@
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="TestFormsApp(VB).vstemplate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PackageIconVB.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />

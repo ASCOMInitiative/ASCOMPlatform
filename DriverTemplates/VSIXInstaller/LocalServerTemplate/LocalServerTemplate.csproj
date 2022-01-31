@@ -111,9 +111,8 @@
     <Content Include="CSharpASCOM.ico" />
     <Content Include="DriverTemplateDeveloperNotes.htm" />
     <Content Include="MyTemplate.vstemplate" />
+    <Content Include="PackageIconCSharp.ico" />
     <Content Include="ReadMe.htm" />
-    <Content Include="_TemplateIcon.ico" />
-    <Content Include="__PreviewImage.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj">

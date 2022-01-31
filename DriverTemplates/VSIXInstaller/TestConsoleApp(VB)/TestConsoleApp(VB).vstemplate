@@ -1,28 +1,32 @@
 ﻿<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
-  <TemplateData>
-    <Name>TestConsoleApp(VB)</Name>
-    <Description>TestConsoleApp(VB)</Description>
-    <Icon>TestConsoleApp(VB).ico</Icon>
-    <ProjectType>VisualBasic</ProjectType>
-    <LanguageTag>visualbasic</LanguageTag>
-    <TemplateID>74930a47-efdf-49bb-b8ba-16662296c0c6</TemplateID>
-    <SortOrder>1000</SortOrder>
-    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
-    <CreateNewFolder>true</CreateNewFolder>
-    <DefaultName>TestConsoleApp(VB)</DefaultName>
-    <ProvideDefaultName>true</ProvideDefaultName>
-    <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
-  </TemplateData>
-  <TemplateContent>
-    <Project File="ProjectTemplate.vbproj" ReplaceParameters="true">
-      <ProjectItem ReplaceParameters="true" OpenInEditor="true" OpenOrder="10">Class1.vb</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="My Project\AssemblyInfo.vb">AssemblyInfo.vb</ProjectItem>
-      <ProjectItem ReplaceParameters="false" TargetFileName="My Project\Application.myapp">MyApplication.myapp</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="My Project\Application.Designer.vb">MyApplication.Designer.vb</ProjectItem>
-      <ProjectItem ReplaceParameters="false" TargetFileName="My Project\Resources.resx">Resources.resx</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="My Project\Resources.Designer.vb">Resources.Designer.vb</ProjectItem>
-      <ProjectItem ReplaceParameters="false" TargetFileName="My Project\Settings.settings">Settings.settings</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="My Project\Settings.Designer.vb">Settings.Designer.vb</ProjectItem>
-    </Project>
-  </TemplateContent>
+	<TemplateData>
+		<Name>TestConsoleApp(VB)</Name>
+		<Description>TestConsoleApp(VB)</Description>
+		<Icon>PackageIconVB.ico</Icon>
+		<ProjectType>VisualBasic</ProjectType>
+		<LanguageTag>visualbasic</LanguageTag>
+		<TemplateID>74930a47-efdf-49bb-b8ba-16662296c0c6</TemplateID>
+		<SortOrder>1000</SortOrder>
+		<NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+		<CreateNewFolder>true</CreateNewFolder>
+		<DefaultName>TestConsoleApp(VB)</DefaultName>
+		<ProvideDefaultName>true</ProvideDefaultName>
+		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+		<PlatformTag>windows</PlatformTag>
+		<ProjectTypeTag>desktop</ProjectTypeTag>
+		<ProjectTypeTag>ASCOM</ProjectTypeTag>
+
+	</TemplateData>
+	<TemplateContent>
+		<Project File="ProjectTemplate.vbproj" ReplaceParameters="true">
+			<ProjectItem ReplaceParameters="true" OpenInEditor="true" OpenOrder="10">Class1.vb</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="My Project\AssemblyInfo.vb">AssemblyInfo.vb</ProjectItem>
+			<ProjectItem ReplaceParameters="false" TargetFileName="My Project\Application.myapp">MyApplication.myapp</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="My Project\Application.Designer.vb">MyApplication.Designer.vb</ProjectItem>
+			<ProjectItem ReplaceParameters="false" TargetFileName="My Project\Resources.resx">Resources.resx</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="My Project\Resources.Designer.vb">Resources.Designer.vb</ProjectItem>
+			<ProjectItem ReplaceParameters="false" TargetFileName="My Project\Settings.settings">Settings.settings</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="My Project\Settings.Designer.vb">Settings.Designer.vb</ProjectItem>
+		</Project>
+	</TemplateContent>
 </VSTemplate>

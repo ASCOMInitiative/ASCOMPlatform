@@ -10,7 +10,7 @@
 		<ProvideDefaultName>false</ProvideDefaultName>
 		<LocationField>Enabled</LocationField>
 		<EnableLocationBrowseButton>true</EnableLocationBrowseButton>
-		<Icon>__TemplateIcon.ico</Icon>
+		<Icon>PackageIconVB.ico</Icon>
 		<LanguageTag>visualbasic</LanguageTag>
 		<PlatformTag>windows</PlatformTag>
 		<ProjectTypeTag>desktop</ProjectTypeTag>
