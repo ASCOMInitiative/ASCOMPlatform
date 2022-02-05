@@ -673,7 +673,7 @@ Public Class DiagnosticsForm
         'Eo06a tests
         eo = SOFA.Eo06a(2400000.5, 53736.0)
 
-        CompareDouble("SOFATests", "Eo06a-eo", eo, -0.0013328823719418338, 0.000000000000001)
+        CompareDouble("SOFATests", "Eo06a-eo", eo, -0.0013328823719418337, 0.000000000000001)
 
         'Atic13 tests
         ri = 2.7101215729690389
@@ -3899,7 +3899,7 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Sub TransformTest()
-        ' Confirm that site property read before write generates an errpr
+        ' Confirm that site property read before write generates an error
         TransformInitalGetTest(transform, TransformExceptionTestType.SiteLatitude)
         TransformInitalGetTest(transform, TransformExceptionTestType.SiteLongitude)
         TransformInitalGetTest(transform, TransformExceptionTestType.SiteElevation)
@@ -3907,7 +3907,7 @@ Public Class DiagnosticsForm
         ' TransformInitalGetTest(transform, TransformExceptionTestType.SiteTemperature)
         TransformInitalGetTest(transform, TransformExceptionTestType.SitePressure)
 
-        ' Set parameters ready for trasnformation
+        ' Set parameters ready for transformation
         transform.SiteTemperature = 20.0
         transform.SiteElevation = 1500
         transform.SiteLatitude = 0.0
@@ -3938,6 +3938,46 @@ Public Class DiagnosticsForm
         TransformTest2000("Deneb", "20:41:25.916", "45:16:49.23", TOLERANCE_E5, TOLERANCE_E4)
         TransformTest2000("Polaris", "02:31:51.263", "89:15:50.68", TOLERANCE_E5, TOLERANCE_E4)
         TransformTest2000("Arcturus", "14:15:38.943", "19:10:37.93", TOLERANCE_E5, TOLERANCE_E4)
+
+        ' Confirm that Transform works if set with J2000 coordinates but refraction correction is off and that it throws an exception if refraction correction is on
+        Dim tr As ASCOM.Astrometry.Transform.Transform
+
+        Try
+            tr = New ASCOM.Astrometry.Transform.Transform()
+            tr.SiteElevation = 1500
+            tr.SiteLatitude = 0.0
+            tr.SiteLongitude = 0.0
+            tr.SetJ2000(0.0, 0.0)
+            tr.Refraction = False
+
+            ' Confirm that Transform operates correctly when J2000 coordinates are set but refraction correction is disabled and site temperature is not set
+            Try
+                Dim rightAscension As Double
+                rightAscension = tr.RATopocentric
+                TL.LogMessage("TransformTest", "Transform works correctly when site temperature has not been set and J2000 coordinates are set.")
+                NMatches += 1
+            Catch ex As TransformUninitialisedException
+                LogError("TransformTest", "Received a TransformUninitialisedException when this operation should have worked!")
+            Catch ex As Exception
+                LogException("TransformTest1", ex.ToString())
+            End Try
+
+            ' Confirm that Transform throws an exception when J2000 coordinates are set and refraction correction is enabled but site temperature is not set
+            'Try
+            '    Dim rightAscension As Double
+            '    tr.Refraction = True
+            '    rightAscension = tr.RATopocentric
+            '    LogError("TransformTest", "Did not receive a TransformUninitialisedException when J2000 coordinates are set and refraction is enabled.")
+            'Catch ex As TransformUninitialisedException
+            '    TL.LogMessage("TransformTest", "Transform threw a TransformUninitialisedException when refraction correction is enabled and J2000 coordinates are set but site temperature has not been set.")
+            '    NMatches += 1
+            'Catch ex As Exception
+            '    LogException("TransformTest1", ex.ToString())
+            'End Try
+            tr.Dispose()
+        Catch ex As Exception
+            LogException("TransformTest", ex.ToString())
+        End Try
 
         TL.BlankLine()
     End Sub
