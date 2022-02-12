@@ -9,16 +9,60 @@ using ASCOM.DeviceHub.MvvmMessenger;
 namespace ASCOM.DeviceHub
 {
 	public class FocuserControlViewModel : DeviceHubViewModelBase
-    {
+	{
 		private readonly IFocuserManager _focuserManager;
 		private IFocuserManager FocuserManager => _focuserManager;
 		private Dictionary<double, int> FocuserMovements { get; set; }
+
+		private bool IsValidTarget
+		{
+			get
+			{
+				bool retval = false;
+				string target = TargetPosition;
+
+				if ( !String.IsNullOrEmpty( target ) )
+				{
+					int temp;
+
+					if ( Int32.TryParse( target, out temp ) )
+					{
+						retval = true;
+					}
+				}
+
+				return retval;
+			}
+		}
+
+		private bool IsValidAmount
+		{
+			get
+			{
+				bool retval = false;
+				string target = TargetAmount;
+
+				if ( !String.IsNullOrEmpty( target ) )
+				{
+					int temp;
+
+					if ( Int32.TryParse( target, out temp ) )
+					{
+						retval = true;
+					}
+				}
+
+				return retval;
+			}
+		}
 
 		public FocuserControlViewModel( IFocuserManager focuserManager )
 		{
 			_focuserManager = focuserManager;
 			_status = null;
 			_temperatureDisplayDegF = false;
+			_accumulatedSteps = 0;
+			_canEditAccumulatedSteps = false;
 
 			FocuserMovements = new Dictionary<double, int>
 			{
@@ -34,9 +78,11 @@ namespace ASCOM.DeviceHub
 			MoveIndex = FocuserMovements.Count - 1;
 			TemperatureOffset = Globals.FocuserTemperatureOffset;
 			TargetPosition = "0";
+			TargetAmount = "0";
 
 			Messenger.Default.Register<FocuserParametersUpdatedMessage>( this, ( action ) => FocuserParametersUpdated( action ) );
 			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => InvalidateDeviceData( action ) );
+			Messenger.Default.Register<FocuserMoveAmountMessage>( this, ( action ) => UpdateAccumulatedMoves( action ) );
 			Messenger.Default.Register<FocuserMoveCompletedMessage>( this, ( action ) => FocuserMoveCompleted() );
 			RegisterStatusUpdateMessage( true );
 		}
@@ -181,7 +227,53 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
+		private int _accumulatedSteps;
+
+		public int AccumulatedSteps
+		{
+			get { return _accumulatedSteps; }
+			set
+			{
+				if ( value != _accumulatedSteps )
+				{
+					_accumulatedSteps = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		private bool _canEditAccumulatedSteps;
+
+		public bool CanEditAccumulatedSteps
+		{
+			get { return _canEditAccumulatedSteps; }
+			set
+			{
+				if ( value != _canEditAccumulatedSteps )
+				{
+					_canEditAccumulatedSteps = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		private string _targetAmount;
+
+		public string TargetAmount
+		{
+			get { return _targetAmount; }
+			set
+			{
+				if ( value != _targetAmount )
+				{
+					_targetAmount = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
 		#endregion Change Notification Properties
+
 
 		#region Helper Methods
 
@@ -193,6 +285,8 @@ namespace ASCOM.DeviceHub
 				{
 					Status = null;
 					Parameters = null;
+					TargetPosition = "0";
+					TargetAmount = "0";
 				}, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
 			}
 		}
@@ -216,12 +310,21 @@ namespace ASCOM.DeviceHub
 
 			Task.Factory.StartNew( () =>
 			{
+				int startingPosition;
+
 				if ( Status == null )
 				{
 					// This should happen once, after connection.
 
 					TargetPosition = action.Status.Position.ToString();
 					TemperatureOffset = Globals.FocuserTemperatureOffset;
+					AccumulatedSteps = 0;
+					CanEditAccumulatedSteps = false;
+					startingPosition = action.Status.Position;
+				}
+				else
+				{
+					startingPosition = Status.Position;
 				}
 
 				Status = action.Status;
@@ -250,9 +353,6 @@ namespace ASCOM.DeviceHub
 		protected void RequestFocuserMove( int delta )
 		{
 			FocuserBusy = true;
-
-			int moveAmount = delta;
-
 			FocuserManager.MoveFocuserBy( delta );
 		}
 
@@ -266,18 +366,6 @@ namespace ASCOM.DeviceHub
 			}, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
 		}
 
-		private void AdjustTargetPosition( int oldPosition )
-		{
-			if ( Status == null )
-			{
-				TargetPosition = String.Empty;
-			}
-			else if ( Status.Position != oldPosition && !Status.IsMoving )
-			{
-				TargetPosition = Status.Position.ToString();
-			}
-		}
-
 		protected override void DoDispose()
 		{
 			_saveOffsetCommand = null;
@@ -286,28 +374,20 @@ namespace ASCOM.DeviceHub
 
 			Messenger.Default.Unregister<FocuserParametersUpdatedMessage>( this );
 			Messenger.Default.Unregister<DeviceDisconnectedMessage>( this );
+			Messenger.Default.Unregister<FocuserMoveAmountMessage>( this );
 			Messenger.Default.Unregister<FocuserMoveCompletedMessage>( this );
 			RegisterStatusUpdateMessage( false );
 		}
 
-		private bool IsValidTarget
+		private void UpdateAccumulatedMoves( FocuserMoveAmountMessage action )
 		{
-			get
+			// Accumulate any position change into the total change value.
+
+			int positionDelta = action.MoveAmount;
+
+			if ( positionDelta != 0 )
 			{
-				bool retval = false;
-				string target = TargetPosition;
-
-				if ( !String.IsNullOrEmpty( target ) )
-				{
-					int temp;
-
-					if ( Int32.TryParse( target, out temp ) )
-					{
-						retval = true;
-					}
-				}
-
-				return retval;
+				AccumulatedSteps += positionDelta;
 			}
 		}
 
@@ -439,9 +519,40 @@ namespace ASCOM.DeviceHub
 		private bool CanMoveFocuserToPosition()
 		{
 			return FocuserManager.IsConnected && !FocuserBusy && IsValidTarget;
-
 		}
 
+		#region MoveFocuserByAmountCommand
+
+		private ICommand _moveFocuserByAmountCommand;
+
+		public ICommand MoveFocuserByAmountCommand
+		{
+			get
+			{
+				if ( _moveFocuserByAmountCommand == null )
+				{
+					_moveFocuserByAmountCommand = new RelayCommand(
+						param => this.MoveFocuserByAmount(),
+						param => this.CanMoveFocuserByAmount() );
+				}
+
+				return _moveFocuserByAmountCommand;
+			}
+		}
+
+		private void MoveFocuserByAmount()
+		{
+			int delta = Int32.Parse( TargetAmount );
+
+			RequestFocuserMove( delta );
+		}
+
+		private bool CanMoveFocuserByAmount()
+		{
+			return FocuserManager.IsConnected && !FocuserBusy && IsValidAmount;
+		}
+
+		#endregion MoveFocuserByAmountCommand
 		#endregion MoveFocuserToPositionCommand
 
 		#region HaltFocuserCommand
@@ -510,6 +621,72 @@ namespace ASCOM.DeviceHub
 		}
 
 		#endregion  ToggleTempCompCommand
+
+		#region ToggleCanEditAccumulatedStepsCommand
+
+		private ICommand _toggleCanEditAccumulatedStepsCommand;
+
+		public ICommand ToggleCanEditAccumulatedStepsCommand
+		{
+			get
+			{
+				if ( _toggleCanEditAccumulatedStepsCommand == null )
+				{
+					_toggleCanEditAccumulatedStepsCommand = new RelayCommand(
+						param => this.ToggleCanEditAccumulatedSteps(),
+						param => this.CanToggleCanEditAccumulatedSteps() );
+				}
+
+				return _toggleCanEditAccumulatedStepsCommand;
+			}
+		}
+
+		private void ToggleCanEditAccumulatedSteps()
+		{
+			CanEditAccumulatedSteps = !CanEditAccumulatedSteps;
+		}
+
+		private bool CanToggleCanEditAccumulatedSteps()
+		{
+			bool retval = Status != null && Status.Connected;
+
+			return retval;
+		}
+
+		#endregion ToggleCanEditAccumulatedStepsCommand
+
+		#region ResetAccumulatedStepsCommand
+
+		private ICommand _resetAccumulatedStepsCommand;
+
+		public ICommand ResetAccumulatedStepsCommand
+		{
+			get
+			{
+				if ( _resetAccumulatedStepsCommand == null )
+				{
+					_resetAccumulatedStepsCommand = new RelayCommand(
+						param => this.ResetAccumulatedSteps(),
+						param => this.CanResetAccumulatedSteps() );
+				}
+
+				return _resetAccumulatedStepsCommand;
+			}
+		}
+
+		private void ResetAccumulatedSteps()
+		{
+			AccumulatedSteps = 0;
+		}
+
+		private bool CanResetAccumulatedSteps()
+		{
+			bool retval = Status != null && Status.Connected;
+
+			return retval;
+		}
+
+		#endregion ResetAccumulatedStepsCommand
 
 		#endregion Relay Commands
 	}
