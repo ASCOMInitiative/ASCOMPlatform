@@ -140,7 +140,7 @@ namespace Unit_Tests.Telescope
 			_prVm.Invoke( "RegisterStatusUpdateMessage", true );
 
 			_prVm.Invoke( "ChangeParkState" );
-			Thread.Sleep( 2500 );
+			Thread.Sleep( 2500 ); 
 			Assert.IsFalse( _vm.Status.AtPark );
 			Assert.AreEqual<ParkingStateEnum>( ParkingStateEnum.Unparked, _vm.Status.ParkingState );
 

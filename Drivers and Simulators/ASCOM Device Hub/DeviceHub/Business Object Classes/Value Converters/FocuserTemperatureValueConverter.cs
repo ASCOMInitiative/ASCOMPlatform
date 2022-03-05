@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -10,8 +11,8 @@ namespace ASCOM.DeviceHub
 		public object Convert( object[] values, Type targetType, object parameter, CultureInfo culture )
 		{
 			string retval = "NO DATA";
-			double rawTemp = Double.NaN;
-			bool convertToF = false;
+			double rawTemp = 0.0;
+			bool convertToF = true;
 			double offset = 0.0;
 
 			if ( values[0] != DependencyProperty.UnsetValue )
@@ -24,7 +25,7 @@ namespace ASCOM.DeviceHub
 				offset = (double)values[1];
 			}
 
-			if ( values[2] != null )
+			if ( values[2] != DependencyProperty.UnsetValue )
 			{
 				convertToF = (bool)values[2];
 			}

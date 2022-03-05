@@ -228,6 +228,7 @@ namespace ASCOM.DeviceHub
 			// Ensure that our move amount does not exceed the MaxIncrement.
 
 			int moveAmount = Math.Max( Math.Min( amount, maxIncrement ), -MaxIncrement );
+			Messenger.Default.Send( new FocuserMoveAmountMessage( moveAmount ) );
 
 			if ( Parameters.Absolute )
 			{

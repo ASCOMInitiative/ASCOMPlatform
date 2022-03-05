@@ -43,9 +43,39 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\..\..\ASCOM.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>ASCOM.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\ASCOM\Platform 6 Developer Components\Components\Platform6\ASCOM.Astrometry.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ASCOM.Attributes, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\ASCOM\Platform 6 Developer Components\Components\Platform6\ASCOM.Attributes.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\ASCOM\Platform 6 Developer Components\Components\Platform6\ASCOM.DeviceInterfaces.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\ASCOM\Platform 6 Developer Components\Components\Platform6\ASCOM.DriverAccess.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\ASCOM\Platform 6 Developer Components\Components\Platform6\ASCOM.Exceptions.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\ASCOM\Platform 6 Developer Components\Components\Platform6\ASCOM.Utilities.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="PresentationFramework.Aero">
       <Private>True</Private>
     </Reference>
@@ -72,21 +102,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="..\..\..\AssemblyVersionInfo.cs">
-      <Link>Properties\AssemblyVersionInfo.cs</Link>
-    </Compile>
     <Compile Include="..\ProductAssemblyInfo.cs">
       <Link>ProductAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Business Object Classes\ASCOM Classes\GarbageCollection.cs" />
     <Compile Include="Business Object Classes\AssemblyGuidAttribute.cs" />
+    <Compile Include="Business Object Classes\DisplayAttribute.cs" />
     <Compile Include="Business Object Classes\Message Types\DomeSlavedChangedMessage.cs" />
-    <Compile Include="Business Object Classes\Telescope Classes\JogAmount.cs" />
-    <Compile Include="Business Object Classes\Telescope Classes\JogDirection.cs" />
     <Compile Include="Business Object Classes\Value Converters\BooleanOnOffConverter.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\TelescopeRates.cs" />
-    <Compile Include="Business Object Classes\Value Converters\MultiBindingTrueIfNotParking.cs" />
     <Compile Include="Business Object Classes\Value Converters\MultiBooleanVisibilityConverter.cs" />
-    <Compile Include="Business Object Classes\DisplayAttribute.cs" />
+    <Compile Include="Business Object Classes\Value Converters\MultiBindingTrueIfNotParking.cs" />
+    <Compile Include="Business Object Classes\Value Converters\EditLockTextBooleanValueConverter.cs" />
+    <Compile Include="Business Object Classes\Message Types\FocuserMoveAmountMessage.cs" />
+    <Compile Include="Resources\Strings.Designer.cs" />
     <Compile Include="View Classes\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
@@ -261,13 +290,10 @@
     <Compile Include="Business Object Classes\Telescope Classes\JogRate.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\JogRates.cs" />
     <Compile Include="Services Classes\Interfaces\IActivityLogService.cs" />
-    <Compile Include="Resources\Strings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Strings.resx</DependentUpon>
-    </Compile>
     <Compile Include="Business Object Classes\Value Converters\RightAscensionValueConverter.cs" />
     <Compile Include="Business Object Classes\Value Converters\DeviceConnectedValueConverter.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\JogDirection.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\JogAmount.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\TelescopeSlewAmounts.cs" />
     <Compile Include="Business Object Classes\Value Converters\SideOfPierStringConverter.cs" />
     <Compile Include="DeviceManagers\TelescopeManagerAccess.cs" />
@@ -408,7 +434,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Business Object Classes\ASCOM Classes\ClassFactory.cs" />
-    <Compile Include="Business Object Classes\ASCOM Classes\GarbageCollection.cs" />
     <Compile Include="Business Object Classes\ASCOM Classes\LocalServer.cs" />
     <Compile Include="View Classes\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -434,10 +459,8 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Strings.resx" />
+    <None Include="ASCOM.snk" />
     <None Include="TelescopeControlClasses.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -458,30 +481,6 @@
     <Resource Include="Images\Stop.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj">
-      <Project>{bce07b80-9e3d-43d9-be5b-50d121d40ed3}</Project>
-      <Name>ASCOM.Astrometry</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\ASCOM.Attributes\ASCOM.Attributes.csproj">
-      <Project>{2c40fad9-de75-4360-a0ad-911c4d24d98c}</Project>
-      <Name>ASCOM.Attributes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj">
-      <Project>{350a73bd-60d1-03e4-2edc-a617d2d79ce3}</Project>
-      <Name>ASCOM.DeviceInterface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\ASCOM.DriverAccess\ASCOM.DriverAccess.csproj">
-      <Project>{3b6c23f5-c590-4385-86bb-98b604b565ba}</Project>
-      <Name>ASCOM.DriverAccess</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
-      <Project>{c9bf0a8b-594f-4ab9-938a-edc8448d8520}</Project>
-      <Name>ASCOM.Utilities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
-      <Project>{5f6cf410-7b16-4a32-99d2-0d92196c4490}</Project>
-      <Name>ASCOM.Exceptions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MvvmMessenger\MvvmMessenger.csproj">
       <Project>{3c199a36-99a6-4c99-bab3-e37a81505111}</Project>
       <Name>MvvmMessenger</Name>
@@ -489,7 +488,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy /b /Y "$(ProjectDir)..\Documents\ASCOM Device Hub User and Technical Information.pdf" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

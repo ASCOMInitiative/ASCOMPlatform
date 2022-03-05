@@ -624,12 +624,12 @@ namespace ASCOM.DeviceHub
 				IMessageBoxService msgSvc = ServiceContainer.Instance.GetService<IMessageBoxService>();
 
 				string text = "Once you start to park the telescope it will not be abortable and must be allowed to complete. \r\n\r\n"
-					+ "Are you sure that you want to continue?";
+					+ "Click OK to Park the telescope?";
 				string title = "Park The Telescope";
 
-				MessageBoxResult result = msgSvc.Show( text, title, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No, MessageBoxOptions.None );
+				MessageBoxResult result = msgSvc.Show( text, title, MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel, MessageBoxOptions.None );
 
-				if ( result != MessageBoxResult.Yes )
+				if ( result != MessageBoxResult.OK )
 				{
 					return;
 				}
