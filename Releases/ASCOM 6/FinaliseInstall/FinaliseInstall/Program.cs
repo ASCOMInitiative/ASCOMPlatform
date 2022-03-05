@@ -15,6 +15,7 @@ using System.Security;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Globalization;
+using System.Security.Claims;
 
 namespace ConsoleApplication1
 {
@@ -348,19 +349,28 @@ namespace ConsoleApplication1
             try
             {
                 rkCLSID = Registry.ClassesRoot.OpenSubKey("CLSID\\" + sCLSID, RegistryKeyPermissionCheck.ReadWriteSubTree);
-                rkCLSID.SetValue("AppId", sAPPID);
-                rkAPPID = Registry.ClassesRoot.CreateSubKey("APPID\\" + sAPPID, RegistryKeyPermissionCheck.ReadWriteSubTree);
-                rkAPPID.SetValue("", rkCLSID.GetValue("")); // Same description as class
-                rkAPPID.SetValue("AppId", sAPPID);
-                rkAPPID.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord); // RPC_C_AUTHN_LEVEL_NONE
 
-                if (exeName != "") // If want AppId\Exe.name
+                // Check whether we have a registry entry
+                if (!(rkCLSID is null)) // We have a registry entry
                 {
-                    rkAPPIDExe = Registry.ClassesRoot.CreateSubKey("AppId\\" + exeName, RegistryKeyPermissionCheck.ReadWriteSubTree);
-                    rkAPPIDExe.SetValue("", rkCLSID.GetValue("")); // Same description as class
-                    rkAPPIDExe.SetValue("AppId", sAPPID);
+                    rkCLSID.SetValue("AppId", sAPPID);
+                    rkAPPID = Registry.ClassesRoot.CreateSubKey("APPID\\" + sAPPID, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                    rkAPPID.SetValue("", rkCLSID.GetValue("")); // Same description as class
+                    rkAPPID.SetValue("AppId", sAPPID);
+                    rkAPPID.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord); // RPC_C_AUTHN_LEVEL_NONE
+
+                    if (exeName != "") // If want AppId\Exe.name
+                    {
+                        rkAPPIDExe = Registry.ClassesRoot.CreateSubKey("AppId\\" + exeName, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                        rkAPPIDExe.SetValue("", rkCLSID.GetValue("")); // Same description as class
+                        rkAPPIDExe.SetValue("AppId", sAPPID);
+                    }
+                    LogMessage("AddAppID", "  OK - Completed");
                 }
-                LogMessage("AddAppID", "  OK - Completed");
+                else // No registry entry so ignore the attempt.
+                {
+                    LogMessage("AddAppID", $"  Registry entry CLSID\\{sCLSID} not found, can't add AppId.");
+                }
             }
             catch (Exception ex)
             {
@@ -569,12 +579,18 @@ namespace ConsoleApplication1
             RegistryKey rkTLIB = null;
             try
             {
-                rkTLIB = Registry.ClassesRoot.OpenSubKey(
-                                "TypeLib\\" + LibID + "\\1.0",
-                                RegistryKeyPermissionCheck.ReadWriteSubTree);
-                rkTLIB.SetValue("PrimaryInteropAssemblyName",
-                                AssyClass + ", Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
-                LogMessage("FixPiaLinkage", "  Fixed OK");
+                rkTLIB = Registry.ClassesRoot.OpenSubKey("TypeLib\\" + LibID + "\\1.0", RegistryKeyPermissionCheck.ReadWriteSubTree);
+
+                // Check whether we have a registry entry
+                if (!(rkTLIB is null)) // We have a registry entry
+                {
+                    rkTLIB.SetValue("PrimaryInteropAssemblyName", AssyClass + ", Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
+                    LogMessage("FixPiaLinkage", "  Fixed OK");
+                }
+                else // No registry entry so ignore the attempt.
+                {
+                    LogMessage("FixPiaLinkage", $"  Registry entry TypeLib\\{LibID}\\1.0 not found, can't fix PIA linkage.");
+                }
             }
             catch (Exception ex)
             {
