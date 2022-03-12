@@ -11,41 +11,6 @@ BOOL WINAPI DllMain(
     DWORD fdwReason,     // reason for calling function
     LPVOID lpReserved)  // reserved
 {
-    time_t seconds;
-
-    seconds = time(NULL);
-    printf("Seconds since January 1, 1970 = %ld\n", seconds);
-
-    char number_str[20];
-
-    sprintf(number_str, "%ld", seconds);
-    printf("Converted to string : %s\n", number_str);
-
-    char fileName[200];
-    strcpy(fileName, "C:\\novas31\\log\\");
-    strcat(fileName, number_str);
-    strcat(fileName, ".txt");
-    printf("File name: %s\n", fileName);
-
-    //char sentence[1000];
-
-    //// creating file pointer to work with files
-    //FILE* fptr;
-
-    //// opening file in writing mode
-    //fptr = fopen("program.txt", "w");
-
-    //// exiting program 
-    //if (fptr == NULL) {
-    //    printf("Error!");
-    //    exit(1);
-    //}
-    //printf("Enter a sentence:\n");
-    //fgets(sentence, sizeof(sentence), stdin);
-    //fprintf(fptr, "%s", sentence);
-    //fclose(fptr);
-
-
     // Perform actions based on the reason for calling.
     switch (fdwReason)
     {
@@ -59,11 +24,11 @@ BOOL WINAPI DllMain(
         break;
 
     case DLL_THREAD_DETACH:
-        // Do thread-specific cleanup.
+        // Do thread-specific clean-up.
         break;
 
     case DLL_PROCESS_DETACH:
-        // Perform any necessary cleanup.
+        // Perform any necessary clean-up.
         ephem_close();
         break;
     }
