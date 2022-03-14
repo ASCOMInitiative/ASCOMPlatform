@@ -68,6 +68,9 @@
     <Compile Include="SetupDialogForm.designer.cs">
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
     </Compile>
+    <Content Include="PackageIconCSharp.ico">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="TemplateProperties\AssemblyInfo.cs" />
     <Compile Include="TemplateProperties\Resources.Designer.cs" />
     <Compile Include="TemplateProperties\Settings.Designer.cs" />

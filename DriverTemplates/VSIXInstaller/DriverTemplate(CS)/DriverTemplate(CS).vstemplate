@@ -1,23 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
+		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+		<TemplateID>0b275c83-d0b5-4ce2-805b-5053cd803830</TemplateID>
 		<Name>ASCOM Device Driver (C#)</Name>
 		<Description>Creates a skeleton ASCOM driver in C#. Use the wizard to specify the device type.</Description>
 		<ProjectType>CSharp</ProjectType>
-		<ProjectSubType>ASCOM6</ProjectSubType>
-		<SortOrder>1100</SortOrder>
+		<ProjectSubType></ProjectSubType>
+		<SortOrder>1000</SortOrder>
 		<CreateNewFolder>true</CreateNewFolder>
-		<DefaultName>ReplaceWithYourOwnName</DefaultName>
+		<DefaultName>ASCOM.DeviceName.DeviceClass</DefaultName>
 		<ProvideDefaultName>true</ProvideDefaultName>
 		<LocationField>Enabled</LocationField>
 		<EnableLocationBrowseButton>true</EnableLocationBrowseButton>
-		<Icon>PackageIconCSharp.ico</Icon>
+		<Icon>PackageIconCsharp.ico</Icon>
 		<LanguageTag>csharp</LanguageTag>
 		<PlatformTag>windows</PlatformTag>
 		<ProjectTypeTag>desktop</ProjectTypeTag>
 		<ProjectTypeTag>ASCOM</ProjectTypeTag>
-		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
-		<TemplateID>0b275c83-d0b5-4ce2-805b-5053cd803830</TemplateID>
 	</TemplateData>
 	<TemplateContent>
 		<Project TargetFileName="ASCOM Device Driver.csproj" File="ASCOM Device Driver CS.csproj" ReplaceParameters="true">
