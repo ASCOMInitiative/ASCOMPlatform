@@ -183,8 +183,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="VSSDK.TemplateWizardInterface.8">
-      <Version>8.0.4</Version>
+    <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface">
+      <Version>17.1.32210.191</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

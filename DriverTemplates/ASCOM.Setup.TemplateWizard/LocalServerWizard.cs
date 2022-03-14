@@ -108,6 +108,7 @@ namespace ASCOM.Setup
                 replacementsDictionary.Add(csTemplateRateGuid, Guid.NewGuid().ToString());
                 replacementsDictionary.Add(csTemplateAxisRatesGuid, Guid.NewGuid().ToString());
                 replacementsDictionary.Add(csTemplateTrackingRatesGuid, Guid.NewGuid().ToString());
+                TL.LogMessage("RunStarted", $"Completed");
             }
             catch (Exception ex)
             {
@@ -122,6 +123,8 @@ namespace ASCOM.Setup
         /// <param name="project"></param>
         public void ProjectFinishedGenerating(Project project)
         {
+            TL.LogMessage("ProjectFinishedGenerating", $"Started");
+
             ProjectItems driversFolderItems = null;
             ProjectItem driverFolder = null;
 
@@ -268,7 +271,11 @@ namespace ASCOM.Setup
 
                 // Rename the Driver folder
                 TL.LogMessage("ProjectFinishedGenerating", $"Renaming driver folder: '{driverFolder.Name}' to '{DeviceClass}Driver'");
+                driverFolder.DTE.SuppressUI = true;
+                TL.LogMessage("ProjectFinishedGenerating", $"Set DTE.SuppressUI = true");
                 driverFolder.Name = $"{DeviceClass}Driver";
+                TL.LogMessage("ProjectFinishedGenerating", $"Completed rename");
+                driverFolder.DTE.SuppressUI = false;
                 TL.LogMessage("ProjectFinishedGenerating", $"New driver folder name: '{driverFolder.Name}'");
 
             }
@@ -279,7 +286,6 @@ namespace ASCOM.Setup
             }
 
             TL.LogMessage("ProjectFinishedGenerating", "End");
-            TL.Enabled = false;
 
         }
 
@@ -288,6 +294,7 @@ namespace ASCOM.Setup
         /// </summary>
         public void RunFinished()
         {
+            TL.LogMessage("RunFinished", $"COmpleted");
         }
 
         #region Unused interface members not applicable to Project templates
@@ -298,6 +305,7 @@ namespace ASCOM.Setup
         /// <param name="projectItem"></param>
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
+            TL.LogMessage("BeforeOpeningFile", $"ProjectItem: {projectItem.Name}");
         }
 
         /// <summary>
@@ -306,6 +314,7 @@ namespace ASCOM.Setup
         /// <param name="projectItem"></param>
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
+            TL.LogMessage("ProjectItemFinishedGenerating", $"ProjectItem: {projectItem.Name}");
         }
 
         /// <summary>
@@ -315,6 +324,7 @@ namespace ASCOM.Setup
         /// <returns></returns>
         public bool ShouldAddProjectItem(string filePath)
         {
+            TL.LogMessage("ShouldAddProjectItem", $"File: {filePath}");
             return true;
         }
 
