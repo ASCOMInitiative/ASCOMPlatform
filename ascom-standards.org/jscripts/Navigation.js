@@ -236,7 +236,7 @@ function writesubmenu() {
 	    SubMenuOutput += "</ul>";
         SubMenuOutput += "<h3>Alpaca References</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
- 		SubMenuOutput += "<li><a href=\"Alpaca.htm\">Introduction to Alpaca</a></li>";
+ 		SubMenuOutput += "<li><a href=\"../About/Index.htm\">About ASCOM &amp; Alpaca</a></li>";
 		SubMenuOutput += "<li><a href=\"https://ascom-standards.org/api/\" target=\"_new\">ASCOM Alpaca API</a></li>";
 		SubMenuOutput += "<li><a href=\"ASCOM%20Alpaca%20API%20Reference.pdf\" target=\"_new\">API Reference (PDF)</a></li>";
 	    SubMenuOutput += "</ul>";
