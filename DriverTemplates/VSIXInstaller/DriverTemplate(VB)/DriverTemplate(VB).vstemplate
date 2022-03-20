@@ -1,9 +1,12 @@
-﻿<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
+		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+		<TemplateID>0416ef46-0da3-4774-8edf-9783ad3312c3</TemplateID>
 		<Name>ASCOM Device Driver (VB)</Name>
 		<Description>Creates a skeleton ASCOM device driver in Visual Basic. Choose the device type in the wizard</Description>
 		<ProjectType>VisualBasic</ProjectType>
-		<ProjectSubType>ASCOM6</ProjectSubType>
+		<ProjectSubType></ProjectSubType>
 		<SortOrder>1000</SortOrder>
 		<CreateNewFolder>true</CreateNewFolder>
 		<DefaultName>ReplaceWithYourOwnName</DefaultName>
@@ -15,10 +18,6 @@
 		<PlatformTag>windows</PlatformTag>
 		<ProjectTypeTag>desktop</ProjectTypeTag>
 		<ProjectTypeTag>ASCOM</ProjectTypeTag>
-		<TemplateID>0416ef46-0da3-4774-8edf-9783ad3312c3</TemplateID>
-		<SortOrder>1000</SortOrder>
-		<NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
-		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
 	</TemplateData>
 	<TemplateContent>
 		<Project TargetFileName="ASCOM Device Driver.vbproj" File="ASCOM Device Driver VB.vbproj" ReplaceParameters="true">
@@ -37,13 +36,15 @@
 			<ProjectItem ReplaceParameters="true" TargetFileName="DeviceObservingConditions.vb">DeviceObservingConditions.vb</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Driver.vb">Driver.vb</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Rates.vb">Rates.vb</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="My Project\Application.myapp">MyProjectTemplate\Application.myapp</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="My Project\Application.Designer.vb">MyProjectTemplate\Application.Designer.vb</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="My Project\AssemblyInfo.vb">MyProjectTemplate\AssemblyInfo.vb</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="My Project\Resources.resx">MyProjectTemplate\Resources.resx</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="My Project\Resources.Designer.vb">MyProjectTemplate\Resources.Designer.vb</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="My Project\Settings.settings">MyProjectTemplate\Settings.settings</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="My Project\Settings.Designer.vb">MyProjectTemplate\Settings.Designer.vb</ProjectItem>
+			<Folder Name="MyProjectTemplate" TargetFolderName="My Project">
+				<ProjectItem ReplaceParameters="true" TargetFileName="Application.myapp">Application.myapp</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="Application.Designer.vb">Application.Designer.vb</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.vb">AssemblyInfo.vb</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="Resources.resx">Resources.resx</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="Resources.Designer.vb">Resources.Designer.vb</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="Settings.settings">Settings.settings</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="Settings.Designer.vb">Settings.Designer.vb</ProjectItem>
+			</Folder>
 			<ProjectItem ReplaceParameters="true" TargetFileName="PlaceholderInterface.vb">PlaceholderInterface.vb</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="ReadMe.htm" OpenInWebBrowser="true">ReadMe.htm</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.vb">SetupDialogForm.vb</ProjectItem>

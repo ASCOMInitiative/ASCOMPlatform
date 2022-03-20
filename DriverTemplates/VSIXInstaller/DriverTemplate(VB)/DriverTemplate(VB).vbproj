@@ -106,7 +106,6 @@
     <Content Include="ASCOM Device Driver VB.sln" />
     <Content Include="ASCOM.png" />
     <Content Include="MyProjectTemplate\Application.myapp" />
-    <Content Include="MyTemplate.vstemplate" />
     <Content Include="ReadMe.htm" />
   </ItemGroup>
   <ItemGroup>
