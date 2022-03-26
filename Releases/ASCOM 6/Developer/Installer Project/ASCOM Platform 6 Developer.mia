@@ -108,6 +108,8 @@ Code Folding Region
 Comment
 Define Component
 Define Component
+Set Component State
+Set Component Choice
 Comment
 Read Registry
 Read Registry
@@ -683,6 +685,8 @@ $
 {D4975AF9-DD9F-4638-8BBC-5BF68B3FF0AE}
 {9290C40B-8B93-483D-AE9C-E9309A308515}
 {EB6EF5ED-56F6-4268-9BDE-0DDB2ADA7F8F}
+{4625FA3A-9362-4426-8831-5EBA86C9AEE7}
+{386F6D64-7FFE-4939-B90B-AC985E1ADEE1}
 {69DF2C82-E168-4ADD-963C-BA4102487851}
 {9BAE20C0-9336-4BEA-AE0F-0B0C56D8029B}
 {8DFDE4E0-9699-45B5-9477-758B6CB7578A}
@@ -1971,15 +1975,18 @@ FALSE
 TRUE
 FALSE
 {EB6EF5ED-56F6-4268-9BDE-0DDB2ADA7F8F}
-Developer Components\Visual Studio Driver Templates
-TRUE
+Developer Components\Visual Studio Templates (SEE BELOW)
+FALSE
 Description for feature New Feature
 {9290C40B-8B93-483D-AE9C-E9309A308515}
 Developer Components
 TRUE
 Description for feature New Feature
 {6E4980A2-53EE-424D-ADB6-84A96412233D}
-Developer Components\Visual Studio Driver Templates
+Developer Components\Visual Studio Templates (SEE BELOW)
+FALSE
+{4625FA3A-9362-4426-8831-5EBA86C9AEE7}
+Developer Components\Visual Studio Templates (SEE BELOW)
 FALSE
 {9D0690B6-6362-431D-A371-760F52DECCFE}
 Developer Components
@@ -3716,6 +3723,9 @@ REMOVE
 TRUE
 {9EC2AEA0-2878-4BFA-A099-DD294C615368}
 $INSTALLCACHEDIRECTORY$
+{386F6D64-7FFE-4939-B90B-AC985E1ADEE1}
+Developer Components\Visual Studio Templates (SEE BELOW)
+FALSE
 {1769AA30-A747-435C-A18D-7E418479ADEF}
 OPSYS
 TRUE
@@ -3910,6 +3920,8 @@ C
 
 
 
+
+
 C
 
 
@@ -4296,6 +4308,8 @@ C
 
 
 $
+
+
 
 
 

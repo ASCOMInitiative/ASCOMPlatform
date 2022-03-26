@@ -107,13 +107,15 @@ end
 [DEFINE REGION: Define Setup Globals]
 Comment: Define Setup Components
 Define Component: Developer Components
-Define Component: Developer Components\Visual Studio Driver Templates
+Define Component: Developer Components\Visual Studio Templates (SEE BELOW)
+Deselect Component: Developer Components\Visual Studio Templates (SEE BELOW)
+Do not allow user to select or deselect Component: Developer Components\Visual Studio Templates (SEE BELOW)
 Comment: Test whether VS is installed by seeing whether the .VSI or .VSIX extentions are mapped to the content installer. If not then ignore!
 Read Registry Key HKCR\.vsi\ into VSIENTRY
 Read Registry Key HKCR\.vsix\ into VSIXENTRY
 if Variable VSIENTRY Equals 
   if Variable VSIXENTRY Equals 
-    Deselect Component: Developer Components\Visual Studio Driver Templates
+    Deselect Component: Developer Components\Visual Studio Templates (SEE BELOW)
   end
 end
  
