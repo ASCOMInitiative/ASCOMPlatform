@@ -1,5 +1,8 @@
-﻿using System;
+﻿using ASCOM.DeviceHub.MvvmMessenger;
+
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -31,6 +34,25 @@ namespace ASCOM.DeviceHub
 				_domeControl,
 				_focuserControl
 			};
+
+			Messenger.Default.Register<SignalWaitMessage>( this, ( action ) => ShowHideWaitCursor( action ) );
+		}
+
+		private void ShowHideWaitCursor( SignalWaitMessage action )
+		{
+			// Used by ViewModels to cause a wait cursor to be displayed when Connecting devices,
+			// in case connect takes time to complete.
+
+			Cursor cursor = ( action.Wait ) ? Cursors.Wait : null;
+
+			Mouse.OverrideCursor = cursor;	
+		}
+
+		protected override void OnClosing( CancelEventArgs e )
+		{
+			Messenger.Default.Unregister<SignalWaitMessage>( this );
+
+			base.OnClosing( e );
 		}
 
 		private void Window_LocationChanged( object sender, EventArgs e )
@@ -109,6 +131,5 @@ namespace ASCOM.DeviceHub
 				}
 			}
 		}
-
 	}
 }

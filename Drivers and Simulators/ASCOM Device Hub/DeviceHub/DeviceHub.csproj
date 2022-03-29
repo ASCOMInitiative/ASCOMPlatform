@@ -81,11 +81,14 @@
     <Compile Include="Business Object Classes\Message Types\DomeSlavedChangedMessage.cs" />
     <Compile Include="Business Object Classes\Value Converters\BooleanOnOffConverter.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\TelescopeRates.cs" />
+    <Compile Include="Business Object Classes\Value Converters\BooleanToConnectStringConverter.cs" />
+    <Compile Include="Business Object Classes\Value Converters\DeviceConnectedValueConverter.cs" />
     <Compile Include="Business Object Classes\Value Converters\MultiBooleanVisibilityConverter.cs" />
     <Compile Include="Business Object Classes\Value Converters\MultiBindingTrueIfNotParking.cs" />
     <Compile Include="Business Object Classes\Value Converters\EditLockTextBooleanValueConverter.cs" />
     <Compile Include="Business Object Classes\Message Types\FocuserMoveAmountMessage.cs" />
     <Compile Include="Resources\Strings.Designer.cs" />
+    <Compile Include="Business Object Classes\Message Types\SignalWaitMessage.cs" />
     <Compile Include="View Classes\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
@@ -237,7 +240,6 @@
     <Compile Include="Business Object Classes\Telescope Classes\AltitudeConverter.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\AzimuthConverter.cs" />
     <Compile Include="Business Object Classes\Value Converters\AzimuthValueConverter.cs" />
-    <Compile Include="Business Object Classes\Value Converters\BooleanToConnectStringConverter.cs" />
     <Compile Include="Business Object Classes\Value Converters\BooleanBooleanValueConverter.cs" />
     <Compile Include="Business Object Classes\Value Converters\BooleanVisibilityConverter.cs" />
     <Compile Include="Business Object Classes\DialogContents.cs" />
@@ -261,7 +263,6 @@
     <Compile Include="Business Object Classes\Telescope Classes\JogRates.cs" />
     <Compile Include="Services Classes\Interfaces\IActivityLogService.cs" />
     <Compile Include="Business Object Classes\Value Converters\RightAscensionValueConverter.cs" />
-    <Compile Include="Business Object Classes\Value Converters\DeviceConnectedValueConverter.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\JogDirection.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\JogAmount.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\TelescopeSlewAmounts.cs" />

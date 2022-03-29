@@ -12,7 +12,6 @@
 		<local:ParkingStateVisibilityConverter x:Key="ParkingStateVisConverter" />
 		<local:HomingStateVisibilityConverter x:Key="HomingStateVisConverter" />
 		<local:BooleanVisibilityConverter x:Key="BoolVisConverter" />
-		<local:DeviceConnectedValueConverter x:Key="DeviceConnectedValueConverter" />
 		<local:BooleanToConnectStringConverter x:Key="BoolConnectConverter" />
 
 		<Style x:Key="Text" TargetType="{x:Type Label}">
