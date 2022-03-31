@@ -106,10 +106,7 @@
 									<TranslateTransform Y="0.5" X="0.5"/>
 								</Setter.Value>
 							</Setter>
-							<!--<Setter TargetName="highlightCircle" Property="Fill" Value="{StaticResource Button.Pressed.Background}" />
-											<Setter TargetName="highlightCircle" Property="Stroke" Value="{StaticResource Button.Pressed.Border}" />-->
 						</Trigger>
-
 						<Trigger Property="IsEnabled" Value="False">
 							<Setter Property="Foreground" Value="{DynamicResource RoundButtonTextBrush}" />
 						</Trigger>

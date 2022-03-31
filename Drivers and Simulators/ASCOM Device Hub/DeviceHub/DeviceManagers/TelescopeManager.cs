@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -9,8 +11,6 @@ using ASCOM.Astrometry.Transform;
 using ASCOM.DeviceInterface;
 
 using ASCOM.DeviceHub.MvvmMessenger;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace ASCOM.DeviceHub
 {
@@ -68,7 +68,7 @@ namespace ASCOM.DeviceHub
 		private bool ForceParameterUpdate { get; set; }
 		private CancellationTokenSource PulseGuideCancelTokenSource { get; set; }
 
-		private object _pulseGuideLock = new object();
+		private readonly object _pulseGuideLock = new object();
 
 		private DateTime _pulseGuideEnd;
 
@@ -366,7 +366,6 @@ namespace ASCOM.DeviceHub
 			}
 
 			//Debug.WriteLine( $"ParkingState set to {ParkingState}." );
-
 		}
 
 		public void DoSlewToCoordinates( double ra, double dec, bool useSynchronousMethodCall = true )
@@ -538,8 +537,7 @@ namespace ASCOM.DeviceHub
 
 			try
 			{
-				double ra, dec;
-				CalculateRaAndDec( azimuth, altitude, out ra, out dec );
+				CalculateRaAndDec( azimuth, altitude, out double ra, out double dec );
 				SendSlewMessage( ra, dec );
 
 				if ( useSynchronousMethodCall )
@@ -582,8 +580,7 @@ namespace ASCOM.DeviceHub
 
 			try
 			{
-				double ra, dec;
-				CalculateRaAndDec( azimuth, altitude, out ra, out dec );
+				CalculateRaAndDec( azimuth, altitude, out double ra, out double dec );
 				SendSlewMessage( ra, dec );
 
 				SlewToAltAzAsync( azimuth, altitude );
@@ -1043,10 +1040,7 @@ namespace ASCOM.DeviceHub
 					Task.Run( () => SlewToAltAz( targetAz, targetAlt ) );
 				}
 
-				double targetRa;
-				double targetDec;
-
-				CalculateRaAndDec( targetAz, targetAlt, out targetRa, out targetDec );
+				CalculateRaAndDec( targetAz, targetAlt, out double targetRa, out double targetDec );
 				PierSide sideOfPier = GetTargetSideOfPier( targetRa, targetDec );
 				Messenger.Default.Send( new SlewInProgressMessage( true, targetRa, targetDec, sideOfPier ) );
 			}

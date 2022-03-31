@@ -48,7 +48,7 @@ namespace ASCOM.DeviceHub
 		{
 			get
 			{
-				bool retval = false;
+				bool retval; // Defaulted to false
 
 				try
 				{

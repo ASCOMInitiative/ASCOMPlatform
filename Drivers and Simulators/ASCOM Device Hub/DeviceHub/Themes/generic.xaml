@@ -80,13 +80,10 @@
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsMouseOver" Value="True">
 							<Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}" />
-							<!--<Setter TargetName="highlightCircle" Property="Stroke" Value="{DynamicResource Button.MouseOver.Border}" />-->
 						</Trigger>
 
 						<Trigger Property="IsPressed" Value="True">
-							<!--<Setter TargetName="highlightCircle" Property="Fill" Value="{StaticResource Button.Pressed.Background}" />-->
 							<Setter Property="Background" Value="{StaticResource Button.Pressed.Background}" />
-							<!--<Setter TargetName="highlightCircle" Property="Stroke" Value="{StaticResource Button.Pressed.Border}" />-->
 						</Trigger>
 
 						<Trigger Property="IsEnabled" Value="False">

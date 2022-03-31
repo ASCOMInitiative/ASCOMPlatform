@@ -23,9 +23,7 @@ namespace ASCOM.DeviceHub
 
 				if ( !String.IsNullOrEmpty( target ) )
 				{
-					int temp;
-
-					if ( Int32.TryParse( target, out temp ) )
+					if ( Int32.TryParse( target, out int temp ) )
 					{
 						retval = true;
 					}
@@ -44,9 +42,7 @@ namespace ASCOM.DeviceHub
 
 				if ( !String.IsNullOrEmpty( target ) )
 				{
-					int temp;
-
-					if ( Int32.TryParse( target, out temp ) )
+					if ( Int32.TryParse( target, out int temp ) )
 					{
 						retval = true;
 					}

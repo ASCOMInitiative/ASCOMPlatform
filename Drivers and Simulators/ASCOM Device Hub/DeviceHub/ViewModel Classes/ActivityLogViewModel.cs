@@ -22,8 +22,7 @@ namespace ASCOM.DeviceHub
 		private object _bufferLock = new Object();
 		private int _bufferInterval = 1000; // empty buffer to log once/second
 		private TaskScheduler UISyncContext { get; set; }
-				private StringBuilder DataBuffer { get; set; }
-		private Task BufferTask { get; set; }
+		private StringBuilder DataBuffer { get; set; }
 		private CancellationTokenSource BufferingCts { get; set; }
 
 		public ActivityLogViewModel()
@@ -39,9 +38,8 @@ namespace ASCOM.DeviceHub
 			DataBuffer = new StringBuilder();
 
 			BufferingCts = new CancellationTokenSource();
-			BufferTask = Task.Factory.StartNew( () => AppendBufferToLog( BufferingCts.Token ),
-												BufferingCts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default );
-
+			Task.Factory.StartNew( () => AppendBufferToLog( BufferingCts.Token ),
+										BufferingCts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default );
 		}
 
 		private bool _isActive;
@@ -490,8 +488,8 @@ namespace ASCOM.DeviceHub
 
 			if ( hwnd != IntPtr.Zero )
 			{
-				int pid = 0;
-				GetWindowThreadProcessId( hwnd, out pid );
+
+				GetWindowThreadProcessId( hwnd, out int pid );
 
 				if ( pid > 0 )
 				{
