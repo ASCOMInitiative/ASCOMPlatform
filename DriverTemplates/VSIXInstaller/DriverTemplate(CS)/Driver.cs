@@ -413,7 +413,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
             {
                 driverProfile.DeviceType = "TEMPLATEDEVICECLASS";
                 driverProfile.WriteValue(driverID, traceStateProfileName, tl.Enabled.ToString());
-                driverProfile.WriteValue(driverID, comPortProfileName, comPort.ToString());
+                if (!(comPort is null)) driverProfile.WriteValue(driverID, comPortProfileName, comPort.ToString());
             }
         }
 

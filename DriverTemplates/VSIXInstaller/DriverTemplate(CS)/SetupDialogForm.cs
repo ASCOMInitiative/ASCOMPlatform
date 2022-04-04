@@ -18,7 +18,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
         public SetupDialogForm(TraceLogger tlDriver)
         {
             InitializeComponent();
-            
+
             // Save the provided trace logger for use within the setup dialogue
             tl = tlDriver;
 
@@ -30,7 +30,14 @@ namespace ASCOM.TEMPLATEDEVICENAME
         {
             // Place any validation constraint checks here
             // Update the state variables with results from the dialogue
-            TEMPLATEDEVICECLASS.comPort = (string)comboBoxComPort.SelectedItem;
+            try
+            {
+                TEMPLATEDEVICECLASS.comPort = (string)comboBoxComPort.SelectedItem;
+            }
+            catch 
+            {
+                // Ignore any errors here in case the PC does not have any COM ports that can be selected
+            }
             tl.Enabled = chkTrace.Checked;
         }
 

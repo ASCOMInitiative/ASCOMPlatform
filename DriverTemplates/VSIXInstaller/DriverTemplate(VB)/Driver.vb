@@ -314,7 +314,9 @@ Public Class TEMPLATEDEVICECLASS
         Using driverProfile As New Profile()
             driverProfile.DeviceType = "TEMPLATEDEVICECLASS"
             driverProfile.WriteValue(driverID, traceStateProfileName, traceState.ToString())
-            driverProfile.WriteValue(driverID, comPortProfileName, comPort.ToString())
+            If comPort IsNot Nothing Then
+                driverProfile.WriteValue(driverID, comPortProfileName, comPort.ToString())
+            End If
         End Using
 
     End Sub
