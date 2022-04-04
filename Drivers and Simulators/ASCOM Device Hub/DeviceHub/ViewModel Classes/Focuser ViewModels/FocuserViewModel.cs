@@ -125,13 +125,23 @@ namespace ASCOM.DeviceHub
 
 		private void ConnectFocuser()
 		{
+			string message = null;
+
 			try
 			{
 				// Attempt to connect with the scope.
 
 				RegisterStatusUpdateMessage( true );
 
-				bool success = FocuserManager.Connect( FocuserID );
+				bool success;
+
+				// Connect can take  a few seconds, so signal the U/I to show a wait cursor.
+
+				SignalWait( true );
+
+				// Now do the connect.
+
+				success = FocuserManager.Connect( FocuserID );
 
 				if ( success )
 				{
@@ -141,22 +151,28 @@ namespace ASCOM.DeviceHub
 				{
 					// No exception, but did not connect!
 
-					string message = "Use the Activity Log to view any errors!";
+					message = "Use the Activity Log to view any errors!";
 
 					if ( FocuserManager.ConnectException != null )
 					{
 						message = FocuserManager.ConnectException.Message;
 					}
-
-					ShowMessage( message, "Focuser Connection Error" );
 				}
 			}
 			catch ( Exception xcp )
 			{
 				// Connection attempt caused exception.
 
-				string message = $"{FocuserManager.ConnectError}\r\n{xcp.Message}";
-				ShowMessage( message, "Focuser Connection Error" );
+				message = $"{FocuserManager.ConnectError}\r\n{xcp.Message}";
+			}
+			finally
+			{
+				SignalWait( false );
+
+				if ( message != null )
+				{
+					ShowMessage( message, "Telescope Connection Error" );
+				}
 			}
 		}
 
@@ -187,7 +203,17 @@ namespace ASCOM.DeviceHub
 		private void DisconnectFocuser()
 		{
 			IsConnected = false;
-			FocuserManager.Disconnect();
+
+			try
+			{
+				SignalWait( true );
+				FocuserManager.Disconnect();
+			}
+			finally
+			{
+				SignalWait( false );
+			}
+
 			Status = null;
 		}
 

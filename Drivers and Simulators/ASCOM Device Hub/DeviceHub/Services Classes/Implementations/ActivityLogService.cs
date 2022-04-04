@@ -7,7 +7,6 @@ namespace ASCOM.DeviceHub
 {
 	public class ActivityLogService : IActivityLogService
     {
-        private bool Initialized { get; set; }
         private ActivityLogViewModel ViewModel { get; set; }
         private Window View { get; set; }
         private Window ParentWindow { get; set; }
@@ -15,7 +14,6 @@ namespace ASCOM.DeviceHub
         public ActivityLogService( Window parent)
         {
             ParentWindow = parent;
-            Initialized = false;
 			View = null;
             ViewModel = null;
         }
@@ -23,7 +21,7 @@ namespace ASCOM.DeviceHub
         public void Show( ActivityLogViewModel vm, double left, double top, double width, double height )
         {
             ViewModel = vm;
-            ViewModel.IsActive = true;
+			ViewModel.IsActive = true;
 			ViewModel.RequestClose += RequestClose;
 
 			View = new ActivityLogView
@@ -35,6 +33,7 @@ namespace ASCOM.DeviceHub
 				Height = height,
 				DataContext = ViewModel
 			};
+
 			View.Show();
             View.AdjustWindowPlacement();
         }

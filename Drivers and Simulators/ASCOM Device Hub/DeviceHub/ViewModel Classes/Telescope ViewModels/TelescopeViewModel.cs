@@ -189,13 +189,23 @@ namespace ASCOM.DeviceHub
 
         private void ConnectTelescope()
         {
+			string message = null;
+
             try
 			{
 				// Attempt to connect with the scope.
 
 				RegisterStatusUpdateMessage( true );
 
-				bool success = TelescopeManager.Connect( TelescopeID );
+				bool success;
+
+				// Connect can take a few seconds, so signal the U/I to show a wait cursor.
+
+				SignalWait( true );
+
+				// Now do the connect.
+
+				success = TelescopeManager.Connect( TelescopeID );
 
 				if ( success )
 				{
@@ -205,7 +215,7 @@ namespace ASCOM.DeviceHub
 				{
 					// Init default message.
 
-					string message = "Use the Activity Log to view any errors!";
+					message = "Use the Activity Log to view any errors!";
 
 					if ( TelescopeManager.ConnectException != null )
 					{
@@ -213,16 +223,22 @@ namespace ASCOM.DeviceHub
 
 						message = TelescopeManager.ConnectException.Message;
 					}
-
-					ShowMessage( message, "Telescope Connection Error" );
 				}
 			}
 			catch ( Exception xcp )
 			{
 				// Connection attempt caused exception.
 
-				string message = $"{TelescopeManager.ConnectError}\r\n{xcp.Message}";
-				ShowMessage( message, "Telescope Connection Error" );
+				message = $"{TelescopeManager.ConnectError}\r\n{xcp.Message}";
+			}
+			finally
+			{
+				SignalWait( false );
+
+				if ( message != null )
+				{
+					ShowMessage( message, "Telescope Connection Error" );
+				}
 			}
 		}
 
@@ -255,7 +271,17 @@ namespace ASCOM.DeviceHub
         {
 			IsConnected = false;
 			IsSlewInProgress = false;
-			TelescopeManager.Disconnect();
+
+			try
+			{
+				SignalWait( true );
+				TelescopeManager.Disconnect();
+			}
+			finally
+			{
+				SignalWait( false );
+			}
+
 			Status = null;
         }
 

@@ -469,7 +469,7 @@ namespace ASCOM.DeviceHub
 
 				UpdateCanStartMove();
 
-				IsTracking = ( Status!= null && Status.Connected ) ? Status.Tracking : false;
+				IsTracking = ( Status!= null && Status.Connected ) && Status.Tracking;
 
 				if ( _isActive && _isFixedSlewInProgress && !Status.Slewing )
 				{
@@ -512,44 +512,6 @@ namespace ASCOM.DeviceHub
 					JogDirections = null;
 				}, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
 			}
-		}
-
-		private void SetSlewDirections()
-		{
-			JogDirections = new ObservableCollection<JogDirection>()
-			{
-				new JogDirection { Name = "N", Description = "North", MoveDirection = MoveDirections.North, Axis = TelescopeAxes.axisSecondary, RateSign = 1.0 },
-				new JogDirection { Name = "S", Description = "South", MoveDirection = MoveDirections.South, Axis = TelescopeAxes.axisSecondary, RateSign = -1.0  },
-				new JogDirection { Name = "W", Description = "West", MoveDirection = MoveDirections.West, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0  },
-				new JogDirection { Name = "E", Description = "East", MoveDirection = MoveDirections.East, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0  }
-			};
-
-			try
-			{
-				if ( TelescopeManager.IsConnected )
-				{
-					if ( Parameters.AlignmentMode == AlignmentModes.algAltAz && IsVariableJog )
-					{
-						JogDirections.Clear();
-
-						JogDirections.Add( new JogDirection { Name = "U", Description = "Up", MoveDirection = MoveDirections.Up, Axis = TelescopeAxes.axisSecondary, RateSign = 1.0 } );
-						JogDirections.Add( new JogDirection { Name = "D", Description = "Down", MoveDirection = MoveDirections.Down, Axis = TelescopeAxes.axisSecondary, RateSign = -1.0 } );
-						JogDirections.Add( new JogDirection { Name = "L", Description = "Left", MoveDirection = MoveDirections.Left, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0 } );
-						JogDirections.Add( new JogDirection { Name = "R", Description = "Right", MoveDirection = MoveDirections.Right, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0 } );
-					}
-					else if ( Parameters.SiteLatitude < 0 )
-					{
-						JogDirections.Clear();
-
-						JogDirections.Add( new JogDirection { Name = "S", Description = "South", MoveDirection = MoveDirections.South, Axis = TelescopeAxes.axisSecondary, RateSign = 1.0 } );
-						JogDirections.Add( new JogDirection { Name = "N", Description = "North", MoveDirection = MoveDirections.North, Axis = TelescopeAxes.axisSecondary, RateSign = -1.0 } );
-						JogDirections.Add( new JogDirection { Name = "W", Description = "West", MoveDirection = MoveDirections.West, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0 } );
-						JogDirections.Add( new JogDirection { Name = "E", Description = "East", MoveDirection = MoveDirections.East, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0 } );
-					}
-				}
-			}
-			catch ( Exception )
-			{ }
 		}
 
 		#endregion Helper Methods

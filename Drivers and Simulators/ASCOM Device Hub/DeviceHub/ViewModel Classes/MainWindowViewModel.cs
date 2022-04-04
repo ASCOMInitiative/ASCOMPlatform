@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,15 +15,6 @@ namespace ASCOM.DeviceHub
 {
 	public class MainWindowViewModel : DeviceHubViewModelBase
 	{
-		#region Private Properties
-
-		private bool IsActivityLogVisible
-		{
-			get => ActivityLogVm.IsActive;
-		}
-
-		#endregion Private Properties
-
 		public MainWindowViewModel()
 		{
 			// Inject the TelescopeManager into the telescope view model at creation so that

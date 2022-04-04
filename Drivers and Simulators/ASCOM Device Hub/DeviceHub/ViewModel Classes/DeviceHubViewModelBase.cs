@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ASCOM.DeviceHub.MvvmMessenger;
+
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
@@ -24,6 +26,11 @@ namespace ASCOM.DeviceHub
 		protected virtual void OnRequestClose( bool? result )
 		{
 			RequestClose( this, new DialogCloseEventArgs( result ) );
+		}
+
+		protected void SignalWait( bool wait )
+		{
+			Messenger.Default.Send( new SignalWaitMessage( wait ) );
 		}
 
 		#region MessageBox Helpers
