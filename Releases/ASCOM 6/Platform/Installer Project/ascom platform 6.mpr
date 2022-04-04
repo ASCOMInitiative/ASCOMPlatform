@@ -2125,7 +2125,7 @@ TRUE
 TRUE
 
 |C:\CodeSigningCertificate\petercodesign.pfx
-
+http://timestamp.sectigo.com
 https://ascom-standards.org
 UAC=requireAdministrator,CACHESOURCES=TRUE,MSI_ALL=FALSE,VM_TARGETFOLDER=%TEMP%,VM_INSTALL_COMMANDLINE=/s,"VM_UNINSTALL_COMMANDLINE=/s MODIFY=FALSE REMOVE=TRUE","VM_UNITTEST=C:\Program Files (x86)\InstallAware X6 Creators Update\unit.exe",LOADOLDDATA=TRUE,SIGN_ALL=DEFAULT
 $
