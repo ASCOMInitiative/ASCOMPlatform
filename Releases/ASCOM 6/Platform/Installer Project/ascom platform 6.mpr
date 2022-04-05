@@ -2113,7 +2113,7 @@ ASCOM Platform 6.6
 ASCOM Platform 6.6 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{FB19CA62-3EFF-4E88-8A27-6C6B8DA456EE}
+{7A188717-77C7-44D5-9F72-B70497623B1C}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
@@ -2125,7 +2125,7 @@ TRUE
 TRUE
 
 |C:\CodeSigningCertificate\petercodesign.pfx
-http://timestamp.sectigo.com
+http://timestamp.digicert.com
 https://ascom-standards.org
 UAC=requireAdministrator,CACHESOURCES=TRUE,MSI_ALL=FALSE,VM_TARGETFOLDER=%TEMP%,VM_INSTALL_COMMANDLINE=/s,"VM_UNINSTALL_COMMANDLINE=/s MODIFY=FALSE REMOVE=TRUE","VM_UNITTEST=C:\Program Files (x86)\InstallAware X6 Creators Update\unit.exe",LOADOLDDATA=TRUE,SIGN_ALL=DEFAULT
 $
