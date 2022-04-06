@@ -153,20 +153,53 @@ namespace ASCOM.DeviceHub
 
 			if ( Capabilities.CanSetRightAscensionRate )
 			{
-				TelescopeManager.SetRaOffsetTrackingRate( raOffset );
+				try
+				{
+					TelescopeManager.SetRaOffsetTrackingRate( raOffset );
+				}
+				catch ( Exception xcp )
+				{
+					string msg = "The telescope driver returned an error when trying to set the Right Ascension tracking offset. "
+						+ $"Details follow:\r\n\r\n{xcp}";
+
+					ShowMessage( msg, "Telescope Driver Error" );
+
+					return;
+				}
 			}
 
 			if ( Capabilities.CanSetDeclinationRate )
 			{
-				TelescopeManager.SetDecOffsetTrackingRate( decOffset );
+				try
+				{
+					TelescopeManager.SetDecOffsetTrackingRate( decOffset );
+				}
+				catch ( Exception xcp )
+				{
+					string msg = "The telescope driver returned an error when trying to set the Declination tracking offset. "
+						+ $"Details follow:\r\n\r\n{xcp}";
+
+					ShowMessage( msg, "Telescope Driver Error" );
+
+					return;
+				}
 			}
 
 			if ( rate != Status.TrackingRate )
 			{
-				TelescopeManager.SetTrackingRate( rate );
+				try
+				{
+					TelescopeManager.SetTrackingRate( rate );
 
-				Status.TrackingRate = rate;
-				UpdateTrackingRateText();
+					Status.TrackingRate = rate;
+					UpdateTrackingRateText();
+				}
+				catch ( Exception xcp )
+				{
+					string msg = "The telescope driver returned an error when trying to change the tracking rate. "
+						+ $"Details follow:\r\n\r\n{xcp}";
+					ShowMessage( msg, "Telescope Driver Error" );
+				}
 			}
 		}
 

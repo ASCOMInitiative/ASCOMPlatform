@@ -107,7 +107,20 @@ namespace ASCOM.DeviceHub
 		private void ChooseScope()
 		{
 			string oldID = TelescopeID;
-			string newID = TelescopeManager.Choose( oldID );
+			string newID;
+
+			try
+			{
+				newID = TelescopeManager.Choose( oldID );
+			}
+			catch ( Exception xcp )
+			{
+				string msg = "An error occurred when trying to launch the ASCOM Telescope Chooser. "
+					+ $"Details follow:\r\n\r\n{xcp}";
+				ShowMessage( msg, "ASCOM Telescope Chooser Error" );
+
+				return;
+			}
 
 			if ( String.IsNullOrEmpty( newID ) )
 			{

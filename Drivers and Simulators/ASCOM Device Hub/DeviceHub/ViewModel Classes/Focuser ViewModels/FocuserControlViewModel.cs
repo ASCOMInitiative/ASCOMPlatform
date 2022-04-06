@@ -346,10 +346,26 @@ namespace ASCOM.DeviceHub
 			return moveAmount;
 		}
 
-		protected void RequestFocuserMove( int delta )
+		protected bool RequestFocuserMove( int delta )
 		{
-			FocuserBusy = true;
-			FocuserManager.MoveFocuserBy( delta );
+			bool retval = true;
+
+			// This method is only called by the U/I. The Focuser driver calls directly into the Focuser Manager.
+
+			try
+			{
+				FocuserManager.MoveFocuserBy( delta );
+				FocuserBusy = true;
+			}
+			catch ( Exception xcp )
+			{
+				string msg = $"An error was occurred when attempting a focuser move. Details follow: \r\n\r\n{xcp.Message}";
+				ShowMessage( msg, "Focuser Move Error" );
+
+				retval = false;
+			}
+
+			return retval;
 		}
 
 		private void FocuserMoveCompleted()
@@ -442,9 +458,9 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void MoveFocuserInward()
+		private bool MoveFocuserInward()
 		{
-			RequestFocuserMove( -MoveIncrement );
+			return RequestFocuserMove( -MoveIncrement );
 		}
 
 		private bool CanMoveFocuserInward()
@@ -473,9 +489,9 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void MoveFocuserOutward()
+		private bool MoveFocuserOutward()
 		{
-			RequestFocuserMove( MoveIncrement );
+			return RequestFocuserMove( MoveIncrement );
 		}
 
 		private bool CanMoveFocuserOutward()
@@ -504,12 +520,12 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void MoveFocuserToPosition()
+		private bool MoveFocuserToPosition()
 		{
 			int target = Int32.Parse( TargetPosition );
 			int delta = target - Status.Position;
 
-			RequestFocuserMove( delta );
+			return RequestFocuserMove( delta );
 		}
 
 		private bool CanMoveFocuserToPosition()
@@ -570,9 +586,23 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void HaltFocuser()
+		private bool HaltFocuser()
 		{
-			FocuserManager.HaltFocuser();
+			bool retval = true;
+
+			try
+			{
+				FocuserManager.HaltFocuser();
+			}
+			catch ( DriverException xcp )
+			{
+				string msg = $"An error occurred when trying to halt the focuser. Details follow:\r\n\r\n{xcp.Message}";
+				ShowMessage( msg, "Focuser Error" );
+
+				retval = false;
+			}
+
+			return retval; // We only care about the return value when unit testing.
 		}
 
 		private bool CanHaltFocuser()
@@ -601,11 +631,23 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void ToggleTempComp( object param)
+		private bool ToggleTempComp( object param)
 		{
+			bool retval = true;
 			bool state = (bool)param;
 
-			FocuserManager.SetTemperatureCompensation( state );
+			try
+			{
+				FocuserManager.SetTemperatureCompensation( state );
+			}
+			catch ( DriverException xcp )
+			{
+				string msg = $"An error occurred when trying to change the focuser's temperature compensation setting. Details follow:\r\n\r\n{xcp.Message}";
+				ShowMessage( msg, "Focuser Error" );
+				retval = false;
+			}
+
+			return retval; // We only care about the return value during unit testing.
 		}
 
 		private bool CanToggleTempComp()

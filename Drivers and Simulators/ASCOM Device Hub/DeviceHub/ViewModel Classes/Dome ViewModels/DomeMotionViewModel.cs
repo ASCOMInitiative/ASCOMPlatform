@@ -317,8 +317,10 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void ToggleShutterState()
+		private bool ToggleShutterState()
 		{
+			bool retval = true;
+
 			ShutterState state = Status.ShutterStatus;
 
 			switch (state)
@@ -326,14 +328,40 @@ namespace ASCOM.DeviceHub
 				case ShutterState.shutterOpen:
 				case ShutterState.shutterOpening:
 				case ShutterState.shutterError:
-					DomeManager.CloseDomeShutter();
+					try
+					{
+						DomeManager.CloseDomeShutter();
+					}
+					catch ( Exception xcp )
+					{
+						string msg = "The dome driver returned an error when attempting to close the shutter. "
+							+ $"Details follow:\r\n\r\n{xcp}";
+						ShowMessage( msg, "Dome Driver Error" );
+
+						retval = false;
+					}
+					
 					break;
 
 				case ShutterState.shutterClosing:
 				case ShutterState.shutterClosed:
-					DomeManager.OpenDomeShutter();
+					try
+					{
+						DomeManager.OpenDomeShutter();
+					}
+					catch ( Exception xcp )
+					{
+						string msg = "The dome driver returned an error when attempting to open the shutter. "
+							+ $"Details follow:\r\n\r\n{xcp}";
+						ShowMessage( msg, "Dome Driver Error" );
+
+						retval = false;
+					}
+
 					break;
 			}
+
+			return retval;  // We only care about the return value when unit testing.
 		}
 
 		private bool CanToggleShutterState()
@@ -347,7 +375,7 @@ namespace ASCOM.DeviceHub
 				retval = Status.ShutterStatus != ShutterState.shutterClosing && Status.ShutterStatus != ShutterState.shutterOpening;
 			}
 
-			return retval;
+			return retval; // We only care about the return value when unit testing.
 		}
 
 		#endregion
@@ -371,9 +399,24 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void ParkDome()
+		private bool ParkDome()
 		{
-			DomeManager.ParkTheDome();
+			bool retval = true;
+
+			try
+			{
+				DomeManager.ParkTheDome();
+			}
+			catch ( Exception xcp )
+			{
+				string msg = "The dome driver returned an error when attempting to park the dome. "
+					+ $"Details follow:\r\n\r\n{xcp}";
+				ShowMessage( msg, "Dome Driver Error" );
+
+				retval = false;
+			}
+
+			return retval;  // We only care about the return value when unit testing.
 		}
 
 		private bool CanParkDome()
@@ -412,14 +455,16 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void JogAltitude( object param )
+		private bool JogAltitude( object param )
 		{
+			bool retval = true;
+
 			MoveDirections direction = (MoveDirections)param;
 			bool moveValid = ( direction == MoveDirections.Up || direction == MoveDirections.Down );
 
 			if ( !moveValid )
 			{
-				return;
+				return retval;
 			}
 
 			double newAltitude = Double.NaN;
@@ -437,8 +482,21 @@ namespace ASCOM.DeviceHub
 
 			if ( !Double.IsNaN( newAltitude ) )
 			{
-				DomeManager.SlewDomeShutter( newAltitude );
+				try
+				{
+					DomeManager.SlewDomeShutter( newAltitude );
+				}
+				catch ( Exception xcp )
+				{
+					string msg = "The dome driver returned an error when attempting to slew the shutter. "
+						+ $"Details follow:\r\n\r\n{xcp}";
+					ShowMessage( msg, "Dome Driver Error" );
+
+					retval = false;
+				}
 			}
+
+			return retval; // We only care about the return value when unit testing.
 		}
 
 		private bool CanJogAltitude()
@@ -475,14 +533,16 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void JogAzimuth( object param )
+		private bool JogAzimuth( object param )
 		{
+			bool retval = true;
+
 			MoveDirections direction = (MoveDirections)param;
 			bool moveValid = ( direction == MoveDirections.Clockwise || direction == MoveDirections.CounterClockwise );
 
 			if ( !moveValid )
 			{
-				return;
+				return retval;
 			}
 
 			double newAzimuth = Double.NaN;
@@ -508,8 +568,21 @@ namespace ASCOM.DeviceHub
 
 			if ( !Double.IsNaN( newAzimuth ) )
 			{
-				DomeManager.SlewDomeToAzimuth( newAzimuth );
+				try
+				{
+					DomeManager.SlewDomeToAzimuth( newAzimuth );
+				}
+				catch ( Exception xcp )
+				{
+					string msg = "The dome driver returned an error when attempting to rotate the dome. "
+						+ $"Details follow:\r\n\r\n{xcp}";
+					ShowMessage( msg, "Dome Driver Error" );
+
+					retval = false;
+				}
 			}
+
+			return retval; // We only care about the return value when unit testing.
 		}
 	
 		private bool CanJogAzimuth()
@@ -544,13 +617,28 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void StopMotion()
+		private bool StopMotion()
 		{
-			DomeManager.StopDomeMotion();
+			bool retval = true;
+
+			try
+			{
+				DomeManager.StopDomeMotion();
+			}
+			catch ( Exception xcp )
+			{
+				string msg = "The dome driver returned an error when attempting to stop all motion. "
+					+ $"Details follow:\r\n\r\n{xcp}";
+				ShowMessage( msg, "Dome Driver Error" );
+
+				retval = false;	
+			}
+
+			return retval; // We only care about the return value when unit testing.
 		}
 
 		#endregion
-		
+
 		#region GotoDirectAzimuthCommand
 
 		private ICommand _gotoDirectAzimuthCommand;
@@ -570,9 +658,24 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void GotoDirectAzimuth()
+		private bool GotoDirectAzimuth()
 		{
-			DomeManager.SlewDomeToAzimuth( DirectTargetAzimuth );
+			bool retVal = true;	
+
+			try
+			{
+				DomeManager.SlewDomeToAzimuth( DirectTargetAzimuth );
+			}
+			catch ( Exception xcp )
+			{
+				string msg = "The dome driver returned an error when attempting to rotate the dome. "
+					+ $"Details follow:\r\n\r\n{xcp}";
+				ShowMessage( msg, "Dome Driver Error" );
+
+				retVal = false;	
+			}
+
+			return retVal;  // We only care about the return value when unit testing.
 		}
 
 		private bool CanGotoDirectAzimuth()
@@ -609,9 +712,24 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void SyncAzimuth()
+		private bool SyncAzimuth()
 		{
-			DomeManager.SyncDomeToAzimuth( SyncTargetAzimuth );
+			bool retval = true;	
+
+			try
+			{
+				DomeManager.SyncDomeToAzimuth( SyncTargetAzimuth );
+			}
+			catch ( Exception xcp )
+			{
+				string msg = "The dome driver returned an error when attempting to synchronize the azimuth. "
+					+ $"Details follow:\r\n\r\n{xcp}";
+				ShowMessage( msg, "Dome Driver Error" );
+
+				retval = false;	
+			}
+
+			return retval;  // We only care about the return value when unit testing.
 		}
 
 		private bool CanSyncAzimuth()
@@ -648,9 +766,24 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void FindHome()
+		private bool FindHome()
 		{
-			DomeManager.FindHomePosition();
+			bool retval = true;
+
+			try
+			{
+				DomeManager.FindHomePosition();
+			}
+			catch ( Exception xcp )
+			{
+				string msg = "The dome driver returned an error when attempting to find the home position. "
+					+ $"Details follow:\r\n\r\n{xcp}";
+				ShowMessage( msg, "Dome Driver Error" );
+
+				retval = false;
+			}
+
+			return retval; // We only care about the return value when unit testing.
 		}
 
 		private bool CanFindHome()

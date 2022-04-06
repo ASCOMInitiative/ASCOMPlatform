@@ -7,6 +7,9 @@ using ASCOM.DeviceInterface;
 using ASCOM.DeviceHub.MvvmMessenger;
 using System.Collections.ObjectModel;
 using System.Linq;
+using ASCOM;
+
+using NotImplementedException = ASCOM.NotImplementedException; // Avoid name collisions with .NET exception
 
 namespace Unit_Tests
 {
@@ -26,6 +29,7 @@ namespace Unit_Tests
 			_jogDirections = null;
 			PulseGuideCancelTokenSource = null;
 			MockIsPulseGuiding = false;
+			RaiseError = false;
 		}
 
 		public string MockTelescopeID { get; set; }
@@ -38,6 +42,8 @@ namespace Unit_Tests
 		public TelescopeCapabilities Capabilities { get; set; }
 		public TelescopeParameters Parameters { get; set; }
 		public DevHubTelescopeStatus Status { get; set; }
+
+		public bool RaiseError { get; set; }
 
 		ObservableCollection<JogDirection> _jogDirections;
 		public ObservableCollection<JogDirection> JogDirections
@@ -161,6 +167,11 @@ namespace Unit_Tests
 
 		public void SetParkingState( ParkingStateEnum desiredState )
 		{
+			if ( RaiseError )
+			{
+				throw new DriverException( "Error raised, as requested." );
+			}
+
 			if ( desiredState == ParkingStateEnum.IsAtPark )
 			{
 				Task.Run( () => ParkScopeTask() ).Wait();
@@ -198,6 +209,11 @@ namespace Unit_Tests
 
 		public void StartFixedSlew( int ndx, double distance )
 		{
+			if ( RaiseError)
+			{
+				throw new DriverException( "Raising an exception, as requested." );
+			}
+
 			MoveDirections direction = JogDirections[ndx].MoveDirection;
 			if ( IsRaDecSlew( direction ) )
 			{
@@ -225,6 +241,11 @@ namespace Unit_Tests
 
 		public void StartJogScope( MoveDirections jogDirection, JogRate jogRate )
 		{
+			if ( RaiseError )
+			{
+				throw new DriverException( "Exception raised, as requested." );
+			}
+
 			if ( MockJogWithPulseGuide )
 			{
 				JogDirection direction = JogDirections.Where( j => j.MoveDirection == jogDirection).First();
@@ -239,6 +260,11 @@ namespace Unit_Tests
 
 		public void StartMeridianFlip()
 		{
+			if ( RaiseError )
+			{
+				throw new DriverException( "Exception raised, as requested." );
+			}
+
 			// Change the Side of the Pier
 
 			PierSide currentSide = Status.SideOfPier;
@@ -275,6 +301,11 @@ namespace Unit_Tests
 			else
 			{
 				StopJogMoveAxis( axis );
+			}
+
+			if ( RaiseError )
+			{
+				throw new DriverException( "Raising exception, as requested." );
 			}
 		}
 

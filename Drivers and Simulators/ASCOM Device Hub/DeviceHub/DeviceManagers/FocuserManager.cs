@@ -220,6 +220,8 @@ namespace ASCOM.DeviceHub
 
 		public void MoveFocuserBy( int amount )
 		{
+			// This method is called by the U/I and the focuser driver.
+
 			int maxIncrement = Parameters.MaxIncrement;
 			int maxStep = Parameters.MaxStep;
 			short interfaceVersion = Parameters.InterfaceVersion;
@@ -256,17 +258,17 @@ namespace ASCOM.DeviceHub
 
 		public void HaltFocuser()
 		{
+			// This is called only from the U/I.
+
 			if ( IsMoving )
 			{
 				// Stop the focuser and cancel any move that we have in progress.
 
 				Halt();
-
 				MoveInProgress = false;
 				Status.IsMoving = false;
 
 				Messenger.Default.Send( new FocuserMoveCompletedMessage() );
-
 			}
 		}
 

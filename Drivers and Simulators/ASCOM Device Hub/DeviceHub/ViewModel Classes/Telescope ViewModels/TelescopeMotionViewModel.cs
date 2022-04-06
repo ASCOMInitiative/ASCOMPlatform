@@ -14,6 +14,8 @@ namespace ASCOM.DeviceHub
 {
 	public class TelescopeMotionViewModel : DeviceHubViewModelBase
 	{
+		private const string _errorCaption = "Telescope Driver Error";
+
 		private bool _jogInProgress;
 		private bool _isActive;
 		private bool _isFixedSlewInProgress;
@@ -537,10 +539,28 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void ChangeTracking()
+		private bool ChangeTracking()
 		{
+			bool retval = true;
+
 			Status.Tracking = _isTracking;
-			TelescopeManager.SetTracking( _isTracking );
+			string desiredState = _isTracking ? "ON" : "OFF";
+
+			try
+			{
+				TelescopeManager.SetTracking( _isTracking );
+			}
+			catch ( Exception xcp )
+			{
+				string msg = $"The telescope driver returned an error when attempting to set tracking to {desiredState}. ";
+				msg += $"Details follow:\r\n\r\n{xcp}";
+
+				ShowMessage( msg, _errorCaption );
+
+				retval = false;
+			}
+
+			return retval;	// We only care about the return value when unit testing.
 		}
 
 		private bool CanChangeTracking()
@@ -577,9 +597,12 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void ChangeParkState()
+		private bool ChangeParkState()
 		{
+			bool retval = true;
+
 			ParkingStateEnum newState = ( Status.ParkingState == ParkingStateEnum.Unparked ) ? ParkingStateEnum.IsAtPark : ParkingStateEnum.Unparked;
+			string stateName = ( newState == ParkingStateEnum.Unparked ) ? "UNPARK" : "PARK";
 
 			if ( newState == ParkingStateEnum.IsAtPark )
 			{
@@ -593,11 +616,25 @@ namespace ASCOM.DeviceHub
 
 				if ( result != MessageBoxResult.OK )
 				{
-					return;
+					return retval;
 				}
 			}
 
-			TelescopeManager.SetParkingState( newState );
+			try
+			{
+				TelescopeManager.SetParkingState( newState );
+			}
+			catch ( Exception xcp )
+			{
+				string msg = $"The telescope driver returned an error when attempting to {stateName} the scope. ";
+				msg += $"Details follow:\r\n\r\n{xcp}";
+
+				ShowMessage( msg, _errorCaption );
+
+				retval = false;
+			}
+
+			return retval;  // We only care about the return value when unit testing.
 		}
 
 		private bool CanChangeParkState()
@@ -636,9 +673,25 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void DoMeridianFlip()
+		private bool DoMeridianFlip()
 		{
-			TelescopeManager.StartMeridianFlip();
+			bool retval = true;
+
+			try
+			{
+				TelescopeManager.StartMeridianFlip();
+			}
+			catch ( Exception xcp )
+			{
+				string msg = $"The telescope driver returned an error when attempting to perform a meridian flip. ";
+				msg += $"Details follow:\r\n\r\n{xcp}";
+
+				ShowMessage( msg, _errorCaption );
+
+				retval = false;
+			}
+
+			return retval;
 		}
 
 		private bool CanDoMeridianFlip()
@@ -676,12 +729,14 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void StartMove( object param )
+		private bool StartMove( object param )
 		{
+			bool retval = true;
+
 			int ndx = Int32.Parse( (string)param );
-			Debug.WriteLine( $"Start Move parameter is {param}." );
+			//Debug.WriteLine( $"Start Move parameter is {param}." );
 			MoveDirections direction = JogDirections[ndx].MoveDirection;
-			Debug.WriteLine( $"Start Move direction is {direction}." );
+			//Debug.WriteLine( $"Start Move direction is {direction}." );
 
 			double rate;
 
@@ -703,12 +758,22 @@ namespace ASCOM.DeviceHub
 					TelescopeManager.StartJogScope( ndx, rate );
 					_jogInProgress = true;
 				}
+				catch ( InvalidValueException xcp )
+				{
+					string msg = $"Unable to use the requested Jog rate.\r\n\r\n{xcp.Message}";
+					ShowMessage( msg, "Unsupported Jog Rate Selected" );
+				}
 				catch ( Exception xcp )
 				{
-					ShowMessage( "Unable to use the requested Jog rate.\r\n\r\n"
-						+ xcp.Message, "Unsupported Jog Rate Selected" );
+					string msg = "The telescope driver returned an error when trying to jog the scope. Details follow:\r\n\r\n"
+						+ xcp.ToString();
+					ShowMessage( msg, _errorCaption );
+
+					retval = false;
 				}
 			}
+
+			return retval;  // We only care about the return value when unit testing.
 		}
 
 		#endregion StartMoveCommand
@@ -731,14 +796,29 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void StopMotion( object param )
+		private bool StopMotion( object param )
 		{
+			bool retval = true;
+
 			int ndx = Int32.Parse( (string)param );
 
 			if ( IsVariableJog && _jogInProgress )
 			{
-				TelescopeManager.StopJogScope( ndx );
+				try
+				{
+					TelescopeManager.StopJogScope( ndx );
+				}
+				catch ( Exception xcp )
+				{
+					string msg = "The telescope driver returned an error when attempting to stop jogging the telescope. "
+								+ $"Details follow:\r\n\r\n{xcp}";
+					ShowMessage( msg, _errorCaption );
+
+					retval = false;
+				}
 			}
+
+			return retval;  // We only care about the return value when unit testing.
 		}
 
 		#endregion StopMotionCommand
@@ -761,8 +841,10 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void DoFixedSlew( object param )
+		private bool DoFixedSlew( object param )
 		{
+			bool retval = true;
+
 			// Param is index into JogDirections collection, as a string.
 
 			if ( !IsVariableJog )
@@ -773,11 +855,24 @@ namespace ASCOM.DeviceHub
 				{
 					int ndx = Int32.Parse( (string)param );
 
-					TelescopeManager.StartFixedSlew( ndx, SelectedSlewAmount.Amount );
+					try
+					{
+						TelescopeManager.StartFixedSlew( ndx, SelectedSlewAmount.Amount );
 
-					_isFixedSlewInProgress = true;
+						_isFixedSlewInProgress = true;
+					}
+					catch ( Exception xcp )
+					{
+						string msg = "The telescope driver returned an error when trying to start a fixed slew. "
+							+ $"Details follow:\r\n\r\n{xcp}";
+						ShowMessage( msg, _errorCaption );
+
+						retval = false;
+					}
 				}
 			}
+
+			return retval;  // We only care about the return value when unit testing.
 		}
 
 		#endregion DoFixedSlewCommand
@@ -801,19 +896,34 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void SetParkPosition()
+		private bool SetParkPosition()
 		{
-			TelescopeManager.SetParkPosition();
+			bool retval = true;
 
-			IMessageBoxService msgSvc = ServiceContainer.Instance.GetService<IMessageBoxService>();
+			try
+			{
+				TelescopeManager.SetParkPosition();
 
-			string text = "The current telescope position has been remembered as the Park position.";
-			string title = "Set ParkPosition";
+				IMessageBoxService msgSvc = ServiceContainer.Instance.GetService<IMessageBoxService>();
 
-			msgSvc.Show( text, title, MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.None );
+				string text = "The current telescope position has been remembered as the Park position.";
+				string title = "Set ParkPosition";
+
+				msgSvc.Show( text, title, MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.None );
+			}
+			catch ( Exception xcp )
+			{
+				string msg = "The telescope driver returned an error when trying to set the Park position. "
+					+ $"Details follow:\r\n\r\n{xcp}";
+				ShowMessage( msg, _errorCaption );
+
+				retval = false;
+			}
+
+			return retval;  // We only care about the return value when unit testing.
 		}
 
-			private bool CanSetParkPosition()
+		private bool CanSetParkPosition()
 		{
 			bool retval = false;
 
