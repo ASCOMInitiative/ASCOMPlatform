@@ -8,7 +8,11 @@ Public Class SetupDialogForm
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click ' OK button event handler
         ' Persist new values of user settings to the ASCOM profile
-        TEMPLATEDEVICECLASS.comPort = ComboBoxComPort.SelectedItem ' Update the state variables with results from the dialogue
+        Try
+            TEMPLATEDEVICECLASS.comPort = ComboBoxComPort.SelectedItem ' Update the state variables with results from the dialogue
+        Catch
+            ' Ignore any errors here in case the PC does not have any COM ports that can be selected
+        End Try
         TEMPLATEDEVICECLASS.traceState = chkTrace.Checked
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
