@@ -104,8 +104,14 @@ namespace ASCOM.DynamicRemoteClients
                 numEstablishCommunicationsTimeout.Value = Convert.ToDecimal(EstablishConnectionTimeout);
                 numStandardTimeout.Value = Convert.ToDecimal(StandardTimeout);
                 numLongTimeout.Value = Convert.ToDecimal(LongTimeout);
-                txtUserName.Text = UserName.Unencrypt(TL);
-                txtPassword.Text = Password.Unencrypt(TL);
+                // Decrypt the user name if present
+                if (string.IsNullOrWhiteSpace(UserName)) txtUserName.Text = "";
+                else txtUserName.Text = UserName.Unencrypt(TL);
+
+                // Decrypt the password if present
+                if (string.IsNullOrWhiteSpace(Password)) txtPassword.Text = "";
+                else txtPassword.Text = Password.Unencrypt(TL);
+
                 chkTrace.Checked = TraceState;
                 chkDebugTrace.Checked = DebugTraceState;
                 ChkEnableRediscovery.Checked = EnableRediscovery;
@@ -198,8 +204,15 @@ namespace ASCOM.DynamicRemoteClients
             EstablishConnectionTimeout = Convert.ToInt32(numEstablishCommunicationsTimeout.Value);
             StandardTimeout = Convert.ToInt32(numStandardTimeout.Value);
             LongTimeout = Convert.ToInt32(numLongTimeout.Value);
-            UserName = txtUserName.Text.Encrypt(TL); // Encrypt the provided username and password
-            Password = txtPassword.Text.Encrypt(TL);
+            
+            // Encrypt user name if present
+            if (string.IsNullOrWhiteSpace(txtUserName.Text)) UserName = "";
+            else UserName = txtUserName.Text.Encrypt(TL); // Encrypt the provided username
+
+            // Encrypt password if present
+            if (string.IsNullOrWhiteSpace(txtPassword.Text)) Password= "";
+            else Password = txtPassword.Text.Encrypt(TL);  // Encrypt the provided password
+
             ManageConnectLocally = radManageConnectLocally.Checked;
             ImageArrayTransferType = (ASCOM.Common.Alpaca.ImageArrayTransferType)CmbImageArrayTransferType.SelectedItem;
             ImageArrayCompression = (ASCOM.Common.Alpaca.ImageArrayCompression)cmbImageArrayCompression.SelectedItem;

@@ -22,6 +22,8 @@ namespace ASCOM.DynamicRemoteClients
         {
             try
             {
+                if (string.IsNullOrEmpty(clearText)) return ""; // Handle null or empty strings
+
                 byte[] clearBytes = Encoding.UTF8.GetBytes(clearText);
                 byte[] entropyBytes = Encoding.UTF8.GetBytes(GenerateEntropy());
                 byte[] encryptedBytes = ProtectedData.Protect(clearBytes, entropyBytes, dataProtectionScope);
@@ -40,7 +42,8 @@ namespace ASCOM.DynamicRemoteClients
         {
             try
             {
-                if (encryptedText == null) return ""; // Deal with initial case where text has not yet been encrypted
+                if (string.IsNullOrEmpty(encryptedText)) return ""; // Handle null or empty strings
+
                 byte[] encryptedBytes = Convert.FromBase64String(encryptedText);
                 byte[] entropyBytes = Encoding.UTF8.GetBytes(GenerateEntropy());
                 byte[] clearBytes = ProtectedData.Unprotect(encryptedBytes, entropyBytes, dataProtectionScope);
