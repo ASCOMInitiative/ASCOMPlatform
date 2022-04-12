@@ -1145,15 +1145,15 @@ Public Class EarthRotationParameters : Implements IDisposable
 
             End Using
         Catch ex As Exception
-            EventLogCode.LogEvent("ManageScheduledTask", $"ManageScheduledTask - Unexpected exception: {ex}", EventLogEntryType.Error, GlobalConstants.EventLogErrors.ManageScheduledTask, ex.ToString());
+            EventLogCode.LogEvent("ManageScheduledTask", $"ManageScheduledTask - Unexpected exception: {ex}", EventLogEntryType.Error, GlobalConstants.EventLogErrors.ManageScheduledTask, ex.ToString())
             Try
                 TL.LogMessageCrLf("ManageScheduledTask Exception", ex.ToString())
-            Catch ex As Exception
+            Catch ex1 As Exception
             End Try
 
             Try
                 MsgBox("Something went wrong with the update, please report this on the ASCOM Talk Groups.IO forum, including the ASCOM.EarthRotation.xx.yy.txt log file from your Documents\ASCOM\Logs yyyy-mm-dd folder." & vbCrLf & ex.ToString())
-            Catch ex As Exception
+            Catch ex1 As Exception
             End Try
 
             Console.WriteLine($"ManageScheduledTask Exception - {ex})")
