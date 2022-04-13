@@ -468,7 +468,7 @@ namespace EarthRotationUpdate
         {
             try // Ignore any errors here
             {
-                if (TL != null) LogMessage("Download Progress", string.Format("Progress %: {0}, {1} / {2} bytes, Complete: {3}", e.ProgressPercentage.ToString(), e.BytesReceived, e.TotalBytesToReceive, DownloadComplete));
+                LogMessage("Download Progress", string.Format("Progress %: {0}, {1} / {2} bytes, Complete: {3}", e.ProgressPercentage.ToString(), e.BytesReceived, e.TotalBytesToReceive, DownloadComplete));
             }
             catch { }
         }
@@ -559,6 +559,7 @@ namespace EarthRotationUpdate
                 {
                     // Log the message to the TraceLogger
                     TL.LogMessageCrLf(identifier, message);
+                    throw new UnauthorizedAccessException("EarthRotationUpdate.LogMessage - TEST EXCEPTION");
                 }
                 catch (Exception ex)
                 {
