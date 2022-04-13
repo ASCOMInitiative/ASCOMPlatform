@@ -109,6 +109,8 @@ namespace EarthRotationUpdate
                         parameters.ManageScheduledTask();
                         LogMessage("EarthRotationUpdate", string.Format("Completed ManageScheduledTask"));
 
+                        LogMessage("EarthRotationUpdate", "Initialise complete.");
+
                         Environment.Exit(0);
                     }
                 }
@@ -557,7 +559,6 @@ namespace EarthRotationUpdate
                 {
                     // Log the message to the TraceLogger
                     TL.LogMessageCrLf(identifier, message);
-                    throw new UnauthorizedAccessException("TEST EXCEPTION - Tests for TraceLogger failure - DO NOT LEAVE IN PRODUCTION CODE!!!");
                 }
                 catch (Exception ex)
                 {
