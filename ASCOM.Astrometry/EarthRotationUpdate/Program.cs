@@ -559,7 +559,6 @@ namespace EarthRotationUpdate
                 {
                     // Log the message to the TraceLogger
                     TL.LogMessageCrLf(identifier, message);
-                    throw new UnauthorizedAccessException("EarthRotationUpdate.LogMessage - TEST EXCEPTION");
                 }
                 catch (Exception ex)
                 {
