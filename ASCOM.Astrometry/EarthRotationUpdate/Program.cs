@@ -143,15 +143,14 @@ namespace EarthRotationUpdate
                 LogEvent(string.Format("Run on {0} by {1}, IsSystem: {2}", runDate, runBy, isSystem), EventLogEntryType.Information);
                 LogMessage("EarthRotationUpdate", string.Format("Run on {0} by {1}, IsSystem: {2}", runDate, runBy, isSystem));
                 BlankLine();
-                if (TL is null)
+
+                if (TL is null) // Do not try to display TraceLogger configuration
                 {
-                    LogEvent($"Log file could not be created, Trace state: {parameters.DownloadTaskTraceEnabled}", EventLogEntryType.Information);
                     LogMessage("EarthRotationUpdate", $"Log file could not be created, Trace state: {parameters.DownloadTaskTraceEnabled}");
                 }
-                else
+                else // Include TraceLogger configuration
                 {
-                    LogEvent(string.Format("Log file: {0}, Trace state: {1}, Log file path: {2}", TL.LogFileName, parameters.DownloadTaskTraceEnabled, TL.LogFilePath), EventLogEntryType.Information);
-                    LogMessage("EarthRotationUpdate", string.Format("Log file: {0}, Trace state: {1}, Log file path: {2}", TL.LogFileName, parameters.DownloadTaskTraceEnabled, TL.LogFilePath));
+                    LogMessage("EarthRotationUpdate", $"Log file: {TL.LogFileName}, Trace state: {parameters.DownloadTaskTraceEnabled}, Log file path: {TL.LogFilePath}");
                 }
                 LogMessage("EarthRotationUpdate", string.Format("Earth rotation data last updated: {0}", parameters.EarthRotationDataLastUpdatedString));
                 LogMessage("EarthRotationUpdate", string.Format("Data source: {0}", hostURIString));
@@ -189,7 +188,7 @@ namespace EarthRotationUpdate
                 // Get the latest delta UT1 values
                 try
                 {
-                    string dUT1fileName = DownloadFile("DeltaUT1", GlobalItems.DELTAUT1_FILE, client, TL); // Download the latest delta UT1 values and receive the filename holding the data
+                    string dUT1fileName = DownloadFile("DeltaUT1", GlobalItems.DELTAUT1_FILE, client); // Download the latest delta UT1 values and receive the filename holding the data
                     FileInfo info = new FileInfo(dUT1fileName); // Find out if we have any data
                     if (info.Length > 0) // We actually received some data so process it
                     {
@@ -284,7 +283,7 @@ namespace EarthRotationUpdate
                 // Get the latest leap second values
                 try
                 {
-                    string leapSecondsfileName = DownloadFile("LeapSeconds", GlobalItems.LEAP_SECONDS_FILE, client, TL); // Download the latest leap second values and receive the filename holding the data
+                    string leapSecondsfileName = DownloadFile("LeapSeconds", GlobalItems.LEAP_SECONDS_FILE, client); // Download the latest leap second values and receive the filename holding the data
                     FileInfo info = new FileInfo(leapSecondsfileName); // Find out if we have any data
                     if (info.Length > 0) // We actually received some data so process it
                     {
@@ -446,16 +445,16 @@ namespace EarthRotationUpdate
             {
                 if (e.Cancelled)
                 {
-                    if (TL != null) LogMessage("Download Status", string.Format("Download timed out"));
+                    LogMessage("Download Status", string.Format("Download timed out"));
                 }
                 else if (e.Error != null)
                 {
                     downloadError = e.Error;
-                    if (TL != null) LogMessage("Download Error", string.Format("Error: {0}", downloadError.Message));
+                    LogMessage("Download Error", string.Format("Error: {0}", downloadError.Message));
                 }
                 else
                 {
-                    if (TL != null) LogMessage("Download Status", string.Format("Download Completed OK,"));
+                    LogMessage("Download Status", string.Format("Download Completed OK,"));
                 }
 
                 DownloadComplete = true;
@@ -481,7 +480,7 @@ namespace EarthRotationUpdate
             EventLogCode.LogEvent("EarthRotationUpdate", message, severity, GlobalConstants.EventLogErrors.EarthRotationUpdate, Except: "");
         }
 
-        private static string DownloadFile(string Function, string DataFile, WebClient Client, TraceLogger TL)
+        private static string DownloadFile(string Function, string DataFile, WebClient Client)
         {
             string tempFileName;
             Stopwatch timeOutTimer;
@@ -552,9 +551,37 @@ namespace EarthRotationUpdate
 
         private static void LogMessage(string identifier, string message)
         {
-            if (!(TL is null)) TL.LogMessageCrLf(identifier, message);
-            Console.WriteLine($"{identifier} - {message}");
-            EventLogCode.LogEvent(identifier, message, EventLogEntryType.Information, GlobalConstants.EventLogErrors.EarthRotationUpdate, "");
+            if (!(TL is null)) // TraceLogger is available so try to use it
+            {
+                try
+                {
+                    // Log the message to the TraceLogger
+                    TL.LogMessageCrLf(identifier, message);
+                    throw new UnauthorizedAccessException("TEST EXCEPTION - Tests for TraceLogger failure - DO NOT LEAVE IN PRODUCTION CODE!!!");
+                }
+                catch (Exception ex)
+                {
+                    // Something went wrong when trying to log the message to the TraceLogger so log this fact to console and event log 
+                    Console.WriteLine($"EarthRotationUpdate.LogMessage - TraceLogger threw an exception when writing '{message}', abandoning trace logging: {ex.Message}");
+                    EventLogCode.LogEvent("EarthRotationUpdate.LogMessage", $"TraceLogger threw an exception when writing '{message}', abandoning trace logging: {ex.Message}", EventLogEntryType.Error, GlobalConstants.EventLogErrors.EarthRotationUpdate, "");
+
+                    // Disable and dispose of the TraceLogger, setting it to null so that it can't be used in future
+                    try { TL.Enabled = false; } catch { }
+                    try { TL.Dispose(); } catch { }
+                    try { TL = null; } catch { }
+
+                    // Log that the disposal was successful
+                    Console.WriteLine($"EarthRotationUpdate.LogMessage - TraceLogger Disposed and set to null");
+                    EventLogCode.LogEvent("EarthRotationUpdate.LogMessage", $"TraceLogger Disposed and set to null", EventLogEntryType.Information, GlobalConstants.EventLogErrors.EarthRotationUpdate, "");
+                }
+            }
+
+            // Log the message to console and event log if it was not logged to the TraceLogger
+            if (TL is null)
+            {
+                Console.WriteLine($"{identifier} - {message}");
+                EventLogCode.LogEvent(identifier, message, EventLogEntryType.Information, GlobalConstants.EventLogErrors.EarthRotationUpdate, "");
+            }
         }
 
         private static void BlankLine()
