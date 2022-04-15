@@ -263,7 +263,18 @@ namespace ASCOM.DeviceHub
 
 		private bool CanToggleFocuserConnected()
 		{
-			return ( FocuserID != null );
+			bool retval = false;
+
+			if ( !IsConnected )
+			{
+				retval = FocuserID != null;
+			}
+			else
+			{
+				retval = Server.FocusersInUse == 0;
+			}
+
+			return retval;
 		}
 
 		#endregion ToggleFocuserConnectedCommand

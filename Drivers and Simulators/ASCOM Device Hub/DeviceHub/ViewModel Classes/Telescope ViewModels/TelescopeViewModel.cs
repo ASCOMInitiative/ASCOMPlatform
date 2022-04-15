@@ -340,7 +340,20 @@ namespace ASCOM.DeviceHub
 
         private bool CanToggleTelescopeConnected()
         {
-            return ( TelescopeID != null );
+			bool retval = false;
+
+			if ( !IsConnected )
+			{
+				retval = TelescopeID != null;
+			}
+			else
+			{
+				// We can only disconnect if there are no connected clients.
+
+				retval = Server.ScopesInUse == 0;
+			}
+
+            return retval;
         }
 
 		#endregion ToggleTelescopeConnectedCommand

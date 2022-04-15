@@ -109,8 +109,11 @@ namespace ASCOM.DeviceHub
 		/// </summary>
 		public void SetupDialog()
 		{
-			if ( Server.ScopesInUse > 1 )
+			if ( Server.ScopesInUse > 1 || TelescopeManager.Instance.IsConnected )
 			{
+				// If ScopesInUse is greater than 1 then there are other clients and we cannot change the driver properties.
+				// If The TelescopeManager is connected then we cannot change the driver properties.
+
 				System.Windows.MessageBox.Show( "Unable to change Telescope Properties at this time." );
 
 				return;

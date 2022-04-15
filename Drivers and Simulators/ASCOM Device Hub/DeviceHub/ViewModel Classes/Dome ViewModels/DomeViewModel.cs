@@ -265,7 +265,18 @@ namespace ASCOM.DeviceHub
 
 		private bool CanToggleDomeConnected()
 		{
-			return ( DomeID != null );
+			bool retval = false;
+
+			if ( !IsConnected )
+			{
+				retval = DomeID != null;
+			}
+			else
+			{
+				retval = Server.DomesInUse == 0;
+			}
+
+			return retval;
 		}
 
 		#endregion ToggleDomeConnectedCommand
