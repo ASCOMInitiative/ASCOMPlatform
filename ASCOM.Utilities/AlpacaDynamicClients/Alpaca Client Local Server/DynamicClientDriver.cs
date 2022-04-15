@@ -382,9 +382,23 @@ namespace ASCOM.DynamicRemoteClients
                 PreAuthenticate = true
             };
 
-            // Add an HTTP basic authenticator configured with the user name and password to the client
-            TL.LogMessage(clientNumber, deviceType, "Creating Authenticator");
-            client.Authenticator = new HttpBasicAuthenticator(userName.Unencrypt(TL), password.Unencrypt(TL)); // Need to decrypt the user name and password so the correct values are sent to the remote device
+            // Add a basic authenticator if the user name is not null or white space
+            if (!string.IsNullOrWhiteSpace(userName))
+            {
+                // Deal with null passwords
+                if (string.IsNullOrEmpty(password)) // Handle the special case of an empty string password
+                {
+                    // Add an HTTP basic authenticator configured with the user name and empty password to the client
+                    TL.LogMessage(clientNumber, deviceType, "Creating Authenticator with an empty password.");
+                    client.Authenticator = new HttpBasicAuthenticator(userName.Unencrypt(TL), ""); // Need to decrypt the user name so the correct value is sent to the remote device
+                }
+                else // Handle the normal case of a non-empty string password
+                {
+                    // Add an HTTP basic authenticator configured with the user name and password to the client
+                    TL.LogMessage(clientNumber, deviceType, "Creating Authenticator with a non-empty password.");
+                    client.Authenticator = new HttpBasicAuthenticator(userName.Unencrypt(TL), password.Unencrypt(TL)); // Need to decrypt the user name and password so the correct values are sent to the remote device
+                }
+            }
 
             // Set the client timeout
             SetClientTimeout(client, deviceResponseTimeout);

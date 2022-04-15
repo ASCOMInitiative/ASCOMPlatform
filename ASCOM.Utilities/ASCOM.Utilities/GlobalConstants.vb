@@ -131,5 +131,7 @@ Module GlobalConstants
         TraceLoggerMutexAbandoned = 30
         RegistryProfileMutexAbandoned = 31
         EarthRotationUpdate = 32
+        ManageScheduledTask = 33
+        Sofa = 34
     End Enum
 End Module
