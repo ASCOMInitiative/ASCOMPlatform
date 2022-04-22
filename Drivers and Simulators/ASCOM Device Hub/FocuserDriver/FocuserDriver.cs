@@ -103,7 +103,7 @@ namespace ASCOM.DeviceHub
 		/// </summary>
 		public void SetupDialog()
 		{
-			if ( Server.FocusersInUse > 1 )
+			if ( Server.FocusersInUse > 0 || FocuserManager.Instance.IsConnected )
 			{
 				System.Windows.MessageBox.Show( "Unable to change Focuser Properties at this time." );
 

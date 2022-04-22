@@ -103,7 +103,7 @@ namespace ASCOM.DeviceHub
 		/// </summary>
 		public void SetupDialog()
 		{
-			if ( Server.DomesInUse > 1 )
+			if ( Server.DomesInUse > 0 || DomeManager.Instance.IsConnected )
 			{
 				System.Windows.MessageBox.Show( "Unable to change Dome Properties at this time." );
 

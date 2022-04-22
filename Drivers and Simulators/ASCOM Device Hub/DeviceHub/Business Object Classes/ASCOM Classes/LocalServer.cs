@@ -312,7 +312,7 @@ namespace ASCOM.DeviceHub
 		{
 			Task discon = new Task( () =>
 			{
-				if ( _scopesInUse == 1 )
+				if ( _scopesInUse == 1 && StartedByCOM )
 				{
 					TelescopeManager.Instance.Disconnect();
 				}
@@ -326,7 +326,7 @@ namespace ASCOM.DeviceHub
 		{
 			Task discon = new Task( () =>
 			{
-				if ( _domesInUse == 1 )
+				if ( _domesInUse == 1 && StartedByCOM )
 				{
 					DomeManager.Instance.Disconnect();
 				}
@@ -340,7 +340,7 @@ namespace ASCOM.DeviceHub
 		{
 			Task discon = new Task( () =>
 			{
-				if ( _focusersInUse == 1 )
+				if ( _focusersInUse == 1 && StartedByCOM )
 				{
 					FocuserManager.Instance.Disconnect();
 				}
