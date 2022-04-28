@@ -35,7 +35,7 @@ namespace Unit_Tests.Telescope
 			_mgr = TelescopeManager.Instance;
 			_svc = (MockTelescopeService)ServiceContainer.Instance.GetService<ITelescopeService>();
 			TelescopeManager.Instance.SetFastUpdatePeriod( 0.5 );
-			bool retval = _mgr.Connect( ScopeID );
+			bool retval = _mgr.Connect( ScopeID, true );
 			Assert.AreEqual( true, retval );
 
 			Thread.Sleep( _startupDelayMs );
@@ -44,7 +44,7 @@ namespace Unit_Tests.Telescope
 		[TestCleanup]
 		public void TestCleanup()
 		{
-			_mgr.Disconnect();
+			_mgr.Disconnect( true );
 			Assert.IsFalse( _svc.Connected );
 
 			_mgr.Dispose();

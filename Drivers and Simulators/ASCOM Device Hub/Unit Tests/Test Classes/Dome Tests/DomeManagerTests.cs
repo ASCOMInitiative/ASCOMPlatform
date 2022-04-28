@@ -36,7 +36,7 @@ namespace Unit_Tests.Dome
 
 			Messenger.Default.Register<DomeSlavedChangedMessage>( this, ( action ) => UpdateDomeSlavedState( action ) );
 
-			bool retval = _mgr.Connect( DomeID );
+			bool retval = _mgr.Connect( DomeID, true );
 			Assert.AreEqual( true, retval );
 
 			Thread.Sleep( _startupDelayMs );
@@ -47,7 +47,7 @@ namespace Unit_Tests.Dome
 		{
 			Messenger.Default.Unregister<DomeSlavedChangedMessage>( this );
 
-			_mgr.Disconnect();
+			_mgr.Disconnect( true );
 			Assert.IsFalse( _svc.Connected );
 
 			_mgr.Dispose();

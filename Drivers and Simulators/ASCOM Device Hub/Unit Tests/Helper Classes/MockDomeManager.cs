@@ -83,7 +83,11 @@ namespace Unit_Tests
 			Messenger.Default.Send( new DomeStatusUpdatedMessage( Status ) );
 		}
 
-		public bool Connect( string domeID )
+		public bool Connect()
+		{
+			return Connect( MockDomeID, false );
+		}
+		public bool Connect( string domeID, bool interactiveConnect = true )
 		{
 			MockDomeID = domeID;
 			IsConnected = true;
@@ -91,7 +95,7 @@ namespace Unit_Tests
 			return IsConnected;
 		}
 
-		public void Disconnect()
+		public void Disconnect( bool interactiveDisconnect = false )
 		{
 			IsConnected = false;
 		}

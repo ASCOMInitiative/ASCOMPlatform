@@ -78,7 +78,7 @@ namespace ASCOM.DeviceHub
 		#region Public Properties
 
 		public bool IsConnected { get; private set; }
-
+		public bool IsInteractivelyConnected { get; private set; }
 		public string ConnectError { get; protected set; }
 		public Exception ConnectException { get; protected set; }
 
@@ -91,10 +91,12 @@ namespace ASCOM.DeviceHub
 
 		public bool Connect()
 		{
-			return Connect( FocuserID );
+			// This is only called by the focuser driver.
+
+			return Connect( FocuserID, false );
 		}
 
-		public bool Connect( string focuserID )
+		public bool Connect( string focuserID, bool interactiveConnect = true )
 		{
 			ConnectError = "";
 			ConnectException = null;
@@ -107,6 +109,11 @@ namespace ASCOM.DeviceHub
 				{
 					InitializeFocuserService( focuserID );
 					SetFocuserID( focuserID );
+
+					if ( interactiveConnect)
+					{
+						IsInteractivelyConnected = interactiveConnect;
+					}
 				}
 				catch ( Exception xcp )
 				{
@@ -187,7 +194,7 @@ namespace ASCOM.DeviceHub
 			return retval;
 		}
 
-		public void Disconnect()
+		public void Disconnect( bool interactiveDisconnect = false )
 		{
 			if ( !DeviceCreated )
 			{
@@ -196,19 +203,30 @@ namespace ASCOM.DeviceHub
 
 			if ( IsConnected )
 			{
-				StopDevicePolling();
-
 				try
 				{
-					Connected = false;
+					if ( ( Server.FocusersInUse == 1 && !IsInteractivelyConnected ) ||
+						 ( Server.FocusersInUse == 0 && IsInteractivelyConnected && interactiveDisconnect ) )
+					{
+						if ( interactiveDisconnect)
+						{
+							IsInteractivelyConnected = false;
+						}
+
+						StopDevicePolling();
+						Connected = false;
+					}
 				}
 				catch ( Exception )
 				{ }
 				finally
 				{
-					IsConnected = false;
-					Messenger.Default.Send( new DeviceDisconnectedMessage( DeviceTypeEnum.Focuser ) );
-					ReleaseFocuserService();
+					if ( !IsPolling )
+					{
+						IsConnected = false;
+						Messenger.Default.Send( new DeviceDisconnectedMessage( DeviceTypeEnum.Focuser ) );
+						ReleaseFocuserService();
+					}
 				}
 			}
 		}

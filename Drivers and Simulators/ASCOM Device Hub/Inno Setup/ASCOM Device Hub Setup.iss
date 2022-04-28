@@ -4,7 +4,7 @@
 ;
 
 #define MyAppName "ASCOM.DeviceHub"
-#define MyAppVersion "6.6.0.4"
+#define MyAppVersion "6.6.0.6"
 #define MyDestSubdirName "DeviceHub"
 ; #define MyPlatformRoot "D:\Github Repos\ASCOMPlatform\"
 #define MyPlatformRoot "D:\My Projects\Visual Studio 2022\Ascom\"
