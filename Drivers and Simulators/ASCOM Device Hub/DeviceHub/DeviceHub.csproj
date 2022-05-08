@@ -87,8 +87,24 @@
     <Compile Include="Business Object Classes\Value Converters\MultiBindingTrueIfNotParking.cs" />
     <Compile Include="Business Object Classes\Value Converters\EditLockTextBooleanValueConverter.cs" />
     <Compile Include="Business Object Classes\Message Types\FocuserMoveAmountMessage.cs" />
+    <Compile Include="Dome Driver\DomeDriver.cs" />
+    <Compile Include="Dome Driver\DomeDriverSetupDialogView.xaml.cs">
+      <DependentUpon>DomeDriverSetupDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dome Driver\DomeDriverSetupDialogViewModel.cs" />
+    <Compile Include="Focuser Driver\FocuserDriver.cs" />
+    <Compile Include="Focuser Driver\FocuserDriverSetupDialogView.xaml.cs">
+      <DependentUpon>FocuserDriverSetupDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Focuser Driver\FocuserDriverSetupDialogViewModel.cs" />
     <Compile Include="Resources\Strings.Designer.cs" />
     <Compile Include="Business Object Classes\Message Types\SignalWaitMessage.cs" />
+    <Compile Include="Telescope Driver\DriverSetupDialogView.xaml.cs">
+      <DependentUpon>DriverSetupDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Telescope Driver\DriverSetupDialogViewModel.cs" />
+    <Compile Include="Telescope Driver\Rates.cs" />
+    <Compile Include="Telescope Driver\TelescopeDriver.cs" />
     <Compile Include="View Classes\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
@@ -304,6 +320,18 @@
     <Compile Include="Services Classes\ServiceContainer.cs" />
     <Compile Include="Services Classes\ServiceInjector.cs" />
     <Compile Include="Business Object Classes\Win32 Extensions\WindowExtensions.cs" />
+    <Page Include="Dome Driver\DomeDriverSetupDialogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Focuser Driver\FocuserDriverSetupDialogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Telescope Driver\DriverSetupDialogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View Classes\AboutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

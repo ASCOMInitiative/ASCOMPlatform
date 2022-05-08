@@ -170,9 +170,6 @@ namespace ASCOM.DeviceHub
 				{
 					ActivityLogVm.CloseLog();
 				}
-
-				ActivityLogVm.Dispose();
-				ActivityLogVm = null;
 			}
 		}
 

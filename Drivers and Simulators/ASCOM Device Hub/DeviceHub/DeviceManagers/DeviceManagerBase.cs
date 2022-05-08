@@ -68,15 +68,22 @@ namespace ASCOM.DeviceHub
 			{
 				if ( retval is ArrayList )
 				{
-					LogActivityStart( messageType, "Get {0}: {1}", propName, retval );
+					LogActivityStart( messageType, "Get {0}: ", propName );
 
 					StringBuilder sb = new StringBuilder();
 					ArrayList list = retval as ArrayList;
 
-					foreach ( var item in list )
+					if ( list.Count == 0 )
 					{
-						sb.Append( ( sb.Length > 0 ) ? ", " : "" );
-						sb.Append( item.ToString() );
+						sb.Append( "Enpty List" );
+					}
+					else
+					{
+						foreach ( var item in list )
+						{
+							sb.Append( ( sb.Length > 0 ) ? ", " : "" );
+							sb.Append( item.ToString() );
+						}
 					}
 
 					LogActivityEnd( messageType, sb.ToString() );

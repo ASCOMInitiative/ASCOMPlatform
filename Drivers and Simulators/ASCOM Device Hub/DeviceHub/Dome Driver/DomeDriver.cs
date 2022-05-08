@@ -43,6 +43,7 @@ namespace ASCOM.DeviceHub
 	/// <summary>
 	/// ASCOM Dome Driver for DeviceHub.
 	/// </summary>
+	[ComVisible( true )]
 	[Guid( "3c3cac40-ad1a-4453-a404-22b9ef331a3b" )]
 	[ProgId( "ASCOM.DeviceHub.Dome" )]
 	[ServedClassName( "Device Hub Dome" )]
@@ -103,7 +104,7 @@ namespace ASCOM.DeviceHub
 		/// </summary>
 		public void SetupDialog()
 		{
-			if ( Server.DomesInUse > 0 || DomeManager.Instance.IsConnected )
+			if ( Server.DomesInUse > 1 || DomeManager.Instance.IsConnected )
 			{
 				System.Windows.MessageBox.Show( "Unable to change Dome Properties at this time." );
 

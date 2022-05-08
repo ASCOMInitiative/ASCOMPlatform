@@ -8,5 +8,8 @@
     <Setting Name="ActivityLogCapacity" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">125000</Value>
     </Setting>
+    <Setting Name="ServerLoggingEnabled" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
