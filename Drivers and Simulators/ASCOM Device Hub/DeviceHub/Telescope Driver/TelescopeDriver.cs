@@ -2669,7 +2669,7 @@ namespace ASCOM.DeviceHub
 
 				try
 				{
-					TelescopeManager.TargetDeclination = value;
+					TelescopeManager.SetTargetDeclination( value );
 					msg += _done;
 				}
 				catch ( Exception )
@@ -2734,7 +2734,7 @@ namespace ASCOM.DeviceHub
 
 				try
 				{
-					TelescopeManager.TargetRightAscension = value;
+					TelescopeManager.SetTargetRightAscension( value );
 					msg += _done;
 				}
 				catch ( Exception )

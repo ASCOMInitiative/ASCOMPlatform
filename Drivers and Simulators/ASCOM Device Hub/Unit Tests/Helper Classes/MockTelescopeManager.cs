@@ -320,6 +320,16 @@ namespace Unit_Tests
 			// Not used, but needed to satisfy the interface.
 		}
 
+		public void SetTargetDeclination( double targetDec )
+		{
+			Status.TargetDeclination = targetDec;
+		}
+
+		public void SetTargetRightAscension( double targetRa )
+		{
+			Status.TargetRightAscension = targetRa;
+		}
+
 		#region Helper Methods
 
 		private void ParkScopeTask()

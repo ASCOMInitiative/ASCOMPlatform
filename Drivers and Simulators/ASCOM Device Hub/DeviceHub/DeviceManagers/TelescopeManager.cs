@@ -736,6 +736,22 @@ namespace ASCOM.DeviceHub
 			return retval;
 		}
 
+		public void SetTargetDeclination( double targetDec )
+		{
+			// This is called by the telescope driver. Update the current status before sending the new target dec to the downstream driver.
+
+			Status.TargetDeclination = targetDec;
+			TargetDeclination = targetDec;
+		}
+
+		public void SetTargetRightAscension( double targetRa )
+		{
+			// This is called by the telescope driver. Update the current status before sending the new target RA to the downstream driver.
+
+			Status.TargetRightAscension = targetRa;
+			TargetRightAscension = targetRa;
+		}
+
 		#endregion Public Methods
 
 		#region Helper Methods

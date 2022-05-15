@@ -33,5 +33,7 @@ namespace ASCOM.DeviceHub
 		void SetDecOffsetTrackingRate( double rate );
 		void SetTrackingRate( DriveRates rate );
 		void SetParkPosition();
+		void SetTargetDeclination( double targetDec );
+		void SetTargetRightAscension( double targetRa );
 	}
 }
