@@ -12,7 +12,7 @@ using System.Windows;
 using Microsoft.Win32;
 
 using ASCOM.DeviceHub.MvvmMessenger;
-using System.Runtime;
+using ASCOM.Utilities;
 
 namespace ASCOM.DeviceHub
 {
@@ -25,14 +25,16 @@ namespace ASCOM.DeviceHub
 		private static int _domesInUse;                     // Keeps a count on the total number of domes alive.
 		private static int _focusersInUse;                  // Keeps a count on the total number of focusers alive.
 		private static int _serverLocks;                    // Keeps a lock count on this application.
-		private static List<Assembly> _comObjectAssys;      // Dynamically loaded assemblies containing served COM objects
-		private static List<Type> _comObjectTypes;          // Served COM object types
+		private static List<Type> _driverTypes;				// Served COM object types
 		private static List<ClassFactory> _classFactories;  // Served COM object class factories
 		private static readonly string _appId = "{4f90ea04-044f-444e-963e-b52db2a87575}";   // Our AppId
 		private static readonly Object _lockObject = new object();
 		private const string _uacRegistryKey = "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
 		private const string _uacRegistryValue = "EnableLUA";
 
+		private static TraceLogger Logger { get; set; }
+
+		private static GarbageCollection GarbageCollector {get; set;}
 
 		private static MainWindow MainWindow { get; set; }          // Reference to the main view
 		private static MainWindowViewModel ViewModel { get; set; }  // Reference to the main view model
@@ -64,15 +66,36 @@ namespace ASCOM.DeviceHub
 
 		internal static void Startup( string[] args )
 		{
+			string logId = "Main";
+
 			// Uncomment the following lines to allow the Visual Studio Debugger to be 
 			// attached to the server for debugging.
 
 			//int procId = Process.GetCurrentProcess().Id;
 			//MessageBox.Show( $"Attach the debugger to process #{procId} now." );
 
+			Logger = new TraceLogger( "", "ASCOM.LocalServer" )
+			{
+				// Server logging can be enabled by setting ServerLoggingEnabled to True in the application config file.
+
+				Enabled = Properties.Settings.Default.ServerLoggingEnabled
+			};
+
+			Logger.LogMessage( logId, "Server started" );
+
 			Globals.UISyncContext = TaskScheduler.FromCurrentSynchronizationContext();
 
-			LoadComObjectAssemblies();   // Load served COM class assemblies, get types
+			Logger.LogMessage( logId, $"Loading drivers" );
+
+			if ( !PopulateListOfAscomDrivers() )
+			{
+				App.Current.Shutdown();
+
+				return;
+			}
+
+			Logger.LogMessage( logId, "Processing command-line arguments." );
+
 
 			if ( !ProcessArguments( args ) )    // Register/Unregister
 			{
@@ -94,6 +117,8 @@ namespace ASCOM.DeviceHub
 
 			// Initialize critical member variables.
 
+			Logger.LogMessage( logId, "Initializing veriables" );
+
 			_objsInUse = 0;
 			_scopesInUse = 0;
 			_domesInUse = 0;
@@ -104,9 +129,13 @@ namespace ASCOM.DeviceHub
 
 			// Initialize our non-U/I services.
 
+			Logger.LogMessage( logId, "Initializing the service injector" );
+
 			ServiceInjector.InjectServices();
 
 			// Create Device Hub App Settings and seed with default values.
+
+			Logger.LogMessage( logId, "Initializing persisted settings." );
 
 			AppSettingsManager.CreateInitialAppSettings();
 
@@ -118,12 +147,18 @@ namespace ASCOM.DeviceHub
 
 			// Create the View and ViewModel
 
+			Logger.LogMessage( logId, "Creating the main view" );
+
 			ViewModel = new MainWindowViewModel();
 			MainWindow = new MainWindow();
 
 			// Create the U/I services.
 
+			Logger.LogMessage( logId, "Injecting the user interface services" );
+
 			ServiceInjector.InjectUIServices( MainWindow );
+
+			Logger.LogMessage( logId, "Setting the data context for the main view" );
 
 			MainWindow.DataContext = ViewModel;
 			MainWindow.Closing += MainWindow_Closing;
@@ -131,27 +166,36 @@ namespace ASCOM.DeviceHub
 			// Load the saved settings to ensure that everyone up-to-date. Be sure to do this
 			// after the main window is created so we can set its location.
 
+			Logger.LogMessage( logId, "Loading the application settings" );
+
 			AppSettingsManager.LoadAppSettings();
+
+			Logger.LogMessage( logId, "Loading the device driver settings" );
 
 			LoadDeviceSettings();
 
 			// Register the class factories of the served objects
 
+			Logger.LogMessage( logId, "Registering class factories" );
+
 			RegisterClassFactories();
 
-			StartGarbageCollection( 10000 );    // Collect garbage every 10 seconds.
+			Logger.LogMessage( logId, "Starting garbage collection" );
+
+			StartGarbageCollection( 60000 );    // Collect garbage once a minute.
 
 			try
 			{
+				Logger.LogMessage( logId, "Starting main view" );
+
 				ShowMainWindow();
-			}	
+
+				Logger.LogMessage( logId, "The main view has closed" );
+			}
 			finally
 			{
+				Logger.LogMessage( logId, "Saving the application settings" );
 				AppSettingsManager.SaveAppSettings();
-
-				// Update the dome settings to save the azimuth adjustment.
-
-				SaveDomeSettings();
 
 				// Revoke the class factories immediately.
 				// Don't wait until the thread has stopped before
@@ -159,16 +203,25 @@ namespace ASCOM.DeviceHub
 
 				RevokeClassFactories();
 
+				Logger.LogMessage( logId, "Disposing the main view and viewmodel." );
+
 				MainWindow.DataContext = null;
 				MainWindow = null;
 				ViewModel.Dispose();
 				ViewModel = null;
 
+				Logger.LogMessage( logId, "Unregistering all services" );
+
 				ServiceContainer.Instance.ClearAllServices();
 
 				// Now stop the Garbage Collector task.
 
+				Logger.LogMessage( logId, "Stopping garbage collection" );
+
 				StopGarbageCollection();
+
+				Logger.LogMessage( logId, "Local server is shutting down" );
+				Logger.Dispose();
 			}
 		}
 
@@ -193,7 +246,7 @@ namespace ASCOM.DeviceHub
 
 		public static int CountObject( DeviceTypeEnum devType )
 		{
-
+			string logId = "CountObject";
 			string name = devType.GetDisplayName();
 
 			int retval;
@@ -203,19 +256,23 @@ namespace ASCOM.DeviceHub
 			if ( devType == DeviceTypeEnum.Telescope )
 			{
 				Interlocked.Increment( ref _scopesInUse );
+				Logger.LogMessage( logId, $"New telescope object count: {_scopesInUse}" );
 			}
 			else if ( devType == DeviceTypeEnum.Dome )
 			{
 				Interlocked.Increment( ref _domesInUse );
+				Logger.LogMessage( logId, $"New dome object count: {_domesInUse}" );
 			}
 			else if ( devType == DeviceTypeEnum.Focuser )
 			{
 				Interlocked.Increment( ref _focusersInUse );
+				Logger.LogMessage( logId, $"New focuser object count: {_focusersInUse}" );
 			}
 
 			// Increment the global count of objects.
 
 			retval = Interlocked.Increment( ref _objsInUse );
+			Logger.LogMessage( logId, $"New object count: {_objsInUse}" );
 
 			Messenger.Default.Send( new ObjectCountMessage( _scopesInUse, _domesInUse, _focusersInUse ) );
 
@@ -227,25 +284,30 @@ namespace ASCOM.DeviceHub
 		public static int UncountObject( DeviceTypeEnum devType )
 		{
 			int retval;
+			string logId = "UncountObject";
 
 			// Decrement the count of objects for the specified device type.
 
 			if ( devType == DeviceTypeEnum.Telescope )
 			{
 				Interlocked.Decrement( ref _scopesInUse );
+				Logger.LogMessage( logId, $"New telescope object count: {_scopesInUse}" );
 			}
 			else if ( devType == DeviceTypeEnum.Dome )
 			{
 				Interlocked.Decrement( ref _domesInUse );
+				Logger.LogMessage( logId, $"New dome object count: {_domesInUse}" );
 			}
 			else if ( devType == DeviceTypeEnum.Focuser )
 			{
 				Interlocked.Decrement( ref _focusersInUse );
+				Logger.LogMessage( logId, $"New focuser object count: {_focusersInUse}" );
 			}
 
 			// Decrement the global count of objects.
 
 			retval = Interlocked.Decrement( ref _objsInUse );
+			Logger.LogMessage( logId, $"New object count: {_objsInUse}" );
 
 			Messenger.Default.Send( new ObjectCountMessage( _scopesInUse, _domesInUse, _focusersInUse ) );
 
@@ -272,7 +334,10 @@ namespace ASCOM.DeviceHub
 		{
 			// Increment the global lock count of this server.
 
-			return Interlocked.Increment( ref _serverLocks );
+			int newCount = Interlocked.Increment( ref _serverLocks );
+			Logger.LogMessage( "CountLock", $"New server lock count: {newCount}" );
+
+			return newCount;
 		}
 
 		// This method performs a thread-safe decrementation the 
@@ -282,7 +347,10 @@ namespace ASCOM.DeviceHub
 		{
 			// Decrement the global lock count of this server.
 
-			return Interlocked.Decrement( ref _serverLocks );
+			int newCount = Interlocked.Decrement( ref _serverLocks );
+			Logger.LogMessage( "UncountLock", $"New server lock count: {newCount}" );
+
+			return newCount;
 		}
 
 		// ExitIf() will check to see if the objects count and the server 
@@ -295,10 +363,14 @@ namespace ASCOM.DeviceHub
 		{
 			lock ( _lockObject )
 			{
+				Logger.LogMessage( "ExitIf", $"Object count: {ObjectsCount}, Server lock count: {ServerLockCount}" );
+
 				if ( ( ObjectsCount <= 0 ) && ( ServerLockCount <= 0 ) )
 				{
 					if ( StartedByCOM )
 					{
+						Logger.LogMessage( "ExitIf", "Server started by COM so shutting down now that all clients have disconnected." );
+
 						Task.Factory.StartNew( () =>
 						{
 							App.Current.Shutdown();
@@ -312,42 +384,45 @@ namespace ASCOM.DeviceHub
 		{
 			Task discon = new Task( () =>
 			{
-				if ( _scopesInUse == 1 && StartedByCOM )
-				{
-					TelescopeManager.Instance.Disconnect();
-				}
+				// The device manager desides whether to disconnect.
+
+				TelescopeManager.Instance.Disconnect();
 			} );
 
 			discon.Start( Globals.UISyncContext );
 			discon.Wait();
+
+			ForceGarbageCollection();
 		}
 
 		public static void DisconnectDomeIf()
 		{
 			Task discon = new Task( () =>
 			{
-				if ( _domesInUse == 1 && StartedByCOM )
-				{
-					DomeManager.Instance.Disconnect();
-				}
+				// The device manager desides whether to disconnect.
+
+				DomeManager.Instance.Disconnect();
 			} );
 
 			discon.Start( Globals.UISyncContext );
 			discon.Wait();
+
+			ForceGarbageCollection();
 		}
 
 		public static void DisconnectFocuserIf()
 		{
 			Task discon = new Task( () =>
 			{
-				if ( _focusersInUse == 1 && StartedByCOM )
-				{
-					FocuserManager.Instance.Disconnect();
-				}
+				// The device manager desides whether to disconnect.
+
+				FocuserManager.Instance.Disconnect();
 			} );
 
 			discon.Start( Globals.UISyncContext );
 			discon.Wait();
+
+			ForceGarbageCollection();
 		}
 
 		#endregion Server Lock, Object Counting, and AutoQuit on COM startup
@@ -428,85 +503,127 @@ namespace ASCOM.DeviceHub
 
 		private static void StartGarbageCollection( int interval )
 		{
+			string msgId = "StartGarbageCollection";
+
 			// Start up the garbage collection thread.
 
-			GarbageCollection garbageCollector = new GarbageCollection( interval );
+			Logger.LogMessage( msgId, $"Creating garbage collector with interval: {interval} milliseconds" );
+
+			GarbageCollector = new GarbageCollection( interval );
+
+			Logger.LogMessage( msgId, "Starting garbage collector thread" );
 
 			GCTokenSource = new CancellationTokenSource();
-			GCTask = Task.Factory.StartNew( () => garbageCollector.GCWatch( GCTokenSource.Token ),
+			GCTask = Task.Factory.StartNew( () => GarbageCollector.GCWatch( GCTokenSource.Token ),
 											GCTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default );
+			Logger.LogMessage( msgId, "garbage collector thread started OK" );
 		}
 
 		private static void StopGarbageCollection()
 		{
+			string msgId = "StopGarbageCollection";
+
+			Logger.LogMessage( msgId, "Stopping garbage collector thread" );
+
 			GCTokenSource.Cancel();
 			GCTask.Wait();
+
+			Logger.LogMessage( msgId, "Garbage collector thread stopped OK" );
+
 			GCTask = null;
 			GCTokenSource.Dispose();
 			GCTokenSource = null;
+			GarbageCollector = null;
 		}
 
-        #endregion Helper Methods
-
-        #region Dynamic Driver Assembly Loader
-
-        private static void LoadComObjectAssemblies()
+		private static void ForceGarbageCollection()
 		{
-			_comObjectAssys = new List<Assembly>();
-			_comObjectTypes = new List<Type>();
-
-			// Put everything into one folder, the same as the server.
-
-			string rootPath = Assembly.GetEntryAssembly().Location;
-			rootPath = Path.GetDirectoryName( rootPath );
-
-			DirectoryInfo d = new DirectoryInfo( rootPath );
-			FileInfo[] files = d.GetFiles( "*.dll" );
-
-			foreach ( FileInfo file in files )
+			if ( GCTask != null && GarbageCollector != null )
 			{
-				string assemblyPath = file.FullName;
-
-				// First try to load the assembly and get the types for
-				// the class and the class factory. If this doesn't work ????
-
-				try
-				{
-					Assembly assembly = Assembly.LoadFrom( assemblyPath );
-
-					// Get the types in the assembly
-
-					Type[] types = assembly.GetTypes();
-
-					foreach ( Type type in types )
-					{
-						// Check to see if the type has the ServedClassName attribute, only use it if it does.
-
-						object[] attributes = type.GetCustomAttributes( typeof( ServedClassNameAttribute ), false );
-
-						if ( attributes.Length > 0 )
-						{
-							_comObjectTypes.Add( type );
-							_comObjectAssys.Add( assembly );
-						}
-					}
-				}
-				catch ( BadImageFormatException )
-				{
-					// Probably an attempt to load a Win32 DLL (i.e. not a .net assembly)
-					// Just swallow the exception and continue to the next item.
-
-					continue;
-				}
-				catch ( Exception e )
-				{
-					string msg = $"Failed to load served COM class assembly {file.Name} - {e.Message}";
-					throw new Exception( msg, e );
-				}
+				GarbageCollector.ForceGCNow();
 			}
 		}
 
-		#endregion Dynamic Driver Assembly Loader
+		private static string GetAssemblyTitle()
+		{
+			Assembly assembly = Assembly.GetExecutingAssembly();
+			Attribute attribute = Attribute.GetCustomAttribute( assembly, typeof( AssemblyTitleAttribute ) );
+			return ( (AssemblyTitleAttribute)attribute ).Title;
+		}
+
+		private static string GetAssemblyDescription()
+		{
+			Assembly assembly = Assembly.GetExecutingAssembly();
+			Attribute attribute = Attribute.GetCustomAttribute( assembly, typeof( AssemblyDescriptionAttribute ) );
+			return ( (AssemblyDescriptionAttribute)attribute ).Description;
+		}
+
+		#endregion Helper Methods
+
+		#region Driver Classes Finder
+
+		/// <summary>
+		/// Populates the list of ASCOM drivers by searching for driver classes within the local server executable.
+		/// </summary>
+		/// <returns>True if successful, otherwise False</returns>
+		private static bool PopulateListOfAscomDrivers()
+		{
+			string msgId = "PopulateListOfAscomDrivers";
+
+			// Initialize the driver types list.
+
+			_driverTypes = new List<Type>();
+
+			try
+			{
+				// Get the types contained within the local server assembly.
+
+				Assembly so = Assembly.GetExecutingAssembly(); // Get the local server assembly 
+				Type[] types = so.GetTypes(); // Get the types in the assembly
+
+				// Iterate over the types identifying those which are drivers.
+
+				foreach ( Type type in types )
+				{
+					Logger.LogMessage( msgId, $"Found type: {type.Name}" );
+
+					// Check to see if this type has the ServedClassName attribute, which indicates that this is a driver class.
+
+					object[] attrbutes = type.GetCustomAttributes( typeof( ServedClassNameAttribute ), false );
+
+					if ( attrbutes.Length > 0 ) // There is a ServedClassName attribute on this class so it is a driver
+					{
+						Logger.LogMessage( msgId, $"{type.Name} is an ASCOM driver" );
+						_driverTypes.Add( type ); // Add the driver type to the list
+					}
+				}
+
+				Logger.BlankLine();
+
+				// Log discovered drivers.
+
+				Logger.LogMessage( msgId, $"Found {_driverTypes.Count} drivers" );
+
+				foreach ( Type type in _driverTypes )
+				{
+					Logger.LogMessage( msgId, $"Found Driver : {type.Name}" );
+				}
+
+				Logger.BlankLine();
+			}
+			catch ( Exception e )
+			{
+				Logger.LogMessageCrLf( msgId, $"Exception: {e}" );
+				string caption = GetAssemblyTitle();
+				MessageBox.Show( $"Failed to load served COM class assembly from within this local server - {e.Message}", caption, MessageBoxButton.OK, MessageBoxImage.Stop );
+
+				return false;
+			}
+
+			return true;
+		}
+
+		#endregion Driver Classes Finder
 
 		#region COM Registration and Unregistration
 
@@ -533,7 +650,11 @@ namespace ASCOM.DeviceHub
 				WindowsIdentity i = WindowsIdentity.GetCurrent();
 				WindowsPrincipal p = new WindowsPrincipal( i );
 
-				return p.IsInRole( WindowsBuiltInRole.Administrator );
+				bool isAdministrator = p.IsInRole( WindowsBuiltInRole.Administrator );
+
+				Logger.LogMessage( "IsElevated", $"Running as {( isAdministrator ? "Administrator" : "Self" )}" );
+
+				return isAdministrator;
 			}
 		}
 
@@ -541,6 +662,8 @@ namespace ASCOM.DeviceHub
 
 		private static void ElevateSelf( string arg )
 		{
+			string logId = "ElevateSelf";
+
 			ProcessStartInfo si = new ProcessStartInfo
 			{
 				Arguments = arg,
@@ -549,16 +672,21 @@ namespace ASCOM.DeviceHub
 				Verb = "runas"
 			};
 
-			try { Process.Start( si ); }
+			try 
+			{
+				Logger.LogMessage( logId, "Starting elevation process." );
+				Process.Start( si ); 
+			}
 
 			catch ( System.ComponentModel.Win32Exception )
 			{
-				MessageBox.Show( "DeviceHub was not " + ( arg == "/register" ? "registered" : "unregistered" ) +
-					" because you did not allow it.", "DeviceHub", MessageBoxButton.OK, MessageBoxImage.Warning );
+				string msg = $"The ASCOM.DeviceHub drivers were not {( arg == "/register" ? "registered" : "unregistered" )} because you did not allow it.";
+				Logger.LogMessage( logId, msg );
+				MessageBox.Show( msg, "Device Hub", MessageBoxButton.OK, MessageBoxImage.Warning );
 			}
 			catch ( Exception ex )
 			{
-				MessageBox.Show( ex.ToString(), "DeviceHub", MessageBoxButton.OK, MessageBoxImage.Stop );
+				MessageBox.Show( ex.ToString(), "Device Hub", MessageBoxButton.OK, MessageBoxImage.Stop );
 			}
 
 			return;
@@ -591,6 +719,8 @@ namespace ASCOM.DeviceHub
 
 		private static void RegisterObjects( bool rerunningAsElevated = false )
 		{
+			string logId = "RegistgerObjects";
+
 			if ( rerunningAsElevated )
 			{
 				if ( !IsElevated )
@@ -617,27 +747,26 @@ namespace ASCOM.DeviceHub
 
 			// If reached here, we're running elevated
 
-			Assembly assy = Assembly.GetExecutingAssembly();
-			Attribute attr = Attribute.GetCustomAttribute( assy, typeof( AssemblyTitleAttribute ) );
-			string assyTitle = ( (AssemblyTitleAttribute)attr ).Title;
-			attr = Attribute.GetCustomAttribute( assy, typeof( AssemblyDescriptionAttribute ) );
-			string assyDescription = ( (AssemblyDescriptionAttribute)attr ).Description;
+			string assemblyTitle = GetAssemblyTitle();
+			string assemblyDescription = GetAssemblyDescription();
 
 			// Local server's DCOM/AppID information
 
 			try
 			{
+				Logger.LogMessage( logId, "Setting local server's APPID" );
+
 				// HKCR\APPID\appid
 
 				using ( RegistryKey key = Registry.ClassesRoot.CreateSubKey( "APPID\\" + _appId ) )
 				{
-					key.SetValue( null, assyDescription );
+					key.SetValue( null, assemblyDescription );
 					key.SetValue( "AppID", _appId );
 					key.SetValue( "AuthenticationLevel", 1, RegistryValueKind.DWord );
 					key.SetValue( "RunAs", "Interactive User", RegistryValueKind.String ); // Added to ensure that only one copy of the local server ...
 				}
 
-					// HKCR\APPID\exename.ext
+				// HKCR\APPID\exename.ext
 
 				using ( RegistryKey key = Registry.ClassesRoot.CreateSubKey( $"APPID\\{GetExecutableFileName()}" ) )
 				{
@@ -646,72 +775,72 @@ namespace ASCOM.DeviceHub
 			}
 			catch ( Exception ex )
 			{
+				Logger.LogMessageCrLf( logId, $"Setting AppID exception: {ex}" );
+
 				MessageBox.Show( "Error while registering the server:\n" + ex.ToString(),
 						"DeviceHub", MessageBoxButton.OK, MessageBoxImage.Stop );
 
 				return;
 			}
 
-			// For each of the driver assemblies
+			// For each of the driver types
 
-			foreach ( Type type in _comObjectTypes )
+			foreach ( Type driverType in _driverTypes )
 			{
+				Logger.LogMessage( logId, $"Creating COM registration for {driverType.Name}" );
+
 				bool bFail = false;
 
 				try
 				{
 					// HKCR\CLSID\clsid
 
-					string clsid = Marshal.GenerateGuidForType( type ).ToString( "B" );
-					string progid = Marshal.GenerateProgIdForType( type );
+					string clsid = Marshal.GenerateGuidForType( driverType ).ToString( "B" );
+					string progid = Marshal.GenerateProgIdForType( driverType );
+					string deviceType = driverType.Name;    // Generate device type from the class name.
+					Logger.LogMessage( logId, $"Assembly title: {assemblyTitle}, Assembly description: {assemblyDescription}, CLSID: {clsid}, ProgID: {progid}, Device type: {deviceType}" );
 
-					//PWGS Generate device type from the Class name
-
-					string deviceType = type.Name;
-
-					using ( RegistryKey key = Registry.ClassesRoot.CreateSubKey( $"CLSID\\{clsid}" ) )
+					using ( RegistryKey clsIdKey = Registry.ClassesRoot.CreateSubKey( $"CLSID\\{clsid}" ) )
 					{
-						key.SetValue( null, progid );                     // Could be assyTitle/Desc??, but .NET components show ProgId here
-						key.SetValue( "AppId", _appId );
+						clsIdKey.SetValue( null, progid );                     // Could be assyTitle/Desc??, but .NET components show ProgId here
+						clsIdKey.SetValue( "AppId", _appId );
 
-						using ( RegistryKey key2 = key.CreateSubKey( "Implemented Categories" ) )
+						using ( RegistryKey key2 = clsIdKey.CreateSubKey( "Implemented Categories" ) )
 						{
 							key2.CreateSubKey( "{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" );
 						}
 
-						using ( RegistryKey key2 = key.CreateSubKey( "ProgId" ) )
+						using ( RegistryKey progIdKey = clsIdKey.CreateSubKey( "ProgId" ) )
 						{
-							key2.SetValue( null, progid );
+							progIdKey.SetValue( null, progid );
 						}
 
-						key.CreateSubKey( "Programmable" );
+						clsIdKey.CreateSubKey( "Programmable" );
 
-						using ( RegistryKey key2 = key.CreateSubKey( "LocalServer32" ) )
+						using ( RegistryKey localServer32Key = clsIdKey.CreateSubKey( "LocalServer32" ) )
 						{
 							string path = GetExecutablePath();
-							key2.SetValue( null, path );
+							localServer32Key.SetValue( null, path );
 						}
 					}
 
 					// HKCR\CLSID\progid
 
-					using ( RegistryKey key = Registry.ClassesRoot.CreateSubKey( progid ) )
+					using ( RegistryKey progIdKey = Registry.ClassesRoot.CreateSubKey( progid ) )
 					{
-						key.SetValue( null, assyTitle );
-						using ( RegistryKey key2 = key.CreateSubKey( "CLSID" ) )
+						progIdKey.SetValue( null, assemblyTitle );
+
+						using ( RegistryKey clsIdKey = progIdKey.CreateSubKey( "CLSID" ) )
 						{
-							key2.SetValue( null, clsid );
+							clsIdKey.SetValue( null, clsid );
 						}
 					}
 
-					// ASCOM 
-
-					assy = type.Assembly;
-
 					// Pull the display name from the ServedClassName attribute.
 
-					attr = Attribute.GetCustomAttribute( type, typeof( ServedClassNameAttribute ) ); //PWGS Changed to search type for attribute rather than assembly
-					string chooserName = ( (ServedClassNameAttribute)attr ).DisplayName ?? "MultiServer";
+					Attribute assemblyAttribute = Attribute.GetCustomAttribute( driverType, typeof( ServedClassNameAttribute ) );
+					string chooserName = ( (ServedClassNameAttribute)assemblyAttribute ).DisplayName ?? "MultiServer";
+					Logger.LogMessage( logId, $"Registering {chooserName} ({driverType.Name}) in Profile" );
 
 					using ( var P = new ASCOM.Utilities.Profile() )
 					{
@@ -721,8 +850,10 @@ namespace ASCOM.DeviceHub
 				}
 				catch ( Exception ex )
 				{
-					MessageBox.Show( "Error while registering the server:\n" + ex.ToString(),
-							"DeviceHub", MessageBoxButton.OK, MessageBoxImage.Stop );
+					Logger.LogMessageCrLf( logId, $"Driver registration exception: {ex}" );
+					string caption = GetAssemblyTitle();
+					MessageBox.Show( "Error while registering the server:\n" + ex.ToString(), caption, MessageBoxButton.OK, MessageBoxImage.Stop );
+
 					bFail = true;
 				}
 				finally
@@ -750,8 +881,10 @@ namespace ASCOM.DeviceHub
 
 		// Remove all traces of this from the registry. 
 
-		private static void UnregisterObjects( bool keepProfile, bool rerunningAsElevated = false )
+		private static void UnregisterObjects( bool keepProfile, List<Type> _driverTypes, bool rerunningAsElevated = false )
 		{
+			string logId = "UnregisterObjects";
+
 			if ( rerunningAsElevated )
 			{
 				if ( !IsElevated )
@@ -782,20 +915,18 @@ namespace ASCOM.DeviceHub
 
 			// For each of the driver assemblies
 
-			foreach ( Type type in _comObjectTypes )
+			foreach ( Type driverType in _driverTypes )
 			{
-				string clsid = Marshal.GenerateGuidForType( type ).ToString( "B" );
-				string progid = Marshal.GenerateProgIdForType( type );
-				string deviceType = type.Name;
+				string clsid = Marshal.GenerateGuidForType( driverType ).ToString( "B" );
+				string progid = Marshal.GenerateProgIdForType( driverType );
+				string deviceType = driverType.Name;
 
-				// Best efforts
-
-				// HKCR\progid
+				// Remove ProgID entries
 
 				Registry.ClassesRoot.DeleteSubKey( $"{progid}\\CLSID", false );
 				Registry.ClassesRoot.DeleteSubKey( progid, false );
 
-				// HKCR\CLSID\clsid
+				// Remove ClsID entries
 
 				Registry.ClassesRoot.DeleteSubKey( $"CLSID\\{clsid}\\Implemented Categories\\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}", false );
 				Registry.ClassesRoot.DeleteSubKey( $"CLSID\\{clsid}\\Implemented Categories", false );
@@ -808,10 +939,10 @@ namespace ASCOM.DeviceHub
 				{
 					// Delete any profile settings for the device.
 
+					Logger.LogMessage( logId, $"Deleting ASCOM Profile registration for {driverType.Name} ({progid})" );
+
 					try
 					{
-						// ASCOM
-
 						using ( var P = new ASCOM.Utilities.Profile() )
 						{
 							P.DeviceType = deviceType;
@@ -833,30 +964,52 @@ namespace ASCOM.DeviceHub
 
 		private static bool RegisterClassFactories()
 		{
+			string logId = "RegisterClassFactories";
+
+			Logger.LogMessage( logId, "Registering class factories" );
+
 			_classFactories = new List<ClassFactory>();
 
-			foreach ( Type type in _comObjectTypes )
+			foreach ( Type driverType in _driverTypes )
 			{
-				ClassFactory factory = new ClassFactory( type );                  // Use default context & flags
+				Logger.LogMessage( logId, $"Creating class factory for {driverType.Name}" );
+
+				ClassFactory factory = new ClassFactory( driverType ); // Use default context & flags
 				_classFactories.Add( factory );
+
+				Logger.LogMessage( logId, $"Registering class factory for: {driverType.Name}" );
 
 				if ( !factory.RegisterClassObject() )
 				{
-					MessageBox.Show( "Failed to register class factory for " + type.Name,
-						"DeviceHub", MessageBoxButton.OK, MessageBoxImage.Stop );
+					string msg = $"Failed to register class factory for {driverType.Name}";
+					Logger.LogMessage( logId, msg );
+					string caption = GetAssemblyTitle();
+					MessageBox.Show( msg, caption, MessageBoxButton.OK, MessageBoxImage.Stop );
 
 					return false;
 				}
+
+				Logger.LogMessage( logId, $"Registered class factory OK for: {driverType.Name}" );
 			}
 
-			ClassFactory.ResumeClassObjects();                                  // Served objects now go live
+			Logger.LogMessage( logId, "Making class factories live" );
+
+			ClassFactory.ResumeClassObjects(); // Served objects now go live
+
+			Logger.LogMessage( logId, "Class factories live OK" );
 
 			return true;
 		}
 
 		private static void RevokeClassFactories()
 		{
-			ClassFactory.SuspendClassObjects();                                 // Prevent race conditions
+			string logId = "RevokeClassFactories";
+
+			Logger.LogMessage( logId, "Suspending class factories." );
+
+			ClassFactory.SuspendClassObjects();  // Prevent race conditions
+
+			Logger.LogMessage( logId, "Class factories suspended OK." );
 
 			foreach ( ClassFactory factory in _classFactories )
 			{
@@ -874,6 +1027,7 @@ namespace ASCOM.DeviceHub
 
 		private static bool ProcessArguments( string[] args )
 		{
+			string msgId = "ProcessArguments";
 			bool retval = true;
 
 			if ( args.Length > 0 )
@@ -884,6 +1038,7 @@ namespace ASCOM.DeviceHub
 				switch ( arg )
 				{
 					case "-embedding":
+						Logger.LogMessage( msgId, $"Started by COM: {args[0]}" );
 						StartedByCOM = true;                                        // Indicate COM started us
 
 						break;
@@ -892,6 +1047,7 @@ namespace ASCOM.DeviceHub
 					case @"/register":
 					case "-regserver":                                          // Emulate VB6
 					case @"/regserver":
+						Logger.LogMessage( msgId, $"Registering drivers: {args[0]}" );
 						RegisterObjects();                                      // Register each served object
 						retval = false;
 
@@ -905,13 +1061,15 @@ namespace ASCOM.DeviceHub
 					case @"/unregister_full":
 					case "-unregserver_full":                                        // Emulate VB6
 					case @"/unregserver_full":
-						UnregisterObjects( keepProfile );                                    //Unregister each served object
+						Logger.LogMessage( msgId, $"Unregistering drivers: {args[0]}" );
+						UnregisterObjects( keepProfile, _driverTypes );                                    //Unregister each served object
 						retval = false;
 
 						break;
 
 					case "-regelevated":
 					case @"/regelevated":
+						Logger.LogMessage( msgId, $"Registering drivers while elevated: {args[0]}" );
 						RegisterObjects( true );
 						retval = false;
 
@@ -921,14 +1079,18 @@ namespace ASCOM.DeviceHub
 					case @"/unregelevated":
 					case "-unregelevated_full":
 					case @"/unregelevated_full":
-						UnregisterObjects( keepProfile, true );
+						Logger.LogMessage( msgId, $"Unregistering drivers while elevated: {args[0]}" );
+						UnregisterObjects( keepProfile, _driverTypes, true );
 						retval = false;
 
 						break;
 
 					default:
-						MessageBox.Show( "Unknown argument: " + args[0] + "\nValid are : -register, -unregister, unregister_full, and -embedding",
-							"DeviceHub", MessageBoxButton.OK, MessageBoxImage.Exclamation );
+						string msg = $"Unknown argument: {args[0]}";
+						Logger.LogMessage( msgId, msg );
+						msg += "\nValid are : -register, -unregister, unregister_full, and -embedding";
+						string caption = GetAssemblyTitle();
+						MessageBox.Show( msg, caption, MessageBoxButton.OK, MessageBoxImage.Exclamation );
 
 						break;
 				}

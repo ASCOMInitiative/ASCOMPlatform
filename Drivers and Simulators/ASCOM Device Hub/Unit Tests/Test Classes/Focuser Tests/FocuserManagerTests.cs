@@ -38,7 +38,7 @@ namespace Unit_Tests.Focuser
 		[TestCleanup]
 		public void TestCleanup()
 		{
-			_mgr.Disconnect();
+			_mgr.Disconnect( true );
 			Assert.IsFalse( _svc.Connected );
 
 			_mgr.Dispose();
@@ -47,7 +47,7 @@ namespace Unit_Tests.Focuser
 		[TestMethod]
 		public void Connect()
 		{
-			bool retval = _mgr.Connect( FocuserID );
+			bool retval = _mgr.Connect( FocuserID, true );
 			Assert.AreEqual( true, retval );
 
 			Thread.Sleep( _startupDelayMs );

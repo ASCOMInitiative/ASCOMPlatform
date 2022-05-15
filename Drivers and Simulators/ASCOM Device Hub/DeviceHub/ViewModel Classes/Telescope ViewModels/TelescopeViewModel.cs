@@ -28,6 +28,7 @@ namespace ASCOM.DeviceHub
 			Messenger.Default.Register<ObjectCountMessage>( this, ( action ) => UpdateObjectsCount( action ) );
 			Messenger.Default.Register<TelescopeIDChangedMessage>( this, ( action ) => TelescopeIDChanged( action ) );
 			Messenger.Default.Register<SlewInProgressMessage>( this, ( action ) => UpdateSlewInProgress( action ) );
+			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => DeviceDisconnected( action ) );
 			RegisterStatusUpdateMessage( true );
 		}
 
@@ -269,13 +270,15 @@ namespace ASCOM.DeviceHub
 
         private void DisconnectTelescope()
         {
+			// This is only called from the U/I.
+
 			IsConnected = false;
 			IsSlewInProgress = false;
 
 			try
 			{
 				SignalWait( true );
-				TelescopeManager.Disconnect();
+				TelescopeManager.Disconnect( true );
 			}
 			finally
 			{
@@ -302,6 +305,16 @@ namespace ASCOM.DeviceHub
 			}, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
 		}
 
+		private void DeviceDisconnected( DeviceDisconnectedMessage action )
+		{
+			if ( action.DeviceType == DeviceTypeEnum.Telescope )
+			{
+				Task.Factory.StartNew( () =>
+				{
+					IsConnected = false;
+				}, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
+			}
+		}
 
 		#endregion Helper Methods
 

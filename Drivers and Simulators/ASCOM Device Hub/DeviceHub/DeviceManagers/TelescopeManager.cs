@@ -112,7 +112,7 @@ namespace ASCOM.DeviceHub
 		#region Public Properties
 
 		public bool IsConnected { get; private set; }
-
+		public bool IsInteractivelyConnected { get; private set; }
 		public string ConnectError { get; protected set; }
 		public Exception ConnectException { get; protected set; }
 		public TelescopeCapabilities Capabilities { get; private set; }
@@ -140,10 +140,12 @@ namespace ASCOM.DeviceHub
 
 		public bool Connect()
 		{
-			return Connect( TelescopeID );
+			// This is only called by the telescope driver.
+
+			return Connect( TelescopeID, false );
 		}
 
-		public bool Connect( string scopeID )
+		public bool Connect( string scopeID, bool interactiveConnect = true )
 		{
 			ConnectError = "";
 			ConnectException = null;
@@ -156,6 +158,11 @@ namespace ASCOM.DeviceHub
 				{
 					InitializeTelescopeService( scopeID );
 					SetTelescopeID( scopeID );
+
+					if ( interactiveConnect )
+					{
+						IsInteractivelyConnected = interactiveConnect;
+					}
 				}
 				catch ( Exception xcp )
 				{
@@ -237,7 +244,7 @@ namespace ASCOM.DeviceHub
 			return retval;
 		}
 
-		public void Disconnect()
+		public void Disconnect( bool interactiveDisconnect = false )
 		{
 			if ( !DeviceCreated )
 			{
@@ -246,21 +253,37 @@ namespace ASCOM.DeviceHub
 
 			if ( IsConnected )
 			{
-				StopDevicePolling();
-
 				try
 				{
-					Connected = false;
+					if ( ( Server.ScopesInUse == 1 && !IsInteractivelyConnected ) ||
+						 ( Server.ScopesInUse == 0 && IsInteractivelyConnected && interactiveDisconnect ) )
+					{
+						// If we are not interactively connected and the last scope is disconnecting then
+						//   stop polling and set Connected to false.
+						// If there are no connected telescope clients and we are interactively connected and this is an interactive
+						//    disconnect then stop polling and set Connected to false
+
+						if ( interactiveDisconnect )
+						{
+							IsInteractivelyConnected = false;
+						}
+ 
+						StopDevicePolling();
+						Connected = false;
+					}
 				}
 				catch ( Exception )
 				{ }
 				finally
 				{
-					IsConnected = false;
-					Messenger.Default.Send( new DeviceDisconnectedMessage( DeviceTypeEnum.Telescope ) );
-					ReleaseTelescopeService();
-					Globals.LatestRawTelescopeStatus = null;
-					_jogDirections = null;
+					if ( !IsPolling )
+					{
+						IsConnected = false;
+						Messenger.Default.Send( new DeviceDisconnectedMessage( DeviceTypeEnum.Telescope ) );
+						ReleaseTelescopeService();
+						Globals.LatestRawTelescopeStatus = null;
+						_jogDirections = null;
+					}
 				}
 			}
 		}
@@ -802,6 +825,7 @@ namespace ASCOM.DeviceHub
 				if ( index == 0 )
 				{
 					taskCancelled = true;
+					break;
 				}
 				else if ( index == 1 )
 				{

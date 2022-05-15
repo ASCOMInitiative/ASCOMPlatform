@@ -4,7 +4,7 @@
 ;
 
 #define MyAppName "ASCOM.DeviceHub"
-#define MyAppVersion "6.6.0.4"
+#define MyAppVersion "6.6.0.7"
 #define MyDestSubdirName "DeviceHub"
 ; #define MyPlatformRoot "D:\Github Repos\ASCOMPlatform\"
 #define MyPlatformRoot "D:\My Projects\Visual Studio 2022\Ascom\"
@@ -44,17 +44,11 @@ Name: "{cf}\ASCOM\{#MyDestSubdirName}"
 [Files]
 Source: "ASCOM.DeviceHub.exe";            DestDir: "{app}"; Flags: ignoreversion
 Source: "ASCOM.DeviceHub.exe.config";     DestDir: "{app}"; Flags: ignoreversion
-Source: "ASCOM.DeviceHub.Telescope.dll";  DestDir: "{app}"; Flags: ignoreversion
-Source: "ASCOM.DeviceHub.Dome.dll";       DestDir: "{app}"; Flags: ignoreversion
-Source: "ASCOM.DeviceHub.Focuser.dll";    DestDir: "{app}"; Flags: ignoreversion
+Source: "ASCOM.DeviceHub.pdb";            DestDir: "{app}"; Flags: ignoreversion
 Source: "MvvmMessenger.dll";              DestDir: "{app}"; Flags: ignoreversion
+Source: "MvvmMessenger.pdb";              DestDir: "{app}"; Flags: ignoreversion
 Source: "PresentationFramework.Aero.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyPlatformRoot}ASCOMDeviceHub\Documents\ASCOM Device Hub User and Technical Information.pdf"; DestDir: "{app}";
-Source: "ASCOM.DeviceHub.pdb";            DestDir: "{app}"; Flags: ignoreversion
-Source: "MvvmMessenger.pdb";              DestDir: "{app}"; Flags: ignoreversion
-Source: "ASCOM.DeviceHub.Telescope.pdb";  DestDir: "{app}"; Flags: ignoreversion
-Source: "ASCOM.DeviceHub.Dome.pdb";       DestDir: "{app}"; Flags: ignoreversion
-Source: "ASCOM.DeviceHub.Focuser.pdb";    DestDir: "{app}"; Flags: ignoreversion
 
 [InstallDelete]
 Type: files; Name: "{app}\*.*"

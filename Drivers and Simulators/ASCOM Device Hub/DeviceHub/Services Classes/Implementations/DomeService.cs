@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections;
+
+using ASCOM;
 using ASCOM.DeviceInterface;
-using ASCOM.DriverAccess;
 
 namespace ASCOM.DeviceHub
 {
 	public class DomeService : IDomeService
 	{
 		private string DeviceID { get; set; }
-		private Dome Dome { get; set; }
+		private ASCOM.DriverAccess.Dome Dome { get; set; }
 
 		public bool DeviceCreated => Initialized && Dome != null;
 		public bool DeviceAvailable => DeviceCreated && Connected;
@@ -32,7 +33,7 @@ namespace ASCOM.DeviceHub
 
 				try
 				{
-					Dome = new Dome( DeviceID );
+					Dome = new ASCOM.DriverAccess.Dome( DeviceID );
 					Initialized = true;
 				}
 				catch ( Exception xcp )

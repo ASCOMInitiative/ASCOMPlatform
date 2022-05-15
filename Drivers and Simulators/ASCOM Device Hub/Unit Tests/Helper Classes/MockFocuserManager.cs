@@ -42,7 +42,12 @@ namespace Unit_Tests
 			set => MockIsConnected = value;
 		}
 
-		public bool Connect( string focuserID )
+		public bool Connect()
+		{
+			return Connect( MockFocuserID, false );
+		}
+
+		public bool Connect( string focuserID, bool interactiveConnect = true )
 		{
 			MockFocuserID = focuserID;
 			IsConnected = true;
@@ -50,7 +55,7 @@ namespace Unit_Tests
 			return IsConnected;
 		}
 
-		public void Disconnect()
+		public void Disconnect( bool interactiveDisconnect = false )
 		{
 			IsConnected = false;
 		}

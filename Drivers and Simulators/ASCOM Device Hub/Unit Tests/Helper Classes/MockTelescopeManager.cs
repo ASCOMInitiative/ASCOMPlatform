@@ -147,7 +147,13 @@ namespace Unit_Tests
 		{
 			throw new NotImplementedException();
 		}
-		public bool Connect( string scopeID )
+
+		public bool Connect()
+		{
+			return Connect( MockTelescopeID, false );
+		}
+
+		public bool Connect( string scopeID, bool interactiveConnect = true )
 		{
 			MockTelescopeID = scopeID;
 			IsConnected = true;
@@ -155,7 +161,7 @@ namespace Unit_Tests
 			return IsConnected;
 		}
 
-		public void Disconnect()
+		public void Disconnect( bool interactiveDisconnect = false )
 		{
 			IsConnected = false;
 		}

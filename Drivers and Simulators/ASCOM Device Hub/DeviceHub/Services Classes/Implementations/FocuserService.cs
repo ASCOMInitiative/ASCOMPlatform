@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections;
-using ASCOM.DriverAccess;
+
+using ASCOM;
 
 namespace ASCOM.DeviceHub
 {
 	public class FocuserService : IFocuserService
 	{
 		private string DeviceID { get; set; }
-		private Focuser Focuser { get; set; }
+		private ASCOM.DriverAccess.Focuser Focuser { get; set; }
 		public bool DeviceCreated => Initialized && Focuser != null;
 		public bool DeviceAvailable => DeviceCreated && Connected;
 		public bool Initialized { get; private set; }
@@ -30,7 +31,7 @@ namespace ASCOM.DeviceHub
 
 				try
 				{
-					Focuser = new Focuser( DeviceID );
+					Focuser = new ASCOM.DriverAccess.Focuser( DeviceID );
 					Initialized = true;
 				}
 				catch ( Exception xcp )

@@ -98,7 +98,7 @@ namespace ASCOM.DeviceHub
 		#region Public Properties
 
 		public bool IsConnected { get; private set; }
-
+		public bool IsInteractivelyConnected { get; private set; }
 		public string ConnectError { get; protected set; }
 		public Exception ConnectException { get; protected set; }
 		public ParkingStateEnum ParkingState { get; private set; }
@@ -149,10 +149,12 @@ namespace ASCOM.DeviceHub
 
 		public bool Connect()
 		{
-			return Connect( DomeID );
+			// This is only called by the dome driver.
+
+			return Connect( DomeID, false );
 		}
 
-		public bool Connect( string domeID )
+		public bool Connect( string domeID, bool interactiveConnect = true )
 		{
 			ConnectError = "";
 			ConnectException = null;
@@ -165,6 +167,11 @@ namespace ASCOM.DeviceHub
 				{
 					InitializeDomeService( domeID );
 					SetDomeID( domeID );
+
+					if ( interactiveConnect)
+					{
+						IsInteractivelyConnected = interactiveConnect;
+					}
 				}
 				catch ( Exception xcp )
 				{
@@ -245,7 +252,7 @@ namespace ASCOM.DeviceHub
 			return retval;
 		}
 
-		public void Disconnect()
+		public void Disconnect( bool interactiveDisconnect = false )
 		{
 			if ( !DeviceCreated )
 			{
@@ -254,21 +261,32 @@ namespace ASCOM.DeviceHub
 
 			if ( IsConnected )
 			{
-				StopDevicePolling();
-
 				try
 				{
-					Connected = false;
+					if ( ( Server.DomesInUse == 1 && !IsInteractivelyConnected ) ||
+						 ( Server.DomesInUse == 0 && IsInteractivelyConnected && interactiveDisconnect ) )
+					{
+						if ( interactiveDisconnect)
+						{
+							IsInteractivelyConnected = false;
+						}
+
+						StopDevicePolling();
+						Connected = false;
+					}
 				}
 				catch ( Exception )
 				{ }
 				finally
 				{
-					IsConnected = false;
-					Messenger.Default.Send( new DomeSlavedChangedMessage( false ) );
-					Messenger.Default.Send( new DeviceDisconnectedMessage( DeviceTypeEnum.Dome ) );
-					ReleaseDomeService();
-					Globals.LatestRawDomeStatus = null;
+					if ( !IsPolling )
+					{
+						IsConnected = false;
+						Messenger.Default.Send( new DomeSlavedChangedMessage( false ) );
+						Messenger.Default.Send( new DeviceDisconnectedMessage( DeviceTypeEnum.Dome ) );
+						ReleaseDomeService();
+						Globals.LatestRawDomeStatus = null;
+					}
 				}
 			}
 		}

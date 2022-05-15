@@ -164,14 +164,11 @@ namespace ASCOM.DeviceHub
 				SetupVm = null;
 			}
 
-			if ( ActivityLogVm != null && ActivityLogVm.IsActive )
+			if ( ActivityLogVm != null )
 			{
-				ActivityLogVm.CloseLog();
-
-				if ( ActivityLogVm != null )
+				if ( ActivityLogVm.IsActive )
 				{
-					ActivityLogVm.Dispose();
-					ActivityLogVm = null;
+					ActivityLogVm.CloseLog();
 				}
 			}
 		}

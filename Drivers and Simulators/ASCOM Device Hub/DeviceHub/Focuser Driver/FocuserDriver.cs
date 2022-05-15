@@ -44,6 +44,7 @@ namespace ASCOM.DeviceHub
 	/// <summary>
 	/// ASCOM Focuser Driver for DeviceHub.
 	/// </summary>
+	[ComVisible(true)]
 	[Guid( "5eb66c80-1658-4dde-8931-4d5772fa2311" )]
 	[ProgId( "ASCOM.DeviceHub.Focuser" )]
 	[ServedClassName( "Device Hub Focuser" )]
@@ -103,7 +104,7 @@ namespace ASCOM.DeviceHub
 		/// </summary>
 		public void SetupDialog()
 		{
-			if ( Server.FocusersInUse > 0 || FocuserManager.Instance.IsConnected )
+			if ( Server.FocusersInUse > 1 || FocuserManager.Instance.IsConnected )
 			{
 				System.Windows.MessageBox.Show( "Unable to change Focuser Properties at this time." );
 

@@ -112,6 +112,11 @@ namespace ASCOM.DeviceHub
 			// This is a registered message handler. It could be called from a worker thread
 			// and we need to be sure that the work is done on the U/I thread.
 
+			if ( Capabilities == null )
+			{
+				return;
+			}
+
 			Task.Factory.StartNew( () =>
 			{
 				Status = action.Status;

@@ -48,6 +48,7 @@ namespace ASCOM.DeviceHub
 	/// <summary>
 	/// ASCOM Telescope Driver for DeviceHub.
 	/// </summary>
+	[ComVisible(true)]
 	[Guid( "ad3ff473-56b5-4e04-af93-185d9cb42395" )]
 	[ProgId( "ASCOM.DeviceHub.Telescope" )]
 	[ServedClassName( "Device Hub Telescope" )]
