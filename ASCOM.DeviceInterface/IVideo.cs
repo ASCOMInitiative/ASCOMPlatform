@@ -307,10 +307,10 @@ namespace ASCOM.DeviceInterface
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
 		/// <remarks><p style="color:red"><b>Must be implemented</b></p>
 		/// <para>This method must return an empty <see cref="ArrayList" /> if no actions are supported. Do not throw a <see cref="ASCOM.PropertyNotImplementedException" />.</para>
-		/// <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. Returned action names may be in mixed case to
-		/// enhance presentation but the <see cref="Action" /> method is case insensitive.</para>
-		/// <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET, <see cref="ArrayList" /> is the correct
-		/// implementation to use because the .NET Generic methods are not compatible with COM.</para>
+		/// <para>SupportedActions is a "discovery" mechanism that enables clients to know which Actions a device supports without having to exercise the Actions themselves. This mechanism is necessary because there could be
+		/// people / equipment safety issues if actions are called unexpectedly or out of a defined process sequence.
+		/// It follows from this that SupportedActions must return names that match the spelling of Action names exactly, without additional descriptive text. However, returned names may use any casing
+		/// because the <see cref="Action" /> ActionName parameter is case insensitive.</para>
 		/// </remarks>
 		ArrayList SupportedActions { get; }
 
