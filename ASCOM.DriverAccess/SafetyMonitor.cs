@@ -34,7 +34,6 @@ namespace ASCOM.DriverAccess
 		/// <summary>
 		/// Brings up the ASCOM Chooser Dialogue to choose a SafetyMonitor
 		/// </summary>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <param name="safetyMonitorId">SafetyMonitor Prog ID for default or null for None</param>
 		/// <returns>Prog ID for chosen SafetyMonitor or null for none</returns>
 		public static string Choose(string safetyMonitorId)

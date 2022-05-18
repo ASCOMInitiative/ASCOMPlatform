@@ -37,7 +37,6 @@ namespace ASCOM.DriverAccess
 		/// </summary>
 		/// <param name="rotatorId">Rotator ProgID for default or null for None</param>
 		/// <returns>ProgID for chosen Rotator or null for none</returns>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		public static string Choose(string rotatorId)
         {
             using (Chooser chooser = new Chooser())
