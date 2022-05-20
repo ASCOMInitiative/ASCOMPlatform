@@ -243,8 +243,8 @@ namespace ASCOM.DeviceInterface
 		/// The current connection status can also be read back through this property.
 		/// An exception will be raised if the link fails to change state for any reason.
 		/// <para><b>Note</b></para>
-		/// <para>The FocuserV1 interface was the only interface to name its <i>"Connect"</i> method "Link" all others named
-		/// their <i>"Connect"</i> method as "Connected". All interfaces including Focuser now have a <see cref="Connected"></see> method and this is
+		/// <para>The FocuserV1 interface was the only interface to name its <i>"Connection"</i> p[roperty "Link" all others named
+		/// their <i>"Connection"</i> property as "Connected". All interfaces including Focuser now have a <see cref="Connected"></see> method and this is
 		/// the recommended method to use to <i>"Connect"</i> to Focusers exposing the V2 and later interfaces.</para>
 		/// <para>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.</para>
 		/// </remarks>
