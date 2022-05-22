@@ -1430,8 +1430,8 @@ namespace ASCOM.DeviceHub
 			{
 				new JogDirection { Name = "N", Description = "North", MoveDirection = MoveDirections.North, Axis = TelescopeAxes.axisSecondary, RateSign = 1.0, GuideDirection = GuideDirections.guideNorth },
 				new JogDirection { Name = "S", Description = "South", MoveDirection = MoveDirections.South, Axis = TelescopeAxes.axisSecondary, RateSign = -1.0, GuideDirection = GuideDirections.guideSouth },
-				new JogDirection { Name = "W", Description = "West", MoveDirection = MoveDirections.West, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0, GuideDirection = GuideDirections.guideWest },
-				new JogDirection { Name = "E", Description = "East", MoveDirection = MoveDirections.East, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0, GuideDirection = GuideDirections.guideEast }
+				new JogDirection { Name = "W", Description = "West", MoveDirection = MoveDirections.West, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0, GuideDirection = GuideDirections.guideWest },
+				new JogDirection { Name = "E", Description = "East", MoveDirection = MoveDirections.East, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0, GuideDirection = GuideDirections.guideEast }
 			};
 
 			try
@@ -1453,8 +1453,8 @@ namespace ASCOM.DeviceHub
 
 						directions.Add( new JogDirection { Name = "S", Description = "South", MoveDirection = MoveDirections.South, Axis = TelescopeAxes.axisSecondary, RateSign = -1.0, GuideDirection = GuideDirections.guideSouth } );
 						directions.Add( new JogDirection { Name = "N", Description = "North", MoveDirection = MoveDirections.North, Axis = TelescopeAxes.axisSecondary, RateSign = 1.0, GuideDirection = GuideDirections.guideNorth } );
-						directions.Add( new JogDirection { Name = "W", Description = "West", MoveDirection = MoveDirections.West, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0, GuideDirection = GuideDirections.guideWest } );
-						directions.Add( new JogDirection { Name = "E", Description = "East", MoveDirection = MoveDirections.East, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0, GuideDirection = GuideDirections.guideEast } );
+						directions.Add( new JogDirection { Name = "W", Description = "West", MoveDirection = MoveDirections.West, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0, GuideDirection = GuideDirections.guideWest } );
+						directions.Add( new JogDirection { Name = "E", Description = "East", MoveDirection = MoveDirections.East, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0, GuideDirection = GuideDirections.guideEast } );
 					}
 				}
 			}

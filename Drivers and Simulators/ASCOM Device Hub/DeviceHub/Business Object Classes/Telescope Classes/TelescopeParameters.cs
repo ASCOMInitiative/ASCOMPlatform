@@ -26,6 +26,8 @@ namespace ASCOM.DeviceHub
 			DriverVersion = mgr.DriverVersion;
 			EquatorialSystem = mgr.EquatorialSystem;
 			FocalLength = mgr.FocalLength;
+			GuideRateDeclination = mgr.GuideRateDeclination;
+			GuideRateRightAscension = mgr.GuideRateRightAscension;
 			InterfaceVersion = mgr.InterfaceVersion;
 			SiteElevation = mgr.SiteElevation;
 			SiteLatitude = mgr.SiteLatitude;
@@ -89,6 +91,8 @@ namespace ASCOM.DeviceHub
             this._driverVersion = other.DriverVersion;
 			this._equatorialSystem = other.EquatorialSystem;
 			this._focalLength = other.FocalLength;
+			this._guideRateDeclination = other.GuideRateDeclination;
+			this._guideRateRightAscension =	other.GuideRateRightAscension;
 			this._interfaceVersion = other.InterfaceVersion;
 			this._siteElevation = other.SiteElevation;
 			this._siteLatitude = other.SiteLatitude;
@@ -255,6 +259,39 @@ namespace ASCOM.DeviceHub
 				{
 					GetExceptionFromManager();
 					_focalLength = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		private double _guideRateDeclination;
+
+		public double GuideRateDeclination
+		{
+			get { return _guideRateDeclination; }
+			set
+			{
+				if ( value != _guideRateDeclination )
+				{
+					GetExceptionFromManager();
+					_guideRateDeclination = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		private double _guideRateRightAscension;
+
+		public double GuideRateRightAscension
+
+		{
+			get { return _guideRateRightAscension; }
+			set
+			{
+				if ( value != _guideRateRightAscension )
+				{
+					GetExceptionFromManager();
+					_guideRateRightAscension = value;
 					OnPropertyChanged();
 				}
 			}
