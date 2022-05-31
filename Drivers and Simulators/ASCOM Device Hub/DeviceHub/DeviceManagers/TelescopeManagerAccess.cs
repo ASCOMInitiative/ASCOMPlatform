@@ -95,7 +95,7 @@ namespace ASCOM.DeviceHub
 
 					if ( except != null )
 					{
-						LogActivityLine( msgType, except.ToString() );
+						LogActivityLine( msgType, $"{except}" );
 					}
 				}
 
@@ -464,27 +464,75 @@ namespace ASCOM.DeviceHub
 
 		public string Action( string actionName, string actionParameters )
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "Action ({0}):", actionName );
-			CheckDevice();
-			string retval = Service.Action( actionName, actionParameters );
-			LogActivityEnd( ActivityMessageTypes.Commands, "returned {0}", retval );
+			string retval = "";
+
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				retval = Service.Action( actionName, actionParameters );
+				msgEnd = $" returned {retval}";
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = "{Failed}. Details follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"Action ({actionName}) {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+			}
 
 			return retval;
 		}
 
 		public void AbortSlew()
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "AbortSlew: " );
-			CheckDevice();
-			Service.AbortSlew();
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			string msgEnd = "";
+			Exception except = null;
+
+			try
+			{
+				CheckDevice();
+				Service.AbortSlew();
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, "AbortSlew - {0}", msgEnd );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );	
+				}
+
+				Status = new DevHubTelescopeStatus( this );
+			}
 		}
 
 		public IAxisRates AxisRates( TelescopeAxes axis )
 		{
 			IAxisRates retval;
 
-			Exception xcp = null;
+			Exception except = null;
 			ActivityMessageTypes messageType = ActivityMessageTypes.Capabilities;
 
 			string axisName = GetNameFromAxis( axis );
@@ -506,9 +554,9 @@ namespace ASCOM.DeviceHub
 
 				msg += Done;
 			}
-			catch (Exception ex )
+			catch (Exception xcp )
 			{
-				xcp = ex;
+				except = xcp;
 				msg += Failed;
 
 				// Return an empty IAxisRates collection
@@ -520,9 +568,9 @@ namespace ASCOM.DeviceHub
 			{
 				LogActivityLine( messageType, msg );
 
-				if ( xcp != null )
+				if ( except != null )
 				{
-					LogActivityLine( messageType, "AxisRates( {0} ) Exception: {1}", axisName, xcp.Message );
+					LogActivityLine( messageType, "AxisRates( {0} ) Exception: {1}", axisName, except.Message );
 				}
 			}
 
@@ -532,32 +580,31 @@ namespace ASCOM.DeviceHub
 		public bool CanMoveAxis( TelescopeAxes axis )
 		{
 			bool retval = false;
-			Exception xcp = null;
+			Exception except = null;
 			ActivityMessageTypes messageType = ActivityMessageTypes.Capabilities;
 
-			string axisName = GetNameFromAxis( axis );
-			string msg = $"Calling CanMoveAxis( {axisName} )";
+			string msg = $"Calling CanMoveAxis( {GetNameFromAxis( axis )} ) - ";
 
 			try
 			{
 				CheckDevice();
 				retval = Service.CanMoveAxis( axis );
-				msg += retval.ToString();
+				msg += $"returned {retval}.";
 			}
-			catch ( Exception ex )
+			catch ( Exception xcp )
 			{
-				xcp = ex;
-				msg += Failed;
+				except = xcp;
+				msg += $"{Failed}. Details follow:";
+
 				throw;
 			}
-
 			finally
 			{
 				LogActivityLine( messageType, msg );
 
-				if ( xcp != null )
+				if ( except != null )
 				{
-					LogActivityLine( messageType, "CanMoveAxis( {0} ) Exception: {1}", axisName, xcp.Message );
+					LogActivityLine( messageType, $"{except}" );
 				}
 			}
 
@@ -566,28 +613,98 @@ namespace ASCOM.DeviceHub
 
 		public void CommandBlind( string command, bool raw = false )
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "CommandBlind - {0}", command );
-			CheckDevice();
-			Service.CommandBlind( command, raw );
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				Service.CommandBlind( command, raw );
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details Follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"CommandBlind( {command} ) - {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+			}
 		}
 
 		public bool CommandBool( string command, bool raw = false )
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "CommandBool - {0}", command );
-			CheckDevice();
-			bool retval = Service.CommandBool( command, raw );
-			LogActivityEnd( ActivityMessageTypes.Commands, "returned {0} {1}", retval, Done );
+			bool retval;
+
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				retval = Service.CommandBool( command, raw );
+				msgEnd = $"returned {retval}.";
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details Follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"CommandBool( {command} ) - {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+			}
 
 			return retval;
 		}
 
 		public string CommandString( string command, bool raw = false )
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "CommandString - {0}", command );
-			CheckDevice();
-			string retval = Service.CommandString( command, raw );
-			LogActivityEnd( ActivityMessageTypes.Commands, "returned {0} {1}", retval, Done );
+			string retval;
+
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				retval = Service.CommandString( command, raw );
+				msgEnd = $"returned {retval}.";
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details Follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"CommandString( {command} ) - {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+			}
 
 			return retval;
 		}
@@ -596,21 +713,33 @@ namespace ASCOM.DeviceHub
 		{
 			PierSide retval = PierSide.pierUnknown;
 
-			RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
-			DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
-
-			LogActivityStart( ActivityMessageTypes.Other, "DestinationSideOfPier RA = {0}, Dec = {1}: ", raConverter, decConverter );
-			CheckDevice();
+			ActivityMessageTypes msgType = ActivityMessageTypes.Other;
+			Exception except = null;
+			string msgEnd = "";
 
 			try
 			{
+				CheckDevice();
 				retval = Service.DestinationSideOfPier( rightAscension, declination );
 				string name = GetPierSideName( retval );
-				LogActivityEnd( ActivityMessageTypes.Other, "{0} {1}", name, Done );
+				msgEnd = $"returned {name}.";
 			} 
-			catch ( Exception )
+			catch ( Exception xcp )
 			{
-				LogActivityEnd( ActivityMessageTypes.Other, "Failed" );
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+			}
+			finally 
+			{
+				RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
+				DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
+
+				LogActivityLine( msgType, $"DestinationSideOfPier RA = {raConverter}, Dec = {decConverter}: {msgEnd}." );
+
+				if ( except != null)
+				{
+					LogActivityLine( msgType, "${except}" );
+				}
 			}
 
 			return retval;
@@ -625,229 +754,516 @@ namespace ASCOM.DeviceHub
 
 		public void FindHome()
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "FindHome:" );
-			CheckDevice();
-			Service.FindHome();
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				Status.Slewing = true;
+				Service.FindHome();
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = Failed;
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"FindHome - {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubTelescopeStatus( this );
+			}
 		}
 
 		public void MoveAxis( TelescopeAxes axis, double rate )
 		{
-			string name = GetNameFromAxis( axis );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
 
-			LogActivityStart( ActivityMessageTypes.Commands, "MoveAxis {0} at {1} deg/sec: ", name, rate );
-			CheckDevice();
-			Debug.WriteLine( $"TelescopeManagerAccess.MoveAxis - Axis = {axis}, Rate = {rate:f3}" );
 			try
 			{
+				CheckDevice();
 				Service.MoveAxis( axis, rate );
+				msgEnd = Done;
 			}
 			catch ( Exception xcp )
 			{
-				Debug.WriteLine( "TelescopeManagerAccess.MoveAxis caught an exception." );
-				throw xcp;
-			}
+				except = xcp;
+				msgEnd = Failed;
 
-			Status.Slewing = rate != 0.0;
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+				throw;
+			}
+			finally 
+			{
+				string name = GetNameFromAxis( axis );
+				LogActivityLine( msgType, $"MoveAxis {name} at {rate} deg/sec: {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubTelescopeStatus( this );
+			}
 		}
 
 		public void Park()
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "Park:" );
-			CheckDevice();
-			Service.Park();
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				Service.Park();
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"Park - {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubTelescopeStatus( this );
+			}
 		}
 
 		public void PulseGuide( GuideDirections direction, int duration )
 		{
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
 			string name = GetGuideDirectionName( direction );
-			LogActivityStart( ActivityMessageTypes.Commands, "PulseGuide {0} for {1} ms:", name, duration );
-			CheckDevice();
-			DateTime startTime = DateTime.Now;
-			Service.PulseGuide( direction, duration );
 
-			// Pulse guiding can be synchronous or asynchronous. If it is the former then
-			// we will not see IsPulseGuiding set to true.
-
-			if ( Service.IsPulseGuiding )
+			try
 			{
-				Status.IsPulseGuiding = true;
-				Status.Slewing = Service.Slewing;
-				DateTime endTime = startTime.AddMilliseconds( duration );
-				Task.Run( () => MonitorPulseGuidingTask( endTime ) );
-			}
-			else
-			{
-				Status.IsPulseGuiding = false;
-			}
+				CheckDevice();
+				DateTime startTime = DateTime.Now;
+				Service.PulseGuide( direction, duration );
 
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+				// Pulse guiding can be synchronous or asynchronous. If it is the former then
+				// we will not see IsPulseGuiding set to true.
+
+				if ( Service.IsPulseGuiding )
+				{
+					Status.IsPulseGuiding = true;
+					Status.Slewing = Service.Slewing;
+					DateTime endTime = startTime.AddMilliseconds( duration );
+					Task.Run( () => MonitorPulseGuidingTask( endTime ) );
+				}
+				else
+				{
+					Status.IsPulseGuiding = false;
+				}
+
+				msgEnd = Done;
+			}
+			catch ( Exception xcp)
+			{
+				except = xcp;
+				msgEnd = Failed;
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"PulseGuide {name} for {duration} ms: {msgEnd}." );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}");
+				}
+			}
 		}
 
 		public void SetPark()
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "SetPark:" );
-			CheckDevice();
-			Service.SetPark();
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			string msgEnd = "";
+			Exception except = null;
+
+			try
+			{
+				CheckDevice();
+				Service.SetPark();
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"SetPark: {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+			}
 		}
 
 		public void SlewToAltAz( double azimuth, double altitude )
 		{
-			AzimuthConverter azConverter = new AzimuthConverter( (decimal)azimuth );
-			AltitudeConverter altConverter = new AltitudeConverter( (decimal)altitude );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToAltAz - Az = {0}, Alt = {1}: {2}"
-							, azConverter, altConverter, SlewStarted );
-			CheckDevice();
-			Status.Slewing = true;
-			Service.SlewToAltAz( azimuth, altitude );
 			try
 			{
-				double ra = Service.TargetRightAscension;
-				Status.TargetRightAscension = ra;
+				CheckDevice();
+				Status.Slewing = true;
+				Service.SlewToAltAz( azimuth, altitude );
+				msgEnd = Done;
 			}
-			catch { }
-			try
+			catch ( Exception xcp )
 			{
-				double dec = Service.TargetDeclination;
-				Status.TargetDeclination = dec;
-			}
-			catch { }
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
 
-			Status.RightAscension = Service.RightAscension;
-			Status.Declination = Service.Declination;
-			Status.Azimuth = Service.Azimuth;
-			Status.Altitude = Service.Altitude;
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToAltAz: {0}", SlewComplete );
+				throw;
+			}
+			finally
+			{
+				AzimuthConverter azConverter = new AzimuthConverter( (decimal)azimuth );
+				AltitudeConverter altConverter = new AltitudeConverter( (decimal)altitude );
+
+				LogActivityLine( msgType, "SlewToAltAz - Az = {azConverter}, Alt = {altConverter}: {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubTelescopeStatus( this );
+			}
 		}
 
 		public void SlewToAltAzAsync( double azimuth, double altitude )
 		{
-			AzimuthConverter azConverter = new AzimuthConverter( (decimal)azimuth );
-			AltitudeConverter altConverter = new AltitudeConverter( (decimal)altitude );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToAltAzAsync - Az = {0}, Alt = {1}: {2}"
-							, azConverter, altConverter, SlewStarted );
-			CheckDevice();
-			Status.Slewing = true;
-			Service.SlewToAltAzAsync( azimuth, altitude );
+			try
+			{
+				CheckDevice();
+				Service.SlewToAltAzAsync( azimuth, altitude );
+				msgEnd = SlewStarted;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow";
+
+				throw;
+			}
+			finally
+			{
+				AzimuthConverter azConverter = new AzimuthConverter( (decimal)azimuth );
+				AltitudeConverter altConverter = new AltitudeConverter( (decimal)altitude );
+				
+				LogActivityLine( msgType, $"SlewToAltAzAsync - Az = {azConverter}, Alt = {altConverter}: {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubTelescopeStatus( this );
+			}
 		}
 
 		public void SlewToCoordinates( double rightAscension, double declination )
 		{
-			RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
-			DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToCoordinates - RA = {0}, Dec = {1}: {2}"
-							, raConverter, decConverter, SlewStarted );
-			CheckDevice();
-			Status.Slewing = true;
-			Service.SlewToCoordinates( rightAscension, declination );
-			Status.TargetRightAscension = Service.TargetRightAscension;
-			Status.TargetDeclination = Service.TargetDeclination;
-			Status.RightAscension = Service.RightAscension;
-			Status.Declination = Service.Declination;
-			Status.Azimuth = Service.Azimuth;
-			Status.Altitude = Service.Altitude;
+			try
+			{
+				CheckDevice();
+				Status.Slewing = true;
+				Service.SlewToCoordinates( rightAscension, declination );
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow";
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToCoordinates: {0}", SlewComplete );
+				throw;
+			}
+			finally
+			{
+				RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
+				DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
+
+				LogActivityLine( msgType, $"SlewToCoordinates - RA = {raConverter}, Dec = {decConverter}: {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubTelescopeStatus( this );
+			}
 		}
 
 		public void SlewToCoordinatesAsync( double rightAscension, double declination )
 		{
-			RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
-			DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToCoordinatesAsync - RA = {0}, Dec {1}: {2}"
-							, raConverter, decConverter, SlewStarted );
-			CheckDevice();
-			Status.Slewing = true;
-			Service.SlewToCoordinatesAsync( rightAscension, declination );
+			try
+			{
+				CheckDevice();
+				Service.SlewToCoordinatesAsync( rightAscension, declination );
+				msgEnd = SlewStarted;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow";
+
+				throw;
+			}
+			finally
+			{
+				RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
+				DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
+
+				LogActivityLine( msgType, "SlewToCoordinatesAsync - RA = {raConverter}, Dec {decConverter}: {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubTelescopeStatus( this );
+			}
 		}
 
 		public void SlewToTarget()
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "SlewToTarget:" );
-			CheckDevice();
-			Service.SlewToTarget();
-			Status.Slewing = true;
-			Status.TargetRightAscension = Service.TargetRightAscension;
-			Status.TargetDeclination = Service.TargetDeclination;
-			Status.RightAscension = Service.RightAscension;
-			Status.Declination = Service.Declination;
-			Status.Azimuth = Service.Azimuth;
-			Status.Altitude = Service.Altitude;
-			LogActivityEnd( ActivityMessageTypes.Commands, SlewComplete );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				Status.Slewing = true;
+				Service.SlewToTarget();
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"SlewToTarget: {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubTelescopeStatus( this );
+			}
 		}
 
 		public void SlewToTargetAsync()
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "SlewToTargetAsync:" );
-			CheckDevice();
-			Service.SlewToTargetAsync();
-			Status.Slewing = true;
-			LogActivityEnd( ActivityMessageTypes.Commands, SlewStarted );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				Service.SlewToTargetAsync();
+				msgEnd = SlewStarted;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, "SlewToTargetAsync: {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubTelescopeStatus( this );
+			}
 		}
 
 		public void SyncToAltAz( double azimuth, double altitude )
 		{
-			AzimuthConverter azConverter = new AzimuthConverter( (decimal)azimuth );
-			AltitudeConverter altConverter = new AltitudeConverter( (decimal)altitude );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SyncToAltAz - Az = {0}, Alt = {1}:", azConverter, altConverter );
-			CheckDevice();
-			Service.SyncToAltAz( azimuth, altitude );
-			Status.Slewing = true;
-			Status.TargetRightAscension = Service.TargetRightAscension;
-			Status.TargetDeclination = Service.TargetDeclination;
-			Status.RightAscension = Service.RightAscension;
-			Status.Declination = Service.Declination;
-			Status.Azimuth = Service.Azimuth;
-			Status.Altitude = Service.Altitude;
-			LogActivityLine( ActivityMessageTypes.Commands, "SyncToAltAz: {0}", Done );
+			try
+			{
+				CheckDevice();
+				Service.SyncToAltAz( azimuth, altitude );
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow";
+
+				throw;
+			}
+			finally
+			{
+				AzimuthConverter azConverter = new AzimuthConverter( (decimal)azimuth );
+				AltitudeConverter altConverter = new AltitudeConverter( (decimal)altitude );
+
+				LogActivityLine( msgType, "SyncToAltAz - Az = {azConverter}, Alt = {altConverter}: {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubTelescopeStatus( this );
+			}
 		}
 
 		public void SyncToCoordinates( double rightAscension, double declination )
 		{
-			RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
-			DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
 
-			LogActivityLine( ActivityMessageTypes.Commands, "SyncToCoordinates - RA = {0}, Dec = {1}", raConverter, decConverter );
-			CheckDevice();
-			Service.SyncToCoordinates( rightAscension, declination );
-			Status.Slewing = true;
-			Status.TargetRightAscension = Service.TargetRightAscension;
-			Status.TargetDeclination = Service.TargetDeclination;
-			Status.RightAscension = Service.RightAscension;
-			Status.Declination = Service.Declination;
-			Status.Azimuth = Service.Azimuth;
-			Status.Altitude = Service.Altitude;
-			LogActivityLine( ActivityMessageTypes.Commands, "SyncToCoordinates: {0}", Done );
+			try
+			{
+				CheckDevice();
+				Service.SyncToCoordinates( rightAscension, declination );
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+			}
+			finally
+			{
+				RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
+				DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
+
+				LogActivityLine( msgType, $"SyncToCoordinates - RA = {raConverter}, Dec = {decConverter} {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubTelescopeStatus( this );
+
+
+			}
 		}
 
 		public void SyncToTarget()
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "SyncToTarget:" );
-			CheckDevice();
-			Service.SyncToTarget();
-			Status.TargetRightAscension = Service.TargetRightAscension;
-			Status.TargetDeclination = Service.TargetDeclination;
-			Status.RightAscension = Service.RightAscension;
-			Status.Declination = Service.Declination;
-			Status.Azimuth = Service.Azimuth;
-			Status.Altitude = Service.Altitude;
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				Service.SyncToTarget( );
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"SyncToTarget: {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubTelescopeStatus( this );
+			}
+
 		}
 
 		public void Unpark()
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "Unpark:" );
-			CheckDevice();
-			Service.Unpark();
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				Service.Unpark();
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"Unpark: {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubTelescopeStatus( this );
+			}
 		}
 
 		#endregion

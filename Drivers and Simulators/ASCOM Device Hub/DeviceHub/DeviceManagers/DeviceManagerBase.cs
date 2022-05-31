@@ -19,7 +19,7 @@ namespace ASCOM.DeviceHub
 		protected const string Done = "(done)";
 		protected const string Failed = "(failed)";
 		protected const string SlewStarted = "(slew started)";
-		protected const string SlewComplete = "(slew complete)";
+		protected const string MoveStarted = "(move started)";
 
 		protected bool ThrowOnInvalidPropertyName { get; set; }
         protected DeviceTypeEnum DeviceType { get; set; }

@@ -81,7 +81,7 @@ namespace ASCOM.DeviceHub
 					catch ( Exception xcp )
 					{
 						LogActivityEnd( msgType, Failed );
-						LogActivityLine( msgType, xcp.ToString() );
+						LogActivityLine( msgType, $"{xcp}" );
 
 						throw;
 					}
@@ -347,56 +347,197 @@ namespace ASCOM.DeviceHub
 
 		public void AbortSlew()
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "AbortSlew: " );
-			CheckDevice();
-			Service.AbortSlew();
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				Service.AbortSlew();
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, msgEnd );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubDomeStatus( this );
+			}
 		}
 
 		public string Action( string actionName, string actionParameters )
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "Action ({0}):" );
-			CheckDevice();
-			string retval = Service.Action( actionName, actionParameters );
-			LogActivityEnd( ActivityMessageTypes.Commands, "returned {0}", retval );
+			string retval = null;
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				retval = Service.Action( actionName, actionParameters );
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+
+				throw;
+			}
+			finally
+			{
+				if ( except == null )
+				{
+					LogActivityLine( msgType, $"Action ({actionName}) returned '{retval}'." );
+				}
+				else
+				{
+					LogActivityLine( msgType, $"Action ({actionName}) {msgEnd}" );
+					LogActivityLine( msgType, $"{except}" );
+				}
+			}
 
 			return retval;
 		}
 
 		public void CloseShutter()
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "CloseShutter:" );
-			CheckDevice();
-			Status.Slewing = true;
-			Status.ShutterStatus = ShutterState.shutterClosing;
-			Service.CloseShutter();
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				Service.CloseShutter();
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"CloseShutter: {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubDomeStatus( this );
+			}
 		}
 
 		public void CommandBlind( string command, bool raw = false )
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "CommandBlind - {0}", command );
-			CheckDevice();
-			Service.CommandBlind( command, raw );
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				Service.CommandBlind( command, raw );
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"CommandBlind( {command} ) - {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityEnd( msgType, $"{except}" );
+				}
+			}
 		}
 
 		public bool CommandBool( string command, bool raw = false )
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "CommandBool - {0}: ", command );
-			CheckDevice();
-			bool retval = Service.CommandBool( command, raw );
-			LogActivityEnd( ActivityMessageTypes.Commands, "returned {0} {1}", retval, Done );
+			bool retval;
+
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				retval = Service.CommandBool( command, raw );
+				msgEnd = $"returned {retval}.";
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details Follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"CommandBool( {command} ) - {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+			}
 
 			return retval;
 		}
 
 		public string CommandString( string command, bool raw = false )
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "CommandString - {0}: ", command );
-			CheckDevice();
-			string retval = Service.CommandString( command, raw );
-			LogActivityEnd( ActivityMessageTypes.Commands, "returned {0} {1}", retval, Done );
+			string retval;
+
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				retval = Service.CommandString( command, raw );
+				msgEnd = $"returned {retval}.";
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details Follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"CommandString( {command} ) - {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+			}
 
 			return retval;
 		}
@@ -418,70 +559,225 @@ namespace ASCOM.DeviceHub
 
 		public void FindHome()
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "FindHome:" );
-			CheckDevice();
-			Status.Slewing = true;
-			Service.FindHome();
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				Status.Slewing = true;
+				Service.FindHome();
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, "FindHome - {0}", msgEnd );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubDomeStatus( this );
+			}
 		}
 
 		public void OpenShutter()
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "OpenShutter:" );
-			CheckDevice();
-			Status.Slewing = true;
-			Status.ShutterStatus = ShutterState.shutterOpening;
-			Service.OpenShutter();
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				Service.OpenShutter();
+				msgEnd = SlewStarted;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"OpenShutter: {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubDomeStatus( this );
+			}
 		}
 
 		public void Park()
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "Park:" );
-			CheckDevice();
-			Status.Slewing = true;
-			Service.Park();
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				Service.Park();
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"Park - {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubDomeStatus( this );
+			}
 		}
 
 		public void SetPark()
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "SetPark:" );
-			CheckDevice();
-			Service.SetPark();
-			Status.AtPark = Service.AtPark;
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			string msgEnd = "";
+			Exception except = null;
+
+			try
+			{
+				CheckDevice();
+				Service.SetPark();
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = Failed;
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"SetPark: {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, except.ToString() );
+				}
+			}
 		}
 
 		public void SlewToAltitude( double altitude )
 		{
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToAltitude ({0:f5}°): {1}", altitude, SlewStarted );
-			CheckDevice();
-			Status.Slewing = true;
-			Service.SlewToAltitude( altitude );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				Service.SlewToAltitude( altitude );
+				msgEnd = SlewStarted;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"SlewToAltitude ({altitude:f5}°): {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubDomeStatus( this );
+			}
 		}
 
 		public void SlewToAzimuth( double azimuth )
 		{
-			LogActivityLine( ActivityMessageTypes.Commands, "SlewToAzimuth ({0:f5}°): {1}", azimuth, SlewStarted );
-			CheckDevice();
-			Status.Slewing = true;
-			Service.SlewToAzimuth( azimuth );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				Service.SlewToAzimuth( azimuth );
+				msgEnd = SlewStarted;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( ActivityMessageTypes.Commands, $"SlewToAzimuth ({azimuth:f5}°): {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubDomeStatus( this );
+			}
 		}
 
 		public void SyncToAzimuth( double azimuth )
 		{
-			LogActivityLine( ActivityMessageTypes.Other, "Azimuth before sync call is {0}.", Azimuth );
-			LogActivityLine( ActivityMessageTypes.Commands, "SyncToAzimuth \r\nAz {0:f2}.", azimuth );
-			CheckDevice();
-			Service.SyncToAzimuth( azimuth );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
 
-			// An application will expect to see the adjusted azimuth immediately after this
-			// method returns. So we force it into the Status object.
+			try
+			{
+				CheckDevice();
+				Service.SyncToAzimuth( azimuth );
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
 
-			Status.Azimuth = Service.Azimuth;
-			LogActivityLine( ActivityMessageTypes.Commands, "SyncToAzimuth: {0}", Done );
-			LogActivityLine( ActivityMessageTypes.Other, "Azimuth after sync call is {0:f2}.", Azimuth );
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( ActivityMessageTypes.Commands, $"SyncToAzimuth: {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubDomeStatus( this );
+			}
 		}
 
 		#endregion IDomeV2 Methods

@@ -36,54 +36,6 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		#region CheckDevice Methods
-
-		protected override void CheckDevice()
-		{
-			CheckDevice( true, true );
-		}
-
-		protected void CheckDevice( bool testConnected )
-		{
-			CheckDevice( testConnected, true );
-		}
-
-		protected bool CheckDevice( bool testConnected, bool throwException )
-		{
-			bool retval;
-
-			if ( Service == null || !Service.DeviceCreated )
-			{
-				if ( throwException )
-				{
-					string msg = $"The {DeviceType.GetDisplayName()} object is null.";
-
-					throw new NullReferenceException( msg );
-				}
-
-				retval = false;
-			}
-			else
-			{
-				retval = true;
-			}
-
-			if ( retval && testConnected && !Service.Connected )
-			{
-				if ( throwException )
-				{
-					string msg = $"There is no connected {DeviceType.GetDisplayName()}.";
-
-					throw new NotConnectedException( msg );
-				}
-
-				retval = false;
-			}
-
-			return retval;
-		}
-
-		#endregion CheckDevice Methods
 
 		public void InitializeFocuserService( string id )
 		{
@@ -125,7 +77,7 @@ namespace ASCOM.DeviceHub
 					catch ( Exception xcp )
 					{
 						LogActivityEnd( msgType, Failed );
-						LogActivityLine( msgType, xcp.ToString() );
+						LogActivityLine( msgType, $"{xcp}" );
 
 						throw;
 					}
@@ -190,7 +142,7 @@ namespace ASCOM.DeviceHub
 				catch ( Exception xcp )
 				{
 					LogActivityEnd( msgType, Failed );
-					LogActivityLine( msgType, xcp.ToString() );
+					LogActivityLine( msgType, $"{xcp}" );
 
 					throw;
 				}
@@ -267,11 +219,24 @@ namespace ASCOM.DeviceHub
 			get
 			{
 				bool retval = false;
-				LogActivityStart( ActivityMessageTypes.Other, "Get Link flag - " );
+
+				ActivityMessageTypes msgType = ActivityMessageTypes.Other;
+				LogActivityStart( msgType, "Get Link flag - " );
 
 				if ( CheckDevice( false, false ) )
 				{
-					retval = Service.Link;
+					try
+					{
+						retval = Service.Link;
+						LogActivityEnd( msgType, retval );
+					}
+					catch ( Exception xcp )
+					{
+						LogActivityEnd( msgType, Failed );
+						LogActivityLine( msgType, $"{xcp}" );
+
+						throw;
+					}
 				}
 
 				LogActivityEnd( ActivityMessageTypes.Other, retval );
@@ -280,18 +245,64 @@ namespace ASCOM.DeviceHub
 			}
 			set
 			{
-				LogActivityStart( ActivityMessageTypes.Other, "Set Link flag -> {0}", value );
+				ActivityMessageTypes msgType = ActivityMessageTypes.Other;
+				LogActivityStart( msgType, "Set Link flag -> {0}", value );
 
-				if ( value != Service.Link )
+				try
 				{
-					CheckDevice( false );
-					Service.Link = value;
+					bool isConnected = Service.Link;
 
-					LogActivityEnd( ActivityMessageTypes.Other, value ? "(connected)" : "(disconnected)" );
+					if ( value != isConnected )
+					{
+						CheckDevice( false );
+						Service.Link = value;
+
+						// Poll the device for up to ten seconds or until it reports that
+						// disconnect/connect is complete.
+
+						int i = 0;
+						int numTries = 20;
+						int msDelay = 500;
+
+						while ( i < numTries )
+						{
+							Thread.Sleep( msDelay );
+							isConnected = Service.Link;
+
+							if ( value == isConnected )
+							{
+								break;
+							}
+
+							++i;
+						}
+
+						if ( value == isConnected )
+						{
+							LogActivityEnd( msgType, value ? "(connected)" : "(disconnected)" );
+							LogActivityLine( msgType, "{0} took {1} milliseconds."
+											, ( value ) ? "Connection" : "Disconnection"
+											, i * msDelay );
+						}
+						else
+						{
+							LogActivityEnd( msgType, Failed );
+							LogActivityLine( msgType, "{0} failed after {1} milliseconds"
+											, ( value ) ? "Connection" : "Disconnection"
+											, numTries * msDelay );
+						}
+					}
+					else
+					{
+						LogActivityEnd( msgType, "(no change)" );
+					}
 				}
-				else
+				catch ( Exception xcp )
 				{
-					LogActivityEnd( ActivityMessageTypes.Other, "(no change)" );
+					LogActivityEnd( msgType, Failed );
+					LogActivityLine( msgType, $"{xcp}" );
+
+					throw;
 				}
 			}
 		}
@@ -371,38 +382,132 @@ namespace ASCOM.DeviceHub
 
 		public string Action( string actionName, string actionParameters )
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "Action ({0}):" );
-			CheckDevice();
-			string retval = Service.Action( actionName, actionParameters );
-			LogActivityEnd( ActivityMessageTypes.Commands, "returned {0}", retval );
+			string retval = "";
+
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				retval = Service.Action( actionName, actionParameters );
+				msgEnd = $" returned {retval}";
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = "{Failed}. Details follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"Action ({actionName}) {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+			}
 
 			return retval;
 		}
 
 		public void CommandBlind( string command, bool raw = false )
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "CommandBlind - {0}", command );
-			CheckDevice();
-			Service.CommandBlind( command, raw );
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				Service.CommandBlind( command, raw );
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details Follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"CommandBlind( {command} ) - {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+			}
 		}
 
 		public bool CommandBool( string command, bool raw = false )
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "CommandBool - {0}", command );
-			CheckDevice();
-			bool retval = Service.CommandBool( command, raw );
-			LogActivityEnd( ActivityMessageTypes.Commands, "returned {0} {1}", retval, Done );
+			bool retval;
+
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				retval = Service.CommandBool( command, raw );
+				msgEnd = $"returned {retval}.";
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details Follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"CommandBool( {command} ) - {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+			}
 
 			return retval;
 		}
 
 		public string CommandString( string command, bool raw = false )
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "CommandString - {0}", command );
-			CheckDevice();
-			string retval = Service.CommandString( command, raw );
-			LogActivityEnd( ActivityMessageTypes.Commands, "returned {0} {1}", retval, Done );
+			string retval;
+
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			Exception except = null;
+			string msgEnd = "";
+
+			try
+			{
+				CheckDevice();
+				retval = Service.CommandString( command, raw );
+				msgEnd = $"returned {retval}.";
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details Follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"CommandString( {command} ) - {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+			}
 
 			return retval;
 		}
@@ -416,20 +521,124 @@ namespace ASCOM.DeviceHub
 
 		public void Halt()
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "Halt: " );
-			CheckDevice();
-			Service.Halt();
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			string msgEnd = "";
+			Exception except = null;
+
+			try
+			{
+				CheckDevice();
+				Service.Halt();
+				msgEnd = Done;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+
+				throw;
+			}
+			finally
+			{
+				LogActivityLine( msgType, $"Halt - {msgEnd}" );
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubFocuserStatus( this );
+			}
 		}
 
 		public void Move( int position )
 		{
-			LogActivityStart( ActivityMessageTypes.Commands, "Move: \r\nPosition {0}: ", position );
-			CheckDevice();
-			Service.Move( position );
-			LogActivityEnd( ActivityMessageTypes.Commands, Done );
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+			string msgEnd = "";
+			Exception except = null;
+
+			try
+			{
+				CheckDevice();
+				Service.Move( position );
+				msgEnd = MoveStarted;
+			}
+			catch ( Exception xcp )
+			{
+				except = xcp;
+				msgEnd = $"{Failed}. Details follow:";
+
+				throw;
+			}
+			finally
+			{
+				if ( Parameters.Absolute )
+				{
+					LogActivityLine( msgType, $"Move To Position {position} - {msgEnd}" );
+				}
+				else
+				{
+					LogActivityLine( msgType, $"Move By {position} steps - {msgEnd}" );
+				}
+
+				if ( except != null )
+				{
+					LogActivityLine( msgType, $"{except}" );
+				}
+
+				Status = new DevHubFocuserStatus( this );
+			}
 		}
 
 		#endregion IFocuserV3 Methods
+
+		#region CheckDevice Methods
+
+		protected override void CheckDevice()
+		{
+			CheckDevice( true, true );
+		}
+
+		protected void CheckDevice( bool testConnected )
+		{
+			CheckDevice( testConnected, true );
+		}
+
+		protected bool CheckDevice( bool testConnected, bool throwException )
+		{
+			bool retval;
+
+			if ( Service == null || !Service.DeviceCreated )
+			{
+				if ( throwException )
+				{
+					string msg = $"The {DeviceType.GetDisplayName()} object is null.";
+
+					throw new NullReferenceException( msg );
+				}
+
+				retval = false;
+			}
+			else
+			{
+				retval = true;
+			}
+
+			if ( retval && testConnected && !Service.Connected )
+			{
+				if ( throwException )
+				{
+					string msg = $"There is no connected {DeviceType.GetDisplayName()}.";
+
+					throw new NotConnectedException( msg );
+				}
+
+				retval = false;
+			}
+
+			return retval;
+		}
+
+		#endregion CheckDevice Methods
 	}
 }
