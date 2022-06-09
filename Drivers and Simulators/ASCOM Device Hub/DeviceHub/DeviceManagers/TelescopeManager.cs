@@ -483,7 +483,7 @@ namespace ASCOM.DeviceHub
 			{
 				// In case the dome is slaved to us, send it a message to start moving.
 
-				SendSlewMessage( Status.TargetRightAscension, Status.TargetDeclination );
+				SendSlewMessage( TargetRightAscension, TargetDeclination );
 
 				if ( useSynchronousMethodCall )
 				{
@@ -530,7 +530,7 @@ namespace ASCOM.DeviceHub
 			{
 				// In case the dome is slaved to us, send it a message to start moving.
 
-				SendSlewMessage( Status.TargetRightAscension, Status.Declination );
+				SendSlewMessage( TargetRightAscension, TargetDeclination );
 				SlewToTargetAsync();
 				slewed = true;
 

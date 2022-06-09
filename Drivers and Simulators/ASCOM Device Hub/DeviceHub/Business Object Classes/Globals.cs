@@ -45,6 +45,8 @@ namespace ASCOM.DeviceHub
 		public static double ActivityWindowHeight { get; set; }
 		public static double ActivityWindowWidth { get; set; }
 		public static bool AlwaysOnTop { get; set; }
+		public static bool IsDomeExpanded { get; set; }
+		public static bool IsFocuserExpanded { get; set; }
 
 		public static DomeLayoutSettings DomeLayout { get; set; }
 

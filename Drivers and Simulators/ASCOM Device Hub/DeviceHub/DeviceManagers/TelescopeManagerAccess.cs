@@ -1059,7 +1059,7 @@ namespace ASCOM.DeviceHub
 				RightAscensionConverter raConverter = new RightAscensionConverter( (decimal)rightAscension );
 				DeclinationConverter decConverter = new DeclinationConverter( (decimal)declination );
 
-				LogActivityLine( msgType, "SlewToCoordinatesAsync - RA = {raConverter}, Dec {decConverter}: {msgEnd}" );
+				LogActivityLine( msgType, $"SlewToCoordinatesAsync - RA = {raConverter}, Dec {decConverter}: {msgEnd}" );
 
 				if ( except != null )
 				{

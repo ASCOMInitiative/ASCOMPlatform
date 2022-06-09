@@ -19,6 +19,8 @@
 				settings.ActivityWindowSize = new System.Windows.Point( 480.0, 540.0 );
 				settings.RegistryVersion = Globals.RegistryVersion;
 				settings.AlwaysOnTop = false;
+				settings.IsDomeExpanded = false;
+				settings.IsFocuserExpanded = false;
 
 				svc.SaveSettings( settings );
 			}
@@ -38,6 +40,8 @@
 			Globals.UseCustomTheme = settings.UseCustomTheme;
 			Globals.UseExpandedScreenLayout = settings.UseExpandedScreenLayout;
 			Globals.UseCompositeSlewingFlag = settings.UseCompositeSlewingFlag;
+			Globals.IsDomeExpanded = settings.IsDomeExpanded;
+			Globals.IsFocuserExpanded = settings.IsFocuserExpanded;
 		}
 
 		public static void LoadMainWindowSettings()
@@ -51,6 +55,8 @@
 			Globals.UseCustomTheme = settings.UseCustomTheme;
 			Globals.UseExpandedScreenLayout = settings.UseExpandedScreenLayout;
 			Globals.AlwaysOnTop = settings.AlwaysOnTop;
+			Globals.IsDomeExpanded = settings.IsDomeExpanded;
+			Globals.IsFocuserExpanded = settings.IsFocuserExpanded;
 		}
 
 		public static void SaveAppSettings()
@@ -65,7 +71,9 @@
 				UseCustomTheme = Globals.UseCustomTheme,
 				UseExpandedScreenLayout = Globals.UseExpandedScreenLayout,
 				AlwaysOnTop = Globals.AlwaysOnTop,
-				UseCompositeSlewingFlag = Globals.UseCompositeSlewingFlag
+				UseCompositeSlewingFlag = Globals.UseCompositeSlewingFlag,
+				IsDomeExpanded = Globals.IsDomeExpanded,
+				IsFocuserExpanded = Globals.IsFocuserExpanded
 			};
 
 			ServiceContainer.Instance.GetService<IAppSettingsService>().SaveSettings( settings );
