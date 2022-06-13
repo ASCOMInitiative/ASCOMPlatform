@@ -485,7 +485,7 @@ namespace ConformanceTests
 				if ( Dome.CanPark )
 				{
 					Dome.Park();
-					timedOut = WaitForSlewToComplete( 60.0 );
+					timedOut = WaitForSlewToComplete( 70.0 );
 
 					if ( timedOut )
 					{
@@ -516,13 +516,13 @@ namespace ConformanceTests
 			string status = _error;
 			bool timedOut;
 			Exception except;
-
+			 
 			try
 			{
 				if ( Dome.CanFindHome )
 				{
 					Dome.FindHome();
-					timedOut = WaitForSlewToComplete( 60.0 );
+					timedOut = WaitForSlewToComplete( 70.0 );
 
 					if ( timedOut )
 					{
@@ -770,7 +770,7 @@ namespace ConformanceTests
 				{
 					double azimuth = (double)target;
 					Dome.SlewToAzimuth( azimuth );
-					timedOut = WaitForSlewToComplete( 60.0 );
+					timedOut = WaitForSlewToComplete( 70.0 );
 
 					if ( timedOut )
 					{

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 
 using ASCOM.DeviceInterface;
+using ASCOM.Astrometry.Exceptions;
 using ASCOM.Astrometry.Transform;
 
 using ASCOM.DeviceHub.MvvmMessenger;
@@ -456,7 +457,13 @@ namespace ASCOM.DeviceHub
 				if ( Service.DeviceAvailable )
 				{
 					UpdateDomeStatusTask();
-					SlewTheSlavedDome( ref nextSlaveAdjustmentTime );
+
+					if ( !Status.Slewing )
+					{
+						SlewTheSlavedDome( ref nextSlaveAdjustmentTime );
+						UpdateDomeStatusTask();
+					}
+
 					bool shutterMoving = Status.ShutterStatus == ShutterState.shutterOpening
 										|| Status.ShutterStatus == ShutterState.shutterClosing;
 
@@ -515,6 +522,7 @@ namespace ASCOM.DeviceHub
 
 		private void SlewTheSlavedDome( ref DateTime nextAdjustmentTime )
 		{
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
 			DateTime returnTime = nextAdjustmentTime;
 
 			if ( Globals.IsDomeSlaved )
@@ -523,32 +531,33 @@ namespace ASCOM.DeviceHub
 				// We need to slew there immediately. We will get another message when the slew has finished, but
 				// until then we need to suspend normal slaved adjustments.
 
-				if ( SlavedSlewState.IsSlewInProgress ) // The telescope is being slewed.
+				SlewInProgressMessage slewState = SlavedSlewState;
+
+				if ( slewState != null && slewState.IsSlewInProgress ) // The telescope is being slewed.
 				{
 					if ( !Status.Slewing || Globals.UseCompositeSlewingFlag )
 					{
 						// The telescope is slewing and we are slaved but not slewing so initiate a dome slew
 						// to the telescope's target position.
 
-						LogActivityLine( ActivityMessageTypes.Commands
-										, "Dome position recalculation due to telescope slew-in-progress." );
+						LogActivityLine( msgType, "Dome position recalculation due to telescope slew-in-progress." );
+
+						Transform xform = new Transform();
+						xform.SiteElevation = TelescopeParameters.SiteElevation;
+						xform.SiteLatitude = TelescopeParameters.SiteLatitude;
+						xform.SiteLongitude = TelescopeParameters.SiteLongitude;
+
+						EquatorialCoordinateType coordinateType = TelescopeParameters.EquatorialSystem;
 
 						try
 						{
-							Transform xform = new Transform
+							if ( coordinateType == EquatorialCoordinateType.equJ2000 )
 							{
-								SiteElevation = TelescopeParameters.SiteElevation,
-								SiteLatitude = TelescopeParameters.SiteLatitude,
-								SiteLongitude = TelescopeParameters.SiteLongitude
-							};
-
-							if ( TelescopeParameters.EquatorialSystem == EquatorialCoordinateType.equJ2000 )
-							{
-								xform.SetJ2000( SlavedSlewState.RightAscension, SlavedSlewState.Declination );
+								xform.SetJ2000( slewState.RightAscension, slewState.Declination );
 							}
-							else
+							else // Assume JNOW
 							{
-								xform.SetTopocentric( SlavedSlewState.RightAscension, SlavedSlewState.Declination );
+								xform.SetTopocentric( slewState.RightAscension, slewState.Declination );
 							}
 
 							Point scopeTargetPosition = new Point( xform.AzimuthTopocentric, xform.ElevationTopocentric );
@@ -559,12 +568,27 @@ namespace ASCOM.DeviceHub
 
 							SlaveDomePointing( scopeTargetPosition, localHourAngle, SlavedSlewState.SideOfPier );
 						}
+						catch ( TransformUninitialisedException xcp )
+						{
+							LogActivityLine( msgType, "Attempting to calculate the slaved dome azimuth. Details follow:" );
+							LogActivityLine( msgType, xcp.Message );
+							LogActivityLine( msgType, $"Transform Error site location:     latitude = {xform.SiteLatitude:F5}, longitude = {xform.SiteLongitude:F5}, elevation = {xform.SiteElevation:F0}" );
+							LogActivityLine( msgType, $"Transform Error coordinate system: coordinateType = {coordinateType}" );
+							LogActivityLine( msgType, $"Transform Error target position:   RA = {slewState.RightAscension}, Dec = {slewState.Declination}" );
+						}
 						catch ( Exception xcp )
 						{
-							LogActivityLine( ActivityMessageTypes.Commands, "Attempting to calculate a new dome slave position due to telescope "
+							LogActivityLine( msgType, "Attempting to calculate a new dome slave position due to telescope "
 								 + "slew caught an exception. Details follow:" );
-							LogActivityLine( ActivityMessageTypes.Commands, xcp.Message );
+							LogActivityLine( msgType, xcp.Message );
 						}
+					}
+					else
+					{
+						// If we get here we need to slew to a new target because of a telescope slew, but the dome is already slewing.
+						// We want to test again quickly and slew the dome again as soon as it has stopped from the current slew.
+
+						returnTime = DateTime.Now.AddMilliseconds( 250.0 );
 					}
 				}
 				else if ( DateTime.Now > nextAdjustmentTime )
@@ -654,10 +678,15 @@ namespace ASCOM.DeviceHub
 
 			if ( Double.IsNaN( targetAltitude) || targetAltitude < 0.0 || targetAltitude > 180.0 )
 			{
-				targetsValid = false;
-				LogActivityLine( ActivityMessageTypes.Commands
-								, "An invalid altitude value ({0:f2}) was calculated...short circuiting the slew"
-								, targetAltitude );
+				// Don't report a bad altitude if we are not going to set it anyway.
+
+				if ( Capabilities.CanSetAltitude )
+				{
+					targetsValid = false;
+					LogActivityLine( ActivityMessageTypes.Commands
+									, "An invalid altitude value ({0:f2}) was calculated...short circuiting the slew"
+									, targetAltitude );
+				}
 			}
 
 			// If either the target azimuth or altitude are invalid, return without slewing the dome!!!
@@ -670,6 +699,8 @@ namespace ASCOM.DeviceHub
 			LogActivityLine( ActivityMessageTypes.Commands, "The calculated dome position is Az: {0:f2}, Alt: {1:f2}."
 							, domeAltAz.X, domeAltAz.Y );
 
+			bool moving = false;
+
 			if ( IsInRange( targetAzimuth, Status.Azimuth, Globals.DomeLayout.AzimuthAccuracy ) )
 			{
 				LogActivityLine( ActivityMessageTypes.Commands
@@ -680,12 +711,14 @@ namespace ASCOM.DeviceHub
 				LogActivityLine( ActivityMessageTypes.Commands
 								, "Slaving dome to target azimuth of {0:f2} degrees.", targetAzimuth );
 
-				Task task = Task.Run( () =>
-				{
-					SlewToAzimuth( targetAzimuth );
-					Status.Slewing = true;
-					SetFastPolling();
-				}, CancellationToken.None );
+				//Task task = Task.Run( () =>
+				//{
+				//	SlewToAzimuth( targetAzimuth );
+				//	Status.Slewing = true;
+				//	SetFastPolling();
+				//}, CancellationToken.None );
+				SlewToAzimuth( targetAzimuth );
+				moving = true;
 			}
 
 			if ( Capabilities.CanSetAltitude && Status.Altitude < targetAltitude )
@@ -693,10 +726,18 @@ namespace ASCOM.DeviceHub
 				LogActivityLine( ActivityMessageTypes.Commands
 								, "Synchronizing dome to target altitude of {0:f2} degrees.", targetAltitude );
 
-				Task task = Task.Run( () =>
-				{
-					SlewToAltitude( targetAltitude );
-				}, CancellationToken.None );
+				//Task task = Task.Run( () =>
+				//{
+				//	SlewToAltitude( targetAltitude );
+				//}, CancellationToken.None );
+				SlewToAzimuth( targetAltitude );
+				moving = true;
+			}
+
+			if ( moving )
+			{
+				Status = new DevHubDomeStatus( this );
+				SetFastPolling();
 			}
 		}
 
