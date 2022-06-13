@@ -33,7 +33,7 @@
       <DocumentationSource sourceFile="..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll" />
     </DocumentationSources>
     <HelpTitle>ASCOM Platform Developer Help</HelpTitle>
-    <CopyrightText>Copyright &amp;#169%3b 2010-21, The ASCOM Initiative</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2010-22, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.Astrometry" isExposed="True">
         <Filter entryType="Class" fullName="ASCOM.Astrometry.EarthRotationParameters" filterName="EarthRotationParameters" isExposed="False" />
@@ -301,6 +301,7 @@
     </Image>
     <Content Include="styles\branding-Help1.css" />
     <None Include="Developer Information\Astronomical Coordinates.aml" />
+    <None Include="Developer Information\Developer Links.aml" />
     <None Include="Version History\Version 6.6.aml" />
     <None Include="Version History\Version 6.5 SP2.aml" />
     <None Include="Tools and Features\AlpacaChooser.aml" />
