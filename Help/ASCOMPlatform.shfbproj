@@ -41,7 +41,7 @@
     <ProjectLinkType>Local</ProjectLinkType>
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace, TypeParameter</MissingTags>
     <ComponentConfigurations>
-      <ComponentConfig id="Code Block Component" enabled="True">
+      <ComponentConfig id="Code Block Component" enabled="False">
         <component id="Code Block Component">
   <basePath value="{@HtmlEncProjectFolder}" />
   <outputPaths>{@HelpFormatOutputPaths}</outputPaths>

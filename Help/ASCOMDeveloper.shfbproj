@@ -96,48 +96,14 @@
     <ProjectLinkType>Local</ProjectLinkType>
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace, TypeParameter</MissingTags>
     <ComponentConfigurations>
-      <ComponentConfig id="Comments Index Data (ESENT Cache)" enabled="False">
-        <component id="Comments Index Data (ESENT Cache)">
-          <index name="comments" value="/doc/members/member" key="@name" cache="30" localCacheSize="2500" frameworkCachePath="{@LocalDataFolder}Cache\CommentsIndexCache" projectCachePath="{@WorkingFolder}CommentsIndexCache">
-	{@FrameworkCommentList}
-	{@CommentFileList}
-</index>
-          <copy name="comments" source="*" target="/document/comments" />
-        </component>
-      </ComponentConfig>
-      <ComponentConfig id="Resolve Reference Links (ESENT Cache)" enabled="False">
-        <component id="Resolve Reference Links (ESENT Cache)">{@HRefFormat}
-<locale value="{@Locale}" /><linkTarget value="{@SdkLinkTarget}" /><helpOutput format="HtmlHelp1"><msdnContentIdCache path="{@LocalDataFolder}Cache\MsdnContentId.cache" cachePath="{@LocalDataFolder}Cache\ESentMsdnContentIdCache" localCacheSize="2500" /><targets base="{@FrameworkReflectionDataFolder}" recurse="true" files="*.xml" type="{@HtmlSdkLinkType}" id="FrameworkTargets" cachePath="{@LocalDataFolder}Cache\ESentFrameworkTargetCache" localCacheSize="2500">
-		{@ReferenceLinkNamespaceFiles}
-	</targets><targets files="reflection.xml" type="Local" id="ProjectTargets" cachePath="" localCacheSize="2500" noReload="true" /></helpOutput><helpOutput format="MSHelpViewer"><msdnContentIdCache path="{@LocalDataFolder}Cache\MsdnContentId.cache" cachePath="{@LocalDataFolder}Cache\ESentMsdnContentIdCache" localCacheSize="2500" /><targets base="{@FrameworkReflectionDataFolder}" recurse="true" files="*.xml" type="{@MSHelpViewerSdkLinkType}" id="FrameworkTargets" cachePath="{@LocalDataFolder}Cache\ESentFrameworkTargetCache" localCacheSize="2500">
-		{@ReferenceLinkNamespaceFiles}
-	</targets><targets files="reflection.xml" type="Id" id="ProjectTargets" cachePath="" localCacheSize="2500" noReload="true" /></helpOutput><helpOutput format="Website"><msdnContentIdCache path="{@LocalDataFolder}Cache\MsdnContentId.cache" cachePath="{@LocalDataFolder}Cache\ESentMsdnContentIdCache" localCacheSize="2500" /><targets base="{@FrameworkReflectionDataFolder}" recurse="true" files="*.xml" type="{@WebsiteSdkLinkType}" id="FrameworkTargets" cachePath="{@LocalDataFolder}Cache\ESentFrameworkTargetCache" localCacheSize="2500">
-		{@ReferenceLinkNamespaceFiles}
-	</targets><targets files="reflection.xml" type="Local" id="ProjectTargets" cachePath="" localCacheSize="2500" noReload="true" /></helpOutput><helpOutput format="OpenXml"><msdnContentIdCache path="{@LocalDataFolder}Cache\MsdnContentId.cache" cachePath="{@LocalDataFolder}Cache\ESentMsdnContentIdCache" localCacheSize="2500" /><targets base="{@FrameworkReflectionDataFolder}" recurse="true" files="*.xml" type="{@WebsiteSdkLinkType}" id="FrameworkTargets" cachePath="{@LocalDataFolder}Cache\ESentFrameworkTargetCache" localCacheSize="2500">
-		{@ReferenceLinkNamespaceFiles}
-	</targets><targets files="reflection.xml" type="Local" id="ProjectTargets" cachePath="" localCacheSize="2500" noReload="true" /></helpOutput><helpOutput format="Markdown"><msdnContentIdCache path="{@LocalDataFolder}Cache\MsdnContentId.cache" cachePath="{@LocalDataFolder}Cache\ESentMsdnContentIdCache" localCacheSize="2500" /><targets base="{@FrameworkReflectionDataFolder}" recurse="true" files="*.xml" type="{@WebsiteSdkLinkType}" id="FrameworkTargets" cachePath="{@LocalDataFolder}Cache\ESentFrameworkTargetCache" localCacheSize="2500">
-		{@ReferenceLinkNamespaceFiles}
-	</targets><targets files="reflection.xml" type="Local" id="ProjectTargets" cachePath="" localCacheSize="2500" noReload="true" /></helpOutput></component>
-      </ComponentConfig>
-      <ComponentConfig id="Reflection Index Data (ESENT Cache)" enabled="False">
-        <component id="Reflection Index Data (ESENT Cache)">
-          <index name="reflection" value="/reflection/apis/api" key="@id" cache="15" localCacheSize="2500" frameworkCachePath="{@LocalDataFolder}Cache\ReflectionIndexCache" projectCachePath="{@WorkingFolder}ReflectionIndexCache">
-            <data base="{@FrameworkReflectionDataFolder}" recurse="true" files="*.xml" duplicateWarning="false" groupId="ReflectionIndexCache">
-		{@ReferenceLinkNamespaceFiles}
-	</data>
-            <data files="reflection.xml" groupId="Project_Ref_{@UniqueID}" />
-          </index>
-          <copy name="reflection" source="*" target="/document/reference" />
-        </component>
-      </ComponentConfig>
-      <ComponentConfig id="Code Block Component" enabled="False">
+      <ComponentConfig id="Code Block Component" enabled="True">
         <component id="Code Block Component">
-          <basePath value="{@HtmlEncProjectFolder}" />
-          <outputPaths>{@HelpFormatOutputPaths}</outputPaths>
-          <allowMissingSource value="false" />
-          <removeRegionMarkers value="false" />
-          <colorizer syntaxFile="{@SHFBFolder}PresentationStyles\Colorizer\highlight.xml" styleFile="{@SHFBFolder}PresentationStyles\Colorizer\highlight.xsl" stylesheet="{@SHFBFolder}PresentationStyles\Colorizer\highlight.css" scriptFile="{@SHFBFolder}PresentationStyles\Colorizer\highlight.js" disabled="{@DisableCodeBlockComponent}" language="cs" tabSize="0" numberLines="false" outlining="false" keepSeeTags="false" defaultTitle="true" />
-        </component>
+  <basePath value="{@HtmlEncProjectFolder}" />
+  <outputPaths>{@HelpFormatOutputPaths}</outputPaths>
+  <allowMissingSource value="false" />
+  <removeRegionMarkers value="false" />
+  <colorizer syntaxFile="{@CoreComponentsFolder}Colorizer\highlight.xml" styleFile="{@CoreComponentsFolder}Colorizer\highlight.xsl" stylesheet="{@CoreComponentsFolder}Colorizer\highlight.css" scriptFile="{@CoreComponentsFolder}Colorizer\highlight.js" disabled="{@DisableCodeBlockComponent}" language="cs" tabSize="0" numberLines="false" outlining="false" keepSeeTags="false" defaultTitle="true" />
+</component>
       </ComponentConfig>
     </ComponentConfigurations>
     <ProjectSummary>ASCOM Platform 6 Developer Documentation</ProjectSummary>
