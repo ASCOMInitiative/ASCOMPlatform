@@ -1,6 +1,5 @@
 ﻿Check Application Requirements
 Main Setup Dialogue
-Prepare for Installation or Uninstallation
 Check Application Pre-Requisites
 Specify additional clean-up required when uninstalling
 Platform 6 Content
@@ -13,5 +12,4 @@ Uninstall items installed by this installer
 ASCOM Cache
 Create shortcuts
 Maintenance Dialogue
-ASCOM Device Hub
 Clean up any remaining simulator COM entries

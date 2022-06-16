@@ -2,7 +2,7 @@
 <topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <para>
-      Please see <link xlink:href="3417e177-f705-497d-8127-fb30e8519d50" /> for detailed information on Platform 6.5 changes and <link xlink:href="2c6cb374-9a44-4bc4-b3a5-f867033a3b93" /> for updates in Platform 6.6.
+      Please see <link xlink:href="2c6cb374-9a44-4bc4-b3a5-f867033a3b93" /> for a detailed list of changes and fixes in Platform 6.6 for both developers and Platform users.
     </para>
 
     <para>
@@ -15,32 +15,41 @@
     </para>
 
     <section address="Introduction-Users-Platform-6">
-      <title>Major Enhancements in Platform 6.5</title>
+      <title>Key changes in Platform 6.6</title>
       <content>
-        <para>
-          <legacyBold>Alpaca Support</legacyBold>
-        </para>
-        <para>
-          Alpaca devices can now be discovered from the Chooser, which will also create a dynamic driver so that the device can be used in any ASCOM client program. By default, Alpaca discovery is disabled but can be enabled
-          through a new "Alpaca" menu option in the Chooser. This menu also enables you to manually create an Alpaca driver for devices that do not support automatic discovery as well as configure discovery and Chooser behaviour.
-        </para>
-        <para>
-          Further information on Alpaca use is provided here: <link xlink:href="e3870a2f-582a-4ab4-b37f-e9b1c37a2030">Using Alpaca devices through the Chooser</link>.
-        </para>
-        <para>
-          <legacyBold>Device Hub</legacyBold>
-        </para>
-        <para>
-          We now have a new "Device Hub" that replaces the ageing POTH, Pipe, Hub and Dome Control drivers. This provides improved functionality delivered in a modern technology that makes it easy to enhance if required.
-          Thanks very much to Rick Burke for delivering this significant improvement!
-        </para>
-        <para>
-          <legacyBold>CoverCalibrator Interface</legacyBold>
-        </para>
-        <para>
-          Following an RFC we have added a new interface, ICoverCalibrator, which enables clients to control opening and closing of automated telescope covers and to adjust the brightness of flat field calibration panels.
-          The interface incorporates these two distinct capabilities because some devices provide both within one hardware device.
-        </para>
+        <list class="bullet">
+          <listItem>The Alpaca Dynamic Camera Client now supports the ImageBytes protocol.</listItem>
+          <listItem>
+            Telescope Simulator:
+            <list class="bullet">
+              <listItem>Client supplied TelescopeAxes values are validated before use.</listItem>
+              <listItem>The Tracking state is restored after Park and Home are called.</listItem>
+            </list>
+          </listItem>
+          <listItem>
+            Camera Simulator:
+            <list class="bullet">
+              <listItem>PulseGuide directions are validated before use.</listItem>
+            </list>
+          </listItem>
+          <listItem>
+            Device Hub
+            <list class="bullet">
+              <listItem>Added a setting to keep Device Hub as the topmost application.</listItem>
+              <listItem>Polling frequency is increased for the duration of a slew.</listItem>
+              <listItem>Implements a stricter interpretation of the Park command requirements.</listItem>
+            </list>
+          </listItem>
+          <listItem>The mechanic to bring Simulator setup dialogues to the front of screen has been made more reliable.</listItem>
+          <listItem>
+            ObservingConditions Simulator and ObservingConditions Hub test applications
+            <list class="bullet">
+              <listItem>Redundant "Chooser" buttons have been removed.</listItem>
+              <listItem>Automatic polling can now be toggled on and off.</listItem>
+            </list>
+          </listItem>
+        </list>
+
       </content>
     </section>
 
@@ -48,7 +57,7 @@
       <title>Operating System Compatibility</title>
       <content>
         <para>
-          Platform 6.5 requires Windows 7 or later together with .NET Framework 4.8. PCs running Windows XP should use Platform 6.4 Service Pack 1 together with .NET Framework 4 Client Profile instead.
+          Platform 6.6 requires Windows 7 or later together with .NET Framework 4.8. PCs running Windows XP should use Platform 6.4 Service Pack 1 together with .NET Framework 4 Client Profile instead.
         </para>
       </content>
     </section>
