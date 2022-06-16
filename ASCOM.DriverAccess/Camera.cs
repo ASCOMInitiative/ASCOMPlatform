@@ -700,7 +700,7 @@ namespace ASCOM.DriverAccess
 		#region ICameraV2 members
 
 		/// <summary>
-		/// Bayer X offset index, Interface Version 2 or later
+		/// Bayer X offset index, Interface Version 2 and later
 		/// </summary>
 		/// <returns>The Bayer colour matrix X offset, as defined in <see cref="SensorType" />.</returns>
 		/// <exception cref="PropertyNotImplementedException">Monochrome cameras must throw this exception, colour cameras must not.</exception>
@@ -710,7 +710,7 @@ namespace ASCOM.DriverAccess
 		/// Returns the X offset of the Bayer matrix, as defined in <see cref="SensorType" />. Value returned must be in the range 0 to M-1, 
 		/// where M is the width of the Bayer matrix. The offset is relative to the 0,0 pixel in the sensor array, and does not change to 
 		/// reflect subframe settings.
-		/// <para>This is only available for the Camera Interface Version 2</para>
+		/// <para>This is only available for the Camera Interface Version 2 and later.</para>
 		/// </remarks>
 		public short BayerOffsetX
         {
@@ -727,7 +727,7 @@ namespace ASCOM.DriverAccess
 		/// <remarks>The offset is relative to the 0,0 pixel in the sensor array, and does not change to reflect subframe settings. 
 		/// <para>It is recommended that this function be called only after a <see cref="AscomDriver.Connected">connection</see> is established with 
 		/// the camera hardware, to ensure that the driver is aware of the capabilities of the specific camera model.</para>
-		/// <para>This is only available for the Camera Interface Version 2</para>
+		/// <para>This is only available for the Camera Interface Version 2 and later.</para>
 		/// </remarks>
 		public short BayerOffsetY
         {
@@ -743,7 +743,7 @@ namespace ASCOM.DriverAccess
 		/// <remarks>
 		/// It is recommended that this function be called only after a <see cref="AscomDriver.Connected">connection</see> is established with the camera hardware, to 
 		/// ensure that the driver is aware of the capabilities of the specific camera model.
-		/// <para>This is only available for the Camera Interface Version 2</para>
+		/// <para>This is only available for the Camera Interface Version 2 and later.</para>
 		/// </remarks>
 		public bool CanFastReadout
         {
@@ -767,7 +767,7 @@ namespace ASCOM.DriverAccess
 		/// It is recommended that this function be called only after 
 		/// a <see cref="AscomDriver.Connected">connection</see> is established with the camera hardware, to ensure that the driver is aware of the capabilities of the 
 		/// specific camera model.
-		/// <para>This is only available for the Camera Interface Version 2</para>
+		/// <para>This is only available for the Camera Interface Version 2 and later.</para>
 		/// </remarks>
 		public double ExposureMax
         {
@@ -786,7 +786,7 @@ namespace ASCOM.DriverAccess
 		/// for more information.</para>
 		/// <para>It is recommended that this function be called only after a <see cref="AscomDriver.Connected">connection</see> is established with the camera hardware, to ensure 
 		/// that the driver is aware of the capabilities of the specific camera model.</para>
-		/// <para>This is only available for the Camera Interface Version 2</para>
+		/// <para>This is only available for the Camera Interface Version 2 and later.</para>
 		/// </remarks>
 		public double ExposureMin
         {
@@ -806,7 +806,7 @@ namespace ASCOM.DriverAccess
 		/// of exposure times; in this case the smallest increment would be appropriate. </para>
 		/// <para>It is recommended that this function be called only after a <see cref="AscomDriver.Connected">connection</see> is established with the camera hardware, to ensure 
 		/// that the driver is aware of the capabilities of the specific camera model.</para>
-		/// <para>This is only available for the Camera Interface Version 2</para>
+		/// <para>This is only available for the Camera Interface Version 2 and later.</para>
 		/// </remarks>
 		public double ExposureResolution
         {
@@ -830,7 +830,7 @@ namespace ASCOM.DriverAccess
 		/// the Fast/Normal switch is meaningless. In this case, it may be preferable to use the <see cref="ReadoutModes" /> function to control 
 		/// fast/normal switching.</para>
 		/// <para>If this feature is not available, then <see cref="CanFastReadout" /> must return False.</para>
-		/// <para>This is only available for the Camera Interface Version 2</para>
+		/// <para>This is only available for the Camera Interface Version 2 and later.</para>
 		/// </remarks>
 		public bool FastReadout
         {
@@ -1040,7 +1040,8 @@ namespace ASCOM.DriverAccess
 		/// <returns>The name of sensor used within the camera</returns>
 		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>Must return an empty string if the sensor name is not known.
+		/// <remarks>
+		/// <para>Must return an empty string if the sensor name is not known.</para>
 		/// <para>Returns the name (data sheet part number) of the sensor, e.g. ICX285AL.  The format is to be exactly as shown on 
 		/// manufacturer data sheet, subject to the following rules. All letters shall be upper case.  Spaces shall not be included.</para>
 		/// <para>Any extra suffixes that define region codes, package types, temperature range, coatings, grading, colour/monochrome, 
@@ -1057,7 +1058,7 @@ namespace ASCOM.DriverAccess
 		/// in place for colour sensors.</para>
 		/// <para>It is recommended that this function be called only after a <see cref="AscomDriver.Connected">connection</see> is established with 
 		/// the camera hardware, to ensure that the driver is aware of the capabilities of the specific camera model.</para>
-		/// <para>This is only available for the Camera Interface Version 2</para>
+		/// <para>This is only available for the Camera Interface Version 2 and later.</para>
 		/// </remarks>
 		public string SensorName
         {

@@ -113,6 +113,7 @@ namespace ASCOM.DriverAccess
 		/// <summary>
 		/// Returns the list of integration rates supported by the video camera.
 		/// </summary>
+		/// <value>The list of supported integration rates in seconds.</value>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
 		/// <remarks>
@@ -120,9 +121,6 @@ namespace ASCOM.DriverAccess
 		/// return a range of useful supported exposures. For many video cameras the supported exposures (integration rates) increase by a factor of 2 from a base exposure e.g. 1, 2, 4, 8, 16 sec or 0.04, 0.08, 0.16, 0.32, 0.64, 1.28, 2.56, 5.12, 10.24 sec.
 		/// If the camera supports only one exposure that cannot be changed (such as all non integrating PAL or NTSC video cameras) then this property must throw <see cref="PropertyNotImplementedException"/>.
 		/// </remarks>
-		/// <value>The list of supported integration rates in seconds.</value>
-		/// <exception cref="NotConnectedException">Must throw exception if data unavailable.</exception>
-		/// <exception cref="PropertyNotImplementedException">Must throw exception if camera supports only one integration rate (exposure) that cannot be changed.</exception>
 		public ArrayList SupportedIntegrationRates
         {
             get { return memberFactory.CallMember(1, "SupportedIntegrationRates", new Type[0], new object[0]).ComObjToArrayList(); }
@@ -131,8 +129,6 @@ namespace ASCOM.DriverAccess
 		/// <summary>
 		///	Index into the <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedIntegrationRates"/> array for the selected camera integration rate.
 		///	</summary>
-		///	<value>Integer index for the current camera integration rate in the <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedIntegrationRates"/> string array.</value>
-		///	<returns>Index into the SupportedIntegrationRates array for the selected camera integration rate.</returns>
 		///	<exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
 		///	<exception cref="PropertyNotImplementedException">Must throw an exception if the camera supports only one integration rate (exposure) that cannot be changed.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
@@ -167,7 +163,8 @@ namespace ASCOM.DriverAccess
 		///	<returns>The name of sensor used within the camera.</returns>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		///	<remarks>Returns the name (data-sheet part number) of the sensor, e.g. ICX285AL.  The format is to be exactly as shown on 
+		///	<remarks>
+		///	Returns the name (data-sheet part number) of the sensor, e.g. ICX285AL.  The format is to be exactly as shown on 
 		///	manufacturer data sheet, subject to the following rules. All letter shall be upper-case.  Spaces shall not be included.
 		///	<para>Any extra suffixes that define region codes, package types, temperature range, coatings, grading, colour/monochrome, 
 		///	etc. shall not be included. For colour sensors, if a suffix differentiates different Bayer matrix encodings, it shall be 
@@ -190,10 +187,9 @@ namespace ASCOM.DriverAccess
         }
 
 		/// <summary>
-		///Type of colour information returned by the camera sensor.
-		///</summary>
-		///   <value></value>
-		///   <returns>The <see cref="DeviceInterface.SensorType"/> enum value of the camera sensor</returns>
+		/// Type of colour information returned by the camera sensor.
+		/// </summary>
+		/// <returns>The <see cref="DeviceInterface.SensorType"/> enum value of the camera sensor</returns>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
 		///   <remarks>
@@ -585,6 +581,7 @@ namespace ASCOM.DriverAccess
 		/// <summary>
 		///	Returns the current camera operational state.
 		///	</summary>
+		///	<value>The state of the camera.</value>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
 		///	<remarks>
@@ -601,8 +598,6 @@ namespace ASCOM.DriverAccess
 		/// 
 		/// <img src="../media/VideoCamera State Diagram.png"/></para>
 		///	</remarks>
-		///	<value>The state of the camera.</value>
-		///	<exception cref="NotConnectedException">Must return an exception if the camera status is unavailable.</exception>
 		public VideoCameraState CameraState
         {
             get { return (VideoCameraState)memberFactory.CallMember(1, "CameraState", new Type[0], new object[0]); }

@@ -82,8 +82,8 @@ namespace ASCOM.DriverAccess
 		/// </summary>
 		/// <returns>The number of devices managed by this driver.</returns>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// /// <exception cref = "DriverException" >An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
-		/// <remarks><p style="color:red"><b>Must be implemented, must not throw an <see cref="T:ASCOM.MethodNotImplementedException"/></b></p>
+		/// <exception cref="DriverException" >An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
+		/// <remarks><p style="color:red"><b>Must be implemented, must not throw an <see cref="T:ASCOM.PropertyNotImplementedException"/></b></p>
 		/// <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</para></remarks>
 		public short MaxSwitch
         {
@@ -114,7 +114,7 @@ namespace ASCOM.DriverAccess
 		/// <exception cref="MethodNotImplementedException">If the device name cannot be set in the application code.</exception>
 		/// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref = "DriverException" >An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
+		/// <exception cref="DriverException" >An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		public void SetSwitchName(short id, string name)
         {
             memberFactory.CallMember(3, "SetSwitchName", new Type[] { typeof(short), typeof(string) }, new object[] { id, name });
@@ -130,7 +130,7 @@ namespace ASCOM.DriverAccess
 		/// </returns>
 		/// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref = "DriverException" >An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
+		/// <exception cref="DriverException" >An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
 		/// <para>This method was first introduced in Version 2.</para>
 		/// </remarks>
@@ -149,7 +149,7 @@ namespace ASCOM.DriverAccess
 		/// </returns>
 		/// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref = "DriverException" >An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
+		/// <exception cref="DriverException" >An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
 		/// <p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
 		/// <para>This method was first introduced in Version 2.</para>
@@ -172,7 +172,7 @@ namespace ASCOM.DriverAccess
 		/// <exception cref="T:ASCOM.InvalidOperationException">If the state cannot be read. This is not recommended but it is not always possible to read
 		/// the state from some hardware. Once the state has been set the last state set must be returned.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref = "DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
+		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
 		/// <p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
 		/// <para>All devices must implement this. A multi-state device will return true if the device is at the maximum value, false if the value is at the minimum
@@ -192,7 +192,7 @@ namespace ASCOM.DriverAccess
 		/// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
 		/// <exception cref="T:ASCOM.MethodNotImplementedException">If the device cannot be written to (<see cref="CanWrite"/> is false).</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref = "DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
+		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
 		/// <para>The <see cref="GetSwitchValue"/> will be set to <see cref="MaxSwitchValue" /> if state is true and to <see cref="MinSwitchValue" /> if the state is False.</para>
 		/// </remarks>
@@ -214,7 +214,7 @@ namespace ASCOM.DriverAccess
 		/// </returns>
 		/// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref = "DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
+		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
 		/// <para>Two state devices should return 1.0 as their maximum value.</para>
 		/// <para>This method was first introduced in Version 2.</para>

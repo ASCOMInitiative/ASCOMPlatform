@@ -35,7 +35,7 @@ namespace ASCOM.DeviceInterface
 		/// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
 		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented</b></p>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.
+		/// <p style="color:red"><b>Must be implemented</b></p>Do not use a NotConnectedException here. That exception is for use in other methods that require a connection in order to succeed.
 		/// <para>The Connected property sets and reports the state of connection to the device hardware.
 		/// For a hub this means that Connected will be true when the first driver connects and will only be set to false
 		/// when all drivers have disconnected.  A second driver may find that Connected is already true and
@@ -186,12 +186,13 @@ namespace ASCOM.DeviceInterface
 		/// <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> </remarks>
 		string CommandString(string Command, bool Raw = false);
 
-        /// <summary>
-        /// Dispose the late-bound interface, if needed. Will release it via COM
-        /// if it is a COM object, else if native .NET will just dereference it
-        /// for GC.
-        /// </summary>
-        void Dispose();
+		/// <summary>
+		/// Dispose the late-bound interface, if needed. Will release it via COM
+		/// if it is a COM object, else if native .NET will just dereference it
+		/// for GC.
+		/// </summary>
+		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+		void Dispose();
 
 		#endregion
 
@@ -206,7 +207,7 @@ namespace ASCOM.DeviceInterface
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
 		/// <remarks>
-		/// <p style="color:red;margin-bottom:0"><b>Must be implemented.</b></p>
+		/// <p style="color:red;margin-bottom:0"><b>Must be implemented and must always return True for the IRotatorV3 interface or later.</b></p>
 		/// </remarks>
 		bool CanReverse { get; }
 

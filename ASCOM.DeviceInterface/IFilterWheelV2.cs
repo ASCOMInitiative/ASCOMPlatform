@@ -28,7 +28,8 @@ namespace ASCOM.DeviceInterface
 		/// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
 		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented</b></p>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.
+		/// <p style="color:red"><b>Must be implemented</b></p>
+		/// <para>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.</para>
 		/// <para>The Connected property sets and reports the state of connection to the device hardware.
 		/// For a hub this means that Connected will be true when the first driver connects and will only be set to false
 		/// when all drivers have disconnected.  A second driver may find that Connected is already true and
@@ -206,9 +207,9 @@ namespace ASCOM.DeviceInterface
 		/// <summary>
 		/// Focus offset of each filter in the wheel
 		/// </summary>
-		/// <remarks>
 		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+		/// <remarks>
 		/// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
 		/// For each valid slot number (from 0 to N-1), reports the focus offset for the given filter position.  These values are focuser and filter dependent, and  would usually be set up by the user via
 		/// the SetupDialog. The number of slots N can be determined from the length of the array. If focuser offsets are not available, then it should report back 0 for all array values.

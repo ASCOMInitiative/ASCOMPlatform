@@ -15,7 +15,7 @@ namespace ASCOM.DriverAccess
     /// <remarks>It is NOT intended as a general purpose environmental sensor system.
     /// The <see cref="IObservingConditions.Action">Action</see> method and 
     /// <see cref="IObservingConditions.SupportedActions">SupportedActions</see> property 
-    /// can be used to add driver specific sensors.
+    /// can be used to add driver-specific sensors.
     /// </remarks>
     public class ObservingConditions : AscomDriver, IObservingConditions
     {

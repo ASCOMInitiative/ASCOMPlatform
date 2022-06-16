@@ -7,7 +7,7 @@ namespace ASCOM.DeviceInterface
     /// <summary>Defines the IDome Interface</summary>
     /// <remarks>
     /// <para>
-    /// This interface can be used to control most types of observatory structure, including domes (with or without a controllable shutter), clamshells and roll off roofs.
+    /// This interface can be used to control most types of observatory structures, including domes (with or without a controllable shutter), clamshells, and roll off roofs.
     /// </para>
     /// <para><b>Dome Coordinates</b></para>
     /// <para>
@@ -68,7 +68,7 @@ namespace ASCOM.DeviceInterface
 		/// <remarks>
 		/// <p style="color: red;"><b>Must be implemented.</b></p>
 		/// <para>
-		/// Do not use a <c>NotConnectedException</c> here, that exception is for use in other methods
+		/// Do not use a <c>NotConnectedException</c> here. That exception is for use in other methods
 		/// that require a connection in order to succeed.
 		/// </para>
 		/// <para>
@@ -141,8 +141,8 @@ namespace ASCOM.DeviceInterface
 		/// <summary>
 		/// The interface version number that this device supports. Should return 2 for this interface
 		/// version.
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
 		/// </summary>
+		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
 		/// <remarks>
 		/// <p style="color:red"><b>Must be implemented.</b></p>
 		/// <para>

@@ -59,7 +59,7 @@ namespace ASCOM.DriverAccess
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
-		/// <p style="color:red;margin-bottom:0"><b>Must be implemented.</b></p>
+		/// <p style="color:red;margin-bottom:0"><b>Must be implemented and must always return True for the IRotatorV3 interface or later.</b></p>
 		/// </remarks>
 		public bool CanReverse
         {

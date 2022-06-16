@@ -91,9 +91,9 @@ namespace ASCOM.DriverAccess
 		/// </summary>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
 		/// <remarks>
-		/// Set True to start the connection to the focuser; set False to terminate the connection. 
+		/// <para>Set True to start the connection to the focuser; set False to terminate the connection. 
 		/// The current connection status can also be read back through this property. 
-		/// An exception will be raised if the link fails to change state for any reason. 
+		/// An exception will be raised if the link fails to change state for any reason. </para>
 		/// <para><b>Note</b></para>
 		/// <para>The FocuserV1 interface was the only interface to name its <i>"Connection"</i> property "Link" all others named 
 		/// their <i>"Connection"</i> property as "Connected". All interfaces including Focuser now have a <see cref="AscomDriver.Connected" /> method and this is 
