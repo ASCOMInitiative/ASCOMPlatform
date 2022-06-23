@@ -236,7 +236,7 @@ Public Class DiagnosticsForm
             TL.BlankLine()
             TL.LogMessage("Date", Date.Now.ToString)
             TL.LogMessage("TimeZoneName", GetTimeZoneName)
-            TL.LogMessage("TimeZoneOffset", TimeZone.CurrentTimeZone.GetUtcOffset(Now).Hours)
+            TL.LogMessage("TimeZoneOffset", TimeZone.CurrentTimeZone.GetUtcOffset(Now).TotalHours)
             TL.LogMessage("UTCDate", Date.UtcNow)
             TL.LogMessage("Julian date", Date.UtcNow.ToOADate() + OLE_AUTOMATION_JULIAN_DATE_OFFSET)
             TL.BlankLine()
@@ -6043,7 +6043,7 @@ Public Class DiagnosticsForm
                 TL.BlankLine()
 
                 Compare("UtilTests", "TimeZoneName", Utl.TimeZoneName.ToString, GetTimeZoneName)
-                CompareDouble("UtilTests", "TimeZoneOffset", Utl.TimeZoneOffset, -CDbl(TimeZone.CurrentTimeZone.GetUtcOffset(Now).Hours), 0.017) '1 minute tolerance
+                CompareDouble("UtilTests", "TimeZoneOffset", Utl.TimeZoneOffset, -TimeZone.CurrentTimeZone.GetUtcOffset(Now).TotalHours, 0.017) '1 minute tolerance
                 Compare("UtilTests", "UTCDate", Utl.UTCDate.ToString, Date.UtcNow)
                 CompareDouble("UtilTests", "Julian date", Utl.JulianDate, Date.UtcNow.ToOADate() + OLE_AUTOMATION_JULIAN_DATE_OFFSET, 0.00002) '1 second tolerance
                 TL.BlankLine()
