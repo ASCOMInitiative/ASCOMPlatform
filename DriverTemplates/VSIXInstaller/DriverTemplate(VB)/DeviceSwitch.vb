@@ -141,7 +141,7 @@ Class DeviceSwitch
 
     ''' <summary>
     ''' Returns the analogue switch value for switch id
-    ''' Boolean switches must throw a MethodNotImplementedException
+    ''' Boolean switches must return either 0.0 (false) Or 1.0 (true).
     ''' </summary>
     ''' <param name="id"></param>
     ''' <returns></returns>
@@ -155,7 +155,7 @@ Class DeviceSwitch
     ''' Set the analogue value for this switch.
     ''' A MethodNotImplementedException should be thrown if CanWrite returns False
     ''' If the value is not between the maximum and minimum then throws an InvalidValueException
-    ''' boolean switches must throw a MethodNotImplementedException
+    ''' Boolean switches must accept either 0.0 (false) Or 1.0 (true).
     ''' </summary>
     ''' <param name="id"></param>
     ''' <param name="value"></param>

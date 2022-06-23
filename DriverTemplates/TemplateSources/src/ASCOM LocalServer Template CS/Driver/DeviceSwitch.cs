@@ -169,7 +169,7 @@ class DeviceSwitch
 
     /// <summary>
     /// returns the analogue switch value for switch id
-    /// boolean switches must throw a not implemented exception
+    /// Boolean switches must return either 0.0 (false) or 1.0 (true).
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -184,7 +184,7 @@ class DeviceSwitch
     /// set the analogue value for this switch.
     /// A MethodNotImplementedException should be thrown if CanWrite returns False
     /// If the value is not between the maximum and minimum then throws an InvalidValueException
-    /// boolean switches must throw a not implemented exception.
+    /// Boolean switches must accept either 0.0 (false) or 1.0 (true).
     /// </summary>
     /// <param name="id"></param>
     /// <param name="value"></param>
@@ -237,24 +237,6 @@ class DeviceSwitch
  	        throw new InvalidValueException(message, value.ToString(), string.Format("Switch({0}) range {1} to {2}", id, min, max));
         }
     }
-
-    /// <summary>
-    /// Checks that the number of states for the switch is correct and throws a methodNotImplemented exception if not.
-    /// Boolean switches must have 2 states and multi-value switches more than 2.
-    /// </summary>
-    /// <param name="message"></param>
-    /// <param name="id"></param>
-    /// <param name="expectBoolean"></param>
-    //private void Validate(string message, short id, bool expectBoolean)
-    //{
-    //    Validate(message, id);
-    //    var ns = (int)(((MaxSwitchValue(id) - MinSwitchValue(id)) / SwitchStep(id)) + 1);
-    //    if ((expectBoolean && ns != 2) || (!expectBoolean && ns <= 2))
-    //    {
-    //        tl.LogMessage(message, string.Format("Switch {0} has the wriong number of states", id, ns));
-    //        throw new MethodNotImplementedException(string.Format("{0}({1})", message, id));
-    //    }
-    //}
 
     #endregion
 
