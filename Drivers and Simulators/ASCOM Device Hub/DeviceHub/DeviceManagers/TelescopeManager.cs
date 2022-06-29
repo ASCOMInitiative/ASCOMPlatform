@@ -778,10 +778,18 @@ namespace ASCOM.DeviceHub
 			Stopwatch watch = new Stopwatch();
 			double overhead = 0.0;
 
+			TimeSpan fastPollExtension = new TimeSpan( 0, 0, 3 ); //Wait 3 seconds after movement stops to return to normal polling.
+			bool previousMoveStatus = false;
+			DateTime returnToNormalPollingTime = DateTime.MinValue;
+			int previousPollingPeriod;
+
 			while ( !taskCancelled )
 			{
 				DateTime wakeupTime = DateTime.Now;
 				//Debug.WriteLine( $"Awakened @ {wakeupTime:hh:mm:ss.fff}." );
+				previousPollingPeriod = PollingPeriod;
+				PollingPeriod = POLLING_PERIOD_NORMAL;
+				int fastPollingMs = Convert.ToInt32( FastPollingPeriod * 1000.0 );
 
 				if ( Service.DeviceAvailable )
 				{
@@ -815,7 +823,42 @@ namespace ASCOM.DeviceHub
 						LogActivityLine( ActivityMessageTypes.Commands, $"Returning to normal polling every {POLLING_PERIOD_NORMAL} ms." );
 					}
 
-					PollingPeriod = ( Status.Slewing ) ? Convert.ToInt32( FastPollingPeriod * 1000.0 ) : POLLING_PERIOD_NORMAL;
+					//PollingPeriod = ( Status.Slewing ) ? Convert.ToInt32( FastPollingPeriod * 1000.0 ) : POLLING_PERIOD_NORMAL;
+
+					if ( Status.Slewing )
+					{
+						// We are moving, so use the fast polling rate.
+
+						PollingPeriod = fastPollingMs;
+					}
+					else if ( previousMoveStatus )
+					{
+						// We stopped moving, so start the timer to return to normal polling.
+
+						returnToNormalPollingTime = DateTime.Now + fastPollExtension;
+						PollingPeriod = fastPollingMs;
+					}
+					else if ( DateTime.Now < returnToNormalPollingTime )
+					{
+						// Continue fast polling.
+
+						PollingPeriod = fastPollingMs;
+					}
+					else
+					{
+						// Return to normal polling.
+
+						returnToNormalPollingTime = DateTime.MinValue;
+					}
+
+					// Remember our state for the next time through this loop.
+
+					previousMoveStatus = Status.Slewing;
+
+					if ( PollingPeriod == POLLING_PERIOD_NORMAL && previousPollingPeriod != POLLING_PERIOD_NORMAL )
+					{
+						LogActivityLine( ActivityMessageTypes.Commands, $"Returning to normal polling every {PollingPeriod} ms." );
+					}
 				}
 
 				TimeSpan waitInterval = wakeupTime.AddMilliseconds( (double)PollingPeriod ) - DateTime.Now;
