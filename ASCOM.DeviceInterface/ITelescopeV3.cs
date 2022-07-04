@@ -516,6 +516,7 @@ namespace ASCOM.DeviceInterface
 		/// The declination tracking rate (arcseconds per SI second, default = 0.0)
 		/// </summary>
 		/// <exception cref="PropertyNotImplementedException">If DeclinationRate Write is not implemented.</exception>
+		/// <exception cref="InvalidValueException">If an invalid DeclinationRate is specified</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
 		/// <remarks>
@@ -1026,8 +1027,9 @@ namespace ASCOM.DeviceInterface
 		/// </summary>
 		/// <param name="RightAscension">The destination right ascension (hours). Copied to <see cref="TargetRightAscension" />.</param>
 		/// <param name="Declination">The destination declination (degrees, positive North). Copied to <see cref="TargetDeclination" />.</param>
-		/// <exception cref="InvalidValueException">If an invalid right ascension or declination is given.</exception>
 		/// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlew" /> is False</exception>
+		/// <exception cref="ParkedException">If the telescope is parked</exception>
+		/// <exception cref="InvalidValueException">If an invalid right ascension or declination is given.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
 		/// <remarks>
@@ -1046,6 +1048,7 @@ namespace ASCOM.DeviceInterface
 		/// <param name="RightAscension">The destination right ascension (hours). Copied to <see cref="TargetRightAscension" />.</param>
 		/// <param name="Declination">The destination declination (degrees, positive North). Copied to <see cref="TargetDeclination" />.</param>
 		/// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlewAsync" /> is False</exception>
+		/// <exception cref="ParkedException">If the telescope is parked</exception>
 		/// <exception cref="InvalidValueException">If an invalid right ascension or declination is given.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
@@ -1066,6 +1069,7 @@ namespace ASCOM.DeviceInterface
 		/// Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> coordinates, return when slew complete.
 		/// </summary>
 		/// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlew" /> is False</exception>
+		/// <exception cref="ParkedException">If the telescope is parked</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
 		/// <remarks>
@@ -1082,6 +1086,7 @@ namespace ASCOM.DeviceInterface
 		/// returns immediately after starting the slew.
 		/// </summary>
 		/// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlewAsync" /> is False</exception>
+		/// <exception cref="ParkedException">If the telescope is parked</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
 		/// <remarks>
