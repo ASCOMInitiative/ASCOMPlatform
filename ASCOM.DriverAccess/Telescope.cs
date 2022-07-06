@@ -551,6 +551,7 @@ namespace ASCOM.DriverAccess
 		/// The declination tracking rate (arcseconds per SI second, default = 0.0)
 		/// </summary>
 		/// <exception cref="PropertyNotImplementedException">If DeclinationRate Write is not implemented</exception>
+		/// <exception cref="InvalidValueException">An invalid value is set.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
