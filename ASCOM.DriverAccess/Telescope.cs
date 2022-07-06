@@ -551,7 +551,7 @@ namespace ASCOM.DriverAccess
 		/// The declination tracking rate (arcseconds per SI second, default = 0.0)
 		/// </summary>
 		/// <exception cref="PropertyNotImplementedException">If DeclinationRate Write is not implemented</exception>
-		/// <exception cref="InvalidValueException">An invalid value is set.</exception>
+		/// <exception cref="InvalidValueException">If an invalid DeclinationRate is specified</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
@@ -1088,6 +1088,7 @@ namespace ASCOM.DriverAccess
 		/// Specifies a post-slew settling time (sec.).
 		/// </summary>
 		/// <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
+		/// <exception cref="InvalidValueException">If an invalid settle time is set.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
@@ -1159,6 +1160,9 @@ namespace ASCOM.DriverAccess
 		/// <summary>
 		/// Move the telescope to the given equatorial coordinates, return when slew is complete
 		/// </summary>
+		/// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlew" /> is False</exception>
+		/// <exception cref="ParkedException">If the telescope is parked</exception>
+		/// <exception cref="InvalidValueException">If an invalid RightAscension or Declination is specified</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
@@ -1179,6 +1183,9 @@ namespace ASCOM.DriverAccess
 		/// <summary>
 		/// Move the telescope to the given equatorial coordinates, return immediately after starting the slew.
 		/// </summary>
+		/// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlewAsync" /> is False</exception>
+		/// <exception cref="ParkedException">If the telescope is parked</exception>
+		/// <exception cref="InvalidValueException">If an invalid RightAscension or Declination is specified</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
@@ -1202,6 +1209,8 @@ namespace ASCOM.DriverAccess
 		/// <summary>
 		/// Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> coordinates, return when slew complete.
 		/// </summary>
+		/// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlew" /> is False</exception>
+		/// <exception cref="ParkedException">If the telescope is parked</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
@@ -1220,6 +1229,8 @@ namespace ASCOM.DriverAccess
 		/// Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" />  coordinates,
 		/// returns immediately after starting the slew.
 		/// </summary>
+		/// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlewAsync" /> is False</exception>
+		/// <exception cref="ParkedException">If the telescope is parked</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
@@ -1242,6 +1253,7 @@ namespace ASCOM.DriverAccess
 		/// True if telescope is currently moving in response to one of the
 		/// Slew methods or the <see cref="MoveAxis" /> method, False at all other times.
 		/// </summary>
+		/// <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
@@ -1261,6 +1273,8 @@ namespace ASCOM.DriverAccess
 		/// <summary>
 		/// Matches the scope's local horizontal coordinates to the given local horizontal coordinates.
 		/// </summary>
+		/// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSyncAltAz" /> is False</exception>
+		/// <exception cref="InvalidValueException">If an invalid azimuth or altitude is given.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
@@ -1280,6 +1294,8 @@ namespace ASCOM.DriverAccess
 		/// </summary>
 		/// <param name="RightAscension">The corrected right ascension (hours). Copied to the TargetRightAscension property.</param>
 		/// <param name="Declination">The corrected declination (degrees, positive North). Copied to the TargetDeclination property.</param>
+		/// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSync" /> is False</exception>
+		/// <exception cref="InvalidValueException">If an invalid right ascension or declination is given.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
@@ -1296,6 +1312,7 @@ namespace ASCOM.DriverAccess
 		/// <summary>
 		/// Matches the scope's equatorial coordinates to the given equatorial coordinates.
 		/// </summary>
+		/// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSync" /> is False</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
@@ -1312,6 +1329,9 @@ namespace ASCOM.DriverAccess
 		/// <summary>
 		/// The declination (degrees, positive North) for the target of an equatorial slew or sync operation
 		/// </summary>
+		/// <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
+		/// <exception cref="InvalidValueException">If an invalid declination is set.</exception>
+		/// <exception cref="InvalidOperationException">If the property is read before being set for the first time.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
@@ -1327,6 +1347,9 @@ namespace ASCOM.DriverAccess
 		/// <summary>
 		/// The right ascension (hours) for the target of an equatorial slew or sync operation
 		/// </summary>
+		/// <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
+		/// <exception cref="InvalidValueException">If an invalid right ascension is set.</exception>
+		/// <exception cref="InvalidOperationException">If the property is read before being set for the first time.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
@@ -1342,6 +1365,7 @@ namespace ASCOM.DriverAccess
 		/// <summary>
 		/// The state of the telescope's sidereal tracking drive.
 		/// </summary>
+		/// <exception cref="PropertyNotImplementedException">If Tracking Write is not implemented.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
@@ -1359,6 +1383,8 @@ namespace ASCOM.DriverAccess
 		/// <summary>
 		/// The current tracking rate of the telescope's sidereal drive
 		/// </summary>
+		/// <exception cref="PropertyNotImplementedException">If TrackingRate Write is not implemented.</exception>
+		/// <exception cref="InvalidValueException">If an invalid drive rate is set.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
@@ -1409,6 +1435,9 @@ namespace ASCOM.DriverAccess
 		/// <summary>
 		/// The UTC date/time of the telescope's internal clock
 		/// </summary>
+		/// <exception cref="PropertyNotImplementedException">If UTCDate Write is not implemented.</exception>
+		/// <exception cref="InvalidValueException">If an invalid <see cref="DateTime" /> is set.</exception>
+		/// <exception cref="InvalidOperationException">When UTCDate is read and the mount cannot provide this property itself and a value has not yet be established by writing to the property.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>
@@ -1429,6 +1458,7 @@ namespace ASCOM.DriverAccess
 		/// <summary>
 		/// Takes telescope out of the Parked state.
 		/// </summary>
+		/// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanUnpark" /> is False</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
 		/// <remarks>

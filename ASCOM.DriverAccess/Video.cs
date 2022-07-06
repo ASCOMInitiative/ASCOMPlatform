@@ -60,6 +60,7 @@ namespace ASCOM.DriverAccess
 		/// <summary>
 		/// The name of the video capture device when such a device is used.
 		/// </summary>
+		/// <exception cref="PropertyNotImplementedException">Must throw an exception if not implemented.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
 		/// <remarks>For analogue video this is usually the video capture card or dongle attached to the computer.
@@ -114,6 +115,7 @@ namespace ASCOM.DriverAccess
 		/// Returns the list of integration rates supported by the video camera.
 		/// </summary>
 		/// <value>The list of supported integration rates in seconds.</value>
+		/// <exception cref="NotImplementedException">Must throw exception if camera supports only one integration rate (exposure) that cannot be changed.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
 		/// <remarks>
@@ -487,6 +489,7 @@ namespace ASCOM.DriverAccess
 		///	Returns the width of the CCD chip pixels in microns.
 		///	</summary>
 		///	<value>The pixel size X if known.</value>
+		/// <exception cref="PropertyNotImplementedException">Must throw exception if not implemented.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
 		public double PixelSizeX
@@ -498,6 +501,7 @@ namespace ASCOM.DriverAccess
 		///	Returns the height of the CCD chip pixels in microns.
 		///	</summary>
 		///	<value>The pixel size Y if known.</value>
+		/// <exception cref="PropertyNotImplementedException">Must throw exception if not implemented.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
 		public double PixelSizeY
@@ -519,6 +523,7 @@ namespace ASCOM.DriverAccess
 		/// <summary>
 		/// Returns the video codec used to record the video file.
 		/// </summary>
+		/// <exception cref="PropertyNotImplementedException">Must throw an exception if not implemented.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
 		/// <remarks>For AVI files this is usually the FourCC identifier of the codec- e.g. XVID, DVSD, YUY2, HFYU etc. 

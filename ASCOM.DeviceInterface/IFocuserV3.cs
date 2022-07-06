@@ -299,7 +299,7 @@ namespace ASCOM.DeviceInterface
 		/// <summary>
 		/// Current focuser position, in steps.
 		/// </summary>
-		/// <exception cref="PropertyNotImplementedException">If the property is not available for this device.</exception>
+		/// <exception cref="PropertyNotImplementedException">Raises a PropertyNotImplemented if the focuser does not intrinsically know what the position is.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
 		/// <remarks>
