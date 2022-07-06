@@ -1120,6 +1120,7 @@ namespace ASCOM.DeviceInterface
 		/// <param name="RightAscension">The corrected right ascension (hours). Copied to the <see cref="TargetRightAscension" /> property.</param>
 		/// <param name="Declination">The corrected declination (degrees, positive North). Copied to the <see cref="TargetDeclination" /> property.</param>
 		/// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSync" /> is False</exception>
+		/// <exception cref="ParkedException">If the telescope is parked</exception>
 		/// <exception cref="InvalidValueException">If an invalid right ascension or declination is given.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
@@ -1135,6 +1136,7 @@ namespace ASCOM.DeviceInterface
 		/// Matches the scope's equatorial coordinates to the given equatorial coordinates.
 		/// </summary>
 		/// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSync" /> is False</exception>
+		/// <exception cref="ParkedException">If the telescope is parked</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
 		/// <remarks>
@@ -1151,6 +1153,7 @@ namespace ASCOM.DeviceInterface
 		/// <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
 		/// <exception cref="InvalidValueException">If an invalid declination is set.</exception>
 		/// <exception cref="InvalidOperationException">If the property is read before being set for the first time.</exception>
+		/// <exception cref="ParkedException">If the telescope is parked</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
 		/// <remarks>
