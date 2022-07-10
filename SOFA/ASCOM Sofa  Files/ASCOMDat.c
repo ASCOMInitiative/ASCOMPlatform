@@ -6,21 +6,24 @@
 
 /* The IAU / SOFA supplied library makes use of hard coded leap second data to enable it to operate in a stand alone environment. */
 /* However, this approach requires that any application that uses the library be recompiled with an updated SOFA library whenever a new leap second is announced.*/
-/* To mitigate this, SOFA have provided a dispensation (SOFA License Note 3c below) for organisations to modify the iauDat routine to suite local conventions for dealing with leap second changes.*/
+/* To mitigate this, SOFA have provided a dispensation (SOFA License Note 3c below) for organisations to modify the iauDat routine to suit local conventions for dealing with leap second changes.*/
 
-/* This revised routine has been developed for the ASCOM Platform and enables the SOFA library to make use of automatically downloaded */
-/* Since C doesn't have provision for dynamic array sizes, a design decision has been made to over specify the likely maximum number of leap second values as 100. */
+/* This revised routine has been developed for the ASCOM Platform and enables the SOFA library to use updated leap second data that is loaded at run-time. */
 
-static LeapSecondData UpdatedLeapSecondData[100];  // Global LeapSecondData array to hold updated leap second data supplied to this DLL
-static bool HasUpdatedData = false;				   // Global boolean flag to indicate whether updated data has been supplied. If TRUE, the updated data will be used, if FALSE, built-in data will be used
-static int NUPDATED = 0;						   // Global integer to hold the number of updated leap second records supplied
+/* A design decision has been made to over specify the likely maximum number of leap second values. The maximum number of entries is set by the MAX_LEAP_SECONDS macro that is defines in ASCOMDat.h. */
 
-// This is the master data table for the whole ASCOM Platform. It is located here in the SOFA DLLs so that they can be used independently of the Platform if required.
+static LeapSecondData UpdatedLeapSecondData[MAX_LEAP_SECONDS];  // Global LeapSecondData array to hold updated leap second data supplied to this DLL
+static bool HasUpdatedData = false;								// Global boolean flag to indicate whether updated data has been supplied. If TRUE, the updated data will be used, if FALSE, built-in data will be used
+static int NUPDATED = 0;										// Global integer to hold the number of updated leap second records supplied
+
+// This is the master built-in leap second data table for the whole ASCOM Platform. It is located here, in the SOFA source code, so that compiled SOFA DLLs can be used independently of the Platform if required.
+
 // The Platform EarthRotatiuonParameters class reads these values through a static SOFA assembly method and uses them as needed throughout the Platform
+
 // When new leap seconds are announced:
 //      1) The new value should be added to the end of the values here
 //      2) The NBUILTIN enum in ASCOMDat.h should be incremented to reflect the new number of leap second values
-static LeapSecondData BuiltInLeapSecondData[100] = // Global LeapSecondData array to hold built-in leap second values
+static LeapSecondData BuiltInLeapSecondData[MAX_LEAP_SECONDS] = // Global LeapSecondData array to hold built-in leap second values
 {
 	{ 1960,  1,  1.4178180 },  // BuiltInLeapSecondData[0]
 	{ 1961,  1,  1.4228180 },
@@ -66,7 +69,7 @@ static LeapSecondData BuiltInLeapSecondData[100] = // Global LeapSecondData arra
 	{ 2017,  1, 37.0 },  // BuiltInLeapSecondData[41] <=== Insert additional values after this one and UPDATE NBUILTIN in the ASCOMDat.h file or new values won't be used!
 };
 
-int iauDat(int iy, int im, int id, double fd, double *deltat)
+int iauDat(int iy, int im, int id, double fd, double* deltat)
 /*
 **  - - - - - - -
 **   i a u D a t
@@ -193,7 +196,9 @@ int iauDat(int iy, int im, int id, double fd, double *deltat)
 **  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 */
 {
-	LeapSecondData(*SelectedLeapSecondData)[100]; // Pointer based array definition. The pointer can reference either the BuiltInLeapSecondData array or the UpdatedLeapSecondData array.
+	// Define a pointer based array to hold the leap second data.
+	// This can be either the data built-in to this C library (the BuiltInLeapSecondData array) or updated data loaded at run-time (the UpdatedLeapSecondData array). 	
+	LeapSecondData(*SelectedLeapSecondData)[MAX_LEAP_SECONDS]; // The pointer can reference either the BuiltInLeapSecondData array or the UpdatedLeapSecondData array.
 	int NDAT; // Number of valid records in the pointer based table (not the dimension of the array itself)
 
 	/* Release year for this version of iauDat */
@@ -397,14 +402,14 @@ int iauDat(int iy, int im, int id, double fd, double *deltat)
 /* Method called from outside the SOFA DLL to accept updated leap second data and store it for use instead of the built-in data table */
 int UpdateLeapSecondData(LeapSecondData SuppliedLeapSecondData[])
 
-/************************************************************************************************************************************************************************/
-/* INPUT:   Array of LeapSecondDataStruct values - maximum size 100 elements																							*/
-/* STORES:  Supplied SuppliedLeapSecondData array data in global array UpdatedLeapSecondData                                                                            */
-/* RETURNS: Integer status code:                                                                                                                                        */
-/*                       0 - Success - data accepted																													*/
-/*                       1 - Success - data ignored because it has already been supplied 			        															*/
-/*                       2 - Failure - data rejected because at least 100 records were supplied and this is unreasonable since there are only 42 records at April 2018! */
-/************************************************************************************************************************************************************************/
+/*************************************************************************************************************************************************************************************/
+/* INPUT:   Array of LeapSecondDataStruct values - maximum size MAX_LEAP_SECONDS elements																		 					 */
+/* STORES:  Supplied SuppliedLeapSecondData array data in global array UpdatedLeapSecondData																						 */
+/* RETURNS: Integer status code:																																					 */
+/*                       0 - Success - data accepted																																 */
+/*                       1 - Success - data ignored because it has already been supplied 			        													  					 */
+/*                       2 - Failure - data rejected because at least MAX_LEAP_SECONDS records were supplied and this is unreasonable since there are only 42 records at April 2018! */
+/*************************************************************************************************************************************************************************************/
 
 {
 	int rc = 0;
@@ -417,7 +422,7 @@ int UpdateLeapSecondData(LeapSecondData SuppliedLeapSecondData[])
 #endif
 
 		/* Iterate over the supplied data and transfer it to an internal array */
-		while ((SuppliedLeapSecondData[NUPDATED].Year != 0) & (NUPDATED <= 100))
+		while ((SuppliedLeapSecondData[NUPDATED].Year != 0) & (NUPDATED <= MAX_LEAP_SECONDS))
 		{
 #ifdef _DEBUG 
 			printf("UpdateLeapSecondData value: %g %i %i\n", SuppliedLeapSecondData[NUPDATED].LeapSeconds, SuppliedLeapSecondData[NUPDATED].Month, SuppliedLeapSecondData[NUPDATED].Year);
@@ -430,12 +435,12 @@ int UpdateLeapSecondData(LeapSecondData SuppliedLeapSecondData[])
 			NUPDATED += 1; // Increment the record count
 		}
 
-		if (NUPDATED <= 100) // We have less than 100 records so let's assume these are OK
+		if (NUPDATED <= MAX_LEAP_SECONDS) // We have less than MAX_LEAP_SECONDS records so let's assume these are OK
 		{
 			HasUpdatedData = true; // Record that we will use the updated leap second data
 			rc = 0; // Return a status code to show that the new data was accepted
 		}
-		else // We have at least 100 records so we will assume that there are more to come, which would exceed the data size of the array. Consequently we will not accept the new data
+		else // We have at least MAX_LEAP_SECONDS records so we will assume that there are more to come, which would exceed the data size of the array. Consequently we will not accept the new data
 		{
 			HasUpdatedData = false; // Record that we will use the built-in leap second data
 			rc = 2; // Return a status code to show that the new data was rejected
@@ -458,7 +463,7 @@ int UpdateLeapSecondData(LeapSecondData SuppliedLeapSecondData[])
 	}
 	else if (rc == 2)
 	{
-		printf("UpdateLeapSecondData - Updated leap second data rejected, using built-in default. 100 or more records were supplied, which exceeds internal SOFA array capacity.\n");
+		printf("UpdateLeapSecondData - Updated leap second data rejected, using built-in default. %i or more records were supplied, which exceeds internal SOFA array capacity.\n", MAX_LEAP_SECONDS);
 	}
 	else
 	{
@@ -474,7 +479,7 @@ int NumberOfBuiltInLeapSecondValues()
 }
 
 /* Method called from outside the SOFA DLL to return the current leap second data table */
-int GetLeapSecondData(LeapSecondData ReturnedLeapSecondData[], bool *UpdatedData)
+int GetLeapSecondData(LeapSecondData ReturnedLeapSecondData[], bool* UpdatedData)
 
 /************************************************************************************************************************************************************************/
 /* RETURNS: The currently in use array of leap second data                                                                                                              */
@@ -515,8 +520,7 @@ int GetLeapSecondData(LeapSecondData ReturnedLeapSecondData[], bool *UpdatedData
 		printf("GetLeapSecondData - Returning built-in data...\n");
 #endif
 
-		//BuiltInLeapSecondData
-		/* Iterate over the supplied data and transfer it to the return array */
+		/* Iterate over the built-in data and transfer it to the return array */
 		while (RecordNumber < NBUILTIN)
 		{
 			ReturnedLeapSecondData[RecordNumber].Year = BuiltInLeapSecondData[RecordNumber].Year; // Save the data to the UpdatedLeapSecondData array
@@ -537,7 +541,7 @@ int GetLeapSecondData(LeapSecondData ReturnedLeapSecondData[], bool *UpdatedData
 	printf("GetLeapSecondData - Return code: %i\n", rc);
 #endif
 
-	*UpdatedData = HasUpdatedData;
+	* UpdatedData = HasUpdatedData;
 
 	return rc;
 }
