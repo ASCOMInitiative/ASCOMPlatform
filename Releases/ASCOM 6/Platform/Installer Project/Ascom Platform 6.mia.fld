@@ -1,15 +1,14 @@
 ﻿Check Application Requirements
 Main Setup Dialogue
-Check Application Pre-Requisites
 Specify additional clean-up required when uninstalling
 Platform 6 Content
 Platform 6 files
-Platform 5.5 files
 Platform 5 files
+Set up log file and variables
 Platform 6.2 files
-Remove Previous Platform 6 install if present
 Uninstall items installed by this installer
 ASCOM Cache
+Remove Previous Platforms 4 and 5 if present
 Create shortcuts
 Maintenance Dialogue
 Clean up any remaining simulator COM entries

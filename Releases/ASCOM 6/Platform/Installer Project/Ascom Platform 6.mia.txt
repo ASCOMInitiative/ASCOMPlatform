@@ -5,6 +5,9 @@ Comment: The installer must be started in 32bit MSI mode
 Set Variable NATIVE_ENGINE to FALSE
 Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
  
+Comment: Set the required minimum Visual C Runtime version number
+Set Variable MINIMUM_VC_RUNTIME_VERSION to 14.32.31332.0
+ 
 [DEFINE REGION: Set up log file and variables]
 Comment: Define variables, create the directory and log file name.
 Set Variable SETUPLOG to 
@@ -360,8 +363,8 @@ Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) to
 Include Script: checkmsi31
 Include Script: checknet351
 Include Script: checknet4.8_x86 
-Include Script: checkvc1410_25017_x86
-Include Script: checkvc1410_25017_x64
+Include Script: check_vcruntime_x86
+Include Script: check_vcruntime_x64
  
 Comment: Install setup pre-requisites
 if Variable PREREQ not Equals FALSE
@@ -480,6 +483,16 @@ Write into Text File $SETUPLOG$ from Value   (at end of file)
  
 Comment: Prepare to install
 Display Dialog: progress, use as progress dialog (non-modal)
+[END REGION]
+ 
+[DEFINE REGION: Install Visual C Runtimes]
+Comment: Install pre-requisites included in this installer
+Include Script: setupmsi31
+Set Variable MYPROGRESS to 3
+Include Script: setup_vcruntime_x64 (get result into variable VC64_REBOOT_REQUIRED)
+Set Variable MYPROGRESS to 6
+Include Script: setup_vcruntime_x86 (get result into variable VC32_REBOOT_REQUIRED)
+Set Variable MYPROGRESS to 9
 [END REGION]
  
 [DEFINE REGION: Remove Previous Platform 6 install if present]
@@ -821,14 +834,6 @@ end
 [END REGION]
  
 [DEFINE REGION: Install Application Pre-Requisites if required]
-Comment: Install pre-requisites included in this installer
-Include Script: setupmsi31
-Set Variable MYPROGRESS to 3
-Include Script: setupvc1410_25017_x64 (get result into variable VC64_REBOOT_REQUIRED)
-Set Variable MYPROGRESS to 6
-Include Script: setupvc1410_25017_x86 (get result into variable VC32_REBOOT_REQUIRED)
-Set Variable MYPROGRESS to 9
- 
 Comment: Ensure that the corrrect Profile registry ACL is set on every run to repair broken installations
 Set Variable PROGRESSTEXT to Preparing ASCOM Profile Store...
 Write into Text File $SETUPLOG$ from Value $TIME$ Setting Profile registry ACL (at end of file)

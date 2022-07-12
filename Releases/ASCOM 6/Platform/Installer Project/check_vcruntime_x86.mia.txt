@@ -1,3 +1,12 @@
+Comment: Install the 32bit Visual Studio C Runtime Library if required. The required version number is set at the top of the main Platform script.
+ 
+Comment: Initialise to installation not required.
+Set Variable VC_RUNTIME_EXISTS to FALSE
+Set Variable INSTALL_VC_RUNTIME_X86 to FALSE
+Set Variable MFC_VERSION_NUMBER to 
+Set Variable REGISTRY_VERSION_NUMBER to 
+ 
+[DEFINE REGION: Check for invalid OS versions]
 Get System Setting Windows 8 into IS8_X64
 Get System Setting Windows 8.1 into IS81_X64
 Get System Setting Windows 8.1 Update 1 into IS811_X64
@@ -76,26 +85,37 @@ if Variable IS8_X86 Equals FALSE
     end
   end
 end
+[END REGION]
  
-Set Variable VC1410_25017_RTM_X86 to TRUE
+Comment: Check the version of the primary MFC DLL file in the system directory
 Get Folder Location System->System Directory into WINSYSDIR
-Comment: Check for the MFC 14.10 DLL file in the system directory
-Does File Exist $WINSYSDIR$\mfc140.dll (get result into variable VC1410_25017_RTM_X86)
-if Variable VC1410_25017_RTM_X86 Equals TRUE
-  Get File Version $WINSYSDIR$\mfc140.dll into Variable MFC140_VER
-  Set Variable MFC140UP152_TARGET to 14.24.28127.0
-  if Variable MFC140UP152_TARGET not Greater Than (Version) $MFC140_VER$
-    Set Variable VC1410_25017_RTM_X86 to FALSE
+Does File Exist $WINSYSDIR$\mfc140.dll (get result into variable VC_RUNTIME_EXISTS)
+if Variable VC_RUNTIME_EXISTS Equals TRUE
+  Comment: File exists so test its version number
+  Get File Version $WINSYSDIR$\mfc140.dll into Variable MFC140_VERSION_NUMBER
+  Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(32) - Minimum required version: $MINIMUM_VC_RUNTIME_VERSION$. Installed version: $MFC140_VERSION_NUMBER$ (at end of file)
+  if Variable MINIMUM_VC_RUNTIME_VERSION Greater Than (Version) $MFC140_VERSION_NUMBER$
+    Comment: Installed version is earlier than minimum required so flag that update is required.
+    Set Variable INSTALL_VC_RUNTIME_X86 to TRUE
+  else
+    Comment: Installed version is the same or later than the minimum required. Now check the registry entries.
+    Read Registry Key HKLM\SOFTWARE\Microsoft\DevDiv\VC\Servicing\14.0\RuntimeMinimum\Version into REGISTRY_VERSION_NUMBER
+    if Variable MINIMUM_VC_RUNTIME_VERSION Greater Than (Version) $REGISTRY_VERSION_NUMBER$
+      Comment: Installed version is earlier than minimum required so flag that update is required.
+      Set Variable INSTALL_VC_RUNTIME_X86 to TRUE
+    end
   end
 else
-  Set Variable VC1410_25017_RTM_X86 to TRUE
+  Comment: File does not exist so flag installation required
+  Set Variable INSTALL_VC_RUNTIME_X86 to TRUE
 end
  
-if Variable VC1410_25017_RTM_X86 Equals TRUE
+Comment: Log outcome of check
+if Variable INSTALL_VC_RUNTIME_X86 Equals TRUE
   Set Variable PREREQ to TRUE
-  Set Variable PRELIST to $PRELIST$$NEWLINE$Visual C++ Runtime for Visual Studio 2019 14.24.28127 (x86)
-  Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(86) - VC 14.24 library (32 bit) not found, it will be installed (at end of file)
+  Set Variable PRELIST to $PRELIST$$NEWLINE$Visual C++ Runtime for Visual Studio $MINIMUM_VC_RUNTIME_VERSION$ (x86)
+  Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(32) - VC library $MINIMUM_VC_RUNTIME_VERSION$ will be installed. File version: $MFC140_VERSION_NUMBER$, Registry version: $REGISTRY_VERSION_NUMBER$ (at end of file)
 else
-  Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(86) - VC 14.24 library (32 bit) found OK (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(32) - Installed VC library is at or above $MINIMUM_VC_RUNTIME_VERSION$. Installation not required. File version: $MFC140_VERSION_NUMBER$, Registry version: $REGISTRY_VERSION_NUMBER$ (at end of file)
 end
  
