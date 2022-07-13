@@ -1,5 +1,5 @@
 Comment: Install the 32bit Visual C runtime library.
-Write into Text File $SETUPLOG$ from Value $TIME$ Start of VC x86 setup script. Install required: $INSTALL_VC_RUNTIME_X86$. (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ VC x86 setup script - install required: $INSTALL_VC_RUNTIME_X86$. (at end of file)
  
 Comment: Initialise variable.
 Set Variable REBOOT_REQUIRED_X86 to FALSE

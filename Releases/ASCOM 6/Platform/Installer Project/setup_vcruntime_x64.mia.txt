@@ -1,5 +1,5 @@
 Comment: Install the 64bit Visual C runtime library.
-Write into Text File $SETUPLOG$ from Value $TIME$ Start of VC x64 setup script. Install required: $INSTALL_VC_RUNTIME_X64$. (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ VC x64 setup script - install required: $INSTALL_VC_RUNTIME_X64$. (at end of file)
  
 Comment: Initialise variable.
 Set Variable REBOOT_REQUIRED_X64 to FALSE
@@ -33,7 +33,7 @@ if Variable INSTALL_VC_RUNTIME_X64 Equals TRUE
    
   Comment: Run the installer to install the support files on the PC.
   Run Program $VC_RUNTIME_FILE_LOCATION$\vc_redist.x64.exe /install /norestart /quiet /l "$MYDOCUMENTS$ASCOM\VcRedistX64Install$DISKSPACE$.txt" (WAIT, get result into variable VC_RUNTIME_INSTALLATION_EXIT_CODE)
-  Write into Text File $SETUPLOG$ from Value $TIME$ SetupVC14(64) - Installer return code: $RUNTIME_INSTALLATION_EXIT_CODE$. (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ SetupVC14(64) - Installer return code: $VC_RUNTIME_INSTALLATION_EXIT_CODE$. (at end of file)
   if Variable VC_RUNTIME_INSTALLATION_EXIT_CODE Equals 3010
     Set Variable REBOOT_REQUIRED_X64 to TRUE
   else
