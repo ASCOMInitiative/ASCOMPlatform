@@ -524,17 +524,17 @@ SOFTWARE\Microsoft\DevDiv\VC\Servicing\14.0\RuntimeMinimum
 Version
 {1B3868E0-DA80-47FC-9656-C122516335C8}
 $SETUPLOG$
-$TIME$ CheckVC14(32) - Minimum required version: $MINIMUM_VC_RUNTIME_VERSION$. Installed version: $MFC140_VERSION_NUMBER$
+$TIME$ CheckVC14(32) - Minimum required version: $MINIMUM_VC_RUNTIME_VERSION$. Installed MFC140.DLL file version: $MFC140_VERSION_NUMBER$
 FALSE
 TRUE
 {BCE50315-D1A9-436C-B7F2-738160ECF201}
 $SETUPLOG$
-$TIME$ CheckVC14(32) - Installed VC library is at or above $MINIMUM_VC_RUNTIME_VERSION$. Installation not required. File version: $MFC140_VERSION_NUMBER$, Registry version: $REGISTRY_VERSION_NUMBER$
+$TIME$ CheckVC14(32) - File version: $MFC140_VERSION_NUMBER$, Registry version: $REGISTRY_VERSION_NUMBER$. Installed VC library is at or above $MINIMUM_VC_RUNTIME_VERSION$, installation by the Platform is not required.
 FALSE
 TRUE
 {97C97D49-63E2-464E-8C01-79BE18258A60}
 $SETUPLOG$
-$TIME$ CheckVC14(32) - VC library $MINIMUM_VC_RUNTIME_VERSION$ will be installed. File version: $MFC140_VERSION_NUMBER$, Registry version: $REGISTRY_VERSION_NUMBER$
+$TIME$ CheckVC14(32) - File version: $MFC140_VERSION_NUMBER$, Registry version: $REGISTRY_VERSION_NUMBER$. The VC library$MINIMUM_VC_RUNTIME_VERSION$ in the Platform will be installed.
 FALSE
 TRUE
 {E4848B90-38E4-408A-9F5C-6231D36A5F49}

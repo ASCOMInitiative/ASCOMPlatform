@@ -209,7 +209,7 @@ $MFC1410_VERSION$
 FALSE
 {EA21FFD4-7C5D-467C-97D0-C089ED0759ED}
 $TITLE$ Setup
-Microsoft Visual C++ Runtime for Visual Studio (x64) could not be installed. $VC_RUNTIME_INSTALLATION_EXIT_CODE$$NEWLINE$$NEWLINE$Please use Windows Update to manually install this update on your system.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+Microsoft Visual C++ Runtime for Visual Studio (x64) could not be installed. $VC_RUNTIME_INSTALLATION_EXIT_CODE$$NEWLINE$$NEWLINE$Please zip up all the files and sub-folders in your Documents\ASCOM folder and post a message and the the zip on the ASCOM Talk Groups.IO Help forum.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
 3
 1
 
@@ -222,7 +222,7 @@ The Visual C runtime library included with the installer is earlier than the req
 {AAFB1C8A-4DD3-4D32-9AC2-271E80D1058E}
 $VC_RUNTIME_FILE_LOCATION$\vc_redist.x64.exe
 TRUE
-/install /norestart /quiet
+/install /norestart /quiet /l "$MYDOCUMENTS$ASCOM\VcRedistX64Install$DISKSPACE$.txt"
 TRUE
 VC_RUNTIME_INSTALLATION_EXIT_CODE
 {C46491D8-6C9E-4684-8191-095A987DD1ED}

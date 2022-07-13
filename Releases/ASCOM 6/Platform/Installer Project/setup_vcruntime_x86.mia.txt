@@ -29,7 +29,7 @@ if Variable INSTALL_VC_RUNTIME_X86 Equals TRUE
   end
    
   Comment: Run the installer to install the support files on the PC.
-  Run Program $VC_RUNTIME_FILE_LOCATION$\vc_redist.x86.exe /install /norestart /quiet (WAIT, get result into variable VC_RUNTIME_INSTALLATION_EXIT_CODE)
+  Run Program $VC_RUNTIME_FILE_LOCATION$\vc_redist.x86.exe /install /norestart /quiet /l "$MYDOCUMENTS$ASCOM\VcRedistX86Install$DISKSPACE$.txt" (WAIT, get result into variable VC_RUNTIME_INSTALLATION_EXIT_CODE)
   Write into Text File $SETUPLOG$ from Value $TIME$ SetupVC14(32) - Installer return code: $VC_RUNTIME_INSTALLATION_EXIT_CODE$. (at end of file)
   if Variable VC_RUNTIME_INSTALLATION_EXIT_CODE Equals 3010
     Set Variable REBOOT_REQUIRED_X86 to TRUE
@@ -38,7 +38,7 @@ if Variable INSTALL_VC_RUNTIME_X86 Equals TRUE
       Set Variable REBOOT_REQUIRED_X86 to TRUE
     else
       if Variable VC_RUNTIME_INSTALLATION_EXIT_CODE not Equals 0
-        MessageBox: $TITLE$ Setup, Microsoft Visual C++ Runtime for Visual Studio (x86) could not be installed. $VC_RUNTIME_INSTALLATION_EXIT_CODE$$NEWLINE$$NEWLINE$Please use Windows Update to manually install this update on your system.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+        MessageBox: $TITLE$ Setup, Microsoft Visual C++ Runtime for Visual Studio (x86) could not be installed. $VC_RUNTIME_INSTALLATION_EXIT_CODE$$NEWLINE$$NEWLINE$Please zip up all the files and sub-folders in your Documents\ASCOM folder and post a message and the the zip on the ASCOM Talk Groups.IO Help forum.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
         Write into Text File $SETUPLOG$ from Value $TIME$ SetupVC14(32) - Terminating installation because the VC runtime had a non-zero return code. (at end of file)
         Terminate Installation
       end

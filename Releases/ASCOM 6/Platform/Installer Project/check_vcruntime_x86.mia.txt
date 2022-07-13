@@ -93,7 +93,7 @@ Does File Exist $WINSYSDIR$\mfc140.dll (get result into variable VC_RUNTIME_EXIS
 if Variable VC_RUNTIME_EXISTS Equals TRUE
   Comment: File exists so test its version number
   Get File Version $WINSYSDIR$\mfc140.dll into Variable MFC140_VERSION_NUMBER
-  Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(32) - Minimum required version: $MINIMUM_VC_RUNTIME_VERSION$. Installed version: $MFC140_VERSION_NUMBER$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(32) - Minimum required version: $MINIMUM_VC_RUNTIME_VERSION$. Installed MFC140.DLL file version: $MFC140_VERSION_NUMBER$ (at end of file)
   if Variable MINIMUM_VC_RUNTIME_VERSION Greater Than (Version) $MFC140_VERSION_NUMBER$
     Comment: Installed version is earlier than minimum required so flag that update is required.
     Set Variable INSTALL_VC_RUNTIME_X86 to TRUE
@@ -114,8 +114,8 @@ Comment: Log outcome of check
 if Variable INSTALL_VC_RUNTIME_X86 Equals TRUE
   Set Variable PREREQ to TRUE
   Set Variable PRELIST to $PRELIST$$NEWLINE$Visual C++ Runtime for Visual Studio $MINIMUM_VC_RUNTIME_VERSION$ (x86)
-  Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(32) - VC library $MINIMUM_VC_RUNTIME_VERSION$ will be installed. File version: $MFC140_VERSION_NUMBER$, Registry version: $REGISTRY_VERSION_NUMBER$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(32) - File version: $MFC140_VERSION_NUMBER$, Registry version: $REGISTRY_VERSION_NUMBER$. The VC library$MINIMUM_VC_RUNTIME_VERSION$ in the Platform will be installed. (at end of file)
 else
-  Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(32) - Installed VC library is at or above $MINIMUM_VC_RUNTIME_VERSION$. Installation not required. File version: $MFC140_VERSION_NUMBER$, Registry version: $REGISTRY_VERSION_NUMBER$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ CheckVC14(32) - File version: $MFC140_VERSION_NUMBER$, Registry version: $REGISTRY_VERSION_NUMBER$. Installed VC library is at or above $MINIMUM_VC_RUNTIME_VERSION$, installation by the Platform is not required. (at end of file)
 end
  
