@@ -2,7 +2,7 @@
     <!-- Required Import to use MSBuild Community Tasks -->
     <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
     <PropertyGroup>
-		<!--  Specify Release or Debug builds -->
+		<!--  Specify Release or Debug builds (Debug not working at 25/10/21) -->
 		<Configuration>Release</Configuration>
 	    
 		<!-- GIT Branch to Check Out-->
@@ -41,12 +41,13 @@
         <DeveloperInstallerProject>$(DeveloperInstallerDirectory)\ASCOM Platform 6 Developer.mpr</DeveloperInstallerProject>
         <MakeTemplatesExecutable>\DriverTemplates\MakeASCOMTemplates\MakeASCOMTemplates\bin\$(Configuration)\MakeASCOMTemplates.exe</MakeTemplatesExecutable>
         <DriverTemplatesDirectory>DriverTemplates</DriverTemplatesDirectory>
-        <FindGUIDsDirectory>Remove ASCOM\Find GUIDs\bin\Release</FindGUIDsDirectory>
+        <FindGUIDsDirectory>Remove ASCOM\Find GUIDs\bin\$(Configuration)</FindGUIDsDirectory>
         <RemoveASCOMDirectory>Remove ASCOM\Remove ASCOM\bin\$(Configuration)</RemoveASCOMDirectory>
         <RemoveASCOMExe>$(RemoveASCOMDirectory)\RemoveASCOM.exe</RemoveASCOMExe>
         <RemoveASCOMPdb>$(RemoveASCOMDirectory)\RemoveASCOM.pdb</RemoveASCOMPdb>
         <RemoveASCOMTxt>$(RemoveASCOMDirectory)\GUIDList.txt</RemoveASCOMTxt>
 	    <VersionFile>$(CheckoutDirectory)\$(PlatformInstallerDirectory)\MasterPlatformVersion.txt</VersionFile>
+		<VSIXInstallerFile>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\bin\$(Configuration)\ASCOMVsixTemplateInstaller.vsix</VSIXInstallerFile>
 		
         <!-- NuGet location and command to restore Platform NuGet dependencies -->
 		<NuGetCommand>..\nuget restore</NuGetCommand>
@@ -62,7 +63,7 @@
   
         <!-- Item group for the installers that are created by the build process -->
         <ItemGroup>
-            <OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe;$(MSBuildProjectDirectory)\RemoveASCOM.*" />
+            <OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe;$(MSBuildProjectDirectory)\RemoveASCOM.*;$(MSBuildProjectDirectory)\*.vsix" />
         </ItemGroup>
 
         <!-- Remove the checkout directory to ensure a clean build, wait until the directory actually goes, -->
@@ -230,7 +231,13 @@
         </ItemGroup>
         <Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM.zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
 
-        <!-- Create a formatted version of the current date and time -->
+		<!-- Copy the VSIX installer to the root folder -->
+		<ItemGroup>
+			<VSIXInstallerFiles Include="$(CheckoutDirectory)\$(VSIXInstallerFile)"/>
+		</ItemGroup>
+		<Copy SourceFiles="@(VSIXInstallerFiles)" DestinationFolder="$(MSBuildProjectDirectory)" SkipUnchangedFiles="false" />
+
+		<!-- Create a formatted version of the current date and time -->
 		<PropertyGroup>
 			<CurrentDate>$([System.DateTime]::Now.ToString(dd MMMM yyyy hh:mm:ss))</CurrentDate>
 		</PropertyGroup>
