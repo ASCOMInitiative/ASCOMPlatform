@@ -7,9 +7,9 @@
     <ProjectGuid>{A1414A9B-63A2-47C7-8F3B-9CEA58349FFA}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>ValidatePlatform</RootNamespace>
-	<AssemblyName Condition="'$(Platform)' == 'Mixed Platforms'">ValidatePlatform</AssemblyName>
-	<AssemblyName Condition="'$(Platform)' == 'AnyCPU'">ValidatePlatform</AssemblyName>
-	<AssemblyName Condition="'$(Platform)' == 'x64'">ValidatePlatform64</AssemblyName>
+    <AssemblyName Condition="'$(Platform)' == 'Mixed Platforms'">ValidatePlatform</AssemblyName>
+    <AssemblyName Condition="'$(Platform)' == 'AnyCPU'">ValidatePlatform</AssemblyName>
+    <AssemblyName Condition="'$(Platform)' == 'x64'">ValidatePlatform64</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -74,7 +74,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
@@ -93,8 +92,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj">
+      <Project>{bce07b80-9e3d-43d9-be5b-50d121d40ed3}</Project>
+      <Name>ASCOM.Astrometry</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
-      <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
+      <Project>{c9bf0a8b-594f-4ab9-938a-edc8448d8520}</Project>
       <Name>ASCOM.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
