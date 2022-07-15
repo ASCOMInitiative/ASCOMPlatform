@@ -197,7 +197,8 @@ namespace ValidatePlatform
                 // DIsplay error log if necessary, otherwise continue silently.
                 if (errorLog != "")
                 {
-                    MessageBox.Show(errorLog, "Validate Platform", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    errorLog=$"The issues below occurred while validating operation of the Platform. Please zip up all the files and sub-folders in your Documents\\ASCOM folder and post a message together with the zip on the ASCOM Talk Groups.Io forum.\r\n\r\n{errorLog}"
+                    MessageBox.Show(errorLog, "Issues Validating Platform", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     SetReturnCode(1);
                 }
 
