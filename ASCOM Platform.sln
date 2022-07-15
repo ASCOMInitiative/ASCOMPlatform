@@ -492,7 +492,8 @@ Global
 		{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}.Release|Win32.ActiveCfg = Release|x86
-		{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}.Release|x64.ActiveCfg = Release|x86
+		{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}.Release|x64.ActiveCfg = Release|Any CPU
+		{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}.Release|x64.Build.0 = Release|Any CPU
 		{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}.Release|x86.ActiveCfg = Release|x86
 		{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}.Release|x86.Build.0 = Release|x86
 		{2CB726BB-E327-41C8-9AEC-5327E5187147}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
