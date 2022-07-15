@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ASCOM.Astrometry.NOVAS;
+using static System.Collections.Specialized.BitVector32;
 
 namespace ValidatePlatform
 {
@@ -20,6 +21,7 @@ namespace ValidatePlatform
         static int returnCode = 0;
         static TraceLogger TL;
         static Util util;
+        static string errorLog = "";
 
         static int Main(string[] args)
         {
@@ -30,14 +32,19 @@ namespace ValidatePlatform
                 // Create a TraceLogger component
                 try
                 {
-                    TL = new TraceLogger("", $"ValidatePlatform{(Environment.Is64BitProcess ? "64" : "86")}");
-                    TL.Enabled = true;
-                    LogMessage("Main", "Successfully created TraceLogger");
+                    string osMode = Environment.Is64BitProcess ? "64" : "86";
+
+                    TL = new TraceLogger("", $"ValidatePlatform{osMode}")
+                    {
+                        Enabled = true
+                    };
+                    LogMessage("Main", $"Successfully created TraceLogger.");
+                    LogMessage("Main", $"Operating in X{osMode} mode.");
                     LogBlankLine();
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create trace logger.\r\n{ex}");
+                    LogError("Main", $"Unable to create trace logger.\r\n{ex.Message}");
                 }
 
                 // Create a Utilities component
@@ -48,7 +55,7 @@ namespace ValidatePlatform
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create Utilities component.\r\n{ex}");
+                    LogError("Main", $"Unable to create Utilities component.\r\n{ex.Message}");
                 }
                 LogBlankLine();
 
@@ -78,7 +85,7 @@ namespace ValidatePlatform
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create SOFA COM component.\r\n{ex}");
+                    LogError("Main", $"Unable to create SOFA COM component.\r\n{ex.Message}");
                 }
                 LogBlankLine();
 
@@ -158,7 +165,7 @@ namespace ValidatePlatform
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create SOFA .NET component.\r\n{ex}");
+                    LogError("Main", $"Unable to create SOFA .NET component.\r\n{ex.Message}");
                 }
                 LogBlankLine();
 
@@ -184,7 +191,14 @@ namespace ValidatePlatform
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create NOVAS .NET component.\r\n{ex}");
+                    LogError("Main", $"Unable to create NOVAS .NET component.\r\n{ex.Message}");
+                }
+
+                // DIsplay error log if necessary, otherwise continue silently.
+                if (errorLog != "")
+                {
+                    MessageBox.Show(errorLog, "Validate Platform", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    SetReturnCode(1);
                 }
 
             }
@@ -223,8 +237,7 @@ namespace ValidatePlatform
         public static void LogError(string section, string logMessage)
         {
             LogMessage(section, logMessage);
-            MessageBox.Show($"{section} - {logMessage}", "Validate Platform", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            SetReturnCode(1);
+            errorLog += $"{section} - {logMessage}\r\n";
         }
 
         public static void LogBlankLine()
