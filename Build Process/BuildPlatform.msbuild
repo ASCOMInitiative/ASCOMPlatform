@@ -1,235 +1,254 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <!-- Required Import to use MSBuild Community Tasks -->
-    <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
-    <PropertyGroup>
+	<!-- Required Import to use MSBuild Community Tasks -->
+	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+	<PropertyGroup>
 		<!--  Specify Release or Debug builds (Debug not working at 25/10/21) -->
 		<Configuration>Release</Configuration>
-	    
+
 		<!-- GIT Branch to Check Out-->
-        <GitCheckoutBranch>master</GitCheckoutBranch>
-	
-        <!-- Directory in which to export the latest ASCOM code base from GitHub-->
+		<GitCheckoutBranch>develop</GitCheckoutBranch>
+
+		<!-- Directory in which to export the latest ASCOM code base from GitHub-->
 		<CheckoutDirectoryRelative>Export</CheckoutDirectoryRelative>
-        <CheckoutDirectory>$(MSBuildProjectDirectory)\$(CheckoutDirectoryRelative)</CheckoutDirectory>
-		
-        <!-- Name and full path to a file that will hold the build number associated with this build -->
+		<CheckoutDirectory>$(MSBuildProjectDirectory)\$(CheckoutDirectoryRelative)</CheckoutDirectory>
+
+		<!-- Name and full path to a file that will hold the build number associated with this build -->
 		<BuildNumberFileName>LastBuildNumber.txt</BuildNumberFileName>
-        <BuildNumberFile>$(CheckoutDirectory)\$(BuildNumberFileName)</BuildNumberFile>
-		
-        <!-- GitHub URL from which to make the clone -->
+		<BuildNumberFile>$(CheckoutDirectory)\$(BuildNumberFileName)</BuildNumberFile>
+
+		<!-- GitHub URL from which to make the clone -->
 		<GitRepositoryPath>https://github.com/ASCOMInitiative/ASCOMPlatform.git</GitRepositoryPath>
-		
-        <!-- Base date from which the number of days is calculated to give the build version number (should stay at Jan 1 2011 - it's good till at least 2019) -->
-        <BuildBaseDate>January 1,2011</BuildBaseDate>
 
-        <!-- Location of the InstallAware build executable -->
-        <MIABuild>miabuild.exe</MIABuild>
+		<!-- Base date from which the number of days is calculated to give the build version number (should stay at Jan 1 2011 - it's good till at least 2019) -->
+		<BuildBaseDate>January 1,2011</BuildBaseDate>
 
-        <!-- Location of the InstallAware shared strings folder on the build machine -->
-        <MIALanguageFolder>C:\Program Files (x86)\InstallAware X6 Creators Update\trans</MIALanguageFolder>
-        <ASCOMSharedStringsDirectory>Releases\ASCOM 6\Translated InstallAware Shared Strings</ASCOMSharedStringsDirectory>
+		<!-- Location of the InstallAware build executable -->
+		<MIABuild>miabuild.exe</MIABuild>
 
-        <!-- Names and locations of solution and project files used by this build script-->
-        <PlatformVSSolution>ASCOM Platform.sln</PlatformVSSolution>
-        <PlatformHelpProject>Help\ASCOMPlatform.shfbproj</PlatformHelpProject>
-        <DeveloperHelpProject>Help\ASCOMDeveloper.shfbproj</DeveloperHelpProject>
-        <PlatformHelpDirectory>Help\Output\Platform</PlatformHelpDirectory>
-	    <DeveloperHelpDirectory>Help\Output\Developer</DeveloperHelpDirectory>
-	    <PlatformInstallerDirectory>Releases\ASCOM 6\Platform\Installer Project</PlatformInstallerDirectory>
-        <DeveloperInstallerDirectory>Releases\ASCOM 6\Developer\Installer Project</DeveloperInstallerDirectory>
-        <PlatformInstallerProject>$(PlatformInstallerDirectory)\ASCOM Platform 6.mpr</PlatformInstallerProject>
-        <DeveloperInstallerProject>$(DeveloperInstallerDirectory)\ASCOM Platform 6 Developer.mpr</DeveloperInstallerProject>
-        <MakeTemplatesExecutable>\DriverTemplates\MakeASCOMTemplates\MakeASCOMTemplates\bin\$(Configuration)\MakeASCOMTemplates.exe</MakeTemplatesExecutable>
-        <DriverTemplatesDirectory>DriverTemplates</DriverTemplatesDirectory>
-        <FindGUIDsDirectory>Remove ASCOM\Find GUIDs\bin\$(Configuration)</FindGUIDsDirectory>
-        <RemoveASCOMDirectory>Remove ASCOM\Remove ASCOM\bin\$(Configuration)</RemoveASCOMDirectory>
-        <RemoveASCOMExe>$(RemoveASCOMDirectory)\RemoveASCOM.exe</RemoveASCOMExe>
-        <RemoveASCOMPdb>$(RemoveASCOMDirectory)\RemoveASCOM.pdb</RemoveASCOMPdb>
-        <RemoveASCOMTxt>$(RemoveASCOMDirectory)\GUIDList.txt</RemoveASCOMTxt>
-	    <VersionFile>$(CheckoutDirectory)\$(PlatformInstallerDirectory)\MasterPlatformVersion.txt</VersionFile>
+		<!-- Location of the InstallAware shared strings folder on the build machine -->
+		<MIALanguageFolder>C:\Program Files (x86)\InstallAware X6 Creators Update\trans</MIALanguageFolder>
+		<ASCOMSharedStringsDirectory>Releases\ASCOM 6\Translated InstallAware Shared Strings</ASCOMSharedStringsDirectory>
+
+		<!-- Names and locations of solution and project files used by this build script-->
+		<PlatformVSSolution>ASCOM Platform.sln</PlatformVSSolution>
+		<PlatformHelpProject>Help\ASCOMPlatform.shfbproj</PlatformHelpProject>
+		<DeveloperHelpProject>Help\ASCOMDeveloper.shfbproj</DeveloperHelpProject>
+		<PlatformHelpDirectory>Help\Output\Platform</PlatformHelpDirectory>
+		<DeveloperHelpDirectory>Help\Output\Developer</DeveloperHelpDirectory>
+		<PlatformInstallerDirectory>Releases\ASCOM 6\Platform\Installer Project</PlatformInstallerDirectory>
+		<DeveloperInstallerDirectory>Releases\ASCOM 6\Developer\Installer Project</DeveloperInstallerDirectory>
+		<PlatformInstallerProject>$(PlatformInstallerDirectory)\ASCOM Platform 6.mpr</PlatformInstallerProject>
+		<DeveloperInstallerProject>$(DeveloperInstallerDirectory)\ASCOM Platform 6 Developer.mpr</DeveloperInstallerProject>
+		<MakeTemplatesExecutable>\DriverTemplates\MakeASCOMTemplates\MakeASCOMTemplates\bin\$(Configuration)\MakeASCOMTemplates.exe</MakeTemplatesExecutable>
+		<DriverTemplatesDirectory>DriverTemplates</DriverTemplatesDirectory>
+		<FindGUIDsDirectory>Remove ASCOM\Find GUIDs\bin\$(Configuration)</FindGUIDsDirectory>
+		<RemoveASCOMDirectory>Remove ASCOM\Remove ASCOM\bin\$(Configuration)</RemoveASCOMDirectory>
+		<RemoveASCOMExe>$(RemoveASCOMDirectory)\RemoveASCOM.exe</RemoveASCOMExe>
+		<RemoveASCOMPdb>$(RemoveASCOMDirectory)\RemoveASCOM.pdb</RemoveASCOMPdb>
+		<RemoveASCOMTxt>$(RemoveASCOMDirectory)\GUIDList.txt</RemoveASCOMTxt>
+		<VersionFile>$(CheckoutDirectory)\$(PlatformInstallerDirectory)\MasterPlatformVersion.txt</VersionFile>
 		<VSIXInstallerFile>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\bin\$(Configuration)\ASCOMVsixTemplateInstaller.vsix</VSIXInstallerFile>
-		
-        <!-- NuGet location and command to restore Platform NuGet dependencies -->
+		<VSIXManifestFile>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\source.extension.vsixmanifest</VSIXManifestFile>
+
+		<!-- NuGet location and command to restore Platform NuGet dependencies -->
 		<NuGetCommand>..\nuget restore</NuGetCommand>
-		
+
 		<!-- Code signing tool command line bases for SHA1 and SHA256 signing -->
 		<SignToolBase1>signtool sign /as /as /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256</SignToolBase1>
 		<SignToolBase256>signtool sign /a /fd SHA256 /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256</SignToolBase256>
 
-    </PropertyGroup>
+	</PropertyGroup>
 
-    <!-- Main build target for this build -->
-    <Target Name="Build">
-  
-        <!-- Item group for the installers that are created by the build process -->
-        <ItemGroup>
-            <OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe;$(MSBuildProjectDirectory)\RemoveASCOM.*;$(MSBuildProjectDirectory)\*.vsix" />
-        </ItemGroup>
+	<!-- Main build target for this build -->
+	<Target Name="Build">
 
-        <!-- Remove the checkout directory to ensure a clean build, wait until the directory actually goes, -->
-	    <!-- the command can complete before the contents are actually gone! -->
-        <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
-        <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'"  />
-        <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
-        <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
-        <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
-        <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
-        <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
-        <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
-        <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
-        <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
-        <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
-        <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
-        <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
-        <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
-        <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
-        <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
-        <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
-        <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
-        <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
-        <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
-	
-	    <!-- Stop the build with an error if we can't clear the directory by this point -->
-        <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="false" />
-		
-        <!-- Clean up any previous installer versions  -->
-        <Delete Files="@(OldPlatformInstallers)" />
+		<!-- Item group for the installers that are created by the build process -->
+		<ItemGroup>
+			<OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe;$(MSBuildProjectDirectory)\RemoveASCOM.*;$(MSBuildProjectDirectory)\*.vsix" />
+		</ItemGroup>
 
-        <!-- Create the export directory ready for cloning  -->
-        <MakeDir Directories="$(CheckoutDirectory)"/>
+		<!-- Remove the checkout directory to ensure a clean build, wait until the directory actually goes, -->
+		<!-- the command can complete before the contents are actually gone! -->
+		<RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+		<Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'"  />
+		<RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+		<Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
+		<RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+		<Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
+		<RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+		<Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
+		<RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+		<Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
+		<RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+		<Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
+		<RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+		<Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
+		<RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+		<Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
+		<RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+		<Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
+		<RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+		<Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
 
-        <!-- Clone a fresh copy of the ASCOM Platform Git repository  -->
+		<!-- Stop the build with an error if we can't clear the directory by this point -->
+		<RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="false" />
+
+		<!-- Clean up any previous installer versions  -->
+		<Delete Files="@(OldPlatformInstallers)" />
+
+		<!-- Create the export directory ready for cloning  -->
+		<MakeDir Directories="$(CheckoutDirectory)"/>
+
+		<!-- Clone a fresh copy of the ASCOM Platform Git repository  -->
 		<GitClient Command="clone" LocalPath="$(MSBuildProjectDirectory)" Arguments="-b $(GitCheckoutBranch) $(GitRepositoryPath) $(CheckoutDirectoryRelative)"/>
 
-        <!-- Get the latest commit number into the Revision Property to use in the the Platform version number -->
+		<!-- Get the latest commit number into the Revision Property to use in the the Platform version number -->
 		<Exec Command="git.exe rev-list HEAD --count" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)">
 			<Output TaskParameter="ConsoleOutput" PropertyName="Revision" />
 		</Exec>
-        <Message Text="Revision Level: $(Revision)"/>
+		<Message Text="Revision Level: $(Revision)"/>
 
-        <!-- Get the SHA1 of the latest commit into the CommitSHA1 property -->
+		<!-- Get the SHA1 of the latest commit into the CommitSHA1 property -->
 		<Exec Command="git.exe rev-parse HEAD" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)">
 			<Output TaskParameter="ConsoleOutput" PropertyName="CommitSHA1" />
 		</Exec>
-        <Message Text="HEAD SHA1: $(CommitSHA1)"/>
+		<Message Text="HEAD SHA1: $(CommitSHA1)"/>
 
-        <!-- Restore NuGet packages -->
-		<Exec Command="$(NuGetCommand)" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
+		<!-- Restore NuGet packages -->
+		<Exec Command="$(NuGetCommand)" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 
-        <!-- Copy the InstallAware shared text strings to the InstallAware program directory. This is the only way that IA will actually use the modified strings! Ugh - but there it is. -->
-        <ItemGroup>
-            <MIASharedStrings Include="$(CheckoutDirectory)\$(ASCOMSharedStringsDirectory)\*.*" />
-        </ItemGroup>
-        <Copy SourceFiles="@(MIASharedStrings)" DestinationFolder="$(MIALanguageFolder)" />
+		<!-- Copy the InstallAware shared text strings to the InstallAware program directory. This is the only way that IA will actually use the modified strings! Ugh - but there it is. -->
+		<ItemGroup>
+			<MIASharedStrings Include="$(CheckoutDirectory)\$(ASCOMSharedStringsDirectory)\*.*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(MIASharedStrings)" DestinationFolder="$(MIALanguageFolder)" />
 
-        <!-- Get the Platform version numbers from the MasterPlatformVersion file in the Export-->
-        <ReadLinesFromFile File="$(VersionFile)" >
-            <Output TaskParameter="Lines" 
+		<!-- Get the Platform version numbers from the MasterPlatformVersion file in the Export-->
+		<ReadLinesFromFile File="$(VersionFile)" >
+			<Output TaskParameter="Lines"
 		    ItemName="VersionNumberList" />
-        </ReadLinesFromFile>
-        <!-- Create version numbers from the semicolon delimited list that ReadLinesFromFile delivers -->
-	    <PropertyGroup>
-    		<PlatformNumber>@(VersionNumberList)</PlatformNumber>
-		    <PlatformMajor>$(PlatformNumber.Split(';')[0])</PlatformMajor>
-		    <PlatformMinor>$(PlatformNumber.Split(';')[1])</PlatformMinor>
-		    <PlatformServicePack>$(PlatformNumber.Split(';')[2])</PlatformServicePack>
-			<PlatformVersion>$(PlatformMajor).$(PlatformMinor)</PlatformVersion>	<!-- Current Platform version Major.Minor-->
-        </PropertyGroup>
-	    <Message Text="Version numbers - Major: $(PlatformMajor), Minor: $(PlatformMinor), ServicePack: $(PlatformServicePack), MasterPlatformLevel: $(PlatformVersion)" />
+		</ReadLinesFromFile>
+		
+		<!-- Create version numbers from the semicolon delimited list that ReadLinesFromFile delivers -->
+		<PropertyGroup>
+			<PlatformNumber>@(VersionNumberList)</PlatformNumber>
+			<PlatformMajor>$(PlatformNumber.Split(';')[0])</PlatformMajor>
+			<PlatformMinor>$(PlatformNumber.Split(';')[1])</PlatformMinor>
+			<PlatformServicePack>$(PlatformNumber.Split(';')[2])</PlatformServicePack>
+			<!-- Current Platform version Major.Minor-->
+			<PlatformVersion>$(PlatformMajor).$(PlatformMinor)</PlatformVersion>
+		</PropertyGroup>
+		<Message Text="Version numbers - Major: $(PlatformMajor), Minor: $(PlatformMinor), ServicePack: $(PlatformServicePack), MasterPlatformLevel: $(PlatformVersion)" />
 
-        <!-- Create global AssemblyVersion attributes from the Platform version, service pack and revision numbers.-->
-        <AssemblyInfo 
+		<!-- Define the VSIX package XML schema name. -->
+		<PropertyGroup>
+			<Namespace>
+				<Namespace Prefix="vsx" Uri="http://schemas.microsoft.com/developer/vsx-schema/2011" />
+			</Namespace>
+		</PropertyGroup>
+
+		<Message Text="VSIX Manifest directory: $(CheckoutDirectory)\$(VSIXManifestFile)"/>
+
+		<!-- Update the developer project templates VSIX installer version number with the current build number. -->
+		<XmlPoke
+		  XmlInputPath="$(CheckoutDirectory)\$(VSIXManifestFile)"
+		  Value="$(PlatformMajor).$(PlatformMinor).$(PlatformServicePack).$(Revision)"
+		  Query="/vsx:PackageManifest/vsx:Metadata/vsx:Identity/@Version"
+		  Namespaces="$(Namespace)"/>
+
+		<!-- Create global AssemblyVersion attributes from the Platform version, service pack and revision numbers. -->
+		<AssemblyInfo
 			CodeLanguage="CS"
-			OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.cs" 
-			AssemblyFileVersion="$(PlatformVersion).$(PlatformServicePack).$(Revision)" 
+			OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.cs"
+			AssemblyFileVersion="$(PlatformVersion).$(PlatformServicePack).$(Revision)"
 			AssemblyInformationalVersion="$(CommitSHA1)"/>
-        <AssemblyInfo 
-		    CodeLanguage="VB" 
-			OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.vb" 
+		<AssemblyInfo
+		    CodeLanguage="VB"
+			OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.vb"
 			AssemblyFileVersion="$(PlatformVersion).$(PlatformServicePack).$(Revision)"
 			AssemblyInformationalVersion="$(CommitSHA1)"/>
 
-        <!-- Build FindGUIDs after cleaning the solution (just in case executables get committed to SVN) -->
-        <!-- This builds the GUIDList.vb file ready to be incorporated into RemoveASCOM when it is built as part of the Platform -->
-        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=MakeDynamicLists;Platform=Mixed Platforms" />
-        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=MakeDynamicLists;Platform=Mixed Platforms" />
+		<!-- Build FindGUIDs after cleaning the solution (just in case executables get committed to SVN) -->
+		<!-- This builds the GUIDList.vb file ready to be incorporated into RemoveASCOM when it is built as part of the Platform -->
+		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=MakeDynamicLists;Platform=Mixed Platforms" />
+		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=MakeDynamicLists;Platform=Mixed Platforms" />
 
-        <!-- Run FindGUIDs to create the updated class in the RemoveASCOM project that contains the list of GUIDs used by the project -->
-        <Exec Command='"$(CheckoutDirectory)\$(FindGUIDsDirectory)\MakeDynamicLists.exe" "$(CheckoutDirectory)" ' />
+		<!-- Run FindGUIDs to create the updated class in the RemoveASCOM project that contains the list of GUIDs used by the project -->
+		<Exec Command='"$(CheckoutDirectory)\$(FindGUIDsDirectory)\MakeDynamicLists.exe" "$(CheckoutDirectory)" ' />
 
-        <!-- Build the main Platform after cleaning the solution (just in case executables get committed to SVN) -->
-        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=$(Configuration);Platform=Mixed Platforms" />
-        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=$(Configuration);Platform=Mixed Platforms" />
+		<!-- Build the main Platform after cleaning the solution (just in case executables get committed to SVN) -->
+		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=$(Configuration);Platform=Mixed Platforms" />
+		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=$(Configuration);Platform=Mixed Platforms" />
 
-        <!-- Sign and copy the RemoveASCOM executables, that have just been built, to the installer main directory so that the latest versions are included in the installer -->
-		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(RemoveASCOMExe)&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
-		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(RemoveASCOMExe)&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
-        <ItemGroup>
-            <RemoveASCOMExecutables Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb)" />
-        </ItemGroup>
-        <Copy SourceFiles="@(RemoveASCOMExecutables)" DestinationFolder="$(CheckoutDirectory)\$(PlatformInstallerDirectory)" />
+		<!-- Sign and copy the RemoveASCOM executables, that have just been built, to the installer main directory so that the latest versions are included in the installer -->
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(RemoveASCOMExe)&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
+		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(RemoveASCOMExe)&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
+		<ItemGroup>
+			<RemoveASCOMExecutables Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb)" />
+		</ItemGroup>
+		<Copy SourceFiles="@(RemoveASCOMExecutables)" DestinationFolder="$(CheckoutDirectory)\$(PlatformInstallerDirectory)" />
 
-	    <!-- Build the 64bit executables after cleaning the solution (just in case executables get committed to SVN) -->
-        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=$(Configuration);Platform=x64" />
-        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=$(Configuration);Platform=x64" />
+		<!-- Build the 64bit executables after cleaning the solution (just in case executables get committed to SVN) -->
+		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=$(Configuration);Platform=x64" />
+		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=$(Configuration);Platform=x64" />
 
-        <!-- Sign the executables that support the installation process, these are not automatically signed by the InstallAware build process -->
-		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
-		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
-		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
-		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
+		<!-- Sign the executables that support the installation process, these are not automatically signed by the InstallAware build process -->
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
+		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
+		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 
-		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
-		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
-		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
-		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" /> 
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
+		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
+		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 
-        <!-- Make the VS Template zip files from their source files-->
-        <Exec Command='"$(CheckoutDirectory)\$(MakeTemplatesExecutable)" "$(CheckoutDirectory)\$(DriverTemplatesDirectory)" "TemplateSources"' />
-    
-        <!-- Build the help files for Platform and Developer.-->
-        <MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=$(Configuration);Platform=AnyCPU" />
-        <MSBuild Projects="$(CheckoutDirectory)\$(DeveloperHelpProject)" Properties="Configuration=$(Configuration);Platform=AnyCPU" />
-	    
+		<!-- Make the VS Template zip files from their source files-->
+		<Exec Command='"$(CheckoutDirectory)\$(MakeTemplatesExecutable)" "$(CheckoutDirectory)\$(DriverTemplatesDirectory)" "TemplateSources"' />
+
+		<!-- Build the help files for Platform and Developer.-->
+		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=$(Configuration);Platform=AnyCPU" />
+		<MSBuild Projects="$(CheckoutDirectory)\$(DeveloperHelpProject)" Properties="Configuration=$(Configuration);Platform=AnyCPU" />
+
 		<!-- Update the file version numbers in the InstallAware project files -->
-	    <ItemGroup>
-            <IAProjectFiles Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.mpr;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.mpr" />
-        </ItemGroup>	
-        <FileUpdate Files="@(IAProjectFiles)" 
+		<ItemGroup>
+			<IAProjectFiles Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.mpr;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.mpr" />
+		</ItemGroup>
+		<FileUpdate Files="@(IAProjectFiles)"
 		    Encoding="ASCII"
-    		Regex="$(PlatformVersion).9999.9999" 
+    		Regex="$(PlatformVersion).9999.9999"
 		    ReplacementText="$(PlatformVersion).$(PlatformServicePack).$(Revision)">
-	    </FileUpdate>
+		</FileUpdate>
 
-        <!-- Add browser compatibility line to all the html help files so that all browsers can read them on the ASCOM Standards web site -->
-        <ItemGroup>
-            <HTMLHelpFiles Include="$(CheckoutDirectory)\$(PlatformHelpDirectory)\*.html;$(CheckoutDirectory)\$(PlatformHelpDirectory)\html\*.htm;$(CheckoutDirectory)\$(DeveloperHelpDirectory)\*.html;$(CheckoutDirectory)\$(DeveloperHelpDirectory)\html\*.htm" />
-        </ItemGroup>
-        <FileUpdate Files="@(HTMLHelpFiles)" 
-    		Regex="&lt;head&gt;" 
+		<!-- Add browser compatibility line to all the html help files so that all browsers can read them on the ASCOM Standards web site -->
+		<ItemGroup>
+			<HTMLHelpFiles Include="$(CheckoutDirectory)\$(PlatformHelpDirectory)\*.html;$(CheckoutDirectory)\$(PlatformHelpDirectory)\html\*.htm;$(CheckoutDirectory)\$(DeveloperHelpDirectory)\*.html;$(CheckoutDirectory)\$(DeveloperHelpDirectory)\html\*.htm" />
+		</ItemGroup>
+		<FileUpdate Files="@(HTMLHelpFiles)"
+    		Regex="&lt;head&gt;"
 		    ReplacementText="&lt;head&gt;&lt;meta&#32;http-equiv&#61;&quot;X-UA-Compatible&quot;&#32;content&#61;&quot;IE&#61;5&quot;&#32;&#47;&gt;">
-	    </FileUpdate>
-		
+		</FileUpdate>
+
 		<!-- Rename index.html files so that they work on the ASCOM Standards web site -->
 		<Exec Command='Rename "$(CheckoutDirectory)\$(PlatformHelpDirectory)\index.html" "Index.html" ' />
 		<Exec Command='Rename "$(CheckoutDirectory)\$(DeveloperHelpDirectory)\index.html" "Index.html" ' />
-		
-	    <!-- Build the InstallAware installers -->
-        <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(PlatformInstallerProject)" /r' />
-        <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(DeveloperInstallerProject)" /r' />
 
-        <!-- Copy the installers back to the build root directory -->
-        <Sleep Milliseconds="1000" />
-        <ItemGroup>
-            <PlatformInstallers Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\Release\Single\*.exe;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\Release\Single\*.exe" />
-        </ItemGroup>
-        <Copy SourceFiles="@(PlatformInstallers)" DestinationFolder="$(MSBuildProjectDirectory)" />
+		<!-- Build the InstallAware installers -->
+		<Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(PlatformInstallerProject)" /r' />
+		<Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(DeveloperInstallerProject)" /r' />
 
-        <!-- Zip up the RemoveASCOM files and store the zip file in the build root directory ;$(CheckoutDirectory)\$(RemoveASCOMPdb) -->
-        <ItemGroup>
-            <ZipFiles Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb);$(CheckoutDirectory)\$(RemoveASCOMTxt)" />
-        </ItemGroup>
-        <Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM.zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
+		<!-- Copy the installers back to the build root directory -->
+		<Sleep Milliseconds="1000" />
+		<ItemGroup>
+			<PlatformInstallers Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\Release\Single\*.exe;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\Release\Single\*.exe" />
+		</ItemGroup>
+		<Copy SourceFiles="@(PlatformInstallers)" DestinationFolder="$(MSBuildProjectDirectory)" />
+
+		<!-- Zip up the RemoveASCOM files and store the zip file in the build root directory ;$(CheckoutDirectory)\$(RemoveASCOMPdb) -->
+		<ItemGroup>
+			<ZipFiles Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb);$(CheckoutDirectory)\$(RemoveASCOMTxt)" />
+		</ItemGroup>
+		<Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM.zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
 
 		<!-- Copy the VSIX installer to the root folder -->
 		<ItemGroup>
@@ -241,18 +260,18 @@
 		<PropertyGroup>
 			<CurrentDate>$([System.DateTime]::Now.ToString(dd MMMM yyyy hh:mm:ss))</CurrentDate>
 		</PropertyGroup>
-		
+
 		<!-- Update the recorded build number -->
-		<ItemGroup> 
-			<CmdLine Include = "Build version: $(PlatformVersion).$(PlatformServicePack).$(Revision)"/> 
-			<CmdLine Include = "Built on: $(CurrentDate)"/> 
-		</ItemGroup> 
+		<ItemGroup>
+			<CmdLine Include = "Build version: $(PlatformVersion).$(PlatformServicePack).$(Revision)"/>
+			<CmdLine Include = "Built on: $(CurrentDate)"/>
+		</ItemGroup>
 		<WriteLinesToFile File="$(BuildNumberFile)" Lines="@(CmdLine)" Overwrite="true"/>
 
 		<!-- Commit and push the revised build number to GitHub so that it shows up in the history. 
 		<Exec Command='git.exe commit $(BuildNumberFileName) -m "Build version: $(PlatformVersion).$(PlatformServicePack).$(Revision)"' WorkingDirectory="$(CheckoutDirectory)"></Exec>
 		<Exec Command='git.exe push' WorkingDirectory="$(CheckoutDirectory)"></Exec>
 		   -->
-  </Target>
+	</Target>
 
 </Project>
