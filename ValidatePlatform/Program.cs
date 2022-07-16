@@ -44,7 +44,7 @@ namespace ValidatePlatform
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create trace logger.\r\n{ex.Message}");
+                    LogError("Main", $"Unable to create trace logger.",ex);
                 }
 
                 // Create a Utilities component
@@ -55,7 +55,7 @@ namespace ValidatePlatform
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create Utilities component.\r\n{ex.Message}");
+                    LogError("Main", $"Unable to create Utilities component.",ex);
                 }
                 LogBlankLine();
 
@@ -80,12 +80,12 @@ namespace ValidatePlatform
                     }
                     else
                     {
-                        LogError("Main", $"Received bad result from TtTai.");
+                        LogError("Main", $"Received bad result from TtTai.",null);
                     }
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create SOFA COM component.\r\n{ex.Message}");
+                    LogError("Main", $"Unable to create SOFA COM component.",ex);
                 }
                 LogBlankLine();
 
@@ -151,7 +151,7 @@ namespace ValidatePlatform
                     }
                     else
                     {
-                        LogError("Main", $"Received bad result from CelestialToObserved - RA.");
+                        LogError("Main", $"Received bad result from CelestialToObserved - RA.", null);
                     }
 
                     if (Math.Abs((dob * RADIANS_TO_DEGREES) - 46.0209960277937) < 0.01)
@@ -160,12 +160,12 @@ namespace ValidatePlatform
                     }
                     else
                     {
-                        LogError("Main", $"Received bad result from CelestialToObserved - DEC.");
+                        LogError("Main", $"Received bad result from CelestialToObserved - DEC.", null);
                     }
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create SOFA .NET component.\r\n{ex.Message}");
+                    LogError("Main", $"Unable to create SOFA .NET component.",ex);
                 }
                 LogBlankLine();
 
@@ -186,12 +186,12 @@ namespace ValidatePlatform
                     }
                     else
                     {
-                        LogError("Main", $"Received bad Julian date {jd} from NOVAS31.JulianDate. Expected: {EXPECTED_JULIAN_DATE}");
+                        LogError("Main", $"Received bad Julian date {jd} from NOVAS31.JulianDate. Expected: {EXPECTED_JULIAN_DATE}", null);
                     }
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create NOVAS .NET component.\r\n{ex.Message}");
+                    LogError("Main", $"Unable to create NOVAS .NET component.",ex);
                 }
 
                 // DIsplay error log if necessary, otherwise continue silently.
@@ -205,7 +205,7 @@ namespace ValidatePlatform
             }
             catch (Exception ex)
             {
-                LogError("Main", $"Exception:\r\n{ex}");
+                LogError("Main", $"Exception:",ex);
             }
 
             return returnCode;
@@ -235,10 +235,18 @@ namespace ValidatePlatform
             catch { }
         }
 
-        public static void LogError(string section, string logMessage)
+        public static void LogError(string section, string message, Exception ex)
         {
-            LogMessage(section, logMessage);
-            errorLog += $"{section} - {logMessage}\r\n";
+            if (ex is null) // No exception so just print the message
+            {
+                LogMessage(section, $"{message}");
+                errorLog += $"{message}\r\n";
+            }
+            else // Exception thrown so include the full text along with the message.
+            {
+                LogMessage(section, $"{message}\r\n{ex}");
+                errorLog += $"{message}\r\n{ex.Message}\r\n";
+            }
         }
 
         public static void LogBlankLine()
