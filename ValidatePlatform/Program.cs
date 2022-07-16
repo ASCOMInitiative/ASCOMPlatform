@@ -245,7 +245,7 @@ namespace ValidatePlatform
             else // Exception thrown so include the full text along with the message.
             {
                 LogMessage(section, $"{message}\r\n{ex}");
-                errorLog += $"{message}\r\n{ex.Message}\r\n";
+                errorLog += $"{message} - {ex.Message}\r\n";
             }
         }
 
