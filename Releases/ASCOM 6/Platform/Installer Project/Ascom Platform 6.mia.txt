@@ -365,6 +365,7 @@ Include Script: checknet351
 Include Script: checknet4.8_x86 
 Include Script: check_vcruntime_x86
 Include Script: check_vcruntime_x64
+Write into Text File $SETUPLOG$ from Value  (at end of file)
  
 Comment: Install setup pre-requisites
 if Variable PREREQ not Equals FALSE
@@ -493,6 +494,7 @@ Include Script: setup_vcruntime_x64 (get result into variable VC64_REBOOT_REQUIR
 Set Variable MYPROGRESS to 6
 Include Script: setup_vcruntime_x86 (get result into variable VC32_REBOOT_REQUIRED)
 Set Variable MYPROGRESS to 9
+Write into Text File $SETUPLOG$ from Value  (at end of file)
 [END REGION]
  
 [DEFINE REGION: Remove Previous Platform 6 install if present]
