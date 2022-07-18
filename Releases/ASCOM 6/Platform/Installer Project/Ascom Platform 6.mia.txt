@@ -1840,14 +1840,15 @@ if Variable SUCCESS not Equals ERROR
   [END REGION]
    
   Comment: Run basic 32bit Platform validation
+  Set Variable PROGRESSTEXT to Validate 32bit Platform operation
   Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform.exe  (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ ValidatePlatform (at end of file)
-  if Variable RC Equals 0
-    if Variable WIN64MODE Equals TRUE
-      Comment: Run basic 64bit Platform validation
-      Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform64.exe  (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ ValidatePlatform64 (at end of file)
-    end
+   
+  Comment: Run basic 64bit Platform validation if we are running on a 64bit OS
+  if Variable WIN64MODE Equals TRUE
+    Set Variable PROGRESSTEXT to Validate 64bit Platform operation
+    Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform64.exe  (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ ValidatePlatform64 (at end of file)
   end
    
 end
