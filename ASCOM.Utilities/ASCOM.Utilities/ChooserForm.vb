@@ -1,4 +1,3 @@
-
 Imports System.Collections.Generic
 Imports System.ComponentModel
 Imports System.Drawing.Drawing2D
@@ -10,6 +9,9 @@ Imports System.Threading
 Imports ASCOM.Utilities
 Imports Newtonsoft.Json.Serialization
 
+''' <summary>
+''' Form displayed to enable the user to select an ASCOM device.
+''' </summary>
 Friend Class ChooserForm
     Inherits Form
 
@@ -17,6 +19,8 @@ Friend Class ChooserForm
 
     ' General constants
     Private Const ALERT_MESSAGEBOX_TITLE As String = "ASCOM Chooser"
+    Private Const DRIVER_INITIALISATION_ERROR_MESSAGEBOX_TITLE As String = "Driver Initialization Error"
+    Private Const SETUP_DIALOGUE_ERROR_MESSAGEBOX_TITLE As String = "Driver Setup Dialog Error"
     Private Const PROPERTIES_TOOLTIP_DISPLAY_TIME As Integer = 5000 ' Time to display the Properties tooltip (milliseconds)
     Private Const FORM_LOAD_WARNING_MESSAGE_DELAY_TIME As Integer = 250 ' Delay time before any warning message is displayed on form load
     Private Const ALPACA_STATUS_BLINK_TIME As Integer = 100 ' Length of time the Alpaca status indicator spends in the on and off state (ms)
@@ -375,14 +379,19 @@ Friend Class ChooserForm
                 Try : bConnected = CBool(oDrv.Link) : Catch : End Try
             End Try
 
-            If bConnected Then
+            If bConnected Then ' Already connected so cannot show the Setup dialogue
                 MsgBox("The device is already connected. Just click OK.", CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Information + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
-            Else
+            Else ' Not connected, so call the SetupDialog method
                 Try
                     WarningTooltipClear() ' Clear warning tool tip before entering setup so that the dialogue doesn't interfere with or obscure the setup dialogue.
                     oDrv.SetupDialog()
-                Catch ex As Exception
-                    MsgBox("Driver setup method failed: """ & sProgID & """ " & ex.ToString(), CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
+                Catch ex As Exception ' Something went wrong in the SetupDialog method so display an error message.
+                    MsgBox($"The SetupDialog method of driver ""{sProgID}"" threw an exception when called.{vbCrLf}{vbCrLf}" &
+                           $"This means that the setup dialogue would not start properly.{vbCrLf}{vbCrLf}" &
+                           $"Please screen print or use CTRL+C to copy all of this message and report it to the driver author with a request for assistance.{vbCrLf}{vbCrLf}" &
+                           $"{ex}",
+                           MsgBoxStyle.OkOnly Or MsgBoxStyle.Critical Or MsgBoxStyle.MsgBoxSetForeground,
+                           SETUP_DIALOGUE_ERROR_MESSAGEBOX_TITLE)
                     LogEvent("ChooserForm", "Driver setup method failed for driver: """ & sProgID & """", Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserSetupFailed, ex.ToString)
                 End Try
             End If
@@ -391,8 +400,13 @@ Friend Class ChooserForm
             EnableOkButton(True)
             WarningTooltipClear()
         Catch ex As Exception
-            MsgBox("Failed to load driver: """ & sProgID & """ " & ex.ToString, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
-            LogEvent("ChooserForm", "Failed to load driver: """ & sProgID & """", Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserDriverFailed, ex.ToString)
+            MsgBox($"The driver ""{sProgID}"" threw an exception when loaded.{vbCrLf}{vbCrLf}" &
+                   $"This means that the driver would not start properly.{vbCrLf}{vbCrLf}" &
+                   $"Please screen print or use CTRL+C to copy all of this message and report it to the driver author with a request for assistance.{vbCrLf}{vbCrLf}" &
+                   $"{ex}",
+                   MsgBoxStyle.OkOnly Or MsgBoxStyle.Critical Or MsgBoxStyle.MsgBoxSetForeground,
+                   DRIVER_INITIALISATION_ERROR_MESSAGEBOX_TITLE)
+            LogEvent("ChooserForm", "Failed to load driver:  """ & sProgID & """", Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserDriverFailed, ex.ToString())
         End Try
 
         'Clean up and release resources
