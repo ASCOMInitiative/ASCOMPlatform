@@ -389,10 +389,10 @@ Friend Class ChooserForm
                     MsgBox($"The SetupDialog method of driver ""{sProgID}"" threw an exception when called.{vbCrLf}{vbCrLf}" &
                            $"This means that the setup dialogue would not start properly.{vbCrLf}{vbCrLf}" &
                            $"Please screen print or use CTRL+C to copy all of this message and report it to the driver author with a request for assistance.{vbCrLf}{vbCrLf}" &
-                           $"{ex}",
+                           $"{ex.Message}",
                            MsgBoxStyle.OkOnly Or MsgBoxStyle.Critical Or MsgBoxStyle.MsgBoxSetForeground,
                            SETUP_DIALOGUE_ERROR_MESSAGEBOX_TITLE)
-                    LogEvent("ChooserForm", "Driver setup method failed for driver: """ & sProgID & """", Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserSetupFailed, ex.ToString)
+                    LogEvent("ChooserForm", "Driver setup method failed for driver: """ & sProgID & """", Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserSetupFailed, ex.Message)
                 End Try
             End If
 
