@@ -32,6 +32,6 @@ if Variable NET351 Equals FALSE
     end
   end
   Set Variable PREREQ to TRUE
-  Set Variable PRELIST to $PRELIST$$NEWLINE$Microsoft .NET Framework 3.5 Service Pack 1
+  Set Variable PRELIST to $PRELIST$$NEWLINE$Microsoft .NET Framework 3.5 Service Pack 1$NEWLINE$
 end
  

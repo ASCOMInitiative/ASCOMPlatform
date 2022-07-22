@@ -1,5 +1,6 @@
 ﻿Check Application Requirements
 Main Setup Dialogue
+Finish Setup Dialogue
 Specify additional clean-up required when uninstalling
 Platform 6 files
 Platform 5 files
@@ -14,4 +15,3 @@ Create shortcuts
 Maintenance Dialogue
 Alpaca Support for Chooser
 Clean up any remaining simulator COM entries
-Finish Setup Dialogue
