@@ -1,0 +1,58 @@
+Comment: Install the 64bit Visual C runtime library.
+Write into Text File $SETUPLOG$ from Value $TIME$ VC x64 setup script - install required: $INSTALL_VC_RUNTIME_X64$. (at end of file)
+ 
+Comment: Initialise variable.
+Set Variable REBOOT_REQUIRED_X64 to FALSE
+ 
+Comment: Only run thnis script if the x64 runtime needs to be installed.
+if Variable INSTALL_VC_RUNTIME_X64 Equals TRUE
+  Set Variable PROGRESSTEXT to Installing Visual C++ Runtime (x64)
+  Set Variable PROGRESSMODE to MARQUEE
+   
+  Comment: Set 64bit mode.
+  Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+   
+  Comment: Initialise variables.
+  Set Variable VC_RUNTIME_FILE_LOCATION to 
+  Set Variable VC_RUNTIME_INSTALLATION_EXIT_CODE to 
+   
+  Comment: Get the runtime installer executable.
+  Define File Bag : #IADIR#\runtimes\LatestVCRuntimes\*.*, get runtime location of files into variable VC_RUNTIME_FILE_LOCATION
+  Write into Text File $SETUPLOG$ from Value $TIME$ SetupVC14(64) - File bag location: $VC_RUNTIME_FILE_LOCATION$ (at end of file)
+   
+  Comment: Check that the included file has the expected version.
+  Get File Version $VC_RUNTIME_FILE_LOCATION$\vc_redist.x64.exe into Variable MFC1410_VERSION
+  Write into Text File $SETUPLOG$ from Value $TIME$ SetupVC14(64) - The expected runtime version numnber is: $MINIMUM_VC_RUNTIME_VERSION$. The supplied runtime is version: $MFC1410_VERSION$. (at end of file)
+  if Variable MINIMUM_VC_RUNTIME_VERSION Greater Than (Version) $MFC1410_VERSION$
+    Comment: The supplied runtime is an earlier version than specified in the minimum version number variable.
+    Comment: This is a Platform build issue but can only be detected at run time, so report the problem and terminate installation.
+    MessageBox: $TITLE$ Setup, The Visual C runtime library included with the installer is earlier than the required minimum version. This is a Platform build issue and is not an installation issue on your PC.$NEWLINE$$NEWLINE$Please zip up all the files and sub-folders in your Documents\ASCOM folder and post a message and the the zip on the ASCOM Talk Groups.IO Help forum.$NEWLINE$$NEWLINE$$TITLE$ Setup will now terminate.
+    Write into Text File $SETUPLOG$ from Value $TIME$ SetupVC14(64) - Terminating installation because the VC runtime does not have the required version number.. (at end of file)
+    Terminate Installation
+  end
+   
+  Comment: Run the installer to install the support files on the PC.
+  Run Program $VC_RUNTIME_FILE_LOCATION$\vc_redist.x64.exe /install /norestart /quiet /l "$MYDOCUMENTS$ASCOM\VcRedistX64Install$DISKSPACE$.txt" (WAIT, get result into variable VC_RUNTIME_INSTALLATION_EXIT_CODE)
+  Write into Text File $SETUPLOG$ from Value $TIME$ SetupVC14(64) - Installer return code: $VC_RUNTIME_INSTALLATION_EXIT_CODE$. (at end of file)
+  if Variable VC_RUNTIME_INSTALLATION_EXIT_CODE Equals 3010
+    Set Variable REBOOT_REQUIRED_X64 to TRUE
+  else
+    if Variable VC_RUNTIME_INSTALLATION_EXIT_CODE Equals 23
+      Set Variable REBOOT_REQUIRED_X64 to TRUE
+    else
+      if Variable VC_RUNTIME_INSTALLATION_EXIT_CODE not Equals 0
+        MessageBox: $TITLE$ Setup, Microsoft Visual C++ Runtime for Visual Studio (x64) could not be installed. $VC_RUNTIME_INSTALLATION_EXIT_CODE$$NEWLINE$$NEWLINE$Please zip up all the files and sub-folders in your Documents\ASCOM folder and post a message and the the zip on the ASCOM Talk Groups.IO Help forum.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+        Write into Text File $SETUPLOG$ from Value $TIME$ SetupVC14(64) - Terminating installation because the VC runtime had a non-zero return code. (at end of file)
+        Terminate Installation
+      end
+    end
+  end
+   
+  Comment: Revert to 32bit mode.
+  Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+   
+  Set Variable PROGRESSMODE to 
+  Write into Text File $SETUPLOG$ from Value $TIME$ SetupVC14(64) - VC 14 library (64 bit) installed with result code: $VC_RUNTIME_INSTALLATION_EXIT_CODE$. Reboot required: $REBOOT_REQUIRED_X64$ (at end of file)
+end
+Return from Include Script with result $REBOOT_REQUIRED_X64$
+ 

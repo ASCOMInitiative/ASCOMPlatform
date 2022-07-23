@@ -40,8 +40,8 @@ Module DeltatCode
 
         ' NOTE: Starting April 2018 - Please note the use of modified Julian date in the formula rather than year fraction as in previous formulae
 
-        ' DATE RANGE November 2022 Onwards - This is beyond the sensible extrapolation range of the most recent data analysis so revert to the basic formula: DeltaT = LeapSeconds + 32.184
-        If (YearFraction >= 2022.83) Then
+        ' DATE RANGE 18th July 2023 Onwards - This is beyond the sensible extrapolation range of the most recent data analysis so revert to the basic formula: DeltaT = LeapSeconds + 32.184
+        If (YearFraction >= 2023.55) Then
 
             ' Create an EarthRotationParameters object and retrieve the current leap second value. If something goes wrong return the fall-back value
             Try
@@ -52,6 +52,15 @@ Module DeltatCode
                 ' Ultimate fallback value if all else fails!
                 Retval = LEAP_SECOND_ULTIMATE_FALLBACK_VALUE + TT_TAI_OFFSET
             End Try
+
+            ' DATE RANGE 18th July 2022 Onwards - The analysis was performed on 18th July 2022 and creates values within 0.01 of a second of the projections to 17th July 2023.
+        ElseIf (YearFraction >= 2022.55) Then
+            Retval = (-0.000000000000528908084762244 * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay) _
+                   + (+0.000000158529137391645 * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay) _
+                   + (-0.0190063060965729 * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay) _
+                   + (+1139.34719487418 * ModifiedJulianDay * ModifiedJulianDay) _
+                   + (-34149488.355673 * ModifiedJulianDay) _
+                   + (+409422822837.639)
 
             ' DATE RANGE October 17th 2021 Onwards - The analysis was performed on 17th October 2021 and creates values within 0.01 of a second of the projections to the end of October 2022.
         ElseIf (YearFraction >= 2021.79) Then

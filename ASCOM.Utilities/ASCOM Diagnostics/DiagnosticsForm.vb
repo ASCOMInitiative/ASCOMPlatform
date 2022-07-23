@@ -7067,8 +7067,15 @@ Public Class DiagnosticsForm
             Status("Scanning Platform 6 install logs")
             TL.LogMessage("ScanPlatform6Logs", "Starting scan")
 
-            'Get a list of setup files in the ASCOM directory and sub directories in creation date order
-            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOMPlatform6Install*.txt", SearchOption.TopDirectoryOnly)
+            'Get a list of setup files in the ASCOM directory in creation date order
+            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOMPlatform6*.txt", SearchOption.TopDirectoryOnly)
+            For Each foundFile In fileList
+                fileInfo = New FileInfo(foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+            Next
+
+            'Get a list of VC++ log files in the ASCOM directory in creation date order
+            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "VcRedist*.txt", SearchOption.TopDirectoryOnly)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
                 setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
@@ -7081,6 +7088,30 @@ Public Class DiagnosticsForm
             Next
 
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.FinaliseInstall.*.txt", SearchOption.AllDirectories)
+            For Each foundFile In fileList
+                fileInfo = New FileInfo(foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+            Next
+
+            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.InstallTemplates*.txt", SearchOption.AllDirectories)
+            For Each foundFile In fileList
+                fileInfo = New FileInfo(foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+            Next
+
+            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.ValidatePlatform*.txt", SearchOption.AllDirectories)
+            For Each foundFile In fileList
+                fileInfo = New FileInfo(foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+            Next
+
+            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.EarthRotationUpdate*.txt", SearchOption.AllDirectories)
+            For Each foundFile In fileList
+                fileInfo = New FileInfo(foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+            Next
+
+            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.SetProfileACL*.txt", SearchOption.AllDirectories)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
                 setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))

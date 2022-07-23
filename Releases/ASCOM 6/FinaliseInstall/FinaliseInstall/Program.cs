@@ -19,6 +19,19 @@ using System.Security.Claims;
 
 namespace ConsoleApplication1
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// Return codes: 
+    ///  0 - Success
+    ///  1 - Unable to set AppID
+    ///  2 - Failed to register device
+    ///  3 - Failed to fix up TypeLib
+    ///  4 - Unexpected exception in main function
+    ///  5 - Insufficient registry access rights
+    ///  6 - Insufficient registry access rights on HKCR
+    /// </remarks>
     public static class Program
     {
 
