@@ -16,6 +16,10 @@ namespace ASCOM.DeviceHub
 
 		public TelescopeDirectSlewViewModel( ITelescopeManager telescopeManager )
 		{
+			string caller = "TelescopeDirectSlewViewModel ctor";
+
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			_isActive = false;
 			_isSlewInProgress = false;
 			_useDecimalHours = true;
@@ -23,9 +27,13 @@ namespace ASCOM.DeviceHub
 			TelescopeManager = telescopeManager;
 			Status = null;
 
+			LogAppMessage( "Registering message handlers", caller );
+
 			Messenger.Default.Register<TelescopeCapabilitiesUpdatedMessage>( this, ( action ) => UpdateCapabilities( action ) );
 			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => InvalidateDeviceData( action ) );
 			RegisterStatusUpdateMessage( true );
+
+			LogAppMessage( "Instance constructor initialization complete.", caller );
 		}
 
 		#region Change Notification Properties

@@ -16,16 +16,23 @@ namespace ASCOM.DeviceHub
 
 		public DomeMotionViewModel( IDomeManager domeManager )
 		{
+			string caller = "DomeMotionViewModel ctor";
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			_domeManager = domeManager;
 			_status = null;
 			_slewAmounts = new DomeSlewAmounts();
 			_selectedSlewAmount = _slewAmounts[0];
+
+			LogAppMessage( "Registering message handlers", caller );
 
 			Messenger.Default.Register<DomeCapabilitiesUpdatedMessage>( this, ( action ) => DomeCapabilitiesUpdated( action ) );
 			Messenger.Default.Register<DomeParametersUpdatedMessage>( this, ( action ) => DomeParametersUpdated( action ) );
 			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => InvalidateDeviceData( action ) );
 			Messenger.Default.Register<DomeSlavedChangedMessage>( this, ( action ) => ChangeSlavedState( action ) );
 			RegisterStatusUpdateMessage( true );
+
+			LogAppMessage( "Initialization complete", caller );
 		}
 
 		#region Change Notification Properties

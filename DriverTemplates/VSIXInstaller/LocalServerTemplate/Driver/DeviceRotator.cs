@@ -19,7 +19,13 @@ class DeviceRotator
     private float rotatorPosition = 0; // Synced or mechanical position angle of the rotator
     private float mechanicalPosition = 0; // Mechanical position angle of the rotator
 
-    public bool CanReverse
+	/// <summary>
+	/// Indicates whether the Rotator supports the <see cref="Reverse" /> method.
+	/// </summary>
+	/// <returns>
+	/// True if the Rotator supports the <see cref="Reverse" /> method.
+	/// </returns>
+	public bool CanReverse
     {
         get
         {
@@ -28,13 +34,20 @@ class DeviceRotator
         }
     }
 
-    public void Halt()
+	/// <summary>
+	/// Immediately stop any Rotator motion due to a previous <see cref="Move">Move</see> or <see cref="MoveAbsolute">MoveAbsolute</see> method call.
+	/// </summary>
+	public void Halt()
     {
         tl.LogMessage("Halt", "Not implemented");
         throw new MethodNotImplementedException("Halt");
     }
 
-    public bool IsMoving
+	/// <summary>
+	/// Indicates whether the rotator is currently moving
+	/// </summary>
+	/// <returns>True if the Rotator is moving to a new position. False if the Rotator is stationary.</returns>
+	public bool IsMoving
     {
         get
         {
@@ -43,21 +56,33 @@ class DeviceRotator
         }
     }
 
-    public void Move(float Position)
+	/// <summary>
+	/// Causes the rotator to move Position degrees relative to the current <see cref="Position" /> value.
+	/// </summary>
+	/// <param name="Position">Relative position to move in degrees from current <see cref="Position" />.</param>
+	public void Move(float Position)
     {
         tl.LogMessage("Move", Position.ToString()); // Move by this amount
         rotatorPosition += Position;
         rotatorPosition = (float)astroUtilities.Range(rotatorPosition, 0.0, true, 360.0, false); // Ensure value is in the range 0.0..359.9999...
     }
 
-    public void MoveAbsolute(float Position)
+
+	/// <summary>
+	/// Causes the rotator to move the absolute position of <see cref="Position" /> degrees.
+	/// </summary>
+	/// <param name="Position">Absolute position in degrees.</param>
+	public void MoveAbsolute(float Position)
     {
         tl.LogMessage("MoveAbsolute", Position.ToString()); // Move to this position
         rotatorPosition = Position;
         rotatorPosition = (float)astroUtilities.Range(rotatorPosition, 0.0, true, 360.0, false); // Ensure value is in the range 0.0..359.9999...
     }
 
-    public float Position
+	/// <summary>
+	/// Current instantaneous Rotator position, allowing for any sync offset, in degrees.
+	/// </summary>
+	public float Position
     {
         get
         {
@@ -66,7 +91,10 @@ class DeviceRotator
         }
     }
 
-    public bool Reverse
+	/// <summary>
+	/// Sets or Returns the rotator’s Reverse state.
+	/// </summary>
+	public bool Reverse
     {
         get
         {
@@ -80,7 +108,10 @@ class DeviceRotator
         }
     }
 
-    public float StepSize
+	/// <summary>
+	/// The minimum StepSize, in degrees.
+	/// </summary>
+	public float StepSize
     {
         get
         {
@@ -89,7 +120,10 @@ class DeviceRotator
         }
     }
 
-    public float TargetPosition
+	/// <summary>
+	/// The destination position angle for Move() and MoveAbsolute().
+	/// </summary>
+	public float TargetPosition
     {
         get
         {
@@ -98,9 +132,12 @@ class DeviceRotator
         }
     }
 
-    // IRotatorV3 methods
+	// IRotatorV3 methods
 
-    public float MechanicalPosition
+	/// <summary>
+	/// This returns the raw mechanical position of the rotator in degrees.
+	/// </summary>
+	public float MechanicalPosition
     {
         get
         {
@@ -109,7 +146,11 @@ class DeviceRotator
         }
     }
 
-    public void MoveMechanical(float Position)
+	/// <summary>
+	/// Moves the rotator to the specified mechanical angle. 
+	/// </summary>
+	/// <param name="Position">Mechanical rotator position angle.</param>
+	public void MoveMechanical(float Position)
     {
         tl.LogMessage("MoveMechanical", Position.ToString()); // Move to this position
 
@@ -118,7 +159,11 @@ class DeviceRotator
         rotatorPosition = (float)astroUtilities.Range(Position, 0.0, true, 360.0, false); // Ensure value is in the range 0.0..359.9999...
     }
 
-    public void Sync(float Position)
+	/// <summary>
+	/// Syncs the rotator to the specified position angle without moving it. 
+	/// </summary>
+	/// <param name="Position">Synchronised rotator position angle.</param>
+	public void Sync(float Position)
     {
         tl.LogMessage("Sync", Position.ToString()); // Sync to this position
 

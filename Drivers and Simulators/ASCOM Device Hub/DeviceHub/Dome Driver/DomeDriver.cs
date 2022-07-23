@@ -433,7 +433,7 @@ namespace ASCOM.DeviceHub
 
 			try
 			{
-				DomeManager.AbortSlew();
+				DomeManager.StopDomeMotion();
 
 				msg = _done;
 			}

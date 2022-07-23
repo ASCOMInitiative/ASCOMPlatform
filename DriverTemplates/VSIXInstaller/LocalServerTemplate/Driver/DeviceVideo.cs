@@ -20,7 +20,11 @@ class DeviceVideo
     private const int bitDepth = 8;
     private const string videoFileFormat = "AVI";
 
-    public int BitDepth
+	/// <summary>
+	/// Reports the bit depth the camera can produce.
+	/// </summary>
+	/// <value>The bit depth per pixel. Typical analogue videos are 8-bit while some digital cameras can provide 12, 14 or 16-bit images.</value>
+	public int BitDepth
     {
         get
         {
@@ -29,12 +33,18 @@ class DeviceVideo
         }
     }
 
-    public VideoCameraState CameraState
+	/// <summary>
+	/// Returns the current camera operational state.
+	/// </summary>
+	public VideoCameraState CameraState
     {
         get { return VideoCameraState.videoCameraError; }
     }
 
-    public bool CanConfigureDeviceProperties
+	/// <summary>
+	/// Returns True if the driver supports custom device properties configuration via the <see cref="M:ASCOM.DeviceInterface.IVideo.ConfigureDeviceProperties"/> method.
+	/// </summary>
+	public bool CanConfigureDeviceProperties
     {
         get
         {
@@ -42,12 +52,18 @@ class DeviceVideo
         }
     }
 
-    public void ConfigureDeviceProperties()
+	/// <summary>
+	/// Displays a device properties configuration dialog that allows the configuration of specialized settings.
+	/// </summary>
+	public void ConfigureDeviceProperties()
     {
         throw new PropertyNotImplementedException();
     }
 
-    public double ExposureMax
+	/// <summary>
+	/// The maximum supported exposure (integration time) in seconds.
+	/// </summary>
+	public double ExposureMax
     {
         get
         {
@@ -56,7 +72,10 @@ class DeviceVideo
         }
     }
 
-    public double ExposureMin
+	/// <summary>
+	/// The minimum supported exposure (integration time) in seconds.
+	/// </summary>
+	public double ExposureMin
     {
         get
         {
@@ -65,16 +84,20 @@ class DeviceVideo
         }
     }
 
-    public VideoCameraFrameRate FrameRate
+	/// <summary>
+	/// The frame rate at which the camera is running.
+	/// </summary>
+	public VideoCameraFrameRate FrameRate
     {
         get { return VideoCameraFrameRate.NTSC; }
     }
 
-    ///	<exception cref="T:NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
-    ///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    ///	<exception cref="T:InvalidValueException">Must throw an exception if not valid.</exception>
-    ///	<exception cref="T:PropertyNotImplementedException">Must throw an exception if gain is not supported</exception>
-    public short Gain
+	/// <summary>
+	/// Index into the <see cref="P:ASCOM.DeviceInterface.IVideo.Gains"/> array for the selected camera gain.
+	/// </summary>
+	/// <value>Short integer index for the current camera gain in the <see cref="P:ASCOM.DeviceInterface.IVideo.Gains"/> string array.</value>
+	/// <returns>Index into the Gains array for the selected camera gain</returns>
+	public short Gain
     {
 
         get
@@ -89,10 +112,10 @@ class DeviceVideo
         }
     }
 
-    ///	<exception cref="T:NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
-    ///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    ///	<exception cref="T:PropertyNotImplementedException">Must throw an exception if gainmax is not supported</exception>
-    public short GainMax
+	/// <summary>
+	/// Maximum value of <see cref="P:ASCOM.DeviceInterface.IVideo.Gain"/>.
+	/// </summary>
+	public short GainMax
     {
 
         get
@@ -101,10 +124,11 @@ class DeviceVideo
         }
     }
 
-    ///	<exception cref="T:NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
-    ///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    ///	<exception cref="T:PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
-    public short GainMin
+	/// <summary>
+	/// Minimum value of <see cref="P:ASCOM.DeviceInterface.IVideo.Gain"/>.
+	/// </summary>
+	/// <returns>The minimum gain value that this camera supports</returns>
+	public short GainMin
     {
 
         get
@@ -113,10 +137,11 @@ class DeviceVideo
         }
     }
 
-    ///	<exception cref="T:NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
-    ///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    ///	<exception cref="T:PropertyNotImplementedException">Must throw an exception if Gains is not supported</exception>
-    public ArrayList Gains
+	/// <summary>
+	/// Gains supported by the camera.
+	/// </summary>
+	/// <returns>An ArrayList of gain names or values</returns>
+	public ArrayList Gains
     {
 
         get
@@ -125,11 +150,12 @@ class DeviceVideo
         }
     }
 
-    ///	<exception cref="T:NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
-    ///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    ///	<exception cref="T:InvalidValueException">Must throw an exception if not valid.</exception>
-    ///	<exception cref="T:PropertyNotImplementedException">Must throw an exception if gamma is not supported</exception>
-    public short Gamma
+	/// <summary>
+	/// Index into the <see cref="P:ASCOM.DeviceInterface.IVideo.Gammas"/> array for the selected camera gamma.
+	/// </summary>
+	/// <value>Short integer index for the current camera gamma in the <see cref="P:ASCOM.DeviceInterface.IVideo.Gammas"/> string array.</value>
+	/// <returns>Index into the Gammas array for the selected camera gamma</returns>
+	public short Gamma
     {
 
         get
@@ -144,10 +170,12 @@ class DeviceVideo
         }
     }
 
-    ///	<exception cref="T:NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
-    ///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    ///	<exception cref="T:PropertyNotImplementedException">Must throw an exception if gainmax is not supported</exception>
-    public short GammaMax
+	/// <summary>
+	/// Maximum value of <see cref="P:ASCOM.DeviceInterface.IVideo.Gamma"/>.
+	/// </summary>
+	/// <value>Short integer representing the maximum gamma value supported by the camera.</value>
+	/// <returns>The maximum gain value that this camera supports</returns>
+	public short GammaMax
     {
 
         get
@@ -156,10 +184,11 @@ class DeviceVideo
         }
     }
 
-    ///	<exception cref="T:NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
-    ///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    ///	<exception cref="T:PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
-    public short GammaMin
+	/// <summary>
+	/// Minimum value of <see cref="P:ASCOM.DeviceInterface.IVideo.Gamma"/>.
+	/// </summary>
+	/// <returns>The minimum gamma value that this camera supports</returns>
+	public short GammaMin
     {
 
         get
@@ -168,10 +197,11 @@ class DeviceVideo
         }
     }
 
-    ///	<exception cref="T:NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
-    ///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    ///	<exception cref="T:PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
-    public ArrayList Gammas
+	/// <summary>
+	/// Gammas supported by the camera.
+	/// </summary>
+	/// <returns>An ArrayList of gamma names or values</returns>
+	public ArrayList Gammas
     {
 
         get
@@ -180,7 +210,11 @@ class DeviceVideo
         }
     }
 
-    public int Height
+	/// <summary>
+	/// Returns the height of the video frame in pixels.
+	/// </summary>
+	/// <value>The video frame height.</value>
+	public int Height
     {
         get
         {
@@ -189,11 +223,12 @@ class DeviceVideo
         }
     }
 
-    ///	<exception cref="T:NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
-    ///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    ///	<exception cref="T:InvalidValueException">Must throw an exception if not valid.</exception>
-    ///	<exception cref="T:PropertyNotImplementedException">Must throw an exception if the camera supports only one integration rate (exposure) that cannot be changed.</exception>
-    public int IntegrationRate
+	/// <summary>
+	/// Index into the <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedIntegrationRates"/> array for the selected camera integration rate.
+	/// </summary>
+	/// <value>Integer index for the current camera integration rate in the <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedIntegrationRates"/> string array.</value>
+	/// <returns>Index into the SupportedIntegrationRates array for the selected camera integration rate.</returns>
+	public int IntegrationRate
     {
 
         get
@@ -208,14 +243,19 @@ class DeviceVideo
         }
     }
 
-    public IVideoFrame LastVideoFrame
+	/// <summary>
+	/// Returns an <see cref="DeviceInterface.IVideoFrame"/> with its <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/> property populated.
+	/// </summary>
+	/// <value>The current video frame.</value>
+	public IVideoFrame LastVideoFrame
     {
         get { throw new InvalidOperationException("There are no video frames available."); }
     }
 
-    ///	<exception cref="T:NotConnectedException">Must throw exception if data unavailable.</exception>
-    /// <exception cref="T:PropertyNotImplementedException">Must throw exception if not implemented.</exception>
-    public double PixelSizeX
+	/// <summary>
+	/// Returns the width of the CCD chip pixels in microns.
+	/// </summary>
+	public double PixelSizeX
     {
 
         get
@@ -224,9 +264,11 @@ class DeviceVideo
         }
     }
 
-    ///	<exception cref="T:NotConnectedException">Must throw exception if data unavailable.</exception>
-    /// <exception cref="T:PropertyNotImplementedException">Must throw exception if not implemented.</exception>
-    public double PixelSizeY
+	/// <summary>
+	/// Returns the height of the CCD chip pixels in microns.
+	/// </summary>
+	/// <value>The pixel size Y if known.</value>
+	public double PixelSizeY
     {
 
         get
@@ -235,10 +277,11 @@ class DeviceVideo
         }
     }
 
-    ///	<exception cref="T:NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
-    ///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    /// <exception cref="T:PropertyNotImplementedException">Must throw exception if not implemented.</exception>
-    public string SensorName
+	/// <summary>
+	/// Sensor name.
+	/// </summary>
+	/// <returns>The name of sensor used within the camera.</returns>
+	public string SensorName
     {
 
         get
@@ -247,25 +290,39 @@ class DeviceVideo
         }
     }
 
-    public SensorType SensorType
+	/// <summary>
+	/// Type of colour information returned by the the camera sensor.
+	/// </summary>
+	/// <returns>The <see cref="DeviceInterface.SensorType"/> enum value of the camera sensor</returns>
+	public SensorType SensorType
     {
         get { return SensorType.Monochrome; }
     }
 
-    public string StartRecordingVideoFile(string PreferredFileName)
+	/// <summary>
+	/// Starts recording a new video file.
+	/// </summary>
+	/// <param name="PreferredFileName">The file name requested by the client. Some systems may not allow the file name to be controlled directly and they should ignore this parameter.</param>
+	/// <returns>The actual file name of the file that is being recorded.</returns>
+	public string StartRecordingVideoFile(string PreferredFileName)
     {
         tl.LogMessage("StartRecordingVideoFile", "Supplied file name: " + PreferredFileName);
         throw new InvalidOperationException("Cannot start recording a video file right now.");
     }
 
-    public void StopRecordingVideoFile()
+	/// <summary>
+	/// Stops the recording of a video file.
+	/// </summary>
+	public void StopRecordingVideoFile()
     {
         throw new InvalidOperationException("Cannot stop recording right now.");
     }
 
-    /// <exception cref="T:NotConnectedException">Must throw exception if data unavailable.</exception>
-    /// <exception cref="T:PropertyNotImplementedException">Must throw exception if camera supports only one integration rate (exposure) that cannot be changed.</exception>		
-    public ArrayList SupportedIntegrationRates
+	/// <summary>
+	/// Returns the list of integration rates supported by the video camera.
+	/// </summary>
+	/// <value>The list of supported integration rates in seconds.</value>
+	public ArrayList SupportedIntegrationRates
     {
 
         get
@@ -274,17 +331,26 @@ class DeviceVideo
         }
     }
 
-    public string VideoCaptureDeviceName
+	/// <summary>
+	/// The name of the video capture device when such a device is used.
+	/// </summary>
+	public string VideoCaptureDeviceName
     {
         get { return string.Empty; }
     }
 
-    public string VideoCodec
+	/// <summary>
+	/// Returns the video codec used to record the video file.
+	/// </summary>
+	public string VideoCodec
     {
         get { return string.Empty; }
     }
 
-    public string VideoFileFormat
+	/// <summary>
+	/// Returns the file format of the recorded video file, e.g. AVI, MPEG, ADV etc.
+	/// </summary>
+	public string VideoFileFormat
     {
         get
         {
@@ -293,12 +359,19 @@ class DeviceVideo
         }
     }
 
-    public int VideoFramesBufferSize
+	/// <summary>
+	/// The size of the video frame buffer.
+	/// </summary>
+	public int VideoFramesBufferSize
     {
         get { return 0; }
     }
 
-    public int Width
+	/// <summary>
+	/// Returns the width of the video frame in pixels.
+	/// </summary>
+	/// <value>The video frame width.</value>
+	public int Width
     {
         get
         {

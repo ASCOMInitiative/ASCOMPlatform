@@ -9,8 +9,16 @@ namespace ASCOM.DeviceHub
 	{
 		public DomeParametersViewModel()
 		{
+			string caller = "DomeParametersViewModel ctor";
+
+			LogAppMessage( "Initializing Instance constructor", caller );
+
+			LogAppMessage( "Registering message handlers", caller );
+
 			Messenger.Default.Register<DomeParametersUpdatedMessage>( this, ( action ) => UpdateParameters( action ) );
 			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => InvalidateParameters( action ) );
+
+			LogAppMessage( "Initialization complete", caller );
 		}
 
 		private DomeParameters _parameters;

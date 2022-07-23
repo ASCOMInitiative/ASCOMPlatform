@@ -21,12 +21,6 @@ class DeviceObservingConditions
     /// <summary>
     /// Gets and sets the time period over which observations wil be averaged
     /// </summary>
-    /// <remarks>
-    /// Get must be implemented, if it can't be changed it must return 0
-    /// Time period (hours) over which the property values will be averaged 0.0 =
-    /// current value, 0.5= average for the last 30 minutes, 1.0 = average for the
-    /// last hour
-    /// </remarks>
     public double AveragePeriod
     {
         get
@@ -45,7 +39,6 @@ class DeviceObservingConditions
     /// <summary>
     /// Amount of sky obscured by cloud
     /// </summary>
-    /// <remarks>0%= clear sky, 100% = 100% cloud coverage</remarks>
     public double CloudCover
     {
         get
@@ -58,10 +51,6 @@ class DeviceObservingConditions
     /// <summary>
     /// Atmospheric dew point at the observatory in deg C
     /// </summary>
-    /// <remarks>
-    /// Normally optional but mandatory if <see cref=" ASCOM.DeviceInterface.IObservingConditions.Humidity"/>
-    /// Is provided
-    /// </remarks>
     public double DewPoint
     {
         get
@@ -74,10 +63,6 @@ class DeviceObservingConditions
     /// <summary>
     /// Atmospheric relative humidity at the observatory in percent
     /// </summary>
-    /// <remarks>
-    /// Normally optional but mandatory if <see cref="ASCOM.DeviceInterface.IObservingConditions.DewPoint"/> 
-    /// Is provided
-    /// </remarks>
     public double Humidity
     {
         get
@@ -90,11 +75,6 @@ class DeviceObservingConditions
     /// <summary>
     /// Atmospheric pressure at the observatory in hectoPascals (mB)
     /// </summary>
-    /// <remarks>
-    /// This must be the pressure at the observatory and not the "reduced" pressure
-    /// at sea level. Please check whether your pressure sensor delivers local pressure
-    /// or sea level pressure and adjust if required to observatory pressure.
-    /// </remarks>
     public double Pressure
     {
         get
@@ -107,10 +87,6 @@ class DeviceObservingConditions
     /// <summary>
     /// Rain rate at the observatory
     /// </summary>
-    /// <remarks>
-    /// This property can be interpreted as 0.0 = Dry any positive nonzero value
-    /// = wet.
-    /// </remarks>
     public double RainRate
     {
         get
@@ -121,7 +97,7 @@ class DeviceObservingConditions
     }
 
     /// <summary>
-    /// Forces the driver to immediatley query its attached hardware to refresh sensor
+    /// Forces the driver to immediately query its attached hardware to refresh sensor
     /// values
     /// </summary>
     public void Refresh()
@@ -134,10 +110,6 @@ class DeviceObservingConditions
     /// </summary>
     /// <param name="propertyName">Name of the property whose sensor description is required</param>
     /// <returns>The sensor description string</returns>
-    /// <remarks>
-    /// PropertyName must be one of the sensor properties, 
-    /// properties that are not implemented must throw the MethodNotImplementedException
-    /// </remarks>
     public string SensorDescription(string propertyName)
     {
         switch (propertyName.Trim().ToLowerInvariant())
@@ -231,11 +203,6 @@ class DeviceObservingConditions
     /// </summary>
     /// <param name="propertyName">Name of the property whose time since last update Is required</param>
     /// <returns>Time in seconds since the last sensor update for this property</returns>
-    /// <remarks>
-    /// PropertyName should be one of the sensor properties Or empty string to get
-    /// the last update of any parameter. A negative value indicates no valid value
-    /// ever received.
-    /// </remarks>
     public double TimeSinceLastUpdate(string propertyName)
     {
         // Test for an empty property name, if found, return the time since the most recent update to any sensor
@@ -275,10 +242,6 @@ class DeviceObservingConditions
     /// <summary>
     /// Wind direction at the observatory in degrees
     /// </summary>
-    /// <remarks>
-    /// 0..360.0, 360=N, 180=S, 90=E, 270=W. When there Is no wind the driver will
-    /// return a value of 0 for wind direction
-    /// </remarks>
     public double WindDirection
     {
         get

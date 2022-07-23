@@ -29,13 +29,20 @@ class DeviceCamera
     private int[,] cameraImageArray;
     private object[,] cameraImageArrayVariant;
 
-    public void AbortExposure()
+	/// <summary>
+	/// Aborts the current exposure, if any, and returns the camera to Idle state.
+	/// </summary>
+	public void AbortExposure()
     {
         tl.LogMessage("AbortExposure", "Not implemented");
         throw new MethodNotImplementedException("AbortExposure");
     }
 
-    public short BayerOffsetX
+	/// <summary>
+	/// Returns the X offset of the Bayer matrix, as defined in <see cref="SensorType" />.
+	/// </summary>
+	/// <returns>The Bayer colour matrix X offset, as defined in <see cref="SensorType" />.</returns>
+	public short BayerOffsetX
     {
         get
         {
@@ -44,7 +51,11 @@ class DeviceCamera
         }
     }
 
-    public short BayerOffsetY
+	/// <summary>
+	/// Returns the Y offset of the Bayer matrix, as defined in <see cref="SensorType" />.
+	/// </summary>
+	/// <returns>The Bayer colour matrix Y offset, as defined in <see cref="SensorType" />.</returns>
+	public short BayerOffsetY
     {
         get
         {
@@ -53,7 +64,11 @@ class DeviceCamera
         }
     }
 
-    public short BinX
+	/// <summary>
+	/// Sets the binning factor for the X axis, also returns the current value.
+	/// </summary>
+	/// <value>The X binning value</value>
+	public short BinX
     {
         get
         {
@@ -67,7 +82,11 @@ class DeviceCamera
         }
     }
 
-    public short BinY
+	/// <summary>
+	/// Sets the binning factor for the Y axis, also returns the current value.
+	/// </summary>
+	/// <value>The Y binning value.</value>
+	public short BinY
     {
         get
         {
@@ -81,7 +100,11 @@ class DeviceCamera
         }
     }
 
-    public double CCDTemperature
+	/// <summary>
+	/// Returns the current CCD temperature in degrees Celsius.
+	/// </summary>
+	/// <value>The CCD temperature.</value>
+	public double CCDTemperature
     {
         get
         {
@@ -90,7 +113,11 @@ class DeviceCamera
         }
     }
 
-    public CameraStates CameraState
+	/// <summary>
+	/// Returns the current camera operational state
+	/// </summary>
+	/// <value>The state of the camera.</value>
+	public CameraStates CameraState
     {
         get
         {
@@ -99,7 +126,11 @@ class DeviceCamera
         }
     }
 
-    public int CameraXSize
+	/// <summary>
+	/// Returns the width of the CCD camera chip in unbinned pixels.
+	/// </summary>
+	/// <value>The size of the camera X.</value>
+	public int CameraXSize
     {
         get
         {
@@ -108,7 +139,11 @@ class DeviceCamera
         }
     }
 
-    public int CameraYSize
+	/// <summary>
+	/// Returns the height of the CCD camera chip in unbinned pixels.
+	/// </summary>
+	/// <value>The size of the camera Y.</value>
+	public int CameraYSize
     {
         get
         {
@@ -117,7 +152,11 @@ class DeviceCamera
         }
     }
 
-    public bool CanAbortExposure
+	/// <summary>
+	/// Returns <c>true</c> if the camera can abort exposures; <c>false</c> if not.
+	/// </summary>
+	/// <value>
+	public bool CanAbortExposure
     {
         get
         {
@@ -126,7 +165,13 @@ class DeviceCamera
         }
     }
 
-    public bool CanAsymmetricBin
+	/// <summary>
+	/// Returns a flag showing whether this camera supports asymmetric binning
+	/// </summary>
+	/// <value>
+	/// <c>true</c> if this instance can asymmetric bin; otherwise, <c>false</c>.
+	/// </value>
+	public bool CanAsymmetricBin
     {
         get
         {
@@ -135,7 +180,11 @@ class DeviceCamera
         }
     }
 
-    public bool CanFastReadout
+	/// <summary>
+	/// Camera has a fast readout mode
+	/// </summary>
+	/// <returns><c>true</c> when the camera supports a fast readout mode</returns>
+	public bool CanFastReadout
     {
         get
         {
@@ -144,7 +193,13 @@ class DeviceCamera
         }
     }
 
-    public bool CanGetCoolerPower
+	/// <summary>
+	/// If <c>true</c>, the camera's cooler power setting can be read.
+	/// </summary>
+	/// <value>
+	/// <c>true</c> if this instance can get cooler power; otherwise, <c>false</c>.
+	/// </value>
+	public bool CanGetCoolerPower
     {
         get
         {
@@ -153,7 +208,13 @@ class DeviceCamera
         }
     }
 
-    public bool CanPulseGuide
+	/// <summary>
+	/// Returns a flag indicating whether this camera supports pulse guiding
+	/// </summary>
+	/// <value>
+	/// <c>true</c> if this instance can pulse guide; otherwise, <c>false</c>.
+	/// </value>
+	public bool CanPulseGuide
     {
         get
         {
@@ -162,7 +223,13 @@ class DeviceCamera
         }
     }
 
-    public bool CanSetCCDTemperature
+	/// <summary>
+	/// Returns a flag indicating whether this camera supports setting the CCD temperature
+	/// </summary>
+	/// <value>
+	/// <c>true</c> if this instance can set CCD temperature; otherwise, <c>false</c>.
+	/// </value>
+	public bool CanSetCCDTemperature
     {
         get
         {
@@ -171,7 +238,13 @@ class DeviceCamera
         }
     }
 
-    public bool CanStopExposure
+	/// <summary>
+	/// Returns a flag indicating whether this camera can stop an exposure that is in progress
+	/// </summary>
+	/// <value>
+	/// <c>true</c> if the camera can stop the exposure; otherwise, <c>false</c>.
+	/// </value>
+	public bool CanStopExposure
     {
         get
         {
@@ -180,7 +253,11 @@ class DeviceCamera
         }
     }
 
-    public bool CoolerOn
+	/// <summary>
+	/// Turns on and off the camera cooler, and returns the current on/off state.
+	/// </summary>
+	/// <value><c>true</c> if the cooler is on; otherwise, <c>false</c>.</value>
+	public bool CoolerOn
     {
         get
         {
@@ -194,7 +271,11 @@ class DeviceCamera
         }
     }
 
-    public double CoolerPower
+	/// <summary>
+	/// Returns the present cooler power level, in percent.
+	/// </summary>
+	/// <value>The cooler power.</value>
+	public double CoolerPower
     {
         get
         {
@@ -203,7 +284,11 @@ class DeviceCamera
         }
     }
 
-    public double ElectronsPerADU
+	/// <summary>
+	/// Returns the gain of the camera in photoelectrons per A/D unit.
+	/// </summary>
+	/// <value>The electrons per ADU.</value>
+	public double ElectronsPerADU
     {
         get
         {
@@ -212,7 +297,11 @@ class DeviceCamera
         }
     }
 
-    public double ExposureMax
+	/// <summary>
+	/// Returns the maximum exposure time supported by <see cref="StartExposure">StartExposure</see>.
+	/// </summary>
+	/// <returns>The maximum exposure time, in seconds, that the camera supports</returns>
+	public double ExposureMax
     {
         get
         {
@@ -221,7 +310,11 @@ class DeviceCamera
         }
     }
 
-    public double ExposureMin
+	/// <summary>
+	/// Minimum exposure time
+	/// </summary>
+	/// <returns>The minimum exposure time, in seconds, that the camera supports through <see cref="StartExposure">StartExposure</see></returns>
+	public double ExposureMin
     {
         get
         {
@@ -230,7 +323,11 @@ class DeviceCamera
         }
     }
 
-    public double ExposureResolution
+	/// <summary>
+	/// Exposure resolution
+	/// </summary>
+	/// <returns>The smallest increment in exposure time supported by <see cref="StartExposure">StartExposure</see>.</returns>
+	public double ExposureResolution
     {
         get
         {
@@ -239,7 +336,11 @@ class DeviceCamera
         }
     }
 
-    public bool FastReadout
+	/// <summary>
+	/// Gets or sets Fast Readout Mode
+	/// </summary>
+	/// <value><c>true</c> for fast readout mode, <c>false</c> for normal mode</value>
+	public bool FastReadout
     {
         get
         {
@@ -253,7 +354,11 @@ class DeviceCamera
         }
     }
 
-    public double FullWellCapacity
+	/// <summary>
+	/// Reports the full well capacity of the camera in electrons, at the current camera settings (binning, SetupDialog settings, etc.)
+	/// </summary>
+	/// <value>The full well capacity.</value>
+	public double FullWellCapacity
     {
         get
         {
@@ -262,7 +367,15 @@ class DeviceCamera
         }
     }
 
-    public short Gain
+
+	/// <summary>
+	/// The camera's gain (GAIN VALUE MODE) OR the index of the selected camera gain description in the <see cref="Gains" /> array (GAINS INDEX MODE)
+	/// </summary>
+	/// <returns><para><b> GAIN VALUE MODE:</b> The current gain value.</para>
+	/// <p style="color:red"><b>OR</b></p>
+	/// <b>GAINS INDEX MODE:</b> Index into the Gains array for the current camera gain
+	/// </returns>
+	public short Gain
     {
         get
         {
@@ -276,7 +389,11 @@ class DeviceCamera
         }
     }
 
-    public short GainMax
+	/// <summary>
+	/// Maximum <see cref="Gain" /> value of that this camera supports
+	/// </summary>
+	/// <returns>The maximum gain value that this camera supports</returns>
+	public short GainMax
     {
         get
         {
@@ -285,7 +402,11 @@ class DeviceCamera
         }
     }
 
-    public short GainMin
+	/// <summary>
+	/// Minimum <see cref="Gain" /> value of that this camera supports
+	/// </summary>
+	/// <returns>The minimum gain value that this camera supports</returns>
+	public short GainMin
     {
         get
         {
@@ -294,7 +415,11 @@ class DeviceCamera
         }
     }
 
-    public ArrayList Gains
+	/// <summary>
+	/// Minimum <see cref="Gain" /> value of that this camera supports
+	/// </summary>
+	/// <returns>The minimum gain value that this camera supports</returns>
+	public ArrayList Gains
     {
         get
         {
@@ -303,7 +428,13 @@ class DeviceCamera
         }
     }
 
-    public bool HasShutter
+	/// <summary>
+	/// Returns a flag indicating whether this camera has a mechanical shutter
+	/// </summary>
+	/// <value>
+	/// <c>true</c> if this instance has shutter; otherwise, <c>false</c>.
+	/// </value>
+	public bool HasShutter
     {
         get
         {
@@ -312,7 +443,11 @@ class DeviceCamera
         }
     }
 
-    public double HeatSinkTemperature
+	/// <summary>
+	/// Returns the current heat sink temperature (called "ambient temperature" by some manufacturers) in degrees Celsius.
+	/// </summary>
+	/// <value>The heat sink temperature.</value>
+	public double HeatSinkTemperature
     {
         get
         {
@@ -321,7 +456,11 @@ class DeviceCamera
         }
     }
 
-    public object ImageArray
+	/// <summary>
+	/// Returns a safearray of int of size <see cref="NumX" /> * <see cref="NumY" /> containing the pixel values from the last exposure.
+	/// </summary>
+	/// <value>The image array.</value>
+	public object ImageArray
     {
         get
         {
@@ -336,7 +475,11 @@ class DeviceCamera
         }
     }
 
-    public object ImageArrayVariant
+	/// <summary>
+	/// Returns a safearray of Variant of size <see cref="NumX" /> * <see cref="NumY" /> containing the pixel values from the last exposure.
+	/// </summary>
+	/// <value>The image array variant.</value>
+	public object ImageArrayVariant
     {
         get
         {
@@ -359,7 +502,11 @@ class DeviceCamera
         }
     }
 
-    public bool ImageReady
+	/// <summary>
+	/// Returns a flag indicating whether the image is ready to be downloaded from the camera
+	/// </summary>
+	/// <value><c>true</c> if [image ready]; otherwise, <c>false</c>.</value>
+	public bool ImageReady
     {
         get
         {
@@ -368,7 +515,13 @@ class DeviceCamera
         }
     }
 
-    public bool IsPulseGuiding
+	/// <summary>
+	/// Returns a flag indicating whether the camera is currently in a <see cref="PulseGuide">PulseGuide</see> operation.
+	/// </summary>
+	/// <value>
+	/// <c>true</c> if this instance is pulse guiding; otherwise, <c>false</c>.
+	/// </value>
+	public bool IsPulseGuiding
     {
         get
         {
@@ -377,7 +530,11 @@ class DeviceCamera
         }
     }
 
-    public double LastExposureDuration
+	/// <summary>
+	/// Reports the actual exposure duration in seconds (i.e. shutter open time).
+	/// </summary>
+	/// <value>The last duration of the exposure.</value>
+	public double LastExposureDuration
     {
         get
         {
@@ -391,7 +548,12 @@ class DeviceCamera
         }
     }
 
-    public string LastExposureStartTime
+	/// <summary>
+	/// Reports the actual exposure start in the FITS-standard CCYY-MM-DDThh:mm:ss[.sss...] format.
+	/// The start time must be UTC.
+	/// </summary>
+	/// <value>The last exposure start time in UTC.</value>
+	public string LastExposureStartTime
     {
         get
         {
@@ -406,7 +568,11 @@ class DeviceCamera
         }
     }
 
-    public int MaxADU
+	/// <summary>
+	/// Reports the maximum ADU value the camera can produce.
+	/// </summary>
+	/// <value>The maximum ADU.</value>
+	public int MaxADU
     {
         get
         {
@@ -415,7 +581,11 @@ class DeviceCamera
         }
     }
 
-    public short MaxBinX
+	/// <summary>
+	/// Returns the maximum allowed binning for the X camera axis
+	/// </summary>
+	/// <value>The max bin X.</value>
+	public short MaxBinX
     {
         get
         {
@@ -424,7 +594,11 @@ class DeviceCamera
         }
     }
 
-    public short MaxBinY
+	/// <summary>
+	/// Returns the maximum allowed binning for the Y camera axis
+	/// </summary>
+	/// <value>The max bin Y.</value>
+	public short MaxBinY
     {
         get
         {
@@ -433,7 +607,11 @@ class DeviceCamera
         }
     }
 
-    public int NumX
+	/// <summary>
+	/// Sets the subframe width. Also returns the current value.
+	/// </summary>
+	/// <value>The num X.</value>
+	public int NumX
     {
         get
         {
@@ -447,7 +625,11 @@ class DeviceCamera
         }
     }
 
-    public int NumY
+	/// <summary>
+	/// Sets the subframe height. Also returns the current value.
+	/// </summary>
+	/// <value>The num Y.</value>
+	public int NumY
     {
         get
         {
@@ -461,7 +643,14 @@ class DeviceCamera
         }
     }
 
-    public int Offset
+	/// <summary>
+	/// The camera's offset (OFFSET VALUE MODE) OR the index of the selected camera offset description in the <see cref="Offsets" /> array (OFFSETS INDEX MODE)
+	/// </summary>
+	/// <returns><para><b> OFFSET VALUE MODE:</b> The current offset value.</para>
+	/// <p style="color:red"><b>OR</b></p>
+	/// <b>OFFSETS INDEX MODE:</b> Index into the Offsets array for the current camera offset
+	/// </returns>
+	public int Offset
     {
         get
         {
@@ -475,7 +664,11 @@ class DeviceCamera
         }
     }
 
-    public int OffsetMax
+	/// <summary>
+	/// Maximum <see cref="Offset" /> value that this camera supports
+	/// </summary>
+	/// <returns>The maximum offset value that this camera supports</returns>
+	public int OffsetMax
     {
         get
         {
@@ -484,7 +677,11 @@ class DeviceCamera
         }
     }
 
-    public int OffsetMin
+	/// <summary>
+	/// Minimum <see cref="Offset" /> value that this camera supports
+	/// </summary>
+	/// <returns>The minimum offset value that this camera supports</returns>
+	public int OffsetMin
     {
         get
         {
@@ -493,7 +690,11 @@ class DeviceCamera
         }
     }
 
-    public ArrayList Offsets
+	/// <summary>
+	/// List of Offset names supported by the camera
+	/// </summary>
+	/// <returns>The list of supported offset names as an ArrayList of strings</returns>
+	public ArrayList Offsets
     {
         get
         {
@@ -502,7 +703,11 @@ class DeviceCamera
         }
     }
 
-    public short PercentCompleted
+	/// <summary>
+	/// Percent completed, Interface Version 2 and later
+	/// </summary>
+	/// <returns>A value between 0 and 100% indicating the completeness of this operation</returns>
+	public short PercentCompleted
     {
         get
         {
@@ -511,7 +716,11 @@ class DeviceCamera
         }
     }
 
-    public double PixelSizeX
+	/// <summary>
+	/// Returns the width of the CCD chip pixels in microns.
+	/// </summary>
+	/// <value>The pixel size X.</value>
+	public double PixelSizeX
     {
         get
         {
@@ -520,7 +729,11 @@ class DeviceCamera
         }
     }
 
-    public double PixelSizeY
+	/// <summary>
+	/// Returns the height of the CCD chip pixels in microns.
+	/// </summary>
+	/// <value>The pixel size Y.</value>
+	public double PixelSizeY
     {
         get
         {
@@ -529,13 +742,24 @@ class DeviceCamera
         }
     }
 
-    public void PulseGuide(GuideDirections Direction, int Duration)
+	/// <summary>
+	/// Activates the Camera's mount control system to instruct the mount to move in a particular direction for a given period of time
+	/// </summary>
+	/// <param name="Direction">The direction of movement.</param>
+	/// <param name="Duration">The duration of movement in milli-seconds.</param>
+	public void PulseGuide(GuideDirections Direction, int Duration)
     {
         tl.LogMessage("PulseGuide", "Not implemented");
         throw new MethodNotImplementedException("PulseGuide");
     }
 
-public short ReadoutMode
+	/// <summary>
+	/// Readout mode, Interface Version 2 only
+	/// </summary>
+	/// <value></value>
+	/// <returns>Short integer index into the <see cref="ReadoutModes">ReadoutModes</see> array of string readout mode names indicating
+	/// the camera's current readout mode.</returns>
+	public short ReadoutMode
     {
         get
         {
@@ -549,7 +773,11 @@ public short ReadoutMode
         }
     }
 
-    public ArrayList ReadoutModes
+	/// <summary>
+	/// List of available readout modes, Interface Version 2 only
+	/// </summary>
+	/// <returns>An ArrayList of readout mode names</returns>
+	public ArrayList ReadoutModes
     {
         get
         {
@@ -558,7 +786,11 @@ public short ReadoutMode
         }
     }
 
-    public string SensorName
+	/// <summary>
+	/// Sensor name, Interface Version 2 and later
+	/// </summary>
+	/// <returns>The name of the sensor used within the camera.</returns>
+	public string SensorName
     {
         get
         {
@@ -567,7 +799,11 @@ public short ReadoutMode
         }
     }
 
-    public SensorType SensorType
+	/// <summary>
+	/// Type of colour information returned by the camera sensor, Interface Version 2 and later
+	/// </summary>
+	/// <value>The type of sensor used by the camera.</value>
+	public SensorType SensorType
     {
         get
         {
@@ -576,7 +812,11 @@ public short ReadoutMode
         }
     }
 
-    public double SetCCDTemperature
+	/// <summary>
+	/// Sets the camera cooler setpoint in degrees Celsius, and returns the current setpoint.
+	/// </summary>
+	/// <value>The set CCD temperature.</value>
+	public double SetCCDTemperature
     {
         get
         {
@@ -590,7 +830,12 @@ public short ReadoutMode
         }
     }
 
-    public void StartExposure(double Duration, bool Light)
+	/// <summary>
+	/// Starts an exposure. Use <see cref="ImageReady" /> to check when the exposure is complete.
+	/// </summary>
+	/// <param name="Duration">Duration of exposure in seconds, can be zero if <see cref="StartExposure">Light</see> is <c>false</c></param>
+	/// <param name="Light"><c>true</c> for light frame, <c>false</c> for dark frame (ignored if no shutter)</param>
+	public void StartExposure(double Duration, bool Light)
     {
         if (Duration < 0.0) throw new InvalidValueException("StartExposure", Duration.ToString(), "0.0 upwards");
         if (cameraNumX > ccdWidth) throw new InvalidValueException("StartExposure", cameraNumX.ToString(), ccdWidth.ToString());
@@ -605,7 +850,10 @@ public short ReadoutMode
         cameraImageReady = true;
     }
 
-    public int StartX
+	/// <summary>
+	/// Sets the subframe start position for the X axis (0 based) and returns the current value.
+	/// </summary>
+	public int StartX
     {
         get
         {
@@ -619,6 +867,9 @@ public short ReadoutMode
         }
     }
 
+	/// <summary>
+	/// Sets the subframe start position for the Y axis (0 based). Also returns the current value.
+	/// </summary>
     public int StartY
     {
         get
@@ -633,13 +884,19 @@ public short ReadoutMode
         }
     }
 
-    public void StopExposure()
+	/// <summary>
+	/// Stops the current exposure, if any.
+	/// </summary>
+	public void StopExposure()
     {
         tl.LogMessage("StopExposure", "Not implemented");
         throw new MethodNotImplementedException("StopExposure");
     }
 
-    public double SubExposureDuration
+	/// <summary>
+	/// Camera's sub-exposure interval
+	/// </summary>
+	public double SubExposureDuration
     {
         get
         {

@@ -25,7 +25,7 @@ namespace ASCOM.DeviceHub
 		private static int _domesInUse;                     // Keeps a count on the total number of domes alive.
 		private static int _focusersInUse;                  // Keeps a count on the total number of focusers alive.
 		private static int _serverLocks;                    // Keeps a lock count on this application.
-		private static List<Type> _driverTypes;				// Served COM object types
+		private static List<Type> _driverTypes;             // Served COM object types
 		private static List<ClassFactory> _classFactories;  // Served COM object class factories
 		private static readonly string _appId = "{4f90ea04-044f-444e-963e-b52db2a87575}";   // Our AppId
 		private static readonly Object _lockObject = new object();
@@ -34,7 +34,7 @@ namespace ASCOM.DeviceHub
 
 		private static TraceLogger Logger { get; set; }
 
-		private static GarbageCollection GarbageCollector {get; set;}
+		private static GarbageCollection GarbageCollector { get; set; }
 
 		private static MainWindow MainWindow { get; set; }          // Reference to the main view
 		private static MainWindowViewModel ViewModel { get; set; }  // Reference to the main view model
@@ -145,11 +145,10 @@ namespace ASCOM.DeviceHub
 
 			AppSettingsManager.LoadMainWindowSettings();
 
-			// Create the View and ViewModel
+			// Create the View
 
 			Logger.LogMessage( logId, "Creating the main view" );
 
-			ViewModel = new MainWindowViewModel();
 			MainWindow = new MainWindow();
 
 			// Create the U/I services.
@@ -158,68 +157,84 @@ namespace ASCOM.DeviceHub
 
 			ServiceInjector.InjectUIServices( MainWindow );
 
-			Logger.LogMessage( logId, "Setting the data context for the main view" );
-
-			MainWindow.DataContext = ViewModel;
-			MainWindow.Closing += MainWindow_Closing;
-
-			// Load the saved settings to ensure that everyone up-to-date. Be sure to do this
-			// after the main window is created so we can set its location.
-
-			Logger.LogMessage( logId, "Loading the application settings" );
-
-			AppSettingsManager.LoadAppSettings();
-
-			Logger.LogMessage( logId, "Loading the device driver settings" );
-
-			LoadDeviceSettings();
-
-			// Register the class factories of the served objects
-
-			Logger.LogMessage( logId, "Registering class factories" );
-
-			RegisterClassFactories();
-
-			Logger.LogMessage( logId, "Starting garbage collection" );
-
-			StartGarbageCollection( 60000 );    // Collect garbage once a minute.
-
 			try
 			{
-				Logger.LogMessage( logId, "Starting main view" );
+				// Create the ViewModel
+				// Any errors starting the view models or device managers will raise an exception and short circuit
+				// the rest of the startup.
 
-				ShowMainWindow();
+				ViewModel = new MainWindowViewModel();
 
-				Logger.LogMessage( logId, "The main view has closed" );
+				Logger.LogMessage( logId, "Setting the data context for the main view" );
+
+				MainWindow.DataContext = ViewModel;
+				MainWindow.Closing += MainWindow_Closing;
+
+				// Load the saved settings to ensure that everyone up-to-date. Be sure to do this
+				// after the main window is created so we can set its location.
+
+				Logger.LogMessage( logId, "Loading the application settings" );
+
+				AppSettingsManager.LoadAppSettings();
+
+				Logger.LogMessage( logId, "Loading the device driver settings" );
+
+				LoadDeviceSettings();
+
+				// Register the class factories of the served objects
+
+				Logger.LogMessage( logId, "Registering class factories" );
+
+				RegisterClassFactories();
+
+				Logger.LogMessage( logId, "Starting garbage collection" );
+
+				StartGarbageCollection( 60000 );    // Collect garbage once a minute.
+
+				try
+				{
+					Logger.LogMessage( logId, "Starting main view" );
+
+					ShowMainWindow();
+
+					Logger.LogMessage( logId, "The main view has closed" );
+				}
+				finally
+				{
+					Logger.LogMessage( logId, "Saving the application settings" );
+					AppSettingsManager.SaveAppSettings();
+
+					// Revoke the class factories immediately.
+					// Don't wait until the thread has stopped before
+					// we perform revocation!!!
+
+					RevokeClassFactories();
+
+					Logger.LogMessage( logId, "Disposing the main view and viewmodel." );
+
+					MainWindow.DataContext = null;
+					MainWindow = null;
+					ViewModel.Dispose();
+					ViewModel = null;
+
+					Logger.LogMessage( logId, "Unregistering all services" );
+
+					ServiceContainer.Instance.ClearAllServices();
+
+					// Now stop the Garbage Collector task.
+
+					Logger.LogMessage( logId, "Stopping garbage collection" );
+
+					StopGarbageCollection();
+				}
+			}
+			catch ( Exception )
+			{
+				// Any exception from starting the view models or device managers will bring us here. 
+				// The exception was already logged via the AppLogger so we have nothing more to do but close the Logger and return.
 			}
 			finally
 			{
-				Logger.LogMessage( logId, "Saving the application settings" );
-				AppSettingsManager.SaveAppSettings();
-
-				// Revoke the class factories immediately.
-				// Don't wait until the thread has stopped before
-				// we perform revocation!!!
-
-				RevokeClassFactories();
-
-				Logger.LogMessage( logId, "Disposing the main view and viewmodel." );
-
-				MainWindow.DataContext = null;
-				MainWindow = null;
-				ViewModel.Dispose();
-				ViewModel = null;
-
-				Logger.LogMessage( logId, "Unregistering all services" );
-
-				ServiceContainer.Instance.ClearAllServices();
-
-				// Now stop the Garbage Collector task.
-
-				Logger.LogMessage( logId, "Stopping garbage collection" );
-
-				StopGarbageCollection();
-
 				Logger.LogMessage( logId, "Local server is shutting down" );
 				Logger.Dispose();
 			}
@@ -1084,11 +1099,16 @@ namespace ASCOM.DeviceHub
 						retval = false;
 
 						break;
+					case "-enableapplogging":
+					case @"/enableapplogging":
+						Logger.LogMessage( msgId, "Enabling application startup logging." );
+						Globals.ForceAppLogging = true;
+						break;
 
 					default:
 						string msg = $"Unknown argument: {args[0]}";
 						Logger.LogMessage( msgId, msg );
-						msg += "\nValid are : -register, -unregister, unregister_full, and -embedding";
+						msg += "\nValid are : -register, -unregister, unregister_full, -embedding, and -enableapplogging";
 						string caption = GetAssemblyTitle();
 						MessageBox.Show( msg, caption, MessageBoxButton.OK, MessageBoxImage.Exclamation );
 

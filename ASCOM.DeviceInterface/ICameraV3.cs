@@ -968,7 +968,7 @@ namespace ASCOM.DeviceInterface
 		ArrayList Gains { get; }
 
 		/// <summary>
-		/// Percent completed, Interface Version 2 only
+		/// Percent completed, Interface Version 2 and later
 		/// </summary>
 		/// <returns>A value between 0 and 100% indicating the completeness of this operation</returns>
 		/// <exception cref="PropertyNotImplementedException">Must throw an exception if PercentCompleted is not supported</exception>
@@ -1079,7 +1079,7 @@ namespace ASCOM.DeviceInterface
 		/// <summary>
 		/// Type of colour information returned by the camera sensor, Interface Version 2 and later
 		/// </summary>
-		/// <value></value>
+		/// <value>The type of sensor used by the camera.</value>
 		/// <returns>The <see cref="ASCOM.DeviceInterface.SensorType" /> enum value of the camera sensor</returns>
 		/// <exception cref="PropertyNotImplementedException">Must throw an exception if not supported.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
@@ -1801,7 +1801,7 @@ namespace ASCOM.DeviceInterface
 		int Offset { get; set; }
 
 		/// <summary>
-		/// Maximum <see cref="Offset" /> value of that this camera supports
+		/// Maximum <see cref="Offset" /> value that this camera supports
 		/// </summary>
 		/// <returns>The maximum offset value that this camera supports</returns>
 		/// <exception cref="PropertyNotImplementedException">When the <see cref="Offset"/> property is not implemented or is operating in <b>OFFSETS INDEX</b> mode.</exception>
@@ -1822,7 +1822,7 @@ namespace ASCOM.DeviceInterface
 		int OffsetMax { get; }
 
 		/// <summary>
-		/// Minimum <see cref="Offset" /> value of that this camera supports
+		/// Minimum <see cref="Offset" /> value that this camera supports
 		/// </summary>
 		/// <returns>The minimum offset value that this camera supports</returns>
 		/// <exception cref="PropertyNotImplementedException">When the <see cref="Offset"/> property is not implemented or is operating in <b>OFFSETS INDEX</b> mode.</exception>

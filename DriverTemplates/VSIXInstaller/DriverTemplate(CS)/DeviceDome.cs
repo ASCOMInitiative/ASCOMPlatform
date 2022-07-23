@@ -16,49 +16,77 @@ class DeviceDome
 
     private bool domeShutterState = false; // Variable to hold the open/closed status of the shutter, true = Open
 
-    public void AbortSlew()
+	/// <summary>
+	/// Immediately stops any and all movement of the dome.
+	/// </summary>
+	public void AbortSlew()
     {
         // This is a mandatory parameter but we have no action to take in this simple driver
         tl.LogMessage("AbortSlew", "Completed");
     }
 
-    public double Altitude
+	/// <summary>
+	/// The altitude (degrees, horizon zero and increasing positive to 90 zenith) of the part of the sky that the observer wishes to observe.
+	/// </summary>
+	public double Altitude
     {
         get
         {
             tl.LogMessage("Altitude Get", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException("Altitude", false);
+            throw new PropertyNotImplementedException("Altitude", false);
         }
     }
 
-    public bool AtHome
+	/// <summary>
+	/// <para><see langword="true" /> when the dome is in the home position. Raises an error if not supported.</para>
+	/// <para>
+	/// This is normally used following a <see cref="FindHome" /> operation. The value is reset
+	/// with any azimuth slew operation that moves the dome away from the home position.
+	/// </para>
+	/// <para>
+	/// <see cref="AtHome" /> may optionally also become true during normal slew operations, if the
+	/// dome passes through the home position and the dome controller hardware is capable of
+	/// detecting that; or at the end of a slew operation if the dome comes to rest at the home
+	/// position.
+	/// </para>
+	/// </summary>
+	public bool AtHome
     {
         get
         {
             tl.LogMessage("AtHome Get", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException("AtHome", false);
+            throw new PropertyNotImplementedException("AtHome", false);
         }
     }
 
-    public bool AtPark
+	/// <summary>
+	/// <see langword="true" /> if the dome is in the programmed park position.
+	/// </summary>
+	public bool AtPark
     {
         get
         {
             tl.LogMessage("AtPark Get", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException("AtPark", false);
+            throw new PropertyNotImplementedException("AtPark", false);
         }
     }
 
-    public double Azimuth
+	/// <summary>
+	/// The dome azimuth (degrees, North zero and increasing clockwise, i.e., 90 East, 180 South, 270 West). North is true north and not magnetic north.
+	/// </summary>
+	public double Azimuth
     {
         get
         {
             tl.LogMessage("Azimuth Get", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException("Azimuth", false);
+            throw new PropertyNotImplementedException("Azimuth", false);
         }
     }
 
-    public bool CanFindHome
+	/// <summary>
+	/// <see langword="true" /> if driver can perform a search for home position.
+	/// </summary>
+	public bool CanFindHome
     {
         get
         {
@@ -67,7 +95,10 @@ class DeviceDome
         }
     }
 
-    public bool CanPark
+	/// <summary>
+	/// <see langword="true" /> if the driver is capable of parking the dome.
+	/// </summary>
+	public bool CanPark
     {
         get
         {
@@ -76,7 +107,10 @@ class DeviceDome
         }
     }
 
-    public bool CanSetAltitude
+	/// <summary>
+	/// <see langword="true" /> if driver is capable of setting dome altitude.
+	/// </summary>
+	public bool CanSetAltitude
     {
         get
         {
@@ -85,7 +119,11 @@ class DeviceDome
         }
     }
 
-    public bool CanSetAzimuth
+	/// <summary>
+	/// <see langword="true" /> if driver is capable of rotating the dome. Muste be <see "langword="false" /> for a 
+	/// roll-off roof or clamshell.
+	/// </summary>
+	public bool CanSetAzimuth
     {
         get
         {
@@ -94,7 +132,10 @@ class DeviceDome
         }
     }
 
-    public bool CanSetPark
+	/// <summary>
+	/// <see langword="true" /> if the driver can set the dome park position.
+	/// </summary>
+	public bool CanSetPark
     {
         get
         {
@@ -103,7 +144,11 @@ class DeviceDome
         }
     }
 
-    public bool CanSetShutter
+	/// <summary>
+	/// <see langword="true" /> if the driver is capable of opening and closing the shutter or roof
+	/// mechanism.
+	/// </summary>
+	public bool CanSetShutter
     {
         get
         {
@@ -112,7 +157,10 @@ class DeviceDome
         }
     }
 
-    public bool CanSlave
+	/// <summary>
+	/// <see langword="true" /> if the dome hardware supports slaving to a telescope.
+	/// </summary>
+	public bool CanSlave
     {
         get
         {
@@ -121,7 +169,11 @@ class DeviceDome
         }
     }
 
-    public bool CanSyncAzimuth
+	/// <summary>
+	/// <see langword="true" /> if the driver is capable of synchronizing the dome azimuth position
+	/// using the <see cref="SyncToAzimuth" /> method.
+	/// </summary>
+	public bool CanSyncAzimuth
     {
         get
         {
@@ -130,37 +182,55 @@ class DeviceDome
         }
     }
 
-    public void CloseShutter()
+	/// <summary>
+	/// Close the shutter or otherwise shield the telescope from the sky.
+	/// </summary>
+	public void CloseShutter()
     {
         tl.LogMessage("CloseShutter", "Shutter has been closed");
         domeShutterState = false;
     }
 
-    public void FindHome()
+	/// <summary>
+	/// Start operation to search for the dome home position.
+	/// </summary>
+	public void FindHome()
     {
         tl.LogMessage("FindHome", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException("FindHome");
+        throw new MethodNotImplementedException("FindHome");
     }
 
-    public void OpenShutter()
+	/// <summary>
+	/// Open shutter or otherwise expose telescope to the sky.
+	/// </summary>
+	public void OpenShutter()
     {
         tl.LogMessage("OpenShutter", "Shutter has been opened");
         domeShutterState = true;
     }
 
+	/// <summary>
+	/// Rotate dome in azimuth to park position.
+	/// </summary>
     public void Park()
     {
         tl.LogMessage("Park", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException("Park");
+        throw new MethodNotImplementedException("Park");
     }
 
-    public void SetPark()
+	/// <summary>
+	/// Set the current azimuth position of dome to the park position.
+	/// </summary>
+	public void SetPark()
     {
         tl.LogMessage("SetPark", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException("SetPark");
+        throw new MethodNotImplementedException("SetPark");
     }
 
-    public ShutterState ShutterStatus
+	/// <summary>
+	/// Gets the status of the dome shutter or roof structure.
+	/// </summary>
+	public ShutterState ShutterStatus
     {
         get
         {
@@ -178,7 +248,10 @@ class DeviceDome
         }
     }
 
-    public bool Slaved
+	/// <summary>
+	/// <see langword="true"/> if the dome is slaved to the telescope in its hardware, else <see langword="false"/>.
+	/// </summary>
+	public bool Slaved
     {
         get
         {
@@ -188,23 +261,42 @@ class DeviceDome
         set
         {
             tl.LogMessage("Slaved Set", "not implemented");
-            throw new ASCOM.PropertyNotImplementedException("Slaved", true);
+            throw new PropertyNotImplementedException("Slaved", true);
         }
     }
 
-    public void SlewToAltitude(double Altitude)
+	/// <summary>
+	/// Ensure that the requested viewing altitude is available for observing.
+	/// </summary>
+	/// <param name="Altitude">
+	/// The desired viewing altitude (degrees, horizon zero and increasing positive to 90 degrees at the zenith)
+	/// </param>
+	public void SlewToAltitude(double Altitude)
     {
         tl.LogMessage("SlewToAltitude", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException("SlewToAltitude");
+        throw new MethodNotImplementedException("SlewToAltitude");
     }
 
-    public void SlewToAzimuth(double Azimuth)
+	/// <summary>
+	/// Ensure that the requested viewing azimuth is available for observing.
+	/// The method should not block and the slew operation should complete asynchronously.
+	/// </summary>
+	/// <param name="Azimuth">
+	/// Desired viewing azimuth (degrees, North zero and increasing clockwise. i.e., 90 East,
+	/// 180 South, 270 West)
+	/// </param>
+	public void SlewToAzimuth(double Azimuth)
     {
         tl.LogMessage("SlewToAzimuth", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException("SlewToAzimuth");
+        throw new MethodNotImplementedException("SlewToAzimuth");
     }
 
-    public bool Slewing
+	/// <summary>
+	/// <see langword="true" /> if any part of the dome is currently moving or a move command has been issued, 
+	/// but the dome has not yet started to move. <see langword="false" /> if all dome components are stationary
+	/// and no move command has been issued. /> 
+	/// </summary>
+	public bool Slewing
     {
         get
         {
@@ -213,10 +305,17 @@ class DeviceDome
         }
     }
 
-    public void SyncToAzimuth(double Azimuth)
+	/// <summary>
+	/// Synchronize the current position of the dome to the given azimuth.
+	/// </summary>
+	/// <param name="Azimuth">
+	/// Target azimuth (degrees, North zero and increasing clockwise. i.e., 90 East,
+	/// 180 South, 270 West)
+	/// </param>
+	public void SyncToAzimuth(double Azimuth)
     {
         tl.LogMessage("SyncToAzimuth", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException("SyncToAzimuth");
+        throw new MethodNotImplementedException("SyncToAzimuth");
     }
 
     #endregion

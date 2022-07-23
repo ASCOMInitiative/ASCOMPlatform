@@ -121,7 +121,7 @@ namespace ASCOM.DeviceHub
 			// This method does not validate the RA!!
 
 			double retval = SiderealTime - rightAscension;
-			retval = ConditionHA( retval );
+			retval = Globals.ConditionHA( retval );
 
 			return retval;
 		}
@@ -176,26 +176,26 @@ namespace ASCOM.DeviceHub
 			return retval;
 		}
 
-		private double ConditionHA( double ha )
-		{
-			double lowerBound = -12.0;
-			double upperBound = 12.0;
-			double range = upperBound - lowerBound;
+		//private double ConditionHA( double ha )
+		//{
+		//	double lowerBound = -12.0;
+		//	double upperBound = 12.0;
+		//	double range = upperBound - lowerBound;
 
-			double retval = ha;
+		//	double retval = ha;
 
-			while ( retval < lowerBound )
-			{
-				retval += range;
-			}
+		//	while ( retval < lowerBound )
+		//	{
+		//		retval += range;
+		//	}
 
-			while ( retval > upperBound )
-			{
-				retval -= range;
-			}
+		//	while ( retval > upperBound )
+		//	{
+		//		retval -= range;
+		//	}
 
-			return retval;
-		}
+		//	return retval;
+		//}
 
 		#endregion
 	}

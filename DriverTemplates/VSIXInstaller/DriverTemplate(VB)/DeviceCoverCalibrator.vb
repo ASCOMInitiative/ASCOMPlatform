@@ -12,10 +12,10 @@ Class DeviceCoverCalibrator
 
 #Region "ICoverCalibrator Implementation"
 
-    ''' <summary>
-    ''' Returns the state of the device cover, if present, otherwise returns "NotPresent"
-    ''' </summary>
-    Public ReadOnly Property CoverState() As CoverStatus Implements ICoverCalibratorV1.CoverState
+	''' <summary>
+	''' Returns the state of the device cover, if present, otherwise returns CoverStatus.NotPresent
+	''' </summary>
+	Public ReadOnly Property CoverState() As CoverStatus Implements ICoverCalibratorV1.CoverState
         Get
             tl.LogMessage("CoverState Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("CoverState", False)
@@ -46,10 +46,10 @@ Class DeviceCoverCalibrator
         Throw New ASCOM.MethodNotImplementedException("HaltCover")
     End Sub
 
-    ''' <summary>
-    ''' Returns the state of the calibration device, if present, otherwise returns "NotPresent"
-    ''' </summary>
-    Public ReadOnly Property CalibratorState() As CalibratorStatus Implements ICoverCalibratorV1.CalibratorState
+	''' <summary>
+	''' Returns the state of the calibration device, if present, otherwise returns CalibratorStatus.NotPresent
+	''' </summary>
+	Public ReadOnly Property CalibratorState() As CalibratorStatus Implements ICoverCalibratorV1.CalibratorState
         Get
             tl.LogMessage("CalibratorState Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("CalibratorState", False)

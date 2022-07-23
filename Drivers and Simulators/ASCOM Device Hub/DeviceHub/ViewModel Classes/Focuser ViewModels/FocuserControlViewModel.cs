@@ -54,6 +54,9 @@ namespace ASCOM.DeviceHub
 
 		public FocuserControlViewModel( IFocuserManager focuserManager )
 		{
+			string caller = "FocuserControlViewModel ctor";
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			_focuserManager = focuserManager;
 			_status = null;
 			_temperatureDisplayDegF = false;
@@ -76,11 +79,15 @@ namespace ASCOM.DeviceHub
 			TargetPosition = "0";
 			TargetAmount = "0";
 
+			LogAppMessage( "Registering message handlers", caller );
+
 			Messenger.Default.Register<FocuserParametersUpdatedMessage>( this, ( action ) => FocuserParametersUpdated( action ) );
 			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => InvalidateDeviceData( action ) );
 			Messenger.Default.Register<FocuserMoveAmountMessage>( this, ( action ) => UpdateAccumulatedMoves( action ) );
 			Messenger.Default.Register<FocuserMoveCompletedMessage>( this, ( action ) => FocuserMoveCompleted() );
 			RegisterStatusUpdateMessage( true );
+
+			LogAppMessage( "Initialization complete", caller );
 		}
 
 		#region Change Notification Properties

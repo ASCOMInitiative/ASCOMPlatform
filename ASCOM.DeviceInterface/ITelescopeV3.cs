@@ -957,7 +957,7 @@ namespace ASCOM.DeviceInterface
 		double SiteLongitude { get; set; }
 
 		/// <summary>
-		/// True if telescope is currently moving in response to one of the
+		/// True if telescope is in the process of moving in response to one of the
 		/// Slew methods or the <see cref="MoveAxis" /> method, False at all other times.
 		/// </summary>
 		/// <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
@@ -1004,6 +1004,7 @@ namespace ASCOM.DeviceInterface
 
 		/// <summary>
 		/// This Method must be implemented if <see cref="CanSlewAltAzAsync" /> returns True.
+		/// It returns immediately, with Slewing set to True
 		/// </summary>
 		/// <param name="Azimuth">Azimuth to which to move</param>
 		/// <param name="Altitude">Altitude to which to move to</param>
@@ -1024,6 +1025,7 @@ namespace ASCOM.DeviceInterface
 
 		/// <summary>
 		/// Move the telescope to the given equatorial coordinates, return when slew is complete
+		/// It does not return to the caller until the slew is complete.
 		/// </summary>
 		/// <param name="RightAscension">The destination right ascension (hours). Copied to <see cref="TargetRightAscension" />.</param>
 		/// <param name="Declination">The destination declination (degrees, positive North). Copied to <see cref="TargetDeclination" />.</param>
@@ -1043,7 +1045,7 @@ namespace ASCOM.DeviceInterface
 		void SlewToCoordinates(double RightAscension, double Declination);
 
 		/// <summary>
-		/// Move the telescope to the given equatorial coordinates, return immediately after starting the slew.
+		/// Move the telescope to the given equatorial coordinates and return with Slewing set to True immediately after starting the slew.
 		/// </summary>
 		/// <param name="RightAscension">The destination right ascension (hours). Copied to <see cref="TargetRightAscension" />.</param>
 		/// <param name="Declination">The destination declination (degrees, positive North). Copied to <see cref="TargetDeclination" />.</param>
@@ -1083,7 +1085,7 @@ namespace ASCOM.DeviceInterface
 
 		/// <summary>
 		/// Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" />  coordinates,
-		/// returns immediately after starting the slew.
+		/// returns immediately after starting the slew with Slewing set to True.
 		/// </summary>
 		/// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlewAsync" /> is False</exception>
 		/// <exception cref="ParkedException">If the telescope is parked</exception>
@@ -1132,7 +1134,7 @@ namespace ASCOM.DeviceInterface
 		void SyncToCoordinates(double RightAscension, double Declination);
 
 		/// <summary>
-		/// Matches the scope's equatorial coordinates to the given equatorial coordinates.
+		/// Matches the scope's equatorial coordinates to the target equatorial coordinates.
 		/// </summary>
 		/// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSync" /> is False</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>

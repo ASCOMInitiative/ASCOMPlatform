@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,20 +19,83 @@ namespace ASCOM.DeviceHub
 	{
 		public MainWindowViewModel()
 		{
+			string caller = "MainWindowViewModel ctor";
+			AssemblyName asblyName = Assembly.GetExecutingAssembly().GetName();
+			string name = asblyName.FullName;
+
+			LogAppMessage( $"Starting application initialization of {asblyName}.", caller );
+
 			// Inject the TelescopeManager into the telescope view model at creation so that
 			// we can inject a mock manager for testing; same for the Dome and Focuser.
 
-			TelescopeVm = new TelescopeViewModel( TelescopeManager.Instance );
-			DomeVm = new DomeViewModel( DomeManager.Instance );
-			FocuserVm = new FocuserViewModel( FocuserManager.Instance );
+			LogAppMessage( "============================== Telescope Initialization ============================== ", caller );
+			LogAppMessage( "Creating the TelescopeManager", caller );
+			string className = "TelescopeManager";
+
+			try
+			{
+				TelescopeManager tm = TelescopeManager.Instance;
+
+				className = "TelescopeViewModel";
+				LogAppMessage( $"Creating the {className}", caller );
+				TelescopeVm = new TelescopeViewModel( tm );
+
+				LogAppMessage( "============================== Dome Initialization ============================== ", caller );
+				className = "DomeManager";
+				LogAppMessage( $"Creating the {className}", caller );
+				DomeManager dm = DomeManager.Instance;
+
+				className = "DomeViewModel";
+				LogAppMessage( $"Creating the {className}", caller );
+				DomeVm = new DomeViewModel( dm );
+
+				LogAppMessage( "============================== Focuser Initialization ============================== ", caller );
+				className = "FocuserManager";
+				LogAppMessage( $"Creating the {className}", caller );
+				FocuserManager fm = FocuserManager.Instance;
+
+				className = "FocuserViewModel";
+				LogAppMessage( $"Creating the {className}", caller );
+				FocuserVm = new FocuserViewModel( fm );
+
+				LogAppMessage( "ViewModel and device manager creation complete.", caller );
+			}
+			catch ( Exception xcp )
+			{
+				// Log the exception in the application log.
+
+				StringBuilder sb = new StringBuilder( $"Caught an exception while creating an instance of the {className}." );
+				sb.Append( " Details follow:\r\n\r\n" );
+				sb.Append( xcp.ToString() );
+				LogAppMessage( sb.ToString() );
+
+				// Tell the user what happened.
+
+				sb = new StringBuilder( $"Device Hub failed to initialize the {className} and must shut down.\r\n\r\n" );
+				sb.Append( "You must enable Application Debug Logging to collect more information about this failure.\r\n\r\n" );
+				sb.Append( "Please contact the ASCOM Support Team for assistance." );
+				ShowMessage( sb.ToString(), "Fatal Device Hub Startup Error", MessageBoxButton.OK, MessageBoxImage.Error );
+
+				throw;
+			}
+
+			LogAppMessage( "Setting the active device to Telescope", caller );
+
 			Globals.ActiveDevice = DeviceTypeEnum.Telescope;
+
+			LogAppMessage( "Initializing the visual theme.", caller );
 
 			string themeName = ( Globals.UseCustomTheme ) ? Strings.ThemeNameCustom : Strings.ThemeNameStandard;
 			InitializeThemes( themeName );
 
 			UseExpandedScreenLayout = Globals.UseExpandedScreenLayout;
 
+			LogAppMessage( "Registering message handlers", caller );
+
 			Messenger.Default.Register<ObjectCountMessage>( this, ( action ) => UpdateObjectsCount( action ) );
+
+			LogAppMessage( "Application Initializaiton is complete.", caller );
+			Globals.CloseAppLogger();
 		}
 
 		#region Public Properties
@@ -151,12 +216,24 @@ namespace ASCOM.DeviceHub
 
 			_showSetupCommand = null;
 			_showLogCommand = null;
-			TelescopeVm.Dispose();
-			TelescopeVm = null;
-			DomeVm.Dispose();
-			DomeVm = null;
-			FocuserVm.Dispose();
-			FocuserVm = null;
+
+			if ( TelescopeVm != null )
+			{
+				TelescopeVm.Dispose();
+				TelescopeVm = null;
+			}
+
+			if ( DomeVm != null )
+			{
+				DomeVm.Dispose();
+				DomeVm = null;
+			}
+
+			if ( FocuserVm != null )
+			{
+				FocuserVm.Dispose();
+				FocuserVm = null;
+			}
 
 			if ( SetupVm != null )
 			{

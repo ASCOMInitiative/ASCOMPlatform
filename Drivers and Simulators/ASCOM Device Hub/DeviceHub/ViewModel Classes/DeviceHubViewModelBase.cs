@@ -67,6 +67,15 @@ namespace ASCOM.DeviceHub
 
 		#endregion MessageBox Helpers
 
+		#region App Logger Members
+
+		protected static void LogAppMessage( string message, [System.Runtime.CompilerServices.CallerMemberName] string callerName = "???" )
+		{
+			Globals.AppLogger.LogMessage( callerName, message );
+		}
+
+		#endregion App Logger Members
+
 		#region INotifyPropertyChanged Members
 
 		/// <summary>

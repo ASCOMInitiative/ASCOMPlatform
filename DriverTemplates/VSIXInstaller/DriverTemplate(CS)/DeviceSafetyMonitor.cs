@@ -12,8 +12,13 @@ class DeviceSafetyMonitor
     Util util = new Util();
     TraceLogger tl = new TraceLogger();
 
-    #region ISafetyMonitor Implementation
-    public bool IsSafe
+	#region ISafetyMonitor Implementation
+
+	/// <summary>
+	/// Indicates whether the monitored state is safe for use.
+	/// </summary>
+	/// <value>True if the state is safe, False if it is unsafe.</value>
+	public bool IsSafe
     {
         get
         {

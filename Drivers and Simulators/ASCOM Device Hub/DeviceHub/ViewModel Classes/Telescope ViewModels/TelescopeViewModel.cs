@@ -14,10 +14,15 @@ namespace ASCOM.DeviceHub
 
 		public TelescopeViewModel( ITelescopeManager telescopeManager )
 		{
+			string caller = "TelescopeViewModel ctor";
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			_telescopeManager = telescopeManager;
 			_isConnected = false;
 			_status = null;
 			_isSlewInProgress = false;
+
+			LogAppMessage( "Creating child view models", caller );
 
 			ParametersVm = new TelescopeParametersViewModel();
 			CapabilitiesVm = new TelescopeCapabilitiesViewModel();
@@ -25,11 +30,15 @@ namespace ASCOM.DeviceHub
 			DirectSlewVm = new TelescopeDirectSlewViewModel( telescopeManager );
 			MotionVm = new TelescopeMotionViewModel( telescopeManager );
 
+			LogAppMessage( "Registering message handlers", caller );
+
 			Messenger.Default.Register<ObjectCountMessage>( this, ( action ) => UpdateObjectsCount( action ) );
 			Messenger.Default.Register<TelescopeIDChangedMessage>( this, ( action ) => TelescopeIDChanged( action ) );
 			Messenger.Default.Register<SlewInProgressMessage>( this, ( action ) => UpdateSlewInProgress( action ) );
 			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => DeviceDisconnected( action ) );
 			RegisterStatusUpdateMessage( true );
+
+			LogAppMessage( "Initialization complete", caller );
 		}
 
 		#region Public Properties

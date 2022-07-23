@@ -13,19 +13,27 @@ namespace ASCOM.DeviceHub
 
 		public DomeViewModel( IDomeManager domeManager )
 		{
+			string caller = "DomeViewModel ctor";
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			DomeManager = domeManager;
 			_isConnected = false;
 			_status = null;
 
+			LogAppMessage( "Creating child view models", caller );
+
 			ParametersVm = new DomeParametersViewModel();
 			CapabilitiesVm = new DomeCapabilitiesViewModel();
 			MotionVm = new DomeMotionViewModel( DomeManager );
+
+			LogAppMessage( "Registering message handlers", caller );
 
 			Messenger.Default.Register<ObjectCountMessage>( this, ( action ) => UpdateObjectsCount( action ) );
 			Messenger.Default.Register<DomeIDChangedMessage>( this, ( action ) => DomeIDChanged( action ) );
 			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => DeviceDisconnected( action ) );
 			RegisterStatusUpdateMessage( true );
 
+			LogAppMessage( "Initialization complete", caller );
 		}
 
 		#region Public Properties
