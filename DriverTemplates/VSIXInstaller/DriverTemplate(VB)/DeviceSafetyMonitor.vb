@@ -12,14 +12,19 @@ Class DeviceSafetyMonitor
     Private TL As New TraceLogger()
 
 #Region "ISafetyMonitor Implementation"
-    Public ReadOnly Property IsSafe() As Boolean Implements ISafetyMonitor.IsSafe
-        Get
-            TL.LogMessage("IsSafe Get", "True")
-            Return True
-        End Get
-    End Property
+
+	''' <summary>
+	''' Indicates whether the monitored state is safe for use.
+	''' </summary>
+	''' <value>True if the state is safe, False if it is unsafe.</value>
+	Public ReadOnly Property IsSafe() As Boolean Implements ISafetyMonitor.IsSafe
+		Get
+			TL.LogMessage("IsSafe Get", "True")
+			Return True
+		End Get
+	End Property
 
 #End Region
 
-    '//ENDOFINSERTEDFILE
+	'//ENDOFINSERTEDFILE
 End Class

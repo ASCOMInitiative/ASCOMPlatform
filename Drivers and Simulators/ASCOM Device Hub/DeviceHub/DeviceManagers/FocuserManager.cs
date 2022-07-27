@@ -34,7 +34,11 @@ namespace ASCOM.DeviceHub
 
 		static FocuserManager()
 		{
+			string caller = "FocuserManager static ctor";
+
+			LogAppMessage( "Initialization started.", caller );
 			FocuserID = "";
+			LogAppMessage( "Initialization completed.", caller );
 		}
 
 		public static void SetFocuserID( string id )
@@ -63,6 +67,9 @@ namespace ASCOM.DeviceHub
 		public FocuserManager()
 				: base( DeviceTypeEnum.Focuser )
 		{
+			string caller = "FocuserManager instance ctor";
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			IsConnected = false;
 			Parameters = null;
 			Status = null;
@@ -71,6 +78,8 @@ namespace ASCOM.DeviceHub
 			MoveInProgress = false;
 			PollingPeriod = POLLING_PERIOD_NORMAL;
 			PollingChange = new ManualResetEvent( false );
+
+			LogAppMessage( "Instance constructor initialization complete.", caller );
 		}
 
 		#endregion Instance Constructor

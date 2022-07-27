@@ -13,18 +13,26 @@ namespace ASCOM.DeviceHub
 
 		public FocuserViewModel( IFocuserManager focuserManager )
 		{
+			string caller = "FocuserViewModel ctor";
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			FocuserManager = focuserManager;
 			_isConnected = false;
 			_status = null;
 
+			LogAppMessage( "Creating child view models", caller );
+
 			ParametersVm = new FocuserParametersViewModel();
 			ControlVm = new FocuserControlViewModel( FocuserManager );
+
+			LogAppMessage( "Registering message handlers", caller );
 
 			Messenger.Default.Register<ObjectCountMessage>( this, ( action ) => UpdateObjectsCount( action ) );
 			Messenger.Default.Register<FocuserIDChangedMessage>( this, ( action ) => FocuserIDChanged( action ) );
 			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => DeviceDisconnected( action ) );
 			RegisterStatusUpdateMessage( true );
 
+			LogAppMessage( "Initialization complete", caller );
 		}
 
 		#region Public Properties

@@ -147,7 +147,9 @@ namespace ASCOM.TEMPLATEDEVICENAME
             }
         }
 
-        public ArrayList SupportedActions
+		/// <summary>Returns the list of custom action names supported by this driver.</summary>
+		/// <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
+		public ArrayList SupportedActions
         {
             get
             {
@@ -156,13 +158,29 @@ namespace ASCOM.TEMPLATEDEVICENAME
             }
         }
 
-        public string Action(string actionName, string actionParameters)
+		/// <summary>Invokes the specified device-specific custom action.</summary>
+		/// <param name="ActionName">A well known name agreed by interested parties that represents the action to be carried out.</param>
+		/// <param name="ActionParameters">List of required parameters or an <see cref="String.Empty">Empty String</see> if none are required.</param>
+		/// <returns>A string response. The meaning of returned strings is set by the driver author.
+		/// <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
+		/// of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
+		/// </returns>
+		public string Action(string actionName, string actionParameters)
         {
             LogMessage("", "Action {0}, parameters {1} not implemented", actionName, actionParameters);
             throw new ASCOM.ActionNotImplementedException("Action " + actionName + " is not implemented by this driver");
         }
 
-        public void CommandBlind(string command, bool raw)
+		/// <summary>
+		/// Transmits an arbitrary string to the device and does not wait for a response.
+		/// Optionally, protocol framing characters may be added to the string before transmission.
+		/// </summary>
+		/// <param name="Command">The literal command string to be transmitted.</param>
+		/// <param name="Raw">
+		/// if set to <c>true</c> the string is transmitted 'as-is'.
+		/// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+		/// </param>
+		public void CommandBlind(string command, bool raw)
         {
             CheckConnected("CommandBlind");
             // TODO The optional CommandBlind method should either be implemented OR throw a MethodNotImplementedException
@@ -171,7 +189,19 @@ namespace ASCOM.TEMPLATEDEVICENAME
             throw new ASCOM.MethodNotImplementedException("CommandBlind");
         }
 
-        public bool CommandBool(string command, bool raw)
+		/// <summary>
+		/// Transmits an arbitrary string to the device and waits for a boolean response.
+		/// Optionally, protocol framing characters may be added to the string before transmission.
+		/// </summary>
+		/// <param name="Command">The literal command string to be transmitted.</param>
+		/// <param name="Raw">
+		/// if set to <c>true</c> the string is transmitted 'as-is'.
+		/// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+		/// </param>
+		/// <returns>
+		/// Returns the interpreted boolean response received from the device.
+		/// </returns>
+		public bool CommandBool(string command, bool raw)
         {
             CheckConnected("CommandBool");
             // TODO The optional CommandBool method should either be implemented OR throw a MethodNotImplementedException
@@ -184,7 +214,19 @@ namespace ASCOM.TEMPLATEDEVICENAME
             throw new ASCOM.MethodNotImplementedException("CommandBool");
         }
 
-        public string CommandString(string command, bool raw)
+		/// <summary>
+		/// Transmits an arbitrary string to the device and waits for a string response.
+		/// Optionally, protocol framing characters may be added to the string before transmission.
+		/// </summary>
+		/// <param name="Command">The literal command string to be transmitted.</param>
+		/// <param name="Raw">
+		/// if set to <c>true</c> the string is transmitted 'as-is'.
+		/// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+		/// </param>
+		/// <returns>
+		/// Returns the string response received from the device.
+		/// </returns>
+		public string CommandString(string command, bool raw)
         {
             CheckConnected("CommandString");
             // TODO The optional CommandString method should either be implemented OR throw a MethodNotImplementedException
@@ -193,7 +235,12 @@ namespace ASCOM.TEMPLATEDEVICENAME
             throw new ASCOM.MethodNotImplementedException("CommandString");
         }
 
-        public void Dispose()
+		/// <summary>
+		/// Dispose the late-bound interface, if needed. Will release it via COM
+		/// if it is a COM object, else if native .NET will just dereference it
+		/// for GC.
+		/// </summary>
+		public void Dispose()
         {
             // Clean up the trace logger and util objects
             tl.Enabled = false;
@@ -205,7 +252,12 @@ namespace ASCOM.TEMPLATEDEVICENAME
             astroUtilities = null;
         }
 
-        public bool Connected
+		/// <summary>
+		/// Set True to connect to the device hardware. Set False to disconnect from the device hardware.
+		/// You can also read the property to check whether it is connected. This reports the current hardware state.
+		/// </summary>
+		/// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
+		public bool Connected
         {
             get
             {
@@ -233,7 +285,11 @@ namespace ASCOM.TEMPLATEDEVICENAME
             }
         }
 
-        public string Description
+		/// <summary>
+		/// Returns a description of the device, such as manufacturer and modelnumber. Any ASCII characters may be used.
+		/// </summary>
+		/// <value>The description.</value>
+		public string Description
         {
             // TODO customise this device description
             get
@@ -243,7 +299,10 @@ namespace ASCOM.TEMPLATEDEVICENAME
             }
         }
 
-        public string DriverInfo
+		/// <summary>
+		/// Descriptive and version information about this ASCOM driver.
+		/// </summary>
+		public string DriverInfo
         {
             get
             {
@@ -255,7 +314,10 @@ namespace ASCOM.TEMPLATEDEVICENAME
             }
         }
 
-        public string DriverVersion
+		/// <summary>
+		/// A string containing only the major and minor version of the driver formatted as 'm.n'.
+		/// </summary>
+		public string DriverVersion
         {
             get
             {
@@ -266,7 +328,10 @@ namespace ASCOM.TEMPLATEDEVICENAME
             }
         }
 
-        public short InterfaceVersion
+		/// <summary>
+		/// The interface version number that this device supports. 
+		/// </summary>
+		public short InterfaceVersion
         {
             // set by the driver wizard
             get
@@ -276,7 +341,10 @@ namespace ASCOM.TEMPLATEDEVICENAME
             }
         }
 
-        public string Name
+		/// <summary>
+		/// The short name of the driver, for display purposes
+		/// </summary>
+		public string Name
         {
             get
             {

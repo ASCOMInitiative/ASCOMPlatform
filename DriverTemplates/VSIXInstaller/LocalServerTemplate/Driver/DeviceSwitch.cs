@@ -13,10 +13,11 @@ class DeviceSwitch
 
     private  short numSwitch = 0;
 
-    /// <summary>
-    /// The number of switches managed by this driver
-    /// </summary>
-    public short MaxSwitch
+	/// <summary>
+	/// The number of switches managed by this driver
+	/// </summary>
+	/// <returns>The number of devices managed by this driver.</returns>
+	public short MaxSwitch
     {
         get 
         { 
@@ -25,58 +26,54 @@ class DeviceSwitch
         }
     }
 
-    /// <summary>
-    /// Return the name of switch n
-    /// </summary>
-    /// <param name="id">The switch number to return</param>
-    /// <returns>
-    /// The name of the switch
-    /// </returns>
-    public string GetSwitchName(short id)
+	/// <summary>
+	/// Return the name of switch device n.
+	/// </summary>
+	/// <param name="id">The device number (0 to <see cref="MaxSwitch"/> - 1)</param>
+	/// <returns>The name of the device</returns>
+	public string GetSwitchName(short id)
     {
         Validate("GetSwitchName", id);
         tl.LogMessage("GetSwitchName", $"GetSwitchName({id}) - not implemented");
         throw new MethodNotImplementedException("GetSwitchName");
-        // or
-        //tl.LogMessage("GetSwitchName", string.Format("GetSwitchName({0}) - default Switch{0}", id));
-        //return "Switch" + id.ToString();
     }
 
-    /// <summary>
-    /// Sets a switch name to a specified value
-    /// </summary>
-    /// <param name="id">The number of the switch whose name is to be set</param>
-    /// <param name="name">The name of the switch</param>
-    public void SetSwitchName(short id, string name)
+	/// <summary>
+	/// Set a switch device name to a specified value.
+	/// </summary>
+	/// <param name="id">The device number (0 to <see cref="MaxSwitch"/> - 1)</param>
+	/// <param name="name">The name of the device</param>
+	public void SetSwitchName(short id, string name)
     {
         Validate("SetSwitchName", id);
         tl.LogMessage("SetSwitchName", $"SetSwitchName({id}) = {name} - not implemented");
         throw new MethodNotImplementedException("SetSwitchName");
     }
 
-    /// <summary>
-    /// Gets the switch description.
-    /// </summary>
-    /// <param name="id">The id.</param>
-    /// <returns></returns>
-    public string GetSwitchDescription(short id)
+	/// <summary>
+	/// Gets the description of the specified switch device. This is to allow a fuller description of
+	/// the device to be returned, for example for a tool tip.
+	/// </summary>
+	/// <param name="id">The device number (0 to <see cref="MaxSwitch"/> - 1)</param>
+	/// <returns>
+	/// String giving the device description.
+	/// </returns>
+	public string GetSwitchDescription(short id)
     {
         Validate("GetSwitchDescription", id);
         tl.LogMessage("GetSwitchDescription", $"GetSwitchDescription({id}) - not implemented");
         throw new MethodNotImplementedException("GetSwitchDescription");
     }
 
-    /// <summary>
-    /// Reports if the specified switch can be written to.
-    /// This is false if the switch cannot be written to, for example a limit switch or a sensor.
-    /// The default is true.
-    /// </summary>
-    /// <param name="id">The number of the switch whose write state is to be returned</param><returns>
-    ///   <c>true</c> if the switch can be written to, otherwise <c>false</c>.
-    /// </returns>
-    /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
-    /// <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
-    public bool CanWrite(short id)
+	/// <summary>
+	/// Reports if the specified switch device can be written to, default true.
+	/// This is false if the device cannot be written to, for example a limit switch or a sensor.
+	/// </summary>
+	/// <param name="id">The device number (0 to <see cref="MaxSwitch"/> - 1)</param>
+	/// <returns>
+	/// <c>true</c> if the device can be written to, otherwise <c>false</c>.
+	/// </returns>
+	public bool CanWrite(short id)
     {
         bool writable = true;
         Validate("CanWrite", id);
@@ -85,32 +82,26 @@ class DeviceSwitch
         return true;
     }
 
-    #region Boolean switch members
+	#region Boolean switch members
 
-    /// <summary>
-    /// Return the state of switch n
-    /// a multi-value switch must throw a not implemented exception
-    /// </summary>
-    /// <param name="id">The switch number to return</param>
-    /// <returns>
-    /// True or false
-    /// </returns>
-    public bool GetSwitch(short id)
+	/// <summary>
+	/// Return the state of switch device id as a boolean
+	/// </summary>
+	/// <param name="id">The device number (0 to <see cref="MaxSwitch"/> - 1)</param>
+	/// <returns>True or false</returns>
+	public bool GetSwitch(short id)
     {
         Validate("GetSwitch", id);
         tl.LogMessage("GetSwitch", $"GetSwitch({id}) - not implemented");
         throw new MethodNotImplementedException("GetSwitch");
     }
 
-    /// <summary>
-    /// Sets a switch to the specified state
-    /// If the switch cannot be set then throws a MethodNotImplementedException.
-    /// A multi-value switch must throw a not implemented exception
-    /// setting it to false will set it to its minimum value.
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="state"></param>
-    public void SetSwitch(short id, bool state)
+	/// <summary>
+	/// Sets a switch controller device to the specified state, true or false.
+	/// </summary>
+	/// <param name="id">The device number (0 to <see cref="MaxSwitch"/> - 1)</param>
+	/// <param name="state">The required control state</param>
+	public void SetSwitch(short id, bool state)
     {
         Validate("SetSwitch", id);
         if (!CanWrite(id))
@@ -123,72 +114,65 @@ class DeviceSwitch
         throw new MethodNotImplementedException("SetSwitch");
     }
 
-    #endregion
+	#endregion
 
-    #region Analogue members
+	#region Analogue members
 
-    /// <summary>
-    /// returns the maximum value for this switch
-    /// boolean switches must return 1.0
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public double MaxSwitchValue(short id)
+	/// <summary>
+	/// Returns the maximum value for this switch device, this must be greater than <see cref="MinSwitchValue"/>.
+	/// </summary>
+	/// <param name="id">The device number (0 to <see cref="MaxSwitch"/> - 1)</param>
+	/// <returns>The maximum value to which this device can be set or which a read only sensor will return.</returns>
+	public double MaxSwitchValue(short id)
     {
         Validate("MaxSwitchValue", id);
         tl.LogMessage("MaxSwitchValue", $"MaxSwitchValue({id}) - not implemented");
         throw new MethodNotImplementedException("MaxSwitchValue");
     }
 
-    /// <summary>
-    /// returns the minimum value for this switch
-    /// boolean switches must return 0.0
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public double MinSwitchValue(short id)
+	/// <summary>
+	/// Returns the minimum value for this switch device, this must be less than <see cref="MaxSwitchValue"/>
+	/// </summary>
+	/// <param name="id">The device number (0 to <see cref="MaxSwitch"/> - 1)</param>
+	/// <returns>The minimum value to which this device can be set or which a read only sensor will return.</returns>
+	public double MinSwitchValue(short id)
     {
         Validate("MinSwitchValue", id);
         tl.LogMessage("MinSwitchValue", $"MinSwitchValue({id}) - not implemented");
         throw new MethodNotImplementedException("MinSwitchValue");
     }
 
-    /// <summary>
-    /// returns the step size that this switch supports. This gives the difference between successive values of the switch.
-    /// The number of values is ((MaxSwitchValue - MinSwitchValue) / SwitchStep) + 1
-    /// boolean switches must return 1.0, giving two states.
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public double SwitchStep(short id)
+	/// <summary>
+	/// Returns the step size that this device supports (the difference between successive values of the device).
+	/// </summary>
+	/// <param name="id">The device number (0 to <see cref="MaxSwitch"/> - 1)</param>
+	/// <returns>The step size for this device.</returns>
+	public double SwitchStep(short id)
     {
         Validate("SwitchStep", id);
         tl.LogMessage("SwitchStep", $"SwitchStep({id}) - not implemented");
         throw new MethodNotImplementedException("SwitchStep");
     }
 
-    /// <summary>
-    /// returns the analogue switch value for switch id
-    /// Boolean switches must return either 0.0 (false) or 1.0 (true).
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public double GetSwitchValue(short id)
+	/// <summary>
+	/// Returns the value for switch device id as a double
+	/// </summary>
+	/// <param name="id">The device number (0 to <see cref="MaxSwitch"/> - 1)</param>
+	/// <returns>The value for this switch, this is expected to be between <see cref="MinSwitchValue"/> and
+	/// <see cref="MaxSwitchValue"/>.</returns>
+	public double GetSwitchValue(short id)
     {
         Validate("GetSwitchValue", id);
         tl.LogMessage("GetSwitchValue", $"GetSwitchValue({id}) - not implemented");
         throw new MethodNotImplementedException("GetSwitchValue");
     }
 
-    /// <summary>
-    /// set the analogue value for this switch.
-    /// A MethodNotImplementedException should be thrown if CanWrite returns False
-    /// If the value is not between the maximum and minimum then throws an InvalidValueException
-    /// Boolean switches must accept either 0.0 (false) or 1.0 (true).
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="value"></param>
-    public void SetSwitchValue(short id, double value)
+	/// <summary>
+	/// Set the value for this device as a double.
+	/// </summary>
+	/// <param name="id">The device number (0 to <see cref="MaxSwitch"/> - 1)</param>
+	/// <param name="value">The value to be set, between <see cref="MinSwitchValue"/> and <see cref="MaxSwitchValue"/></param>
+	public void SetSwitchValue(short id, double value)
     {
         Validate("SetSwitchValue", id, value);
         if (!CanWrite(id))
@@ -201,6 +185,7 @@ class DeviceSwitch
     }
 
     #endregion
+
     #endregion
 
     #region Private methods
@@ -237,24 +222,6 @@ class DeviceSwitch
  	        throw new InvalidValueException(message, value.ToString(), string.Format("Switch({0}) range {1} to {2}", id, min, max));
         }
     }
-
-    /// <summary>
-    /// Checks that the number of states for the switch is correct and throws a methodNotImplemented exception if not.
-    /// Boolean switches must have 2 states and multi-value switches more than 2.
-    /// </summary>
-    /// <param name="message"></param>
-    /// <param name="id"></param>
-    /// <param name="expectBoolean"></param>
-    //private void Validate(string message, short id, bool expectBoolean)
-    //{
-    //    Validate(message, id);
-    //    var ns = (int)(((MaxSwitchValue(id) - MinSwitchValue(id)) / SwitchStep(id)) + 1);
-    //    if ((expectBoolean && ns != 2) || (!expectBoolean && ns <= 2))
-    //    {
-    //        tl.LogMessage(message, string.Format("Switch {0} has the wriong number of states", id, ns));
-    //        throw new MethodNotImplementedException(string.Format("{0}({1})", message, id));
-    //    }
-    //}
 
     #endregion
 

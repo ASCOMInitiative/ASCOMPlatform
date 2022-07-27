@@ -39,6 +39,10 @@ namespace ASCOM.DeviceHub
 
 		static DomeManager()
 		{
+			string caller = "DomeManager static ctor";
+
+			LogAppMessage( "Initialization started", caller );
+
 			DomeID = "";
 		}
 
@@ -74,6 +78,10 @@ namespace ASCOM.DeviceHub
 		private DomeManager()
 			: base( DeviceTypeEnum.Dome )
 		{
+			string caller = "DomeManager instance ctor";
+
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			IsConnected = false;
 			Capabilities = null;
 			Parameters = null;
@@ -88,10 +96,14 @@ namespace ASCOM.DeviceHub
 			PollingPeriod = POLLING_INTERVAL_NORMAL;
 			PollingChange = new ManualResetEvent( false );
 
+			LogAppMessage( "Registering message handlers.", caller );
+
 			Messenger.Default.Register<TelescopeParametersUpdatedMessage>( this, ( action ) => UpdateTelescopeParameters( action ) );
 			Messenger.Default.Register<TelescopeStatusUpdatedMessage>( this, ( action ) => UpdateTelescopeStatus( action ) );
 			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => ClearTelescopeStatus( action ) );
 			Messenger.Default.Register<SlewInProgressMessage>( this, ( action ) => InitiateSlavedSlew( action ) );
+
+			LogAppMessage( "Instance constructor initialization complete.", caller );
 		}
 
 		#endregion Instance Constructor
@@ -389,6 +401,7 @@ namespace ASCOM.DeviceHub
 			if ( Connected )
 			{
 				AbortSlew();
+				SetSlavedState( false );
 				Status = new DevHubDomeStatus( this );
 			}
 		}

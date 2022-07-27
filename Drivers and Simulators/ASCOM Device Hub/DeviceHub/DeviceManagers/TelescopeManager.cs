@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-using ASCOM.Astrometry.AstroUtils;
 using ASCOM.Astrometry.Transform;
 using ASCOM.DeviceInterface;
 
@@ -23,8 +22,6 @@ namespace ASCOM.DeviceHub
 		public static string TelescopeID { get; set; }
 
 		private static TelescopeManager _instance = null;
-
-		private static AstroUtils AstroUtils { get; set; }
 
 		public static TelescopeManager Instance
 		{
@@ -44,8 +41,6 @@ namespace ASCOM.DeviceHub
 		static TelescopeManager()
 		{
 			TelescopeID = "";
-
-			AstroUtils = new AstroUtils();
 		}
 
 		public static void SetTelescopeID( string id )
@@ -93,6 +88,9 @@ namespace ASCOM.DeviceHub
 		private TelescopeManager()
 			: base( DeviceTypeEnum.Telescope )
 		{
+			string caller = "TelescopeManager instance ctor";
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			IsConnected = false;
 			Capabilities = null;
 			Parameters = null;
@@ -105,6 +103,8 @@ namespace ASCOM.DeviceHub
 			PollingChange = new ManualResetEvent( false );
 
 			PreviousSlewInProgressMessage = new SlewInProgressMessage( false );
+
+			LogAppMessage( "Instance constructor initialization complete.", caller );
 		}
 
 		#endregion Instance Constructor
@@ -721,7 +721,7 @@ namespace ASCOM.DeviceHub
 			{
 				// Unable to get side-of-pier for this German Equatorial Mount so we need to simulate it.
 
-				double hourAngle = AstroUtils.ConditionHA( Status.SiderealTime - rightAscension );
+				double hourAngle = Globals.ConditionHA( Status.SiderealTime - rightAscension );
 				PierSide currentSOP = Status.SideOfPier;
 				PierSide destinationSOP = currentSOP; // Favor the current side-of-pier for 0 hour angle;
 

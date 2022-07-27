@@ -122,133 +122,201 @@ Public Class TEMPLATEDEVICECLASS
         End Using
     End Sub
 
-    Public ReadOnly Property SupportedActions() As ArrayList Implements ITEMPLATEDEVICEINTERFACE.SupportedActions
-        Get
-            TL.LogMessage("SupportedActions Get", "Returning empty arraylist")
-            Return New ArrayList()
-        End Get
-    End Property
+	''' <summary>Returns the list of custom action names supported by this driver.</summary>
+	''' <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
+	Public ReadOnly Property SupportedActions() As ArrayList Implements ITEMPLATEDEVICEINTERFACE.SupportedActions
+		Get
+			TL.LogMessage("SupportedActions Get", "Returning empty arraylist")
+			Return New ArrayList()
+		End Get
+	End Property
 
-    Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements ITEMPLATEDEVICEINTERFACE.Action
-        Throw New ActionNotImplementedException("Action " & ActionName & " is not supported by this driver")
-    End Function
+	''' <summary>Invokes the specified device-specific custom action.</summary>
+	''' <param name="ActionName">A well known name agreed by interested parties that represents the action to be carried out.</param>
+	''' <param name="ActionParameters">List of required parameters or an <see cref="String.Empty">Empty String</see> if none are required.</param>
+	''' <returns>A string response. The meaning of returned strings is set by the driver author.
+	''' <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
+	''' of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
+	''' </returns>
+	Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements ITEMPLATEDEVICEINTERFACE.Action
+		Throw New ActionNotImplementedException("Action " & ActionName & " is not supported by this driver")
+	End Function
 
-    Public Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False) Implements ITEMPLATEDEVICEINTERFACE.CommandBlind
-        CheckConnected("CommandBlind")
-        ' TODO The optional CommandBlind method should either be implemented OR throw a MethodNotImplementedException
-        ' If implemented, CommandBlind must send the supplied command to the mount And return immediately without waiting for a response
+	''' <summary>
+	''' Transmits an arbitrary string to the device and does not wait for a response.
+	''' Optionally, protocol framing characters may be added to the string before transmission.
+	''' </summary>
+	''' <param name="Command">The literal command string to be transmitted.</param>
+	''' <param name="Raw">
+	''' if set to <c>True</c> the string is transmitted 'as-is'.
+	''' If set to <c>False</c> then protocol framing characters may be added prior to transmission.
+	''' </param>
+	Public Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False) Implements ITEMPLATEDEVICEINTERFACE.CommandBlind
+		CheckConnected("CommandBlind")
+		' TODO The optional CommandBlind method should either be implemented OR throw a MethodNotImplementedException
+		' If implemented, CommandBlind must send the supplied command to the mount And return immediately without waiting for a response
 
-        Throw New MethodNotImplementedException("CommandBlind")
-    End Sub
+		Throw New MethodNotImplementedException("CommandBlind")
+	End Sub
 
-    Public Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean _
-        Implements ITEMPLATEDEVICEINTERFACE.CommandBool
-        CheckConnected("CommandBool")
-        ' TODO The optional CommandBool method should either be implemented OR throw a MethodNotImplementedException
-        ' If implemented, CommandBool must send the supplied command to the mount, wait for a response and parse this to return a True Or False value
+	''' <summary>
+	''' Transmits an arbitrary string to the device and waits for a boolean response.
+	''' Optionally, protocol framing characters may be added to the string before transmission.
+	''' </summary>
+	''' <param name="Command">The literal command string to be transmitted.</param>
+	''' <param name="Raw">
+	''' if set to <c>True</c> the string is transmitted 'as-is'.
+	''' If set to <c>False</c> then protocol framing characters may be added prior to transmission.
+	''' </param>
+	''' <returns>
+	''' Returns the interpreted boolean response received from the device.
+	''' </returns>
+	Public Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean _
+		Implements ITEMPLATEDEVICEINTERFACE.CommandBool
+		CheckConnected("CommandBool")
+		' TODO The optional CommandBool method should either be implemented OR throw a MethodNotImplementedException
+		' If implemented, CommandBool must send the supplied command to the mount, wait for a response and parse this to return a True Or False value
 
-        ' Dim retString as String = CommandString(command, raw) ' Send the command And wait for the response
-        ' Dim retBool as Boolean = XXXXXXXXXXXXX ' Parse the returned string And create a boolean True / False value
-        ' Return retBool ' Return the boolean value to the client
+		' Dim retString as String = CommandString(command, raw) ' Send the command And wait for the response
+		' Dim retBool as Boolean = XXXXXXXXXXXXX ' Parse the returned string And create a boolean True / False value
+		' Return retBool ' Return the boolean value to the client
 
-        Throw New MethodNotImplementedException("CommandBool")
-    End Function
+		Throw New MethodNotImplementedException("CommandBool")
+	End Function
 
-    Public Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String _
-        Implements ITEMPLATEDEVICEINTERFACE.CommandString
-        CheckConnected("CommandString")
-        ' TODO The optional CommandString method should either be implemented OR throw a MethodNotImplementedException
-        ' If implemented, CommandString must send the supplied command to the mount and wait for a response before returning this to the client
+	''' <summary>
+	''' Transmits an arbitrary string to the device and waits for a string response.
+	''' Optionally, protocol framing characters may be added to the string before transmission.
+	''' </summary>
+	''' <param name="Command">The literal command string to be transmitted.</param>
+	''' <param name="Raw">
+	''' if set to <c>True</c> the string is transmitted 'as-is'.
+	''' If set to <c>False</c> then protocol framing characters may be added prior to transmission.
+	''' </param>
+	''' <returns>
+	''' Returns the string response received from the device.
+	''' </returns>
+	Public Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String _
+		Implements ITEMPLATEDEVICEINTERFACE.CommandString
+		CheckConnected("CommandString")
+		' TODO The optional CommandString method should either be implemented OR throw a MethodNotImplementedException
+		' If implemented, CommandString must send the supplied command to the mount and wait for a response before returning this to the client
 
-        Throw New MethodNotImplementedException("CommandString")
-    End Function
+		Throw New MethodNotImplementedException("CommandString")
+	End Function
 
-    Public Property Connected() As Boolean Implements ITEMPLATEDEVICEINTERFACE.Connected
-        Get
-            TL.LogMessage("Connected Get", IsConnected.ToString())
-            Return IsConnected
-        End Get
-        Set(value As Boolean)
-            TL.LogMessage("Connected Set", value.ToString())
-            If value = IsConnected Then
-                Return
-            End If
+	''' <summary>
+	''' Set True to connect to the device hardware. Set False to disconnect from the device hardware.
+	''' You can also read the property to check whether it is connected. This reports the current hardware state.
+	''' </summary>
+	''' <value><c>True</c> if connected to the hardware; otherwise, <c>False</c>.</value>
+	Public Property Connected() As Boolean Implements ITEMPLATEDEVICEINTERFACE.Connected
+		Get
+			TL.LogMessage("Connected Get", IsConnected.ToString())
+			Return IsConnected
+		End Get
+		Set(value As Boolean)
+			TL.LogMessage("Connected Set", value.ToString())
+			If value = IsConnected Then
+				Return
+			End If
 
-            If value Then
-                connectedState = True
-                TL.LogMessage("Connected Set", "Connecting to port " + comPort)
-                ' TODO connect to the device
-            Else
-                connectedState = False
-                TL.LogMessage("Connected Set", "Disconnecting from port " + comPort)
-                ' TODO disconnect from the device
-            End If
-        End Set
-    End Property
+			If value Then
+				connectedState = True
+				TL.LogMessage("Connected Set", "Connecting to port " + comPort)
+				' TODO connect to the device
+			Else
+				connectedState = False
+				TL.LogMessage("Connected Set", "Disconnecting from port " + comPort)
+				' TODO disconnect from the device
+			End If
+		End Set
+	End Property
 
-    Public ReadOnly Property Description As String Implements ITEMPLATEDEVICEINTERFACE.Description
-        Get
-            ' this pattern seems to be needed to allow a public property to return a private field
-            Dim d As String = driverDescription
-            TL.LogMessage("Description Get", d)
-            Return d
-        End Get
-    End Property
+	''' <summary>
+	''' Returns a description of the device, such as manufacturer and modelnumber. Any ASCII characters may be used.
+	''' </summary>
+	''' <value>The description.</value>
+	Public ReadOnly Property Description As String Implements ITEMPLATEDEVICEINTERFACE.Description
+		Get
+			' this pattern seems to be needed to allow a public property to return a private field
+			Dim d As String = driverDescription
+			TL.LogMessage("Description Get", d)
+			Return d
+		End Get
+	End Property
 
-    Public ReadOnly Property DriverInfo As String Implements ITEMPLATEDEVICEINTERFACE.DriverInfo
-        Get
-            Dim m_version As Version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version
-            ' TODO customise this driver description
-            Dim s_driverInfo As String = "Information about the driver itself. Version: " + m_version.Major.ToString() + "." + m_version.Minor.ToString()
-            TL.LogMessage("DriverInfo Get", s_driverInfo)
-            Return s_driverInfo
-        End Get
-    End Property
+	''' <summary>
+	''' Descriptive and version information about this ASCOM driver.
+	''' </summary>
+	Public ReadOnly Property DriverInfo As String Implements ITEMPLATEDEVICEINTERFACE.DriverInfo
+		Get
+			Dim m_version As Version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version
+			' TODO customise this driver description
+			Dim s_driverInfo As String = "Information about the driver itself. Version: " + m_version.Major.ToString() + "." + m_version.Minor.ToString()
+			TL.LogMessage("DriverInfo Get", s_driverInfo)
+			Return s_driverInfo
+		End Get
+	End Property
 
-    Public ReadOnly Property DriverVersion() As String Implements ITEMPLATEDEVICEINTERFACE.DriverVersion
-        Get
-            ' Get our own assembly and report its version number
-            TL.LogMessage("DriverVersion Get", Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString(2))
-            Return Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString(2)
-        End Get
-    End Property
+	''' <summary>
+	''' A string containing only the major and minor version of the driver formatted as 'm.n'.
+	''' </summary>
+	Public ReadOnly Property DriverVersion() As String Implements ITEMPLATEDEVICEINTERFACE.DriverVersion
+		Get
+			' Get our own assembly and report its version number
+			TL.LogMessage("DriverVersion Get", Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString(2))
+			Return Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString(2)
+		End Get
+	End Property
 
-    Public ReadOnly Property InterfaceVersion() As Short Implements ITEMPLATEDEVICEINTERFACE.InterfaceVersion
-        Get
-            TL.LogMessage("InterfaceVersion Get", "TEMPLATEINTERFACEVERSION")
-            Return TEMPLATEINTERFACEVERSION
-        End Get
-    End Property
+	''' <summary>
+	''' The interface version number that this device supports. 
+	''' </summary>
+	Public ReadOnly Property InterfaceVersion() As Short Implements ITEMPLATEDEVICEINTERFACE.InterfaceVersion
+		Get
+			TL.LogMessage("InterfaceVersion Get", "TEMPLATEINTERFACEVERSION")
+			Return TEMPLATEINTERFACEVERSION
+		End Get
+	End Property
 
-    Public ReadOnly Property Name As String Implements ITEMPLATEDEVICEINTERFACE.Name
-        Get
-            Dim s_name As String = "Short driver name - please customise"
-            TL.LogMessage("Name Get", s_name)
-            Return s_name
-        End Get
-    End Property
+	''' <summary>
+	''' The short name of the driver, for display purposes
+	''' </summary>
+	Public ReadOnly Property Name As String Implements ITEMPLATEDEVICEINTERFACE.Name
+		Get
+			Dim s_name As String = "Short driver name - please customise"
+			TL.LogMessage("Name Get", s_name)
+			Return s_name
+		End Get
+	End Property
 
-    Public Sub Dispose() Implements ITEMPLATEDEVICEINTERFACE.Dispose
-        ' Clean up the trace logger and util objects
-        TL.Enabled = False
-        TL.Dispose()
-        TL = Nothing
-        utilities.Dispose()
-        utilities = Nothing
-        astroUtilities.Dispose()
-        astroUtilities = Nothing
-    End Sub
+	''' <summary>
+	''' Dispose the late-bound interface, if needed. Will release it via COM
+	''' if it is a COM object, else if native .NET will just dereference it
+	''' for GC.
+	''' </summary>
+	Public Sub Dispose() Implements ITEMPLATEDEVICEINTERFACE.Dispose
+		' Clean up the trace logger and util objects
+		TL.Enabled = False
+		TL.Dispose()
+		TL = Nothing
+		utilities.Dispose()
+		utilities = Nothing
+		astroUtilities.Dispose()
+		astroUtilities = Nothing
+	End Sub
 
 #End Region
 
-    '//INTERFACECODEINSERTIONPOINT
+	'//INTERFACECODEINSERTIONPOINT
 #Region "Private properties and methods"
-    ' here are some useful properties and methods that can be used as required
-    ' to help with
+	' here are some useful properties and methods that can be used as required
+	' to help with
 
 #Region "ASCOM Registration"
 
-    Private Shared Sub RegUnregASCOM(ByVal bRegister As Boolean)
+	Private Shared Sub RegUnregASCOM(ByVal bRegister As Boolean)
 
         Using P As New Profile() With {.DeviceType = "TEMPLATEDEVICECLASS"}
             If bRegister Then

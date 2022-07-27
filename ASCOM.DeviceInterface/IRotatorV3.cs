@@ -237,10 +237,10 @@ namespace ASCOM.DeviceInterface
 		/// <summary>
 		/// Causes the rotator to move Position degrees relative to the current <see cref="Position" /> value.
 		/// </summary>
+		/// <param name="Position">Relative position to move in degrees from current <see cref="Position" />.</param>
 		/// <exception cref="InvalidValueException">If Position is invalid.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <param name="Position">Relative position to move in degrees from current <see cref="Position" />.</param>
 		/// <remarks>
 		/// <p style="color:red;margin-bottom:0"><b>Must be implemented.</b></p>
 		/// <para>Calling <see cref="Move">Move</see> causes the <see cref="TargetPosition" /> property to change to the sum of the current angular position

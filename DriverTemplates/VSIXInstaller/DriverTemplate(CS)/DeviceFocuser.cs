@@ -23,7 +23,10 @@ class DeviceFocuser
     private int focuserPosition = 0; // Class level variable to hold the current focuser position
     private const int focuserSteps = 10000;
 
-    public bool Absolute
+	/// <summary>
+	/// True if the focuser is capable of absolute position; that is, being commanded to a specific step location.
+	/// </summary>
+	public bool Absolute
     {
         get
         {
@@ -32,13 +35,19 @@ class DeviceFocuser
         }
     }
 
-    public void Halt()
+	/// <summary>
+	/// Immediately stop any focuser motion due to a previous <see cref="Move" /> method call.
+	/// </summary>
+	public void Halt()
     {
         tl.LogMessage("Halt", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException("Halt");
+        throw new MethodNotImplementedException("Halt");
     }
 
-    public bool IsMoving
+	/// <summary>
+	/// True if the focuser is currently moving to a new position. False if the focuser is stationary.
+	/// </summary>
+	public bool IsMoving
     {
         get
         {
@@ -47,7 +56,10 @@ class DeviceFocuser
         }
     }
 
-    public bool Link
+	/// <summary>
+	/// State of the connection to the focuser.
+	/// </summary>
+	public bool Link
     {
         get
         {
@@ -61,7 +73,11 @@ class DeviceFocuser
         }
     }
 
-    public int MaxIncrement
+	/// <summary>
+	/// Maximum increment size allowed by the focuser;
+	/// i.e. the maximum number of steps allowed in one move operation.
+	/// </summary>
+	public int MaxIncrement
     {
         get
         {
@@ -70,7 +86,10 @@ class DeviceFocuser
         }
     }
 
-    public int MaxStep
+	/// <summary>
+	/// Maximum step position permitted.
+	/// </summary>
+	public int MaxStep
     {
         get
         {
@@ -79,13 +98,20 @@ class DeviceFocuser
         }
     }
 
-    public void Move(int Position)
+	/// <summary>
+	/// Moves the focuser by the specified amount or to the specified position depending on the value of the <see cref="Absolute" /> property.
+	/// </summary>
+	/// <param name="Position">Step distance or absolute position, depending on the value of the <see cref="Absolute" /> property.</param>
+	public void Move(int Position)
     {
         tl.LogMessage("Move", Position.ToString());
         focuserPosition = Position; // Set the focuser position
     }
 
-    public int Position
+	/// <summary>
+	/// Current focuser position, in steps.
+	/// </summary>
+	public int Position
     {
         get
         {
@@ -93,16 +119,23 @@ class DeviceFocuser
         }
     }
 
-    public double StepSize
+
+	/// <summary>
+	/// Step size (microns) for the focuser.
+	/// </summary>
+	public double StepSize
     {
         get
         {
             tl.LogMessage("StepSize Get", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException("StepSize", false);
+            throw new PropertyNotImplementedException("StepSize", false);
         }
     }
 
-    public bool TempComp
+	/// <summary>
+	/// The state of temperature compensation mode (if available), else always False.
+	/// </summary>
+	public bool TempComp
     {
         get
         {
@@ -112,11 +145,14 @@ class DeviceFocuser
         set
         {
             tl.LogMessage("TempComp Set", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException("TempComp", false);
+            throw new PropertyNotImplementedException("TempComp", false);
         }
     }
 
-    public bool TempCompAvailable
+	/// <summary>
+	/// True if focuser has temperature compensation available.
+	/// </summary>
+	public bool TempCompAvailable
     {
         get
         {
@@ -125,12 +161,15 @@ class DeviceFocuser
         }
     }
 
-    public double Temperature
+	/// <summary>
+	/// Current ambient temperature in degrees Celsius as measured by the focuser.
+	/// </summary>
+	public double Temperature
     {
         get
         {
             tl.LogMessage("Temperature Get", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException("Temperature", false);
+            throw new PropertyNotImplementedException("Temperature", false);
         }
     }
 

@@ -19,6 +19,10 @@ namespace ASCOM.DeviceHub
 
 		public TelescopeTrackingRatesViewModel( ITelescopeManager telescopeManager )
 		{
+			string caller = "TelescopeTrackingRatesViewModel ctor";
+
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			TelescopeManager = telescopeManager;
 
 			_raOffsetRate = 0.0;
@@ -26,10 +30,14 @@ namespace ASCOM.DeviceHub
 			_canChangeOffsetRate = true;
 			UpdateTrackingRateText();
 
+			LogAppMessage( "Registering message handlers", caller );
+
 			Messenger.Default.Register<TelescopeCapabilitiesUpdatedMessage>( this, ( action ) => UpdateCapabilities( action ) );
 			Messenger.Default.Register<TelescopeParametersUpdatedMessage>( this, ( action ) => UpdateParameters( action ) );
 			Messenger.Default.Register<TelescopeStatusUpdatedMessage>( this, ( action ) => UpdateStatus( action ) );
 			Messenger.Default.Register<DeviceDisconnectedMessage>( this, (action) => InvalidateDeviceValues( action ) );
+
+			LogAppMessage( "Instance constructor initialization complete", caller );
 		}
 
 		private bool _isConnected;

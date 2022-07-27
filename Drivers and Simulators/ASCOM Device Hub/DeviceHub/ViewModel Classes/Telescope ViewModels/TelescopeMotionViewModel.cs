@@ -32,6 +32,10 @@ namespace ASCOM.DeviceHub
 
 		public TelescopeMotionViewModel( ITelescopeManager telescopeManager )
 		{
+			string caller = "TelescopeMotionViewModel ctor";
+
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			_isActive = false;
 			_telescopeManager = telescopeManager;
 			_isVariableJog = true;
@@ -44,10 +48,14 @@ namespace ASCOM.DeviceHub
 
 			SetParkCommandAction();
 
+			LogAppMessage( "Registering message handlers.", caller );
+
 			Messenger.Default.Register<TelescopeCapabilitiesUpdatedMessage>( this, ( action ) => TelescopeCapabilitiesUpdated( action ) );
 			Messenger.Default.Register<TelescopeParametersUpdatedMessage>( this, ( action ) => TelescopeParametersUpdated( action ) );
 			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => InvalidateDeviceData( action ) );
 			RegisterStatusUpdateMessage( true );
+
+			LogAppMessage( "Instance constructor initialization complete.", caller );
 		}
 
 		#region Change Notification Properties

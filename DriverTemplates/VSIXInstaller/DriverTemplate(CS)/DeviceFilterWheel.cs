@@ -17,7 +17,10 @@ class DeviceFilerWheel
     private string[] fwNames = new string[4] { "Red", "Green", "Blue", "Clear" }; //class level variable to hold the filter names
     private short fwPosition = 0; // class level variable to retain the current filterwheel position
 
-    public int[] FocusOffsets
+	/// <summary>
+	/// Focus offset of each filter in the wheel
+	/// </summary>
+	public int[] FocusOffsets
     {
         get
         {
@@ -30,7 +33,10 @@ class DeviceFilerWheel
         }
     }
 
-    public string[] Names
+	/// <summary>
+	/// Name of each filter in the wheel
+	/// </summary>
+	public string[] Names
     {
         get
         {
@@ -43,7 +49,10 @@ class DeviceFilerWheel
         }
     }
 
-    public short Position
+	/// <summary>
+	/// Sets or returns the current filter wheel position
+	/// </summary>
+	public short Position
     {
         get
         {

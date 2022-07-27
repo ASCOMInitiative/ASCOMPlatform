@@ -2,6 +2,7 @@
 // Required code must lie within the device implementation region
 // The //ENDOFINSERTEDFILE tag must be the last but one line in this file
 
+using ASCOM;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 
@@ -20,7 +21,7 @@ class DeviceCoverCalibrator
         get
         {
             tl.LogMessage("CoverState Get", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException("CoverState", false);
+            throw new PropertyNotImplementedException("CoverState", false);
         }
     }
 
@@ -30,7 +31,7 @@ class DeviceCoverCalibrator
     public void OpenCover()
     {
         tl.LogMessage("OpenCover", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException("OpenCover");
+        throw new MethodNotImplementedException("OpenCover");
     }
 
     /// <summary>
@@ -39,7 +40,7 @@ class DeviceCoverCalibrator
     public void CloseCover()
     {
         tl.LogMessage("CloseCover", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException("CloseCover");
+        throw new MethodNotImplementedException("CloseCover");
     }
 
     /// <summary>
@@ -48,18 +49,18 @@ class DeviceCoverCalibrator
     public void HaltCover()
     {
         tl.LogMessage("HaltCover", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException("HaltCover");
+        throw new MethodNotImplementedException("HaltCover");
     }
 
     /// <summary>
-    /// Returns the state of the calibration device, if present, otherwise returns "NotPresent"
+    /// Returns the state of the calibration device, if present, otherwise returns CalibratorStatus.NotPresent
     /// </summary>
     public CalibratorStatus CalibratorState
     {
         get
         {
             tl.LogMessage("CalibratorState Get", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException("CalibratorState", false);
+            throw new PropertyNotImplementedException("CalibratorState", false);
         }
     }
 
@@ -71,7 +72,7 @@ class DeviceCoverCalibrator
         get
         {
             tl.LogMessage("Brightness Get", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException("Brightness", false);
+            throw new PropertyNotImplementedException("Brightness", false);
         }
     }
 
@@ -83,7 +84,7 @@ class DeviceCoverCalibrator
         get
         {
             tl.LogMessage("MaxBrightness Get", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException("MaxBrightness", false);
+            throw new PropertyNotImplementedException("MaxBrightness", false);
         }
     }
 
@@ -94,7 +95,7 @@ class DeviceCoverCalibrator
     public void CalibratorOn(int Brightness)
     {
         tl.LogMessage("CalibratorOn", $"Not implemented. Value set: {Brightness}");
-        throw new ASCOM.MethodNotImplementedException("CalibratorOn");
+        throw new MethodNotImplementedException("CalibratorOn");
     }
 
     /// <summary>
@@ -103,7 +104,7 @@ class DeviceCoverCalibrator
     public void CalibratorOff()
     {
         tl.LogMessage("CalibratorOff", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException("CalibratorOff");
+        throw new MethodNotImplementedException("CalibratorOff");
     }
 
     #endregion
