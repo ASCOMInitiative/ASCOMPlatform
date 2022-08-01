@@ -11,6 +11,9 @@ namespace ASCOM.DynamicRemoteClients
 {
     public partial class SetupDialogForm : Form
     {
+        #region Constants
+        const string CLEAN_URL = "([a-zA-Z0-9[:]*)([%a-zA-Z0-9]*)([]])"; // The first group is the required IP address, the second group is the unwanted scope id
+        #endregion
 
         #region Variables
 
@@ -20,7 +23,10 @@ namespace ASCOM.DynamicRemoteClients
 
         // Create validating regular expression
         Regex validHostnameRegex = new Regex(AlpacaConstants.ValidHostnameRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        //Regex validIpAddressRegex = new Regex(AlpacaConstants.ValidIpAddressRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        // Set up a regular expression to parse out the ip address from n IPV6 address string, removing the scope id %XX element.
+        Regex cleanIpV6Address = new Regex(CLEAN_URL, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         #endregion
 
         #region Public Properties
@@ -81,6 +87,8 @@ namespace ASCOM.DynamicRemoteClients
 
             // Add event handler to enable / disable the compression combo box depending on whether JSON or Base64HandOff is selected
             CmbImageArrayTransferType.SelectedValueChanged += CmbImageArrayTransferType_SelectedValueChanged;
+
+
         }
 
         public SetupDialogForm(TraceLoggerPlus TraceLogger) : this()
@@ -204,13 +212,13 @@ namespace ASCOM.DynamicRemoteClients
             EstablishConnectionTimeout = Convert.ToInt32(numEstablishCommunicationsTimeout.Value);
             StandardTimeout = Convert.ToInt32(numStandardTimeout.Value);
             LongTimeout = Convert.ToInt32(numLongTimeout.Value);
-            
+
             // Encrypt user name if present
             if (string.IsNullOrWhiteSpace(txtUserName.Text)) UserName = "";
             else UserName = txtUserName.Text.Encrypt(TL); // Encrypt the provided username
 
             // Encrypt password if present
-            if (string.IsNullOrWhiteSpace(txtPassword.Text)) Password= "";
+            if (string.IsNullOrWhiteSpace(txtPassword.Text)) Password = "";
             else Password = txtPassword.Text.Encrypt(TL);  // Encrypt the provided password
 
             ManageConnectLocally = radManageConnectLocally.Checked;
@@ -473,7 +481,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             try
             {
-                string setupUrl = $"{cmbServiceType.Text}://{addressList.Text}:{numPort.Value}/setup";
+                string setupUrl = $"{cmbServiceType.Text}://{CleanUrl(addressList.Text)}:{numPort.Value}/setup";
                 TL.LogMessageCrLf("MainSetupURL", $"{setupUrl}");
 
                 System.Diagnostics.Process.Start(setupUrl);
@@ -489,7 +497,7 @@ namespace ASCOM.DynamicRemoteClients
         {
             try
             {
-                string setupUrl = $"{cmbServiceType.Text}://{addressList.Text}:{numPort.Value}/setup/v1/{DeviceType.ToLowerInvariant()}/{numRemoteDeviceNumber.Value}/setup";
+                string setupUrl = $"{cmbServiceType.Text}://{CleanUrl(addressList.Text)}:{numPort.Value}/setup/v1/{DeviceType.ToLowerInvariant()}/{numRemoteDeviceNumber.Value}/setup";
                 TL.LogMessageCrLf("DeviceSetupURL", $"{setupUrl}");
 
                 System.Diagnostics.Process.Start(setupUrl);
@@ -499,6 +507,30 @@ namespace ASCOM.DynamicRemoteClients
                 TL.LogMessageCrLf("ASCOMSetup Exception", ex.ToString());
                 MessageBox.Show($"An error occurred when contacting the Alpaca device: {ex.Message}", "Setup Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// Remove the Scope ID from an IPV6 address string if present
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private string CleanUrl(string url)
+        {
+            string cleanUrl = url;
+            TL.LogMessageCrLf("CleanUrl", $"Input URL: {cleanUrl}");
+
+            if (url.Contains("%"))
+            {
+                Match match = cleanIpV6Address.Match(cleanUrl);
+                if (match.Success)
+                {
+                    cleanUrl = $"{match.Groups[1].Value}]";
+                    TL.LogMessageCrLf("CleanUrl", $"Cleaned URL to: {cleanUrl}. Match 1: {match.Groups[1]}, Match 2: {match.Groups[2]}");
+                }
+            }
+
+            TL.LogMessageCrLf("CleanUrl", $"Returned URL: {cleanUrl}");
+            return cleanUrl;
         }
     }
 }
