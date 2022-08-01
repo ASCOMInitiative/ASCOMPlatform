@@ -187,7 +187,7 @@ namespace ASCOM.Setup
                         TL.LogMessage("ProjectFinishedGenerating", "Selected initial line: " + documentSelection.Text);
                         while (!documentSelection.Text.ToUpperInvariant().Contains("#REGION"))
                         {
-                            TL.LogMessage("ProjectFinishedGenerating", "Deleting start line: " + documentSelection.Text);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Deleting start line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
                             documentSelection.Delete(); // Delete the current line
                             documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
                         }
@@ -195,17 +195,19 @@ namespace ASCOM.Setup
                         // Find the end of file marker that came from the inserted file
                         const string endOfInsertFile = "//ENDOFINSERTEDFILE";
                         documentSelection.FindText(endOfInsertFile, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
-                        TL.LogMessage("ProjectFinishedGenerating", "Done ENDOFINSERTEDFILE FindText:" + documentSelection.Text);
+                        TL.LogMessage("ProjectFinishedGenerating", $"Done ENDOFINSERTEDFILE FindText: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
 
                         // Delete the marker line and the last 2 lines from the inserted file
                         documentSelection.SelectLine();
-                        TL.LogMessage("ProjectFinishedGenerating", "Found end line: " + documentSelection.Text);
-                        while (!documentSelection.Text.ToUpperInvariant().Contains("#REGION"))
+                        TL.LogMessage("ProjectFinishedGenerating", $"Found initial end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                        int deleteCount = 0;
+                        while ((!documentSelection.Text.ToUpperInvariant().Contains("#REGION")) & (deleteCount < 10))
                         {
                             TL.LogMessage("ProjectFinishedGenerating", "Deleting end line: " + documentSelection.Text);
                             documentSelection.Delete(); // Delete the current line
                             documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
-                            TL.LogMessage("ProjectFinishedGenerating", "Found end line: " + documentSelection.Text);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Found end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}. Delete count: {deleteCount}");
+                            deleteCount += 1;
                         }
 
                         // Reformat the document to make it look pretty
