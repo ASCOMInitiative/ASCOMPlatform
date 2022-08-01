@@ -2199,10 +2199,6 @@ checkmsi31.mia
 setupmsi31.mia
 checknet4.8_x86 .mia
 CleanRegistry.mia
-check_vcruntime_x64.mia
-check_vcruntime_x86.mia
-setup_vcruntime_x64.mia
-setup_vcruntime_x86.mia
 $
 FALSE
 P8tris9000cdK

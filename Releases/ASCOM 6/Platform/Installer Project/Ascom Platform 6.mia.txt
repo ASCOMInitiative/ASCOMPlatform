@@ -366,8 +366,8 @@ Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) to
 Include Script: checkmsi31
 Include Script: checknet351
 Include Script: checknet4.8_x86 
-Include Script: check_vcruntime_x86
-Include Script: check_vcruntime_x64
+Comment: Include Script: check_vcruntime_x86
+Comment: Include Script: check_vcruntime_x64
 Write into Text File $SETUPLOG$ from Value  (at end of file)
  
 Comment: Install setup pre-requisites
@@ -516,9 +516,9 @@ Display Dialog: progress, use as progress dialog (non-modal)
 Comment: Install pre-requisites included in this installer
 Include Script: setupmsi31
 Set Variable MYPROGRESS to 3
-Include Script: setup_vcruntime_x64 (get result into variable VC64_REBOOT_REQUIRED)
+Comment: Include Script: setup_vcruntime_x64 (get result into variable VC64_REBOOT_REQUIRED)
 Set Variable MYPROGRESS to 6
-Include Script: setup_vcruntime_x86 (get result into variable VC32_REBOOT_REQUIRED)
+Comment: Include Script: setup_vcruntime_x86 (get result into variable VC32_REBOOT_REQUIRED)
 Set Variable MYPROGRESS to 9
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 [END REGION]

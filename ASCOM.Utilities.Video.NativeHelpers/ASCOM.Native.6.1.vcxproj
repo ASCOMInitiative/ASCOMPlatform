@@ -101,6 +101,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDLL;_DEBUG;_WINDOWS;_USRDLL;ASCOMVIDEOUTILS_EXPORTS</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -124,6 +125,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDLL;_DEBUG;_WINDOWS;_USRDLL;ASCOMVIDEOUTILS_EXPORTS</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -151,6 +153,7 @@
       </SuppressStartupBanner>
       <Optimization>
       </Optimization>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -181,6 +184,7 @@
       </SuppressStartupBanner>
       <Optimization>
       </Optimization>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
