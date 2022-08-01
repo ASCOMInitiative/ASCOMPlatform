@@ -172,7 +172,7 @@ namespace ASCOM.Setup
 
                         const string insertionPoint = "//INTERFACECODEINSERTIONPOINT"; // Find the insertion point in the Driver.xx item
                         documentSelection.FindText(insertionPoint, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
-                        TL.LogMessage("ProjectFinishedGenerating", "Done INTERFACECODEINSERTIONPOINT FindText:" + documentSelection.Text);
+                        TL.LogMessage("ProjectFinishedGenerating", $"Done INTERFACECODEINSERTIONPOINT FindText: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
 
                         // Create the name of the device interface file to be inserted
                         string insertFile = directory + "\\Device" + this.DeviceClass + Path.GetExtension(projectItem.Name);
@@ -180,9 +180,11 @@ namespace ASCOM.Setup
 
                         documentSelection.InsertFromFile(insertFile); // Insert the required file at the current selection point
                         TL.LogMessage("ProjectFinishedGenerating", "Done InsertFromFile");
+                        itemDocument.Save();
+                        TL.LogMessage("ProjectFinishedGenerating", "Done Save File");
 
                         // Remove the top lines of the inserted file until we get to #Region
-                        // These lines are only there to make the file error free in the template develpment project and are not required here
+                        // These lines are only there to make the file error free in the template development project and are not required here
                         documentSelection.SelectLine(); // Select the current line
                         TL.LogMessage("ProjectFinishedGenerating", "Selected initial line: " + documentSelection.Text);
                         while (!documentSelection.Text.ToUpperInvariant().Contains("#REGION"))
@@ -194,8 +196,8 @@ namespace ASCOM.Setup
 
                         // Find the end of file marker that came from the inserted file
                         const string endOfInsertFile = "//ENDOFINSERTEDFILE";
-                        documentSelection.FindText(endOfInsertFile, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
-                        TL.LogMessage("ProjectFinishedGenerating", $"Done ENDOFINSERTEDFILE FindText: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                        bool foundEndOfInsertedFile = documentSelection.FindText(endOfInsertFile, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                        TL.LogMessage("ProjectFinishedGenerating", $"Found ENDOFINSERTEDFILE {foundEndOfInsertedFile} Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
 
                         // Delete the marker line and the last 2 lines from the inserted file
                         documentSelection.SelectLine();
@@ -203,7 +205,7 @@ namespace ASCOM.Setup
                         int deleteCount = 0;
                         while ((!documentSelection.Text.ToUpperInvariant().Contains("#REGION")) & (deleteCount < 10))
                         {
-                            TL.LogMessage("ProjectFinishedGenerating", "Deleting end line: " + documentSelection.Text);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Deleting end line: {documentSelection.Text} at line {documentSelection.CurrentLine}");
                             documentSelection.Delete(); // Delete the current line
                             documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
                             TL.LogMessage("ProjectFinishedGenerating", $"Found end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}. Delete count: {deleteCount}");
@@ -216,7 +218,7 @@ namespace ASCOM.Setup
                         documentSelection.SmartFormat();
                         TL.LogMessage("ProjectFinishedGenerating", "Done SmartFormat");
 
-                        itemDocument.Save(); // Save the edited file readyfor use!
+                        itemDocument.Save(); // Save the edited file ready for use!
                         TL.LogMessage("ProjectFinishedGenerating", "Done Save");
                         itemDocument.Close(vsSaveChanges.vsSaveChangesYes);
                         TL.LogMessage("ProjectFinishedGenerating", "Done Close");
@@ -231,7 +233,7 @@ namespace ASCOM.Setup
 
                 TL.LogMessage("ProjectFinishedGenerating", $"Identifying files to delete");
 
-                // Done this way to avoid removing items from inside a foreach loop
+                // Done this way to avoid removing items from inside a for each loop
                 rems = new List<string>();
                 foreach (ProjectItem item in project.ProjectItems)
                 {
