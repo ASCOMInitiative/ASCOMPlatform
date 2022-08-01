@@ -1045,7 +1045,7 @@ Public Class DiagnosticsForm
                     .Description = "Platform 6 Telescope Simulator",
                     .DeviceType = "Telescope",
                     .Name = "Simulator",
-                    .DriverVersion = DiagnosticsFullVersionNumber,
+                    .DriverVersion = "6.6",
                     .InterfaceVersion = 3,
                     .IsPlatform5 = False,
                     .SixtyFourBit = True,
