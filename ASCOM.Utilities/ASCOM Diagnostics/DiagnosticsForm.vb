@@ -7515,7 +7515,6 @@ Public Class DiagnosticsForm
                                 localPath.ToUpperInvariant.Contains("\ASCOM.INTERNAL.FUSIONLIB\6") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.NEWTONSOFT.JSON\6") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.SETTINGSPROVIDER\6") Or
-                                localPath.ToUpperInvariant.Contains("\ASCOM.SETUP.TEMPLATEWIZARD\6") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.UTILITIES.SUPPORT\6") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.UTILITIES.VIDEO") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.ASTROMETRY\6") Or

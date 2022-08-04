@@ -224,7 +224,6 @@ namespace ASCOM.Setup
                         TL.LogMessage("ProjectFinishedGenerating", "Done Close");
 
                     }
-
                 }
                 TL.LogMessage("ProjectFinishedGenerating", "Completed processing project items");
 

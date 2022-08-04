@@ -3,6 +3,8 @@
   <PropertyGroup>
     <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -84,14 +86,30 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="ASCOM Test Console App %28VB%29.vbproj" />
+    <None Include="packages.config" />
     <None Include="TemplateMyProject\app.manifest" />
     <None Include="TemplateMyProject\Settings.settings" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="TemplateMyProject\Resources.resx" />
   </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\..\packages\Microsoft.VisualStudio.Threading.Analyzers.17.2.32\analyzers\cs\Microsoft.VisualStudio.Threading.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\..\..\packages\Microsoft.VisualStudio.Threading.Analyzers.17.2.32\analyzers\cs\Microsoft.VisualStudio.Threading.Analyzers.CSharp.dll" />
+    <Analyzer Include="..\..\..\packages\Microsoft.VisualStudio.Threading.Analyzers.17.2.32\analyzers\cs\Microsoft.VisualStudio.Threading.Analyzers.dll" />
+    <Analyzer Include="..\..\..\packages\Microsoft.VisualStudio.Threading.Analyzers.17.2.32\analyzers\vb\Microsoft.VisualStudio.Threading.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\..\..\packages\Microsoft.VisualStudio.Threading.Analyzers.17.2.32\analyzers\vb\Microsoft.VisualStudio.Threading.Analyzers.dll" />
+    <Analyzer Include="..\..\..\packages\Microsoft.VisualStudio.Threading.Analyzers.17.2.32\analyzers\vb\Microsoft.VisualStudio.Threading.Analyzers.VisualBasic.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="..\..\..\packages\Microsoft.VisualStudio.Threading.Analyzers.17.2.32\build\Microsoft.VisualStudio.Threading.Analyzers.targets" Condition="Exists('..\..\..\packages\Microsoft.VisualStudio.Threading.Analyzers.17.2.32\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\packages\Microsoft.VisualStudio.Threading.Analyzers.17.2.32\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.VisualStudio.Threading.Analyzers.17.2.32\build\Microsoft.VisualStudio.Threading.Analyzers.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -35,6 +35,7 @@ using System.Runtime.InteropServices;
 using ASCOM;
 using ASCOM.Astrometry;
 using ASCOM.Astrometry.AstroUtils;
+using ASCOM.Astrometry.NOVAS;
 using ASCOM.Utilities;
 using ASCOM.DeviceInterface;
 using System.Globalization;
@@ -357,6 +358,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
         #endregion
 
         //INTERFACECODEINSERTIONPOINT
+
         #region Private properties and methods
         // here are some useful properties and methods that can be used as required
         // to help with driver development
