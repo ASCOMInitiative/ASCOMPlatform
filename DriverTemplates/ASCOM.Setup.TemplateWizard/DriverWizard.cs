@@ -107,6 +107,7 @@ namespace ASCOM.Setup
                 replacementsDictionary.Add(csTemplateRateGuid, Guid.NewGuid().ToString());
                 replacementsDictionary.Add(csTemplateAxisRatesGuid, Guid.NewGuid().ToString());
                 replacementsDictionary.Add(csTemplateTrackingRatesGuid, Guid.NewGuid().ToString());
+                TL.LogMessage("RunStarted", $"Completed");
             }
             catch (Exception ex)
             {
@@ -121,6 +122,7 @@ namespace ASCOM.Setup
         /// <param name="project"></param>
         public void ProjectFinishedGenerating(Project project)
         {
+            TL.LogMessage("ProjectFinishedGenerating", "Started");
             // Iterate through the project items and 
             // remove any files that begin with the word "Placeholder".
             // and the Rates class unless it's the Telescope class
@@ -180,8 +182,6 @@ namespace ASCOM.Setup
 
                         documentSelection.InsertFromFile(insertFile); // Insert the required file at the current selection point
                         TL.LogMessage("ProjectFinishedGenerating", "Done InsertFromFile");
-                        itemDocument.Save();
-                        TL.LogMessage("ProjectFinishedGenerating", "Done Save File");
 
                         // Remove the top lines of the inserted file until we get to #Region
                         // These lines are only there to make the file error free in the template development project and are not required here
@@ -226,6 +226,7 @@ namespace ASCOM.Setup
                     }
 
                 }
+                TL.LogMessage("ProjectFinishedGenerating", "Completed processing project items");
 
                 // Iterate through the project items and remove any files that begin with the word "Device". 
                 // These are the partial device implementations that are merged in to create a complete device driver template by the code above
@@ -248,8 +249,6 @@ namespace ASCOM.Setup
                     TL.LogMessage("ProjectFinishedGenerating", "Deleting file: " + item);
                     project.ProjectItems.Item(item).Delete();
                 }
-
-
 
                 TL.LogMessage("ProjectFinishedGenerating", $"About to rename driver. TL exists: {!(TL is null)}, Driver template exists: {!(driverTemplate is null)}.");
 

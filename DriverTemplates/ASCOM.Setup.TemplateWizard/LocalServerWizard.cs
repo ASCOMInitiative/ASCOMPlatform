@@ -246,8 +246,10 @@ namespace ASCOM.Setup
                 // Iterate through the project items and remove any files that begin with the word "Device". 
                 // These are the partial device implementations that are merged in to create a complete device driver template by the code above
                 // They are not required in the final project
-
                 // Done this way to avoid removing items from inside a foreach loop
+
+                TL.LogMessage("ProjectFinishedGenerating", $"Identifying files to delete");
+
                 rems = new List<string>();
                 foreach (ProjectItem item in driversFolderItems)
                 {
@@ -263,6 +265,8 @@ namespace ASCOM.Setup
                     TL.LogMessage("ProjectFinishedGenerating", "Deleting file: " + item);
                     driversFolderItems.Item(item).Delete();
                 }
+
+                TL.LogMessage("ProjectFinishedGenerating", $"About to rename driver. TL exists: {!(TL is null)}, Driver template exists: {!(driverTemplate is null)}.");
 
                 // Rename the Driver
                 TL.LogMessage("ProjectFinishedGenerating", $"Renaming driver: '{driverTemplate.Name}' to '{DeviceClass}{driverTemplate.Name}'");
