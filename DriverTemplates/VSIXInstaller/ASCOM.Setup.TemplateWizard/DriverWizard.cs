@@ -15,6 +15,10 @@ namespace ASCOM.Setup
 
         private DeviceDriverForm inputForm;
 
+        const string INTERFACE_METHODS_INSERTION_POINT = "//INTERFACECODEINSERTIONPOINT"; // Find the insertion point in the Driver.xx item.
+        const string START_OF_COMMANDXXX_METHODS = "//STARTOFCOMMANDXXXMETHODS"; // Start of the CommandXXX method definitions.
+        const string END_OF_COMMANDXXX_METHODS = "//ENDOFCOMMANDXXXMETHODS"; // End of the CommandXXX definitions.
+
         // These GUIDs are placeholder GUIDs. Wherever they are used in the template project, they'll be replaced with new values when the template is expanded. THE TEMPLATE PROJECTS MUST USE THESE GUIDS.
         private const string csTemplateAssemblyGuid = "28D679BA-2AF1-4557-AE15-C528C5BF91E0";
         private const string csTemplateInterfaceGuid = "3A02C211-FA08-4747-B0BD-4B00EB159297";
@@ -32,6 +36,10 @@ namespace ASCOM.Setup
 
         private ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("TemplateWizardDr");
         private ProjectItem driverTemplate;
+
+        private TextSelection documentSelection;
+
+        private int deleteCount;
 
         #endregion
 
@@ -169,11 +177,80 @@ namespace ASCOM.Setup
                         itemDocument.Activate(); // Make this the current document
                         TL.LogMessage("ProjectFinishedGenerating", "Activated Document");
 
-                        TextSelection documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                        //
+                        // Remove the CommandXXX methods if this device does not support them
+                        //
+                        TL.LogMessage("ProjectFinishedGenerating", "Removing the CommandXXX methods if the device interface does not support them");
+
+                        if (DeviceClass.ToUpperInvariant() == "VIDEO") // Special handling for the Video interface that does not have CommmandXXX methods
+                        {
+                            TL.LogMessage("ProjectFinishedGenerating", $"{DeviceClass} device - Removing the CommandXXX method markers and all CommandXXX members .");
+                            documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                            TL.LogMessage("ProjectFinishedGenerating", "Created a selection object for the start of CommandXXX methods marker.");
+
+                            bool foundStartOfCommandXxx = documentSelection.FindText(START_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Found {START_OF_COMMANDXXX_METHODS}: {foundStartOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+
+                            documentSelection.SelectLine(); // Select the current line
+                            TL.LogMessage("ProjectFinishedGenerating", $"Selected {START_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
+
+                            // Delete lines until we get to the end of CommandXXX methods marker
+                            deleteCount = 0;
+                            while ((!documentSelection.Text.ToUpperInvariant().Contains(END_OF_COMMANDXXX_METHODS)) & (deleteCount < 100))
+                            {
+                                TL.LogMessage("ProjectFinishedGenerating", $"Deleting line: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
+                                documentSelection.Delete(); // Delete the current line
+                                documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
+                                TL.LogMessage("ProjectFinishedGenerating", $"Found end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}. Delete count: {deleteCount}");
+                                deleteCount += 1;
+                            }
+
+                            TL.LogMessage("ProjectFinishedGenerating", $"Deleting end of CommandXXX marker: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
+                            documentSelection.Delete(); // Delete the current line
+
+                            TL.LogMessage("ProjectFinishedGenerating", $"CommandXXX members removed.");
+                        }
+                        else // Normal behaviour for all other interfaces that do have CommandXXX methods
+                        {
+                            TL.LogMessage("ProjectFinishedGenerating", $"{DeviceClass} device - Just removing the CommandXXX method markers. Retaining all CommandXXX members.");
+
+                            documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                            TL.LogMessage("ProjectFinishedGenerating", "Created a selection object for start of CommandXXX methods.");
+
+                            bool foundStartOfCommandXxx = documentSelection.FindText(START_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Found {START_OF_COMMANDXXX_METHODS}: {foundStartOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+
+                            documentSelection.SelectLine(); // Select the current line
+                            TL.LogMessage("ProjectFinishedGenerating", $"Selected {START_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
+
+                            TL.LogMessage("ProjectFinishedGenerating", $"Deleting line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                            documentSelection.Delete(); // Delete the current line
+
+
+                            documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                            TL.LogMessage("ProjectFinishedGenerating", "Created a selection object for end of CommandXXX methods.");
+
+                            bool foundEndOfCommandXxx = documentSelection.FindText(END_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Found {END_OF_COMMANDXXX_METHODS}: {foundEndOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+
+                            documentSelection.SelectLine(); // Select the current line
+                            TL.LogMessage("ProjectFinishedGenerating", $"Selected {END_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
+
+                            TL.LogMessage("ProjectFinishedGenerating", $"Deleting line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                            documentSelection.Delete(); // Delete the current line
+
+                            TL.LogMessage("ProjectFinishedGenerating", $"CommandXXX markers removed.");
+                        }
+
+                        //
+                        // Insert the device specific methods into the generic driver file
+                        //
+                        TL.LogMessage("ProjectFinishedGenerating", "Inserting the device specific methods into the generic driver ");
+
+                        documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
                         TL.LogMessage("ProjectFinishedGenerating", "Created Selection object");
 
-                        const string insertionPoint = "//INTERFACECODEINSERTIONPOINT"; // Find the insertion point in the Driver.xx item
-                        documentSelection.FindText(insertionPoint, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                        documentSelection.FindText(INTERFACE_METHODS_INSERTION_POINT, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
                         TL.LogMessage("ProjectFinishedGenerating", $"Done INTERFACECODEINSERTIONPOINT FindText: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
 
                         // Create the name of the device interface file to be inserted
@@ -203,7 +280,7 @@ namespace ASCOM.Setup
                         documentSelection.SelectLine();
                         TL.LogMessage("ProjectFinishedGenerating", $"Found initial end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
 
-                        int deleteCount = 0;
+                        deleteCount = 0;
                         while ((!documentSelection.Text.ToUpperInvariant().Contains("#REGION")) & (deleteCount < 10))
                         {
                             TL.LogMessage("ProjectFinishedGenerating", $"Deleting line: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");

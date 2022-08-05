@@ -142,6 +142,7 @@ Public Class TEMPLATEDEVICECLASS
         Throw New ActionNotImplementedException("Action " & ActionName & " is not supported by this driver")
     End Function
 
+    ' //STARTOFCOMMANDXXXMETHODS - This line will be deleted by the template wizard.
     ''' <summary>
     ''' Transmits an arbitrary string to the device and does not wait for a response.
     ''' Optionally, protocol framing characters may be added to the string before transmission.
@@ -205,6 +206,7 @@ Public Class TEMPLATEDEVICECLASS
         Throw New MethodNotImplementedException("CommandString")
     End Function
 
+    ' //ENDOFCOMMANDXXXMETHODS - This line will be deleted by the template wizard.
     ''' <summary>
     ''' Set True to connect to the device hardware. Set False to disconnect from the device hardware.
     ''' You can also read the property to check whether it is connected. This reports the current hardware state.
