@@ -1045,7 +1045,7 @@ Public Class DiagnosticsForm
                     .Description = "Platform 6 Telescope Simulator",
                     .DeviceType = "Telescope",
                     .Name = "Simulator",
-                    .DriverVersion = DiagnosticsFullVersionNumber,
+                    .DriverVersion = "6.6",
                     .InterfaceVersion = 3,
                     .IsPlatform5 = False,
                     .SixtyFourBit = True,
@@ -7515,7 +7515,6 @@ Public Class DiagnosticsForm
                                 localPath.ToUpperInvariant.Contains("\ASCOM.INTERNAL.FUSIONLIB\6") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.NEWTONSOFT.JSON\6") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.SETTINGSPROVIDER\6") Or
-                                localPath.ToUpperInvariant.Contains("\ASCOM.SETUP.TEMPLATEWIZARD\6") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.UTILITIES.SUPPORT\6") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.UTILITIES.VIDEO") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.ASTROMETRY\6") Or

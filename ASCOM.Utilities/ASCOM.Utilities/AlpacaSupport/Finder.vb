@@ -17,9 +17,10 @@ Friend Class Finder
 
     Private TL As TraceLogger
     Private ReadOnly callbackFunctionDelegate As Action(Of IPEndPoint, AlpacaDiscoveryResponse)
-    Private ReadOnly udpClient As UdpClient
 
-    Dim ipV6Discoveryclients As List(Of UdpClient) = New List(Of UdpClient)()
+    Dim ipV4DiscoveryClients As Dictionary(Of IPAddress, UdpClient) = New Dictionary(Of IPAddress, UdpClient)() ' Collection Of IP v4 clients For the various link local And localhost network
+
+    Dim ipV6Discoveryclients As Dictionary(Of IPAddress, UdpClient) = New Dictionary(Of IPAddress, UdpClient)() ' Collection Of IP v6 clients For the various link local And localhost network
 
     ''' <summary>
     ''' A cache of all endpoints found by the server
@@ -38,13 +39,6 @@ Friend Class Finder
         TL = traceLogger ' Save the trace logger object
         LogMessage("Finder", "Starting Initialisation...")
         callbackFunctionDelegate = callback
-        udpClient = New UdpClient()
-        udpClient.EnableBroadcast = True
-        udpClient.MulticastLoopback = False
-
-        '0 tells OS to give us a free ethereal port
-        udpClient.Client.Bind(New IPEndPoint(IPAddress.Any, 0))
-        udpClient.BeginReceive(New AsyncCallback(AddressOf FinderDiscoveryCallback), udpClient)
         LogMessage("Finder", "Initialised")
     End Sub
 
@@ -55,19 +49,17 @@ Friend Class Finder
 
             If disposing Then
 
-                If udpClient IsNot Nothing Then
-
-                    Try
-                        udpClient.Close()
-                    Catch
-                    End Try
-                End If
-
-                For Each client As UdpClient In ipV6Discoveryclients
-                    Try : client.Close() : Catch : End Try
+                'Dispose IPv4
+                For Each dev As KeyValuePair(Of IPAddress, UdpClient) In ipV4DiscoveryClients
+                    Try : dev.Value.Close() : Catch ex As Exception : End Try
                 Next
+                ipV4DiscoveryClients.Clear()
 
-                'try { udpClient.Dispose(); } catch { }
+                For Each dev As KeyValuePair(Of IPAddress, UdpClient) In ipV6Discoveryclients
+                    Try : dev.Value.Close() : Catch ex As Exception : End Try
+                Next
+                ipV6Discoveryclients.Clear()
+
             End If
 
             disposedValue = True
@@ -101,84 +93,171 @@ Friend Class Finder
 
 #End Region
 
+#Region "Private methods"
+    'Private Sub SendDiscoveryMessageIpV4(ByVal discoveryPort As Integer)
+    '    Dim adapters As NetworkInterface() = NetworkInterface.GetAllNetworkInterfaces()
+    '    LogMessage("SendDiscoveryMessageIpV4", $"Sending IPv$ discovery broadcasts")
+
+    '    For Each adapter As NetworkInterface In adapters
+    '        'Do not try and use non-operational adapters
+    '        If adapter.OperationalStatus <> OperationalStatus.Up Then Continue For
+
+    '        If adapter.Supports(NetworkInterfaceComponent.IPv4) Then
+    '            Dim adapterProperties As IPInterfaceProperties = adapter.GetIPProperties()
+    '            If adapterProperties Is Nothing Then Continue For
+    '            Dim uniCast As UnicastIPAddressInformationCollection = adapterProperties.UnicastAddresses
+
+    '            If uniCast.Count > 0 Then
+
+    '                For Each uni As UnicastIPAddressInformation In uniCast
+    '                    If uni.Address.AddressFamily <> AddressFamily.InterNetwork Then Continue For
+
+    '                    ' Local host addresses (127.*.*.*) may have a null mask in Net Framework. We do want to search these. The correct mask is 255.0.0.0.
+    '                    udpClient.Send(Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE), Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE).Length, New IPEndPoint(GetBroadcastAddress(uni.Address, If(uni.IPv4Mask, IPAddress.Parse("255.0.0.0"))), discoveryPort))
+    '                    LogMessage("SendDiscoveryMessageIpV4", $"Sent broadcast to: {uni.Address}")
+    '                Next
+    '            End If
+    '        End If
+    '    Next
+    'End Sub
+
     Private Sub SendDiscoveryMessageIpV4(ByVal discoveryPort As Integer)
         Dim adapters As NetworkInterface() = NetworkInterface.GetAllNetworkInterfaces()
-        LogMessage("SendDiscoveryMessageIpV4", $"Sending IPv$ discovery broadcasts")
+        LogMessage("SearchIPv4", $"Sending IPv4 discovery broadcasts")
 
         For Each adapter As NetworkInterface In adapters
-            'Do not try and use non-operational adapters
-            If adapter.OperationalStatus <> OperationalStatus.Up Then Continue For
 
-            If adapter.Supports(NetworkInterfaceComponent.IPv4) Then
-                Dim adapterProperties As IPInterfaceProperties = adapter.GetIPProperties()
-                If adapterProperties Is Nothing Then Continue For
-                Dim uniCast As UnicastIPAddressInformationCollection = adapterProperties.UnicastAddresses
+            Try
+                If adapter.OperationalStatus <> OperationalStatus.Up Then Continue For
 
-                If uniCast.Count > 0 Then
+                If adapter.Supports(NetworkInterfaceComponent.IPv4) Then
+                    Dim adapterProperties As IPInterfaceProperties = adapter.GetIPProperties()
+                    If adapterProperties Is Nothing Then Continue For
+                    Dim uniCast As UnicastIPAddressInformationCollection = adapterProperties.UnicastAddresses
 
-                    For Each uni As UnicastIPAddressInformation In uniCast
-                        If uni.Address.AddressFamily <> AddressFamily.InterNetwork Then Continue For
+                    If uniCast.Count > 0 Then
 
-                        ' Local host addresses (127.*.*.*) may have a null mask in Net Framework. We do want to search these. The correct mask is 255.0.0.0.
-                        udpClient.Send(Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE), Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE).Length, New IPEndPoint(GetBroadcastAddress(uni.Address, If(uni.IPv4Mask, IPAddress.Parse("255.0.0.0"))), discoveryPort))
-                        LogMessage("SendDiscoveryMessageIpV4", $"Sent broadcast to: {uni.Address}")
-                    Next
+                        For Each uni As UnicastIPAddressInformation In uniCast
+
+                            Try
+                                If uni.Address.AddressFamily <> AddressFamily.InterNetwork Then Continue For
+
+                                If uni.IPv4Mask.Equals(IPAddress.Parse("255.255.255.255")) Then
+                                    Continue For
+                                End If
+
+                                If Not ipV4DiscoveryClients.ContainsKey(uni.Address) Then
+                                    ipV4DiscoveryClients.Add(uni.Address, NewIPv4Client(uni.Address))
+                                End If
+
+                                If Not ipV4DiscoveryClients(uni.Address).Client.IsBound Then
+                                    ipV4DiscoveryClients.Remove(uni.Address)
+                                    Continue For
+                                End If
+
+                                ipV4DiscoveryClients(uni.Address).Send(Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE), Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE).Length, New IPEndPoint(GetBroadcastAddress(uni.Address, If(uni.IPv4Mask, IPAddress.Parse("255.0.0.0"))), discoveryPort))
+                                LogMessage("SearchIPv4", $"Sent broadcast to: {uni.Address}")
+                            Catch ex As Exception
+                                LogMessage("SearchIPv4", ex.Message)
+                            End Try
+                        Next
+                    End If
                 End If
-            End If
+
+            Catch ex As Exception
+                LogMessage("SearchIPv4", ex.Message)
+            End Try
         Next
     End Sub
+
+    Private Function NewIPv4Client(ByVal host As IPAddress) As UdpClient
+        Dim client As New UdpClient With {
+            .EnableBroadcast = True,
+            .MulticastLoopback = False
+        }
+
+        Dim SIO_UDP_CONNRESET As Integer = -1744830452
+        client.Client.IOControl(CType(SIO_UDP_CONNRESET, IOControlCode), New Byte() {0, 0, 0, 0}, Nothing)
+
+        client.Client.Bind(New IPEndPoint(IPAddress.Any, 0))
+        client.BeginReceive(New AsyncCallback(AddressOf FinderDiscoveryCallback), client)
+        Return client
+    End Function
 
     ''' <summary>
     ''' Send out discovery message on the IPv6 multicast group
     ''' This dual targets NetStandard 2.0 and NetFX 3.5 so no Async Await
     ''' </summary>
     Private Sub SendDiscoveryMessageIpV6(ByVal discoveryPort As Integer)
+        LogMessage("SearchIPv6", $"Sending IPv6 discovery broadcasts")
 
-        For Each client As UdpClient In ipV6Discoveryclients
-            Try : client.Close() : Catch : End Try
-        Next
-
-        ipV6Discoveryclients.Clear()
-
-        LogMessage("SendDiscoveryMessageIpV6", $"Sending IPv6 discovery broadcasts")
-
-        ' Windows needs to bind a socket to each adapter explicitly
         For Each adapter As NetworkInterface In NetworkInterface.GetAllNetworkInterfaces()
-            LogMessage("SendDiscoveryMessageIpV6", $"Found network interface {adapter.Description}, Interface type: {adapter.NetworkInterfaceType} - supports multicast: {adapter.SupportsMulticast}")
-            If adapter.OperationalStatus <> OperationalStatus.Up Then Continue For
-            LogMessage("SendDiscoveryMessageIpV6", $"Interface is up")
 
-            If adapter.Supports(NetworkInterfaceComponent.IPv6) AndAlso adapter.SupportsMulticast Then
-                LogMessage("SendDiscoveryMessageIpV6", $"Interface supports IPv6")
-                Dim adapterProperties As IPInterfaceProperties = adapter.GetIPProperties()
-                If adapterProperties Is Nothing Then Continue For
-                Dim uniCast As UnicastIPAddressInformationCollection = adapterProperties.UnicastAddresses
-                LogMessage("SendDiscoveryMessageIpV6", $"Adapter does have properties. Number of unicast addresses: {uniCast.Count}")
+            Try
+                LogMessage("SearchIPv6", $"Found network interface {adapter.Description}, Interface type: {adapter.NetworkInterfaceType} - supports multicast: {adapter.SupportsMulticast}")
+                If adapter.OperationalStatus <> OperationalStatus.Up Then Continue For
+                LogMessage("SearchIPv6", $"Interface is up")
 
-                If uniCast.Count > 0 Then
+                If adapter.Supports(NetworkInterfaceComponent.IPv6) AndAlso adapter.SupportsMulticast Then
+                    LogMessage("SearchIPv6", $"Interface supports IPv6")
+                    Dim adapterProperties As IPInterfaceProperties = adapter.GetIPProperties()
+                    If adapterProperties Is Nothing Then Continue For
+                    Dim uniCast As UnicastIPAddressInformationCollection = adapterProperties.UnicastAddresses
+                    LogMessage("SearchIPv6", $"Adapter does have properties. Number of unicast addresses: {uniCast.Count}")
 
-                    For Each uni As UnicastIPAddressInformation In uniCast
-                        If uni.Address.AddressFamily = AddressFamily.InterNetworkV6 Then
-                            LogMessage("SendDiscoveryMessageIpV6", $"Interface is IPv6")
+                    If uniCast.Count > 0 Then
+
+                        For Each uni As UnicastIPAddressInformation In uniCast
 
                             Try
-                                Dim client As UdpClient = New UdpClient(AddressFamily.InterNetworkV6)
+                                If uni.Address.AddressFamily <> AddressFamily.InterNetworkV6 Then Continue For
+                                LogMessage("SearchIPv6", $"Interface {uni.Address} supports IPv6 - IsLinkLocal: {uni.Address.IsIPv6LinkLocal}, LocalHost: {uni.Address.Equals(IPAddress.Parse("::1"))}")
+                                If Not uni.Address.IsIPv6LinkLocal AndAlso Not IPAddress.IsLoopback(uni.Address) Then Continue For
 
-                                '0 tells OS to give us a free ethereal port
-                                client.Client.Bind(New IPEndPoint(uni.Address, 0))
-                                client.BeginReceive(New AsyncCallback(AddressOf FinderDiscoveryCallback), client)
-                                client.Send(Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE), Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE).Length, New IPEndPoint(IPAddress.Parse(ALPACA_DISCOVERY_IPV6_MULTICAST_ADDRESS), discoveryPort))
-                                LogMessage("SendDiscoveryMessageIpV6", $"Sent multicast IPv6 discovery packet")
+                                Try
 
-                                ipV6Discoveryclients.Add(client)
-                            Catch ex As SocketException
+                                    If Not ipV6Discoveryclients.ContainsKey(uni.Address) Then
+                                        ipV6Discoveryclients.Add(uni.Address, NewIPv6Client(uni.Address, 0))
+                                    End If
+
+                                    ipV6Discoveryclients(uni.Address).Send(Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE), Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE).Length, New IPEndPoint(IPAddress.Parse(ALPACA_DISCOVERY_IPV6_MULTICAST_ADDRESS), discoveryPort))
+                                    LogMessage("SearchIPv6", $"Sent multicast IPv6 discovery packet")
+                                Catch __unusedSocketException1__ As SocketException
+                                End Try
+
+                            Catch ex As Exception
+                                LogMessage("SearchIPv6", $"Exception sending IPv6 discovery packet: {ex}")
                             End Try
-                        End If
-                    Next
+                        Next
+                    End If
                 End If
-            End If
+
+            Catch ex As Exception
+                LogMessage("SearchIPv6", $"Exception: {ex}")
+            End Try
         Next
     End Sub
+
+    Private Function NewIPv6Client(ByVal host As IPAddress, ByVal port As Integer) As UdpClient
+        Dim client As UdpClient = New UdpClient(AddressFamily.InterNetworkV6)
+        client.Client.Bind(New IPEndPoint(host, port))
+        client.BeginReceive(New AsyncCallback(AddressOf FinderDiscoveryCallback), client)
+        Return client
+    End Function
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     ''' <summary>
     ''' This callback is shared between IPv4 and IPv6
@@ -239,4 +318,6 @@ Friend Class Finder
             TL.LogMessage($"Finder - {method}", $"{indentSpaces}{Thread.CurrentThread.ManagedThreadId} - {message}")
         End If
     End Sub
+
+#End Region
 End Class

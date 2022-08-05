@@ -7,11 +7,9 @@ Platform 5 files
 Set Registry Keys
 Platform 6.2 files
 Extra activities if on a 64bit system
-Uninstall items installed by this installer
 ASCOM Cache
 Earth Rotation Date Update
 Remove Previous Platforms 4 and 5 if present
 Create shortcuts
 Maintenance Dialogue
 Alpaca Support for Chooser
-Clean up any remaining simulator COM entries

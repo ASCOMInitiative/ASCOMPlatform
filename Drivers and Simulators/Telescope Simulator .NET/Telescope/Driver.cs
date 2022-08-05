@@ -572,7 +572,7 @@ namespace ASCOM.Simulator
                 CheckVersionOne("DriverVersion", false);
                 Assembly asm = Assembly.GetExecutingAssembly();
 
-                string driverinfo = asm.GetName().Version.ToString();
+                string driverinfo = $"{asm.GetName().Version.Major}.{asm.GetName().Version.Minor}"; // Present the assembly number major and minor version numbers.
 
                 SharedResources.TrafficEnd(driverinfo);
                 return driverinfo;
@@ -825,15 +825,15 @@ namespace ASCOM.Simulator
                                 break;
 
                             case GuideDirections.guideEast:
-								TelescopeHardware.guideRate.X = -Math.Abs( TelescopeHardware.guideRate.X );
-								//TelescopeHardware.pulseGuideRaEndTime = endTime;
-								TelescopeHardware.isPulseGuidingRa = true;
+                                TelescopeHardware.guideRate.X = -Math.Abs(TelescopeHardware.guideRate.X);
+                                //TelescopeHardware.pulseGuideRaEndTime = endTime;
+                                TelescopeHardware.isPulseGuidingRa = true;
                                 TelescopeHardware.guideDuration.X = Duration / 1000.0;
                                 break;
                             case GuideDirections.guideWest:
-								TelescopeHardware.guideRate.X = Math.Abs( TelescopeHardware.guideRate.X );
-								//TelescopeHardware.pulseGuideRaEndTime = endTime;
-								TelescopeHardware.isPulseGuidingRa = true;
+                                TelescopeHardware.guideRate.X = Math.Abs(TelescopeHardware.guideRate.X);
+                                //TelescopeHardware.pulseGuideRaEndTime = endTime;
+                                TelescopeHardware.isPulseGuidingRa = true;
                                 TelescopeHardware.guideDuration.X = Duration / 1000.0;
                                 break;
                         }
@@ -1260,8 +1260,8 @@ namespace ASCOM.Simulator
             }
             set
             {
-				CheckCapability( TelescopeHardware.CanSetTracking, "Tracking", true );
-				SharedResources.TrafficLine(SharedResources.MessageType.Polls, "Tracking:-> " + value.ToString());
+                CheckCapability(TelescopeHardware.CanSetTracking, "Tracking", true);
+                SharedResources.TrafficLine(SharedResources.MessageType.Polls, "Tracking:-> " + value.ToString());
                 TelescopeHardware.Tracking = value;
             }
         }

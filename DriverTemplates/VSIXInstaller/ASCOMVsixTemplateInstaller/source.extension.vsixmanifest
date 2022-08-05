@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="ASCOMVsixTemplateInstaller" Version="0.9.15" Language="en-US" Publisher="Peter Simpson" />
+        <Identity Id="ASCOMVsixTemplateInstaller" Version="0.9.23" Language="en-US" Publisher="Peter Simpson" />
         <DisplayName>ASCOM Driver Project Templates</DisplayName>
         <Description xml:space="preserve">Templates to create C# and VB ASCOM driver projects and test applications.</Description>
         <Icon>ASCOM.ico</Icon>
@@ -32,7 +32,7 @@
         <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
     </Dependencies>
     <Assets>
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" Path="|ASCOM.Setup.TemplateWizard|" AssemblyName="|ASCOM.Setup.TemplateWizard;AssemblyName|" d:ProjectName="ASCOM.Setup.TemplateWizard" />
+        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" Path="|ASCOM.Setup.VsixWizard|" AssemblyName="|ASCOM.Setup.VsixWizard;AssemblyName|" d:ProjectName="ASCOM.Setup.VsixWizard" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="LocalServerTemplate" d:TargetPath="|LocalServerTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="DriverTemplate(CS)" d:TargetPath="|DriverTemplate(CS);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="DriverTemplate(VB)" d:TargetPath="|DriverTemplate(VB);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />

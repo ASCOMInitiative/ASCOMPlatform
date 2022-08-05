@@ -2165,7 +2165,7 @@ ASCOM Platform 6.6 SP1
 ASCOM Platform 6.6 SP1 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{5F59DC7D-DE8B-46E3-A8BA-5A9F3C978BB0}
+{AA571F01-EC89-47FE-9ACF-AA885DD5FF44}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
@@ -2199,10 +2199,6 @@ checkmsi31.mia
 setupmsi31.mia
 checknet4.8_x86 .mia
 CleanRegistry.mia
-check_vcruntime_x64.mia
-check_vcruntime_x86.mia
-setup_vcruntime_x64.mia
-setup_vcruntime_x86.mia
 $
 FALSE
 P8tris9000cdK
