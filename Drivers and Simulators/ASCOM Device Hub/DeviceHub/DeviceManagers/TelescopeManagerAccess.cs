@@ -437,7 +437,7 @@ namespace ASCOM.DeviceHub
 			{
 				DriveRates[] driveRates = new DriveRates[] { DriveRates.driveSidereal };
 				ScopeTrackingRates defaultRates = new ScopeTrackingRates( driveRates );
-				ITrackingRates rates =  GetServiceProperty<ITrackingRates>( () => Service.TrackingRates, defaultRates, ActivityMessageTypes.Parameters );
+				ITrackingRates rates =  GetServiceProperty<ITrackingRates>( () => Service.TrackingRates, (ITrackingRates)defaultRates, ActivityMessageTypes.Parameters );
 
 				return rates;
 			}
