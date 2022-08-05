@@ -87,6 +87,7 @@
     <Compile Include="Business Object Classes\Value Converters\MultiBindingTrueIfNotParking.cs" />
     <Compile Include="Business Object Classes\Value Converters\EditLockTextBooleanValueConverter.cs" />
     <Compile Include="Business Object Classes\Message Types\FocuserMoveAmountMessage.cs" />
+    <Compile Include="Business Object Classes\Value Converters\UnitsBooleanToStringConverter.cs" />
     <Compile Include="Dome Driver\DomeDriver.cs" />
     <Compile Include="Dome Driver\DomeDriverSetupDialogView.xaml.cs">
       <DependentUpon>DomeDriverSetupDialogView.xaml</DependentUpon>

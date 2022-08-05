@@ -43,9 +43,8 @@ namespace ASCOM.DeviceHub
 
 			if ( rates != null )
 			{
-				for ( int i = 1; i <= rates.Count; ++i )
+				foreach (DriveRates rate in rates)
 				{
-					DriveRates rate = rates[i];
 					string name = "";
 
 					switch ( rate )

@@ -62,10 +62,10 @@ namespace ASCOM.DeviceHub
 					}
 				}
 			}
-			catch ( Exception xcp )
+			catch ( Exception )
 			{
-				string msg = $"DeviceHub caught a fatal exception during startup\r\n{xcp.Message}";
-				MessageBox.Show( msg, "DeviceHub", MessageBoxButton.OK, MessageBoxImage.Stop );
+				//string msg = $"DeviceHub caught a fatal exception during startup\r\n{xcp.Message}";
+				//MessageBox.Show( msg, "DeviceHub", MessageBoxButton.OK, MessageBoxImage.Stop );
 
 				if ( Application.Current != null )
 				{
@@ -94,7 +94,5 @@ namespace ASCOM.DeviceHub
 
 			return (T)assembly.GetCustomAttributes( typeof( T ), inherit ).First();
 		}
-
-
 	}
 }

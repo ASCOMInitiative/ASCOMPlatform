@@ -94,7 +94,7 @@ namespace ASCOM.DeviceHub
 
 					LogActivityEnd( messageType, sb.ToString() );
 				}
-				else if ( retval is TrackingRates)
+				else if ( retval is ITrackingRates)
 				{
 					LogActivityStart( ActivityMessageTypes.Parameters, "Get {0}:", propName );
 					StringBuilder sb = new StringBuilder();
