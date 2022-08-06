@@ -18,6 +18,7 @@ namespace ASCOM.Setup
         const string INTERFACE_METHODS_INSERTION_POINT = "//INTERFACECODEINSERTIONPOINT"; // Find the insertion point in the Driver.xx item.
         const string START_OF_COMMANDXXX_METHODS = "//STARTOFCOMMANDXXXMETHODS"; // Start of the CommandXXX method definitions.
         const string END_OF_COMMANDXXX_METHODS = "//ENDOFCOMMANDXXXMETHODS"; // End of the CommandXXX definitions.
+        const string END_OF_INSERTED_FILE = "//ENDOFINSERTEDFILE";
 
         // These GUIDs are placeholder GUIDs. Wherever they are used in the template project, they'll be replaced with new values when the template is expanded. THE TEMPLATE PROJECTS MUST USE THESE GUIDS.
         private const string csTemplateAssemblyGuid = "28D679BA-2AF1-4557-AE15-C528C5BF91E0";
@@ -109,7 +110,7 @@ namespace ASCOM.Setup
                 replacementsDictionary.Add("ITEMPLATEDEVICEINTERFACE", DeviceInterface);
                 replacementsDictionary.Add("TEMPLATENAMESPACE", Namespace);
                 replacementsDictionary.Add("TEMPLATEINTERFACEVERSION", InterfaceVersion.ToString());
-                // create and replace guids
+                // create and replace GUIDs
                 replacementsDictionary.Add(csTemplateAssemblyGuid, Guid.NewGuid().ToString());
                 replacementsDictionary.Add(csTemplateInterfaceGuid, Guid.NewGuid().ToString());
                 replacementsDictionary.Add(csTemplateRateGuid, Guid.NewGuid().ToString());
@@ -131,24 +132,22 @@ namespace ASCOM.Setup
         public void ProjectFinishedGenerating(Project project)
         {
             TL.LogMessage("ProjectFinishedGenerating", "Started");
-            // Iterate through the project items and 
-            // remove any files that begin with the word "Placeholder".
-            // and the Rates class unless it's the Telescope class
-            // done this way to avoid removing items from inside a foreach loop
+
+            // Iterate through the project items and remove any files that begin with the word "Placeholder" and the Rates class unless it's the Telescope class. Done this way to avoid removing items from inside a for-each loop
             List<string> rems = new List<string>();
             foreach (ProjectItem item in project.ProjectItems)
             {
+                TL.LogMessage("Placeholder And Rate", $"Item name: {item.Name}, type: {item.Kind}, file count: {item.FileCount}, item count: {item.ProjectItems.Count}");
                 if (item.Name.StartsWith("Placeholder", StringComparison.OrdinalIgnoreCase) ||
-                    item.Name.StartsWith("Rate", StringComparison.OrdinalIgnoreCase) &&
-                    !this.DeviceClass.Equals("Telescope", StringComparison.OrdinalIgnoreCase))
+                    (item.Name.StartsWith("Rate", StringComparison.OrdinalIgnoreCase) && !DeviceClass.Equals("Telescope", StringComparison.OrdinalIgnoreCase)))
                 {
-                    //MessageBox.Show("adding " + item.Name);
+                    TL.LogMessage("Placeholder And Rate", $"Adding item {item.Name}");
                     rems.Add(item.Name);
                 }
             }
             foreach (string item in rems)
             {
-                //MessageBox.Show("Deleting " + item);
+                TL.LogMessage("Placeholder And Rate", $"Deleting item {item}");
                 project.ProjectItems.Item(item).Delete();
             }
 
@@ -251,7 +250,7 @@ namespace ASCOM.Setup
                         TL.LogMessage("ProjectFinishedGenerating", "Created Selection object");
 
                         documentSelection.FindText(INTERFACE_METHODS_INSERTION_POINT, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
-                        TL.LogMessage("ProjectFinishedGenerating", $"Done INTERFACECODEINSERTIONPOINT FindText: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                        TL.LogMessage("ProjectFinishedGenerating", $"Done {INTERFACE_METHODS_INSERTION_POINT} FindText: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
 
                         // Create the name of the device interface file to be inserted
                         string insertFile = directory + "\\Device" + this.DeviceClass + Path.GetExtension(projectItem.Name);
@@ -272,11 +271,10 @@ namespace ASCOM.Setup
                         }
 
                         // Find the end of inserted file marker that came from the inserted file
-                        const string endOfInsertFile = "//ENDOFINSERTEDFILE";
-                        bool foundEndOfInsertedFile = documentSelection.FindText(endOfInsertFile, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
-                        TL.LogMessage("ProjectFinishedGenerating", $"Found ENDOFINSERTEDFILE {foundEndOfInsertedFile} Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
+                        bool foundEndOfInsertedFile = documentSelection.FindText(END_OF_INSERTED_FILE, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                        TL.LogMessage("ProjectFinishedGenerating", $"Found {END_OF_INSERTED_FILE} {foundEndOfInsertedFile} Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
 
-                        // Delete the end of interted file marker line and any remaining lines from the inserted file
+                        // Delete the end of inserted file marker line and any remaining lines from the inserted file
                         documentSelection.SelectLine();
                         TL.LogMessage("ProjectFinishedGenerating", $"Found initial end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
 
