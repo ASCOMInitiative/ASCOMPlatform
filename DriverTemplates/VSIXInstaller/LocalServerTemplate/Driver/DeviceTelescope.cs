@@ -676,13 +676,15 @@ class DeviceTelescope
         throw new MethodNotImplementedException("SlewToAltAz");
     }
 
-	/// <summary>
-	/// This Method must be implemented if <see cref="CanSlewAltAzAsync" /> returns True.
-	/// It returns immediately, with Slewing set to True
-	/// </summary>
-	/// <param name="Azimuth">Azimuth to which to move</param>
-	/// <param name="Altitude">Altitude to which to move to</param>
-	public void SlewToAltAzAsync(double Azimuth, double Altitude)
+
+    /// <summary>
+    /// This Method must be implemented if <see cref="CanSlewAltAzAsync" /> returns True.
+    /// It returns immediately, with Slewing set to True
+    /// </summary>
+    /// <param name="Azimuth">Azimuth to which to move</param>
+    /// <param name="Altitude">Altitude to which to move to</param>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
+    public void SlewToAltAzAsync(double Azimuth, double Altitude)
     {
         tl.LogMessage("SlewToAltAzAsync", "Not implemented");
         throw new MethodNotImplementedException("SlewToAltAzAsync");
@@ -698,10 +700,11 @@ class DeviceTelescope
         throw new MethodNotImplementedException("SlewToCoordinates");
     }
 
-	/// <summary>
-	/// Move the telescope to the given equatorial coordinates, return with Slewing set to True immediately after starting the slew.
-	/// </summary>
-	public void SlewToCoordinatesAsync(double RightAscension, double Declination)
+    /// <summary>
+    /// Move the telescope to the given equatorial coordinates, return with Slewing set to True immediately after starting the slew.
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
+    public void SlewToCoordinatesAsync(double RightAscension, double Declination)
     {
         tl.LogMessage("SlewToCoordinatesAsync", "Not implemented");
         throw new MethodNotImplementedException("SlewToCoordinatesAsync");
@@ -716,11 +719,12 @@ class DeviceTelescope
         throw new MethodNotImplementedException("SlewToTarget");
     }
 
-	/// <summary>
-	/// Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" />  coordinates,
-	/// returns immediately after starting the slew with Slewing set to True.
-	/// </summary>
-	public void SlewToTargetAsync()
+    /// <summary>
+    /// Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" />  coordinates,
+    /// returns immediately after starting the slew with Slewing set to True.
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
+    public void SlewToTargetAsync()
     {
         tl.LogMessage("SlewToTargetAsync", "Not implemented");
         throw new MethodNotImplementedException("SlewToTargetAsync");
@@ -862,7 +866,7 @@ class DeviceTelescope
         get
         {
             DateTime utcDate = DateTime.UtcNow;
-            tl.LogMessage("TrackingRates", "Get - " + String.Format("MM/dd/yy HH:mm:ss", utcDate));
+            tl.LogMessage("UTCDate", "Get - " + String.Format("MM/dd/yy HH:mm:ss", utcDate));
             return utcDate;
         }
         set

@@ -35,7 +35,9 @@ Partial Class Form1
         Me.labelDriverId.Name = "labelDriverId"
         Me.labelDriverId.Size = New System.Drawing.Size(291, 21)
         Me.labelDriverId.TabIndex = 5
-        Me.labelDriverId.Text = Global.ASCOM.TEMPLATEDEVICENAME.My.MySettings.Default.DriverId
+#Disable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
+        Me.labelDriverId.Text = Global.ASCOM.TEMPLATEDEVICENAME.My.MySettings.Default.DriverID
+#Enable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
         Me.labelDriverId.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'buttonConnect

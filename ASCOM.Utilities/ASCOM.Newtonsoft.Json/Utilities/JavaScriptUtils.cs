@@ -580,7 +580,9 @@ namespace Newtonsoft.Json.Utilities
             }
             if (!TryGetDateConstructorValue(reader, out long? t2, out errorMessage))
             {
+#pragma warning disable CS8762 // Parameter must have a non-null value when exiting in some condition.
                 return false;
+#pragma warning restore CS8762 // Parameter must have a non-null value when exiting in some condition.
             }
             else if (t2 != null)
             {
@@ -594,7 +596,9 @@ namespace Newtonsoft.Json.Utilities
                 {
                     if (!TryGetDateConstructorValue(reader, out long? integer, out errorMessage))
                     {
+#pragma warning disable CS8762 // Parameter must have a non-null value when exiting in some condition.
                         return false;
+#pragma warning restore CS8762 // Parameter must have a non-null value when exiting in some condition.
                     }
                     else if (integer != null)
                     {

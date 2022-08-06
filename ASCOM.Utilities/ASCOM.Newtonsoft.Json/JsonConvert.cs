@@ -717,7 +717,9 @@ namespace Newtonsoft.Json
         [DebuggerStepThrough]
         public static T DeserializeObject<T>(string value)
         {
+#pragma warning disable CS8603 // Possible null reference return.
             return DeserializeObject<T>(value, (JsonSerializerSettings?)null);
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         /// <summary>
@@ -755,7 +757,9 @@ namespace Newtonsoft.Json
         [DebuggerStepThrough]
         public static T DeserializeAnonymousType<T>(string value, T anonymousTypeObject, JsonSerializerSettings settings)
         {
+#pragma warning disable CS8603 // Possible null reference return.
             return DeserializeObject<T>(value, settings);
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         /// <summary>

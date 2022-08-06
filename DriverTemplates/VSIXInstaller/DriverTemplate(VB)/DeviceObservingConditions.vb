@@ -157,12 +157,14 @@ Class DeviceObservingConditions
 		End Get
 	End Property
 
-	''' <summary>
-	''' Provides the time since the sensor value was last updated
-	''' </summary>
-	''' <param name="propertyName">Name of the property whose time since last update Is required</param>
-	''' <returns>Time in seconds since the last sensor update for this property</returns>
-	Public Function TimeSinceLastUpdate(PropertyName As String) As Double Implements IObservingConditions.TimeSinceLastUpdate
+    ''' <summary>
+    ''' Provides the time since the sensor value was last updated
+    ''' </summary>
+    ''' <param name="propertyName">Name of the property whose time since last update Is required</param>
+    ''' <returns>Time in seconds since the last sensor update for this property</returns>
+    Public Function TimeSinceLastUpdate(PropertyName As String) As Double Implements IObservingConditions.TimeSinceLastUpdate
+        Dim lastUpdateTime As Double = 0.0
+
 		' Test for an empty property name, if found, return the time since the most recent update to any sensor
 		If Not String.IsNullOrEmpty(PropertyName) Then
 			Select Case PropertyName.Trim.ToLowerInvariant
@@ -193,14 +195,16 @@ Class DeviceObservingConditions
 			TL.LogMessage("TimeSinceLastUpdate", $"The time since the most recent sensor update is not implemented")
 			Throw New MethodNotImplementedException("TimeSinceLastUpdate(" + PropertyName + ")")
 		End If
-	End Function
 
-	''' <summary>
-	''' Provides a description of the sensor providing the requested property
-	''' </summary>
-	''' <param name="propertyName">Name of the property whose sensor description is required</param>
-	''' <returns>The sensor description string</returns>
-	Public Function SensorDescription(PropertyName As String) As String Implements IObservingConditions.SensorDescription
+		Return lastUpdateTime
+    End Function
+
+    ''' <summary>
+    ''' Provides a description of the sensor providing the requested property
+    ''' </summary>
+    ''' <param name="propertyName">Name of the property whose sensor description is required</param>
+    ''' <returns>The sensor description string</returns>
+    Public Function SensorDescription(PropertyName As String) As String Implements IObservingConditions.SensorDescription
 		Select Case PropertyName.Trim.ToLowerInvariant
 			Case "averageperiod"
 				Return "Average period in hours, immediate values are only available"

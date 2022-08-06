@@ -178,7 +178,9 @@ namespace Newtonsoft.Json.Linq
                 throw new ArgumentException("Source value must be a JToken.");
             }
 
+#pragma warning disable CS8603 // Possible null reference return.
             return token.Convert<JToken, U>();
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         internal static IEnumerable<U> Values<T, U>(this IEnumerable<T> source, object? key) where T : JToken
@@ -191,13 +193,17 @@ namespace Newtonsoft.Json.Linq
                 {
                     if (token is JValue value)
                     {
+#pragma warning disable CS8603 // Possible null reference return.
                         yield return Convert<JValue, U>(value);
+#pragma warning restore CS8603 // Possible null reference return.
                     }
                     else
                     {
                         foreach (JToken t in token.Children())
                         {
+#pragma warning disable CS8603 // Possible null reference return.
                             yield return t.Convert<JToken, U>();
+#pragma warning restore CS8603 // Possible null reference return.
                         }
                     }
                 }
@@ -209,7 +215,9 @@ namespace Newtonsoft.Json.Linq
                     JToken? value = token[key];
                     if (value != null)
                     {
+#pragma warning disable CS8603 // Possible null reference return.
                         yield return value.Convert<JToken, U>();
+#pragma warning restore CS8603 // Possible null reference return.
                     }
                 }
             }
@@ -249,7 +257,9 @@ namespace Newtonsoft.Json.Linq
 
             foreach (T token in source)
             {
+#pragma warning disable CS8603 // Possible null reference return.
                 yield return Convert<JToken, U>(token);
+#pragma warning restore CS8603 // Possible null reference return.
             }
         }
 

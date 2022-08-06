@@ -568,7 +568,11 @@ namespace Newtonsoft.Json.Serialization
                         }
                     }
 
+#pragma warning disable CS8762 // Parameter must have a non-null value when exiting in some condition.
+#pragma warning disable CS8762 // Parameter must have a non-null value when exiting in some condition.
                     return true;
+#pragma warning restore CS8762 // Parameter must have a non-null value when exiting in some condition.
+#pragma warning restore CS8762 // Parameter must have a non-null value when exiting in some condition.
                 }
             }
 
