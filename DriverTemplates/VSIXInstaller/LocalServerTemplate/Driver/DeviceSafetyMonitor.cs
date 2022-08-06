@@ -9,9 +9,6 @@ using ASCOM.Utilities;
 
 class DeviceSafetyMonitor
 {
-    Util util = new Util();
-    TraceLogger tl = new TraceLogger();
-
 	#region ISafetyMonitor Implementation
 
 	/// <summary>
@@ -22,8 +19,7 @@ class DeviceSafetyMonitor
     {
         get
         {
-            tl.LogMessage("IsSafe Get", "true");
-            return true;
+            return SafetyMonitorHardware.IsSafe;
         }
     }
 

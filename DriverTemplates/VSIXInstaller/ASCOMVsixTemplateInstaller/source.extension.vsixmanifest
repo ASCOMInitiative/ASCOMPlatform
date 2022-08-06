@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="ASCOMVsixTemplateInstaller" Version="0.9.28" Language="en-US" Publisher="Peter Simpson" />
+        <Identity Id="ASCOMVsixTemplateInstaller" Version="0.9.41" Language="en-US" Publisher="Peter Simpson" />
         <DisplayName>ASCOM Driver Project Templates</DisplayName>
         <Description xml:space="preserve">Templates to create C# and VB ASCOM driver projects and test applications.</Description>
         <Icon>ASCOM.ico</Icon>

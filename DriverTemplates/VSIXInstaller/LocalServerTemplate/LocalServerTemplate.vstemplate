@@ -43,6 +43,10 @@
 				<ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.cs">SetupDialogForm.cs</ProjectItem>
 				<ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.Designer.cs">SetupDialogForm.Designer.cs</ProjectItem>
 				<ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.resx">SetupDialogForm.resx</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareCamera.cs">HardwareCamera.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareSafetyMonitor.cs">HardwareSafetyMonitor.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareSwitch.cs">HardwareSwitch.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="CommonHardware.cs">CommonHardware.cs</ProjectItem>
 			</Folder>
 			<Folder Name="TemplateProperties" TargetFolderName="Properties">
 				<ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>

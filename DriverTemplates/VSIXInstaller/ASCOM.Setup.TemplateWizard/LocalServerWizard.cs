@@ -15,6 +15,11 @@ namespace ASCOM.Setup
 
         private LocalServerForm inputForm;
 
+        const string INTERFACE_METHODS_INSERTION_POINT = "//INTERFACECODEINSERTIONPOINT"; // Find the insertion point in the Driver.xx item.
+        const string START_OF_COMMANDXXX_METHODS = "//STARTOFCOMMANDXXXMETHODS"; // Start of the CommandXXX method definitions.
+        const string END_OF_COMMANDXXX_METHODS = "//ENDOFCOMMANDXXXMETHODS"; // End of the CommandXXX definitions.
+        const string END_OF_INSERTED_FILE = "//ENDOFINSERTEDFILE";
+
         // These GUIDs are placeholder GUIDs. Wherever they are used in the template project, they'll be replaced with new values when the template is expanded. THE TEMPLATE PROJECTS MUST USE THESE GUIDS.
         private const string csTemplateAssemblyGuid = "28D679BA-2AF1-4557-AE15-C528C5BF91E0";
         private const string csTemplateInterfaceGuid = "3A02C211-FA08-4747-B0BD-4B00EB159297";
@@ -31,7 +36,13 @@ namespace ASCOM.Setup
         private int InterfaceVersion { get; set; }
 
         private ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("TemplateWizardLS");
-        private ProjectItem driverTemplate;
+
+        private ProjectItem driverFile; // Pointer to the Driver.VB or Driver.CS file.
+        private ProjectItem hardwareFile; // Pointer to the Hardware.CS file.
+
+        private TextSelection documentSelection;
+
+        private int deleteCount;
 
         #endregion
 
@@ -99,10 +110,12 @@ namespace ASCOM.Setup
                 {
                     replacementsDictionary.Add("TEMPLATEDEVICECLASS", DeviceClass);
                 }
+                replacementsDictionary.Add("TEMPLATEHARDWARECLASS", $"{DeviceClass}Hardware"); // Hardware class name
                 replacementsDictionary.Add("ITEMPLATEDEVICEINTERFACE", DeviceInterface);
                 replacementsDictionary.Add("TEMPLATENAMESPACE", Namespace);
                 replacementsDictionary.Add("TEMPLATEINTERFACEVERSION", InterfaceVersion.ToString());
-                // create and replace guids
+
+                // create and replace GUIDs
                 replacementsDictionary.Add(csTemplateAssemblyGuid, Guid.NewGuid().ToString());
                 replacementsDictionary.Add(csTemplateInterfaceGuid, Guid.NewGuid().ToString());
                 replacementsDictionary.Add(csTemplateRateGuid, Guid.NewGuid().ToString());
@@ -144,7 +157,7 @@ namespace ASCOM.Setup
 
             if (driversFolderItems is null) throw new Exception("Unable to find Drivers folder");
 
-            // Iterate through the project items and remove any files that begin with the word "Placeholder" and the Rates class unless it's the Telescope class. Done this way to avoid removing items from inside a foreach loop
+            // Iterate through the project items and remove any files that begin with the word "Placeholder" and the Rates class unless it's the Telescope class. Done this way to avoid removing items from inside a for-each loop
             List<string> rems = new List<string>();
             foreach (ProjectItem item in driversFolderItems)
             {
@@ -158,6 +171,7 @@ namespace ASCOM.Setup
             }
             foreach (string item in rems)
             {
+                TL.LogMessage("Placeholder And Rate", $"Deleting item {item}");
                 driversFolderItems.Item(item).Delete();
             }
 
@@ -168,13 +182,15 @@ namespace ASCOM.Setup
                 foreach (ProjectItem projectItem in driversFolderItems)
                 {
                     TL.LogMessage("ProjectFinishedGenerating", "Item name: " + projectItem.Name);
+
+                    // Process DRIVER files
                     if ((projectItem.Name.ToUpperInvariant() == "DRIVER.CS") | (projectItem.Name.ToUpperInvariant() == "DRIVER.VB"))
                     {
-                        driverTemplate = projectItem; // Save the driver item
+                        driverFile = projectItem; // Save the driver item
                         // This is a driver template
                         // Get the filename and directory of the Driver.xx file
                         string directory = Path.GetDirectoryName(projectItem.FileNames[1].ToString());
-                        TL.LogMessage("ProjectFinishedGenerating", "File name: " + projectItem.FileNames[1].ToString() + ", Directory: " + directory);
+                        TL.LogMessage("ProjectFinishedGenerating", "Driver file name: " + projectItem.FileNames[1].ToString() + ", Directory: " + directory);
                         TL.LogMessage("ProjectFinishedGenerating", "Found " + projectItem.Name);
 
                         projectItem.Open(); // Open the item for editing
@@ -186,12 +202,81 @@ namespace ASCOM.Setup
                         itemDocument.Activate(); // Make this the current document
                         TL.LogMessage("ProjectFinishedGenerating", "Activated Document");
 
-                        TextSelection documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                        //
+                        // Remove the CommandXXX methods if this device does not support them
+                        //
+                        TL.LogMessage("ProjectFinishedGenerating", "Removing the CommandXXX methods if the device interface does not support them");
+
+                        if (DeviceClass.ToUpperInvariant() == "VIDEO") // Special handling for the Video interface that does not have CommmandXXX methods
+                        {
+                            TL.LogMessage("ProjectFinishedGenerating", $"{DeviceClass} device - Removing the CommandXXX method markers and all CommandXXX members .");
+                            documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                            TL.LogMessage("ProjectFinishedGenerating", "Created a selection object for the start of CommandXXX methods marker.");
+
+                            bool foundStartOfCommandXxx = documentSelection.FindText(START_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Found {START_OF_COMMANDXXX_METHODS}: {foundStartOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+
+                            documentSelection.SelectLine(); // Select the current line
+                            TL.LogMessage("ProjectFinishedGenerating", $"Selected {START_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
+
+                            // Delete lines until we get to the end of CommandXXX methods marker
+                            deleteCount = 0;
+                            while ((!documentSelection.Text.ToUpperInvariant().Contains(END_OF_COMMANDXXX_METHODS)) & (deleteCount < 100))
+                            {
+                                TL.LogMessage("ProjectFinishedGenerating", $"Deleting line: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
+                                documentSelection.Delete(); // Delete the current line
+                                documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
+                                TL.LogMessage("ProjectFinishedGenerating", $"Found end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}. Delete count: {deleteCount}");
+                                deleteCount += 1;
+                            }
+
+                            TL.LogMessage("ProjectFinishedGenerating", $"Deleting end of CommandXXX marker: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
+                            documentSelection.Delete(); // Delete the current line
+
+                            TL.LogMessage("ProjectFinishedGenerating", $"CommandXXX members removed.");
+                        }
+                        else // Normal behaviour for all other interfaces that do have CommandXXX methods
+                        {
+                            TL.LogMessage("ProjectFinishedGenerating", $"{DeviceClass} device - Just removing the CommandXXX method markers. Retaining all CommandXXX members.");
+
+                            documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                            TL.LogMessage("ProjectFinishedGenerating", "Created a selection object for start of CommandXXX methods.");
+
+                            bool foundStartOfCommandXxx = documentSelection.FindText(START_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Found {START_OF_COMMANDXXX_METHODS}: {foundStartOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+
+                            documentSelection.SelectLine(); // Select the current line
+                            TL.LogMessage("ProjectFinishedGenerating", $"Selected {START_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
+
+                            TL.LogMessage("ProjectFinishedGenerating", $"Deleting line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                            documentSelection.Delete(); // Delete the current line
+
+
+                            documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                            TL.LogMessage("ProjectFinishedGenerating", "Created a selection object for end of CommandXXX methods.");
+
+                            bool foundEndOfCommandXxx = documentSelection.FindText(END_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Found {END_OF_COMMANDXXX_METHODS}: {foundEndOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+
+                            documentSelection.SelectLine(); // Select the current line
+                            TL.LogMessage("ProjectFinishedGenerating", $"Selected {END_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
+
+                            TL.LogMessage("ProjectFinishedGenerating", $"Deleting line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                            documentSelection.Delete(); // Delete the current line
+
+                            TL.LogMessage("ProjectFinishedGenerating", $"CommandXXX markers removed.");
+                        }
+
+                        //
+                        // Insert the device specific methods into the generic driver file
+                        //
+                        TL.LogMessage("ProjectFinishedGenerating", "Inserting the device specific methods into the generic driver ");
+
+                        documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
                         TL.LogMessage("ProjectFinishedGenerating", "Created Selection object");
 
-                        const string insertionPoint = "//INTERFACECODEINSERTIONPOINT"; // Find the insertion point in the Driver.xx item
-                        documentSelection.FindText(insertionPoint, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
-                        TL.LogMessage("ProjectFinishedGenerating", "Done INTERFACECODEINSERTIONPOINT FindText:" + documentSelection.Text);
+                        documentSelection.FindText(INTERFACE_METHODS_INSERTION_POINT, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                        TL.LogMessage("ProjectFinishedGenerating", $"Done {INTERFACE_METHODS_INSERTION_POINT} FindText: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
 
                         // Create the name of the device interface file to be inserted
                         string insertFile = directory + "\\Device" + this.DeviceClass + Path.GetExtension(projectItem.Name);
@@ -201,30 +286,32 @@ namespace ASCOM.Setup
                         TL.LogMessage("ProjectFinishedGenerating", "Done InsertFromFile");
 
                         // Remove the top lines of the inserted file until we get to #Region
-                        // These lines are only there to make the file error free in the template develpment project and are not required here
+                        // These lines are only there to make the file error free in the template development project and are not required here
                         documentSelection.SelectLine(); // Select the current line
                         TL.LogMessage("ProjectFinishedGenerating", "Selected initial line: " + documentSelection.Text);
                         while (!documentSelection.Text.ToUpperInvariant().Contains("#REGION"))
                         {
-                            TL.LogMessage("ProjectFinishedGenerating", "Deleting start line: " + documentSelection.Text);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Deleting start line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
                             documentSelection.Delete(); // Delete the current line
                             documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
                         }
 
-                        // Find the end of file marker that came from the inserted file
-                        const string endOfInsertFile = "//ENDOFINSERTEDFILE";
-                        documentSelection.FindText(endOfInsertFile, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
-                        TL.LogMessage("ProjectFinishedGenerating", "Done ENDOFINSERTEDFILE FindText:" + documentSelection.Text);
+                        // Find the end of inserted file marker that came from the inserted file
+                        bool foundEndOfInsertedFile = documentSelection.FindText(END_OF_INSERTED_FILE, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                        TL.LogMessage("ProjectFinishedGenerating", $"Found {END_OF_INSERTED_FILE} {foundEndOfInsertedFile} Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
 
-                        // Delete the marker line and the last 2 lines from the inserted file
+                        // Delete the end of inserted file marker line and any remaining lines from the inserted file
                         documentSelection.SelectLine();
-                        TL.LogMessage("ProjectFinishedGenerating", "Found end line: " + documentSelection.Text);
-                        while (!documentSelection.Text.ToUpperInvariant().Contains("#REGION"))
+                        TL.LogMessage("ProjectFinishedGenerating", $"Found initial end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
+
+                        deleteCount = 0;
+                        while ((!documentSelection.Text.ToUpperInvariant().Contains("#REGION")) & (deleteCount < 10))
                         {
-                            TL.LogMessage("ProjectFinishedGenerating", "Deleting end line: " + documentSelection.Text);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Deleting line: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
                             documentSelection.Delete(); // Delete the current line
                             documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
-                            TL.LogMessage("ProjectFinishedGenerating", "Found end line: " + documentSelection.Text);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Found end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}. Delete count: {deleteCount}");
+                            deleteCount += 1;
                         }
 
                         // Reformat the document to make it look pretty
@@ -240,20 +327,163 @@ namespace ASCOM.Setup
 
                     }
 
+                    // Process HARDWARE files
+                    if (projectItem.Name.ToUpperInvariant() == "COMMONHARDWARE.CS")
+                    {
+                        hardwareFile = projectItem; // Save the driver item
+                        // This is a driver template
+                        // Get the filename and directory of the Driver.xx file
+                        string directory = Path.GetDirectoryName(projectItem.FileNames[1].ToString());
+                        TL.LogMessage("ProjectFinishedGenerating", "Hardware file name: " + projectItem.FileNames[1].ToString() + ", Directory: " + directory);
+                        TL.LogMessage("ProjectFinishedGenerating", "Found " + projectItem.Name);
+
+                        projectItem.Open(); // Open the item for editing
+                        TL.LogMessage("ProjectFinishedGenerating", "Done Open");
+
+                        Document itemDocument = projectItem.Document; // Get the open file's document object
+                        TL.LogMessage("ProjectFinishedGenerating", "Created Document");
+
+                        itemDocument.Activate(); // Make this the current document
+                        TL.LogMessage("ProjectFinishedGenerating", "Activated Document");
+
+                        //
+                        // Remove the CommandXXX methods if this device does not support them
+                        //
+                        TL.LogMessage("ProjectFinishedGenerating", "Removing the CommandXXX methods if the device interface does not support them");
+
+                        if (DeviceClass.ToUpperInvariant() == "VIDEO") // Special handling for the Video interface that does not have CommmandXXX methods
+                        {
+                            TL.LogMessage("ProjectFinishedGenerating", $"{DeviceClass} device - Removing the CommandXXX method markers and all CommandXXX members .");
+                            documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                            TL.LogMessage("ProjectFinishedGenerating", "Created a selection object for the start of CommandXXX methods marker.");
+
+                            bool foundStartOfCommandXxx = documentSelection.FindText(START_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Found {START_OF_COMMANDXXX_METHODS}: {foundStartOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+
+                            documentSelection.SelectLine(); // Select the current line
+                            TL.LogMessage("ProjectFinishedGenerating", $"Selected {START_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
+
+                            // Delete lines until we get to the end of CommandXXX methods marker
+                            deleteCount = 0;
+                            while ((!documentSelection.Text.ToUpperInvariant().Contains(END_OF_COMMANDXXX_METHODS)) & (deleteCount < 100))
+                            {
+                                TL.LogMessage("ProjectFinishedGenerating", $"Deleting line: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
+                                documentSelection.Delete(); // Delete the current line
+                                documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
+                                TL.LogMessage("ProjectFinishedGenerating", $"Found end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}. Delete count: {deleteCount}");
+                                deleteCount += 1;
+                            }
+
+                            TL.LogMessage("ProjectFinishedGenerating", $"Deleting end of CommandXXX marker: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
+                            documentSelection.Delete(); // Delete the current line
+
+                            TL.LogMessage("ProjectFinishedGenerating", $"CommandXXX members removed.");
+                        }
+                        else // Normal behaviour for all other interfaces that do have CommandXXX methods
+                        {
+                            TL.LogMessage("ProjectFinishedGenerating", $"{DeviceClass} device - Just removing the CommandXXX method markers. Retaining all CommandXXX members.");
+
+                            documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                            TL.LogMessage("ProjectFinishedGenerating", "Created a selection object for start of CommandXXX methods.");
+
+                            bool foundStartOfCommandXxx = documentSelection.FindText(START_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Found {START_OF_COMMANDXXX_METHODS}: {foundStartOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+
+                            documentSelection.SelectLine(); // Select the current line
+                            TL.LogMessage("ProjectFinishedGenerating", $"Selected {START_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
+
+                            TL.LogMessage("ProjectFinishedGenerating", $"Deleting line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                            documentSelection.Delete(); // Delete the current line
+
+
+                            documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                            TL.LogMessage("ProjectFinishedGenerating", "Created a selection object for end of CommandXXX methods.");
+
+                            bool foundEndOfCommandXxx = documentSelection.FindText(END_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Found {END_OF_COMMANDXXX_METHODS}: {foundEndOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+
+                            documentSelection.SelectLine(); // Select the current line
+                            TL.LogMessage("ProjectFinishedGenerating", $"Selected {END_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
+
+                            TL.LogMessage("ProjectFinishedGenerating", $"Deleting line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                            documentSelection.Delete(); // Delete the current line
+
+                            TL.LogMessage("ProjectFinishedGenerating", $"CommandXXX markers removed.");
+                        }
+
+                        //
+                        // Insert the device specific methods into the generic driver file
+                        //
+                        TL.LogMessage("ProjectFinishedGenerating", "Inserting the device specific methods into the generic driver ");
+
+                        documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                        TL.LogMessage("ProjectFinishedGenerating", "Created Selection object");
+
+                        documentSelection.FindText(INTERFACE_METHODS_INSERTION_POINT, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                        TL.LogMessage("ProjectFinishedGenerating", $"Done {INTERFACE_METHODS_INSERTION_POINT} FindText: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+
+                        // Create the name of the device interface file to be inserted
+                        string insertFile = $"{directory}\\Hardware{DeviceClass}{Path.GetExtension(projectItem.Name)}";
+                        TL.LogMessage("ProjectFinishedGenerating", "Opening file: " + insertFile);
+
+                        documentSelection.InsertFromFile(insertFile); // Insert the required file at the current selection point
+                        TL.LogMessage("ProjectFinishedGenerating", "Done InsertFromFile");
+
+                        // Remove the top lines of the inserted file until we get to #Region
+                        // These lines are only there to make the file error free in the template development project and are not required here
+                        documentSelection.SelectLine(); // Select the current line
+                        TL.LogMessage("ProjectFinishedGenerating", "Selected initial line: " + documentSelection.Text);
+                        while (!documentSelection.Text.ToUpperInvariant().Contains("#REGION"))
+                        {
+                            TL.LogMessage("ProjectFinishedGenerating", $"Deleting start line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                            documentSelection.Delete(); // Delete the current line
+                            documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
+                        }
+
+                        // Find the end of inserted file marker that came from the inserted file
+                        bool foundEndOfInsertedFile = documentSelection.FindText(END_OF_INSERTED_FILE, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                        TL.LogMessage("ProjectFinishedGenerating", $"Found {END_OF_INSERTED_FILE} {foundEndOfInsertedFile} Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
+
+                        // Delete the end of inserted file marker line and any remaining lines from the inserted file
+                        documentSelection.SelectLine();
+                        TL.LogMessage("ProjectFinishedGenerating", $"Found initial end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
+
+                        deleteCount = 0;
+                        while ((!documentSelection.Text.ToUpperInvariant().Contains("#REGION")) & (deleteCount < 10))
+                        {
+                            TL.LogMessage("ProjectFinishedGenerating", $"Deleting line: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
+                            documentSelection.Delete(); // Delete the current line
+                            documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
+                            TL.LogMessage("ProjectFinishedGenerating", $"Found end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}. Delete count: {deleteCount}");
+                            deleteCount += 1;
+                        }
+
+                        // Reformat the document to make it look pretty
+                        documentSelection.SelectAll();
+                        TL.LogMessage("ProjectFinishedGenerating", "Done SelectAll");
+                        documentSelection.SmartFormat();
+                        TL.LogMessage("ProjectFinishedGenerating", "Done SmartFormat");
+
+                        itemDocument.Save(); // Save the edited file ready for use!
+                        TL.LogMessage("ProjectFinishedGenerating", "Done Save");
+                        itemDocument.Close(vsSaveChanges.vsSaveChangesYes);
+                        TL.LogMessage("ProjectFinishedGenerating", "Done Close");
+
+                    }
                 }
                 TL.LogMessage("ProjectFinishedGenerating", "Completed processing project items");
 
-                // Iterate through the project items and remove any files that begin with the word "Device". 
+                // Iterate through the project items and remove any files that begin with the words "Device" or "Hardware". 
                 // These are the partial device implementations that are merged in to create a complete device driver template by the code above
                 // They are not required in the final project
-                // Done this way to avoid removing items from inside a foreach loop
+                // Done this way to avoid removing items from inside a for-each loop
 
                 TL.LogMessage("ProjectFinishedGenerating", $"Identifying files to delete");
 
                 rems = new List<string>();
                 foreach (ProjectItem item in driversFolderItems)
                 {
-                    if (item.Name.StartsWith("Device", StringComparison.OrdinalIgnoreCase))
+                    if ((item.Name.StartsWith("Device", StringComparison.OrdinalIgnoreCase)) | (item.Name.StartsWith("Hardware", StringComparison.OrdinalIgnoreCase)))
                     {
                         TL.LogMessage("RemoveList", "adding " + item.Name);
                         rems.Add(item.Name);
@@ -266,12 +496,17 @@ namespace ASCOM.Setup
                     driversFolderItems.Item(item).Delete();
                 }
 
-                TL.LogMessage("ProjectFinishedGenerating", $"About to rename driver. TL exists: {!(TL is null)}, Driver template exists: {!(driverTemplate is null)}.");
+                // Rename the Driver file
+                TL.LogMessage("ProjectFinishedGenerating", $"About to rename driver file - driver template exists: {!(driverFile is null)}.");
+                TL.LogMessage("ProjectFinishedGenerating", $"Renaming driver: '{driverFile.Name}' to '{DeviceClass}{driverFile.Name}'");
+                driverFile.Name = $"{DeviceClass}{driverFile.Name}";
+                TL.LogMessage("ProjectFinishedGenerating", $"New driver name: '{driverFile.Name}'");
 
-                // Rename the Driver
-                TL.LogMessage("ProjectFinishedGenerating", $"Renaming driver: '{driverTemplate.Name}' to '{DeviceClass}{driverTemplate.Name}'");
-                driverTemplate.Name = $"{DeviceClass}{driverTemplate.Name}";
-                TL.LogMessage("ProjectFinishedGenerating", $"New driver name: '{driverTemplate.Name}'");
+                // Rename the Hardware file
+                TL.LogMessage("ProjectFinishedGenerating", $"About to rename hardware file - driver template exists: {!(hardwareFile is null)}.");
+                TL.LogMessage("ProjectFinishedGenerating", $"Renaming hardware: '{hardwareFile.Name}' to '{DeviceClass}Hardware.{Path.GetExtension(hardwareFile.Name)}'");
+                hardwareFile.Name = $"{DeviceClass}Hardware.{Path.GetExtension(hardwareFile.Name)}";
+                TL.LogMessage("ProjectFinishedGenerating", $"New hardware name: '{hardwareFile.Name}'");
 
                 // Rename the Driver folder
                 TL.LogMessage("ProjectFinishedGenerating", $"Renaming driver folder: '{driverFolder.Name}' to '{DeviceClass}Driver'");
@@ -298,7 +533,7 @@ namespace ASCOM.Setup
         /// </summary>
         public void RunFinished()
         {
-            TL.LogMessage("RunFinished", $"COmpleted");
+            TL.LogMessage("RunFinished", $"Completed");
         }
 
         #region Unused interface members not applicable to Project templates

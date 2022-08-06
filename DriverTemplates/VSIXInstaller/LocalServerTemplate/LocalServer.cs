@@ -629,9 +629,11 @@ namespace ASCOM.LocalServer
             TL.LogMessage("StartGarbageCollection", $"Garbage collector thread started OK");
         }
 
+
         /// <summary>
         /// Stop the garbage collection task by sending it the cancellation token and wait for the task to complete
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD002:Avoid problematic synchronous waits", Justification = "The program is ending at this point so the synchronous wait is justified to ensure that it completes.")]
         private static void StopGarbageCollection()
         {
             // Signal the garbage collector thread to stop
