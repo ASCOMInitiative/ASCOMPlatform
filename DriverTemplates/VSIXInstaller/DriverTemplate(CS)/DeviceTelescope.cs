@@ -862,7 +862,7 @@ class DeviceTelescope
         get
         {
             DateTime utcDate = DateTime.UtcNow;
-            tl.LogMessage("TrackingRates", "Get - " + String.Format("MM/dd/yy HH:mm:ss", utcDate));
+            tl.LogMessage("UTCDate", "Get - " + String.Format("MM/dd/yy HH:mm:ss", utcDate));
             return utcDate;
         }
         set
