@@ -9,171 +9,189 @@ using ASCOM.Utilities;
 
 class DeviceFocuser
 {
-    Util util = new Util();
-    TraceLogger tl = new TraceLogger();
-
-    private bool Connected // Dummy Connected method because this is referenced in the Link method
-    {
-        get { return false; }
-        set { }
-    }
-
     #region IFocuser Implementation
 
-    private int focuserPosition = 0; // Class level variable to hold the current focuser position
-    private const int focuserSteps = 10000;
-
-	/// <summary>
-	/// True if the focuser is capable of absolute position; that is, being commanded to a specific step location.
-	/// </summary>
-	public bool Absolute
+    /// <summary>
+    /// True if the focuser is capable of absolute position; that is, being commanded to a specific step location.
+    /// </summary>
+    public bool Absolute
     {
         get
         {
-            tl.LogMessage("Absolute Get", true.ToString());
-            return true; // This is an absolute focuser
+            bool absolute = FocuserHardware.Absolute;
+            LogMessage("Absolute Get", absolute.ToString());
+            return absolute;
         }
     }
 
-	/// <summary>
-	/// Immediately stop any focuser motion due to a previous <see cref="Move" /> method call.
-	/// </summary>
-	public void Halt()
+    /// <summary>
+    /// Immediately stop any focuser motion due to a previous <see cref="Move" /> method call.
+    /// </summary>
+    public void Halt()
     {
-        tl.LogMessage("Halt", "Not implemented");
-        throw new MethodNotImplementedException("Halt");
+        LogMessage("Halt", $"Calling method.");
+        FocuserHardware.Halt();
+        LogMessage("Halt", $"Completed.");
     }
 
-	/// <summary>
-	/// True if the focuser is currently moving to a new position. False if the focuser is stationary.
-	/// </summary>
-	public bool IsMoving
+    /// <summary>
+    /// True if the focuser is currently moving to a new position. False if the focuser is stationary.
+    /// </summary>
+    public bool IsMoving
     {
         get
         {
-            tl.LogMessage("IsMoving Get", false.ToString());
-            return false; // This focuser always moves instantaneously so no need for IsMoving ever to be True
+            bool isMoving = FocuserHardware.IsMoving;
+            LogMessage("IsMoving Get", isMoving.ToString());
+            return isMoving;
         }
     }
 
-	/// <summary>
-	/// State of the connection to the focuser.
-	/// </summary>
-	public bool Link
+    /// <summary>
+    /// State of the connection to the focuser.
+    /// </summary>
+    public bool Link
     {
         get
         {
-            tl.LogMessage("Link Get", this.Connected.ToString());
-            return this.Connected; // Direct function to the connected method, the Link method is just here for backwards compatibility
+            bool link = FocuserHardware.Link;
+            LogMessage("Link Get", link.ToString());
+            return link;
         }
         set
         {
-            tl.LogMessage("Link Set", value.ToString());
-            this.Connected = value; // Direct function to the connected method, the Link method is just here for backwards compatibility
+            LogMessage("Link Set", value.ToString());
+            FocuserHardware.Link = value;
         }
     }
 
-	/// <summary>
-	/// Maximum increment size allowed by the focuser;
-	/// i.e. the maximum number of steps allowed in one move operation.
-	/// </summary>
-	public int MaxIncrement
+    /// <summary>
+    /// Maximum increment size allowed by the focuser;
+    /// i.e. the maximum number of steps allowed in one move operation.
+    /// </summary>
+    public int MaxIncrement
     {
         get
         {
-            tl.LogMessage("MaxIncrement Get", focuserSteps.ToString());
-            return focuserSteps; // Maximum change in one move
+            int maxIncrement = FocuserHardware.MaxIncrement;
+            LogMessage("MaxIncrement Get", maxIncrement.ToString());
+            return maxIncrement;
         }
     }
 
-	/// <summary>
-	/// Maximum step position permitted.
-	/// </summary>
-	public int MaxStep
+    /// <summary>
+    /// Maximum step position permitted.
+    /// </summary>
+    public int MaxStep
     {
         get
         {
-            tl.LogMessage("MaxStep Get", focuserSteps.ToString());
-            return focuserSteps; // Maximum extent of the focuser, so position range is 0 to 10,000
+            int maxStep = FocuserHardware.MaxStep;
+            LogMessage("MaxStep Get", maxStep.ToString());
+            return maxStep;
         }
     }
 
-	/// <summary>
-	/// Moves the focuser by the specified amount or to the specified position depending on the value of the <see cref="Absolute" /> property.
-	/// </summary>
-	/// <param name="Position">Step distance or absolute position, depending on the value of the <see cref="Absolute" /> property.</param>
-	public void Move(int Position)
+    /// <summary>
+    /// Moves the focuser by the specified amount or to the specified position depending on the value of the <see cref="Absolute" /> property.
+    /// </summary>
+    /// <param name="position">Step distance or absolute position, depending on the value of the <see cref="Absolute" /> property.</param>
+    public void Move(int position)
     {
-        tl.LogMessage("Move", Position.ToString());
-        focuserPosition = Position; // Set the focuser position
+        LogMessage("Move", $"Calling method.");
+        FocuserHardware.Move(position);
+        LogMessage("Move", $"Completed.");
     }
 
-	/// <summary>
-	/// Current focuser position, in steps.
-	/// </summary>
-	public int Position
+    /// <summary>
+    /// Current focuser position, in steps.
+    /// </summary>
+    public int Position
     {
         get
         {
-            return focuserPosition; // Return the focuser position
+            int position = FocuserHardware.Position;
+            LogMessage("Position Get", position.ToString());
+            return position;
         }
     }
 
 
-	/// <summary>
-	/// Step size (microns) for the focuser.
-	/// </summary>
-	public double StepSize
+    /// <summary>
+    /// Step size (microns) for the focuser.
+    /// </summary>
+    public double StepSize
     {
         get
         {
-            tl.LogMessage("StepSize Get", "Not implemented");
-            throw new PropertyNotImplementedException("StepSize", false);
+            double stepSize = FocuserHardware.StepSize;
+            LogMessage("StepSize Get", stepSize.ToString());
+            return stepSize;
         }
     }
 
-	/// <summary>
-	/// The state of temperature compensation mode (if available), else always False.
-	/// </summary>
-	public bool TempComp
+    /// <summary>
+    /// The state of temperature compensation mode (if available), else always False.
+    /// </summary>
+    public bool TempComp
     {
         get
         {
-            tl.LogMessage("TempComp Get", false.ToString());
-            return false;
+            bool tempComp = FocuserHardware.TempComp;
+            LogMessage("TempComp Get", tempComp.ToString());
+            return tempComp;
         }
         set
         {
-            tl.LogMessage("TempComp Set", "Not implemented");
-            throw new PropertyNotImplementedException("TempComp", false);
+            LogMessage("TempComp Set", value.ToString());
+            FocuserHardware.TempComp = value;
         }
     }
 
-	/// <summary>
-	/// True if focuser has temperature compensation available.
-	/// </summary>
-	public bool TempCompAvailable
+    /// <summary>
+    /// True if focuser has temperature compensation available.
+    /// </summary>
+    public bool TempCompAvailable
     {
         get
         {
-            tl.LogMessage("TempCompAvailable Get", false.ToString());
-            return false; // Temperature compensation is not available in this driver
+            bool tempCompAvailable = FocuserHardware.TempCompAvailable;
+            LogMessage("TempCompAvailable Get", tempCompAvailable.ToString());
+            return tempCompAvailable;
         }
     }
 
-	/// <summary>
-	/// Current ambient temperature in degrees Celsius as measured by the focuser.
-	/// </summary>
-	public double Temperature
+    /// <summary>
+    /// Current ambient temperature in degrees Celsius as measured by the focuser.
+    /// </summary>
+    public double Temperature
     {
         get
         {
-            tl.LogMessage("Temperature Get", "Not implemented");
-            throw new PropertyNotImplementedException("Temperature", false);
+            double temperature = FocuserHardware.Temperature;
+            LogMessage("Temperature Get", temperature.ToString());
+            return temperature;
         }
     }
 
     #endregion
 
     //ENDOFINSERTEDFILE
+
+    /// <summary>
+    /// Dummy Connected method because this is referenced in the Link method
+    /// </summary>
+    private bool Connected
+    {
+        get { return false; }
+        set { }
+    }
+
+    /// <summary>
+    /// Dummy LogMessage class that removes compilation errors in the Platform source code and that will be omitted when the project is built
+    /// </summary>
+    static void LogMessage(string method, string message)
+    {
+    }
+
 }

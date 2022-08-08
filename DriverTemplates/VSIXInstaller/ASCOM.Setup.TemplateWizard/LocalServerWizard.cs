@@ -15,10 +15,12 @@ namespace ASCOM.Setup
 
         private LocalServerForm inputForm;
 
-        const string INTERFACE_METHODS_INSERTION_POINT = "//INTERFACECODEINSERTIONPOINT"; // Find the insertion point in the Driver.xx item.
-        const string START_OF_COMMANDXXX_METHODS = "//STARTOFCOMMANDXXXMETHODS"; // Start of the CommandXXX method definitions.
-        const string END_OF_COMMANDXXX_METHODS = "//ENDOFCOMMANDXXXMETHODS"; // End of the CommandXXX definitions.
-        const string END_OF_INSERTED_FILE = "//ENDOFINSERTEDFILE";
+        private const string INTERFACE_METHODS_INSERTION_POINT = "//INTERFACECODEINSERTIONPOINT"; // Find the insertion point in the Driver.xx item.
+        private const string START_OF_COMMANDXXX_METHODS = "//STARTOFCOMMANDXXXMETHODS"; // Start of the CommandXXX method definitions.
+        private const string END_OF_COMMANDXXX_METHODS = "//ENDOFCOMMANDXXXMETHODS"; // End of the CommandXXX definitions.
+        private const string END_OF_INSERTED_FILE = "//ENDOFINSERTEDFILE";
+
+        private const int MAXIMUM_DELETED_LINES = 100;
 
         // These GUIDs are placeholder GUIDs. Wherever they are used in the template project, they'll be replaced with new values when the template is expanded. THE TEMPLATE PROJECTS MUST USE THESE GUIDS.
         private const string csTemplateAssemblyGuid = "28D679BA-2AF1-4557-AE15-C528C5BF91E0";
@@ -223,13 +225,19 @@ namespace ASCOM.Setup
 
                             // Delete lines until we get to the end of CommandXXX methods marker
                             deleteCount = 0;
-                            while ((!documentSelection.Text.ToUpperInvariant().Contains(END_OF_COMMANDXXX_METHODS)) & (deleteCount < 100))
+                            while ((!documentSelection.Text.ToUpperInvariant().Contains(END_OF_COMMANDXXX_METHODS)) & (deleteCount < MAXIMUM_DELETED_LINES))
                             {
                                 TL.LogMessage("DriverCommandXXXVideo", $"Deleting line: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
                                 documentSelection.Delete(); // Delete the current line
                                 documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
                                 TL.LogMessage("DriverCommandXXXVideo", $"Found end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}. Delete count: {deleteCount}");
                                 deleteCount += 1;
+                            }
+
+                            // Show an error message if we reached the delete line safety limit
+                            if (deleteCount == MAXIMUM_DELETED_LINES)
+                            {
+                                MessageBox.Show("DriverCommandXXXVideo - Reached maximum delete count!", "LocalServerWizard Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
 
                             TL.LogMessage("DriverCommandXXXVideo", $"Deleting end of CommandXXX marker: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
@@ -307,13 +315,19 @@ namespace ASCOM.Setup
                         TL.LogMessage("DriverRemoveBottomLines", $"Found initial end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
 
                         deleteCount = 0;
-                        while ((!documentSelection.Text.ToUpperInvariant().Contains("#REGION")) & (deleteCount < 10))
+                        while ((!documentSelection.Text.ToUpperInvariant().Contains("#REGION")) & (deleteCount < MAXIMUM_DELETED_LINES))
                         {
                             TL.LogMessage("DriverRemoveBottomLines", $"Deleting line: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
                             documentSelection.Delete(); // Delete the current line
                             documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
                             TL.LogMessage("DriverRemoveBottomLines", $"Found end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}. Delete count: {deleteCount}");
                             deleteCount += 1;
+                        }
+
+                        // Show an error message if we reached the delete line safety limit
+                        if (deleteCount == MAXIMUM_DELETED_LINES)
+                        {
+                            MessageBox.Show("DriverCommandXXXVideo - Reached maximum delete count!", "LocalServerWizard Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
 
                         // Reformat the document to make it look pretty
@@ -367,13 +381,19 @@ namespace ASCOM.Setup
 
                             // Delete lines until we get to the end of CommandXXX methods marker
                             deleteCount = 0;
-                            while ((!documentSelection.Text.ToUpperInvariant().Contains(END_OF_COMMANDXXX_METHODS)) & (deleteCount < 100))
+                            while ((!documentSelection.Text.ToUpperInvariant().Contains(END_OF_COMMANDXXX_METHODS)) & (deleteCount < MAXIMUM_DELETED_LINES))
                             {
                                 TL.LogMessage("HardwareCommandXXXVideo", $"Deleting line: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
                                 documentSelection.Delete(); // Delete the current line
                                 documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
                                 TL.LogMessage("HardwareCommandXXXVideo", $"Found end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}. Delete count: {deleteCount}");
                                 deleteCount += 1;
+                            }
+
+                            // Show an error message if we reached the delete line safety limit
+                            if (deleteCount == MAXIMUM_DELETED_LINES)
+                            {
+                                MessageBox.Show("DriverCommandXXXVideo - Reached maximum delete count!", "LocalServerWizard Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
 
                             TL.LogMessage("HardwareCommandXXXVideo", $"Deleting end of CommandXXX marker: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
@@ -450,13 +470,19 @@ namespace ASCOM.Setup
                         TL.LogMessage("HardwareRemoveBottomLines", $"Found initial end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
 
                         deleteCount = 0;
-                        while ((!documentSelection.Text.ToUpperInvariant().Contains("#REGION")) & (deleteCount < 10))
+                        while ((!documentSelection.Text.ToUpperInvariant().Contains("#REGION")) & (deleteCount < MAXIMUM_DELETED_LINES))
                         {
                             TL.LogMessage("HardwareRemoveBottomLines", $"Deleting line: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
                             documentSelection.Delete(); // Delete the current line
                             documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
                             TL.LogMessage("HardwareRemoveBottomLines", $"Found end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}. Delete count: {deleteCount}");
                             deleteCount += 1;
+                        }
+
+                        // Show an error message if we reached the delete line safety limit
+                        if (deleteCount == MAXIMUM_DELETED_LINES)
+                        {
+                            MessageBox.Show("DriverCommandXXXVideo - Reached maximum delete count!", "LocalServerWizard Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
 
                         // Reformat the document to make it look pretty
