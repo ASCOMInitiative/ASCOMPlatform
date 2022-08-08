@@ -60,6 +60,14 @@
     <Compile Include="Driver\DeviceTelescope.cs" />
     <Compile Include="Driver\DeviceVideo.cs" />
     <Compile Include="Driver\Driver.cs" />
+    <Compile Include="Driver\HardwareCoverCalibrator.cs" />
+    <Compile Include="Driver\HardwareDome.cs" />
+    <Compile Include="Driver\HardwareFilterWheel.cs" />
+    <Compile Include="Driver\HardwareFocuser.cs" />
+    <Compile Include="Driver\HardwareObservingConditions.cs" />
+    <Compile Include="Driver\HardwareRotator.cs" />
+    <Compile Include="Driver\HardwareTelescope.cs" />
+    <Compile Include="Driver\HardwareVideo.cs" />
     <Compile Include="Driver\PlaceholderInterface.cs" />
     <Compile Include="Driver\Rates.cs" />
     <Compile Include="Driver\SetupDialogForm.cs">

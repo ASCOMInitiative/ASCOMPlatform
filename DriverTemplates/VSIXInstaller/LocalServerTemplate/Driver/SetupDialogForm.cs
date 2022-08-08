@@ -38,7 +38,7 @@ namespace TEMPLATENAMESPACE
             }
             else // A COM port has been selected
             {
-                TEMPLATEDEVICECLASS.comPort = (string)comboBoxComPort.SelectedItem;
+                TEMPLATEHARDWARECLASS.comPort = (string)comboBoxComPort.SelectedItem;
                 tl.LogMessage("Setup OK", $"New configuration values - Trace: {chkTrace.Checked}, COM Port: {comboBoxComPort.SelectedItem}");
             }
         }
@@ -76,9 +76,9 @@ namespace TEMPLATENAMESPACE
             comboBoxComPort.Items.AddRange(System.IO.Ports.SerialPort.GetPortNames());
 
             // select the current port if possible
-            if (comboBoxComPort.Items.Contains(TEMPLATEDEVICECLASS.comPort))
+            if (comboBoxComPort.Items.Contains(TEMPLATEHARDWARECLASS.comPort))
             {
-                comboBoxComPort.SelectedItem = TEMPLATEDEVICECLASS.comPort;
+                comboBoxComPort.SelectedItem = TEMPLATEHARDWARECLASS.comPort;
             }
 
             tl.LogMessage("InitUI", $"Set UI controls to Trace: {chkTrace.Checked}, COM Port: {comboBoxComPort.SelectedItem}");

@@ -60,7 +60,7 @@ namespace ASCOM.LocalServer
         static void Main(string[] args)
         {
             // Create a trace logger for the local server.
-            TL = new TraceLogger("", "ASCOM.LocalServer")
+            TL = new TraceLogger("", "TEMPLATEDEVICENAME.LocalServer")
             {
                 Enabled = true // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
             };

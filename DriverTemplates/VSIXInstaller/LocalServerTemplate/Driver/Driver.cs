@@ -1,4 +1,3 @@
-//tabs=4
 // TODO fill in this information for your driver, then remove this line!
 //
 // ASCOM TEMPLATEDEVICECLASS driver for TEMPLATEDEVICENAME
@@ -28,14 +27,13 @@ using System.Windows.Forms;
 namespace TEMPLATENAMESPACE
 {
     //
+    // This code is mostly a presentation layer for the functionality in the TEMPLATEHARDWARECLASS class. You should not need to change the contents of this file very much, if at all.
+    // Most customisation will be in the TEMPLATEHARDWARECLASS class, which is shared by all instances of the driver, and which must handle all aspects of communicating with your device.
+    //
     // Your driver's DeviceID is TEMPLATEDEVICEID
     //
-    // The Guid attribute sets the CLSID for TEMPLATEDEVICEID
-    // The ClassInterface/None attribute prevents an empty interface called
-    // _TEMPLATEDEVICENAME from being created and used as the [default] interface
-    //
-    // TODO Replace the not implemented exceptions with code to implement the function or
-    // throw the appropriate ASCOM exception.
+    // The COM Guid attribute sets the CLSID for TEMPLATEDEVICEID
+    // The COM ClassInterface/None attribute prevents an empty interface called _TEMPLATEDEVICENAME from being created and used as the [default] interface
     //
 
     /// <summary>
@@ -48,19 +46,12 @@ namespace TEMPLATENAMESPACE
     [ClassInterface(ClassInterfaceType.None)]
     public class TEMPLATEDEVICECLASS : ReferenceCountedObjectBase, ITEMPLATEDEVICEINTERFACE
     {
-        // Constants used for Profile persistence
-        internal const string comPortProfileName = "COM Port";
-        internal const string comPortDefault = "COM1";
-        internal const string traceStateProfileName = "Trace Level";
-        internal const string traceStateDefault = "true";
+        internal static string DriverProgId; // ASCOM DeviceID (COM ProgID) for this driver, the value is retrieved from the ServedClassName attribute in the class initialiser.
+        internal static string DriverDescription; // The value is retrieved from the ServedClassName attribute in the class initialiser.
 
-        internal static string driverID; // ASCOM DeviceID (COM ProgID) for this driver, the value is retrieved from the ServedClassName attribute in the class initialiser.
-        internal static string driverDescription; // The value is retrieved from the ServedClassName attribute in the class initialiser.
-        internal static string comPort; // Variable to hold the COM port if required
-        internal static bool connectedState; // variable to hold the connected state
-        internal static Util utilities; // Private variable to hold an ASCOM Utilities object
-        internal static AstroUtils astroUtilities; // Variable to hold an ASCOM AstroUtilities object to provide the Range method
-        internal static TraceLogger tl; // Variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
+        // connectedState holds the connection state from this driver's perspective, as opposed to the local server's perspective, which may be different because of other client connections.
+        internal bool connectedState; // The connected state from this driver's perspective)
+        internal TraceLogger tl; // Trace logger object to hold diagnostic information just for this instance of the driver, as opposed to the local server's log, which includes activity from all driver instances.
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TEMPLATEDEVICENAME"/> class. Must be public to successfully register for COM.
@@ -71,29 +62,32 @@ namespace TEMPLATENAMESPACE
             {
                 // Pull the ProgID from the ProgID class attribute.
                 Attribute attr = Attribute.GetCustomAttribute(this.GetType(), typeof(ProgIdAttribute));
-                driverID = ((ProgIdAttribute)attr).Value ?? "PROGID NOT SET!";  // Get the driver ProgIDfrom the ProgID attribute.
+                DriverProgId = ((ProgIdAttribute)attr).Value ?? "PROGID NOT SET!";  // Get the driver ProgIDfrom the ProgID attribute.
 
                 // Pull the display name from the ServedClassName class attribute.
                 attr = Attribute.GetCustomAttribute(this.GetType(), typeof(ServedClassNameAttribute));
-                driverDescription = ((ServedClassNameAttribute)attr).DisplayName ?? "DISPLAY NAME NOT SET!";  // Get the driver description that displays in the ASCOM Chooser from the ServedClassName attribute.
+                DriverDescription = ((ServedClassNameAttribute)attr).DisplayName ?? "DISPLAY NAME NOT SET!";  // Get the driver description that displays in the ASCOM Chooser from the ServedClassName attribute.
 
-                tl = new TraceLogger("", "TEMPLATEDEVICEIDDriver");
-                TEMPLATEHARDWARECLASS.ReadProfile(); // Read device configuration from the ASCOM Profile store, including the trace state
+                // LOGGING CONFIGURATION
+                // By default all driver logging will appear in Hardware log file
+                // If you would like each instance of the driver to have its own log file as well, uncomment the lines below
 
-                tl.LogMessage("TEMPLATEDEVICECLASS", "Starting driver initialisation");
-                tl.LogMessage("TEMPLATEDEVICECLASS", $"ProgID: {driverID}, Description: {driverDescription}");
+                tl = new TraceLogger("", "TEMPLATEDEVICENAME.Driver"); // Remove the leading ASCOM. from the ProgId because this will be added back by TraceLogger.
+                SetTraceState();
+
+                LogMessage("TEMPLATEDEVICECLASS", "Starting driver initialisation");
+                LogMessage("TEMPLATEDEVICECLASS", $"ProgID: {DriverProgId}, Description: {DriverDescription}");
 
                 connectedState = false; // Initialise connected to false
-                utilities = new Util(); //Initialise util object
-                astroUtilities = new AstroUtils(); // Initialise astro-utilities object
 
-                //TODO: Implement your additional construction here
+                // Initialise the hardware if required
+                TEMPLATEHARDWARECLASS.InitialiseHardware();
 
-                tl.LogMessage("TEMPLATEDEVICECLASS", "Completed initialisation");
+                LogMessage("TEMPLATEDEVICECLASS", "Completed initialisation");
             }
             catch (Exception ex)
             {
-                tl.LogMessageCrLf("TEMPLATEDEVICECLASS", $"Initialisation exception: {ex}");
+                LogMessage("TEMPLATEDEVICECLASS", $"Initialisation exception: {ex}");
                 MessageBox.Show($"{ex.Message}", "Exception creating TEMPLATEDEVICEID", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -111,18 +105,13 @@ namespace TEMPLATENAMESPACE
         /// </summary>
         public void SetupDialog()
         {
-            // consider only showing the setup dialogue if not connected
-            // or call a different dialogue if connected
-            if (IsConnected)
-                MessageBox.Show("Already connected, just press OK");
-
-            using (SetupDialogForm F = new SetupDialogForm(tl))
+            if (connectedState) // Don't show if already connected
             {
-                var result = F.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    WriteProfile(); // Persist device configuration values to the ASCOM Profile store
-                }
+                MessageBox.Show("Already connected, just press OK");
+            }
+            else // Show dialogue
+            {
+                TEMPLATEHARDWARECLASS.SetupDialog();
             }
         }
 
@@ -132,8 +121,9 @@ namespace TEMPLATENAMESPACE
         {
             get
             {
-                tl.LogMessage("SupportedActions Get", "Returning empty ArrayList");
-                return new ArrayList();
+                ArrayList actions = TEMPLATEHARDWARECLASS.SupportedActions;
+                LogMessage("SupportedActions Get", $"Returning {actions.Count} actions.");
+                return actions;
             }
         }
 
@@ -146,8 +136,9 @@ namespace TEMPLATENAMESPACE
         /// </returns>
         public string Action(string actionName, string actionParameters)
         {
-            LogMessage("", $"Action {actionName}, parameters {actionParameters} not implemented");
-            throw new ASCOM.ActionNotImplementedException("Action " + actionName + " is not implemented by this driver");
+            CheckConnected($"Action {actionName} - {actionParameters}");
+            LogMessage("", $"Calling Action: {actionName} with parameters: {actionParameters}");
+            return TEMPLATEHARDWARECLASS.Action(actionName, actionParameters);
         }
 
         //STARTOFCOMMANDXXXMETHODS - This line will be deleted by the template wizard.
@@ -162,11 +153,8 @@ namespace TEMPLATENAMESPACE
         /// </param>
         public void CommandBlind(string command, bool raw)
         {
-            CheckConnected("CommandBlind");
-            // TODO The optional CommandBlind method should either be implemented OR throw a MethodNotImplementedException
-            // If implemented, CommandBlind must send the supplied command to the mount and return immediately without waiting for a response
-
-            throw new MethodNotImplementedException("CommandBlind");
+            CheckConnected($"CommandBlind: {command}, Raw: {raw}");
+            TEMPLATEHARDWARECLASS.CommandBlind(command, raw);
         }
 
         /// <summary>
@@ -183,15 +171,8 @@ namespace TEMPLATENAMESPACE
         /// </returns>
         public bool CommandBool(string command, bool raw)
         {
-            CheckConnected("CommandBool");
-            // TODO The optional CommandBool method should either be implemented OR throw a MethodNotImplementedException
-            // If implemented, CommandBool must send the supplied command to the mount, wait for a response and parse this to return a True or False value
-
-            // string retString = CommandString(command, raw); // Send the command and wait for the response
-            // bool retBool = XXXXXXXXXXXXX; // Parse the returned string and create a boolean True / False value
-            // return retBool; // Return the boolean value to the client
-
-            throw new MethodNotImplementedException("CommandBool");
+            CheckConnected($"CommandBool: {command}, Raw: {raw}");
+            return TEMPLATEHARDWARECLASS.CommandBool(command, raw);
         }
         /// <summary>
         /// Transmits an arbitrary string to the device and waits for a string response.
@@ -207,11 +188,8 @@ namespace TEMPLATENAMESPACE
         /// </returns>
         public string CommandString(string command, bool raw)
         {
-            CheckConnected("CommandString");
-            // TODO The optional CommandString method should either be implemented OR throw a MethodNotImplementedException
-            // If implemented, CommandString must send the supplied command to the mount and wait for a response before returning this to the client
-
-            throw new MethodNotImplementedException("CommandString");
+            CheckConnected($"CommandString: {command}, Raw: {raw}");
+            return TEMPLATEHARDWARECLASS.CommandString(command, raw);
         }
 
         //ENDOFCOMMANDXXXMETHODS - This line will be deleted by the template wizard.
@@ -222,14 +200,13 @@ namespace TEMPLATENAMESPACE
         /// </summary>
         public void Dispose()
         {
-            // Clean up the trace logger and util objects
-            tl.Enabled = false;
-            tl.Dispose();
-            tl = null;
-            utilities.Dispose();
-            utilities = null;
-            astroUtilities.Dispose();
-            astroUtilities = null;
+            // Clean up the trace logger object
+            if (!(tl is null))
+            {
+                tl.Enabled = false;
+                tl.Dispose();
+                tl = null;
+            }
         }
 
         /// <summary>
@@ -241,41 +218,45 @@ namespace TEMPLATENAMESPACE
         {
             get
             {
-                LogMessage("Connected", "Get {0}", IsConnected);
-                return IsConnected;
+                // Returns the driver connection state rather than the local server's connected state, which could be different because there may be other client connections still active.
+                LogMessage("Connected Get", connectedState.ToString());
+                return connectedState;
             }
             set
             {
-                tl.LogMessage("Connected", "Set {0}", value);
-                if (value == IsConnected)
+                if (value == connectedState)
+                {
+                    LogMessage("Connected Set", "Device already connected, ignoring Connected Set = true");
                     return;
+                }
 
                 if (value)
                 {
                     connectedState = true;
-                    LogMessage("Connected Set", "Connecting to port {0}", comPort);
+                    LogMessage("Connected Set", "Connecting to device");
                     TEMPLATEHARDWARECLASS.Connected = true;
                 }
                 else
                 {
                     connectedState = false;
-                    LogMessage("Connected Set", "Disconnecting from port {0}", comPort);
+                    LogMessage("Connected Set", "Disconnecting from device");
                     TEMPLATEHARDWARECLASS.Connected = false;
                 }
             }
         }
 
         /// <summary>
-        /// Returns a description of the device, such as manufacturer and modelnumber. Any ASCII characters may be used.
+        /// Returns a description of the device, such as manufacturer and model number. Any ASCII characters may be used.
         /// </summary>
         /// <value>The description.</value>
         public string Description
         {
-            // TODO customise this device description
             get
             {
-                tl.LogMessage("Description Get", driverDescription);
-                return driverDescription;
+                CheckConnected($"Description Get");
+                string description = DriverDescription;
+                LogMessage("Description Get", description);
+                return description;
             }
         }
 
@@ -287,7 +268,7 @@ namespace TEMPLATENAMESPACE
             get
             {
                 string driverInfo = TEMPLATEHARDWARECLASS.DriverInfo;
-                tl.LogMessage("DriverInfo Get", driverInfo);
+                LogMessage("DriverInfo Get", driverInfo);
                 return driverInfo;
             }
         }
@@ -300,7 +281,7 @@ namespace TEMPLATENAMESPACE
             get
             {
                 string driverVersion = TEMPLATEHARDWARECLASS.DriverVersion;
-                tl.LogMessage("DriverVersion Get", driverVersion);
+                LogMessage("DriverVersion Get", driverVersion);
                 return driverVersion;
             }
         }
@@ -310,11 +291,11 @@ namespace TEMPLATENAMESPACE
         /// </summary>
         public short InterfaceVersion
         {
-            // set by the driver wizard
             get
             {
-                LogMessage("InterfaceVersion Get", "TEMPLATEINTERFACEVERSION");
-                return Convert.ToInt16("TEMPLATEINTERFACEVERSION");
+                short interfaceVersion = TEMPLATEHARDWARECLASS.InterfaceVersion;
+                LogMessage("InterfaceVersion Get", interfaceVersion.ToString());
+                return interfaceVersion;
             }
         }
 
@@ -325,8 +306,8 @@ namespace TEMPLATENAMESPACE
         {
             get
             {
-                string name = "Short driver name - please customise";
-                tl.LogMessage("Name Get", name);
+                string name = TEMPLATEHARDWARECLASS.Name;
+                LogMessage("Name Get", name);
                 return name;
             }
         }
@@ -335,20 +316,7 @@ namespace TEMPLATENAMESPACE
 
         //INTERFACECODEINSERTIONPOINT
         #region Private properties and methods
-        // here are some useful properties and methods that can be used as required
-        // to help with driver development
-
-        /// <summary>
-        /// Returns true if there is a valid connection to the driver hardware
-        /// </summary>
-        private bool IsConnected
-        {
-            get
-            {
-                // TODO check that the driver hardware connection exists and is connected to the hardware
-                return connectedState;
-            }
-        }
+        // Useful properties and methods that can be used as required to help with driver development
 
         /// <summary>
         /// Use this function to throw an exception if we aren't connected to the hardware
@@ -356,49 +324,43 @@ namespace TEMPLATENAMESPACE
         /// <param name="message"></param>
         private void CheckConnected(string message)
         {
-            if (!IsConnected)
+            if (!connectedState)
             {
-                throw new NotConnectedException(message);
+                throw new NotConnectedException($"{DriverDescription} ({DriverProgId}) is not connected: {message}");
             }
         }
 
         /// <summary>
-        /// Read the device configuration from the ASCOM Profile store
+        /// Log helper function that writes to the driver or local server loggers as required
         /// </summary>
-        internal void ReadProfile()
+        /// <param name="identifier">Identifier such as method name</param>
+        /// <param name="message">Message to be logged.</param>
+        private void LogMessage(string identifier, string message)
+        {
+            // This code is currently set to write messages to an individual driver log AND to the shared hardware log.
+
+            // Write to the individual log for this specific instance (if enabled by the driver having a TraceLogger instance)
+            if (tl != null)
+            {
+                tl.LogMessageCrLf(identifier, message); // Write to the individual driver log
+            }
+
+            // Write to the common hardware log shared by all running instances of the driver.
+            TEMPLATEHARDWARECLASS.LogMessage(identifier, message); // Write to the local server logger
+        }
+
+        /// <summary>
+        /// Read the trace state from the driver's Profile and enable / disable the trace log accordingly.
+        /// </summary>
+        private void SetTraceState()
         {
             using (Profile driverProfile = new Profile())
             {
                 driverProfile.DeviceType = "TEMPLATEDEVICECLASS";
-                tl.Enabled = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateProfileName, string.Empty, traceStateDefault));
-                comPort = driverProfile.GetValue(driverID, comPortProfileName, string.Empty, comPortDefault);
+                tl.Enabled = Convert.ToBoolean(driverProfile.GetValue(DriverProgId, TEMPLATEHARDWARECLASS.traceStateProfileName, string.Empty, TEMPLATEHARDWARECLASS.traceStateDefault));
             }
         }
 
-        /// <summary>
-        /// Write the device configuration to the  ASCOM  Profile store
-        /// </summary>
-        internal void WriteProfile()
-        {
-            using (Profile driverProfile = new Profile())
-            {
-                driverProfile.DeviceType = "TEMPLATEDEVICECLASS";
-                driverProfile.WriteValue(driverID, traceStateProfileName, tl.Enabled.ToString());
-                driverProfile.WriteValue(driverID, comPortProfileName, comPort.ToString());
-            }
-        }
-
-        /// <summary>
-        /// Log helper function that takes formatted strings and arguments
-        /// </summary>
-        /// <param name="identifier"></param>
-        /// <param name="message"></param>
-        /// <param name="args"></param>
-        internal void LogMessage(string identifier, string message, params object[] args)
-        {
-            var msg = string.Format(message, args);
-            tl.LogMessage(identifier, msg);
-        }
         #endregion
     }
 }

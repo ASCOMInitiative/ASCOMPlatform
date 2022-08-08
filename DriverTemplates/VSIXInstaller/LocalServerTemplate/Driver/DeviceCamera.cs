@@ -15,27 +15,13 @@ class DeviceCamera
 
     #region ICamera Implementation
 
-    private const int ccdWidth = 1394; // Constants to define the CCD pixel dimensions
-    private const int ccdHeight = 1040;
-    private const double pixelSize = 6.45; // Constant for the pixel physical dimension
-
-    private int cameraNumX = ccdWidth; // Initialise variables to hold values required for functionality tested by Conform
-    private int cameraNumY = ccdHeight;
-    private int cameraStartX = 0;
-    private int cameraStartY = 0;
-    private DateTime exposureStart = DateTime.MinValue;
-    private double cameraLastExposureDuration = 0.0;
-    private bool cameraImageReady = false;
-    private int[,] cameraImageArray;
-    private object[,] cameraImageArrayVariant;
-
 	/// <summary>
 	/// Aborts the current exposure, if any, and returns the camera to Idle state.
 	/// </summary>
 	public void AbortExposure()
     {
-        tl.LogMessage("AbortExposure", "Not implemented");
-        throw new MethodNotImplementedException("AbortExposure");
+        LogMessage("AbortExposure", $"Calling method.");
+        CameraHardware.AbortExposure();
     }
 
 	/// <summary>
@@ -46,8 +32,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("BayerOffsetX Get", "Not implemented");
-            throw new PropertyNotImplementedException("BayerOffsetX", false);
+            short bayerOffsetX=CameraHardware.BayerOffsetX;
+            LogMessage("BayerOffsetX Get", bayerOffsetX.ToString());
+            return bayerOffsetX;
         }
     }
 
@@ -59,8 +46,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("BayerOffsetY Get", "Not implemented");
-            throw new PropertyNotImplementedException("BayerOffsetX", true);
+            short bayerOffsetY = CameraHardware.BayerOffsetY;
+            LogMessage("BayerOffsetY Get", bayerOffsetY.ToString());
+            return bayerOffsetY;
         }
     }
 
@@ -72,13 +60,14 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("BinX Get", "1");
-            return 1;
+            short binX = CameraHardware.BinX;
+            LogMessage("BinX Get", binX.ToString());
+            return binX;
         }
         set
         {
-            tl.LogMessage("BinX Set", value.ToString());
-            if (value != 1) throw new InvalidValueException("BinX", value.ToString(), "1"); // Only 1 is valid in this simple template
+            LogMessage("BinX Set", value.ToString());
+            CameraHardware.BinX = value;
         }
     }
 
@@ -90,13 +79,14 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("BinY Get", "1");
-            return 1;
+            short binY = CameraHardware.BinY;
+            LogMessage("BinY Get", binY.ToString());
+            return binY;
         }
         set
         {
-            tl.LogMessage("BinY Set", value.ToString());
-            if (value != 1) throw new InvalidValueException("BinY", value.ToString(), "1"); // Only 1 is valid in this simple template
+            LogMessage("BinY Set", value.ToString());
+            CameraHardware.BinY = value;
         }
     }
 
@@ -108,8 +98,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("CCDTemperature Get", "Not implemented");
-            throw new PropertyNotImplementedException("CCDTemperature", false);
+            double ccdTemperature = CameraHardware.CCDTemperature;
+            LogMessage("CCDTemperature Get", ccdTemperature.ToString());
+            return ccdTemperature;
         }
     }
 
@@ -121,8 +112,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("CameraState Get", CameraStates.cameraIdle.ToString());
-            return CameraStates.cameraIdle;
+            CameraStates cameraState = CameraHardware.CameraState;
+            LogMessage("CameraState Get", cameraState.ToString());
+            return cameraState;
         }
     }
 
@@ -134,8 +126,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("CameraXSize Get", ccdWidth.ToString());
-            return ccdWidth;
+            int cameraXSize= CameraHardware.CameraXSize;
+            LogMessage("CameraXSize Get", cameraXSize.ToString());
+            return cameraXSize;
         }
     }
 
@@ -147,8 +140,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("CameraYSize Get", ccdHeight.ToString());
-            return ccdHeight;
+            int cameraYSize = CameraHardware.CameraYSize;
+            LogMessage("CameraYSize Get", cameraYSize.ToString());
+            return cameraYSize;
         }
     }
 
@@ -160,8 +154,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("CanAbortExposure Get", false.ToString());
-            return false;
+            bool canAbortExposure= CameraHardware.CanAbortExposure;
+            LogMessage("CanAbortExposure Get", canAbortExposure.ToString());
+            return canAbortExposure;
         }
     }
 
@@ -175,8 +170,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("CanAsymmetricBin Get", false.ToString());
-            return false;
+            bool canAsymmetricBin = CameraHardware.CanAsymmetricBin;
+            LogMessage("CanAsymmetricBin Get", canAsymmetricBin.ToString());
+            return canAsymmetricBin;
         }
     }
 
@@ -188,8 +184,11 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("CanFastReadout Get", false.ToString());
-            return false;
+            {
+                bool canFastReadout = CameraHardware.CanFastReadout;
+                LogMessage("CanFastReadout Get", canFastReadout.ToString());
+                return canFastReadout;
+            }
         }
     }
 
@@ -203,8 +202,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("CanGetCoolerPower Get", false.ToString());
-            return false;
+            bool canGetCoolerPower = CameraHardware.CanGetCoolerPower;
+            LogMessage("CanGetCoolerPower Get", canGetCoolerPower.ToString());
+            return canGetCoolerPower;
         }
     }
 
@@ -218,8 +218,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("CanPulseGuide Get", false.ToString());
-            return false;
+            bool canPulseGuide = CameraHardware.CanPulseGuide;
+            LogMessage("CanPulseGuide Get", canPulseGuide.ToString());
+            return canPulseGuide;
         }
     }
 
@@ -233,8 +234,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("CanSetCCDTemperature Get", false.ToString());
-            return false;
+            bool canSetCCDTemperature = CameraHardware.CanSetCCDTemperature;
+            LogMessage("CanSetCCDTemperature Get", canSetCCDTemperature.ToString());
+            return canSetCCDTemperature;
         }
     }
 
@@ -248,8 +250,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("CanStopExposure Get", false.ToString());
-            return false;
+            bool canStopExposure = CameraHardware.CanStopExposure;
+            LogMessage("CanStopExposure Get", canStopExposure.ToString());
+            return canStopExposure;
         }
     }
 
@@ -261,13 +264,14 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("CoolerOn Get", "Not implemented");
-            throw new PropertyNotImplementedException("CoolerOn", false);
+            bool coolerOn = CameraHardware.CoolerOn;
+            LogMessage("CoolerOn Get", coolerOn.ToString());
+            return coolerOn;
         }
         set
         {
-            tl.LogMessage("CoolerOn Set", "Not implemented");
-            throw new PropertyNotImplementedException("CoolerOn", true);
+            LogMessage("CoolerOn Set", value.ToString());
+            CameraHardware.CoolerOn = value;
         }
     }
 
@@ -279,8 +283,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("CoolerPower Get", "Not implemented");
-            throw new PropertyNotImplementedException("CoolerPower", false);
+            double coolerPower = CameraHardware.CoolerPower;
+            LogMessage("CoolerPower Get", coolerPower.ToString());
+            return coolerPower;
         }
     }
 
@@ -292,8 +297,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("ElectronsPerADU Get", "Not implemented");
-            throw new PropertyNotImplementedException("ElectronsPerADU", false);
+            double electronsPerAdu = CameraHardware.ElectronsPerADU;
+            LogMessage("ElectronsPerADU Get", electronsPerAdu.ToString());
+            return electronsPerAdu;
         }
     }
 
@@ -305,8 +311,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("ExposureMax Get", "Not implemented");
-            throw new PropertyNotImplementedException("ExposureMax", false);
+            double exposureMax = CameraHardware.ExposureMax;
+            LogMessage("ExposureMax Get", exposureMax.ToString());
+            return exposureMax;
         }
     }
 
@@ -318,8 +325,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("ExposureMin Get", "Not implemented");
-            throw new PropertyNotImplementedException("ExposureMin", false);
+            double exposureMin = CameraHardware.ExposureMin;
+            LogMessage("ExposureMin Get", exposureMin.ToString());
+            return exposureMin;
         }
     }
 
@@ -331,8 +339,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("ExposureResolution Get", "Not implemented");
-            throw new PropertyNotImplementedException("ExposureResolution", false);
+            double exposureResolution = CameraHardware.ExposureResolution;
+            LogMessage("ExposureResolution Get", exposureResolution.ToString());
+            return exposureResolution;
         }
     }
 
@@ -344,13 +353,14 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("FastReadout Get", "Not implemented");
-            throw new PropertyNotImplementedException("FastReadout", false);
+            bool fastreadout = CameraHardware.FastReadout;
+            LogMessage("FastReadout Get", fastreadout.ToString());
+            return fastreadout;
         }
         set
         {
-            tl.LogMessage("FastReadout Set", "Not implemented");
-            throw new PropertyNotImplementedException("FastReadout", true);
+            LogMessage("FastReadout Set", value.ToString());
+            CameraHardware.FastReadout = value;
         }
     }
 
@@ -362,11 +372,11 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("FullWellCapacity Get", "Not implemented");
-            throw new PropertyNotImplementedException("FullWellCapacity", false);
+            double fullWellCapacity = CameraHardware.FullWellCapacity;
+            LogMessage("FullWellCapacity Get", fullWellCapacity.ToString());
+            return fullWellCapacity;
         }
     }
-
 
 	/// <summary>
 	/// The camera's gain (GAIN VALUE MODE) OR the index of the selected camera gain description in the <see cref="Gains" /> array (GAINS INDEX MODE)
@@ -379,13 +389,14 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("Gain Get", "Not implemented");
-            throw new PropertyNotImplementedException("Gain", false);
+            short gain = CameraHardware.Gain;
+            LogMessage("Gain Get", gain.ToString());
+            return gain;
         }
         set
         {
-            tl.LogMessage("Gain Set", "Not implemented");
-            throw new PropertyNotImplementedException("Gain", true);
+            LogMessage("Gain Set", value.ToString());
+            CameraHardware.Gain = value;
         }
     }
 
@@ -397,8 +408,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("GainMax Get", "Not implemented");
-            throw new PropertyNotImplementedException("GainMax", false);
+            short gainMax = CameraHardware.GainMax;
+            LogMessage("GainMax Get", gainMax.ToString());
+            return gainMax;
         }
     }
 
@@ -410,8 +422,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("GainMin Get", "Not implemented");
-            throw new PropertyNotImplementedException("GainMin", true);
+            short gainMin = CameraHardware.GainMin;
+            LogMessage("GainMin Get", gainMin.ToString());
+            return gainMin;
         }
     }
 
@@ -423,8 +436,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("Gains Get", "Not implemented");
-            throw new PropertyNotImplementedException("Gains", true);
+            ArrayList gains = CameraHardware.Gains;
+            LogMessage("Gains Get", $"Received {gains.Count} gain values.");
+            return gains;
         }
     }
 
@@ -438,8 +452,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("HasShutter Get", false.ToString());
-            return false;
+            bool hasShutter = CameraHardware.HasShutter;
+            LogMessage("HasShutter Get", hasShutter.ToString());
+            return hasShutter;
         }
     }
 
@@ -451,27 +466,22 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("HeatSinkTemperature Get", "Not implemented");
-            throw new PropertyNotImplementedException("HeatSinkTemperature", false);
+            double heatSinkTemperature = CameraHardware.HeatSinkTemperature;
+            LogMessage("HeatSinkTemperature Get", heatSinkTemperature.ToString());
+            return heatSinkTemperature;
         }
     }
 
 	/// <summary>
-	/// Returns a safearray of int of size <see cref="NumX" /> * <see cref="NumY" /> containing the pixel values from the last exposure.
+	/// Returns a safearray of integer of size <see cref="NumX" /> * <see cref="NumY" /> containing the pixel values from the last exposure.
 	/// </summary>
 	/// <value>The image array.</value>
 	public object ImageArray
     {
         get
         {
-            if (!cameraImageReady)
-            {
-                tl.LogMessage("ImageArray Get", "Throwing InvalidOperationException because of a call to ImageArray before the first image has been taken!");
-                throw new ASCOM.InvalidOperationException("Call to ImageArray before the first image has been taken!");
-            }
-
-            cameraImageArray = new int[cameraNumX, cameraNumY];
-            return cameraImageArray;
+            LogMessage("ImageArray Get", $"Retrieving image array");
+            return CameraHardware.ImageArray; 
         }
     }
 
@@ -483,22 +493,8 @@ class DeviceCamera
     {
         get
         {
-            if (!cameraImageReady)
-            {
-                tl.LogMessage("ImageArrayVariant Get", "Throwing InvalidOperationException because of a call to ImageArrayVariant before the first image has been taken!");
-                throw new ASCOM.InvalidOperationException("Call to ImageArrayVariant before the first image has been taken!");
-            }
-            cameraImageArrayVariant = new object[cameraNumX, cameraNumY];
-            for (int i = 0; i < cameraImageArray.GetLength(1); i++)
-            {
-                for (int j = 0; j < cameraImageArray.GetLength(0); j++)
-                {
-                    cameraImageArrayVariant[j, i] = cameraImageArray[j, i];
-                }
-
-            }
-
-            return cameraImageArrayVariant;
+            LogMessage("ImageArrayVariant Get", $"Retrieving image array");
+            return CameraHardware.ImageArrayVariant;
         }
     }
 
@@ -510,8 +506,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("ImageReady Get", cameraImageReady.ToString());
-            return cameraImageReady;
+            bool imageReady = CameraHardware.ImageReady;
+            LogMessage("ImageReady Get", imageReady.ToString());
+            return imageReady;
         }
     }
 
@@ -525,8 +522,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("IsPulseGuiding Get", "Not implemented");
-            throw new PropertyNotImplementedException("IsPulseGuiding", false);
+            bool isPulseGuiding = CameraHardware.IsPulseGuiding;
+            LogMessage("IsPulseGuiding Get", isPulseGuiding.ToString());
+            return isPulseGuiding;
         }
     }
 
@@ -538,13 +536,9 @@ class DeviceCamera
     {
         get
         {
-            if (!cameraImageReady)
-            {
-                tl.LogMessage("LastExposureDuration Get", "Throwing InvalidOperationException because of a call to LastExposureDuration before the first image has been taken!");
-                throw new ASCOM.InvalidOperationException("Call to LastExposureDuration before the first image has been taken!");
-            }
-            tl.LogMessage("LastExposureDuration Get", cameraLastExposureDuration.ToString());
-            return cameraLastExposureDuration;
+            double lastExposureDuration = CameraHardware.LastExposureDuration;
+            LogMessage("LastExposureDuration Get", lastExposureDuration.ToString());
+            return lastExposureDuration;
         }
     }
 
@@ -557,14 +551,9 @@ class DeviceCamera
     {
         get
         {
-            if (!cameraImageReady)
-            {
-                tl.LogMessage("LastExposureStartTime Get", "Throwing InvalidOperationException because of a call to LastExposureStartTime before the first image has been taken!");
-                throw new ASCOM.InvalidOperationException("Call to LastExposureStartTime before the first image has been taken!");
-            }
-            string exposureStartString = exposureStart.ToString("yyyy-MM-ddTHH:mm:ss");
-            tl.LogMessage("LastExposureStartTime Get", exposureStartString.ToString());
-            return exposureStartString;
+            string lastExposureStartTime = CameraHardware.LastExposureStartTime;
+            LogMessage("LastExposureStartTime Get", lastExposureStartTime.ToString());
+            return lastExposureStartTime;
         }
     }
 
@@ -576,70 +565,75 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("MaxADU Get", "20000");
-            return 20000;
+            int maxAdu = CameraHardware.MaxADU;
+            LogMessage("MaxADU Get", maxAdu.ToString());
+            return maxAdu;
         }
     }
 
 	/// <summary>
 	/// Returns the maximum allowed binning for the X camera axis
 	/// </summary>
-	/// <value>The max bin X.</value>
+	/// <value>The maximum width of the image.</value>
 	public short MaxBinX
     {
         get
         {
-            tl.LogMessage("MaxBinX Get", "1");
-            return 1;
+            short maxBinX = CameraHardware.MaxBinX;
+            LogMessage("MaxBinX Get", maxBinX.ToString());
+            return maxBinX;
         }
     }
 
 	/// <summary>
 	/// Returns the maximum allowed binning for the Y camera axis
 	/// </summary>
-	/// <value>The max bin Y.</value>
+	/// <value>The maximum height of the image.</value>
 	public short MaxBinY
     {
         get
         {
-            tl.LogMessage("MaxBinY Get", "1");
-            return 1;
+            short maxBinY = CameraHardware.MaxBinY;
+            LogMessage("MaxBinY Get", maxBinY.ToString());
+            return maxBinY;
         }
     }
 
 	/// <summary>
 	/// Sets the subframe width. Also returns the current value.
 	/// </summary>
-	/// <value>The num X.</value>
+	/// <value>The width of the image.</value>
 	public int NumX
     {
         get
         {
-            tl.LogMessage("NumX Get", cameraNumX.ToString());
-            return cameraNumX;
+            int numX = CameraHardware.NumX;
+            LogMessage("NumX Get", numX.ToString());
+            return numX;
         }
         set
         {
-            cameraNumX = value;
-            tl.LogMessage("NumX set", value.ToString());
+            LogMessage("NumX Set", value.ToString());
+            CameraHardware.NumX = value;
         }
     }
 
 	/// <summary>
 	/// Sets the subframe height. Also returns the current value.
 	/// </summary>
-	/// <value>The num Y.</value>
+	/// <value>The height of the image.</value>
 	public int NumY
     {
         get
         {
-            tl.LogMessage("NumY Get", cameraNumY.ToString());
-            return cameraNumY;
+            int numY = CameraHardware.NumY;
+            LogMessage("NumY Get", numY.ToString());
+            return numY;
         }
         set
         {
-            cameraNumY = value;
-            tl.LogMessage("NumY set", value.ToString());
+            LogMessage("NumY Set", value.ToString());
+            CameraHardware.NumY = value;
         }
     }
 
@@ -654,13 +648,14 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("Offset Get", "Not implemented");
-            throw new PropertyNotImplementedException("Offset", false);
+            int offset = CameraHardware.Offset;
+            LogMessage("Offset Get", offset.ToString());
+            return offset;
         }
         set
         {
-            tl.LogMessage("Offset Set", "Not implemented");
-            throw new PropertyNotImplementedException("Offset", true);
+            LogMessage("Offset Set", value.ToString());
+            CameraHardware.Offset = value;
         }
     }
 
@@ -672,8 +667,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("OffsetMax Get", "Not implemented");
-            throw new PropertyNotImplementedException("OffsetMax", false);
+            int offsetMax = CameraHardware.OffsetMax;
+            LogMessage("OffsetMax Get", offsetMax.ToString());
+            return offsetMax;
         }
     }
 
@@ -685,8 +681,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("OffsetMin Get", "Not implemented");
-            throw new PropertyNotImplementedException("OffsetMin", true);
+            int offsetMin = CameraHardware.OffsetMin;
+            LogMessage("OffsetMin Get", offsetMin.ToString());
+            return offsetMin;
         }
     }
 
@@ -711,8 +708,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("PercentCompleted Get", "Not implemented");
-            throw new PropertyNotImplementedException("PercentCompleted", false);
+            short percentCompleted = CameraHardware.PercentCompleted;
+            LogMessage("PercentCompleted Get", percentCompleted.ToString());
+            return percentCompleted;
         }
     }
 
@@ -724,8 +722,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("PixelSizeX Get", pixelSize.ToString());
-            return pixelSize;
+            double pixelSizeX = CameraHardware.PixelSizeX;
+            LogMessage("PixelSizeX Get", pixelSizeX.ToString());
+            return pixelSizeX;
         }
     }
 
@@ -737,39 +736,41 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("PixelSizeY Get", pixelSize.ToString());
-            return pixelSize;
+            double pixelSizeY = CameraHardware.PixelSizeY;
+            LogMessage("PixelSizeY Get", pixelSizeY.ToString());
+            return pixelSizeY;
         }
     }
 
 	/// <summary>
 	/// Activates the Camera's mount control system to instruct the mount to move in a particular direction for a given period of time
 	/// </summary>
-	/// <param name="Direction">The direction of movement.</param>
-	/// <param name="Duration">The duration of movement in milli-seconds.</param>
-	public void PulseGuide(GuideDirections Direction, int Duration)
+	/// <param name="direction">The direction of movement.</param>
+	/// <param name="duration">The duration of movement in milli-seconds.</param>
+	public void PulseGuide(GuideDirections direction, int duration)
     {
-        tl.LogMessage("PulseGuide", "Not implemented");
-        throw new MethodNotImplementedException("PulseGuide");
+        LogMessage("PulseGuide", $"Direction: {direction}, Duration: {duration}");
+        CameraHardware.PulseGuide(direction,duration);
     }
 
-	/// <summary>
-	/// Readout mode, Interface Version 2 only
-	/// </summary>
-	/// <value></value>
-	/// <returns>Short integer index into the <see cref="ReadoutModes">ReadoutModes</see> array of string readout mode names indicating
-	/// the camera's current readout mode.</returns>
-	public short ReadoutMode
+    /// <summary>
+    /// Readout mode, Interface Version 2 only
+    /// </summary>
+    /// <value></value>
+    /// <returns>Short integer index into the <see cref="ReadoutModes">ReadoutModes</see> array of string readout mode names indicating
+    /// the camera's current readout mode.</returns>
+    public short ReadoutMode
     {
         get
         {
-            tl.LogMessage("ReadoutMode Get", "Not implemented");
-            throw new PropertyNotImplementedException("ReadoutMode", false);
+            short readoutMode = CameraHardware.ReadoutMode;
+            LogMessage("ReadoutMode Get", readoutMode.ToString());
+            return readoutMode;
         }
         set
         {
-            tl.LogMessage("ReadoutMode Set", "Not implemented");
-            throw new PropertyNotImplementedException("ReadoutMode", true);
+            LogMessage("ReadoutMode Set", value.ToString());
+            CameraHardware.ReadoutMode = value;
         }
     }
 
@@ -781,8 +782,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("ReadoutModes Get", "Not implemented");
-            throw new PropertyNotImplementedException("ReadoutModes", false);
+            ArrayList readoutMode = CameraHardware.ReadoutModes;
+            LogMessage("ReadoutModes Get", $"Received {readoutMode.Count} readout modes.");
+            return readoutMode;
         }
     }
 
@@ -794,8 +796,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("SensorName Get", "Not implemented");
-            throw new PropertyNotImplementedException("SensorName", false);
+            string sensorName = CameraHardware.SensorName;
+            LogMessage("SensorName Get", sensorName.ToString());
+            return sensorName;
         }
     }
 
@@ -807,8 +810,9 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("SensorType Get", "Not implemented");
-            throw new PropertyNotImplementedException("SensorType", false);
+            SensorType sensorType = CameraHardware.SensorType;
+            LogMessage("SensorType Get", sensorType.ToString());
+            return sensorType;
         }
     }
 
@@ -820,34 +824,26 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("SetCCDTemperature Get", "Not implemented");
-            throw new PropertyNotImplementedException("SetCCDTemperature", false);
+            double setCcdTemperature = CameraHardware.SetCCDTemperature;
+            LogMessage("SetCCDTemperature Get", setCcdTemperature.ToString());
+            return setCcdTemperature;
         }
         set
         {
-            tl.LogMessage("SetCCDTemperature Set", "Not implemented");
-            throw new PropertyNotImplementedException("SetCCDTemperature", true);
+            LogMessage("SetCCDTemperature Set", value.ToString());
+            CameraHardware.SetCCDTemperature = value;
         }
     }
 
 	/// <summary>
 	/// Starts an exposure. Use <see cref="ImageReady" /> to check when the exposure is complete.
 	/// </summary>
-	/// <param name="Duration">Duration of exposure in seconds, can be zero if <see cref="StartExposure">Light</see> is <c>false</c></param>
-	/// <param name="Light"><c>true</c> for light frame, <c>false</c> for dark frame (ignored if no shutter)</param>
-	public void StartExposure(double Duration, bool Light)
+	/// <param name="duration">Duration of exposure in seconds, can be zero if <see cref="StartExposure">Light</see> is <c>false</c></param>
+	/// <param name="light"><c>true</c> for light frame, <c>false</c> for dark frame (ignored if no shutter)</param>
+	public void StartExposure(double duration, bool light)
     {
-        if (Duration < 0.0) throw new InvalidValueException("StartExposure", Duration.ToString(), "0.0 upwards");
-        if (cameraNumX > ccdWidth) throw new InvalidValueException("StartExposure", cameraNumX.ToString(), ccdWidth.ToString());
-        if (cameraNumY > ccdHeight) throw new InvalidValueException("StartExposure", cameraNumY.ToString(), ccdHeight.ToString());
-        if (cameraStartX > ccdWidth) throw new InvalidValueException("StartExposure", cameraStartX.ToString(), ccdWidth.ToString());
-        if (cameraStartY > ccdHeight) throw new InvalidValueException("StartExposure", cameraStartY.ToString(), ccdHeight.ToString());
-
-        cameraLastExposureDuration = Duration;
-        exposureStart = DateTime.Now;
-        System.Threading.Thread.Sleep((int)Duration * 1000);  // Sleep for the duration to simulate exposure 
-        tl.LogMessage("StartExposure", Duration.ToString() + " " + Light.ToString());
-        cameraImageReady = true;
+        LogMessage("StartExposure", $"Duration: {duration}, Light: {light}");
+        CameraHardware.StartExposure(duration, light);
     }
 
 	/// <summary>
@@ -857,60 +853,71 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("StartX Get", cameraStartX.ToString());
-            return cameraStartX;
+            int setCcdTemperature = CameraHardware.StartX;
+            LogMessage("StartX Get", setCcdTemperature.ToString());
+            return setCcdTemperature;
         }
         set
         {
-            cameraStartX = value;
-            tl.LogMessage("StartX Set", value.ToString());
+            LogMessage("StartX Set", value.ToString());
+            CameraHardware.StartX = value;
         }
     }
 
-	/// <summary>
-	/// Sets the subframe start position for the Y axis (0 based). Also returns the current value.
-	/// </summary>
+    /// <summary>
+    /// Sets the subframe start position for the Y axis (0 based). Also returns the current value.
+    /// </summary>
     public int StartY
     {
         get
         {
-            tl.LogMessage("StartY Get", cameraStartY.ToString());
-            return cameraStartY;
+            int setCcdTemperature = CameraHardware.StartY;
+            LogMessage("StartY Get", setCcdTemperature.ToString());
+            return setCcdTemperature;
         }
         set
         {
-            cameraStartY = value;
-            tl.LogMessage("StartY set", value.ToString());
+            LogMessage("StartY Set", value.ToString());
+            CameraHardware.StartY = value;
         }
     }
 
-	/// <summary>
-	/// Stops the current exposure, if any.
-	/// </summary>
-	public void StopExposure()
+    /// <summary>
+    /// Stops the current exposure, if any.
+    /// </summary>
+    public void StopExposure()
     {
-        tl.LogMessage("StopExposure", "Not implemented");
-        throw new MethodNotImplementedException("StopExposure");
+        LogMessage("StopExposure", $"Method called");
+        CameraHardware.StopExposure();
     }
 
-	/// <summary>
-	/// Camera's sub-exposure interval
-	/// </summary>
-	public double SubExposureDuration
+    /// <summary>
+    /// Camera's sub-exposure interval
+    /// </summary>
+    public double SubExposureDuration
     {
         get
         {
-            tl.LogMessage("SubExposureDuration Get", "Not implemented");
-            throw new PropertyNotImplementedException("SubExposureDuration", false);
+            double subExposureDuration = CameraHardware.SubExposureDuration;
+            LogMessage("SubExposureDuration Get", subExposureDuration.ToString());
+            return subExposureDuration;
         }
         set
         {
-            tl.LogMessage("SubExposureDuration Set", "Not implemented");
-            throw new PropertyNotImplementedException("SubExposureDuration", true);
+            LogMessage("SubExposureDuration Set", value.ToString());
+            CameraHardware.SubExposureDuration = value;
         }
     }
 
     #endregion
 
     //ENDOFINSERTEDFILE
+
+    /// <summary>
+    /// Dummy LogMessage class that removes compilation errors in the Platform source code and that will be omitted when the project is built
+    /// </summary>
+    static void LogMessage(string method, string message)
+    {
+    }
+
 }
