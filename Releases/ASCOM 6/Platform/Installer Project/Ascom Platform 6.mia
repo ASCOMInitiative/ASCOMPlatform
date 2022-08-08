@@ -1156,8 +1156,6 @@ Install Assembly
 Install Files
 Install Assembly
 Install Files
-Install Assembly
-Install Files
 Comment
 Install Files
 Install Files
@@ -3156,8 +3154,6 @@ $
 {2B9C95B7-B0AA-4AA4-AFA7-809DFF44252D}
 {F809AAF9-23F4-4367-A19E-A0060E8819C1}
 {70023001-1CC7-424B-A9D1-94D0FB6E89EA}
-{F98BC521-A5E0-4098-A60B-1B1283A91E83}
-{A44E4A54-74CF-4B8E-9425-F8B95BCBC50C}
 {02D98C71-D54E-414E-89F8-B7764BB8096E}
 {112A67EC-BFFE-4C89-9AE8-D46535A54406}
 {217AAAE2-DE3E-435E-B5DE-3EB4D48FB84C}
@@ -8983,19 +8979,6 @@ FALSE
 FALSE
 FALSE
 FALSE
-{A44E4A54-74CF-4B8E-9425-F8B95BCBC50C}
-..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\bin\Release\ASCOM.Utilities.Support.pdb
-FALSE|
-$WINDIR$\Symbols\dll
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
 {9F5F901E-69E1-45A7-AA19-2D5FCB51D653}
 ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.dll
 FALSE|
@@ -12935,10 +12918,6 @@ TRUE
 ..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll
 TRUE
 
-{F98BC521-A5E0-4098-A60B-1B1283A91E83}
-..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\bin\Release\ASCOM.Utilities.Support.dll
-TRUE
-
 {02D98C71-D54E-414E-89F8-B7764BB8096E}
 ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Shared Resources\bin\Release\ASCOM.AlpacaSharedResources.dll
 TRUE
@@ -14576,8 +14555,6 @@ C
 
 
 
-C
-C
 
 
 
@@ -15422,8 +15399,6 @@ C
 
 
 $
-
-
 
 
 
