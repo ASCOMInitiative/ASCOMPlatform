@@ -9,13 +9,6 @@ using System.Collections.Generic;
 
 class DeviceObservingConditions
 {
-    //private static TraceLogger tl = new TraceLogger();
-
-    private static void LogMessage(string identifier, string message, params object[] args)
-    {
-        //tl.LogMessage(identifier, string.Format(message, args));
-    }
-
     #region IObservingConditions Implementation
 
     /// <summary>
@@ -25,15 +18,14 @@ class DeviceObservingConditions
     {
         get
         {
-            LogMessage("AveragePeriod", "get - 0");
-            return 0;
+            double averageperiod = ObservingConditionsHardware.AveragePeriod;
+            LogMessage("AveragePeriod Get", averageperiod.ToString());
+            return averageperiod;
         }
         set
         {
-            LogMessage("AveragePeriod", "set - {0}", value);
-            if (value != 0)
-                throw new InvalidValueException("AveragePeriod", value.ToString(), "0 only");
-        }
+            LogMessage("AveragePeriod Set", value.ToString());
+            ObservingConditionsHardware.AveragePeriod = value;        }
     }
 
     /// <summary>
@@ -43,8 +35,9 @@ class DeviceObservingConditions
     {
         get
         {
-            LogMessage("CloudCover", "get - not implemented");
-            throw new PropertyNotImplementedException("CloudCover", false);
+            double cloudCover = ObservingConditionsHardware.CloudCover;
+            LogMessage("CloudCover Get", cloudCover.ToString());
+            return cloudCover;
         }
     }
 
@@ -55,8 +48,9 @@ class DeviceObservingConditions
     {
         get
         {
-            LogMessage("DewPoint", "get - not implemented");
-            throw new PropertyNotImplementedException("DewPoint", false);
+            double dewPoint = ObservingConditionsHardware.DewPoint;
+            LogMessage("DewPoint Get", dewPoint.ToString());
+            return dewPoint;
         }
     }
 
@@ -67,8 +61,9 @@ class DeviceObservingConditions
     {
         get
         {
-            LogMessage("Humidity", "get - not implemented");
-            throw new PropertyNotImplementedException("Humidity", false);
+            double humidity = ObservingConditionsHardware.Humidity;
+            LogMessage("Humidity Get", humidity.ToString());
+            return humidity;
         }
     }
 
@@ -79,8 +74,9 @@ class DeviceObservingConditions
     {
         get
         {
-            LogMessage("Pressure", "get - not implemented");
-            throw new PropertyNotImplementedException("Pressure", false);
+            double period = ObservingConditionsHardware.Pressure;
+            LogMessage("Pressure Get", period.ToString());
+            return period;
         }
     }
 
@@ -91,8 +87,9 @@ class DeviceObservingConditions
     {
         get
         {
-            LogMessage("RainRate", "get - not implemented");
-            throw new PropertyNotImplementedException("RainRate", false);
+            double rainRate = ObservingConditionsHardware.RainRate;
+            LogMessage("RainRate Get", rainRate.ToString());
+            return rainRate;
         }
     }
 
@@ -102,7 +99,9 @@ class DeviceObservingConditions
     /// </summary>
     public void Refresh()
     {
-        throw new MethodNotImplementedException();
+        LogMessage("Refresh", $"Calling method.");
+        ObservingConditionsHardware.Refresh();
+        LogMessage("Refresh", $"Completed.");
     }
 
     /// <summary>
@@ -112,30 +111,10 @@ class DeviceObservingConditions
     /// <returns>The sensor description string</returns>
     public string SensorDescription(string propertyName)
     {
-        switch (propertyName.Trim().ToLowerInvariant())
-        {
-            case "averageperiod":
-                return "Average period in hours, immediate values are only available";
-            case "cloudcover":
-            case "dewpoint":
-            case "humidity":
-            case "pressure":
-            case "rainrate":
-            case "skybrightness":
-            case "skyquality":
-            case "skytemperature":
-            case "starfwhm":
-            case "temperature":
-            case "winddirection":
-            case "windgust":
-            case "windspeed":
-                // Throw an exception on the properties that are not implemented
-                LogMessage("SensorDescription", $"Property {propertyName} is not implemented");
-                throw new MethodNotImplementedException($"SensorDescription - Property {propertyName} is not implemented");
-            default:
-                LogMessage("SensorDescription", $"Invalid sensor name: {propertyName}");
-                throw new InvalidValueException($"SensorDescription - Invalid property name: {propertyName}");
-        }
+        LogMessage("SensorDescription", $"Calling method.");
+        string sensorDescription=ObservingConditionsHardware.SensorDescription(propertyName);
+        LogMessage("SensorDescription", $"{sensorDescription}");
+        return sensorDescription;
     }
 
     /// <summary>
@@ -145,8 +124,9 @@ class DeviceObservingConditions
     {
         get
         {
-            LogMessage("SkyBrightness", "get - not implemented");
-            throw new PropertyNotImplementedException("SkyBrightness", false);
+            double skyBrightness = ObservingConditionsHardware.SkyBrightness;
+            LogMessage("SkyBrightness Get", skyBrightness.ToString());
+            return skyBrightness;
         }
     }
 
@@ -157,8 +137,9 @@ class DeviceObservingConditions
     {
         get
         {
-            LogMessage("SkyQuality", "get - not implemented");
-            throw new PropertyNotImplementedException("SkyQuality", false);
+            double skyQuality = ObservingConditionsHardware.SkyQuality;
+            LogMessage("SkyQuality Get", skyQuality.ToString());
+            return skyQuality;
         }
     }
 
@@ -169,8 +150,9 @@ class DeviceObservingConditions
     {
         get
         {
-            LogMessage("StarFWHM", "get - not implemented");
-            throw new PropertyNotImplementedException("StarFWHM", false);
+            double starFwhm = ObservingConditionsHardware.StarFWHM;
+            LogMessage("StarFWHM Get", starFwhm.ToString());
+            return starFwhm;
         }
     }
 
@@ -181,8 +163,9 @@ class DeviceObservingConditions
     {
         get
         {
-            LogMessage("SkyTemperature", "get - not implemented");
-            throw new PropertyNotImplementedException("SkyTemperature", false);
+            double skyTemperature = ObservingConditionsHardware.SkyTemperature;
+            LogMessage("SkyTemperature Get", skyTemperature.ToString());
+            return skyTemperature;
         }
     }
 
@@ -193,8 +176,9 @@ class DeviceObservingConditions
     {
         get
         {
-            LogMessage("Temperature", "get - not implemented");
-            throw new PropertyNotImplementedException("Temperature", false);
+            double temperature = ObservingConditionsHardware.Temperature;
+            LogMessage("Temperature Get", temperature.ToString());
+            return temperature;
         }
     }
 
@@ -205,38 +189,11 @@ class DeviceObservingConditions
     /// <returns>Time in seconds since the last sensor update for this property</returns>
     public double TimeSinceLastUpdate(string propertyName)
     {
-        // Test for an empty property name, if found, return the time since the most recent update to any sensor
-        if (!string.IsNullOrEmpty(propertyName))
-        {
-            switch (propertyName.Trim().ToLowerInvariant())
-            {
-                // Return the time for properties that are implemented, otherwise fall through to the MethodNotImplementedException
-                case "averageperiod":
-                case "cloudcover":
-                case "dewpoint":
-                case "humidity":
-                case "pressure":
-                case "rainrate":
-                case "skybrightness":
-                case "skyquality":
-                case "skytemperature":
-                case "starfwhm":
-                case "temperature":
-                case "winddirection":
-                case "windgust":
-                case "windspeed":
-                    // Throw an exception on the properties that are not implemented
-                    LogMessage("TimeSinceLastUpdate", $"Property {propertyName} is not implemented");
-                    throw new MethodNotImplementedException($"TimeSinceLastUpdate - Property {propertyName} is not implemented");
-                default:
-                    LogMessage("TimeSinceLastUpdate", $"Invalid sensor name: {propertyName}");
-                    throw new InvalidValueException($"TimeSinceLastUpdate - Invalid property name: {propertyName}");
-            }
-        }
-
-        // Return the time since the most recent update to any sensor
-        LogMessage("TimeSinceLastUpdate", $"The time since the most recent sensor update is not implemented");
-        throw new MethodNotImplementedException("TimeSinceLastUpdate(" + propertyName + ")");
+        LogMessage("TimeSinceLastUpdate", $"Calling method.");
+        ObservingConditionsHardware.TimeSinceLastUpdate(propertyName);
+        double timeSincelastUpdate = ObservingConditionsHardware.TimeSinceLastUpdate(propertyName);
+        LogMessage("TimeSinceLastUpdate", $"{timeSincelastUpdate}");
+        return timeSincelastUpdate;
     }
 
     /// <summary>
@@ -246,8 +203,9 @@ class DeviceObservingConditions
     {
         get
         {
-            LogMessage("WindDirection", "get - not implemented");
-            throw new PropertyNotImplementedException("WindDirection", false);
+            double windDirection = ObservingConditionsHardware.WindDirection;
+            LogMessage("WindDirection Get", windDirection.ToString());
+            return windDirection;
         }
     }
 
@@ -258,8 +216,9 @@ class DeviceObservingConditions
     {
         get
         {
-            LogMessage("WindGust", "get - not implemented");
-            throw new PropertyNotImplementedException("WindGust", false);
+            double windGust = ObservingConditionsHardware.WindGust;
+            LogMessage("WindGust Get", windGust.ToString());
+            return windGust;
         }
     }
 
@@ -270,44 +229,20 @@ class DeviceObservingConditions
     {
         get
         {
-            LogMessage("WindSpeed", "get - not implemented");
-            throw new PropertyNotImplementedException("WindSpeed", false);
+            double windSpeed = ObservingConditionsHardware.WindSpeed;
+            LogMessage("WindSpeed Get", windSpeed.ToString());
+            return windSpeed;
         }
     }
-
-    #endregion
-
-    #region private methods
-
-    #region calculate the gust strength as the largest wind recorded over the last two minutes
-
-    // save the time and wind speed values
-    private Dictionary<DateTime, double> winds = new Dictionary<DateTime, double>();
-
-    private double gustStrength;
-
-    private void UpdateGusts(double speed)
-    {
-        Dictionary<DateTime, double> newWinds = new Dictionary<DateTime, double>();
-        var last = DateTime.Now - TimeSpan.FromMinutes(2);
-        winds.Add(DateTime.Now, speed);
-        var gust = 0.0;
-        foreach (var item in winds)
-        {
-            if (item.Key > last)
-            {
-                newWinds.Add(item.Key, item.Value);
-                if (item.Value > gust)
-                    gust = item.Value;
-            }
-        }
-        gustStrength = gust;
-        winds = newWinds;
-    }
-
-    #endregion
 
     #endregion
 
     //ENDOFINSERTEDFILE
+
+    /// <summary>
+    /// Dummy LogMessage class that removes compilation errors in the Platform source code and that will be omitted when the project is built
+    /// </summary>
+    static void LogMessage(string method, string message)
+    {
+    }
 }
