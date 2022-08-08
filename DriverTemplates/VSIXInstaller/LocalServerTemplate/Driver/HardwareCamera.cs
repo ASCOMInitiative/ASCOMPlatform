@@ -10,9 +10,6 @@ using ASCOM.Utilities;
 
 static class CameraHardware
 {
-    static Util util = new Util();
-    static TraceLogger tl = new TraceLogger();
-
     #region ICamera Implementation
 
     private const int ccdWidth = 1394; // Constants to define the CCD pixel dimensions
@@ -34,7 +31,7 @@ static class CameraHardware
     /// </summary>
     static internal void AbortExposure()
     {
-        tl.LogMessage("AbortExposure", "Not implemented");
+        LogMessage("AbortExposure", "Not implemented");
         throw new MethodNotImplementedException("AbortExposure");
     }
 
@@ -46,7 +43,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("BayerOffsetX Get", "Not implemented");
+            LogMessage("BayerOffsetX Get", "Not implemented");
             throw new PropertyNotImplementedException("BayerOffsetX", false);
         }
     }
@@ -59,7 +56,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("BayerOffsetY Get", "Not implemented");
+            LogMessage("BayerOffsetY Get", "Not implemented");
             throw new PropertyNotImplementedException("BayerOffsetX", true);
         }
     }
@@ -72,12 +69,12 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("BinX Get", "1");
+            LogMessage("BinX Get", "1");
             return 1;
         }
         set
         {
-            tl.LogMessage("BinX Set", value.ToString());
+            LogMessage("BinX Set", value.ToString());
             if (value != 1) throw new InvalidValueException("BinX", value.ToString(), "1"); // Only 1 is valid in this simple template
         }
     }
@@ -90,12 +87,12 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("BinY Get", "1");
+            LogMessage("BinY Get", "1");
             return 1;
         }
         set
         {
-            tl.LogMessage("BinY Set", value.ToString());
+            LogMessage("BinY Set", value.ToString());
             if (value != 1) throw new InvalidValueException("BinY", value.ToString(), "1"); // Only 1 is valid in this simple template
         }
     }
@@ -108,7 +105,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("CCDTemperature Get", "Not implemented");
+            LogMessage("CCDTemperature Get", "Not implemented");
             throw new PropertyNotImplementedException("CCDTemperature", false);
         }
     }
@@ -121,7 +118,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("CameraState Get", CameraStates.cameraIdle.ToString());
+            LogMessage("CameraState Get", CameraStates.cameraIdle.ToString());
             return CameraStates.cameraIdle;
         }
     }
@@ -134,7 +131,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("CameraXSize Get", ccdWidth.ToString());
+            LogMessage("CameraXSize Get", ccdWidth.ToString());
             return ccdWidth;
         }
     }
@@ -147,7 +144,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("CameraYSize Get", ccdHeight.ToString());
+            LogMessage("CameraYSize Get", ccdHeight.ToString());
             return ccdHeight;
         }
     }
@@ -160,7 +157,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("CanAbortExposure Get", false.ToString());
+            LogMessage("CanAbortExposure Get", false.ToString());
             return false;
         }
     }
@@ -175,7 +172,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("CanAsymmetricBin Get", false.ToString());
+            LogMessage("CanAsymmetricBin Get", false.ToString());
             return false;
         }
     }
@@ -188,7 +185,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("CanFastReadout Get", false.ToString());
+            LogMessage("CanFastReadout Get", false.ToString());
             return false;
         }
     }
@@ -203,7 +200,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("CanGetCoolerPower Get", false.ToString());
+            LogMessage("CanGetCoolerPower Get", false.ToString());
             return false;
         }
     }
@@ -218,7 +215,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("CanPulseGuide Get", false.ToString());
+            LogMessage("CanPulseGuide Get", false.ToString());
             return false;
         }
     }
@@ -233,7 +230,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("CanSetCCDTemperature Get", false.ToString());
+            LogMessage("CanSetCCDTemperature Get", false.ToString());
             return false;
         }
     }
@@ -248,7 +245,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("CanStopExposure Get", false.ToString());
+            LogMessage("CanStopExposure Get", false.ToString());
             return false;
         }
     }
@@ -261,12 +258,12 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("CoolerOn Get", "Not implemented");
+            LogMessage("CoolerOn Get", "Not implemented");
             throw new PropertyNotImplementedException("CoolerOn", false);
         }
         set
         {
-            tl.LogMessage("CoolerOn Set", "Not implemented");
+            LogMessage("CoolerOn Set", "Not implemented");
             throw new PropertyNotImplementedException("CoolerOn", true);
         }
     }
@@ -279,7 +276,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("CoolerPower Get", "Not implemented");
+            LogMessage("CoolerPower Get", "Not implemented");
             throw new PropertyNotImplementedException("CoolerPower", false);
         }
     }
@@ -292,7 +289,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("ElectronsPerADU Get", "Not implemented");
+            LogMessage("ElectronsPerADU Get", "Not implemented");
             throw new PropertyNotImplementedException("ElectronsPerADU", false);
         }
     }
@@ -305,7 +302,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("ExposureMax Get", "Not implemented");
+            LogMessage("ExposureMax Get", "Not implemented");
             throw new PropertyNotImplementedException("ExposureMax", false);
         }
     }
@@ -318,7 +315,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("ExposureMin Get", "Not implemented");
+            LogMessage("ExposureMin Get", "Not implemented");
             throw new PropertyNotImplementedException("ExposureMin", false);
         }
     }
@@ -331,7 +328,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("ExposureResolution Get", "Not implemented");
+            LogMessage("ExposureResolution Get", "Not implemented");
             throw new PropertyNotImplementedException("ExposureResolution", false);
         }
     }
@@ -344,12 +341,12 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("FastReadout Get", "Not implemented");
+            LogMessage("FastReadout Get", "Not implemented");
             throw new PropertyNotImplementedException("FastReadout", false);
         }
         set
         {
-            tl.LogMessage("FastReadout Set", "Not implemented");
+            LogMessage("FastReadout Set", "Not implemented");
             throw new PropertyNotImplementedException("FastReadout", true);
         }
     }
@@ -362,7 +359,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("FullWellCapacity Get", "Not implemented");
+            LogMessage("FullWellCapacity Get", "Not implemented");
             throw new PropertyNotImplementedException("FullWellCapacity", false);
         }
     }
@@ -379,12 +376,12 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("Gain Get", "Not implemented");
+            LogMessage("Gain Get", "Not implemented");
             throw new PropertyNotImplementedException("Gain", false);
         }
         set
         {
-            tl.LogMessage("Gain Set", "Not implemented");
+            LogMessage("Gain Set", "Not implemented");
             throw new PropertyNotImplementedException("Gain", true);
         }
     }
@@ -397,7 +394,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("GainMax Get", "Not implemented");
+            LogMessage("GainMax Get", "Not implemented");
             throw new PropertyNotImplementedException("GainMax", false);
         }
     }
@@ -410,7 +407,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("GainMin Get", "Not implemented");
+            LogMessage("GainMin Get", "Not implemented");
             throw new PropertyNotImplementedException("GainMin", true);
         }
     }
@@ -423,7 +420,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("Gains Get", "Not implemented");
+            LogMessage("Gains Get", "Not implemented");
             throw new PropertyNotImplementedException("Gains", true);
         }
     }
@@ -438,7 +435,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("HasShutter Get", false.ToString());
+            LogMessage("HasShutter Get", false.ToString());
             return false;
         }
     }
@@ -451,7 +448,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("HeatSinkTemperature Get", "Not implemented");
+            LogMessage("HeatSinkTemperature Get", "Not implemented");
             throw new PropertyNotImplementedException("HeatSinkTemperature", false);
         }
     }
@@ -466,7 +463,7 @@ static class CameraHardware
         {
             if (!cameraImageReady)
             {
-                tl.LogMessage("ImageArray Get", "Throwing InvalidOperationException because of a call to ImageArray before the first image has been taken!");
+                LogMessage("ImageArray Get", "Throwing InvalidOperationException because of a call to ImageArray before the first image has been taken!");
                 throw new ASCOM.InvalidOperationException("Call to ImageArray before the first image has been taken!");
             }
 
@@ -485,7 +482,7 @@ static class CameraHardware
         {
             if (!cameraImageReady)
             {
-                tl.LogMessage("ImageArrayVariant Get", "Throwing InvalidOperationException because of a call to ImageArrayVariant before the first image has been taken!");
+                LogMessage("ImageArrayVariant Get", "Throwing InvalidOperationException because of a call to ImageArrayVariant before the first image has been taken!");
                 throw new ASCOM.InvalidOperationException("Call to ImageArrayVariant before the first image has been taken!");
             }
             cameraImageArrayVariant = new object[cameraNumX, cameraNumY];
@@ -510,7 +507,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("ImageReady Get", cameraImageReady.ToString());
+            LogMessage("ImageReady Get", cameraImageReady.ToString());
             return cameraImageReady;
         }
     }
@@ -525,7 +522,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("IsPulseGuiding Get", "Not implemented");
+            LogMessage("IsPulseGuiding Get", "Not implemented");
             throw new PropertyNotImplementedException("IsPulseGuiding", false);
         }
     }
@@ -540,10 +537,10 @@ static class CameraHardware
         {
             if (!cameraImageReady)
             {
-                tl.LogMessage("LastExposureDuration Get", "Throwing InvalidOperationException because of a call to LastExposureDuration before the first image has been taken!");
+                LogMessage("LastExposureDuration Get", "Throwing InvalidOperationException because of a call to LastExposureDuration before the first image has been taken!");
                 throw new ASCOM.InvalidOperationException("Call to LastExposureDuration before the first image has been taken!");
             }
-            tl.LogMessage("LastExposureDuration Get", cameraLastExposureDuration.ToString());
+            LogMessage("LastExposureDuration Get", cameraLastExposureDuration.ToString());
             return cameraLastExposureDuration;
         }
     }
@@ -559,11 +556,11 @@ static class CameraHardware
         {
             if (!cameraImageReady)
             {
-                tl.LogMessage("LastExposureStartTime Get", "Throwing InvalidOperationException because of a call to LastExposureStartTime before the first image has been taken!");
+                LogMessage("LastExposureStartTime Get", "Throwing InvalidOperationException because of a call to LastExposureStartTime before the first image has been taken!");
                 throw new ASCOM.InvalidOperationException("Call to LastExposureStartTime before the first image has been taken!");
             }
             string exposureStartString = exposureStart.ToString("yyyy-MM-ddTHH:mm:ss");
-            tl.LogMessage("LastExposureStartTime Get", exposureStartString.ToString());
+            LogMessage("LastExposureStartTime Get", exposureStartString.ToString());
             return exposureStartString;
         }
     }
@@ -576,7 +573,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("MaxADU Get", "20000");
+            LogMessage("MaxADU Get", "20000");
             return 20000;
         }
     }
@@ -589,7 +586,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("MaxBinX Get", "1");
+            LogMessage("MaxBinX Get", "1");
             return 1;
         }
     }
@@ -602,7 +599,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("MaxBinY Get", "1");
+            LogMessage("MaxBinY Get", "1");
             return 1;
         }
     }
@@ -615,13 +612,13 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("NumX Get", cameraNumX.ToString());
+            LogMessage("NumX Get", cameraNumX.ToString());
             return cameraNumX;
         }
         set
         {
             cameraNumX = value;
-            tl.LogMessage("NumX set", value.ToString());
+            LogMessage("NumX set", value.ToString());
         }
     }
 
@@ -633,13 +630,13 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("NumY Get", cameraNumY.ToString());
+            LogMessage("NumY Get", cameraNumY.ToString());
             return cameraNumY;
         }
         set
         {
             cameraNumY = value;
-            tl.LogMessage("NumY set", value.ToString());
+            LogMessage("NumY set", value.ToString());
         }
     }
 
@@ -654,12 +651,12 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("Offset Get", "Not implemented");
+            LogMessage("Offset Get", "Not implemented");
             throw new PropertyNotImplementedException("Offset", false);
         }
         set
         {
-            tl.LogMessage("Offset Set", "Not implemented");
+            LogMessage("Offset Set", "Not implemented");
             throw new PropertyNotImplementedException("Offset", true);
         }
     }
@@ -672,7 +669,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("OffsetMax Get", "Not implemented");
+            LogMessage("OffsetMax Get", "Not implemented");
             throw new PropertyNotImplementedException("OffsetMax", false);
         }
     }
@@ -685,7 +682,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("OffsetMin Get", "Not implemented");
+            LogMessage("OffsetMin Get", "Not implemented");
             throw new PropertyNotImplementedException("OffsetMin", true);
         }
     }
@@ -698,7 +695,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("Offsets Get", "Not implemented");
+            LogMessage("Offsets Get", "Not implemented");
             throw new PropertyNotImplementedException("Offsets", true);
         }
     }
@@ -711,7 +708,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("PercentCompleted Get", "Not implemented");
+            LogMessage("PercentCompleted Get", "Not implemented");
             throw new PropertyNotImplementedException("PercentCompleted", false);
         }
     }
@@ -724,7 +721,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("PixelSizeX Get", pixelSize.ToString());
+            LogMessage("PixelSizeX Get", pixelSize.ToString());
             return pixelSize;
         }
     }
@@ -737,7 +734,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("PixelSizeY Get", pixelSize.ToString());
+            LogMessage("PixelSizeY Get", pixelSize.ToString());
             return pixelSize;
         }
     }
@@ -749,7 +746,7 @@ static class CameraHardware
     /// <param name="Duration">The duration of movement in milli-seconds.</param>
     static internal void PulseGuide(GuideDirections Direction, int Duration)
     {
-        tl.LogMessage("PulseGuide", "Not implemented");
+        LogMessage("PulseGuide", "Not implemented");
         throw new MethodNotImplementedException("PulseGuide");
     }
 
@@ -763,12 +760,12 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("ReadoutMode Get", "Not implemented");
+            LogMessage("ReadoutMode Get", "Not implemented");
             throw new PropertyNotImplementedException("ReadoutMode", false);
         }
         set
         {
-            tl.LogMessage("ReadoutMode Set", "Not implemented");
+            LogMessage("ReadoutMode Set", "Not implemented");
             throw new PropertyNotImplementedException("ReadoutMode", true);
         }
     }
@@ -781,7 +778,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("ReadoutModes Get", "Not implemented");
+            LogMessage("ReadoutModes Get", "Not implemented");
             throw new PropertyNotImplementedException("ReadoutModes", false);
         }
     }
@@ -794,7 +791,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("SensorName Get", "Not implemented");
+            LogMessage("SensorName Get", "Not implemented");
             throw new PropertyNotImplementedException("SensorName", false);
         }
     }
@@ -807,7 +804,7 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("SensorType Get", "Not implemented");
+            LogMessage("SensorType Get", "Not implemented");
             throw new PropertyNotImplementedException("SensorType", false);
         }
     }
@@ -820,12 +817,12 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("SetCCDTemperature Get", "Not implemented");
+            LogMessage("SetCCDTemperature Get", "Not implemented");
             throw new PropertyNotImplementedException("SetCCDTemperature", false);
         }
         set
         {
-            tl.LogMessage("SetCCDTemperature Set", "Not implemented");
+            LogMessage("SetCCDTemperature Set", "Not implemented");
             throw new PropertyNotImplementedException("SetCCDTemperature", true);
         }
     }
@@ -846,7 +843,7 @@ static class CameraHardware
         cameraLastExposureDuration = Duration;
         exposureStart = DateTime.Now;
         System.Threading.Thread.Sleep((int)Duration * 1000);  // Sleep for the duration to simulate exposure 
-        tl.LogMessage("StartExposure", Duration.ToString() + " " + Light.ToString());
+        LogMessage("StartExposure", Duration.ToString() + " " + Light.ToString());
         cameraImageReady = true;
     }
 
@@ -857,13 +854,13 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("StartX Get", cameraStartX.ToString());
+            LogMessage("StartX Get", cameraStartX.ToString());
             return cameraStartX;
         }
         set
         {
             cameraStartX = value;
-            tl.LogMessage("StartX Set", value.ToString());
+            LogMessage("StartX Set", value.ToString());
         }
     }
 
@@ -874,13 +871,13 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("StartY Get", cameraStartY.ToString());
+            LogMessage("StartY Get", cameraStartY.ToString());
             return cameraStartY;
         }
         set
         {
             cameraStartY = value;
-            tl.LogMessage("StartY set", value.ToString());
+            LogMessage("StartY set", value.ToString());
         }
     }
 
@@ -889,7 +886,7 @@ static class CameraHardware
     /// </summary>
     static internal void StopExposure()
     {
-        tl.LogMessage("StopExposure", "Not implemented");
+        LogMessage("StopExposure", "Not implemented");
         throw new MethodNotImplementedException("StopExposure");
     }
 
@@ -900,12 +897,12 @@ static class CameraHardware
     {
         get
         {
-            tl.LogMessage("SubExposureDuration Get", "Not implemented");
+            LogMessage("SubExposureDuration Get", "Not implemented");
             throw new PropertyNotImplementedException("SubExposureDuration", false);
         }
         set
         {
-            tl.LogMessage("SubExposureDuration Set", "Not implemented");
+            LogMessage("SubExposureDuration Set", "Not implemented");
             throw new PropertyNotImplementedException("SubExposureDuration", true);
         }
     }

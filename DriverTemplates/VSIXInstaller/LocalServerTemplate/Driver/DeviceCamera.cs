@@ -19,13 +19,14 @@ class DeviceCamera
     {
         LogMessage("AbortExposure", $"Calling method.");
         CameraHardware.AbortExposure();
+        LogMessage("AbortExposure", $"Completed.");
     }
 
-	/// <summary>
-	/// Returns the X offset of the Bayer matrix, as defined in <see cref="SensorType" />.
-	/// </summary>
-	/// <returns>The Bayer colour matrix X offset, as defined in <see cref="SensorType" />.</returns>
-	public short BayerOffsetX
+    /// <summary>
+    /// Returns the X offset of the Bayer matrix, as defined in <see cref="SensorType" />.
+    /// </summary>
+    /// <returns>The Bayer colour matrix X offset, as defined in <see cref="SensorType" />.</returns>
+    public short BayerOffsetX
     {
         get
         {

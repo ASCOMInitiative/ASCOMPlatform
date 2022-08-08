@@ -8,9 +8,6 @@ using ASCOM.Utilities;
 
 static class CoverCalibratorHardware
 {
-    private static Util util = new Util();
-    private static TraceLogger tl = new TraceLogger();
-
     #region ICoverCalibrator Implementation
 
     /// <summary>
@@ -20,7 +17,7 @@ static class CoverCalibratorHardware
     {
         get
         {
-            tl.LogMessage("CoverState Get", "Not implemented");
+            LogMessage("CoverState Get", "Not implemented");
             throw new PropertyNotImplementedException("CoverState", false);
         }
     }
@@ -30,7 +27,7 @@ static class CoverCalibratorHardware
     /// </summary>
     internal static void OpenCover()
     {
-        tl.LogMessage("OpenCover", "Not implemented");
+        LogMessage("OpenCover", "Not implemented");
         throw new MethodNotImplementedException("OpenCover");
     }
 
@@ -39,7 +36,7 @@ static class CoverCalibratorHardware
     /// </summary>
     internal static void CloseCover()
     {
-        tl.LogMessage("CloseCover", "Not implemented");
+        LogMessage("CloseCover", "Not implemented");
         throw new MethodNotImplementedException("CloseCover");
     }
 
@@ -48,7 +45,7 @@ static class CoverCalibratorHardware
     /// </summary>
     internal static void HaltCover()
     {
-        tl.LogMessage("HaltCover", "Not implemented");
+        LogMessage("HaltCover", "Not implemented");
         throw new MethodNotImplementedException("HaltCover");
     }
 
@@ -59,7 +56,7 @@ static class CoverCalibratorHardware
     {
         get
         {
-            tl.LogMessage("CalibratorState Get", "Not implemented");
+            LogMessage("CalibratorState Get", "Not implemented");
             throw new PropertyNotImplementedException("CalibratorState", false);
         }
     }
@@ -71,7 +68,7 @@ static class CoverCalibratorHardware
     {
         get
         {
-            tl.LogMessage("Brightness Get", "Not implemented");
+            LogMessage("Brightness Get", "Not implemented");
             throw new PropertyNotImplementedException("Brightness", false);
         }
     }
@@ -83,7 +80,7 @@ static class CoverCalibratorHardware
     {
         get
         {
-            tl.LogMessage("MaxBrightness Get", "Not implemented");
+            LogMessage("MaxBrightness Get", "Not implemented");
             throw new PropertyNotImplementedException("MaxBrightness", false);
         }
     }
@@ -94,7 +91,7 @@ static class CoverCalibratorHardware
     /// <param name="Brightness"></param>
     internal static void CalibratorOn(int Brightness)
     {
-        tl.LogMessage("CalibratorOn", $"Not implemented. Value set: {Brightness}");
+        LogMessage("CalibratorOn", $"Not implemented. Value set: {Brightness}");
         throw new MethodNotImplementedException("CalibratorOn");
     }
 
@@ -103,11 +100,18 @@ static class CoverCalibratorHardware
     /// </summary>
     internal static void CalibratorOff()
     {
-        tl.LogMessage("CalibratorOff", "Not implemented");
+        LogMessage("CalibratorOff", "Not implemented");
         throw new MethodNotImplementedException("CalibratorOff");
     }
 
     #endregion
 
     //ENDOFINSERTEDFILE
+
+    /// <summary>
+    /// Dummy LogMessage class that removes compilation errors in the Platform source code and that will be omitted when the project is built
+    /// </summary>
+    static void LogMessage(string method, string message)
+    {
+    }
 }

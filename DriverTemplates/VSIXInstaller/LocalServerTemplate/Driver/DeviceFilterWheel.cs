@@ -17,61 +17,58 @@ class DeviceFilerWheel
     private string[] fwNames = new string[4] { "Red", "Green", "Blue", "Clear" }; //class level variable to hold the filter names
     private short fwPosition = 0; // class level variable to retain the current filterwheel position
 
-	/// <summary>
-	/// Focus offset of each filter in the wheel
-	/// </summary>
-	public int[] FocusOffsets
+    /// <summary>
+    /// Focus offset of each filter in the wheel
+    /// </summary>
+    public int[] FocusOffsets
     {
         get
         {
-            foreach (int fwOffset in fwOffsets) // Write filter offsets to the log
-            {
-                tl.LogMessage("FocusOffsets Get", fwOffset.ToString());
-            }
-
-            return fwOffsets;
+            int[] focusoffsets = FilterWheelHardware.FocusOffsets;
+            LogMessage("FocusOffsets Get", focusoffsets.ToString());
+            return focusoffsets;
         }
     }
 
-	/// <summary>
-	/// Name of each filter in the wheel
-	/// </summary>
-	public string[] Names
+    /// <summary>
+    /// Name of each filter in the wheel
+    /// </summary>
+    public string[] Names
     {
         get
         {
-            foreach (string fwName in fwNames) // Write filter names to the log
-            {
-                tl.LogMessage("Names Get", fwName);
-            }
-
-            return fwNames;
+            string[] names = FilterWheelHardware.Names;
+            LogMessage("Names Get", names.ToString());
+            return names;
         }
     }
 
-	/// <summary>
-	/// Sets or returns the current filter wheel position
-	/// </summary>
-	public short Position
+    /// <summary>
+    /// Sets or returns the current filter wheel position
+    /// </summary>
+    public short Position
     {
         get
         {
-            tl.LogMessage("Position Get", fwPosition.ToString());
-            return fwPosition;
+            short position = FilterWheelHardware.Position;
+            LogMessage("Position Get", position.ToString());
+            return position;
         }
         set
         {
-            tl.LogMessage("Position Set", value.ToString());
-            if ((value < 0) | (value > fwNames.Length - 1))
-            {
-                tl.LogMessage("", "Throwing InvalidValueException - Position: " + value.ToString() + ", Range: 0 to " + (fwNames.Length - 1).ToString());
-                throw new InvalidValueException("Position", value.ToString(), "0 to " + (fwNames.Length - 1).ToString());
-            }
-            fwPosition = value;
+            LogMessage("Position Set", value.ToString());
+            FilterWheelHardware.Position = value;
         }
     }
 
     #endregion
 
     //ENDOFINSERTEDFILE
+
+    /// <summary>
+    /// Dummy LogMessage class that removes compilation errors in the Platform source code and that will be omitted when the project is built
+    /// </summary>
+    static void LogMessage(string method, string message)
+    {
+    }
 }
