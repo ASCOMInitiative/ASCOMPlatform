@@ -10,15 +10,7 @@ using System.Collections;
 
 class DeviceVideo
 {
-    private TraceLogger tl = new TraceLogger();
-    Util util = new Util();
-
     #region IVideo Implementation
-
-    private const int deviceWidth = 720; // Constants to define the ccd pixel dimenstions
-    private const int deviceHeight = 480;
-    private const int bitDepth = 8;
-    private const string videoFileFormat = "AVI";
 
 	/// <summary>
 	/// Reports the bit depth the camera can produce.
@@ -28,7 +20,8 @@ class DeviceVideo
     {
         get
         {
-            tl.LogMessage("BitDepth Get", bitDepth.ToString());
+            int bitDepth = VideoHardware.BitDepth;
+            LogMessage("BitDepth Get", bitDepth.ToString());
             return bitDepth;
         }
     }
@@ -38,7 +31,12 @@ class DeviceVideo
 	/// </summary>
 	public VideoCameraState CameraState
     {
-        get { return VideoCameraState.videoCameraError; }
+        get 
+        {
+            VideoCameraState cameraState = VideoHardware.CameraState;
+            LogMessage("CameraState Get", cameraState.ToString());
+            return cameraState;
+        }
     }
 
 	/// <summary>
@@ -48,7 +46,9 @@ class DeviceVideo
     {
         get
         {
-            return false;
+            bool canConfigureDeviceProperties = VideoHardware.CanConfigureDeviceProperties;
+            LogMessage("CanConfigureDeviceProperties Get", canConfigureDeviceProperties.ToString());
+            return canConfigureDeviceProperties;
         }
     }
 
@@ -57,18 +57,21 @@ class DeviceVideo
 	/// </summary>
 	public void ConfigureDeviceProperties()
     {
-        throw new PropertyNotImplementedException();
+        LogMessage("ConfigureDeviceProperties", $"Calling method.");
+        VideoHardware.ConfigureDeviceProperties();
+        LogMessage("ConfigureDeviceProperties", $"Completed.");
     }
 
-	/// <summary>
-	/// The maximum supported exposure (integration time) in seconds.
-	/// </summary>
-	public double ExposureMax
+    /// <summary>
+    /// The maximum supported exposure (integration time) in seconds.
+    /// </summary>
+    public double ExposureMax
     {
         get
         {
-            // Standard NTSC frame duration
-            return 0.03337;
+            double exposureMax = VideoHardware.ExposureMax;
+            LogMessage("ExposureMax Get", exposureMax.ToString());
+            return exposureMax;
         }
     }
 
@@ -79,8 +82,9 @@ class DeviceVideo
     {
         get
         {
-            // Standard NTSC frame duration
-            return 0.03337;
+            double exposureMin = VideoHardware.ExposureMin;
+            LogMessage("ExposureMin Get", exposureMin.ToString());
+            return exposureMin;
         }
     }
 
@@ -89,7 +93,12 @@ class DeviceVideo
 	/// </summary>
 	public VideoCameraFrameRate FrameRate
     {
-        get { return VideoCameraFrameRate.NTSC; }
+        get
+        {
+            VideoCameraFrameRate frameRate = VideoHardware.FrameRate;
+            LogMessage("FrameRate Get", frameRate.ToString());
+            return frameRate;
+        }
     }
 
 	/// <summary>
@@ -99,16 +108,17 @@ class DeviceVideo
 	/// <returns>Index into the Gains array for the selected camera gain</returns>
 	public short Gain
     {
-
         get
         {
-            throw new PropertyNotImplementedException("Gain", false);
+            short gain = VideoHardware.Gain;
+            LogMessage("Gain Get", gain.ToString());
+            return gain;
         }
-
 
         set
         {
-            throw new PropertyNotImplementedException("Gain", true);
+            LogMessage("Gain Set", value.ToString());
+            VideoHardware.Gain = value;
         }
     }
 
@@ -117,10 +127,11 @@ class DeviceVideo
 	/// </summary>
 	public short GainMax
     {
-
         get
         {
-            throw new PropertyNotImplementedException("GainMax", false);
+            short gainMax = VideoHardware.GainMax;
+            LogMessage("GainMax Get", gainMax.ToString());
+            return gainMax;
         }
     }
 
@@ -130,10 +141,11 @@ class DeviceVideo
 	/// <returns>The minimum gain value that this camera supports</returns>
 	public short GainMin
     {
-
         get
         {
-            throw new PropertyNotImplementedException("GainMin", false);
+            short gainMin = VideoHardware.GainMin;
+            LogMessage("GainMin Get", gainMin.ToString());
+            return gainMin;
         }
     }
 
@@ -143,10 +155,11 @@ class DeviceVideo
 	/// <returns>An ArrayList of gain names or values</returns>
 	public ArrayList Gains
     {
-
         get
         {
-            throw new PropertyNotImplementedException("Gains", false);
+            ArrayList gains = VideoHardware.Gains;
+            LogMessage("Gains Get", $"{gains.Count} gains were returned.");
+            return gains;
         }
     }
 
@@ -157,16 +170,17 @@ class DeviceVideo
 	/// <returns>Index into the Gammas array for the selected camera gamma</returns>
 	public short Gamma
     {
-
         get
         {
-            throw new PropertyNotImplementedException("Gamma", false);
+            short gamma = VideoHardware.Gamma;
+            LogMessage("Gamma Get", gamma.ToString());
+            return gamma;
         }
-
 
         set
         {
-            throw new PropertyNotImplementedException("Gamma", true);
+            LogMessage("Gamma Set", value.ToString());
+            VideoHardware.Gamma = value;
         }
     }
 
@@ -177,10 +191,11 @@ class DeviceVideo
 	/// <returns>The maximum gain value that this camera supports</returns>
 	public short GammaMax
     {
-
         get
         {
-            throw new PropertyNotImplementedException("GainMax", false);
+            short gammaMax = VideoHardware.GammaMax;
+            LogMessage("GammaMax Get", gammaMax.ToString());
+            return gammaMax;
         }
     }
 
@@ -190,10 +205,11 @@ class DeviceVideo
 	/// <returns>The minimum gamma value that this camera supports</returns>
 	public short GammaMin
     {
-
         get
         {
-            throw new PropertyNotImplementedException("GainMin", false);
+            short gammaMin = VideoHardware.GammaMin;
+            LogMessage("GammaMin Get", gammaMin.ToString());
+            return gammaMin;
         }
     }
 
@@ -203,10 +219,11 @@ class DeviceVideo
 	/// <returns>An ArrayList of gamma names or values</returns>
 	public ArrayList Gammas
     {
-
         get
         {
-            throw new PropertyNotImplementedException("Gammas", false);
+            ArrayList gammas = VideoHardware.Gammas;
+            LogMessage("Gammas Get", $"{gammas.Count} gammas were returned.");
+            return gammas;
         }
     }
 
@@ -218,8 +235,9 @@ class DeviceVideo
     {
         get
         {
-            tl.LogMessage("Height Get", deviceHeight.ToString());
-            return deviceHeight;
+            int height = VideoHardware.Height;
+            LogMessage("Height Get", height.ToString());
+            return height;
         }
     }
 
@@ -230,16 +248,17 @@ class DeviceVideo
 	/// <returns>Index into the SupportedIntegrationRates array for the selected camera integration rate.</returns>
 	public int IntegrationRate
     {
-
         get
         {
-            throw new PropertyNotImplementedException("IntegrationRate", false);
+            int integrationRate = VideoHardware.IntegrationRate;
+            LogMessage("IntegrationRate Get", integrationRate.ToString());
+            return integrationRate;
         }
-
 
         set
         {
-            throw new PropertyNotImplementedException("IntegrationRate", true);
+            LogMessage("IntegrationRate Set", value.ToString());
+            VideoHardware.IntegrationRate = value;
         }
     }
 
@@ -249,7 +268,12 @@ class DeviceVideo
 	/// <value>The current video frame.</value>
 	public IVideoFrame LastVideoFrame
     {
-        get { throw new InvalidOperationException("There are no video frames available."); }
+        get 
+        {
+            IVideoFrame lastVideoFrame = VideoHardware.LastVideoFrame;
+            LogMessage("LastVideoFrame Get", $"Returned frame number: {lastVideoFrame.FrameNumber}");
+            return lastVideoFrame;
+        }
     }
 
 	/// <summary>
@@ -257,10 +281,11 @@ class DeviceVideo
 	/// </summary>
 	public double PixelSizeX
     {
-
         get
         {
-            throw new PropertyNotImplementedException("PixelSizeX", false);
+            double pixelSizeX = VideoHardware.PixelSizeX;
+            LogMessage("PixelSizeX Get", pixelSizeX.ToString());
+            return pixelSizeX;
         }
     }
 
@@ -270,10 +295,11 @@ class DeviceVideo
 	/// <value>The pixel size Y if known.</value>
 	public double PixelSizeY
     {
-
         get
         {
-            throw new PropertyNotImplementedException("PixelSizeY", false);
+            double pixelSizeY = VideoHardware.PixelSizeY;
+            LogMessage("PixelSizeY Get", pixelSizeY.ToString());
+            return pixelSizeY;
         }
     }
 
@@ -283,10 +309,11 @@ class DeviceVideo
 	/// <returns>The name of sensor used within the camera.</returns>
 	public string SensorName
     {
-
         get
         {
-            throw new PropertyNotImplementedException("SensorName", false);
+            string sensorName = VideoHardware.SensorName;
+            LogMessage("SensorName Get", sensorName.ToString());
+            return sensorName;
         }
     }
 
@@ -296,7 +323,12 @@ class DeviceVideo
 	/// <returns>The <see cref="DeviceInterface.SensorType"/> enum value of the camera sensor</returns>
 	public SensorType SensorType
     {
-        get { return SensorType.Monochrome; }
+        get
+        {
+            SensorType sensorType = VideoHardware.SensorType;
+            LogMessage("SensorType Get", sensorType.ToString());
+            return sensorType;
+        }
     }
 
 	/// <summary>
@@ -306,28 +338,33 @@ class DeviceVideo
 	/// <returns>The actual file name of the file that is being recorded.</returns>
 	public string StartRecordingVideoFile(string PreferredFileName)
     {
-        tl.LogMessage("StartRecordingVideoFile", "Supplied file name: " + PreferredFileName);
-        throw new InvalidOperationException("Cannot start recording a video file right now.");
+        LogMessage("StartRecordingVideoFile", $"Calling method.");
+        string startRecordingVideoFile=VideoHardware.StartRecordingVideoFile(PreferredFileName);
+        LogMessage("StartRecordingVideoFile", startRecordingVideoFile.ToString());
+        return startRecordingVideoFile;
     }
 
-	/// <summary>
-	/// Stops the recording of a video file.
-	/// </summary>
-	public void StopRecordingVideoFile()
+    /// <summary>
+    /// Stops the recording of a video file.
+    /// </summary>
+    public void StopRecordingVideoFile()
     {
-        throw new InvalidOperationException("Cannot stop recording right now.");
+        LogMessage("StopRecordingVideoFile", $"Calling method.");
+        VideoHardware.StopRecordingVideoFile();
+        LogMessage("StopRecordingVideoFile", $"Completed.");
     }
 
-	/// <summary>
-	/// Returns the list of integration rates supported by the video camera.
-	/// </summary>
-	/// <value>The list of supported integration rates in seconds.</value>
-	public ArrayList SupportedIntegrationRates
+    /// <summary>
+    /// Returns the list of integration rates supported by the video camera.
+    /// </summary>
+    /// <value>The list of supported integration rates in seconds.</value>
+    public ArrayList SupportedIntegrationRates
     {
-
         get
         {
-            throw new PropertyNotImplementedException("SupportedIntegrationRates", false);
+            ArrayList supportedIntegrationRates = VideoHardware.SupportedIntegrationRates;
+            LogMessage("SupportedIntegrationRates Get", $"Returned {supportedIntegrationRates.Count} rates.");
+            return supportedIntegrationRates;
         }
     }
 
@@ -336,7 +373,12 @@ class DeviceVideo
 	/// </summary>
 	public string VideoCaptureDeviceName
     {
-        get { return string.Empty; }
+        get
+        {
+            string videoCaptureDeviceName = VideoHardware.VideoCaptureDeviceName;
+            LogMessage("VideoCaptureDeviceName Get", videoCaptureDeviceName.ToString());
+            return videoCaptureDeviceName;
+        }
     }
 
 	/// <summary>
@@ -344,7 +386,12 @@ class DeviceVideo
 	/// </summary>
 	public string VideoCodec
     {
-        get { return string.Empty; }
+        get 
+        {
+            string videoCodec = VideoHardware.VideoCodec;
+            LogMessage("VideoCodec Get", videoCodec.ToString());
+            return videoCodec;
+        }
     }
 
 	/// <summary>
@@ -354,7 +401,8 @@ class DeviceVideo
     {
         get
         {
-            tl.LogMessage("VideoFileFormat Get", videoFileFormat);
+            string videoFileFormat = VideoHardware.VideoFileFormat;
+            LogMessage("VideoFileFormat Get", videoFileFormat.ToString());
             return videoFileFormat;
         }
     }
@@ -364,7 +412,12 @@ class DeviceVideo
 	/// </summary>
 	public int VideoFramesBufferSize
     {
-        get { return 0; }
+        get 
+        {
+            int videoFramesBufferSize = VideoHardware.VideoFramesBufferSize;
+            LogMessage("VideoFramesBufferSize Get", videoFramesBufferSize.ToString());
+            return videoFramesBufferSize;
+        }
     }
 
 	/// <summary>
@@ -375,12 +428,21 @@ class DeviceVideo
     {
         get
         {
-            tl.LogMessage("Height Width", deviceWidth.ToString());
-            return deviceWidth;
+            int width = VideoHardware.Width;
+            LogMessage("Width Get", width.ToString());
+            return width;
         }
     }
 
     #endregion
 
     //ENDOFINSERTEDFILE
+
+    /// <summary>
+    /// Dummy LogMessage class that removes compilation errors in the Platform source code and that will be omitted when the project is built
+    /// </summary>
+    static void LogMessage(string method, string message)
+    {
+    }
+
 }
