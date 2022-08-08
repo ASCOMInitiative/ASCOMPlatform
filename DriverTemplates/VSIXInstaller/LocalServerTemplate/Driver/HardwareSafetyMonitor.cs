@@ -12,9 +12,6 @@ using System.Text;
 using System.Threading.Tasks;
 static class SafetyMonitorHardware
 {
-    static Util util = new Util();
-    static TraceLogger tl = new TraceLogger();
-
     #region ISafetyMonitor Implementation
 
     /// <summary>

@@ -10,9 +10,6 @@ using ASCOM.Utilities;
 
 class DeviceCamera
 {
-    Util util = new Util();
-    TraceLogger tl = new TraceLogger();
-
     #region ICamera Implementation
 
 	/// <summary>
@@ -695,7 +692,7 @@ class DeviceCamera
     {
         get
         {
-            tl.LogMessage("Offsets Get", "Not implemented");
+            LogMessage("Offsets Get", "Not implemented");
             throw new PropertyNotImplementedException("Offsets", true);
         }
     }

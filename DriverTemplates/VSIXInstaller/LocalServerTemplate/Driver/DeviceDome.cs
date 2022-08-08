@@ -9,9 +9,6 @@ using ASCOM.Utilities;
 
 class DeviceDome
 {
-    Util util = new Util();
-    TraceLogger tl = new TraceLogger();
-
     #region IDome Implementation
 
     private bool domeShutterState = false; // Variable to hold the open/closed status of the shutter, true = Open
@@ -21,19 +18,21 @@ class DeviceDome
 	/// </summary>
 	public void AbortSlew()
     {
-        // This is a mandatory parameter but we have no action to take in this simple driver
-        tl.LogMessage("AbortSlew", "Completed");
+        LogMessage("AbortSlew", $"Calling method.");
+        DomeHardware.AbortSlew();
+        LogMessage("AbortSlew", $"Completed.");
     }
 
-	/// <summary>
-	/// The altitude (degrees, horizon zero and increasing positive to 90 zenith) of the part of the sky that the observer wishes to observe.
-	/// </summary>
-	public double Altitude
+    /// <summary>
+    /// The altitude (degrees, horizon zero and increasing positive to 90 zenith) of the part of the sky that the observer wishes to observe.
+    /// </summary>
+    public double Altitude
     {
         get
         {
-            tl.LogMessage("Altitude Get", "Not implemented");
-            throw new PropertyNotImplementedException("Altitude", false);
+            double altitude = DomeHardware.Altitude;
+            LogMessage("Altitude Get", altitude.ToString());
+            return altitude;
         }
     }
 
@@ -54,8 +53,9 @@ class DeviceDome
     {
         get
         {
-            tl.LogMessage("AtHome Get", "Not implemented");
-            throw new PropertyNotImplementedException("AtHome", false);
+            bool atHome = DomeHardware.AtHome;
+            LogMessage("AtHome Get", atHome.ToString());
+            return atHome;
         }
     }
 
@@ -66,8 +66,9 @@ class DeviceDome
     {
         get
         {
-            tl.LogMessage("AtPark Get", "Not implemented");
-            throw new PropertyNotImplementedException("AtPark", false);
+            bool atPark = DomeHardware.AtPark;
+            LogMessage("AtPark Get", atPark.ToString());
+            return atPark;
         }
     }
 
@@ -78,8 +79,9 @@ class DeviceDome
     {
         get
         {
-            tl.LogMessage("Azimuth Get", "Not implemented");
-            throw new PropertyNotImplementedException("Azimuth", false);
+            double azimuth = DomeHardware.Azimuth;
+            LogMessage("Azimuth Get", azimuth.ToString());
+            return azimuth;
         }
     }
 
@@ -90,8 +92,9 @@ class DeviceDome
     {
         get
         {
-            tl.LogMessage("CanFindHome Get", false.ToString());
-            return false;
+            bool canFindHome = DomeHardware.CanFindHome;
+            LogMessage("CanFindHome Get", canFindHome.ToString());
+            return canFindHome;
         }
     }
 
@@ -102,8 +105,9 @@ class DeviceDome
     {
         get
         {
-            tl.LogMessage("CanPark Get", false.ToString());
-            return false;
+            bool canPark = DomeHardware.CanPark;
+            LogMessage("CanPark Get", canPark.ToString());
+            return canPark;
         }
     }
 
@@ -114,8 +118,9 @@ class DeviceDome
     {
         get
         {
-            tl.LogMessage("CanSetAltitude Get", false.ToString());
-            return false;
+            bool canSetAltitude = DomeHardware.CanSetAltitude;
+            LogMessage("CanSetAltitude Get", canSetAltitude.ToString());
+            return canSetAltitude;
         }
     }
 
@@ -127,8 +132,9 @@ class DeviceDome
     {
         get
         {
-            tl.LogMessage("CanSetAzimuth Get", false.ToString());
-            return false;
+            bool canSetAzimuth = DomeHardware.CanSetAzimuth;
+            LogMessage("CanSetAzimuth Get", canSetAzimuth.ToString());
+            return canSetAzimuth;
         }
     }
 
@@ -139,8 +145,9 @@ class DeviceDome
     {
         get
         {
-            tl.LogMessage("CanSetPark Get", false.ToString());
-            return false;
+            bool canSetPark = DomeHardware.CanSetPark;
+            LogMessage("CanSetPark Get", canSetPark.ToString());
+            return canSetPark;
         }
     }
 
@@ -152,8 +159,9 @@ class DeviceDome
     {
         get
         {
-            tl.LogMessage("CanSetShutter Get", true.ToString());
-            return true;
+            bool canSetShutter = DomeHardware.CanSetShutter;
+            LogMessage("CanSetShutter Get", canSetShutter.ToString());
+            return canSetShutter;
         }
     }
 
@@ -164,8 +172,9 @@ class DeviceDome
     {
         get
         {
-            tl.LogMessage("CanSlave Get", false.ToString());
-            return false;
+            bool canSlave = DomeHardware.CanSlave;
+            LogMessage("CanSlave Get", canSlave.ToString());
+            return canSlave;
         }
     }
 
@@ -177,8 +186,9 @@ class DeviceDome
     {
         get
         {
-            tl.LogMessage("CanSyncAzimuth Get", false.ToString());
-            return false;
+            bool canSyncAzimuth = DomeHardware.CanSyncAzimuth;
+            LogMessage("CanSyncAzimuth Get", canSyncAzimuth.ToString());
+            return canSyncAzimuth;
         }
     }
 
@@ -187,64 +197,61 @@ class DeviceDome
 	/// </summary>
 	public void CloseShutter()
     {
-        tl.LogMessage("CloseShutter", "Shutter has been closed");
-        domeShutterState = false;
+        LogMessage("CloseShutter", $"Calling method.");
+        DomeHardware.CloseShutter();
+        LogMessage("CloseShutter", $"Completed.");
     }
 
-	/// <summary>
-	/// Start operation to search for the dome home position.
-	/// </summary>
-	public void FindHome()
+    /// <summary>
+    /// Start operation to search for the dome home position.
+    /// </summary>
+    public void FindHome()
     {
-        tl.LogMessage("FindHome", "Not implemented");
-        throw new MethodNotImplementedException("FindHome");
+        LogMessage("FindHome", $"Calling method.");
+        DomeHardware.FindHome();
+        LogMessage("FindHome", $"Completed.");
     }
 
-	/// <summary>
-	/// Open shutter or otherwise expose telescope to the sky.
-	/// </summary>
-	public void OpenShutter()
+    /// <summary>
+    /// Open shutter or otherwise expose telescope to the sky.
+    /// </summary>
+    public void OpenShutter()
     {
-        tl.LogMessage("OpenShutter", "Shutter has been opened");
-        domeShutterState = true;
+        LogMessage("OpenShutter", $"Calling method.");
+        DomeHardware.OpenShutter();
+        LogMessage("OpenShutter", $"Completed.");
     }
 
-	/// <summary>
-	/// Rotate dome in azimuth to park position.
-	/// </summary>
+    /// <summary>
+    /// Rotate dome in azimuth to park position.
+    /// </summary>
     public void Park()
     {
-        tl.LogMessage("Park", "Not implemented");
-        throw new MethodNotImplementedException("Park");
+        LogMessage("Park", $"Calling method.");
+        DomeHardware.Park();
+        LogMessage("Park", $"Completed.");
     }
 
-	/// <summary>
-	/// Set the current azimuth position of dome to the park position.
-	/// </summary>
-	public void SetPark()
+    /// <summary>
+    /// Set the current azimuth position of dome to the park position.
+    /// </summary>
+    public void SetPark()
     {
-        tl.LogMessage("SetPark", "Not implemented");
-        throw new MethodNotImplementedException("SetPark");
+        LogMessage("SetPark", $"Calling method.");
+        DomeHardware.SetPark();
+        LogMessage("SetPark", $"Completed.");
     }
 
-	/// <summary>
-	/// Gets the status of the dome shutter or roof structure.
-	/// </summary>
-	public ShutterState ShutterStatus
+    /// <summary>
+    /// Gets the status of the dome shutter or roof structure.
+    /// </summary>
+    public ShutterState ShutterStatus
     {
         get
         {
-            tl.LogMessage("ShutterStatus Get", false.ToString());
-            if (domeShutterState)
-            {
-                tl.LogMessage("ShutterStatus", ShutterState.shutterOpen.ToString());
-                return ShutterState.shutterOpen;
-            }
-            else
-            {
-                tl.LogMessage("ShutterStatus", ShutterState.shutterClosed.ToString());
-                return ShutterState.shutterClosed;
-            }
+            ShutterState shutterSttaus = DomeHardware.ShutterStatus;
+            LogMessage("ShutterStatus Get", shutterSttaus.ToString());
+            return shutterSttaus;
         }
     }
 
@@ -255,70 +262,82 @@ class DeviceDome
     {
         get
         {
-            tl.LogMessage("Slaved Get", false.ToString());
-            return false;
+            bool slaved = DomeHardware.Slaved;
+            LogMessage("Slaved Get", slaved.ToString());
+            return slaved;
         }
         set
         {
-            tl.LogMessage("Slaved Set", "not implemented");
-            throw new PropertyNotImplementedException("Slaved", true);
+            LogMessage("Slaved Set", value.ToString());
+            DomeHardware.Slaved = value;
         }
     }
 
 	/// <summary>
 	/// Ensure that the requested viewing altitude is available for observing.
 	/// </summary>
-	/// <param name="Altitude">
+	/// <param name="altitude">
 	/// The desired viewing altitude (degrees, horizon zero and increasing positive to 90 degrees at the zenith)
 	/// </param>
-	public void SlewToAltitude(double Altitude)
+	public void SlewToAltitude(double altitude)
     {
-        tl.LogMessage("SlewToAltitude", "Not implemented");
-        throw new MethodNotImplementedException("SlewToAltitude");
+        LogMessage("SlewToAltitude", $"Calling method.");
+        DomeHardware.SlewToAltitude(altitude);
+        LogMessage("SlewToAltitude", $"Completed.");
     }
 
-	/// <summary>
-	/// Ensure that the requested viewing azimuth is available for observing.
-	/// The method should not block and the slew operation should complete asynchronously.
-	/// </summary>
-	/// <param name="Azimuth">
-	/// Desired viewing azimuth (degrees, North zero and increasing clockwise. i.e., 90 East,
-	/// 180 South, 270 West)
-	/// </param>
-	public void SlewToAzimuth(double Azimuth)
+    /// <summary>
+    /// Ensure that the requested viewing azimuth is available for observing.
+    /// The method should not block and the slew operation should complete asynchronously.
+    /// </summary>
+    /// <param name="azimuth">
+    /// Desired viewing azimuth (degrees, North zero and increasing clockwise. i.e., 90 East,
+    /// 180 South, 270 West)
+    /// </param>
+    public void SlewToAzimuth(double azimuth)
     {
-        tl.LogMessage("SlewToAzimuth", "Not implemented");
-        throw new MethodNotImplementedException("SlewToAzimuth");
+        LogMessage("SlewToAzimuth", $"Calling method.");
+        DomeHardware.SlewToAzimuth(azimuth);
+        LogMessage("SlewToAzimuth", $"Completed.");
     }
 
-	/// <summary>
-	/// <see langword="true" /> if any part of the dome is currently moving or a move command has been issued, 
-	/// but the dome has not yet started to move. <see langword="false" /> if all dome components are stationary
-	/// and no move command has been issued. /> 
-	/// </summary>
-	public bool Slewing
+    /// <summary>
+    /// <see langword="true" /> if any part of the dome is currently moving or a move command has been issued, 
+    /// but the dome has not yet started to move. <see langword="false" /> if all dome components are stationary
+    /// and no move command has been issued. /> 
+    /// </summary>
+    public bool Slewing
     {
         get
         {
-            tl.LogMessage("Slewing Get", false.ToString());
-            return false;
+            bool slewing = DomeHardware.Slewing;
+            LogMessage("Slewing Get", slewing.ToString());
+            return slewing;
         }
     }
 
 	/// <summary>
 	/// Synchronize the current position of the dome to the given azimuth.
 	/// </summary>
-	/// <param name="Azimuth">
+	/// <param name="azimuth">
 	/// Target azimuth (degrees, North zero and increasing clockwise. i.e., 90 East,
 	/// 180 South, 270 West)
 	/// </param>
-	public void SyncToAzimuth(double Azimuth)
+	public void SyncToAzimuth(double azimuth)
     {
-        tl.LogMessage("SyncToAzimuth", "Not implemented");
-        throw new MethodNotImplementedException("SyncToAzimuth");
+        LogMessage("SyncToAzimuth", $"Calling method.");
+        DomeHardware.SyncToAzimuth(azimuth);
+        LogMessage("SyncToAzimuth", $"Completed.");
     }
 
     #endregion
 
     //ENDOFINSERTEDFILE
+
+    /// <summary>
+    /// Dummy LogMessage class that removes compilation errors in the Platform source code and that will be omitted when the project is built
+    /// </summary>
+    static void LogMessage(string method, string message)
+    {
+    }
 }

@@ -8,9 +8,6 @@ using ASCOM.Utilities;
 
 class DeviceCoverCalibrator
 {
-    Util util = new Util();
-    TraceLogger tl = new TraceLogger();
-
     #region ICoverCalibrator Implementation
 
     /// <summary>
