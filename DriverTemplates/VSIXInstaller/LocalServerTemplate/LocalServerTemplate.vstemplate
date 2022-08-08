@@ -44,8 +44,16 @@
 				<ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.Designer.cs">SetupDialogForm.Designer.cs</ProjectItem>
 				<ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.resx">SetupDialogForm.resx</ProjectItem>
 				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareCamera.cs">HardwareCamera.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareCoverCalibrator.cs">HardwareCoverCalibrator.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareDome.cs">HardwareDome.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareFilterWheel.cs">HardwareFilterWheel.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareFocuser.cs">HardwareFocuser.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareObservingConditions.cs">HardwareObservingConditions.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareRotator.cs">HardwareRotator.cs</ProjectItem>
 				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareSafetyMonitor.cs">HardwareSafetyMonitor.cs</ProjectItem>
 				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareSwitch.cs">HardwareSwitch.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareTelescope.cs">HardwareTelescope.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareVideo.cs">HardwareVideo.cs</ProjectItem>
 				<ProjectItem ReplaceParameters="true" TargetFileName="CommonHardware.cs">CommonHardware.cs</ProjectItem>
 			</Folder>
 			<Folder Name="TemplateProperties" TargetFolderName="Properties">

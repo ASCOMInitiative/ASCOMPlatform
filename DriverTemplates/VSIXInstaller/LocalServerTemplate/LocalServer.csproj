@@ -90,8 +90,16 @@
 		<Compile Include="Driver\PlaceholderInterface.cs" />
 		<Compile Include="Driver\Rates.cs" />
 		<Compile Include="Driver\HardwareCamera.cs" />
+		<Compile Include="Driver\HardwareCoverCalibrator.cs" />
+		<Compile Include="Driver\HardwareDome.cs" />
+		<Compile Include="Driver\HardwareFilterWheel.cs" />
+		<Compile Include="Driver\HardwareFocuser.cs" />
+		<Compile Include="Driver\HardwareObservingConditions.cs" />
+		<Compile Include="Driver\HardwareRotator.cs" />
 		<Compile Include="Driver\HardwareSafetyMonitor.cs" />
 		<Compile Include="Driver\HardwareSwitch.cs" />
+		<Compile Include="Driver\HardwareTelescope.cs" />
+		<Compile Include="Driver\HardwareVideo.cs" />
 		<Compile Include="Driver\CommonHardware.cs" />
 		<Compile Include="frmMain.cs">
 			<SubType>Form</SubType>

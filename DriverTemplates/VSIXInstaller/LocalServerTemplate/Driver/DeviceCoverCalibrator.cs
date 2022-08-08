@@ -20,8 +20,9 @@ class DeviceCoverCalibrator
     {
         get
         {
-            tl.LogMessage("CoverState Get", "Not implemented");
-            throw new PropertyNotImplementedException("CoverState", false);
+            CoverStatus coverStatus = CoverCalibratorHardware.CoverState;
+            LogMessage("CoverStatus", $"{coverStatus}");
+            return coverStatus;
         }
     }
 
@@ -30,8 +31,9 @@ class DeviceCoverCalibrator
     /// </summary>
     public void OpenCover()
     {
-        tl.LogMessage("OpenCover", "Not implemented");
-        throw new MethodNotImplementedException("OpenCover");
+        LogMessage("OpenCover", "Calling OpenCover");
+        CoverCalibratorHardware.OpenCover();
+        LogMessage("OpenCover", "OpenCover complete");
     }
 
     /// <summary>
@@ -39,8 +41,9 @@ class DeviceCoverCalibrator
     /// </summary>
     public void CloseCover()
     {
-        tl.LogMessage("CloseCover", "Not implemented");
-        throw new MethodNotImplementedException("CloseCover");
+        LogMessage("CloseCover", "Calling CloseCover");
+        CoverCalibratorHardware.CloseCover();
+        LogMessage("CloseCover", "CloseCover complete");
     }
 
     /// <summary>
@@ -48,8 +51,9 @@ class DeviceCoverCalibrator
     /// </summary>
     public void HaltCover()
     {
-        tl.LogMessage("HaltCover", "Not implemented");
-        throw new MethodNotImplementedException("HaltCover");
+        LogMessage("HaltCover", "Calling HaltCover");
+        CoverCalibratorHardware.HaltCover();
+        LogMessage("HaltCover", "HaltCover complete");
     }
 
     /// <summary>
@@ -59,8 +63,9 @@ class DeviceCoverCalibrator
     {
         get
         {
-            tl.LogMessage("CalibratorState Get", "Not implemented");
-            throw new PropertyNotImplementedException("CalibratorState", false);
+            CalibratorStatus calibratorStatus = CoverCalibratorHardware.CalibratorState;
+            LogMessage("CalibratorStatus", $"{calibratorStatus}");
+            return calibratorStatus;
         }
     }
 
@@ -71,8 +76,9 @@ class DeviceCoverCalibrator
     {
         get
         {
-            tl.LogMessage("Brightness Get", "Not implemented");
-            throw new PropertyNotImplementedException("Brightness", false);
+            int brightness = CoverCalibratorHardware.Brightness;
+            LogMessage("Brightness", $"{brightness}");
+            return brightness;
         }
     }
 
@@ -83,8 +89,9 @@ class DeviceCoverCalibrator
     {
         get
         {
-            tl.LogMessage("MaxBrightness Get", "Not implemented");
-            throw new PropertyNotImplementedException("MaxBrightness", false);
+            int maxBrightness = CoverCalibratorHardware.MaxBrightness;
+            LogMessage("MaxBrightness", $"{maxBrightness}");
+            return maxBrightness;
         }
     }
 
@@ -94,8 +101,9 @@ class DeviceCoverCalibrator
     /// <param name="Brightness"></param>
     public void CalibratorOn(int Brightness)
     {
-        tl.LogMessage("CalibratorOn", $"Not implemented. Value set: {Brightness}");
-        throw new MethodNotImplementedException("CalibratorOn");
+        LogMessage("CalibratorOn", "Calling CalibratorOn");
+        CoverCalibratorHardware.CalibratorOn(Brightness);
+        LogMessage("CalibratorOn", "CalibratorOn complete");
     }
 
     /// <summary>
@@ -103,11 +111,20 @@ class DeviceCoverCalibrator
     /// </summary>
     public void CalibratorOff()
     {
-        tl.LogMessage("CalibratorOff", "Not implemented");
-        throw new MethodNotImplementedException("CalibratorOff");
+        LogMessage("CalibratorOff", "Calling CalibratorOff");
+        CoverCalibratorHardware.CalibratorOff();
+        LogMessage("CalibratorOff", "CalibratorOff complete");
     }
 
     #endregion
 
     //ENDOFINSERTEDFILE
+
+    /// <summary>
+    /// Dummy LogMessage class that removes compilation errors in the Platform source code and that will be omitted when the project is built
+    /// </summary>
+    static void LogMessage(string method, string message)
+    {
+    }
+
 }
