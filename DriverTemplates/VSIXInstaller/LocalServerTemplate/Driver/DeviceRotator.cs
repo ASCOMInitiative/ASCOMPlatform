@@ -10,8 +10,6 @@ using ASCOM.Astrometry.AstroUtils;
 
 class DeviceRotator
 {
-    Util util = new Util();
-    TraceLogger tl = new TraceLogger();
     AstroUtils astroUtilities = new AstroUtils();
 
     #region IRotator Implementation
@@ -29,65 +27,69 @@ class DeviceRotator
     {
         get
         {
-            tl.LogMessage("CanReverse Get", false.ToString());
-            return false;
+            bool canReverse = RotatorHardware.CanReverse;
+            LogMessage("CanReverse Get", canReverse.ToString());
+            return canReverse;
         }
     }
 
-	/// <summary>
-	/// Immediately stop any Rotator motion due to a previous <see cref="Move">Move</see> or <see cref="MoveAbsolute">MoveAbsolute</see> method call.
-	/// </summary>
-	public void Halt()
+    /// <summary>
+    /// Immediately stop any Rotator motion due to a previous <see cref="Move">Move</see> or <see cref="MoveAbsolute">MoveAbsolute</see> method call.
+    /// </summary>
+    public void Halt()
     {
-        tl.LogMessage("Halt", "Not implemented");
-        throw new MethodNotImplementedException("Halt");
+        LogMessage("Halt", $"Calling method.");
+        RotatorHardware.Halt();
+        LogMessage("Halt", $"Completed.");
     }
 
-	/// <summary>
-	/// Indicates whether the rotator is currently moving
-	/// </summary>
-	/// <returns>True if the Rotator is moving to a new position. False if the Rotator is stationary.</returns>
-	public bool IsMoving
+    /// <summary>
+    /// Indicates whether the rotator is currently moving
+    /// </summary>
+    /// <returns>True if the Rotator is moving to a new position. False if the Rotator is stationary.</returns>
+    public bool IsMoving
     {
         get
         {
-            tl.LogMessage("IsMoving Get", false.ToString()); // This rotator has instantaneous movement
-            return false;
+            bool isMoving = RotatorHardware.IsMoving;
+            LogMessage("IsMoving Get", isMoving.ToString());
+            return isMoving;
         }
     }
 
 	/// <summary>
 	/// Causes the rotator to move Position degrees relative to the current <see cref="Position" /> value.
 	/// </summary>
-	/// <param name="Position">Relative position to move in degrees from current <see cref="Position" />.</param>
-	public void Move(float Position)
+	/// <param name="position">Relative position to move in degrees from current <see cref="Position" />.</param>
+	public void Move(float position)
     {
-        tl.LogMessage("Move", Position.ToString()); // Move by this amount
-        rotatorPosition += Position;
-        rotatorPosition = (float)astroUtilities.Range(rotatorPosition, 0.0, true, 360.0, false); // Ensure value is in the range 0.0..359.9999...
+        LogMessage("Move", $"Calling method.");
+        RotatorHardware.Move(position);
+        LogMessage("Move", $"Completed.");
     }
 
 
-	/// <summary>
-	/// Causes the rotator to move the absolute position of <see cref="Position" /> degrees.
-	/// </summary>
-	/// <param name="Position">Absolute position in degrees.</param>
-	public void MoveAbsolute(float Position)
+    /// <summary>
+    /// Causes the rotator to move the absolute position of <see cref="Position" /> degrees.
+    /// </summary>
+    /// <param name="position">Absolute position in degrees.</param>
+    public void MoveAbsolute(float position)
     {
-        tl.LogMessage("MoveAbsolute", Position.ToString()); // Move to this position
-        rotatorPosition = Position;
-        rotatorPosition = (float)astroUtilities.Range(rotatorPosition, 0.0, true, 360.0, false); // Ensure value is in the range 0.0..359.9999...
+        LogMessage("MoveAbsolute", $"Calling method.");
+        RotatorHardware.MoveAbsolute(position);
+        LogMessage("MoveAbsolute", $"Completed.");
     }
 
-	/// <summary>
-	/// Current instantaneous Rotator position, allowing for any sync offset, in degrees.
-	/// </summary>
-	public float Position
+    /// <summary>
+    /// Current instantaneous Rotator position, allowing for any sync offset, in degrees.
+    /// </summary>
+    public float Position
     {
         get
         {
-            tl.LogMessage("Position Get", rotatorPosition.ToString()); // This rotator has instantaneous movement
-            return rotatorPosition;
+            float position = RotatorHardware.Position;
+            LogMessage("Position Get", position.ToString());
+            return position;
         }
     }
 
@@ -98,13 +100,14 @@ class DeviceRotator
     {
         get
         {
-            tl.LogMessage("Reverse Get", "Not implemented");
-            throw new PropertyNotImplementedException("Reverse", false);
+            bool canReverse = RotatorHardware.Reverse;
+            LogMessage("Reverse Get", canReverse.ToString());
+            return canReverse;
         }
         set
         {
-            tl.LogMessage("Reverse Set", "Not implemented");
-            throw new PropertyNotImplementedException("Reverse", true);
+            LogMessage("Reverse Set", value.ToString());
+            RotatorHardware.Reverse = value;
         }
     }
 
@@ -115,8 +118,9 @@ class DeviceRotator
     {
         get
         {
-            tl.LogMessage("StepSize Get", "Not implemented");
-            throw new PropertyNotImplementedException("StepSize", false);
+            float stepSize = RotatorHardware.StepSize;
+            LogMessage("StepSize Get", stepSize.ToString());
+            return stepSize;
         }
     }
 
@@ -127,8 +131,9 @@ class DeviceRotator
     {
         get
         {
-            tl.LogMessage("TargetPosition Get", rotatorPosition.ToString()); // This rotator has instantaneous movement
-            return rotatorPosition;
+            float targetPosition = RotatorHardware.TargetPosition;
+            LogMessage("TargetPosition Get", targetPosition.ToString());
+            return targetPosition;
         }
     }
 
@@ -141,7 +146,8 @@ class DeviceRotator
     {
         get
         {
-            tl.LogMessage("MechanicalPosition Get", mechanicalPosition.ToString());
+            float mechanicalPosition = RotatorHardware.MechanicalPosition;
+            LogMessage("MechanicalPosition Get", mechanicalPosition.ToString());
             return mechanicalPosition;
         }
     }
@@ -149,29 +155,34 @@ class DeviceRotator
 	/// <summary>
 	/// Moves the rotator to the specified mechanical angle. 
 	/// </summary>
-	/// <param name="Position">Mechanical rotator position angle.</param>
-	public void MoveMechanical(float Position)
+	/// <param name="position">Mechanical rotator position angle.</param>
+	public void MoveMechanical(float position)
     {
-        tl.LogMessage("MoveMechanical", Position.ToString()); // Move to this position
-
-        // TODO: Implement correct sync behaviour. i.e. if the rotator has been synced the mechanical and rotator positions won't be the same
-        mechanicalPosition = (float)astroUtilities.Range(Position, 0.0, true, 360.0, false); // Ensure value is in the range 0.0..359.9999...
-        rotatorPosition = (float)astroUtilities.Range(Position, 0.0, true, 360.0, false); // Ensure value is in the range 0.0..359.9999...
+        LogMessage("AbortExposure", $"Calling method.");
+        RotatorHardware.MoveMechanical(position);
+        LogMessage("AbortExposure", $"Completed.");
     }
 
-	/// <summary>
-	/// Syncs the rotator to the specified position angle without moving it. 
-	/// </summary>
-	/// <param name="Position">Synchronised rotator position angle.</param>
-	public void Sync(float Position)
+    /// <summary>
+    /// Syncs the rotator to the specified position angle without moving it. 
+    /// </summary>
+    /// <param name="position">Synchronised rotator position angle.</param>
+    public void Sync(float position)
     {
-        tl.LogMessage("Sync", Position.ToString()); // Sync to this position
-
-        // TODO: Implement correct sync behaviour. i.e. the rotator mechanical and rotator positions may not be the same
-        rotatorPosition = (float)astroUtilities.Range(Position, 0.0, true, 360.0, false); // Ensure value is in the range 0.0..359.9999...
+        LogMessage("Sync", $"Calling method.");
+        RotatorHardware.Sync(position);
+        LogMessage("Sync", $"Completed.");
     }
 
     #endregion
 
     //ENDOFINSERTEDFILE
+
+    /// <summary>
+    /// Dummy LogMessage class that removes compilation errors in the Platform source code and that will be omitted when the project is built
+    /// </summary>
+    static void LogMessage(string method, string message)
+    {
+    }
+
 }
