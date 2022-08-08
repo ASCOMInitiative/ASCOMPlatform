@@ -12,670 +12,676 @@ using ASCOM.Astrometry;
 
 class DeviceTelescope
 {
-    Util utilities = new Util();
-    AstroUtils astroUtilities = new AstroUtils();
+    #region ITelescope Implementation
 
-    TraceLogger tl = new TraceLogger();
-
-	#region ITelescope Implementation
-
-	/// <summary>
-	/// Stops a slew in progress.
-	/// </summary>
-	public void AbortSlew()
+    /// <summary>
+    /// Stops a slew in progress.
+    /// </summary>
+    public void AbortSlew()
     {
-        tl.LogMessage("AbortSlew", "Not implemented");
-        throw new MethodNotImplementedException("AbortSlew");
+        LogMessage("AbortSlew", $"Calling method.");
+        TelescopeHardware.AbortSlew();
+        LogMessage("AbortSlew", $"Completed.");
     }
 
-	/// <summary>
-	/// The alignment mode of the mount (Alt/Az, Polar, German Polar).
-	/// </summary>
-	public AlignmentModes AlignmentMode
+    /// <summary>
+    /// The alignment mode of the mount (Alt/Az, Polar, German Polar).
+    /// </summary>
+    public AlignmentModes AlignmentMode
     {
         get
         {
-            tl.LogMessage("AlignmentMode Get", "Not implemented");
-            throw new PropertyNotImplementedException("AlignmentMode", false);
+            AlignmentModes alignmentMode = TelescopeHardware.AlignmentMode;
+            LogMessage("AlignmentMode Get", alignmentMode.ToString());
+            return alignmentMode;
         }
     }
 
-	/// <summary>
-	/// The Altitude above the local horizon of the telescope's current position (degrees, positive up)
-	/// </summary>
-	public double Altitude
+    /// <summary>
+    /// The Altitude above the local horizon of the telescope's current position (degrees, positive up)
+    /// </summary>
+    public double Altitude
     {
         get
         {
-            tl.LogMessage("Altitude", "Not implemented");
-            throw new PropertyNotImplementedException("Altitude", false);
+            double altitude = TelescopeHardware.Altitude;
+            LogMessage("Altitude Get", altitude.ToString());
+            return altitude;
         }
     }
 
-	/// <summary>
-	/// The area of the telescope's aperture, taking into account any obstructions (square meters)
-	/// </summary>
-	public double ApertureArea
+    /// <summary>
+    /// The area of the telescope's aperture, taking into account any obstructions (square meters)
+    /// </summary>
+    public double ApertureArea
     {
         get
         {
-            tl.LogMessage("ApertureArea Get", "Not implemented");
-            throw new PropertyNotImplementedException("ApertureArea", false);
+            double apertureArea = TelescopeHardware.ApertureArea;
+            LogMessage("ApertureArea Get", apertureArea.ToString());
+            return apertureArea;
         }
     }
 
-	/// <summary>
-	/// The telescope's effective aperture diameter (meters)
-	/// </summary>
-	public double ApertureDiameter
+    /// <summary>
+    /// The telescope's effective aperture diameter (meters)
+    /// </summary>
+    public double ApertureDiameter
     {
         get
         {
-            tl.LogMessage("ApertureDiameter Get", "Not implemented");
-            throw new PropertyNotImplementedException("ApertureDiameter", false);
+            double apertureArea = TelescopeHardware.ApertureDiameter;
+            LogMessage("ApertureDiameter Get", apertureArea.ToString());
+            return apertureArea;
         }
     }
 
-	/// <summary>
-	/// True if the telescope is stopped in the Home position. Set only following a <see cref="FindHome"></see> operation,
-	/// and reset with any slew operation. This property must be False if the telescope does not support homing.
-	/// </summary>
-	public bool AtHome
+    /// <summary>
+    /// True if the telescope is stopped in the Home position. Set only following a <see cref="FindHome"></see> operation,
+    /// and reset with any slew operation. This property must be False if the telescope does not support homing.
+    /// </summary>
+    public bool AtHome
     {
         get
         {
-            tl.LogMessage("AtHome", "Get - " + false.ToString());
-            return false;
+            bool atHome = TelescopeHardware.AtHome;
+            LogMessage("AtHome Get", atHome.ToString());
+            return atHome;
         }
     }
 
-	/// <summary>
-	/// True if the telescope has been put into the parked state by the seee <see cref="Park" /> method. Set False by calling the Unpark() method.
-	/// </summary>
-	public bool AtPark
+    /// <summary>
+    /// True if the telescope has been put into the parked state by the see <see cref="Park" /> method. Set False by calling the Unpark() method.
+    /// </summary>
+    public bool AtPark
     {
         get
         {
-            tl.LogMessage("AtPark", "Get - " + false.ToString());
-            return false;
+            bool atPark = TelescopeHardware.AtPark;
+            LogMessage("AtPark Get", atPark.ToString());
+            return atPark;
         }
     }
 
-	/// <summary>
-	/// Determine the rates at which the telescope may be moved about the specified axis by the <see cref="MoveAxis" /> method.
-	/// </summary>
-	/// <param name="Axis">The axis about which rate information is desired (TelescopeAxes value)</param>
-	/// <returns>Collection of <see cref="IRate" /> rate objects</returns>
-	public IAxisRates AxisRates(TelescopeAxes Axis)
+    /// <summary>
+    /// Determine the rates at which the telescope may be moved about the specified axis by the <see cref="MoveAxis" /> method.
+    /// </summary>
+    /// <param name="axis">The axis about which rate information is desired (TelescopeAxes value)</param>
+    /// <returns>Collection of <see cref="IRate" /> rate objects</returns>
+    public IAxisRates AxisRates(TelescopeAxes axis)
     {
-        tl.LogMessage("AxisRates", "Get - " + Axis.ToString());
-        return new AxisRates(Axis);
+        IAxisRates axisRates = TelescopeHardware.AxisRates(axis);
+        LogMessage("AxisRates Get", $"Axis: {axis} returned {axisRates.Count} rates.");
+        return axisRates;
     }
 
-	/// <summary>
-	/// The azimuth at the local horizon of the telescope's current position (degrees, North-referenced, positive East/clockwise).
-	/// </summary>
-	public double Azimuth
+    /// <summary>
+    /// The azimuth at the local horizon of the telescope's current position (degrees, North-referenced, positive East/clockwise).
+    /// </summary>
+    public double Azimuth
     {
         get
         {
-            tl.LogMessage("Azimuth Get", "Not implemented");
-            throw new PropertyNotImplementedException("Azimuth", false);
+            double azimuth = TelescopeHardware.Azimuth;
+            LogMessage("Azimuth Get", azimuth.ToString());
+            return azimuth;
         }
     }
 
-	/// <summary>
-	/// True if this telescope is capable of programmed finding its home position (<see cref="FindHome" /> method).
-	/// </summary>
-	public bool CanFindHome
+    /// <summary>
+    /// True if this telescope is capable of programmed finding its home position (<see cref="FindHome" /> method).
+    /// </summary>
+    public bool CanFindHome
     {
         get
         {
-            tl.LogMessage("CanFindHome", "Get - " + false.ToString());
-            return false;
+            bool canFindHome = TelescopeHardware.CanFindHome;
+            LogMessage("CanFindHome Get", canFindHome.ToString());
+            return canFindHome;
         }
     }
 
-	/// <summary>
-	/// True if this telescope can move the requested axis
-	/// </summary>
-	public bool CanMoveAxis(TelescopeAxes Axis)
+    /// <summary>
+    /// True if this telescope can move the requested axis
+    /// </summary>
+    public bool CanMoveAxis(TelescopeAxes axis)
     {
-        tl.LogMessage("CanMoveAxis", "Get - " + Axis.ToString());
-        switch (Axis)
-        {
-            case TelescopeAxes.axisPrimary: return false;
-            case TelescopeAxes.axisSecondary: return false;
-            case TelescopeAxes.axisTertiary: return false;
-            default: throw new InvalidValueException("CanMoveAxis", Axis.ToString(), "0 to 2");
-        }
+        bool canMoveAxis = TelescopeHardware.CanMoveAxis(axis);
+        LogMessage("CanMoveAxis Get", $"Axis: {axis} returned {canMoveAxis}.");
+        return canMoveAxis;
     }
 
-	/// <summary>
-	/// True if this telescope is capable of programmed parking (<see cref="Park" />method)
-	/// </summary>
-	public bool CanPark
+    /// <summary>
+    /// True if this telescope is capable of programmed parking (<see cref="Park" />method)
+    /// </summary>
+    public bool CanPark
     {
         get
         {
-            tl.LogMessage("CanPark", "Get - " + false.ToString());
-            return false;
+            bool canPark = TelescopeHardware.CanPark;
+            LogMessage("CanPark Get", canPark.ToString());
+            return canPark;
         }
     }
 
-	/// <summary>
-	/// True if this telescope is capable of software-pulsed guiding (via the <see cref="PulseGuide" /> method)
-	/// </summary>
-	public bool CanPulseGuide
+    /// <summary>
+    /// True if this telescope is capable of software-pulsed guiding (via the <see cref="PulseGuide" /> method)
+    /// </summary>
+    public bool CanPulseGuide
     {
         get
         {
-            tl.LogMessage("CanPulseGuide", "Get - " + false.ToString());
-            return false;
+            bool canPulseGuide = TelescopeHardware.CanPulseGuide;
+            LogMessage("CanPulseGuide Get", canPulseGuide.ToString());
+            return canPulseGuide;
         }
     }
 
-	/// <summary>
-	/// True if the <see cref="DeclinationRate" /> property can be changed to provide offset tracking in the declination axis.
-	/// </summary>
-	public bool CanSetDeclinationRate
+    /// <summary>
+    /// True if the <see cref="DeclinationRate" /> property can be changed to provide offset tracking in the declination axis.
+    /// </summary>
+    public bool CanSetDeclinationRate
     {
         get
         {
-            tl.LogMessage("CanSetDeclinationRate", "Get - " + false.ToString());
-            return false;
+            bool canSetDeclinationRate = TelescopeHardware.CanSetDeclinationRate;
+            LogMessage("CanSetDeclinationRate Get", canSetDeclinationRate.ToString());
+            return canSetDeclinationRate;
         }
     }
 
-	/// <summary>
-	/// True if the guide rate properties used for <see cref="PulseGuide" /> can ba adjusted.
-	/// </summary>
-	public bool CanSetGuideRates
+    /// <summary>
+    /// True if the guide rate properties used for <see cref="PulseGuide" /> can be adjusted.
+    /// </summary>
+    public bool CanSetGuideRates
     {
         get
         {
-            tl.LogMessage("CanSetGuideRates", "Get - " + false.ToString());
-            return false;
+            bool canSetGuideRates = TelescopeHardware.CanSetGuideRates;
+            LogMessage("CanSetGuideRates Get", canSetGuideRates.ToString());
+            return canSetGuideRates;
         }
     }
 
-	/// <summary>
-	/// True if this telescope is capable of programmed setting of its park position (<see cref="SetPark" /> method)
-	/// </summary>
-	public bool CanSetPark
+    /// <summary>
+    /// True if this telescope is capable of programmed setting of its park position (<see cref="SetPark" /> method)
+    /// </summary>
+    public bool CanSetPark
     {
         get
         {
-            tl.LogMessage("CanSetPark", "Get - " + false.ToString());
-            return false;
+            bool canSetPark = TelescopeHardware.CanSetPark;
+            LogMessage("CanSetPark Get", canSetPark.ToString());
+            return canSetPark;
         }
     }
 
-	/// <summary>
-	/// True if the <see cref="SideOfPier" /> property can be set, meaning that the mount can be forced to flip.
-	/// </summary>
-	public bool CanSetPierSide
+    /// <summary>
+    /// True if the <see cref="SideOfPier" /> property can be set, meaning that the mount can be forced to flip.
+    /// </summary>
+    public bool CanSetPierSide
     {
         get
         {
-            tl.LogMessage("CanSetPierSide", "Get - " + false.ToString());
-            return false;
+            bool canSetPierSide = TelescopeHardware.CanSetPierSide;
+            LogMessage("CanSetPierSide Get", canSetPierSide.ToString());
+            return canSetPierSide;
         }
     }
 
-	/// <summary>
-	/// True if the <see cref="RightAscensionRate" /> property can be changed to provide offset tracking in the right ascension axis.
-	/// </summary>
-	public bool CanSetRightAscensionRate
+    /// <summary>
+    /// True if the <see cref="RightAscensionRate" /> property can be changed to provide offset tracking in the right ascension axis.
+    /// </summary>
+    public bool CanSetRightAscensionRate
     {
         get
         {
-            tl.LogMessage("CanSetRightAscensionRate", "Get - " + false.ToString());
-            return false;
+            bool canSetRightAscensionRate = TelescopeHardware.CanSetRightAscensionRate;
+            LogMessage("CanSetRightAscensionRate Get", canSetRightAscensionRate.ToString());
+            return canSetRightAscensionRate;
         }
     }
 
-	/// <summary>
-	/// True if the <see cref="Tracking" /> property can be changed, turning telescope sidereal tracking on and off.
-	/// </summary>
-	public bool CanSetTracking
+    /// <summary>
+    /// True if the <see cref="Tracking" /> property can be changed, turning telescope sidereal tracking on and off.
+    /// </summary>
+    public bool CanSetTracking
     {
         get
         {
-            tl.LogMessage("CanSetTracking", "Get - " + false.ToString());
-            return false;
+            bool canSetTracking = TelescopeHardware.CanSetTracking;
+            LogMessage("CanSetTracking Get", canSetTracking.ToString());
+            return canSetTracking;
         }
     }
 
-	/// <summary>
-	/// True if this telescope is capable of programmed slewing (synchronous or asynchronous) to equatorial coordinates
-	/// </summary>
-	public bool CanSlew
+    /// <summary>
+    /// True if this telescope is capable of programmed slewing (synchronous or asynchronous) to equatorial coordinates
+    /// </summary>
+    public bool CanSlew
     {
         get
         {
-            tl.LogMessage("CanSlew", "Get - " + false.ToString());
-            return false;
+            bool canSlew = TelescopeHardware.CanSlew;
+            LogMessage("CanSlew Get", canSlew.ToString());
+            return canSlew;
         }
     }
 
-	/// <summary>
-	/// True if this telescope is capable of programmed slewing (synchronous or asynchronous) to local horizontal coordinates
-	/// </summary>
-	public bool CanSlewAltAz
+    /// <summary>
+    /// True if this telescope is capable of programmed slewing (synchronous or asynchronous) to local horizontal coordinates
+    /// </summary>
+    public bool CanSlewAltAz
     {
         get
         {
-            tl.LogMessage("CanSlewAltAz", "Get - " + false.ToString());
-            return false;
+            bool canSlewAltAz = TelescopeHardware.CanSlewAltAz;
+            LogMessage("CanSlewAltAz Get", canSlewAltAz.ToString());
+            return canSlewAltAz;
         }
     }
 
-	/// <summary>
-	/// True if this telescope is capable of programmed asynchronous slewing to local horizontal coordinates
-	/// </summary>
-	public bool CanSlewAltAzAsync
+    /// <summary>
+    /// True if this telescope is capable of programmed asynchronous slewing to local horizontal coordinates
+    /// </summary>
+    public bool CanSlewAltAzAsync
     {
         get
         {
-            tl.LogMessage("CanSlewAltAzAsync", "Get - " + false.ToString());
-            return false;
+            bool canSlewAltAzAsync = TelescopeHardware.CanSlewAltAzAsync;
+            LogMessage("CanSlewAltAzAsync Get", canSlewAltAzAsync.ToString());
+            return canSlewAltAzAsync;
         }
     }
 
-	/// <summary>
-	/// True if this telescope is capable of programmed asynchronous slewing to equatorial coordinates.
-	/// </summary>
-	public bool CanSlewAsync
+    /// <summary>
+    /// True if this telescope is capable of programmed asynchronous slewing to equatorial coordinates.
+    /// </summary>
+    public bool CanSlewAsync
     {
         get
         {
-            tl.LogMessage("CanSlewAsync", "Get - " + false.ToString());
-            return false;
+            bool canSlewAsync = TelescopeHardware.CanSlewAsync;
+            LogMessage("CanSlewAsync Get", canSlewAsync.ToString());
+            return canSlewAsync;
         }
     }
 
-	/// <summary>
-	/// True if this telescope is capable of programmed synching to equatorial coordinates.
-	/// </summary>
-	public bool CanSync
+    /// <summary>
+    /// True if this telescope is capable of programmed syncing to equatorial coordinates.
+    /// </summary>
+    public bool CanSync
     {
         get
         {
-            tl.LogMessage("CanSync", "Get - " + false.ToString());
-            return false;
+            bool canSync = TelescopeHardware.CanSync;
+            LogMessage("CanSync Get", canSync.ToString());
+            return canSync;
         }
     }
 
-	/// <summary>
-	/// True if this telescope is capable of programmed synching to local horizontal coordinates
-	/// </summary>
-	public bool CanSyncAltAz
+    /// <summary>
+    /// True if this telescope is capable of programmed syncing to local horizontal coordinates
+    /// </summary>
+    public bool CanSyncAltAz
     {
         get
         {
-            tl.LogMessage("CanSyncAltAz", "Get - " + false.ToString());
-            return false;
+            bool canSyncAltAz = TelescopeHardware.CanSyncAltAz;
+            LogMessage("CanSyncAltAz Get", canSyncAltAz.ToString());
+            return canSyncAltAz;
         }
     }
 
-	/// <summary>
-	/// True if this telescope is capable of programmed unparking (<see cref="Unpark" /> method).
-	/// </summary>
-	public bool CanUnpark
+    /// <summary>
+    /// True if this telescope is capable of programmed unparking (<see cref="Unpark" /> method).
+    /// </summary>
+    public bool CanUnpark
     {
         get
         {
-            tl.LogMessage("CanUnpark", "Get - " + false.ToString());
-            return false;
+            bool canUnpark = TelescopeHardware.CanUnpark;
+            LogMessage("CanUnpark Get", canUnpark.ToString());
+            return canUnpark;
         }
     }
 
-	/// <summary>
-	/// The declination (degrees) of the telescope's current equatorial coordinates, in the coordinate system given by the <see cref="EquatorialSystem" /> property.
-	/// Reading the property will raise an error if the value is unavailable.
-	/// </summary>
-	public double Declination
+    /// <summary>
+    /// The declination (degrees) of the telescope's current equatorial coordinates, in the coordinate system given by the <see cref="EquatorialSystem" /> property.
+    /// Reading the property will raise an error if the value is unavailable.
+    /// </summary>
+    public double Declination
     {
         get
         {
-            double declination = 0.0;
-            tl.LogMessage("Declination", "Get - " + utilities.DegreesToDMS(declination, ":", ":"));
+            double declination = TelescopeHardware.Declination;
+            LogMessage("Declination Get", declination.ToString());
             return declination;
         }
     }
 
-	/// <summary>
-	/// The declination tracking rate (arcseconds per SI second, default = 0.0)
-	/// </summary>
-	public double DeclinationRate
+    /// <summary>
+    /// The declination tracking rate (arc-seconds per SI second, default = 0.0)
+    /// </summary>
+    public double DeclinationRate
     {
         get
         {
-            double declination = 0.0;
-            tl.LogMessage("DeclinationRate", "Get - " + declination.ToString());
-            return declination;
+            double declinationRate = TelescopeHardware.DeclinationRate;
+            LogMessage("DeclinationRate Get", declinationRate.ToString());
+            return declinationRate;
         }
         set
         {
-            tl.LogMessage("DeclinationRate Set", "Not implemented");
-            throw new PropertyNotImplementedException("DeclinationRate", true);
+            LogMessage("DeclinationRate Set", value.ToString());
+            TelescopeHardware.DeclinationRate = value;
         }
     }
 
-	/// <summary>
-	/// Predict side of pier for German equatorial mounts at the provided coordinates
-	/// </summary>
-	public PierSide DestinationSideOfPier(double RightAscension, double Declination)
+    /// <summary>
+    /// Predict side of pier for German equatorial mounts at the provided coordinates
+    /// </summary>
+    public PierSide DestinationSideOfPier(double rightAscension, double declination)
     {
-        tl.LogMessage("DestinationSideOfPier Get", "Not implemented");
-        throw new PropertyNotImplementedException("DestinationSideOfPier", false);
+        PierSide destinationSideOfPier = TelescopeHardware.DestinationSideOfPier(rightAscension, declination);
+        LogMessage("DestinationSideOfPier Get", $"RA: {rightAscension}, Dec: {declination} - {destinationSideOfPier}.");
+        return destinationSideOfPier;
     }
 
-	/// <summary>
-	/// True if the telescope or driver applies atmospheric refraction to coordinates.
-	/// </summary>
-	public bool DoesRefraction
+    /// <summary>
+    /// True if the telescope or driver applies atmospheric refraction to coordinates.
+    /// </summary>
+    public bool DoesRefraction
     {
         get
         {
-            tl.LogMessage("DoesRefraction Get", "Not implemented");
-            throw new PropertyNotImplementedException("DoesRefraction", false);
+            bool doesRefraction = TelescopeHardware.DoesRefraction;
+            LogMessage("DoesRefraction Get", doesRefraction.ToString());
+            return doesRefraction;
         }
         set
         {
-            tl.LogMessage("DoesRefraction Set", "Not implemented");
-            throw new PropertyNotImplementedException("DoesRefraction", true);
+            LogMessage("DoesRefraction Set", value.ToString());
+            TelescopeHardware.DoesRefraction = value;
         }
     }
 
-	/// <summary>
-	/// Equatorial coordinate system used by this telescope (e.g. Topocentric or J2000).
-	/// </summary>
-	public EquatorialCoordinateType EquatorialSystem
+    /// <summary>
+    /// Equatorial coordinate system used by this telescope (e.g. Topocentric or J2000).
+    /// </summary>
+    public EquatorialCoordinateType EquatorialSystem
     {
         get
         {
-            EquatorialCoordinateType equatorialSystem = EquatorialCoordinateType.equTopocentric;
-            tl.LogMessage("DeclinationRate", "Get - " + equatorialSystem.ToString());
+            EquatorialCoordinateType equatorialSystem = TelescopeHardware.EquatorialSystem;
+            LogMessage("EquatorialSystem Get", equatorialSystem.ToString());
             return equatorialSystem;
         }
     }
 
-	/// <summary>
-	/// Locates the telescope's "home" position (synchronous)
-	/// </summary>
-	public void FindHome()
+    /// <summary>
+    /// Locates the telescope's "home" position (synchronous)
+    /// </summary>
+    public void FindHome()
     {
-        tl.LogMessage("FindHome", "Not implemented");
-        throw new MethodNotImplementedException("FindHome");
+        LogMessage("FindHome", $"Calling method.");
+        TelescopeHardware.FindHome();
+        LogMessage("FindHome", $"Completed.");
     }
 
-	/// <summary>
-	/// The telescope's focal length, meters
-	/// </summary>
-	public double FocalLength
+    /// <summary>
+    /// The telescope's focal length, meters
+    /// </summary>
+    public double FocalLength
     {
         get
         {
-            tl.LogMessage("FocalLength Get", "Not implemented");
-            throw new PropertyNotImplementedException("FocalLength", false);
+            double focalLength = TelescopeHardware.FocalLength;
+            LogMessage("FocalLength Get", focalLength.ToString());
+            return focalLength;
         }
     }
 
-	/// <summary>
-	/// The current Declination movement rate offset for telescope guiding (degrees/sec)
-	/// </summary>
-	public double GuideRateDeclination
+    /// <summary>
+    /// The current Declination movement rate offset for telescope guiding (degrees/sec)
+    /// </summary>
+    public double GuideRateDeclination
     {
         get
         {
-            tl.LogMessage("GuideRateDeclination Get", "Not implemented");
-            throw new PropertyNotImplementedException("GuideRateDeclination", false);
+            double guideRateDeclination = TelescopeHardware.GuideRateDeclination;
+            LogMessage("GuideRateDeclination Get", guideRateDeclination.ToString());
+            return guideRateDeclination;
         }
         set
         {
-            tl.LogMessage("GuideRateDeclination Set", "Not implemented");
-            throw new PropertyNotImplementedException("GuideRateDeclination", true);
+            LogMessage("GuideRateDeclination Set", value.ToString());
+            TelescopeHardware.GuideRateDeclination = value;
         }
     }
 
-	/// <summary>
-	/// The current Right Ascension movement rate offset for telescope guiding (degrees/sec)
-	/// </summary>
-	public double GuideRateRightAscension
+    /// <summary>
+    /// The current Right Ascension movement rate offset for telescope guiding (degrees/sec)
+    /// </summary>
+    public double GuideRateRightAscension
     {
         get
         {
-            tl.LogMessage("GuideRateRightAscension Get", "Not implemented");
-            throw new PropertyNotImplementedException("GuideRateRightAscension", false);
+            double guideRateRightAscension = TelescopeHardware.GuideRateRightAscension;
+            LogMessage("GuideRateRightAscension Get", guideRateRightAscension.ToString());
+            return guideRateRightAscension;
         }
         set
         {
-            tl.LogMessage("GuideRateRightAscension Set", "Not implemented");
-            throw new PropertyNotImplementedException("GuideRateRightAscension", true);
+            LogMessage("GuideRateRightAscension Set", value.ToString());
+            TelescopeHardware.GuideRateRightAscension = value;
         }
     }
 
-	/// <summary>
-	/// True if a <see cref="PulseGuide" /> command is in progress, False otherwise
-	/// </summary>
-	public bool IsPulseGuiding
+    /// <summary>
+    /// True if a <see cref="PulseGuide" /> command is in progress, False otherwise
+    /// </summary>
+    public bool IsPulseGuiding
     {
         get
         {
-            tl.LogMessage("IsPulseGuiding Get", "Not implemented");
-            throw new PropertyNotImplementedException("IsPulseGuiding", false);
+            bool isPulseGuiding = TelescopeHardware.IsPulseGuiding;
+            LogMessage("IsPulseGuiding Get", isPulseGuiding.ToString());
+            return isPulseGuiding;
         }
     }
 
-	/// <summary>
-	/// Move the telescope in one axis at the given rate.
-	/// </summary>
-	/// <param name="Axis">The physical axis about which movement is desired</param>
-	/// <param name="Rate">The rate of motion (deg/sec) about the specified axis</param>
-	public void MoveAxis(TelescopeAxes Axis, double Rate)
+    /// <summary>
+    /// Move the telescope in one axis at the given rate.
+    /// </summary>
+    /// <param name="axis">The physical axis about which movement is desired</param>
+    /// <param name="rate">The rate of motion (deg/sec) about the specified axis</param>
+    public void MoveAxis(TelescopeAxes axis, double rate)
     {
-        tl.LogMessage("MoveAxis", "Not implemented");
-        throw new MethodNotImplementedException("MoveAxis");
+        LogMessage("MoveAxis", $"Calling method - Axis: {axis}, Rate: {rate}.");
+        TelescopeHardware.MoveAxis(axis, rate);
+        LogMessage("MoveAxis", $"Completed.");
     }
 
 
-	/// <summary>
-	/// Move the telescope to its park position, stop all motion (or restrict to a small safe range), and set <see cref="AtPark" /> to True.
-	/// </summary>
-	public void Park()
+    /// <summary>
+    /// Move the telescope to its park position, stop all motion (or restrict to a small safe range), and set <see cref="AtPark" /> to True.
+    /// </summary>
+    public void Park()
     {
-        tl.LogMessage("Park", "Not implemented");
-        throw new MethodNotImplementedException("Park");
+        LogMessage("Park", $"Calling method.");
+        TelescopeHardware.Park();
+        LogMessage("Park", $"Completed.");
     }
 
-	/// <summary>
-	/// Moves the scope in the given direction for the given interval or time at
-	/// the rate given by the corresponding guide rate property
-	/// </summary>
-	/// <param name="Direction">The direction in which the guide-rate motion is to be made</param>
-	/// <param name="Duration">The duration of the guide-rate motion (milliseconds)</param>
-	public void PulseGuide(GuideDirections Direction, int Duration)
+    /// <summary>
+    /// Moves the scope in the given direction for the given interval or time at
+    /// the rate given by the corresponding guide rate property
+    /// </summary>
+    /// <param name="direction">The direction in which the guide-rate motion is to be made</param>
+    /// <param name="duration">The duration of the guide-rate motion (milliseconds)</param>
+    public void PulseGuide(GuideDirections direction, int duration)
     {
-        tl.LogMessage("PulseGuide", "Not implemented");
-        throw new MethodNotImplementedException("PulseGuide");
+        LogMessage("PulseGuide", $"Calling method.");
+        TelescopeHardware.PulseGuide(direction, duration);
+        LogMessage("PulseGuide", $"Completed.");
     }
 
-	/// <summary>
-	/// The right ascension (hours) of the telescope's current equatorial coordinates,
-	/// in the coordinate system given by the EquatorialSystem property
-	/// </summary>
-	public double RightAscension
+    /// <summary>
+    /// The right ascension (hours) of the telescope's current equatorial coordinates,
+    /// in the coordinate system given by the EquatorialSystem property
+    /// </summary>
+    public double RightAscension
     {
         get
         {
-            double rightAscension = 0.0;
-            tl.LogMessage("RightAscension", "Get - " + utilities.HoursToHMS(rightAscension));
+            double rightAscension = TelescopeHardware.RightAscension;
+            LogMessage("RightAscension Get", rightAscension.ToString());
             return rightAscension;
         }
     }
 
-	/// <summary>
-	/// The right ascension tracking rate offset from sidereal (seconds per sidereal second, default = 0.0)
-	/// </summary>
-	public double RightAscensionRate
+    /// <summary>
+    /// The right ascension tracking rate offset from sidereal (seconds per sidereal second, default = 0.0)
+    /// </summary>
+    public double RightAscensionRate
     {
         get
         {
-            double rightAscensionRate = 0.0;
-            tl.LogMessage("RightAscensionRate", "Get - " + rightAscensionRate.ToString());
+            double rightAscensionRate = TelescopeHardware.RightAscensionRate;
+            LogMessage("RightAscensionRate Get", rightAscensionRate.ToString());
             return rightAscensionRate;
         }
         set
         {
-            tl.LogMessage("RightAscensionRate Set", "Not implemented");
-            throw new PropertyNotImplementedException("RightAscensionRate", true);
+            LogMessage("RightAscensionRate Set", value.ToString());
+            TelescopeHardware.RightAscensionRate = value;
         }
     }
 
-	/// <summary>
-	/// Sets the telescope's park position to be its current position.
-	/// </summary>
-	public void SetPark()
+    /// <summary>
+    /// Sets the telescope's park position to be its current position.
+    /// </summary>
+    public void SetPark()
     {
-        tl.LogMessage("SetPark", "Not implemented");
-        throw new MethodNotImplementedException("SetPark");
+        LogMessage("SetPark", $"Calling method.");
+        TelescopeHardware.SetPark();
+        LogMessage("SetPark", $"Completed.");
     }
 
-	/// <summary>
-	/// Indicates the pointing state of the mount. Read the articles installed with the ASCOM Developer
-	/// Components for more detailed information.
-	/// </summary>
-	public PierSide SideOfPier
+    /// <summary>
+    /// Indicates the pointing state of the mount. Read the articles installed with the ASCOM Developer
+    /// Components for more detailed information.
+    /// </summary>
+    public PierSide SideOfPier
     {
         get
         {
-            tl.LogMessage("SideOfPier Get", "Not implemented");
-            throw new PropertyNotImplementedException("SideOfPier", false);
+            PierSide sideOfPier = TelescopeHardware.SideOfPier;
+            LogMessage("SideOfPier Get", sideOfPier.ToString());
+            return sideOfPier;
         }
         set
         {
-            tl.LogMessage("SideOfPier Set", "Not implemented");
-            throw new PropertyNotImplementedException("SideOfPier", true);
+            LogMessage("SideOfPier Set", value.ToString());
+            TelescopeHardware.SideOfPier = value;
         }
     }
 
-	/// <summary>
-	/// The local apparent sidereal time from the telescope's internal clock (hours, sidereal)
-	/// </summary>
-	public double SiderealTime
+    /// <summary>
+    /// The local apparent sidereal time from the telescope's internal clock (hours, sidereal)
+    /// </summary>
+    public double SiderealTime
     {
         get
         {
-            double siderealTime = 0.0; // Sidereal time return value
-
-            // Use NOVAS 3.1 to calculate the sidereal time
-            using (var novas = new NOVAS31())
-            {
-                double julianDate = utilities.DateUTCToJulian(DateTime.UtcNow);
-                novas.SiderealTime(julianDate, 0, novas.DeltaT(julianDate), GstType.GreenwichApparentSiderealTime, Method.EquinoxBased, Accuracy.Full, ref siderealTime);
-            }
-
-            // Adjust the calculated sidereal time for longitude using the value returned by the SiteLongitude property, allowing for the possibility that this property has not yet been implemented
-            try
-            {
-                siderealTime += SiteLongitude / 360.0 * 24.0;
-            }
-            catch (PropertyNotImplementedException) // SiteLongitude hasn't been implemented
-            {
-                // No action, just return the calculated sidereal time unadjusted for longitude
-            }
-            catch (Exception) // Some other exception occurred so return it to the client
-            {
-                throw;
-            }
-
-            // Reduce sidereal time to the range 0 to 24 hours
-            siderealTime = astroUtilities.ConditionRA(siderealTime);
-
-            tl.LogMessage("SiderealTime", "Get - " + siderealTime.ToString());
+            double siderealTime = TelescopeHardware.SiderealTime;
+            LogMessage("SiderealTime Get", siderealTime.ToString());
             return siderealTime;
         }
     }
 
-	/// <summary>
-	/// The elevation above mean sea level (meters) of the site at which the telescope is located
-	/// </summary>
-	public double SiteElevation
+    /// <summary>
+    /// The elevation above mean sea level (meters) of the site at which the telescope is located
+    /// </summary>
+    public double SiteElevation
     {
         get
         {
-            tl.LogMessage("SiteElevation Get", "Not implemented");
-            throw new PropertyNotImplementedException("SiteElevation", false);
+            double siteElevation = TelescopeHardware.SiteElevation;
+            LogMessage("SiteElevation Get", siteElevation.ToString());
+            return siteElevation;
         }
         set
         {
-            tl.LogMessage("SiteElevation Set", "Not implemented");
-            throw new PropertyNotImplementedException("SiteElevation", true);
+            LogMessage("SiteElevation Set", value.ToString());
+            TelescopeHardware.SiteElevation = value;
         }
     }
 
-	/// <summary>
-	/// The geodetic(map) latitude (degrees, positive North, WGS84) of the site at which the telescope is located.
-	/// </summary>
-	public double SiteLatitude
+    /// <summary>
+    /// The geodetic(map) latitude (degrees, positive North, WGS84) of the site at which the telescope is located.
+    /// </summary>
+    public double SiteLatitude
     {
         get
         {
-            tl.LogMessage("SiteLatitude Get", "Not implemented");
-            throw new PropertyNotImplementedException("SiteLatitude", false);
+            double siteLatitude = TelescopeHardware.SiteLatitude;
+            LogMessage("SiteLatitude Get", siteLatitude.ToString());
+            return siteLatitude;
         }
         set
         {
-            tl.LogMessage("SiteLatitude Set", "Not implemented");
-            throw new PropertyNotImplementedException("SiteLatitude", true);
+            LogMessage("SiteLatitude Set", value.ToString());
+            TelescopeHardware.SiteLatitude = value;
         }
     }
 
-	/// <summary>
-	/// The longitude (degrees, positive East, WGS84) of the site at which the telescope is located.
-	/// </summary>
-	public double SiteLongitude
+    /// <summary>
+    /// The longitude (degrees, positive East, WGS84) of the site at which the telescope is located.
+    /// </summary>
+    public double SiteLongitude
     {
         get
         {
-            tl.LogMessage("SiteLongitude Get", "Returning 0.0 to ensure that SiderealTime method is functional out of the box.");
-            return 0.0;
+            double siteLongitude = TelescopeHardware.SiteLongitude;
+            LogMessage("SiteLongitude Get", siteLongitude.ToString());
+            return siteLongitude;
         }
         set
         {
-            tl.LogMessage("SiteLongitude Set", "Not implemented");
-            throw new PropertyNotImplementedException("SiteLongitude", true);
+            LogMessage("SiteLongitude Set", value.ToString());
+            TelescopeHardware.SiteLongitude = value;
         }
     }
 
-	/// <summary>
-	/// Specifies a post-slew settling time (sec.).
-	/// </summary>
-	public short SlewSettleTime
+    /// <summary>
+    /// Specifies a post-slew settling time (sec.).
+    /// </summary>
+    public short SlewSettleTime
     {
         get
         {
-            tl.LogMessage("SlewSettleTime Get", "Not implemented");
-            throw new PropertyNotImplementedException("SlewSettleTime", false);
+            short slewSettleTime = TelescopeHardware.SlewSettleTime;
+            LogMessage("SlewSettleTime Get", slewSettleTime.ToString());
+            return slewSettleTime;
         }
         set
         {
-            tl.LogMessage("SlewSettleTime Set", "Not implemented");
-            throw new PropertyNotImplementedException("SlewSettleTime", true);
+            LogMessage("SlewSettleTime Set", value.ToString());
+            TelescopeHardware.SlewSettleTime = value;
         }
     }
 
-	/// <summary>
-	/// Move the telescope to the given local horizontal coordinates, return when slew is complete
-	/// </summary>
-	public void SlewToAltAz(double Azimuth, double Altitude)
+    /// <summary>
+    /// Move the telescope to the given local horizontal coordinates, return when slew is complete
+    /// </summary>
+    public void SlewToAltAz(double azimuth, double altitude)
     {
-        tl.LogMessage("SlewToAltAz", "Not implemented");
-        throw new MethodNotImplementedException("SlewToAltAz");
+        LogMessage("SlewToAltAz", $"Calling method - Azimuth: {azimuth}, Altitude: {altitude}.");
+        TelescopeHardware.SlewToAltAz(azimuth, altitude);
+        LogMessage("SlewToAltAz", $"Completed.");
     }
-
 
     /// <summary>
     /// This Method must be implemented if <see cref="CanSlewAltAzAsync" /> returns True.
@@ -684,39 +690,43 @@ class DeviceTelescope
     /// <param name="Azimuth">Azimuth to which to move</param>
     /// <param name="Altitude">Altitude to which to move to</param>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
-    public void SlewToAltAzAsync(double Azimuth, double Altitude)
+    public void SlewToAltAzAsync(double azimuth, double altitude)
     {
-        tl.LogMessage("SlewToAltAzAsync", "Not implemented");
-        throw new MethodNotImplementedException("SlewToAltAzAsync");
+        LogMessage("SlewToAltAzAsync", $"Calling method - Azimuth: {azimuth}, Altitude: {altitude}.");
+        TelescopeHardware.SlewToAltAzAsync(azimuth, altitude);
+        LogMessage("SlewToAltAzAsync", $"Completed.");
     }
 
-	/// <summary>
-	/// This Method must be implemented if <see cref="CanSlewAltAzAsync" /> returns True.
-	/// It does not return to the caller until the slew is complete.
-	/// </summary>
-	public void SlewToCoordinates(double RightAscension, double Declination)
+    /// <summary>
+    /// This Method must be implemented if <see cref="CanSlewAltAzAsync" /> returns True.
+    /// It does not return to the caller until the slew is complete.
+    /// </summary>
+    public void SlewToCoordinates(double rightAscension, double declination)
     {
-        tl.LogMessage("SlewToCoordinates", "Not implemented");
-        throw new MethodNotImplementedException("SlewToCoordinates");
+        LogMessage("SlewToCoordinates", $"Calling method - RightAscension: {rightAscension}, Declination: {declination}.");
+        TelescopeHardware.SlewToCoordinates(rightAscension, declination);
+        LogMessage("SlewToCoordinates", $"Completed.");
     }
 
     /// <summary>
     /// Move the telescope to the given equatorial coordinates, return with Slewing set to True immediately after starting the slew.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
-    public void SlewToCoordinatesAsync(double RightAscension, double Declination)
+    public void SlewToCoordinatesAsync(double rightAscension, double declination)
     {
-        tl.LogMessage("SlewToCoordinatesAsync", "Not implemented");
-        throw new MethodNotImplementedException("SlewToCoordinatesAsync");
+        LogMessage("SlewToCoordinatesAsync", $"Calling method - RightAscension: {rightAscension}, Declination: {declination}.");
+        TelescopeHardware.SlewToCoordinatesAsync(rightAscension, declination);
+        LogMessage("SlewToCoordinatesAsync", $"Completed.");
     }
 
-	/// <summary>
-	/// Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> coordinates, return when slew complete.
-	/// </summary>
-	public void SlewToTarget()
+    /// <summary>
+    /// Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> coordinates, return when slew complete.
+    /// </summary>
+    public void SlewToTarget()
     {
-        tl.LogMessage("SlewToTarget", "Not implemented");
-        throw new MethodNotImplementedException("SlewToTarget");
+        LogMessage("SlewToTarget", $"Calling method.");
+        TelescopeHardware.SlewToTarget();
+        LogMessage("SlewToTarget", $"Completed.");
     }
 
     /// <summary>
@@ -726,166 +736,177 @@ class DeviceTelescope
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
     public void SlewToTargetAsync()
     {
-        tl.LogMessage("SlewToTargetAsync", "Not implemented");
-        throw new MethodNotImplementedException("SlewToTargetAsync");
+        LogMessage("SlewToTargetAsync", $"Calling method.");
+        TelescopeHardware.SlewToTargetAsync();
+        LogMessage("SlewToTargetAsync", $"Completed.");
     }
 
-	/// <summary>
-	/// True if telescope is in the process of moving in response to one of the
-	/// Slew methods or the <see cref="MoveAxis" /> method, False at all other times.
-	/// </summary>
-	public bool Slewing
+    /// <summary>
+    /// True if telescope is in the process of moving in response to one of the
+    /// Slew methods or the <see cref="MoveAxis" /> method, False at all other times.
+    /// </summary>
+    public bool Slewing
     {
         get
         {
-            tl.LogMessage("Slewing Get", "Not implemented");
-            throw new PropertyNotImplementedException("Slewing", false);
+            bool slewing = TelescopeHardware.Slewing;
+            LogMessage("Slewing Get", slewing.ToString());
+            return slewing;
         }
     }
 
-	/// <summary>
-	/// Matches the scope's local horizontal coordinates to the given local horizontal coordinates.
-	/// </summary>
-	public void SyncToAltAz(double Azimuth, double Altitude)
+    /// <summary>
+    /// Matches the scope's local horizontal coordinates to the given local horizontal coordinates.
+    /// </summary>
+    public void SyncToAltAz(double azimuth, double altitude)
     {
-        tl.LogMessage("SyncToAltAz", "Not implemented");
-        throw new MethodNotImplementedException("SyncToAltAz");
+        LogMessage("SyncToAltAz", $"Calling method - Azimuth: {azimuth}, Altitude: {altitude}.");
+        TelescopeHardware.SyncToAltAz(azimuth, altitude);
+        LogMessage("SyncToAltAz", $"Completed.");
     }
 
-	/// <summary>
-	/// Matches the scope's equatorial coordinates to the given equatorial coordinates.
-	/// </summary>
-	public void SyncToCoordinates(double RightAscension, double Declination)
+    /// <summary>
+    /// Matches the scope's equatorial coordinates to the given equatorial coordinates.
+    /// </summary>
+    public void SyncToCoordinates(double rightAscension, double declination)
     {
-        tl.LogMessage("SyncToCoordinates", "Not implemented");
-        throw new MethodNotImplementedException("SyncToCoordinates");
+        LogMessage("SyncToCoordinates", $"Calling method - RightAscension: {rightAscension}, Declination: {declination}.");
+        TelescopeHardware.SyncToCoordinates(rightAscension, declination);
+        LogMessage("SyncToCoordinates", $"Completed.");
     }
 
-	/// <summary>
-	/// Matches the scope's equatorial coordinates to the target equatorial coordinates.
-	/// </summary>
-	public void SyncToTarget()
+    /// <summary>
+    /// Matches the scope's equatorial coordinates to the target equatorial coordinates.
+    /// </summary>
+    public void SyncToTarget()
     {
-        tl.LogMessage("SyncToTarget", "Not implemented");
-        throw new MethodNotImplementedException("SyncToTarget");
+        LogMessage("SyncToTarget", $"Calling method.");
+        TelescopeHardware.SyncToTarget();
+        LogMessage("SyncToTarget", $"Completed.");
     }
 
-	/// <summary>
-	/// The declination (degrees, positive North) for the target of an equatorial slew or sync operation
-	/// </summary>
-	public double TargetDeclination
+    /// <summary>
+    /// The declination (degrees, positive North) for the target of an equatorial slew or sync operation
+    /// </summary>
+    public double TargetDeclination
     {
         get
         {
-            tl.LogMessage("TargetDeclination Get", "Not implemented");
-            throw new PropertyNotImplementedException("TargetDeclination", false);
+            double targetDeclination = TelescopeHardware.TargetDeclination;
+            LogMessage("TargetDeclination Get", targetDeclination.ToString());
+            return targetDeclination;
         }
         set
         {
-            tl.LogMessage("TargetDeclination Set", "Not implemented");
-            throw new PropertyNotImplementedException("TargetDeclination", true);
+            LogMessage("TargetDeclination Set", value.ToString());
+            TelescopeHardware.TargetDeclination = value;
         }
     }
 
-	/// <summary>
-	/// The right ascension (hours) for the target of an equatorial slew or sync operation
-	/// </summary>
-	public double TargetRightAscension
+    /// <summary>
+    /// The right ascension (hours) for the target of an equatorial slew or sync operation
+    /// </summary>
+    public double TargetRightAscension
     {
         get
         {
-            tl.LogMessage("TargetRightAscension Get", "Not implemented");
-            throw new PropertyNotImplementedException("TargetRightAscension", false);
+            double targetRightAscension = TelescopeHardware.TargetRightAscension;
+            LogMessage("TargetRightAscension Get", targetRightAscension.ToString());
+            return targetRightAscension;
         }
         set
         {
-            tl.LogMessage("TargetRightAscension Set", "Not implemented");
-            throw new PropertyNotImplementedException("TargetRightAscension", true);
+            LogMessage("TargetRightAscension Set", value.ToString());
+            TelescopeHardware.TargetRightAscension = value;
         }
     }
 
-	/// <summary>
-	/// The state of the telescope's sidereal tracking drive.
-	/// </summary>
-	public bool Tracking
+    /// <summary>
+    /// The state of the telescope's sidereal tracking drive.
+    /// </summary>
+    public bool Tracking
     {
         get
         {
-            bool tracking = true;
-            tl.LogMessage("Tracking", "Get - " + tracking.ToString());
+            bool tracking = TelescopeHardware.Tracking;
+            LogMessage("Tracking Get", tracking.ToString());
             return tracking;
         }
         set
         {
-            tl.LogMessage("Tracking Set", "Not implemented");
-            throw new PropertyNotImplementedException("Tracking", true);
+            LogMessage("Tracking Set", value.ToString());
+            TelescopeHardware.Tracking = value;
         }
     }
 
-	/// <summary>
-	/// The current tracking rate of the telescope's sidereal drive
-	/// </summary>
-	public DriveRates TrackingRate
+    /// <summary>
+    /// The current tracking rate of the telescope's sidereal drive
+    /// </summary>
+    public DriveRates TrackingRate
     {
         get
         {
-            const DriveRates DEFAULT_DRIVERATE = DriveRates.driveSidereal;
-            tl.LogMessage("TrackingRate Get", $"{DEFAULT_DRIVERATE}");
-            return DEFAULT_DRIVERATE;
+            DriveRates trackingRate = TelescopeHardware.TrackingRate;
+            LogMessage("TrackingRate Get", trackingRate.ToString());
+            return trackingRate;
         }
         set
         {
-            tl.LogMessage("TrackingRate Set", "Not implemented");
-            throw new PropertyNotImplementedException("TrackingRate", true);
+            LogMessage("TrackingRate Set", value.ToString());
+            TelescopeHardware.TrackingRate = value;
         }
     }
 
-	/// <summary>
-	/// Returns a collection of supported <see cref="DriveRates" /> values that describe the permissible
-	/// values of the <see cref="TrackingRate" /> property for this telescope type.
-	/// </summary>
-	public ITrackingRates TrackingRates
+    /// <summary>
+    /// Returns a collection of supported <see cref="DriveRates" /> values that describe the permissible
+    /// values of the <see cref="TrackingRate" /> property for this telescope type.
+    /// </summary>
+    public ITrackingRates TrackingRates
     {
         get
         {
-            ITrackingRates trackingRates = new TrackingRates();
-            tl.LogMessage("TrackingRates", "Get - ");
-            foreach (DriveRates driveRate in trackingRates)
-            {
-                tl.LogMessage("TrackingRates", "Get - " + driveRate.ToString());
-            }
+            ITrackingRates trackingRates = TelescopeHardware.TrackingRates;
+            LogMessage("TrackingRates Get", trackingRates.ToString());
             return trackingRates;
         }
     }
 
-	/// <summary>
-	/// The UTC date/time of the telescope's internal clock
-	/// </summary>
-	public DateTime UTCDate
+    /// <summary>
+    /// The UTC date/time of the telescope's internal clock
+    /// </summary>
+    public DateTime UTCDate
     {
         get
         {
-            DateTime utcDate = DateTime.UtcNow;
-            tl.LogMessage("UTCDate", "Get - " + String.Format("MM/dd/yy HH:mm:ss", utcDate));
+            DateTime utcDate = TelescopeHardware.UTCDate;
+            LogMessage("UTCDate Get", utcDate.ToString());
             return utcDate;
         }
         set
         {
-            tl.LogMessage("UTCDate Set", "Not implemented");
-            throw new PropertyNotImplementedException("UTCDate", true);
+            LogMessage("UTCDate Set", value.ToString());
+            TelescopeHardware.UTCDate = value;
         }
     }
 
-	/// <summary>
-	/// Takes telescope out of the Parked state.
-	/// </summary>
-	public void Unpark()
+    /// <summary>
+    /// Takes telescope out of the Parked state.
+    /// </summary>
+    public void Unpark()
     {
-        tl.LogMessage("Unpark", "Not implemented");
-        throw new MethodNotImplementedException("Unpark");
+        LogMessage("Unpark", $"Calling method.");
+        TelescopeHardware.Unpark();
+        LogMessage("Unpark", $"Completed.");
     }
 
     #endregion
 
     //ENDOFINSERTEDFILE
+
+    /// <summary>
+    /// Dummy LogMessage class that removes compilation errors in the Platform source code and that will be omitted when the project is built
+    /// </summary>
+    static void LogMessage(string method, string message)
+    {
+    }
 }
