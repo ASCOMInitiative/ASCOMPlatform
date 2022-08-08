@@ -11,8 +11,6 @@ class DeviceDome
 {
     #region IDome Implementation
 
-    private bool domeShutterState = false; // Variable to hold the open/closed status of the shutter, true = Open
-
 	/// <summary>
 	/// Immediately stops any and all movement of the dome.
 	/// </summary>

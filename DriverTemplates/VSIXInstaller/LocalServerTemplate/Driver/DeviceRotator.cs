@@ -14,9 +14,6 @@ class DeviceRotator
 
     #region IRotator Implementation
 
-    private float rotatorPosition = 0; // Synced or mechanical position angle of the rotator
-    private float mechanicalPosition = 0; // Mechanical position angle of the rotator
-
 	/// <summary>
 	/// Indicates whether the Rotator supports the <see cref="Reverse" /> method.
 	/// </summary>

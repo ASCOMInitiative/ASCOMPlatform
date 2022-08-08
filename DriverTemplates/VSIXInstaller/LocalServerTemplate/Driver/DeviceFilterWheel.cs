@@ -13,9 +13,6 @@ class DeviceFilerWheel
     TraceLogger tl = new TraceLogger();
 
     #region IFilerWheel Implementation
-    private int[] fwOffsets = new int[4] { 0, 0, 0, 0 }; //class level variable to hold focus offsets
-    private string[] fwNames = new string[4] { "Red", "Green", "Blue", "Clear" }; //class level variable to hold the filter names
-    private short fwPosition = 0; // class level variable to retain the current filterwheel position
 
     /// <summary>
     /// Focus offset of each filter in the wheel
