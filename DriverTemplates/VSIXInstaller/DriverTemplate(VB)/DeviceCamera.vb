@@ -362,9 +362,9 @@ Class DeviceCamera
 	End Property
 
 	''' <summary>
-	''' Minimum <see cref="Gain" /> value of that this camera supports
+	''' List of Gain names supported by the camera
 	''' </summary>
-	''' <returns>The minimum gain value that this camera supports</returns>
+	''' <returns>The list of supported gain names as an ArrayList of strings</returns>
 	Public ReadOnly Property Gains() As ArrayList Implements ICameraV3.Gains
 		Get
 			TL.LogMessage("Gains Get", "Not implemented")

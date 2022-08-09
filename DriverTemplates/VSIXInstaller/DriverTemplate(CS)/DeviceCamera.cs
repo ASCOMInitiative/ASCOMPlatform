@@ -412,9 +412,9 @@ class DeviceCamera
     }
 
 	/// <summary>
-	/// Minimum <see cref="Gain" /> value of that this camera supports
+	/// List of Gain names supported by the camera
 	/// </summary>
-	/// <returns>The minimum gain value that this camera supports</returns>
+	/// <returns>The list of supported gain names as an ArrayList of strings</returns>
 	public ArrayList Gains
     {
         get
@@ -750,7 +750,7 @@ class DeviceCamera
     }
 
 	/// <summary>
-	/// Readout mode, Interface Version 2 only
+	/// Readout mode, Interface Version 2 and later
 	/// </summary>
 	/// <value></value>
 	/// <returns>Short integer index into the <see cref="ReadoutModes">ReadoutModes</see> array of string readout mode names indicating
@@ -770,7 +770,7 @@ class DeviceCamera
     }
 
 	/// <summary>
-	/// List of available readout modes, Interface Version 2 only
+	/// List of available readout modes, Interface Version 2 and later
 	/// </summary>
 	/// <returns>An ArrayList of readout mode names</returns>
 	public ArrayList ReadoutModes
