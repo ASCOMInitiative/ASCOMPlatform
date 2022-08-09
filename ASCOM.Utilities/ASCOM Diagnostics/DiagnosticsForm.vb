@@ -1576,13 +1576,37 @@ Public Class DiagnosticsForm
                 Case "FilterWheel"
                     Select Case Test
                         Case "Position"
-                            DeviceObject.Position = 3
+                            Dim numberOfOffsets, testFilter As Integer
+                            testFilter = 0 ' Initialise test filter number
+
+                            ' Determine a valid filter wheel position to run the test
+                            numberOfOffsets = CType(DeviceObject.FocusOffsets, Array).Length
+
+                            Select Case numberOfOffsets
+                                Case 0 ' No filtgers so this is an error because we can't run the test.
+                                    LogError("DeviceTest", "There are no filters defined, unable to test the FilterWheel position property.")
+                                    Exit Select
+                                Case 1 ' Only 1 so choose position 0 - the only option!
+                                    testFilter = 0
+                                Case 2 ' 2 filters so choose the lat one, position 1
+                                    testFilter = 1
+                                Case Else ' More than 2 filters so go with one less than maximum (note filter position is 0 based!)
+                                    testFilter = numberOfOffsets - 2
+                            End Select
+                            TL.LogMessage("DeviceTest", $"Number of filter wheel filters: {numberOfOffsets}, Chosen wheel: {testFilter}")
+
+                            ' Select the desired filter
+                            DeviceObject.Position = testFilter
+
+                            ' Wait for the wheel to stop moving
                             Do
                                 Thread.Sleep(100)
                                 Application.DoEvents()
                                 Action(Test & " " & Now.Subtract(StartTime).Seconds)
                             Loop Until DeviceObject.Position > -1
-                            CompareDouble("DeviceTest", Test, CDbl(DeviceObject.Position), 3.0, 0.000001)
+
+                            ' Test the outcome.
+                            CompareDouble("DeviceTest", Test, CDbl(DeviceObject.Position), CDbl(testFilter), 0.000001)
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
