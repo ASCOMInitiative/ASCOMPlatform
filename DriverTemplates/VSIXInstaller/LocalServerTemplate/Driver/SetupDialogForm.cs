@@ -12,6 +12,7 @@ namespace TEMPLATENAMESPACE
     [ComVisible(false)] // Form not registered for COM!
     public partial class SetupDialogForm : Form
     {
+        const string NO_PORTS_MESSAGE = "No COM ports found";
         TraceLogger tl; // Holder for a reference to the driver's trace logger
 
         public SetupDialogForm(TraceLogger tlDriver)
@@ -34,12 +35,16 @@ namespace TEMPLATENAMESPACE
             // Update the COM port variable if one has been selected
             if (comboBoxComPort.SelectedItem is null) // No COM port selected
             {
-                tl.LogMessage("Setup OK", $"New configuration values - Trace: {chkTrace.Checked}, COM Port: Not selected");
+                tl.LogMessage("Setup OK", $"New configuration values - COM Port: Not selected");
             }
-            else // A COM port has been selected
+            else if (comboBoxComPort.SelectedItem.ToString() == NO_PORTS_MESSAGE)
+            {
+                tl.LogMessage("Setup OK", $"New configuration values - NO COM ports detected on this PC.");
+            }
+            else // A valid COM port has been selected
             {
                 TEMPLATEHARDWARECLASS.comPort = (string)comboBoxComPort.SelectedItem;
-                tl.LogMessage("Setup OK", $"New configuration values - Trace: {chkTrace.Checked}, COM Port: {comboBoxComPort.SelectedItem}");
+                tl.LogMessage("Setup OK", $"New configuration values - COM Port: {comboBoxComPort.SelectedItem}");
             }
         }
 
@@ -72,8 +77,18 @@ namespace TEMPLATENAMESPACE
             chkTrace.Checked = tl.Enabled;
 
             // set the list of COM ports to those that are currently available
-            comboBoxComPort.Items.Clear();
-            comboBoxComPort.Items.AddRange(System.IO.Ports.SerialPort.GetPortNames());
+            comboBoxComPort.Items.Clear(); // Clear any existing entries
+            using (Serial serial = new Serial()) // User the Se5rial component to get an extended list of COM ports
+            {
+                comboBoxComPort.Items.AddRange(serial.AvailableCOMPorts);
+            }
+
+            // If no ports are found include a message to this effect
+            if (comboBoxComPort.Items.Count == 0)
+            {
+                comboBoxComPort.Items.Add(NO_PORTS_MESSAGE);
+                comboBoxComPort.SelectedItem = NO_PORTS_MESSAGE;
+            }
 
             // select the current port if possible
             if (comboBoxComPort.Items.Contains(TEMPLATEHARDWARECLASS.comPort))

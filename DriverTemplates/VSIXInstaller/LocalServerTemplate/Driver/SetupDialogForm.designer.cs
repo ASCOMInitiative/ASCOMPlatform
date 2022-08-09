@@ -109,7 +109,7 @@ namespace TEMPLATENAMESPACE
             this.comboBoxComPort.FormattingEnabled = true;
             this.comboBoxComPort.Location = new System.Drawing.Point(77, 87);
             this.comboBoxComPort.Name = "comboBoxComPort";
-            this.comboBoxComPort.Size = new System.Drawing.Size(90, 21);
+            this.comboBoxComPort.Size = new System.Drawing.Size(133, 21);
             this.comboBoxComPort.TabIndex = 7;
             // 
             // SetupDialogForm
