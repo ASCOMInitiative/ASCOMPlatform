@@ -361,24 +361,24 @@ Class DeviceCamera
 		End Get
 	End Property
 
-	''' <summary>
-	''' Minimum <see cref="Gain" /> value of that this camera supports
-	''' </summary>
-	''' <returns>The minimum gain value that this camera supports</returns>
-	Public ReadOnly Property Gains() As ArrayList Implements ICameraV3.Gains
-		Get
-			TL.LogMessage("Gains Get", "Not implemented")
-			Throw New ASCOM.PropertyNotImplementedException("Gains", False)
-		End Get
-	End Property
+    ''' <summary>
+    ''' Minimum <see cref="Gain" /> value of that this camera supports
+    ''' </summary>
+    ''' <returns>The minimum gain value that this camera supports</returns>
+    Public ReadOnly Property Gains() As ArrayList Implements ICameraV3.Gains
+        Get
+            TL.LogMessage("Gains Get", "Not implemented")
+            Throw New ASCOM.PropertyNotImplementedException("Gains", False)
+        End Get
+    End Property
 
-	''' <summary>
-	''' Returns a flag indicating whether this camera has a mechanical shutter
-	''' </summary>
-	''' <value>
-	''' <c>True</c> if this instance has shutter; otherwise, <c>False</c>.
-	''' </value>
-	Public ReadOnly Property HasShutter() As Boolean Implements ICameraV3.HasShutter
+    ''' <summary>
+    ''' Returns a flag indicating whether this camera has a mechanical shutter
+    ''' </summary>
+    ''' <value>
+    ''' <c>True</c> if this instance has shutter; otherwise, <c>False</c>.
+    ''' </value>
+    Public ReadOnly Property HasShutter() As Boolean Implements ICameraV3.HasShutter
 		Get
 			TL.LogMessage("HasShutter Get", False.ToString())
 			Return False

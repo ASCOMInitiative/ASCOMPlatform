@@ -103,11 +103,11 @@ Class DeviceDome
 		End Get
 	End Property
 
-	''' <summary>
-	''' <see langword="True" /> if driver is capable of rotating the dome. Muste be <see "langword="False" /> for a 
-	''' roll-off roof or clamshell.
-	''' </summary>
-	Public ReadOnly Property CanSetAzimuth() As Boolean Implements IDomeV2.CanSetAzimuth
+    ''' <summary>
+    ''' <see langword="True" /> if driver is capable of rotating the dome. Muste be <see "langword="False" /> for a 
+    ''' roll-off roof or clamshell.
+    ''' </summary>
+    Public ReadOnly Property CanSetAzimuth() As Boolean Implements IDomeV2.CanSetAzimuth
 		Get
 			TL.LogMessage("CanSetAzimuth Get", False.ToString())
 			Return False
