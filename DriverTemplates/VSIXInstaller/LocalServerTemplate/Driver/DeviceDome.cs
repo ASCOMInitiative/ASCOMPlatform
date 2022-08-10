@@ -194,11 +194,11 @@ class DeviceDome
         }
     }
 
-    /// <summary>
-    /// <see langword="true" /> if driver is capable of rotating the dome. Muste be <see "langword="false" /> for a 
-    /// roll-off roof or clamshell.
-    /// </summary>
-    public bool CanSetAzimuth
+	/// <summary>
+	/// <see langword="true" /> if driver is capable of rotating the dome. Must be <see "langword="false" /> for a 
+	/// roll-off roof or clamshell.
+	/// </summary>
+	public bool CanSetAzimuth
     {
         get
         {
