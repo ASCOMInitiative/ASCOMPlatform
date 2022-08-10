@@ -164,6 +164,7 @@ namespace TEMPLATENAMESPACE
             {
                 try
                 {
+                    CheckConnected($"SupportedActions");
                     ArrayList actions = TEMPLATEHARDWARECLASS.SupportedActions;
                     LogMessage("SupportedActions", $"Returning {actions.Count} actions.");
                     return actions;
@@ -296,7 +297,7 @@ namespace TEMPLATENAMESPACE
             {
                 try
                 {
-                    // Returns the driver connection state rather than the local server's connected state, which could be different because there may be other client connections still active.
+                    // Returns the driver's connection state rather than the local server's connected state, which could be different because there may be other client connections still active.
                     LogMessage("Connected Get", connectedState.ToString());
                     return connectedState;
                 }
@@ -369,6 +370,7 @@ namespace TEMPLATENAMESPACE
             {
                 try
                 {
+                    // This should work regardless of whether or not the driver is Connected, hence no CheckConnected method.
                     string driverInfo = TEMPLATEHARDWARECLASS.DriverInfo;
                     LogMessage("DriverInfo", driverInfo);
                     return driverInfo;
@@ -390,6 +392,7 @@ namespace TEMPLATENAMESPACE
             {
                 try
                 {
+                    // This should work regardless of whether or not the driver is Connected, hence no CheckConnected method.
                     string driverVersion = TEMPLATEHARDWARECLASS.DriverVersion;
                     LogMessage("DriverVersion", driverVersion);
                     return driverVersion;
@@ -411,6 +414,7 @@ namespace TEMPLATENAMESPACE
             {
                 try
                 {
+                    // This should work regardless of whether or not the driver is Connected, hence no CheckConnected method.
                     short interfaceVersion = TEMPLATEHARDWARECLASS.InterfaceVersion;
                     LogMessage("InterfaceVersion", interfaceVersion.ToString());
                     return interfaceVersion;
@@ -432,6 +436,7 @@ namespace TEMPLATENAMESPACE
             {
                 try
                 {
+                    // This should work regardless of whether or not the driver is Connected, hence no CheckConnected method.
                     string name = TEMPLATEHARDWARECLASS.Name;
                     LogMessage("Name Get", name);
                     return name;
