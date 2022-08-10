@@ -96,15 +96,13 @@ namespace TEMPLATENAMESPACE
         }
 
         /// <summary>
-        /// Dispose the late-bound interface, if needed. Will release it via COM
-        /// if it is a COM object, else if native .NET will just dereference it
-        /// for GC.
+        /// Dispose of any resources created in this driver file
         /// </summary>
         public void Dispose()
         {
             try
             {
-                // Clean up the hardware class if required
+                // Call the hardware class Dispose() method so that it can release resources that are no longer needed by this or other driver instances.
                 TEMPLATEHARDWARECLASS.Dispose();
 
                 // Clean up the trace logger object
@@ -118,7 +116,7 @@ namespace TEMPLATENAMESPACE
             catch (Exception ex)
             {
                 LogMessage("Dispose", $"Threw an exception: \r\n{ex}");
-                throw;
+                // The exception is not re-thrown to the client because Microsoft's best practice says not to return exceptions from the Dispose method. 
             }
         }
 
@@ -245,7 +243,7 @@ namespace TEMPLATENAMESPACE
             {
                 CheckConnected($"CommandBool: {command}, Raw: {raw}");
                 LogMessage("CommandBlind", $"Calling method - Command: {command}, Raw: {raw}");
-                bool commandBoolResponse= TEMPLATEHARDWARECLASS.CommandBool(command, raw);
+                bool commandBoolResponse = TEMPLATEHARDWARECLASS.CommandBool(command, raw);
                 LogMessage("CommandBlind", $"Returning: {commandBoolResponse}.");
                 return commandBoolResponse;
             }
