@@ -78,13 +78,14 @@ namespace TEMPLATENAMESPACE
                 tl = new TraceLogger("", "TEMPLATEDEVICENAME.Driver"); // Remove the leading ASCOM. from the ProgId because this will be added back by TraceLogger.
                 SetTraceState();
 
+                // Initialise the hardware if required
+                TEMPLATEHARDWARECLASS.InitialiseHardware();
+
                 LogMessage("TEMPLATEDEVICECLASS", "Starting driver initialisation");
                 LogMessage("TEMPLATEDEVICECLASS", $"ProgID: {DriverProgId}, Description: {DriverDescription}");
 
                 connectedState = false; // Initialise connected to false
 
-                // Initialise the hardware if required
-                TEMPLATEHARDWARECLASS.InitialiseHardware();
 
                 LogMessage("TEMPLATEDEVICECLASS", "Completed initialisation");
             }

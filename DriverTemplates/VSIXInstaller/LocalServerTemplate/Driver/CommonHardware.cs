@@ -49,6 +49,7 @@ namespace TEMPLATENAMESPACE
         internal static Util utilities; // ASCOM Utilities object for use as required
         internal static AstroUtils astroUtilities; // ASCOM AstroUtilities object for use as required
         internal static TraceLogger tl; // Local server's trace logger object for diagnostic log with information that you specify
+        private static int connectionCount = 0;
 
         /// <summary>
         /// Initializes a new instance of the device Hardware class.
@@ -57,26 +58,23 @@ namespace TEMPLATENAMESPACE
         {
             try
             {
+                // Create the hardware trace logger in the static initialiser.
+                // All other initialisation should go in the InitialiseHardware method.
                 tl = new TraceLogger("", "TEMPLATEDEVICENAME.Hardware");
 
+                // DriverProgId has to be set here because it used by ReadProfile to get the TraceState flag.
                 DriverProgId = TEMPLATEDEVICECLASS.DriverProgId; // Get this device's ProgID so that it can be used to read the Profile configuration values
-                DriverDescription = TEMPLATEDEVICECLASS.DriverDescription; // Get this device's Chooser description
 
+                // ReadProfile has to go here before anything is written to the log because it loads the TraceLogger enable / disable state.
                 ReadProfile(); // Read device configuration from the ASCOM Profile store, including the trace state
 
-                LogMessage("TEMPLATEHARDWARECLASS", "Starting initialisation");
-                LogMessage("TEMPLATEHARDWARECLASS", $"ProgID: {DriverProgId}, Description: {DriverDescription}");
-
-                connectedState = false; // Initialise connected to false
-                utilities = new Util(); //Initialise ASCOM Utilities object
-                astroUtilities = new AstroUtils(); // Initialise ASCOM Astronomy Utilities object
-
-                LogMessage("TEMPLATEHARDWARECLASS", "Completed initialisation");
+                LogMessage("TEMPLATEHARDWARECLASS", $"Static initialiser completed.");
             }
             catch (Exception ex)
             {
-                LogMessage("TEMPLATEHARDWARECLASS", $"Initialisation exception: {ex}");
+                try { LogMessage("TEMPLATEHARDWARECLASS", $"Initialisation exception: {ex}"); } catch { }
                 MessageBox.Show($"{ex.Message}", "Exception creating TEMPLATEDEVICEID", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
             }
         }
 
@@ -86,10 +84,24 @@ namespace TEMPLATENAMESPACE
         /// <remarks>Called every time a new instance of the driver is created.</remarks>
         internal static void InitialiseHardware()
         {
-            // This method will be called every time a new ASCOM client loads your driver, so make sure that "one off" activities are only undertaken once
+            // This method will be called every time a new ASCOM client loads your driver
+            connectionCount += 1;
+            LogMessage("InitialiseHardware", $"Connection count: {connectionCount}.");
+
+            // Make sure that "one off" activities are only undertaken once
             if (runOnce == false)
             {
                 LogMessage("InitialiseHardware", $"Starting one-off initialisation.");
+
+                DriverDescription = TEMPLATEDEVICECLASS.DriverDescription; // Get this device's Chooser description
+
+                LogMessage("InitialiseHardware", $"ProgID: {DriverProgId}, Description: {DriverDescription}");
+
+                connectedState = false; // Initialise connected to false
+                utilities = new Util(); //Initialise ASCOM Utilities object
+                astroUtilities = new AstroUtils(); // Initialise ASCOM Astronomy Utilities object
+
+                LogMessage("InitialiseHardware", "Completed basic initialisation");
 
                 // Add your own "one off" device initialisation here e.g. validating existence of hardware and setting up communications
 
@@ -217,14 +229,17 @@ namespace TEMPLATENAMESPACE
         /// </summary>
         public static void Dispose()
         {
+            connectionCount -= 1;
+            LogMessage("Dispose", $"Connection count: {connectionCount}.");
+
             // Clean up the trace logger and utility objects
-            tl.Enabled = false;
-            tl.Dispose();
-            tl = null;
-            utilities.Dispose();
-            utilities = null;
-            astroUtilities.Dispose();
-            astroUtilities = null;
+            //tl.Enabled = false;
+            //tl.Dispose();
+            //tl = null;
+            //utilities.Dispose();
+            //utilities = null;
+            //astroUtilities.Dispose();
+            //astroUtilities = null;
         }
 
         /// <summary>
