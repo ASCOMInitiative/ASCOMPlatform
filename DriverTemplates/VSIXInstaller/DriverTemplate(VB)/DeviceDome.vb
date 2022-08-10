@@ -104,7 +104,7 @@ Class DeviceDome
 	End Property
 
 	''' <summary>
-	''' <see langword="True" /> if driver is capable of rotating the dome. Muste be <see "langword="False" /> for a 
+	''' <see langword="True" /> if driver is capable of rotating the dome. Must be <see "langword="False" /> for a 
 	''' roll-off roof or clamshell.
 	''' </summary>
 	Public ReadOnly Property CanSetAzimuth() As Boolean Implements IDomeV2.CanSetAzimuth
