@@ -23,6 +23,7 @@ using ASCOM.DeviceInterface;
 using System.Globalization;
 using System.Collections;
 using System.Windows.Forms;
+using System.IO;
 
 namespace TEMPLATENAMESPACE
 {
@@ -49,9 +50,11 @@ namespace TEMPLATENAMESPACE
         internal static string DriverProgId; // ASCOM DeviceID (COM ProgID) for this driver, the value is retrieved from the ServedClassName attribute in the class initialiser.
         internal static string DriverDescription; // The value is retrieved from the ServedClassName attribute in the class initialiser.
 
-        // connectedState holds the connection state from this driver's perspective, as opposed to the local server's perspective, which may be different because of other client connections.
+        // connectedState holds the connection state from this driver instance's perspective, as opposed to the local server's perspective, which may be different because of other client connections.
         internal bool connectedState; // The connected state from this driver's perspective)
         internal TraceLogger tl; // Trace logger object to hold diagnostic information just for this instance of the driver, as opposed to the local server's log, which includes activity from all driver instances.
+
+        #region Initialisation and Dispose
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TEMPLATEDEVICENAME"/> class. Must be public to successfully register for COM.
@@ -90,8 +93,36 @@ namespace TEMPLATENAMESPACE
                 LogMessage("TEMPLATEDEVICECLASS", $"Initialisation exception: {ex}");
                 MessageBox.Show($"{ex.Message}", "Exception creating TEMPLATEDEVICEID", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
+
+        /// <summary>
+        /// Dispose the late-bound interface, if needed. Will release it via COM
+        /// if it is a COM object, else if native .NET will just dereference it
+        /// for GC.
+        /// </summary>
+        public void Dispose()
+        {
+            try
+            {
+                // Clean up the hardware class if required
+                TEMPLATEHARDWARECLASS.Dispose();
+
+                // Clean up the trace logger object
+                if (!(tl is null))
+                {
+                    tl.Enabled = false;
+                    tl.Dispose();
+                    tl = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Dispose", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
+        }
+
+        #endregion
 
         // PUBLIC COM INTERFACE ITEMPLATEDEVICEINTERFACE IMPLEMENTATION
 
@@ -105,13 +136,23 @@ namespace TEMPLATENAMESPACE
         /// </summary>
         public void SetupDialog()
         {
-            if (connectedState) // Don't show if already connected
+            try
             {
-                MessageBox.Show("Already connected, just press OK");
+                if (connectedState) // Don't show if already connected
+                {
+                    MessageBox.Show("Already connected, just press OK");
+                }
+                else // Show dialogue
+                {
+                    LogMessage("SetupDialog", $"Calling SetupDialog.");
+                    TEMPLATEHARDWARECLASS.SetupDialog();
+                    LogMessage("SetupDialog", $"Completed.");
+                }
             }
-            else // Show dialogue
+            catch (Exception ex)
             {
-                TEMPLATEHARDWARECLASS.SetupDialog();
+                LogMessage("SetupDialog", $"Threw an exception: \r\n{ex}");
+                throw;
             }
         }
 
@@ -121,9 +162,17 @@ namespace TEMPLATENAMESPACE
         {
             get
             {
-                ArrayList actions = TEMPLATEHARDWARECLASS.SupportedActions;
-                LogMessage("SupportedActions Get", $"Returning {actions.Count} actions.");
-                return actions;
+                try
+                {
+                    ArrayList actions = TEMPLATEHARDWARECLASS.SupportedActions;
+                    LogMessage("SupportedActions", $"Returning {actions.Count} actions.");
+                    return actions;
+                }
+                catch (Exception ex)
+                {
+                    LogMessage("SupportedActions", $"Threw an exception: \r\n{ex}");
+                    throw;
+                }
             }
         }
 
@@ -136,9 +185,19 @@ namespace TEMPLATENAMESPACE
         /// </returns>
         public string Action(string actionName, string actionParameters)
         {
-            CheckConnected($"Action {actionName} - {actionParameters}");
-            LogMessage("", $"Calling Action: {actionName} with parameters: {actionParameters}");
-            return TEMPLATEHARDWARECLASS.Action(actionName, actionParameters);
+            try
+            {
+                CheckConnected($"Action {actionName} - {actionParameters}");
+                LogMessage("", $"Calling Action: {actionName} with parameters: {actionParameters}");
+                string actionResponse = TEMPLATEHARDWARECLASS.Action(actionName, actionParameters);
+                LogMessage("Action", $"Completed.");
+                return actionResponse;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Action", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
 
         //STARTOFCOMMANDXXXMETHODS - This line will be deleted by the template wizard.
@@ -153,8 +212,18 @@ namespace TEMPLATENAMESPACE
         /// </param>
         public void CommandBlind(string command, bool raw)
         {
-            CheckConnected($"CommandBlind: {command}, Raw: {raw}");
-            TEMPLATEHARDWARECLASS.CommandBlind(command, raw);
+            try
+            {
+                CheckConnected($"CommandBlind: {command}, Raw: {raw}");
+                LogMessage("CommandBlind", $"Calling method - Command: {command}, Raw: {raw}");
+                TEMPLATEHARDWARECLASS.CommandBlind(command, raw);
+                LogMessage("CommandBlind", $"Completed.");
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CommandBlind", $"Command: {command}, Raw: {raw} threw an exception: \r\n{ex}");
+                throw;
+            }
         }
 
         /// <summary>
@@ -171,9 +240,21 @@ namespace TEMPLATENAMESPACE
         /// </returns>
         public bool CommandBool(string command, bool raw)
         {
-            CheckConnected($"CommandBool: {command}, Raw: {raw}");
-            return TEMPLATEHARDWARECLASS.CommandBool(command, raw);
+            try
+            {
+                CheckConnected($"CommandBool: {command}, Raw: {raw}");
+                LogMessage("CommandBlind", $"Calling method - Command: {command}, Raw: {raw}");
+                bool commandBoolResponse= TEMPLATEHARDWARECLASS.CommandBool(command, raw);
+                LogMessage("CommandBlind", $"Returning: {commandBoolResponse}.");
+                return commandBoolResponse;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CommandBool", $"Command: {command}, Raw: {raw} threw an exception: \r\n{ex}");
+                throw;
+            }
         }
+
         /// <summary>
         /// Transmits an arbitrary string to the device and waits for a string response.
         /// Optionally, protocol framing characters may be added to the string before transmission.
@@ -188,27 +269,22 @@ namespace TEMPLATENAMESPACE
         /// </returns>
         public string CommandString(string command, bool raw)
         {
-            CheckConnected($"CommandString: {command}, Raw: {raw}");
-            return TEMPLATEHARDWARECLASS.CommandString(command, raw);
-        }
-
-        //ENDOFCOMMANDXXXMETHODS - This line will be deleted by the template wizard.
-        /// <summary>
-        /// Dispose the late-bound interface, if needed. Will release it via COM
-        /// if it is a COM object, else if native .NET will just dereference it
-        /// for GC.
-        /// </summary>
-        public void Dispose()
-        {
-            // Clean up the trace logger object
-            if (!(tl is null))
+            try
             {
-                tl.Enabled = false;
-                tl.Dispose();
-                tl = null;
+                CheckConnected($"CommandString: {command}, Raw: {raw}");
+                LogMessage("CommandString", $"Calling method - Command: {command}, Raw: {raw}");
+                string commandStringResponse = TEMPLATEHARDWARECLASS.CommandString(command, raw);
+                LogMessage("CommandString", $"Returning: {commandStringResponse}.");
+                return commandStringResponse;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CommandString", $"Command: {command}, Raw: {raw} threw an exception: \r\n{ex}");
+                throw;
             }
         }
 
+        //ENDOFCOMMANDXXXMETHODS - This line will be deleted by the template wizard.
         /// <summary>
         /// Set True to connect to the device hardware. Set False to disconnect from the device hardware.
         /// You can also read the property to check whether it is connected. This reports the current hardware state.
@@ -218,29 +294,45 @@ namespace TEMPLATENAMESPACE
         {
             get
             {
-                // Returns the driver connection state rather than the local server's connected state, which could be different because there may be other client connections still active.
-                LogMessage("Connected Get", connectedState.ToString());
-                return connectedState;
+                try
+                {
+                    // Returns the driver connection state rather than the local server's connected state, which could be different because there may be other client connections still active.
+                    LogMessage("Connected Get", connectedState.ToString());
+                    return connectedState;
+                }
+                catch (Exception ex)
+                {
+                    LogMessage("Connected Get", $"Threw an exception: \r\n{ex}");
+                    throw;
+                }
             }
             set
             {
-                if (value == connectedState)
+                try
                 {
-                    LogMessage("Connected Set", "Device already connected, ignoring Connected Set = true");
-                    return;
-                }
+                    if (value == connectedState)
+                    {
+                        LogMessage("Connected Set", "Device already connected, ignoring Connected Set = true");
+                        return;
+                    }
 
-                if (value)
-                {
-                    connectedState = true;
-                    LogMessage("Connected Set", "Connecting to device");
-                    TEMPLATEHARDWARECLASS.Connected = true;
+                    if (value)
+                    {
+                        connectedState = true;
+                        LogMessage("Connected Set", "Connecting to device");
+                        TEMPLATEHARDWARECLASS.Connected = true;
+                    }
+                    else
+                    {
+                        connectedState = false;
+                        LogMessage("Connected Set", "Disconnecting from device");
+                        TEMPLATEHARDWARECLASS.Connected = false;
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    connectedState = false;
-                    LogMessage("Connected Set", "Disconnecting from device");
-                    TEMPLATEHARDWARECLASS.Connected = false;
+                    LogMessage("Connected Set", $"Threw an exception: \r\n{ex}");
+                    throw;
                 }
             }
         }
@@ -253,10 +345,18 @@ namespace TEMPLATENAMESPACE
         {
             get
             {
-                CheckConnected($"Description Get");
-                string description = DriverDescription;
-                LogMessage("Description Get", description);
-                return description;
+                try
+                {
+                    CheckConnected($"Description");
+                    string description = TEMPLATEHARDWARECLASS.Description;
+                    LogMessage("Description", description);
+                    return description;
+                }
+                catch (Exception ex)
+                {
+                    LogMessage("Description", $"Threw an exception: \r\n{ex}");
+                    throw;
+                }
             }
         }
 
@@ -267,9 +367,17 @@ namespace TEMPLATENAMESPACE
         {
             get
             {
-                string driverInfo = TEMPLATEHARDWARECLASS.DriverInfo;
-                LogMessage("DriverInfo Get", driverInfo);
-                return driverInfo;
+                try
+                {
+                    string driverInfo = TEMPLATEHARDWARECLASS.DriverInfo;
+                    LogMessage("DriverInfo", driverInfo);
+                    return driverInfo;
+                }
+                catch (Exception ex)
+                {
+                    LogMessage("DriverInfo", $"Threw an exception: \r\n{ex}");
+                    throw;
+                }
             }
         }
 
@@ -280,9 +388,17 @@ namespace TEMPLATENAMESPACE
         {
             get
             {
-                string driverVersion = TEMPLATEHARDWARECLASS.DriverVersion;
-                LogMessage("DriverVersion Get", driverVersion);
-                return driverVersion;
+                try
+                {
+                    string driverVersion = TEMPLATEHARDWARECLASS.DriverVersion;
+                    LogMessage("DriverVersion", driverVersion);
+                    return driverVersion;
+                }
+                catch (Exception ex)
+                {
+                    LogMessage("DriverVersion", $"Threw an exception: \r\n{ex}");
+                    throw;
+                }
             }
         }
 
@@ -293,9 +409,17 @@ namespace TEMPLATENAMESPACE
         {
             get
             {
-                short interfaceVersion = TEMPLATEHARDWARECLASS.InterfaceVersion;
-                LogMessage("InterfaceVersion Get", interfaceVersion.ToString());
-                return interfaceVersion;
+                try
+                {
+                    short interfaceVersion = TEMPLATEHARDWARECLASS.InterfaceVersion;
+                    LogMessage("InterfaceVersion", interfaceVersion.ToString());
+                    return interfaceVersion;
+                }
+                catch (Exception ex)
+                {
+                    LogMessage("InterfaceVersion", $"Threw an exception: \r\n{ex}");
+                    throw;
+                }
             }
         }
 
@@ -306,9 +430,17 @@ namespace TEMPLATENAMESPACE
         {
             get
             {
-                string name = TEMPLATEHARDWARECLASS.Name;
-                LogMessage("Name Get", name);
-                return name;
+                try
+                {
+                    string name = TEMPLATEHARDWARECLASS.Name;
+                    LogMessage("Name Get", name);
+                    return name;
+                }
+                catch (Exception ex)
+                {
+                    LogMessage("Name", $"Threw an exception: \r\n{ex}");
+                    throw;
+                }
             }
         }
 

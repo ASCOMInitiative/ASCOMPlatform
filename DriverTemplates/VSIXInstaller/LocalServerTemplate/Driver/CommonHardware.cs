@@ -58,24 +58,24 @@ namespace TEMPLATENAMESPACE
             try
             {
                 tl = new TraceLogger("", "TEMPLATEDEVICENAME.Hardware");
-                
+
                 DriverProgId = TEMPLATEDEVICECLASS.DriverProgId; // Get this device's ProgID so that it can be used to read the Profile configuration values
-                DriverDescription = TEMPLATEDEVICECLASS.DriverProgId; // Get this device's Chooser description
+                DriverDescription = TEMPLATEDEVICECLASS.DriverDescription; // Get this device's Chooser description
 
                 ReadProfile(); // Read device configuration from the ASCOM Profile store, including the trace state
 
-                tl.LogMessage("TEMPLATEHARDWARECLASS", "Starting initialisation");
-                tl.LogMessage("TEMPLATEHARDWARECLASS", $"ProgID: {DriverProgId}, Description: {DriverDescription}");
+                LogMessage("TEMPLATEHARDWARECLASS", "Starting initialisation");
+                LogMessage("TEMPLATEHARDWARECLASS", $"ProgID: {DriverProgId}, Description: {DriverDescription}");
 
                 connectedState = false; // Initialise connected to false
                 utilities = new Util(); //Initialise ASCOM Utilities object
                 astroUtilities = new AstroUtils(); // Initialise ASCOM Astronomy Utilities object
 
-                tl.LogMessage("TEMPLATEHARDWARECLASS", "Completed initialisation");
+                LogMessage("TEMPLATEHARDWARECLASS", "Completed initialisation");
             }
             catch (Exception ex)
             {
-                tl.LogMessageCrLf("TEMPLATEHARDWARECLASS", $"Initialisation exception: {ex}");
+                LogMessage("TEMPLATEHARDWARECLASS", $"Initialisation exception: {ex}");
                 MessageBox.Show($"{ex.Message}", "Exception creating TEMPLATEDEVICEID", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -89,11 +89,11 @@ namespace TEMPLATENAMESPACE
             // This method will be called every time a new ASCOM client loads your driver, so make sure that "one off" activities are only undertaken once
             if (runOnce == false)
             {
-                tl.LogMessage("InitialiseHardware", $"Starting one-off initialisation.");
+                LogMessage("InitialiseHardware", $"Starting one-off initialisation.");
 
                 // Add your own "one off" device initialisation here e.g. validating existence of hardware and setting up communications
 
-                tl.LogMessage("InitialiseHardware", $"One-off initialisation complete.");
+                LogMessage("InitialiseHardware", $"One-off initialisation complete.");
                 runOnce = true; // Set the flag to ensure that this code is not run again
             }
         }
@@ -130,7 +130,7 @@ namespace TEMPLATENAMESPACE
         {
             get
             {
-                tl.LogMessage("SupportedActions Get", "Returning empty ArrayList");
+                LogMessage("SupportedActions Get", "Returning empty ArrayList");
                 return new ArrayList();
             }
         }
@@ -241,7 +241,7 @@ namespace TEMPLATENAMESPACE
             }
             set
             {
-                tl.LogMessage("Connected", $"Set {value}");
+                LogMessage("Connected", $"Set {value}");
                 if (value == IsConnected)
                     return;
 
@@ -273,7 +273,7 @@ namespace TEMPLATENAMESPACE
             // TODO customise this device description if required
             get
             {
-                tl.LogMessage("Description Get", DriverDescription);
+                LogMessage("Description Get", DriverDescription);
                 return DriverDescription;
             }
         }
@@ -288,7 +288,7 @@ namespace TEMPLATENAMESPACE
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                 // TODO customise this driver description if required
                 string driverInfo = $"Information about the driver itself. Version: {version.Major}.{version.Minor}";
-                tl.LogMessage("DriverInfo Get", driverInfo);
+                LogMessage("DriverInfo Get", driverInfo);
                 return driverInfo;
             }
         }
@@ -302,7 +302,7 @@ namespace TEMPLATENAMESPACE
             {
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                 string driverVersion = $"{version.Major}.{version.Minor}";
-                tl.LogMessage("DriverVersion Get", driverVersion);
+                LogMessage("DriverVersion Get", driverVersion);
                 return driverVersion;
             }
         }
@@ -329,7 +329,7 @@ namespace TEMPLATENAMESPACE
             get
             {
                 string name = "Short driver name - please customise";
-                tl.LogMessage("Name Get", name);
+                LogMessage("Name Get", name);
                 return name;
             }
         }

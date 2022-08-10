@@ -4,6 +4,7 @@
 
 using ASCOM;
 using ASCOM.Utilities;
+using System;
 using static System.Windows.Forms.AxHost;
 
 class DeviceSwitch
@@ -18,9 +19,18 @@ class DeviceSwitch
     {
         get
         {
-            short maxSwitch = SwitchHardware.MaxSwitch;
-            LogMessage("MaxSwitch Get", maxSwitch.ToString());
-            return maxSwitch;
+            try
+            {
+                CheckConnected("MaxSwitch");
+                short maxSwitch = SwitchHardware.MaxSwitch;
+                LogMessage("MaxSwitch", maxSwitch.ToString());
+                return maxSwitch;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("MaxSwitch", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -31,10 +41,19 @@ class DeviceSwitch
     /// <returns>The name of the device</returns>
     public string GetSwitchName(short id)
     {
-        LogMessage("GetSwitchName", $"Calling method.");
-        string switchName=SwitchHardware.GetSwitchName(id);
-        LogMessage("GetSwitchName", switchName.ToString());
-        return switchName;
+        try
+        {
+            CheckConnected("GetSwitchName");
+            LogMessage("GetSwitchName", $"Calling method.");
+            string switchName = SwitchHardware.GetSwitchName(id);
+            LogMessage("GetSwitchName", switchName.ToString());
+            return switchName;
+        }
+        catch (Exception ex)
+        {
+            LogMessage("GetSwitchName", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -44,9 +63,18 @@ class DeviceSwitch
     /// <param name="name">The name of the device</param>
     public void SetSwitchName(short id, string name)
     {
-        LogMessage("SetSwitchName", $"Calling method.");
-        SwitchHardware.SetSwitchName(id,name);
-        LogMessage("SetSwitchName", $"Completed.");
+        try
+        {
+            CheckConnected("SetSwitchName");
+            LogMessage("SetSwitchName", $"Calling method.");
+            SwitchHardware.SetSwitchName(id, name);
+            LogMessage("SetSwitchName", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("SetSwitchName", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -59,10 +87,19 @@ class DeviceSwitch
     /// </returns>
     public string GetSwitchDescription(short id)
     {
-        LogMessage("GetSwitchDescription", $"Calling method.");
-        string switchDescription = SwitchHardware.GetSwitchDescription(id);
-        LogMessage("GetSwitchDescription", switchDescription.ToString());
-        return switchDescription;
+        try
+        {
+            CheckConnected("GetSwitchDescription");
+            LogMessage("GetSwitchDescription", $"Calling method.");
+            string switchDescription = SwitchHardware.GetSwitchDescription(id);
+            LogMessage("GetSwitchDescription", switchDescription.ToString());
+            return switchDescription;
+        }
+        catch (Exception ex)
+        {
+            LogMessage("GetSwitchDescription", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -75,10 +112,19 @@ class DeviceSwitch
     /// </returns>
     public bool CanWrite(short id)
     {
-        LogMessage("CanWrite", $"Calling method.");
-        bool canWrite = SwitchHardware.CanWrite(id);
-        LogMessage("CanWrite", canWrite.ToString());
-        return canWrite;
+        try
+        {
+            CheckConnected("CanWrite");
+            LogMessage("CanWrite", $"Calling method.");
+            bool canWrite = SwitchHardware.CanWrite(id);
+            LogMessage("CanWrite", canWrite.ToString());
+            return canWrite;
+        }
+        catch (Exception ex)
+        {
+            LogMessage("CanWrite", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     #region Boolean switch members
@@ -90,10 +136,19 @@ class DeviceSwitch
     /// <returns>True or false</returns>
     public bool GetSwitch(short id)
     {
-        LogMessage("GetSwitch", $"Calling method.");
-        bool getSwitch = SwitchHardware.GetSwitch(id);
-        LogMessage("GetSwitch", getSwitch.ToString());
-        return getSwitch;
+        try
+        {
+            CheckConnected("GetSwitch");
+            LogMessage("GetSwitch", $"Calling method.");
+            bool getSwitch = SwitchHardware.GetSwitch(id);
+            LogMessage("GetSwitch", getSwitch.ToString());
+            return getSwitch;
+        }
+        catch (Exception ex)
+        {
+            LogMessage("GetSwitch", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -103,9 +158,18 @@ class DeviceSwitch
     /// <param name="state">The required control state</param>
     public void SetSwitch(short id, bool state)
     {
-        LogMessage("SetSwitch", $"Calling method.");
-        SwitchHardware.SetSwitch(id, state);
-        LogMessage("SetSwitch", $"Completed.");
+        try
+        {
+            CheckConnected("SetSwitch");
+            LogMessage("SetSwitch", $"Calling method.");
+            SwitchHardware.SetSwitch(id, state);
+            LogMessage("SetSwitch", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("SetSwitch", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     #endregion
@@ -119,10 +183,19 @@ class DeviceSwitch
     /// <returns>The maximum value to which this device can be set or which a read only sensor will return.</returns>
     public double MaxSwitchValue(short id)
     {
-        LogMessage("MaxSwitchValue", $"Calling method.");
-        double maxSwitchValue = SwitchHardware.MaxSwitchValue(id);
-        LogMessage("MaxSwitchValue", maxSwitchValue.ToString());
-        return maxSwitchValue;
+        try
+        {
+            CheckConnected("MaxSwitchValue");
+            LogMessage("MaxSwitchValue", $"Calling method.");
+            double maxSwitchValue = SwitchHardware.MaxSwitchValue(id);
+            LogMessage("MaxSwitchValue", maxSwitchValue.ToString());
+            return maxSwitchValue;
+        }
+        catch (Exception ex)
+        {
+            LogMessage("MaxSwitchValue", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -132,10 +205,19 @@ class DeviceSwitch
     /// <returns>The minimum value to which this device can be set or which a read only sensor will return.</returns>
     public double MinSwitchValue(short id)
     {
-        LogMessage("MinSwitchValue", $"Calling method.");
-        double maxSwitchValue = SwitchHardware.MinSwitchValue(id);
-        LogMessage("MinSwitchValue", maxSwitchValue.ToString());
-        return maxSwitchValue;
+        try
+        {
+            CheckConnected("MinSwitchValue");
+            LogMessage("MinSwitchValue", $"Calling method.");
+            double maxSwitchValue = SwitchHardware.MinSwitchValue(id);
+            LogMessage("MinSwitchValue", maxSwitchValue.ToString());
+            return maxSwitchValue;
+        }
+        catch (Exception ex)
+        {
+            LogMessage("MinSwitchValue", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -145,10 +227,19 @@ class DeviceSwitch
     /// <returns>The step size for this device.</returns>
     public double SwitchStep(short id)
     {
-        LogMessage("SwitchStep", $"Calling method.");
-        double switchStep = SwitchHardware.SwitchStep(id);
-        LogMessage("SwitchStep", switchStep.ToString());
-        return switchStep;
+        try
+        {
+            CheckConnected("SwitchStep");
+            LogMessage("SwitchStep", $"Calling method.");
+            double switchStep = SwitchHardware.SwitchStep(id);
+            LogMessage("SwitchStep", switchStep.ToString());
+            return switchStep;
+        }
+        catch (Exception ex)
+        {
+            LogMessage("SwitchStep", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -159,10 +250,19 @@ class DeviceSwitch
     /// <see cref="MaxSwitchValue"/>.</returns>
     public double GetSwitchValue(short id)
     {
-        LogMessage("GetSwitchValue", $"Calling method.");
-        double switchValue = SwitchHardware.GetSwitchValue(id);
-        LogMessage("GetSwitchValue", switchValue.ToString());
-        return switchValue;
+        try
+        {
+            CheckConnected("GetSwitchValue");
+            LogMessage("GetSwitchValue", $"Calling method.");
+            double switchValue = SwitchHardware.GetSwitchValue(id);
+            LogMessage("GetSwitchValue", switchValue.ToString());
+            return switchValue;
+        }
+        catch (Exception ex)
+        {
+            LogMessage("GetSwitchValue", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -172,9 +272,18 @@ class DeviceSwitch
     /// <param name="value">The value to be set, between <see cref="MinSwitchValue"/> and <see cref="MaxSwitchValue"/></param>
     public void SetSwitchValue(short id, double value)
     {
-        LogMessage("SetSwitchValue", $"Calling method.");
-        SwitchHardware.SetSwitchValue(id, value);
-        LogMessage("SetSwitchValue", $"Completed.");
+        try
+        {
+            CheckConnected("SetSwitchValue");
+            LogMessage("SetSwitchValue", $"Calling method.");
+            SwitchHardware.SetSwitchValue(id, value);
+            LogMessage("SetSwitchValue", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("SetSwitchValue", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     #endregion
@@ -190,4 +299,11 @@ class DeviceSwitch
     {
     }
 
+    /// <summary>
+    /// Dummy CheckConnected class that removes compilation errors in the Platform source code and that will be omitted when the project is built
+    /// </summary>
+    /// <param name="message"></param>
+    private void CheckConnected(string message)
+    {
+    }
 }

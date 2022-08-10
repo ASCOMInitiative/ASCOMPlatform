@@ -21,9 +21,18 @@ class DeviceFilerWheel
     {
         get
         {
-            int[] focusoffsets = FilterWheelHardware.FocusOffsets;
-            LogMessage("FocusOffsets Get", focusoffsets.ToString());
-            return focusoffsets;
+            try
+            {
+                CheckConnected("FocusOffsets");
+                int[] focusoffsets = FilterWheelHardware.FocusOffsets;
+                LogMessage("FocusOffsets", focusoffsets.ToString());
+                return focusoffsets;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("FocusOffsets", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -34,9 +43,18 @@ class DeviceFilerWheel
     {
         get
         {
-            string[] names = FilterWheelHardware.Names;
-            LogMessage("Names Get", names.ToString());
-            return names;
+            try
+            {
+                CheckConnected("Names");
+                string[] names = FilterWheelHardware.Names;
+                LogMessage("Names", names.ToString());
+                return names;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Names", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -47,14 +65,32 @@ class DeviceFilerWheel
     {
         get
         {
-            short position = FilterWheelHardware.Position;
-            LogMessage("Position Get", position.ToString());
-            return position;
+            try
+            {
+                CheckConnected("Position Get");
+                short position = FilterWheelHardware.Position;
+                LogMessage("Position Get", position.ToString());
+                return position;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Position Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("Position Set", value.ToString());
-            FilterWheelHardware.Position = value;
+            try
+            {
+                CheckConnected("Position Set");
+                LogMessage("Position Set", value.ToString());
+                FilterWheelHardware.Position = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Position Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -66,6 +102,14 @@ class DeviceFilerWheel
     /// Dummy LogMessage class that removes compilation errors in the Platform source code and that will be omitted when the project is built
     /// </summary>
     static void LogMessage(string method, string message)
+    {
+    }
+
+    /// <summary>
+    /// Dummy CheckConnected class that removes compilation errors in the Platform source code and that will be omitted when the project is built
+    /// </summary>
+    /// <param name="message"></param>
+    private void CheckConnected(string message)
     {
     }
 }

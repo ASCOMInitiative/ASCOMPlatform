@@ -5,6 +5,8 @@
 using ASCOM;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
+using System;
+using TEMPLATENAMESPACE;
 
 class DeviceCoverCalibrator
 {
@@ -17,9 +19,18 @@ class DeviceCoverCalibrator
     {
         get
         {
-            CoverStatus coverStatus = CoverCalibratorHardware.CoverState;
-            LogMessage("CoverStatus", $"{coverStatus}");
-            return coverStatus;
+            try
+            {
+                CheckConnected("CoverStatus");
+                CoverStatus coverStatus = CoverCalibratorHardware.CoverState;
+                LogMessage("CoverStatus", $"{coverStatus}");
+                return coverStatus;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CoverState", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -28,9 +39,18 @@ class DeviceCoverCalibrator
     /// </summary>
     public void OpenCover()
     {
-        LogMessage("OpenCover", "Calling OpenCover");
-        CoverCalibratorHardware.OpenCover();
-        LogMessage("OpenCover", "OpenCover complete");
+        try
+        {
+            CheckConnected("OpenCover");
+            LogMessage("OpenCover", "Calling OpenCover");
+            CoverCalibratorHardware.OpenCover();
+            LogMessage("OpenCover", "OpenCover complete");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("OpenCover", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -38,9 +58,18 @@ class DeviceCoverCalibrator
     /// </summary>
     public void CloseCover()
     {
-        LogMessage("CloseCover", "Calling CloseCover");
-        CoverCalibratorHardware.CloseCover();
-        LogMessage("CloseCover", "CloseCover complete");
+        try
+        {
+            CheckConnected("CloseCover");
+            LogMessage("CloseCover", "Calling CloseCover");
+            CoverCalibratorHardware.CloseCover();
+            LogMessage("CloseCover", "CloseCover complete");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("CloseCover", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -48,9 +77,18 @@ class DeviceCoverCalibrator
     /// </summary>
     public void HaltCover()
     {
-        LogMessage("HaltCover", "Calling HaltCover");
-        CoverCalibratorHardware.HaltCover();
-        LogMessage("HaltCover", "HaltCover complete");
+        try
+        {
+            CheckConnected("HaltCover");
+            LogMessage("HaltCover", "Calling HaltCover");
+            CoverCalibratorHardware.HaltCover();
+            LogMessage("HaltCover", "HaltCover complete");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("HaltCover", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -60,9 +98,18 @@ class DeviceCoverCalibrator
     {
         get
         {
-            CalibratorStatus calibratorStatus = CoverCalibratorHardware.CalibratorState;
-            LogMessage("CalibratorStatus", $"{calibratorStatus}");
-            return calibratorStatus;
+            try
+            {
+                CheckConnected("CalibratorStatus");
+                CalibratorStatus calibratorStatus = CoverCalibratorHardware.CalibratorState;
+                LogMessage("CalibratorStatus", $"{calibratorStatus}");
+                return calibratorStatus;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CalibratorState", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -73,9 +120,18 @@ class DeviceCoverCalibrator
     {
         get
         {
-            int brightness = CoverCalibratorHardware.Brightness;
-            LogMessage("Brightness", $"{brightness}");
-            return brightness;
+            try
+            {
+                CheckConnected("Brightness");
+                int brightness = CoverCalibratorHardware.Brightness;
+                LogMessage("Brightness", $"{brightness}");
+                return brightness;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Brightness", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -86,9 +142,18 @@ class DeviceCoverCalibrator
     {
         get
         {
-            int maxBrightness = CoverCalibratorHardware.MaxBrightness;
-            LogMessage("MaxBrightness", $"{maxBrightness}");
-            return maxBrightness;
+            try
+            {
+                CheckConnected("MaxBrightness");
+                int maxBrightness = CoverCalibratorHardware.MaxBrightness;
+                LogMessage("MaxBrightness", $"{maxBrightness}");
+                return maxBrightness;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("MaxBrightness", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -98,9 +163,18 @@ class DeviceCoverCalibrator
     /// <param name="Brightness"></param>
     public void CalibratorOn(int Brightness)
     {
-        LogMessage("CalibratorOn", "Calling CalibratorOn");
-        CoverCalibratorHardware.CalibratorOn(Brightness);
-        LogMessage("CalibratorOn", "CalibratorOn complete");
+        try
+        {
+            CheckConnected("CalibratorOn");
+            LogMessage("CalibratorOn", "Calling CalibratorOn");
+            CoverCalibratorHardware.CalibratorOn(Brightness);
+            LogMessage("CalibratorOn", "CalibratorOn complete");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("CalibratorOn", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -108,9 +182,18 @@ class DeviceCoverCalibrator
     /// </summary>
     public void CalibratorOff()
     {
-        LogMessage("CalibratorOff", "Calling CalibratorOff");
-        CoverCalibratorHardware.CalibratorOff();
-        LogMessage("CalibratorOff", "CalibratorOff complete");
+        try
+        {
+            CheckConnected("CalibratorOff");
+            LogMessage("CalibratorOff", "Calling CalibratorOff");
+            CoverCalibratorHardware.CalibratorOff();
+            LogMessage("CalibratorOff", "CalibratorOff complete");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("CalibratorOff", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     #endregion
@@ -124,4 +207,11 @@ class DeviceCoverCalibrator
     {
     }
 
+    /// <summary>
+    /// Dummy CheckConnected class that removes compilation errors in the Platform source code and that will be omitted when the project is built
+    /// </summary>
+    /// <param name="message"></param>
+    private void CheckConnected(string message)
+    {
+    }
 }

@@ -19,9 +19,18 @@ class DeviceTelescope
     /// </summary>
     public void AbortSlew()
     {
-        LogMessage("AbortSlew", $"Calling method.");
-        TelescopeHardware.AbortSlew();
-        LogMessage("AbortSlew", $"Completed.");
+        try
+        {
+            CheckConnected("AbortSlew");
+            LogMessage("AbortSlew", $"Calling method.");
+            TelescopeHardware.AbortSlew();
+            LogMessage("AbortSlew", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("AbortSlew", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -31,9 +40,18 @@ class DeviceTelescope
     {
         get
         {
-            AlignmentModes alignmentMode = TelescopeHardware.AlignmentMode;
-            LogMessage("AlignmentMode Get", alignmentMode.ToString());
-            return alignmentMode;
+            try
+            {
+                CheckConnected("AlignmentMode");
+                AlignmentModes alignmentMode = TelescopeHardware.AlignmentMode;
+                LogMessage("AlignmentMode", alignmentMode.ToString());
+                return alignmentMode;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("AlignmentMode", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -44,9 +62,18 @@ class DeviceTelescope
     {
         get
         {
-            double altitude = TelescopeHardware.Altitude;
-            LogMessage("Altitude Get", altitude.ToString());
-            return altitude;
+            try
+            {
+                CheckConnected("Altitude");
+                double altitude = TelescopeHardware.Altitude;
+                LogMessage("Altitude", altitude.ToString());
+                return altitude;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Altitude", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -57,9 +84,18 @@ class DeviceTelescope
     {
         get
         {
-            double apertureArea = TelescopeHardware.ApertureArea;
-            LogMessage("ApertureArea Get", apertureArea.ToString());
-            return apertureArea;
+            try
+            {
+                CheckConnected("ApertureArea");
+                double apertureArea = TelescopeHardware.ApertureArea;
+                LogMessage("ApertureArea", apertureArea.ToString());
+                return apertureArea;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("ApertureArea", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -70,9 +106,18 @@ class DeviceTelescope
     {
         get
         {
-            double apertureArea = TelescopeHardware.ApertureDiameter;
-            LogMessage("ApertureDiameter Get", apertureArea.ToString());
-            return apertureArea;
+            try
+            {
+                CheckConnected("ApertureDiameter");
+                double apertureArea = TelescopeHardware.ApertureDiameter;
+                LogMessage("ApertureDiameter", apertureArea.ToString());
+                return apertureArea;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("ApertureDiameter", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -84,9 +129,18 @@ class DeviceTelescope
     {
         get
         {
-            bool atHome = TelescopeHardware.AtHome;
-            LogMessage("AtHome Get", atHome.ToString());
-            return atHome;
+            try
+            {
+                CheckConnected("AtHome");
+                bool atHome = TelescopeHardware.AtHome;
+                LogMessage("AtHome", atHome.ToString());
+                return atHome;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("AtHome", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -97,9 +151,18 @@ class DeviceTelescope
     {
         get
         {
-            bool atPark = TelescopeHardware.AtPark;
-            LogMessage("AtPark Get", atPark.ToString());
-            return atPark;
+            try
+            {
+                CheckConnected("AtPark");
+                bool atPark = TelescopeHardware.AtPark;
+                LogMessage("AtPark", atPark.ToString());
+                return atPark;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("AtPark", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -110,9 +173,18 @@ class DeviceTelescope
     /// <returns>Collection of <see cref="IRate" /> rate objects</returns>
     public IAxisRates AxisRates(TelescopeAxes axis)
     {
-        IAxisRates axisRates = TelescopeHardware.AxisRates(axis);
-        LogMessage("AxisRates Get", $"Axis: {axis} returned {axisRates.Count} rates.");
-        return axisRates;
+        try
+        {
+            CheckConnected("AxisRates");
+            IAxisRates axisRates = TelescopeHardware.AxisRates(axis);
+            LogMessage("AxisRates", $"Axis: {axis} returned {axisRates.Count} rates.");
+            return axisRates;
+        }
+        catch (Exception ex)
+        {
+            LogMessage("AxisRates", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -122,9 +194,18 @@ class DeviceTelescope
     {
         get
         {
-            double azimuth = TelescopeHardware.Azimuth;
-            LogMessage("Azimuth Get", azimuth.ToString());
-            return azimuth;
+            try
+            {
+                CheckConnected("Azimuth");
+                double azimuth = TelescopeHardware.Azimuth;
+                LogMessage("Azimuth", azimuth.ToString());
+                return azimuth;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Azimuth", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -135,9 +216,18 @@ class DeviceTelescope
     {
         get
         {
-            bool canFindHome = TelescopeHardware.CanFindHome;
-            LogMessage("CanFindHome Get", canFindHome.ToString());
-            return canFindHome;
+            try
+            {
+                CheckConnected("CanFindHome");
+                bool canFindHome = TelescopeHardware.CanFindHome;
+                LogMessage("CanFindHome", canFindHome.ToString());
+                return canFindHome;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CanFindHome", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -146,9 +236,18 @@ class DeviceTelescope
     /// </summary>
     public bool CanMoveAxis(TelescopeAxes axis)
     {
-        bool canMoveAxis = TelescopeHardware.CanMoveAxis(axis);
-        LogMessage("CanMoveAxis Get", $"Axis: {axis} returned {canMoveAxis}.");
-        return canMoveAxis;
+        try
+        {
+            CheckConnected("CanMoveAxis");
+            bool canMoveAxis = TelescopeHardware.CanMoveAxis(axis);
+            LogMessage("CanMoveAxis", $"Axis: {axis} returned {canMoveAxis}.");
+            return canMoveAxis;
+        }
+        catch (Exception ex)
+        {
+            LogMessage("CanMoveAxis", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -158,9 +257,18 @@ class DeviceTelescope
     {
         get
         {
-            bool canPark = TelescopeHardware.CanPark;
-            LogMessage("CanPark Get", canPark.ToString());
-            return canPark;
+            try
+            {
+                CheckConnected("CanPark");
+                bool canPark = TelescopeHardware.CanPark;
+                LogMessage("CanPark", canPark.ToString());
+                return canPark;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CanPark", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -171,9 +279,18 @@ class DeviceTelescope
     {
         get
         {
-            bool canPulseGuide = TelescopeHardware.CanPulseGuide;
-            LogMessage("CanPulseGuide Get", canPulseGuide.ToString());
-            return canPulseGuide;
+            try
+            {
+                CheckConnected("CanPulseGuide");
+                bool canPulseGuide = TelescopeHardware.CanPulseGuide;
+                LogMessage("CanPulseGuide", canPulseGuide.ToString());
+                return canPulseGuide;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CanPulseGuide", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -184,9 +301,18 @@ class DeviceTelescope
     {
         get
         {
-            bool canSetDeclinationRate = TelescopeHardware.CanSetDeclinationRate;
-            LogMessage("CanSetDeclinationRate Get", canSetDeclinationRate.ToString());
-            return canSetDeclinationRate;
+            try
+            {
+                CheckConnected("CanSetDeclinationRate");
+                bool canSetDeclinationRate = TelescopeHardware.CanSetDeclinationRate;
+                LogMessage("CanSetDeclinationRate", canSetDeclinationRate.ToString());
+                return canSetDeclinationRate;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CanSetDeclinationRate", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -197,9 +323,18 @@ class DeviceTelescope
     {
         get
         {
-            bool canSetGuideRates = TelescopeHardware.CanSetGuideRates;
-            LogMessage("CanSetGuideRates Get", canSetGuideRates.ToString());
-            return canSetGuideRates;
+            try
+            {
+                CheckConnected("CanSetGuideRates");
+                bool canSetGuideRates = TelescopeHardware.CanSetGuideRates;
+                LogMessage("CanSetGuideRates", canSetGuideRates.ToString());
+                return canSetGuideRates;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CanSetGuideRates", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -210,9 +345,18 @@ class DeviceTelescope
     {
         get
         {
-            bool canSetPark = TelescopeHardware.CanSetPark;
-            LogMessage("CanSetPark Get", canSetPark.ToString());
-            return canSetPark;
+            try
+            {
+                CheckConnected("CanSetPark");
+                bool canSetPark = TelescopeHardware.CanSetPark;
+                LogMessage("CanSetPark", canSetPark.ToString());
+                return canSetPark;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CanSetPark", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -223,9 +367,18 @@ class DeviceTelescope
     {
         get
         {
-            bool canSetPierSide = TelescopeHardware.CanSetPierSide;
-            LogMessage("CanSetPierSide Get", canSetPierSide.ToString());
-            return canSetPierSide;
+            try
+            {
+                CheckConnected("CanSetPierSide");
+                bool canSetPierSide = TelescopeHardware.CanSetPierSide;
+                LogMessage("CanSetPierSide", canSetPierSide.ToString());
+                return canSetPierSide;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CanSetPierSide", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -236,9 +389,18 @@ class DeviceTelescope
     {
         get
         {
-            bool canSetRightAscensionRate = TelescopeHardware.CanSetRightAscensionRate;
-            LogMessage("CanSetRightAscensionRate Get", canSetRightAscensionRate.ToString());
-            return canSetRightAscensionRate;
+            try
+            {
+                CheckConnected("CanSetRightAscensionRate");
+                bool canSetRightAscensionRate = TelescopeHardware.CanSetRightAscensionRate;
+                LogMessage("CanSetRightAscensionRate", canSetRightAscensionRate.ToString());
+                return canSetRightAscensionRate;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CanSetRightAscensionRate", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -249,9 +411,18 @@ class DeviceTelescope
     {
         get
         {
-            bool canSetTracking = TelescopeHardware.CanSetTracking;
-            LogMessage("CanSetTracking Get", canSetTracking.ToString());
-            return canSetTracking;
+            try
+            {
+                CheckConnected("CanSetTracking");
+                bool canSetTracking = TelescopeHardware.CanSetTracking;
+                LogMessage("CanSetTracking", canSetTracking.ToString());
+                return canSetTracking;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CanSetTracking", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -262,9 +433,18 @@ class DeviceTelescope
     {
         get
         {
-            bool canSlew = TelescopeHardware.CanSlew;
-            LogMessage("CanSlew Get", canSlew.ToString());
-            return canSlew;
+            try
+            {
+                CheckConnected("CanSlew");
+                bool canSlew = TelescopeHardware.CanSlew;
+                LogMessage("CanSlew", canSlew.ToString());
+                return canSlew;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CanSlew", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -275,9 +455,18 @@ class DeviceTelescope
     {
         get
         {
-            bool canSlewAltAz = TelescopeHardware.CanSlewAltAz;
-            LogMessage("CanSlewAltAz Get", canSlewAltAz.ToString());
-            return canSlewAltAz;
+            try
+            {
+                CheckConnected("CanSlewAltAz");
+                bool canSlewAltAz = TelescopeHardware.CanSlewAltAz;
+                LogMessage("CanSlewAltAz", canSlewAltAz.ToString());
+                return canSlewAltAz;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CanSlewAltAz", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -288,9 +477,18 @@ class DeviceTelescope
     {
         get
         {
-            bool canSlewAltAzAsync = TelescopeHardware.CanSlewAltAzAsync;
-            LogMessage("CanSlewAltAzAsync Get", canSlewAltAzAsync.ToString());
-            return canSlewAltAzAsync;
+            try
+            {
+                CheckConnected("CanSlewAltAzAsync");
+                bool canSlewAltAzAsync = TelescopeHardware.CanSlewAltAzAsync;
+                LogMessage("CanSlewAltAzAsync", canSlewAltAzAsync.ToString());
+                return canSlewAltAzAsync;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CanSlewAltAzAsync", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -301,9 +499,18 @@ class DeviceTelescope
     {
         get
         {
-            bool canSlewAsync = TelescopeHardware.CanSlewAsync;
-            LogMessage("CanSlewAsync Get", canSlewAsync.ToString());
-            return canSlewAsync;
+            try
+            {
+                CheckConnected("CanSlewAsync");
+                bool canSlewAsync = TelescopeHardware.CanSlewAsync;
+                LogMessage("CanSlewAsync", canSlewAsync.ToString());
+                return canSlewAsync;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CanSlewAsync", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -314,9 +521,18 @@ class DeviceTelescope
     {
         get
         {
-            bool canSync = TelescopeHardware.CanSync;
-            LogMessage("CanSync Get", canSync.ToString());
-            return canSync;
+            try
+            {
+                CheckConnected("CanSync");
+                bool canSync = TelescopeHardware.CanSync;
+                LogMessage("CanSync", canSync.ToString());
+                return canSync;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CanSync", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -327,9 +543,18 @@ class DeviceTelescope
     {
         get
         {
-            bool canSyncAltAz = TelescopeHardware.CanSyncAltAz;
-            LogMessage("CanSyncAltAz Get", canSyncAltAz.ToString());
-            return canSyncAltAz;
+            try
+            {
+                CheckConnected("CanSyncAltAz");
+                bool canSyncAltAz = TelescopeHardware.CanSyncAltAz;
+                LogMessage("CanSyncAltAz", canSyncAltAz.ToString());
+                return canSyncAltAz;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CanSyncAltAz", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -340,9 +565,18 @@ class DeviceTelescope
     {
         get
         {
-            bool canUnpark = TelescopeHardware.CanUnpark;
-            LogMessage("CanUnpark Get", canUnpark.ToString());
-            return canUnpark;
+            try
+            {
+                CheckConnected("CanUnpark");
+                bool canUnpark = TelescopeHardware.CanUnpark;
+                LogMessage("CanUnpark", canUnpark.ToString());
+                return canUnpark;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CanUnpark", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -354,9 +588,18 @@ class DeviceTelescope
     {
         get
         {
-            double declination = TelescopeHardware.Declination;
-            LogMessage("Declination Get", declination.ToString());
-            return declination;
+            try
+            {
+                CheckConnected("Declination");
+                double declination = TelescopeHardware.Declination;
+                LogMessage("Declination", declination.ToString());
+                return declination;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Declination", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -367,14 +610,32 @@ class DeviceTelescope
     {
         get
         {
-            double declinationRate = TelescopeHardware.DeclinationRate;
-            LogMessage("DeclinationRate Get", declinationRate.ToString());
-            return declinationRate;
+            try
+            {
+                CheckConnected("DeclinationRate Get");
+                double declinationRate = TelescopeHardware.DeclinationRate;
+                LogMessage("DeclinationRate Get", declinationRate.ToString());
+                return declinationRate;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("DeclinationRate Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("DeclinationRate Set", value.ToString());
-            TelescopeHardware.DeclinationRate = value;
+            try
+            {
+                CheckConnected("DeclinationRate Set");
+                LogMessage("DeclinationRate Set", value.ToString());
+                TelescopeHardware.DeclinationRate = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("DeclinationRate Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -383,9 +644,18 @@ class DeviceTelescope
     /// </summary>
     public PierSide DestinationSideOfPier(double rightAscension, double declination)
     {
-        PierSide destinationSideOfPier = TelescopeHardware.DestinationSideOfPier(rightAscension, declination);
-        LogMessage("DestinationSideOfPier Get", $"RA: {rightAscension}, Dec: {declination} - {destinationSideOfPier}.");
-        return destinationSideOfPier;
+        try
+        {
+            CheckConnected("DestinationSideOfPier");
+            PierSide destinationSideOfPier = TelescopeHardware.DestinationSideOfPier(rightAscension, declination);
+            LogMessage("DestinationSideOfPier", $"RA: {rightAscension}, Dec: {declination} - {destinationSideOfPier}.");
+            return destinationSideOfPier;
+        }
+        catch (Exception ex)
+        {
+            LogMessage("DestinationSideOfPier", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -395,14 +665,32 @@ class DeviceTelescope
     {
         get
         {
-            bool doesRefraction = TelescopeHardware.DoesRefraction;
-            LogMessage("DoesRefraction Get", doesRefraction.ToString());
-            return doesRefraction;
+            try
+            {
+                CheckConnected("DoesRefraction Get");
+                bool doesRefraction = TelescopeHardware.DoesRefraction;
+                LogMessage("DoesRefraction Get", doesRefraction.ToString());
+                return doesRefraction;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("DoesRefraction Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("DoesRefraction Set", value.ToString());
-            TelescopeHardware.DoesRefraction = value;
+            try
+            {
+                CheckConnected("DoesRefraction Get");
+                LogMessage("DoesRefraction Set", value.ToString());
+                TelescopeHardware.DoesRefraction = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("DoesRefraction Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -413,9 +701,18 @@ class DeviceTelescope
     {
         get
         {
-            EquatorialCoordinateType equatorialSystem = TelescopeHardware.EquatorialSystem;
-            LogMessage("EquatorialSystem Get", equatorialSystem.ToString());
-            return equatorialSystem;
+            try
+            {
+                CheckConnected("EquatorialSystem");
+                EquatorialCoordinateType equatorialSystem = TelescopeHardware.EquatorialSystem;
+                LogMessage("EquatorialSystem", equatorialSystem.ToString());
+                return equatorialSystem;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("EquatorialSystem", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -424,9 +721,18 @@ class DeviceTelescope
     /// </summary>
     public void FindHome()
     {
-        LogMessage("FindHome", $"Calling method.");
-        TelescopeHardware.FindHome();
-        LogMessage("FindHome", $"Completed.");
+        try
+        {
+            CheckConnected("FindHome");
+            LogMessage("FindHome", $"Calling method.");
+            TelescopeHardware.FindHome();
+            LogMessage("FindHome", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("FindHome", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -436,9 +742,18 @@ class DeviceTelescope
     {
         get
         {
-            double focalLength = TelescopeHardware.FocalLength;
-            LogMessage("FocalLength Get", focalLength.ToString());
-            return focalLength;
+            try
+            {
+                CheckConnected("FocalLength");
+                double focalLength = TelescopeHardware.FocalLength;
+                LogMessage("FocalLength", focalLength.ToString());
+                return focalLength;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("FocalLength", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -449,14 +764,32 @@ class DeviceTelescope
     {
         get
         {
-            double guideRateDeclination = TelescopeHardware.GuideRateDeclination;
-            LogMessage("GuideRateDeclination Get", guideRateDeclination.ToString());
-            return guideRateDeclination;
+            try
+            {
+                CheckConnected("GuideRateDeclination Get");
+                double guideRateDeclination = TelescopeHardware.GuideRateDeclination;
+                LogMessage("GuideRateDeclination Get", guideRateDeclination.ToString());
+                return guideRateDeclination;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("GuideRateDeclination Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("GuideRateDeclination Set", value.ToString());
-            TelescopeHardware.GuideRateDeclination = value;
+            try
+            {
+                CheckConnected("GuideRateDeclination Set");
+                LogMessage("GuideRateDeclination Set", value.ToString());
+                TelescopeHardware.GuideRateDeclination = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("GuideRateDeclination Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -467,14 +800,32 @@ class DeviceTelescope
     {
         get
         {
-            double guideRateRightAscension = TelescopeHardware.GuideRateRightAscension;
-            LogMessage("GuideRateRightAscension Get", guideRateRightAscension.ToString());
-            return guideRateRightAscension;
+            try
+            {
+                CheckConnected("GuideRateRightAscension Get");
+                double guideRateRightAscension = TelescopeHardware.GuideRateRightAscension;
+                LogMessage("GuideRateRightAscension Get", guideRateRightAscension.ToString());
+                return guideRateRightAscension;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("GuideRateRightAscension Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("GuideRateRightAscension Set", value.ToString());
-            TelescopeHardware.GuideRateRightAscension = value;
+            try
+            {
+                CheckConnected("GuideRateRightAscension Set");
+                LogMessage("GuideRateRightAscension Set", value.ToString());
+                TelescopeHardware.GuideRateRightAscension = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("GuideRateRightAscension Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -485,9 +836,18 @@ class DeviceTelescope
     {
         get
         {
-            bool isPulseGuiding = TelescopeHardware.IsPulseGuiding;
-            LogMessage("IsPulseGuiding Get", isPulseGuiding.ToString());
-            return isPulseGuiding;
+            try
+            {
+                CheckConnected("IsPulseGuiding");
+                bool isPulseGuiding = TelescopeHardware.IsPulseGuiding;
+                LogMessage("IsPulseGuiding", isPulseGuiding.ToString());
+                return isPulseGuiding;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("IsPulseGuiding", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -498,9 +858,18 @@ class DeviceTelescope
     /// <param name="rate">The rate of motion (deg/sec) about the specified axis</param>
     public void MoveAxis(TelescopeAxes axis, double rate)
     {
-        LogMessage("MoveAxis", $"Calling method - Axis: {axis}, Rate: {rate}.");
-        TelescopeHardware.MoveAxis(axis, rate);
-        LogMessage("MoveAxis", $"Completed.");
+        try
+        {
+            CheckConnected("MoveAxis");
+            LogMessage("MoveAxis", $"Calling method - Axis: {axis}, Rate: {rate}.");
+            TelescopeHardware.MoveAxis(axis, rate);
+            LogMessage("MoveAxis", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("MoveAxis", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
 
@@ -509,9 +878,18 @@ class DeviceTelescope
     /// </summary>
     public void Park()
     {
-        LogMessage("Park", $"Calling method.");
-        TelescopeHardware.Park();
-        LogMessage("Park", $"Completed.");
+        try
+        {
+            CheckConnected("Park");
+            LogMessage("Park", $"Calling method.");
+            TelescopeHardware.Park();
+            LogMessage("Park", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("Park", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -522,9 +900,18 @@ class DeviceTelescope
     /// <param name="duration">The duration of the guide-rate motion (milliseconds)</param>
     public void PulseGuide(GuideDirections direction, int duration)
     {
-        LogMessage("PulseGuide", $"Calling method.");
-        TelescopeHardware.PulseGuide(direction, duration);
-        LogMessage("PulseGuide", $"Completed.");
+        try
+        {
+            CheckConnected("PulseGuide");
+            LogMessage("PulseGuide", $"Calling method.");
+            TelescopeHardware.PulseGuide(direction, duration);
+            LogMessage("PulseGuide", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("PulseGuide", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -535,9 +922,18 @@ class DeviceTelescope
     {
         get
         {
-            double rightAscension = TelescopeHardware.RightAscension;
-            LogMessage("RightAscension Get", rightAscension.ToString());
-            return rightAscension;
+            try
+            {
+                CheckConnected("RightAscension");
+                double rightAscension = TelescopeHardware.RightAscension;
+                LogMessage("RightAscension", rightAscension.ToString());
+                return rightAscension;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("RightAscension", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -548,14 +944,32 @@ class DeviceTelescope
     {
         get
         {
-            double rightAscensionRate = TelescopeHardware.RightAscensionRate;
-            LogMessage("RightAscensionRate Get", rightAscensionRate.ToString());
-            return rightAscensionRate;
+            try
+            {
+                CheckConnected("RightAscensionRate Get");
+                double rightAscensionRate = TelescopeHardware.RightAscensionRate;
+                LogMessage("RightAscensionRate Get", rightAscensionRate.ToString());
+                return rightAscensionRate;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("RightAscensionRate Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("RightAscensionRate Set", value.ToString());
-            TelescopeHardware.RightAscensionRate = value;
+            try
+            {
+                CheckConnected("RightAscensionRate Set");
+                LogMessage("RightAscensionRate Set", value.ToString());
+                TelescopeHardware.RightAscensionRate = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("RightAscensionRate Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -564,9 +978,18 @@ class DeviceTelescope
     /// </summary>
     public void SetPark()
     {
-        LogMessage("SetPark", $"Calling method.");
-        TelescopeHardware.SetPark();
-        LogMessage("SetPark", $"Completed.");
+        try
+        {
+            CheckConnected("SetPark");
+            LogMessage("SetPark", $"Calling method.");
+            TelescopeHardware.SetPark();
+            LogMessage("SetPark", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("SetPark", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -577,14 +1000,32 @@ class DeviceTelescope
     {
         get
         {
-            PierSide sideOfPier = TelescopeHardware.SideOfPier;
-            LogMessage("SideOfPier Get", sideOfPier.ToString());
-            return sideOfPier;
+            try
+            {
+                CheckConnected("SideOfPier Get");
+                PierSide sideOfPier = TelescopeHardware.SideOfPier;
+                LogMessage("SideOfPier Get", sideOfPier.ToString());
+                return sideOfPier;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("SideOfPier Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("SideOfPier Set", value.ToString());
-            TelescopeHardware.SideOfPier = value;
+            try
+            {
+                CheckConnected("SideOfPier Set");
+                LogMessage("SideOfPier Set", value.ToString());
+                TelescopeHardware.SideOfPier = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("SideOfPier Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -595,9 +1036,18 @@ class DeviceTelescope
     {
         get
         {
-            double siderealTime = TelescopeHardware.SiderealTime;
-            LogMessage("SiderealTime Get", siderealTime.ToString());
-            return siderealTime;
+            try
+            {
+                CheckConnected("SiderealTime");
+                double siderealTime = TelescopeHardware.SiderealTime;
+                LogMessage("SiderealTime", siderealTime.ToString());
+                return siderealTime;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("SiderealTime", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -608,14 +1058,32 @@ class DeviceTelescope
     {
         get
         {
-            double siteElevation = TelescopeHardware.SiteElevation;
-            LogMessage("SiteElevation Get", siteElevation.ToString());
-            return siteElevation;
+            try
+            {
+                CheckConnected("SiteElevation Get");
+                double siteElevation = TelescopeHardware.SiteElevation;
+                LogMessage("SiteElevation Get", siteElevation.ToString());
+                return siteElevation;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("SiteElevation Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("SiteElevation Set", value.ToString());
-            TelescopeHardware.SiteElevation = value;
+            try
+            {
+                CheckConnected("SiteElevation Set");
+                LogMessage("SiteElevation Set", value.ToString());
+                TelescopeHardware.SiteElevation = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("SiteElevation Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -626,14 +1094,32 @@ class DeviceTelescope
     {
         get
         {
-            double siteLatitude = TelescopeHardware.SiteLatitude;
-            LogMessage("SiteLatitude Get", siteLatitude.ToString());
-            return siteLatitude;
+            try
+            {
+                CheckConnected("SiteLatitude Get");
+                double siteLatitude = TelescopeHardware.SiteLatitude;
+                LogMessage("SiteLatitude Get", siteLatitude.ToString());
+                return siteLatitude;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("SiteLatitude Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("SiteLatitude Set", value.ToString());
-            TelescopeHardware.SiteLatitude = value;
+            try
+            {
+                CheckConnected("SiteLatitude Set");
+                LogMessage("SiteLatitude Set", value.ToString());
+                TelescopeHardware.SiteLatitude = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("SiteLatitude Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -644,14 +1130,32 @@ class DeviceTelescope
     {
         get
         {
-            double siteLongitude = TelescopeHardware.SiteLongitude;
-            LogMessage("SiteLongitude Get", siteLongitude.ToString());
-            return siteLongitude;
+            try
+            {
+                CheckConnected("SiteLongitude Get");
+                double siteLongitude = TelescopeHardware.SiteLongitude;
+                LogMessage("SiteLongitude Get", siteLongitude.ToString());
+                return siteLongitude;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("SiteLongitude Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("SiteLongitude Set", value.ToString());
-            TelescopeHardware.SiteLongitude = value;
+            try
+            {
+                CheckConnected("SiteLongitude Set");
+                LogMessage("SiteLongitude Set", value.ToString());
+                TelescopeHardware.SiteLongitude = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("SiteLongitude Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -662,14 +1166,32 @@ class DeviceTelescope
     {
         get
         {
-            short slewSettleTime = TelescopeHardware.SlewSettleTime;
-            LogMessage("SlewSettleTime Get", slewSettleTime.ToString());
-            return slewSettleTime;
+            try
+            {
+                CheckConnected("SlewSettleTime Get");
+                short slewSettleTime = TelescopeHardware.SlewSettleTime;
+                LogMessage("SlewSettleTime Get", slewSettleTime.ToString());
+                return slewSettleTime;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("SlewSettleTime Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("SlewSettleTime Set", value.ToString());
-            TelescopeHardware.SlewSettleTime = value;
+            try
+            {
+                CheckConnected("SlewSettleTime Set");
+                LogMessage("SlewSettleTime Set", value.ToString());
+                TelescopeHardware.SlewSettleTime = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("SlewSettleTime Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -678,9 +1200,18 @@ class DeviceTelescope
     /// </summary>
     public void SlewToAltAz(double azimuth, double altitude)
     {
-        LogMessage("SlewToAltAz", $"Calling method - Azimuth: {azimuth}, Altitude: {altitude}.");
-        TelescopeHardware.SlewToAltAz(azimuth, altitude);
-        LogMessage("SlewToAltAz", $"Completed.");
+        try
+        {
+            CheckConnected("SlewToAltAz");
+            LogMessage("SlewToAltAz", $"Calling method - Azimuth: {azimuth}, Altitude: {altitude}.");
+            TelescopeHardware.SlewToAltAz(azimuth, altitude);
+            LogMessage("SlewToAltAz", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("SlewToAltAz", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -692,9 +1223,18 @@ class DeviceTelescope
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
     public void SlewToAltAzAsync(double azimuth, double altitude)
     {
-        LogMessage("SlewToAltAzAsync", $"Calling method - Azimuth: {azimuth}, Altitude: {altitude}.");
-        TelescopeHardware.SlewToAltAzAsync(azimuth, altitude);
-        LogMessage("SlewToAltAzAsync", $"Completed.");
+        try
+        {
+            CheckConnected("SlewToAltAzAsync");
+            LogMessage("SlewToAltAzAsync", $"Calling method - Azimuth: {azimuth}, Altitude: {altitude}.");
+            TelescopeHardware.SlewToAltAzAsync(azimuth, altitude);
+            LogMessage("SlewToAltAzAsync", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("SlewToAltAzAsync", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -703,9 +1243,18 @@ class DeviceTelescope
     /// </summary>
     public void SlewToCoordinates(double rightAscension, double declination)
     {
-        LogMessage("SlewToCoordinates", $"Calling method - RightAscension: {rightAscension}, Declination: {declination}.");
-        TelescopeHardware.SlewToCoordinates(rightAscension, declination);
-        LogMessage("SlewToCoordinates", $"Completed.");
+        try
+        {
+            CheckConnected("SlewToCoordinates");
+            LogMessage("SlewToCoordinates", $"Calling method - RightAscension: {rightAscension}, Declination: {declination}.");
+            TelescopeHardware.SlewToCoordinates(rightAscension, declination);
+            LogMessage("SlewToCoordinates", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("SlewToCoordinates", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -714,9 +1263,18 @@ class DeviceTelescope
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
     public void SlewToCoordinatesAsync(double rightAscension, double declination)
     {
-        LogMessage("SlewToCoordinatesAsync", $"Calling method - RightAscension: {rightAscension}, Declination: {declination}.");
-        TelescopeHardware.SlewToCoordinatesAsync(rightAscension, declination);
-        LogMessage("SlewToCoordinatesAsync", $"Completed.");
+        try
+        {
+            CheckConnected("SlewToCoordinatesAsync");
+            LogMessage("SlewToCoordinatesAsync", $"Calling method - RightAscension: {rightAscension}, Declination: {declination}.");
+            TelescopeHardware.SlewToCoordinatesAsync(rightAscension, declination);
+            LogMessage("SlewToCoordinatesAsync", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("SlewToCoordinatesAsync", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -724,9 +1282,18 @@ class DeviceTelescope
     /// </summary>
     public void SlewToTarget()
     {
-        LogMessage("SlewToTarget", $"Calling method.");
-        TelescopeHardware.SlewToTarget();
-        LogMessage("SlewToTarget", $"Completed.");
+        try
+        {
+            CheckConnected("SlewToTarget");
+            LogMessage("SlewToTarget", $"Calling method.");
+            TelescopeHardware.SlewToTarget();
+            LogMessage("SlewToTarget", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("SlewToTarget", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -736,9 +1303,18 @@ class DeviceTelescope
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
     public void SlewToTargetAsync()
     {
-        LogMessage("SlewToTargetAsync", $"Calling method.");
-        TelescopeHardware.SlewToTargetAsync();
-        LogMessage("SlewToTargetAsync", $"Completed.");
+        try
+        {
+            CheckConnected("SlewToTargetAsync");
+            LogMessage("SlewToTargetAsync", $"Calling method.");
+            TelescopeHardware.SlewToTargetAsync();
+            LogMessage("SlewToTargetAsync", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("SlewToTargetAsync", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -749,9 +1325,18 @@ class DeviceTelescope
     {
         get
         {
-            bool slewing = TelescopeHardware.Slewing;
-            LogMessage("Slewing Get", slewing.ToString());
-            return slewing;
+            try
+            {
+                CheckConnected("Slewing");
+                bool slewing = TelescopeHardware.Slewing;
+                LogMessage("Slewing", slewing.ToString());
+                return slewing;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Slewing", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -760,9 +1345,18 @@ class DeviceTelescope
     /// </summary>
     public void SyncToAltAz(double azimuth, double altitude)
     {
-        LogMessage("SyncToAltAz", $"Calling method - Azimuth: {azimuth}, Altitude: {altitude}.");
-        TelescopeHardware.SyncToAltAz(azimuth, altitude);
-        LogMessage("SyncToAltAz", $"Completed.");
+        try
+        {
+            CheckConnected("SyncToAltAz");
+            LogMessage("SyncToAltAz", $"Calling method - Azimuth: {azimuth}, Altitude: {altitude}.");
+            TelescopeHardware.SyncToAltAz(azimuth, altitude);
+            LogMessage("SyncToAltAz", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("SyncToAltAz", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -770,9 +1364,18 @@ class DeviceTelescope
     /// </summary>
     public void SyncToCoordinates(double rightAscension, double declination)
     {
-        LogMessage("SyncToCoordinates", $"Calling method - RightAscension: {rightAscension}, Declination: {declination}.");
-        TelescopeHardware.SyncToCoordinates(rightAscension, declination);
-        LogMessage("SyncToCoordinates", $"Completed.");
+        try
+        {
+            CheckConnected("SyncToCoordinates");
+            LogMessage("SyncToCoordinates", $"Calling method - RightAscension: {rightAscension}, Declination: {declination}.");
+            TelescopeHardware.SyncToCoordinates(rightAscension, declination);
+            LogMessage("SyncToCoordinates", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("SyncToCoordinates", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -780,9 +1383,18 @@ class DeviceTelescope
     /// </summary>
     public void SyncToTarget()
     {
-        LogMessage("SyncToTarget", $"Calling method.");
-        TelescopeHardware.SyncToTarget();
-        LogMessage("SyncToTarget", $"Completed.");
+        try
+        {
+            CheckConnected("SyncToTarget");
+            LogMessage("SyncToTarget", $"Calling method.");
+            TelescopeHardware.SyncToTarget();
+            LogMessage("SyncToTarget", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("SyncToTarget", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -792,14 +1404,32 @@ class DeviceTelescope
     {
         get
         {
-            double targetDeclination = TelescopeHardware.TargetDeclination;
-            LogMessage("TargetDeclination Get", targetDeclination.ToString());
-            return targetDeclination;
+            try
+            {
+                CheckConnected("TargetDeclination Get");
+                double targetDeclination = TelescopeHardware.TargetDeclination;
+                LogMessage("TargetDeclination Get", targetDeclination.ToString());
+                return targetDeclination;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("TargetDeclination Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("TargetDeclination Set", value.ToString());
-            TelescopeHardware.TargetDeclination = value;
+            try
+            {
+                CheckConnected("TargetDeclination Set");
+                LogMessage("TargetDeclination Set", value.ToString());
+                TelescopeHardware.TargetDeclination = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("TargetDeclination Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -810,14 +1440,32 @@ class DeviceTelescope
     {
         get
         {
-            double targetRightAscension = TelescopeHardware.TargetRightAscension;
-            LogMessage("TargetRightAscension Get", targetRightAscension.ToString());
-            return targetRightAscension;
+            try
+            {
+                CheckConnected("TargetRightAscension Get");
+                double targetRightAscension = TelescopeHardware.TargetRightAscension;
+                LogMessage("TargetRightAscension Get", targetRightAscension.ToString());
+                return targetRightAscension;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("TargetRightAscension Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("TargetRightAscension Set", value.ToString());
-            TelescopeHardware.TargetRightAscension = value;
+            try
+            {
+                CheckConnected("TargetRightAscension Set");
+                LogMessage("TargetRightAscension Set", value.ToString());
+                TelescopeHardware.TargetRightAscension = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("TargetRightAscension Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -828,14 +1476,32 @@ class DeviceTelescope
     {
         get
         {
-            bool tracking = TelescopeHardware.Tracking;
-            LogMessage("Tracking Get", tracking.ToString());
-            return tracking;
+            try
+            {
+                CheckConnected("Tracking Get");
+                bool tracking = TelescopeHardware.Tracking;
+                LogMessage("Tracking Get", tracking.ToString());
+                return tracking;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Tracking Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("Tracking Set", value.ToString());
-            TelescopeHardware.Tracking = value;
+            try
+            {
+                CheckConnected("Tracking Set");
+                LogMessage("Tracking Set", value.ToString());
+                TelescopeHardware.Tracking = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Tracking Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -846,14 +1512,32 @@ class DeviceTelescope
     {
         get
         {
-            DriveRates trackingRate = TelescopeHardware.TrackingRate;
-            LogMessage("TrackingRate Get", trackingRate.ToString());
-            return trackingRate;
+            try
+            {
+                CheckConnected("TrackingRate Get");
+                DriveRates trackingRate = TelescopeHardware.TrackingRate;
+                LogMessage("TrackingRate Get", trackingRate.ToString());
+                return trackingRate;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("TrackingRate Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("TrackingRate Set", value.ToString());
-            TelescopeHardware.TrackingRate = value;
+            try
+            {
+                CheckConnected("TrackingRate Set");
+                LogMessage("TrackingRate Set", value.ToString());
+                TelescopeHardware.TrackingRate = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("TrackingRate Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -865,9 +1549,18 @@ class DeviceTelescope
     {
         get
         {
-            ITrackingRates trackingRates = TelescopeHardware.TrackingRates;
-            LogMessage("TrackingRates Get", trackingRates.ToString());
-            return trackingRates;
+            try
+            {
+                CheckConnected("TrackingRates");
+                ITrackingRates trackingRates = TelescopeHardware.TrackingRates;
+                LogMessage("TrackingRates", trackingRates.ToString());
+                return trackingRates;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("TrackingRates", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -878,14 +1571,32 @@ class DeviceTelescope
     {
         get
         {
-            DateTime utcDate = TelescopeHardware.UTCDate;
-            LogMessage("UTCDate Get", utcDate.ToString());
-            return utcDate;
+            try
+            {
+                CheckConnected("UTCDate Get");
+                DateTime utcDate = TelescopeHardware.UTCDate;
+                LogMessage("UTCDate Get", utcDate.ToString());
+                return utcDate;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("UTCDate Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("UTCDate Set", value.ToString());
-            TelescopeHardware.UTCDate = value;
+            try
+            {
+                CheckConnected("UTCDate Set");
+                LogMessage("UTCDate Set", value.ToString());
+                TelescopeHardware.UTCDate = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("UTCDate Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -894,9 +1605,19 @@ class DeviceTelescope
     /// </summary>
     public void Unpark()
     {
-        LogMessage("Unpark", $"Calling method.");
-        TelescopeHardware.Unpark();
         LogMessage("Unpark", $"Completed.");
+        try
+        {
+            CheckConnected("Unpark");
+            LogMessage("Unpark", $"Calling method.");
+            TelescopeHardware.Unpark();
+            LogMessage("Unpark", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("Unpark", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     #endregion
@@ -907,6 +1628,14 @@ class DeviceTelescope
     /// Dummy LogMessage class that removes compilation errors in the Platform source code and that will be omitted when the project is built
     /// </summary>
     static void LogMessage(string method, string message)
+    {
+    }
+
+    /// <summary>
+    /// Dummy CheckConnected class that removes compilation errors in the Platform source code and that will be omitted when the project is built
+    /// </summary>
+    /// <param name="message"></param>
+    private void CheckConnected(string message)
     {
     }
 }

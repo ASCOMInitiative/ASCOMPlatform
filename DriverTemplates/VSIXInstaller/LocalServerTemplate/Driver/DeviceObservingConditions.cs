@@ -18,14 +18,33 @@ class DeviceObservingConditions
     {
         get
         {
-            double averageperiod = ObservingConditionsHardware.AveragePeriod;
-            LogMessage("AveragePeriod Get", averageperiod.ToString());
-            return averageperiod;
+            try
+            {
+                CheckConnected("AveragePeriod Get");
+                double averageperiod = ObservingConditionsHardware.AveragePeriod;
+                LogMessage("AveragePeriod Get", averageperiod.ToString());
+                return averageperiod;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("AveragePeriod Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("AveragePeriod Set", value.ToString());
-            ObservingConditionsHardware.AveragePeriod = value;        }
+            try
+            {
+                CheckConnected("AveragePeriod Get");
+                LogMessage("AveragePeriod Set", value.ToString());
+                ObservingConditionsHardware.AveragePeriod = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("AveragePeriod Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
+        }
     }
 
     /// <summary>
@@ -35,9 +54,18 @@ class DeviceObservingConditions
     {
         get
         {
-            double cloudCover = ObservingConditionsHardware.CloudCover;
-            LogMessage("CloudCover Get", cloudCover.ToString());
-            return cloudCover;
+            try
+            {
+                CheckConnected("CloudCover");
+                double cloudCover = ObservingConditionsHardware.CloudCover;
+                LogMessage("CloudCover", cloudCover.ToString());
+                return cloudCover;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CloudCover", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -48,9 +76,18 @@ class DeviceObservingConditions
     {
         get
         {
-            double dewPoint = ObservingConditionsHardware.DewPoint;
-            LogMessage("DewPoint Get", dewPoint.ToString());
-            return dewPoint;
+            try
+            {
+                CheckConnected("DewPoint");
+                double dewPoint = ObservingConditionsHardware.DewPoint;
+                LogMessage("DewPoint", dewPoint.ToString());
+                return dewPoint;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("DewPoint", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -61,9 +98,18 @@ class DeviceObservingConditions
     {
         get
         {
-            double humidity = ObservingConditionsHardware.Humidity;
-            LogMessage("Humidity Get", humidity.ToString());
-            return humidity;
+            try
+            {
+                CheckConnected("Humidity");
+                double humidity = ObservingConditionsHardware.Humidity;
+                LogMessage("Humidity", humidity.ToString());
+                return humidity;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Humidity", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -74,9 +120,18 @@ class DeviceObservingConditions
     {
         get
         {
-            double period = ObservingConditionsHardware.Pressure;
-            LogMessage("Pressure Get", period.ToString());
-            return period;
+            try
+            {
+                CheckConnected("Pressure");
+                double period = ObservingConditionsHardware.Pressure;
+                LogMessage("Pressure", period.ToString());
+                return period;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Pressure", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -87,9 +142,18 @@ class DeviceObservingConditions
     {
         get
         {
-            double rainRate = ObservingConditionsHardware.RainRate;
-            LogMessage("RainRate Get", rainRate.ToString());
-            return rainRate;
+            try
+            {
+                CheckConnected("RainRate");
+                double rainRate = ObservingConditionsHardware.RainRate;
+                LogMessage("RainRate", rainRate.ToString());
+                return rainRate;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("RainRate", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -99,9 +163,18 @@ class DeviceObservingConditions
     /// </summary>
     public void Refresh()
     {
-        LogMessage("Refresh", $"Calling method.");
-        ObservingConditionsHardware.Refresh();
-        LogMessage("Refresh", $"Completed.");
+        try
+        {
+            CheckConnected("Refresh");
+            LogMessage("Refresh", $"Calling method.");
+            ObservingConditionsHardware.Refresh();
+            LogMessage("Refresh", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("Refresh", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -111,10 +184,19 @@ class DeviceObservingConditions
     /// <returns>The sensor description string</returns>
     public string SensorDescription(string propertyName)
     {
-        LogMessage("SensorDescription", $"Calling method.");
-        string sensorDescription=ObservingConditionsHardware.SensorDescription(propertyName);
-        LogMessage("SensorDescription", $"{sensorDescription}");
-        return sensorDescription;
+        try
+        {
+            CheckConnected("SensorDescription");
+            LogMessage("SensorDescription", $"Calling method.");
+            string sensorDescription = ObservingConditionsHardware.SensorDescription(propertyName);
+            LogMessage("SensorDescription", $"{sensorDescription}");
+            return sensorDescription;
+        }
+        catch (Exception ex)
+        {
+            LogMessage("SensorDescription", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -124,9 +206,18 @@ class DeviceObservingConditions
     {
         get
         {
-            double skyBrightness = ObservingConditionsHardware.SkyBrightness;
-            LogMessage("SkyBrightness Get", skyBrightness.ToString());
-            return skyBrightness;
+            try
+            {
+                CheckConnected("SkyBrightness");
+                double skyBrightness = ObservingConditionsHardware.SkyBrightness;
+                LogMessage("SkyBrightness", skyBrightness.ToString());
+                return skyBrightness;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("SkyBrightness", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -137,9 +228,18 @@ class DeviceObservingConditions
     {
         get
         {
-            double skyQuality = ObservingConditionsHardware.SkyQuality;
-            LogMessage("SkyQuality Get", skyQuality.ToString());
-            return skyQuality;
+            try
+            {
+                CheckConnected("SkyQuality");
+                double skyQuality = ObservingConditionsHardware.SkyQuality;
+                LogMessage("SkyQuality", skyQuality.ToString());
+                return skyQuality;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("SkyQuality", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -150,9 +250,18 @@ class DeviceObservingConditions
     {
         get
         {
-            double starFwhm = ObservingConditionsHardware.StarFWHM;
-            LogMessage("StarFWHM Get", starFwhm.ToString());
-            return starFwhm;
+            try
+            {
+                CheckConnected("StarFWHM");
+                double starFwhm = ObservingConditionsHardware.StarFWHM;
+                LogMessage("StarFWHM", starFwhm.ToString());
+                return starFwhm;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("StarFWHM", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -163,9 +272,18 @@ class DeviceObservingConditions
     {
         get
         {
-            double skyTemperature = ObservingConditionsHardware.SkyTemperature;
-            LogMessage("SkyTemperature Get", skyTemperature.ToString());
-            return skyTemperature;
+            try
+            {
+                CheckConnected("SkyTemperature");
+                double skyTemperature = ObservingConditionsHardware.SkyTemperature;
+                LogMessage("SkyTemperature", skyTemperature.ToString());
+                return skyTemperature;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("SkyTemperature", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -176,9 +294,18 @@ class DeviceObservingConditions
     {
         get
         {
-            double temperature = ObservingConditionsHardware.Temperature;
-            LogMessage("Temperature Get", temperature.ToString());
-            return temperature;
+            try
+            {
+                CheckConnected("Temperature");
+                double temperature = ObservingConditionsHardware.Temperature;
+                LogMessage("Temperature", temperature.ToString());
+                return temperature;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Temperature", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -189,11 +316,20 @@ class DeviceObservingConditions
     /// <returns>Time in seconds since the last sensor update for this property</returns>
     public double TimeSinceLastUpdate(string propertyName)
     {
-        LogMessage("TimeSinceLastUpdate", $"Calling method.");
-        ObservingConditionsHardware.TimeSinceLastUpdate(propertyName);
-        double timeSincelastUpdate = ObservingConditionsHardware.TimeSinceLastUpdate(propertyName);
-        LogMessage("TimeSinceLastUpdate", $"{timeSincelastUpdate}");
-        return timeSincelastUpdate;
+        try
+        {
+            CheckConnected("TimeSinceLastUpdate");
+            LogMessage("TimeSinceLastUpdate", $"Calling method.");
+            ObservingConditionsHardware.TimeSinceLastUpdate(propertyName);
+            double timeSincelastUpdate = ObservingConditionsHardware.TimeSinceLastUpdate(propertyName);
+            LogMessage("TimeSinceLastUpdate", $"{timeSincelastUpdate}");
+            return timeSincelastUpdate;
+        }
+        catch (Exception ex)
+        {
+            LogMessage("TimeSinceLastUpdate", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -203,9 +339,18 @@ class DeviceObservingConditions
     {
         get
         {
-            double windDirection = ObservingConditionsHardware.WindDirection;
-            LogMessage("WindDirection Get", windDirection.ToString());
-            return windDirection;
+            try
+            {
+                CheckConnected("WindDirection");
+                double windDirection = ObservingConditionsHardware.WindDirection;
+                LogMessage("WindDirection", windDirection.ToString());
+                return windDirection;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("WindDirection", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -216,9 +361,18 @@ class DeviceObservingConditions
     {
         get
         {
-            double windGust = ObservingConditionsHardware.WindGust;
-            LogMessage("WindGust Get", windGust.ToString());
-            return windGust;
+            try
+            {
+                CheckConnected("WindGust");
+                double windGust = ObservingConditionsHardware.WindGust;
+                LogMessage("WindGust", windGust.ToString());
+                return windGust;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("WindGust", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -229,9 +383,18 @@ class DeviceObservingConditions
     {
         get
         {
-            double windSpeed = ObservingConditionsHardware.WindSpeed;
-            LogMessage("WindSpeed Get", windSpeed.ToString());
-            return windSpeed;
+            try
+            {
+                CheckConnected("WindSpeed");
+                double windSpeed = ObservingConditionsHardware.WindSpeed;
+                LogMessage("WindSpeed", windSpeed.ToString());
+                return windSpeed;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("WindSpeed", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -243,6 +406,14 @@ class DeviceObservingConditions
     /// Dummy LogMessage class that removes compilation errors in the Platform source code and that will be omitted when the project is built
     /// </summary>
     static void LogMessage(string method, string message)
+    {
+    }
+
+    /// <summary>
+    /// Dummy CheckConnected class that removes compilation errors in the Platform source code and that will be omitted when the project is built
+    /// </summary>
+    /// <param name="message"></param>
+    private void CheckConnected(string message)
     {
     }
 }

@@ -14,19 +14,28 @@ class DeviceRotator
 
     #region IRotator Implementation
 
-	/// <summary>
-	/// Indicates whether the Rotator supports the <see cref="Reverse" /> method.
-	/// </summary>
-	/// <returns>
-	/// True if the Rotator supports the <see cref="Reverse" /> method.
-	/// </returns>
-	public bool CanReverse
+    /// <summary>
+    /// Indicates whether the Rotator supports the <see cref="Reverse" /> method.
+    /// </summary>
+    /// <returns>
+    /// True if the Rotator supports the <see cref="Reverse" /> method.
+    /// </returns>
+    public bool CanReverse
     {
         get
         {
-            bool canReverse = RotatorHardware.CanReverse;
-            LogMessage("CanReverse Get", canReverse.ToString());
-            return canReverse;
+            try
+            {
+                CheckConnected("CanReverse");
+                bool canReverse = RotatorHardware.CanReverse;
+                LogMessage("CanReverse", canReverse.ToString());
+                return canReverse;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CanReverse", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -35,9 +44,18 @@ class DeviceRotator
     /// </summary>
     public void Halt()
     {
-        LogMessage("Halt", $"Calling method.");
-        RotatorHardware.Halt();
-        LogMessage("Halt", $"Completed.");
+        try
+        {
+            CheckConnected("Halt");
+            LogMessage("Halt", $"Calling method.");
+            RotatorHardware.Halt();
+            LogMessage("Halt", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("Halt", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -48,21 +66,39 @@ class DeviceRotator
     {
         get
         {
-            bool isMoving = RotatorHardware.IsMoving;
-            LogMessage("IsMoving Get", isMoving.ToString());
-            return isMoving;
+            try
+            {
+                CheckConnected("IsMoving");
+                bool isMoving = RotatorHardware.IsMoving;
+                LogMessage("IsMoving", isMoving.ToString());
+                return isMoving;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("IsMoving", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
-	/// <summary>
-	/// Causes the rotator to move Position degrees relative to the current <see cref="Position" /> value.
-	/// </summary>
-	/// <param name="position">Relative position to move in degrees from current <see cref="Position" />.</param>
-	public void Move(float position)
+    /// <summary>
+    /// Causes the rotator to move Position degrees relative to the current <see cref="Position" /> value.
+    /// </summary>
+    /// <param name="position">Relative position to move in degrees from current <see cref="Position" />.</param>
+    public void Move(float position)
     {
-        LogMessage("Move", $"Calling method.");
-        RotatorHardware.Move(position);
-        LogMessage("Move", $"Completed.");
+        try
+        {
+            CheckConnected("Move");
+            LogMessage("Move", $"Calling method.");
+            RotatorHardware.Move(position);
+            LogMessage("Move", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("Move", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
 
@@ -72,9 +108,18 @@ class DeviceRotator
     /// <param name="position">Absolute position in degrees.</param>
     public void MoveAbsolute(float position)
     {
-        LogMessage("MoveAbsolute", $"Calling method.");
-        RotatorHardware.MoveAbsolute(position);
-        LogMessage("MoveAbsolute", $"Completed.");
+        try
+        {
+            CheckConnected("MoveAbsolute");
+            LogMessage("MoveAbsolute", $"Calling method.");
+            RotatorHardware.MoveAbsolute(position);
+            LogMessage("MoveAbsolute", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("MoveAbsolute", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -84,80 +129,143 @@ class DeviceRotator
     {
         get
         {
-            float position = RotatorHardware.Position;
-            LogMessage("Position Get", position.ToString());
-            return position;
+            try
+            {
+                CheckConnected("Position");
+                float position = RotatorHardware.Position;
+                LogMessage("Position", position.ToString());
+                return position;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Position", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
-	/// <summary>
-	/// Sets or Returns the rotator’s Reverse state.
-	/// </summary>
-	public bool Reverse
+    /// <summary>
+    /// Sets or Returns the rotator’s Reverse state.
+    /// </summary>
+    public bool Reverse
     {
         get
         {
-            bool canReverse = RotatorHardware.Reverse;
-            LogMessage("Reverse Get", canReverse.ToString());
-            return canReverse;
+            try
+            {
+                CheckConnected("Reverse Get");
+                bool canReverse = RotatorHardware.Reverse;
+                LogMessage("Reverse Get", canReverse.ToString());
+                return canReverse;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Reverse Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("Reverse Set", value.ToString());
-            RotatorHardware.Reverse = value;
+            try
+            {
+                CheckConnected("Reverse Set");
+                LogMessage("Reverse Set", value.ToString());
+                RotatorHardware.Reverse = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Reverse Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
-	/// <summary>
-	/// The minimum StepSize, in degrees.
-	/// </summary>
-	public float StepSize
+    /// <summary>
+    /// The minimum StepSize, in degrees.
+    /// </summary>
+    public float StepSize
     {
         get
         {
-            float stepSize = RotatorHardware.StepSize;
-            LogMessage("StepSize Get", stepSize.ToString());
-            return stepSize;
+            try
+            {
+                CheckConnected("StepSize");
+                float stepSize = RotatorHardware.StepSize;
+                LogMessage("StepSize", stepSize.ToString());
+                return stepSize;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("StepSize", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
-	/// <summary>
-	/// The destination position angle for Move() and MoveAbsolute().
-	/// </summary>
-	public float TargetPosition
+    /// <summary>
+    /// The destination position angle for Move() and MoveAbsolute().
+    /// </summary>
+    public float TargetPosition
     {
         get
         {
-            float targetPosition = RotatorHardware.TargetPosition;
-            LogMessage("TargetPosition Get", targetPosition.ToString());
-            return targetPosition;
+            try
+            {
+                CheckConnected("TargetPosition");
+                float targetPosition = RotatorHardware.TargetPosition;
+                LogMessage("TargetPosition", targetPosition.ToString());
+                return targetPosition;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("TargetPosition", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
-	// IRotatorV3 methods
+    // IRotatorV3 methods
 
-	/// <summary>
-	/// This returns the raw mechanical position of the rotator in degrees.
-	/// </summary>
-	public float MechanicalPosition
+    /// <summary>
+    /// This returns the raw mechanical position of the rotator in degrees.
+    /// </summary>
+    public float MechanicalPosition
     {
         get
         {
-            float mechanicalPosition = RotatorHardware.MechanicalPosition;
-            LogMessage("MechanicalPosition Get", mechanicalPosition.ToString());
-            return mechanicalPosition;
+            try
+            {
+                CheckConnected("MechanicalPosition");
+                float mechanicalPosition = RotatorHardware.MechanicalPosition;
+                LogMessage("MechanicalPosition", mechanicalPosition.ToString());
+                return mechanicalPosition;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("MechanicalPosition", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
-	/// <summary>
-	/// Moves the rotator to the specified mechanical angle. 
-	/// </summary>
-	/// <param name="position">Mechanical rotator position angle.</param>
-	public void MoveMechanical(float position)
+    /// <summary>
+    /// Moves the rotator to the specified mechanical angle. 
+    /// </summary>
+    /// <param name="position">Mechanical rotator position angle.</param>
+    public void MoveMechanical(float position)
     {
-        LogMessage("AbortExposure", $"Calling method.");
-        RotatorHardware.MoveMechanical(position);
-        LogMessage("AbortExposure", $"Completed.");
+        try
+        {
+            CheckConnected("AbortExposure");
+            LogMessage("AbortExposure", $"Calling method.");
+            RotatorHardware.MoveMechanical(position);
+            LogMessage("AbortExposure", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("MoveMechanical", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -166,9 +274,18 @@ class DeviceRotator
     /// <param name="position">Synchronised rotator position angle.</param>
     public void Sync(float position)
     {
-        LogMessage("Sync", $"Calling method.");
-        RotatorHardware.Sync(position);
-        LogMessage("Sync", $"Completed.");
+        try
+        {
+            CheckConnected("Sync");
+            LogMessage("Sync", $"Calling method.");
+            RotatorHardware.Sync(position);
+            LogMessage("Sync", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("Sync", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     #endregion
@@ -182,4 +299,11 @@ class DeviceRotator
     {
     }
 
+    /// <summary>
+    /// Dummy CheckConnected class that removes compilation errors in the Platform source code and that will be omitted when the project is built
+    /// </summary>
+    /// <param name="message"></param>
+    private void CheckConnected(string message)
+    {
+    }
 }

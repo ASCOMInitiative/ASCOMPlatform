@@ -18,9 +18,18 @@ class DeviceFocuser
     {
         get
         {
-            bool absolute = FocuserHardware.Absolute;
-            LogMessage("Absolute Get", absolute.ToString());
-            return absolute;
+            try
+            {
+                CheckConnected("Absolute");
+                bool absolute = FocuserHardware.Absolute;
+                LogMessage("Absolute", absolute.ToString());
+                return absolute;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Absolute", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -29,9 +38,18 @@ class DeviceFocuser
     /// </summary>
     public void Halt()
     {
-        LogMessage("Halt", $"Calling method.");
-        FocuserHardware.Halt();
-        LogMessage("Halt", $"Completed.");
+        try
+        {
+            CheckConnected("Halt");
+            LogMessage("Halt", $"Calling method.");
+            FocuserHardware.Halt();
+            LogMessage("Halt", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("Halt", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -41,9 +59,18 @@ class DeviceFocuser
     {
         get
         {
-            bool isMoving = FocuserHardware.IsMoving;
-            LogMessage("IsMoving Get", isMoving.ToString());
-            return isMoving;
+            try
+            {
+                CheckConnected("IsMoving");
+                bool isMoving = FocuserHardware.IsMoving;
+                LogMessage("IsMoving", isMoving.ToString());
+                return isMoving;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("IsMoving", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -54,14 +81,32 @@ class DeviceFocuser
     {
         get
         {
-            bool link = FocuserHardware.Link;
-            LogMessage("Link Get", link.ToString());
-            return link;
+            try
+            {
+                CheckConnected("Link Get");
+                bool link = FocuserHardware.Link;
+                LogMessage("Link Get", link.ToString());
+                return link;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Link Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("Link Set", value.ToString());
-            FocuserHardware.Link = value;
+            try
+            {
+                CheckConnected("Link Set");
+                LogMessage("Link Set", value.ToString());
+                FocuserHardware.Link = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Link Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -73,9 +118,18 @@ class DeviceFocuser
     {
         get
         {
-            int maxIncrement = FocuserHardware.MaxIncrement;
-            LogMessage("MaxIncrement Get", maxIncrement.ToString());
-            return maxIncrement;
+            try
+            {
+                CheckConnected("MaxIncrement");
+                int maxIncrement = FocuserHardware.MaxIncrement;
+                LogMessage("MaxIncrement", maxIncrement.ToString());
+                return maxIncrement;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("MaxIncrement", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -86,9 +140,18 @@ class DeviceFocuser
     {
         get
         {
-            int maxStep = FocuserHardware.MaxStep;
-            LogMessage("MaxStep Get", maxStep.ToString());
-            return maxStep;
+            try
+            {
+                CheckConnected("MaxStep");
+                int maxStep = FocuserHardware.MaxStep;
+                LogMessage("MaxStep", maxStep.ToString());
+                return maxStep;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("MaxStep", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -98,9 +161,18 @@ class DeviceFocuser
     /// <param name="position">Step distance or absolute position, depending on the value of the <see cref="Absolute" /> property.</param>
     public void Move(int position)
     {
-        LogMessage("Move", $"Calling method.");
-        FocuserHardware.Move(position);
-        LogMessage("Move", $"Completed.");
+        try
+        {
+            CheckConnected("Move");
+            LogMessage("Move", $"Calling method.");
+            FocuserHardware.Move(position);
+            LogMessage("Move", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("Move", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -110,9 +182,18 @@ class DeviceFocuser
     {
         get
         {
-            int position = FocuserHardware.Position;
-            LogMessage("Position Get", position.ToString());
-            return position;
+            try
+            {
+                CheckConnected("Position");
+                int position = FocuserHardware.Position;
+                LogMessage("Position", position.ToString());
+                return position;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Position", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -124,9 +205,18 @@ class DeviceFocuser
     {
         get
         {
-            double stepSize = FocuserHardware.StepSize;
-            LogMessage("StepSize Get", stepSize.ToString());
-            return stepSize;
+            try
+            {
+                CheckConnected("StepSize");
+                double stepSize = FocuserHardware.StepSize;
+                LogMessage("StepSize", stepSize.ToString());
+                return stepSize;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("StepSize", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -137,14 +227,32 @@ class DeviceFocuser
     {
         get
         {
-            bool tempComp = FocuserHardware.TempComp;
-            LogMessage("TempComp Get", tempComp.ToString());
-            return tempComp;
+            try
+            {
+                CheckConnected("TempComp Get");
+                bool tempComp = FocuserHardware.TempComp;
+                LogMessage("TempComp Get", tempComp.ToString());
+                return tempComp;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("TempComp Get", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
         set
         {
-            LogMessage("TempComp Set", value.ToString());
-            FocuserHardware.TempComp = value;
+            try
+            {
+                CheckConnected("TempComp Set");
+                LogMessage("TempComp Set", value.ToString());
+                FocuserHardware.TempComp = value;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("TempComp Set", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -155,9 +263,18 @@ class DeviceFocuser
     {
         get
         {
-            bool tempCompAvailable = FocuserHardware.TempCompAvailable;
-            LogMessage("TempCompAvailable Get", tempCompAvailable.ToString());
-            return tempCompAvailable;
+            try
+            {
+                CheckConnected("TempCompAvailable");
+                bool tempCompAvailable = FocuserHardware.TempCompAvailable;
+                LogMessage("TempCompAvailable", tempCompAvailable.ToString());
+                return tempCompAvailable;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("TempCompAvailable", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -168,9 +285,18 @@ class DeviceFocuser
     {
         get
         {
-            double temperature = FocuserHardware.Temperature;
-            LogMessage("Temperature Get", temperature.ToString());
-            return temperature;
+            try
+            {
+                CheckConnected("Temperature");
+                double temperature = FocuserHardware.Temperature;
+                LogMessage("Temperature", temperature.ToString());
+                return temperature;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Temperature", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
         }
     }
 
@@ -194,4 +320,12 @@ class DeviceFocuser
     {
     }
 
+
+    /// <summary>
+    /// Dummy CheckConnected class that removes compilation errors in the Platform source code and that will be omitted when the project is built
+    /// </summary>
+    /// <param name="message"></param>
+    private void CheckConnected(string message)
+    {
+    }
 }
