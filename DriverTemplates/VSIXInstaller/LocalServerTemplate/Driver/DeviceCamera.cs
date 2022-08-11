@@ -716,11 +716,11 @@ try
         }
     }
 
-    /// <summary>
-    /// Minimum <see cref="Gain" /> value of that this camera supports
-    /// </summary>
-    /// <returns>The minimum gain value that this camera supports</returns>
-    public ArrayList Gains
+	/// <summary>
+	/// List of Gain names supported by the camera
+	/// </summary>
+	/// <returns>The list of supported gain names as an ArrayList of strings</returns>
+	public ArrayList Gains
     {
         get
         {
@@ -1269,7 +1269,7 @@ try
     }
 
     /// <summary>
-    /// Readout mode, Interface Version 2 only
+    /// Readout mode, Interface Version 2 and later
     /// </summary>
     /// <value></value>
     /// <returns>Short integer index into the <see cref="ReadoutModes">ReadoutModes</see> array of string readout mode names indicating
@@ -1307,11 +1307,11 @@ try
         }
     }
 
-    /// <summary>
-    /// List of available readout modes, Interface Version 2 only
-    /// </summary>
-    /// <returns>An ArrayList of readout mode names</returns>
-    public ArrayList ReadoutModes
+	/// <summary>
+	/// List of available readout modes, Interface Version 2 and later
+	/// </summary>
+	/// <returns>An ArrayList of readout mode names</returns>
+	public ArrayList ReadoutModes
     {
         get
         {
