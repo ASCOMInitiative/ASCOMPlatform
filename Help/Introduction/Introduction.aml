@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Introduction - ASCOM-Platform 6.6 SP1</title>
     <para>
-      Please see <link xlink:href="2c6cb374-9a44-4bc4-b3a5-f867033a3b93" /> for a detailed list of changes and fixes in Platform 6.6 for both developers and Platform users.
+      Please see <link xlink:href="81df3663-6fff-439a-8c64-5ca3989126d8" /> for a detailed list of changes and fixes in Platform 6.6 SP1 for both developers and Platform users.
     </para>
 
     <para>
@@ -15,7 +16,7 @@
     </para>
 
     <section address="Introduction-Users-Platform-6">
-      <title>Key changes in Platform 6.6</title>
+      <title>Key changes in Platform 6.6 SP1</title>
       <content>
         <list class="bullet">
           <listItem>The Alpaca Dynamic Camera Client now supports the ImageBytes protocol.</listItem>
@@ -57,7 +58,7 @@
       <title>Operating System Compatibility</title>
       <content>
         <para>
-          Platform 6.6 requires Windows 7 or later together with .NET Framework 4.8. PCs running Windows XP should use Platform 6.4 Service Pack 1 together with .NET Framework 4 Client Profile instead.
+          Platform 6.6 SP1 requires Windows 7 or later together with .NET Framework 4.8. PCs running Windows XP should use Platform 6.4 Service Pack 1 together with .NET Framework 4 Client Profile instead.
         </para>
       </content>
     </section>
@@ -91,7 +92,7 @@
             See the section titled <link xlink:href="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" /> for a summary of Platform 5.5 updates and new functionality.
           </listItem>
           <listItem>
-            This platform appears as <quoteInline>ASCOM Platform 6.6</quoteInline> in the Apps and add/remove programs dialogues
+            This platform appears as <quoteInline>ASCOM Platform 6.6 SP1</quoteInline> in the Apps and add/remove programs dialogues
           </listItem>
           <listItem>The Platform has been tested in 32 and 64bit bit versions of Windows 7 and Windows 10.</listItem>
         </list>
