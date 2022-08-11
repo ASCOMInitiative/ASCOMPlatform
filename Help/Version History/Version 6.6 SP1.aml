@@ -15,37 +15,53 @@
       <title>Key Changes in 6.6 SP1 - For Everyone</title>
       <content>
         <list class="bullet">
-          <listItem>The Alpaca Dynamic Camera Client now supports the ImageBytes protocol.</listItem>
           <listItem>
-            Telescope Simulator:
+          	Platform installer
             <list class="bullet">
-              <listItem>Client supplied TelescopeAxes values are validated before use.</listItem>
-              <listItem>The Tracking state is restored after Park and Home are called.</listItem>
+	          <listItem>The installer now runs 32bit and 64bit functional tests after installation to confirm that installation has succeeded.</listItem>
+    		  <listItem>.NET 3.5 support will now be enabled automatically on Windows 10 and 11, if required.</listItem>
+    		  <listItem>.Thanks to a generous donation by InstallAware, the Platform and Developer Components installers are now generated with the latest InstallAware version that mitigates the 
+    		    <externalLink>
+            		<linkText>InstallAware Security Issue</linkText>
+            		<linkAlternateText>https://www.installaware.com/blog/?p=705</linkAlternateText>
+            		<linkUri>https://www.installaware.com/blog/?p=705</linkUri>
+            		<linkTarget>_blank</linkTarget>
+          		</externalLink>
+				announced in July 2022.
+    		  </listItem>
             </list>
           </listItem>
-          <listItem>
-            Camera Simulator:
-            <list class="bullet">
-              <listItem>PulseGuide directions are validated before use.</listItem>
-            </list>
-          </listItem>
+          <listItem>Astrometry - The built-in DeltaT predictions have been updated to run until July 2023.</listItem>
+          <listItem>Chooser - An improved message is given if a driver fails when attempting to display its Setup dialogue.</listItem>
+          <listItem>Camera Simulator - ImageArray delivery is now faster through use of parallel processing.</listItem>
+          <listItem>Diagnostics Connection Tester - Partially typing the name of the device type in the device type field now filters the list. e.g. pressing c shows just Camera and CoverCalibrator.</listItem>
           <listItem>
             Device Hub
             <list class="bullet">
-              <listItem>Added a setting to keep Device Hub as the topmost application.</listItem>
-              <listItem>Polling frequency is increased for the duration of a slew.</listItem>
-              <listItem>Implements a stricter interpretation of the Park command requirements.</listItem>
-            </list>
+              <listItem>Added U/I support for displaying accumulated move amount for relative and absolute focusers.</listItem>
+              <listItem>Added direct move amount for relative focusers.</listItem>
+              <listItem>Now shows a wait cursor during Connect operations in case it takes a long time to complete.</listItem>
+              <listItem>Circle buttons have been enhanced to change color when hovered over or pressed.</listItem>
+              <listItem>Device hardware will no longer be disconnected when all connected clients have disconnected, if DeviceHub was started interactively.</listItem>
+          	  <listItem>Device properties can no longer be changed programmatically if a device is connected via the U/I.</listItem>
+			  <listItem>Interactive disconnects are now prevented when there are connected clients.</listItem>
+          	  <listItem>Disconnection delays due to garbage collection have been reduced.</listItem>
+              <listItem>GuideRateDeclination and GuideRateRightAscension have been added to the DeviceHub parameters view.</listItem>
+          	  <listItem>Expanded panels can now be restored at startup.</listItem>
+          	  <listItem>Activity Log will no longer show an icon on the Taskbar.</listItem>
+	          <listItem>Fast polling is now extended for 3 seconds after completion of a slew for all devices.</listItem>
+	          <listItem>Added improved support for offset tracking, including viewing current sidereal tracking rate offsets and changing those offsets.</listItem>
+           </list>
           </listItem>
-          <listItem>The mechanic to bring Simulator setup dialogues to the front of screen has been made more reliable.</listItem>
           <listItem>
-            ObservingConditions Simulator and ObservingConditions Hub test applications
+            OpenWeatherMap Driver
             <list class="bullet">
-              <listItem>Redundant "Chooser" buttons have been removed.</listItem>
-              <listItem>Automatic polling can now be toggled on and off.</listItem>
+              <listItem>The WindGust property is now functional.</listItem>
+              <listItem>The data caching interval is now configurable.</listItem>
+              <listItem>The installer is now signed.</listItem>
             </list>
           </listItem>
-        </list>
+       </list>
       </content>
     </section>
 
@@ -53,47 +69,52 @@
       <title>Issues Fixed in 6.6 SP1 - Platform</title>
       <content>
         <list class="bullet">
-          <listItem>Chooser drop-down list management has been refined to avoid an issue in AllSkEye.</listItem>
-          <listItem>NOVAS ephemeris calculations have been made more reliable.</listItem>
-          <listItem>Registry handles are now properly released in AstroUtils and EarthRotationParameters.</listItem>
-          <listItem>Diagnostics - A video utilities test failure that only occurred on Windows 7 64bit when the text size was above 100% has been fixed.</listItem>
-          <listItem>The Dome Simulator now throws ASCOM DriverExceptions when appropriate rather than using the original VB6 Err.Raise mechanic.</listItem>
+          <listItem>Transform - Fix logic error in automatic site pressure calculation.</listItem>
           <listItem>
-            Dynamic Clients
+          	Dynamic Clients
             <list class="bullet">
-              <listItem>
-                The Camera, Dome and Focuser Dynamic Clients now send every parameter value in the Invariant Culture, as required by the Alpaca specification,
-                this avoids parsing issues in locales where the decimal separator is not the point character.
-              </listItem>
-              <listItem>All clients are now tolerant of missing "Value" and ErrorMessage fields in returned responses.</listItem>
+              <listItem>No longer add an empty basic authentication header to requests when authentication is not required.</listItem>
+	          <listItem>Alpaca device HTTP setup pages, accesible from the Dynamic Client Setup dialogue, now work when the device uses an IPV6 address.</listItem>
+    	      <listItem>Discovery now works correctly over a VPN.</listItem>
             </list>
           </listItem>
           <listItem>
             Platform Installer
             <list class="bullet">
-              <listItem>The mechanic used to set the ASCOM Profile registry ACL has been improved to avoid installation issues observed on some PCs.</listItem>
-              <listItem>
-                The mechanic used to find the localised name of the BUILTIN\USERS group has been changed to avoid installation issues that a small number of users experienced
-                if their WMI installations were not fully functional.
-              </listItem>
-              <listItem>All installer support executables are now code signed to avoid issues with some anti-virus programs.</listItem>
+              <listItem>Improved resilience when expected registry settings are absent.</listItem>
+              <listItem>The EarthRotationParameters executable now runs as expected if the operating system prevents it from creating a log file.</listItem>
+              <listItem>SOFA and NOVAS C components are now compiled using Visual Studio 2022 tooling.</listItem>
+              <listItem>The SOFA and NOVAS C components are now compiled using static linking to eliminate the need to distribute and install the Microsoft
+              Visual C++ runtime libray. The requirement for a fully funtioning version of the library to be installed on the user's PC has recently caused issues for some users.</listItem>
             </list>
           </listItem>
           <listItem>
             Device Hub
             <list class="bullet">
-              <listItem>Telescope: Slewing remains true if an associated Dome is still in motion.</listItem>
-              <listItem>Telescope: The driver rejects method calls when the scope is being parked or unparked.</listItem>
-              <listItem>Telescope: Corrected logic to support aborting a fixed slew.</listItem>
-              <listItem>Telescope: Ensure that a telescope side-of-pier is only calculated for a German Equatorial mount.</listItem>
-              <listItem>Telescope: Corrected expected answer for ChangeParkState MessageBox from OK to Yes.</listItem>
-              <listItem>Dome: Slaving is more resilient.</listItem>
-              <listItem>Dome: Fixed shutter position reporting and disabled Open/Close Shutter button when CanSetShutter is false.</listItem>
+          	  <listItem>Improved DeviceHub user interface error trapping for all 3 devices.</listItem>
+          	  <listItem>Device manager connect/disconnect logic is now improved.</listItem>
+              <listItem>Fixed a minor bug in logging of an empty SupportedActions property.</listItem>
+              <listItem>The Telescope driver now sets Target RA and Dec through the telescope manager to ensure that they are immediately available to the DomeManager if a SlewToTarget is initiated.</listItem>
+              <listItem>Now includes improved exception handling and logging by device manager classes.</listItem>
+              <listItem>Fixed issue with dome slewing interruption.</listItem>
             </list>
           </listItem>
-          <listItem>The RemoveASCOM component is now code signed.</listItem>
-          <listItem>Improved handling when Alpaca devices report errors when calling the ImageArray, ImageArrayVariant, TrackingRates and AxisRates properties.</listItem>
-        </list>
+          <listItem>
+          	Telescope Simulator
+          	<list class="bullet">
+	          <listItem>Corrected East/West button movements.</listItem>
+	          <listItem>Fixed East/West PulseGuide commands to move in the right direction.</listItem>
+	          <listItem>Fixed the DriverVersion command to return the version number in the expected format: X.Y.</listItem>
+	        </list>
+          </listItem>
+          <listItem>
+			Diagnostics
+          	<list class="bullet">
+	          <listItem>The FilterWheel simulator tests now work when any number of filters are configured for use. Previously, they would fail if the maximum number of filters was 3 or less.</listItem>
+	          <listItem>Fixed issue when testing in a geography that has a non-integer time offset from UTC.</listItem>
+            </list>
+          </listItem>
+       </list>
       </content>
     </section>
 
@@ -117,25 +138,48 @@
       <title>Key Changes in 6.6 SP1 - For Developers</title>
       <content>
         <list class="bullet">
-          <listItem>A SitePressure property has been added to the Transform component to improve the accuracy of refraction calculations.</listItem>
-          <listItem>The SOFA component has been updated to the latest SOFA 18.0 release, 12th May 2021.</listItem>
-          <listItem>
-            The Local Server Driver Generator now creates a project that uses a more secure mechanic to locate drivers that are to be served.
+          <listItem>Developer Templates
             <list class="bullet">
+              <listItem>Unnecessary COM registration functions have been removed from the C# driver templates.</listItem>
               <listItem>
-                Drivers are now held as classes within the local server executable rather than as separate DLL's.
-                This eliminates the need to dynamically search for and load driver DLLs at run-time, a mechanic which could have been abused to load malicious code.
+                The local server template has been extensively revised to create a better stating point. The template provides a three level architecture:
+				<list class="bullet">
+              		<listItem>Driver instance - Clients receive an instance of this class with every COM connection made to the driver. (One instance per client COM connection).</listItem>
+              		<listItem>Hardware implementation - A singleton class for each driver that is used by all driver instances to handle device specific behaviour. This creates a single source of data truth that is shared by 
+              		all all clients of this particular driver. (One instance per unique driver in served by the local server).</listItem>
+              		<listItem>Shared Resources - A singleton class containing resources used by all drivers served by the Local Server. This is likely to include the communications mechanic between the PC and the device hardware.
+              		(One instance that serves all drivers served by the local server).</listItem>
+              	</list>	
               </listItem>
-              <listItem>
-                The local server template now creates a single project containing both the local server and a single driver.
-              </listItem>
-              <listItem>
-                Instructions on how to add further drivers, if required, are included in the ReadMe that appears on creation of the local server.
-              </listItem>
-            </list>
+              <listItem>The Driver Templates have been removed from the Platform Developer components installer and are are now delivered as a 
+              			Visual Studio extension that is avalable through the Microsoft VisualStudio Marketplace. (Search for ASCOM in the Visual Studio Extensions / Manage Extensions menu dialogue
+              			to find and install the new template extension.) This change moves template delivery from a deprecated, legacy, mechanic to the mechanic supported by Visual Studio 2017, 2019 and 2022.</listItem>
+	          <listItem>The VB and C# in-process driver templates now target x86 rathther than MSIL so that they register as 32bit objects when run /debugged in VS2022, which is a 64bit application.</listItem>
+        	  <listItem>All templates now include XML help comments to assist developers in implementing methods.</listItem>
+        	  <listItem>Generated project Setup dialogues now specifically say if they cannot find any COM ports on the PC.</listItem>
+        	  <listItem>Generated project Setup dialogues now use the Platform's extended COM port detection rather than just reporting COM ports detected by .NET.</listItem>
+              <listItem>In the local server template, all calls to the device hardware are wrapped in try:catch blocks.</listItem>
+              <listItem>In the local server template, every member, except for Connected, DriverInfo, DriverVersion, InterfaceVersion and Name, checks that the device is oonnnected before actioning the call.</listItem>
+	        </list>
           </listItem>
-          <listItem>The comments in the Switch template have been expanded and clarified.</listItem>
-          <listItem>Camera.ImageArray element ordering has been clarified.</listItem>
+          <listItem>
+          	Documentation Updates
+  			<list class="bullet">
+	          <listItem>All properties now have NotConnectedExceptions and DriverExceptions, as appropriate, with consistent wording.</listItem>
+    	      <listItem>The SupportedActions description has been extended to explain the property's purpose and use.</listItem>
+        	  <listItem>expected exception are now consistent between Interface definitions and DriverAccess definitions.</listItem>
+          	  <listItem>IFocuser.Link description has been improved.</listItem>
+          	  <listItem>The developer help file now has links to extended developer information on the
+          	  <externalLink>
+            	<linkText>ASCOM Standards</linkText>
+            	<linkAlternateText>https://www.ascom-standards.org</linkAlternateText>
+            	<linkUri>https://www.ascom-standards.org</linkUri>
+            	<linkTarget>_blank</linkTarget>
+          	  </externalLink>
+          	  web site.</listItem>
+	          <listItem>Added missing InvalidValueException to ITelescope.DeclinationRate.</listItem>
+          	</list>
+   		  </listItem>       
         </list>
       </content>
     </section>
@@ -144,8 +188,9 @@
       <title>Issues Fixed in 6.6 SP1 - For Developers</title>
       <content>
         <list class="bullet">
-          <listItem>Links to support forums in the developer templates have been updated to reference the Groups.Io forum.</listItem>
-          <listItem>An inconsistency in the Camera.SensorName documentation has been resolved.</listItem>
+          <listItem>Template Installer - Building a test console application no longer results in a driver wizard null reference exception.</listItem>
+          <listItem>Corrected copy/paste error in IntelliSense text for Profile.WriteValue.</listItem>
+          <listItem>Fixed exception in generated code when local PC has no COM ports.</listItem>
         </list>
       </content>
     </section>
