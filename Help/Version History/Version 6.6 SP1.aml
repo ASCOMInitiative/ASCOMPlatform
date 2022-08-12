@@ -20,7 +20,7 @@
             <list class="bullet">
 	          <listItem>The installer now runs 32bit and 64bit functional tests after installation to confirm that installation has succeeded.</listItem>
     		  <listItem>.NET 3.5 support will now be enabled automatically on Windows 10 and 11, if required.</listItem>
-    		  <listItem>.Thanks to a generous donation by InstallAware, the Platform and Developer Components installers are now generated with the latest InstallAware version that mitigates the 
+    		  <listItem>Thanks to a generous donation by InstallAware, the Platform and Developer Components installers are now generated with the latest InstallAware version that mitigates the 
     		    <externalLink>
             		<linkText>InstallAware Security Issue</linkText>
             		<linkAlternateText>https://www.installaware.com/blog/?p=705</linkAlternateText>
