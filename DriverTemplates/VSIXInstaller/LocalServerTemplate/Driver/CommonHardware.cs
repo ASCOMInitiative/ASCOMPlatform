@@ -33,6 +33,7 @@ namespace TEMPLATENAMESPACE
     /// <summary>
     /// ASCOM TEMPLATEDEVICECLASS hardware class for TEMPLATEDEVICENAME.
     /// </summary>
+    [HardwareClass()] // Class attribute flag this as a device hardware class that needs to be disposed by the local server when it exits.
     internal static class TEMPLATEHARDWARECLASS
     {
         // Constants used for Profile persistence
@@ -49,7 +50,6 @@ namespace TEMPLATENAMESPACE
         internal static Util utilities; // ASCOM Utilities object for use as required
         internal static AstroUtils astroUtilities; // ASCOM AstroUtilities object for use as required
         internal static TraceLogger tl; // Local server's trace logger object for diagnostic log with information that you specify
-        private static int connectionCount = 0;
 
         /// <summary>
         /// Initializes a new instance of the device Hardware class.
@@ -85,8 +85,7 @@ namespace TEMPLATENAMESPACE
         internal static void InitialiseHardware()
         {
             // This method will be called every time a new ASCOM client loads your driver
-            connectionCount += 1;
-            LogMessage("InitialiseHardware", $"Connection count: {connectionCount}.");
+            LogMessage("InitialiseHardware", $"Start.");
 
             // Make sure that "one off" activities are only undertaken once
             if (runOnce == false)
@@ -229,17 +228,30 @@ namespace TEMPLATENAMESPACE
         /// </summary>
         public static void Dispose()
         {
-            connectionCount -= 1;
-            LogMessage("Dispose", $"Connection count: {connectionCount}.");
+            try { LogMessage("Dispose", $"Disposing of assets and closing down."); } catch { }
 
-            // Clean up the trace logger and utility objects
-            //tl.Enabled = false;
-            //tl.Dispose();
-            //tl = null;
-            //utilities.Dispose();
-            //utilities = null;
-            //astroUtilities.Dispose();
-            //astroUtilities = null;
+            try
+            {
+                // Clean up the trace logger and utility objects
+                tl.Enabled = false;
+                tl.Dispose();
+                tl = null;
+            }
+            catch { }
+
+            try
+            {
+                utilities.Dispose();
+                utilities = null;
+            }
+            catch { }
+
+            try
+            {
+                astroUtilities.Dispose();
+                astroUtilities = null;
+            }
+            catch { }
         }
 
         /// <summary>

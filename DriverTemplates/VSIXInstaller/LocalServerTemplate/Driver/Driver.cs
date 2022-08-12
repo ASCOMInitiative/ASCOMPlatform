@@ -45,7 +45,7 @@ namespace TEMPLATENAMESPACE
     [ProgId("TEMPLATEDEVICEID")]
     [ServedClassName("ASCOM TEMPLATEDEVICECLASS Driver for TEMPLATEDEVICENAME")] // Driver description that appears in the Chooser, customise as required
     [ClassInterface(ClassInterfaceType.None)]
-    public class TEMPLATEDEVICECLASS : ReferenceCountedObjectBase, ITEMPLATEDEVICEINTERFACE
+    public class TEMPLATEDEVICECLASS : ReferenceCountedObjectBase, ITEMPLATEDEVICEINTERFACE, IDisposable
     {
         internal static string DriverProgId; // ASCOM DeviceID (COM ProgID) for this driver, the value is retrieved from the ServedClassName attribute in the class initialiser.
         internal static string DriverDescription; // The value is retrieved from the ServedClassName attribute in the class initialiser.
@@ -53,6 +53,7 @@ namespace TEMPLATENAMESPACE
         // connectedState holds the connection state from this driver instance's perspective, as opposed to the local server's perspective, which may be different because of other client connections.
         internal bool connectedState; // The connected state from this driver's perspective)
         internal TraceLogger tl; // Trace logger object to hold diagnostic information just for this instance of the driver, as opposed to the local server's log, which includes activity from all driver instances.
+        private bool disposedValue;
 
         #region Initialisation and Dispose
 
@@ -97,27 +98,82 @@ namespace TEMPLATENAMESPACE
         }
 
         /// <summary>
-        /// Dispose of any resources created in this driver file
+        /// Class destructor called automatically by the .NET runtime when the object is finalised in order to release resources that are NOT managed by the .NET runtime.
+        /// </summary>
+        /// <remarks>See the Dispose(bool disposing) remarks for further information.</remarks>
+        ~TEMPLATEDEVICECLASS()
+        {
+            // Please do not change this code.
+            // The Dispose(false) method is called here just to release unmanaged resources. Managed resources will be dealt with automatically by the .NET runtime.
+
+            Dispose(false);
+        }
+
+        /// <summary>
+        /// Deterministically dispose of resources created by this driver that are no longer needed
         /// </summary>
         public void Dispose()
         {
-            try
-            {
-                // Call the hardware class Dispose() method so that it can release resources that are no longer needed by this or other driver instances.
-                TEMPLATEHARDWARECLASS.Dispose();
+            // Please do not change this code.
+            // Do not dispose of items in this method, put clean-up code in the 'Dispose(bool disposing)' method instead.
 
-                // Clean up the trace logger object
-                if (!(tl is null))
-                {
-                    tl.Enabled = false;
-                    tl.Dispose();
-                    tl = null;
-                }
-            }
-            catch (Exception ex)
+            // Release resources now.
+            Dispose(disposing: true);
+
+            // Do not add GC.SuppressFinalize(this); here because it breaks the ReferenceCountedObjectBase COM connection counting mechanic
+        }
+
+        /// <summary>
+        /// Dispose of large or scarce resources created within this driver file
+        /// </summary>
+        /// <remarks>
+        /// 1) The purpose of this method is to enable you to release finite system resources back to the operating system as soon as possible, so that other applications work as effectively as possible.
+        /// 2) You do not need to release every .NET resource you use in your driver because the .NET runtime is very effective at reclaiming these resources. 
+        /// 3) Strong candidates for release here are:
+        ///     a) Objects that have a large memory footprint (> 1Mb) such as images
+        ///     b) Objects that consume finite OS resources such as file handles, synchronisation object handles, memory allocations requested directly from the operating system (NativeMemory methods) etc.
+        /// 4) Please ensure that you do not return exceptions from this method
+        /// 5) Be aware that Dispose() can be called more than once:
+        ///     a) By the client application
+        ///     b) Automatically, by the .NET runtime during finalisation
+        /// 6) Because of 5) above, you should make sure that your code is tolerant of multiple calls.    
+        /// 7) Resources allocated in the hardware and shared resources classes will be automatically released by the local server when it terminates and so do not need to be released here.
+        /// </remarks>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
             {
-                LogMessage("Dispose", $"Threw an exception: \r\n{ex}");
-                // The exception is not re-thrown to the client because Microsoft's best practice says not to return exceptions from the Dispose method. 
+                if (disposing)
+                {
+                    try
+                    {
+                        // Dispose of managed objects here
+
+                        // Clean up the trace logger object
+                        if (!(tl is null))
+                        {
+                            tl.Enabled = false;
+                            tl.Dispose();
+                            tl = null;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        // Any exception is not re-thrown because Microsoft's best practice says not to return exceptions from the Dispose method. 
+                    }
+                }
+
+                try
+                {
+                    // Dispose of unmanaged objects, if any, here (OS handles etc.)
+                }
+                catch (Exception)
+                {
+                    // Any exception is not re-thrown because Microsoft's best practice says not to return exceptions from the Dispose method. 
+                }
+
+                // Flag that Dispose() has already run and disposed of all 
+                disposedValue = true;
             }
         }
 

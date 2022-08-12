@@ -111,6 +111,47 @@ namespace ASCOM.LocalServer
                 RevokeClassFactories();
                 TL.LogMessage("Main", $"Class factories revoked");
 
+                // No new connections are now possible and the local server is irretrievably shutting down, so release resources in the Hardware classes
+                try
+                {
+                    // Get all types in the local server assembly
+                    Type[] types = Assembly.GetExecutingAssembly().GetTypes();
+
+                    // Iterate over the types looking for hardware classes that need to be disposed
+                    foreach (Type type in types)
+                    {
+                        try
+                        {
+                            TL.LogMessage("Main", $"Hardware disposal - Found type: {type.Name}");
+
+                            // Get the HardwareClassAttribute attribute if present on this type
+                            object[] attrbutes = type.GetCustomAttributes(typeof(HardwareClassAttribute), false);
+
+                            // Check to see if this type has the HardwareClass attribute, which indicates that this is a hardware class.
+                            if (attrbutes.Length > 0) // There is a HardwareClass attribute so call its Dispose() method
+                            {
+                                TL.LogMessage("Main", $"  {type.Name} is a hardware class");
+
+                                // Lookup the method
+                                MethodInfo disposeMethod = type.GetMethod("Dispose");
+                                TL.LogMessage("Main", $"  Calling method {disposeMethod.Name}...");
+
+                                // Now call Dispose()
+                                disposeMethod.Invoke(null, null);
+                                TL.LogMessage("Main", $"  {disposeMethod.Name} method called OK.");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            TL.LogMessageCrLf("Main", $"Exception (inner) when disposing of hardware class.\r\n{ex}");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    TL.LogMessageCrLf("Main", $"Exception (outer) when disposing of hardware class.\r\n{ex}");
+                }
+
                 // Now stop the Garbage Collector thread.
                 TL.LogMessage("Main", $"Stopping garbage collector");
                 StopGarbageCollection();
@@ -157,7 +198,7 @@ namespace ASCOM.LocalServer
         /// <returns></returns>
         public static int DecrementObjectCount()
         {
-            int newCount= Interlocked.Decrement(ref driversInUseCount); // Decrement the object count.
+            int newCount = Interlocked.Decrement(ref driversInUseCount); // Decrement the object count.
             TL.LogMessage("DecrementObjectCount", $"New object count: {newCount}");
 
             return newCount;
@@ -183,7 +224,7 @@ namespace ASCOM.LocalServer
         /// <returns></returns>
         public static int IncrementServerLockCount()
         {
-            int newCount= Interlocked.Increment(ref serverLockCount); // Increment the server lock count for this server.
+            int newCount = Interlocked.Increment(ref serverLockCount); // Increment the server lock count for this server.
             TL.LogMessage("IncrementServerLockCount", $"New server lock count: {newCount}");
 
             return newCount;
