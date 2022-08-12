@@ -1,28 +1,39 @@
 ﻿Module Module1
 
+    ' Comment out the "#Const UseChooser = True" line to bypass the code that uses the chooser to select the driver and replace it with code that accesses the driver directly via its ProgId.
+#Const UseChooser = True
+
     Sub Main()
-        ' Uncomment the code that's required
-        ' choose the device
+
+#If UseChooser Then
+        ' Choose the device
         Dim id As String = ASCOM.DriverAccess.TEMPLATEDEVICECLASS.Choose("")
+
+        ' Exit if no device was selected
         If (String.IsNullOrEmpty(id)) Then
             Return
         End If
 
-        ' create this device
+        ' Create the device
         Dim driver As ASCOM.DriverAccess.TEMPLATEDEVICECLASS = New ASCOM.DriverAccess.TEMPLATEDEVICECLASS(id)
+#Else
+        ' Create the driver class directly.
+        Dim driver As ASCOM.DriverAccess.TEMPLATEDEVICECLASS = New ASCOM.DriverAccess.TEMPLATEDEVICECLASS("ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS")
+#End If
 
-        ' this can be replaced by this code, it avoids the chooser and creates the driver class directly.
-        ' Dim driver As ASCOM.DriverAccess.TEMPLATEDEVICECLASS = New ASCOM.DriverAccess.TEMPLATEDEVICECLASS("ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS")
+        ' Now exercise some calls that are common to all drivers.
+        Console.WriteLine($"Name: {driver.Name}")
+        Console.WriteLine($"Description: {driver.Description}")
+        Console.WriteLine($"DriverInfo: {driver.DriverInfo}")
+        Console.WriteLine($"DriverVersion: {driver.DriverVersion}")
+        Console.WriteLine($"InterfaceVersion: {driver.InterfaceVersion}")
 
-        ' now run some tests, adding code to your driver so that the tests will pass.
-        ' these first tests are common to all drivers.
-        Console.WriteLine("Name " & driver.Name)
-        Console.WriteLine("description " & driver.Description)
-        Console.WriteLine("DriverInfo " & driver.DriverInfo)
-        Console.WriteLine("driverVersion " & driver.DriverVersion)
+        '
+        ' TODO add more code to test your driver.
+        '
 
-        ' TODO add more code to test the driver.
-
+        ' Disconnect from the device
+        driver.Connected = False
 
         Console.WriteLine("Press Enter to finish")
         Console.ReadLine()
