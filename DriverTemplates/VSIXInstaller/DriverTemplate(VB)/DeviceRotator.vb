@@ -60,11 +60,15 @@ Class DeviceRotator
 		rotatorPosition = astroUtilities.Range(rotatorPosition, 0.0, True, 360.0, False) ' Ensure value is in the range 0.0..359.9999...
 	End Sub
 
+	''' <summary>
+	''' Causes the rotator to move the absolute position of <see cref="Position" /> degrees.
+	''' </summary>
+	''' <param name="Position">Absolute position in degrees.</param>
 	Public Sub MoveAbsolute(Position As Single) Implements IRotatorV3.MoveAbsolute
-        TL.LogMessage("MoveAbsolute", Position.ToString()) ' Move to this position
-        rotatorPosition = Position
-        rotatorPosition = astroUtilities.Range(rotatorPosition, 0.0, True, 360.0, False) ' Ensure value is in the range 0.0..359.9999...
-    End Sub
+		TL.LogMessage("MoveAbsolute", Position.ToString()) ' Move to this position
+		rotatorPosition = Position
+		rotatorPosition = astroUtilities.Range(rotatorPosition, 0.0, True, 360.0, False) ' Ensure value is in the range 0.0..359.9999...
+	End Sub
 
 	''' <summary>
 	''' Causes the rotator to move the absolute position of <see cref="Position" /> degrees.

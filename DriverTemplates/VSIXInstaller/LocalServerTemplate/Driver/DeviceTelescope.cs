@@ -145,7 +145,7 @@ class DeviceTelescope
     }
 
     /// <summary>
-    /// True if the telescope has been put into the parked state by the see <see cref="Park" /> method. Set False by calling the Unpark() method.
+    /// True if the telescope has been put into the parked state by the <see cref="Park" /> method. Set False by calling the Unpark() method.
     /// </summary>
     public bool AtPark
     {
@@ -1195,10 +1195,12 @@ class DeviceTelescope
         }
     }
 
-    /// <summary>
-    /// Move the telescope to the given local horizontal coordinates, return when slew is complete
-    /// </summary>
-    public void SlewToAltAz(double azimuth, double altitude)
+	/// <summary>
+	/// Move the telescope to the given local horizontal coordinates
+	/// This method must be implemented if <see cref="CanSlewAltAz" /> returns True.
+	/// It does not return until the slew is complete.
+	/// </summary>
+	public void SlewToAltAz(double azimuth, double altitude)
     {
         try
         {
@@ -1214,13 +1216,14 @@ class DeviceTelescope
         }
     }
 
-    /// <summary>
-    /// This Method must be implemented if <see cref="CanSlewAltAzAsync" /> returns True.
-    /// It returns immediately, with Slewing set to True
-    /// </summary>
-    /// <param name="Azimuth">Azimuth to which to move</param>
-    /// <param name="Altitude">Altitude to which to move to</param>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
+	/// <summary>
+	/// Move the telescope to the given local horizontal coordinates.
+	/// This method must be implemented if <see cref="CanSlewAltAzAsync" /> returns True.
+	/// It returns immediately, with <see cref="Slewing" /> set to True
+	/// </summary>
+	/// <param name="Azimuth">Azimuth to which to move</param>
+	/// <param name="Altitude">Altitude to which to move to</param>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
     public void SlewToAltAzAsync(double azimuth, double altitude)
     {
         try
@@ -1237,11 +1240,12 @@ class DeviceTelescope
         }
     }
 
-    /// <summary>
-    /// This Method must be implemented if <see cref="CanSlewAltAzAsync" /> returns True.
-    /// It does not return to the caller until the slew is complete.
-    /// </summary>
-    public void SlewToCoordinates(double rightAscension, double declination)
+	/// <summary>
+	/// Move the telescope to the given equatorial coordinates.  
+	/// This method must be implemented if <see cref="CanSlew" /> returns True.
+	/// It does not return until the slew is complete.
+	/// </summary>
+	public void SlewToCoordinates(double rightAscension, double declination)
     {
         try
         {
@@ -1257,10 +1261,12 @@ class DeviceTelescope
         }
     }
 
-    /// <summary>
-    /// Move the telescope to the given equatorial coordinates, return with Slewing set to True immediately after starting the slew.
-    /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
+	/// <summary>
+	/// Move the telescope to the given equatorial coordinates.
+	/// This method must be implemented if <see cref="CanSlewAsync" /> returns True.
+	/// It returns immediately, with <see cref="Slewing" /> set to True
+	/// </summary>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
     public void SlewToCoordinatesAsync(double rightAscension, double declination)
     {
         try
@@ -1277,10 +1283,12 @@ class DeviceTelescope
         }
     }
 
-    /// <summary>
-    /// Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> coordinates, return when slew complete.
-    /// </summary>
-    public void SlewToTarget()
+	/// <summary>
+	/// Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> coordinates.
+	/// This method must be implemented if <see cref="CanSlew" /> returns True.
+	/// It does not return until the slew is complete.
+	/// </summary>
+	public void SlewToTarget()
     {
         try
         {
@@ -1296,11 +1304,12 @@ class DeviceTelescope
         }
     }
 
-    /// <summary>
-    /// Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" />  coordinates,
-    /// returns immediately after starting the slew with Slewing set to True.
-    /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
+	/// <summary>
+	/// Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" />  coordinates.
+	/// This method must be implemented if <see cref="CanSlewAsync" /> returns True.
+	/// It returns immediately, with <see cref="Slewing" /> set to True
+	/// </summary>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
     public void SlewToTargetAsync()
     {
         try

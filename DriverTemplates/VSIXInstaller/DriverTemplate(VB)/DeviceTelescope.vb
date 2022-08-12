@@ -75,7 +75,7 @@ Class DeviceTelescope
 	End Property
 
 	''' <summary>
-	''' True if the telescope has been put into the parked state by the seee <see cref="Park" /> method. Set False by calling the Unpark() method.
+	''' True if the telescope has been put into the parked state by the <see cref="Park" /> method. Set False by calling the Unpark() method.
 	''' </summary>
 	Public ReadOnly Property AtPark() As Boolean Implements ITelescopeV3.AtPark
 		Get
@@ -560,7 +560,9 @@ Class DeviceTelescope
 	End Property
 
 	''' <summary>
-	''' Move the telescope to the given local horizontal coordinates, return when slew is complete
+	''' Move the telescope to the given local horizontal coordinates
+	''' This method must be implemented if <see cref="CanSlewAltAz" /> returns True.
+	''' It does not return until the slew is complete.
 	''' </summary>
 	Public Sub SlewToAltAz(Azimuth As Double, Altitude As Double) Implements ITelescopeV3.SlewToAltAz
 		TL.LogMessage("SlewToAltAz", "Not implemented")
@@ -568,8 +570,9 @@ Class DeviceTelescope
 	End Sub
 
 	''' <summary>
-	''' This Method must be implemented if <see cref="CanSlewAltAzAsync" /> returns True.
-	''' It returns immediately, with Slewing set to True
+	''' Move the telescope to the given local horizontal coordinates.
+	''' This method must be implemented if <see cref="CanSlewAltAzAsync" /> returns True.
+	''' It returns immediately, with <see cref="Slewing" /> set to True
 	''' </summary>
 	''' <param name="Azimuth">Azimuth to which to move</param>
 	''' <param name="Altitude">Altitude to which to move to</param>
@@ -579,8 +582,9 @@ Class DeviceTelescope
 	End Sub
 
 	''' <summary>
-	''' This Method must be implemented if <see cref="CanSlewAltAzAsync" /> returns True.
-	''' It does not return to the caller until the slew is complete.
+	''' Move the telescope to the given equatorial coordinates.  
+	''' This method must be implemented if <see cref="CanSlew" /> returns True.
+	''' It does not return until the slew is complete.
 	''' </summary>
 	Public Sub SlewToCoordinates(RightAscension As Double, Declination As Double) Implements ITelescopeV3.SlewToCoordinates
 		TL.LogMessage("SlewToCoordinates", "Not implemented")
@@ -588,7 +592,9 @@ Class DeviceTelescope
 	End Sub
 
 	''' <summary>
-	''' Move the telescope to the given equatorial coordinates, return with Slewing set to True immediately after starting the slew.
+	''' Move the telescope to the given equatorial coordinates.
+	''' This method must be implemented if <see cref="CanSlewAsync" /> returns True.
+	''' It returns immediately, with <see cref="Slewing" /> set to True
 	''' </summary>
 	Public Sub SlewToCoordinatesAsync(RightAscension As Double, Declination As Double) Implements ITelescopeV3.SlewToCoordinatesAsync
 		TL.LogMessage("SlewToCoordinatesAsync", "Not implemented")
@@ -596,7 +602,9 @@ Class DeviceTelescope
 	End Sub
 
 	''' <summary>
-	''' Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> coordinates, return when slew complete.
+	''' Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> coordinates.
+	''' This method must be implemented if <see cref="CanSlew" /> returns True.
+	''' It does not return until the slew is complete.
 	''' </summary>
 	Public Sub SlewToTarget() Implements ITelescopeV3.SlewToTarget
 		TL.LogMessage("SlewToTarget", "Not implemented")
@@ -604,8 +612,9 @@ Class DeviceTelescope
 	End Sub
 
 	''' <summary>
-	''' Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" />  coordinates,
-	''' returns immediately after starting the slew with Slewing set to True.
+	''' Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" />  coordinates.
+	''' This method must be implemented if <see cref="CanSlewAsync" /> returns True.
+	''' It returns immediately, with <see cref="Slewing" /> set to True
 	''' </summary>
 	Public Sub SlewToTargetAsync() Implements ITelescopeV3.SlewToTargetAsync
 		TL.LogMessage("    Public Sub SlewToTargetAsync() Implements ITelescopeV3.SlewToTargetAsync", "Not implemented")
