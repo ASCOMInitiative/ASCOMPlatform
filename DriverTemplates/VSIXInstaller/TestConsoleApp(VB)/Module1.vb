@@ -21,6 +21,9 @@
         Dim driver As ASCOM.DriverAccess.TEMPLATEDEVICECLASS = New ASCOM.DriverAccess.TEMPLATEDEVICECLASS("ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS")
 #End If
 
+        ' Disconnect from the device
+        driver.Connected = True
+
         ' Now exercise some calls that are common to all drivers.
         Console.WriteLine($"Name: {driver.Name}")
         Console.WriteLine($"Description: {driver.Description}")
