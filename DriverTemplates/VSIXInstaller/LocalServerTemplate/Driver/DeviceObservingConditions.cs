@@ -114,7 +114,7 @@ class DeviceObservingConditions
     }
 
     /// <summary>
-    /// Atmospheric pressure at the observatory in hectoPascals (mB)
+    /// Atmospheric pressure at the observatory in hectoPascals (hPa)
     /// </summary>
     public double Pressure
     {
@@ -135,10 +135,10 @@ class DeviceObservingConditions
         }
     }
 
-    /// <summary>
-    /// Rain rate at the observatory
-    /// </summary>
-    public double RainRate
+	/// <summary>
+	/// Rain rate at the observatory, in millimeters per hour
+	/// </summary>
+	public double RainRate
     {
         get
         {
@@ -199,10 +199,10 @@ class DeviceObservingConditions
         }
     }
 
-    /// <summary>
-    /// Sky brightness at the observatory
-    /// </summary>
-    public double SkyBrightness
+	/// <summary>
+	/// Sky brightness at the observatory, in Lux (lumens per square meter)
+	/// </summary>
+	public double SkyBrightness
     {
         get
         {
@@ -221,10 +221,10 @@ class DeviceObservingConditions
         }
     }
 
-    /// <summary>
-    /// Sky quality at the observatory
-    /// </summary>
-    public double SkyQuality
+	/// <summary>
+	/// Sky quality at the observatory, in magnitudes per square arc-second
+	/// </summary>
+	public double SkyQuality
     {
         get
         {
@@ -243,10 +243,10 @@ class DeviceObservingConditions
         }
     }
 
-    /// <summary>
-    /// Seeing at the observatory
-    /// </summary>
-    public double StarFWHM
+	/// <summary>
+	/// Seeing at the observatory, measured as the average star full width half maximum (FWHM in arc secs) 
+	/// </summary>
+	public double StarFWHM
     {
         get
         {

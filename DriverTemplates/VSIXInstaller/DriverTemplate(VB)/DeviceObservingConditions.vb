@@ -58,7 +58,7 @@ Class DeviceObservingConditions
 	End Property
 
 	''' <summary>
-	''' Atmospheric pressure at the observatory in hectoPascals (mB)
+	''' Atmospheric pressure at the observatory in hectoPascals (hPa)
 	''' </summary>
 	Public ReadOnly Property Pressure() As Double Implements IObservingConditions.Pressure
 		Get
@@ -68,7 +68,7 @@ Class DeviceObservingConditions
 	End Property
 
 	''' <summary>
-	''' Rain rate at the observatory
+	''' Rain rate at the observatory, in millimeters per hour
 	''' </summary>
 	Public ReadOnly Property RainRate() As Double Implements IObservingConditions.RainRate
 		Get
@@ -78,7 +78,7 @@ Class DeviceObservingConditions
 	End Property
 
 	''' <summary>
-	''' Sky brightness at the observatory
+	''' Sky brightness at the observatory, in Lux (lumens per square meter)
 	''' </summary>
 	Public ReadOnly Property SkyBrightness() As Double Implements IObservingConditions.SkyBrightness
 		Get
@@ -88,7 +88,7 @@ Class DeviceObservingConditions
 	End Property
 
 	''' <summary>
-	''' Sky quality at the observatory
+	''' Sky quality at the observatory, in magnitudes per square arc-second
 	''' </summary>
 	Public ReadOnly Property SkyQuality() As Double Implements IObservingConditions.SkyQuality
 		Get
@@ -98,7 +98,7 @@ Class DeviceObservingConditions
 	End Property
 
 	''' <summary>
-	''' Seeing at the observatory
+	''' Seeing at the observatory, in magnitudes per square arc-second
 	''' </summary>
 	Public ReadOnly Property StarFWHM() As Double Implements IObservingConditions.StarFWHM
 		Get
