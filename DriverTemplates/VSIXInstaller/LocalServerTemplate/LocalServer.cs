@@ -132,13 +132,21 @@ namespace ASCOM.LocalServer
                             {
                                 TL.LogMessage("Main", $"  {type.Name} is a hardware class");
 
-                                // Lookup the method
-                                MethodInfo disposeMethod = type.GetMethod("Dispose");
-                                TL.LogMessage("Main", $"  Calling method {disposeMethod.Name}...");
+                                // Only process static classes that don't have instances here.
+                                if (type.IsAbstract & type.IsSealed) // This type is a static class
+                                {
+                                    // Lookup the method
+                                    MethodInfo disposeMethod = type.GetMethod("Dispose");
+                                    TL.LogMessage("Main", $"  Calling method {disposeMethod.Name} in static class {type.Name}...");
 
-                                // Now call Dispose()
-                                disposeMethod.Invoke(null, null);
-                                TL.LogMessage("Main", $"  {disposeMethod.Name} method called OK.");
+                                    // Now call Dispose()
+                                    disposeMethod.Invoke(null, null);
+                                    TL.LogMessage("Main", $"  {disposeMethod.Name} method called OK.");
+                                }
+                                else
+                                {
+                                    TL.LogMessage("Main", $"  Ignoring type {type.Name} because it is not static.");
+                                }
                             }
                         }
                         catch (Exception ex)
