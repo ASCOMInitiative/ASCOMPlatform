@@ -54,13 +54,14 @@
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 <div class="article">
-	<h3>UNDER CONSTRUCTION - LOOK AT THE ORANGE MENU</h3>
-<p style="color:#FF9900;font-size: large;border: 2px solid; background: #222222">NOTE: Alpaca is 100% independent of Windows. Nowhere in the Alpaca ecosystem is Windows (or COM) needed. Please look over <a href="../About/Index.htm">About Alpaca and ASCOM</a> if you haven't yet.</p>
 <h3>ASCOM Alpaca - ASCOM is not just for Windows any more</h3>
-	<p>P<em>lease</em> take the time to go through the <a href="../About/Index.htm">overview of ASCOM, Alpaca, and Classic ASCOM given in the About Ascom section here</a>.
-	</p>
 	<p class="note">If you are new to ASCOM in general and plan to develop an Alpaca app or driver, is is strongly suggested that you first go through the <a href="../About/Index.htm">About Alpaca and ASCOM</a> section and then return here. Next familiarize yourself with <span class="underline">all three sections</span> of the Design Principles in the orange menu on the left. There is a lot of information here that can save you time and frustration during your development. Please invest some time to check it out before getting heavily into your development.	</p>
-
+	
+	<h3>Alpaca Scope of Application</h3>
+	<p>Alpaca is designed to provide simple point-to-point universal connectivity <em>within an observatory</em> between client applications and devices in the same way that COM does in classic ASCOM. While it is a network protocol, Alpaca's design purposely does not include device-level hardened security measures that would be needed on the open public or campus internet. Instead it is intended to be used within an isolated protected  in-observatory local network. This keeps coding minimal, implementations lightweight, and management simple.	</p>
+	<p>Simply stated, Alpaca and network security are <em>separate things</em>. Alpaca does the job of providing apps with device access. Since security is an open-ended concept, combining the two could easily cause a device's astronomy functions to be completely drowned out by its internal security provisions. Keeping them separate also eliminates the need to prove to security personnel  the &quot;safety&quot; of the implementations within each device in the observatory, an impractical task for manufacturers of the devices and for observatory managers as well. Finally, device level security means that applications have to become more complex in order to manage every device security scenario, thus more complexity and safety testing/certification. </p>
+	<p>Placing control apps and devices within a secure envelope offloads the need for security to well known trusted network tools and topologies with the strengths needed by the user. A simple home or club observatory can operate behind a common NAT router with appropriate IP whitelisting and port mapping without practical risks of hacking the devices. A multi-tenant shared observatory would not be a hostile environment, but if a hostile or bumbling tenant were encountered, he could be given his own local net and charged for the additional public IP needed, or other network partitioning. At this scale, simpler is better.</p>
+	<p>A service for providing read-only monitoring of devices would need to use a hub of some sort both to  protect the devices from high-demand read accesses, as well as to provide the high-security required for public or campus network access. An example hub would be a multi-homed Apache web server with carefully controlled and cached back-end access to the observatory net's control system and devices, plus front end high-security access to the public / campus net. </p>
 	<h3>Driver Design Principles</h3>
 	
 	<p>The interface specifications aren't the full story! There are some vital design principles that, if adhered-to, will maximize the chances that your driver will operate properly with a variety of client software. See the Design Principles topics in the orange menu at the top left and repearted here:	</p>
@@ -83,7 +84,7 @@
 		<li>Not understanding the driver-client architecture and that your driver will be used by many applications, some of which don't  yet exist. See <a href="../About/Index.htm">About Alpaca and ASCOM</a>.</li>
 		<li>Using sources for another driver (or worse, one of the simulators) as a starting point (you start with other peoples' mistakes and the wrong design)</li>
 		<li>Exposing timing restrictions or other device quirks to driver clients (they don't want to do stuff just for your goofy device)</li>
-		<li>Not following the capitalization of key words in Alpaca REST/JSON messages as documented in the <a href="https://github.com/ASCOMInitiative/ASCOMRemote/raw/master/Documentation/ASCOM Alpaca API Reference.pdf" target="_new">API Specification</a>. JSON is case sensitive.</li>
+		<li>Not following the capitalization of key words in Alpaca REST-Like/JSON messages as documented in the <a href="https://github.com/ASCOMInitiative/ASCOMRemote/raw/master/Documentation/ASCOM Alpaca API Reference.pdf" target="_new">API Specification</a>. JSON is case sensitive.</li>
 	</ul>
 	</div>
 &nbsp;<!-- #EndEditable --></div>
@@ -102,8 +103,12 @@
 	<div class="nw">
 	<div>
 		<h3 style="color:#FF9900; text-align: center;">Alpaca Resources</h3>
-		<p><a href="https://github.com/DanielVanNoord/ASCOM.Alpaca.Simulators/releases/latest" target="_new">ASCOM.Alpaca.Simulators</a></p>
-		<p>Multi-platform single package of simulator reference implemenations of <em>all</em> Alpaca devices. </p>
+		<p><a href="https://github.com/DanielVanNoord/ASCOM.Alpaca.Simulators/releases/latest" target="_new">ASCOM.Alpaca.Simulators</a><br />
+		Simulators for <em>all</em> Alpaca devices. Binary builds for Linux, MacOS, and Windows. Scroll down to assets.</p>
+		<p><a href="https://github.com/ASCOMInitiative/ConformU/releases" target="_new">Conform Universal</a><br />
+		New ASCOM Conformance Checker. Binary builds for Linux, MacOS, and Windows. Scroll down to Assets and expand.</p>
+		<p><a href="https://download.ascom-standards.org/dev/AlpacaWorkbenchV2.tar.xz" target="_new">Alpaca Workbench for Raspberry Pi (v2)</a><br />
+		Instructions and resources for installing and using Alpaca simulators, ConformU, and Wireshark on a Raspberry Pi (32-bit OS). <a href="https://download.ascom-standards.org/dev/WorkbenchReadMe.pdf" target="_new">Here are the instructions</a> (ReadMe, also included, PDF).</p>
 	</div>
 
 	</div></div></div></div></div></div></div></div>
