@@ -192,7 +192,6 @@
     <Content Include="styles\branding-Help1.css" />
     <None Include="Version History\Version 6.6 SP1.aml" />
     <None Include="Version History\Version 6.6.aml" />
-    <None Include="Version History\Version 6.5 SP2.aml" />
     <None Include="Version History\Version 6.5 SP1.aml" />
     <None Include="Tools and Features\AlpacaChooser.aml" />
     <None Include="Version History\Version 6.5.aml" />

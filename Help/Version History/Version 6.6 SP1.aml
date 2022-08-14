@@ -70,11 +70,12 @@
       <content>
         <list class="bullet">
           <listItem>Transform - Fix logic error in automatic site pressure calculation.</listItem>
+          <listItem>NOVAS 3.1 - No longer creates debug logs on the C:\ drive (Fixes bug introduced in Platform 6.6).</listItem>
           <listItem>
           	Dynamic Clients
             <list class="bullet">
               <listItem>No longer add an empty basic authentication header to requests when authentication is not required.</listItem>
-	          <listItem>Alpaca device HTTP setup pages, accesible from the Dynamic Client Setup dialogue, now work when the device uses an IPV6 address.</listItem>
+	          <listItem>Alpaca device HTTP setup pages, accessible from the Dynamic Client Setup dialogue, now work when the device uses an IPV6 address.</listItem>
     	      <listItem>Discovery now works correctly over a VPN.</listItem>
             </list>
           </listItem>
@@ -85,7 +86,7 @@
               <listItem>The EarthRotationParameters executable now runs as expected if the operating system prevents it from creating a log file.</listItem>
               <listItem>SOFA and NOVAS C components are now compiled using Visual Studio 2022 tooling.</listItem>
               <listItem>The SOFA and NOVAS C components are now compiled using static linking to eliminate the need to distribute and install the Microsoft
-              Visual C++ runtime libray. The requirement for a fully funtioning version of the library to be installed on the user's PC has recently caused issues for some users.</listItem>
+              Visual C++ runtime library. The requirement for a fully functioning version of the library to be installed on the user's PC has recently caused issues for some users.</listItem>
             </list>
           </listItem>
           <listItem>
@@ -146,20 +147,20 @@
 				<list class="bullet">
               		<listItem>Driver instance - Clients receive an instance of this class with every COM connection made to the driver. (One instance per client COM connection).</listItem>
               		<listItem>Hardware implementation - A singleton class for each driver that is used by all driver instances to handle device specific behaviour. This creates a single source of data truth that is shared by 
-              		all all clients of this particular driver. (One instance per unique driver in served by the local server).</listItem>
+              		all clients of this particular driver. (One instance per unique driver in served by the local server).</listItem>
               		<listItem>Shared Resources - A singleton class containing resources used by all drivers served by the Local Server. This is likely to include the communications mechanic between the PC and the device hardware.
               		(One instance that serves all drivers served by the local server).</listItem>
               	</list>	
               </listItem>
-              <listItem>The Driver Templates have been removed from the Platform Developer components installer and are are now delivered as a 
-              			Visual Studio extension that is avalable through the Microsoft VisualStudio Marketplace. (Search for ASCOM in the Visual Studio Extensions / Manage Extensions menu dialogue
+              <listItem>The Driver Templates have been removed from the Platform Developer components installer and are now delivered as a 
+              			Visual Studio extension that is available through the Microsoft VisualStudio Marketplace. (Search for ASCOM in the Visual Studio Extensions / Manage Extensions menu dialogue
               			to find and install the new template extension.) This change moves template delivery from a deprecated, legacy, mechanic to the mechanic supported by Visual Studio 2017, 2019 and 2022.</listItem>
-	          <listItem>The VB and C# in-process driver templates now target x86 rathther than MSIL so that they register as 32bit objects when run /debugged in VS2022, which is a 64bit application.</listItem>
+	          <listItem>The VB and C# in-process driver templates now target x86 rather than MSIL so that they register as 32bit objects when run /debugged in VS2022, which is a 64bit application.</listItem>
         	  <listItem>All templates now include XML help comments to assist developers in implementing methods.</listItem>
         	  <listItem>Generated project Setup dialogues now specifically say if they cannot find any COM ports on the PC.</listItem>
         	  <listItem>Generated project Setup dialogues now use the Platform's extended COM port detection rather than just reporting COM ports detected by .NET.</listItem>
               <listItem>In the local server template, all calls to the device hardware are wrapped in try:catch blocks.</listItem>
-              <listItem>In the local server template, every member, except for Connected, DriverInfo, DriverVersion, InterfaceVersion and Name, checks that the device is oonnnected before actioning the call.</listItem>
+              <listItem>In the local server template, every member, except for Connected, DriverInfo, DriverVersion, InterfaceVersion and Name, checks that the device is connected before actioning the call.</listItem>
 	        </list>
           </listItem>
           <listItem>

@@ -273,7 +273,6 @@
     <None Include="Developer Information\Developer Links.aml" />
     <None Include="Version History\Version 6.6 SP1.aml" />
     <None Include="Version History\Version 6.6.aml" />
-    <None Include="Version History\Version 6.5 SP2.aml" />
     <None Include="Tools and Features\AlpacaChooser.aml" />
     <None Include="Version History\Version 6.5 SP1.aml" />
     <None Include="Tools and Features\Observing Conditions Hub.aml" />
@@ -295,17 +294,14 @@
     <None Include="Version History\Version 6.0 SP3.aml" />
     <None Include="Examples\Almanac.aml" />
     <None Include="Examples\Almanac.aml" />
-    <None Include="Examples\Copy of Transform.aml" />
     <None Include="Version History\Version 6.0 SP2.aml" />
     <None Include="Version History\Version 6.0 SP2.aml" />
-    <None Include="Introduction\Time Relationships.aml" />
     <None Include="Version History\Version 6.0 SP1.aml" />
     <None Include="Version History\Version 6.0 SP1.aml" />
     <None Include="Examples\DriverAccess.aml" />
     <None Include="Examples\DriverAccess.aml" />
     <None Include="Tools and Features\Serial Port Configuration.aml" />
     <None Include="Tools and Features\Serial Port Configuration.aml" />
-    <None Include="Developer Information\Gauges.aml" />
     <None Include="Introduction\Introduction - Developer.aml" />
     <None Include="Version History\Key Changes in 6.0.aml" />
     <None Include="Examples\ProfileWhole.aml" />
