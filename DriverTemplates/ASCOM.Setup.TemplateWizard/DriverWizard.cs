@@ -107,6 +107,7 @@ namespace ASCOM.Setup
                 replacementsDictionary.Add(csTemplateRateGuid, Guid.NewGuid().ToString());
                 replacementsDictionary.Add(csTemplateAxisRatesGuid, Guid.NewGuid().ToString());
                 replacementsDictionary.Add(csTemplateTrackingRatesGuid, Guid.NewGuid().ToString());
+                TL.LogMessage("RunStarted", $"Completed");
             }
             catch (Exception ex)
             {
@@ -121,6 +122,7 @@ namespace ASCOM.Setup
         /// <param name="project"></param>
         public void ProjectFinishedGenerating(Project project)
         {
+            TL.LogMessage("ProjectFinishedGenerating", "Started");
             // Iterate through the project items and 
             // remove any files that begin with the word "Placeholder".
             // and the Rates class unless it's the Telescope class
@@ -172,7 +174,7 @@ namespace ASCOM.Setup
 
                         const string insertionPoint = "//INTERFACECODEINSERTIONPOINT"; // Find the insertion point in the Driver.xx item
                         documentSelection.FindText(insertionPoint, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
-                        TL.LogMessage("ProjectFinishedGenerating", "Done INTERFACECODEINSERTIONPOINT FindText:" + documentSelection.Text);
+                        TL.LogMessage("ProjectFinishedGenerating", $"Done INTERFACECODEINSERTIONPOINT FindText: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
 
                         // Create the name of the device interface file to be inserted
                         string insertFile = directory + "\\Device" + this.DeviceClass + Path.GetExtension(projectItem.Name);
@@ -182,30 +184,32 @@ namespace ASCOM.Setup
                         TL.LogMessage("ProjectFinishedGenerating", "Done InsertFromFile");
 
                         // Remove the top lines of the inserted file until we get to #Region
-                        // These lines are only there to make the file error free in the template develpment project and are not required here
+                        // These lines are only there to make the file error free in the template development project and are not required here
                         documentSelection.SelectLine(); // Select the current line
                         TL.LogMessage("ProjectFinishedGenerating", "Selected initial line: " + documentSelection.Text);
                         while (!documentSelection.Text.ToUpperInvariant().Contains("#REGION"))
                         {
-                            TL.LogMessage("ProjectFinishedGenerating", "Deleting start line: " + documentSelection.Text);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Deleting start line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
                             documentSelection.Delete(); // Delete the current line
                             documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
                         }
 
                         // Find the end of file marker that came from the inserted file
                         const string endOfInsertFile = "//ENDOFINSERTEDFILE";
-                        documentSelection.FindText(endOfInsertFile, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
-                        TL.LogMessage("ProjectFinishedGenerating", "Done ENDOFINSERTEDFILE FindText:" + documentSelection.Text);
+                        bool foundEndOfInsertedFile = documentSelection.FindText(endOfInsertFile, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                        TL.LogMessage("ProjectFinishedGenerating", $"Found ENDOFINSERTEDFILE {foundEndOfInsertedFile} Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
 
                         // Delete the marker line and the last 2 lines from the inserted file
                         documentSelection.SelectLine();
-                        TL.LogMessage("ProjectFinishedGenerating", "Found end line: " + documentSelection.Text);
-                        while (!documentSelection.Text.ToUpperInvariant().Contains("#REGION"))
+                        TL.LogMessage("ProjectFinishedGenerating", $"Found initial end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                        int deleteCount = 0;
+                        while ((!documentSelection.Text.ToUpperInvariant().Contains("#REGION")) & (deleteCount < 10))
                         {
-                            TL.LogMessage("ProjectFinishedGenerating", "Deleting end line: " + documentSelection.Text);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Deleting end line: {documentSelection.Text} at line {documentSelection.CurrentLine}");
                             documentSelection.Delete(); // Delete the current line
                             documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
-                            TL.LogMessage("ProjectFinishedGenerating", "Found end line: " + documentSelection.Text);
+                            TL.LogMessage("ProjectFinishedGenerating", $"Found end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}. Delete count: {deleteCount}");
+                            deleteCount += 1;
                         }
 
                         // Reformat the document to make it look pretty
@@ -214,26 +218,28 @@ namespace ASCOM.Setup
                         documentSelection.SmartFormat();
                         TL.LogMessage("ProjectFinishedGenerating", "Done SmartFormat");
 
-                        itemDocument.Save(); // Save the edited file readyfor use!
+                        itemDocument.Save(); // Save the edited file ready for use!
                         TL.LogMessage("ProjectFinishedGenerating", "Done Save");
                         itemDocument.Close(vsSaveChanges.vsSaveChangesYes);
                         TL.LogMessage("ProjectFinishedGenerating", "Done Close");
 
                     }
-
                 }
+                TL.LogMessage("ProjectFinishedGenerating", "Completed processing project items");
 
                 // Iterate through the project items and remove any files that begin with the word "Device". 
                 // These are the partial device implementations that are merged in to create a complete device driver template by the code above
                 // They are not required in the final project
 
-                // Done this way to avoid removing items from inside a foreach loop
+                TL.LogMessage("ProjectFinishedGenerating", $"Identifying files to delete");
+
+                // Done this way to avoid removing items from inside a for each loop
                 rems = new List<string>();
                 foreach (ProjectItem item in project.ProjectItems)
                 {
                     if (item.Name.StartsWith("Device", StringComparison.OrdinalIgnoreCase))
                     {
-                        //MessageBox.Show("adding " + item.Name);
+                        TL.LogMessage("ProjectFinishedGenerating", $"Adding {item.Name} to the delete list.");
                         rems.Add(item.Name);
                     }
                 }
@@ -243,11 +249,19 @@ namespace ASCOM.Setup
                     project.ProjectItems.Item(item).Delete();
                 }
 
-                // Rename the Driver
-                TL.LogMessage("ProjectFinishedGenerating", $"Renaming driver: '{driverTemplate.Name}' to '{DeviceClass}{driverTemplate.Name}'");
-                driverTemplate.Name = $"{DeviceClass}{driverTemplate.Name}";
-                TL.LogMessage("ProjectFinishedGenerating", $"New driver name: '{driverTemplate.Name}'");
+                TL.LogMessage("ProjectFinishedGenerating", $"About to rename driver. TL exists: {!(TL is null)}, Driver template exists: {!(driverTemplate is null)}.");
 
+                // Rename the Driver if this is a driver template
+                if (!(driverTemplate is null))
+                {
+                    TL.LogMessage("ProjectFinishedGenerating", $"Renaming driver: '{driverTemplate.Name}' to '{DeviceClass}{driverTemplate.Name}'");
+                    driverTemplate.Name = $"{DeviceClass}{driverTemplate.Name}";
+                    TL.LogMessage("ProjectFinishedGenerating", $"New driver name: '{driverTemplate.Name}'");
+                }
+                else
+                {
+                    TL.LogMessage("ProjectFinishedGenerating", $"No driver in this template so no need to rename it.");
+                }
             }
             catch (Exception ex)
             {

@@ -19,7 +19,7 @@ namespace ASCOM.DeviceHub
 		protected const string Done = "(done)";
 		protected const string Failed = "(failed)";
 		protected const string SlewStarted = "(slew started)";
-		protected const string SlewComplete = "(slew complete)";
+		protected const string MoveStarted = "(move started)";
 
 		protected bool ThrowOnInvalidPropertyName { get; set; }
         protected DeviceTypeEnum DeviceType { get; set; }
@@ -32,12 +32,18 @@ namespace ASCOM.DeviceHub
 
 		public DeviceManagerBase( DeviceTypeEnum deviceType )
 		{
+			string caller = $"DeviceManagerBase ctor for {deviceType}";
+
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			DeviceType = deviceType;
 
 			ThrowOnInvalidPropertyName = false;
 			_messageBoxService = null;
 
 			Exceptions = new PropertyExceptions();
+
+			LogAppMessage( "Instance constructor initialization complete.", caller );
 		}
 
 		public Exception GetLastPropertyException( [System.Runtime.CompilerServices.CallerMemberName] string propName = "???" )
@@ -68,20 +74,27 @@ namespace ASCOM.DeviceHub
 			{
 				if ( retval is ArrayList )
 				{
-					LogActivityStart( messageType, "Get {0}: {1}", propName, retval );
+					LogActivityStart( messageType, "Get {0}: ", propName );
 
 					StringBuilder sb = new StringBuilder();
 					ArrayList list = retval as ArrayList;
 
-					foreach ( var item in list )
+					if ( list.Count == 0 )
 					{
-						sb.Append( ( sb.Length > 0 ) ? ", " : "" );
-						sb.Append( item.ToString() );
+						sb.Append( "Enpty List" );
+					}
+					else
+					{
+						foreach ( var item in list )
+						{
+							sb.Append( ( sb.Length > 0 ) ? ", " : "" );
+							sb.Append( item.ToString() );
+						}
 					}
 
 					LogActivityEnd( messageType, sb.ToString() );
 				}
-				else if ( retval is TrackingRates)
+				else if ( retval is ITrackingRates)
 				{
 					LogActivityStart( ActivityMessageTypes.Parameters, "Get {0}:", propName );
 					StringBuilder sb = new StringBuilder();
@@ -303,6 +316,15 @@ namespace ASCOM.DeviceHub
 		}
 
 		#endregion
+
+		#region Application Logging Methods
+
+		protected static void LogAppMessage( string message, [System.Runtime.CompilerServices.CallerMemberName] string callerName = "???" )
+		{
+			Globals.AppLogger.LogMessage( callerName, message );
+		}
+
+		#endregion Application Logging Methods
 
 		#region Message Box Support Members
 

@@ -9,8 +9,14 @@ namespace ASCOM.DeviceHub
 	{
 		public TelescopeCapabilitiesViewModel()
 		{
+			string caller = "TelescopeCapabilitiesViewModel ctor";
+			LogAppMessage( "Initializing Instance constructor", caller );
+			LogAppMessage( "Registering message handlers" , caller );
+
 			Messenger.Default.Register<TelescopeCapabilitiesUpdatedMessage>( this, ( action ) => UpdateCapabilities( action ) );
 			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => InvalidateCapabilities( action ) );
+
+			LogAppMessage( "Instance constructor initialization complete.", caller );
 		}
 
 		private TelescopeCapabilities _capabilities;

@@ -35,7 +35,7 @@ namespace Unit_Tests.Telescope
 			_mgr = TelescopeManager.Instance;
 			_svc = (MockTelescopeService)ServiceContainer.Instance.GetService<ITelescopeService>();
 			TelescopeManager.Instance.SetFastUpdatePeriod( 0.5 );
-			bool retval = _mgr.Connect( ScopeID );
+			bool retval = _mgr.Connect( ScopeID, true );
 			Assert.AreEqual( true, retval );
 
 			Thread.Sleep( _startupDelayMs );
@@ -44,7 +44,7 @@ namespace Unit_Tests.Telescope
 		[TestCleanup]
 		public void TestCleanup()
 		{
-			_mgr.Disconnect();
+			_mgr.Disconnect( true );
 			Assert.IsFalse( _svc.Connected );
 
 			_mgr.Dispose();
@@ -83,6 +83,8 @@ namespace Unit_Tests.Telescope
 			Assert.AreEqual( _svc.DriverVersion, _mgr.Parameters.DriverVersion );
 			Assert.AreEqual( _svc.EquatorialSystem, _mgr.Parameters.EquatorialSystem );
 			Assert.AreEqual( _svc.FocalLength, _mgr.Parameters.FocalLength );
+			Assert.AreEqual( _svc.GuideRateDeclination, _mgr.Parameters.GuideRateDeclination );
+			Assert.AreEqual( _svc.GuideRateRightAscension, _mgr.Parameters.GuideRateRightAscension );
 			Assert.AreEqual( 3, _mgr.Parameters.InterfaceVersion );
 			Assert.AreEqual( _svc.SiteElevation, _mgr.Parameters.SiteElevation );
 			Assert.AreEqual( _svc.SiteLatitude, _mgr.Parameters.SiteLatitude );
@@ -115,7 +117,7 @@ namespace Unit_Tests.Telescope
 			_mgr.StartJogScope( ndx, jogRates[0].Rate );
 
 			double actualRate = _svc.MockMoveAxisRates.X;
-			Assert.AreEqual( jogRates[0].Rate, actualRate * -1.0 );
+			Assert.AreEqual( jogRates[0].Rate, actualRate * 1.0 );
 
 			_mgr.StopJogScope( ndx );
 
@@ -128,7 +130,7 @@ namespace Unit_Tests.Telescope
 			_mgr.StartJogScope( ndx, jogRates[0].Rate );
 
 			actualRate = _svc.MockMoveAxisRates.X;
-			Assert.AreEqual( jogRates[0].Rate, actualRate );
+			Assert.AreEqual( jogRates[0].Rate, actualRate * -1.0 );
 
 			_mgr.StopJogScope( ndx );
 

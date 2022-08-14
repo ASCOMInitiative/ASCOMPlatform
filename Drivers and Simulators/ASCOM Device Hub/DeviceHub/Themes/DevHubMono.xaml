@@ -11,7 +11,7 @@
 	<SolidColorBrush x:Key="WindowBackgroundBrush" Color="{DynamicResource DevHubGray}" />
 	<SolidColorBrush x:Key="MenuBackgroundBrush" Color="{DynamicResource DevHubGray}" />
 	<SolidColorBrush x:Key="NormalTextBrush" Color="{DynamicResource NormalTextColor}" />
-	<SolidColorBrush x:Key="DynamicTextBrush" Color="LightCoral" />
+	<SolidColorBrush x:Key="DynamicTextBrush" Color="#fff08b8b" />
 	<SolidColorBrush x:Key="ListBackgroundBrush" Color="{DynamicResource DarkDarkGray}" />
 
 	<SolidColorBrush x:Key="InvertTextBrush" Color="{DynamicResource InvertTextColor}" />
@@ -21,6 +21,7 @@
 	<SolidColorBrush x:Key="RotaryHand" Color="{DynamicResource SelectedItemColor}" />
 	<SolidColorBrush x:Key="RoundButtonFaceBrush" Color="{DynamicResource LightGray}" />
 	<SolidColorBrush x:Key="RoundButtonTextBrush" Color="{DynamicResource DarkGray}" />
+
 	<SolidColorBrush x:Key="ArrowBrush" Color="{DynamicResource LightGray}" />
 	<SolidColorBrush x:Key="EmphasisTextBrush" Color="Yellow" />
 	<SolidColorBrush x:Key="MenuItemBorderBrush" Color="Gainsboro" />
@@ -41,5 +42,78 @@
 		<GradientStop Color="#d0434383" Offset="0.5"/>
 		<GradientStop Color="#d0303070" Offset="1"/>
 	</LinearGradientBrush>
+
+	<Style x:Key="CircleButton" TargetType="Button">
+		<Setter Property="OverridesDefaultStyle" Value="True"/>
+		<Setter Property="Margin" Value="2"/>
+		<Setter Property="FocusVisualStyle" Value="{DynamicResource MyFocusVisual}"/>
+		<Setter Property="Background" Value="{DynamicResource RoundButtonFaceBrush}" />
+		<Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Button">
+					<Grid>
+						<Ellipse Fill="{TemplateBinding Background}"/>
+						<Ellipse>
+							<Ellipse.Fill>
+								<RadialGradientBrush>
+									<GradientStop Offset="0" Color="#00000000"/>
+									<GradientStop Offset="0.88" Color="#00000000"/>
+									<GradientStop Offset="1" Color="#80000000"/>
+								</RadialGradientBrush>
+							</Ellipse.Fill>
+						</Ellipse>
+						<Ellipse Margin="8" x:Name="highlightCircle" >
+							<Ellipse.Fill >
+								<LinearGradientBrush >
+									<GradientStop Offset="0" Color="#50FFFFFF"/>
+									<GradientStop Offset="0.5" Color="#00FFFFFF"/>
+									<GradientStop Offset="1" Color="#50FFFFFF"/>
+								</LinearGradientBrush>
+							</Ellipse.Fill>
+						</Ellipse>
+						<ContentPresenter x:Name="content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Grid>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter TargetName="highlightCircle" Property="Fill">
+								<Setter.Value>
+									<LinearGradientBrush StartPoint="0.3,0" EndPoint="0.7,1">
+										<GradientStop Offset="0" Color="#50FFFFFF"/>
+										<GradientStop Offset="0.5" Color="#00FFFFFF"/>
+										<GradientStop Offset="1" Color="#50FFFFFF"/>
+									</LinearGradientBrush>
+								</Setter.Value>
+							</Setter>
+							<Setter TargetName="content" Property="RenderTransform">
+								<Setter.Value>
+									<TranslateTransform Y="0.5" X="0.5"/>
+								</Setter.Value>
+							</Setter>
+						</Trigger>
+						<Trigger Property="IsPressed" Value="True">
+							<Setter TargetName="highlightCircle" Property="Fill">
+								<Setter.Value>
+									<LinearGradientBrush StartPoint="0.7,0" EndPoint="0.3,1">
+										<GradientStop Offset="0" Color="#70FFFFFF"/>
+										<GradientStop Offset="0.5" Color="#00FFFFFF"/>
+										<GradientStop Offset="1" Color="#70FFFFFF"/>
+									</LinearGradientBrush>
+								</Setter.Value>
+							</Setter>
+							<Setter TargetName="content" Property="RenderTransform">
+								<Setter.Value>
+									<TranslateTransform Y="0.5" X="0.5"/>
+								</Setter.Value>
+							</Setter>
+						</Trigger>
+						<Trigger Property="IsEnabled" Value="False">
+							<Setter Property="Foreground" Value="{DynamicResource RoundButtonTextBrush}" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
 
 </ResourceDictionary>

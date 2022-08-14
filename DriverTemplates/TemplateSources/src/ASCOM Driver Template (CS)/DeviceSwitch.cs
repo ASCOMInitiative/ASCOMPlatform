@@ -234,24 +234,6 @@ class DeviceSwitch
         }
     }
 
-    /// <summary>
-    /// Checks that the number of states for the switch is correct and throws a methodNotImplemented exception if not.
-    /// Boolean switches must have 2 states and multi-value switches more than 2.
-    /// </summary>
-    /// <param name="message"></param>
-    /// <param name="id"></param>
-    /// <param name="expectBoolean"></param>
-    //private void Validate(string message, short id, bool expectBoolean)
-    //{
-    //    Validate(message, id);
-    //    var ns = (int)(((MaxSwitchValue(id) - MinSwitchValue(id)) / SwitchStep(id)) + 1);
-    //    if ((expectBoolean && ns != 2) || (!expectBoolean && ns <= 2))
-    //    {
-    //        tl.LogMessage(message, string.Format("Switch {0} has the wriong number of states", id, ns));
-    //        throw new MethodNotImplementedException(string.Format("{0}({1})", message, id));
-    //    }
-    //}
-
     #endregion
 
     //ENDOFINSERTEDFILE

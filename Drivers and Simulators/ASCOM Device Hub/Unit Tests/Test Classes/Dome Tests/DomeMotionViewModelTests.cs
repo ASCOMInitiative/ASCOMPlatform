@@ -86,16 +86,17 @@ namespace Unit_Tests.Dome
 			_prVm.Invoke( "RegisterStatusUpdateMessage", true );
 
 			_prVm.Invoke( "ToggleShutterState" );
-
 			Thread.Sleep( 2000 );
-
 			Assert.AreEqual( ShutterState.shutterOpen, _vm.Status.ShutterStatus );
 
 			_prVm.Invoke( "ToggleShutterState" );
-
 			Thread.Sleep( 2000 );
-
 			Assert.AreEqual( ShutterState.shutterClosed, _vm.Status.ShutterStatus );
+
+			_mgr.RaiseError = true;
+
+			bool retval = (bool)_prVm.Invoke( "ToggleShutterState" );
+			Assert.IsFalse( retval );
 
 			_prVm.Invoke( "RegisterStatusUpdateMessage", false );
 		}
@@ -165,6 +166,10 @@ namespace Unit_Tests.Dome
 
 			Assert.IsTrue( _vm.Status.AtPark );
 			Assert.AreEqual( _mgr.ParkAzimuth, _vm.Status.Azimuth );
+
+			_mgr.RaiseError = true;
+			bool retval = (bool)_prVm.Invoke( "ParkDome" );
+			Assert.IsFalse( retval );
 
 			_prVm.Invoke( "RegisterStatusUpdateMessage", false );
 		}
@@ -261,6 +266,10 @@ namespace Unit_Tests.Dome
 
 			Assert.AreEqual( 0.0, _vm.Status.Altitude );
 
+			_mgr.RaiseError = true;
+			bool retval= (bool)_prVm.Invoke( "JogAltitude", MoveDirections.Down );
+			Assert.IsFalse( retval );
+
 			_prVm.Invoke( "RegisterStatusUpdateMessage", false );
 		}
 
@@ -350,6 +359,10 @@ namespace Unit_Tests.Dome
 
 			Assert.AreEqual( startingAzimuth - slewValue + 360.0, _vm.Status.Azimuth );
 
+			_mgr.RaiseError = true;
+			bool retval = (bool)_prVm.Invoke( "JogAzimuth", MoveDirections.CounterClockwise );
+			Assert.IsFalse( retval );
+
 			_prVm.Invoke( "RegisterStatusUpdateMessage", false );
 		}
 
@@ -431,6 +444,10 @@ namespace Unit_Tests.Dome
 
 			Assert.AreEqual( targetAzimuth, _vm.Status.Azimuth );
 
+			_mgr.RaiseError = true;
+			bool retval = (bool)_prVm.Invoke( "GotoDirectAzimuth" );
+			Assert.IsFalse( retval );
+
 			_prVm.Invoke( "RegisterStatusUpdateMessage", false );
 		}
 
@@ -511,6 +528,10 @@ namespace Unit_Tests.Dome
 
 			Assert.AreEqual( targetAzimuth, _vm.Status.Azimuth );
 
+			_mgr.RaiseError = true;
+			bool retval = (bool)_prVm.Invoke( "SyncAzimuth" );
+			Assert.IsFalse( retval );
+
 			_prVm.Invoke( "RegisterStatusUpdateMessage", false );
 		}
 
@@ -590,6 +611,10 @@ namespace Unit_Tests.Dome
 
 			Assert.AreEqual( _mgr.HomeAzimuth, _vm.Status.Azimuth );
 			Assert.IsTrue( _vm.Status.AtHome );
+
+			_mgr.RaiseError = true;
+			bool retval = (bool)_prVm.Invoke( "FindHome" );
+			Assert.IsFalse( retval );
 
 			_prVm.Invoke( "RegisterStatusUpdateMessage", false );
 		}

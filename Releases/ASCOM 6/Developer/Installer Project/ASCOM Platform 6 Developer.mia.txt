@@ -107,13 +107,15 @@ end
 [DEFINE REGION: Define Setup Globals]
 Comment: Define Setup Components
 Define Component: Developer Components
-Define Component: Developer Components\Visual Studio Driver Templates
+Define Component: Developer Components\Visual Studio Templates (SEE BELOW)
+Deselect Component: Developer Components\Visual Studio Templates (SEE BELOW)
+Do not allow user to select or deselect Component: Developer Components\Visual Studio Templates (SEE BELOW)
 Comment: Test whether VS is installed by seeing whether the .VSI or .VSIX extentions are mapped to the content installer. If not then ignore!
 Read Registry Key HKCR\.vsi\ into VSIENTRY
 Read Registry Key HKCR\.vsix\ into VSIXENTRY
 if Variable VSIENTRY Equals 
   if Variable VSIXENTRY Equals 
-    Deselect Component: Developer Components\Visual Studio Driver Templates
+    Deselect Component: Developer Components\Visual Studio Templates (SEE BELOW)
   end
 end
  
@@ -474,19 +476,22 @@ else
     Install Files ..\..\..\..\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $TARGETDIR$\Internal
     Install Files ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to $TARGETDIR$\Internal
   end
-  [DEFINE REGION: Visual Studio Driver Templates]
    
-  Get Component Developer Components\Visual Studio Driver Templates Selection State into Variable SELECTED
-  if Variable SELECTED Equals TRUE
-    Write into Text File $SETUPLOG$ from Value Installing Project Templates (at end of file)
-    Install Files ..\..\..\..\DriverTemplates\TemplateSources\*.zip to $TARGETDIR$\Templates
-    Install Files ..\..\..\..\Doc\Templates.html to $TARGETDIR$\Developer Documentation
-    Comment: Support DLL for driver templates
-    Install Assembly ..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.dll to Global Assembly Cache
-    Install Files ..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.dll to $TARGETDIR$\Platform 6 Developer Components\Installer Generator
-    Install Files ..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.pdb to $WINDIR$\Symbols\dll
-  end
+  [DEFINE REGION: Visual Studio Driver Templates]
+  Comment: Comment: Following comented out because templates are now distributed via a Visual Studio extension
+   
+  Comment: Get Component Developer Components\Visual Studio Driver Templates Selection State into Variable SELECTED
+  Comment: if Variable SELECTED Equals TRUE
+  Comment: Write into Text File $SETUPLOG$ from Value Installing Project Templates (at end of file)
+  Comment: Install Files ..\..\..\..\DriverTemplates\TemplateSources\*.zip to $TARGETDIR$\Templates
+  Comment: Install Files ..\..\..\..\Doc\Templates.html to $TARGETDIR$\Developer Documentation
+  Comment: Comment: Support DLL for driver templates
+  Comment: Install Assembly ..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.dll to Global Assembly Cache
+  Comment: Install Files ..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.dll to $TARGETDIR$\Platform 6 Developer Components\Installer Generator
+  Comment: Install Files ..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.pdb to $WINDIR$\Symbols\dll
+  Comment: end
   [END REGION]
+   
   [DEFINE WEB MEDIA ASCOM Platform 6 Developer Components]
   if Variable SELECTED Equals TRUE
   end
@@ -526,25 +531,30 @@ else
   Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Creating Driver Installers with Inno to $TARGETDIR$\Developer Documentation\DriverInstallers.html
   Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Visual Studio Templates Readme to $TARGETDIR$\Developer Documentation\Templates.html
   Set Variable NATIVE_ENGINE to FALSE
+  Set Variable MYPROGRESS to 80
   [END REGION]
    
   Comment: Run the VsiInstaller to install the templates, provided that it is present on the system.
-  Set Variable RC to 
-  Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
-  Get Component Developer Components\Visual Studio Driver Templates Selection State into Variable SELECTED
-  if Variable SELECTED Equals TRUE
-    Comment: Install templates
-    Write into Text File $SETUPLOG$ from Value Installing templates (at end of file)
-    Set Variable MYPROGRESS to 75
-    Comment: Ensure that a VS2019 folder exists, if VS does not create it then the template installer will fail to install the templates
-    Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$\Visual Studio 2019\Templates\ProjectTemplates" (WAIT)
-    Run Program $SUPPORTDIR$\InstallTemplates.exe  (WAIT, get result into variable RC)
-    Set Variable MYPROGRESS to 90
-    Write into Text File $SETUPLOG$ from Value Finished installing new templates - Return Code: $RC$ (at end of file)
-    if Variable RC not Equals 0
-      MessageBox: Install Templates, An error has occured during template installation, some templates may not have installed correctly. $NEWLINE$$NEWLINE$Please report this on the Groups.Io ASCOM Developer forum.
-    end
-  end
+  Comment: Set Variable RC to 
+  Comment: Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
+  Comment: Get Component Developer Components\Visual Studio Driver Templates Selection State into Variable SELECTED
+  Comment: if Variable SELECTED Equals TRUE
+  Comment: Comment: Install templates
+  Comment: Write into Text File $SETUPLOG$ from Value Installing templates (at end of file)
+  Comment: Set Variable MYPROGRESS to 75
+  Comment: Comment: Ensure that a VS2019 folder exists, if VS does not create it then the template installer will fail to install the templates
+  Comment: Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$\Visual Studio 2019\Templates\ProjectTemplates" (WAIT)
+  Comment: Run Program $SUPPORTDIR$\InstallTemplates.exe  (WAIT, get result into variable RC)
+  Comment: Set Variable MYPROGRESS to 90
+  Comment: Write into Text File $SETUPLOG$ from Value Finished installing new templates - Return Code: $RC$ (at end of file)
+  Comment: if Variable RC not Equals 0
+  Comment: MessageBox: Install Templates, An error has occured during template installation, some templates may not have installed correctly. $NEWLINE$$NEWLINE$Please report this on the Groups.Io ASCOM Developer forum.
+  Comment: end
+  Comment: end
+   
+  Run Program $SUPPORTDIR$\InstallTemplates.exe /cleanup (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value Finished cleaning templates - Return Code: $RC$ (at end of file)
+   
   Set Variable MYPROGRESS to 100
   Write into Text File $SETUPLOG$ from Value Finished (at end of file)
 end

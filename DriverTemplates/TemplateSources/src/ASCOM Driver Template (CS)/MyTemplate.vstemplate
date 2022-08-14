@@ -1,4 +1,5 @@
-<VSTemplate Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
     <Name>ASCOM Device Driver (C#)</Name>
     <Description>Creates a skeleton ASCOM driver in C#. Use the wizard to specify the device type.</Description>

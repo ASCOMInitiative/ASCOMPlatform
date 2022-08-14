@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 
 using ASCOM.DeviceInterface;
+using ASCOM.Astrometry.Exceptions;
 using ASCOM.Astrometry.Transform;
 
 using ASCOM.DeviceHub.MvvmMessenger;
@@ -38,6 +39,10 @@ namespace ASCOM.DeviceHub
 
 		static DomeManager()
 		{
+			string caller = "DomeManager static ctor";
+
+			LogAppMessage( "Initialization started", caller );
+
 			DomeID = "";
 		}
 
@@ -73,6 +78,10 @@ namespace ASCOM.DeviceHub
 		private DomeManager()
 			: base( DeviceTypeEnum.Dome )
 		{
+			string caller = "DomeManager instance ctor";
+
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			IsConnected = false;
 			Capabilities = null;
 			Parameters = null;
@@ -87,10 +96,14 @@ namespace ASCOM.DeviceHub
 			PollingPeriod = POLLING_INTERVAL_NORMAL;
 			PollingChange = new ManualResetEvent( false );
 
+			LogAppMessage( "Registering message handlers.", caller );
+
 			Messenger.Default.Register<TelescopeParametersUpdatedMessage>( this, ( action ) => UpdateTelescopeParameters( action ) );
 			Messenger.Default.Register<TelescopeStatusUpdatedMessage>( this, ( action ) => UpdateTelescopeStatus( action ) );
 			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => ClearTelescopeStatus( action ) );
 			Messenger.Default.Register<SlewInProgressMessage>( this, ( action ) => InitiateSlavedSlew( action ) );
+
+			LogAppMessage( "Instance constructor initialization complete.", caller );
 		}
 
 		#endregion Instance Constructor
@@ -98,7 +111,7 @@ namespace ASCOM.DeviceHub
 		#region Public Properties
 
 		public bool IsConnected { get; private set; }
-
+		public bool IsInteractivelyConnected { get; private set; }
 		public string ConnectError { get; protected set; }
 		public Exception ConnectException { get; protected set; }
 		public ParkingStateEnum ParkingState { get; private set; }
@@ -149,10 +162,12 @@ namespace ASCOM.DeviceHub
 
 		public bool Connect()
 		{
-			return Connect( DomeID );
+			// This is only called by the dome driver.
+
+			return Connect( DomeID, false );
 		}
 
-		public bool Connect( string domeID )
+		public bool Connect( string domeID, bool interactiveConnect = true )
 		{
 			ConnectError = "";
 			ConnectException = null;
@@ -165,6 +180,11 @@ namespace ASCOM.DeviceHub
 				{
 					InitializeDomeService( domeID );
 					SetDomeID( domeID );
+
+					if ( interactiveConnect)
+					{
+						IsInteractivelyConnected = interactiveConnect;
+					}
 				}
 				catch ( Exception xcp )
 				{
@@ -245,7 +265,7 @@ namespace ASCOM.DeviceHub
 			return retval;
 		}
 
-		public void Disconnect()
+		public void Disconnect( bool interactiveDisconnect = false )
 		{
 			if ( !DeviceCreated )
 			{
@@ -254,21 +274,32 @@ namespace ASCOM.DeviceHub
 
 			if ( IsConnected )
 			{
-				StopDevicePolling();
-
 				try
 				{
-					Connected = false;
+					if ( ( Server.DomesInUse == 1 && !IsInteractivelyConnected ) ||
+						 ( Server.DomesInUse == 0 && IsInteractivelyConnected && interactiveDisconnect ) )
+					{
+						if ( interactiveDisconnect)
+						{
+							IsInteractivelyConnected = false;
+						}
+
+						StopDevicePolling();
+						Connected = false;
+					}
 				}
 				catch ( Exception )
 				{ }
 				finally
 				{
-					IsConnected = false;
-					Messenger.Default.Send( new DomeSlavedChangedMessage( false ) );
-					Messenger.Default.Send( new DeviceDisconnectedMessage( DeviceTypeEnum.Dome ) );
-					ReleaseDomeService();
-					Globals.LatestRawDomeStatus = null;
+					if ( !IsPolling )
+					{
+						IsConnected = false;
+						Messenger.Default.Send( new DomeSlavedChangedMessage( false ) );
+						Messenger.Default.Send( new DeviceDisconnectedMessage( DeviceTypeEnum.Dome ) );
+						ReleaseDomeService();
+						Globals.LatestRawDomeStatus = null;
+					}
 				}
 			}
 		}
@@ -285,10 +316,10 @@ namespace ASCOM.DeviceHub
 			if ( Connected && Capabilities != null && Status != null
 				&& Capabilities.CanSetShutter && Status.ShutterStatus != ShutterState.shutterOpen )
 			{
-				// Issue the open shutter command and wait for a status update before continuing.
+				OpenShutter();
+				Status = new DevHubDomeStatus( this );
 
-				var task = OpenShutterAsync();
-				var result = task.Result;
+				SetFastPolling();
 			}
 		}
 
@@ -299,10 +330,10 @@ namespace ASCOM.DeviceHub
 			if ( Connected && Capabilities != null && Status != null
 				&& Capabilities.CanSetShutter && Status.ShutterStatus != ShutterState.shutterClosed )
 			{
-				// Issue the close shutter command and wait for a status update before returning.
+				CloseShutter();
+				Status = new DevHubDomeStatus( this );
 
-				var task =  CloseShutterAsync();
-				var result = task.Result;
+				SetFastPolling();
 			}
 		}
 
@@ -312,10 +343,10 @@ namespace ASCOM.DeviceHub
 			{
 				ParkingState = ParkingStateEnum.ParkInProgress;
 
-				// Issue the park command and wait for a status update before returning;
+				Park();
+				Status = new DevHubDomeStatus( this );
 
-				var task = ParkDomeAsync();
-				var result = task.Result;
+				SetFastPolling();
 			}
 		}
 
@@ -323,8 +354,10 @@ namespace ASCOM.DeviceHub
 		{
 			if ( Connected && Capabilities != null && Capabilities.CanFindHome && !Slewing )
 			{
-				var task = FindHomeAsync();
-				var result = task.Result;
+				FindHome();
+				Status = new DevHubDomeStatus( this );
+
+				SetFastPolling();
 			}
 		}
 
@@ -335,17 +368,10 @@ namespace ASCOM.DeviceHub
 			if ( Connected && !Slewing && Capabilities.CanSetAltitude
 				&& ( status != ShutterState.shutterClosed && status != ShutterState.shutterError ) )
 			{
-				Task task;
+				SlewToAltitude( targetAltitude );
+				Status = new DevHubDomeStatus( this );
 
-				try
-				{
-					task = SlewShutterAsync( targetAltitude );
-					task.Wait();
-				}
-				catch ( AggregateException xcp )
-				{
-					throw xcp.InnerException;
-				}
+				SetFastPolling();
 			}
 		}
 
@@ -359,21 +385,14 @@ namespace ASCOM.DeviceHub
 
 		public void SlewDomeToAzimuth( double targetAzimuth )
 		{
-			if ( Connected && !Slewing && Capabilities.CanSetAzimuth )
+			if ( Connected && !Status.Slewing && Capabilities.CanSetAzimuth )
 			{
-				// We don't actually need the result, but it allows us to wait for the async slew to start
-				// and for a status update to occur.
+				SlewToAzimuth( targetAzimuth );
+				Status = new DevHubDomeStatus( this );
 
-				try
-				{
-					var task = SlewDomeAsync( targetAzimuth );
-					var result = task.Result;
-				}
-				catch (AggregateException xcp )
-				{
-					Exception ex = xcp.InnerException;
-					throw ex;
-				}
+				// Put the polling task into high gear.
+
+				SetFastPolling();
 			}
 		}
 
@@ -381,16 +400,9 @@ namespace ASCOM.DeviceHub
 		{
 			if ( Connected )
 			{
-				Task<bool> task = Task<bool>.Run( () =>
-				{
-					AbortSlew();
-
-					WaitForStatusUpdate();
-
-					return true;
-				} );
-
-				bool result = task.Result;
+				AbortSlew();
+				SetSlavedState( false );
+				Status = new DevHubDomeStatus( this );
 			}
 		}
 
@@ -430,25 +442,70 @@ namespace ASCOM.DeviceHub
 			Stopwatch watch = new Stopwatch();
 			double overhead = 0.0;
 
+			TimeSpan fastPollExtension = new TimeSpan( 0, 0, 3 ); //Wait 3 seconds after movement stops to return to normal polling.
+			bool previousMoveStatus = false;
+			DateTime returnToNormalPollingTime = DateTime.MinValue;
+			int previousPollingPeriod;
+			
 			while ( !taskCancelled )
 			{
 				DateTime wakeupTime = DateTime.Now;
 				//Debug.WriteLine( $"Awakened @ {wakeupTime:hh:mm:ss.fff}." );
+				previousPollingPeriod = PollingPeriod;
+				PollingPeriod = POLLING_INTERVAL_NORMAL;
+				int fastPollingMs = Convert.ToInt32( FastPollingPeriod * 1000.0 );
 
 				if ( Service.DeviceAvailable )
 				{
 					UpdateDomeStatusTask();
-					SlewTheSlavedDome( ref nextSlaveAdjustmentTime );
-					bool shutterMoving = Status.ShutterStatus == ShutterState.shutterOpening
-										|| Status.ShutterStatus == ShutterState.shutterClosing;
 
-					if ( !( Status.Slewing || shutterMoving ) && PollingPeriod != POLLING_INTERVAL_NORMAL )
+					if ( !Status.Slewing )
 					{
-						LogActivityLine( ActivityMessageTypes.Commands, $"Returning to normal polling every {POLLING_INTERVAL_NORMAL} ms." );
+						if ( SlewTheSlavedDome( ref nextSlaveAdjustmentTime ) )
+						{
+							UpdateDomeStatusTask();
+						}
 					}
 
-					PollingPeriod = ( Status.Slewing || shutterMoving ) ? Convert.ToInt32( FastPollingPeriod * 1000.0 ) : POLLING_INTERVAL_NORMAL;
-				}
+					bool isMoving = Status.Slewing
+								|| Status.ShutterStatus == ShutterState.shutterOpening
+								|| Status.ShutterStatus == ShutterState.shutterClosing;
+
+					if ( isMoving )
+					{
+						// We are moving, so use the fast polling rate.
+
+						PollingPeriod = fastPollingMs;
+					}
+					else if ( previousMoveStatus )
+					{
+						// We stopped moving, so start the timer to return to normal polling.
+
+						returnToNormalPollingTime = DateTime.Now + fastPollExtension;
+						PollingPeriod = fastPollingMs;
+					}
+					else if ( DateTime.Now < returnToNormalPollingTime )
+					{
+						// Continue fast polling.
+
+						PollingPeriod = fastPollingMs;
+					}
+					else
+					{
+						// Return to normal polling.
+
+						returnToNormalPollingTime = DateTime.MinValue;
+					}
+
+					// Remember our state for the next time through this loop.
+
+					previousMoveStatus = isMoving;
+
+					if ( PollingPeriod == POLLING_INTERVAL_NORMAL && previousPollingPeriod != POLLING_INTERVAL_NORMAL )
+					{
+						LogActivityLine( ActivityMessageTypes.Commands, $"Returning to normal polling every {PollingPeriod} ms." );
+					}
+				}	
 
 				TimeSpan waitInterval = wakeupTime.AddMilliseconds( (double)PollingPeriod ) - DateTime.Now;
 				waitInterval -= TimeSpan.FromMilliseconds( overhead );
@@ -495,8 +552,10 @@ namespace ASCOM.DeviceHub
 			IsPolling = false;
 		}
 
-		private void SlewTheSlavedDome( ref DateTime nextAdjustmentTime )
+		private bool SlewTheSlavedDome( ref DateTime nextAdjustmentTime )
 		{
+			bool retval = false;
+			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
 			DateTime returnTime = nextAdjustmentTime;
 
 			if ( Globals.IsDomeSlaved )
@@ -505,32 +564,35 @@ namespace ASCOM.DeviceHub
 				// We need to slew there immediately. We will get another message when the slew has finished, but
 				// until then we need to suspend normal slaved adjustments.
 
-				if ( SlavedSlewState.IsSlewInProgress ) // The telescope is being slewed.
+				SlewInProgressMessage slewState = SlavedSlewState;
+
+				if ( slewState != null && slewState.IsSlewInProgress ) // The telescope is being slewed.
 				{
 					if ( !Status.Slewing || Globals.UseCompositeSlewingFlag )
 					{
 						// The telescope is slewing and we are slaved but not slewing so initiate a dome slew
 						// to the telescope's target position.
 
-						LogActivityLine( ActivityMessageTypes.Commands
-										, "Dome position recalculation due to telescope slew-in-progress." );
+						LogActivityLine( msgType, "Dome position recalculation due to telescope slew-in-progress." );
+
+						Transform xform = new Transform
+						{
+							SiteElevation = TelescopeParameters.SiteElevation,
+							SiteLongitude = TelescopeParameters.SiteLongitude,
+							SiteLatitude = TelescopeParameters.SiteLatitude
+						};
+
+						EquatorialCoordinateType coordinateType = TelescopeParameters.EquatorialSystem;
 
 						try
 						{
-							Transform xform = new Transform
+							if ( coordinateType == EquatorialCoordinateType.equJ2000 )
 							{
-								SiteElevation = TelescopeParameters.SiteElevation,
-								SiteLatitude = TelescopeParameters.SiteLatitude,
-								SiteLongitude = TelescopeParameters.SiteLongitude
-							};
-
-							if ( TelescopeParameters.EquatorialSystem == EquatorialCoordinateType.equJ2000 )
-							{
-								xform.SetJ2000( SlavedSlewState.RightAscension, SlavedSlewState.Declination );
+								xform.SetJ2000( slewState.RightAscension, slewState.Declination );
 							}
-							else
+							else // Assume JNOW
 							{
-								xform.SetTopocentric( SlavedSlewState.RightAscension, SlavedSlewState.Declination );
+								xform.SetTopocentric( slewState.RightAscension, slewState.Declination );
 							}
 
 							Point scopeTargetPosition = new Point( xform.AzimuthTopocentric, xform.ElevationTopocentric );
@@ -540,13 +602,29 @@ namespace ASCOM.DeviceHub
 							double localHourAngle = TelescopeStatus.CalculateHourAngle( SlavedSlewState.RightAscension );
 
 							SlaveDomePointing( scopeTargetPosition, localHourAngle, SlavedSlewState.SideOfPier );
+							retval = true;
+						}
+						catch ( TransformUninitialisedException xcp )
+						{
+							LogActivityLine( msgType, "Attempting to calculate the slaved dome azimuth. Details follow:" );
+							LogActivityLine( msgType, xcp.Message );
+							LogActivityLine( msgType, $"Transform Error site location:     latitude = {xform.SiteLatitude:F5}, longitude = {xform.SiteLongitude:F5}, elevation = {xform.SiteElevation:F0}" );
+							LogActivityLine( msgType, $"Transform Error coordinate system: coordinateType = {coordinateType}" );
+							LogActivityLine( msgType, $"Transform Error target position:   RA = {slewState.RightAscension}, Dec = {slewState.Declination}" );
 						}
 						catch ( Exception xcp )
 						{
-							LogActivityLine( ActivityMessageTypes.Commands, "Attempting to calculate a new dome slave position due to telescope "
+							LogActivityLine( msgType, "Attempting to calculate a new dome slave position due to telescope "
 								 + "slew caught an exception. Details follow:" );
-							LogActivityLine( ActivityMessageTypes.Commands, xcp.Message );
+							LogActivityLine( msgType, xcp.Message );
 						}
+					}
+					else
+					{
+						// If we get here we need to slew to a new target because of a telescope slew, but the dome is already slewing.
+						// We want to test again quickly and slew the dome again as soon as it has stopped from the current slew.
+
+						returnTime = DateTime.Now.AddMilliseconds( 250.0 );
 					}
 				}
 				else if ( DateTime.Now > nextAdjustmentTime )
@@ -564,6 +642,7 @@ namespace ASCOM.DeviceHub
 						try
 						{
 							SlaveDomePointing( scopePosition, TelescopeStatus.LocalHourAngle, TelescopeStatus.SideOfPier );
+							retval = true;
 						}
 						catch ( Exception xcp )
 						{
@@ -586,6 +665,8 @@ namespace ASCOM.DeviceHub
 			}
 
 			nextAdjustmentTime = returnTime;
+
+			return retval;
 		}
 
 		private void SlaveDomePointing( Point scopePosition, double localHourAngle, PierSide sideOfPier )
@@ -636,10 +717,15 @@ namespace ASCOM.DeviceHub
 
 			if ( Double.IsNaN( targetAltitude) || targetAltitude < 0.0 || targetAltitude > 180.0 )
 			{
-				targetsValid = false;
-				LogActivityLine( ActivityMessageTypes.Commands
-								, "An invalid altitude value ({0:f2}) was calculated...short circuiting the slew"
-								, targetAltitude );
+				// Don't report a bad altitude if we are not going to set it anyway.
+
+				if ( Capabilities.CanSetAltitude )
+				{
+					targetsValid = false;
+					LogActivityLine( ActivityMessageTypes.Commands
+									, "An invalid altitude value ({0:f2}) was calculated...short circuiting the slew"
+									, targetAltitude );
+				}
 			}
 
 			// If either the target azimuth or altitude are invalid, return without slewing the dome!!!
@@ -652,6 +738,8 @@ namespace ASCOM.DeviceHub
 			LogActivityLine( ActivityMessageTypes.Commands, "The calculated dome position is Az: {0:f2}, Alt: {1:f2}."
 							, domeAltAz.X, domeAltAz.Y );
 
+			bool moving = false;
+
 			if ( IsInRange( targetAzimuth, Status.Azimuth, Globals.DomeLayout.AzimuthAccuracy ) )
 			{
 				LogActivityLine( ActivityMessageTypes.Commands
@@ -662,12 +750,14 @@ namespace ASCOM.DeviceHub
 				LogActivityLine( ActivityMessageTypes.Commands
 								, "Slaving dome to target azimuth of {0:f2} degrees.", targetAzimuth );
 
-				Task task = Task.Run( () =>
-				{
-					SlewToAzimuth( targetAzimuth );
-					Status.Slewing = true;
-					SetFastPolling();
-				}, CancellationToken.None );
+				//Task task = Task.Run( () =>
+				//{
+				//	SlewToAzimuth( targetAzimuth );
+				//	Status.Slewing = true;
+				//	SetFastPolling();
+				//}, CancellationToken.None );
+				SlewToAzimuth( targetAzimuth );
+				moving = true;
 			}
 
 			if ( Capabilities.CanSetAltitude && Status.Altitude < targetAltitude )
@@ -675,10 +765,18 @@ namespace ASCOM.DeviceHub
 				LogActivityLine( ActivityMessageTypes.Commands
 								, "Synchronizing dome to target altitude of {0:f2} degrees.", targetAltitude );
 
-				Task task = Task.Run( () =>
-				{
-					SlewToAltitude( targetAltitude );
-				}, CancellationToken.None );
+				//Task task = Task.Run( () =>
+				//{
+				//	SlewToAltitude( targetAltitude );
+				//}, CancellationToken.None );
+				SlewToAzimuth( targetAltitude );
+				moving = true;
+			}
+
+			if ( moving )
+			{
+				Status = new DevHubDomeStatus( this );
+				SetFastPolling();
 			}
 		}
 
@@ -796,146 +894,6 @@ namespace ASCOM.DeviceHub
 			Messenger.Default.Send( new DomeParametersUpdatedMessage( Parameters.Clone() ) );
 			Status = status;
 			Messenger.Default.Send( new DomeStatusUpdatedMessage( Status ) );
-		}
-
-		private Task<bool> OpenShutterAsync()
-		{
-			// This method creates a task to run on a worker thread. It issues the open shutter command, 
-			// speeds up the polling cycle, and waits until the next status update before completing.
-			// This allows the caller to wait for completion before continuing.
-
-			Task<bool> task = Task<bool>.Run( () =>
-			{
-				OpenShutter();
-
-				SetFastPolling();
-
-				WaitForStatusUpdate();
-
-				return Status.ShutterStatus == ShutterState.shutterOpening;
-			} );
-
-			return task;
-		}
-
-		private Task<bool> CloseShutterAsync()
-		{
-			// This method creates a task to run on a worker thread. It issues the close shutter command, 
-			// speeds up the polling cycle, and waits until the next status update before completing.
-			// This allows the caller to wait for completion before continuing.
-
-			Task<bool> task = Task<bool>.Run( () =>
-			{
-				CloseShutter();
-
-				// Put the polling task into high gear.
-
-				SetFastPolling();
-
-				WaitForStatusUpdate();
-
-				return Status.ShutterStatus == ShutterState.shutterClosing;
-			} );
-
-			return task;
-		}
-
-		private Task SlewShutterAsync( double altitude )
-		{
-			// This method creates a task to run on a worker thread. It issues the slew shutter command, 
-			// speeds up the polling cycle, and waits until the next status update before completing.
-			// This allows the caller to wait for completion before continuing.
-
-			Task task = Task.Run( () =>
-			{
-				SlewToAltitude( altitude );
-
-				// Put the polling task into high gear.
-
-				SetFastPolling();
-
-				WaitForStatusUpdate();
-			} );
-
-			return task;
-		}
-
-		private Task<bool> ParkDomeAsync()
-		{
-			// This method creates a task to run on a worker thread. It issues the park command, 
-			// speeds up the polling cycle, and waits until the next status update before completing.
-			// This allows the caller to wait for completion before continuing.
-
-			Task<bool> task = Task<bool>.Run( () =>
-			{
-				Park();
-
-				// Put the polling task into high gear.
-
-				SetFastPolling();
-
-				WaitForStatusUpdate();
-
-				return Status.AtPark;
-			} );
-
-			return task;
-		}
-
-		private void WaitForStatusUpdate()
-		{
-			DateTime lastUpdate = Status.LastUpdateTime;
-
-			// Wait for a status update before ending the task.
-
-			while ( lastUpdate == Status.LastUpdateTime )
-			{
-				Thread.Sleep( 400 );
-			}
-		}
-
-		private Task<bool> FindHomeAsync()
-		{
-			// This method creates a task to run on a worker thread. It issues the FindHome command, 
-			// speeds up the polling cycle, and waits until the next status update before completing.
-			// This allows the caller to wait for completion before continuing.
-
-			Task<bool> task = Task<bool>.Run( () =>
-			{
-				FindHome();
-
-				// Put the polling task into high gear.
-
-				SetFastPolling();
-
-				WaitForStatusUpdate();
-
-				return Status.AtHome;
-			} );
-
-			return task;
-		}
-
-		private Task<bool> SlewDomeAsync( double toAzimuth )
-		{
-			// This method creates a task to run on a worker thread. It issues the slew command, 
-			// speeds up the polling cycle, and waits until the next status update before completing.
-			// This allows the caller to wait for completion before continuing.
-
-			Task<bool> task = Task<bool>.Run( () =>
-			{
-				SlewToAzimuth( toAzimuth );
-
-				// Put the polling task into high gear.
-
-				SetFastPolling();
-
-				WaitForStatusUpdate();
-
-				return Status.Slewing;
-			} );
-
-			return task;
 		}
 
 		/// <summary>

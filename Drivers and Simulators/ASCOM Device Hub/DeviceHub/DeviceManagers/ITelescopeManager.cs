@@ -12,8 +12,9 @@ namespace ASCOM.DeviceHub
 		Exception ConnectException { get; }
 		ObservableCollection<JogDirection> JogDirections { get; }
 
-		bool Connect( string scopeID );
-		void Disconnect();
+		bool Connect();
+		bool Connect( string scopeID, bool interactiveConnect = true );
+		void Disconnect( bool interactiveDisconnect = false );
 		void StartJogScope( int ndx, double rate );
 		void StopJogScope( int ndx );
 		void StopJogScope( TelescopeAxes axis );
@@ -32,5 +33,7 @@ namespace ASCOM.DeviceHub
 		void SetDecOffsetTrackingRate( double rate );
 		void SetTrackingRate( DriveRates rate );
 		void SetParkPosition();
+		void SetTargetDeclination( double targetDec );
+		void SetTargetRightAscension( double targetRa );
 	}
 }

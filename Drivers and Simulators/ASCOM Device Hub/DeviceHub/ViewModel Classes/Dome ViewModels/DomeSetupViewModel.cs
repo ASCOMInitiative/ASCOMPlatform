@@ -309,8 +309,20 @@ namespace ASCOM.DeviceHub
 		private void ChooseDome()
 		{
 			string oldID = DomeID;
-			string newID = DomeManager.Choose( oldID );
+			string newID;
 
+			try
+			{
+				newID = DomeManager.Choose( oldID );
+			}
+			catch ( Exception xcp )
+			{
+				string msg = "An error occurred when trying to launch the ASCOM Dome Chooser. "
+					+ $"Details follow:\r\n\r\n{xcp}";
+				ShowMessage( msg, "ASCOM Dome Chooser Error" );
+
+				return;
+			}
 
 			if ( String.IsNullOrEmpty( newID ) )
 			{

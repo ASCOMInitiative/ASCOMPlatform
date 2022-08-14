@@ -28,15 +28,15 @@ namespace ASCOM.DriverAccess
         {
             _memberFactory = MemberFactory;
         }
-        #endregion
+		#endregion
 
-        #region Convenience Members
-        /// <summary>
-        /// Brings up the ASCOM Chooser Dialogue to choose a SafetyMonitor
-        /// </summary>
-        /// <param name="safetyMonitorId">SafetyMonitor Prog ID for default or null for None</param>
-        /// <returns>Prog ID for chosen SafetyMonitor or null for none</returns>
-        public static string Choose(string safetyMonitorId)
+		#region Convenience Members
+		/// <summary>
+		/// Brings up the ASCOM Chooser Dialogue to choose a SafetyMonitor
+		/// </summary>
+		/// <param name="safetyMonitorId">SafetyMonitor Prog ID for default or null for None</param>
+		/// <returns>Prog ID for chosen SafetyMonitor or null for none</returns>
+		public static string Choose(string safetyMonitorId)
         {
             using(Chooser chooser = new Chooser())
             {
@@ -45,15 +45,17 @@ namespace ASCOM.DriverAccess
             }
         }
 
-        #endregion
+		#endregion
 
-        #region ISafetyMonitor Members
+		#region ISafetyMonitor Members
 
-        /// <summary>
-        /// Indicates whether the monitored state is safe for use.
-        /// </summary>
-        /// <value>True if the state is safe, False if it is unsafe.</value>
-        public bool IsSafe
+		/// <summary>
+		/// Indicates whether the monitored state is safe for use.
+		/// </summary>
+		/// <value>True if the state is safe, False if it is unsafe.</value>
+		/// <exception cref="NotConnectedException">If the device is not connected</exception>
+		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
+		public bool IsSafe
         {
             get { return (bool)_memberFactory.CallMember(1, "IsSafe", new Type[] { }, new object[] { }); }
         }

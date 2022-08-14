@@ -530,8 +530,18 @@ Public Class TraceLogger
                         FileNameSuffix += 1
                     Loop Until (ok Or (FileNameSuffix = 20))
 
-                    If Not ok Then Throw New ASCOM.Utilities.Exceptions.HelperException("TraceLogger:CreateLogFile - Unable to create log file", ex)
-
+                    If Not ok Then
+                        Console.WriteLine($"TraceLogger:CreateLogFile - Unable to create log file: {ex}")
+                        Throw New ASCOM.Utilities.Exceptions.HelperException("TraceLogger:CreateLogFile - IOException - Unable to create log file", ex)
+                    End If
+                Catch ex As Exception
+                    Try
+                        MsgBox("CreateLogFile Auto filename exception - #" & g_LogFileName & "# " & ex.ToString)
+                    Catch ex1 As Exception
+                        Console.WriteLine($"TraceLogger:CreateLogFile - Auto filename exception trying to show message box: {ex1}")
+                    End Try
+                    Console.WriteLine($"TraceLogger:CreateLogFile - Auto filename exception creating trace logger: {ex}")
+                    Throw
                 End Try
 
                 ' The user has provided a specific filename
@@ -541,7 +551,12 @@ Public Class TraceLogger
                     g_LogFile.AutoFlush = True
                     g_LogFileActualName = g_LogFileName & ".txt"
                 Catch ex As Exception
-                    MsgBox("CreateLogFile Exception - #" & g_LogFileName & "# " & ex.ToString)
+                    Try
+                        MsgBox("CreateLogFile Manual filename exception - #" & g_LogFileName & "# " & ex.ToString)
+                    Catch ex1 As Exception
+                        Console.WriteLine($"TraceLogger:CreateLogFile - Manual filename exception trying to show message box: {ex1}")
+                    End Try
+                    Console.WriteLine($"TraceLogger:CreateLogFile - Manual  filename exception creating trace logger: {ex}")
                     Throw
                 End Try
         End Select

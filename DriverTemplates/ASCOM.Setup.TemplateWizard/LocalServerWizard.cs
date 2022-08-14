@@ -108,6 +108,7 @@ namespace ASCOM.Setup
                 replacementsDictionary.Add(csTemplateRateGuid, Guid.NewGuid().ToString());
                 replacementsDictionary.Add(csTemplateAxisRatesGuid, Guid.NewGuid().ToString());
                 replacementsDictionary.Add(csTemplateTrackingRatesGuid, Guid.NewGuid().ToString());
+                TL.LogMessage("RunStarted", $"Completed");
             }
             catch (Exception ex)
             {
@@ -122,6 +123,8 @@ namespace ASCOM.Setup
         /// <param name="project"></param>
         public void ProjectFinishedGenerating(Project project)
         {
+            TL.LogMessage("ProjectFinishedGenerating", $"Started");
+
             ProjectItems driversFolderItems = null;
             ProjectItem driverFolder = null;
 
@@ -243,8 +246,10 @@ namespace ASCOM.Setup
                 // Iterate through the project items and remove any files that begin with the word "Device". 
                 // These are the partial device implementations that are merged in to create a complete device driver template by the code above
                 // They are not required in the final project
-
                 // Done this way to avoid removing items from inside a foreach loop
+
+                TL.LogMessage("ProjectFinishedGenerating", $"Identifying files to delete");
+
                 rems = new List<string>();
                 foreach (ProjectItem item in driversFolderItems)
                 {
@@ -261,6 +266,8 @@ namespace ASCOM.Setup
                     driversFolderItems.Item(item).Delete();
                 }
 
+                TL.LogMessage("ProjectFinishedGenerating", $"About to rename driver. TL exists: {!(TL is null)}, Driver template exists: {!(driverTemplate is null)}.");
+
                 // Rename the Driver
                 TL.LogMessage("ProjectFinishedGenerating", $"Renaming driver: '{driverTemplate.Name}' to '{DeviceClass}{driverTemplate.Name}'");
                 driverTemplate.Name = $"{DeviceClass}{driverTemplate.Name}";
@@ -268,7 +275,11 @@ namespace ASCOM.Setup
 
                 // Rename the Driver folder
                 TL.LogMessage("ProjectFinishedGenerating", $"Renaming driver folder: '{driverFolder.Name}' to '{DeviceClass}Driver'");
+                driverFolder.DTE.SuppressUI = true;
+                TL.LogMessage("ProjectFinishedGenerating", $"Set DTE.SuppressUI = true");
                 driverFolder.Name = $"{DeviceClass}Driver";
+                TL.LogMessage("ProjectFinishedGenerating", $"Completed rename");
+                driverFolder.DTE.SuppressUI = false;
                 TL.LogMessage("ProjectFinishedGenerating", $"New driver folder name: '{driverFolder.Name}'");
 
             }
@@ -279,7 +290,6 @@ namespace ASCOM.Setup
             }
 
             TL.LogMessage("ProjectFinishedGenerating", "End");
-            TL.Enabled = false;
 
         }
 
@@ -288,6 +298,7 @@ namespace ASCOM.Setup
         /// </summary>
         public void RunFinished()
         {
+            TL.LogMessage("RunFinished", $"COmpleted");
         }
 
         #region Unused interface members not applicable to Project templates
@@ -298,6 +309,7 @@ namespace ASCOM.Setup
         /// <param name="projectItem"></param>
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
+            TL.LogMessage("BeforeOpeningFile", $"ProjectItem: {projectItem.Name}");
         }
 
         /// <summary>
@@ -306,6 +318,7 @@ namespace ASCOM.Setup
         /// <param name="projectItem"></param>
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
+            TL.LogMessage("ProjectItemFinishedGenerating", $"ProjectItem: {projectItem.Name}");
         }
 
         /// <summary>
@@ -315,6 +328,7 @@ namespace ASCOM.Setup
         /// <returns></returns>
         public bool ShouldAddProjectItem(string filePath)
         {
+            TL.LogMessage("ShouldAddProjectItem", $"File: {filePath}");
             return true;
         }
 

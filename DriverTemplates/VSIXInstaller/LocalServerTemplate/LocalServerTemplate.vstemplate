@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2022">
+	<TemplateData>
+		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+		<TemplateID>5242C600-7514-4B18-9383-35609C2CF906</TemplateID>
+		<Name>Local Server Template (C#)</Name>
+		<Description>Creates an EXE based (local server/singleton) host for multiple devices and drivers. The Project name is the server name and namespace, CHOOSE CAREFULLY!</Description>
+		<ProjectType>CSharp</ProjectType>
+		<ProjectSubType></ProjectSubType>
+		<SortOrder>1030</SortOrder>
+		<CreateNewFolder>true</CreateNewFolder>
+		<DefaultName>ReplaceWithYourName</DefaultName>
+		<ProvideDefaultName>true</ProvideDefaultName>
+		<LocationField>Enabled</LocationField>
+		<EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+		<Icon>PackageIconCsharp.ico</Icon>
+		<LanguageTag>csharp</LanguageTag>
+		<PlatformTag>windows</PlatformTag>
+		<ProjectTypeTag>desktop</ProjectTypeTag>
+		<ProjectTypeTag>ASCOM</ProjectTypeTag>
+	</TemplateData>
+	<TemplateContent>
+		<Project TargetFileName="LocalServer.csproj" File="LocalServer.csproj" ReplaceParameters="true">
+			<ProjectItem ReplaceParameters="true" TargetFileName="app.config">app.config</ProjectItem>
+			<ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.ico">ASCOM.ico</ProjectItem>
+			<ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.png">ASCOM.png</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="ClassFactory.cs">ClassFactory.cs</ProjectItem>
+			<Folder Name="Driver" TargetFolderName="Driver">
+				<ProjectItem ReplaceParameters="true" TargetFileName="DeviceCamera.cs">DeviceCamera.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="DeviceCoverCalibrator.cs">DeviceCoverCalibrator.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="DeviceDome.cs">DeviceDome.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="DeviceFilterWheel.cs">DeviceFilterWheel.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="DeviceFocuser.cs">DeviceFocuser.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="DeviceObservingConditions.cs">DeviceObservingConditions.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="DeviceRotator.cs">DeviceRotator.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="DeviceSafetyMonitor.cs">DeviceSafetyMonitor.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="DeviceSwitch.cs">DeviceSwitch.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="DeviceTelescope.cs">DeviceTelescope.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="DeviceVideo.cs">DeviceVideo.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="Driver.cs">Driver.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="PlaceholderInterface.cs">PlaceholderInterface.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="Rates.cs">Rates.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.cs">SetupDialogForm.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.Designer.cs">SetupDialogForm.Designer.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.resx">SetupDialogForm.resx</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareCamera.cs">HardwareCamera.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareCoverCalibrator.cs">HardwareCoverCalibrator.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareDome.cs">HardwareDome.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareFilterWheel.cs">HardwareFilterWheel.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareFocuser.cs">HardwareFocuser.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareObservingConditions.cs">HardwareObservingConditions.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareRotator.cs">HardwareRotator.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareSafetyMonitor.cs">HardwareSafetyMonitor.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareSwitch.cs">HardwareSwitch.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareTelescope.cs">HardwareTelescope.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="HardwareVideo.cs">HardwareVideo.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="CommonHardware.cs">CommonHardware.cs</ProjectItem>
+			</Folder>
+			<Folder Name="TemplateProperties" TargetFolderName="Properties">
+				<ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="Resources.resx">Resources.resx</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="Resources.Designer.cs">Resources.Designer.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="Settings.settings">Settings.settings</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="Settings.Designer.cs">Settings.Designer.cs</ProjectItem>
+			</Folder>
+			<ProjectItem ReplaceParameters="true" TargetFileName="frmMain.cs">frmMain.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="frmMain.Designer.cs">frmMain.Designer.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="frmMain.resx">frmMain.resx</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="GarbageCollection.cs">GarbageCollection.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="LocalServer.cs">LocalServer.cs</ProjectItem>
+
+			<ProjectItem ReplaceParameters="false" TargetFileName="LocalServer.snk">LocalServer.snk</ProjectItem>
+			<Folder Name="Resources" TargetFolderName="Resources">
+				<ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.bmp">ASCOM.bmp</ProjectItem>
+			</Folder>
+			<ProjectItem ReplaceParameters="true" TargetFileName="ReadMe.htm" OpenInWebBrowser="true">ReadMe.htm</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="ReferenceCountedObject.cs">ReferenceCountedObject.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="SharedResources.cs">SharedResources.cs</ProjectItem>
+		</Project>
+	</TemplateContent>
+	<WizardExtension>
+		<Assembly>ASCOM.Setup.VsixWizard, Version=6.6.0.0, Culture=Neutral, PublicKeyToken=565de7938946fba7</Assembly>
+		<FullClassName>ASCOM.Setup.LocalServerWizard</FullClassName>
+	</WizardExtension>
+</VSTemplate>

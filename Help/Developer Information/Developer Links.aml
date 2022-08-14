@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="A8BA6881-8D00-44C2-BEAE-9B81039FE0F5" revisionNumber="1">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<section address="LinksIntroduction">
+			<title>Introduction</title>
+   			<content>
+      			<para>The following links provide additional information for developers:</para>
+      		</content>
+		</section>
+      	<section address="LinksGeneral">
+			<title>Introduction</title>
+			<content>
+   				<legacyBold>Design Principles</legacyBold>
+	      		<para>
+					<list class="bullet">
+						<listItem>
+						  	<externalLink>
+			        			<linkText>Asynchronous Programming</linkText>
+								<linkUri>https://ascom-standards.org/AlpacaDeveloper/Async.htm</linkUri>
+							</externalLink>
+						</listItem>
+						<listItem>
+						  	<externalLink>
+			        			<linkText>Reporting and Handling Errors and Exceptions</linkText>
+								<linkUri>https://ascom-standards.org/AlpacaDeveloper/Exceptions.htm</linkUri>
+							</externalLink>
+						</listItem>
+					</list>
+				</para>
+			</content>
+		</section>
+      	<section address="LinksAlpaca">
+			<title>Using Alpaca</title>
+			<content>
+   				<legacyBold>General Topics</legacyBold>
+	      		<para>
+					<list class="bullet">
+						<listItem>
+						  	<externalLink>
+			        			<linkText>Alpaca Development Home</linkText>
+								<linkUri>https://ascom-standards.org/AlpacaDeveloper/Index.htm</linkUri>
+							</externalLink>
+						</listItem>
+						<listItem>
+						  	<externalLink>
+			        			<linkText>ConformU Device Tester</linkText>
+								<linkUri>https://github.com/ASCOMInitiative/ConformU/releases</linkUri>
+							</externalLink>
+						</listItem>
+						<listItem>
+						  	<externalLink>
+			        			<linkText>Alpaca API Definitions</linkText>
+								<linkUri>https://ascom-standards.org/api/</linkUri>
+							</externalLink>
+						</listItem>
+						<listItem>
+						  	<externalLink>
+			        			<linkText>Alpaca API Implementation Reference (PDF download)</linkText>
+								<linkUri>https://github.com/ASCOMInitiative/ASCOMRemote/raw/master/Documentation/ASCOM%20Alpaca%20API%20Reference.pdf</linkUri>
+							</externalLink>
+						</listItem>					</list>
+				</para>
+			</content>
+		</section>
+      	<section address="LinksCOM">
+			<title>Using Microsoft COM</title>
+			<content>
+   				<legacyBold>General Topics</legacyBold>
+	      		<para>
+					<list class="bullet">
+						<listItem>
+						  	<externalLink>
+			        			<linkText>COM Development Home</linkText>
+								<linkUri>https://ascom-standards.org/COMDeveloper/Index.htm</linkUri>
+							</externalLink>
+						</listItem>
+						<listItem>
+						  	<externalLink>
+			        			<linkText>Conform Driver Tester</linkText>
+								<linkUri>https://github.com/ASCOMInitiative/Conform/releases</linkUri>
+							</externalLink>
+						</listItem>
+
+					</list>
+				</para>
+			</content>
+		</section>
+
+
+  </developerConceptualDocument>
+</topic>

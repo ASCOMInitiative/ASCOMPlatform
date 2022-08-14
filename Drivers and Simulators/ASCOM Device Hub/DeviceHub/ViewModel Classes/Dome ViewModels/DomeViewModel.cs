@@ -13,18 +13,27 @@ namespace ASCOM.DeviceHub
 
 		public DomeViewModel( IDomeManager domeManager )
 		{
+			string caller = "DomeViewModel ctor";
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			DomeManager = domeManager;
 			_isConnected = false;
 			_status = null;
+
+			LogAppMessage( "Creating child view models", caller );
 
 			ParametersVm = new DomeParametersViewModel();
 			CapabilitiesVm = new DomeCapabilitiesViewModel();
 			MotionVm = new DomeMotionViewModel( DomeManager );
 
+			LogAppMessage( "Registering message handlers", caller );
+
 			Messenger.Default.Register<ObjectCountMessage>( this, ( action ) => UpdateObjectsCount( action ) );
 			Messenger.Default.Register<DomeIDChangedMessage>( this, ( action ) => DomeIDChanged( action ) );
+			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => DeviceDisconnected( action ) );
 			RegisterStatusUpdateMessage( true );
 
+			LogAppMessage( "Initialization complete", caller );
 		}
 
 		#region Public Properties
@@ -127,13 +136,23 @@ namespace ASCOM.DeviceHub
 
 		private void ConnectDome()
 		{
+			string message = null;
+
 			try
 			{
 				// Attempt to connect with the scope.
 
 				RegisterStatusUpdateMessage( true );
 
-				bool success = DomeManager.Connect( DomeID );
+				bool success;
+
+				// Connect can take a few seconds, so signal the U/I to show a wait cursor.
+
+				SignalWait( true );
+
+				// Now do the connect.
+		
+				success = DomeManager.Connect( DomeID );
 
 				if ( success )
 				{
@@ -143,22 +162,28 @@ namespace ASCOM.DeviceHub
 				{
 					// No exception, but did not connect!
 
-					string message = "Use the Activity Log to view any errors!";
+					message = "Use the Activity Log to view any errors!";
 
 					if ( DomeManager.ConnectException != null )
 					{
 						message = DomeManager.ConnectException.Message;
 					}
-
-					ShowMessage( message, "Dome Connection Error" );
 				}
 			}
 			catch ( Exception xcp )
 			{
 				// Connection attempt caused exception.
 
-				string message = $"{DomeManager.ConnectError}\r\n{xcp.Message}";
-				ShowMessage( message, "Dome Connection Error" );
+				message = $"{DomeManager.ConnectError}\r\n{xcp.Message}";
+			}
+			finally
+			{
+				SignalWait( false );
+
+				if ( message != null )
+				{
+					ShowMessage( message, "Dome Connection Error" );
+				}
 			}
 		}
 
@@ -188,8 +213,20 @@ namespace ASCOM.DeviceHub
 
 		private void DisconnectDome()
 		{
+			// This is only called from the U/I.
+
 			IsConnected = false;
-			DomeManager.Disconnect();
+
+			try
+			{
+				SignalWait( true );
+				DomeManager.Disconnect( true );
+			}
+			finally
+			{
+				SignalWait( false );
+			}
+
 			Status = null;
 		}
 
@@ -200,6 +237,17 @@ namespace ASCOM.DeviceHub
 				ObjectCount = msg.DomeCount;
 				HasActiveClients = ObjectCount > 0;
 			}, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
+		}
+
+		private void DeviceDisconnected( DeviceDisconnectedMessage action )
+		{
+			if ( action.DeviceType == DeviceTypeEnum.Dome )
+			{
+				Task.Factory.StartNew( () =>
+				{
+					IsConnected = false;
+				}, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
+			}
 		}
 
 		#endregion Helper Methods
@@ -239,7 +287,18 @@ namespace ASCOM.DeviceHub
 
 		private bool CanToggleDomeConnected()
 		{
-			return ( DomeID != null );
+			bool retval = false;
+
+			if ( !IsConnected )
+			{
+				retval = DomeID != null;
+			}
+			else
+			{
+				retval = Server.DomesInUse == 0;
+			}
+
+			return retval;
 		}
 
 		#endregion ToggleDomeConnectedCommand

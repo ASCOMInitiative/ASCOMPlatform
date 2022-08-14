@@ -13,8 +13,10 @@
 // Date			Who	Vers	Description
 // -----------	---	-----	-------------------------------------------------------
 // 07-JUL-2009	rbt	1.0.0	Initial edit, from ASCOM Telescope Driver template
-// 18-SEP-2102  Rick Burke  Improved support for simulating pulse guiding
+// 18-SEP-2012  Rick Burke  Improved support for simulating pulse guiding
 // May/June 2014 cdr 6.1    Change the telescope hardware to use an axis based method
+// May 2022     Rick Burke	Corrected E/W button movement directions
+//                          Hid MoveAxis and PulseGuide buttons since PulseGuide movement initiated by the buttons had been disabled.
 // --------------------------------------------------------------------------------
 //
 
@@ -1765,15 +1767,15 @@ namespace ASCOM.Simulator
                 case SlewDirection.SlewDown:
                     change.Y = -delta;
                     break;
-                case SlewDirection.SlewEast:
-                case SlewDirection.SlewLeft:
-                    change.X = delta;
-                    break;
-                case SlewDirection.SlewWest:
-                case SlewDirection.SlewRight:
-                    change.X = -delta;
-                    break;
-                case Simulator.SlewDirection.SlewNone:
+				case SlewDirection.SlewWest:
+				case SlewDirection.SlewLeft:
+					change.X = delta;
+					break;
+				case SlewDirection.SlewEast:
+				case SlewDirection.SlewRight:
+					change.X = -delta;
+					break;
+				case Simulator.SlewDirection.SlewNone:
                     break;
             }
             return change;

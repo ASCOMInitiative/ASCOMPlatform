@@ -140,7 +140,7 @@ namespace Unit_Tests.Telescope
 			_prVm.Invoke( "RegisterStatusUpdateMessage", true );
 
 			_prVm.Invoke( "ChangeParkState" );
-			Thread.Sleep( 2500 );
+			Thread.Sleep( 2500 ); 
 			Assert.IsFalse( _vm.Status.AtPark );
 			Assert.AreEqual<ParkingStateEnum>( ParkingStateEnum.Unparked, _vm.Status.ParkingState );
 
@@ -151,6 +151,12 @@ namespace Unit_Tests.Telescope
 			Assert.AreEqual<ParkingStateEnum>( ParkingStateEnum.IsAtPark, _vm.Status.ParkingState );
 
 			_prVm.Invoke( "RegisterStatusUpdateMessage", false );
+
+			_mgr.RaiseError = true;
+			bool retval = (bool)_prVm.Invoke( "ChangeParkState" );
+
+			Thread.Sleep( 2500 );
+			Assert.IsFalse( retval );
 		}
 
 		[TestMethod]
@@ -253,6 +259,11 @@ namespace Unit_Tests.Telescope
 			}
 
 			Assert.AreEqual( PierSide.pierEast, _vm.Status.SideOfPier );
+
+			_mgr.RaiseError = true;
+
+			bool retval = (bool)_prVm.Invoke( "DoMeridianFlip" );
+			Assert.IsFalse( retval );
 		}
 
 		[TestMethod]
@@ -432,6 +443,18 @@ namespace Unit_Tests.Telescope
 			_prVm.Invoke( "StopMotion", ndx.ToString() );
 
 			Assert.AreEqual( 0.0, _mgr.MockDeclinationAxisRate );
+
+			_prVm.Invoke( "StartMove", ndx.ToString() );
+
+			Assert.AreEqual( moveRate, _mgr.MockDeclinationAxisRate );
+
+			_mgr.RaiseError = true;
+
+			bool retval = (bool)_prVm.Invoke( "StopMotion", ndx.ToString() );
+			Assert.IsFalse( retval );
+
+			retval = (bool)_prVm.Invoke( "StartMove", ndx.ToString() );
+			Assert.IsFalse( retval );
 		}
 
 		[TestMethod]
@@ -472,6 +495,21 @@ namespace Unit_Tests.Telescope
 			_prVm.Invoke( "StopMotion", ndx.ToString() );
 
 			Assert.IsFalse( _mgr.MockIsPulseGuiding );
+
+			// Now for the dark path tests. Start a move and see if we handle a stop error correctly.
+
+			_prVm.Invoke( "StartMove", ndx.ToString() );
+
+			Assert.IsTrue( _mgr.MockIsPulseGuiding );
+
+			_mgr.RaiseError = true;
+			bool retval = (bool)_prVm.Invoke( "StopMotion", ndx.ToString() );
+
+			Assert.IsFalse( retval );
+
+			retval = (bool)_prVm.Invoke( "StartMove", ndx.ToString() );
+			
+			Assert.IsFalse ( retval );
 		}
 
 		[TestMethod]
@@ -631,6 +669,34 @@ namespace Unit_Tests.Telescope
 			_prVm.Invoke( "RegisterStatusUpdateMessage", false );
 
 			return new Vector( _vm.Status.RightAscension, _vm.Status.Declination );
+		}
+
+		[TestMethod]
+		public void DoFixedSlewWithError()
+		{
+			_vm.IsVariableJog = false;
+			_mgr.MockIsConnected = true;
+			_mgr.Capabilities = InitializeFullCapabilities();
+			_mgr.Parameters = InitializeTestDefaultParameters();
+
+			Vector startPosition = GetSaneRaDec();
+			int ndx = GetIndexOfJogDirection( MoveDirections.East );
+			Assert.IsTrue( ndx >= 0 );
+
+			JogAmount amount = new JogAmount( "4°", 4.0 );
+
+			DevHubTelescopeStatus sts = DevHubTelescopeStatus.GetEmptyStatus();
+			sts.ParkingState = ParkingStateEnum.Unparked;
+			sts.Tracking = true;
+			sts.Slewing = false;
+			sts.RightAscension = startPosition.X;
+			sts.Declination = startPosition.Y;
+			_mgr.Status = sts;
+			_mgr.RaiseError = true;
+
+
+			bool retval = (bool)_prVm.Invoke( "DoFixedSlew", ndx.ToString() );
+			Assert.IsFalse( retval );
 		}
 
 		private Vector DoFixedSlewAltAz( Vector startPosition, int ndx, JogAmount amount )

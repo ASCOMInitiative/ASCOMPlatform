@@ -328,7 +328,7 @@ class DeviceCamera
             if (!cameraImageReady)
             {
                 tl.LogMessage("ImageArray Get", "Throwing InvalidOperationException because of a call to ImageArray before the first image has been taken!");
-                throw new InvalidOperationException("Call to ImageArray before the first image has been taken!");
+                throw new ASCOM.InvalidOperationException("Call to ImageArray before the first image has been taken!");
             }
 
             cameraImageArray = new int[cameraNumX, cameraNumY];
@@ -343,7 +343,7 @@ class DeviceCamera
             if (!cameraImageReady)
             {
                 tl.LogMessage("ImageArrayVariant Get", "Throwing InvalidOperationException because of a call to ImageArrayVariant before the first image has been taken!");
-                throw new InvalidOperationException("Call to ImageArrayVariant before the first image has been taken!");
+                throw new ASCOM.InvalidOperationException("Call to ImageArrayVariant before the first image has been taken!");
             }
             cameraImageArrayVariant = new object[cameraNumX, cameraNumY];
             for (int i = 0; i < cameraImageArray.GetLength(1); i++)
@@ -384,7 +384,7 @@ class DeviceCamera
             if (!cameraImageReady)
             {
                 tl.LogMessage("LastExposureDuration Get", "Throwing InvalidOperationException because of a call to LastExposureDuration before the first image has been taken!");
-                throw new InvalidOperationException("Call to LastExposureDuration before the first image has been taken!");
+                throw new ASCOM.InvalidOperationException("Call to LastExposureDuration before the first image has been taken!");
             }
             tl.LogMessage("LastExposureDuration Get", cameraLastExposureDuration.ToString());
             return cameraLastExposureDuration;
@@ -398,7 +398,7 @@ class DeviceCamera
             if (!cameraImageReady)
             {
                 tl.LogMessage("LastExposureStartTime Get", "Throwing InvalidOperationException because of a call to LastExposureStartTime before the first image has been taken!");
-                throw new InvalidOperationException("Call to LastExposureStartTime before the first image has been taken!");
+                throw new ASCOM.InvalidOperationException("Call to LastExposureStartTime before the first image has been taken!");
             }
             string exposureStartString = exposureStart.ToString("yyyy-MM-ddTHH:mm:ss");
             tl.LogMessage("LastExposureStartTime Get", exposureStartString.ToString());

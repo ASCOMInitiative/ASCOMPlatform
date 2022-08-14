@@ -14,10 +14,15 @@ namespace ASCOM.DeviceHub
 
 		public TelescopeViewModel( ITelescopeManager telescopeManager )
 		{
+			string caller = "TelescopeViewModel ctor";
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			_telescopeManager = telescopeManager;
 			_isConnected = false;
 			_status = null;
 			_isSlewInProgress = false;
+
+			LogAppMessage( "Creating child view models", caller );
 
 			ParametersVm = new TelescopeParametersViewModel();
 			CapabilitiesVm = new TelescopeCapabilitiesViewModel();
@@ -25,10 +30,15 @@ namespace ASCOM.DeviceHub
 			DirectSlewVm = new TelescopeDirectSlewViewModel( telescopeManager );
 			MotionVm = new TelescopeMotionViewModel( telescopeManager );
 
+			LogAppMessage( "Registering message handlers", caller );
+
 			Messenger.Default.Register<ObjectCountMessage>( this, ( action ) => UpdateObjectsCount( action ) );
 			Messenger.Default.Register<TelescopeIDChangedMessage>( this, ( action ) => TelescopeIDChanged( action ) );
 			Messenger.Default.Register<SlewInProgressMessage>( this, ( action ) => UpdateSlewInProgress( action ) );
+			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => DeviceDisconnected( action ) );
 			RegisterStatusUpdateMessage( true );
+
+			LogAppMessage( "Initialization complete", caller );
 		}
 
 		#region Public Properties
@@ -189,13 +199,23 @@ namespace ASCOM.DeviceHub
 
         private void ConnectTelescope()
         {
+			string message = null;
+
             try
 			{
 				// Attempt to connect with the scope.
 
 				RegisterStatusUpdateMessage( true );
 
-				bool success = TelescopeManager.Connect( TelescopeID );
+				bool success;
+
+				// Connect can take a few seconds, so signal the U/I to show a wait cursor.
+
+				SignalWait( true );
+
+				// Now do the connect.
+
+				success = TelescopeManager.Connect( TelescopeID );
 
 				if ( success )
 				{
@@ -205,7 +225,7 @@ namespace ASCOM.DeviceHub
 				{
 					// Init default message.
 
-					string message = "Use the Activity Log to view any errors!";
+					message = "Use the Activity Log to view any errors!";
 
 					if ( TelescopeManager.ConnectException != null )
 					{
@@ -213,16 +233,22 @@ namespace ASCOM.DeviceHub
 
 						message = TelescopeManager.ConnectException.Message;
 					}
-
-					ShowMessage( message, "Telescope Connection Error" );
 				}
 			}
 			catch ( Exception xcp )
 			{
 				// Connection attempt caused exception.
 
-				string message = $"{TelescopeManager.ConnectError}\r\n{xcp.Message}";
-				ShowMessage( message, "Telescope Connection Error" );
+				message = $"{TelescopeManager.ConnectError}\r\n{xcp.Message}";
+			}
+			finally
+			{
+				SignalWait( false );
+
+				if ( message != null )
+				{
+					ShowMessage( message, "Telescope Connection Error" );
+				}
 			}
 		}
 
@@ -253,9 +279,21 @@ namespace ASCOM.DeviceHub
 
         private void DisconnectTelescope()
         {
+			// This is only called from the U/I.
+
 			IsConnected = false;
 			IsSlewInProgress = false;
-			TelescopeManager.Disconnect();
+
+			try
+			{
+				SignalWait( true );
+				TelescopeManager.Disconnect( true );
+			}
+			finally
+			{
+				SignalWait( false );
+			}
+
 			Status = null;
         }
 
@@ -276,6 +314,16 @@ namespace ASCOM.DeviceHub
 			}, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
 		}
 
+		private void DeviceDisconnected( DeviceDisconnectedMessage action )
+		{
+			if ( action.DeviceType == DeviceTypeEnum.Telescope )
+			{
+				Task.Factory.StartNew( () =>
+				{
+					IsConnected = false;
+				}, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
+			}
+		}
 
 		#endregion Helper Methods
 
@@ -314,7 +362,20 @@ namespace ASCOM.DeviceHub
 
         private bool CanToggleTelescopeConnected()
         {
-            return ( TelescopeID != null );
+			bool retval = false;
+
+			if ( !IsConnected )
+			{
+				retval = TelescopeID != null;
+			}
+			else
+			{
+				// We can only disconnect if there are no connected clients.
+
+				retval = Server.ScopesInUse == 0;
+			}
+
+            return retval;
         }
 
 		#endregion ToggleTelescopeConnectedCommand

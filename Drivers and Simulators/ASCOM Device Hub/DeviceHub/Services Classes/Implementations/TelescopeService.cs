@@ -9,7 +9,7 @@ namespace ASCOM.DeviceHub
 	public class TelescopeService : ITelescopeService
 	{
 		private string DeviceID { get; set; }
-		private Telescope Telescope { get; set; }
+		private ASCOM.DriverAccess.Telescope Telescope { get; set; }
 
 		public bool DeviceCreated => Initialized && Telescope != null;
 		public bool DeviceAvailable => DeviceCreated && Connected;
@@ -33,7 +33,7 @@ namespace ASCOM.DeviceHub
 
 				try
 				{
-					Telescope = new Telescope( DeviceID );
+					Telescope = new ASCOM.DriverAccess.Telescope( DeviceID );
 					Initialized = true;
 				}
 				catch ( Exception xcp )
@@ -49,7 +49,7 @@ namespace ASCOM.DeviceHub
 		{
 			get
 			{
-				bool retval = false;
+				bool retval; // Value is false by default.
 
 				try
 				{

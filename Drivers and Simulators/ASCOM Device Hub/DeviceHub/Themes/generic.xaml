@@ -21,6 +21,12 @@
 	<SolidColorBrush x:Key="RotaryHand" Color="Red" />
 	<SolidColorBrush x:Key="RoundButtonFaceBrush" Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}" />
 	<SolidColorBrush x:Key="RoundButtonTextBrush" Color="{DynamicResource {x:Static SystemColors.InactiveCaptionColorKey}}" />
+	<SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFA0E0E0"/>
+	<SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FFBEE6FD"/>
+	<SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+	<SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+
+
 	<SolidColorBrush x:Key="ArrowBrush" Color="{DynamicResource LightGray}" />
 	<SolidColorBrush x:Key="EmphasisTextBrush" Color="MediumVioletRed" />
 	<SolidColorBrush x:Key="MenuItemBorderBrush" Color="Black" />
@@ -39,4 +45,53 @@
 		<GradientStop Color="#F0DDDDDD" Offset="0.5"/>
 		<GradientStop Color="#F0CDCDCD" Offset="1"/>
 	</LinearGradientBrush>
+
+	<Style x:Key="CircleButton" TargetType="Button">
+		<Setter Property="OverridesDefaultStyle" Value="True"/>
+		<Setter Property="Margin" Value="2"/>
+		<Setter Property="FocusVisualStyle" Value="{DynamicResource MyFocusVisual}"/>
+		<Setter Property="Background" Value="{DynamicResource RoundButtonFaceBrush}" />
+		<Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Button">
+					<Grid>
+						<Ellipse Fill="{TemplateBinding Background}"/>
+						<Ellipse>
+							<Ellipse.Fill>
+								<RadialGradientBrush>
+									<GradientStop Offset="0" Color="#00000000"/>
+									<GradientStop Offset="0.88" Color="#00000000"/>
+									<GradientStop Offset="1" Color="#80000000"/>
+								</RadialGradientBrush>
+							</Ellipse.Fill>
+						</Ellipse>
+						<Ellipse Margin="8" x:Name="highlightCircle" >
+							<Ellipse.Fill >
+								<LinearGradientBrush >
+									<GradientStop Offset="0" Color="#50FFFFFF"/>
+									<GradientStop Offset="0.5" Color="#00FFFFFF"/>
+									<GradientStop Offset="1" Color="#50FFFFFF"/>
+								</LinearGradientBrush>
+							</Ellipse.Fill>
+						</Ellipse>
+						<ContentPresenter x:Name="content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Grid>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}" />
+						</Trigger>
+
+						<Trigger Property="IsPressed" Value="True">
+							<Setter Property="Background" Value="{StaticResource Button.Pressed.Background}" />
+						</Trigger>
+
+						<Trigger Property="IsEnabled" Value="False">
+							<Setter Property="Foreground" Value="{DynamicResource RoundButtonTextBrush}" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
 </ResourceDictionary>

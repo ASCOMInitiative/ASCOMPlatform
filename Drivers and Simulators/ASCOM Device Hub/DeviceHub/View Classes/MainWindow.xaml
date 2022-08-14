@@ -89,7 +89,7 @@
 
 			<!-- Expanded Screen Layout -->
 
-			<Grid Grid.Row="1" Visibility="{Binding UseExpandedScreenLayout, Converter={StaticResource BoolVisConverter}, FallbackValue=Collapsed}">
+			<Grid Grid.Row="1" Name="_expandedViewGrid" Visibility="{Binding UseExpandedScreenLayout, Converter={StaticResource BoolVisConverter}, FallbackValue=Collapsed}">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
@@ -105,7 +105,7 @@
 					<ContentControl Content="{Binding TelescopeVm}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="6,0" Padding="0" Height="Auto" />
 				</GroupBox>
 				<Expander x:Name="_domeControl" Grid.Row="1" Grid.Column="1" ExpandDirection="Right" Margin="0,10" 
-						  Foreground="{DynamicResource NormalTextBrush}" Expanded="Expander_Expanded"
+						  Foreground="{DynamicResource NormalTextBrush}" 
 						  ToolTip="Use Ctrl-Click to expand without collapsing other expanders.">
 					<Expander.Header>
 						<TextBlock Text="Dome Control" TextOptions.TextFormattingMode="Display">
@@ -128,7 +128,7 @@
 					</Grid>
 				</Expander>
 				<Expander x:Name="_focuserControl" Grid.Row="1" Grid.Column="2" ExpandDirection="Right" Margin="0,10" 
-						  Foreground="{DynamicResource NormalTextBrush}" Expanded="Expander_Expanded"
+						  Foreground="{DynamicResource NormalTextBrush}" 
 						  ToolTip="Use Ctrl-Click to expand without collapsing other expanders.">
 					<Expander.Header>
 						<TextBlock Text="Focuser Control" TextOptions.TextFormattingMode="Display" Foreground="{DynamicResource NormalTextBrush}">

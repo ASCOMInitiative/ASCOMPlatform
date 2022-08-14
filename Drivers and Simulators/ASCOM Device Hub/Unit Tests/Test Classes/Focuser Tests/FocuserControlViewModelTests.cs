@@ -93,6 +93,10 @@ namespace Unit_Tests.Focuser
 			Thread.Sleep( 2500 );
 
 			Assert.AreEqual( finalPosition, _vm.Status.Position );
+
+			_mgr.RaiseError = true;
+			bool retval = (bool)_prVm.Invoke( "MoveFocuserInward" );
+			Assert.IsFalse( retval );
 		}
 
 		[TestMethod]
@@ -130,6 +134,12 @@ namespace Unit_Tests.Focuser
 			Thread.Sleep( 2500 );
 
 			Assert.AreEqual( finalPosition, _vm.Status.Position );
+
+
+			_mgr.RaiseError = true;
+			bool retval = (bool)_prVm.Invoke( "MoveFocuserOutward" );
+			Assert.IsFalse( retval );
+
 		}
 
 		[TestMethod]
@@ -167,6 +177,11 @@ namespace Unit_Tests.Focuser
 			Thread.Sleep( 2500 );
 
 			Assert.AreEqual( finalPosition, _vm.Status.Position );
+
+
+			_mgr.RaiseError = true;
+			bool retval = (bool)_prVm.Invoke( "MoveFocuserToPosition" );
+			Assert.IsFalse( retval );
 		}
 	}
 }

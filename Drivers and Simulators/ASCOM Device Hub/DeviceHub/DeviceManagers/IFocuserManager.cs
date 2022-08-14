@@ -8,8 +8,9 @@ namespace ASCOM.DeviceHub
 		string ConnectError { get; }
 		Exception ConnectException { get; }
 
-		bool Connect( string focuserID );
-		void Disconnect();
+		bool Connect();
+		bool Connect( string focuserID, bool interactiveConnect = true );
+		void Disconnect( bool interactiveDisconnect = false );
 
 		void MoveFocuserBy( int amount );
 		void HaltFocuser();

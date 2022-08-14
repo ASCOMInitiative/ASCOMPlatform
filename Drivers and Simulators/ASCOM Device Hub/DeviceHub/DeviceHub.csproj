@@ -43,7 +43,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\..\..\ASCOM.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>ASCOM.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework.Aero">
@@ -72,21 +72,40 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="..\..\..\AssemblyVersionInfo.cs">
-      <Link>Properties\AssemblyVersionInfo.cs</Link>
-    </Compile>
     <Compile Include="..\ProductAssemblyInfo.cs">
       <Link>ProductAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Business Object Classes\ASCOM Classes\GarbageCollection.cs" />
     <Compile Include="Business Object Classes\AssemblyGuidAttribute.cs" />
+    <Compile Include="Business Object Classes\DisplayAttribute.cs" />
     <Compile Include="Business Object Classes\Message Types\DomeSlavedChangedMessage.cs" />
-    <Compile Include="Business Object Classes\Telescope Classes\JogAmount.cs" />
-    <Compile Include="Business Object Classes\Telescope Classes\JogDirection.cs" />
     <Compile Include="Business Object Classes\Value Converters\BooleanOnOffConverter.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\TelescopeRates.cs" />
-    <Compile Include="Business Object Classes\Value Converters\MultiBindingTrueIfNotParking.cs" />
+    <Compile Include="Business Object Classes\Value Converters\BooleanToConnectStringConverter.cs" />
+    <Compile Include="Business Object Classes\Value Converters\DeviceConnectedValueConverter.cs" />
     <Compile Include="Business Object Classes\Value Converters\MultiBooleanVisibilityConverter.cs" />
-    <Compile Include="Business Object Classes\DisplayAttribute.cs" />
+    <Compile Include="Business Object Classes\Value Converters\MultiBindingTrueIfNotParking.cs" />
+    <Compile Include="Business Object Classes\Value Converters\EditLockTextBooleanValueConverter.cs" />
+    <Compile Include="Business Object Classes\Message Types\FocuserMoveAmountMessage.cs" />
+    <Compile Include="Business Object Classes\Value Converters\UnitsBooleanToStringConverter.cs" />
+    <Compile Include="Dome Driver\DomeDriver.cs" />
+    <Compile Include="Dome Driver\DomeDriverSetupDialogView.xaml.cs">
+      <DependentUpon>DomeDriverSetupDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dome Driver\DomeDriverSetupDialogViewModel.cs" />
+    <Compile Include="Focuser Driver\FocuserDriver.cs" />
+    <Compile Include="Focuser Driver\FocuserDriverSetupDialogView.xaml.cs">
+      <DependentUpon>FocuserDriverSetupDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Focuser Driver\FocuserDriverSetupDialogViewModel.cs" />
+    <Compile Include="Resources\Strings.Designer.cs" />
+    <Compile Include="Business Object Classes\Message Types\SignalWaitMessage.cs" />
+    <Compile Include="Telescope Driver\DriverSetupDialogView.xaml.cs">
+      <DependentUpon>DriverSetupDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Telescope Driver\DriverSetupDialogViewModel.cs" />
+    <Compile Include="Telescope Driver\Rates.cs" />
+    <Compile Include="Telescope Driver\TelescopeDriver.cs" />
     <Compile Include="View Classes\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
@@ -238,7 +257,6 @@
     <Compile Include="Business Object Classes\Telescope Classes\AltitudeConverter.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\AzimuthConverter.cs" />
     <Compile Include="Business Object Classes\Value Converters\AzimuthValueConverter.cs" />
-    <Compile Include="Business Object Classes\Value Converters\BooleanToConnectStringConverter.cs" />
     <Compile Include="Business Object Classes\Value Converters\BooleanBooleanValueConverter.cs" />
     <Compile Include="Business Object Classes\Value Converters\BooleanVisibilityConverter.cs" />
     <Compile Include="Business Object Classes\DialogContents.cs" />
@@ -261,13 +279,9 @@
     <Compile Include="Business Object Classes\Telescope Classes\JogRate.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\JogRates.cs" />
     <Compile Include="Services Classes\Interfaces\IActivityLogService.cs" />
-    <Compile Include="Resources\Strings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Strings.resx</DependentUpon>
-    </Compile>
     <Compile Include="Business Object Classes\Value Converters\RightAscensionValueConverter.cs" />
-    <Compile Include="Business Object Classes\Value Converters\DeviceConnectedValueConverter.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\JogDirection.cs" />
+    <Compile Include="Business Object Classes\Telescope Classes\JogAmount.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\TelescopeSlewAmounts.cs" />
     <Compile Include="Business Object Classes\Value Converters\SideOfPierStringConverter.cs" />
     <Compile Include="DeviceManagers\TelescopeManagerAccess.cs" />
@@ -307,6 +321,18 @@
     <Compile Include="Services Classes\ServiceContainer.cs" />
     <Compile Include="Services Classes\ServiceInjector.cs" />
     <Compile Include="Business Object Classes\Win32 Extensions\WindowExtensions.cs" />
+    <Page Include="Dome Driver\DomeDriverSetupDialogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Focuser Driver\FocuserDriverSetupDialogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Telescope Driver\DriverSetupDialogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View Classes\AboutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -408,7 +434,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Business Object Classes\ASCOM Classes\ClassFactory.cs" />
-    <Compile Include="Business Object Classes\ASCOM Classes\GarbageCollection.cs" />
     <Compile Include="Business Object Classes\ASCOM Classes\LocalServer.cs" />
     <Compile Include="View Classes\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -434,10 +459,8 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Strings.resx" />
+    <None Include="ASCOM.snk" />
     <None Include="TelescopeControlClasses.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -489,7 +512,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy /b /Y "$(ProjectDir)..\Documents\ASCOM Device Hub User and Technical Information.pdf" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

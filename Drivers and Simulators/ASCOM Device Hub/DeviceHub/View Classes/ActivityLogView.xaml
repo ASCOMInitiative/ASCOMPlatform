@@ -6,7 +6,7 @@
         xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
         mc:Ignorable="d"
         Background="{DynamicResource WindowBackgroundBrush}"
-        Title="Device Hub Activity Log" MinHeight="540" MinWidth="480"  Height="540" Width="480" WindowStyle="ThreeDBorderWindow" Loaded="Window_Loaded" LocationChanged="Window_LocationChanged" Icon="/ASCOM.DeviceHub;component/Images/ASCOM.ico" SizeChanged="Window_SizeChanged" ResizeMode="CanResizeWithGrip" >
+        Title="Device Hub Activity Log" MinHeight="540" MinWidth="480"  Height="540" Width="480" WindowStyle="ThreeDBorderWindow" Loaded="Window_Loaded" LocationChanged="Window_LocationChanged" Icon="/ASCOM.DeviceHub;component/Images/ASCOM.ico" SizeChanged="Window_SizeChanged" ResizeMode="CanResizeWithGrip" ShowInTaskbar="False" >
     <Window.Resources>
         <Style x:Key="DevLabel" TargetType="{x:Type Label}">
             <Setter Property="HorizontalAlignment" Value="Left" />

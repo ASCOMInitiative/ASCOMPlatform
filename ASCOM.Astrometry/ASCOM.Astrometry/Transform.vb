@@ -694,7 +694,7 @@ Namespace Transform
         Private Sub Recalculate() 'Calculate values for derived co-ordinates
             SwRecalculate.Reset() : SwRecalculate.Start()
             If RequiresRecalculate Or (RefracValue = True) Then
-                TL.LogMessage("Recalculate", "Requires Recalculate: " & RequiresRecalculate.ToString & ", Refraction: " & RefracValue.ToString)
+                TL.LogMessage("Recalculate", $"Requires Recalculate: {RequiresRecalculate}, Refraction: {RefracValue}, Latitude: {SiteLatValue}, Longitude: {SiteLongValue}, Elevation: {SiteElevValue}, Temperature: {SiteTempValue}")
                 Select Case LastSetBy
                     Case SetBy.J2000 'J2000 coordinates have bee set so calculate apparent and topocentric coordinates
                         TL.LogMessage("  Recalculate", "  Values last set by SetJ2000")
@@ -865,13 +865,13 @@ Namespace Transform
 
         Private Sub CalculateSitePressureIfRequired()
             ' Derive the site pressure from the site elevation if the pressure has not been set explicitly
-            If Double.IsNaN(SitePressureValue) Then ' Site pressure has already been set so don't override the set value
-                TL.LogMessage("CalculateSitePressure", $"Site pressure has been set to {SitePressureValue:0.0}hPa.")
+            If Not Double.IsNaN(SitePressureValue) Then ' Site pressure has already been set so don't override the set value
+                TL.LogMessage("  CalculateSitePressure", $"  Site pressure has been set to {SitePressureValue:0.0}hPa.")
             Else ' Site pressure has not been set so derive a value based on the supplied observatory height and temperature
                 ' phpa = 1013.25 * exp ( −hm / ( 29.3 * tsl ) ); NOTE this equation calculates the site pressure and uses the site temperature REDUCED TO SEA LEVEL MESURED IN DEGREES KELVIN
                 ' tsl = tSite − 0.0065(0 − hsite);  NOTE this equation reduces the site temperature to sea level
                 SitePressureValue = STANDARD_PRESSURE * Math.Exp(-SiteElevValue / (29.3 * (SiteTempValue + 0.0065 * SiteElevValue - ABSOLUTE_ZERO_CELSIUS)))
-                TL.LogMessage("CalculateSitePressure", $"Site pressure has not been set by user, calculated value: {SitePressureValue:0.0}hPa.")
+                TL.LogMessage("  CalculateSitePressure", $"  Site pressure has not been set by user, calculated value: {SitePressureValue:0.0}hPa.")
             End If
         End Sub
 

@@ -13,17 +13,26 @@ namespace ASCOM.DeviceHub
 
 		public FocuserViewModel( IFocuserManager focuserManager )
 		{
+			string caller = "FocuserViewModel ctor";
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			FocuserManager = focuserManager;
 			_isConnected = false;
 			_status = null;
 
+			LogAppMessage( "Creating child view models", caller );
+
 			ParametersVm = new FocuserParametersViewModel();
 			ControlVm = new FocuserControlViewModel( FocuserManager );
 
+			LogAppMessage( "Registering message handlers", caller );
+
 			Messenger.Default.Register<ObjectCountMessage>( this, ( action ) => UpdateObjectsCount( action ) );
 			Messenger.Default.Register<FocuserIDChangedMessage>( this, ( action ) => FocuserIDChanged( action ) );
+			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => DeviceDisconnected( action ) );
 			RegisterStatusUpdateMessage( true );
 
+			LogAppMessage( "Initialization complete", caller );
 		}
 
 		#region Public Properties
@@ -125,13 +134,23 @@ namespace ASCOM.DeviceHub
 
 		private void ConnectFocuser()
 		{
+			string message = null;
+
 			try
 			{
 				// Attempt to connect with the scope.
 
 				RegisterStatusUpdateMessage( true );
 
-				bool success = FocuserManager.Connect( FocuserID );
+				bool success;
+
+				// Connect can take  a few seconds, so signal the U/I to show a wait cursor.
+
+				SignalWait( true );
+
+				// Now do the connect.
+
+				success = FocuserManager.Connect( FocuserID );
 
 				if ( success )
 				{
@@ -141,22 +160,28 @@ namespace ASCOM.DeviceHub
 				{
 					// No exception, but did not connect!
 
-					string message = "Use the Activity Log to view any errors!";
+					message = "Use the Activity Log to view any errors!";
 
 					if ( FocuserManager.ConnectException != null )
 					{
 						message = FocuserManager.ConnectException.Message;
 					}
-
-					ShowMessage( message, "Focuser Connection Error" );
 				}
 			}
 			catch ( Exception xcp )
 			{
 				// Connection attempt caused exception.
 
-				string message = $"{FocuserManager.ConnectError}\r\n{xcp.Message}";
-				ShowMessage( message, "Focuser Connection Error" );
+				message = $"{FocuserManager.ConnectError}\r\n{xcp.Message}";
+			}
+			finally
+			{
+				SignalWait( false );
+
+				if ( message != null )
+				{
+					ShowMessage( message, "Telescope Connection Error" );
+				}
 			}
 		}
 
@@ -186,8 +211,20 @@ namespace ASCOM.DeviceHub
 
 		private void DisconnectFocuser()
 		{
+			// This is only called from the U/I
+
 			IsConnected = false;
-			FocuserManager.Disconnect();
+
+			try
+			{
+				SignalWait( true );
+				FocuserManager.Disconnect( true );
+			}
+			finally
+			{
+				SignalWait( false );
+			}
+
 			Status = null;
 		}
 
@@ -198,6 +235,17 @@ namespace ASCOM.DeviceHub
 				ObjectCount = msg.FocuserCount;
 				HasActiveClients = ObjectCount > 0;
 			}, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
+		}
+
+		private void DeviceDisconnected( DeviceDisconnectedMessage action )
+		{
+			if ( action.DeviceType == DeviceTypeEnum.Focuser )
+			{
+				Task.Factory.StartNew( () =>
+				{
+					IsConnected = false;
+				}, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
+			}
 		}
 
 		#endregion Helper Methods
@@ -237,7 +285,18 @@ namespace ASCOM.DeviceHub
 
 		private bool CanToggleFocuserConnected()
 		{
-			return ( FocuserID != null );
+			bool retval = false;
+
+			if ( !IsConnected )
+			{
+				retval = FocuserID != null;
+			}
+			else
+			{
+				retval = Server.FocusersInUse == 0;
+			}
+
+			return retval;
 		}
 
 		#endregion ToggleFocuserConnectedCommand

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+
+using ASCOM;
 using ASCOM.DeviceHub;
 using ASCOM.DeviceHub.MvvmMessenger;
 
@@ -12,6 +14,7 @@ namespace Unit_Tests
 		{
 			IsConnected = false;
 			MockTemperature = 20.0;
+			RaiseError = false;
 		}
 
 		public string MockFocuserID { get; set; }
@@ -25,6 +28,8 @@ namespace Unit_Tests
 		public FocuserParameters Parameters { get; set; }
 		public DevHubFocuserStatus Status { get; set; }
 
+		public bool RaiseError { get; set; }
+
 		public string FocuserID => MockFocuserID;
 		public string FocuserName => MockFocuserName;
 
@@ -37,7 +42,12 @@ namespace Unit_Tests
 			set => MockIsConnected = value;
 		}
 
-		public bool Connect( string focuserID )
+		public bool Connect()
+		{
+			return Connect( MockFocuserID, false );
+		}
+
+		public bool Connect( string focuserID, bool interactiveConnect = true )
 		{
 			MockFocuserID = focuserID;
 			IsConnected = true;
@@ -45,13 +55,18 @@ namespace Unit_Tests
 			return IsConnected;
 		}
 
-		public void Disconnect()
+		public void Disconnect( bool interactiveDisconnect = false )
 		{
 			IsConnected = false;
 		}
 
 		public void HaltFocuser()
 		{
+			if ( RaiseError )
+			{
+				throw new DriverException( "Raised exception, as requested." );
+			}
+
 			Status = DevHubFocuserStatus.GetEmptyStatus();
 			Status.Connected = true;
 			Status.Link = true;
@@ -67,6 +82,11 @@ namespace Unit_Tests
 
 		public void MoveFocuserBy( int amount )
 		{
+			if ( RaiseError )
+			{
+				throw new DriverException( "Raised exception, as requested." );
+			}
+
 			Status = DevHubFocuserStatus.GetEmptyStatus();
 			Status.Connected = true;
 			Status.Link = true;
@@ -101,6 +121,11 @@ namespace Unit_Tests
 
 		public void SetTemperatureCompensation( bool state )
 		{
+			if ( RaiseError )
+			{
+				throw new DriverException( "Raised exception, as requested." );
+			}
+
 			MockTemperatureCompensation = state;
 		}
 	}

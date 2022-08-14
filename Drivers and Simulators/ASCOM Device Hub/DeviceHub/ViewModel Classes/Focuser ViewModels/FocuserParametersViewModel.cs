@@ -9,8 +9,14 @@ namespace ASCOM.DeviceHub
     {
 		public FocuserParametersViewModel()
 		{
+			string caller = "FocuserParametersViewModel ctor";
+			LogAppMessage( "Initializing Instance constructor", caller );
+			LogAppMessage( "Registering message handlers", caller );
+
 			Messenger.Default.Register<FocuserParametersUpdatedMessage>( this, ( action ) => UpdateParameters( action ) );
 			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => InvalidateParameters( action ) );
+
+			LogAppMessage( "Initialization complete", caller );
 		}
 
 		private FocuserParameters _parameters;

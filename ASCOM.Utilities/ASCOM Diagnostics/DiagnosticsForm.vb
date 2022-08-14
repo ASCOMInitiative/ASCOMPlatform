@@ -236,7 +236,7 @@ Public Class DiagnosticsForm
             TL.BlankLine()
             TL.LogMessage("Date", Date.Now.ToString)
             TL.LogMessage("TimeZoneName", GetTimeZoneName)
-            TL.LogMessage("TimeZoneOffset", TimeZone.CurrentTimeZone.GetUtcOffset(Now).Hours)
+            TL.LogMessage("TimeZoneOffset", TimeZone.CurrentTimeZone.GetUtcOffset(Now).TotalHours)
             TL.LogMessage("UTCDate", Date.UtcNow)
             TL.LogMessage("Julian date", Date.UtcNow.ToOADate() + OLE_AUTOMATION_JULIAN_DATE_OFFSET)
             TL.BlankLine()
@@ -673,7 +673,7 @@ Public Class DiagnosticsForm
         'Eo06a tests
         eo = SOFA.Eo06a(2400000.5, 53736.0)
 
-        CompareDouble("SOFATests", "Eo06a-eo", eo, -0.0013328823719418338, 0.000000000000001)
+        CompareDouble("SOFATests", "Eo06a-eo", eo, -0.0013328823719418337, 0.000000000000001)
 
         'Atic13 tests
         ri = 2.7101215729690389
@@ -1045,7 +1045,7 @@ Public Class DiagnosticsForm
                     .Description = "Platform 6 Telescope Simulator",
                     .DeviceType = "Telescope",
                     .Name = "Simulator",
-                    .DriverVersion = DiagnosticsFullVersionNumber,
+                    .DriverVersion = "6.6",
                     .InterfaceVersion = 3,
                     .IsPlatform5 = False,
                     .SixtyFourBit = True,
@@ -1576,13 +1576,37 @@ Public Class DiagnosticsForm
                 Case "FilterWheel"
                     Select Case Test
                         Case "Position"
-                            DeviceObject.Position = 3
+                            Dim numberOfOffsets, testFilter As Integer
+                            testFilter = 0 ' Initialise test filter number
+
+                            ' Determine a valid filter wheel position to run the test
+                            numberOfOffsets = CType(DeviceObject.FocusOffsets, Array).Length
+
+                            Select Case numberOfOffsets
+                                Case 0 ' No filtgers so this is an error because we can't run the test.
+                                    LogError("DeviceTest", "There are no filters defined, unable to test the FilterWheel position property.")
+                                    Exit Select
+                                Case 1 ' Only 1 so choose position 0 - the only option!
+                                    testFilter = 0
+                                Case 2 ' 2 filters so choose the lat one, position 1
+                                    testFilter = 1
+                                Case Else ' More than 2 filters so go with one less than maximum (note filter position is 0 based!)
+                                    testFilter = numberOfOffsets - 2
+                            End Select
+                            TL.LogMessage("DeviceTest", $"Number of filter wheel filters: {numberOfOffsets}, Chosen wheel: {testFilter}")
+
+                            ' Select the desired filter
+                            DeviceObject.Position = testFilter
+
+                            ' Wait for the wheel to stop moving
                             Do
                                 Thread.Sleep(100)
                                 Application.DoEvents()
                                 Action(Test & " " & Now.Subtract(StartTime).Seconds)
                             Loop Until DeviceObject.Position > -1
-                            CompareDouble("DeviceTest", Test, CDbl(DeviceObject.Position), 3.0, 0.000001)
+
+                            ' Test the outcome.
+                            CompareDouble("DeviceTest", Test, CDbl(DeviceObject.Position), CDbl(testFilter), 0.000001)
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
@@ -3899,7 +3923,7 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Sub TransformTest()
-        ' Confirm that site property read before write generates an errpr
+        ' Confirm that site property read before write generates an error
         TransformInitalGetTest(transform, TransformExceptionTestType.SiteLatitude)
         TransformInitalGetTest(transform, TransformExceptionTestType.SiteLongitude)
         TransformInitalGetTest(transform, TransformExceptionTestType.SiteElevation)
@@ -3907,7 +3931,7 @@ Public Class DiagnosticsForm
         ' TransformInitalGetTest(transform, TransformExceptionTestType.SiteTemperature)
         TransformInitalGetTest(transform, TransformExceptionTestType.SitePressure)
 
-        ' Set parameters ready for trasnformation
+        ' Set parameters ready for transformation
         transform.SiteTemperature = 20.0
         transform.SiteElevation = 1500
         transform.SiteLatitude = 0.0
@@ -3938,6 +3962,46 @@ Public Class DiagnosticsForm
         TransformTest2000("Deneb", "20:41:25.916", "45:16:49.23", TOLERANCE_E5, TOLERANCE_E4)
         TransformTest2000("Polaris", "02:31:51.263", "89:15:50.68", TOLERANCE_E5, TOLERANCE_E4)
         TransformTest2000("Arcturus", "14:15:38.943", "19:10:37.93", TOLERANCE_E5, TOLERANCE_E4)
+
+        ' Confirm that Transform works if set with J2000 coordinates but refraction correction is off and that it throws an exception if refraction correction is on
+        Dim tr As ASCOM.Astrometry.Transform.Transform
+
+        Try
+            tr = New ASCOM.Astrometry.Transform.Transform()
+            tr.SiteElevation = 1500
+            tr.SiteLatitude = 0.0
+            tr.SiteLongitude = 0.0
+            tr.SetJ2000(0.0, 0.0)
+            tr.Refraction = False
+
+            ' Confirm that Transform operates correctly when J2000 coordinates are set but refraction correction is disabled and site temperature is not set
+            Try
+                Dim rightAscension As Double
+                rightAscension = tr.RATopocentric
+                TL.LogMessage("TransformTest", "Transform works correctly when site temperature has not been set and J2000 coordinates are set.")
+                NMatches += 1
+            Catch ex As TransformUninitialisedException
+                LogError("TransformTest", "Received a TransformUninitialisedException when this operation should have worked!")
+            Catch ex As Exception
+                LogException("TransformTest1", ex.ToString())
+            End Try
+
+            ' Confirm that Transform throws an exception when J2000 coordinates are set and refraction correction is enabled but site temperature is not set
+            'Try
+            '    Dim rightAscension As Double
+            '    tr.Refraction = True
+            '    rightAscension = tr.RATopocentric
+            '    LogError("TransformTest", "Did not receive a TransformUninitialisedException when J2000 coordinates are set and refraction is enabled.")
+            'Catch ex As TransformUninitialisedException
+            '    TL.LogMessage("TransformTest", "Transform threw a TransformUninitialisedException when refraction correction is enabled and J2000 coordinates are set but site temperature has not been set.")
+            '    NMatches += 1
+            'Catch ex As Exception
+            '    LogException("TransformTest1", ex.ToString())
+            'End Try
+            tr.Dispose()
+        Catch ex As Exception
+            LogException("TransformTest", ex.ToString())
+        End Try
 
         TL.BlankLine()
     End Sub
@@ -6003,7 +6067,7 @@ Public Class DiagnosticsForm
                 TL.BlankLine()
 
                 Compare("UtilTests", "TimeZoneName", Utl.TimeZoneName.ToString, GetTimeZoneName)
-                CompareDouble("UtilTests", "TimeZoneOffset", Utl.TimeZoneOffset, -CDbl(TimeZone.CurrentTimeZone.GetUtcOffset(Now).Hours), 0.017) '1 minute tolerance
+                CompareDouble("UtilTests", "TimeZoneOffset", Utl.TimeZoneOffset, -TimeZone.CurrentTimeZone.GetUtcOffset(Now).TotalHours, 0.017) '1 minute tolerance
                 Compare("UtilTests", "UTCDate", Utl.UTCDate.ToString, Date.UtcNow)
                 CompareDouble("UtilTests", "Julian date", Utl.JulianDate, Date.UtcNow.ToOADate() + OLE_AUTOMATION_JULIAN_DATE_OFFSET, 0.00002) '1 second tolerance
                 TL.BlankLine()
@@ -7027,8 +7091,15 @@ Public Class DiagnosticsForm
             Status("Scanning Platform 6 install logs")
             TL.LogMessage("ScanPlatform6Logs", "Starting scan")
 
-            'Get a list of setup files in the ASCOM directory and sub directories in creation date order
-            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOMPlatform6Install*.txt", SearchOption.TopDirectoryOnly)
+            'Get a list of setup files in the ASCOM directory in creation date order
+            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOMPlatform6*.txt", SearchOption.TopDirectoryOnly)
+            For Each foundFile In fileList
+                fileInfo = New FileInfo(foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+            Next
+
+            'Get a list of VC++ log files in the ASCOM directory in creation date order
+            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "VcRedist*.txt", SearchOption.TopDirectoryOnly)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
                 setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
@@ -7041,6 +7112,30 @@ Public Class DiagnosticsForm
             Next
 
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.FinaliseInstall.*.txt", SearchOption.AllDirectories)
+            For Each foundFile In fileList
+                fileInfo = New FileInfo(foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+            Next
+
+            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.InstallTemplates*.txt", SearchOption.AllDirectories)
+            For Each foundFile In fileList
+                fileInfo = New FileInfo(foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+            Next
+
+            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.ValidatePlatform*.txt", SearchOption.AllDirectories)
+            For Each foundFile In fileList
+                fileInfo = New FileInfo(foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+            Next
+
+            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.EarthRotationUpdate*.txt", SearchOption.AllDirectories)
+            For Each foundFile In fileList
+                fileInfo = New FileInfo(foundFile)
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+            Next
+
+            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.SetProfileACL*.txt", SearchOption.AllDirectories)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
                 setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
@@ -7444,7 +7539,6 @@ Public Class DiagnosticsForm
                                 localPath.ToUpperInvariant.Contains("\ASCOM.INTERNAL.FUSIONLIB\6") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.NEWTONSOFT.JSON\6") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.SETTINGSPROVIDER\6") Or
-                                localPath.ToUpperInvariant.Contains("\ASCOM.SETUP.TEMPLATEWIZARD\6") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.UTILITIES.SUPPORT\6") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.UTILITIES.VIDEO") Or
                                 localPath.ToUpperInvariant.Contains("\ASCOM.ASTROMETRY\6") Or

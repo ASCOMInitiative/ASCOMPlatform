@@ -34,16 +34,14 @@ namespace ASCOM.OpenWeatherMap
             this.chkTrace = new System.Windows.Forms.CheckBox();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageApiKey = new System.Windows.Forms.TabPage();
-            this.tabPageSelectSite = new System.Windows.Forms.TabPage();
-            this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colLat = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colLon = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBoxApiUrl = new System.Windows.Forms.TextBox();
+            this.labelApiKey = new System.Windows.Forms.Label();
+            this.textBoxApiKey = new System.Windows.Forms.TextBox();
+            this.buttonObtainKey = new System.Windows.Forms.Button();
             this.labelObtainApiKey = new System.Windows.Forms.Label();
-            this.buttonCheck = new System.Windows.Forms.Button();
-            this.textBoxSiteLongitude = new System.Windows.Forms.TextBox();
-            this.labelSiteLongitude = new System.Windows.Forms.Label();
+            this.tabPageSelectSite = new System.Windows.Forms.TabPage();
+            this.textBoxCityName = new System.Windows.Forms.TextBox();
             this.radioButtonLatLong = new System.Windows.Forms.RadioButton();
             this.radioButtonCity = new System.Windows.Forms.RadioButton();
             this.textBoxSiteElevation = new System.Windows.Forms.TextBox();
@@ -51,17 +49,24 @@ namespace ASCOM.OpenWeatherMap
             this.textBoxSiteLatitude = new System.Windows.Forms.TextBox();
             this.labelSiteLatitude = new System.Windows.Forms.Label();
             this.labelCityName = new System.Windows.Forms.Label();
-            this.buttonObtainKey = new System.Windows.Forms.Button();
-            this.textBoxCityName = new System.Windows.Forms.TextBox();
-            this.textBoxApiKey = new System.Windows.Forms.TextBox();
-            this.labelApiKey = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textBoxApiUrl = new System.Windows.Forms.TextBox();
+            this.buttonCheck = new System.Windows.Forms.Button();
+            this.textBoxSiteLongitude = new System.Windows.Forms.TextBox();
+            this.labelSiteLongitude = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.dataGridView = new System.Windows.Forms.DataGridView();
+            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colLat = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colLon = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabPageOptions = new System.Windows.Forms.TabPage();
+            this.MinimumRefreshInterval = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.tabControl.SuspendLayout();
             this.tabPageApiKey.SuspendLayout();
             this.tabPageSelectSite.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
+            this.tabPageOptions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MinimumRefreshInterval)).BeginInit();
             this.SuspendLayout();
             // 
             // cmdOK
@@ -117,6 +122,7 @@ namespace ASCOM.OpenWeatherMap
             // 
             this.tabControl.Controls.Add(this.tabPageApiKey);
             this.tabControl.Controls.Add(this.tabPageSelectSite);
+            this.tabControl.Controls.Add(this.tabPageOptions);
             this.tabControl.Location = new System.Drawing.Point(1, 4);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
@@ -138,6 +144,58 @@ namespace ASCOM.OpenWeatherMap
             this.tabPageApiKey.Size = new System.Drawing.Size(336, 317);
             this.tabPageApiKey.TabIndex = 0;
             this.tabPageApiKey.Text = "Get API Key";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(16, 149);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(49, 13);
+            this.label2.TabIndex = 28;
+            this.label2.Text = "API URL";
+            // 
+            // textBoxApiUrl
+            // 
+            this.textBoxApiUrl.Location = new System.Drawing.Point(67, 146);
+            this.textBoxApiUrl.Name = "textBoxApiUrl";
+            this.textBoxApiUrl.Size = new System.Drawing.Size(253, 20);
+            this.textBoxApiUrl.TabIndex = 27;
+            // 
+            // labelApiKey
+            // 
+            this.labelApiKey.AutoSize = true;
+            this.labelApiKey.Location = new System.Drawing.Point(16, 96);
+            this.labelApiKey.Name = "labelApiKey";
+            this.labelApiKey.Size = new System.Drawing.Size(45, 13);
+            this.labelApiKey.TabIndex = 26;
+            this.labelApiKey.Text = "API Key";
+            // 
+            // textBoxApiKey
+            // 
+            this.textBoxApiKey.Location = new System.Drawing.Point(67, 93);
+            this.textBoxApiKey.Name = "textBoxApiKey";
+            this.textBoxApiKey.Size = new System.Drawing.Size(253, 20);
+            this.textBoxApiKey.TabIndex = 25;
+            // 
+            // buttonObtainKey
+            // 
+            this.buttonObtainKey.Location = new System.Drawing.Point(9, 64);
+            this.buttonObtainKey.Name = "buttonObtainKey";
+            this.buttonObtainKey.Size = new System.Drawing.Size(73, 23);
+            this.buttonObtainKey.TabIndex = 23;
+            this.buttonObtainKey.Text = "Obtain Key";
+            this.buttonObtainKey.UseVisualStyleBackColor = true;
+            this.buttonObtainKey.Click += new System.EventHandler(this.buttonObtainKey_Click);
+            // 
+            // labelObtainApiKey
+            // 
+            this.labelObtainApiKey.Location = new System.Drawing.Point(6, 3);
+            this.labelObtainApiKey.Name = "labelObtainApiKey";
+            this.labelObtainApiKey.Size = new System.Drawing.Size(270, 68);
+            this.labelObtainApiKey.TabIndex = 19;
+            this.labelObtainApiKey.Text = "You need to obtain an API key from OpenWeatherMap to use this.\r\nClick on Obtain K" +
+    "ey to go to the OpenWeatherMap site, obtain a key and copy it to the API Key tex" +
+    "t box.\r\n";
             // 
             // tabPageSelectSite
             // 
@@ -162,89 +220,12 @@ namespace ASCOM.OpenWeatherMap
             this.tabPageSelectSite.TabIndex = 1;
             this.tabPageSelectSite.Text = "Select Site";
             // 
-            // dataGridView
+            // textBoxCityName
             // 
-            this.dataGridView.AllowUserToAddRows = false;
-            this.dataGridView.AllowUserToDeleteRows = false;
-            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colName,
-            this.colLat,
-            this.colLon});
-            this.dataGridView.Location = new System.Drawing.Point(1, 144);
-            this.dataGridView.Name = "dataGridView";
-            this.dataGridView.ReadOnly = true;
-            this.dataGridView.Size = new System.Drawing.Size(328, 173);
-            this.dataGridView.TabIndex = 18;
-            this.dataGridView.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
-            // 
-            // colName
-            // 
-            this.colName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colName.HeaderText = "Name";
-            this.colName.Name = "colName";
-            this.colName.ReadOnly = true;
-            // 
-            // colLat
-            // 
-            this.colLat.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            this.colLat.HeaderText = "Latitude";
-            this.colLat.Name = "colLat";
-            this.colLat.ReadOnly = true;
-            this.colLat.Width = 70;
-            // 
-            // colLon
-            // 
-            this.colLon.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            this.colLon.HeaderText = "Longitude";
-            this.colLon.Name = "colLon";
-            this.colLon.ReadOnly = true;
-            this.colLon.Width = 79;
-            // 
-            // label1
-            // 
-            this.label1.Location = new System.Drawing.Point(3, 84);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(326, 46);
-            this.label1.TabIndex = 19;
-            this.label1.Text = "Set the City or Location and click on \"Check\" to find a location in\r\nthe OpenWeat" +
-    "herMap list.  Choose the one you want and click on \"OK\" to select it.\r\n";
-            // 
-            // labelObtainApiKey
-            // 
-            this.labelObtainApiKey.Location = new System.Drawing.Point(6, 3);
-            this.labelObtainApiKey.Name = "labelObtainApiKey";
-            this.labelObtainApiKey.Size = new System.Drawing.Size(270, 68);
-            this.labelObtainApiKey.TabIndex = 19;
-            this.labelObtainApiKey.Text = "You need to obtain an API key from OpenWeatherMap to use this.\r\nClick on Obtain K" +
-    "ey to go to the OpenWeatherMap site, obtain a key and copy it to the API Key tex" +
-    "t box.\r\n";
-            // 
-            // buttonCheck
-            // 
-            this.buttonCheck.Location = new System.Drawing.Point(216, 59);
-            this.buttonCheck.Name = "buttonCheck";
-            this.buttonCheck.Size = new System.Drawing.Size(61, 23);
-            this.buttonCheck.TabIndex = 22;
-            this.buttonCheck.Text = "Check";
-            this.buttonCheck.UseVisualStyleBackColor = true;
-            this.buttonCheck.Click += new System.EventHandler(this.buttonCheck_Click);
-            // 
-            // textBoxSiteLongitude
-            // 
-            this.textBoxSiteLongitude.Location = new System.Drawing.Point(87, 61);
-            this.textBoxSiteLongitude.Name = "textBoxSiteLongitude";
-            this.textBoxSiteLongitude.Size = new System.Drawing.Size(76, 20);
-            this.textBoxSiteLongitude.TabIndex = 21;
-            // 
-            // labelSiteLongitude
-            // 
-            this.labelSiteLongitude.AutoSize = true;
-            this.labelSiteLongitude.Location = new System.Drawing.Point(6, 64);
-            this.labelSiteLongitude.Name = "labelSiteLongitude";
-            this.labelSiteLongitude.Size = new System.Drawing.Size(75, 13);
-            this.labelSiteLongitude.TabIndex = 20;
-            this.labelSiteLongitude.Text = "Site Longitude";
+            this.textBoxCityName.Location = new System.Drawing.Point(67, 6);
+            this.textBoxCityName.Name = "textBoxCityName";
+            this.textBoxCityName.Size = new System.Drawing.Size(96, 20);
+            this.textBoxCityName.TabIndex = 31;
             // 
             // radioButtonLatLong
             // 
@@ -309,54 +290,112 @@ namespace ASCOM.OpenWeatherMap
             this.labelCityName.TabIndex = 23;
             this.labelCityName.Text = "City Name";
             // 
-            // buttonObtainKey
+            // buttonCheck
             // 
-            this.buttonObtainKey.Location = new System.Drawing.Point(9, 64);
-            this.buttonObtainKey.Name = "buttonObtainKey";
-            this.buttonObtainKey.Size = new System.Drawing.Size(73, 23);
-            this.buttonObtainKey.TabIndex = 23;
-            this.buttonObtainKey.Text = "Obtain Key";
-            this.buttonObtainKey.UseVisualStyleBackColor = true;
-            this.buttonObtainKey.Click += new System.EventHandler(this.buttonObtainKey_Click);
+            this.buttonCheck.Location = new System.Drawing.Point(216, 59);
+            this.buttonCheck.Name = "buttonCheck";
+            this.buttonCheck.Size = new System.Drawing.Size(61, 23);
+            this.buttonCheck.TabIndex = 22;
+            this.buttonCheck.Text = "Check";
+            this.buttonCheck.UseVisualStyleBackColor = true;
+            this.buttonCheck.Click += new System.EventHandler(this.buttonCheck_Click);
             // 
-            // textBoxCityName
+            // textBoxSiteLongitude
             // 
-            this.textBoxCityName.Location = new System.Drawing.Point(67, 6);
-            this.textBoxCityName.Name = "textBoxCityName";
-            this.textBoxCityName.Size = new System.Drawing.Size(96, 20);
-            this.textBoxCityName.TabIndex = 31;
+            this.textBoxSiteLongitude.Location = new System.Drawing.Point(87, 61);
+            this.textBoxSiteLongitude.Name = "textBoxSiteLongitude";
+            this.textBoxSiteLongitude.Size = new System.Drawing.Size(76, 20);
+            this.textBoxSiteLongitude.TabIndex = 21;
             // 
-            // textBoxApiKey
+            // labelSiteLongitude
             // 
-            this.textBoxApiKey.Location = new System.Drawing.Point(67, 93);
-            this.textBoxApiKey.Name = "textBoxApiKey";
-            this.textBoxApiKey.Size = new System.Drawing.Size(253, 20);
-            this.textBoxApiKey.TabIndex = 25;
+            this.labelSiteLongitude.AutoSize = true;
+            this.labelSiteLongitude.Location = new System.Drawing.Point(6, 64);
+            this.labelSiteLongitude.Name = "labelSiteLongitude";
+            this.labelSiteLongitude.Size = new System.Drawing.Size(75, 13);
+            this.labelSiteLongitude.TabIndex = 20;
+            this.labelSiteLongitude.Text = "Site Longitude";
             // 
-            // labelApiKey
+            // label1
             // 
-            this.labelApiKey.AutoSize = true;
-            this.labelApiKey.Location = new System.Drawing.Point(16, 96);
-            this.labelApiKey.Name = "labelApiKey";
-            this.labelApiKey.Size = new System.Drawing.Size(45, 13);
-            this.labelApiKey.TabIndex = 26;
-            this.labelApiKey.Text = "API Key";
+            this.label1.Location = new System.Drawing.Point(3, 84);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(326, 46);
+            this.label1.TabIndex = 19;
+            this.label1.Text = "Set the City or Location and click on \"Check\" to find a location in\r\nthe OpenWeat" +
+    "herMap list.  Choose the one you want and click on \"OK\" to select it.\r\n";
             // 
-            // label2
+            // dataGridView
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(16, 149);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(49, 13);
-            this.label2.TabIndex = 28;
-            this.label2.Text = "API URL";
+            this.dataGridView.AllowUserToAddRows = false;
+            this.dataGridView.AllowUserToDeleteRows = false;
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colName,
+            this.colLat,
+            this.colLon});
+            this.dataGridView.Location = new System.Drawing.Point(1, 144);
+            this.dataGridView.Name = "dataGridView";
+            this.dataGridView.ReadOnly = true;
+            this.dataGridView.Size = new System.Drawing.Size(328, 173);
+            this.dataGridView.TabIndex = 18;
+            this.dataGridView.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
             // 
-            // textBoxApiUrl
+            // colName
             // 
-            this.textBoxApiUrl.Location = new System.Drawing.Point(67, 146);
-            this.textBoxApiUrl.Name = "textBoxApiUrl";
-            this.textBoxApiUrl.Size = new System.Drawing.Size(253, 20);
-            this.textBoxApiUrl.TabIndex = 27;
+            this.colName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colName.HeaderText = "Name";
+            this.colName.Name = "colName";
+            this.colName.ReadOnly = true;
+            // 
+            // colLat
+            // 
+            this.colLat.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.colLat.HeaderText = "Latitude";
+            this.colLat.Name = "colLat";
+            this.colLat.ReadOnly = true;
+            this.colLat.Width = 70;
+            // 
+            // colLon
+            // 
+            this.colLon.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.colLon.HeaderText = "Longitude";
+            this.colLon.Name = "colLon";
+            this.colLon.ReadOnly = true;
+            this.colLon.Width = 79;
+            // 
+            // tabPageOptions
+            // 
+            this.tabPageOptions.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageOptions.Controls.Add(this.label3);
+            this.tabPageOptions.Controls.Add(this.MinimumRefreshInterval);
+            this.tabPageOptions.Location = new System.Drawing.Point(4, 22);
+            this.tabPageOptions.Name = "tabPageOptions";
+            this.tabPageOptions.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageOptions.Size = new System.Drawing.Size(336, 317);
+            this.tabPageOptions.TabIndex = 2;
+            this.tabPageOptions.Text = "Options";
+            // 
+            // MinimumRefreshInterval
+            // 
+            this.MinimumRefreshInterval.Location = new System.Drawing.Point(231, 35);
+            this.MinimumRefreshInterval.Maximum = new decimal(new int[] {
+            -727379968,
+            232,
+            0,
+            0});
+            this.MinimumRefreshInterval.Name = "MinimumRefreshInterval";
+            this.MinimumRefreshInterval.Size = new System.Drawing.Size(99, 20);
+            this.MinimumRefreshInterval.TabIndex = 0;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 37);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(217, 13);
+            this.label3.TabIndex = 1;
+            this.label3.Text = "Minimum period between API calls (seconds)";
             // 
             // SetupDialogForm
             // 
@@ -382,6 +421,9 @@ namespace ASCOM.OpenWeatherMap
             this.tabPageSelectSite.ResumeLayout(false);
             this.tabPageSelectSite.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
+            this.tabPageOptions.ResumeLayout(false);
+            this.tabPageOptions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MinimumRefreshInterval)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -418,5 +460,8 @@ namespace ASCOM.OpenWeatherMap
         private System.Windows.Forms.DataGridViewTextBoxColumn colLon;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBoxApiUrl;
+        private System.Windows.Forms.TabPage tabPageOptions;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.NumericUpDown MinimumRefreshInterval;
     }
 }

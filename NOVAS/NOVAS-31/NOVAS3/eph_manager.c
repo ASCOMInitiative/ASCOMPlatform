@@ -134,13 +134,13 @@ short int ephem_open(char* ephem_name,
 
 	if (EPHFILE)
 	{
-		printf("***** EPHEM_OPEN - File already open so closing it.\r\n");
+		// printf("***** EPHEM_OPEN - File already open so closing it.\r\n");
 		fclose(EPHFILE);
 		free(BUFFER);
 	}
 	else
 	{
-		printf("***** EPHEM_OPEN - File NOT already open.\r\n");
+		// printf("***** EPHEM_OPEN - File NOT already open.\r\n");
 	}
 
 	/*
@@ -265,7 +265,7 @@ short int ephem_open(char* ephem_name,
 		*jd_begin = SS[0];
 		*jd_end = SS[1];
 	}
-	printf("***** EPHEM_OPEN %i\r\n", (EPHFILE == NULL));
+	// printf("***** EPHEM_OPEN %i\r\n", (EPHFILE == NULL));
 	return 0;
 }
 
@@ -328,13 +328,13 @@ short int ephem_close(void)
 		// free (BUFFER);
 		// EPHFILE = 0; //Peter Simpson - Added this so that the fclose in Ephem_Open wil not run if the file has been closed
 		// Replaced above two lines with Novas 3.1 Errata from http://aa.usno.navy.mil/software/novas/novas_faq.php 
-		printf("***** EPHEM_CLOSE - FREEING BUFFER AND CLOSING EPHFILE *****\r\n");
+		// printf("***** EPHEM_CLOSE - FREEING BUFFER AND CLOSING EPHFILE *****\r\n");
 		EPHFILE = NULL; // new line, reset pointer 
 		free(BUFFER);
 	}
 	else
 	{
-		printf("***** EPHEM_CLOSE - File already closed, no action taken\r\n");
+		// printf("***** EPHEM_CLOSE - File already closed, no action taken\r\n");
 	}
 	return error;
 }
@@ -420,7 +420,7 @@ short int planet_ephemeris(double tjd[2], short int target,
 	------------------------------------------------------------------------
 	*/
 {
-	printf("***** PLANET_EPHEMERIS - JD[0]: %g, JD[1: ]%g, Target: %i, Centre: %i \r\n", tjd[0], tjd[1], target, center);
+	// printf("***** PLANET_EPHEMERIS - JD[0]: %g, JD[1: ]%g, Target: %i, Centre: %i \r\n", tjd[0], tjd[1], target, center);
 
 
 	short int i, error = 0, earth = 2, moon = 9;

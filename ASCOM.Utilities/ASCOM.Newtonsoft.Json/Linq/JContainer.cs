@@ -318,7 +318,9 @@ namespace Newtonsoft.Json.Linq
 
         internal bool IsMultiContent([NotNull]object? content)
         {
+#pragma warning disable CS8777 // Parameter must have a non-null value when exiting.
             return (content is IEnumerable && !(content is string) && !(content is JToken) && !(content is byte[]));
+#pragma warning restore CS8777 // Parameter must have a non-null value when exiting.
         }
 
         internal JToken EnsureParentToken(JToken? item, bool skipParentCheck)

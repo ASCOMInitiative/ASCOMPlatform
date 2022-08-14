@@ -27,6 +27,8 @@ namespace InstallTemplates
         {
             try
             {
+                string[] vsDirs = new string[0];
+
                 Dictionary<string, string> vsTemplateDirectoryList; // Dictionary to hold the list of install directories holding templates
                 string TemplateSourceDirectory = "";
                 vsTemplateDirectoryList = new Dictionary<string, string>();
@@ -37,53 +39,165 @@ namespace InstallTemplates
                 string fileVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
                 LogMessage("Main", "Installer version: " + fileVersion);
                 LogMessage("Main", "Install date: " + DateTime.Now.ToLongDateString());
+                LogMessage("Main", $"There are : {args.Length} arguments.");
+                LogMessage("Main", $"Argument[0]: {args[0]}.");
                 LogMessage("Main", "");
 
-                try
+                // Handle command line parameters
+                if (args[0].ToUpperInvariant() == "/CLEANUP") // Clean up previous template installation
                 {
-                    LogMessage("Main", "Installing new templates...");
+                    LogMessage("CleanUp", $"Cleaning previous template installation...");
 
-                    if (Environment.Is64BitOperatingSystem)
+                    // Find the roaming profile folder
+                    string roamingApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                    LogMessage("CleanUp", $"Roaming application data path: {roamingApplicationDataFolder}");
+
+                    // Find the local profile folder
+                    string localApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                    LogMessage("CleanUp", $"Local application data path: {localApplicationDataFolder}");
+                    
+                    // Find the Visual Studio folder in the local profile
+                    string vsPathLocal = $"{localApplicationDataFolder}\\Microsoft\\VisualStudio";
+                    LogMessage("CleanUp", $"Local Visual Studio path: {vsPathLocal}");
+
+                    // Find the project template cache in the local profile 
+                    vsDirs = Directory.GetDirectories(vsPathLocal, "ProjectTemplatesCache*", SearchOption.AllDirectories);
+                    foreach (string dir in vsDirs)
                     {
-                        LogMessage("Main", "OS is 64bit");
-                        TemplateSourceDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\ASCOM\Platform 6 Developer Components\Templates";
+                        // Delete the cache file
+                        try
+                        {
+                            LogMessage("CleanUp", $"Found local cache folder: {dir}, deleting file cache.bin");
+                            File.Delete($"{dir}\\cache.bin");
+                        }
+                        catch (Exception ex)
+                        {
+                            LogMessage("CleanUp", "Delete cache.bin exception: " + ex.ToString());
+                        }
                     }
-                    else
+
+                    // Find the project template cache in the roaming profile 
+                    string searchPathRoaming = $"{roamingApplicationDataFolder}\\Microsoft\\VisualStudio";
+                    LogMessage("CleanUp", $"Roaming search path: {searchPathRoaming}");
+
+                    // Find the ASCOM cache contents
+                    vsDirs = Directory.GetDirectories(searchPathRoaming, "ASCOM6", SearchOption.AllDirectories);
+                    foreach (string dir in vsDirs)
                     {
-                        LogMessage("Main", "OS is 32bit");
-                        TemplateSourceDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\ASCOM\Platform 6 Developer Components\Templates";
+                        // Delete the cached ASCOM project template files
+                        try
+                        {
+                            LogMessage("CleanUp", $"Deleting roaming cache folder: {dir}");
+                            File.SetAttributes(dir, FileAttributes.Normal);
+                            Directory.Delete(dir, true);
+                        }
+                        catch (Exception ex)
+                        {
+                            LogMessage("CleanUp", "Delete roaming cache folder exception: " + ex.ToString());
+                        }
                     }
 
-                    LogMessage("Main", "Template Source Directory: " + TemplateSourceDirectory);
-
-                    // Search registry for template directories
-                    vsTemplateDirectoryList = AddTemplateDirectories(FindTemplateDirectoriesInRegistry(Registry.CurrentUser, @"Software\Microsoft\VisualStudio"), vsTemplateDirectoryList);
-                    vsTemplateDirectoryList = AddTemplateDirectories(FindTemplateDirectoriesInRegistry(Registry.CurrentUser, @"Software\Microsoft\WDExpress"), vsTemplateDirectoryList);
-
-                    // Search My Documents file system for template directories
-                    vsTemplateDirectoryList = AddTemplateDirectories(FindTemplateDirectoriesInFileSystem(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"Visual Studio*"), vsTemplateDirectoryList);
-
-                    LogMessage("Main", " ");
-                    foreach (KeyValuePair<string, string> templateDir in vsTemplateDirectoryList) // Install new templates in every template directory on this machine
+                    // Delete the Visual Studio cache file.
+                    vsDirs = Directory.GetDirectories(searchPathRoaming, "ProjectTemplatesCache", SearchOption.AllDirectories);
+                    foreach (string dir in vsDirs)
                     {
-                        LogMessage("Main", "Installing templates in directory: " + templateDir.Key.ToString());
-                        InstallTemplates(templateDir.Key.ToString(), TemplateSourceDirectory);
+                        try
+                        {
+                            LogMessage("CleanUp", $"Found roaming cache folder: {dir}, deleting file cache.bin");
+                            File.Delete($"{dir}\\cache.bin");
+                        }
+                        catch (Exception ex)
+                        {
+                            LogMessage("CleanUp", "Delete roaming cache file cache.bin exception: " + ex.ToString());
+                        }
+                    }
+
+                    // Find and delete any project template source files that may remain in the user's machine
+                    try
+                    {
+                        // Search registry for template directories
+                        vsTemplateDirectoryList = AddTemplateDirectories(FindTemplateDirectoriesInRegistry(Registry.CurrentUser, @"Software\Microsoft\VisualStudio"), vsTemplateDirectoryList);
+                        vsTemplateDirectoryList = AddTemplateDirectories(FindTemplateDirectoriesInRegistry(Registry.CurrentUser, @"Software\Microsoft\WDExpress"), vsTemplateDirectoryList);
+
+                        // Search My Documents file system for template directories
+                        vsTemplateDirectoryList = AddTemplateDirectories(FindTemplateDirectoriesInFileSystem(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"Visual Studio*"), vsTemplateDirectoryList);
+
+                        LogMessage("CleanUp", " ");
+                        foreach (KeyValuePair<string, string> templateDir in vsTemplateDirectoryList) // Install new templates in every template directory on this machine
+                        {
+                            vsDirs = Directory.GetDirectories(templateDir.Key, "ASCOM6", SearchOption.AllDirectories);
+                            foreach (string dir in vsDirs)
+                            {
+                                try
+                                {
+                                    LogMessage("CleanUp", $"Deleting templates in directory: {dir}");
+                                    Directory.Delete(dir, true); ;
+                                }
+                                catch (Exception ex)
+                                {
+                                    LogMessage("CleanUp", "Delete roaming cache folder exception: " + ex.ToString());
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        LogError("CleanUp", ex.ToString());
+                        ReturnCode = 100;
+                    }
+
+                    LogMessage("CleanUp", $"Finished cleaning previous template installation.");
+                }
+                else // Install templates
+                {
+                    try
+                    {
+                        LogMessage("Main", "Installing new templates...");
+
+                        if (Environment.Is64BitOperatingSystem)
+                        {
+                            LogMessage("Main", "OS is 64bit");
+                            TemplateSourceDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\ASCOM\Platform 6 Developer Components\Templates";
+                        }
+                        else
+                        {
+                            LogMessage("Main", "OS is 32bit");
+                            TemplateSourceDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\ASCOM\Platform 6 Developer Components\Templates";
+                        }
+
+                        LogMessage("Main", "Template Source Directory: " + TemplateSourceDirectory);
+
+                        // Search registry for template directories
+                        vsTemplateDirectoryList = AddTemplateDirectories(FindTemplateDirectoriesInRegistry(Registry.CurrentUser, @"Software\Microsoft\VisualStudio"), vsTemplateDirectoryList);
+                        vsTemplateDirectoryList = AddTemplateDirectories(FindTemplateDirectoriesInRegistry(Registry.CurrentUser, @"Software\Microsoft\WDExpress"), vsTemplateDirectoryList);
+
+                        // Search My Documents file system for template directories
+                        vsTemplateDirectoryList = AddTemplateDirectories(FindTemplateDirectoriesInFileSystem(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"Visual Studio*"), vsTemplateDirectoryList);
+
+                        LogMessage("Main", " ");
+                        foreach (KeyValuePair<string, string> templateDir in vsTemplateDirectoryList) // Install new templates in every template directory on this machine
+                        {
+                            LogMessage("Main", "Installing templates in directory: " + templateDir.Key.ToString());
+                            InstallTemplates(templateDir.Key.ToString(), TemplateSourceDirectory);
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        LogError("Main", ex.ToString());
+                        ReturnCode = 1;
                     }
 
                 }
-                catch (Exception ex)
-                {
-                    LogError("Main", ex.ToString());
-                    ReturnCode = 1;
-                }
 
-                TL.Enabled = false; // Clean up trace logger
+                // Clean up trace logger
+                TL.Enabled = false;
                 TL.Dispose();
                 TL = null;
             }
             catch (Exception ex1)
             {
-                Console.WriteLine("Exception creating TraceLogger: " + ex1.ToString());
+                Console.WriteLine("InstallTemplates exception: " + ex1.ToString());
                 ReturnCode = 99;
             }
             return ReturnCode;
@@ -135,7 +249,6 @@ namespace InstallTemplates
 
             if (vsDirectories.Length > 0)
             {
-
                 foreach (string vsDirectory in vsDirectories)
                 {
                     //LogMessage("FindTemplateDirectoriesInFileSystem", "Found: " + vsDirectory);

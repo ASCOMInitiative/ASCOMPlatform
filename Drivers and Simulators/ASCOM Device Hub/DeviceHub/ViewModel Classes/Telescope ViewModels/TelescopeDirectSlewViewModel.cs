@@ -16,6 +16,10 @@ namespace ASCOM.DeviceHub
 
 		public TelescopeDirectSlewViewModel( ITelescopeManager telescopeManager )
 		{
+			string caller = "TelescopeDirectSlewViewModel ctor";
+
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			_isActive = false;
 			_isSlewInProgress = false;
 			_useDecimalHours = true;
@@ -23,9 +27,13 @@ namespace ASCOM.DeviceHub
 			TelescopeManager = telescopeManager;
 			Status = null;
 
+			LogAppMessage( "Registering message handlers", caller );
+
 			Messenger.Default.Register<TelescopeCapabilitiesUpdatedMessage>( this, ( action ) => UpdateCapabilities( action ) );
 			Messenger.Default.Register<DeviceDisconnectedMessage>( this, ( action ) => InvalidateDeviceData( action ) );
 			RegisterStatusUpdateMessage( true );
+
+			LogAppMessage( "Instance constructor initialization complete.", caller );
 		}
 
 		#region Change Notification Properties
@@ -478,22 +486,66 @@ namespace ASCOM.DeviceHub
 			{
 				if ( Capabilities.CanSlewAsync )
 				{
-					TelescopeManager.BeginSlewToCoordinatesAsync( TargetRightAscension, TargetDeclination );
+					try
+					{
+						TelescopeManager.BeginSlewToCoordinatesAsync( TargetRightAscension, TargetDeclination );
+					}
+					catch ( Exception xcp )
+					{
+						string msg = "The telescope driver returned an error when attempting an asynchronous slew to "
+								+ $"new RA/Dec coordinates. Details follow:\r\n\r\n{xcp}";
+						ShowMessage( msg, "Telescope Driver Error" );
+
+						return;
+					}
 				}
 				else
 				{
-					TelescopeManager.DoSlewToCoordinates( TargetRightAscension, TargetDeclination, false );
+					try
+					{
+						TelescopeManager.DoSlewToCoordinates( TargetRightAscension, TargetDeclination, false );
+					}
+					catch ( Exception xcp )
+					{
+						string msg = "The telescope driver returned an error when attempting a synchronous slew to "
+								+ $"new RA/Dec coordinates. Details follow:\r\n\r\n{xcp}";
+						ShowMessage( msg, "Telescope Driver Error" );
+
+						return;
+					}
 				}
 			}
 			else
 			{
 				if ( Capabilities.CanSlewAltAzAsync )
 				{
-					TelescopeManager.BeginSlewToAltAzAsync( TargetAzimuth, TargetAltitude );
+					try
+					{
+						TelescopeManager.BeginSlewToAltAzAsync( TargetAzimuth, TargetAltitude );
+					}
+					catch ( Exception xcp )
+					{
+						string msg = "The telescope driver returned an error when attempting an asynchronous slew to "
+								+ $"new Alt/Az coordinates. Details follow:\r\n\r\n{xcp}";
+						ShowMessage( msg, "Telescope Driver Error" );
+
+						return;
+					}
 				}
 				else
 				{
-					TelescopeManager.DoSlewToAltAz( TargetAzimuth, TargetAltitude, false );
+					try
+					{
+						TelescopeManager.DoSlewToAltAz( TargetAzimuth, TargetAltitude, false );
+					}
+					catch ( Exception xcp )
+					{
+						string msg = "The telescope driver returned an error when attempting a synchronous slew to "
+								+ $"new Alt/Az coordinates. Details follow:\r\n\r\n{xcp}";
+						ShowMessage( msg, "Telescope Driver Error" );
+
+						return;
+					}
 				}
 			}
 
@@ -530,7 +582,16 @@ namespace ASCOM.DeviceHub
 
 		private void AbortDirectSlew()
 		{
-			TelescopeManager.AbortDirectSlew();
+			try
+			{
+				TelescopeManager.AbortDirectSlew();
+			}
+			catch ( Exception xcp )
+			{
+				string msg = "The telescope driver returned an error when attempting to abort a direct slew. "
+						+ $"Details follow:\r\n\r\n{xcp}";
+				ShowMessage( msg, "Telescope Driver Error" );
+			}
 		}
 
 		private bool CanAbortDirectSlew()

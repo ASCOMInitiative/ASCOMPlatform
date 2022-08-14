@@ -1,16 +1,15 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-using ASCOM.Astrometry.AstroUtils;
 using ASCOM.Astrometry.Transform;
 using ASCOM.DeviceInterface;
 
 using ASCOM.DeviceHub.MvvmMessenger;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace ASCOM.DeviceHub
 {
@@ -23,8 +22,6 @@ namespace ASCOM.DeviceHub
 		public static string TelescopeID { get; set; }
 
 		private static TelescopeManager _instance = null;
-
-		private static AstroUtils AstroUtils { get; set; }
 
 		public static TelescopeManager Instance
 		{
@@ -44,8 +41,6 @@ namespace ASCOM.DeviceHub
 		static TelescopeManager()
 		{
 			TelescopeID = "";
-
-			AstroUtils = new AstroUtils();
 		}
 
 		public static void SetTelescopeID( string id )
@@ -68,7 +63,7 @@ namespace ASCOM.DeviceHub
 		private bool ForceParameterUpdate { get; set; }
 		private CancellationTokenSource PulseGuideCancelTokenSource { get; set; }
 
-		private object _pulseGuideLock = new object();
+		private readonly object _pulseGuideLock = new object();
 
 		private DateTime _pulseGuideEnd;
 
@@ -93,6 +88,9 @@ namespace ASCOM.DeviceHub
 		private TelescopeManager()
 			: base( DeviceTypeEnum.Telescope )
 		{
+			string caller = "TelescopeManager instance ctor";
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			IsConnected = false;
 			Capabilities = null;
 			Parameters = null;
@@ -105,6 +103,8 @@ namespace ASCOM.DeviceHub
 			PollingChange = new ManualResetEvent( false );
 
 			PreviousSlewInProgressMessage = new SlewInProgressMessage( false );
+
+			LogAppMessage( "Instance constructor initialization complete.", caller );
 		}
 
 		#endregion Instance Constructor
@@ -112,7 +112,7 @@ namespace ASCOM.DeviceHub
 		#region Public Properties
 
 		public bool IsConnected { get; private set; }
-
+		public bool IsInteractivelyConnected { get; private set; }
 		public string ConnectError { get; protected set; }
 		public Exception ConnectException { get; protected set; }
 		public TelescopeCapabilities Capabilities { get; private set; }
@@ -140,10 +140,12 @@ namespace ASCOM.DeviceHub
 
 		public bool Connect()
 		{
-			return Connect( TelescopeID );
+			// This is only called by the telescope driver.
+
+			return Connect( TelescopeID, false );
 		}
 
-		public bool Connect( string scopeID )
+		public bool Connect( string scopeID, bool interactiveConnect = true )
 		{
 			ConnectError = "";
 			ConnectException = null;
@@ -156,6 +158,11 @@ namespace ASCOM.DeviceHub
 				{
 					InitializeTelescopeService( scopeID );
 					SetTelescopeID( scopeID );
+
+					if ( interactiveConnect )
+					{
+						IsInteractivelyConnected = interactiveConnect;
+					}
 				}
 				catch ( Exception xcp )
 				{
@@ -237,7 +244,7 @@ namespace ASCOM.DeviceHub
 			return retval;
 		}
 
-		public void Disconnect()
+		public void Disconnect( bool interactiveDisconnect = false )
 		{
 			if ( !DeviceCreated )
 			{
@@ -246,21 +253,37 @@ namespace ASCOM.DeviceHub
 
 			if ( IsConnected )
 			{
-				StopDevicePolling();
-
 				try
 				{
-					Connected = false;
+					if ( ( Server.ScopesInUse == 1 && !IsInteractivelyConnected ) ||
+						 ( Server.ScopesInUse == 0 && IsInteractivelyConnected && interactiveDisconnect ) )
+					{
+						// If we are not interactively connected and the last scope is disconnecting then
+						//   stop polling and set Connected to false.
+						// If there are no connected telescope clients and we are interactively connected and this is an interactive
+						//    disconnect then stop polling and set Connected to false
+
+						if ( interactiveDisconnect )
+						{
+							IsInteractivelyConnected = false;
+						}
+ 
+						StopDevicePolling();
+						Connected = false;
+					}
 				}
 				catch ( Exception )
 				{ }
 				finally
 				{
-					IsConnected = false;
-					Messenger.Default.Send( new DeviceDisconnectedMessage( DeviceTypeEnum.Telescope ) );
-					ReleaseTelescopeService();
-					Globals.LatestRawTelescopeStatus = null;
-					_jogDirections = null;
+					if ( !IsPolling )
+					{
+						IsConnected = false;
+						Messenger.Default.Send( new DeviceDisconnectedMessage( DeviceTypeEnum.Telescope ) );
+						ReleaseTelescopeService();
+						Globals.LatestRawTelescopeStatus = null;
+						_jogDirections = null;
+					}
 				}
 			}
 		}
@@ -366,7 +389,6 @@ namespace ASCOM.DeviceHub
 			}
 
 			//Debug.WriteLine( $"ParkingState set to {ParkingState}." );
-
 		}
 
 		public void DoSlewToCoordinates( double ra, double dec, bool useSynchronousMethodCall = true )
@@ -461,7 +483,7 @@ namespace ASCOM.DeviceHub
 			{
 				// In case the dome is slaved to us, send it a message to start moving.
 
-				SendSlewMessage( Status.TargetRightAscension, Status.TargetDeclination );
+				SendSlewMessage( TargetRightAscension, TargetDeclination );
 
 				if ( useSynchronousMethodCall )
 				{
@@ -508,7 +530,7 @@ namespace ASCOM.DeviceHub
 			{
 				// In case the dome is slaved to us, send it a message to start moving.
 
-				SendSlewMessage( Status.TargetRightAscension, Status.Declination );
+				SendSlewMessage( TargetRightAscension, TargetDeclination );
 				SlewToTargetAsync();
 				slewed = true;
 
@@ -538,8 +560,7 @@ namespace ASCOM.DeviceHub
 
 			try
 			{
-				double ra, dec;
-				CalculateRaAndDec( azimuth, altitude, out ra, out dec );
+				CalculateRaAndDec( azimuth, altitude, out double ra, out double dec );
 				SendSlewMessage( ra, dec );
 
 				if ( useSynchronousMethodCall )
@@ -582,8 +603,7 @@ namespace ASCOM.DeviceHub
 
 			try
 			{
-				double ra, dec;
-				CalculateRaAndDec( azimuth, altitude, out ra, out dec );
+				CalculateRaAndDec( azimuth, altitude, out double ra, out double dec );
 				SendSlewMessage( ra, dec );
 
 				SlewToAltAzAsync( azimuth, altitude );
@@ -701,7 +721,7 @@ namespace ASCOM.DeviceHub
 			{
 				// Unable to get side-of-pier for this German Equatorial Mount so we need to simulate it.
 
-				double hourAngle = AstroUtils.ConditionHA( Status.SiderealTime - rightAscension );
+				double hourAngle = Globals.ConditionHA( Status.SiderealTime - rightAscension );
 				PierSide currentSOP = Status.SideOfPier;
 				PierSide destinationSOP = currentSOP; // Favor the current side-of-pier for 0 hour angle;
 
@@ -714,6 +734,22 @@ namespace ASCOM.DeviceHub
 			}
 
 			return retval;
+		}
+
+		public void SetTargetDeclination( double targetDec )
+		{
+			// This is called by the telescope driver. Update the current status before sending the new target dec to the downstream driver.
+
+			Status.TargetDeclination = targetDec;
+			TargetDeclination = targetDec;
+		}
+
+		public void SetTargetRightAscension( double targetRa )
+		{
+			// This is called by the telescope driver. Update the current status before sending the new target RA to the downstream driver.
+
+			Status.TargetRightAscension = targetRa;
+			TargetRightAscension = targetRa;
 		}
 
 		#endregion Public Methods
@@ -742,10 +778,18 @@ namespace ASCOM.DeviceHub
 			Stopwatch watch = new Stopwatch();
 			double overhead = 0.0;
 
+			TimeSpan fastPollExtension = new TimeSpan( 0, 0, 3 ); //Wait 3 seconds after movement stops to return to normal polling.
+			bool previousMoveStatus = false;
+			DateTime returnToNormalPollingTime = DateTime.MinValue;
+			int previousPollingPeriod;
+
 			while ( !taskCancelled )
 			{
 				DateTime wakeupTime = DateTime.Now;
 				//Debug.WriteLine( $"Awakened @ {wakeupTime:hh:mm:ss.fff}." );
+				previousPollingPeriod = PollingPeriod;
+				PollingPeriod = POLLING_PERIOD_NORMAL;
+				int fastPollingMs = Convert.ToInt32( FastPollingPeriod * 1000.0 );
 
 				if ( Service.DeviceAvailable )
 				{
@@ -779,7 +823,42 @@ namespace ASCOM.DeviceHub
 						LogActivityLine( ActivityMessageTypes.Commands, $"Returning to normal polling every {POLLING_PERIOD_NORMAL} ms." );
 					}
 
-					PollingPeriod = ( Status.Slewing ) ? Convert.ToInt32( FastPollingPeriod * 1000.0 ) : POLLING_PERIOD_NORMAL;
+					//PollingPeriod = ( Status.Slewing ) ? Convert.ToInt32( FastPollingPeriod * 1000.0 ) : POLLING_PERIOD_NORMAL;
+
+					if ( Status.Slewing )
+					{
+						// We are moving, so use the fast polling rate.
+
+						PollingPeriod = fastPollingMs;
+					}
+					else if ( previousMoveStatus )
+					{
+						// We stopped moving, so start the timer to return to normal polling.
+
+						returnToNormalPollingTime = DateTime.Now + fastPollExtension;
+						PollingPeriod = fastPollingMs;
+					}
+					else if ( DateTime.Now < returnToNormalPollingTime )
+					{
+						// Continue fast polling.
+
+						PollingPeriod = fastPollingMs;
+					}
+					else
+					{
+						// Return to normal polling.
+
+						returnToNormalPollingTime = DateTime.MinValue;
+					}
+
+					// Remember our state for the next time through this loop.
+
+					previousMoveStatus = Status.Slewing;
+
+					if ( PollingPeriod == POLLING_PERIOD_NORMAL && previousPollingPeriod != POLLING_PERIOD_NORMAL )
+					{
+						LogActivityLine( ActivityMessageTypes.Commands, $"Returning to normal polling every {PollingPeriod} ms." );
+					}
 				}
 
 				TimeSpan waitInterval = wakeupTime.AddMilliseconds( (double)PollingPeriod ) - DateTime.Now;
@@ -805,6 +884,7 @@ namespace ASCOM.DeviceHub
 				if ( index == 0 )
 				{
 					taskCancelled = true;
+					break;
 				}
 				else if ( index == 1 )
 				{
@@ -1043,10 +1123,7 @@ namespace ASCOM.DeviceHub
 					Task.Run( () => SlewToAltAz( targetAz, targetAlt ) );
 				}
 
-				double targetRa;
-				double targetDec;
-
-				CalculateRaAndDec( targetAz, targetAlt, out targetRa, out targetDec );
+				CalculateRaAndDec( targetAz, targetAlt, out double targetRa, out double targetDec );
 				PierSide sideOfPier = GetTargetSideOfPier( targetRa, targetDec );
 				Messenger.Default.Send( new SlewInProgressMessage( true, targetRa, targetDec, sideOfPier ) );
 			}
@@ -1396,8 +1473,8 @@ namespace ASCOM.DeviceHub
 			{
 				new JogDirection { Name = "N", Description = "North", MoveDirection = MoveDirections.North, Axis = TelescopeAxes.axisSecondary, RateSign = 1.0, GuideDirection = GuideDirections.guideNorth },
 				new JogDirection { Name = "S", Description = "South", MoveDirection = MoveDirections.South, Axis = TelescopeAxes.axisSecondary, RateSign = -1.0, GuideDirection = GuideDirections.guideSouth },
-				new JogDirection { Name = "W", Description = "West", MoveDirection = MoveDirections.West, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0, GuideDirection = GuideDirections.guideWest },
-				new JogDirection { Name = "E", Description = "East", MoveDirection = MoveDirections.East, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0, GuideDirection = GuideDirections.guideEast }
+				new JogDirection { Name = "W", Description = "West", MoveDirection = MoveDirections.West, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0, GuideDirection = GuideDirections.guideWest },
+				new JogDirection { Name = "E", Description = "East", MoveDirection = MoveDirections.East, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0, GuideDirection = GuideDirections.guideEast }
 			};
 
 			try
@@ -1419,8 +1496,8 @@ namespace ASCOM.DeviceHub
 
 						directions.Add( new JogDirection { Name = "S", Description = "South", MoveDirection = MoveDirections.South, Axis = TelescopeAxes.axisSecondary, RateSign = -1.0, GuideDirection = GuideDirections.guideSouth } );
 						directions.Add( new JogDirection { Name = "N", Description = "North", MoveDirection = MoveDirections.North, Axis = TelescopeAxes.axisSecondary, RateSign = 1.0, GuideDirection = GuideDirections.guideNorth } );
-						directions.Add( new JogDirection { Name = "W", Description = "West", MoveDirection = MoveDirections.West, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0, GuideDirection = GuideDirections.guideWest } );
-						directions.Add( new JogDirection { Name = "E", Description = "East", MoveDirection = MoveDirections.East, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0, GuideDirection = GuideDirections.guideEast } );
+						directions.Add( new JogDirection { Name = "W", Description = "West", MoveDirection = MoveDirections.West, Axis = TelescopeAxes.axisPrimary, RateSign = 1.0, GuideDirection = GuideDirections.guideWest } );
+						directions.Add( new JogDirection { Name = "E", Description = "East", MoveDirection = MoveDirections.East, Axis = TelescopeAxes.axisPrimary, RateSign = -1.0, GuideDirection = GuideDirections.guideEast } );
 					}
 				}
 			}

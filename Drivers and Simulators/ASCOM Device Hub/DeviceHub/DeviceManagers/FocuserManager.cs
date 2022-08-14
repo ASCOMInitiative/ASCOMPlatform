@@ -34,7 +34,11 @@ namespace ASCOM.DeviceHub
 
 		static FocuserManager()
 		{
+			string caller = "FocuserManager static ctor";
+
+			LogAppMessage( "Initialization started.", caller );
 			FocuserID = "";
+			LogAppMessage( "Initialization completed.", caller );
 		}
 
 		public static void SetFocuserID( string id )
@@ -63,6 +67,9 @@ namespace ASCOM.DeviceHub
 		public FocuserManager()
 				: base( DeviceTypeEnum.Focuser )
 		{
+			string caller = "FocuserManager instance ctor";
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			IsConnected = false;
 			Parameters = null;
 			Status = null;
@@ -71,6 +78,8 @@ namespace ASCOM.DeviceHub
 			MoveInProgress = false;
 			PollingPeriod = POLLING_PERIOD_NORMAL;
 			PollingChange = new ManualResetEvent( false );
+
+			LogAppMessage( "Instance constructor initialization complete.", caller );
 		}
 
 		#endregion Instance Constructor
@@ -78,7 +87,7 @@ namespace ASCOM.DeviceHub
 		#region Public Properties
 
 		public bool IsConnected { get; private set; }
-
+		public bool IsInteractivelyConnected { get; private set; }
 		public string ConnectError { get; protected set; }
 		public Exception ConnectException { get; protected set; }
 
@@ -91,10 +100,12 @@ namespace ASCOM.DeviceHub
 
 		public bool Connect()
 		{
-			return Connect( FocuserID );
+			// This is only called by the focuser driver.
+
+			return Connect( FocuserID, false );
 		}
 
-		public bool Connect( string focuserID )
+		public bool Connect( string focuserID, bool interactiveConnect = true )
 		{
 			ConnectError = "";
 			ConnectException = null;
@@ -107,6 +118,11 @@ namespace ASCOM.DeviceHub
 				{
 					InitializeFocuserService( focuserID );
 					SetFocuserID( focuserID );
+
+					if ( interactiveConnect)
+					{
+						IsInteractivelyConnected = interactiveConnect;
+					}
 				}
 				catch ( Exception xcp )
 				{
@@ -187,7 +203,7 @@ namespace ASCOM.DeviceHub
 			return retval;
 		}
 
-		public void Disconnect()
+		public void Disconnect( bool interactiveDisconnect = false )
 		{
 			if ( !DeviceCreated )
 			{
@@ -196,19 +212,30 @@ namespace ASCOM.DeviceHub
 
 			if ( IsConnected )
 			{
-				StopDevicePolling();
-
 				try
 				{
-					Connected = false;
+					if ( ( Server.FocusersInUse == 1 && !IsInteractivelyConnected ) ||
+						 ( Server.FocusersInUse == 0 && IsInteractivelyConnected && interactiveDisconnect ) )
+					{
+						if ( interactiveDisconnect)
+						{
+							IsInteractivelyConnected = false;
+						}
+
+						StopDevicePolling();
+						Connected = false;
+					}
 				}
 				catch ( Exception )
 				{ }
 				finally
 				{
-					IsConnected = false;
-					Messenger.Default.Send( new DeviceDisconnectedMessage( DeviceTypeEnum.Focuser ) );
-					ReleaseFocuserService();
+					if ( !IsPolling )
+					{
+						IsConnected = false;
+						Messenger.Default.Send( new DeviceDisconnectedMessage( DeviceTypeEnum.Focuser ) );
+						ReleaseFocuserService();
+					}
 				}
 			}
 		}
@@ -220,6 +247,8 @@ namespace ASCOM.DeviceHub
 
 		public void MoveFocuserBy( int amount )
 		{
+			// This method is called by the U/I and the focuser driver.
+
 			int maxIncrement = Parameters.MaxIncrement;
 			int maxStep = Parameters.MaxStep;
 			short interfaceVersion = Parameters.InterfaceVersion;
@@ -228,6 +257,7 @@ namespace ASCOM.DeviceHub
 			// Ensure that our move amount does not exceed the MaxIncrement.
 
 			int moveAmount = Math.Max( Math.Min( amount, maxIncrement ), -MaxIncrement );
+			Messenger.Default.Send( new FocuserMoveAmountMessage( moveAmount ) );
 
 			if ( Parameters.Absolute )
 			{
@@ -255,17 +285,17 @@ namespace ASCOM.DeviceHub
 
 		public void HaltFocuser()
 		{
+			// This is called only from the U/I.
+
 			if ( IsMoving )
 			{
 				// Stop the focuser and cancel any move that we have in progress.
 
 				Halt();
-
 				MoveInProgress = false;
 				Status.IsMoving = false;
 
 				Messenger.Default.Send( new FocuserMoveCompletedMessage() );
-
 			}
 		}
 
@@ -324,13 +354,23 @@ namespace ASCOM.DeviceHub
 			Stopwatch watch = new Stopwatch();
 			double overhead = 0.0;
 
+			TimeSpan fastPollExtension = new TimeSpan( 0, 0, 3 ); //Wait 3 seconds after movement stops to return to normal polling.
+			bool previousMoveStatus = false;
+			DateTime returnToNormalPollingTime = DateTime.MinValue;
+			int previousPollingPeriod;
+
 			while ( !taskCancelled )
 			{
 				DateTime wakeupTime = DateTime.Now;
 				//Debug.WriteLine( $"Awakened @ {wakeupTime:hh:mm:ss.fff}." );
+				previousPollingPeriod = PollingPeriod;
+				PollingPeriod = POLLING_PERIOD_NORMAL;
+				int fastPollingMs = Convert.ToInt32( FastPollingPeriod * 1000.0 );
 
 				if ( Service.DeviceAvailable )
 				{
+					UpdateFocuserStatusTask();
+
 					if ( MoveInProgress && !Status.IsMoving )
 					{
 						MoveInProgress = false;
@@ -339,23 +379,46 @@ namespace ASCOM.DeviceHub
 						{
 							Service.TempComp = true;
 							ReEnableTempComp = false;
+							UpdateFocuserStatusTask();
 						}
-
-						UpdateFocuserStatusTask();
 
 						Messenger.Default.Send( new FocuserMoveCompletedMessage() );
 					}
+
+					if ( MoveInProgress )
+					{
+						// Switch to fast polling because the device is moving.
+						//Debug.WriteLine( "Switching to fast polling because the device is moving." );
+						PollingPeriod = fastPollingMs;
+					}
+					else if ( previousMoveStatus)
+					{
+						// We stopped moving, so start the timer to return to normal polling.
+						//Debug.WriteLine( "We stopped moving, so start the timer to return to normal polling." );
+						returnToNormalPollingTime = DateTime.Now + fastPollExtension;
+						PollingPeriod = fastPollingMs;
+					}
+					else if ( DateTime.Now < returnToNormalPollingTime)
+					{
+						// Continue fast polling.
+						//Debug.WriteLine( "Continue fast polling." );
+						PollingPeriod = fastPollingMs;
+					}
 					else
 					{
-						UpdateFocuserStatusTask();
+						// Return to normal polling.
+						//Debug.WriteLine( "Return to normal polling." );
+						returnToNormalPollingTime = DateTime.MinValue;
 					}
 
-					if ( !MoveInProgress && PollingPeriod != POLLING_PERIOD_NORMAL )
+					// Remember our state for the next time through this loop.
+
+					previousMoveStatus = MoveInProgress;
+
+					if ( PollingPeriod == POLLING_PERIOD_NORMAL && previousPollingPeriod != POLLING_PERIOD_NORMAL )
 					{
-						LogActivityLine( ActivityMessageTypes.Commands, $"Returning to normal polling every {POLLING_PERIOD_NORMAL} ms." );
+						LogActivityLine( ActivityMessageTypes.Commands, $"Returning to normal polling every {PollingPeriod} ms." );
 					}
-
-					PollingPeriod = MoveInProgress ? Convert.ToInt32( FastPollingPeriod * 1000.0 ) : POLLING_PERIOD_NORMAL;
 				}
 
 				TimeSpan waitPeriod = wakeupTime.AddMilliseconds( (double)PollingPeriod ) - DateTime.Now;

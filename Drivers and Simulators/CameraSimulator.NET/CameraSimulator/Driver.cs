@@ -1340,28 +1340,30 @@ namespace ASCOM.Simulator
                 if (sensorType == SensorType.Color)
                 {
                     imageArrayVariantColour = new object[imageArrayColour.GetLength(0), imageArrayColour.GetLength(1), 3];
-                    for (int i = 0; i < imageArrayColour.GetLength(1); i++)
+                    Parallel.For(0, imageArray.GetLength(0), i =>
+                    //for (int i = 0; i < imageArrayColour.GetLength(1); i++)
                     {
-                        for (int j = 0; j < imageArrayColour.GetLength(0); j++)
+                        for (int j = 0; j < imageArrayColour.GetLength(1); j++)
                         {
                             for (int k = 0; k < 3; k++)
-                                imageArrayVariantColour[j, i, k] = imageArrayColour[j, i, k];
+                                imageArrayVariantColour[i, j, k] = imageArrayColour[i, j, k];
                         }
 
-                    }
+                    });
                     return imageArrayVariantColour;
                 }
                 else
                 {
                     imageArrayVariant = new object[imageArray.GetLength(0), imageArray.GetLength(1)];
-                    for (int i = 0; i < imageArray.GetLength(1); i++)
+                    Parallel.For(0, imageArray.GetLength(0), i =>
+                    //for (int i = 0; i < imageArray.GetLength(1); i++)
                     {
-                        for (int j = 0; j < imageArray.GetLength(0); j++)
+                        for (int j = 0; j < imageArray.GetLength(1); j++)
                         {
-                            imageArrayVariant[j, i] = imageArray[j, i];
+                            imageArrayVariant[i, j] = imageArray[i, j];
                         }
 
-                    }
+                    });
                     return imageArrayVariant;
                 }
             }
@@ -2915,7 +2917,7 @@ namespace ASCOM.Simulator
                         {
                             for (int y = 0; y < numY; y++)
                             {
-                                imageArrayColour[x, y, 0] = random.Next(lowerBound,upperBound);
+                                imageArrayColour[x, y, 0] = random.Next(lowerBound, upperBound);
                                 imageArrayColour[x, y, 1] = random.Next(lowerBound, upperBound);
                                 imageArrayColour[x, y, 2] = random.Next(lowerBound, upperBound);
                             }

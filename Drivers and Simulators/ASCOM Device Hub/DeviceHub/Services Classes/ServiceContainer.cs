@@ -115,12 +115,9 @@ namespace ASCOM.DeviceHub
 
 			lock ( this )
 			{
-				Dictionary<string, object> variants;
-
-				if ( _serviceMap.TryGetValue( typeof( TServiceContract ), out variants ) )
+				if ( _serviceMap.TryGetValue( typeof( TServiceContract ), out Dictionary<string, object> variants ) )
 				{
-					object temp = null;
-					variants.TryGetValue( variant, out temp );
+					variants.TryGetValue( variant, out object temp );
 
 					// Figure out if the variant object is a an instance of a service or a type of the concrete service class.
 

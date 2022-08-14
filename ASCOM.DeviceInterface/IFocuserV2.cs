@@ -95,14 +95,15 @@ namespace ASCOM.DeviceInterface
         /// <summary>Invokes the specified device-specific custom action.</summary>
         /// <param name="ActionName">A well known name agreed by interested parties that represents the action to be carried out.</param>
         /// <param name="ActionParameters">List of required parameters or an <see cref="String.Empty">Empty String</see> if none are required.</param>
-        /// <returns>A string response. The meaning of returned strings is set by the driver author.</returns>
+        /// <returns>A string response. The meaning of returned strings is set by the driver author.
+        /// <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
+        /// of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
+		/// </returns>
         /// <exception cref="ASCOM.MethodNotImplementedException">Thrown if no actions are supported.</exception>
         /// <exception cref="ASCOM.ActionNotImplementedException">It is intended that the <see cref="SupportedActions"/> method will inform clients of driver capabilities, but the driver must still throw 
         /// an <see cref="ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
         /// <exception cref="NotConnectedException">If the driver is not connected.</exception>
         /// <exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
-        /// <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
-        /// of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
         /// <remarks><p style="color:red"><b>Must be implemented.</b></p>
         /// <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
         /// <para>The names of all supported actions must be returned in the <see cref="SupportedActions" /> property.</para>
@@ -114,10 +115,10 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
         /// <remarks><p style="color:red"><b>Must be implemented</b></p>
         /// <para>This method must return an empty <see cref="ArrayList" /> if no actions are supported. Do not throw a <see cref="ASCOM.PropertyNotImplementedException" />.</para>
-        /// <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. Returned action names may be in mixed case to
-        /// enhance presentation but the <see cref="Action" /> method is case insensitive.</para>
-        /// <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET, <see cref="ArrayList" /> is the correct
-        /// implementation to use because the .NET Generic methods are not compatible with COM.</para>
+        /// <para>SupportedActions is a "discovery" mechanism that enables clients to know which Actions a device supports without having to exercise the Actions themselves. This mechanism is necessary because there could be
+        /// people / equipment safety issues if actions are called unexpectedly or out of a defined process sequence.
+        /// It follows from this that SupportedActions must return names that match the spelling of Action names exactly, without additional descriptive text. However, returned names may use any casing
+        /// because the <see cref="Action" /> ActionName parameter is case insensitive.</para>
         /// </remarks>
         ArrayList SupportedActions { get; }
 

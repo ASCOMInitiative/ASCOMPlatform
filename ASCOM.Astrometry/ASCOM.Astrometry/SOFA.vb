@@ -222,7 +222,12 @@ Namespace SOFA
 
                                 End Select
                             Case Else
-                                MsgBox("SOFA.New - Unknown Parameters.UpdateType value: " & Parameters.UpdateType)
+                                Try
+                                    MsgBox("SOFA.New - Unknown Parameters.UpdateType value: " & Parameters.UpdateType)
+                                Catch
+                                End Try
+                                Console.WriteLine($"SOFA.New - Unknown Parameters.UpdateType value: {Parameters.UpdateType}")
+                                EventLogCode.LogEvent("SOFA.New", $"SOFA.New - Unknown Parameters.UpdateType value: {Parameters.UpdateType}", EventLogEntryType.Error, GlobalConstants.EventLogErrors.Sofa, "")
                         End Select
 
                     End Using

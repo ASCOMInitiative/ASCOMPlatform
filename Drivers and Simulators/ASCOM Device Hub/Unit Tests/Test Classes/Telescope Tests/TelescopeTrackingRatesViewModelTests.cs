@@ -38,7 +38,6 @@ namespace Unit_Tests.Telescope
 			_vm.IsConnected = true;
 			_vm.Capabilities = TelescopeCapabilities.GetFullCapabilities();
 			_vm.Status = DevHubTelescopeStatus.GetEmptyStatus();
-			//_mgr.MockTrackingRate = DriveRates.driveLunar;
 
 			_prVm.Invoke( "ApplyLunarTracking" );
 
@@ -47,18 +46,6 @@ namespace Unit_Tests.Telescope
 			_prVm.Invoke( "ApplySiderealTracking" );
 
 			Assert.AreEqual( DriveRates.driveSidereal, _mgr.MockTrackingRate );
-			Assert.AreEqual( 0.0, _mgr.MockRightAscensionOffsetRate );
-			Assert.AreEqual( 0.0, _mgr.MockDeclinationOffsetRate );
-
-			_mgr.MockTrackingRate = DriveRates.driveSidereal;
-			_mgr.MockRightAscensionOffsetRate = 200.0;
-			_mgr.MockDeclinationOffsetRate = -200.0;
-
-			_prVm.Invoke( "ApplySiderealTracking" );
-
-			Assert.AreEqual( DriveRates.driveSidereal, _mgr.MockTrackingRate );
-			Assert.AreEqual( 0.0, _mgr.MockRightAscensionOffsetRate );
-			Assert.AreEqual( 0.0, _mgr.MockDeclinationOffsetRate );
 		}
 
 		[TestMethod]
@@ -67,51 +54,75 @@ namespace Unit_Tests.Telescope
 			_vm.IsConnected = true;
 			_vm.Capabilities = TelescopeCapabilities.GetFullCapabilities();
 			_vm.Status = DevHubTelescopeStatus.GetEmptyStatus();
-			_vm.RaOffsetRate = 200.0;
-			_vm.DecOffsetRate = -200.0;
-
-			_mgr.MockTrackingRate = DriveRates.driveSidereal;
 
 			_prVm.Invoke( "ApplySiderealTracking" );
 
 			Assert.AreEqual( DriveRates.driveSidereal, _mgr.MockTrackingRate );
-			Assert.AreEqual( 0.0, _mgr.MockRightAscensionOffsetRate );
-			Assert.AreEqual( 0.0, _mgr.MockDeclinationOffsetRate );
 
 			_prVm.Invoke( "ApplyLunarTracking" );
 
 			Assert.AreEqual( DriveRates.driveLunar, _mgr.MockTrackingRate );
-			Assert.AreEqual( 0.0, _mgr.MockRightAscensionOffsetRate );
-			Assert.AreEqual( 0.0, _mgr.MockDeclinationOffsetRate );
 		}
 
 		[TestMethod]
-		public void ApplyOffsetTrackingTest()
+		public void ApplySolarTrackingTest()
 		{
-			double targetRaOffsetRate = 200.0;
-			double targetDecOffsetRate = -200.0;
-
 			_vm.IsConnected = true;
 			_vm.Capabilities = TelescopeCapabilities.GetFullCapabilities();
 			_vm.Status = DevHubTelescopeStatus.GetEmptyStatus();
-			_vm.RaOffsetRate = targetRaOffsetRate;
-			_vm.DecOffsetRate = targetDecOffsetRate;
-
-			_mgr.MockTrackingRate = DriveRates.driveSidereal;
-
-			_prVm.Invoke( "ApplyOffsetTracking" );
-
-			double expectedRaRate = targetRaOffsetRate * Globals.UTC_SECS_PER_SIDEREAL_SEC / ( 15.0 * 3600.0 );
-			double expectedDecRate = targetDecOffsetRate / 3600.0;
-			Assert.AreEqual( DriveRates.driveSidereal, _mgr.MockTrackingRate );
-			Assert.AreEqual( expectedRaRate, _mgr.MockRightAscensionOffsetRate, 0.0001 );
-			Assert.AreEqual( expectedDecRate, _mgr.MockDeclinationOffsetRate );
 
 			_prVm.Invoke( "ApplySiderealTracking" );
 
 			Assert.AreEqual( DriveRates.driveSidereal, _mgr.MockTrackingRate );
-			Assert.AreEqual( 0.0, _mgr.MockRightAscensionOffsetRate );
-			Assert.AreEqual( 0.0, _mgr.MockDeclinationOffsetRate );
+
+			_prVm.Invoke( "ApplySolarTracking" );
+
+			Assert.AreEqual( DriveRates.driveSolar, _mgr.MockTrackingRate );
+		}
+
+		[TestMethod]
+		public void ApplyKingTrackingTest()
+		{
+			_vm.IsConnected = true;
+			_vm.Capabilities = TelescopeCapabilities.GetFullCapabilities();
+			_vm.Status = DevHubTelescopeStatus.GetEmptyStatus();
+
+			_prVm.Invoke( "ApplySiderealTracking" );
+
+			Assert.AreEqual( DriveRates.driveSidereal, _mgr.MockTrackingRate );
+
+			_prVm.Invoke( "ApplyKingTracking" );
+
+			Assert.AreEqual( DriveRates.driveKing, _mgr.MockTrackingRate );
+		}
+
+		[TestMethod]
+		public void ApplyTrackingOffsetsTest()
+		{
+			double targetRaOffsetRate = -0.00098;
+			double targetDecOffsetRate = -0.01748;
+
+			_vm.IsConnected = true;
+			_vm.Capabilities = TelescopeCapabilities.GetFullCapabilities();
+			_vm.Status = DevHubTelescopeStatus.GetEmptyStatus();
+			_vm.UseNasaJplUnits = false;
+			_vm.NewRaOffsetRate = targetRaOffsetRate;
+			_vm.NewDecOffsetRate = targetDecOffsetRate;
+
+			_prVm.Invoke( "CommitNewRates" );
+
+			Assert.AreEqual( targetRaOffsetRate, _mgr.MockRightAscensionOffsetRate, 0.0001 );
+			Assert.AreEqual( targetDecOffsetRate, _mgr.MockDeclinationOffsetRate, 0.0001 );
+
+			targetRaOffsetRate = -53.1724;
+			targetDecOffsetRate = -62.9412;
+			_vm.UseNasaJplUnits = true;
+			_prVm.Invoke( "CommitNewRates" );
+
+			double expectedRaRate = targetRaOffsetRate * Globals.UTC_SECS_PER_SIDEREAL_SEC / ( 15.0 * 3600.0 );
+			double expectedDecRate = targetDecOffsetRate / 3600.0;
+			Assert.AreEqual( expectedRaRate, _mgr.MockRightAscensionOffsetRate, 0.00001 );
+			Assert.AreEqual( expectedDecRate, _mgr.MockDeclinationOffsetRate, 0.00001 );
 		}
 	}
 }

@@ -28,48 +28,55 @@ namespace ASCOM.OpenWeatherMap
     {
         [DataMember]
         public Coord coord { get; set; }
+
         [DataMember]
-        //"weather":[{
-        public List<Weather> weather { get; set; }
-        // "base":"cmc stations",
+        public List<Weather> weather { get; set; }        //"weather":[{
+
         [DataMember(Name = "@base")]
-        public string basestr { get; set; }
+        public string basestr { get; set; }        // "base":"cmc stations",
+
         [DataMember]
         public Main main { get; set; }
+
         [DataMember]
         public int visibility { get; set; }
+
         [DataMember]
         public Wind wind { get; set; }
+
         [DataMember]
         public Rain rain { get; set; }
+
         [DataMember]
         public Snow snow { get; set; }
+
         [DataMember]
         public Clouds clouds { get; set; }
-        // "dt":1442474132,
+
         [DataMember]
-        public int dt { get; set; }
+        public int dt { get; set; }        // "dt":1442474132,
+
         [DataMember]
         public Sys sys { get; set; }
-        // "id":2634053,
+
         [DataMember]
-        public int id { get; set; }
-        // "name":"White Waltham",
+        public int id { get; set; }        // "id":2634053,
+
         [DataMember]
-        public string name { get; set; }
-        // "cod":200}
+        public string name { get; set; }        // "name":"White Waltham",
+
         [DataMember]
-        public int cod { get; set; }
+        public int cod { get; set; }        // "cod":200}
+
     }
 
-    //{"coord":{
     public class Coord
     {
         // "lon":-0.78,
         public double lon { get; set; }
         // "lat":51.49},
         public double lat { get; set; }
-    }
+    }    //{"coord":{
 
     public class Weather
     {
@@ -83,7 +90,6 @@ namespace ASCOM.OpenWeatherMap
         public string icon { get; set; }
     }
 
-    // "main":{
     public class Main
     {
         // "temp":282.53,
@@ -98,24 +104,23 @@ namespace ASCOM.OpenWeatherMap
         public double? temp_max { get; set; }
         public double? sea_level { get; set; }
         public double? grnd_level { get; set; }
-    }
+    }    // "main":{
 
-    // "wind":{
-    public class Wind
+    public class Wind    // "wind":{
     {
-        // "speed":4.1,
-        public double? speed { get; set; }
-        // "deg":270},
-        public double? deg { get; set; }
+        public double? speed { get; set; }        // "speed":4.1,
+
+        public double? deg { get; set; }        // "deg":270,
+
+        public double? gust { get; set; }       // "gust": 3.58}
     }
 
-    // "rain":{
     public class Rain
     {
         // "1h":0.25},  change 1h to rate1h and 3h to rate3h
         public double? rate1h { get; set; }
         public double? rate3h { get; set; }
-    }
+    }    // "rain":{
 
     public class Snow
     {
@@ -124,14 +129,12 @@ namespace ASCOM.OpenWeatherMap
         public double? rate3h { get; set; }
     }
 
-    // "clouds":{
     public class Clouds
     {
         // "all":92},
         public int? all { get; set; }
-    }
+    }    // "clouds":{
 
-    // "sys":{
     public class Sys
     {
         // "type":1,
@@ -146,5 +149,6 @@ namespace ASCOM.OpenWeatherMap
         public int? sunrise { get; set; }
         // "sunset":1442513593}
         public int? sunset { get; set; }
-    }
+    }    // "sys":{
+
 }

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>TestConsoleApp(CS)</Name>
+		<Description>TestConsoleApp(CS)</Description>
+		<Icon>PackageIconCSharp.ico</Icon>
+		<ProjectType>CSharp</ProjectType>
+		<LanguageTag>csharp</LanguageTag>
+		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+		<SortOrder>1200</SortOrder>
+		<TemplateID>c4f7f10c-710a-41d2-a52b-a0c87719fadf</TemplateID>
+		<CreateNewFolder>true</CreateNewFolder>
+		<DefaultName>ReplaceWithYourOwnName</DefaultName>
+		<ProvideDefaultName>true</ProvideDefaultName>
+		<PlatformTag>windows</PlatformTag>
+		<ProjectTypeTag>desktop</ProjectTypeTag>
+		<ProjectTypeTag>ASCOM</ProjectTypeTag>
+	</TemplateData>
+	<TemplateContent>
+		<Project TargetFileName="ASCOM Test Console App (CS).csproj" File="ASCOM Test Console App (CS).csproj" ReplaceParameters="true">
+			<ProjectItem ReplaceParameters="true" TargetFileName="app.config">app.config</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="PlaceholderClass.cs">PlaceholderClass.cs</ProjectItem>
+			<Folder Name="Properties" TargetFolderName="Properties">
+				<ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+			</Folder>
+		</Project>
+	</TemplateContent>
+	<WizardExtension>
+		<Assembly>ASCOM.Setup.VsixWizard, Version=6.6.0.0, Culture=Neutral, PublicKeyToken=565de7938946fba7</Assembly>
+		<FullClassName>ASCOM.Setup.DriverWizard</FullClassName>
+	</WizardExtension>
+</VSTemplate>

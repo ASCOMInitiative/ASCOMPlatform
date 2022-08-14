@@ -1,5 +1,8 @@
-﻿using System;
+﻿using ASCOM.DeviceHub.MvvmMessenger;
+
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -31,6 +34,47 @@ namespace ASCOM.DeviceHub
 				_domeControl,
 				_focuserControl
 			};
+
+			if ( Globals.UseExpandedScreenLayout )
+			{
+				// We are in expanded view mode, check which expanders to expand.
+
+				if ( Globals.IsDomeExpanded )
+				{
+					_domeControl.IsExpanded = true;
+				}
+
+				if ( Globals.IsFocuserExpanded )
+				{
+					_focuserControl.IsExpanded = true;
+				}
+			}
+
+			// Now that we have restored the IsExpanded states, we can hook up the event handlers
+
+			_domeControl.Expanded += new RoutedEventHandler( _domeControl_Expanded );
+			_domeControl.Collapsed += new RoutedEventHandler( _domeControl_Collapsed );
+			_focuserControl.Expanded += new RoutedEventHandler( _focuserControl_Expanded );
+			_focuserControl.Collapsed += new RoutedEventHandler( _focuserControl_Collapsed );
+
+			Messenger.Default.Register<SignalWaitMessage>( this, ( action ) => ShowHideWaitCursor( action ) );
+		}
+
+		private void ShowHideWaitCursor( SignalWaitMessage action )
+		{
+			// Used by ViewModels to cause a wait cursor to be displayed when Connecting devices,
+			// in case connect takes time to complete.
+
+			Cursor cursor = ( action.Wait ) ? Cursors.Wait : null;
+
+			Mouse.OverrideCursor = cursor;	
+		}
+
+		protected override void OnClosing( CancelEventArgs e )
+		{
+			Messenger.Default.Unregister<SignalWaitMessage>( this );
+
+			base.OnClosing( e );
 		}
 
 		private void Window_LocationChanged( object sender, EventArgs e )
@@ -85,30 +129,56 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private void Expander_Expanded( object sender, RoutedEventArgs e )
+		private void _domeControl_Expanded( object sender, RoutedEventArgs e )
 		{
-			bool collapseOthers = true;
+			Globals.IsDomeExpanded = true;
 
-			if ( Keyboard.IsKeyDown( Key.LeftCtrl ) || Keyboard.IsKeyDown( Key.RightCtrl ) )
-			{
-				collapseOthers = false;
-			}
+			AdjustOtherExpanders( sender );
+		}
 
+		private void _focuserControl_Expanded( object sender, RoutedEventArgs e )
+		{
+			Globals.IsFocuserExpanded = true;
+
+			AdjustOtherExpanders( sender );
+		}
+
+		private void AdjustOtherExpanders( object sender )
+		{
 			Expander sendingExpander = sender as Expander;
 
-			if ( !collapseOthers || sendingExpander == null || _expanders == null )
+			if ( sendingExpander == null )
 			{
 				return;
 			}
 
-			foreach ( Expander expander in _expanders )
+			bool collapseOthers = true;
+
+			if ( collapseOthers && Keyboard.IsKeyDown( Key.LeftCtrl ) || Keyboard.IsKeyDown( Key.RightCtrl ) )
 			{
-				if ( expander != sendingExpander && expander.IsExpanded )
+				collapseOthers = false;
+			}
+
+			if ( collapseOthers )
+			{
+				foreach ( Expander expander in _expanders )
 				{
-					expander.IsExpanded = false;
+					if ( expander != sendingExpander )
+					{
+						expander.IsExpanded = false;
+					}
 				}
 			}
 		}
 
+		private void _domeControl_Collapsed( object sender, RoutedEventArgs e )
+		{
+			Globals.IsDomeExpanded = false;
+		}
+
+		private void _focuserControl_Collapsed( object sender, RoutedEventArgs e )
+		{
+			Globals.IsFocuserExpanded = false;
+		}
 	}
 }

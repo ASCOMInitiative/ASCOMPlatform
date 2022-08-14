@@ -132,7 +132,20 @@ namespace ASCOM.DeviceHub
 		private void ChooseFocuser()
 		{
 			string oldID = FocuserID;
-			string newID = FocuserManager.Choose( oldID );
+			string newID;
+
+			try
+			{
+				newID = FocuserManager.Choose( oldID );
+			}
+			catch ( Exception xcp )
+			{
+				string msg = "An error occurred when trying to launch the ASCOM Focuser Chooser. "
+					+ $"Details follow:\r\n\r\n{xcp}";
+				ShowMessage( msg, "ASCOM Focuser Chooser Error" );
+
+				return;
+			}
 
 			if ( String.IsNullOrEmpty( newID ) )
 			{

@@ -20,6 +20,7 @@ Imports System.Text
 <ClassInterface(ClassInterfaceType.None),
 Guid("880840E2-76E6-4036-AD8F-60A326D7F9DA"),
 ComVisible(True)>
+<DebuggerDisplay("{GetDebuggerDisplay(),nq}")>
 Public Class Profile
     Implements IProfile, IProfileExtra, IDisposable
     '   ===========
@@ -293,8 +294,8 @@ Public Class Profile
     ''' <summary>
     ''' Writes a string value to the profile using the supplied subkey for the given Driver ID and variable name.
     ''' </summary>
-    ''' <param name="DriverID">ProgID of the device to read from</param>
-    ''' <param name="Name">Name of the variable whose value is retrieved</param>
+    ''' <param name="DriverID">ProgID of the device to write to</param>
+    ''' <param name="Name">Name of the variable whose value is to be written</param>
     ''' <param name="Value">The string value to be written</param>
     ''' <param name="SubKey">Subkey from the profile root in which to write the value</param>
     ''' <exception cref="Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
@@ -629,8 +630,8 @@ Public Class Profile
     ''' <summary>
     ''' Writes a string value to the profile using the given Driver ID and variable name.
     ''' </summary>
-    ''' <param name="DriverID">ProgID of the device to read from</param>
-    ''' <param name="Name">Name of the variable whose value is retrieved</param>
+    ''' <param name="DriverID">ProgID of the device to write to</param>
+    ''' <param name="Name">Name of the variable whose value is to be written</param>
     ''' <param name="Value">The string value to be written</param>
     ''' <exception cref="Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
     ''' <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
@@ -723,6 +724,10 @@ Public Class Profile
     Private Shared Sub COMUnRegisterActions(typeToRegister As Type)
         ' No action on unregister, this method has been included to remove a compiler warning
     End Sub
+
+    Private Function GetDebuggerDisplay() As String
+        Return ToString()
+    End Function
 
 #End Region
 

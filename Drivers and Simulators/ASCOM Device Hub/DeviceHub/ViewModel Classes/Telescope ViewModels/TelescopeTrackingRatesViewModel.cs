@@ -11,26 +11,58 @@ namespace ASCOM.DeviceHub
 {
 	public class TelescopeTrackingRatesViewModel : DeviceHubViewModelBase
 	{
+		#region Public Properties
+
 		public TelescopeCapabilities Capabilities { get; set; }
 		public TelescopeParameters Parameters { get; set; }
 		public DevHubTelescopeStatus Status { get; set; }
 
 		public ITelescopeManager TelescopeManager { get; private set; }
 
+		private string _ratesNote;
+
+		public string RatesNote
+		{
+			get { return _ratesNote; }
+		}
+
+		public string AscomRaUnits => "seconds / sidereal second";
+		public string AscomDecUnits => "arc-seconds / SI second";
+		public string NasaJplRaUnits => "arc-seconds / hour";
+		public string NasaJplDecUnits => "arc-seconds / hour";
+
+		#endregion Public Properties
+
+		#region Constructor
+
 		public TelescopeTrackingRatesViewModel( ITelescopeManager telescopeManager )
 		{
+			string caller = "TelescopeTrackingRatesViewModel ctor";
+
+			LogAppMessage( "Initializing Instance constructor", caller );
+
 			TelescopeManager = telescopeManager;
 
-			_raOffsetRate = 0.0;
-			_decOffsetRate = 0.0;
-			_canChangeOffsetRate = true;
+			_raRateOffset = null;
+			_decRateOffset = null;	
+			_newRaOffsetRate = 0.0;
+			_newDecOffsetRate = 0.0;
+			_ratesNote = "These offsets are only applied when the tracking rate is set to Sidereal.";
 			UpdateTrackingRateText();
+
+			LogAppMessage( "Registering message handlers", caller );
 
 			Messenger.Default.Register<TelescopeCapabilitiesUpdatedMessage>( this, ( action ) => UpdateCapabilities( action ) );
 			Messenger.Default.Register<TelescopeParametersUpdatedMessage>( this, ( action ) => UpdateParameters( action ) );
 			Messenger.Default.Register<TelescopeStatusUpdatedMessage>( this, ( action ) => UpdateStatus( action ) );
 			Messenger.Default.Register<DeviceDisconnectedMessage>( this, (action) => InvalidateDeviceValues( action ) );
+
+			LogAppMessage( "Instance constructor initialization complete", caller );
 		}
+
+		#endregion Constructor
+
+		#region Change Notification Properties
 
 		private bool _isConnected;
 
@@ -47,31 +79,31 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private double _raOffsetRate;
+		private double _newRaOffsetRate;
 
-		public double RaOffsetRate
+		public double NewRaOffsetRate
 		{
-			get { return _raOffsetRate; }
+			get { return _newRaOffsetRate; }
 			set
 			{
-				if ( value != _raOffsetRate )
+				if ( value != _newRaOffsetRate )
 				{
-					_raOffsetRate = value;
+					_newRaOffsetRate = value;
 					OnPropertyChanged();
 				}
 			}
 		}
 
-		private double _decOffsetRate;
+		private double _newDecOffsetRate;
 
-		public double DecOffsetRate
+		public double NewDecOffsetRate
 		{
-			get { return _decOffsetRate; }
+			get { return _newDecOffsetRate; }
 			set
 			{
-				if ( value != _decOffsetRate )
+				if ( value != _newDecOffsetRate )
 				{
-					_decOffsetRate = value;
+					_newDecOffsetRate = value;
 					OnPropertyChanged();
 				}
 			}
@@ -92,25 +124,97 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		private bool _canChangeOffsetRate;
+		// The rate offsets are nullable so that no value is displayed when we are not connected to a scope.
 
-		public bool CanChangeOffsetRate
+		private double? _raRateOffset;
+
+		public double? RaRateOffset
 		{
-			get { return _canChangeOffsetRate; }
+			get { return _raRateOffset; }
 			set
 			{
-				if ( value != _canChangeOffsetRate )
+				if ( value != _raRateOffset )
 				{
-					_canChangeOffsetRate = value;
+					_raRateOffset = value;
 					OnPropertyChanged();
 				}
 			}
 		}
 
+		private double? _decRateOffset;
+
+		public double? DecRateOffset
+		{
+			get { return _decRateOffset; }
+			set
+			{
+				if ( value != _decRateOffset )
+				{
+					_decRateOffset = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		private bool _useNasaJplUnits;
+
+		public bool UseNasaJplUnits
+		{
+			get { return _useNasaJplUnits; }
+			set
+			{
+				if ( value != _useNasaJplUnits )
+				{
+					_useNasaJplUnits = value;
+					OnPropertyChanged();
+					RecalculateNewRates( _useNasaJplUnits );
+				}
+			}
+		}
+
+		private string _newRaOffsetUnits;
+
+		public string NewRaOffsetUnits
+		{
+			get { return _newRaOffsetUnits; }
+			set
+			{
+				if ( value != _newRaOffsetUnits )
+				{
+					_newRaOffsetUnits = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		private string _newDecOffsetUnits;
+
+		public string NewDecOffsetUnits
+		{
+			get { return _newDecOffsetUnits; }
+			set
+			{
+				if ( value != _newDecOffsetUnits )
+				{
+					_newDecOffsetUnits = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		#endregion Change Notification Properties
+
+		#region Private Helper Methods
+
 		private void UpdateStatus( TelescopeStatusUpdatedMessage action )
 		{
 			// This is a registered message handler. It could be called from a worker thread
 			// and we need to be sure that the work is done on the U/I thread.
+
+			if ( Capabilities == null )
+			{
+				return;
+			}
 
 			Task.Factory.StartNew( () =>
 			{
@@ -118,55 +222,33 @@ namespace ASCOM.DeviceHub
 				IsConnected = Status.Connected;
 
 				UpdateTrackingRateText();
-
-				if ( !Capabilities.CanSetDeclinationRate || !Capabilities.CanSetRightAscensionRate )
-				{
-					CanChangeOffsetRate = false;
-				}
-				else if ( Status.TrackingRate != DriveRates.driveSidereal )
-				{
-					CanChangeOffsetRate = true;
-				}
-				else if ( Status.RightAscensionRate == 0.0 && Status.DeclinationRate == 0.0 )
-				{
-					CanChangeOffsetRate = true;
-				}
-				else
-				{
-					CanChangeOffsetRate = false;
-				}
-
+				RaRateOffset = Status.RightAscensionRate;
+				DecRateOffset = Status.DeclinationRate;
 			}, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
 		}
 
 		private void ApplyStandardTrackingRate( DriveRates rate )
-		{
-			ApplyOffsetTrackingRate( rate, 0.0, 0.0 );
-		}
-
-		private void ApplyOffsetTrackingRate( DriveRates rate, double raOffset, double decOffset )
 		{
 			if ( !IsConnected )
 			{
 				return;
 			}
 
-			if ( Capabilities.CanSetRightAscensionRate )
-			{
-				TelescopeManager.SetRaOffsetTrackingRate( raOffset );
-			}
-
-			if ( Capabilities.CanSetDeclinationRate )
-			{
-				TelescopeManager.SetDecOffsetTrackingRate( decOffset );
-			}
-
 			if ( rate != Status.TrackingRate )
 			{
-				TelescopeManager.SetTrackingRate( rate );
+				try
+				{
+					TelescopeManager.SetTrackingRate( rate );
 
-				Status.TrackingRate = rate;
-				UpdateTrackingRateText();
+					Status.TrackingRate = rate;
+					UpdateTrackingRateText();
+				}
+				catch ( Exception xcp )
+				{
+					string msg = "The telescope driver returned an error when trying to change the tracking rate. "
+						+ $"Details follow:\r\n\r\n{xcp}";
+					ShowMessage( msg, "Telescope Driver Error" );
+				}
 			}
 		}
 
@@ -183,14 +265,6 @@ namespace ASCOM.DeviceHub
 
 				switch ( driveRate )
 				{
-					case DriveRates.driveSidereal:
-						if ( Status.RightAscensionRate != 0.0 || Status.DeclinationRate != 0.0 )
-						{
-							rate = "Offset";
-						}
-
-						break;
-
 					case DriveRates.driveLunar:
 						rate = "Lunar";
 
@@ -215,6 +289,8 @@ namespace ASCOM.DeviceHub
 		{
 			if ( action.DeviceType == DeviceTypeEnum.Telescope )
 			{
+				RaRateOffset = null;
+				DecRateOffset = null;
 				SetCapabilities( null );
 				SetParameters( null );
 			}
@@ -253,8 +329,51 @@ namespace ASCOM.DeviceHub
 
 			_applySiderealTrackingCommand = null;
 			_applyLunarTrackingCommand = null;
-			_applyOffsetTrackingCommand = null;
+			_applySolarTrackingCommand = null;
+			_applyKingTrackingCommand = null;
+			_commitNewRatesCommand = null;
 		}
+
+		private double ConvertTrackingRate( double rate, bool isRaRate, bool toNasaJplUnits )
+		{
+			double retval = Double.NaN;
+
+			double factor;
+
+			if ( isRaRate )
+			{
+				factor = Globals.UTC_SECS_PER_SIDEREAL_SEC / ( 15.0 * 3600.0 );
+			}
+			else // is Dec rate
+			{
+				factor = 1.0 / 3600.0;
+			}
+
+			if ( toNasaJplUnits )
+			{
+				// Convert a rate from from ASCOM units to NASA JPL units
+
+				retval = rate / factor;
+			}
+			else
+			{
+				// Convert a rate from NASA JPL units to ASCOM units.
+
+				retval = rate * factor;
+			}
+
+			return retval;
+		}
+
+		private void RecalculateNewRates( bool useNasaJplUnits )
+		{	
+			NewRaOffsetRate = ConvertTrackingRate( NewRaOffsetRate, true, useNasaJplUnits );
+			NewDecOffsetRate = ConvertTrackingRate( NewDecOffsetRate, false, useNasaJplUnits );
+		}
+
+		#endregion Private Helper Methods
+
+		#region Commands
 
 		#region ApplySiderealTrackingCommand
 
@@ -278,7 +397,6 @@ namespace ASCOM.DeviceHub
 		private void ApplySiderealTracking()
 		{
 			ApplyStandardTrackingRate( DriveRates.driveSidereal );
-			CanChangeOffsetRate = true;
 		}
 
 		private bool CanApplySiderealTracking()
@@ -317,7 +435,6 @@ namespace ASCOM.DeviceHub
 		private void ApplyLunarTracking()
 		{
 			ApplyStandardTrackingRate( DriveRates.driveLunar );
-			CanChangeOffsetRate = true;
 		}
 
 		private bool CanApplyLunarTracking()
@@ -334,49 +451,172 @@ namespace ASCOM.DeviceHub
 
 		#endregion ApplyLunarTrackingCommand
 
-		#region ApplyOffsetTrackingCommand
+		#region ApplySolarTrackingCommand
 
-		private ICommand _applyOffsetTrackingCommand;
+		private ICommand _applySolarTrackingCommand;
 
-		public ICommand ApplyOffsetTrackingCommand
+		public ICommand ApplySolarTrackingCommand
 		{
 			get
 			{
-				if ( _applyOffsetTrackingCommand == null )
+				if ( _applySolarTrackingCommand == null )
 				{
-					_applyOffsetTrackingCommand = new RelayCommand(
-						param => this.ApplyOffsetTracking(),
-						param => this.CanApplyOffsetTracking() );
+					_applySolarTrackingCommand = new RelayCommand(
+						param => this.ApplySolarTracking(),
+						param => this.CanApplySolarTracking() );
 				}
 
-				return _applyOffsetTrackingCommand;
+				return _applySolarTrackingCommand;
 			}
 		}
 
-		private void ApplyOffsetTracking()
+		private void ApplySolarTracking()
 		{
-			double raOffset = RaOffsetRate / ( 15.0 * 3600.0 ); // Convert from arc-sec/hr to seconds of RA / second.
-			raOffset *= Globals.UTC_SECS_PER_SIDEREAL_SEC; // Convert time base from UTC seconds to sidereal seconds.
-
-			double decOffset = DecOffsetRate / 3600.0;
-
-			ApplyOffsetTrackingRate( DriveRates.driveSidereal, raOffset, decOffset );
-			CanChangeOffsetRate = false;
+			ApplyStandardTrackingRate( DriveRates.driveSolar );
 		}
 
-		private bool CanApplyOffsetTracking()
+		private bool CanApplySolarTracking()
 		{
 			bool retval = IsConnected && Parameters != null && Status != null;
 			retval &= Capabilities != null && Capabilities.CanSetRightAscensionRate && Capabilities.CanSetDeclinationRate;
 
 			if ( retval )
 			{ 
-				retval = Array.Exists( Parameters.TrackingRates, r => r.Rate == DriveRates.driveSidereal ) && !Status.Slewing;
+				retval = Array.Exists( Parameters.TrackingRates, r => r.Rate == DriveRates.driveSolar ) && !Status.Slewing;
 			}
 
 			return retval;
 		}
 
 		#endregion ApplyOffsetTrackingCommand
+
+		#region ApplyKingTrackingCommand
+
+		private ICommand _applyKingTrackingCommand;
+
+		public ICommand ApplyKingTrackingCommand
+		{
+			get
+			{
+				if ( _applyKingTrackingCommand == null )
+				{
+					_applyKingTrackingCommand = new RelayCommand(
+						param => this.ApplyKingTracking(),
+						param => this.CanApplyKingTracking() );
+				}
+
+				return _applyKingTrackingCommand;
+			}
+		}
+
+		private void ApplyKingTracking()
+		{
+			ApplyStandardTrackingRate( DriveRates.driveKing );
+		}
+
+		private bool CanApplyKingTracking()
+		{
+			bool retval = IsConnected && Parameters != null && Status != null;
+
+			if ( retval )
+			{
+				retval = Array.Exists( Parameters.TrackingRates, r => r.Rate == DriveRates.driveKing ) && !Status.Slewing;
+			}
+
+			return retval;
+		}
+
+		#endregion ApplyKingTrackingCommand
+
+		#region ChangeRateUnitsCommand
+
+		private ICommand _changeRateUnitsCommand;
+
+		public ICommand ChangeRateUnitsCommand
+		{
+			get
+			{
+				if ( _changeRateUnitsCommand == null )
+				{
+					_changeRateUnitsCommand = new RelayCommand(
+						param => this.ChangeRateUnits(),
+						param => this.CanChangeRateUnits() );
+				}
+
+				return _changeRateUnitsCommand;
+			}
+		}
+
+		private void ChangeRateUnits()
+		{
+			if ( UseNasaJplUnits )
+			{
+				NewRaOffsetUnits = NasaJplRaUnits;
+				NewDecOffsetUnits = NasaJplDecUnits;
+			}
+			else
+			{
+				NewRaOffsetUnits = AscomRaUnits;
+				NewDecOffsetUnits = AscomDecUnits;
+			}
+		}
+
+		private bool CanChangeRateUnits()
+		{
+			return true;
+		}
+
+		#endregion ChangeRateUnitsCommand
+
+
+		#region CommitNewRatesCommand
+
+		private ICommand _commitNewRatesCommand;
+
+		public ICommand CommitNewRatesCommand
+		{
+			get
+			{
+				if ( _commitNewRatesCommand == null )
+				{
+					_commitNewRatesCommand = new RelayCommand(
+						param => this.CommitNewRates(),
+						param => this.CanCommitNewRates() );
+				}
+
+				return _commitNewRatesCommand;
+			}
+		}
+
+		private void CommitNewRates()
+		{
+			double raOffset = NewRaOffsetRate;
+			double decOffset = NewDecOffsetRate;
+
+			if ( UseNasaJplUnits )
+			{
+				// New values are in NASA JPL units so convert to ASCOM units.
+
+				raOffset = ConvertTrackingRate( raOffset, true, false );
+				decOffset = ConvertTrackingRate( decOffset, false, false );
+			}
+
+			TelescopeManager.SetRaOffsetTrackingRate( raOffset );
+			TelescopeManager.SetDecOffsetTrackingRate( decOffset );
+		}
+
+		private bool CanCommitNewRates()
+		{
+			if ( Capabilities != null )
+			{
+				return IsConnected == true && Capabilities.CanSetDeclinationRate && Capabilities.CanSetRightAscensionRate;
+			}
+
+			return false;
+		}
+
+		#endregion CommitNewRatesCommand
+
+		#endregion Commands
 	}
 }

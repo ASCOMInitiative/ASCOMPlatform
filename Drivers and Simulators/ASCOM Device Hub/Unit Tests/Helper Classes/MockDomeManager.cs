@@ -3,6 +3,7 @@ using System.Threading;
 using ASCOM.DeviceHub;
 using ASCOM.DeviceInterface;
 using ASCOM.DeviceHub.MvvmMessenger;
+using ASCOM;
 
 namespace Unit_Tests
 {
@@ -11,6 +12,7 @@ namespace Unit_Tests
 		public MockDomeManager()
 		{
 			IsConnected = false;
+			RaiseError = false;	
 		}
 
 		public string MockDomeID { get; set; }
@@ -23,6 +25,8 @@ namespace Unit_Tests
 		public DomeCapabilities Capabilities { get; set; }
 		public DomeParameters Parameters { get; set; }
 		public DevHubDomeStatus Status { get; set; }
+
+		public bool RaiseError { get; set; }
 
 		public bool IsScopeReadyToSlave => false;
 		public bool IsDomeReadyToSlave
@@ -60,6 +64,11 @@ namespace Unit_Tests
 
 		public void CloseDomeShutter()
 		{
+			if ( RaiseError )
+			{
+				throw new DriverException( "Error raised, as requested." );
+			}
+
 			Status = DevHubDomeStatus.GetEmptyStatus();
 			Status.ShutterStatus = ShutterState.shutterClosing;
 			Status.Slewing = true;
@@ -74,7 +83,11 @@ namespace Unit_Tests
 			Messenger.Default.Send( new DomeStatusUpdatedMessage( Status ) );
 		}
 
-		public bool Connect( string domeID )
+		public bool Connect()
+		{
+			return Connect( MockDomeID, false );
+		}
+		public bool Connect( string domeID, bool interactiveConnect = true )
 		{
 			MockDomeID = domeID;
 			IsConnected = true;
@@ -82,13 +95,18 @@ namespace Unit_Tests
 			return IsConnected;
 		}
 
-		public void Disconnect()
+		public void Disconnect( bool interactiveDisconnect = false )
 		{
 			IsConnected = false;
 		}
 
 		public void FindHomePosition()
 		{
+			if ( RaiseError )
+			{
+				throw new DriverException( "Error raised, as requested." );
+			}
+
 			Status = DevHubDomeStatus.GetEmptyStatus();
 			Status.Connected = true;
 			Status.ShutterStatus = ShutterState.shutterOpen;
@@ -108,6 +126,11 @@ namespace Unit_Tests
 
 		public void OpenDomeShutter()
 		{
+			if ( RaiseError )
+			{
+				throw new DriverException( "Error raised, as requested." );
+			}
+
 			Status = DevHubDomeStatus.GetEmptyStatus();
 			Status.ShutterStatus = ShutterState.shutterOpening;
 			Status.Slewing = true;
@@ -124,11 +147,21 @@ namespace Unit_Tests
 
 		public void StopDomeMotion()
 		{
+			if ( RaiseError )
+			{
+				throw new DriverException( "Error raised, as requested." );
+			}
+
 			// Really nothing to do here.
 		}
 
 		public void ParkTheDome()
 		{
+			if ( RaiseError )
+			{
+				throw new DriverException( "Error raised, as requested." );
+			}
+
 			Status = DevHubDomeStatus.GetEmptyStatus();
 			Status.Connected = true;
 			Status.Slewing = true;
@@ -147,6 +180,11 @@ namespace Unit_Tests
 
 		public void SlewDomeShutter( double targetAltitude )
 		{
+			if ( RaiseError )
+			{
+				throw new DriverException( "Error raised, as requested." );
+			}
+
 			Status = DevHubDomeStatus.GetEmptyStatus();
 			Status.Connected = true;
 			Status.ShutterStatus = ShutterState.shutterOpen;
@@ -166,6 +204,11 @@ namespace Unit_Tests
 
 		public void SlewDomeToAzimuth( double targetAzimuth )
 		{
+			if ( RaiseError )
+			{
+				throw new DriverException( "Error raised, as requested." );
+			}
+
 			Status = DevHubDomeStatus.GetEmptyStatus();
 			Status.Connected = true;
 			Status.ShutterStatus = ShutterState.shutterOpen;
@@ -184,6 +227,11 @@ namespace Unit_Tests
 
 		public void SyncDomeToAzimuth( double azimuth )
 		{
+			if ( RaiseError )
+			{
+				throw new DriverException( "Error raised, as requested." );
+			}
+
 			Status = DevHubDomeStatus.GetEmptyStatus();
 			Status.Connected = true;
 			Status.ShutterStatus = ShutterState.shutterOpen;

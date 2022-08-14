@@ -5,6 +5,9 @@ Comment: The installer must be started in 32bit MSI mode
 Set Variable NATIVE_ENGINE to FALSE
 Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
  
+Comment: Set the required minimum Visual C Runtime version number
+Set Variable MINIMUM_VC_RUNTIME_VERSION to 14.32.31332.0
+ 
 [DEFINE REGION: Set up log file and variables]
 Comment: Define variables, create the directory and log file name.
 Set Variable SETUPLOG to 
@@ -136,6 +139,9 @@ else
 end
  
 Comment: Set up values for OS version information
+Set Variable OPSYS to 
+Set Variable OPSYSMAJOR to 
+Set Variable OPSYSMINOR to 
 Set Variable OSCURRENTVERSION to 
 Set Variable OSEDITIONID to 
 Set Variable OSPRODUCTNAME to 
@@ -177,7 +183,7 @@ Comment: Initialise to a null value that will access the correct portion of the 
 Set Variable REGASM64 to 
 Set Variable NGEN64 to 
 if Variable WIN64MODE Equals TRUE
-  Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+  Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
   Get Folder Location System->Program Files Directory into PROGRAMFILES64
   Get Common Folder Location System->Program Files Directory into COMMONFILES64
   Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
@@ -187,7 +193,7 @@ if Variable WIN64MODE Equals TRUE
 end
  
 Comment: Setup up further global variables
-Get System Setting Windows NT Kernel (NT4, 2000, XP, 2003, Vista, 2008, 7, 2008 R2, 8, 2012, 8.1, 2012 R2, 10) into ISNT
+Get System Setting Windows NT Kernel (NT4, 2000, XP, 2003, Vista, 2008 (R2), 7, 8.x, 2012 (R2), 10, 2016, 2019, 11, 2022) into ISNT
 Get Folder Location System->Program Files Directory into PROGRAMFILES
 Get Common Folder Location System->Application Data Directory into PROGRAMDATA
 Get Common Folder Location System->Program Files Directory into COMMONFILES
@@ -360,8 +366,9 @@ Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) to
 Include Script: checkmsi31
 Include Script: checknet351
 Include Script: checknet4.8_x86 
-Include Script: checkvc1410_25017_x86
-Include Script: checkvc1410_25017_x64
+Comment: Include Script: check_vcruntime_x86
+Comment: Include Script: check_vcruntime_x64
+Write into Text File $SETUPLOG$ from Value  (at end of file)
  
 Comment: Install setup pre-requisites
 if Variable PREREQ not Equals FALSE
@@ -371,14 +378,37 @@ if Variable PREREQ not Equals FALSE
   end
   Display Dialog: prereq, wait for dialog to return (modal)
   if Variable WIZARD Equals CANCEL
+    Comment: Cancel the install at user request.
     Terminate Installation
-  end
-  if Variable WIZARD Equals NEXT
-    Comment: Check whether the user enabled .NET 3.5 SP1 while the dialogue was open. If still missing then terminate the install
+  else
+    Comment: Check whether the user enabled .NET 3.5 SP1 while the pre-requisites dialogue was open. If still missing then terminate the install
     Include Script: checknet351
     if Variable NET351 Equals FALSE
-      MessageBox: Pre-requisites, .NET 3.5 is not installed, please enable or install it and then re-run this installer.
-      Terminate Installation
+      Parse String $OPSYS$ into Variables OPSYSMAJOR and OPSYSMINOR (Split at position from start)
+      Write into Text File $SETUPLOG$ from Value $TIME$ Operating System: $OPSYS$, Major: $OPSYSMAJOR$, Minor: $OPSYSMINOR$ (at end of file)
+      if Variable OPSYSMAJOR Equals TEN
+        Comment: Running on Windows 10 or later so use DISM to enable .NET 3.5
+        Write into Text File $SETUPLOG$ from Value $TIME$ About to run DISM command to enable .NET 3.5.1 (at end of file)
+        Run Program $SUPPORTDIR$\EnableDotNet35.cmd  (WAIT, get result into variable RC)
+        Write into Text File $SETUPLOG$ from Value $TIME$ Completed DISM execution. Return code: $RC$. (at end of file)
+        Write into Text File $SETUPLOG$ from Value  (at end of file)
+        if Variable RC not Equals 0
+          Comment: DISM returned a non-zero exit code.
+          if Variable RC Equals 3050
+            Comment: DISM requires a reboot
+            MessageBox: Pre-requisites, .NET 3.5 installation is complete  but DISM indicates that your PC must be rebooted in order for the installation to take effect.$NEWLINE$$NEWLINE$The Platform installer will now close.$NEWLINE$$NEWLINE$Please reboot your PC and re-run the Platform installer.
+            Terminate Installation
+          else
+            Comment: Something went wrong during installation of .NET 3.5.
+            MessageBox: Pre-requisites, The .NET 3.5 installation process ran but returned error code $RC$.$NEWLINE$$NEWLINE$Please address the issue reported by DISM and then re-run the Platform installer.$NEWLINE$$NEWLINE$The Platform installer will now close.
+            Terminate Installation
+          end
+        end
+      else
+        Comment: Running on Windows 7 or 8 so provide instructions on how to install .NET 3.5
+        MessageBox: Pre-requisites, The Platform cannot install .NET 3.5 becasue you are running an OS earlier than Windows 10.$NEWLINE$$NEWLINE$Please install it manually through Control Panel / Programs / Programs and Features / Turn Windows features on or off.$NEWLINE$$NEWLINE$The Platform installer will now close.
+        Terminate Installation
+      end
     end
   end
 end
@@ -480,6 +510,17 @@ Write into Text File $SETUPLOG$ from Value   (at end of file)
  
 Comment: Prepare to install
 Display Dialog: progress, use as progress dialog (non-modal)
+[END REGION]
+ 
+[DEFINE REGION: Install Visual C Runtimes]
+Comment: Install pre-requisites included in this installer
+Include Script: setupmsi31
+Set Variable MYPROGRESS to 3
+Comment: Include Script: setup_vcruntime_x64 (get result into variable VC64_REBOOT_REQUIRED)
+Set Variable MYPROGRESS to 6
+Comment: Include Script: setup_vcruntime_x86 (get result into variable VC32_REBOOT_REQUIRED)
+Set Variable MYPROGRESS to 9
+Write into Text File $SETUPLOG$ from Value  (at end of file)
 [END REGION]
  
 [DEFINE REGION: Remove Previous Platform 6 install if present]
@@ -622,7 +663,7 @@ if Variable REMOVE Equals TRUE
    
   Comment: Remove 64bit native images and 64bit component COM registration if necessary
   if Variable WIN64MODE Equals TRUE
-    Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+    Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
     Comment: Remove 64bit native images
     Set Variable MYPROGRESS to 40
     Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.Utilities.Video - v6.1.0.0
@@ -821,14 +862,6 @@ end
 [END REGION]
  
 [DEFINE REGION: Install Application Pre-Requisites if required]
-Comment: Install pre-requisites included in this installer
-Include Script: setupmsi31
-Set Variable MYPROGRESS to 3
-Include Script: setupvc1410_25017_x64 (get result into variable VC64_REBOOT_REQUIRED)
-Set Variable MYPROGRESS to 6
-Include Script: setupvc1410_25017_x86 (get result into variable VC32_REBOOT_REQUIRED)
-Set Variable MYPROGRESS to 9
- 
 Comment: Ensure that the corrrect Profile registry ACL is set on every run to repair broken installations
 Set Variable PROGRESSTEXT to Preparing ASCOM Profile Store...
 Write into Text File $SETUPLOG$ from Value $TIME$ Setting Profile registry ACL (at end of file)
@@ -855,7 +888,7 @@ Include Script: CleanRegistry
  
 Comment: Clean up any remaining 64bit COM registry entries
 if Variable WIN64MODE Equals TRUE
-  Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+  Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
   Write into Text File $SETUPLOG$ from Value $TIME$ Cleaning simulator 64bit COM entries (at end of file)
   Include Script: CleanRegistry
   Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
@@ -1121,8 +1154,6 @@ Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\Microsof
 Comment: Add Alpaca support assemblies to the GAC
 Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll to Global Assembly Cache
 Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.pdb to $WINDIR$\Symbols\dll
-Comment: Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\bin\Release\ASCOM.Utilities.Support.dll to Global Assembly Cache
-Comment: Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.Support\bin\Release\ASCOM.Utilities.Support.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Shared Resources\bin\Release\ASCOM.AlpacaSharedResources.dll to Global Assembly Cache
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Shared Resources\bin\Release\ASCOM.AlpacaSharedResources.pdb to $WINDIR$\Symbols\dll
 Comment: Add the dynamic client driver files
@@ -1154,13 +1185,18 @@ Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\
 Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\MvvmMessenger.dll to $COMMONFILES$\ASCOM\DeviceHub
 Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\MvvmMessenger.pdb to $COMMONFILES$\ASCOM\DeviceHub
 Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\PresentationFramework.Aero.dll to $COMMONFILES$\ASCOM\DeviceHub
-Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\TelescopeDriver\bin\Release\ASCOM.DeviceHub.Telescope.dll to $COMMONFILES$\ASCOM\DeviceHub
-Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\TelescopeDriver\bin\Release\ASCOM.DeviceHub.Telescope.pdb to $COMMONFILES$\ASCOM\DeviceHub
-Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DomeDriver\bin\Release\ASCOM.DeviceHub.Dome.dll to $COMMONFILES$\ASCOM\DeviceHub
-Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DomeDriver\bin\Release\ASCOM.DeviceHub.Dome.pdb to $COMMONFILES$\ASCOM\DeviceHub
-Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\FocuserDriver\bin\Release\ASCOM.DeviceHub.Focuser.dll to $COMMONFILES$\ASCOM\DeviceHub
-Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\FocuserDriver\bin\Release\ASCOM.DeviceHub.Focuser.pdb to $COMMONFILES$\ASCOM\DeviceHub
+Comment: Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\TelescopeDriver\bin\Release\ASCOM.DeviceHub.Telescope.dll to $COMMONFILES$\ASCOM\DeviceHub
+Comment: Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\TelescopeDriver\bin\Release\ASCOM.DeviceHub.Telescope.pdb to $COMMONFILES$\ASCOM\DeviceHub
+Comment: Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DomeDriver\bin\Release\ASCOM.DeviceHub.Dome.dll to $COMMONFILES$\ASCOM\DeviceHub
+Comment: Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DomeDriver\bin\Release\ASCOM.DeviceHub.Dome.pdb to $COMMONFILES$\ASCOM\DeviceHub
+Comment: Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\FocuserDriver\bin\Release\ASCOM.DeviceHub.Focuser.dll to $COMMONFILES$\ASCOM\DeviceHub
+Comment: Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\FocuserDriver\bin\Release\ASCOM.DeviceHub.Focuser.pdb to $COMMONFILES$\ASCOM\DeviceHub
 Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\Documents\ASCOM Device Hub User and Technical Information.pdf to $COMMONFILES$\ASCOM\DeviceHub
+[END REGION]
+ 
+[DEFINE REGION: Platform validation]
+Install Files ..\..\..\..\ValidatePlatform\bin\Release\ValidatePlatform.exe to $TARGETDIR$\Tools\Validation
+Install Files ..\..\..\..\ValidatePlatform\bin\x64\Release\ValidatePlatform64.exe to $TARGETDIR$\Tools\Validation
 [END REGION]
  
 [DEFINE REGION: Platform 6 Content]
@@ -1670,7 +1706,7 @@ if Variable SUCCESS not Equals ERROR
   Comment: Extra registration of 64bit components if on 64bit system
   if Variable WIN64MODE Equals TRUE
      
-    Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+    Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
     Comment: Register core components
     Set Variable MYPROGRESS to 75
     Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Astrometry.dll for COM
@@ -1827,8 +1863,21 @@ if Variable SUCCESS not Equals ERROR
   end
   [END REGION]
    
+  Comment: Run basic 32bit Platform validation
+  Set Variable PROGRESSTEXT to Validate 32bit Platform operation
+  Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform.exe  (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ ValidatePlatform (at end of file)
+   
+  Comment: Run basic 64bit Platform validation if we are running on a 64bit OS
+  if Variable WIN64MODE Equals TRUE
+    Set Variable PROGRESSTEXT to Validate 64bit Platform operation
+    Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform64.exe  (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ ValidatePlatform64 (at end of file)
+  end
+   
 end
 Set Variable MYPROGRESS to 100
+ 
 [END REGION]
  
 [DEFINE REGION: Finish Setup Dialogue]
