@@ -91,6 +91,35 @@
     <P>
         You're probably anxious to get going, but if you are new to this it will help to read through the short <A HREF="#theory">Theory of Operation</A> > section below.
     </P>
+
+    <h3>Driver Architecture</h3>
+    <p>
+        The TEMPLATEDEVICECLASS driver created by the local server project template comprises these main layers:
+        <ol>
+            <li style="margin-bottom:10px">
+                <b>TEMPLATEDEVICECLASSDriver\TEMPLATEDEVICECLASSDriver.cs</b> - An ASCOM COM driver that is served to clients by the local server. An instance of this class will be created every time
+                a client creates an instance of your TEMPLATEDEVICECLASS driver. This class is mainly a presentation layer for the shared functionality that is contained in the TEMPLATEDEVICECLASS\TEMPLATEDEVICECLASSHardware class
+                and should require little customisation.
+            </li>
+            <li style="margin-bottom:10px">
+                <b>TEMPLATEDEVICECLASSDriver\TEMPLATEDEVICECLASSHardware.cs</b> - An internal static class that is shared by all instances of your TEMPLATEDEVICECLASSDriver class. This is where you should locate capabilities that
+                will be shared by all instances of your TEMPLATEDEVICECLASS driver. This static class will contain
+                most of the heavy lifting to map the ASCOM interface functions to the specific communications protocol and behavioural requirements of your TEMPLATEDEVICECLASS hardware.
+                The main functionality is implemented in this shared class so that you have the opportunity to manage concurrent requests from multiple instances of your TEMPLATEDEVICECLASS driver created
+                by one or more ASCOM client applications.
+                Ordinarily, the capabilities in this file would not be shared with other drivers that you may add to the local server at a later date.
+            </li>
+            <li style="margin-bottom:10px">
+                <b>SharedResources.cs</b> - This is where you should place resources that will be shared between the different drivers served by the local server. Typically communications functionality that is shared across multiple drivers
+                will go here. In the generated project, some basic serial port functionality is located here.
+            </li>
+            <li style="margin-bottom:10px">
+                <b>Local server operation support files</b> - The remaining files in the generated project support local server operation and do not need to be customised further.
+                Please do not change these files unless you are completely sure you know what you are doing!
+            </li>
+        </ol>
+    </p>
+
     <h3>To complete your local server driver, please follow these steps in order:</h3>
     <OL>
         <LI style="margin-bottom:20px">
@@ -98,7 +127,7 @@
             <UL>
                 <LI>Review the Application tab and change the AssemblyName and default namespace if required, the recommended format is ASCOM.xxx.</LI>
                 <LI>Click the Assembly Information button and review and update the text if required.</LI>
-                <LI>Do not check the "Make assembly COM visible" checkbox, the local server will register the COM drivers dynamically at run-time and checking this box interferes with this process.</LI>
+                <LI>Do not check the "Make assembly COM visible" checkbox; the local server will register the COM drivers dynamically at run-time, and checking this box interferes with the dynamic registration process.</LI>
                 <LI>
                     Change the assembly version number if required but do not use wild-card (*) numbering because it causes issues with COM registration.
                     It is not recommended that the assembly version number is changed on each release, use the file version number to identify different releases.
@@ -117,10 +146,6 @@
             <ul>
                 <li>Review the ProgID and ServedClassName fields above the Class name for suitability.</li>
                 <li>Compile the whole solution but don't run it.</li>
-                <li>
-                    To support debugging, the driver will create two log files in a Documents\ASCOM\Logs yyyy-mm-dd folder. The first is from the local server executable itself and can be disabled once
-                    the driver is running stably. The second is from the driver and can be enabled / disabled through the Setup dialogue as required.
-                </li>
                 <li>Open a command prompt at the folder where the local server executable is located.</li>
                 <li>
                     Run the local server exe with the /regserver parameter (requires admin privilege), which will create the entry that appears in the ASCOM Chooser. This registration only needs to be done once on each PC.
@@ -132,8 +157,18 @@
                     You will see your driver in the list, will be able to select it and open its Setup dialogue.
                 </li>
                 <li>
+                    To support debugging, the driver will create three log files in a Documents\ASCOM\Logs yyyy-mm-dd folder. 
+                    <ol>
+                        <li><b>ASCOM.TEMPLATEDEVICENAME.Driver.xxx</b> - One log per instance of the COM driver class. (Can be enabled / disabled through the Driver setup dialogue.)</li>
+                        <li><b>ASCOM.TEMPLATEDEVICENAME.Hardware.xxx</b> - One log from the shared hardware class containing information from all instances of the COM driver. (Can be enabled / disabled through the Driver setup dialogue.)</li>
+                        <li><b>ASCOM.TEMPLATEDEVICENAME.LocalServer.xxx</b> - One log for the local server executable itself. (After the driver is running stably, this log can be disabled if required 
+                        by editing the TL.Enabled statement near the top of the LocalServer.cs file.)
+                        </li>
+                    </ol>
+                </li>
+                <li>
                     At this point the basics are proved and its time to start making the driver do something! If you have issues in getting to this point, check the
-                    logs in your Documents\ASCOM folder, which will help determine what has gone wrong. You are welcome to post at the forum listed below if you get stuck.'.
+                    logs in your Documents\ASCOM folder, which will help determine what has gone wrong. You are welcome to post at the ASCOM Developer forum listed below if you get stuck.
                 </li>
             </ul>
         </LI>
@@ -141,18 +176,10 @@
         <LI style="margin-bottom:20px">
             Implement the driver methods
             <ul>
-                <li>
-                    Since your driver can instanciated by multiple threads and clients the driver code should not directly handle communications with your hardware unless it
-                    fully supports asynchronous operation.
-                </li>
-                <li>
-                    A good pattern to follow is to implement hardware communications code as a static class that can be called by the multiple driver instances and that thus
-                    gets the opportunity to handle any communications concurrency requirements.
-                </li>
                 <li>The first implementation task is to fully implement the Connected property to establish communications to your device hardware.</li>
                 <li>
                     After this, it's a good idea to implement a straightforward property before moving on to more complex properties and finally to methods. This approach will
-                    enable you to focus up the driver / application infrastructure initially before having to deal with more complex device functions.
+                    enable you to focus on the essential driver / application infrastructure initially before having to deal with more complex device functions.
                 </li>
             </ul>
         </LI>
@@ -164,12 +191,8 @@
         This method works when:
     </p>
     <ul>
-        <li>
-            Adding a completely new served device type e.g. adding a FOCUSER device to a local server already hosting a TELESCOPE device.
-        </li>
-        <li>
-            Adding a second or further instance of an existing served device type e.g. adding a second FOCUSER to a local server already hosting a FOCUSER device.
-        </li>
+        <li>Adding a completely new served device type e.g. adding a FOCUSER device to a local server already hosting a TELESCOPE device.</li>
+        <li>Adding a second or further instance of an existing served device type e.g. adding a second FOCUSER to a local server already hosting a FOCUSER device.</li>
     </ul>
     <p>Method</p>
     <ol>
@@ -198,9 +221,7 @@
         <LI>
             <P STYLE="margin-bottom: 0cm">
                 if required, a serial port is already provided (see SharedResources.cs) as <FONT FACE="Lucida Console, Courier New, Courier, monospace">SharedResources.SharedSerial</FONT>.
-                You may wish to define additional shared resources in static member variables with public static accessor properties as is already done for SharedSerial.
                 If you don't need the serial port you can remove the public static SharedSerial property, the m_SharedSerial member in the private data region, and the line in main that initializes it.
-                If you don't need any other shared resources for your hub, then you can remove the SharedResources.cs file completely.
             </P>
         </LI>
         <LI>
@@ -246,8 +267,8 @@
         The ASCOM Initiative consists of a group of astronomy software  developers and instrument vendors whose goals are to promote the driver/client model and scripting automation.
     </P>
     <P>
-        See the <A HREF="http://ascom-standards.org/" TARGET="browser">ASCOM web site</A> for more information.
-        If you have questions, please post here: <A HREF="https://ascomtalk.groups.io/g/Help/topics" TARGET="browser">ASCOM-Talk Group</A>.
+        See the <A HREF="https://ascom-standards.org/" TARGET="browser">ASCOM web site</A> for more information.
+        If you have questions, please post here: <A HREF="https://ascomtalk.groups.io/g/Developer/topics" TARGET="browser">ASCOM-Talk Developer Forum</A>.
     </P>
 
 </BODY>
