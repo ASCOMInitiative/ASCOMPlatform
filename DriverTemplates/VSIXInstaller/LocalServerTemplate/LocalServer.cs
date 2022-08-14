@@ -137,11 +137,20 @@ namespace ASCOM.LocalServer
                                 {
                                     // Lookup the method
                                     MethodInfo disposeMethod = type.GetMethod("Dispose");
-                                    TL.LogMessage("Main", $"  Calling method {disposeMethod.Name} in static class {type.Name}...");
 
-                                    // Now call Dispose()
-                                    disposeMethod.Invoke(null, null);
-                                    TL.LogMessage("Main", $"  {disposeMethod.Name} method called OK.");
+                                    // If the method is found call it
+                                    if (disposeMethod != null) // a public Dispose() method was found
+                                    {
+                                        TL.LogMessage("Main", $"  Calling method {disposeMethod.Name} in static class {type.Name}...");
+
+                                        // Now call Dispose()
+                                        disposeMethod.Invoke(null, null);
+                                        TL.LogMessage("Main", $"  {disposeMethod.Name} method called OK.");
+                                    }
+                                    else // No public Dispose method was found
+                                    {
+                                        TL.LogMessage("Main", $"  The {disposeMethod.Name} method does not contain a public Dispose() method.");
+                                    }
                                 }
                                 else
                                 {

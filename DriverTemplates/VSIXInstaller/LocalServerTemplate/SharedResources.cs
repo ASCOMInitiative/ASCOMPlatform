@@ -12,6 +12,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using ASCOM;
 using ASCOM.Utilities;
@@ -25,6 +26,7 @@ namespace ASCOM.LocalServer
     /// Multiple drivers means that several drivers connect to the same hardware device, aka a hub.
     /// Multiple devices means that there are more than one instance of the hardware, such as two focusers. In this case there needs to be multiple instances of the hardware connector, each with it's own connection count.
     /// </summary>
+    [HardwareClass]
     public static class SharedResources
     {
         // Object used for locking to prevent multiple drivers accessing common code at the same time
@@ -35,6 +37,29 @@ namespace ASCOM.LocalServer
         private static int serialConnectionCount = 0;     // counter for the number of connections to the serial port
 
         // Public access to shared resources
+
+        #region Dispose method to clean up resources before close
+        /// <summary>
+        /// Dispose method that will be called by the local server just before exit
+        /// </summary>
+        /// <remarks>
+        /// TODO: Add any further items here that need to be tied up before close down.
+        /// </remarks>
+        public static void Dispose()
+        {
+            try
+            {
+                if (sharedSerial != null)
+                {
+                    sharedSerial.Dispose();
+                }
+            }
+            catch
+            {
+            }
+
+        }
+        #endregion
 
         #region Single serial port connector
 
