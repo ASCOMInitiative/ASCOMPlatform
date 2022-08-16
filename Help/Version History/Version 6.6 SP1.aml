@@ -77,7 +77,7 @@
             <list class="bullet">
               <listItem>No longer add an empty basic authentication header to requests when authentication is not required.</listItem>
 	          <listItem>Alpaca device HTTP setup pages, accessible from the Dynamic Client Setup dialogue, now work when the device uses an IPV6 address.</listItem>
-    	      <listItem>Discovery now works correctly over a VPN.</listItem>
+    	      <listItem>Discovery now works correctly with certain VPNs installed.</listItem>
             </list>
           </listItem>
           <listItem>
