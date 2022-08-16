@@ -390,7 +390,8 @@ if Variable PREREQ not Equals FALSE
       Parse String $OPSYS$ into Variables OPSYSMAJOR and OPSYSMINOR (Split at position from start)
       Write into Text File $SETUPLOG$ from Value $TIME$ Operating System: $OPSYS$, Major: $OPSYSMAJOR$, Minor: $OPSYSMINOR$ (at end of file)
       Comment: Determine whether we are running on Windows 10 or 11.
-      Evaluate Expression ($OPSYS$ = "TEN") OR ($OPSYS$ = "ELEVEN") into variable AUTOUPDATENET35
+      Evaluate Expression $OPSYS$="ELEVEN" or $OPSYS$="TEN" into variable AUTOUPDATENET35
+      Write into Text File $SETUPLOG$ from Value $TIME$ Operating System: #$OPSYS$# Expression: #$AUTOUPDATENET35$# (at end of file)
       Comment: Auto install .NET 3.5 using DISM if possible.
       if Variable AUTOUPDATENET35 Equals TRUE
         Comment: Running on Windows 10 or later so use DISM to enable .NET 3.5
