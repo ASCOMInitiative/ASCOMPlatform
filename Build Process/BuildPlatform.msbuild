@@ -39,8 +39,6 @@
 		<DeveloperInstallerDirectory>Releases\ASCOM 6\Developer\Installer Project</DeveloperInstallerDirectory>
 		<PlatformInstallerProject>$(PlatformInstallerDirectory)\ASCOM Platform 6.mpr</PlatformInstallerProject>
 		<DeveloperInstallerProject>$(DeveloperInstallerDirectory)\ASCOM Platform 6 Developer.mpr</DeveloperInstallerProject>
-		<MakeTemplatesExecutable>\DriverTemplates\MakeASCOMTemplates\MakeASCOMTemplates\bin\$(Configuration)\MakeASCOMTemplates.exe</MakeTemplatesExecutable>
-		<DriverTemplatesDirectory>DriverTemplates</DriverTemplatesDirectory>
 		<FindGUIDsDirectory>Remove ASCOM\Find GUIDs\bin\$(Configuration)</FindGUIDsDirectory>
 		<RemoveASCOMDirectory>Remove ASCOM\Remove ASCOM\bin\$(Configuration)</RemoveASCOMDirectory>
 		<RemoveASCOMExe>$(RemoveASCOMDirectory)\RemoveASCOM.exe</RemoveASCOMExe>
@@ -203,9 +201,6 @@
 		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 
-		<!-- Make the VS Template zip files from their source files-->
-		<Exec Command='"$(CheckoutDirectory)\$(MakeTemplatesExecutable)" "$(CheckoutDirectory)\$(DriverTemplatesDirectory)" "TemplateSources"' />
-
 		<!-- Build the help files for Platform and Developer.-->
 		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=$(Configuration);Platform=AnyCPU" />
 		<MSBuild Projects="$(CheckoutDirectory)\$(DeveloperHelpProject)" Properties="Configuration=$(Configuration);Platform=AnyCPU" />
@@ -249,7 +244,7 @@
 			Include="$(MSBuildProjectDirectory)\AscomPlatform$(PlatformMajor)$(PlatformMinor)$(PlatformServicePack).$(Revision).exe;
 			$(MSBuildProjectDirectory)\AscomDeveloper$(PlatformMajor)$(PlatformMinor)$(PlatformServicePack).$(Revision).exe" />
 		</ItemGroup>
-		<Copy SourceFiles="@(PlatformInstallers)" DestinationFiles="$(PlatformInstallersRenamed)" />
+		<Copy SourceFiles="@(PlatformInstallers)" DestinationFiles="@(PlatformInstallersRenamed)" />
 
 		<!-- Zip up the RemoveASCOM files and store the zip file in the build root directory ;$(CheckoutDirectory)\$(RemoveASCOMPdb) -->
 		<ItemGroup>
@@ -275,10 +270,6 @@
 		</ItemGroup>
 		<WriteLinesToFile File="$(BuildNumberFile)" Lines="@(CmdLine)" Overwrite="true"/>
 
-		<!-- Commit and push the revised build number to GitHub so that it shows up in the history. 
-		<Exec Command='git.exe commit $(BuildNumberFileName) -m "Build version: $(PlatformVersion).$(PlatformServicePack).$(Revision)"' WorkingDirectory="$(CheckoutDirectory)"></Exec>
-		<Exec Command='git.exe push' WorkingDirectory="$(CheckoutDirectory)"></Exec>
-		   -->
 	</Target>
 
 </Project>
