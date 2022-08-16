@@ -390,11 +390,11 @@ if Variable PREREQ not Equals FALSE
       Parse String $OPSYS$ into Variables OPSYSMAJOR and OPSYSMINOR (Split at position from start)
       Write into Text File $SETUPLOG$ from Value $TIME$ Operating System: $OPSYS$, Major: $OPSYSMAJOR$, Minor: $OPSYSMINOR$ (at end of file)
       Comment: Determine whether we are running on Windows 10 or 11.
-      Evaluate Expression ($OPSYSMAJOR$ = "TEN") OR ($OPSYSMAJOR$ = "ELEVEN") into variable AUTOUPDATENET35
+      Evaluate Expression ($OPSYS$ = "TEN") OR ($OPSYS$ = "ELEVEN") into variable AUTOUPDATENET35
       Comment: Auto install .NET 3.5 using DISM if possible.
       if Variable AUTOUPDATENET35 Equals TRUE
         Comment: Running on Windows 10 or later so use DISM to enable .NET 3.5
-        Write into Text File $SETUPLOG$ from Value $TIME$ About to run DISM command to enable .NET 3.5.1 (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ Windows $OPSYS - About to run DISM command to enable .NET 3.5.1 (at end of file)
         Run Program $SUPPORTDIR$\EnableDotNet35.cmd  (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ Completed DISM execution. Return code: $RC$. (at end of file)
         Write into Text File $SETUPLOG$ from Value  (at end of file)
@@ -414,7 +414,7 @@ if Variable PREREQ not Equals FALSE
         end
       else
         Comment: Running on Windows 7 or 8 so provide instructions on how to install .NET 3.5
-        Write into Text File $SETUPLOG$ from Value $TIME$ Operating system is Windows 7 or 8 so .NET 3.5 must be enabled manually. (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ Windows $OPSYS - .NET 3.5 must be enabled manually. (at end of file)
         MessageBox: Pre-requisites, The Platform cannot install .NET 3.5 becasue you are running an OS earlier than Windows 10.$NEWLINE$$NEWLINE$Please install it manually through Control Panel / Programs / Programs and Features / Turn Windows features on or off.$NEWLINE$$NEWLINE$The Platform installer will now close.
         Terminate Installation
       end

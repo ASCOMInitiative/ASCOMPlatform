@@ -12837,7 +12837,7 @@ FALSE
 TRUE
 {88B401F6-C226-4557-9AC4-F717CEF345A3}
 $SETUPLOG$
-$TIME$ About to run DISM command to enable .NET 3.5.1
+$TIME$ Windows $OPSYS - About to run DISM command to enable .NET 3.5.1
 FALSE
 TRUE
 {E9F01F85-1047-4CD6-9EFA-8F2896BF2E58}
@@ -12862,7 +12862,7 @@ FALSE
 TRUE
 {2C6EF069-B2AF-4523-8E05-36AC5121DCD2}
 $SETUPLOG$
-$TIME$ Operating system is Windows 7 or 8 so .NET 3.5 must be enabled manually.
+$TIME$ Windows $OPSYS - .NET 3.5 must be enabled manually.
 FALSE
 TRUE
 {C27DD540-EC7D-462C-9EE8-5D0F21EB2997}
@@ -13421,7 +13421,7 @@ ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|F
 {B079B64D-D72A-492B-AD49-D591083C5617}
 $COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator\ASCOM.Simulator.CoverCalibrator.dll|TRUE|TRUE
 {14F7EBAF-95F4-4D08-AE4C-5EA0EFA58B76}
-($OPSYSMAJOR$ = "TEN") OR ($OPSYSMAJOR$ = "ELEVEN")
+($OPSYS$ = "TEN") OR ($OPSYS$ = "ELEVEN")
 AUTOUPDATENET35
 {9271F64D-CF59-4F0D-B931-FDA8B4F5E843}
 ASCOM Platform Options\Display user guide when installation is complete
