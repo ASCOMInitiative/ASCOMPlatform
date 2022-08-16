@@ -1,4 +1,4 @@
-IF (checkSuccess.Caption = COMPLETE)  THEN  textComplete.Visible := True;
+﻿IF (checkSuccess.Caption = COMPLETE)  THEN  textComplete.Visible := True;
 IF (checkSuccess.Caption = COMPLETE)  THEN  Memo1.Visible := True;
 IF (checkSuccess.Caption = REBOOT)  THEN  textReboot.Visible := True;
 IF (checkSuccess.Caption = CANCEL)  THEN  textCancelled.Visible := True;

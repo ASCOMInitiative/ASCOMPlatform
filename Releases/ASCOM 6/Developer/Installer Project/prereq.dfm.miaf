@@ -1,4 +1,4 @@
-IF (Platform6OK.Caption = FALSE)  THEN  Next.Visible := False;
+﻿IF (Platform6OK.Caption = FALSE)  THEN  Next.Visible := False;
 IF (Platform6OK.Caption = FALSE)  THEN  NeedsPlatform6Title.Visible := True;
 IF (Platform6OK.Caption = FALSE)  THEN  NeedsPlatform6Message.Visible := True;
 IF (NeedsUpgrade.Caption = TRUE)  THEN  PreviousInstalledTitle.Visible := True;
