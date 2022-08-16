@@ -29,6 +29,7 @@
           		</externalLink>
 				announced in July 2022.
     		  </listItem>
+    		  <listItem>Installers now have the build number as part of the filename.</listItem>
             </list>
           </listItem>
           <listItem>Astrometry - The built-in DeltaT predictions have been updated to run until July 2023.</listItem>
