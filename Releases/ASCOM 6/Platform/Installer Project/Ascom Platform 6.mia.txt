@@ -25,9 +25,6 @@ Set Variable APPLYINSTALLSUCCESS to
 Set Variable CFA to 
 Set Variable CFABYPASS to 
  
-Comment: Create variable that will indicate whether .NET 3.5 can be automatically enabled.
-Set Variable AUTOUPDATENET35 to 
- 
 Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
 Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$ASCOM" (WAIT)
  
@@ -151,6 +148,9 @@ Set Variable OSPRODUCTNAME to
 Set Variable OSCURRENTBUILD to 
 Set Variable OSBUILDLABEL to 
 Get Exact OS Level into OPSYS
+ 
+Comment: Create variable that will indicate whether .NET 3.5 can be automatically enabled.
+Set Variable AUTOUPDATENET35 to 
  
 Comment: Initialise to a null value. These variables point at 32bit executables on both 32 and 64bit OS.
 Get Folder Location System->Program Files Directory into PROGRAMFILES32
@@ -390,8 +390,15 @@ if Variable PREREQ not Equals FALSE
       Parse String $OPSYS$ into Variables OPSYSMAJOR and OPSYSMINOR (Split at position from start)
       Write into Text File $SETUPLOG$ from Value $TIME$ Operating System: $OPSYS$, Major: $OPSYSMAJOR$, Minor: $OPSYSMINOR$ (at end of file)
       Comment: Determine whether we are running on Windows 10 or 11.
-      Evaluate Expression $OPSYS$="ELEVEN" or $OPSYS$="TEN" into variable AUTOUPDATENET35
-      Write into Text File $SETUPLOG$ from Value $TIME$ Operating System: #$OPSYS$# Expression: #$AUTOUPDATENET35$# (at end of file)
+      Set Variable AUTOUPDATENET35 to FALSE
+      if Variable OPSYSMAJOR Equals TEN
+        Set Variable AUTOUPDATENET35 to TRUE
+        Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 10 - Enabling automatic .NET 3.5 install. (at end of file)
+      end
+      if Variable OPSYS Equals ELEVEN
+        Set Variable AUTOUPDATENET35 to TRUE
+        Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 11 or later - Enabling automatic .NET 3.5 install. (at end of file)
+      end
       Comment: Auto install .NET 3.5 using DISM if possible.
       if Variable AUTOUPDATENET35 Equals TRUE
         Comment: Running on Windows 10 or later so use DISM to enable .NET 3.5
