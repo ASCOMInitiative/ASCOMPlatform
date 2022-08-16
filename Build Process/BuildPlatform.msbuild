@@ -240,9 +240,16 @@
 		<!-- Copy the installers back to the build root directory -->
 		<Sleep Milliseconds="1000" />
 		<ItemGroup>
-			<PlatformInstallers Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\Release\Single\*.exe;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\Release\Single\*.exe" />
+			<PlatformInstallers 
+			Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\Release\Single\AscomPlatform$(PlatformMajor)$(PlatformMinor)$(PlatformServicePack).exe;
+			$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\Release\Single\AscomDeveloper$(PlatformMajor)$(PlatformMinor)$(PlatformServicePack).exe" />
 		</ItemGroup>
-		<Copy SourceFiles="@(PlatformInstallers)" DestinationFolder="$(MSBuildProjectDirectory)" />
+		<ItemGroup>
+			<PlatformInstallersRenamed
+			Include="$(MSBuildProjectDirectory)\AscomPlatform$(PlatformMajor)$(PlatformMinor)$(PlatformServicePack).$(Revision).exe;
+			$(MSBuildProjectDirectory)\AscomDeveloper$(PlatformMajor)$(PlatformMinor)$(PlatformServicePack).$(Revision).exe" />
+		</ItemGroup>
+		<Copy SourceFiles="@(PlatformInstallers)" DestinationFiles="$(PlatformInstallersRenamed)" />
 
 		<!-- Zip up the RemoveASCOM files and store the zip file in the build root directory ;$(CheckoutDirectory)\$(RemoveASCOMPdb) -->
 		<ItemGroup>
