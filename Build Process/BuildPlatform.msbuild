@@ -3,7 +3,7 @@
 	<!-- Required Import to use MSBuild Community Tasks -->
 	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
 
-	<!--  Specify Release or Release Candidate builds (possible values: Release or ReleaseCandidate) -->
+	<!--  Specify Release or Release Candidate builds (possible values: Release and ReleaseCandidate) -->
 	<PropertyGroup>
 		<BuildType>ReleaseCandidate</BuildType>
 	</PropertyGroup>
@@ -12,24 +12,29 @@
 	<Choose>
 		<When Condition=" '$(BuildType)'=='Release' ">
 			<PropertyGroup>
+				<!-- GIT Branch to Check Out -->
 				<GitCheckoutBranch>master</GitCheckoutBranch>
-				<!-- GIT Branch to Check Out-->
-				<Configuration>Release</Configuration>
+
 				<!--  Specify Release or Debug builds (Debug not working at 25/10/21) -->
-				<BuildTypeAnnotation>release</BuildTypeAnnotation>
+				<Configuration>Release</Configuration>
+
+				<!-- Annotation to add to the installer name to identiy this build type -->
+				<BuildTypeAnnotation></BuildTypeAnnotation>
 			</PropertyGroup>
 		</When>
 		<When Condition=" '$(BuildType)'=='ReleaseCandidate' ">
 			<PropertyGroup>
+				<!-- GIT Branch to Check Out -->
 				<GitCheckoutBranch>develop</GitCheckoutBranch>
-				<!-- GIT Branch to Check Out-->
-				<Configuration>Release</Configuration>
+
 				<!--  Specify Release or Debug builds (Debug not working at 25/10/21) -->
-				<BuildTypeAnnotation>rc</BuildTypeAnnotation>
+				<Configuration>Release</Configuration>
+
+				<!-- Annotation to add to the installer name to identiy this build type -->
+				<BuildTypeAnnotation>beta</BuildTypeAnnotation>
 			</PropertyGroup>
 		</When>
 	</Choose>
-
 
 	<PropertyGroup>
 
