@@ -115,6 +115,7 @@
 			<DependentUpon>frmMain.cs</DependentUpon>
 		</EmbeddedResource>
 		<Compile Include="ReferenceCountedObject.cs" />
+		<Compile Include="HardwareClassAttribute.cs" />
 		<Compile Include="Driver\SetupDialogForm.cs">
 			<SubType>Form</SubType>
 		</Compile>
