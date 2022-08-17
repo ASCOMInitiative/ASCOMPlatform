@@ -26,6 +26,7 @@ namespace ASCOM.LocalServer
     /// Multiple drivers means that several drivers connect to the same hardware device, aka a hub.
     /// Multiple devices means that there are more than one instance of the hardware, such as two focusers. In this case there needs to be multiple instances of the hardware connector, each with it's own connection count.
     /// </summary>
+    [HardwareClass]
     public static class SharedResources
     {
         // Object used for locking to prevent multiple drivers accessing common code at the same time

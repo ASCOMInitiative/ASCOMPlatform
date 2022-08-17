@@ -111,6 +111,64 @@ namespace ASCOM.LocalServer
                 RevokeClassFactories();
                 TL.LogMessage("Main", $"Class factories revoked");
 
+                // No new connections are now possible and the local server is irretrievably shutting down, so release resources in the Hardware classes
+                try
+                {
+                    // Get all types in the local server assembly
+                    Type[] types = Assembly.GetExecutingAssembly().GetTypes();
+
+                    // Iterate over the types looking for hardware classes that need to be disposed
+                    foreach (Type type in types)
+                    {
+                        try
+                        {
+                            TL.LogMessage("Main", $"Hardware disposal - Found type: {type.Name}");
+
+                            // Get the HardwareClassAttribute attribute if present on this type
+                            object[] attrbutes = type.GetCustomAttributes(typeof(HardwareClassAttribute), false);
+
+                            // Check to see if this type has the HardwareClass attribute, which indicates that this is a hardware class.
+                            if (attrbutes.Length > 0) // There is a HardwareClass attribute so call its Dispose() method
+                            {
+                                TL.LogMessage("Main", $"  {type.Name} is a hardware class");
+
+                                // Only process static classes that don't have instances here.
+                                if (type.IsAbstract & type.IsSealed) // This type is a static class
+                                {
+                                    // Lookup the method
+                                    MethodInfo disposeMethod = type.GetMethod("Dispose");
+
+                                    // If the method is found call it
+                                    if (disposeMethod != null) // a public Dispose() method was found
+                                    {
+                                        TL.LogMessage("Main", $"  Calling method {disposeMethod.Name} in static class {type.Name}...");
+
+                                        // Now call Dispose()
+                                        disposeMethod.Invoke(null, null);
+                                        TL.LogMessage("Main", $"  {disposeMethod.Name} method called OK.");
+                                    }
+                                    else // No public Dispose method was found
+                                    {
+                                        TL.LogMessage("Main", $"  The {disposeMethod.Name} method does not contain a public Dispose() method.");
+                                    }
+                                }
+                                else
+                                {
+                                    TL.LogMessage("Main", $"  Ignoring type {type.Name} because it is not static.");
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            TL.LogMessageCrLf("Main", $"Exception (inner) when disposing of hardware class.\r\n{ex}");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    TL.LogMessageCrLf("Main", $"Exception (outer) when disposing of hardware class.\r\n{ex}");
+                }
+
                 // Now stop the Garbage Collector thread.
                 TL.LogMessage("Main", $"Stopping garbage collector");
                 StopGarbageCollection();

@@ -33,6 +33,7 @@ namespace TEMPLATENAMESPACE
     /// <summary>
     /// ASCOM TEMPLATEDEVICECLASS hardware class for TEMPLATEDEVICENAME.
     /// </summary>
+    [HardwareClass()] // Class attribute flag this as a device hardware class that needs to be disposed by the local server when it exits.
     internal static class TEMPLATEHARDWARECLASS
     {
         // Constants used for Profile persistence

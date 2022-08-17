@@ -87,6 +87,7 @@
     <Compile Include="Driver\HardwareSafetyMonitor.cs" />
     <Compile Include="Driver\HardwareSwitch.cs" />
     <Compile Include="Driver\CommonHardware.cs" />
+    <Compile Include="HardwareClassAttribute.cs" />
     <Compile Include="LocalServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReferenceCountedObject.cs" />
