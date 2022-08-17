@@ -75,6 +75,7 @@
 			</Folder>
 			<ProjectItem ReplaceParameters="true" TargetFileName="ReadMe.htm" OpenInWebBrowser="true">ReadMe.htm</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="ReferenceCountedObject.cs">ReferenceCountedObject.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="HardwareClassAttribute.cs">HardwareClassAttribute.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="SharedResources.cs">SharedResources.cs</ProjectItem>
 		</Project>
 	</TemplateContent>

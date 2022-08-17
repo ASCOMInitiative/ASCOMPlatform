@@ -1,12 +1,42 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
 	<!-- Required Import to use MSBuild Community Tasks -->
 	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
-	<PropertyGroup>
-		<!--  Specify Release or Debug builds (Debug not working at 25/10/21) -->
-		<Configuration>Release</Configuration>
 
-		<!-- GIT Branch to Check Out-->
-		<GitCheckoutBranch>develop</GitCheckoutBranch>
+	<!--  Specify Release or Release Candidate builds (possible values: Release and ReleaseCandidate) -->
+	<PropertyGroup>
+		<BuildType>ReleaseCandidate</BuildType>
+	</PropertyGroup>
+
+	<!--  Set values according to type of build -->
+	<Choose>
+		<When Condition=" '$(BuildType)'=='Release' ">
+			<PropertyGroup>
+				<!-- GIT Branch to Check Out -->
+				<GitCheckoutBranch>master</GitCheckoutBranch>
+
+				<!--  Specify Release or Debug builds (Debug not working at 25/10/21) -->
+				<Configuration>Release</Configuration>
+
+				<!-- Annotation to add to the installer name to identiy this build type -->
+				<BuildTypeAnnotation></BuildTypeAnnotation>
+			</PropertyGroup>
+		</When>
+		<When Condition=" '$(BuildType)'=='ReleaseCandidate' ">
+			<PropertyGroup>
+				<!-- GIT Branch to Check Out -->
+				<GitCheckoutBranch>develop</GitCheckoutBranch>
+
+				<!--  Specify Release or Debug builds (Debug not working at 25/10/21) -->
+				<Configuration>Release</Configuration>
+
+				<!-- Annotation to add to the installer name to identiy this build type -->
+				<BuildTypeAnnotation>beta</BuildTypeAnnotation>
+			</PropertyGroup>
+		</When>
+	</Choose>
+
+	<PropertyGroup>
 
 		<!-- Directory in which to export the latest ASCOM code base from GitHub-->
 		<CheckoutDirectoryRelative>Export</CheckoutDirectoryRelative>
@@ -39,8 +69,6 @@
 		<DeveloperInstallerDirectory>Releases\ASCOM 6\Developer\Installer Project</DeveloperInstallerDirectory>
 		<PlatformInstallerProject>$(PlatformInstallerDirectory)\ASCOM Platform 6.mpr</PlatformInstallerProject>
 		<DeveloperInstallerProject>$(DeveloperInstallerDirectory)\ASCOM Platform 6 Developer.mpr</DeveloperInstallerProject>
-		<MakeTemplatesExecutable>\DriverTemplates\MakeASCOMTemplates\MakeASCOMTemplates\bin\$(Configuration)\MakeASCOMTemplates.exe</MakeTemplatesExecutable>
-		<DriverTemplatesDirectory>DriverTemplates</DriverTemplatesDirectory>
 		<FindGUIDsDirectory>Remove ASCOM\Find GUIDs\bin\$(Configuration)</FindGUIDsDirectory>
 		<RemoveASCOMDirectory>Remove ASCOM\Remove ASCOM\bin\$(Configuration)</RemoveASCOMDirectory>
 		<RemoveASCOMExe>$(RemoveASCOMDirectory)\RemoveASCOM.exe</RemoveASCOMExe>
@@ -126,9 +154,9 @@
 		<!-- Get the Platform version numbers from the MasterPlatformVersion file in the Export-->
 		<ReadLinesFromFile File="$(VersionFile)" >
 			<Output TaskParameter="Lines"
-		    ItemName="VersionNumberList" />
+			ItemName="VersionNumberList" />
 		</ReadLinesFromFile>
-		
+
 		<!-- Create version numbers from the semicolon delimited list that ReadLinesFromFile delivers -->
 		<PropertyGroup>
 			<PlatformNumber>@(VersionNumberList)</PlatformNumber>
@@ -163,7 +191,7 @@
 			AssemblyFileVersion="$(PlatformVersion).$(PlatformServicePack).$(Revision)"
 			AssemblyInformationalVersion="$(CommitSHA1)"/>
 		<AssemblyInfo
-		    CodeLanguage="VB"
+			CodeLanguage="VB"
 			OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.vb"
 			AssemblyFileVersion="$(PlatformVersion).$(PlatformServicePack).$(Revision)"
 			AssemblyInformationalVersion="$(CommitSHA1)"/>
@@ -203,9 +231,6 @@
 		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 
-		<!-- Make the VS Template zip files from their source files-->
-		<Exec Command='"$(CheckoutDirectory)\$(MakeTemplatesExecutable)" "$(CheckoutDirectory)\$(DriverTemplatesDirectory)" "TemplateSources"' />
-
 		<!-- Build the help files for Platform and Developer.-->
 		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=$(Configuration);Platform=AnyCPU" />
 		<MSBuild Projects="$(CheckoutDirectory)\$(DeveloperHelpProject)" Properties="Configuration=$(Configuration);Platform=AnyCPU" />
@@ -215,9 +240,9 @@
 			<IAProjectFiles Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.mpr;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.mpr" />
 		</ItemGroup>
 		<FileUpdate Files="@(IAProjectFiles)"
-		    Encoding="ASCII"
-    		Regex="$(PlatformVersion).9999.9999"
-		    ReplacementText="$(PlatformVersion).$(PlatformServicePack).$(Revision)">
+			Encoding="ASCII"
+			Regex="$(PlatformVersion).9999.9999"
+			ReplacementText="$(PlatformVersion).$(PlatformServicePack).$(Revision)">
 		</FileUpdate>
 
 		<!-- Add browser compatibility line to all the html help files so that all browsers can read them on the ASCOM Standards web site -->
@@ -225,8 +250,8 @@
 			<HTMLHelpFiles Include="$(CheckoutDirectory)\$(PlatformHelpDirectory)\*.html;$(CheckoutDirectory)\$(PlatformHelpDirectory)\html\*.htm;$(CheckoutDirectory)\$(DeveloperHelpDirectory)\*.html;$(CheckoutDirectory)\$(DeveloperHelpDirectory)\html\*.htm" />
 		</ItemGroup>
 		<FileUpdate Files="@(HTMLHelpFiles)"
-    		Regex="&lt;head&gt;"
-		    ReplacementText="&lt;head&gt;&lt;meta&#32;http-equiv&#61;&quot;X-UA-Compatible&quot;&#32;content&#61;&quot;IE&#61;5&quot;&#32;&#47;&gt;">
+			Regex="&lt;head&gt;"
+			ReplacementText="&lt;head&gt;&lt;meta&#32;http-equiv&#61;&quot;X-UA-Compatible&quot;&#32;content&#61;&quot;IE&#61;5&quot;&#32;&#47;&gt;">
 		</FileUpdate>
 
 		<!-- Rename index.html files so that they work on the ASCOM Standards web site -->
@@ -240,9 +265,16 @@
 		<!-- Copy the installers back to the build root directory -->
 		<Sleep Milliseconds="1000" />
 		<ItemGroup>
-			<PlatformInstallers Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\Release\Single\*.exe;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\Release\Single\*.exe" />
+			<PlatformInstallers
+			Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\Release\Single\AscomPlatform$(PlatformMajor)$(PlatformMinor)$(PlatformServicePack).exe;
+			$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\Release\Single\AscomDeveloper$(PlatformMajor)$(PlatformMinor)$(PlatformServicePack).exe" />
 		</ItemGroup>
-		<Copy SourceFiles="@(PlatformInstallers)" DestinationFolder="$(MSBuildProjectDirectory)" />
+		<ItemGroup>
+			<PlatformInstallersRenamed
+			Include="$(MSBuildProjectDirectory)\AscomPlatform$(PlatformMajor)$(PlatformMinor)$(PlatformServicePack)$(BuildTypeAnnotation).$(Revision).exe;
+			$(MSBuildProjectDirectory)\AscomDeveloper$(PlatformMajor)$(PlatformMinor)$(PlatformServicePack)$(BuildTypeAnnotation).$(Revision).exe" />
+		</ItemGroup>
+		<Copy SourceFiles="@(PlatformInstallers)" DestinationFiles="@(PlatformInstallersRenamed)" />
 
 		<!-- Zip up the RemoveASCOM files and store the zip file in the build root directory ;$(CheckoutDirectory)\$(RemoveASCOMPdb) -->
 		<ItemGroup>
@@ -268,10 +300,6 @@
 		</ItemGroup>
 		<WriteLinesToFile File="$(BuildNumberFile)" Lines="@(CmdLine)" Overwrite="true"/>
 
-		<!-- Commit and push the revised build number to GitHub so that it shows up in the history. 
-		<Exec Command='git.exe commit $(BuildNumberFileName) -m "Build version: $(PlatformVersion).$(PlatformServicePack).$(Revision)"' WorkingDirectory="$(CheckoutDirectory)"></Exec>
-		<Exec Command='git.exe push' WorkingDirectory="$(CheckoutDirectory)"></Exec>
-		   -->
 	</Target>
 
 </Project>

@@ -2,7 +2,7 @@
 <HTML>
 <HEAD>
     <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252" />
-    <TITLE>Untitled Document</TITLE>
+    <TITLE>ASCOM Local Server Read-Me</TITLE>
     <META NAME="GENERATOR" CONTENT="OpenOffice.org 3.2  (Win32)" />
     <META NAME="CREATED" CONTENT="0;0" />
     <META NAME="CHANGEDBY" CONTENT="Chris Rowland" />
@@ -34,6 +34,12 @@
 
         H4 {
             font-family: "Arial", "Helvetica", sans-serif
+        }
+
+        span.code {
+            color: #ff0000;
+            font-family: monospace;
+            font-size: large
         }
 
         PRE {
@@ -89,7 +95,7 @@
         </SPAN>
     </P>
     <P>
-        You're probably anxious to get going, but if you are new to this it will help to read through the short <A HREF="#theory">Theory of Operation</A> > section below.
+        You're probably anxious to get going, but if you are new to this it will help to read through the short <A HREF="#theory">Theory of Operation</A> and <A HREF="#disposal">Disposing of Resources</A> sections below.
     </P>
 
     <h3>Driver Architecture</h3>
@@ -157,12 +163,13 @@
                     You will see your driver in the list, will be able to select it and open its Setup dialogue.
                 </li>
                 <li>
-                    To support debugging, the driver will create three log files in a Documents\ASCOM\Logs yyyy-mm-dd folder. 
+                    To support debugging, the driver will create three log files in a Documents\ASCOM\Logs yyyy-mm-dd folder.
                     <ol>
                         <li><b>ASCOM.TEMPLATEDEVICENAME.Driver.xxx</b> - One log per instance of the COM driver class. (Can be enabled / disabled through the Driver setup dialogue.)</li>
                         <li><b>ASCOM.TEMPLATEDEVICENAME.Hardware.xxx</b> - One log from the shared hardware class containing information from all instances of the COM driver. (Can be enabled / disabled through the Driver setup dialogue.)</li>
-                        <li><b>ASCOM.TEMPLATEDEVICENAME.LocalServer.xxx</b> - One log for the local server executable itself. (After the driver is running stably, this log can be disabled if required 
-                        by editing the TL.Enabled statement near the top of the LocalServer.cs file.)
+                        <li>
+                            <b>ASCOM.TEMPLATEDEVICENAME.LocalServer.xxx</b> - One log for the local server executable itself. (After the driver is running stably, this log can be disabled if required
+                            by editing the TL.Enabled statement near the top of the LocalServer.cs file.)
                         </li>
                     </ol>
                 </li>
@@ -194,7 +201,7 @@
         <li>Adding a completely new served device type e.g. adding a FOCUSER device to a local server already hosting a TELESCOPE device.</li>
         <li>Adding a second or further instance of an existing served device type e.g. adding a second FOCUSER to a local server already hosting a FOCUSER device.</li>
     </ul>
-    <p>Method</p>
+    <h4>Method</h4>
     <ol>
         <li>
             Add a new "Local Server" project to the solution ensuring that:
@@ -262,6 +269,33 @@
         also registers the served classes for the ASCOM Chooser. The &quot;friendly&quot; name of each served driver that appears in the chooser comes from the driver's ServedClassName attribute.
         The COM ProgID for each served driver is specified in the ProgId attribute for example, ASCOM.AlphaTech.Telescope, where AlphaTech is the local server name and Telescope is the ASCOM type of the driver.
     </P>
+
+    <H3>
+        <A NAME="disposal"></A>Disposing of Resources
+    </H3>
+    <P>
+        If you create objects that consume significant memory or that use finite operating system resources such as file handles, synchronisation objects etc. you will want to release these back to the operating system
+        as soon as you know that clients have finished with them. This is where the Dispose methods on your driver, hardware class and the shared resources class come in.
+    </P>
+    <p>
+        The TEMPLATEDEVICECLASSDriver class is instanciable and supports the IDisposable pattern. This means that clients can inform your class that it is no longer needed, so that it can release its resources. It doesn't
+        matter if clients don't call the Dispose() method because the IDisposable interface implemented in the driver ensures that the runtime's garbage collector will call the driver instance's
+        Dispose() method and your resources will then be released.
+    </p>
+    <p>
+        Both the static TEMPLATEDEVICECLASSHardware and SharedResources classes are decorated with the <span class="code">[HardwareClass()]</span> attribute, which the local server will detect when it is about to close down.
+        The local server will then automatically call the Dispose() methods on these classes without requiring any action on your part.
+    </p>
+    <p>
+        If you create further static classes that need to be
+        disposed when the local server shuts down, just add a hardware class attribute line (<span class="code">[HardwareClass()]</span>)
+        immediately above your class definition line (<span class="code">internal static class YOURCLASSNAME</span>) and add a public Dispose() method to your class.
+    </p>
+    <p>
+        Please do not call the static class Dispose() methods from the TEMPLATEDEVICECLASSDriver.Dispose() method. The static class lifetimes are linked to the lifetime of the local server application and should be Disposed
+        only when it is clear that the local server is irretrievably closing down, as already implemented in the automatic disposal mechanism built into the local server.
+    </p>
+
     <H3>ASCOM Initiative</H3>
     <P>
         The ASCOM Initiative consists of a group of astronomy software  developers and instrument vendors whose goals are to promote the driver/client model and scripting automation.

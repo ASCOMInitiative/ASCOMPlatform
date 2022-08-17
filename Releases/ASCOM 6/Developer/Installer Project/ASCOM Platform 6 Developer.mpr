@@ -653,12 +653,12 @@ https://ascomtalk.groups.io/g/Help
 https://ascom-standards.org/Downloads/Index.htm
 Copyright � 1998-2022, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform66SP1Developer
+AscomDeveloper661
 TRUE
 TRUE
-
+|
 |C:\CodeSigningCertificate\petercodesign.pfx
-http://timestamp.digicert.com
+http://timestamp.digicert.com|
 https://ascom-standards.org
 UAC=requireAdministrator,CACHESOURCES=TRUE,BUILDMODE=SFX,LANGUAGE=English,"TITLE=ASCOM Platform 6.6 SP1 Developer Components",TARGETDIR=$TARGETDIR$,IADIR=C:\PROGRA~2\INSTAL~2\INSTAL~1,PROJDIR=c:\ASCOMT~1\releases\ASCOM6~1\DEVELO~1\INSTAL~1,IAVER=10.00,LANGUAGE=English,LANGUAGE=English,VM_INSTALL_COMMANDLINE=,VM_UNINSTALL_COMMANDLINE=,VM_UNITTEST=,SIGN_ALL=DEFAULT
 $

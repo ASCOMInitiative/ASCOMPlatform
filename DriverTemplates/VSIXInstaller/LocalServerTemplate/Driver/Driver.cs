@@ -110,12 +110,14 @@ namespace TEMPLATENAMESPACE
         }
 
         /// <summary>
-        /// Deterministically dispose of resources created by this driver that are no longer needed
+        /// Deterministically dispose of any managed and unmanaged resources used in this instance of the driver.
         /// </summary>
+        /// <remarks>
+        /// Do not dispose of items in this method, put clean-up code in the 'Dispose(bool disposing)' method instead.
+        /// </remarks>
         public void Dispose()
         {
-            // Please do not change this code.
-            // Do not dispose of items in this method, put clean-up code in the 'Dispose(bool disposing)' method instead.
+            // Please do not change the code in this method.
 
             // Release resources now.
             Dispose(disposing: true);
@@ -124,10 +126,15 @@ namespace TEMPLATENAMESPACE
         }
 
         /// <summary>
-        /// Dispose of large or scarce resources created within this driver file
+        /// Dispose of large or scarce resources created or used within this driver file
         /// </summary>
         /// <remarks>
-        /// 1) The purpose of this method is to enable you to release finite system resources back to the operating system as soon as possible, so that other applications work as effectively as possible.
+        /// The purpose of this method is to enable you to release finite system resources back to the operating system as soon as possible, so that other applications work as effectively as possible.
+        ///
+        /// NOTES
+        /// 1) Do not call the TEMPLATEDEVICECLASSHardware.Dispose() method from this method. Any resources used in the static TEMPLATEDEVICECLASSHardware class itself, 
+        ///    which is shared between all instances of the driver, should be released in the TEMPLATEDEVICECLASSHardware.Dispose() method as usual. 
+        ///    The TEMPLATEDEVICECLASSHardware.Dispose() method will be called automatically by the local server just before it shuts down.
         /// 2) You do not need to release every .NET resource you use in your driver because the .NET runtime is very effective at reclaiming these resources. 
         /// 3) Strong candidates for release here are:
         ///     a) Objects that have a large memory footprint (> 1Mb) such as images
@@ -137,7 +144,6 @@ namespace TEMPLATENAMESPACE
         ///     a) By the client application
         ///     b) Automatically, by the .NET runtime during finalisation
         /// 6) Because of 5) above, you should make sure that your code is tolerant of multiple calls.    
-        /// 7) Resources allocated in the hardware and shared resources classes will be automatically released by the local server when it terminates and so do not need to be released here.
         /// </remarks>
         protected virtual void Dispose(bool disposing)
         {
@@ -172,7 +178,7 @@ namespace TEMPLATENAMESPACE
                     // Any exception is not re-thrown because Microsoft's best practice says not to return exceptions from the Dispose method. 
                 }
 
-                // Flag that Dispose() has already run and disposed of all 
+                // Flag that Dispose() has already run and disposed of all resources
                 disposedValue = true;
             }
         }
