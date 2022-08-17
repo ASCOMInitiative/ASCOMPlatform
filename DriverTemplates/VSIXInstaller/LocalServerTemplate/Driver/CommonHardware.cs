@@ -159,7 +159,7 @@ namespace TEMPLATENAMESPACE
             throw new ActionNotImplementedException("Action " + actionName + " is not implemented by this driver");
         }
 
-        //STARTOFCOMMANDXXXMETHODS - This line will be deleted by the template wizard.
+        //STARTOFCOMMANDXXXMETHODS - This line will be deleted by the template wizard and won't appear in the generated project..
         /// <summary>
         /// Transmits an arbitrary string to the device and does not wait for a response.
         /// Optionally, protocol framing characters may be added to the string before transmission.
@@ -220,12 +220,24 @@ namespace TEMPLATENAMESPACE
             throw new MethodNotImplementedException($"CommandString - Command:{command}, Raw: {raw}.");
         }
 
-        //ENDOFCOMMANDXXXMETHODS - This line will be deleted by the template wizard.
+        //ENDOFCOMMANDXXXMETHODS - This line will be deleted by the template wizard and won't appear in the generated project.
         /// <summary>
-        /// Dispose the late-bound interface, if needed. Will release it via COM
-        /// if it is a COM object, else if native .NET will just dereference it
-        /// for GC.
+        /// Deterministically release both managed and unmanaged resources that are used by this class.
         /// </summary>
+        /// <remarks>
+        /// TODO: Release any managed or unmanaged resources that are used in this class.
+        /// 
+        /// Do not call this method from the Dispose method in your driver class.
+        ///
+        /// This is because this hardware class is decorated with the <see cref="HardwareClassAttribute"/> attribute and this Dispose() method will be called 
+        /// automatically by the  local server executable when it is irretrievably shutting down. This gives you the opportunity to release managed and unmanaged 
+        /// resources in a timely fashion and avoid any time delay between local server close down and garbage collection by the .NET runtime.
+        ///
+        /// For the same reason, do not call the SharedResources.Dispose() method from this method. Any resources used in the static shared resources class
+        /// itself should be released in the SharedResources.Dispose() method as usual. The SharedResources.Dispose() method will be called automatically 
+        /// by the local server just before it shuts down.
+        /// 
+        /// </remarks>
         public static void Dispose()
         {
             try { LogMessage("Dispose", $"Disposing of assets and closing down."); } catch { }

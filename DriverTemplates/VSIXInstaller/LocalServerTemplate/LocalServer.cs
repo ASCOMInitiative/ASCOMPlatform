@@ -3,7 +3,7 @@
 //
 // This is the core of a managed COM Local Server, capable of serving
 // multiple instances of multiple interfaces, within a single
-// executable. This implementes the equivalent functionality of VB6
+// executable. This implements the equivalent functionality of VB6
 // which has been extensively used in ASCOM for drivers that provide
 // multiple interfaces to multiple clients (e.g. Meade Telescope
 // and Focuser) as well as hubs (e.g., POTH).
