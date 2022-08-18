@@ -75,7 +75,9 @@
 		<RemoveASCOMPdb>$(RemoveASCOMDirectory)\RemoveASCOM.pdb</RemoveASCOMPdb>
 		<RemoveASCOMTxt>$(RemoveASCOMDirectory)\GUIDList.txt</RemoveASCOMTxt>
 		<VersionFile>$(CheckoutDirectory)\$(PlatformInstallerDirectory)\MasterPlatformVersion.txt</VersionFile>
-		<VSIXInstallerFile>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\bin\$(Configuration)\ASCOMVsixTemplateInstaller.vsix</VSIXInstallerFile>
+		<VSIXInstallerFileName>ASCOMVsixTemplateInstaller</VSIXInstallerFileName>
+		<VSIXInstallerFileType>vsix</VSIXInstallerFileType>
+		<VSIXInstallerFile>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\bin\$(Configuration)\$VSIXInstallerFileName.$(VSIXInstallerFileType)</VSIXInstallerFile>
 		<VSIXManifestFile>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\source.extension.vsixmanifest</VSIXManifestFile>
 
 		<!-- NuGet location and command to restore Platform NuGet dependencies -->
@@ -280,13 +282,16 @@
 		<ItemGroup>
 			<ZipFiles Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb);$(CheckoutDirectory)\$(RemoveASCOMTxt)" />
 		</ItemGroup>
-		<Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM.zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
+		<Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM$(BuildTypeAnnotation).$(Revision).zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
 
-		<!-- Copy the VSIX installer to the root folder -->
+		<!-- Copy the VSIX installer to the root folder and append the beta status and build number -->
 		<ItemGroup>
-			<VSIXInstallerFiles Include="$(CheckoutDirectory)\$(VSIXInstallerFile)"/>
+			<VSIXInstallerSourceFile Include="$(CheckoutDirectory)\$(VSIXInstallerFile)"/>
 		</ItemGroup>
-		<Copy SourceFiles="@(VSIXInstallerFiles)" DestinationFolder="$(MSBuildProjectDirectory)" SkipUnchangedFiles="false" />
+		<ItemGroup>
+			<VSIXInstallerDestinationFile Include="$(CheckoutDirectory)\$(VSIXInstallerFileName)$(BuildTypeAnnotation).$(Revision).$(VSIXInstallerFileType)"/>
+		</ItemGroup>
+		<Copy SourceFiles="@(VSIXInstallerSourceFile)" DestinationFiles="@VSIXInstallerDestinationFile" SkipUnchangedFiles="false" />
 
 		<!-- Create a formatted version of the current date and time -->
 		<PropertyGroup>
