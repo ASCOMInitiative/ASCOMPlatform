@@ -77,7 +77,7 @@
 		<VersionFile>$(CheckoutDirectory)\$(PlatformInstallerDirectory)\MasterPlatformVersion.txt</VersionFile>
 		<VSIXInstallerFileName>ASCOMVsixTemplateInstaller</VSIXInstallerFileName>
 		<VSIXInstallerFileType>vsix</VSIXInstallerFileType>
-		<VSIXInstallerFile>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\bin\$(Configuration)\$VSIXInstallerFileName.$(VSIXInstallerFileType)</VSIXInstallerFile>
+		<VSIXInstallerFile>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\bin\$(Configuration)\$(VSIXInstallerFileName).$(VSIXInstallerFileType)</VSIXInstallerFile>
 		<VSIXManifestFile>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\source.extension.vsixmanifest</VSIXManifestFile>
 
 		<!-- NuGet location and command to restore Platform NuGet dependencies -->
@@ -94,7 +94,7 @@
 
 		<!-- Item group for the installers that are created by the build process -->
 		<ItemGroup>
-			<OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe;$(MSBuildProjectDirectory)\RemoveASCOM.*;$(MSBuildProjectDirectory)\*.vsix" />
+			<OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe;$(MSBuildProjectDirectory)\RemoveASCOM*.*;$(MSBuildProjectDirectory)\*.vsix" />
 		</ItemGroup>
 
 		<!-- Remove the checkout directory to ensure a clean build, wait until the directory actually goes, -->
@@ -289,9 +289,9 @@
 			<VSIXInstallerSourceFile Include="$(CheckoutDirectory)\$(VSIXInstallerFile)"/>
 		</ItemGroup>
 		<ItemGroup>
-			<VSIXInstallerDestinationFile Include="$(CheckoutDirectory)\$(VSIXInstallerFileName)$(BuildTypeAnnotation).$(Revision).$(VSIXInstallerFileType)"/>
+			<VSIXInstallerDestinationFile Include="$(MSBuildProjectDirectory)\$(VSIXInstallerFileName)$(BuildTypeAnnotation).$(Revision).$(VSIXInstallerFileType)"/>
 		</ItemGroup>
-		<Copy SourceFiles="@(VSIXInstallerSourceFile)" DestinationFiles="@VSIXInstallerDestinationFile" SkipUnchangedFiles="false" />
+		<Copy SourceFiles="@(VSIXInstallerSourceFile)" DestinationFiles="@(VSIXInstallerDestinationFile)" SkipUnchangedFiles="false" />
 
 		<!-- Create a formatted version of the current date and time -->
 		<PropertyGroup>
