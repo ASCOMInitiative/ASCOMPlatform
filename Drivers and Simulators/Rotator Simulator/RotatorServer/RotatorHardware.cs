@@ -69,7 +69,7 @@ namespace ASCOM.Simulator
                 reverse = Convert.ToBoolean(profile.GetValue(progID, "Reverse", "", bool.FalseString));
 
                 syncOffset = Convert.ToSingle(profile.GetValue(progID, "SyncOffset", "", "0.0"), CultureInfo.InvariantCulture);
-                targetMechanicalPosition = RangeAngle(mechanicalPosition + syncOffset, 0.0F, 360.0F); ; // Initialise the target position to the current synced position
+                targetMechanicalPosition = mechanicalPosition ; // Initialise the mechanical target position to the current mechanical position
             }
         }
 
