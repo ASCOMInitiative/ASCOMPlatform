@@ -11,6 +11,8 @@
     <Authors>The ASCOM Initiative</Authors>
     <Copyright>(c) ASCOM Initiative 2022</Copyright>
     <PackageIcon>ASCOMBoarderless.png</PackageIcon>
+    <PackageId>ASCOM.Exception.Library</PackageId>
+    <Description>Exception definitions common to both COM and Alpaca devices.</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net35|AnyCPU'">
