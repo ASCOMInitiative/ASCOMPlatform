@@ -1343,8 +1343,12 @@ namespace ASCOM.Simulator
             get { return rateRaDecOffsetExternal.X; }
             set
             {
-                rateRaDecOffsetExternal.X = value; // Save the provided rate to be returned through the Get property
-                rateRaDecOffsetInternal.X = value * SIDEREAL_SECONDS_TO_SI_SECONDS * ARCSEC_TO_DEGREES; // Save the rate in the internal units that the simulator uses
+                rateRaDecOffsetExternal.X = value; // Save the provided rate (arc sec/sidereal second) to be returned through the Get property
+
+                // Save the provided rate for use internally in the units (degrees per SI second) that the simulator uses.
+                // Have to divide by the 0.9972 conversion factor in the next line because SI seconds are longer than sidereal seconds and hence the simulator movement will be greater
+                // when expressed in arc sec/SI second than when expressed in arc sec/sidereal second
+                rateRaDecOffsetInternal.X = (value / SIDEREAL_SECONDS_TO_SI_SECONDS) * ARCSEC_TO_DEGREES; 
             }
         }
 
