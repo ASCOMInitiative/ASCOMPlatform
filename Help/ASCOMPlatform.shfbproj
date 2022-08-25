@@ -20,6 +20,7 @@
     <DocumentationSources>
       <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" />
       <DocumentationSource sourceFile="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj" />
+      <DocumentationSource sourceFile="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" />
     </DocumentationSources>
     <HelpTitle>ASCOM Platform Help</HelpTitle>
     <CopyrightText>Copyright &amp;#169%3b 2010-22, The ASCOM Initiative</CopyrightText>
