@@ -79,7 +79,9 @@
 		<VSIXInstallerFileType>vsix</VSIXInstallerFileType>
 		<VSIXInstallerFile>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\bin\$(Configuration)\$(VSIXInstallerFileName).$(VSIXInstallerFileType)</VSIXInstallerFile>
 		<VSIXManifestFile>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\source.extension.vsixmanifest</VSIXManifestFile>
-
+		<PackageVersionFile>Directory.Build.props</PackageVersionFile>
+		<ASCOMExceptionsPackageFolder>Interfaces\ASCOMExceptions\bin\Release</ASCOMExceptionsPackageFolder>
+		
 		<!-- NuGet location and command to restore Platform NuGet dependencies -->
 		<NuGetCommand>..\nuget restore</NuGetCommand>
 
@@ -94,7 +96,7 @@
 
 		<!-- Item group for the installers that are created by the build process -->
 		<ItemGroup>
-			<OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe;$(MSBuildProjectDirectory)\RemoveASCOM*.*;$(MSBuildProjectDirectory)\*.vsix" />
+			<OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe;$(MSBuildProjectDirectory)\RemoveASCOM*.*;$(MSBuildProjectDirectory)\*.vsix;$(MSBuildProjectDirectory)\*.nupkg" />
 		</ItemGroup>
 
 		<!-- Remove the checkout directory to ensure a clean build, wait until the directory actually goes, -->
@@ -177,14 +179,22 @@
 			</Namespace>
 		</PropertyGroup>
 
-		<Message Text="VSIX Manifest directory: $(CheckoutDirectory)\$(VSIXManifestFile)"/>
-
 		<!-- Update the developer project templates VSIX installer version number with the current build number. -->
 		<XmlPoke
 		  XmlInputPath="$(CheckoutDirectory)\$(VSIXManifestFile)"
 		  Value="$(PlatformMajor).$(PlatformMinor).$(PlatformServicePack).$(Revision)"
 		  Query="/vsx:PackageManifest/vsx:Metadata/vsx:Identity/@Version"
 		  Namespaces="$(Namespace)"/>
+
+		<Message Text="VSIX Manifest file: $(CheckoutDirectory)\$(VSIXManifestFile) version number updated to: $(PlatformMajor).$(PlatformMinor).$(PlatformServicePack).$(Revision)"/>
+
+		<!-- Update the master package version number to the current Platform level. -->
+		<XmlPoke
+		  XmlInputPath="$(CheckoutDirectory)\$(PackageVersionFile)"
+		  Value="$(PlatformMajor).$(PlatformMinor).$(PlatformServicePack)"
+		  Query="//Version" />
+
+		<Message Text="Package version file: $(CheckoutDirectory)\$(PackageVersionFile) version number updated to: $(PlatformMajor).$(PlatformMinor).$(PlatformServicePack)"/>
 
 		<!-- Create global AssemblyVersion attributes from the Platform version, service pack and revision numbers. -->
 		<AssemblyInfo
@@ -292,6 +302,12 @@
 			<VSIXInstallerDestinationFile Include="$(MSBuildProjectDirectory)\$(VSIXInstallerFileName)$(BuildTypeAnnotation).$(Revision).$(VSIXInstallerFileType)"/>
 		</ItemGroup>
 		<Copy SourceFiles="@(VSIXInstallerSourceFile)" DestinationFiles="@(VSIXInstallerDestinationFile)" SkipUnchangedFiles="false" />
+
+		<!-- Copy the ASCOM Exceptions package to the root folder -->
+		<ItemGroup>
+			<ExceptionPackage Include="$(CheckoutDirectory)\$(ASCOMExceptionsPackageFolder)\*.nupkg"/>
+		</ItemGroup>
+		<Copy SourceFiles="@(ExceptionPackage)" DestinationFolder="$(MSBuildProjectDirectory)" SkipUnchangedFiles="false" />
 
 		<!-- Create a formatted version of the current date and time -->
 		<PropertyGroup>
