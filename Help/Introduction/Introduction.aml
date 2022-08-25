@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Introduction - ASCOM-Platform 6.6 SP1</title>
+    <title>Introduction - ASCOM-Platform 6.6 SP2</title>
     <para>
-      Please see <link xlink:href="81df3663-6fff-439a-8c64-5ca3989126d8" /> for a detailed list of changes and fixes in Platform 6.6 SP1 for both developers and Platform users.
+      Please see <link xlink:href="aa55983a-7030-4db2-a5b0-b24480703726" /> for a detailed list of changes and fixes in Platform 6.6 SP2 for both developers and Platform users.
     </para>
 
     <para>
@@ -16,41 +16,17 @@
     </para>
 
     <section address="Introduction-Users-Platform-6">
-      <title>Key changes in Platform 6.6 SP1</title>
+      <title>Key changes in Platform 6.6 SP2</title>
       <content>
         <list class="bullet">
-          <listItem>The Alpaca Dynamic Camera Client now supports the ImageBytes protocol.</listItem>
           <listItem>
             Telescope Simulator:
             <list class="bullet">
-              <listItem>Client supplied TelescopeAxes values are validated before use.</listItem>
-              <listItem>The Tracking state is restored after Park and Home are called.</listItem>
-            </list>
-          </listItem>
-          <listItem>
-            Camera Simulator:
-            <list class="bullet">
-              <listItem>PulseGuide directions are validated before use.</listItem>
-            </list>
-          </listItem>
-          <listItem>
-            Device Hub
-            <list class="bullet">
-              <listItem>Added a setting to keep Device Hub as the topmost application.</listItem>
-              <listItem>Polling frequency is increased for the duration of a slew.</listItem>
-              <listItem>Implements a stricter interpretation of the Park command requirements.</listItem>
-            </list>
-          </listItem>
-          <listItem>The mechanic to bring Simulator setup dialogues to the front of screen has been made more reliable.</listItem>
-          <listItem>
-            ObservingConditions Simulator and ObservingConditions Hub test applications
-            <list class="bullet">
-              <listItem>Redundant "Chooser" buttons have been removed.</listItem>
-              <listItem>Automatic polling can now be toggled on and off.</listItem>
+	          <listItem>Corrected SlewSettleTime to wait for the specified time period.</listItem>
+	          <listItem>Corrected RightAscensionRate to to apply the requested tracking rate.</listItem>
             </list>
           </listItem>
         </list>
-
       </content>
     </section>
 
@@ -58,7 +34,7 @@
       <title>Operating System Compatibility</title>
       <content>
         <para>
-          Platform 6.6 SP1 requires Windows 7 or later together with .NET Framework 4.8. PCs running Windows XP should use Platform 6.4 Service Pack 1 together with .NET Framework 4 Client Profile instead.
+          Platform 6.6 SP2 requires Windows 7 or later together with .NET Framework 4.8. PCs running Windows XP should use Platform 6.4 Service Pack 1 together with .NET Framework 4 Client Profile instead.
         </para>
       </content>
     </section>
@@ -92,7 +68,7 @@
             See the section titled <link xlink:href="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" /> for a summary of Platform 5.5 updates and new functionality.
           </listItem>
           <listItem>
-            This platform appears as <quoteInline>ASCOM Platform 6.6 SP1</quoteInline> in the Apps and add/remove programs dialogues
+            This platform appears as <quoteInline>ASCOM Platform 6.6 SP2</quoteInline> in the Apps and add/remove programs dialogues
           </listItem>
           <listItem>The Platform has been tested in 32 and 64bit bit versions of Windows 7 and Windows 10.</listItem>
         </list>
