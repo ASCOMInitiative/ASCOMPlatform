@@ -1014,14 +1014,14 @@ namespace ASCOM.Simulator
             get
             {
                 SharedResources.TrafficLine(SharedResources.MessageType.Other, "SlewSettleTime: " + (TelescopeHardware.SlewSettleTime * 1000).ToString(CultureInfo.InvariantCulture));
-                return (short)(TelescopeHardware.SlewSettleTime * 1000);
+                return (short)(TelescopeHardware.SlewSettleTime);
             }
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Other, "SlewSettleTime:-> ");
                 CheckRange(value, 0, 100, "SlewSettleTime");
                 SharedResources.TrafficEnd(value + " (done)");
-                TelescopeHardware.SlewSettleTime = value / 1000;
+                TelescopeHardware.SlewSettleTime = value;
             }
         }
 
