@@ -65,7 +65,7 @@ namespace ASCOM.DynamicRemoteClients
                 CreateAlpacaClients.CreateAlpacaClient(deviceType, deviceNumber, progId, TxtDeviceDescription.Text, localServerPath);
 
                 // Create a pointer to the local server executable
-                string localServerExe = $"{localServerPath}\\{SharedConstants.ALPACA_CLIENT_LOCAL_SERVER}";
+                string localServerExe = $"{localServerPath}{SharedConstants.ALPACA_CLIENT_LOCAL_SERVER}";
                 TL.LogMessage("CreateAlpacaClient", $"Alpaca local server exe name: {localServerExe}");
 
                 // Run the local server to register the new drivers
