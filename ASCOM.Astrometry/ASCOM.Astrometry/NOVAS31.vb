@@ -85,7 +85,7 @@ Namespace NOVAS
 
                 ' Validate that the files exist
                 TL.LogMessage("New", $"Path to NOVAS31 DLL: {Novas31DllFile}")
-                TL.LogMessage("New", $"Path to RACIO file: {Novas31DllFile}")
+                TL.LogMessage("New", $"Path to RACIO file: {RACIOFile}")
                 TL.LogMessage("New", $"Path to JPL ephemeris file: {Novas31DllFile}")
 
                 If Not File.Exists(Novas31DllFile) Then
@@ -96,17 +96,17 @@ Namespace NOVAS
                 End If
 
                 If Not File.Exists(RACIOFile) Then
-                    TL.LogMessage("New", $"NOVAS31 Initialise - Unable to locate RACIO file: {Novas31DllFile}")
+                    TL.LogMessage("New", $"NOVAS31 Initialise - Unable to locate RACIO file: {RACIOFile}")
                     Throw New HelperException($"NOVAS31 Initialise - Unable to locate RACIO file: {RACIOFile}")
                 Else
-                    TL.LogMessage("New", $"Found RACIO file: {Novas31DllFile}")
+                    TL.LogMessage("New", $"Found RACIO file: {RACIOFile}")
                 End If
 
                 If Not File.Exists(JPLEphFile) Then
-                    TL.LogMessage("New", $"NOVAS31 Initialise - Unable to locate JPL ephemeris file: {Novas31DllFile}")
+                    TL.LogMessage("New", $"NOVAS31 Initialise - Unable to locate JPL ephemeris file: {JPLEphFile}")
                     Throw New HelperException($"NOVAS31 Initialise - Unable to locate JPL ephemeris file: {JPLEphFile}")
                 Else
-                    TL.LogMessage("New", $"Found  JPL ephemeris file: {Novas31DllFile}")
+                    TL.LogMessage("New", $"Found  JPL ephemeris file: {JPLEphFile}")
                 End If
 
                 TL.LogMessage("New", "Loading NOVAS31 library DLL: " + Novas31DllFile)
@@ -137,6 +137,7 @@ Namespace NOVAS
                 TL.LogMessage("New", "Unable to open ephemeris file: " & JPLEphFile & ", RC: " & rc1)
                 Throw New HelperException($"NOVAS31 Initialisation - Unable to open ephemeris file: {JPLEphFile} RC: {rc1}")
             End If
+            TL.LogMessage("New", $"Ephemeris file {JPLEphFile} opened OK - DE number: {DENumber}")
 
             TL.LogMessage("New", "NOVAS31 initialised OK")
         End Sub
