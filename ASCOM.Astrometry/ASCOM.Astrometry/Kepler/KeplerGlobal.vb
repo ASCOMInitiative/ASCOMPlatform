@@ -392,7 +392,7 @@ Module KeplerGlobalCode
         epoch = e.epoch
         inclination = e.i
         ascnode = e.W * DTR
-        argperih = e.W
+        argperih = e.wp
         meandistance = e.a '/* semimajor axis */
         dailymotion = e.dm
         eccent = e.ecc

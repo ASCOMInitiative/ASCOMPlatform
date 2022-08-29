@@ -282,10 +282,10 @@ Namespace NOVASCOM
     ''' which correspond to the Type, Name, and Number properties of Novas.Planet. 
     ''' </para>
     '''</remarks>
-    <Guid("78F157E4-D03D-4efb-8248-745F9C63A850"), _
-    ClassInterface(ClassInterfaceType.None), _
-    ComVisible(True)> _
-    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
+    <Guid("78F157E4-D03D-4efb-8248-745F9C63A850"),
+    ClassInterface(ClassInterfaceType.None),
+    ComVisible(True)>
+    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")>
     Public Class Planet
         Implements IPlanet
 
@@ -382,7 +382,7 @@ Namespace NOVASCOM
         ''' <returns>PositionVector for the apparent place.</returns>
         ''' <remarks></remarks>
         Public Function GetApparentPosition(ByVal tjd As Double) As PositionVector Implements IPlanet.GetApparentPosition
-            Dim tdb, peb(3), veb(3), pes(3), ves(3), t2, t3, lighttime, _
+            Dim tdb, peb(3), veb(3), pes(3), ves(3), t2, t3, lighttime,
                 pos1(3), vel1(3), pos2(3), pos3(3), pos4(3), pos5(3), vec(8) As Double
             Dim iter As Integer, pv As PositionVector
 
@@ -502,7 +502,7 @@ Namespace NOVASCOM
                 '// Get position and velocity of planet wrt barycenter of solar system.
                 '//
 
-                ephemeris_nov(m_ephobj, tdb, m_type, m_number, m_name, _
+                ephemeris_nov(m_ephobj, tdb, m_type, m_number, m_name,
                               Origin.Barycentric, pos1, vel1)
                 'TL.LogMessage("GetAstrometricPosition", "tdb: " & tdb)
 
