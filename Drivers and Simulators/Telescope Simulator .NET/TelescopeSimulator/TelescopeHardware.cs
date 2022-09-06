@@ -61,14 +61,14 @@ namespace ASCOM.Simulator
         private const string STARTUP_OPTION_HOME_POSITION = "Start up at configured Home Position";
 
         // Useful mathematical constants
-        private const double SIDEREAL_RATE_DEG_SEC = 15.041 / 3600;
+        private const double SIDEREAL_SECONDS_TO_SI_SECONDS = 0.9972695677;// 0.9972695601852;
+        private const double SIDEREAL_RATE_DEG_PER_SIDEREAL_SECOND = 15.0 / 3600; // Degrees per sidereal second, given the earth's rotation of 360 degrees in 1 sidereal day
+        private const double SIDEREAL_RATE_DEG_PER_SI_SECOND = SIDEREAL_RATE_DEG_PER_SIDEREAL_SECOND / SIDEREAL_SECONDS_TO_SI_SECONDS; // Degrees per SI second
         private const double SOLAR_RATE_DEG_SEC = 15.0 / 3600;
         private const double LUNAR_RATE_DEG_SEC = 14.515 / 3600;
         private const double KING_RATE_DEG_SEC = 15.037 / 3600;
         private const double DEGREES_TO_ARCSEC = 3600.0;
         private const double ARCSEC_TO_DEGREES = 1.0 / DEGREES_TO_ARCSEC;
-        private const double SIDEREAL_SECONDS_TO_SI_SECONDS = 0.9972695601852;
-        private const double SI_SECONDS_TO_SIDEREAL_SECONDS = 1.0 / SIDEREAL_SECONDS_TO_SI_SECONDS;
         #endregion
 
         #region Private variables
@@ -88,6 +88,7 @@ namespace ASCOM.Simulator
         private static Profile s_Profile;
         private static bool onTop;
         public static TraceLogger TL;
+        public static Util util;
 
         //Capabilities
         private static bool canFindHome;
@@ -308,6 +309,9 @@ namespace ASCOM.Simulator
 
                 TL = new ASCOM.Utilities.TraceLogger("", "TelescopeSimHardware");
                 TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.SIMULATOR_TRACE, GlobalConstants.SIMULATOR_TRACE_DEFAULT);
+
+                util = new Util();
+
 
                 TL.LogMessage("TelescopeHardware", string.Format("Alignment mode 1: {0}", alignmentMode));
                 connectStates = new ConcurrentDictionary<long, bool>();
@@ -581,7 +585,7 @@ namespace ASCOM.Simulator
 
                 mountAxes = MountFunctions.ConvertAltAzmToAxes(altAzm); // Convert the start position AltAz coordinates into the current axes representation and set this as the simulator start position
                 TL.LogMessage("TelescopeHardware New", string.Format("Start-up mode: {0}, Azimuth: {1}, Altitude: {2}", startupMode, altAzm.X.ToString(CultureInfo.InvariantCulture), altAzm.Y.ToString(CultureInfo.InvariantCulture)));
-
+                TL.LogMessage("TelescopeHardware New", $"Tracking rate: {SIDEREAL_RATE_DEG_PER_SI_SECOND} degrees per SI second. Sidereal day:{util.HoursToHMS(SIDEREAL_SECONDS_TO_SI_SECONDS * 24.0, ":", ":", "", 3)} HH:MM:SS.xxx");
                 TL.LogMessage("TelescopeHardware New", "Successfully initialised hardware");
 
             }
@@ -1348,7 +1352,7 @@ namespace ASCOM.Simulator
                 // Save the provided rate for use internally in the units (degrees per SI second) that the simulator uses.
                 // Have to divide by the 0.9972 conversion factor in the next line because SI seconds are longer than sidereal seconds and hence the simulator movement will be greater
                 // when expressed in arc sec/SI second than when expressed in arc sec/sidereal second
-                rateRaDecOffsetInternal.X = (value / SIDEREAL_SECONDS_TO_SI_SECONDS) * ARCSEC_TO_DEGREES; 
+                rateRaDecOffsetInternal.X = (value / SIDEREAL_SECONDS_TO_SI_SECONDS) * ARCSEC_TO_DEGREES;
             }
         }
 
@@ -1606,7 +1610,7 @@ namespace ASCOM.Simulator
             switch (TrackingRate)
             {
                 case DriveRates.driveSidereal:
-                    haChange = SIDEREAL_RATE_DEG_SEC * updateInterval;     // change in degrees
+                    haChange = SIDEREAL_RATE_DEG_PER_SI_SECOND * updateInterval;     // change in degrees
                     break;
                 case DriveRates.driveSolar:
                     haChange = SOLAR_RATE_DEG_SEC * updateInterval;     // change in degrees
@@ -1771,15 +1775,15 @@ namespace ASCOM.Simulator
                 case SlewDirection.SlewDown:
                     change.Y = -delta;
                     break;
-				case SlewDirection.SlewWest:
-				case SlewDirection.SlewLeft:
-					change.X = delta;
-					break;
-				case SlewDirection.SlewEast:
-				case SlewDirection.SlewRight:
-					change.X = -delta;
-					break;
-				case Simulator.SlewDirection.SlewNone:
+                case SlewDirection.SlewWest:
+                case SlewDirection.SlewLeft:
+                    change.X = delta;
+                    break;
+                case SlewDirection.SlewEast:
+                case SlewDirection.SlewRight:
+                    change.X = -delta;
+                    break;
+                case Simulator.SlewDirection.SlewNone:
                     break;
             }
             return change;
