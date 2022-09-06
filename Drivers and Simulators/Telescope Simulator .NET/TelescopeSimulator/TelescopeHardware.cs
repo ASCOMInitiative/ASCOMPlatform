@@ -62,11 +62,11 @@ namespace ASCOM.Simulator
 
         // Useful mathematical constants
         private const double SIDEREAL_SECONDS_TO_SI_SECONDS = 0.9972695677;// 0.9972695601852;
-        private const double SIDEREAL_RATE_DEG_PER_SIDEREAL_SECOND = 15.0 / 3600; // Degrees per sidereal second, given the earth's rotation of 360 degrees in 1 sidereal day
+        private const double SIDEREAL_RATE_DEG_PER_SIDEREAL_SECOND = 360.0 / (24.0 * 60.0 * 60.0); // Degrees per sidereal second, given the earth's rotation of 360 degrees in 1 sidereal day
         private const double SIDEREAL_RATE_DEG_PER_SI_SECOND = SIDEREAL_RATE_DEG_PER_SIDEREAL_SECOND / SIDEREAL_SECONDS_TO_SI_SECONDS; // Degrees per SI second
-        private const double SOLAR_RATE_DEG_SEC = 15.0 / 3600;
-        private const double LUNAR_RATE_DEG_SEC = 14.515 / 3600;
-        private const double KING_RATE_DEG_SEC = 15.037 / 3600;
+        private const double SOLAR_RATE_DEG_SEC = 15.0 / 3600.0;
+        private const double LUNAR_RATE_DEG_SEC = 14.515 / 3600.0;
+        private const double KING_RATE_DEG_SEC = 15.037 / 3600.0;
         private const double DEGREES_TO_ARCSEC = 3600.0;
         private const double ARCSEC_TO_DEGREES = 1.0 / DEGREES_TO_ARCSEC;
         #endregion
@@ -310,8 +310,8 @@ namespace ASCOM.Simulator
                 TL = new ASCOM.Utilities.TraceLogger("", "TelescopeSimHardware");
                 TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.SIMULATOR_TRACE, GlobalConstants.SIMULATOR_TRACE_DEFAULT);
 
+                // Create utilities object 
                 util = new Util();
-
 
                 TL.LogMessage("TelescopeHardware", string.Format("Alignment mode 1: {0}", alignmentMode));
                 connectStates = new ConcurrentDictionary<long, bool>();
@@ -585,7 +585,7 @@ namespace ASCOM.Simulator
 
                 mountAxes = MountFunctions.ConvertAltAzmToAxes(altAzm); // Convert the start position AltAz coordinates into the current axes representation and set this as the simulator start position
                 TL.LogMessage("TelescopeHardware New", string.Format("Start-up mode: {0}, Azimuth: {1}, Altitude: {2}", startupMode, altAzm.X.ToString(CultureInfo.InvariantCulture), altAzm.Y.ToString(CultureInfo.InvariantCulture)));
-                TL.LogMessage("TelescopeHardware New", $"Tracking rate: {SIDEREAL_RATE_DEG_PER_SI_SECOND} degrees per SI second. Sidereal day:{util.HoursToHMS(SIDEREAL_SECONDS_TO_SI_SECONDS * 24.0, ":", ":", "", 3)} HH:MM:SS.xxx");
+                TL.LogMessage("TelescopeHardware New", $"Tracking rate: {SIDEREAL_RATE_DEG_PER_SI_SECOND} degrees per SI second, {SIDEREAL_RATE_DEG_PER_SI_SECOND * 3600.0} degrees per SI hour. Sidereal day:{util.HoursToHMS(SIDEREAL_SECONDS_TO_SI_SECONDS * 24.0, ":", ":", "", 3)} HH:MM:SS.xxx");
                 TL.LogMessage("TelescopeHardware New", "Successfully initialised hardware");
 
             }
@@ -635,7 +635,7 @@ namespace ASCOM.Simulator
                 // Determine the changes in current axis position and target axis position required as a result of tracking
                 if (Tracking) // Tracking is enabled
                 {
-                    double haChange = GetTrackingChange(timeInSecondsSinceLastUpdate); // Find the hour angle change that occurred during this interval
+                    double haChange = GetTrackingChangeInDegrees(timeInSecondsSinceLastUpdate); // Find the hour angle change (in degrees )that occurred during this interval
                     switch (alignmentMode)
                     {
                         case AlignmentModes.algGermanPolar: // In polar aligned mounts an HA change moves only the RA (primary) axis so update this, no change is required to the Dec (secondary) axis
@@ -651,7 +651,16 @@ namespace ASCOM.Simulator
 
                     // We are tracking so apply any RightAScensionRate and DeclinationRate rate offsets, this assumes a polar mount. 
                     // This correction is not applied when MoveAxis is in effect because the interface specification says it is one or the other of these and not both at the same time
+                    Vector changePreOffset = change;
                     change += Vector.Multiply(rateRaDecOffsetInternal, timeInSecondsSinceLastUpdate);
+
+                    TL.LogMessage("MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. " +
+                        $"Mount RA normal tracking movment: {changePreOffset.X} degrees. " +
+                        $"RA normal tracking movement rate  {changePreOffset.X * DEGREES_TO_ARCSEC / timeInSecondsSinceLastUpdate} arcseconds per SI second. " +
+                        $"Length of sideral day at this tracking rate = {util.HoursToHMS(1.0 / (changePreOffset.X / timeInSecondsSinceLastUpdate) * (360.0 / 3600.0), ":", ":", "", 3)}. hh:mm:ss.xxx" +
+                        $"RightAscensionRate additional movement: {rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate} degrees. " +
+                        $"RA movement rate including any RightAscensionrate additional movement: {change.X * DEGREES_TO_ARCSEC / timeInSecondsSinceLastUpdate} arcseconds per SI second. "
+                        );
                 }
             }
 
@@ -1353,6 +1362,7 @@ namespace ASCOM.Simulator
                 // Have to divide by the 0.9972 conversion factor in the next line because SI seconds are longer than sidereal seconds and hence the simulator movement will be greater
                 // when expressed in arc sec/SI second than when expressed in arc sec/sidereal second
                 rateRaDecOffsetInternal.X = (value / SIDEREAL_SECONDS_TO_SI_SECONDS) * ARCSEC_TO_DEGREES;
+                TL.LogMessage("RightAscensionRate Set", $"Value to be set (as received): {value} arc seconds per sidereal second. Converted to internal rate of: {value / SIDEREAL_SECONDS_TO_SI_SECONDS} arc seconds per SI second = {rateRaDecOffsetInternal.X} degrees per SI second.");
             }
         }
 
@@ -1597,7 +1607,7 @@ namespace ASCOM.Simulator
         /// </summary>
         /// <param name="updateInterval">The update interval.</param>
         /// <returns></returns>
-        private static double GetTrackingChange(double updateInterval)
+        private static double GetTrackingChangeInDegrees(double updateInterval)
         {
             if (!Tracking)
             {
