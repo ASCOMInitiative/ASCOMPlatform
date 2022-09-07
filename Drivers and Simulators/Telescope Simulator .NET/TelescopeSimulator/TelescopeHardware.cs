@@ -61,14 +61,15 @@ namespace ASCOM.Simulator
         private const string STARTUP_OPTION_HOME_POSITION = "Start up at configured Home Position";
 
         // Useful mathematical constants
-        private const double SIDEREAL_SECONDS_TO_SI_SECONDS = 0.9972695677;// 0.9972695601852;
+        private const double SIDEREAL_SECONDS_TO_SI_SECONDS = 0.99726956631945; // Based on earth sidreal rotation period of 23 hours 56 minutes 4.09053 seconds
         private const double SIDEREAL_RATE_DEG_PER_SIDEREAL_SECOND = 360.0 / (24.0 * 60.0 * 60.0); // Degrees per sidereal second, given the earth's rotation of 360 degrees in 1 sidereal day
         private const double SIDEREAL_RATE_DEG_PER_SI_SECOND = SIDEREAL_RATE_DEG_PER_SIDEREAL_SECOND / SIDEREAL_SECONDS_TO_SI_SECONDS; // Degrees per SI second
         private const double SOLAR_RATE_DEG_SEC = 15.0 / 3600.0;
         private const double LUNAR_RATE_DEG_SEC = 14.515 / 3600.0;
         private const double KING_RATE_DEG_SEC = 15.037 / 3600.0;
-        private const double DEGREES_TO_ARCSEC = 3600.0;
-        private const double ARCSEC_TO_DEGREES = 1.0 / DEGREES_TO_ARCSEC;
+        private const double DEGREES_TO_ARCSECONDS = 3600.0;
+        private const double ARCSECONDS_TO_DEGREES = 1.0 / DEGREES_TO_ARCSECONDS;
+        private const double ARCSECONDS_PER_RA_SECOND = 15.0; // To convert "seconds of RA" (24 hours = a whole circle) to arc seconds (360 degrees = a whole circle)
         #endregion
 
         #region Private variables
@@ -656,10 +657,10 @@ namespace ASCOM.Simulator
 
                     TL.LogMessage("MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. " +
                         $"Mount RA normal tracking movment: {changePreOffset.X} degrees. " +
-                        $"RA normal tracking movement rate  {changePreOffset.X * DEGREES_TO_ARCSEC / timeInSecondsSinceLastUpdate} arcseconds per SI second. " +
+                        $"RA normal tracking movement rate  {changePreOffset.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arcseconds per SI second. " +
                         $"Length of sideral day at this tracking rate = {util.HoursToHMS(1.0 / (changePreOffset.X / timeInSecondsSinceLastUpdate) * (360.0 / 3600.0), ":", ":", "", 3)}. hh:mm:ss.xxx" +
                         $"RightAscensionRate additional movement: {rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate} degrees. " +
-                        $"RA movement rate including any RightAscensionrate additional movement: {change.X * DEGREES_TO_ARCSEC / timeInSecondsSinceLastUpdate} arcseconds per SI second. "
+                        $"RA movement rate including any RightAscensionrate additional movement: {change.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arcseconds per SI second. "
                         );
                 }
             }
@@ -1263,7 +1264,7 @@ namespace ASCOM.Simulator
             set
             {
                 rateRaDecOffsetExternal.Y = value; // Save the provided rate to be returned through the Get property
-                rateRaDecOffsetInternal.Y = value * ARCSEC_TO_DEGREES; // Save the rate in the internal units that the simulator uses
+                rateRaDecOffsetInternal.Y = value * ARCSECONDS_TO_DEGREES; // Save the rate in the internal units that the simulator uses
             }
         }
 
@@ -1350,19 +1351,28 @@ namespace ASCOM.Simulator
             }
         }
 
-        // converts the rate between seconds per sidereal second and seconds per second
+        /// <summary>
+        /// Manages RightAscensionRate. Units are "seconds of RA per sidereal second".
+        /// </summary>
+        /// <remarks>
+        /// 1) This property retains the value supplied by set RightAscensionRate in the rateRaDecOffsetExternal.X vector element so that it can be returned by get RightAscensionRate.
+        /// 2) The set RightAscensionRate value is also converted to the internal units used by the simulator (arcsec per SI second) and stored in the rateRaDecOffsetInternal.X vector element
+        /// </remarks>
         public static double RightAscensionRate
         {
             get { return rateRaDecOffsetExternal.X; }
             set
             {
-                rateRaDecOffsetExternal.X = value; // Save the provided rate (arc sec/sidereal second) to be returned through the Get property
+                // Save the provided rate (seconds of RA per sidereal second) to be returned through the Get property
+                rateRaDecOffsetExternal.X = value;
 
-                // Save the provided rate for use internally in the units (degrees per SI second) that the simulator uses.
-                // Have to divide by the 0.9972 conversion factor in the next line because SI seconds are longer than sidereal seconds and hence the simulator movement will be greater
-                // when expressed in arc sec/SI second than when expressed in arc sec/sidereal second
-                rateRaDecOffsetInternal.X = (value / SIDEREAL_SECONDS_TO_SI_SECONDS) * ARCSEC_TO_DEGREES;
-                TL.LogMessage("RightAscensionRate Set", $"Value to be set (as received): {value} arc seconds per sidereal second. Converted to internal rate of: {value / SIDEREAL_SECONDS_TO_SI_SECONDS} arc seconds per SI second = {rateRaDecOffsetInternal.X} degrees per SI second.");
+                // Save the provided rate for internal use in the units (degrees per SI second) that the simulator uses.
+                // SIDEREAL_SECONDS_TO_SI_SECONDS converts from sidereal seconds to SI seconds
+                // Have to divide by the SIDEREAL_SECONDS_TO_SI_SECONDS conversion factor (0.99726956631945) because SI seconds are longer than sidereal seconds and hence the simulator movement will be greater in one SI second than in one sidereal second
+                // ARCSECONDS_PER_RA_SECOND converts from seconds of RA (1 circle = 24 hours) to arcseconds (1 circle = 360 degrees)
+                // ARCSECONDS_TO_DEGREES converts from arc seconds to degrees
+                rateRaDecOffsetInternal.X = (value / SIDEREAL_SECONDS_TO_SI_SECONDS) * ARCSECONDS_PER_RA_SECOND * ARCSECONDS_TO_DEGREES;
+                TL.LogMessage("RightAscensionRate Set", $"Value to be set (as received): {value} seconds per sidereal second. Converted to internal rate of: {value / SIDEREAL_SECONDS_TO_SI_SECONDS} seconds per SI second = {rateRaDecOffsetInternal.X} degrees per SI second.");
             }
         }
 
