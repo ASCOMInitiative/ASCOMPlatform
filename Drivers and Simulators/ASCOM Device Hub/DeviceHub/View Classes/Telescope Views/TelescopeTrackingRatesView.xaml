@@ -59,8 +59,11 @@
 				<Label Grid.Row="0" Grid.Column="0" Content="RA Offset Rate:" HorizontalAlignment="Right" VerticalAlignment="Center"
 					   Foreground="{DynamicResource NormalTextBrush}" Padding="1" />
 				<Label Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" 
-					   Foreground="{DynamicResource DynamicTextBrush}" Padding="0"
-					   Content="{Binding RaRateOffset}" ContentStringFormat="F7" />
+					   Foreground="{DynamicResource DynamicTextBrush}" Padding="0">
+					<Label.Content>
+						<TextBlock Text="{Binding RaRateOffset, StringFormat=F7, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+					</Label.Content>
+				</Label>
 				<Label Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Padding="0"
 					   Margin="6,0,0,1" Foreground="{DynamicResource NormalTextBrush}"
 					   Content="{Binding AscomRaUnits}" />
@@ -68,12 +71,14 @@
 				<Label Grid.Row="1" Grid.Column="0" Content="Dec Offset Rate:" HorizontalAlignment="Right" VerticalAlignment="Center"
 					   Foreground="{DynamicResource NormalTextBrush}" Padding="1" />
 				<Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" 
-					    Padding="0" Foreground="{DynamicResource DynamicTextBrush}"
-					   Content="{Binding DecRateOffset}" ContentStringFormat="F7" />
+					    Padding="0" Foreground="{DynamicResource DynamicTextBrush}">
+					<Label.Content>
+						<TextBlock Text="{Binding DecRateOffset, StringFormat=F7, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+					</Label.Content>
+				</Label>
 				<Label Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center"
 					   Margin="6,0,0,0" Foreground="{DynamicResource NormalTextBrush}" Padding="0" 
 					   Content="{Binding AscomDecUnits}" />
-
 				<Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Foreground="{DynamicResource NormalTextBrush}" Padding="1" 
 					   Content="{Binding RatesNote}" />
 
