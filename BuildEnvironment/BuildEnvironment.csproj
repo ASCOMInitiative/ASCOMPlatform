@@ -61,7 +61,6 @@
 		<Title>Support files for build environments where the ASCOM Platform is not installed.</Title>
 		<Product>ASCOM.BuildEnvironment.SupportFiles</Product>
 		<Company>The ASCOM Initiative</Company>
-		<Version></Version>
 		<PackageReadmeFile>package.md</PackageReadmeFile>
 	</PropertyGroup>
 
