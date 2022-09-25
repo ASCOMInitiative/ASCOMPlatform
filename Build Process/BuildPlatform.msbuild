@@ -81,6 +81,7 @@
 		<VSIXManifestFile>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\source.extension.vsixmanifest</VSIXManifestFile>
 		<PackageVersionFile>Directory.Build.props</PackageVersionFile>
 		<ASCOMExceptionsPackageFolder>Interfaces\ASCOMExceptions\bin\Release</ASCOMExceptionsPackageFolder>
+		<BuildEnvironmentPackageFolder>BuildEnvironment\bin\Release</BuildEnvironmentPackageFolder>
 		
 		<!-- NuGet location and command to restore Platform NuGet dependencies -->
 		<NuGetCommand>..\nuget restore</NuGetCommand>
@@ -308,6 +309,12 @@
 			<ExceptionPackage Include="$(CheckoutDirectory)\$(ASCOMExceptionsPackageFolder)\*.nupkg"/>
 		</ItemGroup>
 		<Copy SourceFiles="@(ExceptionPackage)" DestinationFolder="$(MSBuildProjectDirectory)" SkipUnchangedFiles="false" />
+
+		<!-- Copy the ASCOM Build Environment package to the root folder -->
+		<ItemGroup>
+			<BuildEnvironmentPackage Include="$(CheckoutDirectory)\$(BuildEnvironmentPackageFolder)\*.nupkg"/>
+		</ItemGroup>
+		<Copy SourceFiles="@(BuildEnvironmentPackage)" DestinationFolder="$(MSBuildProjectDirectory)" SkipUnchangedFiles="false" />
 
 		<!-- Create a formatted version of the current date and time -->
 		<PropertyGroup>

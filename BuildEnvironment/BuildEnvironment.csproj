@@ -62,6 +62,7 @@
 		<Product>ASCOM.BuildEnvironment.SupportFiles</Product>
 		<Company>The ASCOM Initiative</Company>
 		<PackageReadmeFile>package.md</PackageReadmeFile>
+		<Version>1.0.0-rc1</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net35|AnyCPU'">
