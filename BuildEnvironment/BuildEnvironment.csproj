@@ -1,0 +1,102 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<TargetFrameworks>net35;net40</TargetFrameworks>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>../ASCOM.snk</AssemblyOriginatorKeyFile>
+		<DelaySign>false</DelaySign>
+		<PackageProjectUrl>https://ascom-standards.org/</PackageProjectUrl>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Authors>Tim Long, Peter Simpson</Authors>
+		<Copyright>(c) ASCOM Initiative 2022</Copyright>
+		<PackageIcon>ASCOMBoarderless.png</PackageIcon>
+		<PackageId>ASCOM.BuildEnvironment.SupportFiles</PackageId>
+		<Description>
+			This package contains ASCOM run-time executables that are normally installed by the ASCOM Platform. Most ASCOM application and driver authros DO NOT need this package.
+
+			This package is only of use in application and driver build environments requiring ASCOM functionality but where the ASCOM Platform is NOT installed.
+
+			THE EXECUTABLES IN THIS PACKAGE SHOULD NEVER BE DISTRIBUTED AS PART OF A DRIVER OR APPLICATION .
+		</Description>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<IncludeReferencedProjects>true</IncludeReferencedProjects>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="..\AssemblyVersionInfo.cs" Link="Properties\AssemblyVersionInfo.cs" />
+		<Compile Include="..\SolutionInfo.cs" Link="Properties\SolutionInfo.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\Interfaces\ASCOMExceptions\ASCOMBoarderless.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="install.ps1">
+			<Pack>True</Pack>
+			<PackagePath>\tools</PackagePath>
+		</None>
+		<None Include="package.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj" PrivateAssets="All" />
+		<ProjectReference Include="..\ASCOM.Attributes\ASCOM.Attributes.csproj" PrivateAssets="All" />
+		<ProjectReference Include="..\ASCOM.Controls\ASCOM.Controls\ASCOM.Controls.csproj" PrivateAssets="All" />
+		<ProjectReference Include="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj" PrivateAssets="All" />
+		<ProjectReference Include="..\ASCOM.DriverAccess\ASCOM.DriverAccess.csproj" PrivateAssets="All" />
+		<ProjectReference Include="..\ASCOM.Internal.Extensions\ASCOM.Internal.Extensions.csproj" PrivateAssets="All" />
+		<ProjectReference Include="..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj" PrivateAssets="All" />
+		<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Cache\ASCOM.Cache.csproj" PrivateAssets="All" />
+		<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj" PrivateAssets="All" />
+		<ProjectReference Include="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" PrivateAssets="All" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+		<Title>Support files for build environments where the ASCOM Platform is not installed.</Title>
+		<Product>ASCOM.BuildEnvironment.SupportFiles</Product>
+		<Company>The ASCOM Initiative</Company>
+		<Version></Version>
+		<PackageReadmeFile>package.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net35|AnyCPU'">
+	  <NoWarn>1701;1702;3274;3258;3268</NoWarn>
+	  <WarningLevel>0</WarningLevel>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net35|AnyCPU'">
+	  <NoWarn>1701;1702;3274;3258;3268</NoWarn>
+	  <WarningLevel>0</WarningLevel>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|AnyCPU'">
+	  <NoWarn>1701;1702;3274;3258;3268</NoWarn>
+	  <WarningLevel>0</WarningLevel>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|AnyCPU'">
+	  <NoWarn>1701;1702;3274;3258;3268</NoWarn>
+	  <WarningLevel>0</WarningLevel>
+	</PropertyGroup>
+
+	<Target Name="CopyProjectReferencesToPackage" DependsOnTargets="BuildOnlySettings;ResolveReferences">
+		<ItemGroup>
+			<!-- Filter out unnecessary files -->
+			<_ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference')-&gt;WithMetadataValue('PrivateAssets', 'All'))" />
+		</ItemGroup>
+
+		<!-- Print batches for debug purposes -->
+		<Message Text="Batch for .nupkg: ReferenceCopyLocalPaths = @(_ReferenceCopyLocalPaths), ReferenceCopyLocalPaths.DestinationSubDirectory = %(_ReferenceCopyLocalPaths.DestinationSubDirectory) Filename = %(_ReferenceCopyLocalPaths.Filename) Extension = %(_ReferenceCopyLocalPaths.Extension)" Importance="High" Condition="'@(_ReferenceCopyLocalPaths)' != ''" />
+
+		<ItemGroup>
+			<!-- Add file to package with consideration of sub folder. If empty, the root folder is chosen. -->
+			<BuildOutputInPackage Include="@(_ReferenceCopyLocalPaths)" TargetPath="%(_ReferenceCopyLocalPaths.DestinationSubDirectory)" />
+		</ItemGroup>
+	</Target>
+</Project>
