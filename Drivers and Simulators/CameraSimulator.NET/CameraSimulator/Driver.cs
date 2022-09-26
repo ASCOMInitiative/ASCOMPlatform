@@ -1340,7 +1340,7 @@ namespace ASCOM.Simulator
                 if (sensorType == SensorType.Color)
                 {
                     imageArrayVariantColour = new object[imageArrayColour.GetLength(0), imageArrayColour.GetLength(1), 3];
-                    Parallel.For(0, imageArray.GetLength(0), i =>
+                    Parallel.For(0, imageArrayColour.GetLength(0), i =>
                     //for (int i = 0; i < imageArrayColour.GetLength(1); i++)
                     {
                         for (int j = 0; j < imageArrayColour.GetLength(1); j++)
