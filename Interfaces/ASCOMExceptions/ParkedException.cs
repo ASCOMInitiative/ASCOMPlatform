@@ -52,8 +52,8 @@ namespace ASCOM
         /// <summary>
         /// Added to keep Code Analysis happy
         /// </summary>
-        /// <param name = "info"></param>
-        /// <param name = "context"></param>
+        /// <param name = "info">Serialisation information</param>
+        /// <param name = "context">Streaming context.</param>
         protected ParkedException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
