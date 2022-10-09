@@ -387,7 +387,7 @@ namespace ASCOM.DeviceInterface
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
 		/// <remarks>
 		/// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-		/// This will always return False for non-German-equatorial mounts that do not have to be flipped.
+		/// This will always return False for mounts that do not have to be flipped.
 		/// May raise an error if the telescope is not connected.
 		/// <para>This is only available for telescope InterfaceVersions 2 and later.</para>
 		/// </remarks>
