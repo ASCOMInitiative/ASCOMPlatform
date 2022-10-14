@@ -74,7 +74,7 @@ namespace ASCOM.DynamicRemoteClients
                 {
                     Enabled = false
                 }; // Trace state is set in ReadProfile, immediately after being read from the Profile
-                TLLocalServer.LogMessage("DynamicClientDriver", $"Initialising - Version: { Assembly.GetEntryAssembly().GetName().Version}");
+                TLLocalServer.LogMessage("DynamicClientDriver", $"Initialising - Version: {Assembly.GetEntryAssembly().GetName().Version}");
 
                 connectStates = new ConcurrentDictionary<long, bool>();
 
@@ -947,7 +947,46 @@ namespace ASCOM.DynamicRemoteClients
                     {
                         deviceJsonResponse = client.Execute(request);
                     }
-                    if (TL.DebugTraceState) TL.LogMessage(clientNumber, method, $"Returned data content type: '{deviceJsonResponse.ContentType}'");
+
+                    if (TL.DebugTraceState)
+                    {
+                        TL.LogMessage(clientNumber, method, $"Returned data content type: '{deviceJsonResponse.ContentType}'");
+                        TL.LogMessage(clientNumber, method, $"Status code: {deviceJsonResponse.StatusCode}, Error message: '{deviceJsonResponse.ErrorMessage}', Response status: {deviceJsonResponse.ResponseStatus}");
+                        TL.LogMessageCrLf(clientNumber, method, $"Exception: {(deviceJsonResponse.ErrorException is null ? "NONE" : deviceJsonResponse.ErrorException.ToString())}");
+                    }
+
+                    switch (deviceJsonResponse.ResponseStatus)
+                    {
+                        case ResponseStatus.Completed:
+                            // Success - no error management required
+                            break;
+
+                        case ResponseStatus.Error:
+                        case ResponseStatus.TimedOut:
+                        case ResponseStatus.Aborted:
+                        case ResponseStatus.None:
+                            if (deviceJsonResponse.ErrorException != null)
+                            {
+                                // Log the exception and throw it
+                                TL.LogMessageCrLf(clientNumber, method, $"{deviceJsonResponse.ResponseStatus} - Exception: {deviceJsonResponse.ErrorException}");
+                                throw new TimeoutException($"{deviceJsonResponse.ResponseStatus} trying to contact Alpaca device. Response status: {deviceJsonResponse.ResponseStatus}, Status code: {deviceJsonResponse.StatusCode}, Error message: '{deviceJsonResponse.ErrorMessage}'", deviceJsonResponse.ErrorException);
+                            }
+                            else
+                            {
+                                TL.LogMessageCrLf(clientNumber, method, $"{deviceJsonResponse.ResponseStatus} - No exception provided");
+                                throw new TimeoutException($"{deviceJsonResponse.ResponseStatus} trying to contact Alpaca device. Response status: {deviceJsonResponse.ResponseStatus}, Status code: {deviceJsonResponse.StatusCode}, Error message: '{deviceJsonResponse.ErrorMessage}'");
+                            }
+
+                        default:
+                            throw new InvalidValueException($"Unexpected response status value: {deviceJsonResponse.ResponseStatus}");
+                    }
+
+
+
+                    if (deviceJsonResponse.ResponseStatus != ResponseStatus.Completed)
+                    {
+
+                    }
 
                     long timeDeviceResponse = sw.ElapsedMilliseconds - lastTime;
 
@@ -1589,11 +1628,11 @@ namespace ASCOM.DynamicRemoteClients
                 }
                 catch (Exception ex) // Process unexpected exceptions
                 {
-                    if (ex is System.Net.WebException) // Received a WebException, this could indicate that the remote device actively refused the connection so test for this and retry if appropriate
+                    if (ex is WebException) // Received a WebException, this could indicate that the remote device actively refused the connection so test for this and retry if appropriate
                     {
                         if (ex.InnerException != null) // First make sure the is an inner exception
                         {
-                            if (ex.InnerException is System.Net.Sockets.SocketException) // There is an inner exception and it is a SocketException so apply the retry logic
+                            if (ex.InnerException is SocketException) // There is an inner exception and it is a SocketException or a timeout caused an TimeoutException, so apply the retry logic
                             {
                                 retryCounter += 1; // Increment the retry counter
                                 if (retryCounter <= AlpacaConstants.SOCKET_ERROR_MAXIMUM_RETRIES) // The retry count is less than or equal to the maximum allowed so retry the command
@@ -1607,11 +1646,10 @@ namespace ASCOM.DynamicRemoteClients
                                 }
                                 else // The retry count exceeds the maximum allowed so throw the exception to the client
                                 {
-                                    TL.LogMessageCrLf(clientNumber, method, typeof(T).Name + " " + ex.Message);
-                                    if (TL.DebugTraceState) TL.LogMessageCrLf(clientNumber, method, "SocketException: " + ex.ToString());
+                                    TL.LogMessageCrLf(clientNumber, method, $"{typeof(T).Name} Socket exception retry count exceeded - {ex.Message}");
+                                    if (TL.DebugTraceState) TL.LogMessageCrLf(clientNumber, method, $"Socket exception retry count exceeded : {ex}");
                                     throw;
                                 }
-
                             }
                             else  // There is an inner exception but it is not a SocketException so log it and throw it  to the client
                             {
@@ -1619,10 +1657,28 @@ namespace ASCOM.DynamicRemoteClients
                                 if (TL.DebugTraceState) TL.LogMessageCrLf(clientNumber, method, "WebException: " + ex.ToString());
                                 throw;
                             }
-
                         }
                     }
-                    else // Some other type of exception that isn't System.Net.WebException so log it and throw it to the client
+                    else if(ex is TimeoutException)
+                    {
+                        retryCounter += 1; // Increment the retry counter
+                        if (retryCounter <= AlpacaConstants.SOCKET_ERROR_MAXIMUM_RETRIES) // The retry count is less than or equal to the maximum allowed so retry the command
+                        {
+                            TL.LogMessageCrLf(clientNumber, method, typeof(T).Name + " " + ex.Message);
+                            if (TL.DebugTraceState) TL.LogMessageCrLf(clientNumber, method, "TimeOutException: " + ex.ToString());
+
+                            // Log that we are retrying the command and wait a short time in the hope that the transient condition clears
+                            TL.LogMessage(clientNumber, method, string.Format("Timeout exception, retrying command - retry-count {0}/{1}", retryCounter, AlpacaConstants.SOCKET_ERROR_MAXIMUM_RETRIES));
+                            Thread.Sleep(AlpacaConstants.SOCKET_ERROR_RETRY_DELAY_TIME);
+                        }
+                        else // The retry count exceeds the maximum allowed so throw the exception to the client
+                        {
+                            TL.LogMessageCrLf(clientNumber, method, $"{typeof(T).Name} Timeout retry count exceeded - {ex.Message}");
+                            if (TL.DebugTraceState) TL.LogMessageCrLf(clientNumber, method, $"Timeout retry count exceeded : {ex}");
+                            throw;
+                        }
+                    }
+                    else // Some other type of exception that isn't System.Net.WebException or TimeoutException so log it and throw it to the client
                     {
                         TL.LogMessageCrLf(clientNumber, method, typeof(T).Name + " " + ex.Message);
                         if (TL.DebugTraceState) TL.LogMessageCrLf(clientNumber, method, "Exception: " + ex.ToString());
@@ -2038,7 +2094,7 @@ namespace ASCOM.DynamicRemoteClients
 
                             case "UInt16[,,]":
                                 UInt16[,,] uint16Array3D = (UInt16[,,])returnArray;
- 
+
                                 sw.Restart();
                                 Parallel.For(0, returnArray.GetLength(0), (i) =>
                                 {
@@ -2054,7 +2110,7 @@ namespace ASCOM.DynamicRemoteClients
 
                             case "Int32[,,]":
                                 Int32[,,] int3DArray = (Int32[,,])returnArray;
-   
+
                                 sw.Restart();
                                 Parallel.For(0, returnArray.GetLength(0), (i) =>
                                 {
