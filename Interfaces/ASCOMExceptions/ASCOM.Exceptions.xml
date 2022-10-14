@@ -277,8 +277,8 @@
             <summary>
             Added to keep Code Analysis happy
             </summary>
-            <param name = "info"></param>
-            <param name = "context"></param>
+            <param name = "info">Serialisation information</param>
+            <param name = "context">Streaming context.</param>
         </member>
         <member name="T:ASCOM.InvalidValueException">
             <summary>
@@ -338,8 +338,8 @@
             <summary>
             Added to keep Code Analysis happy
             </summary>
-            <param name = "info"></param>
-            <param name = "context"></param>
+            <param name = "info">Serialisation information</param>
+            <param name = "context">Streaming context.</param>
         </member>
         <member name="P:ASCOM.InvalidValueException.PropertyOrMethod">
             <summary>
@@ -461,8 +461,8 @@
             <summary>
             Added to keep Code Analysis happy
             </summary>
-            <param name = "info"></param>
-            <param name = "context"></param>
+            <param name = "info">Serialisation information</param>
+            <param name = "context">Streaming context.</param>
         </member>
         <member name="T:ASCOM.NotImplementedException">
             <summary>
@@ -504,8 +504,8 @@
             <summary>
             Added to keep Code Analysis happy
             </summary>
-            <param name = "info"></param>
-            <param name = "context"></param>
+            <param name = "info">Serialisation information</param>
+            <param name = "context">Streaming context.</param>
         </member>
         <member name="M:ASCOM.NotImplementedException.#ctor(System.String,System.String)">
             <summary>
@@ -560,8 +560,8 @@
             <summary>
             Added to keep Code Analysis happy
             </summary>
-            <param name = "info"></param>
-            <param name = "context"></param>
+            <param name = "info">Serialisation information</param>
+            <param name = "context">Streaming context.</param>
         </member>
         <member name="T:ASCOM.PropertyNotImplementedException">
             <summary>
@@ -722,8 +722,8 @@
             <summary>
             Added to keep Code Analysis happy
             </summary>
-            <param name = "info"></param>
-            <param name = "context"></param>
+            <param name = "info">Serialisation information</param>
+            <param name = "context">Streaming context.</param>
         </member>
         <member name="P:ASCOM.ValueNotSetException.PropertyOrMethod">
             <summary>
