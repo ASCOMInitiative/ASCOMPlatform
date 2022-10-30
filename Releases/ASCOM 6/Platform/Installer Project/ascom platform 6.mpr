@@ -2167,7 +2167,7 @@ COMMONFILES64
 COMMONFILES32
 $
 1
-4
+8
 TRUE
 
 ASCOM Initiative
@@ -2180,7 +2180,7 @@ ASCOM Platform 6.6 SP2-  Early Access
 ASCOM Platform 6.6 SP2 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{B1792D2A-B2F5-4A0B-9852-272F8442A8A0}
+{A6569741-8B9C-4195-B258-C7ECD992D764}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
@@ -2194,7 +2194,7 @@ TRUE
 |C:\CodeSigningCertificate\petercodesign.pfx
 http://timestamp.digicert.com|
 https://ascom-standards.org
-UAC=requireAdministrator,CACHESOURCES=TRUE,MSI_ALL=FALSE,VM_TARGETFOLDER=%TEMP%,VM_INSTALL_COMMANDLINE=/s,"VM_UNINSTALL_COMMANDLINE=/s MODIFY=FALSE REMOVE=TRUE","VM_UNITTEST=C:\Program Files (x86)\InstallAware X6 Creators Update\unit.exe",LOADOLDDATA=TRUE,SIGN_ALL=DEFAULT
+UAC=requireAdministrator,CACHESOURCES=TRUE,MSI_ALL=FALSE,VM_TARGETFOLDER=%TEMP%,VM_INSTALL_COMMANDLINE=/s,"VM_UNINSTALL_COMMANDLINE=/s MODIFY=FALSE REMOVE=TRUE","VM_UNITTEST=C:\Program Files (x86)\InstallAware X6 Creators Update\unit.exe",LOADOLDDATA=TRUE,SIGN_ALL=DEFAULT,SHA256ONLY=TRUE
 $
 $
 
