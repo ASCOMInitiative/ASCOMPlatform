@@ -434,68 +434,80 @@ namespace ASCOM.DriverAccess
             }
         }
 
-		/// <summary>
-		/// Transmits an arbitrary string to the device and does not wait for a response.
-		/// Optionally, protocol framing characters may be added to the string before transmission.
-		/// </summary>
-		/// <param name="Command">The literal command string to be transmitted.</param>
-		/// <param name="Raw">
-		/// if set to <c>true</c> the string is transmitted 'as-is'.
-		/// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
-		/// </param>
-		/// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red"><b>Can throw a not implemented exception</b></p>
-		/// </remarks>
-		public void CommandBlind(string Command, bool Raw)
+        /// <summary>
+        /// Transmits an arbitrary string to the device and does not wait for a response.
+        /// Optionally, protocol framing characters may be added to the string before transmission.
+        /// </summary>
+        /// <param name="Command">The literal command string to be transmitted.</param>
+        /// <param name="Raw">
+        /// if set to <c>true</c> the string is transmitted 'as-is'.
+        /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+        /// </param>
+        /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
+        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
+        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
+        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
+        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
+        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
+        /// </remarks>
+        public void CommandBlind(string Command, bool Raw)
         {
             memberFactory.CallMember(3, "CommandBlind", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
         }
 
-		/// <summary>
-		/// Transmits an arbitrary string to the device and waits for a boolean response.
-		/// Optionally, protocol framing characters may be added to the string before transmission.
-		/// </summary>
-		/// <param name="Command">The literal command string to be transmitted.</param>
-		/// <param name="Raw">
-		/// if set to <c>true</c> the string is transmitted 'as-is'.
-		/// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
-		/// </param>
-		/// <returns>
-		/// Returns the interpreted boolean response received from the device.
-		/// </returns>
-		/// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red"><b>Can throw a not implemented exception</b></p>
-		/// </remarks>
-		public bool CommandBool(string Command, bool Raw)
+        /// <summary>
+        /// Transmits an arbitrary string to the device and waits for a boolean response.
+        /// Optionally, protocol framing characters may be added to the string before transmission.
+        /// </summary>
+        /// <param name="Command">The literal command string to be transmitted.</param>
+        /// <param name="Raw">
+        /// if set to <c>true</c> the string is transmitted 'as-is'.
+        /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+        /// </param>
+        /// <returns>
+        /// Returns the interpreted boolean response received from the device.
+        /// </returns>
+        /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
+        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
+        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
+        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
+        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
+        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
+        /// </remarks>
+        public bool CommandBool(string Command, bool Raw)
         {
             return (bool)memberFactory.CallMember(3, "CommandBool", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
         }
 
-		/// <summary>
-		/// Transmits an arbitrary string to the device and waits for a string response.
-		/// Optionally, protocol framing characters may be added to the string before transmission.
-		/// </summary>
-		/// <param name="Command">The literal command string to be transmitted.</param>
-		/// <param name="Raw">
-		/// if set to <c>true</c> the string is transmitted 'as-is'.
-		/// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
-		/// </param>
-		/// <returns>
-		/// Returns the string response received from the device.
-		/// </returns>
-		/// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red"><b>Can throw a not implemented exception</b></p>
-		/// </remarks>
-		public string CommandString(string Command, bool Raw)
+        /// <summary>
+        /// Transmits an arbitrary string to the device and waits for a string response.
+        /// Optionally, protocol framing characters may be added to the string before transmission.
+        /// </summary>
+        /// <param name="Command">The literal command string to be transmitted.</param>
+        /// <param name="Raw">
+        /// if set to <c>true</c> the string is transmitted 'as-is'.
+        /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+        /// </param>
+        /// <returns>
+        /// Returns the string response received from the device.
+        /// </returns>
+        /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
+        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
+        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
+        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
+        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
+        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
+        /// </remarks>
+        public string CommandString(string Command, bool Raw)
         {
             return (string)memberFactory.CallMember(3, "CommandString", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
         }
