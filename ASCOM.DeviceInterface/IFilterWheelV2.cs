@@ -195,12 +195,11 @@ namespace ASCOM.DeviceInterface
 		/// </remarks>
 		string CommandString(string Command, bool Raw = false);
 
-		/// <summary>
-		/// Dispose the late-bound interface, if needed. Will release it via COM
-		/// if it is a COM object, else if native .NET will just dereference it
-		/// for GC.
-		/// </summary>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <summary>
+        /// This method is a "clean-up" method that is primarily of use to drivers that are written in languages such as C# and VB.NET where resource clean-up is initially managed by the language's 
+        /// runtime garbage collection mechanic. Driver authors should take care to ensure that a client or runtime calling Dispose() does not adversely affect other connected clients.
+        /// Applications should not call this method.
+        /// </summary>
 		void Dispose();
 
 

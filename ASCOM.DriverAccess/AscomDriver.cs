@@ -50,10 +50,11 @@ namespace ASCOM.DriverAccess
 
         }
 
-		/// <summary>
-		/// Releases the unmanaged late bound COM object
-		/// </summary>
-		/// <exception cref = "DriverException" >An error occurred that is not described by one of the more specific ASCOM exceptions.</exception>
+        /// <summary>
+        /// This method is a "clean-up" method that is primarily of use to drivers that are written in languages such as C# and VB.NET where resource clean-up is initially managed by the language's 
+        /// runtime garbage collection mechanic. Driver authors should take care to ensure that a client or runtime calling Dispose() does not adversely affect other connected clients.
+        /// Applications should not call this method.
+        /// </summary>
 		public void Dispose()
         {
             Dispose(true);
