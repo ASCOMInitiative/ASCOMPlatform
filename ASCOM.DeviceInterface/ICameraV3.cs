@@ -144,7 +144,6 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
         /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
         /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
         /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>

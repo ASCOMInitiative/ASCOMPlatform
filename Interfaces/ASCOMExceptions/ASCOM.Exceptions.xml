@@ -230,12 +230,18 @@
             Drivers are free to choose their own numbers starting with DriverBase, up to and including DriverMax.
             </remarks>
         </member>
+        <member name="F:ASCOM.ErrorCodes.ascomExceptions">
+            <summary>
+            Lookup dictionary mapping COM error numbers to ASCOM exception names
+            </summary>
+            <remarks>This must be kept in alignment with the exception number fields defined in this class.</remarks>
+        </member>
         <member name="M:ASCOM.ErrorCodes.GetExceptionName(System.Exception)">
             <summary>
             Return the ASCOM exception name that corresponds to a COM exception
             </summary>
             <param name="exception">COM exception to examine</param>
-            <returns>String ASCOM name of the exception or null if the exception doesn't correspond to one of the ASCOM exceptions.</returns>
+            <returns>The ASCOM name of the exception or null if the exception doesn't correspond to one of the ASCOM exceptions.</returns>
         </member>
         <member name="T:ASCOM.InvalidOperationException">
              <summary>
