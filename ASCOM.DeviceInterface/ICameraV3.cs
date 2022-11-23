@@ -215,11 +215,12 @@ namespace ASCOM.DeviceInterface
         /// <summary>
         /// Aborts the current exposure, if any, and returns the camera to Idle state.
         /// </summary>
+        /// <exception cref="MethodNotImplementedException">If CanAbortExposure is false.</exception>
         /// <exception cref="InvalidOperationException">Thrown if abort is not currently possible (e.g. during download).</exception>
         /// <exception cref="NotConnectedException">Thrown If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
-        /// <p style="color:red"><b>Must be implemented, must not throw a MethodNotImplementedException.</b></p>
+        /// <p style="color:red"><b>May throw a MethodNotImplementedException exception if CanAbortExposure is false.</b></p>
         /// <para><b>NOTES:</b>
         /// <list type="bullet">
         /// <item><description>Must throw exception if camera is not idle and abort is unsuccessful (or not possible, e.g. during download).</description></item>

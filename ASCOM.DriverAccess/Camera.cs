@@ -46,25 +46,26 @@ namespace ASCOM.DriverAccess
             }
         }
 
-		#endregion
+        #endregion
 
-		#region ICamera Members
+        #region ICamera Members
 
-		/// <summary>
-		/// Aborts the current exposure, if any, and returns the camera to Idle state.
-		/// </summary>
-		/// <exception cref="InvalidOperationException">Thrown if abort is not currently possible (e.g. during download).</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <b>NOTES:</b>
-		/// <list type="bullet">
-		/// <item><description>Must throw exception if camera is not idle and abort is unsuccessful (or not possible, e.g. during download).</description></item>
-		/// <item><description>Must throw exception if hardware or communications error occurs.</description></item>
-		/// <item><description>Must NOT throw an exception if the camera is already idle.</description></item>
-		/// </list>
-		/// </remarks>
-		public void AbortExposure()
+        /// <summary>
+        /// Aborts the current exposure, if any, and returns the camera to Idle state.
+        /// </summary>
+        /// <exception cref="MethodNotImplementedException">If CanAbortExposure is false.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if abort is not currently possible (e.g. during download).</exception>
+        /// <exception cref="NotConnectedException">If the device is not connected.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks>
+        /// <b>NOTES:</b>
+        /// <list type="bullet">
+        /// <item><description>Must throw exception if camera is not idle and abort is unsuccessful (or not possible, e.g. during download).</description></item>
+        /// <item><description>Must throw exception if hardware or communications error occurs.</description></item>
+        /// <item><description>Must NOT throw an exception if the camera is already idle.</description></item>
+        /// </list>
+        /// </remarks>
+        public void AbortExposure()
         {
             _memberFactory.CallMember(3, "AbortExposure", new Type[] { }, new object[] { });
         }
