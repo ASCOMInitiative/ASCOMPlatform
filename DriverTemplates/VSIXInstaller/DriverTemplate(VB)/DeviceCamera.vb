@@ -141,7 +141,7 @@ Class DeviceCamera
 	''' <summary>
 	''' Returns <c>True</c> if the camera can abort exposures; <c>False</c> if Not.
 	''' </summary>
-	''' <value>
+	''' <returns><c>True</c> when the camera can abort an exposure</returns>
 	Public ReadOnly Property CanAbortExposure() As Boolean Implements ICameraV3.CanAbortExposure
 		Get
 			TL.LogMessage("CanAbortExposure Get", False.ToString())
