@@ -75,7 +75,7 @@ namespace ASCOM.Simulator
         private void btnMove_MouseUp(object sender, MouseEventArgs e)
         {
             _focuser.KeepMoving = false;
-            _focuser.Target = _focuser.Position;
+            _focuser.Target = _focuser._position;
             _focuser.RateOfChange = 1;
             _focuser.MouseDownTime = DateTime.MaxValue;
         }
@@ -91,7 +91,7 @@ namespace ASCOM.Simulator
         private void UpdateDisplay()
         {
             lblTempDisplay.Text = _focuser.TempProbe ? _focuser.Temperature.ToString(CultureInfo.CurrentCulture) : 0.ToString();
-            lblPositionDisplay.Text = _focuser.Position.ToString(CultureInfo.CurrentCulture);
+            lblPositionDisplay.Text = _focuser._position.ToString(CultureInfo.CurrentCulture);
 
             if (_focuser.TempCompAvailable)
             {

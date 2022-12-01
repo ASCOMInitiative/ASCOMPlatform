@@ -78,7 +78,7 @@ namespace ASCOM.Simulator
 
         private bool _isConnected;
         private System.Timers.Timer _moveTimer; // drives the position and temperature changers
-        private int _position;
+        internal int _position;
         internal int Target;
         private double _lastTemp;
         private FocuserHandboxForm Handbox;
@@ -440,7 +440,10 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!(TL == null)) LogMessage("Position", _position.ToString());
+                if (!Absolute) throw new PropertyNotImplementedException("Position", false);
+
+                if (!(TL is null)) LogMessage("Position", _position.ToString());
+
                 return _position;
             }
         }
