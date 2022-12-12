@@ -249,8 +249,8 @@ function writesubmenu() {
 		SubMenuOutput += "<li><a href=\"https://github.com/ASCOMInitiative/ASCOM.Alpaca.Simulators/releases\" target=\"_new\">Omni Simulators</a></li>";
 		SubMenuOutput += "<li><a href=\"https://github.com/ASCOMInitiative/ConformU/releases\" target=\"_new\">Conformance Checker</a></li>";
 		SubMenuOutput += "<li><a href=\"https://github.com/ASCOMInitiative/ASCOMLibrary#readme\" target=\"_new\">.NET Cross-Platform Library</a></li>";
-		SubMenuOutput += "<li><a href=\"https://ascom-standards.org/alpyca/\" target=\"_new\">Python Client API Package</a> (<a href=\"https://ascom-standards.org/alpyca/alpyca.pdf\" target=\"_new\">PDF</a>)</li>";
-		SubMenuOutput += "<li><a href=\"https://download.ascom-standards.org/dev/AlpacaWorkbenchV2.tar.xz\" target=\"_new\">Alpaca Workbench for Raspberry Pi</a> (<a href=\"https://download.ascom-standards.org/dev/WorkbenchReadMe.pdf\" target=\"_new\">PDF Docs</a>)</li>";
+		SubMenuOutput += "<li><a href=\"https://download.ascom-standards.org/dev/AlpacaWorkbenchV31.tar.xz\" target=\"_new\">Alpaca Workbench for Raspberry Pi</a> (<a href=\"https://download.ascom-standards.org/dev/WorkbenchReadMe.pdf\" target=\"_new\">PDF Docs</a>)</li>";
+		SubMenuOutput += "<li><a href=\"https://ascom-standards.org/alpyca/\" target=\"_new\">Python Alpaca Client API Package</a> (<a href=\"https://ascom-standards.org/alpyca/alpyca.pdf\" target=\"_new\">PDF Docs</a>)</li>";
 		SubMenuOutput += "</ul>";
 //      SubMenuOutput += "<h3>Alpaca App Development</h3>";
 //	    SubMenuOutput += "<ul class=\"treeview\">";
