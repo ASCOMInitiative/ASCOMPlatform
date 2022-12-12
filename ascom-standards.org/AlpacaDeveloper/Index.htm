@@ -84,7 +84,7 @@
 		<li>Not understanding the driver-client architecture and that your driver will be used by many applications, some of which don't  yet exist. See <a href="../About/Index.htm">About Alpaca and ASCOM</a>.</li>
 		<li>Using sources for another driver (or worse, one of the simulators) as a starting point (you start with other peoples' mistakes and the wrong design)</li>
 		<li>Exposing timing restrictions or other device quirks to driver clients (they don't want to do stuff just for your goofy device)</li>
-		<li>Not following the capitalization of key words in Alpaca REST-Like/JSON messages as documented in the <a href="https://github.com/ASCOMInitiative/ASCOMRemote/raw/master/Documentation/ASCOM Alpaca API Reference.pdf" target="_new">API Specification</a>. JSON is case sensitive.</li>
+		<li>Not following the capitalization of key words in Alpaca REST-Like/JSON messages as documented in the <a href="https://github.com/ASCOMInitiative/ASCOMRemote/raw/master/Documentation/ASCOM Alpaca API Reference.pdf" target="_new">API Specification</a>. JSON is case sensitive. JSON also always uses '.' for the numeric decimal point, not ','. </li>
 	</ul>
 	</div>
 &nbsp;<!-- #EndEditable --></div>
@@ -103,10 +103,14 @@
 	<div class="nw">
 	<div>
 		<h3 style="color:#FF9900; text-align: center;">Alpaca Resources</h3>
-		<p><a href="https://github.com/DanielVanNoord/ASCOM.Alpaca.Simulators/releases/latest" target="_new">ASCOM.Alpaca.Simulators</a><br />
+		<p><a href="https://github.com/ASCOMInitiative/ASCOM.Alpaca.Simulators/releases" target="_new">ASCOM.Alpaca.Simulators</a><br />
 		Simulators for <em>all</em> Alpaca devices. Binary builds for Linux, MacOS, and Windows. Scroll down to assets.</p>
 		<p><a href="https://github.com/ASCOMInitiative/ConformU/releases" target="_new">Conform Universal</a><br />
 		New ASCOM Conformance Checker. Binary builds for Linux, MacOS, and Windows. Scroll down to Assets and expand.</p>
+		<p><a href="https://github.com/ASCOMInitiative/ASCOMLibrary#readme" target="_new">.NET Cross-Platform Library</a><br />
+		ASCOM support components written in .NET Standard. These are intended to assist developers in creating effective ASCOM Alpaca applications and drivers.</p>
+		<p><a href="https://ascom-standards.org/alpyca/" target="_new">Alpyca - Python  Alpaca API Package</a> (<a href="https://ascom-standards.org/alpyca/alpyca.pdf" target="_new">also PDF</a>)<br />
+		Client library provides all of the standard ASCOM universal interfaces to Python Programs. Installs via <tt>pip install alpyca</tt> </p>
 		<p><a href="https://download.ascom-standards.org/dev/AlpacaWorkbenchV2.tar.xz" target="_new">Alpaca Workbench for Raspberry Pi (v2)</a><br />
 		Instructions and resources for installing and using Alpaca simulators, ConformU, and Wireshark on a Raspberry Pi (32-bit OS). <a href="https://download.ascom-standards.org/dev/WorkbenchReadMe.pdf" target="_new">Here are the instructions</a> (ReadMe, also included, PDF).</p>
 	</div>

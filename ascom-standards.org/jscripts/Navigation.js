@@ -207,8 +207,10 @@ function writesubmenu() {
 	    SubMenuOutput += "<ul class=\"treeview\">";
 	    SubMenuOutput += "<li><a href=\"Plugins.htm\">Plug-Ins</a></li>";
 	    SubMenuOutput += "</ul>";
-    	SubMenuOutput += "<h3>Additional Downloads</h3>";
+    	SubMenuOutput += "<h3>Useful Tools</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
+		SubMenuOutput += "<li><a href=\"https://github.com/ASCOMInitiative/ASCOM.Alpaca.Simulators/releases\" target=\"_new\">Omni Simulators</a></li>";
+		SubMenuOutput += "<li><a href=\"https://github.com/ASCOMInitiative/ConformU/releases\" target=\"_new\">Conform Universal</a></li>";
 	    SubMenuOutput += "<li><a href=\"ScriptableComponents.htm\">Scriptable Components</a></li>";
 	    SubMenuOutput += "<li><a href=\"https://github.com/ASCOMInitiative/ASCOMRemote/releases\" target=\"_new\">ASCOM Remote (Alpaca)</a></li>";
 	    SubMenuOutput += "<li><a href=\"https://github.com/synfinatic/alpacascope#readme\" target=\"_new\">AlpacaScope (SkySafari)</a></li>";
@@ -216,8 +218,10 @@ function writesubmenu() {
     	SubMenuOutput += "<h3>Developer Downloads</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
 	    SubMenuOutput += "<li><a href=\"PlatDevComponents.htm\">Developer Components</a></li>";
-	    SubMenuOutput += "<li><a href=\"DevTools.htm\">Additional Tools</a></li>";
 	    SubMenuOutput += "<li><a href=\"DevSamples.htm\">Samples &amp; Sources</a></li>";
+		SubMenuOutput += "<li><a href=\"https://github.com/ASCOMInitiative/ASCOMLibrary#readme\" target=\"_new\">.NET Cross-Platform Library</a></li>";
+		SubMenuOutput += "<li><a href=\"https://ascom-standards.org/alpyca/\" target=\"_new\">Python Client API Package</a> (<a href=\"https://ascom-standards.org/alpyca/alpyca.pdf\" target=\"_new\">PDF</a>)</li>";
+		SubMenuOutput += "<li><a href=\"https://download.ascom-standards.org/dev/AlpacaWorkbenchV2.tar.xz\" target=\"_new\">Alpaca Workbench for Raspberry Pi</a> (<a href=\"https://download.ascom-standards.org/dev/WorkbenchReadMe.pdf\" target=\"_new\">PDF Docs</a>)</li>";
 	    SubMenuOutput += "</ul>";
         break;
     case 4: // Documents
@@ -239,15 +243,23 @@ function writesubmenu() {
  		SubMenuOutput += "<li><a href=\"../About/Index.htm\">About ASCOM &amp; Alpaca</a></li>";
 		SubMenuOutput += "<li><a href=\"https://ascom-standards.org/api/\" target=\"_new\">ASCOM Alpaca API</a></li>";
 		SubMenuOutput += "<li><a href=\"https://github.com/ASCOMInitiative/ASCOMRemote/raw/master/Documentation/ASCOM Alpaca API Reference.pdf\" target=\"_new\">API Reference (PDF)</a></li>";
-	    SubMenuOutput += "</ul>";
-        SubMenuOutput += "<h3>Alpaca App Development</h3>";
-	    SubMenuOutput += "<ul class=\"treeview\">";
-		SubMenuOutput += "<li>(to be written)</li>";
-	    SubMenuOutput += "</ul>";
-        SubMenuOutput += "<h3>Alpaca Driver Development</h3>";
-	    SubMenuOutput += "<ul class=\"treeview\">";
-		SubMenuOutput += "<li>(to be written)</li>";
-	    SubMenuOutput += "</ul>";
+		SubMenuOutput += "</ul>"
+		SubMenuOutput += "<h3>Alpaca Resources</h3>";
+		SubMenuOutput += "<ul class=\"treeview\">";
+		SubMenuOutput += "<li><a href=\"https://github.com/ASCOMInitiative/ASCOM.Alpaca.Simulators/releases\" target=\"_new\">Omni Simulators</a></li>";
+		SubMenuOutput += "<li><a href=\"https://github.com/ASCOMInitiative/ConformU/releases\" target=\"_new\">Conformance Checker</a></li>";
+		SubMenuOutput += "<li><a href=\"https://github.com/ASCOMInitiative/ASCOMLibrary#readme\" target=\"_new\">.NET Cross-Platform Library</a></li>";
+		SubMenuOutput += "<li><a href=\"https://ascom-standards.org/alpyca/\" target=\"_new\">Python Client API Package</a> (<a href=\"https://ascom-standards.org/alpyca/alpyca.pdf\" target=\"_new\">PDF</a>)</li>";
+		SubMenuOutput += "<li><a href=\"https://download.ascom-standards.org/dev/AlpacaWorkbenchV2.tar.xz\" target=\"_new\">Alpaca Workbench for Raspberry Pi</a> (<a href=\"https://download.ascom-standards.org/dev/WorkbenchReadMe.pdf\" target=\"_new\">PDF Docs</a>)</li>";
+		SubMenuOutput += "</ul>";
+//      SubMenuOutput += "<h3>Alpaca App Development</h3>";
+//	    SubMenuOutput += "<ul class=\"treeview\">";
+//		SubMenuOutput += "<li>(to be written)</li>";
+//	    SubMenuOutput += "</ul>";
+//      SubMenuOutput += "<h3>Alpaca Driver Development</h3>";
+//	    SubMenuOutput += "<ul class=\"treeview\">";
+//		SubMenuOutput += "<li>(to be written)</li>";
+//	    SubMenuOutput += "</ul>";
 		break;
     case 6: // COM Developers
         SubMenuOutput += "<h3>Design Principles</h3>";
