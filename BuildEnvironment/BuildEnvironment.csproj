@@ -51,7 +51,6 @@
 		<ProjectReference Include="..\ASCOM.DriverAccess\ASCOM.DriverAccess.csproj" PrivateAssets="All" />
 		<ProjectReference Include="..\ASCOM.Internal.Extensions\ASCOM.Internal.Extensions.csproj" PrivateAssets="All" />
 		<ProjectReference Include="..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj" PrivateAssets="All" />
-		<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Cache\ASCOM.Cache.csproj" PrivateAssets="All" />
 		<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj" PrivateAssets="All" />
 		<ProjectReference Include="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" PrivateAssets="All" />
 	</ItemGroup>

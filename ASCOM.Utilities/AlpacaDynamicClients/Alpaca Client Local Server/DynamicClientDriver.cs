@@ -40,6 +40,20 @@ namespace ASCOM.DynamicRemoteClients
         // Private constants
         private const int DYNAMIC_DRIVER_ERROR_NUMBER = 4095; // Alpaca error number that will be returned when a required JSON "Value" element is either absent from the response or is set to "null"
 
+        // Default image array transfer constants
+        internal const ImageArrayCompression IMAGE_ARRAY_COMPRESSION_DEFAULT = ImageArrayCompression.None;
+        internal const ImageArrayTransferType IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT = ImageArrayTransferType.Base64HandOff;
+
+        // Dynamic client configuration constants
+        private const int SOCKET_ERROR_MAXIMUM_RETRIES = 2; // The number of retries that the client will make when it receives a socket actively refused error from the remote device
+        private const int SOCKET_ERROR_RETRY_DELAY_TIME = 1000; // The delay time (milliseconds) between socket actively refused retries
+        private const string ACCEPT_HEADER_NAME = "Accept"; // Name of HTTP header used to affirm ImageBytes support for image array data
+        private const string CONTENT_TYPE_HEADER_NAME = "Content-Type"; // Name of HTTP header used to affirm the type of data returned by the device
+
+        // Image array ImageBytes - combined mime-type values
+        private const string JSON_MIME_TYPES = AlpacaConstants.APPLICATION_JSON_MIME_TYPE + ", " + AlpacaConstants.TEXT_JSON_MIME_TYPE; // JSON mime types
+        private const string IMAGE_BYTES_ACCEPT_HEADER = AlpacaConstants.IMAGE_BYTES_MIME_TYPE + ", " + JSON_MIME_TYPES; // Value of HTTP header to indicate support for the GetImageBytes mechanic
+
         //Private variables
         private static TraceLoggerPlus TLLocalServer;
 
@@ -688,7 +702,7 @@ namespace ASCOM.DynamicRemoteClients
         /// <returns></returns>
         public static T GetValue<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, MemberTypes memberType)
         {
-            return GetValue<T>(clientNumber, client, URIBase, TL, method, AlpacaConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, AlpacaConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT, memberType); // Set an arbitrary value for ImageArrayTransferType
+            return GetValue<T>(clientNumber, client, URIBase, TL, method, IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, IMAGE_ARRAY_COMPRESSION_DEFAULT, memberType); // Set an arbitrary value for ImageArrayTransferType
         }
 
         /// <summary>
@@ -835,7 +849,7 @@ namespace ASCOM.DynamicRemoteClients
         /// <returns></returns>
         public static T SendToRemoteDevice<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, Dictionary<string, string> Parameters, Method HttpMethod, MemberTypes memberType)
         {
-            return SendToRemoteDevice<T>(clientNumber, client, URIBase, TL, method, Parameters, HttpMethod, AlpacaConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, AlpacaConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT, memberType);
+            return SendToRemoteDevice<T>(clientNumber, client, URIBase, TL, method, Parameters, HttpMethod, IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, IMAGE_ARRAY_COMPRESSION_DEFAULT, memberType);
         }
 
         /// <summary>
@@ -907,12 +921,12 @@ namespace ASCOM.DynamicRemoteClients
                                 break;
 
                             case ImageArrayTransferType.ImageBytes:
-                                request.AddHeader(AlpacaConstants.ACCEPT_HEADER_NAME, AlpacaConstants.IMAGE_BYTES_ACCEPT_HEADER);
+                                request.AddHeader(ACCEPT_HEADER_NAME, IMAGE_BYTES_ACCEPT_HEADER);
                                 break;
 
                             case ImageArrayTransferType.BestAvailable:
                                 request.AddHeader(AlpacaConstants.BASE64_HANDOFF_HEADER, AlpacaConstants.BASE64_HANDOFF_SUPPORTED);
-                                request.AddHeader(AlpacaConstants.ACCEPT_HEADER_NAME, AlpacaConstants.IMAGE_BYTES_ACCEPT_HEADER);
+                                request.AddHeader(ACCEPT_HEADER_NAME, IMAGE_BYTES_ACCEPT_HEADER);
                                 break;
 
                             default:
@@ -941,7 +955,7 @@ namespace ASCOM.DynamicRemoteClients
                     // Use the more efficient .NET HttpClient to get the large image array as a byte[] for the ImageBytes mechanic
                     if ((typeof(T) == typeof(Array)) & ((imageArrayTransferType == ImageArrayTransferType.ImageBytes) | ((imageArrayTransferType == ImageArrayTransferType.BestAvailable))))
                     {
-                        deviceJsonResponse = GetResponse($"{client.BaseUrl}{uriBase}{method}".ToLowerInvariant(), AlpacaConstants.IMAGE_BYTES_ACCEPT_HEADER, clientNumber, transaction, TL); ;
+                        deviceJsonResponse = GetResponse($"{client.BaseUrl}{uriBase}{method}".ToLowerInvariant(), IMAGE_BYTES_ACCEPT_HEADER, clientNumber, transaction, TL); ;
                     }
                     else // Use the RestSharp client for everything else
                     {
@@ -1635,14 +1649,14 @@ namespace ASCOM.DynamicRemoteClients
                             if (ex.InnerException is SocketException) // There is an inner exception and it is a SocketException or a timeout caused an TimeoutException, so apply the retry logic
                             {
                                 retryCounter += 1; // Increment the retry counter
-                                if (retryCounter <= AlpacaConstants.SOCKET_ERROR_MAXIMUM_RETRIES) // The retry count is less than or equal to the maximum allowed so retry the command
+                                if (retryCounter <= SOCKET_ERROR_MAXIMUM_RETRIES) // The retry count is less than or equal to the maximum allowed so retry the command
                                 {
                                     TL.LogMessageCrLf(clientNumber, method, typeof(T).Name + " " + ex.Message);
                                     if (TL.DebugTraceState) TL.LogMessageCrLf(clientNumber, method, "SocketException: " + ex.ToString());
 
                                     // Log that we are retrying the command and wait a short time in the hope that the transient condition clears
-                                    TL.LogMessage(clientNumber, method, string.Format("Socket exception, retrying command - retry-count {0}/{1}", retryCounter, AlpacaConstants.SOCKET_ERROR_MAXIMUM_RETRIES));
-                                    Thread.Sleep(AlpacaConstants.SOCKET_ERROR_RETRY_DELAY_TIME);
+                                    TL.LogMessage(clientNumber, method, string.Format("Socket exception, retrying command - retry-count {0}/{1}", retryCounter, SOCKET_ERROR_MAXIMUM_RETRIES));
+                                    Thread.Sleep(SOCKET_ERROR_RETRY_DELAY_TIME);
                                 }
                                 else // The retry count exceeds the maximum allowed so throw the exception to the client
                                 {
@@ -1662,14 +1676,14 @@ namespace ASCOM.DynamicRemoteClients
                     else if(ex is TimeoutException)
                     {
                         retryCounter += 1; // Increment the retry counter
-                        if (retryCounter <= AlpacaConstants.SOCKET_ERROR_MAXIMUM_RETRIES) // The retry count is less than or equal to the maximum allowed so retry the command
+                        if (retryCounter <= SOCKET_ERROR_MAXIMUM_RETRIES) // The retry count is less than or equal to the maximum allowed so retry the command
                         {
                             TL.LogMessageCrLf(clientNumber, method, typeof(T).Name + " " + ex.Message);
                             if (TL.DebugTraceState) TL.LogMessageCrLf(clientNumber, method, "TimeOutException: " + ex.ToString());
 
                             // Log that we are retrying the command and wait a short time in the hope that the transient condition clears
-                            TL.LogMessage(clientNumber, method, string.Format("Timeout exception, retrying command - retry-count {0}/{1}", retryCounter, AlpacaConstants.SOCKET_ERROR_MAXIMUM_RETRIES));
-                            Thread.Sleep(AlpacaConstants.SOCKET_ERROR_RETRY_DELAY_TIME);
+                            TL.LogMessage(clientNumber, method, string.Format("Timeout exception, retrying command - retry-count {0}/{1}", retryCounter, SOCKET_ERROR_MAXIMUM_RETRIES));
+                            Thread.Sleep(SOCKET_ERROR_RETRY_DELAY_TIME);
                         }
                         else // The retry count exceeds the maximum allowed so throw the exception to the client
                         {
@@ -2278,7 +2292,7 @@ namespace ASCOM.DynamicRemoteClients
                 if (headers is null) throw new InvalidValueException("The device did not return any headers. Expected a Content-Type header with a value of 'application/json' or 'text/json' or 'application/imagebytes'.");
 
                 // Extract the content type from tyhe headers
-                if (headers.TryGetValues(AlpacaConstants.CONTENT_TYPE_HEADER_NAME, out contentTypeValues))
+                if (headers.TryGetValues(CONTENT_TYPE_HEADER_NAME, out contentTypeValues))
                 {
                     contentType = contentTypeValues.First().ToLowerInvariant();
                 }

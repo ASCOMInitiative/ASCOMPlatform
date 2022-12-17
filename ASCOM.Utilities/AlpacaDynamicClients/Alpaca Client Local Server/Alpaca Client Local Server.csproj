@@ -215,7 +215,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ASCOM.Alpaca.Components">
-      <Version>1.0.0-alpha28</Version>
+      <Version>1.0.52</Version>
     </PackageReference>
     <PackageReference Include="RestSharp">
       <Version>106.13.0</Version>
@@ -237,6 +237,10 @@
     <ProjectReference Include="..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
       <Project>{5f6cf410-7b16-4a32-99d2-0d92196c4490}</Project>
       <Name>ASCOM.Exceptions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ASCOM.Newtonsoft.Json\ASCOM.Newtonsoft.Json.csproj">
+      <Project>{FEBF12E1-A8CF-4086-ABCD-9AB0FDA69BC4}</Project>
+      <Name>ASCOM.Newtonsoft.Json</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{c9bf0a8b-594f-4ab9-938a-edc8448d8520}</Project>

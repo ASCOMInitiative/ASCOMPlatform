@@ -22,7 +22,7 @@ namespace ASCOM.DynamicRemoteClients
         private bool selectByMouse = false; // Variable to help select the whole contents of a numeric up-down box when tabbed into our selected by mouse
 
         // Create validating regular expression
-        Regex validHostnameRegex = new Regex(AlpacaConstants.ValidHostnameRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        Regex validHostnameRegex = new Regex(SharedConstants.VALID_HOST_NAME_REGEX, RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         // Set up a regular expression to parse out the ip address from n IPV6 address string, removing the scope id %XX element.
         Regex cleanIpV6Address = new Regex(CLEAN_URL, RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -177,8 +177,8 @@ namespace ASCOM.DynamicRemoteClients
                 }
 
                 // Handle cases where the stored registry value is not one of the currently supported modes
-                if (CmbImageArrayTransferType.SelectedItem == null) CmbImageArrayTransferType.SelectedItem = AlpacaConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT;
-                if (cmbImageArrayCompression.SelectedItem == null) cmbImageArrayCompression.SelectedItem = AlpacaConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT;
+                if (CmbImageArrayTransferType.SelectedItem == null) CmbImageArrayTransferType.SelectedItem = DynamicClientDriver.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT;
+                if (cmbImageArrayCompression.SelectedItem == null) cmbImageArrayCompression.SelectedItem = DynamicClientDriver.IMAGE_ARRAY_COMPRESSION_DEFAULT;
 
                 // Bring the setup dialogue to the front of the screen
                 if (WindowState == FormWindowState.Minimized)
@@ -409,7 +409,7 @@ namespace ASCOM.DynamicRemoteClients
             if (RadIpV4.Checked | RadIpV4AndV6.Checked) // IPv4 addresses are required
             {
                 // Add a local host entry
-                addressList.Items.Add(AlpacaConstants.LOCALHOST_NAME_IPV4); // Make "localhost" the first entry in the list of IPv4 addresses
+                addressList.Items.Add(SharedConstants.LOCALHOST_NAME_IPV4); // Make "localhost" the first entry in the list of IPv4 addresses
                 foreach (IPAddress ipAddress in HostPc.IpV4Addresses)
                 {
                     addressList.Items.Add(ipAddress.ToString());
@@ -470,7 +470,7 @@ namespace ASCOM.DynamicRemoteClients
             // Add the wild card addresses at the end of the list
 
             // Include the strong wild card character in the list of addresses if not already in use
-            if (IPAddressString != AlpacaConstants.STRONG_WILDCARD_NAME) addressList.Items.Add(AlpacaConstants.STRONG_WILDCARD_NAME);
+            if (IPAddressString != SharedConstants.STRONG_WILDCARD_NAME) addressList.Items.Add(SharedConstants.STRONG_WILDCARD_NAME);
 
             // Set the combo box selected item
             addressList.SelectedIndex = selectedIndex;
