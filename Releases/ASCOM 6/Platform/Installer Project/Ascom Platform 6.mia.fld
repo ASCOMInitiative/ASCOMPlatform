@@ -17,7 +17,6 @@ Create shortcuts
 Remove 32bit components
 Install Application Pre-Requisites if required
 Maintenance Dialogue
-ASCOM Device Hub
 Clean up any remaining simulator COM entries
 Install Visual C Runtimes
 Platform validation
