@@ -1717,7 +1717,7 @@ namespace ASCOM.Simulator
         public void SetupDialog()
         {
             if (connected)
-                throw new NotConnectedException("Can't set the CCD properties when connected");
+                throw new InvalidOperationException("Can't set the CCD properties when connected");
             using (SetupDialogForm F = new SetupDialogForm())
             {
                 try
@@ -3391,7 +3391,7 @@ namespace ASCOM.Simulator
             if (!imageReady)
             {
                 Log.LogMessage(identifier, "image not ready");
-                throw new NotConnectedException("Can't read " + identifier + " when no image is ready");
+                throw new InvalidOperationException("Can't read " + identifier + " when no image is ready");
             }
         }
 
