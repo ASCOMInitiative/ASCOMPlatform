@@ -149,10 +149,10 @@ function writesubmenu() {
     case 0: // Home Page
         SubMenuOutput += "<h3>Home</h3>";
         SubMenuOutput += "<ul class=\"treeview\">";
-        SubMenuOutput += "<li><a href=\"About/Index.htm\">About Alpaca and ASCOM</a></li>";
-        SubMenuOutput += "<li><a href=\"Support/Index.htm\">Get Support</a></li>";
-        SubMenuOutput += "<li><a href=\"Downloads/Index.htm\">Drivers &amp; Other Downloads</a></li>";
-        SubMenuOutput += "<li><a href=\"Documentation/Index.htm\">Published Documents</a></li>";
+        SubMenuOutput += "<li><a href=\"About/Index.htm\">ABOUT Alpaca and ASCOM</a></li>";
+        SubMenuOutput += "<li><a href=\"Support/Index.htm\">SUPPORT</a></li>";
+        SubMenuOutput += "<li><a href=\"Downloads/Index.htm\">DOWNLOADS</a></li>";
+        SubMenuOutput += "<li><a href=\"Documentation/Index.htm\">DOCUMENTS</a></li>";
         SubMenuOutput += "<li><a href=\"AlpacaDeveloper/Index.htm\">Alpaca Developers</a></li>";
         SubMenuOutput += "<li><a href=\"COMDeveloper/Index.htm\">Classic ASCOM Developers</a></li>";
         SubMenuOutput += "<li><a href=\"FAQs/Index.htm\">Frequently Asked Questions</a></li>";
@@ -221,7 +221,7 @@ function writesubmenu() {
 	    SubMenuOutput += "<li><a href=\"DevSamples.htm\">Samples &amp; Sources</a></li>";
 		SubMenuOutput += "<li><a href=\"https://github.com/ASCOMInitiative/ASCOMLibrary#readme\" target=\"_new\">.NET Cross-Platform Library</a></li>";
 		SubMenuOutput += "<li><a href=\"https://ascom-standards.org/alpyca/\" target=\"_new\">Python Client API Package</a> (<a href=\"https://ascom-standards.org/alpyca/alpyca.pdf\" target=\"_new\">PDF</a>)</li>";
-		SubMenuOutput += "<li><a href=\"https://download.ascom-standards.org/dev/AlpacaWorkbenchV2.tar.xz\" target=\"_new\">Alpaca Workbench for Raspberry Pi</a> (<a href=\"https://download.ascom-standards.org/dev/WorkbenchReadMe.pdf\" target=\"_new\">PDF Docs</a>)</li>";
+		SubMenuOutput += "<li><a href=\"https://download.ascom-standards.org/dev/AlpacaWorkbenchV31.tar.xz\" target=\"_new\">Alpaca Workbench for Raspberry Pi</a> (<a href=\"https://download.ascom-standards.org/dev/WorkbenchReadMe.pdf\" target=\"_new\">PDF Docs</a>)</li>";
 	    SubMenuOutput += "</ul>";
         break;
     case 4: // Documents
