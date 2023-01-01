@@ -65,10 +65,9 @@ Namespace Kepler
     ''' TT clock. It differs from UT1 by an amount called "delta-t", which slowly increases with time, 
     ''' and is about 60 seconds right now (2001). </para>
     ''' </remarks>
-    <Guid("2F2B0413-1F83-4777-B3B4-38DE3C32DC6B"), _
-    ClassInterface(ClassInterfaceType.None), _
-    ComVisible(True)> _
-    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
+    <Guid("2F2B0413-1F83-4777-B3B4-38DE3C32DC6B"),
+    ClassInterface(ClassInterfaceType.None),
+    ComVisible(True)>
     Public Class Ephemeris
         Implements IEphemeris
 
