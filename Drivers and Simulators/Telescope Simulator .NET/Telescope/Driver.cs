@@ -725,13 +725,13 @@ namespace ASCOM.Simulator
 
                     switch (Axis)
                     {
-                        case ASCOM.DeviceInterface.TelescopeAxes.axisPrimary:
+                        case TelescopeAxes.axisPrimary:
                             TelescopeHardware.rateMoveAxes.X = Rate;
                             break;
-                        case ASCOM.DeviceInterface.TelescopeAxes.axisSecondary:
+                        case TelescopeAxes.axisSecondary:
                             TelescopeHardware.rateMoveAxes.Y = Rate;
                             break;
-                        case ASCOM.DeviceInterface.TelescopeAxes.axisTertiary:
+                        case TelescopeAxes.axisTertiary:
                             // not implemented
                             break;
                     }
