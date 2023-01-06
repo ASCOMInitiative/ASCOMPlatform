@@ -12,6 +12,7 @@
 //
 // Written by:	Bob Denny	29-May-2007
 //
+using ASCOM.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -50,7 +51,13 @@ namespace ASCOM.Simulator
 
     public static class SharedResources
     {
-        
+        private static readonly Util util;
+
+        static SharedResources()
+        {
+            util = new Util();
+        }
+
         //private static int s_z = 0;
         private static TrafficForm m_trafficForm;               // Traffic Form 
 
@@ -66,14 +73,14 @@ namespace ASCOM.Simulator
 
         //public static double DEG_RAD = 0.0174532925;
         public const double DEG_RAD = Math.PI / 180;
-        public const double RAD_DEG =  180.0 / Math.PI;        //57.2957795;
+        public const double RAD_DEG = 180.0 / Math.PI;        //57.2957795;
         public const double HRS_RAD = 0.2617993881;
         public const double RAD_HRS = 3.81971863;
         public const double EARTH_ANG_ROT_DEG_MIN = 0.25068447733746215; //Angular rotation of earth in degrees/min
 
         public const double SIDRATE = 0.9972695677;
 
-        public const double TIMER_INTERVAL = .25; //4 ticks per second
+        public const double TIMER_INTERVAL = 0.25; // 4 ticks per second
 
         // ---------------------
         // Simulation Parameters
@@ -100,15 +107,15 @@ namespace ASCOM.Simulator
         //public static int z { get { return s_z++; } }
 
         public static TrafficForm TrafficForm
-        { 
-            get 
+        {
+            get
             {
                 if (m_trafficForm == null)
                 {
                     m_trafficForm = new TrafficForm();
                 }
-                
-                return m_trafficForm; 
+
+                return m_trafficForm;
             }
             set
             {
@@ -237,5 +244,28 @@ namespace ASCOM.Simulator
                     return false;
             }
         }
+
+        /// <summary>
+        /// Extension method to format a double in sesegesimal HH:MM:SS.sss format
+        /// </summary>
+        /// <param name="value">Value to be presented</param>
+        /// <returns>HH:MM:SS.sss formatted string</returns>
+        public static string ToHMS(this double value)
+        {
+            return util.HoursToHMS(value, ":", ":", "", 3);
+        }
+
+        /// <summary>
+        /// Extension method to format a double in sesegesimal DD:MM:SS.sss format
+        /// </summary>
+        /// <param name="value">Value to be presented</param>
+        /// <returns>DDD:MM:SS.sss formatted string</returns>
+        public static string ToDMS(this double value)
+        {
+            return util.DegreesToDMS(value, ":", ":", "", 3);
+        }
+
+
+
     }
 }
