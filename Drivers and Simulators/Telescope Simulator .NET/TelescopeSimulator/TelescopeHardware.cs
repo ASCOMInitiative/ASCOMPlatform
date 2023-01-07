@@ -647,9 +647,6 @@ namespace ASCOM.Simulator
             double timeInSecondsSinceLastUpdate = (now - lastUpdateTime).TotalSeconds;
             lastUpdateTime = now;
 
-            // Update sidereal time for this loop
-            SiderealTime = AstronomyFunctions.LocalSiderealTime(Longitude);
-
             // Find the hour angle change (in degrees) due to tracking that occurred during this interval
             double haChangeDegrees = GetTrackingChangeInDegrees(timeInSecondsSinceLastUpdate);
 
@@ -2013,6 +2010,9 @@ namespace ASCOM.Simulator
         /// </summary>
         private static void UpdatePositions()
         {
+            // Update sidereal time for this loop
+            SiderealTime = AstronomyFunctions.LocalSiderealTime(Longitude);
+
             pointingState = mountAxesDegrees.Y <= 90 ? PointingState.Normal : PointingState.ThroughThePole;
 
             currentAltAzm = MountFunctions.ConvertAxesToAltAzm(mountAxesDegrees);
