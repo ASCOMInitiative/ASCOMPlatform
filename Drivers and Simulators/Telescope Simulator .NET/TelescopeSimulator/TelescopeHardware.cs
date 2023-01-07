@@ -76,7 +76,7 @@ namespace ASCOM.Simulator
 
         #region Private variables
         // change to using a Windows timer to avoid threading problems
-        private static System.Windows.Forms.Timer s_wTimer;
+        private static System.Timers.Timer s_wTimer;
 
         private static long idCount; // Counter to generate ever increasing sequential ID numbers
 
@@ -306,9 +306,9 @@ namespace ASCOM.Simulator
             try
             {
                 s_Profile = new Utilities.Profile();
-                s_wTimer = new System.Windows.Forms.Timer();
+                s_wTimer = new System.Timers.Timer();
                 s_wTimer.Interval = (int)(SharedResources.TIMER_INTERVAL * 1000);
-                s_wTimer.Tick += new EventHandler(Timer_Tick);
+                s_wTimer.Elapsed += Timer_Tick;
 
                 SouthernHemisphere = false;
                 //Connected = false;
