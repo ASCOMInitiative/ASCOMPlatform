@@ -691,19 +691,18 @@ namespace ASCOM.Simulator
                             break;
                     }
 
-
-                    TL.LogMessage("MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. " +
-                        $"Mount RA normal tracking movment: {changePreOffset.X} degrees. " +
-                        $"RA normal tracking movement rate  {changePreOffset.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arcseconds per SI second. " +
-                        $"Length of sideral day at this tracking rate = {util.HoursToHMS(1.0 / (changePreOffset.X / timeInSecondsSinceLastUpdate) * (360.0 / 3600.0), ":", ":", "", 3)}. hh:mm:ss.xxx" +
+                    TL.LogMessage("MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. Alignment mode: {alignmentMode}" +
+                        $"Mount RA normal tracking movement: {changePreOffset.X} degrees. " +
+                        $"RA normal tracking movement rate  {changePreOffset.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second. " +
+                        $"Length of sidereal day at this tracking rate = {(1.0 / (changePreOffset.X / timeInSecondsSinceLastUpdate) * (360.0 / 3600.0)).ToHMS()}" +
                         $"RightAscensionRate additional movement: {rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate} degrees. " +
-                        $"RA movement rate including any RightAscensionrate additional movement: {changeDegrees.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arcseconds per SI second. "
+                        $"RA movement rate including any RightAscensionrate additional movement: {changeDegrees.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second. "
                         );
                 } // Mount is tracking
                 else // Mount is not tracking
                 {
                     // No axis change
-                    TL.LogMessage("MoveAxes NoMove,NoMove", $"Tracking disabled - no changes.Time since last update: {timeInSecondsSinceLastUpdate} seconds.");
+                    TL.LogMessage("MoveAxes", $"Tracking disabled - no changes.Time since last update: {timeInSecondsSinceLastUpdate} seconds.");
                 } // Mount is not tracking
 
                 // Move towards the target position if slewing
@@ -736,6 +735,7 @@ namespace ASCOM.Simulator
             // update the displayed values
             UpdatePositions();
 
+            // List changes this cycle
             TL.LogMessage($"MoveAxes (Final)",
               $"RA: {currentRaDec.X.ToHMS()} ({currentRaDec.X}), Dec: {currentRaDec.Y.ToDMS()} ({currentRaDec.Y}), " +
               $"Azimuth: {currentAltAzm.X.ToDMS()} ({currentAltAzm.X}), Altitude: {currentAltAzm.Y.ToDMS()} ({currentAltAzm.Y}), Through the pole: {SideOfPier}"
