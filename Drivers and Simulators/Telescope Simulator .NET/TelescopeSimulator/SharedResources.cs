@@ -80,7 +80,8 @@ namespace ASCOM.Simulator
 
         public const double SIDRATE = 0.9972695677;
 
-        public const double TIMER_INTERVAL = 0.25; // 4 ticks per second
+        public const double STATE_UPDATE_TIMER_INTERVAL = 0.1; // 10 ticks per second
+        public const double HANDBOX_UPDATE_TIMER_INTERVAL = 0.25; // 4 ticks per second
 
         // ---------------------
         // Simulation Parameters

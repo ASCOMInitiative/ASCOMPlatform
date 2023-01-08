@@ -723,6 +723,8 @@ namespace ASCOM.Simulator
 
                     CheckParked("MoveAxis");
 
+                    TelescopeHardware.TL.LogMessage("MoveAxis", $"Axis {Axis} set to {Rate} degrees per second");
+
                     switch (Axis)
                     {
                         case TelescopeAxes.axisPrimary:

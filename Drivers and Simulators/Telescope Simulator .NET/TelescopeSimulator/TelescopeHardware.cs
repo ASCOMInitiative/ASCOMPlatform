@@ -52,6 +52,7 @@ namespace ASCOM.Simulator
         // Mount positions, Declination, azimuth and altitude are in degrees.
 
         #endregion
+
         #region Constants
         // Start-up options values       
         private const string STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION = "Start up at simulator Default Position";
@@ -70,13 +71,15 @@ namespace ASCOM.Simulator
         private const double DEGREES_TO_ARCSECONDS = 3600.0;
         private const double ARCSECONDS_TO_DEGREES = 1.0 / DEGREES_TO_ARCSECONDS;
         private const double ARCSECONDS_PER_RA_SECOND = 15.0; // To convert "seconds of RA" (24 hours = a whole circle) to arc seconds (360 degrees = a whole circle)
-        private const double ARCSECONDS_TO_HOURS = 24.0 / (360.0 * 60.0 * 60.0);
 
         #endregion
 
         #region Private variables
         // change to using a Windows timer to avoid threading problems
-        private static System.Timers.Timer s_wTimer;
+        private static System.Windows.Forms.Timer updateStateTimer;
+        private static System.Windows.Forms.Timer updateHandboxTimer;
+
+        private static readonly object updateLockObject = new object();
 
         private static long idCount; // Counter to generate ever increasing sequential ID numbers
 
@@ -306,9 +309,13 @@ namespace ASCOM.Simulator
             try
             {
                 s_Profile = new Utilities.Profile();
-                s_wTimer = new System.Timers.Timer();
-                s_wTimer.Interval = (int)(SharedResources.TIMER_INTERVAL * 1000);
-                s_wTimer.Elapsed += Timer_Tick;
+                updateStateTimer = new System.Windows.Forms.Timer();
+                updateStateTimer.Interval = Convert.ToInt32(SharedResources.STATE_UPDATE_TIMER_INTERVAL * 1000.0);
+                updateStateTimer.Tick += UpdateStateTimer_Tick;
+
+                updateHandboxTimer = new System.Windows.Forms.Timer();
+                updateHandboxTimer.Interval = Convert.ToInt32(SharedResources.HANDBOX_UPDATE_TIMER_INTERVAL * 1000.0);
+                updateHandboxTimer.Tick += UpdateHandboxTimer_Tick;
 
                 SouthernHemisphere = false;
                 //Connected = false;
@@ -568,12 +575,12 @@ namespace ASCOM.Simulator
                 //Set the form setting for the Always On Top Value
                 TelescopeSimulator.m_MainForm.TopMost = onTop;
 
-                slewSpeedFast = maximumSlewRate * SharedResources.TIMER_INTERVAL;
+                slewSpeedFast = maximumSlewRate * SharedResources.STATE_UPDATE_TIMER_INTERVAL;
                 slewSpeedMedium = slewSpeedFast * 0.1;
                 slewSpeedSlow = slewSpeedFast * 0.02;
                 SlewDirection = SlewDirection.SlewNone;
 
-                GuideDurationShort = 0.8 * SharedResources.TIMER_INTERVAL;
+                GuideDurationShort = 0.8 * SharedResources.STATE_UPDATE_TIMER_INTERVAL;
                 GuideDurationMedium = 2.0 * GuideDurationShort;
                 GuideDurationLong = 2.0 * GuideDurationMedium;
 
@@ -603,6 +610,14 @@ namespace ASCOM.Simulator
             }
         }
 
+        private static void UpdateHandboxTimer_Tick(object sender, EventArgs e)
+        {
+            lock (updateLockObject)
+            {
+                UpdateDisplay();
+            }
+        }
+
         public static void Start()
         {
             // Start with the configured Tracking state and the mount unparked
@@ -616,17 +631,22 @@ namespace ASCOM.Simulator
             lastUpdateTime = DateTime.Now;
             SiderealTime = AstronomyFunctions.LocalSiderealTime(Longitude);
 
-            // Initialise movement pointers
+            // Initialise movement pointers and create initial display
             MoveAxes();
+            UpdateDisplay();
 
             // Start the timer that updates telescope state
-            s_wTimer.Start();
+            updateStateTimer.Start();
+            updateHandboxTimer.Start();
         }
 
         //Update the Telescope Based on Timed Events
-        private static void Timer_Tick(object sender, EventArgs e)
+        private static void UpdateStateTimer_Tick(object sender, EventArgs e)
         {
-            MoveAxes();
+            lock (updateLockObject)
+            {
+                MoveAxes();
+            }
         }
 
         /// <summary>
@@ -683,16 +703,18 @@ namespace ASCOM.Simulator
 
                             break;
                         case AlignmentModes.algAltAz: // In Alt/Az aligned mounts the HA change moves both RA (primary) and Dec (secondary) axes so both need to be updated
-                            changeDegrees = ConvertRateToAltAz(haChangeDegrees); // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking
+
+                            changePreOffset = ConvertRateToAltAz(haChangeDegrees); // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking
+
+                            changeDegrees = ConvertRateToAltAz(haChangeDegrees + rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate); // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking plus any offset
                             targetAxesDegrees = MountFunctions.ConvertRaDecToAxes(targetRaDec, false); // Update the slew target's Azimuth (primary) and Altitude (secondary) axis positions that will also have changed due to tracking
                             break;
                     }
 
-                    TL.LogMessage("MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. Alignment mode: {alignmentMode}" +
-                        $"Mount RA normal tracking movement: {changePreOffset.X} degrees. " +
-                        $"RA normal tracking movement rate  {changePreOffset.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second. " +
-                        $"Length of sidereal day at this tracking rate = {(1.0 / (changePreOffset.X / timeInSecondsSinceLastUpdate) * (360.0 / 3600.0)).ToHMS()}" +
-                        $"RightAscensionRate additional movement: {rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate} degrees. " +
+                    TL.LogMessage("MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. HA change {haChangeDegrees} degrees. Alignment mode: {alignmentMode}, Mount RA normal tracking movement: {changePreOffset.X} degrees. ");
+                    TL.LogMessage("MoveAxes", $"RA normal tracking movement rate  {changePreOffset.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second. " +
+                        $"Length of sidereal day at this tracking rate = {(1.0 / (changePreOffset.X / timeInSecondsSinceLastUpdate) * (360.0 / 3600.0)).ToHMS()}");
+                    TL.LogMessage("MoveAxes", $"RightAscensionRate additional movement: {rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate} degrees. " +
                         $"RA movement rate including any RightAscensionrate additional movement: {changeDegrees.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second. "
                         );
                 } // Mount is tracking
@@ -710,7 +732,7 @@ namespace ASCOM.Simulator
             {
                 // Calculate movement allowing for the time since the last movement correction was applied.
                 changeDegrees = Vector.Multiply(rateMoveAxes, timeInSecondsSinceLastUpdate);
-                TL.LogMessage("MoveAxes Move", $"Primary axis move rate: {rateMoveAxes.X}, Secondary axis move rate: {rateMoveAxes.Y}. Applied changes - Primary axis: {changeDegrees.X}, Secondary axis: {changeDegrees.Y}. Time since last update: {timeInSecondsSinceLastUpdate} seconds.");
+                TL.LogMessage("MoveAxes MoveAxis", $"Primary axis move rate: {rateMoveAxes.X}, Secondary axis move rate: {rateMoveAxes.Y}. Applied changes - Primary axis: {changeDegrees.X}, Secondary axis: {changeDegrees.Y}. Time since last update: {timeInSecondsSinceLastUpdate} seconds.");
 
             } // MoveAxis is active
 
@@ -2010,15 +2032,13 @@ namespace ASCOM.Simulator
         /// </summary>
         private static void UpdatePositions()
         {
-            // Update sidereal time for this loop
+            // Update sidereal time for next loop
             SiderealTime = AstronomyFunctions.LocalSiderealTime(Longitude);
 
             pointingState = mountAxesDegrees.Y <= 90 ? PointingState.Normal : PointingState.ThroughThePole;
 
             currentAltAzm = MountFunctions.ConvertAxesToAltAzm(mountAxesDegrees);
             currentRaDec = MountFunctions.ConvertAxesToRaDec(mountAxesDegrees);
-
-            UpdateDisplay();
         }
 
         private static void UpdateDisplay()
