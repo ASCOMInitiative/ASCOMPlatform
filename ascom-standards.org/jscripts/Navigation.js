@@ -251,6 +251,7 @@ function writesubmenu() {
 		SubMenuOutput += "<li><a href=\"https://github.com/ASCOMInitiative/ASCOMLibrary#readme\" target=\"_new\">.NET Cross-Platform Library</a></li>";
 		SubMenuOutput += "<li><a href=\"https://download.ascom-standards.org/dev/AlpacaWorkbenchV31.tar.xz\" target=\"_new\">Alpaca Workbench for Raspberry Pi</a> (<a href=\"https://download.ascom-standards.org/dev/WorkbenchReadMe.pdf\" target=\"_new\">PDF Docs</a>)</li>";
 		SubMenuOutput += "<li><a href=\"https://ascom-standards.org/alpyca/\" target=\"_new\">Python Alpaca Client API Package</a> (<a href=\"https://ascom-standards.org/alpyca/alpyca.pdf\" target=\"_new\">PDF Docs</a>)</li>";
+		SubMenuOutput += "<li><a href=\"https://github.com/indigo-astronomy/indigo/tree/master/indigo_drivers/agent_alpaca#readme\" target=\"_new\">Alpaca to INDIGO Bridge</a></li>";
 		SubMenuOutput += "</ul>";
 //      SubMenuOutput += "<h3>Alpaca App Development</h3>";
 //	    SubMenuOutput += "<ul class=\"treeview\">";
