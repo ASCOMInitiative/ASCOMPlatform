@@ -321,7 +321,7 @@ namespace ASCOM.Simulator
                 //Connected = false;
                 rateMoveAxes = new Vector();
 
-                TL = new ASCOM.Utilities.TraceLogger("", "TelescopeSimHardware");
+                TL = new TraceLogger("", "TelescopeSimHardware");
                 TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.SIMULATOR_TRACE, GlobalConstants.SIMULATOR_TRACE_DEFAULT);
 
                 // Create utilities object 
@@ -704,10 +704,11 @@ namespace ASCOM.Simulator
                             break;
                         case AlignmentModes.algAltAz: // In Alt/Az aligned mounts the HA change moves both RA (primary) and Dec (secondary) axes so both need to be updated
 
-                            changePreOffset = ConvertRateToAltAz(haChangeDegrees); // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking
+                            // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking plus any RA / dec rate offsets
+                            changeDegrees = ConvertRateToAltAz(haChangeDegrees / timeInSecondsSinceLastUpdate + rateRaDecOffsetInternal.X, rateRaDecOffsetInternal.Y, timeInSecondsSinceLastUpdate);
 
-                            changeDegrees = ConvertRateToAltAz(haChangeDegrees + rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate); // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking plus any offset
-                            targetAxesDegrees = MountFunctions.ConvertRaDecToAxes(targetRaDec, false); // Update the slew target's Azimuth (primary) and Altitude (secondary) axis positions that will also have changed due to tracking
+                            // Update the slew target's Azimuth (primary) and Altitude (secondary) axis positions that will also have changed due to tracking
+                            targetAxesDegrees = MountFunctions.ConvertRaDecToAxes(targetRaDec, false);
                             break;
                     }
 
@@ -1980,49 +1981,113 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
+        /// Convert [HA,Dec] position and rate into [Az,El] position and rate.
+        /// </summary>
+        /// <param name="phi">site latitude (radians)</param>
+        /// <param name="ha"> hour angle (radians)</param>
+        /// <param name="dec">declination (radians)</param>
+        /// <param name="hadot">rate of change of ha (radians per unit time)</param>
+        /// <param name="decdot">rate of change of declination (radians per unit time)</param>
+        /// <param name="a">azimuth (N through E, radians)</param>
+        /// <param name="e">elevation (radians)</param>
+        /// <param name="ad">rate of change of a (radians per unit time)</param>
+        /// <param name="ed">rate of change of e (radians per unit time)</param>
+        /// <remarks>
+        /// 1) For sidereal tracking ha should include the sidereal rate as well as any differential rate.
+        /// 
+        /// 2) The units of the velocity arguments are up to the caller.
+        ///
+        /// This revision:  2023 January 9
+        ///
+        /// Author P.T.Wallace.
+        /// 
+        /// 
+        /// </remarks>
+        static void Tran(double phi, double ha, double dec, double hadot, double decdot, out double a, out double e, out double ad, out double ed)
+        {
+            double sh, ch, sd, cd, x, y, z, w, xd, yd, zd, sp, cp, rxy2, rxy, xyp;
+
+            /* Functions of HA and Dec. */
+            sh = Math.Sin(ha);
+            ch = Math.Cos(ha);
+            sd = Math.Sin(dec);
+            cd = Math.Cos(dec);
+
+            /* Unit vector (right-handed) P & V. */
+            x = ch * cd;
+            y = -sh * cd;
+            z = sd;
+
+            w = decdot * sd;
+            xd = hadot * y - w * ch;
+            yd = -hadot * x + w * sh;
+            zd = decdot * cd;
+
+            /* Rotate P & V into Cartesian [2pi-Az,El]. */
+            sp = Math.Sin(phi);
+            cp = Math.Cos(phi);
+            w = x * sp - z * cp;
+            z = x * cp + z * sp;
+            x = w;
+
+            w = xd * sp - zd * cp;
+            zd = xd * cp + zd * sp;
+            xd = w;
+
+            /* Vector's component in XY plane. */
+            rxy2 = x * x + y * y;
+            rxy = Math.Sqrt(rxy2);
+
+            /* Position and velocity in [Az,El]. */
+            xyp = x * xd + y * yd;
+            if (rxy != 0.0)
+            {
+                a = Math.Atan2(y, -x);
+                e = Math.Atan2(z, rxy);
+                ad = -(x * yd - y * xd) / rxy2;
+                ed = (zd * rxy2 - z * xyp) / rxy;
+            }
+            else
+            {
+                a = 0.0;
+                e = (z != 0.0) ? Math.Atan2(z, rxy) : 0.0;
+                ad = 0.0;
+                ed = 0.0;
+            }
+        }
+
+        /// <summary>
         /// Convert the move rate in hour angle to a change in altitude and azimuth
         /// </summary>
         /// <param name="haChange">The ha change.</param>
         /// <returns></returns>
-        private static Vector ConvertRateToAltAz(double haChange)
+        private static Vector ConvertRateToAltAz(double haChange, double decChange, double timeInSecondsThisInterval)
         {
             Vector change = new Vector();
 
-            double latRad = latitude * SharedResources.DEG_RAD;
-            double azmRad = currentAltAzm.X * SharedResources.DEG_RAD;
-            double zenithAngle = (90 - currentAltAzm.Y) * SharedResources.DEG_RAD;     // in radians
+            double phi = Latitude * SharedResources.DEG_RAD; // Site latitude in radians
+            double ha = (SiderealTime - currentRaDec.X) * SharedResources.HRS_RAD; // Current hour angle in radians
+            double dec = currentRaDec.Y * SharedResources.DEG_RAD; // Current declination in radians
+            double hadot = haChange * SharedResources.DEG_RAD; // Rate of change in HA due to tracking plus any RA offset rate in radians per second
+            double decdot = decChange * SharedResources.DEG_RAD; // Rate of change in declination due to any declination rate offset in radians per second
 
-            // get the azimuth and elevation rates, as a ratio of the tracking rate
-            double elevationRate = Math.Sin(azmRad) * Math.Cos(latRad);
+#pragma warning disable IDE0018 // Suppress In-line variable declaration
 
-            // fails at zenith so set a very large value, the limit check will trap this
-            double azimuthRate;
-            if (currentAltAzm.Y != 90.0)
-            {
-                azimuthRate = (Math.Sin(latRad) * Math.Sin(zenithAngle) - Math.Cos(latRad) * Math.Cos(zenithAngle) * Math.Cos(azmRad)) / Math.Sin(zenithAngle);
-            }
-            else // altAzm.Y is 90.0
-            {
-                if (currentAltAzm.X >= 90 && currentAltAzm.X <= 270)
-                {
-                    azimuthRate = 10000.0;
-                }
-                else
-                {
-                    azimuthRate = -10000.0;
-                }
-            }
+            double a; // Azimuth (N through E, radians)
+            double e; // Elevation (radians)
+            double ad; // Rate of change of azimuth (radians per unit time)
+            double ed; // Rate of change of elevation (radians per unit time)
 
-            // get the changes in altitude and azimuth using the hour angle change and rates.
-            change.Y = elevationRate * haChange;
-            change.X = azimuthRate * haChange;
+#pragma warning restore IDE0018 // Enable In-line variable declaration
 
-            // stop the secondary going past the vertical
-            if (change.Y > 90 - currentAltAzm.Y) change.Y = 0;
+            // Calculate azimuth and elevation rates (radians per second)
+            Tran(phi, ha, dec, hadot, decdot, out a, out e, out ad, out ed);
 
-            // limit the primary to the maximum slew rate
-            if (change.X < -slewSpeedFast) change.X = -slewSpeedFast;
-            if (change.X > slewSpeedFast) change.X = slewSpeedFast;
+            double azimuthChange = ad * timeInSecondsThisInterval; // Change in azimuth this interval in radians
+            double elevationChange = ed * timeInSecondsThisInterval; // Change in elevation this interval in radians
+
+            change.X = azimuthChange * SharedResources.RAD_DEG; // Convert azimuth change in radians to degrees
+            change.Y = elevationChange * SharedResources.RAD_DEG; // Convert elevation change in radians to degrees
 
             return change;
         }
