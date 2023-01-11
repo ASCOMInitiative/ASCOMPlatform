@@ -72,13 +72,15 @@ namespace ASCOM.Simulator
         public const string REGISTRATION_VERSION = "1";
 
         //public static double DEG_RAD = 0.0174532925;
-        public const double DEG_RAD = Math.PI / 180;
+        public const double DEG_RAD = Math.PI / 180.0;
         public const double RAD_DEG = 180.0 / Math.PI;        //57.2957795;
-        public const double HRS_RAD = 0.2617993881;
-        public const double RAD_HRS = 3.81971863;
+        public const double HRS_RAD = Math.PI / 12.0;
+        public const double RAD_HRS = 12.0 / Math.PI;
         public const double EARTH_ANG_ROT_DEG_MIN = 0.25068447733746215; //Angular rotation of earth in degrees/min
-
-        public const double SIDRATE = 0.9972695677;
+        public const double HOURS_TO_DEGREES = 15.0;
+        public const double DEGREES_TO_HOURS = 1.0 / 15.0;
+        public const double SIDEREAL_SECONDS_TO_SI_SECONDS = 0.99726956631945; // Based on earth sidereal rotation period of 23 hours 56 minutes 4.09053 seconds
+        public const double SI_SECONDS_TO_SIDEREAL_SECONDS = 1.0 / 0.99726956631945; // Based on earth sidereal rotation period of 23 hours 56 minutes 4.09053 seconds
 
         public const double STATE_UPDATE_TIMER_INTERVAL = 0.1; // 10 ticks per second
         public const double HANDBOX_UPDATE_TIMER_INTERVAL = 0.25; // 4 ticks per second

@@ -62,14 +62,13 @@ namespace ASCOM.Simulator
         private const string STARTUP_OPTION_HOME_POSITION = "Start up at configured Home Position";
 
         // Useful mathematical constants
-        private const double SIDEREAL_SECONDS_TO_SI_SECONDS = 0.99726956631945; // Based on earth sidereal rotation period of 23 hours 56 minutes 4.09053 seconds
         private const double SIDEREAL_RATE_DEG_PER_SIDEREAL_SECOND = 360.0 / (24.0 * 60.0 * 60.0); // Degrees per sidereal second, given the earth's rotation of 360 degrees in 1 sidereal day
-        private const double SIDEREAL_RATE_DEG_PER_SI_SECOND = SIDEREAL_RATE_DEG_PER_SIDEREAL_SECOND / SIDEREAL_SECONDS_TO_SI_SECONDS; // Degrees per SI second
+        private const double SIDEREAL_RATE_DEG_PER_SI_SECOND = SIDEREAL_RATE_DEG_PER_SIDEREAL_SECOND / SharedResources.SIDEREAL_SECONDS_TO_SI_SECONDS; // Degrees per SI second
         private const double SOLAR_RATE_DEG_SEC = 15.0 / 3600.0;
         private const double LUNAR_RATE_DEG_SEC = 14.515 / 3600.0;
         private const double KING_RATE_DEG_SEC = 15.037 / 3600.0;
         private const double DEGREES_TO_ARCSECONDS = 3600.0;
-        private const double ARCSECONDS_TO_DEGREES = 1.0 / DEGREES_TO_ARCSECONDS;
+        private const double ARCSECONDS_TO_DEGREES = 1.0 / 3600.0;
         private const double ARCSECONDS_PER_RA_SECOND = 15.0; // To convert "seconds of RA" (24 hours = a whole circle) to arc seconds (360 degrees = a whole circle)
 
         #endregion
@@ -231,7 +230,7 @@ namespace ASCOM.Simulator
         private static TrackingMode trackingMode;
         private static bool slewing;
 
-        private static DateTime lastUpdateTime;
+        private static Stopwatch timeSinceLastUpdate;
 
         #endregion
 
@@ -316,6 +315,9 @@ namespace ASCOM.Simulator
                 updateHandboxTimer = new System.Windows.Forms.Timer();
                 updateHandboxTimer.Interval = Convert.ToInt32(SharedResources.HANDBOX_UPDATE_TIMER_INTERVAL * 1000.0);
                 updateHandboxTimer.Tick += UpdateHandboxTimer_Tick;
+
+                // Initialise the time since last update stopwatch timer
+                timeSinceLastUpdate = new Stopwatch();
 
                 SouthernHemisphere = false;
                 //Connected = false;
@@ -584,7 +586,7 @@ namespace ASCOM.Simulator
                 GuideDurationMedium = 2.0 * GuideDurationShort;
                 GuideDurationLong = 2.0 * GuideDurationMedium;
 
-                guideRate.X = 15.0 * (1.0 / 3600.0) / SharedResources.SIDRATE;
+                guideRate.X = 15.0 * (1.0 / 3600.0) / SharedResources.SIDEREAL_SECONDS_TO_SI_SECONDS;
                 guideRate.Y = guideRate.X;
                 rateRaDecOffsetInternal.Y = 0;
                 rateRaDecOffsetInternal.X = 0;
@@ -599,7 +601,7 @@ namespace ASCOM.Simulator
 
                 mountAxesDegrees = MountFunctions.ConvertAltAzmToAxes(currentAltAzm); // Convert the start position AltAz coordinates into the current axes representation and set this as the simulator start position
                 TL.LogMessage("TelescopeHardware New", string.Format("Start-up mode: {0}, Azimuth: {1}, Altitude: {2}", startupMode, currentAltAzm.X.ToString(CultureInfo.InvariantCulture), currentAltAzm.Y.ToString(CultureInfo.InvariantCulture)));
-                TL.LogMessage("TelescopeHardware New", $"Tracking rate: {SIDEREAL_RATE_DEG_PER_SI_SECOND} degrees per SI second, {SIDEREAL_RATE_DEG_PER_SI_SECOND * 3600.0} degrees per SI hour. Sidereal day:{util.HoursToHMS(SIDEREAL_SECONDS_TO_SI_SECONDS * 24.0, ":", ":", "", 3)} HH:MM:SS.xxx");
+                TL.LogMessage("TelescopeHardware New", $"Tracking rate: {SIDEREAL_RATE_DEG_PER_SI_SECOND} degrees per SI second, {SIDEREAL_RATE_DEG_PER_SI_SECOND * 3600.0} degrees per SI hour. Sidereal day:{util.HoursToHMS(SharedResources.SIDEREAL_SECONDS_TO_SI_SECONDS * 24.0, ":", ":", "", 3)} HH:MM:SS.xxx");
                 TL.LogMessage("TelescopeHardware New", "Successfully initialised hardware");
 
             }
@@ -627,8 +629,10 @@ namespace ASCOM.Simulator
             rateMoveAxes.X = 0;
             rateMoveAxes.Y = 0;
 
-            // Initialise last update time and sidereal time
-            lastUpdateTime = DateTime.Now;
+            // Initialise last time since last update timer 
+            timeSinceLastUpdate.Start();
+
+            // Initialise the sidereal time
             SiderealTime = AstronomyFunctions.LocalSiderealTime(Longitude);
 
             // Initialise movement pointers and create initial display
@@ -663,9 +667,8 @@ namespace ASCOM.Simulator
         private static void MoveAxes()
         {
             // Get the time since the last update. This avoids problems with the timer interval varying and greatly improves tracking.
-            DateTime now = DateTime.Now;
-            double timeInSecondsSinceLastUpdate = (now - lastUpdateTime).TotalSeconds;
-            lastUpdateTime = now;
+            double timeInSecondsSinceLastUpdate = timeSinceLastUpdate.Elapsed.TotalSeconds;
+            timeSinceLastUpdate.Restart();
 
             // Find the hour angle change (in degrees) due to tracking that occurred during this interval
             double haChangeDegrees = GetTrackingChangeInDegrees(timeInSecondsSinceLastUpdate);
@@ -1448,11 +1451,11 @@ namespace ASCOM.Simulator
 
                 // Save the provided rate for internal use in the units (degrees per SI second) that the simulator uses.
                 // SIDEREAL_SECONDS_TO_SI_SECONDS converts from sidereal seconds to SI seconds
-                // Have to divide by the SIDEREAL_SECONDS_TO_SI_SECONDS conversion factor (0.99726956631945) because SI seconds are longer than sidereal seconds and hence the simulator movement will be greater in one SI second than in one sidereal second
+                // Have to multiply by the SIDEREAL_SECONDS_TO_SI_SECONDS conversion factor (0.99726956631945) because SI seconds are longer than sidereal seconds and hence the simulator movement will be less in one SI second than in one sidereal second
                 // ARCSECONDS_PER_RA_SECOND converts from seconds of RA (1 circle = 24 hours) to arc-seconds (1 circle = 360 degrees)
                 // ARCSECONDS_TO_DEGREES converts from arc-seconds to degrees
-                rateRaDecOffsetInternal.X = (value / SIDEREAL_SECONDS_TO_SI_SECONDS) * ARCSECONDS_PER_RA_SECOND * ARCSECONDS_TO_DEGREES;
-                TL.LogMessage("RightAscensionRate Set", $"Value to be set (as received): {value} seconds per sidereal second. Converted to internal rate of: {value / SIDEREAL_SECONDS_TO_SI_SECONDS} seconds per SI second = {rateRaDecOffsetInternal.X} degrees per SI second.");
+                rateRaDecOffsetInternal.X = value*SharedResources.SIDEREAL_SECONDS_TO_SI_SECONDS * ARCSECONDS_PER_RA_SECOND * ARCSECONDS_TO_DEGREES;
+                TL.LogMessage("RightAscensionRate Set", $"Value to be set (as received): {value} seconds per sidereal second. Converted to internal rate of: {value * SharedResources.SIDEREAL_SECONDS_TO_SI_SECONDS} seconds per SI second = {rateRaDecOffsetInternal.X} degrees per SI second.");
             }
         }
 
