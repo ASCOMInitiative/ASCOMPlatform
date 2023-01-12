@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
 using ASCOM.DeviceInterface;
@@ -30,10 +31,11 @@ namespace ASCOM.Simulator
                 case ASCOM.DeviceInterface.AlignmentModes.algAltAz:
                     axes = AstronomyFunctions.CalculateAltAzm(raDec.X, raDec.Y, TelescopeHardware.Latitude);
                     break;
+
                 case ASCOM.DeviceInterface.AlignmentModes.algGermanPolar:
                     PierSide sop = TelescopeHardware.SideOfPier;
 
-                    axes.X = (TelescopeHardware.SiderealTime - raDec.X) * SharedResources.SIDEREAL_SECONDS_TO_SI_SECONDS * SharedResources.HOURS_TO_DEGREES;
+                    axes.X = (TelescopeHardware.SiderealTime - raDec.X) * SharedResources.HOURS_TO_DEGREES;
                     axes.Y = (TelescopeHardware.Latitude >= 0) ? raDec.Y : -raDec.Y;
                     axes.X = RangeAzm(axes.X);
                     if (axes.X > 180.0 || axes.X < 0)
@@ -54,8 +56,9 @@ namespace ASCOM.Simulator
                         axes.Y = 180 - axes.Y;
                     }
                     break;
+
                 case ASCOM.DeviceInterface.AlignmentModes.algPolar:
-                    axes.X = (TelescopeHardware.SiderealTime - raDec.X) * SharedResources.SIDEREAL_SECONDS_TO_SI_SECONDS*SharedResources.HOURS_TO_DEGREES;
+                    axes.X = (TelescopeHardware.SiderealTime - raDec.X) * SharedResources.HOURS_TO_DEGREES;
                     axes.Y = (TelescopeHardware.Latitude >= 0) ? raDec.Y : -raDec.Y;
                     break;
             }
@@ -69,6 +72,7 @@ namespace ASCOM.Simulator
             {
                 case ASCOM.DeviceInterface.AlignmentModes.algAltAz:
                     break;
+
                 case ASCOM.DeviceInterface.AlignmentModes.algGermanPolar:
                     axes = AstronomyFunctions.CalculateHaDec(altAz, TelescopeHardware.Latitude, TelescopeHardware.Longitude);
                     if (TelescopeHardware.Latitude < 0)
@@ -83,6 +87,7 @@ namespace ASCOM.Simulator
                         axes.Y = 180 - axes.Y;
                     }
                     break;
+
                 case ASCOM.DeviceInterface.AlignmentModes.algPolar:
                     axes = AstronomyFunctions.CalculateHaDec(altAz, TelescopeHardware.Latitude, TelescopeHardware.Longitude);
                     if (TelescopeHardware.Latitude < 0)
@@ -101,9 +106,11 @@ namespace ASCOM.Simulator
             switch (TelescopeHardware.AlignmentMode)
             {
                 case ASCOM.DeviceInterface.AlignmentModes.algAltAz:
-                    raDec = AstronomyFunctions.CalculateRaDec(axes, TelescopeHardware.Latitude, TelescopeHardware.Longitude);
-                    raDec.X /= 15.0; // Convert RA in degrees to hours - Added by Peter 4th August 2018 to fix the hand box RA displayed value when in Alt/Az mode
+                    raDec = AstronomyFunctions.CalculateRaDec(axes, TelescopeHardware.Latitude);
+                    //raDec.X /= 15.0; // Convert RA in degrees to hours - Added by Peter 4th August 2018 to fix the hand box RA displayed value when in Alt/Az mode
+                    raDec.X = raDec.X * SharedResources.DEGREES_TO_HOURS;
                     break;
+
                 case ASCOM.DeviceInterface.AlignmentModes.algGermanPolar:
                 case ASCOM.DeviceInterface.AlignmentModes.algPolar:
                     // undo through the pole
@@ -113,7 +120,7 @@ namespace ASCOM.Simulator
                         axes.Y = 180 - axes.Y;
                         axes = RangeAltAzm(axes);
                     }
-                    raDec.X = TelescopeHardware.SiderealTime - axes.X * SharedResources.SI_SECONDS_TO_SIDEREAL_SECONDS * SharedResources.DEGREES_TO_HOURS;
+                    raDec.X = TelescopeHardware.SiderealTime - axes.X * SharedResources.DEGREES_TO_HOURS;
                     raDec.Y = (TelescopeHardware.Latitude >= 0) ? axes.Y : -axes.Y;
                     break;
             }
@@ -128,6 +135,7 @@ namespace ASCOM.Simulator
             {
                 case ASCOM.DeviceInterface.AlignmentModes.algAltAz:
                     break;
+
                 case ASCOM.DeviceInterface.AlignmentModes.algGermanPolar:
                     if (axes.Y > 90)
                     {
@@ -138,11 +146,12 @@ namespace ASCOM.Simulator
                     {
                         axes.Y = -axes.Y;
                     }
-                    var ra = TelescopeHardware.SiderealTime - axes.X / 15.0;
+                    var ra = TelescopeHardware.SiderealTime - axes.X * SharedResources.DEGREES_TO_HOURS;
                     altAzm = AstronomyFunctions.CalculateAltAzm(ra, axes.Y, TelescopeHardware.Latitude);
                     break;
+
                 case ASCOM.DeviceInterface.AlignmentModes.algPolar:
-                    ra = TelescopeHardware.SiderealTime - axes.X / 15.0;
+                    ra = TelescopeHardware.SiderealTime - axes.X * SharedResources.DEGREES_TO_HOURS;
                     if (TelescopeHardware.Latitude < 0)
                     {
                         axes.Y = -axes.Y;

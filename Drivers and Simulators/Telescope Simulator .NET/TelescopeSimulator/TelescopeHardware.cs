@@ -712,6 +712,12 @@ namespace ASCOM.Simulator
 
                             // Update the slew target's Azimuth (primary) and Altitude (secondary) axis positions that will also have changed due to tracking
                             targetAxesDegrees = MountFunctions.ConvertRaDecToAxes(targetRaDec, false);
+
+                            Vector targetradec = MountFunctions.ConvertAxesToRaDec(targetAxesDegrees);
+
+                            TL.LogMessage("MoveAxes - Alt/Az", $"Target RA : {targetRaDec.X.ToHMS()}: Target Dec: {targetRaDec.Y.ToDMS()}");
+                            TL.LogMessage("MoveAxes - Alt/Az", $"Round trip: {targetradec.X.ToHMS()}: Round trip: {targetradec.Y.ToDMS()}");
+
                             break;
                     }
 
@@ -759,10 +765,8 @@ namespace ASCOM.Simulator
             UpdatePositions();
 
             // List changes this cycle
-            TL.LogMessage($"MoveAxes (Final)",
-              $"RA: {currentRaDec.X.ToHMS()} ({currentRaDec.X}), Dec: {currentRaDec.Y.ToDMS()} ({currentRaDec.Y}), " +
-              $"Azimuth: {currentAltAzm.X.ToDMS()} ({currentAltAzm.X}), Altitude: {currentAltAzm.Y.ToDMS()} ({currentAltAzm.Y}), Through the pole: {SideOfPier}"
-              );
+            TL.LogMessage($"MoveAxes (Final)", $"RA: {currentRaDec.X.ToHMS()} ({currentRaDec.X}), Dec: {currentRaDec.Y.ToDMS()} ({currentRaDec.Y}), Sidereal Time: {SiderealTime.ToHMS()} ({SiderealTime})");
+            TL.LogMessage($"MoveAxes (Final)", $"Azimuth: {currentAltAzm.X.ToDMS()} ({currentAltAzm.X}), Altitude: {currentAltAzm.Y.ToDMS()} ({currentAltAzm.Y}), Through the pole: {SideOfPier}");
             TL.LogMessage($"MoveAxes (Final)",
               $"MountAxes.X: {mountAxesDegrees.X.ToDMS()} ({mountAxesDegrees.X}), MountAxes.Y: {mountAxesDegrees.Y.ToDMS()} ({mountAxesDegrees.Y}), " +
               $"Change.X: {changeDegrees.X.ToDMS()} ({changeDegrees.X}), Change.Y: {changeDegrees.Y.ToDMS()} ({changeDegrees.Y}), "
@@ -1454,7 +1458,7 @@ namespace ASCOM.Simulator
                 // Have to multiply by the SIDEREAL_SECONDS_TO_SI_SECONDS conversion factor (0.99726956631945) because SI seconds are longer than sidereal seconds and hence the simulator movement will be less in one SI second than in one sidereal second
                 // ARCSECONDS_PER_RA_SECOND converts from seconds of RA (1 circle = 24 hours) to arc-seconds (1 circle = 360 degrees)
                 // ARCSECONDS_TO_DEGREES converts from arc-seconds to degrees
-                rateRaDecOffsetInternal.X = value*SharedResources.SIDEREAL_SECONDS_TO_SI_SECONDS * ARCSECONDS_PER_RA_SECOND * ARCSECONDS_TO_DEGREES;
+                rateRaDecOffsetInternal.X = value * SharedResources.SIDEREAL_SECONDS_TO_SI_SECONDS * ARCSECONDS_PER_RA_SECOND * ARCSECONDS_TO_DEGREES;
                 TL.LogMessage("RightAscensionRate Set", $"Value to be set (as received): {value} seconds per sidereal second. Converted to internal rate of: {value * SharedResources.SIDEREAL_SECONDS_TO_SI_SECONDS} seconds per SI second = {rateRaDecOffsetInternal.X} degrees per SI second.");
             }
         }
@@ -1695,7 +1699,7 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// returns the mount tracking movement in hour angle during the update interval
+        /// Returns the hour angle change due to tracking in degrees during the update interval
         /// </summary>
         /// <param name="updateInterval">The update interval.</param>
         /// <returns></returns>
