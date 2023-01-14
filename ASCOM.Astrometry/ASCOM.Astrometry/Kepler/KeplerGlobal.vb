@@ -4,6 +4,9 @@ Imports System.Math
 Imports ASCOM.Utilities
 
 Module KeplerGlobalCode
+    ' Constant to indicate that a value has not been set.
+    ' This must not be changed to another value because tests are implemented using Double.IsNan() function.
+    Friend Const NOT_SET As Double = Double.NaN
 
 #Region "Private Structures"
     Friend Structure plantbl
@@ -32,7 +35,7 @@ Module KeplerGlobalCode
         End Sub
     End Structure
 
-    Friend Structure orbit
+    Friend Structure Orbit
         Friend obname As String '/* name of the object */
         Friend epoch As Double '/* epoch of orbital elements */
         Friend i As Double '/* inclination	*/
@@ -44,16 +47,30 @@ Module KeplerGlobalCode
         Friend M As Double '/* mean anomaly */
         Friend equinox As Double   '/* epoch of equinox and ecliptic */
         Friend mag As Double   '/* visual magnitude at 1AU from earth and sun */
-        Friend sdiam As Double '/* equatorial semidiameter at 1au, arc seconds */
-        '/* The following used by perterbation formulas: */
+        Friend sdiam As Double '/* equatorial semi-diameter at 1au, arc seconds */
+
+        '/* The following used by perturbation formulas: */
         Friend ptable As plantbl
         Friend L As Double  '/* computed mean longitude */
         Friend r As Double  '/* computed radius vector */
         Friend plat As Double   '/* perturbation in ecliptic latitude */
 
-        Friend Sub New(ByVal obn As String, ByVal ep As Double, ByVal i_p As Double, ByVal W_p As Double, _
-                       ByVal wp_p As Double, ByVal a_p As Double, ByVal dm_p As Double, ByVal ecc_p As Double, _
-                       ByVal M_p As Double, ByVal eq As Double, ByVal mg As Double, ByVal sd As Double, _
+        Friend semiMajorAxis As Double ' Placeholder for the semi-major axis to disambiguate it from the perihelion distance
+        Friend perihelionDistance As Double ' Placeholder for the perihelion distance to disambiguate it from the semi-major axis
+        Friend eccentricityHasBeenSet As Boolean
+
+        ''' <summary>
+        ''' Initialiser to set the semi-major axis and perihelion distance values to default "unset" states
+        ''' </summary>
+        ''' <param name="dummyParameter">Dummy parameter because VB doesn't allow parameterless instance constructors</param>
+        Sub New(dummyParameter As Double)
+            semiMajorAxis = NOT_SET
+            perihelionDistance = NOT_SET
+        End Sub
+
+        Friend Sub New(ByVal obn As String, ByVal ep As Double, ByVal i_p As Double, ByVal W_p As Double,
+                       ByVal wp_p As Double, ByVal a_p As Double, ByVal dm_p As Double, ByVal ecc_p As Double,
+                       ByVal M_p As Double, ByVal eq As Double, ByVal mg As Double, ByVal sd As Double,
                        ByVal pt As plantbl, ByVal L_p As Double, ByVal r_p As Double, ByVal pl As Double)
             obname = obn
             epoch = ep
@@ -71,6 +88,10 @@ Module KeplerGlobalCode
             L = L_p
             r = r_p
             plat = pl
+
+            ' Initialize the semi-major axis to default 'unset' states
+            semiMajorAxis = NOT_SET
+            perihelionDistance = NOT_SET
         End Sub
     End Structure
 #End Region
@@ -351,7 +372,7 @@ Module KeplerGlobalCode
     ' */
 
 
-    Friend Sub KeplerCalc(ByVal J As Double, ByRef e As orbit, ByRef rect() As Double)
+    Friend Sub KeplerCalc(ByVal J As Double, ByRef e As Orbit, ByRef rect() As Double)
 
         Dim polar(3) As Double
         Dim alat, E1, M, W, temp As Double
@@ -676,33 +697,33 @@ kepdon:
 
 
     '/* January 5.0, 1987 */
-    Friend mercury As New orbit("Mercury", 2446800.5, 7.0048, 48.177, 29.074, 0.387098, 4.09236, _
+    Friend mercury As New Orbit("Mercury", 2446800.5, 7.0048, 48.177, 29.074, 0.387098, 4.09236,
                                 0.205628, 198.7199, 2446800.5, -0.42, 3.36, mer404, 0.0, 0.0, 0.0)
 
     '/* Note the calculated apparent visual magnitude for Venus is not very accurate. */
-    Friend venus As New orbit("Venus", 2446800.5, 3.3946, 76.561, 54.889, 0.723329, 1.60214, _
+    Friend venus As New Orbit("Venus", 2446800.5, 3.3946, 76.561, 54.889, 0.723329, 1.60214,
                                 0.006757, 9.0369, 2446800.5, -4.4, 8.34, ven404, 0.0, 0.0, 0.0)
 
     '/* Fixed numerical values will be used for earth if read in from a file named earth.orb.  See kfiles.c, kep.h. */
-    Friend earthplanet As New orbit("Earth", 2446800.5, 0.0, 0.0, 102.884, 0.999999, 0.985611, _
+    Friend earthplanet As New Orbit("Earth", 2446800.5, 0.0, 0.0, 102.884, 0.999999, 0.985611,
                                0.016713, 1.1791, 2446800.5, -3.86, 0.0, ear404, 0.0, 0.0, 0.0)
 
-    Friend mars As New orbit("Mars", 2446800.5, 1.8498, 49.457, 286.343, 1.52371, 0.524023, _
+    Friend mars As New Orbit("Mars", 2446800.5, 1.8498, 49.457, 286.343, 1.52371, 0.524023,
                               0.093472, 53.1893, 2446800.5, -1.52, 4.68, mar404, 0.0, 0.0, 0.0)
 
-    Friend jupiter As New orbit("Jupiter", 2446800.5, 1.3051, 100.358, 275.129, 5.20265, 0.0830948, _
+    Friend jupiter As New Orbit("Jupiter", 2446800.5, 1.3051, 100.358, 275.129, 5.20265, 0.0830948,
                                  0.0481, 344.5086, 2446800.5, -9.4, 98.44, jup404, 0.0, 0.0, 0.0)
 
-    Friend saturn As New orbit("Saturn", 2446800.5, 2.4858, 113.555, 337.969, 9.5405, 0.033451, _
+    Friend saturn As New Orbit("Saturn", 2446800.5, 2.4858, 113.555, 337.969, 9.5405, 0.033451,
                                 0.052786, 159.6327, 2446800.5, -8.88, 82.73, sat404, 0.0, 0.0, 0.0)
 
-    Friend uranus As New orbit("Uranus", 2446800.5, 0.7738, 73.994, 98.746, 19.2233, 0.0116943, _
+    Friend uranus As New Orbit("Uranus", 2446800.5, 0.7738, 73.994, 98.746, 19.2233, 0.0116943,
                                 0.045682, 84.8516, 2446800.5, -7.19, 35.02, ura404, 0.0, 0.0, 0.0)
 
-    Friend neptune As New orbit("Neptune", 2446800.5, 1.7697, 131.677, 250.623, 30.1631, 0.00594978, _
+    Friend neptune As New Orbit("Neptune", 2446800.5, 1.7697, 131.677, 250.623, 30.1631, 0.00594978,
                                  0.009019, 254.2568, 2446800.5, -6.87, 33.5, nep404, 0.0, 0.0, 0.0)
 
-    Friend pluto As New orbit("Pluto", 2446640.5, 17.1346, 110.204, 114.21, 39.4633, 0.0039757, _
+    Friend pluto As New Orbit("Pluto", 2446640.5, 17.1346, 110.204, 114.21, 39.4633, 0.0039757,
                                0.248662, 355.0554, 2446640.5, -1.0, 2.07, plu404, 0.0, 0.0, 0.0)
 #End Region
 
