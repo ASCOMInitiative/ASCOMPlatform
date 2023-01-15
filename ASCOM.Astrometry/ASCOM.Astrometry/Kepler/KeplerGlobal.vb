@@ -2,6 +2,7 @@
 
 Imports System.Math
 Imports ASCOM.Utilities
+Imports Kepler
 
 Module KeplerGlobalCode
     ' Constant to indicate that a value has not been set.
@@ -152,15 +153,15 @@ Module KeplerGlobalCode
     '   precession, and nutation,"  Astron. J. 108, 711-724 (1994)  */
 
     ' /* Corrections to Williams (1994) introduced in DE403.  */
-    Friend pAcof() As Double = {-0.000000000866, -0.00000004759, 0.0000002424, 0.000013095, _
+    Friend pAcof() As Double = {-0.000000000866, -0.00000004759, 0.0000002424, 0.000013095,
                                  0.00017451, -0.0018055, -0.235316, 0.076, 110.5414, 50287.91959}
 
-    Friend nodecof() As Double = {0.00000000000000066402, -0.00000000000000269151, -0.000000000001547021, _
-                                   0.000000000007521313, 0.00000000019, -0.00000000354, -0.00000018103, _
+    Friend nodecof() As Double = {0.00000000000000066402, -0.00000000000000269151, -0.000000000001547021,
+                                   0.000000000007521313, 0.00000000019, -0.00000000354, -0.00000018103,
                                    0.000000126, 0.00007436169, -0.04207794833, 3.052115282424}
 
-    Friend inclcof() As Double = {0.00000000000000012147, 7.3759E-17, -0.0000000000000826287, _
-                                   0.000000000000250341, 0.000000000024650839, -0.000000000054000441, _
+    Friend inclcof() As Double = {0.00000000000000012147, 7.3759E-17, -0.0000000000000826287,
+                                   0.000000000000250341, 0.000000000024650839, -0.000000000054000441,
                                    0.00000000132115526, -0.0000006012, -0.0000162442, 0.00227850649, 0.0}
 
     '/* Subroutine arguments:
@@ -278,7 +279,7 @@ Module KeplerGlobalCode
         Dim code As Integer
 
         code = 0
-
+        ' Kepler.Ephemeris.TL.LogMessage("atan4", $"x: {x}, y: {y}")
         If (x < 0.0) Then code = 2
         If (y < 0.0) Then code = code Or 1
 
@@ -299,12 +300,14 @@ Module KeplerGlobalCode
             Case 1
                 w = 2.0 * PI
             Case 2
+                w = PI
             Case 3
                 w = PI
             Case Else
         End Select
 
         z = Atan(y / x)
+        ' Kepler.Ephemeris.TL.LogMessage("atan4", $"x: {x}, y: {y}, z: {z}, w: {w}, code: {code}")
 
         Return (w + z)
     End Function
@@ -382,16 +385,16 @@ Module KeplerGlobalCode
         Dim eps, coseps, sineps As Double
         'Dim TL As New TraceLogger("", "KeplerCalc")
         'TL.Enabled = True
-        'TL.LogMessage("KepCalc", "Started")
+        ' Kepler.Ephemeris.TL.LogMessage("KepCalc", $"J: {J}")
         '//
         '// Call program to compute position, if one is supplied.
         '//
         If (e.ptable.lon_tbl(0) <> 0.0) Then
             If (e.obname = "Earth") Then
-                'TL.LogMessage("KepCalc", "Before G3Plan Earth")
+                ' Kepler.Ephemeris.TL.LogMessage("KepCalc", "Before G3Plan Earth")
                 g3plan(J, e.ptable, polar, 3)
             Else
-                'TL.LogMessage("KepCalc", "Before G3Plan Not Earth")
+                ' Kepler.Ephemeris.TL.LogMessage("KepCalc", "Before G3Plan Not Earth")
                 gplan(J, e.ptable, polar)
             End If
             E1 = polar(0) '/* longitude */
@@ -401,14 +404,14 @@ Module KeplerGlobalCode
             e.r = r
             e.epoch = J
             e.equinox = J2000
-            'TL.LogMessage("KepCalc", "After G3Plan")
+            ' Kepler.Ephemeris.TL.LogMessage("KepCalc", "After G3Plan")
             GoTo kepdon
         End If
 
         '// -----------------------------
         '// Compute from orbital elements 
         '// -----------------------------
-        'TL.LogMessage("KepCalc", "Compute orbital elements")
+        ' Kepler.Ephemeris.TL.LogMessage("KepCalc", "Compute orbital elements")
         e.equinox = J2000 '// Always J2000 coordinates
         epoch = e.epoch
         inclination = e.i
@@ -423,7 +426,7 @@ Module KeplerGlobalCode
         '// Parabolic
         '// ---------
         If (eccent = 1.0) Then
-            'TL.LogMessage("KepCalc", "eccent=1.0")
+            ' Kepler.Ephemeris.TL.LogMessage("KepCalc", "eccent=1.0")
             '//
             '// meandistance = perihelion distance, q
             '// epoch = perihelion passage date
@@ -451,7 +454,7 @@ Module KeplerGlobalCode
             '// Hyperbolic
             '// ----------
         ElseIf (eccent > 1.0) Then
-            'TL.LogMessage("KepCalc", "eccent > 1.0")
+            ' Kepler.Ephemeris.TL.LogMessage("KepCalc", "eccent > 1.0")
             '//
             '// The equation of the hyperbola in polar coordinates r, theta
             '// is r = a(e^2 - 1)/(1 + e cos(theta)) so the perihelion 
@@ -478,7 +481,7 @@ Module KeplerGlobalCode
             '// Ellipsoidal
             '// -----------
         Else '		// if(ecc < 1)
-            'TL.LogMessage("KepCalc", "Ellipsoidal")
+            ' Kepler.Ephemeris.TL.LogMessage("KepCalc", "Ellipsoidal")
             '//
             '// Calculate the daily motion, if it is not given.
             '//
@@ -500,6 +503,7 @@ Module KeplerGlobalCode
             '//
             M = DTR * (meananomaly + dailymotion)
             M = modtp(M)
+            ' Kepler.Ephemeris.TL.LogMessage("KepCalc", $"M: {M}")
             '//
             '// If mean longitude was calculated, adjust it also
             '// for motion since epoch of elements.
@@ -546,6 +550,7 @@ Module KeplerGlobalCode
             '//
             temp = Sqrt((1.0 + eccent) / (1.0 - eccent))
             W = 2.0 * Atan(temp * Tan(0.5 * E1))
+            ' Kepler.Ephemeris.TL.LogMessage("KepCalc", $"E: {E1}, W: {W}")
 
             '//
             '// The true anomaly.
@@ -568,7 +573,7 @@ Module KeplerGlobalCode
             '//
             r = meandistance * (1.0 - eccent * eccent) / (1.0 + eccent * Cos(W))
         End If
-        'TL.LogMessage("KepCalc", "Before All orbits")
+        ' Kepler.Ephemeris.TL.LogMessage("KepCalc", "Before All orbits")
         inclination *= DTR '// Convert inclination to radians
 
         '// ----------
@@ -581,7 +586,7 @@ Module KeplerGlobalCode
         '//		inclination	= inclination (rad)
         '//		r			= radius from central focus
         '//
-        '// The heliocentric ecliptic longitude of the objectis given by:
+        '// The heliocentric ecliptic longitude of the object is given by:
         '//
         '//   tan(longitude - ascnode)  =  cos(inclination) * tan(alat)
         '//
@@ -589,6 +594,7 @@ Module KeplerGlobalCode
         sino = Sin(alat)
         W = sino * Cos(inclination)
         E1 = atan4(coso, W) + ascnode
+        ' Kepler.Ephemeris.TL.LogMessage("KepCalc", $"coso: {coso}, sino: {sino}, W: {W}, E: {E1}, ascnode: {ascnode}, atan4: {atan4(coso, W)}")
 
         '//
         '// The ecliptic latitude of the object
@@ -612,13 +618,14 @@ kepdon:
         cosa = Cos(W)
         rect(1) = r * cosa * Sin(E1)
         rect(0) = r * cosa * Cos(E1)
+        ' Kepler.Ephemeris.TL.LogMessage("KepCalc", $"Rect0: {rect(0)}, Rect1: {rect(1)}, Rect2: {rect(2)}")
 
         '//
         '// Convert from heliocentric ecliptic rectangular
         '// to heliocentric equatorial rectangular coordinates
         '// by rotating epsilon radians about the x axis.
         '//
-        'TL.LogMessage("KepCalc", "Before epsiln")
+        ' Kepler.Ephemeris.TL.LogMessage("KepCalc", "Before epsiln")
         epsiln(e.equinox, eps, coseps, sineps)
         W = coseps * rect(1) - sineps * rect(2)
         M = sineps * rect(1) + coseps * rect(2)
@@ -629,16 +636,16 @@ kepdon:
         '// Precess the equatorial (rectangular) coordinates to the
         '// ecliptic & equinox of J2000.0, if not already there.
         '//
-        'TL.LogMessage("KepCalc", "Before precess")
+        ' Kepler.Ephemeris.TL.LogMessage("KepCalc", "Before precess")
         precess(rect, e.equinox, 1)
 
         '//
         '// If earth, adjust from earth-moon barycenter to earth
         '// by AA page E2.
         '//
-        'TL.LogMessage("KepCalc", "Before embofs")
+        ' Kepler.Ephemeris.TL.LogMessage("KepCalc", "Before embofs")
         If e.obname = "Earth" Then embofs(J, rect, r) '/* see embofs() below */
-        'TL.LogMessage("KepCalc", "Exited")
+        ' Kepler.Ephemeris.TL.LogMessage("KepCalc", "Exited")
 
     End Sub
 
@@ -657,20 +664,20 @@ kepdon:
 
         'Dim TL As New TraceLogger("", "Embofs")
         'TL.Enabled = True
-        'TL.LogMessage("Embofs", "Start")
+        ' Kepler.Ephemeris.TL.LogMessage("Embofs", "Start")
         '//
         '// Compute the vector Moon - Earth.
         '//
-        'TL.LogMessage("Embofs", "Before GMoon")
+        ' Kepler.Ephemeris.TL.LogMessage("Embofs", "Before GMoon")
         gmoon(J, pm, polm)
-        'TL.LogMessage("Embofs", "After GMoon")
+        ' Kepler.Ephemeris.TL.LogMessage("Embofs", "After GMoon")
 
         '//
         '// Precess the lunar position
         '// to ecliptic and equinox of J2000.0
         '//
         precess(pm, J, 1)
-        'TL.LogMessage("Embofs", "After Precess")
+        ' Kepler.Ephemeris.TL.LogMessage("Embofs", "After Precess")
 
         '//
         '// Adjust the coordinates of the Earth
@@ -740,27 +747,27 @@ kepdon:
 
     '/* From Simon et al (1994)  */
     '/* Arc sec per 10000 Julian years.  */
-    Friend freqs() As Double = { _
-          53810162868.8982, _
-          21066413643.3548, _
-          12959774228.3429, _
-          6890507749.3988, _
-          1092566037.7991, _
-          439960985.5372, _
-          154248119.3933, _
-          78655032.0744, _
+    Friend freqs() As Double = {
+          53810162868.8982,
+          21066413643.3548,
+          12959774228.3429,
+          6890507749.3988,
+          1092566037.7991,
+          439960985.5372,
+          154248119.3933,
+          78655032.0744,
           52272245.1795}
 
     '/* Arc sec.  */
-    Friend phases() As Double = { _
-          252.25090552 * 3600.0, _
-          181.97980085 * 3600.0, _
-          100.46645683 * 3600.0, _
-          355.43299958 * 3600.0, _
-          34.35151874 * 3600.0, _
-          50.0774443 * 3600.0, _
-          314.05500511 * 3600.0, _
-          304.34866548 * 3600.0, _
+    Friend phases() As Double = {
+          252.25090552 * 3600.0,
+          181.97980085 * 3600.0,
+          100.46645683 * 3600.0,
+          355.43299958 * 3600.0,
+          34.35151874 * 3600.0,
+          50.0774443 * 3600.0,
+          314.05500511 * 3600.0,
+          304.34866548 * 3600.0,
           860492.1546}
 
     Friend Function gplan(ByVal JD As Double, ByRef plan As plantbl, ByRef pobj() As Double) As Integer
@@ -768,6 +775,8 @@ kepdon:
         Dim t, sl, sb, sr As Double
         Dim i, j, k, m, n, k1, ip, np, nt As Integer
         Dim p, pl, pb, pr As Integer
+
+        ' Kepler.Ephemeris.TL.LogMessage("gplan", $"Entered GPlan method")
 
         TI = (JD - J2000) / plan.timescale
         n = plan.maxargs
@@ -1336,24 +1345,24 @@ kepdon:
         Dim x, cosB, sinB, cosL, sinL, eps, coseps, sineps As Double
         'Dim TL As New TraceLogger("", "GMoon")
         'TL.Enabled = True
-        'TL.LogMessage("GMoon", "Before G2Plan")
+        ' Kepler.Ephemeris.TL.LogMessage("GMoon", "Before G2Plan")
         g2plan(J, moonlr, pol)
-        'TL.LogMessage("GMoon", "After G2Plan")
+        ' Kepler.Ephemeris.TL.LogMessage("GMoon", "After G2Plan")
         x = pol(0)
         x += LP_equinox
         If (x < -645000.0) Then x += 1296000.0
         If (x > 645000.0) Then x -= 1296000.0
         pol(0) = STR * x
-        'TL.LogMessage("GMoon", "Before G1Plan")
+        ' Kepler.Ephemeris.TL.LogMessage("GMoon", "Before G1Plan")
         x = g1plan(J, moonlat)
-        'TL.LogMessage("GMoon", "After G1Plan")
+        ' Kepler.Ephemeris.TL.LogMessage("GMoon", "After G1Plan")
         pol(1) = STR * x
         x = (1.0 + STR * pol(2)) * moonlr.distance
         pol(2) = x
         '/* Convert ecliptic polar to equatorial rectangular coordinates.  */
-        'TL.LogMessage("GMoon", "Before Epsilin")
+        ' Kepler.Ephemeris.TL.LogMessage("GMoon", "Before Epsilin")
         epsiln(J, eps, coseps, sineps)
-        'TL.LogMessage("GMoon", "After Epsilin")
+        ' Kepler.Ephemeris.TL.LogMessage("GMoon", "After Epsilin")
         cosB = Cos(pol(1))
         sinB = Sin(pol(1))
         cosL = Cos(pol(0))

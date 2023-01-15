@@ -120,7 +120,7 @@ Namespace Kepler
         Private m_Type As BodyType 'Type of body
         Private m_bTypeValid As Boolean
         Private m_e As Orbit = New Orbit(0.0) 'Elements, etc for minor planets/comets, etc.
-        Private TL As TraceLogger
+        Public Shared TL As TraceLogger
         'gplan variables
         Private ss(NARGS, 31), cc(NARGS, 31), Args(NARGS), LP_equinox, NF_arcsec, Ea_arcsec, pA_precession As Double
 
@@ -264,7 +264,6 @@ Namespace Kepler
             Dim pos(3, 3) As Double
             Dim op As Orbit = New Orbit
             Dim i As Integer
-            Dim qjd, p(2) As Double
 
             If Not m_bTypeValid Then Throw New Exceptions.ValueNotSetException("Kepler:GetPositionAndVelocity Body type has not been set")
             'TL.LogMessage("GetPosAndVel", m_Number.ToString)
@@ -359,10 +358,12 @@ Namespace Kepler
             TL?.LogMessage("GetPositionAndVelocity6", $"Perihelion distance: {m_e.perihelionDistance}, Semi-major axis: {m_e.semiMajorAxis}, m_e.a: {m_e.a}")
 
             For i = 0 To 2
+                Dim p(2) As Double
+                Dim qjd As Double
                 qjd = tjd + CDbl(i - 1) * DTVEL
-                'TL.LogMessage("GetPosVel", "Before KepCalc")
+                TL?.LogMessage("GetPositionAndVelocity", $"tjd: {tjd}, qjd: {qjd}, DTVEL: {DTVEL}")
                 KeplerCalc(qjd, op, p)
-                'TL.LogMessage("GetPosVel", "After KepCalc")
+                TL.LogMessage("GetPosVel", $"Loop {i} - Array p: {p(0)}, {p(1)}, {p(2)}")
                 pos(i, 0) = p(0)
                 pos(i, 1) = p(1)
                 pos(i, 2) = p(2)
@@ -374,6 +375,8 @@ Namespace Kepler
                 posvec(i) = pos(1, i)
                 posvec(3 + i) = (pos(2, i) - pos(0, i)) / (2.0 * DTVEL)
             Next
+
+            TL.LogMessage("GetPosVel", $"Loop {i} - Array posvec: {posvec(0)}, {posvec(1)}, {posvec(2)}, {posvec(3)}, {posvec(4)}, {posvec(5)}")
 
             Return posvec
         End Function
@@ -483,6 +486,7 @@ Namespace Kepler
             End Get
             Set(ByVal value As Body)
                 m_Number = value
+                m_bNumberValid = True
             End Set
         End Property
 
