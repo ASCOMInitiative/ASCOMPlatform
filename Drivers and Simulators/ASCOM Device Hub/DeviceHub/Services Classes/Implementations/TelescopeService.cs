@@ -2,7 +2,6 @@
 using System.Collections;
 
 using ASCOM.DeviceInterface;
-using ASCOM.DriverAccess;
 
 namespace ASCOM.DeviceHub
 {

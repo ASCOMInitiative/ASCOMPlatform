@@ -311,25 +311,27 @@ namespace ASCOM.DeviceHub
 		{
 			get
 			{
-				LogActivityStart( ActivityMessageTypes.Status, "Get Slaved:" );
+				string ident = "Get Slaved";
+				LogActivityStart( ActivityMessageTypes.Status, ident + ": " );
 				CheckDevice();
 				LogActivityEnd( ActivityMessageTypes.Status, Failed );
 
 				// Since we are controlling dome slaving, prevent reading the Slaved status
 				// in the driver.
 
-				throw new PropertyNotImplementedException();
+				throw new PropertyNotImplementedException(ident, "Dome slaving is implemented in Device Hub, not the driver.");
 			}
 			set
 			{
-				LogActivityStart( ActivityMessageTypes.Status, "Set Slaved -> {0}", value );
+				string ident = "Set Slaved";
+				string msg = "Setting Slaved to {value} {Failed}: DeviceHub does not use driver-implemented slaving.";
 				CheckDevice();
-				LogActivityEnd( ActivityMessageTypes.Status, Failed );
+				LogActivityLine( ActivityMessageTypes.Status, msg );
 
 				// Since we are controlling dome slaving, prevent changing the Slaved status
 				// in the driver.
 
-				throw new PropertyNotImplementedException();
+				throw new PropertyNotImplementedException( ident, msg );
 			}
 		}
 
