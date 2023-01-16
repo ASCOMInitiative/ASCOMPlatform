@@ -120,7 +120,7 @@ Namespace Kepler
         Private m_Type As BodyType 'Type of body
         Private m_bTypeValid As Boolean
         Private m_e As Orbit = New Orbit(0.0) 'Elements, etc for minor planets/comets, etc.
-        Private TL As TraceLogger
+        ' Public Shared TL As TraceLogger
         'gplan variables
         Private ss(NARGS, 31), cc(NARGS, 31), Args(NARGS), LP_equinox, NF_arcsec, Ea_arcsec, pA_precession As Double
 
@@ -129,9 +129,9 @@ Namespace Kepler
         ''' </summary>
         ''' <remarks></remarks>
         Public Sub New()
-            TL = New TraceLogger("", "KeplerEphemeris")
-            TL.Enabled = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT) 'Get enabled / disabled state from the user registry
-            TL.LogMessage("New", "Kepler Created")
+            ' TL = New TraceLogger("", "KeplerEphemeris")
+            ' TL.Enabled = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT) 'Get enabled / disabled state from the user registry
+            ' TL.LogMessage("New", "Kepler Created")
             m_bTypeValid = False
             m_Name = "" 'Sentinel
             m_Type = Nothing
@@ -147,15 +147,15 @@ Namespace Kepler
         Public Property a() As Double Implements IEphemeris.a
             Get
                 If Double.IsNaN(m_e.semiMajorAxis) Then
-                    TL.LogMessage("Get a", $"NOT SET - Returning semi-major axis: {0.0}")
+                    ' TL.LogMessage("Get a", $"NOT SET - Returning semi-major axis: {0.0}")
                     Return 0.0
                 Else
-                    TL.LogMessage("Get a", $"SET - Returning semi-major axis: {m_e.semiMajorAxis}")
+                    ' TL.LogMessage("Get a", $"SET - Returning semi-major axis: {m_e.semiMajorAxis}")
                     Return m_e.semiMajorAxis
                 End If
             End Get
             Set(ByVal value As Double)
-                TL.LogMessage("Set a", $"Semi-major axis: {value}")
+                ' TL.LogMessage("Set a", $"Semi-major axis: {value}")
                 m_e.semiMajorAxis = value
                 m_e.a = value
             End Set
@@ -170,15 +170,15 @@ Namespace Kepler
         Public Property q() As Double Implements IEphemeris.q
             Get
                 If Double.IsNaN(m_e.perihelionDistance) Then
-                    TL.LogMessage("Get q", $"NOT SET - Returning perihelion distance: {0.0}")
+                    ' TL.LogMessage("Get q", $"NOT SET - Returning perihelion distance: {0.0}")
                     Return 0.0
                 Else
-                    TL.LogMessage("Get q", $"SET - Returning perihelion distance: {m_e.perihelionDistance}")
+                    ' TL.LogMessage("Get q", $"SET - Returning perihelion distance: {m_e.perihelionDistance}")
                     Return m_e.perihelionDistance
                 End If
             End Get
             Set(ByVal value As Double)
-                TL.LogMessage("Set q", $"Perihelion distance: {value}")
+                ' TL.LogMessage("Set q", $"Perihelion distance: {value}")
                 m_e.perihelionDistance = value
                 m_e.a = value
             End Set
@@ -264,13 +264,12 @@ Namespace Kepler
             Dim pos(3, 3) As Double
             Dim op As Orbit = New Orbit
             Dim i As Integer
-            Dim qjd, p(2) As Double
 
             If Not m_bTypeValid Then Throw New Exceptions.ValueNotSetException("Kepler:GetPositionAndVelocity Body type has not been set")
             'TL.LogMessage("GetPosAndVel", m_Number.ToString)
 
-            TL?.LogMessage("GetPositionAndVelocity", $"Body type: {m_Type}, Eccentricity: {m_e.ecc}")
-            TL?.LogMessage("GetPositionAndVelocity0", $"Perihelion distance: {m_e.perihelionDistance}, Semi-major axis: {m_e.semiMajorAxis}, m_e.a: {m_e.a}")
+            ' TL?.LogMessage("GetPositionAndVelocity", $"Body type: {m_Type}, Eccentricity: {m_e.ecc}")
+            ' TL?.LogMessage("GetPositionAndVelocity0", $"Perihelion distance: {m_e.perihelionDistance}, Semi-major axis: {m_e.semiMajorAxis}, m_e.a: {m_e.a}")
 
             Select Case m_Type
                 Case BodyType.MajorPlanet 'MAJOR PLANETS [unimpl. SUN, MOON]
@@ -306,7 +305,7 @@ Namespace Kepler
 
                     ' Test whether this comet is in an elliptical orbit as opposed to parabolic or hyperbolic
                     If m_e.ecc < 1.0 Then
-                        TL?.LogMessage("GetPositionAndVelocity1", $"Perihelion distance: {m_e.perihelionDistance}, Semi-major axis: {m_e.semiMajorAxis}, m_e.a: {m_e.a}, Eccentricity has been set: {m_e.eccentricityHasBeenSet}, Eccentricity: {m_e.ecc}")
+                        ' TL?.LogMessage("GetPositionAndVelocity1", $"Perihelion distance: {m_e.perihelionDistance}, Semi-major axis: {m_e.semiMajorAxis}, m_e.a: {m_e.a}, Eccentricity has been set: {m_e.eccentricityHasBeenSet}, Eccentricity: {m_e.ecc}")
                         ' For comets in elliptical orbits (ecc < 1.0) ensure that we use the semi-major axis instead of the perihelion distance.
                         ' Handle the four possible scenarios for semi-major axis and perihelion distance
                         '   1) Un-set     Un-set
@@ -315,7 +314,7 @@ Namespace Kepler
                         '   4) Set        Set
                         If Double.IsNaN(m_e.semiMajorAxis) Then ' Semi-major axis is not set
                             If Double.IsNaN(m_e.perihelionDistance) Then ' No semi-major axis or perihelion distance
-                                TL?.LogMessage("GetPositionAndVelocity2", $"Perihelion distance: {m_e.perihelionDistance}, Semi-major axis: {m_e.semiMajorAxis}, m_e.a: {m_e.a}")
+                                ' TL?.LogMessage("GetPositionAndVelocity2", $"Perihelion distance: {m_e.perihelionDistance}, Semi-major axis: {m_e.semiMajorAxis}, m_e.a: {m_e.a}")
 
                                 ' Throw an exception because we can't calculate the orbit without either the semi-major axis value or the perihelion distance value.
                                 Throw New InvalidOperationException($"Kepler.GetPositionAndVelocity - Cannot calculate comet position because neither the semi-major axis nor the perihelion distance have been provided.")
@@ -328,7 +327,7 @@ Namespace Kepler
 
                                 m_e.a = m_e.perihelionDistance / (1.0 - m_e.ecc)
                                 m_e.semiMajorAxis = m_e.a
-                                TL?.LogMessage("GetPositionAndVelocity3", $"Perihelion distance: {m_e.perihelionDistance}, Semi-major axis: {m_e.semiMajorAxis}, m_e.a: {m_e.a}")
+                                ' TL?.LogMessage("GetPositionAndVelocity3", $"Perihelion distance: {m_e.perihelionDistance}, Semi-major axis: {m_e.semiMajorAxis}, m_e.a: {m_e.a}")
                             End If
                         Else ' Semi-major axis has been set so use this
                             m_e.a = m_e.semiMajorAxis
@@ -341,10 +340,10 @@ Namespace Kepler
                                     m_e.perihelionDistance = m_e.semiMajorAxis * (1.0 - m_e.ecc)
                                 End If
 
-                                TL?.LogMessage("GetPositionAndVelocity4", $"Perihelion distance: {m_e.perihelionDistance}, Semi-major axis: {m_e.semiMajorAxis}, m_e.a: {m_e.a}")
+                                ' TL?.LogMessage("GetPositionAndVelocity4", $"Perihelion distance: {m_e.perihelionDistance}, Semi-major axis: {m_e.semiMajorAxis}, m_e.a: {m_e.a}")
                             Else
                                 ' The perihelion distance has been set so just leave it as is
-                                TL?.LogMessage("GetPositionAndVelocity5", $"Perihelion distance: {m_e.perihelionDistance}, Semi-major axis: {m_e.semiMajorAxis}, m_e.a: {m_e.a}")
+                                ' TL?.LogMessage("GetPositionAndVelocity5", $"Perihelion distance: {m_e.perihelionDistance}, Semi-major axis: {m_e.semiMajorAxis}, m_e.a: {m_e.a}")
                             End If
                         End If
                     Else ' Eccentricity is >=1.0 and this is a parabolic or hyperbolic orbit so there is no major axis
@@ -356,13 +355,15 @@ Namespace Kepler
                     op = m_e
             End Select
 
-            TL?.LogMessage("GetPositionAndVelocity6", $"Perihelion distance: {m_e.perihelionDistance}, Semi-major axis: {m_e.semiMajorAxis}, m_e.a: {m_e.a}")
+            ' TL?.LogMessage("GetPositionAndVelocity6", $"Perihelion distance: {m_e.perihelionDistance}, Semi-major axis: {m_e.semiMajorAxis}, m_e.a: {m_e.a}")
 
             For i = 0 To 2
+                Dim p(2) As Double
+                Dim qjd As Double
                 qjd = tjd + CDbl(i - 1) * DTVEL
-                'TL.LogMessage("GetPosVel", "Before KepCalc")
+                ' TL?.LogMessage("GetPositionAndVelocity", $"tjd: {tjd}, qjd: {qjd}, DTVEL: {DTVEL}")
                 KeplerCalc(qjd, op, p)
-                'TL.LogMessage("GetPosVel", "After KepCalc")
+                ' TL.LogMessage("GetPosVel", $"Loop {i} - Array p: {p(0)}, {p(1)}, {p(2)}")
                 pos(i, 0) = p(0)
                 pos(i, 1) = p(1)
                 pos(i, 2) = p(2)
@@ -374,6 +375,8 @@ Namespace Kepler
                 posvec(i) = pos(1, i)
                 posvec(3 + i) = (pos(2, i) - pos(0, i)) / (2.0 * DTVEL)
             Next
+
+            ' TL.LogMessage("GetPosVel", $"Loop {i} - Array posvec: {posvec(0)}, {posvec(1)}, {posvec(2)}, {posvec(3)}, {posvec(4)}, {posvec(5)}")
 
             Return posvec
         End Function
@@ -483,6 +486,7 @@ Namespace Kepler
             End Get
             Set(ByVal value As Body)
                 m_Number = value
+                m_bNumberValid = True
             End Set
         End Property
 
