@@ -1749,18 +1749,20 @@ namespace ASCOM.DeviceHub
 
 		public void MoveAxis( TelescopeAxes axis, double rate )
 		{
-			string name = "MoveAxis:";
+			string name = "MoveAxis";
 
 			CheckConnected( name );
 			CheckRate( name, axis, rate );
 
-			string msg = $"{axis} {rate:F5}";
+			string axisName = Enum.GetName( typeof( TelescopeAxes ), axis );
+			string msg = $"{axisName} {rate:F5}";
 
 			if ( !CanMoveAxis( axis ) )
 			{
-				string axisName = Enum.GetName( typeof( TelescopeAxes ), axis );
-				LogMessage( name, "Cannot move {0}.", axisName );
-				throw new MethodNotImplementedException( $"CanMoveAxis {axisName}" );
+				string errMsg = $"MoveAxis() not supported for {axisName}.";
+				LogMessage( name, errMsg );
+
+				throw new MethodNotImplementedException( name, errMsg );
 			}
 
 			try
@@ -1771,20 +1773,15 @@ namespace ASCOM.DeviceHub
 				}
 				else
 				{
-					Debug.WriteLine( "MoveAxis - Checking if Parked" );
 					CheckParked( name, TelescopeManager.Status.AtPark );
-					Debug.WriteLine( "MoveAxis - Verifying NOT in the process of parking." );
 					CheckParkingStatus( name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked );
-					Debug.WriteLine( $"TelescopeDriver: StartJogMoveAxis - {axis} {rate:F3}" );
 					TelescopeManager.StartJogMoveAxis( axis, rate );
-					Debug.WriteLine( "Back from StartJogMoveAxis" );
 				}
 
 				msg += _done;
 			}
-			catch ( Exception xcp )
+			catch ( Exception )
 			{
-				Debug.WriteLine( $"StartJogMoveAxis caught exception - {xcp.Message}" );
 				msg += _failed;
 
 				throw;

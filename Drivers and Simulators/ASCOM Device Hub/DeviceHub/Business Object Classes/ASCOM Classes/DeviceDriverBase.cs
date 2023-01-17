@@ -78,9 +78,10 @@ namespace ASCOM.DeviceHub
 		{
 			if ( !capabilityValue )
 			{
-				LogMessage( ident, "{0} = {1} prevents the operation.", capabilityName, capabilityValue );
+				string msg = $"{capabilityName} = {capabilityValue} prevents the operation.";
+				LogMessage( ident, msg );
 
-				throw new MethodNotImplementedException( ident );
+				throw new MethodNotImplementedException( ident, msg );
 			}
 		}
 
@@ -88,9 +89,10 @@ namespace ASCOM.DeviceHub
 		{
 			if ( !capabilityValue )
 			{
-				LogMessage( ident, "{0} = {1} prevents the operation.", capabilityName, capabilityValue );
+				string msg = $"{capabilityName} = {capabilityValue} prevents the operation.";
+				LogMessage( ident, msg );
 
-				throw new PropertyNotImplementedException( ident );
+				throw new PropertyNotImplementedException( ident, msg );
 			}
 		}
 

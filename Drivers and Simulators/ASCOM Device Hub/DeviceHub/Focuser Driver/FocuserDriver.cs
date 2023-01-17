@@ -27,6 +27,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Windows.Interop;
 
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
@@ -888,8 +889,10 @@ namespace ASCOM.DeviceHub
 		{
 			if ( !isAvailable )
 			{
-				LogMessage( ident, "Unsupported operation." );
-				throw new PropertyNotImplementedException( ident, true );
+				string msg = "The focuser driver does not support setting temperature compensation.";
+				LogMessage( ident, msg );
+
+				throw new PropertyNotImplementedException( ident, msg );
 			}
 		}
 
@@ -897,9 +900,10 @@ namespace ASCOM.DeviceHub
 		{
 			if ( !absolute )
 			{
-				LogMessage( ident, "Not implemented for a relative positioning focuser." );
+				string msg = "Not implemented for a relative positioning focuser.";
+				LogMessage( ident, msg );
 
-				throw new PropertyNotImplementedException( ident, isSetter );			
+				throw new PropertyNotImplementedException( ident, isSetter, msg );			
 			}
 		}
 
