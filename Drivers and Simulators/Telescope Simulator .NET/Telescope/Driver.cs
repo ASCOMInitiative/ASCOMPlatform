@@ -349,6 +349,14 @@ namespace ASCOM.Simulator
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Capabilities, "CanSetPierSide: ");
                 CheckVersionOne("CanSetPierSide", false);
+
+                // The ASCOM interface specification states that Set SideOfPier is only valid for German equatorial mounts
+                if (TelescopeHardware.AlignmentMode!=AlignmentModes.algGermanPolar)
+                {
+                    SharedResources.TrafficEnd(false.ToString());
+                    return false;
+                }
+
                 SharedResources.TrafficEnd(TelescopeHardware.CanSetPierSide.ToString());
                 return TelescopeHardware.CanSetPierSide;
             }
@@ -927,6 +935,9 @@ namespace ASCOM.Simulator
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SideOfPier: ");
                 CheckCapability(TelescopeHardware.CanSetPierSide, "SideOfPier", true);
+
+                // The ASCOM interface specification states that Set SideOfPier is only valid for German equatorial mounts
+                CheckCapability(TelescopeHardware.AlignmentMode != AlignmentModes.algGermanPolar, "SideOfPier", true);
 
                 if (value == TelescopeHardware.SideOfPier)
                 {
