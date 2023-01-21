@@ -399,7 +399,15 @@ namespace ASCOM.DynamicRemoteClients
 
             // Bypass SSL validation check in the RestClient if configured to do so
             if (trustUnsignedSslCertificate)
+            {
+                TL.LogMessage(clientNumber, deviceType, $"***** ALERT ***** UNSIGNED SSL CERTIFICATES WILL BE TRUSTED");
                 client.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+            }
+            else
+            {
+                TL.LogMessage(clientNumber, deviceType, $"Untrusted SSL certificates will be rejected.");
+
+            }
 
             // Add a basic authenticator if the user name is not null or white space
             if (!string.IsNullOrWhiteSpace(userName))
