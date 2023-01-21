@@ -74,7 +74,7 @@ namespace ASCOM.DynamicRemoteClients
                 if (TL == null) TL = new TraceLoggerPlus("", string.Format(SharedConstants.TRACELOGGER_NAME_FORMAT_STRING, DriverNumber, DEVICE_TYPE));
                 DynamicClientDriver.ReadProfile(clientNumber, TL, DEVICE_TYPE, DriverProgId,
                     ref traceState, ref debugTraceState, ref ipAddressString, ref portNumber, ref remoteDeviceNumber, ref serviceType, ref establishConnectionTimeout, ref standardDeviceResponseTimeout,
-                    ref longDeviceResponseTimeout, ref userName, ref password, ref manageConnectLocally, ref imageArrayTransferType, ref imageArrayCompression, ref uniqueId, ref enableRediscovery, 
+                    ref longDeviceResponseTimeout, ref userName, ref password, ref manageConnectLocally, ref imageArrayTransferType, ref imageArrayCompression, ref uniqueId, ref enableRediscovery,
                     ref ipV4Enabled, ref ipV6Enabled, ref discoveryPort, ref trustUnsignedSslCertificates);
                 TL.LogMessage(clientNumber, DEVICE_TYPE, string.Format("Trace state: {0}, Debug Trace State: {1}, TraceLogger Debug State: {2}", traceState, debugTraceState, TL.DebugTraceState));
                 Version version = Assembly.GetEntryAssembly().GetName().Version;
@@ -240,6 +240,7 @@ namespace ASCOM.DynamicRemoteClients
                     setupForm.IpV4Enabled = ipV4Enabled;
                     setupForm.IpV6Enabled = ipV6Enabled;
                     setupForm.DiscoveryPort = discoveryPort;
+                    setupForm.TrustUnsignedSslCertificates = trustUnsignedSslCertificates;
 
                     TL.LogMessage(clientNumber, "SetupDialog", "Showing Dialogue");
                     var result = setupForm.ShowDialog();
@@ -266,11 +267,12 @@ namespace ASCOM.DynamicRemoteClients
                         ipV4Enabled = setupForm.IpV4Enabled;
                         ipV6Enabled = setupForm.IpV6Enabled;
                         discoveryPort = setupForm.DiscoveryPort;
+                        trustUnsignedSslCertificates = setupForm.TrustUnsignedSslCertificates;
 
                         // Write the changed values to the Profile
                         TL.LogMessage(clientNumber, "SetupDialog", "Writing new values to profile");
                         DynamicClientDriver.WriteProfile(clientNumber, TL, DEVICE_TYPE, DriverProgId, traceState, debugTraceState, ipAddressString, portNumber, remoteDeviceNumber, serviceType,
-                            establishConnectionTimeout, standardDeviceResponseTimeout, longDeviceResponseTimeout, userName, password, manageConnectLocally, imageArrayTransferType, imageArrayCompression, uniqueId, enableRediscovery, 
+                            establishConnectionTimeout, standardDeviceResponseTimeout, longDeviceResponseTimeout, userName, password, manageConnectLocally, imageArrayTransferType, imageArrayCompression, uniqueId, enableRediscovery,
                             ipV4Enabled, ipV6Enabled, discoveryPort, trustUnsignedSslCertificates);
 
                         // Establish new host and device parameters

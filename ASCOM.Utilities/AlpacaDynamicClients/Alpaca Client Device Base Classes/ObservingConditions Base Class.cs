@@ -238,6 +238,7 @@ namespace ASCOM.DynamicRemoteClients
                     setupForm.IpV4Enabled = ipV4Enabled;
                     setupForm.IpV6Enabled = ipV6Enabled;
                     setupForm.DiscoveryPort = discoveryPort;
+                    setupForm.TrustUnsignedSslCertificates = trustUnsignedSslCertificates;
 
                     TL.LogMessage(clientNumber, "SetupDialog", "Showing Dialogue");
                     var result = setupForm.ShowDialog();
@@ -264,6 +265,7 @@ namespace ASCOM.DynamicRemoteClients
                         ipV4Enabled = setupForm.IpV4Enabled;
                         ipV6Enabled = setupForm.IpV6Enabled;
                         discoveryPort = setupForm.DiscoveryPort;
+                        trustUnsignedSslCertificates= setupForm.TrustUnsignedSslCertificates;
 
                         // Write the changed values to the Profile
                         TL.LogMessage(clientNumber, "SetupDialog", "Writing new values to profile");
