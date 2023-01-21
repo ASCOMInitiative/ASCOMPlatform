@@ -215,7 +215,8 @@ namespace ASCOM.DynamicRemoteClients
         /// <param name="uniqueId"></param>
         /// <remarks>This method will attempt to re-discover the Alpaca device if it is not possible to establish a TCP connection with the device at the specified address and port.</remarks>
         public static void ConnectToRemoteDevice(ref RestClient client, string ipAddressString, decimal portNumber, int connectionTimeout, string serviceType, TraceLoggerPlus TL,
-                                                 uint clientNumber, string driverProgId, string deviceType, int deviceResponseTimeout, string userName, string password, string uniqueId, bool enableRediscovery, bool ipV4Enabled, bool ipV6Enabled, int discoveryPort)
+                                                 uint clientNumber, string driverProgId, string deviceType, int deviceResponseTimeout, string userName, string password, string uniqueId, bool enableRediscovery,
+                                                 bool ipV4Enabled, bool ipV6Enabled, int discoveryPort, bool trustUnsignedSslCertificate)
         {
             List<AvailableInterface> availableInterfaces = new List<AvailableInterface>();
 
@@ -393,8 +394,12 @@ namespace ASCOM.DynamicRemoteClients
             // Create a new client pointing at the alpaca device
             client = new RestClient(clientHostAddress)
             {
-                PreAuthenticate = true
+                PreAuthenticate = true,
             };
+
+            // Bypass SSL validation check in the RestClient if configured to do so
+            if (trustUnsignedSslCertificate)
+                client.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
 
             // Add a basic authenticator if the user name is not null or white space
             if (!string.IsNullOrWhiteSpace(userName))
@@ -515,7 +520,8 @@ namespace ASCOM.DynamicRemoteClients
                                        ref bool enableRediscovery,
                                        ref bool ipV4Enabled,
                                        ref bool ipV6Enabled,
-                                       ref int discoveryPort
+                                       ref int discoveryPort,
+                                       ref bool trustUnsignedSslCertificates
                                        )
         {
             using (Profile driverProfile = new Profile())
@@ -545,7 +551,7 @@ namespace ASCOM.DynamicRemoteClients
                 ipV4Enabled = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.ENABLE_IPV4_DISCOVERY_PROFILENAME, string.Empty, SharedConstants.ENABLE_IPV4_DISCOVERY_DEFAULT);
                 ipV6Enabled = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.ENABLE_IPV6_DISCOVERY_PROFILENAME, string.Empty, SharedConstants.ENABLE_IPV6_DISCOVERY_DEFAULT);
                 discoveryPort = GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.DISCOVERY_PORT_PROFILENAME, string.Empty, SharedConstants.DISCOVERY_PORT_DEFAULT);
-
+                trustUnsignedSslCertificates = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.TRUST_UNSIGNED_SSL_CERTIFICATES_PROFILENAME, string.Empty, SharedConstants.TRUST_UNSIGNED_CERTIFICATES_DEFAULT);
                 TL.DebugTraceState = debugTraceState; // Save the debug state for use when needed wherever the trace logger is used
 
                 TL.LogMessage(clientNumber, "ReadProfile", string.Format("New values: Device IP: {0} {1}, Remote device number: {2}", ipAddressString, portNumber.ToString(), remoteDeviceNumber.ToString()));
@@ -574,7 +580,8 @@ namespace ASCOM.DynamicRemoteClients
                                         bool enableRediscovery,
                                         bool ipV4Enabled,
                                         bool ipV6Enabled,
-                                        int discoveryPort
+                                        int discoveryPort,
+                                        bool trustUnsignedSslCertificates
                                         )
         {
             using (Profile driverProfile = new Profile())
@@ -601,6 +608,7 @@ namespace ASCOM.DynamicRemoteClients
                 driverProfile.WriteValue(driverProgID, SharedConstants.ENABLE_IPV4_DISCOVERY_PROFILENAME, ipV4Enabled.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(driverProgID, SharedConstants.ENABLE_IPV6_DISCOVERY_PROFILENAME, ipV6Enabled.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(driverProgID, SharedConstants.DISCOVERY_PORT_PROFILENAME, discoveryPort.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(driverProgID, SharedConstants.TRUST_UNSIGNED_SSL_CERTIFICATES_PROFILENAME, trustUnsignedSslCertificates.ToString(CultureInfo.InvariantCulture));
 
                 TL.DebugTraceState = debugTraceState; // Save the new debug state for use when needed wherever the trace logger is used
 
@@ -1673,7 +1681,7 @@ namespace ASCOM.DynamicRemoteClients
                             }
                         }
                     }
-                    else if(ex is TimeoutException)
+                    else if (ex is TimeoutException)
                     {
                         retryCounter += 1; // Increment the retry counter
                         if (retryCounter <= SOCKET_ERROR_MAXIMUM_RETRIES) // The retry count is less than or equal to the maximum allowed so retry the command

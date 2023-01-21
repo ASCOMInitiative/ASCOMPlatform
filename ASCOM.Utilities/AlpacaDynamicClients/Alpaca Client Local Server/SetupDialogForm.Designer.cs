@@ -74,6 +74,8 @@
             this.BtnSetupUrlMain = new System.Windows.Forms.Button();
             this.BtnSetupUrlDevice = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ChkTrustSelfSignedCertificates = new System.Windows.Forms.CheckBox();
+            this.label15 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numRemoteDeviceNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numStandardTimeout)).BeginInit();
@@ -576,6 +578,26 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Alpaca Web Configuration";
             // 
+            // ChkTrustSelfSignedCertificates
+            // 
+            this.ChkTrustSelfSignedCertificates.AutoSize = true;
+            this.ChkTrustSelfSignedCertificates.Location = new System.Drawing.Point(53, 233);
+            this.ChkTrustSelfSignedCertificates.Name = "ChkTrustSelfSignedCertificates";
+            this.ChkTrustSelfSignedCertificates.Size = new System.Drawing.Size(180, 17);
+            this.ChkTrustSelfSignedCertificates.TabIndex = 57;
+            this.ChkTrustSelfSignedCertificates.Text = "Trust self-signed SSL certificates";
+            this.ChkTrustSelfSignedCertificates.UseVisualStyleBackColor = true;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.ForeColor = System.Drawing.Color.Red;
+            this.label15.Location = new System.Drawing.Point(227, 234);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(259, 13);
+            this.label15.TabIndex = 58;
+            this.label15.Text = "(Only for use by developers who understand the risks)";
+            // 
             // SetupDialogForm
             // 
             this.AcceptButton = this.btnOK;
@@ -583,6 +605,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(832, 483);
+            this.Controls.Add(this.label15);
+            this.Controls.Add(this.ChkTrustSelfSignedCertificates);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.NumDiscoveryPort);
@@ -687,5 +711,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button BtnSetupUrlDevice;
         private System.Windows.Forms.Button BtnSetupUrlMain;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.CheckBox ChkTrustSelfSignedCertificates;
     }
 }
