@@ -51,7 +51,7 @@ namespace ASCOM.DynamicRemoteClients
         public bool IpV4Enabled { get; set; }
         public bool IpV6Enabled { get; set; }
         public int DiscoveryPort { get; set; }
-        public bool TrustUnsignedSslCertificates{ get; set; }
+        public bool TrustUserGeneratedSslCertificates { get; set; }
 
         #endregion
 
@@ -125,7 +125,7 @@ namespace ASCOM.DynamicRemoteClients
                 ChkEnableRediscovery.Checked = EnableRediscovery;
                 NumDiscoveryPort.Value = Convert.ToDecimal(DiscoveryPort);
 
-                ChkTrustSelfSignedCertificates.Checked = TrustUnsignedSslCertificates;
+                ChkTrustSelfSignedCertificates.Checked = TrustUserGeneratedSslCertificates;
 
                 // Set the IP v4 / v6 radio boxes
                 if (IpV4Enabled & IpV6Enabled) // Both IPv4 and v6 are enabled so set the "both" button
@@ -228,7 +228,7 @@ namespace ASCOM.DynamicRemoteClients
             ImageArrayCompression = (ASCOM.Common.Alpaca.ImageArrayCompression)cmbImageArrayCompression.SelectedItem;
             EnableRediscovery = ChkEnableRediscovery.Checked;
             DiscoveryPort = Convert.ToInt32(NumDiscoveryPort.Value);
-            TrustUnsignedSslCertificates=ChkTrustSelfSignedCertificates.Checked;
+            TrustUserGeneratedSslCertificates = ChkTrustSelfSignedCertificates.Checked;
 
             // Set the IP v4 and v6 variables as necessary
             if (RadIpV4.Checked) // The IPv4 radio button is checked so set the IP v4 and IP v6 variables accordingly
