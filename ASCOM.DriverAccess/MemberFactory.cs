@@ -509,7 +509,7 @@ namespace ASCOM.DriverAccess
         private void CheckDotNetExceptions(string memberName, Exception e)
         {
             string FullName = e.InnerException.GetType().FullName;
-            string message = "";
+            string message;
             string member;
             string value;
             string range;
@@ -623,10 +623,10 @@ namespace ASCOM.DriverAccess
             }
 
             // Default behaviour if its not one of the exceptions above
-            string defaultmessage = "CheckDotNetExceptions " + _strProgId + " " + memberName + " " + e.InnerException.ToString() + " (See Inner Exception for details)";
+            message = e.InnerException.Message;
 
-            TL.LogMessageCrLf(memberName, "  Throwing Default DriverException: '" + defaultmessage + "'");
-            throw new DriverException(defaultmessage, e.InnerException);
+            TL.LogMessageCrLf(memberName, $"  Throwing Default DriverException: '{message}'");
+            throw new DriverException(message, e.InnerException);
         }
 
         private void SetTargetInvocationExceptionHandler(string memberName, Exception e)
