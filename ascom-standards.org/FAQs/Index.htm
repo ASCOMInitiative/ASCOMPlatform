@@ -76,6 +76,9 @@ dt {
 		    <dt>Where can I learn about ASCOM Alpaca vs Classic ASCOM COM?</dt>
 			<dd>See the <a href="../About/Index.htm">About ASCOM</a> section<a href="#hist"></a>. This is a highly recommended first step.</dd>
 			
+			<dt>How does the ASCOM Model Compare with INDIGO, and Software Bisque X2</dt>
+			<dd>ASCOM (both COM and Alpaca) is a many-to-many universal interfacing system with no dependence on any software or central server. Alpaca is cross-platform, COM is Windows-only. Both <a href="https://github.com/indigo-astronomy/indigo/blob/master/README.md" target="_new">INDIGO</a> and TheSky (<a href="https://www.bisque.com/wp-content/x2standard/" target="_new">X2 Standard</a>) each offer their own cross platform <em>plug-in</em> standards for instrument interfacing. In addition INDIGO has the concept of a central-server-based "bus" via which "clients" can talk to devices. Most importantly, INDIGO's architecture is not a universal interface, it is a "meta-interface" via which a device can freely add and delete properties and methods, and via which clients  perform discovery of properties and methods for each device to be used. ASCOM universal interfaces are <em>strictly curated</em>, guaranteed to be free of breaking changes, open, and free of any technology other than the OS and internet. Again, no central server is needed. 
+			
 			<dt>Why Can't Astronomy Programs Just Compensate For My Device's Problem?</dt>
 			<dd>See the <a href="SoftwareVictory.htm">Correcting for Problems</a> (also in the menu on the left).</dd>
 			
