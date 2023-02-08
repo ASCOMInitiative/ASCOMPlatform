@@ -2,7 +2,7 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
         <Identity Id="ASCOMVsixTemplateInstaller2019" Version="1.0.0" Language="en-US" Publisher="Peter Simpson" />
-        <DisplayName>ASCOM Driver Project Templates 2019</DisplayName>
+        <DisplayName>ASCOM Driver Project Templates (VS2019)</DisplayName>
         <Description xml:space="preserve">Templates to create C# and VB ASCOM driver projects and test applications.</Description>
         <Icon>ASCOM.ico</Icon>
         <PreviewImage>ASCOM.ico</PreviewImage>
@@ -14,7 +14,7 @@
         <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
     </Dependencies>
     <Assets>
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" Path="|ASCOM.Setup.VsixWizard 2019|" AssemblyName="|ASCOM.Setup.VsixWizard 2019;AssemblyName|" d:ProjectName="ASCOM.Setup.VsixWizard 2019" />
+        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" Path="|ASCOM.Setup.VsixWizard (VS2019)|" AssemblyName="|ASCOM.Setup.VsixWizard (VS2019);AssemblyName|" d:ProjectName="ASCOM.Setup.VsixWizard (VS2019)" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="LocalServerTemplate" d:TargetPath="|LocalServerTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="DriverTemplate(CS)" d:TargetPath="|DriverTemplate(CS);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="DriverTemplate(VB)" d:TargetPath="|DriverTemplate(VB);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />

@@ -14,7 +14,8 @@
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\..\ASCOM.snk</AssemblyOriginatorKeyFile>
-    <ApplicationIcon>ASCOM.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -109,37 +110,30 @@
     <Compile Include="..\..\..\SolutionInfo.cs">
       <Link>SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="LocalServerForm.cs">
+    <Compile Include="..\ASCOM.Setup.TemplateWizard2022\DeviceDriverForm.cs">
+      <Link>DeviceDriverForm.cs</Link>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LocalServerForm.Designer.cs">
-      <DependentUpon>LocalServerForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LocalServerWizard.cs">
-    </Compile>
-    <Compile Include="DeviceDriverForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DeviceDriverForm.Designer.cs">
+    <Compile Include="..\ASCOM.Setup.TemplateWizard2022\DeviceDriverForm.designer.cs">
+      <Link>DeviceDriverForm.designer.cs</Link>
       <DependentUpon>DeviceDriverForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="DriverWizard.cs">
+    <Compile Include="..\ASCOM.Setup.TemplateWizard2022\DriverWizard.cs">
+      <Link>DriverWizard.cs</Link>
+    </Compile>
+    <Compile Include="..\ASCOM.Setup.TemplateWizard2022\LocalServerForm.cs">
+      <Link>LocalServerForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\ASCOM.Setup.TemplateWizard2022\LocalServerForm.designer.cs">
+      <Link>LocalServerForm.designer.cs</Link>
+      <DependentUpon>LocalServerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\ASCOM.Setup.TemplateWizard2022\LocalServerWizard.cs">
+      <Link>LocalServerWizard.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="LocalServerForm.resx">
-      <DependentUpon>LocalServerForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DeviceDriverForm.resx">
-      <DependentUpon>DeviceDriverForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ASCOM.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -177,6 +171,21 @@
     <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface">
       <Version>16.10.31320.204</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\ASCOM.Setup.TemplateWizard2022\ASCOM.ico">
+      <Link>ASCOM.ico</Link>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\ASCOM.Setup.TemplateWizard2022\DeviceDriverForm.resx">
+      <Link>DeviceDriverForm.resx</Link>
+      <DependentUpon>DeviceDriverForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\ASCOM.Setup.TemplateWizard2022\LocalServerForm.resx">
+      <Link>LocalServerForm.resx</Link>
+      <DependentUpon>LocalServerForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

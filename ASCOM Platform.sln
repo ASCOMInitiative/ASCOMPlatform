@@ -264,13 +264,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeleSimTester", "TestProgra
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test Programs", "Test Programs", "{25CBAA15-E20F-47D6-9FC2-FCAED9827157}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Setup.VsixWizard 2019", "DriverTemplates\VSIXInstaller\ASCOM.Setup.TemplateWizard2019\ASCOM.Setup.VsixWizard 2019.csproj", "{C247337D-19C3-4125-B6F2-1E563D88F9AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Setup.VsixWizard (VS2019)", "DriverTemplates\VSIXInstaller\ASCOM.Setup.TemplateWizard2019\ASCOM.Setup.VsixWizard (VS2019).csproj", "{C247337D-19C3-4125-B6F2-1E563D88F9AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOMVsixTemplateInstaller 2019", "DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2019\ASCOMVsixTemplateInstaller 2019.csproj", "{7E4C3320-D971-436F-B151-3A460639AAA3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOMVsixTemplateInstaller (VS2019)", "DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2019\ASCOMVsixTemplateInstaller (VS2019).csproj", "{7E4C3320-D971-436F-B151-3A460639AAA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Setup.VsixWizard 2022", "DriverTemplates\VSIXInstaller\ASCOM.Setup.TemplateWizard2022\ASCOM.Setup.VsixWizard 2022.csproj", "{C809CC68-5E97-4C8E-9959-CF7CDEA70E6F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Setup.VsixWizard (VS2022)", "DriverTemplates\VSIXInstaller\ASCOM.Setup.TemplateWizard2022\ASCOM.Setup.VsixWizard (VS2022).csproj", "{C809CC68-5E97-4C8E-9959-CF7CDEA70E6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOMVsixTemplateInstaller 2022", "DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2022\ASCOMVsixTemplateInstaller 2022.csproj", "{2DF1D280-AC88-4A2D-883C-9B7A3F52F513}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOMVsixTemplateInstaller (VS2022)", "DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2022\ASCOMVsixTemplateInstaller (VS2022).csproj", "{2DF1D280-AC88-4A2D-883C-9B7A3F52F513}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

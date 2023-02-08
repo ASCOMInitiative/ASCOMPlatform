@@ -77,8 +77,10 @@
 		<VersionFile>$(CheckoutDirectory)\$(PlatformInstallerDirectory)\MasterPlatformVersion.txt</VersionFile>
 		<VSIXInstallerFileName>ASCOMVsixTemplateInstaller</VSIXInstallerFileName>
 		<VSIXInstallerFileType>vsix</VSIXInstallerFileType>
-		<VSIXInstallerFile>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\bin\$(Configuration)\$(VSIXInstallerFileName).$(VSIXInstallerFileType)</VSIXInstallerFile>
-		<VSIXManifestFile>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\source.extension.vsixmanifest</VSIXManifestFile>
+		<VSIXInstallerFile2019>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2019\bin\$(Configuration)\$(VSIXInstallerFileName).$(VSIXInstallerFileType)</VSIXInstallerFile2019>
+		<VSIXManifestFile2019>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2019\source.extension.vsixmanifest</VSIXManifestFile2019>
+		<VSIXInstallerFile2022>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2022\bin\$(Configuration)\$(VSIXInstallerFileName).$(VSIXInstallerFileType)</VSIXInstallerFile2022>
+		<VSIXManifestFile2022>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2022\source.extension.vsixmanifest</VSIXManifestFile2022>
 		<PackageVersionFile>Directory.Build.props</PackageVersionFile>
 		<ASCOMExceptionsPackageFolder>Interfaces\ASCOMExceptions\bin\Release</ASCOMExceptionsPackageFolder>
 		<BuildEnvironmentPackageFolder>BuildEnvironment\bin\Release</BuildEnvironmentPackageFolder>
@@ -295,14 +297,23 @@
 		</ItemGroup>
 		<Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM$(BuildTypeAnnotation).$(Revision).zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
 
-		<!-- Copy the VSIX installer to the root folder and append the beta status and build number -->
+		<!-- Copy the VS2019 VSIX installer to the root folder and append the beta status and build number -->
 		<ItemGroup>
-			<VSIXInstallerSourceFile Include="$(CheckoutDirectory)\$(VSIXInstallerFile)"/>
+			<VSIXInstallerSourceFile2019 Include="$(CheckoutDirectory)\$(VSIXInstallerFile2019)"/>
 		</ItemGroup>
 		<ItemGroup>
-			<VSIXInstallerDestinationFile Include="$(MSBuildProjectDirectory)\$(VSIXInstallerFileName)$(BuildTypeAnnotation).$(Revision).$(VSIXInstallerFileType)"/>
+			<VSIXInstallerDestinationFile2019 Include="$(MSBuildProjectDirectory)\$(VSIXInstallerFileName)2019$(BuildTypeAnnotation).$(Revision).$(VSIXInstallerFileType)"/>
 		</ItemGroup>
-		<Copy SourceFiles="@(VSIXInstallerSourceFile)" DestinationFiles="@(VSIXInstallerDestinationFile)" SkipUnchangedFiles="false" />
+		<Copy SourceFiles="@(VSIXInstallerSourceFile2019)" DestinationFiles="@(VSIXInstallerDestinationFile2019)" SkipUnchangedFiles="false" />
+
+		<!-- Copy the VS2022 VSIX installer to the root folder and append the beta status and build number -->
+		<ItemGroup>
+			<VSIXInstallerSourceFile2022 Include="$(CheckoutDirectory)\$(VSIXInstallerFile2022)"/>
+		</ItemGroup>
+		<ItemGroup>
+			<VSIXInstallerDestinationFile2022 Include="$(MSBuildProjectDirectory)\$(VSIXInstallerFileName)2022$(BuildTypeAnnotation).$(Revision).$(VSIXInstallerFileType)"/>
+		</ItemGroup>
+		<Copy SourceFiles="@(VSIXInstallerSourceFile2022)" DestinationFiles="@(VSIXInstallerDestinationFile2022)" SkipUnchangedFiles="false" />
 
 		<!-- Copy the ASCOM Exceptions package to the root folder -->
 		<ItemGroup>

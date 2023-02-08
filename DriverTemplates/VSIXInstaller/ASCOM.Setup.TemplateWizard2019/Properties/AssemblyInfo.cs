@@ -5,10 +5,10 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ASCOM Driver Template Wizard")]
-[assembly: AssemblyDescription("Provides logic to create new ASCOM driver projects based on user selections.")]
+[assembly: AssemblyTitle("ASCOM Driver Template Wizard (VS2019)")]
+[assembly: AssemblyDescription("Provides logic to create new VS2019 ASCOM driver projects based on user selections.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("Copyright © 2009 TiGra Astronomy, Copyright © ASCOM Initiative 2022")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2022")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
