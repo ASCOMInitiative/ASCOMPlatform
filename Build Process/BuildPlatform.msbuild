@@ -182,14 +182,21 @@
 			</Namespace>
 		</PropertyGroup>
 
-		<!-- Update the developer project templates VSIX installer version number with the current build number. -->
+		<!-- Update the developer project templates VS2019 VSIX installer version number with the current build number. -->
 		<XmlPoke
-		  XmlInputPath="$(CheckoutDirectory)\$(VSIXManifestFile)"
+		  XmlInputPath="$(CheckoutDirectory)\$(VSIXManifestFile2019)"
 		  Value="$(PlatformMajor).$(PlatformMinor).$(PlatformServicePack).$(Revision)"
 		  Query="/vsx:PackageManifest/vsx:Metadata/vsx:Identity/@Version"
 		  Namespaces="$(Namespace)"/>
+		  <Message Text="VSIX Manifest file: $(CheckoutDirectory)\$(VSIXManifestFile2019) version number updated to: $(PlatformMajor).$(PlatformMinor).$(PlatformServicePack).$(Revision)"/>
 
-		<Message Text="VSIX Manifest file: $(CheckoutDirectory)\$(VSIXManifestFile) version number updated to: $(PlatformMajor).$(PlatformMinor).$(PlatformServicePack).$(Revision)"/>
+		<!-- Update the developer project templates VS2022 VSIX installer version number with the current build number. -->
+		<XmlPoke
+		  XmlInputPath="$(CheckoutDirectory)\$(VSIXManifestFile2022)"
+		  Value="$(PlatformMajor).$(PlatformMinor).$(PlatformServicePack).$(Revision)"
+		  Query="/vsx:PackageManifest/vsx:Metadata/vsx:Identity/@Version"
+		  Namespaces="$(Namespace)"/>
+		  <Message Text="VSIX Manifest file: $(CheckoutDirectory)\$(VSIXManifestFile2022) version number updated to: $(PlatformMajor).$(PlatformMinor).$(PlatformServicePack).$(Revision)"/>
 
 		<!-- Update the master package version number to the current Platform level. -->
 		<XmlPoke
