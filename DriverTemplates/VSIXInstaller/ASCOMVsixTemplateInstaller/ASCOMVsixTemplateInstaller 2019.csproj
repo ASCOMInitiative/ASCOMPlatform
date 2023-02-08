@@ -73,9 +73,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ASCOM.Setup.TemplateWizard\ASCOM.Setup.VsixWizard.csproj">
+    <ProjectReference Include="..\ASCOM.Setup.TemplateWizard\ASCOM.Setup.VsixWizard 2019.csproj">
       <Project>{C247337D-19C3-4125-B6F2-1E563D88F9AA}</Project>
-      <Name>ASCOM.Setup.VsixWizard</Name>
+      <Name>ASCOM.Setup.VsixWizard 2019</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>

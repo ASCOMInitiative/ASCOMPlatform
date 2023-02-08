@@ -238,7 +238,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VSIX Template Installer and
 		DriverTemplates\DriverTemplateDeveloperNotes.htm = DriverTemplates\DriverTemplateDeveloperNotes.htm
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOMVsixTemplateInstaller", "DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\ASCOMVsixTemplateInstaller.csproj", "{7E4C3320-D971-436F-B151-3A460639AAA3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOMVsixTemplateInstaller 2019", "DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\ASCOMVsixTemplateInstaller 2019.csproj", "{7E4C3320-D971-436F-B151-3A460639AAA3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DriverTemplate(CS)", "DriverTemplates\VSIXInstaller\DriverTemplate(CS)\DriverTemplate(CS).csproj", "{BE799053-8F78-44BF-8581-68BBDC955102}"
 EndProject
@@ -256,7 +256,7 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "TestFormsApp(VB)", "DriverT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidatePlatform", "ValidatePlatform\ValidatePlatform.csproj", "{A1414A9B-63A2-47C7-8F3B-9CEA58349FFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Setup.VsixWizard", "DriverTemplates\VSIXInstaller\ASCOM.Setup.TemplateWizard\ASCOM.Setup.VsixWizard.csproj", "{C247337D-19C3-4125-B6F2-1E563D88F9AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Setup.VsixWizard 2019", "DriverTemplates\VSIXInstaller\ASCOM.Setup.TemplateWizard\ASCOM.Setup.VsixWizard 2019.csproj", "{C247337D-19C3-4125-B6F2-1E563D88F9AA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build Environment Support", "Build Environment Support", "{AFEE7C9B-FAF3-4BFE-8BCA-D0CF03D5E4CF}"
 EndProject
