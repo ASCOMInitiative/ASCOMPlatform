@@ -2,7 +2,6 @@
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\..\..\packages\Microsoft.VSSDK.BuildTools.17.3.2094\build\Microsoft.VSSDK.BuildTools.props" Condition="Exists('..\..\..\packages\Microsoft.VSSDK.BuildTools.17.3.2094\build\Microsoft.VSSDK.BuildTools.props')" />
   <Import Project="..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.5.4062\build\Microsoft.VsSDK.CompatibilityAnalyzer.props" Condition="Exists('..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.5.4062\build\Microsoft.VsSDK.CompatibilityAnalyzer.props')" />
-  <Import Project="..\..\..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.3.3.2\build\Microsoft.CodeAnalysis.BannedApiAnalyzers.props" Condition="Exists('..\..\..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.3.3.2\build\Microsoft.CodeAnalysis.BannedApiAnalyzers.props')" />
   <PropertyGroup>
     <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -184,8 +183,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\..\..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.3.3.2\analyzers\dotnet\cs\Microsoft.CodeAnalysis.BannedApiAnalyzers.dll" />
-    <Analyzer Include="..\..\..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.3.3.2\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.BannedApiAnalyzers.dll" />
+    <Analyzer Include="..\..\..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.3.3.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.BannedApiAnalyzers.dll" />
+    <Analyzer Include="..\..\..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.3.3.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.BannedApiAnalyzers.dll" />
     <Analyzer Include="..\..\..\packages\Microsoft.VisualStudio.SDK.Analyzers.16.10.10\analyzers\cs\Microsoft.VisualStudio.SDK.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\..\..\packages\Microsoft.VisualStudio.SDK.Analyzers.16.10.10\analyzers\cs\Microsoft.VisualStudio.SDK.Analyzers.dll" />
     <Analyzer Include="..\..\..\packages\Microsoft.VisualStudio.Threading.Analyzers.17.5.22\analyzers\cs\Microsoft.VisualStudio.Threading.Analyzers.CodeFixes.dll" />
@@ -201,8 +200,6 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.3.3.2\build\Microsoft.CodeAnalysis.BannedApiAnalyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.3.3.2\build\Microsoft.CodeAnalysis.BannedApiAnalyzers.props'))" />
-    <Error Condition="!Exists('..\..\..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.3.3.2\build\Microsoft.CodeAnalysis.BannedApiAnalyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.3.3.2\build\Microsoft.CodeAnalysis.BannedApiAnalyzers.targets'))" />
     <Error Condition="!Exists('..\..\..\packages\Microsoft.VisualStudio.SDK.Analyzers.16.10.10\build\Microsoft.VisualStudio.SDK.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.VisualStudio.SDK.Analyzers.16.10.10\build\Microsoft.VisualStudio.SDK.Analyzers.targets'))" />
     <Error Condition="!Exists('..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.5.4062\build\Microsoft.VsSDK.CompatibilityAnalyzer.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.5.4062\build\Microsoft.VsSDK.CompatibilityAnalyzer.props'))" />
     <Error Condition="!Exists('..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.5.4062\build\Microsoft.VsSDK.CompatibilityAnalyzer.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.5.4062\build\Microsoft.VsSDK.CompatibilityAnalyzer.targets'))" />
@@ -210,7 +207,6 @@
     <Error Condition="!Exists('..\..\..\packages\Microsoft.VSSDK.BuildTools.17.3.2094\build\Microsoft.VSSDK.BuildTools.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.VSSDK.BuildTools.17.3.2094\build\Microsoft.VSSDK.BuildTools.targets'))" />
     <Error Condition="!Exists('..\..\..\packages\Microsoft.VisualStudio.Threading.Analyzers.17.5.22\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.VisualStudio.Threading.Analyzers.17.5.22\build\Microsoft.VisualStudio.Threading.Analyzers.targets'))" />
   </Target>
-  <Import Project="..\..\..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.3.3.2\build\Microsoft.CodeAnalysis.BannedApiAnalyzers.targets" Condition="Exists('..\..\..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.3.3.2\build\Microsoft.CodeAnalysis.BannedApiAnalyzers.targets')" />
   <Import Project="..\..\..\packages\Microsoft.VisualStudio.SDK.Analyzers.16.10.10\build\Microsoft.VisualStudio.SDK.Analyzers.targets" Condition="Exists('..\..\..\packages\Microsoft.VisualStudio.SDK.Analyzers.16.10.10\build\Microsoft.VisualStudio.SDK.Analyzers.targets')" />
   <Import Project="..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.5.4062\build\Microsoft.VsSDK.CompatibilityAnalyzer.targets" Condition="Exists('..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.5.4062\build\Microsoft.VsSDK.CompatibilityAnalyzer.targets')" />
   <Import Project="..\..\..\packages\Microsoft.VSSDK.BuildTools.17.3.2094\build\Microsoft.VSSDK.BuildTools.targets" Condition="Exists('..\..\..\packages\Microsoft.VSSDK.BuildTools.17.3.2094\build\Microsoft.VSSDK.BuildTools.targets')" />
