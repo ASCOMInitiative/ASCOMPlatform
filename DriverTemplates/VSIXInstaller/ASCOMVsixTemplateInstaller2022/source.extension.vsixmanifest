@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="ASCOMVsixTemplateInstaller" Version="1.0.0" Language="en-US" Publisher="Peter Simpson" />
+        <Identity Id="ASCOMVsixTemplateInstaller" Version="1.0.2" Language="en-US" Publisher="Peter Simpson" />
         <DisplayName>ASCOM Driver Project Templates (VS2022)</DisplayName>
         <Description xml:space="preserve">Templates to create C# and VB ASCOM driver projects and test applications.</Description>
         <Icon>ASCOM.ico</Icon>
@@ -32,6 +32,6 @@
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="TestFormsApp(VB)" d:TargetPath="|TestFormsApp(VB);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
     </Assets>
     <Prerequisites>
-        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,18.0)" DisplayName="Visual Studio core editor" />
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,18.0)" DisplayName="Visual Studio core editor" />
     </Prerequisites>
 </PackageManifest>
