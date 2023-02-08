@@ -10,7 +10,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{7E4C3320-D971-436F-B151-3A460639AAA3}</ProjectGuid>
+    <ProjectGuid>{2DF1D280-AC88-4A2D-883C-9B7A3F52F513}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ASCOMVsixTemplateInstaller</RootNamespace>
@@ -73,9 +73,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ASCOM.Setup.TemplateWizard2019\ASCOM.Setup.VsixWizard 2019.csproj">
-      <Project>{C247337D-19C3-4125-B6F2-1E563D88F9AA}</Project>
-      <Name>ASCOM.Setup.VsixWizard 2019</Name>
+    <ProjectReference Include="..\ASCOM.Setup.TemplateWizard2022\ASCOM.Setup.VsixWizard 2022.csproj">
+      <Project>{c809cc68-5e97-4c8e-9959-cf7cdea70e6f}</Project>
+      <Name>ASCOM.Setup.VsixWizard 2022</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
