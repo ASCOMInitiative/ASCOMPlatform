@@ -1,0 +1,3 @@
+﻿This new package installs the ASCOM project templates on Visual Studio 2019 only. Please use the alternative template package for Visual Studio 2022.
+
+The project templates themselves have not been changed from previous package releases.

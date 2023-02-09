@@ -1,0 +1,5 @@
+﻿This release limits installation to Visual Studio 2022 because a Microsoft change means that it no longer works on Visual Studio 2019.
+
+A separate package has been created that installs the templates in Visual Studio 2019.
+
+No changes have been made to the templates themselves.
