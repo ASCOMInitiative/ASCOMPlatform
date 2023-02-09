@@ -56,7 +56,7 @@
 		<MIABuild>miabuild.exe</MIABuild>
 
 		<!-- Location of the InstallAware shared strings folder on the build machine -->
-		<MIALanguageFolder>C:\Program Files (x86)\InstallAware X6 Creators Update\trans</MIALanguageFolder>
+		<MIALanguageFolder>C:\Program Files (x86)\InstallAware X15 Creators Update\trans</MIALanguageFolder>
 		<ASCOMSharedStringsDirectory>Releases\ASCOM 6\Translated InstallAware Shared Strings</ASCOMSharedStringsDirectory>
 
 		<!-- Names and locations of solution and project files used by this build script-->
@@ -153,12 +153,13 @@
 		<Exec Command="$(NuGetCommand)" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 
 		<!-- Copy the InstallAware shared text strings to the InstallAware program directory. This is the only way that IA will actually use the modified strings! Ugh - but there it is. -->
-		<ItemGroup>
-			<MIASharedStrings Include="$(CheckoutDirectory)\$(ASCOMSharedStringsDirectory)\*.*" />
-		</ItemGroup>
-		<Copy SourceFiles="@(MIASharedStrings)" DestinationFolder="$(MIALanguageFolder)" />
+		<!-- File now stored permanently on the build machine because this approach requires the command prompt to be run with Admin privilege -->
+		<!-- <ItemGroup> -->
+		<!-- 	<MIASharedStrings Include="$(CheckoutDirectory)\$(ASCOMSharedStringsDirectory)\*.*" /> -->
+		<!-- </ItemGroup> -->
+		<!-- <Copy SourceFiles="@(MIASharedStrings)" DestinationFolder="$(MIALanguageFolder)" /> -->
 
-		<!-- Get the Platform version numbers from the MasterPlatformVersion file in the Export-->
+		<!-- Get the Platform version numbers from the MasterPlatformVersion file in the Export -->
 		<ReadLinesFromFile File="$(VersionFile)" >
 			<Output TaskParameter="Lines"
 			ItemName="VersionNumberList" />
@@ -185,7 +186,7 @@
 		<!-- Update the developer project templates VS2019 VSIX installer version number with the current build number. -->
 		<XmlPoke
 		  XmlInputPath="$(CheckoutDirectory)\$(VSIXManifestFile2019)"
-		  Value="$(PlatformMajor).$(PlatformMinor).$(PlatformServicePack).$(Revision)"
+		  Value="$(PlatformMajor).$(PlatformMinor).$(Revision)"
 		  Query="/vsx:PackageManifest/vsx:Metadata/vsx:Identity/@Version"
 		  Namespaces="$(Namespace)"/>
 		  <Message Text="VSIX Manifest file: $(CheckoutDirectory)\$(VSIXManifestFile2019) version number updated to: $(PlatformMajor).$(PlatformMinor).$(PlatformServicePack).$(Revision)"/>
@@ -193,7 +194,7 @@
 		<!-- Update the developer project templates VS2022 VSIX installer version number with the current build number. -->
 		<XmlPoke
 		  XmlInputPath="$(CheckoutDirectory)\$(VSIXManifestFile2022)"
-		  Value="$(PlatformMajor).$(PlatformMinor).$(PlatformServicePack).$(Revision)"
+		  Value="$(PlatformMajor).$(PlatformMinor).$(Revision)"
 		  Query="/vsx:PackageManifest/vsx:Metadata/vsx:Identity/@Version"
 		  Namespaces="$(Namespace)"/>
 		  <Message Text="VSIX Manifest file: $(CheckoutDirectory)\$(VSIXManifestFile2022) version number updated to: $(PlatformMajor).$(PlatformMinor).$(PlatformServicePack).$(Revision)"/>
@@ -304,21 +305,21 @@
 		</ItemGroup>
 		<Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM$(BuildTypeAnnotation).$(Revision).zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
 
-		<!-- Copy the VS2019 VSIX installer to the root folder and append the beta status and build number -->
+		<!-- Copy the VS2019 VSIX installer to the root folder without the beta status -->
 		<ItemGroup>
 			<VSIXInstallerSourceFile2019 Include="$(CheckoutDirectory)\$(VSIXInstallerFile2019)"/>
 		</ItemGroup>
 		<ItemGroup>
-			<VSIXInstallerDestinationFile2019 Include="$(MSBuildProjectDirectory)\$(VSIXInstallerFileName)2019$(BuildTypeAnnotation).$(Revision).$(VSIXInstallerFileType)"/>
+			<VSIXInstallerDestinationFile2019 Include="$(MSBuildProjectDirectory)\$(VSIXInstallerFileName)2019.$(Revision).$(VSIXInstallerFileType)"/>
 		</ItemGroup>
 		<Copy SourceFiles="@(VSIXInstallerSourceFile2019)" DestinationFiles="@(VSIXInstallerDestinationFile2019)" SkipUnchangedFiles="false" />
 
-		<!-- Copy the VS2022 VSIX installer to the root folder and append the beta status and build number -->
+		<!-- Copy the VS2022 VSIX installer to the root folder without the beta status -->
 		<ItemGroup>
 			<VSIXInstallerSourceFile2022 Include="$(CheckoutDirectory)\$(VSIXInstallerFile2022)"/>
 		</ItemGroup>
 		<ItemGroup>
-			<VSIXInstallerDestinationFile2022 Include="$(MSBuildProjectDirectory)\$(VSIXInstallerFileName)2022$(BuildTypeAnnotation).$(Revision).$(VSIXInstallerFileType)"/>
+			<VSIXInstallerDestinationFile2022 Include="$(MSBuildProjectDirectory)\$(VSIXInstallerFileName)2022.$(Revision).$(VSIXInstallerFileType)"/>
 		</ItemGroup>
 		<Copy SourceFiles="@(VSIXInstallerSourceFile2022)" DestinationFiles="@(VSIXInstallerDestinationFile2022)" SkipUnchangedFiles="false" />
 
