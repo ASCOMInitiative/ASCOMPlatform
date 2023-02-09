@@ -131,8 +131,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\ASCOMVsixTemplateInstaller2022\ASCOM.ico">
-      <Link>ASCOM.ico</Link>
+    <Content Include="ASCOM.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="License.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
