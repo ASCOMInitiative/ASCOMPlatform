@@ -4,6 +4,8 @@
         <Identity Id="ASCOMVsixTemplateInstaller" Version="1.0.2" Language="en-US" Publisher="Peter Simpson" />
         <DisplayName>ASCOM Driver Project Templates (VS2022)</DisplayName>
         <Description xml:space="preserve">Templates to create C# and VB ASCOM driver projects and test applications. Compatible with Visual Studio 2022.</Description>
+        <MoreInfo>https://ascom-standards.org</MoreInfo>
+        <License>License.txt</License>
         <ReleaseNotes>ReleaseNotes.txt</ReleaseNotes>
         <Icon>ASCOM.ico</Icon>
         <PreviewImage>ASCOM.ico</PreviewImage>
