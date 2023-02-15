@@ -31,6 +31,7 @@ using System.Windows;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Collections.Generic;
+using System.Windows.Forms.VisualStyles;
 
 namespace ASCOM.Simulator
 {
@@ -698,8 +699,24 @@ namespace ASCOM.Simulator
                             // Update the slew target's RA (primary) axis position that will also have changed due to tracking
                             targetAxesDegrees.X += haChangeDegrees;
 
-                            // Apply any RightAscensionRate and DeclinationRate rate offsets
-                            changeDegrees += Vector.Multiply(rateRaDecOffsetInternal, timeInSecondsSinceLastUpdate);
+                            // Apply the RightAscensionRate offset
+                            // The RA rate offset (rateRaDecOffsetInternal.X) is subtracted because the primary RA axis increases its angle value in a clockwise direction
+                            // but RA decreases when moving in this direction
+                            changeDegrees.X -= rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate;
+
+                            // Apply the DeclinationRate offset
+                            // The relationship between the declination axis rotation direction and the associated declination value switches from
+                            // correlated (declination increases as mechanical angle increases) to inverted (declination decreases as mechanical angle increases) depending on the mount pointing state.
+                            // In addition, the sense of required rate corrections is inverted when in the southern hemisphere compared to the northern hemisphere
+                            if (Latitude >= 0.0) // Northern hemisphere (Yes, very hemisphereist, by assuming that 0.0 latitude is in the northern hemisphere)
+                            {
+                                changeDegrees.Y += (SideOfPier == PierSide.pierEast ? +rateRaDecOffsetInternal.Y : -rateRaDecOffsetInternal.Y) * timeInSecondsSinceLastUpdate; // Add or subtract declination rate depending on pointing state
+                            }
+                            else // Southern hemisphere
+                            {
+                                changeDegrees.Y += (SideOfPier == PierSide.pierEast ? -rateRaDecOffsetInternal.Y : +rateRaDecOffsetInternal.Y) * timeInSecondsSinceLastUpdate; // Add or subtract declination rate depending on pointing state
+                            }
+
                             TL.LogMessage("MoveAxes", $"RA internal offset rate: {rateRaDecOffsetInternal.X}, Dec internal offset rate: {rateRaDecOffsetInternal.Y}. " +
                                 $"Total change this interval: {changeDegrees.X}, {changeDegrees.Y}. Time since last update: {timeInSecondsSinceLastUpdate}"
                                 );
@@ -708,7 +725,9 @@ namespace ASCOM.Simulator
                         case AlignmentModes.algAltAz: // In Alt/Az aligned mounts the HA change moves both RA (primary) and Dec (secondary) axes so both need to be updated
 
                             // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking plus any RA / dec rate offsets
-                            changeDegrees = ConvertRateToAltAz(haChangeDegrees / timeInSecondsSinceLastUpdate + rateRaDecOffsetInternal.X, rateRaDecOffsetInternal.Y, timeInSecondsSinceLastUpdate);
+                            // The RA rate offset (rateRaDecOffsetInternal.X) is subtracted because the primary RA axis increases its angle value in a clockwise direction
+                            // but RA decreases when moving in this direction
+                            changeDegrees = ConvertRateToAltAz(haChangeDegrees / timeInSecondsSinceLastUpdate - rateRaDecOffsetInternal.X, rateRaDecOffsetInternal.Y, timeInSecondsSinceLastUpdate);
 
                             // Update the slew target's Azimuth (primary) and Altitude (secondary) axis positions that will also have changed due to tracking
                             targetAxesDegrees = MountFunctions.ConvertRaDecToAxes(targetRaDec, false);

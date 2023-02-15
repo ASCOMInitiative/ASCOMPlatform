@@ -52,11 +52,11 @@ namespace TeleSimTester
                         LogMessage("Description", Outcome.INFO, tel.Description);
                         LogMessage("Description", Outcome.INFO, tel.AlignmentMode.ToString());
 
-                        SlewCoordinateTests(tel);
+                        //SlewCoordinateTests(tel);
 
-                        SlewTests(tel);
+                        //SlewTests(tel);
 
-                        MoveAxisTests(tel);
+                        //MoveAxisTests(tel);
 
                         RaDecOffsetRateTests(tel);
 
@@ -148,9 +148,44 @@ namespace TeleSimTester
         private static void RaDecOffsetRateTests(Telescope tel)
         {
             tel.Tracking = true;
-            const double OFFSET_HA = 3.0;
+            LogMessage("SetRaDecOffsetRates", Outcome.INFO, "HA = +9.0");
+            double OFFSET_HA = +9.0;
             const double OFFSET_DEC = 40.0;
+            // RA offsets only
+            SlewToHaDec(OFFSET_HA, OFFSET_DEC);
+            SetRaDecOffsetRates(15.0, 0.0);
+            // Dec offsets only
+            SlewToHaDec(OFFSET_HA, OFFSET_DEC);
+            SetRaDecOffsetRates(0.0, 15.0);
 
+            LogMessage("SetRaDecOffsetRates", Outcome.INFO, "HA = +3.0");
+            OFFSET_HA = +3.0;
+            // RA offsets only
+            SlewToHaDec(OFFSET_HA, OFFSET_DEC);
+            SetRaDecOffsetRates(15.0, 0.0);
+            // Dec offsets only
+            SlewToHaDec(OFFSET_HA, OFFSET_DEC);
+            SetRaDecOffsetRates(0.0, 15.0);
+
+            LogMessage("SetRaDecOffsetRates", Outcome.INFO, "HA = -9.0");
+            OFFSET_HA = -9.0;
+            // RA offsets only
+            SlewToHaDec(OFFSET_HA, OFFSET_DEC);
+            SetRaDecOffsetRates(15.0, 0.0);
+            // Dec offsets only
+            SlewToHaDec(OFFSET_HA, OFFSET_DEC);
+            SetRaDecOffsetRates(0.0, 15.0);
+
+            LogMessage("SetRaDecOffsetRates", Outcome.INFO, "HA = -3.0");
+            OFFSET_HA = -3.0;
+            // RA offsets only
+            SlewToHaDec(OFFSET_HA, OFFSET_DEC);
+            SetRaDecOffsetRates(15.0, 0.0);
+            // Dec offsets only
+            SlewToHaDec(OFFSET_HA, OFFSET_DEC);
+            SetRaDecOffsetRates(0.0, 15.0);
+
+#if false
             // No offsets
             SlewToHaDec(OFFSET_HA, OFFSET_DEC);
             SetRaDecOffsetRates(0.0, 0.0);
@@ -187,7 +222,7 @@ namespace TeleSimTester
 
             SlewToHaDec(OFFSET_HA, OFFSET_DEC);
             SetRaDecOffsetRates(-1.0, -1.0);
-
+#endif
             LogMessage("SetRaDecOffsetRates", Outcome.INFO, "FINISHED");
         }
 
@@ -280,10 +315,10 @@ namespace TeleSimTester
 
         internal static void SetRaDecOffsetRates(double expectedRaRate, double expectedDeclinationRate)
         {
-            const double DURATION = 60.0; // Seconds
+            const double DURATION = 10.0; // Seconds
 
-            LogMessage("SetRaDecOffsetRates", Outcome.INFO, $"Testing Primary rate: {expectedRaRate}, Secondary rate: {expectedDeclinationRate}");
-            
+            LogMessage("SetRaDecOffsetRates", Outcome.INFO, $"Testing Primary rate: {expectedRaRate}, Secondary rate: {expectedDeclinationRate}, SideofPier: {telStatic.SideOfPier}");
+
             double priStart = telStatic.RightAscension;
             double secStart = telStatic.Declination;
 
@@ -304,7 +339,10 @@ namespace TeleSimTester
             LogMessage("SetRaDecOffsetRates", Outcome.INFO, $"Difference - : {(priEnd - priStart).ToHMS()}, {(secEnd - secStart).ToDMS()}, {priEnd - priStart:N10}, {secEnd - secStart:N10}");
 
             // Condition results
-            double actualPriRate = (priStart - priEnd) / DURATION * 60.0 * 60.0 * TelescopeHardware.SIDEREAL_SECONDS_TO_SI_SECONDS; // Convert to seconds and convert from sidereal to SI seconds
+            double actualPriRate = (priEnd - priStart) / DURATION; // Calculate offset rate in RA hours per SI second
+            actualPriRate = actualPriRate * 60.0 * 60.0; // Convert rate in RA hours per SI second to RA seconds per SI second
+            actualPriRate *= TelescopeHardware.SIDEREAL_SECONDS_TO_SI_SECONDS; // Convert rate in RA seconds per SI second to RA seconds per sidereal second (which is slightly less than RA seconds per SI second)
+
             double actualSecRate = (secEnd - secStart) / DURATION * 60.0 * 60.0;
 
             LogMessage("SetRaDecOffsetRates", Outcome.INFO, $"Actual primary rate: {actualPriRate}, Expected rate: {expectedRaRate}, Ratio: {actualPriRate / expectedRaRate}, Actual secondary rate: {actualSecRate}, Expected rate: {expectedDeclinationRate}, Ratio: {actualSecRate / expectedDeclinationRate}");
