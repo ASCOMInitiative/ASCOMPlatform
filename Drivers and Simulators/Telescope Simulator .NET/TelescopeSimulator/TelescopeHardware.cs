@@ -646,11 +646,13 @@ namespace ASCOM.Simulator
             // Start the timer that updates telescope state
             updateStateTimer.Start();
             updateHandboxTimer.Start();
+            TL.LogMessage("Start", "State and hand box timers started.");
         }
 
         //Update the Telescope Based on Timed Events
         private static void UpdateStateTimer_Tick(object sender, EventArgs e)
         {
+            TL.LogMessage("UpdateStateTimer_Tick", "Updating state...");
             lock (updateLockObject)
             {
                 MoveAxes();
@@ -670,6 +672,8 @@ namespace ASCOM.Simulator
         /// </remarks>
         private static void MoveAxes()
         {
+            TL.LogMessage("MoveAxes", "Starting state update...");
+
             // Get the time since the last update. This avoids problems with the timer interval varying and greatly improves tracking.
             double timeInSecondsSinceLastUpdate = timeSinceLastUpdate.Elapsed.TotalSeconds;
             timeSinceLastUpdate.Restart();
@@ -786,14 +790,6 @@ namespace ASCOM.Simulator
             // update the displayed values
             UpdatePositions();
 
-            // List changes this cycle
-            TL.LogMessage($"MoveAxes (Final)", $"RA: {currentRaDec.X.ToHMS()} ({currentRaDec.X}), Dec: {currentRaDec.Y.ToDMS()} ({currentRaDec.Y}), Sidereal Time: {SiderealTime.ToHMS()} ({SiderealTime})");
-            TL.LogMessage($"MoveAxes (Final)", $"Azimuth: {currentAltAzm.X.ToDMS()} ({currentAltAzm.X}), Altitude: {currentAltAzm.Y.ToDMS()} ({currentAltAzm.Y}), Through the pole: {SideOfPier}");
-            TL.LogMessage($"MoveAxes (Final)",
-              $"MountAxes.X: {mountAxesDegrees.X.ToDMS()} ({mountAxesDegrees.X}), MountAxes.Y: {mountAxesDegrees.Y.ToDMS()} ({mountAxesDegrees.Y}), " +
-              $"Change.X: {changeDegrees.X.ToDMS()} ({changeDegrees.X}), Change.Y: {changeDegrees.Y.ToDMS()} ({changeDegrees.Y}), "
-              );
-
             // check and update slew state 
             switch (SlewState)
             {
@@ -805,6 +801,14 @@ namespace ASCOM.Simulator
                     }
                     break;
             }
+
+            // List changes this cycle
+            TL.LogMessage($"MoveAxes (Final)", $"RA: {currentRaDec.X.ToHMS()} ({currentRaDec.X}), Dec: {currentRaDec.Y.ToDMS()} ({currentRaDec.Y}), Sidereal Time: {SiderealTime.ToHMS()} ({SiderealTime})");
+            TL.LogMessage($"MoveAxes (Final)", $"Azimuth: {currentAltAzm.X.ToDMS()} ({currentAltAzm.X}), Altitude: {currentAltAzm.Y.ToDMS()} ({currentAltAzm.Y}), Through the pole: {SideOfPier}");
+            TL.LogMessage($"MoveAxes (Final)",
+              $"MountAxes.X: {mountAxesDegrees.X.ToDMS()} ({mountAxesDegrees.X}), MountAxes.Y: {mountAxesDegrees.Y.ToDMS()} ({mountAxesDegrees.Y}), " +
+              $"Change.X: {changeDegrees.X.ToDMS()} ({changeDegrees.X}), Change.Y: {changeDegrees.Y.ToDMS()} ({changeDegrees.Y}), "
+              );
         }
 
         #endregion

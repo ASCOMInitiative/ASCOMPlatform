@@ -21,6 +21,7 @@ namespace ASCOM.Simulator
         {
             InitializeComponent();
             this.BringToFront();
+            TelescopeHardware.TL.LogMessage("FrmMain", "Initialiser complete");
             //this.BackColor = Color.Brown;
         }
 
@@ -216,6 +217,8 @@ namespace ASCOM.Simulator
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
+            TelescopeHardware.TL.LogMessage("FrmMain_Load", "STarting...");
+
             SetSlewButtons();
             TelescopeHardware.Start();
 
@@ -223,6 +226,7 @@ namespace ASCOM.Simulator
 			{
 				checkBoxTrack.AutoCheck = false;
 			}
+            TelescopeHardware.TL.LogMessage("FrmMain_Load", "Finished");
         }
 
         #region Thread Safe Callback Functions
