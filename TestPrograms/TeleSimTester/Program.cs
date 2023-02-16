@@ -87,13 +87,13 @@ namespace TeleSimTester
             telescope.Tracking = true;
             LogMessage($"PulseGuide", Outcome.INFO, $"Guide rate RA: {telescope.GuideRateRightAscension.ToDMS()}, Guide rate declination: {telescope.GuideRateDeclination.ToDMS()}");
 
-            SlewToHaDec(-9.0, 0.0);
+            SlewToHaDec(-9.0, telescope.SiteLatitude);
             TestPulseGuide(-9.0);
-            SlewToHaDec(+9.0, 0.0);
+            SlewToHaDec(+9.0, telescope.SiteLatitude);
             TestPulseGuide(+9.0);
-            SlewToHaDec(-3.0, 0.0);
+            SlewToHaDec(-3.0, telescope.SiteLatitude);
             TestPulseGuide(-3.0);
-            SlewToHaDec(+3.0, 0.0);
+            SlewToHaDec(+3.0, telescope.SiteLatitude);
             TestPulseGuide(+3.0);
         }
 
@@ -111,7 +111,7 @@ namespace TeleSimTester
 
         private static void TestPulseGuideDirection(GuideDirections? direction)
         {
-            const int GUIDE_DURATION = 10000; // Milli-seconds
+            const int GUIDE_DURATION = 1000; // Milli-seconds
             LogMessage($"PulseGuide {direction}", Outcome.INFO, $"Test guiding direction: {direction}");
 
             double initialRa = telescope.RightAscension;
@@ -131,37 +131,17 @@ namespace TeleSimTester
             switch (direction)
             {
                 case GuideDirections.guideNorth:
-                    if (telescope.SiteLatitude >= 0.0) // Northern hemisphere
-                    {
-                        if (decChange > 0.0) // Moved north
-                            LogMessage($"PulseGuide {direction}", Outcome.OK, $"Moved north as expected");
-                        else
-                            LogMessage($"PulseGuide {direction}", Outcome.FAILED, $"Moved south!");
-                    }
-                    else // Southern hemisphere
-                    {
-                        if (decChange < 0.0) // Moved south
-                            LogMessage($"PulseGuide {direction}", Outcome.OK, $"Moved south as expected");
-                        else
-                            LogMessage($"PulseGuide {direction}", Outcome.FAILED, $"Moved north!");
-                    }
+                    if (decChange > 0.0) // Moved north
+                        LogMessage($"PulseGuide {direction}", Outcome.OK, $"Moved north as expected");
+                    else
+                        LogMessage($"PulseGuide {direction}", Outcome.FAILED, $"Moved south!");
                     break;
 
                 case GuideDirections.guideSouth:
-                    if (telescope.SiteLatitude >= 0.0) // Northern hemisphere
-                    {
-                        if (decChange < 0.0) // Moved south
-                            LogMessage($"PulseGuide {direction}", Outcome.OK, $"Moved south as expected");
-                        else
-                            LogMessage($"PulseGuide {direction}", Outcome.FAILED, $"Moved north!");
-                    }
-                    else // Southern hemisphere
-                    {
-                        if (decChange > 0.0) // Moved south
-                            LogMessage($"PulseGuide {direction}", Outcome.OK, $"Moved south as expected");
-                        else
-                            LogMessage($"PulseGuide {direction}", Outcome.FAILED, $"Moved north!");
-                    }
+                    if (decChange < 0.0) // Moved south
+                        LogMessage($"PulseGuide {direction}", Outcome.OK, $"Moved south as expected");
+                    else
+                        LogMessage($"PulseGuide {direction}", Outcome.FAILED, $"Moved north!");
                     break;
 
                 case GuideDirections.guideEast:

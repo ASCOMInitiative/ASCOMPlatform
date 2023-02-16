@@ -1977,8 +1977,47 @@ namespace ASCOM.Simulator
                     break;
 
                 case AlignmentModes.algPolar:
+                    if (isPulseGuidingRa)
+                    {
+                        if (guideDuration.X <= 0)
+                        {
+                            isPulseGuidingRa = false;
+                        }
+                        else
+                        {
+                            // assume polar mount only
+                            guideTime = guideDuration.X > updateInterval ? updateInterval : guideDuration.X;
+                            guideDuration.X -= guideTime;
+
+                            // assumes guide rate is in deg/sec
+                            change.X = guideRate.X * guideTime;
+                        }
+                    }
+                    if (isPulseGuidingDec)
+                    {
+                        if (guideDuration.Y <= 0)
+                        {
+                            isPulseGuidingDec = false;
+                        }
+                        else
+                        {
+                            guideTime = guideDuration.Y > updateInterval ? updateInterval : guideDuration.Y;
+                            guideDuration.Y -= guideTime;
+
+                            // Calculate the change in this interval allowing for inversion of declination direction when in the southern hemisphere.
+                            if (SouthernHemisphere) // Invert the change to match the simulator mechanical axis scale
+                            {
+                                change.Y = -guideRate.Y * guideTime;
+                            }
+                            else // Northern hemisphere
+                            {
+                                change.Y = guideRate.Y * guideTime;
+                            }
+                        }
+                    }
+                    break;
+
                 case AlignmentModes.algGermanPolar:
-                    // PulseGuide implementation
                     if (isPulseGuidingRa)
                     {
                         if (guideDuration.X <= 0)
@@ -2014,6 +2053,12 @@ namespace ASCOM.Simulator
                             else // Through the pole state
                             {
                                 change.Y = -guideRate.Y * guideTime;
+                            }
+
+                            // Invert the direction of the declination change when in the southern hemisphere to match the simulator mechanical axis specification
+                            if (SouthernHemisphere)
+                            {
+                                change.Y = -change.Y;
                             }
                         }
                     }
