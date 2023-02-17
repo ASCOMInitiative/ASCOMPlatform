@@ -75,7 +75,7 @@ namespace ASCOM.Simulator
         public const double DEG_RAD = Math.PI / 180.0;
         public const double RAD_DEG = 180.0 / Math.PI;        //57.2957795;
         public const double HRS_RAD = Math.PI / 12.0;
-        public const double RAD_HRS = 12.0 / Math.PI;
+        public const double RAD_HRS = 3.819718634205; // DO NOT USE 12.0 / Math.Pi FOR THIS CONSTANT! IT CAUSES THE SIMULATOR TO LOCK UP ON WINDOWS 7 64BIT UGGGHHHH!!!!!
         public const double EARTH_ANG_ROT_DEG_MIN = 0.25068447733746215; //Angular rotation of earth in degrees/min
         public const double HOURS_TO_DEGREES = 15.0;
         public const double DEGREES_TO_HOURS = 1.0 / 15.0;
