@@ -26,6 +26,13 @@ namespace ASCOM.Simulator
 {
     public static class AstronomyFunctions
     {
+        private const double DEG_RAD = 0.01745329251994329;
+        private const double RAD_DEG = 57.29577951308232;
+        private const double HRS_RAD = 0.2617993877991494;
+        private const double RAD_HRS = 3.819718634205; // DO NOT USE 12.0 / Math.Pi FOR THIS CONSTANT! IT CAUSES THE SIMULATOR TO LOCK UP ON WINDOWS 7 64BIT UGGGHHHH!!!!!
+        private const double HOURS_TO_DEGREES = 15.0;
+        private const double SIDEREAL_SECONDS_TO_SI_SECONDS = 0.99726956631945; // Based on earth sidereal rotation period of 23 hours 56 minutes 4.09053 seconds
+
         private static Utilities.Util util = new ASCOM.Utilities.Util();
 
         //----------------------------------------------------------------------------------------
@@ -164,12 +171,12 @@ namespace ASCOM.Simulator
         /// <returns></returns>
         public static double CalculateRA(double altitude, double azimuth, double latitude)
         {
-            var alt = altitude * SharedResources.DEG_RAD;
-            var azm = azimuth * SharedResources.DEG_RAD;
-            var lat = latitude * SharedResources.DEG_RAD;
+            var alt = altitude * DEG_RAD;
+            var azm = azimuth * DEG_RAD;
+            var lat = latitude * DEG_RAD;
             double hourAngle = Math.Atan2(-Math.Sin(azm) * Math.Cos(alt),
                                           -Math.Cos(azm) * Math.Sin(lat) * Math.Cos(alt) + Math.Sin(alt) * Math.Cos(lat))
-                                          * SharedResources.RAD_HRS;
+                                          * RAD_HRS;
 
             return RangeRA(TelescopeHardware.SiderealTime - hourAngle);
         }
@@ -183,10 +190,10 @@ namespace ASCOM.Simulator
         /// <returns></returns>
         public static double CalculateDec(double altitude, double azimuth, double latitude)
         {
-            var alt = altitude * SharedResources.DEG_RAD;
-            var azm = azimuth * SharedResources.DEG_RAD;
-            var lat = latitude * SharedResources.DEG_RAD;
-            var dec = Math.Asin(Math.Cos(azm) * Math.Cos(lat) * Math.Cos(alt) + Math.Sin(lat) * Math.Sin(alt)) * SharedResources.RAD_DEG;
+            var alt = altitude * DEG_RAD;
+            var azm = azimuth * DEG_RAD;
+            var lat = latitude * DEG_RAD;
+            var dec = Math.Asin(Math.Cos(azm) * Math.Cos(lat) * Math.Cos(alt) + Math.Sin(lat) * Math.Sin(alt)) * RAD_DEG;
             return RangeDec(dec);
         }
 
@@ -255,9 +262,9 @@ namespace ASCOM.Simulator
         /// <returns></returns>
         public static double CalculateAltAzm(double rightAscension, double declination, double latitude, double longitude, out double azimuth)
         {
-            double ha = (TelescopeHardware.SiderealTime - rightAscension) * SharedResources.HRS_RAD;  // Radians
-            double dec = declination * SharedResources.DEG_RAD;
-            double lat = latitude * SharedResources.DEG_RAD;
+            double ha = (TelescopeHardware.SiderealTime - rightAscension) * HRS_RAD;  // Radians
+            double dec = declination * DEG_RAD;
+            double lat = latitude * DEG_RAD;
 
             double sh = Math.Sin(ha);
             double ch = Math.Cos(ha);
@@ -271,8 +278,8 @@ namespace ASCOM.Simulator
             double z = (ch * cd * cl) + (sd * sl);
             double r = Math.Sqrt((x * x) + (y * y));
 
-            azimuth = RangeAzimuth(Math.Atan2(y, x) * SharedResources.RAD_DEG);
-            return RangeAlt(Math.Atan2(z, r) * SharedResources.RAD_DEG);
+            azimuth = RangeAzimuth(Math.Atan2(y, x) * RAD_DEG);
+            return RangeAlt(Math.Atan2(z, r) * RAD_DEG);
         }
 
         /// <summary>
@@ -286,9 +293,9 @@ namespace ASCOM.Simulator
         {
 
             double lst = TelescopeHardware.SiderealTime;      // Hours
-            double ha = (lst - rightAscension) * SharedResources.HRS_RAD;  // Radians
-            double dec = declination * SharedResources.DEG_RAD;
-            double lat = latitude * SharedResources.DEG_RAD;
+            double ha = (lst - rightAscension) * HRS_RAD;  // Radians
+            double dec = declination * DEG_RAD;
+            double lat = latitude * DEG_RAD;
 
             double sh = Math.Sin(ha);
             double ch = Math.Cos(ha);
@@ -302,7 +309,7 @@ namespace ASCOM.Simulator
             double z = (ch * cd * cl) + (sd * sl);
             double r = Math.Sqrt((x * x) + (y * y));
 
-            return new Vector(RangeAzimuth(Math.Atan2(y, x) * SharedResources.RAD_DEG), RangeAlt(Math.Atan2(z, r) * SharedResources.RAD_DEG));
+            return new Vector(RangeAzimuth(Math.Atan2(y, x) * RAD_DEG), RangeAlt(Math.Atan2(z, r) * RAD_DEG));
         }
 
         /// <summary>
@@ -373,7 +380,7 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// Calcualte RA/Dec vector from AltAz vector - Return RA and Dec in degrees
+        /// Calculate RA/Dec vector from AltAz vector - Return RA and Dec in degrees
         /// </summary>
         /// <param name="targetAltAzm"></param>
         /// <param name="latitude"></param>
@@ -385,7 +392,7 @@ namespace ASCOM.Simulator
             double ra = AstronomyFunctions.CalculateRA(targetAltAzm.Y, targetAltAzm.X, latitude);  // Returned hour angle is in sidereal hours
 
             // Convert RA in sidereal hours to degrees
-            raDec.X = ra * SharedResources.HOURS_TO_DEGREES; // Degrees per SI second
+            raDec.X = ra * HOURS_TO_DEGREES; // Degrees per SI second
 
             raDec.Y = AstronomyFunctions.CalculateDec(targetAltAzm.Y, targetAltAzm.X, latitude);
             return raDec;
@@ -403,7 +410,7 @@ namespace ASCOM.Simulator
             Vector raDec = new Vector();
             double ra = AstronomyFunctions.CalculateRA(targetAltAzm.Y, targetAltAzm.X, latitude);
 
-            raDec.X = AstronomyFunctions.HourAngle(ra, longitude) * SharedResources.HOURS_TO_DEGREES * SharedResources.SIDEREAL_SECONDS_TO_SI_SECONDS;
+            raDec.X = AstronomyFunctions.HourAngle(ra, longitude) * HOURS_TO_DEGREES * SIDEREAL_SECONDS_TO_SI_SECONDS;
 
             raDec.Y = AstronomyFunctions.CalculateDec(targetAltAzm.Y, targetAltAzm.X, latitude);
             return raDec;

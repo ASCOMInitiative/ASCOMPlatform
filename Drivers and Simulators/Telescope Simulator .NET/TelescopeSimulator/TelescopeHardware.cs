@@ -61,16 +61,20 @@ namespace ASCOM.Simulator
         private const string STARTUP_OPTION_PARKED_POSITION = "Start up at configured Park Position";
         private const string STARTUP_OPTION_LASTUSED_POSITION = "Start up at last Shutdown Position";
         private const string STARTUP_OPTION_HOME_POSITION = "Start up at configured Home Position";
+        private const double SIDEREAL_SECONDS_TO_SI_SECONDS = 0.99726956631945; // Based on earth sidereal rotation period of 23 hours 56 minutes 4.09053 seconds
 
         // Useful mathematical constants
         private const double SIDEREAL_RATE_DEG_PER_SIDEREAL_SECOND = 360.0 / (24.0 * 60.0 * 60.0); // Degrees per sidereal second, given the earth's rotation of 360 degrees in 1 sidereal day
-        private const double SIDEREAL_RATE_DEG_PER_SI_SECOND = SIDEREAL_RATE_DEG_PER_SIDEREAL_SECOND / SharedResources.SIDEREAL_SECONDS_TO_SI_SECONDS; // Degrees per SI second
+        private const double SIDEREAL_RATE_DEG_PER_SI_SECOND = SIDEREAL_RATE_DEG_PER_SIDEREAL_SECOND / SIDEREAL_SECONDS_TO_SI_SECONDS; // Degrees per SI second
         private const double SOLAR_RATE_DEG_SEC = 15.0 / 3600.0;
         private const double LUNAR_RATE_DEG_SEC = 14.515 / 3600.0;
         private const double KING_RATE_DEG_SEC = 15.037 / 3600.0;
         private const double DEGREES_TO_ARCSECONDS = 3600.0;
         private const double ARCSECONDS_TO_DEGREES = 1.0 / 3600.0;
         private const double ARCSECONDS_PER_RA_SECOND = 15.0; // To convert "seconds of RA" (24 hours = a whole circle) to arc seconds (360 degrees = a whole circle)
+        private const double DEG_RAD = 0.01745329251994329;
+        private const double RAD_DEG = 57.29577951308232;
+        private const double HRS_RAD = 0.2617993877991494;
 
         #endregion
 
@@ -605,7 +609,7 @@ namespace ASCOM.Simulator
 
                 mountAxesDegrees = MountFunctions.ConvertAltAzmToAxes(currentAltAzm); // Convert the start position AltAz coordinates into the current axes representation and set this as the simulator start position
                 TL.LogMessage("TelescopeHardware New", string.Format("Start-up mode: {0}, Azimuth: {1}, Altitude: {2}", startupMode, currentAltAzm.X.ToString(CultureInfo.InvariantCulture), currentAltAzm.Y.ToString(CultureInfo.InvariantCulture)));
-                TL.LogMessage("TelescopeHardware New", $"Tracking rate: {SIDEREAL_RATE_DEG_PER_SI_SECOND} degrees per SI second, {SIDEREAL_RATE_DEG_PER_SI_SECOND * 3600.0} degrees per SI hour. Sidereal day:{util.HoursToHMS(SharedResources.SIDEREAL_SECONDS_TO_SI_SECONDS * 24.0, ":", ":", "", 3)} HH:MM:SS.xxx");
+                TL.LogMessage("TelescopeHardware New", $"Tracking rate: {SIDEREAL_RATE_DEG_PER_SI_SECOND} degrees per SI second, {SIDEREAL_RATE_DEG_PER_SI_SECOND * 3600.0} degrees per SI hour. Sidereal day:{util.HoursToHMS(SIDEREAL_SECONDS_TO_SI_SECONDS * 24.0, ":", ":", "", 3)} HH:MM:SS.xxx");
                 TL.LogMessage("TelescopeHardware New", "Successfully initialised hardware");
 
             }
@@ -1484,8 +1488,8 @@ namespace ASCOM.Simulator
                 // Have to multiply by the SIDEREAL_SECONDS_TO_SI_SECONDS conversion factor (0.99726956631945) because SI seconds are longer than sidereal seconds and hence the simulator movement will be less in one SI second than in one sidereal second
                 // ARCSECONDS_PER_RA_SECOND converts from seconds of RA (1 circle = 24 hours) to arc-seconds (1 circle = 360 degrees)
                 // ARCSECONDS_TO_DEGREES converts from arc-seconds to degrees
-                rateRaDecOffsetInternal.X = value * SharedResources.SIDEREAL_SECONDS_TO_SI_SECONDS * ARCSECONDS_PER_RA_SECOND * ARCSECONDS_TO_DEGREES;
-                TL.LogMessage("RightAscensionRate Set", $"Value to be set (as received): {value} seconds per sidereal second. Converted to internal rate of: {value * SharedResources.SIDEREAL_SECONDS_TO_SI_SECONDS} seconds per SI second = {rateRaDecOffsetInternal.X} degrees per SI second.");
+                rateRaDecOffsetInternal.X = value * SIDEREAL_SECONDS_TO_SI_SECONDS * ARCSECONDS_PER_RA_SECOND * ARCSECONDS_TO_DEGREES;
+                TL.LogMessage("RightAscensionRate Set", $"Value to be set (as received): {value} seconds per sidereal second. Converted to internal rate of: {value * SIDEREAL_SECONDS_TO_SI_SECONDS} seconds per SI second = {rateRaDecOffsetInternal.X} degrees per SI second.");
             }
         }
 
@@ -2203,11 +2207,11 @@ namespace ASCOM.Simulator
         {
             Vector change = new Vector();
 
-            double phi = Latitude * SharedResources.DEG_RAD; // Site latitude in radians
-            double ha = (SiderealTime - currentRaDec.X) * SharedResources.HRS_RAD; // Current hour angle in radians
-            double dec = currentRaDec.Y * SharedResources.DEG_RAD; // Current declination in radians
-            double hadot = haChange * SharedResources.DEG_RAD; // Rate of change in HA due to tracking plus any RA offset rate in radians per second
-            double decdot = decChange * SharedResources.DEG_RAD; // Rate of change in declination due to any declination rate offset in radians per second
+            double phi = Latitude * DEG_RAD; // Site latitude in radians
+            double ha = (SiderealTime - currentRaDec.X) * HRS_RAD; // Current hour angle in radians
+            double dec = currentRaDec.Y * DEG_RAD; // Current declination in radians
+            double hadot = haChange * DEG_RAD; // Rate of change in HA due to tracking plus any RA offset rate in radians per second
+            double decdot = decChange * DEG_RAD; // Rate of change in declination due to any declination rate offset in radians per second
 
 #pragma warning disable IDE0018 // Suppress In-line variable declaration
 
@@ -2224,8 +2228,8 @@ namespace ASCOM.Simulator
             double azimuthChange = ad * timeInSecondsThisInterval; // Change in azimuth this interval in radians
             double elevationChange = ed * timeInSecondsThisInterval; // Change in elevation this interval in radians
 
-            change.X = azimuthChange * SharedResources.RAD_DEG; // Convert azimuth change in radians to degrees
-            change.Y = elevationChange * SharedResources.RAD_DEG; // Convert elevation change in radians to degrees
+            change.X = azimuthChange * RAD_DEG; // Convert azimuth change in radians to degrees
+            change.Y = elevationChange * RAD_DEG; // Convert elevation change in radians to degrees
 
             return change;
         }
