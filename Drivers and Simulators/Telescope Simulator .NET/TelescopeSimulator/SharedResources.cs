@@ -248,6 +248,10 @@ namespace ASCOM.Simulator
             string wholeUnits, wholeMinutes, seconds, secondsFormatString;
             bool inputIsNegative;
 
+            // Deal with NaN and infinity values by returning string representations of these states.
+            if (double.IsNaN(Units) | double.IsInfinity(Units))
+                return Units.ToString();
+
             // Convert the input value to a positive number if required and store the sign
             if (Units < 0.0)
             {
