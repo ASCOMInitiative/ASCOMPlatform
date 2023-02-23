@@ -44,7 +44,7 @@ namespace ASCOM.LocalServer
         private static ArrayList classFactories; // Served COM object class factories
         private static string localServerAppId = "{89ce45d9-d25a-4cf7-bc06-fb8adcbf4bdd}"; // Our AppId
         private static readonly Object lockObject = new object(); // Counter lock object
-        private static TraceLogger TL; // TraceLogger for the local server (not the served driver, which has its own) - primarily to help debug local server issues
+        internal static TraceLogger TL; // TraceLogger for the local server (not the served driver, which has its own) - primarily to help debug local server issues
         private static Task GCTask; // The garbage collection task
         private static CancellationTokenSource GCTokenSource; // Token source used to end periodic garbage collection.
 
@@ -64,7 +64,7 @@ namespace ASCOM.LocalServer
             {
                 Enabled = true // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
             };
-            TL.LogMessage("Main", $"Server started");
+            TL.LogMessage("Main", $"Server started - OS is {(Environment.Is64BitOperatingSystem ? "64bit" : "32bit")}, Application is {(Environment.Is64BitProcess ? "64bit" : "32bit")}");
 
             // Load driver COM assemblies and get types, ending the program if something goes wrong.
             TL.LogMessage("Main", $"Loading drivers");
@@ -337,7 +337,7 @@ namespace ASCOM.LocalServer
 
         #endregion
 
-        #region COM Registration and Unregistration
+        #region COM Registration and Un-registration
 
         /// <summary>
         /// Register drivers contained in this local server. (Must run as Administrator.)
@@ -385,6 +385,29 @@ namespace ASCOM.LocalServer
                     exeNameKey.SetValue("AppID", localServerAppId);
                 }
                 TL.LogMessage("RegisterObjects", $"APPID set successfully");
+
+                // Add entries in the 32bit registry on a 64bit OS
+                //if (Environment.Is64BitProcess)
+                //{
+                //    // Set HKCR\APPID\appid for 32bit mode on a 64bit OS
+                //    using (RegistryKey clsRootKey = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32))
+                //    {
+                //        using (RegistryKey appIdKey = clsRootKey.CreateSubKey($"APPID\\{localServerAppId}"))
+                //        {
+                //            appIdKey.SetValue(null, assemblyDescription);
+                //            appIdKey.SetValue("AppID", localServerAppId);
+                //            appIdKey.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
+                //            appIdKey.SetValue("RunAs", "Interactive User", RegistryValueKind.String); // Added to ensure that only one copy of the local server runs if the user uses both elevated and non-elevated clients concurrently
+                //        }
+
+                //        // Set HKCR\APPID\exename.ext for 32bit mode on a 64bit OS
+                //        using (RegistryKey exeNameKey = clsRootKey.CreateSubKey($"APPID\\{Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)}"))
+                //        {
+                //            exeNameKey.SetValue("AppID", localServerAppId);
+                //        }
+                //        TL.LogMessage("RegisterObjects", $"32bit APPID set successfully");
+                //    }
+                //}
             }
             catch (Exception ex)
             {
@@ -404,7 +427,7 @@ namespace ASCOM.LocalServer
                     string clsId = Marshal.GenerateGuidForType(driverType).ToString("B");
                     string progId = Marshal.GenerateProgIdForType(driverType);
                     string deviceType = driverType.Name; // Generate device type from the Class name
-                    TL.LogMessage("RegisterObjects", $"Assembly title: {assemblyTitle}, ASsembly description: {assemblyDescription}, CLSID: {clsId}, ProgID: {progId}, Device type: {deviceType}");
+                    TL.LogMessage("RegisterObjects", $"Assembly title: {assemblyTitle}, Assembly description: {assemblyDescription}, CLSID: {clsId}, ProgID: {progId}, Device type: {deviceType}");
 
                     using (RegistryKey clsIdKey = Registry.ClassesRoot.CreateSubKey($"CLSID\\{clsId}"))
                     {
@@ -423,6 +446,7 @@ namespace ASCOM.LocalServer
 
                         using (RegistryKey localServer32Key = clsIdKey.CreateSubKey("LocalServer32"))
                         {
+                            TL.LogMessage("RegisterObjects", $"Driver executable path: {Application.ExecutablePath}");
                             localServer32Key.SetValue(null, Application.ExecutablePath);
                         }
                     }
@@ -436,7 +460,50 @@ namespace ASCOM.LocalServer
                             clsIdKey.SetValue(null, clsId);
                         }
                     }
+                    TL.LogMessage("RegisterObjects", $"Added driver registry entries");
 
+                    // Add entries in the 32bit registry on a 64bit OS
+                    //if (Environment.Is64BitProcess)
+                    //{
+                    //    using (RegistryKey clsRootKey = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32))
+                    //    {
+                    //        using (RegistryKey clsIdKey = clsRootKey.CreateSubKey($"CLSID\\{clsId}"))
+                    //        {
+                    //            clsIdKey.SetValue(null, progId);
+                    //            clsIdKey.SetValue("AppId", localServerAppId);
+                    //            using (RegistryKey implementedCategoriesKey = clsIdKey.CreateSubKey("Implemented Categories"))
+                    //            {
+                    //                implementedCategoriesKey.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}");
+                    //            }
+
+                    //            using (RegistryKey progIdKey = clsIdKey.CreateSubKey("ProgId"))
+                    //            {
+                    //                progIdKey.SetValue(null, progId);
+                    //            }
+                    //            clsIdKey.CreateSubKey("Programmable");
+
+                    //            using (RegistryKey localServer32Key = clsIdKey.CreateSubKey("LocalServer32"))
+                    //            {
+                    //                TL.LogMessage("RegisterObjects", $"Driver 32bit executable path: {Application.ExecutablePath}, Assembly location: {Assembly.GetExecutingAssembly().Location}");
+                    //                localServer32Key.SetValue(null, Application.ExecutablePath);
+                    //            }
+                    //        }
+
+                    //        // HKCR\CLSID\progid
+                    //        using (RegistryKey progIdKey = clsRootKey.CreateSubKey(progId))
+                    //        {
+                    //            progIdKey.SetValue(null, assemblyTitle);
+                    //            using (RegistryKey clsIdKey = progIdKey.CreateSubKey("CLSID"))
+                    //            {
+                    //                clsIdKey.SetValue(null, clsId);
+                    //            }
+                    //        }
+                    //    }
+                    //    TL.LogMessage("RegisterObjects", $"Added driver 32bit registry entries");
+
+                    //}
+
+                    // Add the ASCOM Profile entries
                     // Pull the display name from the ServedClassName attribute.
                     assemblyTitleAttribute = Attribute.GetCustomAttribute(driverType, typeof(ServedClassNameAttribute));
                     string chooserName = ((ServedClassNameAttribute)assemblyTitleAttribute).DisplayName ?? "MultiServer";
@@ -498,22 +565,41 @@ namespace ASCOM.LocalServer
                 Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}\\Programmable", false);
                 Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}", false);
 
-                // Uncomment the following lines to remove ASCOM Profile information when unregistering.
-                // Unregistering often occurs during version upgrades and, if the code below is enabled, will result in loss of all device configuration during the upgrade.
-                // For this reason, enabling this capability is not recommended.
+                // Remove entries in the 32bit registry on a 64bit OS
+                if (Environment.Is64BitProcess)
+                {
+                    using (RegistryKey clsRootKey = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32))
+                    {
+                        // Remove ProgID entries
+                        clsRootKey.DeleteSubKey($"{progId}\\CLSID", false);
+                        clsRootKey.DeleteSubKey(progId, false);
 
-                //try
-                //{
-                //    TL.LogMessage("UnregisterObjects", $"Deleting ASCOM Profile registration for {driverType.Name} ({progId})");
-                //    using (var profile = new Profile())
-                //    {
-                //        profile.DeviceType = driverType.Name;
-                //        profile.Unregister(progId);
-                //    }
-                //}
-                //catch (Exception) { }
-            }
-        }
+                        // Remove CLSID entries
+                        clsRootKey.DeleteSubKey($"CLSID\\{clsId}\\Implemented Categories\\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}", false);
+                        clsRootKey.DeleteSubKey($"CLSID\\{clsId}\\Implemented Categories", false);
+                        clsRootKey.DeleteSubKey($"CLSID\\{clsId}\\ProgId", false);
+                        clsRootKey.DeleteSubKey($"CLSID\\{clsId}\\LocalServer32", false);
+                        clsRootKey.DeleteSubKey($"CLSID\\{clsId}\\Programmable", false);
+                        clsRootKey.DeleteSubKey($"CLSID\\{clsId}", false);
+                    }
+                }
+
+                        // Uncomment the following lines to remove ASCOM Profile information when unregistering.
+                        // Unregistering often occurs during version upgrades and, if the code below is enabled, will result in loss of all device configuration during the upgrade.
+                        // For this reason, enabling this capability is not recommended.
+
+                        //try
+                        //{
+                        //    TL.LogMessage("UnregisterObjects", $"Deleting ASCOM Profile registration for {driverType.Name} ({progId})");
+                        //    using (var profile = new Profile())
+                        //    {
+                        //        profile.DeviceType = driverType.Name;
+                        //        profile.Unregister(progId);
+                        //    }
+                        //}
+                        //catch (Exception) { }
+                    }
+                }
 
         /// <summary>
         /// Test whether the session is running with elevated credentials

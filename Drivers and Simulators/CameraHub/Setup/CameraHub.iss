@@ -8,7 +8,7 @@
 #define MyAppUpdatesURL "https://github.com/ASCOMInitiative"
 #define MyAppExeName "ASCOM.CameraHub.exe"
 #define MyAppAuthor "Peter Simpson"
-#define MyAppCopyright "Copyright © 2022 " + MyAppAuthor
+#define MyAppCopyright "Copyright © 2023 " + MyAppAuthor
 #define MyAppVersion GetVersionNumbersString("..\bin\Release\ASCOM.CameraHub.exe")  ; Create version number variable
 
 [Setup]
@@ -97,6 +97,10 @@ Source: "J:\ASCOMPlatform\Drivers and Simulators\CameraHub\bin\Release\ASCOM.Cam
 [Run]
 ; 64bit OS  
 Filename: "{app}\{#MyAppExeName}"; Parameters: "/regserver"
+
+[UninstallRun]
+; 64bit OS  
+Filename: "{app}\{#MyAppExeName}"; Parameters: "/unregserver"
 
 [UninstallDelete]
 Name: {app}; Type: dirifempty

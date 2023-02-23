@@ -8,37 +8,29 @@
 // Author:		(XXX) Your N. Here <your@email.here>
 //
 
-using ASCOM;
-using ASCOM.Astrometry;
-using ASCOM.Astrometry.AstroUtils;
-using ASCOM.Astrometry.NOVAS;
 using ASCOM.DeviceInterface;
 using ASCOM.LocalServer;
 using ASCOM.Utilities;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ASCOM.CameraHub.Camera
 {
     //
-    // This code is mostly a presentation layer for the functionality in the CameraHardware class. You should not need to change the contents of this file very much, if at all.
-    // Most customisation will be in the CameraHardware class, which is shared by all instances of the driver, and which must handle all aspects of communicating with your device.
+    // This code is mostly a presentation layer for the functionality in the CameraHub class.
+    // One instance of this driver class is created for every connection to the camera hub.
+    // There is exactly one common instance of the CamerHub class that is shared by all driver instances
     //
-    // Your driver's DeviceID is ASCOM.CameraHub.Camera
+    // The hub's DeviceID is ASCOM.CameraHub.Camera
     //
     // The COM Guid attribute sets the CLSID for ASCOM.CameraHub.Camera
     // The COM ClassInterface/None attribute prevents an empty interface called _CameraHub from being created and used as the [default] interface
     //
 
     /// <summary>
-    /// ASCOM Camera Driver for CameraHub.
+    /// ASCOM Driver for the Camera Hub.
     /// </summary>
     [ComVisible(true)]
     [Guid("c60093ec-65a2-4604-91df-998e208d6b14")]

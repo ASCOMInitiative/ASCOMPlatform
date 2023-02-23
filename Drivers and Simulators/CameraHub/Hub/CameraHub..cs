@@ -1,39 +1,16 @@
-﻿// TODO fill in this information for your driver, then remove this line!
-//
-// ASCOM Camera hardware class for CameraHub
-//
-// Description:	 <To be completed by driver developer>
-//
-// Implements:	ASCOM Camera interface version: <To be completed by driver developer>
-// Author:		(XXX) Your N. Here <your@email.here>
-//
-
-using ASCOM;
-using ASCOM.Astrometry;
-using ASCOM.Astrometry.AstroUtils;
-using ASCOM.Astrometry.NOVAS;
-using ASCOM.DeviceInterface;
-using ASCOM.LocalServer;
+﻿using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ASCOM.CameraHub.Camera
 {
-    //
-    // TODO Replace the not implemented exceptions with code to implement the function or throw the appropriate ASCOM exception.
-    //
-
     /// <summary>
-    /// ASCOM Camera hardware class for CameraHub.
+    /// ASCOM Camera Hub main functional class shared by all instances of the driver class.
     /// </summary>
-    [HardwareClass()] // Class attribute flag this as a device hardware class that needs to be disposed by the local server when it exits.
+    [HardwareClass()] // Attribute to flag this as a device hardware class that needs to be disposed by the local server when it exits.
     internal static class CameraHub
     {
         // Constants used for Profile persistence
@@ -41,18 +18,13 @@ namespace ASCOM.CameraHub.Camera
         internal const string CAMERA_PROGID = "Camera ProgID"; internal const string CAMERA_PROGID_DEFAULT = "ASCOM.Simulator.Camera";
         internal static string cameraProgId;
 
-#if DEBUG
-        private static DriverAccess.Camera camera; // Camera device being hosted
-#else
         private static dynamic camera; // Camera device being hosted
-#endif
 
         private static readonly string hubProgId = ""; // ASCOM DeviceID (COM ProgID) for this driver, the value is set by the driver's class initialiser.
         private static string hubDescription = ""; // The value is set by the driver's class initialiser.
         private static bool connectedState; // Local server's connected state
         private static bool runOnce = false; // Flag to enable "one-off" activities only to run once.
         internal static Util utilities; // ASCOM Utilities object for use as required
-        internal static AstroUtils astroUtilities; // ASCOM AstroUtilities object for use as required
         internal static TraceLogger TL; // Local server's trace logger object for diagnostic log with information that you specify
 
         /// <summary>
@@ -102,7 +74,6 @@ namespace ASCOM.CameraHub.Camera
 
                 connectedState = false; // Initialise connected to false
                 utilities = new Util(); //Initialise ASCOM Utilities object
-                astroUtilities = new AstroUtils(); // Initialise ASCOM Astronomy Utilities object
 
                 LogMessage("InitialiseHub", "Completed basic initialisation");
 
@@ -143,13 +114,8 @@ namespace ASCOM.CameraHub.Camera
                 // Create an instance of the camera
                 try
                 {
-#if DEBUG
-                        camera = new DriverAccess.Camera(cameraProgId);
-                        LogMessage("InitialiseHub", $"Created DriverAccess object for ProgID: {cameraProgId} OK.");
-#else
                     camera = Activator.CreateInstance(cameraType);
                     LogMessage("InitialiseHub", $"Created COM object for ProgID: {cameraProgId} OK.");
-#endif
                 }
                 catch (Exception ex1)
                 {
@@ -289,14 +255,8 @@ namespace ASCOM.CameraHub.Camera
 
             if (!(camera is null))
             {
-#if DEBUG
-                try { camera.Dispose(); } catch (Exception) { }
-                try { LogMessage("CameraHub.Dispose", $"Disposed of DriverAccess object."); } catch { }
-                try { camera = null; } catch (Exception) { }
-#else
                 try { Marshal.ReleaseComObject(camera); } catch (Exception) { }
                 try { LogMessage("CameraHub.Dispose", $"Released camera COM object."); } catch { }
-#endif
                 try { camera = null; } catch (Exception) { }
             }
 
@@ -316,12 +276,6 @@ namespace ASCOM.CameraHub.Camera
             }
             catch { }
 
-            try
-            {
-                astroUtilities.Dispose();
-                astroUtilities = null;
-            }
-            catch { }
         }
 
         /// <summary>
