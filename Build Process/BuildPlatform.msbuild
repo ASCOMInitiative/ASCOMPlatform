@@ -18,7 +18,7 @@
 				<!--  Specify Release or Debug builds (Debug not working at 25/10/21) -->
 				<Configuration>Release</Configuration>
 
-				<!-- Annotation to add to the installer name to identiy this build type -->
+				<!-- Annotation to add to the installer name to identify this build type -->
 				<BuildTypeAnnotation></BuildTypeAnnotation>
 			</PropertyGroup>
 		</When>
@@ -30,7 +30,7 @@
 				<!--  Specify Release or Debug builds (Debug not working at 25/10/21) -->
 				<Configuration>Release</Configuration>
 
-				<!-- Annotation to add to the installer name to identiy this build type -->
+				<!-- Annotation to add to the installer name to identify this build type -->
 				<BuildTypeAnnotation>beta</BuildTypeAnnotation>
 			</PropertyGroup>
 		</When>
@@ -199,10 +199,16 @@
 		  Namespaces="$(Namespace)"/>
 		  <Message Text="VSIX Manifest file: $(CheckoutDirectory)\$(VSIXManifestFile2022) version number updated to: $(PlatformMajor).$(PlatformMinor).$(PlatformServicePack).$(Revision)"/>
 
-		<!-- Update the master package version number to the current Platform level. -->
-		<XmlPoke
+		<!-- Update the master package version number to the current Platform level if this is a release. -->
+		<XmlPoke Condition=" '$(BuildType)'=='Release' "
 		  XmlInputPath="$(CheckoutDirectory)\$(PackageVersionFile)"
-		  Value="$(PlatformMajor).$(PlatformMinor).$(PlatformServicePack)"
+		  Value="$(PlatformMajor).$(PlatformMinor).$(PlatformServicePack)$(PackageSuffix)"
+		  Query="//Version" />
+
+		<!-- Update the master package version number to the current Platform and revision if this is a release. -->
+		<XmlPoke Condition=" '$(BuildType)'=='ReleaseCandidate' "
+		  XmlInputPath="$(CheckoutDirectory)\$(PackageVersionFile)"
+		  Value="$(PlatformMajor).$(PlatformMinor).$(PlatformServicePack)$(PackageSuffix)-rc.$(Revision)"
 		  Query="//Version" />
 
 		<Message Text="Package version file: $(CheckoutDirectory)\$(PackageVersionFile) version number updated to: $(PlatformMajor).$(PlatformMinor).$(PlatformServicePack)"/>
