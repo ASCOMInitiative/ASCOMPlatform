@@ -2,6 +2,7 @@
 using ASCOM.Utilities;
 using System;
 using System.Collections;
+using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -98,24 +99,34 @@ namespace ASCOM.CameraHub.Camera
 
                 try { camera.Dispose(); } catch { }
 
-                try { Marshal.ReleaseComObject(camera); } catch { }
+                try
+                {
+                    int remainingCount;
+
+                    do
+                    {
+                        remainingCount = Marshal.ReleaseComObject(camera);
+                        LogMessage("CreateCameraInstance", $"Released COM object wrapper, remaining count: {remainingCount}.");
+                    } while (remainingCount > 0);
+                }
+                catch { }
 
                 camera = null;
 
                 // ALlow some time to dispose of the driver
-                System.Threading.Thread.Sleep(1000); 
+                System.Threading.Thread.Sleep(1000);
             }
             try
             {
                 // Get the Type of this ProgID
                 Type cameraType = Type.GetTypeFromProgID(cameraProgId);
-                LogMessage("InitialiseHub", $"Created Type for ProgID: {cameraProgId} OK.");
+                LogMessage("CreateCameraInstance", $"Created Type for ProgID: {cameraProgId} OK.");
 
                 // Create an instance of the camera
                 try
                 {
                     camera = Activator.CreateInstance(cameraType);
-                    LogMessage("InitialiseHub", $"Created COM object for ProgID: {cameraProgId} OK.");
+                    LogMessage("CreateCameraInstance", $"Created COM object for ProgID: {cameraProgId} OK.");
                 }
                 catch (Exception ex1)
                 {
@@ -463,7 +474,7 @@ namespace ASCOM.CameraHub.Camera
         {
             get
             {
-                return camera.CameraState;
+                return (CameraStates)camera.CameraState;
             }
         }
 
@@ -779,6 +790,9 @@ namespace ASCOM.CameraHub.Camera
         {
             get
             {
+                // Maximise available memory
+                ReleaseArrayMemory();
+
                 return camera.ImageArray;
             }
         }
@@ -791,6 +805,9 @@ namespace ASCOM.CameraHub.Camera
         {
             get
             {
+                // Maximise available memory
+                ReleaseArrayMemory();
+
                 return camera.ImageArrayVariant;
             }
         }
@@ -1065,7 +1082,7 @@ namespace ASCOM.CameraHub.Camera
         {
             get
             {
-                return camera.SensorType;
+                return (SensorType)camera.SensorType;
             }
         }
 
@@ -1152,6 +1169,16 @@ namespace ASCOM.CameraHub.Camera
 
         #region Private properties and methods
         // Useful methods that can be used as required to help with driver development
+
+        /// <summary>
+        /// Release memory allocated to the large arrays on the large object heap.
+        /// </summary>
+        private static void ReleaseArrayMemory()
+        {
+            // Clear out any previous memory allocations
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+            GC.Collect(2, GCCollectionMode.Forced, true, true);
+        }
 
         /// <summary>
         /// Returns true if there is a valid connection to the driver hardware

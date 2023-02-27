@@ -77,29 +77,23 @@ Name: "turkish"; MessagesFile: "compiler:Languages\Turkish.isl"
 Name: "ukrainian"; MessagesFile: "compiler:Languages\Ukrainian.isl"
 
 [Tasks]
-; Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
 ; 64bit OS - Install the 64bit app
 Source: "J:\ASCOMPlatform\Drivers and Simulators\CameraHub\bin\Release\ASCOM.CameraHub.exe"; DestDir: "{app}"; Flags: ignoreversion signonce
-Source: "J:\ASCOMPlatform\Drivers and Simulators\CameraHub\bin\Release\ASCOM.CameraHub.pdb"; DestDir: "{app}"; Flags: ignoreversion signonce
-Source: "J:\ASCOMPlatform\Drivers and Simulators\CameraHub\bin\Release\ASCOM.CameraHub.exe.config"; DestDir: "{app}"; Flags: ignoreversion signonce
+Source: "J:\ASCOMPlatform\Drivers and Simulators\CameraHub\bin\Release\ASCOM.CameraHub.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "J:\ASCOMPlatform\Drivers and Simulators\CameraHub\bin\Release\ASCOM.CameraHub.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "J:\ASCOMPlatform\Drivers and Simulators\CameraHub\ASCOM.ico"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-; 64bit OS
-;Name: "{autoprograms}\ASCOM Conform Universal"; Filename: "{app}\64bit\{#MyAppExeName}"; IconFilename: "{app}\64bit\ASCOM.ico"; Check: Is64BitInstallMode
-;Name: "{autodesktop}\Conform Universal"; Filename: "{app}\64bit\{#MyAppExeName}"; Tasks: desktopicon; IconFilename: "{app}\64bit\ASCOM.ico"; Check: Is64BitInstallMode
+; Name: "{autoprograms}\ASCOM Camera Hub"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\ASCOM.ico"
+; Name: "{autodesktop}\Camera Hub"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; IconFilename: "{app}\ASCOM.ico"
 
-;32bit OS
-;Name: "{autoprograms}\ASCOM Conform Universal"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\ASCOM.ico"; Check: not Is64BitInstallMode
-;Name: "{autodesktop}\Conform Universal"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; IconFilename: "{app}\ASCOM.ico"; Check: not Is64BitInstallMode
-
-[Run]
-; 64bit OS  
+[Run] 
 Filename: "{app}\{#MyAppExeName}"; Parameters: "/regserver"
 
 [UninstallRun]
-; 64bit OS  
 Filename: "{app}\{#MyAppExeName}"; Parameters: "/unregserver"
 
 [UninstallDelete]
