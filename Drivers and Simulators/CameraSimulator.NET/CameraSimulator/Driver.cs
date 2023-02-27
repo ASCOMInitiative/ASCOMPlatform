@@ -48,6 +48,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Runtime;
 
 namespace ASCOM.Simulator
 {
@@ -1336,6 +1337,10 @@ namespace ASCOM.Simulator
                     Log.LogMessage("ImageArrayVariant", "No Image Available");
                     throw new ASCOM.InvalidOperationException("There is no image available");
                 }
+
+                // Clear out any previous memory allocations
+                ReleaseArrayMemory();
+
                 // convert to variant
                 if (sensorType == SensorType.Color)
                 {
@@ -1804,6 +1809,9 @@ namespace ASCOM.Simulator
                                                     numY.ToString(CultureInfo.InvariantCulture),
                                                     string.Format(CultureInfo.InvariantCulture, "1 to {0}", cameraYSize / binY));
             }
+
+            // Clear out any previous memory allocations
+            ReleaseArrayMemory();
 
             // set up the things to do at the start of the exposure
             imageReady = false;
@@ -2499,6 +2507,20 @@ namespace ASCOM.Simulator
         #endregion
 
         #region Private
+
+        /// <summary>
+        /// Release memory allocated to the large arrays on the large object heap.
+        /// </summary>
+        private void ReleaseArrayMemory()
+        {
+            // Clear out any previous memory allocations
+            //imageArray= null;
+            //imageArrayColour= null;
+            imageArrayVariant = null;
+            imageArrayVariantColour = null;
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+            GC.Collect(2, GCCollectionMode.Forced, true, true);
+        }
 
         private void ReadFromProfile()
         {
