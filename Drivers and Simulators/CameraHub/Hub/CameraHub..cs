@@ -19,8 +19,11 @@ namespace ASCOM.CameraHub.Camera
         internal const string CAMERA_PROGID = "Camera ProgID"; internal const string CAMERA_PROGID_DEFAULT = "ASCOM.Simulator.Camera";
         internal static string cameraProgId;
 
+#if DEBUG
+        private static DriverAccess.Camera camera; // Camera device being hosted
+#else
         private static dynamic camera; // Camera device being hosted
-
+#endif
         private static readonly string hubProgId = ""; // ASCOM DeviceID (COM ProgID) for this driver, the value is set by the driver's class initialiser.
         private static string hubDescription = ""; // The value is set by the driver's class initialiser.
         private static bool connectedState; // Local server's connected state
@@ -118,14 +121,19 @@ namespace ASCOM.CameraHub.Camera
             }
             try
             {
-                // Get the Type of this ProgID
-                Type cameraType = Type.GetTypeFromProgID(cameraProgId);
-                LogMessage("CreateCameraInstance", $"Created Type for ProgID: {cameraProgId} OK.");
 
                 // Create an instance of the camera
                 try
                 {
+#if DEBUG
+                    LogMessage("CreateCameraInstance", $"Creating DriverAccess Camera device.");
+                    camera = new DriverAccess.Camera(cameraProgId);
+#else
+                    // Get the Type of this ProgID
+                    Type cameraType = Type.GetTypeFromProgID(cameraProgId);
+                    LogMessage("CreateCameraInstance", $"Created Type for ProgID: {cameraProgId} OK.");
                     camera = Activator.CreateInstance(cameraType);
+#endif
                     LogMessage("CreateCameraInstance", $"Created COM object for ProgID: {cameraProgId} OK.");
                 }
                 catch (Exception ex1)
@@ -141,7 +149,7 @@ namespace ASCOM.CameraHub.Camera
 
         // PUBLIC COM INTERFACE ICameraV3 IMPLEMENTATION
 
-        #region Common properties and methods.
+#region Common properties and methods.
 
         /// <summary>
         /// Displays the Setup Dialogue form.
@@ -266,9 +274,15 @@ namespace ASCOM.CameraHub.Camera
 
             if (!(camera is null))
             {
+#if DEBUG
+                try { camera.Dispose(); } catch (Exception) { }
+                try { LogMessage("CameraHub.Dispose", $"Disposed DriverAccess camera object."); } catch { }
+                try { camera = null; } catch (Exception) { }
+#else
                 try { Marshal.ReleaseComObject(camera); } catch (Exception) { }
                 try { LogMessage("CameraHub.Dispose", $"Released camera COM object."); } catch { }
                 try { camera = null; } catch (Exception) { }
+#endif
             }
 
             try
@@ -386,9 +400,9 @@ namespace ASCOM.CameraHub.Camera
             }
         }
 
-        #endregion
+#endregion
 
-        #region ICamera Implementation
+#region ICamera Implementation
 
         /// <summary>
         /// Aborts the current exposure, if any, and returns the camera to Idle state.
@@ -1165,9 +1179,9 @@ namespace ASCOM.CameraHub.Camera
             }
         }
 
-        #endregion
+#endregion
 
-        #region Private properties and methods
+#region Private properties and methods
         // Useful methods that can be used as required to help with driver development
 
         /// <summary>
@@ -1251,7 +1265,7 @@ namespace ASCOM.CameraHub.Camera
             var msg = string.Format(message, args);
             LogMessage(identifier, msg);
         }
-        #endregion
+#endregion
     }
 }
 
