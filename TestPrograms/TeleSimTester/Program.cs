@@ -40,7 +40,8 @@ namespace TeleSimTester
             {
                 util = new Util();
                 astroUtils = new AstroUtils();
-                using (Telescope telescopeSimulator = new Telescope("ASCOM.Simulator.Telescope"))
+                using (Telescope telescopeSimulator = new Telescope("ScopeSim.Telescope"))
+                //using (Telescope telescopeSimulator = new Telescope("ASCOM.Simulator.Telescope"))
                 // using (Telescope telescopeSimulator = new Telescope("ASCOM.AlpacaDynamic2.Telescope"))
                 {
                     try
@@ -48,8 +49,18 @@ namespace TeleSimTester
                         telescope = telescopeSimulator;
 
                         telescopeSimulator.Connected = true;
-                        LogMessage("Description", Outcome.INFO, telescopeSimulator.Description);
-                        LogMessage("Description", Outcome.INFO, $"Site latitude: {telescopeSimulator.SiteLatitude}. Alignment mode: {telescopeSimulator.AlignmentMode}, Pointing state: {telescope.SideOfPier}");
+                        LogMessage("Description", Outcome.INFO, $"Running on Platform: {util.MajorVersion}.{util.MinorVersion} SP: {util.ServicePack} Build: {util.BuildNumber}");
+                        LogMessage("Description", Outcome.INFO, $"{telescopeSimulator.Description}");
+                        LogMessage("Interface version", Outcome.INFO, $"{telescopeSimulator.InterfaceVersion}");
+                        if (telescopeSimulator.InterfaceVersion == 2)
+                        {
+                            LogMessage("Description", Outcome.INFO, $"Site latitude: {telescopeSimulator.SiteLatitude}. Alignment mode: {telescopeSimulator.AlignmentMode}, Pointing state: {PierSide.pierUnknown}");
+                        }
+                        else
+                        {
+                            LogMessage("Description", Outcome.INFO, $"Site latitude: {telescopeSimulator.SiteLatitude}. Alignment mode: {telescopeSimulator.AlignmentMode}, Pointing state: {telescope.SideOfPier}");
+
+                        }
 
                         //SlewCoordinateTests();
 
@@ -57,9 +68,9 @@ namespace TeleSimTester
 
                         //MoveAxisTests();
 
-                        //RaDecOffsetRateTests();
+                        RaDecOffsetRateTests();
 
-                        PulseGuideTests();
+                        //PulseGuideTests();
 
                         LogMessage("All tests", Outcome.INFO, "COMPLETED");
                         Console.ReadLine();
@@ -236,42 +247,39 @@ namespace TeleSimTester
         private static void RaDecOffsetRateTests()
         {
             telescope.Tracking = true;
-            LogMessage("SetRaDecOffsetRates", Outcome.INFO, "HA = +9.0");
-            double OFFSET_HA = +9.0;
-            const double OFFSET_DEC = 40.0;
-            // RA offsets only
-            SlewToHaDec(OFFSET_HA, OFFSET_DEC);
-            SetRaDecOffsetRates(15.0, 0.0);
-            // Dec offsets only
-            SlewToHaDec(OFFSET_HA, OFFSET_DEC);
-            SetRaDecOffsetRates(0.0, 15.0);
+            double testDeclination = telescope.SiteLatitude >= 0.0 ? +40.0 : -40.0;
 
-            LogMessage("SetRaDecOffsetRates", Outcome.INFO, "HA = +3.0");
-            OFFSET_HA = +3.0;
             // RA offsets only
-            SlewToHaDec(OFFSET_HA, OFFSET_DEC);
-            SetRaDecOffsetRates(15.0, 0.0);
+            double testHa = +9.0;
+            SlewToHaDec(testHa, testDeclination);
+            SetRaDecOffsetRates("HA = +9.0", 15.0, 0.0);
             // Dec offsets only
-            SlewToHaDec(OFFSET_HA, OFFSET_DEC);
-            SetRaDecOffsetRates(0.0, 15.0);
+            SlewToHaDec(testHa, testDeclination);
+            SetRaDecOffsetRates("HA = +9.0", 0.0, 15.0);
 
-            LogMessage("SetRaDecOffsetRates", Outcome.INFO, "HA = -9.0");
-            OFFSET_HA = -9.0;
+            testHa = +3.0;
             // RA offsets only
-            SlewToHaDec(OFFSET_HA, OFFSET_DEC);
-            SetRaDecOffsetRates(15.0, 0.0);
+            SlewToHaDec(testHa, testDeclination);
+            SetRaDecOffsetRates("HA = +3.0", 15.0, 0.0);
             // Dec offsets only
-            SlewToHaDec(OFFSET_HA, OFFSET_DEC);
-            SetRaDecOffsetRates(0.0, 15.0);
+            SlewToHaDec(testHa, testDeclination);
+            SetRaDecOffsetRates("HA = +3.0", 0.0, 15.0);
 
-            LogMessage("SetRaDecOffsetRates", Outcome.INFO, "HA = -3.0");
-            OFFSET_HA = -3.0;
+            testHa = -9.0;
             // RA offsets only
-            SlewToHaDec(OFFSET_HA, OFFSET_DEC);
-            SetRaDecOffsetRates(15.0, 0.0);
+            SlewToHaDec(testHa, testDeclination);
+            SetRaDecOffsetRates("HA = -9.0", 15.0, 0.0);
             // Dec offsets only
-            SlewToHaDec(OFFSET_HA, OFFSET_DEC);
-            SetRaDecOffsetRates(0.0, 15.0);
+            SlewToHaDec(testHa, testDeclination);
+            SetRaDecOffsetRates("HA = -9.0", 0.0, 15.0);
+
+            testHa = -3.0;
+            // RA offsets only
+            SlewToHaDec(testHa, testDeclination);
+            SetRaDecOffsetRates("HA = -3.0", 15.0, 0.0);
+            // Dec offsets only
+            SlewToHaDec(testHa, testDeclination);
+            SetRaDecOffsetRates("HA = -3.0", 0.0, 15.0);
 
 #if false
             // No offsets
@@ -401,11 +409,19 @@ namespace TeleSimTester
 
         #region Slew support and logging
 
-        internal static void SetRaDecOffsetRates(double expectedRaRate, double expectedDeclinationRate)
+        internal static void SetRaDecOffsetRates(string test, double expectedRaRate, double expectedDeclinationRate)
         {
             const double DURATION = 10.0; // Seconds
 
-            LogMessage("SetRaDecOffsetRates", Outcome.INFO, $"Testing Primary rate: {expectedRaRate}, Secondary rate: {expectedDeclinationRate}, SideofPier: {telescope.SideOfPier}");
+            LogMessage("SetRaDecOffsetRates", Outcome.INFO, $"{test}");
+            if (telescope.InterfaceVersion <= 2)
+            {
+                LogMessage("SetRaDecOffsetRates", Outcome.INFO, $"Testing Primary rate: {expectedRaRate}, Secondary rate: {expectedDeclinationRate}, SideofPier: {PierSide.pierUnknown}");
+            }
+            else
+            {
+                LogMessage("SetRaDecOffsetRates", Outcome.INFO, $"Testing Primary rate: {expectedRaRate}, Secondary rate: {expectedDeclinationRate}, SideofPier: {telescope.SideOfPier}");
+            }
 
             double priStart = telescope.RightAscension;
             double secStart = telescope.Declination;
@@ -545,13 +561,19 @@ namespace TeleSimTester
         {
             double ra = astroUtils.ConditionRA(telescope.SiderealTime - ha);
 
-            LogMessage("SlewToHaDec", Outcome.INFO, $"Slewing to RA: {ra.ToHMS()}, Dec: {declination.ToDMS()}");
+            LogMessage("SlewToHaDec", Outcome.INFO, $"Slewing to HA: {ha.ToHMS()} (RA: {ra.ToHMS()}), Dec: {declination.ToDMS()}");
             telescope.SlewToCoordinatesAsync(ra, declination);
             WaitForSlew();
-            LogMessage("SlewToHaDec", Outcome.INFO, $"Slewed to RA:  {telescope.RightAscension.ToHMS()}, Dec: {telescope.Declination.ToDMS()}, Pointing state: {telescope.SideOfPier}");
+            if (telescope.InterfaceVersion <= 2)
+            {
+                LogMessage("SlewToHaDec", Outcome.INFO, $"Slewed to RA:  {telescope.RightAscension.ToHMS()}, Dec: {telescope.Declination.ToDMS()}, Pointing state: {PierSide.pierUnknown}");
+            }
+            else
+            {
+                LogMessage("SlewToHaDec", Outcome.INFO, $"Slewed to RA:  {telescope.RightAscension.ToHMS()}, Dec: {telescope.Declination.ToDMS()}, Pointing state: {telescope.SideOfPier}");
+            }
             if (report) TestHaDifference("SlewToHaDec", "RA", telescope.RightAscension, ra, 1.0 / (60.0 * 60.0));
             if (report) TestHaDifference("SlewToHaDec", "Declination", telescope.Declination, declination, 1.0 / (60.0 * 60.0));
-            LogBlankLine();
         }
 
         static void SlewToRaDec(double ra, double declination)
