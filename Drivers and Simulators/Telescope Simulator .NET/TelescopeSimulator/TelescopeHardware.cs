@@ -32,6 +32,7 @@ using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Collections.Generic;
 using System.Windows.Forms.VisualStyles;
+using ASCOM.Astrometry.AstroUtils;
 
 namespace ASCOM.Simulator
 {
@@ -44,13 +45,49 @@ namespace ASCOM.Simulator
         // The primary axis is the azimuth axis for an AltAz mount and the hour angle axis for polar mounts.
         // The secondary axis is the altitude axis for AltAz mounts and the declination axis for polar mounts.
 
-        // All motion is done and all positions are set and obtained using these axes.
+        // All motion is done and all positions are set by manipulating the axis angle values.
 
         // Vectors are used for pairs of angles that represent the various positions and rates
-        // Vector.X is the primary axis, Hour angle, Right Ascension or azimuth and Vector.Y is the secondary axis, declination or altitude.
+        // Vector.X is the primary axis = Axis angle, Hour angle, Right Ascension or Azimuth and Vector.Y is the secondary axis = Axis angle, Declination or Altitude.
 
-        // Ra and hour angle are in hours
-        // Mount positions, Declination, azimuth and altitude are in degrees.
+        // Ra and hour angle vectors are in hours
+        // Mount position, Declination, azimuth and altitude vectors are in degrees.
+
+        // NORTHERN HEMISPHERE AXIS CONVENTIONS
+        //
+        // ALT/AZ ALIGNMENT - Slews always use the Normal (pierEast) pointing state even when the mount has been manually set to the TTP pointing state
+        //   Primary axis - 0 degrees = North with value increasing clockwise giving 90 degrees = East, 180 degrees = South and 270 = West.
+        //   Secondary axis, 0 degrees at the horizon increasing to 90 degrees at the zenith
+
+        // POLAR ALIGNMENT - Slews always use the Normal (pierEast) pointing state even when the mount has been manually set to the TTP pointing state
+        //   Primary axis - 0 degrees = hour angle 0, -180 degrees = Hour angle -12 and +180 degrees = hour angle +12
+        //   Secondary axis, 0 degrees at declination 0, +90 at the northern equatorial pole. Negative values at negative declinations towards the south.
+
+        // GERMAN POLAR ALIGNMENT - Normal pointing state (pierEast) i.e. when observing hour angles 0 to +12.
+        //   Primary axis - 0 degrees = hour angle 0, +180 degrees = hour angle +12
+        //   Secondary axis - 0 degrees at declination 0, +90 at the northern equatorial pole. Negative values at negative declinations towards the south.
+
+        // GERMAN POLAR ALIGNMENT - Through The Pole pointing state (pierWest) i.e. When observing hour angles -12 to 0.
+        //   Primary axis - 0 degrees = hour angle -12, +180 degrees = hour angle 0
+        //   Secondary axis - +90 at the equatorial pole. 180-declination at smaller declinations. Note that at negative declinations the axis angle will be >180
+
+        // SOUTHERN HEMISPHERE AXIS CONVENTIONS
+        //
+        // ALT/AZ ALIGNMENT - Slews always use the Normal (pierEast) pointing state even when the mount has been manually set to the TTP pointing state
+        //   Primary axis - 0 degrees = North with value increasing clockwise giving 90 degrees = East, 180 degrees = South and 270 = West.
+        //   Secondary axis, 0 degrees at the horizon increasing to 90 degrees at the zenith
+
+        // POLAR ALIGNMENT - Slews always use the Normal (pierEast) pointing state even when the mount has been manually set to the TTP pointing state
+        //   Primary axis - 0 degrees = hour angle 0, -180 degrees = Hour angle -12 and +180 degrees = hour angle +12
+        //   Secondary axis, 0 degrees at declination 0, +90 at the southern equatorial pole. Negative values at positive declinations towards the north.
+
+        // GERMAN POLAR ALIGNMENT - Normal pointing state (pierEast) i.e. when observing hour angles 0 to +12.
+        //   Primary axis - 0 degrees = hour angle 0, +180 degrees = hour angle +12
+        //   Secondary axis - 0 degrees at declination 0, +90 at the southern equatorial pole. Negative values at positive declinations towards the north.
+
+        // GERMAN POLAR ALIGNMENT - Through The Pole pointing state (pierWest) i.e. When observing hour angles -12 to 0.
+        //   Primary axis - 0 degrees = hour angle -12, +180 degrees = hour angle 0
+        //   Secondary axis - +90 at the equatorial pole. 180-declination at smaller declinations. Note that at positive declinations the axis angle will be >180
 
         #endregion
 
@@ -99,6 +136,7 @@ namespace ASCOM.Simulator
         private static bool onTop;
         public static TraceLogger TL;
         public static Util util;
+        public static AstroUtils astroUtils;
 
         //Capabilities
         private static bool canFindHome;
@@ -331,8 +369,9 @@ namespace ASCOM.Simulator
                 TL = new TraceLogger("", "TelescopeSimHardware");
                 TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.SIMULATOR_TRACE, GlobalConstants.SIMULATOR_TRACE_DEFAULT);
 
-                // Create utilities object 
+                // Create utilities objects
                 util = new Util();
+                astroUtils = new AstroUtils();
 
                 TL.LogMessage("TelescopeHardware", string.Format("Alignment mode 1: {0}", alignmentMode));
                 connectStates = new ConcurrentDictionary<long, bool>();
@@ -688,9 +727,6 @@ namespace ASCOM.Simulator
             // This vector accumulates all changes to the current primary and secondary axis positions as a result of movement during this update interval
             Vector changeDegrees = new Vector();
 
-            // Placeholder for changes prior to applying RA/Dec rate offsets
-            Vector changePreOffset = new Vector();
-
             // Apply tracking changes
             if ((rateMoveAxes.X == 0.0) & (rateMoveAxes.Y == 0.0)) // No MoveAxis rates have been set so handle normally
             {
@@ -704,9 +740,6 @@ namespace ASCOM.Simulator
                             // Set the change in the primary (RA) axis position due to tracking 
                             changeDegrees.X = haChangeDegrees; // Set the change in the RA (primary) current axis position due to tracking 
 
-                            // Save the current change for reporting later
-                            changePreOffset = changeDegrees;
-
                             // Update the slew target's RA (primary) axis position that will also have changed due to tracking
                             targetAxesDegrees.X += haChangeDegrees;
 
@@ -719,20 +752,20 @@ namespace ASCOM.Simulator
                             // The relationship between the declination axis rotation direction and the associated declination value switches from
                             // correlated (declination increases as mechanical angle increases) to inverted (declination decreases as mechanical angle increases) depending on the mount pointing state.
                             // In addition, the sense of required rate corrections is inverted when in the southern hemisphere compared to the northern hemisphere
-                            if (Latitude >= 0.0) // Northern hemisphere (Yes, very hemisphereist, by assuming that 0.0 latitude is in the northern hemisphere)
-                            {
-                                changeDegrees.Y += (SideOfPier == PierSide.pierEast ? +rateRaDecOffsetInternal.Y : -rateRaDecOffsetInternal.Y) * timeInSecondsSinceLastUpdate; // Add or subtract declination rate depending on pointing state
-                            }
-                            else // Southern hemisphere
+                            if (SouthernHemisphere) // Southern hemisphere
                             {
                                 changeDegrees.Y += (SideOfPier == PierSide.pierEast ? -rateRaDecOffsetInternal.Y : +rateRaDecOffsetInternal.Y) * timeInSecondsSinceLastUpdate; // Add or subtract declination rate depending on pointing state
+                            }
+                            else // Northern hemisphere
+                            {
+                                changeDegrees.Y += (SideOfPier == PierSide.pierEast ? +rateRaDecOffsetInternal.Y : -rateRaDecOffsetInternal.Y) * timeInSecondsSinceLastUpdate; // Add or subtract declination rate depending on pointing state
                             }
 
                             TL.LogMessage("MoveAxes", $"RA internal offset rate: {rateRaDecOffsetInternal.X}, Dec internal offset rate: {rateRaDecOffsetInternal.Y}. " +
                                 $"Total change this interval: {changeDegrees.X}, {changeDegrees.Y}. Time since last update: {timeInSecondsSinceLastUpdate}"
                                 );
-
                             break;
+
                         case AlignmentModes.algAltAz: // In Alt/Az aligned mounts the HA change moves both RA (primary) and Dec (secondary) axes so both need to be updated
 
                             // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking plus any RA / dec rate offsets
@@ -742,21 +775,14 @@ namespace ASCOM.Simulator
 
                             // Update the slew target's Azimuth (primary) and Altitude (secondary) axis positions that will also have changed due to tracking
                             targetAxesDegrees = MountFunctions.ConvertRaDecToAxes(targetRaDec, false);
-
-                            Vector targetradec = MountFunctions.ConvertAxesToRaDec(targetAxesDegrees);
-
-                            TL.LogMessage("MoveAxes - Alt/Az", $"Target RA : {targetRaDec.X.ToHMS()}: Target Dec: {targetRaDec.Y.ToDMS()}");
-                            TL.LogMessage("MoveAxes - Alt/Az", $"Round trip: {targetradec.X.ToHMS()}: Round trip: {targetradec.Y.ToDMS()}");
-
                             break;
                     }
 
-                    TL.LogMessage("MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. HA change {haChangeDegrees} degrees. Alignment mode: {alignmentMode}, Mount RA normal tracking movement: {changePreOffset.X} degrees. ");
-                    TL.LogMessage("MoveAxes", $"RA normal tracking movement rate  {changePreOffset.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second. " +
-                        $"Length of sidereal day at this tracking rate = {(1.0 / (changePreOffset.X / timeInSecondsSinceLastUpdate) * (360.0 / 3600.0)).ToHMS()}");
-                    TL.LogMessage("MoveAxes", $"RightAscensionRate additional movement: {rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate} degrees. " +
-                        $"RA movement rate including any RightAscensionrate additional movement: {changeDegrees.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second. "
-                        );
+                    TL.LogMessage("MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. HA change {haChangeDegrees} degrees. Alignment mode: {alignmentMode}.");
+                    TL.LogMessage("MoveAxes", $"Movement - Primary axis: {changeDegrees.X} degrees, Secondary axis: {changeDegrees.Y} degrees.");
+                    TL.LogMessage("MoveAxes", $"Movement rate - Primary axis: {changeDegrees.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second, " +
+                        $"Secondary axis: {changeDegrees.Y * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second");
+                    TL.LogMessage("MoveAxes", $"Movement includes RightAscensionRate/DeclinationRate movement of: {rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate} degrees, {rateRaDecOffsetInternal.Y * timeInSecondsSinceLastUpdate} degrees.");
                 } // Mount is tracking
                 else // Mount is not tracking
                 {
@@ -770,8 +796,47 @@ namespace ASCOM.Simulator
             } // MoveAxis is not active
             else // A moveAxis rate has been set so treat as a Move 
             {
-                // Calculate movement allowing for the time since the last movement correction was applied.
-                changeDegrees = Vector.Multiply(rateMoveAxes, timeInSecondsSinceLastUpdate);
+                // Calculate movement allowing for the time since the last movement correction was applied 
+                switch (alignmentMode)
+                {
+                    case AlignmentModes.algAltAz:
+                        // Direction sense is the same in both hemispheres
+                        changeDegrees = Vector.Multiply(rateMoveAxes, timeInSecondsSinceLastUpdate);
+                        break;
+
+                    case AlignmentModes.algPolar:
+                        // NORTHERN HEMISPHERE: Positive axis rates increase the secondary axis angle resulting in increases in declination, which is what we want
+                        // SOUTHERN HEMISPHERE: Positive axis rates increase the secondary axis angle resulting in decreases in declination, so we reverse the sense here to ensure that positive axis rates result in increases in declination
+                        if (SouthernHemisphere) // In the southern hemisphere
+                        {
+                            changeDegrees.X = rateMoveAxes.X * timeInSecondsSinceLastUpdate; // Retain the primary axis direction sense
+                            changeDegrees.Y = -rateMoveAxes.Y * timeInSecondsSinceLastUpdate; // Swap the secondary axis direction sense
+                        }
+                        else // In the northern hemisphere
+                        {
+                            changeDegrees = Vector.Multiply(rateMoveAxes, timeInSecondsSinceLastUpdate); // Retain both primary and secondary axis senses
+                        }
+                        break;
+
+                    case AlignmentModes.algGermanPolar:
+                        // NORTHERN HEMISPHERE - NORMAL POINTING STATE (pierEast): Positive axis rates increase the secondary axis angle resulting in increases in declination, which is what we want
+                        // NORTHERN HEMISPHERE - THROUGH THE POLE POINTING STATE (pierWest): Positive axis rates increase the secondary axis angle resulting in decreases in declination, which is what we want
+                        // SOUTHERN HEMISPHERE - NORMAL POINTING STATE (pierEast): Positive axis rates increase the secondary axis angle resulting in decreases in declination, so we reverse the sense here to ensure that positive axis rates result in increases in declination
+                        // SOUTHERN HEMISPHERE - THROUGH THE POLE POINTING STATE (pierWest): Positive axis rates increase the secondary axis angle resulting in decreases in declination, so we reverse the sense here to ensure that positive axis rates result in increases in declination
+                        if (SouthernHemisphere) // In the southern hemisphere
+                        {
+                            changeDegrees.X = rateMoveAxes.X * timeInSecondsSinceLastUpdate; // Retain the primary axis direction sense
+                            changeDegrees.Y = -rateMoveAxes.Y * timeInSecondsSinceLastUpdate; // Swap the secondary axis direction sense
+                        }
+                        else // In the northern hemisphere
+                        {
+                            changeDegrees = Vector.Multiply(rateMoveAxes, timeInSecondsSinceLastUpdate); // Retain both primary and secondary axis senses
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
                 TL.LogMessage("MoveAxes MoveAxis", $"Primary axis move rate: {rateMoveAxes.X}, Secondary axis move rate: {rateMoveAxes.Y}. Applied changes - Primary axis: {changeDegrees.X}, Secondary axis: {changeDegrees.Y}. Time since last update: {timeInSecondsSinceLastUpdate} seconds.");
 
             } // MoveAxis is active
@@ -807,12 +872,13 @@ namespace ASCOM.Simulator
             }
 
             // List changes this cycle
-            TL.LogMessage($"MoveAxes (Final)", $"RA: {currentRaDec.X.ToHMS()} ({currentRaDec.X}), Dec: {currentRaDec.Y.ToDMS()} ({currentRaDec.Y}), Sidereal Time: {SiderealTime.ToHMS()} ({SiderealTime})");
-            TL.LogMessage($"MoveAxes (Final)", $"Azimuth: {currentAltAzm.X.ToDMS()} ({currentAltAzm.X}), Altitude: {currentAltAzm.Y.ToDMS()} ({currentAltAzm.Y}), Through the pole: {SideOfPier}");
+            TL.LogMessage($"MoveAxes (Final)", $"RA: {currentRaDec.X.ToHMS()}, Dec: {currentRaDec.Y.ToDMS()}, Hour angle: {astroUtils.ConditionHA(SiderealTime - currentRaDec.X).ToHMS()}, Sidereal Time: {SiderealTime.ToHMS()}");
+            TL.LogMessage($"MoveAxes (Final)", $"Azimuth: {currentAltAzm.X.ToDMS()}, Altitude: {currentAltAzm.Y.ToDMS()}, Pointing state (pierEast = Normal): {SideOfPier}");
             TL.LogMessage($"MoveAxes (Final)",
-              $"MountAxes.X: {mountAxesDegrees.X.ToDMS()} ({mountAxesDegrees.X}), MountAxes.Y: {mountAxesDegrees.Y.ToDMS()} ({mountAxesDegrees.Y}), " +
-              $"Change.X: {changeDegrees.X.ToDMS()} ({changeDegrees.X}), Change.Y: {changeDegrees.Y.ToDMS()} ({changeDegrees.Y}), "
+              $"Primary axis angle:  {mountAxesDegrees.X.ToDMS()}, Secondary axis angle:  {mountAxesDegrees.Y.ToDMS()}, " +
+              $"Primary axis change: {changeDegrees.X.ToDMS()}, Secondary axis change: {changeDegrees.Y.ToDMS()}."
               );
+            TL.BlankLine();
         }
 
         #endregion
