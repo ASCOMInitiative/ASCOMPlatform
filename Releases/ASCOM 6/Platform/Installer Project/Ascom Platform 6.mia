@@ -5603,7 +5603,7 @@ FINISH_TITLE$MYAH$MYAH$FALSE
 $TITLE$ has been installed successfully.
 {D56D27C8-BAF3-4C18-9E68-7F9929A9FE4A}
 FINISH_DESCRIPTION$MYAH$MYAH$FALSE
-Sorry, an error occurred during installation of Platform 6.$NEWLINE$$NEWLINE$Please review the PlatformInstall, UninstallASCOM and FinaliseInstall $NEWLINE$logs in the My Documents\ASCOM and the most recent$NEWLINE$My Documents\ASCOM\Logs YYYY MM DD folders.$NEWLINE$$NEWLINE$Please also run the Diagnostics Tool in ASCOM Platform 6 / Tools and $NEWLINE$post all logs on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$Many thanks, The ASCOM Platform Team.
+An error occurred during installation of Platform 6.$NEWLINE$$NEWLINE$Please review the PlatformInstall, UninstallASCOM and FinaliseInstall $NEWLINE$logs in the My Documents\ASCOM and the most recent$NEWLINE$My Documents\ASCOM\Logs YYYY MM DD folders.$NEWLINE$$NEWLINE$Please also run the Diagnostics Tool in ASCOM Platform 6 / Tools and $NEWLINE$post all logs on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$Many thanks, The ASCOM Platform Team.
 {5B45FB35-FB63-43FA-B09A-9865B76DC58B}
 FINISH_TITLE$MYAH$MYAH$FALSE
 $TITLE$ installation failed
@@ -6538,25 +6538,25 @@ The ASCOM Platform has been removed, the installer will now termiinate. Please r
 ERROROLD
 {B898B1FB-3E92-46C8-80C3-06EDDD33752A}
 $TITLE$ Setup Issue
-Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
+The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please update to a supported Windows version if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
 3
 1
 
 {D8E9E8C4-1277-4571-80E4-3028903D63E5}
 $TITLE$ Setup Issue
-Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
+The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please install Windows 7 Service Pack 1 if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
 3
 1
 
 {A66080D9-28F7-4599-BE32-35F244255E72}
 $TITLE$ Setup Issue
-Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
+The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please update to Windows 8 if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
 3
 1
 
 {5BAA2F47-2B2F-494B-A2A1-430AD1335688}
 $TITLE$ Setup issue
-Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
+The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please update to Windows 10 Anniversary Edition (version 1607) or later if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
 3
 1
 
