@@ -298,8 +298,7 @@ namespace ConsoleApplication1
                 // New Platform 6 simulator executables - add App-id information
                 AddAppID("ASCOM.Simulator.FilterWheel", "ASCOM.FilterWheelSim.exe", "{AE139A96-FF4D-4F22-A44C-141A9873E823}");
                 AddAppID("ASCOM.Simulator.Rotator", "ASCOM.RotatorSimulator.exe", "{5D4BBF44-2573-401A-AEE1-F9716D0BAEC3}");
-                AddAppID("ASCOM.Simulator.Telescope", "ASCOM.TelescopeSimulator.exe", "{1620DCB8-0352-4717-A966-B174AC868FA0}");
-
+                AddAppID("ASCOM.Simulator.Telescope", "ASCOM.TelescopeSimulator.exe", "{fe02799d-b48a-46f0-add7-a06d40beb2e9}");
 
                 //Clean up Profile object before close
                 try
@@ -347,48 +346,74 @@ namespace ConsoleApplication1
         // Add AppId stuff for the given ProgID
         // http://go.microsoft.com/fwlink/?linkid=32831
         //
-        static private void AddAppID(string progID, string exeName, string sAPPID)
+        static private void AddAppID(string progID, string exeName, string appID)
         {
-            LogMessage("AddAppID", "ProgID: " + progID + ", ExeName: " + exeName + ", App-id: " + sAPPID);
+            LogMessage("AddAppID", $"ProgID: {progID}, ExeName: {exeName}, App-id: {appID}");
 
-            CLSIDFromProgID(progID, out Guid gCLSID);
-            string sCLSID = "{" + new GuidConverter().ConvertToString(gCLSID) + "}";
-            LogMessage("AddAppID", "  CLSID: " + sCLSID);
+            // Get the CLASSID of the supplied ProgID as a GUID
+            CLSIDFromProgID(progID, out Guid classIdGuid);
 
+            // Convert the GUID to a string that can be used as part of a registry name
+            string classID = $"{{{new GuidConverter().ConvertToString(classIdGuid)}}}";
+            LogMessage("AddAppID", $"  CLSID: {classID}");
+
+            // Define some registry key variables
             RegistryKey rkCLSID = null;
             RegistryKey rkAPPID = null;
             RegistryKey rkAPPIDExe = null;
 
             try
             {
-                rkCLSID = Registry.ClassesRoot.OpenSubKey("CLSID\\" + sCLSID, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                // Create / open the registry key of the ProgID's CLASSID entry
+                rkCLSID = Registry.ClassesRoot.OpenSubKey($"CLSID\\{classID}", RegistryKeyPermissionCheck.ReadWriteSubTree);
+                LogMessage("AddAppID", $"  Opened sub key HKCR\\CLSID\\{classID} OK: {!(rkCLSID is null)}");
 
-                // Check whether we have a registry entry
-                if (!(rkCLSID is null)) // We have a registry entry
+                // Check whether we have a CLASSID registry entry
+                if (!(rkCLSID is null)) // We have a CLASSID registry entry
                 {
-                    rkCLSID.SetValue("AppId", sAPPID);
-                    rkAPPID = Registry.ClassesRoot.CreateSubKey("APPID\\" + sAPPID, RegistryKeyPermissionCheck.ReadWriteSubTree);
-                    rkAPPID.SetValue("", rkCLSID.GetValue("")); // Same description as class
-                    rkAPPID.SetValue("AppId", sAPPID);
-                    rkAPPID.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord); // RPC_C_AUTHN_LEVEL_NONE
+                    // Add an APPID entry to the class's CLASSID entry
+                    rkCLSID.SetValue("AppId", appID);
+                    LogMessage("AddAppID", $"    Set value AppId = {appID}");
 
-                    if (exeName != "") // If want AppId\Exe.name
+
+                    // Add APPID entries if required
+                    if (exeName != "") // Add the AppId entries
                     {
-                        rkAPPIDExe = Registry.ClassesRoot.CreateSubKey("AppId\\" + exeName, RegistryKeyPermissionCheck.ReadWriteSubTree);
-                        rkAPPIDExe.SetValue("", rkCLSID.GetValue("")); // Same description as class
-                        rkAPPIDExe.SetValue("AppId", sAPPID);
+                        // Create / open the registry key for the server executable's EXE name APPID entry 
+                        rkAPPIDExe = Registry.ClassesRoot.CreateSubKey($"AppId\\{exeName}", RegistryKeyPermissionCheck.ReadWriteSubTree);
+                        LogMessage("AddAppID", $"  Opened sub key HKCR\\APPID\\{exeName} OK: {!(rkAPPIDExe is null)}");
+
+                        // Set values in the EXE name APPID entry
+                        rkAPPIDExe.SetValue("", exeName); // Executable name because this EXE could be used by several class
+                        LogMessage("AddAppID", $"    Set null value = {exeName}");
+                        rkAPPIDExe.SetValue("AppId", appID);
+                        LogMessage("AddAppID", $"    Set value AppId = {appID}");
+
+                        // Create / open the registry key for the server executable's APPID GUID entry 
+                        rkAPPID = Registry.ClassesRoot.CreateSubKey($"APPID\\{appID}", RegistryKeyPermissionCheck.ReadWriteSubTree);
+                        LogMessage("AddAppID", $"  Opened sub key HKCR\\APPID\\{appID} OK: {!(rkAPPID is null)}");
+
+                        // Set values in the server executable's APPID GUID entry 
+                        rkAPPID.SetValue("", exeName, RegistryValueKind.String); // Server's EXE name
+                        LogMessage("AddAppID", $"    Set null value = {exeName}");
+                        rkAPPID.SetValue("AppId", appID);
+                        LogMessage("AddAppID", $"    Set value AppId = {appID}");
+                        rkAPPID.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord); // RPC_C_AUTHN_LEVEL_NONE
+                        LogMessage("AddAppID", $"    Set value AuthenticationLevel = 1");
+                        rkAPPID.SetValue("RunAs", "Interactive User", RegistryValueKind.String); // // Added to ensure that only one copy of the local server runs if the user uses both elevated and non-elevated clients concurrently
+                        LogMessage("AddAppID", $"    Set value RunAs = Interactive User");
                     }
                     LogMessage("AddAppID", "  OK - Completed");
                 }
                 else // No registry entry so ignore the attempt.
                 {
-                    LogMessage("AddAppID", $"  Registry entry CLSID\\{sCLSID} not found, can't add AppId.");
+                    LogMessage("AddAppID", $"  Registry entry CLSID\\{classID} not found, can't add AppId.");
                 }
             }
             catch (Exception ex)
             {
                 SetReturnCode(1);
-                LogError("AddAppID", "Failed to add AppID info for " + progID + ": " + ex.ToString());
+                LogError("AddAppID", $"Failed to add AppID info for {progID}:\r\n{ex}");
             }
             finally
             {

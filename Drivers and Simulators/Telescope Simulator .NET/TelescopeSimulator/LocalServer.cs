@@ -122,7 +122,7 @@ namespace ASCOM.Simulator
         private static ArrayList m_ComObjectAssys;				        // Dynamically loaded assemblies containing served COM objects
         private static ArrayList m_ComObjectTypes;				        // Served COM object types
         private static ArrayList m_ClassFactories;				        // Served COM object class factories
-        private static string m_sAppId = "{fe02799d-b48a-46f0-add7-a06d40beb2e9}";	// Our AppId
+        private static string m_sAppId = "{fe02799d-b48a-46f0-add7-a06d40beb2e9}";	// Our AppId. If this changes the corresponding entry in FinaiseInstall must also be changed to match.
         private static readonly object lockObj = new object();
         #endregion
 

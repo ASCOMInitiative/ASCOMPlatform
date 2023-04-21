@@ -19,7 +19,7 @@ AppPublisherURL=mailto:jon@brewsters.net
 AppSupportURL=https://ascomtalk.groups.io/g/Help/topics
 AppUpdatesURL=https://ascom-standards.org/
 VersionInfoVersion=1.0.0
-MinVersion=0,5.0.2195sp4
+MinVersion=0,6
 DefaultDirName={cf}\ASCOM\Telescope
 DisableDirPage=yes
 DisableProgramGroupPage=yes
@@ -108,31 +108,31 @@ Filename: {app}\{#AppNameShort}.exe; Parameters: /unregserver
 
 ;  DCOM setup for COM local Server, needed for TheSky
 [Registry]
-#define AppClsid "{{0A21726F-E58B-4461-85A9-9AA739E6E42F}"
-; Telescope CLSID (mind the leading/extra '{')
-#define AppClsid1 "{{6E429B65-53BF-4379-B6D7-F2334BCD8707}"
-; Dome CLSID (mind the leading/extra '{')
-#define AppClsid2 "{{83D12F01-81DB-401E-97AF-E0D5045F73C0}"
-; Focuser CLSID (mind the leading/extra '{')
-#define AppClsid3 "{{3E0E8170-779A-4FA6-8D1D-DE2D0D49419B}"
+; Set the App ID for the server as a whole
+#define AppId "{{0A21726F-E58B-4461-85A9-9AA739E6E42F}"
+Root: HKCR; Subkey: AppId\{#AppNameShort}.exe; ValueType: string; ValueName: AppID; ValueData: {#AppId}
 
-; set the DCOM access control for TheSky on the Telescope interface
-Root: HKCR; Subkey: CLSID\{#AppClsid1}; ValueType: string; ValueName: AppID; ValueData: {#AppClsid1}
-Root: HKCR; Subkey: AppId\{#AppClsid1}; ValueType: string; ValueData: {#AppName}
-Root: HKCR; Subkey: AppId\{#AppClsid1}; ValueType: string; ValueName: AppID; ValueData: {#AppClsid1}
-Root: HKCR; Subkey: AppId\{#AppClsid1}; ValueType: dword; ValueName: AuthenticationLevel; ValueData: 1
-; set the DCOM access control for TheSky on the Dome interface
-Root: HKCR; Subkey: CLSID\{#AppClsid2}; ValueType: string; ValueName: AppID; ValueData: {#AppClsid2}
-Root: HKCR; Subkey: AppId\{#AppClsid2}; ValueType: string; ValueData: {#AppName}
-Root: HKCR; Subkey: AppId\{#AppClsid2}; ValueType: string; ValueName: AppID; ValueData: {#AppClsid2}
-Root: HKCR; Subkey: AppId\{#AppClsid2}; ValueType: dword; ValueName: AuthenticationLevel; ValueData: 1
-; set the DCOM access control for TheSky on the Focuser interface
-Root: HKCR; Subkey: CLSID\{#AppClsid3}; ValueType: string; ValueName: AppID; ValueData: {#AppClsid3}
-Root: HKCR; Subkey: AppId\{#AppClsid3}; ValueType: string; ValueData: {#AppName}
-Root: HKCR; Subkey: AppId\{#AppClsid3}; ValueType: string; ValueName: AppID; ValueData: {#AppClsid3}
-Root: HKCR; Subkey: AppId\{#AppClsid3}; ValueType: dword; ValueName: AuthenticationLevel; ValueData: 1
-; set the DCOM key for the executable as a whole
-Root: HKCR; Subkey: AppId\{#AppNameShort}.exe; ValueType: string; ValueName: AppID; ValueData: {#AppClsid}
+; Set the DCOM access control keys for TheSky on the Telescope interface
+#define TelescopeClsId "{{6E429B65-53BF-4379-B6D7-F2334BCD8707}"
+Root: HKCR; Subkey: CLSID\{#TelescopeClsId}; ValueType: string; ValueName: AppID; ValueData: {#TelescopeClsId}
+Root: HKCR; Subkey: AppId\{#TelescopeClsId}; ValueType: string; ValueData: {#AppName}
+Root: HKCR; Subkey: AppId\{#TelescopeClsId}; ValueType: string; ValueName: AppID; ValueData: {#TelescopeClsId}
+Root: HKCR; Subkey: AppId\{#TelescopeClsId}; ValueType: dword; ValueName: AuthenticationLevel; ValueData: 1
+
+; Set the DCOM access control keys for TheSky on the Dome interface
+#define DomeClsId "{{83D12F01-81DB-401E-97AF-E0D5045F73C0}"
+Root: HKCR; Subkey: CLSID\{#DomeClsId}; ValueType: string; ValueName: AppID; ValueData: {#DomeClsId}
+Root: HKCR; Subkey: AppId\{#DomeClsId}; ValueType: string; ValueData: {#AppName}
+Root: HKCR; Subkey: AppId\{#DomeClsId}; ValueType: string; ValueName: AppID; ValueData: {#DomeClsId}
+Root: HKCR; Subkey: AppId\{#DomeClsId}; ValueType: dword; ValueName: AuthenticationLevel; ValueData: 1
+
+; Set the DCOM access control keys for TheSky on the Focuser interface
+#define FocuserClsId "{{3E0E8170-779A-4FA6-8D1D-DE2D0D49419B}"
+Root: HKCR; Subkey: CLSID\{#FocuserClsId}; ValueType: string; ValueName: AppID; ValueData: {#FocuserClsId}
+Root: HKCR; Subkey: AppId\{#FocuserClsId}; ValueType: string; ValueData: {#AppName}
+Root: HKCR; Subkey: AppId\{#FocuserClsId}; ValueType: string; ValueName: AppID; ValueData: {#FocuserClsId}
+Root: HKCR; Subkey: AppId\{#FocuserClsId}; ValueType: dword; ValueName: AuthenticationLevel; ValueData: 1
+
 ; CAUTION! DO NOT EDIT - DELETING ENTIRE APPID TREE WILL BREAK WINDOWS!
 Root: HKCR; Subkey: AppId\{#AppClsid1}; Flags: uninsdeletekey
 Root: HKCR; Subkey: AppId\{#AppClsid2}; Flags: uninsdeletekey
