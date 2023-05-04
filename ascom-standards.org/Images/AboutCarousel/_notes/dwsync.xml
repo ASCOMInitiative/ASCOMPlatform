@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="CrossConnectivity.png" server="ascom-standards.org//public_html/ascomtest/" local="132726690235088569" remote="132726810600000000" />
-<file name="LinuxConnectivity.png" server="ascom-standards.org//public_html/ascomtest/" local="132726637950539274" remote="132726810600000000" />
-<file name="MacOSConnectivity.png" server="ascom-standards.org//public_html/ascomtest/" local="132726638002600885" remote="132726810600000000" />
-<file name="SelfContainedAlpacaCOM.png" server="ascom-standards.org//public_html/ascomtest/" local="132726638070484505" remote="132726810600000000" />
-<file name="SelfContainedAlpacaOnly.png" server="ascom-standards.org//public_html/ascomtest/" local="132726638137468011" remote="132726810600000000" />
-<file name="WindowsConnectivityCOM.png" server="ascom-standards.org//public_html/ascomtest/" local="132726705079773604" remote="132726813600000000" />
-<file name="ASCOMRemoteServer.png" server="ascom-standards.org//public_html/ascomtest/" local="132726637863133175" remote="132726810600000000" />
-<file name="WindowsConnectivityAlpaca.png" server="ascom-standards.org//public_html/ascomtest/" local="132726700448560515" remote="132726810600000000" />
-<file name="ASCOMRemoteServer.png" server="ascom-standards.org//public_html/ascomsite/" local="132726637863133175" remote="132740670600000000" />
-<file name="CrossConnectivity.png" server="ascom-standards.org//public_html/ascomsite/" local="132726690235088569" remote="132740670600000000" />
-<file name="LinuxConnectivity.png" server="ascom-standards.org//public_html/ascomsite/" local="132726637950539274" remote="132740670600000000" />
-<file name="MacOSConnectivity.png" server="ascom-standards.org//public_html/ascomsite/" local="132726638002600885" remote="132740670600000000" />
-<file name="SelfContainedAlpacaCOM.png" server="ascom-standards.org//public_html/ascomsite/" local="132726638070484505" remote="132740670600000000" />
-<file name="SelfContainedAlpacaOnly.png" server="ascom-standards.org//public_html/ascomsite/" local="132726638137468011" remote="132740670600000000" />
-<file name="WindowsConnectivityAlpaca.png" server="ascom-standards.org//public_html/ascomsite/" local="132726700448560515" remote="132740670600000000" />
-<file name="WindowsConnectivityCOM.png" server="ascom-standards.org//public_html/ascomsite/" local="132726705079773604" remote="132740670600000000" />
-<file name="ASCOMRemoteServer.png" server="a2.dc3.com//public_html/ascomsite/" local="132865308000000000" remote="132865308000000000" />
-<file name="CrossConnectivity.png" server="a2.dc3.com//public_html/ascomsite/" local="132865308000000000" remote="132865308000000000" />
-<file name="LinuxConnectivity.png" server="a2.dc3.com//public_html/ascomsite/" local="132865308000000000" remote="132865308000000000" />
-<file name="MacOSConnectivity.png" server="a2.dc3.com//public_html/ascomsite/" local="132865308000000000" remote="132865308000000000" />
-<file name="SelfContainedAlpacaCOM.png" server="a2.dc3.com//public_html/ascomsite/" local="132865308000000000" remote="132865308000000000" />
-<file name="SelfContainedAlpacaOnly.png" server="a2.dc3.com//public_html/ascomsite/" local="132865308000000000" remote="132865308000000000" />
-<file name="WindowsConnectivityAlpaca.png" server="a2.dc3.com//public_html/ascomsite/" local="132865308000000000" remote="132865308000000000" />
-<file name="WindowsConnectivityCOM.png" server="a2.dc3.com//public_html/ascomsite/" local="132865308000000000" remote="132865308000000000" />
+<file name="CrossConnectivity.png" server="ascom-standards.org//public_html/ascomtest/" local="132726690235088569" remote="132726810600000000" Dst="-1" />
+<file name="LinuxConnectivity.png" server="ascom-standards.org//public_html/ascomtest/" local="132726637950539274" remote="132726810600000000" Dst="-1" />
+<file name="MacOSConnectivity.png" server="ascom-standards.org//public_html/ascomtest/" local="132726638002600885" remote="132726810600000000" Dst="-1" />
+<file name="SelfContainedAlpacaCOM.png" server="ascom-standards.org//public_html/ascomtest/" local="132726638070484505" remote="132726810600000000" Dst="-1" />
+<file name="SelfContainedAlpacaOnly.png" server="ascom-standards.org//public_html/ascomtest/" local="132726638137468011" remote="132726810600000000" Dst="-1" />
+<file name="WindowsConnectivityCOM.png" server="ascom-standards.org//public_html/ascomtest/" local="132726705079773604" remote="132726813600000000" Dst="-1" />
+<file name="ASCOMRemoteServer.png" server="ascom-standards.org//public_html/ascomtest/" local="132726637863133175" remote="132726810600000000" Dst="-1" />
+<file name="WindowsConnectivityAlpaca.png" server="ascom-standards.org//public_html/ascomtest/" local="132726700448560515" remote="132726810600000000" Dst="-1" />
+<file name="ASCOMRemoteServer.png" server="ascom-standards.org//public_html/ascomsite/" local="132726637863133175" remote="132740670600000000" Dst="-1" />
+<file name="CrossConnectivity.png" server="ascom-standards.org//public_html/ascomsite/" local="132726690235088569" remote="132740670600000000" Dst="-1" />
+<file name="LinuxConnectivity.png" server="ascom-standards.org//public_html/ascomsite/" local="132726637950539274" remote="132740670600000000" Dst="-1" />
+<file name="MacOSConnectivity.png" server="ascom-standards.org//public_html/ascomsite/" local="132726638002600885" remote="132740670600000000" Dst="-1" />
+<file name="SelfContainedAlpacaCOM.png" server="ascom-standards.org//public_html/ascomsite/" local="132726638070484505" remote="132740670600000000" Dst="-1" />
+<file name="SelfContainedAlpacaOnly.png" server="ascom-standards.org//public_html/ascomsite/" local="132726638137468011" remote="132740670600000000" Dst="-1" />
+<file name="WindowsConnectivityAlpaca.png" server="ascom-standards.org//public_html/ascomsite/" local="132726700448560515" remote="132740670600000000" Dst="-1" />
+<file name="WindowsConnectivityCOM.png" server="ascom-standards.org//public_html/ascomsite/" local="132726705079773604" remote="132740670600000000" Dst="-1" />
+<file name="ASCOMRemoteServer.png" server="a2.dc3.com//public_html/ascomsite/" local="132865308000000000" remote="132865308000000000" Dst="0" />
+<file name="CrossConnectivity.png" server="a2.dc3.com//public_html/ascomsite/" local="132865308000000000" remote="132865308000000000" Dst="0" />
+<file name="LinuxConnectivity.png" server="a2.dc3.com//public_html/ascomsite/" local="132865308000000000" remote="132865308000000000" Dst="0" />
+<file name="MacOSConnectivity.png" server="a2.dc3.com//public_html/ascomsite/" local="132865308000000000" remote="132865308000000000" Dst="0" />
+<file name="SelfContainedAlpacaCOM.png" server="a2.dc3.com//public_html/ascomsite/" local="132865308000000000" remote="132865308000000000" Dst="0" />
+<file name="SelfContainedAlpacaOnly.png" server="a2.dc3.com//public_html/ascomsite/" local="132865308000000000" remote="132865308000000000" Dst="0" />
+<file name="WindowsConnectivityAlpaca.png" server="a2.dc3.com//public_html/ascomsite/" local="132865308000000000" remote="132865308000000000" Dst="0" />
+<file name="WindowsConnectivityCOM.png" server="a2.dc3.com//public_html/ascomsite/" local="132865308000000000" remote="132865308000000000" Dst="0" />
 </dwsync>

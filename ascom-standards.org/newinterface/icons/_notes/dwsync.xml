@@ -1,103 +1,103 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="AlertCaution.png" server="ascom-standards.org//public_html/ascomsite/" local="130446108000000000" remote="130446108000000000" />
-<file name="AlertNote.png" server="ascom-standards.org//public_html/ascomsite/" local="132057468000000000" remote="132057468000000000" />
-<file name="AlertSecurity.png" server="ascom-standards.org//public_html/ascomsite/" local="130446108000000000" remote="130446108000000000" />
-<file name="Bug300.png" server="ascom-standards.org//public_html/ascomsite/" local="131696316000000000" remote="131696316000000000" />
-<file name="CFW.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="CodeExample.png" server="ascom-standards.org//public_html/ascomsite/" local="130446108000000000" remote="130446108000000000" />
-<file name="Help.png" server="ascom-standards.org//public_html/ascomsite/" local="132010812000000000" remote="132010812000000000" />
-<file name="Search.png" server="ascom-standards.org//public_html/ascomsite/" local="130445244000000000" remote="130445244000000000" />
-<file name="SectionCollapsed.png" server="ascom-standards.org//public_html/ascomsite/" local="130422780000000000" remote="130422780000000000" />
-<file name="SectionExpanded.png" server="ascom-standards.org//public_html/ascomsite/" local="130422780000000000" remote="130422780000000000" />
-<file name="TocClose.gif" server="ascom-standards.org//public_html/ascomsite/" local="130426236000000000" remote="130426236000000000" />
-<file name="TocCollapsed.gif" server="ascom-standards.org//public_html/ascomsite/" local="130437468000000000" remote="130437468000000000" />
-<file name="TocExpanded.gif" server="ascom-standards.org//public_html/ascomsite/" local="130437468000000000" remote="130437468000000000" />
-<file name="TocOpen.gif" server="ascom-standards.org//public_html/ascomsite/" local="130426236000000000" remote="130426236000000000" />
-<file name="favicon.ico" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="privclass.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="privdelegate.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="privenumeration.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="privevent.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="privextension.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="privfield.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="privinterface.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="privmethod.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="privproperty.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="privstructure.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="protclass.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="protdelegate.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="protenumeration.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="protevent.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="protextension.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="protfield.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="protinterface.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="protmethod.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="protoperator.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="protproperty.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="protstructure.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="pubclass.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="pubdelegate.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="pubenumeration.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="pubevent.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="pubextension.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="pubfield.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="pubinterface.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="pubmethod.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="puboperator.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="pubproperty.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="pubstructure.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="slMobile.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="static.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="xna.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" />
-<file name="AlertCaution.png" server="a2.dc3.com//public_html/ascomsite/" local="130446108000000000" remote="133253799600000000" />
-<file name="AlertNote.png" server="a2.dc3.com//public_html/ascomsite/" local="132057468000000000" remote="133253799600000000" />
-<file name="AlertSecurity.png" server="a2.dc3.com//public_html/ascomsite/" local="130446108000000000" remote="133253799600000000" />
-<file name="Bug300.png" server="a2.dc3.com//public_html/ascomsite/" local="131696316000000000" remote="133253799600000000" />
-<file name="CFW.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253799600000000" />
-<file name="CodeExample.png" server="a2.dc3.com//public_html/ascomsite/" local="130446108000000000" remote="133253799600000000" />
-<file name="favicon.ico" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253799600000000" />
-<file name="Help.png" server="a2.dc3.com//public_html/ascomsite/" local="132010812000000000" remote="133253799600000000" />
-<file name="privclass.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253799600000000" />
-<file name="privdelegate.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253799600000000" />
-<file name="privenumeration.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253799600000000" />
-<file name="privevent.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253799600000000" />
-<file name="privextension.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="privfield.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="privinterface.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="privmethod.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="privproperty.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="privstructure.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="protclass.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="protdelegate.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="protenumeration.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="protevent.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="protextension.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="protfield.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="protinterface.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="protmethod.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="protoperator.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="protproperty.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="protstructure.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="pubclass.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="pubdelegate.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="pubenumeration.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="pubevent.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="pubextension.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="pubfield.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="pubinterface.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="pubmethod.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="puboperator.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="pubproperty.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="pubstructure.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="Search.png" server="a2.dc3.com//public_html/ascomsite/" local="130445244000000000" remote="133253800200000000" />
-<file name="SectionCollapsed.png" server="a2.dc3.com//public_html/ascomsite/" local="130422780000000000" remote="133253800200000000" />
-<file name="SectionExpanded.png" server="a2.dc3.com//public_html/ascomsite/" local="130422780000000000" remote="133253800200000000" />
-<file name="slMobile.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="static.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
-<file name="TocClose.gif" server="a2.dc3.com//public_html/ascomsite/" local="130426236000000000" remote="133253800200000000" />
-<file name="TocCollapsed.gif" server="a2.dc3.com//public_html/ascomsite/" local="130437468000000000" remote="133253800200000000" />
-<file name="TocExpanded.gif" server="a2.dc3.com//public_html/ascomsite/" local="130437468000000000" remote="133253800200000000" />
-<file name="TocOpen.gif" server="a2.dc3.com//public_html/ascomsite/" local="130426236000000000" remote="133253800200000000" />
-<file name="xna.gif" server="a2.dc3.com//public_html/ascomsite/" local="130396860000000000" remote="133253800200000000" />
+<file name="AlertCaution.png" server="ascom-standards.org//public_html/ascomsite/" local="130446108000000000" remote="130446108000000000" Dst="-1" />
+<file name="AlertNote.png" server="ascom-standards.org//public_html/ascomsite/" local="132057468000000000" remote="132057468000000000" Dst="-1" />
+<file name="AlertSecurity.png" server="ascom-standards.org//public_html/ascomsite/" local="130446108000000000" remote="130446108000000000" Dst="-1" />
+<file name="Bug300.png" server="ascom-standards.org//public_html/ascomsite/" local="131696316000000000" remote="131696316000000000" Dst="-1" />
+<file name="CFW.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="CodeExample.png" server="ascom-standards.org//public_html/ascomsite/" local="130446108000000000" remote="130446108000000000" Dst="-1" />
+<file name="Help.png" server="ascom-standards.org//public_html/ascomsite/" local="132010812000000000" remote="132010812000000000" Dst="-1" />
+<file name="Search.png" server="ascom-standards.org//public_html/ascomsite/" local="130445244000000000" remote="130445244000000000" Dst="-1" />
+<file name="SectionCollapsed.png" server="ascom-standards.org//public_html/ascomsite/" local="130422780000000000" remote="130422780000000000" Dst="-1" />
+<file name="SectionExpanded.png" server="ascom-standards.org//public_html/ascomsite/" local="130422780000000000" remote="130422780000000000" Dst="-1" />
+<file name="TocClose.gif" server="ascom-standards.org//public_html/ascomsite/" local="130426236000000000" remote="130426236000000000" Dst="-1" />
+<file name="TocCollapsed.gif" server="ascom-standards.org//public_html/ascomsite/" local="130437468000000000" remote="130437468000000000" Dst="-1" />
+<file name="TocExpanded.gif" server="ascom-standards.org//public_html/ascomsite/" local="130437468000000000" remote="130437468000000000" Dst="-1" />
+<file name="TocOpen.gif" server="ascom-standards.org//public_html/ascomsite/" local="130426236000000000" remote="130426236000000000" Dst="-1" />
+<file name="favicon.ico" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="privclass.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="privdelegate.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="privenumeration.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="privevent.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="privextension.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="privfield.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="privinterface.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="privmethod.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="privproperty.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="privstructure.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="protclass.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="protdelegate.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="protenumeration.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="protevent.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="protextension.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="protfield.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="protinterface.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="protmethod.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="protoperator.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="protproperty.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="protstructure.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="pubclass.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="pubdelegate.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="pubenumeration.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="pubevent.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="pubextension.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="pubfield.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="pubinterface.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="pubmethod.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="puboperator.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="pubproperty.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="pubstructure.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="slMobile.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="static.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="xna.gif" server="ascom-standards.org//public_html/ascomsite/" local="130396860000000000" remote="130396860000000000" Dst="-1" />
+<file name="AlertCaution.png" server="a2.dc3.com//public_html/ascomsite/" local="133264197826276909" remote="133270180200000000" Dst="0" />
+<file name="AlertNote.png" server="a2.dc3.com//public_html/ascomsite/" local="133264197828052291" remote="133270180200000000" Dst="0" />
+<file name="AlertSecurity.png" server="a2.dc3.com//public_html/ascomsite/" local="133264197829972963" remote="133270180200000000" Dst="0" />
+<file name="Bug300.png" server="a2.dc3.com//public_html/ascomsite/" local="133264197831606051" remote="133270180200000000" Dst="0" />
+<file name="CFW.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197833331698" remote="133270180200000000" Dst="0" />
+<file name="CodeExample.png" server="a2.dc3.com//public_html/ascomsite/" local="133264197835089565" remote="133270180200000000" Dst="0" />
+<file name="favicon.ico" server="a2.dc3.com//public_html/ascomsite/" local="133264197836811910" remote="133270180200000000" Dst="0" />
+<file name="Help.png" server="a2.dc3.com//public_html/ascomsite/" local="133264197838632309" remote="133270180200000000" Dst="0" />
+<file name="privclass.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197840387608" remote="133270180200000000" Dst="0" />
+<file name="privdelegate.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197842078297" remote="133270180200000000" Dst="0" />
+<file name="privenumeration.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197843836677" remote="133270180200000000" Dst="0" />
+<file name="privevent.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197845539478" remote="133270180200000000" Dst="0" />
+<file name="privextension.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197847246545" remote="133270180200000000" Dst="0" />
+<file name="privfield.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197849047632" remote="133270180200000000" Dst="0" />
+<file name="privinterface.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197850773341" remote="133270180200000000" Dst="0" />
+<file name="privmethod.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197852481058" remote="133270180200000000" Dst="0" />
+<file name="privproperty.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197854268422" remote="133270180200000000" Dst="0" />
+<file name="privstructure.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197855975616" remote="133270180200000000" Dst="0" />
+<file name="protclass.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197857681204" remote="133270180200000000" Dst="0" />
+<file name="protdelegate.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197859489945" remote="133270180200000000" Dst="0" />
+<file name="protenumeration.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197861315501" remote="133270180200000000" Dst="0" />
+<file name="protevent.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197863047203" remote="133270180200000000" Dst="0" />
+<file name="protextension.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197864803635" remote="133270180200000000" Dst="0" />
+<file name="protfield.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197866519952" remote="133270180200000000" Dst="0" />
+<file name="protinterface.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197868227641" remote="133270180200000000" Dst="0" />
+<file name="protmethod.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197870005451" remote="133270180200000000" Dst="0" />
+<file name="protoperator.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197871718461" remote="133270180200000000" Dst="0" />
+<file name="protproperty.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197873471630" remote="133270180200000000" Dst="0" />
+<file name="protstructure.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197875250441" remote="133270180200000000" Dst="0" />
+<file name="pubclass.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197876947664" remote="133270180200000000" Dst="0" />
+<file name="pubdelegate.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197878734415" remote="133270180200000000" Dst="0" />
+<file name="pubenumeration.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197880453928" remote="133270180200000000" Dst="0" />
+<file name="pubevent.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197882177149" remote="133270180200000000" Dst="0" />
+<file name="pubextension.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197883962416" remote="133270180200000000" Dst="0" />
+<file name="pubfield.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197885688584" remote="133270180200000000" Dst="0" />
+<file name="pubinterface.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197887426089" remote="133270180200000000" Dst="0" />
+<file name="pubmethod.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197889182666" remote="133270180200000000" Dst="0" />
+<file name="puboperator.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197890924447" remote="133270180200000000" Dst="0" />
+<file name="pubproperty.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197892692652" remote="133270180200000000" Dst="0" />
+<file name="pubstructure.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197894527715" remote="133270180200000000" Dst="0" />
+<file name="Search.png" server="a2.dc3.com//public_html/ascomsite/" local="133264197896268715" remote="133270180200000000" Dst="0" />
+<file name="SectionCollapsed.png" server="a2.dc3.com//public_html/ascomsite/" local="133264197898037716" remote="133270180200000000" Dst="0" />
+<file name="SectionExpanded.png" server="a2.dc3.com//public_html/ascomsite/" local="133264197899933499" remote="133270180200000000" Dst="0" />
+<file name="slMobile.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197901719011" remote="133270180200000000" Dst="0" />
+<file name="static.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197903552700" remote="133270180200000000" Dst="0" />
+<file name="TocClose.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197905260309" remote="133270180200000000" Dst="0" />
+<file name="TocCollapsed.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197907015215" remote="133270180200000000" Dst="0" />
+<file name="TocExpanded.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197908826465" remote="133270180200000000" Dst="0" />
+<file name="TocOpen.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197910574816" remote="133270180200000000" Dst="0" />
+<file name="xna.gif" server="a2.dc3.com//public_html/ascomsite/" local="133264197912367701" remote="133270180200000000" Dst="0" />
 </dwsync>
