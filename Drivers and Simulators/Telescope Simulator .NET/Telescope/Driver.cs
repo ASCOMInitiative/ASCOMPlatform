@@ -54,6 +54,11 @@ namespace ASCOM.Simulator
         private string driverID;
         private long objectId;
 
+        // Local copies of the guide rates are kept here because the TelescopeHardware GuideRateRightAscension and GuideRateDeclination values
+        // can have their direction signs changed during PulseGuide operations.
+        private double currentGuideRateRightAscension;
+        private double currentGuideRateDeclination;
+
         const string SlewToHA = "SlewToHA"; const string SlewToHAUpper = "SLEWTOHA";
         const string AssemblyVersionNumber = "AssemblyVersionNumber"; const string AssemblyVersionNumberUpper = "ASSEMBLYVERSIONNUMBER";
         const string TimeUntilPointingStateCanChange = "TIMEUNTILPOINTINGSTATECANCHANGE";
@@ -77,6 +82,10 @@ namespace ASCOM.Simulator
                 // get a unique instance id
                 objectId = TelescopeHardware.GetId();
                 TelescopeHardware.TL.LogMessage("New", "Instance ID: " + objectId + ", new: " + "Driver ID: " + driverID);
+
+                // Initialise the guide rates from the Telescope hardware default values
+                currentGuideRateRightAscension = TelescopeHardware.GuideRateRightAscension;
+                currentGuideRateDeclination = TelescopeHardware.GuideRateDeclination;
             }
             catch (Exception ex)
             {
@@ -95,7 +104,7 @@ namespace ASCOM.Simulator
         public string Action(string ActionName, string ActionParameters)
         {
             //throw new MethodNotImplementedException("Action");
-            string Response = "";
+            string Response;
             if (ActionName == null)
                 throw new InvalidValueException("no ActionName is provided");
             switch (ActionName.ToUpper(CultureInfo.InvariantCulture))
@@ -661,13 +670,14 @@ namespace ASCOM.Simulator
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateDeclination: ");
                 CheckVersionOne("GuideRateDeclination", false);
                 SharedResources.TrafficEnd(TelescopeHardware.GuideRateDeclination.ToString(CultureInfo.InvariantCulture));
-                return TelescopeHardware.GuideRateDeclination;
+                return currentGuideRateDeclination; // Return the value set by the user
             }
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateDeclination->: ");
                 CheckVersionOne("GuideRateDeclination", true);
                 SharedResources.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
+                currentGuideRateDeclination = value; // Save the value set by the user so that it can be returned by GET GuideRateDeclination
                 TelescopeHardware.GuideRateDeclination = value;
             }
         }
@@ -679,13 +689,14 @@ namespace ASCOM.Simulator
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateRightAscension: ");
                 CheckVersionOne("GuideRateRightAscension", false);
                 SharedResources.TrafficEnd(TelescopeHardware.GuideRateRightAscension.ToString(CultureInfo.InvariantCulture));
-                return TelescopeHardware.GuideRateRightAscension;
+                return currentGuideRateRightAscension; // Return the value set by the user
             }
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateRightAscension->: ");
                 CheckVersionOne("GuideRateRightAscension", true);
                 SharedResources.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
+                currentGuideRateRightAscension = value; // Save the value set by the user so that it can be returned by GET GuideRateRightAscension
                 TelescopeHardware.GuideRateRightAscension = value;
             }
         }
@@ -1416,12 +1427,11 @@ namespace ASCOM.Simulator
 
         private static void CheckVersionOne(string property, bool accessorSet)
         {
-            CheckVersionOne(property);
-            //if (TelescopeHardware.VersionOneOnly)
-            //{
-            //    SharedResources.TrafficEnd( property + " invalid in version 1");
-            //    throw new PropertyNotImplementedException(property, accessorSet);
-            //}
+            if (TelescopeHardware.VersionOneOnly)
+            {
+                SharedResources.TrafficEnd(property + " invalid in version 1");
+                throw new PropertyNotImplementedException(property, accessorSet);
+            }
         }
 
         private static void CheckVersionOne(string property)
@@ -1568,7 +1578,7 @@ namespace ASCOM.Simulator
     // The ClassInterface/None attribute prevents an empty interface called
     // _AxisRates from being created and used as the [default] interface
     //
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix"), Guid("af5510b9-3108-4237-83da-ae70524aab7d"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
+    [Guid("af5510b9-3108-4237-83da-ae70524aab7d"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
     public class AxisRates : IAxisRates, IEnumerable, IEnumerator, IDisposable
     {
         private TelescopeAxes m_axis;
@@ -1690,7 +1700,7 @@ namespace ASCOM.Simulator
     // The ClassInterface/None attribute prevents an empty interface called
     // _TrackingRates from being created and used as the [default] interface
     //
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix"), Guid("4bf5c72a-8491-49af-8668-626eac765e91")]
+    [Guid("4bf5c72a-8491-49af-8668-626eac765e91")]
     [ClassInterface(ClassInterfaceType.None)]
     public class TrackingRates : ITrackingRates, IEnumerable, IEnumerator, IDisposable
     {
@@ -1786,7 +1796,7 @@ namespace ASCOM.Simulator
         #endregion
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix"), Guid("46753368-42d1-424a-85fa-26eee8f4c178")]
+    [Guid("46753368-42d1-424a-85fa-26eee8f4c178")]
     [ClassInterface(ClassInterfaceType.None)]
     public class TrackingRatesSimple : ITrackingRates, IEnumerable, IEnumerator, IDisposable
     {
