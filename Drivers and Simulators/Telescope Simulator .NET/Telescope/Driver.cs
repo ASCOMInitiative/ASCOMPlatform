@@ -948,7 +948,7 @@ namespace ASCOM.Simulator
                 CheckCapability(TelescopeHardware.CanSetPierSide, "SideOfPier", true);
 
                 // The ASCOM interface specification states that Set SideOfPier is only valid for German equatorial mounts
-                CheckCapability(TelescopeHardware.AlignmentMode != AlignmentModes.algGermanPolar, "SideOfPier", true);
+                CheckCapability(TelescopeHardware.AlignmentMode == AlignmentModes.algGermanPolar, "SideOfPier", true);
 
                 if (value == TelescopeHardware.SideOfPier)
                 {

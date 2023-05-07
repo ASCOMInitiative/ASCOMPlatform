@@ -269,7 +269,7 @@ namespace ASCOM.Simulator
 
         private static double hourAngleLimit = 20;     // the number of degrees a GEM can go past the meridian
 
-        private static PointingState pointingState;
+        //private static PointingState pointingState;
         private static TrackingMode trackingMode;
         private static bool slewing;
 
@@ -1373,7 +1373,7 @@ namespace ASCOM.Simulator
             }
             else
             {
-                bool successfullyRemoved = connectStates.TryRemove(id, out value);
+                bool successfullyRemoved = connectStates.TryRemove(id, out _);
                 TL.LogMessage("Hardware.Connected Set", "Set Connected to: False, Successfully removed: " + successfullyRemoved.ToString());
             }
         }
@@ -2306,7 +2306,7 @@ namespace ASCOM.Simulator
             // Update sidereal time for next loop
             SiderealTime = AstronomyFunctions.LocalSiderealTime(Longitude);
 
-            pointingState = mountAxesDegrees.Y <= 90 ? PointingState.Normal : PointingState.ThroughThePole;
+            //pointingState = mountAxesDegrees.Y <= 90 ? PointingState.Normal : PointingState.ThroughThePole;
 
             currentAltAzm = MountFunctions.ConvertAxesToAltAzm(mountAxesDegrees);
             currentRaDec = MountFunctions.ConvertAxesToRaDec(mountAxesDegrees);
