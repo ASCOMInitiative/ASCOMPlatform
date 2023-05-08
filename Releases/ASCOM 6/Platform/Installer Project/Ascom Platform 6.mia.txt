@@ -129,8 +129,9 @@ Get System Setting Windows in 64 bit Mode into WIN64MODE
 Comment: Force 64bit mode if required
 if Variable CMDLINE Contains (Ignore Case) /Force64Bit
   Set Variable WIN64MODE to TRUE
-  Write into Text File $SETUPLOG$ from Value $TIME$ $TITLE$ Command line contains /Force64Bit : $CMDLINE$ (at end of file)
-  Write into Text File $SETUPLOG$ from Value $TIME$ $TITLE$ Forcing 64bit installation - WIN64MODE: $WIN64MODE$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Command line contains /Force64Bit : $CMDLINE$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Forcing 64bit installation - WIN64MODE has been set to $WIN64MODE$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value   (at end of file)
 end
  
 Comment: Determine whether install is from the installer executable or from the Windows control panel application installation / modification dialogue
