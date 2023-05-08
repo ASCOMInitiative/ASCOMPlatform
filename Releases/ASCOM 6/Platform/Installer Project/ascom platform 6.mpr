@@ -1547,6 +1547,7 @@ $
 
 
 
+
 B
 
 
@@ -2187,7 +2188,7 @@ ASCOM Platform 6.6 SP2-  Early Access
 ASCOM Platform 6.6 SP2 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{2E10A37E-95EE-42E0-B20B-71B646762D1B}
+{E5A8AE6B-AF62-4ABC-8DCE-16A7158E2F45}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
@@ -2201,7 +2202,7 @@ TRUE
 |C:\CodeSigningCertificate\petercodesign.pfx
 http://timestamp.digicert.com|
 https://ascom-standards.org
-UAC=requireAdministrator,CACHESOURCES=TRUE,MSI_ALL=FALSE,VM_TARGETFOLDER=%TEMP%,VM_INSTALL_COMMANDLINE=/s,"VM_UNINSTALL_COMMANDLINE=/s MODIFY=FALSE REMOVE=TRUE","VM_UNITTEST=C:\Program Files (x86)\InstallAware X6 Creators Update\unit.exe",LOADOLDDATA=TRUE,SIGN_ALL=DEFAULT,SHA256ONLY=TRUE
+UAC=requireAdministrator,CACHESOURCES=TRUE,MSI_ALL=FALSE,VM_TARGETFOLDER=%TEMP%,VM_INSTALL_COMMANDLINE=/s,"VM_UNINSTALL_COMMANDLINE=/s MODIFY=FALSE REMOVE=TRUE","VM_UNITTEST=C:\Program Files (x86)\InstallAware X6 Creators Update\unit.exe",LOADOLDDATA=TRUE,SIGN_ALL=DEFAULT,SHA256ONLY=TRUE,NODROP=TRUE
 $
 $
 
@@ -2226,5 +2227,5 @@ FALSE
 P8tris9000cdK
 FALSE
 FALSE
-TRUE
+true
 FALSE
