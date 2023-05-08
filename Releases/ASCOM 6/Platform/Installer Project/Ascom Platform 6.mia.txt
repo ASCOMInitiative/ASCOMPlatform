@@ -123,8 +123,21 @@ Comment: Set up values for a 64bit OS
 Set Variable PROGRAMFILES64 to 
 Set Variable COMMONFILES64 to 
 Set Variable WIN64MODE to 
+Set Variable ARM64MODE to 
 Set Variable PROGRAMDATA to 
 Get System Setting Windows in 64 bit Mode into WIN64MODE
+ 
+Comment: If the system reports 32bit, check whether we are running on a 64bit ARM chip with 64bit Intel emulation. E.g. A Parallels VM running on Apple silicon.
+if Variable WIN64MODE Equals FALSE
+  Comment: Get an indicator showing whether we are running on ARM64 with Intel emulation.
+  Get System Setting Windows on ARM with AMD64/EM64T Emulation into ARM64MODE
+  if Variable ARM64MODE Equals TRUE
+    Comment: Set the 64bit flag because we are running on a 64bit ARM processor running Windows.
+    Set Variable WIN64MODE to TRUE
+    Write into Text File $SETUPLOG$ from Value $TIME$ Setting WIN64MODE to TRUE because we are running on a 64bit ARM processor with Intel 64bit extension emulation: $WIN64MODE$ (at end of file)
+    Write into Text File $SETUPLOG$ from Value   (at end of file)
+  end
+end
  
 Comment: Force 64bit mode if required
 if Variable CMDLINE Contains (Ignore Case) /Force64Bit
