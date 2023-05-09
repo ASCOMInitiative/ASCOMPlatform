@@ -7095,60 +7095,63 @@ Public Class DiagnosticsForm
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOMPlatform6*.txt", SearchOption.TopDirectoryOnly)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
-                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.LastWriteTime, foundFile))
             Next
 
             'Get a list of VC++ log files in the ASCOM directory in creation date order
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "VcRedist*.txt", SearchOption.TopDirectoryOnly)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
-                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.LastWriteTime, foundFile))
             Next
 
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.UninstallASCOM.*.txt", SearchOption.AllDirectories)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
-                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.LastWriteTime, foundFile))
             Next
 
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.FinaliseInstall.*.txt", SearchOption.AllDirectories)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
-                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.LastWriteTime, foundFile))
             Next
 
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.InstallTemplates*.txt", SearchOption.AllDirectories)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
-                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.LastWriteTime, foundFile))
             Next
 
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.ValidatePlatform*.txt", SearchOption.AllDirectories)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
-                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.LastWriteTime, foundFile))
             Next
 
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.EarthRotationUpdate*.txt", SearchOption.AllDirectories)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
-                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.LastWriteTime, foundFile))
             Next
 
             fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.SetProfileACL*.txt", SearchOption.AllDirectories)
             For Each foundFile In fileList
                 fileInfo = New FileInfo(foundFile)
-                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.CreationTime, foundFile))
+                setupFiles.Add(New KeyValuePair(Of Date, String)(fileInfo.LastWriteTime, foundFile))
             Next
+
+            ' Sort into inverse date order i.e. latest file first
+            setupFiles = setupFiles.OrderBy(Function(o) (Date.MaxValue - o.Key)).ToList
 
             TL.LogMessage("ScanPlatform6Logs", "Found the following installation logs:")
             For Each foundFile In setupFiles
                 TL.LogMessage("ScanPlatform6Logs", $"  Date: {foundFile.Key:dd MMM yyyy HH:mm:ss} Log: {foundFile.Value}")
             Next
-
             TL.BlankLine()
 
-            For Each foundFile In setupFiles 'Iterate over results
+            'Iterate over results
+            For Each foundFile In setupFiles
                 Try
                     fileInfo = New FileInfo(foundFile.Value)
                     TL.LogMessage("InstallLog Found", String.Format("{0}, Created: {1}, Last updated: {2}", foundFile.Value, fileInfo.CreationTime.ToString("dd MMM yyyy HH:mm:ss"), fileInfo.LastWriteTime.ToString("dd MMM yyyy HH:mm:ss")))
