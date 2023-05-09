@@ -1,5 +1,6 @@
 ﻿Main Setup Dialogue
 Prepare for Installation or Uninstallation
+Finish Setup Dialogue
 Specify additional clean-up required when uninstalling
 Platform 6 Content
 Platform 6 files
@@ -9,21 +10,20 @@ Set Registry Keys
 Platform 6.1 files
 Platform 6.2 files
 Remove Previous Platform 6 install if present
+Install New Platform 6 version
+Extra activities if on a 64bit system
+Uninstall items installed by this installer
+Remove 64bit components
 ASCOM Cache
 Earth Rotation Date Update
 Remove Previous Platforms 4 and 5 if present
+Non-MSI installation activities
 Create shortcuts
 Remove 32bit components
 Install Application Pre-Requisites if required
 Maintenance Dialogue
+Alpaca Support for Chooser
+ASCOM Device Hub
+Clean up any remaining simulator COM entries
 Install Visual C Runtimes
 Platform validation
-Finish Setup Dialogue
-Extra activities if on a 64bit system
-Non-MSI installation activities
-ASCOM Device Hub
-Alpaca Support for Chooser
-Clean up any remaining simulator COM entries
-Install New Platform 6 version
-Remove 64bit components
-Uninstall items installed by this installer
