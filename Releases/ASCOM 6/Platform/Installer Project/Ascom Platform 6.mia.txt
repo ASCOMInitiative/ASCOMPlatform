@@ -161,8 +161,8 @@ end
  
 Comment: Set up values for OS version information
 Set Variable OPSYS to 
-Set Variable OPSYSMAJOR to 
-Set Variable OPSYSMINOR to 
+Set Variable WIN10ORLATER to 
+Set Variable INSTALLNET35 to 
 Set Variable OSCURRENTVERSION to 
 Set Variable OSEDITIONID to 
 Set Variable OSPRODUCTNAME to 
@@ -408,22 +408,24 @@ if Variable PREREQ not Equals FALSE
     Comment: Check whether the user enabled .NET 3.5 SP1 while the pre-requisites dialogue was open. If still missing then terminate the install
     Include Script: checknet351
     if Variable NET351 Equals FALSE
-      Parse String $OPSYS$ into Variables OPSYSMAJOR and OPSYSMINOR (Split at position from start)
-      Write into Text File $SETUPLOG$ from Value $TIME$ Operating System: $OPSYS$, Major: $OPSYSMAJOR$, Minor: $OPSYSMINOR$ (at end of file)
-      Comment: Determine whether we are running on Windows 10 or 11.
-      Set Variable AUTOUPDATENET35 to FALSE
-      if Variable OPSYSMAJOR Equals TEN
-        Set Variable AUTOUPDATENET35 to TRUE
-        Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 10 - Enabling automatic .NET 3.5 install. (at end of file)
+      Set Variable INSTALLNET35 to FALSE
+      Comment: Determine whether we are running on Windows 10 or later using value in System Settings..
+      Get System Setting Windows 10 into WIN10ORLATER
+      if Variable WIN10ORLATER Equals TRUE
+        Comment: Running on Windows 10 or later so enable .NET 3.5 installation.
+        Set Variable INSTALLNET35 to TRUE
+        Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 10 or later through System Settings command: $INSTALLNET35$ (at end of file)
+      else
+        Comment: Further attempt to determine whether we are running on Windows 10 or later using the OS build number.
+        Comment: Test for versions after Windows 10 Threshold 2 i.e. Redstone 1 and later.
+        if Variable OSCURRENTBUILD Greater Than 10586
+          Comment: Running on Windows 10 or later so enable .NET 3.5 installation.
+          Set Variable INSTALLNET35 to TRUE
+          Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 10 or later through OS Build number: $INSTALLNET35$ (at end of file)
+        end
       end
-      if Variable OPSYS Equals ELEVEN
-        Set Variable AUTOUPDATENET35 to TRUE
-        Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 11 or later - Enabling automatic .NET 3.5 install. (at end of file)
-      end
-      Comment: Auto install .NET 3.5 using DISM if possible.
-      if Variable AUTOUPDATENET35 Equals TRUE
-        Comment: Running on Windows 10 or later so use DISM to enable .NET 3.5
-        Write into Text File $SETUPLOG$ from Value $TIME$ Windows $OPSYS - About to run DISM command to enable .NET 3.5.1 (at end of file)
+      if Variable INSTALLNET35 Equals TRUE
+        Write into Text File $SETUPLOG$ from Value $TIME$ Installing .NET 3.5 automatically using DISM. (at end of file)
         Run Program $SUPPORTDIR$\EnableDotNet35.cmd  (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ Completed DISM execution. Return code: $RC$. (at end of file)
         Write into Text File $SETUPLOG$ from Value  (at end of file)
@@ -432,7 +434,7 @@ if Variable PREREQ not Equals FALSE
           if Variable RC Equals 3050
             Comment: DISM requires a reboot
             Write into Text File $SETUPLOG$ from Value $TIME$ Completed - DISM requires a reboot. Return code: $RC$. (at end of file)
-            MessageBox: Pre-requisites, .NET 3.5 installation is complete  but DISM indicates that your PC must be rebooted in order for the installation to take effect.$NEWLINE$$NEWLINE$The Platform installer will now close.$NEWLINE$$NEWLINE$Please reboot your PC and re-run the Platform installer.
+            MessageBox: Pre-requisites, .NET 3.5 installation is complete but your PC must be rebooted in order to take effect.$NEWLINE$$NEWLINE$The Platform installer will now close.$NEWLINE$$NEWLINE$Please reboot your PC and re-run the Platform installer.
             Terminate Installation
           else
             Comment: Something went wrong during installation of .NET 3.5.

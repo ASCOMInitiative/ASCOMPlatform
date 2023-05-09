@@ -18,3 +18,12 @@ Install Application Pre-Requisites if required
 Maintenance Dialogue
 Install Visual C Runtimes
 Platform validation
+Finish Setup Dialogue
+Extra activities if on a 64bit system
+Non-MSI installation activities
+ASCOM Device Hub
+Alpaca Support for Chooser
+Clean up any remaining simulator COM entries
+Install New Platform 6 version
+Remove 64bit components
+Uninstall items installed by this installer
