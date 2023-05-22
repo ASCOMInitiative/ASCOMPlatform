@@ -8,6 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Configuration", "S
 		AssemblyVersionInfo.cs = AssemblyVersionInfo.cs
 		AssemblyVersionInfo.vb = AssemblyVersionInfo.vb
 		Directory.Build.props = Directory.Build.props
+		LicenseExceptions.txt = LicenseExceptions.txt
 		SolutionInfo.cs = SolutionInfo.cs
 		SolutionInfo.vb = SolutionInfo.vb
 	EndProjectSection
