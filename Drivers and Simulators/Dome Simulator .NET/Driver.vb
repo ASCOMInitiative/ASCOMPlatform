@@ -36,7 +36,6 @@ Public Class Dome
 
 #Region "New and IDisposable Support"
 
-    <System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")>
     Public Sub New()
 
         Dim RegVer As String = "1"                      ' Registry version, use to change registry if required by new version
@@ -149,7 +148,7 @@ Public Class Dome
         Do
             Threading.Thread.Sleep(100)
             TL.LogMessage("New", "Waiting for hand-box form to be created")
-        Loop Until Not g_handBox Is Nothing
+        Loop Until g_handBox IsNot Nothing
         TL.LogMessage("New", "Hand-box created OK")
 
         TL.LogMessage("New", "New completed OK")
@@ -183,12 +182,12 @@ Public Class Dome
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
         If Not Me.disposedValue Then
             If disposing Then
-                If Not g_TrafficForm Is Nothing Then
+                If g_TrafficForm IsNot Nothing Then
                     Try : g_TrafficForm.Close() : Catch : End Try
                     Try : g_TrafficForm.Dispose() : Catch : End Try
                     g_TrafficForm = Nothing
                 End If
-                If Not g_handBox Is Nothing Then
+                If g_handBox IsNot Nothing Then
                     If Not IsNothing(TL) Then Try : TL.LogMessage("Dispose", "Closing hand-box!") : Catch : End Try
                     g_handBox.Invoke(New Action(AddressOf g_handBox.Close))
                     handboxThread.Join(1000)
@@ -285,7 +284,7 @@ Public Class Dome
 #Region "IDome Implementation"
 
     Public Sub AbortSlew() Implements IDomeV2.AbortSlew
-        If Not g_TrafficForm Is Nothing Then
+        If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkSlew.Checked Then _
                 g_TrafficForm.TrafficStart("AbortSlew")
         End If
@@ -293,7 +292,7 @@ Public Class Dome
         check_connected()
         HW_Halt()
 
-        If Not g_TrafficForm Is Nothing Then
+        If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkSlew.Checked Then _
                 g_TrafficForm.TrafficEnd(" (done)")
         End If
@@ -301,7 +300,7 @@ Public Class Dome
 
     Public ReadOnly Property Altitude() As Double Implements IDomeV2.Altitude
         Get
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkShutter.Checked Then _
                     g_TrafficForm.TrafficStart("Altitude: ")
             End If
@@ -315,7 +314,7 @@ Public Class Dome
 
             Altitude = g_dDomeAlt
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkShutter.Checked Then _
                     g_TrafficForm.TrafficEnd(Format$(Altitude, "0.0"))
             End If
@@ -324,14 +323,14 @@ Public Class Dome
 
     Public ReadOnly Property AtHome() As Boolean Implements IDomeV2.AtHome
         Get
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficStart("AtHome: ")
             End If
 
             check_connected()
             AtHome = g_bAtHome
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficEnd(CStr(AtHome))
             End If
         End Get
@@ -339,7 +338,7 @@ Public Class Dome
 
     Public ReadOnly Property AtPark() As Boolean Implements IDomeV2.AtPark
         Get
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then _
                     g_TrafficForm.TrafficStart("AtPark: ")
             End If
@@ -347,7 +346,7 @@ Public Class Dome
             check_connected()
             AtPark = g_bAtPark
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficEnd(CStr(AtPark))
             End If
         End Get
@@ -355,7 +354,7 @@ Public Class Dome
 
     Public ReadOnly Property Azimuth() As Double Implements IDomeV2.Azimuth
         Get
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then _
                     g_TrafficForm.TrafficStart("Azimuth: ")
             End If
@@ -365,7 +364,7 @@ Public Class Dome
             check_connected()
             Azimuth = g_dDomeAz
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficEnd(Format$(Azimuth, "0.0"))
             End If
         End Get
@@ -375,7 +374,7 @@ Public Class Dome
         Get
             CanFindHome = g_bCanFindHome
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficLine("CanFindHome: " & CanFindHome)
             End If
         End Get
@@ -385,7 +384,7 @@ Public Class Dome
         Get
             CanPark = g_bCanPark
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficLine("CanPark: " & CanPark)
             End If
         End Get
@@ -395,7 +394,7 @@ Public Class Dome
         Get
             CanSetAltitude = g_bCanSetAltitude
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficLine("CanSetAltitude: " & CanSetAltitude)
             End If
         End Get
@@ -405,7 +404,7 @@ Public Class Dome
         Get
             CanSetAzimuth = g_bCanSetAzimuth
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficLine("CanSetAzimuth: " & CanSetAzimuth)
             End If
         End Get
@@ -415,7 +414,7 @@ Public Class Dome
         Get
             CanSetPark = g_bCanSetPark
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficLine("CanSetPark: " & CanSetPark)
             End If
         End Get
@@ -425,7 +424,7 @@ Public Class Dome
         Get
             CanSetShutter = g_bCanSetShutter
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficLine("CanSetShutter: " & CanSetShutter)
             End If
         End Get
@@ -435,7 +434,7 @@ Public Class Dome
         Get
             CanSlave = False
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficLine("CanSlave: " & CanSlave)
             End If
         End Get
@@ -445,14 +444,14 @@ Public Class Dome
         Get
             CanSyncAzimuth = g_bCanSyncAzimuth
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficLine("CanSyncAzimuth: " & CanSyncAzimuth)
             End If
         End Get
     End Property
 
     Public Sub CloseShutter() Implements IDomeV2.CloseShutter
-        If Not g_TrafficForm Is Nothing Then
+        If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkShutter.Checked Then g_TrafficForm.TrafficStart("CloseShutter")
         End If
 
@@ -495,7 +494,7 @@ Public Class Dome
         Get
             Connected = g_bConnected
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkConnected.Checked Then g_TrafficForm.TrafficLine("Connected: " & Connected)
             End If
         End Get
@@ -504,7 +503,7 @@ Public Class Dome
             Dim out As String
             Try
                 TL.LogMessage("Connected", String.Format("Connected set: {0}", value))
-                If Not g_TrafficForm Is Nothing Then
+                If g_TrafficForm IsNot Nothing Then
                     If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficStart("Connected: " & g_bConnected & " -> " & value)
                 End If
 
@@ -528,22 +527,22 @@ Public Class Dome
                     Do
                         Threading.Thread.Sleep(100)
                         TL.LogMessage("Connected", "Waiting for hand-box form to be created")
-                    Loop Until Not g_handBox Is Nothing
+                    Loop Until g_handBox IsNot Nothing
                     TL.LogMessage("Connected", "Hand-box created OK")
                 End If
 
                 If value Then
                     TL.LogMessage("Connected", String.Format("Showing hand-box - g_handox is nothing: {0}", IsNothing(g_handBox)))
                     g_handBox.Show()
-                    If Not g_TrafficForm Is Nothing Then g_TrafficForm.Show()
+                    If g_TrafficForm IsNot Nothing Then g_TrafficForm.Show()
                 Else
-                    If Not g_TrafficForm Is Nothing Then g_TrafficForm.Hide()
+                    If g_TrafficForm IsNot Nothing Then g_TrafficForm.Hide()
                     TL.LogMessage("Connected", String.Format("Hiding hand-box - g_handox is nothing: {0}", IsNothing(g_handBox)))
                     g_handBox.Hide()
                 End If
 
 
-                If Not g_TrafficForm Is Nothing Then
+                If g_TrafficForm IsNot Nothing Then
                     If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficEnd(out)
                 End If
             Catch ex As Exception
@@ -554,13 +553,13 @@ Public Class Dome
 
     Public ReadOnly Property Description() As String Implements IDomeV2.Description
         Get
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficStart("Description")
             End If
 
             Description = INSTRUMENT_DESCRIPTION
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficEnd(" (done)")
             End If
         End Get
@@ -568,7 +567,7 @@ Public Class Dome
 
     Public ReadOnly Property DriverInfo() As String Implements IDomeV2.DriverInfo
         Get
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficStart("DriverInfo")
             End If
             DriverInfo = "ASCOM Platform 6 Dome Simulator in VB.NET"
@@ -587,14 +586,14 @@ Public Class Dome
             'If App.Comments <> "" Then _
             '    DriverInfo = DriverInfo & vbCrLf & App.Comments
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficEnd(" (done)")
             End If
         End Get
     End Property
 
     Public Sub FindHome() Implements IDomeV2.FindHome
-        If Not g_TrafficForm Is Nothing Then
+        If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkSlew.Checked Then g_TrafficForm.TrafficStart("FindHome")
         End If
 
@@ -624,7 +623,7 @@ Public Class Dome
         Get
             InterfaceVersion = 2
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficLine("InterfaceVersion: " & InterfaceVersion)
             End If
         End Get
@@ -634,14 +633,14 @@ Public Class Dome
         Get
             Name = INSTRUMENT_NAME
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficLine("Name: " & Name)
             End If
         End Get
     End Property
 
     Public Sub OpenShutter() Implements IDomeV2.OpenShutter
-        If Not g_TrafficForm Is Nothing Then
+        If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkShutter.Checked Then g_TrafficForm.TrafficStart("OpenShutter")
         End If
 
@@ -677,7 +676,7 @@ Public Class Dome
     End Sub
 
     Public Sub Park() Implements IDomeV2.Park
-        If Not g_TrafficForm Is Nothing Then
+        If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkSlew.Checked Then g_TrafficForm.TrafficStart("Park")
         End If
 
@@ -704,7 +703,7 @@ Public Class Dome
     End Sub
 
     Public Sub SetPark() Implements IDomeV2.SetPark
-        If Not g_TrafficForm Is Nothing Then
+        If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficStart("SetPark: " & Format$(g_dDomeAz, "0.0"))
         End If
 
@@ -736,19 +735,19 @@ Public Class Dome
 
         g_handBox.BeginInvoke(New Action(AddressOf g_handBox.LabelButtons))
 
-        If Not g_TrafficForm Is Nothing Then
+        If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficEnd(" (done)")
         End If
     End Sub
 
     Public Sub SetupDialog() Implements IDomeV2.SetupDialog
-        If Not g_TrafficForm Is Nothing Then
+        If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficStart("SetupDialog")
         End If
 
         g_handBox.BeginInvoke(New Action(AddressOf g_handBox.DoSetup))
 
-        If Not g_TrafficForm Is Nothing Then
+        If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficEnd(" (done)")
         End If
     End Sub
@@ -757,7 +756,7 @@ Public Class Dome
         Get
             Dim out As String
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkShutter.Checked Then g_TrafficForm.TrafficStart("ShutterStatus: ")
             End If
 
@@ -766,7 +765,7 @@ Public Class Dome
             check_connected()
             ShutterStatus = g_eShutterState
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkShutter.Checked Then
                     out = "unknown"
                     Select Case ShutterStatus
@@ -786,12 +785,12 @@ Public Class Dome
         Get
             Slaved = False
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficLine("Slaved: " & Slaved)
             End If
         End Get
         Set(ByVal value As Boolean)
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficLine("Slaved: " & False & " -> " & value)
             End If
 
@@ -806,14 +805,14 @@ Public Class Dome
 
             Slewing = HW_Slewing
 
-            If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkSlewing.Checked Then g_TrafficForm.TrafficChar(IIf(Slewing, "Slewing: True", "Slewing: False"))
             End If
         End Get
     End Property
 
     Public Sub SlewToAltitude(ByVal Altitude As Double) Implements IDomeV2.SlewToAltitude
-        If Not g_TrafficForm Is Nothing Then
+        If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkShutter.Checked Then g_TrafficForm.TrafficLine("SlewToAltitude:" & Format$(Altitude, "0.0"))
         End If
 
@@ -845,7 +844,7 @@ Public Class Dome
     End Sub
 
     Public Sub SlewToAzimuth(ByVal Azimuth As Double) Implements IDomeV2.SlewToAzimuth
-        If Not g_TrafficForm Is Nothing Then
+        If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkSlew.Checked Then g_TrafficForm.TrafficLine("SlewToAzimuth: " & Format$(Azimuth, "0.0"))
         End If
 
@@ -873,7 +872,7 @@ Public Class Dome
     End Sub
 
     Public Sub SyncToAzimuth(ByVal Azimuth As Double) Implements IDomeV2.SyncToAzimuth
-        If Not g_TrafficForm Is Nothing Then
+        If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkSlew.Checked Then g_TrafficForm.TrafficLine("SyncToAzimuth: " & Format$(Azimuth, "0.0"))
         End If
 
@@ -899,7 +898,7 @@ Public Class Dome
         check_Az(Azimuth)
         HW_Sync(Azimuth)
 
-        If Not g_TrafficForm Is Nothing Then
+        If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkSlew.Checked Then _
                 g_TrafficForm.TrafficEnd(" (done)")
         End If
