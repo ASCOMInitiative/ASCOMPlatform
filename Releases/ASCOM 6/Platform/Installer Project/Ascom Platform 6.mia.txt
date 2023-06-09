@@ -1025,7 +1025,7 @@ Comment: Platform 6 core components
 Install Assembly ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
 Install Files ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
-Comment: Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\Platform\v6
+Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\Platform\v6
 Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to Global Assembly Cache
 Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6
@@ -1620,6 +1620,8 @@ if Variable SUCCESS not Equals ERROR
   Set Variable MYPROGRESS to 49
   Set Variable PROGRESSTEXT to Registering ASCOM.Utilities 6.0.0.0
   Register assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable PROGRESSTEXT to Registering ASCOM.DeviceInterface 6.0.0.0
+  Register assembly ASCOM.DeviceInterface, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable MYPROGRESS to 50
   Set Variable PROGRESSTEXT to Registering ASCOM.Utilities.Video 6.1.0.0
   Register assembly ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
@@ -1768,6 +1770,12 @@ if Variable SUCCESS not Equals ERROR
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Utilities (at end of file)
     if Variable RC not Equals 0
       MessageBalloon: RegAsm 64, Unable to register the ASCOM.Utilities assembly for 64bit operation. RC: $RC$
+    end
+    Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Deviceinterfaces.dll for COM
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Deviceinterfaces.dll" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Deviceinterfaces (at end of file)
+    if Variable RC not Equals 0
+      MessageBalloon: RegAsm 64, Unable to register the ASCOM.Deviceinterfaces assembly for 64bit operation. RC: $RC$
     end
     Set Variable MYPROGRESS to 78
     Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Utilities.Video.dll for COM
