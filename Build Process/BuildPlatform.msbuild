@@ -89,7 +89,6 @@
 		<NuGetCommand>..\nuget restore</NuGetCommand>
 
 		<!-- Code signing tool command line bases for SHA1 and SHA256 signing -->
-		<SignToolBase1>signtool sign /as /as /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256</SignToolBase1>
 		<SignToolBase256>signtool sign /a /fd SHA256 /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256</SignToolBase256>
 
 	</PropertyGroup>
@@ -239,7 +238,6 @@
 
 		<!-- Sign and copy the RemoveASCOM executables, that have just been built, to the installer main directory so that the latest versions are included in the installer -->
 		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(RemoveASCOMExe)&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
-		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(RemoveASCOMExe)&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 		<ItemGroup>
 			<RemoveASCOMExecutables Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb)" />
 		</ItemGroup>
@@ -252,13 +250,9 @@
 		<!-- Sign the executables that support the installation process, these are not automatically signed by the InstallAware build process -->
 		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
-		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
-		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 
 		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
-		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
-		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 
 		<!-- Build the help files for Platform and Developer.-->
 		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=$(Configuration);Platform=AnyCPU" />
