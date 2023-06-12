@@ -65,6 +65,9 @@ namespace ASCOM.Simulator
             this.checkBoxCanGetCoolerPower = new System.Windows.Forms.CheckBox();
             this.checkBoxCanSetCCDTemperature = new System.Windows.Forms.CheckBox();
             this.groupBoxExposure = new System.Windows.Forms.GroupBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.TxtSubExposure = new System.Windows.Forms.TextBox();
+            this.ChkHasSubExposure = new System.Windows.Forms.CheckBox();
             this.textBoxMaxExposure = new System.Windows.Forms.TextBox();
             this.textBoxMinExposure = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
@@ -100,9 +103,6 @@ namespace ASCOM.Simulator
             this.label1 = new System.Windows.Forms.Label();
             this.NumInterfaceVersion = new System.Windows.Forms.NumericUpDown();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.ChkHasSubExposure = new System.Windows.Forms.CheckBox();
-            this.TxtSubExposure = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBoxCCD.SuspendLayout();
             this.groupBoxGainSettings.SuspendLayout();
@@ -556,6 +556,38 @@ namespace ASCOM.Simulator
             this.groupBoxExposure.TabStop = false;
             this.groupBoxExposure.Text = "Exposure";
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.label9.Location = new System.Drawing.Point(31, 143);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(86, 13);
+            this.label9.TabIndex = 8;
+            this.label9.Text = "Sub exposure (s)";
+            // 
+            // TxtSubExposure
+            // 
+            this.TxtSubExposure.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TxtSubExposure.Location = new System.Drawing.Point(121, 140);
+            this.TxtSubExposure.Name = "TxtSubExposure";
+            this.TxtSubExposure.Size = new System.Drawing.Size(61, 20);
+            this.TxtSubExposure.TabIndex = 7;
+            // 
+            // ChkHasSubExposure
+            // 
+            this.ChkHasSubExposure.AutoSize = true;
+            this.ChkHasSubExposure.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ChkHasSubExposure.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.ChkHasSubExposure.Location = new System.Drawing.Point(34, 117);
+            this.ChkHasSubExposure.Name = "ChkHasSubExposure";
+            this.ChkHasSubExposure.Size = new System.Drawing.Size(111, 17);
+            this.ChkHasSubExposure.TabIndex = 6;
+            this.ChkHasSubExposure.Text = "Has sub exposure";
+            this.ChkHasSubExposure.UseVisualStyleBackColor = true;
+            this.ChkHasSubExposure.CheckedChanged += new System.EventHandler(this.ChkHasSubExposure_CheckedChanged);
+            // 
             // textBoxMaxExposure
             // 
             this.textBoxMaxExposure.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -931,7 +963,7 @@ namespace ASCOM.Simulator
             this.NumInterfaceVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.NumInterfaceVersion.Location = new System.Drawing.Point(39, 41);
             this.NumInterfaceVersion.Maximum = new decimal(new int[] {
-            3,
+            4,
             0,
             0,
             0});
@@ -963,38 +995,6 @@ namespace ASCOM.Simulator
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Simulated Image";
-            // 
-            // ChkHasSubExposure
-            // 
-            this.ChkHasSubExposure.AutoSize = true;
-            this.ChkHasSubExposure.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ChkHasSubExposure.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.ChkHasSubExposure.Location = new System.Drawing.Point(34, 117);
-            this.ChkHasSubExposure.Name = "ChkHasSubExposure";
-            this.ChkHasSubExposure.Size = new System.Drawing.Size(111, 17);
-            this.ChkHasSubExposure.TabIndex = 6;
-            this.ChkHasSubExposure.Text = "Has sub exposure";
-            this.ChkHasSubExposure.UseVisualStyleBackColor = true;
-            this.ChkHasSubExposure.CheckedChanged += new System.EventHandler(this.ChkHasSubExposure_CheckedChanged);
-            // 
-            // TxtSubExposure
-            // 
-            this.TxtSubExposure.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TxtSubExposure.Location = new System.Drawing.Point(121, 140);
-            this.TxtSubExposure.Name = "TxtSubExposure";
-            this.TxtSubExposure.Size = new System.Drawing.Size(61, 20);
-            this.TxtSubExposure.TabIndex = 7;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label9.Location = new System.Drawing.Point(31, 143);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(86, 13);
-            this.label9.TabIndex = 8;
-            this.label9.Text = "Sub exposure (s)";
             // 
             // SetupDialogForm
             // 

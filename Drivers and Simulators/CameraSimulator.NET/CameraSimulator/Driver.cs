@@ -290,6 +290,8 @@ namespace ASCOM.Simulator
         // SetFanSpeed, GetFanSpeed. These commands control a hypothetical CCD camera heat sink fan, range 0 (off) to 3 (full speed) 
         private int fanMode;
 
+        private bool connecting = false;
+
         #endregion
 
         #region Enums
@@ -2514,6 +2516,9 @@ namespace ASCOM.Simulator
         /// </summary>
         public void Connect()
         {
+            // Test whether we are  behaving as ICameraV4 or later
+            CheckSupportedInThisInterfaceVersion("Connect", 4);
+
             // Set the completion variable to the "process running" state
             Connecting = true;
 
@@ -2538,6 +2543,9 @@ namespace ASCOM.Simulator
         /// </summary>
         public void Disconnect()
         {
+            // Test whether we are  behaving as ICameraV4 or later
+            CheckSupportedInThisInterfaceVersion("Disconnect", 4);
+
             // Set the completion variable to the "process running" state
             Connecting = true;
 
@@ -2560,7 +2568,21 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Connect / Disconnect cokmpleti0n variable. Returns true when an operation is underway, otherwise false
         /// </summary>
-        public bool Connecting { get; private set; }
+        public bool Connecting 
+        {
+            get
+            {
+                // Test whether we are  behaving as ICameraV4 or later
+                CheckSupportedInThisInterfaceVersion("Connecting", 4);
+
+                return connecting;
+            }
+
+            private set
+            {
+                connecting = value;
+            }
+        }
 
         /// <summary>
         /// Return the device's operational state in one call
@@ -2569,6 +2591,9 @@ namespace ASCOM.Simulator
         {
             get
             {
+                // Test whether we are  behaving as ICameraV4 or later
+                CheckSupportedInThisInterfaceVersion("DeviceState", 4);
+
                 // Create an array list to hold the IStateValue entries
                 ArrayList deviceState = new ArrayList();
 
@@ -2588,7 +2613,6 @@ namespace ASCOM.Simulator
         }
 
         #endregion
-
 
         #region Private
 

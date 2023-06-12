@@ -1806,6 +1806,10 @@ if Variable SUCCESS not Equals ERROR
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Focus Simulator 6 (at end of file)
     if Variable RC not Equals 0
       MessageBalloon: RegAsm 64, Unable to register the ASCOM Focuser simulator for 64bit operation. RC: $RC$
+      if Variable ASCOMERROR not Equals 
+        Set Variable ASCOMERROR to $ASCOMERROR$$NEWLINE$
+      end
+      Set Variable ASCOMERROR to $ASCOMERROR$Focuser simulator 64bit registration failed. RC: $RC$
     end
     Set Variable PROGRESSTEXT to Registering Platform 6 CoverCalibrator simulator
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator\ASCOM.Simulator.CoverCalibrator.dll" /codebase (WAIT, get result into variable RC)

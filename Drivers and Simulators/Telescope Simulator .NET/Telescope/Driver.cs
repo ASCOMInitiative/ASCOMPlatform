@@ -792,8 +792,8 @@ namespace ASCOM.Simulator
             get
             {
                 CheckVersionOne("InterfaceVersion", false);
-                SharedResources.TrafficLine(SharedResources.MessageType.Other, "InterfaceVersion: 3");
-                return 3;
+                SharedResources.TrafficLine(SharedResources.MessageType.Other, "InterfaceVersion: 4");
+                return 4;
             }
         }
 
