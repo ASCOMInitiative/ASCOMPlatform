@@ -49,6 +49,7 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Runtime;
+using System.Threading;
 
 namespace ASCOM.Simulator
 {
@@ -59,7 +60,7 @@ namespace ASCOM.Simulator
     /// _Camera from being created and used as the [default] interface
     /// </summary>
     [Guid("12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
-    public class Camera : ICameraV3
+    public class Camera : ICameraV4
     {
         // Driver ID and descriptive string that shows in the Chooser
         private static string s_csDriverID = "ASCOM.Simulator.Camera";
@@ -2505,6 +2506,89 @@ namespace ASCOM.Simulator
         }
 
         #endregion
+
+        #region ICameraV4 members
+
+        /// <summary>
+        /// Connect to the telescope asynchronously
+        /// </summary>
+        public void Connect()
+        {
+            // Set the completion variable to the "process running" state
+            Connecting = true;
+
+            // Start a task that will flag the Connect operation as complete after a set time interval
+            Task.Run(() =>
+            {
+                // Simulate a long connection phase
+                Thread.Sleep(3000);
+
+                // Set the Connected state to true
+                Connected = true;
+
+                // Set the completion variable to the "process complete" state to show that the Connect operation has completed
+                Connecting = false;
+            });
+
+            // End of the Connect operation initiator
+        }
+
+        /// <summary>
+        /// Disconnect from the telescope asynchronously
+        /// </summary>
+        public void Disconnect()
+        {
+            // Set the completion variable to the "process running" state
+            Connecting = true;
+
+            // Start a task that will flag the Disconnect operation as complete after a set time interval
+            Task.Run(() =>
+            {
+                // Simulate a long connection phase
+                Thread.Sleep(3000);
+
+                // Set the Connected state to true
+                Connected = false;
+
+                // Set the completion variable to the "process complete" state to show that the Disconnect operation has completed
+                Connecting = false;
+            });
+
+            // End of the Disconnect operation initiator
+        }
+
+        /// <summary>
+        /// Connect / Disconnect cokmpleti0n variable. Returns true when an operation is underway, otherwise false
+        /// </summary>
+        public bool Connecting { get; private set; }
+
+        /// <summary>
+        /// Return the device's operational state in one call
+        /// </summary>
+        public ArrayList DeviceState
+        {
+            get
+            {
+                // Create an array list to hold the IStateValue entries
+                ArrayList deviceState = new ArrayList();
+
+                // Add one entry for each operational state, if possible
+                try { deviceState.Add(new StateValue("CameraState", CameraState)); } catch { }
+                try { deviceState.Add(new StateValue("CCDTemperature", CCDTemperature)); } catch { }
+                try { deviceState.Add(new StateValue("CoolerPower", CoolerPower)); } catch { }
+                try { deviceState.Add(new StateValue("HeatSinkTemperature", HeatSinkTemperature)); } catch { }
+                try { deviceState.Add(new StateValue("ImageReady", ImageReady)); } catch { }
+                try { deviceState.Add(new StateValue("IsPulseGuiding", IsPulseGuiding)); } catch { }
+                try { deviceState.Add(new StateValue("PercentCompleted", PercentCompleted)); } catch { }
+                try { deviceState.Add(new StateValue("TimeStamp", DateTime.Now)); } catch { }
+
+                // Return the overall device state
+                return deviceState;
+            }
+        }
+
+        #endregion
+
 
         #region Private
 

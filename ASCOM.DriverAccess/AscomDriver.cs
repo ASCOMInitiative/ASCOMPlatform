@@ -117,26 +117,80 @@ namespace ASCOM.DriverAccess
             }
         }
 
-		#endregion
+        #endregion
 
-		#region IAscomDriver Members
+        #region DeviceState and Connect / Disconnect members
 
-		/// <summary>
-		/// Set True to connect to the device hardware. Set False to disconnect from the device hardware.
-		/// You can also read the property to check whether it is connected. This reports the current hardware state.
-		/// </summary>
-		/// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented</b></p>Do not use a NotConnectedException here. That exception is for use in other methods that require a connection in order to succeed.
-		/// <para>The Connected property sets and reports the state of connection to the device hardware.
-		/// For a hub this means that Connected will be true when the first driver connects and will only be set to false
-		/// when all drivers have disconnected.  A second driver may find that Connected is already true and
-		/// setting Connected to false does not report Connected as false.  This is not an error because the physical state is that the
-		/// hardware connection is still true.</para>
-		/// <para>Multiple calls setting Connected to true or false will not cause an error.</para>
-		/// </remarks>
-		public bool Connected
+        /// <summary>
+        /// 
+        /// </summary>
+        public ArrayList DeviceState
+        {
+            get
+            {
+                try
+                {
+                    return memberFactory.CallMember(1, "DeviceState", new Type[] { }, new object[] { }).ComObjToArrayList();
+                }
+                catch (Exception ex)
+                {
+                    // If the device doesn't support his call return an empty ArrayList
+                    TL.LogMessage("DeviceState Get", $"Received exception: {ex.Message}, retuning an empty ArrayList");
+                    return new ArrayList();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Connect()
+        {
+            TL.LogMessage("Connect", "Issuing Connect command");
+            memberFactory.CallMember(3, "Connect", new Type[] { });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Disconnect()
+        {
+            TL.LogMessage("Disconnect", "Issuing Disconnect command");
+            memberFactory.CallMember(3, "Disconnect", new Type[] { });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Connecting
+        {
+            get
+            {
+                TL.LogMessage("Connected Get", "Issuing Connecting command");
+                return (bool)memberFactory.CallMember(1, "Connecting", new Type[] { }, new object[] { });
+            }
+        }
+
+        #endregion
+
+        #region IAscomDriver Members
+
+        /// <summary>
+        /// Set True to connect to the device hardware. Set False to disconnect from the device hardware.
+        /// You can also read the property to check whether it is connected. This reports the current hardware state.
+        /// </summary>
+        /// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented</b></p>Do not use a NotConnectedException here. That exception is for use in other methods that require a connection in order to succeed.
+        /// <para>The Connected property sets and reports the state of connection to the device hardware.
+        /// For a hub this means that Connected will be true when the first driver connects and will only be set to false
+        /// when all drivers have disconnected.  A second driver may find that Connected is already true and
+        /// setting Connected to false does not report Connected as false.  This is not an error because the physical state is that the
+        /// hardware connection is still true.</para>
+        /// <para>Multiple calls setting Connected to true or false will not cause an error.</para>
+        /// </remarks>
+        public bool Connected
         {
             get
             {
@@ -166,17 +220,17 @@ namespace ASCOM.DriverAccess
             }
         }
 
-		/// <summary>
-		/// Returns a description of the device, such as manufacturer and model number. Any ASCII characters may be used. 
-		/// </summary>
-		/// <value>The description.</value>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p> 
-		/// <para>The description length must be a maximum of 64 characters so that it can be used in FITS image headers, which are limited to 80 characters including the header name.</para>
-		/// </remarks>
-		public string Description
+        /// <summary>
+        /// Returns a description of the device, such as manufacturer and model number. Any ASCII characters may be used. 
+        /// </summary>
+        /// <value>The description.</value>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p> 
+        /// <para>The description length must be a maximum of 64 characters so that it can be used in FITS image headers, which are limited to 80 characters including the header name.</para>
+        /// </remarks>
+        public string Description
         {
             get
             {
@@ -209,17 +263,17 @@ namespace ASCOM.DriverAccess
             }
         }
 
-		/// <summary>
-		/// Descriptive and version information about this ASCOM driver.
-		/// </summary>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented</b></p> This string may contain line endings and may be hundreds to thousands of characters long.
-		/// It is intended to display detailed information on the ASCOM driver, including version and copyright data.
-		/// See the <see cref="Description" /> property for information on the device itself.
-		/// To get the driver version in a parse-able string, use the <see cref="DriverVersion" /> property.
-		/// </remarks>
-		public string DriverInfo
+        /// <summary>
+        /// Descriptive and version information about this ASCOM driver.
+        /// </summary>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented</b></p> This string may contain line endings and may be hundreds to thousands of characters long.
+        /// It is intended to display detailed information on the ASCOM driver, including version and copyright data.
+        /// See the <see cref="Description" /> property for information on the device itself.
+        /// To get the driver version in a parse-able string, use the <see cref="DriverVersion" /> property.
+        /// </remarks>
+        public string DriverInfo
         {
             get
             {
@@ -253,15 +307,15 @@ namespace ASCOM.DriverAccess
             }
         }
 
-		/// <summary>
-		/// A string containing only the major and minor version of the driver.
-		/// </summary>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented</b></p> This must be in the form "n.n".
-		/// It should not to be confused with the <see cref="InterfaceVersion" /> property, which is the version of this specification supported by the driver.
-		/// </remarks>
-		public string DriverVersion
+        /// <summary>
+        /// A string containing only the major and minor version of the driver.
+        /// </summary>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented</b></p> This must be in the form "n.n".
+        /// It should not to be confused with the <see cref="InterfaceVersion" /> property, which is the version of this specification supported by the driver.
+        /// </remarks>
+        public string DriverVersion
         {
             get
             {
@@ -296,15 +350,15 @@ namespace ASCOM.DriverAccess
             }
         }
 
-		/// <summary>
-		/// The interface version number that this device supports.
-		/// </summary>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read this property.
-		/// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
-		/// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
-		/// </remarks>
-		public short InterfaceVersion
+        /// <summary>
+        /// The interface version number that this device supports.
+        /// </summary>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read this property.
+        /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
+        /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
+        /// </remarks>
+        public short InterfaceVersion
         {
             get
             {
@@ -320,14 +374,14 @@ namespace ASCOM.DriverAccess
             }
         }
 
-		/// <summary>
-		/// The short name of the driver, for display purposes
-		/// </summary>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented</b></p>
-		/// </remarks>
-		public string Name
+        /// <summary>
+        /// The short name of the driver, for display purposes
+        /// </summary>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented</b></p>
+        /// </remarks>
+        public string Name
         {
             get
             {
@@ -361,55 +415,56 @@ namespace ASCOM.DriverAccess
             }
         }
 
-		/// <summary>
-		/// Launches a configuration dialogue box for the driver.  The call will not return
-		/// until the user clicks OK or cancel manually.
-		/// </summary>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
-		public void SetupDialog()
+        /// <summary>
+        /// Launches a configuration dialogue box for the driver.  The call will not return
+        /// until the user clicks OK or cancel manually.
+        /// </summary>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
+        public void SetupDialog()
         {
             memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { });
         }
-		#endregion
 
-		#region IDeviceControl Members
+        #endregion
 
-		/// <summary>Invokes the specified device-specific custom action.</summary>
-		/// <param name="ActionName">A well known name agreed by interested parties that represents the action to be carried out.</param>
-		/// <param name="ActionParameters">List of required parameters or an <see cref="String.Empty">Empty String</see> if none are required.</param>
-		/// <returns>A string response. The meaning of returned strings is set by the driver author.
-		/// <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
-		/// of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
-		/// </returns>
-		/// <exception cref="MethodNotImplementedException">Thrown if no actions are supported.</exception>
-		/// <exception cref="ActionNotImplementedException">It is intended that the <see cref="SupportedActions"/> method will inform clients of driver capabilities, but the driver must still throw 
-		/// an <see cref="ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented.</b></p>
-		/// <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
-		/// <para>The names of all supported actions must be returned in the <see cref="SupportedActions" /> property.</para>
-		/// </remarks>
-		public string Action(string ActionName, string ActionParameters)
+        #region IDeviceControl Members
+
+        /// <summary>Invokes the specified device-specific custom action.</summary>
+        /// <param name="ActionName">A well known name agreed by interested parties that represents the action to be carried out.</param>
+        /// <param name="ActionParameters">List of required parameters or an <see cref="String.Empty">Empty String</see> if none are required.</param>
+        /// <returns>A string response. The meaning of returned strings is set by the driver author.
+        /// <para>Suppose filter wheels start to appear with automatic wheel changers; new actions could be <c>QueryWheels</c> and <c>SelectWheel</c>. The former returning a formatted list
+        /// of wheel names and the second taking a wheel name and making the change, returning appropriate values to indicate success or failure.</para>
+        /// </returns>
+        /// <exception cref="MethodNotImplementedException">Thrown if no actions are supported.</exception>
+        /// <exception cref="ActionNotImplementedException">It is intended that the <see cref="SupportedActions"/> method will inform clients of driver capabilities, but the driver must still throw 
+        /// an <see cref="ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented.</b></p>
+        /// <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
+        /// <para>The names of all supported actions must be returned in the <see cref="SupportedActions" /> property.</para>
+        /// </remarks>
+        public string Action(string ActionName, string ActionParameters)
         {
             return (string)memberFactory.CallMember(3, "Action", new Type[] { typeof(string), typeof(string) }, new object[] { ActionName, ActionParameters });
         }
 
-		/// <summary>Returns the list of custom action names supported by this driver.</summary>
-		/// <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented</b></p>
-		/// <para>This method must return an empty <see cref="ArrayList" /> if no actions are supported. Do not throw a <see cref="ASCOM.PropertyNotImplementedException" />.</para>
-		/// <para>SupportedActions is a "discovery" mechanism that enables clients to know which Actions a device supports without having to exercise the Actions themselves. This mechanism is necessary because there could be
-		/// people / equipment safety issues if actions are called unexpectedly or out of a defined process sequence.
-		/// It follows from this that SupportedActions must return names that match the spelling of Action names exactly, without additional descriptive text. However, returned names may use any casing
-		/// because the <see cref="Action" /> ActionName parameter is case insensitive.</para>
-		/// </remarks>
-		public ArrayList SupportedActions
+        /// <summary>Returns the list of custom action names supported by this driver.</summary>
+        /// <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented</b></p>
+        /// <para>This method must return an empty <see cref="ArrayList" /> if no actions are supported. Do not throw a <see cref="ASCOM.PropertyNotImplementedException" />.</para>
+        /// <para>SupportedActions is a "discovery" mechanism that enables clients to know which Actions a device supports without having to exercise the Actions themselves. This mechanism is necessary because there could be
+        /// people / equipment safety issues if actions are called unexpectedly or out of a defined process sequence.
+        /// It follows from this that SupportedActions must return names that match the spelling of Action names exactly, without additional descriptive text. However, returned names may use any casing
+        /// because the <see cref="Action" /> ActionName parameter is case insensitive.</para>
+        /// </remarks>
+        public ArrayList SupportedActions
         {
             get
             {

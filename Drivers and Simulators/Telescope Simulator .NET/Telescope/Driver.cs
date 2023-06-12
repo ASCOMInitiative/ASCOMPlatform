@@ -27,6 +27,8 @@ using ASCOM.Utilities;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ASCOM.Simulator
 {
@@ -42,7 +44,7 @@ namespace ASCOM.Simulator
     [ServedClassName("Telescope Simulator for .NET")]
     [ProgId("ASCOM.Simulator.Telescope")]
     [ClassInterface(ClassInterfaceType.None)]
-    public class Telescope : ReferenceCountedObjectBase, ITelescopeV3
+    public class Telescope : ReferenceCountedObjectBase, ITelescopeV4
     {
         //
         // Driver private data (rate collections)
@@ -86,6 +88,7 @@ namespace ASCOM.Simulator
                 // Initialise the guide rates from the Telescope hardware default values
                 currentGuideRateRightAscension = TelescopeHardware.GuideRateRightAscension;
                 currentGuideRateDeclination = TelescopeHardware.GuideRateDeclination;
+                Connecting = false;
             }
             catch (Exception ex)
             {
@@ -95,9 +98,92 @@ namespace ASCOM.Simulator
 
         }
 
-        //
-        // PUBLIC COM INTERFACE ITelescope IMPLEMENTATION
-        //
+        #region ITelescopeV4 members
+
+        /// <summary>
+        /// Connect to the telescope asynchronously
+        /// </summary>
+        public void Connect()
+        {
+            // Set the completion variable to the "process running" state
+            Connecting = true;
+
+            // Start a task that will flag the Connect operation as complete after a set time interval
+            Task.Run(() =>
+            {
+                // Simulate a long connection phase
+                Thread.Sleep(3000);
+
+                // Set the Connected state to true
+                Connected = true;
+
+                // Set the completion variable to the "process complete" state to show that the Connect operation has completed
+                Connecting = false;
+            });
+
+            // End of the Connect operation initiator
+        }
+
+        /// <summary>
+        /// Disconnect from the telescope asynchronously
+        /// </summary>
+        public void Disconnect()
+        {
+            // Set the completion variable to the "process running" state
+            Connecting = true;
+
+            // Start a task that will flag the Disconnect operation as complete after a set time interval
+            Task.Run(() =>
+            {
+                // Simulate a long connection phase
+                Thread.Sleep(3000);
+
+                // Set the Connected state to true
+                Connected = false;
+
+                // Set the completion variable to the "process complete" state to show that the Disconnect operation has completed
+                Connecting = false;
+            });
+
+            // End of the Disconnect operation initiator
+        }
+
+        /// <summary>
+        /// Connect / Disconnect cokmpleti0n variable. Returns true when an operation is underway, otherwise false
+        /// </summary>
+        public bool Connecting { get; private set; }
+
+        /// <summary>
+        /// Return the device's operational state in one call
+        /// </summary>
+        public ArrayList DeviceState
+        {
+            get
+            {
+                // Create an array list to hold the IStateValue entries
+                ArrayList deviceState = new ArrayList();
+
+                // Add one entry for each operational state, if possible
+                try { deviceState.Add(new StateValue("Altitude", Altitude)); } catch { }
+                try { deviceState.Add(new StateValue("AtHome", AtHome)); } catch { }
+                try { deviceState.Add(new StateValue("AtPark", AtPark)); } catch { }
+                try { deviceState.Add(new StateValue("Azimuth", Azimuth)); } catch { }
+                try { deviceState.Add(new StateValue("Declination", Declination)); } catch { }
+                try { deviceState.Add(new StateValue("IsPulseGuiding", IsPulseGuiding)); } catch { }
+                try { deviceState.Add(new StateValue("RightAscension", RightAscension)); } catch { }
+                try { deviceState.Add(new StateValue("SideOfPier", SideOfPier)); } catch { }
+                try { deviceState.Add(new StateValue("SiderealTime", SiderealTime)); } catch { }
+                try { deviceState.Add(new StateValue("Slewing", Slewing)); } catch { }
+                try { deviceState.Add(new StateValue("Tracking", Tracking)); } catch { }
+                try { deviceState.Add(new StateValue("UTCDate", UTCDate)); } catch { }
+                try { deviceState.Add(new StateValue("TimeStamp", DateTime.Now)); } catch { }
+
+                // Return the overall device state
+                return deviceState;
+            }
+        }
+
+        #endregion
 
         #region ITelescope Members
 
@@ -1506,6 +1592,8 @@ namespace ASCOM.Simulator
         #endregion
     }
 
+    #region Data classes
+
     //
     // The Rate class implements IRate, and is used to hold values
     // for AxisRates. You do not need to change this class.
@@ -1892,4 +1980,6 @@ namespace ASCOM.Simulator
         }
         #endregion
     }
+
+    #endregion
 }

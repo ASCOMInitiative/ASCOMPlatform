@@ -114,6 +114,7 @@
     <Compile Include="Camera.cs">
     </Compile>
     <Compile Include="CoverCalibrator.cs" />
+    <Compile Include="CameraDeviceState.cs" />
     <Compile Include="Dome.cs">
     </Compile>
     <Compile Include="Extensions.cs" />
@@ -131,6 +132,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
     </Compile>
+    <Compile Include="TelescopeDeviceState.cs" />
     <Compile Include="Video.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +185,9 @@
     <CodeAnalysisDictionary Include="..\CustomDictionary.xml">
       <Link>CustomDictionary.xml</Link>
     </CodeAnalysisDictionary>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LicenseExceptions.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
