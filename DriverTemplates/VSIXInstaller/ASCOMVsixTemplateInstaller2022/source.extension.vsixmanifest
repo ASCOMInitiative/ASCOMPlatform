@@ -28,12 +28,8 @@
     <Assets>
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" Path="|ASCOM.Setup.VsixWizard (VS2022)|" AssemblyName="|ASCOM.Setup.VsixWizard (VS2022);AssemblyName|" d:ProjectName="ASCOM.Setup.VsixWizard (VS2022)" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="LocalServerTemplate" d:TargetPath="|LocalServerTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="DriverTemplate(CS)" d:TargetPath="|DriverTemplate(CS);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="DriverTemplate(VB)" d:TargetPath="|DriverTemplate(VB);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="TestConsoleApp(CS)" d:TargetPath="|TestConsoleApp(CS);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="TestConsoleApp(VB)" d:TargetPath="|TestConsoleApp(VB);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="TestFormsApp(CS)" d:TargetPath="|TestFormsApp(CS);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="TestFormsApp(VB)" d:TargetPath="|TestFormsApp(VB);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
     </Assets>
     <Prerequisites>
         <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,18.0)" DisplayName="Visual Studio core editor" />
