@@ -18,7 +18,8 @@ class DeviceSafetyMonitor
         {
             try
             {
-                CheckConnected("IsSafe");
+                // IsSafe is required to deliver false when the device is not connected so there is no need to test whether or not the driver is connected.
+
                 bool isSafe = SafetyMonitorHardware.IsSafe;
                 LogMessage("IsSafe", isSafe.ToString());
                 return isSafe;

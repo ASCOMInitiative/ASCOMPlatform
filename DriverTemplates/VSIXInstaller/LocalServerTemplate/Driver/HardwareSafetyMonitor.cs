@@ -14,8 +14,8 @@ static class SafetyMonitorHardware
     {
         get
         {
-            LogMessage("IsSafe Get", "true");
-            return true;
+            LogMessage("IsSafe Get", "false");
+            return false;
         }
     }
 
