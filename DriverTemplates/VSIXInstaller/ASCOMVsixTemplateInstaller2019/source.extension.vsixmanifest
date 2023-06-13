@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="ASCOMVsixTemplateInstaller2019" Version="1.0.4" Language="en-US" Publisher="Peter Simpson" />
+        <Identity Id="ASCOMVsixTemplateInstaller2019" Version="2.0.0" Language="en-US" Publisher="Peter Simpson" />
         <DisplayName>ASCOM Driver Project Templates (VS2019)</DisplayName>
         <Description xml:space="preserve">Templates to create C# and VB ASCOM driver projects and test applications. Compatible with Visual Studio 2019.</Description>
         <MoreInfo>https://ascom-standards.org</MoreInfo>
@@ -20,12 +20,8 @@
     <Assets>
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" Path="|ASCOM.Setup.VsixWizard (VS2019)|" AssemblyName="|ASCOM.Setup.VsixWizard (VS2019);AssemblyName|" d:ProjectName="ASCOM.Setup.VsixWizard (VS2019)" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="LocalServerTemplate" d:TargetPath="|LocalServerTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="DriverTemplate(CS)" d:TargetPath="|DriverTemplate(CS);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="DriverTemplate(VB)" d:TargetPath="|DriverTemplate(VB);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="TestConsoleApp(CS)" d:TargetPath="|TestConsoleApp(CS);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="TestConsoleApp(VB)" d:TargetPath="|TestConsoleApp(VB);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="TestFormsApp(CS)" d:TargetPath="|TestFormsApp(CS);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="TestFormsApp(VB)" d:TargetPath="|TestFormsApp(VB);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
     </Assets>
     <Prerequisites>
         <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[16.0,17.0)" DisplayName="Visual Studio core editor" />
