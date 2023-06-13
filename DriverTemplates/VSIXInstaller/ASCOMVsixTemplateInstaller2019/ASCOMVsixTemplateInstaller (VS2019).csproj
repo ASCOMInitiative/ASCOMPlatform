@@ -76,20 +76,6 @@
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
-    <ProjectReference Include="..\DriverTemplate%28CS%29\DriverTemplate%28CS%29.csproj">
-      <Project>{BE799053-8F78-44BF-8581-68BBDC955102}</Project>
-      <Name>DriverTemplate%28CS%29</Name>
-      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\DriverTemplate%28VB%29\DriverTemplate%28VB%29.vbproj">
-      <Project>{9195CC7F-E6F7-4A13-80C0-426C5D88065E}</Project>
-      <Name>DriverTemplate%28VB%29</Name>
-      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
     <ProjectReference Include="..\LocalServerTemplate\LocalServerTemplate.csproj">
       <Project>{F17A065B-EAD3-40D1-B6E4-5AC30BAC886F}</Project>
       <Name>LocalServerTemplate</Name>
@@ -104,23 +90,9 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\TestConsoleApp%28VB%29\TestConsoleApp%28VB%29.vbproj">
-      <Project>{5698A421-C268-4748-81E6-2A4E58920D17}</Project>
-      <Name>TestConsoleApp%28VB%29</Name>
-      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
     <ProjectReference Include="..\TestFormsApp%28CS%29\TestFormsApp%28CS%29.csproj">
       <Project>{DB7501D8-D922-49DA-B6AA-393E2CE03976}</Project>
       <Name>TestFormsApp%28CS%29</Name>
-      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\TestFormsApp%28VB%29\TestFormsApp%28VB%29.vbproj">
-      <Project>{E7115742-1564-4A22-8B5B-55980215BFCB}</Project>
-      <Name>TestFormsApp%28VB%29</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
