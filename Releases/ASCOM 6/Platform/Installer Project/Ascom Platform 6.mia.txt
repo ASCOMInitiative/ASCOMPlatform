@@ -178,8 +178,6 @@ Get Folder Location System->Program Files Directory into PROGRAMFILES32
 Get Common Folder Location System->Program Files Directory into COMMONFILES32
 Set Variable REGASM32 to 
 Set Variable NGEN32 to 
-Set Variable NGENOPTIONS to 
-Set Variable NGENCOMMAND to 
 Set Variable FRAMEWORK to 
 Set Variable FRAMEWORKPATH to 
 Set Variable FRAMEWORK2 to v2.0.50727
@@ -204,8 +202,6 @@ Set Variable FRAMEWORKPATH to $FRAMEWORKROOT$$FRAMEWORK$
 Comment: Set to values that will access the 32bit portion of the registry on a 64bit OS
 Set Variable REGASM32 to $FRAMEWORKPATH$\regasm.exe
 Set Variable NGEN32 to $FRAMEWORKPATH$\ngen.exe
-Set Variable NGENOPTIONS to /queue:1
-Set Variable NGENCOMMAND to install
  
 Comment: Initialise to a null value that will access the correct portion of the registry on a 32bit OS
 Set Variable REGASM64 to 
@@ -1688,53 +1684,53 @@ if Variable SUCCESS not Equals ERROR
   Comment: Install 32bit native images
   Set Variable MYPROGRESS to 64
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
-  Run Program $NGEN32$ $NGENCOMMAND$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" $NGENOPTIONS$ (WAIT, get result into variable RC)
+  Run Program $NGEN32$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DeviceInterfaces 6 (at end of file)
   Set Variable MYPROGRESS to 65
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper - v1.0.0.0
-  Run Program $NGEN32$ $NGENCOMMAND$ "ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" $NGENOPTIONS$ (WAIT, get result into variable RC)
+  Run Program $NGEN32$ "ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Helper (at end of file)
   Set Variable MYPROGRESS to 66
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities - v6.0.0.0
-  Run Program $NGEN32$ $NGENCOMMAND$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" $NGENOPTIONS$ (WAIT, get result into variable RC)
+  Run Program $NGEN32$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Utilities 6 (at end of file)
   Set Variable MYPROGRESS to 67
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities.Video - v6.1.0.0
-  Run Program $NGEN32$ $NGENCOMMAND$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" $NGENOPTIONS$ (WAIT, get result into variable RC)
+  Run Program $NGEN32$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - VideoUtils 6.1 (at end of file)
   Set Variable MYPROGRESS to 68
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry - v5.5.6.0
-  Run Program $NGEN32$ $NGENCOMMAND$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" $NGENOPTIONS$ (WAIT, get result into variable RC)
+  Run Program $NGEN32$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Astrometry 5.5.6 (at end of file)
   Set Variable MYPROGRESS to 69
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry - v6.0.0.0
-  Run Program $NGEN32$ $NGENCOMMAND$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" $NGENOPTIONS$ (WAIT, get result into variable RC)
+  Run Program $NGEN32$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Astrometry 6 (at end of file)
   Set Variable MYPROGRESS to 70
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DriverAccess - v6.0.0.0
-  Run Program $NGEN32$ $NGENCOMMAND$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" $NGENOPTIONS$ (WAIT, get result into variable RC)
+  Run Program $NGEN32$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DriverAccess 6 (at end of file)
   Set Variable MYPROGRESS to 71
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper2 - v1.0.0.0
-  Run Program $NGEN32$ $NGENCOMMAND$ "ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" $NGENOPTIONS$ (WAIT, get result into variable RC)
+  Run Program $NGEN32$ "ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Helper2 1.0 (at end of file)
   Set Variable MYPROGRESS to 72
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Exceptions - v6.0.0.0
-  Run Program $NGEN32$ $NGENCOMMAND$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" $NGENOPTIONS$ (WAIT, get result into variable RC)
+  Run Program $NGEN32$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Exceptions 6 (at end of file)
   Set Variable MYPROGRESS to 73
   Set Variable PROGRESSTEXT to Creating 32bit native images - DirectShowLib-2005 - v2.1.0.15637
-  Run Program $NGEN32$ $NGENCOMMAND$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" $NGENOPTIONS$ (WAIT, get result into variable RC)
+  Run Program $NGEN32$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DirectShowLib 2.1 (at end of file)
   Set Variable MYPROGRESS to 74
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Cache - v6.0.0.0
-  Run Program $NGEN32$ $NGENCOMMAND$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" $NGENOPTIONS$ (WAIT, get result into variable RC)
+  Run Program $NGEN32$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Cache (at end of file)
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Support.Utilities - v6.0.0.0
-  Comment: Run Program $NGEN32$ $NGENCOMMAND$ "ASCOM.Utilities.Support, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" $NGENOPTIONS$ (WAIT, get result into variable RC)
+  Comment: Run Program $NGEN32$ "ASCOM.Utilities.Support, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
   Comment: Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Support Utilities (at end of file)
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Newtonsoft.Json- v6.0.0.0
-  Run Program $NGEN32$ $NGENCOMMAND$ "ASCOM.Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" $NGENOPTIONS$ (WAIT, get result into variable RC)
+  Run Program $NGEN32$ "ASCOM.Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Newtonsoft JSON Support (at end of file)
    
   Set Variable PROGRESSTEXT to Initialising earth rotation data
@@ -1853,7 +1849,7 @@ if Variable SUCCESS not Equals ERROR
     Comment: Create 64bit native images
     Set Variable MYPROGRESS to 86
     Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
-    Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7"  $NGENOPTIONS" (WAIT, get result into variable RC)
+    Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DeviceInterfaces 6 (at end of file)
     Set Variable MYPROGRESS to 87
     Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DriverAccess - v6.0.0.0
