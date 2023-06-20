@@ -5,6 +5,9 @@ using System.Text;
 using ASCOM.Utilities;
 using System.Collections;
 using System.Globalization;
+using System.Runtime.CompilerServices;
+using System.Diagnostics.Eventing.Reader;
+using System.Threading.Tasks;
 
 namespace ASCOM.DriverAccess
 {
@@ -19,6 +22,7 @@ namespace ASCOM.DriverAccess
         MemberFactory memberFactory;
         private bool disposedValue = false;        // To detect redundant calls
         private string deviceType;
+        private bool connecting; // Flag used when emulating the Connect / Disconnect methods
 
         #region AscomDriver Constructors and Dispose
 
@@ -117,6 +121,91 @@ namespace ASCOM.DriverAccess
             }
         }
 
+        /// <summary>
+        /// Return <see langword="true"/> if the device has a Platform 7 interface that supports Connect / Disconnect and DeviceState
+        /// </summary>
+        internal bool IsPlatform7Device
+        {
+            get
+            {
+                // Switch on the type of this DriverAccess object
+                switch (this)
+                {
+                    // True if interface version is greater than 3
+                    case Camera _:
+                        if (DriverInterfaceVersion > 3)
+                            return true;
+                        break;
+
+                    // True if interface version is greater than 1
+                    case CoverCalibrator _:
+                        if (DriverInterfaceVersion > 1)
+                            return true;
+                        break;
+
+                    // True if interface version is greater than 2
+                    case Dome _:
+                        if (DriverInterfaceVersion > 2)
+                            return true;
+                        break;
+
+                    // True if interface version is greater than 2
+                    case FilterWheel _:
+                        if (DriverInterfaceVersion > 2)
+                            return true;
+                        break;
+
+                    // True if interface version is greater than 3
+                    case Focuser _:
+                        if (DriverInterfaceVersion > 3)
+                            return true;
+                        break;
+
+                    // True if interface version is greater than 1
+                    case ObservingConditions _:
+                        if (DriverInterfaceVersion > 1)
+                            return true;
+                        break;
+
+                    // True if interface version is greater than 3
+                    case Rotator _:
+                        if (DriverInterfaceVersion > 3)
+                            return true;
+                        break;
+
+                    // True if interface version is greater than 1
+                    case SafetyMonitor _:
+                        if (DriverInterfaceVersion > 2)
+                            return true;
+                        break;
+
+                    // True if interface version is greater than 2
+                    case Switch _:
+                        if (DriverInterfaceVersion > 2)
+                            return true;
+                        break;
+
+                    // True if interface version is greater than 4
+                    case Telescope _:
+                        if (DriverInterfaceVersion > 4)
+                            return true;
+                        break;
+
+                    // True if interface version is greater than 1
+                    case Video _:
+                        if (DriverInterfaceVersion > 1)
+                            return true;
+                        break;
+
+                    default:
+                        break;
+                }
+
+                // Device has a Platform 6 or earlier interface
+                return false;
+            }
+        }
+
         #endregion
 
         #region DeviceState and Connect / Disconnect members
@@ -146,8 +235,50 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Connect()
         {
-            TL.LogMessage("Connect", "Issuing Connect command");
-            memberFactory.CallMember(3, "Connect", new Type[] { });
+            // Call the device's connect method if this is a Platform 7 or later device, otherwise simulate the connect call
+            if (IsPlatform7Device) // We are presenting a Platform 7 or later device
+            {
+                TL.LogMessage("Connect", "Issuing Connect command");
+                memberFactory.CallMember(3, "Connect", new Type[] { });
+            }
+            else // Platform 6 or earlier so emulate the capability
+            {
+                TL.LogMessage("Connect", "Emulating Connect command for Platform 6 driver");
+
+                // Set Connecting to true
+                connecting = true;
+                
+                // Run a task to set the Connected property to True
+                Task connectingTask = Task.Factory.StartNew(() =>
+                {
+                    Exception connectException = null;
+
+                    // Ensure that no exceptions can escape
+                    try
+                    {
+                        // Set Connected True
+                        TL.LogMessage("Connect", "About to set Connected True");
+                        Connected = true;
+                        TL.LogMessage("Connect", "Connected Set True OK");
+                    }
+                    catch (Exception ex)
+                    {
+                        // SOmething went wrong so long the issue and save the exception
+                        TL.LogMessage("Connect", $"Connected threw an exception: {ex.Message}");
+                        connectException = ex;
+                    }
+                    // Ensure that Connecting is always set False at the end of the task
+                    finally
+                    {
+                        TL.LogMessage("Connect", "Setting Connecting to False");
+                        connecting = false;
+                    }
+
+                    // If Connected threw an exception, throw this to the client
+                    if (!(connectException is null))
+                        throw connectException;
+                });
+            }
         }
 
         /// <summary>
@@ -166,8 +297,13 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                TL.LogMessage("Connected Get", "Issuing Connecting command");
-                return (bool)memberFactory.CallMember(1, "Connecting", new Type[] { }, new object[] { });
+                if (!IsPlatform7Device)
+                {
+                    TL.LogMessage("Connecting Get", "Issuing Connecting command");
+                    return (bool)memberFactory.CallMember(1, "Connecting", new Type[] { }, new object[] { });
+                }
+                else
+                    return connecting;
             }
         }
 
