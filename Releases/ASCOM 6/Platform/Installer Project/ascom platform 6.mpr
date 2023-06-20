@@ -1563,6 +1563,10 @@ $
 
 
 
+
+
+
+
 B
 
 
@@ -2215,7 +2219,11 @@ ASCOM Platform 6.6 SP2-  Early Access
 ASCOM Platform 6.6 SP2 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
+<<<<<<< Updated upstream
 {EE948DC1-6040-490D-B60A-E4B672434D9D}
+=======
+{9696858F-6636-4329-A136-498E827FF43C}
+>>>>>>> Stashed changes
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
