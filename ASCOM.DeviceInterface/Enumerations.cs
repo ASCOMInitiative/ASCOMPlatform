@@ -402,4 +402,51 @@ namespace ASCOM.DeviceInterface
         LRGB = 5
     }
 
+    /// <summary>
+    /// ASCOM Video Camera supported frame rates.
+    /// </summary>
+    [Guid("AECD630C-3A08-46A2-96D3-33F3CF461CBB")]
+    [ComVisible(true)]
+    public enum VideoCameraFrameRate
+    {
+        /// <summary>
+        /// This is a video camera that supports variable frame rates.
+        /// </summary>
+        Variable = 0,
+
+        /// <summary>
+        /// 25 frames per second (fps) corresponding to a <b>PAL</b> (colour) or <b>CCIR</b> (black and white) video standard.
+        /// </summary>
+        PAL = 1,
+
+        /// <summary>
+        /// 29.97  frames per second (fps) corresponding to an <b>NTSC</b> (colour) or <b>EIA</b> (black and white) video standard.
+        /// </summary>
+        NTSC = 2
+    }
+
+    /// <summary>
+    /// ASCOM Video Camera status values.
+    /// </summary>
+    [Guid("84422451-5D8E-4F5A-9A81-8E197AABF79B")]
+    [ComVisible(true)]
+    public enum VideoCameraState
+    {
+        /// <summary>
+        /// Camera status running. The video is receiving signal and video frames are available for viewing or recording.
+        /// </summary>
+        videoCameraRunning = 0,
+
+        /// <summary>
+        /// Camera status recording. The video camera is recording video to the file system. Video frames are available for viewing.
+        /// </summary>
+        videoCameraRecording = 1,
+
+        /// <summary>
+        /// Camera status error. The video camera is in a state of an error and cannot continue its operation. Usually a reset will be required to resolve the error condition.
+        /// </summary>
+        videoCameraError = 2
+    }
+
+
 }

@@ -19,10 +19,10 @@ namespace ASCOM.DeviceInterface
     /// <summary>
     /// Defines the IVideo Interface.
     /// </summary>
-    [Guid("00A394A5-BCB0-449D-A46B-81A02824ADC5")]
+    [Guid("85570809-BBD8-41F3-94C4-55201D64235B")]
     [ComVisible(true)]
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
-    public interface IVideo
+    public interface IVideoV2
     {
 		/// <summary>
 		/// Set True to connect to the device hardware. Set False to disconnect from the device hardware.
@@ -129,15 +129,35 @@ namespace ASCOM.DeviceInterface
         /// </summary>
 		void Dispose();
 
-		/// <summary>
-		/// The name of the video capture device when such a device is used.
-		/// </summary>
-		/// <exception cref="PropertyNotImplementedException">Must throw an exception if not implemented.</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks>For analogue video this is usually the video capture card or dongle attached to the computer.
-		/// </remarks>
-		string VideoCaptureDeviceName { get; }
+        /// <summary>
+        /// Connect to the device asynchronously
+        /// </summary>
+        void Connect();
+
+        /// <summary>
+        /// Disconnect from the device asynchronously
+        /// </summary>
+        void Disconnect();
+
+        /// <summary>
+        /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
+        /// </summary>
+        bool Connecting { get; }
+
+        /// <summary>
+        /// Returns the device operational state in a single call.
+        /// </summary>
+        ArrayList DeviceState { get; }
+
+        /// <summary>
+        /// The name of the video capture device when such a device is used.
+        /// </summary>
+        /// <exception cref="PropertyNotImplementedException">Must throw an exception if not implemented.</exception>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <remarks>For analogue video this is usually the video capture card or dongle attached to the computer.
+        /// </remarks>
+        string VideoCaptureDeviceName { get; }
 
 		/// <summary>
 		/// Launches a configuration dialog box for the driver.  The call will not return
@@ -810,7 +830,7 @@ namespace ASCOM.DeviceInterface
 		/// This dialog is not intended to be used in unattended mode but can give greater control over video cameras that provide special features. The dialog may also allow
 		/// changing standard <see cref="DeviceInterface.IVideo"/> interface settings such as Gamma and Gain. If a client software
 		/// displays any <see cref="DeviceInterface.IVideo"/> interface settings then it should take care to keep in sync the values changed by this method and those changed directly via the interface.</para>
-		/// <para>To support automated and unattended control over the specialized device settings or functions available on this dialog the driver should also allow their control via <see cref="SupportedActions"/>.
+		/// <para>To support automated and unattended control over the specialized device settings or functions available on this dialog the driver should also allow their control via <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedActions"/>.
 		/// This dialog is meant to be used by the applications to allow the user to adjust specialized device settings when those applications don't specifically use the specialized settings in their functionality.</para>
 		/// <para>Examples for specialized settings that could be supported are white balance and sharpness.</para>
 		/// </remarks>

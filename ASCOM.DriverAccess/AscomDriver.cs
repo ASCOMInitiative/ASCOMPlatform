@@ -90,9 +90,9 @@ namespace ASCOM.DriverAccess
         #region Public helper members
 
         /// <summary>
-        /// Return <see langword="true"/> if the device has a Platform 7 or later interface that supports Connect / Disconnect and DeviceState
+        /// Returns <see langword="true"/> if the device has a Platform 7 or later interface that supports Connect / Disconnect and DeviceState
         /// </summary>
-        public bool IsPlatform7OrLater
+        public bool HasConnectAndDeviceState
         {
             get
             {
@@ -240,7 +240,7 @@ namespace ASCOM.DriverAccess
         public void Connect()
         {
             // Call the device's Connect method if this is a Platform 7 or later device, otherwise simulate the connect call
-            if (IsPlatform7OrLater) // We are presenting a Platform 7 or later device
+            if (HasConnectAndDeviceState) // We are presenting a Platform 7 or later device
             {
                 TL.LogMessage("Connect", "Issuing Connect command");
                 memberFactory.CallMember(3, "Connect", new Type[] { });
@@ -291,7 +291,7 @@ namespace ASCOM.DriverAccess
         public void Disconnect()
         {
             // Call the device's Disconnect method if this is a Platform 7 or later device, otherwise simulate the connect call
-            if (IsPlatform7OrLater) // We are presenting a Platform 7 or later device
+            if (HasConnectAndDeviceState) // We are presenting a Platform 7 or later device
             {
                 TL.LogMessage("Disconnect", "Issuing Disconnect command");
                 memberFactory.CallMember(3, "Disconnect", new Type[] { });
@@ -343,7 +343,7 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                if (IsPlatform7OrLater)
+                if (HasConnectAndDeviceState)
                 {
                     TL.LogMessage("Connecting Get", "Issuing Connecting command");
                     return (bool)memberFactory.CallMember(1, "Connecting", new Type[] { }, new object[] { });

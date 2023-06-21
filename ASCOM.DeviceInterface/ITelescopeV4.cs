@@ -17,30 +17,6 @@ namespace ASCOM.DeviceInterface
     public interface ITelescopeV4
     {
 
-        #region ITelescopeV4 members
-
-        /// <summary>
-        /// Connect to device asynchronously
-        /// </summary>
-        void Connect();
-
-        /// <summary>
-        /// Disconnect from device asynchronously
-        /// </summary>
-        void Disconnect();
-        
-        /// <summary>
-        /// Completion variable for asynchronous connect and disconnect operations
-        /// </summary>
-        bool Connecting { get; }
-
-        /// <summary>
-        /// Device state
-        /// </summary>
-        ArrayList DeviceState { get; }
-
-        #endregion  
-
         #region Common methods
 
         /// <summary>
@@ -226,6 +202,26 @@ namespace ASCOM.DeviceInterface
         /// Applications should not call this method.
         /// </summary>
 		void Dispose();
+
+        /// <summary>
+        /// Connect to device asynchronously
+        /// </summary>
+        void Connect();
+
+        /// <summary>
+        /// Disconnect from device asynchronously
+        /// </summary>
+        void Disconnect();
+
+        /// <summary>
+        /// Completion variable for asynchronous connect and disconnect operations
+        /// </summary>
+        bool Connecting { get; }
+
+        /// <summary>
+        /// Device state
+        /// </summary>
+        ArrayList DeviceState { get; }
 
         #endregion
 
