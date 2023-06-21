@@ -87,44 +87,12 @@ namespace ASCOM.DriverAccess
         }
         #endregion
 
-        #region Internal members
+        #region Public helper members
 
         /// <summary>
-        /// Returns the member factory created for this device for use by the device class
+        /// Return <see langword="true"/> if the device has a Platform 7 or later interface that supports Connect / Disconnect and DeviceState
         /// </summary>
-        /// <value>The member factory object.</value>
-        internal MemberFactory MemberFactory
-        {
-            get { return memberFactory; }
-        }
-
-        /// <summary>
-        /// Return the driver interface version number
-        /// </summary>
-        /// <returns>The driver's interface version</returns>
-        /// <remarks>
-        /// This method reads the interface version on the first call and caches it, returning the cached value on subsequent calls.
-        /// It also handles interface version 1 drivers that don't have InterfaceVersion properties
-        /// </remarks>
-        internal short DriverInterfaceVersion
-        {
-            get
-            {
-                // Test whether the interface version has already been retrieved
-                if (!interfaceVersion.HasValue) // This is the first time the method has been called so get the interface version number from the driver and cache it
-                {
-                    try { interfaceVersion = this.InterfaceVersion; } // Get the interface version
-                    catch { interfaceVersion = 1; } // The method failed so assume that the driver has a version 1 interface where the InterfaceVersion method is not implemented
-                }
-
-                return interfaceVersion.Value; // Return the newly retrieved or already cached value
-            }
-        }
-
-        /// <summary>
-        /// Return <see langword="true"/> if the device has a Platform 7 interface that supports Connect / Disconnect and DeviceState
-        /// </summary>
-        internal bool IsPlatform7Device
+        public bool IsPlatform7OrLater
         {
             get
             {
@@ -208,6 +176,42 @@ namespace ASCOM.DriverAccess
 
         #endregion
 
+        #region Internal members
+
+        /// <summary>
+        /// Returns the member factory created for this device for use by the device class
+        /// </summary>
+        /// <value>The member factory object.</value>
+        internal MemberFactory MemberFactory
+        {
+            get { return memberFactory; }
+        }
+
+        /// <summary>
+        /// Return the driver interface version number
+        /// </summary>
+        /// <returns>The driver's interface version</returns>
+        /// <remarks>
+        /// This method reads the interface version on the first call and caches it, returning the cached value on subsequent calls.
+        /// It also handles interface version 1 drivers that don't have InterfaceVersion properties
+        /// </remarks>
+        internal short DriverInterfaceVersion
+        {
+            get
+            {
+                // Test whether the interface version has already been retrieved
+                if (!interfaceVersion.HasValue) // This is the first time the method has been called so get the interface version number from the driver and cache it
+                {
+                    try { interfaceVersion = this.InterfaceVersion; } // Get the interface version
+                    catch { interfaceVersion = 1; } // The method failed so assume that the driver has a version 1 interface where the InterfaceVersion method is not implemented
+                }
+
+                return interfaceVersion.Value; // Return the newly retrieved or already cached value
+            }
+        }
+
+        #endregion
+
         #region DeviceState and Connect / Disconnect members
 
         /// <summary>
@@ -235,8 +239,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Connect()
         {
-            // Call the device's connect method if this is a Platform 7 or later device, otherwise simulate the connect call
-            if (IsPlatform7Device) // We are presenting a Platform 7 or later device
+            // Call the device's Connect method if this is a Platform 7 or later device, otherwise simulate the connect call
+            if (IsPlatform7OrLater) // We are presenting a Platform 7 or later device
             {
                 TL.LogMessage("Connect", "Issuing Connect command");
                 memberFactory.CallMember(3, "Connect", new Type[] { });
@@ -286,8 +290,50 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Disconnect()
         {
-            TL.LogMessage("Disconnect", "Issuing Disconnect command");
-            memberFactory.CallMember(3, "Disconnect", new Type[] { });
+            // Call the device's Disconnect method if this is a Platform 7 or later device, otherwise simulate the connect call
+            if (IsPlatform7OrLater) // We are presenting a Platform 7 or later device
+            {
+                TL.LogMessage("Disconnect", "Issuing Disconnect command");
+                memberFactory.CallMember(3, "Disconnect", new Type[] { });
+            }
+            else // Platform 6 or earlier so emulate the capability
+            {
+                TL.LogMessage("Disconnect", "Emulating Disconnect command for Platform 6 driver");
+
+                // Set Connecting to true
+                connecting = true;
+
+                // Run a task to set the Connected property to True
+                Task disConnectingTask = Task.Factory.StartNew(() =>
+                {
+                    Exception disConnectException = null;
+
+                    // Ensure that no exceptions can escape
+                    try
+                    {
+                        // Set Connected False
+                        TL.LogMessage("Disconnect", "About to set Connected False");
+                        Connected = false;
+                        TL.LogMessage("ConnDisconnectect", "Connected Set False OK");
+                    }
+                    catch (Exception ex)
+                    {
+                        // Something went wrong so long the issue and save the exception
+                        TL.LogMessage("CoDisconnectnnect", $"Connected threw an exception: {ex.Message}");
+                        disConnectException = ex;
+                    }
+                    // Ensure that Connecting is always set False at the end of the task
+                    finally
+                    {
+                        TL.LogMessage("Disconnect", "Setting Connecting to False");
+                        connecting = false;
+                    }
+
+                    // If Connected threw an exception, throw this to the client
+                    if (!(disConnectException is null))
+                        throw disConnectException;
+                });
+            }
         }
 
         /// <summary>
@@ -297,7 +343,7 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                if (!IsPlatform7Device)
+                if (IsPlatform7OrLater)
                 {
                     TL.LogMessage("Connecting Get", "Issuing Connecting command");
                     return (bool)memberFactory.CallMember(1, "Connecting", new Type[] { }, new object[] { });
