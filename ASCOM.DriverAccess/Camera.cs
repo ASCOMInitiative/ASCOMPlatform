@@ -1921,7 +1921,8 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                ArrayList arrayList = DeviceState;
+                ArrayList arrayList = (ArrayList)_memberFactory.CallMember(1, "Offset", new Type[] { }, new object[] { });
+
                 TL.LogMessage("CameraDeviceState", $"Received {arrayList.Count} items");
 
                 List<IStateValue> keyValuePairs = new List<IStateValue>();

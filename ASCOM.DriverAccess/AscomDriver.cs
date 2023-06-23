@@ -212,27 +212,7 @@ namespace ASCOM.DriverAccess
 
         #endregion
 
-        #region DeviceState and Connect / Disconnect members
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public ArrayList DeviceState
-        {
-            get
-            {
-                try
-                {
-                    return memberFactory.CallMember(1, "DeviceState", new Type[] { }, new object[] { }).ComObjToArrayList();
-                }
-                catch (Exception ex)
-                {
-                    // If the device doesn't support his call return an empty ArrayList
-                    TL.LogMessage("DeviceState Get", $"Received exception: {ex.Message}, retuning an empty ArrayList");
-                    return new ArrayList();
-                }
-            }
-        }
+        #region Connect / Disconnect members
 
         /// <summary>
         /// 
