@@ -16,8 +16,6 @@ using System.Globalization;
 namespace ASCOM.DriverAccess
 {
 
-
-
     #region Telescope Wrapper
     /// <summary>
     /// Implements a telescope class to access any registered ASCOM telescope
@@ -27,6 +25,11 @@ namespace ASCOM.DriverAccess
         internal MemberFactory memberFactory;
         internal bool isPlatform6Telescope = false;
         internal bool isPlatform5Telescope = false;
+
+        /// <summary>
+        /// Telescope operation completion event, fires when an asynchronous operation completes.
+        /// </summary>
+        public event CompletionEventHandler OperationCompleted;
 
         #region Telescope constructors
 
@@ -292,6 +295,7 @@ namespace ASCOM.DriverAccess
         #endregion
 
         #region ITelescope Members
+
         /// <summary>
         /// 
         /// </summary>
@@ -338,7 +342,6 @@ namespace ASCOM.DriverAccess
             }
         }
 
-
         /// <summary>
         /// Stops a slew in progress.
         /// </summary>
@@ -357,6 +360,28 @@ namespace ASCOM.DriverAccess
             TL.LogMessage("AbortSlew", "Calling method");
             memberFactory.CallMember(3, "AbortSlew", new Type[] { }, new object[] { });
             TL.LogMessage("AbortSlew", "Finished");
+        }
+
+        /// <summary>
+        /// True if the device supports asynchronous operations event notifications.
+        /// </summary>
+        public bool CanCallBack
+        {
+            get 
+            { 
+                return (bool)memberFactory.CallMember(1, "CanCallBack", new Type[] { }, new object[] { }); 
+            }
+        }
+
+        /// <summary>
+        /// True when an asynchronous operation has completed.
+        /// </summary>
+        public bool OperationComplete
+        {
+            get
+            {
+                return (bool)memberFactory.CallMember(1, "OperationComplete", new Type[] { }, new object[] { });
+            }
         }
 
         /// <summary>

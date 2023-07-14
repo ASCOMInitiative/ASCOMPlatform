@@ -1921,133 +1921,144 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                ArrayList arrayList = (ArrayList)_memberFactory.CallMember(1, "DeviceState", new Type[] { }, new object[] { });
+                CameraDeviceState state = new CameraDeviceState();
 
-                TL.LogMessage("CameraDeviceState", $"Received {arrayList.Count} items");
-
-                List<IStateValue> keyValuePairs = new List<IStateValue>();
-
-                CameraStates? cameraState = null;
-                double? ccdTemperature = null;
-                double? coolerPower = null;
-                double? heatSinkTemperature = null;
-                bool? imageReady = null;
-                bool? isPulesGuiding = null;
-                short? percentCompleted = null;
-                DateTime? timeStamp = null;
-
-                foreach (IStateValue kvp in arrayList)
+                try
                 {
-                    TL.LogMessage("CameraDeviceState",$"{kvp.Name} = {kvp.Value}");
-                    keyValuePairs.Add((IStateValue)kvp);
+                    ArrayList arrayList = _memberFactory.CallMember(1, "DeviceState", new Type[] { }, new object[] { }).ComObjToArrayList();
+                    //return _memberFactory.CallMember(1, "Offsets", new Type[] { }, new object[] { }).ComObjToArrayList();
+                    TL.LogMessage("CameraDeviceState", $"Received {arrayList.Count} items");
 
-                    switch (kvp.Name)
+                    List<IStateValue> keyValuePairs = new List<IStateValue>();
+
+                    CameraStates? cameraState = null;
+                    double? ccdTemperature = null;
+                    double? coolerPower = null;
+                    double? heatSinkTemperature = null;
+                    bool? imageReady = null;
+                    bool? isPulesGuiding = null;
+                    short? percentCompleted = null;
+                    DateTime? timeStamp = null;
+
+                    foreach (IStateValue kvp in arrayList)
                     {
-                        case "CameraState":
-                            try
-                            {
-                                cameraState = (CameraStates)kvp.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage("CameraDeviceState", $"CameraState - Ignoring exception: {ex.Message}");
-                            }
-                            TL.LogMessage("CameraDeviceState", $"CameraState has value: {cameraState.HasValue}, Value: {((CameraStates)cameraState.Value)}");
-                            break;
+                        TL.LogMessage("CameraDeviceState", $"{kvp.Name} = {kvp.Value}");
+                        keyValuePairs.Add((IStateValue)kvp);
 
-                        case "CCDTemperature":
-                            try
-                            {
-                                ccdTemperature = (double)kvp.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage("CameraDeviceState", $"CCDTemperature - Ignoring exception: {ex.Message}");
-                            }
-                            TL.LogMessage("CameraDeviceState", $"CCDTemperature has value: {ccdTemperature.HasValue}, Value: {ccdTemperature.Value}");
-                            break;
+                        switch (kvp.Name)
+                        {
+                            case "CameraState":
+                                try
+                                {
+                                    cameraState = (CameraStates)kvp.Value;
+                                }
+                                catch (Exception ex)
+                                {
+                                    TL.LogMessage("CameraDeviceState", $"CameraState - Ignoring exception: {ex.Message}");
+                                }
+                                TL.LogMessage("CameraDeviceState", $"CameraState has value: {cameraState.HasValue}, Value: {((CameraStates)cameraState.Value)}");
+                                break;
 
-                        case "CoolerPower":
-                            try
-                            {
-                                coolerPower = (double)kvp.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage("CameraDeviceState", $"CoolerPower - Ignoring exception: {ex.Message}");
-                            }
-                            TL.LogMessage("CameraDeviceState", $"CoolerPower has value: {coolerPower.HasValue}, Value: {coolerPower.Value}");
-                            break;
+                            case "CCDTemperature":
+                                try
+                                {
+                                    ccdTemperature = (double)kvp.Value;
+                                }
+                                catch (Exception ex)
+                                {
+                                    TL.LogMessage("CameraDeviceState", $"CCDTemperature - Ignoring exception: {ex.Message}");
+                                }
+                                TL.LogMessage("CameraDeviceState", $"CCDTemperature has value: {ccdTemperature.HasValue}, Value: {ccdTemperature.Value}");
+                                break;
 
-                        case "HeatSinkTemperature":
-                            try
-                            {
-                                heatSinkTemperature = (double)kvp.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage("CameraDeviceState", $"HeatSinkTemperature - Ignoring exception: {ex.Message}");
-                            }
-                            TL.LogMessage("CameraDeviceState", $"HeatSinkTemperature has value: {heatSinkTemperature.HasValue}, Value: {heatSinkTemperature.Value}");
-                            break;
+                            case "CoolerPower":
+                                try
+                                {
+                                    coolerPower = (double)kvp.Value;
+                                }
+                                catch (Exception ex)
+                                {
+                                    TL.LogMessage("CameraDeviceState", $"CoolerPower - Ignoring exception: {ex.Message}");
+                                }
+                                TL.LogMessage("CameraDeviceState", $"CoolerPower has value: {coolerPower.HasValue}, Value: {coolerPower.Value}");
+                                break;
 
-                        case "ImageReady":
-                            try
-                            {
-                                imageReady = (bool)kvp.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage("CameraDeviceState", $"ImageReady - Ignoring exception: {ex.Message}");
-                            }
-                            TL.LogMessage("CameraDeviceState", $"ImageReady has value: {imageReady.HasValue}, Value: {imageReady.Value}");
-                            break;
+                            case "HeatSinkTemperature":
+                                try
+                                {
+                                    heatSinkTemperature = (double)kvp.Value;
+                                }
+                                catch (Exception ex)
+                                {
+                                    TL.LogMessage("CameraDeviceState", $"HeatSinkTemperature - Ignoring exception: {ex.Message}");
+                                }
+                                TL.LogMessage("CameraDeviceState", $"HeatSinkTemperature has value: {heatSinkTemperature.HasValue}, Value: {heatSinkTemperature.Value}");
+                                break;
 
-                        case "IsPulseGuiding":
-                            try
-                            {
-                                isPulesGuiding = (bool)kvp.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage("CameraDeviceState", $"IsPulseGuiding - Ignoring exception: {ex.Message}");
-                            }
-                            TL.LogMessage("CameraDeviceState", $"IsPulseGuiding has value: {isPulesGuiding.HasValue}, Value: {isPulesGuiding.Value}");
-                            break;
+                            case "ImageReady":
+                                try
+                                {
+                                    imageReady = (bool)kvp.Value;
+                                }
+                                catch (Exception ex)
+                                {
+                                    TL.LogMessage("CameraDeviceState", $"ImageReady - Ignoring exception: {ex.Message}");
+                                }
+                                TL.LogMessage("CameraDeviceState", $"ImageReady has value: {imageReady.HasValue}, Value: {imageReady.Value}");
+                                break;
 
-                        case "PercentCompleted":
-                            try
-                            {
-                                percentCompleted = (short)kvp.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage("CameraDeviceState", $"PercentCompleted - Ignoring exception: {ex.Message}");
-                            }
-                            TL.LogMessage("CameraDeviceState", $"PercentCompleted has value: {percentCompleted.HasValue}, Value: {percentCompleted.Value}");
-                            break;
+                            case "IsPulseGuiding":
+                                try
+                                {
+                                    isPulesGuiding = (bool)kvp.Value;
+                                }
+                                catch (Exception ex)
+                                {
+                                    TL.LogMessage("CameraDeviceState", $"IsPulseGuiding - Ignoring exception: {ex.Message}");
+                                }
+                                TL.LogMessage("CameraDeviceState", $"IsPulseGuiding has value: {isPulesGuiding.HasValue}, Value: {isPulesGuiding.Value}");
+                                break;
 
-                        case "TimeStamp":
-                            try
-                            {
-                                timeStamp = (DateTime)kvp.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage("CameraDeviceState", $"TimeStamp - Ignoring exception: {ex.Message}");
-                            }
-                            TL.LogMessage("CameraDeviceState", $"TimeStamp has value: {timeStamp.HasValue}, Value: {timeStamp.Value}");
-                            break;
+                            case "PercentCompleted":
+                                try
+                                {
+                                    percentCompleted = (short)kvp.Value;
+                                }
+                                catch (Exception ex)
+                                {
+                                    TL.LogMessage("CameraDeviceState", $"PercentCompleted - Ignoring exception: {ex.Message}");
+                                }
+                                TL.LogMessage("CameraDeviceState", $"PercentCompleted has value: {percentCompleted.HasValue}, Value: {percentCompleted.Value}");
+                                break;
 
-                        default:
-                            TL.LogMessage("CameraDeviceState", $"Ignoring {kvp.Name}");
-                            break;
+                            case "TimeStamp":
+                                try
+                                {
+                                    timeStamp = (DateTime)kvp.Value;
+                                }
+                                catch (Exception ex)
+                                {
+                                    TL.LogMessage("CameraDeviceState", $"TimeStamp - Ignoring exception: {ex.Message}");
+                                }
+                                TL.LogMessage("CameraDeviceState", $"TimeStamp has value: {timeStamp.HasValue}, Value: {timeStamp.Value}");
+                                break;
+
+                            default:
+                                TL.LogMessage("CameraDeviceState", $"Ignoring {kvp.Name}");
+                                break;
+                        }
                     }
+
+                    state = new CameraDeviceState(cameraState, ccdTemperature, coolerPower, heatSinkTemperature, imageReady, isPulesGuiding, percentCompleted, timeStamp);
+
+                    TL.LogMessage("CameraDeviceState", $"Returning: '{state.CameraState}' '{state.CCDTemperature}' '{state.CoolerPower}' '{state.HeatSinkTemperature}' '{state.ImageReady}' '{state.PercentCompleted}' '{state.TimeStamp}'");
+
                 }
-
-                CameraDeviceState state = new CameraDeviceState(cameraState, ccdTemperature, coolerPower, heatSinkTemperature, imageReady, isPulesGuiding, percentCompleted, timeStamp);
-
-                TL.LogMessage("CameraDeviceState", $"Returning: '{state.CameraState}' '{state.CCDTemperature}' '{state.CoolerPower}' '{state.HeatSinkTemperature}' '{state.ImageReady}' '{state.PercentCompleted}' '{state.TimeStamp}'");
+                catch (Exception ex)
+                {
+                    TL.LogMessage("CameraDeviceState", $"Exception: {ex.Message}\r\n{ex}");
+                    throw;
+                }
 
                 return state;
             }

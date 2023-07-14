@@ -33,6 +33,7 @@ using ASCOM.Utilities;
 using System.Collections.Generic;
 using System.Windows.Forms.VisualStyles;
 using ASCOM.Astrometry.AstroUtils;
+using System.Threading.Tasks;
 
 namespace ASCOM.Simulator
 {
@@ -92,6 +93,10 @@ namespace ASCOM.Simulator
         #endregion
 
         #region Constants
+
+        // Time after which an attempt to call event handlers will time out (milli seconds)
+        const int MAXIMUM_EVENT_CALLBACK_DURATION = 5000;
+
         // Start-up options values       
         private const string STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION = "Start up at simulator Default Position";
         private const string STARTUP_OPTION_START_POSITION = "Start up at configured Start Position";
@@ -116,6 +121,9 @@ namespace ASCOM.Simulator
         #endregion
 
         #region Private variables
+        // Asynchronous operation variables
+        private static bool canCallBack = true; // Flag indicating whether callbacks are available
+
         // change to using a Windows timer to avoid threading problems
         private static System.Windows.Forms.Timer updateStateTimer;
         private static System.Windows.Forms.Timer updateHandboxTimer;
@@ -279,6 +287,12 @@ namespace ASCOM.Simulator
 
         #region Internal variables
 
+        /// <summary>
+        /// Operation completed event - fires when an asynchronous operation completes
+        /// </summary>
+        public static event CompletionEventHandler OperationCompleted;
+
+
         // durations are in secs.
         internal static double GuideDurationShort { get; private set; }
 
@@ -302,6 +316,11 @@ namespace ASCOM.Simulator
         #endregion
 
         #region Public variables
+
+        public static Operation CurrentOperation; // Type of current operation.
+
+        public static bool OperationComplete { get; set; }
+        public static Exception OperationException { get; set; }
 
         /// <summary>
         /// Guide rates, deg/sec. X Ra/Azm, Y Alt/Dec
@@ -695,7 +714,7 @@ namespace ASCOM.Simulator
         //Update the Telescope Based on Timed Events
         private static void UpdateStateTimer_Tick(object sender, EventArgs e)
         {
-            TL.LogMessage("UpdateStateTimer_Tick", "Updating state...");
+            //TL.LogMessage("UpdateStateTimer_Tick", "Updating state...");
             lock (updateLockObject)
             {
                 MoveAxes();
@@ -715,7 +734,7 @@ namespace ASCOM.Simulator
         /// </remarks>
         private static void MoveAxes()
         {
-            TL.LogMessage("MoveAxes", "Starting state update...");
+            // TL.LogMessage("MoveAxes", "Starting state update...");
 
             // Get the time since the last update. This avoids problems with the timer interval varying and greatly improves tracking.
             double timeInSecondsSinceLastUpdate = timeSinceLastUpdate.Elapsed.TotalSeconds;
@@ -761,9 +780,9 @@ namespace ASCOM.Simulator
                                 changeDegrees.Y += (SideOfPier == PierSide.pierEast ? +rateRaDecOffsetInternal.Y : -rateRaDecOffsetInternal.Y) * timeInSecondsSinceLastUpdate; // Add or subtract declination rate depending on pointing state
                             }
 
-                            TL.LogMessage("MoveAxes", $"RA internal offset rate: {rateRaDecOffsetInternal.X}, Dec internal offset rate: {rateRaDecOffsetInternal.Y}. " +
-                                $"Total change this interval: {changeDegrees.X}, {changeDegrees.Y}. Time since last update: {timeInSecondsSinceLastUpdate}"
-                                );
+                            //TL.LogMessage("MoveAxes", $"RA internal offset rate: {rateRaDecOffsetInternal.X}, Dec internal offset rate: {rateRaDecOffsetInternal.Y}. " +
+                            //    $"Total change this interval: {changeDegrees.X}, {changeDegrees.Y}. Time since last update: {timeInSecondsSinceLastUpdate}"
+                            //    );
                             break;
 
                         case AlignmentModes.algAltAz: // In Alt/Az aligned mounts the HA change moves both RA (primary) and Dec (secondary) axes so both need to be updated
@@ -778,16 +797,16 @@ namespace ASCOM.Simulator
                             break;
                     }
 
-                    TL.LogMessage("MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. HA change {haChangeDegrees} degrees. Alignment mode: {alignmentMode}.");
-                    TL.LogMessage("MoveAxes", $"Movement - Primary axis: {changeDegrees.X} degrees, Secondary axis: {changeDegrees.Y} degrees.");
-                    TL.LogMessage("MoveAxes", $"Movement rate - Primary axis: {changeDegrees.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second, " +
-                        $"Secondary axis: {changeDegrees.Y * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second");
-                    TL.LogMessage("MoveAxes", $"Movement includes RightAscensionRate/DeclinationRate movement of: {rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate} degrees, {rateRaDecOffsetInternal.Y * timeInSecondsSinceLastUpdate} degrees.");
+                    // TL.LogMessage("MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. HA change {haChangeDegrees} degrees. Alignment mode: {alignmentMode}.");
+                    // TL.LogMessage("MoveAxes", $"Movement - Primary axis: {changeDegrees.X} degrees, Secondary axis: {changeDegrees.Y} degrees.");
+                    // TL.LogMessage("MoveAxes", $"Movement rate - Primary axis: {changeDegrees.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second, " +
+                    //     $"Secondary axis: {changeDegrees.Y * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second");
+                    //TL.LogMessage("MoveAxes", $"Movement includes RightAscensionRate/DeclinationRate movement of: {rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate} degrees, {rateRaDecOffsetInternal.Y * timeInSecondsSinceLastUpdate} degrees.");
                 } // Mount is tracking
                 else // Mount is not tracking
                 {
                     // No axis change
-                    TL.LogMessage("MoveAxes", $"Tracking disabled - no changes.Time since last update: {timeInSecondsSinceLastUpdate} seconds.");
+                    //TL.LogMessage("MoveAxes", $"Tracking disabled - no changes.Time since last update: {timeInSecondsSinceLastUpdate} seconds.");
                 } // Mount is not tracking
 
                 // Move towards the target position if slewing
@@ -837,7 +856,7 @@ namespace ASCOM.Simulator
                     default:
                         break;
                 }
-                TL.LogMessage("MoveAxes MoveAxis", $"Primary axis move rate: {rateMoveAxes.X}, Secondary axis move rate: {rateMoveAxes.Y}. Applied changes - Primary axis: {changeDegrees.X}, Secondary axis: {changeDegrees.Y}. Time since last update: {timeInSecondsSinceLastUpdate} seconds.");
+                //TL.LogMessage("MoveAxes MoveAxis", $"Primary axis move rate: {rateMoveAxes.X}, Secondary axis move rate: {rateMoveAxes.Y}. Applied changes - Primary axis: {changeDegrees.X}, Secondary axis: {changeDegrees.Y}. Time since last update: {timeInSecondsSinceLastUpdate} seconds.");
 
             } // MoveAxis is active
 
@@ -864,18 +883,22 @@ namespace ASCOM.Simulator
                     {
                         SharedResources.TrafficLine(SharedResources.MessageType.Slew, "(Slew Complete)");
                         SlewState = SlewType.SlewNone;
+
+
+                        // End the current operation
+                        EndOperation(CurrentOperation);
                     }
                     break;
             }
 
             // List changes this cycle
-            TL.LogMessage($"MoveAxes (Final)", $"RA: {currentRaDec.X.ToHMS()}, Dec: {currentRaDec.Y.ToDMS()}, Hour angle: {astroUtils.ConditionHA(SiderealTime - currentRaDec.X).ToHMS()}, Sidereal Time: {SiderealTime.ToHMS()}");
-            TL.LogMessage($"MoveAxes (Final)", $"Azimuth: {currentAltAzm.X.ToDMS()}, Altitude: {currentAltAzm.Y.ToDMS()}, Pointing state (pierEast = Normal): {SideOfPier}");
-            TL.LogMessage($"MoveAxes (Final)",
-              $"Primary axis angle:  {mountAxesDegrees.X.ToDMS()}, Secondary axis angle:  {mountAxesDegrees.Y.ToDMS()}, " +
-              $"Primary axis change: {changeDegrees.X.ToDMS()}, Secondary axis change: {changeDegrees.Y.ToDMS()}."
-              );
-            TL.BlankLine();
+            //TL.LogMessage($"MoveAxes (Final)", $"RA: {currentRaDec.X.ToHMS()}, Dec: {currentRaDec.Y.ToDMS()}, Hour angle: {astroUtils.ConditionHA(SiderealTime - currentRaDec.X).ToHMS()}, Sidereal Time: {SiderealTime.ToHMS()}");
+            //TL.LogMessage($"MoveAxes (Final)", $"Azimuth: {currentAltAzm.X.ToDMS()}, Altitude: {currentAltAzm.Y.ToDMS()}, Pointing state (pierEast = Normal): {SideOfPier}");
+            // TL.LogMessage($"MoveAxes (Final)",
+            //  $"Primary axis angle:  {mountAxesDegrees.X.ToDMS()}, Secondary axis angle:  {mountAxesDegrees.Y.ToDMS()}, " +
+            // $"Primary axis change: {changeDegrees.X.ToDMS()}, Secondary axis change: {changeDegrees.Y.ToDMS()}."
+            // );
+            //TL.BlankLine();
         }
 
         #endregion
@@ -883,6 +906,19 @@ namespace ASCOM.Simulator
         #region Properties For Settings
 
         //I used some of these as dual purpose if the driver uses the same exact property
+
+        /// <summary>
+        /// True if the telescope can raise events
+        /// </summary>
+        public static bool CanCallBack
+        {
+            get
+            {
+                return canCallBack;
+            }
+        }
+
+
         public static AlignmentModes AlignmentMode
         {
             get { return alignmentMode; }
@@ -1629,6 +1665,8 @@ namespace ASCOM.Simulator
             rateMoveAxes = new Vector();
             rateRaDecOffsetInternal = new Vector();
             SlewState = SlewType.SlewNone;
+
+            EndOperation(CurrentOperation, new DriverException("Slew aborted because ABortSlew method was called."));
         }
 
         public static void SyncToTarget()
@@ -1680,6 +1718,8 @@ namespace ASCOM.Simulator
         /// <param name="targetPosition">The position.</param>
         public static void StartSlewAxes(Vector targetPosition, SlewType slewState)
         {
+            StartOperation();
+
             targetAxesDegrees = targetPosition;
             SlewState = slewState;
             slewing = true;
@@ -1923,11 +1963,17 @@ namespace ASCOM.Simulator
                         LogMessage("DoSlew", "Parked done");
                         SlewState = SlewType.SlewNone;
                         ChangePark(true);
+
+                        // End the current operation
+                        EndOperation(Operation.Park);
                         break;
 
                     case SlewType.SlewHome:
                         LogMessage("DoSlew", "Home done");
                         SlewState = SlewType.SlewNone;
+
+                        // End the current operation
+                        EndOperation(Operation.FindHome);
                         break;
 
                     case SlewType.SlewNone:
@@ -2327,6 +2373,89 @@ namespace ASCOM.Simulator
             TelescopeSimulator.m_MainForm.LabelState(TelescopeSimulator.m_MainForm.lblHOME, AtHome);
             TelescopeSimulator.m_MainForm.LabelState(TelescopeSimulator.m_MainForm.labelSlew, IsSlewing);
         }
+
+        public static void StartOperation()
+        {
+            // Clear any previous exception that was being thrown
+            OperationException = null;
+
+            // Mark this operation as underway.
+            OperationComplete = false;
+        }
+
+        public static void EndOperation(Operation operation)
+        {
+            EndOperation(operation, null);
+        }
+
+        public static void EndOperation(Operation operation, Exception exception)
+        {
+            OperationCompleteArgs args;
+            TL.LogMessage("EndOperation", $"Running completion task...");
+
+            Task.Run(() =>
+            {
+                try
+                {
+                    TL.LogMessage("EndOperationTask", $"Completion task started...Can call back: {canCallBack}");
+
+                    // Mark this operation as complete
+                    OperationComplete = true;
+
+                    // Set the exception to be returned by the OperationComplete property, if any
+                    OperationException = exception;
+
+                    // Generate a client event if we are configured to do this.
+                    if (canCallBack)
+                    {
+                        TL.LogMessage("EndOperationTask", $"Creating OperationCompleteArgs. Exception is null: {exception is null}");
+                        // Create a relevant completion event args class
+                        if (exception is null) // Success - no error
+                        {
+                            args = new OperationCompleteArgs(operation);
+
+                        }
+                        else // Failed - report error
+                        {
+                            args = new OperationCompleteArgs(operation, exception.HResult, exception.Message);
+                        }
+
+                        // Create a cancellation token and set its timeout period
+                        CancellationTokenSource tokenSource = new CancellationTokenSource();
+                        tokenSource.CancelAfter(MAXIMUM_EVENT_CALLBACK_DURATION);
+
+                        // Run a task to call event handlers, silently timing out if necessary
+                        TL.LogMessage("EndOperationTask", $"Running event notification task...{args.Operation} {args.ErrorNumber} {args.ErrorMessage}");
+                        Task.Run(() =>
+                        {
+                            TL.LogMessage("EndOperationEventTask", $"Starting event notification..");
+                            try
+                            {
+                                OperationCompleted?.Invoke(args);
+                                TL.LogMessage("EndOperationEventTask", $"Event sent successfully!");
+                            }
+                            catch (Exception ex)
+                            {
+                                TL.LogMessageCrLf("EndOperationEventTask", $"Exception when raising event for operation: {operation}, Error number: {exception.HResult}, Error message: {exception.Message} - {ex.Message}\r\n{ex}");
+                            }
+
+                        }, tokenSource.Token);
+                    }
+
+                    TL.LogMessage("EndOperationTask", $"Exiting");
+
+                }
+                catch (Exception ex)
+                {
+                    TL.LogMessage("EndOperationTask", $"Exception: {ex.Message}\r\n{ex}");
+                }
+
+            });
+
+            TL.LogMessage("EndOperation", $"Exiting");
+
+        }
+
 
         #endregion
     }

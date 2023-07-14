@@ -19,6 +19,16 @@ namespace ASCOM.DeviceInterface
 
         #region Common methods
 
+        ///// <summary>
+        ///// Operation completed event
+        ///// </summary>
+        //event CompletionEventHandler OperationCompleted;
+
+        /// <summary>
+        /// True if the device does support completion events.
+        /// </summary>
+        bool CanCallBack { get; }
+
         /// <summary>
         /// Set True to connect to the device hardware. Set False to disconnect from the device hardware.
         /// You can also read the property to check whether it is connected. This reports the current hardware state.
@@ -226,6 +236,12 @@ namespace ASCOM.DeviceInterface
         #endregion
 
         #region Device interface
+
+        /// <summary>
+        /// True when an asynchronous operation has completed
+        /// </summary>
+        bool OperationComplete { get; }
+
 
         /// <summary>
         /// Stops a slew in progress.

@@ -29,6 +29,8 @@ using System.Runtime.CompilerServices;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Windows.Markup.Primitives;
+using System.Windows.Forms;
 
 namespace ASCOM.Simulator
 {
@@ -44,6 +46,7 @@ namespace ASCOM.Simulator
     [ServedClassName("Telescope Simulator for .NET")]
     [ProgId("ASCOM.Simulator.Telescope")]
     [ClassInterface(ClassInterfaceType.None)]
+    [ComSourceInterfaces(typeof(IOperationCompleted))]
     public class Telescope : ReferenceCountedObjectBase, ITelescopeV4
     {
         //
@@ -65,6 +68,8 @@ namespace ASCOM.Simulator
         const string AssemblyVersionNumber = "AssemblyVersionNumber"; const string AssemblyVersionNumberUpper = "ASSEMBLYVERSIONNUMBER";
         const string TimeUntilPointingStateCanChange = "TIMEUNTILPOINTINGSTATECANCHANGE";
         const string AvailableTimeInThisPointingState = "AVAILABLETIMEINTHISPOINTINGSTATE";
+
+        private int completionDelay = 3000; // Delay time before an operation complete event is signalled.
 
         //
         // Constructor - Must be public for COM registration!
@@ -89,6 +94,9 @@ namespace ASCOM.Simulator
                 currentGuideRateRightAscension = TelescopeHardware.GuideRateRightAscension;
                 currentGuideRateDeclination = TelescopeHardware.GuideRateDeclination;
                 Connecting = false;
+
+                // Add a handler to pass on OperationCompleted events generated in the TelescopeHardware class.
+                TelescopeHardware.OperationCompleted += TelescopeHardwareOperationCompletedEventHandler;
             }
             catch (Exception ex)
             {
@@ -98,7 +106,56 @@ namespace ASCOM.Simulator
 
         }
 
+        private void TelescopeHardwareOperationCompletedEventHandler(OperationCompleteArgs operationCompleteArgs)
+        {
+            try
+            {
+                TelescopeHardware.TL.LogMessage("DriverOperationCompleted", $"Raising event to clients: Operation: {operationCompleteArgs.Operation}, Error numer: {operationCompleteArgs.ErrorNumber}, Error message: {operationCompleteArgs.ErrorMessage}");
+
+                // Bass on the event to any clients
+                OperationCompleted?.Invoke(operationCompleteArgs);
+                TelescopeHardware.TL.LogMessage("DriverOperationCompleted", $"Event raised to clients.");
+
+            }
+            catch (Exception ex)
+            {
+                TelescopeHardware.TL.LogMessage("DriverOperationCompleted", $"Exception: {ex.Message}\r\n{ex}");
+            }
+        }
+
         #region ITelescopeV4 members
+
+        /// <summary>
+        /// Operation completed event - fires when an asynchronous operation completes
+        /// </summary>
+        private event CompletionEventHandler OperationCompleted;
+
+        /// <summary>
+        /// True if the telescope can raise events
+        /// </summary>
+        public bool CanCallBack
+        {
+            get
+            {
+                bool asd = TelescopeHardware.CanAlignmentMode;
+                return TelescopeHardware.CanCallBack;
+            }
+        }
+
+        /// <summary>
+        /// True when an asynchronous operation has completed.
+        /// </summary>
+        /// <exception cref="DriverException">When an operation fails.</exception>
+        public bool OperationComplete
+        {
+            get
+            {
+                if (TelescopeHardware.OperationException is null)
+                    return TelescopeHardware.OperationComplete;
+
+                throw TelescopeHardware.OperationException;
+            }
+        }
 
         /// <summary>
         /// Connect to the telescope asynchronously
@@ -112,7 +169,7 @@ namespace ASCOM.Simulator
             Task.Run(() =>
             {
                 // Simulate a long connection phase
-                Thread.Sleep(3000);
+                Thread.Sleep(2000);
 
                 // Set the Connected state to true
                 Connected = true;
@@ -136,7 +193,7 @@ namespace ASCOM.Simulator
             Task.Run(() =>
             {
                 // Simulate a long connection phase
-                Thread.Sleep(3000);
+                Thread.Sleep(2000);
 
                 // Set the Connected state to true
                 Connected = false;
@@ -731,6 +788,7 @@ namespace ASCOM.Simulator
 
             while (TelescopeHardware.SlewState == SlewType.SlewHome || TelescopeHardware.SlewState == SlewType.SlewSettle)
             {
+                Thread.Sleep(50);
                 System.Windows.Forms.Application.DoEvents();
             }
 
@@ -874,10 +932,11 @@ namespace ASCOM.Simulator
 
             TelescopeHardware.Park();
 
-            while (TelescopeHardware.SlewState == SlewType.SlewPark)
-            {
-                System.Windows.Forms.Application.DoEvents();
-            }
+            //while (TelescopeHardware.SlewState == SlewType.SlewPark)
+            //{
+            //    Thread.Sleep(50);
+            //    System.Windows.Forms.Application.DoEvents();
+            //}
 
             SharedResources.TrafficEnd("(done)");
         }
@@ -1146,10 +1205,15 @@ namespace ASCOM.Simulator
             CheckRange(Altitude, -90, 90, "SlewToAltAz", "Altitude");
 
             SharedResources.TrafficStart(" Alt " + m_Util.DegreesToDMS(Altitude) + " Az " + m_Util.DegreesToDMS(Azimuth));
+
+            // Set the type of the current operation
+            TelescopeHardware.CurrentOperation = Operation.SlewToAltAzAsync;
+
             TelescopeHardware.StartSlewAltAz(Altitude, Azimuth);
 
             while (TelescopeHardware.SlewState == SlewType.SlewAltAz || TelescopeHardware.SlewState == SlewType.SlewSettle)
             {
+                Thread.Sleep(50);
                 System.Windows.Forms.Application.DoEvents();
             }
             SharedResources.TrafficEnd(" done");
@@ -1166,6 +1230,9 @@ namespace ASCOM.Simulator
             CheckRange(Altitude, -90, 90, "SlewToAltAzAsync", "Altitude");
 
             SharedResources.TrafficStart(" Alt " + m_Util.DegreesToDMS(Altitude) + " Az " + m_Util.DegreesToDMS(Azimuth));
+
+            // Set the type of the current operation
+            TelescopeHardware.CurrentOperation = Operation.SlewToAltAzAsync;
 
             TelescopeHardware.StartSlewAltAz(Altitude, Azimuth);
             SharedResources.TrafficEnd(" started");
@@ -1185,6 +1252,9 @@ namespace ASCOM.Simulator
 
             TelescopeHardware.TargetRightAscension = RightAscension; // Set the Target RA and Dec prior to the Slew attempt per the ASCOM Telescope specification
             TelescopeHardware.TargetDeclination = Declination;
+
+            // Set the type of the current operation
+            TelescopeHardware.CurrentOperation = Operation.SlewToCoordinatesAsync;
 
             TelescopeHardware.StartSlewRaDec(RightAscension, Declination, true);
 
@@ -1211,6 +1281,9 @@ namespace ASCOM.Simulator
 
             SharedResources.TrafficStart(" RA " + m_Util.HoursToHMS(RightAscension) + " DEC " + m_Util.DegreesToDMS(Declination));
 
+            // Set the type of the current operation
+            TelescopeHardware.CurrentOperation = Operation.SlewToCoordinatesAsync;
+
             TelescopeHardware.StartSlewRaDec(RightAscension, Declination, true);
             SharedResources.TrafficEnd("started");
         }
@@ -1225,10 +1298,13 @@ namespace ASCOM.Simulator
             TelescopeHardware.RestoreTrackingStateIfNecessary(); // Restore the configured Tracking state if the client is prevented from doing this by simulator configuration
             CheckTracking(true, "SlewToTarget");
 
+            // Set the type of the current operation
+            TelescopeHardware.CurrentOperation = Operation.SlewToTargetAsync;
             TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.TargetDeclination, true);
 
             while (TelescopeHardware.SlewState == SlewType.SlewRaDec || TelescopeHardware.SlewState == SlewType.SlewSettle)
             {
+                Thread.Sleep(50);
                 System.Windows.Forms.Application.DoEvents();
             }
             SharedResources.TrafficEnd("done");
@@ -1243,6 +1319,10 @@ namespace ASCOM.Simulator
             CheckParked("SlewToTargetAsync");
             TelescopeHardware.RestoreTrackingStateIfNecessary(); // Restore the configured Tracking state if the client is prevented from doing this by simulator configuration
             CheckTracking(true, "SlewToTargetAsync");
+
+            // Set the type of the current operation
+            TelescopeHardware.CurrentOperation = Operation.SlewToTargetAsync;
+
             TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.TargetDeclination, true);
         }
 
@@ -1430,9 +1510,33 @@ namespace ASCOM.Simulator
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, "UnPark: ");
             CheckCapability(TelescopeHardware.CanUnpark, "UnPark");
+            TelescopeHardware.TL.LogMessage("Unpark", $"About to call StartOperation...");
+            // Flag that the operation has started
+            TelescopeHardware.StartOperation();
+            TelescopeHardware.TL.LogMessage("Unpark", $"StartOperation complete.");
 
-            TelescopeHardware.ChangePark(false);
-            TelescopeHardware.Tracking = TelescopeHardware.AutoTrack;
+            // Run a task to wait and then end the operation
+            Task.Run(() =>
+            {
+                try
+                {
+                    TelescopeHardware.TL.LogMessage("UnparkTask", $"Waiting for delay...");
+                    WaitFor(completionDelay); // Wait
+                    TelescopeHardware.TL.LogMessage("UnparkTask", $"Delay completed.");
+
+                    TelescopeHardware.ChangePark(false);
+                    TelescopeHardware.Tracking = TelescopeHardware.AutoTrack;
+
+                    TelescopeHardware.TL.LogMessage("UnparkTask", $"Ending operation...");
+                    TelescopeHardware.EndOperation(Operation.Unpark);
+                    TelescopeHardware.TL.LogMessage("UnparkTask", $"Operation ended.");
+                }
+                catch (Exception ex)
+                {
+                    TelescopeHardware.TL.LogMessage("UnparkTask", $"Exception {ex.Message}\r\n{ex}.");
+                    TelescopeHardware.EndOperation(Operation.Unpark, ex);
+                }
+            });
 
             SharedResources.TrafficEnd("(done)");
         }
@@ -1467,7 +1571,24 @@ namespace ASCOM.Simulator
 
         #endregion
 
-        #region private methods
+        #region Private methods
+
+        /// <summary>
+        /// Wait for the given number of milliseconds
+        /// </summary>
+        /// <param name="waitTime"></param>
+        private void WaitFor(int waitTime)
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            while (sw.ElapsedMilliseconds < waitTime)
+            {
+                Thread.Sleep(50);
+                Application.DoEvents();
+            }
+
+
+        }
+
         private void CheckRate(TelescopeAxes axis, double rate)
         {
             IAxisRates rates = AxisRates(axis);
@@ -1576,6 +1697,7 @@ namespace ASCOM.Simulator
 
         public void Dispose()
         {
+            TelescopeHardware.TL.LogMessage("Dispose", "Start - Setting Connected to false.");
             Connected = false;
             m_AxisRates[0].Dispose();
             m_AxisRates[1].Dispose();
@@ -1587,6 +1709,9 @@ namespace ASCOM.Simulator
             m_TrackingRatesSimple = null;
             m_Util.Dispose();
             m_Util = null;
+            TelescopeHardware.TL.LogMessage("Dispose", "Resources disposed.");
+            TelescopeHardware.OperationCompleted -= TelescopeHardwareOperationCompletedEventHandler;
+            TelescopeHardware.TL.LogMessage("Dispose", "TelescopeHardware.OperationCompleted event un-hooked.");
         }
 
         #endregion
