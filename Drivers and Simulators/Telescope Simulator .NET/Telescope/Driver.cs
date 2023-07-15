@@ -47,7 +47,7 @@ namespace ASCOM.Simulator
     [ProgId("ASCOM.Simulator.Telescope")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComSourceInterfaces(typeof(IOperationCompleted))]
-    public class Telescope : ReferenceCountedObjectBase, ITelescopeV4
+    public class Telescope : ReferenceCountedObjectBase, ITelescopeV4, IObserver<OperationCompleteArgs>
     {
         //
         // Driver private data (rate collections)
@@ -70,6 +70,8 @@ namespace ASCOM.Simulator
         const string AvailableTimeInThisPointingState = "AVAILABLETIMEINTHISPOINTINGSTATE";
 
         private int completionDelay = 3000; // Delay time before an operation complete event is signalled.
+
+        //IDisposable hardwareCompoetionSubscription = null;
 
         //
         // Constructor - Must be public for COM registration!
@@ -96,7 +98,8 @@ namespace ASCOM.Simulator
                 Connecting = false;
 
                 // Add a handler to pass on OperationCompleted events generated in the TelescopeHardware class.
-                TelescopeHardware.OperationCompleted += TelescopeHardwareOperationCompletedEventHandler;
+                //TelescopeHardware.OperationCompleted += TelescopeHardwareOperationCompletedEventHandler;
+                _ = TelescopeHardware.Subscribe(this);
             }
             catch (Exception ex)
             {
@@ -1710,8 +1713,27 @@ namespace ASCOM.Simulator
             m_Util.Dispose();
             m_Util = null;
             TelescopeHardware.TL.LogMessage("Dispose", "Resources disposed.");
-            TelescopeHardware.OperationCompleted -= TelescopeHardwareOperationCompletedEventHandler;
+            //TelescopeHardware.OperationCompleted -= TelescopeHardwareOperationCompletedEventHandler;
+            //hardwareCompoetionSubscription.Dispose();
+            //hardwareCompoetionSubscription = null;
+            TelescopeHardware.UnSubscribe(this);
+            GC.Collect();
             TelescopeHardware.TL.LogMessage("Dispose", "TelescopeHardware.OperationCompleted event un-hooked.");
+        }
+
+        public void OnNext(OperationCompleteArgs value)
+        {
+            TelescopeHardwareOperationCompletedEventHandler(value);
+        }
+
+        public void OnError(Exception error)
+        {
+            TelescopeHardware.TL.LogMessage("IObserver.OnError", $"Received exception: {error.Message}\r\n{error}");
+        }
+
+        public void OnCompleted()
+        {
+            TelescopeHardware.TL.LogMessage("IObserver.OnCompleted", "Message received...");
         }
 
         #endregion

@@ -20,6 +20,8 @@
 // --------------------------------------------------------------------------------
 //
 
+// Ignore Spelling: Unsubscriber
+
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
@@ -34,10 +36,11 @@ using System.Collections.Generic;
 using System.Windows.Forms.VisualStyles;
 using ASCOM.Astrometry.AstroUtils;
 using System.Threading.Tasks;
+using ASCOM.Astrometry;
 
 namespace ASCOM.Simulator
 {
-    public static class TelescopeHardware
+    public static class TelescopeHardware 
     {
         #region How the simulator works
 
@@ -123,6 +126,8 @@ namespace ASCOM.Simulator
         #region Private variables
         // Asynchronous operation variables
         private static bool canCallBack = true; // Flag indicating whether callbacks are available
+
+        private static List<IObserver<OperationCompleteArgs>> telescopeClients = new List<IObserver<OperationCompleteArgs>>();
 
         // change to using a Windows timer to avoid threading problems
         private static System.Windows.Forms.Timer updateStateTimer;
@@ -290,7 +295,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Operation completed event - fires when an asynchronous operation completes
         /// </summary>
-        public static event CompletionEventHandler OperationCompleted;
+       // public static event CompletionEventHandler OperationCompleted;
 
 
         // durations are in secs.
@@ -2431,7 +2436,15 @@ namespace ASCOM.Simulator
                             TL.LogMessage("EndOperationEventTask", $"Starting event notification..");
                             try
                             {
-                                OperationCompleted?.Invoke(args);
+                                foreach (IObserver<OperationCompleteArgs> client in telescopeClients)
+                                {
+                                    TL.LogMessage("EndOperationEventTask", $"Calling client...");
+                                    client.OnNext(args);
+                                    TL.LogMessage("EndOperationEventTask", $"Returned from client!");
+                                }
+
+
+                                //OperationCompleted?.Invoke(args);
                                 TL.LogMessage("EndOperationEventTask", $"Event sent successfully!");
                             }
                             catch (Exception ex)
@@ -2456,6 +2469,36 @@ namespace ASCOM.Simulator
 
         }
 
+        public static IDisposable Subscribe(IObserver<OperationCompleteArgs> observer)
+        {
+            if (!telescopeClients.Contains(observer))
+                telescopeClients.Add(observer);
+            return new Unsubscriber(telescopeClients, observer);
+        }
+
+        public static void UnSubscribe(IObserver<OperationCompleteArgs> observer)
+        {
+            if (!telescopeClients.Contains(observer))
+                telescopeClients.Remove(observer);
+        }
+
+        private class Unsubscriber : IDisposable
+        {
+            private List<IObserver<OperationCompleteArgs>> _observers;
+            private IObserver<OperationCompleteArgs> _observer;
+
+            public Unsubscriber(List<IObserver<OperationCompleteArgs>> observers, IObserver<OperationCompleteArgs> observer)
+            {
+                this._observers = observers;
+                this._observer = observer;
+            }
+
+            public void Dispose()
+            {
+                if (_observer != null && _observers.Contains(_observer))
+                    _observers.Remove(_observer);
+            }
+        }
 
         #endregion
     }
