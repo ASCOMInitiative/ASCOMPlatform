@@ -78,7 +78,7 @@
   <ItemGroup>
     <VSTemplate Include="DriverTemplate(CS).vstemplate" />
   </ItemGroup>
-   <ItemGroup>
+  <ItemGroup>
     <Content Include="ASCOM.ico" />
     <Content Include="ASCOM.png" />
     <Content Include="ReadMe.htm" />

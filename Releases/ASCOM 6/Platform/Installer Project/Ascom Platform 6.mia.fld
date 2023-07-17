@@ -5,12 +5,11 @@ Platform 6 Content
 Platform 5 files
 Set Registry Keys
 Platform 6.2 files
-Create shortcuts
+Remove Previous Platform 6 install if present
+Uninstall items installed by this installer
+Remove Previous Platforms 4 and 5 if present
 Maintenance Dialogue
 ASCOM Device Hub
 Clean up any remaining simulator COM entries
 Install Visual C Runtimes
 Platform validation
-Remove Previous Platform 6 install if present
-Remove Previous Platforms 4 and 5 if present
-Uninstall items installed by this installer

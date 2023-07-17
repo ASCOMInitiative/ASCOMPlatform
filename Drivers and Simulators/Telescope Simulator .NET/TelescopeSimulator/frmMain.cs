@@ -59,7 +59,7 @@ namespace ASCOM.Simulator
                 setupForm.CanEquatorial = TelescopeHardware.CanEquatorial;
                 setupForm.CanLatLongElev = TelescopeHardware.CanLatLongElev;
                 setupForm.CanPierSide = TelescopeHardware.CanPierSide;
-                setupForm.CanDestinationSideOfPier = TelescopeHardware.CanDestinationSideofPier;
+                setupForm.CanDestinationSideOfPier = TelescopeHardware.CanDestinationSideOfPier;
                 setupForm.CanDualAxisPulseGuide = TelescopeHardware.CanDualAxisPulseGuide;
                 setupForm.AutoTrack = TelescopeHardware.AutoTrack;
                 setupForm.DisconnectOnPark = TelescopeHardware.DisconnectOnPark;
@@ -73,6 +73,7 @@ namespace ASCOM.Simulator
                 setupForm.Longitude = TelescopeHardware.Longitude;
                 setupForm.MaximumSlewRate = TelescopeHardware.MaximumSlewRate;
                 setupForm.NoSyncPastMeridian = TelescopeHardware.NoSyncPastMeridian;
+                setupForm.InterfaceVersion = TelescopeHardware.InterfaceVersion;
                 this.BringToFront();
                 DialogResult ans = setupForm.ShowDialog(this);
 
@@ -108,7 +109,7 @@ namespace ASCOM.Simulator
                     TelescopeHardware.CanEquatorial = setupForm.CanEquatorial;
                     TelescopeHardware.CanLatLongElev = setupForm.CanLatLongElev;
                     TelescopeHardware.CanPierSide = setupForm.CanPierSide;
-                    TelescopeHardware.CanDestinationSideofPier = setupForm.CanDestinationSideOfPier;
+                    TelescopeHardware.CanDestinationSideOfPier = setupForm.CanDestinationSideOfPier;
                     TelescopeHardware.CanDualAxisPulseGuide = setupForm.CanDualAxisPulseGuide;
                     TelescopeHardware.AutoTrack = setupForm.AutoTrack;
                     TelescopeHardware.DisconnectOnPark = setupForm.DisconnectOnPark;
@@ -122,6 +123,7 @@ namespace ASCOM.Simulator
                     TelescopeHardware.Longitude = setupForm.Longitude;
                     TelescopeHardware.MaximumSlewRate = setupForm.MaximumSlewRate;
                     TelescopeHardware.NoSyncPastMeridian = setupForm.NoSyncPastMeridian;
+                    TelescopeHardware.InterfaceVersion=setupForm.InterfaceVersion;
 
                     this.TopMost = setupForm.OnTop;
                 }

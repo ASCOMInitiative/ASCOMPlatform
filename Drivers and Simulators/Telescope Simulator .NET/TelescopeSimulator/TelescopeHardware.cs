@@ -20,7 +20,7 @@
 // --------------------------------------------------------------------------------
 //
 
-// Ignore Spelling: Unsubscriber
+// Ignore Spelling: Unsubscriber Lat Elev Utils astro util
 
 using System;
 using System.Collections.Concurrent;
@@ -37,10 +37,11 @@ using System.Windows.Forms.VisualStyles;
 using ASCOM.Astrometry.AstroUtils;
 using System.Threading.Tasks;
 using ASCOM.Astrometry;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace ASCOM.Simulator
 {
-    public static class TelescopeHardware 
+    public static class TelescopeHardware
     {
         #region How the simulator works
 
@@ -97,9 +98,6 @@ namespace ASCOM.Simulator
 
         #region Constants
 
-        // Time after which an attempt to call event handlers will time out (milli seconds)
-        const int MAXIMUM_EVENT_CALLBACK_DURATION = 5000;
-
         // Start-up options values       
         private const string STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION = "Start up at simulator Default Position";
         private const string STARTUP_OPTION_START_POSITION = "Start up at configured Start Position";
@@ -124,10 +122,9 @@ namespace ASCOM.Simulator
         #endregion
 
         #region Private variables
-        // Asynchronous operation variables
-        private static bool canCallBack = true; // Flag indicating whether callbacks are available
 
-        private static List<IObserver<OperationCompleteArgs>> telescopeClients = new List<IObserver<OperationCompleteArgs>>();
+        private static short interfaceVersion = 4;
+        private static Operation currentOperation = Operation.None; // Initialise to no operation
 
         // change to using a Windows timer to avoid threading problems
         private static System.Windows.Forms.Timer updateStateTimer;
@@ -197,6 +194,8 @@ namespace ASCOM.Simulator
         private static double elevation;
         private static int maximumSlewRate;
         private static bool noSyncPastMeridian;
+
+        private static bool atPark;
 
         //
         // Vectors are used for pairs of angles that represent the various positions and rates
@@ -292,12 +291,6 @@ namespace ASCOM.Simulator
 
         #region Internal variables
 
-        /// <summary>
-        /// Operation completed event - fires when an asynchronous operation completes
-        /// </summary>
-       // public static event CompletionEventHandler OperationCompleted;
-
-
         // durations are in secs.
         internal static double GuideDurationShort { get; private set; }
 
@@ -322,10 +315,55 @@ namespace ASCOM.Simulator
 
         #region Public variables
 
-        public static Operation CurrentOperation; // Type of current operation.
+        /// <summary>
+        /// Name of the current operation.
+        /// </summary>
+        public static Operation CurrentOperation
+        {
+            get
+            {
+                // Return the current operation
+                return currentOperation;
+            }
 
-        public static bool OperationComplete { get; set; }
+            set
+            {
+                // Assign the new operation as the current operation
+                currentOperation = value;
+            }
+        }
+
+        public static bool OperationComplete
+        {
+            get
+            {
+                TL?.LogMessage("OperationComplete - GET", $"{operationComplete}");
+                return operationComplete;
+            }
+
+            set
+            {
+                operationComplete = value;
+                TL?.LogMessage("OperationComplete - SET", $"{operationComplete}");
+            }
+        }
         public static Exception OperationException { get; set; }
+
+        public static bool InterruptionComplete
+        {
+            get
+            {
+                TL?.LogMessage("InterruptionComplete - GET", $"{interruptionComplete}");
+                return interruptionComplete;
+            }
+
+            set
+            {
+                interruptionComplete = value;
+                TL?.LogMessage("InterruptionComplete - SET", $"{interruptionComplete}");
+            }
+        }
+        public static Exception InterruptionException { get; set; }
 
         /// <summary>
         /// Guide rates, deg/sec. X Ra/Azm, Y Alt/Dec
@@ -345,6 +383,8 @@ namespace ASCOM.Simulator
         /// Axis Rates (deg/sec) set by the MoveAxis method
         /// </summary>
         public static Vector rateMoveAxes = new Vector();
+        private static bool operationComplete;
+        private static bool interruptionComplete;
 
         #endregion
 
@@ -382,6 +422,12 @@ namespace ASCOM.Simulator
                 updateHandboxTimer = new System.Windows.Forms.Timer();
                 updateHandboxTimer.Interval = Convert.ToInt32(SharedResources.HANDBOX_UPDATE_TIMER_INTERVAL * 1000.0);
                 updateHandboxTimer.Tick += UpdateHandboxTimer_Tick;
+
+                // Initialise Operation variables
+                OperationComplete = true;
+                OperationException = null;
+                InterruptionComplete = true;
+                InterruptionException = null;
 
                 // Initialise the time since last update stopwatch timer
                 timeSinceLastUpdate = new Stopwatch();
@@ -527,6 +573,7 @@ namespace ASCOM.Simulator
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanDestinationSideOfPier", "true", "Capabilities");
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanTrackingRates", "true", "Capabilities");
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanDualAxisPulseGuide", "true", "Capabilities");
+                    s_Profile.WriteValue(SharedResources.PROGRAM_ID, "InterfaceVersion", "4", "Capabilities");
                 }
 
                 //Load up the values from saved
@@ -634,6 +681,8 @@ namespace ASCOM.Simulator
                 noSyncPastMeridian = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "NoSyncPastMeridian", "Capabilities", "false"));
 
                 dateDelta = int.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "DateDelta"), CultureInfo.InvariantCulture);
+
+                interfaceVersion = short.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "InterfaceVersion", "", "4"), CultureInfo.InvariantCulture);
 
                 if (latitude < 0) { SouthernHemisphere = true; }
 
@@ -889,9 +938,9 @@ namespace ASCOM.Simulator
                         SharedResources.TrafficLine(SharedResources.MessageType.Slew, "(Slew Complete)");
                         SlewState = SlewType.SlewNone;
 
-
-                        // End the current operation
-                        EndOperation(CurrentOperation);
+                        // End the current slew operation
+                        if ((SlewState != SlewType.SlewHome) & (SlewState == SlewType.SlewPark))
+                            EndOperation("SlewSettle");
                     }
                     break;
             }
@@ -910,16 +959,17 @@ namespace ASCOM.Simulator
 
         #region Properties For Settings
 
-        //I used some of these as dual purpose if the driver uses the same exact property
-
-        /// <summary>
-        /// True if the telescope can raise events
-        /// </summary>
-        public static bool CanCallBack
+        public static short InterfaceVersion
         {
             get
             {
-                return canCallBack;
+                return interfaceVersion;
+            }
+
+            set
+            {
+                interfaceVersion = value;
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "InterfaceVersion", value.ToString(), "");
             }
         }
 
@@ -1157,7 +1207,7 @@ namespace ASCOM.Simulator
             }
         }
 
-        public static bool CanDestinationSideofPier
+        public static bool CanDestinationSideOfPier
         {
             get { return canDestinationSideOfPier; }
             set
@@ -1357,7 +1407,17 @@ namespace ASCOM.Simulator
             set { currentAltAzm.Y = value; }
         }
 
-        public static bool AtPark { get; private set; }
+        public static bool AtPark
+        {
+            get
+            {
+                return atPark;
+            }
+            private set
+            {
+                atPark = value;
+            }
+        }
 
         public static double Azimuth
         {
@@ -1516,7 +1576,10 @@ namespace ASCOM.Simulator
             get
             {
                 //LogMessage("AtHome", "Distance from Home: {0}, AtHome: {1}", (mountAxes - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared, (mountAxes - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared < 0.01);
-                return (mountAxesDegrees - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared < 0.01;
+
+                bool atHome = (mountAxesDegrees - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared < 0.01;
+
+                return atHome;
             }
         }
 
@@ -1643,8 +1706,10 @@ namespace ASCOM.Simulator
                     throw new InvalidOperationException("set SideOfPier " + value.ToString() + " cannot be reached at the current position");
                 }
 
+                StartOperation(Operation.SideOfPier);
+
                 // change the pier side
-                StartSlewAxes(pa, 180 - mountAxesDegrees.Y, SlewType.SlewRaDec);
+                StartSlewAxes(pa, 180 - mountAxesDegrees.Y, SlewType.SlewRaDec, Operation.SideOfPier);
             }
         }
 
@@ -1652,14 +1717,26 @@ namespace ASCOM.Simulator
         {
             get
             {
+
                 if (SlewState != SlewType.SlewNone)
+                {
+                    TL.LogMessage("IsSlewing", $"TRUE - {SlewState} - SlewState != SlewType.None");
                     return true;
+                }
+
                 if (slewing)
+                {
+                    TL.LogMessage("IsSlewing", $"TRUE - {SlewState} - slewing == true");
                     return true;
+                }
+
                 if (rateMoveAxes.LengthSquared != 0)
+                {
+                    TL.LogMessage("IsSlewing", $"TRUE - {SlewState} - rateMoveAxes.LengthSquared != 0");
                     return true;
-                //if (rateRaDec.LengthSquared != 0) // Commented out by Peter 4th August 2018 because the Telescope specification says that RightAscensionRate and DeclinationRate do not affect the Slewing state
-                //    return true;
+                }
+
+                TL.LogMessage("IsSlewing", $"SlewState: {SlewState}, Slewing: {slewing}, rateMoveAxes.X:{rateMoveAxes.X}, rateMoveAxes.Y: {rateMoveAxes.Y} - Returning: {slewing && rateMoveAxes.Y != 0 && rateMoveAxes.X != 0}");
                 return slewing && rateMoveAxes.Y != 0 && rateMoveAxes.X != 0;
             }
         }
@@ -1671,7 +1748,21 @@ namespace ASCOM.Simulator
             rateRaDecOffsetInternal = new Vector();
             SlewState = SlewType.SlewNone;
 
-            EndOperation(CurrentOperation, new DriverException("Slew aborted because ABortSlew method was called."));
+            // End running operations as defined in the interface specification
+            switch (currentOperation)
+            {
+                case Operation.MoveAxis:
+                case Operation.SlewToAltAzAsync:
+                case Operation.SlewToCoordinatesAsync:
+                case Operation.SlewToTargetAsync:
+                    // End these operations if they are running
+                    EndOperation("AbortSlew", new DriverException("Slew / Move interrupted because the AbortSlew method was called."));
+                    break;
+
+                default:
+                    // No action for other operations
+                    break;
+            }
         }
 
         public static void SyncToTarget()
@@ -1680,50 +1771,50 @@ namespace ASCOM.Simulator
             UpdatePositions();
         }
 
-        public static void SyncToAltAzm(double targetAzimuth, double targetAltitude)
+        public static void SyncToAltAz(double targetAzimuth, double targetAltitude)
         {
             mountAxesDegrees = MountFunctions.ConvertAltAzmToAxes(new Vector(targetAzimuth, targetAltitude));
             UpdatePositions();
         }
 
-        public static void StartSlewRaDec(double rightAscension, double declination, bool doSideOfPier)
+        public static void StartSlewRaDec(double rightAscension, double declination, bool doSideOfPier, Operation operation)
         {
             Vector raDec = new Vector(rightAscension, declination);
             targetAxesDegrees = MountFunctions.ConvertRaDecToAxes(raDec);
 
             LogMessage("StartSlewRaDec", $"RA: {rightAscension.ToHMS()}, Declination: {declination.ToDMS()}, DoSOP {doSideOfPier}");
-            StartSlewAxes(targetAxesDegrees, SlewType.SlewRaDec);
+            StartSlewAxes(targetAxesDegrees, SlewType.SlewRaDec, operation);
         }
 
-        public static void StartSlewAltAz(double altitude, double azimuth)
+        public static void StartSlewAltAz(double altitude, double azimuth, Operation operation)
         {
-            StartSlewAltAz(new Vector(azimuth, altitude));
+            StartSlewAltAz(new Vector(azimuth, altitude), operation);
             return;
         }
 
-        public static void StartSlewAltAz(Vector targetAltAzm)
+        public static void StartSlewAltAz(Vector targetAltAz, Operation operation)
         {
-            LogMessage("StartSlewAltAz", $"Azimuth: {targetAltAzm.X.ToDMS()}, Altitude: {targetAltAzm.Y.ToDMS()}");
+            LogMessage("StartSlewAltAz", $"Azimuth: {targetAltAz.X.ToDMS()}, Altitude: {targetAltAz.Y.ToDMS()}");
 
-            Vector target = MountFunctions.ConvertAltAzmToAxes(targetAltAzm);
+            Vector target = MountFunctions.ConvertAltAzmToAxes(targetAltAz);
             if (target.LengthSquared > 0)
             {
-                StartSlewAxes(target, SlewType.SlewAltAz);
+                StartSlewAxes(target, SlewType.SlewAltAz, operation);
             }
         }
 
-        public static void StartSlewAxes(double primaryAxis, double secondaryAxis, SlewType slewState)
+        public static void StartSlewAxes(double primaryAxis, double secondaryAxis, SlewType slewState, Operation operation)
         {
-            StartSlewAxes(new Vector(primaryAxis, secondaryAxis), slewState);
+            StartSlewAxes(new Vector(primaryAxis, secondaryAxis), slewState, operation);
         }
 
         /// <summary>
         /// Starts a slew to the target position in mount axis degrees.
         /// </summary>
         /// <param name="targetPosition">The position.</param>
-        public static void StartSlewAxes(Vector targetPosition, SlewType slewState)
+        public static void StartSlewAxes(Vector targetPosition, SlewType slewState, Operation operation)
         {
-            StartOperation();
+            StartOperation(operation);
 
             targetAxesDegrees = targetPosition;
             SlewState = slewState;
@@ -1738,7 +1829,7 @@ namespace ASCOM.Simulator
             parkCoordinates = MountFunctions.ConvertAltAzmToAxes(parkPosition); // Convert the park position AltAz coordinates into the current axes representation
             Tracking = false;
 
-            StartSlewAxes(parkCoordinates, SlewType.SlewPark);
+            StartSlewAxes(parkCoordinates, SlewType.SlewPark, Operation.Park);
         }
 
         public static void FindHome()
@@ -1750,7 +1841,7 @@ namespace ASCOM.Simulator
 
             Tracking = false;
             TL.LogMessage("FindHome", $"HomePosition.X: {HomePosition.X.ToDMS()}, HomePosition.Y: {HomePosition.Y.ToDMS()}");
-            StartSlewAxes(MountFunctions.ConvertAltAzmToAxes(HomePosition), SlewType.SlewHome);
+            StartSlewAxes(MountFunctions.ConvertAltAzmToAxes(HomePosition), SlewType.SlewHome, Operation.FindHome);
         }
 
         /// <summary>
@@ -1959,9 +2050,18 @@ namespace ASCOM.Simulator
                 {
                     case SlewType.SlewRaDec:
                     case SlewType.SlewAltAz:
-                        SlewState = SlewType.SlewSettle;
-                        settleTime = DateTime.Now + TimeSpan.FromSeconds(SlewSettleTime);
-                        LogMessage("Settle", "Moved from slew to settle");
+                        if (SlewSettleTime == 0.0) // Slew finishes here!
+                        {
+                            SlewState = SlewType.SlewNone;
+                            LogMessage("DoSlew", "No settle time - Slew done");
+                            EndOperation("DoSlew - Slew Done");
+                        }
+                        else
+                        {
+                            SlewState = SlewType.SlewSettle;
+                            settleTime = DateTime.Now + TimeSpan.FromSeconds(SlewSettleTime);
+                            LogMessage("DoSlew", $"Moved from slew to settle for {SlewSettleTime} seconds");
+                        }
                         break;
 
                     case SlewType.SlewPark:
@@ -1970,7 +2070,7 @@ namespace ASCOM.Simulator
                         ChangePark(true);
 
                         // End the current operation
-                        EndOperation(Operation.Park);
+                        EndOperation("DoSlew - Park Done");
                         break;
 
                     case SlewType.SlewHome:
@@ -1978,7 +2078,7 @@ namespace ASCOM.Simulator
                         SlewState = SlewType.SlewNone;
 
                         // End the current operation
-                        EndOperation(Operation.FindHome);
+                        EndOperation("DoSlew - Home Done");
                         break;
 
                     case SlewType.SlewNone:
@@ -2186,6 +2286,13 @@ namespace ASCOM.Simulator
                 default:
                     break;
             }
+
+            // End the pulse guide operation if one is active and guiding has completed
+            if (currentOperation == Operation.PulseGuide & !isPulseGuidingRa & !isPulseGuidingDec)
+            {
+                EndOperation("PulseGuide");
+            }
+
             return change;
         }
 
@@ -2379,8 +2486,11 @@ namespace ASCOM.Simulator
             TelescopeSimulator.m_MainForm.LabelState(TelescopeSimulator.m_MainForm.labelSlew, IsSlewing);
         }
 
-        public static void StartOperation()
+        public static void StartOperation(Operation operation)
         {
+            TL.LogMessage("StartOperation", $"Starting new operation: {operation} - Current operation is: {CurrentOperation}");
+            CurrentOperation = operation;
+
             // Clear any previous exception that was being thrown
             OperationException = null;
 
@@ -2388,116 +2498,23 @@ namespace ASCOM.Simulator
             OperationComplete = false;
         }
 
-        public static void EndOperation(Operation operation)
+        public static void EndOperation(string sourceName)
         {
-            EndOperation(operation, null);
+            EndOperation(sourceName, null);
         }
 
-        public static void EndOperation(Operation operation, Exception exception)
+        public static void EndOperation(string sourceName, Exception exception)
         {
-            OperationCompleteArgs args;
-            TL.LogMessage("EndOperation", $"Running completion task...");
+            if (exception is null)
+                TL.LogMessage("EndOperation", $"{sourceName} - Ending operation {currentOperation}");
+            else
+                TL.LogMessage("EndOperation", $"{sourceName} - Ending operation {currentOperation} with error number: 0x{exception.HResult:X8} and error message: '{exception.Message}'");
+            // Mark this operation as complete
+            OperationComplete = true;
 
-            Task.Run(() =>
-            {
-                try
-                {
-                    TL.LogMessage("EndOperationTask", $"Completion task started...Can call back: {canCallBack}");
-
-                    // Mark this operation as complete
-                    OperationComplete = true;
-
-                    // Set the exception to be returned by the OperationComplete property, if any
-                    OperationException = exception;
-
-                    // Generate a client event if we are configured to do this.
-                    if (canCallBack)
-                    {
-                        TL.LogMessage("EndOperationTask", $"Creating OperationCompleteArgs. Exception is null: {exception is null}");
-                        // Create a relevant completion event args class
-                        if (exception is null) // Success - no error
-                        {
-                            args = new OperationCompleteArgs(operation);
-
-                        }
-                        else // Failed - report error
-                        {
-                            args = new OperationCompleteArgs(operation, exception.HResult, exception.Message);
-                        }
-
-                        // Create a cancellation token and set its timeout period
-                        CancellationTokenSource tokenSource = new CancellationTokenSource();
-                        tokenSource.CancelAfter(MAXIMUM_EVENT_CALLBACK_DURATION);
-
-                        // Run a task to call event handlers, silently timing out if necessary
-                        TL.LogMessage("EndOperationTask", $"Running event notification task...{args.Operation} {args.ErrorNumber} {args.ErrorMessage}");
-                        Task.Run(() =>
-                        {
-                            TL.LogMessage("EndOperationEventTask", $"Starting event notification..");
-                            try
-                            {
-                                foreach (IObserver<OperationCompleteArgs> client in telescopeClients)
-                                {
-                                    TL.LogMessage("EndOperationEventTask", $"Calling client...");
-                                    client.OnNext(args);
-                                    TL.LogMessage("EndOperationEventTask", $"Returned from client!");
-                                }
-
-
-                                //OperationCompleted?.Invoke(args);
-                                TL.LogMessage("EndOperationEventTask", $"Event sent successfully!");
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessageCrLf("EndOperationEventTask", $"Exception when raising event for operation: {operation}, Error number: {exception.HResult}, Error message: {exception.Message} - {ex.Message}\r\n{ex}");
-                            }
-
-                        }, tokenSource.Token);
-                    }
-
-                    TL.LogMessage("EndOperationTask", $"Exiting");
-
-                }
-                catch (Exception ex)
-                {
-                    TL.LogMessage("EndOperationTask", $"Exception: {ex.Message}\r\n{ex}");
-                }
-
-            });
-
-            TL.LogMessage("EndOperation", $"Exiting");
-
-        }
-
-        public static IDisposable Subscribe(IObserver<OperationCompleteArgs> observer)
-        {
-            if (!telescopeClients.Contains(observer))
-                telescopeClients.Add(observer);
-            return new Unsubscriber(telescopeClients, observer);
-        }
-
-        public static void UnSubscribe(IObserver<OperationCompleteArgs> observer)
-        {
-            if (!telescopeClients.Contains(observer))
-                telescopeClients.Remove(observer);
-        }
-
-        private class Unsubscriber : IDisposable
-        {
-            private List<IObserver<OperationCompleteArgs>> _observers;
-            private IObserver<OperationCompleteArgs> _observer;
-
-            public Unsubscriber(List<IObserver<OperationCompleteArgs>> observers, IObserver<OperationCompleteArgs> observer)
-            {
-                this._observers = observers;
-                this._observer = observer;
-            }
-
-            public void Dispose()
-            {
-                if (_observer != null && _observers.Contains(_observer))
-                    _observers.Remove(_observer);
-            }
+            // Set the exception to be returned by the OperationComplete property, if any
+            OperationException = exception;
+            CurrentOperation = Operation.None;
         }
 
         #endregion

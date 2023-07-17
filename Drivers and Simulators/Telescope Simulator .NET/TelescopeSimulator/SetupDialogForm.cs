@@ -95,6 +95,13 @@ namespace ASCOM.Simulator
         }
 
         #region Properties for Settings
+
+        public short InterfaceVersion
+        {
+            get { return (short)NumInterfaceVersion.Value; }
+            set { NumInterfaceVersion.Value = value; }
+        }
+
         public int EquatorialSystem
         {
             get { return int.Parse(comboBoxEquatorialSystem.SelectedValue.ToString(), CultureInfo.CurrentCulture); }

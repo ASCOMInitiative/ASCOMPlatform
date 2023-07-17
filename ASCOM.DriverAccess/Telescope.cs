@@ -23,13 +23,9 @@ namespace ASCOM.DriverAccess
     public class Telescope : AscomDriver, ITelescopeV4
     {
         internal MemberFactory memberFactory;
+        internal bool isPlatform7Telescope = false;
         internal bool isPlatform6Telescope = false;
         internal bool isPlatform5Telescope = false;
-
-        /// <summary>
-        /// Telescope operation completion event, fires when an asynchronous operation completes.
-        /// </summary>
-        public event CompletionEventHandler OperationCompleted;
 
         #region Telescope constructors
 
@@ -45,6 +41,12 @@ namespace ASCOM.DriverAccess
             foreach (Type objInterface in memberFactory.GetInterfaces)
             {
                 TL.LogMessage("Telescope", "Found interface name: " + objInterface.Name);
+                if (objInterface.Equals(typeof(ITelescopeV4)))
+                {
+                    isPlatform6Telescope = true; //If the type matches the V2 type flag this
+                    isPlatform7Telescope = true; //If the type matches the V2 type flag this
+                }
+
                 if (objInterface.Equals(typeof(ITelescopeV3))) isPlatform6Telescope = true; //If the type matches the V2 type flag this
                 if (objInterface.Equals(typeof(ASCOM.Interface.ITelescope))) isPlatform5Telescope = true; //If the type matches the PIA type flag this
             }
@@ -367,9 +369,9 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanCallBack
         {
-            get 
-            { 
-                return (bool)memberFactory.CallMember(1, "CanCallBack", new Type[] { }, new object[] { }); 
+            get
+            {
+                return (bool)memberFactory.CallMember(1, "CanCallBack", new Type[] { }, new object[] { });
             }
         }
 
@@ -381,6 +383,17 @@ namespace ASCOM.DriverAccess
             get
             {
                 return (bool)memberFactory.CallMember(1, "OperationComplete", new Type[] { }, new object[] { });
+            }
+        }
+
+        /// <summary>
+        /// True when an asynchronous operation has completed.
+        /// </summary>
+        public bool InterruptionComplete
+        {
+            get
+            {
+                return (bool)memberFactory.CallMember(1, "InterruptionComplete", new Type[] { }, new object[] { });
             }
         }
 

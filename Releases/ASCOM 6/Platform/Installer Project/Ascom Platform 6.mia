@@ -7154,7 +7154,7 @@ FALSE
 FALSE
 FALSE
 {66F63968-9989-4A1E-9EF0-CD889DE712C1}
-..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.Simulator.Telescope.pdb
+..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 FALSE
@@ -7167,7 +7167,7 @@ FALSE
 FALSE
 FALSE
 {DB279330-747E-49B9-9E3A-B63DE4B15FBA}
-..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.Simulator.Telescope.dll
+..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.dll
 FALSE|
 $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 FALSE
@@ -7180,7 +7180,7 @@ FALSE
 FALSE
 FALSE
 {DF583DE8-D756-465B-A420-9D39B61816F9}
-..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.TelescopeSimulator.pdb
+..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 FALSE
@@ -7193,7 +7193,7 @@ FALSE
 FALSE
 FALSE
 {D384BBAC-C890-49D3-9ED6-3F4CF457BE49}
-..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.TelescopeSimulator.exe
+..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe
 FALSE|
 $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 FALSE

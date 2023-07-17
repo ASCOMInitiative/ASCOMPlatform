@@ -63,7 +63,7 @@
   <ItemGroup>
     <VSTemplate Include="TestFormsApp(CS).vstemplate" />
   </ItemGroup>
-   <ItemGroup>
+  <ItemGroup>
     <Content Include="PackageIconCSharp.ico" />
   </ItemGroup>
   <ItemGroup>

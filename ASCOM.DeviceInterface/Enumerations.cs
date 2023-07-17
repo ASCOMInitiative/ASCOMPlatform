@@ -461,9 +461,14 @@ namespace ASCOM.DeviceInterface
         Uninitialised = 0,
 
         /// <summary>
+        /// No operation
+        /// </summary>
+        None = 1,
+
+        /// <summary>
         /// All device operations
         /// </summary>
-        All = 1,
+        All = 65535,
 
         /// <summary>
         /// Connect operation

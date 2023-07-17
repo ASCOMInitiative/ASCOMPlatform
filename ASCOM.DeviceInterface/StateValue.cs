@@ -11,15 +11,15 @@ namespace ASCOM.DeviceInterface
     public class StateValue : IStateValue
     {
         /// <summary>
-        /// 
+        /// Create a new state value object
         /// </summary>
         public StateValue() { }
 
         /// <summary>
-        /// 
+        /// Create a new state value object with the given name and value
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="value">Value</param>
+        /// <param name="name">State name</param>
+        /// <param name="value">State value</param>
         public StateValue(string name, object value)
         {
             Name = name;

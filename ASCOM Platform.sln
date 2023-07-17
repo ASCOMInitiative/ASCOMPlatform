@@ -277,6 +277,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Camera Hub", "Camera Hub", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraHub", "Drivers and Simulators\CameraHub\CameraHub.csproj", "{C708E487-E3A9-4073-A545-294B88674225}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{50BF53C3-616D-4A8B-AC3B-11C410601EC8}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Quick|Any CPU = Debug Quick|Any CPU

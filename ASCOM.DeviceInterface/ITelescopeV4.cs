@@ -19,16 +19,6 @@ namespace ASCOM.DeviceInterface
 
         #region Common methods
 
-        ///// <summary>
-        ///// Operation completed event
-        ///// </summary>
-        //event CompletionEventHandler OperationCompleted;
-
-        /// <summary>
-        /// True if the device does support completion events.
-        /// </summary>
-        bool CanCallBack { get; }
-
         /// <summary>
         /// Set True to connect to the device hardware. Set False to disconnect from the device hardware.
         /// You can also read the property to check whether it is connected. This reports the current hardware state.
@@ -213,6 +203,10 @@ namespace ASCOM.DeviceInterface
         /// </summary>
 		void Dispose();
 
+        #endregion
+
+        #region ITelescopeV4 members
+
         /// <summary>
         /// Connect to device asynchronously
         /// </summary>
@@ -233,15 +227,19 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         ArrayList DeviceState { get; }
 
-        #endregion
-
-        #region Device interface
-
         /// <summary>
         /// True when an asynchronous operation has completed
         /// </summary>
         bool OperationComplete { get; }
 
+        /// <summary>
+        /// True when an operation to stop telescope movement has stopped
+        /// </summary>
+        bool InterruptionComplete { get; }
+
+        #endregion
+
+        #region Device interface
 
         /// <summary>
         /// Stops a slew in progress.
