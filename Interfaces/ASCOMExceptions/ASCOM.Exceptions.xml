@@ -209,7 +209,7 @@
             The exception is defined in the ASCOM.Cache component rather than ASCOM.Exceptions.
             </remarks>
         </member>
-        <member name="F:ASCOM.ErrorCodes.OperationCancelledException">
+        <member name="F:ASCOM.ErrorCodes.OperationCancelled">
             <summary>
             Reserved error code (0x8004040E) to indicate that an in-progress operation has been cancelled.
             </summary>
@@ -548,33 +548,33 @@
         </member>
         <member name="M:ASCOM.OperationCancelledException.#ctor">
             <summary>
-            Initializes a new instance of the <see cref = "T:ASCOM.ParkedException" /> class
+            Initializes a new instance of the <see cref = "T:ASCOM.OperationCancelledException" /> class
             using default error text and error codes.
             </summary>
         </member>
         <member name="M:ASCOM.OperationCancelledException.#ctor(System.Exception)">
             <summary>
-            Initializes a new instance of the <see cref = "T:ASCOM.ParkedException" /> class
+            Initializes a new instance of the <see cref = "T:ASCOM.OperationCancelledException" /> class with a provided inner exception
             with a caught (inner) exception.
             </summary>
-            <param name = "inner">The inner.</param>
+            <param name = "inner">The inner exception.</param>
         </member>
         <member name="M:ASCOM.OperationCancelledException.#ctor(System.String)">
             <summary>
-            Create a new exception
+            Initializes a new instance of the <see cref = "T:ASCOM.OperationCancelledException" /> class with a provided message
             </summary>
             <param name = "message">Exception description</param>
         </member>
         <member name="M:ASCOM.OperationCancelledException.#ctor(System.String,System.Exception)">
             <summary>
-            Create a new exception
+            Initializes a new instance of the <see cref = "T:ASCOM.OperationCancelledException" /> class with a provided message and inner exception
             </summary>
             <param name = "message">Exception description</param>
             <param name = "inner">Underlying exception that caused this exception to be thrown.</param>
         </member>
         <member name="M:ASCOM.OperationCancelledException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
             <summary>
-            Added to keep Code Analysis happy
+            Serialisation constructor
             </summary>
             <param name = "info">Serialisation information</param>
             <param name = "context">Streaming context.</param>

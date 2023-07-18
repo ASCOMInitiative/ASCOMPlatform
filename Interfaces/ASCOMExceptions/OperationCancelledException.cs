@@ -16,41 +16,41 @@ namespace ASCOM
     public class OperationCancelledException : DriverException
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref = "ParkedException" /> class
+        /// Initializes a new instance of the <see cref = "OperationCancelledException" /> class
         /// using default error text and error codes.
         /// </summary>
-        public OperationCancelledException() : base("Operation not valid while the device is parked", ErrorCodes.InvalidWhileParked)
+        public OperationCancelledException() : base("The current operation has been cancelled.", ErrorCodes.OperationCancelled)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref = "ParkedException" /> class
+        /// Initializes a new instance of the <see cref = "OperationCancelledException" /> class with a provided inner exception
         /// with a caught (inner) exception.
         /// </summary>
-        /// <param name = "inner">The inner.</param>
-        public OperationCancelledException(Exception inner) : base("Operation not valid while the device is parked", ErrorCodes.InvalidWhileParked, inner)
+        /// <param name = "inner">The inner exception.</param>
+        public OperationCancelledException(Exception inner) : base("The current operation has been cancelled.", ErrorCodes.OperationCancelled, inner)
         {
         }
 
         /// <summary>
-        /// Create a new exception
+        /// Initializes a new instance of the <see cref = "OperationCancelledException" /> class with a provided message
         /// </summary>
         /// <param name = "message">Exception description</param>
-        public OperationCancelledException(string message) : base(message, ErrorCodes.InvalidWhileParked)
+        public OperationCancelledException(string message) : base(message, ErrorCodes.OperationCancelled)
         {
         }
 
         /// <summary>
-        /// Create a new exception
+        /// Initializes a new instance of the <see cref = "OperationCancelledException" /> class with a provided message and inner exception
         /// </summary>
         /// <param name = "message">Exception description</param>
         /// <param name = "inner">Underlying exception that caused this exception to be thrown.</param>
-        public OperationCancelledException(string message, Exception inner) : base(message, ErrorCodes.InvalidWhileParked, inner)
+        public OperationCancelledException(string message, Exception inner) : base(message, ErrorCodes.OperationCancelled, inner)
         {
         }
 
         /// <summary>
-        /// Added to keep Code Analysis happy
+        /// Serialisation constructor
         /// </summary>
         /// <param name = "info">Serialisation information</param>
         /// <param name = "context">Streaming context.</param>

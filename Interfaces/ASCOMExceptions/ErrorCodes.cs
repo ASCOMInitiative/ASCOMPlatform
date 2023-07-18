@@ -87,7 +87,7 @@ namespace ASCOM
         /// <summary>
         /// Reserved error code (0x8004040E) to indicate that an in-progress operation has been cancelled.
         /// </summary>
-        public static readonly int OperationCancelledException = unchecked((int)0x8004040E);
+        public static readonly int OperationCancelled = unchecked((int)0x8004040E);
 
         /// <summary>
         /// Reserved 'catch-all' error code (0x800404FF) used when nothing else was specified.
