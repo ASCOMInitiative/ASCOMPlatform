@@ -209,6 +209,11 @@
             The exception is defined in the ASCOM.Cache component rather than ASCOM.Exceptions.
             </remarks>
         </member>
+        <member name="F:ASCOM.ErrorCodes.OperationCancelledException">
+            <summary>
+            Reserved error code (0x8004040E) to indicate that an in-progress operation has been cancelled.
+            </summary>
+        </member>
         <member name="F:ASCOM.ErrorCodes.UnspecifiedError">
             <summary>
             Reserved 'catch-all' error code (0x800404FF) used when nothing else was specified.
@@ -532,6 +537,47 @@
             <summary>
             The property/accessor or method that is not implemented
             </summary>
+        </member>
+        <member name="T:ASCOM.OperationCancelledException">
+            <summary>
+            This exception should be used to indicate that an in-progress operation has been cancelled.
+            </summary>
+            <remarks>
+            <para>If you need to throw this error as a COM exception use the error number: 0x80040408.</para>
+            </remarks>
+        </member>
+        <member name="M:ASCOM.OperationCancelledException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref = "T:ASCOM.ParkedException" /> class
+            using default error text and error codes.
+            </summary>
+        </member>
+        <member name="M:ASCOM.OperationCancelledException.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref = "T:ASCOM.ParkedException" /> class
+            with a caught (inner) exception.
+            </summary>
+            <param name = "inner">The inner.</param>
+        </member>
+        <member name="M:ASCOM.OperationCancelledException.#ctor(System.String)">
+            <summary>
+            Create a new exception
+            </summary>
+            <param name = "message">Exception description</param>
+        </member>
+        <member name="M:ASCOM.OperationCancelledException.#ctor(System.String,System.Exception)">
+            <summary>
+            Create a new exception
+            </summary>
+            <param name = "message">Exception description</param>
+            <param name = "inner">Underlying exception that caused this exception to be thrown.</param>
+        </member>
+        <member name="M:ASCOM.OperationCancelledException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Added to keep Code Analysis happy
+            </summary>
+            <param name = "info">Serialisation information</param>
+            <param name = "context">Streaming context.</param>
         </member>
         <member name="T:ASCOM.ParkedException">
             <summary>
