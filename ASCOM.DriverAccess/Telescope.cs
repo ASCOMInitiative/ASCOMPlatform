@@ -387,17 +387,6 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// True when an asynchronous operation has completed.
-        /// </summary>
-        public bool InterruptionComplete
-        {
-            get
-            {
-                return (bool)memberFactory.CallMember(1, "InterruptionComplete", new Type[] { }, new object[] { });
-            }
-        }
-
-        /// <summary>
         /// The alignment mode of the mount.
         /// </summary>
         /// <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>

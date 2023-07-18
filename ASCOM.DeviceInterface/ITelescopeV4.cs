@@ -232,11 +232,6 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         bool OperationComplete { get; }
 
-        /// <summary>
-        /// True when an operation to stop telescope movement has stopped
-        /// </summary>
-        bool InterruptionComplete { get; }
-
         #endregion
 
         #region Device interface

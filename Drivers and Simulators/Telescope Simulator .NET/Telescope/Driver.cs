@@ -127,24 +127,6 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// True when an asynchronous operation has completed.
-        /// </summary>
-        /// <exception cref="DriverException">When an operation fails.</exception>
-        public bool InterruptionComplete
-        {
-            get
-            {
-                // This method is only valid in interface V4 and later
-                CheckCapability(TelescopeHardware.InterfaceVersion >= 4, "InterruptionComplete", false);
-
-                if (TelescopeHardware.InterruptionException is null)
-                    return TelescopeHardware.InterruptionComplete;
-
-                throw TelescopeHardware.InterruptionException;
-            }
-        }
-
-        /// <summary>
         /// Connect to the telescope asynchronously
         /// </summary>
         public void Connect()

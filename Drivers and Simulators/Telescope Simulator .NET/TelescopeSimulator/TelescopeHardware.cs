@@ -349,22 +349,6 @@ namespace ASCOM.Simulator
         }
         public static Exception OperationException { get; set; }
 
-        public static bool InterruptionComplete
-        {
-            get
-            {
-                //TL?.LogMessage("InterruptionComplete - GET", $"{interruptionComplete}");
-                return interruptionComplete;
-            }
-
-            set
-            {
-                interruptionComplete = value;
-                //TL?.LogMessage("InterruptionComplete - SET", $"{interruptionComplete}");
-            }
-        }
-        public static Exception InterruptionException { get; set; }
-
         /// <summary>
         /// Guide rates, deg/sec. X Ra/Azm, Y Alt/Dec
         /// </summary>
@@ -384,7 +368,6 @@ namespace ASCOM.Simulator
         /// </summary>
         public static Vector rateMoveAxes = new Vector();
         private static bool operationComplete;
-        private static bool interruptionComplete;
 
         #endregion
 
@@ -426,8 +409,6 @@ namespace ASCOM.Simulator
                 // Initialise Operation variables
                 OperationComplete = true;
                 OperationException = null;
-                InterruptionComplete = true;
-                InterruptionException = null;
 
                 // Initialise the time since last update stopwatch timer
                 timeSinceLastUpdate = new Stopwatch();
