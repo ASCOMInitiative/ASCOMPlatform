@@ -337,14 +337,14 @@ namespace ASCOM.Simulator
         {
             get
             {
-                TL?.LogMessage("OperationComplete - GET", $"{operationComplete}");
+                //TL?.LogMessage("OperationComplete - GET", $"{operationComplete}");
                 return operationComplete;
             }
 
             set
             {
                 operationComplete = value;
-                TL?.LogMessage("OperationComplete - SET", $"{operationComplete}");
+                //TL?.LogMessage("OperationComplete - SET", $"{operationComplete}");
             }
         }
         public static Exception OperationException { get; set; }
@@ -353,14 +353,14 @@ namespace ASCOM.Simulator
         {
             get
             {
-                TL?.LogMessage("InterruptionComplete - GET", $"{interruptionComplete}");
+                //TL?.LogMessage("InterruptionComplete - GET", $"{interruptionComplete}");
                 return interruptionComplete;
             }
 
             set
             {
                 interruptionComplete = value;
-                TL?.LogMessage("InterruptionComplete - SET", $"{interruptionComplete}");
+                //TL?.LogMessage("InterruptionComplete - SET", $"{interruptionComplete}");
             }
         }
         public static Exception InterruptionException { get; set; }
@@ -1720,23 +1720,23 @@ namespace ASCOM.Simulator
 
                 if (SlewState != SlewType.SlewNone)
                 {
-                    TL.LogMessage("IsSlewing", $"TRUE - {SlewState} - SlewState != SlewType.None");
+                    //TL.LogMessage("IsSlewing", $"TRUE - {SlewState} - SlewState != SlewType.None");
                     return true;
                 }
 
                 if (slewing)
                 {
-                    TL.LogMessage("IsSlewing", $"TRUE - {SlewState} - slewing == true");
+                    //TL.LogMessage("IsSlewing", $"TRUE - {SlewState} - slewing == true");
                     return true;
                 }
 
                 if (rateMoveAxes.LengthSquared != 0)
                 {
-                    TL.LogMessage("IsSlewing", $"TRUE - {SlewState} - rateMoveAxes.LengthSquared != 0");
+                    //TL.LogMessage("IsSlewing", $"TRUE - {SlewState} - rateMoveAxes.LengthSquared != 0");
                     return true;
                 }
 
-                TL.LogMessage("IsSlewing", $"SlewState: {SlewState}, Slewing: {slewing}, rateMoveAxes.X:{rateMoveAxes.X}, rateMoveAxes.Y: {rateMoveAxes.Y} - Returning: {slewing && rateMoveAxes.Y != 0 && rateMoveAxes.X != 0}");
+                //TL.LogMessage("IsSlewing", $"SlewState: {SlewState}, Slewing: {slewing}, rateMoveAxes.X:{rateMoveAxes.X}, rateMoveAxes.Y: {rateMoveAxes.Y} - Returning: {slewing && rateMoveAxes.Y != 0 && rateMoveAxes.X != 0}");
                 return slewing && rateMoveAxes.Y != 0 && rateMoveAxes.X != 0;
             }
         }
@@ -2488,7 +2488,7 @@ namespace ASCOM.Simulator
 
         public static void StartOperation(Operation operation)
         {
-            TL.LogMessage("StartOperation", $"Starting new operation: {operation} - Current operation is: {CurrentOperation}");
+            TL.LogMessage("OperationState-Start", $"Starting new operation: {operation} - Current operation is: {CurrentOperation}");
             CurrentOperation = operation;
 
             // Clear any previous exception that was being thrown
@@ -2506,9 +2506,9 @@ namespace ASCOM.Simulator
         public static void EndOperation(string sourceName, Exception exception)
         {
             if (exception is null)
-                TL.LogMessage("EndOperation", $"{sourceName} - Ending operation {currentOperation}");
+                TL.LogMessage("OperationState-End", $"{sourceName} - Ending operation {currentOperation}");
             else
-                TL.LogMessage("EndOperation", $"{sourceName} - Ending operation {currentOperation} with error number: 0x{exception.HResult:X8} and error message: '{exception.Message}'");
+                TL.LogMessage("OperationState-End", $"{sourceName} - Ending operation {currentOperation} with error number: 0x{exception.HResult:X8} and error message: '{exception.Message}'");
             // Mark this operation as complete
             OperationComplete = true;
 
