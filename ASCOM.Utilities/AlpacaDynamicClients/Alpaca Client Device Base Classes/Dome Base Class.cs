@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ASCOM.Common.Alpaca;
 using ASCOM.DeviceInterface;
@@ -31,6 +32,10 @@ namespace ASCOM.DynamicRemoteClients
         private uint clientNumber; // Unique number for this driver within the locaL server, i.e. across all drivers that the local server is serving
         private bool clientIsConnected;  // Connection state of this driver
         private string URIBase; // URI base unique to this driver
+
+        // Connect / Disconnect emulation variables
+        bool connecting;
+        Exception connectException;
 
         // Variables to hold values that can be configured by the user through the setup form
         private bool traceState = true;
@@ -504,6 +509,146 @@ namespace ASCOM.DynamicRemoteClients
             {
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "Slewing", MemberTypes.Property);
+            }
+        }
+
+        #endregion
+
+        #region IDomeV3 implementation
+
+        public void Connect()
+        {
+            // Call the device's Connect method if this is a Platform 7 or later device, otherwise simulate the connect call
+            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device
+            {
+                TL.LogMessage("Connect", "Issuing Connect command");
+                DynamicClientDriver.SetClientTimeout(client, establishConnectionTimeout);
+                DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "Connect", MemberTypes.Method);
+            }
+
+            // Platform 6 or earlier so emulate the capability
+            TL.LogMessage("Connect", "Emulating Connect command for Platform 6 driver");
+
+            // Set Connecting to true and clear any previous exception
+            connecting = true;
+            connectException = null;
+
+            // Run a task to set the Connected property to True
+            Task connectingTask = Task.Factory.StartNew(() =>
+            {
+                // Ensure that no exceptions can escape
+                try
+                {
+                    // Set Connected True
+                    TL.LogMessage("Connect", "About to set Connected True");
+                    Connected = true;
+                    TL.LogMessage("Connect", "Connected Set True OK");
+                }
+                catch (Exception ex)
+                {
+                    // Something went wrong so log the issue and save the exception
+                    TL.LogMessage("Connect", $"Connected threw an exception: {ex.Message}");
+                    connectException = ex;
+                }
+                // Ensure that Connecting is always set False at the end of the task
+                finally
+                {
+                    TL.LogMessage("Connect", "Setting Connecting to False");
+                    connecting = false;
+                }
+            });
+        }
+
+        public void Disconnect()
+        {
+            // Call the device's Disconnect method if this is a Platform 7 or later device, otherwise simulate the connect call
+            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device
+            {
+                TL.LogMessage("Disconnect", "Issuing Disconnect command");
+                DynamicClientDriver.SetClientTimeout(client, establishConnectionTimeout);
+                DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "Disconnect", MemberTypes.Method);
+            }
+
+            // Platform 6 or earlier so emulate the capability
+            TL.LogMessage("Disconnect", "Emulating Disconnect command for Platform 6 driver");
+
+            // Set Connecting to true and clear any previous exception
+            connecting = true;
+            connectException = null;
+
+            // Run a task to set the Connected property to True
+            Task connectingTask = Task.Factory.StartNew(() =>
+            {
+                // Ensure that no exceptions can escape
+                try
+                {
+                    // Set Connected True
+                    TL.LogMessage("Disconnect", "About to set Connected False");
+                    Connected = false;
+                    TL.LogMessage("Disconnect", "Connected Set False OK");
+                }
+                catch (Exception ex)
+                {
+                    // Something went wrong so log the issue and save the exception
+                    TL.LogMessage("Disconnect", $"Connected threw an exception: {ex.Message}");
+                    connectException = ex;
+                }
+                // Ensure that Connecting is always set False at the end of the task
+                finally
+                {
+                    TL.LogMessage("Disconnect", "Setting Connecting to False");
+                    connecting = false;
+                }
+            });
+        }
+
+        public bool Connecting
+        {
+            get
+            {
+                // Call the device's Connecting method if this is a Platform 7 or later device, otherwise return False
+                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device
+                {
+                    TL.LogMessage("Connecting Get", "Issuing Connecting command");
+                    DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                    return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "Connecting", MemberTypes.Property);
+                }
+
+                // Platform 6 or earlier device
+                // If Connected or disconnected threw an exception, throw this to the client
+                if (!(connectException is null))
+                {
+                    TL.LogMessage("Connecting Get", $"Throwing exception from Connected to the client: {connectException.Message}\r\n{connectException}");
+                    throw connectException;
+                }
+
+                // Platform 6 or earlier device so always return false.
+                return false;
+            }
+        }
+
+        public ArrayList DeviceState
+        {
+            get
+            {
+                // Call the device's DeviceState method if this is a Platform 7 or later device, otherwise simulate the DeviceState method
+                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device
+                {
+                    try
+                    {
+                        DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                        return DynamicClientDriver.DeviceState(clientNumber, client, URIBase, TL);
+                    }
+                    catch (Exception ex)
+                    {
+                        TL.LogMessage("DeviceState Get", "Received exception: " + ex.Message);
+                        throw;
+                    }
+                }
+                else // Platform 6 or earlier device so return an empty list.
+                {
+                    return new ArrayList();
+                }
             }
         }
 

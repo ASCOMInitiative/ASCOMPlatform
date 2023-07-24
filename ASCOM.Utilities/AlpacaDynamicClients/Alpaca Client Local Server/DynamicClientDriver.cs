@@ -1887,6 +1887,21 @@ namespace ASCOM.DynamicRemoteClients
             return returnValues;
         }
 
+        public static ArrayList DeviceState(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL)
+        {
+            List<IStateValue> supportedActions = GetValue<List<IStateValue>>(clientNumber, client, URIBase, TL, "DeviceState", MemberTypes.Property);
+            TL.LogMessage(clientNumber, "DeviceState", string.Format("Returning {0} elements", supportedActions.Count));
+
+            ArrayList returnValues = new ArrayList();
+            foreach (IStateValue action in supportedActions)
+            {
+                returnValues.Add(action);
+                TL.LogMessage(clientNumber, "SupportedActions", string.Format("Returning action: {0}", action));
+            }
+
+            return returnValues;
+        }
+
         #endregion
 
         #region Complex Camera Properties

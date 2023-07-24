@@ -107,6 +107,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeviceCapabilities.cs" />
     <Compile Include="ICameraV4.cs" />
     <Compile Include="ICoverCalibratorV2.cs" />
     <Compile Include="IDomeV3.cs" />
