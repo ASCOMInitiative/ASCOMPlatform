@@ -227,11 +227,6 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         ArrayList DeviceState { get; }
 
-        /// <summary>
-        /// True when an asynchronous operation has completed
-        /// </summary>
-        bool OperationComplete { get; }
-
         #endregion
 
         #region Device interface

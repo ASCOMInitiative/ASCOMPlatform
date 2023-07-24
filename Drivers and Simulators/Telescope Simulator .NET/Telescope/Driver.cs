@@ -109,24 +109,6 @@ namespace ASCOM.Simulator
         #region ITelescopeV4 members
 
         /// <summary>
-        /// True when an asynchronous operation has completed.
-        /// </summary>
-        /// <exception cref="DriverException">When an operation fails.</exception>
-        public bool OperationComplete
-        {
-            get
-            {
-                // This method is only valid in interface V4 and later
-                CheckCapability(TelescopeHardware.InterfaceVersion >= 4, "OperationComplete", false);
-
-                if (TelescopeHardware.OperationException is null)
-                    return TelescopeHardware.OperationComplete;
-
-                throw TelescopeHardware.OperationException;
-            }
-        }
-
-        /// <summary>
         /// Connect to the telescope asynchronously
         /// </summary>
         public void Connect()
@@ -798,6 +780,7 @@ namespace ASCOM.Simulator
                     System.Windows.Forms.Application.DoEvents();
                 }
             }
+
             SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "(done)");
         }
 
@@ -905,6 +888,7 @@ namespace ASCOM.Simulator
 
                             case Operation.None: // No operation currently underway
                                 // No operation currently underway so ignore this request to stop movement.
+                                TelescopeHardware.TL.LogMessage("MoveAxis", $"Request to set the MoveAxis rate to 0.0 and no operation currently running - ignoring request. Slewing: {TelescopeHardware.IsSlewing}");
                                 break;
 
                             case Operation.MoveAxis: // A MoveAxis operation is underway

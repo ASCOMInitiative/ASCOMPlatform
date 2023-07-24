@@ -376,17 +376,6 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// True when an asynchronous operation has completed.
-        /// </summary>
-        public bool OperationComplete
-        {
-            get
-            {
-                return (bool)memberFactory.CallMember(1, "OperationComplete", new Type[] { }, new object[] { });
-            }
-        }
-
-        /// <summary>
         /// The alignment mode of the mount.
         /// </summary>
         /// <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>

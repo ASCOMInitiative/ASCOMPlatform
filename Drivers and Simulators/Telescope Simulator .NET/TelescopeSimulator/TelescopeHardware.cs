@@ -43,7 +43,17 @@ namespace ASCOM.Simulator
 {
     public static class TelescopeHardware
     {
-        #region How the simulator works
+        #region How the simulator works and Operations
+
+        // OPERATIONS
+        
+        // Operations were part of a PoC to introduce independent completion variables for all async methods that was implemented in June / July 2023 as part of Platform 7 feature testing.
+        // These completion variables would return true /false or, when something went wrong, would throw exceptions continually until the next operation was started.
+
+        // The TelescopeHardware.OperationComplete property is not currently exposed through the driver's ITelescopeV4 interface but
+        // the code is left in place in case it is useful in the future.
+
+        // HOW THE SIMULATOR WORKS
 
         // The telescope is implemented using two axes that represent the primary and secondary telescope axes.
         // The role of the axes varies depending on the mount type.
@@ -1558,6 +1568,11 @@ namespace ASCOM.Simulator
             {
                 //LogMessage("AtHome", "Distance from Home: {0}, AtHome: {1}", (mountAxes - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared, (mountAxes - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared < 0.01);
 
+                // If a FindHome operation has been started, return its sate
+                if (currentOperation == Operation.FindHome)
+                    return false;
+
+                // Otherwise return true if the mount is close to the  home position.
                 bool atHome = (mountAxesDegrees - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared < 0.01;
 
                 return atHome;
@@ -1737,7 +1752,7 @@ namespace ASCOM.Simulator
                 case Operation.SlewToCoordinatesAsync:
                 case Operation.SlewToTargetAsync:
                     // End these operations if they are running
-                    EndOperation("AbortSlew", new DriverException("Slew / Move interrupted because the AbortSlew method was called."));
+                    EndOperation("AbortSlew", new OperationCancelledException("Slew / Move interrupted because the AbortSlew method was called."));
                     break;
 
                 default:
