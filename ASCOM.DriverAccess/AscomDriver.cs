@@ -23,6 +23,7 @@ namespace ASCOM.DriverAccess
         private bool disposedValue = false;        // To detect redundant calls
         private string deviceType;
         private bool connecting; // Flag used when emulating the Connect / Disconnect methods
+        Exception connectException = null; // Placeholder for any exception generated when emulating asynchronous connection / disconnection on a Platform 6 or earlier device
 
         #region AscomDriver Constructors and Dispose
 
@@ -153,9 +154,9 @@ namespace ASCOM.DriverAccess
                             return true;
                         break;
 
-                    // True if interface version is greater than 4
+                    // True if interface version is greater than 3
                     case Telescope _:
-                        if (DriverInterfaceVersion > 4)
+                        if (DriverInterfaceVersion > 3)
                             return true;
                         break;
 
@@ -212,10 +213,10 @@ namespace ASCOM.DriverAccess
 
         #endregion
 
-        #region Connect / Disconnect members
+        #region Connect / Disconnect and DeviceState members
 
         /// <summary>
-        /// 
+        /// Connect to a device asynchronously
         /// </summary>
         public void Connect()
         {
@@ -224,49 +225,44 @@ namespace ASCOM.DriverAccess
             {
                 TL.LogMessage("Connect", "Issuing Connect command");
                 memberFactory.CallMember(3, "Connect", new Type[] { });
+                return;
             }
-            else // Platform 6 or earlier so emulate the capability
+
+            // Platform 6 or earlier so emulate the capability
+            TL.LogMessage("Connect", "Emulating Connect command for Platform 6 driver");
+
+            // Set Connecting to true and clear any previous exception
+            connecting = true;
+            connectException = null;
+
+            // Run a task to set the Connected property to True
+            Task connectingTask = Task.Factory.StartNew(() =>
             {
-                TL.LogMessage("Connect", "Emulating Connect command for Platform 6 driver");
-
-                // Set Connecting to true
-                connecting = true;
-                
-                // Run a task to set the Connected property to True
-                Task connectingTask = Task.Factory.StartNew(() =>
+                // Ensure that no exceptions can escape
+                try
                 {
-                    Exception connectException = null;
-
-                    // Ensure that no exceptions can escape
-                    try
-                    {
-                        // Set Connected True
-                        TL.LogMessage("Connect", "About to set Connected True");
-                        Connected = true;
-                        TL.LogMessage("Connect", "Connected Set True OK");
-                    }
-                    catch (Exception ex)
-                    {
-                        // SOmething went wrong so long the issue and save the exception
-                        TL.LogMessage("Connect", $"Connected threw an exception: {ex.Message}");
-                        connectException = ex;
-                    }
-                    // Ensure that Connecting is always set False at the end of the task
-                    finally
-                    {
-                        TL.LogMessage("Connect", "Setting Connecting to False");
-                        connecting = false;
-                    }
-
-                    // If Connected threw an exception, throw this to the client
-                    if (!(connectException is null))
-                        throw connectException;
-                });
-            }
+                    // Set Connected True
+                    TL.LogMessage("Connect", "About to set Connected True");
+                    Connected = true;
+                    TL.LogMessage("Connect", "Connected Set True OK");
+                }
+                catch (Exception ex)
+                {
+                    // Something went wrong so log the issue and save the exception
+                    TL.LogMessage("Connect", $"Connected threw an exception: {ex.Message}");
+                    connectException = ex;
+                }
+                // Ensure that Connecting is always set False at the end of the task
+                finally
+                {
+                    TL.LogMessage("Connect", "Setting Connecting to False");
+                    connecting = false;
+                }
+            });
         }
 
         /// <summary>
-        /// 
+        /// Disconnect from a device asynchronously
         /// </summary>
         public void Disconnect()
         {
@@ -275,61 +271,93 @@ namespace ASCOM.DriverAccess
             {
                 TL.LogMessage("Disconnect", "Issuing Disconnect command");
                 memberFactory.CallMember(3, "Disconnect", new Type[] { });
+                return;
             }
-            else // Platform 6 or earlier so emulate the capability
+
+            // Platform 6 or earlier so emulate the capability
+            TL.LogMessage("Disconnect", "Emulating Disconnect command for Platform 6 driver");
+            // Set Connecting to true and clear any previous exception
+            connecting = true;
+            connectException = null;
+
+            // Run a task to set the Connected property to False
+            Task disConnectingTask = Task.Factory.StartNew(() =>
             {
-                TL.LogMessage("Disconnect", "Emulating Disconnect command for Platform 6 driver");
-
-                // Set Connecting to true
-                connecting = true;
-
-                // Run a task to set the Connected property to True
-                Task disConnectingTask = Task.Factory.StartNew(() =>
+                // Ensure that no exceptions can escape
+                try
                 {
-                    Exception disConnectException = null;
-
-                    // Ensure that no exceptions can escape
-                    try
-                    {
-                        // Set Connected False
-                        TL.LogMessage("Disconnect", "About to set Connected False");
-                        Connected = false;
-                        TL.LogMessage("ConnDisconnectect", "Connected Set False OK");
-                    }
-                    catch (Exception ex)
-                    {
-                        // Something went wrong so long the issue and save the exception
-                        TL.LogMessage("CoDisconnectnnect", $"Connected threw an exception: {ex.Message}");
-                        disConnectException = ex;
-                    }
-                    // Ensure that Connecting is always set False at the end of the task
-                    finally
-                    {
-                        TL.LogMessage("Disconnect", "Setting Connecting to False");
-                        connecting = false;
-                    }
-
-                    // If Connected threw an exception, throw this to the client
-                    if (!(disConnectException is null))
-                        throw disConnectException;
-                });
-            }
+                    // Set Connected False
+                    TL.LogMessage("Disconnect", "About to set Connected False");
+                    Connected = false;
+                    TL.LogMessage("Disconnect", "Connected Set False OK");
+                }
+                catch (Exception ex)
+                {
+                    // Something went wrong so save the exception
+                    TL.LogMessage("Disconnect", $"Connected threw an exception: {ex.Message}");
+                    connectException = ex;
+                }
+                // Ensure that Connecting is always set False at the end of the task
+                finally
+                {
+                    TL.LogMessage("Disconnect", "Setting Connecting to False");
+                    connecting = false;
+                }
+            });
         }
 
         /// <summary>
-        /// 
+        /// Completion variable for the Connect and Disconnect methods
         /// </summary>
         public bool Connecting
         {
             get
             {
-                if (HasConnectAndDeviceState)
+                // Call the device's Connecting method if this is a Platform 7 or later device, otherwise return False
+                if (HasConnectAndDeviceState) // Platform 7 or later device
                 {
                     TL.LogMessage("Connecting Get", "Issuing Connecting command");
                     return (bool)memberFactory.CallMember(1, "Connecting", new Type[] { }, new object[] { });
                 }
-                else
-                    return connecting;
+
+                // Platform 6 or earlier device
+                // If Connected or disconnected threw an exception, throw this to the client
+                if (!(connectException is null))
+                {
+                    TL.LogMessage("Connecting Get", $"Throwing exception from Connected to the client: {connectException.Message}\r\n{connectException}");
+                    throw connectException;
+                }
+
+                // Platform 6 or earlier device so always return false.
+                return false;
+            }
+        }
+
+        /// <summary>Returns the device's operational state.</summary>
+        /// <value>An ArrayList of <see cref="DeviceState"/> objects describing the device's operational state.
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        public ArrayList DeviceState
+        {
+            get
+            {
+                // Call the device's DeviceState method if this is a Platform 7 or later device, otherwise simulate the DeviceState method
+                if (HasConnectAndDeviceState) // Platform 7 or later device so call the device's DeviceState method
+                {
+                    try
+                    {
+                        return memberFactory.CallMember(1, "DeviceState", new Type[] { }, new object[] { }).ComObjToArrayList();
+                    }
+                    catch (Exception ex)
+                    {
+                        TL.LogMessage("SupportedActions Get", "Received exception: " + ex.Message);
+                        throw;
+                    }
+                }
+                else // Platform 6 or earlier device so return an empty list.
+                {
+                    return new ArrayList();
+                }
             }
         }
 
