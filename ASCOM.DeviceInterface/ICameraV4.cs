@@ -206,26 +206,6 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         void Dispose();
 
-        /// <summary>
-        /// Connect to the device asynchronously
-        /// </summary>
-        void Connect();
-
-        /// <summary>
-        /// Disconnect from the device asynchronously
-        /// </summary>
-        void Disconnect();
-
-        /// <summary>
-        /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
-        /// </summary>
-        bool Connecting { get; }
-
-        /// <summary>
-        /// Returns the device operational state in a single call.
-        /// </summary>
-        ArrayList DeviceState { get; }
-
         #endregion
 
         #region ICameraV1 members
@@ -1912,6 +1892,30 @@ namespace ASCOM.DeviceInterface
         /// <para>This is only available in Camera Interface Version 3 and later.</para>
         /// </remarks>
         double SubExposureDuration { get; set; }
+
+        #endregion
+
+        #region ICameraV4 members
+
+        /// <summary>
+        /// Connect to the device asynchronously
+        /// </summary>
+        void Connect();
+
+        /// <summary>
+        /// Disconnect from the device asynchronously
+        /// </summary>
+        void Disconnect();
+
+        /// <summary>
+        /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
+        /// </summary>
+        bool Connecting { get; }
+
+        /// <summary>
+        /// Returns the device operational state in a single call.
+        /// </summary>
+        ArrayList DeviceState { get; }
 
         #endregion
 

@@ -81,23 +81,13 @@ namespace ASCOM.DriverAccess
         /// <summary>
 		/// State response from the device
 		/// </summary>
-		public TelescopeDeviceState TelescopeDeviceState
+		public TelescopeState TelescopeState
         {
             get
             {
-                // Initialise the response variable with an emptgy arry list in case the device throws an exception
-                ArrayList arrayList = new ArrayList();
-
-                // get the device state from the device
-                try
-                {
-                    arrayList = DeviceState;
-                    TL.LogMessage("TelescopeDeviceState", $"Received {arrayList.Count} items");
-                }
-                catch (Exception ex)
-                {
-                    TL.LogMessageCrLf("TelescopeDeviceState", $"The DeviceState property threw an exception, cannot return any values: {ex.Message}\r\n{ex}");
-                }
+                // Get the device state from the device
+                ArrayList arrayList = DeviceState;
+                TL.LogMessage("TelescopeState", $"Received {arrayList.Count} items");
 
                 // Initialise variables to null values
                 double? altitude = null;
@@ -117,7 +107,7 @@ namespace ASCOM.DriverAccess
                 // Parse the device response into the null-able variables defined above
                 foreach (IStateValue kvp in arrayList)
                 {
-                    TL.LogMessage("TelescopeDeviceState", $"Found {kvp.Name} = {kvp.Value}");
+                    TL.LogMessage("TelescopeState", $"Found {kvp.Name} = {kvp.Value}");
 
                     switch (kvp.Name)
                     {
@@ -128,9 +118,9 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage("TelescopeDeviceState", $"Altitude - Ignoring exception: {ex.Message}");
+                                TL.LogMessage("TelescopeState", $"Altitude - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage("TelescopeDeviceState", $"Altitude has value: {altitude.HasValue}, Value: {((double)altitude.Value)}");
+                            TL.LogMessage("TelescopeState", $"Altitude has value: {altitude.HasValue}, Value: {((double)altitude.Value)}");
                             break;
 
                         case "AtHome":
@@ -140,9 +130,9 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage("TelescopeDeviceState", $"AtHome - Ignoring exception: {ex.Message}");
+                                TL.LogMessage("TelescopeState", $"AtHome - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage("TelescopeDeviceState", $"AtHome has value: {atHome.HasValue}, Value: {atHome.Value}");
+                            TL.LogMessage("TelescopeState", $"AtHome has value: {atHome.HasValue}, Value: {atHome.Value}");
                             break;
 
                         case "AtPark":
@@ -152,9 +142,9 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage("TelescopeDeviceState", $"AtPark - Ignoring exception: {ex.Message}");
+                                TL.LogMessage("TelescopeState", $"AtPark - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage("TelescopeDeviceState", $"AtPark has value: {atPark.HasValue}, Value: {atPark.Value}");
+                            TL.LogMessage("TelescopeState", $"AtPark has value: {atPark.HasValue}, Value: {atPark.Value}");
                             break;
 
                         case "Azimuth":
@@ -164,9 +154,9 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage("TelescopeDeviceState", $"Azimuth - Ignoring exception: {ex.Message}");
+                                TL.LogMessage("TelescopeState", $"Azimuth - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage("TelescopeDeviceState", $"Azimuth has value: {azimuth.HasValue}, Value: {((double)azimuth.Value)}");
+                            TL.LogMessage("TelescopeState", $"Azimuth has value: {azimuth.HasValue}, Value: {((double)azimuth.Value)}");
                             break;
 
                         case "Declination":
@@ -176,9 +166,9 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage("TelescopeDeviceState", $"Declination - Ignoring exception: {ex.Message}");
+                                TL.LogMessage("TelescopeState", $"Declination - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage("TelescopeDeviceState", $"Declination has value: {declination.HasValue}, Value: {((double)declination.Value)}");
+                            TL.LogMessage("TelescopeState", $"Declination has value: {declination.HasValue}, Value: {((double)declination.Value)}");
                             break;
 
                         case "IsPulseGuiding":
@@ -188,9 +178,9 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage("TelescopeDeviceState", $"IsPulseGuiding - Ignoring exception: {ex.Message}");
+                                TL.LogMessage("TelescopeState", $"IsPulseGuiding - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage("TelescopeDeviceState", $"IsPulseGuiding has value: {isPulseGuiding.HasValue}, Value: {((bool)isPulseGuiding.Value)}");
+                            TL.LogMessage("TelescopeState", $"IsPulseGuiding has value: {isPulseGuiding.HasValue}, Value: {((bool)isPulseGuiding.Value)}");
                             break;
 
                         case "RightAscension":
@@ -200,9 +190,9 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage("TelescopeDeviceState", $"RightAscension - Ignoring exception: {ex.Message}");
+                                TL.LogMessage("TelescopeState", $"RightAscension - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage("TelescopeDeviceState", $"RightAscension has value: {rightAscension.HasValue}, Value: {((double)rightAscension.Value)}");
+                            TL.LogMessage("TelescopeState", $"RightAscension has value: {rightAscension.HasValue}, Value: {((double)rightAscension.Value)}");
                             break;
 
                         case "SideOfPier":
@@ -212,9 +202,9 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage("TelescopeDeviceState", $"SideOfPier - Ignoring exception: {ex.Message}");
+                                TL.LogMessage("TelescopeState", $"SideOfPier - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage("TelescopeDeviceState", $"SideOfPier has value: {sideOfPier.HasValue}, Value: {((double)sideOfPier.Value)}");
+                            TL.LogMessage("TelescopeState", $"SideOfPier has value: {sideOfPier.HasValue}, Value: {((double)sideOfPier.Value)}");
                             break;
 
                         case "SiderealTime":
@@ -224,9 +214,9 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage("TelescopeDeviceState", $"SiderealTime - Ignoring exception: {ex.Message}");
+                                TL.LogMessage("TelescopeState", $"SiderealTime - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage("TelescopeDeviceState", $"SiderealTime has value: {siderealTime.HasValue}, Value: {((double)siderealTime.Value)}");
+                            TL.LogMessage("TelescopeState", $"SiderealTime has value: {siderealTime.HasValue}, Value: {((double)siderealTime.Value)}");
                             break;
 
                         case "Slewing":
@@ -236,9 +226,9 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage("TelescopeDeviceState", $"Slewing - Ignoring exception: {ex.Message}");
+                                TL.LogMessage("TelescopeState", $"Slewing - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage("TelescopeDeviceState", $"Slewing has value: {slewing.HasValue}, Value: {slewing.Value}");
+                            TL.LogMessage("TelescopeState", $"Slewing has value: {slewing.HasValue}, Value: {slewing.Value}");
                             break;
 
                         case "Tracking":
@@ -248,9 +238,9 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage("TelescopeDeviceState", $"Tracking - Ignoring exception: {ex.Message}");
+                                TL.LogMessage("TelescopeState", $"Tracking - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage("TelescopeDeviceState", $"Tracking has value: {tracking.HasValue}, Value: {tracking.Value}");
+                            TL.LogMessage("TelescopeState", $"Tracking has value: {tracking.HasValue}, Value: {tracking.Value}");
                             break;
 
                         case "UTCDate":
@@ -260,9 +250,9 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage("TelescopeDeviceState", $"UTCDate - Ignoring exception: {ex.Message}");
+                                TL.LogMessage("TelescopeState", $"UTCDate - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage("TelescopeDeviceState", $"UTCDate has value: {utcDate.HasValue}, Value: {utcDate.Value}");
+                            TL.LogMessage("TelescopeState", $"UTCDate has value: {utcDate.HasValue}, Value: {utcDate.Value}");
                             break;
 
                         case "TimeStamp":
@@ -272,21 +262,21 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage("TelescopeDeviceState", $"TimeStamp - Ignoring exception: {ex.Message}");
+                                TL.LogMessage("TelescopeState", $"TimeStamp - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage("TelescopeDeviceState", $"TimeStamp has value: {timeStamp.HasValue}, Value: {timeStamp.Value}");
+                            TL.LogMessage("TelescopeState", $"TimeStamp has value: {timeStamp.HasValue}, Value: {timeStamp.Value}");
                             break;
 
                         default:
-                            TL.LogMessage("TelescopeDeviceState", $"Ignoring {kvp.Name}");
+                            TL.LogMessage("TelescopeState", $"Ignoring {kvp.Name}");
                             break;
                     }
                 }
 
                 // Populate an instance of a device specific class with the values reported by the device, any values not received from the device will be null.
-                TelescopeDeviceState state = new TelescopeDeviceState(altitude, atHome, atPark, azimuth, declination, isPulseGuiding, rightAscension, sideOfPier, siderealTime, slewing, tracking, utcDate, timeStamp);
+                TelescopeState state = new TelescopeState(altitude, atHome, atPark, azimuth, declination, isPulseGuiding, rightAscension, sideOfPier, siderealTime, slewing, tracking, utcDate, timeStamp);
 
-                TL.LogMessage("TelescopeDeviceState", $"Returning: '{state.Altitude}' '{state.AtHome}' '{state.AtPark}' '{state.Azimuth}' '{state.Declination}' '{state.IsPulseGuiding}' " +
+                TL.LogMessage("TelescopeState", $"Returning: '{state.Altitude}' '{state.AtHome}' '{state.AtPark}' '{state.Azimuth}' '{state.Declination}' '{state.IsPulseGuiding}' " +
                     $"'{state.RightAscension}' '{state.SideOfPier}' '{state.SiderealTime}' '{state.Slewing}' '{state.Tracking}' '{state.UTCDate}' '{state.TimeStamp}'");
 
                 // Return the device specific state class
@@ -297,52 +287,6 @@ namespace ASCOM.DriverAccess
         #endregion
 
         #region ITelescope Members
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public ArrayList DeviceState
-        {
-            get
-            {
-                if (HasConnectAndDeviceState) // We are presenting a Platform 7 or later device
-                {
-                    try
-                    {
-                        return memberFactory.CallMember(1, "DeviceState", new Type[] { }, new object[] { }).ComObjToArrayList();
-                    }
-                    catch (Exception ex)
-                    {
-                        // If the device doesn't support his call return an empty ArrayList
-                        TL.LogMessage("DeviceState Get", $"Received exception: {ex.Message}, retuning an empty ArrayList");
-                        return new ArrayList();
-                    }
-                }
-                else
-                {
-                    // Create an array list to hold the IStateValue entries
-                    ArrayList deviceState = new ArrayList();
-
-                    // Add one entry for each operational state, if possible
-                    try { deviceState.Add(new StateValue("Altitude", Altitude)); } catch { }
-                    try { deviceState.Add(new StateValue("AtHome", AtHome)); } catch { }
-                    try { deviceState.Add(new StateValue("AtPark", AtPark)); } catch { }
-                    try { deviceState.Add(new StateValue("Azimuth", Azimuth)); } catch { }
-                    try { deviceState.Add(new StateValue("Declination", Declination)); } catch { }
-                    try { deviceState.Add(new StateValue("IsPulseGuiding", IsPulseGuiding)); } catch { }
-                    try { deviceState.Add(new StateValue("RightAscension", RightAscension)); } catch { }
-                    try { deviceState.Add(new StateValue("SideOfPier", SideOfPier)); } catch { }
-                    try { deviceState.Add(new StateValue("SiderealTime", SiderealTime)); } catch { }
-                    try { deviceState.Add(new StateValue("Slewing", Slewing)); } catch { }
-                    try { deviceState.Add(new StateValue("Tracking", Tracking)); } catch { }
-                    try { deviceState.Add(new StateValue("UTCDate", UTCDate)); } catch { }
-                    try { deviceState.Add(new StateValue("TimeStamp", DateTime.Now)); } catch { }
-
-                    // Return the overall device state
-                    return deviceState;
-                }
-            }
-        }
 
         /// <summary>
         /// Stops a slew in progress.

@@ -24,23 +24,26 @@ namespace ASCOM.DeviceInterface
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
     public interface IVideoV2
     {
-		/// <summary>
-		/// Set True to connect to the device hardware. Set False to disconnect from the device hardware.
-		/// You can also read the property to check whether it is connected. This reports the current hardware state.
-		/// </summary>
-		/// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
-		/// <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
-		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented</b></p>
-		/// <para>Do not use a NotConnectedException here. That exception is for use in other methods that require a connection in order to succeed.</para>
-		/// <para>The Connected property sets and reports the state of connection to the device hardware.
-		/// For a hub this means that Connected will be true when the first driver connects and will only be set to false
-		/// when all drivers have disconnected.  A second driver may find that Connected is already true and
-		/// setting Connected to false does not report Connected as false.  This is not an error because the physical state is that the
-		/// hardware connection is still true.</para>
-		/// <para>Multiple calls setting Connected to true or false will not cause an error.</para>
-		/// </remarks>
-		bool Connected { get; set; }
+
+        #region IVideoV1 members
+
+        /// <summary>
+        /// Set True to connect to the device hardware. Set False to disconnect from the device hardware.
+        /// You can also read the property to check whether it is connected. This reports the current hardware state.
+        /// </summary>
+        /// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
+        /// <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented</b></p>
+        /// <para>Do not use a NotConnectedException here. That exception is for use in other methods that require a connection in order to succeed.</para>
+        /// <para>The Connected property sets and reports the state of connection to the device hardware.
+        /// For a hub this means that Connected will be true when the first driver connects and will only be set to false
+        /// when all drivers have disconnected.  A second driver may find that Connected is already true and
+        /// setting Connected to false does not report Connected as false.  This is not an error because the physical state is that the
+        /// hardware connection is still true.</para>
+        /// <para>Multiple calls setting Connected to true or false will not cause an error.</para>
+        /// </remarks>
+        bool Connected { get; set; }
 
 		/// <summary>
 		/// Returns a description of the device, such as manufacturer and model number. Any ASCII characters may be used.
@@ -128,26 +131,6 @@ namespace ASCOM.DeviceInterface
         /// Applications should not call this method.
         /// </summary>
 		void Dispose();
-
-        /// <summary>
-        /// Connect to the device asynchronously
-        /// </summary>
-        void Connect();
-
-        /// <summary>
-        /// Disconnect from the device asynchronously
-        /// </summary>
-        void Disconnect();
-
-        /// <summary>
-        /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
-        /// </summary>
-        bool Connecting { get; }
-
-        /// <summary>
-        /// Returns the device operational state in a single call.
-        /// </summary>
-        ArrayList DeviceState { get; }
 
         /// <summary>
         /// The name of the video capture device when such a device is used.
@@ -835,5 +818,31 @@ namespace ASCOM.DeviceInterface
 		/// <para>Examples for specialized settings that could be supported are white balance and sharpness.</para>
 		/// </remarks>
 		void ConfigureDeviceProperties();
+
+        #endregion
+
+        #region IVideoV2 members
+        /// <summary>
+        /// Connect to the device asynchronously
+        /// </summary>
+        void Connect();
+
+        /// <summary>
+        /// Disconnect from the device asynchronously
+        /// </summary>
+        void Disconnect();
+
+        /// <summary>
+        /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
+        /// </summary>
+        bool Connecting { get; }
+
+        /// <summary>
+        /// Returns the device operational state in a single call.
+        /// </summary>
+        ArrayList DeviceState { get; }
+
+        #endregion
+
     }
 }

@@ -58,34 +58,36 @@ namespace ASCOM.DeviceInterface
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
     public interface IDomeV3 // CCDA0D85-474A-4775-8105-1D513ADC3896
     {
-		/// <summary>
-		/// Set <see langword="true" /> to connect to the device hardware. Set <see langword="false" /> to
-		/// disconnect from the device hardware. You can also read the property to check whether it is
-		/// connected. This reports the current hardware state.
-		/// </summary>
-		/// <value><see langword="true" /> if connected to the hardware; otherwise, <see langword="false" />.</value>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-		/// <remarks>
-		/// <p style="color: red;"><b>Must be implemented.</b></p>
-		/// <para>
-		/// Do not use a <c>NotConnectedException</c> here. That exception is for use in other methods
-		/// that require a connection in order to succeed.
-		/// </para>
-		/// <para>
-		/// The Connected property sets and reports the state of the hardware connection. For a hub
-		/// this means that <see cref="Connected" /> will be <see langword="true" /> when the first
-		/// driver connects and will only return <see langword="false" /> when all drivers have
-		/// disconnected.  A second driver may find that Connected is already true and setting
-		/// <see cref="Connected" /> to <see langword="false" /> does not report
-		/// <see cref="Connected" /> as <see langword="false" />. This is not an error because the
-		/// physical state is that the hardware connection is still active.
-		/// </para>
-		/// <para>
-		/// The property is idempotent; writing to the property multiple times will not cause an
-		/// error.
-		/// </para>
-		/// </remarks>
-		bool Connected { get; set; }
+        #region IDomeV2 members
+
+        /// <summary>
+        /// Set <see langword="true" /> to connect to the device hardware. Set <see langword="false" /> to
+        /// disconnect from the device hardware. You can also read the property to check whether it is
+        /// connected. This reports the current hardware state.
+        /// </summary>
+        /// <value><see langword="true" /> if connected to the hardware; otherwise, <see langword="false" />.</value>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <remarks>
+        /// <p style="color: red;"><b>Must be implemented.</b></p>
+        /// <para>
+        /// Do not use a <c>NotConnectedException</c> here. That exception is for use in other methods
+        /// that require a connection in order to succeed.
+        /// </para>
+        /// <para>
+        /// The Connected property sets and reports the state of the hardware connection. For a hub
+        /// this means that <see cref="Connected" /> will be <see langword="true" /> when the first
+        /// driver connects and will only return <see langword="false" /> when all drivers have
+        /// disconnected.  A second driver may find that Connected is already true and setting
+        /// <see cref="Connected" /> to <see langword="false" /> does not report
+        /// <see cref="Connected" /> as <see langword="false" />. This is not an error because the
+        /// physical state is that the hardware connection is still active.
+        /// </para>
+        /// <para>
+        /// The property is idempotent; writing to the property multiple times will not cause an
+        /// error.
+        /// </para>
+        /// </remarks>
+        bool Connected { get; set; }
 
 		/// <summary>
 		/// Returns a description of the device, such as manufacturer and model number. Any ASCII
@@ -282,26 +284,6 @@ namespace ASCOM.DeviceInterface
         /// Applications should not call this method.
         /// </summary>
 		void Dispose();
-
-        /// <summary>
-        /// Connect to the device asynchronously
-        /// </summary>
-        void Connect();
-
-        /// <summary>
-        /// Disconnect from the device asynchronously
-        /// </summary>
-        void Disconnect();
-
-        /// <summary>
-        /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
-        /// </summary>
-        bool Connecting { get; }
-
-        /// <summary>
-        /// Returns the device operational state in a single call.
-        /// </summary>
-        ArrayList DeviceState { get; }
 
         /// <summary>
         /// Immediately stops any and all movement.
@@ -674,5 +656,31 @@ namespace ASCOM.DeviceInterface
 		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
 		void SyncToAzimuth(double Azimuth);
+
+        #endregion
+
+        #region IDomeV3 members
+        /// <summary>
+        /// Connect to the device asynchronously
+        /// </summary>
+        void Connect();
+
+        /// <summary>
+        /// Disconnect from the device asynchronously
+        /// </summary>
+        void Disconnect();
+
+        /// <summary>
+        /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
+        /// </summary>
+        bool Connecting { get; }
+
+        /// <summary>
+        /// Returns the device operational state in a single call.
+        /// </summary>
+        ArrayList DeviceState { get; }
+
+        #endregion
+
     }
 }

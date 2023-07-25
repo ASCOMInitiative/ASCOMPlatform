@@ -19,28 +19,29 @@ namespace ASCOM.DeviceInterface
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
     public interface IFocuserV4
     {
-		// IAscomDriver Methods
 
-		/// <summary>
-		/// Set True to connect to the device hardware. Set False to disconnect from the device hardware.
-		/// You can also read the property to check whether it is connected. This reports the current hardware state.
-		/// </summary>
-		/// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented</b></p>
-		/// <para>Do not use a NotConnectedException here. That exception is for use in other methods that require a connection in order to succeed.</para>
-		/// <para>The Connected property sets and reports the state of connection to the device hardware.
-		/// For a hub this means that Connected will be true when the first driver connects and will only be set to false
-		/// when all drivers have disconnected.  A second driver may find that Connected is already true and
-		/// setting Connected to false does not report Connected as false.  This is not an error because the physical state is that the
-		/// hardware connection is still true.</para>
-		/// <para>Multiple calls setting Connected to true or false will not cause an error.</para>
-		/// <para>The Connected property is not implemented in Version 1 drivers; these use the <see cref="Link"></see>
-		/// property and will raise a Not Implemented exception for this property. Version 2 drivers must implement both Connected and Link.
-		/// Applications should check that InterfaceVersion returns 2 or more before using Connected.</para>
-		/// </remarks>
-		bool Connected { get; set; }
+        #region IFocuserV3 members
+
+        /// <summary>
+        /// Set True to connect to the device hardware. Set False to disconnect from the device hardware.
+        /// You can also read the property to check whether it is connected. This reports the current hardware state.
+        /// </summary>
+        /// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented</b></p>
+        /// <para>Do not use a NotConnectedException here. That exception is for use in other methods that require a connection in order to succeed.</para>
+        /// <para>The Connected property sets and reports the state of connection to the device hardware.
+        /// For a hub this means that Connected will be true when the first driver connects and will only be set to false
+        /// when all drivers have disconnected.  A second driver may find that Connected is already true and
+        /// setting Connected to false does not report Connected as false.  This is not an error because the physical state is that the
+        /// hardware connection is still true.</para>
+        /// <para>Multiple calls setting Connected to true or false will not cause an error.</para>
+        /// <para>The Connected property is not implemented in Version 1 drivers; these use the <see cref="Link"></see>
+        /// property and will raise a Not Implemented exception for this property. Version 2 drivers must implement both Connected and Link.
+        /// Applications should check that InterfaceVersion returns 2 or more before using Connected.</para>
+        /// </remarks>
+        bool Connected { get; set; }
 
 		/// <summary>
 		/// Returns a description of the device, such as manufacturer and modelnumber. Any ASCII characters may be used.
@@ -215,26 +216,6 @@ namespace ASCOM.DeviceInterface
 		void Dispose();
 
         /// <summary>
-        /// Connect to the device asynchronously
-        /// </summary>
-        void Connect();
-
-        /// <summary>
-        /// Disconnect from the device asynchronously
-        /// </summary>
-        void Disconnect();
-
-        /// <summary>
-        /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
-        /// </summary>
-        bool Connecting { get; }
-
-        /// <summary>
-        /// Returns the device operational state in a single call.
-        /// </summary>
-        ArrayList DeviceState { get; }
-
-        /// <summary>
         /// True if the focuser is capable of absolute position; that is, being commanded to a specific step location.
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
@@ -398,5 +379,31 @@ namespace ASCOM.DeviceInterface
 		/// units are degrees Celsius for consistency with <see cref="IObservingConditions.Temperature"/>. Conversion to other temperature units can be achieved through the <see cref="Util.ConvertUnits"/> utility method.</para>
 		/// </remarks>
 		double Temperature { get; }
+
+        #endregion
+
+        #region IFocuserV4 members
+        /// <summary>
+        /// Connect to the device asynchronously
+        /// </summary>
+        void Connect();
+
+        /// <summary>
+        /// Disconnect from the device asynchronously
+        /// </summary>
+        void Disconnect();
+
+        /// <summary>
+        /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
+        /// </summary>
+        bool Connecting { get; }
+
+        /// <summary>
+        /// Returns the device operational state in a single call.
+        /// </summary>
+        ArrayList DeviceState { get; }
+
+        #endregion
+
     }
 }

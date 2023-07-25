@@ -114,7 +114,8 @@
     <Compile Include="Camera.cs">
     </Compile>
     <Compile Include="CoverCalibrator.cs" />
-    <Compile Include="CameraDeviceState.cs" />
+    <Compile Include="DeviceState Classes\CameraDeviceState.cs" />
+    <Compile Include="DeviceState Classes\CoverCalibratorState.cs" />
     <Compile Include="Dome.cs">
     </Compile>
     <Compile Include="Extensions.cs" />
@@ -132,7 +133,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
     </Compile>
-    <Compile Include="TelescopeDeviceState.cs" />
+    <Compile Include="DeviceState Classes\TelescopeState.cs" />
     <Compile Include="Video.cs" />
   </ItemGroup>
   <ItemGroup>

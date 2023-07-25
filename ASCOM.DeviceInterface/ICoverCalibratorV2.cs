@@ -213,29 +213,9 @@ namespace ASCOM.DeviceInterface
         /// </summary>
 		void Dispose();
 
-        /// <summary>
-        /// Connect to the device asynchronously
-        /// </summary>
-        void Connect();
-
-        /// <summary>
-        /// Disconnect from the device asynchronously
-        /// </summary>
-        void Disconnect();
-
-        /// <summary>
-        /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
-        /// </summary>
-        bool Connecting { get; }
-
-        /// <summary>
-        /// Returns the device operational state in a single call.
-        /// </summary>
-        ArrayList DeviceState { get; }
-
         #endregion
 
-        #region Device Specific Methods
+        #region ICoverCalibratorV1 members
 
         /// <summary>
         /// Returns the state of the device cover, if present, otherwise returns "NotPresent"
@@ -364,5 +344,29 @@ namespace ASCOM.DeviceInterface
         void CalibratorOff();
 
         #endregion
+
+        #region ICoverCalibratorV2 members
+        /// <summary>
+        /// Connect to the device asynchronously
+        /// </summary>
+        void Connect();
+
+        /// <summary>
+        /// Disconnect from the device asynchronously
+        /// </summary>
+        void Disconnect();
+
+        /// <summary>
+        /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
+        /// </summary>
+        bool Connecting { get; }
+
+        /// <summary>
+        /// Returns the device operational state in a single call.
+        /// </summary>
+        ArrayList DeviceState { get; }
+
+        #endregion
+
     }
 }

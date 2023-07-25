@@ -26,7 +26,7 @@ namespace ASCOM.DeviceInterface
     public interface IRotatorV4
     {
 
-		#region Common Methods
+		#region Common members
 
 		/// <summary>
 		/// Set True to connect to the device hardware. Set False to disconnect from the device hardware.
@@ -211,29 +211,9 @@ namespace ASCOM.DeviceInterface
         /// </summary>
 		void Dispose();
 
-        /// <summary>
-        /// Connect to the device asynchronously
-        /// </summary>
-        void Connect();
-
-        /// <summary>
-        /// Disconnect from the device asynchronously
-        /// </summary>
-        void Disconnect();
-
-        /// <summary>
-        /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
-        /// </summary>
-        bool Connecting { get; }
-
-        /// <summary>
-        /// Returns the device operational state in a single call.
-        /// </summary>
-        ArrayList DeviceState { get; }
-
         #endregion
 
-        #region IRotatorV2 properties and methods
+        #region IRotatorV2 members
 
         /// <summary>
         /// Indicates whether the Rotator supports the <see cref="Reverse" /> method.
@@ -379,7 +359,7 @@ namespace ASCOM.DeviceInterface
 
 		#endregion
 
-		#region IRotatorV3 additional properties and methods
+		#region IRotatorV3 members
 
 		/// <summary>
 		/// This returns the raw mechanical position of the rotator in degrees.
@@ -426,5 +406,30 @@ namespace ASCOM.DeviceInterface
 		void MoveMechanical(float Position);
 
         #endregion
+
+        #region IRotatorV4 members
+
+        /// <summary>
+        /// Connect to the device asynchronously
+        /// </summary>
+        void Connect();
+
+        /// <summary>
+        /// Disconnect from the device asynchronously
+        /// </summary>
+        void Disconnect();
+
+        /// <summary>
+        /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
+        /// </summary>
+        bool Connecting { get; }
+
+        /// <summary>
+        /// Returns the device operational state in a single call.
+        /// </summary>
+        ArrayList DeviceState { get; }
+
+        #endregion
+
     }
 }

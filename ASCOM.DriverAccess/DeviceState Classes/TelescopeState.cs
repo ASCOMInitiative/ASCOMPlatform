@@ -9,17 +9,17 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// 
     /// </summary>
-    public class TelescopeDeviceState
+    public class TelescopeState
     {
         /// <summary>
         /// 
         /// </summary>
-        public TelescopeDeviceState() { }
+        public TelescopeState() { }
 
         /// <summary>
         /// Telescope device state
         /// </summary>
-        public TelescopeDeviceState(double? altitude, bool? atHome, bool? atPark, double? azimuth, double? declination, bool? isPulseGuiding, double? rightAscension, PierSide? sideOfPier, double? siderealTime, bool? slewing, bool? tracking, DateTime? utcDate, DateTime? timeStamp)
+        public TelescopeState(double? altitude, bool? atHome, bool? atPark, double? azimuth, double? declination, bool? isPulseGuiding, double? rightAscension, PierSide? sideOfPier, double? siderealTime, bool? slewing, bool? tracking, DateTime? utcDate, DateTime? timeStamp)
         {
             Altitude = altitude;
             AtHome = atHome;

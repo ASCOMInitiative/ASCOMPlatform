@@ -205,31 +205,7 @@ namespace ASCOM.DeviceInterface
 
         #endregion
 
-        #region ITelescopeV4 members
-
-        /// <summary>
-        /// Connect to device asynchronously
-        /// </summary>
-        void Connect();
-
-        /// <summary>
-        /// Disconnect from device asynchronously
-        /// </summary>
-        void Disconnect();
-
-        /// <summary>
-        /// Completion variable for asynchronous connect and disconnect operations
-        /// </summary>
-        bool Connecting { get; }
-
-        /// <summary>
-        /// Device state
-        /// </summary>
-        ArrayList DeviceState { get; }
-
-        #endregion
-
-        #region Device interface
+        #region ITelescopeV3 members
 
         /// <summary>
         /// Stops a slew in progress.
@@ -1297,8 +1273,33 @@ namespace ASCOM.DeviceInterface
         /// will raise an error if the value has never been set or is otherwise unavailable.
         /// </remarks>
         DateTime UTCDate { get; set; }
-    }
 
-    #endregion
+        #endregion
+
+        #region ITelescopeV4 members
+
+        /// <summary>
+        /// Connect to device asynchronously
+        /// </summary>
+        void Connect();
+
+        /// <summary>
+        /// Disconnect from device asynchronously
+        /// </summary>
+        void Disconnect();
+
+        /// <summary>
+        /// Completion variable for asynchronous connect and disconnect operations
+        /// </summary>
+        bool Connecting { get; }
+
+        /// <summary>
+        /// Device state
+        /// </summary>
+        ArrayList DeviceState { get; }
+
+        #endregion
+
+    }
 
 }

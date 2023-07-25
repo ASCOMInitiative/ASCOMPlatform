@@ -8,6 +8,8 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Diagnostics.Eventing.Reader;
 using System.Threading.Tasks;
+using ASCOM.DeviceInterface;
+using System.Runtime.Remoting.Messaging;
 
 namespace ASCOM.DriverAccess
 {
@@ -341,21 +343,14 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                // Call the device's DeviceState method if this is a Platform 7 or later device, otherwise simulate the DeviceState method
-                if (HasConnectAndDeviceState) // Platform 7 or later device so call the device's DeviceState method
+                // Determine whether this device has DeviceState support
+                if (HasConnectAndDeviceState) // We are presenting a Platform 7 or later device
                 {
-                    try
-                    {
-                        return memberFactory.CallMember(1, "DeviceState", new Type[] { }, new object[] { }).ComObjToArrayList();
-                    }
-                    catch (Exception ex)
-                    {
-                        TL.LogMessage("SupportedActions Get", "Received exception: " + ex.Message);
-                        throw;
-                    }
+                    return memberFactory.CallMember(1, "DeviceState", new Type[] { }, new object[] { }).ComObjToArrayList();
                 }
-                else // Platform 6 or earlier device so return an empty list.
+                else // We are presenting a Platform 6 or earlier device
                 {
+                    // Return an empty ArrayList because this feature isn't supported
                     return new ArrayList();
                 }
             }

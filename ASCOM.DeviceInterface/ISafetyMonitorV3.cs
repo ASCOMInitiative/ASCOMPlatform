@@ -15,26 +15,25 @@ namespace ASCOM.DeviceInterface
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
     public interface ISafetyMonitorV3
     {
+        #region ISafetyMonitorV2 members
 
-		// IAscomDriver Methods
-
-		/// <summary>
-		/// Set True to connect to the device hardware. Set False to disconnect from the device hardware.
-		/// You can also read the property to check whether it is connected. This reports the current hardware state.
-		/// </summary>
-		/// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented</b></p>
-		/// <para>Do not use a NotConnectedException here. That exception is for use in other methods that require a connection in order to succeed.</para>
-		/// <para>The Connected property sets and reports the state of connection to the device hardware.
-		/// For a hub this means that Connected will be true when the first driver connects and will only be set to false
-		/// when all drivers have disconnected.  A second driver may find that Connected is already true and
-		/// setting Connected to false does not report Connected as false.  This is not an error because the physical state is that the
-		/// hardware connection is still true.</para>
-		/// <para>Multiple calls setting Connected to true or false will not cause an error.</para>
-		/// </remarks>
-		bool Connected { get; set; }
+        /// <summary>
+        /// Set True to connect to the device hardware. Set False to disconnect from the device hardware.
+        /// You can also read the property to check whether it is connected. This reports the current hardware state.
+        /// </summary>
+        /// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented</b></p>
+        /// <para>Do not use a NotConnectedException here. That exception is for use in other methods that require a connection in order to succeed.</para>
+        /// <para>The Connected property sets and reports the state of connection to the device hardware.
+        /// For a hub this means that Connected will be true when the first driver connects and will only be set to false
+        /// when all drivers have disconnected.  A second driver may find that Connected is already true and
+        /// setting Connected to false does not report Connected as false.  This is not an error because the physical state is that the
+        /// hardware connection is still true.</para>
+        /// <para>Multiple calls setting Connected to true or false will not cause an error.</para>
+        /// </remarks>
+        bool Connected { get; set; }
 
 		/// <summary>
 		/// Returns a description of the device, such as manufacturer and modelnumber. Any ASCII characters may be used.
@@ -203,6 +202,20 @@ namespace ASCOM.DeviceInterface
 		void Dispose();
 
         /// <summary>
+        /// Indicates whether the monitored state is safe for use.
+        /// </summary>
+        /// <value>True if the state is safe, False if it is unsafe.</value>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <remarks>
+        /// <p style="color:red;margin-bottom:0"><b>Must be implemented and must not throw a PropertyNotImplementedException. </b></p>
+        /// </remarks>
+        bool IsSafe { get; }
+
+        #endregion
+
+        #region IsafetyMonitorV3 members
+        /// <summary>
         /// Connect to the device asynchronously
         /// </summary>
         void Connect();
@@ -222,15 +235,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         ArrayList DeviceState { get; }
 
-        /// <summary>
-        /// Indicates whether the monitored state is safe for use.
-        /// </summary>
-        /// <value>True if the state is safe, False if it is unsafe.</value>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>
-        /// <p style="color:red;margin-bottom:0"><b>Must be implemented and must not throw a PropertyNotImplementedException. </b></p>
-        /// </remarks>
-        bool IsSafe { get; }
+        #endregion
+
     }
 }
