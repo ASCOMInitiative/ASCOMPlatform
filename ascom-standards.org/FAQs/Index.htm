@@ -78,7 +78,7 @@ dt {
 			
 			<dt>How does the ASCOM Model Compare with INDIGO, and Software Bisque X2</dt>
 			<dd>ASCOM (both COM and Alpaca) is a many-to-many universal interfacing system with no dependence on any software or central server. Alpaca is cross-platform, COM is Windows-only. Both <a href="https://github.com/indigo-astronomy/indigo/blob/master/README.md" target="_new">INDIGO</a> and TheSky (<a href="https://www.bisque.com/wp-content/x2standard/" target="_new">X2 Standard</a>) each offer their own cross platform <em>plug-in</em> standards for instrument interfacing. In addition INDIGO has the concept of a central-server-based "bus" via which "clients" can talk to devices. Most importantly, INDIGO's architecture is not a universal interface, it is a "meta-interface" via which a device can freely add and delete properties and methods, and via which clients  perform discovery of properties and methods for each device to be used. ASCOM universal interfaces are <em>strictly curated</em>, guaranteed to be free of breaking changes, open, and free of any technology other than the OS and internet. Again, no central server is needed. 
-			
+				
 			<dt>Why Can't Astronomy Programs Just Compensate For My Device's Problem?</dt>
 			<dd>See the <a href="SoftwareVictory.htm">Correcting for Problems</a> (also in the menu on the left).</dd>
 			
@@ -106,8 +106,12 @@ dt {
 		<h3>Frequently Asked Questions &#8212; Classic ASCOM COM</h3>
 		<dl style="margin-top: 0px; margin-bottom: 0px;">
 			
-			<dt><img src="../Images/ASCOM COM 80.png" width="80" height="88" hspace="8" vspace="4" align="right" /><a name="hub" id="hub"></a>What is a Classic ASCOM Hub?</dt>
-			<dd> A hub is an executable program that allows multiple ASCOM astronomy programs to share a device which has a DLL driver (which could ordinarily serve only a single app at a time). For details in context see ASCOM-COM COnnectivity in the About section. A hub can allow more than one program to connect to it just like an EXE driver, and it in turn provides sharing of the  DLL driver for the real device. Hubs can exist for any type of device. The diagram below shows a telescope hub only as an example. The ASCOM Platform comes with a useful hub. See <a href="DevHub.htm">Using DeviceHub</a> (also in the menu on the left). <br />
+			<dt><img src="../Images/ASCOM COM 80.png" width="80" height="88" hspace="8" vspace="4" align="right" /></dt>
+			<dt>Why can't 64-bit Apps Load <i>Some</i> 32-bit Drivers</dt>
+			<dd>Drivers come in two flavors: Loadable (DLL) type and Executable (EXE) type. Loadable/DLL drivers load into an app and become part of it. A 32-bit loadable driver cannot load into a 64 bit app. Period. The Platform has nothing to do with this. It is a basic characteristic of Windows that a 32-bit DLL is incompatible with a 64 bit host program. On the other hand, an Executable type driver is bitness-proof. It can be used by both 32- and 64-bit apps without regard to its own bitness.  For more info see the ASCOM Web Site, About ASCOM, <a href="../About/Conn-COM.htm" target="_new">COM Connectivity</a>. </dd>
+			<dt></dt>
+			<dt><a name="hub" id="hub"></a>What is a Classic ASCOM Hub?</dt>
+			<dd> A hub is an executable program that allows multiple ASCOM astronomy programs to share a device which has a DLL driver (which could ordinarily serve only a single app at a time). Also A 32-bit hub can provide 64-bit apps with access to a 32-bit loadable driver. For details in context see <a href="../About/Conn-COM.htm" target="_new">ASCOM-COM Connectivity</a> in the About section. A hub can allow more than one program to connect to it just like an EXE driver, and it in turn provides sharing of the  DLL driver for the real device. Hubs can exist for any type of device. The diagram below shows a telescope hub only as an example. The ASCOM Platform comes with a useful hub. See <a href="DevHub.htm">Using DeviceHub</a> (also in the menu on the left). <br />
 				<img src="../Images/Hub.png" alt="Diagram" width="521" height="233" vspace="6" /> <br />
 				As explained in the previous question, a hub is not needed for an EXE (Local Server) driver. An EXE driver is itself a hub since it is able to serve multiple apps.</dd>
 			
