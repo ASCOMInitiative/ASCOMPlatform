@@ -1301,5 +1301,4 @@ namespace ASCOM.DeviceInterface
         #endregion
 
     }
-
 }
