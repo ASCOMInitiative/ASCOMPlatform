@@ -17,7 +17,7 @@ namespace ASCOM.Simulator
     [ProgId(OCSimulator.DRIVER_PROGID)]
     [ServedClassName(OCSimulator.DRIVER_DISPLAY_NAME)]
     [ClassInterface(ClassInterfaceType.None)]
-    public class ObservingConditions : ReferenceCountedObjectBase, IObservingConditions
+    public class ObservingConditions : ReferenceCountedObjectBase, IObservingConditionsV2
     {
         #region Variables and Constants
 
@@ -147,7 +147,7 @@ namespace ASCOM.Simulator
 
         #endregion
 
-        #region ObservingConditions Implementation
+        #region IObservingConditionsV1 Implementation
 
         public double AveragePeriod
         {
@@ -234,6 +234,54 @@ namespace ASCOM.Simulator
         {
             get { return OCSimulator.WindSpeed(clientNumber); }
         }
+
+        #endregion
+
+        #region IObservingConditionsV2 implementation
+
+        public void Connect()
+        {
+            Connected = true;
+        }
+
+        public void Disconnect()
+        {
+            Connected = false;
+        }
+
+        public bool Connecting
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public ArrayList DeviceState
+        {
+            get
+            {
+                ArrayList deviceState = new ArrayList();
+
+                try { deviceState.Add(new StateValue(nameof(CloudCover), CloudCover)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(DewPoint), DewPoint)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(Humidity), Humidity)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(Pressure), Pressure)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(RainRate), RainRate)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(SkyBrightness), SkyBrightness)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(SkyQuality), SkyQuality)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(SkyTemperature), SkyTemperature)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(StarFWHM), StarFWHM)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(Temperature), Temperature)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(WindDirection), WindDirection)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(WindSpeed), WindSpeed)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(WindGust), WindGust)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                return deviceState;
+            }
+        }
+
         #endregion
     }
 }

@@ -22,7 +22,7 @@ namespace ASCOM.Simulator
     [Guid("0EF59E5C-2715-4E91-8A5E-38FE388B4F00")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
-    public class SafetyMonitor : ISafetyMonitor, IDisposable
+    public class SafetyMonitor : ISafetyMonitorV3, IDisposable
     {
         #region Constants
 
@@ -71,12 +71,6 @@ namespace ASCOM.Simulator
 
         #endregion
 
-        #region ISafetyMonitor Public Members
-
-        //
-        // PUBLIC COM INTERFACE ISafetyMonitor IMPLEMENTATION
-        //
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SafetyMonitor"/> class.
         /// Must be public for COM registration.
@@ -86,9 +80,9 @@ namespace ASCOM.Simulator
             //check to see if the profile is ok
             if (ValidateProfile())
             {
-                if (CheckSafetyMonitorKeyValue()) 
-                //load profile settings
-                GetProfileSetting();
+                if (CheckSafetyMonitorKeyValue())
+                    //load profile settings
+                    GetProfileSetting();
             }
             else
             {
@@ -96,6 +90,7 @@ namespace ASCOM.Simulator
             }
         }
 
+        #region Common Members
         /// <summary>
         /// Displays the Setup Dialog form.
         /// If the user clicks the OK button to dismiss the form, then
@@ -161,19 +156,7 @@ namespace ASCOM.Simulator
             get { return name; }
         }
 
-        /// <summary>
-        /// Gets the last result.
-        /// </summary>
-        /// <value>
-        /// The result of the last executed action, or <see cref="String.Empty"	/>
-        /// if no action has yet been executed.
-        /// </value>
-        //public string LastResult
-        //{
-        //    get { throw new MethodNotImplementedException("LastResult"); }
-        //}
-
-        void ISafetyMonitor.Dispose()
+        void ISafetyMonitorV3.Dispose()
         {
             Dispose();
         }
@@ -181,19 +164,10 @@ namespace ASCOM.Simulator
         private static void Dispose()
         {
         }
-        
+
         void IDisposable.Dispose()
         {
             Dispose();
-        }
-
-        /// <summary>
-        /// Return the condition of the SafetyMonitor
-        /// </summary>
-        /// <value>State of the Monitor</value>
-        public bool IsSafe 
-        {
-            get { return _isSafe; }
         }
 
         /// <summary>
@@ -241,6 +215,53 @@ namespace ASCOM.Simulator
         {
             // no supported actions, return empty array
             get { ArrayList sa = new ArrayList(); return sa; }
+        }
+
+        #endregion
+
+        #region ISafetyMonitorV2 members
+
+        /// <summary>
+        /// Return the condition of the SafetyMonitor
+        /// </summary>
+        /// <value>State of the Monitor</value>
+        public bool IsSafe
+        {
+            get { return _isSafe; }
+        }
+
+        #endregion
+
+        #region ISafetyMonitorV3 members
+
+        public void Connect()
+        {
+            Connected = true;
+        }
+
+        public void Disconnect()
+        {
+            Connected = false;
+        }
+
+        public bool Connecting
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public ArrayList DeviceState
+        {
+            get
+            {
+                ArrayList deviceState = new ArrayList();
+                try { deviceState.Add(new StateValue(nameof(IsSafe), IsSafe)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                return deviceState;
+            }
         }
 
         #endregion
@@ -380,6 +401,7 @@ namespace ASCOM.Simulator
         {
             RegUnregASCOM(false);
         }
+
         #endregion
 
 

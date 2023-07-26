@@ -25,7 +25,7 @@ namespace ASCOM.Simulator
     [Guid("24C040F2-2FA5-4DA4-B87B-6C1101828D2A")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
-    public class Focuser : IFocuserV3, IDisposable
+    public class Focuser : IFocuserV4, IDisposable
     {
         #region Constants
 
@@ -532,6 +532,43 @@ namespace ASCOM.Simulator
         /// mode.
         /// </summary>
         public double Temperature { get; internal set; }
+
+        #endregion
+
+        #region IFocuserV4 members
+
+        public void Connect()
+        {
+            Connected = true;
+        }
+
+        public void Disconnect()
+        {
+            Connected = false;
+        }
+
+        public bool Connecting
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public ArrayList DeviceState
+        {
+            get
+            {
+                ArrayList deviceState = new ArrayList();
+
+                try { deviceState.Add(new StateValue(nameof(IsMoving), IsMoving)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(Position), Position)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(Temperature), Temperature)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                return deviceState;
+            }
+        }
 
         #endregion
 

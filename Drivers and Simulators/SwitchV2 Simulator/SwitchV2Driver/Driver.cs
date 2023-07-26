@@ -41,7 +41,7 @@ namespace ASCOM.Simulator
     [ProgId("ASCOM.Simulator.Switch")]
     [ServedClassName("ASCOM SwitchV2 Simulator Driver")]
     [ClassInterface(ClassInterfaceType.None)]
-    public class Switch : ReferenceCountedObjectBase, ISwitchV2
+    public class Switch : ReferenceCountedObjectBase, ISwitchV3
     {
         /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
@@ -92,10 +92,6 @@ namespace ASCOM.Simulator
 
             tl.LogMessage("Switch", "Completed initialisation");
         }
-
-        //
-        // PUBLIC COM INTERFACE ISwitchV2 IMPLEMENTATION
-        //
 
         #region Common properties and methods.
 
@@ -425,6 +421,50 @@ namespace ASCOM.Simulator
 
         #endregion analogue members
         #endregion ISwitchV2 Implementation
+
+        #region ISwitchV3 implementation
+
+        public void Connect()
+        {
+            Connected = true;
+        }
+
+        public void Disconnect()
+        {
+            Connected = false;
+        }
+
+        public bool Connecting
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public ArrayList DeviceState
+        {
+            get
+            {
+                ArrayList deviceState = new ArrayList();
+
+                for (short i = 0; i < MaxSwitch; i++)
+                {
+                    try { deviceState.Add(new StateValue($"GetSwitch{i}", GetSwitch(i))); } catch { }
+                }
+
+                for (short i = 0; i < MaxSwitch; i++)
+                {
+                    try { deviceState.Add(new StateValue($"GetSwitchValue{i}", GetSwitchValue(i))); } catch { }
+                }
+
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                return deviceState;
+            }
+        }
+
+        #endregion
 
         #region Private properties and methods
 

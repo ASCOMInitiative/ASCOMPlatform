@@ -218,7 +218,7 @@ namespace ASCOM.Simulator
                 try { deviceState.Add(new StateValue("Slewing", Slewing)); } catch { }
                 try { deviceState.Add(new StateValue("Tracking", Tracking)); } catch { }
                 try { deviceState.Add(new StateValue("UTCDate", UTCDate)); } catch { }
-                try { deviceState.Add(new StateValue("TimeStamp", DateTime.Now)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
                 // Return the overall device state
                 return deviceState;

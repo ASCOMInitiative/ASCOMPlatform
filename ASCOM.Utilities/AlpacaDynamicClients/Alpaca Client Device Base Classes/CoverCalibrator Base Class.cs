@@ -15,7 +15,7 @@ namespace ASCOM.DynamicRemoteClients
     /// <summary>
     /// ASCOM DynamicRemoteClients SafetyMonitor base class
     /// </summary>
-    public class CoverCalibratorBaseClass : ReferenceCountedObjectBase, ICoverCalibratorV1
+    public class CoverCalibratorBaseClass : ReferenceCountedObjectBase, ICoverCalibratorV2
     {
         #region Variables and Constants
 
@@ -519,6 +519,40 @@ namespace ASCOM.DynamicRemoteClients
                 {
                     return new ArrayList();
                 }
+            }
+        }
+
+        public bool CalibratorChanging
+        {
+            get
+            {
+                // Call the device's CalibratorChanging property if this is a Platform 7 or later device, otherwise use CalibratorState
+                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the CalibratorChanging property
+                {
+                    TL.LogMessage("CalibratorChanging", "Issuing CalibratorChanging command");
+                    DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                    return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CalibratorChanging", MemberTypes.Property);
+                }
+
+                // Platform 6 or earlier device so use CalibratorState to determine the movement state.
+                return CalibratorState == CalibratorStatus.NotReady;
+            }
+        }
+
+        public bool CoverMoving
+        {
+            get
+            {
+                // Call the device's CoverMoving property if this is a Platform 7 or later device, otherwise use CoverState
+                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the CoverMoving property
+                {
+                    TL.LogMessage("CoverMoving", "Issuing CoverMoving command");
+                    DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                    return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CoverMoving", MemberTypes.Property);
+                }
+
+                // Platform 6 or earlier device so use CoverState to determine the movement state.
+                return CoverState == CoverStatus.Moving;
             }
         }
 

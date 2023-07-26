@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace ASCOM.DeviceInterface
 {
@@ -24,6 +25,16 @@ namespace ASCOM.DeviceInterface
         {
             Name = name;
             Value = value;
+        }
+
+        /// <summary>
+        /// Create a StateValue object whose Name property is "TimeStamp" and whose Value property is the supplied date-time value.
+        /// </summary>
+        /// <param name="dateTime">This time-stamp date-time value</param>
+        public StateValue(DateTime dateTime)
+        {
+            Name = "TimeStamp";
+            Value = dateTime;
         }
 
         /// <summary>

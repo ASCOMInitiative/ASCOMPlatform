@@ -32,7 +32,7 @@ Imports System.Globalization
 <Guid("70896ae0-b6c4-4303-a945-01219bf40bb4")>
 <ClassInterface(ClassInterfaceType.None)>
 Public Class Dome
-    Implements IDomeV2, IDisposable
+    Implements IDomeV3, IDisposable
 
 #Region "New and IDisposable Support"
 
@@ -211,7 +211,7 @@ Public Class Dome
     'End Sub
 
     ' This code added by Visual Basic to correctly implement the disposable pattern.
-    Public Sub Dispose() Implements IDisposable.Dispose, IDomeV2.Dispose
+    Public Sub Dispose() Implements IDisposable.Dispose, IDomeV3.Dispose
         ' Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
         Dispose(True)
         GC.SuppressFinalize(Me)
@@ -259,31 +259,9 @@ Public Class Dome
 
 #End Region
 
-#Region "IDomeV2 Implementation"
-    Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements IDomeV2.Action
-        Throw New MethodNotImplementedException("Action")
-    End Function
-
-    Public ReadOnly Property SupportedActions As ArrayList Implements IDomeV2.SupportedActions
-        Get
-            Return New ArrayList()
-        End Get
-    End Property
-
-    Public ReadOnly Property DriverVersion As String Implements DeviceInterface.IDomeV2.DriverVersion
-        Get
-            Dim Ass As Reflection.Assembly
-
-            Ass = Reflection.Assembly.GetExecutingAssembly 'Get our own assembly and report its version number
-            Return Ass.GetName.Version.Major.ToString & "." & Ass.GetName.Version.Minor.ToString
-        End Get
-    End Property
-
-#End Region
-
 #Region "IDome Implementation"
 
-    Public Sub AbortSlew() Implements IDomeV2.AbortSlew
+    Public Sub AbortSlew() Implements IDomeV3.AbortSlew
         If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkSlew.Checked Then _
                 g_TrafficForm.TrafficStart("AbortSlew")
@@ -298,7 +276,7 @@ Public Class Dome
         End If
     End Sub
 
-    Public ReadOnly Property Altitude() As Double Implements IDomeV2.Altitude
+    Public ReadOnly Property Altitude() As Double Implements IDomeV3.Altitude
         Get
             If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkShutter.Checked Then _
@@ -321,7 +299,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public ReadOnly Property AtHome() As Boolean Implements IDomeV2.AtHome
+    Public ReadOnly Property AtHome() As Boolean Implements IDomeV3.AtHome
         Get
             If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficStart("AtHome: ")
@@ -336,7 +314,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public ReadOnly Property AtPark() As Boolean Implements IDomeV2.AtPark
+    Public ReadOnly Property AtPark() As Boolean Implements IDomeV3.AtPark
         Get
             If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then _
@@ -352,7 +330,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public ReadOnly Property Azimuth() As Double Implements IDomeV2.Azimuth
+    Public ReadOnly Property Azimuth() As Double Implements IDomeV3.Azimuth
         Get
             If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then _
@@ -370,7 +348,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public ReadOnly Property CanFindHome() As Boolean Implements IDomeV2.CanFindHome
+    Public ReadOnly Property CanFindHome() As Boolean Implements IDomeV3.CanFindHome
         Get
             CanFindHome = g_bCanFindHome
 
@@ -380,7 +358,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public ReadOnly Property CanPark() As Boolean Implements IDomeV2.CanPark
+    Public ReadOnly Property CanPark() As Boolean Implements IDomeV3.CanPark
         Get
             CanPark = g_bCanPark
 
@@ -390,7 +368,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public ReadOnly Property CanSetAltitude() As Boolean Implements IDomeV2.CanSetAltitude
+    Public ReadOnly Property CanSetAltitude() As Boolean Implements IDomeV3.CanSetAltitude
         Get
             CanSetAltitude = g_bCanSetAltitude
 
@@ -400,7 +378,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public ReadOnly Property CanSetAzimuth() As Boolean Implements IDomeV2.CanSetAzimuth
+    Public ReadOnly Property CanSetAzimuth() As Boolean Implements IDomeV3.CanSetAzimuth
         Get
             CanSetAzimuth = g_bCanSetAzimuth
 
@@ -410,7 +388,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public ReadOnly Property CanSetPark() As Boolean Implements IDomeV2.CanSetPark
+    Public ReadOnly Property CanSetPark() As Boolean Implements IDomeV3.CanSetPark
         Get
             CanSetPark = g_bCanSetPark
 
@@ -420,7 +398,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public ReadOnly Property CanSetShutter() As Boolean Implements IDomeV2.CanSetShutter
+    Public ReadOnly Property CanSetShutter() As Boolean Implements IDomeV3.CanSetShutter
         Get
             CanSetShutter = g_bCanSetShutter
 
@@ -430,7 +408,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public ReadOnly Property CanSlave() As Boolean Implements IDomeV2.CanSlave
+    Public ReadOnly Property CanSlave() As Boolean Implements IDomeV3.CanSlave
         Get
             CanSlave = False
 
@@ -440,7 +418,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public ReadOnly Property CanSyncAzimuth() As Boolean Implements IDomeV2.CanSyncAzimuth
+    Public ReadOnly Property CanSyncAzimuth() As Boolean Implements IDomeV3.CanSyncAzimuth
         Get
             CanSyncAzimuth = g_bCanSyncAzimuth
 
@@ -450,7 +428,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public Sub CloseShutter() Implements IDomeV2.CloseShutter
+    Public Sub CloseShutter() Implements IDomeV3.CloseShutter
         If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkShutter.Checked Then g_TrafficForm.TrafficStart("CloseShutter")
         End If
@@ -478,19 +456,19 @@ Public Class Dome
 
     End Sub
 
-    Public Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False) Implements IDomeV2.CommandBlind
+    Public Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False) Implements IDomeV3.CommandBlind
         Throw New MethodNotImplementedException("CommandBlind")
     End Sub
 
-    Public Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean Implements IDomeV2.CommandBool
+    Public Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean Implements IDomeV3.CommandBool
         Throw New MethodNotImplementedException("CommandBool")
     End Function
 
-    Public Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String Implements IDomeV2.CommandString
+    Public Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String Implements IDomeV3.CommandString
         Throw New MethodNotImplementedException("CommandString")
     End Function
 
-    Public Property Connected() As Boolean Implements IDomeV2.Connected
+    Public Property Connected() As Boolean Implements IDomeV3.Connected
         Get
             Connected = g_bConnected
 
@@ -551,7 +529,7 @@ Public Class Dome
         End Set
     End Property
 
-    Public ReadOnly Property Description() As String Implements IDomeV2.Description
+    Public ReadOnly Property Description() As String Implements IDomeV3.Description
         Get
             If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficStart("Description")
@@ -565,7 +543,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public ReadOnly Property DriverInfo() As String Implements IDomeV2.DriverInfo
+    Public ReadOnly Property DriverInfo() As String Implements IDomeV3.DriverInfo
         Get
             If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficStart("DriverInfo")
@@ -592,7 +570,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public Sub FindHome() Implements IDomeV2.FindHome
+    Public Sub FindHome() Implements IDomeV3.FindHome
         If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkSlew.Checked Then g_TrafficForm.TrafficStart("FindHome")
         End If
@@ -619,7 +597,7 @@ Public Class Dome
         If Not g_bAtHome Then HW_FindHome()
     End Sub
 
-    Public ReadOnly Property InterfaceVersion() As Short Implements IDomeV2.InterfaceVersion
+    Public ReadOnly Property InterfaceVersion() As Short Implements IDomeV3.InterfaceVersion
         Get
             InterfaceVersion = 2
 
@@ -629,7 +607,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public ReadOnly Property Name() As String Implements IDomeV2.Name
+    Public ReadOnly Property Name() As String Implements IDomeV3.Name
         Get
             Name = INSTRUMENT_NAME
 
@@ -639,7 +617,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public Sub OpenShutter() Implements IDomeV2.OpenShutter
+    Public Sub OpenShutter() Implements IDomeV3.OpenShutter
         If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkShutter.Checked Then g_TrafficForm.TrafficStart("OpenShutter")
         End If
@@ -675,7 +653,7 @@ Public Class Dome
         HW_OpenShutter()
     End Sub
 
-    Public Sub Park() Implements IDomeV2.Park
+    Public Sub Park() Implements IDomeV3.Park
         If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkSlew.Checked Then g_TrafficForm.TrafficStart("Park")
         End If
@@ -702,7 +680,7 @@ Public Class Dome
         If Not g_bAtPark Then HW_Park()
     End Sub
 
-    Public Sub SetPark() Implements IDomeV2.SetPark
+    Public Sub SetPark() Implements IDomeV3.SetPark
         If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficStart("SetPark: " & Format$(g_dDomeAz, "0.0"))
         End If
@@ -740,7 +718,7 @@ Public Class Dome
         End If
     End Sub
 
-    Public Sub SetupDialog() Implements IDomeV2.SetupDialog
+    Public Sub SetupDialog() Implements IDomeV3.SetupDialog
         If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficStart("SetupDialog")
         End If
@@ -752,7 +730,7 @@ Public Class Dome
         End If
     End Sub
 
-    Public ReadOnly Property ShutterStatus() As ShutterState Implements IDomeV2.ShutterStatus
+    Public ReadOnly Property ShutterStatus() As ShutterState Implements IDomeV3.ShutterStatus
         Get
             Dim out As String
 
@@ -781,7 +759,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public Property Slaved() As Boolean Implements IDomeV2.Slaved
+    Public Property Slaved() As Boolean Implements IDomeV3.Slaved
         Get
             Slaved = False
 
@@ -799,7 +777,7 @@ Public Class Dome
         End Set
     End Property
 
-    Public ReadOnly Property Slewing() As Boolean Implements IDomeV2.Slewing
+    Public ReadOnly Property Slewing() As Boolean Implements IDomeV3.Slewing
         Get
             check_connected()
 
@@ -811,7 +789,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public Sub SlewToAltitude(ByVal Altitude As Double) Implements IDomeV2.SlewToAltitude
+    Public Sub SlewToAltitude(ByVal Altitude As Double) Implements IDomeV3.SlewToAltitude
         If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkShutter.Checked Then g_TrafficForm.TrafficLine("SlewToAltitude:" & Format$(Altitude, "0.0"))
         End If
@@ -843,7 +821,7 @@ Public Class Dome
         HW_MoveShutter(Altitude)
     End Sub
 
-    Public Sub SlewToAzimuth(ByVal Azimuth As Double) Implements IDomeV2.SlewToAzimuth
+    Public Sub SlewToAzimuth(ByVal Azimuth As Double) Implements IDomeV3.SlewToAzimuth
         If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkSlew.Checked Then g_TrafficForm.TrafficLine("SlewToAzimuth: " & Format$(Azimuth, "0.0"))
         End If
@@ -871,7 +849,7 @@ Public Class Dome
         HW_Move(Azimuth)
     End Sub
 
-    Public Sub SyncToAzimuth(ByVal Azimuth As Double) Implements IDomeV2.SyncToAzimuth
+    Public Sub SyncToAzimuth(ByVal Azimuth As Double) Implements IDomeV3.SyncToAzimuth
         If g_TrafficForm IsNot Nothing Then
             If g_TrafficForm.chkSlew.Checked Then g_TrafficForm.TrafficLine("SyncToAzimuth: " & Format$(Azimuth, "0.0"))
         End If
@@ -903,6 +881,63 @@ Public Class Dome
                 g_TrafficForm.TrafficEnd(" (done)")
         End If
     End Sub
+
+#End Region
+
+#Region "IDomeV2 Implementation"
+    Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements IDomeV3.Action
+        Throw New MethodNotImplementedException("Action")
+    End Function
+
+    Public ReadOnly Property SupportedActions As ArrayList Implements IDomeV3.SupportedActions
+        Get
+            Return New ArrayList()
+        End Get
+    End Property
+
+    Public ReadOnly Property DriverVersion As String Implements IDomeV3.DriverVersion
+        Get
+            Dim Ass As Reflection.Assembly
+
+            Ass = Reflection.Assembly.GetExecutingAssembly 'Get our own assembly and report its version number
+            Return Ass.GetName.Version.Major.ToString & "." & Ass.GetName.Version.Minor.ToString
+        End Get
+    End Property
+
+#End Region
+
+#Region "IDomeV3 implementation"
+
+    Public Sub Connect() Implements IDomeV3.Connect
+        Connected = True
+    End Sub
+
+    Public Sub Disconnect() Implements IDomeV3.Disconnect
+        Connected = False
+    End Sub
+
+    Public ReadOnly Property Connecting As Boolean Implements IDomeV3.Connecting
+        Get
+            Return False
+        End Get
+    End Property
+
+    Public ReadOnly Property DeviceState As ArrayList Implements IDomeV3.DeviceState
+        Get
+            Dim returnValue As ArrayList = New ArrayList()
+
+            Try : returnValue.Add(New StateValue(NameOf(Altitude), Altitude)) : Catch : End Try
+            Try : returnValue.Add(New StateValue(NameOf(AtHome), AtHome)) : Catch : End Try
+            Try : returnValue.Add(New StateValue(NameOf(AtPark), AtPark)) : Catch : End Try
+            Try : returnValue.Add(New StateValue(NameOf(Azimuth), Azimuth)) : Catch : End Try
+            Try : returnValue.Add(New StateValue(NameOf(ShutterStatus), ShutterStatus)) : Catch : End Try
+            Try : returnValue.Add(New StateValue(NameOf(Slewing), Slewing)) : Catch : End Try
+            Try : returnValue.Add(New StateValue(DateTime.Now)) : Catch : End Try
+
+            Return returnValue
+        End Get
+    End Property
+
 #End Region
 
 End Class
