@@ -599,7 +599,7 @@ Public Class Dome
 
     Public ReadOnly Property InterfaceVersion() As Short Implements IDomeV3.InterfaceVersion
         Get
-            InterfaceVersion = 2
+            InterfaceVersion = 3
 
             If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficLine("InterfaceVersion: " & InterfaceVersion)
@@ -926,12 +926,12 @@ Public Class Dome
         Get
             Dim returnValue As ArrayList = New ArrayList()
 
-            Try : returnValue.Add(New StateValue(NameOf(Altitude), Altitude)) : Catch : End Try
-            Try : returnValue.Add(New StateValue(NameOf(AtHome), AtHome)) : Catch : End Try
-            Try : returnValue.Add(New StateValue(NameOf(AtPark), AtPark)) : Catch : End Try
-            Try : returnValue.Add(New StateValue(NameOf(Azimuth), Azimuth)) : Catch : End Try
-            Try : returnValue.Add(New StateValue(NameOf(ShutterStatus), ShutterStatus)) : Catch : End Try
-            Try : returnValue.Add(New StateValue(NameOf(Slewing), Slewing)) : Catch : End Try
+            Try : returnValue.Add(New StateValue(NameOf(IDomeV3.Altitude), Altitude)) : Catch : End Try
+            Try : returnValue.Add(New StateValue(NameOf(IDomeV3.AtHome), AtHome)) : Catch : End Try
+            Try : returnValue.Add(New StateValue(NameOf(IDomeV3.AtPark), AtPark)) : Catch : End Try
+            Try : returnValue.Add(New StateValue(NameOf(IDomeV3.Azimuth), Azimuth)) : Catch : End Try
+            Try : returnValue.Add(New StateValue(NameOf(IDomeV3.ShutterStatus), ShutterStatus)) : Catch : End Try
+            Try : returnValue.Add(New StateValue(NameOf(IDomeV3.Slewing), Slewing)) : Catch : End Try
             Try : returnValue.Add(New StateValue(DateTime.Now)) : Catch : End Try
 
             Return returnValue

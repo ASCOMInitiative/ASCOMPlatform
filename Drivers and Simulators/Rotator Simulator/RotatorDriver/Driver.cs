@@ -214,9 +214,9 @@ namespace ASCOM.Simulator
             {
                 ArrayList deviceState = new ArrayList();
 
-                try { deviceState.Add(new StateValue(nameof(IsMoving), IsMoving)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(MechanicalPosition), MechanicalPosition)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(Position), Position)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IRotatorV4.IsMoving), IsMoving)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IRotatorV4.MechanicalPosition), MechanicalPosition)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IRotatorV4.Position), Position)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
                 return deviceState;

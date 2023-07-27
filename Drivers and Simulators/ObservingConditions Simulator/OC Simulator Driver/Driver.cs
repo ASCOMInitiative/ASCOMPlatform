@@ -263,19 +263,19 @@ namespace ASCOM.Simulator
             {
                 ArrayList deviceState = new ArrayList();
 
-                try { deviceState.Add(new StateValue(nameof(CloudCover), CloudCover)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(DewPoint), DewPoint)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(Humidity), Humidity)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(Pressure), Pressure)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(RainRate), RainRate)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(SkyBrightness), SkyBrightness)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(SkyQuality), SkyQuality)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(SkyTemperature), SkyTemperature)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(StarFWHM), StarFWHM)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(Temperature), Temperature)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(WindDirection), WindDirection)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(WindSpeed), WindSpeed)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(WindGust), WindGust)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.CloudCover), CloudCover)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.DewPoint), DewPoint)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.Humidity), Humidity)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.Pressure), Pressure)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.RainRate), RainRate)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.SkyBrightness), SkyBrightness)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.SkyQuality), SkyQuality)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.SkyTemperature), SkyTemperature)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.StarFWHM), StarFWHM)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.Temperature), Temperature)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.WindDirection), WindDirection)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.WindSpeed), WindSpeed)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.WindGust), WindGust)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
                 return deviceState;

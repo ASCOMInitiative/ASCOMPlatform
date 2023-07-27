@@ -253,8 +253,8 @@ namespace ASCOM.Simulator
             // set by the driver wizard
             get
             {
-                LogMessage("InterfaceVersion Get", "1");
-                return Convert.ToInt16("1");
+                LogMessage("InterfaceVersion Get", "2");
+                return Convert.ToInt16("2");
             }
         }
 
@@ -494,10 +494,11 @@ namespace ASCOM.Simulator
             get
             {
                 ArrayList deviceState = new ArrayList();
-                try { deviceState.Add(new StateValue(nameof(CalibratorState), CalibratorState)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(CoverState), CoverState)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(CoverMoving), CoverMoving)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(CalibratorChanging), CalibratorChanging)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.Brightness), Brightness)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CalibratorState), CalibratorState)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CalibratorChanging), CalibratorChanging)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CoverState), CoverState)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CoverMoving), CoverMoving)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
                 return deviceState;

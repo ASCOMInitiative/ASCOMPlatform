@@ -206,18 +206,18 @@ namespace ASCOM.Simulator
                 ArrayList deviceState = new ArrayList();
 
                 // Add one entry for each operational state, if possible
-                try { deviceState.Add(new StateValue("Altitude", Altitude)); } catch { }
-                try { deviceState.Add(new StateValue("AtHome", AtHome)); } catch { }
-                try { deviceState.Add(new StateValue("AtPark", AtPark)); } catch { }
-                try { deviceState.Add(new StateValue("Azimuth", Azimuth)); } catch { }
-                try { deviceState.Add(new StateValue("Declination", Declination)); } catch { }
-                try { deviceState.Add(new StateValue("IsPulseGuiding", IsPulseGuiding)); } catch { }
-                try { deviceState.Add(new StateValue("RightAscension", RightAscension)); } catch { }
-                try { deviceState.Add(new StateValue("SideOfPier", SideOfPier)); } catch { }
-                try { deviceState.Add(new StateValue("SiderealTime", SiderealTime)); } catch { }
-                try { deviceState.Add(new StateValue("Slewing", Slewing)); } catch { }
-                try { deviceState.Add(new StateValue("Tracking", Tracking)); } catch { }
-                try { deviceState.Add(new StateValue("UTCDate", UTCDate)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Altitude), Altitude)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.AtHome), AtHome)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.AtPark), AtPark)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Azimuth), Azimuth)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Declination), Declination)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.IsPulseGuiding), IsPulseGuiding)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.RightAscension), RightAscension)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.SideOfPier), SideOfPier)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.SiderealTime), SiderealTime)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Slewing), Slewing)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Tracking), Tracking)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.UTCDate), UTCDate)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
                 // Return the overall device state

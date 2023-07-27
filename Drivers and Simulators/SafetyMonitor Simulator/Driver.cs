@@ -44,7 +44,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Driver interface version
         /// </summary>
-        private const short interfaceVersion = 2;
+        private const short interfaceVersion = 3;
 
         /// <summary>
         /// Driver version number
@@ -257,7 +257,7 @@ namespace ASCOM.Simulator
             get
             {
                 ArrayList deviceState = new ArrayList();
-                try { deviceState.Add(new StateValue(nameof(IsSafe), IsSafe)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ISafetyMonitorV3.IsSafe), IsSafe)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
                 return deviceState;

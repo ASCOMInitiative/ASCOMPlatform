@@ -2598,13 +2598,13 @@ namespace ASCOM.Simulator
                 ArrayList deviceState = new ArrayList();
 
                 // Add one entry for each operational state, if possible
-                try { deviceState.Add(new StateValue(nameof(CameraState), CameraState)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(CCDTemperature), CCDTemperature)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(CoolerPower), CoolerPower)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(HeatSinkTemperature), HeatSinkTemperature)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ImageReady), ImageReady)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(IsPulseGuiding), IsPulseGuiding)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(PercentCompleted), PercentCompleted)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.CameraState), CameraState)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.CCDTemperature), CCDTemperature)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.CoolerPower), CoolerPower)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.HeatSinkTemperature), HeatSinkTemperature)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.ImageReady), ImageReady)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.IsPulseGuiding), IsPulseGuiding)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.PercentCompleted), PercentCompleted)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
                 // Return the overall device state

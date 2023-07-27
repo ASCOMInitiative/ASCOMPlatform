@@ -87,7 +87,7 @@ Public Class FilterWheel
 
     Public ReadOnly Property InterfaceVersion As Short Implements IFilterWheelV3.InterfaceVersion
         Get
-            Return 2
+            Return 3
         End Get
     End Property
 
@@ -181,7 +181,7 @@ Public Class FilterWheel
         Get
             Dim returnValue As ArrayList = New ArrayList()
 
-            Try : returnValue.Add(New StateValue(NameOf(Position), Position)) : Catch : End Try
+            Try : returnValue.Add(New StateValue(NameOf(IFilterWheelV3.Position), Position)) : Catch : End Try
             Try : returnValue.Add(New StateValue(DateTime.Now)) : Catch : End Try
 
             Return returnValue

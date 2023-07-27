@@ -234,8 +234,8 @@ namespace ASCOM.Simulator
             // set by the driver wizard
             get
             {
-                tl.LogMessage("InterfaceVersion Get", "2");
-                return Convert.ToInt16("2");
+                tl.LogMessage("InterfaceVersion Get", "3");
+                return Convert.ToInt16("3");
             }
         }
 

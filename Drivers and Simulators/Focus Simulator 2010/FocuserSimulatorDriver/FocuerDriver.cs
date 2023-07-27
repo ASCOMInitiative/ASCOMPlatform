@@ -47,7 +47,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Driver interface version
         /// </summary>
-        private const short interfaceVersion = 3;
+        private const short interfaceVersion = 4;
 
         /// <summary>
         /// Driver version number
@@ -561,9 +561,9 @@ namespace ASCOM.Simulator
             {
                 ArrayList deviceState = new ArrayList();
 
-                try { deviceState.Add(new StateValue(nameof(IsMoving), IsMoving)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(Position), Position)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(Temperature), Temperature)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IFocuserV4.IsMoving), IsMoving)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IFocuserV4.Position), Position)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IFocuserV4.Temperature), Temperature)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
                 return deviceState;
