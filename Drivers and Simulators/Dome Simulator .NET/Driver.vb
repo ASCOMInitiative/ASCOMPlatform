@@ -926,10 +926,14 @@ Public Class Dome
         Get
             Dim returnValue As ArrayList = New ArrayList()
 
-            Try : returnValue.Add(New StateValue(NameOf(IDomeV3.Altitude), Altitude)) : Catch : End Try
+            If g_bCanSetAltitude Then
+                Try : returnValue.Add(New StateValue(NameOf(IDomeV3.Altitude), g_dDomeAlt)) : Catch : End Try
+            End If
             Try : returnValue.Add(New StateValue(NameOf(IDomeV3.AtHome), AtHome)) : Catch : End Try
             Try : returnValue.Add(New StateValue(NameOf(IDomeV3.AtPark), AtPark)) : Catch : End Try
-            Try : returnValue.Add(New StateValue(NameOf(IDomeV3.Azimuth), Azimuth)) : Catch : End Try
+            If g_bCanSetAzimuth Then
+                Try : returnValue.Add(New StateValue(NameOf(IDomeV3.Azimuth), g_dDomeAz)) : Catch : End Try
+            End If
             Try : returnValue.Add(New StateValue(NameOf(IDomeV3.ShutterStatus), ShutterStatus)) : Catch : End Try
             Try : returnValue.Add(New StateValue(NameOf(IDomeV3.Slewing), Slewing)) : Catch : End Try
             Try : returnValue.Add(New StateValue(DateTime.Now)) : Catch : End Try
