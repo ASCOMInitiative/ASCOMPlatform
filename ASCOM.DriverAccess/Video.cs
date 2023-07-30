@@ -18,7 +18,6 @@ using System.Text;
 
 namespace ASCOM.DriverAccess
 {
-    #region Video wrapper
     /// <summary>
     /// Provides universal access to Video drivers
     /// </summary>
@@ -54,18 +53,36 @@ namespace ASCOM.DriverAccess
             }
         }
 
-		#endregion
+        /// <summary>
+        /// VideoState device state
+        /// </summary>
+        public VideoState VideoState
+        {
+            get
+            {
+                // Create a state object to return.
+                VideoState videoState = new VideoState(DeviceState, TL);
+                TL.LogMessage(nameof(DriverAccess.VideoState), $"Returning: " +
+                    $"Cloud cover: '{videoState.CameraState}', " +
+                    $"Time stamp: '{videoState.TimeStamp}'");
 
-		#region IVideo Members
-		/// <summary>
-		/// The name of the video capture device when such a device is used.
-		/// </summary>
-		/// <exception cref="PropertyNotImplementedException">Must throw an exception if not implemented.</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>For analogue video this is usually the video capture card or dongle attached to the computer.
-		/// </remarks>
-		public string VideoCaptureDeviceName
+                // Return the device specific state class
+                return videoState;
+            }
+        }
+
+        #endregion
+
+        #region IVideo Members
+        /// <summary>
+        /// The name of the video capture device when such a device is used.
+        /// </summary>
+        /// <exception cref="PropertyNotImplementedException">Must throw an exception if not implemented.</exception>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks>For analogue video this is usually the video capture card or dongle attached to the computer.
+        /// </remarks>
+        public string VideoCaptureDeviceName
         {
             get { return (string)memberFactory.CallMember(1, "VideoCaptureDeviceName", new Type[0], new object[0]); }
         }
@@ -811,5 +828,4 @@ namespace ASCOM.DriverAccess
         #endregion
 
     }
-    #endregion
 }

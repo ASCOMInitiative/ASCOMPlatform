@@ -522,16 +522,16 @@ namespace ASCOM.DynamicRemoteClients
             }
         }
 
-        public bool CalibratorChanging
+        public bool CalibratorReady
         {
             get
             {
-                // Call the device's CalibratorChanging property if this is a Platform 7 or later device, otherwise use CalibratorState
-                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the CalibratorChanging property
+                // Call the device's CalibratorReady property if this is a Platform 7 or later device, otherwise use CalibratorState
+                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the CalibratorReady property
                 {
-                    TL.LogMessage("CalibratorChanging", "Issuing CalibratorChanging command");
+                    TL.LogMessage("CalibratorReady", "Issuing CalibratorReady command");
                     DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                    return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CalibratorChanging", MemberTypes.Property);
+                    return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CalibratorReady", MemberTypes.Property);
                 }
 
                 // Platform 6 or earlier device so use CalibratorState to determine the movement state.

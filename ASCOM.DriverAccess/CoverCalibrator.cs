@@ -39,6 +39,21 @@ namespace ASCOM.DriverAccess
             }
         }
 
+        /// <summary>
+        /// CoverCalibrator device state
+        /// </summary>
+        public CoverCalibratorState CoverCalibratorState
+        {
+            get
+            {
+                // Create a state object to return.
+                CoverCalibratorState deviceState = new CoverCalibratorState(DeviceState, TL);
+                TL.LogMessage("CoverCalibratorState", $"Returning: '{deviceState.Brightness}' '{deviceState.CalibratorReady}' '{deviceState.CalibratorState}' '{deviceState.CoverMoving}' '{deviceState.CoverState}' '{deviceState.TimeStamp}'");
+
+                // Return the device specific state class
+                return deviceState;
+            }
+        }
         #endregion
 
         #region ICoverCalibratorV1 Members
@@ -203,15 +218,15 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// True while the calibrator brightness is changing.
         /// </summary>
-        public bool CalibratorChanging
+        public bool CalibratorReady
         {
             get
             {
-                // Call the device's CalibratorChanging method if this is a Platform 7 or later device, otherwise use CalibratorState
+                // Call the device's CalibratorReady method if this is a Platform 7 or later device, otherwise use CalibratorState
                 if (HasConnectAndDeviceState) // Platform 7 or later device
                 {
-                    TL.LogMessage("CalibratorChanging", "Issuing CalibratorChanging command");
-                    return Convert.ToBoolean(memberFactory.CallMember(1, "CalibratorChanging", new Type[] { }, new object[] { }));
+                    TL.LogMessage("CalibratorReady", "Issuing CalibratorReady command");
+                    return Convert.ToBoolean(memberFactory.CallMember(1, "CalibratorReady", new Type[] { }, new object[] { }));
                 }
 
                 // Platform 6 or earlier device so use CalibratorState to determine the movement state.

@@ -336,7 +336,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>Returns the device's operational state.</summary>
-        /// <value>An ArrayList of <see cref="DeviceState"/> objects describing the device's operational state.
+        /// <value>An ArrayList of <see cref="DeviceState"/> objects describing the device's operational state.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
         public ArrayList DeviceState

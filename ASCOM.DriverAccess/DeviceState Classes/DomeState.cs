@@ -9,24 +9,24 @@ using System.Text;
 namespace ASCOM.DriverAccess
 {
     /// <summary>
-    /// 
+    /// Class that presents the device's operation state as a set of nullable properties
     /// </summary>
-    public class TelescopeState
+    public class DomeState
     {
         // Assign the name of this class
-        string className = nameof(TelescopeState);
+        string className = nameof(DomeState);
 
         /// <summary>
-        /// Create a new TelescopeState instance
+        /// Create a new DomeState instance
         /// </summary>
-        public TelescopeState() { }
+        public DomeState() { }
 
         /// <summary>
-        /// Create a new TelescopeState instance from the device's DeviceState response.
+        /// Create a new DomeState instance from the device's DeviceState response.
         /// </summary>
         /// <param name="deviceStateArrayList">The device's DeviceState response.</param>
         /// <param name="TL">Debug TraceLogger instance.</param>
-        public TelescopeState(ArrayList deviceStateArrayList, TraceLogger TL)
+        public DomeState(ArrayList deviceStateArrayList, TraceLogger TL)
         {
             TL?.LogMessage(className, $"Received {deviceStateArrayList.Count} items");
 
@@ -51,7 +51,7 @@ namespace ASCOM.DriverAccess
 
                     switch (stateValue.Name)
                     {
-                        case nameof(ITelescopeV4.Altitude):
+                        case nameof(IDomeV3.Altitude):
                             try
                             {
                                 Altitude = (double)stateValue.Value;
@@ -63,7 +63,7 @@ namespace ASCOM.DriverAccess
                             TL.LogMessage(className, $"Altitude has value: {Altitude.HasValue}, Value: {Altitude}");
                             break;
 
-                        case nameof(ITelescopeV4.AtHome):
+                        case nameof(IDomeV3.AtHome):
                             try
                             {
                                 AtHome = (bool)stateValue.Value;
@@ -75,7 +75,7 @@ namespace ASCOM.DriverAccess
                             TL.LogMessage(className, $"AtHome has value: {AtHome.HasValue}, Value: {AtHome}");
                             break;
 
-                        case nameof(ITelescopeV4.AtPark):
+                        case nameof(IDomeV3.AtPark):
                             try
                             {
                                 AtPark = (bool)stateValue.Value;
@@ -87,7 +87,7 @@ namespace ASCOM.DriverAccess
                             TL.LogMessage(className, $"AtPark has value: {AtPark.HasValue}, Value: {AtPark}");
                             break;
 
-                        case nameof(ITelescopeV4.Azimuth):
+                        case nameof(IDomeV3.Azimuth):
                             try
                             {
                                 Azimuth = (double)stateValue.Value;
@@ -99,67 +99,19 @@ namespace ASCOM.DriverAccess
                             TL.LogMessage(className, $"Azimuth has value: {Azimuth.HasValue}, Value: {Azimuth}");
                             break;
 
-                        case nameof(ITelescopeV4.Declination):
+                        case nameof(IDomeV3.ShutterStatus):
                             try
                             {
-                                Declination = (double)stateValue.Value;
+                                ShutterStatus = (ShutterState)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
                                 TL.LogMessage(className, $"Declination - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Declination has value: {Declination.HasValue}, Value: {Declination}");
+                            TL.LogMessage(className, $"ShutterStatus has value: {ShutterStatus.HasValue}, Value: {ShutterStatus}");
                             break;
 
-                        case nameof(ITelescopeV4.IsPulseGuiding):
-                            try
-                            {
-                                IsPulseGuiding = (bool)stateValue.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage(className, $"IsPulseGuiding - Ignoring exception: {ex.Message}");
-                            }
-                            TL.LogMessage(className, $"IsPulseGuiding has value: {IsPulseGuiding.HasValue}, Value: {IsPulseGuiding}");
-                            break;
-
-                        case nameof(ITelescopeV4.RightAscension):
-                            try
-                            {
-                                RightAscension = (double)stateValue.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage(className, $"RightAscension - Ignoring exception: {ex.Message}");
-                            }
-                            TL.LogMessage(className, $"RightAscension has value: {RightAscension.HasValue}, Value: {RightAscension}");
-                            break;
-
-                        case nameof(ITelescopeV4.SideOfPier):
-                            try
-                            {
-                                SideOfPier = (PierSide)stateValue.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage(className, $"SideOfPier - Ignoring exception: {ex.Message}");
-                            }
-                            TL.LogMessage(className, $"SideOfPier has value: {SideOfPier.HasValue}, Value: {SideOfPier}");
-                            break;
-
-                        case nameof(ITelescopeV4.SiderealTime):
-                            try
-                            {
-                                SiderealTime = (double)stateValue.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage(className, $"SiderealTime - Ignoring exception: {ex.Message}");
-                            }
-                            TL.LogMessage(className, $"SiderealTime has value: {SiderealTime.HasValue}, Value: {SiderealTime}");
-                            break;
-
-                        case nameof(ITelescopeV4.Slewing):
+                        case nameof(IDomeV3.Slewing):
                             try
                             {
                                 Slewing = (bool)stateValue.Value;
@@ -168,32 +120,9 @@ namespace ASCOM.DriverAccess
                             {
                                 TL.LogMessage(className, $"Slewing - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Slewing has value: {Slewing.HasValue}, Value: {Slewing}");
+                            TL.LogMessage(className, $"Slewing has value: {Slewing.HasValue}, Value: {Slewing.Value}");
                             break;
 
-                        case nameof(ITelescopeV4.Tracking):
-                            try
-                            {
-                                Tracking = (bool)stateValue.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage(className, $"Tracking - Ignoring exception: {ex.Message}");
-                            }
-                            TL.LogMessage(className, $"Tracking has value: {Tracking.HasValue}, Value: {Tracking}");
-                            break;
-
-                        case nameof(ITelescopeV4.UTCDate):
-                            try
-                            {
-                                UTCDate = (DateTime)stateValue.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage(className, $"UTCDate - Ignoring exception: {ex.Message}");
-                            }
-                            TL.LogMessage(className, $"UTCDate has value: {UTCDate.HasValue}, Value: {UTCDate}");
-                            break;
 
                         case "TimeStamp":
                             try
@@ -220,64 +149,34 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Telescope altitude
+        /// Dome altitude
         /// </summary>
         public double? Altitude { get; set; } = null;
 
         /// <summary>
-        /// Telescope is at home
+        /// Dome is at home
         /// </summary>
         public bool? AtHome { get; set; } = null;
 
         /// <summary>
-        /// Telescope is parked
+        /// Dome is parked
         /// </summary>
         public bool? AtPark { get; set; } = null;
 
         /// <summary>
-        /// Telescope azimuth
+        /// Dome azimuth
         /// </summary>
         public double? Azimuth { get; set; } = null;
 
         /// <summary>
-        /// Telescope declination
+        /// Dome shutter state
         /// </summary>
-        public double? Declination { get; set; } = null;
+        public ShutterState? ShutterStatus { get; set; } = null;
 
         /// <summary>
-        /// Telescope is pulse guiding
-        /// </summary>
-        public bool? IsPulseGuiding { get; set; } = null;
-
-        /// <summary>
-        /// Telescope right ascension
-        /// </summary>
-        public double? RightAscension { get; set; } = null;
-
-        /// <summary>
-        /// Telescope pointing state
-        /// </summary>
-        public PierSide? SideOfPier { get; set; } = null;
-
-        /// <summary>
-        /// Telescope sidereal time
-        /// </summary>
-        public double? SiderealTime { get; set; } = null;
-
-        /// <summary>
-        /// Telescope is slewing
+        /// Dome is slewing
         /// </summary>
         public bool? Slewing { get; set; } = null;
-
-        /// <summary>
-        /// Telescope  is tracking
-        /// </summary>
-        public bool? Tracking { get; set; } = null;
-
-        /// <summary>
-        /// Telescope UTC date and time
-        /// </summary>
-        public DateTime? UTCDate { get; set; } = null;
 
         /// <summary>
         /// The time at which the state was recorded
@@ -285,4 +184,3 @@ namespace ASCOM.DriverAccess
         public DateTime? TimeStamp { get; set; } = null;
     }
 }
-

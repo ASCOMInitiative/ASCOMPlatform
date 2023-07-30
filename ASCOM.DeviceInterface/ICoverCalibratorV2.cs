@@ -367,9 +367,9 @@ namespace ASCOM.DeviceInterface
         ArrayList DeviceState { get; }
 
         /// <summary>
-        /// True while the calibrator brightness is changing.
+        /// False while the calibrator brightness is not stable.
         /// </summary>
-        bool CalibratorChanging { get; }
+        bool CalibratorReady { get; }
         
         /// <summary>
         /// True while the cover is in motion.
