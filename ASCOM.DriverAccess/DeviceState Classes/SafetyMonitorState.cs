@@ -9,7 +9,7 @@ using System.Text;
 namespace ASCOM.DriverAccess
 {
     /// <summary>
-    /// 
+    /// Class that presents the device's operation state as a set of nullable properties
     /// </summary>
     public class SafetyMonitorState
     {
