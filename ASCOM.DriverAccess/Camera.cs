@@ -55,7 +55,7 @@ namespace ASCOM.DriverAccess
             {
                 // Create a state object to return.
                 CameraDeviceState cameraDeviceState = new CameraDeviceState(DeviceState, TL);
-                TL.LogMessage("CameraDeviceState", $"Returning: '{cameraDeviceState.CameraState}' '{cameraDeviceState.CCDTemperature}' '{cameraDeviceState.CoolerPower}' '{cameraDeviceState.HeatSinkTemperature}' '{cameraDeviceState.ImageReady}' '{cameraDeviceState.PercentCompleted}' '{cameraDeviceState.TimeStamp}'");
+                TL.LogMessage(nameof(CameraDeviceState), $"Returning: '{cameraDeviceState.CameraState}' '{cameraDeviceState.CCDTemperature}' '{cameraDeviceState.CoolerPower}' '{cameraDeviceState.HeatSinkTemperature}' '{cameraDeviceState.ImageReady}' '{cameraDeviceState.PercentCompleted}' '{cameraDeviceState.TimeStamp}'");
 
                 // Return the device specific state class
                 return cameraDeviceState;

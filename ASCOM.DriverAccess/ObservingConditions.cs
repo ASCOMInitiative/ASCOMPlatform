@@ -57,7 +57,7 @@ namespace ASCOM.DriverAccess
             {
                 // Create a state object to return.
                 ObservingConditionsState observingConditionsState = new ObservingConditionsState(DeviceState, TL);
-                TL.LogMessage(nameof(DriverAccess.ObservingConditionsState), $"Returning: " +
+                TL.LogMessage(nameof(ObservingConditionsState), $"Returning: " +
                     $"Cloud cover: '{observingConditionsState.CloudCover}', " +
                     $"Dew point: '{observingConditionsState.DewPoint}', " +
                     $"Humidity: '{observingConditionsState.Humidity}', " +

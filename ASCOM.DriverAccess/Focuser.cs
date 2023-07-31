@@ -55,7 +55,7 @@ namespace ASCOM.DriverAccess
             {
                 // Create a state object to return.
                 FocuserState focuserState = new FocuserState(DeviceState, TL);
-                TL.LogMessage(nameof(DriverAccess.FocuserState), $"Returning: '{focuserState.IsMoving}' '{focuserState.Position}' '{focuserState.Temperature}' '{focuserState.TimeStamp}'");
+                TL.LogMessage(nameof(FocuserState), $"Returning: '{focuserState.IsMoving}' '{focuserState.Position}' '{focuserState.Temperature}' '{focuserState.TimeStamp}'");
 
                 // Return the device specific state class
                 return focuserState;

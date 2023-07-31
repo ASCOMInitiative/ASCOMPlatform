@@ -53,7 +53,7 @@ namespace ASCOM.DriverAccess
             {
                 // Create a state object to return.
                 SafetyMonitorState safetyMonitorState = new SafetyMonitorState(DeviceState, TL);
-                TL.LogMessage(nameof(DriverAccess.SafetyMonitorState), $"Returning: " +
+                TL.LogMessage(nameof(SafetyMonitorState), $"Returning: " +
                     $"Cloud cover: '{safetyMonitorState.IsSafe}', " +
                     $"Time stamp: '{safetyMonitorState.TimeStamp}'");
 

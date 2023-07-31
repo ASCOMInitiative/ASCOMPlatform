@@ -48,12 +48,13 @@ namespace ASCOM.DriverAccess
             {
                 // Create a state object to return.
                 CoverCalibratorState deviceState = new CoverCalibratorState(DeviceState, TL);
-                TL.LogMessage("CoverCalibratorState", $"Returning: '{deviceState.Brightness}' '{deviceState.CalibratorReady}' '{deviceState.CalibratorState}' '{deviceState.CoverMoving}' '{deviceState.CoverState}' '{deviceState.TimeStamp}'");
+                TL.LogMessage(nameof(CoverCalibratorState), $"Returning: '{deviceState.Brightness}' '{deviceState.CalibratorReady}' '{deviceState.CalibratorState}' '{deviceState.CoverMoving}' '{deviceState.CoverState}' '{deviceState.TimeStamp}'");
 
                 // Return the device specific state class
                 return deviceState;
             }
         }
+
         #endregion
 
         #region ICoverCalibratorV1 Members

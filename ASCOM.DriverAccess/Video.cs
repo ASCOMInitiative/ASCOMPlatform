@@ -62,8 +62,8 @@ namespace ASCOM.DriverAccess
             {
                 // Create a state object to return.
                 VideoState videoState = new VideoState(DeviceState, TL);
-                TL.LogMessage(nameof(DriverAccess.VideoState), $"Returning: " +
-                    $"Cloud cover: '{videoState.CameraState}', " +
+                TL.LogMessage(nameof(VideoState), $"Returning: " +
+                    $"CameraState: '{videoState.CameraState}', " +
                     $"Time stamp: '{videoState.TimeStamp}'");
 
                 // Return the device specific state class

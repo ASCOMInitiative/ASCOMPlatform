@@ -46,7 +46,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// ObservingConditions device state
+        /// Rotator device state
         /// </summary>
         public RotatorState RotatorState
         {
@@ -54,7 +54,7 @@ namespace ASCOM.DriverAccess
             {
                 // Create a state object to return.
                 RotatorState rotatorState = new RotatorState(DeviceState, TL);
-                TL.LogMessage(nameof(DriverAccess.ObservingConditionsState), $"Returning: " +
+                TL.LogMessage(nameof(RotatorState), $"Returning: " +
                     $"Cloud cover: '{rotatorState.IsMoving}', " +
                     $"Dew point: '{rotatorState.MechanicalPosition}', " +
                     $"Humidity: '{rotatorState.Position}', " +
