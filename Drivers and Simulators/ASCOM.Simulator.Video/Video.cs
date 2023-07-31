@@ -829,6 +829,21 @@ namespace ASCOM.Simulator
             }
         }
 
+        public void CommandBlind(string Command, bool Raw = false)
+        {
+            throw new ASCOM.MethodNotImplementedException("CommandBlind is not implemented in this device.");
+        }
+
+        public bool CommandBool(string Command, bool Raw = false)
+        {
+            throw new ASCOM.MethodNotImplementedException("CommandBool is not implemented in this device.");
+        }
+
+        public string CommandString(string Command, bool Raw = false)
+        {
+            throw new ASCOM.MethodNotImplementedException("CommandString is not implemented in this device.");
+        }
+
         #endregion
 
         #region Support code
