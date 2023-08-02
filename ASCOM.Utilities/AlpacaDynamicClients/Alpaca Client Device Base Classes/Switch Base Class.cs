@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -554,7 +556,7 @@ namespace ASCOM.DynamicRemoteClients
             {
                 TL.LogMessage("SetAsyncValue", "Issuing SetAsyncValue command");
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                DynamicClientDriver.SetBoolWithShortParameter(clientNumber, client, URIBase, TL, "SetAsyncValue", id, value, MemberTypes.Method);
+                DynamicClientDriver.SetDoubleWithShortParameter(clientNumber, client, URIBase, TL, "SetAsyncValue", id, value, MemberTypes.Method);
                 return;
             }
 
@@ -567,6 +569,7 @@ namespace ASCOM.DynamicRemoteClients
             // Call the device's SetAsyncValue method if this is a Platform 7 or later device, otherwise return false to indicate no async capability.
             if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
             {
+                TL.LogMessage("CanAsync", "Getting CanAsync property");
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetShortIndexedBool(clientNumber, client, URIBase, TL, "CanAsync", id, MemberTypes.Method);
             }
@@ -580,7 +583,7 @@ namespace ASCOM.DynamicRemoteClients
             // Call the device's StateChangeComplete method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
             if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
             {
-                TL.LogMessage("StateChangeComplete", "Issuing StateChangeComplete command");
+                TL.LogMessage("StateChangeComplete", "Getting StateChangeComplete property");
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
                 return DynamicClientDriver.GetShortIndexedBool(clientNumber, client, URIBase, TL, "StateChangeComplete", id, MemberTypes.Method);
             }
@@ -595,7 +598,8 @@ namespace ASCOM.DynamicRemoteClients
             if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
             {
                 TL.LogMessage("CancelAsync", "Issuing CancelAsync command");
-                memberFactory.CallMember(3, "CancelAsync", new Type[] { typeof(short) }, new object[] { id });
+                Dictionary<string, string> Parameters = new Dictionary<string, string>() { { AlpacaConstants.ID_PARAMETER_NAME, id.ToString() } };
+                DynamicClientDriver.SendToRemoteDevice<NoReturnValue>(clientNumber, client, URIBase, TL, "CancelAsync", Parameters, Method.PUT, MemberTypes.Method);
                 return;
             }
 
