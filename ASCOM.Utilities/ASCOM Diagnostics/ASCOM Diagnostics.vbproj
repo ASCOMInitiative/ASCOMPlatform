@@ -185,9 +185,7 @@
     <Compile Include="EarthRotationDataForm.Designer.vb">
       <DependentUpon>EarthRotationDataForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="EarthRotationDataForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="EarthRotationDataForm.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="..\..\AssemblyVersionInfo.vb">
       <Link>My Project\AssemblyVersionInfo.cs</Link>

@@ -2977,16 +2977,13 @@ Global
 		{7E267614-682C-4B91-A691-ACA1AD872D07}.MakeDynamicLists|x64.Build.0 = Debug|Any CPU
 		{7E267614-682C-4B91-A691-ACA1AD872D07}.MakeDynamicLists|x86.ActiveCfg = Debug|Any CPU
 		{7E267614-682C-4B91-A691-ACA1AD872D07}.MakeDynamicLists|x86.Build.0 = Debug|Any CPU
-		{7E267614-682C-4B91-A691-ACA1AD872D07}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7E267614-682C-4B91-A691-ACA1AD872D07}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7E267614-682C-4B91-A691-ACA1AD872D07}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{7E267614-682C-4B91-A691-ACA1AD872D07}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{7E267614-682C-4B91-A691-ACA1AD872D07}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E267614-682C-4B91-A691-ACA1AD872D07}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{7E267614-682C-4B91-A691-ACA1AD872D07}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{7E267614-682C-4B91-A691-ACA1AD872D07}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
 		{7E267614-682C-4B91-A691-ACA1AD872D07}.Release|Win32.ActiveCfg = Release|Any CPU
-		{7E267614-682C-4B91-A691-ACA1AD872D07}.Release|Win32.Build.0 = Release|Any CPU
 		{7E267614-682C-4B91-A691-ACA1AD872D07}.Release|x64.ActiveCfg = Release|Any CPU
-		{7E267614-682C-4B91-A691-ACA1AD872D07}.Release|x64.Build.0 = Release|Any CPU
 		{7E267614-682C-4B91-A691-ACA1AD872D07}.Release|x86.ActiveCfg = Release|Any CPU
-		{7E267614-682C-4B91-A691-ACA1AD872D07}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
