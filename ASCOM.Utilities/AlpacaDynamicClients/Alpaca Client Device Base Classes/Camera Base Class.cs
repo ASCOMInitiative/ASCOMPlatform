@@ -1060,9 +1060,8 @@ namespace ASCOM.DynamicRemoteClients
                     TL.LogMessage("Connecting Get", $"Throwing exception from Connected to the client: {connectException.Message}\r\n{connectException}");
                     throw connectException;
                 }
-
-                // Platform 6 or earlier device so always return false.
-                return false;
+                // No exception so return emulated state
+                return connecting;
             }
         }
 

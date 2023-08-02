@@ -330,8 +330,8 @@ namespace ASCOM.DriverAccess
                     throw connectException;
                 }
 
-                // Platform 6 or earlier device so always return false.
-                return false;
+                // No exception so return emulated state
+                return connecting;
             }
         }
 
