@@ -51,7 +51,7 @@ namespace ASCOM.DynamicRemoteClients
         private const string CONTENT_TYPE_HEADER_NAME = "Content-Type"; // Name of HTTP header used to affirm the type of data returned by the device
 
         // Image array ImageBytes - combined mime-type values
-        private const string JSON_MIME_TYPES = AlpacaConstants.APPLICATION_JSON_MIME_TYPE + ", " + AlpacaConstants.TEXT_JSON_MIME_TYPE; // JSON mime types
+        private const string JSON_MIME_TYPES = AlpacaConstants.APPLICATION_JSON_MIME_TYPE; // JSON mime type
         private const string IMAGE_BYTES_ACCEPT_HEADER = AlpacaConstants.IMAGE_BYTES_MIME_TYPE + ", " + JSON_MIME_TYPES; // Value of HTTP header to indicate support for the GetImageBytes mechanic
 
         //Private variables
@@ -2334,7 +2334,7 @@ namespace ASCOM.DynamicRemoteClients
                 TL.LogMessage("GetResponse", $"ReadAsByteArrayAsync time: {sw.ElapsedMilliseconds}ms, Overall time: {swOverall.ElapsedMilliseconds}ms.");
 
                 // If the content type is JSON - Populate the Content property with a string converted from the byte[] 
-                if ((contentType.Contains(AlpacaConstants.APPLICATION_JSON_MIME_TYPE)) | (contentType.Contains(AlpacaConstants.TEXT_JSON_MIME_TYPE)))
+                if (contentType.Contains(AlpacaConstants.APPLICATION_JSON_MIME_TYPE))
                 {
                     sw.Restart();
                     RestResponse restResponse = new RestResponse()
