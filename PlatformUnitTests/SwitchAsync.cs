@@ -1,12 +1,8 @@
 ﻿using ASCOM;
 using ASCOM.DriverAccess;
-using ASCOM.Utilities;
-using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 
 namespace PlatformUnitTests
