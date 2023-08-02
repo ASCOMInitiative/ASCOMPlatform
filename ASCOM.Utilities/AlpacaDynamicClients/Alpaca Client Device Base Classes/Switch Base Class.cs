@@ -7,13 +7,14 @@ using System.Windows.Forms;
 using ASCOM.Common.Alpaca;
 using ASCOM.DeviceInterface;
 using RestSharp;
+using static System.Windows.Forms.AxHost;
 
 namespace ASCOM.DynamicRemoteClients
 {
     /// <summary>
     /// ASCOM DynamicRemoteClients Switch base class
     /// </summary>
-    public class SwitchBaseClass : ReferenceCountedObjectBase, ISwitchV2
+    public class SwitchBaseClass : ReferenceCountedObjectBase, ISwitchV3
     {
         #region Variables and Constants
 
@@ -30,6 +31,7 @@ namespace ASCOM.DynamicRemoteClients
         private uint clientNumber; // Unique number for this driver within the locaL server, i.e. across all drivers that the local server is serving
         private bool clientIsConnected;  // Connection state of this driver
         private string URIBase; // URI base unique to this driver
+        private short? interfaceVersion; // Cached interface version to reduce client traffic
 
         // Connect / Disconnect emulation variables
         bool connecting;
@@ -48,8 +50,8 @@ namespace ASCOM.DynamicRemoteClients
         private string userName;
         private string password;
         private bool manageConnectLocally;
-        private ASCOM.Common.Alpaca.ImageArrayTransferType imageArrayTransferType;
-        private ASCOM.Common.Alpaca.ImageArrayCompression imageArrayCompression;
+        private ImageArrayTransferType imageArrayTransferType;
+        private ImageArrayCompression imageArrayCompression;
         private string uniqueId;
         private bool enableRediscovery;
         private bool ipV4Enabled;
@@ -77,7 +79,7 @@ namespace ASCOM.DynamicRemoteClients
                 if (TL == null) TL = new TraceLoggerPlus("", string.Format(SharedConstants.TRACELOGGER_NAME_FORMAT_STRING, DriverNumber, DEVICE_TYPE));
                 DynamicClientDriver.ReadProfile(clientNumber, TL, DEVICE_TYPE, DriverProgId,
                     ref traceState, ref debugTraceState, ref ipAddressString, ref portNumber, ref remoteDeviceNumber, ref serviceType, ref establishConnectionTimeout, ref standardDeviceResponseTimeout,
-                    ref longDeviceResponseTimeout, ref userName, ref password, ref manageConnectLocally, ref imageArrayTransferType, ref imageArrayCompression, ref uniqueId, ref enableRediscovery, 
+                    ref longDeviceResponseTimeout, ref userName, ref password, ref manageConnectLocally, ref imageArrayTransferType, ref imageArrayCompression, ref uniqueId, ref enableRediscovery,
                     ref ipV4Enabled, ref ipV6Enabled, ref discoveryPort, ref trustUserGeneratedSslCertificates);
 
                 TL.LogMessage(clientNumber, DEVICE_TYPE, string.Format("Trace state: {0}, Debug Trace State: {1}, TraceLogger Debug State: {2}", traceState, debugTraceState, TL.DebugTraceState));
@@ -197,8 +199,16 @@ namespace ASCOM.DynamicRemoteClients
         {
             get
             {
+                // Test whether we have already retrieved the interface version, if so, return it without calling the device.
+                if (interfaceVersion.HasValue) // We have an interface version so return it
+                    return interfaceVersion.Value;
+
+                // We don't have the interface version so get it from the device and save it for future use
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                return DynamicClientDriver.InterfaceVersion(clientNumber, client, URIBase, TL);
+                interfaceVersion = DynamicClientDriver.InterfaceVersion(clientNumber, client, URIBase, TL);
+
+                // Return the interface version to the client
+                return interfaceVersion.Value;
             }
         }
 
@@ -271,12 +281,12 @@ namespace ASCOM.DynamicRemoteClients
                         ipV4Enabled = setupForm.IpV4Enabled;
                         ipV6Enabled = setupForm.IpV6Enabled;
                         discoveryPort = setupForm.DiscoveryPort;
-                        trustUserGeneratedSslCertificates= setupForm.TrustUserGeneratedSslCertificates;
+                        trustUserGeneratedSslCertificates = setupForm.TrustUserGeneratedSslCertificates;
 
                         // Write the changed values to the Profile
                         TL.LogMessage(clientNumber, "SetupDialog", "Writing new values to profile");
                         DynamicClientDriver.WriteProfile(clientNumber, TL, DEVICE_TYPE, DriverProgId, traceState, debugTraceState, ipAddressString, portNumber, remoteDeviceNumber, serviceType,
-                            establishConnectionTimeout, standardDeviceResponseTimeout, longDeviceResponseTimeout, userName, password, manageConnectLocally, imageArrayTransferType, imageArrayCompression, uniqueId, enableRediscovery, 
+                            establishConnectionTimeout, standardDeviceResponseTimeout, longDeviceResponseTimeout, userName, password, manageConnectLocally, imageArrayTransferType, imageArrayCompression, uniqueId, enableRediscovery,
                             ipV4Enabled, ipV6Enabled, discoveryPort, trustUserGeneratedSslCertificates);
 
                         // Establish new host and device parameters
@@ -520,6 +530,77 @@ namespace ASCOM.DynamicRemoteClients
                     return new ArrayList();
                 }
             }
+        }
+
+        public void SetAsync(short id, bool state)
+        {
+            // Call the device's SetAsync method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
+            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
+            {
+                TL.LogMessage("SetAsync", "Issuing SetAsync command");
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                DynamicClientDriver.SetBoolWithShortParameter(clientNumber, client, URIBase, TL, "SetAsync", id, state, MemberTypes.Method);
+                return;
+            }
+
+            // Platform 6 or earlier device
+            throw new MethodNotImplementedException($"DynamicClient.Switch - SetAsync is not supported by this device because it exposes interface ISwitchV{InterfaceVersion}.");
+        }
+
+        public void SetAsyncValue(short id, double value)
+        {
+            // Call the device's SetAsyncValue method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
+            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
+            {
+                TL.LogMessage("SetAsyncValue", "Issuing SetAsyncValue command");
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                DynamicClientDriver.SetBoolWithShortParameter(clientNumber, client, URIBase, TL, "SetAsyncValue", id, value, MemberTypes.Method);
+                return;
+            }
+
+            // Platform 6 or earlier device - method not implemented
+            throw new MethodNotImplementedException($"DynamicClient - SetAsyncValue is not supported by this device because it exposes interface ISwitchV{InterfaceVersion}.");
+        }
+
+        public bool CanAsync(short id)
+        {
+            // Call the device's SetAsyncValue method if this is a Platform 7 or later device, otherwise return false to indicate no async capability.
+            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
+            {
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                return DynamicClientDriver.GetShortIndexedBool(clientNumber, client, URIBase, TL, "CanAsync", id, MemberTypes.Method);
+            }
+
+            // Platform 6 or earlier device - async is not supported so return false to show no async support.
+            return false;
+        }
+
+        public bool StateChangeComplete(short id)
+        {
+            // Call the device's StateChangeComplete method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
+            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
+            {
+                TL.LogMessage("StateChangeComplete", "Issuing StateChangeComplete command");
+                DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
+                return DynamicClientDriver.GetShortIndexedBool(clientNumber, client, URIBase, TL, "StateChangeComplete", id, MemberTypes.Method);
+            }
+
+            // Platform 6 or earlier device
+            throw new MethodNotImplementedException($"DynamicClient - StateChangeComplete is not supported by this device because it exposes interface ISwitchV{InterfaceVersion}.");
+        }
+
+        public void CancelAsync(short id)
+        {
+            // Call the device's CancelAsync method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
+            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
+            {
+                TL.LogMessage("CancelAsync", "Issuing CancelAsync command");
+                memberFactory.CallMember(3, "CancelAsync", new Type[] { typeof(short) }, new object[] { id });
+                return;
+            }
+
+            // Platform 6 or earlier device
+            throw new MethodNotImplementedException($"DynamicClient - CancelAsync is not supported by this device because it exposes interface ISwitchV{InterfaceVersion}.");
         }
 
         #endregion

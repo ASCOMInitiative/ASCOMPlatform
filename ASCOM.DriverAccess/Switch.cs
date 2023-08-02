@@ -336,11 +336,10 @@ namespace ASCOM.DriverAccess
             }
 
             // Platform 6 or earlier device
-            throw new MethodNotImplementedException($"DriverAccess - SetAsync is not supported by this device because it exposes interface ISwitchV{DriverInterfaceVersion}.");
+            throw new MethodNotImplementedException($"DriverAccess.Switch - SetAsync is not supported by this device because it exposes interface ISwitchV{DriverInterfaceVersion}.");
         }
 
         /// <inheritdoc />
-        /// <exception cref="System.NotImplementedException"></exception>
         public void SetAsyncValue(short id, double value)
         {
             // Call the device's SetAsyncValue method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
@@ -356,7 +355,6 @@ namespace ASCOM.DriverAccess
         }
 
         /// <inheritdoc />
-        /// <exception cref="System.NotImplementedException"></exception>
         public bool CanAsync(short id)
         {
             // Call the device's SetAsyncValue method if this is a Platform 7 or later device, otherwise return false to indicate no async capability.
@@ -371,7 +369,6 @@ namespace ASCOM.DriverAccess
         }
 
         /// <inheritdoc />
-        /// <exception cref="System.NotImplementedException"></exception>
         public bool StateChangeComplete(short id)
         {
             // Call the device's StateChangeComplete method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
