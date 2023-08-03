@@ -1461,12 +1461,12 @@ namespace ASCOM.Simulator
             if (value)
             {
                 bool notAlreadyPresent = connectStates.TryAdd(id, true);
-                TL.LogMessage("Hardware.Connected Set", "Set Connected to: True, AlreadyConnected: " + (!notAlreadyPresent).ToString());
+                TL.LogMessage("Hardware.Connected Set", $"Set Connected to: True, AlreadyConnected: {!notAlreadyPresent}, Connection count: {connectStates.Count}");
             }
             else
             {
                 bool successfullyRemoved = connectStates.TryRemove(id, out _);
-                TL.LogMessage("Hardware.Connected Set", "Set Connected to: False, Successfully removed: " + successfullyRemoved.ToString());
+                TL.LogMessage("Hardware.Connected Set", $"Set Connected to: False, Successfully removed: {successfullyRemoved}, Connection count: {connectStates.Count}");
             }
         }
 

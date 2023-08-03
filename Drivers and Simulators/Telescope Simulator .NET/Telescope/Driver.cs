@@ -70,6 +70,8 @@ namespace ASCOM.Simulator
         private long objectId;
         private bool connecting = false;
 
+        private bool connected = false; // Holds connected state for this instance
+
         // Local copies of the guide rates are kept here because the TelescopeHardware GuideRateRightAscension and GuideRateDeclination values
         // can have their direction signs changed during PulseGuide operations.
         private double currentGuideRateRightAscension;
@@ -610,7 +612,6 @@ namespace ASCOM.Simulator
         {
             get
             {
-                var connected = TelescopeHardware.Connected;
                 SharedResources.TrafficLine(SharedResources.MessageType.Other, "Connected = " + connected.ToString());
                 TelescopeHardware.TL.LogMessage("Connected Get", connected.ToString());
                 return connected;
@@ -620,6 +621,7 @@ namespace ASCOM.Simulator
                 SharedResources.TrafficLine(SharedResources.MessageType.Other, "Set Connected to " + value.ToString());
                 TelescopeHardware.TL.LogMessage("Connected Set", value.ToString());
                 TelescopeHardware.SetConnected(objectId, value);
+                connected = value;
             }
         }
 
