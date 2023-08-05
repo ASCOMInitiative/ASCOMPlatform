@@ -463,6 +463,9 @@ namespace ASCOM.Simulator
 
         public void SetAsync(short id, bool state)
         {
+            // Validate the id parameter
+            Validate("SetAsync", id);
+
             // Convert the bool value to an appropriate double value representing true or false
             SetAsyncValue(id, state ? switches[id].Maximum : switches[id].Minimum);
         }
@@ -510,12 +513,18 @@ namespace ASCOM.Simulator
 
         public bool CanAsync(short id)
         {
+            // Validate the id parameter
+            Validate("CanAsync", id);
+
             // Return the configured CanAsync state
             return switches[id].CanAsync;
         }
 
         public bool StateChangeComplete(short id)
         {
+            // Validate the id parameter
+            Validate("StateChangeComplete", id);
+
             // Throw any exception from the async process (Only OperationCanelledException in this simulator)
             if (!(switches[id].AsyncException is null)) // There is an exception to throw
             {
@@ -528,6 +537,9 @@ namespace ASCOM.Simulator
 
         public void CancelAsync(short id)
         {
+            // Validate the id parameter
+            Validate("CancelAsync", id);
+
             if (!StateChangeComplete(id))
             {
                 switches[id].CancellationTokenSource.Cancel();
