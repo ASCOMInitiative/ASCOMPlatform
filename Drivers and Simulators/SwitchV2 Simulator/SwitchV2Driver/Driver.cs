@@ -87,7 +87,7 @@ namespace ASCOM.Simulator
         {
             driverID = Marshal.GenerateProgIdForType(this.GetType());
             ReadProfile(); // Read device configuration from the ASCOM Profile store
-            tl = new TraceLogger("", "Simulator");
+            tl = new TraceLogger("", "SwitchSimulator");
             tl.Enabled = traceState;
             tl.LogMessage("Switch", "Starting initialisation");
 
@@ -260,7 +260,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// list of switches used for simulation
         /// </summary>
-        internal static List<LocalSwitch> switches;
+        internal static List<SwitchDevice> switches;
 
         /// <summary>
         /// The number of switches managed by this driver
@@ -335,7 +335,7 @@ namespace ASCOM.Simulator
         public bool GetSwitch(short id)
         {
             Validate("GetSwitch", id);
-            LocalSwitch sw = switches[id];
+            SwitchDevice sw = switches[id];
             // returns true if the value is closer to the maximum than the minimum
             return sw.Maximum - sw.Value <= sw.Value - sw.Minimum;
         }
@@ -349,7 +349,7 @@ namespace ASCOM.Simulator
         public void SetSwitch(short id, bool state)
         {
             Validate("SetSwitch", id);
-            LocalSwitch sw = switches[id];
+            SwitchDevice sw = switches[id];
             sw.SetValue(state ? sw.Maximum : sw.Minimum, "SetSwitch");
         }
 
@@ -477,12 +477,31 @@ namespace ASCOM.Simulator
 
             // Validate the incoming state value
             switches[id].SetValueValidate(value, "SetAsyncValue");
+            tl.LogMessage("SetAsyncValue", $"Entry - cancellation token is none: {switches[id].CancellationToken == CancellationToken.None}, State change complete: {switches[id].StateChangeComplete}");
 
-            // Check whether an async operation is already running, if so cancel it and start this new one.
-            if (!StateChangeComplete(id)) // An operation is running
+            // If an async operation is already running cancel it
+            if (switches[id].CancellationToken != CancellationToken.None)
             {
-                // Cancel the operation's task
+                tl.LogMessage("SetAsyncValue", $"Before cancellation - cancellation token is none: {switches[id].CancellationToken == CancellationToken.None}, State change complete: {switches[id].StateChangeComplete}");
                 switches[id].CancellationTokenSource.Cancel();
+                tl.LogMessage("SetAsyncValue", $"After cancellation - cancellation token is none: {switches[id].CancellationToken == CancellationToken.None}, State change complete: {switches[id].StateChangeComplete}");
+
+                // Wait for the task to cancel
+                Stopwatch sw = Stopwatch.StartNew();
+                tl.LogMessage("SetAsyncValue", $"Started waiting for task to complete");
+                try
+                {
+                    Task.WaitAny(switches[id].Task);
+                }
+                catch (Exception e)
+                {
+                    tl.LogMessageCrLf("SetAsyncValue", $"Waiting for previous task to complete: {e.Message}\r\n{e}");
+                }
+                tl.LogMessage("SetAsyncValue", $"Finished waiting for task to complete. Wait duration: {sw.ElapsedMilliseconds}ms.");
+
+
+                //Thread.Sleep(100); // Wait for a short while for cancellation to happen
+                tl.LogMessage("SetAsyncValue", $"After wait - cancellation token is none: {switches[id].CancellationToken == CancellationToken.None}, State change complete: {switches[id].StateChangeComplete}");
             }
 
             // Flag that an operation is underway
@@ -493,22 +512,36 @@ namespace ASCOM.Simulator
 
             // Create a cancellation token source and save it for use if CancelAsync is called for this switch
             CancellationTokenSource cts = new CancellationTokenSource();
+
             switches[id].CancellationTokenSource = cts;
+            switches[id].CancellationToken = cts.Token;
 
             // Create a task to set the switch state asynchronously
-            Task.Run(() =>
+            tl.LogMessage("SetAsyncValue", $"Running task - cancellation token is none: {switches[id].CancellationToken == CancellationToken.None}, State change complete: {switches[id].StateChangeComplete}");
+            switches[id].Task = Task.Run(() =>
             {
                 try
                 {
-                    // Start the switch operation as its own asynchronous task
+                    // Start the switch operation
+                    Stopwatch sw = Stopwatch.StartNew();
+                    tl.LogMessage("SetAsyncValueTask", $"Starting SetValue");
                     switches[id].SetValue(value, "SetAsyncValue");
+                    tl.LogMessage("SetAsyncValueTask", $"SetValue completed in {sw.Elapsed.TotalSeconds:0.00} seconds.");
                 }
                 finally // Ensure that the operation complete flag is always set
                 {
+                    // Clear the cancellation token to show that no task is running for this switch
+                    tl.LogMessage("SetAsyncValueTask", $"Clearing cancellation token");
+                    switches[id].CancellationToken = CancellationToken.None;
+
                     // Set the operation complete flag
+                    tl.LogMessage("SetAsyncValueTask", $"Setting state change complete.");
                     switches[id].StateChangeComplete = true;
                 }
-            }, cts.Token);
+            }, switches[id].CancellationToken);
+
+            tl.LogMessage("SetAsyncValue", $"Exit - cancellation token is none: {switches[id].CancellationToken == CancellationToken.None}, State change complete: {switches[id].StateChangeComplete}");
+
         }
 
         public bool CanAsync(short id)
@@ -540,10 +573,25 @@ namespace ASCOM.Simulator
             // Validate the id parameter
             Validate("CancelAsync", id);
 
-            if (!StateChangeComplete(id))
+            if (switches[id].CancellationToken != CancellationToken.None)
             {
                 switches[id].CancellationTokenSource.Cancel();
                 switches[id].AsyncException = new OperationCancelledException($"The asynchronous operation for switch {id} was cancelled.");
+
+                // Wait for the task to cancel
+                Stopwatch sw = Stopwatch.StartNew();
+                tl.LogMessage("CancelAsync", $"Started waiting for task to complete");
+                try
+                {
+                    Task.WaitAny(switches[id].Task);
+                }
+                catch (Exception e)
+                {
+                    tl.LogMessageCrLf("CancelAsync", $"Waiting for previous task to complete: {e.Message}\r\n{e}");
+                }
+                tl.LogMessage("CancelAsync", $"Finished waiting for task to complete. Wait duration: {sw.ElapsedMilliseconds}ms.");
+
+
             }
         }
 
@@ -632,13 +680,13 @@ namespace ASCOM.Simulator
                 traceState = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateProfileName, string.Empty, traceStateDefault));
                 exposeOCHState = Convert.ToBoolean(driverProfile.GetValue(driverID, EXPOSE_OCHTAG_NAME, string.Empty, EXPOSE_OCHTAG_DEFAULT.ToString()));
 
-                switches = new List<LocalSwitch>();
+                switches = new List<SwitchDevice>();
                 int numSwitch;
                 if (int.TryParse(driverProfile.GetValue(driverID, "NumSwitches"), out numSwitch))
                 {
                     for (short i = 0; i < numSwitch; i++)
                     {
-                        switches.Add(new LocalSwitch(driverProfile, driverID, i));
+                        switches.Add(new SwitchDevice(driverProfile, driverID, i));
                     }
                 }
                 else
@@ -670,17 +718,17 @@ namespace ASCOM.Simulator
         /// </summary>
         private void LoadDefaultSwitches()
         {
-            switches.Add(new LocalSwitch("Power1") { Description = "Generic power switch" });
-            switches.Add(new LocalSwitch("Power2") { Description = "Generic Power switch" });
-            switches.Add(new LocalSwitch("Light Box", 100, 0, 10, 0, false, 0) { Description = "Light box , 0 to 100%" });
-            switches.Add(new LocalSwitch("Flat Panel", 255, 0, 1, 0, false, 0) { Description = "Flat panel , 0 to 255" });
-            switches.Add(new LocalSwitch("Scope Cover") { Description = "Scope cover control true is closed, false is open" });
-            switches.Add(new LocalSwitch("Scope Parked") { Description = "Scope parked switch, true if parked", CanWrite = false });
-            switches.Add(new LocalSwitch("Cloudy", 2, 0, 1, 0, false, 0) { Description = "Cloud monitor: 0=clear, 1=light cloud, 2= heavy cloud" });
-            switches.Add(new LocalSwitch("Temperature", 30, -20, 0.1, 12, false, false, 0) { Description = "Temperature in deg C" });
-            switches.Add(new LocalSwitch("Humidity", 100, 0, 1, 50, false, false, 0) { Description = "Relative humidity %" });
-            switches.Add(new LocalSwitch("Raining") { Description = "Rain monitor, true if raining", CanWrite = false, CanAsync = false });
-            switches.Add(new LocalSwitch("Async") { Description = "Long running asynchronous operation", CanWrite = false, CanAsync = true, AsyncDuration = 3.0 });
+            switches.Add(new SwitchDevice("Power1") { Description = "Generic power switch" });
+            switches.Add(new SwitchDevice("Power2") { Description = "Generic Power switch" });
+            switches.Add(new SwitchDevice("Light Box", 100, 0, 10, 0, false, 0) { Description = "Light box , 0 to 100%" });
+            switches.Add(new SwitchDevice("Flat Panel", 255, 0, 1, 0, false, 0) { Description = "Flat panel , 0 to 255" });
+            switches.Add(new SwitchDevice("Scope Cover") { Description = "Scope cover control true is closed, false is open" });
+            switches.Add(new SwitchDevice("Scope Parked") { Description = "Scope parked switch, true if parked", CanWrite = false });
+            switches.Add(new SwitchDevice("Cloudy", 2, 0, 1, 0, false, 0) { Description = "Cloud monitor: 0=clear, 1=light cloud, 2= heavy cloud" });
+            switches.Add(new SwitchDevice("Temperature", 30, -20, 0.1, 12, false, false, 0) { Description = "Temperature in deg C" });
+            switches.Add(new SwitchDevice("Humidity", 100, 0, 1, 50, false, false, 0) { Description = "Relative humidity %" });
+            switches.Add(new SwitchDevice("Raining") { Description = "Rain monitor, true if raining", CanWrite = false, CanAsync = false });
+            switches.Add(new SwitchDevice("Async") { Description = "Long running asynchronous operation", CanWrite = false, CanAsync = true, AsyncDuration = 3.0 });
         }
 
         #endregion

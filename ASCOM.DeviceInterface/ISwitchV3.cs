@@ -427,6 +427,7 @@ namespace ASCOM.DeviceInterface
         #endregion
 
         #region ISwitchV3  members
+
         /// <summary>
         /// Connect to the device asynchronously
         /// </summary>

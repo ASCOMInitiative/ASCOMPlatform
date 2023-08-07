@@ -101,9 +101,9 @@ namespace ASCOM.Simulator
                 if (row.IsNewRow)
                     continue;
                 string reason;
-                if (LocalSwitch.IsValid(row.Cells, out reason))
+                if (SwitchDevice.IsValid(row.Cells, out reason))
                 {
-                    Switch.switches.Add(new LocalSwitch(row.Cells));
+                    Switch.switches.Add(new SwitchDevice(row.Cells));
                 }
                 else
                 {
@@ -251,7 +251,7 @@ namespace ASCOM.Simulator
             var row = dataGridViewSwitches.Rows[e.RowIndex];
             if (row.IsNewRow) return;
             string reason;
-            if (LocalSwitch.IsValid(row.Cells, out reason))
+            if (SwitchDevice.IsValid(row.Cells, out reason))
             {
                 row.ErrorText = "";
             }
