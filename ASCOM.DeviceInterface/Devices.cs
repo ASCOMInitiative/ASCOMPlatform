@@ -48,7 +48,7 @@ namespace ASCOM.DeviceInterface
         }
 
         /// <summary>
-        /// Convert a string device name to a <see cref="DeviceType"/> enum value.
+        /// Extension method that converts a string device name to a <see cref="DeviceType"/> enum value.
         /// </summary>
         /// <param name="device">Device type</param>
         /// <returns>DeviceTypes enum value corresponding to the given string device name</returns>
@@ -63,12 +63,12 @@ namespace ASCOM.DeviceInterface
             catch (Exception ex)// Bad value to return an exception
             {
                 // Failed to parse so return an excpeiton and include the parser exception
-                throw new InvalidValueException($"Devices.StringToDeviceType - Device type: {device} is not an ASCOM device type. Parser failure message: {ex.Message}.", ex);
+                throw new InvalidValueException($"Devices.ToDeviceType - Device type: {device} is not an ASCOM device type. Parser failure message: {ex.Message}.", ex);
             }
         }
 
         /// <summary>
-        /// Convert a <see cref="DeviceType"/> enum value to a string
+        /// Extension method that converts a <see cref="DeviceType"/> enum value to a string
         /// </summary>
         /// <param name="deviceType">Device type</param>
         /// <returns>String device type name corresponding to the given DeviceTypes enum value</returns>
@@ -81,7 +81,7 @@ namespace ASCOM.DeviceInterface
             if (deviceTypeString != null) return deviceTypeString; // OK
 
             // Bad value to return an exception
-            throw new InvalidValueException($"Devices.DeviceTypeToString - Supplied DeviceTypes enum value {(int)deviceType} is not a valid member of the DeviceTypes enum.");
+            throw new InvalidValueException($"Devices.ToDeviceString - Supplied DeviceType enum value {(int)deviceType} is not a valid member of the DeviceTypes enum.");
         }
     }
 }
