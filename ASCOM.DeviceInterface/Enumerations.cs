@@ -625,4 +625,67 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         SlewToTargetAsync = 32
     }
+
+    /// <summary>
+    /// ASCOM device type
+    /// </summary>
+    [Guid("85E6E5B4-603A-40D1-A320-F87ECB90DF9B")]
+    [ComVisible(true)]
+    public enum DeviceType
+    {
+        /// <summary>
+        /// Camera device
+        /// </summary>
+        Camera,
+
+        /// <summary>
+        /// CoverCalibrator device
+        /// </summary>
+        CoverCalibrator,
+
+        /// <summary>
+        /// Dome device
+        /// </summary>
+        Dome,
+
+        /// <summary>
+        /// FilterWheel device
+        /// </summary>
+        FilterWheel,
+
+        /// <summary>
+        /// Focuser device
+        /// </summary>
+        Focuser,
+
+        /// <summary>
+        /// ObservingConditions device
+        /// </summary>
+        ObservingConditions,
+
+        /// <summary>
+        /// Rotator device
+        /// </summary>
+        Rotator,
+
+        /// <summary>
+        /// SafetyMonitor device
+        /// </summary>
+        SafetyMonitor,
+
+        /// <summary>
+        /// Switch device
+        /// </summary>
+        Switch,
+
+        /// <summary>
+        /// Telescope device
+        /// </summary>
+        Telescope,
+
+        /// <summary>
+        /// Video device
+        /// </summary>
+        Video
+    }
 }

@@ -323,7 +323,7 @@ namespace ASCOM.DynamicRemoteClients
         public void Connect()
         {
             // Call the device's Connect method if this is a Platform 7 or later device, otherwise simulate the connect call
-            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device
+            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device
             {
                 TL.LogMessage("Connect", "Issuing Connect command");
                 DynamicClientDriver.SetClientTimeout(client, establishConnectionTimeout);
@@ -366,7 +366,7 @@ namespace ASCOM.DynamicRemoteClients
         public void Disconnect()
         {
             // Call the device's Disconnect method if this is a Platform 7 or later device, otherwise simulate the connect call
-            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device
+            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device
             {
                 TL.LogMessage("Disconnect", "Issuing Disconnect command");
                 DynamicClientDriver.SetClientTimeout(client, establishConnectionTimeout);
@@ -411,7 +411,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 // Call the device's Connecting method if this is a Platform 7 or later device, otherwise return False
-                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device
+                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device
                 {
                     TL.LogMessage("Connecting Get", "Issuing Connecting command");
                     DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
@@ -436,7 +436,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 // Call the device's DeviceState method if this is a Platform 7 or later device, otherwise simulate the DeviceState method
-                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device
+                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device
                 {
                     try
                     {

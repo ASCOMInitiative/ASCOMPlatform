@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DeviceCapabilities.cs" />
+    <Compile Include="Devices.cs" />
     <Compile Include="ICameraV4.cs" />
     <Compile Include="ICoverCalibratorV2.cs" />
     <Compile Include="IDomeV3.cs" />

@@ -59,6 +59,7 @@
     <Compile Include="Dome Base Class.cs" />
     <Compile Include="FilterWheel Base Class.cs" />
     <Compile Include="Focuser Base Class.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ObservingConditions Base Class.cs" />
     <Compile Include="Rotator Base Class.cs" />
     <Compile Include="SafetyMonitor Base Class.cs" />

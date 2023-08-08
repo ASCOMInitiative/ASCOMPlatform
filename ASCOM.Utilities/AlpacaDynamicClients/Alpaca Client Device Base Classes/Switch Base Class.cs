@@ -401,7 +401,7 @@ namespace ASCOM.DynamicRemoteClients
         public void Connect()
         {
             // Call the device's Connect method if this is a Platform 7 or later device, otherwise simulate the connect call
-            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device
+            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device
             {
                 TL.LogMessage("Connect", "Issuing Connect command");
                 DynamicClientDriver.SetClientTimeout(client, establishConnectionTimeout);
@@ -444,7 +444,7 @@ namespace ASCOM.DynamicRemoteClients
         public void Disconnect()
         {
             // Call the device's Disconnect method if this is a Platform 7 or later device, otherwise simulate the connect call
-            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device
+            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device
             {
                 TL.LogMessage("Disconnect", "Issuing Disconnect command");
                 DynamicClientDriver.SetClientTimeout(client, establishConnectionTimeout);
@@ -489,7 +489,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 // Call the device's Connecting method if this is a Platform 7 or later device, otherwise return False
-                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device
+                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device
                 {
                     TL.LogMessage("Connecting Get", "Issuing Connecting command");
                     DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
@@ -514,7 +514,7 @@ namespace ASCOM.DynamicRemoteClients
             get
             {
                 // Call the device's DeviceState method if this is a Platform 7 or later device, otherwise simulate the DeviceState method
-                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device
+                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device
                 {
                     try
                     {
@@ -537,7 +537,7 @@ namespace ASCOM.DynamicRemoteClients
         public void SetAsync(short id, bool state)
         {
             // Call the device's SetAsync method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
-            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
+            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
             {
                 TL.LogMessage("SetAsync", "Issuing SetAsync command");
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
@@ -552,7 +552,7 @@ namespace ASCOM.DynamicRemoteClients
         public void SetAsyncValue(short id, double value)
         {
             // Call the device's SetAsyncValue method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
-            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
+            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
             {
                 TL.LogMessage("SetAsyncValue", "Issuing SetAsyncValue command");
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
@@ -567,7 +567,7 @@ namespace ASCOM.DynamicRemoteClients
         public bool CanAsync(short id)
         {
             // Call the device's SetAsyncValue method if this is a Platform 7 or later device, otherwise return false to indicate no async capability.
-            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
+            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
             {
                 TL.LogMessage("CanAsync", "Getting CanAsync property");
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
@@ -581,7 +581,7 @@ namespace ASCOM.DynamicRemoteClients
         public bool StateChangeComplete(short id)
         {
             // Call the device's StateChangeComplete method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
-            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
+            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
             {
                 TL.LogMessage("StateChangeComplete", "Getting StateChangeComplete property");
                 DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
@@ -595,7 +595,7 @@ namespace ASCOM.DynamicRemoteClients
         public void CancelAsync(short id)
         {
             // Call the device's CancelAsync method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
-            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
+            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
             {
                 TL.LogMessage("CancelAsync", "Issuing CancelAsync command");
                 Dictionary<string, string> Parameters = new Dictionary<string, string>() { { AlpacaConstants.ID_PARAMETER_NAME, id.ToString() } };
