@@ -62,7 +62,7 @@ namespace ASCOM.DeviceInterface
             }
             catch (Exception ex)// Bad value to return an exception
             {
-                // Failed to parse so return an excpeiton and include the parser exception
+                // Failed to parse so return an exception and include the parser exception
                 throw new InvalidValueException($"Devices.ToDeviceType - Device type: {device} is not an ASCOM device type. Parser failure message: {ex.Message}.", ex);
             }
         }
