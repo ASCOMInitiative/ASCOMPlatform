@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ASCOM.Controls
+﻿namespace ASCOM.Controls
 {
     ///<summary>
     /// The TrafficLight enumeration may be used in any situation where a Normal/Warning/Error status indication is needed.

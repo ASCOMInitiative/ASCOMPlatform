@@ -1,32 +1,29 @@
-﻿using ASCOM.DeviceInterface;
-using ASCOM.Utilities;
+﻿using ASCOM.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace ASCOM.DriverAccess
+namespace ASCOM.DeviceInterface.DeviceState
 {
     /// <summary>
     /// Class that presents the device's operation state as a set of nullable properties
     /// </summary>
-    public class DomeState
+    public class CoverCalibratorState
     {
         // Assign the name of this class
-        string className = nameof(DomeState);
+        string className = nameof(CoverCalibratorState);
 
         /// <summary>
-        /// Create a new DomeState instance
+        /// Create a new CoverCalibratorState instance
         /// </summary>
-        public DomeState() { }
+        public CoverCalibratorState() { }
 
         /// <summary>
-        /// Create a new DomeState instance from the device's DeviceState response.
+        /// Create a new CoverCalibratorState instance from the device's DeviceState response.
         /// </summary>
         /// <param name="deviceStateArrayList">The device's DeviceState response.</param>
         /// <param name="TL">Debug TraceLogger instance.</param>
-        public DomeState(ArrayList deviceStateArrayList, TraceLogger TL)
+        public CoverCalibratorState(ArrayList deviceStateArrayList, TraceLogger TL)
         {
             TL?.LogMessage(className, $"Received {deviceStateArrayList.Count} items");
 
@@ -39,8 +36,6 @@ namespace ASCOM.DriverAccess
                 return;
             }
 
-            TL?.LogMessage(className, $"ArrayList from device contained {deviceStateArrayList.Count} DeviceSate items.");
-
             // An ArrayList was supplied so process each supplied value
             foreach (IStateValue stateValue in deviceStateArrayList)
             {
@@ -51,78 +46,65 @@ namespace ASCOM.DriverAccess
 
                     switch (stateValue.Name)
                     {
-                        case nameof(IDomeV3.Altitude):
+                        case nameof(ICoverCalibratorV2.Brightness):
                             try
                             {
-                                Altitude = (double)stateValue.Value;
+                                Brightness = (int)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"Altitude - Ignoring exception: {ex.Message}");
+                                TL?.LogMessage(className, $"Brightness - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Altitude has value: {Altitude.HasValue}, Value: {Altitude}");
+                            TL?.LogMessage(className, $"Brightness has value: {Brightness.HasValue}, Value: {Brightness}");
                             break;
 
-                        case nameof(IDomeV3.AtHome):
+                        case nameof(ICoverCalibratorV2.CalibratorState):
                             try
                             {
-                                AtHome = (bool)stateValue.Value;
+                                CalibratorState = (CalibratorStatus)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"AtHome - Ignoring exception: {ex.Message}");
+                                TL?.LogMessage(className, $"CalibratorState - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"AtHome has value: {AtHome.HasValue}, Value: {AtHome}");
+                            TL?.LogMessage(className, $"CalibratorState has value: {CalibratorState.HasValue}, Value: {CalibratorState}");
                             break;
 
-                        case nameof(IDomeV3.AtPark):
+                        case nameof(ICoverCalibratorV2.CoverState):
                             try
                             {
-                                AtPark = (bool)stateValue.Value;
+                                CoverState = (CoverStatus)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"AtPark - Ignoring exception: {ex.Message}");
+                                TL?.LogMessage(className, $"CoverState - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"AtPark has value: {AtPark.HasValue}, Value: {AtPark}");
+                            TL?.LogMessage(className, $"CoverState has value: {CoverState.HasValue}, Value: {CoverState}");
                             break;
 
-                        case nameof(IDomeV3.Azimuth):
+                        case nameof(ICoverCalibratorV2.CalibratorReady):
                             try
                             {
-                                Azimuth = (double)stateValue.Value;
+                                CalibratorReady = (bool)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"Azimuth - Ignoring exception: {ex.Message}");
+                                TL?.LogMessage(className, $"CalibratorReady - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Azimuth has value: {Azimuth.HasValue}, Value: {Azimuth}");
+                            TL?.LogMessage(className, $"CalibratorReady has value: {CalibratorReady.HasValue}, Value: {CalibratorReady}");
                             break;
 
-                        case nameof(IDomeV3.ShutterStatus):
+                        case nameof(ICoverCalibratorV2.CoverMoving):
                             try
                             {
-                                ShutterStatus = (ShutterState)stateValue.Value;
+                                CoverMoving = (bool)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"Declination - Ignoring exception: {ex.Message}");
+                                TL?.LogMessage(className, $"CoverMoving - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"ShutterStatus has value: {ShutterStatus.HasValue}, Value: {ShutterStatus}");
+                            TL?.LogMessage(className, $"CoverMoving has value: {CoverMoving.HasValue}, Value: {CoverMoving}");
                             break;
-
-                        case nameof(IDomeV3.Slewing):
-                            try
-                            {
-                                Slewing = (bool)stateValue.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage(className, $"Slewing - Ignoring exception: {ex.Message}");
-                            }
-                            TL.LogMessage(className, $"Slewing has value: {Slewing.HasValue}, Value: {Slewing.Value}");
-                            break;
-
 
                         case "TimeStamp":
                             try
@@ -131,9 +113,9 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"TimeStamp - Ignoring exception: {ex.Message}");
+                                TL?.LogMessage(className, $"TimeStamp - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"TimeStamp has value: {TimeStamp.HasValue}, Value: {TimeStamp}");
+                            TL?.LogMessage(className, $"TimeStamp has value: {TimeStamp.HasValue}, Value: {TimeStamp}");
                             break;
 
                         default:
@@ -149,38 +131,34 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Dome altitude
+        /// The device's Brightness
         /// </summary>
-        public double? Altitude { get; set; } = null;
+        public double? Brightness { get; set; } = null;
 
         /// <summary>
-        /// Dome is at home
+        /// The device's CalibratorState
         /// </summary>
-        public bool? AtHome { get; set; } = null;
+        public CalibratorStatus? CalibratorState { get; set; } = null;
 
         /// <summary>
-        /// Dome is parked
+        /// The device's CoverState
         /// </summary>
-        public bool? AtPark { get; set; } = null;
+        public CoverStatus? CoverState { get; set; } = null;
 
         /// <summary>
-        /// Dome azimuth
+        /// The device's CalibratorReady state
         /// </summary>
-        public double? Azimuth { get; set; } = null;
+        public bool? CalibratorReady { get; set; } = null;
 
         /// <summary>
-        /// Dome shutter state
+        /// The device's CoverMoving state
         /// </summary>
-        public ShutterState? ShutterStatus { get; set; } = null;
-
-        /// <summary>
-        /// Dome is slewing
-        /// </summary>
-        public bool? Slewing { get; set; } = null;
+        public bool? CoverMoving { get; set; } = null;
 
         /// <summary>
         /// The time at which the state was recorded
         /// </summary>
         public DateTime? TimeStamp { get; set; } = null;
+
     }
 }

@@ -17,7 +17,6 @@
 using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 using System.Collections;
-using ASCOM;
 using System;
 
 namespace ASCOM.Simulator

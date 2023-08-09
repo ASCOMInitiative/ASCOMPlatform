@@ -22,7 +22,6 @@
 
 using System;
 using System.Collections;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -37,18 +36,18 @@ using static System.FormattableString;
 
 namespace ASCOM.DeviceHub
 {
-	//
-	// Your driver's DeviceID is ASCOM.DeviceHub.Telescope
-	//
-	// The Guid attribute sets the CLSID for ASCOM.DeviceHub.Telescope
-	// The ClassInterface/None attribute prevents an empty interface called
-	// _DeviceHub from being created and used as the [default] interface
-	//
+    //
+    // Your driver's DeviceID is ASCOM.DeviceHub.Telescope
+    //
+    // The Guid attribute sets the CLSID for ASCOM.DeviceHub.Telescope
+    // The ClassInterface/None attribute prevents an empty interface called
+    // _DeviceHub from being created and used as the [default] interface
+    //
 
-	/// <summary>
-	/// ASCOM Telescope Driver for DeviceHub.
-	/// </summary>
-	[ComVisible(true)]
+    /// <summary>
+    /// ASCOM Telescope Driver for DeviceHub.
+    /// </summary>
+    [ComVisible(true)]
 	[Guid( "ad3ff473-56b5-4e04-af93-185d9cb42395" )]
 	[ProgId( "ASCOM.DeviceHub.Telescope" )]
 	[ServedClassName( "Device Hub Telescope" )]

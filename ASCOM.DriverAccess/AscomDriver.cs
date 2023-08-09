@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ASCOM.Utilities;
 using System.Collections;
-using System.Globalization;
-using System.Runtime.CompilerServices;
-using System.Diagnostics.Eventing.Reader;
 using System.Threading.Tasks;
-using ASCOM.DeviceInterface;
-using System.Runtime.Remoting.Messaging;
 
 namespace ASCOM.DriverAccess
 {

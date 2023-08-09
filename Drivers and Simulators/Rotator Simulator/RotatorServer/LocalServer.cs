@@ -20,17 +20,15 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Security;
 using System.Security.Principal;
 using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Win32;
-using Helper = ASCOM.Utilities;
 using ASCOM.Utilities;
 
 namespace ASCOM.Simulator
 {
-	public class RotatorSimulator
+    public class RotatorSimulator
 	{
 
 		#region Access to kernel32.dll, user32.dll, and ole32.dll functions

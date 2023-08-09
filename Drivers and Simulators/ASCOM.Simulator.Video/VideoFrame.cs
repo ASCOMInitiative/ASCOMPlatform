@@ -14,17 +14,11 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using ASCOM.DeviceInterface;
 using Simulator.VideoCameraImpl;
 
 namespace ASCOM.Simulator
 {
-	public class VideoFrame : ASCOM.DeviceInterface.IVideoFrame
+    public class VideoFrame : ASCOM.DeviceInterface.IVideoFrame
 	{
 		private long? frameNumber;
 		private string imageInfo;

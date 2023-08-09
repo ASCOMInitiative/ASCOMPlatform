@@ -5,7 +5,6 @@ using System.Threading;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using ASCOM.Utilities;
 using ASCOM.Utilities.Exceptions;
 
 namespace ASCOM.Utilities

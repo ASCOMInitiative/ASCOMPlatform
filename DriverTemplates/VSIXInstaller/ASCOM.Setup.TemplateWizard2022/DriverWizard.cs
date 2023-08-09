@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TemplateWizard;
 using System.Windows.Forms;
 using EnvDTE;
-using EnvDTE80;
 using System.IO;
-using System.Diagnostics;
 
 namespace ASCOM.Setup
 {

@@ -6,8 +6,8 @@
 
 using System;
 using ASCOM.DeviceInterface;
+using ASCOM.DeviceInterface.DeviceState;
 using ASCOM.Utilities;
-using System.Globalization;
 
 namespace ASCOM.DriverAccess
 {

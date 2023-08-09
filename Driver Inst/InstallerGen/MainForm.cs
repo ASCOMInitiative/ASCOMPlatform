@@ -1,15 +1,10 @@
 using System;
-using System.Collections;
 //using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.IO;
 using System.Reflection;
 using System.Diagnostics;
-using System.Globalization;
 
 namespace ASCOM.InstallerGen
 {

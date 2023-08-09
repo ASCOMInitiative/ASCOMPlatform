@@ -1,5 +1,4 @@
-﻿using ASCOM;
-using ASCOM.DriverAccess;
+﻿using ASCOM.DriverAccess;
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;

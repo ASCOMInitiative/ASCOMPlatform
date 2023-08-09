@@ -1,32 +1,29 @@
-﻿using ASCOM.DeviceInterface;
-using ASCOM.Utilities;
+﻿using ASCOM.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace ASCOM.DriverAccess
+namespace ASCOM.DeviceInterface.DeviceState
 {
     /// <summary>
     /// Class that presents the device's operation state as a set of nullable properties
     /// </summary>
-    public class FocuserState
+    public class FilterWheelState
     {
         // Assign the name of this class
         string className = nameof(FilterWheelState);
 
         /// <summary>
-        /// Create a new FocuserState instance
+        /// Create a new FilterWheelState instance
         /// </summary>
-        public FocuserState() { }
+        public FilterWheelState() { }
 
         /// <summary>
-        /// Create a new FocuserState instance from the device's DeviceState response.
+        /// Create a new FilterWheelState instance from the device's DeviceState response.
         /// </summary>
         /// <param name="deviceStateArrayList">The device's DeviceState response.</param>
         /// <param name="TL">Debug TraceLogger instance.</param>
-        public FocuserState(ArrayList deviceStateArrayList, TraceLogger TL)
+        public FilterWheelState(ArrayList deviceStateArrayList, TraceLogger TL)
         {
             TL?.LogMessage(className, $"Received {deviceStateArrayList.Count} items");
 
@@ -51,40 +48,16 @@ namespace ASCOM.DriverAccess
 
                     switch (stateValue.Name)
                     {
-                        case nameof(IFocuserV4.IsMoving):
+                        case nameof(IFilterWheelV3.Position):
                             try
                             {
-                                IsMoving = (bool)stateValue.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage(className, $"IsMoving - Ignoring exception: {ex.Message}");
-                            }
-                            TL.LogMessage(className, $"IsMoving has value: {IsMoving.HasValue}, Value: {IsMoving}");
-                            break;
-
-                        case nameof(IFocuserV4.Position):
-                            try
-                            {
-                                Position = (int)stateValue.Value;
+                                Position = (short)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
                                 TL.LogMessage(className, $"Position - Ignoring exception: {ex.Message}");
                             }
                             TL.LogMessage(className, $"Position has value: {Position.HasValue}, Value: {Position}");
-                            break;
-
-                        case nameof(IFocuserV4.Temperature):
-                            try
-                            {
-                                Temperature = (double)stateValue.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage(className, $"Temperature - Ignoring exception: {ex.Message}");
-                            }
-                            TL.LogMessage(className, $"Temperature has value: {Position.HasValue}, Value: {Position}");
                             break;
 
                         case "TimeStamp":
@@ -112,19 +85,9 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Focuser IsMoving state
+        /// FilterWheel position
         /// </summary>
-        public bool? IsMoving { get; set; } = null;
-
-        /// <summary>
-        /// Focuser position
-        /// </summary>
-        public int? Position { get; set; } = null;
-
-        /// <summary>
-        /// Focuser temperature
-        /// </summary>
-        public double? Temperature { get; set; } = null;
+        public double? Position { get; set; } = null;
 
         /// <summary>
         /// The time at which the state was recorded

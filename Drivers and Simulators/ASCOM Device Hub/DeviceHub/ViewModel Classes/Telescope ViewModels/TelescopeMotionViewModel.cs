@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,7 +11,7 @@ using ASCOM.DeviceInterface;
 
 namespace ASCOM.DeviceHub
 {
-	public class TelescopeMotionViewModel : DeviceHubViewModelBase
+    public class TelescopeMotionViewModel : DeviceHubViewModelBase
 	{
 		private const string _errorCaption = "Telescope Driver Error";
 

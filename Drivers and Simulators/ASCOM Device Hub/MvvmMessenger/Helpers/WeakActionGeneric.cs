@@ -16,19 +16,18 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 // ReSharper disable RedundantUsingDirective
-using System.Reflection;
 
 // ReSharper restore RedundantUsingDirective
 
 namespace ASCOM.DeviceHub.MvvmMessenger.Helpers
 {
-	/// <summary>
-	/// Stores an Action without causing a hard reference
-	/// to be created to the Action's owner. The owner can be garbage collected at any time.
-	/// </summary>
-	/// <typeparam name="T">The type of the Action's parameter.</typeparam>
-	////[ClassInfo(typeof(WeakAction))]
-	public class WeakAction<T> : WeakAction, IExecuteWithObject
+    /// <summary>
+    /// Stores an Action without causing a hard reference
+    /// to be created to the Action's owner. The owner can be garbage collected at any time.
+    /// </summary>
+    /// <typeparam name="T">The type of the Action's parameter.</typeparam>
+    ////[ClassInfo(typeof(WeakAction))]
+    public class WeakAction<T> : WeakAction, IExecuteWithObject
     {
         private Action<T> _staticAction;
 

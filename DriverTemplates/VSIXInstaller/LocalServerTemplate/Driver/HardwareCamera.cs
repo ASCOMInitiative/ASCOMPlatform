@@ -6,7 +6,6 @@ using ASCOM.DeviceInterface;
 using System;
 using System.Collections;
 using ASCOM;
-using ASCOM.Utilities;
 
 static class CameraHardware
 {

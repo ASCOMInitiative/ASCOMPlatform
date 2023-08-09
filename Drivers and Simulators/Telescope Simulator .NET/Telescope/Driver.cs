@@ -27,13 +27,10 @@ using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
-using System.Windows.Markup.Primitives;
 using System.Windows.Forms;
-using System.Diagnostics.Eventing.Reader;
 
 namespace ASCOM.Simulator
 {

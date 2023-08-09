@@ -1,32 +1,29 @@
-﻿using ASCOM.DeviceInterface;
-using ASCOM.Utilities;
+﻿using ASCOM.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace ASCOM.DriverAccess
+namespace ASCOM.DeviceInterface.DeviceState
 {
     /// <summary>
     /// Class that presents the device's operation state as a set of nullable properties
     /// </summary>
-    public class TelescopeState
+    public class ObservingConditionsState
     {
         // Assign the name of this class
-        string className = nameof(TelescopeState);
+        string className = nameof(ObservingConditionsState);
 
         /// <summary>
-        /// Create a new TelescopeState instance
+        /// Create a new ObservingConditionsState instance
         /// </summary>
-        public TelescopeState() { }
+        public ObservingConditionsState() { }
 
         /// <summary>
-        /// Create a new TelescopeState instance from the device's DeviceState response.
+        /// Create a new ObservingConditionsState instance from the device's DeviceState response.
         /// </summary>
         /// <param name="deviceStateArrayList">The device's DeviceState response.</param>
         /// <param name="TL">Debug TraceLogger instance.</param>
-        public TelescopeState(ArrayList deviceStateArrayList, TraceLogger TL)
+        public ObservingConditionsState(ArrayList deviceStateArrayList, TraceLogger TL)
         {
             TL?.LogMessage(className, $"Received {deviceStateArrayList.Count} items");
 
@@ -51,148 +48,160 @@ namespace ASCOM.DriverAccess
 
                     switch (stateValue.Name)
                     {
-                        case nameof(ITelescopeV4.Altitude):
+                        case nameof(IObservingConditionsV2.CloudCover):
                             try
                             {
-                                Altitude = (double)stateValue.Value;
+                                CloudCover = (double)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"Altitude - Ignoring exception: {ex.Message}");
+                                TL.LogMessage(className, $"CloudCover - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Altitude has value: {Altitude.HasValue}, Value: {Altitude}");
+                            TL.LogMessage(className, $"CloudCover has value: {CloudCover.HasValue}, Value: {CloudCover}");
                             break;
 
-                        case nameof(ITelescopeV4.AtHome):
+                        case nameof(IObservingConditionsV2.DewPoint):
                             try
                             {
-                                AtHome = (bool)stateValue.Value;
+                                DewPoint = (double)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"AtHome - Ignoring exception: {ex.Message}");
+                                TL.LogMessage(className, $"DewPoint - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"AtHome has value: {AtHome.HasValue}, Value: {AtHome}");
+                            TL.LogMessage(className, $"DewPoint has value: {DewPoint.HasValue} , Value:  {DewPoint}");
                             break;
 
-                        case nameof(ITelescopeV4.AtPark):
+                        case nameof(IObservingConditionsV2.Humidity):
                             try
                             {
-                                AtPark = (bool)stateValue.Value;
+                                Humidity = (double)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"AtPark - Ignoring exception: {ex.Message}");
+                                TL.LogMessage(className, $"Humidity - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"AtPark has value: {AtPark.HasValue}, Value: {AtPark}");
+                            TL.LogMessage(className, $"Humidity has value: {Humidity.HasValue} , Value:  {Humidity}");
                             break;
 
-                        case nameof(ITelescopeV4.Azimuth):
+                        case nameof(IObservingConditionsV2.Pressure):
                             try
                             {
-                                Azimuth = (double)stateValue.Value;
+                                Pressure = (double)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"Azimuth - Ignoring exception: {ex.Message}");
+                                TL.LogMessage(className, $"Pressure - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Azimuth has value: {Azimuth.HasValue}, Value: {Azimuth}");
+                            TL.LogMessage(className, $"Pressure has value: {Pressure.HasValue} , Value:  {Pressure}");
                             break;
 
-                        case nameof(ITelescopeV4.Declination):
+                        case nameof(IObservingConditionsV2.RainRate):
                             try
                             {
-                                Declination = (double)stateValue.Value;
+                                RainRate = (double)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"Declination - Ignoring exception: {ex.Message}");
+                                TL.LogMessage(className, $"RainRate - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Declination has value: {Declination.HasValue}, Value: {Declination}");
+                            TL.LogMessage(className, $"RainRate has value: {RainRate.HasValue}, Value: {RainRate}");
                             break;
 
-                        case nameof(ITelescopeV4.IsPulseGuiding):
+                        case nameof(IObservingConditionsV2.SkyBrightness):
                             try
                             {
-                                IsPulseGuiding = (bool)stateValue.Value;
+                                SkyBrightness = (double)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"IsPulseGuiding - Ignoring exception: {ex.Message}");
+                                TL.LogMessage(className, $"SkyBrightness - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"IsPulseGuiding has value: {IsPulseGuiding.HasValue}, Value: {IsPulseGuiding}");
+                            TL.LogMessage(className, $"SkyBrightness has value: {SkyBrightness.HasValue}, Value: {SkyBrightness}");
                             break;
 
-                        case nameof(ITelescopeV4.RightAscension):
+                        case nameof(IObservingConditionsV2.SkyQuality):
                             try
                             {
-                                RightAscension = (double)stateValue.Value;
+                                SkyQuality = (double)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"RightAscension - Ignoring exception: {ex.Message}");
+                                TL.LogMessage(className, $"SkyQuality - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"RightAscension has value: {RightAscension.HasValue}, Value: {RightAscension}");
+                            TL.LogMessage(className, $"SkyQuality has value: {SkyQuality.HasValue}, Value: {SkyQuality}");
                             break;
 
-                        case nameof(ITelescopeV4.SideOfPier):
+                        case nameof(IObservingConditionsV2.SkyTemperature):
                             try
                             {
-                                SideOfPier = (PierSide)stateValue.Value;
+                                SkyTemperature = (double)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"SideOfPier - Ignoring exception: {ex.Message}");
+                                TL.LogMessage(className, $"SkyTemperature - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"SideOfPier has value: {SideOfPier.HasValue}, Value: {SideOfPier}");
+                            TL.LogMessage(className, $"SkyTemperature has value: {SkyTemperature.HasValue}, Value: {SkyTemperature}");
                             break;
 
-                        case nameof(ITelescopeV4.SiderealTime):
+                        case nameof(IObservingConditionsV2.StarFWHM):
                             try
                             {
-                                SiderealTime = (double)stateValue.Value;
+                                StarFWHM = (double)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"SiderealTime - Ignoring exception: {ex.Message}");
+                                TL.LogMessage(className, $"StarFWHM - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"SiderealTime has value: {SiderealTime.HasValue}, Value: {SiderealTime}");
+                            TL.LogMessage(className, $"StarFWHM has value: {StarFWHM.HasValue}, Value: {StarFWHM}");
                             break;
 
-                        case nameof(ITelescopeV4.Slewing):
+                        case nameof(IObservingConditionsV2.Temperature):
                             try
                             {
-                                Slewing = (bool)stateValue.Value;
+                                Temperature = (double)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"Slewing - Ignoring exception: {ex.Message}");
+                                TL.LogMessage(className, $"Temperature - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Slewing has value: {Slewing.HasValue}, Value: {Slewing}");
+                            TL.LogMessage(className, $"Temperature has value: {Temperature.HasValue}, Value: {Temperature}");
                             break;
 
-                        case nameof(ITelescopeV4.Tracking):
+                        case nameof(IObservingConditionsV2.WindDirection):
                             try
                             {
-                                Tracking = (bool)stateValue.Value;
+                                WindDirection = (double)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"Tracking - Ignoring exception: {ex.Message}");
+                                TL.LogMessage(className, $"WindDirection - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Tracking has value: {Tracking.HasValue}, Value: {Tracking}");
+                            TL.LogMessage(className, $"WindDirection has value: {WindDirection.HasValue}, Value: {WindDirection}");
                             break;
 
-                        case nameof(ITelescopeV4.UTCDate):
+                        case nameof(IObservingConditionsV2.WindGust):
                             try
                             {
-                                UTCDate = (DateTime)stateValue.Value;
+                                WindGust = (double)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"UTCDate - Ignoring exception: {ex.Message}");
+                                TL.LogMessage(className, $"WindGust - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"UTCDate has value: {UTCDate.HasValue}, Value: {UTCDate}");
+                            TL.LogMessage(className, $"WindGust has value: {WindGust.HasValue}, Value: {WindGust}");
+                            break;
+
+                        case nameof(IObservingConditionsV2.WindSpeed):
+                            try
+                            {
+                                WindSpeed = (double)stateValue.Value;
+                            }
+                            catch (Exception ex)
+                            {
+                                TL.LogMessage(className, $"WindSpeed - Ignoring exception: {ex.Message}");
+                            }
+                            TL.LogMessage(className, $"WindSpeed has value: {WindSpeed.HasValue}, Value: {WindSpeed}");
                             break;
 
                         case "TimeStamp":
@@ -222,63 +231,67 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Telescope altitude
         /// </summary>
-        public double? Altitude { get; set; } = null;
+        public double? CloudCover { get; set; } = null;
 
         /// <summary>
         /// Telescope is at home
         /// </summary>
-        public bool? AtHome { get; set; } = null;
+        public double? DewPoint { get; set; } = null;
 
         /// <summary>
         /// Telescope is parked
         /// </summary>
-        public bool? AtPark { get; set; } = null;
+        public double? Humidity { get; set; } = null;
 
         /// <summary>
         /// Telescope azimuth
         /// </summary>
-        public double? Azimuth { get; set; } = null;
+        public double? Pressure { get; set; } = null;
 
         /// <summary>
         /// Telescope declination
         /// </summary>
-        public double? Declination { get; set; } = null;
+        public double? RainRate { get; set; } = null;
 
         /// <summary>
         /// Telescope is pulse guiding
         /// </summary>
-        public bool? IsPulseGuiding { get; set; } = null;
+        public double? SkyBrightness { get; set; } = null;
 
         /// <summary>
         /// Telescope right ascension
         /// </summary>
-        public double? RightAscension { get; set; } = null;
+        public double? SkyQuality { get; set; } = null;
 
         /// <summary>
         /// Telescope pointing state
         /// </summary>
-        public PierSide? SideOfPier { get; set; } = null;
+        public double? SkyTemperature { get; set; } = null;
 
         /// <summary>
         /// Telescope sidereal time
         /// </summary>
-        public double? SiderealTime { get; set; } = null;
+        public double? StarFWHM { get; set; } = null;
 
         /// <summary>
         /// Telescope is slewing
         /// </summary>
-        public bool? Slewing { get; set; } = null;
+        public double? Temperature { get; set; } = null;
 
         /// <summary>
         /// Telescope  is tracking
         /// </summary>
-        public bool? Tracking { get; set; } = null;
+        public double? WindDirection { get; set; } = null;
 
         /// <summary>
         /// Telescope UTC date and time
         /// </summary>
-        public DateTime? UTCDate { get; set; } = null;
+        public double? WindGust { get; set; } = null;
 
+        /// <summary>
+        /// Telescope UTC date and time
+        /// </summary>
+        public double? WindSpeed { get; set; } = null;
         /// <summary>
         /// The time at which the state was recorded
         /// </summary>

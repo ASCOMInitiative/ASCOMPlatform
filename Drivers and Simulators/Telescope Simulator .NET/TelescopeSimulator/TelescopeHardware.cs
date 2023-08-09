@@ -25,19 +25,13 @@
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
-using System.Runtime.Serialization;
 using System.Threading;
 using System.Windows;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Collections.Generic;
-using System.Windows.Forms.VisualStyles;
 using ASCOM.Astrometry.AstroUtils;
-using System.Threading.Tasks;
-using ASCOM.Astrometry;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace ASCOM.Simulator
 {

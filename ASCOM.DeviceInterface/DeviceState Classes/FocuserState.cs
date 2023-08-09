@@ -1,33 +1,29 @@
-﻿using ASCOM.DeviceInterface;
-using ASCOM.Interface;
-using ASCOM.Utilities;
+﻿using ASCOM.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace ASCOM.DriverAccess
+namespace ASCOM.DeviceInterface.DeviceState
 {
     /// <summary>
     /// Class that presents the device's operation state as a set of nullable properties
     /// </summary>
-    public class VideoState
+    public class FocuserState
     {
         // Assign the name of this class
         string className = nameof(FilterWheelState);
 
         /// <summary>
-        /// Create a new VideoState instance
+        /// Create a new FocuserState instance
         /// </summary>
-        public VideoState() { }
+        public FocuserState() { }
 
         /// <summary>
-        /// Create a new VideoState instance from the device's DeviceState response.
+        /// Create a new FocuserState instance from the device's DeviceState response.
         /// </summary>
         /// <param name="deviceStateArrayList">The device's DeviceState response.</param>
         /// <param name="TL">Debug TraceLogger instance.</param>
-        public VideoState(ArrayList deviceStateArrayList, TraceLogger TL)
+        public FocuserState(ArrayList deviceStateArrayList, TraceLogger TL)
         {
             TL?.LogMessage(className, $"Received {deviceStateArrayList.Count} items");
 
@@ -52,16 +48,40 @@ namespace ASCOM.DriverAccess
 
                     switch (stateValue.Name)
                     {
-                        case nameof(IVideoV2.CameraState):
+                        case nameof(IFocuserV4.IsMoving):
                             try
                             {
-                                CameraState = (VideoCameraState)stateValue.Value;
+                                IsMoving = (bool)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"CameraState - Ignoring exception: {ex.Message}");
+                                TL.LogMessage(className, $"IsMoving - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"CameraState has value: {CameraState.HasValue}, Value: {CameraState}");
+                            TL.LogMessage(className, $"IsMoving has value: {IsMoving.HasValue}, Value: {IsMoving}");
+                            break;
+
+                        case nameof(IFocuserV4.Position):
+                            try
+                            {
+                                Position = (int)stateValue.Value;
+                            }
+                            catch (Exception ex)
+                            {
+                                TL.LogMessage(className, $"Position - Ignoring exception: {ex.Message}");
+                            }
+                            TL.LogMessage(className, $"Position has value: {Position.HasValue}, Value: {Position}");
+                            break;
+
+                        case nameof(IFocuserV4.Temperature):
+                            try
+                            {
+                                Temperature = (double)stateValue.Value;
+                            }
+                            catch (Exception ex)
+                            {
+                                TL.LogMessage(className, $"Temperature - Ignoring exception: {ex.Message}");
+                            }
+                            TL.LogMessage(className, $"Temperature has value: {Position.HasValue}, Value: {Position}");
                             break;
 
                         case "TimeStamp":
@@ -91,7 +111,17 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Focuser IsMoving state
         /// </summary>
-        public VideoCameraState? CameraState { get; set; } = null;
+        public bool? IsMoving { get; set; } = null;
+
+        /// <summary>
+        /// Focuser position
+        /// </summary>
+        public int? Position { get; set; } = null;
+
+        /// <summary>
+        /// Focuser temperature
+        /// </summary>
+        public double? Temperature { get; set; } = null;
 
         /// <summary>
         /// The time at which the state was recorded
@@ -99,3 +129,4 @@ namespace ASCOM.DriverAccess
         public DateTime? TimeStamp { get; set; } = null;
     }
 }
+

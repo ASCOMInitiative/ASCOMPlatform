@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
 namespace ASCOM.DeviceHub
 {
-	public class FocuserTemperatureValueConverter : IMultiValueConverter
+    public class FocuserTemperatureValueConverter : IMultiValueConverter
 	{
 		public object Convert( object[] values, Type targetType, object parameter, CultureInfo culture )
 		{

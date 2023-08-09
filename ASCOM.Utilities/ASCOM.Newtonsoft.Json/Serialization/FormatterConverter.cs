@@ -1,9 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using Newtonsoft.Json.Utilities;
-
+﻿
 #if HAVE_BINARY_SERIALIZATION && !HAVE_BINARY_FORMATTER
 
 namespace Newtonsoft.Json.Serialization

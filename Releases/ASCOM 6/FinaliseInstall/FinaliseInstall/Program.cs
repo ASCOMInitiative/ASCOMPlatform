@@ -1,8 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Security.Permissions;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
@@ -15,7 +12,6 @@ using System.Security;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Globalization;
-using System.Security.Claims;
 
 namespace ConsoleApplication1
 {

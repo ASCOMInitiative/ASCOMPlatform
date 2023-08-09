@@ -1,32 +1,29 @@
-﻿using ASCOM.DeviceInterface;
-using ASCOM.Utilities;
+﻿using ASCOM.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace ASCOM.DriverAccess
+namespace ASCOM.DeviceInterface.DeviceState
 {
     /// <summary>
     /// Class that presents the device's operation state as a set of nullable properties
     /// </summary>
-    public class SafetyMonitorState
+    public class RotatorState
     {
         // Assign the name of this class
-        string className = nameof(SafetyMonitorState);
+        string className = nameof(RotatorState);
 
         /// <summary>
-        /// Create a new FocuserState instance
+        /// Create a new RotatorState instance
         /// </summary>
-        public SafetyMonitorState() { }
+        public RotatorState() { }
 
         /// <summary>
-        /// Create a new FocuserState instance from the device's DeviceState response.
+        /// Create a new RotatorState instance from the device's DeviceState response.
         /// </summary>
         /// <param name="deviceStateArrayList">The device's DeviceState response.</param>
         /// <param name="TL">Debug TraceLogger instance.</param>
-        public SafetyMonitorState(ArrayList deviceStateArrayList, TraceLogger TL)
+        public RotatorState(ArrayList deviceStateArrayList, TraceLogger TL)
         {
             TL?.LogMessage(className, $"Received {deviceStateArrayList.Count} items");
 
@@ -51,16 +48,40 @@ namespace ASCOM.DriverAccess
 
                     switch (stateValue.Name)
                     {
-                        case nameof(ISafetyMonitorV3.IsSafe):
+                        case nameof(IRotatorV4.IsMoving):
                             try
                             {
-                                IsSafe = (bool)stateValue.Value;
+                                IsMoving = (bool)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"IsSafe - Ignoring exception: {ex.Message}");
+                                TL.LogMessage(className, $"IsMoving - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"IsSafe has value: {IsSafe.HasValue}, Value: {IsSafe}");
+                            TL.LogMessage(className, $"IsMoving has value: {IsMoving.HasValue}, Value: {IsMoving}");
+                            break;
+
+                        case nameof(IRotatorV4.MechanicalPosition):
+                            try
+                            {
+                                MechanicalPosition = (float)stateValue.Value;
+                            }
+                            catch (Exception ex)
+                            {
+                                TL.LogMessage(className, $"MechanicalPosition - Ignoring exception: {ex.Message}");
+                            }
+                            TL.LogMessage(className, $"MechanicalPosition has value: {MechanicalPosition.HasValue}, Value: {MechanicalPosition}");
+                            break;
+
+                        case nameof(IRotatorV4.Position):
+                            try
+                            {
+                                Position = (float)stateValue.Value;
+                            }
+                            catch (Exception ex)
+                            {
+                                TL.LogMessage(className, $"Position - Ignoring exception: {ex.Message}");
+                            }
+                            TL.LogMessage(className, $"Position has value: {Position.HasValue}, Value: {Position}");
                             break;
 
                         case "TimeStamp":
@@ -88,9 +109,19 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Focuser IsMoving state
+        /// Rotator is moving state
         /// </summary>
-        public bool? IsSafe { get; set; } = null;
+        public bool? IsMoving{ get; set; } = null;
+
+        /// <summary>
+        /// Rotator position
+        /// </summary>
+        public float? Position { get; set; } = null;
+
+        /// <summary>
+        /// Rotator mechanical position
+        /// </summary>
+        public float? MechanicalPosition { get; set; } = null;
 
         /// <summary>
         /// The time at which the state was recorded
@@ -98,4 +129,3 @@ namespace ASCOM.DriverAccess
         public DateTime? TimeStamp { get; set; } = null;
     }
 }
-

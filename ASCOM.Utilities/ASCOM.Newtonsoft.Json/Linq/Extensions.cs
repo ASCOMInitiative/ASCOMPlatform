@@ -28,7 +28,6 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Utilities;
 using System.Globalization;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 #if !HAVE_LINQ
 using Newtonsoft.Json.Utilities.LinqBridge;
 #else

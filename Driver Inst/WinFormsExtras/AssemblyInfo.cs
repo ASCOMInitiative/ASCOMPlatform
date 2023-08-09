@@ -1,5 +1,4 @@
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 //
 // General Information about an assembly is controlled through the following 
@@ -10,7 +9,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDescription("Support file for Inno installer generator")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCopyright("")]
-[assembly: AssemblyCulture("")]		
+[assembly: AssemblyCulture("")]
 
 //
 // Version information for an assembly consists of the following four values:

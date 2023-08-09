@@ -33,13 +33,10 @@ using Newtonsoft.Json.Utilities;
 using System.Collections;
 using System.Globalization;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Diagnostics.CodeAnalysis;
 #if !HAVE_LINQ
 using Newtonsoft.Json.Utilities.LinqBridge;
 #else
-using System.Linq;
 #endif
 
 namespace Newtonsoft.Json.Linq

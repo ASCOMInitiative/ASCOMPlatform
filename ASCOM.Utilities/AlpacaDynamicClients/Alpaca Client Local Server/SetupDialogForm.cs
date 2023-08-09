@@ -1,5 +1,4 @@
-﻿using ASCOM.Common.Alpaca;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Net;
 using System.Net.Sockets;

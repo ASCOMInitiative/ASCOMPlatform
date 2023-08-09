@@ -8,10 +8,9 @@ using System;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Globalization;
+using ASCOM.DeviceInterface.DeviceState;
 
 namespace ASCOM.DriverAccess
 {

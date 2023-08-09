@@ -4,8 +4,6 @@ using System.Linq;
 using System.Windows.Forms;
 using ASCOM.Utilities;
 using System.IO;
-using System.Text.RegularExpressions;
-using Microsoft.Win32;
 using System.Diagnostics;
 using System.Threading;
 using System.Reflection;

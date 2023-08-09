@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System;
 using System.Runtime.InteropServices;
-using static System.Net.Mime.MediaTypeNames;
-using System.Reflection;
 
 namespace ASCOM.DeviceInterface
 {

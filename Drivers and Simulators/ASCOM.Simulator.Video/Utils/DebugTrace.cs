@@ -11,15 +11,13 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
 using ASCOM.Utilities;
 
 namespace ASCOM.Simulator.Utils
 {
-	public static class DebugTrace
+    public static class DebugTrace
 	{
 		private static string TRACE_CATEGORY_ERROR = "VideoCameraSimulator.ASCOM[Error]";
 		private static string TRACE_CATEGORY_WARNING = "VideoCameraSimulator.ASCOM[Warn]";

@@ -12,10 +12,7 @@
 //
 // Written by:	Bob Denny	29-May-2007
 //
-using ASCOM.Utilities;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ASCOM.Simulator
 {

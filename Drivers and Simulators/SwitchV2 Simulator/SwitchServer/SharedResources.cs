@@ -13,10 +13,7 @@
 // Written by:	Bob Denny	29-May-2007
 // Modified by Chris Rowland and Peter Simpson to hamdle multiple hardware devices March 2011
 //
-using System;
 using System.Collections.Generic;
-using System.Text;
-using ASCOM;
 
 namespace ASCOM.Simulator
 {

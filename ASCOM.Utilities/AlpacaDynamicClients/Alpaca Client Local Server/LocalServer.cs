@@ -23,7 +23,6 @@ using Microsoft.Win32;
 using System.Threading;
 using System.Security.Principal;
 using System.Diagnostics;
-using ASCOM.Common.Alpaca;
 
 namespace ASCOM.DynamicRemoteClients
 {

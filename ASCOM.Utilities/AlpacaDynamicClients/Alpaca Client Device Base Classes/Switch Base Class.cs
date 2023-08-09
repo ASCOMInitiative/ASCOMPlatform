@@ -2,14 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ASCOM.Common.Alpaca;
 using ASCOM.DeviceInterface;
 using RestSharp;
-using static System.Windows.Forms.AxHost;
 
 namespace ASCOM.DynamicRemoteClients
 {

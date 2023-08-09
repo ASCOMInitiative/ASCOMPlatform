@@ -22,12 +22,10 @@
 
 using System;
 using System.Collections;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using System.Windows.Interop;
 
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
@@ -36,16 +34,16 @@ using static System.FormattableString;
 
 namespace ASCOM.DeviceHub
 {
-	// Your driver's DeviceID is ASCOM.DeviceHub.Focuser
+    // Your driver's DeviceID is ASCOM.DeviceHub.Focuser
 
-	// The Guid attribute sets the CLSID for ASCOM.DeviceHub.Focuser
-	// The ClassInterface/None attribute prevents an empty interface called
-	// _DeviceHub from being created and used as the [default] interface
+    // The Guid attribute sets the CLSID for ASCOM.DeviceHub.Focuser
+    // The ClassInterface/None attribute prevents an empty interface called
+    // _DeviceHub from being created and used as the [default] interface
 
-	/// <summary>
-	/// ASCOM Focuser Driver for DeviceHub.
-	/// </summary>
-	[ComVisible(true)]
+    /// <summary>
+    /// ASCOM Focuser Driver for DeviceHub.
+    /// </summary>
+    [ComVisible(true)]
 	[Guid( "5eb66c80-1658-4dde-8931-4d5772fa2311" )]
 	[ProgId( "ASCOM.DeviceHub.Focuser" )]
 	[ServedClassName( "Device Hub Focuser" )]

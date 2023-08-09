@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ASCOM.DeviceHub
 {
-	// The ServiceContainer allows new concrete service instances to be
-	// created and returned. To always return the same instance, pass that instance when
-	// registering the service. To return a different instance each time one is requested,
-	// pass the type of the concrete implementation to AddService.
+    // The ServiceContainer allows new concrete service instances to be
+    // created and returned. To always return the same instance, pass that instance when
+    // registering the service. To return a different instance each time one is requested,
+    // pass the type of the concrete implementation to AddService.
 
-	//Examples:
-					
-	// Singleton( the same instance is returned each time a service reference is requested.
-	// ServiceContainer.Instance.AddService<ISpeechService>( new SpeechService() );
-	
-	// Unique( a different, unique instance is returned each time a service reference is requested.
-	// ServiceContainer.Instance.AddService<IVCurvePointService>( typeof(DummyFocusPointGenerator) );
+    //Examples:
 
-	public class ServiceContainer
+    // Singleton( the same instance is returned each time a service reference is requested.
+    // ServiceContainer.Instance.AddService<ISpeechService>( new SpeechService() );
+
+    // Unique( a different, unique instance is returned each time a service reference is requested.
+    // ServiceContainer.Instance.AddService<IVCurvePointService>( typeof(DummyFocusPointGenerator) );
+
+    public class ServiceContainer
     {
 		// The service container is a singleton.
 

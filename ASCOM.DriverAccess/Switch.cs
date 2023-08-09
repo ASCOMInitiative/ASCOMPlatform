@@ -5,7 +5,6 @@
 using System;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
-using static System.Windows.Forms.AxHost;
 
 namespace ASCOM.DriverAccess
 {

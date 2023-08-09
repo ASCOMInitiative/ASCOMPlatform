@@ -10,9 +10,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.GAC;
 using System.Text;
-using System.Collections.Generic;
 using System.Management;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace UninstallAscom
 {

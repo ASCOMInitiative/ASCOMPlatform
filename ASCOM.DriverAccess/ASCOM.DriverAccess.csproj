@@ -114,15 +114,6 @@
     <Compile Include="Camera.cs">
     </Compile>
     <Compile Include="CoverCalibrator.cs" />
-    <Compile Include="DeviceState Classes\CameraDeviceState.cs" />
-    <Compile Include="DeviceState Classes\CoverCalibratorState.cs" />
-    <Compile Include="DeviceState Classes\DomeState.cs" />
-    <Compile Include="DeviceState Classes\FilterWheelState.cs" />
-    <Compile Include="DeviceState Classes\FocuserState.cs" />
-    <Compile Include="DeviceState Classes\ObservingConditionsState.cs" />
-    <Compile Include="DeviceState Classes\RotatorState.cs" />
-    <Compile Include="DeviceState Classes\SafetyMonitorState.cs" />
-    <Compile Include="DeviceState Classes\VideoState.cs" />
     <Compile Include="Dome.cs">
     </Compile>
     <Compile Include="Extensions.cs" />
@@ -140,7 +131,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
     </Compile>
-    <Compile Include="DeviceState Classes\TelescopeState.cs" />
     <Compile Include="Video.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using ASCOM.DeviceInterface;
+using ASCOM.DeviceInterface.DeviceState;
 using ASCOM.DriverAccess;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

@@ -4,7 +4,6 @@
 
 using ASCOM;
 using ASCOM.Utilities;
-using System.Diagnostics;
 using ASCOM.DeviceInterface;
 using System.Collections;
 

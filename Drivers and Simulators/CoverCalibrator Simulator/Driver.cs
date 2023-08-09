@@ -2,7 +2,6 @@ using System;
 using System.Runtime.InteropServices;
 using ASCOM.Utilities;
 using ASCOM.DeviceInterface;
-using System.Globalization;
 using System.Collections;
 using System.Windows.Forms;
 using System.Reflection;

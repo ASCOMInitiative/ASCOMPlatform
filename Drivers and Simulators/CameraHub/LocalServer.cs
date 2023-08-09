@@ -12,18 +12,14 @@
 // Modified by Chris Rowland and Peter Simpson to allow use with multiple devices of the same type March 2011
 //
 //
-using ASCOM;
 using ASCOM.Utilities;
 using Microsoft.Win32;
 using System;
 using System.Collections;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;

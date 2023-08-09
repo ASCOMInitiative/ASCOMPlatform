@@ -24,11 +24,8 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Numerics;
 using ASCOM.Common.Alpaca;
-using ASCOM.Alpaca.Clients;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Security.Policy;
-using System.Web;
 using ASCOM.Common.Com;
 
 namespace ASCOM.DynamicRemoteClients

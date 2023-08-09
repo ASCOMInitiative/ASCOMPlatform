@@ -1,32 +1,29 @@
-﻿using ASCOM.DeviceInterface;
-using ASCOM.Utilities;
+﻿using ASCOM.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace ASCOM.DriverAccess
+namespace ASCOM.DeviceInterface.DeviceState
 {
     /// <summary>
     /// Class that presents the device's operation state as a set of nullable properties
     /// </summary>
-    public class FilterWheelState
+    public class SafetyMonitorState
     {
         // Assign the name of this class
-        string className = nameof(FilterWheelState);
+        string className = nameof(SafetyMonitorState);
 
         /// <summary>
-        /// Create a new FilterWheelState instance
+        /// Create a new FocuserState instance
         /// </summary>
-        public FilterWheelState() { }
+        public SafetyMonitorState() { }
 
         /// <summary>
-        /// Create a new FilterWheelState instance from the device's DeviceState response.
+        /// Create a new FocuserState instance from the device's DeviceState response.
         /// </summary>
         /// <param name="deviceStateArrayList">The device's DeviceState response.</param>
         /// <param name="TL">Debug TraceLogger instance.</param>
-        public FilterWheelState(ArrayList deviceStateArrayList, TraceLogger TL)
+        public SafetyMonitorState(ArrayList deviceStateArrayList, TraceLogger TL)
         {
             TL?.LogMessage(className, $"Received {deviceStateArrayList.Count} items");
 
@@ -51,16 +48,16 @@ namespace ASCOM.DriverAccess
 
                     switch (stateValue.Name)
                     {
-                        case nameof(IFilterWheelV3.Position):
+                        case nameof(ISafetyMonitorV3.IsSafe):
                             try
                             {
-                                Position = (short)stateValue.Value;
+                                IsSafe = (bool)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"Position - Ignoring exception: {ex.Message}");
+                                TL.LogMessage(className, $"IsSafe - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Position has value: {Position.HasValue}, Value: {Position}");
+                            TL.LogMessage(className, $"IsSafe has value: {IsSafe.HasValue}, Value: {IsSafe}");
                             break;
 
                         case "TimeStamp":
@@ -88,9 +85,9 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// FilterWheel position
+        /// Focuser IsMoving state
         /// </summary>
-        public double? Position { get; set; } = null;
+        public bool? IsSafe { get; set; } = null;
 
         /// <summary>
         /// The time at which the state was recorded

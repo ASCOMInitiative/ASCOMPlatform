@@ -4,8 +4,6 @@
 
 using ASCOM.DeviceInterface;
 using System;
-using ASCOM;
-using ASCOM.Utilities;
 
 class DeviceDome
 {

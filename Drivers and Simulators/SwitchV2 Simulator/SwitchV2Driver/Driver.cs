@@ -25,8 +25,6 @@ using ASCOM.Utilities;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.AxHost;
 
 namespace ASCOM.Simulator
 {

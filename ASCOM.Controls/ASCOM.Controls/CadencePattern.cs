@@ -1,19 +1,11 @@
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Windows.Forms;
-using System.Diagnostics;
-
 namespace ASCOM.Controls
 {
-	/// <summary>
-	/// Cadence patterns for blinking LEDs.
-	/// Cadences are based on 32-bit unsigned integers, such that the ordinal value
-	/// of each item represents a bit mask that can be used directly in an update routine.
-	/// </summary>
-	public enum CadencePattern : long
+    /// <summary>
+    /// Cadence patterns for blinking LEDs.
+    /// Cadences are based on 32-bit unsigned integers, such that the ordinal value
+    /// of each item represents a bit mask that can be used directly in an update routine.
+    /// </summary>
+    public enum CadencePattern : long
 	{
 		/// <summary>
 		/// Permanently off, 

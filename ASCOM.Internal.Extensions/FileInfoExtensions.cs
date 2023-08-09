@@ -41,16 +41,15 @@
 
 namespace ASCOM.Internal
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using System.IO;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.IO;
 
-	/// <summary>
-	/// Extension methods relating to <see cref="FileInfo"/>.
-	/// </summary>
-	public static class FileInfoExtensions
+    /// <summary>
+    /// Extension methods relating to <see cref="FileInfo"/>.
+    /// </summary>
+    public static class FileInfoExtensions
 	{
 		/// <summary>
 		/// The recognized ASCOM device classes.
