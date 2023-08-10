@@ -11,7 +11,7 @@ namespace ASCOM.DeviceInterface.DeviceState
     public class ObservingConditionsState
     {
         // Assign the name of this class
-        string className = nameof(ObservingConditionsState);
+        readonly string className = nameof(ObservingConditionsState);
 
         /// <summary>
         /// Create a new ObservingConditionsState instance

@@ -11,7 +11,7 @@ namespace ASCOM.DeviceInterface.DeviceState
     public class RotatorState
     {
         // Assign the name of this class
-        string className = nameof(RotatorState);
+        readonly string className = nameof(RotatorState);
 
         /// <summary>
         /// Create a new RotatorState instance

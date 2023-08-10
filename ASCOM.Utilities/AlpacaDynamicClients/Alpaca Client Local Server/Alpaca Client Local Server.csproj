@@ -97,6 +97,9 @@
     <Compile Include="..\Alpaca Shared Resources\Response Classes\DateAndTimeResponse.cs">
       <Link>Response Classes\DateAndTimeResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Alpaca Shared Resources\Response Classes\DeviceStateResponse.cs">
+      <Link>Response Classes\DeviceStateResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Alpaca Shared Resources\Response Classes\DoubleArray2DResponse.cs">
       <Link>Response Classes\DoubleArray2DResponse.cs</Link>
     </Compile>
@@ -129,6 +132,9 @@
     </Compile>
     <Compile Include="..\Alpaca Shared Resources\Response Classes\RestResponseBase.cs">
       <Link>Response Classes\RestResponseBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Alpaca Shared Resources\Response Classes\RestResponseBaseConcreteClass.cs">
+      <Link>Response Classes\RestResponseBaseConcreteClass.cs</Link>
     </Compile>
     <Compile Include="..\Alpaca Shared Resources\Response Classes\ShortArray2DResponse.cs">
       <Link>Response Classes\ShortArray2DResponse.cs</Link>

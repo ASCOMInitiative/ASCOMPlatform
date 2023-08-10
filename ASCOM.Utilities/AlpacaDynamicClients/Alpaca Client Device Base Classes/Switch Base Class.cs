@@ -22,15 +22,15 @@ namespace ASCOM.DynamicRemoteClients
         private const string DEVICE_TYPE = "Switch";
 
         // Instance specific variables
-        private TraceLoggerPlus TL; // Private variable to hold the trace logger object
-        private string DriverNumber; // This driver's number in the series 1, 2, 3...
-        private string DriverDisplayName; // Driver description that displays in the ASCOM Chooser.
-        private string DriverProgId; // Drivers ProgID
+        private readonly TraceLoggerPlus TL; // Private variable to hold the trace logger object
+        private readonly string DriverNumber; // This driver's number in the series 1, 2, 3...
+        private readonly string DriverDisplayName; // Driver description that displays in the ASCOM Chooser.
+        private readonly string DriverProgId; // Drivers ProgID
         private SetupDialogForm setupForm; // Private variable to hold an instance of the Driver's setup form when invoked by the user
         private RestClient client; // Client to send and receive REST style messages to / from the remote device
-        private uint clientNumber; // Unique number for this driver within the locaL server, i.e. across all drivers that the local server is serving
+        private readonly uint clientNumber; // Unique number for this driver within the locaL server, i.e. across all drivers that the local server is serving
         private bool clientIsConnected;  // Connection state of this driver
-        private string URIBase; // URI base unique to this driver
+        private readonly string URIBase; // URI base unique to this driver
         private short? interfaceVersion; // Cached interface version to reduce client traffic
 
         // Connect / Disconnect emulation variables
@@ -51,8 +51,8 @@ namespace ASCOM.DynamicRemoteClients
         private string password;
         private bool manageConnectLocally;
         private ImageArrayTransferType imageArrayTransferType;
-        private ImageArrayCompression imageArrayCompression;
-        private string uniqueId;
+        private readonly ImageArrayCompression imageArrayCompression;
+        private readonly string uniqueId;
         private bool enableRediscovery;
         private bool ipV4Enabled;
         private bool ipV6Enabled;
@@ -108,6 +108,12 @@ namespace ASCOM.DynamicRemoteClients
                 TL.LogMessageCrLf(clientNumber, DEVICE_TYPE, ex.ToString());
             }
         }
+
+        #endregion
+
+        #region Convenience members
+
+        // There is no SwitchState member because the number of switches is a dynamic, user configured value as is switch naming, which makes it impossible to model in a class with fixed properties.
 
         #endregion
 

@@ -11,7 +11,7 @@ namespace ASCOM.DeviceInterface.DeviceState
     public class CameraDeviceState
     {
         // Assign the name of this class
-        string className = nameof(CameraDeviceState);
+        readonly string className = nameof(CameraDeviceState);
 
         /// <summary>
         /// Create a new CameraDeviceState instance

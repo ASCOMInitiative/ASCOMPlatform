@@ -11,7 +11,7 @@ namespace ASCOM.DeviceInterface.DeviceState
     public class SafetyMonitorState
     {
         // Assign the name of this class
-        string className = nameof(SafetyMonitorState);
+        readonly string className = nameof(SafetyMonitorState);
 
         /// <summary>
         /// Create a new FocuserState instance

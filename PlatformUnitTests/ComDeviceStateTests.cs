@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace PlatformUnitTests
 {
     [TestClass]
-    public class DeviceStateTests
+    public class ComDeviceStateTests
     {
         [TestMethod]
         public void Camera()

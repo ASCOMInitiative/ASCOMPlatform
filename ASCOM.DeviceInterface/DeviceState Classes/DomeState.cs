@@ -11,7 +11,7 @@ namespace ASCOM.DeviceInterface.DeviceState
     public class DomeState
     {
         // Assign the name of this class
-        string className = nameof(DomeState);
+        readonly string className = nameof(DomeState);
 
         /// <summary>
         /// Create a new DomeState instance

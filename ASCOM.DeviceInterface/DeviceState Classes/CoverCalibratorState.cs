@@ -11,7 +11,7 @@ namespace ASCOM.DeviceInterface.DeviceState
     public class CoverCalibratorState
     {
         // Assign the name of this class
-        string className = nameof(CoverCalibratorState);
+        readonly string className = nameof(CoverCalibratorState);
 
         /// <summary>
         /// Create a new CoverCalibratorState instance

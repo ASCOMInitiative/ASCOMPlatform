@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ASCOM.Common.Alpaca;
 using ASCOM.DeviceInterface;
+using ASCOM.DeviceInterface.DeviceState;
 using RestSharp;
 
 namespace ASCOM.DynamicRemoteClients
@@ -15,7 +16,7 @@ namespace ASCOM.DynamicRemoteClients
     /// <summary>
     /// ASCOM DynamicRemoteClients Telescope base class
     /// </summary>
-    public class TelescopeBaseClass : ReferenceCountedObjectBase, ITelescopeV3
+    public class TelescopeBaseClass : ReferenceCountedObjectBase, ITelescopeV4
     {
         #region Variables and Constants
 
@@ -23,15 +24,15 @@ namespace ASCOM.DynamicRemoteClients
         private const string DEVICE_TYPE = "Telescope";
 
         // Instance specific variables
-        private TraceLoggerPlus TL; // Private variable to hold the trace logger object
-        private string DriverNumber; // This driver's number in the series 1, 2, 3...
-        private string DriverDisplayName; // Driver description that displays in the ASCOM Chooser.
-        private string DriverProgId; // Drivers ProgID
+        private readonly TraceLoggerPlus TL; // Private variable to hold the trace logger object
+        private readonly string DriverNumber; // This driver's number in the series 1, 2, 3...
+        private readonly string DriverDisplayName; // Driver description that displays in the ASCOM Chooser.
+        private readonly string DriverProgId; // Drivers ProgID
         private SetupDialogForm setupForm; // Private variable to hold an instance of the Driver's setup form when invoked by the user
         private RestClient client; // Client to send and receive REST style messages to / from the remote device
-        private uint clientNumber; // Unique number for this driver within the locaL server, i.e. across all drivers that the local server is serving
+        private readonly uint clientNumber; // Unique number for this driver within the locaL server, i.e. across all drivers that the local server is serving
         private bool clientIsConnected;  // Connection state of this driver
-        private string URIBase; // URI base unique to this driver
+        private readonly string URIBase; // URI base unique to this driver
 
         // Connect / Disconnect emulation variables
         bool connecting;
@@ -51,8 +52,8 @@ namespace ASCOM.DynamicRemoteClients
         private string password;
         private bool manageConnectLocally;
         private ASCOM.Common.Alpaca.ImageArrayTransferType imageArrayTransferType;
-        private ASCOM.Common.Alpaca.ImageArrayCompression imageArrayCompression;
-        private string uniqueId;
+        private readonly ASCOM.Common.Alpaca.ImageArrayCompression imageArrayCompression;
+        private readonly string uniqueId;
         private bool enableRediscovery;
         private bool ipV4Enabled;
         private bool ipV6Enabled;
@@ -106,6 +107,27 @@ namespace ASCOM.DynamicRemoteClients
             catch (Exception ex)
             {
                 TL.LogMessageCrLf(clientNumber, DEVICE_TYPE, ex.ToString());
+            }
+        }
+
+        #endregion
+
+        #region Convenience members
+
+        /// <summary>
+        /// State response from the device
+        /// </summary>
+        public TelescopeState TelescopeState
+        {
+            get
+            {
+                // Create a state object to return.
+                TelescopeState state = new TelescopeState(DeviceState, TL);
+                TL.LogMessage(nameof(TelescopeState), $"Returning: '{state.Altitude}' '{state.AtHome}' '{state.AtPark}' '{state.Azimuth}' '{state.Declination}' '{state.IsPulseGuiding}' " +
+                    $"'{state.RightAscension}' '{state.SideOfPier}' '{state.SiderealTime}' '{state.Slewing}' '{state.Tracking}' '{state.UTCDate}' '{state.TimeStamp}'");
+
+                // Return the device specific state class
+                return state;
             }
         }
 

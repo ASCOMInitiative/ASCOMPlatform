@@ -11,7 +11,7 @@ namespace ASCOM.DeviceInterface.DeviceState
     public class TelescopeState
     {
         // Assign the name of this class
-        string className = nameof(TelescopeState);
+        readonly string className = nameof(TelescopeState);
 
         /// <summary>
         /// Create a new TelescopeState instance
