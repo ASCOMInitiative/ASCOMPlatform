@@ -27,6 +27,7 @@ using ASCOM.Common.Alpaca;
 using System.Net.Http.Headers;
 using System.Text;
 using ASCOM.Common.Com;
+using System.CodeDom;
 
 namespace ASCOM.DynamicRemoteClients
 {
@@ -1107,6 +1108,13 @@ namespace ASCOM.DynamicRemoteClients
                             if (CallWasSuccessful(TL, stringListResponse)) return (T)((object)stringListResponse.Value);
                             restResponseBase = (RestResponseBase)stringListResponse;
                         }
+                        if (typeof(T) == typeof(List<StateValue>)) // Used for ArrayLists of IStateValue
+                        {
+                            DeviceStateResponse deviceStateResponse = JsonConvert.DeserializeObject<DeviceStateResponse>(deviceJsonResponse.Content);
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, deviceStateResponse.ClientTransactionID, deviceStateResponse.ServerTransactionID, (deviceStateResponse.Value is null) ? "NO VALUE OR NULL VALUE RETURNED" : deviceStateResponse.Value.Count.ToString()));
+                            if (CallWasSuccessful(TL, deviceStateResponse)) return (T)((object)deviceStateResponse.Value);
+                            restResponseBase = (RestResponseBase)deviceStateResponse;
+                        }
                         if (typeof(T) == typeof(NoReturnValue)) // Used for Methods that have no response and Property Set members
                         {
                             MethodResponse deviceResponse = JsonConvert.DeserializeObject<MethodResponse>(deviceJsonResponse.Content);
@@ -1553,6 +1561,11 @@ namespace ASCOM.DynamicRemoteClients
                                 restResponseBase = (RestResponseBase)responseBase;
                             } // remote device has used JSON encoding
                         }
+                        else
+                        {
+                            restResponseBase = JsonConvert.DeserializeObject<RestResponseBaseConcreteClass>(deviceJsonResponse.Content);
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, restResponseBase.ClientTransactionID, restResponseBase.ServerTransactionID, "Value NOT de-serialised"));
+                        }
 
                         // HANDLE COM EXCEPTIONS THROWN BY WINDOWS BASED DRIVERS RUNNING IN THE REMOTE DEVICE
                         if (restResponseBase.DriverException != null)
@@ -1886,14 +1899,14 @@ namespace ASCOM.DynamicRemoteClients
 
         public static ArrayList DeviceState(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL)
         {
-            List<IStateValue> supportedActions = GetValue<List<IStateValue>>(clientNumber, client, URIBase, TL, "DeviceState", MemberTypes.Property);
-            TL.LogMessage(clientNumber, "DeviceState", string.Format("Returning {0} elements", supportedActions.Count));
+            List<StateValue> deviceState = GetValue<List<StateValue>>(clientNumber, client, URIBase, TL, "DeviceState", MemberTypes.Property);
+            TL.LogMessage(clientNumber, "DeviceState", $"Returning {deviceState.Count} elements");
 
             ArrayList returnValues = new ArrayList();
-            foreach (IStateValue action in supportedActions)
+            foreach (StateValue stateValue in deviceState)
             {
-                returnValues.Add(action);
-                TL.LogMessage(clientNumber, "SupportedActions", string.Format("Returning action: {0}", action));
+                returnValues.Add(stateValue);
+                TL.LogMessage(clientNumber, "DeviceState", $"Returning: {stateValue.Name} = {stateValue.Value} - Type: {stateValue.Value.GetType().Name}");
             }
 
             return returnValues;
