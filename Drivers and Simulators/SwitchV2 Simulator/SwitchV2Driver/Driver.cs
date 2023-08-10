@@ -453,6 +453,11 @@ namespace ASCOM.Simulator
                     try { deviceState.Add(new StateValue($"GetSwitchValue{i}", GetSwitchValue(i))); } catch { }
                 }
 
+                for (short i = 0; i < MaxSwitch; i++)
+                {
+                    try { deviceState.Add(new StateValue($"StateChangeComplete{i}", StateChangeComplete(i))); } catch { }
+                }
+
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
                 return deviceState;
