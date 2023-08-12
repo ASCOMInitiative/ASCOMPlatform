@@ -431,57 +431,96 @@ namespace ASCOM.DeviceInterface
         /// <summary>
         /// Connect to the device asynchronously
         /// </summary>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+		/// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
         void Connect();
 
         /// <summary>
         /// Disconnect from the device asynchronously
         /// </summary>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+		/// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
         void Disconnect();
 
         /// <summary>
         /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
         /// </summary>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <remarks><p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p></remarks>
         bool Connecting { get; }
 
         /// <summary>
         /// Returns the device's operational state in a single call.
         /// </summary>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <remarks>
+        /// <p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p>
+        /// <para><b>Devices</b></para>
+        /// <para>Devices must return all operational values that are definitively known but can omit entries where values are unknown.
+        /// Devices must not throw exceptions / return errors when values are not known.</para>
+        /// <para>An empty list must be returned if no values are known.</para>
+        /// <para><b>Client Applications</b></para>
+		/// <para>
+		/// Applications must expect that, from time to time, some operational state values may not be present in the device response and must be prepared to handle “missing” values.
+		/// </para>
+        /// </remarks>
         ArrayList DeviceState { get; }
 
-		/// <summary>
-		/// Set a boolean switch's state asynchronously
-		/// </summary>
-		/// <param name="id">Switch number.</param>
-		/// <param name="state">New boolean state.</param>
+        /// <summary>
+        /// Set a boolean switch's state asynchronously
+        /// </summary>
+		/// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
+        /// <param name="id">Switch number.</param>
+        /// <param name="state">New boolean state.</param>
+		/// <remarks>
+        /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
+        /// </remarks>
 		void SetAsync(short id, bool state);
 
-		/// <summary>
-		/// Set a switch's value asynchronously
-		/// </summary>
-		/// <param name="id">Switch number.</param>
-		/// <param name="value">New double value.</param>
-		void SetAsyncValue(short id, double value);
-
-		/// <summary>
-		/// Flag indicating whether this switch can operate asynchronously.
-		/// </summary>
-		/// <param name="id">Switch number.</param>
-		/// <returns>True if the switch can operate asynchronously.</returns>
-		bool CanAsync(short id);
+        /// <summary>
+        /// Set a switch's value asynchronously
+        /// </summary>
+        /// <param name="id">Switch number.</param>
+        /// <param name="value">New double value.</param>
+        /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
+        /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
+        /// <remarks>
+        /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
+        /// </remarks>
+        void SetAsyncValue(short id, double value);
 
         /// <summary>
-        /// Completion variable for asynchronous changes.
+        /// Flag indicating whether this switch can operate asynchronously.
+        /// </summary>
+        /// <param name="id">Switch number.</param>
+        /// <returns>True if the switch can operate asynchronously.</returns>
+        /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
+		/// <remarks>
+        /// <p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p>
+		/// </remarks>
+        bool CanAsync(short id);
+
+        /// <summary>
+        /// Completion variable for asynchronous switch state change operations.
         /// </summary>
         /// <param name="id">Switch number.</param>
         /// <exception cref="OperationCancelledException">When an in-progress operation is cancelled by the <see cref="CancelAsync(short)"/> method.</exception>
         /// <returns>False while an asynchronous operation is underway and true when it has completed.</returns>
+		/// <remarks>
+        /// <p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p>
+		/// </remarks>
         bool StateChangeComplete(short id);
 
-		/// <summary>
-		/// Cancels an in-progress asynchronous operation.
-		/// </summary>
-		/// <param name="id">Switch number.</param>
-		void CancelAsync(short id);
+        /// <summary>
+        /// Cancels an in-progress asynchronous state change operation.
+        /// </summary>
+        /// <param name="id">Switch number.</param>
+        /// <remarks>
+        /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/>.</b></p>
+		/// This method must be implemented if it is possible for the device to cancel an asynchronous state change operation, otherwise it must throw a <see cref="MethodNotImplementedException"/>.
+        /// </remarks>
+        void CancelAsync(short id);
 
         #endregion
 

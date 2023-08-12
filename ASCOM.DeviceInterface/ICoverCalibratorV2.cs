@@ -346,34 +346,69 @@ namespace ASCOM.DeviceInterface
         #endregion
 
         #region ICoverCalibratorV2 members
+
         /// <summary>
         /// Connect to the device asynchronously
         /// </summary>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+		/// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
         void Connect();
 
         /// <summary>
         /// Disconnect from the device asynchronously
         /// </summary>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+		/// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
         void Disconnect();
 
         /// <summary>
         /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
         /// </summary>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <remarks><p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p></remarks>
         bool Connecting { get; }
 
         /// <summary>
-        /// Returns the device operational state in a single call.
+        /// Returns the device's operational state in a single call.
         /// </summary>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <remarks>
+        /// <p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p>
+        /// <para><b>Devices</b></para>
+        /// <para>Devices must return all operational values that are definitively known but can omit entries where values are unknown.
+        /// Devices must not throw exceptions / return errors when values are not known.</para>
+        /// <para>An empty list must be returned if no values are known.</para>
+        /// <para><b>Client Applications</b></para>
+		/// <para>
+		/// Applications must expect that, from time to time, some operational state values may not be present in the device response and must be prepared to handle “missing” values.
+		/// </para>
+        /// </remarks>
         ArrayList DeviceState { get; }
 
         /// <summary>
-        /// False while the calibrator brightness is not stable.
+        /// Flag showing whether a calibrator brightness state change is in progress. 
         /// </summary>
+        /// <returns>
+        /// False while the calibrator brightness is not stable following a <see cref="CalibratorOn(int)"/> or <see cref="CalibratorOff"/> command.
+        /// </returns>
+        /// <remarks>
+        /// <p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p>
+        /// <para>
+        /// This property must throw an exception ff an issue arises while changing calibrator brightness. The exception must continue to be thrown until a new <see cref="CalibratorOn(int)"/> or
+        /// <see cref="CalibratorOff"/> command is received.</para>
+        /// </remarks>
         bool CalibratorReady { get; }
-        
+
         /// <summary>
-        /// True while the cover is in motion.
+        /// Flag showing whether the cover is moving. 
         /// </summary>
+        /// <returns>
+        /// True while the cover is in motion following an <see cref="OpenCover"/> or <see cref="CloseCover"/> command.
+        /// </returns>
+        /// <remarks>
+        /// <p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p>
+        /// </remarks>
         bool CoverMoving { get; }
 
         #endregion

@@ -217,9 +217,7 @@ namespace ASCOM.DriverAccess
 
         #region ICoverCalibratorV2 members
 
-        /// <summary>
-        /// True while the calibrator brightness is changing.
-        /// </summary>
+        /// <inheritdoc />
         public bool CalibratorReady
         {
             get
@@ -236,9 +234,7 @@ namespace ASCOM.DriverAccess
             }
         }
 
-        /// <summary>
-        /// True while the cover is in motion.
-        /// </summary>
+        /// <inheritdoc />
         public bool CoverMoving
         {
             get

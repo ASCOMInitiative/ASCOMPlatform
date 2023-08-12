@@ -1279,23 +1279,42 @@ namespace ASCOM.DeviceInterface
         #region ITelescopeV4 members
 
         /// <summary>
-        /// Connect to device asynchronously
+        /// Connect to the device asynchronously
         /// </summary>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+		/// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
         void Connect();
 
         /// <summary>
-        /// Disconnect from device asynchronously
+        /// Disconnect from the device asynchronously
         /// </summary>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+		/// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
         void Disconnect();
 
         /// <summary>
-        /// Completion variable for asynchronous connect and disconnect operations
+        /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
         /// </summary>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <remarks><p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p></remarks>
         bool Connecting { get; }
 
         /// <summary>
-        /// Device state
+        /// Returns the device's operational state in a single call.
         /// </summary>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <remarks>
+        /// <p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p>
+        /// <para><b>Devices</b></para>
+        /// <para>Devices must return all operational values that are definitively known but can omit entries where values are unknown.
+        /// Devices must not throw exceptions / return errors when values are not known.</para>
+        /// <para>An empty list must be returned if no values are known.</para>
+        /// <para><b>Client Applications</b></para>
+		/// <para>
+		/// Applications must expect that, from time to time, some operational state values may not be present in the device response and must be prepared to handle “missing” values.
+		/// </para>
+        /// </remarks>
         ArrayList DeviceState { get; }
 
         #endregion
