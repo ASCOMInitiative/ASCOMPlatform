@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
-		<Name>TestFormsApp(CS)</Name>
-		<Description>ASCOM Test Forms App</Description>
+		<Name>ASCOM Windows Forms test application</Name>
+		<Description>A Windows Forms application to create and connect to a driver.</Description>
 		<Icon>PackageIconCSharp.ico</Icon>
 		<ProjectType>CSharp</ProjectType>
 		<LanguageTag>csharp</LanguageTag>
