@@ -1,5 +1,5 @@
 ﻿This Release
-The local server template name been changed to ASCOM Driver
+The local server template name been changed from local server to ASCOM Driver
 
 Release 6.6.3713
 To conform with the ASCOM SafetyMonitor device specification the SafetyMonitor driver template now defaults IsSafe to False when the driver is not connected.

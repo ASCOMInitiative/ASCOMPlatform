@@ -136,7 +136,7 @@
 		<!-- Clone a fresh copy of the ASCOM Platform Git repository  -->
 		<GitClient Command="clone" LocalPath="$(MSBuildProjectDirectory)" Arguments="-b $(GitCheckoutBranch) $(GitRepositoryPath) $(CheckoutDirectoryRelative)"/>
 
-		<!-- Get the latest commit number into the Revision Property to use in the the Platform version number  Now uses 'all' instead of 'HEAD' to get latest commit accross all branches. -->
+		<!-- Get the latest commit number into the Revision Property to use in the the Platform version number  Now uses 'all' instead of 'HEAD' to get the latest commit accross all branches. -->
 		<Exec Command="git.exe rev-list --all --count" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)">
 			<Output TaskParameter="ConsoleOutput" PropertyName="Revision" />
 		</Exec>

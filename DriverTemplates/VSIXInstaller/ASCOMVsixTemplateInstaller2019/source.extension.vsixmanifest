@@ -3,7 +3,7 @@
     <Metadata>
         <Identity Id="ASCOMVsixTemplateInstaller2019" Version="2.0.0" Language="en-US" Publisher="Peter Simpson" />
         <DisplayName>ASCOM Driver Project Templates (VS2019)</DisplayName>
-        <Description xml:space="preserve">Templates to create and test an ASCOM local server driver project. Compatible with Visual Studio 2019.</Description>
+        <Description xml:space="preserve">Templates to create and test an ASCOM driver project. Compatible with Visual Studio 2019.</Description>
         <MoreInfo>https://ascom-standards.org</MoreInfo>
         <License>License.txt</License>
         <ReleaseNotes>ReleaseNotes.txt</ReleaseNotes>

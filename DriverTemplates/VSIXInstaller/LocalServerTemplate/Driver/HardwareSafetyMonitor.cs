@@ -14,6 +14,7 @@ static class SafetyMonitorHardware
     {
         get
         {
+            // Return false per the ASOCM specification
             LogMessage("IsSafe Get", "false");
             return false;
         }
