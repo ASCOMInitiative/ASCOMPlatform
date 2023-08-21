@@ -40,8 +40,8 @@ Module DeltatCode
 
         ' NOTE: Starting April 2018 - Please note the use of modified Julian date in the formula rather than year fraction as in previous formulae
 
-        ' DATE RANGE 18th July 2023 Onwards - This is beyond the sensible extrapolation range of the most recent data analysis so revert to the basic formula: DeltaT = LeapSeconds + 32.184
-        If (YearFraction >= 2023.55) Then
+        ' DATE RANGE 31st December 2024 onwards - This is beyond the sensible extrapolation range of the most recent data analysis so revert to the basic formula: DeltaT = LeapSeconds + 32.184
+        If (YearFraction >= 2025.0) Then
 
             ' Create an EarthRotationParameters object and retrieve the current leap second value. If something goes wrong return the fall-back value
             Try
@@ -52,6 +52,15 @@ Module DeltatCode
                 ' Ultimate fallback value if all else fails!
                 Retval = LEAP_SECOND_ULTIMATE_FALLBACK_VALUE + TT_TAI_OFFSET
             End Try
+
+            ' DATE RANGE 20th August 2023 Onwards - The analysis was performed on 20th August 2023 and creates values within 0.01 of a second of the projections to 19th August 2024.
+        ElseIf ((YearFraction >= 2023.6)) Then
+            Retval = (+0.0 * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay) _
+                    + (+0.0 * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay) _
+                    + (-0.00000000836552733660643 * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay) _
+                    + (+0.00151338479660039 * ModifiedJulianDay * ModifiedJulianDay) _
+                    + (-91.2604650974829 * ModifiedJulianDay) _
+                    + (+1834465.8890493)
 
             ' DATE RANGE 18th July 2022 Onwards - The analysis was performed on 18th July 2022 and creates values within 0.01 of a second of the projections to 17th July 2023.
         ElseIf (YearFraction >= 2022.55) Then
