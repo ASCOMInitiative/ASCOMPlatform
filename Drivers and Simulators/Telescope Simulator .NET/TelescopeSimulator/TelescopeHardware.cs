@@ -1746,7 +1746,7 @@ namespace ASCOM.Simulator
                 case Operation.SlewToCoordinatesAsync:
                 case Operation.SlewToTargetAsync:
                     // End these operations if they are running
-                    EndOperation("AbortSlew", new OperationCancelledException("Slew / Move interrupted because the AbortSlew method was called."));
+                    EndOperation("AbortSlew");
                     break;
 
                 default:

@@ -52,7 +52,7 @@
 							<listItem>Tracking accuracy has been improved.</listItem>
 							<listItem>
 								Fixed Telescope Simulator so that it will handle RA/Dec rate offsets when in ALt/Az mode.
-								<i>Many thanks to Patrick Wallace for providing original C code and the algorithm for this fix!</i>
+								<legacyItalic>Many thanks to Patrick Wallace for providing C code and describing the algorithm for this fix!</legacyItalic>
 							</listItem>
 							<listItem>
 								RA/Dec rate offsets now have the correct sign behaviour: positive rate offsets result in increasing RA and Dec values and vice versa.
@@ -76,7 +76,7 @@
 							<listItem>Dome - Correctly persist layout settings when changed through the dome driver's SetupDialog method.</listItem>
 						</list>
 					</listItem>
-					<listItem>Dynamic Clients - Timeouts are now handled better.</listItem>						.
+					<listItem>Dynamic Clients - Timeouts are now handled better.</listItem>
 				</list>
 			</content>
 		</section>
@@ -338,7 +338,6 @@
 				<list class="bullet">
 					<listItem>.NET Framework 4.8</listItem>
 					<listItem>For WIndows 8 and Windows 10 the .NET Framework 3.5 option must be enabled in Control Panel / Programs and Features / Turn Windows Features On and Off</listItem>
-					<listItem>Visual C++ 16.0 libraries (these are provided by the Platform installer if required)</listItem>
 				</list>
 				<para>
 					While previous Platforms required .NET Framework 4.0, Platform 6.6 SP2 requires that .NET Framework 4.8 is installed on your PC. This change is to enable Platform components to take
@@ -353,7 +352,6 @@
 						<linkTarget>_blank</linkTarget>
 					</externalLink>
 				</para>
-				<para>The Platform installer will provide or update the C++ 16 libraries if they are not already present on your PC or are not current.</para>
 			</content>
 		</section>
 	</developerConceptualDocument>
