@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ASCOM.Common.Alpaca;
 using ASCOM.DeviceInterface;
-using ASCOM.DeviceInterface.DeviceState;
 using RestSharp;
 
 namespace ASCOM.DynamicRemoteClients
@@ -16,7 +15,7 @@ namespace ASCOM.DynamicRemoteClients
     /// <summary>
     /// ASCOM DynamicRemoteClients SafetyMonitor base class
     /// </summary>
-    public class CoverCalibratorBaseClass : ReferenceCountedObjectBase, ICoverCalibratorV2
+    public class CoverCalibratorBaseClass : ReferenceCountedObjectBase, ICoverCalibratorV1
     {
         #region Variables and Constants
 
@@ -106,26 +105,6 @@ namespace ASCOM.DynamicRemoteClients
             catch (Exception ex)
             {
                 TL.LogMessageCrLf(clientNumber, DEVICE_TYPE, ex.ToString());
-            }
-        }
-
-        #endregion
-
-        #region Convenience members
-
-        /// <summary>
-        /// CoverCalibrator device state
-        /// </summary>
-        public CoverCalibratorState CoverCalibratorState
-        {
-            get
-            {
-                // Create a state object to return.
-                CoverCalibratorState deviceState = new CoverCalibratorState(DeviceState, TL);
-                TL.LogMessage(nameof(CoverCalibratorState), $"Returning: '{deviceState.Brightness}' '{deviceState.CalibratorReady}' '{deviceState.CalibratorState}' '{deviceState.CoverMoving}' '{deviceState.CoverState}' '{deviceState.TimeStamp}'");
-
-                // Return the device specific state class
-                return deviceState;
             }
         }
 
@@ -401,180 +380,6 @@ namespace ASCOM.DynamicRemoteClients
             DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
             DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "CalibratorOff", MemberTypes.Method);
             TL.LogMessage(clientNumber, "AbortSlew", $"Calibrator off OK");
-        }
-
-        #endregion
-
-        #region ICoverCalibratorV2 implementation
-
-        public void Connect()
-        {
-            // Call the device's Connect method if this is a Platform 7 or later device, otherwise simulate the connect call
-            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device
-            {
-                TL.LogMessage("Connect", "Issuing Connect command");
-                DynamicClientDriver.SetClientTimeout(client, establishConnectionTimeout);
-                DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "Connect", MemberTypes.Method);
-            }
-
-            // Platform 6 or earlier so emulate the capability
-            TL.LogMessage("Connect", "Emulating Connect command for Platform 6 driver");
-
-            // Set Connecting to true and clear any previous exception
-            connecting = true;
-            connectException = null;
-
-            // Run a task to set the Connected property to True
-            Task connectingTask = Task.Factory.StartNew(() =>
-            {
-                // Ensure that no exceptions can escape
-                try
-                {
-                    // Set Connected True
-                    TL.LogMessage("Connect", "About to set Connected True");
-                    Connected = true;
-                    TL.LogMessage("Connect", "Connected Set True OK");
-                }
-                catch (Exception ex)
-                {
-                    // Something went wrong so log the issue and save the exception
-                    TL.LogMessage("Connect", $"Connected threw an exception: {ex.Message}");
-                    connectException = ex;
-                }
-                // Ensure that Connecting is always set False at the end of the task
-                finally
-                {
-                    TL.LogMessage("Connect", "Setting Connecting to False");
-                    connecting = false;
-                }
-            });
-        }
-
-        public void Disconnect()
-        {
-            // Call the device's Disconnect method if this is a Platform 7 or later device, otherwise simulate the connect call
-            if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device
-            {
-                TL.LogMessage("Disconnect", "Issuing Disconnect command");
-                DynamicClientDriver.SetClientTimeout(client, establishConnectionTimeout);
-                DynamicClientDriver.CallMethodWithNoParameters(clientNumber, client, URIBase, TL, "Disconnect", MemberTypes.Method);
-            }
-
-            // Platform 6 or earlier so emulate the capability
-            TL.LogMessage("Disconnect", "Emulating Disconnect command for Platform 6 driver");
-
-            // Set Connecting to true and clear any previous exception
-            connecting = true;
-            connectException = null;
-
-            // Run a task to set the Connected property to True
-            Task connectingTask = Task.Factory.StartNew(() =>
-            {
-                // Ensure that no exceptions can escape
-                try
-                {
-                    // Set Connected True
-                    TL.LogMessage("Disconnect", "About to set Connected False");
-                    Connected = false;
-                    TL.LogMessage("Disconnect", "Connected Set False OK");
-                }
-                catch (Exception ex)
-                {
-                    // Something went wrong so log the issue and save the exception
-                    TL.LogMessage("Disconnect", $"Connected threw an exception: {ex.Message}");
-                    connectException = ex;
-                }
-                // Ensure that Connecting is always set False at the end of the task
-                finally
-                {
-                    TL.LogMessage("Disconnect", "Setting Connecting to False");
-                    connecting = false;
-                }
-            });
-        }
-
-        public bool Connecting
-        {
-            get
-            {
-                // Call the device's Connecting method if this is a Platform 7 or later device, otherwise return False
-                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device
-                {
-                    TL.LogMessage("Connecting Get", "Issuing Connecting command");
-                    DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                    return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "Connecting", MemberTypes.Property);
-                }
-
-                // Platform 6 or earlier device
-                // If Connected or disconnected threw an exception, throw this to the client
-                if (!(connectException is null))
-                {
-                    TL.LogMessage("Connecting Get", $"Throwing exception from Connected to the client: {connectException.Message}\r\n{connectException}");
-                    throw connectException;
-                }
-
-                // No exception so return emulated state
-                return connecting;
-            }
-        }
-
-        public ArrayList DeviceState
-        {
-            get
-            {
-                // Call the device's DeviceState method if this is a Platform 7 or later device, otherwise simulate the DeviceState method
-                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device
-                {
-                    try
-                    {
-                        DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                        return DynamicClientDriver.DeviceState(clientNumber, client, URIBase, TL);
-                    }
-                    catch (Exception ex)
-                    {
-                        TL.LogMessage("DeviceState Get", "Received exception: " + ex.Message);
-                        throw;
-                    }
-                }
-                else // Platform 6 or earlier device so return an empty list.
-                {
-                    return new ArrayList();
-                }
-            }
-        }
-
-        public bool CalibratorReady
-        {
-            get
-            {
-                // Call the device's CalibratorReady property if this is a Platform 7 or later device, otherwise use CalibratorState
-                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device so call the CalibratorReady property
-                {
-                    TL.LogMessage("CalibratorReady", "Issuing CalibratorReady command");
-                    DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                    return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CalibratorReady", MemberTypes.Property);
-                }
-
-                // Platform 6 or earlier device so use CalibratorState to determine the movement state.
-                return CalibratorState == CalibratorStatus.NotReady;
-            }
-        }
-
-        public bool CoverMoving
-        {
-            get
-            {
-                // Call the device's CoverMoving property if this is a Platform 7 or later device, otherwise use CoverState
-                if (DeviceCapabilities.HasConnectAndDeviceState(DEVICE_TYPE.ToDeviceType(), InterfaceVersion)) // We are presenting a Platform 7 or later device so call the CoverMoving property
-                {
-                    TL.LogMessage("CoverMoving", "Issuing CoverMoving command");
-                    DynamicClientDriver.SetClientTimeout(client, standardDeviceResponseTimeout);
-                    return DynamicClientDriver.GetValue<bool>(clientNumber, client, URIBase, TL, "CoverMoving", MemberTypes.Property);
-                }
-
-                // Platform 6 or earlier device so use CoverState to determine the movement state.
-                return CoverState == CoverStatus.Moving;
-            }
         }
 
         #endregion

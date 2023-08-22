@@ -6,7 +6,6 @@
 
 using System;
 using ASCOM.DeviceInterface;
-using ASCOM.DeviceInterface.DeviceState;
 using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
@@ -49,22 +48,6 @@ namespace ASCOM.DriverAccess
             {
                 chooser.DeviceType = "FilterWheel";
                 return chooser.Choose(filterWheelId);
-            }
-        }
-
-        /// <summary>
-        /// FilterWheel device state
-        /// </summary>
-        public FilterWheelState FilterWheelState
-        {
-            get
-            {
-                // Create a state object to return.
-                FilterWheelState filterWheelState = new FilterWheelState(DeviceState, TL);
-                TL.LogMessage(nameof(FilterWheelState), $"Returning: '{filterWheelState.Position}' '{filterWheelState.TimeStamp}'");
-
-                // Return the device specific state class
-                return filterWheelState;
             }
         }
 

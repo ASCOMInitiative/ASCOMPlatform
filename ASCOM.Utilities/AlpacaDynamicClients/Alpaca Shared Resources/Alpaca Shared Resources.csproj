@@ -57,7 +57,6 @@
     <Compile Include="Response Classes\Base64ArrayJsonResponse.cs" />
     <Compile Include="Response Classes\BoolResponse.cs" />
     <Compile Include="Response Classes\DateAndTimeResponse.cs" />
-    <Compile Include="Response Classes\DeviceStateResponse.cs" />
     <Compile Include="Response Classes\DoubleArray2DResponse.cs" />
     <Compile Include="Response Classes\DoubleArray3DResponse.cs" />
     <Compile Include="Response Classes\DoubleResponse.cs" />

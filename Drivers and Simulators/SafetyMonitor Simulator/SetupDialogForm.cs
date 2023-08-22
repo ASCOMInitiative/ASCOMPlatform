@@ -9,7 +9,7 @@ namespace ASCOM.Simulator
 {
     public partial class SetupDialogForm : Form
     {
-        private static readonly ISafetyMonitorV3 SafetyMonitor = new SafetyMonitor();
+        private static readonly ISafetyMonitor SafetyMonitor = new SafetyMonitor();
         Assembly _assembly;
         Stream _redLed;
         Stream _greenLed;

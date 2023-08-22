@@ -35,7 +35,7 @@ namespace ASCOM.Simulator
     [ComSourceInterfaces(typeof(IVideo))]
     [Guid("1D06B419-B330-42CA-BC41-992718C929F4")]
     [ProgId("ASCOM.Simulator.Video")]
-    public class Video : IVideoV2
+    public class Video : IVideo
     {
         /// <summary>
         /// Category under which the device will be listed by the ASCOM Chooser
@@ -784,60 +784,6 @@ namespace ASCOM.Simulator
             AssertConnected();
 
             UIThreadCaller.Invoke((frm, args) => ConfigureDevideProperiesInternal(frm));
-        }
-
-        #endregion
-
-        #region IVideoV2 members
-
-        public void Connect()
-        {
-            Connected = true;
-        }
-
-        public void Disconnect()
-        {
-            Connected = false;
-        }
-
-        public bool Connecting
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        public ArrayList DeviceState
-        {
-            get
-            {
-                // Create an array list to hold the IStateValue entries
-                ArrayList deviceState = new ArrayList();
-
-                // Add one entry for each operational state, if possible
-                try { deviceState.Add(new StateValue(nameof(IVideoV2.CameraState), CameraState)); } catch { }
-                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
-
-                // Return the overall device state
-                return deviceState;
-
-            }
-        }
-
-        public void CommandBlind(string Command, bool Raw = false)
-        {
-            throw new ASCOM.MethodNotImplementedException("CommandBlind is not implemented in this device.");
-        }
-
-        public bool CommandBool(string Command, bool Raw = false)
-        {
-            throw new ASCOM.MethodNotImplementedException("CommandBool is not implemented in this device.");
-        }
-
-        public string CommandString(string Command, bool Raw = false)
-        {
-            throw new ASCOM.MethodNotImplementedException("CommandString is not implemented in this device.");
         }
 
         #endregion

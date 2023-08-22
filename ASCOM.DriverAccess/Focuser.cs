@@ -6,7 +6,6 @@
 
 using System;
 using ASCOM.DeviceInterface;
-using ASCOM.DeviceInterface.DeviceState;
 using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
@@ -43,22 +42,6 @@ namespace ASCOM.DriverAccess
             {
                 chooser.DeviceType = "Focuser";
                 return chooser.Choose(focuserId);
-            }
-        }
-
-        /// <summary>
-        /// Focuser device state
-        /// </summary>
-        public FocuserState FocuserState
-        {
-            get
-            {
-                // Create a state object to return.
-                FocuserState focuserState = new FocuserState(DeviceState, TL);
-                TL.LogMessage(nameof(FocuserState), $"Returning: '{focuserState.IsMoving}' '{focuserState.Position}' '{focuserState.Temperature}' '{focuserState.TimeStamp}'");
-
-                // Return the device specific state class
-                return focuserState;
             }
         }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using ASCOM.DeviceInterface;
-using ASCOM.DeviceInterface.DeviceState;
 using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
@@ -8,7 +7,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to CoverCalibrator drivers
     /// </summary>
-    public class CoverCalibrator : AscomDriver, ICoverCalibratorV2
+    public class CoverCalibrator : AscomDriver, ICoverCalibratorV1
     {
         private MemberFactory memberFactory;
 
@@ -37,22 +36,6 @@ namespace ASCOM.DriverAccess
             {
                 chooser.DeviceType = "CoverCalibrator";
                 return chooser.Choose(coverCalibratorId);
-            }
-        }
-
-        /// <summary>
-        /// CoverCalibrator device state
-        /// </summary>
-        public CoverCalibratorState CoverCalibratorState
-        {
-            get
-            {
-                // Create a state object to return.
-                CoverCalibratorState deviceState = new CoverCalibratorState(DeviceState, TL);
-                TL.LogMessage(nameof(CoverCalibratorState), $"Returning: '{deviceState.Brightness}' '{deviceState.CalibratorReady}' '{deviceState.CalibratorState}' '{deviceState.CoverMoving}' '{deviceState.CoverState}' '{deviceState.TimeStamp}'");
-
-                // Return the device specific state class
-                return deviceState;
             }
         }
 
@@ -215,42 +198,5 @@ namespace ASCOM.DriverAccess
 
         #endregion
 
-        #region ICoverCalibratorV2 members
-
-        /// <inheritdoc />
-        public bool CalibratorReady
-        {
-            get
-            {
-                // Call the device's CalibratorReady method if this is a Platform 7 or later device, otherwise use CalibratorState
-                if (HasConnectAndDeviceState) // Platform 7 or later device
-                {
-                    TL.LogMessage("CalibratorReady", "Issuing CalibratorReady command");
-                    return Convert.ToBoolean(memberFactory.CallMember(1, "CalibratorReady", new Type[] { }, new object[] { }));
-                }
-
-                // Platform 6 or earlier device so use CalibratorState to determine the movement state.
-                return (CalibratorStatus)memberFactory.CallMember(1, "CalibratorState", new Type[] { }, new object[] { }) == CalibratorStatus.NotReady;
-            }
-        }
-
-        /// <inheritdoc />
-        public bool CoverMoving
-        {
-            get
-            {
-                // Call the device's CoverMoving method if this is a Platform 7 or later device, otherwise use CoverState
-                if (HasConnectAndDeviceState) // Platform 7 or later device
-                {
-                    TL.LogMessage("CoverMoving", "Issuing CoverMoving command");
-                    return Convert.ToBoolean(memberFactory.CallMember(1, "CoverMoving", new Type[] { }, new object[] { }));
-                }
-
-                // Platform 6 or earlier device so use CoverState to determine the movement state.
-                return (CoverStatus)memberFactory.CallMember(1, "CoverState", new Type[] { }, new object[] { }) == CoverStatus.Moving;
-            }
-        }
-
-        #endregion
     }
 }

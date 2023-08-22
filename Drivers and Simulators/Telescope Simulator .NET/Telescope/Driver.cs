@@ -46,7 +46,7 @@ namespace ASCOM.Simulator
     [ServedClassName("Telescope Simulator for .NET")]
     [ProgId("ASCOM.Simulator.Telescope")]
     [ClassInterface(ClassInterfaceType.None)]
-    public class Telescope : ReferenceCountedObjectBase, ITelescopeV4
+    public class Telescope : ReferenceCountedObjectBase, ITelescopeV3
     {
         private const int UNPARK_COMPLETION_DELAY = 1000; // Delay time (ms) before an Unpark operation completes.
 
@@ -94,8 +94,6 @@ namespace ASCOM.Simulator
                 // Initialise the guide rates from the Telescope hardware default values
                 currentGuideRateRightAscension = TelescopeHardware.GuideRateRightAscension;
                 currentGuideRateDeclination = TelescopeHardware.GuideRateDeclination;
-                if (TelescopeHardware.InterfaceVersion >= 4)
-                    Connecting = false;
             }
             catch (Exception ex)
             {
@@ -104,127 +102,6 @@ namespace ASCOM.Simulator
             }
 
         }
-
-        #region ITelescopeV4 members
-
-        /// <summary>
-        /// Connect to the telescope asynchronously
-        /// </summary>
-        public void Connect()
-        {
-            // This method is only valid in interface V4 and later
-            CheckCapability(TelescopeHardware.InterfaceVersion >= 4, "Connect");
-
-            TelescopeHardware.TL.LogMessage("Connect Operation", $"Starting Connect()...");
-
-            // Set the completion variable to the "process running" state
-            Connecting = true;
-
-            // Start a task that will flag the Connect operation as complete after a set time interval
-            Task.Run(() =>
-            {
-                // Simulate a long connection phase
-                Thread.Sleep(1000);
-
-                // Set the Connected state to true
-                Connected = true;
-
-                // Set the completion variable to the "process complete" state to show that the Connect operation has completed
-                Connecting = false;
-
-                TelescopeHardware.TL.LogMessage("Connect Operation", $"Completed Connect()");
-            });
-
-            // End of the Connect operation initiator
-        }
-
-        /// <summary>
-        /// Disconnect from the telescope asynchronously
-        /// </summary>
-        public void Disconnect()
-        {
-            // This method is only valid in interface V4 and later
-            CheckCapability(TelescopeHardware.InterfaceVersion >= 4, "Disconnect");
-
-            TelescopeHardware.TL.LogMessage("Disconnect Operation", $"Starting Disconnect...");
-
-            // Set the completion variable to the "process running" state
-            Connecting = true;
-
-            // Start a task that will flag the Disconnect operation as complete after a set time interval
-            Task.Run(() =>
-            {
-                // Simulate a long connection phase
-                Thread.Sleep(1000);
-
-                // Set the Connected state to true
-                Connected = false;
-
-                // Set the completion variable to the "process complete" state to show that the Disconnect operation has completed
-                Connecting = false;
-
-                TelescopeHardware.TL.LogMessage("Disconnect Operation", $"Completed Disconnect()");
-            });
-
-            // End of the Disconnect operation initiator
-        }
-
-        /// <summary>
-        /// Connect / Disconnect completion variable. Returns true when an operation is underway, otherwise false
-        /// </summary>
-        public bool Connecting
-        {
-            get
-            {
-                // This method is only valid in interface V4 and later
-                CheckCapability(TelescopeHardware.InterfaceVersion >= 4, "Connecting", false);
-
-                return connecting;
-            }
-
-            private set
-            {
-                // This method is only valid in interface V4 and later
-                CheckCapability(TelescopeHardware.InterfaceVersion >= 4, "Connecting", true);
-
-                connecting = value;
-            }
-        }
-
-        /// <summary>
-        /// Return the device's operational state in one call
-        /// </summary>
-        public ArrayList DeviceState
-        {
-            get
-            {
-                // This method is only valid in interface V4 and later
-                CheckCapability(TelescopeHardware.InterfaceVersion >= 4, "DeviceState", false);
-
-                // Create an array list to hold the IStateValue entries
-                ArrayList deviceState = new ArrayList();
-
-                // Add one entry for each operational state, if possible
-                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Altitude), Altitude)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.AtHome), AtHome)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.AtPark), AtPark)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Azimuth), Azimuth)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Declination), Declination)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.IsPulseGuiding), IsPulseGuiding)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.RightAscension), RightAscension)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.SideOfPier), SideOfPier)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.SiderealTime), SiderealTime)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Slewing), Slewing)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Tracking), Tracking)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.UTCDate), UTCDate)); } catch { }
-                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
-
-                // Return the overall device state
-                return deviceState;
-            }
-        }
-
-        #endregion
 
         #region ITelescope Members
 

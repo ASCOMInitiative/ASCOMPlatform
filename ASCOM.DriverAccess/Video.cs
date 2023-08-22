@@ -6,9 +6,7 @@
 using System;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
-
 using System.Collections;
-using ASCOM.DeviceInterface.DeviceState;
 
 namespace ASCOM.DriverAccess
 {
@@ -44,24 +42,6 @@ namespace ASCOM.DriverAccess
             {
                 chooser.DeviceType = "Video";
                 return chooser.Choose(videoId);
-            }
-        }
-
-        /// <summary>
-        /// VideoState device state
-        /// </summary>
-        public VideoState VideoState
-        {
-            get
-            {
-                // Create a state object to return.
-                VideoState videoState = new VideoState(DeviceState, TL);
-                TL.LogMessage(nameof(VideoState), $"Returning: " +
-                    $"CameraState: '{videoState.CameraState}', " +
-                    $"Time stamp: '{videoState.TimeStamp}'");
-
-                // Return the device specific state class
-                return videoState;
             }
         }
 
