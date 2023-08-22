@@ -1108,13 +1108,6 @@ namespace ASCOM.DynamicRemoteClients
                             if (CallWasSuccessful(TL, stringListResponse)) return (T)((object)stringListResponse.Value);
                             restResponseBase = (RestResponseBase)stringListResponse;
                         }
-                        if (typeof(T) == typeof(List<StateValue>)) // Used for ArrayLists of IStateValue
-                        {
-                            DeviceStateResponse deviceStateResponse = JsonConvert.DeserializeObject<DeviceStateResponse>(deviceJsonResponse.Content);
-                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, deviceStateResponse.ClientTransactionID, deviceStateResponse.ServerTransactionID, (deviceStateResponse.Value is null) ? "NO VALUE OR NULL VALUE RETURNED" : deviceStateResponse.Value.Count.ToString()));
-                            if (CallWasSuccessful(TL, deviceStateResponse)) return (T)((object)deviceStateResponse.Value);
-                            restResponseBase = (RestResponseBase)deviceStateResponse;
-                        }
                         if (typeof(T) == typeof(NoReturnValue)) // Used for Methods that have no response and Property Set members
                         {
                             MethodResponse deviceResponse = JsonConvert.DeserializeObject<MethodResponse>(deviceJsonResponse.Content);
@@ -1892,21 +1885,6 @@ namespace ASCOM.DynamicRemoteClients
             {
                 returnValues.Add(action);
                 TL.LogMessage(clientNumber, "SupportedActions", string.Format("Returning action: {0}", action));
-            }
-
-            return returnValues;
-        }
-
-        public static ArrayList DeviceState(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL)
-        {
-            List<StateValue> deviceState = GetValue<List<StateValue>>(clientNumber, client, URIBase, TL, "DeviceState", MemberTypes.Property);
-            TL.LogMessage(clientNumber, "DeviceState", $"Returning {deviceState.Count} elements");
-
-            ArrayList returnValues = new ArrayList();
-            foreach (StateValue stateValue in deviceState)
-            {
-                returnValues.Add(stateValue);
-                TL.LogMessage(clientNumber, "DeviceState", $"Returning: {stateValue.Name} = {stateValue.Value} - Type: {stateValue.Value.GetType().Name}");
             }
 
             return returnValues;

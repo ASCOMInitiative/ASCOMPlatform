@@ -16,7 +16,7 @@ namespace ASCOM.Simulator
     [Guid("096bb159-95fd-4963-809f-1f8fb6e7f833")]
     [ClassInterface(ClassInterfaceType.None)]
 
-    public class CoverCalibrator : ICoverCalibratorV2
+    public class CoverCalibrator : ICoverCalibratorV1
     {
         // Private simulator constants
         private const string DRIVER_PROGID = "ASCOM.Simulator.CoverCalibrator"; // ASCOM DeviceID (COM ProgID) for this driver.
@@ -464,59 +464,6 @@ namespace ASCOM.Simulator
                 targetCalibratorStatus = CalibratorStatus.Off;
                 calibratorTimer.Start();
                 TL.LogMessage("CalibratorOff", $"Starting asynchronous calibrator turn off for {CalibratorStablisationTimeValue} seconds.");
-            }
-        }
-
-        #endregion
-
-        #region ICoverCalibratorV2 implementation
-        public void Connect()
-        {
-            Connected = true;
-        }
-
-        public void Disconnect()
-        {
-            Connected = false;
-        }
-
-        public bool Connecting
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        public ArrayList DeviceState
-        {
-            get
-            {
-                ArrayList deviceState = new ArrayList();
-                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.Brightness), Brightness)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CalibratorState), CalibratorState)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CalibratorReady), CalibratorReady)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CoverState), CoverState)); } catch { }
-                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CoverMoving), CoverMoving)); } catch { }
-                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
-
-                return deviceState;
-            }
-        }
-
-        public bool CalibratorReady
-        {
-            get
-            {
-                return CalibratorState == CalibratorStatus.NotReady;
-            }
-        }
-
-        public bool CoverMoving
-        {
-            get
-            {
-                return CoverState == CoverStatus.Moving;
             }
         }
 

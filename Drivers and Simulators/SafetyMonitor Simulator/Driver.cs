@@ -21,7 +21,7 @@ namespace ASCOM.Simulator
     [Guid("0EF59E5C-2715-4E91-8A5E-38FE388B4F00")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
-    public class SafetyMonitor : ISafetyMonitorV3, IDisposable
+    public class SafetyMonitor : ISafetyMonitor, IDisposable
     {
         #region Constants
 
@@ -155,7 +155,7 @@ namespace ASCOM.Simulator
             get { return name; }
         }
 
-        void ISafetyMonitorV3.Dispose()
+        void ISafetyMonitor.Dispose()
         {
             Dispose();
         }
@@ -227,40 +227,6 @@ namespace ASCOM.Simulator
         public bool IsSafe
         {
             get { return _isSafe; }
-        }
-
-        #endregion
-
-        #region ISafetyMonitorV3 members
-
-        public void Connect()
-        {
-            Connected = true;
-        }
-
-        public void Disconnect()
-        {
-            Connected = false;
-        }
-
-        public bool Connecting
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        public ArrayList DeviceState
-        {
-            get
-            {
-                ArrayList deviceState = new ArrayList();
-                try { deviceState.Add(new StateValue(nameof(ISafetyMonitorV3.IsSafe), IsSafe)); } catch { }
-                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
-
-                return deviceState;
-            }
         }
 
         #endregion
