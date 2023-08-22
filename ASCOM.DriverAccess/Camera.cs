@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using ASCOM.DeviceInterface;
-using ASCOM.DeviceInterface.DeviceState;
 using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
@@ -43,22 +42,6 @@ namespace ASCOM.DriverAccess
             {
                 chooser.DeviceType = "Camera";
                 return chooser.Choose(cameraId);
-            }
-        }
-
-        /// <summary>
-        /// Camera device state
-        /// </summary>
-        public CameraDeviceState CameraDeviceState
-        {
-            get
-            {
-                // Create a state object to return.
-                CameraDeviceState cameraDeviceState = new CameraDeviceState(DeviceState, TL);
-                TL.LogMessage(nameof(CameraDeviceState), $"Returning: '{cameraDeviceState.CameraState}' '{cameraDeviceState.CCDTemperature}' '{cameraDeviceState.CoolerPower}' '{cameraDeviceState.HeatSinkTemperature}' '{cameraDeviceState.ImageReady}' '{cameraDeviceState.PercentCompleted}' '{cameraDeviceState.TimeStamp}'");
-
-                // Return the device specific state class
-                return cameraDeviceState;
             }
         }
 

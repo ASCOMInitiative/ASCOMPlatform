@@ -6,7 +6,6 @@
 //
 using System;
 using ASCOM.DeviceInterface;
-using ASCOM.DeviceInterface.DeviceState;
 using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
@@ -91,22 +90,6 @@ namespace ASCOM.DriverAccess
             {
                 chooser.DeviceType = "Dome";
                 return chooser.Choose(domeId);
-            }
-        }
-
-        /// <summary>
-        /// Dome device state
-        /// </summary>
-        public DomeState DomeState
-        {
-            get
-            {
-                // Create a state object to return.
-                DomeState domeState = new DomeState(DeviceState, TL);
-                TL.LogMessage(nameof(DomeState), $"Returning: '{domeState.Altitude}' '{domeState.AtHome}' '{domeState.AtPark}' '{domeState.Azimuth}' '{domeState.ShutterStatus}' '{domeState.Slewing}' '{domeState.TimeStamp}'");
-
-                // Return the device specific state class
-                return domeState;
             }
         }
 

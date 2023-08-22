@@ -5,7 +5,6 @@
 
 using System;
 using ASCOM.DeviceInterface;
-using ASCOM.DeviceInterface.DeviceState;
 using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
@@ -42,24 +41,6 @@ namespace ASCOM.DriverAccess
             {
                 chooser.DeviceType = "SafetyMonitor";
                 return chooser.Choose(safetyMonitorId);
-            }
-        }
-
-        /// <summary>
-        /// SafetyMonitor device state
-        /// </summary>
-        public SafetyMonitorState SafetyMonitorState
-        {
-            get
-            {
-                // Create a state object to return.
-                SafetyMonitorState safetyMonitorState = new SafetyMonitorState(DeviceState, TL);
-                TL.LogMessage(nameof(SafetyMonitorState), $"Returning: " +
-                    $"Cloud cover: '{safetyMonitorState.IsSafe}', " +
-                    $"Time stamp: '{safetyMonitorState.TimeStamp}'");
-
-                // Return the device specific state class
-                return safetyMonitorState;
             }
         }
 

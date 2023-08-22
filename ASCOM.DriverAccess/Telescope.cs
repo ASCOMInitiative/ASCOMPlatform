@@ -10,8 +10,6 @@ using ASCOM.Utilities;
 using System.Collections;
 using System.Reflection;
 using System.Globalization;
-using ASCOM.DeviceInterface.DeviceState;
-
 namespace ASCOM.DriverAccess
 {
 
@@ -19,10 +17,9 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Implements a telescope class to access any registered ASCOM telescope
     /// </summary>
-    public class Telescope : AscomDriver, ITelescopeV4
+    public class Telescope : AscomDriver, ITelescopeV3
     {
         internal MemberFactory memberFactory;
-        internal bool isPlatform7Telescope = false;
         internal bool isPlatform6Telescope = false;
         internal bool isPlatform5Telescope = false;
 
@@ -40,12 +37,6 @@ namespace ASCOM.DriverAccess
             foreach (Type objInterface in memberFactory.GetInterfaces)
             {
                 TL.LogMessage("Telescope", "Found interface name: " + objInterface.Name);
-                if (objInterface.Equals(typeof(ITelescopeV4)))
-                {
-                    isPlatform6Telescope = true; //If the type matches the V2 type flag this
-                    isPlatform7Telescope = true; //If the type matches the V2 type flag this
-                }
-
                 if (objInterface.Equals(typeof(ITelescopeV3))) isPlatform6Telescope = true; //If the type matches the V2 type flag this
                 if (objInterface.Equals(typeof(ASCOM.Interface.ITelescope))) isPlatform5Telescope = true; //If the type matches the PIA type flag this
             }
@@ -74,23 +65,6 @@ namespace ASCOM.DriverAccess
             {
                 chooser.DeviceType = "Telescope";
                 return chooser.Choose(telescopeId);
-            }
-        }
-
-        /// <summary>
-		/// State response from the device
-		/// </summary>
-		public TelescopeState TelescopeState
-        {
-            get
-            {
-                // Create a state object to return.
-                TelescopeState state = new TelescopeState(DeviceState, TL);
-                TL.LogMessage(nameof(TelescopeState), $"Returning: '{state.Altitude}' '{state.AtHome}' '{state.AtPark}' '{state.Azimuth}' '{state.Declination}' '{state.IsPulseGuiding}' " +
-                    $"'{state.RightAscension}' '{state.SideOfPier}' '{state.SiderealTime}' '{state.Slewing}' '{state.Tracking}' '{state.UTCDate}' '{state.TimeStamp}'");
-
-                // Return the device specific state class
-                return state;
             }
         }
 

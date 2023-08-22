@@ -1,6 +1,5 @@
 ﻿using System;
 using ASCOM.DeviceInterface;
-using ASCOM.DeviceInterface.DeviceState;
 using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
@@ -46,36 +45,6 @@ namespace ASCOM.DriverAccess
             {
                 chooser.DeviceType = "ObservingConditions";
                 return chooser.Choose(observingConditionsId);
-            }
-        }
-
-        /// <summary>
-        /// ObservingConditions device state
-        /// </summary>
-        public ObservingConditionsState ObservingConditionsState
-        {
-            get
-            {
-                // Create a state object to return.
-                ObservingConditionsState observingConditionsState = new ObservingConditionsState(DeviceState, TL);
-                TL.LogMessage(nameof(ObservingConditionsState), $"Returning: " +
-                    $"Cloud cover: '{observingConditionsState.CloudCover}', " +
-                    $"Dew point: '{observingConditionsState.DewPoint}', " +
-                    $"Humidity: '{observingConditionsState.Humidity}', " +
-                    $"Pressure: '{observingConditionsState.Pressure}', " +
-                    $"Rain rate: '{observingConditionsState.RainRate}', " +
-                    $"Sky brightness: '{observingConditionsState.SkyBrightness}', " +
-                    $"Sky quality: '{observingConditionsState.SkyQuality}', " +
-                    $"Sky temperature'{observingConditionsState.SkyTemperature}', " +
-                    $"Star FWHM: '{observingConditionsState.StarFWHM}', " +
-                    $"Temperature: '{observingConditionsState.Temperature}', " +
-                    $"Wind direction: '{observingConditionsState.WindDirection}', " +
-                    $"Wind gust: '{observingConditionsState.WindGust}', " +
-                    $"Wind speed: '{observingConditionsState.WindSpeed}', " +
-                    $"Time stamp: '{observingConditionsState.TimeStamp}'");
-
-                // Return the device specific state class
-                return observingConditionsState;
             }
         }
 

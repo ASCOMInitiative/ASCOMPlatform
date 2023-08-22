@@ -36,7 +36,7 @@ namespace ASCOM.DriverAccess
     /// <para>For convenience devices are referred to as Boolean if the device can only have two states, and multi-state if it can have more than two values.
     /// <b>These are treated the same in the interface definition</b>.</para>
     /// </remarks>
-    public class Switch : AscomDriver, ISwitchV3
+    public class Switch : AscomDriver, ISwitchV2
     {
         private MemberFactory memberFactory;
 

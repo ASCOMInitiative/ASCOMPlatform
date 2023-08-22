@@ -6,7 +6,6 @@
 
 using System;
 using ASCOM.DeviceInterface;
-using ASCOM.DeviceInterface.DeviceState;
 using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
@@ -43,26 +42,6 @@ namespace ASCOM.DriverAccess
             {
                 chooser.DeviceType = "Rotator";
                 return chooser.Choose(rotatorId);
-            }
-        }
-
-        /// <summary>
-        /// Rotator device state
-        /// </summary>
-        public RotatorState RotatorState
-        {
-            get
-            {
-                // Create a state object to return.
-                RotatorState rotatorState = new RotatorState(DeviceState, TL);
-                TL.LogMessage(nameof(RotatorState), $"Returning: " +
-                    $"Cloud cover: '{rotatorState.IsMoving}', " +
-                    $"Dew point: '{rotatorState.MechanicalPosition}', " +
-                    $"Humidity: '{rotatorState.Position}', " +
-                    $"Time stamp: '{rotatorState.TimeStamp}'");
-
-                // Return the device specific state class
-                return rotatorState;
             }
         }
 
