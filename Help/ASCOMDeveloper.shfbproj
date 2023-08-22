@@ -86,7 +86,7 @@
       <Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" />
     </ApiFilter>
     <PresentationStyle>VS2013</PresentationStyle>
-    <Preliminary>True</Preliminary>
+    <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
     <CleanIntermediates>True</CleanIntermediates>
     <IncludeFavorites>True</IncludeFavorites>
@@ -114,7 +114,8 @@
     </FeedbackEMailAddress>
     <FeedbackEMailLinkText>
     </FeedbackEMailLinkText>
-    <HeaderText>Platform 6.6 SP2 - Early Release.</HeaderText>
+    <HeaderText>
+    </HeaderText>
     <VisibleItems>InheritedMembers, EditorBrowsableNever, NonBrowsable</VisibleItems>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="ASCOM.HelperNET.VB6HelperSupport" isDocumented="False" />

@@ -52,8 +52,6 @@ namespace ASCOM.Simulator
             this.colMax = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStep = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCanWrite = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.colCanAsync = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.colAsyncDuration = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSwitches)).BeginInit();
             this.SuspendLayout();
@@ -146,9 +144,7 @@ namespace ASCOM.Simulator
             this.colMin,
             this.colMax,
             this.colStep,
-            this.colCanWrite,
-            this.colCanAsync,
-            this.colAsyncDuration});
+            this.colCanWrite});
             this.dataGridViewSwitches.Location = new System.Drawing.Point(8, 71);
             this.dataGridViewSwitches.MultiSelect = false;
             this.dataGridViewSwitches.Name = "dataGridViewSwitches";
@@ -265,25 +261,6 @@ namespace ASCOM.Simulator
             this.colCanWrite.ToolTipText = "If this is unchecked the device value cannot be set, i.e. a sensor.";
             this.colCanWrite.Width = 40;
             // 
-            // colCanAsync
-            // 
-            this.colCanAsync.DataPropertyName = "CanAsync";
-            this.colCanAsync.HeaderText = "Can Async";
-            this.colCanAsync.Name = "colCanAsync";
-            this.colCanAsync.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.colCanAsync.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.colCanAsync.ToolTipText = "Check to enable Async operation";
-            this.colCanAsync.Width = 40;
-            // 
-            // colAsyncDuration
-            // 
-            this.colAsyncDuration.DataPropertyName = "AsyncDuration";
-            this.colAsyncDuration.HeaderText = "Async Duration";
-            this.colAsyncDuration.Name = "colAsyncDuration";
-            this.colAsyncDuration.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.colAsyncDuration.ToolTipText = "Duration of the asynchronous operation.";
-            this.colAsyncDuration.Width = 50;
-            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -331,7 +308,5 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.DataGridViewTextBoxColumn colMax;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStep;
         private System.Windows.Forms.DataGridViewCheckBoxColumn colCanWrite;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn colCanAsync;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colAsyncDuration;
     }
 }

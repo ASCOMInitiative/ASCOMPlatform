@@ -545,10 +545,9 @@ namespace ASCOM.Simulator
             switches.Add(new SwitchDevice("Scope Cover") { Description = "Scope cover control true is closed, false is open" });
             switches.Add(new SwitchDevice("Scope Parked") { Description = "Scope parked switch, true if parked", CanWrite = false });
             switches.Add(new SwitchDevice("Cloudy", 2, 0, 1, 0, false, 0) { Description = "Cloud monitor: 0=clear, 1=light cloud, 2= heavy cloud" });
-            switches.Add(new SwitchDevice("Temperature", 30, -20, 0.1, 12, false, false, 0) { Description = "Temperature in deg C" });
-            switches.Add(new SwitchDevice("Humidity", 100, 0, 1, 50, false, false, 0) { Description = "Relative humidity %" });
-            switches.Add(new SwitchDevice("Raining") { Description = "Rain monitor, true if raining", CanWrite = false, CanAsync = false });
-            switches.Add(new SwitchDevice("Async") { Description = "Long running asynchronous operation", CanWrite = false, CanAsync = true, AsyncDuration = 3.0 });
+            switches.Add(new SwitchDevice("Temperature", 30, -20, 0.1, 12, false, 0) { Description = "Temperature in deg C" });
+            switches.Add(new SwitchDevice("Humidity", 100, 0, 1, 50, false, 0) { Description = "Relative humidity %" });
+            switches.Add(new SwitchDevice("Raining") { Description = "Rain monitor, true if raining", CanWrite = false});
         }
 
         #endregion

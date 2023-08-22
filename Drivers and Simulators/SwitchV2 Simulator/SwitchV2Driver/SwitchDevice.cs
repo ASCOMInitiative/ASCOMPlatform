@@ -23,24 +23,6 @@ namespace ASCOM.Simulator
         public double Value { get; set; }
         public string Description { get; set; }
 
-        #region ISwitchV3 members
-
-        public bool CanAsync { get; set; } // True if this switch can operate asynchronously
-
-        public double AsyncDuration { get; set; } // Duration of the asynchronous change
-
-        public bool StateChangeComplete { get; set; } = true; // True when an asynchronous operation completes
-
-        public Exception AsyncException { get; set; } = null; // Exception to return, if any, when the Connecting property is polled
-
-        public CancellationTokenSource CancellationTokenSource { get; set; } = new CancellationTokenSource(); // Cancellation token source to cancel an in-progress asynchronous operation. Null when no operation is in progress
-
-        public CancellationToken CancellationToken { get; set; } = CancellationToken.None; // Cancellation token to cancel an in-progress asynchronous operation. Null when no operation is in progress
-
-        public Task Task { get; set; } // Current task
-
-        #endregion
-
         #region Constructors
 
         private SwitchDevice()
@@ -67,8 +49,8 @@ namespace ASCOM.Simulator
         /// <param name="minimum">The minimum.</param>
         /// <param name="stepSize">step Size</param>
         /// <param name="value">The value.</param>
-        internal SwitchDevice(string name, double maximum, double minimum, double stepSize, double value, bool canAsync, double asyncDuration)
-            : this(name, maximum, minimum, stepSize, value, true, canAsync, asyncDuration)
+        internal SwitchDevice(string name, double maximum, double minimum, double stepSize, double value, double asyncDuration)
+            : this(name, maximum, minimum, stepSize, value, true, asyncDuration)
         { }
 
         /// <summary>
@@ -80,7 +62,7 @@ namespace ASCOM.Simulator
         /// <param name="step">The step.</param>
         /// <param name="canWrite">if set to <c>true</c> [read only].</param>
         /// <param name="value">The value.</param>
-        public SwitchDevice(string name, double max, double min, double step, double value, bool canWrite, bool canAsync, double asyncDuration)
+        public SwitchDevice(string name, double max, double min, double step, double value, bool canWrite, double asyncDuration)
         {
             this.Name = name;
             this.Maximum = max;
@@ -89,8 +71,6 @@ namespace ASCOM.Simulator
             this.CanWrite = canWrite;
             this.Value = value;
             this.Description = name;
-            this.CanAsync = canAsync;
-            this.AsyncDuration = asyncDuration;
         }
 
         /// <summary>
@@ -111,8 +91,6 @@ namespace ASCOM.Simulator
             this.CanWrite = Convert.ToBoolean(profile.GetValue(driverId, "CanWrite", subKey, bool.FalseString), CultureInfo.InvariantCulture);
             this.Value = Convert.ToDouble(profile.GetValue(driverId, "Value", subKey, "0"), CultureInfo.InvariantCulture);
             this.Description = profile.GetValue(driverId, "Description", subKey, this.Name);
-            this.CanAsync = Convert.ToBoolean(profile.GetValue(driverId, "CanAsync", subKey, bool.FalseString), CultureInfo.InvariantCulture);
-            this.AsyncDuration = Convert.ToDouble(profile.GetValue(driverId, "AsyncDuration", subKey, "0.0"), CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -134,9 +112,6 @@ namespace ASCOM.Simulator
             {
                 this.Description = (string)cells["colDescription"].Value;
             }
-
-            this.CanAsync = Convert.ToBoolean(cells["colCanAsync"].Value);
-            this.AsyncDuration = Convert.ToDouble(cells["colAsyncDuration"].Value);
         }
         #endregion
 
@@ -151,20 +126,6 @@ namespace ASCOM.Simulator
         {
             // Validate the incoming parameters
             SetValueValidate(value, message);
-
-            // Assign variables
-            Stopwatch sw = Stopwatch.StartNew();
-
-            // Wait for any delay period, finishing early if cancelled
-            do
-            {
-                Thread.Sleep(100);
-                Application.DoEvents();
-            } while ((sw.Elapsed.TotalSeconds < AsyncDuration) & !CancellationToken.IsCancellationRequested);
-
-            // Return if the operation was cancelled before completion
-            if (CancellationToken.IsCancellationRequested)
-                return;
 
             // Set the new value
             SetValueSet(value);
@@ -214,8 +175,6 @@ namespace ASCOM.Simulator
             profile.WriteValue(driverId, "StepSize", this.StepSize.ToString(CultureInfo.InvariantCulture), subKey);
             profile.WriteValue(driverId, "CanWrite", this.CanWrite.ToString(CultureInfo.InvariantCulture), subKey);
             profile.WriteValue(driverId, "Value", this.Value.ToString(CultureInfo.InvariantCulture), subKey);
-            profile.WriteValue(driverId, "CanAsync", this.CanAsync.ToString(CultureInfo.InvariantCulture), subKey);
-            profile.WriteValue(driverId, "AsyncDuration", this.AsyncDuration.ToString(CultureInfo.InvariantCulture), subKey);
         }
 
         /// <summary>
@@ -227,7 +186,7 @@ namespace ASCOM.Simulator
         /// </returns>
         internal bool IsValid(out string reason)
         {
-            return IsValid(this.Name, this.Maximum, this.Minimum, this.StepSize, this.Value, this.AsyncDuration, out reason);
+            return IsValid(this.Name, this.Maximum, this.Minimum, this.StepSize, this.Value, out reason);
         }
 
         /// <summary>
@@ -245,8 +204,7 @@ namespace ASCOM.Simulator
             var maximum = Convert.ToDouble(cells["colMax"].Value);
             var stepSize = Convert.ToDouble(cells["colStep"].Value);
             var value = Convert.ToDouble(cells["colValue"].Value);
-            var asyncDuration = Convert.ToDouble(cells["colAsyncDuration"].Value);
-            if (!IsValid(name, maximum, minimum, stepSize, value, asyncDuration, out reason))
+            if (!IsValid(name, maximum, minimum, stepSize, value, out reason))
             {
                 return false;
             }
@@ -254,7 +212,7 @@ namespace ASCOM.Simulator
             return true;
         }
 
-        private static bool IsValid(string name, double max, double min, double step, double value, double asyncDuration, out string reason)
+        private static bool IsValid(string name, double max, double min, double step, double value, out string reason)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -284,12 +242,6 @@ namespace ASCOM.Simulator
             if (value < min || value > max)
             {
                 reason = "Value not between Minimum and Maximum";
-                return false;
-            }
-
-            if (asyncDuration < 0.0)
-            {
-                reason = "Async duration must not be negative.";
                 return false;
             }
 
