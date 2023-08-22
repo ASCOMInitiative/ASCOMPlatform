@@ -32,7 +32,6 @@ using Newtonsoft.Json.Utilities.LinqBridge;
 using System.Collections.Concurrent;
 #endif
 using System.Threading;
-using Newtonsoft.Json.Serialization;
 
 namespace Newtonsoft.Json.Utilities
 {

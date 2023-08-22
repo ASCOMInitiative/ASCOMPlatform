@@ -1,10 +1,9 @@
-using System;
 using System.Runtime.InteropServices;
 //using System.Diagnostics;
 
 namespace ASCOM.Simulator
 {
-	[ComVisible(false)]
+    [ComVisible(false)]
 	public class ReferenceCountedObjectBase
 	{
 		public ReferenceCountedObjectBase()

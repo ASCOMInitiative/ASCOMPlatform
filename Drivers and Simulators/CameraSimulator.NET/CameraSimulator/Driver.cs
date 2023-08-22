@@ -48,6 +48,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Runtime;
+using System.Threading;
 
 namespace ASCOM.Simulator
 {
@@ -58,7 +60,7 @@ namespace ASCOM.Simulator
     /// _Camera from being created and used as the [default] interface
     /// </summary>
     [Guid("12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
-    public class Camera : ICameraV3
+    public class Camera : ICameraV4
     {
         // Driver ID and descriptive string that shows in the Chooser
         private static string s_csDriverID = "ASCOM.Simulator.Camera";
@@ -287,6 +289,8 @@ namespace ASCOM.Simulator
 
         // SetFanSpeed, GetFanSpeed. These commands control a hypothetical CCD camera heat sink fan, range 0 (off) to 3 (full speed) 
         private int fanMode;
+
+        private bool connecting = false;
 
         #endregion
 
@@ -1336,11 +1340,15 @@ namespace ASCOM.Simulator
                     Log.LogMessage("ImageArrayVariant", "No Image Available");
                     throw new ASCOM.InvalidOperationException("There is no image available");
                 }
+
+                // Clear out any previous memory allocations
+                ReleaseArrayMemory();
+
                 // convert to variant
                 if (sensorType == SensorType.Color)
                 {
                     imageArrayVariantColour = new object[imageArrayColour.GetLength(0), imageArrayColour.GetLength(1), 3];
-                    Parallel.For(0, imageArray.GetLength(0), i =>
+                    Parallel.For(0, imageArrayColour.GetLength(0), i =>
                     //for (int i = 0; i < imageArrayColour.GetLength(1); i++)
                     {
                         for (int j = 0; j < imageArrayColour.GetLength(1); j++)
@@ -1717,7 +1725,7 @@ namespace ASCOM.Simulator
         public void SetupDialog()
         {
             if (connected)
-                throw new NotConnectedException("Can't set the CCD properties when connected");
+                throw new InvalidOperationException("Can't set the CCD properties when connected");
             using (SetupDialogForm F = new SetupDialogForm())
             {
                 try
@@ -1804,6 +1812,9 @@ namespace ASCOM.Simulator
                                                     numY.ToString(CultureInfo.InvariantCulture),
                                                     string.Format(CultureInfo.InvariantCulture, "1 to {0}", cameraYSize / binY));
             }
+
+            // Clear out any previous memory allocations
+            ReleaseArrayMemory();
 
             // set up the things to do at the start of the exposure
             imageReady = false;
@@ -2498,7 +2509,126 @@ namespace ASCOM.Simulator
 
         #endregion
 
+        #region ICameraV4 members
+
+        /// <summary>
+        /// Connect to the telescope asynchronously
+        /// </summary>
+        public void Connect()
+        {
+            // Test whether we are  behaving as ICameraV4 or later
+            CheckSupportedInThisInterfaceVersion("Connect", 4);
+
+            // Set the completion variable to the "process running" state
+            Connecting = true;
+
+            // Start a task that will flag the Connect operation as complete after a set time interval
+            Task.Run(() =>
+            {
+                // Simulate a long connection phase
+                Thread.Sleep(3000);
+
+                // Set the Connected state to true
+                Connected = true;
+
+                // Set the completion variable to the "process complete" state to show that the Connect operation has completed
+                Connecting = false;
+            });
+
+            // End of the Connect operation initiator
+        }
+
+        /// <summary>
+        /// Disconnect from the telescope asynchronously
+        /// </summary>
+        public void Disconnect()
+        {
+            // Test whether we are  behaving as ICameraV4 or later
+            CheckSupportedInThisInterfaceVersion("Disconnect", 4);
+
+            // Set the completion variable to the "process running" state
+            Connecting = true;
+
+            // Start a task that will flag the Disconnect operation as complete after a set time interval
+            Task.Run(() =>
+            {
+                // Simulate a long connection phase
+                Thread.Sleep(3000);
+
+                // Set the Connected state to true
+                Connected = false;
+
+                // Set the completion variable to the "process complete" state to show that the Disconnect operation has completed
+                Connecting = false;
+            });
+
+            // End of the Disconnect operation initiator
+        }
+
+        /// <summary>
+        /// Connect / Disconnect cokmpleti0n variable. Returns true when an operation is underway, otherwise false
+        /// </summary>
+        public bool Connecting 
+        {
+            get
+            {
+                // Test whether we are  behaving as ICameraV4 or later
+                CheckSupportedInThisInterfaceVersion("Connecting", 4);
+
+                return connecting;
+            }
+
+            private set
+            {
+                connecting = value;
+            }
+        }
+
+        /// <summary>
+        /// Return the device's operational state in one call
+        /// </summary>
+        public ArrayList DeviceState
+        {
+            get
+            {
+                // Test whether we are  behaving as ICameraV4 or later
+                CheckSupportedInThisInterfaceVersion("DeviceState", 4);
+
+                // Create an array list to hold the IStateValue entries
+                ArrayList deviceState = new ArrayList();
+
+                // Add one entry for each operational state, if possible
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.CameraState), CameraState)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.CCDTemperature), CCDTemperature)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.CoolerPower), CoolerPower)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.HeatSinkTemperature), HeatSinkTemperature)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.ImageReady), ImageReady)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.IsPulseGuiding), IsPulseGuiding)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.PercentCompleted), PercentCompleted)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                // Return the overall device state
+                return deviceState;
+            }
+        }
+
+        #endregion
+
         #region Private
+
+        /// <summary>
+        /// Release memory allocated to the large arrays on the large object heap.
+        /// </summary>
+        private void ReleaseArrayMemory()
+        {
+            // Clear out any previous memory allocations
+            //imageArray= null;
+            //imageArrayColour= null;
+            imageArrayVariant = null;
+            imageArrayVariantColour = null;
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+            GC.Collect(2, GCCollectionMode.Forced, true, true);
+        }
 
         private void ReadFromProfile()
         {
@@ -3391,7 +3521,7 @@ namespace ASCOM.Simulator
             if (!imageReady)
             {
                 Log.LogMessage(identifier, "image not ready");
-                throw new NotConnectedException("Can't read " + identifier + " when no image is ready");
+                throw new InvalidOperationException("Can't read " + identifier + " when no image is ready");
             }
         }
 

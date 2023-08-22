@@ -22,7 +22,6 @@
 
 using System;
 using System.Collections;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -37,18 +36,18 @@ using static System.FormattableString;
 
 namespace ASCOM.DeviceHub
 {
-	//
-	// Your driver's DeviceID is ASCOM.DeviceHub.Telescope
-	//
-	// The Guid attribute sets the CLSID for ASCOM.DeviceHub.Telescope
-	// The ClassInterface/None attribute prevents an empty interface called
-	// _DeviceHub from being created and used as the [default] interface
-	//
+    //
+    // Your driver's DeviceID is ASCOM.DeviceHub.Telescope
+    //
+    // The Guid attribute sets the CLSID for ASCOM.DeviceHub.Telescope
+    // The ClassInterface/None attribute prevents an empty interface called
+    // _DeviceHub from being created and used as the [default] interface
+    //
 
-	/// <summary>
-	/// ASCOM Telescope Driver for DeviceHub.
-	/// </summary>
-	[ComVisible(true)]
+    /// <summary>
+    /// ASCOM Telescope Driver for DeviceHub.
+    /// </summary>
+    [ComVisible(true)]
 	[Guid( "ad3ff473-56b5-4e04-af93-185d9cb42395" )]
 	[ProgId( "ASCOM.DeviceHub.Telescope" )]
 	[ServedClassName( "Device Hub Telescope" )]
@@ -1749,18 +1748,20 @@ namespace ASCOM.DeviceHub
 
 		public void MoveAxis( TelescopeAxes axis, double rate )
 		{
-			string name = "MoveAxis:";
+			string name = "MoveAxis";
 
 			CheckConnected( name );
 			CheckRate( name, axis, rate );
 
-			string msg = $"{axis} {rate:F5}";
+			string axisName = Enum.GetName( typeof( TelescopeAxes ), axis );
+			string msg = $"{axisName} {rate:F5}";
 
 			if ( !CanMoveAxis( axis ) )
 			{
-				string axisName = Enum.GetName( typeof( TelescopeAxes ), axis );
-				LogMessage( name, "Cannot move {0}.", axisName );
-				throw new MethodNotImplementedException( $"CanMoveAxis {axisName}" );
+				string errMsg = $"MoveAxis() not supported for {axisName}.";
+				LogMessage( name, errMsg );
+
+				throw new MethodNotImplementedException( name, errMsg );
 			}
 
 			try
@@ -1771,20 +1772,15 @@ namespace ASCOM.DeviceHub
 				}
 				else
 				{
-					Debug.WriteLine( "MoveAxis - Checking if Parked" );
 					CheckParked( name, TelescopeManager.Status.AtPark );
-					Debug.WriteLine( "MoveAxis - Verifying NOT in the process of parking." );
 					CheckParkingStatus( name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked );
-					Debug.WriteLine( $"TelescopeDriver: StartJogMoveAxis - {axis} {rate:F3}" );
 					TelescopeManager.StartJogMoveAxis( axis, rate );
-					Debug.WriteLine( "Back from StartJogMoveAxis" );
 				}
 
 				msg += _done;
 			}
-			catch ( Exception xcp )
+			catch ( Exception )
 			{
-				Debug.WriteLine( $"StartJogMoveAxis caught exception - {xcp.Message}" );
 				msg += _failed;
 
 				throw;

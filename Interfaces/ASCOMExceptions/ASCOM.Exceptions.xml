@@ -139,9 +139,7 @@
               Error numbers for use by drivers.
             </summary>
             <remarks>
-              The range of permitted values falls within the class FACILTY_ITF as 
-              defined by the operating system and COM. These values will never clash with 
-              COM, RPC, or OS error codes.
+              The range of permitted values falls within the class FACILTY_ITF as defined by the operating system and COM. These values will never clash with COM, RPC, or OS error codes.
               <para>
                 Driver developers may extend this class by making use of the <c>partial</c> keyword.
               </para>
@@ -211,6 +209,11 @@
             The exception is defined in the ASCOM.Cache component rather than ASCOM.Exceptions.
             </remarks>
         </member>
+        <member name="F:ASCOM.ErrorCodes.OperationCancelled">
+            <summary>
+            Reserved error code (0x8004040E) to indicate that an in-progress operation has been cancelled.
+            </summary>
+        </member>
         <member name="F:ASCOM.ErrorCodes.UnspecifiedError">
             <summary>
             Reserved 'catch-all' error code (0x800404FF) used when nothing else was specified.
@@ -231,6 +234,19 @@
             <remarks>
             Drivers are free to choose their own numbers starting with DriverBase, up to and including DriverMax.
             </remarks>
+        </member>
+        <member name="F:ASCOM.ErrorCodes.ascomExceptions">
+            <summary>
+            Lookup dictionary mapping COM error numbers to ASCOM exception names
+            </summary>
+            <remarks>This must be kept in alignment with the exception number fields defined in this class.</remarks>
+        </member>
+        <member name="M:ASCOM.ErrorCodes.GetExceptionName(System.Exception)">
+            <summary>
+            Return the ASCOM exception name that corresponds to a COM exception
+            </summary>
+            <param name="exception">COM exception to examine</param>
+            <returns>The ASCOM name of the exception or null if the exception doesn't correspond to one of the ASCOM exceptions.</returns>
         </member>
         <member name="T:ASCOM.InvalidOperationException">
              <summary>
@@ -277,8 +293,8 @@
             <summary>
             Added to keep Code Analysis happy
             </summary>
-            <param name = "info"></param>
-            <param name = "context"></param>
+            <param name = "info">Serialisation information</param>
+            <param name = "context">Streaming context.</param>
         </member>
         <member name="T:ASCOM.InvalidValueException">
             <summary>
@@ -338,8 +354,8 @@
             <summary>
             Added to keep Code Analysis happy
             </summary>
-            <param name = "info"></param>
-            <param name = "context"></param>
+            <param name = "info">Serialisation information</param>
+            <param name = "context">Streaming context.</param>
         </member>
         <member name="P:ASCOM.InvalidValueException.PropertyOrMethod">
             <summary>
@@ -461,8 +477,8 @@
             <summary>
             Added to keep Code Analysis happy
             </summary>
-            <param name = "info"></param>
-            <param name = "context"></param>
+            <param name = "info">Serialisation information</param>
+            <param name = "context">Streaming context.</param>
         </member>
         <member name="T:ASCOM.NotImplementedException">
             <summary>
@@ -504,8 +520,8 @@
             <summary>
             Added to keep Code Analysis happy
             </summary>
-            <param name = "info"></param>
-            <param name = "context"></param>
+            <param name = "info">Serialisation information</param>
+            <param name = "context">Streaming context.</param>
         </member>
         <member name="M:ASCOM.NotImplementedException.#ctor(System.String,System.String)">
             <summary>
@@ -521,6 +537,47 @@
             <summary>
             The property/accessor or method that is not implemented
             </summary>
+        </member>
+        <member name="T:ASCOM.OperationCancelledException">
+            <summary>
+            This exception should be used to indicate that an in-progress operation has been cancelled.
+            </summary>
+            <remarks>
+            <para>If you need to throw this error as a COM exception use the error number: 0x80040408.</para>
+            </remarks>
+        </member>
+        <member name="M:ASCOM.OperationCancelledException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref = "T:ASCOM.OperationCancelledException" /> class
+            using default error text and error codes.
+            </summary>
+        </member>
+        <member name="M:ASCOM.OperationCancelledException.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref = "T:ASCOM.OperationCancelledException" /> class with a provided inner exception
+            with a caught (inner) exception.
+            </summary>
+            <param name = "inner">The inner exception.</param>
+        </member>
+        <member name="M:ASCOM.OperationCancelledException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref = "T:ASCOM.OperationCancelledException" /> class with a provided message
+            </summary>
+            <param name = "message">Exception description</param>
+        </member>
+        <member name="M:ASCOM.OperationCancelledException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref = "T:ASCOM.OperationCancelledException" /> class with a provided message and inner exception
+            </summary>
+            <param name = "message">Exception description</param>
+            <param name = "inner">Underlying exception that caused this exception to be thrown.</param>
+        </member>
+        <member name="M:ASCOM.OperationCancelledException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Serialisation constructor
+            </summary>
+            <param name = "info">Serialisation information</param>
+            <param name = "context">Streaming context.</param>
         </member>
         <member name="T:ASCOM.ParkedException">
             <summary>
@@ -560,8 +617,8 @@
             <summary>
             Added to keep Code Analysis happy
             </summary>
-            <param name = "info"></param>
-            <param name = "context"></param>
+            <param name = "info">Serialisation information</param>
+            <param name = "context">Streaming context.</param>
         </member>
         <member name="T:ASCOM.PropertyNotImplementedException">
             <summary>
@@ -722,8 +779,8 @@
             <summary>
             Added to keep Code Analysis happy
             </summary>
-            <param name = "info"></param>
-            <param name = "context"></param>
+            <param name = "info">Serialisation information</param>
+            <param name = "context">Streaming context.</param>
         </member>
         <member name="P:ASCOM.ValueNotSetException.PropertyOrMethod">
             <summary>

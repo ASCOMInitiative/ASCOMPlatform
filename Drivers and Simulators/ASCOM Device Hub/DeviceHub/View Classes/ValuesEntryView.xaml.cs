@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Windows;
+﻿using System.Windows;
 
 namespace ASCOM.DeviceHub
 {
-	/// <summary>
-	/// Interaction logic for ValuesEntryWindow.xaml
-	/// </summary>
-	public partial class ValuesEntryView
+    /// <summary>
+    /// Interaction logic for ValuesEntryWindow.xaml
+    /// </summary>
+    public partial class ValuesEntryView
     {
         public ValuesEntryView()
         {

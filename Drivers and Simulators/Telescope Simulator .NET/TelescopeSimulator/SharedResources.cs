@@ -13,8 +13,6 @@
 // Written by:	Bob Denny	29-May-2007
 //
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ASCOM.Simulator
 {
@@ -50,30 +48,14 @@ namespace ASCOM.Simulator
 
     public static class SharedResources
     {
-        
-        //private static int s_z = 0;
         private static TrafficForm m_trafficForm;               // Traffic Form 
-
-        //private SharedResources() { }							// Prevent creation of instances
-
-        //static SharedResources()								// Static initialization
-        //{
-        //}
 
         //Constant Definitions
         public const string PROGRAM_ID = "ASCOM.Simulator.Telescope";  //Key used to store the settings
         public const string REGISTRATION_VERSION = "1";
 
-        //public static double DEG_RAD = 0.0174532925;
-        public const double DEG_RAD = Math.PI / 180;
-        public const double RAD_DEG =  180.0 / Math.PI;        //57.2957795;
-        public const double HRS_RAD = 0.2617993881;
-        public const double RAD_HRS = 3.81971863;
-        public const double EARTH_ANG_ROT_DEG_MIN = 0.25068447733746215; //Angular rotation of earth in degrees/min
-
-        public const double SIDRATE = 0.9972695677;
-
-        public const double TIMER_INTERVAL = .25; //4 ticks per second
+        public const double STATE_UPDATE_TIMER_INTERVAL = 0.1; // 10 ticks per second
+        public const double HANDBOX_UPDATE_TIMER_INTERVAL = 0.25; // 4 ticks per second
 
         // ---------------------
         // Simulation Parameters
@@ -100,15 +82,15 @@ namespace ASCOM.Simulator
         //public static int z { get { return s_z++; } }
 
         public static TrafficForm TrafficForm
-        { 
-            get 
+        {
+            get
             {
                 if (m_trafficForm == null)
                 {
                     m_trafficForm = new TrafficForm();
                 }
-                
-                return m_trafficForm; 
+
+                return m_trafficForm;
             }
             set
             {
@@ -237,5 +219,77 @@ namespace ASCOM.Simulator
                     return false;
             }
         }
+
+        /// <summary>
+        /// Extension method to format a double in sesegesimal HH:MM:SS.sss format
+        /// </summary>
+        /// <param name="value">Value to be presented</param>
+        /// <returns>HH:MM:SS.sss formatted string</returns>
+        public static string ToHMS(this double value)
+        {
+            return DoubleToSexagesimalSeconds(value, ":", ":", "", 3);
+        }
+
+        /// <summary>
+        /// Extension method to format a double in sesegesimal DD:MM:SS.sss format
+        /// </summary>
+        /// <param name="value">Value to be presented</param>
+        /// <returns>DDD:MM:SS.sss formatted string</returns>
+        public static string ToDMS(this double value)
+        {
+            return DoubleToSexagesimalSeconds(value, ":", ":", "", 3);
+        }
+
+        private static string DoubleToSexagesimalSeconds(double Units, string DegDelim, string MinDelim, string SecDelim, int SecDecimalDigits)
+        {
+            string wholeUnits, wholeMinutes, seconds, secondsFormatString;
+            bool inputIsNegative;
+
+            // Deal with NaN and infinity values by returning string representations of these states.
+            if (double.IsNaN(Units) | double.IsInfinity(Units))
+                return Units.ToString();
+
+            // Convert the input value to a positive number if required and store the sign
+            if (Units < 0.0)
+            {
+                Units = -Units;
+                inputIsNegative = true;
+            }
+            else inputIsNegative = false;
+
+            // Extract the number of whole units and save the remainder
+            wholeUnits = Math.Floor(Units).ToString().PadLeft(2, '0');
+            double remainderInMinutes = (Units - Convert.ToDouble(wholeUnits)) * 60.0; // Remainder in minutes
+
+            // Extract the number of whole minutes and save the remainder
+            wholeMinutes = Math.Floor(remainderInMinutes).ToString().PadLeft(2, '0');// Integral minutes
+            double remainderInSeconds = (remainderInMinutes - System.Convert.ToDouble(wholeMinutes)) * 60.0; // Remainder in seconds
+
+            if (SecDecimalDigits == 0) secondsFormatString = "00"; // No decimal point or decimal digits
+            else secondsFormatString = "00." + new String('0', SecDecimalDigits); // Format$ string of form 00.0000
+
+            seconds = remainderInSeconds.ToString(secondsFormatString); // Format seconds with requested number of decimal digits
+
+            // Check to see whether rounding has pushed the number of whole seconds or minutes to 60
+            if (seconds.Substring(0, 2) == "60") // The rounded seconds value is 60 so we need to add one to the minutes count and make the seconds 0
+            {
+                seconds = 0.0.ToString(secondsFormatString); // Seconds are 0.0 formatted as required
+                wholeMinutes = (Convert.ToInt32(wholeMinutes) + 1).ToString("00"); // Add one to the to the minutes count
+                if (wholeMinutes == "60")// The minutes value is 60 so we need to add one to the units count and make the minutes 0
+                {
+                    wholeMinutes = "00"; // Minutes are 0.0
+                    wholeUnits = (Convert.ToInt32(wholeUnits) + 1).ToString("00"); // Add one to the units count
+                }
+            }
+
+            // Create the full formatted string from the units, minute and seconds parts and add a leading negative sign if required
+            string returnValue = wholeUnits + DegDelim + wholeMinutes + MinDelim + seconds + SecDelim;
+            if (inputIsNegative) returnValue = $"-{returnValue}";
+
+            return returnValue;
+        }
+
+
+
     }
 }

@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 using System.Globalization;
 using System.Reflection;
@@ -95,6 +91,13 @@ namespace ASCOM.Simulator
         }
 
         #region Properties for Settings
+
+        public short InterfaceVersion
+        {
+            get { return (short)NumInterfaceVersion.Value; }
+            set { NumInterfaceVersion.Value = value; }
+        }
+
         public int EquatorialSystem
         {
             get { return int.Parse(comboBoxEquatorialSystem.SelectedValue.ToString(), CultureInfo.CurrentCulture); }

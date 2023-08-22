@@ -132,7 +132,13 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the driver is not connected.</exception>
         /// <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
-        /// <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> </remarks>
+        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
+        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
+        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
+        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
+        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
+        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
+        /// </remarks>
         void CommandBlind(string Command, bool Raw = false);
 
         /// <summary>
@@ -150,7 +156,13 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the driver is not connected.</exception>
         /// <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
-        /// <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> </remarks>
+        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
+        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
+        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
+        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
+        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
+        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
+        /// </remarks>
         bool CommandBool(string Command, bool Raw = false);
 
         /// <summary>
@@ -168,13 +180,19 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the driver is not connected.</exception>
         /// <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
-        /// <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> </remarks>
+        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
+        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
+        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
+        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
+        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
+        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
+        /// </remarks>
         string CommandString(string Command, bool Raw = false);
 
         /// <summary>
-        /// Dispose the late-bound interface, if needed. Will release it via COM
-        /// if it is a COM object, else if native .NET will just dereference it
-        /// for GC.
+        /// This method is a "clean-up" method that is primarily of use to drivers that are written in languages such as C# and VB.NET where resource clean-up is initially managed by the language's 
+        /// runtime garbage collection mechanic. Driver authors should take care to ensure that a client or runtime calling Dispose() does not adversely affect other connected clients.
+        /// Applications should not call this method.
         /// </summary>
         void Dispose();
 

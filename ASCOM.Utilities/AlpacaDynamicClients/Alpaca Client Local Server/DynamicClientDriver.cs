@@ -24,12 +24,10 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Numerics;
 using ASCOM.Common.Alpaca;
-using ASCOM.Alpaca.Clients;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Security.Policy;
-using System.Web;
 using ASCOM.Common.Com;
+using System.CodeDom;
 
 namespace ASCOM.DynamicRemoteClients
 {
@@ -39,6 +37,20 @@ namespace ASCOM.DynamicRemoteClients
 
         // Private constants
         private const int DYNAMIC_DRIVER_ERROR_NUMBER = 4095; // Alpaca error number that will be returned when a required JSON "Value" element is either absent from the response or is set to "null"
+
+        // Default image array transfer constants
+        internal const ImageArrayCompression IMAGE_ARRAY_COMPRESSION_DEFAULT = ImageArrayCompression.None;
+        internal const ImageArrayTransferType IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT = ImageArrayTransferType.Base64HandOff;
+
+        // Dynamic client configuration constants
+        private const int SOCKET_ERROR_MAXIMUM_RETRIES = 2; // The number of retries that the client will make when it receives a socket actively refused error from the remote device
+        private const int SOCKET_ERROR_RETRY_DELAY_TIME = 1000; // The delay time (milliseconds) between socket actively refused retries
+        private const string ACCEPT_HEADER_NAME = "Accept"; // Name of HTTP header used to affirm ImageBytes support for image array data
+        private const string CONTENT_TYPE_HEADER_NAME = "Content-Type"; // Name of HTTP header used to affirm the type of data returned by the device
+
+        // Image array ImageBytes - combined mime-type values
+        private const string JSON_MIME_TYPES = AlpacaConstants.APPLICATION_JSON_MIME_TYPE; // JSON mime type
+        private const string IMAGE_BYTES_ACCEPT_HEADER = AlpacaConstants.IMAGE_BYTES_MIME_TYPE + ", " + JSON_MIME_TYPES; // Value of HTTP header to indicate support for the GetImageBytes mechanic
 
         //Private variables
         private static TraceLoggerPlus TLLocalServer;
@@ -74,7 +86,7 @@ namespace ASCOM.DynamicRemoteClients
                 {
                     Enabled = false
                 }; // Trace state is set in ReadProfile, immediately after being read from the Profile
-                TLLocalServer.LogMessage("DynamicClientDriver", $"Initialising - Version: { Assembly.GetEntryAssembly().GetName().Version}");
+                TLLocalServer.LogMessage("DynamicClientDriver", $"Initialising - Version: {Assembly.GetEntryAssembly().GetName().Version}");
 
                 connectStates = new ConcurrentDictionary<long, bool>();
 
@@ -201,7 +213,8 @@ namespace ASCOM.DynamicRemoteClients
         /// <param name="uniqueId"></param>
         /// <remarks>This method will attempt to re-discover the Alpaca device if it is not possible to establish a TCP connection with the device at the specified address and port.</remarks>
         public static void ConnectToRemoteDevice(ref RestClient client, string ipAddressString, decimal portNumber, int connectionTimeout, string serviceType, TraceLoggerPlus TL,
-                                                 uint clientNumber, string driverProgId, string deviceType, int deviceResponseTimeout, string userName, string password, string uniqueId, bool enableRediscovery, bool ipV4Enabled, bool ipV6Enabled, int discoveryPort)
+                                                 uint clientNumber, string driverProgId, string deviceType, int deviceResponseTimeout, string userName, string password, string uniqueId, bool enableRediscovery,
+                                                 bool ipV4Enabled, bool ipV6Enabled, int discoveryPort, bool trustUnsignedSslCertificate)
         {
             List<AvailableInterface> availableInterfaces = new List<AvailableInterface>();
 
@@ -379,8 +392,20 @@ namespace ASCOM.DynamicRemoteClients
             // Create a new client pointing at the alpaca device
             client = new RestClient(clientHostAddress)
             {
-                PreAuthenticate = true
+                PreAuthenticate = true,
             };
+
+            // Bypass SSL validation check in the RestClient if configured to do so
+            if (trustUnsignedSslCertificate)
+            {
+                TL.LogMessage(clientNumber, deviceType, $"***** ALERT ***** UNSIGNED SSL CERTIFICATES WILL BE TRUSTED");
+                client.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+            }
+            else
+            {
+                TL.LogMessage(clientNumber, deviceType, $"Untrusted SSL certificates will be rejected.");
+
+            }
 
             // Add a basic authenticator if the user name is not null or white space
             if (!string.IsNullOrWhiteSpace(userName))
@@ -501,7 +526,8 @@ namespace ASCOM.DynamicRemoteClients
                                        ref bool enableRediscovery,
                                        ref bool ipV4Enabled,
                                        ref bool ipV6Enabled,
-                                       ref int discoveryPort
+                                       ref int discoveryPort,
+                                       ref bool trustUnsignedSslCertificates
                                        )
         {
             using (Profile driverProfile = new Profile())
@@ -531,7 +557,7 @@ namespace ASCOM.DynamicRemoteClients
                 ipV4Enabled = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.ENABLE_IPV4_DISCOVERY_PROFILENAME, string.Empty, SharedConstants.ENABLE_IPV4_DISCOVERY_DEFAULT);
                 ipV6Enabled = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.ENABLE_IPV6_DISCOVERY_PROFILENAME, string.Empty, SharedConstants.ENABLE_IPV6_DISCOVERY_DEFAULT);
                 discoveryPort = GetInt32Value(TL, driverProfile, driverProgID, SharedConstants.DISCOVERY_PORT_PROFILENAME, string.Empty, SharedConstants.DISCOVERY_PORT_DEFAULT);
-
+                trustUnsignedSslCertificates = GetBooleanValue(TL, driverProfile, driverProgID, SharedConstants.TRUST_UNSIGNED_SSL_CERTIFICATES_PROFILENAME, string.Empty, SharedConstants.TRUST_UNSIGNED_CERTIFICATES_DEFAULT);
                 TL.DebugTraceState = debugTraceState; // Save the debug state for use when needed wherever the trace logger is used
 
                 TL.LogMessage(clientNumber, "ReadProfile", string.Format("New values: Device IP: {0} {1}, Remote device number: {2}", ipAddressString, portNumber.ToString(), remoteDeviceNumber.ToString()));
@@ -560,7 +586,8 @@ namespace ASCOM.DynamicRemoteClients
                                         bool enableRediscovery,
                                         bool ipV4Enabled,
                                         bool ipV6Enabled,
-                                        int discoveryPort
+                                        int discoveryPort,
+                                        bool trustUnsignedSslCertificates
                                         )
         {
             using (Profile driverProfile = new Profile())
@@ -587,6 +614,7 @@ namespace ASCOM.DynamicRemoteClients
                 driverProfile.WriteValue(driverProgID, SharedConstants.ENABLE_IPV4_DISCOVERY_PROFILENAME, ipV4Enabled.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(driverProgID, SharedConstants.ENABLE_IPV6_DISCOVERY_PROFILENAME, ipV6Enabled.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(driverProgID, SharedConstants.DISCOVERY_PORT_PROFILENAME, discoveryPort.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(driverProgID, SharedConstants.TRUST_UNSIGNED_SSL_CERTIFICATES_PROFILENAME, trustUnsignedSslCertificates.ToString(CultureInfo.InvariantCulture));
 
                 TL.DebugTraceState = debugTraceState; // Save the new debug state for use when needed wherever the trace logger is used
 
@@ -688,7 +716,7 @@ namespace ASCOM.DynamicRemoteClients
         /// <returns></returns>
         public static T GetValue<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, MemberTypes memberType)
         {
-            return GetValue<T>(clientNumber, client, URIBase, TL, method, AlpacaConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, AlpacaConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT, memberType); // Set an arbitrary value for ImageArrayTransferType
+            return GetValue<T>(clientNumber, client, URIBase, TL, method, IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, IMAGE_ARRAY_COMPRESSION_DEFAULT, memberType); // Set an arbitrary value for ImageArrayTransferType
         }
 
         /// <summary>
@@ -835,7 +863,7 @@ namespace ASCOM.DynamicRemoteClients
         /// <returns></returns>
         public static T SendToRemoteDevice<T>(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL, string method, Dictionary<string, string> Parameters, Method HttpMethod, MemberTypes memberType)
         {
-            return SendToRemoteDevice<T>(clientNumber, client, URIBase, TL, method, Parameters, HttpMethod, AlpacaConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, AlpacaConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT, memberType);
+            return SendToRemoteDevice<T>(clientNumber, client, URIBase, TL, method, Parameters, HttpMethod, IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT, IMAGE_ARRAY_COMPRESSION_DEFAULT, memberType);
         }
 
         /// <summary>
@@ -907,12 +935,12 @@ namespace ASCOM.DynamicRemoteClients
                                 break;
 
                             case ImageArrayTransferType.ImageBytes:
-                                request.AddHeader(AlpacaConstants.ACCEPT_HEADER_NAME, AlpacaConstants.IMAGE_BYTES_ACCEPT_HEADER);
+                                request.AddHeader(ACCEPT_HEADER_NAME, IMAGE_BYTES_ACCEPT_HEADER);
                                 break;
 
                             case ImageArrayTransferType.BestAvailable:
                                 request.AddHeader(AlpacaConstants.BASE64_HANDOFF_HEADER, AlpacaConstants.BASE64_HANDOFF_SUPPORTED);
-                                request.AddHeader(AlpacaConstants.ACCEPT_HEADER_NAME, AlpacaConstants.IMAGE_BYTES_ACCEPT_HEADER);
+                                request.AddHeader(ACCEPT_HEADER_NAME, IMAGE_BYTES_ACCEPT_HEADER);
                                 break;
 
                             default:
@@ -941,13 +969,52 @@ namespace ASCOM.DynamicRemoteClients
                     // Use the more efficient .NET HttpClient to get the large image array as a byte[] for the ImageBytes mechanic
                     if ((typeof(T) == typeof(Array)) & ((imageArrayTransferType == ImageArrayTransferType.ImageBytes) | ((imageArrayTransferType == ImageArrayTransferType.BestAvailable))))
                     {
-                        deviceJsonResponse = GetResponse($"{client.BaseUrl}{uriBase}{method}".ToLowerInvariant(), AlpacaConstants.IMAGE_BYTES_ACCEPT_HEADER, clientNumber, transaction, TL); ;
+                        deviceJsonResponse = GetResponse($"{client.BaseUrl}{uriBase}{method}".ToLowerInvariant(), IMAGE_BYTES_ACCEPT_HEADER, clientNumber, transaction, TL); ;
                     }
                     else // Use the RestSharp client for everything else
                     {
                         deviceJsonResponse = client.Execute(request);
                     }
-                    if (TL.DebugTraceState) TL.LogMessage(clientNumber, method, $"Returned data content type: '{deviceJsonResponse.ContentType}'");
+
+                    if (TL.DebugTraceState)
+                    {
+                        TL.LogMessage(clientNumber, method, $"Returned data content type: '{deviceJsonResponse.ContentType}'");
+                        TL.LogMessage(clientNumber, method, $"Status code: {deviceJsonResponse.StatusCode}, Error message: '{deviceJsonResponse.ErrorMessage}', Response status: {deviceJsonResponse.ResponseStatus}");
+                        TL.LogMessageCrLf(clientNumber, method, $"Exception: {(deviceJsonResponse.ErrorException is null ? "NONE" : deviceJsonResponse.ErrorException.ToString())}");
+                    }
+
+                    switch (deviceJsonResponse.ResponseStatus)
+                    {
+                        case ResponseStatus.Completed:
+                            // Success - no error management required
+                            break;
+
+                        case ResponseStatus.Error:
+                        case ResponseStatus.TimedOut:
+                        case ResponseStatus.Aborted:
+                        case ResponseStatus.None:
+                            if (deviceJsonResponse.ErrorException != null)
+                            {
+                                // Log the exception and throw it
+                                TL.LogMessageCrLf(clientNumber, method, $"{deviceJsonResponse.ResponseStatus} - Exception: {deviceJsonResponse.ErrorException}");
+                                throw new TimeoutException($"{deviceJsonResponse.ResponseStatus} trying to contact Alpaca device. Response status: {deviceJsonResponse.ResponseStatus}, Status code: {deviceJsonResponse.StatusCode}, Error message: '{deviceJsonResponse.ErrorMessage}'", deviceJsonResponse.ErrorException);
+                            }
+                            else
+                            {
+                                TL.LogMessageCrLf(clientNumber, method, $"{deviceJsonResponse.ResponseStatus} - No exception provided");
+                                throw new TimeoutException($"{deviceJsonResponse.ResponseStatus} trying to contact Alpaca device. Response status: {deviceJsonResponse.ResponseStatus}, Status code: {deviceJsonResponse.StatusCode}, Error message: '{deviceJsonResponse.ErrorMessage}'");
+                            }
+
+                        default:
+                            throw new InvalidValueException($"Unexpected response status value: {deviceJsonResponse.ResponseStatus}");
+                    }
+
+
+
+                    if (deviceJsonResponse.ResponseStatus != ResponseStatus.Completed)
+                    {
+
+                    }
 
                     long timeDeviceResponse = sw.ElapsedMilliseconds - lastTime;
 
@@ -1040,6 +1107,13 @@ namespace ASCOM.DynamicRemoteClients
                             TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, stringListResponse.ClientTransactionID, stringListResponse.ServerTransactionID, (stringListResponse.Value is null) ? "NO VALUE OR NULL VALUE RETURNED" : stringListResponse.Value.Count.ToString()));
                             if (CallWasSuccessful(TL, stringListResponse)) return (T)((object)stringListResponse.Value);
                             restResponseBase = (RestResponseBase)stringListResponse;
+                        }
+                        if (typeof(T) == typeof(List<StateValue>)) // Used for ArrayLists of IStateValue
+                        {
+                            DeviceStateResponse deviceStateResponse = JsonConvert.DeserializeObject<DeviceStateResponse>(deviceJsonResponse.Content);
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, deviceStateResponse.ClientTransactionID, deviceStateResponse.ServerTransactionID, (deviceStateResponse.Value is null) ? "NO VALUE OR NULL VALUE RETURNED" : deviceStateResponse.Value.Count.ToString()));
+                            if (CallWasSuccessful(TL, deviceStateResponse)) return (T)((object)deviceStateResponse.Value);
+                            restResponseBase = (RestResponseBase)deviceStateResponse;
                         }
                         if (typeof(T) == typeof(NoReturnValue)) // Used for Methods that have no response and Property Set members
                         {
@@ -1487,6 +1561,11 @@ namespace ASCOM.DynamicRemoteClients
                                 restResponseBase = (RestResponseBase)responseBase;
                             } // remote device has used JSON encoding
                         }
+                        else
+                        {
+                            restResponseBase = JsonConvert.DeserializeObject<RestResponseBaseConcreteClass>(deviceJsonResponse.Content);
+                            TL.LogMessage(clientNumber, method, string.Format(LOG_FORMAT_STRING, restResponseBase.ClientTransactionID, restResponseBase.ServerTransactionID, "Value NOT de-serialised"));
+                        }
 
                         // HANDLE COM EXCEPTIONS THROWN BY WINDOWS BASED DRIVERS RUNNING IN THE REMOTE DEVICE
                         if (restResponseBase.DriverException != null)
@@ -1589,29 +1668,28 @@ namespace ASCOM.DynamicRemoteClients
                 }
                 catch (Exception ex) // Process unexpected exceptions
                 {
-                    if (ex is System.Net.WebException) // Received a WebException, this could indicate that the remote device actively refused the connection so test for this and retry if appropriate
+                    if (ex is WebException) // Received a WebException, this could indicate that the remote device actively refused the connection so test for this and retry if appropriate
                     {
                         if (ex.InnerException != null) // First make sure the is an inner exception
                         {
-                            if (ex.InnerException is System.Net.Sockets.SocketException) // There is an inner exception and it is a SocketException so apply the retry logic
+                            if (ex.InnerException is SocketException) // There is an inner exception and it is a SocketException or a timeout caused an TimeoutException, so apply the retry logic
                             {
                                 retryCounter += 1; // Increment the retry counter
-                                if (retryCounter <= AlpacaConstants.SOCKET_ERROR_MAXIMUM_RETRIES) // The retry count is less than or equal to the maximum allowed so retry the command
+                                if (retryCounter <= SOCKET_ERROR_MAXIMUM_RETRIES) // The retry count is less than or equal to the maximum allowed so retry the command
                                 {
                                     TL.LogMessageCrLf(clientNumber, method, typeof(T).Name + " " + ex.Message);
                                     if (TL.DebugTraceState) TL.LogMessageCrLf(clientNumber, method, "SocketException: " + ex.ToString());
 
                                     // Log that we are retrying the command and wait a short time in the hope that the transient condition clears
-                                    TL.LogMessage(clientNumber, method, string.Format("Socket exception, retrying command - retry-count {0}/{1}", retryCounter, AlpacaConstants.SOCKET_ERROR_MAXIMUM_RETRIES));
-                                    Thread.Sleep(AlpacaConstants.SOCKET_ERROR_RETRY_DELAY_TIME);
+                                    TL.LogMessage(clientNumber, method, string.Format("Socket exception, retrying command - retry-count {0}/{1}", retryCounter, SOCKET_ERROR_MAXIMUM_RETRIES));
+                                    Thread.Sleep(SOCKET_ERROR_RETRY_DELAY_TIME);
                                 }
                                 else // The retry count exceeds the maximum allowed so throw the exception to the client
                                 {
-                                    TL.LogMessageCrLf(clientNumber, method, typeof(T).Name + " " + ex.Message);
-                                    if (TL.DebugTraceState) TL.LogMessageCrLf(clientNumber, method, "SocketException: " + ex.ToString());
+                                    TL.LogMessageCrLf(clientNumber, method, $"{typeof(T).Name} Socket exception retry count exceeded - {ex.Message}");
+                                    if (TL.DebugTraceState) TL.LogMessageCrLf(clientNumber, method, $"Socket exception retry count exceeded : {ex}");
                                     throw;
                                 }
-
                             }
                             else  // There is an inner exception but it is not a SocketException so log it and throw it  to the client
                             {
@@ -1619,10 +1697,28 @@ namespace ASCOM.DynamicRemoteClients
                                 if (TL.DebugTraceState) TL.LogMessageCrLf(clientNumber, method, "WebException: " + ex.ToString());
                                 throw;
                             }
-
                         }
                     }
-                    else // Some other type of exception that isn't System.Net.WebException so log it and throw it to the client
+                    else if (ex is TimeoutException)
+                    {
+                        retryCounter += 1; // Increment the retry counter
+                        if (retryCounter <= SOCKET_ERROR_MAXIMUM_RETRIES) // The retry count is less than or equal to the maximum allowed so retry the command
+                        {
+                            TL.LogMessageCrLf(clientNumber, method, typeof(T).Name + " " + ex.Message);
+                            if (TL.DebugTraceState) TL.LogMessageCrLf(clientNumber, method, "TimeOutException: " + ex.ToString());
+
+                            // Log that we are retrying the command and wait a short time in the hope that the transient condition clears
+                            TL.LogMessage(clientNumber, method, string.Format("Timeout exception, retrying command - retry-count {0}/{1}", retryCounter, SOCKET_ERROR_MAXIMUM_RETRIES));
+                            Thread.Sleep(SOCKET_ERROR_RETRY_DELAY_TIME);
+                        }
+                        else // The retry count exceeds the maximum allowed so throw the exception to the client
+                        {
+                            TL.LogMessageCrLf(clientNumber, method, $"{typeof(T).Name} Timeout retry count exceeded - {ex.Message}");
+                            if (TL.DebugTraceState) TL.LogMessageCrLf(clientNumber, method, $"Timeout retry count exceeded : {ex}");
+                            throw;
+                        }
+                    }
+                    else // Some other type of exception that isn't System.Net.WebException or TimeoutException so log it and throw it to the client
                     {
                         TL.LogMessageCrLf(clientNumber, method, typeof(T).Name + " " + ex.Message);
                         if (TL.DebugTraceState) TL.LogMessageCrLf(clientNumber, method, "Exception: " + ex.ToString());
@@ -1796,6 +1892,21 @@ namespace ASCOM.DynamicRemoteClients
             {
                 returnValues.Add(action);
                 TL.LogMessage(clientNumber, "SupportedActions", string.Format("Returning action: {0}", action));
+            }
+
+            return returnValues;
+        }
+
+        public static ArrayList DeviceState(uint clientNumber, RestClient client, string URIBase, TraceLoggerPlus TL)
+        {
+            List<StateValue> deviceState = GetValue<List<StateValue>>(clientNumber, client, URIBase, TL, "DeviceState", MemberTypes.Property);
+            TL.LogMessage(clientNumber, "DeviceState", $"Returning {deviceState.Count} elements");
+
+            ArrayList returnValues = new ArrayList();
+            foreach (StateValue stateValue in deviceState)
+            {
+                returnValues.Add(stateValue);
+                TL.LogMessage(clientNumber, "DeviceState", $"Returning: {stateValue.Name} = {stateValue.Value} - Type: {stateValue.Value.GetType().Name}");
             }
 
             return returnValues;
@@ -2038,7 +2149,7 @@ namespace ASCOM.DynamicRemoteClients
 
                             case "UInt16[,,]":
                                 UInt16[,,] uint16Array3D = (UInt16[,,])returnArray;
- 
+
                                 sw.Restart();
                                 Parallel.For(0, returnArray.GetLength(0), (i) =>
                                 {
@@ -2054,7 +2165,7 @@ namespace ASCOM.DynamicRemoteClients
 
                             case "Int32[,,]":
                                 Int32[,,] int3DArray = (Int32[,,])returnArray;
-   
+
                                 sw.Restart();
                                 Parallel.For(0, returnArray.GetLength(0), (i) =>
                                 {
@@ -2222,7 +2333,7 @@ namespace ASCOM.DynamicRemoteClients
                 if (headers is null) throw new InvalidValueException("The device did not return any headers. Expected a Content-Type header with a value of 'application/json' or 'text/json' or 'application/imagebytes'.");
 
                 // Extract the content type from tyhe headers
-                if (headers.TryGetValues(AlpacaConstants.CONTENT_TYPE_HEADER_NAME, out contentTypeValues))
+                if (headers.TryGetValues(CONTENT_TYPE_HEADER_NAME, out contentTypeValues))
                 {
                     contentType = contentTypeValues.First().ToLowerInvariant();
                 }
@@ -2233,7 +2344,7 @@ namespace ASCOM.DynamicRemoteClients
                 TL.LogMessage("GetResponse", $"ReadAsByteArrayAsync time: {sw.ElapsedMilliseconds}ms, Overall time: {swOverall.ElapsedMilliseconds}ms.");
 
                 // If the content type is JSON - Populate the Content property with a string converted from the byte[] 
-                if ((contentType.Contains(AlpacaConstants.APPLICATION_JSON_MIME_TYPE)) | (contentType.Contains(AlpacaConstants.TEXT_JSON_MIME_TYPE)))
+                if (contentType.Contains(AlpacaConstants.APPLICATION_JSON_MIME_TYPE))
                 {
                     sw.Restart();
                     RestResponse restResponse = new RestResponse()

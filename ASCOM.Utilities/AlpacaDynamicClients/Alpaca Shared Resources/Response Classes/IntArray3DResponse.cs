@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ASCOM.DynamicRemoteClients
+﻿namespace ASCOM.DynamicRemoteClients
 {
     public class IntArray3DResponse : ImageArrayResponseBase
     {

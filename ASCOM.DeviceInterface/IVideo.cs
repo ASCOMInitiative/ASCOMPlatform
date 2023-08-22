@@ -17,199 +17,6 @@ using System.Runtime.InteropServices;
 namespace ASCOM.DeviceInterface
 {
     /// <summary>
-    /// ASCOM Video Camera supported frame rates.
-    /// </summary>
-    [Guid("AECD630C-3A08-46A2-96D3-33F3CF461CBB")]
-    [ComVisible(true)]
-    public enum VideoCameraFrameRate
-    {
-        /// <summary>
-        /// This is a video camera that supports variable frame rates.
-        /// </summary>
-        Variable = 0,
-
-        /// <summary>
-        /// 25 frames per second (fps) corresponding to a <b>PAL</b> (colour) or <b>CCIR</b> (black and white) video standard.
-        /// </summary>
-        PAL = 1,
-
-        /// <summary>
-        /// 29.97  frames per second (fps) corresponding to an <b>NTSC</b> (colour) or <b>EIA</b> (black and white) video standard.
-        /// </summary>
-        NTSC = 2
-    }
-
-    /// <summary>
-    /// ASCOM Video Camera status values.
-    /// </summary>
-    [Guid("84422451-5D8E-4F5A-9A81-8E197AABF79B")]
-    [ComVisible(true)]
-    public enum VideoCameraState
-    {
-        /// <summary>
-        /// Camera status running. The video is receiving signal and video frames are available for viewing or recording.
-        /// </summary>
-        videoCameraRunning = 0,
-
-        /// <summary>
-        /// Camera status recording. The video camera is recording video to the file system. Video frames are available for viewing.
-        /// </summary>
-        videoCameraRecording = 1,
-
-        /// <summary>
-        /// Camera status error. The video camera is in a state of an error and cannot continue its operation. Usually a reset will be required to resolve the error condition.
-        /// </summary>
-        videoCameraError = 2
-    }
-
-    /// <summary>
-    /// Defines the IVideoFrame Interface.
-    /// </summary>
-    [Guid("EA1D5478-7263-43F8-B708-78783A48158C")]
-    [ComVisible(true)]
-    [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
-    public interface IVideoFrame
-    {
-		/// <summary>
-		/// Returns a safearray of int32 containing the pixel values from the video frame. The array could be one of: ImageArray[Pixels], ImageArray[Height, Width], ImageArray[NumPlane, Pixels]
-		/// or ImageArray[NumPlane, Height, Width].
-		/// </summary>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
-		/// <para>The application must inspect the Safearray parameters to determine the dimensions and also the <see cref="P:ASCOM.DeviceInterface.IVideo.SensorType"/> to determine if the image is <b>Color</b> or not.
-		/// The following table should be used to determine the format of the data:</para>
-		/// <para>
-		/// <table style="width:76.24%;" cellspacing="0" width="76.24%">
-		/// <col style="width: 11.701%;"></col>
-		/// <col style="width: 20.708%;"></col>
-		/// <col style="width: 67.591%;"></col>
-		/// <tr>
-		/// <td colspan="1" rowspan="1" style="width: 11.701%; padding-right: 10px; padding-left: 10px; &#xA; border-left-color: #000000; border-left-style: Solid; &#xA; border-top-color: #000000; border-top-style: Solid; &#xA; border-right-color: #000000; border-right-style: Solid;&#xA; border-bottom-color: #000000; border-bottom-style: Solid; &#xA; border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; &#xA; background-color: #00ffff;" width="11.701%">
-		/// <b>Dimensions</b></td>
-		/// <td colspan="1" rowspan="1" style="width: 20.708%; padding-right: 10px; padding-left: 10px; &#xA; border-top-color: #000000; border-top-style: Solid; &#xA; border-right-style: Solid; border-right-color: #000000; &#xA; border-bottom-color: #000000; border-bottom-style: Solid; &#xA; border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; &#xA; background-color: #00ffff;" width="20.708%">
-		/// <b>SensorType</b></td>
-		/// <td colspan="1" rowspan="1" style="width: 67.591%; padding-right: 10px; padding-left: 10px; &#xA; border-top-color: #000000; border-top-style: Solid; &#xA; border-right-style: Solid; border-right-color: #000000; &#xA; border-bottom-color: #000000; border-bottom-style: Solid; &#xA; border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; &#xA; background-color: #00ffff;" width="67.591%">
-		/// <b>Array Format</b></td>
-		/// </tr>
-		/// <tr>
-		/// <td>1; int[]</td>
-		/// <td><b>Monochrome</b>, <b>RGGB</b>, <b>CMYG</b>, <b>CMYG2</b>, <b>LRGB</b></td>
-		/// <td>A row major <b>ImageArray[Pixels]</b> of <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> elements. The pixels in the array start from the top left part of the image and are listed by horizontal lines/rows. The second pixel in the array is the second pixel from the first horizontal row
-		/// and the second last pixel in the array is the second last pixels from the last horizontal row.</td>
-		/// </tr>
-		/// <tr>
-		/// <td>1; int[]</td>
-		/// <td><b>Color</b></td>
-		/// <td><p style="color:red">Invalid configuration.</p></td>
-		/// </tr>
-		/// <tr>
-		/// <td>2; int[,]</td>
-		/// <td><b>Monochrome</b>, <b>RGGB</b>, <b>CMYG</b>, <b>CMYG2</b>, <b>LRGB</b></td>
-		/// <td><b>ImageArray[Height, Width]</b> of <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> x <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> elements.</td>
-		/// </tr>
-		/// <tr>
-		/// <td>2; int[,]</td>
-		/// <td><b>Color</b></td>
-		/// <td><b>ImageArray[NumPlane, Pixels]</b> of NumPlanes x <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> elements. The order of the three colour planes is
-		/// first is <b>R</b>, the second is <b>G</b> and third is <b>B</b>. The pixels in second dimension of the array start from the top left part of the image and are listed by horizontal lines/rows. The second pixel is the second pixel from the first horizontal row
-		/// and the second last pixel is the second last pixels from the last horizontal row.</td>
-		/// </tr>
-		/// <tr>
-		/// <td>3; int[,,]</td>
-		/// <td><b>Monochrome</b>, <b>RGGB</b>, <b>CMYG</b>, <b>CMYG2</b>, <b>LRGB</b></td>
-		/// <td><p style="color:red">Invalid configuration.</p></td>
-		/// </tr>
-		/// <tr>
-		/// <td>3; int[,,]</td>
-		/// <td><b>Color</b></td>
-		/// <td><b>ImageArray[NumPlane, Height, Width]</b> of NumPlanes x <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> x <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> elements. The order of the three colour planes is
-		/// first is <b>R</b>, the second is <b>G</b> and third is <b>B</b>.</td>
-		/// </tr>
-		/// </table>
-		/// </para>
-		/// <para>In <b>Color</b> SensorType mode, if the application cannot handle multispectral images, it should use just the first plane.</para>
-		/// </remarks>
-		/// <value>The image array.</value>
-		object ImageArray { get; }
-
-		/// <summary>
-		/// Returns a preview bitmap for the last video frame as an array of byte.
-		/// </summary>
-		/// <example> The following code can be used to create a Bitmap from the returned byte array
-		/// <code lang="cs">
-		/// using (var memStr = new MemoryStream(frame.PreviewBitmap))
-		/// {
-		/// bmp = (Bitmap)Image.FromStream(memStr);
-		/// }
-		/// </code>
-		/// <code lang="VB">
-		/// Using memStr = New MemoryStream(frame.PreviewBitmap)
-		/// bmp = DirectCast(Image.FromStream(memStr), Bitmap)
-		/// End Using
-		/// </code>
-		/// </example>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p> The application can use this bitmap to show a preview image of the last video frame when required. This is a convenience property for
-		/// those applications that don't require to process the <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/> but usually only adjust the video camera settings and then record a video file.
-		/// <para>When a 24bit RGB image can be returned by the driver this should be the preferred format. </para>
-		/// </remarks>
-		/// <value>The preview bitmap image.</value>
-		byte[] PreviewBitmap { get; }
-
-		/// <summary>
-		/// Returns the frame number.
-		/// </summary>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
-		/// The frame number of the first exposed frame may not be zero and is dependent on the device and/or the driver. The frame number increases with each acquired frame not with each requested frame by the client.
-		/// </remarks>
-		/// <value>The frame number of the current video frame.</value>
-		long FrameNumber { get; }
-
-		/// <summary>
-		/// Returns the actual exposure duration in seconds (i.e. shutter open time).
-		/// </summary>
-		/// <exception cref="PropertyNotImplementedException">Must throw an exception if not implemented.</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks>
-		/// This may differ from the exposure time corresponding to the requested frame exposure due to shutter latency, camera timing precision, etc.
-		/// </remarks>
-		/// <value>The duration of the frame exposure.</value>
-		double ExposureDuration { get; }
-
-		/// <summary>
-		/// Returns the actual exposure start time in the FITS-standard CCYY-MM-DDThh:mm:ss[.sss...] format, if supported.
-		/// </summary>
-		/// <value>The frame exposure start time.</value>
-		/// <exception cref="PropertyNotImplementedException">Must throw an exception if not implemented.</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		string ExposureStartTime { get; }
-
-		/// <summary>
-		/// Returns additional information associated with the video frame as a list of named variables.
-		/// </summary>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
-		/// <para>The returned object contains entries for each value. For each entry, the Key property is the value's name, and the Value property is the string value itself.</para>
-		/// This property must return an empty list if no video frame metadata is provided.
-		/// <para>The Keys is a single word, or multiple words joined by underscore characters, that sensibly describes the variable. It is recommended that Keys
-		/// should be a maximum of 16 characters for legibility and all upper case.</para>
-		/// <para>The KeyValuePair objects are instances of the <see cref="ASCOM.Utilities.KeyValuePair">KeyValuePair class</see></para>
-		/// </remarks>
-		/// <value>An ArrayList of KeyValuePair objects.</value>
-		ArrayList ImageMetadata { get; }
-    }
-
-    /// <summary>
     /// Defines the IVideo Interface.
     /// </summary>
     [Guid("00A394A5-BCB0-449D-A46B-81A02824ADC5")]
@@ -315,12 +122,11 @@ namespace ASCOM.DeviceInterface
 		/// </remarks>
 		ArrayList SupportedActions { get; }
 
-		/// <summary>
-		/// Dispose the late-bound interface, if needed. Will release it via COM
-		/// if it is a COM object, else if native .NET will just dereference it
-		/// for GC.
-		/// </summary>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <summary>
+        /// This method is a "clean-up" method that is primarily of use to drivers that are written in languages such as C# and VB.NET where resource clean-up is initially managed by the language's 
+        /// runtime garbage collection mechanic. Driver authors should take care to ensure that a client or runtime calling Dispose() does not adversely affect other connected clients.
+        /// Applications should not call this method.
+        /// </summary>
 		void Dispose();
 
 		/// <summary>
@@ -1004,7 +810,7 @@ namespace ASCOM.DeviceInterface
 		/// This dialog is not intended to be used in unattended mode but can give greater control over video cameras that provide special features. The dialog may also allow
 		/// changing standard <see cref="DeviceInterface.IVideo"/> interface settings such as Gamma and Gain. If a client software
 		/// displays any <see cref="DeviceInterface.IVideo"/> interface settings then it should take care to keep in sync the values changed by this method and those changed directly via the interface.</para>
-		/// <para>To support automated and unattended control over the specialized device settings or functions available on this dialog the driver should also allow their control via <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedActions"/>.
+		/// <para>To support automated and unattended control over the specialized device settings or functions available on this dialog the driver should also allow their control via <see cref="SupportedActions"/>.
 		/// This dialog is meant to be used by the applications to allow the user to adjust specialized device settings when those applications don't specifically use the specialized settings in their functionality.</para>
 		/// <para>Examples for specialized settings that could be supported are white balance and sharpness.</para>
 		/// </remarks>

@@ -6,12 +6,11 @@
 
 using System;
 using ASCOM.DeviceInterface;
+using ASCOM.DeviceInterface.DeviceState;
 using ASCOM.Utilities;
-using System.Globalization;
 
 namespace ASCOM.DriverAccess
 {
-    #region Focuser wrapper
     /// <summary>
     /// Provides universal access to Focuser drivers
     /// </summary>
@@ -47,16 +46,32 @@ namespace ASCOM.DriverAccess
             }
         }
 
-		#endregion
+        /// <summary>
+        /// Focuser device state
+        /// </summary>
+        public FocuserState FocuserState
+        {
+            get
+            {
+                // Create a state object to return.
+                FocuserState focuserState = new FocuserState(DeviceState, TL);
+                TL.LogMessage(nameof(FocuserState), $"Returning: '{focuserState.IsMoving}' '{focuserState.Position}' '{focuserState.Temperature}' '{focuserState.TimeStamp}'");
 
-		#region IFocuser Members
+                // Return the device specific state class
+                return focuserState;
+            }
+        }
 
-		/// <summary>
-		/// True if the focuser is capable of absolute position; that is, being commanded to a specific step location.
-		/// </summary>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		public bool Absolute
+        #endregion
+
+        #region IFocuser Members
+
+        /// <summary>
+        /// True if the focuser is capable of absolute position; that is, being commanded to a specific step location.
+        /// </summary>
+        /// <exception cref="NotConnectedException">If the device is not connected.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        public bool Absolute
         {
             get { return Convert.ToBoolean(memberFactory.CallMember(1, "Absolute", new Type[] { }, new object[] { })); }
         }
@@ -245,7 +260,6 @@ namespace ASCOM.DriverAccess
         }
 
         #endregion
-    }
 
-    #endregion
+    }
 }

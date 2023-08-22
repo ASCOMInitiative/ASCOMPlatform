@@ -509,13 +509,14 @@ namespace ASCOM.DriverAccess
         private void CheckDotNetExceptions(string memberName, Exception e)
         {
             string FullName = e.InnerException.GetType().FullName;
-            string message = "";
+            string message;
             string member;
             string value;
             string range;
 
-            // Deal with the possibility that DriverAccess is being used in both driver and client so remove the outer 
-            // DriverAccessCOMException exception if present
+            //Throw the appropriate exception based on the inner exception of the TargetInvocationException
+
+            // Deal with the possibility that DriverAccess is being used in both driver and client so remove the outer DriverAccessCOMException exception if present
             if (e.InnerException is DriverAccessCOMException)
             {
                 message = e.InnerException.InnerException.Message;
@@ -534,7 +535,24 @@ namespace ASCOM.DriverAccess
                 CheckDotNetExceptions(memberName + " inner exception", e.InnerException.InnerException);
             }
 
-            //Throw the appropriate exception based on the inner exception of the TargetInvocationException
+            if (e.InnerException is COMException)
+            {
+                message = e.InnerException.Message;
+                int number = (int)e.InnerException.GetType().InvokeMember("ErrorCode", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
+
+                TL.LogMessageCrLf(memberName, "  Throwing DriverAccessCOMException: '" + message + "' '" + number + "'");
+                throw new DriverAccessCOMException(message, number, e.InnerException);
+            }
+
+            if (e.InnerException is DriverException)
+            {
+                message = e.InnerException.Message;
+                int number = (int)e.InnerException.GetType().InvokeMember("Number", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
+
+                TL.LogMessageCrLf(memberName, "  Throwing DriverException: '" + message + "' '" + number + "'");
+                throw new DriverException(message, number, e.InnerException);
+            }
+
             if (e.InnerException is InvalidOperationException)
             {
                 message = e.InnerException.Message;
@@ -552,6 +570,13 @@ namespace ASCOM.DriverAccess
                 throw new InvalidValueException(member, value, range, e.InnerException);
             }
 
+            if (e.InnerException is MethodNotImplementedException)
+            {
+                member = (string)e.InnerException.GetType().InvokeMember("PropertyOrMethod", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
+                TL.LogMessageCrLf(memberName, "  Throwing MethodNotImplementedException: '" + member + "'");
+                throw new MethodNotImplementedException(member, e.InnerException);
+            }
+
             if (e.InnerException is NotConnectedException)
             {
                 message = e.InnerException.Message;
@@ -559,25 +584,19 @@ namespace ASCOM.DriverAccess
                 throw new NotConnectedException(message, e.InnerException);
             }
 
-            if (e.InnerException is ASCOM.PropertyNotImplementedException)
-            {
-                member = (string)e.InnerException.GetType().InvokeMember("PropertyOrMethod", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
-                TL.LogMessageCrLf(memberName, "  Throwing PropertyNotImplementedException: '" + member + "'");
-                throw new PropertyNotImplementedException(member, false, e.InnerException);
-            }
-
-            if (e.InnerException is ASCOM.MethodNotImplementedException)
-            {
-                member = (string)e.InnerException.GetType().InvokeMember("PropertyOrMethod", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
-                TL.LogMessageCrLf(memberName, "  Throwing MethodNotImplementedException: '" + member + "'");
-                throw new MethodNotImplementedException(member, e.InnerException);
-            }
-
-            if (e.InnerException is ASCOM.NotImplementedException)
+            if (e.InnerException is NotImplementedException)
             {
                 member = (string)e.InnerException.GetType().InvokeMember("PropertyOrMethod", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
                 TL.LogMessageCrLf(memberName, "  Throwing NotImplementedException: '" + member + "'");
                 throw new NotImplementedException(member, e.InnerException);
+            }
+
+            if (e.InnerException is OperationCanceledException)
+            {
+                message = e.InnerException.Message;
+
+                TL.LogMessageCrLf(memberName, "  Throwing OperationCanceledException: '" + message + "'");
+                throw new OperationCanceledException(message, e.InnerException);
             }
 
             if (e.InnerException is ParkedException)
@@ -586,6 +605,13 @@ namespace ASCOM.DriverAccess
 
                 TL.LogMessageCrLf(memberName, "  Throwing ParkedException: '" + message + "'");
                 throw new ParkedException(message, e.InnerException);
+            }
+
+            if (e.InnerException is PropertyNotImplementedException)
+            {
+                member = (string)e.InnerException.GetType().InvokeMember("PropertyOrMethod", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
+                TL.LogMessageCrLf(memberName, "  Throwing PropertyNotImplementedException: '" + member + "'");
+                throw new PropertyNotImplementedException(member, false, e.InnerException);
             }
 
             if (e.InnerException is SlavedException)
@@ -604,29 +630,11 @@ namespace ASCOM.DriverAccess
                 throw new ValueNotSetException(member, e.InnerException);
             }
 
-            if (e.InnerException is DriverException)
-            {
-                message = e.InnerException.Message;
-                int number = (int)e.InnerException.GetType().InvokeMember("Number", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
-
-                TL.LogMessageCrLf(memberName, "  Throwing DriverException: '" + message + "' '" + number + "'");
-                throw new DriverException(message, number, e.InnerException);
-            }
-
-            if (e.InnerException is COMException)
-            {
-                message = e.InnerException.Message;
-                int number = (int)e.InnerException.GetType().InvokeMember("ErrorCode", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
-
-                TL.LogMessageCrLf(memberName, "  Throwing DriverAccessCOMException: '" + message + "' '" + number + "'");
-                throw new DriverAccessCOMException(message, number, e.InnerException);
-            }
-
             // Default behaviour if its not one of the exceptions above
-            string defaultmessage = "CheckDotNetExceptions " + _strProgId + " " + memberName + " " + e.InnerException.ToString() + " (See Inner Exception for details)";
+            message = e.InnerException.Message;
 
-            TL.LogMessageCrLf(memberName, "  Throwing Default DriverException: '" + defaultmessage + "'");
-            throw new DriverException(defaultmessage, e.InnerException);
+            TL.LogMessageCrLf(memberName, $"  Throwing Default DriverException: '{message}'");
+            throw new DriverException(message, e.InnerException);
         }
 
         private void SetTargetInvocationExceptionHandler(string memberName, Exception e)

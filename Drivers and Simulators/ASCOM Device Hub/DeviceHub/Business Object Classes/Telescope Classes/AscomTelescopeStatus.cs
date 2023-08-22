@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using ASCOM.DeviceInterface;
 
 namespace ASCOM.DeviceHub
 {
-	public class AscomTelescopeStatus : DevicePropertiesBase, ICloneable
+    public class AscomTelescopeStatus : DevicePropertiesBase, ICloneable
 	{
 		public AscomTelescopeStatus()
 		{}

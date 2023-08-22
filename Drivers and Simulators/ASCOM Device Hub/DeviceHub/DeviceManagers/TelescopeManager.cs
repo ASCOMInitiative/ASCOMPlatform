@@ -664,7 +664,9 @@ namespace ASCOM.DeviceHub
 					DoSlewToCoordinates( ra, dec );
 				}
 
+				Status = new DevHubTelescopeStatus( this );
 				SetFastPolling();
+
 				SlewInProgressMessage msg = new SlewInProgressMessage( true, ra, dec, newSide );
 				Messenger.Default.Send( msg );
 				PreviousSlewInProgressMessage = msg;

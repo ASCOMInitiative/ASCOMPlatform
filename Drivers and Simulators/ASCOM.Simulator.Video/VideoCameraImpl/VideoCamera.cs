@@ -13,20 +13,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using ASCOM;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities.Video;
 using ASCOM.Simulator.Properties;
-using ASCOM.Simulator.Utils;
 
 namespace Simulator.VideoCameraImpl
 {
-	public class VideoCameraFrame
+    public class VideoCameraFrame
 	{
 		public int[,] Pixels;
 		public byte[] PreviewBitmapBytes;

@@ -30,7 +30,6 @@ When you enumerate assemblies that are available in the GAC.
 NOTE: CoInitialize(Ex) must be called before you use any of the functions and interfaces that are described in this specification. 
 */
 
-using System;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Globalization;

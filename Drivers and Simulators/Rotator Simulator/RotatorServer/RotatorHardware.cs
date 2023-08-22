@@ -42,7 +42,7 @@ namespace ASCOM.Simulator
         private static string description = "ASCOM Rotator Driver for RotatorSimulator";
         private static string driverInfo = "ASCOM.Simulator.Rotator";
         private static string driverVersion = "6.6";
-        private static short interfaceVersion = 3;
+        private static short interfaceVersion = 4;
         private static string progID = "ASCOM.Simulator.Rotator";
 
         // Sync object
@@ -69,7 +69,7 @@ namespace ASCOM.Simulator
                 reverse = Convert.ToBoolean(profile.GetValue(progID, "Reverse", "", bool.FalseString));
 
                 syncOffset = Convert.ToSingle(profile.GetValue(progID, "SyncOffset", "", "0.0"), CultureInfo.InvariantCulture);
-                targetMechanicalPosition = RangeAngle(mechanicalPosition + syncOffset, 0.0F, 360.0F); ; // Initialise the target position to the current synced position
+                targetMechanicalPosition = mechanicalPosition ; // Initialise the mechanical target position to the current mechanical position
             }
         }
 

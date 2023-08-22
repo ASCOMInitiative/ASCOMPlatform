@@ -9,15 +9,11 @@
 //
 // --------------------------------------------------------------------------------
 //
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 
 namespace ASCOM.Simulator.Utils
 {
-	public static class TraceSwitches
+    public static class TraceSwitches
 	{
 		public static TraceSwitch DebugTracing;
 

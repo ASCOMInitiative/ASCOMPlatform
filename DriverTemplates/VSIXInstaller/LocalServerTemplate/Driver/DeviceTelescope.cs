@@ -4,11 +4,6 @@
 
 using ASCOM.DeviceInterface;
 using System;
-using ASCOM;
-using ASCOM.Utilities;
-using ASCOM.Astrometry.AstroUtils;
-using ASCOM.Astrometry.NOVAS;
-using ASCOM.Astrometry;
 
 class DeviceTelescope
 {

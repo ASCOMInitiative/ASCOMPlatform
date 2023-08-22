@@ -1,12 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
-using ASCOM.Utilities;
-using ASCOM.Simulator;
 using System.Diagnostics;
 
 namespace ASCOM.Simulator
@@ -19,28 +14,30 @@ namespace ASCOM.Simulator
             InitializeComponent();
 
             this.Load += SetupDialogForm_Load;
-            
+
             // Initialise current values of user settings from the ASCOM Profile 
             chkTrace.Checked = Switch.traceState;
-            
+
             // get a copy of the switches for editing
             dataGridViewSwitches.Rows.Clear();
+
             var i = 0;
             foreach (var item in Switch.switches)
             {
-                dataGridViewSwitches.Rows.Add(i, item.Name, item.Description, item.Value, item.Minimum, item.Maximum, item.StepSize, item.CanWrite);
+                dataGridViewSwitches.Rows.Add(i, item.Name, item.Description, item.Value, item.Minimum, item.Maximum, item.StepSize, item.CanWrite, item.CanAsync, item.AsyncDuration);
                 i++;
             }
+
             checkBoxSetupSimulator_CheckedChanged(null, null);
+
             FileVersionInfo FV = Process.GetCurrentProcess().MainModule.FileVersionInfo; //Get the name of the executable without path or file extension
             labelVersion.Text = "Version: " + FV.FileVersion;
 
             dataGridViewSwitches.ColumnWidthChanged += new DataGridViewColumnEventHandler(dataGridViewSwitches_ColumnWidthChanged);
             dataGridViewSwitches.RowHeightChanged += new DataGridViewRowEventHandler(dataGridViewSwitches_RowHeightChanged);
             dataGridViewSwitches.RowsAdded += new DataGridViewRowsAddedEventHandler(dataGridViewSwitches_RowsAdded);
-            
-            ResizeForm();
 
+            ResizeForm();
         }
 
         private void SetupDialogForm_Load(object sender, EventArgs e)
@@ -64,13 +61,13 @@ namespace ASCOM.Simulator
 
         void ResizeForm()
         {
-            int height = 0;
+            int height = 15;
             foreach (DataGridViewRow row in dataGridViewSwitches.Rows)
             {
                 height += row.Height;
             }
             height += dataGridViewSwitches.ColumnHeadersHeight;
-
+            
             int width = 0;
             foreach (DataGridViewColumn col in dataGridViewSwitches.Columns)
             {
@@ -87,7 +84,6 @@ namespace ASCOM.Simulator
             ResizeForm();
         }
 
-
         private void cmdOK_Click(object sender, EventArgs e) // OK button event handler
         {
             // Place any validation constraint checks here
@@ -100,9 +96,9 @@ namespace ASCOM.Simulator
                 if (row.IsNewRow)
                     continue;
                 string reason;
-                if (LocalSwitch.IsValid(row.Cells, out reason))
+                if (SwitchDevice.IsValid(row.Cells, out reason))
                 {
-                    Switch.switches.Add(new LocalSwitch(row.Cells));
+                    Switch.switches.Add(new SwitchDevice(row.Cells));
                 }
                 else
                 {
@@ -148,6 +144,7 @@ namespace ASCOM.Simulator
                 case "colMax":
                 case "colStep":
                 case "colValue":
+                case "colAsyncDuration":
                     itemID.KeyPress += itemID_NumKeyPress;
                     break;
             }
@@ -202,6 +199,7 @@ namespace ASCOM.Simulator
                 case "colMax":
                 case "colStep":
                 case "colValue":
+                case "colAsyncDuration":
                     double d;
                     if (!double.TryParse(e.FormattedValue.ToString(), out d))
                     {
@@ -248,7 +246,7 @@ namespace ASCOM.Simulator
             var row = dataGridViewSwitches.Rows[e.RowIndex];
             if (row.IsNewRow) return;
             string reason;
-            if (LocalSwitch.IsValid(row.Cells, out reason))
+            if (SwitchDevice.IsValid(row.Cells, out reason))
             {
                 row.ErrorText = "";
             }

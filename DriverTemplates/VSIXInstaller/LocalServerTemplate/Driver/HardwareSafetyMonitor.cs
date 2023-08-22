@@ -2,14 +2,6 @@
 // Required code must lie within the device implementation region
 // The //ENDOFINSERTEDFILE tag must be the last but one line in this file
 
-using ASCOM.DeviceInterface;
-using System;
-using ASCOM;
-using ASCOM.Utilities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 static class SafetyMonitorHardware
 {
     #region ISafetyMonitor Implementation
@@ -22,8 +14,9 @@ static class SafetyMonitorHardware
     {
         get
         {
-            LogMessage("IsSafe Get", "true");
-            return true;
+            // Return false per the ASOCM specification
+            LogMessage("IsSafe Get", "false");
+            return false;
         }
     }
 

@@ -15,17 +15,13 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
-using System.Drawing;
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.Reflection;
-using ASCOM.Utilities;
 using Microsoft.Win32;
-using System.Text;
 using System.Threading;
 using System.Security.Principal;
 using System.Diagnostics;
-using ASCOM;
 
 namespace ASCOM.Simulator
 {

@@ -5251,6 +5251,12 @@ Namespace SOFA
         <DispId(16)> Function Tf2a(s As String, ihour As Integer, imin As Integer, sec As Double, ByRef rad As Double) As Integer
         <DispId(17)> Function TtTai(tt1 As Double, tt2 As Double, ByRef tai1 As Double, ByRef tai2 As Double) As Integer
         <DispId(18)> Function UtcTai(utc1 As Double, utc2 As Double, ByRef tai1 As Double, ByRef tai2 As Double) As Integer
+        <DispId(19)> Sub Hd2ae(ha As Double, dec As Double, phi As Double, ByRef az As Double, ByRef el As Double)
+        <DispId(20)> Sub S2pv(theta As Double, phi As Double, r As Double, td As Double, pd As Double, rd As Double, pv As Double(,))
+        <DispId(21)> Sub Ir(r As Double(,))
+        <DispId(22)> Sub Ry(theta As Double, r As Double(,))
+        <DispId(23)> Sub Rxpv(r As Double(,), pv As Double(,), rpv As Double(,))
+        <DispId(24)> Sub Pv2s(pv As Double(,), ByRef theta As Double, ByRef phi As Double, ByRef r As Double, ByRef td As Double, ByRef pd As Double, ByRef rd As Double)
     End Interface
 End Namespace
 #End Region

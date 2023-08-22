@@ -17,7 +17,7 @@
 using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 using System.Collections;
-using ASCOM;
+using System;
 
 namespace ASCOM.Simulator
 {
@@ -29,7 +29,7 @@ namespace ASCOM.Simulator
     [ProgId("ASCOM.Simulator.Rotator")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
-    public class Rotator : ReferenceCountedObjectBase, IRotatorV3
+    public class Rotator : ReferenceCountedObjectBase, IRotatorV4
     {
         //
         // Constructor - Must be public for COM registration!
@@ -186,5 +186,43 @@ namespace ASCOM.Simulator
         }
 
         #endregion
+
+        #region IRotatorV4 members
+
+        public void Connect()
+        {
+            Connected = true;
+        }
+
+        public void Disconnect()
+        {
+            Connected = false;
+        }
+
+        public bool Connecting
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public ArrayList DeviceState
+        {
+            get
+            {
+                ArrayList deviceState = new ArrayList();
+
+                try { deviceState.Add(new StateValue(nameof(IRotatorV4.IsMoving), IsMoving)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IRotatorV4.MechanicalPosition), MechanicalPosition)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IRotatorV4.Position), Position)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                return deviceState;
+            }
+        }
+
+        #endregion
+
     }
 }

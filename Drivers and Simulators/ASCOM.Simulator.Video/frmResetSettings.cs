@@ -12,18 +12,12 @@
 //
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ASCOM.Simulator.Properties;
 
 namespace ASCOM.Simulator
 {
-	public partial class frmResetSettings : Form
+    public partial class frmResetSettings : Form
 	{
 		public frmResetSettings()
 		{

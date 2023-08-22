@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -25,7 +24,7 @@ namespace ASCOM.Simulator
     [Guid("24C040F2-2FA5-4DA4-B87B-6C1101828D2A")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
-    public class Focuser : IFocuserV3, IDisposable
+    public class Focuser : IFocuserV4, IDisposable
     {
         #region Constants
 
@@ -47,7 +46,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Driver interface version
         /// </summary>
-        private const short interfaceVersion = 3;
+        private const short interfaceVersion = 4;
 
         /// <summary>
         /// Driver version number
@@ -78,7 +77,7 @@ namespace ASCOM.Simulator
 
         private bool _isConnected;
         private System.Timers.Timer _moveTimer; // drives the position and temperature changers
-        private int _position;
+        internal int _position;
         internal int Target;
         private double _lastTemp;
         private FocuserHandboxForm Handbox;
@@ -440,7 +439,10 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!(TL == null)) LogMessage("Position", _position.ToString());
+                if (!Absolute) throw new PropertyNotImplementedException("Position", false);
+
+                if (!(TL is null)) LogMessage("Position", _position.ToString());
+
                 return _position;
             }
         }
@@ -529,6 +531,43 @@ namespace ASCOM.Simulator
         /// mode.
         /// </summary>
         public double Temperature { get; internal set; }
+
+        #endregion
+
+        #region IFocuserV4 members
+
+        public void Connect()
+        {
+            Connected = true;
+        }
+
+        public void Disconnect()
+        {
+            Connected = false;
+        }
+
+        public bool Connecting
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public ArrayList DeviceState
+        {
+            get
+            {
+                ArrayList deviceState = new ArrayList();
+
+                try { deviceState.Add(new StateValue(nameof(IFocuserV4.IsMoving), IsMoving)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IFocuserV4.Position), Position)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IFocuserV4.Temperature), Temperature)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                return deviceState;
+            }
+        }
 
         #endregion
 

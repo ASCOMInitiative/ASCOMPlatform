@@ -402,4 +402,290 @@ namespace ASCOM.DeviceInterface
         LRGB = 5
     }
 
+    /// <summary>
+    /// ASCOM Video Camera supported frame rates.
+    /// </summary>
+    [Guid("AECD630C-3A08-46A2-96D3-33F3CF461CBB")]
+    [ComVisible(true)]
+    public enum VideoCameraFrameRate
+    {
+        /// <summary>
+        /// This is a video camera that supports variable frame rates.
+        /// </summary>
+        Variable = 0,
+
+        /// <summary>
+        /// 25 frames per second (fps) corresponding to a <b>PAL</b> (colour) or <b>CCIR</b> (black and white) video standard.
+        /// </summary>
+        PAL = 1,
+
+        /// <summary>
+        /// 29.97  frames per second (fps) corresponding to an <b>NTSC</b> (colour) or <b>EIA</b> (black and white) video standard.
+        /// </summary>
+        NTSC = 2
+    }
+
+    /// <summary>
+    /// ASCOM Video Camera status values.
+    /// </summary>
+    [Guid("84422451-5D8E-4F5A-9A81-8E197AABF79B")]
+    [ComVisible(true)]
+    public enum VideoCameraState
+    {
+        /// <summary>
+        /// Camera status running. The video is receiving signal and video frames are available for viewing or recording.
+        /// </summary>
+        videoCameraRunning = 0,
+
+        /// <summary>
+        /// Camera status recording. The video camera is recording video to the file system. Video frames are available for viewing.
+        /// </summary>
+        videoCameraRecording = 1,
+
+        /// <summary>
+        /// Camera status error. The video camera is in a state of an error and cannot continue its operation. Usually a reset will be required to resolve the error condition.
+        /// </summary>
+        videoCameraError = 2
+    }
+
+    /// <summary>
+    /// Device operation names
+    /// </summary>
+    [Guid("EF2A0628-1BB2-458C-A202-5D4F49C29433")]
+    [ComVisible(true)]
+    public enum Operation
+    {
+        /// <summary>
+        /// Uninitialised operation
+        /// </summary>
+        Uninitialised = 0,
+
+        /// <summary>
+        /// No operation
+        /// </summary>
+        None = 1,
+
+        /// <summary>
+        /// All device operations
+        /// </summary>
+        All = 65535,
+
+        /// <summary>
+        /// Connect operation
+        /// </summary>
+        Connect = 2,
+
+        /// <summary>
+        /// Disconnect operation
+        /// </summary>
+        Disconnect = 3,
+
+        /// <summary>
+        /// StartExposure operation
+        /// </summary>
+        StartExposure = 4,
+
+        /// <summary>
+        /// StopExposure operation
+        /// </summary>
+        StopExposure = 5,
+
+        /// <summary>
+        /// AbortExposure operation
+        /// </summary>
+        AbortExposure = 6,
+
+        /// <summary>
+        /// PulseGuide operation
+        /// </summary>
+        PulseGuide = 7,
+
+        /// <summary>
+        /// CalibratorOff operation
+        /// </summary>
+        CalibratorOff = 8,
+
+        /// <summary>
+        /// CalibratorOn operation
+        /// </summary>
+        CalibratorOn = 9,
+
+        /// <summary>
+        /// CloseCover operation
+        /// </summary>
+        CloseCover = 10,
+
+        /// <summary>
+        /// OpenCover operation
+        /// </summary>
+        OpenCover = 11,
+
+        /// <summary>
+        /// HaltCover operation
+        /// </summary>
+        HaltCover = 12,
+
+        /// <summary>
+        /// FindHome operation
+        /// </summary>
+        FindHome = 13,
+
+        /// <summary>
+        /// Park operation
+        /// </summary>
+        Park = 14,
+
+        /// <summary>
+        /// SlewToAzimuth operation
+        /// </summary>
+        SlewToAzimuth = 15,
+
+        /// <summary>
+        /// AbortSlew operation
+        /// </summary>
+        AbortSlew = 16,
+
+        /// <summary>
+        /// AbortSlew operation
+        /// </summary>
+        CloseShutter = 17,
+
+        /// <summary>
+        /// OpenShutter operation
+        /// </summary>
+        OpenShutter = 18,
+
+        /// <summary>
+        /// SlewToAltitude operation
+        /// </summary>
+        SlewToAltitude = 19,
+
+        /// <summary>
+        /// Position operation
+        /// </summary>
+        Position = 20,
+
+        /// <summary>
+        /// Move operation
+        /// </summary>
+        Move = 21,
+
+        /// <summary>
+        /// Halt operation
+        /// </summary>
+        Halt = 22,
+
+        /// <summary>
+        /// MoveAbsolute operation
+        /// </summary>
+        MoveAbsolute = 23,
+
+        /// <summary>
+        /// MoveAbsolute operation
+        /// </summary>
+        MoveMechanical = 24,
+
+        /// <summary>
+        /// SetSwitch operation
+        /// </summary>
+        SetSwitch = 25,
+
+        /// <summary>
+        /// SetSwitchValue operation
+        /// </summary>
+        SetSwitchValue = 26,
+
+        /// <summary>
+        /// Unpark operation
+        /// </summary>
+        Unpark = 27,
+
+        /// <summary>
+        /// MoveAxis operation
+        /// </summary>
+        MoveAxis = 28,
+
+        /// <summary>
+        /// SideOfPier operation
+        /// </summary>
+        SideOfPier = 29,
+
+        /// <summary>
+        /// SlewToAltAzAsync operation
+        /// </summary>
+        SlewToAltAzAsync = 30,
+
+        /// <summary>
+        /// SlewToCoordinatesAsync operation
+        /// </summary>
+        SlewToCoordinatesAsync = 31,
+
+        /// <summary>
+        /// SlewToTargetAsync operation
+        /// </summary>
+        SlewToTargetAsync = 32
+    }
+
+    /// <summary>
+    /// ASCOM device type
+    /// </summary>
+    [Guid("85E6E5B4-603A-40D1-A320-F87ECB90DF9B")]
+    [ComVisible(true)]
+    public enum DeviceType
+    {
+        /// <summary>
+        /// Camera device
+        /// </summary>
+        Camera,
+
+        /// <summary>
+        /// CoverCalibrator device
+        /// </summary>
+        CoverCalibrator,
+
+        /// <summary>
+        /// Dome device
+        /// </summary>
+        Dome,
+
+        /// <summary>
+        /// FilterWheel device
+        /// </summary>
+        FilterWheel,
+
+        /// <summary>
+        /// Focuser device
+        /// </summary>
+        Focuser,
+
+        /// <summary>
+        /// ObservingConditions device
+        /// </summary>
+        ObservingConditions,
+
+        /// <summary>
+        /// Rotator device
+        /// </summary>
+        Rotator,
+
+        /// <summary>
+        /// SafetyMonitor device
+        /// </summary>
+        SafetyMonitor,
+
+        /// <summary>
+        /// Switch device
+        /// </summary>
+        Switch,
+
+        /// <summary>
+        /// Telescope device
+        /// </summary>
+        Telescope,
+
+        /// <summary>
+        /// Video device
+        /// </summary>
+        Video
+    }
 }

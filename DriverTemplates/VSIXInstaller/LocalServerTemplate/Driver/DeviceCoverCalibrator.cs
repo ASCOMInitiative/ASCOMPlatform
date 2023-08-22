@@ -2,11 +2,8 @@
 // Required code must lie within the device implementation region
 // The //ENDOFINSERTEDFILE tag must be the last but one line in this file
 
-using ASCOM;
 using ASCOM.DeviceInterface;
-using ASCOM.Utilities;
 using System;
-using TEMPLATENAMESPACE;
 
 class DeviceCoverCalibrator
 {

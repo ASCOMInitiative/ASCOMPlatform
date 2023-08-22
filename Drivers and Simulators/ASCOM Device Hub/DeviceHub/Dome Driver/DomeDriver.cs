@@ -136,6 +136,7 @@ namespace ASCOM.DeviceHub
 					_logger.Enabled = vm.IsLoggingEnabled;
 					DomeManager.DomeID = vm.DomeSetupVm.DomeID;
 					DomeManager.Instance.SetFastUpdatePeriod( vm.DomeSetupVm.FastUpdatePeriod );
+					Globals.DomeLayout = vm.DomeSetupVm.GetLayout();
 
 					SaveProfile();
 					UpdateAppProfile( DomeManager.DomeID );

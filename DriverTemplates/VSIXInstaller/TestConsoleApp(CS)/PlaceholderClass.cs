@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// This is a dummy class whose only purpose is to ensure that the Platform code compiles correctly, without errors.
+﻿// This is a dummy class whose only purpose is to ensure that the Platform code compiles correctly, without errors.
 // This class is discarded when the template wizard runs on the user's PC and does not appear in the generated project.
 
 namespace ASCOM.DriverAccess

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ASCOM.DeviceHub
+﻿namespace ASCOM.DeviceHub
 {
-	internal class FocuserMoveAmountMessage
+    internal class FocuserMoveAmountMessage
 	{
 		public FocuserMoveAmountMessage( int moveAmount )
 		{

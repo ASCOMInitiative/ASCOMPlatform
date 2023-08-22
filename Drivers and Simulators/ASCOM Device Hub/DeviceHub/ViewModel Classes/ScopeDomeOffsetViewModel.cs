@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace ASCOM.DeviceHub
 {
-	internal class ScopeDomeOffsetViewModel : ValuesEntryViewModelBase
+    internal class ScopeDomeOffsetViewModel : ValuesEntryViewModelBase
 	{
 		public ScopeDomeOffsetViewModel( string offsetDirections )
 			: base( $"{offsetDirections}OffsetValuesEntry" )

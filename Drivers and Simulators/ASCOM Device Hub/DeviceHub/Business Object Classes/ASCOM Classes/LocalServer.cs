@@ -734,7 +734,7 @@ namespace ASCOM.DeviceHub
 
 		private static void RegisterObjects( bool rerunningAsElevated = false )
 		{
-			string logId = "RegistgerObjects";
+			string logId = "RegisterObjects";
 
 			if ( rerunningAsElevated )
 			{

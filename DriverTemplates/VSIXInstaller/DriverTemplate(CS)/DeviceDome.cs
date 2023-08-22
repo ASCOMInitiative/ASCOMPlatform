@@ -3,7 +3,6 @@
 // The //ENDOFINSERTEDFILE tag must be the last but one line in this file
 
 using ASCOM.DeviceInterface;
-using System;
 using ASCOM;
 using ASCOM.Utilities;
 

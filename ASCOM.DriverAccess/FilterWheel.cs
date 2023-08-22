@@ -6,8 +6,8 @@
 
 using System;
 using ASCOM.DeviceInterface;
+using ASCOM.DeviceInterface.DeviceState;
 using ASCOM.Utilities;
-using System.Globalization;
 
 namespace ASCOM.DriverAccess
 {
@@ -52,24 +52,40 @@ namespace ASCOM.DriverAccess
             }
         }
 
-		#endregion
+        /// <summary>
+        /// FilterWheel device state
+        /// </summary>
+        public FilterWheelState FilterWheelState
+        {
+            get
+            {
+                // Create a state object to return.
+                FilterWheelState filterWheelState = new FilterWheelState(DeviceState, TL);
+                TL.LogMessage(nameof(FilterWheelState), $"Returning: '{filterWheelState.Position}' '{filterWheelState.TimeStamp}'");
 
-		#region IFilterWheel Members
+                // Return the device specific state class
+                return filterWheelState;
+            }
+        }
 
-		/// <summary>
-		/// Focus offset of each filter in the wheel
-		///</summary>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// For each valid slot number (from 0 to N-1), reports the focus offset for
-		/// the given filter position.  These values are focuser and filter
-		/// dependent, and  would usually be set up by the user via the SetupDialog.
-		/// The number of slots N can be determined from the length of the array.
-		/// If focuser offsets are not available, then it should report back 0 for all
-		/// array values.
-		/// </remarks>
-		public int[] FocusOffsets
+        #endregion
+
+        #region IFilterWheel Members
+
+        /// <summary>
+        /// Focus offset of each filter in the wheel
+        ///</summary>
+        /// <exception cref="NotConnectedException">If the device is not connected.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks>
+        /// For each valid slot number (from 0 to N-1), reports the focus offset for
+        /// the given filter position.  These values are focuser and filter
+        /// dependent, and  would usually be set up by the user via the SetupDialog.
+        /// The number of slots N can be determined from the length of the array.
+        /// If focuser offsets are not available, then it should report back 0 for all
+        /// array values.
+        /// </remarks>
+        public int[] FocusOffsets
         {
             get { return (int[])memberFactory.CallMember(1, "FocusOffsets", new Type[] { }, new object[] { }); }
         }

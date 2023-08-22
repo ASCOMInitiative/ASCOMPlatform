@@ -11,15 +11,13 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
 namespace ASCOM.Simulator.Utils
 {
-	public class UIThreadCaller
+    public class UIThreadCaller
 	{
 		public delegate void CallInUIThreadCallback(IWin32Window applicationWindow, params object[] additionalParams);
 

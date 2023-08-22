@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ASCOM.DeviceInterface;
 using ASCOM.Simulator.Properties;
 
 namespace ASCOM.Simulator.Config
 {
-	public partial class ucGeneral : SettingsPannel
+    public partial class ucGeneral : SettingsPannel
 	{
 		public ucGeneral(ISettingsPagesManager settingsManager)
 			: base(settingsManager)

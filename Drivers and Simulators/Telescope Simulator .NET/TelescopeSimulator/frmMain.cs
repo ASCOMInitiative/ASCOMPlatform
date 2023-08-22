@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using ASCOM.Controls;
 using System.Diagnostics;
@@ -21,6 +18,7 @@ namespace ASCOM.Simulator
         {
             InitializeComponent();
             this.BringToFront();
+            TelescopeHardware.TL.LogMessage("FrmMain", "Initialiser complete");
             //this.BackColor = Color.Brown;
         }
 
@@ -58,7 +56,7 @@ namespace ASCOM.Simulator
                 setupForm.CanEquatorial = TelescopeHardware.CanEquatorial;
                 setupForm.CanLatLongElev = TelescopeHardware.CanLatLongElev;
                 setupForm.CanPierSide = TelescopeHardware.CanPierSide;
-                setupForm.CanDestinationSideOfPier = TelescopeHardware.CanDestinationSideofPier;
+                setupForm.CanDestinationSideOfPier = TelescopeHardware.CanDestinationSideOfPier;
                 setupForm.CanDualAxisPulseGuide = TelescopeHardware.CanDualAxisPulseGuide;
                 setupForm.AutoTrack = TelescopeHardware.AutoTrack;
                 setupForm.DisconnectOnPark = TelescopeHardware.DisconnectOnPark;
@@ -72,6 +70,7 @@ namespace ASCOM.Simulator
                 setupForm.Longitude = TelescopeHardware.Longitude;
                 setupForm.MaximumSlewRate = TelescopeHardware.MaximumSlewRate;
                 setupForm.NoSyncPastMeridian = TelescopeHardware.NoSyncPastMeridian;
+                setupForm.InterfaceVersion = TelescopeHardware.InterfaceVersion;
                 this.BringToFront();
                 DialogResult ans = setupForm.ShowDialog(this);
 
@@ -107,7 +106,7 @@ namespace ASCOM.Simulator
                     TelescopeHardware.CanEquatorial = setupForm.CanEquatorial;
                     TelescopeHardware.CanLatLongElev = setupForm.CanLatLongElev;
                     TelescopeHardware.CanPierSide = setupForm.CanPierSide;
-                    TelescopeHardware.CanDestinationSideofPier = setupForm.CanDestinationSideOfPier;
+                    TelescopeHardware.CanDestinationSideOfPier = setupForm.CanDestinationSideOfPier;
                     TelescopeHardware.CanDualAxisPulseGuide = setupForm.CanDualAxisPulseGuide;
                     TelescopeHardware.AutoTrack = setupForm.AutoTrack;
                     TelescopeHardware.DisconnectOnPark = setupForm.DisconnectOnPark;
@@ -121,6 +120,7 @@ namespace ASCOM.Simulator
                     TelescopeHardware.Longitude = setupForm.Longitude;
                     TelescopeHardware.MaximumSlewRate = setupForm.MaximumSlewRate;
                     TelescopeHardware.NoSyncPastMeridian = setupForm.NoSyncPastMeridian;
+                    TelescopeHardware.InterfaceVersion=setupForm.InterfaceVersion;
 
                     this.TopMost = setupForm.OnTop;
                 }
@@ -216,6 +216,8 @@ namespace ASCOM.Simulator
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
+            TelescopeHardware.TL.LogMessage("FrmMain_Load", "STarting...");
+
             SetSlewButtons();
             TelescopeHardware.Start();
 
@@ -223,6 +225,7 @@ namespace ASCOM.Simulator
 			{
 				checkBoxTrack.AutoCheck = false;
 			}
+            TelescopeHardware.TL.LogMessage("FrmMain_Load", "Finished");
         }
 
         #region Thread Safe Callback Functions

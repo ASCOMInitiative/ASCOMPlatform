@@ -3,8 +3,8 @@
 	<TemplateData>
 		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
 		<TemplateID>5242C600-7514-4B18-9383-35609C2CF906</TemplateID>
-		<Name>Local Server Template (C#)</Name>
-		<Description>Creates an EXE based (local server/singleton) host for multiple devices and drivers. The Project name is the server name and namespace, CHOOSE CAREFULLY!</Description>
+		<Name>ASCOM Driver Template</Name>
+		<Description>Creates an EXE based (local server/singleton) host for multiple devices and drivers. The Project name is the server name and namespace, choose carefully!</Description>
 		<ProjectType>CSharp</ProjectType>
 		<ProjectSubType></ProjectSubType>
 		<SortOrder>1030</SortOrder>

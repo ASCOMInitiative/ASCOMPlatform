@@ -142,8 +142,11 @@ Friend Class Finder
                             Try
                                 If uni.Address.AddressFamily <> AddressFamily.InterNetwork Then Continue For
 
-                                If uni.IPv4Mask.Equals(IPAddress.Parse("255.255.255.255")) Then
-                                    Continue For
+                                ' Protect against IPV4Mak being null, which it can occasionally be
+                                If Not (uni.IPv4Mask Is Nothing) Then
+                                    If uni.IPv4Mask.Equals(IPAddress.Parse("255.255.255.255")) Then
+                                        Continue For
+                                    End If
                                 End If
 
                                 If Not ipV4DiscoveryClients.ContainsKey(uni.Address) Then
@@ -155,17 +158,19 @@ Friend Class Finder
                                     Continue For
                                 End If
 
-                                ipV4DiscoveryClients(uni.Address).Send(Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE), Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE).Length, New IPEndPoint(GetBroadcastAddress(uni.Address, If(uni.IPv4Mask, IPAddress.Parse("255.0.0.0"))), discoveryPort))
+                                ipV4DiscoveryClients(uni.Address).Send(Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE),
+                                                                       Encoding.ASCII.GetBytes(DISCOVERY_MESSAGE).Length,
+                                                                       New IPEndPoint(GetBroadcastAddress(uni.Address, If(uni.IPv4Mask, IPAddress.Parse("255.0.0.0"))), discoveryPort))
                                 LogMessage("SearchIPv4", $"Sent broadcast to: {uni.Address}")
                             Catch ex As Exception
-                                LogMessage("SearchIPv4", ex.Message)
+                                LogMessage("SearchIPv4", ex.ToString())
                             End Try
                         Next
                     End If
                 End If
 
             Catch ex As Exception
-                LogMessage("SearchIPv4", ex.Message)
+                LogMessage("SearchIPv4", ex.ToString())
             End Try
         Next
     End Sub

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
 using ASCOM.Internal;

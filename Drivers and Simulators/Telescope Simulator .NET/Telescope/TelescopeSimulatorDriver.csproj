@@ -51,7 +51,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\TelescopeSimulator\bin\Release\</OutputPath>
+    <OutputPath>..\TelescopeSimulator\bin\x86\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -161,9 +161,8 @@
       <Name>ASCOM.Exceptions</Name>
     </ProjectReference>
     <ProjectReference Include="..\TelescopeSimulator\TelescopeSimulatorServer.csproj">
-      <Project>{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}</Project>
+      <Project>{8d28213e-d3d5-482c-a35f-e0bb6a4265bc}</Project>
       <Name>TelescopeSimulatorServer</Name>
-      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

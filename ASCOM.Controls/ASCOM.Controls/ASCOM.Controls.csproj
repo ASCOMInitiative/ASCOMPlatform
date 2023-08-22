@@ -164,6 +164,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TrafficLights.cs" />
+    <None Include="..\..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="..\..\ASCOM.snk">
       <Link>ASCOM.snk</Link>
     </None>

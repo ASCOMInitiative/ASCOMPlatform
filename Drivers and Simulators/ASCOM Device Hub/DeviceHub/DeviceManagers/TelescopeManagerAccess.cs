@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,13 +8,13 @@ using ASCOM.Utilities;
 
 namespace ASCOM.DeviceHub
 {
-	// This portion of the TelescopeManager class exposes pass-thru methods to allow a client app
-	// and the DeviceHub telescope driver to issue commands to the connected telescope driver.
+    // This portion of the TelescopeManager class exposes pass-thru methods to allow a client app
+    // and the DeviceHub telescope driver to issue commands to the connected telescope driver.
 
-	// The methods and properties also provide live activity logging and access the connected telescope
-	// via an implementation of the ITelescopeService in order to facilitate unit testing of the class.
+    // The methods and properties also provide live activity logging and access the connected telescope
+    // via an implementation of the ITelescopeService in order to facilitate unit testing of the class.
 
-	public partial class TelescopeManager
+    public partial class TelescopeManager
 	{
 		public static string Choose( string id )
 		{

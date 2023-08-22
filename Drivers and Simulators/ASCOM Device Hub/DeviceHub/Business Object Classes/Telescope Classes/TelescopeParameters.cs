@@ -2,11 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using ASCOM.DeviceInterface;
-using ASCOM.DriverAccess;
 
 namespace ASCOM.DeviceHub
 {
-	public class TelescopeParameters : DevicePropertiesBase, ICloneable
+    public class TelescopeParameters : DevicePropertiesBase, ICloneable
 	{
 		// This class contains static telescope properties, other than the Can... properties.
 

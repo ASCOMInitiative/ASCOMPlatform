@@ -4,8 +4,6 @@ using System.Linq;
 using System.Windows.Forms;
 using ASCOM.Utilities;
 using System.IO;
-using System.Text.RegularExpressions;
-using Microsoft.Win32;
 using System.Diagnostics;
 using System.Threading;
 using System.Reflection;
@@ -108,7 +106,7 @@ namespace ASCOM.DynamicRemoteClients
 
                         // The supplied parameters pass validation so run the create device form to obtain the device description and create the driver
                         CreateAlpacaClient(args[1], comDevicenumber, args[3], args[4], localServerPath); // Call the execution method with correctly cased device type and unique ID parameters
-                        string localServerExe = $"{localServerPath}\\{SharedConstants.ALPACA_CLIENT_LOCAL_SERVER}";
+                        string localServerExe = $"{localServerPath}{SharedConstants.ALPACA_CLIENT_LOCAL_SERVER}";
                         TL.LogMessage("CreateAlpacaClient", $"Alpaca local server exe name: {localServerExe}");
                         RunLocalServer(localServerExe, "-regserver", TL);
 

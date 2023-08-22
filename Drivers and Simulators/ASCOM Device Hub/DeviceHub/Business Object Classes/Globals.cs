@@ -17,7 +17,7 @@ namespace ASCOM.DeviceHub
 		public const string DevHubFocuserID = "ASCOM.DeviceHub.Focuser";
 
 		public const double DegRad = Math.PI / 180.0;
-		public const double UTC_SECS_PER_SIDEREAL_SEC = 0.9972695677;
+		public const double UTC_SECS_PER_SIDEREAL_SEC = 0.997269566334879;
 
 		public const double DEG_TO_RAD = ( 2.0 * Math.PI ) / 360.0;     // 0.017453 radians per degree
 		public const double RAD_TO_DEG = 1.0 / DEG_TO_RAD;              // 57.29578 degrees per radian

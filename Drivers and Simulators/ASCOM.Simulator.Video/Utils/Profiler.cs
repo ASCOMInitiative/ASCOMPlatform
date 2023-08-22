@@ -16,11 +16,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace ASCOM.Simulator.Utils
 {
-	internal class NativeMethods
+    internal class NativeMethods
 	{
 		[DllImport("Kernel32.dll")]
 		public static extern void QueryPerformanceCounter(ref long ticks);

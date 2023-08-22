@@ -28,10 +28,9 @@ Namespace NOVASCOM
     ''' (KM/sec.). In addition, it must support three read/write properties BodyType, Name, and Number, 
     ''' which correspond to the Type, Name, and Number properties of Novas.Planet. 
     ''' </para></remarks>
-    <Guid("6BD93BA2-79C5-4077-9630-B7C6E30B2FDF"), _
-    ClassInterface(ClassInterfaceType.None), _
-    ComVisible(True)> _
-    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
+    <Guid("6BD93BA2-79C5-4077-9630-B7C6E30B2FDF"),
+    ClassInterface(ClassInterfaceType.None),
+    ComVisible(True)>
     Public Class Earth
         Implements IEarth
 
@@ -282,10 +281,9 @@ Namespace NOVASCOM
     ''' which correspond to the Type, Name, and Number properties of Novas.Planet. 
     ''' </para>
     '''</remarks>
-    <Guid("78F157E4-D03D-4efb-8248-745F9C63A850"), _
-    ClassInterface(ClassInterfaceType.None), _
-    ComVisible(True)> _
-    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
+    <Guid("78F157E4-D03D-4efb-8248-745F9C63A850"),
+    ClassInterface(ClassInterfaceType.None),
+    ComVisible(True)>
     Public Class Planet
         Implements IPlanet
 
@@ -382,7 +380,7 @@ Namespace NOVASCOM
         ''' <returns>PositionVector for the apparent place.</returns>
         ''' <remarks></remarks>
         Public Function GetApparentPosition(ByVal tjd As Double) As PositionVector Implements IPlanet.GetApparentPosition
-            Dim tdb, peb(3), veb(3), pes(3), ves(3), t2, t3, lighttime, _
+            Dim tdb, peb(3), veb(3), pes(3), ves(3), t2, t3, lighttime,
                 pos1(3), vel1(3), pos2(3), pos3(3), pos4(3), pos5(3), vec(8) As Double
             Dim iter As Integer, pv As PositionVector
 
@@ -502,7 +500,7 @@ Namespace NOVASCOM
                 '// Get position and velocity of planet wrt barycenter of solar system.
                 '//
 
-                ephemeris_nov(m_ephobj, tdb, m_type, m_number, m_name, _
+                ephemeris_nov(m_ephobj, tdb, m_type, m_number, m_name,
                               Origin.Barycentric, pos1, vel1)
                 'TL.LogMessage("GetAstrometricPosition", "tdb: " & tdb)
 
@@ -544,8 +542,8 @@ Namespace NOVASCOM
             Dim j, iter As Integer
             Dim st As SiteInfo
             Dim t2, t3 As Double
-            Dim gast, lighttime, ujd, pog(3), vog(3), pb(3), vb(3), ps(3), _
-             vs(3), pos1(3), vel1(3), pos2(3), vel2(3), pos3(3), vec(3), _
+            Dim gast, lighttime, ujd, pog(3), vog(3), pb(3), vb(3), ps(3),
+             vs(3), pos1(3), vel1(3), pos2(3), vel2(3), pos3(3), vec(3),
              tdb, peb(3), veb(3), pes(3), ves(3), oblm, oblt, eqeq, psi, eps As Double
             Dim pv As PositionVector
             Dim Obj3 As New Object3, OnSurf As New OnSurface, Ref3 As RefractionOption, rc As Short
@@ -677,9 +675,9 @@ Namespace NOVASCOM
             Dim j As Short, iter As Integer
             Dim ref As RefractionOption
             Dim st As SiteInfo
-            Dim ujd, t2, t3, gast, pos1(3), pos2(3), pos4(3), pos5(3), _
-             pos6(3), vel1(3), vel2(3), pog(3), vog(3), pob(3), vec(3), _
-             vob(3), pos(3), lighttime, tdb, peb(3), veb(3), pes(3), ves(3), _
+            Dim ujd, t2, t3, gast, pos1(3), pos2(3), pos4(3), pos5(3),
+             pos6(3), vel1(3), vel2(3), pog(3), vog(3), pob(3), vec(3),
+             vob(3), pos(3), lighttime, tdb, peb(3), veb(3), pes(3), ves(3),
              oblm, oblt, eqeq, psi, eps As Double
             Dim ra, rra, dec, rdec, az, zd, dist As Double
             Dim wx As Boolean, pv As PositionVector
@@ -863,7 +861,7 @@ Namespace NOVASCOM
         ''' <remarks></remarks>
         Public Function GetVirtualPosition(ByVal tjd As Double) As PositionVector Implements IPlanet.GetVirtualPosition
             Dim t2, t3 As Double
-            Dim lighttime, pos1(3), vel1(3), pos2(3), pos3(3), vec(3), _
+            Dim lighttime, pos1(3), vel1(3), pos2(3), pos3(3), vec(3),
                 tdb, peb(3), veb(3), pes(3), ves(3), oblm, oblt, eqeq, psi, eps As Double
             Dim iter As Integer
             Dim pv As New PositionVector
@@ -1004,10 +1002,9 @@ Namespace NOVASCOM
     ''' proper motion. Thus, a PositionVector object gives access to some of the lower-level NOVAS functions. 
     ''' <para><b>Note:</b> The equatorial coordinate properties of this object are dependent variables, and thus are read-only. Changing any cartesian coordinate will cause the equatorial coordinates to be recalculated. 
     ''' </para></remarks>
-    <Guid("8D8B7043-49AA-40be-881F-0EC5D8E2213D"), _
-    ClassInterface(ClassInterfaceType.None), _
-    ComVisible(True)> _
-    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
+    <Guid("8D8B7043-49AA-40be-881F-0EC5D8E2213D"),
+    ClassInterface(ClassInterfaceType.None),
+    ComVisible(True)>
     Public Class PositionVector
         Implements IPositionVector, IPositionVectorExtra
         Private xOk, yOk, zOk, RADecOk, AzElOk As Boolean
@@ -1038,14 +1035,14 @@ Namespace NOVASCOM
         ''' <param name="Azimuth">Object azimuth</param>
         ''' <param name="Altitude">Object altitude</param>
         ''' <remarks></remarks>
-        Public Sub New(ByVal x As Double, _
-                               ByVal y As Double, _
-                               ByVal z As Double, _
-                               ByVal RA As Double, _
-                               ByVal DEC As Double, _
-                               ByVal Distance As Double, _
-                               ByVal Light As Double, _
-                               ByVal Azimuth As Double, _
+        Public Sub New(ByVal x As Double,
+                               ByVal y As Double,
+                               ByVal z As Double,
+                               ByVal RA As Double,
+                               ByVal DEC As Double,
+                               ByVal Distance As Double,
+                               ByVal Light As Double,
+                               ByVal Azimuth As Double,
                                ByVal Altitude As Double)
             PosVec(0) = x
             xOk = True
@@ -1074,12 +1071,12 @@ Namespace NOVASCOM
         ''' <param name="Distance">Distance to object</param>
         ''' <param name="Light">Light-time to object</param>
         ''' <remarks></remarks>
-        Public Sub New(ByVal x As Double, _
-                               ByVal y As Double, _
-                               ByVal z As Double, _
-                               ByVal RA As Double, _
-                               ByVal DEC As Double, _
-                               ByVal Distance As Double, _
+        Public Sub New(ByVal x As Double,
+                               ByVal y As Double,
+                               ByVal z As Double,
+                               ByVal RA As Double,
+                               ByVal DEC As Double,
+                               ByVal Distance As Double,
                                ByVal Light As Double)
             PosVec(0) = x
             xOk = True
@@ -1346,7 +1343,7 @@ Namespace NOVASCOM
         ''' "SetFromSiteJD(ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double)"
         ''' with delta_t set to 0.0 to achieve this effect.
         ''' </remarks>
-        <ComVisible(False)> _
+        <ComVisible(False)>
         Public Overloads Function SetFromSiteJD(ByVal site As Site, ByVal ujd As Double) As Boolean Implements IPositionVectorExtra.SetFromSiteJD
             SetFromSiteJD(site, ujd, 0.0)
         End Function
@@ -1524,10 +1521,9 @@ Namespace NOVASCOM
     ''' ellipsoid. Properties are latitude, longitude, height above mean sea level, the ambient temperature 
     ''' and the sea-level barmetric pressure. The latter two are used only for optional refraction corrections. 
     ''' Latitude and longitude are (common) geodetic, not geocentric. </remarks>
-    <Guid("46ACFBCE-4EEE-496d-A4B6-7A5FDDD8F969"), _
-    ClassInterface(ClassInterfaceType.None), _
-    ComVisible(True)> _
-    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
+    <Guid("46ACFBCE-4EEE-496d-A4B6-7A5FDDD8F969"),
+    ClassInterface(ClassInterfaceType.None),
+    ComVisible(True)>
     Public Class Site
         Implements ISite
         Private vHeight, vLatitude, vLongitude, vPressure, vTemperature As Double
@@ -1660,10 +1656,9 @@ Namespace NOVASCOM
     ''' time, the (optionally refracted) alt-az coordinates are calculated, and are also contained within 
     ''' the returned PositionVector. <b>Note that Alt/Az is available in PositionVectors returned from calling 
     ''' GetTopocentricPosition().</b></para></remarks>
-    <Guid("8FD58EDE-DF7A-4fdc-9DEC-FD0B36424F5F"), _
-    ClassInterface(ClassInterfaceType.None), _
-    ComVisible(True)> _
-    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
+    <Guid("8FD58EDE-DF7A-4fdc-9DEC-FD0B36424F5F"),
+    ClassInterface(ClassInterfaceType.None),
+    ComVisible(True)>
     Public Class Star
         Implements IStar
         Private m_rv, m_plx, m_pmdec, m_pmra, m_ra, m_dec, m_deltat As Double
@@ -1775,7 +1770,7 @@ Namespace NOVASCOM
             Dim cat As New CatEntry
             Dim PV As New PositionVector
 
-            Dim tdb, time2, peb(3), veb(3), pes(3), ves(3), pos1(3), pos2(3), _
+            Dim tdb, time2, peb(3), veb(3), pes(3), ves(3), pos1(3), pos2(3),
                 pos3(3), pos4(3), pos5(3), pos6(3), vel1(3), vec(3) As Double
 
             If Not (m_rav And m_decv) Then Throw New Exceptions.ValueNotSetException("Star.GetApparentPosition RA or DEC not available")
@@ -1829,7 +1824,7 @@ Namespace NOVASCOM
         Public Function GetAstrometricPosition(ByVal tjd As Double) As PositionVector Implements IStar.GetAstrometricPosition
             Dim cat As New CatEntry
             Dim PV As New PositionVector
-            Dim lighttime, pos1(3), vel1(3), pos2(3), tdb, peb(3), _
+            Dim lighttime, pos1(3), vel1(3), pos2(3), tdb, peb(3),
                 veb(3), pes(3), ves(3), vec(3) As Double
 
             If Not (m_rav And m_decv) Then Throw New Exceptions.ValueNotSetException("Star.GetAstrometricPosition RA or DEC not available")
@@ -1882,9 +1877,9 @@ Namespace NOVASCOM
             Dim cat As New CatEntry
             Dim PV As New PositionVector
             Dim st As New SiteInfo
-            Dim gast, lighttime, ujd, pog(3), vog(3), pb(3), vb(3), ps(3), _
-             vs(3), pos1(3), vel1(3), pos2(3), vel2(3), pos3(3), pos4(3), _
-             tdb, peb(3), veb(3), pes(3), ves(3), vec(3), oblm, oblt, eqeq, _
+            Dim gast, lighttime, ujd, pog(3), vog(3), pb(3), vb(3), ps(3),
+             vs(3), pos1(3), vel1(3), pos2(3), vel2(3), pos3(3), pos4(3),
+             tdb, peb(3), veb(3), pes(3), ves(3), vec(3), oblm, oblt, eqeq,
              psi, eps As Double
             Dim j As Integer
 
@@ -1990,9 +1985,9 @@ Namespace NOVASCOM
             Dim j As Integer
             Dim cat As New CatEntry
             Dim st As New SiteInfo
-            Dim lighttime, ujd, pob(3), pog(3), vob(3), vog(3), pos(3), gast, _
-                pos1(3), pos2(3), pos3(3), pos4(3), pos5(3), pos6(3), _
-                vel1(3), vel2(3), tdb, peb(3), veb(3), pes(3), ves(3), vec(3), _
+            Dim lighttime, ujd, pob(3), pog(3), vob(3), vog(3), pos(3), gast,
+                pos1(3), pos2(3), pos3(3), pos4(3), pos5(3), pos6(3),
+                vel1(3), vel2(3), tdb, peb(3), veb(3), pes(3), ves(3), vec(3),
                 oblm, oblt, eqeq, psi, eps As Double
             Dim ra, rra, dec, rdec, az, zd, dist As Double
             Dim wx As Boolean
@@ -2147,7 +2142,7 @@ Namespace NOVASCOM
             Dim cat As New CatEntry
             Dim PV As New PositionVector
 
-            Dim pos1(3), vel1(3), pos2(3), pos3(3), pos4(3), _
+            Dim pos1(3), vel1(3), pos2(3), pos3(3), pos4(3),
                 tdb, peb(3), veb(3), pes(3), ves(3), vec(3), lighttime As Double
 
             If Not (m_rav And m_decv) Then Throw New Exceptions.ValueNotSetException("Star.GetVirtualPosition RA or DEC not available")
@@ -2374,10 +2369,9 @@ Namespace NOVASCOM
     ''' a Star object (essentially an FK5 or HIP catalog entry) or a Site (lat/long/height). For the star 
     ''' object the proper motions, distance and radial velocity are used, for a site, the velocity is that 
     ''' of the observer with respect to the Earth's center of mass. </remarks>
-    <Guid("25F2ED0A-D0C1-403d-86B9-5F7CEBE97D87"), _
-    ClassInterface(ClassInterfaceType.None), _
-    ComVisible(True)> _
-    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
+    <Guid("25F2ED0A-D0C1-403d-86B9-5F7CEBE97D87"),
+    ClassInterface(ClassInterfaceType.None),
+    ComVisible(True)>
     Public Class VelocityVector
         Implements IVelocityVector, IVelocityVectorExtra
 
@@ -2518,7 +2512,7 @@ Namespace NOVASCOM
         ''' "SetFromSiteJD(ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double)"
         ''' with delta_t set to 0.0 to achieve this effect.
         ''' </remarks>
-        <ComVisible(False)> _
+        <ComVisible(False)>
         Public Function SetFromSiteJD(ByVal site As Site, ByVal ujd As Double) As Boolean Implements IVelocityVectorExtra.SetFromSiteJD
             SetFromSiteJD(site, ujd, 0.0)
         End Function

@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 
 using ASCOM.DeviceInterface;
 
 namespace ASCOM.DeviceHub
 {
-	public class DevHubDomeStatus : AscomDomeStatus, ICloneable
+    public class DevHubDomeStatus : AscomDomeStatus, ICloneable
     {
 		public static DevHubDomeStatus GetEmptyStatus()
 		{

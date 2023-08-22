@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections;
 
-using ASCOM;
-
 namespace ASCOM.DeviceHub
 {
-	public class FocuserService : IFocuserService
+    public class FocuserService : IFocuserService
 	{
 		private string DeviceID { get; set; }
 		private ASCOM.DriverAccess.Focuser Focuser { get; set; }

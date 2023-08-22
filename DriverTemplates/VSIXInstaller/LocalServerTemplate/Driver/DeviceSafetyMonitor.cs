@@ -2,10 +2,7 @@
 // Required code must lie within the device implementation region
 // The //ENDOFINSERTEDFILE tag must be the last but one line in this file
 
-using ASCOM.DeviceInterface;
 using System;
-using ASCOM;
-using ASCOM.Utilities;
 
 class DeviceSafetyMonitor
 {
@@ -21,7 +18,7 @@ class DeviceSafetyMonitor
         {
             try
             {
-                CheckConnected("IsSafe");
+                // IsSafe is required to deliver false when the device is not connected so there is no need to test whether or not the driver is connected.
                 bool isSafe = SafetyMonitorHardware.IsSafe;
                 LogMessage("IsSafe", isSafe.ToString());
                 return isSafe;

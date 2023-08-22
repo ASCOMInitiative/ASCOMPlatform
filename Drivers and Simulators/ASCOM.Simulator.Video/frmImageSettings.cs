@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Simulator.VideoCameraImpl;
 
 namespace ASCOM.Simulator
 {
-	public partial class frmImageSettings : Form
+    public partial class frmImageSettings : Form
 	{
 		internal VideoCamera Camera { get; set; }
 

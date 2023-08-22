@@ -20,60 +20,121 @@
 // --------------------------------------------------------------------------------
 //
 
+// Ignore Spelling: Unsubscriber Lat Elev Utils astro util
+
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
-using System.Runtime.Serialization;
 using System.Threading;
 using System.Windows;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Collections.Generic;
+using ASCOM.Astrometry.AstroUtils;
 
 namespace ASCOM.Simulator
 {
     public static class TelescopeHardware
     {
-        #region How the simulator works
+        #region How the simulator works and Operations
+
+        // OPERATIONS
+        
+        // Operations were part of a PoC to introduce independent completion variables for all async methods that was implemented in June / July 2023 as part of Platform 7 feature testing.
+        // These completion variables would return true /false or, when something went wrong, would throw exceptions continually until the next operation was started.
+
+        // The TelescopeHardware.OperationComplete property is not currently exposed through the driver's ITelescopeV4 interface but
+        // the code is left in place in case it is useful in the future.
+
+        // HOW THE SIMULATOR WORKS
 
         // The telescope is implemented using two axes that represent the primary and secondary telescope axes.
         // The role of the axes varies depending on the mount type.
         // The primary axis is the azimuth axis for an AltAz mount and the hour angle axis for polar mounts.
         // The secondary axis is the altitude axis for AltAz mounts and the declination axis for polar mounts.
 
-        // All motion is done and all positions are set and obtained using these axes.
+        // All motion is done and all positions are set by manipulating the axis angle values.
 
         // Vectors are used for pairs of angles that represent the various positions and rates
-        // Vector.X is the primary axis, Hour angle, Right Ascension or azimuth and Vector.Y is the secondary axis, declination or altitude.
+        // Vector.X is the primary axis = Axis angle, Hour angle, Right Ascension or Azimuth and Vector.Y is the secondary axis = Axis angle, Declination or Altitude.
 
-        // Ra and hour angle are in hours
-        // Mount positions, Declination, azimuth and altitude are in degrees.
+        // Ra and hour angle vectors are in hours
+        // Mount position, Declination, azimuth and altitude vectors are in degrees.
+
+        // NORTHERN HEMISPHERE AXIS CONVENTIONS
+        //
+        // ALT/AZ ALIGNMENT - Slews always use the Normal (pierEast) pointing state even when the mount has been manually set to the TTP pointing state
+        //   Primary axis - 0 degrees = North with value increasing clockwise giving 90 degrees = East, 180 degrees = South and 270 = West.
+        //   Secondary axis, 0 degrees at the horizon increasing to 90 degrees at the zenith
+
+        // POLAR ALIGNMENT - Slews always use the Normal (pierEast) pointing state even when the mount has been manually set to the TTP pointing state
+        //   Primary axis - 0 degrees = hour angle 0, -180 degrees = Hour angle -12 and +180 degrees = hour angle +12
+        //   Secondary axis, 0 degrees at declination 0, +90 at the northern equatorial pole. Negative values at negative declinations towards the south.
+
+        // GERMAN POLAR ALIGNMENT - Normal pointing state (pierEast) i.e. when observing hour angles 0 to +12.
+        //   Primary axis - 0 degrees = hour angle 0, +180 degrees = hour angle +12
+        //   Secondary axis - 0 degrees at declination 0, +90 at the northern equatorial pole. Negative values at negative declinations towards the south.
+
+        // GERMAN POLAR ALIGNMENT - Through The Pole pointing state (pierWest) i.e. When observing hour angles -12 to 0.
+        //   Primary axis - 0 degrees = hour angle -12, +180 degrees = hour angle 0
+        //   Secondary axis - +90 at the equatorial pole. 180-declination at smaller declinations. Note that at negative declinations the axis angle will be >180
+
+        // SOUTHERN HEMISPHERE AXIS CONVENTIONS
+        //
+        // ALT/AZ ALIGNMENT - Slews always use the Normal (pierEast) pointing state even when the mount has been manually set to the TTP pointing state
+        //   Primary axis - 0 degrees = North with value increasing clockwise giving 90 degrees = East, 180 degrees = South and 270 = West.
+        //   Secondary axis, 0 degrees at the horizon increasing to 90 degrees at the zenith
+
+        // POLAR ALIGNMENT - Slews always use the Normal (pierEast) pointing state even when the mount has been manually set to the TTP pointing state
+        //   Primary axis - 0 degrees = hour angle 0, -180 degrees = Hour angle -12 and +180 degrees = hour angle +12
+        //   Secondary axis, 0 degrees at declination 0, +90 at the southern equatorial pole. Negative values at positive declinations towards the north.
+
+        // GERMAN POLAR ALIGNMENT - Normal pointing state (pierEast) i.e. when observing hour angles 0 to +12.
+        //   Primary axis - 0 degrees = hour angle 0, +180 degrees = hour angle +12
+        //   Secondary axis - 0 degrees at declination 0, +90 at the southern equatorial pole. Negative values at positive declinations towards the north.
+
+        // GERMAN POLAR ALIGNMENT - Through The Pole pointing state (pierWest) i.e. When observing hour angles -12 to 0.
+        //   Primary axis - 0 degrees = hour angle -12, +180 degrees = hour angle 0
+        //   Secondary axis - +90 at the equatorial pole. 180-declination at smaller declinations. Note that at positive declinations the axis angle will be >180
 
         #endregion
+
         #region Constants
+
         // Start-up options values       
         private const string STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION = "Start up at simulator Default Position";
         private const string STARTUP_OPTION_START_POSITION = "Start up at configured Start Position";
         private const string STARTUP_OPTION_PARKED_POSITION = "Start up at configured Park Position";
         private const string STARTUP_OPTION_LASTUSED_POSITION = "Start up at last Shutdown Position";
         private const string STARTUP_OPTION_HOME_POSITION = "Start up at configured Home Position";
+        private const double SIDEREAL_SECONDS_TO_SI_SECONDS = 0.99726956631945; // Based on earth sidereal rotation period of 23 hours 56 minutes 4.09053 seconds
 
         // Useful mathematical constants
-        private const double SIDEREAL_RATE_DEG_SEC = 15.041 / 3600;
-        private const double SOLAR_RATE_DEG_SEC = 15.0 / 3600;
-        private const double LUNAR_RATE_DEG_SEC = 14.515 / 3600;
-        private const double KING_RATE_DEG_SEC = 15.037 / 3600;
-        private const double DEGREES_TO_ARCSEC = 3600.0;
-        private const double ARCSEC_TO_DEGREES = 1.0 / DEGREES_TO_ARCSEC;
-        private const double SIDEREAL_SECONDS_TO_SI_SECONDS = 0.9972695601852;
-        private const double SI_SECONDS_TO_SIDEREAL_SECONDS = 1.0 / SIDEREAL_SECONDS_TO_SI_SECONDS;
+        private const double SIDEREAL_RATE_DEG_PER_SIDEREAL_SECOND = 360.0 / (24.0 * 60.0 * 60.0); // Degrees per sidereal second, given the earth's rotation of 360 degrees in 1 sidereal day
+        private const double SIDEREAL_RATE_DEG_PER_SI_SECOND = SIDEREAL_RATE_DEG_PER_SIDEREAL_SECOND / SIDEREAL_SECONDS_TO_SI_SECONDS; // Degrees per SI second
+        private const double SOLAR_RATE_DEG_SEC = 15.0 / 3600.0;
+        private const double LUNAR_RATE_DEG_SEC = 14.515 / 3600.0;
+        private const double KING_RATE_DEG_SEC = 15.037 / 3600.0;
+        private const double DEGREES_TO_ARCSECONDS = 3600.0;
+        private const double ARCSECONDS_TO_DEGREES = 1.0 / 3600.0;
+        private const double ARCSECONDS_PER_RA_SECOND = 15.0; // To convert "seconds of RA" (24 hours = a whole circle) to arc seconds (360 degrees = a whole circle)
+        private const double DEG_RAD = 0.01745329251994329;
+        private const double RAD_DEG = 57.29577951308232;
+        private const double HRS_RAD = 0.2617993877991494;
+
         #endregion
 
         #region Private variables
+
+        private static short interfaceVersion = 4;
+        private static Operation currentOperation = Operation.None; // Initialise to no operation
+
         // change to using a Windows timer to avoid threading problems
-        private static System.Windows.Forms.Timer s_wTimer;
+        private static System.Windows.Forms.Timer updateStateTimer;
+        private static System.Windows.Forms.Timer updateHandboxTimer;
+
+        private static readonly object updateLockObject = new object();
 
         private static long idCount; // Counter to generate ever increasing sequential ID numbers
 
@@ -88,6 +149,8 @@ namespace ASCOM.Simulator
         private static Profile s_Profile;
         private static bool onTop;
         public static TraceLogger TL;
+        public static Util util;
+        public static AstroUtils astroUtils;
 
         //Capabilities
         private static bool canFindHome;
@@ -136,6 +199,8 @@ namespace ASCOM.Simulator
         private static int maximumSlewRate;
         private static bool noSyncPastMeridian;
 
+        private static bool atPark;
+
         //
         // Vectors are used for pairs of angles that represent the various positions and rates
         //
@@ -148,7 +213,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Current azimuth (X) and altitude (Y )in degrees, derived from the mountAxes Vector
         /// </summary>
-        private static Vector altAzm;
+        private static Vector currentAltAzm;
 
         /// <summary>
         /// Park axis positions, X primary, Y secondary in Alt/Az degrees
@@ -185,11 +250,15 @@ namespace ASCOM.Simulator
         private static Vector shutdownPosition = new Vector();
 
         /// <summary>
-        /// Right Ascension (X) and declination (Y) rates (deg/sec) set through the RightAscensionRate and DeclinationRate properties
-        ///  The "Internal" vector holds values in the units used internally by the simulator (degrees per SI second)
-        ///  The "External" vector holds values in the units specified in the telescope interface standard (arc-seconds per sidereal second for RightAscensionRate and arc-seconds per SI second for DeclinationRate)
+        /// Internal versions of the Right Ascension and declination rates in mount simulator units
+        /// This "Internal" vector holds values in the units used internally by the simulator (degrees per SI second)
         /// </summary>
         private static Vector rateRaDecOffsetInternal = new Vector();
+
+        /// <summary>
+        /// Right Ascension and declination rates as set through the RightAscensionRate and DeclinationRate properties
+        /// This "External" vector holds values in the units specified in the telescope interface standard (arc-seconds per sidereal second for RightAscensionRate and arc-seconds per SI second for DeclinationRate)
+        /// </summary>
         private static Vector rateRaDecOffsetExternal = new Vector();
 
         private static int dateDelta;
@@ -207,20 +276,20 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Axis position in mount axis degrees. X is primary (RA or Azimuth axis), Y is secondary (Dec or Altitude axis)
         /// </summary>
-        private static Vector mountAxes;
+        private static Vector mountAxesDegrees;
 
         /// <summary>
         /// Slew target in mount axis degrees
         /// </summary>
-        private static Vector targetAxes;
+        private static Vector targetAxesDegrees;
 
         private static double hourAngleLimit = 20;     // the number of degrees a GEM can go past the meridian
 
-        private static PointingState pointingState;
+        //private static PointingState pointingState;
         private static TrackingMode trackingMode;
         private static bool slewing;
 
-        private static DateTime lastUpdateTime;
+        private static Stopwatch timeSinceLastUpdate;
 
         #endregion
 
@@ -251,6 +320,40 @@ namespace ASCOM.Simulator
         #region Public variables
 
         /// <summary>
+        /// Name of the current operation.
+        /// </summary>
+        public static Operation CurrentOperation
+        {
+            get
+            {
+                // Return the current operation
+                return currentOperation;
+            }
+
+            set
+            {
+                // Assign the new operation as the current operation
+                currentOperation = value;
+            }
+        }
+
+        public static bool OperationComplete
+        {
+            get
+            {
+                //TL?.LogMessage("OperationComplete - GET", $"{operationComplete}");
+                return operationComplete;
+            }
+
+            set
+            {
+                operationComplete = value;
+                //TL?.LogMessage("OperationComplete - SET", $"{operationComplete}");
+            }
+        }
+        public static Exception OperationException { get; set; }
+
+        /// <summary>
         /// Guide rates, deg/sec. X Ra/Azm, Y Alt/Dec
         /// </summary>
         public static Vector guideRate = new Vector();
@@ -268,6 +371,7 @@ namespace ASCOM.Simulator
         /// Axis Rates (deg/sec) set by the MoveAxis method
         /// </summary>
         public static Vector rateMoveAxes = new Vector();
+        private static bool operationComplete;
 
         #endregion
 
@@ -298,16 +402,31 @@ namespace ASCOM.Simulator
             try
             {
                 s_Profile = new Utilities.Profile();
-                s_wTimer = new System.Windows.Forms.Timer();
-                s_wTimer.Interval = (int)(SharedResources.TIMER_INTERVAL * 1000);
-                s_wTimer.Tick += new EventHandler(M_wTimer_Tick);
+                updateStateTimer = new System.Windows.Forms.Timer();
+                updateStateTimer.Interval = Convert.ToInt32(SharedResources.STATE_UPDATE_TIMER_INTERVAL * 1000.0);
+                updateStateTimer.Tick += UpdateStateTimer_Tick;
+
+                updateHandboxTimer = new System.Windows.Forms.Timer();
+                updateHandboxTimer.Interval = Convert.ToInt32(SharedResources.HANDBOX_UPDATE_TIMER_INTERVAL * 1000.0);
+                updateHandboxTimer.Tick += UpdateHandboxTimer_Tick;
+
+                // Initialise Operation variables
+                OperationComplete = true;
+                OperationException = null;
+
+                // Initialise the time since last update stopwatch timer
+                timeSinceLastUpdate = new Stopwatch();
 
                 SouthernHemisphere = false;
                 //Connected = false;
                 rateMoveAxes = new Vector();
 
-                TL = new ASCOM.Utilities.TraceLogger("", "TelescopeSimHardware");
+                TL = new TraceLogger("", "TelescopeSimHardware");
                 TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.SIMULATOR_TRACE, GlobalConstants.SIMULATOR_TRACE_DEFAULT);
+
+                // Create utilities objects
+                util = new Util();
+                astroUtils = new AstroUtils();
 
                 TL.LogMessage("TelescopeHardware", string.Format("Alignment mode 1: {0}", alignmentMode));
                 connectStates = new ConcurrentDictionary<long, bool>();
@@ -439,6 +558,7 @@ namespace ASCOM.Simulator
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanDestinationSideOfPier", "true", "Capabilities");
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanTrackingRates", "true", "Capabilities");
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanDualAxisPulseGuide", "true", "Capabilities");
+                    s_Profile.WriteValue(SharedResources.PROGRAM_ID, "InterfaceVersion", "4", "Capabilities");
                 }
 
                 //Load up the values from saved
@@ -473,8 +593,8 @@ namespace ASCOM.Simulator
                 longitude = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "Longitude"), CultureInfo.InvariantCulture);
                 maximumSlewRate = int.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "MaxSlewRate"), CultureInfo.InvariantCulture);
 
-                altAzm.Y = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "StartAltitude", "", "0"), CultureInfo.InvariantCulture); // Get the default start position
-                altAzm.X = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "StartAzimuth", "", "0"), CultureInfo.InvariantCulture);
+                currentAltAzm.Y = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "StartAltitude", "", "0"), CultureInfo.InvariantCulture); // Get the default start position
+                currentAltAzm.X = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "StartAzimuth", "", "0"), CultureInfo.InvariantCulture);
                 StartCoordinates.Y = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "StartAltitudeConfigured", "", "0"), CultureInfo.InvariantCulture); // Get the configured start position
                 StartCoordinates.X = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "StartAzimuthConfigured", "", "0"), CultureInfo.InvariantCulture);
 
@@ -498,16 +618,16 @@ namespace ASCOM.Simulator
                     case STARTUP_OPTION_SIMULATOR_DEFAULT_POSITION: // No action just go with the built-in values already in altAzm
                         break;
                     case STARTUP_OPTION_PARKED_POSITION:
-                        altAzm = parkPosition;
+                        currentAltAzm = parkPosition;
                         break;
                     case STARTUP_OPTION_START_POSITION:
-                        altAzm = StartCoordinates;
+                        currentAltAzm = StartCoordinates;
                         break;
                     case STARTUP_OPTION_LASTUSED_POSITION:
-                        altAzm = shutdownPosition;
+                        currentAltAzm = shutdownPosition;
                         break;
                     case STARTUP_OPTION_HOME_POSITION:
-                        altAzm = HomePosition;
+                        currentAltAzm = HomePosition;
                         break;
                     default: // No action just go with the built-in simulator start-up position already in altAzm
                         break;
@@ -547,6 +667,8 @@ namespace ASCOM.Simulator
 
                 dateDelta = int.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "DateDelta"), CultureInfo.InvariantCulture);
 
+                interfaceVersion = short.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "InterfaceVersion", "", "4"), CultureInfo.InvariantCulture);
+
                 if (latitude < 0) { SouthernHemisphere = true; }
 
                 if (TelescopeSimulator.m_MainForm == null)
@@ -557,17 +679,20 @@ namespace ASCOM.Simulator
                 //Set the form setting for the Always On Top Value
                 TelescopeSimulator.m_MainForm.TopMost = onTop;
 
-                slewSpeedFast = maximumSlewRate * SharedResources.TIMER_INTERVAL;
+                slewSpeedFast = maximumSlewRate * SharedResources.STATE_UPDATE_TIMER_INTERVAL;
                 slewSpeedMedium = slewSpeedFast * 0.1;
                 slewSpeedSlow = slewSpeedFast * 0.02;
                 SlewDirection = SlewDirection.SlewNone;
 
-                GuideDurationShort = 0.8 * SharedResources.TIMER_INTERVAL;
+                GuideDurationShort = 0.8 * SharedResources.STATE_UPDATE_TIMER_INTERVAL;
                 GuideDurationMedium = 2.0 * GuideDurationShort;
                 GuideDurationLong = 2.0 * GuideDurationMedium;
 
-                guideRate.X = 15.0 * (1.0 / 3600.0) / SharedResources.SIDRATE;
-                guideRate.Y = guideRate.X;
+                // Set default pulse guide rates
+                //   Guide rate RA:          15 arc seconds per SI second
+                //   Guide rate Declination: 15 arc seconds per SI second
+                guideRate.X = 15.0 * (1.0 / 3600.0); // Degrees per SI second
+                guideRate.Y = 15.0 * (1.0 / 3600.0); // Degrees per SI second
                 rateRaDecOffsetInternal.Y = 0;
                 rateRaDecOffsetInternal.X = 0;
 
@@ -579,9 +704,9 @@ namespace ASCOM.Simulator
                 targetRaDec = new Vector(double.NaN, double.NaN);
                 SlewState = SlewType.SlewNone;
 
-                mountAxes = MountFunctions.ConvertAltAzmToAxes(altAzm); // Convert the start position AltAz coordinates into the current axes representation and set this as the simulator start position
-                TL.LogMessage("TelescopeHardware New", string.Format("Start-up mode: {0}, Azimuth: {1}, Altitude: {2}", startupMode, altAzm.X.ToString(CultureInfo.InvariantCulture), altAzm.Y.ToString(CultureInfo.InvariantCulture)));
-
+                mountAxesDegrees = MountFunctions.ConvertAltAzmToAxes(currentAltAzm); // Convert the start position AltAz coordinates into the current axes representation and set this as the simulator start position
+                TL.LogMessage("TelescopeHardware New", string.Format("Start-up mode: {0}, Azimuth: {1}, Altitude: {2}", startupMode, currentAltAzm.X.ToString(CultureInfo.InvariantCulture), currentAltAzm.Y.ToString(CultureInfo.InvariantCulture)));
+                TL.LogMessage("TelescopeHardware New", $"Tracking rate: {SIDEREAL_RATE_DEG_PER_SI_SECOND} degrees per SI second, {SIDEREAL_RATE_DEG_PER_SI_SECOND * 3600.0} degrees per SI hour. Sidereal day:{util.HoursToHMS(SIDEREAL_SECONDS_TO_SI_SECONDS * 24.0, ":", ":", "", 3)} HH:MM:SS.xxx");
                 TL.LogMessage("TelescopeHardware New", "Successfully initialised hardware");
 
             }
@@ -589,6 +714,14 @@ namespace ASCOM.Simulator
             {
                 EventLogCode.LogEvent("ASCOM.Simulator.Telescope", "TelescopeHardware Initialiser Exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.TelescopeSimulatorNew, ex.ToString());
                 System.Windows.Forms.MessageBox.Show("Telescope HardwareInitialise: " + ex.ToString());
+            }
+        }
+
+        private static void UpdateHandboxTimer_Tick(object sender, EventArgs e)
+        {
+            lock (updateLockObject)
+            {
+                UpdateDisplay();
             }
         }
 
@@ -601,73 +734,182 @@ namespace ASCOM.Simulator
             rateMoveAxes.X = 0;
             rateMoveAxes.Y = 0;
 
-            lastUpdateTime = DateTime.Now;
-            s_wTimer.Start();
+            // Initialise last time since last update timer 
+            timeSinceLastUpdate.Start();
+
+            // Initialise the sidereal time
+            SiderealTime = AstronomyFunctions.LocalSiderealTime(Longitude);
+
+            // Initialise movement pointers and create initial display
+            MoveAxes();
+            UpdateDisplay();
+
+            // Start the timer that updates telescope state
+            updateStateTimer.Start();
+            updateHandboxTimer.Start();
+            TL.LogMessage("Start", "State and hand box timers started.");
         }
 
         //Update the Telescope Based on Timed Events
-        private static void M_wTimer_Tick(object sender, EventArgs e)
+        private static void UpdateStateTimer_Tick(object sender, EventArgs e)
         {
-            MoveAxes();
+            //TL.LogMessage("UpdateStateTimer_Tick", "Updating state...");
+            lock (updateLockObject)
+            {
+                MoveAxes();
+            }
         }
 
         /// <summary>
         /// This is called every TIMER_INTERVAL period and applies the current movement rates to the axes,
         /// copes with the range and updates the displayed values
         /// </summary>
+        /// <remarks>
+        /// Axis assignment in telescope alignment modes 
+        /// Polar / German Polar: Primary axis is RA (X coordinate in vector maths)      - Secondary axis is Declination (Y coordinate in vector maths)
+        /// Alt/Az mount mode:    Primary axis is Azimuth (X coordinate in vector maths) - Secondary axis is Altitude (Y coordinate in vector maths)
+        /// 
+        /// In Alt/Az mode: north = azimuth 0, east = azimuth 90, south=azimuth 180 and west = azimuth 270
+        /// </remarks>
         private static void MoveAxes()
         {
-            // get the time since the last update. This avoids problems with the timer interval varying and greatly improves tracking.
-            DateTime now = DateTime.Now;
-            double timeInSecondsSinceLastUpdate = (now - lastUpdateTime).TotalSeconds;
-            lastUpdateTime = now;
+            // TL.LogMessage("MoveAxes", "Starting state update...");
+
+            // Get the time since the last update. This avoids problems with the timer interval varying and greatly improves tracking.
+            double timeInSecondsSinceLastUpdate = timeSinceLastUpdate.Elapsed.TotalSeconds;
+            timeSinceLastUpdate.Restart();
+
+            // Find the hour angle change (in degrees) due to tracking that occurred during this interval
+            double haChangeDegrees = GetTrackingChangeInDegrees(timeInSecondsSinceLastUpdate);
 
             // This vector accumulates all changes to the current primary and secondary axis positions as a result of movement during this update interval
-            Vector change = new Vector();
+            Vector changeDegrees = new Vector();
 
             // Apply tracking changes
-            if (rateMoveAxes.X == 0.0) // No axis move rate has been set for the primary RA axis so normal tracking applies, if it has been enabled
+            if ((rateMoveAxes.X == 0.0) & (rateMoveAxes.Y == 0.0)) // No MoveAxis rates have been set so handle normally
             {
                 // Determine the changes in current axis position and target axis position required as a result of tracking
                 if (Tracking) // Tracking is enabled
                 {
-                    double haChange = GetTrackingChange(timeInSecondsSinceLastUpdate); // Find the hour angle change that occurred during this interval
                     switch (alignmentMode)
                     {
                         case AlignmentModes.algGermanPolar: // In polar aligned mounts an HA change moves only the RA (primary) axis so update this, no change is required to the Dec (secondary) axis
                         case AlignmentModes.algPolar:
-                            change.X = haChange; // Set the change in the RA (primary) current axis position due to tracking 
-                            targetAxes.X += haChange; // Update the slew target's RA (primary) axis position that will also have changed due to tracking
+                            // Set the change in the primary (RA) axis position due to tracking 
+                            changeDegrees.X = haChangeDegrees; // Set the change in the RA (primary) current axis position due to tracking 
+
+                            // Update the slew target's RA (primary) axis position that will also have changed due to tracking
+                            targetAxesDegrees.X += haChangeDegrees;
+
+                            // Apply the RightAscensionRate offset
+                            // The RA rate offset (rateRaDecOffsetInternal.X) is subtracted because the primary RA axis increases its angle value in a clockwise direction
+                            // but RA decreases when moving in this direction
+                            changeDegrees.X -= rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate;
+
+                            // Apply the DeclinationRate offset
+                            // The relationship between the declination axis rotation direction and the associated declination value switches from
+                            // correlated (declination increases as mechanical angle increases) to inverted (declination decreases as mechanical angle increases) depending on the mount pointing state.
+                            // In addition, the sense of required rate corrections is inverted when in the southern hemisphere compared to the northern hemisphere
+                            if (SouthernHemisphere) // Southern hemisphere
+                            {
+                                changeDegrees.Y += (SideOfPier == PierSide.pierEast ? -rateRaDecOffsetInternal.Y : +rateRaDecOffsetInternal.Y) * timeInSecondsSinceLastUpdate; // Add or subtract declination rate depending on pointing state
+                            }
+                            else // Northern hemisphere
+                            {
+                                changeDegrees.Y += (SideOfPier == PierSide.pierEast ? +rateRaDecOffsetInternal.Y : -rateRaDecOffsetInternal.Y) * timeInSecondsSinceLastUpdate; // Add or subtract declination rate depending on pointing state
+                            }
+
+                            //TL.LogMessage("MoveAxes", $"RA internal offset rate: {rateRaDecOffsetInternal.X}, Dec internal offset rate: {rateRaDecOffsetInternal.Y}. " +
+                            //    $"Total change this interval: {changeDegrees.X}, {changeDegrees.Y}. Time since last update: {timeInSecondsSinceLastUpdate}"
+                            //    );
                             break;
+
                         case AlignmentModes.algAltAz: // In Alt/Az aligned mounts the HA change moves both RA (primary) and Dec (secondary) axes so both need to be updated
-                            change = ConvertRateToAltAz(haChange); // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking
-                            targetAxes = MountFunctions.ConvertRaDecToAxes(targetRaDec, false); // Update the slew target's Azimuth (primary) and Altitude (secondary) axis positions that will also have changed due to tracking
+
+                            // Set the change in the Azimuth (primary) and Altitude (secondary) axis positions due to tracking plus any RA / dec rate offsets
+                            // The RA rate offset (rateRaDecOffsetInternal.X) is subtracted because the primary RA axis increases its angle value in a clockwise direction
+                            // but RA decreases when moving in this direction
+                            changeDegrees = ConvertRateToAltAz(haChangeDegrees / timeInSecondsSinceLastUpdate - rateRaDecOffsetInternal.X, rateRaDecOffsetInternal.Y, timeInSecondsSinceLastUpdate);
+
+                            // Update the slew target's Azimuth (primary) and Altitude (secondary) axis positions that will also have changed due to tracking
+                            targetAxesDegrees = MountFunctions.ConvertRaDecToAxes(targetRaDec, false);
                             break;
                     }
 
-                    // We are tracking so apply any RightAScensionRate and DeclinationRate rate offsets, this assumes a polar mount. 
-                    // This correction is not applied when MoveAxis is in effect because the interface specification says it is one or the other of these and not both at the same time
-                    change += Vector.Multiply(rateRaDecOffsetInternal, timeInSecondsSinceLastUpdate);
+                    // TL.LogMessage("MoveAxes", $"Time since last update: {timeInSecondsSinceLastUpdate} seconds. HA change {haChangeDegrees} degrees. Alignment mode: {alignmentMode}.");
+                    // TL.LogMessage("MoveAxes", $"Movement - Primary axis: {changeDegrees.X} degrees, Secondary axis: {changeDegrees.Y} degrees.");
+                    // TL.LogMessage("MoveAxes", $"Movement rate - Primary axis: {changeDegrees.X * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second, " +
+                    //     $"Secondary axis: {changeDegrees.Y * DEGREES_TO_ARCSECONDS / timeInSecondsSinceLastUpdate} arc-seconds per SI second");
+                    //TL.LogMessage("MoveAxes", $"Movement includes RightAscensionRate/DeclinationRate movement of: {rateRaDecOffsetInternal.X * timeInSecondsSinceLastUpdate} degrees, {rateRaDecOffsetInternal.Y * timeInSecondsSinceLastUpdate} degrees.");
+                } // Mount is tracking
+                else // Mount is not tracking
+                {
+                    // No axis change
+                    //TL.LogMessage("MoveAxes", $"Tracking disabled - no changes.Time since last update: {timeInSecondsSinceLastUpdate} seconds.");
+                } // Mount is not tracking
+
+                // Move towards the target position if slewing
+                changeDegrees += DoSlew();
+
+            } // MoveAxis is not active
+            else // A moveAxis rate has been set so treat as a Move 
+            {
+                // Calculate movement allowing for the time since the last movement correction was applied 
+                switch (alignmentMode)
+                {
+                    case AlignmentModes.algAltAz:
+                        // Direction sense is the same in both hemispheres
+                        changeDegrees = Vector.Multiply(rateMoveAxes, timeInSecondsSinceLastUpdate);
+                        break;
+
+                    case AlignmentModes.algPolar:
+                        // NORTHERN HEMISPHERE: Positive axis rates increase the secondary axis angle resulting in increases in declination, which is what we want
+                        // SOUTHERN HEMISPHERE: Positive axis rates increase the secondary axis angle resulting in decreases in declination, so we reverse the sense here to ensure that positive axis rates result in increases in declination
+                        if (SouthernHemisphere) // In the southern hemisphere
+                        {
+                            changeDegrees.X = rateMoveAxes.X * timeInSecondsSinceLastUpdate; // Retain the primary axis direction sense
+                            changeDegrees.Y = -rateMoveAxes.Y * timeInSecondsSinceLastUpdate; // Swap the secondary axis direction sense
+                        }
+                        else // In the northern hemisphere
+                        {
+                            changeDegrees = Vector.Multiply(rateMoveAxes, timeInSecondsSinceLastUpdate); // Retain both primary and secondary axis senses
+                        }
+                        break;
+
+                    case AlignmentModes.algGermanPolar:
+                        // NORTHERN HEMISPHERE - NORMAL POINTING STATE (pierEast): Positive axis rates increase the secondary axis angle resulting in increases in declination, which is what we want
+                        // NORTHERN HEMISPHERE - THROUGH THE POLE POINTING STATE (pierWest): Positive axis rates increase the secondary axis angle resulting in decreases in declination, which is what we want
+                        // SOUTHERN HEMISPHERE - NORMAL POINTING STATE (pierEast): Positive axis rates increase the secondary axis angle resulting in decreases in declination, so we reverse the sense here to ensure that positive axis rates result in increases in declination
+                        // SOUTHERN HEMISPHERE - THROUGH THE POLE POINTING STATE (pierWest): Positive axis rates increase the secondary axis angle resulting in decreases in declination, so we reverse the sense here to ensure that positive axis rates result in increases in declination
+                        if (SouthernHemisphere) // In the southern hemisphere
+                        {
+                            changeDegrees.X = rateMoveAxes.X * timeInSecondsSinceLastUpdate; // Retain the primary axis direction sense
+                            changeDegrees.Y = -rateMoveAxes.Y * timeInSecondsSinceLastUpdate; // Swap the secondary axis direction sense
+                        }
+                        else // In the northern hemisphere
+                        {
+                            changeDegrees = Vector.Multiply(rateMoveAxes, timeInSecondsSinceLastUpdate); // Retain both primary and secondary axis senses
+                        }
+                        break;
+
+                    default:
+                        break;
                 }
-            }
+                //TL.LogMessage("MoveAxes MoveAxis", $"Primary axis move rate: {rateMoveAxes.X}, Secondary axis move rate: {rateMoveAxes.Y}. Applied changes - Primary axis: {changeDegrees.X}, Secondary axis: {changeDegrees.Y}. Time since last update: {timeInSecondsSinceLastUpdate} seconds.");
 
-            // MoveAxis movement allowing for the time since the last movement correction was applied.
-            change += Vector.Multiply(rateMoveAxes, timeInSecondsSinceLastUpdate);
-
-            // Move towards the target position if slewing
-            change += DoSlew();
+            } // MoveAxis is active
 
             // handle HC button moves
-            change += HcMoves();
+            changeDegrees += HcMoves();
 
             // Pulse guiding changes
-            change += PulseGuide(timeInSecondsSinceLastUpdate);
+            changeDegrees += PulseGuide(timeInSecondsSinceLastUpdate);
 
             // Update the axis positions with the total change in this interval
-            mountAxes += change;
+            mountAxesDegrees += changeDegrees;
 
             // check the axis values, stop movement past limits
-            CheckAxisLimits(change.X);
+            CheckAxisLimits(changeDegrees.X);
 
             // update the displayed values
             UpdatePositions();
@@ -680,16 +922,43 @@ namespace ASCOM.Simulator
                     {
                         SharedResources.TrafficLine(SharedResources.MessageType.Slew, "(Slew Complete)");
                         SlewState = SlewType.SlewNone;
+
+                        // End the current slew operation
+                        if ((SlewState != SlewType.SlewHome) & (SlewState == SlewType.SlewPark))
+                            EndOperation("SlewSettle");
                     }
                     break;
             }
+
+            // List changes this cycle
+            //TL.LogMessage($"MoveAxes (Final)", $"RA: {currentRaDec.X.ToHMS()}, Dec: {currentRaDec.Y.ToDMS()}, Hour angle: {astroUtils.ConditionHA(SiderealTime - currentRaDec.X).ToHMS()}, Sidereal Time: {SiderealTime.ToHMS()}");
+            //TL.LogMessage($"MoveAxes (Final)", $"Azimuth: {currentAltAzm.X.ToDMS()}, Altitude: {currentAltAzm.Y.ToDMS()}, Pointing state (pierEast = Normal): {SideOfPier}");
+            // TL.LogMessage($"MoveAxes (Final)",
+            //  $"Primary axis angle:  {mountAxesDegrees.X.ToDMS()}, Secondary axis angle:  {mountAxesDegrees.Y.ToDMS()}, " +
+            // $"Primary axis change: {changeDegrees.X.ToDMS()}, Secondary axis change: {changeDegrees.Y.ToDMS()}."
+            // );
+            //TL.BlankLine();
         }
 
         #endregion
 
         #region Properties For Settings
 
-        //I used some of these as dual purpose if the driver uses the same exact property
+        public static short InterfaceVersion
+        {
+            get
+            {
+                return interfaceVersion;
+            }
+
+            set
+            {
+                interfaceVersion = value;
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "InterfaceVersion", value.ToString(), "");
+            }
+        }
+
+
         public static AlignmentModes AlignmentMode
         {
             get { return alignmentMode; }
@@ -798,7 +1067,8 @@ namespace ASCOM.Simulator
             {
                 latitude = value;
                 s_Profile.WriteValue(SharedResources.PROGRAM_ID, "Latitude", value.ToString(CultureInfo.InvariantCulture));
-                if (latitude < 0) { SouthernHemisphere = true; }
+                // Assign the Southern hemisphere property to true or false depending on the site latitude
+                SouthernHemisphere = latitude <= 0.0;
             }
         }
 
@@ -922,7 +1192,7 @@ namespace ASCOM.Simulator
             }
         }
 
-        public static bool CanDestinationSideofPier
+        public static bool CanDestinationSideOfPier
         {
             get { return canDestinationSideOfPier; }
             set
@@ -1118,16 +1388,26 @@ namespace ASCOM.Simulator
 
         public static double Altitude
         {
-            get { return altAzm.Y; }
-            set { altAzm.Y = value; }
+            get { return currentAltAzm.Y; }
+            set { currentAltAzm.Y = value; }
         }
 
-        public static bool AtPark { get; private set; }
+        public static bool AtPark
+        {
+            get
+            {
+                return atPark;
+            }
+            private set
+            {
+                atPark = value;
+            }
+        }
 
         public static double Azimuth
         {
-            get { return altAzm.X; }
-            set { altAzm.X = value; }
+            get { return currentAltAzm.X; }
+            set { currentAltAzm.X = value; }
         }
 
         public static double ParkAltitude
@@ -1175,12 +1455,12 @@ namespace ASCOM.Simulator
             if (value)
             {
                 bool notAlreadyPresent = connectStates.TryAdd(id, true);
-                TL.LogMessage("Hardware.Connected Set", "Set Connected to: True, AlreadyConnected: " + (!notAlreadyPresent).ToString());
+                TL.LogMessage("Hardware.Connected Set", $"Set Connected to: True, AlreadyConnected: {!notAlreadyPresent}, Connection count: {connectStates.Count}");
             }
             else
             {
-                bool successfullyRemoved = connectStates.TryRemove(id, out value);
-                TL.LogMessage("Hardware.Connected Set", "Set Connected to: False, Successfully removed: " + successfullyRemoved.ToString());
+                bool successfullyRemoved = connectStates.TryRemove(id, out _);
+                TL.LogMessage("Hardware.Connected Set", $"Set Connected to: False, Successfully removed: {successfullyRemoved}, Connection count: {connectStates.Count}");
             }
         }
 
@@ -1250,7 +1530,8 @@ namespace ASCOM.Simulator
             set
             {
                 rateRaDecOffsetExternal.Y = value; // Save the provided rate to be returned through the Get property
-                rateRaDecOffsetInternal.Y = value * ARCSEC_TO_DEGREES; // Save the rate in the internal units that the simulator uses
+                rateRaDecOffsetInternal.Y = value * ARCSECONDS_TO_DEGREES; // Save the rate in the internal units that the simulator uses
+                TL.LogMessage("DeclinationRate Set", $"Value to be set (as received): {rateRaDecOffsetExternal.Y} arc seconds per SI second. Converted to internal rate of: {rateRaDecOffsetInternal.Y} degrees per SI second.");
             }
         }
 
@@ -1280,7 +1561,15 @@ namespace ASCOM.Simulator
             get
             {
                 //LogMessage("AtHome", "Distance from Home: {0}, AtHome: {1}", (mountAxes - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared, (mountAxes - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared < 0.01);
-                return (mountAxes - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared < 0.01;
+
+                // If a FindHome operation has been started, return its sate
+                if (currentOperation == Operation.FindHome)
+                    return false;
+
+                // Otherwise return true if the mount is close to the  home position.
+                bool atHome = (mountAxesDegrees - MountFunctions.ConvertAltAzmToAxes(HomePosition)).LengthSquared < 0.01;
+
+                return atHome;
             }
         }
 
@@ -1337,14 +1626,28 @@ namespace ASCOM.Simulator
             }
         }
 
-        // converts the rate between seconds per sidereal second and seconds per second
+        /// <summary>
+        /// Manages RightAscensionRate. Units are "seconds of RA per sidereal second".
+        /// </summary>
+        /// <remarks>
+        /// 1) This property retains the value supplied by set RightAscensionRate in the rateRaDecOffsetExternal.X vector element so that it can be returned by get RightAscensionRate.
+        /// 2) The set RightAscensionRate value is also converted to the internal units used by the simulator (arcsec per SI second) and stored in the rateRaDecOffsetInternal.X vector element
+        /// </remarks>
         public static double RightAscensionRate
         {
             get { return rateRaDecOffsetExternal.X; }
             set
             {
-                rateRaDecOffsetExternal.X = value; // Save the provided rate to be returned through the Get property
-                rateRaDecOffsetInternal.X = value * SIDEREAL_SECONDS_TO_SI_SECONDS * ARCSEC_TO_DEGREES; // Save the rate in the internal units that the simulator uses
+                // Save the provided rate (seconds of RA per sidereal second) to be returned through the Get property
+                rateRaDecOffsetExternal.X = value;
+
+                // Save the provided rate for internal use in the units (degrees per SI second) that the simulator uses.
+                // SIDEREAL_SECONDS_TO_SI_SECONDS converts from sidereal seconds to SI seconds
+                // Have to multiply by the SIDEREAL_SECONDS_TO_SI_SECONDS conversion factor (0.99726956631945) because SI seconds are longer than sidereal seconds and hence the simulator movement will be less in one SI second than in one sidereal second
+                // ARCSECONDS_PER_RA_SECOND converts from seconds of RA (1 circle = 24 hours) to arc-seconds (1 circle = 360 degrees)
+                // ARCSECONDS_TO_DEGREES converts from arc-seconds to degrees
+                rateRaDecOffsetInternal.X = value * SIDEREAL_SECONDS_TO_SI_SECONDS * ARCSECONDS_PER_RA_SECOND * ARCSECONDS_TO_DEGREES;
+                TL.LogMessage("RightAscensionRate Set", $"Value to be set (as received): {value} seconds per sidereal second. Converted to internal rate of: {value * SIDEREAL_SECONDS_TO_SI_SECONDS} seconds per SI second = {rateRaDecOffsetInternal.X} degrees per SI second.");
             }
         }
 
@@ -1381,20 +1684,22 @@ namespace ASCOM.Simulator
         {
             get
             {
-                return (mountAxes.Y <= 90 && mountAxes.Y >= -90) ?
+                return (mountAxesDegrees.Y <= 90 && mountAxesDegrees.Y >= -90) ?
                     PierSide.pierEast : PierSide.pierWest;
             }
             set
             {
                 // check the new side can be reached
-                var pa = AstronomyFunctions.RangeAzimuth(mountAxes.X - 180);
+                var pa = AstronomyFunctions.RangeAzimuth(mountAxesDegrees.X - 180);
                 if (pa >= hourAngleLimit + 180 && pa < -hourAngleLimit)
                 {
                     throw new InvalidOperationException("set SideOfPier " + value.ToString() + " cannot be reached at the current position");
                 }
 
+                StartOperation(Operation.SideOfPier);
+
                 // change the pier side
-                StartSlewAxes(pa, 180 - mountAxes.Y, SlewType.SlewRaDec);
+                StartSlewAxes(pa, 180 - mountAxesDegrees.Y, SlewType.SlewRaDec, Operation.SideOfPier);
             }
         }
 
@@ -1402,14 +1707,26 @@ namespace ASCOM.Simulator
         {
             get
             {
+
                 if (SlewState != SlewType.SlewNone)
+                {
+                    //TL.LogMessage("IsSlewing", $"TRUE - {SlewState} - SlewState != SlewType.None");
                     return true;
+                }
+
                 if (slewing)
+                {
+                    //TL.LogMessage("IsSlewing", $"TRUE - {SlewState} - slewing == true");
                     return true;
+                }
+
                 if (rateMoveAxes.LengthSquared != 0)
+                {
+                    //TL.LogMessage("IsSlewing", $"TRUE - {SlewState} - rateMoveAxes.LengthSquared != 0");
                     return true;
-                //if (rateRaDec.LengthSquared != 0) // Commented out by Peter 4th August 2018 because the Telescope specification says that RightAscensionRate and DeclinationRate do not affect the Slewing state
-                //    return true;
+                }
+
+                //TL.LogMessage("IsSlewing", $"SlewState: {SlewState}, Slewing: {slewing}, rateMoveAxes.X:{rateMoveAxes.X}, rateMoveAxes.Y: {rateMoveAxes.Y} - Returning: {slewing && rateMoveAxes.Y != 0 && rateMoveAxes.X != 0}");
                 return slewing && rateMoveAxes.Y != 0 && rateMoveAxes.X != 0;
             }
         }
@@ -1420,59 +1737,76 @@ namespace ASCOM.Simulator
             rateMoveAxes = new Vector();
             rateRaDecOffsetInternal = new Vector();
             SlewState = SlewType.SlewNone;
+
+            // End running operations as defined in the interface specification
+            switch (currentOperation)
+            {
+                case Operation.MoveAxis:
+                case Operation.SlewToAltAzAsync:
+                case Operation.SlewToCoordinatesAsync:
+                case Operation.SlewToTargetAsync:
+                    // End these operations if they are running
+                    EndOperation("AbortSlew", new OperationCancelledException("Slew / Move interrupted because the AbortSlew method was called."));
+                    break;
+
+                default:
+                    // No action for other operations
+                    break;
+            }
         }
 
         public static void SyncToTarget()
         {
-            mountAxes = MountFunctions.ConvertRaDecToAxes(targetRaDec, true);
+            mountAxesDegrees = MountFunctions.ConvertRaDecToAxes(targetRaDec, true);
             UpdatePositions();
         }
 
-        public static void SyncToAltAzm(double targetAzimuth, double targetAltitude)
+        public static void SyncToAltAz(double targetAzimuth, double targetAltitude)
         {
-            mountAxes = MountFunctions.ConvertAltAzmToAxes(new Vector(targetAzimuth, targetAltitude));
+            mountAxesDegrees = MountFunctions.ConvertAltAzmToAxes(new Vector(targetAzimuth, targetAltitude));
             UpdatePositions();
         }
 
-        public static void StartSlewRaDec(double rightAscension, double declination, bool doSideOfPier)
+        public static void StartSlewRaDec(double rightAscension, double declination, bool doSideOfPier, Operation operation)
         {
             Vector raDec = new Vector(rightAscension, declination);
-            targetAxes = MountFunctions.ConvertRaDecToAxes(raDec);
+            targetAxesDegrees = MountFunctions.ConvertRaDecToAxes(raDec);
 
-            StartSlewAxes(targetAxes, SlewType.SlewRaDec);
-            LogMessage("StartSlewRaDec", "Ra {0}, dec {1}, doSOP {2}", rightAscension, declination, doSideOfPier);
+            LogMessage("StartSlewRaDec", $"RA: {rightAscension.ToHMS()}, Declination: {declination.ToDMS()}, DoSOP {doSideOfPier}");
+            StartSlewAxes(targetAxesDegrees, SlewType.SlewRaDec, operation);
         }
 
-        public static void StartSlewAltAz(double altitude, double azimuth)
+        public static void StartSlewAltAz(double altitude, double azimuth, Operation operation)
         {
-            LogMessage("StartSlewAltAz", "{0}, {1}", altitude, azimuth);
-            StartSlewAltAz(new Vector(azimuth, altitude));
+            StartSlewAltAz(new Vector(azimuth, altitude), operation);
             return;
         }
 
-        public static void StartSlewAltAz(Vector targetAltAzm)
+        public static void StartSlewAltAz(Vector targetAltAz, Operation operation)
         {
-            LogMessage("StartSlewAltAz", "Azm {0}, Alt {1}", targetAltAzm.X, targetAltAzm.Y);
+            LogMessage("StartSlewAltAz", $"Azimuth: {targetAltAz.X.ToDMS()}, Altitude: {targetAltAz.Y.ToDMS()}");
 
-            Vector target = MountFunctions.ConvertAltAzmToAxes(targetAltAzm);
+            Vector target = MountFunctions.ConvertAltAzmToAxes(targetAltAz);
             if (target.LengthSquared > 0)
             {
-                StartSlewAxes(target, SlewType.SlewAltAz);
+                StartSlewAxes(target, SlewType.SlewAltAz, operation);
             }
         }
 
-        public static void StartSlewAxes(double primaryAxis, double secondaryAxis, SlewType slewState)
+        public static void StartSlewAxes(double primaryAxis, double secondaryAxis, SlewType slewState, Operation operation)
         {
-            StartSlewAxes(new Vector(primaryAxis, secondaryAxis), slewState);
+            StartSlewAxes(new Vector(primaryAxis, secondaryAxis), slewState, operation);
         }
 
         /// <summary>
         /// Starts a slew to the target position in mount axis degrees.
         /// </summary>
         /// <param name="targetPosition">The position.</param>
-        public static void StartSlewAxes(Vector targetPosition, SlewType slewState)
+        public static void StartSlewAxes(Vector targetPosition, SlewType slewState, Operation operation)
         {
-            targetAxes = targetPosition;
+            StartOperation(operation);
+
+            targetAxesDegrees = targetPosition;
             SlewState = slewState;
             slewing = true;
             ChangePark(false);
@@ -1485,7 +1819,7 @@ namespace ASCOM.Simulator
             parkCoordinates = MountFunctions.ConvertAltAzmToAxes(parkPosition); // Convert the park position AltAz coordinates into the current axes representation
             Tracking = false;
 
-            StartSlewAxes(parkCoordinates, SlewType.SlewPark);
+            StartSlewAxes(parkCoordinates, SlewType.SlewPark, Operation.Park);
         }
 
         public static void FindHome()
@@ -1496,8 +1830,8 @@ namespace ASCOM.Simulator
             }
 
             Tracking = false;
-            TL.LogMessage("FindHome", string.Format("HomePosition.X: {0}, HomePosition.Y: {1}", HomePosition.X.ToString(CultureInfo.InvariantCulture), HomePosition.Y.ToString(CultureInfo.InvariantCulture)));
-            StartSlewAxes(MountFunctions.ConvertAltAzmToAxes(HomePosition), SlewType.SlewHome);
+            TL.LogMessage("FindHome", $"HomePosition.X: {HomePosition.X.ToDMS()}, HomePosition.Y: {HomePosition.Y.ToDMS()}");
+            StartSlewAxes(MountFunctions.ConvertAltAzmToAxes(HomePosition), SlewType.SlewHome, Operation.FindHome);
         }
 
         /// <summary>
@@ -1538,7 +1872,7 @@ namespace ASCOM.Simulator
                 if (ha < 0.0 && ha >= -12.0) sideOfPier = PierSide.pierWest;
                 else if (ha >= 0.0 && ha <= 12.0) sideOfPier = PierSide.pierEast;
                 else sideOfPier = PierSide.pierUnknown;
-                LogMessage("SideOfPierRaDec", "Ra {0}, Dec {1}, Ha {2}, sop {3}", rightAscension, declination, ha, sideOfPier);
+                LogMessage("SideOfPierRaDec", $"RA: {rightAscension.ToHMS()}, Declination: {declination.ToDMS()}, HA: {ha.ToHMS()}, Side of pier: {sideOfPier}");
 
                 return sideOfPier;
             }
@@ -1559,7 +1893,7 @@ namespace ASCOM.Simulator
                 {
                     return double.MaxValue;
                 }
-                double degToLimit = mountAxes.X + hourAngleLimit + 360;
+                double degToLimit = mountAxesDegrees.X + hourAngleLimit + 360;
                 while (degToLimit > 180) degToLimit -= 360;
                 return degToLimit * 240;
             }
@@ -1573,7 +1907,7 @@ namespace ASCOM.Simulator
                 {
                     return double.MaxValue;
                 }
-                var degToLimit = mountAxes.X - hourAngleLimit + 360;
+                var degToLimit = mountAxesDegrees.X - hourAngleLimit + 360;
                 while (degToLimit > 180) degToLimit -= 360;
                 return degToLimit * 240;
             }
@@ -1585,11 +1919,11 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// returns the mount tracking movement in hour angle during the update interval
+        /// Returns the hour angle change due to tracking in degrees during the update interval
         /// </summary>
         /// <param name="updateInterval">The update interval.</param>
         /// <returns></returns>
-        private static double GetTrackingChange(double updateInterval)
+        private static double GetTrackingChangeInDegrees(double updateInterval)
         {
             if (!Tracking)
             {
@@ -1602,7 +1936,7 @@ namespace ASCOM.Simulator
             switch (TrackingRate)
             {
                 case DriveRates.driveSidereal:
-                    haChange = SIDEREAL_RATE_DEG_SEC * updateInterval;     // change in degrees
+                    haChange = SIDEREAL_RATE_DEG_PER_SI_SECOND * updateInterval;     // change in degrees
                     break;
                 case DriveRates.driveSolar:
                     haChange = SOLAR_RATE_DEG_SEC * updateInterval;     // change in degrees
@@ -1632,10 +1966,10 @@ namespace ASCOM.Simulator
 
             // Move towards the target position
             double delta;
-            bool finished = true;
+            bool finished;
 
             // Check primary axis
-            delta = targetAxes.X - mountAxes.X;
+            delta = targetAxesDegrees.X - mountAxesDegrees.X;
             while (delta < -180 || delta > 180)
             {
                 if (delta < -180) delta += 360;
@@ -1644,28 +1978,33 @@ namespace ASCOM.Simulator
             int signDelta = delta < 0 ? -1 : +1;
             delta = Math.Abs(delta);
 
+            // Slewing is complete because we are less than one slow-speed unit from the target.
             if (delta < slewSpeedSlow)
             {
                 change.X = delta * signDelta;
+                finished = true;
             }
             else if (delta < slewSpeedMedium * 2)
             {
+                // Move by one slow speed unit
                 change.X = slewSpeedSlow * signDelta;
                 finished = false;
             }
             else if (delta < slewSpeedFast * 2)
             {
+                // Move by one medium speed unit
                 change.X = slewSpeedMedium * signDelta;
                 finished = false;
             }
             else
             {
+                // Move by one fast speed unit
                 change.X = slewSpeedFast * signDelta;
                 finished = false;
             }
 
             // Check secondary axis
-            delta = targetAxes.Y - mountAxes.Y;
+            delta = targetAxesDegrees.Y - mountAxesDegrees.Y;
             while (delta < -180 || delta > 180)
             {
                 if (delta < -180) delta += 360;
@@ -1701,28 +2040,42 @@ namespace ASCOM.Simulator
                 {
                     case SlewType.SlewRaDec:
                     case SlewType.SlewAltAz:
-                        SlewState = SlewType.SlewSettle;
-                        settleTime = DateTime.Now + TimeSpan.FromSeconds(SlewSettleTime);
-                        LogMessage("Settle", "Moved from slew to settle");
+                        if (SlewSettleTime == 0.0) // Slew finishes here!
+                        {
+                            SlewState = SlewType.SlewNone;
+                            LogMessage("DoSlew", "No settle time - Slew done");
+                            EndOperation("DoSlew - Slew Done");
+                        }
+                        else
+                        {
+                            SlewState = SlewType.SlewSettle;
+                            settleTime = DateTime.Now + TimeSpan.FromSeconds(SlewSettleTime);
+                            LogMessage("DoSlew", $"Moved from slew to settle for {SlewSettleTime} seconds");
+                        }
                         break;
+
                     case SlewType.SlewPark:
                         LogMessage("DoSlew", "Parked done");
                         SlewState = SlewType.SlewNone;
                         ChangePark(true);
+
+                        // End the current operation
+                        EndOperation("DoSlew - Park Done");
                         break;
+
                     case SlewType.SlewHome:
                         LogMessage("DoSlew", "Home done");
                         SlewState = SlewType.SlewNone;
+
+                        // End the current operation
+                        EndOperation("DoSlew - Home Done");
                         break;
+
                     case SlewType.SlewNone:
                         break;
-                    //case SlewType.SlewSettle:
-                    //    break;
-                    //case SlewType.SlewMoveAxis:
-                    //    break;
-                    //case SlewType.SlewHandpad:
-                    //    break;
+
                     default:
+                        //Covers SlewType.SlewMoveAxis and SlewType.SlewHandpad:
                         SlewState = SlewType.SlewNone;
                         break;
                 }
@@ -1767,15 +2120,15 @@ namespace ASCOM.Simulator
                 case SlewDirection.SlewDown:
                     change.Y = -delta;
                     break;
-				case SlewDirection.SlewWest:
-				case SlewDirection.SlewLeft:
-					change.X = delta;
-					break;
-				case SlewDirection.SlewEast:
-				case SlewDirection.SlewRight:
-					change.X = -delta;
-					break;
-				case Simulator.SlewDirection.SlewNone:
+                case SlewDirection.SlewWest:
+                case SlewDirection.SlewLeft:
+                    change.X = delta;
+                    break;
+                case SlewDirection.SlewEast:
+                case SlewDirection.SlewRight:
+                    change.X = -delta;
+                    break;
+                case Simulator.SlewDirection.SlewNone:
                     break;
             }
             return change;
@@ -1789,35 +2142,147 @@ namespace ASCOM.Simulator
         private static Vector PulseGuide(double updateInterval)
         {
             Vector change = new Vector();
-            // PulseGuide implementation
-            if (isPulseGuidingRa)
+            double guideTime;
+
+            // Handle AltAz alignment differently to Polar and German polar.
+            switch (alignmentMode)
             {
-                if (guideDuration.X <= 0)
-                {
-                    isPulseGuidingRa = false;
-                }
-                else
-                {
-                    // assume polar mount only
-                    var gd = guideDuration.X > updateInterval ? updateInterval : guideDuration.X;
-                    guideDuration.X -= gd;
-                    // assumes guide rate is in deg/sec
-                    change.X = guideRate.X * gd;
-                }
+                case AlignmentModes.algAltAz:
+
+                    // Only run the process if we are currently pulse guiding
+                    if (IsPulseGuiding)
+                    {
+                        // Set a flag when RA pulse guiding is complete
+                        if (guideDuration.X <= 0)
+                        {
+                            isPulseGuidingRa = false;
+                            guideDuration.X = 0.0;
+                        }
+
+                        // Set a flag when declination pulse guiding is complete
+                        if (guideDuration.Y <= 0)
+                        {
+                            isPulseGuidingDec = false;
+                            guideDuration.Y = 0.0;
+                        }
+
+                        // If pulse guiding is active on either axis undertake the calculation
+                        if ((guideDuration.X > 0.0) | (guideDuration.Y > 0.0))
+                        {
+                            // Calculate the time during which pulse guiding was actually active in this time interval, either the whole interval or part of it
+                            double guideTimeRA = guideDuration.X > updateInterval ? updateInterval : guideDuration.X;
+                            double guideTimeDeclination = guideDuration.Y > updateInterval ? updateInterval : guideDuration.Y;
+
+                            // Update the remaining time of the pulse guide interval
+                            if (guideDuration.X > 0.0)
+                                guideDuration.X -= updateInterval;
+                            if (guideDuration.Y > 0.0)
+                                guideDuration.Y -= updateInterval;
+
+                            // Calculate the change due to any RA and declination pulse guiding in this interval
+                            change = ConvertRateToAltAz(guideRate.X * guideTimeRA / updateInterval, guideRate.Y * guideTimeDeclination / updateInterval, updateInterval);
+                        }
+                    }
+                    break;
+
+                case AlignmentModes.algPolar:
+                    if (isPulseGuidingRa)
+                    {
+                        if (guideDuration.X <= 0)
+                        {
+                            isPulseGuidingRa = false;
+                        }
+                        else
+                        {
+                            // assume polar mount only
+                            guideTime = guideDuration.X > updateInterval ? updateInterval : guideDuration.X;
+                            guideDuration.X -= guideTime;
+
+                            // assumes guide rate is in deg/sec
+                            change.X = guideRate.X * guideTime;
+                        }
+                    }
+                    if (isPulseGuidingDec)
+                    {
+                        if (guideDuration.Y <= 0)
+                        {
+                            isPulseGuidingDec = false;
+                        }
+                        else
+                        {
+                            guideTime = guideDuration.Y > updateInterval ? updateInterval : guideDuration.Y;
+                            guideDuration.Y -= guideTime;
+
+                            // Calculate the change in this interval allowing for inversion of declination direction when in the southern hemisphere.
+                            if (SouthernHemisphere) // Invert the change to match the simulator mechanical axis scale
+                            {
+                                change.Y = -guideRate.Y * guideTime;
+                            }
+                            else // Northern hemisphere
+                            {
+                                change.Y = guideRate.Y * guideTime;
+                            }
+                        }
+                    }
+                    break;
+
+                case AlignmentModes.algGermanPolar:
+                    if (isPulseGuidingRa)
+                    {
+                        if (guideDuration.X <= 0)
+                        {
+                            isPulseGuidingRa = false;
+                        }
+                        else
+                        {
+                            // assume polar mount only
+                            guideTime = guideDuration.X > updateInterval ? updateInterval : guideDuration.X;
+                            guideDuration.X -= guideTime;
+
+                            // assumes guide rate is in deg/sec
+                            change.X = guideRate.X * guideTime;
+                        }
+                    }
+                    if (isPulseGuidingDec)
+                    {
+                        if (guideDuration.Y <= 0)
+                        {
+                            isPulseGuidingDec = false;
+                        }
+                        else
+                        {
+                            guideTime = guideDuration.Y > updateInterval ? updateInterval : guideDuration.Y;
+                            guideDuration.Y -= guideTime;
+
+                            // Calculate the change in this interval allowing for inversion of declination direction when the pointing state is through the pole.
+                            if (SideOfPier == PierSide.pierEast) // Normal state
+                            {
+                                change.Y = guideRate.Y * guideTime;
+                            }
+                            else // Through the pole state
+                            {
+                                change.Y = -guideRate.Y * guideTime;
+                            }
+
+                            // Invert the direction of the declination change when in the southern hemisphere to match the simulator mechanical axis specification
+                            if (SouthernHemisphere)
+                            {
+                                change.Y = -change.Y;
+                            }
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
             }
-            if (isPulseGuidingDec)
+
+            // End the pulse guide operation if one is active and guiding has completed
+            if (currentOperation == Operation.PulseGuide & !isPulseGuidingRa & !isPulseGuidingDec)
             {
-                if (guideDuration.Y <= 0)
-                {
-                    isPulseGuidingDec = false;
-                }
-                else
-                {
-                    var gd = guideDuration.Y > updateInterval ? updateInterval : guideDuration.Y;
-                    guideDuration.Y -= gd;
-                    change.Y = guideRate.Y * gd;
-                }
+                EndOperation("PulseGuide");
             }
+
             return change;
         }
 
@@ -1836,36 +2301,112 @@ namespace ASCOM.Simulator
             {
                 case AlignmentModes.algAltAz:
                     // the primary axis must be in the range 0 to 360
-                    mountAxes.X = AstronomyFunctions.RangeAzimuth(mountAxes.X);
+                    mountAxesDegrees.X = AstronomyFunctions.RangeAzimuth(mountAxesDegrees.X);
                     break;
                 case AlignmentModes.algGermanPolar:
                     // the primary axis needs to be in the range -180 to +180 to correspond with hour angles
                     // of -12 to 12.
                     // check if we have hit the hour angle limit
-                    if ((mountAxes.X >= hourAngleLimit + 180 && primaryChange > 0) ||
-                        (mountAxes.X <= -hourAngleLimit && primaryChange < 0))
+                    if ((mountAxesDegrees.X >= hourAngleLimit + 180 && primaryChange > 0) ||
+                        (mountAxesDegrees.X <= -hourAngleLimit && primaryChange < 0))
                     {
                         // undo the movement when the limit is hit
-                        mountAxes.X -= primaryChange;
+                        mountAxesDegrees.X -= primaryChange;
                     }
                     break;
                 case AlignmentModes.algPolar:
                     // the axis needs to be in the range -180 to +180 to correspond with hour angles
                     // of -12 to 12.
-                    while (mountAxes.X <= -180.0 || mountAxes.X > 180.0)
+                    while (mountAxesDegrees.X <= -180.0 || mountAxesDegrees.X > 180.0)
                     {
-                        if (mountAxes.X <= -180.0) mountAxes.X += 360;
-                        if (mountAxes.X > 180) mountAxes.X -= 360;
+                        if (mountAxesDegrees.X <= -180.0) mountAxesDegrees.X += 360;
+                        if (mountAxesDegrees.X > 180) mountAxesDegrees.X -= 360;
                     }
                     break;
             }
             // secondary must be in the range -90 to 0 to +90 for normal 
             // and +90 to 180 to 270 for through the pole.
             // rotation is continuous
-            while (mountAxes.Y >= 270.0 || mountAxes.Y < -90.0)
+            while (mountAxesDegrees.Y >= 270.0 || mountAxesDegrees.Y < -90.0)
             {
-                if (mountAxes.Y >= 270) mountAxes.Y -= 360.0;
-                if (mountAxes.Y < -90) mountAxes.Y += 360.0;
+                if (mountAxesDegrees.Y >= 270) mountAxesDegrees.Y -= 360.0;
+                if (mountAxesDegrees.Y < -90) mountAxesDegrees.Y += 360.0;
+            }
+        }
+
+        /// <summary>
+        /// Convert [HA,Dec] position and rate into [Az,El] position and rate.
+        /// </summary>
+        /// <param name="phi">site latitude (radians)</param>
+        /// <param name="ha"> hour angle (radians)</param>
+        /// <param name="dec">declination (radians)</param>
+        /// <param name="hadot">rate of change of ha (radians per unit time)</param>
+        /// <param name="decdot">rate of change of declination (radians per unit time)</param>
+        /// <param name="a">azimuth (N through E, radians)</param>
+        /// <param name="e">elevation (radians)</param>
+        /// <param name="ad">rate of change of a (radians per unit time)</param>
+        /// <param name="ed">rate of change of e (radians per unit time)</param>
+        /// <remarks>
+        /// 1) For sidereal tracking ha should include the sidereal rate as well as any differential rate.
+        /// 
+        /// 2) The units of the velocity arguments are up to the caller.
+        ///
+        /// This revision:  2023 January 9
+        ///
+        /// Author P.T.Wallace.
+        /// 
+        /// 
+        /// </remarks>
+        static void Tran(double phi, double ha, double dec, double hadot, double decdot, out double a, out double e, out double ad, out double ed)
+        {
+            double sh, ch, sd, cd, x, y, z, w, xd, yd, zd, sp, cp, rxy2, rxy, xyp;
+
+            /* Functions of HA and Dec. */
+            sh = Math.Sin(ha);
+            ch = Math.Cos(ha);
+            sd = Math.Sin(dec);
+            cd = Math.Cos(dec);
+
+            /* Unit vector (right-handed) P & V. */
+            x = ch * cd;
+            y = -sh * cd;
+            z = sd;
+
+            w = decdot * sd;
+            xd = hadot * y - w * ch;
+            yd = -hadot * x + w * sh;
+            zd = decdot * cd;
+
+            /* Rotate P & V into Cartesian [2pi-Az,El]. */
+            sp = Math.Sin(phi);
+            cp = Math.Cos(phi);
+            w = x * sp - z * cp;
+            z = x * cp + z * sp;
+            x = w;
+
+            w = xd * sp - zd * cp;
+            zd = xd * cp + zd * sp;
+            xd = w;
+
+            /* Vector's component in XY plane. */
+            rxy2 = x * x + y * y;
+            rxy = Math.Sqrt(rxy2);
+
+            /* Position and velocity in [Az,El]. */
+            xyp = x * xd + y * yd;
+            if (rxy != 0.0)
+            {
+                a = Math.Atan2(y, -x);
+                e = Math.Atan2(z, rxy);
+                ad = -(x * yd - y * xd) / rxy2;
+                ed = (zd * rxy2 - z * xyp) / rxy;
+            }
+            else
+            {
+                a = 0.0;
+                e = (z != 0.0) ? Math.Atan2(z, rxy) : 0.0;
+                ad = 0.0;
+                ed = 0.0;
             }
         }
 
@@ -1874,45 +2415,33 @@ namespace ASCOM.Simulator
         /// </summary>
         /// <param name="haChange">The ha change.</param>
         /// <returns></returns>
-        private static Vector ConvertRateToAltAz(double haChange)
+        private static Vector ConvertRateToAltAz(double haChange, double decChange, double timeInSecondsThisInterval)
         {
             Vector change = new Vector();
 
-            double latRad = latitude * SharedResources.DEG_RAD;
-            double azmRad = altAzm.X * SharedResources.DEG_RAD;
-            double zenithAngle = (90 - altAzm.Y) * SharedResources.DEG_RAD;     // in radians
+            double phi = Latitude * DEG_RAD; // Site latitude in radians
+            double ha = (SiderealTime - currentRaDec.X) * HRS_RAD; // Current hour angle in radians
+            double dec = currentRaDec.Y * DEG_RAD; // Current declination in radians
+            double hadot = haChange * DEG_RAD; // Rate of change in HA due to tracking plus any RA offset rate in radians per second
+            double decdot = decChange * DEG_RAD; // Rate of change in declination due to any declination rate offset in radians per second
 
-            // get the azimuth and elevation rates, as a ratio of the tracking rate
-            double elevationRate = Math.Sin(azmRad) * Math.Cos(latRad);
+#pragma warning disable IDE0018 // Suppress In-line variable declaration
 
-            // fails at zenith so set a very large value, the limit check will trap this
-            double azimuthRate;
-            if (altAzm.Y != 90.0)
-            {
-                azimuthRate = (Math.Sin(latRad) * Math.Sin(zenithAngle) - Math.Cos(latRad) * Math.Cos(zenithAngle) * Math.Cos(azmRad)) / Math.Sin(zenithAngle);
-            }
-            else // altAzm.Y is 90.0
-            {
-                if (altAzm.X >= 90 && altAzm.X <= 270)
-                {
-                    azimuthRate = 10000.0;
-                }
-                else
-                {
-                    azimuthRate = -10000.0;
-                }
-            }
+            double a; // Azimuth (N through E, radians)
+            double e; // Elevation (radians)
+            double ad; // Rate of change of azimuth (radians per unit time)
+            double ed; // Rate of change of elevation (radians per unit time)
 
-            // get the changes in altitude and azimuth using the hour angle change and rates.
-            change.Y = elevationRate * haChange;
-            change.X = azimuthRate * haChange;
+#pragma warning restore IDE0018 // Enable In-line variable declaration
 
-            // stop the secondary going past the vertical
-            if (change.Y > 90 - altAzm.Y) change.Y = 0;
+            // Calculate azimuth and elevation rates (radians per second)
+            Tran(phi, ha, dec, hadot, decdot, out a, out e, out ad, out ed);
 
-            // limit the primary to the maximum slew rate
-            if (change.X < -slewSpeedFast) change.X = -slewSpeedFast;
-            if (change.X > slewSpeedFast) change.X = slewSpeedFast;
+            double azimuthChange = ad * timeInSecondsThisInterval; // Change in azimuth this interval in radians
+            double elevationChange = ed * timeInSecondsThisInterval; // Change in elevation this interval in radians
+
+            change.X = azimuthChange * RAD_DEG; // Convert azimuth change in radians to degrees
+            change.Y = elevationChange * RAD_DEG; // Convert elevation change in radians to degrees
 
             return change;
         }
@@ -1922,14 +2451,13 @@ namespace ASCOM.Simulator
         /// </summary>
         private static void UpdatePositions()
         {
+            // Update sidereal time for next loop
             SiderealTime = AstronomyFunctions.LocalSiderealTime(Longitude);
 
-            pointingState = mountAxes.Y <= 90 ? PointingState.Normal : PointingState.ThroughThePole;
+            //pointingState = mountAxesDegrees.Y <= 90 ? PointingState.Normal : PointingState.ThroughThePole;
 
-            altAzm = MountFunctions.ConvertAxesToAltAzm(mountAxes);
-            currentRaDec = MountFunctions.ConvertAxesToRaDec(mountAxes);
-
-            UpdateDisplay();
+            currentAltAzm = MountFunctions.ConvertAxesToAltAzm(mountAxesDegrees);
+            currentRaDec = MountFunctions.ConvertAxesToRaDec(mountAxesDegrees);
         }
 
         private static void UpdateDisplay()
@@ -1946,6 +2474,37 @@ namespace ASCOM.Simulator
             TelescopeSimulator.m_MainForm.LabelState(TelescopeSimulator.m_MainForm.lblPARK, AtPark);
             TelescopeSimulator.m_MainForm.LabelState(TelescopeSimulator.m_MainForm.lblHOME, AtHome);
             TelescopeSimulator.m_MainForm.LabelState(TelescopeSimulator.m_MainForm.labelSlew, IsSlewing);
+        }
+
+        public static void StartOperation(Operation operation)
+        {
+            TL.LogMessage("OperationState-Start", $"Starting new operation: {operation} - Current operation is: {CurrentOperation}");
+            CurrentOperation = operation;
+
+            // Clear any previous exception that was being thrown
+            OperationException = null;
+
+            // Mark this operation as underway.
+            OperationComplete = false;
+        }
+
+        public static void EndOperation(string sourceName)
+        {
+            EndOperation(sourceName, null);
+        }
+
+        public static void EndOperation(string sourceName, Exception exception)
+        {
+            if (exception is null)
+                TL.LogMessage("OperationState-End", $"{sourceName} - Ending operation {currentOperation}");
+            else
+                TL.LogMessage("OperationState-End", $"{sourceName} - Ending operation {currentOperation} with error number: 0x{exception.HResult:X8} and error message: '{exception.Message}'");
+            // Mark this operation as complete
+            OperationComplete = true;
+
+            // Set the exception to be returned by the OperationComplete property, if any
+            OperationException = exception;
+            CurrentOperation = Operation.None;
         }
 
         #endregion

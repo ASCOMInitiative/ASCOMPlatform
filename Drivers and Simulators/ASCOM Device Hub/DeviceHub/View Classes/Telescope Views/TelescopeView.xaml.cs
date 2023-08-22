@@ -1,12 +1,11 @@
-﻿using System;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace ASCOM.DeviceHub
 {
-	/// <summary>
-	/// Interaction logic for TelescopeView.xaml
-	/// </summary>
-	public partial class TelescopeView : UserControl
+    /// <summary>
+    /// Interaction logic for TelescopeView.xaml
+    /// </summary>
+    public partial class TelescopeView : UserControl
 	{
 		public TelescopeView()
 		{

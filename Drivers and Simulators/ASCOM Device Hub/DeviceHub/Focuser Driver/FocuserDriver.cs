@@ -22,7 +22,6 @@
 
 using System;
 using System.Collections;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -35,16 +34,16 @@ using static System.FormattableString;
 
 namespace ASCOM.DeviceHub
 {
-	// Your driver's DeviceID is ASCOM.DeviceHub.Focuser
+    // Your driver's DeviceID is ASCOM.DeviceHub.Focuser
 
-	// The Guid attribute sets the CLSID for ASCOM.DeviceHub.Focuser
-	// The ClassInterface/None attribute prevents an empty interface called
-	// _DeviceHub from being created and used as the [default] interface
+    // The Guid attribute sets the CLSID for ASCOM.DeviceHub.Focuser
+    // The ClassInterface/None attribute prevents an empty interface called
+    // _DeviceHub from being created and used as the [default] interface
 
-	/// <summary>
-	/// ASCOM Focuser Driver for DeviceHub.
-	/// </summary>
-	[ComVisible(true)]
+    /// <summary>
+    /// ASCOM Focuser Driver for DeviceHub.
+    /// </summary>
+    [ComVisible(true)]
 	[Guid( "5eb66c80-1658-4dde-8931-4d5772fa2311" )]
 	[ProgId( "ASCOM.DeviceHub.Focuser" )]
 	[ServedClassName( "Device Hub Focuser" )]
@@ -888,8 +887,10 @@ namespace ASCOM.DeviceHub
 		{
 			if ( !isAvailable )
 			{
-				LogMessage( ident, "Unsupported operation." );
-				throw new PropertyNotImplementedException( ident, true );
+				string msg = "The focuser driver does not support setting temperature compensation.";
+				LogMessage( ident, msg );
+
+				throw new PropertyNotImplementedException( ident, msg );
 			}
 		}
 
@@ -897,9 +898,10 @@ namespace ASCOM.DeviceHub
 		{
 			if ( !absolute )
 			{
-				LogMessage( ident, "Not implemented for a relative positioning focuser." );
+				string msg = "Not implemented for a relative positioning focuser.";
+				LogMessage( ident, msg );
 
-				throw new PropertyNotImplementedException( ident, isSetter );			
+				throw new PropertyNotImplementedException( ident, isSetter, msg );			
 			}
 		}
 

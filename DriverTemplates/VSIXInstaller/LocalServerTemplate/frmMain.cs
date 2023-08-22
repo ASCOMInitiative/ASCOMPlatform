@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ASCOM.LocalServer
 {
-	public partial class FrmMain : Form
+    public partial class FrmMain : Form
 	{
 		delegate void SetTextCallback(string text);
 

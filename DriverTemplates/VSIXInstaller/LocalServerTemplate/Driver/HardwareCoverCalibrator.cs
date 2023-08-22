@@ -4,7 +4,6 @@
 
 using ASCOM;
 using ASCOM.DeviceInterface;
-using ASCOM.Utilities;
 
 static class CoverCalibratorHardware
 {

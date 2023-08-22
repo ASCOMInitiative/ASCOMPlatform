@@ -8,11 +8,10 @@ using System.Windows;
 
 using ASCOM.DeviceHub.MvvmMessenger;
 using ASCOM.DeviceInterface;
-using ASCOM.DriverAccess;
 
 namespace ASCOM.DeviceHub
 {
-	public enum ActivityMessageTypes { None = 0, Status, Capabilities, Parameters, Commands, Other };
+    public enum ActivityMessageTypes { None = 0, Status, Capabilities, Parameters, Commands, Other };
 
 	public class DeviceManagerBase : NormalizedValueBase, INotifyPropertyChanged
 	{

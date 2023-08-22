@@ -123,8 +123,29 @@ Comment: Set up values for a 64bit OS
 Set Variable PROGRAMFILES64 to 
 Set Variable COMMONFILES64 to 
 Set Variable WIN64MODE to 
+Set Variable ARM64MODE to 
 Set Variable PROGRAMDATA to 
 Get System Setting Windows in 64 bit Mode into WIN64MODE
+ 
+Comment: If the system reports 32bit, check whether we are running on a 64bit ARM chip with 64bit Intel emulation. E.g. A Parallels VM running on Apple silicon.
+if Variable WIN64MODE Equals FALSE
+  Comment: Get an indicator showing whether we are running on ARM64 with Intel emulation.
+  Get System Setting Windows on ARM with AMD64/EM64T Emulation into ARM64MODE
+  if Variable ARM64MODE Equals TRUE
+    Comment: Set the 64bit flag because we are running on a 64bit ARM processor running Windows.
+    Set Variable WIN64MODE to TRUE
+    Write into Text File $SETUPLOG$ from Value $TIME$ Setting WIN64MODE to TRUE because we are running on a 64bit ARM processor with Intel 64bit extension emulation: $WIN64MODE$ (at end of file)
+    Write into Text File $SETUPLOG$ from Value   (at end of file)
+  end
+end
+ 
+Comment: Force 64bit mode if required
+if Variable CMDLINE Contains (Ignore Case) /Force64Bit
+  Set Variable WIN64MODE to TRUE
+  Write into Text File $SETUPLOG$ from Value $TIME$ Command line contains /Force64Bit : $CMDLINE$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Forcing 64bit installation - WIN64MODE has been set to $WIN64MODE$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value   (at end of file)
+end
  
 Comment: Determine whether install is from the installer executable or from the Windows control panel application installation / modification dialogue
 Set Variable INSTALLMETHOD to 
@@ -140,8 +161,8 @@ end
  
 Comment: Set up values for OS version information
 Set Variable OPSYS to 
-Set Variable OPSYSMAJOR to 
-Set Variable OPSYSMINOR to 
+Set Variable WIN10ORLATER to 
+Set Variable INSTALLNET35 to 
 Set Variable OSCURRENTVERSION to 
 Set Variable OSEDITIONID to 
 Set Variable OSPRODUCTNAME to 
@@ -324,7 +345,7 @@ if Variable CHECKSYSTEM Equals SEVEN
   if Variable CHECKSYSTEM not Greater Than 0
     Comment: We are running on Windows 7 without service pack 1 so cannot proceed because Framework 4.8 is only supported on Win 7 SP1
     Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 7 without SP1, terminating installation (at end of file)
-    MessageBox: $TITLE$ Setup Issue, Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
+    MessageBox: $TITLE$ Setup Issue, The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please install Windows 7 Service Pack 1 if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
     Terminate Installation
   end
 end
@@ -334,7 +355,7 @@ Get Exact OS Level into CHECKSYSTEM
 if Variable CHECKSYSTEM Equals METRO
   Comment: We are running on Windows 8.0 so cannot proceed because Framework 4.8 is only supported on Win 8.1
   Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 8.0, terminating installation (at end of file)
-  MessageBox: $TITLE$ Setup Issue, Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
+  MessageBox: $TITLE$ Setup Issue, The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please update to Windows 8 if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
   Terminate Installation
 end
  
@@ -346,7 +367,7 @@ if Variable CHECKSYSTEM Equals TRUE
   if Variable CHECKSYSTEM not Equals TRUE
     Comment: We are running on Windows 10 with a Threshold version so cannot proceed because Framework 4.8 is only supported on Win 8.1
     Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 10 Threshold, terminating installation (at end of file)
-    MessageBox: $TITLE$ Setup issue, Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
+    MessageBox: $TITLE$ Setup issue, The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please update to Windows 10 Anniversary Edition (version 1607) or later if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
     Terminate Installation
   end
 end
@@ -355,7 +376,7 @@ Comment: Check that we are not below Windows 7 i.e. on XP
 Get System Setting Windows 7 into CHECKSYSTEM
 if Variable CHECKSYSTEM not Equals TRUE
   Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows earlier than 7, terminating installation (at end of file)
-  MessageBox: $TITLE$ Setup Issue, Sorry, the ASCOM Platform will only install on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary edition or later.$NEWLINE$$NEWLINE$The $TITLE$ installer cannot continue and will now close.
+  MessageBox: $TITLE$ Setup Issue, The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please update to a supported Windows version if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
   Terminate Installation
 end
  
@@ -387,22 +408,24 @@ if Variable PREREQ not Equals FALSE
     Comment: Check whether the user enabled .NET 3.5 SP1 while the pre-requisites dialogue was open. If still missing then terminate the install
     Include Script: checknet351
     if Variable NET351 Equals FALSE
-      Parse String $OPSYS$ into Variables OPSYSMAJOR and OPSYSMINOR (Split at position from start)
-      Write into Text File $SETUPLOG$ from Value $TIME$ Operating System: $OPSYS$, Major: $OPSYSMAJOR$, Minor: $OPSYSMINOR$ (at end of file)
-      Comment: Determine whether we are running on Windows 10 or 11.
-      Set Variable AUTOUPDATENET35 to FALSE
-      if Variable OPSYSMAJOR Equals TEN
-        Set Variable AUTOUPDATENET35 to TRUE
-        Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 10 - Enabling automatic .NET 3.5 install. (at end of file)
+      Set Variable INSTALLNET35 to FALSE
+      Comment: Determine whether we are running on Windows 10 or later using value in System Settings..
+      Get System Setting Windows 10 into WIN10ORLATER
+      if Variable WIN10ORLATER Equals TRUE
+        Comment: Running on Windows 10 or later so enable .NET 3.5 installation.
+        Set Variable INSTALLNET35 to TRUE
+        Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 10 or later through System Settings command: $INSTALLNET35$ (at end of file)
+      else
+        Comment: Further attempt to determine whether we are running on Windows 10 or later using the OS build number.
+        Comment: Test for versions after Windows 10 Threshold 2 i.e. Redstone 1 and later.
+        if Variable OSCURRENTBUILD Greater Than 10586
+          Comment: Running on Windows 10 or later so enable .NET 3.5 installation.
+          Set Variable INSTALLNET35 to TRUE
+          Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 10 or later through OS Build number: $INSTALLNET35$ (at end of file)
+        end
       end
-      if Variable OPSYS Equals ELEVEN
-        Set Variable AUTOUPDATENET35 to TRUE
-        Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 11 or later - Enabling automatic .NET 3.5 install. (at end of file)
-      end
-      Comment: Auto install .NET 3.5 using DISM if possible.
-      if Variable AUTOUPDATENET35 Equals TRUE
-        Comment: Running on Windows 10 or later so use DISM to enable .NET 3.5
-        Write into Text File $SETUPLOG$ from Value $TIME$ Windows $OPSYS - About to run DISM command to enable .NET 3.5.1 (at end of file)
+      if Variable INSTALLNET35 Equals TRUE
+        Write into Text File $SETUPLOG$ from Value $TIME$ Installing .NET 3.5 automatically using DISM. (at end of file)
         Run Program $SUPPORTDIR$\EnableDotNet35.cmd  (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ Completed DISM execution. Return code: $RC$. (at end of file)
         Write into Text File $SETUPLOG$ from Value  (at end of file)
@@ -411,7 +434,7 @@ if Variable PREREQ not Equals FALSE
           if Variable RC Equals 3050
             Comment: DISM requires a reboot
             Write into Text File $SETUPLOG$ from Value $TIME$ Completed - DISM requires a reboot. Return code: $RC$. (at end of file)
-            MessageBox: Pre-requisites, .NET 3.5 installation is complete  but DISM indicates that your PC must be rebooted in order for the installation to take effect.$NEWLINE$$NEWLINE$The Platform installer will now close.$NEWLINE$$NEWLINE$Please reboot your PC and re-run the Platform installer.
+            MessageBox: Pre-requisites, .NET 3.5 installation is complete but your PC must be rebooted in order to take effect.$NEWLINE$$NEWLINE$The Platform installer will now close.$NEWLINE$$NEWLINE$Please reboot your PC and re-run the Platform installer.
             Terminate Installation
           else
             Comment: Something went wrong during installation of .NET 3.5.
@@ -1002,7 +1025,7 @@ Comment: Platform 6 core components
 Install Assembly ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
 Install Files ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
-Comment: Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\Platform\v6
+Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\Platform\v6
 Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to Global Assembly Cache
 Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6
@@ -1182,8 +1205,8 @@ Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Dev
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\RestSharp.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Alpaca.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Common.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Tools.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\Newtonsoft.Json.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Comment: Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Tools.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Comment: Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\Newtonsoft.Json.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
 Comment: Add the client creator executable and the dependencies that must be present in order to allow the dynamic compilation to succeed
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.exe to $TARGETDIR$\Tools\AlpacaDynamicClientManager
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.pdb to $TARGETDIR$\Tools\AlpacaDynamicClientManager
@@ -1597,6 +1620,8 @@ if Variable SUCCESS not Equals ERROR
   Set Variable MYPROGRESS to 49
   Set Variable PROGRESSTEXT to Registering ASCOM.Utilities 6.0.0.0
   Register assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable PROGRESSTEXT to Registering ASCOM.DeviceInterface 6.0.0.0
+  Register assembly ASCOM.DeviceInterface, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable MYPROGRESS to 50
   Set Variable PROGRESSTEXT to Registering ASCOM.Utilities.Video 6.1.0.0
   Register assembly ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
@@ -1746,6 +1771,12 @@ if Variable SUCCESS not Equals ERROR
     if Variable RC not Equals 0
       MessageBalloon: RegAsm 64, Unable to register the ASCOM.Utilities assembly for 64bit operation. RC: $RC$
     end
+    Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Deviceinterfaces.dll for COM
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Deviceinterfaces.dll" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Deviceinterfaces (at end of file)
+    if Variable RC not Equals 0
+      MessageBalloon: RegAsm 64, Unable to register the ASCOM.Deviceinterfaces assembly for 64bit operation. RC: $RC$
+    end
     Set Variable MYPROGRESS to 78
     Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Utilities.Video.dll for COM
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC)
@@ -1775,6 +1806,10 @@ if Variable SUCCESS not Equals ERROR
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Focus Simulator 6 (at end of file)
     if Variable RC not Equals 0
       MessageBalloon: RegAsm 64, Unable to register the ASCOM Focuser simulator for 64bit operation. RC: $RC$
+      if Variable ASCOMERROR not Equals 
+        Set Variable ASCOMERROR to $ASCOMERROR$$NEWLINE$
+      end
+      Set Variable ASCOMERROR to $ASCOMERROR$Focuser simulator 64bit registration failed. RC: $RC$
     end
     Set Variable PROGRESSTEXT to Registering Platform 6 CoverCalibrator simulator
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator\ASCOM.Simulator.CoverCalibrator.dll" /codebase (WAIT, get result into variable RC)
@@ -1971,7 +2006,7 @@ if Variable SUCCESS not Equals (Ignore Case) ERROR
 else
   Comment: We have an error so set the error messages
   Set Variable FINISH_TITLE to $TITLE$ installation failed
-  Set Variable FINISH_DESCRIPTION to Sorry, an error occurred during installation of Platform 6.$NEWLINE$$NEWLINE$Please review the PlatformInstall, UninstallASCOM and FinaliseInstall $NEWLINE$logs in the My Documents\ASCOM and the most recent$NEWLINE$My Documents\ASCOM\Logs YYYY MM DD folders.$NEWLINE$$NEWLINE$Please also run the Diagnostics Tool in ASCOM Platform 6 / Tools and $NEWLINE$post all logs on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$Many thanks, The ASCOM Platform Team.
+  Set Variable FINISH_DESCRIPTION to An error occurred during installation of Platform 6.$NEWLINE$$NEWLINE$Please review the PlatformInstall, UninstallASCOM and FinaliseInstall $NEWLINE$logs in the My Documents\ASCOM and the most recent$NEWLINE$My Documents\ASCOM\Logs YYYY MM DD folders.$NEWLINE$$NEWLINE$Please also run the Diagnostics Tool in ASCOM Platform 6 / Tools and $NEWLINE$post all logs on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$Many thanks, The ASCOM Platform Team.
   Set Variable FINISH_CONTEXT to Last error: "$LASTERROR$"$NEWLINE$$ASCOMERROR$
 end
  

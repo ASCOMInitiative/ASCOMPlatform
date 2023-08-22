@@ -10,11 +10,6 @@
 //
 //	* ALL DECLARATIONS MUST BE STATIC HERE!! INSTANCES OF THIS CLASS MUST NEVER BE CREATED!
 
-using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using ASCOM;
 using ASCOM.Utilities;
 
 namespace ASCOM.LocalServer

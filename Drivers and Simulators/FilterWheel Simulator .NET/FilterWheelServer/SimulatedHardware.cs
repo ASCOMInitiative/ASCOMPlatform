@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Drawing;
 using ASCOM.Utilities;
@@ -13,7 +11,7 @@ namespace ASCOM.Simulator
     public class SimulatedHardware
     {
 
-#region variables
+        #region variables
 
         // Timer variables
         private static int m_iTimeInterval;             // Time to move between filter positions (miilisecs)
@@ -70,7 +68,7 @@ namespace ASCOM.Simulator
         private static int SCODE_SETUP_NOT_ALLOWED = ErrorCodes.DriverBase + 0x406;
         private const string MSG_SETUP_NOT_ALLOWED = "Setup not allowed whilst connected";
 
-#endregion
+        #endregion
 
         //
         // Constructor - initialize state
@@ -87,7 +85,7 @@ namespace ASCOM.Simulator
 
         }
 
-#region Properties and Methods
+        #region Properties and Methods
 
         //
         // Initialize/finalize for server startup/shutdown
@@ -188,8 +186,26 @@ namespace ASCOM.Simulator
                         }
                     }
 
-                    // Find the shortest distance between two filter positions
-                    Jumps = Math.Min(Math.Abs(m_sPosition - m_sTargetPosition), m_iSlots - Math.Abs(m_sPosition - m_sTargetPosition));
+                    bool biDirectionalBehaviour = true;
+
+                    // Emulate uni-directional or bi-directional behaviour
+                    if (biDirectionalBehaviour) // Bi-directional behaviour so pick the shortest route
+                    {
+                        // Find the shortest distance between two filter positions
+                        Jumps = Math.Min(Math.Abs(m_sPosition - m_sTargetPosition), m_iSlots - Math.Abs(m_sPosition - m_sTargetPosition));
+                    }
+                    else // Unidirectional behaviour so use short route when increasing filter number and long route when decreasing filter number
+                    {
+                        if (m_sTargetPosition >= m_sPosition)
+                        {
+                            Jumps = m_sTargetPosition - m_sPosition;
+                        }
+                        else
+                        {
+                            Jumps = m_iSlots - (m_sPosition - m_sTargetPosition);
+                        }
+                    }
+
                     m_iTimeToMove = Jumps * m_iTimeInterval;
 
                     // trigger the "motor"
@@ -255,7 +271,7 @@ namespace ASCOM.Simulator
 
         // For the Handbox
         public static bool Moving { get { return m_bMoving; } }
-        
+
         // For the Handbox
         public static int Interval { get { return m_iTimeInterval; } }
 
@@ -268,7 +284,7 @@ namespace ASCOM.Simulator
         // For the Handbox
         public static Color CurrFilterColour { get { return m_acFilterColours[m_sPosition]; } }
 
-         // Sends the Pump interval from the Handbox
+        // Sends the Pump interval from the Handbox
         public static int TimerTickInverval { set { m_iTimerTickInterval = value; } }
 
         public static void AbortMove()
@@ -322,11 +338,11 @@ namespace ASCOM.Simulator
         }
 
 
-#endregion
+        #endregion
 
 
-#region private utilities
-    
+        #region private utilities
+
         //
         // Get Settings from Registry
         //
@@ -334,7 +350,7 @@ namespace ASCOM.Simulator
         {
             int i;
 
-            if (g_Profile.GetValue(g_csDriverID, "RegVer","","") != m_sRegVer)
+            if (g_Profile.GetValue(g_csDriverID, "RegVer", "", "") != m_sRegVer)
             {
                 //
                 // initialize variables that are not present
@@ -424,19 +440,19 @@ namespace ASCOM.Simulator
 
             SetupDialog.Close();
             SetupDialog.Dispose();
-            
+
             // Show the main handbox form
             FilterWheelSim.m_MainForm.Show();
 
         }
-            
+
         private static void LogTraffic(string Text)
         {
             if (m_bLogTraffic)
                 Trace.WriteLine(Text);
         }
 
-#endregion
+        #endregion
 
     }
 }

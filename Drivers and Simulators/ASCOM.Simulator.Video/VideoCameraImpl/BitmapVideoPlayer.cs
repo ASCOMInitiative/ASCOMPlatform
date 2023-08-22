@@ -11,15 +11,12 @@
 //
 
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using ASCOM;
@@ -30,7 +27,7 @@ using ASCOM.Simulator.VideoCameraImpl;
 
 namespace Simulator.VideoCameraImpl
 {
-	internal struct BufferedFrameInfo
+    internal struct BufferedFrameInfo
 	{
 		public int FirstIntegratedFrameIndex;
 		public int LastIntegratedFrameIndex;

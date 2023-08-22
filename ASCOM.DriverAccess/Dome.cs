@@ -6,12 +6,11 @@
 //
 using System;
 using ASCOM.DeviceInterface;
+using ASCOM.DeviceInterface.DeviceState;
 using ASCOM.Utilities;
-using System.Globalization;
 
 namespace ASCOM.DriverAccess
 {
-    #region Dome wrapper
     /// <summary>
     /// Provides universal access to ASCOM Dome drivers
     /// </summary>
@@ -95,22 +94,38 @@ namespace ASCOM.DriverAccess
             }
         }
 
-		#endregion
+        /// <summary>
+        /// Dome device state
+        /// </summary>
+        public DomeState DomeState
+        {
+            get
+            {
+                // Create a state object to return.
+                DomeState domeState = new DomeState(DeviceState, TL);
+                TL.LogMessage(nameof(DomeState), $"Returning: '{domeState.Altitude}' '{domeState.AtHome}' '{domeState.AtPark}' '{domeState.Azimuth}' '{domeState.ShutterStatus}' '{domeState.Slewing}' '{domeState.TimeStamp}'");
 
-		#region IDome Members
+                // Return the device specific state class
+                return domeState;
+            }
+        }
 
-		/// <summary>Immediately stops any and all movement.</summary>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red">
-		/// <b>Must be implemented, must not throw a MethodNotImplementedException.</b>
-		/// </p>
-		/// Calling this method will immediately disable hardware slewing (<see cref="Slaved" /> will
-		/// become <see langword="false" />). Raises an error if a communications failure occurs, or if the
-		/// command is known to have failed.
-		/// </remarks>
-		public void AbortSlew()
+        #endregion
+
+        #region IDome Members
+
+        /// <summary>Immediately stops any and all movement.</summary>
+        /// <exception cref="NotConnectedException">If the device is not connected.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks>
+        /// <p style="color:red">
+        /// <b>Must be implemented, must not throw a MethodNotImplementedException.</b>
+        /// </p>
+        /// Calling this method will immediately disable hardware slewing (<see cref="Slaved" /> will
+        /// become <see langword="false" />). Raises an error if a communications failure occurs, or if the
+        /// command is known to have failed.
+        /// </remarks>
+        public void AbortSlew()
         {
             memberFactory.CallMember(3, "AbortSlew", new Type[] { }, new object[] { });
         }
@@ -492,5 +507,4 @@ namespace ASCOM.DriverAccess
 
         #endregion
     }
-    #endregion
 }

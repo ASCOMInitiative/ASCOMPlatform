@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Globalization;
 
 //// Artinsoft
 //// Author: Mauricio Rojas orellabac@gmail.com mrojas@artinsoft.com

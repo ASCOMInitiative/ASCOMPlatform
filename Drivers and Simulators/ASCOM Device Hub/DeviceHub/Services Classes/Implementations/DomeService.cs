@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections;
-
-using ASCOM;
 using ASCOM.DeviceInterface;
 
 namespace ASCOM.DeviceHub
 {
-	public class DomeService : IDomeService
+    public class DomeService : IDomeService
 	{
 		private string DeviceID { get; set; }
 		private ASCOM.DriverAccess.Dome Dome { get; set; }

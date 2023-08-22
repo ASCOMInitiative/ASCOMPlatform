@@ -17,6 +17,8 @@
 // 29 Dec 2010  cdr         Extensive refactoring and bug fixes
 // --------------------------------------------------------------------------------
 //
+// Ignore Spelling: Dialog
+
 using System;
 using System.Collections;
 using System.Globalization;
@@ -25,8 +27,10 @@ using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace ASCOM.Simulator
 {
@@ -42,26 +46,35 @@ namespace ASCOM.Simulator
     [ServedClassName("Telescope Simulator for .NET")]
     [ProgId("ASCOM.Simulator.Telescope")]
     [ClassInterface(ClassInterfaceType.None)]
-    public class Telescope : ReferenceCountedObjectBase, ITelescopeV3
+    public class Telescope : ReferenceCountedObjectBase, ITelescopeV4
     {
-        //
+        private const int UNPARK_COMPLETION_DELAY = 1000; // Delay time (ms) before an Unpark operation completes.
+
+        // Constants for Action / SupportedActions
+        private const string SLEW_TO_HA = "SlewToHA";
+        private const string SLEW_TO_HA_UPPER = "SLEWTOHA";
+        private const string ASSEMBLY_VERSION_NUMBER = "AssemblyVersionNumber";
+        private const string ASSEMBLY_VERSION_NUMBER_UPPER = "ASSEMBLYVERSIONNUMBER";
+        private const string TIME_UNTIL_POINTINSTATE_CAN_CHANGE = "TIMEUNTILPOINTINGSTATECANCHANGE";
+        private const string AVAILABLE_TIME_IN_THIS_POINTING_STATE = "AVAILABLETIMEINTHISPOINTINGSTATE";
+
         // Driver private data (rate collections)
-        //
         private AxisRates[] m_AxisRates;
         private TrackingRates m_TrackingRates;
         private TrackingRatesSimple m_TrackingRatesSimple;
         private ASCOM.Utilities.Util m_Util;
         private string driverID;
         private long objectId;
+        private bool connecting = false;
 
-        const string SlewToHA = "SlewToHA"; const string SlewToHAUpper = "SLEWTOHA";
-        const string AssemblyVersionNumber = "AssemblyVersionNumber"; const string AssemblyVersionNumberUpper = "ASSEMBLYVERSIONNUMBER";
-        const string TimeUntilPointingStateCanChange = "TIMEUNTILPOINTINGSTATECANCHANGE";
-        const string AvailableTimeInThisPointingState = "AVAILABLETIMEINTHISPOINTINGSTATE";
+        private bool connected = false; // Holds connected state for this instance
 
-        //
+        // Local copies of the guide rates are kept here because the TelescopeHardware GuideRateRightAscension and GuideRateDeclination values
+        // can have their direction signs changed during PulseGuide operations.
+        private double currentGuideRateRightAscension;
+        private double currentGuideRateDeclination;
+
         // Constructor - Must be public for COM registration!
-        //
         public Telescope()
         {
             try
@@ -77,6 +90,12 @@ namespace ASCOM.Simulator
                 // get a unique instance id
                 objectId = TelescopeHardware.GetId();
                 TelescopeHardware.TL.LogMessage("New", "Instance ID: " + objectId + ", new: " + "Driver ID: " + driverID);
+
+                // Initialise the guide rates from the Telescope hardware default values
+                currentGuideRateRightAscension = TelescopeHardware.GuideRateRightAscension;
+                currentGuideRateDeclination = TelescopeHardware.GuideRateDeclination;
+                if (TelescopeHardware.InterfaceVersion >= 4)
+                    Connecting = false;
             }
             catch (Exception ex)
             {
@@ -86,24 +105,141 @@ namespace ASCOM.Simulator
 
         }
 
-        //
-        // PUBLIC COM INTERFACE ITelescope IMPLEMENTATION
-        //
+        #region ITelescopeV4 members
+
+        /// <summary>
+        /// Connect to the telescope asynchronously
+        /// </summary>
+        public void Connect()
+        {
+            // This method is only valid in interface V4 and later
+            CheckCapability(TelescopeHardware.InterfaceVersion >= 4, "Connect");
+
+            TelescopeHardware.TL.LogMessage("Connect Operation", $"Starting Connect()...");
+
+            // Set the completion variable to the "process running" state
+            Connecting = true;
+
+            // Start a task that will flag the Connect operation as complete after a set time interval
+            Task.Run(() =>
+            {
+                // Simulate a long connection phase
+                Thread.Sleep(1000);
+
+                // Set the Connected state to true
+                Connected = true;
+
+                // Set the completion variable to the "process complete" state to show that the Connect operation has completed
+                Connecting = false;
+
+                TelescopeHardware.TL.LogMessage("Connect Operation", $"Completed Connect()");
+            });
+
+            // End of the Connect operation initiator
+        }
+
+        /// <summary>
+        /// Disconnect from the telescope asynchronously
+        /// </summary>
+        public void Disconnect()
+        {
+            // This method is only valid in interface V4 and later
+            CheckCapability(TelescopeHardware.InterfaceVersion >= 4, "Disconnect");
+
+            TelescopeHardware.TL.LogMessage("Disconnect Operation", $"Starting Disconnect...");
+
+            // Set the completion variable to the "process running" state
+            Connecting = true;
+
+            // Start a task that will flag the Disconnect operation as complete after a set time interval
+            Task.Run(() =>
+            {
+                // Simulate a long connection phase
+                Thread.Sleep(1000);
+
+                // Set the Connected state to true
+                Connected = false;
+
+                // Set the completion variable to the "process complete" state to show that the Disconnect operation has completed
+                Connecting = false;
+
+                TelescopeHardware.TL.LogMessage("Disconnect Operation", $"Completed Disconnect()");
+            });
+
+            // End of the Disconnect operation initiator
+        }
+
+        /// <summary>
+        /// Connect / Disconnect completion variable. Returns true when an operation is underway, otherwise false
+        /// </summary>
+        public bool Connecting
+        {
+            get
+            {
+                // This method is only valid in interface V4 and later
+                CheckCapability(TelescopeHardware.InterfaceVersion >= 4, "Connecting", false);
+
+                return connecting;
+            }
+
+            private set
+            {
+                // This method is only valid in interface V4 and later
+                CheckCapability(TelescopeHardware.InterfaceVersion >= 4, "Connecting", true);
+
+                connecting = value;
+            }
+        }
+
+        /// <summary>
+        /// Return the device's operational state in one call
+        /// </summary>
+        public ArrayList DeviceState
+        {
+            get
+            {
+                // This method is only valid in interface V4 and later
+                CheckCapability(TelescopeHardware.InterfaceVersion >= 4, "DeviceState", false);
+
+                // Create an array list to hold the IStateValue entries
+                ArrayList deviceState = new ArrayList();
+
+                // Add one entry for each operational state, if possible
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Altitude), Altitude)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.AtHome), AtHome)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.AtPark), AtPark)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Azimuth), Azimuth)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Declination), Declination)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.IsPulseGuiding), IsPulseGuiding)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.RightAscension), RightAscension)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.SideOfPier), SideOfPier)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.SiderealTime), SiderealTime)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Slewing), Slewing)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Tracking), Tracking)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ITelescopeV4.UTCDate), UTCDate)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                // Return the overall device state
+                return deviceState;
+            }
+        }
+
+        #endregion
 
         #region ITelescope Members
 
         public string Action(string ActionName, string ActionParameters)
         {
             //throw new MethodNotImplementedException("Action");
-            string Response = "";
+            string Response;
             if (ActionName == null)
                 throw new InvalidValueException("no ActionName is provided");
             switch (ActionName.ToUpper(CultureInfo.InvariantCulture))
             {
-                case AssemblyVersionNumberUpper:
+                case ASSEMBLY_VERSION_NUMBER_UPPER:
                     Response = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                     break;
-                case SlewToHAUpper:
+                case SLEW_TO_HA_UPPER:
                     //Assume that we have just been supplied with an HA
                     //Let errors just go straight back to the caller
                     double HA = double.Parse(ActionParameters, CultureInfo.InvariantCulture);
@@ -111,14 +247,14 @@ namespace ASCOM.Simulator
                     this.SlewToCoordinates(RA, 0.0);
                     Response = "Slew successful!";
                     break;
-                case AvailableTimeInThisPointingState:
+                case AVAILABLE_TIME_IN_THIS_POINTING_STATE:
                     Response = TelescopeHardware.AvailableTimeInThisPointingState.ToString();
                     break;
-                case TimeUntilPointingStateCanChange:
+                case TIME_UNTIL_POINTINSTATE_CAN_CHANGE:
                     Response = TelescopeHardware.TimeUntilPointingStateCanChange.ToString();
                     break;
                 default:
-                    throw new ASCOM.InvalidOperationException("Command: '" + ActionName + "' is not recognised by the Scope Simulator .NET driver. " + AssemblyVersionNumberUpper + " " + SlewToHAUpper);
+                    throw new ASCOM.InvalidOperationException("Command: '" + ActionName + "' is not recognised by the Scope Simulator .NET driver. " + ASSEMBLY_VERSION_NUMBER_UPPER + " " + SLEW_TO_HA_UPPER);
             }
             return Response;
         }
@@ -133,8 +269,8 @@ namespace ASCOM.Simulator
             {
                 ArrayList sa = new ArrayList
                 {
-                    AssemblyVersionNumber, // Add a test action to return a value
-                    SlewToHA, // Expects a numeric HA Parameter
+                    ASSEMBLY_VERSION_NUMBER, // Add a test action to return a value
+                    SLEW_TO_HA, // Expects a numeric HA Parameter
                     "AvailableTimeInThisPointingState",
                     "TimeUntilPointingStateCanChange"
                 };
@@ -349,6 +485,14 @@ namespace ASCOM.Simulator
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Capabilities, "CanSetPierSide: ");
                 CheckVersionOne("CanSetPierSide", false);
+
+                // The ASCOM interface specification states that Set SideOfPier is only valid for German equatorial mounts
+                if (TelescopeHardware.AlignmentMode != AlignmentModes.algGermanPolar)
+                {
+                    SharedResources.TrafficEnd(false.ToString());
+                    return false;
+                }
+
                 SharedResources.TrafficEnd(TelescopeHardware.CanSetPierSide.ToString());
                 return TelescopeHardware.CanSetPierSide;
             }
@@ -465,7 +609,6 @@ namespace ASCOM.Simulator
         {
             get
             {
-                var connected = TelescopeHardware.Connected;
                 SharedResources.TrafficLine(SharedResources.MessageType.Other, "Connected = " + connected.ToString());
                 TelescopeHardware.TL.LogMessage("Connected Get", connected.ToString());
                 return connected;
@@ -475,6 +618,7 @@ namespace ASCOM.Simulator
                 SharedResources.TrafficLine(SharedResources.MessageType.Other, "Set Connected to " + value.ToString());
                 TelescopeHardware.TL.LogMessage("Connected Set", value.ToString());
                 TelescopeHardware.SetConnected(objectId, value);
+                connected = value;
             }
         }
 
@@ -526,7 +670,7 @@ namespace ASCOM.Simulator
             SharedResources.TrafficStart(SharedResources.MessageType.Other, "DestinationSideOfPier: ");
             CheckVersionOne("DestinationSideOfPier");
             SharedResources.TrafficStart(string.Format(CultureInfo.CurrentCulture, "Ra {0}, Dec {1} - ", RightAscension, Declination));
-            CheckCapability(TelescopeHardware.CanDestinationSideofPier, "DestinationSideOfPier");
+            CheckCapability(TelescopeHardware.CanDestinationSideOfPier, "DestinationSideOfPier");
 
             PierSide ps = TelescopeHardware.SideOfPierRaDec(RightAscension, Declination);
             SharedResources.TrafficEnd(ps.ToString());
@@ -626,9 +770,14 @@ namespace ASCOM.Simulator
 
             TelescopeHardware.FindHome();
 
-            while (TelescopeHardware.SlewState == SlewType.SlewHome || TelescopeHardware.SlewState == SlewType.SlewSettle)
+            if (TelescopeHardware.InterfaceVersion < 4)
             {
-                System.Windows.Forms.Application.DoEvents();
+                // Interface v3 and earlier behaviour
+                while (TelescopeHardware.SlewState == SlewType.SlewHome || TelescopeHardware.SlewState == SlewType.SlewSettle)
+                {
+                    Thread.Sleep(50);
+                    System.Windows.Forms.Application.DoEvents();
+                }
             }
 
             SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "(done)");
@@ -653,13 +802,14 @@ namespace ASCOM.Simulator
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateDeclination: ");
                 CheckVersionOne("GuideRateDeclination", false);
                 SharedResources.TrafficEnd(TelescopeHardware.GuideRateDeclination.ToString(CultureInfo.InvariantCulture));
-                return TelescopeHardware.GuideRateDeclination;
+                return currentGuideRateDeclination; // Return the value set by the user
             }
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateDeclination->: ");
                 CheckVersionOne("GuideRateDeclination", true);
                 SharedResources.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
+                currentGuideRateDeclination = value; // Save the value set by the user so that it can be returned by GET GuideRateDeclination
                 TelescopeHardware.GuideRateDeclination = value;
             }
         }
@@ -671,13 +821,14 @@ namespace ASCOM.Simulator
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateRightAscension: ");
                 CheckVersionOne("GuideRateRightAscension", false);
                 SharedResources.TrafficEnd(TelescopeHardware.GuideRateRightAscension.ToString(CultureInfo.InvariantCulture));
-                return TelescopeHardware.GuideRateRightAscension;
+                return currentGuideRateRightAscension; // Return the value set by the user
             }
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateRightAscension->: ");
                 CheckVersionOne("GuideRateRightAscension", true);
                 SharedResources.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
+                currentGuideRateRightAscension = value; // Save the value set by the user so that it can be returned by GET GuideRateRightAscension
                 TelescopeHardware.GuideRateRightAscension = value;
             }
         }
@@ -687,8 +838,8 @@ namespace ASCOM.Simulator
             get
             {
                 CheckVersionOne("InterfaceVersion", false);
-                SharedResources.TrafficLine(SharedResources.MessageType.Other, "InterfaceVersion: 3");
-                return 3;
+                SharedResources.TrafficLine(SharedResources.MessageType.Other, $"InterfaceVersion: {TelescopeHardware.InterfaceVersion}");
+                return TelescopeHardware.InterfaceVersion;
             }
         }
 
@@ -723,15 +874,92 @@ namespace ASCOM.Simulator
 
                     CheckParked("MoveAxis");
 
+                    TelescopeHardware.TL.LogMessage("MoveAxis", $"Axis {Axis} set to {Rate} degrees per second");
+
+                    // Manage the operation status based on whether or not the supplied rate is zero
+                    if (Rate == 0.0) // Rate is zero
+                    {
+                        switch (TelescopeHardware.CurrentOperation)
+                        {
+                            case Operation.Uninitialised: // These should never happen!
+                            case Operation.All:
+                                throw new InvalidValueException($"TelescopeSimulator.MoveAxis - Operation state is {TelescopeHardware.CurrentOperation}, which should never happen!");
+
+                            case Operation.None: // No operation currently underway
+                                // No operation currently underway so ignore this request to stop movement.
+                                TelescopeHardware.TL.LogMessage("MoveAxis", $"Request to set the MoveAxis rate to 0.0 and no operation currently running - ignoring request. Slewing: {TelescopeHardware.IsSlewing}");
+                                break;
+
+                            case Operation.MoveAxis: // A MoveAxis operation is underway
+                                if (Axis == TelescopeAxes.axisPrimary) // Rate is being set for the Primary axis
+                                {
+                                    // Check whether the secondary axis is currently moving
+                                    if (TelescopeHardware.rateMoveAxes.Y == 0.0) // Secondary axis does not have a rate set
+                                    {
+                                        // Both axes now have a rate of 0.0 so end the MoveAxis operation
+                                        TelescopeHardware.EndOperation("MoveAxis - Primary");
+                                    }
+                                    else // Secondary axis does have a rate set
+                                    {
+                                        // No action - A MoveAxis operation is still in progress on the secondary axis so leave the current operation state intact
+                                    }
+                                }
+                                else if (Axis == TelescopeAxes.axisSecondary) // Rate is being set for the Secondary axis
+                                {
+                                    // Check whether the primary axis is currently moving
+                                    if (TelescopeHardware.rateMoveAxes.X == 0.0) // Primary axis does not have a rate set
+                                    {
+                                        // Both axes now have a rate of 0.0 so end the MoveAxis operation
+                                        TelescopeHardware.EndOperation("MoveAxis - Secondary");
+                                    }
+                                    else // Primary axis does have a rate set
+                                    {
+                                        // No action - A MoveAxis operation is still in progress on the primary axis so leave the current operation state intact
+                                    }
+                                }
+                                else // Tertiary axis
+                                {
+                                    // We don't support the tertiary axis in this simulator so ignore
+                                }
+                                break;
+
+                            default: // Some other operation is underway
+                                // No need to change the current operation state.
+                                break;
+                        }
+                    }
+                    else // Non-zero rate
+                    {
+                        switch (TelescopeHardware.CurrentOperation)
+                        {
+                            case Operation.Uninitialised: // These should never happen!
+                            case Operation.All:
+                                throw new InvalidValueException($"TelescopeSimulator.MoveAxis - Operation state is {TelescopeHardware.CurrentOperation}, which should never happen!");
+
+                            default: // No operation, MoveAxis or some other operation is underway so start a MoveAxis operation
+                                if ((Axis == TelescopeAxes.axisPrimary) | (Axis == TelescopeAxes.axisSecondary)) // Rate is being set for the Primary or Secondary axis
+                                {
+                                    // Start a MoveAxis operation
+                                    TelescopeHardware.StartOperation(Operation.MoveAxis);
+                                }
+                                else // Tertiary axis
+                                {
+                                    // We don't support the tertiary axis in this simulator so ignore
+                                }
+                                break;
+                        }
+                    }
+
+                    // Set the supplied rate
                     switch (Axis)
                     {
-                        case ASCOM.DeviceInterface.TelescopeAxes.axisPrimary:
+                        case TelescopeAxes.axisPrimary:
                             TelescopeHardware.rateMoveAxes.X = Rate;
                             break;
-                        case ASCOM.DeviceInterface.TelescopeAxes.axisSecondary:
+                        case TelescopeAxes.axisSecondary:
                             TelescopeHardware.rateMoveAxes.Y = Rate;
                             break;
-                        case ASCOM.DeviceInterface.TelescopeAxes.axisTertiary:
+                        case TelescopeAxes.axisTertiary:
                             // not implemented
                             break;
                     }
@@ -764,14 +992,17 @@ namespace ASCOM.Simulator
                 SharedResources.TrafficEnd("(Is Parked)");
                 return;
             }
-
             TelescopeHardware.Park();
 
-            while (TelescopeHardware.SlewState == SlewType.SlewPark)
+            if (TelescopeHardware.InterfaceVersion < 4)
             {
-                System.Windows.Forms.Application.DoEvents();
+                // Interface v3 and earlier behaviour
+                while (TelescopeHardware.SlewState == SlewType.SlewPark)
+                {
+                    Thread.Sleep(50);
+                    System.Windows.Forms.Application.DoEvents();
+                }
             }
-
             SharedResources.TrafficEnd("(done)");
         }
 
@@ -810,6 +1041,12 @@ namespace ASCOM.Simulator
                     }
                     else // Start the pulse guide
                     {
+                        // Start a PulseGuide operation if necessary
+                        if (!IsPulseGuiding)
+                        {
+                            TelescopeHardware.StartOperation(Operation.PulseGuide);
+                        }
+
                         switch (Direction)
                         {
                             case GuideDirections.guideNorth:
@@ -926,15 +1163,20 @@ namespace ASCOM.Simulator
                 SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SideOfPier: ");
                 CheckCapability(TelescopeHardware.CanSetPierSide, "SideOfPier", true);
 
+                // The ASCOM interface specification states that Set SideOfPier is only valid for German equatorial mounts
+                CheckCapability(TelescopeHardware.AlignmentMode == AlignmentModes.algGermanPolar, "SideOfPier", true);
+
                 if (value == TelescopeHardware.SideOfPier)
                 {
                     SharedResources.TrafficEnd("(no change needed)");
                     return;
                 }
+
                 // TODO implement this correctly, it needs an overlap which can be reached on either side
                 TelescopeHardware.SideOfPier = value;
+
                 // slew to the same position, changing the side of pier appropriately if possible
-                TelescopeHardware.StartSlewRaDec(TelescopeHardware.RightAscension, TelescopeHardware.Declination, true);
+                TelescopeHardware.StartSlewRaDec(TelescopeHardware.RightAscension, TelescopeHardware.Declination, true, Operation.SideOfPier);
                 SharedResources.TrafficEnd("(started)");
             }
         }
@@ -1014,14 +1256,14 @@ namespace ASCOM.Simulator
             get
             {
                 SharedResources.TrafficLine(SharedResources.MessageType.Other, "SlewSettleTime: " + (TelescopeHardware.SlewSettleTime * 1000).ToString(CultureInfo.InvariantCulture));
-                return (short)(TelescopeHardware.SlewSettleTime * 1000);
+                return (short)(TelescopeHardware.SlewSettleTime);
             }
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Other, "SlewSettleTime:-> ");
                 CheckRange(value, 0, 100, "SlewSettleTime");
                 SharedResources.TrafficEnd(value + " (done)");
-                TelescopeHardware.SlewSettleTime = value / 1000;
+                TelescopeHardware.SlewSettleTime = value;
             }
         }
 
@@ -1036,10 +1278,12 @@ namespace ASCOM.Simulator
             CheckRange(Altitude, -90, 90, "SlewToAltAz", "Altitude");
 
             SharedResources.TrafficStart(" Alt " + m_Util.DegreesToDMS(Altitude) + " Az " + m_Util.DegreesToDMS(Azimuth));
-            TelescopeHardware.StartSlewAltAz(Altitude, Azimuth);
+
+            TelescopeHardware.StartSlewAltAz(Altitude, Azimuth, Operation.SlewToAltAzAsync);
 
             while (TelescopeHardware.SlewState == SlewType.SlewAltAz || TelescopeHardware.SlewState == SlewType.SlewSettle)
             {
+                Thread.Sleep(500);
                 System.Windows.Forms.Application.DoEvents();
             }
             SharedResources.TrafficEnd(" done");
@@ -1057,7 +1301,7 @@ namespace ASCOM.Simulator
 
             SharedResources.TrafficStart(" Alt " + m_Util.DegreesToDMS(Altitude) + " Az " + m_Util.DegreesToDMS(Azimuth));
 
-            TelescopeHardware.StartSlewAltAz(Altitude, Azimuth);
+            TelescopeHardware.StartSlewAltAz(Altitude, Azimuth, Operation.SlewToAltAzAsync);
             SharedResources.TrafficEnd(" started");
         }
 
@@ -1076,11 +1320,12 @@ namespace ASCOM.Simulator
             TelescopeHardware.TargetRightAscension = RightAscension; // Set the Target RA and Dec prior to the Slew attempt per the ASCOM Telescope specification
             TelescopeHardware.TargetDeclination = Declination;
 
-            TelescopeHardware.StartSlewRaDec(RightAscension, Declination, true);
+            TelescopeHardware.StartSlewRaDec(RightAscension, Declination, true, Operation.SlewToCoordinatesAsync);
 
             //while (TelescopeHardware.SlewState == SlewType.SlewRaDec || TelescopeHardware.SlewState == SlewType.SlewSettle)
             while (TelescopeHardware.IsSlewing)
             {
+                Thread.Sleep(500);
                 System.Windows.Forms.Application.DoEvents();
             }
             SharedResources.TrafficEnd("done");
@@ -1101,7 +1346,7 @@ namespace ASCOM.Simulator
 
             SharedResources.TrafficStart(" RA " + m_Util.HoursToHMS(RightAscension) + " DEC " + m_Util.DegreesToDMS(Declination));
 
-            TelescopeHardware.StartSlewRaDec(RightAscension, Declination, true);
+            TelescopeHardware.StartSlewRaDec(RightAscension, Declination, true, Operation.SlewToCoordinatesAsync);
             SharedResources.TrafficEnd("started");
         }
 
@@ -1115,10 +1360,11 @@ namespace ASCOM.Simulator
             TelescopeHardware.RestoreTrackingStateIfNecessary(); // Restore the configured Tracking state if the client is prevented from doing this by simulator configuration
             CheckTracking(true, "SlewToTarget");
 
-            TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.TargetDeclination, true);
+            TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.TargetDeclination, true, Operation.SlewToTargetAsync);
 
             while (TelescopeHardware.SlewState == SlewType.SlewRaDec || TelescopeHardware.SlewState == SlewType.SlewSettle)
             {
+                Thread.Sleep(500);
                 System.Windows.Forms.Application.DoEvents();
             }
             SharedResources.TrafficEnd("done");
@@ -1133,7 +1379,8 @@ namespace ASCOM.Simulator
             CheckParked("SlewToTargetAsync");
             TelescopeHardware.RestoreTrackingStateIfNecessary(); // Restore the configured Tracking state if the client is prevented from doing this by simulator configuration
             CheckTracking(true, "SlewToTargetAsync");
-            TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.TargetDeclination, true);
+
+            TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.TargetDeclination, true, Operation.SlewToTargetAsync);
         }
 
         public bool Slewing
@@ -1159,7 +1406,7 @@ namespace ASCOM.Simulator
 
             TelescopeHardware.ChangePark(false);
 
-            TelescopeHardware.SyncToAltAzm(Azimuth, Altitude);
+            TelescopeHardware.SyncToAltAz(Azimuth, Altitude);
 
             //TelescopeHardware.Altitude = Altitude;
             //TelescopeHardware.Azimuth = Azimuth;
@@ -1321,15 +1568,54 @@ namespace ASCOM.Simulator
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, "UnPark: ");
             CheckCapability(TelescopeHardware.CanUnpark, "UnPark");
 
-            TelescopeHardware.ChangePark(false);
-            TelescopeHardware.Tracking = TelescopeHardware.AutoTrack;
+            // Flag that the operation has started
+            TelescopeHardware.StartOperation(Operation.Unpark);
+
+            // Interface v3 and earlier behaviour
+            if (TelescopeHardware.InterfaceVersion < 4)// Interface is V3 or earlier
+            {
+                TelescopeHardware.Tracking = TelescopeHardware.AutoTrack;
+                TelescopeHardware.ChangePark(false);
+                TelescopeHardware.EndOperation("Unpark V3");
+            }
+            else // Interface is v4 or later
+            {
+                // If parked, run a task to wait before completing the Unpark operation
+                if (AtPark)
+                {
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            TelescopeHardware.TL.LogMessage("UnparkTask", $"Waiting for {UNPARK_COMPLETION_DELAY}ms delay...");
+                            WaitFor(UNPARK_COMPLETION_DELAY); // Wait
+
+                            TelescopeHardware.Tracking = TelescopeHardware.AutoTrack;
+                            TelescopeHardware.ChangePark(false);
+                            TelescopeHardware.EndOperation("Unpark V4 - Parked");
+                            TelescopeHardware.TL.LogMessage("UnparkTask", $"Unpark completed.");
+                        }
+                        catch (Exception ex)
+                        {
+                            TelescopeHardware.TL.LogMessage("UnparkTask", $"Exception {ex.Message}\r\n{ex}.");
+                            TelescopeHardware.EndOperation("Unpark V4 - Exception", ex);
+                        }
+                    });
+                }
+                else
+                {
+                    TelescopeHardware.Tracking = TelescopeHardware.AutoTrack;
+                    TelescopeHardware.ChangePark(false);
+                    TelescopeHardware.EndOperation("Unpark V4 - Not Parked");
+                }
+            }
 
             SharedResources.TrafficEnd("(done)");
         }
 
         #endregion
 
-        #region new pier side properties
+        #region New pier side properties 
 
         //public double AvailableTimeInThisPointingState
         //{
@@ -1357,7 +1643,22 @@ namespace ASCOM.Simulator
 
         #endregion
 
-        #region private methods
+        #region Private methods
+
+        /// <summary>
+        /// Wait for the given number of milliseconds
+        /// </summary>
+        /// <param name="waitTime"></param>
+        private void WaitFor(int waitTime)
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            while (sw.ElapsedMilliseconds < waitTime)
+            {
+                Thread.Sleep(50);
+                Application.DoEvents();
+            }
+        }
+
         private void CheckRate(TelescopeAxes axis, double rate)
         {
             IAxisRates rates = AxisRates(axis);
@@ -1403,12 +1704,11 @@ namespace ASCOM.Simulator
 
         private static void CheckVersionOne(string property, bool accessorSet)
         {
-            CheckVersionOne(property);
-            //if (TelescopeHardware.VersionOneOnly)
-            //{
-            //    SharedResources.TrafficEnd( property + " invalid in version 1");
-            //    throw new PropertyNotImplementedException(property, accessorSet);
-            //}
+            if (TelescopeHardware.VersionOneOnly)
+            {
+                SharedResources.TrafficEnd(property + " invalid in version 1");
+                throw new PropertyNotImplementedException(property, accessorSet);
+            }
         }
 
         private static void CheckVersionOne(string property)
@@ -1429,12 +1729,13 @@ namespace ASCOM.Simulator
             }
         }
 
-        private static void CheckCapability(bool capability, string property, bool setNotGet)
+        private static void CheckCapability(bool capability, string property, bool isSetter)
         {
             if (!capability)
             {
-                SharedResources.TrafficEnd(string.Format(CultureInfo.CurrentCulture, "{2} {0} not implemented in {1}", capability, property, setNotGet ? "set" : "get"));
-                throw new PropertyNotImplementedException(property, setNotGet);
+                SharedResources.TrafficEnd(string.Format(CultureInfo.CurrentCulture, "{2} {0} not implemented in {1}", capability, property, isSetter ? "set" : "get"));
+                SharedResources.TrafficEnd($"{(isSetter ? "Set" : "Get")} {property} is not implemented.");
+                throw new PropertyNotImplementedException(property, isSetter);
             }
         }
 
@@ -1482,6 +1783,8 @@ namespace ASCOM.Simulator
 
         #endregion
     }
+
+    #region Data classes
 
     //
     // The Rate class implements IRate, and is used to hold values
@@ -1555,7 +1858,7 @@ namespace ASCOM.Simulator
     // The ClassInterface/None attribute prevents an empty interface called
     // _AxisRates from being created and used as the [default] interface
     //
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix"), Guid("af5510b9-3108-4237-83da-ae70524aab7d"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
+    [Guid("af5510b9-3108-4237-83da-ae70524aab7d"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
     public class AxisRates : IAxisRates, IEnumerable, IEnumerator, IDisposable
     {
         private TelescopeAxes m_axis;
@@ -1677,7 +1980,7 @@ namespace ASCOM.Simulator
     // The ClassInterface/None attribute prevents an empty interface called
     // _TrackingRates from being created and used as the [default] interface
     //
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix"), Guid("4bf5c72a-8491-49af-8668-626eac765e91")]
+    [Guid("4bf5c72a-8491-49af-8668-626eac765e91")]
     [ClassInterface(ClassInterfaceType.None)]
     public class TrackingRates : ITrackingRates, IEnumerable, IEnumerator, IDisposable
     {
@@ -1773,7 +2076,7 @@ namespace ASCOM.Simulator
         #endregion
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix"), Guid("46753368-42d1-424a-85fa-26eee8f4c178")]
+    [Guid("46753368-42d1-424a-85fa-26eee8f4c178")]
     [ClassInterface(ClassInterfaceType.None)]
     public class TrackingRatesSimple : ITrackingRates, IEnumerable, IEnumerator, IDisposable
     {
@@ -1869,4 +2172,6 @@ namespace ASCOM.Simulator
         }
         #endregion
     }
+
+    #endregion
 }

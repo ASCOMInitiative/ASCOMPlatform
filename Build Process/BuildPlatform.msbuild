@@ -18,7 +18,7 @@
 				<!--  Specify Release or Debug builds (Debug not working at 25/10/21) -->
 				<Configuration>Release</Configuration>
 
-				<!-- Annotation to add to the installer name to identiy this build type -->
+				<!-- Annotation to add to the installer name to identify this build type -->
 				<BuildTypeAnnotation></BuildTypeAnnotation>
 			</PropertyGroup>
 		</When>
@@ -30,7 +30,7 @@
 				<!--  Specify Release or Debug builds (Debug not working at 25/10/21) -->
 				<Configuration>Release</Configuration>
 
-				<!-- Annotation to add to the installer name to identiy this build type -->
+				<!-- Annotation to add to the installer name to identify this build type -->
 				<BuildTypeAnnotation>beta</BuildTypeAnnotation>
 			</PropertyGroup>
 		</When>
@@ -56,7 +56,7 @@
 		<MIABuild>miabuild.exe</MIABuild>
 
 		<!-- Location of the InstallAware shared strings folder on the build machine -->
-		<MIALanguageFolder>C:\Program Files (x86)\InstallAware X6 Creators Update\trans</MIALanguageFolder>
+		<MIALanguageFolder>C:\Program Files (x86)\InstallAware X15 Creators Update\trans</MIALanguageFolder>
 		<ASCOMSharedStringsDirectory>Releases\ASCOM 6\Translated InstallAware Shared Strings</ASCOMSharedStringsDirectory>
 
 		<!-- Names and locations of solution and project files used by this build script-->
@@ -75,14 +75,20 @@
 		<RemoveASCOMPdb>$(RemoveASCOMDirectory)\RemoveASCOM.pdb</RemoveASCOMPdb>
 		<RemoveASCOMTxt>$(RemoveASCOMDirectory)\GUIDList.txt</RemoveASCOMTxt>
 		<VersionFile>$(CheckoutDirectory)\$(PlatformInstallerDirectory)\MasterPlatformVersion.txt</VersionFile>
-		<VSIXInstallerFile>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\bin\$(Configuration)\ASCOMVsixTemplateInstaller.vsix</VSIXInstallerFile>
-		<VSIXManifestFile>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller\source.extension.vsixmanifest</VSIXManifestFile>
-
+		<VSIXInstallerFileName>ASCOMVsixTemplateInstaller</VSIXInstallerFileName>
+		<VSIXInstallerFileType>vsix</VSIXInstallerFileType>
+		<VSIXInstallerFile2019>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2019\bin\$(Configuration)\$(VSIXInstallerFileName).$(VSIXInstallerFileType)</VSIXInstallerFile2019>
+		<VSIXManifestFile2019>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2019\source.extension.vsixmanifest</VSIXManifestFile2019>
+		<VSIXInstallerFile2022>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2022\bin\$(Configuration)\$(VSIXInstallerFileName).$(VSIXInstallerFileType)</VSIXInstallerFile2022>
+		<VSIXManifestFile2022>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2022\source.extension.vsixmanifest</VSIXManifestFile2022>
+		<PackageVersionFile>Directory.Build.props</PackageVersionFile>
+		<ASCOMExceptionsPackageFolder>Interfaces\ASCOMExceptions\bin\Release</ASCOMExceptionsPackageFolder>
+		<BuildEnvironmentPackageFolder>BuildEnvironment\bin\Release</BuildEnvironmentPackageFolder>
+		
 		<!-- NuGet location and command to restore Platform NuGet dependencies -->
 		<NuGetCommand>..\nuget restore</NuGetCommand>
 
 		<!-- Code signing tool command line bases for SHA1 and SHA256 signing -->
-		<SignToolBase1>signtool sign /as /as /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256</SignToolBase1>
 		<SignToolBase256>signtool sign /a /fd SHA256 /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256</SignToolBase256>
 
 	</PropertyGroup>
@@ -92,7 +98,7 @@
 
 		<!-- Item group for the installers that are created by the build process -->
 		<ItemGroup>
-			<OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe;$(MSBuildProjectDirectory)\RemoveASCOM.*;$(MSBuildProjectDirectory)\*.vsix" />
+			<OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe;$(MSBuildProjectDirectory)\RemoveASCOM*.*;$(MSBuildProjectDirectory)\*.vsix;$(MSBuildProjectDirectory)\*.nupkg" />
 		</ItemGroup>
 
 		<!-- Remove the checkout directory to ensure a clean build, wait until the directory actually goes, -->
@@ -130,8 +136,8 @@
 		<!-- Clone a fresh copy of the ASCOM Platform Git repository  -->
 		<GitClient Command="clone" LocalPath="$(MSBuildProjectDirectory)" Arguments="-b $(GitCheckoutBranch) $(GitRepositoryPath) $(CheckoutDirectoryRelative)"/>
 
-		<!-- Get the latest commit number into the Revision Property to use in the the Platform version number -->
-		<Exec Command="git.exe rev-list HEAD --count" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)">
+		<!-- Get the latest commit number into the Revision Property to use in the the Platform version number  Now uses 'all' instead of 'HEAD' to get the latest commit accross all branches. -->
+		<Exec Command="git.exe rev-list --all --count" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)">
 			<Output TaskParameter="ConsoleOutput" PropertyName="Revision" />
 		</Exec>
 		<Message Text="Revision Level: $(Revision)"/>
@@ -146,12 +152,13 @@
 		<Exec Command="$(NuGetCommand)" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 
 		<!-- Copy the InstallAware shared text strings to the InstallAware program directory. This is the only way that IA will actually use the modified strings! Ugh - but there it is. -->
-		<ItemGroup>
-			<MIASharedStrings Include="$(CheckoutDirectory)\$(ASCOMSharedStringsDirectory)\*.*" />
-		</ItemGroup>
-		<Copy SourceFiles="@(MIASharedStrings)" DestinationFolder="$(MIALanguageFolder)" />
+		<!-- File now stored permanently on the build machine because this approach requires the command prompt to be run with Admin privilege -->
+		<!-- <ItemGroup> -->
+		<!-- 	<MIASharedStrings Include="$(CheckoutDirectory)\$(ASCOMSharedStringsDirectory)\*.*" /> -->
+		<!-- </ItemGroup> -->
+		<!-- <Copy SourceFiles="@(MIASharedStrings)" DestinationFolder="$(MIALanguageFolder)" /> -->
 
-		<!-- Get the Platform version numbers from the MasterPlatformVersion file in the Export-->
+		<!-- Get the Platform version numbers from the MasterPlatformVersion file in the Export -->
 		<ReadLinesFromFile File="$(VersionFile)" >
 			<Output TaskParameter="Lines"
 			ItemName="VersionNumberList" />
@@ -175,14 +182,35 @@
 			</Namespace>
 		</PropertyGroup>
 
-		<Message Text="VSIX Manifest directory: $(CheckoutDirectory)\$(VSIXManifestFile)"/>
-
-		<!-- Update the developer project templates VSIX installer version number with the current build number. -->
+		<!-- Update the developer project templates VS2019 VSIX installer version number with the current build number. -->
 		<XmlPoke
-		  XmlInputPath="$(CheckoutDirectory)\$(VSIXManifestFile)"
-		  Value="$(PlatformMajor).$(PlatformMinor).$(PlatformServicePack).$(Revision)"
+		  XmlInputPath="$(CheckoutDirectory)\$(VSIXManifestFile2019)"
+		  Value="$(PlatformMajor).$(PlatformMinor).$(Revision)"
 		  Query="/vsx:PackageManifest/vsx:Metadata/vsx:Identity/@Version"
 		  Namespaces="$(Namespace)"/>
+		  <Message Text="VSIX Manifest file: $(CheckoutDirectory)\$(VSIXManifestFile2019) version number updated to: $(PlatformMajor).$(PlatformMinor).$(PlatformServicePack).$(Revision)"/>
+
+		<!-- Update the developer project templates VS2022 VSIX installer version number with the current build number. -->
+		<XmlPoke
+		  XmlInputPath="$(CheckoutDirectory)\$(VSIXManifestFile2022)"
+		  Value="$(PlatformMajor).$(PlatformMinor).$(Revision)"
+		  Query="/vsx:PackageManifest/vsx:Metadata/vsx:Identity/@Version"
+		  Namespaces="$(Namespace)"/>
+		  <Message Text="VSIX Manifest file: $(CheckoutDirectory)\$(VSIXManifestFile2022) version number updated to: $(PlatformMajor).$(PlatformMinor).$(PlatformServicePack).$(Revision)"/>
+
+		<!-- Update the master package version number to the current Platform level if this is a release. -->
+		<XmlPoke Condition=" '$(BuildType)'=='Release' "
+		  XmlInputPath="$(CheckoutDirectory)\$(PackageVersionFile)"
+		  Value="$(PlatformMajor).$(PlatformMinor).$(PlatformServicePack)$(PackageSuffix)"
+		  Query="//Version" />
+
+		<!-- Update the master package version number to the current Platform and revision if this is a release. -->
+		<XmlPoke Condition=" '$(BuildType)'=='ReleaseCandidate' "
+		  XmlInputPath="$(CheckoutDirectory)\$(PackageVersionFile)"
+		  Value="$(PlatformMajor).$(PlatformMinor).$(PlatformServicePack)$(PackageSuffix)-rc.$(Revision)"
+		  Query="//Version" />
+
+		<Message Text="Package version file: $(CheckoutDirectory)\$(PackageVersionFile) version number updated to: $(PlatformMajor).$(PlatformMinor).$(PlatformServicePack)"/>
 
 		<!-- Create global AssemblyVersion attributes from the Platform version, service pack and revision numbers. -->
 		<AssemblyInfo
@@ -210,7 +238,6 @@
 
 		<!-- Sign and copy the RemoveASCOM executables, that have just been built, to the installer main directory so that the latest versions are included in the installer -->
 		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(RemoveASCOMExe)&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
-		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(RemoveASCOMExe)&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 		<ItemGroup>
 			<RemoveASCOMExecutables Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb)" />
 		</ItemGroup>
@@ -223,13 +250,9 @@
 		<!-- Sign the executables that support the installation process, these are not automatically signed by the InstallAware build process -->
 		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
-		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
-		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 
 		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
-		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
-		<Exec Command="$(SignToolBase1) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
 
 		<!-- Build the help files for Platform and Developer.-->
 		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=$(Configuration);Platform=AnyCPU" />
@@ -280,13 +303,37 @@
 		<ItemGroup>
 			<ZipFiles Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb);$(CheckoutDirectory)\$(RemoveASCOMTxt)" />
 		</ItemGroup>
-		<Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM.zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
+		<Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM$(BuildTypeAnnotation).$(Revision).zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
 
-		<!-- Copy the VSIX installer to the root folder -->
+		<!-- Copy the VS2019 VSIX installer to the root folder without the beta status -->
 		<ItemGroup>
-			<VSIXInstallerFiles Include="$(CheckoutDirectory)\$(VSIXInstallerFile)"/>
+			<VSIXInstallerSourceFile2019 Include="$(CheckoutDirectory)\$(VSIXInstallerFile2019)"/>
 		</ItemGroup>
-		<Copy SourceFiles="@(VSIXInstallerFiles)" DestinationFolder="$(MSBuildProjectDirectory)" SkipUnchangedFiles="false" />
+		<ItemGroup>
+			<VSIXInstallerDestinationFile2019 Include="$(MSBuildProjectDirectory)\$(VSIXInstallerFileName)2019.$(Revision).$(VSIXInstallerFileType)"/>
+		</ItemGroup>
+		<Copy SourceFiles="@(VSIXInstallerSourceFile2019)" DestinationFiles="@(VSIXInstallerDestinationFile2019)" SkipUnchangedFiles="false" />
+
+		<!-- Copy the VS2022 VSIX installer to the root folder without the beta status -->
+		<ItemGroup>
+			<VSIXInstallerSourceFile2022 Include="$(CheckoutDirectory)\$(VSIXInstallerFile2022)"/>
+		</ItemGroup>
+		<ItemGroup>
+			<VSIXInstallerDestinationFile2022 Include="$(MSBuildProjectDirectory)\$(VSIXInstallerFileName)2022.$(Revision).$(VSIXInstallerFileType)"/>
+		</ItemGroup>
+		<Copy SourceFiles="@(VSIXInstallerSourceFile2022)" DestinationFiles="@(VSIXInstallerDestinationFile2022)" SkipUnchangedFiles="false" />
+
+		<!-- Copy the ASCOM Exceptions package to the root folder -->
+		<ItemGroup>
+			<ExceptionPackage Include="$(CheckoutDirectory)\$(ASCOMExceptionsPackageFolder)\*.nupkg"/>
+		</ItemGroup>
+		<Copy SourceFiles="@(ExceptionPackage)" DestinationFolder="$(MSBuildProjectDirectory)" SkipUnchangedFiles="false" />
+
+		<!-- Copy the ASCOM Build Environment package to the root folder -->
+		<ItemGroup>
+			<BuildEnvironmentPackage Include="$(CheckoutDirectory)\$(BuildEnvironmentPackageFolder)\*.nupkg"/>
+		</ItemGroup>
+		<Copy SourceFiles="@(BuildEnvironmentPackage)" DestinationFolder="$(MSBuildProjectDirectory)" SkipUnchangedFiles="false" />
 
 		<!-- Create a formatted version of the current date and time -->
 		<PropertyGroup>

@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ASCOM.Utilities;
 using System.Diagnostics;
 
 namespace ASCOM.Controls.Demo
-	{
-	public partial class frmDemo : Form
+{
+    public partial class frmDemo : Form
 		{
 		public frmDemo()
 			{

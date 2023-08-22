@@ -4,6 +4,7 @@ Imports ASCOM.Utilities
 Imports ASCOM.Utilities.Exceptions
 Imports System.Text
 Imports System.IO
+Imports System.Security.Cryptography
 
 Namespace SOFA
     ''' <summary>
@@ -1328,6 +1329,50 @@ Namespace SOFA
             Return Convert.ToInt32(RetCode)
         End Function
 
+        Public Sub Hd2ae(ha As Double, dec As Double, phi As Double, ByRef az As Double, ByRef el As Double) Implements ISOFA.Hd2ae
+            If Is64Bit() Then
+                Hd2ae64(ha, dec, phi, az, el)
+            Else
+                Hd2ae32(ha, dec, phi, az, el)
+            End If
+        End Sub
+        Public Sub S2pv(theta As Double, phi As Double, r As Double, td As Double, pd As Double, rd As Double, pv As Double(,)) Implements ISOFA.S2pv
+            If Is64Bit() Then
+                S2pv64(theta, phi, r, td, pd, rd, pv)
+            Else
+                S2pv32(theta, phi, r, td, pd, rd, pv)
+            End If
+
+        End Sub
+        Public Sub Ir(r As Double(,)) Implements ISOFA.Ir
+            If Is64Bit() Then
+                Ir64(r)
+            Else
+                Ir32(r)
+            End If
+        End Sub
+        Public Sub Ry(theta As Double, r As Double(,)) Implements ISOFA.Ry
+            If Is64Bit() Then
+                Ry64(theta, r)
+            Else
+                Ry32(theta, r)
+            End If
+        End Sub
+        Public Sub Rxpv(r As Double(,), pv As Double(,), rpv As Double(,)) Implements ISOFA.Rxpv
+            If Is64Bit() Then
+                Rxpv64(r, pv, rpv)
+            Else
+                Rxpv32(r, pv, rpv)
+            End If
+        End Sub
+        Public Sub Pv2s(pv As Double(,), ByRef theta As Double, ByRef phi As Double, ByRef r As Double, ByRef td As Double, ByRef pd As Double, ByRef rd As Double) Implements ISOFA.Pv2s
+            If Is64Bit() Then
+                Pv2s64(pv, theta, phi, r, td, pd, rd)
+            Else
+                Pv2s32(pv, theta, phi, r, td, pd, rd)
+            End If
+        End Sub
+
 #End Region
 
 #Region "Private SOFA DLL access Functions"
@@ -1596,6 +1641,48 @@ Namespace SOFA
         <DllImport(SOFA32DLL, EntryPoint:="NumberOfBuiltInLeapSecondValues")>
         Private Shared Function NumberOfBuiltInLeapSecondValues32() As Short
         End Function
+        <DllImport(SOFA32DLL, EntryPoint:="iauHd2ae")>
+        Private Shared Sub Hd2ae32(ha As Double,
+                                   dec As Double,
+                                   phi As Double,
+                                   ByRef az As Double,
+                                   ByRef el As Double)
+        End Sub
+
+        <DllImport(SOFA32DLL, EntryPoint:="iauS2pv")>
+        Private Shared Sub S2pv32(theta As Double,
+                                phi As Double,
+                                r As Double,
+                                td As Double,
+                                pd As Double,
+                                rd As Double,
+                                pv As Double(,))
+        End Sub
+
+        <DllImport(SOFA32DLL, EntryPoint:="iauIr")>
+        Private Shared Sub Ir32(r As Double(,))
+        End Sub
+
+        <DllImport(SOFA32DLL, EntryPoint:="iauRy")>
+        Private Shared Sub Ry32(theta As Double,
+                              r As Double(,))
+        End Sub
+
+        <DllImport(SOFA32DLL, EntryPoint:="iauRxpv")>
+        Private Shared Sub Rxpv32(r As Double(,),
+                                pv As Double(,),
+                                rpv As Double(,))
+        End Sub
+
+        <DllImport(SOFA32DLL, EntryPoint:="iauPv2s")>
+        Private Shared Sub Pv2s32(pv As Double(,),
+                                ByRef theta As Double,
+                                ByRef phi As Double,
+                                ByRef r As Double,
+                                ByRef td As Double,
+                                ByRef pd As Double,
+                                ByRef rd As Double)
+        End Sub
 
 #End Region
 
@@ -1805,6 +1892,49 @@ Namespace SOFA
         <DllImport(SOFA64DLL, EntryPoint:="NumberOfBuiltInLeapSecondValues")>
         Private Shared Function NumberOfBuiltInLeapSecondValues64() As Short
         End Function
+
+        <DllImport(SOFA64DLL, EntryPoint:="iauHd2ae")>
+        Private Shared Sub Hd2ae64(ha As Double,
+                                   dec As Double,
+                                   phi As Double,
+                                   ByRef az As Double,
+                                   ByRef el As Double)
+        End Sub
+
+        <DllImport(SOFA64DLL, EntryPoint:="iauS2pv")>
+        Private Shared Sub S2pv64(theta As Double,
+                                phi As Double,
+                                r As Double,
+                                td As Double,
+                                pd As Double,
+                                rd As Double,
+                                pv As Double(,))
+        End Sub
+
+        <DllImport(SOFA64DLL, EntryPoint:="iauIr")>
+        Private Shared Sub Ir64(r As Double(,))
+        End Sub
+
+        <DllImport(SOFA64DLL, EntryPoint:="iauRy")>
+        Private Shared Sub Ry64(theta As Double,
+                              r As Double(,))
+        End Sub
+
+        <DllImport(SOFA64DLL, EntryPoint:="iauRxpv")>
+        Private Shared Sub Rxpv64(r As Double(,),
+                                pv As Double(,),
+                                rpv As Double(,))
+        End Sub
+
+        <DllImport(SOFA64DLL, EntryPoint:="iauPv2s")>
+        Private Shared Sub Pv2s64(pv As Double(,),
+                                ByRef theta As Double,
+                                ByRef phi As Double,
+                                ByRef r As Double,
+                                ByRef td As Double,
+                                ByRef pd As Double,
+                                ByRef rd As Double)
+        End Sub
 
 #End Region
 

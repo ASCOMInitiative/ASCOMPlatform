@@ -86,7 +86,7 @@
       <Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" />
     </ApiFilter>
     <PresentationStyle>VS2013</PresentationStyle>
-    <Preliminary>False</Preliminary>
+    <Preliminary>True</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
     <CleanIntermediates>True</CleanIntermediates>
     <IncludeFavorites>True</IncludeFavorites>
@@ -114,8 +114,7 @@
     </FeedbackEMailAddress>
     <FeedbackEMailLinkText>
     </FeedbackEMailLinkText>
-    <HeaderText>
-    </HeaderText>
+    <HeaderText>Platform 6.6 SP2 - Early Release.</HeaderText>
     <VisibleItems>InheritedMembers, EditorBrowsableNever, NonBrowsable</VisibleItems>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="ASCOM.HelperNET.VB6HelperSupport" isDocumented="False" />
@@ -271,6 +270,7 @@
     <Content Include="styles\branding-Help1.css" />
     <None Include="Developer Information\Astronomical Coordinates.aml" />
     <None Include="Developer Information\Developer Links.aml" />
+    <None Include="Version History\Version 6.6 SP2.aml" />
     <None Include="Version History\Version 6.6 SP1.aml" />
     <None Include="Version History\Version 6.6.aml" />
     <None Include="Tools and Features\AlpacaChooser.aml" />

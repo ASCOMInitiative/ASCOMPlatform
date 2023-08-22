@@ -11,16 +11,9 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using ASCOM.Utilities;
 using ASCOM.Utilities.Exceptions;
-using ASCOM.DeviceInterface;
 
 namespace ASCOM.Utilities.Video
 {

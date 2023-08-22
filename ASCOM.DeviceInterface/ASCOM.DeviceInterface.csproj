@@ -107,6 +107,32 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeviceCapabilities.cs" />
+    <Compile Include="Devices.cs" />
+    <Compile Include="DeviceState Classes\CameraDeviceState.cs" />
+    <Compile Include="DeviceState Classes\CoverCalibratorState.cs" />
+    <Compile Include="DeviceState Classes\DomeState.cs" />
+    <Compile Include="DeviceState Classes\FilterWheelState.cs" />
+    <Compile Include="DeviceState Classes\FocuserState.cs" />
+    <Compile Include="DeviceState Classes\ObservingConditionsState.cs" />
+    <Compile Include="DeviceState Classes\RotatorState.cs" />
+    <Compile Include="DeviceState Classes\SafetyMonitorState.cs" />
+    <Compile Include="DeviceState Classes\TelescopeState.cs" />
+    <Compile Include="DeviceState Classes\VideoState.cs" />
+    <Compile Include="ICameraV4.cs" />
+    <Compile Include="ICoverCalibratorV2.cs" />
+    <Compile Include="IDomeV3.cs" />
+    <Compile Include="IFilterWheelV3.cs" />
+    <Compile Include="IFocuserV4.cs" />
+    <Compile Include="IObservingConditionsV2.cs" />
+    <Compile Include="IRotatorV4.cs" />
+    <Compile Include="ISafetyMonitorV3.cs" />
+    <Compile Include="ISwitchV3.cs" />
+    <Compile Include="ITelescopeV4.cs" />
+    <Compile Include="IVideoFrame.cs" />
+    <Compile Include="IVideoV2.cs" />
+    <Compile Include="StateValue.cs" />
+    <Compile Include="IStateValue.cs" />
     <Compile Include="ICameraV3.cs" />
     <Compile Include="ICoverCalibratorV1.cs" />
     <Compile Include="IRotatorV3.cs" />

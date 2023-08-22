@@ -2,10 +2,7 @@
 // Required code must lie within the device implementation region
 // The //ENDOFINSERTEDFILE tag must be the last but one line in this file
 
-using ASCOM;
-using ASCOM.Utilities;
 using System;
-using static System.Windows.Forms.AxHost;
 
 class DeviceSwitch
 {
