@@ -35,10 +35,6 @@ namespace ASCOM.DynamicRemoteClients
         private bool clientIsConnected;  // Connection state of this driver
         private readonly string URIBase; // URI base unique to this driver
 
-        // Connect / Disconnect emulation variables
-        bool connecting;
-        Exception connectException;
-
         // Variables to hold values that can be configured by the user through the setup form
         private bool traceState = true;
         private bool debugTraceState = true;

@@ -24,7 +24,7 @@ namespace ASCOM.Simulator
             var i = 0;
             foreach (var item in Switch.switches)
             {
-                dataGridViewSwitches.Rows.Add(i, item.Name, item.Description, item.Value, item.Minimum, item.Maximum, item.StepSize, item.CanWrite, item.CanAsync, item.AsyncDuration);
+                dataGridViewSwitches.Rows.Add(i, item.Name, item.Description, item.Value, item.Minimum, item.Maximum, item.StepSize, item.CanWrite);
                 i++;
             }
 

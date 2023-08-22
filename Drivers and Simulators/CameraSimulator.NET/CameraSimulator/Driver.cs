@@ -290,8 +290,6 @@ namespace ASCOM.Simulator
         // SetFanSpeed, GetFanSpeed. These commands control a hypothetical CCD camera heat sink fan, range 0 (off) to 3 (full speed) 
         private int fanMode;
 
-        private bool connecting = false;
-
         #endregion
 
         #region Enums

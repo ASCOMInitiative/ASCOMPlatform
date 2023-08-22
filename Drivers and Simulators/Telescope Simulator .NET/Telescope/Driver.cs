@@ -65,7 +65,6 @@ namespace ASCOM.Simulator
         private ASCOM.Utilities.Util m_Util;
         private string driverID;
         private long objectId;
-        private bool connecting = false;
 
         private bool connected = false; // Holds connected state for this instance
 

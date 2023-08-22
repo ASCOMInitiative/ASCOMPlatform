@@ -33,10 +33,6 @@ namespace ASCOM.DynamicRemoteClients
         private readonly string URIBase; // URI base unique to this driver
         private short? interfaceVersion; // Cached interface version to reduce client traffic
 
-        // Connect / Disconnect emulation variables
-        bool connecting;
-        Exception connectException;
-
         // Variables to hold values that can be configured by the user through the setup form
         private bool traceState = true;
         private bool debugTraceState = true;
