@@ -30,6 +30,9 @@ Public Class DiagnosticsForm
     Private Const TEST_SCAN_DRIVES As Boolean = True
     Private Const CREATE_DEBUG_COLSOLE As Boolean = False
 
+    ' Current number of leap seconds - Used to test NOVAS 3.1 DeltaT calculation - Needs to be updated when the number of leap seconds changes
+    Private Const CURRENT_LEAP_SECONDS As Double = 37.0
+
     Private Const ASCOM_PLATFORM_NAME As String = "ASCOM Platform 6"
     Private Const INST_DISPLAY_NAME As String = "DisplayName"
     Private Const INST_DISPLAY_VERSION As String = "DisplayVersion"
@@ -2993,6 +2996,17 @@ Public Class DiagnosticsForm
                         WorkedOK = False
                     End Try
                     CompareBoolean("NOVAS31DeltaT", "JD below the minimum value threw InvalidValueException as expected (00:00:00 1 January 0001)", WorkedOK, True)
+
+                    ' Check that the current value is valid
+                    Try
+                        JD = Utl.JulianDate
+
+                        DeltaTResult1 = Math.Abs(Nov31.DeltaT(JD) - CURRENT_LEAP_SECONDS - 32.184)
+                        TL.LogMessage("NOVAS31DeltaT", $"DeltaT value: {Nov31.DeltaT(JD)}, Difference: {DeltaTResult1}")
+                        CompareBoolean("NOVAS31DeltaT", "Current DeltaT is within 0.5 seconds of expected value.", DeltaTResult1 < 0.5, True)
+                    Catch ex As Exception
+                        WorkedOK = False
+                    End Try
 
                 Case NOVAS3Functions.Aberration
                     rc = 0
