@@ -431,7 +431,7 @@ if Variable PREREQ not Equals FALSE
         Write into Text File $SETUPLOG$ from Value  (at end of file)
         if Variable RC not Equals 0
           Comment: DISM returned a non-zero exit code.
-          if Variable RC Equals 3050
+          if Variable RC Equals 3010
             Comment: DISM requires a reboot
             Write into Text File $SETUPLOG$ from Value $TIME$ Completed - DISM requires a reboot. Return code: $RC$. (at end of file)
             MessageBox: Pre-requisites, .NET 3.5 installation is complete but your PC must be rebooted in order to take effect.$NEWLINE$$NEWLINE$The Platform installer will now close.$NEWLINE$$NEWLINE$Please reboot your PC and re-run the Platform installer.

@@ -85,11 +85,6 @@ namespace ASCOM
         public static readonly int NotInCacheException = unchecked((int)0x8004040D);
 
         /// <summary>
-        /// Reserved error code (0x8004040E) to indicate that an in-progress operation has been cancelled.
-        /// </summary>
-        public static readonly int OperationCancelled = unchecked((int)0x8004040E);
-
-        /// <summary>
         /// Reserved 'catch-all' error code (0x800404FF) used when nothing else was specified.
         /// </summary>
         public static readonly int UnspecifiedError = unchecked((int)0x800404FF);
