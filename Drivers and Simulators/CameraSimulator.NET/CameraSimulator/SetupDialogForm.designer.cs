@@ -963,7 +963,7 @@ namespace ASCOM.Simulator
             this.NumInterfaceVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.NumInterfaceVersion.Location = new System.Drawing.Point(39, 41);
             this.NumInterfaceVersion.Maximum = new decimal(new int[] {
-            4,
+            3,
             0,
             0,
             0});

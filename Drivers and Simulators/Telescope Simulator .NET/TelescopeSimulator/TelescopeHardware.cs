@@ -127,7 +127,7 @@ namespace ASCOM.Simulator
 
         #region Private variables
 
-        private static short interfaceVersion = 4;
+        private static short interfaceVersion = 3;
         private static Operation currentOperation = Operation.None; // Initialise to no operation
 
         // change to using a Windows timer to avoid threading problems

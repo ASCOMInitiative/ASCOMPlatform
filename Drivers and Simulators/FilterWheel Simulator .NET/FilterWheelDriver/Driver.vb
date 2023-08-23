@@ -87,7 +87,7 @@ Public Class FilterWheel
 
     Public ReadOnly Property InterfaceVersion As Short Implements IFilterWheelV2.InterfaceVersion
         Get
-            Return 3
+            Return 2
         End Get
     End Property
 

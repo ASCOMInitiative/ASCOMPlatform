@@ -599,7 +599,7 @@ Public Class Dome
 
     Public ReadOnly Property InterfaceVersion() As Short Implements IDomeV2.InterfaceVersion
         Get
-            InterfaceVersion = 3
+            InterfaceVersion = 2
 
             If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficLine("InterfaceVersion: " & InterfaceVersion)
