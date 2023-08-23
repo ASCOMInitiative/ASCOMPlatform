@@ -213,7 +213,7 @@ namespace ASCOM.Simulator
         /// <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
         public short InterfaceVersion
         {
-            get { return 2; }
+            get { return 1; }
         }
 
         /// <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>

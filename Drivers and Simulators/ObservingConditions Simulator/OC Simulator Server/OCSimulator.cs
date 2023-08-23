@@ -420,7 +420,7 @@ namespace ASCOM.Simulator
 
         public static short InterfaceVersion(int clientNumber)
         {
-            short interfaceVersion = 2;
+            short interfaceVersion = 1;
             TL.LogMessage(clientNumber, "InterfaceVersion", interfaceVersion.ToString());
             return interfaceVersion;
         }
