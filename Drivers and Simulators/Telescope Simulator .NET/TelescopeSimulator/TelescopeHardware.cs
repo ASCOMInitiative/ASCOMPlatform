@@ -558,7 +558,7 @@ namespace ASCOM.Simulator
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanDestinationSideOfPier", "true", "Capabilities");
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanTrackingRates", "true", "Capabilities");
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanDualAxisPulseGuide", "true", "Capabilities");
-                    s_Profile.WriteValue(SharedResources.PROGRAM_ID, "InterfaceVersion", "4", "Capabilities");
+                    s_Profile.WriteValue(SharedResources.PROGRAM_ID, "InterfaceVersion", "3", "Capabilities");
                 }
 
                 //Load up the values from saved
@@ -667,7 +667,7 @@ namespace ASCOM.Simulator
 
                 dateDelta = int.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "DateDelta"), CultureInfo.InvariantCulture);
 
-                interfaceVersion = short.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "InterfaceVersion", "", "4"), CultureInfo.InvariantCulture);
+                interfaceVersion = short.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "InterfaceVersion", "", "3"), CultureInfo.InvariantCulture);
 
                 if (latitude < 0) { SouthernHemisphere = true; }
 
