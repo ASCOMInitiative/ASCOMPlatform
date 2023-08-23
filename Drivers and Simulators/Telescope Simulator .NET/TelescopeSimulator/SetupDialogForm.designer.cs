@@ -104,8 +104,6 @@ namespace ASCOM.Simulator
             this.checkBoxRefraction = new System.Windows.Forms.CheckBox();
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelTime = new System.Windows.Forms.Label();
-            this.NumInterfaceVersion = new System.Windows.Forms.NumericUpDown();
-            this.label10 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
@@ -118,7 +116,6 @@ namespace ASCOM.Simulator
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumInterfaceVersion)).BeginInit();
             this.SuspendLayout();
             // 
             // cmdOK
@@ -1007,46 +1004,12 @@ namespace ASCOM.Simulator
             this.labelTime.TabIndex = 19;
             this.labelTime.Text = "<run time - time zone and UTC offset>";
             // 
-            // NumInterfaceVersion
-            // 
-            this.NumInterfaceVersion.Location = new System.Drawing.Point(388, 148);
-            this.NumInterfaceVersion.Maximum = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.NumInterfaceVersion.Minimum = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            this.NumInterfaceVersion.Name = "NumInterfaceVersion";
-            this.NumInterfaceVersion.Size = new System.Drawing.Size(40, 20);
-            this.NumInterfaceVersion.TabIndex = 20;
-            this.NumInterfaceVersion.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.ForeColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(434, 151);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(86, 13);
-            this.label10.TabIndex = 21;
-            this.label10.Text = "Interface version";
-            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(628, 495);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.NumInterfaceVersion);
             this.Controls.Add(this.labelTime);
             this.Controls.Add(this.labelVersion);
             this.Controls.Add(this.checkBoxRefraction);
@@ -1091,7 +1054,6 @@ namespace ASCOM.Simulator
             this.tableLayoutPanel5.PerformLayout();
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumInterfaceVersion)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1175,7 +1137,5 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.TextBox textBoxAperture;
         private System.Windows.Forms.CheckBox checkBoxNoSyncPastMeridian;
         private System.Windows.Forms.CheckBox chkCanDestinationSideofPier;
-        private System.Windows.Forms.NumericUpDown NumInterfaceVersion;
-        private System.Windows.Forms.Label label10;
     }
 }
