@@ -1329,6 +1329,33 @@ Namespace SOFA
             Return Convert.ToInt32(RetCode)
         End Function
 
+        ''' <summary>
+        ''' Transform hour angle and declination to azimuth And altitude.
+        ''' </summary>
+        ''' <param name="ha">Hour angle (radians)</param>
+        ''' <param name="dec">Declination (radians)</param>
+        ''' <param name="phi">Latitude (radians)</param>
+        ''' <param name="az">Azimuth (radians) - North = 0, East = +pi/2</param>
+        ''' <param name="el">Altitude (radians) - Horizon = 0, Zenith = +pi/2</param>
+        ''' <remarks>
+        ''' Note
+        ''' <list type="number">
+        ''' <item><description>All the arguments are angles in radians.</description></item>
+        ''' <item><description>Azimuth is returned in the range 0−2pi;  north is zero, and east is +pi/2.  Altitude Is returned in the range +/− pi/2.</description></item>
+        ''' <item><description>The latitude phi is pi/2 minus the angle between the Earth’s rotation axis And the adopted zenith.  
+        ''' In many applications it will be sufficient to use the published geodetic latitude of the site.  
+        ''' In very precise (sub−arcsecond) applications, phi can be corrected for polar motion.</description></item>
+        ''' <item><description>The returned azimuth az is with respect to the rotational north pole, as opposed to the ITRS pole, 
+        ''' and for sub−arcsecond accuracy will need to be adjusted for polar motion if it Is to be with respect to north on a map of the Earth's surface.</description></item>
+        ''' <item><description>Should the user wish to work with respect to the astronomical zenith rather than the geodetic zenith, phi will need to be
+        ''' adjusted for deflection of the vertical (often tens of arcseconds), and the zero point of the hour angle ha will also be affected.</description></item>
+        ''' <item><description>The transformation is the same as Vh = Rz(pi)*Ry(pi/2−phi)*Ve, where Vh And Ve are left-handed unit vectors in the (az,el) 
+        ''' and (ha,dec) systems respectively And Ry And Rz are rotations about first the y−axis And then the z−axis.  (n.b. Rz(pi) simply
+        '''  reverses the signs of the x And y components.)  For efficiency, the algorithm Is written out rather than calling other utility functions.  
+        '''  For applications that require even greater efficiency, additional savings are possible if constant terms such as functions of latitude are computed once And for all.</description></item>
+        ''' <item><description>Again for efficiency, no range checking of arguments is carried out.</description></item>
+        ''' </list>
+        ''' </remarks>
         Public Sub Hd2ae(ha As Double, dec As Double, phi As Double, ByRef az As Double, ByRef el As Double) Implements ISOFA.Hd2ae
             If Is64Bit() Then
                 Hd2ae64(ha, dec, phi, az, el)
@@ -1336,6 +1363,18 @@ Namespace SOFA
                 Hd2ae32(ha, dec, phi, az, el)
             End If
         End Sub
+
+        ''' <summary>
+        ''' Convert position/velocity from spherical to Cartesian coordinates.
+        ''' </summary>
+        ''' <param name="theta">Longitude angle (radians)</param>
+        ''' <param name="phi">Latitude angle (radians)</param>
+        ''' <param name="r">Radial distance</param>
+        ''' <param name="td">Rate of change of theta</param>
+        ''' <param name="pd">Rate of change of phi</param>
+        ''' <param name="rd">Rate of change of r</param>
+        ''' <param name="pv">Position/velocity vector</param>
+
         Public Sub S2pv(theta As Double, phi As Double, r As Double, td As Double, pd As Double, rd As Double, pv As Double(,)) Implements ISOFA.S2pv
             If Is64Bit() Then
                 S2pv64(theta, phi, r, td, pd, rd, pv)
@@ -1344,6 +1383,11 @@ Namespace SOFA
             End If
 
         End Sub
+
+        ''' <summary>
+        ''' Initialize an r−matrix to the identity matrix.
+        ''' </summary>
+        ''' <param name="r"> r−matrix</param>
         Public Sub Ir(r As Double(,)) Implements ISOFA.Ir
             If Is64Bit() Then
                 Ir64(r)
@@ -1351,6 +1395,12 @@ Namespace SOFA
                 Ir32(r)
             End If
         End Sub
+
+        ''' <summary>
+        ''' Rotate an r−matrix about the y−axis.
+        ''' </summary>
+        ''' <param name="theta">Angle (radians)</param>
+        ''' <param name="r">r−matrix, rotated</param>
         Public Sub Ry(theta As Double, r As Double(,)) Implements ISOFA.Ry
             If Is64Bit() Then
                 Ry64(theta, r)
@@ -1358,6 +1408,21 @@ Namespace SOFA
                 Ry32(theta, r)
             End If
         End Sub
+
+        ''' <summary>
+        ''' Multiply a pv−vector by an r−matrix.
+        ''' </summary>
+        ''' <param name="r">r−matrix</param>
+        ''' <param name="pv">pv−vector</param>
+        ''' <param name="rpv">r * pv</param>
+        ''' <remarks>
+        ''' Note
+        ''' <list type="number">
+        ''' <item><description>The algorithm is for the simple case where the r−matrix r is not a function of time.  The case where r Is a function of time leads
+        ''' to an additional velocity component equal to the product of the derivative of r And the position vector.</description></item>
+        ''' <item><description>It is permissible for pv and rpv to be the same array.</description></item>
+        ''' </list>
+        ''' </remarks>
         Public Sub Rxpv(r As Double(,), pv As Double(,), rpv As Double(,)) Implements ISOFA.Rxpv
             If Is64Bit() Then
                 Rxpv64(r, pv, rpv)
@@ -1365,6 +1430,26 @@ Namespace SOFA
                 Rxpv32(r, pv, rpv)
             End If
         End Sub
+
+        ''' <summary>
+        ''' Convert position/velocity from Cartesian to spherical coordinates.
+        ''' </summary>
+        ''' <param name="pv">pv-vector</param>
+        ''' <param name="theta">Longitude angle (radians)</param>
+        ''' <param name="phi">Latitude angle (radians)</param>
+        ''' <param name="r">Radial distance</param>
+        ''' <param name="td">Rate of change of theta</param>
+        ''' <param name="pd">Rate of change of phi</param>
+        ''' <param name="rd">Rate of change of r</param>
+        ''' <remarks>
+        ''' Note
+        ''' <list type="number">
+        ''' <item><description>If the position part of pv is null, theta, phi, td and pd are indeterminate.  This Is handled by extrapolating the position 
+        ''' through unit time by using the velocity part of pv.  This moves the origin without changing the direction of the velocity component.  
+        ''' If the position And velocity components of pv are both null, zeroes are returned for all six results.</description></item>
+        ''' <item><description>If the position is a pole, theta, td and pd are indeterminate. In such cases zeroes are returned for all three.</description></item>
+        ''' </list>
+        ''' </remarks>
         Public Sub Pv2s(pv As Double(,), ByRef theta As Double, ByRef phi As Double, ByRef r As Double, ByRef td As Double, ByRef pd As Double, ByRef rd As Double) Implements ISOFA.Pv2s
             If Is64Bit() Then
                 Pv2s64(pv, theta, phi, r, td, pd, rd)
