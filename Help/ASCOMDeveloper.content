@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
   <Topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" visible="True" isDefault="true" title="Introduction - Platform 6.6 SP2" tocTitle="Introduction" />
-  <Topic id="6cdc126a-3b1a-4a55-836f-aaf704740a33" visible="True" isSelected="true" title="Introduction - Platform 6.6 SP2 - For Developers" tocTitle="Introduction - Developers" />
+  <Topic id="6cdc126a-3b1a-4a55-836f-aaf704740a33" visible="True" title="Introduction - Platform 6.6 SP2 - For Developers" tocTitle="Introduction - Developers" />
   <Topic id="174fff87-9bd7-442e-98e1-9fe2ac09bac6" visible="True" />
   <Topic id="3d17234a-c873-4f65-af0f-52f182081a44" visible="True" title="ASCOM Platform for .NET Developers" />
   <Topic id="e7734c14-0562-4010-b0c9-ddb5055cd318" visible="True" title="ASCOM Platform for COM Developers" />
   <Topic id="bfd53b69-9f13-489b-9a98-50c60d2a633b" visible="True" isExpanded="true" title="Version History">
+    <Topic id="aa55983a-7030-4db2-a5b0-b24480703726" visible="True" isSelected="true" />
     <Topic id="81df3663-6fff-439a-8c64-5ca3989126d8" visible="True" />
-    <Topic id="aa55983a-7030-4db2-a5b0-b24480703726" visible="True" />
     <Topic id="2c6cb374-9a44-4bc4-b3a5-f867033a3b93" visible="True" />
     <Topic id="FC49CB34-01CF-4D01-BE66-6D55796512D5" visible="True" />
     <Topic id="3417e177-f705-497d-8127-fb30e8519d50" visible="True" />

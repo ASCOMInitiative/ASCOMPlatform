@@ -1,86 +1,82 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" revisionNumber="1">
-  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Introduction - ASCOM-Platform 6.6 SP2</title>
-    <para>
-      Please see <link xlink:href="aa55983a-7030-4db2-a5b0-b24480703726" /> for a detailed list of changes and fixes in Platform 6.6 SP2 for both developers and Platform users.
-    </para>
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<title>Introduction - ASCOM-Platform 6.6 SP2</title>
+		<para>
+			Please see <link xlink:href="aa55983a-7030-4db2-a5b0-b24480703726" /> for a detailed list of changes and fixes in Platform 6.6 SP2 for both developers and Platform users.
+		</para>
 
-    <para>
-      Every ASCOM Platform release aims for <legacyBold>100% backward compatibility</legacyBold> with current drivers and applications, providing an easy upgrade path and new capabilities that developers and enthusiasts can exploit.
-    </para>
+		<para>
+			Every ASCOM Platform release aims for <legacyBold>100% backward compatibility</legacyBold> with current drivers and applications, providing an easy upgrade path and new capabilities that developers and enthusiasts can exploit.
+		</para>
 
-    <para>
-      If you would like to confirm the integrity of the installed Platform, the <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> will provide a wide ranging report through a comprehensive test suite that exercises
-      every aspect of Platform functionality.
-    </para>
+		<para>
+			If you would like to confirm the integrity of the installed Platform, the <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> will provide a wide ranging report through a comprehensive test suite that exercises
+			every aspect of Platform functionality.
+		</para>
 
-    <section address="Introduction-Users-Platform-6">
-      <title>Key changes in Platform 6.6 SP2</title>
-      <content>
-        <list class="bullet">
-          <listItem>
-            Telescope Simulator:
-            <list class="bullet">
-	          <listItem>Corrected SlewSettleTime to wait for the specified time period.</listItem>
-	          <listItem>Corrected RightAscensionRate to to apply the requested tracking rate.</listItem>
-            </list>
-          </listItem>
-        </list>
-      </content>
-    </section>
+		<section address="Introduction-Users-Platform-6">
+			<title>Key changes in Platform 6.6 SP2</title>
+			<content>
+				<list class="bullet">
+					<listItem>
+						This is a bug fix release with no major changes. A detailed list of fixes is given here: <link xlink:href="aa55983a-7030-4db2-a5b0-b24480703726" />.
+					</listItem>
+				</list>
+			</content>
+		</section>
 
-    <section address="Compatibility">
-      <title>Operating System Compatibility</title>
-      <content>
-        <para>
-          Platform 6.6 SP2 requires Windows 7 or later together with .NET Framework 4.8. PCs running Windows XP should use Platform 6.4 Service Pack 1 together with .NET Framework 4 Client Profile instead.
-        </para>
-      </content>
-    </section>
+		<section address="Compatibility">
+			<title>Operating System Compatibility</title>
+			<content>
+				<para>
+					Platform 6.6 SP2 requires Windows 7 or later together with .NET Framework 4.8. PCs running Windows XP should use Platform 6.4 Service Pack 1 together with .NET Framework 4 Client Profile instead.
+				</para>
+			</content>
+		</section>
 
-    <section address="Issues">
-      <title>Issues and Enhancement Requests</title>
-      <content>
-        <para>
-          Please use the ASCOM Groups.io forum:
-          <externalLink>
-            <linkText>ASCOM Talk Forum</linkText>
-            <linkAlternateText>https://ascomtalk.groups.io/g/Help</linkAlternateText>
-            <linkUri>https://ascomtalk.groups.io/g/Help</linkUri>
-            <linkTarget>_blank</linkTarget>
-          </externalLink>
-          at <quoteInline>https://ascomtalk.groups.io/g/Help</quoteInline> to report and discuss issues that you come across when using the ASCOM Platform. You will find the
-          <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> located in Start Menu / ASCOM Platform 6 / Tools; it will help greatly if you run it before reporting an issue as it provides concrete evidence to
-          help diagnose and resolve the problem.
-        </para>
-      </content>
-    </section>
+		<section address="Issues">
+			<title>Issues and Enhancement Requests</title>
+			<content>
+				<para>
+					Please use the ASCOM Groups.io forum:
+					<externalLink>
+						<linkText>ASCOM Talk Forum</linkText>
+						<linkAlternateText>https://ascomtalk.groups.io/g/Help</linkAlternateText>
+						<linkUri>https://ascomtalk.groups.io/g/Help</linkUri>
+						<linkTarget>_blank</linkTarget>
+					</externalLink>
+					at <quoteInline>https://ascomtalk.groups.io/g/Help</quoteInline> to report and discuss issues that you come across when using the ASCOM Platform. You will find the
+					<link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> located in Start Menu / ASCOM Platform 6 / Tools; it will help greatly if you run it before reporting an issue as it provides concrete evidence to
+					help diagnose and resolve the problem.
+				</para>
+			</content>
+		</section>
 
-    <section address="Notes">
-      <title>Notes</title>
-      <content>
-        <list class="bullet">
-          <listItem>
-            See the section titled <link xlink:href="bfd53b69-9f13-489b-9a98-50c60d2a633b" /> for a summary of Platform 6 updates and new functionality.
-          </listItem>
-          <listItem>
-            See the section titled <link xlink:href="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" /> for a summary of Platform 5.5 updates and new functionality.
-          </listItem>
-          <listItem>
-            This platform appears as <quoteInline>ASCOM Platform 6.6 SP2</quoteInline> in the Apps and add/remove programs dialogues
-          </listItem>
-          <listItem>The Platform has been tested in 32 and 64bit bit versions of Windows 7 and Windows 10.</listItem>
-        </list>
-      </content>
-    </section>
+		<section address="Notes">
+			<title>Notes</title>
+			<content>
+				<list class="bullet">
+					<listItem>
+						See the section titled <link xlink:href="bfd53b69-9f13-489b-9a98-50c60d2a633b" /> for a summary of Platform 6 updates and new functionality.
+					</listItem>
+					<listItem>
+						See the section titled <link xlink:href="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" /> for a summary of Platform 5.5 updates and new functionality.
+					</listItem>
+					<listItem>
+						This platform appears as <quoteInline>ASCOM Platform 6.6 SP2</quoteInline> in the Apps and add/remove programs dialogues
+					</listItem>
+					<listItem>The Platform has been tested in 32 and 64bit bit versions of Windows 7 and Windows 10.</listItem>
+				</list>
+			</content>
+		</section>
 
-    <relatedTopics>
-      <externalLink>
-        <linkText>ASCOM Initiative Web Site</linkText>
-        <linkAlternateText>Go to the ASCOM Initiative web site</linkAlternateText>
-        <linkUri>https://ascom-standards.org/</linkUri>
-      </externalLink>
-    </relatedTopics>
-  </developerConceptualDocument>
+		<relatedTopics>
+			<externalLink>
+				<linkText>ASCOM Initiative Web Site</linkText>
+				<linkAlternateText>Go to the ASCOM Initiative web site</linkAlternateText>
+				<linkUri>https://ascom-standards.org/</linkUri>
+			</externalLink>
+		</relatedTopics>
+	</developerConceptualDocument>
 </topic>
