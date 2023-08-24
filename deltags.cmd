@@ -1,0 +1,1 @@
+for /F "tokens=*" %%A in (tags.txt) do    git push origin :refs/tags/%%A
