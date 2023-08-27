@@ -8233,7 +8233,7 @@ FALSE
 FALSE
 FALSE
 {2E058EE3-6E21-466C-90E1-EB7F757D2D2B}
-..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll
+..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6
 FALSE
@@ -9234,7 +9234,7 @@ FALSE
 FALSE
 FALSE
 {59A83F04-5E26-4C0C-A93C-D6492E414D23}
-..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll
+..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
 FALSE|
 $TARGETDIR$\Tools\AlpacaDynamicClientManager
 FALSE
@@ -13117,7 +13117,7 @@ TRUE
 TRUE
 
 {1F7F0B19-8C68-4676-8D62-2733FBD50DD8}
-..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll
+..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
 TRUE
 
 {BEE12C15-363C-46CF-92A0-8892203E4E35}
@@ -14684,7 +14684,7 @@ C
 
 
 
-
+C
 
 
 

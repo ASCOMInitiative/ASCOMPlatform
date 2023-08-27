@@ -1024,9 +1024,9 @@ Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverA
 Comment: Platform 6 core components
 Install Assembly ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
 Install Files ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $WINDIR$\Symbols\dll
-Install Assembly ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
-Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\Platform\v6
-Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $WINDIR$\Symbols\dll
+Install Assembly ..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
+Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\Platform\v6
+Comment: Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to Global Assembly Cache
 Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6
 Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.pdb to $WINDIR$\Symbols\dll
@@ -1211,7 +1211,7 @@ Comment: Add the client creator executable and the dependencies that must be pre
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.exe to $TARGETDIR$\Tools\AlpacaDynamicClientManager
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.pdb to $TARGETDIR$\Tools\AlpacaDynamicClientManager
 Install Files ..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $TARGETDIR$\Tools\AlpacaDynamicClientManager
-Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $TARGETDIR$\Tools\AlpacaDynamicClientManager
+Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $TARGETDIR$\Tools\AlpacaDynamicClientManager
 Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll to $TARGETDIR$\Tools\AlpacaDynamicClientManager
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\RestSharp.dll to $TARGETDIR$\Tools\AlpacaDynamicClientManager
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.dll to $TARGETDIR$\Tools\AlpacaDynamicClientManager
