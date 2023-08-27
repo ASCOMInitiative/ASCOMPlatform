@@ -1,18 +1,11 @@
-// TODO fill in this information for your driver, then remove this line!
-//
-// ASCOM Alpaca SafetyMonitor Simulator driver
-//
-// Description:	 <To be completed by driver developer>
-//
-// Implements:	ASCOM SafetyMonitor interface version: <To be completed by driver developer>
-// Author:		(XXX) Your N. Here <your@email.here>
-//
-
+using ASCOM.Alpaca.Clients;
 using ASCOM.Common.DeviceInterfaces;
 using ASCOM.LocalServer;
 using ASCOM.Tools;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -36,7 +29,7 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
     [ProgId("ASCOM.AlpacaSim.SafetyMonitor")]
     [ServedClassName("ASCOM Alpaca SafetyMonitor Simulator")] // Driver description that appears in the Chooser, customise as required
     [ClassInterface(ClassInterfaceType.None)]
-    public class SafetyMonitor : ReferenceCountedObjectBase, ASCOM.DeviceInterface.ISafetyMonitor, IDisposable
+    public class SafetyMonitor : ReferenceCountedObjectBase, ASCOM.DeviceInterface.ISafetyMonitorV3, IDisposable
     {
         internal static string DriverProgId; // ASCOM DeviceID (COM ProgID) for this driver, the value is retrieved from the ServedClassName attribute in the class initialiser.
         internal static string DriverDescription; // The value is retrieved from the ServedClassName attribute in the class initialiser.
@@ -45,6 +38,8 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
         internal bool connectedState; // The connected state from this driver's perspective)
         internal TraceLogger tl; // Trace logger object to hold diagnostic information just for this instance of the driver, as opposed to the local server's log, which includes activity from all driver instances.
         private bool disposedValue;
+
+        private AlpacaSafetyMonitor client;
 
         #region Initialisation and Dispose
 
@@ -68,15 +63,23 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
                 // If you would like each instance of the driver to have its own log file as well, uncomment the lines below
 
                 tl = new TraceLogger("AlpacaSim.Driver", true); // Remove the leading ASCOM. from the ProgId because this will be added back by TraceLogger.
+                tl.SetMinimumLoggingLevel(Common.Interfaces.LogLevel.Debug);
                 SetTraceState();
 
                 // Initialise the hardware if required
-                SafetyMonitorHardware.InitialiseHardware();
+                //SafetyMonitorHardware.InitialiseHardware();
 
                 LogMessage("SafetyMonitor", "Starting driver initialisation");
                 LogMessage("SafetyMonitor", $"ProgID: {DriverProgId}, Description: {DriverDescription}");
 
                 connectedState = false; // Initialise connected to false
+
+                LogMessage("SafetyMonitor", $"About to create Alpaca client");
+                client = (AlpacaSafetyMonitor)Server.GetClient(Common.DeviceTypes.SafetyMonitor, tl);
+                LogMessage("SafetyMonitor", $"Alpaca client created successfully");
+
+                LogMessage("SafetyMonitor", $"Connected: {client.Connected}, IsSafe: {client.IsSafe}");
+
 
 
                 LogMessage("SafetyMonitor", "Completed initialisation");
@@ -145,6 +148,7 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
                     try
                     {
                         // Dispose of managed objects here
+                        client?.Dispose();
 
                         // Clean up the trace logger object
                         if (!(tl is null))
@@ -197,7 +201,7 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
                 else // Show dialogue
                 {
                     LogMessage("SetupDialog", $"Calling SetupDialog.");
-                    SafetyMonitorHardware.SetupDialog();
+                    MessageBox.Show("Setup dialogue not yet supported");
                     LogMessage("SetupDialog", $"Completed.");
                 }
             }
@@ -217,7 +221,7 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
                 try
                 {
                     CheckConnected($"SupportedActions");
-                    ArrayList actions = SafetyMonitorHardware.SupportedActions;
+                    ArrayList actions = new(client.SupportedActions.ToList<string>());
                     LogMessage("SupportedActions", $"Returning {actions.Count} actions.");
                     return actions;
                 }
@@ -242,7 +246,7 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
             {
                 CheckConnected($"Action {actionName} - {actionParameters}");
                 LogMessage("", $"Calling Action: {actionName} with parameters: {actionParameters}");
-                string actionResponse = SafetyMonitorHardware.Action(actionName, actionParameters);
+                string actionResponse = client.Action(actionName, actionParameters);
                 LogMessage("Action", $"Completed.");
                 return actionResponse;
             }
@@ -268,7 +272,7 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
             {
                 CheckConnected($"CommandBlind: {command}, Raw: {raw}");
                 LogMessage("CommandBlind", $"Calling method - Command: {command}, Raw: {raw}");
-                SafetyMonitorHardware.CommandBlind(command, raw);
+                client.CommandBlind(command, raw);
                 LogMessage("CommandBlind", $"Completed.");
             }
             catch (Exception ex)
@@ -296,7 +300,7 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
             {
                 CheckConnected($"CommandBool: {command}, Raw: {raw}");
                 LogMessage("CommandBlind", $"Calling method - Command: {command}, Raw: {raw}");
-                bool commandBoolResponse = SafetyMonitorHardware.CommandBool(command, raw);
+                bool commandBoolResponse = client.CommandBool(command, raw);
                 LogMessage("CommandBlind", $"Returning: {commandBoolResponse}.");
                 return commandBoolResponse;
             }
@@ -325,7 +329,7 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
             {
                 CheckConnected($"CommandString: {command}, Raw: {raw}");
                 LogMessage("CommandString", $"Calling method - Command: {command}, Raw: {raw}");
-                string commandStringResponse = SafetyMonitorHardware.CommandString(command, raw);
+                string commandStringResponse = client.CommandString(command, raw);
                 LogMessage("CommandString", $"Returning: {commandStringResponse}.");
                 return commandStringResponse;
             }
@@ -363,21 +367,29 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
                 {
                     if (value == connectedState)
                     {
-                        LogMessage("Connected Set", "Device already connected, ignoring Connected Set = true");
+                        LogMessage("Connected Set", $"Device already in requested state, ignoring request to set Connected to {value}");
                         return;
                     }
 
-                    if (value)
+                    if (value) // Set Connected = TRUE
                     {
-                        connectedState = true;
-                        LogMessage("Connected Set", "Connecting to device");
-                        SafetyMonitorHardware.Connected = true;
+                        if (!client.Connected) // Device is not connected
+                        {
+                            LogMessage("Connected Set", "Connecting to device");
+                            client.Connected = true;
+                            connectedState = true;
+                            LogMessage("Connected Set", $"Connected to device OK, connected state: {connectedState}");
+                        }
+                        else // Device is already connected
+                        {
+                            connectedState = true;
+                            LogMessage("Connected Set", $"Client already connected, setting connected state to true, connected state: {connectedState}");
+                        }
                     }
-                    else
+                    else // Set Connected = FALSE
                     {
                         connectedState = false;
-                        LogMessage("Connected Set", "Disconnecting from device");
-                        SafetyMonitorHardware.Connected = false;
+                        LogMessage("Connected Set", $"Setting Connected to false, connected state: {connectedState}");
                     }
                 }
                 catch (Exception ex)
@@ -399,7 +411,7 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
                 try
                 {
                     CheckConnected($"Description");
-                    string description = SafetyMonitorHardware.Description;
+                    string description = client.Description;
                     LogMessage("Description", description);
                     return description;
                 }
@@ -421,7 +433,7 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
                 try
                 {
                     // This should work regardless of whether or not the driver is Connected, hence no CheckConnected method.
-                    string driverInfo = SafetyMonitorHardware.DriverInfo;
+                    string driverInfo = client.DriverInfo;
                     LogMessage("DriverInfo", driverInfo);
                     return driverInfo;
                 }
@@ -443,7 +455,7 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
                 try
                 {
                     // This should work regardless of whether or not the driver is Connected, hence no CheckConnected method.
-                    string driverVersion = SafetyMonitorHardware.DriverVersion;
+                    string driverVersion = client.DriverVersion;
                     LogMessage("DriverVersion", driverVersion);
                     return driverVersion;
                 }
@@ -465,7 +477,7 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
                 try
                 {
                     // This should work regardless of whether or not the driver is Connected, hence no CheckConnected method.
-                    short interfaceVersion = SafetyMonitorHardware.InterfaceVersion;
+                    short interfaceVersion = client.InterfaceVersion;
                     LogMessage("InterfaceVersion", interfaceVersion.ToString());
                     return interfaceVersion;
                 }
@@ -487,7 +499,7 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
                 try
                 {
                     // This should work regardless of whether or not the driver is Connected, hence no CheckConnected method.
-                    string name = SafetyMonitorHardware.Name;
+                    string name = client.Name;
                     LogMessage("Name Get", name);
                     return name;
                 }
@@ -496,6 +508,55 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
                     LogMessage("Name", $"Threw an exception: \r\n{ex}");
                     throw;
                 }
+            }
+        }
+
+        public void Connect()
+        {
+            if (!client.Connected) // Client is not connected
+            {
+                // Connect client
+                client.Connect();
+                do
+                {
+                    Application.DoEvents();
+                    System.Threading.Thread.Sleep(100);
+                } while (client.Connecting);
+
+                //Set Connected to True
+                connectedState = true;
+            }
+            else // Client is already connected so just set the Connected state to TRUE
+            {
+                connectedState = true;
+            }
+        }
+
+        public void Disconnect()
+        {
+            connectedState = false;
+        }
+
+        public bool Connecting => client.Connecting;
+
+        public ArrayList DeviceState
+        {
+            get
+            {
+                ArrayList returnValue = new();
+
+                List<StateValue> deviceState = StateValue.Clean(client.DeviceState, Common.DeviceTypes.SafetyMonitor, tl);
+
+                LogMessage("DeviceState", $"Received {deviceState.Count} values");
+                foreach (StateValue value in deviceState)
+                {
+                    LogMessage("DeviceState", $"  {value.Name} = {value.Value} - Kind: {value.Value.GetType().Name}");
+                    returnValue.Add(value);
+                }
+
+                LogMessage("DeviceState", $"Return value has {returnValue.Count} values");
+
+                return returnValue;
             }
         }
 
@@ -515,7 +576,7 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
                 {
                     // IsSafe is required to deliver false when the device is not connected so there is no need to test whether or not the driver is connected.
 
-                    bool isSafe = SafetyMonitorHardware.IsSafe;
+                    bool isSafe = client.IsSafe;
                     LogMessage("IsSafe", isSafe.ToString());
                     return isSafe;
                 }
@@ -530,6 +591,7 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
         #endregion
 
         #region Private properties and methods
+
         // Useful properties and methods that can be used as required to help with driver development
 
         /// <summary>
@@ -559,8 +621,6 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
                 tl.LogMessage(identifier, message); // Write to the individual driver log
             }
 
-            // Write to the common hardware log shared by all running instances of the driver.
-            SafetyMonitorHardware.LogMessage(identifier, message); // Write to the local server logger
         }
 
         /// <summary>

@@ -40,7 +40,6 @@ namespace ASCOM.AlpacaSim.SafetyMonitor
             }
             else // A valid COM port has been selected
             {
-                SafetyMonitorHardware.comPort = (string)comboBoxComPort.SelectedItem;
                 tl.LogMessage("Setup OK", $"New configuration values - COM Port: {comboBoxComPort.SelectedItem}");
             }
         }

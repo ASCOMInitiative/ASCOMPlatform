@@ -1,5 +1,7 @@
+using ASCOM.Alpaca.Clients;
 using ASCOM.Com;
 using ASCOM.Common;
+using ASCOM.Common.DeviceInterfaces;
 using ASCOM.Tools;
 using Microsoft.Win32;
 using System;
@@ -698,5 +700,22 @@ namespace ASCOM.LocalServer
         static extern uint GetCurrentThreadId();
 
         #endregion
+
+        #region Common methods
+
+        internal static IAscomDevice GetClient(DeviceTypes deviceType, TraceLogger TL)
+        {
+            switch (deviceType)
+            {
+                case DeviceTypes.SafetyMonitor:
+                    return new AlpacaSafetyMonitor(Common.Alpaca.ServiceType.Http, portNumber: 32323, logger: TL); ;
+
+                default:
+                    throw new InvalidValueException($"Unsupported device type: {deviceType}");
+            }
+        }
+
+        #endregion
+
     }
 }

@@ -33,4 +33,7 @@
 	<ItemGroup Condition="'$(TARGETFRAMEWORK)' != 'netstandard2.0'">
 	  <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.49" />
+	</ItemGroup>
 </Project>
