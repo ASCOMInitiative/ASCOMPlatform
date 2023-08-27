@@ -1,6 +1,6 @@
 // TODO fill in this information for your driver, then remove this line!
 //
-// ASCOM SafetyMonitor driver for asd
+// ASCOM Alpaca SafetyMonitor Simulator driver
 //
 // Description:	 <To be completed by driver developer>
 //
@@ -16,25 +16,25 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace ASCOM.asd.SafetyMonitor
+namespace ASCOM.AlpacaSim.SafetyMonitor
 {
     //
     // This code is mostly a presentation layer for the functionality in the SafetyMonitorHardware class. You should not need to change the contents of this file very much, if at all.
     // Most customisation will be in the SafetyMonitorHardware class, which is shared by all instances of the driver, and which must handle all aspects of communicating with your device.
     //
-    // Your driver's DeviceID is ASCOM.asd.SafetyMonitor
+    // Your driver's DeviceID is ASCOM.AlpacaSim.SafetyMonitor
     //
-    // The COM Guid attribute sets the CLSID for ASCOM.asd.SafetyMonitor
-    // The COM ClassInterface/None attribute prevents an empty interface called _asd from being created and used as the [default] interface
+    // The COM Guid attribute sets the CLSID for ASCOM.AlpacaSim.SafetyMonitor
+    // The COM ClassInterface/None attribute prevents an empty interface called from being created and used as the [default] interface
     //
 
     /// <summary>
-    /// ASCOM SafetyMonitor Driver for asd.
+    /// Driver to access the Alpaca SafetyMonitor simulator.
     /// </summary>
     [ComVisible(true)]
     [Guid("5d9261e1-f1e1-4913-ad12-a2463568982e")]
-    [ProgId("ASCOM.asd.SafetyMonitor")]
-    [ServedClassName("ASCOM SafetyMonitor Driver for asd")] // Driver description that appears in the Chooser, customise as required
+    [ProgId("ASCOM.AlpacaSim.SafetyMonitor")]
+    [ServedClassName("ASCOM Alpaca SafetyMonitor Simulator")] // Driver description that appears in the Chooser, customise as required
     [ClassInterface(ClassInterfaceType.None)]
     public class SafetyMonitor : ReferenceCountedObjectBase, ASCOM.DeviceInterface.ISafetyMonitor, IDisposable
     {
@@ -49,7 +49,7 @@ namespace ASCOM.asd.SafetyMonitor
         #region Initialisation and Dispose
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="asd"/> class. Must be public to successfully register for COM.
+        /// Initializes a new instance of the <see cref="SafetyMonitor"/> class. Must be public to successfully register for COM.
         /// </summary>
         public SafetyMonitor()
         {
@@ -67,7 +67,7 @@ namespace ASCOM.asd.SafetyMonitor
                 // By default all driver logging will appear in Hardware log file
                 // If you would like each instance of the driver to have its own log file as well, uncomment the lines below
 
-                tl = new TraceLogger("asd.Driver", true); // Remove the leading ASCOM. from the ProgId because this will be added back by TraceLogger.
+                tl = new TraceLogger("AlpacaSim.Driver", true); // Remove the leading ASCOM. from the ProgId because this will be added back by TraceLogger.
                 SetTraceState();
 
                 // Initialise the hardware if required
@@ -84,7 +84,7 @@ namespace ASCOM.asd.SafetyMonitor
             catch (Exception ex)
             {
                 LogMessage("SafetyMonitor", $"Initialisation exception: {ex}");
-                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.asd.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.AlpacaSim.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

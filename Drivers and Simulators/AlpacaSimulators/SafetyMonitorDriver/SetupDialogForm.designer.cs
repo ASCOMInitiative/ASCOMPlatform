@@ -1,4 +1,4 @@
-namespace ASCOM.asd.SafetyMonitor
+namespace ASCOM.AlpacaSim.SafetyMonitor
 {
     partial class SetupDialogForm
     {
@@ -130,7 +130,7 @@ namespace ASCOM.asd.SafetyMonitor
             this.Name = "SetupDialogForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "asd Setup";
+            this.Text = "AlpacaSim Setup";
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.ResumeLayout(false);

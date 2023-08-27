@@ -4,13 +4,13 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace ASCOM.asd.SafetyMonitor
+namespace ASCOM.AlpacaSim.SafetyMonitor
 {
     [ComVisible(false)] // Form not registered for COM!
     public partial class SetupDialogForm : Form
     {
         const string NO_PORTS_MESSAGE = "No COM ports found";
-        TraceLogger tl; // Holder for a reference to the driver's trace logger
+        readonly TraceLogger tl; // Holder for a reference to the driver's trace logger
 
         public SetupDialogForm(TraceLogger tlDriver)
         {

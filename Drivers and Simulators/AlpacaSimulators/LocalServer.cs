@@ -26,8 +26,8 @@ namespace ASCOM.LocalServer
         private static int serverLockCount; // Keeps a lock count on this application.
         private static ArrayList driverTypes; // Served COM object types
         private static ArrayList classFactories; // Served COM object class factories
-        private static string localServerAppId = "{ec90cd67-0083-46ed-a65b-907a85982dfb}"; // Our AppId
-        private static readonly Object lockObject = new object(); // Counter lock object
+        private static readonly string localServerAppId = "{ec90cd67-0083-46ed-a65b-907a85982dfb}"; // Our AppId
+        private static readonly Object lockObject = new(); // Counter lock object
         private static TraceLogger TL; // TraceLogger for the local server (not the served driver, which has its own) - primarily to help debug local server issues
         private static Task GCTask; // The garbage collection task
         private static CancellationTokenSource GCTokenSource; // Token source used to end periodic garbage collection.
@@ -44,7 +44,7 @@ namespace ASCOM.LocalServer
         static void Main(string[] args)
         {
             // Create a trace logger for the local server.
-            TL = new TraceLogger("asd.LocalServer", true)
+            TL = new TraceLogger("AlpacaSim.LocalServer", true)
             {
                 Enabled = true // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
             };
@@ -63,7 +63,7 @@ namespace ASCOM.LocalServer
             driversInUseCount = 0;
             serverLockCount = 0;
             mainThreadId = GetCurrentThreadId();
-            Thread.CurrentThread.Name = "asd Local Server Thread";
+            Thread.CurrentThread.Name = "AlpacaSim Local Server Thread";
 
             // Create and configure the local server host form that runs the Windows message loop required to support driver operation
             TL.LogMessage("Main", $"Creating host form");
@@ -259,8 +259,8 @@ namespace ASCOM.LocalServer
                     {
                         TL.LogMessage("ExitIf", $"Server started by COM so shutting down the Windows message loop on the main process to end the local server.");
 
-                        UIntPtr wParam = new UIntPtr(0);
-                        IntPtr lParam = new IntPtr(0);
+                        UIntPtr wParam = new(0);
+                        IntPtr lParam = new(0);
                         PostThreadMessage(mainThreadId, 0x0012, wParam, lParam);
                     }
                 }
@@ -373,7 +373,7 @@ namespace ASCOM.LocalServer
             catch (Exception ex)
             {
                 TL.LogMessage("RegisterObjects", $"Setting AppID exception: {ex}");
-                MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.asd.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
 
@@ -431,7 +431,7 @@ namespace ASCOM.LocalServer
                 catch (Exception ex)
                 {
                     TL.LogMessage("RegisterObjects", $"Driver registration exception: {ex}");
-                    MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.asd.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     bFail = true;
                 }
 
@@ -503,7 +503,7 @@ namespace ASCOM.LocalServer
             get
             {
                 WindowsIdentity userIdentity = WindowsIdentity.GetCurrent();
-                WindowsPrincipal userPrincipal = new WindowsPrincipal(userIdentity);
+                WindowsPrincipal userPrincipal = new(userIdentity);
                 bool isAdministrator = userPrincipal.IsInRole(WindowsBuiltInRole.Administrator);
 
                 TL.LogMessage("IsAdministrator", isAdministrator.ToString());
@@ -517,7 +517,7 @@ namespace ASCOM.LocalServer
         /// <param name="argument">Argument to pass to ourselves</param>
         private static void ElevateSelf(string argument)
         {
-            ProcessStartInfo processStartInfo = new ProcessStartInfo();
+            ProcessStartInfo processStartInfo = new();
             processStartInfo.Arguments = argument;
             processStartInfo.WorkingDirectory = Environment.CurrentDirectory;
             processStartInfo.FileName = Application.ExecutablePath;
@@ -529,13 +529,13 @@ namespace ASCOM.LocalServer
             }
             catch (System.ComponentModel.Win32Exception)
             {
-                TL.LogMessage("IsAdministrator", $"The ASCOM.asd.SafetyMonitor was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it."));
-                MessageBox.Show("The ASCOM.asd.SafetyMonitor was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it.", "ASCOM.asd.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Warning));
+                TL.LogMessage("IsAdministrator", $"The ASCOM.AlpacaSim.LocalServer was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it."));
+                MessageBox.Show("The ASCOM.AlpacaSim.LocalServer was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it.", "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Warning));
             }
             catch (Exception ex)
             {
                 TL.LogMessage("IsAdministrator", $"Exception: {ex}");
-                MessageBox.Show(ex.ToString(), "ASCOM.asd.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show(ex.ToString(), "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
             return;
         }
@@ -556,14 +556,14 @@ namespace ASCOM.LocalServer
             foreach (Type driverType in driverTypes)
             {
                 TL.LogMessage("RegisterClassFactories", $"  Creating class factory for: {driverType.Name}");
-                ClassFactory factory = new ClassFactory(driverType); // Use default context & flags
+                ClassFactory factory = new(driverType); // Use default context & flags
                 classFactories.Add(factory);
 
                 TL.LogMessage("RegisterClassFactories", $"  Registering class factory for: {driverType.Name}");
                 if (!factory.RegisterClassObject())
                 {
                     TL.LogMessage("RegisterClassFactories", $"  Failed to register class factory for " + driverType.Name);
-                    MessageBox.Show("Failed to register class factory for " + driverType.Name, "ASCOM.asd.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("Failed to register class factory for " + driverType.Name, "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return false;
                 }
                 TL.LogMessage("RegisterClassFactories", $"  Registered class factory OK for: {driverType.Name}");
@@ -633,7 +633,7 @@ namespace ASCOM.LocalServer
 
                     default:
                         TL.LogMessage("ProcessArguments", $"Unknown argument: {args[0]}");
-                        MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "ASCOM.asd.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         break;
                 }
             }
@@ -658,7 +658,7 @@ namespace ASCOM.LocalServer
         {
             // Create the garbage collection object
             TL.LogMessage("StartGarbageCollection", $"Creating garbage collector with interval: {interval} seconds");
-            GarbageCollection garbageCollector = new GarbageCollection(interval);
+            GarbageCollection garbageCollector = new(interval);
 
             // Create a cancellation token and start the garbage collection task 
             TL.LogMessage("StartGarbageCollection", $"Starting garbage collector thread");
@@ -671,7 +671,6 @@ namespace ASCOM.LocalServer
         /// <summary>
         /// Stop the garbage collection task by sending it the cancellation token and wait for the task to complete
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD002:Avoid problematic synchronous waits", Justification = "The program is ending at this point so the synchronous wait is justified to ensure that it completes.")]
         private static void StopGarbageCollection()
         {
             // Signal the garbage collector thread to stop

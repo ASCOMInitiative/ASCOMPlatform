@@ -49,7 +49,7 @@ namespace ASCOM.LocalServer
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "frmMain";
-            this.Text = "ASCOM.asd.SafetyMonitor Driver Server";
+            this.Text = "ASCOM.AlpacaSim.SafetyMonitor Driver Server";
             this.ResumeLayout(false);
 
         }

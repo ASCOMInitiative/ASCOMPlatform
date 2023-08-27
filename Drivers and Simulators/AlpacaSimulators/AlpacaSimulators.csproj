@@ -3,7 +3,7 @@
 		<ProductVersion>8.0.50727</ProductVersion>
 		<OutputType>WinExe</OutputType>
 		<RootNamespace>ASCOM.LocalServer.Server</RootNamespace>
-		<AssemblyName>ASCOM.asd</AssemblyName>
+		<AssemblyName>AlpacaSims</AssemblyName>
 		<TargetFramework>net7.0-windows</TargetFramework>
 		<UseWindowsForms>true</UseWindowsForms>
 		<FileUpgradeFlags />
@@ -23,10 +23,10 @@
 		<ApplicationVersion>1.0.0.%2a</ApplicationVersion>
 		<UseApplicationTrust>false</UseApplicationTrust>
 		<BootstrapperEnabled>true</BootstrapperEnabled>
-		<AssemblyTitle>ASCOM.asd.SafetyMonitor</AssemblyTitle>
+		<AssemblyTitle>ASCOM.AlpacaSim.LocalServer</AssemblyTitle>
 		<Company>The ASCOM Initiative</Company>
-		<Product>ASCOM Local Server SafetyMonitor driver for asd</Product>
-		<Description>ASCOM Local Server SafetyMonitor driver for asd</Description>
+		<Product>Alpaca Simulators Local Server</Product>
+		<Description>ASCOM Local Server for Alpaca Simulators</Description>
 		<Copyright>Copyright © 2023 The ASCOM Initiative</Copyright>
 		<AssemblyVersion>6.6.0.0</AssemblyVersion>
 		<FileVersion>6.6.0.0</FileVersion>
@@ -40,11 +40,12 @@
 		<PostBuildEvent />
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<DebugType>full</DebugType>
+		<DebugType>embedded</DebugType>
 		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<DebugType>pdbonly</DebugType>
+		<DebugType>embedded</DebugType>
+		<Optimize>False</Optimize>
 	</PropertyGroup>
 	<PropertyGroup>
 		<SignAssembly>true</SignAssembly>
@@ -81,7 +82,6 @@
 	<ItemGroup>
 		<Content Include="ASCOM.ico" />
 		<Content Include="ASCOM.png" />
-		<Content Include="ReadMe.htm" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="LocalServer.snk" />
@@ -90,10 +90,10 @@
 	  <PackageReference Include="ASCOM.Alpaca.Components" Version="1.0.109-rc.47" />
 	  <PackageReference Include="ASCOM.Com.Components" Version="1.0.109-rc.47" />
 	  <PackageReference Include="ASCOM.Common.Components" Version="1.0.109-rc.47" />
-	  <PackageReference Include="ASCOM.Exception.Library" Version="6.6.2-rc.3767" />
 	  <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.47" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj" />
+	  <ProjectReference Include="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" />
 	</ItemGroup>
 </Project>

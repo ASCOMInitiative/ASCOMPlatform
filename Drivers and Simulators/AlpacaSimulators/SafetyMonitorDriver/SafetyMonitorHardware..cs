@@ -4,14 +4,14 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 
-namespace ASCOM.asd.SafetyMonitor
+namespace ASCOM.AlpacaSim.SafetyMonitor
 {
     //
     // TODO Replace the not implemented exceptions with code to implement the function or throw the appropriate ASCOM exception.
     //
 
     /// <summary>
-    /// ASCOM SafetyMonitor hardware class for asd.
+    /// ASCOM SafetyMonitor hardware class for AlpacaSim.
     /// </summary>
     [HardwareClass()] // Class attribute flag this as a device hardware class that needs to be disposed by the local server when it exits.
     internal static class SafetyMonitorHardware
@@ -22,7 +22,7 @@ namespace ASCOM.asd.SafetyMonitor
         internal const string traceStateProfileName = "Trace Level";
         internal const string traceStateDefault = "true";
 
-        private static string DriverProgId = ""; // ASCOM DeviceID (COM ProgID) for this driver, the value is set by the driver's class initialiser.
+        private static readonly string DriverProgId = ""; // ASCOM DeviceID (COM ProgID) for this driver, the value is set by the driver's class initialiser.
         private static string DriverDescription = ""; // The value is set by the driver's class initialiser.
         internal static string comPort; // COM port name (if required)
         private static bool connectedState; // Local server's connected state
@@ -38,7 +38,7 @@ namespace ASCOM.asd.SafetyMonitor
             {
                 // Create the hardware trace logger in the static initialiser.
                 // All other initialisation should go in the InitialiseHardware method.
-                tl = new TraceLogger("asd.Hardware", true);
+                tl = new TraceLogger("AlpacaSim.Hardware", true);
 
                 // DriverProgId has to be set here because it used by ReadProfile to get the TraceState flag.
                 DriverProgId = SafetyMonitor.DriverProgId; // Get this device's ProgID so that it can be used to read the Profile configuration values
@@ -51,7 +51,7 @@ namespace ASCOM.asd.SafetyMonitor
             catch (Exception ex)
             {
                 try { LogMessage("SafetyMonitorHardware", $"Initialisation exception: {ex}"); } catch { }
-                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.asd.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.AlpacaSim.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
             }
         }
@@ -101,7 +101,7 @@ namespace ASCOM.asd.SafetyMonitor
             if (IsConnected)
                 MessageBox.Show("Already connected, just press OK");
 
-            using (SetupDialogForm F = new SetupDialogForm(tl))
+            using (SetupDialogForm F = new(tl))
             {
                 var result = F.ShowDialog();
                 if (result == DialogResult.OK)
