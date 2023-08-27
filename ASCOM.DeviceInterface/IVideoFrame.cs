@@ -146,6 +146,8 @@ namespace ASCOM.DeviceInterface
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
 		string ExposureStartTime { get; }
 
+		//Avoid reference to KeyValuePair class in .NET Standard 2.0 because the class doesn't exist in the ASCOM Library.
+#if NETFRAMEWORK
 		/// <summary>
 		/// Returns additional information associated with the video frame as a list of named variables.
 		/// </summary>
@@ -160,6 +162,22 @@ namespace ASCOM.DeviceInterface
 		/// <para>The KeyValuePair objects are instances of the <see cref="ASCOM.Utilities.KeyValuePair">KeyValuePair class</see></para>
 		/// </remarks>
 		/// <value>An ArrayList of KeyValuePair objects.</value>
-		ArrayList ImageMetadata { get; }
+#else
+        /// <summary>
+        /// Returns additional information associated with the video frame as a list of named variables.
+        /// </summary>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
+        /// <para>The returned object contains entries for each value. For each entry, the Key property is the value's name, and the Value property is the string value itself.</para>
+        /// This property must return an empty list if no video frame metadata is provided.
+        /// <para>The Keys is a single word, or multiple words joined by underscore characters, that sensibly describes the variable. It is recommended that Keys
+        /// should be a maximum of 16 characters for legibility and all upper case.</para>
+        /// <para>The KeyValuePair objects are instances of the KeyValuePair class</para>
+        /// </remarks>
+        /// <value>An ArrayList of KeyValuePair objects.</value>
+#endif
+        ArrayList ImageMetadata { get; }
     }
 }

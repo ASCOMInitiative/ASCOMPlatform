@@ -12,7 +12,7 @@
 		<DefaultItemExcludes>$(DefaultItemExcludes);$(ProjectDir)**\*.vb</DefaultItemExcludes>
 		<AssemblyTitle>ASCOM Device Interfaces</AssemblyTitle>
 		<Company>ASCOM</Company>
-		<Product>ASCOM.DeviceInterfaces.Platform6</Product>
+		<Product>ASCOM.DeviceInterfaces</Product>
 		<Description>ASCOM Device Interfaces for Platform 7</Description>
 		<Copyright>Copyright © ASCOM Initiative 2023</Copyright>
 		<AssemblyVersion>6.0.0.0</AssemblyVersion>
@@ -20,15 +20,15 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<DocumentationFile>ASCOM.DeviceInterfaces.xml</DocumentationFile>
 		<RegisterForComInterop>false</RegisterForComInterop>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Title>ASCOM Platform 7 Device Interfaces</Title>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Include="..\AssemblyVersionInfo.cs" Link="Properties\AssemblyVersionInfo.cs" />
 	</ItemGroup>
+	<!-- Include the correct reference depending on whether the target is .NET Framework or .NET Standard -->
 	<ItemGroup Condition="'$(TARGETFRAMEWORK)' == 'netstandard2.0'">
-		<PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.46" />
+		<PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.47" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TARGETFRAMEWORK)' != 'netstandard2.0'">
 	  <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj" />

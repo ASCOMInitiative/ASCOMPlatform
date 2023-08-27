@@ -4,6 +4,11 @@
 using System.Collections;
 using System;
 using System.Runtime.InteropServices;
+#if NETFRAMEWORK
+using ASCOM.Utilities;
+#else
+using Util = ASCOM.Tools.Utilities;
+#endif
 
 namespace ASCOM.DeviceInterface
 {
@@ -22,7 +27,7 @@ namespace ASCOM.DeviceInterface
     public interface IObservingConditionsV2
     {
 
-        #region IObservingConditionsV1 members
+		#region IObservingConditionsV1 members
 
         /// <summary>
         /// Set to True to connect to the device hardware. Set to False to disconnect from the device hardware.
@@ -627,9 +632,9 @@ namespace ASCOM.DeviceInterface
 		/// </remarks>
 		void Refresh();
 
-        #endregion
+		#endregion
 
-        #region IObservingConditionsV2 members
+		#region IObservingConditionsV2 members
 
         /// <summary>
         /// Connect to the device asynchronously
@@ -670,7 +675,7 @@ namespace ASCOM.DeviceInterface
         /// </remarks>
         ArrayList DeviceState { get; }
 
-        #endregion
+		#endregion
 
     }
 }
