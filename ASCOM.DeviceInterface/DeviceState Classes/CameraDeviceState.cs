@@ -1,4 +1,8 @@
-﻿using ASCOM.Utilities;
+﻿#if NETSTANDARD2_0
+using ASCOM.Tools;
+#else
+using ASCOM.Utilities;
+#endif
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -149,7 +153,7 @@ namespace ASCOM.DeviceInterface.DeviceState
                 }
                 catch (Exception ex)
                 {
-                    TL?.LogMessageCrLf(className, $"Exception: {ex.Message}.\r\n{ex}");
+                    TL?.LogMessage(className, $"Exception: {ex.Message}.\r\n{ex}");
                 }
             }
         }

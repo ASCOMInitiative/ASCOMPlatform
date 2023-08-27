@@ -2,6 +2,6 @@
  <PropertyGroup>
 	<!-- This is the solution level version for Nuget packages, This should be x.x.x semver (or x.x.x-suffix for pre-release -->
 	<!-- https://docs.microsoft.com/en-us/nuget/concepts/package-versioning -->
-   <Version>6.6.2-rc.1</Version>
+   <Version>7.0.0-rc.1</Version>
  </PropertyGroup>
 </Project>
