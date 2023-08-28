@@ -382,8 +382,8 @@ else
     Install Files ..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.xml to $TARGETDIR$\Components\Platform6
     Install Files ..\..\..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to $TARGETDIR$\Components\Platform6
     Install Files ..\..\..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.xml to $TARGETDIR$\Components\Platform6
-    Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $TARGETDIR$\Components\Platform6
-    Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.xml to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.xml to $TARGETDIR$\Components\Platform6
     Install Files ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to $TARGETDIR$\Components\Platform6
     Install Files ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.xml to $TARGETDIR$\Components\Platform6
     Install Files ..\..\..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to $TARGETDIR$\Components\Platform6

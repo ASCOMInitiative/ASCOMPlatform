@@ -2141,7 +2141,7 @@ FALSE
 FALSE
 FALSE
 {C8D6F07B-5968-4626-A053-62D313337925}
-..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll
+..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
 FALSE|
 $TARGETDIR$\Components\Platform6
 FALSE
@@ -2596,7 +2596,7 @@ FALSE
 FALSE
 FALSE
 {4423E3F1-BFDD-4F0C-983D-927B5E1804A4}
-..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.xml
+..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.xml
 FALSE|
 $TARGETDIR$\Components\Platform6
 FALSE
