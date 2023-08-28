@@ -101,15 +101,17 @@ namespace ASCOM.DynamicRemoteClients
                             return;
                         }
 
+                        // Get the local server folder
                         string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + SharedConstants.ALPACA_CLIENT_LOCAL_SERVER_PATH;
                         TL.LogMessage("CreateAlpacaClient", $"Alpaca local server folder: {localServerPath}");
 
-                        // The supplied parameters pass validation so run the create device form to obtain the device description and create the driver
+                        // Run the create device form to obtain the device description and create the driver
                         CreateAlpacaClient(args[1], comDevicenumber, args[3], args[4], localServerPath); // Call the execution method with correctly cased device type and unique ID parameters
+
+                        // Register the dynamic clients
                         string localServerExe = $"{localServerPath}{SharedConstants.ALPACA_CLIENT_LOCAL_SERVER}";
                         TL.LogMessage("CreateAlpacaClient", $"Alpaca local server exe name: {localServerExe}");
                         RunLocalServer(localServerExe, "-regserver", TL);
-
                         break;
 
                     case "CREATENAMEDCLIENT":
