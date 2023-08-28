@@ -15,7 +15,7 @@
     <RootNamespace>Documentation</RootNamespace>
     <Name>Documentation</Name>
     <!-- SHFB properties -->
-    <OutputPath>.\Output\Developer\</OutputPath>
+    <OutputPath>Output\developer\</OutputPath>
     <HtmlHelpName>PlatformDeveloperHelp</HtmlHelpName>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj" />
@@ -149,6 +149,7 @@
     <VendorName>ASCOM Initiative</VendorName>
     <ProductTitle>ASCOM Platform Developer Documentation</ProductTitle>
     <TocOrder>-1</TocOrder>
+    <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->

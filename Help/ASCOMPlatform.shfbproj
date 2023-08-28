@@ -15,7 +15,7 @@
     <RootNamespace>Documentation</RootNamespace>
     <Name>Documentation</Name>
     <!-- SHFB properties -->
-    <OutputPath>.\Output\Platform\</OutputPath>
+    <OutputPath>Output\platform\</OutputPath>
     <HtmlHelpName>PlatformHelp</HtmlHelpName>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" />
@@ -92,6 +92,7 @@
     <TopicVersion>100</TopicVersion>
     <FooterText>
     </FooterText>
+    <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->
