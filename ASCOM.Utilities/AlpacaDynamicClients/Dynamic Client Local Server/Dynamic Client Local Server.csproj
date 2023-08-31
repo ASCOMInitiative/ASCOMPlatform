@@ -1,0 +1,99 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<ProductVersion>8.0.50727</ProductVersion>
+		<OutputType>WinExe</OutputType>
+		<AssemblyName>AlpacaSims</AssemblyName>
+		<TargetFramework>net7.0-windows</TargetFramework>
+		<UseWindowsForms>true</UseWindowsForms>
+		<FileUpgradeFlags />
+		<UpgradeBackupLocation />
+		<IsWebBootstrapper>false</IsWebBootstrapper>
+		<PublishUrl>publish\</PublishUrl>
+		<Install>true</Install>
+		<InstallFrom>Disk</InstallFrom>
+		<UpdateEnabled>false</UpdateEnabled>
+		<UpdateMode>Foreground</UpdateMode>
+		<UpdateInterval>7</UpdateInterval>
+		<UpdateIntervalUnits>Days</UpdateIntervalUnits>
+		<UpdatePeriodically>false</UpdatePeriodically>
+		<UpdateRequired>false</UpdateRequired>
+		<MapFileExtensions>true</MapFileExtensions>
+		<ApplicationRevision>0</ApplicationRevision>
+		<ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+		<UseApplicationTrust>false</UseApplicationTrust>
+		<BootstrapperEnabled>true</BootstrapperEnabled>
+		<AssemblyTitle>ASCOM.AlpacaSim.LocalServer</AssemblyTitle>
+		<Company>The ASCOM Initiative</Company>
+		<Product>Alpaca Simulators Local Server</Product>
+		<Description>ASCOM Local Server for Alpaca Simulators</Description>
+		<Copyright>Copyright © 2023 The ASCOM Initiative</Copyright>
+		<AssemblyVersion>6.6.0.0</AssemblyVersion>
+		<FileVersion>6.6.0.0</FileVersion>
+		<PlatformTarget>x86</PlatformTarget>
+		<OutputPath>bin\$(Configuration)\</OutputPath>
+		<PreBuildEvent />
+		<PostBuildEvent />
+		<PreBuildEvent />
+		<PostBuildEvent />
+		<PreBuildEvent />
+		<PostBuildEvent />
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DebugType>embedded</DebugType>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DebugType>embedded</DebugType>
+		<Optimize>False</Optimize>
+	</PropertyGroup>
+	<PropertyGroup>
+		<SignAssembly>true</SignAssembly>
+	</PropertyGroup>
+	<PropertyGroup>
+		<AssemblyOriginatorKeyFile>LocalServer.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
+	<PropertyGroup>
+		<PreBuildEvent />
+		<PostBuildEvent />
+		<RootNamespace>ASCOM.DynamicClients</RootNamespace>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Update="LocalServerForm.cs">
+			<SubType>Form</SubType>
+		</Compile>
+		<Compile Update="LocalServerForm.Designer.cs">
+			<DependentUpon>LocalServerForm.cs</DependentUpon>
+		</Compile>
+		<EmbeddedResource Update="LocalServerForm.resx">
+			<SubType>Designer</SubType>
+			<DependentUpon>LocalServerForm.cs</DependentUpon>
+		</EmbeddedResource>
+		<Compile Update="Devices\SetupDialogForm.cs">
+			<SubType>Form</SubType>
+		</Compile>
+		<Compile Update="Devices\SetupDialogForm.designer.cs">
+			<DependentUpon>SetupDialogForm.cs</DependentUpon>
+		</Compile>
+		<EmbeddedResource Update="Devices\SetupDialogForm.resx">
+			<DependentUpon>SetupDialogForm.cs</DependentUpon>
+			<SubType>Designer</SubType>
+		</EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="ASCOM.ico" />
+		<Content Include="ASCOM.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="LocalServer.snk" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="ASCOM.Alpaca.Components" Version="1.0.109-rc.49" />
+	  <PackageReference Include="ASCOM.Com.Components" Version="1.0.109-rc.49" />
+	  <PackageReference Include="ASCOM.Common.Components" Version="1.0.109-rc.49" />
+	  <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.49" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj" />
+	  <ProjectReference Include="..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" />
+	</ItemGroup>
+</Project>

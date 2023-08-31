@@ -30,9 +30,9 @@ namespace ASCOM.DynamicRemoteClients
         {
             string errMsg;
 
-            // Add unhandled exception handlers           
+            // Add un-handled exception handlers           
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException); // Add the event handler for handling UI thread exceptions to the event.
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException); // Set the unhandled exception mode to force all exceptions to go through our handler.
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException); // Set the un-handled exception mode to force all exceptions to go through our handler.
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException); // Add the event handler for handling non-UI thread exceptions to the event. 
 
             TL = new TraceLogger("", "AlpacaDynamicClientManager");
@@ -106,7 +106,7 @@ namespace ASCOM.DynamicRemoteClients
                         TL.LogMessage("CreateAlpacaClient", $"Alpaca local server folder: {localServerPath}");
 
                         // Run the create device form to obtain the device description and create the driver
-                        CreateAlpacaClient(args[1], comDevicenumber, args[3], args[4], localServerPath); // Call the execution method with correctly cased device type and unique ID parameters
+                        // CreateAlpacaClient(args[1], comDevicenumber, args[3], args[4], localServerPath); // Call the execution method with correctly cased device type and unique ID parameters
 
                         // Register the dynamic clients
                         string localServerExe = $"{localServerPath}{SharedConstants.ALPACA_CLIENT_LOCAL_SERVER}";
@@ -382,29 +382,6 @@ namespace ASCOM.DynamicRemoteClients
             }
 
         }
-
-        /// <summary>
-        /// Extension method to return a Pascal cased string
-        /// </summary>
-        /// <param name="sourceString"></param>
-        /// <returns></returns>
-        //public static string ToPascalCase(this string sourceString)
-        //{
-        //    // Check for empty string.  
-        //    if (string.IsNullOrEmpty(sourceString))
-        //    {
-        //        return string.Empty;
-        //    }
-
-        //    // Check for a single character string
-        //    if (sourceString.Length == 1)
-        //    {
-        //        return sourceString.ToUpperInvariant();
-        //    }
-
-        //    // Return the multi character string with first letter in upper case and the remaining characters in lower case.  
-        //    return sourceString.Substring(0, 1).ToUpperInvariant() + sourceString.Substring(1).ToLowerInvariant();
-        //}
 
         /// <summary>
         /// Run the local server to register and unregister DynamicRemoteClient clients

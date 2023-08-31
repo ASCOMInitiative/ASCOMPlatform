@@ -49,13 +49,14 @@ Friend Class ChooserForm
     ' Alpaca integration constants
     Private Const ALPACA_DYNAMIC_CLIENT_MANAGER_RELATIVE_PATH As String = "ASCOM\Platform 6\Tools\AlpacaDynamicClientManager"
     Private Const ALPACA_DYNAMIC_CLIENT_MANAGER_EXE_NAME As String = "ASCOM.AlpacaDynamicClientManager.exe"
-    Private Const DRIVER_PROGID_BASE As String = "ASCOM.AlpacaDynamic"
+    Private Const DRIVER_PROGID_BASE As String = "ASCOM.AlpacaDynamic" ' This value must match the same named constant in the Dynamic Client Local Server project LocalServer.cs file
 
     ' Alpaca driver Profile store value names
     Private Const PROFILE_VALUE_NAME_UNIQUEID As String = "UniqueID" ' Prefix applied to all COM drivers created to front Alpaca devices
     Private Const PROFILE_VALUE_NAME_IP_ADDRESS As String = "IP Address"
     Private Const PROFILE_VALUE_NAME_PORT_NUMBER As String = "Port Number"
     Private Const PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER As String = "Remote Device Number"
+    Private Const PROFILE_VALUE_NAME_COM_GUID As String = "COM Guid" ' This value must match the same named constant in the Dynamic Client Local Server project LocalServer.cs file
 
 #End Region
 
@@ -458,6 +459,10 @@ Friend Class ChooserForm
                     profile.WriteValue(newProgId, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER, selectedChooserItem.DeviceNumber.ToString())
                     profile.WriteValue(newProgId, PROFILE_VALUE_NAME_UNIQUEID, selectedChooserItem.DeviceUniqueID.ToString())
 
+                    ' Create a new COM GUID for this driver if one does not already exist.
+                    ' At this point, we aren't interested in the returned value, only that a value exists. This is ensured by use of the default value: Guid.NewGuid().
+                    profile.GetValue(newProgId, PROFILE_VALUE_NAME_COM_GUID, "", Guid.NewGuid().ToString())
+
                     ' Flag the driver as being already configured so that it can be used immediately
                     registryAccess.WriteProfile("Chooser", $"{newProgId} Init", "True")
 
@@ -740,11 +745,11 @@ Friend Class ChooserForm
         TL.LogMessage("CreateAlpacaClient", $"Creating new ProgID: {newProgId}")
 
         ' Create the new Alpaca Client appending the device description if required 
-        If (String.IsNullOrEmpty(deviceDescription)) Then
-            RunDynamicClientManager($"\CreateNamedClient {deviceTypeValue} {deviceNumber} {newProgId}")
-        Else
-            RunDynamicClientManager($"\CreateAlpacaClient {deviceTypeValue} {deviceNumber} {newProgId} ""{deviceDescription}""")
-        End If
+        'If (String.IsNullOrEmpty(deviceDescription)) Then
+        '    RunDynamicClientManager($"\CreateNamedClient {deviceTypeValue} {deviceNumber} {newProgId}")
+        'Else
+        '    RunDynamicClientManager($"\CreateAlpacaClient {deviceTypeValue} {deviceNumber} {newProgId} ""{deviceDescription}""")
+        'End If
 
         Return newProgId ' Return the new ProgID
     End Function
