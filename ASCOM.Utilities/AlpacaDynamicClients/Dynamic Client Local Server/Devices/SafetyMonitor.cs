@@ -1,6 +1,8 @@
 using ASCOM.Alpaca.Clients;
+using ASCOM.Common;
+using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
-using ASCOM.LocalServer;
+using ASCOM.Common.Interfaces;
 using ASCOM.Tools;
 using System;
 using System.Collections;
@@ -26,15 +28,20 @@ namespace ASCOM.DynamicClients
     /// </summary>
     public class SafetyMonitor : ReferenceCountedObjectBase, ASCOM.DeviceInterface.ISafetyMonitorV3, IDisposable
     {
-        internal static string DriverProgId; // ASCOM DeviceID (COM ProgID) for this driver, the value is retrieved from the ServedClassName attribute in the class initialiser.
-        internal static string DriverDescription; // The value is retrieved from the ServedClassName attribute in the class initialiser.
+        // Set the device type of this device
+        private DeviceTypes deviceType = DeviceTypes.SafetyMonitor;
+
+        internal static string driverProgId; // ASCOM DeviceID (COM ProgID) for this driver, the value is retrieved from the ServedClassName attribute in the class initialiser.
+        internal static string driverDisplayName; // The value is retrieved from the ServedClassName attribute in the class initialiser.
 
         // connectedState holds the connection state from this driver instance's perspective, as opposed to the local server's perspective, which may be different because of other client connections.
         internal bool connectedState; // The connected state from this driver's perspective)
-        internal TraceLogger tl; // Trace logger object to hold diagnostic information just for this instance of the driver, as opposed to the local server's log, which includes activity from all driver instances.
+        internal TraceLogger TL; // Trace logger object to hold diagnostic information just for this instance of the driver, as opposed to the local server's log, which includes activity from all driver instances.
         private bool disposedValue;
 
         private AlpacaSafetyMonitor client;
+
+        DriverState state; // State variable for this driver
 
         #region Initialisation and Dispose
 
@@ -47,35 +54,36 @@ namespace ASCOM.DynamicClients
             {
                 // Pull the ProgID from the ProgID class attribute.
                 Attribute attr = Attribute.GetCustomAttribute(this.GetType(), typeof(ProgIdAttribute));
-                DriverProgId = ((ProgIdAttribute)attr).Value ?? "PROGID NOT SET!";  // Get the driver ProgIDfrom the ProgID attribute.
+                driverProgId = ((ProgIdAttribute)attr).Value ?? "PROGID NOT SET!";  // Get the driver ProgIDfrom the ProgID attribute.
 
                 // Pull the display name from the ServedClassName class attribute.
                 attr = Attribute.GetCustomAttribute(this.GetType(), typeof(ServedClassNameAttribute));
-                DriverDescription = ((ServedClassNameAttribute)attr).DisplayName ?? "DISPLAY NAME NOT SET!";  // Get the driver description that displays in the ASCOM Chooser from the ServedClassName attribute.
+                driverDisplayName = ((ServedClassNameAttribute)attr).DisplayName ?? "DISPLAY NAME NOT SET!";  // Get the driver description that displays in the ASCOM Chooser from the ServedClassName attribute.
+
+                // Read configuration from the Profile
+                state = new DriverState(driverProgId, deviceType, driverDisplayName);
 
                 // LOGGING CONFIGURATION
                 // By default all driver logging will appear in Hardware log file
                 // If you would like each instance of the driver to have its own log file as well, uncomment the lines below
 
-                tl = new TraceLogger("AlpacaSim.Driver", true); // Remove the leading ASCOM. from the ProgId because this will be added back by TraceLogger.
-                tl.SetMinimumLoggingLevel(Common.Interfaces.LogLevel.Debug);
+                TL = new TraceLogger("AlpacaSim.Driver", true); // Remove the leading ASCOM. from the ProgId because this will be added back by TraceLogger.
+                TL.SetMinimumLoggingLevel(Common.Interfaces.LogLevel.Debug);
                 SetTraceState();
 
                 // Initialise the hardware if required
                 //SafetyMonitorHardware.InitialiseHardware();
 
                 LogMessage("SafetyMonitor", "Starting driver initialisation");
-                LogMessage("SafetyMonitor", $"ProgID: {DriverProgId}, Description: {DriverDescription}");
+                LogMessage("SafetyMonitor", $"ProgID: {driverProgId}, Description: {driverDisplayName}");
 
                 connectedState = false; // Initialise connected to false
 
                 LogMessage("SafetyMonitor", $"About to create Alpaca client");
-                client = (AlpacaSafetyMonitor)Server.GetClient(Common.DeviceTypes.SafetyMonitor, tl);
+                client = Server.GetClient<AlpacaSafetyMonitor>(state, TL);
                 LogMessage("SafetyMonitor", $"Alpaca client created successfully");
 
                 LogMessage("SafetyMonitor", $"Connected: {client.Connected}, IsSafe: {client.IsSafe}");
-
-
 
                 LogMessage("SafetyMonitor", "Completed initialisation");
             }
@@ -117,23 +125,6 @@ namespace ASCOM.DynamicClients
         /// <summary>
         /// Dispose of large or scarce resources created or used within this driver file
         /// </summary>
-        /// <remarks>
-        /// The purpose of this method is to enable you to release finite system resources back to the operating system as soon as possible, so that other applications work as effectively as possible.
-        ///
-        /// NOTES
-        /// 1) Do not call the SafetyMonitorHardware.Dispose() method from this method. Any resources used in the static SafetyMonitorHardware class itself, 
-        ///    which is shared between all instances of the driver, should be released in the SafetyMonitorHardware.Dispose() method as usual. 
-        ///    The SafetyMonitorHardware.Dispose() method will be called automatically by the local server just before it shuts down.
-        /// 2) You do not need to release every .NET resource you use in your driver because the .NET runtime is very effective at reclaiming these resources. 
-        /// 3) Strong candidates for release here are:
-        ///     a) Objects that have a large memory footprint (> 1Mb) such as images
-        ///     b) Objects that consume finite OS resources such as file handles, synchronisation object handles, memory allocations requested directly from the operating system (NativeMemory methods) etc.
-        /// 4) Please ensure that you do not return exceptions from this method
-        /// 5) Be aware that Dispose() can be called more than once:
-        ///     a) By the client application
-        ///     b) Automatically, by the .NET runtime during finalisation
-        /// 6) Because of 5) above, you should make sure that your code is tolerant of multiple calls.    
-        /// </remarks>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -146,11 +137,11 @@ namespace ASCOM.DynamicClients
                         client?.Dispose();
 
                         // Clean up the trace logger object
-                        if (!(tl is null))
+                        if (!(TL is null))
                         {
-                            tl.Enabled = false;
-                            tl.Dispose();
-                            tl = null;
+                            TL.Enabled = false;
+                            TL.Dispose();
+                            TL = null;
                         }
                     }
                     catch (Exception)
@@ -187,23 +178,15 @@ namespace ASCOM.DynamicClients
         /// </summary>
         public void SetupDialog()
         {
-            try
+            if (connectedState) // Don't show if already connected
             {
-                if (connectedState) // Don't show if already connected
-                {
-                    MessageBox.Show("Already connected, just press OK");
-                }
-                else // Show dialogue
-                {
-                    LogMessage("SetupDialog", $"Calling SetupDialog.");
-                    MessageBox.Show("Setup dialogue not yet supported");
-                    LogMessage("SetupDialog", $"Completed.");
-                }
+                MessageBox.Show("Already connected, just press OK");
             }
-            catch (Exception ex)
+            else // Show dialogue
             {
-                LogMessage("SetupDialog", $"Threw an exception: \r\n{ex}");
-                throw;
+                AlpacaSafetyMonitor newclient = Server.SetupDialogueCommon<AlpacaSafetyMonitor>(state, TL);
+                if (newclient != null)
+                    client = newclient;
             }
         }
 
@@ -540,7 +523,7 @@ namespace ASCOM.DynamicClients
             {
                 ArrayList returnValue = new();
 
-                List<StateValue> deviceState = StateValue.Clean(client.DeviceState, Common.DeviceTypes.SafetyMonitor, tl);
+                List<StateValue> deviceState = OperationalStateProperty.Clean(client.DeviceState, DeviceTypes.SafetyMonitor, TL);
 
                 LogMessage("DeviceState", $"Received {deviceState.Count} values");
                 foreach (StateValue value in deviceState)
@@ -597,7 +580,7 @@ namespace ASCOM.DynamicClients
         {
             if (!connectedState)
             {
-                throw new NotConnectedException($"{DriverDescription} ({DriverProgId}) is not connected: {message}");
+                throw new NotConnectedException($"{driverDisplayName} ({driverProgId}) is not connected: {message}");
             }
         }
 
@@ -611,9 +594,9 @@ namespace ASCOM.DynamicClients
             // This code is currently set to write messages to an individual driver log AND to the shared hardware log.
 
             // Write to the individual log for this specific instance (if enabled by the driver having a TraceLogger instance)
-            if (tl != null)
+            if (TL != null)
             {
-                tl.LogMessage(identifier, message); // Write to the individual driver log
+                TL.LogMessage(identifier, message); // Write to the individual driver log
             }
 
         }

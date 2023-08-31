@@ -1,6 +1,6 @@
 using System;
 
-namespace ASCOM.LocalServer
+namespace ASCOM.DynamicClients
 {
     partial class LocalServerForm
     {

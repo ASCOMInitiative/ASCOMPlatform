@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 
-namespace ASCOM.LocalServer
+namespace ASCOM.DynamicClients
 {
     public partial class LocalServerForm : Form
     {

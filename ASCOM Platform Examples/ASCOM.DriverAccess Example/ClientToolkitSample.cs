@@ -1,11 +1,10 @@
 using System;
-using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using ASCOM.DriverAccess;
 
 namespace ASCOM
 {
-	class ClientTest
+    class ClientTest
 	{
 		static void Main(string[] args)
 		{

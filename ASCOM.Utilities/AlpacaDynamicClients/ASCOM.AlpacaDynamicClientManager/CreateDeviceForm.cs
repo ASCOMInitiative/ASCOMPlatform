@@ -55,7 +55,7 @@ namespace ASCOM.DynamicRemoteClients
             if (!string.IsNullOrEmpty(TxtDeviceDescription.Text)) // There is a device description
             {
                 // Create the new Alpaca client using the supplied parameters
-                CreateAlpacaClients.CreateAlpacaClient(deviceType, deviceNumber, progId, TxtDeviceDescription.Text, localServerPath);
+                //CreateAlpacaClients.CreateAlpacaClient(deviceType, deviceNumber, progId, TxtDeviceDescription.Text, localServerPath);
 
                 // Create a pointer to the local server executable
                 string localServerExe = $"{localServerPath}{SharedConstants.ALPACA_CLIENT_LOCAL_SERVER}";

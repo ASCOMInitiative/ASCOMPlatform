@@ -27,7 +27,6 @@ using ASCOM.Common.Alpaca;
 using System.Net.Http.Headers;
 using System.Text;
 using ASCOM.Common.Com;
-using System.CodeDom;
 
 namespace ASCOM.DynamicRemoteClients
 {

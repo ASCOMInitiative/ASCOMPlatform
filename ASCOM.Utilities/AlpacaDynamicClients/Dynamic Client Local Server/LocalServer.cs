@@ -1,24 +1,24 @@
 using ASCOM.Alpaca.Clients;
 using ASCOM.Com;
 using ASCOM.Common;
+using ASCOM.Common.Alpaca;
 using ASCOM.Common.DeviceInterfaces;
+using ASCOM.Common.Interfaces;
 using ASCOM.Tools;
 using Microsoft.Win32;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ASCOM.LocalServer
+namespace ASCOM.DynamicClients
 {
     public static class Server
     {
@@ -842,15 +842,159 @@ namespace ASCOM.LocalServer
 
         #region Common methods
 
-        internal static IAscomDevice GetClient(DeviceTypes deviceType, TraceLogger TL)
+        internal static T GetClient<T>(DriverState state, TraceLogger TL)
         {
-            switch (deviceType)
+            IAlpacaClientV2 client;
+
+            switch (typeof(T))
             {
-                case DeviceTypes.SafetyMonitor:
-                    return new AlpacaSafetyMonitor(Common.Alpaca.ServiceType.Http, portNumber: 32323, logger: TL); ;
+                case Type type when type == typeof(AlpacaCamera):
+                    client = new AlpacaSafetyMonitor();
+                    break;
+
+                case Type type when type == typeof(AlpacaCoverCalibrator):
+                    client = new AlpacaSafetyMonitor();
+                    break;
+
+                case Type type when type == typeof(AlpacaDome):
+                    client = new AlpacaSafetyMonitor();
+                    break;
+
+                case Type type when type == typeof(AlpacaFilterWheel):
+                    client = new AlpacaSafetyMonitor();
+                    break;
+
+                case Type type when type == typeof(AlpacaFocuser):
+                    client = new AlpacaSafetyMonitor();
+                    break;
+
+                case Type type when type == typeof(AlpacaObservingConditions):
+                    client = new AlpacaSafetyMonitor();
+                    break;
+
+                case Type type when type == typeof(AlpacaRotator):
+                    client = new AlpacaSafetyMonitor();
+                    break;
+
+                case Type type when type == typeof(AlpacaSafetyMonitor):
+                    client = new AlpacaSafetyMonitor();
+                    break;
+
+                case Type type when type == typeof(AlpacaSwitch):
+                    client = new AlpacaSafetyMonitor();
+                    break;
+
+                case Type type when type == typeof(AlpacaTelescope):
+                    client = new AlpacaSafetyMonitor();
+                    break;
 
                 default:
-                    throw new InvalidValueException($"Unsupported device type: {deviceType}");
+                    throw new InvalidValueException($"Unsupported device type: {state.DeviceType}");
+            }
+
+            // Set the device configuration
+            client.ClientConfiguration.ClientNumber = state.ClientId;
+            client.ClientConfiguration.EstablishConnectionTimeout = state.EstablishConnectionTimeout;
+            client.ClientConfiguration.IpAddress = state.IpAddressString;
+            client.ClientConfiguration.Logger = TL;
+            client.ClientConfiguration.LongDeviceResponseTimeout = state.LongDeviceResponseTimeout;
+            client.ClientConfiguration.Password = state.Password;
+            client.ClientConfiguration.PortNumber = state.PortNumber;
+            client.ClientConfiguration.RemoteDeviceNumber = state.RemoteDeviceNumber;
+            client.ClientConfiguration.ServiceType = state.ServiceType;
+            client.ClientConfiguration.StandardDeviceResponseTimeout = state.StandardDeviceResponseTimeout;
+            client.ClientConfiguration.StrictCasing = true;
+            client.ClientConfiguration.UserName = state.UserName;
+            client.ClientConfiguration.ImageArrayCompression = state.ImageArrayCompression;
+            client.ClientConfiguration.ImageArrayTransferType = state.ImageArrayTransferType;
+
+            // Refresh the HTTP client with the updated values set above.
+            client.Refresh();
+            
+            // Return the configured Alpaca client as the required type
+            return (T)(object)client;
+        }
+
+        internal static T SetupDialogueCommon<T>(DriverState state, TraceLogger TL)
+        {
+            T client = default;
+
+            try
+            {
+                TL.LogMessage("SetupDialog", "Creating setup form");
+                using (SetupDialogForm setupForm = new SetupDialogForm(TL))
+                {
+                    // Pass the setup dialogue data into the form
+                    setupForm.DriverDisplayName = state.DriverDisplayName;
+                    setupForm.TraceState = state.TraceState;
+                    setupForm.DebugTraceState = state.DebugTraceState;
+                    setupForm.ServiceType = state.ServiceType;
+                    setupForm.IPAddressString = state.IpAddressString;
+                    setupForm.PortNumber = state.PortNumber;
+                    setupForm.RemoteDeviceNumber = state.RemoteDeviceNumber;
+                    setupForm.EstablishConnectionTimeout = state.EstablishConnectionTimeout;
+                    setupForm.StandardTimeout = state.StandardDeviceResponseTimeout;
+                    setupForm.LongTimeout = state.LongDeviceResponseTimeout;
+                    setupForm.UserName = state.UserName;
+                    setupForm.Password = state.Password;
+                    setupForm.ManageConnectLocally = state.ManageConnectLocally;
+                    setupForm.ImageArrayTransferType = state.ImageArrayTransferType;
+                    setupForm.ImageArrayCompression = state.ImageArrayCompression;
+                    setupForm.DeviceType = state.DeviceType.ToDeviceString();
+                    setupForm.EnableRediscovery = state.EnableRediscovery;
+                    setupForm.IpV4Enabled = state.IpV4Enabled;
+                    setupForm.IpV6Enabled = state.IpV6Enabled;
+                    setupForm.DiscoveryPort = state.DiscoveryPort;
+                    setupForm.TrustUserGeneratedSslCertificates = state.TrustUserGeneratedSslCertificates;
+
+                    TL.LogMessage("SetupDialog", "Showing Dialogue");
+                    var result = setupForm.ShowDialog();
+                    TL.LogMessage("SetupDialog", "Dialogue closed");
+                    if (result == DialogResult.OK)
+                    {
+                        TL.LogMessage("SetupDialog", "Dialogue closed with OK status");
+
+                        // Retrieve revised setup data from the form
+                        state.TraceState = setupForm.TraceState;
+                        state.DebugTraceState = setupForm.DebugTraceState;
+                        state.ServiceType = setupForm.ServiceType;
+                        state.IpAddressString = setupForm.IPAddressString;
+                        state.PortNumber = setupForm.PortNumber;
+                        state.RemoteDeviceNumber = setupForm.RemoteDeviceNumber;
+                        state.EstablishConnectionTimeout = (int)setupForm.EstablishConnectionTimeout;
+                        state.StandardDeviceResponseTimeout = (int)setupForm.StandardTimeout;
+                        state.LongDeviceResponseTimeout = (int)setupForm.LongTimeout;
+                        state.UserName = setupForm.UserName;
+                        state.Password = setupForm.Password;
+                        state.ManageConnectLocally = setupForm.ManageConnectLocally;
+                        state.ImageArrayTransferType = setupForm.ImageArrayTransferType;
+                        state.ImageArrayCompression = setupForm.ImageArrayCompression;
+                        state.EnableRediscovery = setupForm.EnableRediscovery;
+                        state.IpV4Enabled = setupForm.IpV4Enabled;
+                        state.IpV6Enabled = setupForm.IpV6Enabled;
+                        state.DiscoveryPort = setupForm.DiscoveryPort;
+                        state.TrustUserGeneratedSslCertificates = setupForm.TrustUserGeneratedSslCertificates;
+
+                        // Write the changed values to the Profile
+                        TL.LogMessage("SetupDialog", "Writing new values to profile");
+                        state.PersistState();
+
+                        // Establish new host and device parameters
+                        TL.LogMessage("SetupDialog", "Establishing new host and device parameters");
+                        // DynamicClientDriver.ConnectToRemoteDevice(ref client, ipAddressString, portNumber, establishConnectionTimeout, serviceType, TL, clientNumber, driverProgId, DEVICE_TYPE,
+                        //                                           standardDeviceResponseTimeout, userName, password, uniqueId, enableRediscovery, ipV4Enabled, ipV6Enabled, discoveryPort, trustUserGeneratedSslCertificates);
+                        client = GetClient<T>(state, TL);
+                    }
+                    else
+                        TL.LogMessage("SetupDialog", "Dialogue closed with Cancel status");
+
+                    return (T)(object)client;
+                }
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessage("SetupDialog", $"Threw an exception: \r\n{ex}");
+                throw;
             }
         }
 

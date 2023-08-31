@@ -449,11 +449,30 @@ Friend Class ChooserForm
             If userResponse = DialogResult.OK Then ' User pressed the OK button
 
                 Try
-                    ' Create a new Alpaca driver of the current ASCOM device type
-                    newProgId = CreateNewAlpacaDriver(selectedChooserItem.AscomName)
+                    Dim tempProgId As String
+                    Dim deviceNumber As Integer
+                    Dim typeFromProgId As Type
+
+                    ' Initialise to a starting value
+                    deviceNumber = 0
+
+                    ' Try successive ProgIDs until one is found that is not COM registered
+                    Do
+                        deviceNumber += 1 ' Increment the device number
+                        tempProgId = $"{DRIVER_PROGID_BASE}{deviceNumber}.{deviceTypeValue}" ' Create the new ProgID to be tested
+                        typeFromProgId = Type.GetTypeFromProgID(tempProgId) ' Try to get the type with the new ProgID
+                        TL.LogMessage("CreateAlpacaClient", $"Testing ProgID: {tempProgId} Type name: {typeFromProgId?.Name}")
+                    Loop While (Not (typeFromProgId Is Nothing)) ' Loop until the returned type is null indicating that this type is not COM registered
+                    newProgId = tempProgId
+                    TL.LogMessage("CreateAlpacaClient", $"Creating new ProgID: {newProgId}")
 
                     ' Configure the IP address, port number and Alpaca device number in the newly registered driver
+                    TL.LogMessage("OK Click", $"ProgID: {newProgId}")
+                    TL.LogMessage("OK Click", $"Display name: {selectedChooserItem.AscomName}")
+                    TL.LogMessage("OK Click", $"Display name: {selectedChooserItem.DisplayName}")
+
                     profile.DeviceType = deviceTypeValue
+                    profile.Register(newProgId, selectedChooserItem.AscomName)
                     profile.WriteValue(newProgId, PROFILE_VALUE_NAME_IP_ADDRESS, selectedChooserItem.HostName)
                     profile.WriteValue(newProgId, PROFILE_VALUE_NAME_PORT_NUMBER, selectedChooserItem.Port.ToString())
                     profile.WriteValue(newProgId, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER, selectedChooserItem.DeviceNumber.ToString())
@@ -462,6 +481,9 @@ Friend Class ChooserForm
                     ' Create a new COM GUID for this driver if one does not already exist.
                     ' At this point, we aren't interested in the returned value, only that a value exists. This is ensured by use of the default value: Guid.NewGuid().
                     profile.GetValue(newProgId, PROFILE_VALUE_NAME_COM_GUID, "", Guid.NewGuid().ToString())
+
+                    ' Create a new Alpaca driver of the current ASCOM device type
+                    newProgId = CreateNewAlpacaDriver(newProgId, deviceNumber, selectedChooserItem.AscomName)
 
                     ' Flag the driver as being already configured so that it can be used immediately
                     registryAccess.WriteProfile("Chooser", $"{newProgId} Init", "True")
@@ -726,8 +748,21 @@ Friend Class ChooserForm
     ''' </summary>
     ''' <param name="deviceDescription"></param>
     ''' <returns></returns>
-    Private Function CreateNewAlpacaDriver(deviceDescription As String) As String
+    Private Function CreateNewAlpacaDriver(newProgId As String, deviceNumber As Integer, deviceDescription As String) As String
+        ' Create the new Alpaca Client appending the device description if required 
+        If (String.IsNullOrEmpty(deviceDescription)) Then
+            RunDynamicClientManager($"\CreateNamedClient {deviceTypeValue} {deviceNumber} {newProgId}")
+        Else
+            RunDynamicClientManager($"\CreateAlpacaClient {deviceTypeValue} {deviceNumber} {newProgId} ""{deviceDescription}""")
+        End If
+
+        Return newProgId ' Return the new ProgID
+    End Function
+
+    Private Sub MnuCreateAlpacaDriver_Click(sender As Object, e As EventArgs) Handles MnuCreateAlpacaDriver.Click
         Dim newProgId As String
+
+        Dim tempProgId As String
         Dim deviceNumber As Integer
         Dim typeFromProgId As Type
 
@@ -737,28 +772,15 @@ Friend Class ChooserForm
         ' Try successive ProgIDs until one is found that is not COM registered
         Do
             deviceNumber += 1 ' Increment the device number
-            newProgId = $"{DRIVER_PROGID_BASE}{deviceNumber}.{deviceTypeValue}" ' Create the new ProgID to be tested
-            typeFromProgId = Type.GetTypeFromProgID(newProgId) ' Try to get the type with the new ProgID
-            TL.LogMessage("CreateAlpacaClient", $"Testing ProgID: {newProgId} Type name: {typeFromProgId?.Name}")
+            tempProgId = $"{DRIVER_PROGID_BASE}{deviceNumber}.{deviceTypeValue}" ' Create the new ProgID to be tested
+            typeFromProgId = Type.GetTypeFromProgID(tempProgId) ' Try to get the type with the new ProgID
+            TL.LogMessage("CreateAlpacaClient", $"Testing ProgID: {tempProgId} Type name: {typeFromProgId?.Name}")
         Loop While (Not (typeFromProgId Is Nothing)) ' Loop until the returned type is null indicating that this type is not COM registered
-
+        newProgId = tempProgId
         TL.LogMessage("CreateAlpacaClient", $"Creating new ProgID: {newProgId}")
 
-        ' Create the new Alpaca Client appending the device description if required 
-        'If (String.IsNullOrEmpty(deviceDescription)) Then
-        '    RunDynamicClientManager($"\CreateNamedClient {deviceTypeValue} {deviceNumber} {newProgId}")
-        'Else
-        '    RunDynamicClientManager($"\CreateAlpacaClient {deviceTypeValue} {deviceNumber} {newProgId} ""{deviceDescription}""")
-        'End If
-
-        Return newProgId ' Return the new ProgID
-    End Function
-
-    Private Sub MnuCreateAlpacaDriver_Click(sender As Object, e As EventArgs) Handles MnuCreateAlpacaDriver.Click
-        Dim newProgId As String
-
         ' Create a new Alpaca driver of the current ASCOM device type
-        newProgId = CreateNewAlpacaDriver("")
+        newProgId = CreateNewAlpacaDriver(newProgId, deviceNumber, "")
 
         ' Select the new driver in the Chooser combo box list
         selectedProgIdValue = newProgId

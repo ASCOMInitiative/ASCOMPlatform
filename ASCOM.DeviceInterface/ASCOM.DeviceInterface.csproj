@@ -34,6 +34,6 @@
 	  <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.49" />
+	  <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.58" />
 	</ItemGroup>
 </Project>

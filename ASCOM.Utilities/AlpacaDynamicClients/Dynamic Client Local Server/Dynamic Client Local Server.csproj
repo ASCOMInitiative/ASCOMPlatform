@@ -64,19 +64,12 @@
 		<Compile Update="LocalServerForm.Designer.cs">
 			<DependentUpon>LocalServerForm.cs</DependentUpon>
 		</Compile>
+		<Compile Update="SetupDialogForm.cs">
+		  <SubType>Form</SubType>
+		</Compile>
 		<EmbeddedResource Update="LocalServerForm.resx">
 			<SubType>Designer</SubType>
 			<DependentUpon>LocalServerForm.cs</DependentUpon>
-		</EmbeddedResource>
-		<Compile Update="Devices\SetupDialogForm.cs">
-			<SubType>Form</SubType>
-		</Compile>
-		<Compile Update="Devices\SetupDialogForm.designer.cs">
-			<DependentUpon>SetupDialogForm.cs</DependentUpon>
-		</Compile>
-		<EmbeddedResource Update="Devices\SetupDialogForm.resx">
-			<DependentUpon>SetupDialogForm.cs</DependentUpon>
-			<SubType>Designer</SubType>
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
@@ -87,10 +80,10 @@
 		<None Include="LocalServer.snk" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="ASCOM.Alpaca.Components" Version="1.0.109-rc.49" />
-	  <PackageReference Include="ASCOM.Com.Components" Version="1.0.109-rc.49" />
-	  <PackageReference Include="ASCOM.Common.Components" Version="1.0.109-rc.49" />
-	  <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.49" />
+	  <PackageReference Include="ASCOM.Alpaca.Components" Version="1.0.109-rc.58" />
+	  <PackageReference Include="ASCOM.Com.Components" Version="1.0.109-rc.58" />
+	  <PackageReference Include="ASCOM.Common.Components" Version="1.0.109-rc.58" />
+	  <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.58" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj" />

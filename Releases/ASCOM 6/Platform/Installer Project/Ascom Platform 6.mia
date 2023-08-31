@@ -1227,6 +1227,17 @@ Install Files
 Install Files
 Install Files
 Install Files
+Code Folding Region
+Comment
+Code Folding Region
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
 Install Files
 Install Files
 Install Files
@@ -3269,6 +3280,17 @@ $
 {59302FA6-658F-4182-A81D-AD77A3EECBC7}
 {FBA925DD-C424-4348-9DF4-10CC11E8BC2D}
 {237B0382-D0F5-4DD4-851F-A728A2614F47}
+{B9B73027-27CF-4A96-A7DB-98062D14DFBD}
+{6D4F604A-C809-496E-8A5F-F1660102DD78}
+{5BC223B4-41C9-4CD4-A1FF-4030340DDECB}
+{26185D86-3854-4AFE-8379-CB29139D5ADE}
+{C16F6135-E32E-4EEA-A5C3-4CF9A0F0FE59}
+{C9387C61-E0B7-42D1-95AF-5920C49A03CF}
+{B10D3499-8E20-430A-83B8-CAB7D1AA4531}
+{FB7DF0B0-2740-49ED-9083-3B4BFAD4C38C}
+{45682A68-7226-42EC-B197-D15E8342B442}
+{6676A912-0297-4EC5-AA64-F9A73E2C4C48}
+{06365DA1-35BA-42EE-83E6-B0630B49BE66}
 {EE58469C-D891-48CD-A5C3-A1F9CEF67326}
 {93C5E81A-2CCB-4158-8C16-DA23102E15AB}
 {EAB79DE7-4596-408C-9426-39A9751686B8}
@@ -4820,6 +4842,8 @@ Further attempt to determine whether we are running on Windows 10 or later using
 Test for versions after Windows 10 Threshold 2 i.e. Redstone 1 and later.
 {03F109A3-05B8-489B-8A13-5F7F87AF837B}
 Running on Windows 10 or later so enable .NET 3.5 installation.
+{B9B73027-27CF-4A96-A7DB-98062D14DFBD}
+
 {3FDCB84F-CB74-4A3D-8649-C2FB2EFB7985}
 PRELIST
 
@@ -9662,6 +9686,110 @@ FALSE
 FALSE
 FALSE
 FALSE
+{5BC223B4-41C9-4CD4-A1FF-4030340DDECB}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\AlpacaSims.exe
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{26185D86-3854-4AFE-8379-CB29139D5ADE}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\AlpacaSims.deps.json
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{C16F6135-E32E-4EEA-A5C3-4CF9A0F0FE59}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\AlpacaSims.dll
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{C9387C61-E0B7-42D1-95AF-5920C49A03CF}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\AlpacaSims.runtimeconfig.json
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{B10D3499-8E20-430A-83B8-CAB7D1AA4531}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Alpaca.dll
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{FB7DF0B0-2740-49ED-9083-3B4BFAD4C38C}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Com.dll
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{45682A68-7226-42EC-B197-D15E8342B442}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Common.dll
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{6676A912-0297-4EC5-AA64-F9A73E2C4C48}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Tools.dll
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
 {BF164208-5DCC-44E8-BF70-A15EC9C00CCE}
 $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe
 TRUE
@@ -13389,6 +13517,12 @@ Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
 {9D2059CB-0BD3-471F-ACED-36635A0CC579}
 TRUE
 Platform validation
+{6D4F604A-C809-496E-8A5F-F1660102DD78}
+TRUE
+Platform 7 files
+{06365DA1-35BA-42EE-83E6-B0630B49BE66}
+FALSE
+Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
 {F1670508-8739-4F56-8ADD-2DA803A33113}
 DISKSPACE
 C:
@@ -14883,6 +15017,17 @@ C
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 C
 C
 C
@@ -15708,6 +15853,17 @@ C
 
 
 $
+
+
+
+
+
+
+
+
+
+
+
 
 
 

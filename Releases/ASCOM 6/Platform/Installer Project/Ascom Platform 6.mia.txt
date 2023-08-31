@@ -1218,6 +1218,17 @@ Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Dev
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe to $TARGETDIR$\Tools\AlpacaDynamicClientManager
 [END REGION]
  
+[DEFINE REGION: Platform 7 files]
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\AlpacaSims.exe to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\AlpacaSims.deps.json to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\AlpacaSims.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\AlpacaSims.runtimeconfig.json to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Alpaca.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Com.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Common.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Tools.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+[END REGION]
+ 
 [DEFINE REGION: ASCOM Device Hub]
 Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.exe to $COMMONFILES$\ASCOM\DeviceHub
 Install Files ..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.exe.config to $COMMONFILES$\ASCOM\DeviceHub

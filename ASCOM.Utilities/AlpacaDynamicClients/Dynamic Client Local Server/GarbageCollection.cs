@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace ASCOM.LocalServer
+namespace ASCOM.DynamicClients
 {
     /// <summary>
     /// Summary description for GarbageCollection.

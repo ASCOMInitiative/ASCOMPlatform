@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 
-namespace ASCOM.LocalServer
+namespace ASCOM.DynamicClients
 {
     #region C# Definition of IClassFactory
 

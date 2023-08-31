@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ASCOM.LocalServer
+namespace ASCOM.DynamicClients
 {
     /// <summary>
     ///   An attribute that confers a 'friendly name' on a class and marks it as loadable by LocalServer.

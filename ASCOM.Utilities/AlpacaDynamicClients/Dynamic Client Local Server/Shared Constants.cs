@@ -1,6 +1,6 @@
 ﻿using ASCOM.Common.Alpaca;
 
-namespace ASCOM.DynamicRemoteClients
+namespace ASCOM.DynamicClients
 {
     public static class SharedConstants
     {
@@ -11,9 +11,9 @@ namespace ASCOM.DynamicRemoteClients
         public const string STRONG_WILDCARD_NAME = "+";
         public const string VALID_HOST_NAME_REGEX = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$";
         public const string IPADDRESS_PROFILENAME = "IP Address"; public const string IPADDRESS_DEFAULT = LOCALHOST_NAME_IPV4;
-        public const string PORTNUMBER_PROFILENAME = "Port Number"; public const decimal PORTNUMBER_DEFAULT = 11111;
-        public const string REMOTE_DEVICE_NUMBER_PROFILENAME = "Remote Device Number"; public const decimal REMOTE_DEVICE_NUMBER_DEFAULT = 0;
-        public const string SERVICE_TYPE_PROFILENAME = "Service Type"; public const string SERVICE_TYPE_DEFAULT = "http";
+        public const string PORTNUMBER_PROFILENAME = "Port Number"; public const int PORTNUMBER_DEFAULT = 11111;
+        public const string REMOTE_DEVICE_NUMBER_PROFILENAME = "Remote Device Number"; public const int REMOTE_DEVICE_NUMBER_DEFAULT = 0;
+        public const string SERVICE_TYPE_PROFILENAME = "Service Type"; public const ServiceType SERVICE_TYPE_DEFAULT = ServiceType.Http;
         public const string ESTABLISH_CONNECTION_TIMEOUT_PROFILENAME = "Establish Connection Timeout"; public const int ESTABLISH_CONNECTION_TIMEOUT_DEFAULT = 2;
         public const string STANDARD_DEVICE_RESPONSE_TIMEOUT_PROFILENAME = "Standard Device Response Timeout"; public const int STANDARD_SERVER_RESPONSE_TIMEOUT_DEFAULT = 10;
         public const string LONG_DEVICE_RESPONSE_TIMEOUT_PROFILENAME = "Long Device Response Timeout"; public const int LONG_SERVER_RESPONSE_TIMEOUT_DEFAULT = 120;
@@ -39,8 +39,7 @@ namespace ASCOM.DynamicRemoteClients
 
         // Constants used by the generated dynamic client driver assembly
         public const string ALPACA_CLIENT_LOCAL_SERVER_PATH = @"\ASCOM\AlpacaDynamicClients\"; // Relative path from CommonFiles
-        //public const string ALPACA_CLIENT_LOCAL_SERVER = @"ASCOM.AlpacaClientLocalServer.exe"; // Name of the remote client local server application
-        public const string ALPACA_CLIENT_LOCAL_SERVER = @"AlpacaSims.exe"; // Name of the remote client local server application
+        public const string ALPACA_CLIENT_LOCAL_SERVER = @"ASCOM.AlpacaClientLocalServer.exe"; // Name of the remote client local server application
 
         // Driver naming constants
         public const string DRIVER_DISPLAY_NAME = "ASCOM Alpaca Dynamic Client";
