@@ -263,11 +263,11 @@ else
 end
  
 Comment: Set  up start menu variables, ASCOMSTARTMENU is the name of the Platform folder
-Set Variable ASCOMSTARTMENU to ASCOM Platform 6
+Set Variable ASCOMSTARTMENU to ASCOM Platform 7
 Set Variable ALLUSERS to TRUE
  
 Comment: Set the Target directory and start menu folder
-Set Variable TARGETDIR to $PROGRAMFILES$ASCOM\Platform 6
+Set Variable TARGETDIR to $PROGRAMFILES$ASCOM\Platform 7
 Set Variable STARTMENU to $TITLE$
  
 Comment: Set the installation cache location
@@ -500,7 +500,7 @@ end
 Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance user choice - Modify: $MODIFY$ ,Repair: $REPAIR$, Remove: $REMOVE$ (at end of file)
  
 if Variable REPAIR Equals (Ignore Case) TRUE
-  Set Variable PROGRESSTEXT to Repairing Platform 6...
+  Set Variable PROGRESSTEXT to Repairing Platform 7...
 end
  
 if Variable MODIFY Equals (Ignore Case) TRUE
@@ -511,7 +511,7 @@ if Variable MODIFY Equals (Ignore Case) TRUE
     Write into Text File $SETUPLOG$ from Value $TIME$ Installation cancelled at user request (Modify) (at end of file)
     Terminate Installation
   end
-  Set Variable PROGRESSTEXT to Maintaining Platform 6...
+  Set Variable PROGRESSTEXT to Maintaining Platform 7...
 end
  
 if Variable REMOVE Equals (Ignore Case) TRUE
@@ -521,7 +521,7 @@ if Variable REMOVE Equals (Ignore Case) TRUE
     Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance - Modify: $MODIFY$ ,Repair: $REPAIR$, Remove: $REMOVE$ - Uninstall cancelled (at end of file)
     Terminate Installation
   end
-  Set Variable PROGRESSTEXT to Removing Platform 6...
+  Set Variable PROGRESSTEXT to Removing Platform 7...
 end
 Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance after processing - Modify: $MODIFY$ ,Repair: $REPAIR$, Remove: $REMOVE$ (at end of file)
 [END REGION]
@@ -677,14 +677,14 @@ if Variable MAINTENANCE not Equals TRUE
       Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling Platform 5... (at end of file)
       Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
       Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM  (at end of file)
-      Set Variable PROGRESSTEXT to Installing Platform 6...
+      Set Variable PROGRESSTEXT to Installing Platform 7...
     else
       if Variable PLATFORM4FOUND Equals TRUE
         Set Variable PROGRESSTEXT to Removing Platform 4...
         Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling Platform 4... (at end of file)
         Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM  (at end of file)
-        Set Variable PROGRESSTEXT to Installing Platform 6...
+        Set Variable PROGRESSTEXT to Installing Platform 7...
       end
     end
     if Variable RC not Equals 0
@@ -878,7 +878,7 @@ if Variable REMOVE Equals TRUE
   [END REGION]
    
   Set Variable PROGRESSTEXT to Uninstalling Platform...
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Uninstalling Platform 6 (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Uninstalling Platform 7 (at end of file)
   Apply Uninstall (get result into variable SUCCESS)
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstall return code: $SUCCESS$ (at end of file)
   if Variable SUCCESS not Equals ERROR
@@ -892,8 +892,8 @@ if Variable REMOVE Equals TRUE
    
   Set Variable MYPROGRESS to 100
   MessageBalloon: , 
-  Set Variable PROGRESSTEXT to Finished uninstalling Platform 6
-  Write into Text File $SETUPLOG$ from Value $TIME$ Finished uninstalling Platform 6 (at end of file)
+  Set Variable PROGRESSTEXT to Finished uninstalling Platform 7
+  Write into Text File $SETUPLOG$ from Value $TIME$ Finished uninstalling Platform 7 (at end of file)
    
   Comment: Bypass the installation code and go to the finish dialogue
   GoTo Label: Finish Setup
@@ -918,7 +918,7 @@ if Variable RC not Equals 0
 end
 [END REGION]
  
-[DEFINE REGION: Install New Platform 6 version]
+[DEFINE REGION: Install New Platform version]
  
 [DEFINE REGION: Clean up any remaining simulator COM entries]
 Comment: Clean up any remaining 32bit COM registry entries
@@ -1227,6 +1227,10 @@ Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Lo
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Com.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Common.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Tools.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.DeviceInterfaces.pdb to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Exceptions.pdb to $COMMONFILES$\ASCOM\AlpacaDynamicClients
 [END REGION]
  
 [DEFINE REGION: ASCOM Device Hub]
@@ -1251,7 +1255,7 @@ Install Files ..\..\..\..\ValidatePlatform\bin\x64\Release\ValidatePlatform64.ex
 [END REGION]
  
 [DEFINE REGION: Platform 6 Content]
-Comment: Platform 6 Documents
+Comment: Platform Documents
 Install Files ..\Files\Help.ico to $COMMONFILES$\ASCOM\Platform
 Install Files ..\Files\Internet.ico to $COMMONFILES$\ASCOM\Platform
 Install Files ..\Files\ASCOM.ico to $COMMONFILES$\ASCOM\Platform
@@ -1621,7 +1625,7 @@ if Variable SUCCESS not Equals ERROR
   Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Copy - Attributes 5.5.0 (at end of file)
    
-  Comment: Register Platform 6 components
+  Comment: Register Platform components
   Set Variable MYPROGRESS to 47
   Set Variable PROGRESSTEXT to Registering ASCOM.Astrometry 6.0.0.0
   Register assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
@@ -1642,52 +1646,52 @@ if Variable SUCCESS not Equals ERROR
    
   Comment: Register in-process simulator DLL files with Codebase option
   Set Variable MYPROGRESS to 52
-  Set Variable PROGRESSTEXT to Registering Platform 6 Camera simulator
+  Set Variable PROGRESSTEXT to Registering Platform 7 Camera simulator
   Register assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll, set the code base in the registry
   Set Variable MYPROGRESS to 53
-  Set Variable PROGRESSTEXT to Registering Platform 6 Focuser simulator
+  Set Variable PROGRESSTEXT to Registering Platform 7 Focuser simulator
   Register assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll, set the code base in the registry
-  Set Variable PROGRESSTEXT to Registering Platform 6 CoverCalibrator simulator
+  Set Variable PROGRESSTEXT to Registering Platform 7 CoverCalibrator simulator
   Register assembly $COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator\ASCOM.Simulator.CoverCalibrator.dll, set the code base in the registry
   Set Variable MYPROGRESS to 54
-  Set Variable PROGRESSTEXT to Registering Platform 6 SafetyMonitor simulator
+  Set Variable PROGRESSTEXT to Registering Platform 7 SafetyMonitor simulator
   Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll, set the code base in the registry
   Set Variable MYPROGRESS to 55
-  Set Variable PROGRESSTEXT to Registering Platform 6 Dome simulator
+  Set Variable PROGRESSTEXT to Registering Platform 7 Dome simulator
   Register assembly $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll, set the code base in the registry
   Set Variable MYPROGRESS to 56
-  Set Variable PROGRESSTEXT to Registering Platform 6 Video simulator
+  Set Variable PROGRESSTEXT to Registering Platform 7 Video simulator
   Register assembly $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll, set the code base in the registry
   Set Variable MYPROGRESS to 57
-  Set Variable PROGRESSTEXT to Registering Platform 6 OpenWeatherMap simulator
+  Set Variable PROGRESSTEXT to Registering Platform 7 OpenWeatherMap simulator
   Register assembly $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\ASCOM.OpenWeatherMap.ObservingConditions.dll, set the code base in the registry
    
   Comment: Register these LocalServer drivers using the -register option
   Set Variable MYPROGRESS to 58
-  Set Variable PROGRESSTEXT to Registering Platform 6 FilterWheel simulator
+  Set Variable PROGRESSTEXT to Registering Platform 7 FilterWheel simulator
   Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe -register (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FilterWheel Simulator 6 (at end of file)
   Set Variable MYPROGRESS to 59
-  Set Variable PROGRESSTEXT to Registering Platform 6 Rotator simulator
+  Set Variable PROGRESSTEXT to Registering Platform 7 Rotator simulator
   Run Program $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe -register (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Rotator Simulator 6 (at end of file)
   Set Variable MYPROGRESS to 60
-  Set Variable PROGRESSTEXT to Registering Platform 6 Switch simulator
+  Set Variable PROGRESSTEXT to Registering Platform 7 Switch simulator
   Run Program $COMMONFILES$\ASCOM\Switch\Switch V2\ASCOM.Simulator.Server.exe -register (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Switch V2 Simulator (at end of file)
   Set Variable MYPROGRESS to 61
-  Set Variable PROGRESSTEXT to Registering Platform 6 Telescope simulator
+  Set Variable PROGRESSTEXT to Registering Platform 7 Telescope simulator
   Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe -register (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Telescope Simulator 6 (at end of file)
   Set Variable MYPROGRESS to 62
-  Set Variable PROGRESSTEXT to Registering Platform 6 ObservingConditions simulator
+  Set Variable PROGRESSTEXT to Registering Platform 7 ObservingConditions simulator
   Run Program $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Server.exe -register (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Observing Conditions Simulator (at end of file)
   Set Variable MYPROGRESS to 63
-  Set Variable PROGRESSTEXT to Registering Platform 6 Observing Conditions Hub
+  Set Variable PROGRESSTEXT to Registering Platform 7 Observing Conditions Hub
   Run Program $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Server.exe -register (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Observing Conditions Hub (at end of file)
-  Set Variable PROGRESSTEXT to Registering Platform 6 Device Hub
+  Set Variable PROGRESSTEXT to Registering Platform 7 Device Hub
   Run Program $COMMONFILES$\ASCOM\DeviceHub\ASCOM.DeviceHub.exe -register (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Device Hub (at end of file)
    
@@ -1805,14 +1809,14 @@ if Variable SUCCESS not Equals ERROR
      
     Comment: Register simulators
     Set Variable MYPROGRESS to 80
-    Set Variable PROGRESSTEXT to Registering Platform 6 Camera simulator
+    Set Variable PROGRESSTEXT to Registering Platform 7 Camera simulator
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Camera Simulator 6 (at end of file)
     if Variable RC not Equals 0
       MessageBalloon: RegAsm 64, Unable to register the ASCOM Camera simulator for 64bit operation. RC: $RC$
     end
     Set Variable MYPROGRESS to 81
-    Set Variable PROGRESSTEXT to Registering Platform 6 Focuser simulator
+    Set Variable PROGRESSTEXT to Registering Platform 7  Focuser simulator
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll" /codebase (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Focus Simulator 6 (at end of file)
     if Variable RC not Equals 0
@@ -1822,35 +1826,35 @@ if Variable SUCCESS not Equals ERROR
       end
       Set Variable ASCOMERROR to $ASCOMERROR$Focuser simulator 64bit registration failed. RC: $RC$
     end
-    Set Variable PROGRESSTEXT to Registering Platform 6 CoverCalibrator simulator
+    Set Variable PROGRESSTEXT to Registering Platform 7 CoverCalibrator simulator
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator\ASCOM.Simulator.CoverCalibrator.dll" /codebase (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - CoverCalibrator Simulator (at end of file)
     if Variable RC not Equals 0
       MessageBalloon: RegAsm 64, Unable to register the ASCOM CoverCalibrator simulator for 64bit operation. RC: $RC$
     end
     Set Variable MYPROGRESS to 82
-    Set Variable PROGRESSTEXT to Registering Platform 6 Safety Monitor simulator
+    Set Variable PROGRESSTEXT to Registering Platform 7 Safety Monitor simulator
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll" /codebase (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Safety Monitor Simulator 6 (at end of file)
     if Variable RC not Equals 0
       MessageBalloon: RegAsm 64, Unable to register the ASCOM Safety Monitor simulator for 64bit operation. RC: $RC$
     end
     Set Variable MYPROGRESS to 83
-    Set Variable PROGRESSTEXT to Registering Platform 6 Dome simulator
+    Set Variable PROGRESSTEXT to Registering Platform 7 Dome simulator
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll" /codebase (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Dome Simulator 6 (at end of file)
     if Variable RC not Equals 0
       MessageBalloon: RegAsm 64, Unable to register the ASCOM Dome simulator for 64bit operation. RC: $RC$
     end
     Set Variable MYPROGRESS to 84
-    Set Variable PROGRESSTEXT to Registering Platform 6 Video simulator
+    Set Variable PROGRESSTEXT to Registering Platform 7 Video simulator
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll" /codebase (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Video Simulator (at end of file)
     if Variable RC not Equals 0
       MessageBalloon: RegAsm 64, Unable to register the ASCOM Video simulator for 64bit operation. RC: $RC$
     end
     Set Variable MYPROGRESS to 85
-    Set Variable PROGRESSTEXT to Registering Platform 6 Open Weathermap Driver
+    Set Variable PROGRESSTEXT to Registering Platform 7 Open Weathermap Driver
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\ASCOM.OpenWeatherMap.ObservingConditions.dll" /codebase (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Open Weather Map Driver (at end of file)
     if Variable RC not Equals 0
@@ -1986,7 +1990,7 @@ if Variable SUCCESS not Equals (Ignore Case) ERROR
       if Variable SUCCESS Equals (Ignore Case) COMPLETE
         Comment: Success and no reboot required!
         Set Variable FINISH_TITLE to $TITLE$ has been installed successfully.
-        Set Variable FINISH_DESCRIPTION to  Congratulations, ASCOM Platform 6 installed successfully!$NEWLINE$$NEWLINE$ Please review the "Introduction" section of the Help file in$NEWLINE$ Start Menu / ASCOM Platform 6 for changes in this release.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ Diagnostics Tool in ASCOM Platform 6 / Tools and report them on$NEWLINE$ the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
+        Set Variable FINISH_DESCRIPTION to  Congratulations, ASCOM Platform 7 installed successfully!$NEWLINE$$NEWLINE$ Please review the "Introduction" section of the Help file in$NEWLINE$ Start Menu / ASCOM Platform 7 for changes in this release.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ Diagnostics Tool in ASCOM Platform 7 / Tools and report them on$NEWLINE$ the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
         if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
           Set Variable FINISH_CONTEXT to The user guide will be displayed after you click the Finish button
         end
@@ -2017,7 +2021,7 @@ if Variable SUCCESS not Equals (Ignore Case) ERROR
 else
   Comment: We have an error so set the error messages
   Set Variable FINISH_TITLE to $TITLE$ installation failed
-  Set Variable FINISH_DESCRIPTION to An error occurred during installation of Platform 6.$NEWLINE$$NEWLINE$Please review the PlatformInstall, UninstallASCOM and FinaliseInstall $NEWLINE$logs in the My Documents\ASCOM and the most recent$NEWLINE$My Documents\ASCOM\Logs YYYY MM DD folders.$NEWLINE$$NEWLINE$Please also run the Diagnostics Tool in ASCOM Platform 6 / Tools and $NEWLINE$post all logs on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$Many thanks, The ASCOM Platform Team.
+  Set Variable FINISH_DESCRIPTION to An error occurred during installation of Platform 7.$NEWLINE$$NEWLINE$Please review the PlatformInstall, UninstallASCOM and FinaliseInstall $NEWLINE$logs in the Documents\ASCOM and the most recent$NEWLINE$Documents\ASCOM\Logs YYYY MM DD folders.$NEWLINE$$NEWLINE$Please also run the Diagnostics Tool in ASCOM Platform 7 / Tools and $NEWLINE$post all logs on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$Many thanks, The ASCOM Platform Team.
   Set Variable FINISH_CONTEXT to Last error: "$LASTERROR$"$NEWLINE$$ASCOMERROR$
 end
  
@@ -2048,7 +2052,7 @@ if Variable SILENT Equals FALSE
         else
           Comment: We are not running on Windows 10 so display an error message.
           Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is not installed and we are not running on Windows 10 - showing cannot display message (at end of file)
-          MessageBox: User Guide, Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 6.
+          MessageBox: User Guide, Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 7.
         end
       end
     end

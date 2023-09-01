@@ -12,9 +12,9 @@ E.g for the initial release of Platform 6.0 the first three lines of this file w
 0
 
 While for service pack 2 of Platform 6.1 the first three lines would be:
-6
-1
-2
+7
+0
+0
 
 When version numbers are constructed by the installer the number of GIT commits is added as the fourth version number component
 giving an overall format of MajorVersion.MinorVersion.ServicePack.GitCommitCount

@@ -1574,6 +1574,10 @@ $
 
 
 
+
+
+
+
 B
 
 
@@ -2217,23 +2221,23 @@ $
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 6.6 SP2 - Early Access
+ASCOM Platform 7.0 - Early Access
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {A6BBF69E-978B-43BE-B8DF-21EFC599A93A}
-6.6.9999.9999
+7.0.9999.9999
 English
-ASCOM Platform 6.6 SP2-  Early Access
-ASCOM Platform 6.6 SP2 - Installation
+ASCOM Platform 7.0 - Early Access
+ASCOM Platform 7.0 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{93852635-0FEA-4226-9E86-6A32C933F763}
+{C4B8AC55-C5BD-4A74-82CC-6EBD3972F58E}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
 https://ascom-standards.org/Downloads/Index.htm
-Copyright © 1998-2022, The ASCOM Initiative. All rights reserved. 
+Copyright © 1998-2023, The ASCOM Initiative. All rights reserved. 
 FALSE
-AscomPlatform662
+AscomPlatform700
 TRUE
 TRUE
 |

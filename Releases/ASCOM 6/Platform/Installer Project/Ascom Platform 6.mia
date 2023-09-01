@@ -1227,6 +1227,10 @@ Install Files
 Install Files
 Install Files
 Install Files
+Install Files
+Install Files
+Install Files
+Install Files
 Code Folding Region
 Comment
 Code Folding Region
@@ -3290,6 +3294,10 @@ $
 {FB7DF0B0-2740-49ED-9083-3B4BFAD4C38C}
 {45682A68-7226-42EC-B197-D15E8342B442}
 {6676A912-0297-4EC5-AA64-F9A73E2C4C48}
+{A5F2544D-46CB-4FC1-B27C-FE380D1F9F2C}
+{46AFCB44-3136-4C61-B4DB-F6C3CA5CC082}
+{01FBFAB5-EC8C-47D7-BEE5-CE3916CA2B25}
+{B0B34BC1-5C76-4E9C-827A-D267EE7E72B8}
 {06365DA1-35BA-42EE-83E6-B0630B49BE66}
 {EE58469C-D891-48CD-A5C3-A1F9CEF67326}
 {93C5E81A-2CCB-4158-8C16-DA23102E15AB}
@@ -4171,7 +4179,7 @@ Remove TLB files created by RegAsm when application is uninstalled
 {FF37FEA3-3A9E-4EF1-AA83-98F386BB554A}
 Create registry keys
 {97E1885F-326F-49A8-96A2-DECDAB7F74A1}
-Platform 6 Documents
+Platform Documents
 {E4BD3BAD-742E-4FA3-9897-33D89C733B63}
 Dome simulator
 {97493473-6D95-4BE8-B539-4195119C6DB1}
@@ -4249,7 +4257,7 @@ Video utilities
 {99E4DC33-EE0F-42E5-98F8-EA0934EB2AEE}
 Register in-process simulator DLL files with Codebase option
 {B27625E0-2CC8-4EFC-801E-5974DB8B2F9E}
-Register Platform 6 components
+Register Platform components
 {AB776E41-3068-4B78-9EE0-ABFE04ECFDEC}
 
 {C81B3F29-A00A-4C46-81E3-F6D18262734E}
@@ -4957,7 +4965,7 @@ MYPROGRESS$MYAH$MYAH$FALSE
 20
 {F371373E-B54B-4A4C-9170-A1397309F67C}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Removing Platform 6...
+Removing Platform 7...
 {AE5B179A-A9DE-43EF-99EE-2617037F8601}
 PROGRESSTEXT$MYAH$MYAH$FALSE
 Creating 32bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
@@ -4981,13 +4989,13 @@ STARTMENU
 $TITLE$
 {F2B1A027-1632-4A7B-BC66-5844E9F3A435}
 TARGETDIR$MYAH$MYAH$FALSE
-$PROGRAMFILES$ASCOM\Platform 6
+$PROGRAMFILES$ASCOM\Platform 7
 {B25CA8AA-8E34-4DA8-82D9-3F5F16B94956}
 ALLUSERS$MYAH$MYAH$FALSE
 TRUE
 {5297F471-CF6A-4E41-A6FF-429D16D6A47A}
 ASCOMSTARTMENU$MYAH$MYAH$FALSE
-ASCOM Platform 6
+ASCOM Platform 7
 {7AFD58E0-D6EB-4665-B094-FC23A05E529E}
 GACREF$MYAH$MYAH$FALSE
 SOFTWARE\Microsoft\Fusion\References
@@ -5152,7 +5160,7 @@ MYPROGRESS$MYAH$MYAH$FALSE
 86
 {85B1FD2D-DC7E-44E1-9452-DA2B7D860FB7}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 Camera simulator
+Registering Platform 7 Camera simulator
 {B2281660-8C64-4883-A093-8706E31978CF}
 PROGRESSTEXT$MYAH$MYAH$FALSE
 Registering 64bit ASCOM.Astrometry.dll for COM
@@ -5164,7 +5172,7 @@ NATIVE_ENGINE$MYAH$MYAH$FALSE
 FALSE
 {8BD2E572-22E5-46BA-AA22-CDA1EB2CAE26}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Finished uninstalling Platform 6
+Finished uninstalling Platform 7
 {D9006F83-2322-4622-A1B5-0944E5A29C55}
 PROGRESSTEXT
 Installing $TITLE$
@@ -5407,40 +5415,40 @@ PROGRESSTEXT$MYAH$MYAH$FALSE
 Registering ASCOM.Utilities.Video 6.1.0.0
 {E9406F9B-9253-413F-82EF-471418937729}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 Camera simulator
+Registering Platform 7 Camera simulator
 {D77A478A-612A-475F-835E-DA732072D4EA}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 Focuser simulator
+Registering Platform 7 Focuser simulator
 {F1723E5B-3BFF-44E7-A37E-68ADF6A9F981}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 SafetyMonitor simulator
+Registering Platform 7 SafetyMonitor simulator
 {58BA01DE-AC04-4CA5-A30E-F313056D87AE}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 Dome simulator
+Registering Platform 7 Dome simulator
 {DA151A20-30A7-48C0-B966-11E2F30E8A79}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 Video simulator
+Registering Platform 7 Video simulator
 {BE6B6EB4-4939-476E-AC30-7CEA858F70E6}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 OpenWeatherMap simulator
+Registering Platform 7 OpenWeatherMap simulator
 {524CB442-6E01-4F6C-AFD6-67ADAB5270C9}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 FilterWheel simulator
+Registering Platform 7 FilterWheel simulator
 {301A3DF8-CCCF-4880-B6A9-F00AFD8164A5}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 Rotator simulator
+Registering Platform 7 Rotator simulator
 {D4DA1762-1BEB-420A-B6DC-DD2283CB029A}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 Switch simulator
+Registering Platform 7 Switch simulator
 {C8D3E136-B597-4568-B543-58E5A3D6F68F}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 Telescope simulator
+Registering Platform 7 Telescope simulator
 {9635D3D4-B72D-4EA8-945D-8BF019F83A46}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 ObservingConditions simulator
+Registering Platform 7 ObservingConditions simulator
 {BEEB615C-4F69-4ECE-A18F-4BE7C560A496}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 Observing Conditions Hub
+Registering Platform 7 Observing Conditions Hub
 {8DE247E1-73D4-4330-A845-669651A8FC75}
 PROGRESSTEXT$MYAH$MYAH$FALSE
 Registering ASCOM.Cache 6.0.0.0
@@ -5479,19 +5487,19 @@ PROGRESSTEXT$MYAH$MYAH$FALSE
 Registering 64bit ASCOM.Cache.dll for COM
 {9DB32F4A-56A6-4C84-8BE8-A1DD977BA8DE}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 Focuser simulator
+Registering Platform 7  Focuser simulator
 {7CBEF415-8EA3-465C-B56D-3B21D8E8D7F7}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 Safety Monitor simulator
+Registering Platform 7 Safety Monitor simulator
 {C215171C-52FB-471C-8034-CA408AE11EC7}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 Dome simulator
+Registering Platform 7 Dome simulator
 {E66C30C3-DEC6-4EF6-AFED-2A08C29A0EE1}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 Video simulator
+Registering Platform 7 Video simulator
 {6CA43868-21A9-4A80-B2E9-4AE1545EBF13}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 Open Weathermap Driver
+Registering Platform 7 Open Weathermap Driver
 {A84D1437-C8ED-4A9D-9794-5BFD73A683C0}
 MYPROGRESS$MYAH$MYAH$FALSE
 93
@@ -5686,10 +5694,10 @@ PROGRESSTEXT
 Installing $TITLE$
 {04BF65A6-0BF0-4A03-AA9A-247AB57B96F5}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Maintaining Platform 6...
+Maintaining Platform 7...
 {973BE3FE-787A-4876-A7D3-0CED603A3F5E}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Repairing Platform 6...
+Repairing Platform 7...
 {174BCFB5-172A-46B5-90E4-5D82E3EC14A6}
 FINISH_TITLE$MYAH$MYAH$FALSE
 
@@ -5707,13 +5715,13 @@ DISPLAY_USER_GUIDE$MYAH$MYAH$FALSE
 FALSE
 {5F4F3B33-9365-4DA0-B7A3-022BCD5F5CDA}
 FINISH_DESCRIPTION$MYAH$MYAH$FALSE
- Congratulations, ASCOM Platform 6 installed successfully!$NEWLINE$$NEWLINE$ Please review the "Introduction" section of the Help file in$NEWLINE$ Start Menu / ASCOM Platform 6 for changes in this release.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ Diagnostics Tool in ASCOM Platform 6 / Tools and report them on$NEWLINE$ the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
+ Congratulations, ASCOM Platform 7 installed successfully!$NEWLINE$$NEWLINE$ Please review the "Introduction" section of the Help file in$NEWLINE$ Start Menu / ASCOM Platform 7 for changes in this release.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ Diagnostics Tool in ASCOM Platform 7 / Tools and report them on$NEWLINE$ the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
 {CC500FEC-8278-4E0F-9662-5BD30446381C}
 FINISH_TITLE$MYAH$MYAH$FALSE
 $TITLE$ has been installed successfully.
 {D56D27C8-BAF3-4C18-9E68-7F9929A9FE4A}
 FINISH_DESCRIPTION$MYAH$MYAH$FALSE
-An error occurred during installation of Platform 6.$NEWLINE$$NEWLINE$Please review the PlatformInstall, UninstallASCOM and FinaliseInstall $NEWLINE$logs in the My Documents\ASCOM and the most recent$NEWLINE$My Documents\ASCOM\Logs YYYY MM DD folders.$NEWLINE$$NEWLINE$Please also run the Diagnostics Tool in ASCOM Platform 6 / Tools and $NEWLINE$post all logs on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$Many thanks, The ASCOM Platform Team.
+An error occurred during installation of Platform 7.$NEWLINE$$NEWLINE$Please review the PlatformInstall, UninstallASCOM and FinaliseInstall $NEWLINE$logs in the Documents\ASCOM and the most recent$NEWLINE$Documents\ASCOM\Logs YYYY MM DD folders.$NEWLINE$$NEWLINE$Please also run the Diagnostics Tool in ASCOM Platform 7 / Tools and $NEWLINE$post all logs on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$Many thanks, The ASCOM Platform Team.
 {5B45FB35-FB63-43FA-B09A-9865B76DC58B}
 FINISH_TITLE$MYAH$MYAH$FALSE
 $TITLE$ installation failed
@@ -5794,13 +5802,13 @@ ASCOMERROR$MYAH$MYAH$FALSE
 Profile migration issue. RC: $RC$
 {B2AC1C08-8298-44F7-9FA5-80CF408EAB7E}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Installing Platform 6...
+Installing Platform 7...
 {A4E9C5C4-7084-4D51-BAD0-3C53736C9AD7}
 PROGRESSTEXT$MYAH$MYAH$FALSE
 Removing Platform 4...
 {A23A8DDE-B245-42EE-8D10-5EA4F026A194}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Installing Platform 6...
+Installing Platform 7...
 {54455A27-06C5-4890-814C-CC4E61002024}
 PROGRESSTEXT$MYAH$MYAH$FALSE
 Removing Platform 5...
@@ -5863,13 +5871,13 @@ PROGRESSTEXT$MYAH$MYAH$FALSE
 Creating 64bit native images - ASCOM.Support.Utilities - v6.0.0.0
 {01F20A4A-1B38-418D-8135-6127BF331571}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 CoverCalibrator simulator
+Registering Platform 7 CoverCalibrator simulator
 {CEE921C6-D434-4632-B770-30BD8FE031D8}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 CoverCalibrator simulator
+Registering Platform 7 CoverCalibrator simulator
 {4A79DB22-3DDB-432E-A287-D8E9709C5570}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Platform 6 Device Hub
+Registering Platform 7 Device Hub
 {A5A32AFE-0728-418C-B372-12B746897243}
 INSTALL_POTH$MYAH$MYAH$FALSE
 
@@ -6670,7 +6678,7 @@ You chose not to force Platform removal so this installer cannot continue and wi
 ERROROLD
 {97D96884-87EE-4C5A-A92A-3B125B7EDDF6}
 User Guide
-Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 6.
+Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 7.
 0
 1
 
@@ -9790,6 +9798,58 @@ FALSE
 FALSE
 FALSE
 FALSE
+{A5F2544D-46CB-4FC1-B27C-FE380D1F9F2C}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.DeviceInterfaces.dll
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{46AFCB44-3136-4C61-B4DB-F6C3CA5CC082}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.DeviceInterfaces.pdb
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{01FBFAB5-EC8C-47D7-BEE5-CE3916CA2B25}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Exceptions.dll
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{B0B34BC1-5C76-4E9C-827A-D267EE7E72B8}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Exceptions.pdb
+FALSE|
+$COMMONFILES$\ASCOM\AlpacaDynamicClients
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
 {BF164208-5DCC-44E8-BF70-A15EC9C00CCE}
 $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe
 TRUE
@@ -11999,7 +12059,7 @@ FALSE
 TRUE
 {5A4EE47D-5574-478F-A007-27AC9C446771}
 $SETUPLOG$
-$TIME$ Finished uninstalling Platform 6
+$TIME$ Finished uninstalling Platform 7
 FALSE
 TRUE
 {4B1C8A43-9F37-48BD-B538-04299F97947D}
@@ -12994,7 +13054,7 @@ FALSE
 TRUE
 {A30D0954-41E2-4909-B373-6230D63DC36C}
 $SETUPLOG$
-$TIME$ RC: $RC$ Uninstalling Platform 6
+$TIME$ RC: $RC$ Uninstalling Platform 7
 FALSE
 TRUE
 {B55DD3B7-514A-43F7-8676-7BA4372089BC}
@@ -13414,7 +13474,7 @@ TRUE
 Remove Previous Platform 6 install if present
 {4ED27AFA-F362-480F-A5BB-717DC5544C1F}
 TRUE
-Install New Platform 6 version
+Install New Platform version
 {2735985A-B7EE-4727-87BE-6E4E6271EB71}
 FALSE
 
@@ -15028,6 +15088,10 @@ C
 
 
 
+
+
+
+
 C
 C
 C
@@ -15853,6 +15917,10 @@ C
 
 
 $
+
+
+
+
 
 
 
