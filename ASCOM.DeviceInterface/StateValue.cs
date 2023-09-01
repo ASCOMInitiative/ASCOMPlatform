@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace ASCOM.DeviceInterface
 {
     /// <summary>
-    /// 
+    /// Data class to hold a single operational state name and value
     /// </summary>
     [ClassInterface(ClassInterfaceType.None)]
     [Guid("109DB703-2B74-424A-89AC-EAA94CFDD86D")]
