@@ -1,9 +1,4 @@
-﻿#if NETSTANDARD2_0
-using ASCOM.Tools;
-#else
-using ASCOM.Utilities;
-#endif
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -26,17 +21,19 @@ namespace ASCOM.DeviceInterface.DeviceState
         /// Create a new CoverCalibratorState instance from the device's DeviceState response.
         /// </summary>
         /// <param name="deviceStateArrayList">The device's DeviceState response.</param>
-        /// <param name="TL">Debug TraceLogger instance.</param>
-        public CoverCalibratorState(ArrayList deviceStateArrayList, TraceLogger TL)
+        /// <param name="TL">Debug TraceLogger instance. The type of this parameter is Object - see remarks.</param>
+        /// <remarks>This class supports .NET Framework 3.5, 4.x and .NET Standard 2.0. In order to avoid use of dynamic and inclusion of projects or packages that define the TraceLogger
+        /// component, the TL parameter is typed as an object and a reflection method is used to call the LogMessage member.</remarks>
+        public CoverCalibratorState(ArrayList deviceStateArrayList, object TL)
         {
-            TL?.LogMessage(className, $"Received {deviceStateArrayList.Count} items");
+            LogMessage(className, $"Received {deviceStateArrayList.Count} items");
 
             List<IStateValue> deviceState = new List<IStateValue>();
 
             // Handle null ArrayList
             if (deviceStateArrayList is null) // No ArrayList was supplied so return
             {
-                TL?.LogMessage(className, $"Supplied device state ArrayList is null, all values will be unknown.");
+                LogMessage(className, $"Supplied device state ArrayList is null, all values will be unknown.");
                 return;
             }
 
@@ -45,7 +42,7 @@ namespace ASCOM.DeviceInterface.DeviceState
             {
                 try
                 {
-                    TL?.LogMessage(className, $"{stateValue.Name} = {stateValue.Value}");
+                    LogMessage(className, $"{stateValue.Name} = {stateValue.Value}");
                     deviceState.Add(new StateValue(stateValue.Name, stateValue.Value));
 
                     switch (stateValue.Name)
@@ -57,9 +54,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL?.LogMessage(className, $"Brightness - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"Brightness - Ignoring exception: {ex.Message}");
                             }
-                            TL?.LogMessage(className, $"Brightness has value: {Brightness.HasValue}, Value: {Brightness}");
+                            LogMessage(className, $"Brightness has value: {Brightness.HasValue}, Value: {Brightness}");
                             break;
 
                         case nameof(ICoverCalibratorV2.CalibratorState):
@@ -69,9 +66,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL?.LogMessage(className, $"CalibratorState - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"CalibratorState - Ignoring exception: {ex.Message}");
                             }
-                            TL?.LogMessage(className, $"CalibratorState has value: {CalibratorState.HasValue}, Value: {CalibratorState}");
+                            LogMessage(className, $"CalibratorState has value: {CalibratorState.HasValue}, Value: {CalibratorState}");
                             break;
 
                         case nameof(ICoverCalibratorV2.CoverState):
@@ -81,9 +78,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL?.LogMessage(className, $"CoverState - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"CoverState - Ignoring exception: {ex.Message}");
                             }
-                            TL?.LogMessage(className, $"CoverState has value: {CoverState.HasValue}, Value: {CoverState}");
+                            LogMessage(className, $"CoverState has value: {CoverState.HasValue}, Value: {CoverState}");
                             break;
 
                         case nameof(ICoverCalibratorV2.CalibratorReady):
@@ -93,9 +90,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL?.LogMessage(className, $"CalibratorReady - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"CalibratorReady - Ignoring exception: {ex.Message}");
                             }
-                            TL?.LogMessage(className, $"CalibratorReady has value: {CalibratorReady.HasValue}, Value: {CalibratorReady}");
+                            LogMessage(className, $"CalibratorReady has value: {CalibratorReady.HasValue}, Value: {CalibratorReady}");
                             break;
 
                         case nameof(ICoverCalibratorV2.CoverMoving):
@@ -105,9 +102,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL?.LogMessage(className, $"CoverMoving - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"CoverMoving - Ignoring exception: {ex.Message}");
                             }
-                            TL?.LogMessage(className, $"CoverMoving has value: {CoverMoving.HasValue}, Value: {CoverMoving}");
+                            LogMessage(className, $"CoverMoving has value: {CoverMoving.HasValue}, Value: {CoverMoving}");
                             break;
 
                         case "TimeStamp":
@@ -117,19 +114,19 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL?.LogMessage(className, $"TimeStamp - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"TimeStamp - Ignoring exception: {ex.Message}");
                             }
-                            TL?.LogMessage(className, $"TimeStamp has value: {TimeStamp.HasValue}, Value: {TimeStamp}");
+                            LogMessage(className, $"TimeStamp has value: {TimeStamp.HasValue}, Value: {TimeStamp}");
                             break;
 
                         default:
-                            TL?.LogMessage(className, $"Ignoring {stateValue.Name}");
+                            LogMessage(className, $"Ignoring {stateValue.Name}");
                             break;
                     }
                 }
                 catch (Exception ex)
                 {
-                    TL?.LogMessage(className, $"Exception: {ex.Message}.\r\n{ex}");
+                    LogMessage(className, $"Exception: {ex.Message}.\r\n{ex}");
                 }
             }
         }
@@ -163,6 +160,15 @@ namespace ASCOM.DeviceInterface.DeviceState
         /// The time at which the state was recorded
         /// </summary>
         public DateTime? TimeStamp { get; set; } = null;
+
+        #region Private methods
+
+        private void LogMessage(string method, string name)
+        {
+
+        }
+
+        #endregion
 
     }
 }

@@ -12,12 +12,12 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <param name="driverInterfaceVersion">Interface version of this driver (Int16)</param>
         /// <returns>True if the switch supports asynchronous operations.</returns>
-        /// <exception cref="InvalidValueException">The supplied interface version is 0 or less.</exception>
+        /// <exception cref="InvalidOperationException">The supplied interface version is 0 or less.</exception>
         public static bool HasAsyncSwitch(int driverInterfaceVersion)
         {
             // Validate parameter
             if (driverInterfaceVersion < 1)
-                throw new InvalidValueException($"ASCOMLibrary.DeviceCapabilities.HasAsyncSwitch - Supplied interface version is 0 or negative: {driverInterfaceVersion}");
+                throw new InvalidOperationException($"ASCOMLibrary.DeviceCapabilities.HasAsyncSwitch - Supplied interface version is 0 or negative: {driverInterfaceVersion}");
 
             return driverInterfaceVersion >= 3;
         }
@@ -112,7 +112,7 @@ namespace ASCOM.DeviceInterface
                     break;
 
                 default:
-                    throw new InvalidValueException($"DeviceCapabillities.HasConnectAndDeviceState - Unsupported device type: {deviceType}. The Platform code needs to be updated to add support.");
+                    throw new InvalidOperationException($"DeviceCapabillities.HasConnectAndDeviceState - Unsupported device type: {deviceType}. The Platform code needs to be updated to add support.");
             }
 
             // Device has a Platform 6 or earlier interface

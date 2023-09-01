@@ -26,14 +26,23 @@
 	<ItemGroup>
 		<Compile Include="..\AssemblyVersionInfo.cs" Link="Properties\AssemblyVersionInfo.cs" />
 	</ItemGroup>
-	<!-- Include the correct reference depending on whether the target is .NET Framework or .NET Standard -->
-	<ItemGroup Condition="'$(TARGETFRAMEWORK)' == 'netstandard2.0'">
-		<PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.47" />
+	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+		<PackageReference Include="System.Dynamic.Runtime">
+			<Version>4.3.0</Version>
+		</PackageReference>
 	</ItemGroup>
-	<ItemGroup Condition="'$(TARGETFRAMEWORK)' != 'netstandard2.0'">
-	  <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj" />
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<PackageReference Include="System.Dynamic.Runtime">
+			<Version>4.3.0</Version>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net35'">
+		<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj" />
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.58" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" />
 	</ItemGroup>
 </Project>

@@ -4,7 +4,8 @@
 using System.Collections;
 using System;
 using System.Runtime.InteropServices;
-#if NETFRAMEWORK
+
+#if NET35
 using ASCOM.Utilities;
 #else
 using Util = ASCOM.Tools.Utilities;

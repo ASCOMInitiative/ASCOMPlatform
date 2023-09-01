@@ -61,52 +61,52 @@ namespace ASCOM.DynamicClients
             {
                 Enabled = true // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
             };
-            TL.LogMessage("Main", $"Server started");
+            TL?.LogMessage("Main", $"Server started");
 
             // Load driver COM assemblies and get types, ending the program if something goes wrong.
-            TL.LogMessage("Main", $"Loading drivers");
+            TL?.LogMessage("Main", $"Loading drivers");
             if (!PopulateListOfAscomDrivers()) return;
 
             // Process command line arguments e.g. to Register/Unregister drivers, ending the program if required.
-            TL.LogMessage("Main", $"Processing command-line arguments");
+            TL?.LogMessage("Main", $"Processing command-line arguments");
             if (!ProcessArguments(args)) return;
 
             // Initialize variables.
-            TL.LogMessage("Main", $"Initialising variables");
+            TL?.LogMessage("Main", $"Initialising variables");
             driversInUseCount = 0;
             serverLockCount = 0;
             mainThreadId = GetCurrentThreadId();
             Thread.CurrentThread.Name = "AlpacaSim Local Server Thread";
 
             // Create and configure the local server host form that runs the Windows message loop required to support driver operation
-            TL.LogMessage("Main", $"Creating host form");
+            TL?.LogMessage("Main", $"Creating host form");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             localServerMainForm = new LocalServerForm();
             if (startedByCOM) localServerMainForm.WindowState = FormWindowState.Minimized;
 
             // Register the class factories of the served objects
-            TL.LogMessage("Main", $"Registering class factories");
+            TL?.LogMessage("Main", $"Registering class factories");
             RegisterClassFactories();
 
             // Start the garbage collection thread.
-            TL.LogMessage("Main", $"Starting garbage collection");
+            TL?.LogMessage("Main", $"Starting garbage collection");
             StartGarbageCollection(10000);
-            TL.LogMessage("Main", $"Garbage collector thread started");
+            TL?.LogMessage("Main", $"Garbage collector thread started");
 
             // Start the message loop to serialize incoming calls to the served driver COM objects.
             try
             {
-                TL.LogMessage("Main", $"Starting main form");
+                TL?.LogMessage("Main", $"Starting main form");
                 Application.Run(localServerMainForm);
-                TL.LogMessage("Main", $"Main form has ended");
+                TL?.LogMessage("Main", $"Main form has ended");
             }
             finally
             {
                 // Revoke the class factories immediately without waiting until the thread has stopped
-                TL.LogMessage("Main", $"Revoking class factories");
+                TL?.LogMessage("Main", $"Revoking class factories");
                 RevokeClassFactories();
-                TL.LogMessage("Main", $"Class factories revoked");
+                TL?.LogMessage("Main", $"Class factories revoked");
 
                 // No new connections are now possible and the local server is irretrievably shutting down, so release resources in the Hardware classes
                 try
@@ -119,7 +119,7 @@ namespace ASCOM.DynamicClients
                     {
                         try
                         {
-                            TL.LogMessage("Main", $"Hardware disposal - Found type: {type.Name}");
+                            TL?.LogMessage("Main", $"Hardware disposal - Found type: {type.Name}");
 
                             // Get the HardwareClassAttribute attribute if present on this type
                             object[] attrbutes = type.GetCustomAttributes(typeof(HardwareClassAttribute), false);
@@ -127,7 +127,7 @@ namespace ASCOM.DynamicClients
                             // Check to see if this type has the HardwareClass attribute, which indicates that this is a hardware class.
                             if (attrbutes.Length > 0) // There is a HardwareClass attribute so call its Dispose() method
                             {
-                                TL.LogMessage("Main", $"  {type.Name} is a hardware class");
+                                TL?.LogMessage("Main", $"  {type.Name} is a hardware class");
 
                                 // Only process static classes that don't have instances here.
                                 if (type.IsAbstract & type.IsSealed) // This type is a static class
@@ -138,40 +138,40 @@ namespace ASCOM.DynamicClients
                                     // If the method is found call it
                                     if (disposeMethod != null) // a public Dispose() method was found
                                     {
-                                        TL.LogMessage("Main", $"  Calling method {disposeMethod.Name} in static class {type.Name}...");
+                                        TL?.LogMessage("Main", $"  Calling method {disposeMethod.Name} in static class {type.Name}...");
 
                                         // Now call Dispose()
                                         disposeMethod.Invoke(null, null);
-                                        TL.LogMessage("Main", $"  {disposeMethod.Name} method called OK.");
+                                        TL?.LogMessage("Main", $"  {disposeMethod.Name} method called OK.");
                                     }
                                     else // No public Dispose method was found
                                     {
-                                        TL.LogMessage("Main", $"  The {disposeMethod.Name} method does not contain a public Dispose() method.");
+                                        TL?.LogMessage("Main", $"  The {disposeMethod.Name} method does not contain a public Dispose() method.");
                                     }
                                 }
                                 else
                                 {
-                                    TL.LogMessage("Main", $"  Ignoring type {type.Name} because it is not static.");
+                                    TL?.LogMessage("Main", $"  Ignoring type {type.Name} because it is not static.");
                                 }
                             }
                         }
                         catch (Exception ex)
                         {
-                            TL.LogMessage("Main", $"Exception (inner) when disposing of hardware class.\r\n{ex}");
+                            TL?.LogMessage("Main", $"Exception (inner) when disposing of hardware class.\r\n{ex}");
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    TL.LogMessage("Main", $"Exception (outer) when disposing of hardware class.\r\n{ex}");
+                    TL?.LogMessage("Main", $"Exception (outer) when disposing of hardware class.\r\n{ex}");
                 }
 
                 // Now stop the Garbage Collector thread.
-                TL.LogMessage("Main", $"Stopping garbage collector");
+                TL?.LogMessage("Main", $"Stopping garbage collector");
                 StopGarbageCollection();
             }
 
-            TL.LogMessage("Main", $"Local server closing");
+            TL?.LogMessage("Main", $"Local server closing");
             TL.Dispose();
 
         }
@@ -201,7 +201,7 @@ namespace ASCOM.DynamicClients
         public static int IncrementObjectCount()
         {
             int newCount = Interlocked.Increment(ref driversInUseCount); // Increment the object count.
-            TL.LogMessage("IncrementObjectCount", $"New object count: {newCount}");
+            TL?.LogMessage("IncrementObjectCount", $"New object count: {newCount}");
 
             return newCount;
         }
@@ -213,7 +213,7 @@ namespace ASCOM.DynamicClients
         public static int DecrementObjectCount()
         {
             int newCount = Interlocked.Decrement(ref driversInUseCount); // Decrement the object count.
-            TL.LogMessage("DecrementObjectCount", $"New object count: {newCount}");
+            TL?.LogMessage("DecrementObjectCount", $"New object count: {newCount}");
 
             return newCount;
         }
@@ -239,7 +239,7 @@ namespace ASCOM.DynamicClients
         public static int IncrementServerLockCount()
         {
             int newCount = Interlocked.Increment(ref serverLockCount); // Increment the server lock count for this server.
-            TL.LogMessage("IncrementServerLockCount", $"New server lock count: {newCount}");
+            TL?.LogMessage("IncrementServerLockCount", $"New server lock count: {newCount}");
 
             return newCount;
         }
@@ -251,7 +251,7 @@ namespace ASCOM.DynamicClients
         public static int DecrementServerLockLock()
         {
             int newCount = Interlocked.Decrement(ref serverLockCount); // Decrement the server lock count for this server.
-            TL.LogMessage("DecrementServerLockLock", $"New server lock count: {newCount}");
+            TL?.LogMessage("DecrementServerLockLock", $"New server lock count: {newCount}");
             return newCount;
         }
 
@@ -265,12 +265,12 @@ namespace ASCOM.DynamicClients
         {
             lock (lockObject)
             {
-                TL.LogMessage("ExitIf", $"Object count: {ObjectCount}, Server lock count: {serverLockCount}");
+                TL?.LogMessage("ExitIf", $"Object count: {ObjectCount}, Server lock count: {serverLockCount}");
                 if ((ObjectCount <= 0) && (ServerLockCount <= 0))
                 {
                     if (startedByCOM)
                     {
-                        TL.LogMessage("ExitIf", $"Server started by COM so shutting down the Windows message loop on the main process to end the local server.");
+                        TL?.LogMessage("ExitIf", $"Server started by COM so shutting down the Windows message loop on the main process to end the local server.");
 
                         UIntPtr wParam = new(0);
                         IntPtr lParam = new(0);
@@ -304,29 +304,29 @@ namespace ASCOM.DynamicClients
                 // Iterate over the types identifying those which are drivers
                 foreach (Type type in types)
                 {
-                    TL.LogMessage("PopulateListOfAscomDrivers", $"Found type: {type.Name}");
+                    TL?.LogMessage("PopulateListOfAscomDrivers", $"Found type: {type.Name}");
 
                     // Check to see if this type has the ServedClassName attribute, which indicates that this is a driver class.
                     object[] attrbutes = type.GetCustomAttributes(typeof(ServedClassNameAttribute), false);
                     if (attrbutes.Length > 0) // There is a ServedClassName attribute on this class so it is a driver
                     {
-                        TL.LogMessage("PopulateListOfAscomDrivers", $"  {type.Name} is a driver assembly");
+                        TL?.LogMessage("PopulateListOfAscomDrivers", $"  {type.Name} is a driver assembly");
                         driverTypes.Add(type); // Add the driver type to the list
                     }
                 }
                 TL.BlankLine();
 
                 // Log discovered drivers
-                TL.LogMessage("PopulateListOfAscomDrivers", $"Found {driverTypes.Count} drivers");
+                TL?.LogMessage("PopulateListOfAscomDrivers", $"Found {driverTypes.Count} drivers");
                 foreach (Type type in driverTypes)
                 {
-                    TL.LogMessage("PopulateListOfAscomDrivers", $"Found Driver : {type.Name} {type.GetTypeInfo().CustomAttributes.First()}");
+                    TL?.LogMessage("PopulateListOfAscomDrivers", $"Found Driver : {type.Name} {type.GetTypeInfo().CustomAttributes.First()}");
                 }
                 TL.BlankLine();
             }
             catch (Exception e)
             {
-                TL.LogMessage("PopulateListOfAscomDrivers", $"Exception: {e}");
+                TL?.LogMessage("PopulateListOfAscomDrivers", $"Exception: {e}");
                 MessageBox.Show($"Failed to load served COM class assembly from within this local server - {e.Message}", "Alpaca Dynamic Local Server", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return false;
             }
@@ -359,13 +359,13 @@ namespace ASCOM.DynamicClients
                 // Iterate over registered devices of the selected device type
                 Profile.GetDrivers(deviceType).ForEach(driver =>
                 {
-                    TL.LogMessage("GetDynamicTypes", $"Found driver: {driver.ProgID} => {driver.Name}");
+                    TL?.LogMessage("GetDynamicTypes", $"Found driver: {driver.ProgID} => {driver.Name}");
 
                     // Test whether the driver is a of the new driver file less type.
                     if (driver.ProgID.StartsWith(DRIVER_PROGID_BASE, StringComparison.OrdinalIgnoreCase)) //This is a new type driver
                     {
                         // Log this registration
-                        TL.LogMessage("GetDynamicTypes", $"Registering driver: {driver.ProgID} => {driver.Name}");
+                        TL?.LogMessage("GetDynamicTypes", $"Registering driver: {driver.ProgID} => {driver.Name}");
 
                         // Get the COM GUID for this driver
                         Guid registrationGuid;
@@ -377,7 +377,7 @@ namespace ASCOM.DynamicClients
                         catch (Exception ex)
                         {
                             // Can't read or write to the Profile so this is a catastrophic failure that requires an end to the process
-                            TL.LogMessage("GetDynamicTypes", $"Exception reading COM GUID: {ex.Message}, creating a new registration GUID.\r\n{ex}");
+                            TL?.LogMessage("GetDynamicTypes", $"Exception reading COM GUID: {ex.Message}, creating a new registration GUID.\r\n{ex}");
                             throw;
                         }
 
@@ -508,7 +508,7 @@ namespace ASCOM.DynamicClients
             // Set the local server's DCOM/AppID information
             try
             {
-                TL.LogMessage("RegisterObjects", $"Setting local server's APPID");
+                TL?.LogMessage("RegisterObjects", $"Setting local server's APPID");
 
                 // Set HKCR\APPID\appid
                 using (RegistryKey appIdKey = Registry.ClassesRoot.CreateSubKey($"APPID\\{localServerAppId}"))
@@ -524,11 +524,11 @@ namespace ASCOM.DynamicClients
                 {
                     exeNameKey.SetValue("AppID", localServerAppId);
                 }
-                TL.LogMessage("RegisterObjects", $"APPID set successfully");
+                TL?.LogMessage("RegisterObjects", $"APPID set successfully");
             }
             catch (Exception ex)
             {
-                TL.LogMessage("RegisterObjects", $"Setting AppID exception: {ex}");
+                TL?.LogMessage("RegisterObjects", $"Setting AppID exception: {ex}");
                 MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
@@ -536,7 +536,7 @@ namespace ASCOM.DynamicClients
             // Register each discovered driver
             foreach (Type driverType in driverTypes)
             {
-                TL.LogMessage("RegisterObjects", $"Creating COM registration for {driverType.Name}");
+                TL?.LogMessage("RegisterObjects", $"Creating COM registration for {driverType.Name}");
                 bool bFail = false;
                 try
                 {
@@ -544,7 +544,7 @@ namespace ASCOM.DynamicClients
                     string clsId = Marshal.GenerateGuidForType(driverType).ToString("B");
                     string progId = Marshal.GenerateProgIdForType(driverType);
                     string deviceType = driverType.Name; // Generate device type from the Class name
-                    TL.LogMessage("RegisterObjects", $"Assembly title: {assemblyTitle}, ASsembly description: {assemblyDescription}, CLSID: {clsId}, ProgID: {progId}, Device type: {deviceType}");
+                    TL?.LogMessage("RegisterObjects", $"Assembly title: {assemblyTitle}, ASsembly description: {assemblyDescription}, CLSID: {clsId}, ProgID: {progId}, Device type: {deviceType}");
 
                     using (RegistryKey clsIdKey = Registry.ClassesRoot.CreateSubKey($"CLSID\\{clsId}"))
                     {
@@ -580,13 +580,13 @@ namespace ASCOM.DynamicClients
                     // Pull the display name from the ServedClassName attribute.
                     assemblyTitleAttribute = Attribute.GetCustomAttribute(driverType, typeof(ServedClassNameAttribute));
                     string chooserName = ((ServedClassNameAttribute)assemblyTitleAttribute).DisplayName ?? "MultiServer";
-                    TL.LogMessage("RegisterObjects", $"Registering {chooserName} ({driverType.Name}) in Profile");
+                    TL?.LogMessage("RegisterObjects", $"Registering {chooserName} ({driverType.Name}) in Profile");
 
                     Profile.Register(deviceType.ToDeviceType(), progId, chooserName);
                 }
                 catch (Exception ex)
                 {
-                    TL.LogMessage("RegisterObjects", $"Driver registration exception: {ex}");
+                    TL?.LogMessage("RegisterObjects", $"Driver registration exception: {ex}");
                     MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     bFail = true;
                 }
@@ -617,7 +617,7 @@ namespace ASCOM.DynamicClients
             // Delete each driver's COM registration
             foreach (Type driverType in driverTypes)
             {
-                TL.LogMessage("UnregisterObjects", $"Removing COM registration for {driverType.Name}");
+                TL?.LogMessage("UnregisterObjects", $"Removing COM registration for {driverType.Name}");
 
                 string clsId = Marshal.GenerateGuidForType(driverType).ToString("B");
                 string progId = Marshal.GenerateProgIdForType(driverType);
@@ -647,7 +647,7 @@ namespace ASCOM.DynamicClients
                 WindowsPrincipal userPrincipal = new(userIdentity);
                 bool isAdministrator = userPrincipal.IsInRole(WindowsBuiltInRole.Administrator);
 
-                TL.LogMessage("IsAdministrator", isAdministrator.ToString());
+                TL?.LogMessage("IsAdministrator", isAdministrator.ToString());
                 return isAdministrator;
             }
         }
@@ -665,17 +665,17 @@ namespace ASCOM.DynamicClients
             processStartInfo.Verb = "runas";
             try
             {
-                TL.LogMessage("IsAdministrator", $"Starting elevated process");
+                TL?.LogMessage("IsAdministrator", $"Starting elevated process");
                 Process.Start(processStartInfo);
             }
             catch (System.ComponentModel.Win32Exception)
             {
-                TL.LogMessage("IsAdministrator", $"The ASCOM.AlpacaSim.LocalServer was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it."));
+                TL?.LogMessage("IsAdministrator", $"The ASCOM.AlpacaSim.LocalServer was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it."));
                 MessageBox.Show("The ASCOM.AlpacaSim.LocalServer was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it.", "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Warning));
             }
             catch (Exception ex)
             {
-                TL.LogMessage("IsAdministrator", $"Exception: {ex}");
+                TL?.LogMessage("IsAdministrator", $"Exception: {ex}");
                 MessageBox.Show(ex.ToString(), "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
             return;
@@ -692,27 +692,27 @@ namespace ASCOM.DynamicClients
         /// <returns>True if there are no errors, otherwise false.</returns>
         private static bool RegisterClassFactories()
         {
-            TL.LogMessage("RegisterClassFactories", $"Registering class factories");
+            TL?.LogMessage("RegisterClassFactories", $"Registering class factories");
             classFactories = new();
             foreach (Type driverType in driverTypes)
             {
-                TL.LogMessage("RegisterClassFactories", $"  Creating class factory for: {driverType.Name}");
+                TL?.LogMessage("RegisterClassFactories", $"  Creating class factory for: {driverType.Name}");
                 ClassFactory factory = new(driverType); // Use default context & flags
                 classFactories.Add(factory);
 
-                TL.LogMessage("RegisterClassFactories", $"  Registering class factory for: {driverType.Name}");
+                TL?.LogMessage("RegisterClassFactories", $"  Registering class factory for: {driverType.Name}");
                 if (!factory.RegisterClassObject())
                 {
-                    TL.LogMessage("RegisterClassFactories", $"  Failed to register class factory for " + driverType.Name);
+                    TL?.LogMessage("RegisterClassFactories", $"  Failed to register class factory for " + driverType.Name);
                     MessageBox.Show("Failed to register class factory for " + driverType.Name, "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return false;
                 }
-                TL.LogMessage("RegisterClassFactories", $"  Registered class factory OK for: {driverType.Name}");
+                TL?.LogMessage("RegisterClassFactories", $"  Registered class factory OK for: {driverType.Name}");
             }
 
-            TL.LogMessage("RegisterClassFactories", $"Making class factories live");
+            TL?.LogMessage("RegisterClassFactories", $"Making class factories live");
             ClassFactory.ResumeClassObjects(); // Served objects now go live
-            TL.LogMessage("RegisterClassFactories", $"Class factories live OK");
+            TL?.LogMessage("RegisterClassFactories", $"Class factories live OK");
             return true;
         }
 
@@ -721,9 +721,9 @@ namespace ASCOM.DynamicClients
         /// </summary>
         private static void RevokeClassFactories()
         {
-            TL.LogMessage("RevokeClassFactories", $"Suspending class factories");
+            TL?.LogMessage("RevokeClassFactories", $"Suspending class factories");
             ClassFactory.SuspendClassObjects(); // Prevent race conditions
-            TL.LogMessage("RevokeClassFactories", $"Class factories suspended OK");
+            TL?.LogMessage("RevokeClassFactories", $"Class factories suspended OK");
 
             foreach (ClassFactory factory in classFactories)
             {
@@ -749,7 +749,7 @@ namespace ASCOM.DynamicClients
                 switch (args[0].ToLower())
                 {
                     case "-embedding":
-                        TL.LogMessage("ProcessArguments", $"Started by COM: {args[0]}");
+                        TL?.LogMessage("ProcessArguments", $"Started by COM: {args[0]}");
                         startedByCOM = true; // Indicate COM started us and continue
                         returnStatus = true; // Continue on return
                         break;
@@ -758,7 +758,7 @@ namespace ASCOM.DynamicClients
                     case @"/register":
                     case "-regserver": // Emulate VB6
                     case @"/regserver":
-                        TL.LogMessage("ProcessArguments", $"Registering drivers: {args[0]}");
+                        TL?.LogMessage("ProcessArguments", $"Registering drivers: {args[0]}");
                         RegisterObjects(); // Register each served object
                         returnStatus = false; // Terminate on return
                         break;
@@ -767,13 +767,13 @@ namespace ASCOM.DynamicClients
                     case @"/unregister":
                     case "-unregserver": // Emulate VB6
                     case @"/unregserver":
-                        TL.LogMessage("ProcessArguments", $"Unregistering drivers: {args[0]}");
+                        TL?.LogMessage("ProcessArguments", $"Unregistering drivers: {args[0]}");
                         UnregisterObjects(); //Unregister each served object
                         returnStatus = false; // Terminate on return
                         break;
 
                     default:
-                        TL.LogMessage("ProcessArguments", $"Unknown argument: {args[0]}");
+                        TL?.LogMessage("ProcessArguments", $"Unknown argument: {args[0]}");
                         MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         break;
                 }
@@ -781,7 +781,7 @@ namespace ASCOM.DynamicClients
             else
             {
                 startedByCOM = false;
-                TL.LogMessage("ProcessArguments", $"No arguments supplied");
+                TL?.LogMessage("ProcessArguments", $"No arguments supplied");
             }
 
             return returnStatus;
@@ -798,14 +798,14 @@ namespace ASCOM.DynamicClients
         private static void StartGarbageCollection(int interval)
         {
             // Create the garbage collection object
-            TL.LogMessage("StartGarbageCollection", $"Creating garbage collector with interval: {interval} seconds");
+            TL?.LogMessage("StartGarbageCollection", $"Creating garbage collector with interval: {interval} seconds");
             GarbageCollection garbageCollector = new(interval);
 
             // Create a cancellation token and start the garbage collection task 
-            TL.LogMessage("StartGarbageCollection", $"Starting garbage collector thread");
+            TL?.LogMessage("StartGarbageCollection", $"Starting garbage collector thread");
             GCTokenSource = new CancellationTokenSource();
             GCTask = Task.Factory.StartNew(() => garbageCollector.GCWatch(GCTokenSource.Token), GCTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-            TL.LogMessage("StartGarbageCollection", $"Garbage collector thread started OK");
+            TL?.LogMessage("StartGarbageCollection", $"Garbage collector thread started OK");
         }
 
 
@@ -815,10 +815,10 @@ namespace ASCOM.DynamicClients
         private static void StopGarbageCollection()
         {
             // Signal the garbage collector thread to stop
-            TL.LogMessage("StopGarbageCollection", $"Stopping garbage collector thread");
+            TL?.LogMessage("StopGarbageCollection", $"Stopping garbage collector thread");
             GCTokenSource.Cancel();
             GCTask.Wait();
-            TL.LogMessage("StopGarbageCollection", $"Garbage collector thread stopped OK");
+            TL?.LogMessage("StopGarbageCollection", $"Garbage collector thread stopped OK");
 
             // Clean up
             GCTask = null;
@@ -915,13 +915,20 @@ namespace ASCOM.DynamicClients
             return (T)(object)client;
         }
 
-        internal static T SetupDialogueCommon<T>(DriverState state, TraceLogger TL)
+        /// <summary>
+        /// Setup dialogue method used by all device types
+        /// </summary>
+        /// <typeparam name="T">Alpaca client type</typeparam>
+        /// <param name="state">DriverState class containing the driver's state</param>
+        /// <param name="TL">TraceLogger instance for operational debugging.</param>
+        /// <returns></returns>
+        internal static T SetupDialogue<T>(DriverState state, TraceLogger TL)
         {
             T client = default;
 
             try
             {
-                TL.LogMessage("SetupDialog", "Creating setup form");
+                TL?.LogMessage("SetupDialog", "Creating setup form");
                 using (SetupDialogForm setupForm = new SetupDialogForm(TL))
                 {
                     // Pass the setup dialogue data into the form
@@ -947,12 +954,12 @@ namespace ASCOM.DynamicClients
                     setupForm.DiscoveryPort = state.DiscoveryPort;
                     setupForm.TrustUserGeneratedSslCertificates = state.TrustUserGeneratedSslCertificates;
 
-                    TL.LogMessage("SetupDialog", "Showing Dialogue");
+                    TL?.LogMessage("SetupDialog", "Showing Dialogue");
                     var result = setupForm.ShowDialog();
-                    TL.LogMessage("SetupDialog", "Dialogue closed");
+                    TL?.LogMessage("SetupDialog", "Dialogue closed");
                     if (result == DialogResult.OK)
                     {
-                        TL.LogMessage("SetupDialog", "Dialogue closed with OK status");
+                        TL?.LogMessage("SetupDialog", "Dialogue closed with OK status");
 
                         // Retrieve revised setup data from the form
                         state.TraceState = setupForm.TraceState;
@@ -976,24 +983,24 @@ namespace ASCOM.DynamicClients
                         state.TrustUserGeneratedSslCertificates = setupForm.TrustUserGeneratedSslCertificates;
 
                         // Write the changed values to the Profile
-                        TL.LogMessage("SetupDialog", "Writing new values to profile");
+                        TL?.LogMessage("SetupDialog", "Writing new values to profile");
                         state.PersistState();
 
-                        // Establish new host and device parameters
-                        TL.LogMessage("SetupDialog", "Establishing new host and device parameters");
-                        // DynamicClientDriver.ConnectToRemoteDevice(ref client, ipAddressString, portNumber, establishConnectionTimeout, serviceType, TL, clientNumber, driverProgId, DEVICE_TYPE,
-                        //                                           standardDeviceResponseTimeout, userName, password, uniqueId, enableRediscovery, ipV4Enabled, ipV6Enabled, discoveryPort, trustUserGeneratedSslCertificates);
+                        // Create a new client with the configured parameters
+                        TL?.LogMessage("SetupDialog", "Creating a new client with the configured parameters");
+
                         client = GetClient<T>(state, TL);
                     }
                     else
-                        TL.LogMessage("SetupDialog", "Dialogue closed with Cancel status");
+                        TL?.LogMessage("SetupDialog", "Dialogue closed with Cancel status");
 
+                    // Return the new client with the new setup parameters
                     return (T)(object)client;
                 }
             }
             catch (Exception ex)
             {
-                TL.LogMessage("SetupDialog", $"Threw an exception: \r\n{ex}");
+                TL?.LogMessage("SetupDialog", $"Threw an exception: \r\n{ex}");
                 throw;
             }
         }

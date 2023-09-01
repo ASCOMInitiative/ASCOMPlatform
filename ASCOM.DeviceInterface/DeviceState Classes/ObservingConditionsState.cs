@@ -1,9 +1,4 @@
-﻿#if NETSTANDARD2_0
-using ASCOM.Tools;
-#else
-using ASCOM.Utilities;
-#endif
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -26,28 +21,30 @@ namespace ASCOM.DeviceInterface.DeviceState
         /// Create a new ObservingConditionsState instance from the device's DeviceState response.
         /// </summary>
         /// <param name="deviceStateArrayList">The device's DeviceState response.</param>
-        /// <param name="TL">Debug TraceLogger instance.</param>
-        public ObservingConditionsState(ArrayList deviceStateArrayList, TraceLogger TL)
+        /// <param name="TL">Debug TraceLogger instance. The type of this parameter is Object - see remarks.</param>
+        /// <remarks>This class supports .NET Framework 3.5, 4.x and .NET Standard 2.0. In order to avoid use of dynamic and inclusion of projects or packages that define the TraceLogger
+        /// component, the TL parameter is typed as an object and a reflection method is used to call the LogMessage member.</remarks>
+        public ObservingConditionsState(ArrayList deviceStateArrayList, object TL)
         {
-            TL?.LogMessage(className, $"Received {deviceStateArrayList.Count} items");
+            LogMessage(className, $"Received {deviceStateArrayList.Count} items");
 
             List<IStateValue> deviceState = new List<IStateValue>();
 
             // Handle null ArrayList
             if (deviceStateArrayList is null) // No ArrayList was supplied so return
             {
-                TL?.LogMessage(className, $"Supplied device state ArrayList is null, all values will be unknown.");
+                LogMessage(className, $"Supplied device state ArrayList is null, all values will be unknown.");
                 return;
             }
 
-            TL?.LogMessage(className, $"ArrayList from device contained {deviceStateArrayList.Count} DeviceSate items.");
+            LogMessage(className, $"ArrayList from device contained {deviceStateArrayList.Count} DeviceSate items.");
 
             // An ArrayList was supplied so process each supplied value
             foreach (IStateValue stateValue in deviceStateArrayList)
             {
                 try
                 {
-                    TL?.LogMessage(className, $"{stateValue.Name} = {stateValue.Value}");
+                    LogMessage(className, $"{stateValue.Name} = {stateValue.Value}");
                     deviceState.Add(new StateValue(stateValue.Name, stateValue.Value));
 
                     switch (stateValue.Name)
@@ -59,9 +56,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"CloudCover - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"CloudCover - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"CloudCover has value: {CloudCover.HasValue}, Value: {CloudCover}");
+                            LogMessage(className, $"CloudCover has value: {CloudCover.HasValue}, Value: {CloudCover}");
                             break;
 
                         case nameof(IObservingConditionsV2.DewPoint):
@@ -71,9 +68,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"DewPoint - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"DewPoint - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"DewPoint has value: {DewPoint.HasValue} , Value:  {DewPoint}");
+                            LogMessage(className, $"DewPoint has value: {DewPoint.HasValue} , Value:  {DewPoint}");
                             break;
 
                         case nameof(IObservingConditionsV2.Humidity):
@@ -83,9 +80,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"Humidity - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"Humidity - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Humidity has value: {Humidity.HasValue} , Value:  {Humidity}");
+                            LogMessage(className, $"Humidity has value: {Humidity.HasValue} , Value:  {Humidity}");
                             break;
 
                         case nameof(IObservingConditionsV2.Pressure):
@@ -95,9 +92,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"Pressure - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"Pressure - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Pressure has value: {Pressure.HasValue} , Value:  {Pressure}");
+                            LogMessage(className, $"Pressure has value: {Pressure.HasValue} , Value:  {Pressure}");
                             break;
 
                         case nameof(IObservingConditionsV2.RainRate):
@@ -107,9 +104,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"RainRate - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"RainRate - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"RainRate has value: {RainRate.HasValue}, Value: {RainRate}");
+                            LogMessage(className, $"RainRate has value: {RainRate.HasValue}, Value: {RainRate}");
                             break;
 
                         case nameof(IObservingConditionsV2.SkyBrightness):
@@ -119,9 +116,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"SkyBrightness - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"SkyBrightness - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"SkyBrightness has value: {SkyBrightness.HasValue}, Value: {SkyBrightness}");
+                            LogMessage(className, $"SkyBrightness has value: {SkyBrightness.HasValue}, Value: {SkyBrightness}");
                             break;
 
                         case nameof(IObservingConditionsV2.SkyQuality):
@@ -131,9 +128,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"SkyQuality - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"SkyQuality - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"SkyQuality has value: {SkyQuality.HasValue}, Value: {SkyQuality}");
+                            LogMessage(className, $"SkyQuality has value: {SkyQuality.HasValue}, Value: {SkyQuality}");
                             break;
 
                         case nameof(IObservingConditionsV2.SkyTemperature):
@@ -143,9 +140,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"SkyTemperature - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"SkyTemperature - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"SkyTemperature has value: {SkyTemperature.HasValue}, Value: {SkyTemperature}");
+                            LogMessage(className, $"SkyTemperature has value: {SkyTemperature.HasValue}, Value: {SkyTemperature}");
                             break;
 
                         case nameof(IObservingConditionsV2.StarFWHM):
@@ -155,9 +152,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"StarFWHM - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"StarFWHM - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"StarFWHM has value: {StarFWHM.HasValue}, Value: {StarFWHM}");
+                            LogMessage(className, $"StarFWHM has value: {StarFWHM.HasValue}, Value: {StarFWHM}");
                             break;
 
                         case nameof(IObservingConditionsV2.Temperature):
@@ -167,9 +164,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"Temperature - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"Temperature - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Temperature has value: {Temperature.HasValue}, Value: {Temperature}");
+                            LogMessage(className, $"Temperature has value: {Temperature.HasValue}, Value: {Temperature}");
                             break;
 
                         case nameof(IObservingConditionsV2.WindDirection):
@@ -179,9 +176,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"WindDirection - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"WindDirection - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"WindDirection has value: {WindDirection.HasValue}, Value: {WindDirection}");
+                            LogMessage(className, $"WindDirection has value: {WindDirection.HasValue}, Value: {WindDirection}");
                             break;
 
                         case nameof(IObservingConditionsV2.WindGust):
@@ -191,9 +188,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"WindGust - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"WindGust - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"WindGust has value: {WindGust.HasValue}, Value: {WindGust}");
+                            LogMessage(className, $"WindGust has value: {WindGust.HasValue}, Value: {WindGust}");
                             break;
 
                         case nameof(IObservingConditionsV2.WindSpeed):
@@ -203,9 +200,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"WindSpeed - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"WindSpeed - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"WindSpeed has value: {WindSpeed.HasValue}, Value: {WindSpeed}");
+                            LogMessage(className, $"WindSpeed has value: {WindSpeed.HasValue}, Value: {WindSpeed}");
                             break;
 
                         case "TimeStamp":
@@ -215,19 +212,19 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"TimeStamp - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"TimeStamp - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"TimeStamp has value: {TimeStamp.HasValue}, Value: {TimeStamp}");
+                            LogMessage(className, $"TimeStamp has value: {TimeStamp.HasValue}, Value: {TimeStamp}");
                             break;
 
                         default:
-                            TL?.LogMessage(className, $"Ignoring {stateValue.Name}");
+                            LogMessage(className, $"Ignoring {stateValue.Name}");
                             break;
                     }
                 }
                 catch (Exception ex)
                 {
-                    TL?.LogMessage(className, $"Exception: {ex.Message}.\r\n{ex}");
+                    LogMessage(className, $"Exception: {ex.Message}.\r\n{ex}");
                 }
             }
         }
@@ -300,6 +297,15 @@ namespace ASCOM.DeviceInterface.DeviceState
         /// The time at which the state was recorded
         /// </summary>
         public DateTime? TimeStamp { get; set; } = null;
+        #region Private methods
+
+        private void LogMessage(string method, string name)
+        {
+
+        }
+
+        #endregion
+
     }
 }
 

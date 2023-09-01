@@ -1,9 +1,4 @@
-﻿#if NETSTANDARD2_0
-using ASCOM.Tools;
-#else
-using ASCOM.Utilities;
-#endif
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -26,28 +21,30 @@ namespace ASCOM.DeviceInterface.DeviceState
         /// Create a new VideoState instance from the device's DeviceState response.
         /// </summary>
         /// <param name="deviceStateArrayList">The device's DeviceState response.</param>
-        /// <param name="TL">Debug TraceLogger instance.</param>
-        public VideoState(ArrayList deviceStateArrayList, TraceLogger TL)
+        /// <param name="TL">Debug TraceLogger instance. The type of this parameter is Object - see remarks.</param>
+        /// <remarks>This class supports .NET Framework 3.5, 4.x and .NET Standard 2.0. In order to avoid use of dynamic and inclusion of projects or packages that define the TraceLogger
+        /// component, the TL parameter is typed as an object and a reflection method is used to call the LogMessage member.</remarks>
+        public VideoState(ArrayList deviceStateArrayList, object TL)
         {
-            TL?.LogMessage(className, $"Received {deviceStateArrayList.Count} items");
+            LogMessage(className, $"Received {deviceStateArrayList.Count} items");
 
             List<IStateValue> deviceState = new List<IStateValue>();
 
             // Handle null ArrayList
             if (deviceStateArrayList is null) // No ArrayList was supplied so return
             {
-                TL?.LogMessage(className, $"Supplied device state ArrayList is null, all values will be unknown.");
+                LogMessage(className, $"Supplied device state ArrayList is null, all values will be unknown.");
                 return;
             }
 
-            TL?.LogMessage(className, $"ArrayList from device contained {deviceStateArrayList.Count} DeviceSate items.");
+            LogMessage(className, $"ArrayList from device contained {deviceStateArrayList.Count} DeviceSate items.");
 
             // An ArrayList was supplied so process each supplied value
             foreach (IStateValue stateValue in deviceStateArrayList)
             {
                 try
                 {
-                    TL?.LogMessage(className, $"{stateValue.Name} = {stateValue.Value}");
+                    LogMessage(className, $"{stateValue.Name} = {stateValue.Value}");
                     deviceState.Add(new StateValue(stateValue.Name, stateValue.Value));
 
                     switch (stateValue.Name)
@@ -59,9 +56,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"CameraState - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"CameraState - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"CameraState has value: {CameraState.HasValue}, Value: {CameraState}");
+                            LogMessage(className, $"CameraState has value: {CameraState.HasValue}, Value: {CameraState}");
                             break;
 
                         case "TimeStamp":
@@ -71,19 +68,19 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"TimeStamp - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"TimeStamp - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"TimeStamp has value: {TimeStamp.HasValue}, Value: {TimeStamp}");
+                            LogMessage(className, $"TimeStamp has value: {TimeStamp.HasValue}, Value: {TimeStamp}");
                             break;
 
                         default:
-                            TL?.LogMessage(className, $"Ignoring {stateValue.Name}");
+                            LogMessage(className, $"Ignoring {stateValue.Name}");
                             break;
                     }
                 }
                 catch (Exception ex)
                 {
-                    TL?.LogMessage(className, $"Exception: {ex.Message}.\r\n{ex}");
+                    LogMessage(className, $"Exception: {ex.Message}.\r\n{ex}");
                 }
             }
         }
@@ -97,5 +94,14 @@ namespace ASCOM.DeviceInterface.DeviceState
         /// The time at which the state was recorded
         /// </summary>
         public DateTime? TimeStamp { get; set; } = null;
+        #region Private methods
+
+        private void LogMessage(string method, string name)
+        {
+
+        }
+
+        #endregion
+
     }
 }

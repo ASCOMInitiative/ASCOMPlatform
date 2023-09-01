@@ -14,6 +14,12 @@ using System.Collections;
 using System;
 using System.Runtime.InteropServices;
 
+#if NET35
+using ASCOM.Utilities;
+#else
+using Util = ASCOM.Tools.Utilities;
+#endif
+
 namespace ASCOM.DeviceInterface
 {
     /// <summary>
@@ -147,7 +153,7 @@ namespace ASCOM.DeviceInterface
 		string ExposureStartTime { get; }
 
 		//Avoid reference to KeyValuePair class in .NET Standard 2.0 because the class doesn't exist in the ASCOM Library.
-#if NETFRAMEWORK
+#if NET35
 		/// <summary>
 		/// Returns additional information associated with the video frame as a list of named variables.
 		/// </summary>
@@ -159,7 +165,7 @@ namespace ASCOM.DeviceInterface
 		/// This property must return an empty list if no video frame metadata is provided.
 		/// <para>The Keys is a single word, or multiple words joined by underscore characters, that sensibly describes the variable. It is recommended that Keys
 		/// should be a maximum of 16 characters for legibility and all upper case.</para>
-		/// <para>The KeyValuePair objects are instances of the <see cref="ASCOM.Utilities.KeyValuePair">KeyValuePair class</see></para>
+		/// <para>The KeyValuePair objects are instances of the <see cref="KeyValuePair">KeyValuePair class</see></para>
 		/// </remarks>
 		/// <value>An ArrayList of KeyValuePair objects.</value>
 #else

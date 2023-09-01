@@ -40,7 +40,7 @@ namespace ASCOM.DeviceInterface
                 deviceTypeName.ToDeviceType();
                 return true;
             }
-            catch (InvalidValueException)
+            catch 
             {
                 return false;
             }
@@ -62,7 +62,7 @@ namespace ASCOM.DeviceInterface
             catch (Exception ex)// Bad value to return an exception
             {
                 // Failed to parse so return an exception and include the parser exception
-                throw new InvalidValueException($"Devices.ToDeviceType - Device type: {device} is not an ASCOM device type. Parser failure message: {ex.Message}.", ex);
+                throw new InvalidOperationException($"Devices.ToDeviceType - Device type: {device} is not an ASCOM device type. Parser failure message: {ex.Message}.", ex);
             }
         }
 
@@ -80,7 +80,7 @@ namespace ASCOM.DeviceInterface
             if (deviceTypeString != null) return deviceTypeString; // OK
 
             // Bad value to return an exception
-            throw new InvalidValueException($"Devices.ToDeviceString - Supplied DeviceType enum value {(int)deviceType} is not a valid member of the DeviceTypes enum.");
+            throw new InvalidOperationException($"Devices.ToDeviceString - Supplied DeviceType enum value {(int)deviceType} is not a valid member of the DeviceTypes enum.");
         }
     }
 }

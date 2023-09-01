@@ -1,9 +1,4 @@
-﻿#if NETSTANDARD2_0
-using ASCOM.Tools;
-#else
-using ASCOM.Utilities;
-#endif
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -26,28 +21,30 @@ namespace ASCOM.DeviceInterface.DeviceState
         /// Create a new TelescopeState instance from the device's DeviceState response.
         /// </summary>
         /// <param name="deviceStateArrayList">The device's DeviceState response.</param>
-        /// <param name="TL">Debug TraceLogger instance.</param>
-        public TelescopeState(ArrayList deviceStateArrayList, TraceLogger TL)
+        /// <param name="TL">Debug TraceLogger instance. The type of this parameter is Object - see remarks.</param>
+        /// <remarks>This class supports .NET Framework 3.5, 4.x and .NET Standard 2.0. In order to avoid use of dynamic and inclusion of projects or packages that define the TraceLogger
+        /// component, the TL parameter is typed as an object and a reflection method is used to call the LogMessage member.</remarks>
+        public TelescopeState(ArrayList deviceStateArrayList, object TL)
         {
-            TL?.LogMessage(className, $"Received {deviceStateArrayList.Count} items");
+            LogMessage(className, $"Received {deviceStateArrayList.Count} items");
 
             List<IStateValue> deviceState = new List<IStateValue>();
 
             // Handle null ArrayList
             if (deviceStateArrayList is null) // No ArrayList was supplied so return
             {
-                TL?.LogMessage(className, $"Supplied device state ArrayList is null, all values will be unknown.");
+                LogMessage(className, $"Supplied device state ArrayList is null, all values will be unknown.");
                 return;
             }
 
-            TL?.LogMessage(className, $"ArrayList from device contained {deviceStateArrayList.Count} DeviceSate items.");
+            LogMessage(className, $"ArrayList from device contained {deviceStateArrayList.Count} DeviceSate items.");
 
             // An ArrayList was supplied so process each supplied value
             foreach (IStateValue stateValue in deviceStateArrayList)
             {
                 try
                 {
-                    TL?.LogMessage(className, $"{stateValue.Name} = {stateValue.Value}");
+                    LogMessage(className, $"{stateValue.Name} = {stateValue.Value}");
                     deviceState.Add(new StateValue(stateValue.Name, stateValue.Value));
 
                     switch (stateValue.Name)
@@ -59,9 +56,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"Altitude - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"Altitude - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Altitude has value: {Altitude.HasValue}, Value: {Altitude}");
+                            LogMessage(className, $"Altitude has value: {Altitude.HasValue}, Value: {Altitude}");
                             break;
 
                         case nameof(ITelescopeV4.AtHome):
@@ -71,9 +68,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"AtHome - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"AtHome - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"AtHome has value: {AtHome.HasValue}, Value: {AtHome}");
+                            LogMessage(className, $"AtHome has value: {AtHome.HasValue}, Value: {AtHome}");
                             break;
 
                         case nameof(ITelescopeV4.AtPark):
@@ -83,9 +80,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"AtPark - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"AtPark - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"AtPark has value: {AtPark.HasValue}, Value: {AtPark}");
+                            LogMessage(className, $"AtPark has value: {AtPark.HasValue}, Value: {AtPark}");
                             break;
 
                         case nameof(ITelescopeV4.Azimuth):
@@ -95,9 +92,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"Azimuth - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"Azimuth - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Azimuth has value: {Azimuth.HasValue}, Value: {Azimuth}");
+                            LogMessage(className, $"Azimuth has value: {Azimuth.HasValue}, Value: {Azimuth}");
                             break;
 
                         case nameof(ITelescopeV4.Declination):
@@ -107,9 +104,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"Declination - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"Declination - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Declination has value: {Declination.HasValue}, Value: {Declination}");
+                            LogMessage(className, $"Declination has value: {Declination.HasValue}, Value: {Declination}");
                             break;
 
                         case nameof(ITelescopeV4.IsPulseGuiding):
@@ -119,9 +116,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"IsPulseGuiding - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"IsPulseGuiding - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"IsPulseGuiding has value: {IsPulseGuiding.HasValue}, Value: {IsPulseGuiding}");
+                            LogMessage(className, $"IsPulseGuiding has value: {IsPulseGuiding.HasValue}, Value: {IsPulseGuiding}");
                             break;
 
                         case nameof(ITelescopeV4.RightAscension):
@@ -131,9 +128,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"RightAscension - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"RightAscension - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"RightAscension has value: {RightAscension.HasValue}, Value: {RightAscension}");
+                            LogMessage(className, $"RightAscension has value: {RightAscension.HasValue}, Value: {RightAscension}");
                             break;
 
                         case nameof(ITelescopeV4.SideOfPier):
@@ -143,9 +140,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"SideOfPier - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"SideOfPier - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"SideOfPier has value: {SideOfPier.HasValue}, Value: {SideOfPier}");
+                            LogMessage(className, $"SideOfPier has value: {SideOfPier.HasValue}, Value: {SideOfPier}");
                             break;
 
                         case nameof(ITelescopeV4.SiderealTime):
@@ -155,9 +152,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"SiderealTime - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"SiderealTime - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"SiderealTime has value: {SiderealTime.HasValue}, Value: {SiderealTime}");
+                            LogMessage(className, $"SiderealTime has value: {SiderealTime.HasValue}, Value: {SiderealTime}");
                             break;
 
                         case nameof(ITelescopeV4.Slewing):
@@ -167,9 +164,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"Slewing - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"Slewing - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Slewing has value: {Slewing.HasValue}, Value: {Slewing}");
+                            LogMessage(className, $"Slewing has value: {Slewing.HasValue}, Value: {Slewing}");
                             break;
 
                         case nameof(ITelescopeV4.Tracking):
@@ -179,9 +176,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"Tracking - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"Tracking - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"Tracking has value: {Tracking.HasValue}, Value: {Tracking}");
+                            LogMessage(className, $"Tracking has value: {Tracking.HasValue}, Value: {Tracking}");
                             break;
 
                         case nameof(ITelescopeV4.UTCDate):
@@ -191,9 +188,9 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"UTCDate - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"UTCDate - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"UTCDate has value: {UTCDate.HasValue}, Value: {UTCDate}");
+                            LogMessage(className, $"UTCDate has value: {UTCDate.HasValue}, Value: {UTCDate}");
                             break;
 
                         case "TimeStamp":
@@ -203,19 +200,19 @@ namespace ASCOM.DeviceInterface.DeviceState
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(className, $"TimeStamp - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"TimeStamp - Ignoring exception: {ex.Message}");
                             }
-                            TL.LogMessage(className, $"TimeStamp has value: {TimeStamp.HasValue}, Value: {TimeStamp}");
+                            LogMessage(className, $"TimeStamp has value: {TimeStamp.HasValue}, Value: {TimeStamp}");
                             break;
 
                         default:
-                            TL?.LogMessage(className, $"Ignoring {stateValue.Name}");
+                            LogMessage(className, $"Ignoring {stateValue.Name}");
                             break;
                     }
                 }
                 catch (Exception ex)
                 {
-                    TL?.LogMessage(className, $"Exception: {ex.Message}.\r\n{ex}");
+                    LogMessage(className, $"Exception: {ex.Message}.\r\n{ex}");
                 }
             }
         }
@@ -284,6 +281,15 @@ namespace ASCOM.DeviceInterface.DeviceState
         /// The time at which the state was recorded
         /// </summary>
         public DateTime? TimeStamp { get; set; } = null;
+        #region Private methods
+
+        private void LogMessage(string method, string name)
+        {
+
+        }
+
+        #endregion
+
     }
 }
 
