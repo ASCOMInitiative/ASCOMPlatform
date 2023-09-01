@@ -118,8 +118,10 @@
     <VisibleItems>InheritedMembers, EditorBrowsableNever, NonBrowsable</VisibleItems>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="ASCOM.HelperNET.VB6HelperSupport" isDocumented="False" />
-      <NamespaceSummaryItem name="ASCOM.Utilities.Interfaces" isDocumented="True" />
-    </NamespaceSummaries>
+<NamespaceSummaryItem name="ASCOM.Utilities.Interfaces" isDocumented="True" />
+<NamespaceSummaryItem name="ASCOM.DeviceInterface (Group)" isGroup="True" isDocumented="True">Device interfaces and device state classes.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="ASCOM.DeviceInterface" isDocumented="True" />
+<NamespaceSummaryItem name="ASCOM.DeviceInterface.DeviceState" isDocumented="True">Device state helper classes returned by client toolkit instances.</NamespaceSummaryItem></NamespaceSummaries>
     <SdkLinkType>Msdn</SdkLinkType>
     <FrameworkVersion>.NET Framework 4.8</FrameworkVersion>
     <KeepLogFile>True</KeepLogFile>
