@@ -221,7 +221,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ASCOM.Alpaca.Components">
-      <Version>1.0.109-rc.58</Version>
+      <Version>1.0.109-rc.59</Version>
     </PackageReference>
     <PackageReference Include="RestSharp">
       <Version>106.15.0</Version>

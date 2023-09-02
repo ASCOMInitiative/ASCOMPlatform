@@ -842,7 +842,7 @@ namespace ASCOM.DynamicClients
 
         #region Common methods
 
-        internal static T GetClient<T>(DriverState state, TraceLogger TL)
+        internal static T GetClient<T>(DynamicClientState state, TraceLogger TL)
         {
             IAlpacaClientV2 client;
 
@@ -922,7 +922,7 @@ namespace ASCOM.DynamicClients
         /// <param name="state">DriverState class containing the driver's state</param>
         /// <param name="TL">TraceLogger instance for operational debugging.</param>
         /// <returns></returns>
-        internal static T SetupDialogue<T>(DriverState state, TraceLogger TL)
+        internal static T SetupDialogue<T>(DynamicClientState state, TraceLogger TL)
         {
             T client = default;
 

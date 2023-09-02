@@ -8,14 +8,14 @@ namespace ASCOM.DynamicClients
     /// <summary>
     /// Class holding the state of this driver
     /// </summary>
-    public class DriverState
+    public class DynamicClientState
     {
         /// <summary>
         /// Initialise this instance using values from the given ProgId
         /// </summary>
         /// <param name="ProgId">The device's ProgId</param>
         /// <param name="DeviceType">The ASCOM device type</param>
-        public DriverState(string progId, DeviceTypes deviceType, string driverDisplayName)
+        public DynamicClientState(string progId, DeviceTypes deviceType, string driverDisplayName)
         {
             // Save the provided ProgId and device type for use when saving values to the Profile
             ProgId = progId;

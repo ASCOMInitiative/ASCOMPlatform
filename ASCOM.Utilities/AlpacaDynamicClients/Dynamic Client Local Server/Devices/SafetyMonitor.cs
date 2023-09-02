@@ -20,16 +20,20 @@ namespace ASCOM.DynamicClients
         // Set the device type of this device
         private const DeviceTypes deviceType = DeviceTypes.SafetyMonitor;
 
-        internal static string driverProgId; // ASCOM DeviceID (COM ProgID) for this driver, the value is retrieved from the ServedClassName attribute in the class initialiser.
-        internal static string driverDisplayName; // The value is retrieved from the ServedClassName attribute in the class initialiser.
-
-        internal bool connectedState; // The connected state from this driver's perspective)
-        internal TraceLogger TL; // Trace logger object to hold diagnostic information just for this instance of the driver, as opposed to the local server's log, which includes activity from all driver instances.
-        private bool disposedValue;
-
+        // The ASCOM Library Alpaca client that is used to communicate with the Alpaca device.
         private AlpacaSafetyMonitor client;
 
-        DriverState state; // State variable for this driver
+        internal static string driverProgId; // ASCOM DeviceID (COM ProgID) for this driver, the value is retrieved from the ServedClassName attribute in the class initialiser.
+        internal static string driverDisplayName; // The device description in the Chooser, the value is retrieved from the ServedClassName attribute in the class initialiser.
+
+        internal bool connectedState; // The connected state from this driver's perspective
+        internal TraceLogger TL; // Trace logger object to present diagnostic information for this instance of the driver
+        private bool disposedValue;
+
+        readonly DynamicClientState state; // Holds state information for this Dynamic Client driver (not the remote Alpaca device)
+
+        private bool asyncConnectDisconnect; // Flag indicating whether an asynchronous Connect or Disconnect operation is in progress
+        private bool newConnectedState; // The state to which connectedState will be set when an asynchronous Connect / Disconnect operation completes
 
         #region Initialisation and Dispose
 
@@ -49,7 +53,7 @@ namespace ASCOM.DynamicClients
                 driverDisplayName = ((ServedClassNameAttribute)attr).DisplayName ?? "DISPLAY NAME NOT SET!";  // Get the driver description that displays in the ASCOM Chooser from the ServedClassName attribute.
 
                 // Read the device's configuration from the Profile and assign its ProgID, device type and display name that has been read from the class
-                state = new DriverState(driverProgId, deviceType, driverDisplayName);
+                state = new DynamicClientState(driverProgId, deviceType, driverDisplayName);
 
                 // Set up a trace logger
                 TL = new TraceLogger(state.ProgId[6..], false)
@@ -59,20 +63,20 @@ namespace ASCOM.DynamicClients
                 if (state.DebugTraceState)
                     TL.SetMinimumLoggingLevel(LogLevel.Debug);
 
-                LogMessage(nameof(SafetyMonitor), $"Starting driver initialisation for ProgID: {driverProgId}, Description: {driverDisplayName}");
+                LogMessage(deviceType.ToString(), $"Starting driver initialisation for ProgID: {driverProgId}, Description: {driverDisplayName}");
+
+                // Create a client
+                client = Server.GetClient<AlpacaSafetyMonitor>(state, TL);
+                LogMessage(deviceType.ToString(), $"Alpaca client created successfully");
 
                 // Initialise connected to false
                 connectedState = false;
 
-                // Create a client
-                client = Server.GetClient<AlpacaSafetyMonitor>(state, TL);
-                LogMessage(nameof(SafetyMonitor), $"Alpaca client created successfully");
-
-                LogMessage(nameof(SafetyMonitor), "Completed initialisation");
+                LogMessage(deviceType.ToString(), "Completed initialisation");
             }
             catch (Exception ex)
             {
-                LogMessage(nameof(SafetyMonitor), $"Initialisation exception: {ex}");
+                LogMessage(deviceType.ToString(), $"Initialisation exception: {ex}");
                 MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.AlpacaSim.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -153,7 +157,7 @@ namespace ASCOM.DynamicClients
             else // Show dialogue
             {
                 AlpacaSafetyMonitor newclient = Server.SetupDialogue<AlpacaSafetyMonitor>(state, TL);
-                if (newclient != null)
+                if (newclient is not null)
                 {
                     // Dispose of the old client
                     try
@@ -165,7 +169,7 @@ namespace ASCOM.DynamicClients
                         LogMessage("SetupDialog", $"Ignoring exception when disposing current client: {ex.Message}.\r\n{ex}");
                     }
 
-                    // Replace client
+                    // Replace original client with new client
                     client = newclient;
                 }
             }
@@ -258,9 +262,9 @@ namespace ASCOM.DynamicClients
             try
             {
                 CheckConnected($"CommandBool: {command}, Raw: {raw}");
-                LogMessage("CommandBlind", $"Calling method - Command: {command}, Raw: {raw}");
+                LogMessage("CommandBool", $"Calling method - Command: {command}, Raw: {raw}");
                 bool commandBoolResponse = client.CommandBool(command, raw);
-                LogMessage("CommandBlind", $"Returning: {commandBoolResponse}.");
+                LogMessage("CommandBool", $"Returning: {commandBoolResponse}.");
                 return commandBoolResponse;
             }
             catch (Exception ex)
@@ -308,53 +312,41 @@ namespace ASCOM.DynamicClients
         {
             get
             {
-                try
-                {
-                    // Returns the driver's connection state rather than the local server's connected state, which could be different because there may be other client connections still active.
-                    LogMessage("Connected Get", connectedState.ToString());
-                    return connectedState;
-                }
-                catch (Exception ex)
-                {
-                    LogMessage("Connected Get", $"Threw an exception: \r\n{ex}");
-                    throw;
-                }
+                // Returns the driver's connection state rather than the local server's connected state, which could be different because there may be other client connections still active.
+                LogMessage("Connected Get", connectedState.ToString());
+                return connectedState;
             }
             set
             {
-                try
+                // Handle local connection management if required.
+                if (state.ManageConnectLocally) // Connected state will be set locally but will not be passed to the remote device
                 {
-                    if (value == connectedState)
+                    connectedState = value;
+                }
+                else // Connected state will be set locally and passed to the to the remote device
+                {
+                    try
                     {
-                        LogMessage("Connected Set", $"Device already in requested state, ignoring request to set Connected to {value}");
-                        return;
-                    }
-
-                    if (value) // Set Connected = TRUE
-                    {
-                        if (!client.Connected) // Device is not connected
+                        if (value) // Set Connected = TRUE
                         {
                             LogMessage("Connected Set", "Connecting to device");
                             client.Connected = true;
                             connectedState = true;
                             LogMessage("Connected Set", $"Connected to device OK, connected state: {connectedState}");
                         }
-                        else // Device is already connected
+                        else // Set Connected = FALSE
                         {
-                            connectedState = true;
-                            LogMessage("Connected Set", $"Client already connected, setting connected state to true, connected state: {connectedState}");
+                            LogMessage("Connected Set", "Disconnecting from device");
+                            client.Connected = false;
+                            connectedState = false;
+                            LogMessage("Connected Set", $"Disconnected from device OK, connected state: {connectedState}");
                         }
                     }
-                    else // Set Connected = FALSE
+                    catch (Exception ex)
                     {
-                        connectedState = false;
-                        LogMessage("Connected Set", $"Setting Connected to false, connected state: {connectedState}");
+                        LogMessage("Connected Set", $"Threw an exception: {ex.Message}\r\n{ex}");
+                        throw;
                     }
-                }
-                catch (Exception ex)
-                {
-                    LogMessage("Connected Set", $"Threw an exception: \r\n{ex}");
-                    throw;
                 }
             }
         }
@@ -472,50 +464,133 @@ namespace ASCOM.DynamicClients
 
         public void Connect()
         {
-            if (!client.Connected) // Client is not connected
+            // Handle local connection management if required.
+            if (state.ManageConnectLocally) // Connected state will be set locally immediately but will not be passed to the remote device
             {
-                // Connect client
-                client.Connect();
-                do
-                {
-                    Application.DoEvents();
-                    System.Threading.Thread.Sleep(100);
-                } while (client.Connecting);
-
-                //Set Connected to True
                 connectedState = true;
             }
-            else // Client is already connected so just set the Connected state to TRUE
+            else // Connect will be passed to the to the remote device
             {
-                connectedState = true;
+                try
+                {
+                    // Call the client's Connect method
+                    client.Connect();
+
+                    // Flag that an asynchronous Connect operation is underway and that the Connected state should be TRUE on completion
+                    asyncConnectDisconnect = true;
+                    newConnectedState = true;
+                }
+                catch (Exception ex)
+                {
+                    LogMessage("Connect", $"Threw an exception: {ex.Message}\r\n{ex}");
+                    throw;
+                }
             }
         }
 
         public void Disconnect()
         {
-            connectedState = false;
+            // Handle local connection management if required.
+            if (state.ManageConnectLocally) // Connected state will be set locally immediately but will not be passed to the remote device
+            {
+                connectedState = false;
+            }
+            else // Disconnect will be passed to the to the remote device
+            {
+                try
+                {
+                    // Call the client's Disconnect method
+                    client.Disconnect();
+
+                    // Flag that an asynchronous Disconnect operation is underway and that the Connected state should be FALSE on completion
+                    asyncConnectDisconnect = true;
+                    newConnectedState = false;
+                }
+                catch (Exception ex)
+                {
+                    LogMessage("Disconnect", $"Threw an exception: {ex.Message}\r\n{ex}");
+                    throw;
+                }
+            }
         }
 
-        public bool Connecting => client.Connecting;
+        public bool Connecting
+        {
+            get
+            {
+                // Handle local connection management if required.
+                if (state.ManageConnectLocally) // Connect and Disconnect operations always complete immediately, so Connecting will always be FALSE
+                {
+                    return false;
+                }
+                else // Get the connecting state from the remote device
+                {
+                    try
+                    {
+                        // Get the connecting state from the remote device
+                        bool connecting = client.Connecting;
+
+                        // If the operation is complete check whether we need to update the local Connected state
+                        if (!connecting) // Operation is complete
+                        {
+                            // Test whether an async operation is underway from this client's perspective
+                            if (asyncConnectDisconnect) // An async operation was underway but the device indicates that the operation has completed
+                            {
+                                // Update the Connected state and unset the async operation underway flag
+                                connectedState = newConnectedState;
+                                asyncConnectDisconnect = false;
+                            }
+                            else
+                            {
+                                // No async operation underway so no action required.
+                            }
+                        }
+                        else // Operation is still underway
+                        {
+                            // The asynchronous Connect or Disconnect is still underway so no action required
+                        }
+
+                        // Return the Connecting state from the device
+                        return connecting;
+                    }
+                    catch (Exception ex)
+                    {
+                        LogMessage("Connecting", $"Threw an exception: {ex.Message}\r\n{ex}");
+                        throw;
+                    }
+                }
+            }
+        }
 
         public ArrayList DeviceState
         {
             get
             {
-                ArrayList returnValue = new();
-
-                List<StateValue> deviceState = OperationalStateProperty.Clean(client.DeviceState, DeviceTypes.SafetyMonitor, TL);
-
-                LogMessage("DeviceState", $"Received {deviceState.Count} values");
-                foreach (StateValue value in deviceState)
+                try
                 {
-                    LogMessage("DeviceState", $"  {value.Name} = {value.Value} - Kind: {value.Value.GetType().Name}");
-                    returnValue.Add(value);
+                    // Initialise the return ArrayList
+                    ArrayList returnValue = new();
+
+                    // Get the device state from the Alpaca device
+                    List<StateValue> deviceState = client.DeviceState;
+                    LogMessage("DeviceState", $"Received {deviceState.Count} values");
+
+                    // Parse the returned values and store in the ArrayList
+                    foreach (StateValue value in deviceState)
+                    {
+                        LogMessage("DeviceState", $"  {value.Name} = {value.Value} - Kind: {value.Value.GetType().Name}");
+                        returnValue.Add(value);
+                    }
+
+                    LogMessage("DeviceState", $"Return value has {returnValue.Count} values");
+
+                    return returnValue;
                 }
-
-                LogMessage("DeviceState", $"Return value has {returnValue.Count} values");
-
-                return returnValue;
+                catch (Exception ex)
+                {
+                    LogMessage("DeviceState", $"Threw an exception: {ex.Message}\r\n{ex}");
+                    throw;
+                }
             }
         }
 
