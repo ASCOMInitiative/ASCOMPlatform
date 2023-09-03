@@ -47,7 +47,7 @@ Friend Class ChooserForm
     Private Const ALPACA_MULTI_THREADED_CHOOSER As String = "Multi Threaded Chooser" : Private Const ALPACA_MULTI_THREADED_CHOOSER_DEFAULT As Boolean = True
 
     ' Alpaca integration constants
-    Private Const ALPACA_DYNAMIC_CLIENT_MANAGER_RELATIVE_PATH As String = "ASCOM\Platform 6\Tools\AlpacaDynamicClientManager"
+    Private Const ALPACA_DYNAMIC_CLIENT_MANAGER_RELATIVE_PATH As String = "ASCOM\Platform 7\Tools\AlpacaDynamicClientManager"
     Private Const ALPACA_DYNAMIC_CLIENT_MANAGER_EXE_NAME As String = "ASCOM.AlpacaDynamicClientManager.exe"
     Private Const DRIVER_PROGID_BASE As String = "ASCOM.AlpacaDynamic" ' This value must match the same named constant in the Dynamic Client Local Server project LocalServer.cs file
 

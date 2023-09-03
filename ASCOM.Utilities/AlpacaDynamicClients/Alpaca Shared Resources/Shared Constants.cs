@@ -40,7 +40,7 @@ namespace ASCOM.DynamicRemoteClients
         // Constants used by the generated dynamic client driver assembly
         public const string ALPACA_CLIENT_LOCAL_SERVER_PATH = @"\ASCOM\AlpacaDynamicClients\"; // Relative path from CommonFiles
         //public const string ALPACA_CLIENT_LOCAL_SERVER = @"ASCOM.AlpacaClientLocalServer.exe"; // Name of the remote client local server application
-        public const string ALPACA_CLIENT_LOCAL_SERVER = @"AlpacaSims.exe"; // Name of the remote client local server application
+        public const string ALPACA_CLIENT_LOCAL_SERVER = @"DynamicClientServer.exe"; // Name of the remote client local server application
 
         // Driver naming constants
         public const string DRIVER_DISPLAY_NAME = "ASCOM Alpaca Dynamic Client";

@@ -48,8 +48,8 @@ Public Class Form1
     Const REMOVE_ALL_CONFIRMATION_MESSAGE As String = "Are you sure you want to FORCE remove your entire ASCOM Platform, Profile and 3rd Party drivers?"
     Const REMOVAL_COMPLETE_MESSAGE As String = "The current Platform has been removed, press OK to end this program."
 
-    Const ASCOM_TARGET_DIRECTORY_PLATFORM As String = "\ASCOM\Platform 6"
-    Const ASCOM_TARGET_DIRECTORY_DEVELOPER As String = "\ASCOM\Platform 6 Developer Components"
+    Const ASCOM_TARGET_DIRECTORY_PLATFORM As String = "\ASCOM\Platform 7"
+    Const ASCOM_TARGET_DIRECTORY_DEVELOPER As String = "\ASCOM\Platform 7 Developer Components"
 
 #Region "Event handlers"
 

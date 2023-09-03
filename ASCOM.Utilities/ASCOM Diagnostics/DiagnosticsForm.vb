@@ -15,7 +15,7 @@ Imports System.Security.AccessControl
 Imports System.Security.Principal
 Imports System.Threading
 Imports System.Text
-Imports ASCOM.Astrometry.Exceptions
+'Imports ASCOM.Astrometry.Exceptions
 
 Public Class DiagnosticsForm
 
@@ -33,7 +33,7 @@ Public Class DiagnosticsForm
     ' Current number of leap seconds - Used to test NOVAS 3.1 DeltaT calculation - Needs to be updated when the number of leap seconds changes
     Private Const CURRENT_LEAP_SECONDS As Double = 37.0
 
-    Private Const ASCOM_PLATFORM_NAME As String = "ASCOM Platform 6"
+    Private Const ASCOM_PLATFORM_NAME As String = "ASCOM Platform 7"
     Private Const INST_DISPLAY_NAME As String = "DisplayName"
     Private Const INST_DISPLAY_VERSION As String = "DisplayVersion"
     Private Const INST_INSTALL_DATE As String = "InstallDate"
@@ -416,7 +416,7 @@ Public Class DiagnosticsForm
                         LogException("ScanLogs", ex.ToString)
                     End Try
 
-                    'List Platform 6 install logs
+                    'List Platform 6 and 7 install logs
                     Try
                         ScanPlatform6Logs()
                     Catch ex As Exception
@@ -1048,7 +1048,7 @@ Public Class DiagnosticsForm
                     .Description = "Platform 6 Telescope Simulator",
                     .DeviceType = "Telescope",
                     .Name = "Simulator",
-                    .DriverVersion = "6.6",
+                    .DriverVersion = "7.0",
                     .InterfaceVersion = 3,
                     .IsPlatform5 = False,
                     .SixtyFourBit = True,
@@ -1220,7 +1220,7 @@ Public Class DiagnosticsForm
                 .Description = "Platform 6 Switch Simulator",
                 .DeviceType = "Switch",
                 .Name = "ASCOM Switch V2 Simulator",
-                .DriverVersion = "6.6",
+                .DriverVersion = "7.0",
                 .InterfaceVersion = 2,
                 .IsPlatform5 = False,
                 .SixtyFourBit = True
@@ -4037,7 +4037,7 @@ Public Class DiagnosticsForm
                     value = TR.SitePressure
             End Select
             LogError("TransformInitalGetTest", $"Inital read of Transform.{test} did not raise a TransformUninitialisedException as expected.")
-        Catch ex As TransformUninitialisedException
+        Catch ex As ASCOM.Astrometry.Exceptions.TransformUninitialisedException
             TL.LogMessage("TransformInitalGetTest", $"A TransformUninitialisedException was generated as expected when readsing Transform{test} for the first time.")
             NMatches += 1
         Catch ex As Exception
@@ -6040,7 +6040,8 @@ Public Class DiagnosticsForm
             Compare("UtilTests", "IsMinimumRequiredVersion 6.4", Utl.IsMinimumRequiredVersion(6, 4).ToString, "True")
             Compare("UtilTests", "IsMinimumRequiredVersion 6.5", Utl.IsMinimumRequiredVersion(6, 5).ToString, "True")
             Compare("UtilTests", "IsMinimumRequiredVersion 6.6", Utl.IsMinimumRequiredVersion(6, 6).ToString, "True")
-            Compare("UtilTests", "IsMinimumRequiredVersion 6.7", Utl.IsMinimumRequiredVersion(6, 7).ToString, "False")
+            Compare("UtilTests", "IsMinimumRequiredVersion 7.0", Utl.IsMinimumRequiredVersion(7, 0).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 7.1", Utl.IsMinimumRequiredVersion(7, 1).ToString, "False")
 
             ' Check that the platform version properties return the correct values
             Dim FV As FileVersionInfo
@@ -7102,7 +7103,7 @@ Public Class DiagnosticsForm
         Dim fileInfo As FileInfo
 
         Try
-            Status("Scanning Platform 6 install logs")
+            Status("Scanning Platform 7 install logs")
             TL.LogMessage("ScanPlatform6Logs", "Starting scan")
 
             'Get a list of setup files in the ASCOM directory in creation date order
@@ -7644,7 +7645,7 @@ Public Class DiagnosticsForm
     End Function
 
     Private Sub ScanDeveloperFiles()
-        Dim ASCOMPath As String = "C:\Program Files\ASCOM\Platform 6 Developer Components\" ' Default location
+        Dim ASCOMPath As String = "C:\Program Files\ASCOM\Platform 7 Developer Components\" ' Default location
         Dim PathShell As New System.Text.StringBuilder(260)
         Dim ASCOMPathComponents5, ASCOMPathComponents55, ASCOMPathComponents6, ASCOMPathDocs, ASCOMPathInstallerGenerator, ASCOMPathResources As String
 
@@ -7653,9 +7654,9 @@ Public Class DiagnosticsForm
 
             If System.IntPtr.Size = 8 Then 'We are on a 64bit OS so look in the 32bit locations for files
                 SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILESX86, False)
-                ASCOMPath = PathShell.ToString & "\ASCOM\Platform 6 Developer Components\"
+                ASCOMPath = PathShell.ToString & "\ASCOM\Platform 7 Developer Components\"
             Else '32bit system so look in the normal Program Files place
-                ASCOMPath = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) & "\ASCOM\Platform 6 Developer Components\"""
+                ASCOMPath = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) & "\ASCOM\Platform 7 Developer Components\"""
             End If
         Catch ex As ProfilePersistenceException
             If InStr(ex.Message, "0x2") > 0 Then
@@ -7672,7 +7673,7 @@ Public Class DiagnosticsForm
             If Directory.Exists(ASCOMPath) Then
                 ASCOMPathComponents5 = ASCOMPath & "Components\Platform5\"
                 ASCOMPathComponents55 = ASCOMPath & "Components\Platform55\"
-                ASCOMPathComponents6 = ASCOMPath & "Components\Platform6\"
+                ASCOMPathComponents6 = ASCOMPath & "Components\Platform7\"
                 ASCOMPathDocs = ASCOMPath & "Developer Documentation\"
                 ASCOMPathInstallerGenerator = ASCOMPath & "Installer Generator\"
                 ASCOMPathResources = ASCOMPath & "Installer Generator\Resources\"
@@ -8144,7 +8145,7 @@ Public Class DiagnosticsForm
         GetInstalledComponent("Platform 5A", "{075F543B-97C5-4118-9D54-93910DE03FE9}", False, True, True)
         GetInstalledComponent("Platform 5B", "{14C10725-0018-4534-AE5E-547C08B737B7}", False, True, True)
 
-        Try ' Platform 5.5 Inno installer setup, should always be absent in Platform 6!
+        Try ' Platform 5.5 Inno installer setup, should always be absent in Platform 7!
             RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\microsoft\Windows\Currentversion\uninstall\ASCOM.platform.NET.Components_is1", False)
 
             TL.LogMessage("Platform 5.5", RegKey.GetValue("DisplayName"))
@@ -8160,12 +8161,12 @@ Public Class DiagnosticsForm
         End Try
         TL.BlankLine()
 
-        platformInfo = GetInstalledComponent("Platform 6", PLATFORM_INSTALLER_PROPDUCT_CODE, True, False, True)
-        developerInfo = GetInstalledComponent("Platform 6 Developer", DEVELOPER_INSTALLER_PROPDUCT_CODE, False, True, True)
+        platformInfo = GetInstalledComponent("Platform 7", PLATFORM_INSTALLER_PROPDUCT_CODE, True, False, True)
+        developerInfo = GetInstalledComponent("Platform 7 Developer", DEVELOPER_INSTALLER_PROPDUCT_CODE, False, True, True)
 
         Try
             If developerInfo(INST_DISPLAY_VERSION) <> INST_NOT_KNOWN Then
-                Compare("Platform 6", "Developer and Platform Version Numbers", developerInfo(INST_DISPLAY_VERSION), platformInfo(INST_DISPLAY_VERSION))
+                Compare("Platform 7", "Developer and Platform Version Numbers", developerInfo(INST_DISPLAY_VERSION), platformInfo(INST_DISPLAY_VERSION))
             End If
         Catch ex As System.Collections.Generic.KeyNotFoundException
             ' Ignore errors due to the key being missing if the developer tools are not installed
@@ -8186,7 +8187,7 @@ Public Class DiagnosticsForm
     Private Function GetInstalledComponent(ByVal Name As String, ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean, ByVal MSIInstaller As Boolean) As Generic.SortedList(Of String, String)
         Dim InstallInfo As New SortedList(Of String, String)
 
-        Try ' Platform 6 installer GUID, should always be present in Platform 6
+        Try ' Platform 7 installer GUID, should always be present in Platform 6
             InstallInfo = GetInstallInformation(ProductCode, Required, Force32, MSIInstaller)
             If InstallInfo.Count > 0 Then
                 TL.LogMessage(Name, InstallInfo(INST_DISPLAY_NAME))

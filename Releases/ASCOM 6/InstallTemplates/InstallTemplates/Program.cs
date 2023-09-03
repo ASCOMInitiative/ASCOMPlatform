@@ -155,12 +155,12 @@ namespace InstallTemplates
                         if (Environment.Is64BitOperatingSystem)
                         {
                             LogMessage("Main", "OS is 64bit");
-                            TemplateSourceDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\ASCOM\Platform 6 Developer Components\Templates";
+                            TemplateSourceDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\ASCOM\Platform 7 Developer Components\Templates";
                         }
                         else
                         {
                             LogMessage("Main", "OS is 32bit");
-                            TemplateSourceDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\ASCOM\Platform 6 Developer Components\Templates";
+                            TemplateSourceDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\ASCOM\Platform 7 Developer Components\Templates";
                         }
 
                         LogMessage("Main", "Template Source Directory: " + TemplateSourceDirectory);

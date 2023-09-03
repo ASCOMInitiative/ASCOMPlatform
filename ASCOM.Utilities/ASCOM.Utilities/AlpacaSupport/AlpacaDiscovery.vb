@@ -1,7 +1,10 @@
 ﻿Imports System.Collections.Generic
+Imports System.IO
 Imports System.Net
 Imports System.Runtime.InteropServices
+Imports System.Text
 Imports System.Threading
+Imports System.Web.Script.Serialization
 Imports ASCOM.Utilities.Interfaces
 Imports Newtonsoft.Json
 
@@ -385,7 +388,10 @@ Public Class AlpacaDiscovery
 
                 Dim apiVersionsJsonResponse As String = GetRequest($"http://{hostIpAndPort}/management/apiversions", Convert.ToInt32(discoveryTime * 1000))
                 LogMessage("GetAlpacaDeviceInformation", $"Received JSON response from {hostIpAndPort}: {apiVersionsJsonResponse}")
-                Dim apiVersionsResponse As IntArray1DResponse = JsonConvert.DeserializeObject(Of IntArray1DResponse)(apiVersionsJsonResponse)
+
+                Dim serializer As New JavaScriptSerializer()
+                Dim apiVersionsResponse As IntArray1DResponse = serializer.Deserialize(Of IntArray1DResponse)(apiVersionsJsonResponse)
+                ' Dim apiVersionsResponse As IntArray1DResponse = JsonConvert.DeserializeObject(Of IntArray1DResponse)(apiVersionsJsonResponse)
 
                 SyncLock deviceListLockObject ' Make sure that only one thread can update the device list dictionary at a time
                     alpacaDeviceList(deviceIpEndPoint).SupportedInterfaceVersions = apiVersionsResponse.Value
@@ -399,7 +405,10 @@ Public Class AlpacaDiscovery
             Using descriptionClient As WebClientWithTimeOut = New WebClientWithTimeOut()
                 Dim deviceDescriptionJsonResponse As String = GetRequest($"http://{hostIpAndPort}/management/v1/description", Convert.ToInt32(discoveryTime * 1000))
                 LogMessage("GetAlpacaDeviceInformation", $"Received JSON response from {hostIpAndPort}: {deviceDescriptionJsonResponse}")
-                Dim deviceDescriptionResponse As AlpacaDescriptionResponse = JsonConvert.DeserializeObject(Of AlpacaDescriptionResponse)(deviceDescriptionJsonResponse)
+                Dim serializer As New JavaScriptSerializer()
+                Dim deviceDescriptionResponse As AlpacaDescriptionResponse = serializer.Deserialize(Of AlpacaDescriptionResponse)(deviceDescriptionJsonResponse)
+
+                ' Dim deviceDescriptionResponse As AlpacaDescriptionResponse = JsonConvert.DeserializeObject(Of AlpacaDescriptionResponse)(deviceDescriptionJsonResponse)
 
                 SyncLock deviceListLockObject ' Make sure that only one thread can update the device list dictionary at a time
                     alpacaDeviceList(deviceIpEndPoint).ServerName = deviceDescriptionResponse.Value.ServerName
@@ -415,7 +424,11 @@ Public Class AlpacaDiscovery
             Using configuredDevicesClient As WebClientWithTimeOut = New WebClientWithTimeOut()
                 Dim configuredDevicesJsonResponse As String = GetRequest($"http://{hostIpAndPort}/management/v1/configureddevices", Convert.ToInt32(discoveryTime * 1000))
                 LogMessage("GetAlpacaDeviceInformation", $"Received JSON response from {hostIpAndPort}: {configuredDevicesJsonResponse}")
-                Dim configuredDevicesResponse As AlpacaConfiguredDevicesResponse = JsonConvert.DeserializeObject(Of AlpacaConfiguredDevicesResponse)(configuredDevicesJsonResponse)
+
+                Dim serializer As New JavaScriptSerializer()
+                Dim configuredDevicesResponse As AlpacaConfiguredDevicesResponse = serializer.Deserialize(Of AlpacaConfiguredDevicesResponse)(configuredDevicesJsonResponse)
+
+                ' Dim configuredDevicesResponse As AlpacaConfiguredDevicesResponse = JsonConvert.DeserializeObject(Of AlpacaConfiguredDevicesResponse)(configuredDevicesJsonResponse)
 
                 SyncLock deviceListLockObject ' Make sure that only one thread can update the device list dictionary at a time
                     alpacaDeviceList(deviceIpEndPoint).ConfiguredDevices = configuredDevicesResponse.Value

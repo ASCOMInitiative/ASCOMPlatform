@@ -49,7 +49,7 @@ namespace ASCOM.DriverAccess
                 if (objInterface.Equals(typeof(ITelescopeV3))) isPlatform6Telescope = true; //If the type matches the V2 type flag this
                 if (objInterface.Equals(typeof(ASCOM.Interface.ITelescope))) isPlatform5Telescope = true; //If the type matches the PIA type flag this
             }
-            TL.LogMessage("Telescope", "Platform 5 Telescope: " + isPlatform5Telescope.ToString() + " Platform 6 Telescope: " + isPlatform6Telescope.ToString());
+            TL.LogMessage("Telescope", $"Platform 5 Telescope: {isPlatform5Telescope},  Platform 6 Telescope: {isPlatform6Telescope},  Platform 7 Telescope: {isPlatform7Telescope}");
         }
 
         #region IDisposable Members

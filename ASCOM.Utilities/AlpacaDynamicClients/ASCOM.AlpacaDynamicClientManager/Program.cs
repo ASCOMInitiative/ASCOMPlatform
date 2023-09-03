@@ -17,6 +17,18 @@ namespace ASCOM.DynamicRemoteClients
         private const string BASE_CLASS_POSTFIX = "BaseClass"; // Postfix to the device type to create the base class name e.g. "CamerabaseClass". Must match the last characters of the device base class names!
         private const int LOCALSERVER_WAIT_TIME = 5000; // Length of time (milliseconds) to wait for the local server to (un)register its drivers
 
+        // Constants used by the generated dynamic client driver assembly
+        public const string ALPACA_CLIENT_LOCAL_SERVER_PATH = @"\ASCOM\AlpacaDynamicClients\"; // Relative path from CommonFiles
+        //public const string ALPACA_CLIENT_LOCAL_SERVER = @"ASCOM.AlpacaClientLocalServer.exe"; // Name of the remote client local server application
+        public const string ALPACA_CLIENT_LOCAL_SERVER = @"DynamicClientServer.exe"; // Name of the remote client local server application
+        public const string DRIVER_PROGID_BASE = "ASCOM.AlpacaDynamic";
+        public const string LOCALHOST_NAME_IPV4 = "127.0.0.1";
+
+        public const string IPADDRESS_PROFILENAME = "IP Address";
+        public const string PORTNUMBER_PROFILENAME = "Port Number";
+        public const string REMOTE_DEVICE_NUMBER_PROFILENAME = "Remote Device Number";
+        public const string UNIQUEID_PROFILENAME = "UniqueID";
+
         // List of supported device types - this must be kept in sync with the device type numeric up-down controls on the form dialogue!
         private static readonly List<string> supportedDeviceTypes = new List<string>() { "Camera", "CoverCalibrator", "Dome", "FilterWheel", "Focuser", "ObservingConditions", "Rotator", "SafetyMonitor", "Switch", "Telescope" };
 
@@ -102,14 +114,14 @@ namespace ASCOM.DynamicRemoteClients
                         }
 
                         // Get the local server folder
-                        string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + SharedConstants.ALPACA_CLIENT_LOCAL_SERVER_PATH;
+                        string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + ALPACA_CLIENT_LOCAL_SERVER_PATH;
                         TL.LogMessage("CreateAlpacaClient", $"Alpaca local server folder: {localServerPath}");
 
                         // Run the create device form to obtain the device description and create the driver
                         // CreateAlpacaClient(args[1], comDevicenumber, args[3], args[4], localServerPath); // Call the execution method with correctly cased device type and unique ID parameters
 
                         // Register the dynamic clients
-                        string localServerExe = $"{localServerPath}{SharedConstants.ALPACA_CLIENT_LOCAL_SERVER}";
+                        string localServerExe = $"{localServerPath}{ALPACA_CLIENT_LOCAL_SERVER}";
                         TL.LogMessage("CreateAlpacaClient", $"Alpaca local server exe name: {localServerExe}");
                         RunLocalServer(localServerExe, "-regserver", TL);
                         break;
@@ -145,7 +157,7 @@ namespace ASCOM.DynamicRemoteClients
                             return;
                         }
 
-                        localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + SharedConstants.ALPACA_CLIENT_LOCAL_SERVER_PATH;
+                        localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + ALPACA_CLIENT_LOCAL_SERVER_PATH;
                         TL.LogMessage("CreateAlpacaClient", $"Alpaca local server folder: {localServerPath}");
 
                         // The supplied parameters pass validation so run the create device form to obtain the device description and create the driver
@@ -291,7 +303,7 @@ namespace ASCOM.DynamicRemoteClients
                 TL.LogMessage("CreateAlpacaClient", "Added name space to program");
 
                 // Construct the path to the output DLL
-                String dllName = $"{localServerPath.TrimEnd('\\')}\\{SharedConstants.DRIVER_PROGID_BASE}{DeviceNumber}.{DeviceType}.dll";
+                String dllName = $"{localServerPath.TrimEnd('\\')}\\{DRIVER_PROGID_BASE}{DeviceNumber}.{DeviceType}.dll";
                 TL.LogMessage("CreateAlpacaClient", string.Format("Output file name: {0}", dllName));
 
                 // Create relevant compiler options to shape the compilation
@@ -311,7 +323,7 @@ namespace ASCOM.DynamicRemoteClients
                 cp.ReferencedAssemblies.Add(@"ASCOM.Newtonsoft.Json.dll");               // Must be present in the current directory because the compiler doesn't use the GAC
                 cp.ReferencedAssemblies.Add(@"RestSharp.dll");                           // Must be present in the current directory
                 cp.ReferencedAssemblies.Add(@"ASCOM.AlpacaClientDeviceBaseClasses.dll"); // Must be present in the current directory
-                cp.ReferencedAssemblies.Add(SharedConstants.ALPACA_CLIENT_LOCAL_SERVER); // Must be present in the current directory
+                cp.ReferencedAssemblies.Add(ALPACA_CLIENT_LOCAL_SERVER); // Must be present in the current directory
 
                 Assembly executingAssembly = Assembly.GetExecutingAssembly();
                 cp.ReferencedAssemblies.Add(executingAssembly.Location);

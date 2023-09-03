@@ -9695,7 +9695,7 @@ FALSE
 FALSE
 FALSE
 {5BC223B4-41C9-4CD4-A1FF-4030340DDECB}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\AlpacaSims.exe
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.exe
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9708,7 +9708,7 @@ FALSE
 FALSE
 FALSE
 {26185D86-3854-4AFE-8379-CB29139D5ADE}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\AlpacaSims.deps.json
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.deps.json
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9721,7 +9721,7 @@ FALSE
 FALSE
 FALSE
 {C16F6135-E32E-4EEA-A5C3-4CF9A0F0FE59}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\AlpacaSims.dll
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9734,7 +9734,7 @@ FALSE
 FALSE
 FALSE
 {C9387C61-E0B7-42D1-95AF-5920C49A03CF}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\AlpacaSims.runtimeconfig.json
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.runtimeconfig.json
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -15044,30 +15044,30 @@ C
 
 
 
+C
+C
+C
+C
 
-
-
-
-
-
-
-
-
-
-
-
-
+C
+C
+C
+C
+C
+C
+C
+C
 C
 C
 
 
 
-
-
-
-
-
-
+C
+C
+C
+C
+C
+C
 
 
 

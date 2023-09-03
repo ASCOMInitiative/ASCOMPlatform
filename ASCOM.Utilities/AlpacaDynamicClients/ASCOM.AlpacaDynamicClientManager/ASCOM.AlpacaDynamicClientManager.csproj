@@ -100,14 +100,6 @@
       <Project>{c9bf0a8b-594f-4ab9-938a-edc8448d8520}</Project>
       <Name>ASCOM.Utilities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Alpaca Client Device Base Classes\Alpaca Client Device Base Classes.csproj">
-      <Project>{c7605d43-d11a-4891-a32d-fd5ab6e74772}</Project>
-      <Name>Alpaca Client Device Base Classes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Alpaca Shared Resources\Alpaca Shared Resources.csproj">
-      <Project>{a9a92122-3cd7-4960-8d80-d62b06553983}</Project>
-      <Name>Alpaca Shared Resources</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="RestSharp">

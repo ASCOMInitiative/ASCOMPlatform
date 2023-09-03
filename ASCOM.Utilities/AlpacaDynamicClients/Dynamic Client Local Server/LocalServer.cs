@@ -386,58 +386,53 @@ namespace ASCOM.DynamicClients
                         switch (deviceType)
                         {
                             case DeviceTypes.Camera:
-                                driverType = typeof(DynamicClients.SafetyMonitor);
+                                driverType = typeof(Camera);
                                 interfaceType = typeof(DeviceInterface.ICameraV4);
                                 break;
 
                             case DeviceTypes.CoverCalibrator:
-                                driverType = typeof(DynamicClients.SafetyMonitor);
+                                driverType = typeof(CoverCalibrator);
                                 interfaceType = typeof(DeviceInterface.ICoverCalibratorV2);
                                 break;
 
                             case DeviceTypes.Dome:
-                                driverType = typeof(DynamicClients.SafetyMonitor);
+                                driverType = typeof(Dome);
                                 interfaceType = typeof(DeviceInterface.IDomeV3);
                                 break;
 
                             case DeviceTypes.FilterWheel:
-                                driverType = typeof(DynamicClients.SafetyMonitor);
+                                driverType = typeof(FilterWheel);
                                 interfaceType = typeof(DeviceInterface.IFilterWheelV3);
                                 break;
 
                             case DeviceTypes.Focuser:
-                                driverType = typeof(DynamicClients.SafetyMonitor);
+                                driverType = typeof(Focuser);
                                 interfaceType = typeof(DeviceInterface.IFocuserV4);
                                 break;
 
                             case DeviceTypes.ObservingConditions:
-                                driverType = typeof(DynamicClients.SafetyMonitor);
+                                driverType = typeof(ObservingConditions);
                                 interfaceType = typeof(DeviceInterface.IObservingConditionsV2);
                                 break;
 
                             case DeviceTypes.Rotator:
-                                driverType = typeof(DynamicClients.SafetyMonitor);
+                                driverType = typeof(Rotator);
                                 interfaceType = typeof(DeviceInterface.IRotatorV4);
                                 break;
 
                             case DeviceTypes.SafetyMonitor:
-                                driverType = typeof(DynamicClients.SafetyMonitor);
+                                driverType = typeof(SafetyMonitor);
                                 interfaceType = typeof(DeviceInterface.ISafetyMonitorV3);
                                 break;
 
                             case DeviceTypes.Switch:
-                                driverType = typeof(DynamicClients.SafetyMonitor);
+                                driverType = typeof(Switch);
                                 interfaceType = typeof(DeviceInterface.ISwitchV3);
                                 break;
 
                             case DeviceTypes.Telescope:
-                                driverType = typeof(DynamicClients.SafetyMonitor);
+                                driverType = typeof(Telescope);
                                 interfaceType = typeof(DeviceInterface.ITelescopeV4);
-                                break;
-
-                            case DeviceTypes.Video:
-                                driverType = typeof(DynamicClients.SafetyMonitor);
-                                interfaceType = typeof(DeviceInterface.IVideoV2);
                                 break;
 
                             default:
@@ -849,31 +844,31 @@ namespace ASCOM.DynamicClients
             switch (typeof(T))
             {
                 case Type type when type == typeof(AlpacaCamera):
-                    client = new AlpacaSafetyMonitor();
+                    client = new AlpacaCamera();
                     break;
 
                 case Type type when type == typeof(AlpacaCoverCalibrator):
-                    client = new AlpacaSafetyMonitor();
+                    client = new AlpacaCoverCalibrator();
                     break;
 
                 case Type type when type == typeof(AlpacaDome):
-                    client = new AlpacaSafetyMonitor();
+                    client = new AlpacaDome();
                     break;
 
                 case Type type when type == typeof(AlpacaFilterWheel):
-                    client = new AlpacaSafetyMonitor();
+                    client = new AlpacaFilterWheel();
                     break;
 
                 case Type type when type == typeof(AlpacaFocuser):
-                    client = new AlpacaSafetyMonitor();
+                    client = new AlpacaFocuser();
                     break;
 
                 case Type type when type == typeof(AlpacaObservingConditions):
-                    client = new AlpacaSafetyMonitor();
+                    client = new AlpacaObservingConditions();
                     break;
 
                 case Type type when type == typeof(AlpacaRotator):
-                    client = new AlpacaSafetyMonitor();
+                    client = new AlpacaRotator();
                     break;
 
                 case Type type when type == typeof(AlpacaSafetyMonitor):
@@ -881,11 +876,11 @@ namespace ASCOM.DynamicClients
                     break;
 
                 case Type type when type == typeof(AlpacaSwitch):
-                    client = new AlpacaSafetyMonitor();
+                    client = new AlpacaSwitch();
                     break;
 
                 case Type type when type == typeof(AlpacaTelescope):
-                    client = new AlpacaSafetyMonitor();
+                    client = new AlpacaTelescope();
                     break;
 
                 default:

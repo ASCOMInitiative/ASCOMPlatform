@@ -8,7 +8,7 @@ Public Class EarthRotationDataForm
     Private Const DELTAUT1_ACCEPTABLE_RANGE As Double = 0.9 ' Acceptable range for manual deltaut1 values is +- this value
     Private Const MINIMUM_UPDATE_RUN_TIME As Double = 5.0 ' Minimum acceptable time (seconds)  for the time allowed for a manually triggered update task to run
 
-    Private Const PLATFORM_HELP_FILE As String = "\ASCOM\Platform 6\Docs\PlatformHelp.chm"
+    Private Const PLATFORM_HELP_FILE As String = "\ASCOM\Platform 7\Docs\PlatformHelp.chm"
     Private Const EARTH_ROTATION_HELP_TOPIC As String = "/html/98976954-6a00-4864-a223-7b3b25ffaaf1.htm"
     Private TL As TraceLogger
     Private Parameters As EarthRotationParameters

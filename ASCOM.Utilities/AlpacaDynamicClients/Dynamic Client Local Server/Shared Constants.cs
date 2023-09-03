@@ -46,5 +46,8 @@ namespace ASCOM.DynamicClients
         public const string DRIVER_PROGID_BASE = "ASCOM.AlpacaDynamic";
         public const string NOT_CONNECTED_MESSAGE = "is not connected."; // This is appended to the driver display name + driver number and displayed when the driver is not connected
 
+        // Alpaca data format string
+        public const string ISO8601_DATE_FORMAT_STRING = "yyyy-MM-ddTHH:mm:ss.fffffff";
+
     }
 }

@@ -8,6 +8,7 @@ Imports System.Net.NetworkInformation
 Imports System.Net.Sockets
 Imports System.Text
 Imports System.Threading
+Imports System.Web.Script.Serialization
 Imports Newtonsoft.Json
 
 
@@ -283,7 +284,10 @@ Friend Class Finder
             'Only process Alpaca device responses
             If ReceiveString.ToLowerInvariant().Contains(DISCOVERY_RESPONSE_STRING) Then
                 ' Extract the discovery response parameters from the device's JSON response
-                Dim discoveryResponse As AlpacaDiscoveryResponse = JsonConvert.DeserializeObject(Of AlpacaDiscoveryResponse)(ReceiveString)
+                Dim serializer As New JavaScriptSerializer()
+                Dim discoveryResponse As AlpacaDiscoveryResponse = serializer.Deserialize(Of AlpacaDiscoveryResponse)(ReceiveString)
+
+                ' Dim discoveryResponse As AlpacaDiscoveryResponse = JsonConvert.DeserializeObject(Of AlpacaDiscoveryResponse)(ReceiveString)
                 Dim alpacaApiEndpoint As IPEndPoint = New IPEndPoint(alpacaBroadcastResponseEndPoint.Address, discoveryResponse.AlpacaPort) ' Create 
                 If Not CachedEndpoints.Contains(alpacaApiEndpoint) Then
                     CachedEndpoints.Add(alpacaApiEndpoint)

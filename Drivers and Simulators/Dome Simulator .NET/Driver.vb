@@ -548,7 +548,7 @@ Public Class Dome
             If g_TrafficForm IsNot Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficStart("DriverInfo")
             End If
-            DriverInfo = "ASCOM Platform 6 Dome Simulator in VB.NET"
+            DriverInfo = "ASCOM Platform 7 Dome Simulator in VB.NET"
             '
             ' Use the Project/Properties sheet, Make tab, to set these
             ' items. That way they will show in the Version tab of the

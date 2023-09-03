@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<ProductVersion>8.0.50727</ProductVersion>
 		<OutputType>WinExe</OutputType>
-		<AssemblyName>AlpacaSims</AssemblyName>
+		<AssemblyName>DynamicClientServer</AssemblyName>
 		<TargetFramework>net7.0-windows</TargetFramework>
 		<UseWindowsForms>true</UseWindowsForms>
 		<FileUpgradeFlags />

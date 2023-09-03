@@ -755,7 +755,7 @@ namespace UninstallAscom
                 ManagementClass oProcess = new ManagementClass(oScope, oPath, oGetOp);
 
                 ManagementBaseObject oInParams = oProcess.GetMethodParameters("CreateRestorePoint");
-                oInParams["Description"] = "ASCOM Platform 6";
+                oInParams["Description"] = "ASCOM Platform 7";
                 oInParams["RestorePointType"] = 0;
                 oInParams["EventType"] = 100;
 

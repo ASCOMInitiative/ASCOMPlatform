@@ -235,7 +235,7 @@ namespace ASCOM.DynamicRemoteClients
                 BtnDeleteDrivers.Enabled = false;
 
                 // Create pointer to the dynamic driver's local server folder
-                string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + SharedConstants.ALPACA_CLIENT_LOCAL_SERVER_PATH;
+                string localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + CreateAlpacaClients.ALPACA_CLIENT_LOCAL_SERVER_PATH;
                 TL.LogMessage("DeleteDrivers", $"Local server path: {localServerPath}");
 
                 // Iterate over each device that has been checked in the UI checked list box
@@ -367,7 +367,7 @@ namespace ASCOM.DynamicRemoteClients
             Regex dynamicDriverProgidParseRegex = new Regex(DYNAMIC_DRIVER_PROGID_PARSE_REGEX_STRING, RegexOptions.Compiled | RegexOptions.IgnoreCase);
             Regex remoteDriverProgidParseRegex = new Regex(REMOTE_DRIVER_PROGID_PARSE_REGEX_STRING, RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-            string dynamicDriverDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + SharedConstants.ALPACA_CLIENT_LOCAL_SERVER_PATH;
+            string dynamicDriverDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + CreateAlpacaClients.ALPACA_CLIENT_LOCAL_SERVER_PATH;
             string remoteDriverDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + ASCOM_REMOTE_CLIENT_LOCAL_SERVER_PATH;
 
             // Initialise 
@@ -406,10 +406,10 @@ namespace ASCOM.DynamicRemoteClients
 
                                 // populate configuration information from the dynamic driver's Profile and 
                                 profile.DeviceType = foundDriver.DeviceType;
-                                foundDriver.IPAdrress = profile.GetValue(foundDriver.ProgId, SharedConstants.IPADDRESS_PROFILENAME);
-                                foundDriver.PortNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, SharedConstants.PORTNUMBER_PROFILENAME));
-                                foundDriver.RemoteDeviceNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, SharedConstants.REMOTE_DEVICE_NUMBER_PROFILENAME));
-                                foundDriver.UniqueID = profile.GetValue(foundDriver.ProgId, SharedConstants.UNIQUEID_PROFILENAME);
+                                foundDriver.IPAdrress = profile.GetValue(foundDriver.ProgId, CreateAlpacaClients.IPADDRESS_PROFILENAME);
+                                foundDriver.PortNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, CreateAlpacaClients.PORTNUMBER_PROFILENAME));
+                                foundDriver.RemoteDeviceNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, CreateAlpacaClients.REMOTE_DEVICE_NUMBER_PROFILENAME));
+                                foundDriver.UniqueID = profile.GetValue(foundDriver.ProgId, CreateAlpacaClients.UNIQUEID_PROFILENAME);
                                 foundDriver.Name = device.Value;
                                 foundDriver.Description = $"{foundDriver.Name} ({foundDriver.ProgId}) - {foundDriver.IPAdrress}:{foundDriver.PortNumber}/api/v1/{foundDriver.DeviceType}/{foundDriver.RemoteDeviceNumber} - {foundDriver.UniqueID}";
 
@@ -475,10 +475,10 @@ namespace ASCOM.DynamicRemoteClients
 
                                 // populate configuration information from the dynamic driver's Profile and 
                                 profile.DeviceType = foundDriver.DeviceType;
-                                foundDriver.IPAdrress = profile.GetValue(foundDriver.ProgId, SharedConstants.IPADDRESS_PROFILENAME);
-                                foundDriver.PortNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, SharedConstants.PORTNUMBER_PROFILENAME));
-                                foundDriver.RemoteDeviceNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, SharedConstants.REMOTE_DEVICE_NUMBER_PROFILENAME));
-                                foundDriver.UniqueID = profile.GetValue(foundDriver.ProgId, SharedConstants.UNIQUEID_PROFILENAME);
+                                foundDriver.IPAdrress = profile.GetValue(foundDriver.ProgId, CreateAlpacaClients.IPADDRESS_PROFILENAME);
+                                foundDriver.PortNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, CreateAlpacaClients.PORTNUMBER_PROFILENAME));
+                                foundDriver.RemoteDeviceNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, CreateAlpacaClients.REMOTE_DEVICE_NUMBER_PROFILENAME));
+                                foundDriver.UniqueID = profile.GetValue(foundDriver.ProgId, CreateAlpacaClients.UNIQUEID_PROFILENAME);
                                 foundDriver.Name = device.Value;
                                 foundDriver.Description = $"{foundDriver.Name} ({foundDriver.ProgId}) - {foundDriver.IPAdrress}:{foundDriver.PortNumber}/api/v1/{foundDriver.DeviceType}/{foundDriver.RemoteDeviceNumber} - {foundDriver.UniqueID}";
 
@@ -534,7 +534,7 @@ namespace ASCOM.DynamicRemoteClients
                     // Validate Alpaca dynamic drivers
                     if (ChkIncludeAlpacaDynamicDrivers.Checked)
                     {
-                        string dynamicDriverProgId = $"{SharedConstants.DRIVER_PROGID_BASE}{i}.{deviceType}";
+                        string dynamicDriverProgId = $"{CreateAlpacaClients.DRIVER_PROGID_BASE}{i}.{deviceType}";
                         ValidateDriver(dynamicDriverDirectory, deviceType, dynamicDriverProgId);
                     }
 

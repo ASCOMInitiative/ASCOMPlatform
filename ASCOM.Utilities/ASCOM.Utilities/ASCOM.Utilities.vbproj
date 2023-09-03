@@ -117,6 +117,7 @@
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms">
       <Name>System.Windows.Forms</Name>
     </Reference>
@@ -285,10 +286,6 @@
       <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
       <Name>ASCOM.Exceptions</Name>
       <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\ASCOM.Newtonsoft.Json\ASCOM.Newtonsoft.Json.csproj">
-      <Project>{febf12e1-a8cf-4086-abcd-9ab0fda69bc4}</Project>
-      <Name>ASCOM.Newtonsoft.Json</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
