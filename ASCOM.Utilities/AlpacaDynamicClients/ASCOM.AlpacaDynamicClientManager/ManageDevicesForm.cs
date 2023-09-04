@@ -18,6 +18,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using Microsoft.Win32;
+using ASCOM.Common;
 
 namespace ASCOM.DynamicRemoteClients
 {
@@ -33,16 +34,14 @@ namespace ASCOM.DynamicRemoteClients
         private const string ASCOM_REMOTE_PROGID_BASE = "ASCOM.Remote"; // Base of all ASCOM Remote ProgIDs
 
         // State persistence constants
-        private const string CONFIGRATION_SUBKEY = "Chooser\\Configuration";
+        private const string CONFIGRATION_SUBKEY = @"Chooser\Configuration";
         private const string INCLUDE_ALPACA_DYNAMIC_DRIVERS = "Include Alpaca Dynamic Drivers"; private const bool INCLUDE_ALPACA_DYNAMIC_DRIVERS_DEFAULT = true;
         private const string INCLUDE_ASCOM_REMOTE_DRIVERS = "Include ASCOM Remote Drivers"; private const bool INCLUDE_ASCOM_REMOTE_DRIVERS_DEFAULT = false;
 
         // Global variables within this class
-        private TraceLogger TL;
-        private Profile profile;
+        private Utilities.TraceLogger TL;
         private List<DynamicDriverRegistration> dynamicDrivers;
         private ColouredCheckedListBox dynamicDriversCheckedListBox;
-        private RegistryAccess registryAccess;
 
         #region Initialise and Dispose
 
@@ -57,8 +56,6 @@ namespace ASCOM.DynamicRemoteClients
 
                 // Initialise components
                 TL = TLParameter; // Save the supplied trace logger
-                registryAccess = new RegistryAccess("Alpaca Dynamic Client Manager");
-                profile = new Profile();
                 dynamicDrivers = new List<DynamicDriverRegistration>(); // Create the driver list
 
                 // Display and log current version information
@@ -81,14 +78,14 @@ namespace ASCOM.DynamicRemoteClients
                 dynamicDriversCheckedListBox.HorizontalScrollbar = true;
 
                 // Initialise the "Include ..." checkboxes and then activate their event handlers
-                ChkIncludeAlpacaDynamicDrivers.Checked = Convert.ToBoolean(registryAccess.GetProfile(CONFIGRATION_SUBKEY, INCLUDE_ALPACA_DYNAMIC_DRIVERS, INCLUDE_ALPACA_DYNAMIC_DRIVERS_DEFAULT.ToString()), CultureInfo.InvariantCulture);
-                ChkIncludeAscomRemoteDrivers.Checked = Convert.ToBoolean(registryAccess.GetProfile(CONFIGRATION_SUBKEY, INCLUDE_ASCOM_REMOTE_DRIVERS, INCLUDE_ASCOM_REMOTE_DRIVERS_DEFAULT.ToString()), CultureInfo.InvariantCulture);
+                ChkIncludeAlpacaDynamicDrivers.Checked = ProfileAccess.GetBool(CONFIGRATION_SUBKEY, INCLUDE_ALPACA_DYNAMIC_DRIVERS, INCLUDE_ALPACA_DYNAMIC_DRIVERS_DEFAULT);
+                ChkIncludeAscomRemoteDrivers.Checked = ProfileAccess.GetBool(CONFIGRATION_SUBKEY, INCLUDE_ASCOM_REMOTE_DRIVERS, INCLUDE_ASCOM_REMOTE_DRIVERS_DEFAULT);
 
                 // Force Alpaca Dynamic drivers to be found if both Alpaca Dynamic and ASCOM Remote drivers are disabled on start up
                 if ((ChkIncludeAlpacaDynamicDrivers.Checked == false) & (ChkIncludeAscomRemoteDrivers.Checked == false))
                 {
                     ChkIncludeAlpacaDynamicDrivers.Checked = true;
-                    registryAccess.WriteProfile(CONFIGRATION_SUBKEY, INCLUDE_ALPACA_DYNAMIC_DRIVERS, true.ToString(CultureInfo.InvariantCulture));
+                    ProfileAccess.SetBool(CONFIGRATION_SUBKEY, INCLUDE_ALPACA_DYNAMIC_DRIVERS, true);
                 }
 
                 ChkIncludeAscomRemoteDrivers.CheckedChanged += new EventHandler(ChkIncludeAscomRemoteDrivers_CheckedChanged);
@@ -108,7 +105,7 @@ namespace ASCOM.DynamicRemoteClients
             catch (Exception ex)
             {
                 TL.LogMessageCrLf("initialise - Exception", ex.ToString());
-                MessageBox.Show("Sorry, an error occurred on start up, please report this error message on the ASCOM Talk forum hosted at Groups.Io.\r\n\n" + ex.Message, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("An error occurred on start up, please report this error message on the ASCOM Talk forum hosted at Groups.Io.\r\n\n" + ex.Message, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -134,7 +131,6 @@ namespace ASCOM.DynamicRemoteClients
                 components.Dispose();
             }
 
-            if (profile != null) try { profile.Dispose(); } catch { }
             if (dynamicDriversCheckedListBox != null) try { dynamicDriversCheckedListBox.Dispose(); } catch { }
 
             base.Dispose(disposing);
@@ -154,7 +150,7 @@ namespace ASCOM.DynamicRemoteClients
             CheckBox thisCheckBox = sender as CheckBox;
 
             // Persist the new value
-            registryAccess.WriteProfile(CONFIGRATION_SUBKEY, INCLUDE_ALPACA_DYNAMIC_DRIVERS, thisCheckBox.Checked.ToString(CultureInfo.InvariantCulture));
+            ProfileAccess.SetBool(CONFIGRATION_SUBKEY, INCLUDE_ALPACA_DYNAMIC_DRIVERS, thisCheckBox.Checked);
 
             // Force the checkbox to display it's checked tick now rather than waiting until ReadConfiguration has completed to provide immediate visual feedback to the user
             thisCheckBox.Refresh();
@@ -174,7 +170,7 @@ namespace ASCOM.DynamicRemoteClients
             CheckBox thisCheckBox = sender as CheckBox;
 
             // Persist the new value
-            registryAccess.WriteProfile(CONFIGRATION_SUBKEY, INCLUDE_ASCOM_REMOTE_DRIVERS, thisCheckBox.Checked.ToString(CultureInfo.InvariantCulture));
+            ProfileAccess.SetBool(CONFIGRATION_SUBKEY, INCLUDE_ASCOM_REMOTE_DRIVERS, thisCheckBox.Checked);
 
             // Force the checkbox to display it's checked tick now rather than waiting until ReadConfiguration has completed to provide immediate visual feedback to the user
             (sender as CheckBox).Refresh();
@@ -260,7 +256,7 @@ namespace ASCOM.DynamicRemoteClients
                         try
                         {
                             File.Delete(driverFileName);
-                            TL.LogMessage("DeleteDrivers", $"Successfully deleted driver file { driverFileName}");
+                            TL.LogMessage("DeleteDrivers", $"Successfully deleted driver file {driverFileName}");
                         }
                         catch (UnauthorizedAccessException ex)
                         {
@@ -279,7 +275,7 @@ namespace ASCOM.DynamicRemoteClients
                         try
                         {
                             File.Delete(pdbFileName);
-                            TL.LogMessage("DeleteDrivers", $"Successfully deleted driver file { driverFileName}");
+                            TL.LogMessage("DeleteDrivers", $"Successfully deleted driver file {driverFileName}");
                         }
                         catch (Exception ex)
                         {
@@ -292,8 +288,7 @@ namespace ASCOM.DynamicRemoteClients
                         try
                         {
                             TL.LogMessage("DeleteDrivers", $"Removing driver Profile registration for {driver.DeviceType} driver: {driver.ProgId}");
-                            profile.DeviceType = driver.DeviceType;
-                            profile.Unregister(driver.ProgId);
+                            Com.Profile.UnRegister(driver.DeviceType.ToDeviceType(), driver.ProgId);
                         }
                         catch (Exception ex)
                         {
@@ -380,18 +375,17 @@ namespace ASCOM.DynamicRemoteClients
                 return;
             }
 
-
             // Extract a list of the remote client drivers from the list of devices in the Profile
-            ArrayList deviceTypes = profile.RegisteredDeviceTypes;
-            foreach (string deviceType in deviceTypes)
+            List<DeviceTypes> deviceTypes = Devices.DeviceTypeList();
+            foreach (DeviceTypes deviceType in deviceTypes)
             {
-                ArrayList devices = profile.RegisteredDevices(deviceType);
-                foreach (KeyValuePair device in devices)
+                List<Com.ASCOMRegistration> devices = Com.Profile.GetDrivers(deviceType);
+                foreach (Com.ASCOMRegistration device in devices)
                 {
                     // Process any Alpaca Dynamic Drivers that are found
                     if (ChkIncludeAlpacaDynamicDrivers.Checked) // We do need to include ASCOM Remote drivers
                     {
-                        Match dynamicDriverMatch = dynamicDriverProgidParseRegex.Match(device.Key); // Parse the ProgID to extract the dynamic device number and device type
+                        Match dynamicDriverMatch = dynamicDriverProgidParseRegex.Match(device.ProgID); // Parse the ProgID to extract the dynamic device number and device type
                         if (dynamicDriverMatch.Success)
                         {
                             // Create a new data class to hold information about this dynamic driver
@@ -402,15 +396,14 @@ namespace ASCOM.DynamicRemoteClients
                                 // Populate information from the dynamic driver's ProgID
                                 foundDriver.ProgId = dynamicDriverMatch.Groups["0"].Value;
                                 foundDriver.Number = int.Parse(dynamicDriverMatch.Groups[DEVICE_NUMBER].Value, CultureInfo.InvariantCulture);
-                                foundDriver.DeviceType = deviceType;
+                                foundDriver.DeviceType = deviceType.ToDeviceString();
 
                                 // populate configuration information from the dynamic driver's Profile and 
-                                profile.DeviceType = foundDriver.DeviceType;
-                                foundDriver.IPAdrress = profile.GetValue(foundDriver.ProgId, CreateAlpacaClients.IPADDRESS_PROFILENAME);
-                                foundDriver.PortNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, CreateAlpacaClients.PORTNUMBER_PROFILENAME));
-                                foundDriver.RemoteDeviceNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, CreateAlpacaClients.REMOTE_DEVICE_NUMBER_PROFILENAME));
-                                foundDriver.UniqueID = profile.GetValue(foundDriver.ProgId, CreateAlpacaClients.UNIQUEID_PROFILENAME);
-                                foundDriver.Name = device.Value;
+                                foundDriver.IPAdrress = Com.Profile.GetValue(deviceType, foundDriver.ProgId, CreateAlpacaClients.IPADDRESS_PROFILENAME, "");
+                                foundDriver.PortNumber = Convert.ToInt32(Com.Profile.GetValue(deviceType, foundDriver.ProgId, CreateAlpacaClients.PORTNUMBER_PROFILENAME, ""));
+                                foundDriver.RemoteDeviceNumber = Convert.ToInt32(Com.Profile.GetValue(deviceType, foundDriver.ProgId, CreateAlpacaClients.REMOTE_DEVICE_NUMBER_PROFILENAME, ""));
+                                foundDriver.UniqueID = Com.Profile.GetValue(deviceType, foundDriver.ProgId, CreateAlpacaClients.UNIQUEID_PROFILENAME, "");
+                                foundDriver.Name = device.Name;
                                 foundDriver.Description = $"{foundDriver.Name} ({foundDriver.ProgId}) - {foundDriver.IPAdrress}:{foundDriver.PortNumber}/api/v1/{foundDriver.DeviceType}/{foundDriver.RemoteDeviceNumber} - {foundDriver.UniqueID}";
 
                                 // Test whether the driver is correctly registered and installed and flag accordingly
@@ -418,19 +411,7 @@ namespace ASCOM.DynamicRemoteClients
 
                                 if (compatibilityMessage == "") // Driver is correctly registered 
                                 {
-                                    string driverExecutable = $"{dynamicDriverDirectory}{foundDriver.ProgId}.dll";
-                                    TL.LogMessage("ReadConfiguration", $"Searching for driver:  {driverExecutable}");
-
-                                    // Confirm that the driver DLL executable exists
-                                    if (File.Exists(driverExecutable)) // DLL exists so flag OK
-                                    {
-                                        foundDriver.InstallState = InstallationState.Ok;
-                                    }
-                                    else // Driver DLL does not exist so flag as corrupted and suggest deletion
-                                    {
-                                        foundDriver.InstallState = InstallationState.MissingDriver;
-                                        foundDriver.Description = $"{foundDriver.ProgId} - Driver is ASCOM registered does not exist - Deletion recommended";
-                                    }
+                                    foundDriver.InstallState = InstallationState.Ok;
                                 }
                                 else // A driver installation issue was found so flag as corrupted and recommend deletion
                                 {
@@ -460,7 +441,7 @@ namespace ASCOM.DynamicRemoteClients
                     // Process any ASCOM Remote drivers that are found if this is enabled
                     if (ChkIncludeAscomRemoteDrivers.Checked) // We do need to include ASCOM Remote drivers
                     {
-                        Match remoteDrivermatch = remoteDriverProgidParseRegex.Match(device.Key); // Parse the ProgID to extract the remote device number and device type
+                        Match remoteDrivermatch = remoteDriverProgidParseRegex.Match(device.ProgID); // Parse the ProgID to extract the remote device number and device type
                         if (remoteDrivermatch.Success)
                         {
                             // Create a new data class to hold information about this dynamic driver
@@ -471,15 +452,14 @@ namespace ASCOM.DynamicRemoteClients
                                 // Populate information from the dynamic driver's ProgID
                                 foundDriver.ProgId = remoteDrivermatch.Groups["0"].Value;
                                 foundDriver.Number = int.Parse(remoteDrivermatch.Groups[DEVICE_NUMBER].Value, CultureInfo.InvariantCulture);
-                                foundDriver.DeviceType = deviceType;
+                                foundDriver.DeviceType = deviceType.ToDeviceString();
 
                                 // populate configuration information from the dynamic driver's Profile and 
-                                profile.DeviceType = foundDriver.DeviceType;
-                                foundDriver.IPAdrress = profile.GetValue(foundDriver.ProgId, CreateAlpacaClients.IPADDRESS_PROFILENAME);
-                                foundDriver.PortNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, CreateAlpacaClients.PORTNUMBER_PROFILENAME));
-                                foundDriver.RemoteDeviceNumber = Convert.ToInt32(profile.GetValue(foundDriver.ProgId, CreateAlpacaClients.REMOTE_DEVICE_NUMBER_PROFILENAME));
-                                foundDriver.UniqueID = profile.GetValue(foundDriver.ProgId, CreateAlpacaClients.UNIQUEID_PROFILENAME);
-                                foundDriver.Name = device.Value;
+                                foundDriver.IPAdrress = Com.Profile.GetValue(deviceType, foundDriver.ProgId, CreateAlpacaClients.IPADDRESS_PROFILENAME, "");
+                                foundDriver.PortNumber = Convert.ToInt32(Com.Profile.GetValue(deviceType, foundDriver.ProgId, CreateAlpacaClients.PORTNUMBER_PROFILENAME, ""));
+                                foundDriver.RemoteDeviceNumber = Convert.ToInt32(Com.Profile.GetValue(deviceType, foundDriver.ProgId, CreateAlpacaClients.REMOTE_DEVICE_NUMBER_PROFILENAME, ""));
+                                foundDriver.UniqueID = Com.Profile.GetValue(deviceType, foundDriver.ProgId, CreateAlpacaClients.UNIQUEID_PROFILENAME, "");
+                                foundDriver.Name = device.Name;
                                 foundDriver.Description = $"{foundDriver.Name} ({foundDriver.ProgId}) - {foundDriver.IPAdrress}:{foundDriver.PortNumber}/api/v1/{foundDriver.DeviceType}/{foundDriver.RemoteDeviceNumber} - {foundDriver.UniqueID}";
 
                                 // Test whether the driver is correctly registered and installed and flag accordingly
@@ -534,15 +514,15 @@ namespace ASCOM.DynamicRemoteClients
                     // Validate Alpaca dynamic drivers
                     if (ChkIncludeAlpacaDynamicDrivers.Checked)
                     {
-                        string dynamicDriverProgId = $"{CreateAlpacaClients.DRIVER_PROGID_BASE}{i}.{deviceType}";
-                        ValidateDriver(dynamicDriverDirectory, deviceType, dynamicDriverProgId);
+                        string dynamicDriverProgId = $"{CreateAlpacaClients.DRIVER_PROGID_BASE}{i}.{deviceType.ToDeviceString()}";
+                        ValidateDriver(dynamicDriverDirectory, deviceType.ToDeviceString(), dynamicDriverProgId);
                     }
 
                     // Validate ASCOM Remote drivers
                     if (ChkIncludeAscomRemoteDrivers.Checked)
                     {
-                        string remoteDriverProgId = $"{ASCOM_REMOTE_PROGID_BASE}{i}.{deviceType}";
-                        ValidateDriver(remoteDriverDirectory, deviceType, remoteDriverProgId);
+                        string remoteDriverProgId = $"{ASCOM_REMOTE_PROGID_BASE}{i}.{deviceType.ToDeviceString()}";
+                        ValidateDriver(remoteDriverDirectory, deviceType.ToDeviceString(), remoteDriverProgId);
                     }
                 }
             }
@@ -592,7 +572,7 @@ namespace ASCOM.DynamicRemoteClients
                 else // Driver is COM registered and its driver DLL exists
                 {
                     // Test whether the device is ASCOM registered
-                    if (!profile.IsRegistered(progId)) // The driver is not registered in the ASCOM Profile
+                    if (!Com.Profile.IsRegistered(deviceType.ToDeviceType(), progId)) // The driver is not registered in the ASCOM Profile
                     {
                         // Create a new list entry
                         DynamicDriverRegistration foundDriver = new DynamicDriverRegistration();
@@ -682,7 +662,7 @@ namespace ASCOM.DynamicRemoteClients
             LblTitle.Left = (this.Width - LblTitle.Width - 20) / 2;
             dynamicDriversCheckedListBox.Height = this.Height - 168;
             dynamicDriversCheckedListBox.Width = this.Width - 97;
-            ChkIncludeAscomRemoteDrivers.Left = this.Width - 218;
+            ChkIncludeAscomRemoteDrivers.Left = this.Width - 233;
             ChkIncludeAlpacaDynamicDrivers.Left = ChkIncludeAscomRemoteDrivers.Left;
         }
 

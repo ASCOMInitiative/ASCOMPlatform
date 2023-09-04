@@ -46,6 +46,11 @@ csharp_style_prefer_not_pattern = true:suggestion
 csharp_style_var_for_built_in_types = false:silent
 csharp_style_var_elsewhere = false:silent
 csharp_style_var_when_type_is_apparent = false:silent
+csharp_style_prefer_primary_constructors = true:suggestion
+
+# VSSpell001: Spell Check
+dotnet_diagnostic.VSSpell001.severity = none
+
 [*.vb]
 [*.{cs,vb}]
 
