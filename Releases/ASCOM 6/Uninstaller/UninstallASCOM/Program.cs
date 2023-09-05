@@ -605,7 +605,7 @@ namespace UninstallAscom
         protected static void CleanUp4()
         {
             RegistryAccess RA = new RegistryAccess();
-            RegistryKey RK = RA.OpenSubKey3264(Registry.LocalMachine, @"SOFTWARE\ASCOM", true, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY);
+            RegistryKey RK = RA.OpenSubKey3264(RegistryHive.LocalMachine, @"SOFTWARE\ASCOM", true, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY);
             try
             {
                 RK.DeleteSubKeyTree(@"Telescope Drivers\SS2K.Telescope");

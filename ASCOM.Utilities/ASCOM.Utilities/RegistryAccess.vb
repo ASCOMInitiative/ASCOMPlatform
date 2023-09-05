@@ -16,8 +16,6 @@ Imports System.Runtime.InteropServices
 Friend Class RegistryAccess
     Implements IAccess, IDisposable
 
-    Private HandleList As List(Of IntPtr) = New List(Of IntPtr)()
-
     Private ProfileRegKey As RegistryKey
 
     Private ProfileMutex As System.Threading.Mutex
@@ -131,7 +129,7 @@ Friend Class RegistryAccess
         ProfileMutex = New System.Threading.Mutex(False, PROFILE_MUTEX_NAME)
 
         Try
-            ProfileRegKey = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
+            ProfileRegKey = OpenSubKey3264(RegistryHive.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
             PlatformVersion = GetProfile("\", "PlatformVersion")
             'OK, no exception so assume that we are initialised
         Catch ex As System.ComponentModel.Win32Exception 'This occurs when the key does not exist and is OK if we are ignoring checks
@@ -164,11 +162,6 @@ Friend Class RegistryAccess
 
             Try : ProfileRegKey.Close() : Catch : End Try
             Try : ProfileRegKey = Nothing : Catch : End Try
-
-            ' Release the registry key OS handles
-            For Each ptr As IntPtr In HandleList
-                Try : CloseHandle(ptr) : Catch ex As Exception : End Try
-            Next
 
             If DisableTLOnExit Then
                 Try : TL.Enabled = False : Catch : End Try 'Clean up the logger
@@ -519,7 +512,7 @@ Friend Class RegistryAccess
             End Select
 
             'Make sure we have a valid key now that we have migrated the profile to the registry
-            ProfileRegKey = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
+            ProfileRegKey = OpenSubKey3264(RegistryHive.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
 
             sw.Stop() : LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
         Catch ex As Exception
@@ -713,7 +706,7 @@ Friend Class RegistryAccess
         swLocal = Stopwatch.StartNew
 
         'FromKey = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME, True)
-        FromKey = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegWow64Options.KEY_WOW64_32KEY)
+        FromKey = OpenSubKey3264(RegistryHive.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegWow64Options.KEY_WOW64_32KEY)
         ToKey = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME & "\" & REGISTRY_5_BACKUP_SUBKEY)
         PlatformVersion = ToKey.GetValue("PlatformVersion", "").ToString ' Test whether we have already backed up the profile
         If String.IsNullOrEmpty(PlatformVersion) Then
@@ -779,8 +772,8 @@ Friend Class RegistryAccess
             ListRegistryACLs(Registry.ClassesRoot, "HKEY_CLASSES_ROOT")
             ListRegistryACLs(Registry.LocalMachine.OpenSubKey("SOFTWARE"), "HKEY_LOCAL_MACHINE\SOFTWARE")
             ListRegistryACLs(Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft"), "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft")
-            ListRegistryACLs(OpenSubKey3264(Registry.LocalMachine, "SOFTWARE", True, RegWow64Options.KEY_WOW64_64KEY), "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node")
-            ListRegistryACLs(OpenSubKey3264(Registry.LocalMachine, "SOFTWARE\Microsoft", True, RegWow64Options.KEY_WOW64_32KEY), "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft")
+            ListRegistryACLs(OpenSubKey3264(RegistryHive.LocalMachine, "SOFTWARE", True, RegWow64Options.KEY_WOW64_64KEY), "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node")
+            ListRegistryACLs(OpenSubKey3264(RegistryHive.LocalMachine, "SOFTWARE\Microsoft", True, RegWow64Options.KEY_WOW64_32KEY), "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft")
         Else
             LogMessage("SetRegistryACL", "Listing base key ACLS in 32bit mode")
             ListRegistryACLs(Registry.ClassesRoot, "HKEY_CLASSES_ROOT")
@@ -789,7 +782,7 @@ Friend Class RegistryAccess
         End If
 
         LogMessage("SetRegistryACL", "Creating root ASCOM key ""\""")
-        Key = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY) ' Always create the key in the 32bit portion of the registry for backward compatibility
+        Key = OpenSubKey3264(RegistryHive.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY) ' Always create the key in the 32bit portion of the registry for backward compatibility
 
         LogMessage("SetRegistryACL", "Retrieving ASCOM key ACL rule")
         TL.BlankLine()
@@ -1114,7 +1107,7 @@ Friend Class RegistryAccess
         swLocal = Stopwatch.StartNew
 
         FromKey = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME & "\" & REGISTRY_5_BACKUP_SUBKEY)
-        ToKey = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
+        ToKey = OpenSubKey3264(RegistryHive.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
         LogMessage("Restore50", "Restoring Profile 5 to " & ToKey.Name)
         CopyRegistry(FromKey, ToKey)
         FromKey.Close() 'Close the key after migration
@@ -1130,7 +1123,7 @@ Friend Class RegistryAccess
         swLocal = Stopwatch.StartNew
 
         FromKey = Registry.CurrentUser.OpenSubKey(REGISTRY_ROOT_KEY_NAME & "\" & REGISTRY_55_BACKUP_SUBKEY)
-        ToKey = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
+        ToKey = OpenSubKey3264(RegistryHive.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
         LogMessage("Restore55", "Restoring Profile 5.5 to " & ToKey.Name)
         CopyRegistry(FromKey, ToKey)
         FromKey.Close() 'Close the key after migration
@@ -1194,77 +1187,65 @@ Friend Class RegistryAccess
     'OpenSubKey should be replaced with Microsoft.Win32.RegistryKey.OpenBaseKey method
 
     '<Obsolete("Replace with Microsoft.Win32.RegistryKey.OpenBaseKey method in Framework 4", False)> _
-    Friend Function OpenSubKey3264(ByVal ParentKey As RegistryKey, ByVal SubKeyName As String, ByVal Writeable As Boolean, ByVal Options As RegWow64Options) As RegistryKey
+    Friend Function OpenSubKey3264(ByVal ParentKey As RegistryHive, ByVal SubKeyName As String, ByVal Writeable As Boolean, ByVal Options As RegWow64Options) As RegistryKey
         Dim SubKeyHandle As Integer
         Dim Result As Integer
+        Dim resultKey As RegistryKey
 
-        If ParentKey Is Nothing OrElse GetRegistryKeyHandle(ParentKey).Equals(IntPtr.Zero) Then
-            Throw New ProfilePersistenceException("OpenSubKey: Parent key is not open")
-        End If
+        TL.LogMessage("OpenSubKey3264", $"Hive: {ParentKey}, SubKey: {SubKeyName}, Writeable: {Writeable}, Options: {Options}, Application bits: {ApplicationBits()}")
 
-        Dim Rights As Integer = RegistryRights.ReadKey ' Or RegistryRights.EnumerateSubKeys Or RegistryRights.QueryValues Or RegistryRights.Notify
-        If Writeable Then
-            Rights = RegistryRights.WriteKey
-            '                       hKey                             SubKey      Res lpClass     dwOpts samDesired     SecAttr      Handle        Disp
-            Result = RegCreateKeyEx(GetRegistryKeyHandle(ParentKey), SubKeyName, 0, IntPtr.Zero, 0, Rights Or Options, IntPtr.Zero.ToInt32, SubKeyHandle, IntPtr.Zero.ToInt32)
-            HandleList.Add(CType(SubKeyHandle, IntPtr))
-        Else
-            Result = RegOpenKeyEx(GetRegistryKeyHandle(ParentKey), SubKeyName, 0, Rights Or Options, SubKeyHandle)
-            HandleList.Add(CType(SubKeyHandle, IntPtr))
-        End If
+        ' Handle the various registry hives
+        Select Case ParentKey
+            Case RegistryHive.ClassesRoot ' HKEY classes root
+                ' Test whether the application is 32bit or 64bit
+                If ApplicationBits() = Bitness.Bits64 Then ' 64bit application
+                    ' Force access to the 32bit portion of the registry (different on a 64bit machine from the 64bit portion of the registry)
+                    resultKey = Registry.ClassesRoot.OpenSubKey($"WOW6432Node\{SubKeyName}", Writeable)
 
-        Select Case Result
-            Case 0 'All OK so return result
-                Return PointerToRegistryKey(CType(SubKeyHandle, IntPtr), Writeable, False, Options) ' Now pass the options as well for Framework 4 compatibility
-            Case 2 'Key not found so return nothing
-                Throw New ProfilePersistenceException("Cannot open key " & SubKeyName & " as it does not exist - Result: 0x" & Hex(Result))
-            Case Else 'Some other error so throw an error
-                Throw New ProfilePersistenceException("OpenSubKey: Exception encountered opening key - Result: 0x" & Hex(Result))
+                Else ' 32bit application
+                    ' Access the 32bit portion of the registry (only one version because 32bit only)
+                    resultKey = Registry.ClassesRoot.OpenSubKey(SubKeyName, Writeable)
+                End If
+
+            Case RegistryHive.LocalMachine ' HKEY local machine
+                ' Test whether the application is 32bit or 64bit
+                If ApplicationBits() = Bitness.Bits64 Then ' 64bit application
+                    ' Check whether we are accessing the SOFTWARE key
+                    Dim cleanedKey As String = SubKeyName.Trim().TrimStart("\"c) ' Remove leading and trailing spaces and leading \ characters
+
+                    If cleanedKey.StartsWith("SOFTWARE", StringComparison.OrdinalIgnoreCase) Then ' We need to access the 32bit version of the SOFTWARE key 
+                        ' Force access to the 32bit portion of the registry (different on a 64bit machine from the 64bit portion of the registry)
+                        ' extract any sub-key that follows SOFTWARE
+                        If cleanedKey.Length > 8 Then ' There is something after the key SOFTWARE
+                            cleanedKey = $"SOFTWARE\WOW6432Node\{cleanedKey.Substring(8)}"
+                        Else
+                            cleanedKey = $"SOFTWARE\WOW6432Node\"
+                        End If
+                        TL.LogMessage("OpenSubKey3264", $"Cleaned key: {cleanedKey}")
+
+                        resultKey = Registry.LocalMachine.OpenSubKey(cleanedKey, Writeable)
+
+                    Else
+                        resultKey = Registry.LocalMachine.OpenSubKey(SubKeyName, Writeable)
+                    End If
+
+                Else ' 32bit application
+                    ' Access the 32bit portion of the registry (only one version because 32bit only)
+                    resultKey = Registry.LocalMachine.OpenSubKey(SubKeyName, Writeable)
+                End If
+
+            Case Else ' Other hives are not supported
+                Throw New InvalidValueException($"RegistryAccess - OpenSubKey3264 - The {ParentKey} hive is not yet supported.
+")
         End Select
 
-    End Function
-
-    Private Function PointerToRegistryKey(ByVal hKey As System.IntPtr, ByVal writable As Boolean, ByVal ownsHandle As Boolean, ByVal options As RegWow64Options) As Microsoft.Win32.RegistryKey
-        ' Create a SafeHandles.SafeRegistryHandle from this pointer - this is a private class
-        Dim privateConstructors, publicConstructors As System.Reflection.BindingFlags
-        Dim safeRegistryHandleType As System.Type
-        Dim safeRegistryHandleConstructorTypes As System.Type() = {GetType(System.IntPtr), GetType(System.Boolean)}
-        Dim safeRegistryHandleConstructor As System.Reflection.ConstructorInfo
-        Dim safeHandle As System.Object
-        Dim registryKeyType As System.Type
-        Dim registryKeyConstructor As System.Reflection.ConstructorInfo
-        Dim result As Microsoft.Win32.RegistryKey
-
-        publicConstructors = System.Reflection.BindingFlags.Instance Or System.Reflection.BindingFlags.NonPublic Or System.Reflection.BindingFlags.Public
-        privateConstructors = System.Reflection.BindingFlags.Instance Or System.Reflection.BindingFlags.NonPublic
-        safeRegistryHandleType = GetType(Microsoft.Win32.SafeHandles.SafeHandleZeroOrMinusOneIsInvalid).Assembly.GetType("Microsoft.Win32.SafeHandles.SafeRegistryHandle")
-        safeRegistryHandleConstructor = safeRegistryHandleType.GetConstructor(publicConstructors, Nothing, safeRegistryHandleConstructorTypes, Nothing)
-        safeHandle = safeRegistryHandleConstructor.Invoke(New System.Object() {hKey, ownsHandle})
-
-        ' Create a new Registry key using the private constructor using the safeHandle - this should then behave like a .NET natively opened handle and disposed of correctly
-        If System.Environment.Version.Major >= 4 Then ' Deal with MS having added a new parameter to the RegistryKey private constructor!!
-            Dim RegistryViewType As System.Type = GetType(Microsoft.Win32.SafeHandles.SafeHandleZeroOrMinusOneIsInvalid).Assembly.GetType("Microsoft.Win32.RegistryView") ' This is the new parameter type
-            Dim registryKeyConstructorTypes As System.Type() = {safeRegistryHandleType, GetType(System.Boolean), RegistryViewType} 'Add the extra parameter to the list of parameter types
-            registryKeyType = GetType(Microsoft.Win32.RegistryKey)
-            registryKeyConstructor = registryKeyType.GetConstructor(privateConstructors, Nothing, registryKeyConstructorTypes, Nothing)
-            result = DirectCast(registryKeyConstructor.Invoke(New Object() {safeHandle, writable, CInt(options)}), Microsoft.Win32.RegistryKey) ' Version 4 and later
-        Else ' Only two parameters for Frameworks 3.5 and below
-            Dim registryKeyConstructorTypes As System.Type() = {safeRegistryHandleType, GetType(System.Boolean)}
-            registryKeyType = GetType(Microsoft.Win32.RegistryKey)
-            registryKeyConstructor = registryKeyType.GetConstructor(privateConstructors, Nothing, registryKeyConstructorTypes, Nothing)
-            result = DirectCast(registryKeyConstructor.Invoke(New Object() {safeHandle, writable}), Microsoft.Win32.RegistryKey) ' Version 3.5 and earlier
+        ' Test whether the sub-key was found
+        If resultKey Is Nothing Then ' Sub-key not found so throw an exception
+            Throw New ProfilePersistenceException("Cannot open key " & SubKeyName & " as it does not exist - Result: 0x" & Hex(Result))
         End If
-        Return result
-    End Function
 
-    Private Function GetRegistryKeyHandle(ByVal RegisteryKey As RegistryKey) As IntPtr
-        ' Basis from http://blogs.msdn.com/cumgranosalis/archive/2005/12/09/Win64RegistryPart1.aspx
-        Dim Type As Type = Type.GetType("Microsoft.Win32.RegistryKey")
-        Dim Info As Reflection.FieldInfo = Type.GetField("hkey", Reflection.BindingFlags.NonPublic Or Reflection.BindingFlags.Instance)
-
-        Dim Handle As Runtime.InteropServices.SafeHandle = CType(Info.GetValue(RegisteryKey), Runtime.InteropServices.SafeHandle)
-
-        Return Handle.DangerousGetHandle
+        ' Sub-key found so return it
+        Return resultKey
     End Function
 
     Friend Enum RegWow64Options As Integer
@@ -1273,25 +1254,6 @@ Friend Class RegistryAccess
         KEY_WOW64_64KEY = &H100
         KEY_WOW64_32KEY = &H200
     End Enum
-
-    Private Declare Auto Function RegOpenKeyEx Lib "advapi32.dll" (ByVal hKey As IntPtr,
-                                                                   ByVal lpSubKey As String,
-                                                                   ByVal ulOptions As Integer,
-                                                                   ByVal samDesired As Integer,
-                                                                   ByRef phkResult As Integer) As Integer
-
-
-    Private Declare Auto Function RegCreateKeyEx Lib "advapi32.dll" (ByVal hKey As IntPtr,
-                                                                     ByVal lpSubKey As String,
-                                                                     ByVal Reserved As Integer,
-                                                                     ByVal lpClass As IntPtr,
-                                                                     ByVal dwOptions As Integer,
-                                                                     ByVal samDesired As Integer,
-                                                                     ByVal lpSecurityAttributes As Integer,
-                                                                     ByRef phkResult As Integer,
-                                                                     ByVal lpdwDisposition As Integer) As Integer
-
-    Private Declare Auto Function CloseHandle Lib "kernel32.dll" (ByVal hObject As IntPtr) As Integer
 
 #End Region
 

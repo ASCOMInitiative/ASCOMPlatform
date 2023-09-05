@@ -933,11 +933,11 @@ Public Class DiagnosticsForm
         Reg = New RegistryAccess
 
         Try
-            AppKey = Reg.OpenSubKey3264(Registry.ClassesRoot, ProgID & "\CLSID", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+            AppKey = Reg.OpenSubKey3264(RegistryHive.ClassesRoot, ProgID & "\CLSID", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
             CLSIDString = AppKey.GetValue("", "")
             AppKey.Close()
             If Not String.IsNullOrEmpty(CLSIDString) Then 'Got a GUID value so try and process it
-                AppKey = Reg.OpenSubKey3264(Registry.ClassesRoot, "CLSID\" & CLSIDString & "\LocalServer32", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                AppKey = Reg.OpenSubKey3264(RegistryHive.ClassesRoot, "CLSID\" & CLSIDString & "\LocalServer32", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
                 FileName = AppKey.GetValue("", "")
                 FileName = FileName.Trim(New Char() {""""}) 'TrimChars)
                 If Not String.IsNullOrEmpty(FileName) Then 'We have a file name so see if it exists
@@ -971,7 +971,7 @@ Public Class DiagnosticsForm
             AppKey.Close()
             If Not String.IsNullOrEmpty(CLSIDString) Then 'Got a GUID value so try and process it
                 Try
-                    AppKey = Reg.OpenSubKey3264(Registry.ClassesRoot, "CLSID\" & CLSIDString & "\LocalServer32", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                    AppKey = Reg.OpenSubKey3264(RegistryHive.ClassesRoot, "CLSID\" & CLSIDString & "\LocalServer32", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
                     FileName = AppKey.GetValue("", "")
                     If Not String.IsNullOrEmpty(FileName) Then 'We have a file name so see if it exists
                         If File.Exists(FileName) Then 'Get details
@@ -6649,7 +6649,7 @@ Public Class DiagnosticsForm
                     RegistryRights(Registry.LocalMachine, "SOFTWARE\WOW6432Node\ASCOM", False)
                     RegistryRights(Registry.LocalMachine, "SOFTWARE\WOW6432Node\ASCOM\Telescope Drivers", False)
                     RegistryRights(Registry.LocalMachine, "SOFTWARE\WOW6432Node\ASCOM\Telescope Drivers\ASCOM.Simulator.Telescope", False)
-                    Key = ASCOMRegistryAccess.OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                    Key = ASCOMRegistryAccess.OpenSubKey3264(RegistryHive.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
                     RecursionLevel = -1
                     RecurseRegistrySecurity(Key)
                 Catch ex As Exception
@@ -6830,7 +6830,7 @@ Public Class DiagnosticsForm
             Try
                 'List the 32bit registry
                 TL.LogMessage("ScanRegistry", "Machine Profile Root (64bit OS - 32bit Registry)")
-                Key = ASCOMRegistryAccess.OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                Key = ASCOMRegistryAccess.OpenSubKey3264(RegistryHive.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
                 RecursionLevel = -1
                 RecurseRegistry(Key)
             Catch ex As Exception
@@ -6841,7 +6841,7 @@ Public Class DiagnosticsForm
             Try
                 'List the 64bit registry
                 TL.LogMessage("ScanRegistry", "Machine Profile Root (64bit OS - 64bit Registry)")
-                Key = ASCOMRegistryAccess.OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_64KEY)
+                Key = ASCOMRegistryAccess.OpenSubKey3264(RegistryHive.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_64KEY)
                 RecursionLevel = -1
                 RecurseRegistry(Key)
             Catch ex As ProfilePersistenceException
@@ -7408,7 +7408,7 @@ Public Class DiagnosticsForm
                         Case VersionCode.Bitness.Bits64 ' We are a 64bit application so look in the 32bit registry section
                             Select Case Bitness
                                 Case VersionCode.Bitness.Bits32 ' Open the 32bit registry
-                                    RKeyCLSID = RegAccess.OpenSubKey3264(Registry.ClassesRoot, "CLSID\" & CLSID, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                                    RKeyCLSID = RegAccess.OpenSubKey3264(RegistryHive.ClassesRoot, "CLSID\" & CLSID, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
                                 Case VersionCode.Bitness.Bits64 'Open the 64bit registry
                                     RKeyCLSID = Registry.ClassesRoot.OpenSubKey("CLSID\" & CLSID, False)
                                 Case Else
