@@ -1216,9 +1216,9 @@ Install Files
 Install Files
 Install Files
 Install Files
-Code Folding Region
 Comment
-Code Folding Region
+Install Files
+Comment
 Install Files
 Install Files
 Install Files
@@ -3283,9 +3283,9 @@ $
 {07ECF99B-D559-4E60-B8E8-8788A272B628}
 {59302FA6-658F-4182-A81D-AD77A3EECBC7}
 {FBA925DD-C424-4348-9DF4-10CC11E8BC2D}
-{237B0382-D0F5-4DD4-851F-A728A2614F47}
+{71E35CFD-6271-49C8-86D0-12319A333286}
+{959B2C0A-31CA-4EAB-B079-CF4423D46B0C}
 {B9B73027-27CF-4A96-A7DB-98062D14DFBD}
-{6D4F604A-C809-496E-8A5F-F1660102DD78}
 {5BC223B4-41C9-4CD4-A1FF-4030340DDECB}
 {26185D86-3854-4AFE-8379-CB29139D5ADE}
 {C16F6135-E32E-4EEA-A5C3-4CF9A0F0FE59}
@@ -4851,6 +4851,8 @@ Test for versions after Windows 10 Threshold 2 i.e. Redstone 1 and later.
 {03F109A3-05B8-489B-8A13-5F7F87AF837B}
 Running on Windows 10 or later so enable .NET 3.5 installation.
 {B9B73027-27CF-4A96-A7DB-98062D14DFBD}
+
+{71E35CFD-6271-49C8-86D0-12319A333286}
 
 {3FDCB84F-CB74-4A3D-8649-C2FB2EFB7985}
 PRELIST
@@ -9850,6 +9852,19 @@ FALSE
 FALSE
 FALSE
 FALSE
+{959B2C0A-31CA-4EAB-B079-CF4423D46B0C}
+..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net70-windows\*.*
+FALSE|*.xml
+$TARGETDIR$\Tools\AlpacaDynamicClientManager
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
 {BF164208-5DCC-44E8-BF70-A15EC9C00CCE}
 $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe
 TRUE
@@ -13547,9 +13562,6 @@ Maintenance Dialogue
 {5BEB039D-589B-4CAE-AEC4-592A05D1964A}
 FALSE
 Copy of Copy of 
-{237B0382-D0F5-4DD4-851F-A728A2614F47}
-FALSE
-Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
 {7082CCE5-A087-4EBE-9A0C-6527E3CE2DE7}
 TRUE
 Alpaca Support for Chooser
@@ -13577,9 +13589,6 @@ Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
 {9D2059CB-0BD3-471F-ACED-36635A0CC579}
 TRUE
 Platform validation
-{6D4F604A-C809-496E-8A5F-F1660102DD78}
-TRUE
-Platform 7 files
 {06365DA1-35BA-42EE-83E6-B0630B49BE66}
 FALSE
 Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
@@ -15060,8 +15069,8 @@ C
 C
 C
 
-
-
+C
+C
 C
 C
 C

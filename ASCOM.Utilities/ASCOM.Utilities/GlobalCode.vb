@@ -656,9 +656,8 @@ Module VersionCode
         Dim AssemblyFullName As String, LoadedAssembly As Assembly
         Dim peKind As PortableExecutableKinds, machine As ImageFileMachine, Modules() As [Module]
 
-        ' Using ProfileStore As RegistryAccess = New RegistryAccess("DriverCompatibilityMessage") 'Get access to the profile store
+        Dim CompatibilityMessage As String = "" 'Set default return value as OK
 
-        DriverCompatibilityMessage = "" 'Set default return value as OK
         TL.LogMessage("DriverCompatibility", "     ProgID: " & ProgID & ", Bitness: " & RequiredBitness.ToString)
         'Parse the COM registry section to determine whether this ProgID is an in-process DLL server.
         'If it is then parse the executable to determine whether it is a 32bit only driver and gie a suitable message if it is
@@ -767,22 +766,22 @@ Module VersionCode
                                 InprocServerBitness = InProcServer.BitNess
                                 If InprocServerBitness = Bitness.Bits32 Then '32bit driver executable
                                     If Registered64Bit Then '32bit driver executable registered in 64bit COM
-                                        DriverCompatibilityMessage = "This 32bit only driver won't work in a 64bit application even though it is registered as a 64bit COM driver." & vbCrLf & DRIVER_AUTHOR_MESSAGE_DRIVER
+                                        CompatibilityMessage = "This 32bit only driver won't work in a 64bit application even though it is registered as a 64bit COM driver." & vbCrLf & DRIVER_AUTHOR_MESSAGE_DRIVER
                                     Else '32bit driver executable registered in 32bit COM
-                                        DriverCompatibilityMessage = "This 32bit only driver won't work in a 64bit application even though it is correctly registered as a 32bit COM driver." & vbCrLf & DRIVER_AUTHOR_MESSAGE_DRIVER
+                                        CompatibilityMessage = "This 32bit only driver won't work in a 64bit application even though it is correctly registered as a 32bit COM driver." & vbCrLf & DRIVER_AUTHOR_MESSAGE_DRIVER
                                     End If
                                 Else '64bit driver
                                     If Registered64Bit Then '64bit driver executable registered in 64bit COM section
                                         'This is the only OK combination, no message for this!
                                     Else '64bit driver executable registered in 32bit COM
-                                        DriverCompatibilityMessage = "This 64bit capable driver is only registered as a 32bit COM driver." & vbCrLf & DRIVER_AUTHOR_MESSAGE_INSTALLER
+                                        CompatibilityMessage = "This 64bit capable driver is only registered as a 32bit COM driver." & vbCrLf & DRIVER_AUTHOR_MESSAGE_INSTALLER
                                     End If
                                 End If
                             Catch ex As FileNotFoundException 'Cannot open the file
-                                DriverCompatibilityMessage = "Cannot find the driver executable: " & vbCrLf & """" & InprocFilePath & """"
+                                CompatibilityMessage = "Cannot find the driver executable: " & vbCrLf & """" & InprocFilePath & """"
                             Catch ex As Exception 'Some other exception so log it
-                                LogEvent("DriverCompatibilityMessage", "Exception parsing " & ProgID & ", """ & InprocFilePath & """", EventLogEntryType.Error, EventLogErrors.DriverCompatibilityException, ex.ToString)
-                                DriverCompatibilityMessage = "PEReader Exception, please check ASCOM application Event Log for details"
+                                LogEvent("CompatibilityMessage", "Exception parsing " & ProgID & ", """ & InprocFilePath & """", EventLogEntryType.Error, EventLogErrors.DriverCompatibilityException, ex.ToString)
+                                CompatibilityMessage = "PEReader Exception, please check ASCOM application Event Log for details"
                             End Try
 
                             If Not InProcServer Is Nothing Then 'Clean up the PEReader class
@@ -798,10 +797,10 @@ Module VersionCode
                         'Please leave this empty clause here so the logic is clear!
                     End If
                 Else 'Cannot find a CLSID entry
-                    DriverCompatibilityMessage = "Unable to find a CLSID entry for this driver, please re-install."
+                    CompatibilityMessage = "Unable to find a CLSID entry for this driver, please re-install."
                 End If
             Else 'No COM ProgID registry entry
-                DriverCompatibilityMessage = "This driver is not registered for COM (can't find ProgID), please re-install."
+                CompatibilityMessage = "This driver is not registered for COM (can't find ProgID), please re-install."
             End If
         Else 'We are running a 32bit application test so make sure the executable is not 64bit only
             RK = Registry.ClassesRoot.OpenSubKey(ProgID & "\CLSID", False) 'Look in the 32bit registry
@@ -927,13 +926,13 @@ Module VersionCode
                             Try
                                 InProcServer = New PEReader(InprocFilePath, TL) 'Get hold of the executable so we can determine its characteristics
                                 If InProcServer.BitNess = Bitness.Bits64 Then '64bit only driver executable
-                                    DriverCompatibilityMessage = "This is a 64bit only driver and is not compatible with this 32bit application." & vbCrLf & DRIVER_AUTHOR_MESSAGE_DRIVER
+                                    CompatibilityMessage = "This is a 64bit only driver and is not compatible with this 32bit application." & vbCrLf & DRIVER_AUTHOR_MESSAGE_DRIVER
                                 End If
                             Catch ex As FileNotFoundException 'Cannot open the file
-                                DriverCompatibilityMessage = "Cannot find the driver executable: " & vbCrLf & """" & InprocFilePath & """"
+                                CompatibilityMessage = "Cannot find the driver executable: " & vbCrLf & """" & InprocFilePath & """"
                             Catch ex As Exception 'Some other exception so log it
-                                LogEvent("DriverCompatibilityMessage", "Exception parsing " & ProgID & ", """ & InprocFilePath & """", EventLogEntryType.Error, EventLogErrors.DriverCompatibilityException, ex.ToString)
-                                DriverCompatibilityMessage = "PEReader Exception, please check ASCOM application Event Log for details"
+                                LogEvent("CompatibilityMessage", "Exception parsing " & ProgID & ", """ & InprocFilePath & """", EventLogEntryType.Error, EventLogErrors.DriverCompatibilityException, ex.ToString)
+                                CompatibilityMessage = "PEReader Exception, please check ASCOM application Event Log for details"
                             End Try
 
                             If Not InProcServer Is Nothing Then 'Clean up the PEReader class
@@ -950,18 +949,18 @@ Module VersionCode
                         TL.LogMessage("DriverCompatibility", "This is not an inprocess DLL so no need to test further and no error message to return")
                     End If
                 Else 'Cannot find a CLSID entry
-                    DriverCompatibilityMessage = "Unable to find a CLSID entry for this driver, please re-install."
+                    CompatibilityMessage = "Unable to find a CLSID entry for this driver, please re-install."
                     TL.LogMessage("DriverCompatibility", "     Could not find CLSID entry!")
                 End If
             Else 'No COM ProgID registry entry
-                DriverCompatibilityMessage = "This driver is not registered for COM (can't find ProgID), please re-install."
+                CompatibilityMessage = "This driver is not registered for COM (can't find ProgID), please re-install."
             End If
 
         End If
 
         ' End Using
-        TL.LogMessage("DriverCompatibility", "     Returning: """ & DriverCompatibilityMessage & """")
-        Return DriverCompatibilityMessage
+        TL.LogMessage("DriverCompatibility", "     Returning: """ & CompatibilityMessage & """")
+        Return CompatibilityMessage
     End Function
 
 End Module

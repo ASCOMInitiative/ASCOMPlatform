@@ -61,7 +61,7 @@ namespace ASCOM.DynamicClients
             {
                 Enabled = true // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
             };
-            TL?.LogMessage("Main", $"Server started");
+            TL?.LogMessage("Main", $"Server started - Running as a {(Environment.Is64BitProcess?"64bit":"32bit")} process");
 
             // Load driver COM assemblies and get types, ending the program if something goes wrong.
             TL?.LogMessage("Main", $"Loading drivers");
@@ -541,6 +541,8 @@ namespace ASCOM.DynamicClients
                     string deviceType = driverType.Name; // Generate device type from the Class name
                     TL?.LogMessage("RegisterObjects", $"Assembly title: {assemblyTitle}, ASsembly description: {assemblyDescription}, CLSID: {clsId}, ProgID: {progId}, Device type: {deviceType}");
 
+
+                    // Register in the 32bit registry when running as 32bit application or in the 64bit registry when running as a 64bit application
                     using (RegistryKey clsIdKey = Registry.ClassesRoot.CreateSubKey($"CLSID\\{clsId}"))
                     {
                         clsIdKey.SetValue(null, progId);
@@ -562,7 +564,32 @@ namespace ASCOM.DynamicClients
                         }
                     }
 
-                    // HKCR\CLSID\progid
+                    // Additionally, register in the 32bit registry if running as a 64bit application on a 64bit OS.
+                    if (Environment.Is64BitProcess)
+                    {
+                        using (RegistryKey clsIdKey = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32).CreateSubKey($"CLSID\\{clsId}"))
+                        {
+                            clsIdKey.SetValue(null, progId);
+                            clsIdKey.SetValue("AppId", localServerAppId);
+                            using (RegistryKey implementedCategoriesKey = clsIdKey.CreateSubKey("Implemented Categories"))
+                            {
+                                implementedCategoriesKey.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}");
+                            }
+
+                            using (RegistryKey progIdKey = clsIdKey.CreateSubKey("ProgId"))
+                            {
+                                progIdKey.SetValue(null, progId);
+                            }
+                            clsIdKey.CreateSubKey("Programmable");
+
+                            using (RegistryKey localServer32Key = clsIdKey.CreateSubKey("LocalServer32"))
+                            {
+                                localServer32Key.SetValue(null, Application.ExecutablePath);
+                            }
+                        }
+                    }
+
+                    // HKCR\progid
                     using (RegistryKey progIdKey = Registry.ClassesRoot.CreateSubKey(progId))
                     {
                         progIdKey.SetValue(null, assemblyTitle);
@@ -621,13 +648,24 @@ namespace ASCOM.DynamicClients
                 Registry.ClassesRoot.DeleteSubKey($"{progId}\\CLSID", false);
                 Registry.ClassesRoot.DeleteSubKey(progId, false);
 
-                // Remove CLSID entries
+                // Remove CLSID entries in the 32bit registry when running as 32bit application or in the 64bit registry when running as a 64bit application
                 Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}\\Implemented Categories\\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}", false);
                 Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}\\Implemented Categories", false);
                 Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}\\ProgId", false);
                 Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}\\LocalServer32", false);
                 Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}\\Programmable", false);
                 Registry.ClassesRoot.DeleteSubKey($"CLSID\\{clsId}", false);
+
+                // Additionally, remove the 32bit registry entries if running as a 64bit application on a 64bit OS.
+                if (Environment.Is64BitProcess)
+                {
+                    RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32).DeleteSubKey($"CLSID\\{clsId}\\Implemented Categories\\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}", false);
+                    RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32).DeleteSubKey($"CLSID\\{clsId}\\Implemented Categories", false);
+                    RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32).DeleteSubKey($"CLSID\\{clsId}\\ProgId", false);
+                    RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32).DeleteSubKey($"CLSID\\{clsId}\\LocalServer32", false);
+                    RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32).DeleteSubKey($"CLSID\\{clsId}\\Programmable", false);
+                    RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32).DeleteSubKey($"CLSID\\{clsId}", false);
+                }
             }
         }
 
@@ -905,7 +943,7 @@ namespace ASCOM.DynamicClients
 
             // Refresh the HTTP client with the updated values set above.
             client.Refresh();
-            
+
             // Return the configured Alpaca client as the required type
             return (T)(object)client;
         }

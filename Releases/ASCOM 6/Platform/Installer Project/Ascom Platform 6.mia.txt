@@ -1208,17 +1208,17 @@ Comment: Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca C
 Comment: Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Tools.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
 Comment: Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\Newtonsoft.Json.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
 Comment: Add the client creator executable and the dependencies that must be present in order to allow the dynamic compilation to succeed
-Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.exe to $TARGETDIR$\Tools\AlpacaDynamicClientManager
-Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.pdb to $TARGETDIR$\Tools\AlpacaDynamicClientManager
+Comment: Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.exe to $TARGETDIR$\Tools\AlpacaDynamicClientManager
+Comment: Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.pdb to $TARGETDIR$\Tools\AlpacaDynamicClientManager
 Comment: Install Files ..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $TARGETDIR$\Tools\AlpacaDynamicClientManager
 Comment: Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $TARGETDIR$\Tools\AlpacaDynamicClientManager
 Comment: Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll to $TARGETDIR$\Tools\AlpacaDynamicClientManager
 Comment: Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\RestSharp.dll to $TARGETDIR$\Tools\AlpacaDynamicClientManager
 Comment: Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.dll to $TARGETDIR$\Tools\AlpacaDynamicClientManager
 Comment: Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe to $TARGETDIR$\Tools\AlpacaDynamicClientManager
-[END REGION]
  
-[DEFINE REGION: Platform 7 files]
+Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net70-windows\*.* to $TARGETDIR$\Tools\AlpacaDynamicClientManager, ignore files matching wildcard pattern(s) *.xml
+ 
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.exe to $COMMONFILES$\ASCOM\AlpacaDynamicClients
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.deps.json to $COMMONFILES$\ASCOM\AlpacaDynamicClients
 Install Files ..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients

@@ -13,7 +13,6 @@ Remove Previous Platform 6 install if present
 ASCOM Cache
 Earth Rotation Date Update
 Install Application Pre-Requisites if required
-Alpaca Support for Chooser
 ASCOM Device Hub
 Clean up any remaining simulator COM entries
 Install Visual C Runtimes
