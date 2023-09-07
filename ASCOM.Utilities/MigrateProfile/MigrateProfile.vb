@@ -9,6 +9,7 @@ Imports System.IO
 Imports Microsoft.Win32
 Imports System.Security.AccessControl
 Imports System.Security.Principal
+Imports ASCOM.Utilities.Global
 
 Module MigrateProfile
 

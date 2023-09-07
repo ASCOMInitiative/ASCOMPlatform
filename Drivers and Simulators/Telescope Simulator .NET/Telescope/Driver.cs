@@ -31,6 +31,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
+using static ASCOM.Utilities.Global;
 
 namespace ASCOM.Simulator
 {
@@ -99,7 +100,7 @@ namespace ASCOM.Simulator
             }
             catch (Exception ex)
             {
-                EventLogCode.LogEvent("ASCOM.Simulator.Telescope", "Exception on New", EventLogEntryType.Error, GlobalConstants.EventLogErrors.TelescopeSimulatorNew, ex.ToString());
+                LogEvent("ASCOM.Simulator.Telescope", "Exception on New", EventLogEntryType.Error, EventLogErrors.TelescopeSimulatorNew, ex.ToString());
                 System.Windows.Forms.MessageBox.Show("Telescope New: " + ex.ToString());
             }
 
@@ -1145,7 +1146,7 @@ namespace ASCOM.Simulator
             }
             catch (Exception ex)
             {
-                EventLogCode.LogEvent("ASCOM.Simulator.Telescope", "Exception on SetupDialog", EventLogEntryType.Error, GlobalConstants.EventLogErrors.TelescopeSimulatorSetup, ex.ToString());
+                LogEvent("ASCOM.Simulator.Telescope", "Exception on SetupDialog", EventLogEntryType.Error, EventLogErrors.TelescopeSimulatorSetup, ex.ToString());
                 System.Windows.Forms.MessageBox.Show("Telescope SetUp: " + ex.ToString());
             }
         }

@@ -32,6 +32,7 @@ using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Collections.Generic;
 using ASCOM.Astrometry.AstroUtils;
+using static ASCOM.Utilities.Global;
 
 namespace ASCOM.Simulator
 {
@@ -422,7 +423,7 @@ namespace ASCOM.Simulator
                 rateMoveAxes = new Vector();
 
                 TL = new TraceLogger("", "TelescopeSimHardware");
-                TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.SIMULATOR_TRACE, GlobalConstants.SIMULATOR_TRACE_DEFAULT);
+                TL.Enabled = GetBool(SIMULATOR_TRACE, SIMULATOR_TRACE_DEFAULT);
 
                 // Create utilities objects
                 util = new Util();
@@ -712,7 +713,7 @@ namespace ASCOM.Simulator
             }
             catch (Exception ex)
             {
-                EventLogCode.LogEvent("ASCOM.Simulator.Telescope", "TelescopeHardware Initialiser Exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.TelescopeSimulatorNew, ex.ToString());
+                LogEvent("ASCOM.Simulator.Telescope", "TelescopeHardware Initialiser Exception", EventLogEntryType.Error, EventLogErrors.TelescopeSimulatorNew, ex.ToString());
                 System.Windows.Forms.MessageBox.Show("Telescope HardwareInitialise: " + ex.ToString());
             }
         }

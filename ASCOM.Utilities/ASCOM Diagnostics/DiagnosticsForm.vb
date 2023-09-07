@@ -16,6 +16,7 @@ Imports System.Security.Principal
 Imports System.Threading
 Imports System.Text
 'Imports ASCOM.Astrometry.Exceptions
+Imports ASCOM.Utilities.Global
 
 Public Class DiagnosticsForm
 
@@ -202,7 +203,7 @@ Public Class DiagnosticsForm
 
 
         Catch ex As Exception
-            EventLogCode.LogEvent("Diagnostics Load", "Exception", EventLogEntryType.Error, EventLogErrors.DiagnosticsLoadException, ex.ToString)
+            LogEvent("Diagnostics Load", "Exception", EventLogEntryType.Error, EventLogErrors.DiagnosticsLoadException, ex.ToString)
             MsgBox(ex.ToString)
         End Try
     End Sub
@@ -6568,8 +6569,8 @@ Public Class DiagnosticsForm
                 TL.BlankLine()
             End If
 
-            ErrorLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & GlobalConstants.EVENTLOG_ERRORS
-            MessageLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & GlobalConstants.EVENTLOG_MESSAGES
+            ErrorLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & EVENTLOG_ERRORS
+            MessageLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & EVENTLOG_MESSAGES
 
             If File.Exists(MessageLog) Or File.Exists(ErrorLog) Then
                 LogError("ScanEventLog", "Errors have occurred while writing to the ASCOM event log, please see detail earlier in this log.")
@@ -6577,7 +6578,7 @@ Public Class DiagnosticsForm
 
                 If File.Exists(MessageLog) Then
                     Try
-                        TL.LogMessage("ScanEventLog Found", GlobalConstants.EVENTLOG_MESSAGES)
+                        TL.LogMessage("ScanEventLog Found", EVENTLOG_MESSAGES)
                         SR = File.OpenText(MessageLog)
 
                         Do Until SR.EndOfStream 'include the file
@@ -6600,7 +6601,7 @@ Public Class DiagnosticsForm
 
                 If File.Exists(ErrorLog) Then
                     Try
-                        TL.LogMessage("ScanEventLog Found", GlobalConstants.EVENTLOG_ERRORS)
+                        TL.LogMessage("ScanEventLog Found", EVENTLOG_ERRORS)
                         SR = File.OpenText(ErrorLog)
 
                         Do Until SR.EndOfStream 'include the file
@@ -7403,13 +7404,13 @@ Public Class DiagnosticsForm
                     CLSID = RKeyCLSIDValue.GetValue("").ToString 'Get the CLSID
 
                     Select Case (ApplicationBits())
-                        Case VersionCode.Bitness.Bits32 ' We are a 32bit application so look in the default registry position
+                        Case Bitness.Bits32 ' We are a 32bit application so look in the default registry position
                             RKeyCLSID = Registry.ClassesRoot.OpenSubKey("CLSID\" & CLSID, False)
-                        Case VersionCode.Bitness.Bits64 ' We are a 64bit application so look in the 32bit registry section
+                        Case Bitness.Bits64 ' We are a 64bit application so look in the 32bit registry section
                             Select Case Bitness
-                                Case VersionCode.Bitness.Bits32 ' Open the 32bit registry
+                                Case Bitness.Bits32 ' Open the 32bit registry
                                     RKeyCLSID = RegAccess.OpenSubKey3264(RegistryHive.ClassesRoot, "CLSID\" & CLSID, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
-                                Case VersionCode.Bitness.Bits64 'Open the 64bit registry
+                                Case Bitness.Bits64 'Open the 64bit registry
                                     RKeyCLSID = Registry.ClassesRoot.OpenSubKey("CLSID\" & CLSID, False)
                                 Case Else
                                     RKeyCLSID = Nothing
@@ -7433,11 +7434,11 @@ Public Class DiagnosticsForm
 
                                 If Result = MsgBoxResult.Yes Then
                                     TL.LogMessage("HelperHijacking", "  Fixing COM Registration")
-                                    If OSBits() = VersionCode.Bitness.Bits64 Then ' We are running on a 64bit OS
+                                    If OSBits() = Bitness.Bits64 Then ' We are running on a 64bit OS
                                         Select Case Bitness
-                                            Case VersionCode.Bitness.Bits32 ' Run the 32bit Regedit
+                                            Case Bitness.Bits32 ' Run the 32bit Regedit
                                                 SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_SYSTEMX86, False) ' Get the 32bit system directory
-                                            Case VersionCode.Bitness.Bits64 ' Run the 64bit Regedit
+                                            Case Bitness.Bits64 ' Run the 64bit Regedit
                                                 SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_SYSTEM, False) ' Get the 64bit system directory
                                         End Select
                                     Else ' We are running on a 32bit OS
@@ -8702,7 +8703,7 @@ Public Class DiagnosticsForm
     Private Sub MenuSerialTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuSerialTraceEnabled.Click
         Dim ProfileStore As RegistryAccess
 
-        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+        ProfileStore = New RegistryAccess(VB6COMErrors.ERR_SOURCE_CHOOSER) 'Get access to the profile store
         If MenuSerialTraceEnabled.Checked Then
             MenuSerialTraceEnabled.Checked = False 'Uncheck the enabled flag, make it inaccessible and clear the trace file name
             ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, "")
@@ -8726,7 +8727,7 @@ Public Class DiagnosticsForm
 
     Private Sub MenuAutoTraceFilenames_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuUseTraceAutoFilenames.Click
         Dim ProfileStore As RegistryAccess
-        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+        ProfileStore = New RegistryAccess(VB6COMErrors.ERR_SOURCE_CHOOSER) 'Get access to the profile store
         'Auto filenames currently disabled, so enable them
         MenuUseTraceAutoFilenames.Checked = True 'Enable the auto trace name flag
         MenuUseTraceAutoFilenames.Enabled = False
@@ -8752,7 +8753,7 @@ Public Class DiagnosticsForm
         Dim ProfileStore As RegistryAccess
         Dim RetVal As System.Windows.Forms.DialogResult
 
-        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+        ProfileStore = New RegistryAccess(VB6COMErrors.ERR_SOURCE_CHOOSER) 'Get access to the profile store
 
         ' Set up the manual serial trace file name entry dialogue
         SerialTraceFileName.FileName = "SerialTrace.txt"

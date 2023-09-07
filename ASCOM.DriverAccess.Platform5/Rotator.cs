@@ -7,6 +7,8 @@
 using System;
 using ASCOM.Interface;
 using ASCOM.Utilities;
+using static ASCOM.Utilities.Global;
+
 
 namespace ASCOM.DriverAccess
 {
@@ -30,7 +32,7 @@ namespace ASCOM.DriverAccess
         public Rotator(string rotatorId)
         {
             TL = new TraceLogger("", "DriverAccessRotator");
-            TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.DRIVERACCESS_TRACE, GlobalConstants.DRIVERACCESS_TRACE_DEFAULT);
+            TL.Enabled = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT);
             _memberFactory = new MemberFactory(rotatorId, TL);
         }
 

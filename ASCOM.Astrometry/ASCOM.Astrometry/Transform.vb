@@ -7,6 +7,7 @@ Imports System.Runtime.InteropServices
 Imports ASCOM.Astrometry.Kepler
 Imports ASCOM.Astrometry.AstroUtils
 Imports System.Reflection
+Imports ASCOM.Utilities.Global
 
 Namespace Transform
     ''' <summary>

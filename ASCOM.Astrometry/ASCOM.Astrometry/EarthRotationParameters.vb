@@ -3,6 +3,7 @@ Imports System.Globalization
 Imports System.IO
 Imports System.ServiceProcess
 Imports Microsoft.Win32.TaskScheduler
+Imports ASCOM.Utilities.Global
 
 Public Class EarthRotationParameters : Implements IDisposable
 
@@ -1145,7 +1146,7 @@ Public Class EarthRotationParameters : Implements IDisposable
 
             End Using
         Catch ex As Exception
-            EventLogCode.LogEvent("ManageScheduledTask", $"ManageScheduledTask - Unexpected exception: {ex}", EventLogEntryType.Error, GlobalConstants.EventLogErrors.ManageScheduledTask, ex.ToString())
+            ASCOM.Utilities.Global.LogEvent("ManageScheduledTask", $"ManageScheduledTask - Unexpected exception: {ex}", EventLogEntryType.Error, EventLogErrors.ManageScheduledTask, ex.ToString())
             Try
                 LogScheduledTaskMessage("ManageScheduledTask Exception", ex.ToString())
             Catch ex1 As Exception
@@ -1171,7 +1172,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         If Not (TL Is Nothing) Then
             TL.LogMessageCrLf(Source, Message)
         Else
-            EventLogCode.LogEvent(Source, Message, EventLogEntryType.Information, GlobalConstants.EventLogErrors.EarthRotationUpdate, "")
+            ASCOM.Utilities.Global.LogEvent(Source, Message, EventLogEntryType.Information, EventLogErrors.EarthRotationUpdate, "")
         End If
 
     End Sub
@@ -1185,7 +1186,7 @@ Public Class EarthRotationParameters : Implements IDisposable
     End Sub
 
     Private Sub LogEvent(message As String)
-        EventLogCode.LogEvent("EarthRotationUpdate", message, EventLogEntryType.Warning, EventLogErrors.EarthRotationUpdate, "")
+        ASCOM.Utilities.Global.LogEvent("EarthRotationUpdate", message, EventLogEntryType.Warning, EventLogErrors.EarthRotationUpdate, "")
     End Sub
 
     Private Function BuiltInLeapSeconds(RequiredLeapSecondJulianDate As Double) As Double

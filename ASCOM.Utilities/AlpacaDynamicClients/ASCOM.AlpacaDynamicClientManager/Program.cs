@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Reflection;
 using ASCOM.Tools;
+using static ASCOM.Utilities.Global;
 
 namespace ASCOM.DynamicRemoteClients
 {
@@ -43,7 +44,7 @@ namespace ASCOM.DynamicRemoteClients
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException); // Add the event handler for handling non-UI thread exceptions to the event. 
 
             TL = new Utilities.TraceLogger("", "AlpacaDynamicClientManager");
-            TL.Enabled = Utilities.RegistryCommonCode.GetBool(Utilities.GlobalConstants.TRACE_UTIL, Utilities.GlobalConstants.TRACE_UTIL_DEFAULT);
+            TL.Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT);
 
             try
             {

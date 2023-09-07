@@ -5,6 +5,7 @@ Imports ASCOM.Utilities.Exceptions
 Imports System.Text
 Imports System.IO
 Imports System.Security.Cryptography
+Imports ASCOM.Utilities.Global
 
 Namespace SOFA
     ''' <summary>
@@ -228,7 +229,7 @@ Namespace SOFA
                                 Catch
                                 End Try
                                 Console.WriteLine($"SOFA.New - Unknown Parameters.UpdateType value: {Parameters.UpdateType}")
-                                EventLogCode.LogEvent("SOFA.New", $"SOFA.New - Unknown Parameters.UpdateType value: {Parameters.UpdateType}", EventLogEntryType.Error, GlobalConstants.EventLogErrors.Sofa, "")
+                                LogEvent("SOFA.New", $"SOFA.New - Unknown Parameters.UpdateType value: {Parameters.UpdateType}", EventLogEntryType.Error, EventLogErrors.Sofa, "")
                         End Select
 
                     End Using

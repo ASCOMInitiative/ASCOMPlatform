@@ -1,5 +1,6 @@
 ﻿Imports ASCOM.Utilities
 Imports Microsoft.Win32
+Imports ASCOM.Utilities.Global
 
 Public Class VersionForm
 

@@ -68,7 +68,7 @@ namespace ASCOM.Simulator
             }
             catch (Exception ex)
             {
-                //EventLogCode.LogEvent("ASCOM.Simulator.Telescope", "Exception on SetupDialog", EventLogEntryType.Error, GlobalConstants.EventLogErrors.TelescopeSimulatorSetup, ex.ToString());
+                //LogEvent("ASCOM.Simulator.Telescope", "Exception on SetupDialog", EventLogEntryType.Error, EventLogErrors.TelescopeSimulatorSetup, ex.ToString());
                 System.Windows.Forms.MessageBox.Show("ObservingConditions Simulator SetUp: " + ex.ToString());
             }
 

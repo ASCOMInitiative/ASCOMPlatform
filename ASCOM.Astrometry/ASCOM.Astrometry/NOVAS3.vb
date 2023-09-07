@@ -2,6 +2,7 @@
 Imports System.Environment
 Imports ASCOM.Utilities
 Imports ASCOM.Utilities.Exceptions
+Imports ASCOM.Utilities.Global
 
 Namespace NOVAS
 

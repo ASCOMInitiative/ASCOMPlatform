@@ -120,8 +120,8 @@
       <Name>ASCOM.Attributes</Name>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
-      <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
+    <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj">
+      <Project>{7B9B8BE0-9517-0548-11D2-27B6261AB180}</Project>
       <Name>ASCOM.Utilities</Name>
       <Private>True</Private>
     </ProjectReference>

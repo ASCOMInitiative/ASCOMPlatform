@@ -155,8 +155,8 @@
       <Project>{350a73bd-60d1-03e4-2edc-a617d2d79ce3}</Project>
       <Name>ASCOM.DeviceInterface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
-      <Project>{c9bf0a8b-594f-4ab9-938a-edc8448d8520}</Project>
+    <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj">
+      <Project>{7B9B8BE0-9517-0548-11D2-27B6261AB180}</Project>
       <Name>ASCOM.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">

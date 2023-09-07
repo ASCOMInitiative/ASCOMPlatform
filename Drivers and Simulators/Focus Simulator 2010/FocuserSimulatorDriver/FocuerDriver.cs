@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Globalization;
+using static ASCOM.Utilities.Global;
 
 namespace ASCOM.Simulator
 {
@@ -110,7 +111,7 @@ namespace ASCOM.Simulator
             try
             {
                 TL = new TraceLogger("", "FocusSimulator");
-                TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.SIMULATOR_TRACE, GlobalConstants.SIMULATOR_TRACE_DEFAULT);
+                TL.Enabled = GetBool(SIMULATOR_TRACE, SIMULATOR_TRACE_DEFAULT);
                 LogMessage("New", "Started");
 
                 //check to see if the profile is ok

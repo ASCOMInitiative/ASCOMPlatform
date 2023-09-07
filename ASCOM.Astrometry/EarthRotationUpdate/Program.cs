@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Security.Principal;
 using System.Globalization;
 using System.Threading;
+using static ASCOM.Utilities.Global;
 
 namespace EarthRotationUpdate
 {
@@ -429,10 +430,10 @@ namespace EarthRotationUpdate
             {
                 try { LogMessage("EarthRotationUpdate", ex.ToString()); } catch { }
 
-                EventLogCode.LogEvent("EarthRotationUpdate",
+                Global.LogEvent("EarthRotationUpdate",
                                       string.Format("EarthRotationUpdate - Unexpected exception: {0}", ex.Message),
                                       EventLogEntryType.Error,
-                                      GlobalConstants.EventLogErrors.EarthRotationUpdate,
+                                      EventLogErrors.EarthRotationUpdate,
                                       ex.ToString());
                 ReturnCode = 5;
             }
@@ -479,7 +480,7 @@ namespace EarthRotationUpdate
 
         private static void LogEvent(string message, EventLogEntryType severity)
         {
-            EventLogCode.LogEvent("EarthRotationUpdate", message, severity, GlobalConstants.EventLogErrors.EarthRotationUpdate, Except: "");
+            Global.LogEvent("EarthRotationUpdate", message, severity, EventLogErrors.EarthRotationUpdate, Except: "");
         }
 
         private static string DownloadFile(string Function, string DataFile, WebClient Client)
@@ -564,7 +565,7 @@ namespace EarthRotationUpdate
                 {
                     // Something went wrong when trying to log the message to the TraceLogger so log this fact to console and event log 
                     Console.WriteLine($"EarthRotationUpdate.LogMessage - TraceLogger threw an exception when writing '{message}', abandoning trace logging: {ex.Message}");
-                    EventLogCode.LogEvent("EarthRotationUpdate.LogMessage", $"TraceLogger threw an exception when writing '{message}', abandoning trace logging: {ex.Message}", EventLogEntryType.Error, GlobalConstants.EventLogErrors.EarthRotationUpdate, "");
+                    Global.LogEvent("EarthRotationUpdate.LogMessage", $"TraceLogger threw an exception when writing '{message}', abandoning trace logging: {ex.Message}", EventLogEntryType.Error, EventLogErrors.EarthRotationUpdate, "");
 
                     // Disable and dispose of the TraceLogger, setting it to null so that it can't be used in future
                     try { TL.Enabled = false; } catch { }
@@ -573,7 +574,7 @@ namespace EarthRotationUpdate
 
                     // Log that the disposal was successful
                     Console.WriteLine($"EarthRotationUpdate.LogMessage - TraceLogger Disposed and set to null");
-                    EventLogCode.LogEvent("EarthRotationUpdate.LogMessage", $"TraceLogger Disposed and set to null", EventLogEntryType.Information, GlobalConstants.EventLogErrors.EarthRotationUpdate, "");
+                    Global.LogEvent("EarthRotationUpdate.LogMessage", $"TraceLogger Disposed and set to null", EventLogEntryType.Information, EventLogErrors.EarthRotationUpdate, "");
                 }
             }
 
@@ -581,7 +582,7 @@ namespace EarthRotationUpdate
             if (TL is null)
             {
                 Console.WriteLine($"{identifier} - {message}");
-                EventLogCode.LogEvent(identifier, message, EventLogEntryType.Information, GlobalConstants.EventLogErrors.EarthRotationUpdate, "");
+                Global.LogEvent(identifier, message, EventLogEntryType.Information, EventLogErrors.EarthRotationUpdate, "");
             }
         }
 

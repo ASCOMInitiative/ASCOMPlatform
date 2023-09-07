@@ -94,7 +94,7 @@
       <Name>ASCOM.Exceptions</Name>
     </ProjectReference>
     <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities.vbproj">
-      <Project>{c9bf0a8b-594f-4ab9-938a-edc8448d8520}</Project>
+      <Project>{7B9B8BE0-9517-0548-11D2-27B6261AB180}</Project>
       <Name>ASCOM.Utilities</Name>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>

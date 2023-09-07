@@ -1,5 +1,6 @@
 ﻿Imports ASCOM.Astrometry
 Imports System.Globalization
+Imports ASCOM.Utilities.Global
 
 Public Class EarthRotationDataForm
     Private Const TRACE_LOGGER_IDENTIFIER_FIELD_WIDTH As Integer = 35

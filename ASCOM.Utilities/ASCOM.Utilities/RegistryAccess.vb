@@ -598,13 +598,13 @@ Friend Class RegistryAccess
     'log messages and send to screen when appropriate
     Private Sub LogMessage(ByVal section As String, ByVal logMessage As String)
         TL.LogMessageCrLf(section, logMessage) ' The CrLf version is used in order properly to format exception messages
-        EventLogCode.LogEvent(section, logMessage, EventLogEntryType.Information, GlobalConstants.EventLogErrors.MigrateProfileRegistryKey, "")
+        LogEvent(section, logMessage, EventLogEntryType.Information, EventLogErrors.MigrateProfileRegistryKey, "")
     End Sub
 
     'log error messages and send to screen when appropriate
     Private Sub LogError(ByVal section As String, ByVal logMessage As String)
         TL.LogMessageCrLf(section, logMessage) ' The CrLf version is used in order properly to format exception messages
-        EventLogCode.LogEvent(section, "Exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.MigrateProfileRegistryKey, logMessage)
+        LogEvent(section, "Exception", EventLogEntryType.Error, EventLogErrors.MigrateProfileRegistryKey, logMessage)
     End Sub
 
     Private Sub GetSubKey(ByVal BaseSubKey As String, ByVal SubKeyOffset As String, ByRef ProfileContents As ASCOMProfile)

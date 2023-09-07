@@ -6,6 +6,7 @@
 
 using System;
 using ASCOM.Utilities;
+using static ASCOM.Utilities.Global;
 
 namespace ASCOM.DriverAccess
 {
@@ -29,7 +30,7 @@ namespace ASCOM.DriverAccess
         public Switch(string switchId)
         {
             TL = new TraceLogger("", "DriverAccessSwitch");
-            TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.DRIVERACCESS_TRACE, GlobalConstants.DRIVERACCESS_TRACE_DEFAULT);
+            TL.Enabled = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT);
             _memberFactory = new MemberFactory(switchId, TL);
         }
 

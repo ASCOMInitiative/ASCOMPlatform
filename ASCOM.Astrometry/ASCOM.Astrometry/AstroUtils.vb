@@ -1,6 +1,7 @@
 ﻿Imports System.Runtime.InteropServices
 Imports ASCOM.Utilities
 Imports ASCOM.Astrometry.GlobalItems
+Imports ASCOM.Utilities.Global
 
 Namespace AstroUtils
     ''' <summary>

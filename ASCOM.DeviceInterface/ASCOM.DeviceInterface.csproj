@@ -37,7 +37,7 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net35'">
-		<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj" />
+		<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.60" />

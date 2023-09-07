@@ -356,8 +356,8 @@ Module EventLogCode
         Catch ex As System.ComponentModel.Win32Exception ' Special handling because these exceptions contain error codes we may want to know
             Try
                 Dim TodaysDateTime As String = Format(Now(), "dd MMMM yyyy HH:mm:ss.fff")
-                Dim ErrorLog As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & GlobalConstants.EVENTLOG_ERRORS
-                Dim MessageLog As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & GlobalConstants.EVENTLOG_MESSAGES
+                Dim ErrorLog As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & EVENTLOG_ERRORS
+                Dim MessageLog As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & EVENTLOG_MESSAGES
 
                 ' Write to backup eventlog message and error logs
                 File.AppendAllText(ErrorLog, TodaysDateTime & " ErrorCode: 0x" & Hex(ex.ErrorCode) & " NativeErrorCode: 0x" & Hex(ex.NativeErrorCode) & " " & ex.ToString & vbCrLf)
@@ -369,8 +369,8 @@ Module EventLogCode
             'Somthing bad happened when writing to the event log so try and log it in a log file on the file system
             Try
                 Dim TodaysDateTime As String = Format(Now(), "dd MMMM yyyy HH:mm:ss.fff")
-                Dim ErrorLog As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & GlobalConstants.EVENTLOG_ERRORS
-                Dim MessageLog As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & GlobalConstants.EVENTLOG_MESSAGES
+                Dim ErrorLog As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & EVENTLOG_ERRORS
+                Dim MessageLog As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & EVENTLOG_MESSAGES
 
                 ' Write to backup eventlog message and error logs
                 File.AppendAllText(ErrorLog, TodaysDateTime & " " & ex.ToString & vbCrLf)

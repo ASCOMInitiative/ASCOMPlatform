@@ -5,6 +5,7 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using static ASCOM.Utilities.GlobalConstants;
 
 namespace InstallTemplates
 {
@@ -328,7 +329,7 @@ namespace InstallTemplates
         {
             Console.WriteLine(logMessage);
             TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
-            EventLogCode.LogEvent("InstallTemplates", logMessage, EventLogEntryType.Information, GlobalConstants.EventLogErrors.InstallTemplatesInfo, "");
+            EventLogCode.LogEvent("InstallTemplates", logMessage, EventLogEntryType.Information, EventLogErrors.InstallTemplatesInfo, "");
         }
 
         /// <summary>
@@ -340,7 +341,7 @@ namespace InstallTemplates
         {
             Console.WriteLine(logMessage);
             TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
-            EventLogCode.LogEvent("InstallTemplates", "Exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.InstallTemplatesError, logMessage);
+            EventLogCode.LogEvent("InstallTemplates", "Exception", EventLogEntryType.Error, EventLogErrors.InstallTemplatesError, logMessage);
         }
 
         /// <summary>

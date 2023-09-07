@@ -4,6 +4,7 @@ Imports ASCOM.Utilities
 Imports ASCOM.Utilities.Exceptions
 Imports System.Threading
 Imports System.IO
+Imports ASCOM.Utilities.Global
 
 Namespace NOVAS
 

@@ -7,6 +7,7 @@
 using System;
 using ASCOM.Interface;
 using ASCOM.Utilities;
+using static ASCOM.Utilities.Global;
 
 namespace ASCOM.DriverAccess
 {
@@ -30,7 +31,7 @@ namespace ASCOM.DriverAccess
         public Focuser(string focuserId)
         {
             TL = new TraceLogger("", "DriverAccessFocuser");
-            TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.DRIVERACCESS_TRACE, GlobalConstants.DRIVERACCESS_TRACE_DEFAULT);
+            TL.Enabled = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT);
             _memberFactory = new MemberFactory(focuserId, TL);
         }
 

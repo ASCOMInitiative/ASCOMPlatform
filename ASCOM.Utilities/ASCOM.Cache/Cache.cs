@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using ASCOM.Utilities.Exceptions;
+using static ASCOM.Utilities.Global;
 
 namespace ASCOM.Utilities
 {
@@ -105,7 +106,7 @@ namespace ASCOM.Utilities
             syncMutex = new Mutex(false);
             pumpMessagesInterval = PUMP_MESSAGES_INTERVAL_DEFAULT;
 
-            if (RegistryCommonCode.GetBool(GlobalConstants.TRACE_CACHE, GlobalConstants.TRACE_CACHE_DEFAULT))
+            if (Global.GetBool(TRACE_CACHE, TRACE_CACHE_DEFAULT))
             {
                 TL = new TraceLogger("", "Cache")
                 {

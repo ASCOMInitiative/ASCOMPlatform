@@ -19,6 +19,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.Win32;
 using ASCOM.Common;
+using static ASCOM.Utilities.Global;
 
 namespace ASCOM.DynamicRemoteClients
 {
@@ -407,7 +408,7 @@ namespace ASCOM.DynamicRemoteClients
                                 foundDriver.Description = $"{foundDriver.Name} ({foundDriver.ProgId}) - {foundDriver.IPAdrress}:{foundDriver.PortNumber}/api/v1/{foundDriver.DeviceType}/{foundDriver.RemoteDeviceNumber} - {foundDriver.UniqueID}";
 
                                 // Test whether the driver is correctly registered and installed and flag accordingly
-                                string compatibilityMessage = VersionCode.DriverCompatibilityMessage(foundDriver.ProgId, VersionCode.Bitness.Bits32, TL);
+                                string compatibilityMessage = DriverCompatibilityMessage(foundDriver.ProgId, Bitness.Bits32, TL);
 
                                 if (compatibilityMessage == "") // Driver is correctly registered 
                                 {
@@ -463,7 +464,7 @@ namespace ASCOM.DynamicRemoteClients
                                 foundDriver.Description = $"{foundDriver.Name} ({foundDriver.ProgId}) - {foundDriver.IPAdrress}:{foundDriver.PortNumber}/api/v1/{foundDriver.DeviceType}/{foundDriver.RemoteDeviceNumber} - {foundDriver.UniqueID}";
 
                                 // Test whether the driver is correctly registered and installed and flag accordingly
-                                string compatibilityMessage = VersionCode.DriverCompatibilityMessage(foundDriver.ProgId, VersionCode.Bitness.Bits32, TL);
+                                string compatibilityMessage = DriverCompatibilityMessage(foundDriver.ProgId, Bitness.Bits32, TL);
 
                                 if (compatibilityMessage == "") // Driver is correctly registered 
                                 {

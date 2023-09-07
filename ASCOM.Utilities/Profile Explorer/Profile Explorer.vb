@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.InteropServices
+Imports ASCOM.Utilities.Global
 
 Public Class frmProfileExplorer
     Private RecursionLevel As Integer
@@ -133,7 +134,7 @@ Public Class frmProfileExplorer
     End Sub
 
     Private Sub LogException(ByVal Caller As String, ByVal ex As Exception)
-        EventLogCode.LogEvent("Profile Explorer", Caller & " exception", EventLogEntryType.Error, EventLogErrors.ProfileExplorerException, ex.ToString)
+        LogEvent("Profile Explorer", Caller & " exception", EventLogEntryType.Error, EventLogErrors.ProfileExplorerException, ex.ToString)
         MsgBox(Caller & " Exception, please run ASCOM Diagnostics and report this on ASCOM Talk: " & ex.ToString)
     End Sub
 

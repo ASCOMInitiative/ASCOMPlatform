@@ -14,6 +14,7 @@ using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using ASCOM.Utilities.Exceptions;
+using static ASCOM.Utilities.Global;
 
 namespace ASCOM.Utilities.Video
 {
@@ -47,7 +48,7 @@ namespace ASCOM.Utilities.Video
         {
             int lastError;
             TL = new TraceLogger("NativeHelpers");
-            TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.TRACE_UTIL, GlobalConstants.TRACE_UTIL_DEFAULT);
+            TL.Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT);
             try
             {
                 string VideoDllFile = null;
