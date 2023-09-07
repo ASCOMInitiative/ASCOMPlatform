@@ -658,25 +658,31 @@ Module VersionCode
 
         Dim CompatibilityMessage As String = "" 'Set default return value as OK
 
+        ' Validate incoming required bitness parameter
+        If RequiredBitness = Bitness.Bits64 And OSBits() = Bitness.Bits32 Then
+            Throw New InvalidOperationException($"Cannot validate a driver for 64bit operation on a 32bit OS! Required bitness: {RequiredBitness}, OS bitness: {OSBits()}")
+        End If
+
         TL.LogMessage("DriverCompatibility", "     ProgID: " & ProgID & ", Bitness: " & RequiredBitness.ToString)
         'Parse the COM registry section to determine whether this ProgID is an in-process DLL server.
         'If it is then parse the executable to determine whether it is a 32bit only driver and gie a suitable message if it is
         'Picks up some COM registration issues as well as a by-product.
         If RequiredBitness = Bitness.Bits64 Then 'We have a 64bit application so check to see whether this is a 32bit only driver
-            RK = Registry.ClassesRoot.OpenSubKey(ProgID & "\CLSID", False) 'Look in the 64bit section first
+            RK = CreateClsidKey(ProgID & "\CLSID", Bitness.Bits64) 'Look in the 64bit section first
             If Not RK Is Nothing Then ' ProgID is registered and has a CLSID!
                 CLSID = RK.GetValue("").ToString 'Get the CLSID for this ProgID
                 RK.Close()
 
-                RK = Registry.ClassesRoot.OpenSubKey("CLSID\" & CLSID) ' Check the 64bit registry section for this CLSID
+                RK = CreateClsidKey("CLSID\" & CLSID, Bitness.Bits64) ' Check the 64bit registry section for this CLSID
                 If RK Is Nothing Then 'We don't have an entry in the 64bit CLSID registry section so try the 32bit section
                     TL.LogMessage("DriverCompatibility", "     No entry in the 64bit registry, checking the 32bit registry")
-                    RK = Registry.ClassesRoot.OpenSubKey("Wow6432Node\CLSID\" & CLSID) 'Check the 32bit registry section
+                    RK = CreateClsidKey("\CLSID\" & CLSID, Bitness.Bits32) 'Check the 32bit registry section
                     Registered64Bit = False
-                Else
+                Else ' Found entry in the 64bit section
                     TL.LogMessage("DriverCompatibility", "     Found entry in the 64bit registry")
                     Registered64Bit = True
                 End If
+
                 If Not RK Is Nothing Then 'We have a CLSID entry so process it
                     RKInprocServer32 = RK.OpenSubKey("InprocServer32")
                     RK.Close()
@@ -803,7 +809,7 @@ Module VersionCode
                 CompatibilityMessage = "This driver is not registered for COM (can't find ProgID), please re-install."
             End If
         Else 'We are running a 32bit application test so make sure the executable is not 64bit only
-            RK = Registry.ClassesRoot.OpenSubKey(ProgID & "\CLSID", False) 'Look in the 32bit registry
+            RK = CreateClsidKey(ProgID & "\CLSID", Bitness.Bits32) 'Look in the 32bit registry
 
             If Not RK Is Nothing Then ' ProgID is registered and has a CLSID!
                 TL.LogMessage("DriverCompatibility", "     Found 32bit ProgID registration")
@@ -813,42 +819,38 @@ Module VersionCode
 
                 If OSBits() = Bitness.Bits64 Then ' We want to test as if we are a 32bit app on a 64bit OS
                     Try
-                        ' RK32 = ProfileStore.OpenSubKey3264(Registry.ClassesRoot, "CLSID\" & CLSID, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
-                        RK32 = Registry.ClassesRoot.OpenSubKey($"WOW6432Node\CLSID\{CLSID}", False)
+                        RK32 = CreateClsidKey($"CLSID\{CLSID}", Bitness.Bits32)
                     Catch ex As Exception 'Ignore any exceptions, they just mean the operation wasn't successful
                     End Try
 
                     Try
-                        ' RK64 = ProfileStore.OpenSubKey3264(Registry.ClassesRoot, "CLSID\" & CLSID, False, RegistryAccess.RegWow64Options.KEY_WOW64_64KEY)
-                        RK64 = Registry.ClassesRoot.OpenSubKey($"CLSID\{CLSID}", False)
+                        RK64 = CreateClsidKey($"CLSID\{CLSID}", Bitness.Bits64)
                     Catch ex As Exception 'Ignore any exceptions, they just mean the operation wasn't successful
                     End Try
 
-                Else ' We are running on a 32bit OS
-                    RK = Registry.ClassesRoot.OpenSubKey("CLSID\" & CLSID) ' Check the 32bit registry section for this CLSID
-                    TL.LogMessage("DriverCompatibility", "     Running on a 32bit OS, 32Bit Registered: " & (Not RK Is Nothing))
-                End If
-
-                If OSBits() = Bitness.Bits64 Then
                     TL.LogMessage("DriverCompatibility", "     Running on a 64bit OS, 32bit Registered: " & (Not RK32 Is Nothing) & ", 64Bit Registered: " & (Not RK64 Is Nothing))
-                    If Not RK32 Is Nothing Then 'We are testing as a 32bit app so if there is a 32bit key return this
+                    If Not RK32 Is Nothing Then ' We are testing as a 32bit app so, if there is a 32bit key, return this
                         RK = RK32
-                    Else 'Otherwise return the 64bit key
+                    Else ' Otherwise return the 64bit key
                         RK = RK64
                     End If
+                Else ' We are running on a 32bit OS
+                    RK = CreateClsidKey("CLSID\" & CLSID, Bitness.Bits32) ' Check the 32bit registry section for this CLSID
+                    TL.LogMessage("DriverCompatibility", "     Running on a 32bit OS, 32Bit Registered: " & (Not RK Is Nothing))
                 End If
 
                 If Not RK Is Nothing Then 'We have a CLSID entry so process it
                     TL.LogMessage("DriverCompatibility", "     Found CLSID entry")
                     RKInprocServer32 = RK.OpenSubKey("InprocServer32")
                     RK.Close()
+
                     If Not RKInprocServer32 Is Nothing Then ' This is an in process server so test for compatibility
                         InprocFilePath = RKInprocServer32.GetValue("", "").ToString ' Get the file location from the default position
                         CodeBase = RKInprocServer32.GetValue("CodeBase", "").ToString 'Get the codebase if present to override the default value
                         If CodeBase <> "" Then InprocFilePath = CodeBase
 
                         If (Trim(InprocFilePath).ToUpperInvariant = "MSCOREE.DLL") Then ' We have an assembly, most likely in the GAC so get the actual file location of the assembly
-                            'If this assembly is in the GAC, we should have an "Assembly" registry entry with the full assmbly name, 
+                            'If this assembly is in the GAC, we should have an "Assembly" registry entry with the full assembly name, 
                             TL.LogMessage("DriverCompatibility", "     Found MSCOREE.DLL")
 
                             AssemblyFullName = RKInprocServer32.GetValue("Assembly", "").ToString 'Get the full name
@@ -942,11 +944,11 @@ Module VersionCode
                         Else
                             'No codebase or not a DLL so can't test this driver, don't give an error message, just have to take a chance!
                             TL.LogMessage("DriverCompatibility", "No codebase or not a DLL so can't test this driver, don't give an error message, just have to take a chance!")
-                        End If
+                        End If ' Process as a native executable
                         RKInprocServer32.Close() 'Clean up the InProcServer registry key
-                    Else 'This is not an inprocess DLL so no need to test further and no error message to return
+                    Else 'This is not an in-process DLL so no need to test further and no error message to return
                         'Please leave this empty clause here so the logic is clear!
-                        TL.LogMessage("DriverCompatibility", "This is not an inprocess DLL so no need to test further and no error message to return")
+                        TL.LogMessage("DriverCompatibility", "This is not an in-process DLL so no need to test further and no error message to return")
                     End If
                 Else 'Cannot find a CLSID entry
                     CompatibilityMessage = "Unable to find a CLSID entry for this driver, please re-install."
@@ -958,43 +960,33 @@ Module VersionCode
 
         End If
 
-        ' End Using
         TL.LogMessage("DriverCompatibility", "     Returning: """ & CompatibilityMessage & """")
         Return CompatibilityMessage
     End Function
 
+    ''' <summary>
+    ''' Create a registry key that points at an entry in the 32 or 64bit portions of the HKCR hive as determined b the supplied bitness parameter
+    ''' </summary>
+    ''' <param name="key">Name of the registry key to ope</param>
+    ''' <param name="requiredBitness">Required bitness 32bit or 64bit</param>
+    ''' <returns>HKCR registry key</returns>
+    Function CreateClsidKey(key As String, requiredBitness As Bitness) As RegistryKey
+        ' Handle 32bit and 64bit OS behaviour
+        If OSBits() = Bitness.Bits32 Then ' 32bit OS
+            ' Only one possibility
+            Return Registry.ClassesRoot.OpenSubKey(key)
+        Else ' 64bit OS
+            ' Select the key in the appropriate part of the HKCR hive
+            If requiredBitness = Bitness.Bits32 Then ' Open the key in the 32bit portion of the HKCR hive
+                Return Registry.ClassesRoot.OpenSubKey($"WOW6432Node\{key}")
+
+            Else ' Open the key in the 64bit portion of the HKCR hive
+                Return Registry.ClassesRoot.OpenSubKey(key)
+            End If
+        End If
+    End Function
+
 End Module
-
-#End Region
-
-#Region "Old Code"
-
-'Try 'Get the list of 32bit only drivers
-'Drivers32Bit = ProfileStore.EnumProfile(DRIVERS_32BIT)
-'Catch ex1 As Exception
-'Ignore any exceptions from this call e.g. if there are no 32bit only devices installed
-'Just create an empty list
-'Drivers32Bit = New Generic.SortedList(Of String, String)
-'LogEvent("ChooserForm", "Exception creating SortedList of 32bit only applications", EventLogEntryType.Error, EventLogErrors.Chooser32BitOnlyException, ex1.ToString)
-'End Try
-
-'Try 'Get the list of 64bit only drivers
-'Drivers64Bit = ProfileStore.EnumProfile(DRIVERS_64BIT)
-'Catch ex1 As Exception
-'Ignore any exceptions from this call e.g. if there are no 64bit only devices installed
-'Just create an empty list
-'Drivers64Bit = New Generic.SortedList(Of String, String)
-'LogEvent("ChooserForm", "Exception creating SortedList of 64bit only applications", EventLogEntryType.Error, EventLogErrors.Chooser64BitOnlyException, ex1.ToString)
-'End Try
-
-'If (ApplicationBits() = Bitness.Bits64) And (Drivers32Bit.ContainsKey(ProgID)) Then 'This is a 32bit driver being accessed by a 64bit application
-' DriverCompatibilityMessage = "This 32bit driver is not compatible with your 64bit application." & vbCrLf & _
-'               "Please contact the driver author to see if there is a 64bit compatible version."
-' End If
-'If (ApplicationBits() = Bitness.Bits32) And (Drivers64Bit.ContainsKey(ProgID)) Then 'This is a 64bit driver being accessed by a 32bit application
-' DriverCompatibilityMessage = "This 64bit driver is not compatible with your 32bit application." & vbCrLf & _
-'               "Please contact the driver author to see if there is a 32bit compatible version."
-' End If
 
 #End Region
 
