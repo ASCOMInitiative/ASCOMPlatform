@@ -9,9 +9,9 @@ namespace ASCOM.Utilities
         private ChooserForm chooserForm;
 
         /// <summary>
-    /// Initialiser enabling the Chooser to pass in a reference to itself so that it's variables can be accessed
-    /// </summary>
-    /// <param name="chooser"></param>
+        /// Initialiser enabling the Chooser to pass in a reference to itself so that it's variables can be accessed
+        /// </summary>
+        /// <param name="chooser"></param>
         internal ChooserAlpacaConfigurationForm(ChooserForm chooser)
         {
 
@@ -24,10 +24,10 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Form load event handler
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
+        /// Form load event handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChooserAlpacaConfigurationForm_Load(object sender, EventArgs e)
         {
 
@@ -55,10 +55,10 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// OK button event handler
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
+        /// OK button event handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnOK_Click(object sender, EventArgs e)
         {
 
@@ -99,10 +99,10 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Cancel button event handler
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
+        /// Cancel button event handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnCancel_Click(object sender, EventArgs e)
         {
 

@@ -164,7 +164,7 @@
     </Compile>
     <Compile Include="ChooserCustomToolStripRenderer.cs" />
     <Compile Include="ChooserItem.cs" />
-    <Compile Include="Enums.cs" />
+    <Compile Include="Units.cs" />
     <Compile Include="My Project\AssemblyInfo.cs" />
     <Compile Include="..\..\AssemblyVersionInfo.cs">
       <Link>My Project\AssemblyVersionInfo.cs</Link>

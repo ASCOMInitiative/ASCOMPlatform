@@ -1,19 +1,20 @@
 ﻿using System;
 using Microsoft.VisualBasic.CompilerServices;
-// Class to manage state storage for platform components e.g. profile tracing enabled/disabled
-
 using Microsoft.Win32;
 
 namespace ASCOM.Utilities
 {
-
-    // To add a new saved value:
-    // 1) Decide on the variable name and its default value
-    // 2) Create appropriately named constants similar to those below
-    // 3) Create a property of the relevant type in the parameters section
-    // 4) Create Get and Set code based on the patterns already implemented
-    // 5) If the property is of a type not already handled,you will need to create a GetXXX function in the Utility code region
-
+    /// <summary>
+    /// Class to manage state storage for platform components e.g. profile tracing enabled/disabled
+    /// </summary>
+    /// <remarks>
+    /// To add a new saved value:
+    /// 1) Decide on the variable name and its default value
+    /// 2) Create appropriately named constants similar to those below
+    /// 3) Create a property of the relevant type in the parameters section
+    /// 4) Create Get and Set code based on the patterns already implemented
+    /// 5) If the property is of a type not already handled,you will need to create a GetXXX function in the Utility code region
+    /// </remarks>
     internal class UtilitiesSettings : IDisposable
     {
 

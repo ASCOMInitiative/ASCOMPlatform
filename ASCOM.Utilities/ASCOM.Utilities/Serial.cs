@@ -1,6 +1,4 @@
-﻿// Implements the Serial component
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO.Ports;
@@ -19,9 +17,9 @@ namespace ASCOM.Utilities
     #region Enums
     // PortSpeed enum
     /// <summary>
-/// Enumeration of serial port speeds for use with the Serial port
-/// </summary>
-/// <remarks>This contains an additional speed 230,400 baud that the COM component doesn't support.</remarks>
+    /// Enumeration of serial port speeds for use with the Serial port
+    /// </summary>
+    /// <remarks>This contains an additional speed 230,400 baud that the COM component doesn't support.</remarks>
     [Guid("06BB25BA-6E75-4d1b-8BB4-BA629454AE38")]
     [ComVisible(true)]
     public enum SerialSpeed : int // Defined at ACOM.Utilities level
@@ -41,133 +39,133 @@ namespace ASCOM.Utilities
     }
 
     /// <summary>
-/// Number of stop bits appended to a serial character
-/// </summary>
-/// <remarks>
-/// This enumeration specifies the number of stop bits to use. Stop bits separate each unit of data 
-/// on an asynchronous serial connection. 
-/// The None option is not supported. Setting the StopBits property to None raises an 
-/// ArgumentOutOfRangeException. 
-/// </remarks>
+    /// Number of stop bits appended to a serial character
+    /// </summary>
+    /// <remarks>
+    /// This enumeration specifies the number of stop bits to use. Stop bits separate each unit of data 
+    /// on an asynchronous serial connection. 
+    /// The None option is not supported. Setting the StopBits property to None raises an 
+    /// ArgumentOutOfRangeException. 
+    /// </remarks>
     [Guid("17D30DAA-C767-43fd-8AF4-5E149D5C771F")]
     [ComVisible(true)]
     public enum SerialStopBits
     {
         /// <summary>
-    /// No stop bits are used. This value is not supported. Setting the StopBits property to None raises an ArgumentOutOfRangeException. 
-    /// </summary>
-    /// <remarks></remarks>
+        /// No stop bits are used. This value is not supported. Setting the StopBits property to None raises an ArgumentOutOfRangeException. 
+        /// </summary>
+        /// <remarks></remarks>
         None = 0,
         /// <summary>
-    /// One stop bit is used. 
-    /// </summary>
-    /// <remarks></remarks>
+        /// One stop bit is used. 
+        /// </summary>
+        /// <remarks></remarks>
         One = 1,
         /// <summary>
-    /// 1.5 stop bits are used. 
-    /// </summary>
-    /// <remarks></remarks>
+        /// 1.5 stop bits are used. 
+        /// </summary>
+        /// <remarks></remarks>
         OnePointFive = 3,
         /// <summary>
-    /// Two stop bits are used. 
-    /// </summary>
-    /// <remarks></remarks>
+        /// Two stop bits are used. 
+        /// </summary>
+        /// <remarks></remarks>
         Two = 2
     }
 
     /// <summary>
-/// The type of parity used on the serial port
-/// </summary>
-/// <remarks>
-/// Parity is an error-checking procedure in which the number of 1s must always be the 
-/// same — either even or odd — for each group of bits that is transmitted without error. 
-/// Parity is one of the parameters that must be 
-/// agreed upon by both sending and receiving parties before transmission can take place. 
-/// </remarks>
+    /// The type of parity used on the serial port
+    /// </summary>
+    /// <remarks>
+    /// Parity is an error-checking procedure in which the number of 1s must always be the 
+    /// same — either even or odd — for each group of bits that is transmitted without error. 
+    /// Parity is one of the parameters that must be 
+    /// agreed upon by both sending and receiving parties before transmission can take place. 
+    /// </remarks>
     [Guid("92B19711-B44F-4642-9F96-5A20397B8FD1")]
     [ComVisible(true)]
     public enum SerialParity
     {
         /// <summary>
-    /// Sets the parity bit so that the count of bits set is an even number. 
-    /// </summary>
-    /// <remarks></remarks>
+        /// Sets the parity bit so that the count of bits set is an even number. 
+        /// </summary>
+        /// <remarks></remarks>
         Even = 2,
         /// <summary>
-    /// Leaves the parity bit set to 1. 
-    /// </summary>
-    /// <remarks></remarks>
+        /// Leaves the parity bit set to 1. 
+        /// </summary>
+        /// <remarks></remarks>
         Mark = 3,
         /// <summary>
-    /// No parity check occurs. 
-    /// </summary>
-    /// <remarks></remarks>
+        /// No parity check occurs. 
+        /// </summary>
+        /// <remarks></remarks>
         None = 0,
         /// <summary>
-    /// Sets the parity bit so that the count of bits set is an odd number. 
-    /// </summary>
-    /// <remarks></remarks>
+        /// Sets the parity bit so that the count of bits set is an odd number. 
+        /// </summary>
+        /// <remarks></remarks>
         Odd = 1,
         /// <summary>
-    /// Leaves the parity bit set to 0. 
-    /// </summary>
-    /// <remarks></remarks>
+        /// Leaves the parity bit set to 0. 
+        /// </summary>
+        /// <remarks></remarks>
         Space = 4
     }
 
     /// <summary>
-/// The control protocol used by the serial port
-/// </summary>
-/// <remarks></remarks>
+    /// The control protocol used by the serial port
+    /// </summary>
+    /// <remarks></remarks>
     [Guid("55A24A18-02C8-47df-A048-2E0982E1E4FE")]
     [ComVisible(true)]
     public enum SerialHandshake
     {
         /// <summary>
-    /// No control is used for the handshake. 
-    /// </summary>
-    /// <remarks></remarks>
+        /// No control is used for the handshake. 
+        /// </summary>
+        /// <remarks></remarks>
         None = 0,
         /// <summary>
-    /// Request-to-Send (RTS) hardware flow control is used. RTS signals that data is available 
-    /// for transmission. If the input buffer becomes full, the RTS line will be set to false. 
-    /// The RTS line will be set to true when more room becomes available in the input buffer. 
-    /// </summary>
-    /// <remarks></remarks>
+        /// Request-to-Send (RTS) hardware flow control is used. RTS signals that data is available 
+        /// for transmission. If the input buffer becomes full, the RTS line will be set to false. 
+        /// The RTS line will be set to true when more room becomes available in the input buffer. 
+        /// </summary>
+        /// <remarks></remarks>
         RequestToSend = 2,
         /// <summary>
-    /// Both the Request-to-Send (RTS) hardware control and the XON/XOFF software controls are used. 
-    /// </summary>
-    /// <remarks></remarks>
+        /// Both the Request-to-Send (RTS) hardware control and the XON/XOFF software controls are used. 
+        /// </summary>
+        /// <remarks></remarks>
         RequestToSendXonXoff = 3,
         /// <summary>
-    /// The XON/XOFF software control protocol is used. The XOFF control is sent to stop 
-    /// the transmission of data. The XON control is sent to resume the transmission. 
-    /// These software controls are used instead of Request to Send (RTS) and Clear to Send (CTS) 
-    /// hardware controls. 
-    /// </summary>
-    /// <remarks></remarks>
+        /// The XON/XOFF software control protocol is used. The XOFF control is sent to stop 
+        /// the transmission of data. The XON control is sent to resume the transmission. 
+        /// These software controls are used instead of Request to Send (RTS) and Clear to Send (CTS) 
+        /// hardware controls. 
+        /// </summary>
+        /// <remarks></remarks>
         XonXoff = 1
     }
     #endregion
 
     /// <summary>
-/// Creates a .NET serial port and provides a simple set of commands to use it.
-/// </summary>
-/// <remarks>This object provides an easy to use interface to a serial (COM) port. 
-/// It provides ASCII and binary I/O with controllable timeout.
-/// The interface is callable from any .NET client.
-/// <para>The platform allows you to control use of the DTR and RTS/CTS lines for a particular 
-/// COM port and to remove or force listing of individual COM ports in the AvailableComPorts 
-/// list through configuration in the ASCOM Profile.
-/// Please see the Tools and Features section of this help file for further details.</para> 
-/// </remarks>
-/// <example>
-/// Example of how to create and use an ASCOM serial port.
-/// <code lang="vbnet" title="ASCOM Serial Port Example" 
-/// source="..\ASCOM Platform Examples\Examples\SerialExamples.vb"
-/// />
-/// </example>
+    /// Creates a .NET serial port and provides a simple set of commands to use it.
+    /// </summary>
+    /// <remarks>This object provides an easy to use interface to a serial (COM) port. 
+    /// It provides ASCII and binary I/O with controllable timeout.
+    /// The interface is callable from any .NET client.
+    /// <para>The platform allows you to control use of the DTR and RTS/CTS lines for a particular 
+    /// COM port and to remove or force listing of individual COM ports in the AvailableComPorts 
+    /// list through configuration in the ASCOM Profile.
+    /// Please see the Tools and Features section of this help file for further details.</para> 
+    /// </remarks>
+    /// <example>
+    /// Example of how to create and use an ASCOM serial port.
+    /// <code lang="vbnet" title="ASCOM Serial Port Example" 
+    /// source="..\ASCOM Platform Examples\Examples\SerialExamples.vb"
+    /// />
+    /// </example>
     [ClassInterface(ClassInterfaceType.None)]
     [Guid("0B8E6DC4-7451-4484-BE15-0D0727569FB8")]
     [ComVisible(true)]
@@ -317,9 +315,9 @@ namespace ASCOM.Utilities
 
         // This code added by Visual Basic to correctly implement the disposable pattern.
         /// <summary>
-    /// Disposes of resources used by the profile object
-    /// </summary>
-    /// <remarks></remarks>
+        /// Disposes of resources used by the profile object
+        /// </summary>
+        /// <remarks></remarks>
         public void Dispose()
         {
             // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
@@ -334,10 +332,10 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Disposes of resources used by the profile object - called by IDisposable interface
-    /// </summary>
-    /// <param name="disposing"></param>
-    /// <remarks></remarks>
+        /// Disposes of resources used by the profile object - called by IDisposable interface
+        /// </summary>
+        /// <param name="disposing"></param>
+        /// <remarks></remarks>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposed)
@@ -401,12 +399,12 @@ namespace ASCOM.Utilities
 
         #region ISerial Implementation
         /// <summary>
-    /// Gets or sets the number of data bits in each byte
-    /// </summary>
-    /// <value>The number of data bits in each byte, default is 8 data bits</value>
-    /// <returns>Integer number of data bits in each byte</returns>
-    /// <exception cref="ArgumentOutOfRangeException">The data bits value is less than 5 or more than 8</exception>
-    /// <remarks></remarks>
+        /// Gets or sets the number of data bits in each byte
+        /// </summary>
+        /// <value>The number of data bits in each byte, default is 8 data bits</value>
+        /// <returns>Integer number of data bits in each byte</returns>
+        /// <exception cref="ArgumentOutOfRangeException">The data bits value is less than 5 or more than 8</exception>
+        /// <remarks></remarks>
         public int DataBits
         {
             get
@@ -421,11 +419,11 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Gets or sets the state of the DTR line
-    /// </summary>
-    /// <value>The state of the DTR line, default is enabled</value>
-    /// <returns>Boolean true/false indicating enabled/disabled</returns>
-    /// <remarks></remarks>
+        /// Gets or sets the state of the DTR line
+        /// </summary>
+        /// <value>The state of the DTR line, default is enabled</value>
+        /// <returns>Boolean true/false indicating enabled/disabled</returns>
+        /// <remarks></remarks>
         public bool DTREnable
         {
             get
@@ -440,12 +438,12 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Gets or sets use of the RTS handshake control line
-    /// </summary>
-    /// <value>The state of RTS line use, default is disabled (false)</value>
-    /// <returns>Boolean true/false indicating RTS line use enabled/disabled</returns>
-    /// <remarks>By default the serial component will not drive the RTS line. If RTSEnable is true, the RTS line will be raised before
-    /// characters are sent. Please also see the associated <see cref="Handshake"/> property.</remarks>
+        /// Gets or sets use of the RTS handshake control line
+        /// </summary>
+        /// <value>The state of RTS line use, default is disabled (false)</value>
+        /// <returns>Boolean true/false indicating RTS line use enabled/disabled</returns>
+        /// <remarks>By default the serial component will not drive the RTS line. If RTSEnable is true, the RTS line will be raised before
+        /// characters are sent. Please also see the associated <see cref="Handshake"/> property.</remarks>
         public bool RTSEnable
         {
             get
@@ -460,11 +458,11 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Gets or sets the type of serial handshake used on the serial link
-    /// </summary>
-    /// <value>The type of flow control handshake used on the serial line, default is none</value>
-    /// <returns>One of the SerialHandshake enumeration values</returns>
-    /// <remarks>Use of the RTS line can additionally be controlled by the <see cref="RTSEnable"/> property.</remarks>
+        /// Gets or sets the type of serial handshake used on the serial link
+        /// </summary>
+        /// <value>The type of flow control handshake used on the serial line, default is none</value>
+        /// <returns>One of the SerialHandshake enumeration values</returns>
+        /// <remarks>Use of the RTS line can additionally be controlled by the <see cref="RTSEnable"/> property.</remarks>
         public SerialHandshake Handshake
         {
             get
@@ -479,11 +477,11 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Gets or sets the type of parity check used over the serial link
-    /// </summary>
-    /// <value>The type of parity check used over the serial link, default none</value>
-    /// <returns>One of the SerialParity enumeration values</returns>
-    /// <remarks></remarks>
+        /// Gets or sets the type of parity check used over the serial link
+        /// </summary>
+        /// <value>The type of parity check used over the serial link, default none</value>
+        /// <returns>One of the SerialParity enumeration values</returns>
+        /// <remarks></remarks>
         public SerialParity Parity
         {
             get
@@ -498,11 +496,11 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Gets or sets the number of stop bits used on the serial link
-    /// </summary>
-    /// <value>the number of stop bits used on the serial link, default 1</value>
-    /// <returns>One of the SerialStopBits enumeration values</returns>
-    /// <remarks></remarks>
+        /// Gets or sets the number of stop bits used on the serial link
+        /// </summary>
+        /// <value>the number of stop bits used on the serial link, default 1</value>
+        /// <returns>One of the SerialStopBits enumeration values</returns>
+        /// <remarks></remarks>
         public SerialStopBits StopBits
         {
             get
@@ -517,13 +515,13 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Gets or sets the connected state of the ASCOM serial port.
-    /// </summary>
-    /// <value>Connected state of the serial port.</value>
-    /// <returns><c>True</c> if the serial port is connected.</returns>
-    /// <remarks>Set this property to True to connect to the serial (COM) port. You can read the property to determine if the object is connected. </remarks>
-    /// <exception cref="Exceptions.InvalidValueException">Throws this exception if the requested 
-    /// COM port does not exist.</exception>
+        /// Gets or sets the connected state of the ASCOM serial port.
+        /// </summary>
+        /// <value>Connected state of the serial port.</value>
+        /// <returns><c>True</c> if the serial port is connected.</returns>
+        /// <remarks>Set this property to True to connect to the serial (COM) port. You can read the property to determine if the object is connected. </remarks>
+        /// <exception cref="Exceptions.InvalidValueException">Throws this exception if the requested 
+        /// COM port does not exist.</exception>
         public bool Connected
         {
             get
@@ -700,11 +698,11 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Gets or sets the number of the ASCOM serial port (Default is 1, giving COM1 as the serial port name).
-    /// </summary>
-    /// <value>COM port number of the ASCOM serial port.</value>
-    /// <returns>Integer, number of the ASCOM serial port</returns>
-    /// <remarks>This works for serial port names of the form COMnnn. Use PortName if your COM port name does not fit the form COMnnn.</remarks>
+        /// Gets or sets the number of the ASCOM serial port (Default is 1, giving COM1 as the serial port name).
+        /// </summary>
+        /// <value>COM port number of the ASCOM serial port.</value>
+        /// <returns>Integer, number of the ASCOM serial port</returns>
+        /// <remarks>This works for serial port names of the form COMnnn. Use PortName if your COM port name does not fit the form COMnnn.</remarks>
         public int Port
         {
             // Set and get port names of the form COMnn. This only works with port names of that form
@@ -721,12 +719,12 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// The maximum time that the ASCOM serial port will wait for incoming receive data (seconds, default = 5)
-    /// </summary>
-    /// <value>Integer, serial port timeout in seconds</value>
-    /// <returns>Integer, serial port timeout in seconds.</returns>
-    /// <remarks>The minimum delay timout that can be set through this command is 1 seconds. Use ReceiveTimeoutMs to set a timeout less than 1 second.</remarks>
-    /// <exception cref="InvalidValueException">Thrown when <i>value</i> is invalid (outside the range 1 to 120 seconds.)</exception>
+        /// The maximum time that the ASCOM serial port will wait for incoming receive data (seconds, default = 5)
+        /// </summary>
+        /// <value>Integer, serial port timeout in seconds</value>
+        /// <returns>Integer, serial port timeout in seconds.</returns>
+        /// <remarks>The minimum delay timout that can be set through this command is 1 seconds. Use ReceiveTimeoutMs to set a timeout less than 1 second.</remarks>
+        /// <exception cref="InvalidValueException">Thrown when <i>value</i> is invalid (outside the range 1 to 120 seconds.)</exception>
         public int ReceiveTimeout
         {
             // Get and set the receive timeout
@@ -838,13 +836,13 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// The maximum time that the ASCOM serial port will wait for incoming receive data (milliseconds, default = 5000)
-    /// </summary>
-    /// <value>Integer, serial port timeout in milli-seconds</value>
-    /// <returns>Integer, serial port timeout in milli-seconds</returns>
-    /// <remarks>If a timeout occurs, an IO timeout error is raised. See ReceiveTimeout for an alternate form 
-    /// using the timeout in seconds. </remarks>
-    /// <exception cref="InvalidValueException">Thrown when <i>value</i> is invalid.</exception>
+        /// The maximum time that the ASCOM serial port will wait for incoming receive data (milliseconds, default = 5000)
+        /// </summary>
+        /// <value>Integer, serial port timeout in milli-seconds</value>
+        /// <returns>Integer, serial port timeout in milli-seconds</returns>
+        /// <remarks>If a timeout occurs, an IO timeout error is raised. See ReceiveTimeout for an alternate form 
+        /// using the timeout in seconds. </remarks>
+        /// <exception cref="InvalidValueException">Thrown when <i>value</i> is invalid.</exception>
         public int ReceiveTimeoutMs
         {
             // Get and set the receive timeout in ms
@@ -956,11 +954,11 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Gets and sets the baud rate of the ASCOM serial port
-    /// </summary>
-    /// <value>Port speed using the PortSpeed enum</value>
-    /// <returns>Port speed as a SerialSpeed enum value</returns>
-    /// <remarks>This is modelled on the COM component with possible values enumerated in the PortSpeed enum.</remarks>
+        /// Gets and sets the baud rate of the ASCOM serial port
+        /// </summary>
+        /// <value>Port speed using the PortSpeed enum</value>
+        /// <returns>Port speed as a SerialSpeed enum value</returns>
+        /// <remarks>This is modelled on the COM component with possible values enumerated in the PortSpeed enum.</remarks>
         public SerialSpeed Speed
         {
             // Get and set the port speed using the portspeed enum
@@ -976,10 +974,10 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Clears the ASCOM serial port receive and transmit buffers
-    /// </summary>
-    /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
-    /// <remarks></remarks>
+        /// Clears the ASCOM serial port receive and transmit buffers
+        /// </summary>
+        /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
+        /// <remarks></remarks>
         public void ClearBuffers()
         {
             var TData = new ThreadData();
@@ -1085,15 +1083,15 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Receive at least one text character from the ASCOM serial port
-    /// </summary>
-    /// <returns>The characters received</returns>
-    /// <exception cref="System.TimeoutException">Thrown when a receive timeout occurs.</exception>
-    /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
-    /// <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
-    /// <remarks>This method reads all of the characters currently in the serial receive buffer. It will not return 
-    /// unless it reads at least one character. A timeout will cause a TimeoutException to be raised. Use this for 
-    /// text data, as it returns a String. </remarks>
+        /// Receive at least one text character from the ASCOM serial port
+        /// </summary>
+        /// <returns>The characters received</returns>
+        /// <exception cref="System.TimeoutException">Thrown when a receive timeout occurs.</exception>
+        /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
+        /// <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
+        /// <remarks>This method reads all of the characters currently in the serial receive buffer. It will not return 
+        /// unless it reads at least one character. A timeout will cause a TimeoutException to be raised. Use this for 
+        /// text data, as it returns a String. </remarks>
         public string Receive()
         {
             // Return all characters in the receive buffer
@@ -1212,13 +1210,13 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Receive one binary byte from the ASCOM serial port
-    /// </summary>
-    /// <returns>The received byte</returns>
-    /// <exception cref="System.TimeoutException">Thrown when a receive timeout occurs.</exception>
-    /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
-    /// <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
-    /// <remarks>Use this for 8-bit (binary data). If a timeout occurs, a TimeoutException is raised. </remarks>
+        /// Receive one binary byte from the ASCOM serial port
+        /// </summary>
+        /// <returns>The received byte</returns>
+        /// <exception cref="System.TimeoutException">Thrown when a receive timeout occurs.</exception>
+        /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
+        /// <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
+        /// <remarks>Use this for 8-bit (binary data). If a timeout occurs, a TimeoutException is raised. </remarks>
         public byte ReceiveByte()
         {
             var TData = new ThreadData();
@@ -1335,14 +1333,14 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Receive exactly the given number of characters from the ASCOM serial port and return as a string
-    /// </summary>
-    /// <param name="Count">The number of characters to return</param>
-    /// <returns>String of length "Count" characters</returns>
-    /// <exception cref="System.TimeoutException">Thrown when a receive timeout occurs.</exception>
-    /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
-    /// <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
-    /// <remarks>If a timeout occurs a TimeoutException is raised.</remarks>
+        /// Receive exactly the given number of characters from the ASCOM serial port and return as a string
+        /// </summary>
+        /// <param name="Count">The number of characters to return</param>
+        /// <returns>String of length "Count" characters</returns>
+        /// <exception cref="System.TimeoutException">Thrown when a receive timeout occurs.</exception>
+        /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
+        /// <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
+        /// <remarks>If a timeout occurs a TimeoutException is raised.</remarks>
         public string ReceiveCounted(int Count)
         {
             var TData = new ThreadData();
@@ -1463,17 +1461,17 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Receive exactly the given number of characters from the ASCOM serial port and return as a byte array
-    /// </summary>
-    /// <param name="Count">The number of characters to return</param>
-    /// <returns>Byte array of size "Count" elements</returns>
-    /// <exception cref="System.TimeoutException">Thrown when a receive timeout occurs.</exception>
-    /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
-    /// <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
-    /// <remarks>
-    /// <para>If a timeout occurs, a TimeoutException is raised. </para>
-    /// <para>This function exists in the COM component but is not documented in the help file.</para>
-    /// </remarks>
+        /// Receive exactly the given number of characters from the ASCOM serial port and return as a byte array
+        /// </summary>
+        /// <param name="Count">The number of characters to return</param>
+        /// <returns>Byte array of size "Count" elements</returns>
+        /// <exception cref="System.TimeoutException">Thrown when a receive timeout occurs.</exception>
+        /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
+        /// <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
+        /// <remarks>
+        /// <para>If a timeout occurs, a TimeoutException is raised. </para>
+        /// <para>This function exists in the COM component but is not documented in the help file.</para>
+        /// </remarks>
         public byte[] ReceiveCountedBinary(int Count)
         {
             byte[] Result;
@@ -1601,14 +1599,14 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Receive characters from the ASCOM serial port until the given terminator string is seen
-    /// </summary>
-    /// <param name="Terminator">The character string that indicates end of message</param>
-    /// <returns>Received characters including the terminator string</returns>
-    /// <exception cref="System.TimeoutException">Thrown when a receive timeout occurs.</exception>
-    /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
-    /// <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
-    /// <remarks>If a timeout occurs, a TimeoutException is raised.</remarks>
+        /// Receive characters from the ASCOM serial port until the given terminator string is seen
+        /// </summary>
+        /// <param name="Terminator">The character string that indicates end of message</param>
+        /// <returns>Received characters including the terminator string</returns>
+        /// <exception cref="System.TimeoutException">Thrown when a receive timeout occurs.</exception>
+        /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
+        /// <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
+        /// <remarks>If a timeout occurs, a TimeoutException is raised.</remarks>
         public string ReceiveTerminated(string Terminator)
         {
             var TData = new ThreadData();
@@ -1748,16 +1746,16 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Receive characters from the ASCOM serial port until the given terminator bytes are seen, return as a byte array
-    /// </summary>
-    /// <param name="TerminatorBytes">Array of bytes that indicates end of message</param>
-    /// <returns>Byte array of received characters</returns>
-    /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
-    /// <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
-    /// <remarks>
-    /// <para>If a timeout occurs, a TimeoutException is raised.</para>
-    /// <para>This function exists in the COM component but is not documented in the help file.</para>
-    /// </remarks>
+        /// Receive characters from the ASCOM serial port until the given terminator bytes are seen, return as a byte array
+        /// </summary>
+        /// <param name="TerminatorBytes">Array of bytes that indicates end of message</param>
+        /// <returns>Byte array of received characters</returns>
+        /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
+        /// <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
+        /// <remarks>
+        /// <para>If a timeout occurs, a TimeoutException is raised.</para>
+        /// <para>This function exists in the COM component but is not documented in the help file.</para>
+        /// </remarks>
         public byte[] ReceiveTerminatedBinary(byte[] TerminatorBytes)
         {
             byte[] Result;
@@ -1904,12 +1902,12 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Transmits a string through the ASCOM serial port
-    /// </summary>
-    /// <param name="Data">String to transmit</param>
-    /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
-    /// <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
-    /// <remarks></remarks>
+        /// Transmits a string through the ASCOM serial port
+        /// </summary>
+        /// <param name="Data">String to transmit</param>
+        /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
+        /// <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
+        /// <remarks></remarks>
         public void Transmit(string Data)
         {
             var TData = new ThreadData();
@@ -2011,12 +2009,12 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Transmit an array of binary bytes through the ASCOM serial port 
-    /// </summary>
-    /// <param name="Data">Byte array to transmit</param>
-    /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
-    /// <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
-    /// <remarks></remarks>
+        /// Transmit an array of binary bytes through the ASCOM serial port 
+        /// </summary>
+        /// <param name="Data">Byte array to transmit</param>
+        /// <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
+        /// <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
+        /// <remarks></remarks>
         public void TransmitBinary(byte[] Data)
         {
             string Result;
@@ -2126,13 +2124,13 @@ namespace ASCOM.Utilities
         #region ISerialExtensions Implementation
         // These are additional funcitons not provided in the original Helper and Helper2 components
         /// <summary>
-    /// Sets the ASCOM serial port name as a string
-    /// </summary>
-    /// <value>Serial port name to be used</value>
-    /// <returns>Current serial port name</returns>
-    /// <remarks>This property allows any serial port name to be used, even if it doesn't conform to a format of COMnnn
-    /// If the required port name is of the form COMnnn then Serial.Port=nnn and Serial.PortName="COMnnn" are 
-    /// equivalent.</remarks>
+        /// Sets the ASCOM serial port name as a string
+        /// </summary>
+        /// <value>Serial port name to be used</value>
+        /// <returns>Current serial port name</returns>
+        /// <remarks>This property allows any serial port name to be used, even if it doesn't conform to a format of COMnnn
+        /// If the required port name is of the form COMnnn then Serial.Port=nnn and Serial.PortName="COMnnn" are 
+        /// equivalent.</remarks>
         public string PortName
         {
             // Allows the full COM port name to be read and set. This works for COM ports of any name
@@ -2148,17 +2146,17 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Returns a list of all available ASCOM serial ports with COMnnn ports sorted into ascending port number order
-    /// </summary>
-    /// <value>String array of available serial ports</value>
-    /// <returns>A string array of available serial ports</returns>
-    /// <remarks><b>Update in platform 6.0.0.0</b> This call uses the .NET Framework to retrieve available 
-    /// COM ports and this has been found not to return names of some USB serial adapters. Additional 
-    /// code has been added to attempt to open all COM ports up to COM32. Any ports that can be 
-    /// successfully opened are now returned alongside the ports returned by the .NET call.
-    /// <para>If this new approach still does not detect a COM port it can be forced to appear in the list by adding its name
-    /// as a string entry in the ForceCOMPorts key of the ASCOM Profile. In the event that this scanning causes issues, a COM port can be 
-    /// omitted from the scan by adding its name as a string entry in the IgnoreCOMPorts key of the ASCOM Profile.</para></remarks>
+        /// Returns a list of all available ASCOM serial ports with COMnnn ports sorted into ascending port number order
+        /// </summary>
+        /// <value>String array of available serial ports</value>
+        /// <returns>A string array of available serial ports</returns>
+        /// <remarks><b>Update in platform 6.0.0.0</b> This call uses the .NET Framework to retrieve available 
+        /// COM ports and this has been found not to return names of some USB serial adapters. Additional 
+        /// code has been added to attempt to open all COM ports up to COM32. Any ports that can be 
+        /// successfully opened are now returned alongside the ports returned by the .NET call.
+        /// <para>If this new approach still does not detect a COM port it can be forced to appear in the list by adding its name
+        /// as a string entry in the ForceCOMPorts key of the ASCOM Profile. In the event that this scanning causes issues, a COM port can be 
+        /// omitted from the scan by adding its name as a string entry in the IgnoreCOMPorts key of the ASCOM Profile.</para></remarks>
         public string[] AvailableComPorts
         {
             // Returns a list of all available COM ports sorted into ascending COM port number order
@@ -2380,13 +2378,13 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Adds a message to the ASCOM serial trace file
-    /// </summary>
-    /// <param name="Caller">String identifying the module logging the message</param>
-    /// <param name="Message">Message text to be logged.</param>
-    /// <remarks>
-    /// <para>This can be called regardless of whether logging is enabled</para>
-    /// </remarks>
+        /// Adds a message to the ASCOM serial trace file
+        /// </summary>
+        /// <param name="Caller">String identifying the module logging the message</param>
+        /// <param name="Message">Message text to be logged.</param>
+        /// <remarks>
+        /// <para>This can be called regardless of whether logging is enabled</para>
+        /// </remarks>
         public void LogMessage(string Caller, string Message)
         {
             // Allows a driver to include its own comments in the serial log
@@ -2403,11 +2401,11 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Translates a supplied string into hex characters
-    /// </summary>
-    /// <param name="p_Msg">The string to convert</param>
-    /// <returns>A string with each character represented as [xx]</returns>
-    /// <remarks></remarks>
+        /// Translates a supplied string into hex characters
+        /// </summary>
+        /// <param name="p_Msg">The string to convert</param>
+        /// <returns>A string with each character represented as [xx]</returns>
+        /// <remarks></remarks>
         private string MakeHex(string p_Msg)
         {
             string l_Msg = "";
@@ -2618,20 +2616,20 @@ namespace ASCOM.Utilities
         private const uint WAIT_TIMEOUT = 0x102U;
 
         /// <summary>
-    /// OS level blocking wait for an event 
-    /// </summary>
-    /// <param name="handle">The triggering even't handle</param>
-    /// <param name="milliseconds">Length of time to wait before timing out</param>
-    /// <returns>Status, 0 = success</returns>
-    /// <remarks></remarks>
+        /// OS level blocking wait for an event 
+        /// </summary>
+        /// <param name="handle">The triggering even't handle</param>
+        /// <param name="milliseconds">Length of time to wait before timing out</param>
+        /// <returns>Status, 0 = success</returns>
+        /// <remarks></remarks>
         [DllImport("kernel32", SetLastError = true)]
         private static extern uint WaitForSingleObject(IntPtr handle, uint milliseconds);
 
         /// <summary>
-    /// Sleep the calling thread until the worker thread has completed
-    /// </summary>
-    /// <param name="TData">ThreadData class holding required inputs, outputs and thread management information</param>
-    /// <remarks></remarks>
+        /// Sleep the calling thread until the worker thread has completed
+        /// </summary>
+        /// <param name="TData">ThreadData class holding required inputs, outputs and thread management information</param>
+        /// <remarks></remarks>
         private void WaitForThread(ThreadData TData)
         {
             uint RetCode;
@@ -2750,9 +2748,9 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Worker thread data
-    /// </summary>
-    /// <remarks></remarks>
+        /// Worker thread data
+        /// </summary>
+        /// <remarks></remarks>
         private class ThreadData
         {
             // Transmit Input values
@@ -2786,9 +2784,9 @@ namespace ASCOM.Utilities
             public int TimeoutValue;
 
             /// <summary>
-        /// Initialises a new ThreadData synchronisation object
-        /// </summary>
-        /// <remarks></remarks>
+            /// Initialises a new ThreadData synchronisation object
+            /// </summary>
+            /// <remarks></remarks>
             public ThreadData()
             {
                 // Initialise values to required state
@@ -2798,9 +2796,9 @@ namespace ASCOM.Utilities
             }
 
             /// <summary>
-        /// Signals that this thread has completed its work
-        /// </summary>
-        /// <remarks></remarks>
+            /// Signals that this thread has completed its work
+            /// </summary>
+            /// <remarks></remarks>
             public void ThreadCompleted()
             {
                 try

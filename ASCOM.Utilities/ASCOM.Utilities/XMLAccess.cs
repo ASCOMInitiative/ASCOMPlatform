@@ -17,8 +17,8 @@ namespace ASCOM.Utilities
     internal class XMLAccess : IAccess, IDisposable
     {
 
-        private const int RETRY_MAX = 1; // Number of persistence failure retrys
-        private const int RETRY_INTERVAL = 200; // Length between persistence failure retrys in milliseconds
+        private const int RETRY_MAX = 1; // Number of persistence failure re-trys
+        private const int RETRY_INTERVAL = 200; // Length between persistence failure re-trys in milliseconds
 
         private IFileStoreProvider FileStore; // File store containing the new ASCOM XML profile 
         private bool disposedValue = false;        // To detect redundant calls to IDisposable
@@ -783,7 +783,7 @@ namespace ASCOM.Utilities
                         switch (kvp.Key ?? "")
                         {
                             case COLLECTION_DEFAULT_VALUE_NAME: // Ignore the default value entry
-                                                                                // Write everything else to the file
+                                                                // Write everything else to the file
                                 {
                                     break;
                                 }

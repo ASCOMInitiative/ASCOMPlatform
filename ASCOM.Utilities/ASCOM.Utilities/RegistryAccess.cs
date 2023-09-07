@@ -30,10 +30,10 @@ namespace ASCOM.Utilities
         private Stopwatch sw, swSupport;
 
         /// <summary>
-    /// Enum containing all the possible registry access rights values. The built-in RegistryRights enum only has a partial collection
-    /// and often returns values such as -1 or large positive and negative integer values when converted to a string
-    /// The Flags attribute ensures that the ToString operation returns an aggregate list of discrete values
-    /// </summary>
+        /// Enum containing all the possible registry access rights values. The built-in RegistryRights enum only has a partial collection
+        /// and often returns values such as -1 or large positive and negative integer values when converted to a string
+        /// The Flags attribute ensures that the ToString operation returns an aggregate list of discrete values
+        /// </summary>
         [Flags()]
         public enum AccessRights
         {
@@ -121,10 +121,10 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Common code for the new method
-    /// </summary>
-    /// <param name="p_IgnoreChecks">If true, suppresses the exception normally thrown if a valid profile is not present</param>
-    /// <remarks></remarks>
+        /// Common code for the new method
+        /// </summary>
+        /// <param name="p_IgnoreChecks">If true, suppresses the exception normally thrown if a valid profile is not present</param>
+        /// <remarks></remarks>
         public void NewCode(bool p_IgnoreChecks)
         {
             string PlatformVersion;
@@ -347,12 +347,12 @@ namespace ASCOM.Utilities
         void IAccess.DeleteKey(string p_SubKeyName) => DeleteKey(p_SubKeyName);
 
         /// <summary>
-    /// Rename a subkey by copying its contents to the new name and deleting the original key
-    /// </summary>
-    /// <param name="CurrentSubKeyName">Current key name</param>
-    /// <param name="NewSubKeyName">New key name</param>
-    /// <remarks>The original version of this method just renamed the key and copied its values, however it did not copy any of the current key's subkeys. 
-    /// As of Platform 6.5 SP1 the method recursively calls itself in order to copy any subkeys and their values as well.</remarks>
+        /// Rename a subkey by copying its contents to the new name and deleting the original key
+        /// </summary>
+        /// <param name="CurrentSubKeyName">Current key name</param>
+        /// <param name="NewSubKeyName">New key name</param>
+        /// <remarks>The original version of this method just renamed the key and copied its values, however it did not copy any of the current key's subkeys. 
+        /// As of Platform 6.5 SP1 the method recursively calls itself in order to copy any subkeys and their values as well.</remarks>
         internal void RenameKey(string CurrentSubKeyName, string NewSubKeyName)
         {
             // Rename a key by creating a copy of the original key with the new name then deleting the original key
@@ -485,10 +485,10 @@ namespace ASCOM.Utilities
         SortedList<string, string> IAccess.EnumKeys(string p_SubKeyName) => EnumKeys(p_SubKeyName);
 
         /// <summary>
-    /// Returns a sorted list of key values
-    /// </summary>
-    /// <param name="p_SubKeyName">SubKey to search</param>
-    /// <returns></returns>
+        /// Returns a sorted list of key values
+        /// </summary>
+        /// <param name="p_SubKeyName">SubKey to search</param>
+        /// <returns></returns>
         internal SortedList<string, string> EnumProfile(string p_SubKeyName)
         {
             var RetValues = new SortedList<string, string>();
@@ -532,12 +532,12 @@ namespace ASCOM.Utilities
         SortedList<string, string> IAccess.EnumProfile(string p_SubKeyName) => EnumProfile(p_SubKeyName);
 
         /// <summary>
-    /// Read a single value from a key
-    /// </summary>
-    /// <param name="p_SubKeyName"></param>
-    /// <param name="p_ValueName"></param>
-    /// <param name="p_DefaultValue"></param>
-    /// <returns></returns>
+        /// Read a single value from a key
+        /// </summary>
+        /// <param name="p_SubKeyName"></param>
+        /// <param name="p_ValueName"></param>
+        /// <param name="p_DefaultValue"></param>
+        /// <returns></returns>
         internal string GetProfile(string p_SubKeyName, string p_ValueName, string p_DefaultValue)
         {
             string RetVal;

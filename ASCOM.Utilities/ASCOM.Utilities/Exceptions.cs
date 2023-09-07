@@ -1,5 +1,5 @@
 ﻿using System;
-// Exceptions for the Utilities namesapce
+// Exceptions for the Utilities name space
 using System.Runtime.InteropServices;
 
 namespace ASCOM.Utilities.Exceptions

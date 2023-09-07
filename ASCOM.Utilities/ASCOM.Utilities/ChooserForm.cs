@@ -597,7 +597,7 @@ namespace ASCOM.Utilities
                     try
                     {
                         WarningTooltipClear(); // Clear warning tool tip before entering setup so that the dialogue doesn't interfere with or obscure the setup dialogue.
-                        MethodInfo methodInfo= ProgIdType.GetMethod("SetupDialog");
+                        MethodInfo methodInfo = ProgIdType.GetMethod("SetupDialog");
                         methodInfo.Invoke(oDrv, new object[] { });
                     }
                     catch (Exception ex) // Something went wrong in the SetupDialog method so display an error message.

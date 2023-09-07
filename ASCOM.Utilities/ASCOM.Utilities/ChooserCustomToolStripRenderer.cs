@@ -4,15 +4,15 @@ using System.Windows.Forms;
 namespace ASCOM.Utilities
 {
     /// <summary>
-/// Custom renderer for the Chooser tool strip
-/// </summary>
+    /// Custom renderer for the Chooser tool strip
+    /// </summary>
     public class ChooserCustomToolStripRenderer : ToolStripProfessionalRenderer
     {
 
         /// <summary>
-    /// Prevent "selected "colour changes when hovering over disabled menu items 
-    /// </summary>
-    /// <param name="e"></param>
+        /// Prevent "selected "colour changes when hovering over disabled menu items 
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
         {
             if (e.Item.Enabled)
@@ -22,9 +22,9 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Respect the BackBolor property set for labels - without this they always appear with a grey background.
-    /// </summary>
-    /// <param name="e"></param>
+        /// Respect the BackBolor property set for labels - without this they always appear with a grey background.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnRenderLabelBackground(ToolStripItemRenderEventArgs e)
         {
             if (!(e.Item.BackColor == Color.WhiteSmoke))

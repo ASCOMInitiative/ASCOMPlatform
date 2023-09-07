@@ -8,11 +8,11 @@ namespace ASCOM.Utilities
 {
 
     /// <summary>
-/// Class that represents a whole device Profile and which contains a set of methods for for manipulating its contents
-/// </summary>
-/// <remarks>
-/// This class is used by the Profile.GetProfile and Profile.SetProfile methods, do not confuse it with the Profile Class itself.
-/// </remarks>
+    /// Class that represents a whole device Profile and which contains a set of methods for for manipulating its contents
+    /// </summary>
+    /// <remarks>
+    /// This class is used by the Profile.GetProfile and Profile.SetProfile methods, do not confuse it with the Profile Class itself.
+    /// </remarks>
     [ComVisible(true)]
     [Guid("43325B3A-8B34-48db-8028-9D8CED9FA9E2")]
     [ClassInterface(ClassInterfaceType.None)]
@@ -31,10 +31,10 @@ namespace ASCOM.Utilities
         #endregion
 
         /// <summary>
-    /// Add a new subkey
-    /// </summary>
-    /// <param name="SubKeyName">Name of the subkey</param>
-    /// <remarks></remarks>
+        /// Add a new subkey
+        /// </summary>
+        /// <param name="SubKeyName">Name of the subkey</param>
+        /// <remarks></remarks>
         public void AddSubkey(string SubKeyName)
         {
             try
@@ -48,31 +48,31 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Clears all contents
-    /// </summary>
-    /// <remarks></remarks>
+        /// Clears all contents
+        /// </summary>
+        /// <remarks></remarks>
         public void Clear()
         {
             Subkey.Clear();
         }
 
         /// <summary>
-    /// Retrieve a registry value
-    /// </summary>
-    /// <param name="Name">Name of the value</param>
-    /// <param name="SubKeyName">"SubKey in which the value is located</param>
-    /// <returns>String value</returns>
-    /// <remarks></remarks>
+        /// Retrieve a registry value
+        /// </summary>
+        /// <param name="Name">Name of the value</param>
+        /// <param name="SubKeyName">"SubKey in which the value is located</param>
+        /// <returns>String value</returns>
+        /// <remarks></remarks>
         public string GetValue(string Name, string SubKeyName)
         {
             return Subkey[SubKeyName][Name];
         }
 
         /// <summary>
-    /// Removes a complete subkey
-    /// </summary>
-    /// <param name="SubKeyName">Subkey to be removed</param>
-    /// <remarks></remarks>
+        /// Removes a complete subkey
+        /// </summary>
+        /// <param name="SubKeyName">Subkey to be removed</param>
+        /// <remarks></remarks>
         public void RemoveSubKey(string SubKeyName)
         {
             try
@@ -85,11 +85,11 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Remove a value
-    /// </summary>
-    /// <param name="ValueName">Name of the value to be removed</param>
-    /// <param name="SubKeyName">"SubKey containing the value</param>
-    /// <remarks></remarks>
+        /// Remove a value
+        /// </summary>
+        /// <param name="ValueName">Name of the value to be removed</param>
+        /// <param name="SubKeyName">"SubKey containing the value</param>
+        /// <remarks></remarks>
         public void RemoveValue(string ValueName, string SubKeyName)
         {
             if (!string.IsNullOrEmpty(ValueName))
@@ -105,13 +105,13 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Set a value
-    /// </summary>
-    /// <param name="Name">Name of the value to set</param>
-    /// <param name="Value">Value to be set</param>
-    /// <param name="SubKeyName">"Subkey continaining the value</param>
-    /// <remarks>Changing a value with this method does NOT change the underlying profile store, only the value in this class.
-    /// In order to persist the new value, the class should be written back to the profile store through Profile.SetProfile.</remarks>
+        /// Set a value
+        /// </summary>
+        /// <param name="Name">Name of the value to set</param>
+        /// <param name="Value">Value to be set</param>
+        /// <param name="SubKeyName">"Subkey continaining the value</param>
+        /// <remarks>Changing a value with this method does NOT change the underlying profile store, only the value in this class.
+        /// In order to persist the new value, the class should be written back to the profile store through Profile.SetProfile.</remarks>
         public void SetValue(string Name, string Value, string SubKeyName)
         {
 
@@ -129,11 +129,11 @@ namespace ASCOM.Utilities
 
         #region .NET only methods
         /// <summary>
-    /// Get the collection of values in this profile
-    /// </summary>
-    /// <value>All values in the collection</value>
-    /// <returns>SortedList(Of SubKey as String, SortedList(Of ValueName as String, Value as String))</returns>
-    /// <remarks></remarks>
+        /// Get the collection of values in this profile
+        /// </summary>
+        /// <value>All values in the collection</value>
+        /// <returns>SortedList(Of SubKey as String, SortedList(Of ValueName as String, Value as String))</returns>
+        /// <remarks></remarks>
         [ComVisible(false)]
         public SortedList<string, SortedList<string, string>> ProfileValues
         {
@@ -144,11 +144,11 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Retrieve a registry value from the driver top level subkey
-    /// </summary>
-    /// <param name="Name">Name of the value </param>
-    /// <returns>String value</returns>
-    /// <remarks></remarks>
+        /// Retrieve a registry value from the driver top level subkey
+        /// </summary>
+        /// <param name="Name">Name of the value </param>
+        /// <returns>String value</returns>
+        /// <remarks></remarks>
         [ComVisible(false)]
         public string GetValue(string Name)
         {
@@ -156,10 +156,10 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Remove a value from the driver top level subkey
-    /// </summary>
-    /// <param name="ValueName">Name of the value to be removed</param>
-    /// <remarks></remarks>
+        /// Remove a value from the driver top level subkey
+        /// </summary>
+        /// <param name="ValueName">Name of the value to be removed</param>
+        /// <remarks></remarks>
         [ComVisible(false)]
         public void RemoveValue(string ValueName)
         {
@@ -167,11 +167,11 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Set a value in the driver top level subkey
-    /// </summary>
-    /// <param name="Name">Name of the value to set</param>
-    /// <param name="Value">Value to be set</param>
-    /// <remarks></remarks>
+        /// Set a value in the driver top level subkey
+        /// </summary>
+        /// <param name="Name">Name of the value to set</param>
+        /// <param name="Value">Value to be set</param>
+        /// <remarks></remarks>
         [ComVisible(false)]
         public void SetValue(string Name, string Value)
         {

@@ -95,8 +95,7 @@ namespace ASCOM.Utilities
         internal const string NAME_ATTRIBUTE_NAME = "Name"; // Profile value name attribute
         internal const string VALUE_ATTRIBUTE_NAME = "Value"; // Profile element value attribute
 
-        // XML constants used by ASCOMProfile class to serialise and de-serialise a profile
-        // These are public so that they can be used by applications to work directly with the returned XML
+        // XML constants used by ASCOMProfile class to serialise and de-serialise a profile. These are public so that they can be used by applications to work directly with the returned XML
         public const string XML_SUBKEYNAME_ELEMENTNAME = "SubKeyName";
         public const string XML_DEFAULTVALUE_ELEMENTNAME = "DefaultValue";
         public const string XML_NAME_ELEMENTNAME = "Name";

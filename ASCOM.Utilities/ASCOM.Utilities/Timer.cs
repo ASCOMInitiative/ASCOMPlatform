@@ -1,6 +1,4 @@
-﻿// Implements the Timer component
-
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -12,22 +10,22 @@ namespace ASCOM.Utilities
 {
 
     /// <summary>
-/// Provides a repeating timer with associated tick event.
-/// </summary>
-/// <remarks>
-/// <para>The interval resolution is about 20ms.If you need beter than this, you could use the WaitForMilliseconds 
-/// method to create your own solution.</para>
-/// <para>You can create multiple instances of this object. When enabled, the Timer delivers Tick events periodically 
-/// (determined by setting the Interval property).</para>
-/// <para>This component is now considered <b>obsolete</b> for use in .NET clients and drivers. It is reliable under almost 
-/// all circumstances but there are some environments, noteably console and some scripted applications, where it fails to fire.
-/// The Platform 6 component improves performance over the Platform 5 component in this respect and can be further tuned 
-/// for particular applications by placing an entry in the ForceSystemTimer Profile key.</para>
-/// <para>For .NET applications, use of System.Timers.Timer is recommended but atention must be paid to getting threading correct
-/// when using this control. The Windows.Forms.Timer control is not an improvement over the ASCOM timer which is based upon it.</para>
-/// <para>Developers using non .NET languages are advised to use timers provided as part of their development environment, only falling 
-/// back to the ASCOM Timer if no viable alternative can be found.</para>
-/// </remarks>
+    /// Provides a repeating timer with associated tick event.
+    /// </summary>
+    /// <remarks>
+    /// <para>The interval resolution is about 20ms.If you need beter than this, you could use the WaitForMilliseconds 
+    /// method to create your own solution.</para>
+    /// <para>You can create multiple instances of this object. When enabled, the Timer delivers Tick events periodically 
+    /// (determined by setting the Interval property).</para>
+    /// <para>This component is now considered <b>obsolete</b> for use in .NET clients and drivers. It is reliable under almost 
+    /// all circumstances but there are some environments, noteably console and some scripted applications, where it fails to fire.
+    /// The Platform 6 component improves performance over the Platform 5 component in this respect and can be further tuned 
+    /// for particular applications by placing an entry in the ForceSystemTimer Profile key.</para>
+    /// <para>For .NET applications, use of System.Timers.Timer is recommended but atention must be paid to getting threading correct
+    /// when using this control. The Windows.Forms.Timer control is not an improvement over the ASCOM timer which is based upon it.</para>
+    /// <para>Developers using non .NET languages are advised to use timers provided as part of their development environment, only falling 
+    /// back to the ASCOM Timer if no viable alternative can be found.</para>
+    /// </remarks>
     [Guid("64FEE414-176D-44d0-99DF-47621D9C377F")]
     [ComVisible(true)]
     [ComSourceInterfaces(typeof(ITimerEvent))]
@@ -108,23 +106,23 @@ namespace ASCOM.Utilities
         private TraceLogger TL;
 
         /// <summary>
-    /// Timer tick event handler
-    /// </summary>
-    /// <remarks></remarks>
+        /// Timer tick event handler
+        /// </summary>
+        /// <remarks></remarks>
         [ComVisible(false)]
         public delegate void TickEventHandler();
 
         /// <summary>
-    /// Fired once per Interval when timer is Enabled.
-    /// </summary>
-    /// <remarks>To sink this event in Visual Basic, declare the object variable using the WithEvents keyword.</remarks>
+        /// Fired once per Interval when timer is Enabled.
+        /// </summary>
+        /// <remarks>To sink this event in Visual Basic, declare the object variable using the WithEvents keyword.</remarks>
         public event TickEventHandler Tick; // Implements ITimer.Tick ' Declare the tick event
 
         #region New and IDisposable Support
         /// <summary>
-    /// Create a new timer component
-    /// </summary>
-    /// <remarks></remarks>
+        /// Create a new timer component
+        /// </summary>
+        /// <remarks></remarks>
         public Timer()
         {
             TL = new TraceLogger("", "Timer");
@@ -238,10 +236,10 @@ namespace ASCOM.Utilities
 
         // IDisposable
         /// <summary>
-    /// Disposes of resources used by the profile object - called by IDisposable interface
-    /// </summary>
-    /// <param name="disposing"></param>
-    /// <remarks></remarks>
+        /// Disposes of resources used by the profile object - called by IDisposable interface
+        /// </summary>
+        /// <param name="disposing"></param>
+        /// <remarks></remarks>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -265,9 +263,9 @@ namespace ASCOM.Utilities
 
         // This code added by Visual Basic to correctly implement the disposable pattern.
         /// <summary>
-    /// Disposes of resources used by the profile object
-    /// </summary>
-    /// <remarks></remarks>
+        /// Disposes of resources used by the profile object
+        /// </summary>
+        /// <remarks></remarks>
         public void Dispose()
         {
             // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
@@ -285,11 +283,11 @@ namespace ASCOM.Utilities
 
         #region Timer Implementation
         /// <summary>
-    /// The interval between Tick events when the timer is Enabled in milliseconds, (default = 1000)
-    /// </summary>
-    /// <value>The interval between Tick events when the timer is Enabled (milliseconds, default = 1000)</value>
-    /// <returns>The interval between Tick events when the timer is Enabled in milliseconds</returns>
-    /// <remarks></remarks>
+        /// The interval between Tick events when the timer is Enabled in milliseconds, (default = 1000)
+        /// </summary>
+        /// <value>The interval between Tick events when the timer is Enabled (milliseconds, default = 1000)</value>
+        /// <returns>The interval between Tick events when the timer is Enabled in milliseconds</returns>
+        /// <remarks></remarks>
         public int Interval
         {
             // Get and set the timer period
@@ -336,11 +334,11 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Enable the timer tick events
-    /// </summary>
-    /// <value>True means the timer is active and will deliver Tick events every Interval milliseconds.</value>
-    /// <returns>Enabled state of timer tick events</returns>
-    /// <remarks></remarks>
+        /// Enable the timer tick events
+        /// </summary>
+        /// <value>True means the timer is active and will deliver Tick events every Interval milliseconds.</value>
+        /// <returns>Enabled state of timer tick events</returns>
+        /// <remarks></remarks>
         public bool Enabled
         {
             // Enable and disable the timer
@@ -376,9 +374,9 @@ namespace ASCOM.Utilities
         #region Support code
         // Raise the external event whenever a timer tick event occurs
         /// <summary>
-    /// Timer event handler
-    /// </summary>
-    /// <remarks>Raises the Tick event</remarks>
+        /// Timer event handler
+        /// </summary>
+        /// <remarks>Raises the Tick event</remarks>
         private void OnTimedEvent(object sender, object e)
         {
             if (IsForm)
