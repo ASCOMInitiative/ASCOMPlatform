@@ -17,7 +17,8 @@
     <AssemblyCompanyName>ASCOM Initiative</AssemblyCompanyName>
     <StartWithIE>False</StartWithIE>
     <RootNamespace>ASCOM.Utilities</RootNamespace>
-    <FileUpgradeFlags></FileUpgradeFlags>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\ASCOM.snk</AssemblyOriginatorKeyFile>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -47,7 +48,8 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>bin\Debug\ASCOM.Utilities.xml</DocumentationFile>
     <DebugSymbols>True</DebugSymbols>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <NoWarn>42017,42018,42019,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>full</DebugType>
@@ -59,7 +61,8 @@
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>bin\Release\ASCOM.Utilities.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <NoWarn>42017,42018,42019,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>Full</DebugType>
@@ -177,6 +180,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="KeyValuePair.cs" />
+    <Compile Include="PEReader.cs" />
     <Compile Include="RegistryAccess.cs" />
     <Compile Include="VB6Support\VB6COMErrors.cs">
       <SubType>Code</SubType>
@@ -184,11 +188,10 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="UtilitiesSettings.cs" />
-    <Compile Include="GlobalCode.cs" />
+    <Compile Include="Global.cs" />
     <Compile Include="VB6Support\VB6HelperSupport.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GlobalConstants.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -202,7 +205,8 @@
     <Compile Include="Profile.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Serial.cs"></Compile>
+    <Compile Include="Serial.cs">
+    </Compile>
     <Compile Include="Timer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -285,7 +289,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent></PreBuildEvent>
-    <PostBuildEvent></PostBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
