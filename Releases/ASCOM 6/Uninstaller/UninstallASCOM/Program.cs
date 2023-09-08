@@ -453,7 +453,7 @@ namespace UninstallAscom
 
                 // Now make sure our version of Helper is the COM registered version!
                 LogMessage("FixHelper", "  Fixing COM Registration");
-                if (VersionCode.OSBits() == VersionCode.Bitness.Bits64) // We are running on a 64bit OS
+                if (Global.OSBits() == Global.Bitness.Bits64) // We are running on a 64bit OS
                 {
                     SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_SYSTEMX86, 0);
                 }
@@ -499,7 +499,7 @@ namespace UninstallAscom
             catch { }
             try
             {
-                EventLogCode.LogEvent("UninstallAscom", logMessage, EventLogEntryType.Information, GlobalConstants.EventLogErrors.UninstallASCOMInfo, "");
+                Global.LogEvent("UninstallAscom", logMessage, EventLogEntryType.Information, Global.EventLogErrors.UninstallASCOMInfo, "");
             }
             catch { }
         }
@@ -519,7 +519,7 @@ namespace UninstallAscom
             catch { }
             try
             {
-                EventLogCode.LogEvent("UninstallAscom", "Exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.UninstallASCOMError, logMessage);
+                Global.LogEvent("UninstallAscom", "Exception", EventLogEntryType.Error, Global.EventLogErrors.UninstallASCOMError, logMessage);
             }
             catch { }
         }

@@ -100,7 +100,7 @@
       <Name>ASCOM.Exceptions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Uninstaller\MigrationSupport\MigrationSupport.vbproj">
-      <Project>{645C8113-FD52-44BB-844F-63F11FEC5F74}</Project>
+      <Project>{D6780078-310A-0B4A-0617-A98F7D7B6BD4}</Project>
       <Name>MigrationSupport</Name>
     </ProjectReference>
   </ItemGroup>

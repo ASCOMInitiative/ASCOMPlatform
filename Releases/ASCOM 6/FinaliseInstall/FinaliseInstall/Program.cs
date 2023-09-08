@@ -653,7 +653,7 @@ namespace ConsoleApplication1
             catch { }
             try
             {
-                EventLogCode.LogEvent("FinaliseInstall", logMessage, EventLogEntryType.Information, GlobalConstants.EventLogErrors.UninstallASCOMInfo, "");
+                Global.LogEvent("FinaliseInstall", logMessage, EventLogEntryType.Information, Global.EventLogErrors.UninstallASCOMInfo, "");
             }
             catch { }
         }
@@ -673,7 +673,7 @@ namespace ConsoleApplication1
             catch { }
             try
             {
-                EventLogCode.LogEvent("FinaliseInstall", "Exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.UninstallASCOMError, logMessage);
+                Global.LogEvent("FinaliseInstall", "Exception", EventLogEntryType.Error, Global.EventLogErrors.UninstallASCOMError, logMessage);
             }
             catch { }
         }
