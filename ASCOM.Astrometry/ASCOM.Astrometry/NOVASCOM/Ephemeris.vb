@@ -14,12 +14,12 @@ Module EphemerisCode
     'function is used (see solarsystem().
     '
     'For more info, see the original NOVAS-C sources.
-    Friend Sub get_earth_nov(ByRef pEphDisp As IEphemeris, ByVal tjd As Double, _
-                      ByRef tdb As Double, ByRef peb() As Double, ByRef veb() As Double, ByRef pes() As Double, _
+    Friend Sub get_earth_nov(ByRef pEphDisp As IEphemeris, ByVal tjd As Double,
+                      ByRef tdb As Double, ByRef peb() As Double, ByRef veb() As Double, ByRef pes() As Double,
                       ByRef ves() As Double)
         Dim i, rc As Short
         Dim dummy, secdiff As Double
-        Static tjd_last As Double = 0.0
+        Dim tjd_last As Double = 0.0
         Dim ltdb, lpeb(3), lveb(3), lpes(3), lves(3) As Double
         'Dim TL As New TraceLogger("", "get_earth_nov")
         'TL.Enabled = True
@@ -94,8 +94,8 @@ Module EphemerisCode
     '//			0-2 are the position vector of the body, elements 3.5 are the
     '//			velocity vector of the body. 
     '//
-    Friend Sub ephemeris_nov(ByRef ephDisp As IEphemeris, ByVal tjd As Double, ByVal btype As BodyType, _
-                             ByVal num As Integer, ByVal name As String, ByVal origin As Origin, _
+    Friend Sub ephemeris_nov(ByRef ephDisp As IEphemeris, ByVal tjd As Double, ByVal btype As BodyType,
+                             ByVal num As Integer, ByVal name As String, ByVal origin As Origin,
                              ByRef pos() As Double, ByRef vel() As Double)
         Dim i As Integer
         Dim posvel(6), p(2), v(2) As Double
@@ -111,7 +111,7 @@ Module EphemerisCode
         If (ephDisp Is Nothing) Then
             Throw New Exceptions.ValueNotSetException("Ephemeris_nov Ephemeris object not set")
         Else
-            If ((origin <> origin.Barycentric) And (origin <> origin.Heliocentric)) Then Throw New Utilities.Exceptions.InvalidValueException("Ephemeris_nov Origin is neither barycentric or heliocentric")
+            If ((origin <> Origin.Barycentric) And (origin <> Origin.Heliocentric)) Then Throw New Utilities.Exceptions.InvalidValueException("Ephemeris_nov Origin is neither barycentric or heliocentric")
 
             '//
             '// Call the ephemeris for the heliocentric J2000.0 equatorial coordinates
@@ -155,7 +155,7 @@ Module EphemerisCode
             'TL.LogMessage("EphNov", "After ephDisp GetPosAndVel")
         End If
 
-        If (origin = origin.Barycentric) Then
+        If (origin = Origin.Barycentric) Then
 
             Dim sun_pos(3), sun_vel(3) As Double
 
@@ -166,7 +166,7 @@ Module EphemerisCode
             '// AN EPHEMERIS GEN THAT HANDLES BARYCENTRIC, WE CAN 
             '// CAN THIS...
             'TL.LogMessage("EphNov", "Before solsys3")
-            solsys3_nov(tjd, Body.Sun, origin.Barycentric, sun_pos, sun_vel)
+            solsys3_nov(tjd, Body.Sun, Origin.Barycentric, sun_pos, sun_vel)
             'TL.LogMessage("EphNov", "After solsys3")
             For i = 0 To 2
                 posvel(i) += sun_pos(i)
@@ -197,8 +197,8 @@ Module EphemerisCode
     '// This function must set error info... it is designed to work with 
     '// reflected exceptions from the attached ephemeris
     '// 
-    Friend Function solarsystem_nov(ByRef ephDisp As IEphemeris, ByVal tjd As Double, _
-          ByVal tdb As Double, ByVal planet As Body, ByVal origin As Origin, _
+    Friend Function solarsystem_nov(ByRef ephDisp As IEphemeris, ByVal tjd As Double,
+          ByVal tdb As Double, ByVal planet As Body, ByVal origin As Origin,
           ByRef pos() As Double, ByRef vel() As Double) As Short
         'Dim pl As NOVAS2.Body, org As NOVAS2.Origin
         'Dim TL As New TraceLogger("", "solarsystem_nov")
@@ -279,16 +279,16 @@ Module EphemerisCode
 
         Const obl As Double = 23.43929111
 
-        Static tlast As Double = 0.0
-        Static sine, cose, tmass, pbary(3), vbary(3) As Double
+        Dim tlast As Double = 0.0
+        Dim sine, cose, tmass, pbary(3), vbary(3) As Double
 
-        Dim oblr, qjd, ras, decs, diss, pos1(3), p(3, 3), dlon, sinl, _
+        Dim oblr, qjd, ras, decs, diss, pos1(3), p(3, 3), dlon, sinl,
             cosl, x, y, z, xdot, ydot, zdot, f As Double
 
         '//
         '// Check inputs
         '//
-        If ((origin <> origin.Barycentric) And (origin <> origin.Heliocentric)) Then _
+        If ((origin <> Origin.Barycentric) And (origin <> Origin.Heliocentric)) Then _
             Throw New Utilities.Exceptions.InvalidValueException("EphemerisCode.Solsys3 Invalid origin: " & origin)
 
         If ((tjd < 2340000.5) Or (tjd > 2560000.5)) Then _
@@ -344,7 +344,7 @@ Module EphemerisCode
         'approximations of the coordinates of the four largest planets.
         '*/
 
-        If (origin = origin.Barycentric) Then
+        If (origin = Origin.Barycentric) Then
             If tjd <> tlast Then
                 For i = 0 To 2
                     pbary(i) = 0.0
@@ -413,57 +413,57 @@ Module EphemerisCode
         Const factor As Double = 0.0000001
         Dim u, arg, lon, lat, t, t2, emean, sin_lon As Double
 
-        Dim con() As sun_con = { _
-          New sun_con(403406.0, 0.0, 4.721964, 1.621043), _
-          New sun_con(195207.0, -97597.0, 5.937458, 62830.348067), _
-          New sun_con(119433.0, -59715.0, 1.115589, 62830.821524), _
-          New sun_con(112392.0, -56188.0, 5.781616, 62829.634302), _
-          New sun_con(3891.0, -1556.0, 5.5474, 125660.5691), _
-          New sun_con(2819.0, -1126.0, 1.512, 125660.9845), _
-          New sun_con(1721.0, -861.0, 4.1897, 62832.4766), _
-          New sun_con(0.0, 941.0, 1.163, 0.813), _
-          New sun_con(660.0, -264.0, 5.415, 125659.31), _
-          New sun_con(350.0, -163.0, 4.315, 57533.85), _
-          New sun_con(334.0, 0.0, 4.553, -33.931), _
-          New sun_con(314.0, 309.0, 5.198, 777137.715), _
-          New sun_con(268.0, -158.0, 5.989, 78604.191), _
-          New sun_con(242.0, 0.0, 2.911, 5.412), _
-          New sun_con(234.0, -54.0, 1.423, 39302.098), _
-          New sun_con(158.0, 0.0, 0.061, -34.861), _
-          New sun_con(132.0, -93.0, 2.317, 115067.698), _
-          New sun_con(129.0, -20.0, 3.193, 15774.337), _
-          New sun_con(114.0, 0.0, 2.828, 5296.67), _
-          New sun_con(99.0, -47.0, 0.52, 58849.27), _
-          New sun_con(93.0, 0.0, 4.65, 5296.11), _
-          New sun_con(86.0, 0.0, 4.35, -3980.7), _
-          New sun_con(78.0, -33.0, 2.75, 52237.69), _
-          New sun_con(72.0, -32.0, 4.5, 55076.47), _
-          New sun_con(68.0, 0.0, 3.23, 261.08), _
-          New sun_con(64.0, -10.0, 1.22, 15773.85), _
-          New sun_con(46.0, -16.0, 0.14, 188491.03), _
-          New sun_con(38.0, 0.0, 3.44, -7756.55), _
-          New sun_con(37.0, 0.0, 4.37, 264.89), _
-          New sun_con(32.0, -24.0, 1.14, 117906.27), _
-          New sun_con(29.0, -13.0, 2.84, 55075.75), _
-          New sun_con(28.0, 0.0, 5.96, -7961.39), _
-          New sun_con(27.0, -9.0, 5.09, 188489.81), _
-          New sun_con(27.0, 0.0, 1.72, 2132.19), _
-          New sun_con(25.0, -17.0, 2.56, 109771.03), _
-          New sun_con(24.0, -11.0, 1.92, 54868.56), _
-          New sun_con(21.0, 0.0, 0.09, 25443.93), _
-          New sun_con(21.0, 31.0, 5.98, -55731.43), _
-          New sun_con(20.0, -10.0, 4.03, 60697.74), _
-          New sun_con(18.0, 0.0, 4.27, 2132.79), _
-          New sun_con(17.0, -12.0, 0.79, 109771.63), _
-          New sun_con(14.0, 0.0, 4.24, -7752.82), _
-          New sun_con(13.0, -5.0, 2.01, 188491.91), _
-          New sun_con(13.0, 0.0, 2.65, 207.81), _
-          New sun_con(13.0, 0.0, 4.98, 29424.63), _
-          New sun_con(12.0, 0.0, 0.93, -7.99), _
-          New sun_con(10.0, 0.0, 2.21, 46941.14), _
-          New sun_con(10.0, 0.0, 3.59, -68.29), _
-          New sun_con(10.0, 0.0, 1.5, 21463.25), _
-          New sun_con(10.0, -9.0, 2.55, 157208.4) _
+        Dim con() As sun_con = {
+          New sun_con(403406.0, 0.0, 4.721964, 1.621043),
+          New sun_con(195207.0, -97597.0, 5.937458, 62830.348067),
+          New sun_con(119433.0, -59715.0, 1.115589, 62830.821524),
+          New sun_con(112392.0, -56188.0, 5.781616, 62829.634302),
+          New sun_con(3891.0, -1556.0, 5.5474, 125660.5691),
+          New sun_con(2819.0, -1126.0, 1.512, 125660.9845),
+          New sun_con(1721.0, -861.0, 4.1897, 62832.4766),
+          New sun_con(0.0, 941.0, 1.163, 0.813),
+          New sun_con(660.0, -264.0, 5.415, 125659.31),
+          New sun_con(350.0, -163.0, 4.315, 57533.85),
+          New sun_con(334.0, 0.0, 4.553, -33.931),
+          New sun_con(314.0, 309.0, 5.198, 777137.715),
+          New sun_con(268.0, -158.0, 5.989, 78604.191),
+          New sun_con(242.0, 0.0, 2.911, 5.412),
+          New sun_con(234.0, -54.0, 1.423, 39302.098),
+          New sun_con(158.0, 0.0, 0.061, -34.861),
+          New sun_con(132.0, -93.0, 2.317, 115067.698),
+          New sun_con(129.0, -20.0, 3.193, 15774.337),
+          New sun_con(114.0, 0.0, 2.828, 5296.67),
+          New sun_con(99.0, -47.0, 0.52, 58849.27),
+          New sun_con(93.0, 0.0, 4.65, 5296.11),
+          New sun_con(86.0, 0.0, 4.35, -3980.7),
+          New sun_con(78.0, -33.0, 2.75, 52237.69),
+          New sun_con(72.0, -32.0, 4.5, 55076.47),
+          New sun_con(68.0, 0.0, 3.23, 261.08),
+          New sun_con(64.0, -10.0, 1.22, 15773.85),
+          New sun_con(46.0, -16.0, 0.14, 188491.03),
+          New sun_con(38.0, 0.0, 3.44, -7756.55),
+          New sun_con(37.0, 0.0, 4.37, 264.89),
+          New sun_con(32.0, -24.0, 1.14, 117906.27),
+          New sun_con(29.0, -13.0, 2.84, 55075.75),
+          New sun_con(28.0, 0.0, 5.96, -7961.39),
+          New sun_con(27.0, -9.0, 5.09, 188489.81),
+          New sun_con(27.0, 0.0, 1.72, 2132.19),
+          New sun_con(25.0, -17.0, 2.56, 109771.03),
+          New sun_con(24.0, -11.0, 1.92, 54868.56),
+          New sun_con(21.0, 0.0, 0.09, 25443.93),
+          New sun_con(21.0, 31.0, 5.98, -55731.43),
+          New sun_con(20.0, -10.0, 4.03, 60697.74),
+          New sun_con(18.0, 0.0, 4.27, 2132.79),
+          New sun_con(17.0, -12.0, 0.79, 109771.63),
+          New sun_con(14.0, 0.0, 4.24, -7752.82),
+          New sun_con(13.0, -5.0, 2.01, 188491.91),
+          New sun_con(13.0, 0.0, 2.65, 207.81),
+          New sun_con(13.0, 0.0, 4.98, 29424.63),
+          New sun_con(12.0, 0.0, 0.93, -7.99),
+          New sun_con(10.0, 0.0, 2.21, 46941.14),
+          New sun_con(10.0, 0.0, 3.59, -68.29),
+          New sun_con(10.0, 0.0, 1.5, 21463.25),
+          New sun_con(10.0, -9.0, 2.55, 157208.4)
         }
 
         '/*

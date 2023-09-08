@@ -1145,7 +1145,7 @@ namespace ASCOM.DeviceHub
 			if ( Parameters.EquatorialSystem == EquatorialCoordinateType.equJ2000 )
 			{
 				ra = xform.RAJ2000;
-				dec = xform.DecJ2000;
+				dec = xform.DECJ2000;
 			}
 			else
 			{

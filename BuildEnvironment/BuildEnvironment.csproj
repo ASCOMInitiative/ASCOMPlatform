@@ -44,7 +44,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj" PrivateAssets="All" />
+		<ProjectReference Include="..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.csproj" PrivateAssets="All" />
 		<ProjectReference Include="..\ASCOM.Attributes\ASCOM.Attributes.csproj" PrivateAssets="All" />
 		<ProjectReference Include="..\ASCOM.Controls\ASCOM.Controls\ASCOM.Controls.csproj" PrivateAssets="All" />
 		<ProjectReference Include="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj" PrivateAssets="All" />

@@ -127,8 +127,8 @@
     <Content Include="ReadMe.htm" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj">
-      <Project>{bce07b80-9e3d-43d9-be5b-50d121d40ed3}</Project>
+    <ProjectReference Include="..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.csproj">
+      <Project>{0EC4FAEB-5265-0C28-3C03-9AAF43433A73}</Project>
       <Name>ASCOM.Astrometry</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\ASCOM.Attributes\ASCOM.Attributes.csproj">

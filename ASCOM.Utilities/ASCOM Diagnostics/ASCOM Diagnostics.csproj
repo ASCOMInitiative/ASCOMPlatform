@@ -238,8 +238,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj">
-      <Project>{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}</Project>
+    <ProjectReference Include="..\..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.csproj">
+      <Project>{0EC4FAEB-5265-0C28-3C03-9AAF43433A73}</Project>
       <Name>ASCOM.Astrometry</Name>
       <Private>True</Private>
     </ProjectReference>

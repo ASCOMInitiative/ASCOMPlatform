@@ -1837,7 +1837,7 @@ Namespace NOVAS
 
         Private Shared Function Is64Bit() As Boolean
             Dim rc As Boolean
-            Static StatPath As String
+            Dim StatPath As String
 
             'StatPath is a static variable because GetFolderPath takes about 10 times longer to execute than
             'the supervisory NOVAS routines. If we called it every time the overhead would be enormous.
