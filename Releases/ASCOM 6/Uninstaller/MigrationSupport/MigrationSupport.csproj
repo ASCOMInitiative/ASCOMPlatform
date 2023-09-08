@@ -124,9 +124,6 @@
     <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\Units.cs">
       <Link>Units.cs</Link>
     </Compile>
-    <Compile Include="My Project\MyNamespace.Static.1.Designer.cs" />
-    <Compile Include="My Project\MyNamespace.Static.2.Designer.cs" />
-    <Compile Include="My Project\MyNamespace.Static.3.Designer.cs" />
     <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\AllUsersFileSystemProvider.cs">
       <Link>AllUsersFileSystemProvider.cs</Link>
     </Compile>
@@ -166,45 +163,14 @@
     <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\XMLAccess.cs">
       <Link>XMLAccess.cs</Link>
     </Compile>
-    <Compile Include="My Project\AssemblyInfo.cs" />
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="..\..\..\..\AssemblyVersionInfo.cs">
-      <Link>My Project\AssemblyVersionInfo.cs</Link>
-    </Compile>
-    <Compile Include="My Project\Application.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Application.myapp</DependentUpon>
-    </Compile>
-    <Compile Include="Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="My Project\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <Link>AssemblyVersionInfo.cs</Link>
     </Compile>
     <Compile Include="TraceLogger.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>ASCOM.Utilities.My.Resources</CustomToolNamespace>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\..\..\ASCOM.snk" />
-    <None Include="My Project\Application.myapp">
-      <Generator>MyApplicationCodeGenerator</Generator>
-      <LastGenOutput>Application.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="My Project\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <CustomToolNamespace>ASCOM.Utilities.My</CustomToolNamespace>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">

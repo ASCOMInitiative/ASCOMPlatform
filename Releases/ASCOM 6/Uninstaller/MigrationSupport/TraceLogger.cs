@@ -611,13 +611,13 @@ namespace ASCOM.Utilities
                             throw new ValueNotSetException("TRACELOGGER.CREATELOGFILE - Call made but no log file type has been set");
                         if (string.IsNullOrEmpty(g_LogFilePath)) // Default behaviour using the current user's Document directory
                         {
-                            My.MyProject.Computer.FileSystem.CreateDirectory(g_DefaultLogFilePath); // Create the directory if it doesn't exist
+                            Directory.CreateDirectory(g_DefaultLogFilePath); // Create the directory if it doesn't exist
                             FileNameBase = g_DefaultLogFilePath + @"\ASCOM." + g_LogFileType + "." + Strings.Format(DateTime.Now, "HHmm.ssfff");
                         }
                         else // User has given a specific path so use that
                         {
                             TodaysLogFilePath = g_LogFilePath + Global.TRACE_LOGGER_FILENAME_BASE + Strings.Format(DateTime.Now, Global.TRACE_LOGGER_FILE_NAME_DATE_FORMAT); // Append Logs yyyy-mm-dd to the user supplied log file
-                            My.MyProject.Computer.FileSystem.CreateDirectory(TodaysLogFilePath); // Create the directory if it doesn't exist
+                            Directory.CreateDirectory(TodaysLogFilePath); // Create the directory if it doesn't exist
                             FileNameBase = TodaysLogFilePath + @"\ASCOM." + g_LogFileType + "." + Strings.Format(DateTime.Now, "HHmm.ssfff");
                         }
                         do // Create a unique log file name based on date, time and required name
