@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using static ASCOM.Utilities.Global;
+using ASCOM;
 
 namespace InstallTemplates
 {
@@ -29,7 +30,6 @@ namespace InstallTemplates
                 string[] vsDirs = new string[0];
 
                 Dictionary<string, string> vsTemplateDirectoryList; // Dictionary to hold the list of install directories holding templates
-                string TemplateSourceDirectory = "";
                 vsTemplateDirectoryList = new Dictionary<string, string>();
 
                 TL = new TraceLogger("", "InstallTemplates"); // Create a trace logger so we can log what happens
@@ -149,44 +149,7 @@ namespace InstallTemplates
                 }
                 else // Install templates
                 {
-                    try
-                    {
-                        LogMessage("Main", "Installing new templates...");
-
-                        if (Environment.Is64BitOperatingSystem)
-                        {
-                            LogMessage("Main", "OS is 64bit");
-                            TemplateSourceDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\ASCOM\Platform 7 Developer Components\Templates";
-                        }
-                        else
-                        {
-                            LogMessage("Main", "OS is 32bit");
-                            TemplateSourceDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\ASCOM\Platform 7 Developer Components\Templates";
-                        }
-
-                        LogMessage("Main", "Template Source Directory: " + TemplateSourceDirectory);
-
-                        // Search registry for template directories
-                        vsTemplateDirectoryList = AddTemplateDirectories(FindTemplateDirectoriesInRegistry(Registry.CurrentUser, @"Software\Microsoft\VisualStudio"), vsTemplateDirectoryList);
-                        vsTemplateDirectoryList = AddTemplateDirectories(FindTemplateDirectoriesInRegistry(Registry.CurrentUser, @"Software\Microsoft\WDExpress"), vsTemplateDirectoryList);
-
-                        // Search My Documents file system for template directories
-                        vsTemplateDirectoryList = AddTemplateDirectories(FindTemplateDirectoriesInFileSystem(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"Visual Studio*"), vsTemplateDirectoryList);
-
-                        LogMessage("Main", " ");
-                        foreach (KeyValuePair<string, string> templateDir in vsTemplateDirectoryList) // Install new templates in every template directory on this machine
-                        {
-                            LogMessage("Main", "Installing templates in directory: " + templateDir.Key.ToString());
-                            InstallTemplates(templateDir.Key.ToString(), TemplateSourceDirectory);
-                        }
-
-                    }
-                    catch (Exception ex)
-                    {
-                        LogError("Main", ex.ToString());
-                        ReturnCode = 1;
-                    }
-
+                    throw new ASCOM.InvalidOperationException($"The command: {args[0]} is not supported, only the /CLEANUP command is supported.");
                 }
 
                 // Clean up trace logger
@@ -342,159 +305,6 @@ namespace InstallTemplates
             Console.WriteLine(logMessage);
             TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
             Global.LogEvent("InstallTemplates", "Exception", EventLogEntryType.Error, EventLogErrors.InstallTemplatesError, logMessage);
-        }
-
-        /// <summary>
-        /// Removes templates within a particular version of Visual Studio
-        /// </summary>
-        /// <param name="Name">Descriptive name of the Visual Studio release</param>
-        /// <param name="TemplateBasePath">Base path to its location in the HKCU</param>
-        /// <returns></returns>
-        static int InstallTemplates(string TemplateBasePath, string TemplateSourceDirectory)
-        {
-            const string spaces = "    ";
-
-            try
-            {
-                LogMessage("InstallTemplates", "TemplateBasePath: " + TemplateBasePath);
-                LogMessage("InstallTemplates", "TemplateSourceDirectory: " + TemplateSourceDirectory);
-
-                string Platform5VB = TemplateBasePath + @"\Visual Basic\"; // Set up expected paths
-                string Platform5CSharp = TemplateBasePath + @"\Visual C#\";
-                string Platform6VB = TemplateBasePath + @"\Visual Basic\ASCOM6\";
-                string Platform6CSharp = TemplateBasePath + @"\Visual C#\ASCOM6\";
-
-                LogMessage("InstallTemplates", spaces + "VB Path (Platform 5): " + Platform5VB);
-                LogMessage("InstallTemplates", spaces + "C# Path (Platform 5): " + Platform5CSharp);
-                LogMessage("InstallTemplates", spaces + "VB Path (Platform 6): " + Platform6VB);
-                LogMessage("InstallTemplates", spaces + "C# Path (Platform 6): " + Platform6CSharp);
-
-                if (Directory.Exists(Platform6CSharp))
-                {
-                    LogMessage("InstallTemplates", spaces + "Path: " + Platform6CSharp + " already exists");
-                }
-                else
-                {
-                    LogMessage("InstallTemplates", spaces + "Path: " + Platform6CSharp + " does not exist, creating directory");
-                    Directory.CreateDirectory(Platform6CSharp);
-                }
-                CleanDirectory(Platform6CSharp); // Clean the C# directory
-
-                if (Directory.Exists(Platform6VB))
-                {
-                    LogMessage("InstallTemplates", spaces + "Path: " + Platform6VB + " already exists");
-                }
-                else
-                {
-                    LogMessage("InstallTemplates", spaces + "Path: " + Platform6VB + " does not exist, creating directory");
-                    Directory.CreateDirectory(Platform6VB);
-                }
-                CleanDirectory(Platform6VB); // Clean the C# directory
-
-                FileDelete(Platform5CSharp + "ASCOM Camera Driver (C#).zip"); //Platform 5 C#
-                FileDelete(Platform5CSharp + "ASCOM Dome Driver (C#).zip");
-                FileDelete(Platform5CSharp + "ASCOM FilterWheel Driver (C#).zip");
-                FileDelete(Platform5CSharp + "ASCOM Focuser Driver (C#).zip");
-                FileDelete(Platform5CSharp + "ASCOM Rotator Driver (C#).zip");
-                FileDelete(Platform5CSharp + "ASCOM Switch Driver (C#).zip");
-                FileDelete(Platform5CSharp + "ASCOM Telescope Driver (C#).zip");
-                FileDelete(Platform5CSharp + "ASCOM Local Server (singleton).zip");
-
-                FileDelete(Platform5VB + "ASCOM Camera Driver (VB).zip"); // Platform 5 VB
-                FileDelete(Platform5VB + "ASCOM Dome Driver (VB).zip");
-                FileDelete(Platform5VB + "ASCOM FilterWheel Driver (VB).zip");
-                FileDelete(Platform5VB + "ASCOM Focuser Driver (VB).zip");
-                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB).zip");
-                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(2).zip"); //Remove copies introduced by a bad content file in Platform 5 Templates SP1
-                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(3).zip");
-                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(4).zip");
-                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(5).zip");
-                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(6).zip");
-                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(7).zip");
-                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(8).zip");
-                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(9).zip");
-                FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(10).zip");
-                FileDelete(Platform5VB + "ASCOM Switch Driver (VB).zip");
-                FileDelete(Platform5VB + "ASCOM Telescope Driver (VB).zip");
-
-                LogMessage("InstallTemplates", spaces + "About to copy files from - template source directory: " + TemplateSourceDirectory);
-
-                foreach (string item in Directory.GetFiles(TemplateSourceDirectory, "*.zip"))
-                {
-                    LogMessage("InstallTemplates", spaces + "Found zip file: " + item);
-                    string fileName = Path.GetFileName(item);
-                    LogMessage("InstallTemplates", spaces + "Processing zip file: " + fileName);
-
-                    if (item.ToUpperInvariant().Contains("CS")) // CSharp item
-                    {
-                        LogMessage("InstallTemplates", spaces + "Copying C# template: " + item + " as: " + Platform6CSharp + Path.GetFileName(item));
-                        File.Copy(item, Platform6CSharp + Path.GetFileName(item), true);
-                    }
-                    if (item.ToUpperInvariant().Contains("VB")) // VBitem
-                    {
-                        LogMessage("InstallTemplates", spaces + "Copying VB template: " + item + " as: " + Platform6VB + Path.GetFileName(item));
-                        File.Copy(item, Platform6VB + Path.GetFileName(item), true);
-                    }
-                }
-
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                LogError("FileDelete", "  Exception installing templates: " + ex.ToString());
-                ReturnCode = 4;
-                return 4;
-            }
-        }
-
-        /// <summary>
-        /// Erases a file, if it exists, silently logging any exceptions
-        /// </summary>
-        /// <param name="DeletePath">Path to the file to delete</param>
-        /// <param name="DeleteFile">Name of the file to delete</param>
-        static void FileDelete(string DeleteFile)
-        {
-            bool FileExists = File.Exists(DeleteFile);
-
-            try
-            {
-
-                if (FileExists)
-                {
-                    LogMessage("FileDelete", "  Deleting file: " + DeleteFile);
-                    File.Delete(DeleteFile); // Only delete it if it exists!
-                }
-                else
-                {
-                    LogMessage("FileDelete", "  File: " + DeleteFile + " does not exist.");
-                }
-            }
-            catch (Exception ex)
-            {
-                LogError("FileDelete", "  Exception Deleting file: " + FileExists.ToString() + ", " + DeleteFile + " " + ex.ToString());
-                ReturnCode = 5;
-            }
-        }
-
-        /// <summary>
-        /// Erase all files in a directory
-        /// </summary>
-        /// <param name="DirectoryPath">Full path of the directory to clear</param>
-        static void CleanDirectory(string DirectoryPath)
-        {
-            if (Directory.Exists(DirectoryPath))
-            {
-                LogMessage("CleanDirectory", "Cleaning directory: " + DirectoryPath);
-                string[] directoryFiles = Directory.GetFiles(DirectoryPath);
-                foreach (string file in directoryFiles)
-                {
-                    FileDelete(file);
-                }
-            }
-            else
-            {
-                LogMessage("CleanDirectory", "Directory: " + DirectoryPath + " does not exist, no files to clean.");
-            }
         }
 
     }
