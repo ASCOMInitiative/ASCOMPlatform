@@ -58,7 +58,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache.cs" />
-    <Compile Include="CpuId.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="NotInCacheException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

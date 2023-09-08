@@ -1130,7 +1130,7 @@ Public Class EarthRotationParameters : Implements IDisposable
                                 End Select
 
                                 ' Implement the new task in the root folder either by updating the existing task or creating a new task
-                                LogScheduledTaskMessage("ManageScheduledTask", String.Format("The {0} task does not exist so registering it now.", DOWNLOAD_TASK_NAME))
+                                LogScheduledTaskMessage("ManageScheduledTask", $"Registering the {DOWNLOAD_TASK_NAME} task.")
                                 service.RootFolder.RegisterTaskDefinition(DOWNLOAD_TASK_NAME, taskDefinition, TaskCreation.CreateOrUpdate, "SYSTEM", Nothing, TaskLogonType.ServiceAccount)
                                 LogScheduledTaskMessage("ManageScheduledTask", String.Format("New task registered OK."))
                             Case Else
