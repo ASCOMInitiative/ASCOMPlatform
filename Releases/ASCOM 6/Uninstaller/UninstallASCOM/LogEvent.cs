@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace UninstallAscom
+namespace SetACL
 {
     internal enum EventLogErrors : int
     {

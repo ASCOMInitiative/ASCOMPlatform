@@ -107,7 +107,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsExtras", "Driver In
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinaliseInstall", "Releases\ASCOM 6\FinaliseInstall\FinaliseInstall\FinaliseInstall.csproj", "{64C79557-F7A9-4D24-9F2D-C18E104C8A24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UninstallAscom", "Releases\ASCOM 6\Uninstaller\UninstallASCOM\UninstallAscom.csproj", "{8D8F18F1-5298-49CC-9579-6C04568D9771}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetACL", "Releases\ASCOM 6\Uninstaller\UninstallASCOM\SetACL.csproj", "{8D8F18F1-5298-49CC-9579-6C04568D9771}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code Analysis", "Code Analysis", "{F1B91A53-8136-4D7A-A0E8-412AEF6B0F2C}"
 	ProjectSection(SolutionItems) = preProject
