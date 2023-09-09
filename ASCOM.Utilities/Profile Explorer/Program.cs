@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace RemoveASCOM
+namespace ASCOM.Utilities
 {
     internal static class Program
     {
@@ -19,7 +23,7 @@ namespace RemoveASCOM
             // Start the application UI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new frmProfileExplorer());
         }
 
         /// <summary>
@@ -31,18 +35,18 @@ namespace RemoveASCOM
         {
             try
             {
-                using (TraceLogger logger = new TraceLogger("", "RemoveAscomException"))
+                using (TraceLogger logger = new TraceLogger("", "ProfileExplorerException"))
                 {
                     logger.Enabled = true;
                     Exception ex = eventArgs.ExceptionObject as Exception;
-                    logger.LogMessageCrLf("RemoveAscom", $"An un-handled application exception occurred, please report this on the ASCOM-Talk groups.io forum: {ex.Message}.\r\n{ex}");
+                    logger.LogMessageCrLf("ProfileExplorer", $"An un-handled application exception occurred, please report this on the ASCOM-Talk groups.io forum: {ex.Message}.\r\n{ex}");
                     logger.Enabled = false;
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An un-handled application exception occurred but it was not possible to create an error log: {ex.Message}.\r\n{ex}\r\n" +
-                    $"RemoveAscom application exception: \r\n{(Exception)eventArgs.ExceptionObject}");
+                    $"ProfileExplorer application exception: \r\n{(Exception)eventArgs.ExceptionObject}");
             }
         }
 
@@ -55,17 +59,17 @@ namespace RemoveASCOM
         {
             try
             {
-                using (TraceLogger logger = new TraceLogger("", "RemoveAscomThreadException"))
+                using (TraceLogger logger = new TraceLogger("", "ProfileExplorerThreadException"))
                 {
                     logger.Enabled = true;
-                    logger.LogMessageCrLf("RemoveAscom", $"An un-handled thread exception occurred, please report this on the ASCOM-Talk groups.io forum: {eventArgs.Exception.Message}.\r\n{eventArgs.Exception}");
+                    logger.LogMessageCrLf("ProfileExplorer", $"An un-handled thread exception occurred, please report this on the ASCOM-Talk groups.io forum: {eventArgs.Exception.Message}.\r\n{eventArgs.Exception}");
                     logger.Enabled = false;
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An un-handled thread exception occurred but it was not possible to create an error log: {ex.Message}.\r\n{ex}\r\n" +
-                    $"RemoveAscom thread exception: \r\n{(Exception)eventArgs.Exception}");
+                    $"ProfileExplorer thread exception: \r\n{(Exception)eventArgs.Exception}");
             }
         }
     }
