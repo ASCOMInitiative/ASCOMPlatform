@@ -39,7 +39,7 @@ namespace ASCOM.Utilities
                 {
                     logger.Enabled = true;
                     Exception ex = eventArgs.ExceptionObject as Exception;
-                    logger.LogMessageCrLf("ProfileExplorer", $"An un-handled application exception occurred, please report this on the ASCOM-Talk groups.io forum: {ex.Message}.\r\n{ex}");
+                    logger?.LogMessageCrLf("ProfileExplorer", $"An un-handled application exception occurred, please report this on the ASCOM-Talk groups.io forum: {ex.Message}.\r\n{ex}");
                     logger.Enabled = false;
                 }
             }
@@ -62,7 +62,7 @@ namespace ASCOM.Utilities
                 using (TraceLogger logger = new TraceLogger("", "ProfileExplorerThreadException"))
                 {
                     logger.Enabled = true;
-                    logger.LogMessageCrLf("ProfileExplorer", $"An un-handled thread exception occurred, please report this on the ASCOM-Talk groups.io forum: {eventArgs.Exception.Message}.\r\n{eventArgs.Exception}");
+                    logger?.LogMessageCrLf("ProfileExplorer", $"An un-handled thread exception occurred, please report this on the ASCOM-Talk groups.io forum: {eventArgs.Exception.Message}.\r\n{eventArgs.Exception}");
                     logger.Enabled = false;
                 }
             }

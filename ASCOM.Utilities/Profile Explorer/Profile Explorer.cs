@@ -20,6 +20,8 @@ namespace ASCOM.Utilities
         private string SelectedFullPath;
         private ActionType Action;
 
+        TraceLogger logger;
+
         private enum ActionType : int
         {
             None,
@@ -38,6 +40,9 @@ namespace ASCOM.Utilities
         public frmProfileExplorer()
         {
             InitializeComponent();
+            logger = new TraceLogger("ProfileExplorer");
+            logger.Enabled = false;
+            logger?.LogMessage("FORMlOad", "Started");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -68,6 +73,7 @@ namespace ASCOM.Utilities
                 KeyTree.TopNode.Expand();
                 SelectedFullPath = ROOT_NAME;
                 KeyValues.Columns[0].Width = 200;
+                logger?.LogMessage("FORMlOad", "Completed");
             }
             catch (Exception ex)
             {
@@ -203,13 +209,14 @@ namespace ASCOM.Utilities
         {
             try
             {
+                logger?.LogMessage("CellValueChanged", $"Column: {e.ColumnIndex}, Row: {e.RowIndex}");
+
                 if (KeyValues.IsCurrentRowDirty) // Commit value back to the profile store
                 {
                     switch (e.ColumnIndex)
                     {
                         case 0: // Value name has changed
                             {
-                                string oldValueName = Values.Keys[e.RowIndex];
 
                                 try
                                 {
@@ -237,13 +244,9 @@ namespace ASCOM.Utilities
                                 }
 
                                 // Create new value
-
-                                MessageBox.Show($"row index: {e.RowIndex}, Values.count: {Values.Count}, old value name: {oldValueName}");
-
                                 if (e.RowIndex <= (Values.Count - 1))
                                 {
-                                    MessageBox.Show($"Deleting KeyPath: {KeyPath}, value being deleted: {oldValueName}");
-                                    Prof.DeleteProfile(KeyPath, oldValueName); // Delete old value if not a new row
+                                    Prof.DeleteProfile(KeyPath, Values.Keys[e.RowIndex]); // Delete old value if not a new row
                                 }
                                 // Make the last row value read only if its data name is null or empty, i.e. hasn't been filled out yet
 
@@ -255,25 +258,34 @@ namespace ASCOM.Utilities
                         case 1: // Value data has changed
                             {
                                 // Write new value back to the profile
-
+                                logger?.LogMessage("CellValueChanged", $"Value data changed");
+                                string valueName = KeyValues.CurrentRow.Cells[0].Value.ToString() ?? "";
                                 try
                                 {
-                                    if ((KeyValues.CurrentRow.Cells[0].Value.ToString() ?? "") == REGISTRY_DEFAULT)
+                                    logger?.LogMessage("CellValueChanged", $"KeyValues.CurrentRow.Cells[0].Value: {valueName}");
+                                    if (valueName == REGISTRY_DEFAULT)
                                     {
-                                        KeyValues.CurrentRow.Cells[0].Value = "";
+                                        logger?.LogMessage("CellValueChanged", $"Setting cell 0 to empty string");
+
+                                        valueName= "";
                                     }
                                 }
                                 catch (Exception ex)
                                 {
-                                    KeyValues.CurrentRow.Cells[0].Value = "";
+                                    valueName= "";
+                                    logger?.LogMessage("CellValueChanged", $"Exception: {ex}");
                                 }
                                 // Turn the (Default) key name into empty string
 
                                 if (KeyValues.CurrentCell.Value is null) // Guard against value deleted, in which case create an empty string
                                 {
+                                    logger?.LogMessage("CellValueChanged", $"CurrenCell.value is null");
                                     KeyValues.CurrentCell.Value = "";
                                 }
-                                Prof.WriteProfile(KeyPath, KeyValues.CurrentRow.Cells[0].Value.ToString(), KeyValues.CurrentRow.Cells[1].Value.ToString());
+
+                                logger?.LogMessage("CellValueChanged", $"Setting profile to - KeyPath: {KeyPath}, Cell 0 value: {valueName}, Cell 1 value: {KeyValues.CurrentRow.Cells[1].Value}");
+                                
+                                Prof.WriteProfile(KeyPath, valueName, KeyValues.CurrentRow.Cells[1].Value.ToString());
                                 RefreshKeyValues();
                                 break;
                             }
