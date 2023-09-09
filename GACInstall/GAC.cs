@@ -34,8 +34,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Globalization;
 using System.Runtime.InteropServices.ComTypes;
+using System;
 
-namespace System.GAC
+namespace UninstallAscom
 {
 
     #region Flags

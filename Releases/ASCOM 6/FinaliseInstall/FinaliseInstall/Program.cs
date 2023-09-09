@@ -6,14 +6,13 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using System.Windows.Forms;
-using ASCOM.Utilities;
 using System.Management;
 using System.Security;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Globalization;
 
-namespace ConsoleApplication1
+namespace FinaliseInstall
 {
     /// <summary>
     /// 
@@ -653,7 +652,7 @@ namespace ConsoleApplication1
             catch { }
             try
             {
-                Global.LogEvent("FinaliseInstall", logMessage, EventLogEntryType.Information, Global.EventLogErrors.UninstallASCOMInfo, "");
+                Global.LogEvent("FinaliseInstall", logMessage, EventLogEntryType.Information, EventLogErrors.UninstallASCOMInfo, "");
             }
             catch { }
         }
@@ -673,7 +672,7 @@ namespace ConsoleApplication1
             catch { }
             try
             {
-                Global.LogEvent("FinaliseInstall", "Exception", EventLogEntryType.Error, Global.EventLogErrors.UninstallASCOMError, logMessage);
+                Global.LogEvent("FinaliseInstall", "Exception", EventLogEntryType.Error, EventLogErrors.UninstallASCOMError, logMessage);
             }
             catch { }
         }

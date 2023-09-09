@@ -6,7 +6,6 @@ using static System.Math;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using ASCOM.Utilities;
-using Microsoft.VisualBasic;
 
 namespace ASCOM.Astrometry.Transform
 {

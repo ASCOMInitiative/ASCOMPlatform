@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using ASCOM.Utilities;
+//using ASCOM.Utilities;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using static ASCOM.Utilities.Global;
-using ASCOM;
+//using static ASCOM.Utilities.Global;
 
 namespace InstallTemplates
 {

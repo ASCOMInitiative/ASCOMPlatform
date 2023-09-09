@@ -1,7 +1,7 @@
 ﻿using ASCOM.DeviceInterface;
-using ASCOM.DeviceInterface.DeviceState;
-using ASCOM.DriverAccess;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ASCOM.DriverAccess;
+using ASCOM.DeviceInterface.DeviceState;
 
 namespace PlatformUnitTests
 {
@@ -9,7 +9,7 @@ namespace PlatformUnitTests
     public class ComDeviceStateTests
     {
         [TestMethod]
-        public void Camera()
+        public void CameraTest()
         {
             using (Camera device = new Camera("ASCOM.Simulator.Camera"))
             {
@@ -36,7 +36,7 @@ namespace PlatformUnitTests
         }
 
         [TestMethod]
-        public void CoverCalibrator()
+        public void CoverCalibratorTest()
         {
             using (CoverCalibrator device = new CoverCalibrator("ASCOM.Simulator.CoverCalibrator"))
             {
@@ -61,7 +61,7 @@ namespace PlatformUnitTests
         }
 
         [TestMethod]
-        public void Dome()
+        public void DomeTest()
         {
             using (Dome device = new Dome("ASCOM.Simulator.Dome"))
             {
@@ -86,7 +86,7 @@ namespace PlatformUnitTests
             }
         }
         [TestMethod]
-        public void FilterWheel()
+        public void FilterWheelTest()
         {
             using (FilterWheel device = new FilterWheel("ASCOM.Simulator.FilterWheel"))
             {
@@ -106,7 +106,7 @@ namespace PlatformUnitTests
             }
         }
         [TestMethod]
-        public void Focuser()
+        public void FocuserTest()
         {
             using (Focuser device = new Focuser("ASCOM.Simulator.Focuser"))
             {
@@ -129,7 +129,7 @@ namespace PlatformUnitTests
         }
 
         [TestMethod]
-        public void ObservingConditions()
+        public void ObservingConditionsTest()
         {
             using (ObservingConditions device = new ObservingConditions("ASCOM.Simulator.ObservingConditions"))
             {
@@ -162,7 +162,7 @@ namespace PlatformUnitTests
         }
 
         [TestMethod]
-        public void Rotator()
+        public void RotatorTest()
         {
             using (Rotator device = new Rotator("ASCOM.Simulator.Rotator"))
             {
@@ -185,7 +185,7 @@ namespace PlatformUnitTests
         }
 
         [TestMethod]
-        public void SafetyMonitor()
+        public void SafetyMonitorTest()
         {
             using (SafetyMonitor device = new SafetyMonitor("ASCOM.Simulator.SafetyMonitor"))
             {
@@ -206,7 +206,7 @@ namespace PlatformUnitTests
         }
 
         [TestMethod]
-        public void Video()
+        public void VideoTest()
         {
             using (Video device = new Video("ASCOM.Simulator.Video"))
             {
@@ -228,7 +228,7 @@ namespace PlatformUnitTests
         }
 
         [TestMethod]
-        public void Telescope()
+        public void TelescopeTest()
         {
             using (Telescope device = new Telescope("ASCOM.Simulator.Telescope"))
             {

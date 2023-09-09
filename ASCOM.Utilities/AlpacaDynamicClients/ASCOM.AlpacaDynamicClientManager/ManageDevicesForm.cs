@@ -6,7 +6,6 @@
 // The application generates required code and stores this in memory. When the class is complete it is compiled and the resultant assembly persisted to disk
 // into the same directory as the dynamic client local server, which is then called to register the driver assembly.
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;

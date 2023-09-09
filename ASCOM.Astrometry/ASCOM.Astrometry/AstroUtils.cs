@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using static ASCOM.Astrometry.GlobalItems;
 using ASCOM.Utilities;
-using Microsoft.VisualBasic;
 
 namespace ASCOM.Astrometry.AstroUtils
 {

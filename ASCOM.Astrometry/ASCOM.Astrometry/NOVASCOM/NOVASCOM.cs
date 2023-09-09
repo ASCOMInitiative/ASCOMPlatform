@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 using ASCOM.Astrometry.Kepler;
 using ASCOM.Astrometry.NOVAS;
 using static ASCOM.Astrometry.NOVAS.NOVAS2;
-using Microsoft.VisualBasic;
 
 namespace ASCOM.Astrometry.NOVASCOM
 {

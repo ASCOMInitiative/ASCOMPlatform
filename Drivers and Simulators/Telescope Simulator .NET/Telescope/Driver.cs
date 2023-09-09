@@ -25,7 +25,6 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
-using ASCOM.Utilities;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;

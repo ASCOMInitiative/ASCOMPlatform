@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using ASCOM.Utilities;
 using ASCOM.Utilities.Exceptions;
-using Microsoft.VisualBasic;
 using System.Windows.Forms;
 
 namespace ASCOM.Astrometry.SOFA

@@ -202,7 +202,7 @@ namespace PlatformUnitTests
         public void SetAsyncDriverAccess()
         {
             // Create a Switch simulator device
-            ASCOM.DriverAccess.Switch switchSim = new ASCOM.DriverAccess.Switch("ASCOM.Simulator.Switch");
+            Switch switchSim = new Switch("ASCOM.Simulator.Switch");
 
             // Connect
             switchSim.Connected = true;

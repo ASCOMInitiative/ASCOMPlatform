@@ -84,11 +84,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LogEvent.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="..\..\..\..\AssemblyVersionInfo.cs">
       <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TraceLogger.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -98,10 +100,6 @@
     <ProjectReference Include="..\..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
       <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
       <Name>ASCOM.Exceptions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Uninstaller\MigrationSupport\MigrationSupport.vbproj">
-      <Project>{D6780078-310A-0B4A-0617-A98F7D7B6BD4}</Project>
-      <Name>MigrationSupport</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

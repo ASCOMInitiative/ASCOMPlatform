@@ -6,7 +6,6 @@ using System.IO;
 using System.ServiceProcess;
 using System.Windows.Forms;
 using ASCOM.Utilities;
-using Microsoft.VisualBasic;
 using Microsoft.Win32.TaskScheduler;
 
 namespace ASCOM.Astrometry

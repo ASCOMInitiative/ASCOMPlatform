@@ -2,7 +2,6 @@
 // Common items for the Kepler code
 
 using static System.Math;
-using ASCOM.Astrometry.Kepler;
 
 namespace ASCOM.Astrometry
 {

@@ -1,9 +1,6 @@
 using ASCOM.Alpaca.Clients;
 using ASCOM.Com;
 using ASCOM.Common;
-using ASCOM.Common.Alpaca;
-using ASCOM.Common.DeviceInterfaces;
-using ASCOM.Common.Interfaces;
 using ASCOM.Tools;
 using Microsoft.Win32;
 using System;

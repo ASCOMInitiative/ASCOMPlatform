@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 using static ASCOM.Utilities.Serial;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
-using static ASCOM.Utilities.Global;
 
 // These items are shared between the ASCOM.Utilities and ASCOM.Astrometry assemblies
 
