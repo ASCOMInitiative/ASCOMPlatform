@@ -129,7 +129,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Simulator.Video", "Dr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ASCOM.Native.6.1", "ASCOM.Utilities.Video.NativeHelpers\ASCOM.Native.6.1.vcxproj", "{D2A70AD3-B305-4609-B1E1-0EE5449B5353}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallTemplates", "Releases\ASCOM 6\InstallTemplates\InstallTemplates\InstallTemplates.csproj", "{779D544E-9B02-4D78-8AD8-F53C05975D6D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoveOldTemplates", "Releases\ASCOM 6\InstallTemplates\InstallTemplates\RemoveOldTemplates.csproj", "{779D544E-9B02-4D78-8AD8-F53C05975D6D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MakeDynamicLists", "Remove ASCOM\Find GUIDs\MakeDynamicLists.csproj", "{227ED9A5-66AD-470D-976F-57442AA2C73C}"
 EndProject
