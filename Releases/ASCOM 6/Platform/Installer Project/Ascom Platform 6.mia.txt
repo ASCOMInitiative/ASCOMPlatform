@@ -894,7 +894,7 @@ end
 Comment: Ensure that the corrrect Profile registry ACL is set on every run to repair broken installations
 Set Variable PROGRESSTEXT to Preparing ASCOM Profile Store...
 Write into Text File $SETUPLOG$ from Value $TIME$ Setting Profile registry ACL (at end of file)
-Run Program $SUPPORTDIR$\UninstallAscom.exe /SETPROFILEACL (WAIT, get result into variable RC)
+Run Program $SUPPORTDIR$\SetACL.exe /SETPROFILEACL (WAIT, get result into variable RC)
 Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Set ACL on ASCOM Profile Store (at end of file)
  
 Comment: Test whether an error occured when setting the Profile ACL and report this if necessary
@@ -947,8 +947,8 @@ Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\msvbvm60.dll to $WINSY
 Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\comdlg32.ocx to $WINSYSDIR$ (Never Overwrite)
 Comment: Platform 5 assemblies
 Comment: ASCOM.DriverAccess 1.0.5 is not copied because it is replaced with 1.0.6 in Platform 6
-Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\policy.1.0.ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\Platform\v5.5
-Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\DriverAccess.config to $COMMONFILES$\ASCOM\Platform\v5.5
+Install Files ..\..\..\..\InstallerSupport\RedirectionPolicies\policy.1.0.ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\Platform\v5.5
+Install Files ..\..\..\..\InstallerSupport\RedirectionPolicies\Policy.1.0.DriverAccess.xml to $COMMONFILES$\ASCOM\Platform\v5.5
 Install Assembly ..\..\..\..\Interfaces\Master Interfaces\ASCOM.Interfaces.dll to Global Assembly Cache
 Comment: Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.dll to Global Assembly Cache
 Install Assembly ..\..\..\..\Interfaces\HelperPIAs\ASCOM.Helper.dll to Global Assembly Cache
@@ -999,9 +999,10 @@ Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\These files are n
  
 [DEFINE REGION: Platform 6 files]
 Comment: Install exceptions redirection policy
-Install Files ..\..\..\..\ASCOM Redirection Policies\policy.1.0.ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6.0
-Install Files ..\..\..\..\ASCOM Redirection Policies\policy.1.1.ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6.0
-Install Files ..\..\..\..\ASCOM Redirection Policies\ExceptionsPolicy.xml to $COMMONFILES$\ASCOM\Platform\v6.0
+Install Files ..\..\..\..\InstallerSupport\RedirectionPolicies\policy.1.0.ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6.0
+Install Files ..\..\..\..\InstallerSupport\RedirectionPolicies\Policy.1.0.Exceptions.xml to $COMMONFILES$\ASCOM\Platform\v6.0
+Install Files ..\..\..\..\InstallerSupport\RedirectionPolicies\policy.1.1.ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6.0
+Install Files ..\..\..\..\InstallerSupport\RedirectionPolicies\Policy.1.1.Exceptions.xml to $COMMONFILES$\ASCOM\Platform\v6.0
 Comment: Updated Utiities 5.5.6 to replace 5.5.1 that access registry rather than XML files, otherwise unchanged
 Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
 Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
@@ -1035,8 +1036,8 @@ Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.As
 Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v6
 Install Assembly ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
 Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
-Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\Platform 5.5 Redirection Policy\policy.5.5.ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v5.5
-Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\Platform 5.5 Redirection Policy\AstrometryPolicy.xml to $COMMONFILES$\ASCOM\Platform\v5.5
+Install Files ..\..\..\..\InstallerSupport\RedirectionPolicies\policy.5.5.ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v5.5
+Install Files ..\..\..\..\InstallerSupport\RedirectionPolicies\policy.5.5.Astrometry.xml to $COMMONFILES$\ASCOM\Platform\v5.5
 Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll to $COMMONFILES$\ASCOM\Astrometry
 Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb to $COMMONFILES$\ASCOM\Astrometry
 Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll to $COMMONFILES$\ASCOM\Astrometry
@@ -1054,7 +1055,7 @@ Install Files ..\..\..\..\NOVAS\NOVAS-31\NOVAS3\x64\Release\NOVAS31-64.dll to $C
 Install Files ..\..\..\..\NOVAS\NOVAS-31\NOVAS3\x64\Release\NOVAS31-64.pdb to $COMMONFILES$\ASCOM\Astrometry
 Comment: Install Files ..\..\..\..\NOVAS\NOVAS-3\CioFile\cio_ra.bin to $COMMONFILES$\ASCOM\Astrometry
 Comment: Platform 6 Internal
-Install Files ..\..\..\..\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $COMMONFILES$\ASCOM\Platform\Internal
+Install Files ..\..\..\..\InstallerSupport\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $COMMONFILES$\ASCOM\Platform\Internal
 Install Assembly ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to Global Assembly Cache
 Install Files ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\..\..\..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll to Global Assembly Cache

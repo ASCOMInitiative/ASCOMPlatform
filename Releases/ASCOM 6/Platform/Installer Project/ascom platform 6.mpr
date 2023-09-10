@@ -45,13 +45,12 @@ Helper2.dll
 icon.ico
 Index.htm
 MasterPlatformVersion.txt
-MigrationSupport.dll
-MigrationSupport.pdb
-MigrationSupport.xml
 moon.bmp
 readme.rtf
 RemoveASCOM.exe
 RemoveASCOM.pdb
+SetACL.exe
+SetACL.pdb
 setup.bmp
 Sleep.exe
 SuppressWinErrors.exe
@@ -60,19 +59,7 @@ swoosh.avi
 translations.English
 translations.Map
 translations.Original
-UninstallAscom.exe
-UninstallAscom.pdb
 $
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2231,7 +2218,7 @@ ASCOM Platform 7.0 - Early Access
 ASCOM Platform 7.0 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{6C73A99D-220A-4A41-B12E-00BA64D35160}
+{F71FE742-803B-4021-84C0-1B39916E8F2E}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help

@@ -1002,6 +1002,7 @@ Comment
 Install Files
 Install Files
 Install Files
+Install Files
 Comment
 Install Assembly
 Install Files
@@ -3059,6 +3060,7 @@ $
 {CF91B3B6-0D64-473A-9179-AB873B6AA057}
 {B0800112-6A7E-4749-BE13-FE7E894AA2BB}
 {31E8132D-39CB-4775-9745-B4A83DA32CA2}
+{19E617E0-D302-4020-9B94-030400FD99CC}
 {EF48DD6D-1694-45C4-816F-25FFDFF44FCC}
 {917ACA92-ECF0-4B21-B130-36915B903A04}
 {8ADF3958-F7C7-4A77-9C80-9162DF259690}
@@ -7453,7 +7455,7 @@ FALSE
 FALSE
 FALSE
 {E1B52B9B-9147-4C34-9A1A-B581035339ED}
-..\..\..\..\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe
+..\..\..\..\InstallerSupport\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe
 FALSE|
 $COMMONFILES$\ASCOM\Platform\Internal
 FALSE
@@ -7531,7 +7533,7 @@ FALSE
 FALSE
 FALSE
 {866E280C-2CBB-4ED7-9383-27C83A7E4270}
-..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\Platform 5.5 Redirection Policy\AstrometryPolicy.xml
+..\..\..\..\InstallerSupport\RedirectionPolicies\policy.5.5.Astrometry.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -7544,7 +7546,7 @@ FALSE
 FALSE
 FALSE
 {810DA89F-A7BF-4F16-BB66-BEACB713DC60}
-..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\Platform 5.5 Redirection Policy\policy.5.5.ASCOM.Astrometry.dll
+..\..\..\..\InstallerSupport\RedirectionPolicies\policy.5.5.ASCOM.Astrometry.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -8038,7 +8040,7 @@ FALSE
 FALSE
 FALSE
 {E090E662-4E34-4403-82FF-9917F9AB2A29}
-..\..\..\..\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\DriverAccess.config
+..\..\..\..\InstallerSupport\RedirectionPolicies\Policy.1.0.DriverAccess.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -8051,7 +8053,7 @@ FALSE
 FALSE
 FALSE
 {97977395-E63D-4FC4-B241-1CFEC7E5982B}
-..\..\..\..\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\policy.1.0.ASCOM.DriverAccess.dll
+..\..\..\..\InstallerSupport\RedirectionPolicies\policy.1.0.ASCOM.DriverAccess.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -8428,7 +8430,7 @@ FALSE
 FALSE
 FALSE
 {CF91B3B6-0D64-473A-9179-AB873B6AA057}
-..\..\..\..\ASCOM Redirection Policies\policy.1.0.ASCOM.Exceptions.dll
+..\..\..\..\InstallerSupport\RedirectionPolicies\policy.1.0.ASCOM.Exceptions.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6.0
 FALSE
@@ -8441,7 +8443,7 @@ FALSE
 FALSE
 FALSE
 {31E8132D-39CB-4775-9745-B4A83DA32CA2}
-..\..\..\..\ASCOM Redirection Policies\ExceptionsPolicy.xml
+..\..\..\..\InstallerSupport\RedirectionPolicies\policy.1.1.ASCOM.Exceptions.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6.0
 FALSE
@@ -8454,7 +8456,7 @@ FALSE
 FALSE
 FALSE
 {B0800112-6A7E-4749-BE13-FE7E894AA2BB}
-..\..\..\..\ASCOM Redirection Policies\policy.1.1.ASCOM.Exceptions.dll
+..\..\..\..\InstallerSupport\RedirectionPolicies\Policy.1.0.Exceptions.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6.0
 FALSE
@@ -9844,6 +9846,19 @@ FALSE
 FALSE
 FALSE
 FALSE
+{19E617E0-D302-4020-9B94-030400FD99CC}
+..\..\..\..\InstallerSupport\RedirectionPolicies\Policy.1.1.Exceptions.xml
+FALSE|
+$COMMONFILES$\ASCOM\Platform\v6.0
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
 {BF164208-5DCC-44E8-BF70-A15EC9C00CCE}
 $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe
 TRUE
@@ -10361,7 +10376,7 @@ TRUE
 TRUE
 RC
 {BCBC7A89-88DD-4B9C-9751-41F773A801E6}
-$SUPPORTDIR$\UninstallAscom.exe
+$SUPPORTDIR$\SetACL.exe
 TRUE
 /SETPROFILEACL
 TRUE
@@ -14824,6 +14839,7 @@ C
 
 
 
+
 C
 
 
@@ -15864,6 +15880,7 @@ C
 
 
 $
+
 
 
 
