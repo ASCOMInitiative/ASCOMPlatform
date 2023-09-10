@@ -36,7 +36,7 @@ using System.Globalization;
 using System.Runtime.InteropServices.ComTypes;
 using System;
 
-namespace UninstallAscom
+namespace GACInstall
 {
 
     #region Flags

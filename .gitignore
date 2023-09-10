@@ -286,3 +286,8 @@ Help/Output
 /test.cmd
 /where.txt
 /xcopy.txt
+/InstallerSupport/GACInstallOrg/Properties/AssemblyInfo.cs
+/InstallerSupport/GACInstallOrg/app.config
+/InstallerSupport/GACInstallOrg/GAC.cs
+/InstallerSupport/GACInstallOrg/GACInstall.csproj
+/InstallerSupport/GACInstallOrg/Program.cs

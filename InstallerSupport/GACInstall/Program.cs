@@ -1,25 +1,25 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-//// Artinsoft
-//// Author: Mauricio Rojas orellabac@gmail.com mrojas@artinsoft.com
-//// This program uses the undocumented GAC API to perform a simple install of an assembly
-
-//// Revised by Peter Simpson to add help
-////                          to uninstall as well as install
-////                          to provide textual description of uninstall outcome
-
-//// Updated to use the mangaged API System.EnterpriseServices.Internal.Publish() by Peter Simpson 16th October 2013
-//// This gets rid of the unpublished FusionLib and GAC access assembly of Maurico Rojas and brings us back to 
-//// managed APIs at last! Hooray!
-
-//// Return code: 0 OK
-////              1 Unable to find file
-////              2 An exception happened
-
-namespace ASCOM.Internal.GACInstall
+namespace GACInstall
 {
+    //// Artinsoft
+    //// Author: Mauricio Rojas orellabac@gmail.com mrojas@artinsoft.com
+    //// This program uses the undocumented GAC API to perform a simple install of an assembly
+
+    //// Revised by Peter Simpson to add help
+    ////                          to uninstall as well as install
+    ////                          to provide textual description of uninstall outcome
+
+    //// Updated to use the mangaged API System.EnterpriseServices.Internal.Publish() by Peter Simpson 16th October 2013
+    //// This gets rid of the unpublished FusionLib and GAC access assembly of Maurico Rojas and brings us back to 
+    //// managed APIs at last! Hooray!
+
+    //// Return code: 0 OK
+    ////              1 Unable to find file
+    ////              2 An exception happened
+
     class Program
     {
         static int Main(string[] args)
