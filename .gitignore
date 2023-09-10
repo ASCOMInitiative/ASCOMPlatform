@@ -283,3 +283,6 @@ Help/Output
 /ASCOM.Native.6.1$/ASCOM.Native.6.1.exp
 /ASCOM.Native.6.1$/ASCOM.Native.6.1.dll
 /Drivers and Simulators/CameraHub/Setup/Builds
+/test.cmd
+/where.txt
+/xcopy.txt

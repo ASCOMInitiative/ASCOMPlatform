@@ -57,6 +57,11 @@
     <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+"$(SolutionDir)installercopy.cmd" "$(SolutionDir)" "$(TargetDir)$(TargetName).exe" &amp; "$(SolutionDir)installercopy.cmd" "$(SolutionDir)" "$(TargetDir)$(TargetName).pdb" &amp;
+		</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

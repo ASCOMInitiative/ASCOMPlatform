@@ -552,15 +552,10 @@ Comment: Prepare to install
 Display Dialog: progress, use as progress dialog (non-modal)
 [END REGION]
  
-[DEFINE REGION: Install Visual C Runtimes]
+[DEFINE REGION: MSI installer support if required]
 Comment: Install pre-requisites included in this installer
 Include Script: setupmsi31
 Set Variable MYPROGRESS to 3
-Comment: Include Script: setup_vcruntime_x64 (get result into variable VC64_REBOOT_REQUIRED)
-Set Variable MYPROGRESS to 6
-Comment: Include Script: setup_vcruntime_x86 (get result into variable VC32_REBOOT_REQUIRED)
-Set Variable MYPROGRESS to 9
-Write into Text File $SETUPLOG$ from Value  (at end of file)
 [END REGION]
  
 [DEFINE REGION: Remove Previous Platform 6 install if present]
@@ -673,23 +668,17 @@ if Variable MAINTENANCE not Equals TRUE
     Comment: Run the uninstaller if either platform is found
     Set Variable RC to 0
     if Variable PLATFORM5FOUND Equals TRUE
-      Set Variable PROGRESSTEXT to Removing Platform 5...
-      Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling Platform 5... (at end of file)
-      Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
-      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM  (at end of file)
-      Set Variable PROGRESSTEXT to Installing Platform 7...
+      Set Variable PROGRESSTEXT to Found Platform 5
+      Write into Text File $SETUPLOG$ from Value $TIME$ Found Platform 5 terminating installation. (at end of file)
+      MessageBox: $TITLE$ Setup Issue, A Platform 5 installation was found, which can not be removed by this installer. Please install Platform 6 first in order to upgrade from Platform 5 and then run this installer again to upgrade to Platform 7.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
+      Terminate Installation
     else
       if Variable PLATFORM4FOUND Equals TRUE
-        Set Variable PROGRESSTEXT to Removing Platform 4...
-        Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling Platform 4... (at end of file)
-        Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM  (at end of file)
-        Set Variable PROGRESSTEXT to Installing Platform 7...
+        Set Variable PROGRESSTEXT to Found Platform 4
+        Write into Text File $SETUPLOG$ from Value $TIME$ Found Platform 4 terminating installation. (at end of file)
+        MessageBox: $TITLE$ Setup Issue, A Platform 4 installation was found, which can not be removed by this installer. Please install Platform 6 first in order to upgrade from Platform 4 and then run this installer again to upgrade to Platform 7.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
+        Terminate Installation
       end
-    end
-    if Variable RC not Equals 0
-      MessageBox: Profile Migration, Unable to set write access to the ASCOM Profile store. Please zip up all logs in your Documents\ASCOM folder and its subfolders  and attach the zip to a post on the ASCOM-Talk Groups.Io forum.
-      Set Variable ASCOMERROR to Profile migration issue. RC: $RC$
     end
   end
 end
