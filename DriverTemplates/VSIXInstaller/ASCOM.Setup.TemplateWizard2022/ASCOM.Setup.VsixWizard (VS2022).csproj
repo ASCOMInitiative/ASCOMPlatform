@@ -169,7 +169,7 @@
       <Name>ASCOM.DeviceInterface</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj">
-      <Project>{7B9B8BE0-9517-0548-11D2-27B6261AB180}</Project>
+      <Project>{7b9b8be0-9517-0548-11d2-27b6261ab180}</Project>
       <Name>ASCOM.Utilities</Name>
     </ProjectReference>
   </ItemGroup>

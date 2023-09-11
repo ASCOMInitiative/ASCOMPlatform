@@ -168,7 +168,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities.vbproj">
+    <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities.csproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
       <Name>ASCOM.Utilities</Name>
     </ProjectReference>

@@ -92,10 +92,9 @@
       <Project>{5f6cf410-7b16-4a32-99d2-0d92196c4490}</Project>
       <Name>ASCOM.Exceptions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities.vbproj">
-      <Project>{7B9B8BE0-9517-0548-11D2-27B6261AB180}</Project>
+    <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities.csproj">
+      <Project>{7b9b8be0-9517-0548-11d2-27b6261ab180}</Project>
       <Name>ASCOM.Utilities</Name>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

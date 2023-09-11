@@ -65,11 +65,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj">
-      <Project>{7B9B8BE0-9517-0548-11D2-27B6261AB180}</Project>
+      <Project>{7b9b8be0-9517-0548-11d2-27b6261ab180}</Project>
       <Name>ASCOM.Utilities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ASCOM.Astrometry\ASCOM.Astrometry.vbproj">
-      <Project>{0EC4FAEB-5265-0C28-3C03-9AAF43433A73}</Project>
+    <ProjectReference Include="..\ASCOM.Astrometry\ASCOM.Astrometry.csproj">
+      <Project>{0ec4faeb-5265-0c28-3c03-9aaf43433a73}</Project>
       <Name>ASCOM.Astrometry</Name>
     </ProjectReference>
   </ItemGroup>

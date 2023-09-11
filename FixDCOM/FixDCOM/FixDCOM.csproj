@@ -120,7 +120,7 @@
     <Content Include="favicon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
+    <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj">
       <Project>{c9bf0a8b-594f-4ab9-938a-edc8448d8520}</Project>
       <Name>ASCOM.Utilities</Name>
     </ProjectReference>
