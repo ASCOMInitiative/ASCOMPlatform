@@ -562,7 +562,7 @@ namespace RemoveASCOM
                         Registry.LocalMachine.DeleteSubKeyTree(Installer.Value);
                         TL.LogMessage("RemoveInstallers", "Reference to " + Installer.Key + " - Removed OK");
                     }
-                    catch (ArgumentException ex2)
+                    catch (ArgumentException)
                     {
                         TL.LogMessage("RemoveInstallers", "Reference to " + Installer.Key + " - Not present");
                     }
@@ -647,7 +647,7 @@ namespace RemoveASCOM
                         RKey.DeleteSubKeyTree("ASCOM");
                         TL.LogMessage("RemoveProfile", "  Removed OK");
                     }
-                    catch (ArgumentException ex2)
+                    catch (ArgumentException)
                     {
                         TL.LogMessage("RemoveProfile", "  Not present");
                     }
@@ -665,7 +665,7 @@ namespace RemoveASCOM
                         RKey.DeleteSubKeyTree("ASCOM");
                         TL.LogMessage("RemoveProfile", "  Removed OK");
                     }
-                    catch (ArgumentException ex2)
+                    catch (ArgumentException)
                     {
                         TL.LogMessage("RemoveProfile", "  Not present");
                     }
@@ -682,7 +682,7 @@ namespace RemoveASCOM
                     RKey.DeleteSubKeyTree("ASCOM");
                     TL.LogMessage("RemoveProfile", "  Removed OK");
                 }
-                catch (ArgumentException ex2)
+                catch (ArgumentException)
                 {
                     TL.LogMessage("RemoveProfile", "  Not present");
                 }
@@ -1321,7 +1321,7 @@ namespace RemoveASCOM
                 BaseKey.DeleteSubKeyTree(GUIDSubKey);
                 TL.LogMessage("CleanRegistryLocation", "  SubKey removed: " + BaseKey.Name + @"\" + GUIDSubKey);
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("CleanRegistryLocation", "    SubKey does not exist: " + BaseKey.Name + @"\" + GUIDSubKey);
             }

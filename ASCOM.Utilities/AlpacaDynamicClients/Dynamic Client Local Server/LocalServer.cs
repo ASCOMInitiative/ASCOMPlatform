@@ -939,7 +939,7 @@ namespace ASCOM.DynamicClients
             client.ClientConfiguration.ImageArrayTransferType = state.ImageArrayTransferType;
 
             // Refresh the HTTP client with the updated values set above.
-            client.Refresh();
+            client.RefreshClient();
 
             // Return the configured Alpaca client as the required type
             return (T)(object)client;

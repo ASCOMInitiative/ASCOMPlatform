@@ -21,7 +21,7 @@ namespace RemoveASCOM
                 guidList.Add("00A394A5-BCB0-449D-A46B-81A02824ADC5", @"E:\ASCOM\ASCOM.DeviceInterface\IVideo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "00A394A5-BCB0-449D-A46B-81A02824ADC5");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "00A394A5-BCB0-449D-A46B-81A02824ADC5");
             }
@@ -30,7 +30,7 @@ namespace RemoveASCOM
                 guidList.Add("00BC6F08-4277-47c3-9DBA-F80E02C5A448", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "00BC6F08-4277-47c3-9DBA-F80E02C5A448");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "00BC6F08-4277-47c3-9DBA-F80E02C5A448");
             }
@@ -39,7 +39,7 @@ namespace RemoveASCOM
                 guidList.Add("031b8292-fc9b-4684-8faf-fa7e968db0ff", @"E:\ASCOM\ASCOM.SettingsProvider\ASCOM.SettingsProviderSample.CSharp\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "031b8292-fc9b-4684-8faf-fa7e968db0ff");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "031b8292-fc9b-4684-8faf-fa7e968db0ff");
             }
@@ -48,7 +48,7 @@ namespace RemoveASCOM
                 guidList.Add("0517e476-3c3f-43fb-9ac2-c326a83dd405", @"E:\ASCOM\Releases\ASCOM 6\SuppressWinErrors\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "0517e476-3c3f-43fb-9ac2-c326a83dd405");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "0517e476-3c3f-43fb-9ac2-c326a83dd405");
             }
@@ -57,7 +57,7 @@ namespace RemoveASCOM
                 guidList.Add("0529dfc1-44d5-4e75-8014-56a4d831eddf", @"E:\ASCOM\Dome\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "0529dfc1-44d5-4e75-8014-56a4d831eddf");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "0529dfc1-44d5-4e75-8014-56a4d831eddf");
             }
@@ -66,7 +66,7 @@ namespace RemoveASCOM
                 guidList.Add("05f2ef53-c71e-4fbe-bcc3-2e62ee043d40", @"E:\ASCOM\ASCOM.DriverAccess.Platform5\PublisherPolicy\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "05f2ef53-c71e-4fbe-bcc3-2e62ee043d40");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "05f2ef53-c71e-4fbe-bcc3-2e62ee043d40");
             }
@@ -75,7 +75,7 @@ namespace RemoveASCOM
                 guidList.Add("06BB25BA-6E75-4d1b-8BB4-BA629454AE38", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Serial.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "06BB25BA-6E75-4d1b-8BB4-BA629454AE38");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "06BB25BA-6E75-4d1b-8BB4-BA629454AE38");
             }
@@ -84,7 +84,7 @@ namespace RemoveASCOM
                 guidList.Add("06CC64FC-3833-48D5-BC54-82DF40CA3900", @"E:\ASCOM\Interfaces\ASCOMExceptions\DriverAccessCOMException.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "06CC64FC-3833-48D5-BC54-82DF40CA3900");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "06CC64FC-3833-48D5-BC54-82DF40CA3900");
             }
@@ -93,7 +93,7 @@ namespace RemoveASCOM
                 guidList.Add("0858c63c-55c3-4e3f-92ba-45342a88dae4", @"E:\ASCOM\ASCOM.DriverAccess.Platform5\GACInstaller\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "0858c63c-55c3-4e3f-92ba-45342a88dae4");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "0858c63c-55c3-4e3f-92ba-45342a88dae4");
             }
@@ -102,7 +102,7 @@ namespace RemoveASCOM
                 guidList.Add("093dbafa-609b-4dbe-8080-5fb857efa903", @"E:\ASCOM\ASCOM Redirection Policies\ASCOM Redirection Policies\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "093dbafa-609b-4dbe-8080-5fb857efa903");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "093dbafa-609b-4dbe-8080-5fb857efa903");
             }
@@ -111,7 +111,7 @@ namespace RemoveASCOM
                 guidList.Add("09acdfb2-dd0f-4ee2-aa25-2795487fcd9e", @"E:\ASCOM\Drivers and Simulators\Switch Simulator .NET\TestSwitchSimulator\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "09acdfb2-dd0f-4ee2-aa25-2795487fcd9e");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "09acdfb2-dd0f-4ee2-aa25-2795487fcd9e");
             }
@@ -120,7 +120,7 @@ namespace RemoveASCOM
                 guidList.Add("0B8E6DC4-7451-4484-BE15-0D0727569FB8", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Serial.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "0B8E6DC4-7451-4484-BE15-0D0727569FB8");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "0B8E6DC4-7451-4484-BE15-0D0727569FB8");
             }
@@ -129,7 +129,7 @@ namespace RemoveASCOM
                 guidList.Add("0D2B7199-622D-4244-88C3-2577308F82E2", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "0D2B7199-622D-4244-88C3-2577308F82E2");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "0D2B7199-622D-4244-88C3-2577308F82E2");
             }
@@ -138,7 +138,7 @@ namespace RemoveASCOM
                 guidList.Add("0EF59E5C-2715-4E91-8A5E-38FE388B4F00", @"E:\ASCOM\Drivers and Simulators\SafetyMonitor Simulator\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "0EF59E5C-2715-4E91-8A5E-38FE388B4F00");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "0EF59E5C-2715-4E91-8A5E-38FE388B4F00");
             }
@@ -147,7 +147,7 @@ namespace RemoveASCOM
                 guidList.Add("0EF9BC38-B790-4416-8FEF-E03758B6B630", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "0EF9BC38-B790-4416-8FEF-E03758B6B630");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "0EF9BC38-B790-4416-8FEF-E03758B6B630");
             }
@@ -156,7 +156,7 @@ namespace RemoveASCOM
                 guidList.Add("114EBEC4-7887-4ab9-B750-98BB5F1C8A8F", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\VB6Support\VB6HelperSupport.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "114EBEC4-7887-4ab9-B750-98BB5F1C8A8F");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "114EBEC4-7887-4ab9-B750-98BB5F1C8A8F");
             }
@@ -165,7 +165,7 @@ namespace RemoveASCOM
                 guidList.Add("12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe", @"E:\ASCOM\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe");
             }
@@ -174,7 +174,7 @@ namespace RemoveASCOM
                 guidList.Add("12730163-A85C-44CA-95AB-9E92FD9B8364", @"E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "12730163-A85C-44CA-95AB-9E92FD9B8364");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "12730163-A85C-44CA-95AB-9E92FD9B8364");
             }
@@ -183,7 +183,7 @@ namespace RemoveASCOM
                 guidList.Add("135265BA-25AC-4F43-95E5-80D0171E48FA", @"E:\ASCOM\ASCOM.Interfaces\Telescope.Enumerations.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "135265BA-25AC-4F43-95E5-80D0171E48FA");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "135265BA-25AC-4F43-95E5-80D0171E48FA");
             }
@@ -192,7 +192,7 @@ namespace RemoveASCOM
                 guidList.Add("143068F6-ADC9-4751-AC39-924111396F0F", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "143068F6-ADC9-4751-AC39-924111396F0F");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "143068F6-ADC9-4751-AC39-924111396F0F");
             }
@@ -201,7 +201,7 @@ namespace RemoveASCOM
                 guidList.Add("15737EA5-E4FA-40da-8BDA-B8CF96D89E43", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "15737EA5-E4FA-40da-8BDA-B8CF96D89E43");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "15737EA5-E4FA-40da-8BDA-B8CF96D89E43");
             }
@@ -210,7 +210,7 @@ namespace RemoveASCOM
                 guidList.Add("1749d4be-3c6c-42b1-b7fd-d6277b0e791b", @"E:\ASCOM\ASCOM.PowerShell.Cmdlets\ASCOMPowerShellCmdlets\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "1749d4be-3c6c-42b1-b7fd-d6277b0e791b");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "1749d4be-3c6c-42b1-b7fd-d6277b0e791b");
             }
@@ -219,7 +219,7 @@ namespace RemoveASCOM
                 guidList.Add("17D30DAA-C767-43fd-8AF4-5E149D5C771F", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Serial.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "17D30DAA-C767-43fd-8AF4-5E149D5C771F");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "17D30DAA-C767-43fd-8AF4-5E149D5C771F");
             }
@@ -228,7 +228,7 @@ namespace RemoveASCOM
                 guidList.Add("18458B04-7057-4169-B755-B6DB2405C0B0", @"E:\ASCOM\Drivers and Simulators\Rotator Simulator\RotatorDriver\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "18458B04-7057-4169-B755-B6DB2405C0B0");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "18458B04-7057-4169-B755-B6DB2405C0B0");
             }
@@ -237,7 +237,7 @@ namespace RemoveASCOM
                 guidList.Add("1aea1ff7-0290-4149-8c05-0aeb546294e5", @"E:\ASCOM\ASCOM.Controls\ASCOM.Controls.Demo\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "1aea1ff7-0290-4149-8c05-0aeb546294e5");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "1aea1ff7-0290-4149-8c05-0aeb546294e5");
             }
@@ -246,7 +246,7 @@ namespace RemoveASCOM
                 guidList.Add("1C7ABC95-8B63-475e-B5DB-D0CE7ADC436B", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "1C7ABC95-8B63-475e-B5DB-D0CE7ADC436B");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "1C7ABC95-8B63-475e-B5DB-D0CE7ADC436B");
             }
@@ -255,7 +255,7 @@ namespace RemoveASCOM
                 guidList.Add("1D06B419-B330-42CA-BC41-992718C929F4", @"E:\ASCOM\Drivers and Simulators\ASCOM.Simulator.Video\Video.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "1D06B419-B330-42CA-BC41-992718C929F4");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "1D06B419-B330-42CA-BC41-992718C929F4");
             }
@@ -264,7 +264,7 @@ namespace RemoveASCOM
                 guidList.Add("1F07419A-0C9E-4B90-8B62-FC8053E89EE2", @"E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "1F07419A-0C9E-4B90-8B62-FC8053E89EE2");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "1F07419A-0C9E-4B90-8B62-FC8053E89EE2");
             }
@@ -273,7 +273,7 @@ namespace RemoveASCOM
                 guidList.Add("1f85051e-b2f3-4e08-811d-d1ab208da74f", @"E:\ASCOM\ASCOM.Utilities\PreProcess404Files\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "1f85051e-b2f3-4e08-811d-d1ab208da74f");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "1f85051e-b2f3-4e08-811d-d1ab208da74f");
             }
@@ -282,7 +282,7 @@ namespace RemoveASCOM
                 guidList.Add("21AEDC6B-CC7F-4101-BC33-532DFEDEB7B5", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "21AEDC6B-CC7F-4101-BC33-532DFEDEB7B5");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "21AEDC6B-CC7F-4101-BC33-532DFEDEB7B5");
             }
@@ -291,7 +291,7 @@ namespace RemoveASCOM
                 guidList.Add("21b8916c-f28e-11d2-a473-00c04f8ef448", @"E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "21b8916c-f28e-11d2-a473-00c04f8ef448");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "21b8916c-f28e-11d2-a473-00c04f8ef448");
             }
@@ -300,7 +300,7 @@ namespace RemoveASCOM
                 guidList.Add("221C0BC0-110B-4129-85A0-18BB28579290", @"E:\ASCOM\ASCOM.Interfaces\IRate.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "221C0BC0-110B-4129-85A0-18BB28579290");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "221C0BC0-110B-4129-85A0-18BB28579290");
             }
@@ -309,7 +309,7 @@ namespace RemoveASCOM
                 guidList.Add("23A8A279-FB8E-4b3c-8F2E-010AC0F98588", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "23A8A279-FB8E-4b3c-8F2E-010AC0F98588");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "23A8A279-FB8E-4b3c-8F2E-010AC0F98588");
             }
@@ -318,7 +318,7 @@ namespace RemoveASCOM
                 guidList.Add("2414C071-8A5B-4d53-89BC-CAF30BA7123B", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "2414C071-8A5B-4d53-89BC-CAF30BA7123B");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "2414C071-8A5B-4d53-89BC-CAF30BA7123B");
             }
@@ -327,7 +327,7 @@ namespace RemoveASCOM
                 guidList.Add("24C040F2-2FA5-4DA4-B87B-6C1101828D2A", @"E:\ASCOM\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\FocuerDriver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "24C040F2-2FA5-4DA4-B87B-6C1101828D2A");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "24C040F2-2FA5-4DA4-B87B-6C1101828D2A");
             }
@@ -336,7 +336,7 @@ namespace RemoveASCOM
                 guidList.Add("25052f4e-415a-4f98-8e0c-6828c881ab01", @"E:\ASCOM\ASCOM.SettingsProvider\ASCOM.SettingsProvider\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "25052f4e-415a-4f98-8e0c-6828c881ab01");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "25052f4e-415a-4f98-8e0c-6828c881ab01");
             }
@@ -345,7 +345,7 @@ namespace RemoveASCOM
                 guidList.Add("25df0fc1-7f97-4070-add7-4b13bbfd7cb8", @"E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "25df0fc1-7f97-4070-add7-4b13bbfd7cb8");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "25df0fc1-7f97-4070-add7-4b13bbfd7cb8");
             }
@@ -354,7 +354,7 @@ namespace RemoveASCOM
                 guidList.Add("25F2ED0A-D0C1-403d-86B9-5F7CEBE97D87", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVASCOM\NOVASCOM.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "25F2ED0A-D0C1-403d-86B9-5F7CEBE97D87");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "25F2ED0A-D0C1-403d-86B9-5F7CEBE97D87");
             }
@@ -363,7 +363,7 @@ namespace RemoveASCOM
                 guidList.Add("26F6BD6C-5289-4aa1-B270-F3EA0EBEAFD7", @"E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "26F6BD6C-5289-4aa1-B270-F3EA0EBEAFD7");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "26F6BD6C-5289-4aa1-B270-F3EA0EBEAFD7");
             }
@@ -372,7 +372,7 @@ namespace RemoveASCOM
                 guidList.Add("277380A5-6599-448f-9232-1C280073D3CD", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "277380A5-6599-448f-9232-1C280073D3CD");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "277380A5-6599-448f-9232-1C280073D3CD");
             }
@@ -381,7 +381,7 @@ namespace RemoveASCOM
                 guidList.Add("28D679BA-2AF1-4557-AE15-C528C5BF91E0", @"E:\ASCOM\DriverTemplates\TemplateSources\src\ASCOM Driver Template (CS)\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "28D679BA-2AF1-4557-AE15-C528C5BF91E0");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "28D679BA-2AF1-4557-AE15-C528C5BF91E0");
             }
@@ -390,7 +390,7 @@ namespace RemoveASCOM
                 guidList.Add("2B8FD76E-AF7E-4FAA-9FAC-4029E96129F4", @"E:\ASCOM\ASCOM.Interfaces\IAxisRates.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "2B8FD76E-AF7E-4FAA-9FAC-4029E96129F4");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "2B8FD76E-AF7E-4FAA-9FAC-4029E96129F4");
             }
@@ -399,7 +399,7 @@ namespace RemoveASCOM
                 guidList.Add("2c5b21ae-63a8-4cf7-bf5f-b5846204f249", @"E:\ASCOM\NOVAS\Usno.Novas.TestConsoleApp\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "2c5b21ae-63a8-4cf7-bf5f-b5846204f249");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "2c5b21ae-63a8-4cf7-bf5f-b5846204f249");
             }
@@ -408,7 +408,7 @@ namespace RemoveASCOM
                 guidList.Add("2d3d0b3d-52e3-43f8-85db-df7bbd5e8998", @"E:\ASCOM\Drivers and Simulators\TrivialSwitch Simulator .NET\TrivialSimulator\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "2d3d0b3d-52e3-43f8-85db-df7bbd5e8998");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "2d3d0b3d-52e3-43f8-85db-df7bbd5e8998");
             }
@@ -417,7 +417,7 @@ namespace RemoveASCOM
                 guidList.Add("2d44189d-4504-41ee-88c9-b8f58ee97a02", @"E:\ASCOM\DriverTemplates\TemplateSources\src\ASCOM Test Forms App (VB)\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "2d44189d-4504-41ee-88c9-b8f58ee97a02");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "2d44189d-4504-41ee-88c9-b8f58ee97a02");
             }
@@ -426,7 +426,7 @@ namespace RemoveASCOM
                 guidList.Add("2DC50060-2842-45ba-B486-C2CC4841BD26", @"E:\ASCOM\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "2DC50060-2842-45ba-B486-C2CC4841BD26");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "2DC50060-2842-45ba-B486-C2CC4841BD26");
             }
@@ -435,7 +435,7 @@ namespace RemoveASCOM
                 guidList.Add("2E7CEEE4-B5C6-4e9a-87F4-80445700D123", @"E:\ASCOM\ASCOM.DeviceInterface\IRate.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "2E7CEEE4-B5C6-4e9a-87F4-80445700D123");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "2E7CEEE4-B5C6-4e9a-87F4-80445700D123");
             }
@@ -444,7 +444,7 @@ namespace RemoveASCOM
                 guidList.Add("2ec93463-b0c3-45e1-8364-327e96aea856", @"E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "2ec93463-b0c3-45e1-8364-327e96aea856");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "2ec93463-b0c3-45e1-8364-327e96aea856");
             }
@@ -453,7 +453,7 @@ namespace RemoveASCOM
                 guidList.Add("2F2B0413-1F83-4777-B3B4-38DE3C32DC6B", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Kepler\KeplerEphemeris.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "2F2B0413-1F83-4777-B3B4-38DE3C32DC6B");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "2F2B0413-1F83-4777-B3B4-38DE3C32DC6B");
             }
@@ -462,7 +462,7 @@ namespace RemoveASCOM
                 guidList.Add("30D18B61-AECC-4C03-8759-E3EDD246F062", @"E:\ASCOM\ASCOM.Interfaces\Telescope.Enumerations.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "30D18B61-AECC-4C03-8759-E3EDD246F062");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "30D18B61-AECC-4C03-8759-E3EDD246F062");
             }
@@ -471,7 +471,7 @@ namespace RemoveASCOM
                 guidList.Add("32761e1b-f9a1-4000-99dc-10f5d3845caa", @"E:\ASCOM\Drivers and Simulators\SimulatorTestingProject\Simulator Testing Project\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "32761e1b-f9a1-4000-99dc-10f5d3845caa");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "32761e1b-f9a1-4000-99dc-10f5d3845caa");
             }
@@ -480,7 +480,7 @@ namespace RemoveASCOM
                 guidList.Add("32914B41-41C3-4f68-A974-E9ABCE0BA03A", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "32914B41-41C3-4f68-A974-E9ABCE0BA03A");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "32914B41-41C3-4f68-A974-E9ABCE0BA03A");
             }
@@ -489,7 +489,7 @@ namespace RemoveASCOM
                 guidList.Add("33A846B1-63EE-44B3-937C-5678E0F5B295", @"E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\NWaySwitch.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "33A846B1-63EE-44B3-937C-5678E0F5B295");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "33A846B1-63EE-44B3-937C-5678E0F5B295");
             }
@@ -498,7 +498,7 @@ namespace RemoveASCOM
                 guidList.Add("347B5004-3662-42C0-96B8-3F8F6F0467D2", @"E:\ASCOM\Drivers and Simulators\Rotator Simulator\RotatorDriver\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "347B5004-3662-42C0-96B8-3F8F6F0467D2");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "347B5004-3662-42C0-96B8-3F8F6F0467D2");
             }
@@ -507,7 +507,7 @@ namespace RemoveASCOM
                 guidList.Add("3503C303-B268-4da8-A0AA-CD6530B802AA", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "3503C303-B268-4da8-A0AA-CD6530B802AA");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "3503C303-B268-4da8-A0AA-CD6530B802AA");
             }
@@ -516,7 +516,7 @@ namespace RemoveASCOM
                 guidList.Add("35C65270-9582-410d-93CB-A660C5C99D9D", @"E:\ASCOM\ASCOM.DeviceInterface\ITrackingRates.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "35C65270-9582-410d-93CB-A660C5C99D9D");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "35C65270-9582-410d-93CB-A660C5C99D9D");
             }
@@ -525,7 +525,7 @@ namespace RemoveASCOM
                 guidList.Add("3613EEEB-5563-47D8-B512-1D36D64CEEBB", @"E:\ASCOM\ASCOM.Interfaces\Telescope.Enumerations.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "3613EEEB-5563-47D8-B512-1D36D64CEEBB");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "3613EEEB-5563-47D8-B512-1D36D64CEEBB");
             }
@@ -534,7 +534,7 @@ namespace RemoveASCOM
                 guidList.Add("36a016e8-062e-4b9f-bf05-3b7e7845ce72", @"E:\ASCOM\ASCOM.Utilities\Profile Explorer\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "36a016e8-062e-4b9f-bf05-3b7e7845ce72");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "36a016e8-062e-4b9f-bf05-3b7e7845ce72");
             }
@@ -543,7 +543,7 @@ namespace RemoveASCOM
                 guidList.Add("385AEDA1-3E8E-4bba-A50C-06B0FD2E0B6B", @"E:\ASCOM\SampleLocalServer\SampleRotator\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "385AEDA1-3E8E-4bba-A50C-06B0FD2E0B6B");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "385AEDA1-3E8E-4bba-A50C-06B0FD2E0B6B");
             }
@@ -552,7 +552,7 @@ namespace RemoveASCOM
                 guidList.Add("394E0981-3344-4cff-8ABA-E19A775AAD29", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "394E0981-3344-4cff-8ABA-E19A775AAD29");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "394E0981-3344-4cff-8ABA-E19A775AAD29");
             }
@@ -561,7 +561,7 @@ namespace RemoveASCOM
                 guidList.Add("3A02C211-FA08-4747-B0BD-4B00EB159297", @"E:\ASCOM\DriverTemplates\TemplateSources\src\ASCOM Driver Template (CS)\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "3A02C211-FA08-4747-B0BD-4B00EB159297");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "3A02C211-FA08-4747-B0BD-4B00EB159297");
             }
@@ -570,7 +570,7 @@ namespace RemoveASCOM
                 guidList.Add("3a22c443-4e46-4504-8cef-731095e51e1f", @"E:\ASCOM\Drivers and Simulators\Gemini Driver\Focuser\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "3a22c443-4e46-4504-8cef-731095e51e1f");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "3a22c443-4e46-4504-8cef-731095e51e1f");
             }
@@ -579,7 +579,7 @@ namespace RemoveASCOM
                 guidList.Add("3AC3E32A-EDCE-4234-AA50-CDB346851C5D", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "3AC3E32A-EDCE-4234-AA50-CDB346851C5D");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "3AC3E32A-EDCE-4234-AA50-CDB346851C5D");
             }
@@ -588,7 +588,7 @@ namespace RemoveASCOM
                 guidList.Add("3c9fd70d-799e-4eb7-9ff7-59b7e97398da", @"E:\ASCOM\Driver Inst\InstallerGen\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "3c9fd70d-799e-4eb7-9ff7-59b7e97398da");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "3c9fd70d-799e-4eb7-9ff7-59b7e97398da");
             }
@@ -597,7 +597,7 @@ namespace RemoveASCOM
                 guidList.Add("3D201554-007C-47e6-805D-F66D1CA35543", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "3D201554-007C-47e6-805D-F66D1CA35543");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "3D201554-007C-47e6-805D-F66D1CA35543");
             }
@@ -606,7 +606,7 @@ namespace RemoveASCOM
                 guidList.Add("3e1da6ba-4e5a-4627-bd36-cfdc484bcaef", @"E:\ASCOM\Interfaces\ASCOMExceptions\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "3e1da6ba-4e5a-4627-bd36-cfdc484bcaef");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "3e1da6ba-4e5a-4627-bd36-cfdc484bcaef");
             }
@@ -615,7 +615,7 @@ namespace RemoveASCOM
                 guidList.Add("3FA761EC-12F4-4757-8637-F0ABE5ECB9F7", @"E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "3FA761EC-12F4-4757-8637-F0ABE5ECB9F7");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "3FA761EC-12F4-4757-8637-F0ABE5ECB9F7");
             }
@@ -624,7 +624,7 @@ namespace RemoveASCOM
                 guidList.Add("41244296-BED8-4AC9-AA24-D4E90C6C95FA", @"E:\ASCOM\ASCOM.Utilities.Video\CameraImage.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "41244296-BED8-4AC9-AA24-D4E90C6C95FA");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "41244296-BED8-4AC9-AA24-D4E90C6C95FA");
             }
@@ -633,7 +633,7 @@ namespace RemoveASCOM
                 guidList.Add("43234d78-8dfc-44b5-9d39-e18d568748c1", @"E:\ASCOM\Releases\ASCOM 6\Uninstaller\MigrationSupport\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "43234d78-8dfc-44b5-9d39-e18d568748c1");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "43234d78-8dfc-44b5-9d39-e18d568748c1");
             }
@@ -642,7 +642,7 @@ namespace RemoveASCOM
                 guidList.Add("43325B3A-8B34-48db-8028-9D8CED9FA9E2", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\ASCOMProfile.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "43325B3A-8B34-48db-8028-9D8CED9FA9E2");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "43325B3A-8B34-48db-8028-9D8CED9FA9E2");
             }
@@ -651,7 +651,7 @@ namespace RemoveASCOM
                 guidList.Add("45EAC3DA-08FB-49E2-B852-114312933742", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "45EAC3DA-08FB-49E2-B852-114312933742");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "45EAC3DA-08FB-49E2-B852-114312933742");
             }
@@ -660,7 +660,7 @@ namespace RemoveASCOM
                 guidList.Add("46584278-AC16-4CFC-8878-09CA960AEABE", @"E:\ASCOM\Interfaces\ASCOMExceptions\NotImplementedException.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "46584278-AC16-4CFC-8878-09CA960AEABE");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "46584278-AC16-4CFC-8878-09CA960AEABE");
             }
@@ -669,7 +669,7 @@ namespace RemoveASCOM
                 guidList.Add("46753368-42d1-424a-85fa-26eee8f4c178", @"E:\ASCOM\Drivers and Simulators\Telescope Simulator .NET\Telescope\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "46753368-42d1-424a-85fa-26eee8f4c178");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "46753368-42d1-424a-85fa-26eee8f4c178");
             }
@@ -678,7 +678,7 @@ namespace RemoveASCOM
                 guidList.Add("46AB7149-B2AF-4160-A2FD-17B8923CBADE", @"E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "46AB7149-B2AF-4160-A2FD-17B8923CBADE");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "46AB7149-B2AF-4160-A2FD-17B8923CBADE");
             }
@@ -687,7 +687,7 @@ namespace RemoveASCOM
                 guidList.Add("46ACFBCE-4EEE-496d-A4B6-7A5FDDD8F969", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVASCOM\NOVASCOM.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "46ACFBCE-4EEE-496d-A4B6-7A5FDDD8F969");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "46ACFBCE-4EEE-496d-A4B6-7A5FDDD8F969");
             }
@@ -696,7 +696,7 @@ namespace RemoveASCOM
                 guidList.Add("4876295B-6FCC-47c8-AEC9-CF39F1244AEB", @"E:\ASCOM\ASCOM.IConform\ASCOM.IConform\IConform.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "4876295B-6FCC-47c8-AEC9-CF39F1244AEB");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "4876295B-6FCC-47c8-AEC9-CF39F1244AEB");
             }
@@ -705,7 +705,7 @@ namespace RemoveASCOM
                 guidList.Add("49003324-8DE2-4986-BC7D-4D85E1C4CF6B", @"E:\ASCOM\ASCOM.Interfaces\IRotator.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "49003324-8DE2-4986-BC7D-4D85E1C4CF6B");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "49003324-8DE2-4986-BC7D-4D85E1C4CF6B");
             }
@@ -714,7 +714,7 @@ namespace RemoveASCOM
                 guidList.Add("49072a46-ff81-4647-ab82-6a535bd31f8f", @"E:\ASCOM\CustomActions\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "49072a46-ff81-4647-ab82-6a535bd31f8f");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "49072a46-ff81-4647-ab82-6a535bd31f8f");
             }
@@ -723,7 +723,7 @@ namespace RemoveASCOM
                 guidList.Add("4959930F-0CDB-4324-A0E0-F60A351454B7", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "4959930F-0CDB-4324-A0E0-F60A351454B7");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "4959930F-0CDB-4324-A0E0-F60A351454B7");
             }
@@ -732,7 +732,7 @@ namespace RemoveASCOM
                 guidList.Add("4987D641-7E8B-41b9-AE0D-FB232FBBC1F0", @"E:\ASCOM\SampleLocalServer\SampleRotator\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "4987D641-7E8B-41b9-AE0D-FB232FBBC1F0");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "4987D641-7E8B-41b9-AE0D-FB232FBBC1F0");
             }
@@ -741,7 +741,7 @@ namespace RemoveASCOM
                 guidList.Add("49A4CA43-46B2-4D66-B9D3-FBE3ABE13DEB", @"E:\ASCOM\DriverTemplates\TemplateSources\src\ASCOM Driver Template (CS)\Rates.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "49A4CA43-46B2-4D66-B9D3-FBE3ABE13DEB");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "49A4CA43-46B2-4D66-B9D3-FBE3ABE13DEB");
             }
@@ -750,7 +750,7 @@ namespace RemoveASCOM
                 guidList.Add("4b30b57f-d1d4-4a99-ad36-a8f466587c72", @"E:\ASCOM\Patterns and Practices\WiX.Bootstrapper.Test\Bootstrapper.Test.ConsoleApplication\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "4b30b57f-d1d4-4a99-ad36-a8f466587c72");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "4b30b57f-d1d4-4a99-ad36-a8f466587c72");
             }
@@ -759,7 +759,7 @@ namespace RemoveASCOM
                 guidList.Add("4bf5c72a-8491-49af-8668-626eac765e91", @"E:\ASCOM\Drivers and Simulators\Telescope Simulator .NET\Telescope\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "4bf5c72a-8491-49af-8668-626eac765e91");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "4bf5c72a-8491-49af-8668-626eac765e91");
             }
@@ -768,7 +768,7 @@ namespace RemoveASCOM
                 guidList.Add("4CFCC2FF-6348-4268-B481-E92BE3B30039", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryExceptions.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "4CFCC2FF-6348-4268-B481-E92BE3B30039");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "4CFCC2FF-6348-4268-B481-E92BE3B30039");
             }
@@ -777,7 +777,7 @@ namespace RemoveASCOM
                 guidList.Add("4f90225b-dcd5-4333-9d92-1cefc5585e8e", @"E:\ASCOM\ASCOM.Interfaces\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "4f90225b-dcd5-4333-9d92-1cefc5585e8e");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "4f90225b-dcd5-4333-9d92-1cefc5585e8e");
             }
@@ -786,7 +786,7 @@ namespace RemoveASCOM
                 guidList.Add("524cdf63-174c-4291-a5c0-b16ddfc99e46", @"E:\ASCOM\ASCOM.Utilities.Video\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "524cdf63-174c-4291-a5c0-b16ddfc99e46");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "524cdf63-174c-4291-a5c0-b16ddfc99e46");
             }
@@ -795,7 +795,7 @@ namespace RemoveASCOM
                 guidList.Add("52f2cf34-8c59-4daa-8efa-0605cf4df51b", @"E:\ASCOM\TestApps\CameraTest\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "52f2cf34-8c59-4daa-8efa-0605cf4df51b");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "52f2cf34-8c59-4daa-8efa-0605cf4df51b");
             }
@@ -804,7 +804,7 @@ namespace RemoveASCOM
                 guidList.Add("5325E96C-BD24-4470-A0F6-E917B05805E1", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "5325E96C-BD24-4470-A0F6-E917B05805E1");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "5325E96C-BD24-4470-A0F6-E917B05805E1");
             }
@@ -813,7 +813,7 @@ namespace RemoveASCOM
                 guidList.Add("537BF13D-55E0-4C80-98EB-BE270E653E10", @"E:\ASCOM\Interfaces\ASCOMExceptions\SlavedException.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "537BF13D-55E0-4C80-98EB-BE270E653E10");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "537BF13D-55E0-4C80-98EB-BE270E653E10");
             }
@@ -822,7 +822,7 @@ namespace RemoveASCOM
                 guidList.Add("53a321d1-8b60-4fb9-8c26-da012b764545", @"E:\ASCOM\ASCOM.Platform.UnitTest\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "53a321d1-8b60-4fb9-8c26-da012b764545");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "53a321d1-8b60-4fb9-8c26-da012b764545");
             }
@@ -831,7 +831,7 @@ namespace RemoveASCOM
                 guidList.Add("54A8F586-C7B7-4899-8AA1-6044BDE4ABFA", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "54A8F586-C7B7-4899-8AA1-6044BDE4ABFA");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "54A8F586-C7B7-4899-8AA1-6044BDE4ABFA");
             }
@@ -840,7 +840,7 @@ namespace RemoveASCOM
                 guidList.Add("558F644F-E112-4e88-9D79-20063BB25C3E", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "558F644F-E112-4e88-9D79-20063BB25C3E");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "558F644F-E112-4e88-9D79-20063BB25C3E");
             }
@@ -849,7 +849,7 @@ namespace RemoveASCOM
                 guidList.Add("55A24A18-02C8-47df-A048-2E0982E1E4FE", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Serial.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "55A24A18-02C8-47df-A048-2E0982E1E4FE");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "55A24A18-02C8-47df-A048-2E0982E1E4FE");
             }
@@ -858,7 +858,7 @@ namespace RemoveASCOM
                 guidList.Add("5679F94A-D4D1-40D3-A0F8-7CE61100A691", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\AstroUtils.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "5679F94A-D4D1-40D3-A0F8-7CE61100A691");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "5679F94A-D4D1-40D3-A0F8-7CE61100A691");
             }
@@ -867,7 +867,7 @@ namespace RemoveASCOM
                 guidList.Add("56b1a988-7c0c-4aa2-8639-c3eb5a90226f", @"E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "56b1a988-7c0c-4aa2-8639-c3eb5a90226f");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "56b1a988-7c0c-4aa2-8639-c3eb5a90226f");
             }
@@ -876,7 +876,7 @@ namespace RemoveASCOM
                 guidList.Add("582dac66-e678-449f-aba6-6faaec8a9394", @"E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "582dac66-e678-449f-aba6-6faaec8a9394");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "582dac66-e678-449f-aba6-6faaec8a9394");
             }
@@ -885,7 +885,7 @@ namespace RemoveASCOM
                 guidList.Add("5849AF17-3590-42ff-900E-7544D45C9825", @"E:\ASCOM\ASCOM.DeviceInterface\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "5849AF17-3590-42ff-900E-7544D45C9825");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "5849AF17-3590-42ff-900E-7544D45C9825");
             }
@@ -894,7 +894,7 @@ namespace RemoveASCOM
                 guidList.Add("598cc9ed-9415-4d32-9dc2-df146c7a5ac8", @"E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\SwitchConsole\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "598cc9ed-9415-4d32-9dc2-df146c7a5ac8");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "598cc9ed-9415-4d32-9dc2-df146c7a5ac8");
             }
@@ -903,7 +903,7 @@ namespace RemoveASCOM
                 guidList.Add("5BBB931B-358C-40ac-921C-B48373F01348", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "5BBB931B-358C-40ac-921C-B48373F01348");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "5BBB931B-358C-40ac-921C-B48373F01348");
             }
@@ -912,7 +912,7 @@ namespace RemoveASCOM
                 guidList.Add("5c53ff1c-b4f2-49d6-85ca-e7b3d249d12e", @"E:\ASCOM\Drivers and Simulators\Telescope Simulator .NET\Telescope\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "5c53ff1c-b4f2-49d6-85ca-e7b3d249d12e");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "5c53ff1c-b4f2-49d6-85ca-e7b3d249d12e");
             }
@@ -921,7 +921,7 @@ namespace RemoveASCOM
                 guidList.Add("5E3A9439-A1A4-4d8d-8658-53E2470C69F6", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\VB6Support\VB6HelperSupport.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "5E3A9439-A1A4-4d8d-8658-53E2470C69F6");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "5E3A9439-A1A4-4d8d-8658-53E2470C69F6");
             }
@@ -930,7 +930,7 @@ namespace RemoveASCOM
                 guidList.Add("5EDEE8B3-E223-4fb7-924F-4C56E8373380", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "5EDEE8B3-E223-4fb7-924F-4C56E8373380");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "5EDEE8B3-E223-4fb7-924F-4C56E8373380");
             }
@@ -939,7 +939,7 @@ namespace RemoveASCOM
                 guidList.Add("5EE28FFB-39CD-4d23-BF62-11EE4C581681", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "5EE28FFB-39CD-4d23-BF62-11EE4C581681");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "5EE28FFB-39CD-4d23-BF62-11EE4C581681");
             }
@@ -948,7 +948,7 @@ namespace RemoveASCOM
                 guidList.Add("5EF15982-D79E-42f7-B20B-E83232E2B86B", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "5EF15982-D79E-42f7-B20B-E83232E2B86B");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "5EF15982-D79E-42f7-B20B-E83232E2B86B");
             }
@@ -957,7 +957,7 @@ namespace RemoveASCOM
                 guidList.Add("5FC578AC-C7E2-4F02-9478-BD459DC4981F", @"E:\ASCOM\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "5FC578AC-C7E2-4F02-9478-BD459DC4981F");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "5FC578AC-C7E2-4F02-9478-BD459DC4981F");
             }
@@ -966,7 +966,7 @@ namespace RemoveASCOM
                 guidList.Add("602b2780-d8fe-438b-a11a-e45a8df6e7c8", @"E:\ASCOM\Drivers and Simulators\SwitchV2 Simulator\SwitchV2Driver\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "602b2780-d8fe-438b-a11a-e45a8df6e7c8");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "602b2780-d8fe-438b-a11a-e45a8df6e7c8");
             }
@@ -975,7 +975,7 @@ namespace RemoveASCOM
                 guidList.Add("60E342F9-3CC3-4b98-8045-D61B5A7D974B", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "60E342F9-3CC3-4b98-8045-D61B5A7D974B");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "60E342F9-3CC3-4b98-8045-D61B5A7D974B");
             }
@@ -984,7 +984,7 @@ namespace RemoveASCOM
                 guidList.Add("62a1ee21-0c62-4a4d-b9b5-10429b4afb71", @"E:\ASCOM\NOVAS\Usno.Novas.Test\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "62a1ee21-0c62-4a4d-b9b5-10429b4afb71");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "62a1ee21-0c62-4a4d-b9b5-10429b4afb71");
             }
@@ -993,7 +993,7 @@ namespace RemoveASCOM
                 guidList.Add("6320FEDA-8582-4048-988A-7D4DE7978C71", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "6320FEDA-8582-4048-988A-7D4DE7978C71");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "6320FEDA-8582-4048-988A-7D4DE7978C71");
             }
@@ -1002,7 +1002,7 @@ namespace RemoveASCOM
                 guidList.Add("64A25FDD-3687-45e0-BEAF-18C361E5E340", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "64A25FDD-3687-45e0-BEAF-18C361E5E340");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "64A25FDD-3687-45e0-BEAF-18C361E5E340");
             }
@@ -1011,7 +1011,7 @@ namespace RemoveASCOM
                 guidList.Add("64DC4F51-E5EB-4F28-A8B9-782F78A778FA", @"E:\ASCOM\Interfaces\ASCOMExceptions\InvalidOperationException.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "64DC4F51-E5EB-4F28-A8B9-782F78A778FA");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "64DC4F51-E5EB-4F28-A8B9-782F78A778FA");
             }
@@ -1020,7 +1020,7 @@ namespace RemoveASCOM
                 guidList.Add("64FEE414-176D-44d0-99DF-47621D9C377F", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Timer.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "64FEE414-176D-44d0-99DF-47621D9C377F");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "64FEE414-176D-44d0-99DF-47621D9C377F");
             }
@@ -1029,7 +1029,7 @@ namespace RemoveASCOM
                 guidList.Add("676E4D8C-2CD1-4e63-B55A-B0A1C338C6CE", @"E:\ASCOM\ASCOM.IConform\ASCOM.IConform\IConform.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "676E4D8C-2CD1-4e63-B55A-B0A1C338C6CE");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "676E4D8C-2CD1-4e63-B55A-B0A1C338C6CE");
             }
@@ -1038,7 +1038,7 @@ namespace RemoveASCOM
                 guidList.Add("692FA48C-4A30-4543-8681-DA0733758F11", @"E:\ASCOM\ASCOM.DeviceInterface\IRotatorV2.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "692FA48C-4A30-4543-8681-DA0733758F11");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "692FA48C-4A30-4543-8681-DA0733758F11");
             }
@@ -1047,7 +1047,7 @@ namespace RemoveASCOM
                 guidList.Add("694A65AE-7DB0-4BE6-99CA-C319AC044FAF", @"E:\ASCOM\ASCOM.DeviceInterface\IToggleSwitch.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "694A65AE-7DB0-4BE6-99CA-C319AC044FAF");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "694A65AE-7DB0-4BE6-99CA-C319AC044FAF");
             }
@@ -1056,7 +1056,7 @@ namespace RemoveASCOM
                 guidList.Add("69651C90-75F5-4f46-8D0F-22D186151D45", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "69651C90-75F5-4f46-8D0F-22D186151D45");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "69651C90-75F5-4f46-8D0F-22D186151D45");
             }
@@ -1065,7 +1065,7 @@ namespace RemoveASCOM
                 guidList.Add("69CFE7E6-E64F-4045-8D0D-C61F50F31CAC", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\KeyValuePair.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "69CFE7E6-E64F-4045-8D0D-C61F50F31CAC");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "69CFE7E6-E64F-4045-8D0D-C61F50F31CAC");
             }
@@ -1074,7 +1074,7 @@ namespace RemoveASCOM
                 guidList.Add("6ADE707E-1D7E-471a-94C9-F9FCC56755B1", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "6ADE707E-1D7E-471a-94C9-F9FCC56755B1");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "6ADE707E-1D7E-471a-94C9-F9FCC56755B1");
             }
@@ -1083,7 +1083,7 @@ namespace RemoveASCOM
                 guidList.Add("6B8F457E-29D6-463D-841B-85C85A8E6A1F", @"E:\ASCOM\Interfaces\ASCOMExceptions\ValueNotSetException.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "6B8F457E-29D6-463D-841B-85C85A8E6A1F");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "6B8F457E-29D6-463D-841B-85C85A8E6A1F");
             }
@@ -1092,7 +1092,7 @@ namespace RemoveASCOM
                 guidList.Add("6BD93BA2-79C5-4077-9630-B7C6E30B2FDF", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVASCOM\NOVASCOM.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "6BD93BA2-79C5-4077-9630-B7C6E30B2FDF");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "6BD93BA2-79C5-4077-9630-B7C6E30B2FDF");
             }
@@ -1101,7 +1101,7 @@ namespace RemoveASCOM
                 guidList.Add("6C02144E-641B-4E7D-9661-51FEFD48A068", @"E:\ASCOM\ASCOM.Utilities.Video\CameraImage.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "6C02144E-641B-4E7D-9661-51FEFD48A068");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "6C02144E-641B-4E7D-9661-51FEFD48A068");
             }
@@ -1110,7 +1110,7 @@ namespace RemoveASCOM
                 guidList.Add("6D6475A7-A6E0-4983-A4A8-EF7A8BCFFF1E", @"E:\ASCOM\Interfaces\ASCOMExceptions\ActionNotImplementedException.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "6D6475A7-A6E0-4983-A4A8-EF7A8BCFFF1E");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "6D6475A7-A6E0-4983-A4A8-EF7A8BCFFF1E");
             }
@@ -1119,7 +1119,7 @@ namespace RemoveASCOM
                 guidList.Add("6e391152-a698-44b6-bae7-d23438c50f2e", @"E:\ASCOM\Drivers and Simulators\TrivialSwitch Simulator .NET\TrivialSimulator\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "6e391152-a698-44b6-bae7-d23438c50f2e");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "6e391152-a698-44b6-bae7-d23438c50f2e");
             }
@@ -1128,7 +1128,7 @@ namespace RemoveASCOM
                 guidList.Add("6EA9EFD4-1783-4c6b-991C-9D4700A72A07", @"E:\ASCOM\Drivers and Simulators\SafetyMonitor Simulator .NET\Safety Monitor Simulator\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "6EA9EFD4-1783-4c6b-991C-9D4700A72A07");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "6EA9EFD4-1783-4c6b-991C-9D4700A72A07");
             }
@@ -1137,7 +1137,7 @@ namespace RemoveASCOM
                 guidList.Add("6F0E1F45-129A-4c3a-A3B0-3611AEDB33FB", @"E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "6F0E1F45-129A-4c3a-A3B0-3611AEDB33FB");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "6F0E1F45-129A-4c3a-A3B0-3611AEDB33FB");
             }
@@ -1146,7 +1146,7 @@ namespace RemoveASCOM
                 guidList.Add("6F38768E-C52D-41c7-9E0F-B8E4AFE341A7", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "6F38768E-C52D-41c7-9E0F-B8E4AFE341A7");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "6F38768E-C52D-41c7-9E0F-B8E4AFE341A7");
             }
@@ -1155,7 +1155,7 @@ namespace RemoveASCOM
                 guidList.Add("703bbc0f-1c29-4e3b-857f-5e7d6082921a", @"E:\ASCOM\ASCOM.DriverAccess\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "703bbc0f-1c29-4e3b-857f-5e7d6082921a");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "703bbc0f-1c29-4e3b-857f-5e7d6082921a");
             }
@@ -1164,7 +1164,7 @@ namespace RemoveASCOM
                 guidList.Add("70896ae0-b6c4-4303-a945-01219bf40bb4", @"E:\ASCOM\Drivers and Simulators\Dome Simulator .NET\Driver.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "70896ae0-b6c4-4303-a945-01219bf40bb4");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "70896ae0-b6c4-4303-a945-01219bf40bb4");
             }
@@ -1173,7 +1173,7 @@ namespace RemoveASCOM
                 guidList.Add("717e4712-687d-44e4-bbea-69e36975b9a3", @"E:\ASCOM\ASCOM.Utilities\ASCOM Diagnostics\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "717e4712-687d-44e4-bbea-69e36975b9a3");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "717e4712-687d-44e4-bbea-69e36975b9a3");
             }
@@ -1182,7 +1182,7 @@ namespace RemoveASCOM
                 guidList.Add("71A6CA6B-A86B-4EBB-8DA3-6D91705177A3", @"E:\ASCOM\ASCOM.DeviceInterface\ISwitchV2.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "71A6CA6B-A86B-4EBB-8DA3-6D91705177A3");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "71A6CA6B-A86B-4EBB-8DA3-6D91705177A3");
             }
@@ -1191,7 +1191,7 @@ namespace RemoveASCOM
                 guidList.Add("74F604BD-6106-40ac-A821-B32F80BF3FED", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVAS3.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "74F604BD-6106-40ac-A821-B32F80BF3FED");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "74F604BD-6106-40ac-A821-B32F80BF3FED");
             }
@@ -1200,7 +1200,7 @@ namespace RemoveASCOM
                 guidList.Add("756FD725-A6E2-436F-8C7A-67E358622027", @"E:\ASCOM\ASCOM.Interfaces\IFilterWheel.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "756FD725-A6E2-436F-8C7A-67E358622027");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "756FD725-A6E2-436F-8C7A-67E358622027");
             }
@@ -1209,7 +1209,7 @@ namespace RemoveASCOM
                 guidList.Add("76E5F444-806B-4c72-9184-18CE21D350A7", @"E:\ASCOM\ASCOM.DeviceInterface\IAscomDriver.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "76E5F444-806B-4c72-9184-18CE21D350A7");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "76E5F444-806B-4c72-9184-18CE21D350A7");
             }
@@ -1218,7 +1218,7 @@ namespace RemoveASCOM
                 guidList.Add("7722AE51-F475-4c69-8B35-B2EDBD297C66", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "7722AE51-F475-4c69-8B35-B2EDBD297C66");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "7722AE51-F475-4c69-8B35-B2EDBD297C66");
             }
@@ -1227,7 +1227,7 @@ namespace RemoveASCOM
                 guidList.Add("779CD957-5502-4939-A661-EBEE9E1F485E", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Transform.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "779CD957-5502-4939-A661-EBEE9E1F485E");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "779CD957-5502-4939-A661-EBEE9E1F485E");
             }
@@ -1236,7 +1236,7 @@ namespace RemoveASCOM
                 guidList.Add("78F157E4-D03D-4efb-8248-745F9C63A850", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVASCOM\NOVASCOM.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "78F157E4-D03D-4efb-8248-745F9C63A850");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "78F157E4-D03D-4efb-8248-745F9C63A850");
             }
@@ -1245,7 +1245,7 @@ namespace RemoveASCOM
                 guidList.Add("7A3CFD64-D7E3-48b0-BEB6-5696CF7599B3", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "7A3CFD64-D7E3-48b0-BEB6-5696CF7599B3");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "7A3CFD64-D7E3-48b0-BEB6-5696CF7599B3");
             }
@@ -1254,7 +1254,7 @@ namespace RemoveASCOM
                 guidList.Add("7DE239E3-D454-42F8-88F4-B371F328A26B", @"E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "7DE239E3-D454-42F8-88F4-B371F328A26B");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "7DE239E3-D454-42F8-88F4-B371F328A26B");
             }
@@ -1263,7 +1263,7 @@ namespace RemoveASCOM
                 guidList.Add("7E2164AD-F002-4b30-98A1-BE1CEC954260", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryExceptions.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "7E2164AD-F002-4b30-98A1-BE1CEC954260");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "7E2164AD-F002-4b30-98A1-BE1CEC954260");
             }
@@ -1272,7 +1272,7 @@ namespace RemoveASCOM
                 guidList.Add("7e30c546-1a9a-4ed4-98d7-03eb167e2c9a", @"E:\ASCOM\Drivers and Simulators\Gemini Driver\Telescope\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "7e30c546-1a9a-4ed4-98d7-03eb167e2c9a");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "7e30c546-1a9a-4ed4-98d7-03eb167e2c9a");
             }
@@ -1281,7 +1281,7 @@ namespace RemoveASCOM
                 guidList.Add("7f3582e3-9aa8-42ca-845c-2e6b13f362c1", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "7f3582e3-9aa8-42ca-845c-2e6b13f362c1");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "7f3582e3-9aa8-42ca-845c-2e6b13f362c1");
             }
@@ -1290,7 +1290,7 @@ namespace RemoveASCOM
                 guidList.Add("7fdf28d9-9887-4b7e-be36-7a4acb80a281", @"E:\ASCOM\DriverTemplates\ASCOM.Setup.TemplateWizard\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "7fdf28d9-9887-4b7e-be36-7a4acb80a281");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "7fdf28d9-9887-4b7e-be36-7a4acb80a281");
             }
@@ -1299,7 +1299,7 @@ namespace RemoveASCOM
                 guidList.Add("8021120a-7635-4793-a64e-93d26bf813cb", @"E:\ASCOM\Drivers and Simulators\Switch Simulator .NET\SwitchSimulatorDriver\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "8021120a-7635-4793-a64e-93d26bf813cb");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "8021120a-7635-4793-a64e-93d26bf813cb");
             }
@@ -1308,7 +1308,7 @@ namespace RemoveASCOM
                 guidList.Add("84422451-5D8E-4F5A-9A81-8E197AABF79B", @"E:\ASCOM\ASCOM.DeviceInterface\IVideo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "84422451-5D8E-4F5A-9A81-8E197AABF79B");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "84422451-5D8E-4F5A-9A81-8E197AABF79B");
             }
@@ -1317,7 +1317,7 @@ namespace RemoveASCOM
                 guidList.Add("84f0df4b-8d54-41d6-be96-1b8a3c98ef03", @"E:\ASCOM\Drivers and Simulators\Gemini Driver\Telescope\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "84f0df4b-8d54-41d6-be96-1b8a3c98ef03");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "84f0df4b-8d54-41d6-be96-1b8a3c98ef03");
             }
@@ -1326,7 +1326,7 @@ namespace RemoveASCOM
                 guidList.Add("867fafcd-7a54-4b6d-9360-1abaa662e6d8", @"E:\ASCOM\Remove ASCOM\Find GUIDs\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "867fafcd-7a54-4b6d-9360-1abaa662e6d8");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "867fafcd-7a54-4b6d-9360-1abaa662e6d8");
             }
@@ -1335,7 +1335,7 @@ namespace RemoveASCOM
                 guidList.Add("86931eac-1f52-4918-b6aa-7e9b0ff361bd", @"E:\ASCOM\Drivers and Simulators\Telescope Simulator .NET\Telescope\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "86931eac-1f52-4918-b6aa-7e9b0ff361bd");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "86931eac-1f52-4918-b6aa-7e9b0ff361bd");
             }
@@ -1344,7 +1344,7 @@ namespace RemoveASCOM
                 guidList.Add("87752dfb-e91b-44d4-a49d-798121f78149", @"E:\ASCOM\DriverTemplates\TemplateSources\src\ASCOM Test Console App (VB)\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "87752dfb-e91b-44d4-a49d-798121f78149");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "87752dfb-e91b-44d4-a49d-798121f78149");
             }
@@ -1353,7 +1353,7 @@ namespace RemoveASCOM
                 guidList.Add("87D14110-BEB7-43ff-991E-AAA11C44E5AF", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\VB6Support\VB6HelperSupport.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "87D14110-BEB7-43ff-991E-AAA11C44E5AF");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "87D14110-BEB7-43ff-991E-AAA11C44E5AF");
             }
@@ -1362,7 +1362,7 @@ namespace RemoveASCOM
                 guidList.Add("880840E2-76E6-4036-AD8F-60A326D7F9DA", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Profile.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "880840E2-76E6-4036-AD8F-60A326D7F9DA");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "880840E2-76E6-4036-AD8F-60A326D7F9DA");
             }
@@ -1371,7 +1371,7 @@ namespace RemoveASCOM
                 guidList.Add("8828511A-05C1-43c7-8970-00D23595930A", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "8828511A-05C1-43c7-8970-00D23595930A");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "8828511A-05C1-43c7-8970-00D23595930A");
             }
@@ -1380,7 +1380,7 @@ namespace RemoveASCOM
                 guidList.Add("88CFA00C-DDD3-4b42-A1F0-9387E6823832", @"E:\ASCOM\ASCOM.DeviceInterface\IDomeV2.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "88CFA00C-DDD3-4b42-A1F0-9387E6823832");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "88CFA00C-DDD3-4b42-A1F0-9387E6823832");
             }
@@ -1389,7 +1389,7 @@ namespace RemoveASCOM
                 guidList.Add("89145C95-9B78-494e-99FE-BD2EF4386096", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "89145C95-9B78-494e-99FE-BD2EF4386096");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "89145C95-9B78-494e-99FE-BD2EF4386096");
             }
@@ -1398,7 +1398,7 @@ namespace RemoveASCOM
                 guidList.Add("8915DF3D-B055-4195-8D23-AAD7F58FDF3B", @"E:\ASCOM\ASCOM.Interfaces\DomeEnumerations.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "8915DF3D-B055-4195-8D23-AAD7F58FDF3B");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "8915DF3D-B055-4195-8D23-AAD7F58FDF3B");
             }
@@ -1407,7 +1407,7 @@ namespace RemoveASCOM
                 guidList.Add("89EA7E2A-7C74-461C-ABD5-75EE3D46DA13", @"E:\ASCOM\Interfaces\ASCOMExceptions\ParkedException.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "89EA7E2A-7C74-461C-ABD5-75EE3D46DA13");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "89EA7E2A-7C74-461C-ABD5-75EE3D46DA13");
             }
@@ -1416,7 +1416,7 @@ namespace RemoveASCOM
                 guidList.Add("8AF165D8-251D-4214-9160-E43241FDB55C", @"E:\ASCOM\ASCOM.Internal.Extensions\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "8AF165D8-251D-4214-9160-E43241FDB55C");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "8AF165D8-251D-4214-9160-E43241FDB55C");
             }
@@ -1425,7 +1425,7 @@ namespace RemoveASCOM
                 guidList.Add("8BBA934E-D874-48a2-A3E2-C842A7FFFB35", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "8BBA934E-D874-48a2-A3E2-C842A7FFFB35");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "8BBA934E-D874-48a2-A3E2-C842A7FFFB35");
             }
@@ -1434,7 +1434,7 @@ namespace RemoveASCOM
                 guidList.Add("8bbbfc3b-a642-4c27-8de0-55130ff8fc92", @"E:\ASCOM\ASCOM Platform Examples\Examples\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "8bbbfc3b-a642-4c27-8de0-55130ff8fc92");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "8bbbfc3b-a642-4c27-8de0-55130ff8fc92");
             }
@@ -1443,7 +1443,7 @@ namespace RemoveASCOM
                 guidList.Add("8cedc215-ac4b-488b-93c0-a50a49cb2fb8", @"E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "8cedc215-ac4b-488b-93c0-a50a49cb2fb8");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "8cedc215-ac4b-488b-93c0-a50a49cb2fb8");
             }
@@ -1452,7 +1452,7 @@ namespace RemoveASCOM
                 guidList.Add("8D8B7043-49AA-40be-881F-0EC5D8E2213D", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVASCOM\NOVASCOM.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "8D8B7043-49AA-40be-881F-0EC5D8E2213D");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "8D8B7043-49AA-40be-881F-0EC5D8E2213D");
             }
@@ -1461,7 +1461,7 @@ namespace RemoveASCOM
                 guidList.Add("8D9E6EF5-CE9C-4ba9-8B24-C0FA5067D8FA", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "8D9E6EF5-CE9C-4ba9-8B24-C0FA5067D8FA");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "8D9E6EF5-CE9C-4ba9-8B24-C0FA5067D8FA");
             }
@@ -1470,7 +1470,7 @@ namespace RemoveASCOM
                 guidList.Add("8DD80835-29C6-49d6-8E4D-8887B20E707E", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "8DD80835-29C6-49d6-8E4D-8887B20E707E");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "8DD80835-29C6-49d6-8E4D-8887B20E707E");
             }
@@ -1479,7 +1479,7 @@ namespace RemoveASCOM
                 guidList.Add("8FD58EDE-DF7A-4fdc-9DEC-FD0B36424F5F", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVASCOM\NOVASCOM.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "8FD58EDE-DF7A-4fdc-9DEC-FD0B36424F5F");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "8FD58EDE-DF7A-4fdc-9DEC-FD0B36424F5F");
             }
@@ -1488,7 +1488,7 @@ namespace RemoveASCOM
                 guidList.Add("8FFEAC07-F976-4fd8-8547-3DCFF25F5FA3", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "8FFEAC07-F976-4fd8-8547-3DCFF25F5FA3");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "8FFEAC07-F976-4fd8-8547-3DCFF25F5FA3");
             }
@@ -1497,7 +1497,7 @@ namespace RemoveASCOM
                 guidList.Add("903D0C2C-CE3D-4e27-BD50-3B2C76B7EEE1", @"E:\ASCOM\ASCOM.IConform\ASCOM.IConform\IConform.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "903D0C2C-CE3D-4e27-BD50-3B2C76B7EEE1");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "903D0C2C-CE3D-4e27-BD50-3B2C76B7EEE1");
             }
@@ -1506,7 +1506,7 @@ namespace RemoveASCOM
                 guidList.Add("90F92092-DD68-4AA5-845C-7061F328B73E", @"E:\ASCOM\ASCOM.DeviceInterface\SafetyMonitor.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "90F92092-DD68-4AA5-845C-7061F328B73E");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "90F92092-DD68-4AA5-845C-7061F328B73E");
             }
@@ -1515,7 +1515,7 @@ namespace RemoveASCOM
                 guidList.Add("9145faa9-a4b3-4311-a55a-35b7763d4d75", @"E:\ASCOM\DriverHelper2\VB.Net Test\VB.Net Test\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "9145faa9-a4b3-4311-a55a-35b7763d4d75");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "9145faa9-a4b3-4311-a55a-35b7763d4d75");
             }
@@ -1524,7 +1524,7 @@ namespace RemoveASCOM
                 guidList.Add("9289B6A5-CAF1-4da1-8A36-999BEBCDD5E9", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\VB6Support\VB6HelperSupport.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "9289B6A5-CAF1-4da1-8A36-999BEBCDD5E9");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "9289B6A5-CAF1-4da1-8A36-999BEBCDD5E9");
             }
@@ -1533,7 +1533,7 @@ namespace RemoveASCOM
                 guidList.Add("92B19711-B44F-4642-9F96-5A20397B8FD1", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Serial.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "92B19711-B44F-4642-9F96-5A20397B8FD1");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "92B19711-B44F-4642-9F96-5A20397B8FD1");
             }
@@ -1542,7 +1542,7 @@ namespace RemoveASCOM
                 guidList.Add("939B5C76-A502-4729-8786-0C1600445EFE", @"E:\ASCOM\Interfaces\ASCOMExceptions\InvalidValueException.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "939B5C76-A502-4729-8786-0C1600445EFE");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "939B5C76-A502-4729-8786-0C1600445EFE");
             }
@@ -1551,7 +1551,7 @@ namespace RemoveASCOM
                 guidList.Add("946C9620-B292-4807-9B75-FC828AB1700B", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "946C9620-B292-4807-9B75-FC828AB1700B");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "946C9620-B292-4807-9B75-FC828AB1700B");
             }
@@ -1560,7 +1560,7 @@ namespace RemoveASCOM
                 guidList.Add("9591FC6A-3EF1-41ae-9FE1-FE0C76686A85", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "9591FC6A-3EF1-41ae-9FE1-FE0C76686A85");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "9591FC6A-3EF1-41ae-9FE1-FE0C76686A85");
             }
@@ -1569,7 +1569,7 @@ namespace RemoveASCOM
                 guidList.Add("972CEBC6-0EBE-4efc-99DD-CC5293FDE77B", @"E:\ASCOM\ASCOM.DeviceInterface\ICameraV2.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "972CEBC6-0EBE-4efc-99DD-CC5293FDE77B");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "972CEBC6-0EBE-4efc-99DD-CC5293FDE77B");
             }
@@ -1578,7 +1578,7 @@ namespace RemoveASCOM
                 guidList.Add("979908fa-6eec-4aec-b59a-e6b01e22e51a", @"E:\ASCOM\ASCOM.Attributes\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "979908fa-6eec-4aec-b59a-e6b01e22e51a");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "979908fa-6eec-4aec-b59a-e6b01e22e51a");
             }
@@ -1587,7 +1587,7 @@ namespace RemoveASCOM
                 guidList.Add("99c5f824-66cb-4fa4-ad22-2c93179f3d38", @"E:\ASCOM\InstallAwareHack\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "99c5f824-66cb-4fa4-ad22-2c93179f3d38");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "99c5f824-66cb-4fa4-ad22-2c93179f3d38");
             }
@@ -1596,7 +1596,7 @@ namespace RemoveASCOM
                 guidList.Add("99DB28A6-0132-43BF-91C0-D723124813C8", @"E:\ASCOM\DriverTemplates\TemplateSources\src\ASCOM Driver Template (CS)\Rates.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "99DB28A6-0132-43BF-91C0-D723124813C8");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "99DB28A6-0132-43BF-91C0-D723124813C8");
             }
@@ -1605,7 +1605,7 @@ namespace RemoveASCOM
                 guidList.Add("9AD852C3-A895-4f69-AEC0-C9CA44283FA0", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "9AD852C3-A895-4f69-AEC0-C9CA44283FA0");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "9AD852C3-A895-4f69-AEC0-C9CA44283FA0");
             }
@@ -1614,7 +1614,7 @@ namespace RemoveASCOM
                 guidList.Add("9c916b40-9e2b-4f99-b3d9-a12bafe1466d", @"E:\ASCOM\Drivers and Simulators\Gemini Driver\Telescope\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "9c916b40-9e2b-4f99-b3d9-a12bafe1466d");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "9c916b40-9e2b-4f99-b3d9-a12bafe1466d");
             }
@@ -1623,7 +1623,7 @@ namespace RemoveASCOM
                 guidList.Add("9DD2CBDB-D114-4576-8072-4ED79CD3571A", @"E:\ASCOM\ASCOM.DeviceInterface\IRheostat.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "9DD2CBDB-D114-4576-8072-4ED79CD3571A");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "9DD2CBDB-D114-4576-8072-4ED79CD3571A");
             }
@@ -1632,7 +1632,7 @@ namespace RemoveASCOM
                 guidList.Add("9E3AAEB4-D1CD-11D2-BAB9-00C04F8ECEAE", @"E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "9E3AAEB4-D1CD-11D2-BAB9-00C04F8ECEAE");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "9E3AAEB4-D1CD-11D2-BAB9-00C04F8ECEAE");
             }
@@ -1641,7 +1641,7 @@ namespace RemoveASCOM
                 guidList.Add("A007D146-AE3D-4754-98CA-199FEC03CF68", @"E:\ASCOM\ASCOM.DeviceInterface\ITelescopeV3.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "A007D146-AE3D-4754-98CA-199FEC03CF68");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "A007D146-AE3D-4754-98CA-199FEC03CF68");
             }
@@ -1650,7 +1650,7 @@ namespace RemoveASCOM
                 guidList.Add("A088DB9B-E081-4339-996E-191EB9A80844", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\TraceLogger.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "A088DB9B-E081-4339-996E-191EB9A80844");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "A088DB9B-E081-4339-996E-191EB9A80844");
             }
@@ -1659,7 +1659,7 @@ namespace RemoveASCOM
                 guidList.Add("A1D2C046-F7BC-474f-8D95-6E7B761DEECB", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "A1D2C046-F7BC-474f-8D95-6E7B761DEECB");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "A1D2C046-F7BC-474f-8D95-6E7B761DEECB");
             }
@@ -1668,7 +1668,7 @@ namespace RemoveASCOM
                 guidList.Add("a1fb7459-56f0-4962-a34e-5ca3bbbd3018", @"E:\ASCOM\ASCOM.IConform\ASCOM.IConform\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "a1fb7459-56f0-4962-a34e-5ca3bbbd3018");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "a1fb7459-56f0-4962-a34e-5ca3bbbd3018");
             }
@@ -1677,7 +1677,7 @@ namespace RemoveASCOM
                 guidList.Add("A29FB43E-28C5-4ed0-8C8A-889DC7170A82", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "A29FB43E-28C5-4ed0-8C8A-889DC7170A82");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "A29FB43E-28C5-4ed0-8C8A-889DC7170A82");
             }
@@ -1686,7 +1686,7 @@ namespace RemoveASCOM
                 guidList.Add("A38ABA4D-F872-4c2a-A19D-62DBBC761DD5", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "A38ABA4D-F872-4c2a-A19D-62DBBC761DD5");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "A38ABA4D-F872-4c2a-A19D-62DBBC761DD5");
             }
@@ -1695,7 +1695,7 @@ namespace RemoveASCOM
                 guidList.Add("A3B6F9AA-B331-47c7-B8F0-4FBECF0638AA", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "A3B6F9AA-B331-47c7-B8F0-4FBECF0638AA");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "A3B6F9AA-B331-47c7-B8F0-4FBECF0638AA");
             }
@@ -1704,7 +1704,7 @@ namespace RemoveASCOM
                 guidList.Add("a3fca333-0593-4b7a-b684-64c4fbe08700", @"E:\ASCOM\ASCOM.Utilities\MigrateProfile\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "a3fca333-0593-4b7a-b684-64c4fbe08700");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "a3fca333-0593-4b7a-b684-64c4fbe08700");
             }
@@ -1713,7 +1713,7 @@ namespace RemoveASCOM
                 guidList.Add("A5E797E1-2DC3-48DD-953C-08A3F34374A0", @"E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "A5E797E1-2DC3-48DD-953C-08A3F34374A0");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "A5E797E1-2DC3-48DD-953C-08A3F34374A0");
             }
@@ -1722,7 +1722,7 @@ namespace RemoveASCOM
                 guidList.Add("A8B9A15E-0F01-46ce-AF6E-BEFD3CB9E2BC", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryExceptions.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "A8B9A15E-0F01-46ce-AF6E-BEFD3CB9E2BC");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "A8B9A15E-0F01-46ce-AF6E-BEFD3CB9E2BC");
             }
@@ -1731,7 +1731,7 @@ namespace RemoveASCOM
                 guidList.Add("A8CFEEE1-F27B-4a68-AF05-5F6CCE3F1257", @"E:\ASCOM\ASCOM.IConform\ASCOM.IConform\IConform.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "A8CFEEE1-F27B-4a68-AF05-5F6CCE3F1257");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "A8CFEEE1-F27B-4a68-AF05-5F6CCE3F1257");
             }
@@ -1740,7 +1740,7 @@ namespace RemoveASCOM
                 guidList.Add("A9C1E5CF-2AA4-404D-B16A-79F5C8B1062F", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "A9C1E5CF-2AA4-404D-B16A-79F5C8B1062F");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "A9C1E5CF-2AA4-404D-B16A-79F5C8B1062F");
             }
@@ -1749,7 +1749,7 @@ namespace RemoveASCOM
                 guidList.Add("A9C2CF73-C139-4fae-B47B-36F18C49B527", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "A9C2CF73-C139-4fae-B47B-36F18C49B527");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "A9C2CF73-C139-4fae-B47B-36F18C49B527");
             }
@@ -1758,7 +1758,7 @@ namespace RemoveASCOM
                 guidList.Add("ABE720E6-9C2C-47e9-8476-6CE5A3F994E2", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\VB6Support\VB6HelperSupport.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "ABE720E6-9C2C-47e9-8476-6CE5A3F994E2");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "ABE720E6-9C2C-47e9-8476-6CE5A3F994E2");
             }
@@ -1767,7 +1767,7 @@ namespace RemoveASCOM
                 guidList.Add("AD6248B3-3F51-4FFF-B62B-E3E942DD817E", @"E:\ASCOM\DriverTemplates\TemplateSources\src\ASCOM Driver Template (CS)\Rates.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "AD6248B3-3F51-4FFF-B62B-E3E942DD817E");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "AD6248B3-3F51-4FFF-B62B-E3E942DD817E");
             }
@@ -1776,7 +1776,7 @@ namespace RemoveASCOM
                 guidList.Add("AECD630C-3A08-46A2-96D3-33F3CF461CBB", @"E:\ASCOM\ASCOM.DeviceInterface\IVideo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "AECD630C-3A08-46A2-96D3-33F3CF461CBB");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "AECD630C-3A08-46A2-96D3-33F3CF461CBB");
             }
@@ -1785,7 +1785,7 @@ namespace RemoveASCOM
                 guidList.Add("AEFE0EA0-D013-46a9-B77D-6D0FDD661005", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "AEFE0EA0-D013-46a9-B77D-6D0FDD661005");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "AEFE0EA0-D013-46a9-B77D-6D0FDD661005");
             }
@@ -1794,7 +1794,7 @@ namespace RemoveASCOM
                 guidList.Add("af5510b9-3108-4237-83da-ae70524aab7d", @"E:\ASCOM\Drivers and Simulators\Telescope Simulator .NET\Telescope\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "af5510b9-3108-4237-83da-ae70524aab7d");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "af5510b9-3108-4237-83da-ae70524aab7d");
             }
@@ -1803,7 +1803,7 @@ namespace RemoveASCOM
                 guidList.Add("AF69D7CC-A59C-4fcc-BE17-C2F568957BFD", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "AF69D7CC-A59C-4fcc-BE17-C2F568957BFD");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "AF69D7CC-A59C-4fcc-BE17-C2F568957BFD");
             }
@@ -1812,7 +1812,7 @@ namespace RemoveASCOM
                 guidList.Add("B02BEFFC-6373-441A-A4E3-9A82165E1A0F", @"E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\ToggleSwitch.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "B02BEFFC-6373-441A-A4E3-9A82165E1A0F");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "B02BEFFC-6373-441A-A4E3-9A82165E1A0F");
             }
@@ -1821,7 +1821,7 @@ namespace RemoveASCOM
                 guidList.Add("b02f9d65-fb77-4f7a-afa5-b391309f11c9", @"E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "b02f9d65-fb77-4f7a-afa5-b391309f11c9");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "b02f9d65-fb77-4f7a-afa5-b391309f11c9");
             }
@@ -1830,7 +1830,7 @@ namespace RemoveASCOM
                 guidList.Add("B0C32247-9CF4-47bd-A5E4-FD430065CB4A", @"E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "B0C32247-9CF4-47bd-A5E4-FD430065CB4A");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "B0C32247-9CF4-47bd-A5E4-FD430065CB4A");
             }
@@ -1839,7 +1839,7 @@ namespace RemoveASCOM
                 guidList.Add("B1F24499-879F-4fa1-8FE1-C491741EBBF4", @"E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "B1F24499-879F-4fa1-8FE1-C491741EBBF4");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "B1F24499-879F-4fa1-8FE1-C491741EBBF4");
             }
@@ -1848,7 +1848,7 @@ namespace RemoveASCOM
                 guidList.Add("B232CDBA-22CC-4596-84F9-23F99B2512FD", @"E:\ASCOM\ASCOM.DeviceInterface\IDeviceControl.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "B232CDBA-22CC-4596-84F9-23F99B2512FD");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "B232CDBA-22CC-4596-84F9-23F99B2512FD");
             }
@@ -1857,7 +1857,7 @@ namespace RemoveASCOM
                 guidList.Add("b377b2cb-f8f4-4bba-a013-3f0a7aebd6ef", @"E:\ASCOM\NOVAS\NOVAS.Net\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "b377b2cb-f8f4-4bba-a013-3f0a7aebd6ef");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "b377b2cb-f8f4-4bba-a013-3f0a7aebd6ef");
             }
@@ -1866,7 +1866,7 @@ namespace RemoveASCOM
                 guidList.Add("B3E5FC9D-4D76-4f4b-8FF5-854A01DF413F", @"E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\SwitchDevice.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "B3E5FC9D-4D76-4f4b-8FF5-854A01DF413F");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "B3E5FC9D-4D76-4f4b-8FF5-854A01DF413F");
             }
@@ -1875,7 +1875,7 @@ namespace RemoveASCOM
                 guidList.Add("b51f66fe-1a27-4a79-8549-8791dcc1986e", @"E:\ASCOM\Releases\ASCOM 6\Uninstaller\UninstallASCOM\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "b51f66fe-1a27-4a79-8549-8791dcc1986e");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "b51f66fe-1a27-4a79-8549-8791dcc1986e");
             }
@@ -1884,7 +1884,7 @@ namespace RemoveASCOM
                 guidList.Add("B5D6F255-2547-461D-9273-AD0C8FBD91D5", @"E:\ASCOM\Drivers and Simulators\SafetyMonitor Simulator\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "B5D6F255-2547-461D-9273-AD0C8FBD91D5");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "B5D6F255-2547-461D-9273-AD0C8FBD91D5");
             }
@@ -1893,7 +1893,7 @@ namespace RemoveASCOM
                 guidList.Add("B6EE3D18-CF56-42D3-AED5-B97ABF36B4EE", @"E:\ASCOM\Interfaces\ASCOMExceptions\DriverException.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "B6EE3D18-CF56-42D3-AED5-B97ABF36B4EE");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "B6EE3D18-CF56-42D3-AED5-B97ABF36B4EE");
             }
@@ -1902,7 +1902,7 @@ namespace RemoveASCOM
                 guidList.Add("B7203C35-B113-472D-9E5D-0602883AC835", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVAS31.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "B7203C35-B113-472D-9E5D-0602883AC835");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "B7203C35-B113-472D-9E5D-0602883AC835");
             }
@@ -1911,7 +1911,7 @@ namespace RemoveASCOM
                 guidList.Add("B7A1F5A0-71B4-44f9-91E9-468697957D6B", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Chooser.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "B7A1F5A0-71B4-44f9-91E9-468697957D6B");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "B7A1F5A0-71B4-44f9-91E9-468697957D6B");
             }
@@ -1920,7 +1920,7 @@ namespace RemoveASCOM
                 guidList.Add("B826412C-B56B-439D-86F9-D116E6EB052C", @"E:\ASCOM\ASCOM.DeviceInterface\INWaySwitch.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "B826412C-B56B-439D-86F9-D116E6EB052C");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "B826412C-B56B-439D-86F9-D116E6EB052C");
             }
@@ -1929,7 +1929,7 @@ namespace RemoveASCOM
                 guidList.Add("BBD1CD3C-5983-4584-96F9-E22AB0F8BB31", @"E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "BBD1CD3C-5983-4584-96F9-E22AB0F8BB31");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "BBD1CD3C-5983-4584-96F9-E22AB0F8BB31");
             }
@@ -1938,7 +1938,7 @@ namespace RemoveASCOM
                 guidList.Add("BBED286E-5814-4467-9471-A499DED13452", @"E:\ASCOM\Interfaces\ASCOMExceptions\MethodNotImplementedException.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "BBED286E-5814-4467-9471-A499DED13452");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "BBED286E-5814-4467-9471-A499DED13452");
             }
@@ -1947,7 +1947,7 @@ namespace RemoveASCOM
                 guidList.Add("BCB5C21D-B0EA-40D1-B36C-272456F44D01", @"E:\ASCOM\ASCOM.Interfaces\Telescope.Enumerations.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "BCB5C21D-B0EA-40D1-B36C-272456F44D01");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "BCB5C21D-B0EA-40D1-B36C-272456F44D01");
             }
@@ -1956,7 +1956,7 @@ namespace RemoveASCOM
                 guidList.Add("BD925113-3B58-4C5F-984E-FBCE7C6A93BE", @"E:\ASCOM\ASCOM.Utilities.Video\CameraImage.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "BD925113-3B58-4C5F-984E-FBCE7C6A93BE");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "BD925113-3B58-4C5F-984E-FBCE7C6A93BE");
             }
@@ -1965,7 +1965,7 @@ namespace RemoveASCOM
                 guidList.Add("bdc086a3-8b62-4994-b6ee-4299217a1347", @"E:\ASCOM\ASCOM.Utilities\EraseProfile\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "bdc086a3-8b62-4994-b6ee-4299217a1347");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "bdc086a3-8b62-4994-b6ee-4299217a1347");
             }
@@ -1974,7 +1974,7 @@ namespace RemoveASCOM
                 guidList.Add("BDDA4DFD-77F8-4bd2-ACC0-AF32B4F8B9C2", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "BDDA4DFD-77F8-4bd2-ACC0-AF32B4F8B9C2");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "BDDA4DFD-77F8-4bd2-ACC0-AF32B4F8B9C2");
             }
@@ -1983,7 +1983,7 @@ namespace RemoveASCOM
                 guidList.Add("BE3C8C90-98F8-4B8B-8C12-C99C8CEC0B7F", @"E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\ControllerDeviceState.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "BE3C8C90-98F8-4B8B-8C12-C99C8CEC0B7F");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "BE3C8C90-98F8-4B8B-8C12-C99C8CEC0B7F");
             }
@@ -1992,7 +1992,7 @@ namespace RemoveASCOM
                 guidList.Add("BF98641E-FC63-451d-9310-63EFEFA1B28B", @"E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "BF98641E-FC63-451d-9310-63EFEFA1B28B");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "BF98641E-FC63-451d-9310-63EFEFA1B28B");
             }
@@ -2001,7 +2001,7 @@ namespace RemoveASCOM
                 guidList.Add("C22D9A81-63FA-4AC3-AD64-77B77D3CEB2B", @"E:\ASCOM\Interfaces\ASCOMExceptions\NotConnectedException.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "C22D9A81-63FA-4AC3-AD64-77B77D3CEB2B");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "C22D9A81-63FA-4AC3-AD64-77B77D3CEB2B");
             }
@@ -2010,7 +2010,7 @@ namespace RemoveASCOM
                 guidList.Add("C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC", @"E:\ASCOM\ASCOM.Interfaces\IFocuser.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC");
             }
@@ -2019,7 +2019,7 @@ namespace RemoveASCOM
                 guidList.Add("C39A798C-53F7-460b-853F-DA5389B4324D", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "C39A798C-53F7-460b-853F-DA5389B4324D");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "C39A798C-53F7-460b-853F-DA5389B4324D");
             }
@@ -2028,7 +2028,7 @@ namespace RemoveASCOM
                 guidList.Add("C3F04186-CD53-40fb-8B2A-B52BE955956D", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVAS2COM.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "C3F04186-CD53-40fb-8B2A-B52BE955956D");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "C3F04186-CD53-40fb-8B2A-B52BE955956D");
             }
@@ -2037,7 +2037,7 @@ namespace RemoveASCOM
                 guidList.Add("c5c6b4bf-4cba-447d-810a-b0013b0a77a5", @"E:\ASCOM\Drivers and Simulators\Gemini Driver\Focuser\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "c5c6b4bf-4cba-447d-810a-b0013b0a77a5");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "c5c6b4bf-4cba-447d-810a-b0013b0a77a5");
             }
@@ -2046,7 +2046,7 @@ namespace RemoveASCOM
                 guidList.Add("c7008f94-e3b9-4481-b720-3b56557860c6", @"E:\ASCOM\Drivers and Simulators\SwitchV2 Simulator\switchtest\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "c7008f94-e3b9-4481-b720-3b56557860c6");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "c7008f94-e3b9-4481-b720-3b56557860c6");
             }
@@ -2055,7 +2055,7 @@ namespace RemoveASCOM
                 guidList.Add("C7A1DA6D-91A4-4165-A647-1A40E2D4D5F8", @"E:\ASCOM\Drivers and Simulators\SafetyMonitor Simulator .NET\Safety Monitor Simulator\Driver.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "C7A1DA6D-91A4-4165-A647-1A40E2D4D5F8");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "C7A1DA6D-91A4-4165-A647-1A40E2D4D5F8");
             }
@@ -2064,7 +2064,7 @@ namespace RemoveASCOM
                 guidList.Add("C839867F-E152-44e1-8356-2DB450329EDC", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "C839867F-E152-44e1-8356-2DB450329EDC");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "C839867F-E152-44e1-8356-2DB450329EDC");
             }
@@ -2073,7 +2073,7 @@ namespace RemoveASCOM
                 guidList.Add("C893C94C-3D48-4068-8BCE-6CED6AEF2512", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "C893C94C-3D48-4068-8BCE-6CED6AEF2512");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "C893C94C-3D48-4068-8BCE-6CED6AEF2512");
             }
@@ -2082,7 +2082,7 @@ namespace RemoveASCOM
                 guidList.Add("c9809d46-a7aa-4876-8631-47222a34707f", @"E:\ASCOM\Drivers and Simulators\Gemini Driver\Telescope\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "c9809d46-a7aa-4876-8631-47222a34707f");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "c9809d46-a7aa-4876-8631-47222a34707f");
             }
@@ -2091,7 +2091,7 @@ namespace RemoveASCOM
                 guidList.Add("C9D7FD9C-1F22-47B3-88A3-2E3C5C5E9B94", @"E:\ASCOM\ASCOM.Interfaces\CameraEnumerations.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "C9D7FD9C-1F22-47B3-88A3-2E3C5C5E9B94");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "C9D7FD9C-1F22-47B3-88A3-2E3C5C5E9B94");
             }
@@ -2100,7 +2100,7 @@ namespace RemoveASCOM
                 guidList.Add("CA653783-E47D-4e9d-9759-3B91BE0F4340", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "CA653783-E47D-4e9d-9759-3B91BE0F4340");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "CA653783-E47D-4e9d-9759-3B91BE0F4340");
             }
@@ -2109,7 +2109,7 @@ namespace RemoveASCOM
                 guidList.Add("CAE65556-EA7A-4252-BF28-D0E967AEF04D", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "CAE65556-EA7A-4252-BF28-D0E967AEF04D");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "CAE65556-EA7A-4252-BF28-D0E967AEF04D");
             }
@@ -2118,7 +2118,7 @@ namespace RemoveASCOM
                 guidList.Add("cc3bdb91-8048-4d1e-8e10-e35858594154", @"E:\ASCOM\ASCOM.Utilities\FusionLib\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "cc3bdb91-8048-4d1e-8e10-e35858594154");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "cc3bdb91-8048-4d1e-8e10-e35858594154");
             }
@@ -2127,7 +2127,7 @@ namespace RemoveASCOM
                 guidList.Add("CCDA0D85-474A-4775-8105-1D513ADC3896", @"E:\ASCOM\ASCOM.Interfaces\IDome.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "CCDA0D85-474A-4775-8105-1D513ADC3896");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "CCDA0D85-474A-4775-8105-1D513ADC3896");
             }
@@ -2136,7 +2136,7 @@ namespace RemoveASCOM
                 guidList.Add("CD193BC0-B4BC-11d2-9833-00C04FC31D2E", @"E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "CD193BC0-B4BC-11d2-9833-00C04FC31D2E");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "CD193BC0-B4BC-11d2-9833-00C04FC31D2E");
             }
@@ -2145,7 +2145,7 @@ namespace RemoveASCOM
                 guidList.Add("CD7AEAC0-1BFA-447e-A43E-62C231B0FC55", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "CD7AEAC0-1BFA-447e-A43E-62C231B0FC55");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "CD7AEAC0-1BFA-447e-A43E-62C231B0FC55");
             }
@@ -2154,7 +2154,7 @@ namespace RemoveASCOM
                 guidList.Add("cf3c716d-b0a6-4511-ba79-860e63521fbe", @"E:\ASCOM\Drivers and Simulators\ASCOM.Simulator.Video\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "cf3c716d-b0a6-4511-ba79-860e63521fbe");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "cf3c716d-b0a6-4511-ba79-860e63521fbe");
             }
@@ -2163,7 +2163,7 @@ namespace RemoveASCOM
                 guidList.Add("d0acdb0f-9c7e-4c53-abb7-576e9f2b8225", @"E:\ASCOM\Drivers and Simulators\Telescope Simulator .NET\Telescope\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "d0acdb0f-9c7e-4c53-abb7-576e9f2b8225");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "d0acdb0f-9c7e-4c53-abb7-576e9f2b8225");
             }
@@ -2172,7 +2172,7 @@ namespace RemoveASCOM
                 guidList.Add("d0c60845-c28e-4d08-8cb4-4f10cbd04ceb", @"E:\ASCOM\Releases\ASCOM 6\FinaliseInstall\FinaliseInstall\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "d0c60845-c28e-4d08-8cb4-4f10cbd04ceb");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "d0c60845-c28e-4d08-8cb4-4f10cbd04ceb");
             }
@@ -2181,7 +2181,7 @@ namespace RemoveASCOM
                 guidList.Add("D398FD76-F4B8-48a2-9CA3-2EF0DD8B98E1", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "D398FD76-F4B8-48a2-9CA3-2EF0DD8B98E1");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "D398FD76-F4B8-48a2-9CA3-2EF0DD8B98E1");
             }
@@ -2190,7 +2190,7 @@ namespace RemoveASCOM
                 guidList.Add("D40EB54D-0F0F-406d-B68F-C2A7984235BC", @"E:\ASCOM\ASCOM.Interfaces\CameraEnumerations.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "D40EB54D-0F0F-406d-B68F-C2A7984235BC");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "D40EB54D-0F0F-406d-B68F-C2A7984235BC");
             }
@@ -2199,7 +2199,7 @@ namespace RemoveASCOM
                 guidList.Add("d6707f49-0be2-49fa-899b-1975d91ecff4", @"E:\ASCOM\Drivers and Simulators\Switch Simulator .NET\SwitchSimulatorDriver\Driver.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "d6707f49-0be2-49fa-899b-1975d91ecff4");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "d6707f49-0be2-49fa-899b-1975d91ecff4");
             }
@@ -2208,7 +2208,7 @@ namespace RemoveASCOM
                 guidList.Add("D8C4C44C-5FE9-4848-93AE-0C8ED527753B", @"E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "D8C4C44C-5FE9-4848-93AE-0C8ED527753B");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "D8C4C44C-5FE9-4848-93AE-0C8ED527753B");
             }
@@ -2217,7 +2217,7 @@ namespace RemoveASCOM
                 guidList.Add("D95FBC6E-0705-458B-84C0-57E3295DBCCE", @"E:\ASCOM\ASCOM.Interfaces\ICamera.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "D95FBC6E-0705-458B-84C0-57E3295DBCCE");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "D95FBC6E-0705-458B-84C0-57E3295DBCCE");
             }
@@ -2226,7 +2226,7 @@ namespace RemoveASCOM
                 guidList.Add("D9998808-2DF0-4CA1-ADD6-CE592026C663", @"E:\ASCOM\ASCOM.Interfaces\Telescope.Enumerations.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "D9998808-2DF0-4CA1-ADD6-CE592026C663");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "D9998808-2DF0-4CA1-ADD6-CE592026C663");
             }
@@ -2235,7 +2235,7 @@ namespace RemoveASCOM
                 guidList.Add("DA182F18-4133-4d6f-A533-67306F48AC5C", @"E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "DA182F18-4133-4d6f-A533-67306F48AC5C");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "DA182F18-4133-4d6f-A533-67306F48AC5C");
             }
@@ -2244,7 +2244,7 @@ namespace RemoveASCOM
                 guidList.Add("dc03bf05-df2c-4ef4-8876-738c4b7bbdf1", @"E:\ASCOM\Remove ASCOM\Remove ASCOM\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "dc03bf05-df2c-4ef4-8876-738c4b7bbdf1");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "dc03bf05-df2c-4ef4-8876-738c4b7bbdf1");
             }
@@ -2253,7 +2253,7 @@ namespace RemoveASCOM
                 guidList.Add("DC98F1DF-315A-43EF-81F6-23F3DD461F58", @"E:\ASCOM\ASCOM.Interfaces\ITrackingRates.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "DC98F1DF-315A-43EF-81F6-23F3DD461F58");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "DC98F1DF-315A-43EF-81F6-23F3DD461F58");
             }
@@ -2262,7 +2262,7 @@ namespace RemoveASCOM
                 guidList.Add("DCF3858D-D68E-45ed-8141-1C899B4B432A", @"E:\ASCOM\ASCOM.DeviceInterface\IFilterWheelV2.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "DCF3858D-D68E-45ed-8141-1C899B4B432A");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "DCF3858D-D68E-45ed-8141-1C899B4B432A");
             }
@@ -2271,7 +2271,7 @@ namespace RemoveASCOM
                 guidList.Add("DCFDCA25-F7DB-4b62-B8FF-50ABB4844E4E", @"E:\ASCOM\ASCOM.DeviceInterface\IRateEnumerator.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "DCFDCA25-F7DB-4b62-B8FF-50ABB4844E4E");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "DCFDCA25-F7DB-4b62-B8FF-50ABB4844E4E");
             }
@@ -2280,7 +2280,7 @@ namespace RemoveASCOM
                 guidList.Add("DF215CCF-2C25-48e5-A357-A8300C1EA027", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "DF215CCF-2C25-48e5-A357-A8300C1EA027");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "DF215CCF-2C25-48e5-A357-A8300C1EA027");
             }
@@ -2289,7 +2289,7 @@ namespace RemoveASCOM
                 guidList.Add("DF41946E-EE14-40f7-AA66-DD8A92E36EF2", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "DF41946E-EE14-40f7-AA66-DD8A92E36EF2");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "DF41946E-EE14-40f7-AA66-DD8A92E36EF2");
             }
@@ -2298,7 +2298,7 @@ namespace RemoveASCOM
                 guidList.Add("e1108c19-e0bb-472e-8bb2-29263f331971", @"E:\ASCOM\Drivers and Simulators\Gemini Driver\Telescope\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "e1108c19-e0bb-472e-8bb2-29263f331971");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "e1108c19-e0bb-472e-8bb2-29263f331971");
             }
@@ -2307,7 +2307,7 @@ namespace RemoveASCOM
                 guidList.Add("e19176ff-b7de-427f-8d12-2ffece5ad0f2", @"E:\ASCOM\DriverTemplates\MakeASCOMTemplates\MakeASCOMTemplates\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "e19176ff-b7de-427f-8d12-2ffece5ad0f2");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "e19176ff-b7de-427f-8d12-2ffece5ad0f2");
             }
@@ -2316,7 +2316,7 @@ namespace RemoveASCOM
                 guidList.Add("E39480E6-9DBB-466e-9AA4-9D1B1EA8F849", @"E:\ASCOM\ASCOM.DeviceInterface\IAxisRates.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "E39480E6-9DBB-466e-9AA4-9D1B1EA8F849");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "E39480E6-9DBB-466e-9AA4-9D1B1EA8F849");
             }
@@ -2325,7 +2325,7 @@ namespace RemoveASCOM
                 guidList.Add("E430C8A8-539E-4558-895D-A2F293D946E7", @"E:\ASCOM\ASCOM.DeviceInterface\IFocuserV2.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "E430C8A8-539E-4558-895D-A2F293D946E7");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "E430C8A8-539E-4558-895D-A2F293D946E7");
             }
@@ -2334,7 +2334,7 @@ namespace RemoveASCOM
                 guidList.Add("E4C73BFB-9F18-494C-9A2C-D19AD5D8B55E", @"E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "E4C73BFB-9F18-494C-9A2C-D19AD5D8B55E");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "E4C73BFB-9F18-494C-9A2C-D19AD5D8B55E");
             }
@@ -2343,7 +2343,7 @@ namespace RemoveASCOM
                 guidList.Add("e6c7b090-1f16-486f-bdba-d45785e9f6f1", @"E:\ASCOM\DriverTemplates\TemplateSources\src\ASCOM Test Forms App (CS)\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "e6c7b090-1f16-486f-bdba-d45785e9f6f1");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "e6c7b090-1f16-486f-bdba-d45785e9f6f1");
             }
@@ -2352,7 +2352,7 @@ namespace RemoveASCOM
                 guidList.Add("e707dcde-d1cd-11d2-bab9-00c04f8eceae", @"E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "e707dcde-d1cd-11d2-bab9-00c04f8eceae");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "e707dcde-d1cd-11d2-bab9-00c04f8eceae");
             }
@@ -2361,7 +2361,7 @@ namespace RemoveASCOM
                 guidList.Add("E861C6D8-B55B-494a-BC59-0F27F981CA98", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Util.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "E861C6D8-B55B-494a-BC59-0F27F981CA98");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "E861C6D8-B55B-494a-BC59-0F27F981CA98");
             }
@@ -2370,7 +2370,7 @@ namespace RemoveASCOM
                 guidList.Add("e91d0ec6-5dbb-471a-9119-4ae7102c34f2", @"E:\ASCOM\Releases\ASCOM 6\InstallTemplates\InstallTemplates\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "e91d0ec6-5dbb-471a-9119-4ae7102c34f2");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "e91d0ec6-5dbb-471a-9119-4ae7102c34f2");
             }
@@ -2379,7 +2379,7 @@ namespace RemoveASCOM
                 guidList.Add("EA016028-4929-4962-B768-3A4F33FC36A8", @"E:\ASCOM\Interfaces\ASCOMExceptions\PropertyNotImplementedException.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "EA016028-4929-4962-B768-3A4F33FC36A8");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "EA016028-4929-4962-B768-3A4F33FC36A8");
             }
@@ -2388,7 +2388,7 @@ namespace RemoveASCOM
                 guidList.Add("EA1D5478-7263-43F8-B708-78783A48158C", @"E:\ASCOM\ASCOM.DeviceInterface\IVideo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "EA1D5478-7263-43F8-B708-78783A48158C");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "EA1D5478-7263-43F8-B708-78783A48158C");
             }
@@ -2397,7 +2397,7 @@ namespace RemoveASCOM
                 guidList.Add("eba86e62-c384-4fe6-9d8a-1af33093fde2", @"E:\ASCOM\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "eba86e62-c384-4fe6-9d8a-1af33093fde2");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "eba86e62-c384-4fe6-9d8a-1af33093fde2");
             }
@@ -2406,7 +2406,7 @@ namespace RemoveASCOM
                 guidList.Add("ECD99531-A2CF-4B9F-91A0-35FE5D12B043", @"E:\ASCOM\ASCOM.Interfaces\Telescope.Enumerations.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "ECD99531-A2CF-4B9F-91A0-35FE5D12B043");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "ECD99531-A2CF-4B9F-91A0-35FE5D12B043");
             }
@@ -2415,7 +2415,7 @@ namespace RemoveASCOM
                 guidList.Add("ED02B64A-320F-47cd-90D9-3DF2DF07602D", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "ED02B64A-320F-47cd-90D9-3DF2DF07602D");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "ED02B64A-320F-47cd-90D9-3DF2DF07602D");
             }
@@ -2424,7 +2424,7 @@ namespace RemoveASCOM
                 guidList.Add("EF0C67AD-A9D3-4F7B-A635-CD2095517633", @"E:\ASCOM\Drivers and Simulators\Gemini Driver\Telescope\Driver.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "EF0C67AD-A9D3-4F7B-A635-CD2095517633");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "EF0C67AD-A9D3-4F7B-A635-CD2095517633");
             }
@@ -2433,7 +2433,7 @@ namespace RemoveASCOM
                 guidList.Add("ef68f42f-d9c6-4475-8910-619e1a77dce5", @"E:\ASCOM\Drivers and Simulators\SwitchV2 Simulator\SwitchV2Driver\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "ef68f42f-d9c6-4475-8910-619e1a77dce5");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "ef68f42f-d9c6-4475-8910-619e1a77dce5");
             }
@@ -2442,7 +2442,7 @@ namespace RemoveASCOM
                 guidList.Add("f0acf8ea-ddeb-4869-ae33-b25d4d6195b6", @"E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\VB6Support\VB6HelperSupport.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "f0acf8ea-ddeb-4869-ae33-b25d4d6195b6");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "f0acf8ea-ddeb-4869-ae33-b25d4d6195b6");
             }
@@ -2451,7 +2451,7 @@ namespace RemoveASCOM
                 guidList.Add("f0fdf5df-22e7-483b-99ea-18bef18c234f", @"E:\ASCOM\ASCOM Platform Examples\ASCOM.DriverAccess Example\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "f0fdf5df-22e7-483b-99ea-18bef18c234f");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "f0fdf5df-22e7-483b-99ea-18bef18c234f");
             }
@@ -2460,7 +2460,7 @@ namespace RemoveASCOM
                 guidList.Add("F10B748F-4F90-4acf-9EB0-76D50293E9A9", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "F10B748F-4F90-4acf-9EB0-76D50293E9A9");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "F10B748F-4F90-4acf-9EB0-76D50293E9A9");
             }
@@ -2469,7 +2469,7 @@ namespace RemoveASCOM
                 guidList.Add("F18240B0-00CC-4ff7-9A94-AC835387F959", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "F18240B0-00CC-4ff7-9A94-AC835387F959");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "F18240B0-00CC-4ff7-9A94-AC835387F959");
             }
@@ -2478,7 +2478,7 @@ namespace RemoveASCOM
                 guidList.Add("f21984e0-ee4f-41a1-8582-057ae4e36d96", @"E:\ASCOM\Driver Helper\VB.Net Test\VB.Net Test\My Project\AssemblyInfo.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "f21984e0-ee4f-41a1-8582-057ae4e36d96");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "f21984e0-ee4f-41a1-8582-057ae4e36d96");
             }
@@ -2487,7 +2487,7 @@ namespace RemoveASCOM
                 guidList.Add("f642a6f8-8c93-4154-9d18-8f1c652d7ce3", @"E:\ASCOM\Dome\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "f642a6f8-8c93-4154-9d18-8f1c652d7ce3");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "f642a6f8-8c93-4154-9d18-8f1c652d7ce3");
             }
@@ -2496,7 +2496,7 @@ namespace RemoveASCOM
                 guidList.Add("F6774C71-BA75-4400-B8DB-20960D373170", @"E:\ASCOM\ASCOM.IConform\ASCOM.IConform\IConform.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "F6774C71-BA75-4400-B8DB-20960D373170");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "F6774C71-BA75-4400-B8DB-20960D373170");
             }
@@ -2505,7 +2505,7 @@ namespace RemoveASCOM
                 guidList.Add("f7bb7cea-c97d-4232-9050-b8ffe7b3630f", @"E:\ASCOM\Drivers and Simulators\Rotator Simulator\RotatorConsoleTest\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "f7bb7cea-c97d-4232-9050-b8ffe7b3630f");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "f7bb7cea-c97d-4232-9050-b8ffe7b3630f");
             }
@@ -2514,7 +2514,7 @@ namespace RemoveASCOM
                 guidList.Add("F9043C88-F6F2-101A-A3C9-08002B2F49FC", @"E:\ASCOM\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\Driver.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "F9043C88-F6F2-101A-A3C9-08002B2F49FC");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "F9043C88-F6F2-101A-A3C9-08002B2F49FC");
             }
@@ -2523,7 +2523,7 @@ namespace RemoveASCOM
                 guidList.Add("F934C471-CFA7-478c-A25E-CED11236EF1A", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryExceptions.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "F934C471-CFA7-478c-A25E-CED11236EF1A");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "F934C471-CFA7-478c-A25E-CED11236EF1A");
             }
@@ -2532,7 +2532,7 @@ namespace RemoveASCOM
                 guidList.Add("fc0404ba-bf0d-4faf-bdd7-b7f1aa1f015d", @"E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\Backup\Properties\AssemblyInfo.cs");
                 TL.LogMessage("GUIDs", "Added GUID: " + "fc0404ba-bf0d-4faf-bdd7-b7f1aa1f015d");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "fc0404ba-bf0d-4faf-bdd7-b7f1aa1f015d");
             }
@@ -2541,7 +2541,7 @@ namespace RemoveASCOM
                 guidList.Add("FCE7DF74-B3AF-4ef6-AD7D-324B87492307", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryExceptions.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "FCE7DF74-B3AF-4ef6-AD7D-324B87492307");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "FCE7DF74-B3AF-4ef6-AD7D-324B87492307");
             }
@@ -2550,7 +2550,7 @@ namespace RemoveASCOM
                 guidList.Add("FF6DA248-BA2A-4a62-BA0A-AAD433EAAC85", @"E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb");
                 TL.LogMessage("GUIDs", "Added GUID: " + "FF6DA248-BA2A-4a62-BA0A-AAD433EAAC85");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 TL.LogMessage("GUIDs", "Duplicate GUID: " + "FF6DA248-BA2A-4a62-BA0A-AAD433EAAC85");
             }
