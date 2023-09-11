@@ -5,7 +5,7 @@ using System.IO;
 
 using System.Runtime.InteropServices;
 
-namespace InstallTemplates
+namespace RemoveOldTemplates
 {
 
     /// <summary>

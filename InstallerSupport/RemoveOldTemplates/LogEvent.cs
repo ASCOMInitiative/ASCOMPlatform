@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace InstallTemplates
+namespace RemoveOldTemplates
 {
     internal enum EventLogErrors : int
     {

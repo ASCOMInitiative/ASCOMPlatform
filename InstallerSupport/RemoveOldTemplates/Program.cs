@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-//using ASCOM.Utilities;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-//using static ASCOM.Utilities.Global;
 
-namespace InstallTemplates
+namespace RemoveOldTemplates
 {
     /// <summary>
     /// Locate all Visual Studio template directories and install ASCOM templates in them, overwriting any current versions present.

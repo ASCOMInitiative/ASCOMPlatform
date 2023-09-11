@@ -479,8 +479,8 @@ else
     [END REGION]
     Comment: Install GacInstall so that we can uninstall assemblies from the GAC indepndently of the Platform itself
     Comment: Install FusionLib here in case the Platform is removed first and has already uninstalled this from the GAC
-    Install Files ..\..\..\..\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $TARGETDIR$\Internal
-    Install Files ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to $TARGETDIR$\Internal
+    Comment: Install Files ..\..\..\..\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $TARGETDIR$\Internal
+    Comment: Install Files ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to $TARGETDIR$\Internal
   end
    
   [DEFINE REGION: Visual Studio Driver Templates]
