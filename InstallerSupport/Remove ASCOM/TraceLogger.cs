@@ -3,6 +3,7 @@
 
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using Microsoft.VisualBasic;
 
 namespace RemoveASCOM
@@ -51,7 +52,7 @@ namespace RemoveASCOM
         {
             g_LogFileName = ""; // Set automatic filenames as default
             g_LogFileType = "Default"; // "Set an arbitary name inc case someone forgets to call SetTraceLog
-            g_LogFilePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ASCOM\Logs " + Strings.Format(DateTime.Now, "yyyy-MM-dd");
+            g_LogFilePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ASCOM\Logs " + DateTime.Now.ToString("yyyy-MM-dd");
             // mut = New System.Threading.Mutex(False, "ForceRemoveMutex")
         }
 
@@ -65,7 +66,7 @@ namespace RemoveASCOM
         {
             g_LogFileName = LogFileName; // Save parameters to use when the first call to write a record is made
             g_LogFileType = LogFileType;
-            g_LogFilePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ASCOM\Logs " + Strings.Format(DateTime.Now, "yyyy-MM-dd");
+            g_LogFilePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ASCOM\Logs " + DateTime.Now.ToString("yyyy-MM-dd");
             // mut = New System.Threading.Mutex
         }
 
@@ -280,13 +281,13 @@ namespace RemoveASCOM
                 case var @case when @case == "":
                     {
                         if (string.IsNullOrEmpty(g_LogFileType))
-                            Interaction.MsgBox("TRACELOGGER.CREATELOGFILE - Call made but no log filetype has been set");
+                            MessageBox.Show("TRACELOGGER.CREATELOGFILE - Call made but no log file type has been set");
                         Directory.CreateDirectory(g_LogFilePath); // Create the directory if it doesn't exist
-                        FileNameBase = g_LogFilePath + @"\ASCOM." + g_LogFileType + "." + Strings.Format(DateTime.Now, "HHmm.ssfff");
+                        FileNameBase = g_LogFilePath + @"\ASCOM." + g_LogFileType + "." + DateTime.Now.ToString("HHmm.ssfff");
                         do // Create a unique log file name based on date, time and required name
                         {
                             g_LogFileActualName = FileNameBase + FileNameSuffix.ToString() + ".txt";
-                            FileNameSuffix += 1; // Increment counter that ensures that no logfile can have the same name as any other
+                            FileNameSuffix += 1; // Increment counter that ensures that no log file can have the same name as any other
                         }
                         while (File.Exists(g_LogFileActualName));
                         try
@@ -314,7 +315,7 @@ namespace RemoveASCOM
                             }
                             while (!(ok | FileNameSuffix == 20));
                             if (!ok)
-                                Interaction.MsgBox("TraceLogger:CreateLogFile - Unable to create log file" + ex.ToString());
+                                MessageBox.Show("TraceLogger:CreateLogFile - Unable to create log file" + ex.ToString());
                         } // Create log file based on supplied name
 
                         break;
@@ -329,7 +330,7 @@ namespace RemoveASCOM
                         }
                         catch (Exception ex)
                         {
-                            Interaction.MsgBox("CreateLogFile Exception - #" + g_LogFileName + "# " + ex.ToString());
+                            MessageBox.Show("CreateLogFile Exception - #" + g_LogFileName + "# " + ex.ToString());
                             throw;
                         }
 
@@ -342,11 +343,11 @@ namespace RemoveASCOM
         {
             string l_Msg = "";
             int i, CharNo;
-            // Present any unprintable charcters in [0xHH] format
-            var loopTo = Strings.Len(p_Msg);
+            // Present any unprintable characters in [0xHH] format
+            var loopTo = p_Msg.Length;
             for (i = 1; i <= loopTo; i++)
             {
-                CharNo = Strings.Asc(Strings.Mid(p_Msg, i, 1));
+                CharNo = Convert.ToInt32(char.GetNumericValue(p_Msg, i));
                 switch (CharNo)
                 {
                     case 10:
@@ -354,11 +355,11 @@ namespace RemoveASCOM
                         {
                             if (p_RespectCrLf)
                             {
-                                l_Msg = l_Msg + Strings.Mid(p_Msg, i, 1);
+                                l_Msg = l_Msg + p_Msg.Substring(i, 1);
                             }
                             else
                             {
-                                l_Msg = l_Msg + "[" + Strings.Right("00" + Conversion.Hex(CharNo), 2) + "]";
+                                l_Msg = l_Msg + "[" + CharNo.ToString("X2") + "]";
                             }
 
                             break;
@@ -369,13 +370,13 @@ namespace RemoveASCOM
                     case 14 - 31:
                     case var @case when @case > 126: // All other non-printables should be translated
                         {
-                            l_Msg = l_Msg + "[" + Strings.Right("00" + Conversion.Hex(CharNo), 2) + "]";// Everything else is printable and should be left as is
+                            l_Msg = l_Msg + "[" + CharNo.ToString("X2") + "]";// Everything else is printable and should be left as is
                             break;
                         }
 
                     default:
                         {
-                            l_Msg = l_Msg + Strings.Mid(p_Msg, i, 1);
+                            l_Msg = l_Msg + p_Msg.Substring(i, 1);
                             break;
                         }
                 }
@@ -394,11 +395,11 @@ namespace RemoveASCOM
             string l_Msg = "";
             int i, CharNo;
             // Present all characters in [0xHH] format
-            var loopTo = Strings.Len(p_Msg);
+            var loopTo = p_Msg.Length;
             for (i = 1; i <= loopTo; i++)
             {
-                CharNo = Strings.Asc(Strings.Mid(p_Msg, i, 1));
-                l_Msg = l_Msg + "[" + Strings.Right("00" + Conversion.Hex(CharNo), 2) + "]";
+                CharNo = Convert.ToInt32(char.GetNumericValue(p_Msg, i));
+                l_Msg = l_Msg + "[" + CharNo.ToString("X2") + "]";
             }
             return l_Msg;
         }
@@ -408,9 +409,9 @@ namespace RemoveASCOM
             string l_Msg = "";
             try
             {
-                p_Test = Strings.Left(p_Test + Strings.StrDup(30, " "), 25);
+                p_Test = (p_Test + "                              ").Substring(0, 25);
 
-                l_Msg = Strings.Format(DateTime.Now, "HH:mm:ss.fff") + " " + MakePrintable(p_Test, p_RespectCrLf) + " " + MakePrintable(p_Msg, p_RespectCrLf);
+                l_Msg = DateTime.Now.ToString("HH:mm:ss.fff") + " " + MakePrintable(p_Test, p_RespectCrLf) + " " + MakePrintable(p_Msg, p_RespectCrLf);
                 if (g_LogFile is not null)
                 {
                     if (p_NewLine)
