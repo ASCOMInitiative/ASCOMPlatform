@@ -345,7 +345,7 @@ namespace RemoveASCOM
             int i, CharNo;
             // Present any unprintable characters in [0xHH] format
             var loopTo = p_Msg.Length;
-            for (i = 1; i <= loopTo; i++)
+            for (i = 0; i < loopTo; i++)
             {
                 CharNo = Convert.ToInt32(char.GetNumericValue(p_Msg, i));
                 switch (CharNo)
@@ -427,7 +427,7 @@ namespace RemoveASCOM
             }
             catch (Exception ex)
             {
-                // MsgBox("LogMsgFormatter exception: " & Len(l_Msg) & " *" & l_Msg & "* " & ex.ToString, MsgBoxStyle.Critical)
+                MessageBox.Show("LogMsgFormatter exception: " + l_Msg.Length.ToString() + " *" + l_Msg + "* " + ex.ToString(), "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
