@@ -27,7 +27,7 @@ for /l %%a in (1,1,3) do (
 echo Cleaned source files: %sourceFiles%
 
 rem Set the installer project folder releative to the solution folder
-set installerFolder="%solutionFolder%\Releases\ASCOM 6\Developer\Installer Project"
+set installerFolder="%solutionFolder%\InstallerDeveloper"
 echo Installer folder: %installerFolder%
 
 rem Copy the source files to the installer folder
