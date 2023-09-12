@@ -25,7 +25,7 @@
 		<When Condition=" '$(BuildType)'=='ReleaseCandidate' ">
 			<PropertyGroup>
 				<!-- GIT Branch to Check Out -->
-				<GitCheckoutBranch>develop</GitCheckoutBranch>
+				<GitCheckoutBranch>platform7</GitCheckoutBranch>
 
 				<!--  Specify Release or Debug builds (Debug not working at 25/10/21) -->
 				<Configuration>Release</Configuration>
@@ -69,8 +69,8 @@
 		<DeveloperInstallerDirectory>Releases\ASCOM 6\Developer\Installer Project</DeveloperInstallerDirectory>
 		<PlatformInstallerProject>$(PlatformInstallerDirectory)\ASCOM Platform 6.mpr</PlatformInstallerProject>
 		<DeveloperInstallerProject>$(DeveloperInstallerDirectory)\ASCOM Platform 6 Developer.mpr</DeveloperInstallerProject>
-		<FindGUIDsDirectory>Remove ASCOM\Find GUIDs\bin\$(Configuration)</FindGUIDsDirectory>
-		<RemoveASCOMDirectory>Remove ASCOM\Remove ASCOM\bin\$(Configuration)</RemoveASCOMDirectory>
+		<FindGUIDsDirectory>InstallerSupport\Find GUIDs\bin\$(Configuration)</FindGUIDsDirectory>
+		<RemoveASCOMDirectory>InstallerSupport\Remove ASCOM\bin\$(Configuration)</RemoveASCOMDirectory>
 		<RemoveASCOMExe>$(RemoveASCOMDirectory)\RemoveASCOM.exe</RemoveASCOMExe>
 		<RemoveASCOMPdb>$(RemoveASCOMDirectory)\RemoveASCOM.pdb</RemoveASCOMPdb>
 		<RemoveASCOMTxt>$(RemoveASCOMDirectory)\GUIDList.txt</RemoveASCOMTxt>
@@ -136,7 +136,7 @@
 		<!-- Clone a fresh copy of the ASCOM Platform Git repository  -->
 		<GitClient Command="clone" LocalPath="$(MSBuildProjectDirectory)" Arguments="-b $(GitCheckoutBranch) $(GitRepositoryPath) $(CheckoutDirectoryRelative)"/>
 
-		<!-- Get the latest commit number into the Revision Property to use in the the Platform version number  Now uses 'all' instead of 'HEAD' to get the latest commit accross all branches. -->
+		<!-- Get the latest commit number into the Revision Property to use in the the Platform version number  Now uses 'all' instead of 'HEAD' to get latest commit accross all branches. -->
 		<Exec Command="git.exe rev-list --all --count" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)">
 			<Output TaskParameter="ConsoleOutput" PropertyName="Revision" />
 		</Exec>
@@ -230,7 +230,7 @@
 		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=MakeDynamicLists;Platform=Mixed Platforms" />
 
 		<!-- Run FindGUIDs to create the updated class in the RemoveASCOM project that contains the list of GUIDs used by the project -->
-		<Exec Command='"$(CheckoutDirectory)\$(FindGUIDsDirectory)\MakeDynamicLists.exe" "$(CheckoutDirectory)" ' />
+		<Exec Command='"$(CheckoutDirectory)\$(FindGUIDsDirectory)\MakeDynamicLists.exe" "$(CheckoutDirectory)" ' ContinueOnError="WarnAndContinue" />
 
 		<!-- Build the main Platform after cleaning the solution (just in case executables get committed to SVN) -->
 		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=$(Configuration);Platform=Mixed Platforms" />
@@ -242,6 +242,12 @@
 			<RemoveASCOMExecutables Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb)" />
 		</ItemGroup>
 		<Copy SourceFiles="@(RemoveASCOMExecutables)" DestinationFolder="$(CheckoutDirectory)\$(PlatformInstallerDirectory)" />
+
+		<!-- Zip up the RemoveASCOM files and store the zip file in the build root directory ;$(CheckoutDirectory)\$(RemoveASCOMPdb) -->
+		<ItemGroup>
+			<ZipFiles Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb);$(CheckoutDirectory)\$(RemoveASCOMTxt)" />
+		</ItemGroup>
+		<Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM$(BuildTypeAnnotation).$(Revision).zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
 
 		<!-- Build the 64bit executables after cleaning the solution (just in case executables get committed to SVN) -->
 		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=$(Configuration);Platform=x64" />
@@ -298,12 +304,6 @@
 			$(MSBuildProjectDirectory)\AscomDeveloper$(PlatformMajor)$(PlatformMinor)$(PlatformServicePack)$(BuildTypeAnnotation).$(Revision).exe" />
 		</ItemGroup>
 		<Copy SourceFiles="@(PlatformInstallers)" DestinationFiles="@(PlatformInstallersRenamed)" />
-
-		<!-- Zip up the RemoveASCOM files and store the zip file in the build root directory ;$(CheckoutDirectory)\$(RemoveASCOMPdb) -->
-		<ItemGroup>
-			<ZipFiles Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb);$(CheckoutDirectory)\$(RemoveASCOMTxt)" />
-		</ItemGroup>
-		<Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM$(BuildTypeAnnotation).$(Revision).zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
 
 		<!-- Copy the VS2019 VSIX installer to the root folder without the beta status -->
 		<ItemGroup>

@@ -1090,7 +1090,7 @@ namespace RemoveASCOM
                         }
                         else
                         {
-                            TL.LogMessage("RemoveGAC", "Also : " + assname.FullName);
+                            TL.LogMessage("RemoveGAC", "Also: " + assname.FullName);
                         }
                     }
                     catch (Exception ex)
