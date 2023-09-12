@@ -1,4 +1,0 @@
-IF (UserName.Text <> )  THEN  Next.Enabled := True;
-IF (UserCompany.Text <> )  THEN  Next.Enabled := True;
-IF (UserName.Text = )  THEN  Next.Enabled := False;
-IF (UserCompany.Text = )  THEN  Next.Enabled := False;

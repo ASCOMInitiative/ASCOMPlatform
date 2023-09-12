@@ -1,2 +1,0 @@
-IF (Scheduling.Caption <> TRUE)  THEN  SchedulingLink.Visible := False;
-IF (Scheduling.Caption = TRUE)  THEN  SchedulingLink.Visible := True;

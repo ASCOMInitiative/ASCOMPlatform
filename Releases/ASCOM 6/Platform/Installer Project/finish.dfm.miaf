@@ -1,4 +1,0 @@
-﻿IF (Description.Caption = )  THEN  Description.Visible := False;
-IF (Description.Caption = )  THEN  Title.Top := 184;
-IF (Description.Caption = )  THEN  Context.Top := 220;
-IF (Success.Caption = REBOOT)  THEN  RebootNow.Visible := True;

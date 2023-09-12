@@ -1,0 +1,10 @@
+IF (Keep.Checked <> False)  THEN  Notify.Enabled := True;
+IF (Keep.Checked <> False)  THEN  Download.Enabled := True;
+IF (Keep.Checked <> False)  THEN  Install.Enabled := True;
+IF (Keep.Checked = False)  THEN  Install.Enabled := False;
+IF (Keep.Checked = False)  THEN  Download.Enabled := False;
+IF (Keep.Checked = False)  THEN  Notify.Enabled := False;
+IF (Keep.Checked = False)  THEN  Time.Enabled := False;
+IF (Keep.Checked = False)  THEN  Date.Enabled := False;
+IF (Keep.Checked <> False)  THEN  Time.Enabled := True;
+IF (Keep.Checked <> False)  THEN  Date.Enabled := True;

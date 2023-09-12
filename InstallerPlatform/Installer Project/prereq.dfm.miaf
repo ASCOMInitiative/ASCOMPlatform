@@ -1,0 +1,6 @@
+﻿IF (MSI31.Caption = FALSE)  THEN  MSI31Label.Visible := True;
+IF (NET351.Caption = FALSE)  THEN  Net351Label1.Visible := True;
+IF (DOTNET48.Caption = FALSE)  THEN  DotNet4Label.Visible := True;
+IF (DOTNET48.Caption = FALSE)  THEN  Next.Enabled := False;
+IF (VC_X86.Caption = TRUE)  THEN  VCLabel.Visible := True;
+IF (VC_X64.Caption = TRUE)  THEN  VCLabel.Visible := True;

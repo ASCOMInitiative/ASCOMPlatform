@@ -1,0 +1,4 @@
+IF (LicenseAccept.Checked = True)  THEN  Next.Enabled := True;
+IF (LicenseReject.Checked = False)  THEN  Next.Enabled := True;
+IF (LicenseAccept.Checked = False)  THEN  Next.Enabled := False;
+IF (LicenseReject.Checked = True)  THEN  Next.Enabled := False;
