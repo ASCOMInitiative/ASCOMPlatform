@@ -202,7 +202,7 @@ namespace SetACL
             RuleCollection = KeySec.GetAccessRules(true, true, typeof(NTAccount)); // Get the access rules
 
             foreach (RegistryAccessRule RegRule in RuleCollection) // Iterate over the rule set and list them
-                LogMessage("ListRegistryACLs", RegRule.AccessControlType.ToString() + " " + RegRule.IdentityReference.ToString() + " " + ((AccessRights)RegRule.RegistryRights).ToString() + " " + (RegRule.IsInherited?"Inherited":"NotInherited") + " " + RegRule.InheritanceFlags.ToString() + " " + RegRule.PropagationFlags.ToString());
+                LogMessage("ListRegistryACLs", RegRule.AccessControlType.ToString() + " " + RegRule.IdentityReference.ToString() + " " + ((AccessRights)RegRule.RegistryRights).ToString() + " " + (RegRule.IsInherited ? "Inherited" : "NotInherited") + " " + RegRule.InheritanceFlags.ToString() + " " + RegRule.PropagationFlags.ToString());
             TL.BlankLine();
         }
 
@@ -250,7 +250,9 @@ namespace SetACL
             }
 
             LogMessage("SetRegistryACL", @"Creating root ASCOM key ""\""");
-            Key = OpenSubKey3264(RegistryHive.LocalMachine, REGISTRY_ROOT_KEY_NAME, true, RegWow64Options.KEY_WOW64_32KEY); // Always create the key in the 32bit portion of the registry for backward compatibility
+
+            // Always create the key in the 32bit portion of the registry for backward compatibility
+            Key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).CreateSubKey(REGISTRY_ROOT_KEY_NAME);
 
             LogMessage("SetRegistryACL", "Retrieving ASCOM key ACL rule");
             TL.BlankLine();
@@ -577,11 +579,10 @@ namespace SetACL
         // <Obsolete("Replace with Microsoft.Win32.RegistryKey.OpenBaseKey method in Framework 4", False)> _
         internal RegistryKey OpenSubKey3264(RegistryHive ParentKey, string SubKeyName, bool Writeable, RegWow64Options Options)
         {
-            int SubKeyHandle;
             var Result = default(int);
             RegistryKey resultKey;
 
-            TL.LogMessage("OpenSubKey3264", $"Hive: {ParentKey}, SubKey: {SubKeyName}, Writeable: {Writeable}, Options: {Options}, Application: {(Environment.Is64BitProcess?"64bit":"32bit")}");
+            TL.LogMessage("OpenSubKey3264", $"Hive: {ParentKey}, SubKey: {SubKeyName}, Writeable: {Writeable}, Options: {Options}, Application: {(Environment.Is64BitProcess ? "64bit" : "32bit")}");
 
             // Handle the various registry hives
             switch (ParentKey)
