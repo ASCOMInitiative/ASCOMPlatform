@@ -16,10 +16,10 @@ namespace MakeDynamicLists
         /// This program is run by the build process before RemoveASCOM is compiled so that GUIDList is up to date.
         /// </summary>
         /// <param name="args">Accepts one parameter, the full path to the base of the Exported Platform source code.</param>
-        /// <remarks> If the command line parameter is omitted the program will default to values appropriate to the development environment as oposed to the build environment.</remarks>
+        /// <remarks> If the command line parameter is omitted the program will default to values appropriate to the development environment as opposed to the build environment.</remarks>
         static void Main(string[] args)
         {
-            // Settings for use in the development environment, these are overriden by a command line argument in the build environment
+            // Settings for use in the development environment, these are overridden by a command line argument in the build environment
             string developmentSearchPath = @"..\..\..\..";
             string outputPath = @"\InstallerSupport\Remove ASCOM\";
             string devlopmentPath = developmentSearchPath + outputPath;
@@ -134,7 +134,7 @@ namespace MakeDynamicLists
                 //
                 try
                 {
-                    // Create the streamwriter to make the updated GUIDList class file and the readable txt file
+                    // Create the stream writer to make the updated GUIDList class file and the readable txt file
                     StreamWriter outputTextFile = new StreamWriter(outputTextFullFileName);
                     StreamWriter outputClassFile = new StreamWriter(outputClassFullFileName);
 
@@ -238,12 +238,12 @@ namespace MakeDynamicLists
             {
                 fileList = new SortedSet<string>(); // Create a SortedSet to hold the lines returned
 
-                // Set up a regular expression to pick out the file name and install path from an Installaware Install Files line
+                // Set up a regular expression to pick out the file name and install path from an InstallAware Install Files line
                 //                                 Comment: Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
                 // Groups within the matched line: <Comment>              <---------------------------------FileName-------------------------------->    <---------InstallPath---------> 
                 Regex regexInstallFile = new Regex(@"\s*(?<Comment>[\w\W]*)\sInstall Files\s*(?<FileName>[\w\W]*) to (?<InstallPath>[\w\W]*)", RegexOptions.IgnoreCase);
 
-                // Set up a regular expression to pick out the compiler variable from the InstallPath part of an Installaware Install Files line
+                // Set up a regular expression to pick out the compiler variable from the InstallPath part of an InstallAware Install Files line
                 //                                $COMMONFILES$\ASCOM\Platform\v6
                 // Group within the matched line: <--CompVar-->
                 Regex regexInstallerVariables = new Regex(@"\$(?<CompVar>[\w]*)\$.*", RegexOptions.IgnoreCase);
@@ -280,7 +280,7 @@ namespace MakeDynamicLists
                                     case "WINDIR":
                                         TL.LogMessage("Main", "Found WINDIR or WINSYSDIR, ignoring this file");
                                         break;
-                                    default: // Throw an error if a new variable is encountered so that it can be added to one of the preceeding groups.
+                                    default: // Throw an error if a new variable is encountered so that it can be added to one of the preceding groups.
                                         TL.LogMessage("FindInstalledFiles", "ERROR - Found UNKNOWN COMPILER VARIABLE: " + mVar.Groups["CompVar"].ToString() + " in line: " + line);
                                         MessageBox.Show("ERROR - Found UNKNOWN COMPILER VARIABLE: " + mVar.Groups["CompVar"].ToString() + " in line: " + line,
                                                         "MakeDynamicLists Build Environment Program", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);

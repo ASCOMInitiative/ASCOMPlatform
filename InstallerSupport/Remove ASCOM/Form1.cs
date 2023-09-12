@@ -9,8 +9,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.Win32;
 
 namespace RemoveASCOM
@@ -48,27 +46,28 @@ namespace RemoveASCOM
         private const string REMOVE_INSTALLER_COMBO_TEXT = "Platform and Installer only (Recommended)";
         private Color REMOVE_INSTALLER_BACK_COLOUR = Color.Yellow;
         private Color REMOVE_INSTALLER_FORE_COLOUR = Color.Black;
-        private const string REMOVE_INSTALLER_TEXT = Constants.vbCrLf + "WARNING!" + Constants.vbCrLf + Constants.vbCrLf + "This option will remove the ASCOM Platform and its installer." + Constants.vbCrLf + Constants.vbCrLf + "If unsuccessful, use the \"" + REMOVE_ALL_COMBO_TEXT + "\" option as a last resort";
+        private const string REMOVE_INSTALLER_TEXT = "\r\n" + "WARNING!" + "\r\n" + "\r\n" + "This option will remove the ASCOM Platform and its installer." + "\r\n" + "\r\n" + "If unsuccessful, use the \"" + REMOVE_ALL_COMBO_TEXT + "\" option as a last resort";
         private const string REMOVE_INSTALLER_CONFIRMATION_MESSAGE = "Are you sure you want to remove your ASCOM Platform?";
 
         private const string REMOVE_ALL_COMBO_TEXT = "Platform, Installer, Profile and 3rd Party Drivers";
         private Color REMOVE_ALL_BACK_COLOUR = Color.Red;
         private Color REMOVE_ALL_FORE_COLOUR = Color.White;
-        private const string REMOVE_ALL_TEXT = Constants.vbCrLf + "WARNING!" + Constants.vbCrLf + Constants.vbCrLf + "This option will forcibly remove your entire ASCOM Platform including your drivers and Profile." + Constants.vbCrLf + Constants.vbCrLf + "Please use it only as a last resort.";
+        private const string REMOVE_ALL_TEXT = "\r\n" + "WARNING!" + "\r\n" + "\r\n" + "This option will forcibly remove your entire ASCOM Platform including your drivers and Profile." + "\r\n" + "\r\n" + "Please use it only as a last resort.";
         private const string REMOVE_ALL_CONFIRMATION_MESSAGE = "Are you sure you want to FORCE remove your entire ASCOM Platform, Profile and 3rd Party drivers?";
         private const string REMOVAL_COMPLETE_MESSAGE = "The current Platform has been removed, press OK to end this program.";
 
         private const string ASCOM_TARGET_DIRECTORY_PLATFORM = @"\ASCOM\Platform 7";
         private const string ASCOM_TARGET_DIRECTORY_DEVELOPER = @"\ASCOM\Platform 7 Developer Components";
+        private const string ASCOM_DEVELOPER_COMPONENTS_DIRECTORY = $@"{ASCOM_TARGET_DIRECTORY_DEVELOPER}\Components\Platform7";
 
         #region Event handlers
 
         /// <summary>
-    /// Update colours and text when the type of removal is changed
-    /// </summary>
-    /// <param name="sender">Object creating the event</param>
-    /// <param name="e">Event arguments</param>
-    /// <remarks></remarks>
+        /// Update colours and text when the type of removal is changed
+        /// </summary>
+        /// <param name="sender">Object creating the event</param>
+        /// <param name="e">Event arguments</param>
+        /// <remarks></remarks>
         private void cmbRemoveMode_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (cmbRemoveMode.SelectedItem)
@@ -90,18 +89,18 @@ namespace RemoveASCOM
 
                 default:
                     {
-                        Interaction.MsgBox("Unrecognised cmbRemoveMode value: " + cmbRemoveMode.SelectedItem.ToString(), MsgBoxStyle.Critical);
+                        MessageBox.Show("Unrecognised cmbRemoveMode value: " + cmbRemoveMode.SelectedItem.ToString(), "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                     }
             }
         }
 
         /// <summary>
-    /// Effect Platform removal
-    /// </summary>
-    /// <param name="sender">Object creating the event</param>
-    /// <param name="e">Event arguments</param>
-    /// <remarks></remarks>
+        /// Effect Platform removal
+        /// </summary>
+        /// <param name="sender">Object creating the event</param>
+        /// <param name="e">Event arguments</param>
+        /// <remarks></remarks>
         private void btnRemove_Click(object sender, EventArgs e)
         {
             TopLevelRemovalScript(); // Run the overall uninstallation script
@@ -115,11 +114,11 @@ namespace RemoveASCOM
         }
 
         /// <summary>
-    /// Form load event handler
-    /// </summary>
-    /// <param name="sender">Object creating the event</param>
-    /// <param name="e">Event arguments</param>
-    /// <remarks></remarks>
+        /// Form load event handler
+        /// </summary>
+        /// <param name="sender">Object creating the event</param>
+        /// <param name="e">Event arguments</param>
+        /// <remarks></remarks>
         private void Form1_Load(object sender, EventArgs e)
         {
             string[] arguments;
@@ -132,7 +131,8 @@ namespace RemoveASCOM
             }
             catch (Exception ex)
             {
-                Interaction.MsgBox("TraceLogger Load Exception: " + ex.ToString());
+
+                MessageBox.Show("TraceLogger Load Exception: " + ex.ToString());
             }
 
             try
@@ -175,11 +175,11 @@ namespace RemoveASCOM
         }
 
         /// <summary>
-    /// Form close event handler
-    /// </summary>
-    /// <param name="sender">Object creating the event</param>
-    /// <param name="e">Event arguments</param>
-    /// <remarks></remarks>
+        /// Form close event handler
+        /// </summary>
+        /// <param name="sender">Object creating the event</param>
+        /// <param name="e">Event arguments</param>
+        /// <remarks></remarks>
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             try
@@ -205,11 +205,11 @@ namespace RemoveASCOM
         }
 
         /// <summary>
-    /// Exit button event handler
-    /// </summary>
-    /// <param name="sender">Object creating the event</param>
-    /// <param name="e">Event arguments</param>
-    /// <remarks></remarks>
+        /// Exit button event handler
+        /// </summary>
+        /// <param name="sender">Object creating the event</param>
+        /// <param name="e">Event arguments</param>
+        /// <remarks></remarks>
         private void btnExit_Click(object sender, EventArgs e)
         {
             Close();
@@ -221,7 +221,7 @@ namespace RemoveASCOM
 
         private void TopLevelRemovalScript()
         {
-            MsgBoxResult dlgResult;
+            DialogResult dlgResult;
             string dlgMessage = "WARNING: Uninitialised Message value!";
             try
             {
@@ -246,7 +246,7 @@ namespace RemoveASCOM
 
                     default:
                         {
-                            Interaction.MsgBox("Unrecognised cmbRemoveMode value: " + cmbRemoveMode.SelectedItem.ToString(), MsgBoxStyle.Critical);
+                            MessageBox.Show("Unrecognised cmbRemoveMode value: " + cmbRemoveMode.SelectedItem.ToString(), "", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                             break;
                         }
                 }
@@ -254,9 +254,9 @@ namespace RemoveASCOM
                 TL.LogMessage("ForceRemove", "Removal option: " + cmbRemoveMode.SelectedItem.ToString());
 
                 // Display the confirmation dialogue box
-                dlgResult = Interaction.MsgBox(dlgMessage, MsgBoxStyle.Exclamation | MsgBoxStyle.YesNo, "Remove ASCOM");
+                dlgResult = MessageBox.Show(dlgMessage, "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 TL.LogMessage("ForceRemove", dlgMessage);
-                if (dlgResult == MsgBoxResult.Yes) // User said YES so proceed
+                if (dlgResult == DialogResult.Yes) // User said YES so proceed
                 {
                     TL.LogMessage("ForceRemove", "User said \"Yes\"");
                     TL.BlankLine();
@@ -288,7 +288,7 @@ namespace RemoveASCOM
 
                         default:
                             {
-                                Interaction.MsgBox("Unrecognised cmbRemoveMode value: " + cmbRemoveMode.SelectedItem.ToString(), MsgBoxStyle.Critical);
+                                MessageBox.Show("Unrecognised cmbRemoveMode value: " + cmbRemoveMode.SelectedItem.ToString(), "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;
                             }
                     }
@@ -371,7 +371,7 @@ namespace RemoveASCOM
                 if (Registry.LocalMachine.OpenSubKey(InstallerKeys[PLATFORM60]) is not null) // Try and uninstall Platform 6
                 {
                     TL.LogMessage("Uninstall", PLATFORM60);
-                    UninstallProgram = Conversions.ToString(Registry.LocalMachine.OpenSubKey(InstallerKeys[PLATFORM60]).GetValue(UNINSTALL_STRING));
+                    UninstallProgram = Registry.LocalMachine.OpenSubKey(InstallerKeys[PLATFORM60]).GetValue(UNINSTALL_STRING).ToString();
                     UninstallDirectory = Path.GetDirectoryName(UninstallProgram); // Save the current installation's install directory so that it can be deleted at the end if it is not empty
                     RunProcess(PLATFORM60, UninstallProgram, ARGS60);
                     WaitFor(2000);
@@ -392,7 +392,7 @@ namespace RemoveASCOM
                     DirInfo = new DirectoryInfo(ASCOMDirectory); // Get a directory info for the common application data directory
                     DirInfos = DirInfo.GetDirectories(); // Get a list of directories within the common application data directory
 
-                    Action(Strings.Left(ASCOMDirectory, 70));
+                    Action(ASCOMDirectory.Substring(0, Math.Min(ASCOMDirectory.Length, 70)));
                     try // Get file details for each directory in this folder
                     {
                         foreach (var currentDirInfo in DirInfos)
@@ -486,7 +486,7 @@ namespace RemoveASCOM
                 if (Registry.LocalMachine.OpenSubKey(InstallerKeys[PLATFORM55]) is not null) // Try and uninstall Platform 5.5
                 {
                     TL.LogMessage("Uninstall", PLATFORM55);
-                    UninstallProgram = Conversions.ToString(Registry.LocalMachine.OpenSubKey(InstallerKeys[PLATFORM55]).GetValue(UNINSTALL_STRING));
+                    UninstallProgram = Registry.LocalMachine.OpenSubKey(InstallerKeys[PLATFORM55]).GetValue(UNINSTALL_STRING).ToString();
                     RunProcess(PLATFORM55, UninstallProgram, ARGS55);
                 }
                 else
@@ -497,7 +497,7 @@ namespace RemoveASCOM
                 if (Registry.LocalMachine.OpenSubKey(InstallerKeys[PLATFORM50B]) is not null) // Try and uninstall Platform 5.0B
                 {
                     TL.LogMessage("Uninstall", PLATFORM50B);
-                    UninstallProgram = Conversions.ToString(Registry.LocalMachine.OpenSubKey(InstallerKeys[PLATFORM50B]).GetValue(UNINSTALL_STRING));
+                    UninstallProgram = Registry.LocalMachine.OpenSubKey(InstallerKeys[PLATFORM50B]).GetValue(UNINSTALL_STRING).ToString();
                     RunProcess(PLATFORM50B, "MsiExec.exe", SplitKey(UninstallProgram));
                 }
                 else
@@ -524,7 +524,7 @@ namespace RemoveASCOM
                         TL.LogMessageCrLf("Uninstall", "Exception: " + ex.ToString());
                     }
 
-                    UninstallProgram = Conversions.ToString(Registry.LocalMachine.OpenSubKey(InstallerKeys[PLATFORM50A]).GetValue(UNINSTALL_STRING));
+                    UninstallProgram = Registry.LocalMachine.OpenSubKey(InstallerKeys[PLATFORM50A]).GetValue(UNINSTALL_STRING).ToString();
                     RunProcess(PLATFORM50A, "MsiExec.exe", SplitKey(UninstallProgram));
                 }
                 else
@@ -537,7 +537,7 @@ namespace RemoveASCOM
                     try
                     {
                         TL.LogMessage("Uninstall", PLATFORM41);
-                        UninstallProgram = Conversions.ToString(Registry.LocalMachine.OpenSubKey(InstallerKeys[PLATFORM41]).GetValue(UNINSTALL_STRING));
+                        UninstallProgram = Registry.LocalMachine.OpenSubKey(InstallerKeys[PLATFORM41]).GetValue(UNINSTALL_STRING).ToString();
                         TL.LogMessage("Uninstall", "  Found uninstall string: \"" + UninstallProgram + "\"");
                         Vals = UninstallProgram.Split(SplitChars, StringSplitOptions.RemoveEmptyEntries);
                         TL.LogMessage("Uninstall", "  Found uninstall values: \"" + Vals[0] + "\", \"" + Vals[1] + "\"");
@@ -603,7 +603,7 @@ namespace RemoveASCOM
 
                     foreach (var SubKey in SubKeys)
                     {
-                        ProductDescription = Conversions.ToString(RKey.OpenSubKey(SubKey).GetValue("ProductName", "Product description not present"));
+                        ProductDescription = RKey.OpenSubKey(SubKey).GetValue("ProductName", "Product description not present").ToString();
                         TL.LogMessage("RemoveInstallers", "Found Product: " + ProductDescription);
                         if (ProductDescription.ToUpperInvariant().Contains("ASCOM PLATFORM"))
                         {
@@ -714,15 +714,15 @@ namespace RemoveASCOM
         }
 
         /// <summary>
-    /// Remove specific Platform files only leaving the directory structure and 3rd party files intact.
-    /// </summary>
-    /// <remarks></remarks>
+        /// Remove specific Platform files only leaving the directory structure and 3rd party files intact.
+        /// </summary>
+        /// <remarks></remarks>
         private void RemovePlatformFiles()
         {
             Regex regexInstallerVariables;
             Match mVar;
 
-            string CommonFiles, CommonFiles64, TargetDirectoryPlatform, TargetDirectoryDeveloper;
+            string CommonFiles, CommonFiles64, TargetDirectoryPlatform, TargetDirectoryDeveloper, VsReferenceFiles;
 
             TL.LogMessage("RemovePlatformFiles", "Started");
             Status("Removing Platform files");
@@ -737,9 +737,9 @@ namespace RemoveASCOM
             {
                 TargetDirectoryPlatform = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + ASCOM_TARGET_DIRECTORY_PLATFORM;
                 TargetDirectoryDeveloper = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + ASCOM_TARGET_DIRECTORY_DEVELOPER;
+                VsReferenceFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + ASCOM_DEVELOPER_COMPONENTS_DIRECTORY;
                 CommonFiles = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86);
                 CommonFiles64 = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles);
-
                 TL.LogMessage("RemovePlatformFiles", "This is a 64bit OS");
                 TL.LogMessage("RemovePlatformFiles", "TargetDirectory: " + TargetDirectoryPlatform);
                 TL.LogMessage("RemovePlatformFiles", "CommonFiles: " + CommonFiles);
@@ -748,7 +748,8 @@ namespace RemoveASCOM
             else // Set variables for when we are running on a 32bit OS
             {
                 TargetDirectoryPlatform = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + ASCOM_TARGET_DIRECTORY_PLATFORM;
-                TargetDirectoryDeveloper = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + ASCOM_TARGET_DIRECTORY_DEVELOPER;
+                TargetDirectoryDeveloper = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + ASCOM_TARGET_DIRECTORY_DEVELOPER;
+                VsReferenceFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + ASCOM_DEVELOPER_COMPONENTS_DIRECTORY;
                 CommonFiles = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles);
                 CommonFiles64 = "Not set";
 
@@ -758,47 +759,40 @@ namespace RemoveASCOM
                 TL.LogMessage("RemovePlatformFiles", "CommonFiles64: " + CommonFiles64);
             }
 
-            // Iterate of the list of Platform files, convert compiler variables to real values on this system and remove the files
+            // Iterate over the list of Platform files, convert compiler variables to real values on this system and remove the files
             foreach (string fileFullName in DynamicLists.PlatformFiles(TL))
             {
                 try
                 {
                     Action("Removing file: " + fileFullName);
-                    // TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
                     mVar = regexInstallerVariables.Match(fileFullName);
                     if (mVar.Success) // We have found a compiler variable so process it
                     {
                         switch (mVar.Groups["CompVar"].ToString().ToUpperInvariant() ?? "")
                         {
                             case "TARGETDIR":
-                                {
-                                    DeleteFile(fileFullName.Replace("$TARGETDIR$", TargetDirectoryPlatform));
-                                    break;
-                                }
+                                DeleteFile(fileFullName.Replace("$TARGETDIR$", TargetDirectoryPlatform));
+                                break;
+
                             case "COMMONFILES":
-                                {
-                                    DeleteFile(fileFullName.Replace("$COMMONFILES$", CommonFiles));
-                                    break;
-                                }
+                                DeleteFile(fileFullName.Replace("$COMMONFILES$", CommonFiles));
+                                break;
+
                             case "COMMONFILES64":
+                                if (Is64Bit())
                                 {
-                                    if (Is64Bit())
-                                    {
-                                        DeleteFile(fileFullName.Replace("$COMMONFILES64$", CommonFiles64));
-                                    }
-                                    else
-                                    {
-                                        TL.LogMessage("RemovePlatformFiles", "Ignoring 64bit variable: " + fileFullName);
-                                    } // Unrecognised compiler variable so log an error
-
-                                    break;
+                                    DeleteFile(fileFullName.Replace("$COMMONFILES64$", CommonFiles64));
                                 }
+                                else
+                                {
+                                    TL.LogMessage("RemovePlatformFiles", "Ignoring 64bit variable: " + fileFullName);
+                                }
+                                break;
 
+                            // Unrecognised compiler variable so log an error
                             default:
-                                {
-                                    TL.LogMessage("RemovePlatformFiles", "***** UNKNOWN Compiler Variable: " + mVar.Groups["CompVar"].ToString() + " in file: " + fileFullName);
-                                    break;
-                                }
+                                TL.LogMessage("RemovePlatformFiles", "***** UNKNOWN Compiler Variable: " + mVar.Groups["CompVar"].ToString() + " in file: " + fileFullName);
+                                break;
                         }
                     }
                     else
@@ -814,47 +808,44 @@ namespace RemoveASCOM
             }
             TL.BlankLine();
 
-            // Iterate of the list of Developer files, convert compiler variables to real values on this system and remove the files
+            // Iterate over the list of Developer files, convert compiler variables to real values on this system and remove the files
             foreach (string fileFullName in DynamicLists.DeveloperFiles(TL))
             {
                 try
                 {
                     Action("Removing file: " + fileFullName);
-                    // TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
                     mVar = regexInstallerVariables.Match(fileFullName);
                     if (mVar.Success) // We have found a compiler variable so process it
                     {
                         switch (mVar.Groups["CompVar"].ToString().ToUpperInvariant() ?? "")
                         {
                             case "TARGETDIR":
-                                {
-                                    DeleteFile(fileFullName.Replace("$TARGETDIR$", TargetDirectoryDeveloper));
-                                    break;
-                                }
+                                DeleteFile(fileFullName.Replace("$TARGETDIR$", TargetDirectoryDeveloper));
+                                break;
+
+                            case "$VSREFERENCEFILES$":
+                                DeleteFile(fileFullName.Replace("$VSREFERENCEFILES$", VsReferenceFiles));
+                                break;
+
                             case "COMMONFILES":
-                                {
-                                    DeleteFile(fileFullName.Replace("$COMMONFILES$", CommonFiles));
-                                    break;
-                                }
+                                DeleteFile(fileFullName.Replace("$COMMONFILES$", CommonFiles));
+                                break;
+
                             case "COMMONFILES64":
+                                if (Is64Bit())
                                 {
-                                    if (Is64Bit())
-                                    {
-                                        DeleteFile(fileFullName.Replace("$COMMONFILES64$", CommonFiles64));
-                                    }
-                                    else
-                                    {
-                                        TL.LogMessage("RemovePlatformFiles", "Ignoring 64bit variable: " + fileFullName);
-                                    } // Unrecognised compiler variable so log an error
-
-                                    break;
+                                    DeleteFile(fileFullName.Replace("$COMMONFILES64$", CommonFiles64));
                                 }
+                                else
+                                {
+                                    TL.LogMessage("RemovePlatformFiles", "Ignoring 64bit variable: " + fileFullName);
+                                }
+                                break;
 
+                            // Unrecognised compiler variable so log an error
                             default:
-                                {
-                                    TL.LogMessage("RemovePlatformFiles", "***** UNKNOWN Compiler Variable: " + mVar.Groups["CompVar"].ToString() + " in file: " + fileFullName);
-                                    break;
-                                }
+                                TL.LogMessage("RemovePlatformFiles", "***** UNKNOWN Compiler Variable: " + mVar.Groups["CompVar"].ToString() + " in file: " + fileFullName);
+                                break;
                         }
                     }
                     else
@@ -862,7 +853,6 @@ namespace RemoveASCOM
                         TL.LogMessage("RemovePlatformFiles", "***** NO Compiler Variable in file: " + fileFullName);
                     }
                 }
-                // TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
                 catch (Exception ex)
                 {
                     TL.LogMessageCrLf("", "Exception: " + ex.ToString());
@@ -873,18 +863,14 @@ namespace RemoveASCOM
         }
 
         /// <summary>
-    /// Recursively removes all Platform directories and their contents regardless of whether the files are Platform or 3rd party provided.
-    /// </summary>
-    /// <remarks></remarks>
+        /// Recursively removes all Platform directories and their contents regardless of whether the files are Platform or 3rd party provided.
+        /// </summary>
+        /// <remarks></remarks>
         private void RemovePlatformDirectories()
         {
             var Path = new StringBuilder(260);
             int rc;
             string ASCOMDirectory;
-            DirectoryInfo DirInfo;
-            FileInfo[] FileInfos;
-            DirectoryInfo[] DirInfos;
-            bool Found;
 
             try
             {
@@ -1097,7 +1083,7 @@ namespace RemoveASCOM
                     try
                     {
                         assname = GetAssemblyName(an);
-                        if (Strings.InStr(assname.FullName, "ASCOM") > 0) // Extra information for ASCOM files
+                        if (assname.FullName.Contains("ASCOM")) // Extra information for ASCOM files
                         {
                             TL.LogMessage("RemoveGAC", "Found: " + assname.FullName);
                             ASCOMAssemblyNames.Add(assname.FullName, assname.Name); // Convert the fusion representation to a standard AssemblyName and get its full name
@@ -1135,41 +1121,32 @@ namespace RemoveASCOM
                         switch (Outcome.Disposition)
                         {
                             case IASSEMBLYCACHE_UNINSTALL_DISPOSITION.IASSEMBLYCACHE_UNINSTALL_DISPOSITION_ALREADY_UNINSTALLEDField:
-                                {
-                                    TL.LogMessage("RemoveGAC #####", "  Outcome: Assembly already uninstalled");
-                                    break;
-                                }
+                                TL.LogMessage("RemoveGAC #####", "  Outcome: Assembly already uninstalled");
+                                break;
+
                             case IASSEMBLYCACHE_UNINSTALL_DISPOSITION.IASSEMBLYCACHE_UNINSTALL_DISPOSITION_DELETE_PENDINGField:
-                                {
-                                    TL.LogMessage("RemoveGAC #####", "   Outcome: Delete currently pending");
-                                    break;
-                                }
+                                TL.LogMessage("RemoveGAC #####", "   Outcome: Delete currently pending");
+                                break;
+
                             case IASSEMBLYCACHE_UNINSTALL_DISPOSITION.IASSEMBLYCACHE_UNINSTALL_DISPOSITION_HAS_INSTALL_REFERENCESField:
-                                {
-                                    TL.LogMessage("RemoveGAC #####", "  Outcome: Assembly has remaining install references");
-                                    break;
-                                }
+                                TL.LogMessage("RemoveGAC #####", "  Outcome: Assembly has remaining install references");
+                                break;
+
                             case IASSEMBLYCACHE_UNINSTALL_DISPOSITION.IASSEMBLYCACHE_UNINSTALL_DISPOSITION_REFERENCE_NOT_FOUNDField:
-                                {
-                                    TL.LogMessage("RemoveGAC #####", "  Outcome: Unable to find assembly - " + AssemblyName.Value + " - " + AssemblyName.Key);
-                                    break;
-                                }
+                                TL.LogMessage("RemoveGAC #####", "  Outcome: Unable to find assembly - " + AssemblyName.Value + " - " + AssemblyName.Key);
+                                break;
+
                             case IASSEMBLYCACHE_UNINSTALL_DISPOSITION.IASSEMBLYCACHE_UNINSTALL_DISPOSITION_STILL_IN_USEField:
-                                {
-                                    TL.LogMessage("RemoveGA #####C", "  Outcome: Assembly still in use");
-                                    break;
-                                }
+                                TL.LogMessage("RemoveGA #####C", "  Outcome: Assembly still in use");
+                                break;
+
                             case IASSEMBLYCACHE_UNINSTALL_DISPOSITION.IASSEMBLYCACHE_UNINSTALL_DISPOSITION_UNINSTALLEDField:
-                                {
-                                    TL.LogMessage("RemoveGAC", "  Outcome: Assembly uninstalled");
-                                    break;
-                                }
+                                TL.LogMessage("RemoveGAC", "  Outcome: Assembly uninstalled");
+                                break;
 
                             default:
-                                {
-                                    TL.LogMessage("RemoveGAC #####", "  Unknown uninstall outcome code: " + ((int)Outcome.Disposition).ToString());
-                                    break;
-                                }
+                                TL.LogMessage("RemoveGAC #####", "  Unknown uninstall outcome code: " + ((int)Outcome.Disposition).ToString());
+                                break;
                         }
                     }
                     catch (Exception ex)
@@ -1256,10 +1233,10 @@ namespace RemoveASCOM
         #region Support Routines
 
         /// <summary>
-    /// Delete a single file, reporting success or an exception
-    /// </summary>
-    /// <param name="FileName">Full path to the file to delete</param>
-    /// <remarks></remarks>
+        /// Delete a single file, reporting success or an exception
+        /// </summary>
+        /// <param name="FileName">Full path to the file to delete</param>
+        /// <remarks></remarks>
         private void DeleteFile(string FileName)
         {
             FileInfo TargetFile;
@@ -1343,7 +1320,7 @@ namespace RemoveASCOM
                 if (Directory.Exists(Folder))
                 {
                     DirInfo = new DirectoryInfo(Folder);
-                    Action(Strings.Left(Folder, 70));
+                    Action(Folder.Substring(0, Math.Min(Folder.Length, 70)));
                     try // Get file details for files in this folder
                     {
                         FileInfos = DirInfo.GetFiles();
