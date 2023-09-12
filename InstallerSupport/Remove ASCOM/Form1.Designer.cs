@@ -5,7 +5,6 @@ using System.Windows.Forms;
 
 namespace RemoveASCOM
 {
-    [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
     public partial class Form1 : Form
     {
 
