@@ -377,44 +377,44 @@ else
     Comment: Set the VS Reference filles folder location
     Set Variable VSREFERENCEFILES to $TARGETDIR$\Components\Platform7
     Comment: Platform 6.4 references
-    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $VSREFERENCEFILES$
-    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.xml to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.xml to $VSREFERENCEFILES$
     Comment: Platform 6.1 references
-    Install Files ..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to $VSREFERENCEFILES$
     Comment: Platform 6 references
-    Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $VSREFERENCEFILES$
-    Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml to $VSREFERENCEFILES$
-    Install Files ..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $VSREFERENCEFILES$
-    Install Files ..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.xml to $VSREFERENCEFILES$
-    Install Files ..\..\..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to $VSREFERENCEFILES$
-    Install Files ..\..\..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.xml to $VSREFERENCEFILES$
-    Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $VSREFERENCEFILES$
-    Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.xml to $VSREFERENCEFILES$
-    Install Files ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to $VSREFERENCEFILES$
-    Install Files ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.xml to $VSREFERENCEFILES$
-    Install Files ..\..\..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to $VSREFERENCEFILES$
-    Install Files ..\..\..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.xml to $VSREFERENCEFILES$
-    Install Files ..\..\..\..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll to $VSREFERENCEFILES$
-    Install Files ..\..\..\..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.xml to $VSREFERENCEFILES$
-    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $VSREFERENCEFILES$
-    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.xml to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.xml to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.xml to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.xml to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.xml to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.xml to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $VSREFERENCEFILES$
+    Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml to $VSREFERENCEFILES$
     Set Variable PROGRESS to 40
-    Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to $VSREFERENCEFILES$
-    Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.xml to $VSREFERENCEFILES$
+    Install Files ..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to $VSREFERENCEFILES$
+    Install Files ..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.xml to $VSREFERENCEFILES$
     Comment: Platform 5.5 references
-    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Astrometry.dll to $TARGETDIR$\Components\Platform55\
-    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Astrometry.xml to $TARGETDIR$\Components\Platform55\
-    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.dll to $TARGETDIR$\Components\Platform55\
-    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.xml to $TARGETDIR$\Components\Platform55\
-    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform55\
-    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.xml to $TARGETDIR$\Components\Platform55\
-    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $TARGETDIR$\Components\Platform55\
-    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.xml to $TARGETDIR$\Components\Platform55\
-    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.DriverAccess.dll to $TARGETDIR$\Components\Platform55\
-    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.DriverAccess.xml to $TARGETDIR$\Components\Platform55\
+    Install Files ..\InstallerContent\Platform 5.5\ASCOM.Astrometry.dll to $TARGETDIR$\Components\Platform55\
+    Install Files ..\InstallerContent\Platform 5.5\ASCOM.Astrometry.xml to $TARGETDIR$\Components\Platform55\
+    Install Files ..\InstallerContent\Platform 5.5\ASCOM.Attributes.dll to $TARGETDIR$\Components\Platform55\
+    Install Files ..\InstallerContent\Platform 5.5\ASCOM.Attributes.xml to $TARGETDIR$\Components\Platform55\
+    Install Files ..\InstallerContent\Platform 5.5\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform55\
+    Install Files ..\InstallerContent\Platform 5.5\ASCOM.Exceptions.xml to $TARGETDIR$\Components\Platform55\
+    Install Files ..\InstallerContent\Platform 5.5\ASCOM.Utilities.dll to $TARGETDIR$\Components\Platform55\
+    Install Files ..\InstallerContent\Platform 5.5\ASCOM.Utilities.xml to $TARGETDIR$\Components\Platform55\
+    Install Files ..\InstallerContent\ASCOM.DriverAccess.dll to $TARGETDIR$\Components\Platform55\
+    Install Files ..\InstallerContent\ASCOM.DriverAccess.xml to $TARGETDIR$\Components\Platform55\
     Comment: Platform 5 references
-    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform5
-    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.xml to $TARGETDIR$\Components\Platform5
+    Install Files ..\InstallerContent\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform5
+    Install Files ..\InstallerContent\ASCOM.Exceptions.xml to $TARGETDIR$\Components\Platform5
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 7\, $TARGETDIR$\Components\Platform7
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5.5\, $TARGETDIR$\Components\Platform55
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5\, $TARGETDIR$\Components\Platform5
@@ -426,49 +426,49 @@ else
     [END REGION]
     [DEFINE REGION: Developer Documentation]
     Comment: Platform 7 Documentation
-    Install Files ..\..\..\..\Help\Platform Supporting Documents\ASCOM SideOfPier Behaviour.pdf to $TARGETDIR$\Developer Documentation
-    Install Files ..\..\..\..\Help\Platform Supporting Documents\Generating Multiple ASCOM Drivers.pdf to $TARGETDIR$\Developer Documentation
-    Install Files ..\..\..\..\Help\Platform Supporting Documents\Introduction to Developing ASCOM Drivers.pdf to $TARGETDIR$\Developer Documentation
-    Install Files ..\..\..\..\Help\Platform Supporting Documents\Making a Local Server based Driver.pdf to $TARGETDIR$\Developer Documentation
-    Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $TARGETDIR$\Developer Documentation
-    Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform Evolution.pdf to $TARGETDIR$\Developer Documentation
-    Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS_C3.0_Guide.pdf to $TARGETDIR$\Developer Documentation
-    Install Files ..\..\..\..\NOVAS\Algorithms.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\Help\Platform Supporting Documents\ASCOM SideOfPier Behaviour.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\Help\Platform Supporting Documents\Generating Multiple ASCOM Drivers.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\Help\Platform Supporting Documents\Introduction to Developing ASCOM Drivers.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\Help\Platform Supporting Documents\Making a Local Server based Driver.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\Help\Platform Supporting Documents\Platform Evolution.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\NOVAS\NOVAS-3\NOVAS_C3.0_Guide.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\NOVAS\Algorithms.pdf to $TARGETDIR$\Developer Documentation
     Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
     Set Variable PROGRESS to 60
-    Install Files ..\..\..\..\Doc\tip.gif to $TARGETDIR$\Developer Documentation
-    Install Files ..\..\..\..\Doc\Bug72T-sm.jpg to $TARGETDIR$\Developer Documentation
-    Install Files ..\..\..\..\Help\Script Help Files\Script56.chm to $TARGETDIR$\Developer Documentation
-    Install Files ..\..\..\..\Help\Script Help Files\wsh-56.chm to $TARGETDIR$\Developer Documentation
+    Install Files ..\Doc\tip.gif to $TARGETDIR$\Developer Documentation
+    Install Files ..\Doc\Bug72T-sm.jpg to $TARGETDIR$\Developer Documentation
+    Install Files ..\Help\Script Help Files\Script56.chm to $TARGETDIR$\Developer Documentation
+    Install Files ..\Help\Script Help Files\wsh-56.chm to $TARGETDIR$\Developer Documentation
     Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
     Set Variable PROGRESS to 70
-    Install Files ..\..\..\..\Help\Output\Developer\PlatformDeveloperHelp.chm to $TARGETDIR$\Developer Documentation
+    Install Files ..\Help\Output\Developer\PlatformDeveloperHelp.chm to $TARGETDIR$\Developer Documentation
     Comment: Platform 6 SP1 Documentation
-    Install Files ..\..\..\..\NOVAS\NOVAS-31\NOVAS_C3.1_Guide.pdf to $TARGETDIR$\Developer Documentation
-    Install Files ..\..\..\..\Help\Platform Supporting Documents\GuideToAstro32Migration.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\NOVAS\NOVAS-31\NOVAS_C3.1_Guide.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\Help\Platform Supporting Documents\GuideToAstro32Migration.pdf to $TARGETDIR$\Developer Documentation
     Comment: Platform 6 SP2 Files
-    Install Files ..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\check-earth.js to $TARGETDIR$\Sample Scripts
-    Install Files ..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\check-planet.js to $TARGETDIR$\Sample Scripts
-    Install Files ..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\check-star.vbs to $TARGETDIR$\Sample Scripts
-    Install Files ..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\KepNovSample.vbs to $TARGETDIR$\Sample Scripts
-    Install Files ..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\LocalTopoToJ2000.js to $TARGETDIR$\Sample Scripts
-    Install Files ..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\TransformCheck.vbs to $TARGETDIR$\Sample Scripts
+    Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\check-earth.js to $TARGETDIR$\Sample Scripts
+    Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\check-planet.js to $TARGETDIR$\Sample Scripts
+    Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\check-star.vbs to $TARGETDIR$\Sample Scripts
+    Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\KepNovSample.vbs to $TARGETDIR$\Sample Scripts
+    Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\LocalTopoToJ2000.js to $TARGETDIR$\Sample Scripts
+    Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\TransformCheck.vbs to $TARGETDIR$\Sample Scripts
     Comment: Platform 6.1 Documentation
-    Install Files ..\..\..\..\Help\Platform Supporting Documents\ASCOM Video Developers Documentation.pdf to $TARGETDIR$\Developer Documentation
-    Install Files ..\..\..\..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\Help\Platform Supporting Documents\ASCOM Video Developers Documentation.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf to $TARGETDIR$\Developer Documentation
     [END REGION]
     [DEFINE REGION: Driver installer]
-    Install Files ..\..\..\..\Doc\DriverInstallers.html to $TARGETDIR$\Developer Documentation
-    Install Files ..\..\..\..\Driver Inst\InstallerGen\bin\Release\InstallerGen.exe to $TARGETDIR$\Installer Generator
-    Install Files ..\..\..\..\Driver Inst\InstallerGen\bin\Release\InstallerGen.pdb to $TARGETDIR$\Installer Generator
-    Install Files ..\..\..\..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.dll to $TARGETDIR$\Installer Generator
-    Install Files ..\..\..\..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.pdb to $TARGETDIR$\Installer Generator
+    Install Files ..\Doc\DriverInstallers.html to $TARGETDIR$\Developer Documentation
+    Install Files ..\Driver Inst\InstallerGen\bin\Release\InstallerGen.exe to $TARGETDIR$\Installer Generator
+    Install Files ..\Driver Inst\InstallerGen\bin\Release\InstallerGen.pdb to $TARGETDIR$\Installer Generator
+    Install Files ..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.dll to $TARGETDIR$\Installer Generator
+    Install Files ..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.pdb to $TARGETDIR$\Installer Generator
     Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
     Set Variable PROGRESS to 80
-    Install Files ..\..\..\..\Driver Inst\InstallerGen\Template\TemplateSubstitutionParameters.txt to $TARGETDIR$\Installer Generator
-    Install Files ..\..\..\..\Driver Inst\InstallerGen\License\CreativeCommons.txt to $TARGETDIR$\Installer Generator\Resources
-    Install Files ..\..\..\..\Driver Inst\InstallerGen\Template\DriverInstallTemplate.iss to $TARGETDIR$\Installer Generator\Resources
-    Install Files ..\..\..\..\Driver Inst\InstallerGen\Graphics\WizardImage.bmp to $TARGETDIR$\Installer Generator\Resources
+    Install Files ..\Driver Inst\InstallerGen\Template\TemplateSubstitutionParameters.txt to $TARGETDIR$\Installer Generator
+    Install Files ..\Driver Inst\InstallerGen\License\CreativeCommons.txt to $TARGETDIR$\Installer Generator\Resources
+    Install Files ..\Driver Inst\InstallerGen\Template\DriverInstallTemplate.iss to $TARGETDIR$\Installer Generator\Resources
+    Install Files ..\Driver Inst\InstallerGen\Graphics\WizardImage.bmp to $TARGETDIR$\Installer Generator\Resources
     [END REGION]
     [DEFINE REGION: Update Developer Tools installation information in Profile]
     Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Installation Date, $DATE$ $TIME$
@@ -479,8 +479,8 @@ else
     [END REGION]
     Comment: Install GacInstall so that we can uninstall assemblies from the GAC indepndently of the Platform itself
     Comment: Install FusionLib here in case the Platform is removed first and has already uninstalled this from the GAC
-    Comment: Install Files ..\..\..\..\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $TARGETDIR$\Internal
-    Comment: Install Files ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to $TARGETDIR$\Internal
+    Comment: Install Files ..\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $TARGETDIR$\Internal
+    Comment: Install Files ..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to $TARGETDIR$\Internal
   end
    
   [DEFINE REGION: Visual Studio Driver Templates]
@@ -489,12 +489,12 @@ else
   Comment: Get Component Developer Components\Visual Studio Driver Templates Selection State into Variable SELECTED
   Comment: if Variable SELECTED Equals TRUE
   Comment: Write into Text File $SETUPLOG$ from Value Installing Project Templates (at end of file)
-  Comment: Install Files ..\..\..\..\DriverTemplates\TemplateSources\*.zip to $TARGETDIR$\Templates
-  Comment: Install Files ..\..\..\..\Doc\Templates.html to $TARGETDIR$\Developer Documentation
+  Comment: Install Files ..\DriverTemplates\TemplateSources\*.zip to $TARGETDIR$\Templates
+  Comment: Install Files ..\Doc\Templates.html to $TARGETDIR$\Developer Documentation
   Comment: Comment: Support DLL for driver templates
-  Comment: Install Assembly ..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.dll to Global Assembly Cache
-  Comment: Install Files ..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.dll to $TARGETDIR$\Platform 6 Developer Components\Installer Generator
-  Comment: Install Files ..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.pdb to $WINDIR$\Symbols\dll
+  Comment: Install Assembly ..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.dll to Global Assembly Cache
+  Comment: Install Files ..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.dll to $TARGETDIR$\Platform 6 Developer Components\Installer Generator
+  Comment: Install Files ..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.pdb to $WINDIR$\Symbols\dll
   Comment: end
   [END REGION]
    

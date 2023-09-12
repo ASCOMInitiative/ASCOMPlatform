@@ -2129,7 +2129,7 @@ CHECKSYSTEM
 CHECKSYSTEM
 0
 {78F888D5-CBEC-4D28-B351-D23C397BAEF1}
-..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll
+..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2142,7 +2142,7 @@ FALSE
 FALSE
 FALSE
 {48613799-281A-4627-AB70-ABAE8B8F6353}
-..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll
+..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2155,7 +2155,7 @@ FALSE
 FALSE
 FALSE
 {A3BC775F-C238-4539-B45F-029FA7504501}
-..\..\..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll
+..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2168,7 +2168,7 @@ FALSE
 FALSE
 FALSE
 {C8D6F07B-5968-4626-A053-62D313337925}
-..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
+..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2181,7 +2181,7 @@ FALSE
 FALSE
 FALSE
 {AAF20841-06B7-4D20-B221-FBC971B4A2B6}
-..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll
+..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2194,7 +2194,7 @@ FALSE
 FALSE
 FALSE
 {8A24BA3D-B3F4-4E44-BA3D-1387817F9C69}
-..\..\..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll
+..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2207,7 +2207,7 @@ FALSE
 FALSE
 FALSE
 {3E034A21-6650-4E68-801C-8B5F093BC1E4}
-..\..\..\..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll
+..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2220,7 +2220,7 @@ FALSE
 FALSE
 FALSE
 {36BBC1ED-1264-4591-9C2E-6296426F92C0}
-..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml
+..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2233,7 +2233,7 @@ FALSE
 FALSE
 FALSE
 {38907624-A7E8-459E-ABC7-DB192C293F53}
-..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll
+..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2246,7 +2246,7 @@ FALSE
 FALSE
 FALSE
 {18326B2E-366B-42A6-9660-36F9D9E4767D}
-..\..\..\..\NOVAS\Algorithms.pdf
+..\NOVAS\Algorithms.pdf
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2259,7 +2259,7 @@ FALSE
 FALSE
 FALSE
 {87194CFA-DC3C-4C51-8C4D-B2B579C11E06}
-..\..\..\..\NOVAS\NOVAS-3\NOVAS_C3.0_Guide.pdf
+..\NOVAS\NOVAS-3\NOVAS_C3.0_Guide.pdf
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2272,7 +2272,7 @@ FALSE
 FALSE
 FALSE
 {058FDC86-0730-4598-A8BB-9DF13D550474}
-..\..\..\..\Doc\tip.gif
+..\Doc\tip.gif
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2285,7 +2285,7 @@ FALSE
 FALSE
 FALSE
 {9357557A-0E04-452E-8CD2-73D4A5CF698A}
-..\..\..\..\Doc\Bug72T-sm.jpg
+..\Doc\Bug72T-sm.jpg
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2298,7 +2298,7 @@ FALSE
 FALSE
 FALSE
 {F77A0B40-AC43-47E9-A77D-1DF4AAA37D79}
-..\..\..\..\Driver Inst\InstallerGen\bin\Release\InstallerGen.exe
+..\Driver Inst\InstallerGen\bin\Release\InstallerGen.exe
 FALSE|
 $TARGETDIR$\Installer Generator
 FALSE
@@ -2311,7 +2311,7 @@ FALSE
 FALSE
 FALSE
 {A73B14FA-C7F0-4FAF-B34F-431B2D9A62EA}
-..\..\..\..\Driver Inst\InstallerGen\bin\Release\InstallerGen.pdb
+..\Driver Inst\InstallerGen\bin\Release\InstallerGen.pdb
 FALSE|
 $TARGETDIR$\Installer Generator
 FALSE
@@ -2324,7 +2324,7 @@ FALSE
 FALSE
 FALSE
 {A84B19CE-78A5-477B-B079-78504FB4DF09}
-..\..\..\..\Help\Script Help Files\Script56.chm
+..\Help\Script Help Files\Script56.chm
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2337,7 +2337,7 @@ FALSE
 FALSE
 FALSE
 {3A4184F7-264B-448A-86A1-FB36583A1A8E}
-..\..\..\..\Help\Script Help Files\wsh-56.chm
+..\Help\Script Help Files\wsh-56.chm
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2350,7 +2350,7 @@ FALSE
 FALSE
 FALSE
 {52C0CAC6-634A-4DFE-92D8-713EDF1FD7E6}
-..\..\..\..\Driver Inst\InstallerGen\License\CreativeCommons.txt
+..\Driver Inst\InstallerGen\License\CreativeCommons.txt
 FALSE|
 $TARGETDIR$\Installer Generator\Resources
 FALSE
@@ -2363,7 +2363,7 @@ FALSE
 FALSE
 FALSE
 {71C80B71-C96D-45E7-93F9-2F985B0F08FB}
-..\..\..\..\Driver Inst\InstallerGen\Template\TemplateSubstitutionParameters.txt
+..\Driver Inst\InstallerGen\Template\TemplateSubstitutionParameters.txt
 FALSE|
 $TARGETDIR$\Installer Generator
 FALSE
@@ -2376,7 +2376,7 @@ FALSE
 FALSE
 FALSE
 {453F1268-5C88-43C9-A103-A172C5B79C48}
-..\..\..\..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.dll
+..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.dll
 FALSE|
 $TARGETDIR$\Installer Generator
 FALSE
@@ -2389,7 +2389,7 @@ FALSE
 FALSE
 FALSE
 {55908527-B59D-42B1-9D10-42D039566565}
-..\..\..\..\Help\Output\Developer\PlatformDeveloperHelp.chm
+..\Help\Output\Developer\PlatformDeveloperHelp.chm
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2402,7 +2402,7 @@ FALSE
 FALSE
 FALSE
 {62D8753A-017C-4A29-9F6C-7B0DA0FADC71}
-..\..\..\..\Driver Inst\InstallerGen\Template\DriverInstallTemplate.iss
+..\Driver Inst\InstallerGen\Template\DriverInstallTemplate.iss
 FALSE|
 $TARGETDIR$\Installer Generator\Resources
 FALSE
@@ -2415,7 +2415,7 @@ FALSE
 FALSE
 FALSE
 {374EFB29-F62B-4B4A-A706-58D2F632971A}
-..\..\..\..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.pdb
+..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.pdb
 FALSE|
 $TARGETDIR$\Installer Generator
 FALSE
@@ -2428,7 +2428,7 @@ FALSE
 FALSE
 FALSE
 {BE0FF982-C3E6-4A13-9284-A087DD1FE94A}
-..\..\..\..\Driver Inst\InstallerGen\Graphics\WizardImage.bmp
+..\Driver Inst\InstallerGen\Graphics\WizardImage.bmp
 FALSE|
 $TARGETDIR$\Installer Generator\Resources
 FALSE
@@ -2441,7 +2441,7 @@ FALSE
 FALSE
 FALSE
 {AF5ED094-3A84-465A-9907-D892C2D78EB4}
-..\..\..\..\Doc\DriverInstallers.html
+..\Doc\DriverInstallers.html
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2454,7 +2454,7 @@ FALSE
 FALSE
 FALSE
 {EF0E2867-7092-4009-B686-592228982D8C}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.xml
+..\InstallerContent\ASCOM.Exceptions.xml
 FALSE|
 $TARGETDIR$\Components\Platform5
 FALSE
@@ -2467,7 +2467,7 @@ FALSE
 FALSE
 FALSE
 {5989FF1C-86FF-4788-BF7F-ECFDC2A2D033}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll
+..\InstallerContent\Platform 5.5\ASCOM.Utilities.dll
 FALSE|
 $TARGETDIR$\Components\Platform55\
 FALSE
@@ -2480,7 +2480,7 @@ FALSE
 FALSE
 FALSE
 {0F034885-E765-4743-AEEC-63D55F0ACF12}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.dll
+..\InstallerContent\Platform 5.5\ASCOM.Exceptions.dll
 FALSE|
 $TARGETDIR$\Components\Platform55\
 FALSE
@@ -2493,7 +2493,7 @@ FALSE
 FALSE
 FALSE
 {CC78D846-FA68-4AA5-A245-C80608CE43B0}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.dll
+..\InstallerContent\Platform 5.5\ASCOM.Attributes.dll
 FALSE|
 $TARGETDIR$\Components\Platform55\
 FALSE
@@ -2506,7 +2506,7 @@ FALSE
 FALSE
 FALSE
 {440CC6D4-487C-4A4D-A402-9E83704381C7}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Astrometry.dll
+..\InstallerContent\Platform 5.5\ASCOM.Astrometry.dll
 FALSE|
 $TARGETDIR$\Components\Platform55\
 FALSE
@@ -2519,7 +2519,7 @@ FALSE
 FALSE
 FALSE
 {2481BBD9-6FCE-47E2-9952-DD8776769777}
-..\..\..\..\Doc\Templates.html
+..\Doc\Templates.html
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2532,7 +2532,7 @@ FALSE
 FALSE
 FALSE
 {5D0034B0-1147-4607-80E2-F9EC3BA4D1D9}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.DriverAccess.dll
+..\InstallerContent\ASCOM.DriverAccess.dll
 FALSE|
 $TARGETDIR$\Components\Platform55\
 FALSE
@@ -2545,7 +2545,7 @@ FALSE
 FALSE
 FALSE
 {371E786E-2B25-4957-9BD2-FF05346AE7E8}
-..\..\..\..\Help\Platform Supporting Documents\Generating Multiple ASCOM Drivers.pdf
+..\Help\Platform Supporting Documents\Generating Multiple ASCOM Drivers.pdf
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2558,7 +2558,7 @@ FALSE
 FALSE
 FALSE
 {4418C2EF-7588-4FD8-BDD6-24D17ECE81BF}
-..\..\..\..\Help\Platform Supporting Documents\Making a Local Server based Driver.pdf
+..\Help\Platform Supporting Documents\Making a Local Server based Driver.pdf
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2571,7 +2571,7 @@ FALSE
 FALSE
 FALSE
 {0B757607-DE34-4DAD-8DCC-2B15B92029A6}
-..\..\..\..\Help\Platform Supporting Documents\ASCOM SideOfPier Behaviour.pdf
+..\Help\Platform Supporting Documents\ASCOM SideOfPier Behaviour.pdf
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2584,7 +2584,7 @@ FALSE
 FALSE
 FALSE
 {08749819-424A-4A51-866D-57B8E53F5EB7}
-..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml
+..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2597,7 +2597,7 @@ FALSE
 FALSE
 FALSE
 {E9B20B1E-A5DA-4F7B-A08C-A091AFC5E279}
-..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.xml
+..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.xml
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2610,7 +2610,7 @@ FALSE
 FALSE
 FALSE
 {75AC4937-4237-4C98-9D92-F5E9894AB51D}
-..\..\..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.xml
+..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.xml
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2623,7 +2623,7 @@ FALSE
 FALSE
 FALSE
 {4423E3F1-BFDD-4F0C-983D-927B5E1804A4}
-..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.xml
+..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.xml
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2636,7 +2636,7 @@ FALSE
 FALSE
 FALSE
 {DB6999CA-CA11-4798-8FC9-5161B5E0CD51}
-..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.xml
+..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.xml
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2649,7 +2649,7 @@ FALSE
 FALSE
 FALSE
 {5AFCEFFF-6D2A-44C9-9BED-5F12C4B5939F}
-..\..\..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.xml
+..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.xml
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2662,7 +2662,7 @@ FALSE
 FALSE
 FALSE
 {C79ECCCC-5C80-4CBA-858C-F3654120A85B}
-..\..\..\..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.xml
+..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.xml
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2675,7 +2675,7 @@ FALSE
 FALSE
 FALSE
 {4525EEAA-E586-47A1-A3B7-722C565495A2}
-..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll
+..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2688,7 +2688,7 @@ FALSE
 FALSE
 FALSE
 {318A1F1B-D101-47A7-8E27-06261A335730}
-..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.xml
+..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.xml
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2701,7 +2701,7 @@ FALSE
 FALSE
 FALSE
 {E152DE20-3177-464A-9DD1-6AAB9BD61094}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Astrometry.xml
+..\InstallerContent\Platform 5.5\ASCOM.Astrometry.xml
 FALSE|
 $TARGETDIR$\Components\Platform55\
 FALSE
@@ -2714,7 +2714,7 @@ FALSE
 FALSE
 FALSE
 {35E3B32D-47E3-464B-BC62-FE0A1137BF67}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.xml
+..\InstallerContent\Platform 5.5\ASCOM.Attributes.xml
 FALSE|
 $TARGETDIR$\Components\Platform55\
 FALSE
@@ -2727,7 +2727,7 @@ FALSE
 FALSE
 FALSE
 {1BACDEAB-B19F-4A5C-8452-26FD09FA8248}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.xml
+..\InstallerContent\Platform 5.5\ASCOM.Exceptions.xml
 FALSE|
 $TARGETDIR$\Components\Platform55\
 FALSE
@@ -2740,7 +2740,7 @@ FALSE
 FALSE
 FALSE
 {119F8FC7-DA07-4F6B-AE19-B73C99A2EF93}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.xml
+..\InstallerContent\Platform 5.5\ASCOM.Utilities.xml
 FALSE|
 $TARGETDIR$\Components\Platform55\
 FALSE
@@ -2753,7 +2753,7 @@ FALSE
 FALSE
 FALSE
 {2BAC64AA-E812-4B2E-B876-5D294FF1015C}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.DriverAccess.xml
+..\InstallerContent\ASCOM.DriverAccess.xml
 FALSE|
 $TARGETDIR$\Components\Platform55\
 FALSE
@@ -2766,7 +2766,7 @@ FALSE
 FALSE
 FALSE
 {7E972734-A7CC-4F80-86D4-C8BCB1EC7989}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.dll
+..\InstallerContent\ASCOM.Exceptions.dll
 FALSE|
 $TARGETDIR$\Components\Platform5
 FALSE
@@ -2779,7 +2779,7 @@ FALSE
 FALSE
 FALSE
 {78BDADB0-1211-4D85-B9AF-22F8A6DD66F7}
-..\..\..\..\NOVAS\NOVAS-31\NOVAS_C3.1_Guide.pdf
+..\NOVAS\NOVAS-31\NOVAS_C3.1_Guide.pdf
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2792,7 +2792,7 @@ FALSE
 FALSE
 FALSE
 {015DCB13-A2B4-4532-BF7D-CC3227524753}
-..\..\..\..\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf
+..\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2805,7 +2805,7 @@ FALSE
 FALSE
 FALSE
 {5F79957F-2BA8-466C-A302-F36AB90B0807}
-..\..\..\..\Help\Platform Supporting Documents\Platform Evolution.pdf
+..\Help\Platform Supporting Documents\Platform Evolution.pdf
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2818,7 +2818,7 @@ FALSE
 FALSE
 FALSE
 {DA36DB18-F09F-449D-B575-18D06D9A8751}
-..\..\..\..\Help\Platform Supporting Documents\GuideToAstro32Migration.pdf
+..\Help\Platform Supporting Documents\GuideToAstro32Migration.pdf
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2831,7 +2831,7 @@ FALSE
 FALSE
 FALSE
 {734C24CD-F974-4C0B-9CDC-0DE26D3C8BCB}
-..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.pdb
+..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -2844,7 +2844,7 @@ FALSE
 FALSE
 FALSE
 {E14565AE-B959-4E7B-92DB-E05A6E67237B}
-..\..\..\..\Help\Platform Supporting Documents\Introduction to Developing ASCOM Drivers.pdf
+..\Help\Platform Supporting Documents\Introduction to Developing ASCOM Drivers.pdf
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2857,7 +2857,7 @@ FALSE
 FALSE
 FALSE
 {8287DFF3-F622-45AD-BE48-C9EA2476F08D}
-..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\check-earth.js
+..\ASCOM.Astrometry\Astrometry Test Scripts\check-earth.js
 FALSE|
 $TARGETDIR$\Sample Scripts
 FALSE
@@ -2870,7 +2870,7 @@ FALSE
 FALSE
 FALSE
 {C77E90CC-3699-4FBF-9A7D-A5C087216251}
-..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\check-planet.js
+..\ASCOM.Astrometry\Astrometry Test Scripts\check-planet.js
 FALSE|
 $TARGETDIR$\Sample Scripts
 FALSE
@@ -2883,7 +2883,7 @@ FALSE
 FALSE
 FALSE
 {967A7E23-C44D-40BF-80EB-A3215F05686F}
-..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\check-star.vbs
+..\ASCOM.Astrometry\Astrometry Test Scripts\check-star.vbs
 FALSE|
 $TARGETDIR$\Sample Scripts
 FALSE
@@ -2896,7 +2896,7 @@ FALSE
 FALSE
 FALSE
 {3CA815CB-8AB1-49D7-9F23-8E643BC4EB38}
-..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\KepNovSample.vbs
+..\ASCOM.Astrometry\Astrometry Test Scripts\KepNovSample.vbs
 FALSE|
 $TARGETDIR$\Sample Scripts
 FALSE
@@ -2909,7 +2909,7 @@ FALSE
 FALSE
 FALSE
 {623688B9-C5AD-4916-87E6-905D489E79CB}
-..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\LocalTopoToJ2000.js
+..\ASCOM.Astrometry\Astrometry Test Scripts\LocalTopoToJ2000.js
 FALSE|
 $TARGETDIR$\Sample Scripts
 FALSE
@@ -2922,7 +2922,7 @@ FALSE
 FALSE
 FALSE
 {BEFAD791-0B00-4CEE-9BA9-C417C8AA5546}
-..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\TransformCheck.vbs
+..\ASCOM.Astrometry\Astrometry Test Scripts\TransformCheck.vbs
 FALSE|
 $TARGETDIR$\Sample Scripts
 FALSE
@@ -2935,7 +2935,7 @@ FALSE
 FALSE
 FALSE
 {F553AF76-DCC9-4CBD-853B-D705ACDF38EE}
-..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll
+..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -2948,7 +2948,7 @@ FALSE
 FALSE
 FALSE
 {2A752E25-0E7E-4E13-B1D3-FB2305E2354C}
-..\..\..\..\DriverTemplates\TemplateSources\*.zip
+..\DriverTemplates\TemplateSources\*.zip
 FALSE|
 $TARGETDIR$\Templates
 FALSE
@@ -2961,7 +2961,7 @@ FALSE
 FALSE
 FALSE
 {C550B1CA-B28D-432A-A5AE-407BD356A787}
-..\..\..\..\Help\Platform Supporting Documents\ASCOM Video Developers Documentation.pdf
+..\Help\Platform Supporting Documents\ASCOM Video Developers Documentation.pdf
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2974,7 +2974,7 @@ FALSE
 FALSE
 FALSE
 {1E59158E-BA84-4D76-827D-CC30F64F8A43}
-..\..\..\..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf
+..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2987,7 +2987,7 @@ FALSE
 FALSE
 FALSE
 {7C5262F8-759A-4667-8F6A-BF8A850F33FE}
-..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.dll
+..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.dll
 FALSE|
 $TARGETDIR$\Platform 6 Developer Components\Installer Generator
 FALSE
@@ -3000,7 +3000,7 @@ FALSE
 FALSE
 FALSE
 {7A44AD5F-45EE-4F45-8D16-9AF96138DA14}
-..\..\..\..\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe
+..\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe
 FALSE|
 $TARGETDIR$\Internal
 FALSE
@@ -3013,7 +3013,7 @@ FALSE
 FALSE
 FALSE
 {469E13F7-6A9A-48BE-81E6-147C4764F1F0}
-..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll
+..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll
 FALSE|
 $TARGETDIR$\Internal
 FALSE
@@ -3026,7 +3026,7 @@ FALSE
 FALSE
 FALSE
 {332B501F-AF88-484C-B135-76914132146E}
-..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.xml
+..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.xml
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -3039,7 +3039,7 @@ FALSE
 FALSE
 FALSE
 {C0E75B6B-2503-4EE3-A12D-D9DFE11C50F2}
-..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll
+..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -3679,7 +3679,7 @@ TRUE
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 PLATFORM6OK
 {E88C9B68-BF66-4536-A611-FBE660565282}
-..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.dll
+..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.dll
 TRUE
 
 {85E85F0D-84CE-4BBF-A07B-AF4EC555FB1B}
