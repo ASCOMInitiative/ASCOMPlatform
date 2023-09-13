@@ -129,19 +129,19 @@ namespace ASCOM.Astrometry
         #endregion
 
         #region Utility Routines
-        // // ----------------
-        // // Utility routines
-        // // ----------------
+        // ----------------
+        // Utility routines
+        // ----------------
 
-        // // Obliquity of the ecliptic at Julian date J  
-        // // according to the DE403 values. Refer to 
-        // // S. Moshier's aa54e sources.
+        // Obliquity of the ecliptic at Julian date J  
+        // according to the DE403 values. Refer to 
+        // S. Moshier's aa54e sources.
 
         internal static void epsiln(double J, ref double eps, ref double coseps, ref double sineps)
         {
             double T;
 
-            T = (J - 2451545.0d) / 365250.0d; // // T / 10
+            T = (J - 2451545.0d) / 365250.0d; // T / 10
             eps = ((((((((((0.000000000245d * T + 0.00000000579d) * T + 0.0000002787d) * T + 0.000000712d) * T - 0.00003905d) * T - 0.0024967d) * T - 0.005138d) * T + 1.9989d) * T - 0.0175d) * T - 468.3396d) * T + 84381.406173d) * STR;
 
 
@@ -348,9 +348,9 @@ namespace ASCOM.Astrometry
             return w + z;
         }
 
-        // //
-        // // Reduce x modulo 2 pi
-        // //
+        //
+        // Reduce x modulo 2 pi
+        //
         internal static double modtp(double x)
         {
 
@@ -365,9 +365,9 @@ namespace ASCOM.Astrometry
             return y;
         }
 
-        // //
-        // //  Reduce x modulo 360 degrees
-        // //
+        //
+        //  Reduce x modulo 360 degrees
+        //
         internal static double mod360(double x)
         {
 
@@ -421,9 +421,9 @@ namespace ASCOM.Astrometry
             // Dim TL As New TraceLogger("", "KeplerCalc")
             // TL.Enabled = True
             // Kepler.Ephemeris.TL.LogMessage("KepCalc", $"J: {J}")
-            // //
-            // // Call program to compute position, if one is supplied.
-            // //
+            //
+            // Call program to compute position, if one is supplied.
+            //
             if (e.ptable.lon_tbl[0] != 0.0d)
             {
                 if (e.obname == "Earth")
@@ -447,11 +447,11 @@ namespace ASCOM.Astrometry
                 goto kepdon;
             }
 
-            // // -----------------------------
-            // // Compute from orbital elements 
-            // // -----------------------------
+            // -----------------------------
+            // Compute from orbital elements 
+            // -----------------------------
             // Kepler.Ephemeris.TL.LogMessage("KepCalc", "Compute orbital elements")
-            e.equinox = J2000; // // Always J2000 coordinates
+            e.equinox = J2000; // Always J2000 coordinates
             epoch = e.epoch;
             inclination = e.i;
             ascnode = e.W * DTR;
@@ -461,22 +461,22 @@ namespace ASCOM.Astrometry
             eccent = e.ecc;
             meananomaly = e.M;
 
-            // // ---------
-            // // Parabolic
-            // // ---------
+            // ---------
+            // Parabolic
+            // ---------
             if (eccent == 1.0d)
             {
                 // Kepler.Ephemeris.TL.LogMessage("KepCalc", "eccent=1.0")
-                // //
-                // // meandistance = perihelion distance, q
-                // // epoch = perihelion passage date
-                // //
+                //
+                // meandistance = perihelion distance, q
+                // epoch = perihelion passage date
+                //
                 temp = meandistance * Sqrt(meandistance);
                 W = (J - epoch) * 0.0364911624d / temp;
-                // //
-                // // The constant above is 3 k / sqrt(2),
-                // // k = Gaussian gravitational constant = 0.01720209895
-                // //
+                //
+                // The constant above is 3 k / sqrt(2),
+                // k = Gaussian gravitational constant = 0.01720209895
+                //
                 E1 = 0.0d;
                 M = 1.0d;
                 while (Abs(M) > 0.00000000001d)
@@ -493,17 +493,17 @@ namespace ASCOM.Astrometry
                 M = 2.0d * M;
                 alat = M + DTR * argperih;
             }
-            // // ----------
-            // // Hyperbolic
-            // // ----------
+            // ----------
+            // Hyperbolic
+            // ----------
             else if (eccent > 1.0d)
             {
                 // Kepler.Ephemeris.TL.LogMessage("KepCalc", "eccent > 1.0")
-                // //
-                // // The equation of the hyperbola in polar coordinates r, theta
-                // // is r = a(e^2 - 1)/(1 + e cos(theta)) so the perihelion 
-                // // distance q = a(e-1), the "mean distance"  a = q/(e-1).
-                // //
+                //
+                // The equation of the hyperbola in polar coordinates r, theta
+                // is r = a(e^2 - 1)/(1 + e cos(theta)) so the perihelion 
+                // distance q = a(e-1), the "mean distance"  a = q/(e-1).
+                //
                 meandistance = meandistance / (eccent - 1.0d);
                 temp = meandistance * Sqrt(meandistance);
                 W = (J - epoch) * 0.01720209895d / temp;
@@ -523,164 +523,164 @@ namespace ASCOM.Astrometry
                 alat = M + DTR * argperih;
             }
 
-            // // -----------
-            // // Ellipsoidal
-            // // -----------
-            else // // if(ecc < 1)
+            // -----------
+            // Ellipsoidal
+            // -----------
+            else // if(ecc < 1)
             {
                 // Kepler.Ephemeris.TL.LogMessage("KepCalc", "Ellipsoidal")
-                // //
-                // // Calculate the daily motion, if it is not given.
-                // //
+                //
+                // Calculate the daily motion, if it is not given.
+                //
                 if (dailymotion == 0.0d)
                 {
 
-                    // //
-                    // // The constant is 180 k / pi, k = Gaussian gravitational 
-                    // // constant. Assumes object in heliocentric orbit is 
-                    // // massless.
-                    // //
+                    //
+                    // The constant is 180 k / pi, k = Gaussian gravitational 
+                    // constant. Assumes object in heliocentric orbit is 
+                    // massless.
+                    //
                     dailymotion = 0.9856076686d / (e.a * Sqrt(e.a));
                 }
                 dailymotion *= J - epoch;
-                // //
-                // // M is proportional to the area swept out by the radius
-                // // vector of a circular orbit during the time between
-                // // perihelion passage and Julian date J.
-                // // It is the mean anomaly at time J.
-                // //
+                //
+                // M is proportional to the area swept out by the radius
+                // vector of a circular orbit during the time between
+                // perihelion passage and Julian date J.
+                // It is the mean anomaly at time J.
+                //
                 M = DTR * (meananomaly + dailymotion);
                 M = modtp(M);
                 // Kepler.Ephemeris.TL.LogMessage("KepCalc", $"M: {M}")
-                // //
-                // // If mean longitude was calculated, adjust it also
-                // // for motion since epoch of elements.
-                // //
+                //
+                // If mean longitude was calculated, adjust it also
+                // for motion since epoch of elements.
+                //
                 if (e.L != 0.0d)
                 {
                     e.L += dailymotion;
                     e.L = mod360(e.L);
                 }
-                // //
-                // // By Kepler's second law, M must be equal to
-                // // the area swept out in the same time by an
-                // // elliptical orbit of same total area.
-                // // Integrate the ellipse expressed in polar coordinates
-                // //     r = a(1-e^2)/(1 + e cosW)
-                // // with respect to the angle W to get an expression for the
-                // // area swept out by the radius vector.  The area is given
-                // // by the mean anomaly; the angle is solved numerically.
-                // // 
-                // // The answer is obtained in two steps.  We first solve
-                // // Kepler's equation
-                // //    M = E - eccent*sin(E)
-                // // for the eccentric anomaly E.  Then there is a
-                // // closed form solution for W in terms of E.
-                // //
+                //
+                // By Kepler's second law, M must be equal to
+                // the area swept out in the same time by an
+                // elliptical orbit of same total area.
+                // Integrate the ellipse expressed in polar coordinates
+                //     r = a(1-e^2)/(1 + e cosW)
+                // with respect to the angle W to get an expression for the
+                // area swept out by the radius vector.  The area is given
+                // by the mean anomaly; the angle is solved numerically.
+                // 
+                // The answer is obtained in two steps.  We first solve
+                // Kepler's equation
+                //    M = E - eccent*sin(E)
+                // for the eccentric anomaly E.  Then there is a
+                // closed form solution for W in terms of E.
+                //
                 E1 = M; // /* Initial guess is same as circular orbit. */
                 temp = 1.0d;
                 do
                 {
-                    // // The approximate area swept out in the ellipse
-                    // // ...minus the area swept out in the circle
+                    // The approximate area swept out in the ellipse
+                    // ...minus the area swept out in the circle
                     temp = E1 - eccent * Sin(E1) - M;
-                    // // ...should be zero.  Use the derivative of the error
-                    // //to converge to solution by Newton's method.
+                    // ...should be zero.  Use the derivative of the error
+                    //to converge to solution by Newton's method.
                     E1 -= temp / (1.0d - eccent * Cos(E1));
                 }
                 while (Abs(temp) > 0.00000000001d);
 
-                // //
-                // // The exact formula for the area in the ellipse is
-                // //    2.0*atan(c2*tan(0.5*W)) - c1*eccent*sin(W)/(1+e*cos(W))
-                // // where
-                // //    c1 = sqrt( 1.0 - eccent*eccent )
-                // //    c2 = sqrt( (1.0-eccent)/(1.0+eccent) ).
-                // // Substituting the following value of W
-                // // yields the exact solution.
-                // //
+                //
+                // The exact formula for the area in the ellipse is
+                //    2.0*atan(c2*tan(0.5*W)) - c1*eccent*sin(W)/(1+e*cos(W))
+                // where
+                //    c1 = sqrt( 1.0 - eccent*eccent )
+                //    c2 = sqrt( (1.0-eccent)/(1.0+eccent) ).
+                // Substituting the following value of W
+                // yields the exact solution.
+                //
                 temp = Sqrt((1.0d + eccent) / (1.0d - eccent));
                 W = 2.0d * Atan(temp * Tan(0.5d * E1));
                 // Kepler.Ephemeris.TL.LogMessage("KepCalc", $"E: {E1}, W: {W}")
 
-                // //
-                // // The true anomaly.
-                // //
+                //
+                // The true anomaly.
+                //
                 W = modtp(W);
 
                 meananomaly *= DTR;
-                // //
-                // // Orbital longitude measured from node
-                // // (argument of latitude)
-                // //
-                if (e.L != 0.0d) // // Mean longitude given
+                //
+                // Orbital longitude measured from node
+                // (argument of latitude)
+                //
+                if (e.L != 0.0d) // Mean longitude given
                 {
                     alat = e.L * DTR + W - meananomaly - ascnode;
                 }
                 else
                 {
                     alat = W + DTR * argperih;
-                } // // Mean longitude not given
-                  // //
-                  // // From the equation of the ellipse, get the
-                  // // radius from central focus to the object.
-                  // //
+                } // Mean longitude not given
+                  //
+                  // From the equation of the ellipse, get the
+                  // radius from central focus to the object.
+                  //
                 r = meandistance * (1.0d - eccent * eccent) / (1.0d + eccent * Cos(W));
             }
             // Kepler.Ephemeris.TL.LogMessage("KepCalc", "Before All orbits")
-            inclination *= DTR; // // Convert inclination to radians
+            inclination *= DTR; // Convert inclination to radians
 
-            // // ----------
-            // // ALL ORBITS
-            // // ----------
-            // //
-            // // At this point:
-            // //
-            // //		alat		= argument of latitude (rad)
-            // //		inclination	= inclination (rad)
-            // //		r			= radius from central focus
-            // //
-            // // The heliocentric ecliptic longitude of the object is given by:
-            // //
-            // //   tan(longitude - ascnode)  =  cos(inclination) * tan(alat)
-            // //
+            // ----------
+            // ALL ORBITS
+            // ----------
+            //
+            // At this point:
+            //
+            //		alat		= argument of latitude (rad)
+            //		inclination	= inclination (rad)
+            //		r			= radius from central focus
+            //
+            // The heliocentric ecliptic longitude of the object is given by:
+            //
+            //   tan(longitude - ascnode)  =  cos(inclination) * tan(alat)
+            //
             coso = Cos(alat);
             sino = Sin(alat);
             W = sino * Cos(inclination);
             E1 = atan4(coso, W) + ascnode;
             // Kepler.Ephemeris.TL.LogMessage("KepCalc", $"coso: {coso}, sino: {sino}, W: {W}, E: {E1}, ascnode: {ascnode}, atan4: {atan4(coso, W)}")
 
-            // //
-            // // The ecliptic latitude of the object
-            // //
+            //
+            // The ecliptic latitude of the object
+            //
             W = Asin(sino * Sin(inclination));
 
-        // // ------------------------------------
-        // // Both from DE404 and from elements...
-        // // ------------------------------------
-        // //
-        // // At this point we have the heliocentric ecliptic polar
-        // // coordinates of the body.
-        // //
+        // ------------------------------------
+        // Both from DE404 and from elements...
+        // ------------------------------------
+        //
+        // At this point we have the heliocentric ecliptic polar
+        // coordinates of the body.
+        //
         kepdon:
             ;
 
 
-            // //
-            // // Convert to heliocentric ecliptic rectangular coordinates, 
-            // // using the perturbed latitude.
-            // //
+            //
+            // Convert to heliocentric ecliptic rectangular coordinates, 
+            // using the perturbed latitude.
+            //
             rect[2] = r * Sin(W);
             cosa = Cos(W);
             rect[1] = r * cosa * Sin(E1);
             rect[0] = r * cosa * Cos(E1);
             // Kepler.Ephemeris.TL.LogMessage("KepCalc", $"Rect0: {rect(0)}, Rect1: {rect(1)}, Rect2: {rect(2)}")
 
-            // //
-            // // Convert from heliocentric ecliptic rectangular
-            // // to heliocentric equatorial rectangular coordinates
-            // // by rotating epsilon radians about the x axis.
-            // //
+            //
+            // Convert from heliocentric ecliptic rectangular
+            // to heliocentric equatorial rectangular coordinates
+            // by rotating epsilon radians about the x axis.
+            //
             // Kepler.Ephemeris.TL.LogMessage("KepCalc", "Before epsiln")
             epsiln(e.equinox, ref eps, ref coseps, ref sineps);
             W = coseps * rect[1] - sineps * rect[2];
@@ -688,17 +688,17 @@ namespace ASCOM.Astrometry
             rect[1] = W;
             rect[2] = M;
 
-            // //
-            // // Precess the equatorial (rectangular) coordinates to the
-            // // ecliptic & equinox of J2000.0, if not already there.
-            // //
+            //
+            // Precess the equatorial (rectangular) coordinates to the
+            // ecliptic & equinox of J2000.0, if not already there.
+            //
             // Kepler.Ephemeris.TL.LogMessage("KepCalc", "Before precess")
             precess(ref rect, e.equinox, 1);
 
-            // //
-            // // If earth, adjust from earth-moon barycenter to earth
-            // // by AA page E2.
-            // //
+            //
+            // If earth, adjust from earth-moon barycenter to earth
+            // by AA page E2.
+            //
             // Kepler.Ephemeris.TL.LogMessage("KepCalc", "Before embofs")
             if (e.obname == "Earth")
                 embofs(J, ref rect, ref r); // /* see embofs() below */
@@ -706,13 +706,13 @@ namespace ASCOM.Astrometry
 
         }
 
-        // //
-        // // Adjust position from Earth-Moon barycenter to Earth
-        // //
-        // // J = Julian day number
-        // // emb = Equatorial rectangular coordinates of EMB.
-        // // pr = Earth's distance to the Sun (au)
-        // //
+        //
+        // Adjust position from Earth-Moon barycenter to Earth
+        //
+        // J = Julian day number
+        // emb = Equatorial rectangular coordinates of EMB.
+        // pr = Earth's distance to the Sun (au)
+        //
         internal static void embofs(double J, ref double[] ea, ref double pr)
         {
 
@@ -723,23 +723,23 @@ namespace ASCOM.Astrometry
             // Dim TL As New TraceLogger("", "Embofs")
             // TL.Enabled = True
             // Kepler.Ephemeris.TL.LogMessage("Embofs", "Start")
-            // //
-            // // Compute the vector Moon - Earth.
-            // //
+            //
+            // Compute the vector Moon - Earth.
+            //
             // Kepler.Ephemeris.TL.LogMessage("Embofs", "Before GMoon")
             gmoon(J, ref pm, ref polm);
             // Kepler.Ephemeris.TL.LogMessage("Embofs", "After GMoon")
 
-            // //
-            // // Precess the lunar position
-            // // to ecliptic and equinox of J2000.0
-            // //
+            //
+            // Precess the lunar position
+            // to ecliptic and equinox of J2000.0
+            //
             precess(ref pm, J, 1);
             // Kepler.Ephemeris.TL.LogMessage("Embofs", "After Precess")
 
-            // //
-            // // Adjust the coordinates of the Earth
-            // //
+            //
+            // Adjust the coordinates of the Earth
+            //
             a = 1.0d / (emrat + 1.0d);
             b = 0.0d;
             for (i = 0; i <= 2; i++)
@@ -748,9 +748,9 @@ namespace ASCOM.Astrometry
                 b = b + ea[i] * ea[i];
             }
 
-            // //
-            // // Sun-Earth distance.
-            // //
+            //
+            // Sun-Earth distance.
+            //
             pr = Sqrt(b);
         }
         #endregion

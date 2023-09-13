@@ -362,14 +362,14 @@ namespace ASCOM.Astrometry.Kepler
 
                 case BodyType.MinorPlanet: // MINOR PLANET
                     {
-                        // //TODO: Check elements
+                        //TODO: Check elements
                         op = m_e;
                         break;
                     }
 
                 case BodyType.Comet: // COMET
                     {
-                        // //TODO: Check elements
+                        //TODO: Check elements
 
                         // Test whether this comet is in an elliptical orbit as opposed to parabolic or hyperbolic
                         if (m_e.ecc < 1.0d)

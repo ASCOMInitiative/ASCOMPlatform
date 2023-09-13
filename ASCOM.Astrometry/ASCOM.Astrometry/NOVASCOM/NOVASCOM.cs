@@ -433,20 +433,20 @@ namespace ASCOM.Astrometry.NOVASCOM
                 Obj3.Type = ObjectType.MajorPlanetSunOrMoon;
 
                 rc = Nov31.AppPlanet(tjd, Obj3, Accuracy.Full, ref RA, ref Dec, ref Dis); // Get the apparent RA/Dec
-                Nov31.RaDec2Vector(RA, Dec, Dis, ref pos1); // Convert to a vector
+                RADec2Vector(RA, Dec, Dis, ref pos1); // Convert to a vector
 
                 pv = new PositionVector(pos1[0], pos1[1], pos1[2], RA, Dec, Dis, Dis / GlobalItems.C); // Create the position vector to return
             }
             else
             {
-                // //
-                // // This gets the barycentric terrestrial dynamical time (TDB).
-                // //
+                //
+                // This gets the barycentric terrestrial dynamical time (TDB).
+                //
                 EphemerisCode.get_earth_nov(ref m_earthephobj, tjd, ref tdb, ref peb, ref veb, ref pes, ref ves);
 
-                // //
-                // // Get position and velocity of planet wrt barycenter of solar system.
-                // //
+                //
+                // Get position and velocity of planet wrt barycenter of solar system.
+                //
 
                 EphemerisCode.ephemeris_nov(ref m_ephobj, tdb, m_type, m_number, m_name, Origin.Barycentric, ref pos1, ref vel1);
 
@@ -464,12 +464,12 @@ namespace ASCOM.Astrometry.NOVASCOM
                 }
                 while (Abs(t3 - t2) > 0.000001d & iter < 100);
 
-                // //
-                // // Finish apparent place computation.
-                // //
+                //
+                // Finish apparent place computation.
+                //
                 SunField(pos2, pes, ref pos3);
                 Aberration(pos3, veb, lighttime, ref pos4);
-                Precession(GlobalItems.J2000BASE, pos4, tdb, ref pos5);
+                Nov31.Precession(GlobalItems.J2000BASE, pos4, tdb, ref pos5);
                 Nutate(tdb, NutationDirection.MeanToTrue, pos5, ref vec);
 
                 pv = new PositionVector();
@@ -508,7 +508,7 @@ namespace ASCOM.Astrometry.NOVASCOM
                 Obj3.Type = ObjectType.MajorPlanetSunOrMoon;
 
                 rc = Nov31.AstroPlanet(tjd, Obj3, Accuracy.Full, ref RA, ref Dec, ref Dis); // Get the astro RA/Dec
-                Nov31.RaDec2Vector(RA, Dec, Dis, ref pos1); // Convert to a vector
+                RADec2Vector(RA, Dec, Dis, ref pos1); // Convert to a vector
 
                 RetVal = new PositionVector(pos1[0], pos1[1], pos1[2], RA, Dec, Dis, Dis / GlobalItems.C); // Create the position vector to return
             }
@@ -518,12 +518,12 @@ namespace ASCOM.Astrometry.NOVASCOM
 
 
                 // Dim pebe(3), pese(3), vebe(3), vese(3) As Double
-                // //
-                // // Get position of the Earth wrt center of Sun and barycenter of the
-                // // solar system.
-                // //
-                // // This also gets the barycentric terrestrial dynamical time (TDB).
-                // //
+                //
+                // Get position of the Earth wrt center of Sun and barycenter of the
+                // solar system.
+                //
+                // This also gets the barycentric terrestrial dynamical time (TDB).
+                //
                 // earth.name = "Earth"
                 // earth.number = Body.Earth
                 // earth.type = NOVAS2Net.BodyType.MajorPlanet
@@ -547,9 +547,9 @@ namespace ASCOM.Astrometry.NOVASCOM
                 // TL.LogMessage("GetAstrometricPosition", "get_earth ves(1): " & ves(1))
                 // TL.LogMessage("GetAstrometricPosition", "get_earth ves(2): " & ves(2))
 
-                // //
-                // // Get position and velocity of planet wrt barycenter of solar system.
-                // //
+                //
+                // Get position and velocity of planet wrt barycenter of solar system.
+                //
 
                 EphemerisCode.ephemeris_nov(ref m_ephobj, tdb, m_type, m_number, m_name, Origin.Barycentric, ref pos1, ref vel1);
                 // TL.LogMessage("GetAstrometricPosition", "tdb: " & tdb)
@@ -571,9 +571,9 @@ namespace ASCOM.Astrometry.NOVASCOM
                 if (iter >= 100)
                     throw new Utilities.Exceptions.HelperException("Planet:GetAstrometricPoition ephemeris_nov did not converge in 100 iterations");
 
-                // //
-                // // pos2 is astrometric place.
-                // //
+                //
+                // pos2 is astrometric place.
+                //
                 RetVal = new PositionVector();
                 RetVal.x = pos2[0];
                 RetVal.y = pos2[1];
@@ -605,18 +605,18 @@ namespace ASCOM.Astrometry.NOVASCOM
             short rc;
             double ra = default, rra = default, dec = default, rdec = default, az = default, zd = default, dist = default;
 
-            // //
-            // // Compute 'ujd', the UT1 Julian date corresponding to 'tjd'.
-            // //
+            //
+            // Compute 'ujd', the UT1 Julian date corresponding to 'tjd'.
+            //
             if (!m_bDTValid) // April 2012 - correced bug, deltat was not treated as seconds and also adapted to work with Novas31
             {
                 m_deltat = DeltatCode.DeltaTCalc(tjd);
             }
             ujd = tjd - m_deltat / 86400.0d;
 
-            // //
-            // // Get the observer's site info
-            // //
+            //
+            // Get the observer's site info
+            //
             try
             {
                 st.Latitude = site.Latitude;
@@ -659,38 +659,38 @@ namespace ASCOM.Astrometry.NOVASCOM
                 rc = Nov31.LocalPlanet(tjd, Obj3, m_deltat, OnSurf, Accuracy.Full, ref ra, ref dec, ref dist);
                 Nov31.Equ2Hor(ujd, m_deltat, Accuracy.Full, 0.0d, 0.0d, OnSurf, ra, dec, Ref3, ref zd, ref az, ref rra, ref rdec);
 
-                Nov31.RaDec2Vector(rra, rdec, dist, ref vec);
+                RADec2Vector(rra, rdec, dist, ref vec);
                 pv = new PositionVector(vec[0], vec[1], vec[2], rra, rdec, dist, dist / GlobalItems.C, az, 90.0d - zd);
             }
 
             else // Some other planet
             {
 
-                // //
-                // // Get position of Earth wrt the center of the Sun and the barycenter
-                // // of solar system.
-                // //
-                // // This also gets the barycentric terrestrial dynamical time (TDB).
-                // //
+                //
+                // Get position of Earth wrt the center of the Sun and the barycenter
+                // of solar system.
+                //
+                // This also gets the barycentric terrestrial dynamical time (TDB).
+                //
                 EphemerisCode.get_earth_nov(ref m_earthephobj, tjd, ref tdb, ref peb, ref veb, ref pes, ref ves);
 
                 EarthTilt(tdb, ref oblm, ref oblt, ref eqeq, ref psi, ref eps);
 
-                // //
-                // // Get position and velocity of observer wrt center of the Earth.
-                // //
+                //
+                // Get position and velocity of observer wrt center of the Earth.
+                //
                 SiderealTime(ujd, 0.0d, eqeq, ref gast);
                 Terra(ref st, gast, ref pos1, ref vel1);
                 Nutate(tdb, NutationDirection.TrueToMean, pos1, ref pos2);
-                Precession(tdb, pos2, GlobalItems.J2000BASE, ref pog);
+                Nov31.Precession(tdb, pos2, GlobalItems.J2000BASE, ref pog);
 
                 Nutate(tdb, NutationDirection.TrueToMean, vel1, ref vel2);
-                Precession(tdb, vel2, GlobalItems.J2000BASE, ref vog);
+                Nov31.Precession(tdb, vel2, GlobalItems.J2000BASE, ref vog);
 
-                // //
-                // // Get position and velocity of observer wrt barycenter of solar 
-                // // system and wrt center of the sun.
-                // //
+                //
+                // Get position and velocity of observer wrt barycenter of solar 
+                // system and wrt center of the sun.
+                //
                 for (j = 0; j <= 2; j++)
                 {
                     pb[j] = peb[j] + pog[j];
@@ -699,9 +699,9 @@ namespace ASCOM.Astrometry.NOVASCOM
                     vs[j] = ves[j] + vog[j];
                 }
 
-                // //
-                // // Get position of planet wrt barycenter of solar system.
-                // //
+                //
+                // Get position of planet wrt barycenter of solar system.
+                //
                 EphemerisCode.ephemeris_nov(ref m_ephobj, tdb, m_type, m_number, m_name, Origin.Barycentric, ref pos1, ref vel1);
 
                 BaryToGeo(pos1, pb, ref pos2, ref lighttime);
@@ -721,9 +721,9 @@ namespace ASCOM.Astrometry.NOVASCOM
                 if (iter >= 100)
                     throw new Utilities.Exceptions.HelperException("Planet:GetLocalPoition ephemeris_nov did not converge in 100 iterations");
 
-                // //
-                // // Finish local place calculation.
-                // //
+                //
+                // Finish local place calculation.
+                //
                 SunField(pos2, ps, ref pos3);
                 Aberration(pos3, vb, lighttime, ref vec);
 
@@ -761,18 +761,18 @@ namespace ASCOM.Astrometry.NOVASCOM
             RefractionOption Ref3;
             short rc;
 
-            // //
-            // // Compute 'ujd', the UT1 Julian date corresponding to 'tjd'.
-            // //
+            //
+            // Compute 'ujd', the UT1 Julian date corresponding to 'tjd'.
+            //
             if (!m_bDTValid) // April 2012 - correced bug, deltat was not treated as seconds and also adapted to work with Novas31
             {
                 m_deltat = DeltatCode.DeltaTCalc(tjd);
             }
             ujd = tjd - m_deltat / 86400.0d;
 
-            // //
-            // // Get the observer's site info
-            // //
+            //
+            // Get the observer's site info
+            //
             try
             {
                 st.Latitude = site.Latitude;
@@ -822,7 +822,7 @@ namespace ASCOM.Astrometry.NOVASCOM
                 rc = Nov31.TopoPlanet(tjd, Obj3, m_deltat, OnSurf, Accuracy.Full, ref ra, ref dec, ref dist);
                 Nov31.Equ2Hor(ujd, m_deltat, Accuracy.Full, 0.0d, 0.0d, OnSurf, ra, dec, Ref3, ref zd, ref az, ref rra, ref rdec);
 
-                Nov31.RaDec2Vector(rra, rdec, dist, ref vec);
+                RADec2Vector(rra, rdec, dist, ref vec);
                 pv = new PositionVector(vec[0], vec[1], vec[2], rra, rdec, dist, dist / GlobalItems.C, az, 90.0d - zd);
             }
 
@@ -830,32 +830,32 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
 
 
-                // //
-                // // Compute position and velocity of the observer, on mean equator
-                // // and equinox of J2000.0, wrt the solar system barycenter and
-                // // wrt to the center of the Sun. 
-                // //
-                // // This also gets the barycentric terrestrial dynamical time (TDB).
-                // //
+                //
+                // Compute position and velocity of the observer, on mean equator
+                // and equinox of J2000.0, wrt the solar system barycenter and
+                // wrt to the center of the Sun. 
+                //
+                // This also gets the barycentric terrestrial dynamical time (TDB).
+                //
                 EphemerisCode.get_earth_nov(ref m_earthephobj, tjd, ref tdb, ref peb, ref veb, ref pes, ref ves);
 
                 EarthTilt(tdb, ref oblm, ref oblt, ref eqeq, ref psi, ref eps);
 
-                // //
-                // // Get position and velocity of observer wrt center of the Earth.
-                // //
+                //
+                // Get position and velocity of observer wrt center of the Earth.
+                //
                 SiderealTime(ujd, 0.0d, eqeq, ref gast);
                 Terra(ref st, gast, ref pos1, ref vel1);
                 Nutate(tdb, NutationDirection.TrueToMean, pos1, ref pos2);
-                Precession(tdb, pos2, GlobalItems.J2000BASE, ref pog);
+                Nov31.Precession(tdb, pos2, GlobalItems.J2000BASE, ref pog);
 
                 Nutate(tdb, NutationDirection.TrueToMean, vel1, ref vel2);
-                Precession(tdb, vel2, GlobalItems.J2000BASE, ref vog);
+                Nov31.Precession(tdb, vel2, GlobalItems.J2000BASE, ref vog);
 
-                // //
-                // // Get position and velocity of observer wrt barycenter of solar system
-                // // and wrt center of the sun.
-                // //
+                //
+                // Get position and velocity of observer wrt barycenter of solar system
+                // and wrt center of the sun.
+                //
                 for (j = 0; j <= 2; j++)
                 {
 
@@ -864,12 +864,12 @@ namespace ASCOM.Astrometry.NOVASCOM
                     pos[j] = pes[j] + pog[j];
                 }
 
-                // // 
-                // // Compute the apparent place of the planet using the position and
-                // // velocity of the observer.
-                // //
-                // // First, get the position of the planet wrt barycenter of solar system.
-                // //
+                // 
+                // Compute the apparent place of the planet using the position and
+                // velocity of the observer.
+                //
+                // First, get the position of the planet wrt barycenter of solar system.
+                //
                 EphemerisCode.ephemeris_nov(ref m_ephobj, tdb, m_type, m_number, m_name, Origin.Barycentric, ref pos1, ref vel1);
 
                 BaryToGeo(pos1, pob, ref pos2, ref lighttime);
@@ -889,23 +889,23 @@ namespace ASCOM.Astrometry.NOVASCOM
                 if (iter >= 100)
                     throw new Utilities.Exceptions.HelperException("Planet:GetTopocentricPoition ephemeris_nov did not converge in 100 iterations");
 
-                // //
-                // // Finish topocentric place calculation.
-                // //
+                //
+                // Finish topocentric place calculation.
+                //
                 SunField(pos2, pos, ref pos4);
                 Aberration(pos4, vob, lighttime, ref pos5);
-                Precession(GlobalItems.J2000BASE, pos5, tdb, ref pos6);
+                Nov31.Precession(GlobalItems.J2000BASE, pos5, tdb, ref pos6);
                 Nutate(tdb, NutationDirection.MeanToTrue, pos6, ref vec);
 
-                // //
-                // // Calculate equatorial coordinates and distance
-                // //
+                //
+                // Calculate equatorial coordinates and distance
+                //
                 Vector2RADec(vec, ref ra, ref dec); // Get topo RA/Dec
                 dist = Sqrt(Pow(vec[0], 2.0d) + Pow(vec[1], 2.0d) + Pow(vec[2], 2.0d)); // And dist
 
-                // //
-                // // Refract if requested
-                // //
+                //
+                // Refract if requested
+                //
                 @ref = RefractionOption.NoRefraction; // Assume no refraction
                 if (Refract)
                 {
@@ -935,10 +935,10 @@ namespace ASCOM.Astrometry.NOVASCOM
                         @ref = RefractionOption.StandardRefraction;
                     }
                 }
-                // //
-                // // This calculates Alt/Az coordinates. If ref > 0 then it refracts
-                // // both the computed Alt/Az and the RA/Dec coordinates.
-                // //
+                //
+                // This calculates Alt/Az coordinates. If ref > 0 then it refracts
+                // both the computed Alt/Az and the RA/Dec coordinates.
+                //
                 if (m_bDTValid)
                 {
                     Equ2Hor(tjd, m_deltat, 0.0d, 0.0d, ref st, ra, dec, @ref, ref zd, ref az, ref rra, ref rdec);
@@ -948,10 +948,10 @@ namespace ASCOM.Astrometry.NOVASCOM
                     Equ2Hor(tjd, DeltatCode.DeltaTCalc(tjd), 0.0d, 0.0d, ref st, ra, dec, @ref, ref zd, ref az, ref rra, ref rdec);
                 }
 
-                // //
-                // // If we refracted, we now must compute new cartesian components
-                // // Distance does not change...
-                // //
+                //
+                // If we refracted, we now must compute new cartesian components
+                // Distance does not change...
+                //
                 if (@ref != RefractionOption.NoRefraction)
                     RADec2Vector(rra, rdec, dist, ref vec); // If refracted, recompute New refracted vector
 
@@ -989,7 +989,7 @@ namespace ASCOM.Astrometry.NOVASCOM
                 Obj3.Type = ObjectType.MajorPlanetSunOrMoon;
 
                 rc = Nov31.VirtualPlanet(tjd, Obj3, Accuracy.Full, ref RA, ref Dec, ref Dis); // Get the astro RA/Dec
-                Nov31.RaDec2Vector(RA, Dec, Dis, ref pos1); // Convert to a vector
+                RADec2Vector(RA, Dec, Dis, ref pos1); // Convert to a vector
 
                 pv = new PositionVector(pos1[0], pos1[1], pos1[2], RA, Dec, Dis, Dis / GlobalItems.C); // Create the position vector to return
             }
@@ -997,19 +997,19 @@ namespace ASCOM.Astrometry.NOVASCOM
             else
             {
 
-                // //
-                // // Get position nd velocity of Earth wrt barycenter of solar system.
-                // //
-                // //
-                // // This also gets the barycentric terrestrial dynamical time (TDB).
-                // //
+                //
+                // Get position nd velocity of Earth wrt barycenter of solar system.
+                //
+                //
+                // This also gets the barycentric terrestrial dynamical time (TDB).
+                //
                 EphemerisCode.get_earth_nov(ref m_earthephobj, tjd, ref tdb, ref peb, ref veb, ref pes, ref ves);
 
                 EarthTilt(tdb, ref oblm, ref oblt, ref eqeq, ref psi, ref eps);
 
-                // //
-                // // Get position and velocity of planet wrt barycenter of solar system.
-                // //
+                //
+                // Get position and velocity of planet wrt barycenter of solar system.
+                //
 
                 var km_type = default(BodyType);
                 switch (m_type)
@@ -1050,9 +1050,9 @@ namespace ASCOM.Astrometry.NOVASCOM
                 if (iter >= 100)
                     throw new Utilities.Exceptions.HelperException("Planet:GetVirtualPoition ephemeris_nov did not converge in 100 iterations");
 
-                // //
-                // // Finish virtual place computation.
-                // //
+                //
+                // Finish virtual place computation.
+                //
                 SunField(pos2, pes, ref pos3);
 
                 Aberration(pos3, veb, lighttime, ref vec);
@@ -1151,6 +1151,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         private bool xOk, yOk, zOk, RADecOk, AzElOk;
         private double[] PosVec = new double[3];
         private double m_RA, m_DEC, m_Dist, m_Light, m_Alt, m_Az;
+        private NOVAS31 Nov31 = new NOVAS31();
 
         /// <summary>
         /// Create a new, uninitialised position vector
@@ -1368,7 +1369,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             p[0] = PosVec[0];
             p[1] = PosVec[1];
             p[2] = PosVec[2];
-            Precession(tjd, p, tjd2, ref PosVec);
+            Nov31.Precession(tjd, p, tjd2, ref PosVec);
             RADecOk = false;
             AzElOk = false;
         }
@@ -1449,12 +1450,12 @@ namespace ASCOM.Astrometry.NOVASCOM
         /// Delta-T (eliminating the need for calculating hyper-accurate GAST yourself).</remarks>
         public bool SetFromSite(Site site, double gast)
         {
-            const double f = 0.00335281d; // // f = Earth ellipsoid flattening
+            const double f = 0.00335281d; // f = Earth ellipsoid flattening
             double df2, t, sinphi, cosphi, c, s, ach, ash, stlocl, sinst, cosst;
 
-            // //
-            // // Compute parameters relating to geodetic to geocentric conversion.
-            // //
+            //
+            // Compute parameters relating to geodetic to geocentric conversion.
+            //
             df2 = Pow(1.0d - f, 2d);
             try
             {
@@ -1479,13 +1480,13 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 throw new Exceptions.ValueNotAvailableException("PositionVector:SetFromSite Site.Height is not available");
             }
-            t /= 1000d; // // Elevation in KM
+            t /= 1000d; // Elevation in KM
             ach = GlobalItems.EARTHRAD * c + t;
             ash = GlobalItems.EARTHRAD * s + t;
 
-            // //
-            // // Compute local sidereal time factors at the observer's longitude.
-            // //
+            //
+            // Compute local sidereal time factors at the observer's longitude.
+            //
             try
             {
                 t = site.Longitude;
@@ -1499,18 +1500,18 @@ namespace ASCOM.Astrometry.NOVASCOM
             sinst = Sin(stlocl);
             cosst = Cos(stlocl);
 
-            // //
-            // // Compute position vector components in AU
-            // //
+            //
+            // Compute position vector components in AU
+            //
 
             PosVec[0] = ach * cosphi * cosst / GlobalItems.KMAU;
             PosVec[1] = ach * cosphi * sinst / GlobalItems.KMAU;
             PosVec[2] = ash * sinphi / GlobalItems.KMAU;
 
-            RADecOk = false; // // These really aren't inteersting anyway for site vector
+            RADecOk = false; // These really aren't inteersting anyway for site vector
             AzElOk = false;
 
-            xOk = true; // // Object is valid
+            xOk = true; // Object is valid
             yOk = true;
             zOk = true;
             return default;
@@ -1548,14 +1549,14 @@ namespace ASCOM.Astrometry.NOVASCOM
             double dummy = default, secdiff = default, tdb, tjd, gast = default;
             double oblm = default, oblt = default, eqeq = default, psi = default, eps = default;
 
-            // //
-            // // Convert UTC Julian date to Terrestrial Julian Date then
-            // // convert that to barycentric for earthtilt(), which we use
-            // // to get the equation of equinoxes for sidereal_time(). Note
-            // // that we're using UJD as input to the deltat(), but that is
-            // // OK as the difference in time (~70 sec) is insignificant.
-            // // For precise applications, the caller must specify delta_t.
-            // //
+            //
+            // Convert UTC Julian date to Terrestrial Julian Date then
+            // convert that to barycentric for earthtilt(), which we use
+            // to get the equation of equinoxes for sidereal_time(). Note
+            // that we're using UJD as input to the deltat(), but that is
+            // OK as the difference in time (~70 sec) is insignificant.
+            // For precise applications, the caller must specify delta_t.
+            //
             // tjd = ujd + ((delta_t != 0.0) ? delta_t : deltat(ujd))
             if (delta_t != 0.0d)
             {
@@ -1571,10 +1572,10 @@ namespace ASCOM.Astrometry.NOVASCOM
             tdb = tjd + secdiff / 86400.0d;
             EarthTilt(tdb, ref oblm, ref oblt, ref eqeq, ref psi, ref eps);
 
-            // //
-            // // Get the Greenwich Apparent Sidereal Time and call our
-            // // SetFromSite() method.
-            // //
+            //
+            // Get the Greenwich Apparent Sidereal Time and call our
+            // SetFromSite() method.
+            //
             SiderealTime(ujd, 0.0d, eqeq, ref gast);
             SetFromSite(site, gast);
             return default;
@@ -1592,10 +1593,10 @@ namespace ASCOM.Astrometry.NOVASCOM
         {
             double paralx, r, d, cra, sra, cdc, sdc;
 
-            // //
-            // // If parallax is unknown, undetermined, or zero, set it to 1e-7 second
-            // // of arc, corresponding to a distance of 10 megaparsecs.
-            // //
+            //
+            // If parallax is unknown, undetermined, or zero, set it to 1e-7 second
+            // of arc, corresponding to a distance of 10 megaparsecs.
+            //
             try
             {
                 paralx = star.Parallax;
@@ -1608,10 +1609,10 @@ namespace ASCOM.Astrometry.NOVASCOM
             if (paralx <= 0.0d)
                 paralx = 0.0000001d;
 
-            // //
-            // // Convert right ascension, declination, and parallax to position vector
-            // // in equatorial system with units of AU.
-            // //
+            //
+            // Convert right ascension, declination, and parallax to position vector
+            // in equatorial system with units of AU.
+            //
             m_Dist = GlobalItems.RAD2SEC / paralx;
             try
             {
@@ -1622,7 +1623,7 @@ namespace ASCOM.Astrometry.NOVASCOM
                 throw new Exceptions.ValueNotAvailableException("PositionVector:SetFromStar Star.RightAscension is not available");
             }
 
-            r = m_RA * 15.0d * GlobalItems.DEG2RAD; // // hrs -> deg -> rad
+            r = m_RA * 15.0d * GlobalItems.DEG2RAD; // hrs -> deg -> rad
             try
             {
                 m_DEC = star.Declination;
@@ -1632,7 +1633,7 @@ namespace ASCOM.Astrometry.NOVASCOM
                 throw new Exceptions.ValueNotAvailableException("PositionVector:SetFromStar Star.Declination is not available");
             }
 
-            d = m_DEC * GlobalItems.DEG2RAD; // /// deg -> rad
+            d = m_DEC * GlobalItems.DEG2RAD; /// deg -> rad
 
             cra = Cos(r);
             sra = Sin(r);
@@ -1643,7 +1644,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             PosVec[1] = m_Dist * cdc * sra;
             PosVec[2] = m_Dist * sdc;
 
-            RADecOk = true; // // Object is valid
+            RADecOk = true; // Object is valid
             xOk = true;
             yOk = true;
             zOk = true;
@@ -1909,6 +1910,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         private BodyDescription m_earth;
         private short hr;
         private double[] m_earthephdisps = new double[5];
+        private NOVAS31 Nov31 = new NOVAS31();
 
         /// <summary>
         /// Initialise a new instance of the star class
@@ -1927,7 +1929,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             m_cat = ""; // \0''No names
             m_name = ""; // \0'
             m_num = 0;
-            m_earthephobj = null; // // No Earth ephemeris [sentinel]
+            m_earthephobj = null; // No Earth ephemeris [sentinel]
             m_bDTValid = false; // Calculate delta-t
             m_earth = new BodyDescription();
             m_earth.Number = Body.Earth;
@@ -2033,13 +2035,13 @@ namespace ASCOM.Astrometry.NOVASCOM
             if (!(m_rav & m_decv))
                 throw new Exceptions.ValueNotSetException("Star.GetApparentPosition RA or DEC not available");
 
-            // //
-            // // Get the position and velocity of the Earth w/r/t the solar system
-            // // barycenter and the center of mass of the Sun, on the mean equator
-            // // and equinox of J2000.0
-            // //
-            // // This also gets the barycentric terrestrial dynamical time (TDB).
-            // //
+            //
+            // Get the position and velocity of the Earth w/r/t the solar system
+            // barycenter and the center of mass of the Sun, on the mean equator
+            // and equinox of J2000.0
+            //
+            // This also gets the barycentric terrestrial dynamical time (TDB).
+            //
 
             hr = GetEarth(tjd, ref m_earth, ref tdb, ref peb, ref veb, ref pes, ref ves);
             if (hr > 0)
@@ -2062,7 +2064,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             BaryToGeo(pos2, peb, ref pos3, ref time2);
             SunField(pos3, pes, ref pos4);
             Aberration(pos4, veb, time2, ref pos5);
-            Precession(GlobalItems.J2000BASE, pos5, tdb, ref pos6);
+            Nov31.Precession(GlobalItems.J2000BASE, pos5, tdb, ref pos6);
             Nutate(tdb, NutationDirection.MeanToTrue, pos6, ref vec);
             PV.x = vec[0];
             PV.y = vec[1];
@@ -2070,10 +2072,10 @@ namespace ASCOM.Astrometry.NOVASCOM
             return PV;
         }
 
-        // //
-        // // This is the NOVAS-COM implementation of astro_star(). See the
-        // // original NOVAS-C sources for more info.
-        // //
+        //
+        // This is the NOVAS-COM implementation of astro_star(). See the
+        // original NOVAS-C sources for more info.
+        //
         /// <summary>
         /// Get an astrometric position for a given time
         /// </summary>
@@ -2090,13 +2092,13 @@ namespace ASCOM.Astrometry.NOVASCOM
             if (!(m_rav & m_decv))
                 throw new Exceptions.ValueNotSetException("Star.GetAstrometricPosition RA or DEC not available");
 
-            // //
-            // // Get the position and velocity of the Earth w/r/t the solar system
-            // // barycenter and the center of mass of the Sun, on the mean equator
-            // // and equinox of J2000.0
-            // //
-            // // This also gets the barycentric terrestrial dynamical time (TDB).
-            // //
+            //
+            // Get the position and velocity of the Earth w/r/t the solar system
+            // barycenter and the center of mass of the Sun, on the mean equator
+            // and equinox of J2000.0
+            //
+            // This also gets the barycentric terrestrial dynamical time (TDB).
+            //
             hr = GetEarth(tjd, ref m_earth, ref tdb, ref peb, ref veb, ref pes, ref ves);
             if (hr > 0)
             {
@@ -2113,9 +2115,9 @@ namespace ASCOM.Astrometry.NOVASCOM
             cat.Parallax = m_plx;
             cat.RadialVelocity = m_rv;
 
-            // //
-            // // Compute astrometric place.
-            // //
+            //
+            // Compute astrometric place.
+            //
 
             StarVectors(cat, ref pos1, ref vel1);
             ProperMotion(GlobalItems.J2000BASE, pos1, vel1, tdb, ref pos2);
@@ -2146,9 +2148,9 @@ namespace ASCOM.Astrometry.NOVASCOM
 
             if (!(m_rav & m_decv))
                 throw new Exceptions.ValueNotSetException("Star.GetLocalPosition RA or DEC not available");
-            // //
-            // // Compute 'ujd', the UT1 Julian date corresponding to 'tjd'.
-            // //
+            //
+            // Compute 'ujd', the UT1 Julian date corresponding to 'tjd'.
+            //
             if (m_bDTValid)
             {
                 ujd = tjd - m_deltat;
@@ -2192,13 +2194,13 @@ namespace ASCOM.Astrometry.NOVASCOM
                 throw new Exceptions.ValueNotAvailableException("Star:GetLocalPosition Site.Height is not available");
             }
 
-            // //
-            // // Compute position and velocity of the observer, on mean equator
-            // // and equinox of J2000.0, wrt the solar system barycenter and
-            // // wrt to the center of the Sun.
-            // //
-            // // This also gets the barycentric terrestrial dynamical time (TDB).
-            // //
+            //
+            // Compute position and velocity of the observer, on mean equator
+            // and equinox of J2000.0, wrt the solar system barycenter and
+            // wrt to the center of the Sun.
+            //
+            // This also gets the barycentric terrestrial dynamical time (TDB).
+            //
             hr = GetEarth(tjd, ref m_earth, ref tdb, ref peb, ref veb, ref pes, ref ves);
             if (hr > 0)
             {
@@ -2213,10 +2215,10 @@ namespace ASCOM.Astrometry.NOVASCOM
             SiderealTime(ujd, 0.0d, eqeq, ref gast);
             Terra(ref st, gast, ref pos1, ref vel1);
             Nutate(tdb, NutationDirection.TrueToMean, pos1, ref pos2);
-            Precession(tdb, pos2, GlobalItems.J2000BASE, ref pog);
+            Nov31.Precession(tdb, pos2, GlobalItems.J2000BASE, ref pog);
 
             Nutate(tdb, NutationDirection.TrueToMean, vel1, ref vel2);
-            Precession(tdb, vel2, GlobalItems.J2000BASE, ref vog);
+            Nov31.Precession(tdb, vel2, GlobalItems.J2000BASE, ref vog);
 
             for (j = 0; j <= 2; j++)
             {
@@ -2227,9 +2229,9 @@ namespace ASCOM.Astrometry.NOVASCOM
                 vs[j] = ves[j] + vog[j];
             }
 
-            // //
-            // // Compute local place.
-            // //
+            //
+            // Compute local place.
+            //
 
             StarVectors(cat, ref pos1, ref vel1);
             ProperMotion(GlobalItems.J2000BASE, pos1, vel1, tdb, ref pos2);
@@ -2244,10 +2246,10 @@ namespace ASCOM.Astrometry.NOVASCOM
 
         }
 
-        // //
-        // // This is the NOVAS-COM implementation of topo_star(). See the
-        // // original NOVAS-C sources for more info.
-        // //
+        //
+        // This is the NOVAS-COM implementation of topo_star(). See the
+        // original NOVAS-C sources for more info.
+        //
         /// <summary>
         /// Get a topocentric position for a given site and time
         /// </summary>
@@ -2270,9 +2272,9 @@ namespace ASCOM.Astrometry.NOVASCOM
             if (!(m_rav & m_decv))
                 throw new Exceptions.ValueNotSetException("Star.GetTopocentricPosition RA or DEC not available");
 
-            // //
-            // // Compute 'ujd', the UT1 Julian date corresponding to 'tjd'.
-            // //
+            //
+            // Compute 'ujd', the UT1 Julian date corresponding to 'tjd'.
+            //
             if (m_bDTValid)
             {
                 ujd = tjd - m_deltat;
@@ -2282,9 +2284,9 @@ namespace ASCOM.Astrometry.NOVASCOM
                 ujd = tjd - DeltatCode.DeltaTCalc(tjd) / 86400.0d;
             }
 
-            // //
-            // // Get the observer's site info
-            // //
+            //
+            // Get the observer's site info
+            //
             try
             {
                 st.Latitude = site.Latitude;
@@ -2310,13 +2312,13 @@ namespace ASCOM.Astrometry.NOVASCOM
                 throw new Exceptions.ValueNotAvailableException("Star:GetTopocentricPosition Site.Height is not available");
             }
 
-            // //
-            // // Compute position and velocity of the observer, on mean equator
-            // // and equinox of J2000.0, wrt the solar system barycenter and
-            // // wrt to the center of the Sun.
-            // //
-            // // This also gets the barycentric terrestrial dynamical time (TDB).
-            // //
+            //
+            // Compute position and velocity of the observer, on mean equator
+            // and equinox of J2000.0, wrt the solar system barycenter and
+            // wrt to the center of the Sun.
+            //
+            // This also gets the barycentric terrestrial dynamical time (TDB).
+            //
             hr = GetEarth(tjd, ref m_earth, ref tdb, ref peb, ref veb, ref pes, ref ves);
             if (hr > 0)
             {
@@ -2331,10 +2333,10 @@ namespace ASCOM.Astrometry.NOVASCOM
             SiderealTime(ujd, 0.0d, eqeq, ref gast);
             Terra(ref st, gast, ref pos1, ref vel1);
             Nutate(tdb, NutationDirection.TrueToMean, pos1, ref pos2);
-            Precession(tdb, pos2, GlobalItems.J2000BASE, ref pog);
+            Nov31.Precession(tdb, pos2, GlobalItems.J2000BASE, ref pog);
 
             Nutate(tdb, NutationDirection.TrueToMean, vel1, ref vel2);
-            Precession(tdb, vel2, GlobalItems.J2000BASE, ref vog);
+            Nov31.Precession(tdb, vel2, GlobalItems.J2000BASE, ref vog);
 
             for (j = 0; j <= 2; j++)
             {
@@ -2343,9 +2345,9 @@ namespace ASCOM.Astrometry.NOVASCOM
                 pos[j] = pes[j] + pog[j];
             }
 
-            // //
-            // // Convert FK5 info to vector form
-            // //
+            //
+            // Convert FK5 info to vector form
+            //
             cat.RA = m_ra;
             cat.Dec = m_dec;
             cat.ProMoRA = m_pmra;
@@ -2354,25 +2356,25 @@ namespace ASCOM.Astrometry.NOVASCOM
             cat.RadialVelocity = m_rv;
             StarVectors(cat, ref pos1, ref vel1);
 
-            // //
-            // // Finish topocentric place calculation.
-            // //
+            //
+            // Finish topocentric place calculation.
+            //
             ProperMotion(GlobalItems.J2000BASE, pos1, vel1, tdb, ref pos2);
             BaryToGeo(pos2, pob, ref pos3, ref lighttime);
             SunField(pos3, pos, ref pos4);
             Aberration(pos4, vob, lighttime, ref pos5);
-            Precession(GlobalItems.J2000BASE, pos5, tdb, ref pos6);
+            Nov31.Precession(GlobalItems.J2000BASE, pos5, tdb, ref pos6);
             Nutate(tdb, NutationDirection.MeanToTrue, pos6, ref vec);
 
-            // //
-            // // Calculate equatorial coordinates and distance
-            // //
+            //
+            // Calculate equatorial coordinates and distance
+            //
             Vector2RADec(vec, ref ra, ref dec); // Get topo RA/Dec
             dist = Sqrt(Pow(vec[0], 2.0d) + Pow(vec[1], 2.0d) + Pow(vec[2], 2.0d)); // And dist
 
-            // //
-            // // Refract if requested
-            // //
+            //
+            // Refract if requested
+            //
             @ref = RefractionOption.NoRefraction; // Assume no refraction
             if (Refract)
             {
@@ -2404,10 +2406,10 @@ namespace ASCOM.Astrometry.NOVASCOM
                     @ref = RefractionOption.StandardRefraction;
                 }
             }
-            // //
-            // // This calculates Alt/Az coordinates. If ref > 0 then it refracts
-            // // both the computed Alt/Az and the RA/Dec coordinates.
-            // //
+            //
+            // This calculates Alt/Az coordinates. If ref > 0 then it refracts
+            // both the computed Alt/Az and the RA/Dec coordinates.
+            //
             if (m_bDTValid)
             {
                 Equ2Hor(tjd, m_deltat, 0.0d, 0.0d, ref st, ra, dec, @ref, ref zd, ref az, ref rra, ref rdec);
@@ -2417,10 +2419,10 @@ namespace ASCOM.Astrometry.NOVASCOM
                 Equ2Hor(tjd, DeltatCode.DeltaTCalc(tjd), 0.0d, 0.0d, ref st, ra, dec, @ref, ref zd, ref az, ref rra, ref rdec);
             }
 
-            // //
-            // // If we refracted, we now must compute new cartesian components
-            // // Distance does not change...
-            // //
+            //
+            // If we refracted, we now must compute new cartesian components
+            // Distance does not change...
+            //
             if ((int)@ref > 0) // If refracted, recompute 
             {
                 RADec2Vector(rra, rdec, dist, ref vec); // New refracted vector
@@ -2440,10 +2442,10 @@ namespace ASCOM.Astrometry.NOVASCOM
         /// <remarks></remarks>
         public PositionVector GetVirtualPosition(double tjd)
         {
-            // //
-            // // This is the NOVAS-COM implementation of virtual_star(). See the
-            // // original NOVAS-C sources for more info.
-            // //
+            //
+            // This is the NOVAS-COM implementation of virtual_star(). See the
+            // original NOVAS-C sources for more info.
+            //
             var cat = new CatEntry();
             var PV = new PositionVector();
 
@@ -2460,13 +2462,13 @@ namespace ASCOM.Astrometry.NOVASCOM
             cat.Parallax = m_plx;
             cat.RadialVelocity = m_rv;
 
-            // //
-            // // Compute position and velocity of the observer, on mean equator
-            // // and equinox of J2000.0, wrt the solar system barycenter and
-            // // wrt to the center of the Sun.
-            // //
-            // // This also gets the barycentric terrestrial dynamical time (TDB).
-            // //
+            //
+            // Compute position and velocity of the observer, on mean equator
+            // and equinox of J2000.0, wrt the solar system barycenter and
+            // wrt to the center of the Sun.
+            //
+            // This also gets the barycentric terrestrial dynamical time (TDB).
+            //
 
             hr = GetEarth(tjd, ref m_earth, ref tdb, ref peb, ref veb, ref pes, ref ves);
             if (hr > 0)
@@ -2477,9 +2479,9 @@ namespace ASCOM.Astrometry.NOVASCOM
                 throw new Exceptions.NOVASFunctionException("Star.GetApparentPosition", "get_earth", hr);
             }
 
-            // //
-            // // Compute virtual place.
-            // //
+            //
+            // Compute virtual place.
+            //
             StarVectors(cat, ref pos1, ref vel1);
             ProperMotion(GlobalItems.J2000BASE, pos1, vel1, tdb, ref pos2);
             BaryToGeo(pos2, peb, ref pos3, ref lighttime);
@@ -2710,6 +2712,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         private bool m_xv, m_yv, m_zv, m_cv;
         private double[] m_v = new double[3];
         private double m_VRA, m_RadVel, m_VDec;
+        private NOVAS31 Nov31 = new NOVAS31();
 
         /// <summary>
         /// Creates a new velocity vector object
@@ -2789,9 +2792,9 @@ namespace ASCOM.Astrometry.NOVASCOM
             const double omega = 0.000072921151467d; // omega = Earth angular velocity rad/sec
             double df2, t, sinphi, cosphi, c, s, ach, ash, stlocl, sinst, cosst;
 
-            // //
-            // // Compute parameters relating to geodetic to geocentric conversion.
-            // //
+            //
+            // Compute parameters relating to geodetic to geocentric conversion.
+            //
             df2 = Pow(1.0d - f, 2d);
             try
             {
@@ -2820,9 +2823,9 @@ namespace ASCOM.Astrometry.NOVASCOM
             ach = GlobalItems.EARTHRAD * c + t;
             ash = GlobalItems.EARTHRAD * s + t;
 
-            // //
-            // // Compute local sidereal time factors at the observer's longitude.
-            // //
+            //
+            // Compute local sidereal time factors at the observer's longitude.
+            //
             try
             {
                 t = site.Longitude;
@@ -2835,9 +2838,9 @@ namespace ASCOM.Astrometry.NOVASCOM
             sinst = Sin(stlocl);
             cosst = Cos(stlocl);
 
-            // //
-            // // Compute velocity vector components in AU/Day
-            // //
+            //
+            // Compute velocity vector components in AU/Day
+            //
 
             m_v[0] = -omega * ach * cosphi * sinst * 86400.0d / GlobalItems.KMAU;
             m_v[1] = omega * ach * cosphi * cosst * 86400.0d / GlobalItems.KMAU;
@@ -2887,14 +2890,14 @@ namespace ASCOM.Astrometry.NOVASCOM
             double dummy = default, secdiff = default, tdb, tjd, gast = default;
             double oblm = default, oblt = default, eqeq = default, psi = default, eps = default;
 
-            // //
-            // // Convert UTC Julian date to Terrestrial Julian Date then
-            // // convert that to barycentric for earthtilt(), which we use
-            // // to get the equation of equinoxes for sidereal_time(). Note
-            // // that we're using UJD as input to the deltat(), but that is
-            // // OK as the difference in time (~70 sec) is insignificant.
-            // // For precise applications, the caller must specify delta_t.
-            // //
+            //
+            // Convert UTC Julian date to Terrestrial Julian Date then
+            // convert that to barycentric for earthtilt(), which we use
+            // to get the equation of equinoxes for sidereal_time(). Note
+            // that we're using UJD as input to the deltat(), but that is
+            // OK as the difference in time (~70 sec) is insignificant.
+            // For precise applications, the caller must specify delta_t.
+            //
 
             if (delta_t != 0.0d)
             {
@@ -2909,10 +2912,10 @@ namespace ASCOM.Astrometry.NOVASCOM
             tdb = tjd + secdiff / 86400.0d;
             EarthTilt(tdb, ref oblm, ref oblt, ref eqeq, ref psi, ref eps);
 
-            // //
-            // // Get the Greenwich Apparent Sidereal Time and call our
-            // // SetFromSite() method.
-            // //
+            //
+            // Get the Greenwich Apparent Sidereal Time and call our
+            // SetFromSite() method.
+            //
             SiderealTime(ujd, 0.0d, eqeq, ref gast);
             SetFromSite(site, gast);
             return true;
@@ -2930,10 +2933,10 @@ namespace ASCOM.Astrometry.NOVASCOM
         {
             double t, paralx, r, d, cra, sra, cdc, sdc;
 
-            // //
-            // // If parallax is unknown, undetermined, or zero, set it to 1e-7 second
-            // // of arc, corresponding to a distance of 10 megaparsecs.
-            // //
+            //
+            // If parallax is unknown, undetermined, or zero, set it to 1e-7 second
+            // of arc, corresponding to a distance of 10 megaparsecs.
+            //
             try
             {
                 paralx = star.Parallax;
@@ -2945,10 +2948,10 @@ namespace ASCOM.Astrometry.NOVASCOM
             if (paralx <= 0.0d)
                 paralx = 0.0000001d;
 
-            // //
-            // // Convert right ascension, declination, and parallax to position vector
-            // // in equatorial system with units of AU.
-            // //
+            //
+            // Convert right ascension, declination, and parallax to position vector
+            // in equatorial system with units of AU.
+            //
             try
             {
                 r = star.RightAscension;
@@ -2973,10 +2976,10 @@ namespace ASCOM.Astrometry.NOVASCOM
             cdc = Cos(d);
             sdc = Sin(d);
 
-            // //
-            // // Convert proper motion and radial velocity to orthogonal components of
-            // // motion with units of AU/Day.
-            // //
+            //
+            // Convert proper motion and radial velocity to orthogonal components of
+            // motion with units of AU/Day.
+            //
             try
             {
                 t = star.ProperMotionRA;
@@ -3007,9 +3010,9 @@ namespace ASCOM.Astrometry.NOVASCOM
 
             m_RadVel = t * 86400.0d / GlobalItems.KMAU;
 
-            // //
-            // // Transform motion vector to equatorial system.
-            // //
+            //
+            // Transform motion vector to equatorial system.
+            //
             m_v[0] = -m_VRA * sra - m_VDec * sdc * cra + m_RadVel * cdc * cra;
             m_v[1] = m_VRA * cra - m_VDec * sdc * sra + m_RadVel * cdc * sra;
             m_v[2] = m_VDec * cdc + m_RadVel * sdc;

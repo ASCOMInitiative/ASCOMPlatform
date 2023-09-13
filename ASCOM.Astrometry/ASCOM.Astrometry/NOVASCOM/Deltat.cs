@@ -66,46 +66,59 @@ namespace ASCOM.Astrometry
             // DATE RANGE 20th August 2023 Onwards - The analysis was performed on 20th August 2023 and creates values within 0.01 of a second of the projections to 19th August 2024.
             else if (YearFraction >= 2023.6d)
             {
-                Retval = +0.0d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + (+0.0d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay) + -0.00000000836552733660643d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + (+0.00151338479660039d * ModifiedJulianDay * ModifiedJulianDay) + -91.2604650974829d * ModifiedJulianDay + (+1834465.8890493d);
-
-
-
-
+                Retval = 
+                    +0.0d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + 
+                    +0.0d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + 
+                    -0.00000000836552733660643d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + 
+                    +0.00151338479660039d * ModifiedJulianDay * ModifiedJulianDay + 
+                    -91.2604650974829d * ModifiedJulianDay +
+                    +1834465.8890493d;
             }
 
             // DATE RANGE 18th July 2022 Onwards - The analysis was performed on 18th July 2022 and creates values within 0.01 of a second of the projections to 17th July 2023.
             else if (YearFraction >= 2022.55d)
             {
-                Retval = -0.000000000000528908084762244d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + (+0.000000158529137391645d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay) + -0.0190063060965729d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + (+1139.34719487418d * ModifiedJulianDay * ModifiedJulianDay) + -34149488.355673d * ModifiedJulianDay + (+409422822837.639d);
-
-
-
-
+                Retval = 
+                    -0.000000000000528908084762244d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + 
+                    +0.000000158529137391645d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + 
+                    -0.0190063060965729d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + 
+                    +1139.34719487418d * ModifiedJulianDay * ModifiedJulianDay + 
+                    -34149488.355673d * ModifiedJulianDay + 
+                    +409422822837.639d;
             }
 
             // DATE RANGE October 17th 2021 Onwards - The analysis was performed on 17th October 2021 and creates values within 0.01 of a second of the projections to the end of October 2022.
             else if (YearFraction >= 2021.79d)
             {
-                Retval = 0.000000000000926333089959963d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + -0.000000276351646101278d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + 0.0329773938043592d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + -1967.61450470546d * ModifiedJulianDay * ModifiedJulianDay + 58699325.5212533d * ModifiedJulianDay - 700463653286.072d;
-
-
-
-
+                Retval = 
+                    0.000000000000926333089959963d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + 
+                    -0.000000276351646101278d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + 
+                    0.0329773938043592d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + 
+                    -1967.61450470546d * ModifiedJulianDay * ModifiedJulianDay + 
+                    58699325.5212533d * ModifiedJulianDay +
+                    -700463653286.072d;
             }
 
             // DATE RANGE October 17th 2020 Onwards - The analysis was performed on 17th July 2020 and creates values within 0.01 of a second of the projections to October 2021 and sensible extrapolation to the end of 2021
             else if (YearFraction >= 2020.79d)
             {
-                Retval = 0.0000000000526391114738186d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + -0.0000124987447353606d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + 1.1128953517557d * ModifiedJulianDay * ModifiedJulianDay + -44041.1402447551d * ModifiedJulianDay + 653571203.42671d;
-
-
-
+                Retval = 
+                    0.0000000000526391114738186d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + 
+                    -0.0000124987447353606d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + 
+                    1.1128953517557d * ModifiedJulianDay * ModifiedJulianDay + 
+                    -44041.1402447551d * ModifiedJulianDay + 
+                    653571203.42671d;
             }
 
             // DATE RANGE July 2020 Onwards - The analysis was performed on 10th July 2020 and creates values within 0.01 of a second of the projections to Q2 2021 and sensible extrapolation to the end of 2021
             else if (YearFraction >= 2020.5d)
             {
-                Retval = 0.0000000000234066661113585d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay - 0.00000555556956413194d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + 0.494477925757861d * ModifiedJulianDay * ModifiedJulianDay - 19560.53496991d * ModifiedJulianDay + 290164271.563078d;
+                Retval = 
+                    0.0000000000234066661113585d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay +
+                    -0.00000555556956413194d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay + 
+                    0.494477925757861d * ModifiedJulianDay * ModifiedJulianDay +
+                    -19560.53496991d * ModifiedJulianDay + 
+                    290164271.563078d;
             }
 
             // DATE RANGE April 2018 Onwards - The analysis was performed on 25th April 2018 and creates values within 0.03 of a second of the projections to Q4 2018 and sensible extrapolation to 2021
@@ -190,7 +203,7 @@ namespace ASCOM.Astrometry
                     // Besselian interpolation from tabulated values. See AA page K11.
                     // Index into the table.
                     p = Floor(YearFraction);
-                    iy = (int)Round(p - TABSTART1620);            // // rbd - added cast
+                    iy = (int)Round(p - TABSTART1620);            // rbd - added cast
                                                                   // /* Zeroth order estimate is value at start of year */
                     Retval = dt[iy];
                     k = iy + 1;

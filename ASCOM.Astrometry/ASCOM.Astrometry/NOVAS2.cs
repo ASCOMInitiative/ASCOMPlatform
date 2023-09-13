@@ -98,9 +98,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// >0...Error code from function 'solarsystem'.</pre></returns>
         /// <remarks></remarks>
         public static short AppStar(double tjd, ref BodyDescription earth, ref CatEntry star, ref double ra, ref double dec)
-
-
-
         {
             if (Is64Bit())
             {
@@ -130,11 +127,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// >0...Error code from function 'solarsystem'.</pre></returns>
         /// <remarks></remarks>
         public static short TopoStar(double tjd, ref BodyDescription earth, double deltat, ref CatEntry star, ref SiteInfo location, ref double ra, ref double dec)
-
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -169,10 +161,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
         /// </remarks>
         public static short AppPlanet(double tjd, ref BodyDescription ss_object, ref BodyDescription earth, ref double ra, ref double dec, ref double dis)
-
-
-
-
         {
 
             if (Is64Bit())
@@ -209,12 +197,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
         /// </remarks>
         public static short TopoPlanet(double tjd, ref BodyDescription ss_object, ref BodyDescription earth, double deltat, ref SiteInfo location, ref double ra, ref double dec, ref double dis)
-
-
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -244,11 +226,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <remarks>
         /// Computes the virtual place of a star at date 'tjd', given its 
         /// mean place, proper motion, parallax, and radial velocity for J2000.0.</remarks>
-        public static short VirtualStar(double tjd, ref BodyDescription earth, ref CatEntry star, ref double ra, ref double dec)
-
-
-
-        {
+        public static short VirtualStar(double tjd, ref BodyDescription earth, ref CatEntry star, ref double ra, ref double dec)        {
             if (Is64Bit())
             {
                 var argearth = BodyDescToShort(earth);
@@ -278,11 +256,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks></remarks>
         public static short LocalStar(double tjd, ref BodyDescription earth, double deltat, ref CatEntry star, ref SiteInfo location, ref double ra, ref double dec)
-
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -316,10 +289,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
         /// </remarks>
         public static short VirtualPlanet(double tjd, ref BodyDescription ss_object, ref BodyDescription earth, ref double ra, ref double dec, ref double dis)
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -355,12 +324,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
         /// </remarks>
         public static short LocalPlanet(double tjd, ref BodyDescription ss_object, ref BodyDescription earth, double deltat, ref SiteInfo location, ref double ra, ref double dec, ref double dis)
-
-
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -388,11 +351,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// >0...Error code from function 'solarsystem'.
         /// </pre></returns>
         /// <remarks>     Computes the astrometric place of a star, given its mean place, proper motion, parallax, and radial velocity for J2000.0.</remarks>
-        public static short AstroStar(double tjd, ref BodyDescription earth, ref CatEntry star, ref double ra, ref double dec)
-
-
-
-        {
+        public static short AstroStar(double tjd, ref BodyDescription earth, ref CatEntry star, ref double ra, ref double dec)        {
             if (Is64Bit())
             {
                 var argearth = BodyDescToShort(earth);
@@ -424,10 +383,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
         /// </remarks>
         public static short AstroPlanet(double tjd, ref BodyDescription ss_object, ref BodyDescription earth, ref double ra, ref double dec, ref double dis)
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -464,16 +419,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// level.  This function can also adjust coordinates for atmospheric 
         /// refraction.</remarks>
         public static void Equ2Hor(double tjd, double deltat, double x, double y, ref SiteInfo location, double ra, double dec, RefractionOption ref_option, ref double zd, ref double az, ref double rar, ref double decr)
-
-
-
-
-
-
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -558,10 +503,6 @@ namespace ASCOM.Astrometry.NOVAS
         ///    distinction between TDB and TT is necessary.
         /// </pre></remarks>
         public static void TransformCat(TransformationOption option, double date_incat, ref CatEntry incat, double date_newcat, ref byte[] newcat_id, ref CatEntry newcat)
-
-
-
-
         {
             var CEN2 = new CatEntryNOVAS2();
 
@@ -632,10 +573,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="deps">OUT: Nutation in obliquity in arcseconds at 'tjd'.</param>
         /// <remarks></remarks>
         public static void EarthTilt(double tjd, ref double mobl, ref double tobl, ref double eq, ref double dpsi, ref double deps)
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -684,11 +621,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// 10+n ... where n is the error code from 'solarsystem'.
         /// 20+n ... where n is the error code from 'readeph'.</pre></returns>
         /// <remarks></remarks>
-        public static short Ephemeris(double tjd, ref BodyDescription cel_obj, Origin origin, ref double[] pos, ref double[] vel)
-
-
-
-        {
+        public static short Ephemeris(double tjd, ref BodyDescription cel_obj, Origin origin, ref double[] pos, ref double[] vel)        {
             var posv = new PosVector();
             var velv = new VelVector();
             short rc;
@@ -724,11 +657,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// 2...Invalid value of 'body'.
         /// </pre></returns>
         /// <remarks> Provides the position and velocity of the Earth at epoch 'tjd' by evaluating a closed-form theory without reference to an  external file.  This function can also provide the position and velocity of the Sun.</remarks>
-        public static short SolarSystem(double tjd, Body body, Origin origin, ref double[] pos, ref double[] vel)
-
-
-
-        {
+        public static short SolarSystem(double tjd, Body body, Origin origin, ref double[] pos, ref double[] vel)        {
             var posv = new PosVector();
             var velv = new VelVector();
             short rc;
@@ -838,11 +767,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </returns>
         /// <remarks></remarks>
         public static short GetEarth(double tjd, ref BodyDescription earth, ref double tdb, ref double[] bary_earthp, ref double[] bary_earthv, ref double[] helio_earthp, ref double[] helio_earthv)
-
-
-
-
-
         {
             short rc;
             PosVector vbary_earthp = new PosVector(), vhelio_earthp = new PosVector();
@@ -884,10 +808,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// are assumed to be zero.
         /// </remarks>
         public static short MeanStar(double tjd, ref BodyDescription earth, double ra, double dec, ref double mra, ref double mdec)
-
-
-
-
         {
             short rc;
             if (Is64Bit())
@@ -913,10 +833,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="vecs">OUT: Vector in geocentric rectangular space-fixed system, referred to mean equator and equinox of J2000.0.</param>
         /// <remarks>Transforms a vector from an Earth-fixed geographic system to a space-fixed system based on mean equator and equinox of J2000.0; applies rotations for wobble, spin, nutation, and precession.</remarks>
         public static void Pnsw(double tjd, double gast, double x, double y, double[] vece, ref double[] vecs)
-
-
-
-
         {
             var vvecs = new PosVector();
             if (Is64Bit())
@@ -1015,11 +931,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="tjd2">TDB Julian date of second epoch.</param>
         /// <param name="pos2">OUT: Position vector at second epoch.</param>
         /// <remarks></remarks>
-        public static void ProperMotion(double tjd1, double[] pos, double[] vel, double tjd2, ref double[] pos2)
-
-
-
-        {
+        public static void ProperMotion(double tjd1, double[] pos, double[] vel, double tjd2, ref double[] pos2)        {
             var vpos2 = new PosVector();
             if (Is64Bit())
             {
@@ -1277,14 +1189,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="star">OUT: Structure containing the input data</param>
         /// <remarks></remarks>
         public static void MakeCatEntry(string catalog, string star_name, int star_num, double ra, double dec, double pm_ra, double pm_dec, double parallax, double rad_vel, ref CatEntry star)
-
-
-
-
-
-
-
-
         {
             var CEN2 = new CatEntryNOVAS2();
 
@@ -1353,11 +1257,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="day">OUT: Day number</param>
         /// <param name="hour">OUT: Time in hours</param>
         /// <remarks></remarks>
-        public static void CalDate(double tjd, ref short year, ref short month, ref short day, ref double hour)
-
-
-
-        {
+        public static void CalDate(double tjd, ref short year, ref short month, ref short day, ref double hour)        {
             if (Is64Bit())
             {
                 cal_date64(tjd, ref year, ref month, ref day, ref hour);
@@ -1406,89 +1306,37 @@ namespace ASCOM.Astrometry.NOVAS
 
         #region DLL Entry Points (32bit)
         [DllImport(NOVAS32Dll, EntryPoint = "app_star")]
-        private static extern short app_star32(double tjd, ref BodyDescriptionShort earth, ref CatEntryNOVAS2 star, ref double ra, ref double dec);
-
-
-
-        [DllImport(NOVAS32Dll, EntryPoint = "topo_star")]
+        private static extern short app_star32(double tjd, ref BodyDescriptionShort earth, ref CatEntryNOVAS2 star, ref double ra, ref double dec);        [DllImport(NOVAS32Dll, EntryPoint = "topo_star")]
         private static extern short topo_star32(double tjd, ref BodyDescriptionShort earth, double deltat, ref CatEntryNOVAS2 star, ref SiteInfo location, ref double ra, ref double dec);
-
-
-
-
 
         [DllImport(NOVAS32Dll, EntryPoint = "app_planet")]
         private static extern short app_planet32(double tjd, ref BodyDescriptionShort ss_object, ref BodyDescriptionShort earth, ref double ra, ref double dec, ref double dis);
-
-
-
-
 
         [DllImport(NOVAS32Dll, EntryPoint = "topo_planet")]
         private static extern short topo_planet32(double tjd, ref BodyDescriptionShort ss_object, ref BodyDescriptionShort earth, double deltat, ref SiteInfo location, ref double ra, ref double dec, ref double dis);
 
 
-
-
-
-
         [DllImport(NOVAS32Dll, EntryPoint = "virtual_star")]
-        private static extern short virtual_star32(double tjd, ref BodyDescriptionShort earth, ref CatEntryNOVAS2 star, ref double ra, ref double dec);
-
-
-
-        [DllImport(NOVAS32Dll, EntryPoint = "local_star")]
+        private static extern short virtual_star32(double tjd, ref BodyDescriptionShort earth, ref CatEntryNOVAS2 star, ref double ra, ref double dec);        [DllImport(NOVAS32Dll, EntryPoint = "local_star")]
         private static extern short local_star32(double tjd, ref BodyDescriptionShort earth, double deltat, ref CatEntryNOVAS2 star, ref SiteInfo location, ref double ra, ref double dec);
-
-
-
-
 
         [DllImport(NOVAS32Dll, EntryPoint = "virtual_planet")]
         private static extern short virtual_planet32(double tjd, ref BodyDescriptionShort ss_object, ref BodyDescriptionShort earth, ref double ra, ref double dec, ref double dis);
-
-
-
-
         [DllImport(NOVAS32Dll, EntryPoint = "local_planet")]
         private static extern short local_planet32(double tjd, ref BodyDescriptionShort ss_object, ref BodyDescriptionShort earth, double deltat, ref SiteInfo location, ref double ra, ref double dec, ref double dis);
 
 
-
-
-
-
         [DllImport(NOVAS32Dll, EntryPoint = "astro_star")]
-        private static extern short astro_star32(double tjd, ref BodyDescriptionShort earth, ref CatEntryNOVAS2 star, ref double ra, ref double dec);
-
-
-
-        [DllImport(NOVAS32Dll, EntryPoint = "astro_planet")]
+        private static extern short astro_star32(double tjd, ref BodyDescriptionShort earth, ref CatEntryNOVAS2 star, ref double ra, ref double dec);        [DllImport(NOVAS32Dll, EntryPoint = "astro_planet")]
         private static extern short astro_planet32(double tjd, ref BodyDescriptionShort ss_object, ref BodyDescriptionShort earth, ref double ra, ref double dec, ref double dis);
-
-
-
-
         [DllImport(NOVAS32Dll, EntryPoint = "equ2hor")]
         private static extern void equ2hor32(double tjd, double deltat, double x, double y, ref SiteInfo location, double ra, double dec, short ref_option, ref double zd, ref double az, ref double rar, ref double decr);
-
-
-
-
-
-
-
-
 
 
         [DllImport(NOVAS32Dll, EntryPoint = "transform_hip")]
         private static extern void transform_hip32(ref CatEntryNOVAS2 hipparcos, ref CatEntryNOVAS2 fk5);
         [DllImport(NOVAS32Dll, EntryPoint = "transform_cat")]
         private static extern void transform_cat32(short option, double date_incat, ref CatEntryNOVAS2 incat, double date_newcat, ref byte[] newcat_id, ref CatEntryNOVAS2 newcat);
-
-
-
-
         [DllImport(NOVAS32Dll, EntryPoint = "sidereal_time")]
         private static extern void sidereal_time32(double jd_high, double jd_low, double ee, ref double gst);
 
@@ -1499,23 +1347,11 @@ namespace ASCOM.Astrometry.NOVAS
 
         [DllImport(NOVAS32Dll, EntryPoint = "earthtilt")]
         private static extern void earthtilt32(double tjd, ref double mobl, ref double tobl, ref double eq, ref double dpsi, ref double deps);
-
-
-
-
         [DllImport(NOVAS32Dll, EntryPoint = "cel_pole")]
         private static extern void cel_pole32(double del_dpsi, double del_deps);
         [DllImport(NOVAS32Dll, EntryPoint = "ephemeris")]
-        private static extern short ephemeris32(double tjd, ref BodyDescriptionShort cel_obj, short origin, ref PosVector pos, ref VelVector vel);
-
-
-
-        [DllImport(NOVAS32Dll, EntryPoint = "solarsystem")]
-        private static extern short solarsystem32(double tjd, short body, short origin, ref PosVector pos, ref VelVector vel);
-
-
-
-        [DllImport(NOVAS32Dll, EntryPoint = "vector2radec")]
+        private static extern short ephemeris32(double tjd, ref BodyDescriptionShort cel_obj, short origin, ref PosVector pos, ref VelVector vel);        [DllImport(NOVAS32Dll, EntryPoint = "solarsystem")]
+        private static extern short solarsystem32(double tjd, short body, short origin, ref PosVector pos, ref VelVector vel);        [DllImport(NOVAS32Dll, EntryPoint = "vector2radec")]
         private static extern short vector2radec32(ref PosVector pos, ref double ra, ref double dec);
 
         [DllImport(NOVAS32Dll, EntryPoint = "starvectors")]
@@ -1529,25 +1365,13 @@ namespace ASCOM.Astrometry.NOVAS
         [DllImport(NOVAS32Dll, EntryPoint = "get_earth")]
         private static extern short get_earth32(double tjd, ref BodyDescriptionShort earth, ref double tdb, ref PosVector bary_earthp, ref VelVector bary_earthv, ref PosVector helio_earthp, ref VelVector helio_earthv);
 
-
-
-
-
         // 
         // START OF NEW
         // 
         [DllImport(NOVAS32Dll, EntryPoint = "mean_star")]
         private static extern short mean_star32(double tjd, ref BodyDescriptionShort earth, double ra, double dec, ref double mra, ref double mdec);
-
-
-
-
         [DllImport(NOVAS32Dll, EntryPoint = "pnsw")]
         private static extern void pnsw32(double tjd, double gast, double x, double y, ref PosVector vece, ref PosVector vecs);
-
-
-
-
         [DllImport(NOVAS32Dll, EntryPoint = "spin")]
         private static extern void spin32(double st, ref PosVector pos1, ref PosVector pos2);
 
@@ -1557,40 +1381,16 @@ namespace ASCOM.Astrometry.NOVAS
 
 
         [DllImport(NOVAS32Dll, EntryPoint = "terra")]
-        private static extern void terra32(ref SiteInfo locale, double st, ref PosVector pos, ref VelVector vel);
-
-
-
-        [DllImport(NOVAS32Dll, EntryPoint = "proper_motion")]
-        private static extern void proper_motion32(double tjd1, ref PosVector pos, ref VelVector vel, double tjd2, ref PosVector pos2);
-
-
-
-        [DllImport(NOVAS32Dll, EntryPoint = "bary_to_geo")]
+        private static extern void terra32(ref SiteInfo locale, double st, ref PosVector pos, ref VelVector vel);        [DllImport(NOVAS32Dll, EntryPoint = "proper_motion")]
+        private static extern void proper_motion32(double tjd1, ref PosVector pos, ref VelVector vel, double tjd2, ref PosVector pos2);        [DllImport(NOVAS32Dll, EntryPoint = "bary_to_geo")]
         private static extern void bary_to_geo32(ref PosVector pos, ref PosVector earthvector, ref PosVector pos2, ref double lighttime);
 
 
         [DllImport(NOVAS32Dll, EntryPoint = "sun_field")]
-        private static extern short sun_field32(ref PosVector pos, ref PosVector earthvector, ref PosVector pos2);
-
-
-
-        [DllImport(NOVAS32Dll, EntryPoint = "aberration")]
-        private static extern short aberration32(ref PosVector pos, ref VelVector vel, double lighttime, ref PosVector pos2);
-
-
-
-        [DllImport(NOVAS32Dll, EntryPoint = "nutate")]
-        private static extern short nutate32(double tjd, short fn, ref PosVector pos, ref PosVector pos2);
-
-
-
-        [DllImport(NOVAS32Dll, EntryPoint = "nutation_angles")]
-        private static extern short nutation_angles32(double tdbtime, ref double longnutation, ref double obliqnutation);
-
-
-
-        [DllImport(NOVAS32Dll, EntryPoint = "fund_args")]
+        private static extern short sun_field32(ref PosVector pos, ref PosVector earthvector, ref PosVector pos2);        [DllImport(NOVAS32Dll, EntryPoint = "aberration")]
+        private static extern short aberration32(ref PosVector pos, ref VelVector vel, double lighttime, ref PosVector pos2);        [DllImport(NOVAS32Dll, EntryPoint = "nutate")]
+        private static extern short nutate32(double tjd, short fn, ref PosVector pos, ref PosVector pos2);        [DllImport(NOVAS32Dll, EntryPoint = "nutation_angles")]
+        private static extern short nutation_angles32(double tdbtime, ref double longnutation, ref double obliqnutation);        [DllImport(NOVAS32Dll, EntryPoint = "fund_args")]
         private static extern void fund_args32(double t, ref FundamentalArgs a);
         [DllImport(NOVAS32Dll, EntryPoint = "tdb2tdt")]
         private static extern void tdb2tdt32(double tdb, ref double tdtjd, ref double secdiff);
@@ -1598,48 +1398,16 @@ namespace ASCOM.Astrometry.NOVAS
 
         [DllImport(NOVAS32Dll, EntryPoint = "set_body")]
         private static extern short set_body32(short type, short number, [MarshalAs(UnmanagedType.LPStr)] string name, ref BodyDescriptionShort cel_obj);
-
-
-
-
         [DllImport(NOVAS32Dll, EntryPoint = "readeph")]
-        private static extern PosVector readeph32(int mp, IntPtr name, double jd, ref int err);
-
-
-
-        [DllImport(NOVAS32Dll, EntryPoint = "make_cat_entry")]
-        private static extern void make_cat_entry32([MarshalAs(UnmanagedType.LPStr)] string catalog, [MarshalAs(UnmanagedType.LPStr)] string star_name, int star_num, double ra, double dec, double pm_ra, double pm_dec, double parallax, double rad_vel, ref CatEntryNOVAS2 star);
-
-
-
-
-
-
-
-
-
-
-
-        [DllImport(NOVAS32Dll, EntryPoint = "refract")]
+        private static extern PosVector readeph32(int mp, IntPtr name, double jd, ref int err);        [DllImport(NOVAS32Dll, EntryPoint = "make_cat_entry")]
+        private static extern void make_cat_entry32([MarshalAs(UnmanagedType.LPStr)] string catalog, [MarshalAs(UnmanagedType.LPStr)] string star_name, int star_num, double ra, double dec, double pm_ra, double pm_dec, double parallax, double rad_vel, ref CatEntryNOVAS2 star);        [DllImport(NOVAS32Dll, EntryPoint = "refract")]
         private static extern double refract32(ref SiteInfo location, short ref_option, double zd_obs);
 
 
         [DllImport(NOVAS32Dll, EntryPoint = "julian_date")]
-        private static extern double julian_date32(short year, short month, short day, double hour);
-
-
-
-        [DllImport(NOVAS32Dll, EntryPoint = "cal_date")]
-        private static extern void cal_date32(double tjd, ref short year, ref short month, ref short day, ref double hour);
-
-
-
-        [DllImport(NOVAS32Dll, EntryPoint = "sun_eph")]
-        private static extern void sun_eph32(double jd, ref double ra, ref double dec, ref double dis);
-
-
-
-        // <DllImport(NOVAS32Dll, EntryPoint:="solarsystem")> _
+        private static extern double julian_date32(short year, short month, short day, double hour);        [DllImport(NOVAS32Dll, EntryPoint = "cal_date")]
+        private static extern void cal_date32(double tjd, ref short year, ref short month, ref short day, ref double hour);        [DllImport(NOVAS32Dll, EntryPoint = "sun_eph")]
+        private static extern void sun_eph32(double jd, ref double ra, ref double dec, ref double dis);        // <DllImport(NOVAS32Dll, EntryPoint:="solarsystem")> _
         // Private Shared Function solarsystem32(ByVal tjd As Double, _
         // ByVal body As Body, _
         // ByRef origin As Integer, _
@@ -1650,88 +1418,36 @@ namespace ASCOM.Astrometry.NOVAS
 
         #region DLL Entry Points (64bit)
         [DllImport(NOVAS64Dll, EntryPoint = "app_star")]
-        private static extern short app_star64(double tjd, ref BodyDescriptionShort earth, ref CatEntryNOVAS2 star, ref double ra, ref double dec);
-
-
-
-        [DllImport(NOVAS64Dll, EntryPoint = "topo_star")]
+        private static extern short app_star64(double tjd, ref BodyDescriptionShort earth, ref CatEntryNOVAS2 star, ref double ra, ref double dec);        [DllImport(NOVAS64Dll, EntryPoint = "topo_star")]
         private static extern short topo_star64(double tjd, ref BodyDescriptionShort earth, double deltat, ref CatEntryNOVAS2 star, ref SiteInfo location, ref double ra, ref double dec);
-
-
-
-
 
         [DllImport(NOVAS64Dll, EntryPoint = "app_planet")]
         private static extern short app_planet64(double tjd, ref BodyDescriptionShort ss_object, ref BodyDescriptionShort earth, ref double ra, ref double dec, ref double dis);
-
-
-
-
         [DllImport(NOVAS64Dll, EntryPoint = "topo_planet")]
         private static extern short topo_planet64(double tjd, ref BodyDescriptionShort ss_object, ref BodyDescriptionShort earth, double deltat, ref SiteInfo location, ref double ra, ref double dec, ref double dis);
 
 
-
-
-
-
         [DllImport(NOVAS64Dll, EntryPoint = "virtual_star")]
-        private static extern short virtual_star64(double tjd, ref BodyDescriptionShort earth, ref CatEntryNOVAS2 star, ref double ra, ref double dec);
-
-
-
-        [DllImport(NOVAS64Dll, EntryPoint = "local_star")]
+        private static extern short virtual_star64(double tjd, ref BodyDescriptionShort earth, ref CatEntryNOVAS2 star, ref double ra, ref double dec);        [DllImport(NOVAS64Dll, EntryPoint = "local_star")]
         private static extern short local_star64(double tjd, ref BodyDescriptionShort earth, double deltat, ref CatEntryNOVAS2 star, ref SiteInfo location, ref double ra, ref double dec);
-
-
-
-
 
         [DllImport(NOVAS64Dll, EntryPoint = "virtual_planet")]
         private static extern short virtual_planet64(double tjd, ref BodyDescriptionShort ss_object, ref BodyDescriptionShort earth, ref double ra, ref double dec, ref double dis);
-
-
-
-
         [DllImport(NOVAS64Dll, EntryPoint = "local_planet")]
         private static extern short local_planet64(double tjd, ref BodyDescriptionShort ss_object, ref BodyDescriptionShort earth, double deltat, ref SiteInfo location, ref double ra, ref double dec, ref double dis);
 
 
-
-
-
-
         [DllImport(NOVAS64Dll, EntryPoint = "astro_star")]
-        private static extern short astro_star64(double tjd, ref BodyDescriptionShort earth, ref CatEntryNOVAS2 star, ref double ra, ref double dec);
-
-
-
-        [DllImport(NOVAS64Dll, EntryPoint = "astro_planet")]
+        private static extern short astro_star64(double tjd, ref BodyDescriptionShort earth, ref CatEntryNOVAS2 star, ref double ra, ref double dec);        [DllImport(NOVAS64Dll, EntryPoint = "astro_planet")]
         private static extern short astro_planet64(double tjd, ref BodyDescriptionShort ss_object, ref BodyDescriptionShort earth, ref double ra, ref double dec, ref double dis);
-
-
-
-
         [DllImport(NOVAS64Dll, EntryPoint = "equ2hor")]
         private static extern void equ2hor64(double tjd, double deltat, double x, double y, ref SiteInfo location, double ra, double dec, short ref_option, ref double zd, ref double az, ref double rar, ref double decr);
-
-
-
-
-
-
-
-
 
 
         [DllImport(NOVAS64Dll, EntryPoint = "transform_hip")]
         private static extern void transform_hip64(ref CatEntryNOVAS2 hipparcos, ref CatEntryNOVAS2 fk5);
         [DllImport(NOVAS64Dll, EntryPoint = "transform_cat")]
         private static extern void transform_cat64(short option, double date_incat, ref CatEntryNOVAS2 incat, double date_newcat, ref byte[] newcat_id, ref CatEntryNOVAS2 newcat);
-
-
-
-
         [DllImport(NOVAS64Dll, EntryPoint = "sidereal_time")]
         private static extern void sidereal_time64(double jd_high, double jd_low, double ee, ref double gst);
 
@@ -1742,23 +1458,11 @@ namespace ASCOM.Astrometry.NOVAS
 
         [DllImport(NOVAS64Dll, EntryPoint = "earthtilt")]
         private static extern void earthtilt64(double tjd, ref double mobl, ref double tobl, ref double eq, ref double dpsi, ref double deps);
-
-
-
-
         [DllImport(NOVAS64Dll, EntryPoint = "cel_pole")]
         private static extern void cel_pole64(double del_dpsi, double del_deps);
         [DllImport(NOVAS64Dll, EntryPoint = "ephemeris")]
-        private static extern short ephemeris64(double tjd, ref BodyDescriptionShort cel_obj, short origin, ref PosVector pos, ref VelVector vel);
-
-
-
-        [DllImport(NOVAS64Dll, EntryPoint = "solarsystem")]
-        private static extern short solarsystem64(double tjd, short body, short origin, ref PosVector pos, ref VelVector vel);
-
-
-
-        [DllImport(NOVAS64Dll, EntryPoint = "vector2radec")]
+        private static extern short ephemeris64(double tjd, ref BodyDescriptionShort cel_obj, short origin, ref PosVector pos, ref VelVector vel);        [DllImport(NOVAS64Dll, EntryPoint = "solarsystem")]
+        private static extern short solarsystem64(double tjd, short body, short origin, ref PosVector pos, ref VelVector vel);        [DllImport(NOVAS64Dll, EntryPoint = "vector2radec")]
         private static extern short vector2radec64(ref PosVector pos, ref double ra, ref double dec);
 
         [DllImport(NOVAS64Dll, EntryPoint = "starvectors")]
@@ -1771,25 +1475,13 @@ namespace ASCOM.Astrometry.NOVAS
         [DllImport(NOVAS64Dll, EntryPoint = "get_earth")]
         private static extern short get_earth64(double tjd, ref BodyDescriptionShort earth, ref double tdb, ref PosVector bary_earthp, ref VelVector bary_earthv, ref PosVector helio_earthp, ref VelVector helio_earthv);
 
-
-
-
-
         // 
         // START OF NEW
         // 
         [DllImport(NOVAS64Dll, EntryPoint = "mean_star")]
         private static extern short mean_star64(double tjd, ref BodyDescriptionShort earth, double ra, double dec, ref double mra, ref double mdec);
-
-
-
-
         [DllImport(NOVAS64Dll, EntryPoint = "pnsw")]
         private static extern void pnsw64(double tjd, double gast, double x, double y, ref PosVector vece, ref PosVector vecs);
-
-
-
-
         [DllImport(NOVAS64Dll, EntryPoint = "spin")]
         private static extern void spin64(double st, ref PosVector pos1, ref PosVector pos2);
 
@@ -1799,35 +1491,15 @@ namespace ASCOM.Astrometry.NOVAS
 
 
         [DllImport(NOVAS64Dll, EntryPoint = "terra")]
-        private static extern void terra64(ref SiteInfo locale, double st, ref PosVector pos, ref VelVector vel);
-
-
-
-        [DllImport(NOVAS64Dll, EntryPoint = "proper_motion")]
-        private static extern void proper_motion64(double tjd1, ref PosVector pos, ref VelVector vel, double tjd2, ref PosVector pos2);
-
-
-
-        [DllImport(NOVAS64Dll, EntryPoint = "bary_to_geo")]
+        private static extern void terra64(ref SiteInfo locale, double st, ref PosVector pos, ref VelVector vel);        [DllImport(NOVAS64Dll, EntryPoint = "proper_motion")]
+        private static extern void proper_motion64(double tjd1, ref PosVector pos, ref VelVector vel, double tjd2, ref PosVector pos2);        [DllImport(NOVAS64Dll, EntryPoint = "bary_to_geo")]
         private static extern void bary_to_geo64(ref PosVector pos, ref PosVector earthvector, ref PosVector pos2, ref double lighttime);
 
 
         [DllImport(NOVAS64Dll, EntryPoint = "sun_field")]
-        private static extern short sun_field64(ref PosVector pos, ref PosVector earthvector, ref PosVector pos2);
-
-
-
-        [DllImport(NOVAS64Dll, EntryPoint = "aberration")]
-        private static extern short aberration64(ref PosVector pos, ref VelVector vel, double lighttime, ref PosVector pos2);
-
-
-
-        [DllImport(NOVAS64Dll, EntryPoint = "nutate")]
-        private static extern short nutate64(double tjd, short fn, ref PosVector pos, ref PosVector pos2);
-
-
-
-        [DllImport(NOVAS64Dll, EntryPoint = "nutation_angles")]
+        private static extern short sun_field64(ref PosVector pos, ref PosVector earthvector, ref PosVector pos2);        [DllImport(NOVAS64Dll, EntryPoint = "aberration")]
+        private static extern short aberration64(ref PosVector pos, ref VelVector vel, double lighttime, ref PosVector pos2);        [DllImport(NOVAS64Dll, EntryPoint = "nutate")]
+        private static extern short nutate64(double tjd, short fn, ref PosVector pos, ref PosVector pos2);        [DllImport(NOVAS64Dll, EntryPoint = "nutation_angles")]
         private static extern short nutation_angles64(double tdbtime, ref double longnutation, ref double obliqnutation);
 
 
@@ -1839,52 +1511,18 @@ namespace ASCOM.Astrometry.NOVAS
 
         [DllImport(NOVAS64Dll, EntryPoint = "set_body")]
         private static extern short set_body64(short type, short number, [MarshalAs(UnmanagedType.LPStr)] string name, ref BodyDescriptionShort cel_obj);
-
-
-
-
         [DllImport(NOVAS64Dll, EntryPoint = "readeph")]
-        private static extern PosVector readeph64(int mp, IntPtr name, double jd, ref int err);
-
-
-
-        [DllImport(NOVAS64Dll, EntryPoint = "make_cat_entry")]
-        private static extern void make_cat_entry64([MarshalAs(UnmanagedType.LPStr)] string catalog, [MarshalAs(UnmanagedType.LPStr)] string star_name, int star_num, double ra, double dec, double pm_ra, double pm_dec, double parallax, double rad_vel, ref CatEntryNOVAS2 star);
-
-
-
-
-
-
-
-
-
-
-
-        [DllImport(NOVAS64Dll, EntryPoint = "refract")]
+        private static extern PosVector readeph64(int mp, IntPtr name, double jd, ref int err);        [DllImport(NOVAS64Dll, EntryPoint = "make_cat_entry")]
+        private static extern void make_cat_entry64([MarshalAs(UnmanagedType.LPStr)] string catalog, [MarshalAs(UnmanagedType.LPStr)] string star_name, int star_num, double ra, double dec, double pm_ra, double pm_dec, double parallax, double rad_vel, ref CatEntryNOVAS2 star);        [DllImport(NOVAS64Dll, EntryPoint = "refract")]
         private static extern double refract64(ref SiteInfo location, short ref_option, double zd_obs);
 
 
         [DllImport(NOVAS64Dll, EntryPoint = "julian_date")]
-        private static extern double julian_date64(short year, short month, short day, double hour);
-
-
-
-        [DllImport(NOVAS64Dll, EntryPoint = "cal_date")]
-        private static extern void cal_date64(double tjd, ref short year, ref short month, ref short day, ref double hour);
-
-
-
-        [DllImport(NOVAS64Dll, EntryPoint = "sun_eph")]
-        private static extern void sun_eph64(double jd, ref double ra, ref double dec, ref double dis);
-
-
-
-        [DllImport(NOVAS64Dll, EntryPoint = "solarsystem")]
-        private static extern short solarsystem64(double tjd, short body, ref int origin, ref PosVector pos, ref VelVector vel);
-
-
-
+        private static extern double julian_date64(short year, short month, short day, double hour);        [DllImport(NOVAS64Dll, EntryPoint = "cal_date")]
+        private static extern void cal_date64(double tjd, ref short year, ref short month, ref short day, ref double hour);        [DllImport(NOVAS64Dll, EntryPoint = "sun_eph")]
+        private static extern void sun_eph64(double jd, ref double ra, ref double dec, ref double dis);        [DllImport(NOVAS64Dll, EntryPoint = "solarsystem")]
+        private static extern short solarsystem64(double tjd, short body, ref int origin, ref PosVector pos, ref VelVector vel);        
+        
         #endregion
 
         #region Support Code

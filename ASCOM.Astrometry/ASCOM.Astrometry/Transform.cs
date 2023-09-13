@@ -701,7 +701,7 @@ namespace ASCOM.Astrometry.Transform
                 SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0d, 0.0d, 0.0d, 0.0d, JDUTCSofa, 0.0d, DUT1, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, ref aob, ref zob, ref hob, ref dob, ref rob, ref eo);
             }
 
-            RATopoValue = SOFA.Anp(rob - eo) * RADIANS2HOURS; // // Convert CIO RA to equinox of date RA by subtracting the equation of the origins and convert from radians to hours
+            RATopoValue = SOFA.Anp(rob - eo) * RADIANS2HOURS; // Convert CIO RA to equinox of date RA by subtracting the equation of the origins and convert from radians to hours
             DECTopoValue = dob * RADIANS2DEGREES; // Convert Dec from radians to degrees
             AzimuthTopoValue = aob * RADIANS2DEGREES;
             ElevationTopoValue = 90.0d - zob * RADIANS2DEGREES;
@@ -722,7 +722,7 @@ namespace ASCOM.Astrometry.Transform
             JDTTSofa = GetJDTTSofa();
 
             SOFA.CelestialToIntermediate(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0d, 0.0d, 0.0d, 0.0d, JDTTSofa, 0.0d, ref ri, ref di, ref eo);
-            RAApparentValue = SOFA.Anp(ri - eo) * RADIANS2HOURS; // // Convert CIO RA to equinox of date RA by subtracting the equation of the origins and convert from radians to hours
+            RAApparentValue = SOFA.Anp(ri - eo) * RADIANS2HOURS; // Convert CIO RA to equinox of date RA by subtracting the equation of the origins and convert from radians to hours
             DECApparentValue = di * RADIANS2DEGREES; // Convert Dec from radians to degrees
 
             TL.LogMessage("  J2000 To Apparent", "  Apparent RA/Dec:   " + FormatRA(RAApparentValue) + " " + FormatDec(DECApparentValue) + ", " + Sw.Elapsed.TotalMilliseconds.ToString("0.00") + "ms");

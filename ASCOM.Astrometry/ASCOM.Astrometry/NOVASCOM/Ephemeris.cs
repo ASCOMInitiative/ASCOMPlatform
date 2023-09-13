@@ -27,21 +27,21 @@ namespace ASCOM.Astrometry
             // Dim TL As New TraceLogger("", "get_earth_nov")
             // TL.Enabled = True
             // TL.LogMessage("get_earth_nov", "Start")
-            // //
-            // // Compute the TDB Julian date corresponding to 'tjd'.
-            // //
+            //
+            // Compute the TDB Julian date corresponding to 'tjd'.
+            //
 
             // If (Abs(tjd - tjd_last) > 0.000001) Then 'Optimize repeated calls
             Tdb2Tdt(tjd, ref dummy, ref secdiff);
             // TL.LogMessage("get_earth_nov", "after tbd2tdt")
             ltdb = tjd + secdiff / 86400.0d;
 
-            // //
-            // // Get position and velocity of the Earth wrt barycenter of 
-            // // solar system and wrt center of the sun. These calls reflect
-            // // exceptions thrown by the attached ephemeris generator, so
-            // // we just return the hr ... the ErrorInfo is already set!
-            // //
+            //
+            // Get position and velocity of the Earth wrt barycenter of 
+            // solar system and wrt center of the sun. These calls reflect
+            // exceptions thrown by the attached ephemeris generator, so
+            // we just return the hr ... the ErrorInfo is already set!
+            //
             try
             {
                 // TL.LogMessage("get_earth_nov", "before solsysnov barycentric")
@@ -87,25 +87,25 @@ namespace ASCOM.Astrometry
 
         }
 
-        // //
-        // // Ephemeris() - Wrapper for external ephemeris generator
-        // //
-        // // The ephemeris generator must support a single method:
-        // //
-        // //     result(6) = GetPositionAndVelocity(tjd, Type, Number, Name)
-        // //
-        // //	tjd		Terrestrial Julian Date
-        // //	Type	Type of body: 0 = major planet, Sun, or Moon
-        // //						  1 = minor planet
-        // //	Number: For Type = 0: Mercury = 1, ..., Pluto = 9
-        // //			For Type = 1: minor planet number or 0 for unnumbered MP
-        // //  Name:   For Type = 0: n/a
-        // //			For Type = 1: n/a for numbered MPs. For unnumbered MPs, this
-        // //						  is the MPC PACKED designation.
-        // //  result	A SAFEARRAY of VARIANT, each element VT_R8 (double). Elements
-        // //			0-2 are the position vector of the body, elements 3.5 are the
-        // //			velocity vector of the body. 
-        // //
+        //
+        // Ephemeris() - Wrapper for external ephemeris generator
+        //
+        // The ephemeris generator must support a single method:
+        //
+        //     result(6) = GetPositionAndVelocity(tjd, Type, Number, Name)
+        //
+        //	tjd		Terrestrial Julian Date
+        //	Type	Type of body: 0 = major planet, Sun, or Moon
+        //						  1 = minor planet
+        //	Number: For Type = 0: Mercury = 1, ..., Pluto = 9
+        //			For Type = 1: minor planet number or 0 for unnumbered MP
+        //  Name:   For Type = 0: n/a
+        //			For Type = 1: n/a for numbered MPs. For unnumbered MPs, this
+        //						  is the MPC PACKED designation.
+        //  result	A SAFEARRAY of VARIANT, each element VT_R8 (double). Elements
+        //			0-2 are the position vector of the body, elements 3.5 are the
+        //			velocity vector of the body. 
+        //
         internal static void ephemeris_nov(ref IEphemeris ephDisp, double tjd, BodyType btype, int num, string name, Origin origin, ref double[] pos, ref double[] vel)
         {
             int i;
@@ -116,9 +116,9 @@ namespace ASCOM.Astrometry
             // Dim TL As New TraceLogger("", "EphNov")
             // TL.Enabled = True
             // TL.LogMessage("EphNov", "Start")
-            // //
-            // // Check inputs
-            // //
+            //
+            // Check inputs
+            //
             if (ephDisp is null)
             {
                 throw new Exceptions.ValueNotSetException("Ephemeris_nov Ephemeris object not set");
@@ -128,77 +128,53 @@ namespace ASCOM.Astrometry
                 if (origin != Origin.Barycentric & origin != Origin.Heliocentric)
                     throw new Utilities.Exceptions.InvalidValueException("Ephemeris_nov Origin is neither barycentric or heliocentric");
 
-                // //
-                // // Call the ephemeris for the heliocentric J2000.0 equatorial coordinates
+                //
+                // Call the ephemeris for the heliocentric J2000.0 equatorial coordinates
                 var kbtype = default(BodyType);
                 // TL.LogMessage("EphNov", "Before Case Btype")
                 switch (btype)
                 {
                     case BodyType.Comet:
-                        {
-                            kbtype = BodyType.Comet;
-                            break;
-                        }
+                        kbtype = BodyType.Comet;
+                        break;
                     case BodyType.MajorPlanet:
-                        {
-                            kbtype = BodyType.MajorPlanet;
-                            break;
-                        }
+                        kbtype = BodyType.MajorPlanet;
+                        break;
                     case BodyType.MinorPlanet:
-                        {
-                            kbtype = BodyType.MinorPlanet;
-                            break;
-                        }
+                        kbtype = BodyType.MinorPlanet;
+                        break;
                 }
 
                 var knum = default(Body);
                 switch (num)
                 {
                     case 1:
-                        {
-                            knum = Body.Mercury;
-                            break;
-                        }
+                        knum = Body.Mercury;
+                        break;
                     case 2:
-                        {
-                            knum = Body.Venus;
-                            break;
-                        }
+                        knum = Body.Venus;
+                        break;
                     case 3:
-                        {
-                            knum = Body.Earth;
-                            break;
-                        }
+                        knum = Body.Earth;
+                        break;
                     case 4:
-                        {
-                            knum = Body.Mars;
-                            break;
-                        }
+                        knum = Body.Mars;
+                        break;
                     case 5:
-                        {
-                            knum = Body.Jupiter;
-                            break;
-                        }
+                        knum = Body.Jupiter;
+                        break;
                     case 6:
-                        {
-                            knum = Body.Saturn;
-                            break;
-                        }
+                        knum = Body.Saturn;
+                        break;
                     case 7:
-                        {
-                            knum = Body.Uranus;
-                            break;
-                        }
+                        knum = Body.Uranus;
+                        break;
                     case 8:
-                        {
-                            knum = Body.Neptune;
-                            break;
-                        }
+                        knum = Body.Neptune;
+                        break;
                     case 9:
-                        {
-                            knum = Body.Pluto;
-                            break;
-                        }
+                        knum = Body.Pluto;
+                        break;
                 }
                 ephDisp.BodyType = kbtype;
                 ephDisp.Number = knum;
@@ -214,12 +190,12 @@ namespace ASCOM.Astrometry
 
                 double[] sun_pos = new double[4], sun_vel = new double[4];
 
-                // // CHICKEN AND EGG ALERT!!! WE CANNOT CALL OURSELVES FOR 
-                // // BARYCENTER CALCULATION -- AS AN APPROXIMATION, WE USE
-                // // OUR INTERNAL SOLSYS3() FUNCTION TO GET THE BARYCENTRIC
-                // // SUN. THIS SHOULD BE "GOOD ENOUGH". IF WE EVER GET 
-                // // AN EPHEMERIS GEN THAT HANDLES BARYCENTRIC, WE CAN 
-                // // CAN THIS...
+                // CHICKEN AND EGG ALERT!!! WE CANNOT CALL OURSELVES FOR 
+                // BARYCENTER CALCULATION -- AS AN APPROXIMATION, WE USE
+                // OUR INTERNAL SOLSYS3() FUNCTION TO GET THE BARYCENTRIC
+                // SUN. THIS SHOULD BE "GOOD ENOUGH". IF WE EVER GET 
+                // AN EPHEMERIS GEN THAT HANDLES BARYCENTRIC, WE CAN 
+                // CAN THIS...
                 // TL.LogMessage("EphNov", "Before solsys3")
                 solsys3_nov(tjd, Body.Sun, Origin.Barycentric, ref sun_pos, ref sun_vel);
                 // TL.LogMessage("EphNov", "After solsys3")
@@ -239,21 +215,21 @@ namespace ASCOM.Astrometry
             // TL.Dispose()
         }
 
-        // // ===============
-        // // LOCAL FUNCTIONS
-        // // ===============
+        // ===============
+        // LOCAL FUNCTIONS
+        // ===============
 
 
-        // //
-        // // This is the function used to get the position and velocity vectors
-        // // for the major solar system bodies and the moon. It is patterned after
-        // // the solarsystem() function in the original NOVAS-C package. You can
-        // // pass an IDispatch pointer for an ephemeris component, and it will be 
-        // // used. If that is NULL the internal solsys3() function is used.
-        // //
-        // // This function must set error info... it is designed to work with 
-        // // reflected exceptions from the attached ephemeris
-        // // 
+        //
+        // This is the function used to get the position and velocity vectors
+        // for the major solar system bodies and the moon. It is patterned after
+        // the solarsystem() function in the original NOVAS-C package. You can
+        // pass an IDispatch pointer for an ephemeris component, and it will be 
+        // used. If that is NULL the internal solsys3() function is used.
+        //
+        // This function must set error info... it is designed to work with 
+        // reflected exceptions from the attached ephemeris
+        // 
         internal static short solarsystem_nov(ref IEphemeris ephDisp, double tjd, double tdb, Body planet, Origin origin, ref double[] pos, ref double[] vel)
         {
             // Dim pl As NOVAS2.Body, org As NOVAS2.Origin
@@ -261,9 +237,9 @@ namespace ASCOM.Astrometry
             var rc = default(short);
             // TL.Enabled = True
             // TL.LogMessage("solarsystem_nov", "Start")
-            // //
-            // // solsys3 takes tdb, ephemeris takes tjd
-            // //
+            //
+            // solsys3 takes tdb, ephemeris takes tjd
+            //
             // Select Case origin
             // Case OriginType.nvBarycentric
             // org = NOVAS2.Origin.SolarSystemBarycentre
@@ -313,10 +289,10 @@ namespace ASCOM.Astrometry
             return rc;
         }
 
-        // //
-        // // solsys3() - Internal function that gives reasonable ephemerides for 
-        // // Sun or Earth, barycentric or heliocentric.
-        // //
+        //
+        // solsys3() - Internal function that gives reasonable ephemerides for 
+        // Sun or Earth, barycentric or heliocentric.
+        //
         private static short solsys3_nov(double tjd, Body body, Origin origin, ref double[] pos, ref double[] vel)
         {
 
@@ -347,9 +323,9 @@ namespace ASCOM.Astrometry
             double[] pos1 = new double[4];
             double[,] p = new double[4, 4];
 
-            // //
-            // // Check inputs
-            // //
+            //
+            // Check inputs
+            //
             if (origin != Origin.Barycentric & origin != Origin.Heliocentric)
                 throw new Utilities.Exceptions.InvalidValueException("EphemerisCode.Solsys3 Invalid origin: " + ((int)origin).ToString());
 

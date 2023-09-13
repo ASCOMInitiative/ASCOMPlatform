@@ -157,11 +157,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <remarks>This function accesses the JPL planetary ephemeris to give the position and velocity of the target 
         /// object with respect to the center object.</remarks>
         public short PlanetEphemeris(ref double[] Tjd, Target Target, Target Center, ref double[] Position, ref double[] Velocity)
-
-
-
         {
-
             var JdHp = new JDHighPrecision();
             var VPos = new PosVector();
             var VVel = new VelVector();
@@ -209,10 +205,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// http://www.usno.navy.mil/USNO/astronomical-applications/software-products/usnoae98</para>
         /// </remarks>
         public double[] ReadEph(int Mp, string Name, double Jd, ref int Err)
-
-
         {
-
             const int DOUBLE_LENGTH = 8;
             const int NUM_RETURN_VALUES = 6;
 
@@ -261,11 +254,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <returns>Always returns 0</returns>
         /// <remarks></remarks>
         public short SolarSystem(double Tjd, Body Body, Origin Origin, ref double[] Pos, ref double[] Vel)
-
-
-
         {
-
             var VPos = new PosVector();
             var VVel = new VelVector();
             short rc;
@@ -316,10 +305,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// </para>
         /// </remarks>
         public short State(ref double[] Jed, Target Target, ref double[] TargetPos, ref double[] TargetVel)
-
-
         {
-
             var JdHp = new JDHighPrecision();
             var VPos = new PosVector();
             var VVel = new VelVector();
@@ -352,8 +338,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="Pos2"> Position vector, referred to origin at center of mass of the Earth, corrected for aberration, components in AU</param>
         /// <remarks>If 'lighttime' = 0 on input, this function will compute it.</remarks>
         public void Aberration(double[] Pos, double[] Vel, double LightTime, ref double[] Pos2)
-
-
         {
             var VPos2 = default(PosVector);
             if (Is64Bit())
@@ -388,10 +372,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks></remarks>
         public short AppPlanet(double JdTt, Object3 SsBody, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis)
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -422,9 +402,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks></remarks>
         public short AppStar(double JdTt, CatEntry3 Star, Accuracy Accuracy, ref double Ra, ref double Dec)
-
-
-
         {
             if (Is64Bit())
             {
@@ -453,10 +430,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks></remarks>
         public short AstroPlanet(double JdTt, Object3 SsBody, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis)
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -485,11 +458,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks></remarks>
         public short AstroStar(double JdTt, CatEntry3 Star, Accuracy Accuracy, ref double Ra, ref double Dec)
-
-
-
         {
-
             if (Is64Bit())
             {
                 return AstroStar64(JdTt, ref Star, Accuracy, ref Ra, ref Dec);
@@ -509,8 +478,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="Lighttime">Light time from object to Earth in days.</param>
         /// <remarks></remarks>
         public void Bary2Obs(double[] Pos, double[] PosObs, ref double[] Pos2, ref double Lighttime)
-
-
         {
             var PosV = new PosVector();
             if (Is64Bit())
@@ -538,10 +505,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="Day">day number</param>
         /// <param name="Hour">Fractional hour of the day</param>
         /// <remarks></remarks>
-        public void CalDate(double Tjd, ref short Year, ref short Month, ref short Day, ref double Hour)
-
-
-
+        public void CalDate(double Tjd, ref short Year, ref short Month, ref short Day, ref double Hour)  
         {
             if (Is64Bit())
             {
@@ -566,8 +530,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks></remarks>
         public short CelPole(double Tjd, PoleOffsetCorrection Type, double Dpole1, double Dpole2)
-
-
         {
             if (Is64Bit())
             {
@@ -580,7 +542,7 @@ namespace ASCOM.Astrometry.NOVAS
         }
 
         /// <summary>
-        /// Calaculate an array of CIO RA values around a given date
+        /// Calculate an array of CIO RA values around a given date
         /// </summary>
         /// <param name="JdTdb">TDB Julian date.</param>
         /// <param name="NPts"> Number of Julian dates and right ascension values requested (not less than 2 or more than 20).</param>
@@ -615,7 +577,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </example>
         /// </remarks>
         public short CioArray(double JdTdb, int NPts, ref ArrayList Cio)
-
         {
             var CioStruct = new RAOfCioArray();
             short rc;
@@ -656,11 +617,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// can be with respect to either the GCRS origin or the true equinox of date -- different algorithms 
         /// are used in the two cases.</remarks>
         public short CioBasis(double JdTdbEquionx, double RaCioEquionx, ReferenceSystem RefSys, Accuracy Accuracy, ref double x, ref double y, ref double z)
-
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -686,8 +642,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks>  This function returns the location of the celestial intermediate origin (CIO) for a given Julian date, as a right ascension with respect to either the GCRS (geocentric ICRS) origin or the true equinox of date.  The CIO is always located on the true equator (= intermediate equator) of date.</remarks>
         public short CioLocation(double JdTdb, Accuracy Accuracy, ref double RaCio, ref ReferenceSystem RefSys)
-
-
         {
             if (Is64Bit())
             {
@@ -714,7 +668,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks></remarks>
         public short CioRa(double JdTt, Accuracy Accuracy, ref double RaCio)
-
         {
             if (Is64Bit())
             {
@@ -774,11 +727,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// set 'CoordSys' = 2; the value of 'JdTt' can be set to anything, since J2000.0 is assumed. 
         /// Except for the output from this case, all vectors are assumed to be with respect to a dynamical system.
         /// </remarks>
-        public short Ecl2EquVec(double JdTt, CoordSys CoordSys, Accuracy Accuracy, double[] Pos1, ref double[] Pos2)
-
-
-
-        {
+        public short Ecl2EquVec(double JdTt, CoordSys CoordSys, Accuracy Accuracy, double[] Pos1, ref double[] Pos2)        {
             var VPos2 = new PosVector();
             short rc;
             if (Is64Bit())
@@ -808,7 +757,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// copied from IERS function 'eect2000', which has a more complete series.
         /// </remarks>
         public double EeCt(double JdHigh, double JdLow, Accuracy Accuracy)
-
         {
             if (Is64Bit())
             {
@@ -839,10 +787,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks>It is recommended that the input structure 'cel_obj' be created using function 'MakeObject' in file novas.c.</remarks>
         public short Ephemeris(double[] Jd, Object3 CelObj, Origin Origin, Accuracy Accuracy, ref double[] Pos, ref double[] Vel)
-
-
-
-
         {
             var VPos = new PosVector();
             var VVel = new VelVector();
@@ -886,11 +830,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// Except for the input to this case, all input coordinates are dynamical.
         /// </remarks>
         public short Equ2Ecl(double JdTt, CoordSys CoordSys, Accuracy Accuracy, double Ra, double Dec, ref double ELon, ref double ELat)
-
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -917,11 +856,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <remarks>To convert an ICRS vector to an ecliptic vector (mean ecliptic and equinox of J2000.0 only), 
         /// set 'CoordSys' = 2; the value of 'JdTt' can be set to anything, since J2000.0 is assumed. Except for 
         /// the input to this case, all vectors are assumed to be with respect to a dynamical system.</remarks>
-        public short Equ2EclVec(double JdTt, CoordSys CoordSys, Accuracy Accuracy, double[] Pos1, ref double[] Pos2)
-
-
-
-        {
+        public short Equ2EclVec(double JdTt, CoordSys CoordSys, Accuracy Accuracy, double[] Pos1, ref double[] Pos2)        {
             var VPos2 = new PosVector();
             short rc;
             if (Is64Bit())
@@ -948,8 +883,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="GLat">Galactic latitude in degrees.</param>
         /// <remarks></remarks>
         public void Equ2Gal(double RaI, double DecI, ref double GLon, ref double GLat)
-
-
         {
             if (Is64Bit())
             {
@@ -983,19 +916,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <remarks>This function transforms topocentric right ascension and declination to zenith distance and azimuth.  
         /// It uses a method that properly accounts for polar motion, which is significant at the sub-arcsecond level.  
         /// This function can also adjust coordinates for atmospheric refraction.</remarks>
-        public void Equ2Hor(double Jd_Ut1, double DeltT, Accuracy Accuracy, double x, double y, OnSurface Location, double Ra, double Dec, RefractionOption RefOption, ref double Zd, ref double Az, ref double RaR, ref double DecR)
-
-
-
-
-
-
-
-
-
-
-
-        {
+        public void Equ2Hor(double Jd_Ut1, double DeltT, Accuracy Accuracy, double x, double y, OnSurface Location, double Ra, double Dec, RefractionOption RefOption, ref double Zd, ref double Az, ref double RaR, ref double DecR)        {
             if (Is64Bit())
             {
                 Equ2Hor64(Jd_Ut1, DeltT, Accuracy, x, y, ref Location, Ra, Dec, RefOption, ref Zd, ref Az, ref RaR, ref DecR);
@@ -1042,10 +963,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// <remarks>Values of the celestial pole offsets 'PSI_COR' and 'EPS_COR' are set using function 'cel_pole', 
         /// if desired.  See the prolog of 'cel_pole' for details.</remarks>
         public void ETilt(double JdTdb, Accuracy Accuracy, ref double Mobl, ref double Tobl, ref double Ee, ref double Dpsi, ref double Deps)
-
-
-
-
 
         {
             if (Is64Bit())
@@ -1143,11 +1060,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// <remarks>For coordinates with respect to the true equator of date, the origin of right ascension can be either the true equinox or the celestial intermediate origin (CIO).
         /// <para> This function only supports the CIO-based method.</para></remarks>
         public short Gcrs2Equ(double JdTt, CoordSys CoordSys, Accuracy Accuracy, double RaG, double DecG, ref double Ra, ref double Dec)
-
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -1177,10 +1089,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks>The final vectors are expressed in the GCRS.</remarks>
         public short GeoPosVel(double JdTt, double DeltaT, Accuracy Accuracy, Observer Obs, ref double[] Pos, ref double[] Vel)
-
-
-
-
         {
             var VPos = new PosVector();
             var VVel = new VelVector();
@@ -1225,10 +1133,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </para>
         /// </remarks>
         public short GravDef(double JdTdb, EarthDeflection LocCode, Accuracy Accuracy, double[] Pos1, double[] PosObs, ref double[] Pos2)
-
-
-
-
         {
             var VPos2 = new PosVector();
             short rc;
@@ -1264,11 +1168,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="Pos2">Position vector of observed object, with respect to origin at observer 
         /// (or the geocenter), corrected for gravitational deflection, components in AU.</param>
         /// <remarks>This function valid for an observed body within the solar system as well as for a star.</remarks>
-        public void GravVec(double[] Pos1, double[] PosObs, double[] PosBody, double RMass, ref double[] Pos2)
-
-
-
-        {
+        public void GravVec(double[] Pos1, double[] PosObs, double[] PosBody, double RMass, ref double[] Pos2)        {
             var VPos2 = new PosVector();
 
             if (Is64Bit())
@@ -1299,7 +1199,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// (i.e true equinox), then the returned value is the equation of the origins.</returns>
         /// <remarks></remarks>
         public double IraEquinox(double JdTdb, EquinoxType Equinox, Accuracy Accuracy)
-
         {
             if (Is64Bit())
             {
@@ -1323,8 +1222,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// must be Gregorian. The input time value can be based on any UT-like time scale (UTC, UT1, TT, etc.) 
         /// - output Julian date will have the same basis.</remarks>
         public double JulianDate(short Year, short Month, short Day, double Hour)
-
-
         {
             if (Is64Bit())
             {
@@ -1355,11 +1252,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks></remarks>
         public short LightTime(double JdTdb, Object3 SsObject, double[] PosObs, double TLight0, Accuracy Accuracy, ref double[] Pos, ref double TLight)
-
-
-
-
-
         {
             var VPos = new PosVector();
             short rc;
@@ -1395,8 +1287,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// For an observer on the surface of the Earth, this function returns the approximate unrefracted 
         /// altitude.</remarks>
         public void LimbAngle(double[] PosObj, double[] PosObs, ref double LimbAng, ref double NadirAng)
-
-
         {
             if (Is64Bit())
             {
@@ -1430,12 +1320,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks></remarks>
         public short LocalPlanet(double JdTt, Object3 SsBody, double DeltaT, OnSurface Position, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis)
-
-
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -1467,11 +1351,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks></remarks>
         public short LocalStar(double JdTt, double DeltaT, CatEntry3 Star, OnSurface Position, Accuracy Accuracy, ref double Ra, ref double Dec)
-
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -1498,14 +1377,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="Star">CatEntry3 structure containing the input data</param>
         /// <remarks></remarks>
         public void MakeCatEntry(string StarName, string Catalog, int StarNum, double Ra, double Dec, double PmRa, double PmDec, double Parallax, double RadVel, ref CatEntry3 Star)
-
-
-
-
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -1527,7 +1398,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// on a near-Earth spacecraft</param>
         /// <remarks></remarks>
         public void MakeInSpace(double[] ScPos, double[] ScVel, ref InSpace ObsSpace)
-
         {
             if (Is64Bit())
             {
@@ -1560,11 +1430,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// 2 ... 'Number' out of range
         /// </pre></returns>
         /// <remarks></remarks>
-        public short MakeObject(ObjectType Type, short Number, string Name, CatEntry3 StarData, ref Object3 CelObj)
-
-
-
-        {
+        public short MakeObject(ObjectType Type, short Number, string Name, CatEntry3 StarData, ref Object3 CelObj)        {
             var O3I = new Object3Internal();
             short rc;
 
@@ -1596,8 +1462,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks></remarks>
         public short MakeObserver(ObserverLocation Where, OnSurface ObsSurface, InSpace ObsSpace, ref Observer Obs)
-
-
         {
             if (Is64Bit())
             {
@@ -1636,7 +1500,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// situated on a near-Earth spacecraft</param>
         /// <remarks>Both input vectors are with respect to true equator and equinox of date.</remarks>
         public void MakeObserverInSpace(double[] ScPos, double[] ScVel, ref Observer ObsInSpace)
-
         {
             if (Is64Bit())
             {
@@ -1665,10 +1528,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// the surface of the Earth</param>
         /// <remarks></remarks>
         public void MakeObserverOnSurface(double Latitude, double Longitude, double Height, double Temperature, double Pressure, ref Observer ObsOnSurface)
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -1693,10 +1552,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// observer on the surface of the Earth.</param>
         /// <remarks></remarks>
         public void MakeOnSurface(double Latitude, double Longitude, double Height, double Temperature, double Pressure, ref OnSurface ObsSurface)
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -1724,7 +1579,6 @@ namespace ASCOM.Astrometry.NOVAS
             {
                 return MeanObliq32(JdTdb);
             }
-
         }
 
         /// <summary>
@@ -1745,10 +1599,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks></remarks>
         public short MeanStar(double JdTt, double Ra, double Dec, Accuracy Accuracy, ref double IRa, ref double IDec)
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -1791,9 +1641,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// true equator and equinox of epoch.</param>
         /// <remarks> Inverse transformation may be applied by setting flag 'direction'</remarks>
         public void Nutation(double JdTdb, NutationDirection Direction, Accuracy Accuracy, double[] Pos, ref double[] Pos2)
-
-
-
         {
             var VPOs2 = new PosVector();
 
@@ -1825,8 +1672,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </para>
         /// </remarks>
         public void NutationAngles(double t, Accuracy Accuracy, ref double DPsi, ref double DEps)
-
-
         {
             if (Is64Bit())
             {
@@ -1880,11 +1725,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// <remarks>
         /// </remarks>
         public short Place(double JdTt, Object3 CelObject, Observer Location, double DeltaT, CoordSys CoordSys, Accuracy Accuracy, ref SkyPos Output)
-
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -1911,8 +1751,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks> One of the two epochs must be J2000.0.  The coordinates are referred to the mean dynamical equator and equinox of the two respective epochs.</remarks>
         public short Precession(double JdTdb1, double[] Pos1, double JdTdb2, ref double[] Pos2)
-
-
         {
 
             var VPos2 = new PosVector();
@@ -1941,11 +1779,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="JdTdb2">TDB Julian date of second epoch.</param>
         /// <param name="Pos2">Position vector at second epoch.</param>
         /// <remarks></remarks>
-        public void ProperMotion(double JdTdb1, double[] Pos, double[] Vel, double JdTdb2, ref double[] Pos2)
-
-
-
-        {
+        public void ProperMotion(double JdTdb1, double[] Pos, double[] Vel, double JdTdb2, ref double[] Pos2)        {
             var VPos2 = new PosVector();
 
             if (Is64Bit())
@@ -1973,8 +1807,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="Vector">Position vector, equatorial rectangular coordinates (AU).</param>
         /// <remarks></remarks>
         public void RaDec2Vector(double Ra, double Dec, double Dist, ref double[] Vector)
-
-
         {
             var VVector = new PosVector();
 
@@ -2008,12 +1840,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// kinematic velocity vector (obtained independently of spectroscopy) can be treated like 
         /// solar system objects.</remarks>
         public void RadVel(Object3 CelObject, double[] Pos, double[] Vel, double[] VelObs, double DObsGeo, double DObsSun, double DObjSun, ref double Rv)
-
-
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -2045,7 +1871,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// can be used for planning observations or telescope pointing, but should not be used for the 
         /// reduction of precise observations.</remarks>
         public double Refract(OnSurface Location, RefractionOption RefOption, double ZdObs)
-
         {
             if (Is64Bit())
             {
@@ -2076,11 +1901,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// <remarks> The Julian date may be split at any point, but for highest precision, set 'JdHigh' 
         /// to be the integral part of the Julian date, and set 'JdLow' to be the fractional part.</remarks>
         public short SiderealTime(double JdHigh, double JdLow, double DeltaT, GstType GstType, Method Method, Accuracy Accuracy, ref double Gst)
-
-
-
-
-
         {
 
             if (Is64Bit())
@@ -2101,7 +1921,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="Pos2">Position vector expressed in new coordinate system rotated about z by 'angle'.</param>
         /// <remarks></remarks>
         public void Spin(double Angle, double[] Pos1, ref double[] Pos2)
-
         {
             var VPOs2 = new PosVector();
             if (Is64Bit())
@@ -2126,7 +1945,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="Vel">Velocity vector, equatorial rectangular coordinates, components in AU/Day.</param>
         /// <remarks></remarks>
         public void StarVectors(CatEntry3 Star, ref double[] Pos, ref double[] Vel)
-
         {
             var VPos = new PosVector();
             var VVel = new VelVector();
@@ -2154,7 +1972,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// series given in: Explanatory Supplement to the Astronomical Almanac, pp. 42-44 and p. 316. 
         /// The result is good to about 10 microseconds.</remarks>
         public void Tdb2Tt(double TdbJd, ref double TtJd, ref double SecDiff)
-
         {
             if (Is64Bit())
             {
@@ -2196,14 +2013,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// The 'option' flag only works for the equinox-based method.
         /// </para></remarks>
         public short Ter2Cel(double JdHigh, double JdLow, double DeltaT, Method Method, Accuracy Accuracy, OutputVectorOption OutputOption, double x, double y, double[] VecT, ref double[] VecC)
-
-
-
-
-
-
-
-
         {
             var VVecC = new PosVector();
             short rc;
@@ -2240,8 +2049,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// and nutation of the Earth's axis is not accounted for here.</para>
         /// </remarks>
         public void Terra(OnSurface Location, double St, ref double[] Pos, ref double[] Vel)
-
-
         {
             var VPos = new PosVector();
             var VVel = new VelVector();
@@ -2276,12 +2083,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks></remarks>
         public short TopoPlanet(double JdTt, Object3 SsBody, double DeltaT, OnSurface Position, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis)
-
-
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -2313,11 +2114,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks></remarks>
         public short TopoStar(double JdTt, double DeltaT, CatEntry3 Star, OnSurface Position, Accuracy Accuracy, ref double Ra, ref double Dec)
-
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -2364,10 +2160,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// proper motions were derived by assuming a precession constant significantly different from 
         /// the value implicit in function 'precession'.</para></remarks>
         public short TransformCat(TransformationOption3 TransformOption, double DateInCat, CatEntry3 InCat, double DateNewCat, string NewCatId, ref CatEntry3 NewCat)
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -2438,7 +2230,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks></remarks>
         public short Vector2RaDec(double[] Pos, ref double Ra, ref double Dec)
-
         {
             if (Is64Bit())
             {
@@ -2469,10 +2260,6 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks></remarks>
         public short VirtualPlanet(double JdTt, Object3 SsBody, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis)
-
-
-
-
         {
             if (Is64Bit())
             {
@@ -2501,11 +2288,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// > 20 ... Error code from function 'Place'
         /// </pre></returns>
         /// <remarks></remarks>
-        public short VirtualStar(double JdTt, CatEntry3 Star, Accuracy Accuracy, ref double Ra, ref double Dec)
-
-
-
-        {
+        public short VirtualStar(double JdTt, CatEntry3 Star, Accuracy Accuracy, ref double Ra, ref double Dec)        {
             if (Is64Bit())
             {
                 return VirtualStar64(JdTt, ref Star, Accuracy, ref Ra, ref Dec);
@@ -2530,11 +2313,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="Pos2">Position vector, geocentric equatorial rectangular coordinates, 
         /// referred to true equator and TIO.</param>
         /// <remarks></remarks>
-        public void Wobble(double Tjd, double x, double y, double[] Pos1, ref double[] Pos2)
-
-
-
-        {
+        public void Wobble(double Tjd, double x, double y, double[] Pos1, ref double[] Pos2)        {
             var VPos2 = new PosVector();
 
             if (Is64Bit())
@@ -2554,9 +2333,7 @@ namespace ASCOM.Astrometry.NOVAS
 
         #region Private Ephemeris And RACIOFile Routines
         private short Ephem_Open(string Ephem_Name, ref double JD_Begin, ref double JD_End)
-
         {
-
             short rc;
             if (Is64Bit())
             {
@@ -2607,24 +2384,12 @@ namespace ASCOM.Astrometry.NOVAS
 
         [DllImport(NOVAS32DLL, EntryPoint = "Planet_Ephemeris")]
         private static extern short PlanetEphemeris32(ref JDHighPrecision Tjd, Target Target, Target Center, ref PosVector Position, ref VelVector Velocity);
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "readeph")]
-        private static extern IntPtr ReadEph32(int Mp, [MarshalAs(UnmanagedType.LPStr)] string Name, double Jd, ref int Err);
-
-
-
-        [DllImport(NOVAS32DLL, EntryPoint = "cleaneph")]
+        private static extern IntPtr ReadEph32(int Mp, [MarshalAs(UnmanagedType.LPStr)] string Name, double Jd, ref int Err);        [DllImport(NOVAS32DLL, EntryPoint = "cleaneph")]
         private static extern void CleanEph32();
 
         [DllImport(NOVAS32DLL, EntryPoint = "solarsystem")]
         private static extern short SolarSystem32(double tjd, short body, short origin, ref PosVector pos, ref VelVector vel);
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "State")]
         private static extern short State32(ref JDHighPrecision Jed, Target Target, ref PosVector TargetPos, ref VelVector TargetVel);
 
@@ -2633,53 +2398,21 @@ namespace ASCOM.Astrometry.NOVAS
 
         #region DLL Entry Points NOVAS (32bit)
         [DllImport(NOVAS32DLL, EntryPoint = "aberration")]
-        private static extern void Aberration32(ref PosVector Pos, ref VelVector Vel, double LightTime, ref PosVector Pos2);
-
-
-
-        [DllImport(NOVAS32DLL, EntryPoint = "app_planet")]
+        private static extern void Aberration32(ref PosVector Pos, ref VelVector Vel, double LightTime, ref PosVector Pos2);        [DllImport(NOVAS32DLL, EntryPoint = "app_planet")]
         private static extern short AppPlanet32(double JdTt, ref Object3Internal SsBody, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis);
-
-
-
-
 
         [DllImport(NOVAS32DLL, EntryPoint = "app_star")]
         private static extern short AppStar32(double JdTt, ref CatEntry3 Star, Accuracy Accuracy, ref double Ra, ref double Dec);
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "astro_planet")]
         private static extern short AstroPlanet32(double JdTt, ref Object3Internal SsBody, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis);
 
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "astro_star")]
         private static extern short AstroStar32(double JdTt, ref CatEntry3 Star, Accuracy Accuracy, ref double Ra, ref double Dec);
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "bary2obs")]
-        private static extern void Bary2Obs32(ref PosVector Pos, ref PosVector PosObs, ref PosVector Pos2, ref double Lighttime);
-
-
-
-        [DllImport(NOVAS32DLL, EntryPoint = "cal_date")]
+        private static extern void Bary2Obs32(ref PosVector Pos, ref PosVector PosObs, ref PosVector Pos2, ref double Lighttime);        [DllImport(NOVAS32DLL, EntryPoint = "cal_date")]
         private static extern void CalDate32(double Tjd, ref short Year, ref short Month, ref short Day, ref double Hour);
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "cel_pole")]
-        private static extern short CelPole32(double Tjd, PoleOffsetCorrection Type, double Dpole1, double Dpole2);
-
-
-
-        [DllImport(NOVAS32DLL, EntryPoint = "cio_array")]
+        private static extern short CelPole32(double Tjd, PoleOffsetCorrection Type, double Dpole1, double Dpole2);        [DllImport(NOVAS32DLL, EntryPoint = "cio_array")]
         private static extern short CioArray32(double JdTdb, int NPts, ref RAOfCioArray Cio);
 
 
@@ -2687,16 +2420,8 @@ namespace ASCOM.Astrometry.NOVAS
         private static extern short CioBasis32(double JdTdbEquionx, double RaCioEquionx, ReferenceSystem RefSys, Accuracy Accuracy, ref double x, ref double y, ref double z);
 
 
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "cio_location")]
-        private static extern short CioLocation32(double JdTdb, Accuracy Accuracy, ref double RaCio, ref ReferenceSystem RefSys);
-
-
-
-        [DllImport(NOVAS32DLL, EntryPoint = "cio_ra")]
+        private static extern short CioLocation32(double JdTdb, Accuracy Accuracy, ref double RaCio, ref ReferenceSystem RefSys);        [DllImport(NOVAS32DLL, EntryPoint = "cio_ra")]
         private static extern short CioRa32(double JdTt, Accuracy Accuracy, ref double RaCio);
 
 
@@ -2707,16 +2432,8 @@ namespace ASCOM.Astrometry.NOVAS
         private static extern void ETilt32(double JdTdb, Accuracy Accuracy, ref double Mobl, ref double Tobl, ref double Ee, ref double Dpsi, ref double Deps);
 
 
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "ecl2equ_vec")]
         private static extern short Ecl2EquVec32(double JdTt, CoordSys CoordSys, Accuracy Accuracy, ref PosVector Pos1, ref PosVector Pos2);
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "ee_ct")]
         private static extern double EeCt32(double JdHigh, double JdLow, Accuracy Accuracy);
 
@@ -2724,43 +2441,15 @@ namespace ASCOM.Astrometry.NOVAS
         [DllImport(NOVAS32DLL, EntryPoint = "ephemeris")]
         private static extern short Ephemeris32(ref JDHighPrecision Jd, ref Object3Internal CelObj, Origin Origin, Accuracy Accuracy, ref PosVector Pos, ref VelVector Vel);
 
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "equ2ecl")]
         private static extern short Equ2Ecl32(double JdTt, CoordSys CoordSys, Accuracy Accuracy, double Ra, double Dec, ref double ELon, ref double ELat);
 
 
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "equ2ecl_vec")]
         private static extern short Equ2EclVec32(double JdTt, CoordSys CoordSys, Accuracy Accuracy, ref PosVector Pos1, ref PosVector Pos2);
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "equ2gal")]
-        private static extern void Equ2Gal32(double RaI, double DecI, ref double GLon, ref double GLat);
-
-
-
-        [DllImport(NOVAS32DLL, EntryPoint = "equ2hor")]
+        private static extern void Equ2Gal32(double RaI, double DecI, ref double GLon, ref double GLat);        [DllImport(NOVAS32DLL, EntryPoint = "equ2hor")]
         private static extern void Equ2Hor32(double Jd_Ut1, double DeltT, Accuracy Accuracy, double x, double y, ref OnSurface Location, double Ra, double Dec, RefractionOption RefOption, ref double Zd, ref double Az, ref double RaR, ref double DecR);
-
-
-
-
-
-
-
-
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "era")]
         private static extern double Era32(double JdHigh, double JdLow);
 
@@ -2775,79 +2464,31 @@ namespace ASCOM.Astrometry.NOVAS
         private static extern short Gcrs2Equ32(double JdTt, CoordSys CoordSys, Accuracy Accuracy, double RaG, double DecG, ref double Ra, ref double Dec);
 
 
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "geo_posvel")]
         private static extern short GeoPosVel32(double JdTt, double DeltaT, Accuracy Accuracy, ref Observer Obs, ref PosVector Pos, ref VelVector Vel);
-
-
-
-
 
         [DllImport(NOVAS32DLL, EntryPoint = "grav_def")]
         private static extern short GravDef32(double JdTdb, EarthDeflection LocCode, Accuracy Accuracy, ref PosVector Pos1, ref PosVector PosObs, ref PosVector Pos2);
 
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "grav_vec")]
         private static extern void GravVec32(ref PosVector Pos1, ref PosVector PosObs, ref PosVector PosBody, double RMass, ref PosVector Pos2);
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "ira_equinox")]
         private static extern double IraEquinox32(double JdTdb, EquinoxType Equinox, Accuracy Accuracy);
 
 
         [DllImport(NOVAS32DLL, EntryPoint = "julian_date")]
-        private static extern double JulianDate32(short Year, short Month, short Day, double Hour);
-
-
-
-        [DllImport(NOVAS32DLL, EntryPoint = "light_time")]
+        private static extern double JulianDate32(short Year, short Month, short Day, double Hour);        [DllImport(NOVAS32DLL, EntryPoint = "light_time")]
         private static extern short LightTime32(double JdTdb, ref Object3Internal SsObject, ref PosVector PosObs, double TLight0, Accuracy Accuracy, ref PosVector Pos, ref double TLight);
 
 
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "limb_angle")]
-        private static extern void LimbAngle32(ref PosVector PosObj, ref PosVector PosObs, ref double LimbAng, ref double NadirAng);
-
-
-
-        [DllImport(NOVAS32DLL, EntryPoint = "local_planet")]
-        private static extern short LocalPlanet32(double JdTt, ref Object3Internal SsBody, double DeltaT, ref OnSurface Position, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis);
-
-
-
-
-
-
-
-        [DllImport(NOVAS32DLL, EntryPoint = "local_star")]
+        private static extern void LimbAngle32(ref PosVector PosObj, ref PosVector PosObs, ref double LimbAng, ref double NadirAng);        [DllImport(NOVAS32DLL, EntryPoint = "local_planet")]
+        private static extern short LocalPlanet32(double JdTt, ref Object3Internal SsBody, double DeltaT, ref OnSurface Position, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis);        [DllImport(NOVAS32DLL, EntryPoint = "local_star")]
         private static extern short LocalStar32(double JdTt, double DeltaT, ref CatEntry3 Star, ref OnSurface Position, Accuracy Accuracy, ref double Ra, ref double Dec);
-
-
-
-
 
 
         [DllImport(NOVAS32DLL, EntryPoint = "make_cat_entry")]
         private static extern void MakeCatEntry32([MarshalAs(UnmanagedType.LPStr)] string StarName, [MarshalAs(UnmanagedType.LPStr)] string Catalog, int StarNum, double Ra, double Dec, double PmRa, double PmDec, double Parallax, double RadVel, ref CatEntry3 Star);
-
-
-
-
-
-
-
-
 
         [DllImport(NOVAS32DLL, EntryPoint = "make_in_space")]
         private static extern void MakeInSpace32(ref PosVector ScPos, ref VelVector ScVel, ref InSpace ObsSpace);
@@ -2855,16 +2496,8 @@ namespace ASCOM.Astrometry.NOVAS
 
         [DllImport(NOVAS32DLL, EntryPoint = "make_object")]
         private static extern short MakeObject32(ObjectType Type, short Number, [MarshalAs(UnmanagedType.LPStr)] string Name, ref CatEntry3 StarData, ref Object3Internal CelObj);
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "make_observer")]
-        private static extern short MakeObserver32(ObserverLocation Where, ref OnSurface ObsSurface, ref InSpace ObsSpace, ref Observer Obs);
-
-
-
-        [DllImport(NOVAS32DLL, EntryPoint = "make_observer_at_geocenter")]
+        private static extern short MakeObserver32(ObserverLocation Where, ref OnSurface ObsSurface, ref InSpace ObsSpace, ref Observer Obs);        [DllImport(NOVAS32DLL, EntryPoint = "make_observer_at_geocenter")]
         private static extern void MakeObserverAtGeocenter32(ref Observer ObsAtGeocenter);
 
         [DllImport(NOVAS32DLL, EntryPoint = "make_observer_in_space")]
@@ -2874,16 +2507,8 @@ namespace ASCOM.Astrometry.NOVAS
         [DllImport(NOVAS32DLL, EntryPoint = "make_observer_on_surface")]
         private static extern void MakeObserverOnSurface32(double Latitude, double Longitude, double Height, double Temperature, double Pressure, ref Observer ObsOnSurface);
 
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "make_on_surface")]
         private static extern void MakeOnSurface32(double Latitude, double Longitude, double Height, double Temperature, double Pressure, ref OnSurface ObsSurface);
-
-
-
-
 
         [DllImport(NOVAS32DLL, EntryPoint = "mean_obliq")]
         private static extern double MeanObliq32(double JdTdb);
@@ -2891,67 +2516,27 @@ namespace ASCOM.Astrometry.NOVAS
         [DllImport(NOVAS32DLL, EntryPoint = "mean_star")]
         private static extern short MeanStar32(double JdTt, double Ra, double Dec, Accuracy Accuracy, ref double IRa, ref double IDec);
 
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "norm_ang")]
         private static extern double NormAng32(double Angle);
 
         [DllImport(NOVAS32DLL, EntryPoint = "nutation")]
         private static extern void Nutation32(double JdTdb, NutationDirection Direction, Accuracy Accuracy, ref PosVector Pos, ref PosVector Pos2);
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "nutation_angles")]
-        private static extern void NutationAngles32(double t, Accuracy Accuracy, ref double DPsi, ref double DEps);
-
-
-
-        [DllImport(NOVAS32DLL, EntryPoint = "place")]
+        private static extern void NutationAngles32(double t, Accuracy Accuracy, ref double DPsi, ref double DEps);        [DllImport(NOVAS32DLL, EntryPoint = "place")]
         private static extern short Place32(double JdTt, ref Object3Internal CelObject, ref Observer Location, double DeltaT, CoordSys CoordSys, Accuracy Accuracy, ref SkyPos Output);
 
 
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "precession")]
-        private static extern short Precession32(double JdTdb1, ref PosVector Pos1, double JdTdb2, ref PosVector Pos2);
-
-
-
-        [DllImport(NOVAS32DLL, EntryPoint = "proper_motion")]
+        private static extern short Precession32(double JdTdb1, ref PosVector Pos1, double JdTdb2, ref PosVector Pos2);        [DllImport(NOVAS32DLL, EntryPoint = "proper_motion")]
         private static extern void ProperMotion32(double JdTdb1, ref PosVector Pos, ref VelVector Vel, double JdTdb2, ref PosVector Pos2);
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "rad_vel")]
-        private static extern void RadVel32(ref Object3Internal CelObject, ref PosVector Pos, ref VelVector Vel, ref VelVector VelObs, double DObsGeo, double DObsSun, double DObjSun, ref double Rv);
-
-
-
-
-
-
-
-        [DllImport(NOVAS32DLL, EntryPoint = "radec2vector")]
-        private static extern void RaDec2Vector32(double Ra, double Dec, double Dist, ref PosVector Vector);
-
-
-
-        [DllImport(NOVAS32DLL, EntryPoint = "refract")]
+        private static extern void RadVel32(ref Object3Internal CelObject, ref PosVector Pos, ref VelVector Vel, ref VelVector VelObs, double DObsGeo, double DObsSun, double DObjSun, ref double Rv);        [DllImport(NOVAS32DLL, EntryPoint = "radec2vector")]
+        private static extern void RaDec2Vector32(double Ra, double Dec, double Dist, ref PosVector Vector);        [DllImport(NOVAS32DLL, EntryPoint = "refract")]
         private static extern double Refract32(ref OnSurface Location, RefractionOption RefOption, double ZdObs);
 
 
         [DllImport(NOVAS32DLL, EntryPoint = "sidereal_time")]
         private static extern short SiderealTime32(double JdHigh, double JdLow, double DeltaT, GstType GstType, Method Method, Accuracy Accuracy, ref double Gst);
-
-
-
-
 
 
         [DllImport(NOVAS32DLL, EntryPoint = "spin")]
@@ -2969,43 +2554,15 @@ namespace ASCOM.Astrometry.NOVAS
         [DllImport(NOVAS32DLL, EntryPoint = "ter2cel")]
         private static extern short Ter2Cel32(double JdHigh, double JdLow, double DeltaT, Method Method, Accuracy Accuracy, OutputVectorOption OutputOption, double x, double y, ref PosVector VecT, ref PosVector VecC);
 
-
-
-
-
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "terra")]
-        private static extern void Terra32(ref OnSurface Location, double St, ref PosVector Pos, ref VelVector Vel);
-
-
-
-        [DllImport(NOVAS32DLL, EntryPoint = "topo_planet")]
-        private static extern short TopoPlanet32(double JdTt, ref Object3Internal SsBody, double DeltaT, ref OnSurface Position, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis);
-
-
-
-
-
-
-
-        [DllImport(NOVAS32DLL, EntryPoint = "topo_star")]
+        private static extern void Terra32(ref OnSurface Location, double St, ref PosVector Pos, ref VelVector Vel);        [DllImport(NOVAS32DLL, EntryPoint = "topo_planet")]
+        private static extern short TopoPlanet32(double JdTt, ref Object3Internal SsBody, double DeltaT, ref OnSurface Position, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis);        [DllImport(NOVAS32DLL, EntryPoint = "topo_star")]
         private static extern short TopoStar32(double JdTt, double DeltaT, ref CatEntry3 Star, ref OnSurface Position, Accuracy Accuracy, ref double Ra, ref double Dec);
-
-
-
-
 
 
         [DllImport(NOVAS32DLL, EntryPoint = "transform_cat")]
 
         private static extern short TransformCat32(TransformationOption3 TransformOption, double DateInCat, ref CatEntry3 InCat, double DateNewCat, [MarshalAs(UnmanagedType.LPStr)] string NewCatId, ref CatEntry3 NewCat);
-
-
-
-
 
         [DllImport(NOVAS32DLL, EntryPoint = "transform_hip")]
         private static extern void TransformHip32(ref CatEntry3 Hipparcos, ref CatEntry3 Hip2000);
@@ -3017,21 +2574,11 @@ namespace ASCOM.Astrometry.NOVAS
         [DllImport(NOVAS32DLL, EntryPoint = "virtual_planet")]
         private static extern short VirtualPlanet32(double JdTt, ref Object3Internal SsBody, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis);
 
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "virtual_star")]
         private static extern short VirtualStar32(double JdTt, ref CatEntry3 Star, Accuracy Accuracy, ref double Ra, ref double Dec);
-
-
-
-
         [DllImport(NOVAS32DLL, EntryPoint = "wobble")]
-        private static extern void Wobble32(double Tjd, double x, double y, ref PosVector Pos1, ref PosVector Pos2);
-
-
-
+        private static extern void Wobble32(double Tjd, double x, double y, ref PosVector Pos1, ref PosVector Pos2);        
+        
         #endregion
 
         #region DLL Entry Points for Ephemeris and RACIOFile (64bit)
@@ -3047,24 +2594,12 @@ namespace ASCOM.Astrometry.NOVAS
 
         [DllImport(NOVAS64DLL, EntryPoint = "Planet_Ephemeris")]
         private static extern short PlanetEphemeris64(ref JDHighPrecision Tjd, Target Target, Target Center, ref PosVector Position, ref VelVector Velocity);
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "readeph")]
-        private static extern IntPtr ReadEph64(int Mp, [MarshalAs(UnmanagedType.LPStr)] string Name, double Jd, ref int Err);
-
-
-
-        [DllImport(NOVAS64DLL, EntryPoint = "cleaneph")]
+        private static extern IntPtr ReadEph64(int Mp, [MarshalAs(UnmanagedType.LPStr)] string Name, double Jd, ref int Err);        [DllImport(NOVAS64DLL, EntryPoint = "cleaneph")]
         private static extern void CleanEph64();
 
         [DllImport(NOVAS64DLL, EntryPoint = "solarsystem")]
         private static extern short SolarSystem64(double tjd, short body, short origin, ref PosVector pos, ref VelVector vel);
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "State")]
         private static extern short State64(ref JDHighPrecision Jed, Target Target, ref PosVector TargetPos, ref VelVector TargetVel);
 
@@ -3073,53 +2608,21 @@ namespace ASCOM.Astrometry.NOVAS
 
         #region DLL Entry Points NOVAS (64bit)
         [DllImport(NOVAS64DLL, EntryPoint = "aberration")]
-        private static extern void Aberration64(ref PosVector Pos, ref VelVector Vel, double LightTime, ref PosVector Pos2);
-
-
-
-        [DllImport(NOVAS64DLL, EntryPoint = "app_planet")]
+        private static extern void Aberration64(ref PosVector Pos, ref VelVector Vel, double LightTime, ref PosVector Pos2);        [DllImport(NOVAS64DLL, EntryPoint = "app_planet")]
         private static extern short AppPlanet64(double JdTt, ref Object3Internal SsBody, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis);
-
-
-
-
 
         [DllImport(NOVAS64DLL, EntryPoint = "app_star")]
         private static extern short AppStar64(double JdTt, ref CatEntry3 Star, Accuracy Accuracy, ref double Ra, ref double Dec);
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "astro_planet")]
         private static extern short AstroPlanet64(double JdTt, ref Object3Internal SsBody, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis);
 
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "astro_star")]
         private static extern short AstroStar64(double JdTt, ref CatEntry3 Star, Accuracy Accuracy, ref double Ra, ref double Dec);
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "bary2obs")]
-        private static extern void Bary2Obs64(ref PosVector Pos, ref PosVector PosObs, ref PosVector Pos2, ref double Lighttime);
-
-
-
-        [DllImport(NOVAS64DLL, EntryPoint = "cal_date")]
+        private static extern void Bary2Obs64(ref PosVector Pos, ref PosVector PosObs, ref PosVector Pos2, ref double Lighttime);        [DllImport(NOVAS64DLL, EntryPoint = "cal_date")]
         private static extern void CalDate64(double Tjd, ref short Year, ref short Month, ref short Day, ref double Hour);
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "cel_pole")]
-        private static extern short CelPole64(double Tjd, PoleOffsetCorrection Type, double Dpole1, double Dpole2);
-
-
-
-        [DllImport(NOVAS64DLL, EntryPoint = "cio_array")]
+        private static extern short CelPole64(double Tjd, PoleOffsetCorrection Type, double Dpole1, double Dpole2);        [DllImport(NOVAS64DLL, EntryPoint = "cio_array")]
         private static extern short CioArray64(double JdTdb, int NPts, ref RAOfCioArray Cio);
 
 
@@ -3127,16 +2630,8 @@ namespace ASCOM.Astrometry.NOVAS
         private static extern short CioBasis64(double JdTdbEquionx, double RaCioEquionx, ReferenceSystem RefSys, Accuracy Accuracy, ref double x, ref double y, ref double z);
 
 
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "cio_location")]
-        private static extern short CioLocation64(double JdTdb, Accuracy Accuracy, ref double RaCio, ref ReferenceSystem RefSys);
-
-
-
-        [DllImport(NOVAS64DLL, EntryPoint = "cio_ra")]
+        private static extern short CioLocation64(double JdTdb, Accuracy Accuracy, ref double RaCio, ref ReferenceSystem RefSys);        [DllImport(NOVAS64DLL, EntryPoint = "cio_ra")]
         private static extern short CioRa64(double JdTt, Accuracy Accuracy, ref double RaCio);
 
 
@@ -3147,16 +2642,8 @@ namespace ASCOM.Astrometry.NOVAS
         private static extern void ETilt64(double JdTdb, Accuracy Accuracy, ref double Mobl, ref double Tobl, ref double Ee, ref double Dpsi, ref double Deps);
 
 
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "ecl2equ_vec")]
         private static extern short Ecl2EquVec64(double JdTt, CoordSys CoordSys, Accuracy Accuracy, ref PosVector Pos1, ref PosVector Pos2);
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "ee_ct")]
         private static extern double EeCt64(double JdHigh, double JdLow, Accuracy Accuracy);
 
@@ -3164,43 +2651,15 @@ namespace ASCOM.Astrometry.NOVAS
         [DllImport(NOVAS64DLL, EntryPoint = "ephemeris")]
         private static extern short Ephemeris64(ref JDHighPrecision Jd, ref Object3Internal CelObj, Origin Origin, Accuracy Accuracy, ref PosVector Pos, ref VelVector Vel);
 
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "equ2ecl")]
         private static extern short Equ2Ecl64(double JdTt, CoordSys CoordSys, Accuracy Accuracy, double Ra, double Dec, ref double ELon, ref double ELat);
 
 
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "equ2ecl_vec")]
         private static extern short Equ2EclVec64(double JdTt, CoordSys CoordSys, Accuracy Accuracy, ref PosVector Pos1, ref PosVector Pos2);
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "equ2gal")]
-        private static extern void Equ2Gal64(double RaI, double DecI, ref double GLon, ref double GLat);
-
-
-
-        [DllImport(NOVAS64DLL, EntryPoint = "equ2hor")]
+        private static extern void Equ2Gal64(double RaI, double DecI, ref double GLon, ref double GLat);        [DllImport(NOVAS64DLL, EntryPoint = "equ2hor")]
         private static extern void Equ2Hor64(double Jd_Ut1, double DeltT, Accuracy Accuracy, double x, double y, ref OnSurface Location, double Ra, double Dec, RefractionOption RefOption, ref double Zd, ref double Az, ref double RaR, ref double DecR);
-
-
-
-
-
-
-
-
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "era")]
         private static extern double Era64(double JdHigh, double JdLow);
 
@@ -3215,79 +2674,31 @@ namespace ASCOM.Astrometry.NOVAS
         private static extern short Gcrs2Equ64(double JdTt, CoordSys CoordSys, Accuracy Accuracy, double RaG, double DecG, ref double Ra, ref double Dec);
 
 
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "geo_posvel")]
         private static extern short GeoPosVel64(double JdTt, double DeltaT, Accuracy Accuracy, ref Observer Obs, ref PosVector Pos, ref VelVector Vel);
-
-
-
-
 
         [DllImport(NOVAS64DLL, EntryPoint = "grav_def")]
         private static extern short GravDef64(double JdTdb, EarthDeflection LocCode, Accuracy Accuracy, ref PosVector Pos1, ref PosVector PosObs, ref PosVector Pos2);
 
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "grav_vec")]
         private static extern void GravVec64(ref PosVector Pos1, ref PosVector PosObs, ref PosVector PosBody, double RMass, ref PosVector Pos2);
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "ira_equinox")]
         private static extern double IraEquinox64(double JdTdb, EquinoxType Equinox, Accuracy Accuracy);
 
 
         [DllImport(NOVAS64DLL, EntryPoint = "julian_date")]
-        private static extern double JulianDate64(short Year, short Month, short Day, double Hour);
-
-
-
-        [DllImport(NOVAS64DLL, EntryPoint = "light_time")]
+        private static extern double JulianDate64(short Year, short Month, short Day, double Hour);        [DllImport(NOVAS64DLL, EntryPoint = "light_time")]
         private static extern short LightTime64(double JdTdb, ref Object3Internal SsObject, ref PosVector PosObs, double TLight0, Accuracy Accuracy, ref PosVector Pos, ref double TLight);
 
 
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "limb_angle")]
-        private static extern void LimbAngle64(ref PosVector PosObj, ref PosVector PosObs, ref double LimbAng, ref double NadirAng);
-
-
-
-        [DllImport(NOVAS64DLL, EntryPoint = "local_planet")]
-        private static extern short LocalPlanet64(double JdTt, ref Object3Internal SsBody, double DeltaT, ref OnSurface Position, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis);
-
-
-
-
-
-
-
-        [DllImport(NOVAS64DLL, EntryPoint = "local_star")]
+        private static extern void LimbAngle64(ref PosVector PosObj, ref PosVector PosObs, ref double LimbAng, ref double NadirAng);        [DllImport(NOVAS64DLL, EntryPoint = "local_planet")]
+        private static extern short LocalPlanet64(double JdTt, ref Object3Internal SsBody, double DeltaT, ref OnSurface Position, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis);        [DllImport(NOVAS64DLL, EntryPoint = "local_star")]
         private static extern short LocalStar64(double JdTt, double DeltaT, ref CatEntry3 Star, ref OnSurface Position, Accuracy Accuracy, ref double Ra, ref double Dec);
-
-
-
-
 
 
         [DllImport(NOVAS64DLL, EntryPoint = "make_cat_entry")]
         private static extern void MakeCatEntry64([MarshalAs(UnmanagedType.LPStr)] string StarName, [MarshalAs(UnmanagedType.LPStr)] string Catalog, int StarNum, double Ra, double Dec, double PmRa, double PmDec, double Parallax, double RadVel, ref CatEntry3 Star);
-
-
-
-
-
-
-
-
 
         [DllImport(NOVAS64DLL, EntryPoint = "make_in_space")]
         private static extern void MakeInSpace64(ref PosVector ScPos, ref VelVector ScVel, ref InSpace ObsSpace);
@@ -3295,16 +2706,8 @@ namespace ASCOM.Astrometry.NOVAS
 
         [DllImport(NOVAS64DLL, EntryPoint = "make_object")]
         private static extern short MakeObject64(ObjectType Type, short Number, [MarshalAs(UnmanagedType.LPStr)] string Name, ref CatEntry3 StarData, ref Object3Internal CelObj);
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "make_observer")]
-        private static extern short MakeObserver64(ObserverLocation Where, ref OnSurface ObsSurface, ref InSpace ObsSpace, ref Observer Obs);
-
-
-
-        [DllImport(NOVAS64DLL, EntryPoint = "make_observer_at_geocenter")]
+        private static extern short MakeObserver64(ObserverLocation Where, ref OnSurface ObsSurface, ref InSpace ObsSpace, ref Observer Obs);        [DllImport(NOVAS64DLL, EntryPoint = "make_observer_at_geocenter")]
         private static extern void MakeObserverAtGeocenter64(ref Observer ObsAtGeocenter);
 
         [DllImport(NOVAS64DLL, EntryPoint = "make_observer_in_space")]
@@ -3314,16 +2717,8 @@ namespace ASCOM.Astrometry.NOVAS
         [DllImport(NOVAS64DLL, EntryPoint = "make_observer_on_surface")]
         private static extern void MakeObserverOnSurface64(double Latitude, double Longitude, double Height, double Temperature, double Pressure, ref Observer ObsOnSurface);
 
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "make_on_surface")]
         private static extern void MakeOnSurface64(double Latitude, double Longitude, double Height, double Temperature, double Pressure, ref OnSurface ObsSurface);
-
-
-
-
 
         [DllImport(NOVAS64DLL, EntryPoint = "mean_obliq")]
         private static extern double MeanObliq64(double JdTdb);
@@ -3331,67 +2726,27 @@ namespace ASCOM.Astrometry.NOVAS
         [DllImport(NOVAS64DLL, EntryPoint = "mean_star")]
         private static extern short MeanStar64(double JdTt, double Ra, double Dec, Accuracy Accuracy, ref double IRa, ref double IDec);
 
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "norm_ang")]
         private static extern double NormAng64(double Angle);
 
         [DllImport(NOVAS64DLL, EntryPoint = "nutation")]
         private static extern void Nutation64(double JdTdb, NutationDirection Direction, Accuracy Accuracy, ref PosVector Pos, ref PosVector Pos2);
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "nutation_angles")]
-        private static extern void NutationAngles64(double t, Accuracy Accuracy, ref double DPsi, ref double DEps);
-
-
-
-        [DllImport(NOVAS64DLL, EntryPoint = "place")]
+        private static extern void NutationAngles64(double t, Accuracy Accuracy, ref double DPsi, ref double DEps);        [DllImport(NOVAS64DLL, EntryPoint = "place")]
         private static extern short Place64(double JdTt, ref Object3Internal CelObject, ref Observer Location, double DeltaT, CoordSys CoordSys, Accuracy Accuracy, ref SkyPos Output);
 
 
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "precession")]
-        private static extern short Precession64(double JdTdb1, ref PosVector Pos1, double JdTdb2, ref PosVector Pos2);
-
-
-
-        [DllImport(NOVAS64DLL, EntryPoint = "proper_motion")]
+        private static extern short Precession64(double JdTdb1, ref PosVector Pos1, double JdTdb2, ref PosVector Pos2);        [DllImport(NOVAS64DLL, EntryPoint = "proper_motion")]
         private static extern void ProperMotion64(double JdTdb1, ref PosVector Pos, ref VelVector Vel, double JdTdb2, ref PosVector Pos2);
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "rad_vel")]
-        private static extern void RadVel64(ref Object3Internal CelObject, ref PosVector Pos, ref VelVector Vel, ref VelVector VelObs, double DObsGeo, double DObsSun, double DObjSun, ref double Rv);
-
-
-
-
-
-
-
-        [DllImport(NOVAS64DLL, EntryPoint = "radec2vector")]
-        private static extern void RaDec2Vector64(double Ra, double Dec, double Dist, ref PosVector Vector);
-
-
-
-        [DllImport(NOVAS64DLL, EntryPoint = "refract")]
+        private static extern void RadVel64(ref Object3Internal CelObject, ref PosVector Pos, ref VelVector Vel, ref VelVector VelObs, double DObsGeo, double DObsSun, double DObjSun, ref double Rv);        [DllImport(NOVAS64DLL, EntryPoint = "radec2vector")]
+        private static extern void RaDec2Vector64(double Ra, double Dec, double Dist, ref PosVector Vector);        [DllImport(NOVAS64DLL, EntryPoint = "refract")]
         private static extern double Refract64(ref OnSurface Location, RefractionOption RefOption, double ZdObs);
 
 
         [DllImport(NOVAS64DLL, EntryPoint = "sidereal_time")]
         private static extern short SiderealTime64(double JdHigh, double JdLow, double DeltaT, GstType GstType, Method Method, Accuracy Accuracy, ref double Gst);
-
-
-
-
 
 
         [DllImport(NOVAS64DLL, EntryPoint = "spin")]
@@ -3409,43 +2764,15 @@ namespace ASCOM.Astrometry.NOVAS
         [DllImport(NOVAS64DLL, EntryPoint = "ter2cel")]
         private static extern short Ter2Cel64(double JdHigh, double JdLow, double DeltaT, Method Method, Accuracy Accuracy, OutputVectorOption OutputOption, double x, double y, ref PosVector VecT, ref PosVector VecC);
 
-
-
-
-
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "terra")]
-        private static extern void Terra64(ref OnSurface Location, double St, ref PosVector Pos, ref VelVector Vel);
-
-
-
-        [DllImport(NOVAS64DLL, EntryPoint = "topo_planet")]
-        private static extern short TopoPlanet64(double JdTt, ref Object3Internal SsBody, double DeltaT, ref OnSurface Position, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis);
-
-
-
-
-
-
-
-        [DllImport(NOVAS64DLL, EntryPoint = "topo_star")]
+        private static extern void Terra64(ref OnSurface Location, double St, ref PosVector Pos, ref VelVector Vel);        [DllImport(NOVAS64DLL, EntryPoint = "topo_planet")]
+        private static extern short TopoPlanet64(double JdTt, ref Object3Internal SsBody, double DeltaT, ref OnSurface Position, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis);        [DllImport(NOVAS64DLL, EntryPoint = "topo_star")]
         private static extern short TopoStar64(double JdTt, double DeltaT, ref CatEntry3 Star, ref OnSurface Position, Accuracy Accuracy, ref double Ra, ref double Dec);
-
-
-
-
 
 
         [DllImport(NOVAS64DLL, EntryPoint = "transform_cat")]
 
         private static extern short TransformCat64(TransformationOption3 TransformOption, double DateInCat, ref CatEntry3 InCat, double DateNewCat, [MarshalAs(UnmanagedType.LPStr)] string NewCatId, ref CatEntry3 NewCat);
-
-
-
-
 
         [DllImport(NOVAS64DLL, EntryPoint = "transform_hip")]
         private static extern void TransformHip64(ref CatEntry3 Hipparcos, ref CatEntry3 Hip2000);
@@ -3457,21 +2784,11 @@ namespace ASCOM.Astrometry.NOVAS
         [DllImport(NOVAS64DLL, EntryPoint = "virtual_planet")]
         private static extern short VirtualPlanet64(double JdTt, ref Object3Internal SsBody, Accuracy Accuracy, ref double Ra, ref double Dec, ref double Dis);
 
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "virtual_star")]
         private static extern short VirtualStar64(double JdTt, ref CatEntry3 Star, Accuracy Accuracy, ref double Ra, ref double Dec);
-
-
-
-
         [DllImport(NOVAS64DLL, EntryPoint = "wobble")]
-        private static extern void Wobble64(double Tjd, double x, double y, ref PosVector Pos1, ref PosVector Pos2);
-
-
-
+        private static extern void Wobble64(double Tjd, double x, double y, ref PosVector Pos1, ref PosVector Pos2);        
+        
         #endregion
 
         #region Private Support Code
