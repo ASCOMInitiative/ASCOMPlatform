@@ -291,3 +291,8 @@ Help/Output
 /InstallerSupport/GACInstallOrg/GAC.cs
 /InstallerSupport/GACInstallOrg/GACInstall.csproj
 /InstallerSupport/GACInstallOrg/Program.cs
+/InstallerPlatform/FinaliseInstall.exe
+/InstallerPlatform/RemoveASCOM.exe
+/InstallerPlatform/SetACL.exe
+/InstallerPlatform/SuppressWinErrors.exe
+/InstallerDeveloper/RemoveOldTemplates.exe
