@@ -12,6 +12,7 @@ using Microsoft.VisualBasic.CompilerServices;
 // These items are shared between the ASCOM.Utilities and ASCOM.Astrometry assemblies
 
 using Microsoft.Win32;
+using System.Windows.Forms;
 
 namespace ASCOM.Utilities
 {
@@ -124,6 +125,9 @@ namespace ASCOM.Utilities
         internal const string PLATFORM_VERSION = "Platform Version";
         internal const string PLATFORM_VERSION_DEFAULT_BAD_VALUE = "0.0.0.0";
 
+        // TraceLogger - Per user configuration value names
+        internal const string TRACELOGGER_DEFAULT_FOLDER = "TraceLogger Default Folder";
+        
         // Other constants
         internal const double ABSOLUTE_ZERO_CELSIUS = -273.15d;
         internal const string TRACE_LOGGER_PATH = @"\ASCOM"; // Path to TraceLogger directory from My Documents

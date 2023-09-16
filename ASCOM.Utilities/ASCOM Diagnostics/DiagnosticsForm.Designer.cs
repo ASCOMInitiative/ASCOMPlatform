@@ -77,6 +77,7 @@ namespace ASCOM.Utilities
             this.lblAction = new System.Windows.Forms.Label();
             this.btnViewLastLog = new System.Windows.Forms.Button();
             this.SerialTraceFileName = new System.Windows.Forms.SaveFileDialog();
+            this.SetLogFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -180,7 +181,8 @@ namespace ASCOM.Utilities
             this.ChooserToolStripMenuItem1,
             this.ChooserNETToolStripMenuItem,
             this.ListAvailableCOMPortsToolStripMenuItem,
-            this.EarthRotationDataUpdateToolStripMenuItem});
+            this.EarthRotationDataUpdateToolStripMenuItem,
+            this.SetLogFileLocationToolStripMenuItem});
             this.mnuTools.Name = "mnuTools";
             this.mnuTools.Size = new System.Drawing.Size(46, 20);
             this.mnuTools.Text = "Tools";
@@ -440,6 +442,13 @@ namespace ASCOM.Utilities
             this.btnViewLastLog.UseVisualStyleBackColor = true;
             this.btnViewLastLog.Click += new System.EventHandler(this.BtnLastLog_Click);
             // 
+            // SetLogFileLocationToolStripMenuItem
+            // 
+            this.SetLogFileLocationToolStripMenuItem.Name = "SetLogFileLocationToolStripMenuItem";
+            this.SetLogFileLocationToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+            this.SetLogFileLocationToolStripMenuItem.Text = "Set Log File Location";
+            this.SetLogFileLocationToolStripMenuItem.Click += new System.EventHandler(this.SetLogFileLocationToolStripMenuItem_Click);
+            // 
             // DiagnosticsForm
             // 
             this.AcceptButton = this.btnRunDiagnostics;
@@ -510,5 +519,6 @@ namespace ASCOM.Utilities
         internal ToolStripMenuItem EarthRotationDataUpdateToolStripMenuItem;
         internal ToolStripMenuItem MenuEarthRotationDataFormTraceEnabled;
         internal ToolStripMenuItem MenuRegistryTraceEnabled;
+        private ToolStripMenuItem SetLogFileLocationToolStripMenuItem;
     }
 }

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using ASCOM.Utilities.Exceptions;
 using ASCOM.Utilities.Interfaces;
 using Microsoft.VisualBasic;
@@ -70,7 +71,12 @@ namespace ASCOM.Utilities
             }
             else // We are running as a normal user
             {
-                g_DefaultLogFilePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + TRACE_LOGGER_PATH + TRACE_LOGGER_FILENAME_BASE + Strings.Format(DateTime.Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT);
+                // Get the configured default folder name. Set the  Documents folder as the default if no value has yet been set.
+
+                string defaultFolderName = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + TRACE_LOGGER_PATH;
+                string folderName = Global.GetString(TRACELOGGER_DEFAULT_FOLDER, defaultFolderName);
+
+                g_DefaultLogFilePath = folderName + TRACE_LOGGER_FILENAME_BASE + Strings.Format(DateTime.Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT);
             }
 
             g_LogFilePath = g_DefaultLogFilePath; // Initialise the log file path to the default value
@@ -622,103 +628,97 @@ namespace ASCOM.Utilities
 
                 // No filename has been specified so use the automatically generated name
                 case SERIAL_AUTO_FILENAME:
+                    if (string.IsNullOrEmpty(g_LogFileType))
+                        throw new ValueNotSetException("TRACELOGGER.CREATELOGFILE - Call made but no log file type has been set");
+
+                    if (autoLogFilePath) // Default behaviour using the current user's Document directory
                     {
-                        if (string.IsNullOrEmpty(g_LogFileType))
-                            throw new ValueNotSetException("TRACELOGGER.CREATELOGFILE - Call made but no log file type has been set");
+                        My.MyProject.Computer.FileSystem.CreateDirectory(g_DefaultLogFilePath); // Create the directory if it doesn't exist
+                        FileNameBase = g_DefaultLogFilePath + @"\ASCOM." + g_LogFileType + "." + Strings.Format(DateTime.Now, "HHmm.ssfff");
+                    }
+                    else // User has given a specific path so use that
+                    {
+                        TodaysLogFilePath = g_LogFilePath + TRACE_LOGGER_FILENAME_BASE + Strings.Format(DateTime.Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT); // Append Logs yyyy-mm-dd to the user supplied log file
+                        My.MyProject.Computer.FileSystem.CreateDirectory(TodaysLogFilePath); // Create the directory if it doesn't exist
+                        FileNameBase = TodaysLogFilePath + @"\ASCOM." + g_LogFileType + "." + Strings.Format(DateTime.Now, "HHmm.ssfff");
+                    }
 
-                        if (autoLogFilePath) // Default behaviour using the current user's Document directory
-                        {
-                            My.MyProject.Computer.FileSystem.CreateDirectory(g_DefaultLogFilePath); // Create the directory if it doesn't exist
-                            FileNameBase = g_DefaultLogFilePath + @"\ASCOM." + g_LogFileType + "." + Strings.Format(DateTime.Now, "HHmm.ssfff");
-                        }
-                        else // User has given a specific path so use that
-                        {
-                            TodaysLogFilePath = g_LogFilePath + TRACE_LOGGER_FILENAME_BASE + Strings.Format(DateTime.Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT); // Append Logs yyyy-mm-dd to the user supplied log file
-                            My.MyProject.Computer.FileSystem.CreateDirectory(TodaysLogFilePath); // Create the directory if it doesn't exist
-                            FileNameBase = TodaysLogFilePath + @"\ASCOM." + g_LogFileType + "." + Strings.Format(DateTime.Now, "HHmm.ssfff");
-                        }
+                    do // Create a unique log file name based on date, time and required name
+                    {
+                        g_LogFileActualName = FileNameBase + FileNameSuffix.ToString() + ".txt";
+                        FileNameSuffix += 1; // Increment counter that ensures that no log file can have the same name as any other
+                    }
+                    while (File.Exists(g_LogFileActualName));
 
-                        do // Create a unique log file name based on date, time and required name
-                        {
-                            g_LogFileActualName = FileNameBase + FileNameSuffix.ToString() + ".txt";
-                            FileNameSuffix += 1; // Increment counter that ensures that no log file can have the same name as any other
-                        }
-                        while (File.Exists(g_LogFileActualName));
-
-                        try
-                        {
-                            g_LogFile = new StreamWriter(g_LogFileActualName, false);
-                            g_LogFile.AutoFlush = true;
-                        }
-                        catch (IOException ex)
-                        {
-                            ok = false;
-                            do
-                            {
-                                try
-                                {
-                                    g_LogFileActualName = FileNameBase + FileNameSuffix.ToString() + ".txt";
-                                    g_LogFile = new StreamWriter(g_LogFileActualName, false);
-                                    g_LogFile.AutoFlush = true;
-                                    ok = true;
-                                }
-                                catch (IOException ex1)
-                                {
-                                    // Ignore IO exceptions and try the next filename
-                                }
-                                FileNameSuffix += 1;
-                            }
-                            while (!(ok | FileNameSuffix == 20));
-
-                            if (!ok)
-                            {
-                                Console.WriteLine($"TraceLogger:CreateLogFile - Unable to create log file: {ex}");
-                                throw new HelperException("TraceLogger:CreateLogFile - IOException - Unable to create log file", ex);
-                            }
-                        }
-                        catch (Exception ex)
+                    try
+                    {
+                        g_LogFile = new StreamWriter(g_LogFileActualName, false);
+                        g_LogFile.AutoFlush = true;
+                    }
+                    catch (IOException ex)
+                    {
+                        ok = false;
+                        do
                         {
                             try
                             {
-                                Interaction.MsgBox("CreateLogFile Auto filename exception - #" + g_LogFileName + "# " + ex.ToString());
+                                g_LogFileActualName = FileNameBase + FileNameSuffix.ToString() + ".txt";
+                                g_LogFile = new StreamWriter(g_LogFileActualName, false);
+                                g_LogFile.AutoFlush = true;
+                                ok = true;
                             }
-                            catch (Exception ex1)
+                            catch (IOException ex1)
                             {
-                                Console.WriteLine($"TraceLogger:CreateLogFile - Auto filename exception trying to show message box: {ex1}");
+                                // Ignore IO exceptions and try the next filename
                             }
-                            Console.WriteLine($"TraceLogger:CreateLogFile - Auto filename exception creating trace logger: {ex}");
-                            throw;
+                            FileNameSuffix += 1;
+                        }
+                        while (!(ok | FileNameSuffix == 20));
 
-                            // The user has provided a specific filename
-                        } // Create log file based on supplied name
-
-                        break;
+                        if (!ok)
+                        {
+                            Console.WriteLine($"TraceLogger:CreateLogFile - Unable to create log file: {ex}");
+                            throw new HelperException("TraceLogger:CreateLogFile - IOException - Unable to create log file", ex);
+                        }
                     }
+                    catch (Exception ex)
+                    {
+                        try
+                        {
+                            Interaction.MsgBox("CreateLogFile Auto filename exception - #" + g_LogFileName + "# " + ex.ToString());
+                        }
+                        catch (Exception ex1)
+                        {
+                            Console.WriteLine($"TraceLogger:CreateLogFile - Auto filename exception trying to show message box: {ex1}");
+                        }
+                        Console.WriteLine($"TraceLogger:CreateLogFile - Auto filename exception creating trace logger: {ex}");
+                        throw;
 
+                    }
+                    break;
+
+                // The user has provided a specific filename so create log file based on supplied name
                 default:
+                    try
+                    {
+                        g_LogFile = new StreamWriter(g_LogFileName + ".txt", false);
+                        g_LogFile.AutoFlush = true;
+                        g_LogFileActualName = g_LogFileName + ".txt";
+                    }
+                    catch (Exception ex)
                     {
                         try
                         {
-                            g_LogFile = new StreamWriter(g_LogFileName + ".txt", false);
-                            g_LogFile.AutoFlush = true;
-                            g_LogFileActualName = g_LogFileName + ".txt";
+                            Interaction.MsgBox("CreateLogFile Manual filename exception - #" + g_LogFileName + "# " + ex.ToString());
                         }
-                        catch (Exception ex)
+                        catch (Exception ex1)
                         {
-                            try
-                            {
-                                Interaction.MsgBox("CreateLogFile Manual filename exception - #" + g_LogFileName + "# " + ex.ToString());
-                            }
-                            catch (Exception ex1)
-                            {
-                                Console.WriteLine($"TraceLogger:CreateLogFile - Manual filename exception trying to show message box: {ex1}");
-                            }
-                            Console.WriteLine($"TraceLogger:CreateLogFile - Manual  filename exception creating trace logger: {ex}");
-                            throw;
+                            Console.WriteLine($"TraceLogger:CreateLogFile - Manual filename exception trying to show message box: {ex1}");
                         }
-
-                        break;
+                        Console.WriteLine($"TraceLogger:CreateLogFile - Manual  filename exception creating trace logger: {ex}");
+                        throw;
                     }
+                    break;
             }
         }
 

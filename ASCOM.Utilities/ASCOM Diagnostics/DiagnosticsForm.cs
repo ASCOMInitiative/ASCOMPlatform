@@ -24,6 +24,8 @@ using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.Win32;
+using static System.Environment;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static ASCOM.Utilities.Global;
 using static ASCOM.Utilities.RegistryAccess;
 using static ASCOM.Utilities.Serial;
@@ -11888,6 +11890,20 @@ namespace ASCOM.Utilities
         {
             MenuAutoViewLog.Checked = !MenuAutoViewLog.Checked; // Auto view log option clicked so invert its checked status
             Utilities.Global.SetName(OPTIONS_AUTOVIEW_REGISTRYKEY, MenuAutoViewLog.Checked.ToString()); // Set the new value in the registry
+        }
+
+        private void SetLogFileLocationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog folderDlg = new FolderBrowserDialog();
+            folderDlg.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            folderDlg.Description = "Dialogue description";
+            // Show the FolderBrowserDialog.  
+            DialogResult result = folderDlg.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                MessageBox.Show($"OK button pressed - {folderDlg.SelectedPath}");
+                Global.SetName(TRACELOGGER_DEFAULT_FOLDER, folderDlg.SelectedPath);
+            }
         }
 
         private void DiagnosticsForm_KeyDown(object sender, KeyEventArgs e)
