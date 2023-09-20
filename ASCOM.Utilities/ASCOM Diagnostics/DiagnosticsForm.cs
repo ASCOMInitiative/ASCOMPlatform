@@ -11901,7 +11901,6 @@ namespace ASCOM.Utilities
             DialogResult result = folderDlg.ShowDialog();
             if (result == DialogResult.OK)
             {
-                MessageBox.Show($"OK button pressed - {folderDlg.SelectedPath}");
                 Global.SetName(TRACELOGGER_DEFAULT_FOLDER, folderDlg.SelectedPath);
             }
         }
