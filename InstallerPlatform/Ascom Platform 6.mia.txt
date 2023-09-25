@@ -26,7 +26,7 @@ Set Variable CFA to
 Set Variable CFABYPASS to 
  
 Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
-Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$ASCOM" (WAIT)
+Comment: Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$ASCOM" (WAIT)
  
 Comment: Create the correct log name depending on whether we are installing or uninstalling
 Set Variable LOGPATHREGISTRY to 
@@ -34,23 +34,30 @@ Set Variable LOGPATHREGISTRY to
 Comment: Get the log path from the registry if this has already been set
 Read Registry Key HKCU\Software\ASCOM\Utilities\TraceLogger Default Folder into LOGPATHREGISTRY
  
-if Variable REMOVE Equals (Ignore Case) TRUE
-  Comment: We are uninstalling the Platform
-  if Variable LOGPATHREGISTRY Equals (Ignore Case) 
-    Comment: Registry log path has not been set so use the Documents default value.
-    Set Variable SETUPLOG to $MYDOCUMENTS$ASCOM\ASCOMPlatform6Remove$DISKSPACE$.txt
+Comment: Create the correct log name depending on whether we are installing or uninstalling
+if Variable LOGPATHREGISTRY Equals (Ignore Case) 
+  Comment: Registry log path has not been set so use the Documents default value.
+  Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$\ASCOM" (WAIT)
+  if Variable REMOVE Equals (Ignore Case) FALSE
+    Comment: We are installing the Platform
+    Set Variable SETUPLOG to $MYDOCUMENTS$ASCOM\ASCOMPlatform6Install$DISKSPACE$.txt
+    Write into Text File $SETUPLOG$ from Value Installing using default log location: $MYDOCUMENTS$\ASCOM (at end of file)
   else
-    Comment: Registry log path has been set so use it.
-    Set Variable SETUPLOG to $LOGPATHREGISTRY$\ASCOMPlatform6Remove$DISKSPACE$.txt
+    Comment: We are uninstalling the Platform
+    Set Variable SETUPLOG to $MYDOCUMENTS$ASCOM\ASCOMPlatform6Uninstall$DISKSPACE$.txt
+    Write into Text File $SETUPLOG$ from Value Uninstalling using default log location: $MYDOCUMENTS$\ASCOM (at end of file)
   end
 else
-  Comment: We are installing the Platform
-  if Variable LOGPATHREGISTRY Equals (Ignore Case) 
-    Comment: Registry log path has not been set so use the Documents default value.
-    Set Variable SETUPLOG to $MYDOCUMENTS$ASCOM\ASCOMPlatform6Install$DISKSPACE$.txt
-  else
-    Comment: Registry log path has been set so use it.
+  Comment: Registry log path has been set so use it.
+  Run Program CMD.EXE /c MKDIR "$LOGPATHREGISTRY$" (WAIT)
+  if Variable REMOVE Equals (Ignore Case) FALSE
+    Comment: We are installing the Platform
     Set Variable SETUPLOG to $LOGPATHREGISTRY$\ASCOMPlatform6Install$DISKSPACE$.txt
+    Write into Text File $SETUPLOG$ from Value Installing using configured log location: $LOGPATHREGISTRY$ (at end of file)
+  else
+    Comment: We are uninstalling the Platform
+    Set Variable SETUPLOG to $LOGPATHREGISTRY$\ASCOMPlatform6Uninstall$DISKSPACE$.txt
+    Write into Text File $SETUPLOG$ from Value Uninstalling using configured log location: $LOGPATHREGISTRY$ (at end of file)
   end
 end
 Write into Text File $SETUPLOG$ from Value $TIME$ $TITLE$ v$VERSION$ (at end of file)
