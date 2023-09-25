@@ -71,12 +71,14 @@ namespace ASCOM.Utilities
             }
             else // We are running as a normal user
             {
-                // Get the configured default folder name. Set the  Documents folder as the default if no value has yet been set.
+                // Create a fallback folder name within the Documents folder: Documents\ASCOM
+                string fallbackFolderName = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + TRACE_LOGGER_PATH;
 
-                string defaultFolderName = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + TRACE_LOGGER_PATH;
-                string folderName = Global.GetString(TRACELOGGER_DEFAULT_FOLDER, defaultFolderName);
+                // Get the user configured TraceLogger default folder name. Fall back to the Documents\ASCOM folder if no default folder has been set by the user
+                string configuredFolderName = Global.GetString(TRACELOGGER_DEFAULT_FOLDER, fallbackFolderName);
 
-                g_DefaultLogFilePath = folderName + TRACE_LOGGER_FILENAME_BASE + Strings.Format(DateTime.Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT);
+                // Set the default folder name variable that is used with the TraceLogger application
+                g_DefaultLogFilePath = configuredFolderName + TRACE_LOGGER_FILENAME_BASE + Strings.Format(DateTime.Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT);
             }
 
             g_LogFilePath = g_DefaultLogFilePath; // Initialise the log file path to the default value
@@ -633,13 +635,13 @@ namespace ASCOM.Utilities
 
                     if (autoLogFilePath) // Default behaviour using the current user's Document directory
                     {
-                        My.MyProject.Computer.FileSystem.CreateDirectory(g_DefaultLogFilePath); // Create the directory if it doesn't exist
+                        Directory.CreateDirectory(g_DefaultLogFilePath); // Create the directory if it doesn't exist
                         FileNameBase = g_DefaultLogFilePath + @"\ASCOM." + g_LogFileType + "." + Strings.Format(DateTime.Now, "HHmm.ssfff");
                     }
                     else // User has given a specific path so use that
                     {
                         TodaysLogFilePath = g_LogFilePath + TRACE_LOGGER_FILENAME_BASE + Strings.Format(DateTime.Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT); // Append Logs yyyy-mm-dd to the user supplied log file
-                        My.MyProject.Computer.FileSystem.CreateDirectory(TodaysLogFilePath); // Create the directory if it doesn't exist
+                        Directory.CreateDirectory(TodaysLogFilePath); // Create the directory if it doesn't exist
                         FileNameBase = TodaysLogFilePath + @"\ASCOM." + g_LogFileType + "." + Strings.Format(DateTime.Now, "HHmm.ssfff");
                     }
 
