@@ -151,6 +151,7 @@ namespace MakeDynamicLists
                     outputClassFile.WriteLine(" ");
                     outputClassFile.WriteLine(@"using System;");
                     outputClassFile.WriteLine(@"using System.Collections.Generic;");
+                    outputClassFile.WriteLine(@"using Utilities;");
                     outputClassFile.WriteLine(" ");
                     outputClassFile.WriteLine(@"namespace RemoveASCOM");
                     outputClassFile.WriteLine(@"{");
