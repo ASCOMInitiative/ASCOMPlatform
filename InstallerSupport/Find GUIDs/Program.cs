@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Utilities;
 
 namespace MakeDynamicLists
 {
@@ -43,7 +44,7 @@ namespace MakeDynamicLists
             SortedSet<string> platformFileList = new SortedSet<string>();
             SortedSet<string> developerFileList = new SortedSet<string>();
 
-            using (TraceLogger TL = new TraceLogger("", "MakeDynamicLists"))
+            using (TraceLogger TL = new TraceLogger("MakeDynamicLists"))
             {
                 TL.Enabled = true;
 
@@ -230,7 +231,7 @@ namespace MakeDynamicLists
 
         }
 
-        static SortedSet<string> FindInstalledFiles(string installerTextFileFullName, TraceLogger TL)
+        static SortedSet<string> FindInstalledFiles(string installerTextFileFullName, Utilities.TraceLogger TL)
         {
             SortedSet<String> fileList; // Variable to hold the returned list of Install File lines
 

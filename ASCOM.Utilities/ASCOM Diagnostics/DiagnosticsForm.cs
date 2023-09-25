@@ -11894,14 +11894,17 @@ namespace ASCOM.Utilities
 
         private void SetLogFileLocationToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // Create a folder browser dialogue
             System.Windows.Forms.FolderBrowserDialog folderDlg = new FolderBrowserDialog();
-            folderDlg.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            folderDlg.Description = "Dialogue description";
-            // Show the FolderBrowserDialog.  
+
+            // Set the starting path to the current value using the Documents folder as a fall-back if no location has yet been set
+            folderDlg.SelectedPath = Global.GetString(TRACELOGGER_DEFAULT_FOLDER, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+            folderDlg.Description = "Select ASCOM Log File Path";
+
+            // Show the FolderBrowserDialog and save the new value if required
             DialogResult result = folderDlg.ShowDialog();
             if (result == DialogResult.OK)
             {
-                MessageBox.Show($"OK button pressed - {folderDlg.SelectedPath}");
                 Global.SetName(TRACELOGGER_DEFAULT_FOLDER, folderDlg.SelectedPath);
             }
         }

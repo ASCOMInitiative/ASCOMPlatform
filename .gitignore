@@ -296,3 +296,4 @@ Help/Output
 /InstallerPlatform/SetACL.exe
 /InstallerPlatform/SuppressWinErrors.exe
 /InstallerDeveloper/RemoveOldTemplates.exe
+/InstallerPlatform/ASCOM.Exceptions.dll

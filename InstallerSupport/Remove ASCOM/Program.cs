@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
+using Utilities;
 
 namespace RemoveASCOM
 {
@@ -31,7 +32,7 @@ namespace RemoveASCOM
         {
             try
             {
-                using (TraceLogger logger = new TraceLogger("", "RemoveAscomException"))
+                using (TraceLogger logger = new TraceLogger("RemoveAscomException"))
                 {
                     logger.Enabled = true;
                     Exception ex = eventArgs.ExceptionObject as Exception;
@@ -55,7 +56,7 @@ namespace RemoveASCOM
         {
             try
             {
-                using (TraceLogger logger = new TraceLogger("", "RemoveAscomThreadException"))
+                using (TraceLogger logger = new TraceLogger("RemoveAscomThreadException"))
                 {
                     logger.Enabled = true;
                     logger.LogMessageCrLf("RemoveAscom", $"An un-handled thread exception occurred, please report this on the ASCOM-Talk groups.io forum: {eventArgs.Exception.Message}.\r\n{eventArgs.Exception}");

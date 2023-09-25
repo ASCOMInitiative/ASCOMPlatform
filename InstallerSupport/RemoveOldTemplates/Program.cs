@@ -4,6 +4,7 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using Utilities;
 
 namespace RemoveOldTemplates
 {
@@ -29,7 +30,7 @@ namespace RemoveOldTemplates
                 Dictionary<string, string> vsTemplateDirectoryList; // Dictionary to hold the list of install directories holding templates
                 vsTemplateDirectoryList = new Dictionary<string, string>();
 
-                TL = new TraceLogger("", "InstallTemplates"); // Create a trace logger so we can log what happens
+                TL = new TraceLogger("InstallTemplates"); // Create a trace logger so we can log what happens
                 TL.Enabled = true;
 
                 string fileVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;

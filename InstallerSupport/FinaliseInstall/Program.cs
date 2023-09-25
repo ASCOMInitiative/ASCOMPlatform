@@ -35,7 +35,7 @@ namespace FinaliseInstall
 
         static private Type tProfile; // Late bound Helper.Profile type
         static private object oProfile; // Late bound Helper.Profile
-        static private TraceLogger TL; // Trace logger
+        static private Utilities.TraceLogger TL; // Trace logger
         private const string sMsgTitle = "ASCOM Platform 6 Install Finaliser";
         static private int ReturnCode = 0; // Code to return to the calling application
 
@@ -115,7 +115,7 @@ namespace FinaliseInstall
         {
             try
             {
-                TL = new TraceLogger("", "FinaliseInstall"); // Create a trace logger so we can log what happens
+                TL = new Utilities.TraceLogger("FinaliseInstall"); // Create a trace logger so we can log what happens
                 TL.Enabled = true;
 
                 LogMessage("FinaliseInstall", "Starting finalise process");
@@ -310,14 +310,6 @@ namespace FinaliseInstall
                 }
                 catch { }
 
-                //Clean up TraceLogger object before close
-                try
-                {
-                    TL.Enabled = false;
-                    TL.Dispose();
-                    TL = null;
-                }
-                catch { }
             }
             catch (Exception ex) //Exception in top level routine
             {
@@ -326,6 +318,16 @@ namespace FinaliseInstall
             }
 
             LogMessage("FinaliseInstall", "Completed finalise process, ReturnCode: " + ReturnCode.ToString());
+
+            //Clean up TraceLogger object before close
+            try
+            {
+                if (!(TL is null)) TL.Enabled = false;
+                TL?.Dispose();
+                TL = null;
+            }
+            catch { }
+
             return ReturnCode;
         }
 

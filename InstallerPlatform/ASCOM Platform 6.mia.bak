@@ -6972,7 +6972,7 @@ ARM64MODE
 WIN10ORLATER
 98
 {47BB85A9-6089-40A2-BB7A-A752AA6AB942}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\Bug72T-sm.jpg
+..\InstallerContent\Docs\Bug72T-sm.jpg
 FALSE|
 $TARGETDIR$\Docs
 FALSE
@@ -6985,7 +6985,7 @@ FALSE
 FALSE
 FALSE
 {2C643623-35C4-4B6D-9075-95134D7D6DE8}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Supported Devices (web).url
+..\InstallerContent\Supported Devices (web).url
 FALSE|
 $TARGETDIR$\Docs
 FALSE
@@ -6998,7 +6998,7 @@ FALSE
 FALSE
 FALSE
 {4BEBC7DD-05A3-4669-9E16-A400A2CE60EF}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM User Guide.pdf
+..\InstallerContent\ASCOM User Guide.pdf
 FALSE|
 $TARGETDIR$\Docs
 FALSE
@@ -7011,7 +7011,7 @@ FALSE
 FALSE
 FALSE
 {96EC7A24-A21D-4415-B1E9-BFF2B92CE4E2}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Support (web).url
+..\InstallerContent\Support (web).url
 FALSE|
 $TARGETDIR$\Docs
 FALSE
@@ -7024,7 +7024,7 @@ FALSE
 FALSE
 FALSE
 {19EBDE0A-13C6-4ACB-A5E6-4009D367AB6D}
-..\..\..\..\Help\Output\Platform\PlatformHelp.chm
+..\Help\Output\Platform\PlatformHelp.chm
 FALSE|
 $TARGETDIR$\Docs
 FALSE
@@ -7037,7 +7037,7 @@ FALSE
 FALSE
 FALSE
 {9BAA8D43-CC6E-4E5B-A6F2-9D2B298A4217}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Drivers and Downloads (web).url
+..\InstallerContent\Drivers and Downloads (web).url
 FALSE|
 $TARGETDIR$\Docs
 FALSE
@@ -7050,7 +7050,7 @@ FALSE
 FALSE
 FALSE
 {4308982B-78B1-4EA3-8A2A-8F186D2DF263}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Compatible Software (web).url
+..\InstallerContent\Compatible Software (web).url
 FALSE|
 $TARGETDIR$\Docs
 FALSE
@@ -7063,7 +7063,7 @@ FALSE
 FALSE
 FALSE
 {24933A7F-0F7D-40F2-94FF-39A254A77098}
-..\Files\ASCOM.ico
+..\InstallerContent\ASCOM.ico
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -7076,7 +7076,7 @@ FALSE
 FALSE
 FALSE
 {0EE29C13-31FA-4268-A37F-108FB5DEC408}
-..\..\..\..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.pdb
+..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
 FALSE
@@ -7089,7 +7089,7 @@ FALSE
 FALSE
 FALSE
 {8A0D9007-00C8-4439-A840-D4992663DF79}
-..\..\..\..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.dll
+..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.dll
 FALSE|
 $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
 FALSE
@@ -7102,7 +7102,7 @@ FALSE
 FALSE
 FALSE
 {DAF5176A-6ED6-48B7-93CE-1EE7F0D7F76D}
-..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.pdb
+..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
 FALSE
@@ -7115,7 +7115,7 @@ FALSE
 FALSE
 FALSE
 {7986587A-2322-450E-A2EE-A6E895924781}
-..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.dll
+..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.dll
 FALSE|
 $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
 FALSE
@@ -7128,7 +7128,7 @@ FALSE
 FALSE
 FALSE
 {FC0CE118-029B-4BCC-B989-A224597008D0}
-..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.pdb
+..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
 FALSE
@@ -7141,7 +7141,7 @@ FALSE
 FALSE
 FALSE
 {4CC32491-4492-48A8-832F-449FA091FD9D}
-..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe
+..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe
 FALSE|
 $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
 FALSE
@@ -7154,7 +7154,7 @@ FALSE
 FALSE
 FALSE
 {66F63968-9989-4A1E-9EF0-CD889DE712C1}
-..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.Simulator.Telescope.pdb
+..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.Simulator.Telescope.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 FALSE
@@ -7167,7 +7167,7 @@ FALSE
 FALSE
 FALSE
 {DB279330-747E-49B9-9E3A-B63DE4B15FBA}
-..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.Simulator.Telescope.dll
+..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.Simulator.Telescope.dll
 FALSE|
 $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 FALSE
@@ -7180,7 +7180,7 @@ FALSE
 FALSE
 FALSE
 {DF583DE8-D756-465B-A420-9D39B61816F9}
-..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.TelescopeSimulator.pdb
+..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.TelescopeSimulator.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 FALSE
@@ -7193,7 +7193,7 @@ FALSE
 FALSE
 FALSE
 {D384BBAC-C890-49D3-9ED6-3F4CF457BE49}
-..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.TelescopeSimulator.exe
+..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.TelescopeSimulator.exe
 FALSE|
 $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 FALSE
@@ -7206,7 +7206,7 @@ FALSE
 FALSE
 FALSE
 {D9E3123E-E8D9-4C07-B73F-49EE87C7DE79}
-..\..\..\..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb
+..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
 FALSE
@@ -7219,7 +7219,7 @@ FALSE
 FALSE
 FALSE
 {1CA81DB6-CCE6-443F-A0AD-F741546DD0F9}
-..\..\..\..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll
+..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll
 FALSE|
 $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
 FALSE
@@ -7232,7 +7232,7 @@ FALSE
 FALSE
 FALSE
 {4ED0ABB7-B3ED-43DF-B248-B90FF68D5087}
-..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.Simulator.FilterWheel.pdb
+..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.Simulator.FilterWheel.pdb
 FALSE|
 $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
 FALSE
@@ -7245,7 +7245,7 @@ FALSE
 FALSE
 FALSE
 {D24CBC48-57E7-464F-A2E8-F07FF6E133CA}
-..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.Simulator.FilterWheel.dll
+..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.Simulator.FilterWheel.dll
 FALSE|
 $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
 FALSE
@@ -7258,7 +7258,7 @@ FALSE
 FALSE
 FALSE
 {F8ED3511-34B8-4FA5-B1E5-42F5F148C11A}
-..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.FilterWheelSim.pdb
+..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.FilterWheelSim.pdb
 FALSE|
 $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
 FALSE
@@ -7271,7 +7271,7 @@ FALSE
 FALSE
 FALSE
 {081B258C-DCE5-4FB9-A7AE-10499D06228E}
-..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.FilterWheelSim.exe
+..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.FilterWheelSim.exe
 FALSE|
 $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
 FALSE
@@ -7284,7 +7284,7 @@ FALSE
 FALSE
 FALSE
 {EAE2E045-3243-456D-ADF2-1889EB62AAF2}
-..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb
+..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
 FALSE
@@ -7297,7 +7297,7 @@ FALSE
 FALSE
 FALSE
 {91B5B5E8-DC66-4722-AFC5-8E2D1005E153}
-..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll
+..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll
 FALSE|
 $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
 FALSE
@@ -7310,7 +7310,7 @@ FALSE
 FALSE
 FALSE
 {54B06058-9E54-4D5A-820E-9E5992F3529B}
-..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb
+..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb
 FALSE|
 $TARGETDIR$\Tools
 FALSE
@@ -7323,7 +7323,7 @@ FALSE
 FALSE
 FALSE
 {D8ABE00A-C6F9-432C-A0C2-C6B6FD28AD9D}
-..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.exe
+..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.exe
 FALSE|
 $TARGETDIR$\Tools
 FALSE
@@ -7336,7 +7336,7 @@ FALSE
 FALSE
 FALSE
 {D4B8807E-5C3B-4827-96E2-33710EA117A0}
-..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb
+..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -7349,7 +7349,7 @@ FALSE
 FALSE
 FALSE
 {66566B80-4AD5-41CA-B712-E67A1549D8CD}
-..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\Ceres.chby
+..\ASCOM.Utilities\ASCOM Diagnostics\Ceres.chby
 FALSE|
 $TARGETDIR$\Tools
 FALSE
@@ -7362,7 +7362,7 @@ FALSE
 FALSE
 FALSE
 {FA429F38-748F-45E5-BCCB-7F86657E0587}
-..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml
+..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml
 FALSE|
 $TARGETDIR$\Tools
 FALSE
@@ -7375,7 +7375,7 @@ FALSE
 FALSE
 FALSE
 {75081AAE-60C8-4DF0-B7FD-9975FB012745}
-..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb
+..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb
 FALSE|
 $TARGETDIR$\Tools
 FALSE
@@ -7388,7 +7388,7 @@ FALSE
 FALSE
 FALSE
 {CA170AAB-888A-4A4D-B3AC-AA69657D890F}
-..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe
+..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe
 FALSE|
 $TARGETDIR$\Tools
 FALSE
@@ -7401,7 +7401,7 @@ FALSE
 FALSE
 FALSE
 {79562A2A-7FA8-44A5-A9D6-7760E1D284E0}
-..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb
+..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -7414,7 +7414,7 @@ FALSE
 FALSE
 FALSE
 {558CB091-504F-4917-B0D5-68A32C46F896}
-..\..\..\..\ShowPlatformVersion.vbs
+..\ShowPlatformVersion.vbs
 FALSE|
 $COMMONFILES$\ASCOM
 FALSE
@@ -7427,7 +7427,7 @@ FALSE
 FALSE
 FALSE
 {9EA1C8DA-C2D5-44E4-9CB7-44AC6CD62C94}
-..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb
+..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -7440,7 +7440,7 @@ FALSE
 FALSE
 FALSE
 {E1B52B9B-9147-4C34-9A1A-B581035339ED}
-..\..\..\..\InstallerSupport\GACInstall\bin\Release\GACInstall.exe
+..\InstallerSupport\GACInstall\bin\Release\GACInstall.exe
 FALSE|
 $COMMONFILES$\ASCOM\Platform\Internal
 FALSE
@@ -7453,7 +7453,7 @@ FALSE
 FALSE
 FALSE
 {83ABAF5E-816E-488F-A67B-B9539022C433}
-..\..\..\..\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH
+..\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -7466,7 +7466,7 @@ FALSE
 FALSE
 FALSE
 {2D7D740B-7A83-4B96-841E-76A9F81A92AC}
-..\..\..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb
+..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -7479,7 +7479,7 @@ FALSE
 FALSE
 FALSE
 {A5136F22-2E87-4F37-8B8E-194DCCFEA65A}
-..\..\..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll
+..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -7492,7 +7492,7 @@ FALSE
 FALSE
 FALSE
 {E4EB8B28-B575-4466-8F03-0AC036E2C9B9}
-..\..\..\..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb
+..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -7505,7 +7505,7 @@ FALSE
 FALSE
 FALSE
 {7C2F140D-9F30-4321-9083-31BF8E236693}
-..\..\..\..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll
+..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -7518,7 +7518,7 @@ FALSE
 FALSE
 FALSE
 {866E280C-2CBB-4ED7-9383-27C83A7E4270}
-..\..\..\..\InstallerSupport\RedirectionPolicies\policy.5.5.Astrometry.xml
+..\InstallerSupport\RedirectionPolicies\policy.5.5.Astrometry.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -7531,7 +7531,7 @@ FALSE
 FALSE
 FALSE
 {810DA89F-A7BF-4F16-BB66-BEACB713DC60}
-..\..\..\..\InstallerSupport\RedirectionPolicies\policy.5.5.ASCOM.Astrometry.dll
+..\InstallerSupport\RedirectionPolicies\policy.5.5.ASCOM.Astrometry.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -7544,7 +7544,7 @@ FALSE
 FALSE
 FALSE
 {077217F9-6B53-4824-9A45-7289877393BC}
-..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.pdb
+..\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -7557,7 +7557,7 @@ FALSE
 FALSE
 FALSE
 {FB7544F7-0DF1-4087-BE4A-0CBF217ED8E6}
-..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll
+..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6
 FALSE
@@ -7570,7 +7570,7 @@ FALSE
 FALSE
 FALSE
 {06499D84-146D-4281-BF4E-85D8CC3CE5F8}
-..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb
+..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -7583,7 +7583,7 @@ FALSE
 FALSE
 FALSE
 {C37C183E-22F7-4D3E-8A5E-3A6B5F0ACD8B}
-..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb
+..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -7596,7 +7596,7 @@ FALSE
 FALSE
 FALSE
 {078FAD89-2729-47A3-87A7-BCB866F64715}
-..\..\..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.pdb
+..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -7609,7 +7609,7 @@ FALSE
 FALSE
 FALSE
 {539EE182-463D-4B79-AA32-68D6AD9ADA0E}
-..\..\..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb
+..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -7622,7 +7622,7 @@ FALSE
 FALSE
 FALSE
 {55464B57-15BE-4EA3-BF92-6F88C22FF8F2}
-..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll
+..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6
 FALSE
@@ -7635,7 +7635,7 @@ FALSE
 FALSE
 FALSE
 {F585C580-B47C-4B7B-B8CE-FAB458C6333B}
-..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb
+..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -7648,7 +7648,7 @@ FALSE
 FALSE
 FALSE
 {AFFAC2E3-131B-42AB-A0DB-6055EB18D1FC}
-..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.pdb
+..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -7661,7 +7661,7 @@ FALSE
 FALSE
 FALSE
 {0808F9DA-4556-4B78-8A2F-902825998095}
-..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll
+..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6
 FALSE
@@ -7674,7 +7674,7 @@ FALSE
 FALSE
 FALSE
 {946608CD-9B20-4CA9-AF26-4BE80484BEF9}
-..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb
+..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -7687,7 +7687,7 @@ FALSE
 FALSE
 FALSE
 {C18CB2B5-2084-43A1-81B3-442AC1BE435A}
-..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb
+..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -7700,7 +7700,7 @@ FALSE
 FALSE
 FALSE
 {221F43CA-6300-4B04-A8CB-61F6C2B669D6}
-..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb
+..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -7713,7 +7713,7 @@ FALSE
 FALSE
 FALSE
 {62CA9828-7965-4230-8DDD-F414A36FC99C}
-..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\UtilitiesPolicy.xml
+..\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\UtilitiesPolicy.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -7726,7 +7726,7 @@ FALSE
 FALSE
 FALSE
 {2950CF53-03D7-40FB-BA17-776760F28FCF}
-..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\policy.5.5.ASCOM.Utilities.dll
+..\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\policy.5.5.ASCOM.Utilities.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -7739,7 +7739,7 @@ FALSE
 FALSE
 FALSE
 {8ADF3958-F7C7-4A77-9C80-9162DF259690}
-..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.pdb
+..\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -7752,7 +7752,7 @@ FALSE
 FALSE
 FALSE
 {2D930527-835E-411C-A3D9-2FF0D49E5748}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\These files are not in use - ReadMe.txt
+..\InstallerContent\Docs\These files are not in use - ReadMe.txt
 FALSE|
 $COMMONFILES$\ASCOM\.net
 FALSE
@@ -7765,7 +7765,7 @@ FALSE
 FALSE
 FALSE
 {BE3D07F5-1BA2-42AF-94F5-DB763A43BAB2}
-..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll
+..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll
 FALSE|
 $COMMONFILES$\ASCOM\.net
 FALSE
@@ -7778,7 +7778,7 @@ FALSE
 FALSE
 FALSE
 {1AB8C8F5-23B4-42D8-9FFE-A8CC86ABDBCA}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll
+..\InstallerContent\Platform 5.5\ASCOM.Utilities.dll
 FALSE|
 $COMMONFILES$\ASCOM\.net
 FALSE
@@ -7791,7 +7791,7 @@ FALSE
 FALSE
 FALSE
 {F60FBAE9-D1A8-41BA-9778-A98552C3A1B0}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.pdb
+..\InstallerContent\Platform 5.5\ASCOM.Attributes.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -7804,7 +7804,7 @@ FALSE
 FALSE
 FALSE
 {4ACAE86F-F8E1-4219-BB8A-9E121153F2D9}
-..\..\..\..\ASCOM.Utilities\VB6Helper2\Helper2.dll
+..\ASCOM.Utilities\VB6Helper2\Helper2.dll
 FALSE|
 $COMMONFILES$\ASCOM
 FALSE
@@ -7817,7 +7817,7 @@ FALSE
 FALSE
 FALSE
 {5249019E-52DD-4660-BFF7-99CCDA70056D}
-..\..\..\..\ASCOM.Utilities\VB6Helper\Helper.dll
+..\ASCOM.Utilities\VB6Helper\Helper.dll
 FALSE|
 $COMMONFILES$\ASCOM
 FALSE
@@ -7830,7 +7830,7 @@ FALSE
 FALSE
 FALSE
 {2010ECF2-4943-49C4-BE1B-86E2760E45D7}
-..\..\..\..\POTH\Source\POTH\POTHHelp.htm
+..\POTH\Source\POTH\POTHHelp.htm
 FALSE|
 $COMMONFILES$\ASCOM\Telescope
 FALSE
@@ -7843,7 +7843,7 @@ FALSE
 FALSE
 FALSE
 {8BE78B12-BD31-42AC-A900-02D803E8AA8D}
-..\..\..\..\POTH\Source\POTH\POTH.exe
+..\POTH\Source\POTH\POTH.exe
 FALSE|
 $COMMONFILES$\ASCOM\Telescope
 FALSE
@@ -7856,7 +7856,7 @@ FALSE
 FALSE
 FALSE
 {3CDD77FB-843C-4133-8A04-D86F8D55C0D0}
-..\..\..\..\Pipe\Hub.exe
+..\Pipe\Hub.exe
 FALSE|
 $COMMONFILES$\ASCOM\Telescope
 FALSE
@@ -7869,7 +7869,7 @@ FALSE
 FALSE
 FALSE
 {FE9FEB3D-796A-4FEF-B162-EA2CC1C01DCC}
-..\..\..\..\Pipe\PipeHubHelp.htm
+..\Pipe\PipeHubHelp.htm
 FALSE|
 $COMMONFILES$\ASCOM\Telescope
 FALSE
@@ -7882,7 +7882,7 @@ FALSE
 FALSE
 FALSE
 {EB9EAF44-0EFE-4886-88D7-24B528646F42}
-..\..\..\..\Pipe\Pipe.exe
+..\Pipe\Pipe.exe
 FALSE|
 $COMMONFILES$\ASCOM\Telescope
 FALSE
@@ -7895,7 +7895,7 @@ FALSE
 FALSE
 FALSE
 {AA596C28-0BD6-40FC-B279-3E56F9F7333B}
-..\..\..\..\Drivers and Simulators\Scope Simulator\ScopeSimHelp.htm
+..\Drivers and Simulators\Scope Simulator\ScopeSimHelp.htm
 FALSE|
 $COMMONFILES$\ASCOM\Telescope
 FALSE
@@ -7908,7 +7908,7 @@ FALSE
 FALSE
 FALSE
 {F0B9A95A-BFB5-430A-92B4-E87A6F266227}
-..\..\..\..\Drivers and Simulators\Scope Simulator\ScopeSim.exe
+..\Drivers and Simulators\Scope Simulator\ScopeSim.exe
 FALSE|
 $COMMONFILES$\ASCOM\Telescope
 FALSE
@@ -7921,7 +7921,7 @@ FALSE
 FALSE
 FALSE
 {256A6197-B153-4B5F-8D77-71CC48DC623D}
-..\..\..\..\Drivers and Simulators\Switch Simulator\SwitchSim.exe
+..\Drivers and Simulators\Switch Simulator\SwitchSim.exe
 FALSE|
 $COMMONFILES$\ASCOM\Switch
 FALSE
@@ -7934,7 +7934,7 @@ FALSE
 FALSE
 FALSE
 {1D4DAE40-DCA4-481E-8569-8E1DEE54F8D2}
-..\..\..\..\Drivers and Simulators\Focus Simulator\FocusSim.exe
+..\Drivers and Simulators\Focus Simulator\FocusSim.exe
 FALSE|
 $COMMONFILES$\ASCOM\Focuser
 FALSE
@@ -7947,7 +7947,7 @@ FALSE
 FALSE
 FALSE
 {94F9152F-14DB-4759-90E6-BE3A0C5B59A0}
-..\..\..\..\Drivers and Simulators\Filter Wheel Simulator\FilterWheelSim.exe
+..\Drivers and Simulators\Filter Wheel Simulator\FilterWheelSim.exe
 FALSE|
 $COMMONFILES$\ASCOM\FilterWheel
 FALSE
@@ -7960,7 +7960,7 @@ FALSE
 FALSE
 FALSE
 {0206E2B0-8CC8-4EB7-B1FB-4BD486D652C5}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Astro32.dll
+..\InstallerContent\Astro32.dll
 FALSE|
 $COMMONFILES$\ASCOM\Dome
 FALSE
@@ -7973,7 +7973,7 @@ FALSE
 FALSE
 FALSE
 {FFD80E8F-5EE1-48DB-9F8E-B0D78A0B9CF7}
-..\..\..\..\Drivers and Simulators\Dome Simulator\DomeSim.exe
+..\Drivers and Simulators\Dome Simulator\DomeSim.exe
 FALSE|
 $COMMONFILES$\ASCOM\Dome
 FALSE
@@ -7986,7 +7986,7 @@ FALSE
 FALSE
 FALSE
 {64F80670-72EF-40C8-9E52-6F1693D5C490}
-..\..\..\..\Drivers and Simulators\CCD Simulator\unuran-0.6.0.dll
+..\Drivers and Simulators\CCD Simulator\unuran-0.6.0.dll
 FALSE|
 $COMMONFILES$\ASCOM\Camera
 FALSE
@@ -7999,7 +7999,7 @@ FALSE
 FALSE
 FALSE
 {D535F00D-0B7B-443E-9A45-6C96071B95DE}
-..\..\..\..\Drivers and Simulators\CCD Simulator\UNURANReadMe.txt
+..\Drivers and Simulators\CCD Simulator\UNURANReadMe.txt
 FALSE|
 $COMMONFILES$\ASCOM\Camera
 FALSE
@@ -8012,7 +8012,7 @@ FALSE
 FALSE
 FALSE
 {05B43AFD-B638-4A3B-A6FF-5116B369A983}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\CCDSimulator.dll
+..\InstallerContent\CCDSimulator.dll
 FALSE|
 $COMMONFILES$\ASCOM\Camera
 FALSE
@@ -8025,7 +8025,7 @@ FALSE
 FALSE
 FALSE
 {E090E662-4E34-4403-82FF-9917F9AB2A29}
-..\..\..\..\InstallerSupport\RedirectionPolicies\Policy.1.0.DriverAccess.xml
+..\InstallerSupport\RedirectionPolicies\Policy.1.0.DriverAccess.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -8038,7 +8038,7 @@ FALSE
 FALSE
 FALSE
 {97977395-E63D-4FC4-B241-1CFEC7E5982B}
-..\..\..\..\InstallerSupport\RedirectionPolicies\policy.1.0.ASCOM.DriverAccess.dll
+..\InstallerSupport\RedirectionPolicies\policy.1.0.ASCOM.DriverAccess.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -8051,7 +8051,7 @@ FALSE
 FALSE
 FALSE
 {65E9D955-CAA2-46B0-A8BB-FA9E36C1D165}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\comdlg32.ocx
+..\InstallerContent\comdlg32.ocx
 FALSE|
 $WINSYSDIR$
 FALSE
@@ -8064,7 +8064,7 @@ FALSE
 FALSE
 TRUE
 {D0FFF3E8-2140-45F3-A119-2593B0E28BB4}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\msvbvm60.dll
+..\InstallerContent\msvbvm60.dll
 FALSE|
 $WINSYSDIR$
 FALSE
@@ -8077,7 +8077,7 @@ FALSE
 FALSE
 TRUE
 {9DAE06F4-21F4-4226-ACA6-9685160609C2}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\MSComm32.Ocx
+..\InstallerContent\MSComm32.Ocx
 FALSE|
 $WINSYSDIR$
 FALSE
@@ -8090,7 +8090,7 @@ FALSE
 FALSE
 TRUE
 {5EF5A2A7-A01D-40AD-9464-D8D7EA5C5D77}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\mscomctl.OCX
+..\InstallerContent\mscomctl.OCX
 FALSE|
 $WINSYSDIR$
 FALSE
@@ -8103,7 +8103,7 @@ FALSE
 FALSE
 TRUE
 {FE73FD03-2401-49DC-BB45-C474D5F1EF74}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\RegTlb.exe
+..\InstallerContent\RegTlb.exe
 FALSE|
 $COMMONFILES$\ASCOM\Platform\Internal
 FALSE
@@ -8116,7 +8116,7 @@ FALSE
 FALSE
 FALSE
 {8A54C8FB-0893-4B71-B23D-2AB2156109BC}
-..\..\..\..\Interfaces\IObjectSafety.tlb
+..\Interfaces\IObjectSafety.tlb
 FALSE|
 $COMMONFILES$\ASCOM\Interface
 FALSE
@@ -8129,7 +8129,7 @@ FALSE
 FALSE
 FALSE
 {6CC42394-3EC3-44A5-8420-04CA8BE8BF7A}
-..\..\..\..\Interfaces\HelperPIAs\Helper2.tlb
+..\Interfaces\HelperPIAs\Helper2.tlb
 FALSE|
 $COMMONFILES$\ASCOM\Interface
 FALSE
@@ -8142,7 +8142,7 @@ FALSE
 FALSE
 FALSE
 {A303A3A8-A396-4E3F-A63A-2C852A0F3EF2}
-..\..\..\..\Interfaces\HelperPIAs\Helper.tlb
+..\Interfaces\HelperPIAs\Helper.tlb
 FALSE|
 $COMMONFILES$\ASCOM\Interface
 FALSE
@@ -8155,7 +8155,7 @@ FALSE
 FALSE
 FALSE
 {B6538865-B9C0-483A-885C-669F3F61BE43}
-..\..\..\..\Interfaces\Master Interfaces\AscomMasterInterfaces.tlb
+..\Interfaces\Master Interfaces\AscomMasterInterfaces.tlb
 FALSE|
 $COMMONFILES$\ASCOM\Interface
 FALSE
@@ -8168,7 +8168,7 @@ FALSE
 FALSE
 FALSE
 {BF08B73E-89BC-4914-9C0F-6EA381F0D4C3}
-..\Files\Help.ico
+..\InstallerContent\Help.ico
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -8181,7 +8181,7 @@ FALSE
 FALSE
 FALSE
 {C51F6E06-C527-411B-8AC2-E38C179A9B71}
-..\Files\Internet.ico
+..\InstallerContent\Internet.ico
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -8194,7 +8194,7 @@ FALSE
 FALSE
 FALSE
 {E8E2B0EC-A116-4D7B-A19A-8FBE37DC02C3}
-..\..\..\..\CheckForUpdates.js
+..\CheckForUpdates.js
 FALSE|
 $TARGETDIR$\Tools
 FALSE
@@ -8207,7 +8207,7 @@ FALSE
 FALSE
 FALSE
 {2E058EE3-6E21-466C-90E1-EB7F757D2D2B}
-..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
+..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6
 FALSE
@@ -8220,7 +8220,7 @@ FALSE
 FALSE
 FALSE
 {D808C08E-2CD9-4122-A69E-0FD541891864}
-..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.pdb
+..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.pdb
 FALSE|
 $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
 FALSE
@@ -8233,7 +8233,7 @@ FALSE
 FALSE
 FALSE
 {207B12ED-9B1F-45AE-9935-26D637448561}
-..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.dll
+..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.dll
 FALSE|
 $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
 FALSE
@@ -8246,7 +8246,7 @@ FALSE
 FALSE
 FALSE
 {3A9A6CA1-04F9-4785-8569-F23231C485BE}
-..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\M42-800x600.jpg
+..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\M42-800x600.jpg
 FALSE|
 $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
 FALSE
@@ -8259,7 +8259,7 @@ FALSE
 FALSE
 FALSE
 {3B716432-4790-4880-9B65-CBFC197D6C93}
-..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\Testcard_F.jpg
+..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\Testcard_F.jpg
 FALSE|
 $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
 FALSE
@@ -8272,7 +8272,7 @@ FALSE
 FALSE
 FALSE
 {289CFED3-BA7C-458D-914A-2573EC6586AE}
-..\..\..\..\NOVAS\NOVAS-C\Win32\Release\NOVAS-C.pdb
+..\NOVAS\NOVAS-C\Win32\Release\NOVAS-C.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -8285,7 +8285,7 @@ FALSE
 FALSE
 FALSE
 {23204755-7968-4F18-AFC5-985753BBDC68}
-..\..\..\..\NOVAS\NOVAS-C\Win32\Release\NOVAS-C.dll
+..\NOVAS\NOVAS-C\Win32\Release\NOVAS-C.dll
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -8298,7 +8298,7 @@ FALSE
 FALSE
 FALSE
 {2A4AA234-7C18-41F1-8A7C-E8DFF3215C07}
-..\..\..\..\NOVAS\NOVAS-C\x64\Release\NOVAS-C64.pdb
+..\NOVAS\NOVAS-C\x64\Release\NOVAS-C64.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -8311,7 +8311,7 @@ FALSE
 FALSE
 FALSE
 {FD764053-C08A-46E6-8CC2-AA7FFA04E702}
-..\..\..\..\NOVAS\NOVAS-C\x64\Release\NOVAS-C64.dll
+..\NOVAS\NOVAS-C\x64\Release\NOVAS-C64.dll
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -8324,7 +8324,7 @@ FALSE
 FALSE
 FALSE
 {7259055C-6952-49CE-B0A3-9223CC3EA6A8}
-..\..\..\..\NOVAS\NOVAS-3\CioFile\cio_ra.bin
+..\NOVAS\NOVAS-3\CioFile\cio_ra.bin
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -8337,7 +8337,7 @@ FALSE
 FALSE
 FALSE
 {153A3F07-86D3-419E-9B16-6E186933CD64}
-..\..\..\..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.pdb
+..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -8350,7 +8350,7 @@ FALSE
 FALSE
 FALSE
 {EE361C31-2D9F-4366-B0E5-4BFAEA48A9D0}
-..\..\..\..\NOVAS\NOVAS-3\CioFile\cio_ra.bin
+..\NOVAS\NOVAS-3\CioFile\cio_ra.bin
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -8363,7 +8363,7 @@ FALSE
 FALSE
 FALSE
 {C2D29CA2-89B0-4F1D-9081-225E005F50D3}
-..\..\..\..\NOVAS\NOVAS-31\NOVAS3\x64\Release\NOVAS31-64.pdb
+..\NOVAS\NOVAS-31\NOVAS3\x64\Release\NOVAS31-64.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -8376,7 +8376,7 @@ FALSE
 FALSE
 FALSE
 {A286D28B-4E84-4DE9-A319-C3E2DF7852C2}
-..\..\..\..\NOVAS\NOVAS-31\NOVAS3\x64\Release\NOVAS31-64.dll
+..\NOVAS\NOVAS-31\NOVAS3\x64\Release\NOVAS31-64.dll
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -8389,7 +8389,7 @@ FALSE
 FALSE
 FALSE
 {FCA55A9A-BDDB-4D0B-A5CB-BE2D80CB0DEA}
-..\..\..\..\NOVAS\NOVAS-31\NOVAS3\Win32\Release\NOVAS31.pdb
+..\NOVAS\NOVAS-31\NOVAS3\Win32\Release\NOVAS31.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -8402,7 +8402,7 @@ FALSE
 FALSE
 FALSE
 {3F94F4CB-6780-4A7A-BC29-B1F58264A967}
-..\..\..\..\NOVAS\NOVAS-31\NOVAS3\Win32\Release\NOVAS31.dll
+..\NOVAS\NOVAS-31\NOVAS3\Win32\Release\NOVAS31.dll
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -8415,7 +8415,7 @@ FALSE
 FALSE
 FALSE
 {CF91B3B6-0D64-473A-9179-AB873B6AA057}
-..\..\..\..\InstallerSupport\RedirectionPolicies\policy.1.0.ASCOM.Exceptions.dll
+..\InstallerSupport\RedirectionPolicies\policy.1.0.ASCOM.Exceptions.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6.0
 FALSE
@@ -8428,7 +8428,7 @@ FALSE
 FALSE
 FALSE
 {31E8132D-39CB-4775-9745-B4A83DA32CA2}
-..\..\..\..\InstallerSupport\RedirectionPolicies\policy.1.1.ASCOM.Exceptions.dll
+..\InstallerSupport\RedirectionPolicies\policy.1.1.ASCOM.Exceptions.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6.0
 FALSE
@@ -8441,7 +8441,7 @@ FALSE
 FALSE
 FALSE
 {B0800112-6A7E-4749-BE13-FE7E894AA2BB}
-..\..\..\..\InstallerSupport\RedirectionPolicies\Policy.1.0.Exceptions.xml
+..\InstallerSupport\RedirectionPolicies\Policy.1.0.Exceptions.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6.0
 FALSE
@@ -8454,7 +8454,7 @@ FALSE
 FALSE
 FALSE
 {33453629-8592-4EFE-A8B7-13999F1BD98F}
-..\..\..\..\ASCOM.Utilities.Video.NativeHelpers\Release\X64\ASCOM.NativeVideo64.pdb
+..\ASCOM.Utilities.Video.NativeHelpers\Release\X64\ASCOM.NativeVideo64.pdb
 FALSE|
 $COMMONFILES$\ASCOM\VideoUtilities
 FALSE
@@ -8467,7 +8467,7 @@ FALSE
 FALSE
 FALSE
 {7B13380A-561A-4FD4-99C8-4DFC94A59AB2}
-..\..\..\..\ASCOM.Utilities.Video.NativeHelpers\Release\X64\ASCOM.NativeVideo64.dll
+..\ASCOM.Utilities.Video.NativeHelpers\Release\X64\ASCOM.NativeVideo64.dll
 FALSE|
 $COMMONFILES$\ASCOM\VideoUtilities
 FALSE
@@ -8480,7 +8480,7 @@ FALSE
 FALSE
 FALSE
 {CF7B0762-CE71-4498-97E9-3DA4323ED205}
-..\..\..\..\ASCOM.Utilities.Video.NativeHelpers\Release\Win32\ASCOM.NativeVideo32.pdb
+..\ASCOM.Utilities.Video.NativeHelpers\Release\Win32\ASCOM.NativeVideo32.pdb
 FALSE|
 $COMMONFILES$\ASCOM\VideoUtilities
 FALSE
@@ -8493,7 +8493,7 @@ FALSE
 FALSE
 FALSE
 {869B1C87-C678-4812-9BAF-41E2A1730826}
-..\..\..\..\ASCOM.Utilities.Video.NativeHelpers\Release\Win32\ASCOM.NativeVideo32.dll
+..\ASCOM.Utilities.Video.NativeHelpers\Release\Win32\ASCOM.NativeVideo32.dll
 FALSE|
 $COMMONFILES$\ASCOM\VideoUtilities
 FALSE
@@ -8506,7 +8506,7 @@ FALSE
 FALSE
 FALSE
 {6034A4BB-0AA4-4C84-84A7-2627B1886D11}
-..\..\..\..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\Resources\simulator.pix
+..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\Resources\simulator.pix
 FALSE|
 $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\Resources
 FALSE
@@ -8519,7 +8519,7 @@ FALSE
 FALSE
 FALSE
 {42130339-E050-45B3-98AA-7128BC7575D6}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\DirectShowLib\DirectShowLib-2005.dll
+..\InstallerContent\DirectShowLib\DirectShowLib-2005.dll
 FALSE|
 $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
 FALSE
@@ -8532,7 +8532,7 @@ FALSE
 FALSE
 FALSE
 {50E49467-0457-42B6-BCB2-0E4EDC6FFB5E}
-..\..\..\..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\ASCOM.Simulator.Video.pdb
+..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\ASCOM.Simulator.Video.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
 FALSE
@@ -8545,7 +8545,7 @@ FALSE
 FALSE
 FALSE
 {197D779E-51DB-4606-BD68-B07FCE617115}
-..\..\..\..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\ASCOM.Simulator.Video.dll
+..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\ASCOM.Simulator.Video.dll
 FALSE|
 $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
 FALSE
@@ -8558,7 +8558,7 @@ FALSE
 FALSE
 FALSE
 {171617BA-0522-4897-9B07-C870AA172CA2}
-..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll
+..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6.1
 FALSE
@@ -8571,7 +8571,7 @@ FALSE
 FALSE
 FALSE
 {5292B79E-D638-473C-B98A-AEA94BD43178}
-..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.pdb
+..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -8584,7 +8584,7 @@ FALSE
 FALSE
 FALSE
 {91638559-C21A-4309-82B4-81524B7A8554}
-..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.exe.config
+..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.exe.config
 FALSE|
 $COMMONFILES$\ASCOM\Switch\Switch V2
 FALSE
@@ -8597,7 +8597,7 @@ FALSE
 FALSE
 FALSE
 {FC1F80CE-BE56-434D-8DEE-4B07F234F9EA}
-..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.exe
+..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.exe
 FALSE|
 $COMMONFILES$\ASCOM\Switch\Switch V2
 FALSE
@@ -8610,7 +8610,7 @@ FALSE
 FALSE
 FALSE
 {9890979C-BB13-46DF-9218-DFD809326E40}
-..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.dll
+..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.dll
 FALSE|
 $COMMONFILES$\ASCOM\Switch\Switch V2
 FALSE
@@ -8623,7 +8623,7 @@ FALSE
 FALSE
 FALSE
 {87688874-0B8D-4905-9E9C-4EBA83D5B4A9}
-..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.pdb
+..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Switch\Switch V2
 FALSE
@@ -8636,7 +8636,7 @@ FALSE
 FALSE
 FALSE
 {D5B148EA-90A2-4538-8DAF-AB3AE5F82EA2}
-..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.pdb
+..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Switch\Switch V2
 FALSE
@@ -8649,7 +8649,7 @@ FALSE
 FALSE
 FALSE
 {8D0F144B-DA7D-4B30-BEA5-7202657572C5}
-..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.dll.config
+..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.dll.config
 FALSE|
 $COMMONFILES$\ASCOM\Switch\Switch V2
 FALSE
@@ -8662,7 +8662,7 @@ FALSE
 FALSE
 FALSE
 {43A473F7-7048-4F6E-89E8-FFE43CF2E75E}
-..\..\..\..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.exe
+..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.exe
 FALSE|
 $TARGETDIR$\Tools\DriverConnect64
 FALSE
@@ -8675,7 +8675,7 @@ FALSE
 FALSE
 FALSE
 {2DB475CE-FBB6-4ACA-A1E4-EC956F1C16AA}
-..\..\..\..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.pdb
+..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.pdb
 FALSE|
 $TARGETDIR$\Tools\DriverConnect64
 FALSE
@@ -8688,7 +8688,7 @@ FALSE
 FALSE
 FALSE
 {B7B28FF3-8F7F-4702-BC15-FB7E2C042E5D}
-..\..\..\..\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.pdb
+..\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.pdb
 FALSE|
 $TARGETDIR$\Tools\DriverConnect32
 FALSE
@@ -8701,7 +8701,7 @@ FALSE
 FALSE
 FALSE
 {B90C7A31-9100-4138-9957-A22C3AA611CC}
-..\..\..\..\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.exe
+..\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.exe
 FALSE|
 $TARGETDIR$\Tools\DriverConnect32
 FALSE
@@ -8714,7 +8714,7 @@ FALSE
 FALSE
 FALSE
 {94A346DE-FF77-4950-94DD-74E16651F5F7}
-..\..\..\..\SOFA\SOFA Library\x64\Release\SOFA-64.pdb
+..\SOFA\SOFA Library\x64\Release\SOFA-64.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -8727,7 +8727,7 @@ FALSE
 FALSE
 FALSE
 {B665586D-FEAA-444B-9D16-D9F778BA6606}
-..\..\..\..\SOFA\SOFA Library\Win32\Release\SOFA.pdb
+..\SOFA\SOFA Library\Win32\Release\SOFA.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -8740,7 +8740,7 @@ FALSE
 FALSE
 FALSE
 {0F2955FF-ED87-4107-823F-279763A4142C}
-..\..\..\..\SOFA\SOFA Library\Win32\Release\SOFA.dll
+..\SOFA\SOFA Library\Win32\Release\SOFA.dll
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -8753,7 +8753,7 @@ FALSE
 FALSE
 FALSE
 {BD20D395-35BC-44D1-AC77-B54024C41505}
-..\..\..\..\SOFA\Sofa Test Application\Win32\Release\SofaTestApplication-32.exe
+..\SOFA\Sofa Test Application\Win32\Release\SofaTestApplication-32.exe
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -8766,7 +8766,7 @@ FALSE
 FALSE
 FALSE
 {A2E1184F-EE0D-4204-AD36-37C499DF5BCF}
-..\..\..\..\SOFA\SOFA Test Application\x64\Release\SofaTestApplication-64.exe
+..\SOFA\SOFA Test Application\x64\Release\SofaTestApplication-64.exe
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -8779,7 +8779,7 @@ FALSE
 FALSE
 FALSE
 {02D3549A-1029-450D-881D-AF2420EDB712}
-..\..\..\..\SOFA\SOFA Library\x64\Release\SOFA-64.dll
+..\SOFA\SOFA Library\x64\Release\SOFA-64.dll
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -8792,7 +8792,7 @@ FALSE
 FALSE
 FALSE
 {6311DE0F-5CC0-4050-B64C-CC7575169BE4}
-..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.pdb
+..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Switch\ObservingConditions\OCH
 FALSE
@@ -8805,7 +8805,7 @@ FALSE
 FALSE
 FALSE
 {59111D09-F2D2-4A98-A413-056EE5DAEC48}
-..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe
+..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\OCH
 FALSE
@@ -8818,7 +8818,7 @@ FALSE
 FALSE
 FALSE
 {EB04F2F3-1ADE-4E1D-9DC2-03B1149068AA}
-..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.pdb
+..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.pdb
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\OCH
 FALSE
@@ -8831,7 +8831,7 @@ FALSE
 FALSE
 FALSE
 {D7302087-4354-4FFF-B7DD-86F5F1025689}
-..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll
+..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\OCH
 FALSE
@@ -8844,7 +8844,7 @@ FALSE
 FALSE
 FALSE
 {CD602022-CE00-4AD0-A9B4-C1BF05BDF82F}
-..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Test\bin\Release\ASCOM.OCH.Test.exe
+..\Drivers and Simulators\ObservingConditions Hub\OCH Test\bin\Release\ASCOM.OCH.Test.exe
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\OCH
 FALSE
@@ -8857,7 +8857,7 @@ FALSE
 FALSE
 FALSE
 {BD7B9E36-430F-4B6C-95A2-8DA2A947AC34}
-..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Test\bin\Release\ASCOM.OCH.Test.pdb
+..\Drivers and Simulators\ObservingConditions Hub\OCH Test\bin\Release\ASCOM.OCH.Test.pdb
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\OCH
 FALSE
@@ -8870,7 +8870,7 @@ FALSE
 FALSE
 FALSE
 {7930CA45-D135-48FF-992A-DA782F588B5E}
-..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\bin\Release\ASCOM.OCSimulator.Test.pdb
+..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\bin\Release\ASCOM.OCSimulator.Test.pdb
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\Simulator
 FALSE
@@ -8883,7 +8883,7 @@ FALSE
 FALSE
 FALSE
 {591F31AD-98AB-41AE-A096-61122E79FD11}
-..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\bin\Release\ASCOM.OCSimulator.Test.exe
+..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\bin\Release\ASCOM.OCSimulator.Test.exe
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\Simulator
 FALSE
@@ -8896,7 +8896,7 @@ FALSE
 FALSE
 FALSE
 {C097F481-840F-4500-86E5-6DCF94C7A496}
-..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.exe.config
+..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.exe.config
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\Simulator
 FALSE
@@ -8909,7 +8909,7 @@ FALSE
 FALSE
 FALSE
 {31EFC171-513C-41DA-9FBE-745704ED6FE4}
-..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.exe
+..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.exe
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\Simulator
 FALSE
@@ -8922,7 +8922,7 @@ FALSE
 FALSE
 FALSE
 {4EC57B79-E598-4CA6-8509-80050FE44C90}
-..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.Simulator.ObservingConditions.pdb
+..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.Simulator.ObservingConditions.pdb
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\Simulator
 FALSE
@@ -8935,7 +8935,7 @@ FALSE
 FALSE
 FALSE
 {F31C7033-25DA-4A25-A983-BDBE4E07BB90}
-..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.Simulator.ObservingConditions.dll
+..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.Simulator.ObservingConditions.dll
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\Simulator
 FALSE
@@ -8948,7 +8948,7 @@ FALSE
 FALSE
 FALSE
 {1474B9E8-A4AF-4417-99C4-7AA0ED2B8AC8}
-..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.pdb
+..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.pdb
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\Simulator
 FALSE
@@ -8961,7 +8961,7 @@ FALSE
 FALSE
 FALSE
 {18C815A8-879C-4DE3-B614-292208D8AAF8}
-..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe.config
+..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe.config
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\OCH
 FALSE
@@ -8974,7 +8974,7 @@ FALSE
 FALSE
 FALSE
 {1ACF7C6C-18EB-40A5-879A-82F0A22E8AD2}
-..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll.config
+..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll.config
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\OCH
 FALSE
@@ -8987,7 +8987,7 @@ FALSE
 FALSE
 FALSE
 {76760639-999B-47EF-8B99-A424CA8481DF}
-..\..\..\..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.pdb
+..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.pdb
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
 FALSE
@@ -9000,7 +9000,7 @@ FALSE
 FALSE
 FALSE
 {A125880F-E604-47EB-A5C1-91120B7E6CB4}
-..\..\..\..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.dll
+..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.dll
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
 FALSE
@@ -9013,7 +9013,7 @@ FALSE
 FALSE
 FALSE
 {DBB72F6C-D688-4C82-9797-99CDEE400FE5}
-..\..\..\..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.dll.config
+..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.dll.config
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
 FALSE
@@ -9026,7 +9026,7 @@ FALSE
 FALSE
 FALSE
 {9BF0C037-2FCF-4C5C-9028-B87195C403F5}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\These files are not in use - ReadMe.txt
+..\InstallerContent\Docs\These files are not in use - ReadMe.txt
 FALSE|
 $COMMONFILES64$ASCOM\.net
 FALSE
@@ -9039,7 +9039,7 @@ FALSE
 FALSE
 FALSE
 {C2362EC4-9F19-4B82-B0E6-8404669C9C5E}
-..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll
+..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll
 FALSE|
 $COMMONFILES64$ASCOM\.net
 FALSE
@@ -9052,7 +9052,7 @@ FALSE
 FALSE
 FALSE
 {73157039-09E2-4B41-A949-13F3181D8D37}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll
+..\InstallerContent\Platform 5.5\ASCOM.Utilities.dll
 FALSE|
 $COMMONFILES64$ASCOM\.net
 FALSE
@@ -9065,7 +9065,7 @@ FALSE
 FALSE
 FALSE
 {51F68EBF-39A4-4E7D-B16B-B5F0E97B19BF}
-..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll
+..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6.4
 FALSE
@@ -9078,7 +9078,7 @@ FALSE
 FALSE
 FALSE
 {ECFADF04-7680-4609-A92F-C0C6E1E8B0D6}
-..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.pdb
+..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -9091,7 +9091,7 @@ FALSE
 FALSE
 FALSE
 {37710A1C-1194-41B4-98C5-C518C8FFD685}
-..\..\..\..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.exe
+..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.exe
 FALSE|
 $TARGETDIR$\Tools
 FALSE
@@ -9104,7 +9104,7 @@ FALSE
 FALSE
 FALSE
 {BF1F3A7D-7CB1-4E26-AEF7-4B1122A54AAC}
-..\..\..\..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.pdb
+..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.pdb
 FALSE|
 $TARGETDIR$\Tools
 FALSE
@@ -9117,7 +9117,7 @@ FALSE
 FALSE
 FALSE
 {241FAB00-9FD3-4B49-8E50-C4E85D5BFBC0}
-..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\Microsoft.Win32.TaskScheduler.dll
+..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\Microsoft.Win32.TaskScheduler.dll
 FALSE|
 $TARGETDIR$\Tools
 FALSE
@@ -9130,7 +9130,7 @@ FALSE
 FALSE
 FALSE
 {70023001-1CC7-424B-A9D1-94D0FB6E89EA}
-..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.pdb
+..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -9143,7 +9143,7 @@ FALSE
 FALSE
 FALSE
 {364763FD-78C9-4988-A0A5-D194EE0C970B}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.pdb
+..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.pdb
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9156,7 +9156,7 @@ FALSE
 FALSE
 FALSE
 {9F5F901E-69E1-45A7-AA19-2D5FCB51D653}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9169,7 +9169,7 @@ FALSE
 FALSE
 FALSE
 {23D1AEE3-7817-47F4-BA58-5D0EE99EA6A3}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.exe
+..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.exe
 FALSE|
 $TARGETDIR$\Tools\AlpacaDynamicClientManager
 FALSE
@@ -9182,7 +9182,7 @@ FALSE
 FALSE
 FALSE
 {2AD14A0C-AFC6-43C0-9691-1BC843C62755}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.pdb
+..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.pdb
 FALSE|
 $TARGETDIR$\Tools\AlpacaDynamicClientManager
 FALSE
@@ -9195,7 +9195,7 @@ FALSE
 FALSE
 FALSE
 {C58C5C16-7E68-4901-9323-32693A69D0CB}
-..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll
+..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll
 FALSE|
 $TARGETDIR$\Tools\AlpacaDynamicClientManager
 FALSE
@@ -9208,7 +9208,7 @@ FALSE
 FALSE
 FALSE
 {59A83F04-5E26-4C0C-A93C-D6492E414D23}
-..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
+..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
 FALSE|
 $TARGETDIR$\Tools\AlpacaDynamicClientManager
 FALSE
@@ -9221,7 +9221,7 @@ FALSE
 FALSE
 FALSE
 {47FDF76A-3E97-4146-B993-933189260DEB}
-..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll
+..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll
 FALSE|
 $TARGETDIR$\Tools\AlpacaDynamicClientManager
 FALSE
@@ -9234,7 +9234,7 @@ FALSE
 FALSE
 FALSE
 {07ECF99B-D559-4E60-B8E8-8788A272B628}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\RestSharp.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\RestSharp.dll
 FALSE|
 $TARGETDIR$\Tools\AlpacaDynamicClientManager
 FALSE
@@ -9247,7 +9247,7 @@ FALSE
 FALSE
 FALSE
 {59302FA6-658F-4182-A81D-AD77A3EECBC7}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.dll
 FALSE|
 $TARGETDIR$\Tools\AlpacaDynamicClientManager
 FALSE
@@ -9260,7 +9260,7 @@ FALSE
 FALSE
 FALSE
 {FBA925DD-C424-4348-9DF4-10CC11E8BC2D}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe
+..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe
 FALSE|
 $TARGETDIR$\Tools\AlpacaDynamicClientManager
 FALSE
@@ -9273,7 +9273,7 @@ FALSE
 FALSE
 FALSE
 {93F921A4-C61C-41AF-856A-EB87C02CCD28}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe
+..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9286,7 +9286,7 @@ FALSE
 FALSE
 FALSE
 {3583042B-2D97-4F7C-BD27-3F0A6B7FD411}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe.config
+..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe.config
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9299,7 +9299,7 @@ FALSE
 FALSE
 FALSE
 {EA0457AB-C15C-403A-BF5E-1DBDC8C58B27}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.pdb
+..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -9312,7 +9312,7 @@ FALSE
 FALSE
 FALSE
 {112A67EC-BFFE-4C89-9AE8-D46535A54406}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Shared Resources\bin\Release\ASCOM.AlpacaSharedResources.pdb
+..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Shared Resources\bin\Release\ASCOM.AlpacaSharedResources.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -9325,7 +9325,7 @@ FALSE
 FALSE
 FALSE
 {655F6AEE-D565-4AF3-8675-D457FC68C43C}
-..\..\..\..\Drivers and Simulators\CoverCalibrator Simulator\bin\Release\ASCOM.Simulator.CoverCalibrator.dll
+..\Drivers and Simulators\CoverCalibrator Simulator\bin\Release\ASCOM.Simulator.CoverCalibrator.dll
 FALSE|
 $COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator
 FALSE
@@ -9338,7 +9338,7 @@ FALSE
 FALSE
 FALSE
 {D721DDB4-20AC-44B7-9CF3-6AA9272D779C}
-..\..\..\..\Drivers and Simulators\CoverCalibrator Simulator\bin\Release\ASCOM.Simulator.CoverCalibrator.pdb
+..\Drivers and Simulators\CoverCalibrator Simulator\bin\Release\ASCOM.Simulator.CoverCalibrator.pdb
 FALSE|
 $COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator
 FALSE
@@ -9351,7 +9351,7 @@ FALSE
 FALSE
 FALSE
 {EAB79DE7-4596-408C-9426-39A9751686B8}
-..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.exe
+..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.exe
 FALSE|
 $COMMONFILES$\ASCOM\DeviceHub
 FALSE
@@ -9364,7 +9364,7 @@ FALSE
 FALSE
 FALSE
 {EEDC6F5B-8860-4FC7-B807-A746DAB055E4}
-..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.pdb
+..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.pdb
 FALSE|
 $COMMONFILES$\ASCOM\DeviceHub
 FALSE
@@ -9377,7 +9377,7 @@ FALSE
 FALSE
 FALSE
 {945414D2-BA34-4C7B-8CB9-AD42C4B4C2F2}
-..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.exe.config
+..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.exe.config
 FALSE|
 $COMMONFILES$\ASCOM\DeviceHub
 FALSE
@@ -9390,7 +9390,7 @@ FALSE
 FALSE
 FALSE
 {FB9C8A99-7B78-4020-AA95-FBC8ACF86628}
-..\..\..\..\Drivers and Simulators\ASCOM Device Hub\TelescopeDriver\bin\Release\ASCOM.DeviceHub.Telescope.dll
+..\Drivers and Simulators\ASCOM Device Hub\TelescopeDriver\bin\Release\ASCOM.DeviceHub.Telescope.dll
 FALSE|
 $COMMONFILES$\ASCOM\DeviceHub
 FALSE
@@ -9403,7 +9403,7 @@ FALSE
 FALSE
 FALSE
 {F176C33D-5D91-4516-B69A-A68CD1FC2D97}
-..\..\..\..\Drivers and Simulators\ASCOM Device Hub\TelescopeDriver\bin\Release\ASCOM.DeviceHub.Telescope.pdb
+..\Drivers and Simulators\ASCOM Device Hub\TelescopeDriver\bin\Release\ASCOM.DeviceHub.Telescope.pdb
 FALSE|
 $COMMONFILES$\ASCOM\DeviceHub
 FALSE
@@ -9416,7 +9416,7 @@ FALSE
 FALSE
 FALSE
 {7EFDB9EC-4DD5-4C01-AFF6-A06B83F3CA31}
-..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DomeDriver\bin\Release\ASCOM.DeviceHub.Dome.pdb
+..\Drivers and Simulators\ASCOM Device Hub\DomeDriver\bin\Release\ASCOM.DeviceHub.Dome.pdb
 FALSE|
 $COMMONFILES$\ASCOM\DeviceHub
 FALSE
@@ -9429,7 +9429,7 @@ FALSE
 FALSE
 FALSE
 {5B4D4F5E-C607-4208-A752-AB2A36F92DEC}
-..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DomeDriver\bin\Release\ASCOM.DeviceHub.Dome.dll
+..\Drivers and Simulators\ASCOM Device Hub\DomeDriver\bin\Release\ASCOM.DeviceHub.Dome.dll
 FALSE|
 $COMMONFILES$\ASCOM\DeviceHub
 FALSE
@@ -9442,7 +9442,7 @@ FALSE
 FALSE
 FALSE
 {572F1B32-619B-4F69-A59C-863B4AC36AB7}
-..\..\..\..\Drivers and Simulators\ASCOM Device Hub\FocuserDriver\bin\Release\ASCOM.DeviceHub.Focuser.pdb
+..\Drivers and Simulators\ASCOM Device Hub\FocuserDriver\bin\Release\ASCOM.DeviceHub.Focuser.pdb
 FALSE|
 $COMMONFILES$\ASCOM\DeviceHub
 FALSE
@@ -9455,7 +9455,7 @@ FALSE
 FALSE
 FALSE
 {7BD3CC76-32FD-437D-9916-6CE3111A2E7C}
-..\..\..\..\Drivers and Simulators\ASCOM Device Hub\FocuserDriver\bin\Release\ASCOM.DeviceHub.Focuser.dll
+..\Drivers and Simulators\ASCOM Device Hub\FocuserDriver\bin\Release\ASCOM.DeviceHub.Focuser.dll
 FALSE|
 $COMMONFILES$\ASCOM\DeviceHub
 FALSE
@@ -9468,7 +9468,7 @@ FALSE
 FALSE
 FALSE
 {819A1780-0694-45FB-AAD6-3A141C947A8C}
-..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\MvvmMessenger.dll
+..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\MvvmMessenger.dll
 FALSE|
 $COMMONFILES$\ASCOM\DeviceHub
 FALSE
@@ -9481,7 +9481,7 @@ FALSE
 FALSE
 FALSE
 {1FD01EE2-74B6-4778-930F-259A04461FA1}
-..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\MvvmMessenger.pdb
+..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\MvvmMessenger.pdb
 FALSE|
 $COMMONFILES$\ASCOM\DeviceHub
 FALSE
@@ -9494,7 +9494,7 @@ FALSE
 FALSE
 FALSE
 {EF1F880E-C85A-4682-9732-42FA791D88F8}
-..\..\..\..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\PresentationFramework.Aero.dll
+..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\PresentationFramework.Aero.dll
 FALSE|
 $COMMONFILES$\ASCOM\DeviceHub
 FALSE
@@ -9507,7 +9507,7 @@ FALSE
 FALSE
 FALSE
 {5AD99EF6-50BC-45B8-9E5D-636E26CE6B66}
-..\..\..\..\Drivers and Simulators\ASCOM Device Hub\Documents\ASCOM Device Hub User and Technical Information.pdf
+..\Drivers and Simulators\ASCOM Device Hub\Documents\ASCOM Device Hub User and Technical Information.pdf
 FALSE|
 $COMMONFILES$\ASCOM\DeviceHub
 FALSE
@@ -9520,7 +9520,7 @@ FALSE
 FALSE
 FALSE
 {F3791C60-82D7-4DB3-9C55-1CB480587492}
-..\..\..\..\Drivers and Simulators\ASCOMDome\ASCOMDome.exe
+..\Drivers and Simulators\ASCOMDome\ASCOMDome.exe
 FALSE|
 $COMMONFILES$\ASCOM\Dome
 FALSE
@@ -9533,7 +9533,7 @@ FALSE
 FALSE
 FALSE
 {AEF2E9FC-C231-4E7A-A15A-7D0AEEFAB090}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Astro32.dll
+..\InstallerContent\Astro32.dll
 FALSE|
 $COMMONFILES$\ASCOM\Telescope
 FALSE
@@ -9546,7 +9546,7 @@ FALSE
 FALSE
 FALSE
 {E2A59BC6-86E8-482D-AF1B-443C214A066B}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\RestSharp.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\RestSharp.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9559,7 +9559,7 @@ FALSE
 FALSE
 FALSE
 {68C64F2C-BF56-4F57-92BD-28E02A8B72A6}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Alpaca.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Alpaca.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9572,7 +9572,7 @@ FALSE
 FALSE
 FALSE
 {EDCAC9A0-4730-4BC4-85E0-407DD241E807}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Common.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Common.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9585,7 +9585,7 @@ FALSE
 FALSE
 FALSE
 {688B8357-2855-4FDA-8667-A1FE818A78DD}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Tools.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Tools.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9598,7 +9598,7 @@ FALSE
 FALSE
 FALSE
 {063D8F75-0450-41B5-AB0A-576047E55A90}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\Newtonsoft.Json.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\Newtonsoft.Json.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9611,7 +9611,7 @@ FALSE
 FALSE
 FALSE
 {AE2BF225-469A-48F2-A076-FF0953CE66BA}
-..\..\..\..\ValidatePlatform\bin\x64\Release\ValidatePlatform64.exe
+..\ValidatePlatform\bin\x64\Release\ValidatePlatform64.exe
 FALSE|
 $TARGETDIR$\Tools\Validation
 FALSE
@@ -9624,7 +9624,7 @@ FALSE
 FALSE
 FALSE
 {DD343903-3C04-4AEB-B516-44C17728AF20}
-..\..\..\..\ValidatePlatform\bin\Release\ValidatePlatform.exe
+..\ValidatePlatform\bin\Release\ValidatePlatform.exe
 FALSE|
 $TARGETDIR$\Tools\Validation
 FALSE
@@ -9637,7 +9637,7 @@ FALSE
 FALSE
 FALSE
 {5BC223B4-41C9-4CD4-A1FF-4030340DDECB}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.exe
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.exe
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9650,7 +9650,7 @@ FALSE
 FALSE
 FALSE
 {26185D86-3854-4AFE-8379-CB29139D5ADE}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.deps.json
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.deps.json
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9663,7 +9663,7 @@ FALSE
 FALSE
 FALSE
 {C16F6135-E32E-4EEA-A5C3-4CF9A0F0FE59}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9676,7 +9676,7 @@ FALSE
 FALSE
 FALSE
 {C9387C61-E0B7-42D1-95AF-5920C49A03CF}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.runtimeconfig.json
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.runtimeconfig.json
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9689,7 +9689,7 @@ FALSE
 FALSE
 FALSE
 {B10D3499-8E20-430A-83B8-CAB7D1AA4531}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Alpaca.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Alpaca.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9702,7 +9702,7 @@ FALSE
 FALSE
 FALSE
 {FB7DF0B0-2740-49ED-9083-3B4BFAD4C38C}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Com.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Com.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9715,7 +9715,7 @@ FALSE
 FALSE
 FALSE
 {45682A68-7226-42EC-B197-D15E8342B442}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Common.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Common.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9728,7 +9728,7 @@ FALSE
 FALSE
 FALSE
 {6676A912-0297-4EC5-AA64-F9A73E2C4C48}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Tools.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Tools.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9741,7 +9741,7 @@ FALSE
 FALSE
 FALSE
 {A5F2544D-46CB-4FC1-B27C-FE380D1F9F2C}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.DeviceInterfaces.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.DeviceInterfaces.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9754,7 +9754,7 @@ FALSE
 FALSE
 FALSE
 {46AFCB44-3136-4C61-B4DB-F6C3CA5CC082}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.DeviceInterfaces.pdb
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.DeviceInterfaces.pdb
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9767,7 +9767,7 @@ FALSE
 FALSE
 FALSE
 {01FBFAB5-EC8C-47D7-BEE5-CE3916CA2B25}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Exceptions.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Exceptions.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9780,7 +9780,7 @@ FALSE
 FALSE
 FALSE
 {B0B34BC1-5C76-4E9C-827A-D267EE7E72B8}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Exceptions.pdb
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Exceptions.pdb
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -9793,7 +9793,7 @@ FALSE
 FALSE
 FALSE
 {959B2C0A-31CA-4EAB-B079-CF4423D46B0C}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net70-windows\*.*
+..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net70-windows\*.*
 FALSE|*.xml
 $TARGETDIR$\Tools\AlpacaDynamicClientManager
 FALSE
@@ -9806,7 +9806,7 @@ FALSE
 FALSE
 FALSE
 {5D3AA2B9-D105-437C-9B98-42DF8EE790F7}
-..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM.Tools.dll
+..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM.Tools.dll
 FALSE|
 $TARGETDIR$\Tools
 FALSE
@@ -9819,7 +9819,7 @@ FALSE
 FALSE
 FALSE
 {2CCDFB22-2B5C-4D09-82DF-52D556F7D89E}
-..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM.Common.dll
+..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM.Common.dll
 FALSE|
 $TARGETDIR$\Tools
 FALSE
@@ -9832,7 +9832,7 @@ FALSE
 FALSE
 FALSE
 {19E617E0-D302-4020-9B94-030400FD99CC}
-..\..\..\..\InstallerSupport\RedirectionPolicies\Policy.1.1.Exceptions.xml
+..\InstallerSupport\RedirectionPolicies\Policy.1.1.Exceptions.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6.0
 FALSE
@@ -13240,99 +13240,99 @@ SOFTWARE\ASCOM\Astrometry
 Leap Seconds
 FALSE
 {14A4D424-B117-4943-8443-B2433541ADE8}
-..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll
+..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll
 TRUE
 
 {4387F179-ACFA-485B-999D-FCCA128C77C8}
-..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.dll
+..\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.dll
 TRUE
 
 {E434A399-D6D0-431E-BE7F-3E9D6C40959C}
-..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll
+..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll
 TRUE
 $COMMONFILES$\ASCOM\Platform
 {B411CB5E-8BF2-4378-AFA4-BA43829901BC}
-..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll
+..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll
 TRUE
 
 {32AB87FC-C903-4904-A34C-6143CA7580A7}
-..\..\..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll
+..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll
 TRUE
 
 {D23C2C8B-E2D4-4584-A246-096E1B56D9E3}
-..\..\..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll
+..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll
 TRUE
 
 {891D1337-505C-47B3-83DD-E4874BBF68D4}
-..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll
+..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll
 TRUE
 
 {9D6171F5-D1AF-4295-936D-1D9FF8E5AB1F}
-..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll
+..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll
 TRUE
 
 {1F7F0B19-8C68-4676-8D62-2733FBD50DD8}
-..\..\..\..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
+..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
 TRUE
 
 {BEE12C15-363C-46CF-92A0-8892203E4E35}
-..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll
+..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll
 TRUE
 
 {2B49682A-376C-4A15-8F9A-263C86732B92}
-..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll
+..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll
 TRUE
 
 {917ACA92-ECF0-4B21-B130-36915B903A04}
-..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.dll
+..\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.dll
 TRUE
 
 {F4010F60-D0FB-4144-8338-C28E10F0B200}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.dll
+..\InstallerContent\Platform 5.5\ASCOM.Exceptions.dll
 TRUE
 
 {28A4C074-BE09-4063-A1DC-8C3FA13E404A}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.dll
+..\InstallerContent\Platform 5.5\ASCOM.Attributes.dll
 TRUE
 
 {BA1F873C-3BE0-48E1-A7FD-A11CEE6C2C91}
-..\..\..\..\Interfaces\HelperPIAs\ASCOM.Helper2.dll
+..\Interfaces\HelperPIAs\ASCOM.Helper2.dll
 TRUE
 
 {7DC0E1C6-6083-418A-A0F0-6754DCB4367F}
-..\..\..\..\Interfaces\HelperPIAs\ASCOM.Helper.dll
+..\Interfaces\HelperPIAs\ASCOM.Helper.dll
 TRUE
 
 {4EB3DF89-AFD4-4469-A5D2-2DDC65B092F8}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.dll
+..\InstallerContent\ASCOM.Exceptions.dll
 TRUE
 
 {4737F293-18B9-4D15-9942-2EB9B3EBDC0D}
-..\..\..\..\Interfaces\Master Interfaces\ASCOM.Interfaces.dll
+..\Interfaces\Master Interfaces\ASCOM.Interfaces.dll
 TRUE
 
 {C83E9CEC-3344-4FFE-9A3F-44AC830A058A}
-..\..\..\..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll
+..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll
 TRUE
 
 {2D0EDA3F-AAA9-4439-8ED1-B85B30ACB440}
-..\..\..\..\Releases\ASCOM 6\Platform\Files\DirectShowLib\DirectShowLib-2005.dll
+..\InstallerContent\DirectShowLib\DirectShowLib-2005.dll
 TRUE
 
 {70D15D67-6599-4061-B997-8E6AFBE58AD1}
-..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll
+..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll
 TRUE
 
 {ADF176B6-093D-4FEA-82AE-1AE5E1143817}
-..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll
+..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll
 TRUE
 
 {F809AAF9-23F4-4367-A19E-A0060E8819C1}
-..\..\..\..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll
+..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll
 TRUE
 
 {02D98C71-D54E-414E-89F8-B7764BB8096E}
-..\..\..\..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Shared Resources\bin\Release\ASCOM.AlpacaSharedResources.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Shared Resources\bin\Release\ASCOM.AlpacaSharedResources.dll
 TRUE
 
 {4A022616-2482-4FC4-9194-C6429D6AF38B}

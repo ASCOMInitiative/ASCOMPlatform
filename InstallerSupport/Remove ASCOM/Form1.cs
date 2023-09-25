@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Win32;
+using Utilities;
 
 namespace RemoveASCOM
 {
@@ -125,7 +126,7 @@ namespace RemoveASCOM
 
             try
             {
-                TL = new TraceLogger("", "ForceRemove");
+                TL = new TraceLogger("ForceRemove");
                 TL.Enabled = true;
                 TL.LogMessage("ForceRemove", string.Format("Program started on {0}", DateTime.Now.ToLongDateString()));
             }

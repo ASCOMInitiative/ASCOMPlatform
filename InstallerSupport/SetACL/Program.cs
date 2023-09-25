@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
+using Utilities;
 
 namespace SetACL
 {
@@ -32,7 +33,7 @@ namespace SetACL
             {
                 try
                 {
-                    TL = new TraceLogger("", "SetProfileACL"); // Create a trace logger so we can log what happens
+                    TL = new TraceLogger("SetProfileACL"); // Create a trace logger so we can log what happens
                     TL.Enabled = true;
 
                     // Create the Profile key if required and set its access rights

@@ -116,6 +116,9 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Utilities\TraceLogger.cs">
+      <Link>TraceLogger.cs</Link>
+    </Compile>
     <Compile Include="DynamicLists.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -130,7 +133,6 @@
     <Compile Include="..\..\AssemblyVersionInfo.cs">
       <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="TraceLogger.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">

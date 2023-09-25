@@ -274,6 +274,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoveASCOM", "InstallerSup
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GACInstall", "InstallerSupport\GACInstall\GACInstall.csproj", "{96ABE929-97F9-4A0F-9D8C-6FC9C12B8A76}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "InstallerSupport\Utilities\Utilities.csproj", "{E83F33EA-139D-4D9A-8A83-E49F485796D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Quick|Any CPU = Debug Quick|Any CPU
@@ -2866,6 +2868,46 @@ Global
 		{96ABE929-97F9-4A0F-9D8C-6FC9C12B8A76}.Release|x64.ActiveCfg = Release|Any CPU
 		{96ABE929-97F9-4A0F-9D8C-6FC9C12B8A76}.Release|x86.ActiveCfg = Release|Any CPU
 		{96ABE929-97F9-4A0F-9D8C-6FC9C12B8A76}.Release|x86.Build.0 = Release|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug Quick|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug Quick|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug Quick|Win32.ActiveCfg = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug Quick|Win32.Build.0 = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug Quick|x64.ActiveCfg = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug Quick|x64.Build.0 = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug Quick|x86.ActiveCfg = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug Quick|x86.Build.0 = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug|Win32.Build.0 = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug|x64.Build.0 = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Debug|x86.Build.0 = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.MakeDynamicLists|Any CPU.ActiveCfg = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.MakeDynamicLists|Any CPU.Build.0 = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.MakeDynamicLists|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.MakeDynamicLists|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.MakeDynamicLists|Win32.ActiveCfg = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.MakeDynamicLists|Win32.Build.0 = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.MakeDynamicLists|x64.ActiveCfg = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.MakeDynamicLists|x64.Build.0 = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.MakeDynamicLists|x86.ActiveCfg = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.MakeDynamicLists|x86.Build.0 = Debug|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Release|Win32.ActiveCfg = Release|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Release|Win32.Build.0 = Release|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Release|x64.ActiveCfg = Release|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Release|x64.Build.0 = Release|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Release|x86.ActiveCfg = Release|Any CPU
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2977,6 +3019,7 @@ Global
 		{227ED9A5-66AD-470D-976F-57442AA2C73C} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
 		{C29D0D1A-1033-0242-1122-180C1FA52413} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
 		{96ABE929-97F9-4A0F-9D8C-6FC9C12B8A76} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
+		{E83F33EA-139D-4D9A-8A83-E49F485796D8} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EF732E96-7FA0-4C42-96B4-861ED5E48814}
