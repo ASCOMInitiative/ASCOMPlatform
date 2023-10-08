@@ -36,7 +36,7 @@ namespace ValidatePlatform
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create trace logger.",ex);
+                    LogError("Main", $"Unable to create trace logger.", ex);
                 }
 
                 // Create a Utilities component
@@ -47,43 +47,56 @@ namespace ValidatePlatform
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create Utilities component.",ex);
+                    LogError("Main", $"Unable to create Utilities component.", ex);
                 }
                 LogBlankLine();
 
                 // Test the SOFA COM object
                 try
                 {
+                    LogMessage("Main", "About to create SOFA component type...");
                     Type sofaType = Type.GetTypeFromProgID("ASCOM.Astrometry.SOFA.SOFA");
-                    dynamic sofa = Activator.CreateInstance(sofaType);
-                    LogMessage("Main", "Successfully created SOFA COM object");
 
-                    double tt1 = 2459773.0;
-                    double tt2 = 0.99093;
-                    double tai1 = 0.0;
-                    double tai2 = 0.0;
-                    int rc = sofa.TtTai(tt1, tt2, ref tai1, ref tai2);
-                    double difference = (tt1 + tt2 - tai1 - tai2) * 24.0 * 60.0 * 60.0;
-                    LogMessage("Main", $"TtTai called successfully. Input terrestrial time: {tt1 + tt2}, output atomic time: {tai1 + tai2}. Difference: {difference} seconds.");
-
-                    if (Math.Abs(difference - 32.184) < 0.01)
+                    // Test whether we got the SOFA component's Type
+                    if (sofaType != null) // Found the SOFA component OK
                     {
-                        LogMessage("Main", $"Received expected result from TtTai.");
+                        LogMessage("Main", $"Successfully created SOFA component type, about to create instance...");
+
+                        dynamic sofa = Activator.CreateInstance(sofaType);
+                        LogMessage("Main", "Successfully created SOFA component");
+
+                        double tt1 = 2459773.0;
+                        double tt2 = 0.99093;
+                        double tai1 = 0.0;
+                        double tai2 = 0.0;
+                        int rc = sofa.TtTai(tt1, tt2, ref tai1, ref tai2);
+                        double difference = (tt1 + tt2 - tai1 - tai2) * 24.0 * 60.0 * 60.0;
+                        LogMessage("Main", $"TtTai called successfully. Input terrestrial time: {tt1 + tt2}, output atomic time: {tai1 + tai2}. Difference: {difference} seconds.");
+
+                        if (Math.Abs(difference - 32.184) < 0.01)
+                        {
+                            LogMessage("Main", $"Received expected result from TtTai.");
+                        }
+                        else
+                        {
+                            LogError("Main", $"Received bad result from TtTai.", null);
+                        }
                     }
-                    else
+                    else // Did not find the SOFA components type
                     {
-                        LogError("Main", $"Received bad result from TtTai.",null);
+                        LogError("Main", $"Unable to get SOFA component's type, further SOFA tests abandoned.", null);
                     }
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create SOFA COM component.",ex);
+                    LogError("Main", $"Unable to create SOFA COM component.", ex);
                 }
                 LogBlankLine();
 
                 // Test the SOFA .NET component.
                 try
                 {
+                    LogMessage("Main", "About to create SOFA .NET component...");
                     ASCOM.Astrometry.SOFA.SOFA sofaComponent = new ASCOM.Astrometry.SOFA.SOFA();
                     LogMessage("Main", "Successfully created SOFA .NET component.");
 
@@ -157,7 +170,7 @@ namespace ValidatePlatform
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create SOFA .NET component.",ex);
+                    LogError("Main", $"Unable to create SOFA .NET component.", ex);
                 }
                 LogBlankLine();
 
@@ -166,6 +179,7 @@ namespace ValidatePlatform
                 {
                     const double EXPECTED_JULIAN_DATE = 2459774.0;
 
+                    LogMessage("Main", "About to create NOVAS31 component...");
                     NOVAS31 novas31 = new NOVAS31();
                     LogMessage("Main", "Successfully created NOVAS31 component.");
 
@@ -183,7 +197,7 @@ namespace ValidatePlatform
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create NOVAS .NET component.",ex);
+                    LogError("Main", $"Unable to create NOVAS .NET component.", ex);
                 }
 
                 // DIsplay error log if necessary, otherwise continue silently.
@@ -197,7 +211,7 @@ namespace ValidatePlatform
             }
             catch (Exception ex)
             {
-                LogError("Main", $"Exception:",ex);
+                LogError("Main", $"Exception:", ex);
             }
 
             return returnCode;
