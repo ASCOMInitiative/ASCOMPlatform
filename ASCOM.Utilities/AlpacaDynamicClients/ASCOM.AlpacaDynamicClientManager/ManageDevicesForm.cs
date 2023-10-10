@@ -288,7 +288,7 @@ namespace ASCOM.DynamicRemoteClients
                         try
                         {
                             TL.LogMessage("DeleteDrivers", $"Removing driver Profile registration for {driver.DeviceType} driver: {driver.ProgId}");
-                            Com.Profile.UnRegister(driver.DeviceType.ToDeviceType(), driver.ProgId);
+                            Com.Profile.UnRegister(Common.Devices.ToDeviceType(driver.DeviceType), driver.ProgId);
                         }
                         catch (Exception ex)
                         {
@@ -376,7 +376,7 @@ namespace ASCOM.DynamicRemoteClients
             }
 
             // Extract a list of the remote client drivers from the list of devices in the Profile
-            List<DeviceTypes> deviceTypes = Devices.DeviceTypeList();
+            List<DeviceTypes> deviceTypes = Common.Devices.DeviceTypeList();
             foreach (DeviceTypes deviceType in deviceTypes)
             {
                 List<Com.ASCOMRegistration> devices = Com.Profile.GetDrivers(deviceType);
@@ -572,7 +572,7 @@ namespace ASCOM.DynamicRemoteClients
                 else // Driver is COM registered and its driver DLL exists
                 {
                     // Test whether the device is ASCOM registered
-                    if (!Com.Profile.IsRegistered(deviceType.ToDeviceType(), progId)) // The driver is not registered in the ASCOM Profile
+                    if (!Com.Profile.IsRegistered(Common.Devices.ToDeviceType(deviceType), progId)) // The driver is not registered in the ASCOM Profile
                     {
                         // Create a new list entry
                         DynamicDriverRegistration foundDriver = new DynamicDriverRegistration();
