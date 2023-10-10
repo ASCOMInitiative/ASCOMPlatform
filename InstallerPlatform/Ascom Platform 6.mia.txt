@@ -1267,7 +1267,9 @@ Install Files ..\Drivers and Simulators\ASCOM Device Hub\Documents\ASCOM Device 
  
 [DEFINE REGION: Platform validation]
 Install Files ..\ValidatePlatform\bin\Release\ValidatePlatform.exe to $TARGETDIR$\Tools\Validation
+Install Files ..\ValidatePlatform\bin\Release\ValidatePlatform.pdb to $TARGETDIR$\Tools\Validation
 Install Files ..\ValidatePlatform\bin\x64\Release\ValidatePlatform64.exe to $TARGETDIR$\Tools\Validation
+Install Files ..\ValidatePlatform\bin\x64\Release\ValidatePlatform64.pdb to $TARGETDIR$\Tools\Validation
 [END REGION]
  
 [DEFINE REGION: Platform 6 Content]
