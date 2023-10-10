@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
+using ASCOM.DriverAccess;
 
 namespace ASCOM.Simulator
 {

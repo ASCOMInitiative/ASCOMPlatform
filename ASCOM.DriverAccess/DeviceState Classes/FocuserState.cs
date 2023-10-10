@@ -1,8 +1,9 @@
-﻿using System;
+﻿using ASCOM.DeviceInterface;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace ASCOM.DeviceInterface.DeviceState
+namespace ASCOM.DriverAccess
 {
     /// <summary>
     /// Class that presents the device's operation state as a set of nullable properties

@@ -10,7 +10,6 @@ using ASCOM.Utilities;
 using System.Collections;
 using System.Reflection;
 using System.Globalization;
-using ASCOM.DeviceInterface.DeviceState;
 
 namespace ASCOM.DriverAccess
 {

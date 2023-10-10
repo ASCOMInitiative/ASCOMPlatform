@@ -1,30 +1,31 @@
-﻿using System;
+﻿using ASCOM.DeviceInterface;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace ASCOM.DeviceInterface.DeviceState
+namespace ASCOM.DriverAccess
 {
     /// <summary>
     /// Class that presents the device's operation state as a set of nullable properties
     /// </summary>
-    public class CoverCalibratorState
+    public class RotatorState
     {
         // Assign the name of this class
-        readonly string className = nameof(CoverCalibratorState);
+        readonly string className = nameof(RotatorState);
 
         /// <summary>
-        /// Create a new CoverCalibratorState instance
+        /// Create a new RotatorState instance
         /// </summary>
-        public CoverCalibratorState() { }
+        public RotatorState() { }
 
         /// <summary>
-        /// Create a new CoverCalibratorState instance from the device's DeviceState response.
+        /// Create a new RotatorState instance from the device's DeviceState response.
         /// </summary>
         /// <param name="deviceStateArrayList">The device's DeviceState response.</param>
         /// <param name="TL">Debug TraceLogger instance. The type of this parameter is Object - see remarks.</param>
         /// <remarks>This class supports .NET Framework 3.5, 4.x and .NET Standard 2.0. In order to avoid use of dynamic and inclusion of projects or packages that define the TraceLogger
         /// component, the TL parameter is typed as an object and a reflection method is used to call the LogMessage member.</remarks>
-        public CoverCalibratorState(ArrayList deviceStateArrayList, object TL)
+        public RotatorState(ArrayList deviceStateArrayList, object TL)
         {
             LogMessage(className, $"Received {deviceStateArrayList.Count} items");
 
@@ -37,6 +38,8 @@ namespace ASCOM.DeviceInterface.DeviceState
                 return;
             }
 
+            LogMessage(className, $"ArrayList from device contained {deviceStateArrayList.Count} DeviceSate items.");
+
             // An ArrayList was supplied so process each supplied value
             foreach (IStateValue stateValue in deviceStateArrayList)
             {
@@ -47,64 +50,40 @@ namespace ASCOM.DeviceInterface.DeviceState
 
                     switch (stateValue.Name)
                     {
-                        case nameof(ICoverCalibratorV2.Brightness):
+                        case nameof(IRotatorV4.IsMoving):
                             try
                             {
-                                Brightness = (int)stateValue.Value;
+                                IsMoving = (bool)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                LogMessage(className, $"Brightness - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"IsMoving - Ignoring exception: {ex.Message}");
                             }
-                            LogMessage(className, $"Brightness has value: {Brightness.HasValue}, Value: {Brightness}");
+                            LogMessage(className, $"IsMoving has value: {IsMoving.HasValue}, Value: {IsMoving}");
                             break;
 
-                        case nameof(ICoverCalibratorV2.CalibratorState):
+                        case nameof(IRotatorV4.MechanicalPosition):
                             try
                             {
-                                CalibratorState = (CalibratorStatus)stateValue.Value;
+                                MechanicalPosition = (float)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                LogMessage(className, $"CalibratorState - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"MechanicalPosition - Ignoring exception: {ex.Message}");
                             }
-                            LogMessage(className, $"CalibratorState has value: {CalibratorState.HasValue}, Value: {CalibratorState}");
+                            LogMessage(className, $"MechanicalPosition has value: {MechanicalPosition.HasValue}, Value: {MechanicalPosition}");
                             break;
 
-                        case nameof(ICoverCalibratorV2.CoverState):
+                        case nameof(IRotatorV4.Position):
                             try
                             {
-                                CoverState = (CoverStatus)stateValue.Value;
+                                Position = (float)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                LogMessage(className, $"CoverState - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"Position - Ignoring exception: {ex.Message}");
                             }
-                            LogMessage(className, $"CoverState has value: {CoverState.HasValue}, Value: {CoverState}");
-                            break;
-
-                        case nameof(ICoverCalibratorV2.CalibratorReady):
-                            try
-                            {
-                                CalibratorReady = (bool)stateValue.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                LogMessage(className, $"CalibratorReady - Ignoring exception: {ex.Message}");
-                            }
-                            LogMessage(className, $"CalibratorReady has value: {CalibratorReady.HasValue}, Value: {CalibratorReady}");
-                            break;
-
-                        case nameof(ICoverCalibratorV2.CoverMoving):
-                            try
-                            {
-                                CoverMoving = (bool)stateValue.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                LogMessage(className, $"CoverMoving - Ignoring exception: {ex.Message}");
-                            }
-                            LogMessage(className, $"CoverMoving has value: {CoverMoving.HasValue}, Value: {CoverMoving}");
+                            LogMessage(className, $"Position has value: {Position.HasValue}, Value: {Position}");
                             break;
 
                         case "TimeStamp":
@@ -132,35 +111,24 @@ namespace ASCOM.DeviceInterface.DeviceState
         }
 
         /// <summary>
-        /// The device's Brightness
+        /// Rotator is moving state
         /// </summary>
-        public double? Brightness { get; set; } = null;
+        public bool? IsMoving{ get; set; } = null;
 
         /// <summary>
-        /// The device's CalibratorState
+        /// Rotator position
         /// </summary>
-        public CalibratorStatus? CalibratorState { get; set; } = null;
+        public float? Position { get; set; } = null;
 
         /// <summary>
-        /// The device's CoverState
+        /// Rotator mechanical position
         /// </summary>
-        public CoverStatus? CoverState { get; set; } = null;
-
-        /// <summary>
-        /// The device's CalibratorReady state
-        /// </summary>
-        public bool? CalibratorReady { get; set; } = null;
-
-        /// <summary>
-        /// The device's CoverMoving state
-        /// </summary>
-        public bool? CoverMoving { get; set; } = null;
+        public float? MechanicalPosition { get; set; } = null;
 
         /// <summary>
         /// The time at which the state was recorded
         /// </summary>
         public DateTime? TimeStamp { get; set; } = null;
-
         #region Private methods
 
         private void LogMessage(string method, string name)

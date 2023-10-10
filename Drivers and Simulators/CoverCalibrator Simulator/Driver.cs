@@ -6,6 +6,7 @@ using System.Collections;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Diagnostics;
+using ASCOM.DriverAccess;
 
 namespace ASCOM.Simulator
 {

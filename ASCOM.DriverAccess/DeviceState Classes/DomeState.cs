@@ -1,30 +1,31 @@
-﻿using System;
+﻿using ASCOM.DeviceInterface;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace ASCOM.DeviceInterface.DeviceState
+namespace ASCOM.DriverAccess
 {
     /// <summary>
     /// Class that presents the device's operation state as a set of nullable properties
     /// </summary>
-    public class CameraDeviceState
+    public class DomeState
     {
         // Assign the name of this class
-        readonly string className = nameof(CameraDeviceState);
+        readonly string className = nameof(DomeState);
 
         /// <summary>
-        /// Create a new CameraDeviceState instance
+        /// Create a new DomeState instance
         /// </summary>
-        public CameraDeviceState() { }
+        public DomeState() { }
 
         /// <summary>
-        /// Create a new CameraDeviceState instance from the device's DeviceState response.
+        /// Create a new DomeState instance from the device's DeviceState response.
         /// </summary>
         /// <param name="deviceStateArrayList">The device's DeviceState response.</param>
         /// <param name="TL">Debug TraceLogger instance. The type of this parameter is Object - see remarks.</param>
         /// <remarks>This class supports .NET Framework 3.5, 4.x and .NET Standard 2.0. In order to avoid use of dynamic and inclusion of projects or packages that define the TraceLogger
         /// component, the TL parameter is typed as an object and a reflection method is used to call the LogMessage member.</remarks>
-        public CameraDeviceState(ArrayList deviceStateArrayList, object TL)
+        public DomeState(ArrayList deviceStateArrayList, object TL)
         {
             LogMessage(className, $"Received {deviceStateArrayList.Count} items");
 
@@ -37,6 +38,8 @@ namespace ASCOM.DeviceInterface.DeviceState
                 return;
             }
 
+            LogMessage(className, $"ArrayList from device contained {deviceStateArrayList.Count} DeviceSate items.");
+
             // An ArrayList was supplied so process each supplied value
             foreach (IStateValue stateValue in deviceStateArrayList)
             {
@@ -47,89 +50,78 @@ namespace ASCOM.DeviceInterface.DeviceState
 
                     switch (stateValue.Name)
                     {
-                        case nameof(ICameraV4.CameraState):
+                        case nameof(IDomeV3.Altitude):
                             try
                             {
-                                CameraState = (CameraStates)stateValue.Value;
+                                Altitude = (double)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                LogMessage(className, $"CameraState - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"Altitude - Ignoring exception: {ex.Message}");
                             }
-                            LogMessage(className, $"CameraState has value: {CameraState.HasValue}, Value: {CameraState}");
+                            LogMessage(className, $"Altitude has value: {Altitude.HasValue}, Value: {Altitude}");
                             break;
 
-                        case nameof(ICameraV4.CCDTemperature):
+                        case nameof(IDomeV3.AtHome):
                             try
                             {
-                                CCDTemperature = (double)stateValue.Value;
+                                AtHome = (bool)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                LogMessage(className, $"CCDTemperature - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"AtHome - Ignoring exception: {ex.Message}");
                             }
-                            LogMessage(className, $"CCDTemperature has value: {CCDTemperature.HasValue}, Value: {CCDTemperature}");
+                            LogMessage(className, $"AtHome has value: {AtHome.HasValue}, Value: {AtHome}");
                             break;
 
-                        case nameof(ICameraV4.CoolerPower): 
+                        case nameof(IDomeV3.AtPark):
                             try
                             {
-                                CoolerPower = (double)stateValue.Value;
+                                AtPark = (bool)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                LogMessage(className, $"CoolerPower - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"AtPark - Ignoring exception: {ex.Message}");
                             }
-                            LogMessage(className, $"CoolerPower has value: {CoolerPower.HasValue}, Value: {CoolerPower}");
+                            LogMessage(className, $"AtPark has value: {AtPark.HasValue}, Value: {AtPark}");
                             break;
 
-                        case nameof(ICameraV4.HeatSinkTemperature):
+                        case nameof(IDomeV3.Azimuth):
                             try
                             {
-                                HeatSinkTemperature = (double)stateValue.Value;
+                                Azimuth = (double)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                LogMessage(className, $"HeatSinkTemperature - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"Azimuth - Ignoring exception: {ex.Message}");
                             }
-                            LogMessage(className, $"HeatSinkTemperature has value: {HeatSinkTemperature.HasValue}, Value: {HeatSinkTemperature}");
+                            LogMessage(className, $"Azimuth has value: {Azimuth.HasValue}, Value: {Azimuth}");
                             break;
 
-                        case nameof(ICameraV4.ImageReady):
+                        case nameof(IDomeV3.ShutterStatus):
                             try
                             {
-                                ImageReady = (bool)stateValue.Value;
+                                ShutterStatus = (ShutterState)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                LogMessage(className, $"ImageReady - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"Declination - Ignoring exception: {ex.Message}");
                             }
-                            LogMessage(className, $"ImageReady has value: {ImageReady.HasValue}, Value: {ImageReady}");
+                            LogMessage(className, $"ShutterStatus has value: {ShutterStatus.HasValue}, Value: {ShutterStatus}");
                             break;
 
-                        case nameof(ICameraV4.IsPulseGuiding):
+                        case nameof(IDomeV3.Slewing):
                             try
                             {
-                                IsPulseGuiding = (bool)stateValue.Value;
+                                Slewing = (bool)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                LogMessage(className, $"IsPulseGuiding - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"Slewing - Ignoring exception: {ex.Message}");
                             }
-                            LogMessage(className, $"IsPulseGuiding has value: {IsPulseGuiding.HasValue}, Value: {IsPulseGuiding}");
+                            LogMessage(className, $"Slewing has value: {Slewing.HasValue}, Value: {Slewing.Value}");
                             break;
 
-                        case nameof(ICameraV4.PercentCompleted):
-                            try
-                            {
-                                PercentCompleted = (short)stateValue.Value;
-                            }
-                            catch (Exception ex)
-                            {
-                                LogMessage(className, $"PercentCompleted - Ignoring exception: {ex.Message}");
-                            }
-                            LogMessage(className, $"PercentCompleted has value: {PercentCompleted.HasValue}, Value: {PercentCompleted}");
-                            break;
 
                         case "TimeStamp":
                             try
@@ -156,39 +148,34 @@ namespace ASCOM.DeviceInterface.DeviceState
         }
 
         /// <summary>
-        /// The device's CameraState
+        /// Dome altitude
         /// </summary>
-        public CameraStates? CameraState { get; set; } = null;
+        public double? Altitude { get; set; } = null;
 
         /// <summary>
-        /// The device's CCDTemperature
+        /// Dome is at home
         /// </summary>
-        public double? CCDTemperature { get; set; } = null;
+        public bool? AtHome { get; set; } = null;
 
         /// <summary>
-        /// The device's CoolerPower
+        /// Dome is parked
         /// </summary>
-        public double? CoolerPower { get; set; } = null;
+        public bool? AtPark { get; set; } = null;
 
         /// <summary>
-        /// The device's HeatSinkTemperature
+        /// Dome azimuth
         /// </summary>
-        public double? HeatSinkTemperature { get; set; } = null;
+        public double? Azimuth { get; set; } = null;
 
         /// <summary>
-        /// The device's ImageReady property
+        /// Dome shutter state
         /// </summary>
-        public bool? ImageReady { get; set; } = null;
+        public ShutterState? ShutterStatus { get; set; } = null;
 
         /// <summary>
-        /// The device's IsPulseGuiding property
+        /// Dome is slewing
         /// </summary>
-        public bool? IsPulseGuiding { get; set; } = null;
-
-        /// <summary>
-        /// The device's PercentCompleted property
-        /// </summary>
-        public double? PercentCompleted { get; set; } = null;
+        public bool? Slewing { get; set; } = null;
 
         /// <summary>
         /// The time at which the state was recorded

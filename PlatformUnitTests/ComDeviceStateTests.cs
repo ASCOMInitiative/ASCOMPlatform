@@ -1,7 +1,6 @@
 ﻿using ASCOM.DeviceInterface;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ASCOM.DriverAccess;
-using ASCOM.DeviceInterface.DeviceState;
 
 namespace PlatformUnitTests
 {

@@ -1,31 +1,39 @@
-﻿using System;
+﻿using ASCOM.DeviceInterface;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace ASCOM.DeviceInterface.DeviceState
+namespace ASCOM.DriverAccess
 {
     /// <summary>
     /// Class that presents the device's operation state as a set of nullable properties
     /// </summary>
-    public class VideoState
+    public class SafetyMonitorState
     {
+        readonly Type traceLoggerType;
+        readonly object TL;
+
         // Assign the name of this class
-        readonly string className = nameof(FilterWheelState);
+        readonly string className = nameof(SafetyMonitorState);
 
         /// <summary>
-        /// Create a new VideoState instance
+        /// Create a new FocuserState instance
         /// </summary>
-        public VideoState() { }
+        public SafetyMonitorState() { }
 
         /// <summary>
-        /// Create a new VideoState instance from the device's DeviceState response.
+        /// Create a new FocuserState instance from the device's DeviceState response.
         /// </summary>
         /// <param name="deviceStateArrayList">The device's DeviceState response.</param>
         /// <param name="TL">Debug TraceLogger instance. The type of this parameter is Object - see remarks.</param>
         /// <remarks>This class supports .NET Framework 3.5, 4.x and .NET Standard 2.0. In order to avoid use of dynamic and inclusion of projects or packages that define the TraceLogger
         /// component, the TL parameter is typed as an object and a reflection method is used to call the LogMessage member.</remarks>
-        public VideoState(ArrayList deviceStateArrayList, object TL)
+        public SafetyMonitorState(ArrayList deviceStateArrayList, object TL) // 
         {
+            // SAve the TraceLogger and it's type
+            this.TL = TL;
+            traceLoggerType = TL.GetType();
+
             LogMessage(className, $"Received {deviceStateArrayList.Count} items");
 
             List<IStateValue> deviceState = new List<IStateValue>();
@@ -49,16 +57,16 @@ namespace ASCOM.DeviceInterface.DeviceState
 
                     switch (stateValue.Name)
                     {
-                        case nameof(IVideoV2.CameraState):
+                        case nameof(ISafetyMonitorV3.IsSafe):
                             try
                             {
-                                CameraState = (VideoCameraState)stateValue.Value;
+                                IsSafe = (bool)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                LogMessage(className, $"CameraState - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"IsSafe - Ignoring exception: {ex.Message}");
                             }
-                            LogMessage(className, $"CameraState has value: {CameraState.HasValue}, Value: {CameraState}");
+                            LogMessage(className, $"IsSafe has value: {IsSafe.HasValue}, Value: {IsSafe}");
                             break;
 
                         case "TimeStamp":
@@ -88,7 +96,7 @@ namespace ASCOM.DeviceInterface.DeviceState
         /// <summary>
         /// Focuser IsMoving state
         /// </summary>
-        public VideoCameraState? CameraState { get; set; } = null;
+        public bool? IsSafe { get; set; } = null;
 
         /// <summary>
         /// The time at which the state was recorded
@@ -96,12 +104,29 @@ namespace ASCOM.DeviceInterface.DeviceState
         public DateTime? TimeStamp { get; set; } = null;
         #region Private methods
 
-        private void LogMessage(string method, string name)
+        private void LogMessage(string method, string message)
         {
+            // Create a parameter object array containing the two parameters
+            object[] parms = new object[] { method, message };
 
+            try
+            {
+            // Invoke the LogMessage method.
+            object result = traceLoggerType.InvokeMember("LogMessage",
+                                                           System.Reflection.BindingFlags.Default | System.Reflection.BindingFlags.InvokeMethod,
+                                                           null,
+                                                           TL,
+                                                           parms,
+                                                           System.Globalization.CultureInfo.InvariantCulture);
+            }
+            catch (System.Reflection.TargetInvocationException e)
+            {
+                // Remove any TargetInvocationException wrapper and throw the real exception
+                throw e.InnerException;
+            }
         }
 
         #endregion
-
     }
 }
+

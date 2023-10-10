@@ -1,30 +1,31 @@
-﻿using System;
+﻿using ASCOM.DeviceInterface;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace ASCOM.DeviceInterface.DeviceState
+namespace ASCOM.DriverAccess
 {
     /// <summary>
     /// Class that presents the device's operation state as a set of nullable properties
     /// </summary>
-    public class FilterWheelState
+    public class VideoState
     {
         // Assign the name of this class
         readonly string className = nameof(FilterWheelState);
 
         /// <summary>
-        /// Create a new FilterWheelState instance
+        /// Create a new VideoState instance
         /// </summary>
-        public FilterWheelState() { }
+        public VideoState() { }
 
         /// <summary>
-        /// Create a new FilterWheelState instance from the device's DeviceState response.
+        /// Create a new VideoState instance from the device's DeviceState response.
         /// </summary>
         /// <param name="deviceStateArrayList">The device's DeviceState response.</param>
         /// <param name="TL">Debug TraceLogger instance. The type of this parameter is Object - see remarks.</param>
         /// <remarks>This class supports .NET Framework 3.5, 4.x and .NET Standard 2.0. In order to avoid use of dynamic and inclusion of projects or packages that define the TraceLogger
         /// component, the TL parameter is typed as an object and a reflection method is used to call the LogMessage member.</remarks>
-        public FilterWheelState(ArrayList deviceStateArrayList, object TL)
+        public VideoState(ArrayList deviceStateArrayList, object TL)
         {
             LogMessage(className, $"Received {deviceStateArrayList.Count} items");
 
@@ -49,16 +50,16 @@ namespace ASCOM.DeviceInterface.DeviceState
 
                     switch (stateValue.Name)
                     {
-                        case nameof(IFilterWheelV3.Position):
+                        case nameof(IVideoV2.CameraState):
                             try
                             {
-                                Position = (short)stateValue.Value;
+                                CameraState = (VideoCameraState)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                LogMessage(className, $"Position - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"CameraState - Ignoring exception: {ex.Message}");
                             }
-                            LogMessage(className, $"Position has value: {Position.HasValue}, Value: {Position}");
+                            LogMessage(className, $"CameraState has value: {CameraState.HasValue}, Value: {CameraState}");
                             break;
 
                         case "TimeStamp":
@@ -86,9 +87,9 @@ namespace ASCOM.DeviceInterface.DeviceState
         }
 
         /// <summary>
-        /// FilterWheel position
+        /// Focuser IsMoving state
         /// </summary>
-        public double? Position { get; set; } = null;
+        public VideoCameraState? CameraState { get; set; } = null;
 
         /// <summary>
         /// The time at which the state was recorded
@@ -105,4 +106,3 @@ namespace ASCOM.DeviceInterface.DeviceState
 
     }
 }
-
