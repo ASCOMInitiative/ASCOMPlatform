@@ -50,6 +50,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Runtime;
 using System.Threading;
+using ASCOM.DriverAccess;
 
 namespace ASCOM.Simulator
 {

@@ -1,14 +1,12 @@
-﻿using System;
+﻿using ASCOM.DeviceInterface;
+using System;
 using System.Runtime.InteropServices;
 
-namespace ASCOM.DeviceInterface
+namespace ASCOM.DriverAccess
 {
     /// <summary>
     /// Data class to hold a single operational state name and value
     /// </summary>
-    [ClassInterface(ClassInterfaceType.None)]
-    [Guid("109DB703-2B74-424A-89AC-EAA94CFDD86D")]
-    [ComVisible(true)]
     public class StateValue : IStateValue
     {
         /// <summary>

@@ -27,6 +27,7 @@
 ' _Dome from being created and used as the [default] interface
 '
 Imports ASCOM.DeviceInterface
+Imports ASCOM.DriverAccess
 Imports System.Globalization
 
 <Guid("70896ae0-b6c4-4303-a945-01219bf40bb4")>

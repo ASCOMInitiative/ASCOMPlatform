@@ -31,6 +31,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
 using static ASCOM.Utilities.Global;
+using ASCOM.DriverAccess;
 
 namespace ASCOM.Simulator
 {

@@ -27,6 +27,7 @@ using ASCOM.Utilities.Video;
 using ASCOM.Simulator.Properties;
 using ASCOM.Simulator.Utils;
 using Simulator.VideoCameraImpl;
+using ASCOM.DriverAccess;
 
 namespace ASCOM.Simulator
 {

@@ -7,6 +7,7 @@ using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Globalization;
 using static ASCOM.Utilities.Global;
+using ASCOM.DriverAccess;
 
 namespace ASCOM.Simulator
 {
