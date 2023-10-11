@@ -5,10 +5,17 @@ using System.Windows.Forms;
 
 namespace ASCOM.Utilities
 {
+    /// <summary>
+    /// About box form class.
+    /// </summary>
     public partial class AboutBox : Form
     {
 
         // Form overrides dispose to clean up the component list.
+        /// <summary>
+        /// Dispose of form.
+        /// </summary>
+        /// <param name="disposing"></param>
         [DebuggerNonUserCode()]
         protected override void Dispose(bool disposing)
         {

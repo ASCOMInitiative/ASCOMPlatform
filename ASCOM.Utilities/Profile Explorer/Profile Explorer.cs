@@ -37,6 +37,9 @@ namespace ASCOM.Utilities
 
         private const string NEW_KEY_NAME = "New Key 1";
 
+        /// <summary>
+        /// Initialise the Profile explorer application
+        /// </summary>
         public frmProfileExplorer()
         {
             InitializeComponent();
@@ -224,7 +227,7 @@ namespace ASCOM.Utilities
                                     {
                                     } // Test whether the value is null and condition to empty string
                                 }
-                                catch (Exception ex)
+                                catch (Exception)
                                 {
                                     KeyValues.CurrentRow.Cells[1].Value = "";
                                 }
@@ -410,7 +413,7 @@ namespace ASCOM.Utilities
                 CurrentRow = KeyValues.CurrentRow.Index;
                 CurrentCell = KeyValues.CurrentCell.ColumnIndex;
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException )
             {
                 CurrentRow = 0;
                 CurrentCell = 0;
@@ -537,13 +540,13 @@ namespace ASCOM.Utilities
                             KeyValues.Rows[KeyValues.RowCount - 1].Cells[1].Style.BackColor = Color.White;
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         KeyValues.Rows[KeyValues.RowCount - 1].Cells[1].ReadOnly = true;
                         KeyValues.Rows[KeyValues.RowCount - 1].Cells[1].Style.BackColor = Color.Crimson;
                     }
                 }
-                catch (System.InvalidOperationException ex)
+                catch (System.InvalidOperationException )
                 {
                 }
                 // Ignore these re-entrant error messages
@@ -613,7 +616,7 @@ namespace ASCOM.Utilities
                                 KeyValues.CurrentCell = KeyValues[xpos, ypos];
                             }
 
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                             }
                             mnuRenameValue.Text = "Edit Value";
@@ -663,7 +666,7 @@ namespace ASCOM.Utilities
                                         mnuEditData.Text = "Enter New Data";
                                     }
                                 }
-                                catch (Exception ex)
+                                catch (Exception)
                                 {
                                     mnuEditData.Text = "Please enter Value first";
                                     mnuEditData.Enabled = false;

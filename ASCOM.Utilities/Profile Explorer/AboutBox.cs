@@ -5,6 +5,9 @@ namespace ASCOM.Utilities
 {
     public sealed partial class AboutBox
     {
+        /// <summary>
+        /// Initialise about box class
+        /// </summary>
         public AboutBox()
         {
             InitializeComponent();
