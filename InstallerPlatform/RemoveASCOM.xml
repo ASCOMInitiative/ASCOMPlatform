@@ -95,6 +95,16 @@
             with HexDump set False to achieve this effect.</para>
             </remarks>
         </member>
+        <member name="T:RemoveASCOM.Form1">
+            <summary>
+            Remove ASCOM Form class
+            </summary>
+        </member>
+        <member name="M:RemoveASCOM.Form1.#ctor">
+            <summary>
+            Create the Remove ASCOM form.
+            </summary>
+        </member>
         <member name="M:RemoveASCOM.Form1.cmbRemoveMode_SelectedIndexChanged(System.Object,System.EventArgs)">
             <summary>
             Update colours and text when the type of removal is changed
@@ -153,6 +163,12 @@
             </summary>
             <param name="FileName">Full path to the file to delete</param>
             <remarks></remarks>
+        </member>
+        <member name="M:RemoveASCOM.Form1.Dispose(System.Boolean)">
+            <summary>
+            Dispose of the form
+            </summary>
+            <param name="disposing"></param>
         </member>
         <member name="T:RemoveASCOM.ASM_DISPLAY_FLAGS">
             <summary>
@@ -599,14 +615,14 @@
             Handle an un-handled application exception
             </summary>
             <param name="sender"></param>
-            <param name="e"></param>
+            <param name="eventArgs"></param>
         </member>
         <member name="M:RemoveASCOM.Program.HandleThreadException(System.Object,System.Threading.ThreadExceptionEventArgs)">
             <summary>
             Handle an un-handled thread exception
             </summary>
             <param name="sender"></param>
-            <param name="e"></param>
+            <param name="eventArgs"></param>
         </member>
     </members>
 </doc>

@@ -5,10 +5,17 @@ using System.Windows.Forms;
 
 namespace RemoveASCOM
 {
+    /// <summary>
+    /// Remove ASCOM Form class
+    /// </summary>
     public partial class Form1 : Form
     {
 
         // Form overrides dispose to clean up the component list.
+        /// <summary>
+        /// Dispose of the form
+        /// </summary>
+        /// <param name="disposing"></param>
         [DebuggerNonUserCode()]
         protected override void Dispose(bool disposing)
         {
@@ -26,7 +33,9 @@ namespace RemoveASCOM
         }
 
         // Required by the Windows Form Designer
+#pragma warning disable CS0649 // Field 'Form1.components' is never assigned to, and will always have its default value null
         private System.ComponentModel.IContainer components;
+#pragma warning restore CS0649 // Field 'Form1.components' is never assigned to, and will always have its default value null
 
         // NOTE: The following procedure is required by the Windows Form Designer
         // It can be modified using the Windows Form Designer.  

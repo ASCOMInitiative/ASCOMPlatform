@@ -48,7 +48,6 @@ namespace Utilities
         /// <summary>
         /// Creates a new TraceLogger instance and initialises filename and type
         /// </summary>
-        /// <param name="LogFileName">Fully qualified trace file name or null string to use automatic file naming (recommended)</param>
         /// <param name="logFileType">String identifying the type of log e,g, Focuser, LX200, GEMINI, MoonLite, G11</param>
         /// <remarks>The LogFileType is used in the file name to allow you to quickly identify which of several logs contains the information of interest.</remarks>
         public TraceLogger(string logFileType) : base()

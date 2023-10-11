@@ -33,6 +33,9 @@ namespace RemoveASCOM
         private const int CSIDL_PROGRAM_FILES_COMMON = 43; // 0x002b 
         private const int CSIDL_PROGRAM_FILES_COMMONX86 = 44;    // 0x002c
 
+        /// <summary>
+        /// Create the Remove ASCOM form.
+        /// </summary>
         public Form1()
         {
             InitializeComponent();

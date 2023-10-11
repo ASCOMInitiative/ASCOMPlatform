@@ -72,7 +72,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>bin\Release\RemoveASCOM.xml</DocumentationFile>
     <Optimize>false</Optimize>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,CS1591</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <CodeAnalysisLogFile>bin\Release\RemoveASCOM.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
