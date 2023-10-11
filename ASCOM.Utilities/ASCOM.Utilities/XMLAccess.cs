@@ -604,6 +604,8 @@ namespace ASCOM.Utilities
 
         private SortedList<string, string> ReadValues(string p_SubKeyName)
         {
+            string ValueName = "";
+
             // Read all values in a key - SubKey has to be absolute from the profile store root
             var Retval = new SortedList<string, string>();
             XmlReaderSettings ReaderSettings;
