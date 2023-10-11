@@ -203,7 +203,7 @@ namespace ASCOM.Utilities
                 {
                     FileStore.DeleteDirectory(p_SubKeyName);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 } // Remove it if at all possible but don't throw any errors
                 sw.Stop();
@@ -395,7 +395,7 @@ namespace ASCOM.Utilities
                         RetVal = Values[p_ValueName];
                     }
                 }
-                catch (KeyNotFoundException ex) // Missing value generates a KeyNotFound exception and should return a null string or the supplied default value
+                catch (KeyNotFoundException ) // Missing value generates a KeyNotFound exception and should return a null string or the supplied default value
                 {
                     if (p_DefaultValue is not null) // We have been supplied a default value so set it and then return it
                     {
@@ -607,9 +607,6 @@ namespace ASCOM.Utilities
             // Read all values in a key - SubKey has to be absolute from the profile store root
             var Retval = new SortedList<string, string>();
             XmlReaderSettings ReaderSettings;
-            string LastElementName = "";
-            string NextName = "";
-            string ValueName = "";
             bool ReadOK = false;
             int RetryCount;
             bool ErrorOccurred = false;
@@ -810,7 +807,7 @@ namespace ASCOM.Utilities
                     FStream.Dispose();
                     FStream = null;
                 }
-                catch (Exception ex) // Ensure no error occur from this tidying up
+                catch (Exception) // Ensure no error occur from this tidying up
                 {
                 }
 
