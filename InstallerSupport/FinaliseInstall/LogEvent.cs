@@ -117,14 +117,14 @@ namespace FinaliseInstall
                     File.AppendAllText(ErrorLog, TodaysDateTime + " ErrorCode: 0x" + ex.ErrorCode.ToString("X8") + " NativeErrorCode: 0x" + ex.NativeErrorCode.ToString("X8") + " " + ex.ToString() + "\r\n");
                     File.AppendAllText(MessageLog, TodaysDateTime + " " + Caller + " " + Msg + " " + Severity.ToString() + " " + Id.ToString() + " " + Except + "\r\n");
                 }
-                catch (Exception ex1) // Ignore exceptions here, the PC seems to be in a catastrophic failure!
+                catch (Exception ) // Ignore exceptions here, the PC seems to be in a catastrophic failure!
                 {
 
                 }
             }
             catch (Exception ex) // Catch all other exceptions
             {
-                // Somthing bad happened when writing to the event log so try and log it in a log file on the file system
+                // Something bad happened when writing to the event log so try and log it in a log file on the file system
                 try
                 {
                     string TodaysDateTime = DateTime.Now.ToString("dd MMMM yyyy HH:mm:ss.fff");
@@ -135,7 +135,7 @@ namespace FinaliseInstall
                     File.AppendAllText(ErrorLog, TodaysDateTime + " " + ex.ToString() + "\r\n");
                     File.AppendAllText(MessageLog, TodaysDateTime + " " + Caller + " " + Msg + " " + Severity.ToString() + " " + Id.ToString() + " " + Except + "\r\n");
                 }
-                catch (Exception ex1) // Ignore exceptions here, the PC seems to be in a catastrophic failure!
+                catch (Exception) // Ignore exceptions here, the PC seems to be in a catastrophic failure!
                 {
 
                 }

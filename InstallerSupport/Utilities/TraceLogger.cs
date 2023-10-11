@@ -350,7 +350,7 @@ namespace Utilities
                     returnValue = settingsKey.GetValue(name).ToString();
                 }
             }
-            catch (IOException ex) // Value doesn't exist so create it
+            catch (IOException) // Value doesn't exist so create it
             {
                 try
                 {
