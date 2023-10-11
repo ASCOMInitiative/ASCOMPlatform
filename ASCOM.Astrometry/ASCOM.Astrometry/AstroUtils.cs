@@ -37,6 +37,9 @@ namespace ASCOM.Astrometry.AstroUtils
         }
 
         #region New and IDisposable Support
+        /// <summary>
+        /// AstroUtils initiator
+        /// </summary>
         public AstroUtils() // Create own trace logger
         {
             TL = new TraceLogger("", "AstroUtils");
@@ -65,7 +68,9 @@ namespace ASCOM.Astrometry.AstroUtils
         }
 
         // IDisposable
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         protected virtual void Dispose(bool disposing)
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
         {
             if (!disposedValue)
             {
@@ -114,6 +119,9 @@ namespace ASCOM.Astrometry.AstroUtils
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// AstroUtils destructor
+        /// </summary>
         ~AstroUtils()
         {
             // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
@@ -615,7 +623,7 @@ namespace ASCOM.Astrometry.AstroUtils
             {
                 TestDate = DateTime.Parse(Month + "/" + Day + "/" + Year, System.Globalization.CultureInfo.InvariantCulture); // Test whether this is a valid date e.g is not the 31st of February
             }
-            catch (FormatException ex) // Catch case where day exceeds the maximum number of days in the month
+            catch (FormatException ) // Catch case where day exceeds the maximum number of days in the month
             {
                 throw new InvalidValueException("Day or Month", Day.ToString() + " " + Month.ToString() + " " + Year.ToString(), "Day must not exceed the number of days in the month");
             }

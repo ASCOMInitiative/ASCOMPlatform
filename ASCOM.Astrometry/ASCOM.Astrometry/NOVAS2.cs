@@ -1149,23 +1149,24 @@ namespace ASCOM.Astrometry.NOVAS
         /// </pre></returns>
         /// <remarks></remarks>
         public static short SetBody(BodyType type, Body number, string name, ref BodyDescription cel_obj)
-
-
         {
             var BDS = new BodyDescriptionShort();
+            short rc;
+
             if (Is64Bit())
             {
-                return set_body64((short)type, (short)number, name, ref BDS);
+                rc= set_body64((short)type, (short)number, name, ref BDS);
             }
             else
             {
-                return set_body32((short)type, (short)number, name, ref BDS);
+                rc = set_body32((short)type, (short)number, name, ref BDS);
             }
 
             // Set values in the return object
             cel_obj.Name = BDS.Name;
             cel_obj.Number = (Body)BDS.Number;
             cel_obj.Type = (BodyType)BDS.Type;
+            return rc;
         }
 
         // Public Shared Function readeph(ByVal mp As Integer, _

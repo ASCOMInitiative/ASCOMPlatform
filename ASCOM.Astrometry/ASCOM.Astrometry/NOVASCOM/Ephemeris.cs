@@ -50,7 +50,7 @@ namespace ASCOM.Astrometry
                 if (rc != 0)
                     throw new Exceptions.NOVASFunctionException("EphemerisCode:get_earth_nov Earth eph exception", "solarsystem_nov", rc);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 tjd_last = 0.0d;
                 throw;
@@ -64,7 +64,7 @@ namespace ASCOM.Astrometry
                 if (rc != 0)
                     throw new Exceptions.NOVASFunctionException("EphemerisCode:get_earth_nov Earth eph exception", "solarsystem_nov", rc);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 tjd_last = 0.0d;
                 throw;
@@ -465,7 +465,7 @@ namespace ASCOM.Astrometry
             double sum_lon = 0.0d;
             double sum_r = 0.0d;
             const double factor = 0.0000001d;
-            double u, arg, lon, lat, t, t2, emean, sin_lon;
+            double u, arg, lon, t, t2, emean, sin_lon;
 
             sun_con[] con = new sun_con[] { new sun_con(403406.0d, 0.0d, 4.721964d, 1.621043d), new sun_con(195207.0d, -97597.0d, 5.937458d, 62830.348067d), new sun_con(119433.0d, -59715.0d, 1.115589d, 62830.821524d), new sun_con(112392.0d, -56188.0d, 5.781616d, 62829.634302d), new sun_con(3891.0d, -1556.0d, 5.5474d, 125660.5691d), new sun_con(2819.0d, -1126.0d, 1.512d, 125660.9845d), new sun_con(1721.0d, -861.0d, 4.1897d, 62832.4766d), new sun_con(0.0d, 941.0d, 1.163d, 0.813d), new sun_con(660.0d, -264.0d, 5.415d, 125659.31d), new sun_con(350.0d, -163.0d, 4.315d, 57533.85d), new sun_con(334.0d, 0.0d, 4.553d, -33.931d), new sun_con(314.0d, 309.0d, 5.198d, 777137.715d), new sun_con(268.0d, -158.0d, 5.989d, 78604.191d), new sun_con(242.0d, 0.0d, 2.911d, 5.412d), new sun_con(234.0d, -54.0d, 1.423d, 39302.098d), new sun_con(158.0d, 0.0d, 0.061d, -34.861d), new sun_con(132.0d, -93.0d, 2.317d, 115067.698d), new sun_con(129.0d, -20.0d, 3.193d, 15774.337d), new sun_con(114.0d, 0.0d, 2.828d, 5296.67d), new sun_con(99.0d, -47.0d, 0.52d, 58849.27d), new sun_con(93.0d, 0.0d, 4.65d, 5296.11d), new sun_con(86.0d, 0.0d, 4.35d, -3980.7d), new sun_con(78.0d, -33.0d, 2.75d, 52237.69d), new sun_con(72.0d, -32.0d, 4.5d, 55076.47d), new sun_con(68.0d, 0.0d, 3.23d, 261.08d), new sun_con(64.0d, -10.0d, 1.22d, 15773.85d), new sun_con(46.0d, -16.0d, 0.14d, 188491.03d), new sun_con(38.0d, 0.0d, 3.44d, -7756.55d), new sun_con(37.0d, 0.0d, 4.37d, 264.89d), new sun_con(32.0d, -24.0d, 1.14d, 117906.27d), new sun_con(29.0d, -13.0d, 2.84d, 55075.75d), new sun_con(28.0d, 0.0d, 5.96d, -7961.39d), new sun_con(27.0d, -9.0d, 5.09d, 188489.81d), new sun_con(27.0d, 0.0d, 1.72d, 2132.19d), new sun_con(25.0d, -17.0d, 2.56d, 109771.03d), new sun_con(24.0d, -11.0d, 1.92d, 54868.56d), new sun_con(21.0d, 0.0d, 0.09d, 25443.93d), new sun_con(21.0d, 31.0d, 5.98d, -55731.43d), new sun_con(20.0d, -10.0d, 4.03d, 60697.74d), new sun_con(18.0d, 0.0d, 4.27d, 2132.79d), new sun_con(17.0d, -12.0d, 0.79d, 109771.63d), new sun_con(14.0d, 0.0d, 4.24d, -7752.82d), new sun_con(13.0d, -5.0d, 2.01d, 188491.91d), new sun_con(13.0d, 0.0d, 2.65d, 207.81d), new sun_con(13.0d, 0.0d, 4.98d, 29424.63d), new sun_con(12.0d, 0.0d, 0.93d, -7.99d), new sun_con(10.0d, 0.0d, 2.21d, 46941.14d), new sun_con(10.0d, 0.0d, 3.59d, -68.29d), new sun_con(10.0d, 0.0d, 1.5d, 21463.25d), new sun_con(10.0d, -9.0d, 2.55d, 157208.4d) };
 
@@ -498,8 +498,6 @@ namespace ASCOM.Astrometry
             lon = lon % GlobalItems.TWOPI;
             if (lon < 0.0d)
                 lon += GlobalItems.TWOPI;
-
-            lat = 0.0d;
 
             dis = 1.0001026d + factor * sum_r;
 

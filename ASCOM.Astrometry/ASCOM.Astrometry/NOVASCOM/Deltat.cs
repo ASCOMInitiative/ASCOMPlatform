@@ -56,7 +56,7 @@ namespace ASCOM.Astrometry
                         Retval = rp.LeapSeconds() + GlobalItems.TT_TAI_OFFSET; // Get today's leap second value using whatever mechanic the user has configured and convert to DeltaT
                     }
                 }
-                catch (Exception ex)
+                catch (Exception )
                 {
                     // Ultimate fallback value if all else fails!
                     Retval = GlobalItems.LEAP_SECOND_ULTIMATE_FALLBACK_VALUE + GlobalItems.TT_TAI_OFFSET;

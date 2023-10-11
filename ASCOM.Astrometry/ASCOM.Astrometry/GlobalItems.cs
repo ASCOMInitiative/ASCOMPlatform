@@ -186,19 +186,61 @@ namespace ASCOM.Astrometry
     [ComVisible(true)]
     public enum EventType : int
     {
+        /// <summary>
+        /// SunRiseSunset
+        /// </summary>
         SunRiseSunset = 0,
+        /// <summary>
+        /// MoonRiseMoonSet
+        /// </summary>
         MoonRiseMoonSet = 1,
+        /// <summary>
+        /// CivilTwilight
+        /// </summary>
         CivilTwilight = 2,
+        /// <summary>
+        /// NauticalTwilight
+        /// </summary>
         NauticalTwilight = 3,
+        /// <summary>
+        /// AmateurAstronomicalTwilight
+        /// </summary>
         AmateurAstronomicalTwilight = 4,
+        /// <summary>
+        /// AstronomicalTwilight
+        /// </summary>
         AstronomicalTwilight = 5,
+        /// <summary>
+        /// MercuryRiseSet
+        /// </summary>
         MercuryRiseSet = 6,
+        /// <summary>
+        /// VenusRiseSet
+        /// </summary>
         VenusRiseSet = 7,
+        /// <summary>
+        /// MarsRiseSet
+        /// </summary>
         MarsRiseSet = 8,
+        /// <summary>
+        /// JupiterRiseSet
+        /// </summary>
         JupiterRiseSet = 9,
+        /// <summary>
+        /// SaturnRiseSet
+        /// </summary>
         SaturnRiseSet = 10,
+        /// <summary>
+        /// UranusRiseSet
+        /// </summary>
         UranusRiseSet = 11,
+        /// <summary>
+        /// NeptuneRiseSet
+        /// </summary>
         NeptuneRiseSet = 12,
+        /// <summary>
+        /// PlutoRiseSet
+        /// </summary>
         PlutoRiseSet = 13
     }
     #endregion
@@ -408,7 +450,13 @@ namespace ASCOM.Astrometry
     [ComVisible(true)]
     public enum TransformationDirection : short
     {
+        /// <summary>
+        /// ITRSToTerrestrialIntermediate
+        /// </summary>
         ITRSToTerrestrialIntermediate = 0,
+        /// <summary>
+        /// TerrestrialIntermediateToITRS
+        /// </summary>
         TerrestrialIntermediateToITRS = 1
     }
     /// <summary>

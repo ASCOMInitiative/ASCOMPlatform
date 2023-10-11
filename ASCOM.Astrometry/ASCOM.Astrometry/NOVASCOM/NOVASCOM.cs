@@ -621,7 +621,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 st.Latitude = site.Latitude;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("Star:GetTopocentricPosition Site.Latitude is not available");
             }
@@ -629,7 +629,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 st.Longitude = site.Longitude;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("Star:GetTopocentricPosition Site.Longitude is not available");
             }
@@ -637,7 +637,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 st.Height = site.Height;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("Star:GetTopocentricPosition Site.Height is not available");
             }
@@ -777,7 +777,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 st.Latitude = site.Latitude;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("Star:GetTopocentricPosition Site.Latitude is not available");
             }
@@ -785,7 +785,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 st.Longitude = site.Longitude;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("Star:GetTopocentricPosition Site.Longitude is not available");
             }
@@ -793,7 +793,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 st.Height = site.Height;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("Star:GetTopocentricPosition Site.Height is not available");
             }
@@ -914,7 +914,7 @@ namespace ASCOM.Astrometry.NOVASCOM
                     {
                         st.Temperature = site.Temperature;
                     }
-                    catch (Exception ex) // Value unset so use standard refraction option
+                    catch (Exception ) // Value unset so use standard refraction option
                     {
                         wx = false;
                     }
@@ -922,7 +922,7 @@ namespace ASCOM.Astrometry.NOVASCOM
                     {
                         st.Pressure = site.Pressure;
                     }
-                    catch (Exception ex) // Value unset so use standard refraction option
+                    catch (Exception ) // Value unset so use standard refraction option
                     {
                         wx = false;
                     }
@@ -1243,7 +1243,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 v[0] = vel.x;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("PositionVector:Aberration VelocityVector.x is not available");
             }
@@ -1251,7 +1251,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 v[1] = vel.y;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("PositionVector:Aberration VelocityVector.y is not available");
 
@@ -1260,7 +1260,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 v[2] = vel.z;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("PositionVector:Aberration VelocityVector.z is not available");
             }
@@ -1396,7 +1396,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 v[0] = vel.x;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("PositionVector:ProperMotion VelocityVector.x is not available");
             }
@@ -1404,7 +1404,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 v[1] = vel.y;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("PositionVector:ProperMotion VelocityVector.y is not available");
             }
@@ -1412,7 +1412,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 v[2] = vel.z;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exceptions.ValueNotAvailableException("PositionVector:ProperMotion VelocityVector.z is not available");
             }
@@ -1461,7 +1461,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 t = site.Latitude;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("PositionVector:SetFromSite Site.Latitude is not available");
             }
@@ -1476,7 +1476,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 t = site.Height;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("PositionVector:SetFromSite Site.Height is not available");
             }
@@ -1491,7 +1491,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 t = site.Longitude;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("PositionVector:SetFromSite Site.Height is not available");
             }
@@ -1601,7 +1601,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 paralx = star.Parallax;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("PositionVector:SetFromStar Star.Parallax is not available");
             }
@@ -1618,7 +1618,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 m_RA = star.RightAscension;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("PositionVector:SetFromStar Star.RightAscension is not available");
             }
@@ -1628,12 +1628,12 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 m_DEC = star.Declination;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("PositionVector:SetFromStar Star.Declination is not available");
             }
 
-            d = m_DEC * GlobalItems.DEG2RAD; /// deg -> rad
+            d = m_DEC * GlobalItems.DEG2RAD; // deg -> rad
 
             cra = Cos(r);
             sra = Sin(r);
@@ -2172,7 +2172,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 st.Latitude = site.Latitude;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("Star:GetLocalPosition Site.Latitude is not available");
             }
@@ -2181,7 +2181,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 st.Longitude = site.Longitude;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exceptions.ValueNotAvailableException("Star:GetLocalPosition Site.Longitude is not available");
             }
@@ -2189,7 +2189,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 st.Height = site.Height;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("Star:GetLocalPosition Site.Height is not available");
             }
@@ -2291,7 +2291,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 st.Latitude = site.Latitude;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("Star:GetTopocentricPosition Site.Latitude is not available");
             }
@@ -2299,7 +2299,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 st.Longitude = site.Longitude;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("Star:GetTopocentricPosition Site.Longitude is not available");
             }
@@ -2307,7 +2307,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 st.Height = site.Height;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("Star:GetTopocentricPosition Site.Height is not available");
             }
@@ -2383,7 +2383,7 @@ namespace ASCOM.Astrometry.NOVASCOM
                 {
                     st.Temperature = site.Temperature;
                 }
-                catch (Exception ex) // Value unset so use standard refraction option
+                catch (Exception ) // Value unset so use standard refraction option
                 {
                     wx = false;
                 }
@@ -2391,7 +2391,7 @@ namespace ASCOM.Astrometry.NOVASCOM
                 {
                     st.Pressure = site.Pressure;
                 }
-                catch (Exception ex) // Value unset so use standard refraction option
+                catch (Exception ) // Value unset so use standard refraction option
                 {
                     wx = false;
                 }
@@ -2800,7 +2800,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 t = site.Latitude;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("VelocityVector:SetFromSite Site.Latitude is not available");
             }
@@ -2814,7 +2814,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 t = site.Height;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("VelocityVector:SetFromSite Site.Height is not available");
             }
@@ -2830,7 +2830,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 t = site.Longitude;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("VelocityVector:SetFromSite Site.Longitude is not available");
             }
@@ -2941,7 +2941,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 paralx = star.Parallax;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("VelocityVector:SetFromStar Star.Parallax is not available");
             }
@@ -2956,7 +2956,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 r = star.RightAscension;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("VelocityVector:SetFromStar Star.RightAscension is not available");
             }
@@ -2964,7 +2964,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 d = star.Declination;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exceptions.ValueNotAvailableException("VelocityVector:SetFromStar Star.Declination is not available");
             }
@@ -2984,7 +2984,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 t = star.ProperMotionRA;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("VelocityVector:SetFromStar Star.ProperMotionRA is not available");
             }
@@ -2994,7 +2994,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 t = star.ProperMotionDec;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("VelocityVector:SetFromStar Star.ProperMotionDec is not available");
             }
@@ -3003,7 +3003,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             {
                 t = star.RadialVelocity;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exceptions.ValueNotAvailableException("VelocityVector:SetFromStar Star.RadialVelocity is not available");
             }

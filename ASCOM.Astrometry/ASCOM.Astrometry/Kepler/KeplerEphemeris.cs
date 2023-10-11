@@ -122,7 +122,6 @@ namespace ASCOM.Astrometry.Kepler
         // gplan variables
         private double[,] ss = new double[19, 32], cc = new double[19, 32];
         private double[] Args = new double[19];
-        private double LP_equinox, NF_arcsec, Ea_arcsec, pA_precession;
 
         /// <summary>
         /// Create a new Ephemeris component and initialise it

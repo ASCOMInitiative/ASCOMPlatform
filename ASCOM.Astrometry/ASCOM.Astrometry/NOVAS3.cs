@@ -105,7 +105,9 @@ namespace ASCOM.Astrometry.NOVAS
         private bool disposedValue = false;        // To detect redundant calls
 
         // IDisposable
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         protected virtual void Dispose(bool disposing)
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
         {
             if (!disposedValue)
             {

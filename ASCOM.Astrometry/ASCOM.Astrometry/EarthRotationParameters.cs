@@ -10,7 +10,9 @@ using Microsoft.Win32.TaskScheduler;
 
 namespace ASCOM.Astrometry
 {
-
+    /// <summary>
+    /// EarthRotationParameters class
+    /// </summary>
     public class EarthRotationParameters : IDisposable
     {
 
@@ -65,10 +67,17 @@ namespace ASCOM.Astrometry
         #endregion
 
         #region New and IDisposable Support
+        /// <summary>
+        /// EarthRotationParameters initiator
+        /// </summary>
         public EarthRotationParameters() : this(null) // Call the main initialisation routine with no trace logger reference
         {
         }
 
+        /// <summary>
+        /// EarthRotationParameters initiator with TraceLogger
+        /// </summary>
+        /// <param name="SuppliedTraceLogger"></param>
         public EarthRotationParameters(TraceLogger SuppliedTraceLogger)
         {
             DateTime LeapSecondDate;
@@ -96,7 +105,9 @@ namespace ASCOM.Astrometry
         }
 
         // IDisposable
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         protected virtual void Dispose(bool disposing)
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
         {
             if (!disposedValue)
             {
@@ -113,6 +124,9 @@ namespace ASCOM.Astrometry
         }
 
         // This code added by Visual Basic to correctly implement the disposable pattern.
+        /// <summary>
+        /// DIspose of the EarthRotationParameters class
+        /// </summary>
         public void Dispose()
         {
             // Do not change this code.  Put clean-up code in Dispose(disposing As Boolean) above.
@@ -120,6 +134,9 @@ namespace ASCOM.Astrometry
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// EarthRotationParameters destructor
+        /// </summary>
         ~EarthRotationParameters()
         {
             // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
@@ -129,6 +146,9 @@ namespace ASCOM.Astrometry
 
         #region Public properties
 
+        /// <summary>
+        /// Number of leap seconds built into class.
+        /// </summary>
         public double CurrentBuiltInLeapSeconds
         {
             get
@@ -142,6 +162,9 @@ namespace ASCOM.Astrometry
             }
         }
 
+        /// <summary>
+        /// Download task scheduled time
+        /// </summary>
         public DateTime DownloadTaskScheduledTime
         {
             get
@@ -156,6 +179,9 @@ namespace ASCOM.Astrometry
             }
         }
 
+        /// <summary>
+        /// Update type
+        /// </summary>
         public string UpdateType
         {
             get
@@ -170,6 +196,9 @@ namespace ASCOM.Astrometry
             }
         }
 
+        /// <summary>
+        /// Manually entered  delta T value
+        /// </summary>
         public double ManualDeltaUT1
         {
             get
@@ -184,6 +213,9 @@ namespace ASCOM.Astrometry
             }
         }
 
+        /// <summary>
+        /// Manually entered leap seconds value
+        /// </summary>
         public double ManualLeapSeconds
         {
             get
@@ -198,6 +230,9 @@ namespace ASCOM.Astrometry
             }
         }
 
+        /// <summary>
+        /// Number of leap seconds downloaded from the Internet.
+        /// </summary>
         public double AutomaticLeapSeconds
         {
             get
@@ -206,6 +241,9 @@ namespace ASCOM.Astrometry
             }
         }
 
+        /// <summary>
+        /// Number of leap seconds downloaded from the Internet as a formatted string.
+        /// </summary>
         public string AutomaticLeapSecondsString
         {
             get
@@ -220,6 +258,9 @@ namespace ASCOM.Astrometry
             }
         }
 
+        /// <summary>
+        /// The next leap second value if specified by the IERS.
+        /// </summary>
         public double NextLeapSeconds
         {
             get
@@ -228,6 +269,9 @@ namespace ASCOM.Astrometry
             }
         }
 
+        /// <summary>
+        /// The next leap second value if specified by the IERS as a formatted string.
+        /// </summary>
         public string NextLeapSecondsString
         {
             get
@@ -242,6 +286,9 @@ namespace ASCOM.Astrometry
             }
         }
 
+        /// <summary>
+        /// Date on which the next leap second change will be effected, if specified by the IERS
+        /// </summary>
         public DateTime NextLeapSecondsDate
         {
             get
@@ -250,6 +297,9 @@ namespace ASCOM.Astrometry
             }
         }
 
+        /// <summary>
+        /// Date on which the next leap second change will be effected, if specified by the IERS as a formatted string
+        /// </summary>
         public string NextLeapSecondsDateString
         {
             get
@@ -264,6 +314,9 @@ namespace ASCOM.Astrometry
             }
         }
 
+        /// <summary>
+        /// Data source for leap second and delta T Internet updates
+        /// </summary>
         public string DownloadTaskDataSource
         {
             get
@@ -278,6 +331,9 @@ namespace ASCOM.Astrometry
             }
         }
 
+        /// <summary>
+        /// Response timeout for the Internet data download task.
+        /// </summary>
         public double DownloadTaskTimeOut
         {
             get
@@ -292,6 +348,9 @@ namespace ASCOM.Astrometry
             }
         }
 
+        /// <summary>
+        /// Flag indicating how frequently the internet data should be updated
+        /// </summary>
         public string DownloadTaskRepeatFrequency
         {
             get
@@ -306,6 +365,9 @@ namespace ASCOM.Astrometry
             }
         }
 
+        /// <summary>
+        /// Flag indicating whether the download task is enabled.
+        /// </summary>
         public bool DownloadTaskTraceEnabled
         {
             get
@@ -320,6 +382,9 @@ namespace ASCOM.Astrometry
             }
         }
 
+        /// <summary>
+        /// Location where the download task will place its log files
+        /// </summary>
         public string DownloadTaskTracePath
         {
             get
@@ -334,6 +399,9 @@ namespace ASCOM.Astrometry
             }
         }
 
+        /// <summary>
+        /// Date and time when the internet data was last successfully refreshed.
+        /// </summary>
         public string EarthRotationDataLastUpdatedString
         {
             get
@@ -349,9 +417,9 @@ namespace ASCOM.Astrometry
         }
 
         /// <summary>
-    /// Return today's number of leap seconds
-    /// </summary>
-    /// <returns>Current leap seconds as a double</returns>
+        /// Return today's number of leap seconds
+        /// </summary>
+        /// <returns>Current leap seconds as a double</returns>
         public double LeapSeconds()
         {
             double CurrentJulianDate;
@@ -371,10 +439,10 @@ namespace ASCOM.Astrometry
         }
 
         /// <summary>
-    /// Return the specified Julian day's number of leap seconds
-    /// </summary>
-    /// <param name="RequiredLeapSecondJulianDate"></param>
-    /// <returns>Leap seconds as a double</returns>
+        /// Return the specified Julian day's number of leap seconds
+        /// </summary>
+        /// <param name="RequiredLeapSecondJulianDate"></param>
+        /// <returns>Leap seconds as a double</returns>
         public double LeapSeconds(double RequiredLeapSecondJulianDate)
         {
             DateTime EffectiveDate;
@@ -524,9 +592,9 @@ namespace ASCOM.Astrometry
         }
 
         /// <summary>
-    /// Return today's DeltaT value
-    /// </summary>
-    /// <returns>DeltaT value as a double</returns>
+        /// Return today's DeltaT value
+        /// </summary>
+        /// <returns>DeltaT value as a double</returns>
         public double DeltaT()
         {
             double CurrentJulianDateUTC;
@@ -546,10 +614,10 @@ namespace ASCOM.Astrometry
         }
 
         /// <summary>
-    /// Return the specified Julian day's DeltaT value
-    /// </summary>
-    /// <param name="RequiredDeltaTJulianDateUTC"></param>
-    /// <returns>DeltaT value as a double</returns>
+        /// Return the specified Julian day's DeltaT value
+        /// </summary>
+        /// <param name="RequiredDeltaTJulianDateUTC"></param>
+        /// <returns>DeltaT value as a double</returns>
         public double DeltaT(double RequiredDeltaTJulianDateUTC)
         {
             double DeltaUT1, ReturnValue;
@@ -575,64 +643,57 @@ namespace ASCOM.Astrometry
             switch (UpdateTypeValue ?? "")
             {
                 case GlobalItems.UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1:
+
+                    // Approach: calculate DELTA_T as =  CURRENT_LEAP_SECONDS + TT_TAI_OFFSET - DUT1
+                    // Determine whether a downloaded DeltaUT1 value exists for the given UTC Julian date then perform the calculation above
+                    // if yes then 
+                    // Determine whether the value is a valid double number
+                    // If it is then 
+                    // Test whether the value is in the acceptable range -0.0 to +0.9
+                    // If it is then return this value
+                    // If not then fall back to the predicted approach
+                    // If not then fall back to the predicted approach
+                    // if no then fall back to the predicted approach
+
+                    UTCDate = DateTime.FromOADate(RequiredDeltaTJulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET); // Convert the Julian day into a DateTime
+                    DeltaUT1ValueName = string.Format(GlobalItems.DELTAUT1_VALUE_NAME_FORMAT, UTCDate.Year.ToString(GlobalItems.DELTAUT1_VALUE_NAME_YEAR_FORMAT), UTCDate.Month.ToString(GlobalItems.DELTAUT1_VALUE_NAME_MONTH_FORMAT), UTCDate.Day.ToString(GlobalItems.DELTAUT1_VALUE_NAME_DAY_FORMAT));
+                    DeltaUT1String = profile.GetProfile(GlobalItems.AUTOMATIC_UPDATE_DELTAUT1_SUBKEY_NAME, DeltaUT1ValueName);
+                    if (!string.IsNullOrEmpty(DeltaUT1String)) // We have got something back from the Profile so test whether it is a valid double number
                     {
-
-                        // Approach: calculate DELTA_T as =  CURRENT_LEAP_SECONDS + TT_TAI_OFFSET - DUT1
-                        // Determine whether a downloaded DeltaUT1 value exists for the given UTC Julian date then perform the calculation above
-                        // if yes then 
-                        // Determine whether the value is a valid double number
-                        // If it is then 
-                        // Test whether the value is in the acceptable range -0.0 to +0.9
-                        // If it is then return this value
-                        // If not then fall back to the predicted approach
-                        // If not then fall back to the predicted approach
-                        // if no then fall back to the predicted approach
-
-                        UTCDate = DateTime.FromOADate(RequiredDeltaTJulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET); // Convert the Julian day into a DateTime
-                        DeltaUT1ValueName = string.Format(GlobalItems.DELTAUT1_VALUE_NAME_FORMAT, UTCDate.Year.ToString(GlobalItems.DELTAUT1_VALUE_NAME_YEAR_FORMAT), UTCDate.Month.ToString(GlobalItems.DELTAUT1_VALUE_NAME_MONTH_FORMAT), UTCDate.Day.ToString(GlobalItems.DELTAUT1_VALUE_NAME_DAY_FORMAT));
-                        DeltaUT1String = profile.GetProfile(GlobalItems.AUTOMATIC_UPDATE_DELTAUT1_SUBKEY_NAME, DeltaUT1ValueName);
-                        if (!string.IsNullOrEmpty(DeltaUT1String)) // We have got something back from the Profile so test whether it is a valid double number
+                        if (double.TryParse(DeltaUT1String, NumberStyles.Float, CultureInfo.InvariantCulture, out DeltaUT1)) // We have a valid double number so check that it is the acceptable range
                         {
-                            if (double.TryParse(DeltaUT1String, NumberStyles.Float, CultureInfo.InvariantCulture, out DeltaUT1)) // We have a valid double number so check that it is the acceptable range
+                            if (DeltaUT1 >= -GlobalItems.DELTAUT1_BOUND & DeltaUT1 <= GlobalItems.DELTAUT1_BOUND)
                             {
-                                if (DeltaUT1 >= -GlobalItems.DELTAUT1_BOUND & DeltaUT1 <= GlobalItems.DELTAUT1_BOUND)
+
+                                LogDebugMessage("DeltaT(JD)", string.Format("Automatic leap seconds and delta UT1 are required, found a good DeltaUT1 value so returning the calculated DeltaT value for Julian day: {0} ({1})", RequiredDeltaTJulianDateUTC, DateTime.FromOADate(RequiredDeltaTJulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
+                                ReturnValue = LeapSeconds() + GlobalItems.TT_TAI_OFFSET - DeltaUT1; // Calculate DeltaT using the valid DeltaUT1 value
+                                LogDebugMessage("DeltaT(JD)", string.Format("Return value: {0} for Julian day: {1} ({2})", ReturnValue, RequiredDeltaTJulianDateUTC, DateTime.FromOADate(RequiredDeltaTJulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
+
+                                lock (DeltaTLockObject) // Update cache values and return the calculated value
                                 {
-
-                                    LogDebugMessage("DeltaT(JD)", string.Format("Automatic leap seconds and delta UT1 are required, found a good DeltaUT1 value so returning the calculated DeltaT value for Julian day: {0} ({1})", RequiredDeltaTJulianDateUTC, DateTime.FromOADate(RequiredDeltaTJulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
-                                    ReturnValue = LeapSeconds() + GlobalItems.TT_TAI_OFFSET - DeltaUT1; // Calculate DeltaT using the valid DeltaUT1 value
-                                    LogDebugMessage("DeltaT(JD)", string.Format("Return value: {0} for Julian day: {1} ({2})", ReturnValue, RequiredDeltaTJulianDateUTC, DateTime.FromOADate(RequiredDeltaTJulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
-
-                                    lock (DeltaTLockObject) // Update cache values and return the calculated value
-                                    {
-                                        LastDeltaTJulianDate = RequiredDeltaTJulianDateUTC;
-                                        LastDeltaTValue = ReturnValue;
-                                        return ReturnValue;
-                                    }
+                                    LastDeltaTJulianDate = RequiredDeltaTJulianDateUTC;
+                                    LastDeltaTValue = ReturnValue;
+                                    return ReturnValue;
                                 }
-
-                                else
-                                {
-                                    LogDebugMessage("DeltaT(JD)", string.Format("Automatic leap seconds and delta UT1 are required, but the found DeltaUT1 value {0} from {1} was outside the correct range so falling through to the predicted approach for Julian day: {2} ({3})", DeltaUT1, DeltaUT1ValueName, RequiredDeltaTJulianDateUTC, DateTime.FromOADate(RequiredDeltaTJulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
-                                    break;
-                                } // We have a double value that is outside the expected range so fall through to the default predicted approach
                             }
-                            else
-                            {
-                                LogDebugMessage("DeltaT(JD)", string.Format("Automatic leap seconds and delta UT1 are required, but the Profile value {0} from {1} isn't a number so falling through to the predicted approach for Julian day: {2} ({3})", DeltaUT1String, DeltaUT1ValueName, RequiredDeltaTJulianDateUTC, DateTime.FromOADate(RequiredDeltaTJulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
-                                break;
-                            } // We have a profile value but it isn't a number so fall through to the default predicted approach
-                        }
-                        else
-                        {
-                            LogDebugMessage("DeltaT(JD)", string.Format("Automatic leap seconds and delta UT1 are required, but no profile value was found for {0} so falling through to the predicted approach for Julian day: {1} ({2})", DeltaUT1ValueName, RequiredDeltaTJulianDateUTC, DateTime.FromOADate(RequiredDeltaTJulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
-                            break;
-                        } // We have no profile value so fall through to the default predicted approach
 
-                        break;
+                            else // We have a double value that is outside the expected range so fall through to the default predicted approach
+                            {
+                                LogDebugMessage("DeltaT(JD)", string.Format("Automatic leap seconds and delta UT1 are required, but the found DeltaUT1 value {0} from {1} was outside the correct range so falling through to the predicted approach for Julian day: {2} ({3})", DeltaUT1, DeltaUT1ValueName, RequiredDeltaTJulianDateUTC, DateTime.FromOADate(RequiredDeltaTJulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
+                            }
+                        }
+                        else // We have a profile value but it isn't a number so fall through to the default predicted approach
+                        {
+                            LogDebugMessage("DeltaT(JD)", string.Format("Automatic leap seconds and delta UT1 are required, but the Profile value {0} from {1} isn't a number so falling through to the predicted approach for Julian day: {2} ({3})", DeltaUT1String, DeltaUT1ValueName, RequiredDeltaTJulianDateUTC, DateTime.FromOADate(RequiredDeltaTJulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
+                        }
                     }
+                    else // We have no profile value so fall through to the default predicted approach
+                    {
+                        LogDebugMessage("DeltaT(JD)", string.Format("Automatic leap seconds and delta UT1 are required, but no profile value was found for {0} so falling through to the predicted approach for Julian day: {1} ({2})", DeltaUT1ValueName, RequiredDeltaTJulianDateUTC, DateTime.FromOADate(RequiredDeltaTJulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
+                    }
+                    break;
 
                 case GlobalItems.UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1:
-                    {
                         // Approach: calculate DELTA_T as =  CURRENT_LEAP_SECONDS + TT_TAI_OFFSET - DUT1
                         // Determine whether the manual DeltaUT1 value is valid 
                         // if yes then use this value in the equation above
@@ -654,11 +715,8 @@ namespace ASCOM.Astrometry
                         else
                         {
                             LogDebugMessage("DeltaT(JD)", string.Format("Manual leap seconds and manual delta UT1 are required, but the DeltaUT1 value is not available or invalid so falling through to the predicted approach for Julian day: {0} ({1})", RequiredDeltaTJulianDateUTC, DateTime.FromOADate(RequiredDeltaTJulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
-                            break;
                         }
-
                         break;
-                    }
 
                 case GlobalItems.UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1:
                     {
@@ -694,9 +752,9 @@ namespace ASCOM.Astrometry
         }
 
         /// <summary>
-    /// Return today's DeltaUT1 value
-    /// </summary>
-    /// <returns>DeltaUT1 value as a double</returns>
+        /// Return today's DeltaUT1 value
+        /// </summary>
+        /// <returns>DeltaUT1 value as a double</returns>
         public double DeltaUT1()
         {
             double CurrentJulianDateUTC;
@@ -716,10 +774,10 @@ namespace ASCOM.Astrometry
         }
 
         /// <summary>
-    /// Return the specified Julian day'DeltaUT1 value
-    /// </summary>
-    /// <param name="RequiredDeltaUT1JulianDateUTC"></param>
-    /// <returns>DeltaUT1 value as a double</returns>
+        /// Return the specified Julian day'DeltaUT1 value
+        /// </summary>
+        /// <param name="RequiredDeltaUT1JulianDateUTC"></param>
+        /// <returns>DeltaUT1 value as a double</returns>
         public double DeltaUT1(double RequiredDeltaUT1JulianDateUTC)
         {
             double ReturnValue = default, ProfileValue;
@@ -832,6 +890,9 @@ namespace ASCOM.Astrometry
 
         }
 
+        /// <summary>
+        /// Refresh state values
+        /// </summary>
         public void RefreshState()
         {
             string OriginalProfileValue;
@@ -1060,7 +1121,7 @@ namespace ASCOM.Astrometry
             {
                 ProfileLeapSecondsValueStrings = profile.EnumProfile(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME);
             }
-            catch (NullReferenceException ex) // Key does not exist so supply an empty sorted list
+            catch (NullReferenceException ) // Key does not exist so supply an empty sorted list
             {
                 LogDebugMessage("RefreshState", string.Format("Profile key does not exist - there are no downloaded leap second values"));
                 DownloadedLeapSecondValues = new SortedList<double, double>();
@@ -1120,6 +1181,9 @@ namespace ASCOM.Astrometry
 
         }
 
+        /// <summary>
+        /// Number of leap seconds as downloaded from the Internet
+        /// </summary>
         public SortedList<double, double> DownloadedLeapSeconds
         {
             get
@@ -1128,6 +1192,9 @@ namespace ASCOM.Astrometry
             }
         }
 
+        /// <summary>
+        /// Update the scheduled Windows task with new parameters specified by the user through the Diagnostics Earth Rotation Parameters dialogue.
+        /// </summary>
         public void ManageScheduledTask()
         {
             TaskDefinition taskDefinition;
@@ -1221,7 +1288,7 @@ namespace ASCOM.Astrometry
                                             taskDefinition.Settings.StartWhenAvailable = true; // ' Requires a V2 task library (XP is only V1)
                                             LogScheduledTaskMessage("ManageScheduledTask", string.Format("Successfully added V2 AllowDemandStart and StartWhenAvailable settings."));
                                         }
-                                        catch (NotV1SupportedException ex) // Swallow the not supported exception on XP
+                                        catch (NotV1SupportedException ) // Swallow the not supported exception on XP
                                         {
                                             LogScheduledTaskMessage("ManageScheduledTask", string.Format("This machine only has a V1 task scheduler - ignoring V2 AllowDemandStart and StartWhenAvailable settings."));
                                         }
@@ -1351,7 +1418,7 @@ namespace ASCOM.Astrometry
                 {
                     LogScheduledTaskMessage("ManageScheduledTask Exception", ex.ToString());
                 }
-                catch (Exception ex1)
+                catch (Exception )
                 {
                 }
 
@@ -1359,7 +1426,7 @@ namespace ASCOM.Astrometry
                 {
                     MessageBox.Show(@"Something went wrong with the update, please report this on the ASCOM Talk Groups.IO forum, including a zip of your entire Documents\ASCOM folder and sub-folders." + "\r\n" + ex.ToString());
                 }
-                catch (Exception ex1)
+                catch (Exception)
                 {
                 }
 

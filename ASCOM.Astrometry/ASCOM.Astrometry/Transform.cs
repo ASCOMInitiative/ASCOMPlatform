@@ -61,6 +61,9 @@ namespace ASCOM.Astrometry.Transform
         }
 
         #region New and IDisposable
+        /// <summary>
+        /// Transform initialiser
+        /// </summary>
         public Transform()
         {
             TL = new TraceLogger("", "Transform");
@@ -92,7 +95,9 @@ namespace ASCOM.Astrometry.Transform
         }
 
         // IDisposable
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         protected virtual void Dispose(bool disposing)
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
         {
             if (!disposedValue)
             {
