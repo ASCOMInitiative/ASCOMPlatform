@@ -469,7 +469,7 @@ namespace ASCOM.Astrometry.NOVASCOM
                 //
                 SunField(pos2, pes, ref pos3);
                 Aberration(pos3, veb, lighttime, ref pos4);
-                Nov31.Precession(GlobalItems.J2000BASE, pos4, tdb, ref pos5);
+                Precession(GlobalItems.J2000BASE, pos4, tdb, ref pos5);
                 Nutate(tdb, NutationDirection.MeanToTrue, pos5, ref vec);
 
                 pv = new PositionVector();
@@ -894,7 +894,7 @@ namespace ASCOM.Astrometry.NOVASCOM
                 //
                 SunField(pos2, pos, ref pos4);
                 Aberration(pos4, vob, lighttime, ref pos5);
-                Nov31.Precession(GlobalItems.J2000BASE, pos5, tdb, ref pos6);
+                Precession(GlobalItems.J2000BASE, pos5, tdb, ref pos6);
                 Nutate(tdb, NutationDirection.MeanToTrue, pos6, ref vec);
 
                 //
@@ -2363,7 +2363,7 @@ namespace ASCOM.Astrometry.NOVASCOM
             BaryToGeo(pos2, pob, ref pos3, ref lighttime);
             SunField(pos3, pos, ref pos4);
             Aberration(pos4, vob, lighttime, ref pos5);
-            Nov31.Precession(GlobalItems.J2000BASE, pos5, tdb, ref pos6);
+            Precession(GlobalItems.J2000BASE, pos5, tdb, ref pos6);
             Nutate(tdb, NutationDirection.MeanToTrue, pos6, ref vec);
 
             //
