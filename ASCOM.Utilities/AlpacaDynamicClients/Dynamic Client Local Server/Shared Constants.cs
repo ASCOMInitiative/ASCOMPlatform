@@ -5,7 +5,7 @@ namespace ASCOM.DynamicClients
     public static class SharedConstants
     {
         // Client driver profile persistence constants
-        public const string TRACE_LEVEL_PROFILENAME = "Trace Level"; public const bool CLIENT_TRACE_LEVEL_DEFAULT = true;
+        public const string TRACE_LEVEL_PROFILENAME = "Trace Level"; public const bool CLIENT_TRACE_LEVEL_DEFAULT = false;
         public const string DEBUG_TRACE_PROFILENAME = "Include Debug Trace"; public const bool DEBUG_TRACE_DEFAULT = false;
         public const string LOCALHOST_NAME_IPV4 = "127.0.0.1";
         public const string STRONG_WILDCARD_NAME = "+";
