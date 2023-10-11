@@ -427,7 +427,7 @@ namespace RemoveASCOM
                                     }
                                 }
                             }
-                            catch (UnauthorizedAccessException ex)
+                            catch (UnauthorizedAccessException)
                             {
                                 TL.LogMessage("RemoveInstallers 2", "UnauthorizedAccessException for directory; " + DirInfo.FullName);
                             }
@@ -437,7 +437,7 @@ namespace RemoveASCOM
                             }
                         }
                     }
-                    catch (UnauthorizedAccessException ex)
+                    catch (UnauthorizedAccessException )
                     {
                         TL.LogMessage("RemoveInstallers", "UnauthorizedAccessException for directory; " + DirInfo.FullName);
                     }
@@ -889,7 +889,7 @@ namespace RemoveASCOM
                         RemoveFilesRecurse(ASCOMDirectory);
                         TL.LogMessage("RemoveDirectories", "  Removed OK");
                     }
-                    catch (DirectoryNotFoundException ex)
+                    catch (DirectoryNotFoundException)
                     {
                         TL.LogMessage("RemoveDirectories", "  Not present");
                     }
@@ -908,7 +908,7 @@ namespace RemoveASCOM
                         RemoveFilesRecurse(ASCOMDirectory);
                         TL.LogMessage("RemoveDirectories", "  Removed OK");
                     }
-                    catch (DirectoryNotFoundException ex)
+                    catch (DirectoryNotFoundException)
                     {
                         TL.LogMessage("RemoveDirectories", "  Not present");
                     }
@@ -927,7 +927,7 @@ namespace RemoveASCOM
                         RemoveFilesRecurse(ASCOMDirectory);
                         TL.LogMessage("RemoveDirectories", "  Removed OK");
                     }
-                    catch (DirectoryNotFoundException ex)
+                    catch (DirectoryNotFoundException)
                     {
                         TL.LogMessage("RemoveDirectories", "  Not present");
                     }
@@ -946,7 +946,7 @@ namespace RemoveASCOM
                         RemoveFilesRecurse(ASCOMDirectory);
                         TL.LogMessage("RemoveDirectories", "  Removed OK");
                     }
-                    catch (DirectoryNotFoundException ex)
+                    catch (DirectoryNotFoundException)
                     {
                         TL.LogMessage("RemoveDirectories", "  Not present");
                     }
@@ -967,7 +967,7 @@ namespace RemoveASCOM
                         RemoveFilesRecurse(ASCOMDirectory);
                         TL.LogMessage("RemoveDirectories", "  Removed OK");
                     }
-                    catch (DirectoryNotFoundException ex)
+                    catch (DirectoryNotFoundException)
                     {
                         TL.LogMessage("RemoveDirectories", "  Not present");
                     }
@@ -986,7 +986,7 @@ namespace RemoveASCOM
                         RemoveFilesRecurse(ASCOMDirectory);
                         TL.LogMessage("RemoveDirectories", "  Removed OK");
                     }
-                    catch (DirectoryNotFoundException ex)
+                    catch (DirectoryNotFoundException)
                     {
                         TL.LogMessage("RemoveDirectories", "  Not present");
                     }
@@ -1061,7 +1061,7 @@ namespace RemoveASCOM
                     }
                 }
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 TL.LogMessageCrLf("RemoveGAC", @"Registry Key HKLM\SOFTWARE\Classes\Installer\Assemblies does not exist");
             }
@@ -1094,7 +1094,7 @@ namespace RemoveASCOM
                             TL.LogMessage("RemoveGAC", "Also: " + assname.FullName);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         // Ignore an exceptions here due to duplicate names, these are all MS assemblies
                     }
@@ -1257,11 +1257,11 @@ namespace RemoveASCOM
                     TL.LogMessage("RemoveFile", "Invalid filename:        " + FileName);
                 }
             }
-            catch (DirectoryNotFoundException ex)
+            catch (DirectoryNotFoundException)
             {
                 TL.LogMessage("RemoveFile", "Directory not found:     " + FileName);
             }
-            catch (FileNotFoundException ex)
+            catch (FileNotFoundException)
             {
                 TL.LogMessage("RemoveFile", "File not found:          " + FileName);
             }
@@ -1332,7 +1332,7 @@ namespace RemoveASCOM
                             MyFile.Delete();
                         }
                     }
-                    catch (UnauthorizedAccessException ex)
+                    catch (UnauthorizedAccessException)
                     {
                         TL.LogMessage("RecurseProgramFiles 1", "UnauthorizedAccessException for directory; " + Folder);
                     }
@@ -1347,7 +1347,7 @@ namespace RemoveASCOM
                         foreach (DirectoryInfo Directory in DirInfos)
                             RemoveFilesRecurse(Directory.FullName); // Recursively process this sub directory
                     }
-                    catch (UnauthorizedAccessException ex)
+                    catch (UnauthorizedAccessException)
                     {
                         TL.LogMessage("RecurseProgramFiles 2", "UnauthorizedAccessException for directory; " + Folder);
                     }
@@ -1364,7 +1364,7 @@ namespace RemoveASCOM
                     TL.LogMessageCrLf("RemoveFilesRecurse", "  Folder does not exist");
                 }
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 TL.LogMessage("RecurseProgramFiles 3", "UnauthorizedAccessException for directory; " + Folder);
             }

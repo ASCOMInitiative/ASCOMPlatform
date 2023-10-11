@@ -24,7 +24,6 @@ namespace SetACL
 
         static TraceLogger TL;
         static RegistryAccess regAccess;
-        static string ascomDirectory;
         static int returnCode = 0;
 
         static int Main(string[] args)

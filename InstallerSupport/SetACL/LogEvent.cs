@@ -117,7 +117,7 @@ namespace SetACL
                     File.AppendAllText(ErrorLog, TodaysDateTime + " ErrorCode: 0x" + ex.ErrorCode.ToString("X8") + " NativeErrorCode: 0x" + ex.NativeErrorCode.ToString("X8") + " " + ex.ToString() + "\r\n");
                     File.AppendAllText(MessageLog, TodaysDateTime + " " + Caller + " " + Msg + " " + Severity.ToString() + " " + Id.ToString() + " " + Except + "\r\n");
                 }
-                catch (Exception ex1) // Ignore exceptions here, the PC seems to be in a catastrophic failure!
+                catch (Exception) // Ignore exceptions here, the PC seems to be in a catastrophic failure!
                 {
 
                 }
@@ -135,7 +135,7 @@ namespace SetACL
                     File.AppendAllText(ErrorLog, TodaysDateTime + " " + ex.ToString() + "\r\n");
                     File.AppendAllText(MessageLog, TodaysDateTime + " " + Caller + " " + Msg + " " + Severity.ToString() + " " + Id.ToString() + " " + Except + "\r\n");
                 }
-                catch (Exception ex1) // Ignore exceptions here, the PC seems to be in a catastrophic failure!
+                catch (Exception) // Ignore exceptions here, the PC seems to be in a catastrophic failure!
                 {
 
                 }
