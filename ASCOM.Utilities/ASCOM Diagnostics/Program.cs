@@ -26,7 +26,7 @@ namespace ASCOM.Utilities
         /// Handle an un-handled application exception
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="eventArgs"></param>
         static void HandleApplicationException(object sender, UnhandledExceptionEventArgs eventArgs)
         {
             try
@@ -50,7 +50,7 @@ namespace ASCOM.Utilities
         /// Handle an un-handled thread exception
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="eventArgs"></param>
         static void HandleThreadException(object sender, ThreadExceptionEventArgs eventArgs)
         {
             try

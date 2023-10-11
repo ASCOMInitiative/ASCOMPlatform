@@ -69,6 +69,9 @@ namespace ASCOM.Utilities
 
         private List<string> scheduleRepeatOptions = new List<string>() { Astrometry.GlobalItems.SCHEDULE_REPEAT_NONE, Astrometry.GlobalItems.SCHEDULE_REPEAT_DAILY, Astrometry.GlobalItems.SCHEDULE_REPEAT_WEEKLY, Astrometry.GlobalItems.SCHEDULE_REPEAT_MONTHLY };
 
+        /// <summary>
+        /// EarthRotationDataForm initiator
+        /// </summary>
         public EarthRotationDataForm()
         {
             InitializeComponent();

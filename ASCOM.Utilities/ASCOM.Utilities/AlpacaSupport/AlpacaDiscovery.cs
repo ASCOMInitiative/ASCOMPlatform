@@ -13,23 +13,23 @@ namespace ASCOM.Utilities
 {
 
     /// <summary>
-/// Enables clients to discover Alpaca devices by sending one or more discovery polls. Returns information on discovered <see cref="AlpacaDevice">Alpaca devices</see> and the <see cref="AscomDevice">ASCOM devices</see> that are available.
-/// </summary>
-/// <remarks>
-/// <para>
-/// The discovery process is asynchronous and is initiated by the <see cref="StartDiscovery(Integer, Integer, Integer, Double, Boolean, Boolean, Boolean)"/> method. Clients can then either work synchronously by looping and periodically 
-/// polling the <see cref="DiscoveryComplete"/> property or work asynchronously by handling the <see cref="AlpacaDevicesUpdated"/> and <see cref="DiscoveryCompleted"/> events while doing other work.
-/// </para>
-/// <para>
-/// The <see cref="StartDiscovery(Integer, Integer, Integer, Double, Boolean, Boolean, Boolean)"/> method is used to set the character of the discovery e.g. the discovery duration and whether to search for IPv4 and/or IPv6 devices. 
-/// After the specified discovery duration, the <see cref="DiscoveryComplete"/> event fires and the <see cref="DiscoveryCompleted"/> property returns True.
-/// </para>
-/// <para>
-/// Once discovery is complete, .NET clients can retrieve details of discovered Alpaca devices and associated ASCOM interface devices through the <see cref="GetAlpacaDevices"/> and <see cref="GetASCOMDevices"/> methods.
-/// COM clients must use the <see cref="GetAlpacaDevicesAsArrayList"/> and <see cref="GetASCOMDevicesAsArrayList"/> properties because COM does not support the generic classes used 
-/// in the <see cref="GetAlpacaDevices"/> and <see cref="GetASCOMDevices"/> methods. 
-/// </para>
-/// </remarks>
+    /// Enables clients to discover Alpaca devices by sending one or more discovery polls. Returns information on discovered <see cref="AlpacaDevice">Alpaca devices</see> and the <see cref="AscomDevice">ASCOM devices</see> that are available.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The discovery process is asynchronous and is initiated by the <see cref="StartDiscovery(int, int, int, double, bool, bool, bool)"/> method. Clients can then either work synchronously by looping and periodically 
+    /// polling the <see cref="DiscoveryComplete"/> property or work asynchronously by handling the <see cref="AlpacaDevicesUpdated"/> and <see cref="DiscoveryCompleted"/> events while doing other work.
+    /// </para>
+    /// <para>
+    /// The <see cref="StartDiscovery(int, int, int, double, bool, bool, bool)"/> method is used to set the character of the discovery e.g. the discovery duration and whether to search for IPv4 and/or IPv6 devices. 
+    /// After the specified discovery duration, the <see cref="DiscoveryComplete"/> event fires and the <see cref="DiscoveryCompleted"/> property returns True.
+    /// </para>
+    /// <para>
+    /// Once discovery is complete, .NET clients can retrieve details of discovered Alpaca devices and associated ASCOM interface devices through the <see cref="GetAlpacaDevices"/> and <see cref="GetASCOMDevices"/> methods.
+    /// COM clients must use the <see cref="GetAlpacaDevicesAsArrayList"/> and <see cref="GetASCOMDevicesAsArrayList"/> properties because COM does not support the generic classes used 
+    /// in the <see cref="GetAlpacaDevices"/> and <see cref="GetASCOMDevices"/> methods. 
+    /// </para>
+    /// </remarks>
     [Guid("877A70E7-0A70-41EE-829A-8C00CAE2B9F0")]
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]

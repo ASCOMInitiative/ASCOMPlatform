@@ -5,13 +5,18 @@ using System.Windows.Forms;
 
 namespace ASCOM.Utilities
 {
+    /// <summary>
+    /// EarthRotationDataForm class
+    /// </summary>
     [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
     public partial class EarthRotationDataForm : Form
     {
 
         // Form overrides dispose to clean up the component list.
         [DebuggerNonUserCode()]
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         protected override void Dispose(bool disposing)
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
         {
             try
             {

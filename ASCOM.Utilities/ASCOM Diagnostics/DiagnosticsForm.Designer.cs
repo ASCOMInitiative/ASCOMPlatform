@@ -7,8 +7,10 @@ namespace ASCOM.Utilities
 {
     public partial class DiagnosticsForm
     {
-
-        // Form overrides dispose to clean up the component list.
+        /// <summary>
+        /// Form overrides dispose to clean up the component list. 
+        /// </summary>
+        /// <param name="disposing"></param>
         protected override void Dispose(bool disposing)
         {
             try

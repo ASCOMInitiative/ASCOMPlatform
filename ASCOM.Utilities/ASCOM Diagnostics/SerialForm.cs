@@ -5,6 +5,9 @@ namespace ASCOM.Utilities
 {
     public partial class SerialForm
     {
+        /// <summary>
+        /// Serial form initialiser
+        /// </summary>
         public SerialForm()
         {
             InitializeComponent();

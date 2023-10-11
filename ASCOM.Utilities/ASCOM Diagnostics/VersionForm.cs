@@ -9,9 +9,14 @@ using static ASCOM.Utilities.RegistryAccess;
 
 namespace ASCOM.Utilities
 {
-
+    /// <summary>
+    /// VersionForm class
+    /// </summary>
     public partial class VersionForm
     {
+        /// <summary>
+        /// VersionForm initiator
+        /// </summary>
         public VersionForm()
         {
             InitializeComponent();

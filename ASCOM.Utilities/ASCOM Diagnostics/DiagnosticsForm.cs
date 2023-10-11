@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Set to true to debug this code, otherwise leave false!
+#define DEBUG_TRACE
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -102,6 +105,9 @@ namespace ASCOM.Utilities
         private const string OPTIONS_AUTOVIEW_REGISTRYKEY = "Diagnostics Auto View Log";
         private const bool OPTIONS_AUTOVIEW_REGISTRYKEY_DEFAULT = false;
 
+        /// <summary>
+        /// Diagnostics form initiator
+        /// </summary>
         public DiagnosticsForm()
         {
             InitializeComponent();
@@ -109,10 +115,10 @@ namespace ASCOM.Utilities
 
         #region DLL Call Definitions
         [DllImport("kernel32.dll")]
-        public static extern bool AllocConsole();
+        internal static extern bool AllocConsole();
 
         [DllImport("kernel32.dll")]
-        public static extern bool FreeConsole();
+        internal static extern bool FreeConsole();
         #endregion
 
         private enum DoubleType
@@ -181,7 +187,6 @@ namespace ASCOM.Utilities
             }
         }
         private int RecursionLevel;
-        private int g_CountWarning, g_CountIssue, g_CountError;
         private Stopwatch sw, s1, s2;
         private dynamic DrvHlpUtil;
         private Util AscomUtil;
@@ -246,14 +251,14 @@ namespace ASCOM.Utilities
                 MenuAutoViewLog.Checked = Utilities.Global.GetBool(OPTIONS_AUTOVIEW_REGISTRYKEY, OPTIONS_AUTOVIEW_REGISTRYKEY_DEFAULT); // Get the auto view log setting
 
                 // Create a debug console if required
-                if (CREATE_DEBUG_COLSOLE)
-                {
-                    AllocConsole();
-                    Console.OpenStandardError();
-                    Console.OpenStandardOutput();
-                    Console.WriteLine("Console created");
-                }
-
+#if CREATE_DEBUG_COLSOLE
+                
+                AllocConsole();
+                Console.OpenStandardError();
+                Console.OpenStandardOutput();
+                Console.WriteLine("Console created");
+                
+#endif
                 BringToFront();
                 KeyPreview = true; // Ensure that key press events are sent to the form so that the key press event handler can respond to them
             }
@@ -1163,7 +1168,7 @@ namespace ASCOM.Utilities
                 foreach (string Dir in Directories)
                     GetApplicationViaDirectory(Application, Path.GetFileName(Dir));
             }
-            catch (DirectoryNotFoundException ex)
+            catch (DirectoryNotFoundException)
             {
                 TL.LogMessage("ScanApplication", "Application " + Application.ToString() + " not installed in " + PathShell.ToString() + @"\" + AppDirectory);
             }
@@ -1204,7 +1209,7 @@ namespace ASCOM.Utilities
                         FileDetails(Path.GetDirectoryName(Executable) + @"\", Path.GetFileName(Executable));
                 }
             }
-            catch (DirectoryNotFoundException ex)
+            catch (DirectoryNotFoundException)
             {
                 TL.LogMessage("ScanApplication", "Application " + Application.ToString() + " not installed in " + AppPath);
             }
@@ -1256,7 +1261,7 @@ namespace ASCOM.Utilities
                     TL.LogMessage("ScanApplication", "AppID entry found but this has no AppID value " + Application.ToString() + " not found");
                 }
             }
-            catch (ProfilePersistenceException ex) // Key does not exist
+            catch (ProfilePersistenceException) // Key does not exist
             {
                 TL.LogMessage("ScanApplication", "Application " + Application.ToString() + " not found");
             }
@@ -1300,7 +1305,7 @@ namespace ASCOM.Utilities
                             TL.LogMessage("ScanApplication", "CLSID entry found but this has no file name value " + Application.ToString() + " not found");
                         }
                     }
-                    catch (ProfilePersistenceException ex) // Key does not exist
+                    catch (ProfilePersistenceException) // Key does not exist
                     {
                         TL.LogMessage("ScanApplication", "Application " + Application.ToString() + " not found");
                     }
@@ -1355,7 +1360,7 @@ namespace ASCOM.Utilities
                     TL.LogMessage(Description, ContentItem.Key + " \"" + ContentItem.Value + "\"");
                 TL.BlankLine();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
@@ -2027,7 +2032,7 @@ namespace ASCOM.Utilities
                                         DeviceObject.Connected = false;
                                         NMatches += 1;
                                     }
-                                    catch (RuntimeBinderException ex1) // Could be a Platform 5 driver that uses "Link" instead of "Connected"
+                                    catch (RuntimeBinderException) // Could be a Platform 5 driver that uses "Link" instead of "Connected"
                                     {
                                         TL.LogMessage("TestSimulator", "Focuser Connected member missing, using Link instead");
                                         DeviceObject.Link = false; // Try Link, if it fails the outer try will catch the exception
@@ -2420,7 +2425,7 @@ namespace ASCOM.Utilities
                                         catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
                                         {
                                         }
-                                        catch (PropertyNotImplementedException ex)
+                                        catch (PropertyNotImplementedException)
                                         {
                                             Compare(Device, "SiderealTime - Property is configured not to return a value.", "True", "True");
                                         }
@@ -2439,7 +2444,7 @@ namespace ASCOM.Utilities
                                         catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
                                         {
                                         }
-                                        catch (PropertyNotImplementedException ex)
+                                        catch (PropertyNotImplementedException)
                                         {
                                             Compare(Device, "TargetDeclination - Property is configured not to return a value.", "True", "True");
                                         }
@@ -2463,7 +2468,7 @@ namespace ASCOM.Utilities
                                             catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
                                             {
                                             }
-                                            catch (PropertyNotImplementedException ex)
+                                            catch (PropertyNotImplementedException)
                                             {
                                                 Compare(Device, "TargetRightAscension - Property is configured not to return a value.", "True", "True");
                                             }
@@ -2600,7 +2605,7 @@ namespace ASCOM.Utilities
                                         catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
                                         {
                                         }
-                                        catch (MethodNotImplementedException ex)
+                                        catch (MethodNotImplementedException)
                                         {
                                             Compare(Device, "Slewing - Simulator Slewing property is not accessible", "True", "True");
                                         }
@@ -2628,7 +2633,7 @@ namespace ASCOM.Utilities
                                             catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
                                             {
                                             }
-                                            catch (MethodNotImplementedException ex)
+                                            catch (MethodNotImplementedException)
                                             {
                                                 Compare(Device, "OpenShutter - Simulator open shutter is disabled", "True", "True");
                                             }
@@ -2661,7 +2666,7 @@ namespace ASCOM.Utilities
                                             catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
                                             {
                                             }
-                                            catch (MethodNotImplementedException ex)
+                                            catch (MethodNotImplementedException)
                                             {
                                                 Compare(Device, "CloseShutter - Simulator close shutter is disabled", "True", "True");
                                             }
@@ -2694,7 +2699,7 @@ namespace ASCOM.Utilities
                                             catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
                                             {
                                             }
-                                            catch (MethodNotImplementedException ex)
+                                            catch (MethodNotImplementedException)
                                             {
                                                 Compare(Device, "SlewToAltitude - Simulator SlewToAltitude method is disabled", "True", "True");
                                             }
@@ -2727,7 +2732,7 @@ namespace ASCOM.Utilities
                                             catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
                                             {
                                             }
-                                            catch (MethodNotImplementedException ex)
+                                            catch (MethodNotImplementedException)
                                             {
                                                 Compare(Device, "SlewToAzimuth - Simulator SlewToAzimuth method is disabled", "True", "True");
                                             }
@@ -3577,7 +3582,6 @@ namespace ASCOM.Utilities
                         }
                     case NOVAS3Functions.Nutation:
                         {
-                            var Obs = new Observer();
                             rc = 0;
                             Nov3.Nutation(JDTest, NutationDirection.MeanToTrue, Accuracy.Full, Pos, ref Pos2);
                             LogRC(TestFunction, "Pos, Pos2", rc, Strings.Format(Pos[0], "0.00000000") + " " + Strings.Format(Pos[1], "0.00000000") + " " + Strings.Format(Pos[2], "0.00000000") + " " + Strings.Format(Pos2[0], "0.00000000") + " " + Strings.Format(Pos2[1], "0.00000000") + " " + Strings.Format(Pos2[2], "0.00000000"), "");
@@ -4167,7 +4171,7 @@ namespace ASCOM.Utilities
                                 WorkedOK = true;
                                 TL.LogMessage("NOVAS31DeltaT", string.Format("Received an InvalidValueException as expected when the supplied JD is below the minimum value: {0}", ex.Message));
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 WorkedOK = false;
                             }
@@ -4182,7 +4186,7 @@ namespace ASCOM.Utilities
                                 TL.LogMessage("NOVAS31DeltaT", $"DeltaT value: {Nov31.DeltaT(JD)}, Difference: {DeltaTResult1}");
                                 CompareBoolean("NOVAS31DeltaT", "Current DeltaT is within 0.5 seconds of expected value.", DeltaTResult1 < 0.5d, true);
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 WorkedOK = false;
                             }
@@ -4565,7 +4569,6 @@ namespace ASCOM.Utilities
                         }
                     case NOVAS3Functions.Nutation:
                         {
-                            var Obs = new Observer();
                             rc = 0;
                             Nov31.Nutation(JDTest, NutationDirection.MeanToTrue, Accuracy.Full, Pos, ref Pos2);
                             LogRC31(TestFunction, "Pos, Pos2", rc, Strings.Format(Pos[0], "0.00000000") + " " + Strings.Format(Pos[1], "0.00000000") + " " + Strings.Format(Pos[2], "0.00000000") + " " + Strings.Format(Pos2[0], "0.00000000") + " " + Strings.Format(Pos2[1], "0.00000000") + " " + Strings.Format(Pos2[2], "0.00000000"), "");
@@ -5580,7 +5583,7 @@ namespace ASCOM.Utilities
                     TL.LogMessage("TransformTest", "Transform works correctly when site temperature has not been set and J2000 coordinates are set.");
                     NMatches += 1;
                 }
-                catch (TransformUninitialisedException ex)
+                catch (TransformUninitialisedException)
                 {
                     LogError("TransformTest", "Received a TransformUninitialisedException when this operation should have worked!");
                 }
@@ -5647,7 +5650,7 @@ namespace ASCOM.Utilities
                 }
                 LogError("TransformInitalGetTest", $"Inital read of Transform.{test} did not raise a TransformUninitialisedException as expected.");
             }
-            catch (Astrometry.Exceptions.TransformUninitialisedException ex)
+            catch (Astrometry.Exceptions.TransformUninitialisedException)
             {
                 TL.LogMessage("TransformInitalGetTest", $"A TransformUninitialisedException was generated as expected when readsing Transform{test} for the first time.");
                 NMatches += 1;
@@ -5758,7 +5761,7 @@ namespace ASCOM.Utilities
                     LogError("TransformExceptionTester", string.Format("No exception generated on invalid {0} value of {1}", test.ToString(), Value));
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (!ExpectedPass)
                 {
@@ -6388,7 +6391,7 @@ namespace ASCOM.Utilities
                     foreach (KeyValuePair<string, string> kvp in keys)
                         TL.LogMessage("RegisteredDevices EmptyString", "  " + kvp.Key + " - " + kvp.Value);
                 }
-                catch (Exceptions.InvalidValueException ex)
+                catch (Exceptions.InvalidValueException)
                 {
                     Compare("ProfileTest", "RegisteredDevices with an empty string", "InvalidValueException", "InvalidValueException");
                 }
@@ -6405,7 +6408,7 @@ namespace ASCOM.Utilities
                     foreach (KeyValuePair<string, string> kvp in keys)
                         TL.LogMessage("RegisteredDevices Nothing", "  " + kvp.Key + " - " + kvp.Value);
                 }
-                catch (Exceptions.InvalidValueException ex)
+                catch (Exceptions.InvalidValueException)
                 {
                     Compare("ProfileTest", "RegisteredDevices with a null value", "InvalidValueException", "InvalidValueException");
                 }
@@ -6422,7 +6425,7 @@ namespace ASCOM.Utilities
                     foreach (KeyValuePair<string, string> kvp in keys)
                         TL.LogMessage("RegisteredDevices Bad", "  " + kvp.Key + " - " + kvp.Value);
                 }
-                catch (Exceptions.InvalidValueException ex)
+                catch (Exceptions.InvalidValueException)
                 {
                     LogException("ProfileTest", "RegisteredDevices Unknown DeviceType incorrectly generated an InvalidValueException");
                 }
@@ -7330,7 +7333,7 @@ namespace ASCOM.Utilities
                 {
                     returnDouble = cache.GetDouble(TEST_DOUBLE_KEY);
                 }
-                catch (NotInCacheException ex)
+                catch (NotInCacheException)
                 {
                     NMatches += 1;
                     TL.LogMessage(TestName, "InvalidOperationException thrown as expected for expired double value.");
@@ -7359,7 +7362,7 @@ namespace ASCOM.Utilities
                 {
                     returnInt = cache.GetInt(TEST_INTEGER_KEY);
                 }
-                catch (NotInCacheException ex)
+                catch (NotInCacheException)
                 {
                     NMatches += 1;
                     TL.LogMessage(TestName, "InvalidOperationException thrown as expected for expired int value.");
@@ -7388,7 +7391,7 @@ namespace ASCOM.Utilities
                 {
                     returnBool = cache.GetBool(TEST_BOOL_KEY);
                 }
-                catch (NotInCacheException ex)
+                catch (NotInCacheException)
                 {
                     NMatches += 1;
                     TL.LogMessage(TestName, "InvalidOperationException thrown as expected for expired boolean value.");
@@ -7417,7 +7420,7 @@ namespace ASCOM.Utilities
                 {
                     returnString = cache.GetString(TEST_STRING_KEY);
                 }
-                catch (NotInCacheException ex)
+                catch (NotInCacheException)
                 {
                     NMatches += 1;
                     TL.LogMessage(TestName, "InvalidOperationException thrown as expected for expired string value.");
@@ -7454,7 +7457,7 @@ namespace ASCOM.Utilities
                 {
                     returnObject = (KeyValuePair)cache.Get(TEST_OBJECT_KEY);
                 }
-                catch (NotInCacheException ex)
+                catch (NotInCacheException)
                 {
                     NMatches += 1;
                     TL.LogMessage(TestName, "InvalidOperationException thrown as expected for expired object.");
@@ -7508,7 +7511,7 @@ namespace ASCOM.Utilities
                 {
                     returnInt = cache.GetInt(TEST_INTEGER_KEY);
                 }
-                catch (NotInCacheException ex)
+                catch (NotInCacheException)
                 {
                     NMatches += 1;
                     TL.LogMessage(TestName, "InvalidOperationException thrown as expected for removed int value.");
@@ -7579,7 +7582,7 @@ namespace ASCOM.Utilities
                     {
                         returnInt = cache.GetInt(TEST_INTEGER_KEY);
                     }
-                    catch (NotInCacheException ex)
+                    catch (NotInCacheException)
                     {
                         removedItemCount += 1;
                     }
@@ -8408,7 +8411,7 @@ namespace ASCOM.Utilities
                     ErrorList.Add("UtilTests" + " - " + ErrMsg);
                 }
 
-                catch (InvalidValueException ex) // Expected behaviour for bad value
+                catch (InvalidValueException) // Expected behaviour for bad value
                 {
                     TL.LogMessage("UtilTests", "DewPoint2Humidity - InvalidValueException thrown as expected when dew point < absolute zero");
                     NMatches += 1;
@@ -8431,7 +8434,7 @@ namespace ASCOM.Utilities
                     ErrorList.Add("UtilTests" + " - " + ErrMsg);
                 }
 
-                catch (InvalidValueException ex) // Expected behaviour for bad value
+                catch (InvalidValueException) // Expected behaviour for bad value
                 {
                     TL.LogMessage("UtilTests", "DewPoint2Humidity - InvalidValueException thrown as expected when dew point > 100.0C");
                     NMatches += 1;
@@ -8454,7 +8457,7 @@ namespace ASCOM.Utilities
                     ErrorList.Add("UtilTests" + " - " + ErrMsg);
                 }
 
-                catch (InvalidValueException ex) // Expected behaviour for bad value
+                catch (InvalidValueException) // Expected behaviour for bad value
                 {
                     TL.LogMessage("UtilTests", "DewPoint2Humidity - InvalidValueException thrown as expected when ambient temperature < absolute zero");
                     NMatches += 1;
@@ -8477,7 +8480,7 @@ namespace ASCOM.Utilities
                     ErrorList.Add("UtilTests" + " - " + ErrMsg);
                 }
 
-                catch (InvalidValueException ex) // Expected behaviour for bad value
+                catch (InvalidValueException) // Expected behaviour for bad value
                 {
                     TL.LogMessage("UtilTests", "DewPoint2Humidity - InvalidValueException thrown as expected when ambient temperature > 100.0C");
                     NMatches += 1;
@@ -8500,7 +8503,7 @@ namespace ASCOM.Utilities
                     ErrorList.Add("UtilTests" + " - " + ErrMsg);
                 }
 
-                catch (InvalidValueException ex) // Expected behaviour for bad value
+                catch (InvalidValueException) // Expected behaviour for bad value
                 {
                     TL.LogMessage("UtilTests", "Humidity2DewPoint - InvalidValueException thrown as expected when humidity < 0.0");
                     NMatches += 1;
@@ -8523,7 +8526,7 @@ namespace ASCOM.Utilities
                     ErrorList.Add("UtilTests" + " - " + ErrMsg);
                 }
 
-                catch (InvalidValueException ex) // Expected behaviour for bad value
+                catch (InvalidValueException) // Expected behaviour for bad value
                 {
                     TL.LogMessage("UtilTests", "Humidity2DewPoint - InvalidValueException thrown as expected when humidity > 100.0%");
                     NMatches += 1;
@@ -8546,7 +8549,7 @@ namespace ASCOM.Utilities
                     ErrorList.Add("UtilTests" + " - " + ErrMsg);
                 }
 
-                catch (InvalidValueException ex) // Expected behaviour for bad value
+                catch (InvalidValueException) // Expected behaviour for bad value
                 {
                     TL.LogMessage("UtilTests", "Humidity2DewPoint - InvalidValueException thrown as expected when ambient temperature < absolute zero");
                     NMatches += 1;
@@ -8569,7 +8572,7 @@ namespace ASCOM.Utilities
                     ErrorList.Add("UtilTests" + " - " + ErrMsg);
                 }
 
-                catch (InvalidValueException ex) // Expected behaviour for bad value
+                catch (InvalidValueException) // Expected behaviour for bad value
                 {
                     TL.LogMessage("UtilTests", "Humidity2DewPoint - InvalidValueException thrown as expected when ambient temperature > 100.0C");
                     NMatches += 1;
@@ -8685,7 +8688,7 @@ namespace ASCOM.Utilities
                 ErrorList.Add("TestInvalidOperation" + " - " + ErrMsg);
             }
 
-            catch (InvalidOperationException ex) // Expected behaviour for mismatched types of unit
+            catch (InvalidOperationException) // Expected behaviour for mismatched types of unit
             {
                 TL.LogMessage("TestInvalidOperation", "InvalidOperationException thrown as expected for FromUnit: " + FromUnit.ToString() + ", ToUnit: " + ToUnit.ToString());
                 NMatches += 1;
@@ -9043,7 +9046,7 @@ namespace ASCOM.Utilities
                     if (debugSwitch)
                         TL.LogMessage("RegistrySecurityDbg", "End of Try-Catch code");
                 }
-                catch (NullReferenceException ex)
+                catch (NullReferenceException)
                 {
                     LogException("RegistrySecurityRec", "The subkey: " + Key.Name + " does not exist.");
                 }
@@ -9148,7 +9151,7 @@ namespace ASCOM.Utilities
                 if (debugSwitch)
                     TL.LogMessage("RegistryRightsDbg", "End of Try-Catch code");
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 LogException("RegistryRights", "The subkey: " + Key.Name + @"\" + SubKey + " does not exist.");
             }
@@ -9386,11 +9389,11 @@ namespace ASCOM.Utilities
                         }
                     }
                 }
-                catch (UnauthorizedAccessException ex)
+                catch (UnauthorizedAccessException)
                 {
                     TL.LogMessage("RecurseProgramFiles 1", "UnauthorizedAccessException for directory; " + Folder);
                 }
-                catch (PathTooLongException ex)
+                catch (PathTooLongException)
                 {
                     TL.LogMessage("RecurseProgramFiles 1", "PathTooLongException in directory; " + Folder);
                 }
@@ -9405,11 +9408,11 @@ namespace ASCOM.Utilities
                     foreach (DirectoryInfo Directory in DirInfos)
                         RecurseProgramFiles(Directory.FullName); // Recursively process this sub directory
                 }
-                catch (UnauthorizedAccessException ex)
+                catch (UnauthorizedAccessException)
                 {
                     TL.LogMessage("RecurseProgramFiles 2", "UnauthorizedAccessException for directory; " + Folder);
                 }
-                catch (PathTooLongException ex)
+                catch (PathTooLongException)
                 {
                     TL.LogMessage("RecurseProgramFiles 2", "PathTooLongException in directory; " + Folder);
                 }
@@ -9420,11 +9423,11 @@ namespace ASCOM.Utilities
 
                 Action("");
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 TL.LogMessage("RecurseProgramFiles 3", "UnauthorizedAccessException for directory; " + Folder);
             }
-            catch (PathTooLongException ex)
+            catch (PathTooLongException)
             {
                 TL.LogMessage("RecurseProgramFiles 3", "PathTooLongException in directory; " + Folder);
             }
@@ -9450,7 +9453,7 @@ namespace ASCOM.Utilities
 
                 TL.BlankLine();
             }
-            catch (DirectoryNotFoundException ex)
+            catch (DirectoryNotFoundException)
             {
                 TL.LogMessage("ScanProfileFiles", "Profile 5.5 file store not present");
                 TL.BlankLine();
@@ -10086,7 +10089,7 @@ namespace ASCOM.Utilities
                         assname = GetAssemblyName(an);
                         AssemblyNames.Add(assname.FullName, assname.Name); // Convert the fusion representation to a standard AssemblyName and get its full name
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         // Ignore an exceptions here due to duplicate names, these are all MS assemblies
                     }
@@ -10114,7 +10117,7 @@ namespace ASCOM.Utilities
                                 }
                                 FileDetails(Path.GetDirectoryName(localPath) + @"\", Path.GetFileName(localPath));
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
 
                             }
@@ -10200,7 +10203,7 @@ namespace ASCOM.Utilities
                                 }
                         }
                     }
-                    catch (FormatException ex)
+                    catch (FormatException)
                     {
                         LogException("GACFileVersion", "  ##### File version is in an invalid format: " + FVInfo.FileVersion);
                     }
@@ -10419,7 +10422,7 @@ namespace ASCOM.Utilities
                                 TL.LogMessage("ErrorDiagnostics", ReflectionAss.FullName);
                         }
                     }
-                    catch (BadImageFormatException ex)
+                    catch (BadImageFormatException)
                     {
                         AssVer = "Not an assembly";
                     }
@@ -10457,7 +10460,7 @@ namespace ASCOM.Utilities
                         PE.Dispose();
                         PE = (PEReader)null;
                     }
-                    catch (InvalidOperationException ex)
+                    catch (InvalidOperationException)
                     {
                         TL.LogMessage("FileDetails", "   .NET Assembly:      Not a valid PE executable");
                     }
@@ -10949,7 +10952,7 @@ namespace ASCOM.Utilities
                 TL.LogMessage("Platform 5.5", Conversions.ToString(Operators.ConcatenateObject("Install Location - ", RegKey.GetValue("InstallLocation"))));
                 RegKey.Close();
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 TL.LogMessage("Platform 5.5", "Not Installed");
             }
@@ -10969,7 +10972,7 @@ namespace ASCOM.Utilities
                     Compare("Platform 7", "Developer and Platform Version Numbers", developerInfo[INST_DISPLAY_VERSION], platformInfo[INST_DISPLAY_VERSION]);
                 }
             }
-            catch (KeyNotFoundException ex)
+            catch (KeyNotFoundException)
             {
                 // Ignore errors due to the key being missing if the developer tools are not installed
             }
@@ -11035,10 +11038,10 @@ namespace ASCOM.Utilities
             RegistryKey UninstallKey;
             string[] UninstallSubKeyNames;
 
-            const bool DEBUG_TRACE = false; // Set to true to debug this code, otherwise leave false!
 
-            if (DEBUG_TRACE)
-                TL.LogMessage("GetInstallInformation", $"Product: {ProductCode}, Required: {Required}, Force32: {Force32}, MSIInstaller: {MSIInstaller}");
+#if DEBUG_TRACE
+            TL.LogMessage("GetInstallInformation", $"Product: {ProductCode}, Required: {Required}, Force32: {Force32}, MSIInstaller: {MSIInstaller}");
+#endif
             try
             {
                 if (MSIInstaller)
@@ -11052,17 +11055,16 @@ namespace ASCOM.Utilities
                     {
                         RegKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\" + ProductCode, false);
                     }
-                    if (DEBUG_TRACE)
+#if DEBUG_TRACE
+                    if (RegKey is not null)
                     {
-                        if (RegKey is not null)
-                        {
-                            TL.LogMessage("GetInstallInformation", "  MSI Installer: found Reg Key: " + RegKey.Name);
-                        }
-                        else
-                        {
-                            TL.LogMessage("GetInstallInformation", "  MSI Installer: Regkey is nothing!!");
-                        }
+                        TL.LogMessage("GetInstallInformation", "  MSI Installer: found Reg Key: " + RegKey.Name);
                     }
+                    else
+                    {
+                        TL.LogMessage("GetInstallInformation", "  MSI Installer: Regkey is nothing!!");
+                    }
+#endif
                 }
 
                 else
@@ -11077,43 +11079,44 @@ namespace ASCOM.Utilities
                         UninstallKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\", false);
                         RegKey = UninstallKey.OpenSubKey(ProductCode, false);
                     }
-                    if (DEBUG_TRACE)
+#if DEBUG_TRACE
+                    if (UninstallKey is not null)
                     {
-                        if (UninstallKey is not null)
-                        {
-                            TL.LogMessage("GetInstallInformation", "  Native Installer: found Uninstall Key: " + UninstallKey.Name);
-                        }
-                        else
-                        {
-                            TL.LogMessage("GetInstallInformation", "  Uninstall is nothing!!");
-                        }
-
-                        if (RegKey is not null)
-                        {
-                            TL.LogMessage("GetInstallInformation", "  Native Installer: found Reg Key: " + RegKey.Name);
-                        }
-                        else
-                        {
-                            TL.LogMessage("GetInstallInformation", "  Native Installer: Regkey is nothing!!");
-                        }
+                        TL.LogMessage("GetInstallInformation", "  Native Installer: found Uninstall Key: " + UninstallKey.Name);
                     }
+                    else
+                    {
+                        TL.LogMessage("GetInstallInformation", "  Uninstall is nothing!!");
+                    }
+
+                    if (RegKey is not null)
+                    {
+                        TL.LogMessage("GetInstallInformation", "  Native Installer: found Reg Key: " + RegKey.Name);
+                    }
+                    else
+                    {
+                        TL.LogMessage("GetInstallInformation", "  Native Installer: Regkey is nothing!!");
+                    }
+#endif
                     // Get the uninstall string associated with this GUID
                     UninstallString = Conversions.ToString(RegKey.GetValue(INST_UNINSTALL_STRING, ""));
                     RegKey.Close();
                     RegKey = null;
-                    if (DEBUG_TRACE)
-                        TL.LogMessage("GetInstallInformation", "  Native Installer: found Uninstall String: " + UninstallString);
-
+#if DEBUG_TRACE
+                    TL.LogMessage("GetInstallInformation", "  Native Installer: found Uninstall String: " + UninstallString);
+#endif
                     UninstallSubKeyNames = UninstallKey.GetSubKeyNames();
                     foreach (string SubKey in UninstallSubKeyNames)
                     {
-                        if (DEBUG_TRACE)
-                            TL.LogMessage("GetInstallInformation", "  Native Installer: searching subkey : " + SubKey);
+#if DEBUG_TRACE
+                        TL.LogMessage("GetInstallInformation", "  Native Installer: searching subkey : " + SubKey);
+#endif
                         if (Conversions.ToBoolean(Operators.ConditionalCompareObjectEqual(UninstallKey.OpenSubKey(SubKey).GetValue(INST_DISPLAY_ICON, ""), UninstallString, false)))
                         {
                             RegKey = UninstallKey.OpenSubKey(SubKey);
-                            if (DEBUG_TRACE)
-                                TL.LogMessage("GetInstallInformation", "    Native Installer Found: " + RegKey.Name);
+#if DEBUG_TRACE
+                            TL.LogMessage("GetInstallInformation", "    Native Installer Found: " + RegKey.Name);
+#endif
                             break;
                         }
                     }
@@ -11129,8 +11132,9 @@ namespace ASCOM.Utilities
             }
             catch (Exception ex)
             {
-                if (DEBUG_TRACE)
-                    TL.LogMessageCrLf("Exception", ex.ToString());
+#if DEBUG_TRACE
+                TL.LogMessageCrLf("Exception", ex.ToString());
+#endif
                 // If Not RetVal.ContainsKey(INST_DISPLAY_NAME) Then RetVal.Add(INST_DISPLAY_NAME, "Unknown name")
                 // If Not RetVal.ContainsKey(INST_DISPLAY_VERSION) Then RetVal.Add(INST_DISPLAY_VERSION, "Unknown version")
                 // If Not RetVal.ContainsKey(INST_INSTALL_DATE) Then RetVal.Add(INST_INSTALL_DATE, "Unknown install date")
@@ -11220,7 +11224,7 @@ namespace ASCOM.Utilities
                     }
                 }
             }
-            catch (DirectoryNotFoundException ex)
+            catch (DirectoryNotFoundException )
             {
                 TL.LogMessageCrLf("RecurseASCOMDrivers", "Directory not present: " + Folder);
                 return;
@@ -11238,7 +11242,7 @@ namespace ASCOM.Utilities
                     RecurseASCOMDrivers(Directory);
                 Action("");
             }
-            catch (DirectoryNotFoundException ex)
+            catch (DirectoryNotFoundException )
             {
                 TL.LogMessage("RecurseASCOMDrivers", "Directory not present: " + Folder);
             }

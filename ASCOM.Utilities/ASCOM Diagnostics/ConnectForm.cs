@@ -19,6 +19,9 @@ namespace ASCOM.Utilities
         private dynamic Device;
         private Util Util;
 
+        /// <summary>
+        /// Connect form
+        /// </summary>
         public ConnectForm()
         {
             InitializeComponent();
@@ -65,7 +68,7 @@ namespace ASCOM.Utilities
             btnGetProfile.Enabled = false;
         }
 
-        public void SetScriptButton()
+        internal void SetScriptButton()
         {
             if (CurrentDeviceType == "Telescope" & !string.IsNullOrEmpty(CurrentDevice)) // Enable or disable the run script button as appropriate
             {
@@ -287,7 +290,7 @@ namespace ASCOM.Utilities
             TL.Dispose();
         }
 
-        public void ExecuteCommand(string Command)
+        internal void ExecuteCommand(string Command)
         {
             var sw = new Stopwatch();
             var StartTime = default(DateTime);
@@ -366,7 +369,7 @@ namespace ASCOM.Utilities
                 LogMsg(Command, "Exception - Started: " + Strings.Format(StartTime, "HH:mm:ss.fff") + " duration: " + sw.ElapsedMilliseconds + " ms - Exception: " + ex.ToString());
             }
         }
-        public void LogMsg(string Command, string Msg)
+        internal void LogMsg(string Command, string Msg)
         {
             TL.LogMessage(Command, Msg);
             txtStatus.Text = txtStatus.Text + Command + " " + Msg + "\r\n";
@@ -389,7 +392,7 @@ namespace ASCOM.Utilities
         }
 
 
-        public void cmbDeviceType_Click()
+        internal void cmbDeviceType_Click()
         {
             // If Not cmbDeviceType.DroppedDown Then cmbDeviceType.
             SendMessage((long)cmbDeviceType.Handle, CB_SHOWDROPDOWN, 1L, 0L);

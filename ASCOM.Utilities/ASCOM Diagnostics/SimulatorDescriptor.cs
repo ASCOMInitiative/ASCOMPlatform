@@ -1,7 +1,8 @@
 ﻿
 namespace ASCOM.Utilities
 {
-    public class SimulatorDescriptor
+    
+    internal class SimulatorDescriptor
     {
         private string _ProgID;
         private bool _SixtyFourBit;
